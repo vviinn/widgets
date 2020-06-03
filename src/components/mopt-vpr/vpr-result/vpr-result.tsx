@@ -1,4 +1,5 @@
-import { Component, ComponentInterface, Host, h, Prop } from '@stencil/core';
+import { Component, ComponentInterface, Host, h, Prop, Element } from '@stencil/core';
+import { Recommendation } from '../../../interfaces/recommendation';
 
 @Component({
   tag: 'vpr-result',
@@ -6,14 +7,26 @@ import { Component, ComponentInterface, Host, h, Prop } from '@stencil/core';
   shadow: true,
 })
 export class VprResult implements ComponentInterface {
-  @Prop() item: any;
-  
+  @Element() el: HTMLElement;
+  @Prop() item: Recommendation;
+  @Prop() imageWidth: number;
+  @Prop() imageRatio: number;
+
+  async componentWillLoad() {
+    this.el.style.setProperty('--image-height', `${this.imageWidth * this.imageRatio}px`);
+  }
+
+
   render() {
     return (
       <Host>
-        <slot></slot>
+          <img src={this.item.url}
+               width={this.imageWidth}
+               height={this.imageWidth * this.imageRatio}
+               alt={this.item.title}>
+          </img>
+          <span>{this.item.title}</span>
       </Host>
     );
   }
-
 }

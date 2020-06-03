@@ -5,14 +5,20 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { Recommendation, } from "./interfaces/recommendation";
 export namespace Components {
     interface MoptVpr {
         "blockTitle": string;
+        "columns": number;
+        "imageRatio": number;
+        "imageWidth": number;
         "productId": string;
         "token": string;
     }
     interface VprResult {
-        "item": any;
+        "imageRatio": number;
+        "imageWidth": number;
+        "item": Recommendation;
     }
 }
 declare global {
@@ -36,11 +42,16 @@ declare global {
 declare namespace LocalJSX {
     interface MoptVpr {
         "blockTitle"?: string;
+        "columns"?: number;
+        "imageRatio"?: number;
+        "imageWidth"?: number;
         "productId"?: string;
         "token"?: string;
     }
     interface VprResult {
-        "item"?: any;
+        "imageRatio"?: number;
+        "imageWidth"?: number;
+        "item"?: Recommendation;
     }
     interface IntrinsicElements {
         "mopt-vpr": MoptVpr;

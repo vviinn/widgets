@@ -1,3 +1,13 @@
 :host {
-  display: block;
+  --image-height: 0;
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-rows: var(--image-height) auto;
+}
+
+img {
+  display: grid;
+  align-content: center;
+  object-position: 50% 50%;
+  object-fit: contain;
 }
