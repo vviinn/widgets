@@ -1,2 +1,4 @@
 .log
+dist
+www
 node_modules
