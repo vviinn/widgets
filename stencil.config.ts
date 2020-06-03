@@ -17,6 +17,9 @@ export const config: Config = {
       serviceWorker: null // disable service workers
     }
   ],
+  copy: [
+    { src: 'mocks' }
+  ],
   plugins: [
     dotenvPlugin()
   ]
