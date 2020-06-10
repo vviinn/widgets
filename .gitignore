@@ -1,5 +1,6 @@
 .log
 dist
+src/interfaces/generated.ts
 www
 loader
 node_modules
