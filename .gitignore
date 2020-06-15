@@ -1,6 +1,6 @@
 .log
-dist
+dist/
+www/
+loader/
 src/interfaces/generated.ts
-www
-loader
-node_modules
+node_modules/

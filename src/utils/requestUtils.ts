@@ -1,12 +1,12 @@
 import * as TE from 'fp-ts/lib/TaskEither';
 import * as E from 'fp-ts/lib/Either';
 
-
 import { flow } from 'fp-ts/lib/function';
 import { pipe } from 'fp-ts/lib/pipeable';
+import { FetchOptions } from '../interfaces/fetch-options';
 
-const safeGet = (url: string): TE.TaskEither<Error, Response> => TE.tryCatch(
-  () => fetch(url),
+const safeGet = (url: string, options: FetchOptions = {}): TE.TaskEither<Error, Response> => TE.tryCatch(
+  () => fetch(url, options),
   (reason) => new Error(String(reason))
 );
 
@@ -21,8 +21,8 @@ const processResponce = flow(
 
 const getJson = async (x: Response) => await x.json();
 
-export const httpGet = (url: string): TE.TaskEither<Error, Promise<any>> => pipe(
-  safeGet(url),
+export const httpGet = (url: string, options: FetchOptions = {}): TE.TaskEither<Error, Promise<any>> => pipe(
+  safeGet(url, options),
   TE.chain(processResponce),
   TE.map(getJson)
 );
