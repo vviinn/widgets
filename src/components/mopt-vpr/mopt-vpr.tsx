@@ -6,6 +6,14 @@ import * as TE from 'fp-ts/lib/TaskEither';
 import * as E from 'fp-ts/lib/Either';
 import { authOptionsFromToken } from './token-helpers';
 
+const emptyId = (x: string): E.Either<Error, string> =>
+  x.length === 0 ? E.left(new Error('Product id is empty')) : E.right(x);
+
+const getProductId = (x: string): E.Either<Error, string> => pipe(
+  E.fromNullable(new Error('Product id not provided'))(x),
+  E.chain(emptyId)
+);
+
 @Component({
   tag: 'mopt-vpr',
   styleUrl: 'mopt-vpr.css',
@@ -27,9 +35,9 @@ export class MoptVpr implements ComponentInterface {
     this.el.style.setProperty('--column-width', `${this.imageWidth}px`);
 
     const request = pipe(
-      authOptionsFromToken(this.token),
-      TE.fromEither,
-      TE.map(getRecommendations),
+      TE.right(getRecommendations),
+      TE.ap(TE.fromEither(getProductId(this.productId))),
+      TE.ap(TE.fromEither(authOptionsFromToken(this.token))),
       TE.flatten
     );
 
