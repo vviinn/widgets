@@ -23,4 +23,5 @@ pipelines:
             - node
           script:
             - npm install
+            - ls -la
             - npm run build
