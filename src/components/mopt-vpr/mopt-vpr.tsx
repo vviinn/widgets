@@ -1,10 +1,10 @@
 import { Component, ComponentInterface, Host, h, Prop, State, Element } from '@stencil/core';
 import { getRecommendations } from '../../services/recommendationsService';
-import { Recommendation } from '../../interfaces/recommendation';
 import { pipe } from 'fp-ts/lib/pipeable';
 import * as TE from 'fp-ts/lib/TaskEither';
 import * as E from 'fp-ts/lib/Either';
 import { authOptionsFromToken } from './token-helpers';
+import { Interfaces } from '../../interfaces/recommendation';
 
 const emptyId = (x: string): E.Either<Error, string> =>
   x.length === 0 ? E.left(new Error('Product id is empty')) : E.right(x);
@@ -21,15 +21,21 @@ const getProductId = (x: string): E.Either<Error, string> => pipe(
 })
 export class MoptVpr implements ComponentInterface {
   @Element() el: HTMLElement;
-  @Prop() token: string;
-  @Prop() productId: string;
+  /** Title for recommendations widget */
   @Prop() blockTitle: string = 'Recommended products';
-  @Prop() imageWidth: number = 150;
-  @Prop() imageRatio: number = 1.5;
+  /** Number of columns for recommendations */
   @Prop() columns: number = 4;
+  /** Ratio of each recommended product image */
+  @Prop() imageRatio: number = 1.5;
+  /** Width of each recommended product image */
+  @Prop() imageWidth: number = 150;
+  /** Id of product you need recommendations for */
+  @Prop() productId: string;
+  /** Mediaopt customer token */
+  @Prop() token: string;
 
-  @State()
-  recommendations: any[] = [];
+  @State() recommendations: Interfaces['VisualProductSearch'][] = [];
+  @State() loaded: boolean = false;
 
   async componentWillLoad() {
     this.el.style.setProperty('--column-width', `${this.imageWidth}px`);
@@ -56,13 +62,15 @@ export class MoptVpr implements ComponentInterface {
     console.log('ERROR:', error);
   }
 
-  async handleRecommendationsSucces(data: Promise<Recommendation[]>): Promise<void> {
+  async handleRecommendationsSucces(data: Promise<Interfaces['VisualProductSearch'][]>): Promise<void> {
     this.recommendations = await data;
+    this.loaded = true;
   }
 
   render() {
     return (
-      <Host>
+      <Host class={{loaded: this.loaded}}
+            aria-hidden={this.loaded ? 'false' : 'true'}>
           <h4>{ this.blockTitle }</h4>
           <div class="results"
                data-columns={this.columns}>

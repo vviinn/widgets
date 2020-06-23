@@ -7,14 +7,14 @@
 
 ## Properties
 
-| Property     | Attribute     | Description | Type     | Default                  |
-| ------------ | ------------- | ----------- | -------- | ------------------------ |
-| `blockTitle` | `block-title` |             | `string` | `'Recommended products'` |
-| `columns`    | `columns`     |             | `number` | `4`                      |
-| `imageRatio` | `image-ratio` |             | `number` | `1.5`                    |
-| `imageWidth` | `image-width` |             | `number` | `150`                    |
-| `productId`  | `product-id`  |             | `string` | `undefined`              |
-| `token`      | `token`       |             | `string` | `undefined`              |
+| Property     | Attribute     | Description                                | Type     | Default                  |
+| ------------ | ------------- | ------------------------------------------ | -------- | ------------------------ |
+| `blockTitle` | `block-title` | Title for recommendations widget           | `string` | `'Recommended products'` |
+| `columns`    | `columns`     | Number of columns for recommendations      | `number` | `4`                      |
+| `imageRatio` | `image-ratio` | Ratio of each recommended product image    | `number` | `1.5`                    |
+| `imageWidth` | `image-width` | Width of each recommended product image    | `number` | `150`                    |
+| `productId`  | `product-id`  | Id of product you need recommendations for | `string` | `undefined`              |
+| `token`      | `token`       | Mediaopt customer token                    | `string` | `undefined`              |
 
 
 ## Dependencies

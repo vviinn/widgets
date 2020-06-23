@@ -5,20 +5,38 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { Recommendation, } from "./interfaces/recommendation";
+import { Interfaces, } from "./interfaces/recommendation";
 export namespace Components {
     interface MoptVpr {
+        /**
+          * Title for recommendations widget
+         */
         "blockTitle": string;
+        /**
+          * Number of columns for recommendations
+         */
         "columns": number;
+        /**
+          * Ratio of each recommended product image
+         */
         "imageRatio": number;
+        /**
+          * Width of each recommended product image
+         */
         "imageWidth": number;
+        /**
+          * Id of product you need recommendations for
+         */
         "productId": string;
+        /**
+          * Mediaopt customer token
+         */
         "token": string;
     }
     interface VprResult {
         "imageRatio": number;
         "imageWidth": number;
-        "item": Recommendation;
+        "item": Interfaces["VisualProductSearch"];
     }
 }
 declare global {
@@ -41,17 +59,35 @@ declare global {
 }
 declare namespace LocalJSX {
     interface MoptVpr {
+        /**
+          * Title for recommendations widget
+         */
         "blockTitle"?: string;
+        /**
+          * Number of columns for recommendations
+         */
         "columns"?: number;
+        /**
+          * Ratio of each recommended product image
+         */
         "imageRatio"?: number;
+        /**
+          * Width of each recommended product image
+         */
         "imageWidth"?: number;
+        /**
+          * Id of product you need recommendations for
+         */
         "productId"?: string;
+        /**
+          * Mediaopt customer token
+         */
         "token"?: string;
     }
     interface VprResult {
         "imageRatio"?: number;
         "imageWidth"?: number;
-        "item"?: Recommendation;
+        "item"?: Interfaces["VisualProductSearch"];
     }
     interface IntrinsicElements {
         "mopt-vpr": MoptVpr;

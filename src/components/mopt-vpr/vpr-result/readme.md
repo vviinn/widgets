@@ -7,11 +7,11 @@
 
 ## Properties
 
-| Property     | Attribute     | Description | Type             | Default     |
-| ------------ | ------------- | ----------- | ---------------- | ----------- |
-| `imageRatio` | `image-ratio` |             | `number`         | `undefined` |
-| `imageWidth` | `image-width` |             | `number`         | `undefined` |
-| `item`       | --            |             | `Recommendation` | `undefined` |
+| Property     | Attribute     | Description | Type                                                                                                                                                            | Default     |
+| ------------ | ------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `imageRatio` | `image-ratio` |             | `number`                                                                                                                                                        | `undefined` |
+| `imageWidth` | `image-width` |             | `number`                                                                                                                                                        | `undefined` |
+| `item`       | --            |             | `{ productId?: string; title?: string; deeplink?: string; image?: { original?: string; thumbnail?: string; }; price?: { actual?: number; retail?: number; }; }` | `undefined` |
 
 
 ## Dependencies
