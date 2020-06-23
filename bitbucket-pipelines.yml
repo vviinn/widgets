@@ -9,15 +9,13 @@ pipelines:
   branches:
     develop:
       - step:
-          name: Create .env file
-          script:
-            - touch .env
-            - echo "OPENAPI_URL=https://docs.stage.ionos.mediaopt.tools/openapi.yaml" >> .env
-      - step:
           name: Build app
           caches:
             - node
           script:
+            - rm .env
+            - touch .env
+            - echo "OPENAPI_URL=https://docs.stage.ionos.mediaopt.tools/openapi.yaml" >> .env
             - npm install
             - npm run build_interfaces
             - ls -la src/interfaces
