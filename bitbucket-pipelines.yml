@@ -33,3 +33,19 @@ pipelines:
             - npm run build_interfaces
             - ls -la src/interfaces
             - npm run build
+  tags:
+    'v*.*.*':
+      - step:
+          name: Build app and publish to NPM
+          script:
+            - touch .env
+            - echo "OPENAPI_URL=https://docs.stage.ionos.mediaopt.tools/openapi.yaml" >> .env
+            - echo "RECOMMENDATIONS_URL=https://stage.mediaopt.tools/product/" >> .env
+            - npm install
+            - npm run build_interfaces
+            - ls -la src/interfaces
+            - npm run build
+            - npm version from-git
+            - pipe: atlassian/npm-publish:0.3.1
+              variables:
+                NPM_TOKEN: $NPM_TOKEN
