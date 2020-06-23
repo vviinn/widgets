@@ -18,10 +18,13 @@ pipelines:
           script:
             - npm install
             - npm run build_interfaces
+            - ls -la
+            - echo $PWD
       - step:  
           caches:
             - node
           script:
             - npm install
+            - npm run build_interfaces
             - ls -la src/interfaces
             - npm run build
