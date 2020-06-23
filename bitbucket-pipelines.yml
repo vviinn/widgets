@@ -13,9 +13,22 @@ pipelines:
           caches:
             - node
           script:
-            - rm .env
             - touch .env
             - echo "OPENAPI_URL=https://docs.stage.ionos.mediaopt.tools/openapi.yaml" >> .env
+            - echo "RECOMMENDATIONS_URL=https://stage.mediaopt.tools/product/" >> .env
+            - npm install
+            - npm run build_interfaces
+            - ls -la src/interfaces
+            - npm run build
+    master:
+      - step:
+          name: Build app
+          caches:
+            - node
+          script:
+            - touch .env
+            - echo "OPENAPI_URL=https://docs.mediaopt.tools/openapi.yaml" >> .env
+            - echo "RECOMMENDATIONS_URL=https://mediaopt.tools/product/" >> .env
             - npm install
             - npm run build_interfaces
             - ls -la src/interfaces
