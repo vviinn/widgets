@@ -12,15 +12,9 @@ pipelines:
           name: Create .env file
           script:
             - touch .env
-            - echo "OPENAPI_URL=https://docs.mediaopt.tools/openapi.yaml" >> .env
+            - echo "OPENAPI_URL=https://docs.stage.ionos.mediaopt.tools/openapi.yaml" >> .env
       - step:
-          name: Build interfaces from OpenApi docs
-          script:
-            - npm install
-            - npm run build_interfaces
-            - ls -la
-            - echo $PWD
-      - step:  
+          name: Build app
           caches:
             - node
           script:
