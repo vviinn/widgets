@@ -8,6 +8,16 @@ image: node:10.15.3
 pipelines:
   branches:
     develop:
+      - step:
+          name: Create .env file
+          script:
+            - touch .env
+            - echo "OPENAPI_URL=https://docs.stage.mediaopt.tools/openapi.yaml" >> .env
+      - step:
+          name: Build interfaces from OpenApi docs
+          script:
+            - npm install
+            - npm run build_interfaces
       - step:  
           caches:
             - node
