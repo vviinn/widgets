@@ -12,7 +12,7 @@ pipelines:
           name: Create .env file
           script:
             - touch .env
-            - echo "OPENAPI_URL=https://docs.stage.mediaopt.tools/openapi.yaml" >> .env
+            - echo "OPENAPI_URL=https://docs.mediaopt.tools/openapi.yaml" >> .env
       - step:
           name: Build interfaces from OpenApi docs
           script:
