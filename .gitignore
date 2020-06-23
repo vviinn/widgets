@@ -1,4 +1,5 @@
 .log
+.env
 dist/
 www/
 loader/
