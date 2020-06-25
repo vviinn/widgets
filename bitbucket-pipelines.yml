@@ -20,6 +20,7 @@ pipelines:
             - npm run build_interfaces
             - ls -la src/interfaces
             - npm run build
+            - npm run test
     master:
       - step:
           name: Build app
@@ -33,6 +34,7 @@ pipelines:
             - npm run build_interfaces
             - ls -la src/interfaces
             - npm run build
+            - npm run test
   tags:
     'v*.*.*':
       - step:
@@ -45,6 +47,7 @@ pipelines:
             - npm run build_interfaces
             - ls -la src/interfaces
             - npm run build
+            - npm run test
             - npm version from-git
             - pipe: atlassian/npm-publish:0.3.1
               variables:
