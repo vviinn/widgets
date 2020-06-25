@@ -8,9 +8,12 @@ describe('mopt-vpr', () => {
       html: `<mopt-vpr></mopt-vpr>`,
     });
     expect(page.root).toEqualHtml(`
-      <mopt-vpr>
+      <mopt-vpr aria-hidden="true" style="--column-width: 150px;">
         <mock:shadow-root>
-          <slot></slot>
+          <h4>
+            Recommended products
+          </h4>
+          <div class="results" data-columns="4"></div>
         </mock:shadow-root>
       </mopt-vpr>
     `);

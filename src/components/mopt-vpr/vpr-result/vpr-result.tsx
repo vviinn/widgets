@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Host, h, Prop, Element } from '@stencil/core';
+import { Component, ComponentInterface, h, Prop, Element } from '@stencil/core';
 import { Interfaces } from '../../../interfaces/recommendation';
 
 @Component({
@@ -9,23 +9,24 @@ import { Interfaces } from '../../../interfaces/recommendation';
 export class VprResult implements ComponentInterface {
   @Element() el: HTMLElement;
   @Prop() item: Interfaces['VisualProductSearch'];
-  @Prop() imageWidth: number;
-  @Prop() imageRatio: number;
+  @Prop() imageWidth: number = 100;
+  @Prop() imageRatio: number = 1.5;
 
   async componentWillLoad() {
     this.el.style.setProperty('--image-height', `${this.imageWidth * this.imageRatio}px`);
   }
 
   render() {
-    return (
-      <Host>
-          <img src={this.item.image.original}
-               width={this.imageWidth}
-               height={this.imageWidth * this.imageRatio}
-               alt={this.item.title}>
-          </img>
-          <span>{this.item.title}</span>
-      </Host>
-    );
+    return this.item === undefined
+         ? null
+         : [
+           <img src={this.item.image.original}
+                width={this.imageWidth}
+                height={this.imageWidth * this.imageRatio}
+                alt={this.item.title}>
+           </img>,
+           <span>{this.item.title}</span>
+         ];
   }
 }
+
