@@ -22,5 +22,8 @@ export const config: Config = {
   ],
   plugins: [
     dotenvPlugin()
-  ]
+  ],
+  testing: {
+    browserArgs: ['--no-sandbox', '--disable-setuid-sandbox'],
+  },
 };
