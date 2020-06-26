@@ -62,8 +62,9 @@ export class MoptVpr implements ComponentInterface {
     console.log('ERROR:', error);
   }
 
-  async handleRecommendationsSucces(data: Promise<Interfaces['VisualProductSearch'][]>): Promise<void> {
-    this.recommendations = await data;
+  async handleRecommendationsSucces(data: Promise<any>): Promise<void> {
+    const response = await data
+    this.recommendations = response.extended;
     this.loaded = true;
   }
 
