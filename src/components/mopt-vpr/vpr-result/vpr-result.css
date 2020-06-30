@@ -1,8 +1,11 @@
 :host {
   --image-height: 0;
+  --discount-color: salmon;
   display: grid;
-  grid-gap: 1rem;
+  grid-gap: .5rem;
   grid-template-rows: var(--image-height) auto;
+  justify-items: center;
+  align-content: start;
 }
 
 img {
@@ -10,4 +13,18 @@ img {
   align-content: center;
   object-position: 50% 50%;
   object-fit: contain;
+}
+
+.sale-container {
+  display: grid;
+  grid-template-rows: repeat(2, max-content);
+  grid-gap: .5rem;
+}
+
+.outdated {
+  text-decoration: line-through;
+}
+
+.discount {
+  color: var(--discount-color);
 }
