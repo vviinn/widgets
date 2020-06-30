@@ -267,7 +267,7 @@ describe('vpr-result', () => {
     `);
   });
 
-  it('renders price (actual more then retail)', async () => {
+  it('renders price (retail more then actual)', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
       image: {
         original: 'path-to-image.jpg',
@@ -294,8 +294,10 @@ describe('vpr-result', () => {
         <mock:shadow-root>
           <img alt="Fender Jazz Bass" height="150" src="path-to-thumb.jpg" width="100">
           <a href="/basses/fjb.html">Fender Jazz Bass</a>
-          <span class="price outdated">100</span>
-          <span class="price discount">90</span>
+          <div class="sale-container">
+            <span class="price outdated">100</span>
+            <span class="price discount">90</span>
+          </div>
         </mock:shadow-root>
       </vpr-result>
     `);
