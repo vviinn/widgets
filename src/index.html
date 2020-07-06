@@ -7,9 +7,39 @@
 
   <script type="module" src="/build/medaopt-vpr.esm.js"></script>
   <script nomodule src="/build/medaopt-vpr.js"></script>
+  <style id="kek">
+    body {
+      color: #101010;
+      font-family: Open Sans,Helvetica,Arial,sans-serif;
+      font-size: 14px;
+      line-height: 1.42857;
+    }
 
+    mopt-vpr::part(price-outdated) {
+      color: inherit;
+      font-size: 12px;
+      font-weight: 400;
+      text-align: center;
+    }
+
+    mopt-vpr::part(price-discount) {
+      color: #dc616d;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    mopt-vpr::part(product-title) {
+      color: #101010;
+      font-size: 16px;
+      text-align: center;
+      font-weight: 400;
+      text-decoration: none;
+    }
+  </style>
 </head>
 <body>
+  <h2>Hello from document</h2>
   <mopt-vpr token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjI1LCJpYXQiOjE1OTIzOTEzMDYsImp0aSI6NTU5Mjc2ODc0fQ.u5NM-TDV8Sa9RP2IYyTp1MK1UGn5D5lDeliQF2-0p8cVgUOgolLaks2P6DC2_mNFDAflRfOA9vog0drE6hBUOuioyLzqWL63lOXQAliEUwb6EgKLCgY0IZvZPlWEhvaP9csMKGolSGl-Mc0WrgDdgLLrbbLLQuKOXFFCzGxmxpc"
             product-id="0100580000053">
   </mopt-vpr>
