@@ -1,11 +1,9 @@
 import { createStore } from "@stencil/store";
 
-const { state, onChange } = createStore({
-  fallbackStyles: ''
-});
-
-onChange('fallbackStyles', value => {
-  state.fallbackStyles = value;
+const { state } = createStore({
+  fallbackStyles: '',
+  pricePrefix: null,
+  currencySign: null
 });
 
 export default state;

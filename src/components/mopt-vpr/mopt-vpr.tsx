@@ -55,6 +55,9 @@ export class MoptVpr implements ComponentInterface {
   async componentWillLoad() {
     this.el.style.setProperty('--column-width', `${this.imageWidth}px`);
 
+    state.pricePrefix = this.pricePrefix;
+    state.currencySign = this.currencySign;
+
     const request = pipe(
       TE.right(getRecommendations),
       TE.ap(TE.fromEither(getProductId(this.productId))),
