@@ -5,6 +5,7 @@ import * as TE from 'fp-ts/lib/TaskEither';
 import * as E from 'fp-ts/lib/Either';
 import { authOptionsFromToken } from './token-helpers';
 import { Interfaces } from '../../interfaces/recommendation';
+import state from '../../store/store';
 
 const emptyId = (x: string): E.Either<Error, string> =>
   x.length === 0 ? E.left(new Error('Product id is empty')) : E.right(x);
@@ -33,9 +34,23 @@ export class MoptVpr implements ComponentInterface {
   @Prop() productId: string;
   /** Mediaopt customer token */
   @Prop() token: string;
+  /** Currency sign will shown after price */
+  @Prop() currencySign: string;
+  /** prefix will shown before price */
+  @Prop() pricePrefix: string;
 
   @State() recommendations: Interfaces['VisualProductSearch'][] = [];
   @State() loaded: boolean = false;
+
+  private cssPartsDetector: HTMLDivElement;
+
+  componentDidLoad() {
+    const detectorBounds = this.cssPartsDetector.getBoundingClientRect();
+
+    if(detectorBounds.width === 0 && detectorBounds.height === 0) {
+      state.fallbackStyles = document.head.getElementsByTagName('style')['kek'].textContent.replace(/(?:mopt-vpr::part\()(\w+)-(\w+)\)/g, '.$1.$2');
+    }
+  }
 
   async componentWillLoad() {
     this.el.style.setProperty('--column-width', `${this.imageWidth}px`);
@@ -72,14 +87,19 @@ export class MoptVpr implements ComponentInterface {
     return (
       <Host class={{loaded: this.loaded}}
             aria-hidden={this.loaded ? 'false' : 'true'}>
+          <style>{state.fallbackStyles}</style>
           <h2>{ this.blockTitle }</h2>
           <div class="results"
                data-columns={this.columns}>
               { this.recommendations.map(r => (
                 <vpr-result item={r}
                             imageWidth={this.imageWidth}
-                            imageRatio={this.imageRatio}/>
+                            imageRatio={this.imageRatio} />
                 ))}
+          </div>
+          <div class="visually-hidden"
+               part="shadow-parts-detect"
+               ref={(el) => this.cssPartsDetector = el }>
           </div>
       </Host>
     );
