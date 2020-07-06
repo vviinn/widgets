@@ -20,6 +20,14 @@ img {
   grid-gap: .5rem;
 }
 
+.price.discount,
+.price.outdated,
+.price.regular {
+  display: grid;
+  grid-gap: .1rem;
+  grid-auto-flow: column;
+}
+
 .outdated {
   text-decoration: line-through;
 }
