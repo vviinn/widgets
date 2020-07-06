@@ -17,6 +17,10 @@ export namespace Components {
          */
         "columns": number;
         /**
+          * Currency sign will shown after price
+         */
+        "currencySign": string;
+        /**
           * Ratio of each recommended product image
          */
         "imageRatio": number;
@@ -24,6 +28,10 @@ export namespace Components {
           * Width of each recommended product image
          */
         "imageWidth": number;
+        /**
+          * prefix will shown before price
+         */
+        "pricePrefix": string;
         /**
           * Id of product you need recommendations for
          */
@@ -68,6 +76,10 @@ declare namespace LocalJSX {
          */
         "columns"?: number;
         /**
+          * Currency sign will shown after price
+         */
+        "currencySign"?: string;
+        /**
           * Ratio of each recommended product image
          */
         "imageRatio"?: number;
@@ -75,6 +87,10 @@ declare namespace LocalJSX {
           * Width of each recommended product image
          */
         "imageWidth"?: number;
+        /**
+          * prefix will shown before price
+         */
+        "pricePrefix"?: string;
         /**
           * Id of product you need recommendations for
          */
