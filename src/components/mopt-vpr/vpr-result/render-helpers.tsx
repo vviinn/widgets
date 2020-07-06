@@ -24,24 +24,24 @@ export const Title = (data: Interfaces['VisualProductSearch']): FunctionalCompon
     O.fromNullable(data.deeplink),
     O.chain(checkEmpryString),
     O.fold(
-      () => (<span>{data.title}</span>),
-      (url) => (<a href={url}>{data.title}</a>)
+      () => (<span part="product-title" class="product title">{data.title}</span>),
+      (url) => (<a part="product-title" class="product title" href={url}>{data.title}</a>)
     )
   );
 
 const bothPricesPresented = (x: Interfaces['VisualProductSearch']['price']): E.Either<FunctionalComponent<Interfaces['VisualProductSearch']['price']>, [number, number]> => sequenceTEither(
-  E.fromNullable(<span class="price">{x.actual}</span>)(x.retail),
-  E.fromNullable(<span class="price">{x.retail}</span>)(x.actual)
+  E.fromNullable(<span part="price-regular" class="price regular">{x.actual}</span>)(x.retail),
+  E.fromNullable(<span part="price-regular" class="price regular">{x.retail}</span>)(x.actual)
 );
 
 const pricesAreDifferent = (x: [number, number]): E.Either<FunctionalComponent<Interfaces['VisualProductSearch']['price']>, [number, number]> =>
   x[0] === x[1]
-  ? E.left(<span class="price">{x[0]}</span>)
+  ? E.left(<span part="price-regular" class="price regular">{x[0]}</span>)
   : E.right(x);
 
 const isSalePrice = (x: [number, number]): E.Either<FunctionalComponent<Interfaces['VisualProductSearch']['price']>, [number, number]> =>
   x[0] < x[1]
-       ? E.left(<span class="price">{x[1]}</span>)
+       ? E.left(<span part="price-regular" class="price regular">{x[1]}</span>)
        : E.right(x);
 
 export const Price = (data: Interfaces['VisualProductSearch']): FunctionalComponent<Interfaces['VisualProductSearch']['price']> =>
@@ -53,8 +53,8 @@ export const Price = (data: Interfaces['VisualProductSearch']): FunctionalCompon
     E.fold(
       (singlePriceComponent) => singlePriceComponent,
       (prices) => <div class="sale-container">
-        <span class="price outdated">{prices[0]}</span>
-        <span class="price discount">{prices[1]}</span>
+          <span part="price-outdated" class="price outdated">{prices[0]}</span>
+          <span part="price-discount" class="price discount">{prices[1]}</span>
       </div>
     )
   );
