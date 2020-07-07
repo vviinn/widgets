@@ -91,7 +91,7 @@ export class MoptVpr implements ComponentInterface {
       <Host class={{loaded: this.loaded}}
             aria-hidden={this.loaded ? 'false' : 'true'}>
           <style>{state.fallbackStyles}</style>
-          <h2>{ this.blockTitle }</h2>
+          <h2 part="recommendations-title">{ this.blockTitle }</h2>
           <div class="results"
                data-columns={this.columns}>
               { this.recommendations.map(r => (

@@ -11,8 +11,8 @@ export const Image = (data: Interfaces['VisualProductSearch'], wi: number, he: n
   pipe(
     O.fromNullable(data.image.thumbnail),
     O.fold(
-      () => (<img width={wi} height={he} src={data.image.original} alt={data.title} />),
-      (thumbnail) => (<img width={wi} height={he} src={thumbnail} alt={data.title} />)
+      () => (<img part="product-image" width={wi} height={he} src={data.image.original} alt={data.title} />),
+      (thumbnail) => (<img part="product-image" width={wi} height={he} src={thumbnail} alt={data.title} />)
     )
   );
 
@@ -49,11 +49,11 @@ const PriceComponent = (price: number, prefix: string, currency: string) => pipe
   O.fromNullable(price),
   O.fold(
     () => null,
-    () => <span part="price-regular" class="price regular">
-        {Prefix(prefix)}
-        <span part="price-amount" class="price amount">{ price }</span>
-        {Currency(currency)}
-    </span>
+    () => [
+      Prefix(prefix),
+      <span part="price-amount" class="price amount">{ price }</span>,
+      Currency(currency)
+    ]
   )
 );
 
@@ -79,7 +79,9 @@ export const Price = (data: Interfaces['VisualProductSearch'], prefix: string = 
     E.chain(pricesAreDifferent),
     E.chain(isSalePrice),
     E.fold(
-      (singlePrice) => PriceComponent(singlePrice, prefix, currency),
+      (singlePrice) => <span part="price-regular" class="price regular">
+          {PriceComponent(singlePrice, prefix, currency)}
+      </span>,
       (prices) => <div class="sale-container">
           <span part="price-outdated" class="price outdated">
               { PriceComponent(prices[0], prefix, currency) }
