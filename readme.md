@@ -9,14 +9,33 @@
 
 ### Component's properties
 
-| Property     | Attribute     | Description                                | Type     | Default                  |
-| ------------ | ------------- | ------------------------------------------ | -------- | ------------------------ |
-| `blockTitle` | `block-title` | Title for recommendations widget           | `string` | `'Recommended products'` |
-| `columns`    | `columns`     | Number of columns for recommendations      | `number` | `4`                      |
-| `imageRatio` | `image-ratio` | Ratio of each recommended product image    | `number` | `1.5`                    |
-| `imageWidth` | `image-width` | Width of each recommended product image    | `number` | `150`                    |
-| `productId`  | `product-id`  | Id of product you need recommendations for | `string` | `undefined`              |
-| `token`      | `token`       | Mediaopt customer token                    | `string` | `undefined`              |
+| Property       | Attribute       | Description                                | Type     | Default                  |
+| -------------- | --------------- | ------------------------------------------ | -------- | ------------------------ |
+| `blockTitle`   | `block-title`   | Title for recommendations widget           | `string` | `'Recommended products'` |
+| `columns`      | `columns`       | Number of columns for recommendations      | `number` | `4`                      |
+| `currencySign` | `currency-sign` | Currency sign will shown after price       | `string` | `undefined`              |
+| `imageRatio`   | `image-ratio`   | Ratio of each recommended product image    | `number` | `1.5`                    |
+| `imageWidth`   | `image-width`   | Width of each recommended product image    | `number` | `150`                    |
+| `pricePrefix`  | `price-prefix`  | prefix will shown before price             | `string` | `undefined`              |
+| `productId`    | `product-id`    | Id of product you need recommendations for | `string` | `undefined`              |
+| `token`        | `token`         | Mediaopt customer token                    | `string` | `undefined`              |
+
+### Styling a component
+
+Because some of CSS style properties can not be inherited we provide an styling API based on [CSS Shadow Parts](https://developer.mozilla.org/en-US/docs/Web/CSS/::part) spec.
+
+Here is a list of shadow parts you can style:
+- recommendations-title
+- product-image
+- product-title
+- price-prefix
+- price-currency
+- price-regular
+- price-outdated
+- price-discount
+
+This image describe which elements affected by parts:
+![exported-parts](/web_component_shadow_parts.png)
 
 ## Development
 ### Automatic interfaces generations
