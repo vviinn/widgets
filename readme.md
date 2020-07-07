@@ -24,6 +24,27 @@
 
 Because some of CSS style properties can not be inherited we provide an styling API based on [CSS Shadow Parts](https://developer.mozilla.org/en-US/docs/Web/CSS/::part) spec.
 
+*NB: If you don't need to support browsers without Shadow Parts support (IE, Firefox for Android and Samsung Internet) you can adding id to style tag and use Shadow Parts styling anywhere*
+
+To use Shadow Parts add *style* tag to head of your page:
+```html
+<style id="vpr-styles">
+    mopt-vpr::part(price-outdated) {
+      color: inherit;
+      font-size: 12px;
+      font-weight: 400;
+      text-align: center;
+    }
+
+    mopt-vpr::part(price-discount) {
+      color: #dc616d;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+    }
+</style>
+```
+
 Here is a list of shadow parts you can style:
 
 - recommendations-title
@@ -36,7 +57,18 @@ Here is a list of shadow parts you can style:
 - price-discount
 
 This image describe which elements affected by parts:
+
 ![exported-parts](/web_component_shadow_parts.png)
+
+Combination of CSS Grids and Shadow Parts allows to change visual position of some elements. For example, if you want to put title below image use
+
+```css
+    mopt-vpr::part(product-title) {
+      grid-row: 1;
+    }
+```
+
+*NB: This feature will not work if you will change display property of element!*
 
 ## Development
 ### Automatic interfaces generations
