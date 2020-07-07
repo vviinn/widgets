@@ -25,6 +25,7 @@
 Because some of CSS style properties can not be inherited we provide an styling API based on [CSS Shadow Parts](https://developer.mozilla.org/en-US/docs/Web/CSS/::part) spec.
 
 Here is a list of shadow parts you can style:
+
 - recommendations-title
 - product-image
 - product-title
