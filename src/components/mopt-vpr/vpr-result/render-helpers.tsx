@@ -72,9 +72,9 @@ const isSalePrice = (x: [number, number]): E.Either<number, [number, number]> =>
        ? E.left(x[1])
        : E.right(x);
 
-export const Price = (data: Interfaces['VisualProductSearch'], prefix: string = null, currency: string = null): FunctionalComponent<Interfaces['VisualProductSearch']['price']> =>
+const getPriceComponent = (data: Interfaces['VisualProductSearch']['price'], prefix: string = null, currency: string = null): FunctionalComponent<Interfaces['VisualProductSearch']['price']> =>
   pipe(
-    E.fromNullable(null)(data.price),
+    E.right(data),
     E.chain(bothPricesPresented),
     E.chain(pricesAreDifferent),
     E.chain(isSalePrice),
@@ -90,5 +90,14 @@ export const Price = (data: Interfaces['VisualProductSearch'], prefix: string = 
               { PriceComponent(prices[1], prefix, currency) }
           </span>
       </div>
+    )
+  );
+
+export const Price = (data: Interfaces['VisualProductSearch'], prefix: string = null, currency: string = null): FunctionalComponent<Interfaces['VisualProductSearch']['price']> =>
+  pipe(
+    O.fromNullable(data.price),
+    O.fold(
+      () => null,
+      (price) => getPriceComponent(price, prefix, currency)
     )
   );

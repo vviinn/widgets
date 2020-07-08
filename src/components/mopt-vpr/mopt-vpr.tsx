@@ -3,6 +3,7 @@ import { getRecommendations } from '../../services/recommendationsService';
 import { pipe } from 'fp-ts/lib/pipeable';
 import * as TE from 'fp-ts/lib/TaskEither';
 import * as E from 'fp-ts/lib/Either';
+import * as O from 'fp-ts/lib/Option';
 import { authOptionsFromToken } from './token-helpers';
 import { Interfaces } from '../../interfaces/recommendation';
 import state from '../../store/store';
@@ -48,7 +49,11 @@ export class MoptVpr implements ComponentInterface {
     const detectorBounds = this.cssPartsDetector.getBoundingClientRect();
 
     if(detectorBounds.width === 0 && detectorBounds.height === 0) {
-      state.fallbackStyles = document.head.getElementsByTagName('style')['kek'].textContent.replace(/(?:mopt-vpr::part\()(\w+)-(\w+)\)/g, '.$1.$2');
+      state.fallbackStyles = pipe(
+        O.fromNullable(document.head.getElementsByTagName('style')['vpr-styles']),
+        O.map(style => style.textContent.replace(/(?:mopt-vpr::part\()(\w+)-(\w+)\)/g, '.$1.$2')),
+        O.getOrElse(() => '')
+      );
     }
   }
 
