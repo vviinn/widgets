@@ -1,5 +1,7 @@
-import { Component, ComponentInterface, h, Prop, Element } from '@stencil/core';
+import { Component, ComponentInterface, Prop, Element, Host, h } from '@stencil/core';
 import { Interfaces } from '../../../interfaces/recommendation';
+import { Image, Title, Price } from './render-helpers';
+import state from '../../../store/store';
 
 @Component({
   tag: 'vpr-result',
@@ -17,16 +19,16 @@ export class VprResult implements ComponentInterface {
   }
 
   render() {
-    return this.item === undefined
-         ? null
-         : [
-           <img src={this.item.image.original}
-                width={this.imageWidth}
-                height={this.imageWidth * this.imageRatio}
-                alt={this.item.title}>
-           </img>,
-           <span>{this.item.title}</span>
-         ];
+    return <Host exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image">
+        <style>{state.fallbackStyles}</style>
+        {this.item === undefined
+        ? null
+        : [
+          Image(this.item, this.imageWidth, this.imageWidth * this.imageRatio),
+          Title(this.item),
+          Price(this.item, state.pricePrefix, state.currencySign)
+        ]}
+    </Host>
   }
 }
 

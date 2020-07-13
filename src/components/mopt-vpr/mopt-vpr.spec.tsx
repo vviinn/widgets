@@ -10,10 +10,12 @@ describe('mopt-vpr', () => {
     expect(page.root).toEqualHtml(`
       <mopt-vpr aria-hidden="true" style="--column-width: 150px;">
         <mock:shadow-root>
-          <h4>
+          <style></style>
+          <h2 part="recommendations-title">
             Recommended products
-          </h4>
+          </h2>
           <div class="results" data-columns="4"></div>
+          <div class="visually-hidden" part="shadow-parts-detect"></div>
         </mock:shadow-root>
       </mopt-vpr>
     `);
