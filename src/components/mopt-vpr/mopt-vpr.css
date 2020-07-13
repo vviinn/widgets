@@ -14,3 +14,17 @@
   grid-gap: 1rem;
   grid-template-columns: repeat(auto-fit, var(--column-width))  
 }
+
+.visually-hidden {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  height: 0;
+  width: 0;
+}
+
+::part(shadow-parts-detect) {
+  height: 10px!important;
+  width: 10px!important;
+}
