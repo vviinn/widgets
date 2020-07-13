@@ -14,7 +14,7 @@ pipelines:
             - node
           script:
             - touch .env
-            - echo "OPENAPI_URL=https://docs.stage.ionos.mediaopt.tools/openapi.yaml" >> .env
+            - echo "OPENAPI_URL=https://docs.stage.mediaopt.tools/openapi.yaml" >> .env
             - echo "RECOMMENDATIONS_URL=https://stage.mediaopt.tools/product/" >> .env
             - npm install
             - npm run build_interfaces
