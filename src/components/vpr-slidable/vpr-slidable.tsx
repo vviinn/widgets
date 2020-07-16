@@ -18,7 +18,7 @@ export class VprSlidable implements ComponentInterface {
       this.mode,
       E.fold(
         () => <slider-mouse><slot></slot></slider-mouse>,
-        () => <slider-touch><slot></slot></slider-touch>
+        () => <slider-mouse><slot></slot></slider-mouse>
       )
     )
   }

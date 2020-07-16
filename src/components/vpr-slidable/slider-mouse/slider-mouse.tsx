@@ -1,4 +1,9 @@
 import { Component, ComponentInterface, h, Element } from '@stencil/core';
+import { getSlotContent } from '../utils';
+import { pipe } from 'fp-ts/lib/pipeable';
+import * as O from 'fp-ts/lib/Option';
+import * as A from 'fp-ts/lib/Array';
+import { sequenceT } from 'fp-ts/lib/Apply';
 
 @Component({
   tag: 'slider-mouse',
@@ -10,6 +15,30 @@ export class SliderMouse implements ComponentInterface {
 
   private wrapperNode: HTMLDivElement;
   private contentNode: HTMLDivElement;
+
+  private slideWidth: number = 0;
+
+  componentDidRender() {
+    const sequenceTOption = sequenceT(O.option);
+    const twoPresented = (x: Element[]) => sequenceTOption(
+      A.lookup(0, x),
+      A.lookup(1, x),
+    );
+
+    const step = pipe(
+      getSlotContent(this.contentNode),
+      O.chain(A.head),
+      O.map((x) => Array.from(x.childNodes)),
+      O.chain(twoPresented),
+      O.map((elts) => elts.map(e => e.getBoundingClientRect().left)),
+      O.map((leftCoords) => leftCoords[1] - leftCoords[0]),
+      O.getOrElse(() => 1)
+    );
+
+    const steps = Math.round(this.wrapperNode.getBoundingClientRect().width / step);
+
+    this.slideWidth = step * steps;
+  }
 
   isContentInRightBounds(): boolean {
     const contentSlot = this.contentNode.lastChild as HTMLSlotElement;
@@ -31,9 +60,8 @@ export class SliderMouse implements ComponentInterface {
     if(this.isContentInRightBounds()) {
       const translation = '--translation';
       const currentTranslation = getComputedStyle(this.contentNode).getPropertyValue(translation);
-      const { width } = this.wrapperNode.getBoundingClientRect();
 
-      this.contentNode.style.setProperty(translation, `${parseInt(currentTranslation) - width}px`)
+      this.contentNode.style.setProperty(translation, `${parseInt(currentTranslation) - this.slideWidth}px`)
     }
   }
 
@@ -41,9 +69,8 @@ export class SliderMouse implements ComponentInterface {
     if(this.isContentInLeftBounds()) {
       const translation = '--translation';
       const currentTranslation = getComputedStyle(this.contentNode).getPropertyValue(translation);
-      const { width } = this.wrapperNode.getBoundingClientRect();
 
-      this.contentNode.style.setProperty(translation, `${parseInt(currentTranslation) + width}px`)
+      this.contentNode.style.setProperty(translation, `${parseInt(currentTranslation) + this.slideWidth}px`)
     }
   }
 
