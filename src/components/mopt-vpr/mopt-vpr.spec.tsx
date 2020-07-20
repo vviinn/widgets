@@ -14,7 +14,7 @@ describe('mopt-vpr', () => {
           <h2 part="recommendations-title">
             Recommended products
           </h2>
-          <div class="results" data-columns="4"></div>
+          <div class="grid results" data-columns="4"></div>
           <div class="visually-hidden" part="shadow-parts-detect"></div>
         </mock:shadow-root>
       </mopt-vpr>
