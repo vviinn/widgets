@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, h } from '@stencil/core';
+import { Component, ComponentInterface, h, Listen } from '@stencil/core';
 
 @Component({
   tag: 'slider-touch',
@@ -6,10 +6,35 @@ import { Component, ComponentInterface, h } from '@stencil/core';
   shadow: true,
 })
 export class SliderTouch implements ComponentInterface {
+  private contentNode: HTMLDivElement;
+  private touchMoveListener = this.handleTouchMove.bind(this);
+  private touchEndListener = this.handleTouchEnd.bind(this);
+  
+  @Listen('touchstart')
+  handleTouchStart() {    
+    this.contentNode.addEventListener('touchmove', this.touchMoveListener);
+    this.contentNode.addEventListener('touchend', this.touchEndListener);
+  }
 
+  handleTouchMove(event: TouchEvent) {
+    event.preventDefault();
+  }
+
+  handleTouchEnd() {
+    this.contentNode.removeEventListener('touchmove', this.touchMoveListener);
+    this.contentNode.removeEventListener('touchend', this.touchEndListener);
+  }
+  
   render() {
     return (
-      <div><h1>HELLO TOUCH!</h1><slot></slot></div>
+      <div class="slider-body">
+          <div class="content-wrapper">
+              <div class="content"
+                   ref={(el) => this.contentNode = el}>
+                  <slot></slot>
+              </div>
+          </div>
+      </div>
     );
   }
 

@@ -1,3 +1,20 @@
 :host {
+  --translation: 0px;
   display: block;
+}
+
+.content-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.slider-body {
+  display: grid;
+  grid-template-columns: auto;
+  grid-gap: 1rem;
+  align-items: center;
+}
+
+.content {
+
 }
