@@ -9,10 +9,16 @@
   visibility: hidden;
 }
 
-.results[data-columns] {
+.results.grid[data-columns] {
   display: grid;
   grid-gap: 1rem;
   grid-template-columns: repeat(auto-fit, var(--column-width))  
+}
+
+.results.slider {
+  display: grid;
+  grid-gap: 1rem;
+  grid-auto-flow: column;
 }
 
 .visually-hidden {

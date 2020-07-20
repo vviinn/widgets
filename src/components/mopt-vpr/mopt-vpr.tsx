@@ -39,6 +39,8 @@ export class MoptVpr implements ComponentInterface {
   @Prop() currencySign: string;
   /** prefix will shown before price */
   @Prop() pricePrefix: string;
+  /** Use slider or grid view */
+  @Prop() sliderMode: boolean = false;
 
   @State() recommendations: Interfaces['VisualProductSearch'][] = [];
   @State() loaded: boolean = false;
@@ -91,20 +93,34 @@ export class MoptVpr implements ComponentInterface {
     this.loaded = true;
   }
 
+  getBody(): HTMLElement {
+    return this.sliderMode
+         ? <vpr-slidable>
+             <div class="results slider">
+                 { this.recommendations.map(r => (
+                   <vpr-result item={r}
+                               imageWidth={this.imageWidth}
+                               imageRatio={this.imageRatio} />
+                   ))}
+             </div>
+         </vpr-slidable>
+         : <div class="results grid"
+                data-columns={this.columns}>
+             { this.recommendations.map(r => (
+               <vpr-result item={r}
+                           imageWidth={this.imageWidth}
+                           imageRatio={this.imageRatio} />
+               ))}
+         </div>
+  }
+
   render() {
     return (
       <Host class={{loaded: this.loaded}}
             aria-hidden={this.loaded ? 'false' : 'true'}>
           <style>{state.fallbackStyles}</style>
           <h2 part="recommendations-title">{ this.blockTitle }</h2>
-          <div class="results"
-               data-columns={this.columns}>
-              { this.recommendations.map(r => (
-                <vpr-result item={r}
-                            imageWidth={this.imageWidth}
-                            imageRatio={this.imageRatio} />
-                ))}
-          </div>
+          { this.getBody() }
           <div class="visually-hidden"
                part="shadow-parts-detect"
                ref={(el) => this.cssPartsDetector = el }>
