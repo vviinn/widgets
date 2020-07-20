@@ -10,7 +10,9 @@ describe('vpr-slidable', () => {
     expect(page.root).toEqualHtml(`
       <vpr-slidable>
         <mock:shadow-root>
-          <slot></slot>
+          <slider-mouse>
+            <slot></slot>
+          </slider-mouse>
         </mock:shadow-root>
       </vpr-slidable>
     `);
