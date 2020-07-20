@@ -37,14 +37,24 @@ export namespace Components {
          */
         "productId": string;
         /**
+          * Use slider or grid view
+         */
+        "sliderMode": boolean;
+        /**
           * Mediaopt customer token
          */
         "token": string;
+    }
+    interface SliderMouse {
+    }
+    interface SliderTouch {
     }
     interface VprResult {
         "imageRatio": number;
         "imageWidth": number;
         "item": Interfaces["VisualProductSearch"];
+    }
+    interface VprSlidable {
     }
 }
 declare global {
@@ -54,15 +64,36 @@ declare global {
         prototype: HTMLMoptVprElement;
         new (): HTMLMoptVprElement;
     };
+    interface HTMLSliderMouseElement extends Components.SliderMouse, HTMLStencilElement {
+    }
+    var HTMLSliderMouseElement: {
+        prototype: HTMLSliderMouseElement;
+        new (): HTMLSliderMouseElement;
+    };
+    interface HTMLSliderTouchElement extends Components.SliderTouch, HTMLStencilElement {
+    }
+    var HTMLSliderTouchElement: {
+        prototype: HTMLSliderTouchElement;
+        new (): HTMLSliderTouchElement;
+    };
     interface HTMLVprResultElement extends Components.VprResult, HTMLStencilElement {
     }
     var HTMLVprResultElement: {
         prototype: HTMLVprResultElement;
         new (): HTMLVprResultElement;
     };
+    interface HTMLVprSlidableElement extends Components.VprSlidable, HTMLStencilElement {
+    }
+    var HTMLVprSlidableElement: {
+        prototype: HTMLVprSlidableElement;
+        new (): HTMLVprSlidableElement;
+    };
     interface HTMLElementTagNameMap {
         "mopt-vpr": HTMLMoptVprElement;
+        "slider-mouse": HTMLSliderMouseElement;
+        "slider-touch": HTMLSliderTouchElement;
         "vpr-result": HTMLVprResultElement;
+        "vpr-slidable": HTMLVprSlidableElement;
     }
 }
 declare namespace LocalJSX {
@@ -96,18 +127,31 @@ declare namespace LocalJSX {
          */
         "productId"?: string;
         /**
+          * Use slider or grid view
+         */
+        "sliderMode"?: boolean;
+        /**
           * Mediaopt customer token
          */
         "token"?: string;
+    }
+    interface SliderMouse {
+    }
+    interface SliderTouch {
     }
     interface VprResult {
         "imageRatio"?: number;
         "imageWidth"?: number;
         "item"?: Interfaces["VisualProductSearch"];
     }
+    interface VprSlidable {
+    }
     interface IntrinsicElements {
         "mopt-vpr": MoptVpr;
+        "slider-mouse": SliderMouse;
+        "slider-touch": SliderTouch;
         "vpr-result": VprResult;
+        "vpr-slidable": VprSlidable;
     }
 }
 export { LocalJSX as JSX };
@@ -115,7 +159,10 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "mopt-vpr": LocalJSX.MoptVpr & JSXBase.HTMLAttributes<HTMLMoptVprElement>;
+            "slider-mouse": LocalJSX.SliderMouse & JSXBase.HTMLAttributes<HTMLSliderMouseElement>;
+            "slider-touch": LocalJSX.SliderTouch & JSXBase.HTMLAttributes<HTMLSliderTouchElement>;
             "vpr-result": LocalJSX.VprResult & JSXBase.HTMLAttributes<HTMLVprResultElement>;
+            "vpr-slidable": LocalJSX.VprSlidable & JSXBase.HTMLAttributes<HTMLVprSlidableElement>;
         }
     }
 }
