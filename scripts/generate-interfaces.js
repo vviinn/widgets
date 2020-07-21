@@ -11,14 +11,23 @@ const yaml = require('js-yaml');
 http
   .get(process.env.OPENAPI_URL, (response) => {
     response.pipe(file);
-    file.on('finish', (x) => {
+    file.on('finish', () => {
       const yamlToJs = yaml.load(fs.readFileSync(path));
       result.write(swaggerToTS.default(yamlToJs));
       result.close();
       file.close();
       fs.unlinkSync(path);
+      console.info('Interfaces created!');
+      process.exit(0);
+    });
+
+    file.on('error', (err) => {
+      fs.unlinkSync(path);
+      console.error('Can not read schema:', err.message);
+      process.exit(1);
     });
   })
   .on('error', (err) => {
-    console.log('Can not load Swagger schema:', err.message);
+    console.error('Can not load Swagger schema:', err.message);
+    process.exit(1);
   });
