@@ -17,9 +17,17 @@ http
       result.close();
       file.close();
       fs.unlinkSync(path);
+      console.info('Interfaces created!');
+      process.exit(0);
+    });
+
+    file.on('error', (err) => {
+      fs.unlinkSync(path);
+      console.error('Can not read schema:', err.message);
+      process.exit(1);
     });
   })
   .on('error', (err) => {
-    console.log('Can not load Swagger schema:', err.message);
+    console.error('Can not load Swagger schema:', err.message);
     process.exit(1);
   });
