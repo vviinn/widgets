@@ -11,7 +11,7 @@ const yaml = require('js-yaml');
 http
   .get(process.env.OPENAPI_URL, (response) => {
     response.pipe(file);
-    file.on('finish', (x) => {
+    file.on('finish', () => {
       const yamlToJs = yaml.load(fs.readFileSync(path));
       result.write(swaggerToTS.default(yamlToJs));
       result.close();
@@ -21,4 +21,5 @@ http
   })
   .on('error', (err) => {
     console.log('Can not load Swagger schema:', err.message);
+    process.exit(1);
   });
