@@ -70,4 +70,5 @@ pipelines:
             - touch .env
             - echo "OPENAPI_URL=https://docs_error.mediaopt.tools/openapi.yaml" >> .env
             - echo "RECOMMENDATIONS_URL=https://mediaopt.tools/product/" >> .env
+            - npm install
             - npm run build_interfaces 
