@@ -21,7 +21,7 @@ const processResponce = flow(
 
 const getJson = async (x: Response) => await x.json();
 
-export const httpGet = (url: string, options: FetchOptions = {}): TE.TaskEither<Error, Promise<any>> => pipe(
+export const httpGet = <T>(url: string, options: FetchOptions = {}): TE.TaskEither<Error, Promise<T>> => pipe(
   safeGet(url, options),
   TE.chain(processResponce),
   TE.map(getJson)
