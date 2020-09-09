@@ -1,6 +1,6 @@
 import { Component, ComponentInterface, Prop, Element, Host, h } from '@stencil/core';
 import { Interfaces } from '../../../interfaces/recommendation';
-import { Image, Title, Price } from './render-helpers';
+import { Image, Title, Price, Brand, ProductType } from './render-helpers';
 import state from '../../../store/store';
 
 @Component({
@@ -26,6 +26,8 @@ export class VprResult implements ComponentInterface {
         : [
           Image(this.item, this.imageWidth, this.imageWidth * this.imageRatio),
           Title(this.item),
+          Brand(this.item),
+          ProductType(this.item),
           Price(this.item, state.pricePrefix, state.currencySign)
         ]}
     </Host>

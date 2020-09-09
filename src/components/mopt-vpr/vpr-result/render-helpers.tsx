@@ -101,3 +101,25 @@ export const Price = (data: Interfaces['VisualProductSearch'], prefix: string = 
       (price) => getPriceComponent(price, prefix, currency)
     )
   );
+
+export const Brand = (data: Interfaces['VisualProductSearch']): FunctionalComponent<Interfaces['VisualProductSearch']['brand']> =>
+  pipe(
+    O.fromNullable(data.brand),
+    O.fold(
+      () => null,
+      (brand) => <span part="brand" class="brand">
+          { brand }
+      </span>
+    )
+  );
+
+export const ProductType = (data: Interfaces['VisualProductSearch']): FunctionalComponent<Interfaces['VisualProductSearch']['productType']> =>
+  pipe(
+    O.fromNullable(data.productType),
+    O.fold(
+      () => null,
+      (productType) => <span part="product-type" class="product-type">
+          { productType }
+      </span>
+    )
+  );
