@@ -56,6 +56,8 @@ Here is a list of shadow parts you can style:
 - price-regular
 - price-outdated
 - price-discount
+- brand
+- product-type
 
 This image describe which elements affected by parts:
 
