@@ -20,7 +20,7 @@ describe('vpr-result', () => {
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image" style="--image-height: 150px;">
+      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
         <mock:shadow-root>
           <style></style>
           <img alt="Fender Jazz Bass" part="product-image" part="product-image" height="150" src="path-to-image.jpg" width="100">
@@ -50,7 +50,7 @@ describe('vpr-result', () => {
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image" style="--image-height: 150px;">
+      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
         <mock:shadow-root>
           <style></style>
           <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
@@ -79,7 +79,7 @@ describe('vpr-result', () => {
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image" style="--image-height: 150px;">
+      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
         <mock:shadow-root>
           <style></style>
           <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
@@ -109,7 +109,7 @@ describe('vpr-result', () => {
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image" style="--image-height: 150px;">
+      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
         <mock:shadow-root>
           <style></style>
           <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
@@ -140,7 +140,7 @@ describe('vpr-result', () => {
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image" style="--image-height: 150px;">
+      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
         <mock:shadow-root>
           <style></style>
           <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
@@ -174,7 +174,7 @@ describe('vpr-result', () => {
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image" style="--image-height: 150px;">
+      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
         <mock:shadow-root>
           <style></style>
           <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
@@ -213,7 +213,7 @@ describe('vpr-result', () => {
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image" style="--image-height: 150px;">
+      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
         <mock:shadow-root>
           <style></style>
           <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
@@ -253,7 +253,7 @@ describe('vpr-result', () => {
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image" style="--image-height: 150px;">
+      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
         <mock:shadow-root>
           <style></style>
           <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
@@ -293,7 +293,7 @@ describe('vpr-result', () => {
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image" style="--image-height: 150px;">
+      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
         <mock:shadow-root>
           <style></style>
           <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
@@ -333,7 +333,7 @@ describe('vpr-result', () => {
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image" style="--image-height: 150px;">
+      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
         <mock:shadow-root>
           <style></style>
           <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
@@ -356,5 +356,83 @@ describe('vpr-result', () => {
       </vpr-result>
     `);
   });
+
+  it('renders brand', async () => {
+    const recommendation: Interfaces['VisualProductSearch'] = {
+      image: {
+        original: 'path-to-image.jpg',
+        thumbnail: 'path-to-thumb.jpg'
+      },
+      title: 'Fender Jazz Bass',
+      deeplink: '/basses/fjb.html',
+      price: {
+        actual: 100
+      },
+      brand: "Fender"
+    };
+    
+    const page = await newSpecPage({
+      components: [VprResult],
+      html: `<vpr-result></vpr-result>`
+    });
+
+    page.root.item = recommendation;
+    await page.waitForChanges();
+
+    expect(page.root).toEqualHtml(`
+      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
+        <mock:shadow-root>
+          <style></style>
+          <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          <a class="product title" href="/basses/fjb.html" part="product-title">
+            Fender Jazz Bass
+          </a>
+          <span class="brand" part="brand">Fender</span>
+          <span class="price regular" part="price-regular">
+            <span class="amount price" part="price-amount">100</span>
+          </span>
+        </mock:shadow-root>
+      </vpr-result>
+    `);
+    });
+
+    it('renders product type', async () => {
+    const recommendation: Interfaces['VisualProductSearch'] = {
+      image: {
+        original: 'path-to-image.jpg',
+        thumbnail: 'path-to-thumb.jpg'
+      },
+      title: 'Fender Jazz Bass',
+      deeplink: '/basses/fjb.html',
+      price: {
+        actual: 100
+      },
+      productType: "Bass guitar"
+    };
+    
+    const page = await newSpecPage({
+      components: [VprResult],
+      html: `<vpr-result></vpr-result>`
+    });
+
+    page.root.item = recommendation;
+    await page.waitForChanges();
+
+    expect(page.root).toEqualHtml(`
+      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
+        <mock:shadow-root>
+          <style></style>
+          <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          <a class="product title" href="/basses/fjb.html" part="product-title">
+            Fender Jazz Bass
+          </a>
+          <span class="product-type" part="product-type">Bass guitar</span>
+          <span class="price regular" part="price-regular">
+            <span class="amount price" part="price-amount">100</span>
+          </span>
+        </mock:shadow-root>
+      </vpr-result>
+    `);
+    });
 
 });
