@@ -19,7 +19,7 @@ export class VprResult implements ComponentInterface {
   }
 
   render() {
-    return <Host exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image">
+    return <Host exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type">
         <style>{state.fallbackStyles}</style>
         {this.item === undefined
         ? null
