@@ -143,7 +143,9 @@ describe('vpr-result', () => {
       <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
         <mock:shadow-root>
           <style></style>
-          <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          <a href="/basses/fjb.html">
+            <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          </a>
           <a class="product title" href="/basses/fjb.html" part="product-title">
             Fender Jazz Bass
           </a>
@@ -177,7 +179,9 @@ describe('vpr-result', () => {
       <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
         <mock:shadow-root>
           <style></style>
-          <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          <a href="/basses/fjb.html">
+            <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          </a>
           <a class="product title" href="/basses/fjb.html" part="product-title">
             Fender Jazz Bass
           </a>
@@ -216,7 +220,9 @@ describe('vpr-result', () => {
       <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
         <mock:shadow-root>
           <style></style>
-          <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          <a href="/basses/fjb.html">
+            <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          </a>
           <a class="product title" href="/basses/fjb.html" part="product-title">
             Fender Jazz Bass
           </a>
@@ -256,7 +262,9 @@ describe('vpr-result', () => {
       <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
         <mock:shadow-root>
           <style></style>
-          <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          <a href="/basses/fjb.html">
+            <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          </a>
           <a class="product title" href="/basses/fjb.html" part="product-title">
             Fender Jazz Bass
           </a>
@@ -296,7 +304,9 @@ describe('vpr-result', () => {
       <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
         <mock:shadow-root>
           <style></style>
-          <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          <a href="/basses/fjb.html">
+            <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          </a>
           <a class="product title" href="/basses/fjb.html" part="product-title">
             Fender Jazz Bass
           </a>
@@ -336,7 +346,9 @@ describe('vpr-result', () => {
       <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
         <mock:shadow-root>
           <style></style>
-          <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          <a href="/basses/fjb.html">
+            <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          </a>
           <a class="product title" href="/basses/fjb.html" part="product-title">
             Fender Jazz Bass
           </a>
@@ -383,7 +395,9 @@ describe('vpr-result', () => {
       <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
         <mock:shadow-root>
           <style></style>
-          <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          <a href="/basses/fjb.html">
+            <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          </a>
           <a class="product title" href="/basses/fjb.html" part="product-title">
             Fender Jazz Bass
           </a>
@@ -394,7 +408,7 @@ describe('vpr-result', () => {
         </mock:shadow-root>
       </vpr-result>
     `);
-    });
+  });
 
     it('renders product type', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
@@ -418,11 +432,13 @@ describe('vpr-result', () => {
     page.root.item = recommendation;
     await page.waitForChanges();
 
-    expect(page.root).toEqualHtml(`
+      expect(page.root).toEqualHtml(`
       <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
         <mock:shadow-root>
           <style></style>
-          <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          <a href="/basses/fjb.html">
+            <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          </a>
           <a class="product title" href="/basses/fjb.html" part="product-title">
             Fender Jazz Bass
           </a>
@@ -432,7 +448,7 @@ describe('vpr-result', () => {
           </span>
         </mock:shadow-root>
       </vpr-result>
-    `);
+      `);
     });
 
 });

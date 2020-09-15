@@ -7,17 +7,31 @@ import { FunctionalComponent, h } from '@stencil/core';
 
 const sequenceTEither = sequenceT(E.either);
 
+const checkEmpryString = (x: string): O.Option<string> =>
+  x.length > 0 ? O.some(x) : O.none;
+
 export const Image = (data: Interfaces['VisualProductSearch'], wi: number, he: number): FunctionalComponent<Interfaces['VisualProductSearch']> =>
   pipe(
     O.fromNullable(data.image.thumbnail),
     O.fold(
-      () => (<img part="product-image" width={wi} height={he} src={data.image.original} alt={data.title} />),
-      (thumbnail) => (<img part="product-image" width={wi} height={he} src={thumbnail} alt={data.title} />)
+      () => pipe(
+        O.fromNullable(data.deeplink),
+        O.chain(checkEmpryString),
+        O.fold(
+          () => (<img part="product-image" width={wi} height={he} src={data.image.original} alt={data.title} />),
+          (deeplink) => (<a href={deeplink}><img part="product-image" width={wi} height={he} src={data.image.original} alt={data.title} /></a>)
+        )
+      ),
+      (thumbnail) => pipe(
+        O.fromNullable(data.deeplink),
+        O.chain(checkEmpryString),
+        O.fold(
+          () => (<img part="product-image" width={wi} height={he} src={thumbnail} alt={data.title} />),
+          (deeplink) => (<a href={deeplink}><img part="product-image" width={wi} height={he} src={thumbnail} alt={data.title} /></a>)
+        )
+      )
     )
   );
-
-const checkEmpryString = (x: string): O.Option<string> =>
-  x.length > 0 ? O.some(x) : O.none;
 
 export const Title = (data: Interfaces['VisualProductSearch']): FunctionalComponent<Interfaces['VisualProductSearch']> =>
   pipe(
