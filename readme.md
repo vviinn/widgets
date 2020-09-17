@@ -7,7 +7,7 @@
 - Then you can use the element anywhere in your template with `<mopt-vpr></mopt-vpr>` tag
 - Use attributes for provide credentials or customize component view
 
-### Component's properties
+### Component properties
 
 | Property       | Attribute       | Description                                | Type      | Default                  |
 | -------------- | --------------- | ------------------------------------------ | --------- | ------------------------ |
@@ -20,6 +20,16 @@
 | `productId`    | `product-id`    | Id of product you need recommendations for | `string`  | `undefined`              |
 | `sliderMode`   | `slider-mode`   | Use slider or grid view                    | `boolean` | `false`                  |
 | `token`        | `token`         | Mediaopt customer token                    | `string`  | `undefined`              |
+
+### Component events
+
+| Event                 | Description                                                  | Type                                                                                                                                                                                                               |
+| --------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `recommendationClick` | Event fires ones when user click on deeplink                 | `CustomEvent<{ productId?: string; title?: string; brand?: string; productType?: string; deeplink?: string; image?: { original?: string; thumbnail?: string; }; price?: { actual?: number; retail?: number; }; }>` |
+| `recommendationLoad`  | Event fires ones when recommendation rendered on page        | `CustomEvent<{ productId?: string; title?: string; brand?: string; productType?: string; deeplink?: string; image?: { original?: string; thumbnail?: string; }; price?: { actual?: number; retail?: number; }; }>` |
+| `recommendationView`  | Event fires ones when recommendation appears on the viewport | `CustomEvent<{ productId?: string; title?: string; brand?: string; productType?: string; deeplink?: string; image?: { original?: string; thumbnail?: string; }; price?: { actual?: number; retail?: number; }; }>` |
+
+
 
 ### Styling a component
 

@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Prop, Element, Host, h } from '@stencil/core';
+import { Component, ComponentInterface, Prop, Element, Host, h, Event, EventEmitter } from '@stencil/core';
 import { Interfaces } from '../../../interfaces/recommendation';
 import { Image, Title, Price, Brand, ProductType } from './render-helpers';
 import state from '../../../store/store';
@@ -14,8 +14,43 @@ export class VprResult implements ComponentInterface {
   @Prop() imageWidth: number = 100;
   @Prop() imageRatio: number = 1.5;
 
+  /** Event fires ones when recommendation rendered on page */
+  @Event() recommendationLoad: EventEmitter<Interfaces['VisualProductSearch']>;
+  /** Event fires ones when recommendation appears on the viewport */
+  @Event() recommendationView: EventEmitter<Interfaces['VisualProductSearch']>;
+  /** Event fires ones when user click on deeplink */
+  @Event() recommendationClick: EventEmitter<Interfaces['VisualProductSearch']>;
+
+  private intersectionObserver = new IntersectionObserver(
+    this.intersectionCallback.bind(this),
+    { threshold: 1.0 }
+  );
+
   async componentWillLoad() {
     this.el.style.setProperty('--image-height', `${this.imageWidth * this.imageRatio}px`);
+  }
+
+  componentDidLoad() {
+    this.recommendationLoad.emit(this.item);
+    this.intersectionObserver.observe(this.el);
+
+    const links = this.el.shadowRoot.querySelectorAll('a');
+    links.forEach((link) => link.addEventListener(
+      'mousedown',
+      (event) => {
+        this.recommendationClick.emit(this.item);
+        event.preventDefault();
+        let clickEvent: MouseEvent = new MouseEvent('click');
+        setTimeout(() => link.dispatchEvent(clickEvent))
+      }
+    ));
+  }
+
+  intersectionCallback(data: IntersectionObserverEntry[]) {
+    if (data.some((entry) => entry.isIntersecting)) {
+      this.recommendationView.emit(this.item);
+      this.intersectionObserver.disconnect();
+    }
   }
 
   render() {
