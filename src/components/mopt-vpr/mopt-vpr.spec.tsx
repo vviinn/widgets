@@ -1,7 +1,5 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { MoptVpr } from './mopt-vpr';
-//import { Interfaces } from '../../interfaces/recommendation';
-jest.mock('../../mocks/getRecommendations');
 
 describe('mopt-vpr', () => {
   it('renders', async () => {
