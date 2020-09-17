@@ -143,6 +143,18 @@ declare namespace LocalJSX {
         "imageRatio"?: number;
         "imageWidth"?: number;
         "item"?: Interfaces["VisualProductSearch"];
+        /**
+          * Event fires ones when user click on deeplink
+         */
+        "onRecommendationClick"?: (event: CustomEvent<Interfaces["VisualProductSearch"]>) => void;
+        /**
+          * Event fires ones when recommendation rendered on page
+         */
+        "onRecommendationLoad"?: (event: CustomEvent<Interfaces["VisualProductSearch"]>) => void;
+        /**
+          * Event fires ones when recommendation appears on the viewport
+         */
+        "onRecommendationView"?: (event: CustomEvent<Interfaces["VisualProductSearch"]>) => void;
     }
     interface VprSlidable {
     }
