@@ -1,8 +1,28 @@
-import { newSpecPage } from '@stencil/core/testing';
+import { newSpecPage, SpecPage } from '@stencil/core/testing';
 import { VprResult } from './vpr-result';
 import { Interfaces } from '../../../interfaces/recommendation';
 
+let page: SpecPage;
+
 describe('vpr-result', () => {
+
+  beforeEach(async () => {
+    global.IntersectionObserver = jest.fn(() => ({
+      takeRecords: jest.fn(),
+      root: null,
+      rootMargin: '0',
+      thresholds: [1],
+      disconnect: jest.fn(),
+      observe: jest.fn(),
+      unobserve: jest.fn()
+    }));
+
+    page = await newSpecPage({
+      components: [VprResult],
+      html: `<vpr-result></vpr-result>`
+    });
+  });
+
   it('renders', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
       image: {
@@ -10,11 +30,6 @@ describe('vpr-result', () => {
       },
       title: 'Fender Jazz Bass'
     };
-    
-    const page = await newSpecPage({
-      components: [VprResult],
-      html: `<vpr-result></vpr-result>`
-    });
 
     page.root.item = recommendation;
     await page.waitForChanges();
@@ -40,11 +55,8 @@ describe('vpr-result', () => {
       },
       title: 'Fender Jazz Bass'
     };
-    
-    const page = await newSpecPage({
-      components: [VprResult],
-      html: `<vpr-result></vpr-result>`
-    });
+
+    await page.setContent('<vpr-result></vpr-result>');
 
     page.root.item = recommendation;
     await page.waitForChanges();
@@ -69,11 +81,6 @@ describe('vpr-result', () => {
       },
       title: 'Fender Jazz Bass',
     };
-    
-    const page = await newSpecPage({
-      components: [VprResult],
-      html: `<vpr-result></vpr-result>`
-    });
 
     page.root.item = recommendation;
     await page.waitForChanges();
@@ -99,11 +106,6 @@ describe('vpr-result', () => {
       title: 'Fender Jazz Bass',
       deeplink: ''
     };
-    
-    const page = await newSpecPage({
-      components: [VprResult],
-      html: `<vpr-result></vpr-result>`
-    });
 
     page.root.item = recommendation;
     await page.waitForChanges();
@@ -130,11 +132,6 @@ describe('vpr-result', () => {
       title: 'Fender Jazz Bass',
       deeplink: '/basses/fjb.html'
     };
-    
-    const page = await newSpecPage({
-      components: [VprResult],
-      html: `<vpr-result></vpr-result>`
-    });
 
     page.root.item = recommendation;
     await page.waitForChanges();
@@ -166,11 +163,6 @@ describe('vpr-result', () => {
         actual: 100
       }
     };
-    
-    const page = await newSpecPage({
-      components: [VprResult],
-      html: `<vpr-result></vpr-result>`
-    });
 
     page.root.item = recommendation;
     await page.waitForChanges();
@@ -207,11 +199,6 @@ describe('vpr-result', () => {
         retail: 100
       }
     };
-    
-    const page = await newSpecPage({
-      components: [VprResult],
-      html: `<vpr-result></vpr-result>`
-    });
 
     page.root.item = recommendation;
     await page.waitForChanges();
@@ -249,11 +236,6 @@ describe('vpr-result', () => {
         actual: 100
       }
     };
-    
-    const page = await newSpecPage({
-      components: [VprResult],
-      html: `<vpr-result></vpr-result>`
-    });
 
     page.root.item = recommendation;
     await page.waitForChanges();
@@ -291,11 +273,6 @@ describe('vpr-result', () => {
         actual: 100
       }
     };
-    
-    const page = await newSpecPage({
-      components: [VprResult],
-      html: `<vpr-result></vpr-result>`
-    });
 
     page.root.item = recommendation;
     await page.waitForChanges();
@@ -333,11 +310,6 @@ describe('vpr-result', () => {
         actual: 90
       }
     };
-    
-    const page = await newSpecPage({
-      components: [VprResult],
-      html: `<vpr-result></vpr-result>`
-    });
 
     page.root.item = recommendation;
     await page.waitForChanges();
@@ -382,11 +354,6 @@ describe('vpr-result', () => {
       },
       brand: "Fender"
     };
-    
-    const page = await newSpecPage({
-      components: [VprResult],
-      html: `<vpr-result></vpr-result>`
-    });
 
     page.root.item = recommendation;
     await page.waitForChanges();
@@ -410,7 +377,7 @@ describe('vpr-result', () => {
     `);
   });
 
-    it('renders product type', async () => {
+  it('renders product type', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
       image: {
         original: 'path-to-image.jpg',
@@ -423,16 +390,11 @@ describe('vpr-result', () => {
       },
       productType: "Bass guitar"
     };
-    
-    const page = await newSpecPage({
-      components: [VprResult],
-      html: `<vpr-result></vpr-result>`
-    });
 
     page.root.item = recommendation;
     await page.waitForChanges();
 
-      expect(page.root).toEqualHtml(`
+    expect(page.root).toEqualHtml(`
       <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
         <mock:shadow-root>
           <style></style>
@@ -448,7 +410,6 @@ describe('vpr-result', () => {
           </span>
         </mock:shadow-root>
       </vpr-result>
-      `);
-    });
-
+    `);
+  });
 });
