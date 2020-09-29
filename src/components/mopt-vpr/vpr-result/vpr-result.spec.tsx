@@ -5,7 +5,6 @@ import { Interfaces } from '../../../interfaces/recommendation';
 let page: SpecPage;
 
 describe('vpr-result', () => {
-
   beforeEach(async () => {
     global.IntersectionObserver = jest.fn(() => ({
       takeRecords: jest.fn(),
@@ -25,6 +24,7 @@ describe('vpr-result', () => {
 
   it('renders', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
+      productId: 'some-id',
       image: {
         original: 'path-to-image.jpg'
       },
@@ -49,6 +49,7 @@ describe('vpr-result', () => {
 
   it('renders recommendation with thumbnail', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
+      productId: 'some-id',
       image: {
         original: 'path-to-image.jpg',
         thumbnail: 'path-to-thumb.jpg'
@@ -76,6 +77,7 @@ describe('vpr-result', () => {
 
   it('renders recommendation title as span if no deeplink', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
+      productId: 'some-id',
       image: {
         thumbnail: 'path-to-thumb.jpg'
       },
@@ -100,6 +102,7 @@ describe('vpr-result', () => {
 
   it('renders recommendation title as span if deeplink is empty string', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
+      productId: 'some-id',
       image: {
         thumbnail: 'path-to-thumb.jpg'
       },
@@ -125,6 +128,7 @@ describe('vpr-result', () => {
 
   it('renders link if non-empty deeplink present', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
+      productId: 'some-id',
       image: {
         original: 'path-to-image.jpg',
         thumbnail: 'path-to-thumb.jpg'
@@ -153,6 +157,7 @@ describe('vpr-result', () => {
 
   it('renders price (only actual presented)', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
+      productId: 'some-id',
       image: {
         original: 'path-to-image.jpg',
         thumbnail: 'path-to-thumb.jpg'
@@ -189,6 +194,7 @@ describe('vpr-result', () => {
 
   it('renders price (only retail presented)', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
+      productId: 'some-id',
       image: {
         original: 'path-to-image.jpg',
         thumbnail: 'path-to-thumb.jpg'
@@ -225,6 +231,7 @@ describe('vpr-result', () => {
 
   it('renders price (retail eq actual)', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
+      productId: 'some-id',
       image: {
         original: 'path-to-image.jpg',
         thumbnail: 'path-to-thumb.jpg'
@@ -262,6 +269,7 @@ describe('vpr-result', () => {
 
   it('renders price (actual more then retail)', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
+      productId: 'some-id',
       image: {
         original: 'path-to-image.jpg',
         thumbnail: 'path-to-thumb.jpg'
@@ -299,6 +307,7 @@ describe('vpr-result', () => {
 
   it('renders price (retail more then actual)', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
+      productId: 'some-id',
       image: {
         original: 'path-to-image.jpg',
         thumbnail: 'path-to-thumb.jpg'
@@ -343,6 +352,7 @@ describe('vpr-result', () => {
 
   it('renders brand', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
+      productId: 'some-id',
       image: {
         original: 'path-to-image.jpg',
         thumbnail: 'path-to-thumb.jpg'
@@ -379,6 +389,7 @@ describe('vpr-result', () => {
 
   it('renders product type', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
+      productId: 'some-id',
       image: {
         original: 'path-to-image.jpg',
         thumbnail: 'path-to-thumb.jpg'
