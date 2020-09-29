@@ -35,7 +35,8 @@ describe('vpr-result', () => {
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
+      <vpr-result exportparts="product, price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, product-image-link, brand, product-type" part="product" style="--image-height: 150px;">
+
         <mock:shadow-root>
           <style></style>
           <img alt="Fender Jazz Bass" part="product-image" part="product-image" height="150" src="path-to-image.jpg" width="100">
@@ -63,7 +64,8 @@ describe('vpr-result', () => {
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
+      <vpr-result exportparts="product, price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, product-image-link, brand, product-type" part="product" style="--image-height: 150px;">
+
         <mock:shadow-root>
           <style></style>
           <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
@@ -88,7 +90,8 @@ describe('vpr-result', () => {
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
+      <vpr-result exportparts="product, price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, product-image-link, brand, product-type" part="product" style="--image-height: 150px;">
+
         <mock:shadow-root>
           <style></style>
           <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
@@ -114,7 +117,8 @@ describe('vpr-result', () => {
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
+      <vpr-result exportparts="product, price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, product-image-link, brand, product-type" part="product" style="--image-height: 150px;">
+
         <mock:shadow-root>
           <style></style>
           <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
@@ -141,10 +145,11 @@ describe('vpr-result', () => {
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
+      <vpr-result exportparts="product, price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, product-image-link, brand, product-type" part="product" style="--image-height: 150px;">
+
         <mock:shadow-root>
           <style></style>
-          <a href="/basses/fjb.html">
+          <a href="/basses/fjb.html" part="product-image-link">
             <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
           </a>
           <a class="product title" href="/basses/fjb.html" part="product-title">
@@ -173,10 +178,11 @@ describe('vpr-result', () => {
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
+      <vpr-result exportparts="product, price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, product-image-link, brand, product-type" part="product" style="--image-height: 150px;">
+
         <mock:shadow-root>
           <style></style>
-          <a href="/basses/fjb.html">
+          <a href="/basses/fjb.html" part="product-image-link">
             <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
           </a>
           <a class="product title" href="/basses/fjb.html" part="product-title">
@@ -210,10 +216,11 @@ describe('vpr-result', () => {
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
+      <vpr-result exportparts="product, price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, product-image-link, brand, product-type" part="product" style="--image-height: 150px;">
+
         <mock:shadow-root>
           <style></style>
-          <a href="/basses/fjb.html">
+          <a href="/basses/fjb.html" part="product-image-link">
             <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
           </a>
           <a class="product title" href="/basses/fjb.html" part="product-title">
@@ -248,10 +255,11 @@ describe('vpr-result', () => {
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
+      <vpr-result exportparts="product, price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, product-image-link, brand, product-type" part="product" style="--image-height: 150px;">
+
         <mock:shadow-root>
           <style></style>
-          <a href="/basses/fjb.html">
+          <a href="/basses/fjb.html" part="product-image-link">
             <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
           </a>
           <a class="product title" href="/basses/fjb.html" part="product-title">
@@ -286,10 +294,11 @@ describe('vpr-result', () => {
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
+      <vpr-result exportparts="product, price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, product-image-link, brand, product-type" part="product" style="--image-height: 150px;">
+
         <mock:shadow-root>
           <style></style>
-          <a href="/basses/fjb.html">
+          <a href="/basses/fjb.html" part="product-image-link">
             <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
           </a>
           <a class="product title" href="/basses/fjb.html" part="product-title">
@@ -324,27 +333,26 @@ describe('vpr-result', () => {
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
+      <vpr-result exportparts="product, price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, product-image-link, brand, product-type" part="product" style="--image-height: 150px;">
+
         <mock:shadow-root>
           <style></style>
-          <a href="/basses/fjb.html">
+          <a href="/basses/fjb.html" part="product-image-link">
             <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
           </a>
           <a class="product title" href="/basses/fjb.html" part="product-title">
             Fender Jazz Bass
           </a>
-          <div class="sale-container">
-            <span class="price outdated" part="price-outdated">
-              <span class="amount price" part="price-amount">
-                100
-              </span>
+          <span class="price outdated" part="price-outdated">
+            <span class="amount price" part="price-amount">
+              100
             </span>
-            <span class="discount price" part="price-discount">
-              <span class="amount price" part="price-amount">
-                90
-              </span>
+          </span>
+          <span class="discount price" part="price-discount">
+            <span class="amount price" part="price-amount">
+              90
             </span>
-          </div>
+          </span>
         </mock:shadow-root>
       </vpr-result>
     `);
@@ -369,10 +377,11 @@ describe('vpr-result', () => {
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
+      <vpr-result exportparts="product, price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, product-image-link, brand, product-type" part="product" style="--image-height: 150px;">
+
         <mock:shadow-root>
           <style></style>
-          <a href="/basses/fjb.html">
+          <a href="/basses/fjb.html" part="product-image-link">
             <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
           </a>
           <a class="product title" href="/basses/fjb.html" part="product-title">
@@ -406,10 +415,11 @@ describe('vpr-result', () => {
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
+      <vpr-result exportparts="product, price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, product-image-link, brand, product-type" part="product" style="--image-height: 150px;">
+
         <mock:shadow-root>
           <style></style>
-          <a href="/basses/fjb.html">
+          <a href="/basses/fjb.html" part="product-image-link">
             <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
           </a>
           <a class="product title" href="/basses/fjb.html" part="product-title">
