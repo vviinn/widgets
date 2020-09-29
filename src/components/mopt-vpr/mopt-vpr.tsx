@@ -60,7 +60,7 @@ export class MoptVpr implements ComponentInterface {
   }
 
   async componentWillLoad() {
-    this.el.style.setProperty('--column-width', `${this.imageWidth * 1.25}px`);
+    this.el.style.setProperty('--column-width', `${this.imageWidth}px`);
     this.el.style.setProperty('--columns', `${this.columns}`);
 
     state.pricePrefix = this.pricePrefix;
@@ -90,6 +90,7 @@ export class MoptVpr implements ComponentInterface {
 
   async handleRecommendationsSucces(data: Promise<Interfaces['VisualProductRecommendations']>): Promise<void> {
     const response = await data
+    this.el.style.setProperty('--items-size', `${response.extended.length}`);
     this.recommendations = response.extended;
     this.loaded = true;
   }
@@ -97,7 +98,8 @@ export class MoptVpr implements ComponentInterface {
   getBody(): HTMLElement {
     return this.sliderMode
          ? <vpr-slidable>
-             <div class="results slider">
+             <div class="results slider"
+                  data-items={this.recommendations.length}>
                  { this.recommendations.map(r => (
                    <vpr-result item={r}
                                imageWidth={this.imageWidth}

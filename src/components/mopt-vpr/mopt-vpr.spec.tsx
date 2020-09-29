@@ -8,7 +8,7 @@ describe('mopt-vpr', () => {
       html: `<mopt-vpr></mopt-vpr>`,
     });
     expect(page.root).toEqualHtml(`
-      <mopt-vpr aria-hidden="true" style="--column-width: 187.5px; --columns: 4;">
+      <mopt-vpr aria-hidden="true" style="--column-width: 150px; --columns: 4;">
         <mock:shadow-root>
           <style></style>
           <h2 part="recommendations-title">
@@ -27,7 +27,7 @@ describe('mopt-vpr', () => {
       html: `<mopt-vpr product-id="0100580000053" token="lol"></mopt-vpr>`,
     });
     expect(page.root).toEqualHtml(`
-      <mopt-vpr aria-hidden="true" product-id="0100580000053" token="lol" style="--column-width: 187.5px; --columns: 4;">
+      <mopt-vpr aria-hidden="true" product-id="0100580000053" token="lol" style="--column-width: 150px; --columns: 4;">
         <mock:shadow-root>
           <style></style>
           <h2 part="recommendations-title">

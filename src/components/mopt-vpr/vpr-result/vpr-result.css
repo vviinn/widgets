@@ -14,7 +14,7 @@ img {
 }
 
 .product.title {
-    width: 20ch;
+    width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
