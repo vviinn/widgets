@@ -18,7 +18,8 @@ export const config: Config = {
     }
   ],
   copy: [
-    { src: 'mocks' }
+      { src: 'mocks' },
+      { src: 'assets' }
   ],
   plugins: [
     dotenvPlugin()
