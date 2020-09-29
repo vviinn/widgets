@@ -1,17 +1,17 @@
-import readme from './readme.md';
-
 const MoptVprStory = ({
   token,
   productId,
   blockTitle,
   sliderMode,
-  columns
+  columns,
+  currencySign
 }) => `
   <mopt-vpr token=${token}
             product-id=${productId}
             block-title=${blockTitle}
             slider-mode=${sliderMode}
-            columns=${columns}>
+            columns=${columns}
+            currency-sign=${currencySign}>
   </mopt-vpr>
 `;
 
@@ -22,15 +22,20 @@ MoptVpr.args = {
   productId: '80928998',
   blockTitle: 'Recommendations',
   sliderMode: true,
-  columns: 4
+  columns: 4,
+  currencySign: '€',
 };
 
 export default {
-  title: 'Visual Recommendations',
+  title: 'Web Component component',
   component: MoptVprStory({}),
   parameters: {
-    notes: {
-      markdown: readme,
+    actions: {
+      handles: [
+        'recommendationLoad',
+        'recommendationView',
+        'recommendationClick',
+      ]
     },
-  },
+  }
 };

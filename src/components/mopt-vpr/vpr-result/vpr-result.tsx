@@ -2,6 +2,7 @@ import { Component, ComponentInterface, Prop, Element, Host, h, Event, EventEmit
 import { Interfaces } from '../../../interfaces/recommendation';
 import { Image, Title, Price, Brand, ProductType } from './render-helpers';
 import state from '../../../store/store';
+import { sendEvent, sendBeacon } from './ga-events';
 
 @Component({
   tag: 'vpr-result',
@@ -31,6 +32,7 @@ export class VprResult implements ComponentInterface {
   }
 
   componentDidLoad() {
+    sendEvent('load', this.item.productId);
     this.recommendationLoad.emit(this.item);
     this.intersectionObserver.observe(this.el);
 
@@ -38,6 +40,7 @@ export class VprResult implements ComponentInterface {
     links.forEach((link) => link.addEventListener(
       'mousedown',
       (event) => {
+        sendBeacon('click', this.item.productId);
         this.recommendationClick.emit(this.item);
         event.preventDefault();
         let clickEvent: MouseEvent = new MouseEvent('click');
@@ -48,6 +51,7 @@ export class VprResult implements ComponentInterface {
 
   intersectionCallback(data: IntersectionObserverEntry[]) {
     if (data.some((entry) => entry.isIntersecting)) {
+      sendEvent('view', this.item.productId);
       this.recommendationView.emit(this.item);
       this.intersectionObserver.disconnect();
     }

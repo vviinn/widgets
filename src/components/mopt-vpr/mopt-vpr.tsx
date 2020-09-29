@@ -60,7 +60,8 @@ export class MoptVpr implements ComponentInterface {
   }
 
   async componentWillLoad() {
-    this.el.style.setProperty('--column-width', `${this.imageWidth}px`);
+    this.el.style.setProperty('--column-width', `${this.imageWidth * 1.25}px`);
+    this.el.style.setProperty('--columns', `${this.columns}`);
 
     state.pricePrefix = this.pricePrefix;
     state.currencySign = this.currencySign;
