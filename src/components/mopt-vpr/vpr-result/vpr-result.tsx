@@ -3,6 +3,8 @@ import { Interfaces } from '../../../interfaces/recommendation';
 import { Image, Title, Price, Brand, ProductType } from './render-helpers';
 import state from '../../../store/store';
 import { sendEvent, sendBeacon } from './ga-events';
+import { fromNullable, fold } from 'fp-ts/lib/Option';
+import { pipe } from 'fp-ts/lib/pipeable';
 
 @Component({
   tag: 'vpr-result',
@@ -32,7 +34,14 @@ export class VprResult implements ComponentInterface {
   }
 
   componentDidLoad() {
-    sendEvent('load', this.item.productId);
+    pipe(
+      fromNullable(this.item),
+      fold(
+        () => null,
+        () => sendEvent('load', this.item.productId)
+      )
+    );
+
     this.recommendationLoad.emit(this.item);
     this.intersectionObserver.observe(this.el);
 
@@ -51,7 +60,14 @@ export class VprResult implements ComponentInterface {
 
   intersectionCallback(data: IntersectionObserverEntry[]) {
     if (data.some((entry) => entry.isIntersecting)) {
-      sendEvent('view', this.item.productId);
+      pipe(
+        fromNullable(this.item),
+        fold(
+          () => null,
+          () => sendEvent('view', this.item.productId)
+        )
+      );
+
       this.recommendationView.emit(this.item);
       this.intersectionObserver.disconnect();
     }
