@@ -1,5 +1,6 @@
 :host {
   --column-width: 0;
+  --items-size: 0;
   --columns: 4;
   display: grid;
   grid-gap: 1rem;
@@ -20,6 +21,7 @@
   display: grid;
   grid-gap: 1rem;
   grid-auto-flow: column;
+  grid-template-columns: repeat(var(--items-size), var(--column-width));
 }
 
 .visually-hidden {
