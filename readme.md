@@ -58,8 +58,10 @@ To use Shadow Parts add *style* tag to head of your page:
 
 Here is a list of shadow parts you can style:
 
+- product
 - recommendations-title
 - product-image
+- product-image-link
 - product-title
 - price-prefix
 - price-currency
