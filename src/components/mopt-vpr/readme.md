@@ -20,6 +20,14 @@
 | `token`        | `token`         | Mediaopt customer token                    | `string`  | `undefined`              |
 
 
+## Shadow Parts
+
+| Part                      | Description |
+| ------------------------- | ----------- |
+| `"recommendations-title"` |             |
+| `"shadow-parts-detect"`   |             |
+
+
 ## Dependencies
 
 ### Depends on
