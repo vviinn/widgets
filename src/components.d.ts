@@ -5,7 +5,7 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { Interfaces, } from "./interfaces/recommendation";
+import { Interfaces } from "./interfaces/recommendation";
 export namespace Components {
     interface MoptVpr {
         /**
@@ -52,7 +52,7 @@ export namespace Components {
     interface VprResult {
         "imageRatio": number;
         "imageWidth": number;
-        "item": Interfaces["VisualProductSearch"];
+        "item": Interfaces['VisualProductSearch'];
     }
     interface VprSlidable {
     }
@@ -142,19 +142,19 @@ declare namespace LocalJSX {
     interface VprResult {
         "imageRatio"?: number;
         "imageWidth"?: number;
-        "item"?: Interfaces["VisualProductSearch"];
+        "item"?: Interfaces['VisualProductSearch'];
         /**
           * Event fires ones when user click on deeplink
          */
-        "onRecommendationClick"?: (event: CustomEvent<Interfaces["VisualProductSearch"]>) => void;
+        "onRecommendationClick"?: (event: CustomEvent<Interfaces['VisualProductSearch']>) => void;
         /**
           * Event fires ones when recommendation rendered on page
          */
-        "onRecommendationLoad"?: (event: CustomEvent<Interfaces["VisualProductSearch"]>) => void;
+        "onRecommendationLoad"?: (event: CustomEvent<Interfaces['VisualProductSearch']>) => void;
         /**
           * Event fires ones when recommendation appears on the viewport
          */
-        "onRecommendationView"?: (event: CustomEvent<Interfaces["VisualProductSearch"]>) => void;
+        "onRecommendationView"?: (event: CustomEvent<Interfaces['VisualProductSearch']>) => void;
     }
     interface VprSlidable {
     }
