@@ -23,6 +23,13 @@
 | `recommendationView`  | Event fires ones when recommendation appears on the viewport | `CustomEvent<{ productId?: string; title?: string; brand?: string; productType?: string; deeplink?: string; image?: { original?: string; thumbnail?: string; }; price?: { actual?: number; retail?: number; }; }>` |
 
 
+## Shadow Parts
+
+| Part        | Description |
+| ----------- | ----------- |
+| `"product"` |             |
+
+
 ## Dependencies
 
 ### Used by
