@@ -4,12 +4,22 @@ const MoptVprStory = ({
   blockTitle,
   sliderMode,
   columns,
-  currencySign
+  currencySign,
+  lineHeight,
+  fontSize,
+  fontColor,
+  salePriceColor
 }) => `
   <style>
+  body {
+    font-size: ${fontSize}px;  
+    color: ${fontColor}
+  }
+
   mopt-vpr::part(product) {
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(6, max-content);
+    line-height: ${lineHeight}px;
   }
 
   mopt-vpr::part(product-image-link) {
@@ -18,10 +28,10 @@ const MoptVprStory = ({
   }
 
   mopt-vpr::part(product-title) {
+    color: inherit;
     grid-column: 1/-1;
     grid-row: 2/3;
     text-decoration: none;
-    color: #101010;
     font-weight: bold;
   }
 
@@ -44,6 +54,7 @@ const MoptVprStory = ({
     grid-column: 2;
     justify-self: start;
     font-weight: bold;
+    color: ${salePriceColor};
   }
 
   mopt-vpr::part(price-regular) {
@@ -71,11 +82,19 @@ MoptVpr.args = {
   sliderMode: true,
   columns: 4,
   currencySign: '€',
+  lineHeight: 16,
+  fontSize: 14,
+  fontColor: '#7474741',
+  salePriceColor: '#F64E4E'
 };
 
 export default {
   title: 'Web Component',
   component: MoptVprStory({}),
+  argTypes: {
+    fontColor: { control: 'color' },
+    salePriceColor: { control: 'color' },
+  },
   parameters: {
     actions: {
       handles: [
