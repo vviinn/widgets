@@ -14,12 +14,12 @@ export const config: Config = {
     },
     {
       type: 'www',
-      serviceWorker: null // disable service workers
+      serviceWorker: null, // disable service workers,
+      copy: [
+        { src: 'mocks' },
+        { src: 'assets' }
+      ],
     }
-  ],
-  copy: [
-      { src: 'mocks' },
-      { src: 'assets' }
   ],
   plugins: [
     dotenvPlugin()

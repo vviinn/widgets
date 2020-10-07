@@ -33,6 +33,8 @@
     "@storybook/addon-essentials": "^6.0.22",
     "@storybook/addon-links": "^6.0.22",
     "@storybook/addon-notes": "^5.3.21",
+    "@storybook/addons": "^6.0.26",
+    "@storybook/theming": "^6.0.26",
     "@storybook/web-components": "^6.0.22",
     "@types/jest": "26.0.14",
     "@types/puppeteer": "3.0.2",
