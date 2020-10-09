@@ -1,5 +1,7 @@
 :host {
   --column-width: 0;
+  --items-size: 0;
+  --columns: 4;
   display: grid;
   grid-gap: 1rem;
 }
@@ -12,13 +14,14 @@
 .results.grid[data-columns] {
   display: grid;
   grid-gap: 1rem;
-  grid-template-columns: repeat(auto-fit, var(--column-width))  
+  grid-template-columns: repeat(var(--columns), var(--column-width))  
 }
 
 .results.slider {
   display: grid;
   grid-gap: 1rem;
   grid-auto-flow: column;
+  grid-template-columns: repeat(var(--items-size), var(--column-width));
 }
 
 .visually-hidden {

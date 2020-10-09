@@ -7,17 +7,31 @@ import { FunctionalComponent, h } from '@stencil/core';
 
 const sequenceTEither = sequenceT(E.either);
 
+const checkEmpryString = (x: string): O.Option<string> =>
+  x.length > 0 ? O.some(x) : O.none;
+
 export const Image = (data: Interfaces['VisualProductSearch'], wi: number, he: number): FunctionalComponent<Interfaces['VisualProductSearch']> =>
   pipe(
     O.fromNullable(data.image.thumbnail),
     O.fold(
-      () => (<img part="product-image" width={wi} height={he} src={data.image.original} alt={data.title} />),
-      (thumbnail) => (<img part="product-image" width={wi} height={he} src={thumbnail} alt={data.title} />)
+      () => pipe(
+        O.fromNullable(data.deeplink),
+        O.chain(checkEmpryString),
+        O.fold(
+          () => (<img part="product-image" width={wi} height={he} src={data.image.original} alt={data.title} />),
+          (deeplink) => (<a href={deeplink} part="product-image-link"><img part="product-image" width={wi} height={he} src={data.image.original} alt={data.title} /></a>)
+        )
+      ),
+      (thumbnail) => pipe(
+        O.fromNullable(data.deeplink),
+        O.chain(checkEmpryString),
+        O.fold(
+          () => (<img part="product-image" width={wi} height={he} src={thumbnail} alt={data.title} />),
+          (deeplink) => (<a href={deeplink} part="product-image-link"><img part="product-image" width={wi} height={he} src={thumbnail} alt={data.title} /></a>)
+        )
+      )
     )
   );
-
-const checkEmpryString = (x: string): O.Option<string> =>
-  x.length > 0 ? O.some(x) : O.none;
 
 export const Title = (data: Interfaces['VisualProductSearch']): FunctionalComponent<Interfaces['VisualProductSearch']> =>
   pipe(
@@ -82,14 +96,14 @@ const getPriceComponent = (data: Interfaces['VisualProductSearch']['price'], pre
       (singlePrice) => <span part="price-regular" class="price regular">
           {PriceComponent(singlePrice, prefix, currency)}
       </span>,
-      (prices) => <div class="sale-container">
-          <span part="price-outdated" class="price outdated">
-              { PriceComponent(prices[0], prefix, currency) }
-          </span>
-          <span part="price-discount" class="price discount">
-              { PriceComponent(prices[1], prefix, currency) }
-          </span>
-      </div>
+      (prices) => [
+        <span part="price-outdated" class="price outdated">
+            { PriceComponent(prices[0], prefix, currency) }
+        </span>,
+        <span part="price-discount" class="price discount">
+            { PriceComponent(prices[1], prefix, currency) }
+        </span> 
+      ]
     )
   );
 

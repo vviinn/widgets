@@ -1,26 +1,42 @@
-import { newSpecPage } from '@stencil/core/testing';
+import { newSpecPage, SpecPage } from '@stencil/core/testing';
 import { VprResult } from './vpr-result';
 import { Interfaces } from '../../../interfaces/recommendation';
 
+let page: SpecPage;
+
 describe('vpr-result', () => {
+  beforeEach(async () => {
+    global.IntersectionObserver = jest.fn(() => ({
+      takeRecords: jest.fn(),
+      root: null,
+      rootMargin: '0',
+      thresholds: [1],
+      disconnect: jest.fn(),
+      observe: jest.fn(),
+      unobserve: jest.fn()
+    }));
+
+    page = await newSpecPage({
+      components: [VprResult],
+      html: `<vpr-result></vpr-result>`
+    });
+  });
+
   it('renders', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
+      productId: 'some-id',
       image: {
         original: 'path-to-image.jpg'
       },
       title: 'Fender Jazz Bass'
     };
-    
-    const page = await newSpecPage({
-      components: [VprResult],
-      html: `<vpr-result></vpr-result>`
-    });
 
     page.root.item = recommendation;
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
+      <vpr-result exportparts="product, price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, product-image-link, brand, product-type" part="product" style="--image-height: 150px;">
+
         <mock:shadow-root>
           <style></style>
           <img alt="Fender Jazz Bass" part="product-image" part="product-image" height="150" src="path-to-image.jpg" width="100">
@@ -34,23 +50,22 @@ describe('vpr-result', () => {
 
   it('renders recommendation with thumbnail', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
+      productId: 'some-id',
       image: {
         original: 'path-to-image.jpg',
         thumbnail: 'path-to-thumb.jpg'
       },
       title: 'Fender Jazz Bass'
     };
-    
-    const page = await newSpecPage({
-      components: [VprResult],
-      html: `<vpr-result></vpr-result>`
-    });
+
+    await page.setContent('<vpr-result></vpr-result>');
 
     page.root.item = recommendation;
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
+      <vpr-result exportparts="product, price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, product-image-link, brand, product-type" part="product" style="--image-height: 150px;">
+
         <mock:shadow-root>
           <style></style>
           <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
@@ -64,22 +79,19 @@ describe('vpr-result', () => {
 
   it('renders recommendation title as span if no deeplink', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
+      productId: 'some-id',
       image: {
         thumbnail: 'path-to-thumb.jpg'
       },
       title: 'Fender Jazz Bass',
     };
-    
-    const page = await newSpecPage({
-      components: [VprResult],
-      html: `<vpr-result></vpr-result>`
-    });
 
     page.root.item = recommendation;
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
+      <vpr-result exportparts="product, price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, product-image-link, brand, product-type" part="product" style="--image-height: 150px;">
+
         <mock:shadow-root>
           <style></style>
           <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
@@ -93,23 +105,20 @@ describe('vpr-result', () => {
 
   it('renders recommendation title as span if deeplink is empty string', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
+      productId: 'some-id',
       image: {
         thumbnail: 'path-to-thumb.jpg'
       },
       title: 'Fender Jazz Bass',
       deeplink: ''
     };
-    
-    const page = await newSpecPage({
-      components: [VprResult],
-      html: `<vpr-result></vpr-result>`
-    });
 
     page.root.item = recommendation;
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
+      <vpr-result exportparts="product, price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, product-image-link, brand, product-type" part="product" style="--image-height: 150px;">
+
         <mock:shadow-root>
           <style></style>
           <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
@@ -123,6 +132,7 @@ describe('vpr-result', () => {
 
   it('renders link if non-empty deeplink present', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
+      productId: 'some-id',
       image: {
         original: 'path-to-image.jpg',
         thumbnail: 'path-to-thumb.jpg'
@@ -130,20 +140,18 @@ describe('vpr-result', () => {
       title: 'Fender Jazz Bass',
       deeplink: '/basses/fjb.html'
     };
-    
-    const page = await newSpecPage({
-      components: [VprResult],
-      html: `<vpr-result></vpr-result>`
-    });
 
     page.root.item = recommendation;
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
+      <vpr-result exportparts="product, price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, product-image-link, brand, product-type" part="product" style="--image-height: 150px;">
+
         <mock:shadow-root>
           <style></style>
-          <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          <a href="/basses/fjb.html" part="product-image-link">
+            <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          </a>
           <a class="product title" href="/basses/fjb.html" part="product-title">
             Fender Jazz Bass
           </a>
@@ -154,6 +162,7 @@ describe('vpr-result', () => {
 
   it('renders price (only actual presented)', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
+      productId: 'some-id',
       image: {
         original: 'path-to-image.jpg',
         thumbnail: 'path-to-thumb.jpg'
@@ -164,20 +173,18 @@ describe('vpr-result', () => {
         actual: 100
       }
     };
-    
-    const page = await newSpecPage({
-      components: [VprResult],
-      html: `<vpr-result></vpr-result>`
-    });
 
     page.root.item = recommendation;
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
+      <vpr-result exportparts="product, price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, product-image-link, brand, product-type" part="product" style="--image-height: 150px;">
+
         <mock:shadow-root>
           <style></style>
-          <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          <a href="/basses/fjb.html" part="product-image-link">
+            <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          </a>
           <a class="product title" href="/basses/fjb.html" part="product-title">
             Fender Jazz Bass
           </a>
@@ -193,6 +200,7 @@ describe('vpr-result', () => {
 
   it('renders price (only retail presented)', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
+      productId: 'some-id',
       image: {
         original: 'path-to-image.jpg',
         thumbnail: 'path-to-thumb.jpg'
@@ -203,20 +211,18 @@ describe('vpr-result', () => {
         retail: 100
       }
     };
-    
-    const page = await newSpecPage({
-      components: [VprResult],
-      html: `<vpr-result></vpr-result>`
-    });
 
     page.root.item = recommendation;
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
+      <vpr-result exportparts="product, price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, product-image-link, brand, product-type" part="product" style="--image-height: 150px;">
+
         <mock:shadow-root>
           <style></style>
-          <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          <a href="/basses/fjb.html" part="product-image-link">
+            <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          </a>
           <a class="product title" href="/basses/fjb.html" part="product-title">
             Fender Jazz Bass
           </a>
@@ -232,6 +238,7 @@ describe('vpr-result', () => {
 
   it('renders price (retail eq actual)', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
+      productId: 'some-id',
       image: {
         original: 'path-to-image.jpg',
         thumbnail: 'path-to-thumb.jpg'
@@ -243,20 +250,18 @@ describe('vpr-result', () => {
         actual: 100
       }
     };
-    
-    const page = await newSpecPage({
-      components: [VprResult],
-      html: `<vpr-result></vpr-result>`
-    });
 
     page.root.item = recommendation;
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
+      <vpr-result exportparts="product, price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, product-image-link, brand, product-type" part="product" style="--image-height: 150px;">
+
         <mock:shadow-root>
           <style></style>
-          <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          <a href="/basses/fjb.html" part="product-image-link">
+            <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          </a>
           <a class="product title" href="/basses/fjb.html" part="product-title">
             Fender Jazz Bass
           </a>
@@ -272,6 +277,7 @@ describe('vpr-result', () => {
 
   it('renders price (actual more then retail)', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
+      productId: 'some-id',
       image: {
         original: 'path-to-image.jpg',
         thumbnail: 'path-to-thumb.jpg'
@@ -283,20 +289,18 @@ describe('vpr-result', () => {
         actual: 100
       }
     };
-    
-    const page = await newSpecPage({
-      components: [VprResult],
-      html: `<vpr-result></vpr-result>`
-    });
 
     page.root.item = recommendation;
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
+      <vpr-result exportparts="product, price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, product-image-link, brand, product-type" part="product" style="--image-height: 150px;">
+
         <mock:shadow-root>
           <style></style>
-          <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          <a href="/basses/fjb.html" part="product-image-link">
+            <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          </a>
           <a class="product title" href="/basses/fjb.html" part="product-title">
             Fender Jazz Bass
           </a>
@@ -312,6 +316,7 @@ describe('vpr-result', () => {
 
   it('renders price (retail more then actual)', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
+      productId: 'some-id',
       image: {
         original: 'path-to-image.jpg',
         thumbnail: 'path-to-thumb.jpg'
@@ -323,35 +328,31 @@ describe('vpr-result', () => {
         actual: 90
       }
     };
-    
-    const page = await newSpecPage({
-      components: [VprResult],
-      html: `<vpr-result></vpr-result>`
-    });
 
     page.root.item = recommendation;
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
+      <vpr-result exportparts="product, price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, product-image-link, brand, product-type" part="product" style="--image-height: 150px;">
+
         <mock:shadow-root>
           <style></style>
-          <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          <a href="/basses/fjb.html" part="product-image-link">
+            <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          </a>
           <a class="product title" href="/basses/fjb.html" part="product-title">
             Fender Jazz Bass
           </a>
-          <div class="sale-container">
-            <span class="price outdated" part="price-outdated">
-              <span class="amount price" part="price-amount">
-                100
-              </span>
+          <span class="price outdated" part="price-outdated">
+            <span class="amount price" part="price-amount">
+              100
             </span>
-            <span class="discount price" part="price-discount">
-              <span class="amount price" part="price-amount">
-                90
-              </span>
+          </span>
+          <span class="discount price" part="price-discount">
+            <span class="amount price" part="price-amount">
+              90
             </span>
-          </div>
+          </span>
         </mock:shadow-root>
       </vpr-result>
     `);
@@ -359,6 +360,7 @@ describe('vpr-result', () => {
 
   it('renders brand', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
+      productId: 'some-id',
       image: {
         original: 'path-to-image.jpg',
         thumbnail: 'path-to-thumb.jpg'
@@ -370,20 +372,18 @@ describe('vpr-result', () => {
       },
       brand: "Fender"
     };
-    
-    const page = await newSpecPage({
-      components: [VprResult],
-      html: `<vpr-result></vpr-result>`
-    });
 
     page.root.item = recommendation;
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
+      <vpr-result exportparts="product, price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, product-image-link, brand, product-type" part="product" style="--image-height: 150px;">
+
         <mock:shadow-root>
           <style></style>
-          <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          <a href="/basses/fjb.html" part="product-image-link">
+            <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          </a>
           <a class="product title" href="/basses/fjb.html" part="product-title">
             Fender Jazz Bass
           </a>
@@ -394,10 +394,11 @@ describe('vpr-result', () => {
         </mock:shadow-root>
       </vpr-result>
     `);
-    });
+  });
 
-    it('renders product type', async () => {
+  it('renders product type', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
+      productId: 'some-id',
       image: {
         original: 'path-to-image.jpg',
         thumbnail: 'path-to-thumb.jpg'
@@ -409,20 +410,18 @@ describe('vpr-result', () => {
       },
       productType: "Bass guitar"
     };
-    
-    const page = await newSpecPage({
-      components: [VprResult],
-      html: `<vpr-result></vpr-result>`
-    });
 
     page.root.item = recommendation;
     await page.waitForChanges();
 
     expect(page.root).toEqualHtml(`
-      <vpr-result exportparts="price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, brand, product-type" style="--image-height: 150px;">
+      <vpr-result exportparts="product, price-discount, price-outdated, price-regular, product-title, price-amount, price-currency, product-image, product-image-link, brand, product-type" part="product" style="--image-height: 150px;">
+
         <mock:shadow-root>
           <style></style>
-          <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          <a href="/basses/fjb.html" part="product-image-link">
+            <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
+          </a>
           <a class="product title" href="/basses/fjb.html" part="product-title">
             Fender Jazz Bass
           </a>
@@ -433,6 +432,5 @@ describe('vpr-result', () => {
         </mock:shadow-root>
       </vpr-result>
     `);
-    });
-
+  });
 });

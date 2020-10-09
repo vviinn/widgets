@@ -1,0 +1,42 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+
+<Meta title="Tutorials/Install/without a Framework"></Meta>
+
+# Install on HTML project
+
+Integrating a component built with Stencil to a project without a JavaScript framework is straight forward. If you're using a simple HTML page, you can add your component via a script tag. For example, if we published a component to npm, we could load the component through a CDN like this:
+
+```html
+<html>
+  <head>
+    <script src='https://unpkg.com/mediaopt-vpr@latest/dist/medaopt-vpr/medaopt-vpr.js'></script>
+  </head>
+  <body>
+    <mopt-vpr token="YOURS_TOKEN_HERE"
+              product-id="SOME_ID">
+    </mopt-vpr>
+  </body>
+</html>
+```
+# Use ES6 packages
+
+If you want to use web component as ES6 module you should install ot from NPM
+
+`npm i mediaopt-vpr`
+
+And then use in yours JavaScript:
+
+```javascript
+import { defineCustomElements } from 'mediaopt-vpr';
+defineCustomElements();
+```
+
+In both cases you can create component instance with standart DOM API:
+
+```javascript
+const component = document.createElement('mopt-vpr');
+component.token = YOURS_TOKEN;
+component.productId = SOME_ID;
+
+document.append(component);
+```
