@@ -198,7 +198,7 @@ describe('vpr-result', () => {
     `);
   });
 
-  it('renders price (only retail presented)', async () => {
+  it('renders price (only sale presented)', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
       productId: 'some-id',
       image: {
@@ -208,7 +208,7 @@ describe('vpr-result', () => {
       title: 'Fender Jazz Bass',
       deeplink: '/basses/fjb.html',
       price: {
-        retail: 100
+        sale: 100
       }
     };
 
@@ -236,7 +236,7 @@ describe('vpr-result', () => {
     `);
   });
 
-  it('renders price (retail eq actual)', async () => {
+  it('renders price (sale eq actual)', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
       productId: 'some-id',
       image: {
@@ -246,7 +246,7 @@ describe('vpr-result', () => {
       title: 'Fender Jazz Bass',
       deeplink: '/basses/fjb.html',
       price: {
-        retail: 100,
+        sale: 100,
         actual: 100
       }
     };
@@ -275,7 +275,7 @@ describe('vpr-result', () => {
     `);
   });
 
-  it('renders price (actual more then retail)', async () => {
+  it('renders price (actual more then sale)', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
       productId: 'some-id',
       image: {
@@ -285,7 +285,7 @@ describe('vpr-result', () => {
       title: 'Fender Jazz Bass',
       deeplink: '/basses/fjb.html',
       price: {
-        retail: 90,
+        sale: 90,
         actual: 100
       }
     };
@@ -314,7 +314,7 @@ describe('vpr-result', () => {
     `);
   });
 
-  it('renders price (retail more then actual)', async () => {
+  it('renders price (sale more then actual)', async () => {
     const recommendation: Interfaces['VisualProductSearch'] = {
       productId: 'some-id',
       image: {
@@ -324,7 +324,7 @@ describe('vpr-result', () => {
       title: 'Fender Jazz Bass',
       deeplink: '/basses/fjb.html',
       price: {
-        retail: 100,
+        sale: 100,
         actual: 90
       }
     };
