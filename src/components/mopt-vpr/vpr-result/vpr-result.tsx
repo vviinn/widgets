@@ -34,14 +34,6 @@ export class VprResult implements ComponentInterface {
   }
 
   componentDidLoad() {
-    pipe(
-      fromNullable(this.item),
-      fold(
-        () => null,
-        () => sendEvent('load', this.item.productId)
-      )
-    );
-
     this.recommendationLoad.emit(this.item);
     this.intersectionObserver.observe(this.el);
 
@@ -64,7 +56,7 @@ export class VprResult implements ComponentInterface {
         fromNullable(this.item),
         fold(
           () => null,
-          () => sendEvent('view', this.item.productId)
+          () => sendEvent(this.item)
         )
       );
 
