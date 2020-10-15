@@ -72,8 +72,8 @@ const PriceComponent = (price: number, prefix: string, currency: string) => pipe
 );
 
 const bothPricesPresented = (x: Interfaces['VisualProductSearch']['price']): E.Either<number, [number, number]> => sequenceTEither(
-  E.fromNullable(x.actual)(x.retail),
-  E.fromNullable(x.retail)(x.actual)
+  E.fromNullable(x.actual)(x.sale),
+  E.fromNullable(x.sale)(x.actual)
 );
 
 const pricesAreDifferent = (x: [number, number]): E.Either<number, [number, number]> =>
