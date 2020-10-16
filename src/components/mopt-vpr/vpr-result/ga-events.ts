@@ -8,12 +8,16 @@ export const sendEvent = (product: Interfaces['VisualProductSearch']) =>
     fold(
       () => null,
       () => gtag('event', 'view_item_list', {
-        id: product.productId,
-        name: product.title,
-        brand: product.brand ?? '',
-        category: product.productType ?? '',
-        list: 'VI Recommendations',
-        price: product.price ?? ''
+        items: [
+          {
+            id: product.productId,
+            name: product.title,
+            brand: product.brand ?? '',
+            category: product.productType ?? '',
+            list: 'VI Recommendations',
+            price: product.price ?? ''
+          }
+        ]
       })
     )
   );
