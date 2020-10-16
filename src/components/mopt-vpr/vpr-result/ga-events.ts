@@ -4,15 +4,16 @@ import { Interfaces } from '../../../interfaces/recommendation';
 
 export const sendEvent = (product: Interfaces['VisualProductSearch']) => 
   pipe(
-    fromNullable(window.ga),
+    fromNullable(window.gtag),
     fold(
       () => null,
-      () => ga('ec:addImpression', {
+      () => gtag('event', 'view_item_list', {
         id: product.productId,
         name: product.title,
-        brand: product.brand,
-        category: product.productType,
-        list: 'VI Recommendations'
+        brand: product.brand ?? '',
+        category: product.productType ?? '',
+        list: 'VI Recommendations',
+        price: product.price ?? ''
       })
     )
   );
