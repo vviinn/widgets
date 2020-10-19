@@ -2,9 +2,10 @@ import { Component, ComponentInterface, Prop, Element, Host, h, Event, EventEmit
 import { Interfaces } from '../../../interfaces/recommendation';
 import { Image, Title, Price, Brand, ProductType } from './render-helpers';
 import state from '../../../store/store';
-import { sendEvent, sendBeacon } from './ga-events';
+import { sendBeacon } from './ga-events';
 import { fromNullable, fold } from 'fp-ts/lib/Option';
 import { pipe } from 'fp-ts/lib/pipeable';
+import { sendAnalytics } from '../../../analytics/GeneralAnalytics';
 
 @Component({
   tag: 'vpr-result',
@@ -56,7 +57,7 @@ export class VprResult implements ComponentInterface {
         fromNullable(this.item),
         fold(
           () => null,
-          () => sendEvent(this.item)
+          () => sendAnalytics(this.item)
         )
       );
 
