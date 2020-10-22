@@ -17,7 +17,8 @@ export const config: Config = {
       serviceWorker: null, // disable service workers,
       copy: [
         { src: 'mocks' },
-        { src: 'assets' }
+        { src: 'assets' },
+        { src: 'favicon.ico' }
       ],
     }
   ],

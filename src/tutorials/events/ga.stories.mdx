@@ -4,19 +4,12 @@ import { Meta, Story } from '@storybook/addon-docs/blocks';
 
 # Default analytics
 
-By default Web Component can send some events to customer Google Analytics account.
-  
-Events will be sent only if global `ga` function initialized.
+By default Web Component can send Enhanced Ecommerce data to customer Google Analytics account.
 
-Each event have category `VI-Product`. Event label depends on event type:
+Events will be sent only if global `gtag` or `ga` function initialized.
+Gtag is preferred method of tracking ecommerce data.
 
-|Event type           |label|
-|---------------------|-----|
-|recommendationClick|click|
-|recommendationLoad |load |
-|recommendationView |view |
-
-Also Web component will sent product id in label property of sent event.
+Each product have will belong to `VI VPR View` list in analytics platform.
 
 If you want to customize this behaviour
 [Read more about events](?path=/story/tutorials-events--page)

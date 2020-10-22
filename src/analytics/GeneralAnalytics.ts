@@ -1,9 +1,8 @@
 import { pipe } from "fp-ts/lib/pipeable";
-import { fromNullable, map, getFirstMonoid, fold } from "fp-ts/lib/Option";
+import { fromNullable, map, getFirstMonoid, Option } from "fp-ts/lib/Option";
 import { GtagAnalytics } from "./GtagAnalytics";
 import { GAnalytics } from "./GAnalytics";
 import { ProductAnalytics } from "./ProductAnalytics";
-import { Interfaces } from "../interfaces/recommendation";
 
 const getGtagAnalytics = pipe(
   fromNullable(window.gtag),
@@ -15,13 +14,7 @@ const getCommonAnalytics = pipe(
   map(() => new GAnalytics())
 );
 
-const getAnalyticsModule = getFirstMonoid<ProductAnalytics>();
+const analyticsMonoid = getFirstMonoid<ProductAnalytics>();
 
-export const sendAnalytics = (product: Interfaces['VisualProductSearch']): undefined =>
-  pipe(
-  getAnalyticsModule.concat(getGtagAnalytics, getCommonAnalytics),
-  fold(
-    () => undefined,
-    (analyticsModule: ProductAnalytics) => analyticsModule.send(product)
-  )
-);
+export const getAnalyticsModule = (): Option<ProductAnalytics> =>
+  analyticsMonoid.concat(getGtagAnalytics, getCommonAnalytics);

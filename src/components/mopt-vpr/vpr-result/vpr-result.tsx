@@ -2,10 +2,9 @@ import { Component, ComponentInterface, Prop, Element, Host, h, Event, EventEmit
 import { Interfaces } from '../../../interfaces/recommendation';
 import { Image, Title, Price, Brand, ProductType } from './render-helpers';
 import state from '../../../store/store';
-import { sendBeacon } from './ga-events';
-import { fromNullable, fold } from 'fp-ts/lib/Option';
+import { fold } from 'fp-ts/lib/Option';
 import { pipe } from 'fp-ts/lib/pipeable';
-import { sendAnalytics } from '../../../analytics/GeneralAnalytics';
+import { getAnalyticsModule } from '../../../analytics/GeneralAnalytics';
 
 @Component({
   tag: 'vpr-result',
@@ -42,11 +41,25 @@ export class VprResult implements ComponentInterface {
     links.forEach((link) => link.addEventListener(
       'mousedown',
       (event) => {
-        sendBeacon('click', this.item.productId);
         this.recommendationClick.emit(this.item);
-        event.preventDefault();
-        let clickEvent: MouseEvent = new MouseEvent('click');
-        setTimeout(() => link.dispatchEvent(clickEvent))
+
+        if(window.ga) { event.preventDefault(); }
+
+        pipe(
+          getAnalyticsModule(),
+          fold(
+            () => null,
+            (analytics) => analytics.sendClick(this.item)
+          )
+        );
+
+        if(window.ga) {
+          ga('send', 'event', 'UX', 'click', 'Results', {
+            hitCallback: function() {
+              document.location.href = this.item.deeplink;
+            }
+          });
+        }
       }
     ));
   }
@@ -54,10 +67,10 @@ export class VprResult implements ComponentInterface {
   intersectionCallback(data: IntersectionObserverEntry[]) {
     if (data.some((entry) => entry.isIntersecting)) {
       pipe(
-        fromNullable(this.item),
+        getAnalyticsModule(),
         fold(
           () => null,
-          () => sendAnalytics(this.item)
+          (analytics) => analytics.sendImpression(this.item)
         )
       );
 
