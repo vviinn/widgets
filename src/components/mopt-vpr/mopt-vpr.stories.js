@@ -73,11 +73,11 @@ const MoptVprStory = ({
   </mopt-vpr>
 `;
 
-export const MoptVpr = MoptVprStory.bind({});
+export const VI_Vpr_View = MoptVprStory.bind({});
 
-MoptVpr.args = {
-  token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjQyLCJqdGkiOiIyMjU4MTNjYy1lOTM1LTRkNGQtYjZjNy1jYzZkMTZlN2QwMGQiLCJzY29wZXMiOlsidnByIiwidnBzIl19.RaCZ2RDLlIEZLPMS2GxIMV2D5Dx-j_KyLmeG20kAjdFsFq-4FDNYnv7Mr21c-tmZ_qBNGgD8a_S1n_UHbCCUA-OKHmeslflZw4J3oKzgXWB7O2Gv4K9RzgyyBX909AVcwWTyYiMW_et8E_jHvODGeN9nn3idQsSg16giqxNx1Ac',
-  productId: '80928998',
+VI_Vpr_View.args = {
+  token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjY2LCJqdGkiOiIxYjEzMjFlZC02OTNjLTQwODQtOWZiYi1lY2YzNGU5NDM3NWUiLCJzY29wZXMiOlsidnByIiwidnBzIl19.D-NPLWN54WbEqvtwjiF45KhvGW0crChajIm-MnvxNXG4eArbb2xO7dOBykcgEHO8cj7erqXm6mdTwrOHljV-dL9QOXerdhMPGfqr1naZp4UEX125hSqPq2qYJVx0q4DfY_GrfkhSkS0KhlDJVWLOGiI6V0plfc4qSuVY_I8YdXo',
+  productId: '100580000053410',
   blockTitle: 'Recommendations',
   sliderMode: true,
   columns: 4,
@@ -90,7 +90,7 @@ MoptVpr.args = {
 
 export default {
   title: 'Web Component',
-  component: MoptVprStory({}),
+  component: MoptVprStory(VI_Vpr_View),
   argTypes: {
     fontColor: { control: 'color' },
     salePriceColor: { control: 'color' },
