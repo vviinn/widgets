@@ -15,14 +15,14 @@
     "loader/"
   ],
   "scripts": {
-    "build_interfaces": "node ./scripts/generate-interfaces.js ./src/interfaces/generated.ts",
     "build": "stencil build --docs",
-    "start": "stencil build --dev --watch --serve",
-    "test": "stencil test --spec --e2e",
-    "test.watch": "stencil test --spec --e2e --watchAll",
+    "build_interfaces": "node ./scripts/generate-interfaces.js ./src/interfaces/generated.ts",
+    "build_storybook": "stencil build --docs && build-storybook -s www",
     "generate": "stencil generate",
+    "start": "stencil build --dev --watch --serve",
     "storybook": "start-storybook -p 6006 -s www",
-    "build_storybook": "stencil build --docs && build-storybook -s www"
+    "test": "stencil test --spec --e2e",
+    "test.watch": "stencil test --spec --e2e --watchAll"
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",
