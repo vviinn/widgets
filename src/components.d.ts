@@ -56,6 +56,10 @@ export namespace Components {
     }
     interface VprSlidable {
     }
+    interface VprSlider {
+        "items": Interfaces["VisualProductSearch"][];
+        "loadKek": (x: Interfaces["VisualProductSearch"][]) => Promise<void>;
+    }
 }
 declare global {
     interface HTMLMoptVprElement extends Components.MoptVpr, HTMLStencilElement {
@@ -88,12 +92,19 @@ declare global {
         prototype: HTMLVprSlidableElement;
         new (): HTMLVprSlidableElement;
     };
+    interface HTMLVprSliderElement extends Components.VprSlider, HTMLStencilElement {
+    }
+    var HTMLVprSliderElement: {
+        prototype: HTMLVprSliderElement;
+        new (): HTMLVprSliderElement;
+    };
     interface HTMLElementTagNameMap {
         "mopt-vpr": HTMLMoptVprElement;
         "slider-mouse": HTMLSliderMouseElement;
         "slider-touch": HTMLSliderTouchElement;
         "vpr-result": HTMLVprResultElement;
         "vpr-slidable": HTMLVprSlidableElement;
+        "vpr-slider": HTMLVprSliderElement;
     }
 }
 declare namespace LocalJSX {
@@ -158,12 +169,16 @@ declare namespace LocalJSX {
     }
     interface VprSlidable {
     }
+    interface VprSlider {
+        "items"?: Interfaces["VisualProductSearch"][];
+    }
     interface IntrinsicElements {
         "mopt-vpr": MoptVpr;
         "slider-mouse": SliderMouse;
         "slider-touch": SliderTouch;
         "vpr-result": VprResult;
         "vpr-slidable": VprSlidable;
+        "vpr-slider": VprSlider;
     }
 }
 export { LocalJSX as JSX };
@@ -175,6 +190,7 @@ declare module "@stencil/core" {
             "slider-touch": LocalJSX.SliderTouch & JSXBase.HTMLAttributes<HTMLSliderTouchElement>;
             "vpr-result": LocalJSX.VprResult & JSXBase.HTMLAttributes<HTMLVprResultElement>;
             "vpr-slidable": LocalJSX.VprSlidable & JSXBase.HTMLAttributes<HTMLVprSlidableElement>;
+            "vpr-slider": LocalJSX.VprSlider & JSXBase.HTMLAttributes<HTMLVprSliderElement>;
         }
     }
 }

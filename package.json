@@ -51,6 +51,7 @@
     "@types/google.analytics": "0.0.40",
     "@types/gtag.js": "0.0.3",
     "@types/node": "^14.11.2",
+    "@types/resize-observer-browser": "^0.1.4",
     "dotenv": "^8.2.0",
     "enhanced-ecommerce-types": "0.0.3",
     "fp-ts": "^2.8.3",
