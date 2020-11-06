@@ -1,3 +1,24 @@
 :host {
-  display: block;
+  --slide-size: 0px;
+  --slide-position: 0;
+  display: grid;
+  grid-gap: 1rem;
+  grid-auto-flow: column;
+  overflow: hidden
+}
+
+.slide {
+  display: grid;
+  grid-auto-flow: column;
+  border: 1px solid gray;
+  width: var(--slide-size);
+  box-sizing: border-box;
+}
+
+.body {
+  display: grid;
+  grid-auto-flow: column;
+  overflow: hidden;
+  box-sizing: border-box;
+  transform: translateX(calc(var(--slide-size) * var(--slide-position)));
 }

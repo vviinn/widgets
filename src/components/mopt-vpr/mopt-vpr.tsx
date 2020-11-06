@@ -121,10 +121,7 @@ export class MoptVpr implements ComponentInterface {
 
   getBody(): HTMLElement {
     return this.sliderMode ? (
-      <vpr-slider
-        items={this.recommendations}
-        ref={(el) => (this.slider = el)}
-      ></vpr-slider>
+      <vpr-slider part="grid" ref={(el) => (this.slider = el)}></vpr-slider>
     ) : (
       <div class="results grid" data-columns={this.columns} part="grid">
         {this.recommendations.map((r) => (
