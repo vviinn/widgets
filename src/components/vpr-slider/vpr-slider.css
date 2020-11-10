@@ -3,8 +3,8 @@
   --slide-position: 0;
   display: grid;
   grid-gap: 1rem;
-  grid-auto-flow: column;
-  overflow: hidden
+  overflow: hidden;
+  grid-template-columns: min-content auto min-content; 
 }
 
 .slide {
@@ -23,7 +23,7 @@
 
 .body {
   display: grid;
-  grid-auto-flow: column;
+  grid-template-columns: min-content auto min-content;
   box-sizing: border-box;
   transform: translateX(calc(var(--slide-size) * var(--slide-position)));
   transition: transform .5s;
