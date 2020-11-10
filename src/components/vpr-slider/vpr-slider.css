@@ -22,7 +22,7 @@
 
 .body {
   display: grid;
-  grid-template-columns: min-content auto min-content;
+  grid-auto-flow: column;
   box-sizing: border-box;
   transform: translateX(calc(var(--slide-size) * var(--slide-position)));
   transition: transform .5s;
