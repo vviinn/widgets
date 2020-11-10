@@ -33,7 +33,7 @@ export class VprSlider {
     const products = this.wrappedItems.flat();
     this.wrapItems(products, this.getColumnsValue());
   }
-  
+
   componentShouldUpdate() {
     this.updateSliderWrapperSize();
   }

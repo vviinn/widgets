@@ -3,8 +3,8 @@
   --slide-position: 0;
   display: grid;
   grid-gap: 1rem;
-  overflow: hidden;
-  grid-template-columns: min-content auto min-content; 
+  grid-template-columns: min-content auto min-content;
+  overflow: hidden
 }
 
 .slide {
