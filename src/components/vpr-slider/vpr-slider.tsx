@@ -23,7 +23,7 @@ export class VprSlider {
   @State() wrappedItems: Interfaces["VisualProductSearch"][][] = [[]];
 
   private slidesWrapper: HTMLElement;
-  private slidePosition: number = 0;
+  @State() slidePosition: number = 0;
 
   @Listen("resize", { target: "window" })
   resizeHandler() {
@@ -72,24 +72,32 @@ export class VprSlider {
     this.wrappedItems = chunksOf(this.columns)(items);
   }
 
+  isPrevAvaible(): boolean {
+    return this.slidePosition === 0;
+  }
+
+  isNextAvaible(): boolean {
+    return Math.abs(this.slidePosition) === this.wrappedItems.length - 1;
+  }
+
   prev() {
-    if (this.slidePosition > 0) {
-      this.slidePosition++;
-      this.el.style.setProperty("--slide-position", `${this.slidePosition}`);
-    }
+    this.slidePosition++;
+    this.el.style.setProperty("--slide-position", `${this.slidePosition}`);
   }
 
   next() {
-    if (this.slidePosition < this.wrappedItems.length) {
-      this.slidePosition--;
-      this.el.style.setProperty("--slide-position", `${this.slidePosition}`);
-    }
+    this.slidePosition--;
+    this.el.style.setProperty("--slide-position", `${this.slidePosition}`);
   }
 
   render() {
     return (
       <Host>
-        <div class="prev" onClick={() => this.prev()}>
+        <button
+          class="prev"
+          onClick={() => this.prev()}
+          disabled={this.isPrevAvaible()}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="30"
@@ -99,17 +107,23 @@ export class VprSlider {
             <title>previous</title>
             <polyline points="328 112 184 256 328 400" />
           </svg>
+        </button>
+        <div class="slides-wrapper" ref={(el) => (this.slidesWrapper = el)}>
+          <div class="body">
+            {this.wrappedItems.map((items) => (
+              <div class="slide">
+                {items.map((item) => (
+                  <vpr-result item={item} imageWidth={100} imageRatio={1.5} />
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
-        <div class="body" ref={(el) => (this.slidesWrapper = el)}>
-          {this.wrappedItems.map((items) => (
-            <div class="slide">
-              {items.map((item) => (
-                <vpr-result item={item} imageWidth={100} imageRatio={1.5} />
-              ))}
-            </div>
-          ))}
-        </div>
-        <div class="next" onClick={() => this.next()}>
+        <button
+          class="next"
+          onClick={() => this.next()}
+          disabled={this.isNextAvaible()}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 512 512"
@@ -119,7 +133,7 @@ export class VprSlider {
             <title>next</title>
             <polyline points="184 112 328 256 184 400" />
           </svg>
-        </div>
+        </button>
       </Host>
     );
   }

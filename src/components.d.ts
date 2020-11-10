@@ -57,7 +57,6 @@ export namespace Components {
     interface VprSlidable {
     }
     interface VprSlider {
-        "items": Interfaces["VisualProductSearch"][];
         "loadKek": (x: Interfaces["VisualProductSearch"][]) => Promise<void>;
     }
 }
@@ -170,7 +169,6 @@ declare namespace LocalJSX {
     interface VprSlidable {
     }
     interface VprSlider {
-        "items"?: Interfaces["VisualProductSearch"][];
     }
     interface IntrinsicElements {
         "mopt-vpr": MoptVpr;

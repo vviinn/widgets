@@ -13,12 +13,40 @@
   border: 1px solid gray;
   width: var(--slide-size);
   box-sizing: border-box;
+  justify-content: center;
+  grid-gap: 1rem;
+}
+
+.slides-wrapper {
+  overflow: hidden;
 }
 
 .body {
   display: grid;
   grid-auto-flow: column;
-  overflow: hidden;
   box-sizing: border-box;
   transform: translateX(calc(var(--slide-size) * var(--slide-position)));
+  transition: transform .5s;
+}
+
+polyline {
+  fill: none;
+  stroke: #000;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 48px;
+}
+
+.prev, .next {
+  cursor: pointer;
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  background: none;
+  border: none;
+}
+
+.prev:disabled,
+.next:disabled {
+  opacity: .25;
 }
