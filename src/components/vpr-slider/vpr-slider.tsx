@@ -6,9 +6,11 @@ import {
   State,
   Method,
   Listen,
+  Prop,
 } from "@stencil/core";
 import { Interfaces } from "../../interfaces/recommendation";
 import { chunksOf } from "fp-ts/lib/Array";
+import { GridMode } from "../mopt-vpr/GridMode";
 
 @Component({
   tag: "vpr-slider",
@@ -18,6 +20,7 @@ import { chunksOf } from "fp-ts/lib/Array";
 export class VprSlider {
   @Element() el: HTMLElement;
 
+  @Prop() mode: GridMode;
   @State() columns: number = 1;
   @State() wrappedItems: Interfaces["VisualProductSearch"][][] = [[]];
   @State() slidePosition: number = 0;

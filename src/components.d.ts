@@ -6,6 +6,7 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { Interfaces } from "./interfaces/recommendation";
+import { GridMode } from "./components/mopt-vpr/GridMode";
 export namespace Components {
     interface MoptVpr {
         /**
@@ -58,6 +59,7 @@ export namespace Components {
     }
     interface VprSlider {
         "loadProducts": (products: Interfaces["VisualProductSearch"][]) => Promise<void>;
+        "mode": GridMode;
     }
 }
 declare global {
@@ -169,6 +171,7 @@ declare namespace LocalJSX {
     interface VprSlidable {
     }
     interface VprSlider {
+        "mode"?: GridMode;
     }
     interface IntrinsicElements {
         "mopt-vpr": MoptVpr;

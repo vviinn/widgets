@@ -15,8 +15,7 @@ import * as O from "fp-ts/lib/Option";
 import { authOptionsFromToken } from "./token-helpers";
 import { Interfaces } from "../../interfaces/recommendation";
 import state from "../../store/store";
-
-type GridMode = "grid" | "auto";
+import { GridMode } from "./GridMode";
 
 const emptyId = (x: string): E.Either<Error, string> =>
   x.length === 0 ? E.left(new Error("Product id is empty")) : E.right(x);
@@ -128,7 +127,7 @@ export class MoptVpr implements ComponentInterface {
 
   getBody(): HTMLElement {
     return this.sliderMode ? (
-      <vpr-slider part="grid" ref={(el) => (this.slider = el)}></vpr-slider>
+      <vpr-slider mode={this.gridMode} part="grid" ref={(el) => (this.slider = el)}></vpr-slider>
     ) : (
       <div class="results" data-mode={this.gridMode} part="grid">
         {this.recommendations.map((r) => (
