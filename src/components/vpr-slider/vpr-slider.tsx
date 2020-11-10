@@ -27,16 +27,11 @@ export class VprSlider {
 
   @Listen("resize", { target: "window" })
   resizeHandler() {
-    this.updateColumns();
-    this.updateSliderWrapperSize();
+    this.updateView();
   }
 
-  componentDidRender() {
-    this.updateSliderWrapperSize();
-  }
-
-  componentWillLoad() {
-    this.updateColumns();
+  componentDidUpdate() {
+    this.updateView();
   }
 
   @Method()
@@ -49,10 +44,15 @@ export class VprSlider {
     return parseInt(getComputedStyle(this.el).getPropertyValue("--columns"));
   }
 
+  updateView() {
+    this.updateColumns();
+    this.updateSliderWrapperSize();
+  }
+
   updateColumns() {
     const newColumns = this.getColumnsValue();
 
-    if (newColumns !== this.columns) {
+    if (!this.columns || newColumns !== this.columns) {
       this.columns = newColumns;
       this.wrapItems(this.items);
     }
