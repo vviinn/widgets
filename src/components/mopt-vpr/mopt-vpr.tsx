@@ -16,6 +16,8 @@ import { authOptionsFromToken } from "./token-helpers";
 import { Interfaces } from "../../interfaces/recommendation";
 import state from "../../store/store";
 
+type GridMode = "grid" | "auto";
+
 const emptyId = (x: string): E.Either<Error, string> =>
   x.length === 0 ? E.left(new Error("Product id is empty")) : E.right(x);
 
@@ -35,7 +37,7 @@ export class MoptVpr implements ComponentInterface {
   /** Title for recommendations widget */
   @Prop() blockTitle: string = "Recommended products";
   /** Number of columns for recommendations */
-  @Prop() columns: number = 4;
+  @Prop() columns: number;
   /** Ratio of each recommended product image */
   @Prop() imageRatio: number = 1.5;
   /** Width of each recommended product image */
@@ -53,6 +55,7 @@ export class MoptVpr implements ComponentInterface {
 
   @State() recommendations: Interfaces["VisualProductSearch"][] = [];
   @State() loaded: boolean = false;
+  @State() gridMode: GridMode = "auto";
 
   private cssPartsDetector: HTMLDivElement;
   private slider: HTMLVprSliderElement;
@@ -77,8 +80,12 @@ export class MoptVpr implements ComponentInterface {
   }
 
   async componentWillLoad() {
+    if (this.columns) {
+      this.el.style.setProperty("--columns", `${this.columns}`);
+      this.gridMode = "grid";
+    }
+
     this.el.style.setProperty("--column-width", `${this.imageWidth}px`);
-    this.el.style.setProperty("--columns", `${this.columns}`);
 
     state.pricePrefix = this.pricePrefix;
     state.currencySign = this.currencySign;
@@ -123,7 +130,7 @@ export class MoptVpr implements ComponentInterface {
     return this.sliderMode ? (
       <vpr-slider part="grid" ref={(el) => (this.slider = el)}></vpr-slider>
     ) : (
-      <div class="results grid" data-columns={this.columns} part="grid">
+      <div class="results" data-mode={this.gridMode} part="grid">
         {this.recommendations.map((r) => (
           <vpr-result
             item={r}

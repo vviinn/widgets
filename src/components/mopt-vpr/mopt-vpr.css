@@ -11,17 +11,17 @@
   visibility: hidden;
 }
 
-.results.grid[data-columns] {
+.results {
   display: grid;
   grid-gap: 1rem;
+}
+
+.results[data-mode="grid"] {
   grid-template-columns: repeat(var(--columns), var(--column-width))  
 }
 
-.results.slider {
-  display: grid;
-  grid-gap: 1rem;
-  grid-auto-flow: column;
-  grid-template-columns: repeat(var(--items-size), var(--column-width));
+.results[data-mode="auto"] {
+  grid-template-columns: repeat(auto-fill, var(--column-width))  
 }
 
 .visually-hidden {
