@@ -5,7 +5,7 @@ import {
   Element,
   State,
   Method,
-  Listen,
+  //Listen,
 } from "@stencil/core";
 import { Interfaces } from "../../interfaces/recommendation";
 import { chunksOf } from "fp-ts/lib/Array";
@@ -18,26 +18,41 @@ import { chunksOf } from "fp-ts/lib/Array";
 export class VprSlider {
   @Element() el: HTMLElement;
 
-  @State() items: Interfaces["VisualProductSearch"][] = [];
   @State() columns: number = 1;
   @State() wrappedItems: Interfaces["VisualProductSearch"][][] = [[]];
-
-  private slidesWrapper: HTMLElement;
   @State() slidePosition: number = 0;
 
-  @Listen("resize", { target: "window" })
-  resizeHandler() {
-    this.updateView();
+  private items: Interfaces["VisualProductSearch"][] = [];
+  private slideSize: number = 100;
+  private slidesWrapper: HTMLElement;
+
+  /* @Listen("resize", { target: "window" })
+   * resizeHandler() {
+   *   this.updateView();
+   * }
+
+   * componentWillLoad() {
+   *   this.updateView();
+   * }
+   */
+  componentShouldUpdate(...args) {
+    console.log("should update", args);
+    this.updateSliderWrapperSize();
   }
 
-  componentDidUpdate() {
-    this.updateView();
+  componentDidRender() {
+    console.log(
+      "cmp slideSize",
+      this.slideSize,
+      "actual slideSize",
+      this.getSlideSize()
+    );
   }
 
   @Method()
-  async loadKek(x: Interfaces["VisualProductSearch"][]) {
-    this.items = x;
-    this.wrapItems(this.items);
+  async loadProducts(products: Interfaces["VisualProductSearch"][]) {
+    this.wrapItems(products, this.getColumnsValue());
+    //this.updateView();
   }
 
   getColumnsValue(): number {
@@ -63,13 +78,15 @@ export class VprSlider {
   }
 
   updateSliderWrapperSize() {
+    const size = this.getSlideSize();
+    console.log("slide size", size);
     setTimeout(() => {
-      this.el.style.setProperty("--slide-size", `${this.getSlideSize()}px`);
+      this.el.style.setProperty("--slide-size", `${size}px`);
     });
   }
 
-  wrapItems(items: Interfaces["VisualProductSearch"][]) {
-    this.wrappedItems = chunksOf(this.columns)(items);
+  wrapItems(items: Interfaces["VisualProductSearch"][], columns: number = 1) {
+    this.wrappedItems = chunksOf(columns)(items);
   }
 
   isPrevAvaible(): boolean {

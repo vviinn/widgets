@@ -57,7 +57,7 @@ export namespace Components {
     interface VprSlidable {
     }
     interface VprSlider {
-        "loadKek": (x: Interfaces["VisualProductSearch"][]) => Promise<void>;
+        "loadProducts": (products: Interfaces["VisualProductSearch"][]) => Promise<void>;
     }
 }
 declare global {

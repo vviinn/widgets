@@ -120,7 +120,7 @@ export class MoptVpr implements ComponentInterface {
     this.recommendations = response.extended;
 
     if (this.sliderMode) {
-      this.slider.loadKek(response.extended);
+      this.slider.loadProducts(response.extended);
     }
 
     this.loaded = true;
