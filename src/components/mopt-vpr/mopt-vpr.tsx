@@ -127,7 +127,13 @@ export class MoptVpr implements ComponentInterface {
 
   getBody(): HTMLElement {
     return this.sliderMode ? (
-      <vpr-slider mode={this.gridMode} part="grid" ref={(el) => (this.slider = el)}></vpr-slider>
+      <vpr-slider
+        mode={this.gridMode}
+        imageWidth={this.imageWidth}
+        imageRatio={this.imageRatio}
+        part="grid"
+        ref={(el) => (this.slider = el)}
+      ></vpr-slider>
     ) : (
       <div class="results" data-mode={this.gridMode} part="grid">
         {this.recommendations.map((r) => (

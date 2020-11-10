@@ -21,11 +21,13 @@ export class VprSlider {
   @Element() el: HTMLElement;
 
   @Prop() mode: GridMode;
+  @Prop() imageRatio: number = 1.5;
+  @Prop() imageWidth: number = 150;
+
   @State() columns: number = 1;
   @State() wrappedItems: Interfaces["VisualProductSearch"][][] = [[]];
   @State() slidePosition: number = 0;
 
-  private items: Interfaces["VisualProductSearch"][] = [];
   private slidesWrapper: HTMLElement;
 
   @Listen("resize", { target: "window" })
@@ -38,7 +40,7 @@ export class VprSlider {
     this.updateSliderWrapperSize();
   }
 
-  componentDidRender() {
+  componentDidLoad() {
     this.updateSliderWrapperSize();
   }
 
@@ -51,20 +53,6 @@ export class VprSlider {
     return parseInt(getComputedStyle(this.el).getPropertyValue("--columns"));
   }
 
-  updateView() {
-    this.updateColumns();
-    this.updateSliderWrapperSize();
-  }
-
-  updateColumns() {
-    const newColumns = this.getColumnsValue();
-
-    if (!this.columns || newColumns !== this.columns) {
-      this.columns = newColumns;
-      this.wrapItems(this.items);
-    }
-  }
-
   getSlideSize(): number {
     return this.slidesWrapper.getBoundingClientRect().width;
   }
@@ -75,7 +63,18 @@ export class VprSlider {
   }
 
   wrapItems(items: Interfaces["VisualProductSearch"][], columns: number = 1) {
-    this.wrappedItems = chunksOf(columns)(items);
+    if (this.mode === "grid") {
+      this.wrappedItems = chunksOf(columns)(items);
+    } else {
+      const slideSize = this.getSlideSize();
+      const margin = parseInt(
+        getComputedStyle(this.el).getPropertyValue("font-size")
+      );
+
+      const avaibleColumns = Math.floor(slideSize / (this.imageWidth + margin));
+
+      this.wrappedItems = chunksOf(avaibleColumns)(items);
+    }
   }
 
   isPrevAvaible(): boolean {

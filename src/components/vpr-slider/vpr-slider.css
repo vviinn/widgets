@@ -2,15 +2,14 @@
   --slide-size: 0px;
   --slide-position: 0;
   display: grid;
-  grid-gap: 1rem;
   grid-template-columns: min-content auto min-content;
+  justify-content: stretch;
   overflow: hidden
 }
 
 .slide {
   display: grid;
   grid-auto-flow: column;
-  border: 1px solid gray;
   width: var(--slide-size);
   box-sizing: border-box;
   justify-content: center;
@@ -44,6 +43,7 @@ polyline {
   align-content: center;
   background: none;
   border: none;
+  padding: 0;
 }
 
 .prev:disabled,

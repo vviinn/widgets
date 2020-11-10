@@ -58,6 +58,8 @@ export namespace Components {
     interface VprSlidable {
     }
     interface VprSlider {
+        "imageRatio": number;
+        "imageWidth": number;
         "loadProducts": (products: Interfaces["VisualProductSearch"][]) => Promise<void>;
         "mode": GridMode;
     }
@@ -171,6 +173,8 @@ declare namespace LocalJSX {
     interface VprSlidable {
     }
     interface VprSlider {
+        "imageRatio"?: number;
+        "imageWidth"?: number;
         "mode"?: GridMode;
     }
     interface IntrinsicElements {
