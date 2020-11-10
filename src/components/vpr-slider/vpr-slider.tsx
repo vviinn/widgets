@@ -23,7 +23,6 @@ export class VprSlider {
   @State() slidePosition: number = 0;
 
   private items: Interfaces["VisualProductSearch"][] = [];
-  private slideSize: number = 100;
   private slidesWrapper: HTMLElement;
 
   /* @Listen("resize", { target: "window" })
@@ -35,24 +34,17 @@ export class VprSlider {
    *   this.updateView();
    * }
    */
-  componentShouldUpdate(...args) {
-    console.log("should update", args);
+  componentShouldUpdate() {
     this.updateSliderWrapperSize();
   }
 
   componentDidRender() {
-    console.log(
-      "cmp slideSize",
-      this.slideSize,
-      "actual slideSize",
-      this.getSlideSize()
-    );
+    this.updateSliderWrapperSize();
   }
 
   @Method()
   async loadProducts(products: Interfaces["VisualProductSearch"][]) {
     this.wrapItems(products, this.getColumnsValue());
-    //this.updateView();
   }
 
   getColumnsValue(): number {

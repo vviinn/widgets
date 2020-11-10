@@ -3,7 +3,7 @@
   --slide-position: 0;
   display: grid;
   grid-gap: 1rem;
-  grid-auto-flow: column;
+  grid-template-columns: min-content auto min-content;
   overflow: hidden
 }
 
