@@ -6,6 +6,7 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { Interfaces } from "./interfaces/recommendation";
+import { GridMode } from "./components/mopt-vpr/GridMode";
 export namespace Components {
     interface MoptVpr {
         /**
@@ -45,16 +46,16 @@ export namespace Components {
          */
         "token": string;
     }
-    interface SliderMouse {
-    }
-    interface SliderTouch {
-    }
     interface VprResult {
         "imageRatio": number;
         "imageWidth": number;
         "item": Interfaces['VisualProductSearch'];
     }
-    interface VprSlidable {
+    interface VprSlider {
+        "imageRatio": number;
+        "imageWidth": number;
+        "loadProducts": (products: Interfaces["VisualProductSearch"][]) => Promise<void>;
+        "mode": GridMode;
     }
 }
 declare global {
@@ -64,36 +65,22 @@ declare global {
         prototype: HTMLMoptVprElement;
         new (): HTMLMoptVprElement;
     };
-    interface HTMLSliderMouseElement extends Components.SliderMouse, HTMLStencilElement {
-    }
-    var HTMLSliderMouseElement: {
-        prototype: HTMLSliderMouseElement;
-        new (): HTMLSliderMouseElement;
-    };
-    interface HTMLSliderTouchElement extends Components.SliderTouch, HTMLStencilElement {
-    }
-    var HTMLSliderTouchElement: {
-        prototype: HTMLSliderTouchElement;
-        new (): HTMLSliderTouchElement;
-    };
     interface HTMLVprResultElement extends Components.VprResult, HTMLStencilElement {
     }
     var HTMLVprResultElement: {
         prototype: HTMLVprResultElement;
         new (): HTMLVprResultElement;
     };
-    interface HTMLVprSlidableElement extends Components.VprSlidable, HTMLStencilElement {
+    interface HTMLVprSliderElement extends Components.VprSlider, HTMLStencilElement {
     }
-    var HTMLVprSlidableElement: {
-        prototype: HTMLVprSlidableElement;
-        new (): HTMLVprSlidableElement;
+    var HTMLVprSliderElement: {
+        prototype: HTMLVprSliderElement;
+        new (): HTMLVprSliderElement;
     };
     interface HTMLElementTagNameMap {
         "mopt-vpr": HTMLMoptVprElement;
-        "slider-mouse": HTMLSliderMouseElement;
-        "slider-touch": HTMLSliderTouchElement;
         "vpr-result": HTMLVprResultElement;
-        "vpr-slidable": HTMLVprSlidableElement;
+        "vpr-slider": HTMLVprSliderElement;
     }
 }
 declare namespace LocalJSX {
@@ -135,10 +122,6 @@ declare namespace LocalJSX {
          */
         "token"?: string;
     }
-    interface SliderMouse {
-    }
-    interface SliderTouch {
-    }
     interface VprResult {
         "imageRatio"?: number;
         "imageWidth"?: number;
@@ -156,14 +139,15 @@ declare namespace LocalJSX {
          */
         "onRecommendationView"?: (event: CustomEvent<Interfaces['VisualProductSearch']>) => void;
     }
-    interface VprSlidable {
+    interface VprSlider {
+        "imageRatio"?: number;
+        "imageWidth"?: number;
+        "mode"?: GridMode;
     }
     interface IntrinsicElements {
         "mopt-vpr": MoptVpr;
-        "slider-mouse": SliderMouse;
-        "slider-touch": SliderTouch;
         "vpr-result": VprResult;
-        "vpr-slidable": VprSlidable;
+        "vpr-slider": VprSlider;
     }
 }
 export { LocalJSX as JSX };
@@ -171,10 +155,8 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "mopt-vpr": LocalJSX.MoptVpr & JSXBase.HTMLAttributes<HTMLMoptVprElement>;
-            "slider-mouse": LocalJSX.SliderMouse & JSXBase.HTMLAttributes<HTMLSliderMouseElement>;
-            "slider-touch": LocalJSX.SliderTouch & JSXBase.HTMLAttributes<HTMLSliderTouchElement>;
             "vpr-result": LocalJSX.VprResult & JSXBase.HTMLAttributes<HTMLVprResultElement>;
-            "vpr-slidable": LocalJSX.VprSlidable & JSXBase.HTMLAttributes<HTMLVprSlidableElement>;
+            "vpr-slider": LocalJSX.VprSlider & JSXBase.HTMLAttributes<HTMLVprSliderElement>;
         }
     }
 }

@@ -9,8 +9,8 @@
 
 | Property       | Attribute       | Description                                | Type      | Default                  |
 | -------------- | --------------- | ------------------------------------------ | --------- | ------------------------ |
-| `blockTitle`   | `block-title`   | Title for recommendations widget           | `string`  | `'Recommended products'` |
-| `columns`      | `columns`       | Number of columns for recommendations      | `number`  | `4`                      |
+| `blockTitle`   | `block-title`   | Title for recommendations widget           | `string`  | `"Recommended products"` |
+| `columns`      | `columns`       | Number of columns for recommendations      | `number`  | `undefined`              |
 | `currencySign` | `currency-sign` | Currency sign will shown after price       | `string`  | `undefined`              |
 | `imageRatio`   | `image-ratio`   | Ratio of each recommended product image    | `number`  | `1.5`                    |
 | `imageWidth`   | `image-width`   | Width of each recommended product image    | `number`  | `150`                    |
@@ -24,6 +24,7 @@
 
 | Part                      | Description |
 | ------------------------- | ----------- |
+| `"grid"`                  |             |
 | `"recommendations-title"` |             |
 | `"shadow-parts-detect"`   |             |
 
@@ -32,15 +33,15 @@
 
 ### Depends on
 
-- [vpr-slidable](../vpr-slidable)
+- [vpr-slider](../vpr-slider)
 - [vpr-result](vpr-result)
 
 ### Graph
 ```mermaid
 graph TD;
-  mopt-vpr --> vpr-slidable
+  mopt-vpr --> vpr-slider
   mopt-vpr --> vpr-result
-  vpr-slidable --> slider-mouse
+  vpr-slider --> vpr-result
   style mopt-vpr fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

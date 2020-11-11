@@ -14,7 +14,7 @@
       font-family: Open Sans,Helvetica,Arial,sans-serif;
       font-size: 14px;
       line-height: 1.42857;
-      width: 600px;
+      margin: 0;
     }
 
     mopt-vpr::part(price-outdated) {
@@ -38,11 +38,17 @@
       font-weight: 400;
       text-decoration: none;
     }
+
+    @media screen and (max-width: 600px) {
+      mopt-vpr::part(grid) {
+        --columns: 2;
+      }    
+    }
   </style>
 </head>
 <body>
-  <mopt-vpr token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjI1LCJpYXQiOjE1OTIzOTEzMDYsImp0aSI6NTU5Mjc2ODc0fQ.u5NM-TDV8Sa9RP2IYyTp1MK1UGn5D5lDeliQF2-0p8cVgUOgolLaks2P6DC2_mNFDAflRfOA9vog0drE6hBUOuioyLzqWL63lOXQAliEUwb6EgKLCgY0IZvZPlWEhvaP9csMKGolSGl-Mc0WrgDdgLLrbbLLQuKOXFFCzGxmxpc"
-            product-id="0100580000053"
+  <mopt-vpr token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjY2LCJqdGkiOiIxYjEzMjFlZC02OTNjLTQwODQtOWZiYi1lY2YzNGU5NDM3NWUiLCJzY29wZXMiOlsidnByIiwidnBzIl19.D-NPLWN54WbEqvtwjiF45KhvGW0crChajIm-MnvxNXG4eArbb2xO7dOBykcgEHO8cj7erqXm6mdTwrOHljV-dL9QOXerdhMPGfqr1naZp4UEX125hSqPq2qYJVx0q4DfY_GrfkhSkS0KhlDJVWLOGiI6V0plfc4qSuVY_I8YdXo"
+            product-id="100580000053410"
             price-prefix="from"
             currency-sign="€"
             slider-mode="true">
