@@ -2,7 +2,7 @@ import { Config } from '@stencil/core';
 import dotenvPlugin from 'rollup-plugin-dotenv';
 
 export const config: Config = {
-  namespace: 'medaopt-vpr',
+  namespace: 'mediaopt-vpr',
   taskQueue: 'async',
   outputTargets: [
     {
