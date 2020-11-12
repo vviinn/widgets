@@ -1,5 +1,7 @@
 import { Config } from '@stencil/core';
 import dotenvPlugin from 'rollup-plugin-dotenv';
+import { postcss } from '@stencil/postcss';
+import autoprefixer from 'autoprefixer';
 
 export const config: Config = {
   namespace: 'mediaopt-vpr',
@@ -23,7 +25,10 @@ export const config: Config = {
     }
   ],
   plugins: [
-    dotenvPlugin()
+    dotenvPlugin(),
+    postcss({
+      plugins: [autoprefixer()]
+    })
   ],
   testing: {
     browserArgs: ['--no-sandbox', '--disable-setuid-sandbox'],
