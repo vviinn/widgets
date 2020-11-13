@@ -73,7 +73,9 @@ export class VprSlider {
 
       const avaibleColumns = Math.floor(slideSize / (this.imageWidth + margin));
 
-      this.wrappedItems = chunksOf(avaibleColumns)(items);
+      this.wrappedItems = chunksOf(avaibleColumns > 1 ? avaibleColumns : 1)(
+        items
+      );
     }
   }
 
@@ -118,7 +120,11 @@ export class VprSlider {
             {this.wrappedItems.map((items) => (
               <div class="slide">
                 {items.map((item) => (
-                  <vpr-result item={item} imageWidth={100} imageRatio={1.5} />
+                  <vpr-result
+                    item={item}
+                    imageWidth={this.imageWidth}
+                    imageRatio={this.imageRatio}
+                  />
                 ))}
               </div>
             ))}
