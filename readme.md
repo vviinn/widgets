@@ -4,10 +4,10 @@
 ## Using this component
 
 - Put a script tag similar to this
-`<script type="module" src="https://unpkg.com/mediaopt-vpr@stable/www/build/mediaopt-vpr.esm.js"></script>`
-`<script nomodule src="https://unpkg.com/mediaopt-vpr@stable/www/build/mediaopt-vpr.js"></script>` 
+`<script type="module" src="https://unpkg.com/mediaopt-widgets@stable/www/build/mediaopt-vpr.esm.js"></script>`
+`<script nomodule src="https://unpkg.com/mediaopt-widgets@stable/www/build/mediaopt-vpr.js"></script>` 
 in the head of your index.html
-- Then you can use the element anywhere in your template with `<mopt-vpr></mopt-vpr>` tag
+- Then you can use the element anywhere in your template with `<vi-vpr-view></vi-vpr-view>` tag
 - Use attributes for provide credentials or customize component view
 
 ### Component properties
