@@ -33,16 +33,16 @@
 
 ### Depends on
 
-- [vpr-slider](../vpr-slider)
+- [vpr-slider](vpr-slider)
 - [vpr-result](vpr-result)
 
 ### Graph
 ```mermaid
 graph TD;
-  mopt-vpr --> vpr-slider
-  mopt-vpr --> vpr-result
+  vi-vpr-view --> vpr-slider
+  vi-vpr-view --> vpr-result
   vpr-slider --> vpr-result
-  style mopt-vpr fill:#f9f,stroke:#333,stroke-width:4px
+  style vi-vpr-view fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
 ----------------------------------------------

@@ -6,9 +6,9 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { Interfaces } from "./interfaces/recommendation";
-import { GridMode } from "./components/mopt-vpr/GridMode";
+import { GridMode } from "./components/vpr-view/GridMode";
 export namespace Components {
-    interface MoptVpr {
+    interface ViVprView {
         /**
           * Title for recommendations widget
          */
@@ -59,11 +59,11 @@ export namespace Components {
     }
 }
 declare global {
-    interface HTMLMoptVprElement extends Components.MoptVpr, HTMLStencilElement {
+    interface HTMLViVprViewElement extends Components.ViVprView, HTMLStencilElement {
     }
-    var HTMLMoptVprElement: {
-        prototype: HTMLMoptVprElement;
-        new (): HTMLMoptVprElement;
+    var HTMLViVprViewElement: {
+        prototype: HTMLViVprViewElement;
+        new (): HTMLViVprViewElement;
     };
     interface HTMLVprResultElement extends Components.VprResult, HTMLStencilElement {
     }
@@ -78,13 +78,13 @@ declare global {
         new (): HTMLVprSliderElement;
     };
     interface HTMLElementTagNameMap {
-        "mopt-vpr": HTMLMoptVprElement;
+        "vi-vpr-view": HTMLViVprViewElement;
         "vpr-result": HTMLVprResultElement;
         "vpr-slider": HTMLVprSliderElement;
     }
 }
 declare namespace LocalJSX {
-    interface MoptVpr {
+    interface ViVprView {
         /**
           * Title for recommendations widget
          */
@@ -145,7 +145,7 @@ declare namespace LocalJSX {
         "mode"?: GridMode;
     }
     interface IntrinsicElements {
-        "mopt-vpr": MoptVpr;
+        "vi-vpr-view": ViVprView;
         "vpr-result": VprResult;
         "vpr-slider": VprSlider;
     }
@@ -154,7 +154,7 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "mopt-vpr": LocalJSX.MoptVpr & JSXBase.HTMLAttributes<HTMLMoptVprElement>;
+            "vi-vpr-view": LocalJSX.ViVprView & JSXBase.HTMLAttributes<HTMLViVprViewElement>;
             "vpr-result": LocalJSX.VprResult & JSXBase.HTMLAttributes<HTMLVprResultElement>;
             "vpr-slider": LocalJSX.VprSlider & JSXBase.HTMLAttributes<HTMLVprSliderElement>;
         }

@@ -11,14 +11,14 @@ Because some of CSS style properties can not be inherited we provide an styling 
 To use Shadow Parts add *style* tag to head of your page:
 ```html
 <style id="vpr-styles">
-    mopt-vpr::part(price-outdated) {
+    vi-vpr-view::part(price-outdated) {
       color: inherit;
       font-size: 12px;
       font-weight: 400;
       text-align: center;
     }
 
-    mopt-vpr::part(price-discount) {
+    vi-vpr-view::part(price-discount) {
       color: #dc616d;
       font-size: 14px;
       font-weight: 600;
@@ -49,7 +49,7 @@ This image describe which elements affected by parts:
 Combination of CSS Grids and Shadow Parts allows to change visual position of some elements. For example, if you want to put title below image use
 
 ```css
-mopt-vpr::part(product-title) {
+vi-vpr-view::part(product-title) {
   grid-row: 1;
 }
 ```

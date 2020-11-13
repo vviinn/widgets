@@ -16,18 +16,18 @@ const MoptVprStory = ({
     color: ${fontColor}
   }
 
-  mopt-vpr::part(product) {
+  vi-vpr-view::part(product) {
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(6, max-content);
     line-height: ${lineHeight}px;
   }
 
-  mopt-vpr::part(product-image-link) {
+  vi-vpr-view::part(product-image-link) {
     grid-column: 1/-1;
     grid-row: 1/2;
   }
 
-  mopt-vpr::part(product-title) {
+  vi-vpr-view::part(product-title) {
     color: inherit;
     grid-column: 1/-1;
     grid-row: 2/3;
@@ -35,42 +35,42 @@ const MoptVprStory = ({
     font-weight: bold;
   }
 
-  mopt-vpr::part(brand) {
+  vi-vpr-view::part(brand) {
     grid-column: 1/-1;
     grid-row: 3/4;
   }
 
-  mopt-vpr::part(product-type) {
+  vi-vpr-view::part(product-type) {
     grid-column: 1/-1;
     grid-row: 4/5;
   }
 
-  mopt-vpr::part(price-outdated) {
+  vi-vpr-view::part(price-outdated) {
     grid-column: 1;
     justify-self: end;
   }
 
-  mopt-vpr::part(price-discount) {
+  vi-vpr-view::part(price-discount) {
     grid-column: 2;
     justify-self: start;
     font-weight: bold;
     color: ${salePriceColor};
   }
 
-  mopt-vpr::part(price-regular) {
+  vi-vpr-view::part(price-regular) {
     grid-column: 1/-1;
     justify-self: center;
   }
 
   </style>
-  <mopt-vpr token=${token}
+  <vi-vpr-view token=${token}
             product-id=${productId}
             block-title=${blockTitle}
             slider-mode=${sliderMode}
             columns=${columns}
             currency-sign=${currencySign}
             image-width="200">
-  </mopt-vpr>
+  </vi-vpr-view>
 `;
 
 export const VI_Vpr_View = MoptVprStory.bind({});

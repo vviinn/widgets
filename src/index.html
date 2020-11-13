@@ -4,9 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
   <title>Stencil Component Starter</title>
-
-  <script type="module" src="/build/medaopt-vpr.esm.js"></script>
-  <script nomodule src="/build/medaopt-vpr.js"></script>
+  <script type="module" src="/build/mediaopt-widgets.esm.js"></script>
+  <script nomodule src="/build/mediaopt-widgets.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet"> 
   <style id="kek">
     body {
@@ -17,21 +16,21 @@
       margin: 0;
     }
 
-    mopt-vpr::part(price-outdated) {
+    vi-vpr-view::part(price-outdated) {
       color: inherit;
       font-size: 12px;
       font-weight: 400;
       text-align: center;
     }
 
-    mopt-vpr::part(price-discount) {
+    vi-vpr-view::part(price-discount) {
       color: #dc616d;
       font-size: 14px;
       font-weight: 600;
       text-align: center;
     }
 
-    mopt-vpr::part(product-title) {
+    vi-vpr-view::part(product-title) {
       color: #101010;
       font-size: 16px;
       text-align: center;
@@ -40,18 +39,18 @@
     }
 
     @media screen and (max-width: 600px) {
-      mopt-vpr::part(grid) {
+      vi-vpr-view::part(grid) {
         --columns: 2;
       }    
     }
   </style>
 </head>
 <body>
-  <mopt-vpr token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjY2LCJqdGkiOiIxYjEzMjFlZC02OTNjLTQwODQtOWZiYi1lY2YzNGU5NDM3NWUiLCJzY29wZXMiOlsidnByIiwidnBzIl19.D-NPLWN54WbEqvtwjiF45KhvGW0crChajIm-MnvxNXG4eArbb2xO7dOBykcgEHO8cj7erqXm6mdTwrOHljV-dL9QOXerdhMPGfqr1naZp4UEX125hSqPq2qYJVx0q4DfY_GrfkhSkS0KhlDJVWLOGiI6V0plfc4qSuVY_I8YdXo"
+  <vi-vpr-view token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjY2LCJqdGkiOiIxYjEzMjFlZC02OTNjLTQwODQtOWZiYi1lY2YzNGU5NDM3NWUiLCJzY29wZXMiOlsidnByIiwidnBzIl19.D-NPLWN54WbEqvtwjiF45KhvGW0crChajIm-MnvxNXG4eArbb2xO7dOBykcgEHO8cj7erqXm6mdTwrOHljV-dL9QOXerdhMPGfqr1naZp4UEX125hSqPq2qYJVx0q4DfY_GrfkhSkS0KhlDJVWLOGiI6V0plfc4qSuVY_I8YdXo"
             product-id="100580000053410"
             price-prefix="from"
             currency-sign="€"
             slider-mode="true">
-  </mopt-vpr>
+  </vi-vpr-view>
 </body>
 </html>

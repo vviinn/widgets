@@ -31,17 +31,17 @@ Type: `Promise<void>`
 
 ### Used by
 
- - [mopt-vpr](../mopt-vpr)
+ - [vi-vpr-view](..)
 
 ### Depends on
 
-- [vpr-result](../mopt-vpr/vpr-result)
+- [vpr-result](../vpr-result)
 
 ### Graph
 ```mermaid
 graph TD;
   vpr-slider --> vpr-result
-  mopt-vpr --> vpr-slider
+  vi-vpr-view --> vpr-slider
   style vpr-slider fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
