@@ -69,7 +69,7 @@ export class VIVprView implements ComponentInterface {
         ),
         O.map((style) =>
           style.textContent.replace(
-            /(?:mopt-vpr::part\()(\w+)-(\w+)\)/g,
+            /(?:vi-vpr-view::part\()(\w+)-(\w+)\)/g,
             ".$1.$2"
           )
         ),
