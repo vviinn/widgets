@@ -1,14 +1,14 @@
 import { newSpecPage } from "@stencil/core/testing";
-import { MoptVpr } from "./mopt-vpr";
+import { VIVprView } from "./vi-vpr-view";
 
-describe("mopt-vpr", () => {
+describe("vi-vpr-view", () => {
   it("renders", async () => {
     const page = await newSpecPage({
-      components: [MoptVpr],
-      html: `<mopt-vpr></mopt-vpr>`,
+      components: [VIVprView],
+      html: `<vi-vpr-view></vi-vpr-view>`,
     });
     expect(page.root).toEqualHtml(`
-      <mopt-vpr aria-hidden="true" exportparts="grid" style="--column-width: 150px;">
+      <vi-vpr-view aria-hidden="true" exportparts="grid" style="--column-width: 150px;">
         <mock:shadow-root>
           <style></style>
           <h2 part="recommendations-title">
@@ -17,17 +17,17 @@ describe("mopt-vpr", () => {
           <div class="results" data-mode="auto" part="grid"></div>
           <div class="visually-hidden" part="shadow-parts-detect"></div>
         </mock:shadow-root>
-      </mopt-vpr>
+      </vi-vpr-view>
     `);
   });
 
   it("renders with price attribute", async () => {
     const page = await newSpecPage({
-      components: [MoptVpr],
-      html: `<mopt-vpr product-id="0100580000053" token="lol"></mopt-vpr>`,
+      components: [VIVprView],
+      html: `<vi-vpr-view product-id="0100580000053" token="lol"></vi-vpr-view>`,
     });
     expect(page.root).toEqualHtml(`
-      <mopt-vpr aria-hidden="true" exportparts="grid" product-id="0100580000053" token="lol" style="--column-width: 150px;">
+      <vi-vpr-view aria-hidden="true" exportparts="grid" product-id="0100580000053" token="lol" style="--column-width: 150px;">
         <mock:shadow-root>
           <style></style>
           <h2 part="recommendations-title">
@@ -36,17 +36,17 @@ describe("mopt-vpr", () => {
           <div class="results" data-mode="auto" part="grid"></div>
           <div class="visually-hidden" part="shadow-parts-detect"></div>
         </mock:shadow-root>
-      </mopt-vpr>
+      </vi-vpr-view>
     `);
   });
 
   it("renders proper columns and mode attributes attribute", async () => {
     const page = await newSpecPage({
-      components: [MoptVpr],
-      html: `<mopt-vpr product-id="0100580000053" token="lol" columns="4"></mopt-vpr>`,
+      components: [VIVprView],
+      html: `<vi-vpr-view product-id="0100580000053" token="lol" columns="4"></vi-vpr-view>`,
     });
     expect(page.root).toEqualHtml(`
-      <mopt-vpr aria-hidden="true" columns="4" exportparts="grid" product-id="0100580000053" token="lol" style="--columns: 4; --column-width: 150px;">
+      <vi-vpr-view aria-hidden="true" columns="4" exportparts="grid" product-id="0100580000053" token="lol" style="--columns: 4; --column-width: 150px;">
         <mock:shadow-root>
           <style></style>
           <h2 part="recommendations-title">
@@ -55,7 +55,7 @@ describe("mopt-vpr", () => {
           <div class="results" data-mode="grid" part="grid"></div>
           <div class="visually-hidden" part="shadow-parts-detect"></div>
         </mock:shadow-root>
-      </mopt-vpr>
+      </vi-vpr-view>
     `);
   });
 });

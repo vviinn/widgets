@@ -27,11 +27,11 @@ const getProductId = (x: string): E.Either<Error, string> =>
   );
 
 @Component({
-  tag: "mopt-vpr",
-  styleUrl: "mopt-vpr.css",
+  tag: "vi-vpr-view",
+  styleUrl: "vi-vpr-view.css",
   shadow: true,
 })
-export class MoptVpr implements ComponentInterface {
+export class VIVprView implements ComponentInterface {
   @Element() el: HTMLElement;
   /** Title for recommendations widget */
   @Prop() blockTitle: string = "Recommended products";

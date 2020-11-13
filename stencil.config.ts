@@ -4,7 +4,7 @@ import { postcss } from '@stencil/postcss';
 import autoprefixer from 'autoprefixer';
 
 export const config: Config = {
-  namespace: 'mediaopt-vpr',
+  namespace: 'mediaopt-widgets',
   taskQueue: 'async',
   outputTargets: [
     {

@@ -8,9 +8,9 @@ import {
   Listen,
   Prop,
 } from "@stencil/core";
-import { Interfaces } from "../../interfaces/recommendation";
+import { Interfaces } from "../../../interfaces/recommendation";
 import { chunksOf } from "fp-ts/lib/Array";
-import { GridMode } from "../mopt-vpr/GridMode";
+import { GridMode } from "../GridMode";
 
 @Component({
   tag: "vpr-slider",
