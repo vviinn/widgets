@@ -1,4 +1,4 @@
-:host {
+vpr-slider {
   --slide-size: 0px;
   --slide-position: 0;
   display: grid;
