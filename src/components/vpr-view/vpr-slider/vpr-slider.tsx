@@ -15,7 +15,7 @@ import { GridMode } from "../GridMode";
 @Component({
   tag: "vpr-slider",
   styleUrl: "vpr-slider.css",
-  shadow: true,
+  shadow: false,
 })
 export class VprSlider {
   @Element() el: HTMLElement;
