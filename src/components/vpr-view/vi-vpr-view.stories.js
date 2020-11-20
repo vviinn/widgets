@@ -8,6 +8,7 @@ const MoptVprStory = ({
   lineHeight,
   fontSize,
   fontColor,
+  imageWidth,
 }) => `
 <style>
 body {
@@ -30,10 +31,6 @@ vi-vpr-view::part(product-type) {
   font-weight: 400;
   color: #19181e;
   font-size: 18px;
-}
-
-vi-vpr-view::part(product-image) {
-  border: 1px solid ${fontColor};
 }
 
 vi-vpr-view::part(price-regular),
@@ -60,7 +57,7 @@ vi-vpr-view::part(price-outdated) {
             slider-mode=${sliderMode}
             columns=${columns}
             currency-sign=${currencySign}
-            image-width="200">
+            image-width="${imageWidth}">
   </vi-vpr-view>
 `;
 
@@ -76,6 +73,7 @@ VI_VPR_View.args = {
   currencySign: "€",
   lineHeight: 20,
   fontSize: 20,
+  imageWidth: 200,
   fontColor: "#19181e",
 };
 
