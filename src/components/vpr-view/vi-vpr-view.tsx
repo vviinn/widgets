@@ -39,7 +39,7 @@ export class VIVprView implements ComponentInterface {
   /** Number of columns for recommendations */
   @Prop() columns: number;
   /** Ratio of each recommended product image */
-  @Prop() imageRatio: number = 1.5;
+  @Prop() imageRatio: number = 1;
   /** Width of each recommended product image */
   @Prop() imageWidth: number = 150;
   /** Id of product you need recommendations for */
