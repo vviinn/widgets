@@ -5,6 +5,7 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { CampaignName } from "./campaign/Campaign";
 import { Interfaces } from "./interfaces/recommendation";
 import { GridMode } from "./components/vpr-view/GridMode";
 export namespace Components {
@@ -13,6 +14,10 @@ export namespace Components {
           * Title for recommendations widget
          */
         "blockTitle": string;
+        /**
+          * Campaign type
+         */
+        "campaignType": CampaignName;
         /**
           * Number of columns for recommendations
          */
@@ -89,6 +94,10 @@ declare namespace LocalJSX {
           * Title for recommendations widget
          */
         "blockTitle"?: string;
+        /**
+          * Campaign type
+         */
+        "campaignType"?: CampaignName;
         /**
           * Number of columns for recommendations
          */
