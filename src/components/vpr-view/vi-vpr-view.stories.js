@@ -9,6 +9,7 @@ const MoptVprStory = ({
   fontSize,
   fontColor,
   imageWidth,
+  crossSellingCampaign
 }) => `
 <style>
 body {
@@ -57,7 +58,8 @@ vi-vpr-view::part(price-outdated) {
             slider-mode=${sliderMode}
             columns=${columns}
             currency-sign=${currencySign}
-            image-width="${imageWidth}">
+            image-width="${imageWidth}"
+            campaign-type="${crossSellingCampaign ? 'VSC' : 'VPR'}">
   </vi-vpr-view>
 `;
 
@@ -75,6 +77,7 @@ VI_VPR_View.args = {
   fontSize: 20,
   imageWidth: 200,
   fontColor: "#19181e",
+  crossSellingCampaign: false
 };
 
 export default {

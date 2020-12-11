@@ -7,7 +7,6 @@ import {
   State,
   Element,
 } from "@stencil/core";
-import { getRecommendations } from "../../services/recommendationsService";
 import { pipe } from "fp-ts/lib/pipeable";
 import * as TE from "fp-ts/lib/TaskEither";
 import * as E from "fp-ts/lib/Either";
@@ -16,6 +15,8 @@ import { authOptionsFromToken } from "./token-helpers";
 import { Interfaces } from "../../interfaces/recommendation";
 import state from "../../store/store";
 import { GridMode } from "./GridMode";
+import { CampaignName } from "../../campaign/Campaign";
+import { getRecommendationsService } from "../../campaign/CampaignService";
 
 const emptyId = (x: string): E.Either<Error, string> =>
   x.length === 0 ? E.left(new Error("Product id is empty")) : E.right(x);
@@ -38,7 +39,7 @@ export class VIVprView implements ComponentInterface {
   /** Number of columns for recommendations */
   @Prop() columns: number;
   /** Ratio of each recommended product image */
-  @Prop() imageRatio: number = 1.5;
+  @Prop() imageRatio: number = 1;
   /** Width of each recommended product image */
   @Prop() imageWidth: number = 150;
   /** Id of product you need recommendations for */
@@ -51,6 +52,8 @@ export class VIVprView implements ComponentInterface {
   @Prop() pricePrefix: string;
   /** Use slider or grid view */
   @Prop() sliderMode: boolean = false;
+  /** Campaign type */
+  @Prop() campaignType: CampaignName = "VPR";
 
   @State() recommendations: Interfaces["VisualProductSearch"][] = [];
   @State() loaded: boolean = false;
@@ -90,7 +93,7 @@ export class VIVprView implements ComponentInterface {
     state.currencySign = this.currencySign;
 
     const request = pipe(
-      TE.right(getRecommendations),
+      TE.right(getRecommendationsService(this.campaignType)),
       TE.ap(TE.fromEither(getProductId(this.productId))),
       TE.ap(TE.fromEither(authOptionsFromToken(this.token))),
       TE.flatten
