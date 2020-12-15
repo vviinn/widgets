@@ -114,14 +114,16 @@ export class VIVprView implements ComponentInterface {
     console.log("ERROR:", error);
   }
 
-  async handleRecommendationsSucces(data: any): Promise<void> {
+  handleRecommendationsSucces(data: any) {
     const recommendations = data?.extended ?? data;
 
     this.el.style.setProperty("--items-size", `${recommendations.length}`);
     this.recommendations = recommendations;
 
     if (this.sliderMode) {
-      this.slider.loadProducts(recommendations);
+      setTimeout(() => {
+        this.slider.loadProducts(recommendations);
+      });
     }
 
     this.loaded = true;
