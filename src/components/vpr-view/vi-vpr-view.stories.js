@@ -9,7 +9,7 @@ const MoptVprStory = ({
   fontSize,
   fontColor,
   imageWidth,
-  crossSellingCampaign
+  crossSellingCampaign,
 }) => `
 <style>
 body {
@@ -59,7 +59,7 @@ vi-vpr-view::part(price-outdated) {
             columns=${columns}
             currency-sign=${currencySign}
             image-width="${imageWidth}"
-            campaign-type="${crossSellingCampaign ? 'VSC' : 'VPR'}">
+            campaign-type="${crossSellingCampaign ? "VSC" : "VPR"}">
   </vi-vpr-view>
 `;
 
@@ -67,8 +67,8 @@ export const VI_VPR_View = MoptVprStory.bind({});
 
 VI_VPR_View.args = {
   token:
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgyLCJqdGkiOiI4ZDU2ZWY4OC1lZWVlLTRiOWQtOTBkYi05OWM3NGNlOGY0ZDYiLCJzY29wZXMiOlsidnByIiwidnBzIl19.b8KzSNCbM_V385cq7nC21-CBevVJ-YdnTadCuMmnrjIBubd8sSaeeihjkaY7m-Uw5eHdDuZNbKHpZ6bb5SWE5_4iB25aTC6Epx6mjhPM03mhvOwtLT22gkvDSaejpdHnkB5yMXSIgO2SyYSeaMqSNaUEabBVbLT2SfqmieJXiAI",
-  productId: "875869",
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjE0LCJqdGkiOiI3YzY3ZDY1Yy1iMzE2LTQzMDMtYjU3My0xZmIyYmI2MGQ4NTciLCJzY29wZXMiOlsidnByIiwidnBzIiwidmNzIl19.k11FFSpXiTTPatpWVoVD_ZzQbtlgepyzIL0MnhGeTU8ABEAkHEtuPyXTOdzQN0VHhJXjcXT7tA71G0PIR6RlybXWTKPeMUAzSjV5oZUD41k0y8dMvCd_t4O0CCVpigE81ZD01-NDR_AGVdQFnEQrXXv0_MhgtXe36Cuyoi_bvbQ",
+  productId: "0007590659994c213d2f14694624ea4a",
   blockTitle: "Recommendations",
   sliderMode: true,
   columns: 0,
@@ -77,7 +77,7 @@ VI_VPR_View.args = {
   fontSize: 20,
   imageWidth: 200,
   fontColor: "#19181e",
-  crossSellingCampaign: false
+  crossSellingCampaign: false,
 };
 
 export default {

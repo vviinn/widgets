@@ -93,7 +93,7 @@ export class VIVprView implements ComponentInterface {
     state.currencySign = this.currencySign;
 
     const request = pipe(
-      TE.right(getRecommendationsService(this.campaignType)),
+      TE.of(getRecommendationsService(this.campaignType)),
       TE.ap(TE.fromEither(getProductId(this.productId))),
       TE.ap(TE.fromEither(authOptionsFromToken(this.token))),
       TE.flatten
@@ -110,19 +110,18 @@ export class VIVprView implements ComponentInterface {
     );
   }
 
-  handleError(error: Error): any {
+  handleError(error: unknown): any {
     console.log("ERROR:", error);
   }
 
-  async handleRecommendationsSucces(
-    data: Promise<Interfaces["VisualProductRecommendations"]>
-  ): Promise<void> {
-    const response = await data;
-    this.el.style.setProperty("--items-size", `${response.extended.length}`);
-    this.recommendations = response.extended;
+  async handleRecommendationsSucces(data: any): Promise<void> {
+    const recommendations = data?.extended ?? data;
+
+    this.el.style.setProperty("--items-size", `${recommendations.length}`);
+    this.recommendations = recommendations;
 
     if (this.sliderMode) {
-      this.slider.loadProducts(response.extended);
+      this.slider.loadProducts(recommendations);
     }
 
     this.loaded = true;

@@ -13,7 +13,7 @@ export const isVCS = (c: Campaign): c is VCS => c._tag === "VCS";
 
 export type Campaign = VPR | VCS;
 
-export function fold<B>(onVPR: () => B, onVCS: () => B): (c: Campaign) => B {
+export function fold<A, B>(onVPR: () => A, onVCS: () => B): (c: Campaign) => A|B {
   return (c) => (isVPR(c) ? onVPR() : onVCS());
 }
 
