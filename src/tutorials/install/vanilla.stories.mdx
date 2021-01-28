@@ -12,9 +12,9 @@ Integrating a component built with Stencil to a project without a JavaScript fra
     <script src='https://unpkg.com/mediaopt-vpr@latest/dist/medaopt-vpr/medaopt-vpr.js'></script>
   </head>
   <body>
-    <mopt-vpr token="YOURS_TOKEN_HERE"
+    <vi-vpr-view token="YOURS_TOKEN_HERE"
               product-id="SOME_ID">
-    </mopt-vpr>
+    </vi-vpr-view>
   </body>
 </html>
 ```
@@ -34,7 +34,7 @@ defineCustomElements();
 In both cases you can create component instance with standart DOM API:
 
 ```javascript
-const component = document.createElement('mopt-vpr');
+const component = document.createElement('vi-vpr-view');
 component.token = YOURS_TOKEN;
 component.productId = SOME_ID;
 
