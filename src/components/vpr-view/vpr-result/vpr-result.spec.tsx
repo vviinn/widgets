@@ -40,7 +40,7 @@ describe('vpr-result', () => {
         <mock:shadow-root>
           <style></style>
           <img alt="Fender Jazz Bass" part="product-image" part="product-image" height="150" src="path-to-image.jpg" width="100">
-          <span class="product title" part="product-title">
+          <span class="product title" part="product-title" title="Fender Jazz Bass">
             Fender Jazz Bass
           </span>
         </mock:shadow-root>
@@ -69,7 +69,7 @@ describe('vpr-result', () => {
         <mock:shadow-root>
           <style></style>
           <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
-          <span class="product title" part="product-title">
+          <span class="product title" part="product-title" title="Fender Jazz Bass">
             Fender Jazz Bass
           </span>
         </mock:shadow-root>
@@ -95,7 +95,7 @@ describe('vpr-result', () => {
         <mock:shadow-root>
           <style></style>
           <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
-          <span class="product title" part="product-title">
+          <span class="product title" part="product-title" title="Fender Jazz Bass">
             Fender Jazz Bass
           </span>
         </mock:shadow-root>
@@ -122,7 +122,7 @@ describe('vpr-result', () => {
         <mock:shadow-root>
           <style></style>
           <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
-          <span class="product title" part="product-title">
+          <span class="product title" part="product-title" title="Fender Jazz Bass">
             Fender Jazz Bass
           </span>
         </mock:shadow-root>
@@ -152,7 +152,7 @@ describe('vpr-result', () => {
           <a href="/basses/fjb.html" part="product-image-link">
             <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
           </a>
-          <a class="product title" href="/basses/fjb.html" part="product-title">
+          <a class="product title" href="/basses/fjb.html" part="product-title" title="Fender Jazz Bass">
             Fender Jazz Bass
           </a>
         </mock:shadow-root>
@@ -185,7 +185,7 @@ describe('vpr-result', () => {
           <a href="/basses/fjb.html" part="product-image-link">
             <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
           </a>
-          <a class="product title" href="/basses/fjb.html" part="product-title">
+          <a class="product title" href="/basses/fjb.html" part="product-title" title="Fender Jazz Bass">
             Fender Jazz Bass
           </a>
           <span class="price regular" part="price-regular">
@@ -223,7 +223,7 @@ describe('vpr-result', () => {
           <a href="/basses/fjb.html" part="product-image-link">
             <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
           </a>
-          <a class="product title" href="/basses/fjb.html" part="product-title">
+          <a class="product title" href="/basses/fjb.html" part="product-title" title="Fender Jazz Bass">
             Fender Jazz Bass
           </a>
           <span class="price regular" part="price-regular">
@@ -262,7 +262,7 @@ describe('vpr-result', () => {
           <a href="/basses/fjb.html" part="product-image-link">
             <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
           </a>
-          <a class="product title" href="/basses/fjb.html" part="product-title">
+          <a class="product title" href="/basses/fjb.html" part="product-title" title="Fender Jazz Bass">
             Fender Jazz Bass
           </a>
           <span class="price regular" part="price-regular">
@@ -301,7 +301,7 @@ describe('vpr-result', () => {
           <a href="/basses/fjb.html" part="product-image-link">
             <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
           </a>
-          <a class="product title" href="/basses/fjb.html" part="product-title">
+          <a class="product title" href="/basses/fjb.html" part="product-title" title="Fender Jazz Bass">
             Fender Jazz Bass
           </a>
           <span class="price regular" part="price-regular">
@@ -340,7 +340,7 @@ describe('vpr-result', () => {
           <a href="/basses/fjb.html" part="product-image-link">
             <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
           </a>
-          <a class="product title" href="/basses/fjb.html" part="product-title">
+          <a class="product title" href="/basses/fjb.html" part="product-title" title="Fender Jazz Bass">
             Fender Jazz Bass
           </a>
           <span class="price outdated" part="price-outdated">
@@ -384,7 +384,7 @@ describe('vpr-result', () => {
           <a href="/basses/fjb.html" part="product-image-link">
             <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
           </a>
-          <a class="product title" href="/basses/fjb.html" part="product-title">
+          <a class="product title" href="/basses/fjb.html" part="product-title" title="Fender Jazz Bass">
             Fender Jazz Bass
           </a>
           <span class="brand" part="brand">Fender</span>
@@ -422,7 +422,7 @@ describe('vpr-result', () => {
           <a href="/basses/fjb.html" part="product-image-link">
             <img alt="Fender Jazz Bass" part="product-image" height="150" src="path-to-thumb.jpg" width="100">
           </a>
-          <a class="product title" href="/basses/fjb.html" part="product-title">
+          <a class="product title" href="/basses/fjb.html" part="product-title" title="Fender Jazz Bass">
             Fender Jazz Bass
           </a>
           <span class="product-type" part="product-type">Bass guitar</span>
