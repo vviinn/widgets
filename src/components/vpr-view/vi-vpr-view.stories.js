@@ -67,8 +67,8 @@ export const VI_VPR_View = MoptVprStory.bind({});
 
 VI_VPR_View.args = {
   token:
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjE0LCJqdGkiOiI3YzY3ZDY1Yy1iMzE2LTQzMDMtYjU3My0xZmIyYmI2MGQ4NTciLCJzY29wZXMiOlsidnByIiwidnBzIiwidmNzIl19.k11FFSpXiTTPatpWVoVD_ZzQbtlgepyzIL0MnhGeTU8ABEAkHEtuPyXTOdzQN0VHhJXjcXT7tA71G0PIR6RlybXWTKPeMUAzSjV5oZUD41k0y8dMvCd_t4O0CCVpigE81ZD01-NDR_AGVdQFnEQrXXv0_MhgtXe36Cuyoi_bvbQ",
-  productId: "0007590659994c213d2f14694624ea4a",
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgyLCJqdGkiOiI4ZDU2ZWY4OC1lZWVlLTRiOWQtOTBkYi05OWM3NGNlOGY0ZDYiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.zMVTgD91RMHUYXXhORIZk5sI0R2Jz4Yryz_jlaoBSLo24evOQWslh2QDfJZGEH63gTCpGvnCuaEQP9iA9xnCTDhpcrViricwBngxt6Z9r2NfCpwC-XKBF_kJWhsSnixcJiuTXUpzTYvnLAQ37QfrElkEbG77J7EMgJsuYy4fqAQ",
+  productId: "130351",
   blockTitle: "Recommendations",
   sliderMode: true,
   columns: 0,
