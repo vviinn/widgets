@@ -38,8 +38,8 @@ export const Title = (data: Interfaces['VisualProductSearch']): FunctionalCompon
     O.fromNullable(data.deeplink),
     O.chain(checkEmpryString),
     O.fold(
-      () => (<span part="product-title" class="product title">{data.title}</span>),
-      (url) => (<a part="product-title" class="product title" href={url}>{data.title}</a>)
+      () => (<span part="product-title" class="product title" title={data.title}>{data.title}</span>),
+      (url) => (<a part="product-title" class="product title" title={data.title} href={url}>{data.title}</a>)
     )
   );
 
@@ -65,7 +65,7 @@ const PriceComponent = (price: number, prefix: string, currency: string) => pipe
     () => null,
     () => [
       Prefix(prefix),
-      <span part="price-amount" class="price amount">{ price }</span>,
+      <span part="price-amount" class="price amount">{price}</span>,
       Currency(currency)
     ]
   )
@@ -78,13 +78,13 @@ const bothPricesPresented = (x: Interfaces['VisualProductSearch']['price']): E.E
 
 const pricesAreDifferent = (x: [number, number]): E.Either<number, [number, number]> =>
   x[0] === x[1]
-  ? E.left(x[0])
-  : E.right(x);
+    ? E.left(x[0])
+    : E.right(x);
 
 const isSalePrice = (x: [number, number]): E.Either<number, [number, number]> =>
   x[0] < x[1]
-       ? E.left(x[1])
-       : E.right(x);
+    ? E.left(x[1])
+    : E.right(x);
 
 const getPriceComponent = (data: Interfaces['VisualProductSearch']['price'], prefix: string = null, currency: string = null): FunctionalComponent<Interfaces['VisualProductSearch']['price']> =>
   pipe(
@@ -94,15 +94,15 @@ const getPriceComponent = (data: Interfaces['VisualProductSearch']['price'], pre
     E.chain(isSalePrice),
     E.fold(
       (singlePrice) => <span part="price-regular" class="price regular">
-          {PriceComponent(singlePrice, prefix, currency)}
+        {PriceComponent(singlePrice, prefix, currency)}
       </span>,
       (prices) => [
         <span part="price-outdated" class="price outdated">
-            { PriceComponent(prices[0], prefix, currency) }
+          {PriceComponent(prices[0], prefix, currency)}
         </span>,
         <span part="price-discount" class="price discount">
-            { PriceComponent(prices[1], prefix, currency) }
-        </span> 
+          {PriceComponent(prices[1], prefix, currency)}
+        </span>
       ]
     )
   );
@@ -122,7 +122,7 @@ export const Brand = (data: Interfaces['VisualProductSearch']): FunctionalCompon
     O.fold(
       () => null,
       (brand) => <span part="brand" class="brand">
-          { brand }
+        {brand}
       </span>
     )
   );
@@ -133,7 +133,7 @@ export const ProductType = (data: Interfaces['VisualProductSearch']): Functional
     O.fold(
       () => null,
       (productType) => <span part="product-type" class="product-type">
-          { productType }
+        {productType}
       </span>
     )
   );
