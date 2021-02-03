@@ -9,6 +9,8 @@ import { CampaignName } from "./campaign/Campaign";
 import { Interfaces } from "./interfaces/recommendation";
 import { GridMode } from "./components/vpr-view/GridMode";
 export namespace Components {
+    interface ImageSelector {
+    }
     interface ViVprView {
         /**
           * Title for recommendations widget
@@ -64,6 +66,12 @@ export namespace Components {
     }
 }
 declare global {
+    interface HTMLImageSelectorElement extends Components.ImageSelector, HTMLStencilElement {
+    }
+    var HTMLImageSelectorElement: {
+        prototype: HTMLImageSelectorElement;
+        new (): HTMLImageSelectorElement;
+    };
     interface HTMLViVprViewElement extends Components.ViVprView, HTMLStencilElement {
     }
     var HTMLViVprViewElement: {
@@ -83,12 +91,15 @@ declare global {
         new (): HTMLVprSliderElement;
     };
     interface HTMLElementTagNameMap {
+        "image-selector": HTMLImageSelectorElement;
         "vi-vpr-view": HTMLViVprViewElement;
         "vpr-result": HTMLVprResultElement;
         "vpr-slider": HTMLVprSliderElement;
     }
 }
 declare namespace LocalJSX {
+    interface ImageSelector {
+    }
     interface ViVprView {
         /**
           * Title for recommendations widget
@@ -154,6 +165,7 @@ declare namespace LocalJSX {
         "mode"?: GridMode;
     }
     interface IntrinsicElements {
+        "image-selector": ImageSelector;
         "vi-vpr-view": ViVprView;
         "vpr-result": VprResult;
         "vpr-slider": VprSlider;
@@ -163,6 +175,7 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "image-selector": LocalJSX.ImageSelector & JSXBase.HTMLAttributes<HTMLImageSelectorElement>;
             "vi-vpr-view": LocalJSX.ViVprView & JSXBase.HTMLAttributes<HTMLViVprViewElement>;
             "vpr-result": LocalJSX.VprResult & JSXBase.HTMLAttributes<HTMLVprResultElement>;
             "vpr-slider": LocalJSX.VprSlider & JSXBase.HTMLAttributes<HTMLVprSliderElement>;
