@@ -13,10 +13,20 @@ describe("image-selector", () => {
     const page = await newE2EPage();
     await page.setContent("<image-selector></image-selector>");
 
-    //const element = await page.find("image-selector");
     const input = await page.find("image-selector >>> input");
 
-    expect(input).toHaveAttribute("type", "file");
-    //expect(input).toHaveProperty("accept", "image/png, image/jpeg, image/webp");
+    expect(input).toHaveAttribute("type");
+    expect(input).toHaveAttribute("accept");
+    expect(input).toHaveAttribute("capture");
+  });
+
+  it("have drag'n'drop zone", async () => {
+    const page = await newE2EPage();
+    await page.setContent("<image-selector></image-selector>");
+
+    const dropZone = await page.find("image-selector >>> #drop-zone");
+
+    expect(dropZone).toHaveAttribute("ondrop");
+    expect(dropZone).toHaveAttribute("ondragover");
   });
 });
