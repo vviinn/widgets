@@ -1,6 +1,8 @@
 import { Component, Host, h, State } from "@stencil/core";
 import * as O from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/function";
+import { fromFile } from "../../Image/fromFile";
+import { resizeImage } from "../../Image/resizeImage";
 
 const checkImageType = (f: File): O.Option<File> =>
   f.type.split("/")[0] === "image" ? O.some(f) : O.none;
@@ -43,8 +45,13 @@ export class ImageSelector {
     );
   }
 
-  private fileSelectionSuccess(f: File) {
-    console.log("File selected!", f);
+  private async fileSelectionSuccess(f: File) {
+    const r = await fromFile(f);
+
+    r.onload = () => {
+      const t = resizeImage(300, r);
+      console.log("File selected!", t);
+    };
   }
 
   private fileSelectionError() {
