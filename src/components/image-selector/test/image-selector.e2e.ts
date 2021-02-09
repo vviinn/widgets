@@ -19,14 +19,4 @@ describe("image-selector", () => {
     expect(input).toHaveAttribute("accept");
     expect(input).toHaveAttribute("capture");
   });
-
-  it("have drag'n'drop zone", async () => {
-    const page = await newE2EPage();
-    await page.setContent("<image-selector></image-selector>");
-
-    const dropZone = await page.find("image-selector >>> #drop-zone");
-
-    expect(dropZone).toHaveAttribute("ondrop");
-    expect(dropZone).toHaveAttribute("ondragover");
-  });
 });
