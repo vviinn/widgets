@@ -15,6 +15,8 @@ export namespace Components {
     }
     interface ImageCropper {
     }
+    interface ImageSelector {
+    }
     interface ViVprView {
         /**
           * Title for recommendations widget
@@ -82,6 +84,12 @@ declare global {
         prototype: HTMLImageCropperElement;
         new (): HTMLImageCropperElement;
     };
+    interface HTMLImageSelectorElement extends Components.ImageSelector, HTMLStencilElement {
+    }
+    var HTMLImageSelectorElement: {
+        prototype: HTMLImageSelectorElement;
+        new (): HTMLImageSelectorElement;
+    };
     interface HTMLViVprViewElement extends Components.ViVprView, HTMLStencilElement {
     }
     var HTMLViVprViewElement: {
@@ -103,6 +111,7 @@ declare global {
     interface HTMLElementTagNameMap {
         "cropper-handler": HTMLCropperHandlerElement;
         "image-cropper": HTMLImageCropperElement;
+        "image-selector": HTMLImageSelectorElement;
         "vi-vpr-view": HTMLViVprViewElement;
         "vpr-result": HTMLVprResultElement;
         "vpr-slider": HTMLVprSliderElement;
@@ -115,6 +124,8 @@ declare namespace LocalJSX {
     }
     interface ImageCropper {
         "onMouseRelease"?: (event: CustomEvent<void>) => void;
+    }
+    interface ImageSelector {
     }
     interface ViVprView {
         /**
@@ -183,6 +194,7 @@ declare namespace LocalJSX {
     interface IntrinsicElements {
         "cropper-handler": CropperHandler;
         "image-cropper": ImageCropper;
+        "image-selector": ImageSelector;
         "vi-vpr-view": ViVprView;
         "vpr-result": VprResult;
         "vpr-slider": VprSlider;
@@ -194,6 +206,7 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "cropper-handler": LocalJSX.CropperHandler & JSXBase.HTMLAttributes<HTMLCropperHandlerElement>;
             "image-cropper": LocalJSX.ImageCropper & JSXBase.HTMLAttributes<HTMLImageCropperElement>;
+            "image-selector": LocalJSX.ImageSelector & JSXBase.HTMLAttributes<HTMLImageSelectorElement>;
             "vi-vpr-view": LocalJSX.ViVprView & JSXBase.HTMLAttributes<HTMLViVprViewElement>;
             "vpr-result": LocalJSX.VprResult & JSXBase.HTMLAttributes<HTMLVprResultElement>;
             "vpr-slider": LocalJSX.VprSlider & JSXBase.HTMLAttributes<HTMLVprSliderElement>;

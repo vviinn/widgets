@@ -1,0 +1,46 @@
+:host {
+  display: block;
+}
+
+.visually-hidden {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+#drop-zone {
+  padding: 2rem;
+  border: 3px dotted gray;
+  display: grid;
+  justify-items: center;
+  justify-content: center;
+  transition: border-color 0.1s ease-in-out;
+}
+
+#drop-zone.dragover {
+  border-color: lightblue;
+}
+
+#drop-zone.error {
+  border-color: lightcoral;
+}
+
+span.error {
+  color: lightcoral;
+}
+
+label {
+  cursor: pointer;
+  padding: 0.5rem;
+  border: 1px solid gray;
+  transition: background 0.1s ease-in-out;
+}
+
+label:hover {
+  background: whitesmoke;
+}
+
