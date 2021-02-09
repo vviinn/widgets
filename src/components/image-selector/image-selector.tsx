@@ -62,8 +62,8 @@ export class ImageSelector {
     const fileMessage = this.error ? (
       <span class="error">use only image files!</span>
     ) : (
-        <span>or drop files here</span>
-      );
+      <span>or drop files here</span>
+    );
 
     return (
       <Host>
