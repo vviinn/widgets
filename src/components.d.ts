@@ -5,10 +5,16 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { Handler } from "./cropper/Handler";
 import { CampaignName } from "./campaign/Campaign";
 import { Interfaces } from "./interfaces/recommendation";
 import { GridMode } from "./components/vpr-view/GridMode";
 export namespace Components {
+    interface CropperHandler {
+        "handler": Handler;
+    }
+    interface ImageCropper {
+    }
     interface ViVprView {
         /**
           * Title for recommendations widget
@@ -64,6 +70,18 @@ export namespace Components {
     }
 }
 declare global {
+    interface HTMLCropperHandlerElement extends Components.CropperHandler, HTMLStencilElement {
+    }
+    var HTMLCropperHandlerElement: {
+        prototype: HTMLCropperHandlerElement;
+        new (): HTMLCropperHandlerElement;
+    };
+    interface HTMLImageCropperElement extends Components.ImageCropper, HTMLStencilElement {
+    }
+    var HTMLImageCropperElement: {
+        prototype: HTMLImageCropperElement;
+        new (): HTMLImageCropperElement;
+    };
     interface HTMLViVprViewElement extends Components.ViVprView, HTMLStencilElement {
     }
     var HTMLViVprViewElement: {
@@ -83,12 +101,21 @@ declare global {
         new (): HTMLVprSliderElement;
     };
     interface HTMLElementTagNameMap {
+        "cropper-handler": HTMLCropperHandlerElement;
+        "image-cropper": HTMLImageCropperElement;
         "vi-vpr-view": HTMLViVprViewElement;
         "vpr-result": HTMLVprResultElement;
         "vpr-slider": HTMLVprSliderElement;
     }
 }
 declare namespace LocalJSX {
+    interface CropperHandler {
+        "handler"?: Handler;
+        "onHandlerMoved"?: (event: CustomEvent<Handler>) => void;
+    }
+    interface ImageCropper {
+        "onMouseRelease"?: (event: CustomEvent<void>) => void;
+    }
     interface ViVprView {
         /**
           * Title for recommendations widget
@@ -154,6 +181,8 @@ declare namespace LocalJSX {
         "mode"?: GridMode;
     }
     interface IntrinsicElements {
+        "cropper-handler": CropperHandler;
+        "image-cropper": ImageCropper;
         "vi-vpr-view": ViVprView;
         "vpr-result": VprResult;
         "vpr-slider": VprSlider;
@@ -163,6 +192,8 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "cropper-handler": LocalJSX.CropperHandler & JSXBase.HTMLAttributes<HTMLCropperHandlerElement>;
+            "image-cropper": LocalJSX.ImageCropper & JSXBase.HTMLAttributes<HTMLImageCropperElement>;
             "vi-vpr-view": LocalJSX.ViVprView & JSXBase.HTMLAttributes<HTMLViVprViewElement>;
             "vpr-result": LocalJSX.VprResult & JSXBase.HTMLAttributes<HTMLVprResultElement>;
             "vpr-slider": LocalJSX.VprSlider & JSXBase.HTMLAttributes<HTMLVprSliderElement>;
