@@ -139,16 +139,16 @@ export class VIVprView implements ComponentInterface {
         ref={(el) => (this.slider = el)}
       ></vpr-slider>
     ) : (
-        <div class="results" data-mode={this.gridMode} part="grid">
-          {this.recommendations.map((r) => (
-            <vpr-result
-              item={r}
-              imageWidth={this.imageWidth}
-              imageRatio={this.imageRatio}
-            />
-          ))}
-        </div>
-      );
+      <div class="results" data-mode={this.gridMode} part="grid">
+        {this.recommendations.map((r) => (
+          <vpr-result
+            item={r}
+            imageWidth={this.imageWidth}
+            imageRatio={this.imageRatio}
+          />
+        ))}
+      </div>
+    );
   }
 
   render() {
