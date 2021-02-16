@@ -3,10 +3,7 @@ export const resizeImage = (width: number, i: HTMLImageElement): string => {
   const ctx = canvas.getContext("2d");
   const imageWidth = i.naturalWidth;
   const imageHeight = i.naturalHeight;
-  const ratio = Math.floor(imageHeight / imageWidth);
-
-  console.log(ratio);
-
+  const ratio = imageHeight / imageWidth;
   const newHeight = width * ratio;
 
   canvas.width = width;
