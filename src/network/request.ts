@@ -1,34 +1,56 @@
-import { FetchOptions } from "./fetchOptions";
 import { flow } from "fp-ts/lib/function";
 import { pipe } from "fp-ts/lib/pipeable";
 import * as TE from "fp-ts/lib/TaskEither";
 import * as T from "fp-ts/lib/Task";
 import * as E from "fp-ts/lib/Either";
 
+export interface NetworkError {
+  errorType: "NetworkError" | "NotFound";
+  body?: unknown;
+}
+
+function errorFromUnknown(x: unknown): NetworkError {
+  return {
+    errorType: "NetworkError", body: x
+  }
+}
+
+export function networkErrorFrom<T>(x: T): NetworkError {
+  return {
+    errorType: "NetworkError", body: x
+  }
+}
+
+const getError = (x: Response): NetworkError =>
+  x.status === 500 ? { errorType: "NetworkError", body: x } : { errorType: "NotFound", body: x };
+
 const safeRequest = (
-  url: string,
-  options: FetchOptions = {}
-): TE.TaskEither<Error, Response> =>
+  url: string | Request,
+  request: RequestInit = {method: 'GET'}
+): TE.TaskEither<NetworkError, Response> =>
   TE.tryCatch(
-    () => fetch(url, options),
-    (reason) => new Error(String(reason))
+  () => fetch(url, request),
+    errorFromUnknown
   );
 
-const processResponce = flow((x: Response): E.Either<Error, Response> => {
-  return x.status === 200 ? E.right(x) : E.left(Error(x.statusText));
+const processResponce = flow((x: Response): E.Either<
+  NetworkError,
+  Response
+> => {
+  return (x.status >= 200 && x.status < 300) ? E.right(x) : E.left(getError(x));
 }, TE.fromEither);
 
-function getJson<I>(x: Response): TE.TaskEither<Error, I> {
+function getJson<I>(x: Response): TE.TaskEither<NetworkError, I> {
   const task: T.Task<I> = () => x.json();
   return TE.fromTask(task);
 }
 
-export const request = <T>(
-  url: string,
-  options: FetchOptions = {}
-): TE.TaskEither<Error, T> =>
+export const request = <I>(
+  url: string | Request,
+  request: RequestInit = {}
+): TE.TaskEither<NetworkError, I> =>
   pipe(
-    safeRequest(url, options),
+  safeRequest(url, request),
     TE.chain(processResponce),
-    TE.chain((x) => getJson<T>(x))
+    TE.chain((x) => getJson<I>(x))
   );

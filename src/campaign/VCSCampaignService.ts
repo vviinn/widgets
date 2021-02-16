@@ -1,10 +1,9 @@
-import { FetchOptions } from "../network/fetchOptions";
-import { request } from "../network/request";
+import { apiGet } from "../network/apiClient";
 import { VCSCampaignResponse } from "./VCSCampaignResponse";
 
 export const getVCSRecommendations = (productId: string) => (
-  options: FetchOptions
+  options: RequestInit
 ) => {
-  const recommendationsUrl = `${process.env.RECOMMENDATIONS_URL}${productId}/cross-selling-products`;
-  return request<VCSCampaignResponse>(recommendationsUrl, options);
+  const url = `product/${productId}/cross-selling-products`;
+  return apiGet<VCSCampaignResponse>(url, options);
 };
