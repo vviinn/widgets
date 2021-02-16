@@ -1,0 +1,213 @@
+import {
+  Component,
+  Host,
+  h,
+  Element,
+  State,
+  Method,
+  Listen,
+  Prop,
+} from "@stencil/core";
+import { Recommendation } from "../../recommendation/recommendation";
+import { chunksOf } from "fp-ts/Array";
+import { GridMode } from "./GridMode";
+import { rebuildProducts } from "./products.worker";
+
+@Component({
+  tag: "vpr-slider",
+  styleUrl: "vpr-slider.css",
+  shadow: false,
+})
+export class VprSlider {
+  @Element() el: HTMLElement;
+
+  @Prop() mode: GridMode;
+  @Prop() imageRatio: number = 1.5;
+  @Prop() imageWidth: number = 150;
+  @Prop() productsInGrid: number = 4;
+
+  @State() wrappedItems: Recommendation[][] = [[]];
+  @State() slidePosition: number = 0;
+
+  @Listen("resize", { target: "window" })
+  async resizeHandler() {
+    this.updateSliderWrapperSize();
+    if (this.mode === "grid") return;
+    const columns = parseInt(
+      getComputedStyle(this.el).getPropertyValue("--columns")
+    );
+
+    if (columns === undefined) {
+      return this.rebuildSlides();
+    }
+
+    this.rebuildSlides();
+  }
+
+  componentShouldUpdate() {
+    this.updateSliderWrapperSize();
+  }
+
+  componentDidLoad() {
+    this.el.style.setProperty("--item-size", `${this.imageWidth}px`);
+    this.updateSliderWrapperSize();
+  }
+
+  @Method()
+  async loadProducts(products: Recommendation[]) {
+    switch (this.mode) {
+      case "auto":
+        this.wrappedItems = [products];
+
+        const columns = parseInt(
+          getComputedStyle(this.el).getPropertyValue("--columns")
+        );
+
+        if (columns === undefined) {
+          return this.rebuildSlides();
+        }
+
+        return this.wrapItems(products, columns);
+      case "grid":
+        return this.wrapItems(products, this.getProductsCount(products));
+    }
+  }
+
+  private getProductsCount(products): number {
+    return this.productsInGrid ?? products.length ?? 1;
+  }
+
+  private async rebuildSlides() {
+    const slideSize = this.getSlideSize();
+    const margin = parseInt(
+      getComputedStyle(this.el).getPropertyValue("font-size")
+    );
+
+    const imageWidth = parseInt(
+      getComputedStyle(this.el).getPropertyValue("--image-width")
+    );
+
+    const products = await rebuildProducts(
+      this.wrappedItems,
+      slideSize,
+      margin,
+      Number.isNaN(imageWidth) ? this.imageWidth : imageWidth
+    );
+
+    this.wrappedItems = products;
+    this.updateSliderWrapperSize();
+  }
+
+  private getSlideSize(): number {
+    return this.el.querySelector(".slides-wrapper").getBoundingClientRect()
+      .width;
+  }
+
+  private updateSliderWrapperSize() {
+    requestAnimationFrame(() => {
+      const size = this.getSlideSize();
+      this.el.style.setProperty("--slide-size", `${size}px`);
+    });
+  }
+
+  private wrapItems(items: Recommendation[], columns: number = 1) {
+    this.wrappedItems = chunksOf(columns)(items);
+    this.updateSliderWrapperSize();
+  }
+
+  private isPrevAvaible(): boolean {
+    return this.slidePosition === 0;
+  }
+
+  private isNextAvaible(): boolean {
+    return Math.abs(this.slidePosition) === this.wrappedItems.length - 1;
+  }
+
+  private prev() {
+    this.slidePosition++;
+    this.el.style.setProperty("--slide-position", `${this.slidePosition}`);
+  }
+
+  private next() {
+    this.slidePosition--;
+    this.el.style.setProperty("--slide-position", `${this.slidePosition}`);
+  }
+
+  private moveTo(position: number) {
+    this.slidePosition = position * -1;
+    this.el.style.setProperty("--slide-position", `${this.slidePosition}`);
+  }
+
+  private isMultipleSlidesAvaible(): boolean {
+    return this.wrappedItems.length > 1;
+  }
+
+  render() {
+    return (
+      <Host class={{ minimal: !this.isMultipleSlidesAvaible() }}>
+        {this.isMultipleSlidesAvaible() ? (
+          <button
+            class="prev"
+            onClick={() => this.prev()}
+            disabled={this.isPrevAvaible()}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="30"
+              height="30"
+              viewBox="0 0 512 512"
+            >
+              <title>previous</title>
+              <polyline points="328 112 184 256 328 400" />
+            </svg>
+          </button>
+        ) : null}
+        <div class="slides-wrapper">
+          <div class="body">
+            {this.wrappedItems.map((items) => (
+              <div class={{ slide: true, [this.mode]: true }}>
+                {items.map((item) => (
+                  <vpr-result
+                    item={item}
+                    imageWidth={this.imageWidth}
+                    imageRatio={this.imageRatio}
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+        {this.isMultipleSlidesAvaible() ? (
+          <button
+            class="next"
+            onClick={() => this.next()}
+            disabled={this.isNextAvaible()}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512"
+              width="30"
+              height="30"
+            >
+              <title>next</title>
+              <polyline points="184 112 328 256 184 400" />
+            </svg>
+          </button>
+        ) : null}
+        {this.isMultipleSlidesAvaible() ? (
+          <div class="position-bullets">
+            {this.wrappedItems.map((_, i) => (
+              <div
+                class={{
+                  "position-bullet": true,
+                  active: this.slidePosition === i * -1,
+                }}
+                onClick={() => this.moveTo(i)}
+              ></div>
+            ))}
+          </div>
+        ) : null}
+      </Host>
+    );
+  }
+}

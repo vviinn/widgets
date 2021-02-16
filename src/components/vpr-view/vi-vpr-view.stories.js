@@ -51,6 +51,18 @@ vi-vpr-view::part(price-outdated) {
   margin-top: 2px;
 }
 
+@media (max-width: 450px) {
+  body {
+    font-size: 10px;  
+    line-height: 10px;
+  }
+
+  vi-vpr-view::part(grid) {
+    --image-width: 100px;
+    --columns: 2;
+  }
+}
+
   </style>
   <vi-vpr-view token=${token}
             product-id=${productId}

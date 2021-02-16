@@ -34,14 +34,12 @@
 
 ### Depends on
 
-- [vpr-slider](vpr-slider)
-- [vpr-result](vpr-result)
+- [vpr-slider](../vpr-slider)
 
 ### Graph
 ```mermaid
 graph TD;
   vi-vpr-view --> vpr-slider
-  vi-vpr-view --> vpr-result
   vpr-slider --> vpr-result
   style vi-vpr-view fill:#f9f,stroke:#333,stroke-width:4px
 ```

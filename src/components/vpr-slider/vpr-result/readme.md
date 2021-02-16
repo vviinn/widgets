@@ -34,13 +34,11 @@
 
 ### Used by
 
- - [vi-vpr-view](..)
- - [vpr-slider](../vpr-slider)
+ - [vpr-slider](..)
 
 ### Graph
 ```mermaid
 graph TD;
-  vi-vpr-view --> vpr-result
   vpr-slider --> vpr-result
   style vpr-result fill:#f9f,stroke:#333,stroke-width:4px
 ```
