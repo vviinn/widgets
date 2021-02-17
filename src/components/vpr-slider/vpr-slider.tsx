@@ -10,7 +10,7 @@ import {
 } from "@stencil/core";
 import { Recommendation } from "../../recommendation/recommendation";
 import { chunksOf } from "fp-ts/Array";
-import { GridMode } from "./GridMode";
+import { GridMode } from "../../slider/GridMode";
 import { rebuildProducts } from "./products.worker";
 
 @Component({
@@ -29,23 +29,31 @@ export class VprSlider {
   @State() wrappedItems: Recommendation[][] = [[]];
   @State() slidePosition: number = 0;
 
+  private sliderMode: GridMode = "auto";
+
   @Listen("resize", { target: "window" })
   async resizeHandler() {
     this.updateSliderWrapperSize();
-    if (this.mode === "grid") return;
-    const columns = parseInt(
-      getComputedStyle(this.el).getPropertyValue("--columns")
-    );
 
-    if (columns === undefined) {
-      return this.rebuildSlides();
+    switch (this.sliderMode) {
+      case "auto":
+        return this.rebuildSlides();
+      case "manual":
+        const products = this.wrappedItems.flat();
+        return this.wrapItems(products, this.getColumns());
     }
-
-    this.rebuildSlides();
   }
 
   componentShouldUpdate() {
     this.updateSliderWrapperSize();
+  }
+
+  connectedCallback() {
+    const columns = parseInt(
+      getComputedStyle(this.el).getPropertyValue("--columns")
+    );
+
+    this.sliderMode = Number.isNaN(columns) ? this.mode : "manual";
   }
 
   componentDidLoad() {
@@ -55,22 +63,19 @@ export class VprSlider {
 
   @Method()
   async loadProducts(products: Recommendation[]) {
-    switch (this.mode) {
+    switch (this.sliderMode) {
       case "auto":
         this.wrappedItems = [products];
-
-        const columns = parseInt(
-          getComputedStyle(this.el).getPropertyValue("--columns")
-        );
-
-        if (columns === undefined) {
-          return this.rebuildSlides();
-        }
-
-        return this.wrapItems(products, columns);
+        return this.rebuildSlides();
       case "grid":
         return this.wrapItems(products, this.getProductsCount(products));
+      case "manual":
+        return this.wrapItems(products, this.getColumns());
     }
+  }
+
+  private getColumns(): number {
+    return parseInt(getComputedStyle(this.el).getPropertyValue("--columns"));
   }
 
   private getProductsCount(products): number {
@@ -83,15 +88,11 @@ export class VprSlider {
       getComputedStyle(this.el).getPropertyValue("font-size")
     );
 
-    const imageWidth = parseInt(
-      getComputedStyle(this.el).getPropertyValue("--image-width")
-    );
-
     const products = await rebuildProducts(
       this.wrappedItems,
       slideSize,
       margin,
-      Number.isNaN(imageWidth) ? this.imageWidth : imageWidth
+      this.imageWidth
     );
 
     this.wrappedItems = products;

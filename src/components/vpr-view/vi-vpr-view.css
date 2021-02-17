@@ -1,7 +1,4 @@
 :host {
-  --column-width: 0;
-  --items-size: 0;
-  --columns: 4;
   display: grid;
   grid-gap: 1rem;
   width: 100%;
