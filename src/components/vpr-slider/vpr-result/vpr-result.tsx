@@ -24,7 +24,7 @@ export class VprResult implements ComponentInterface {
   @Element() el: HTMLElement;
   @Prop() item: Interfaces["VisualProductSearch"];
   @Prop() imageWidth: number = 100;
-  @Prop() imageRatio: number = 1.5;
+  @Prop() imageRatio: number = 1;
 
   /** Event fires ones when recommendation rendered on page */
   @Event() recommendationLoad: EventEmitter<Interfaces["VisualProductSearch"]>;
@@ -44,9 +44,7 @@ export class VprResult implements ComponentInterface {
       `${this.imageWidth * this.imageRatio}px`
     );
 
-    this.el.style.setProperty(
-      "--image-ratio", `${this.imageRatio}`
-    );
+    this.el.style.setProperty("--image-ratio", `${this.imageRatio}`);
   }
 
   componentDidLoad() {
