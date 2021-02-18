@@ -55,9 +55,13 @@ vi-vpr-view::part(price-outdated) {
 }
 
 ${ mobileColumns ? `
-@media (max-width: 321px) {
+@media (max-width: 43em) {
+  body::after {
+    content: "mobile"
+  }
+
   body {
-    font-size: 10px;  
+    font-size: 10px;
     line-height: 10px;
   }
 
@@ -68,9 +72,13 @@ ${ mobileColumns ? `
 ` : ''}
 
 ${ tabletColumns ? `
-@media (max-width: 836px) {
+@media (min-width: 43em) {
+  body::after {
+    content: "tablet"
+  }
+
   body {
-    font-size: 10px;  
+    font-size: 10px;
     line-height: 10px;
   }
 
@@ -81,10 +89,9 @@ ${ tabletColumns ? `
 ` : ''}
 
 ${ desktopColumns ? `
-@media (min-width: 837px) {
-  body {
-    font-size: 10px;  
-    line-height: 10px;
+@media (min-width: 62em) {
+  body::after {
+    content: "desktop"
   }
 
   vi-vpr-view::part(grid) {

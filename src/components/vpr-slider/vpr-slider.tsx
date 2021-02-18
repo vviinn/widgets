@@ -5,13 +5,15 @@ import {
   Element,
   State,
   Method,
-  Listen,
   Prop,
 } from "@stencil/core";
 import { Recommendation } from "../../recommendation/recommendation";
-import { chunksOf } from "fp-ts/Array";
+//import { chunksOf } from "fp-ts/Array";
 import { GridMode } from "../../slider/GridMode";
-import { rebuildProducts } from "./products.worker";
+import { rebuildProducts, rewrapProducts } from "./products.worker";
+import { animationFrameScheduler } from "rxjs";
+import { fromEvent } from "rxjs";
+import { debounceTime } from "rxjs/operators";
 
 @Component({
   tag: "vpr-slider",
@@ -30,30 +32,33 @@ export class VprSlider {
   @State() slidePosition: number = 0;
 
   private sliderMode: GridMode = "auto";
-
-  @Listen("resize", { target: "window" })
-  async resizeHandler() {
-    this.updateSliderWrapperSize();
-
-    switch (this.sliderMode) {
-      case "auto":
-        return this.rebuildSlides();
-      case "manual":
-        const products = this.wrappedItems.flat();
-        return this.wrapItems(products, this.getColumns());
-    }
-  }
+  private products: Recommendation[] = [];
 
   componentShouldUpdate() {
     this.updateSliderWrapperSize();
   }
 
   connectedCallback() {
-    const columns = parseInt(
-      getComputedStyle(this.el).getPropertyValue("--columns")
-    );
+    const resize = fromEvent(window, "resize");
+    const resizeObserver = resize.pipe(debounceTime(50));
 
-    this.sliderMode = Number.isNaN(columns) ? this.mode : "manual";
+    resizeObserver.subscribe(() => {
+      animationFrameScheduler.schedule(() => {
+        this.updateSliderWrapperSize();
+        this.sliderMode = Number.isNaN(this.getColumns())
+          ? this.mode
+          : "manual";
+
+        switch (this.sliderMode) {
+          case "auto":
+            return this.rebuildSlides();
+          case "manual":
+            return this.wrapItems(this.products, this.getColumns());
+        }
+      });
+    });
+
+    this.sliderMode = Number.isNaN(this.getColumns()) ? this.mode : "manual";
   }
 
   componentDidLoad() {
@@ -63,19 +68,21 @@ export class VprSlider {
 
   @Method()
   async loadProducts(products: Recommendation[]) {
+    this.products = products;
+
     switch (this.sliderMode) {
       case "auto":
-        this.wrappedItems = [products];
         return this.rebuildSlides();
       case "grid":
-        return this.wrapItems(products, this.getProductsCount(products));
+        return this.wrapItems(this.products, this.getProductsCount(products));
       case "manual":
-        return this.wrapItems(products, this.getColumns());
+        return this.wrapItems(this.products, this.getColumns());
     }
   }
 
   private getColumns(): number {
-    return parseInt(getComputedStyle(this.el).getPropertyValue("--columns"));
+    const c = parseInt(getComputedStyle(this.el).getPropertyValue("--columns"));
+    return c;
   }
 
   private getProductsCount(products): number {
@@ -88,14 +95,13 @@ export class VprSlider {
       getComputedStyle(this.el).getPropertyValue("font-size")
     );
 
-    const products = await rebuildProducts(
-      this.wrappedItems,
+    this.wrappedItems = await rebuildProducts(
+      this.products,
       slideSize,
       margin,
       this.imageWidth
     );
 
-    this.wrappedItems = products;
     this.updateSliderWrapperSize();
   }
 
@@ -111,8 +117,8 @@ export class VprSlider {
     });
   }
 
-  private wrapItems(items: Recommendation[], columns: number = 1) {
-    this.wrappedItems = chunksOf(columns)(items);
+  private async wrapItems(items: Recommendation[], columns: number = 1) {
+    this.wrappedItems = await rewrapProducts(items, columns);
     this.updateSliderWrapperSize();
   }
 
