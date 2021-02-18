@@ -7,13 +7,13 @@ import {
   Event,
   EventEmitter,
 } from "@stencil/core";
-import { fromRectangle, Handler } from "../../cropper/Handler";
-import { Rectangle, move, transform } from "../../geometry/Rectangle";
+import { fromRectangle, Handler } from "../../../cropper/Handler";
+import { Rectangle, move, transform } from "../../../geometry/Rectangle";
 import {
   Point,
   fromMouseEvent,
   pointDiffSemigroup,
-} from "../../geometry/Point";
+} from "../../../geometry/Point";
 
 @Component({
   tag: "image-cropper",

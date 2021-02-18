@@ -6,16 +6,29 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { Handler } from "./cropper/Handler";
+import { Rectangle } from "./geometry/Rectangle";
 import { CampaignName } from "./campaign/Campaign";
 import { Interfaces } from "./interfaces/recommendation";
-import { GridMode } from "./components/vpr-view/GridMode";
+import { GridMode } from "./slider/GridMode";
+import { Recommendation } from "./recommendation/recommendation";
 export namespace Components {
     interface CropperHandler {
         "handler": Handler;
     }
     interface ImageCropper {
     }
+    interface ImageSearch {
+        /**
+          * Mediaopt customer token
+         */
+        "token": string;
+    }
     interface ImageSelector {
+    }
+    interface ImageView {
+    }
+    interface SelectionBox {
+        "selection": Rectangle | undefined;
     }
     interface ViVprView {
         /**
@@ -62,13 +75,14 @@ export namespace Components {
     interface VprResult {
         "imageRatio": number;
         "imageWidth": number;
-        "item": Interfaces['VisualProductSearch'];
+        "item": Interfaces["VisualProductSearch"];
     }
     interface VprSlider {
         "imageRatio": number;
         "imageWidth": number;
-        "loadProducts": (products: Interfaces["VisualProductSearch"][]) => Promise<void>;
+        "loadProducts": (products: Recommendation[]) => Promise<void>;
         "mode": GridMode;
+        "productsInGrid": number;
     }
 }
 declare global {
@@ -84,11 +98,29 @@ declare global {
         prototype: HTMLImageCropperElement;
         new (): HTMLImageCropperElement;
     };
+    interface HTMLImageSearchElement extends Components.ImageSearch, HTMLStencilElement {
+    }
+    var HTMLImageSearchElement: {
+        prototype: HTMLImageSearchElement;
+        new (): HTMLImageSearchElement;
+    };
     interface HTMLImageSelectorElement extends Components.ImageSelector, HTMLStencilElement {
     }
     var HTMLImageSelectorElement: {
         prototype: HTMLImageSelectorElement;
         new (): HTMLImageSelectorElement;
+    };
+    interface HTMLImageViewElement extends Components.ImageView, HTMLStencilElement {
+    }
+    var HTMLImageViewElement: {
+        prototype: HTMLImageViewElement;
+        new (): HTMLImageViewElement;
+    };
+    interface HTMLSelectionBoxElement extends Components.SelectionBox, HTMLStencilElement {
+    }
+    var HTMLSelectionBoxElement: {
+        prototype: HTMLSelectionBoxElement;
+        new (): HTMLSelectionBoxElement;
     };
     interface HTMLViVprViewElement extends Components.ViVprView, HTMLStencilElement {
     }
@@ -111,7 +143,10 @@ declare global {
     interface HTMLElementTagNameMap {
         "cropper-handler": HTMLCropperHandlerElement;
         "image-cropper": HTMLImageCropperElement;
+        "image-search": HTMLImageSearchElement;
         "image-selector": HTMLImageSelectorElement;
+        "image-view": HTMLImageViewElement;
+        "selection-box": HTMLSelectionBoxElement;
         "vi-vpr-view": HTMLViVprViewElement;
         "vpr-result": HTMLVprResultElement;
         "vpr-slider": HTMLVprSliderElement;
@@ -125,7 +160,20 @@ declare namespace LocalJSX {
     interface ImageCropper {
         "onMouseRelease"?: (event: CustomEvent<void>) => void;
     }
+    interface ImageSearch {
+        /**
+          * Mediaopt customer token
+         */
+        "token"?: string;
+    }
     interface ImageSelector {
+        "onImageSelected"?: (event: CustomEvent<File>) => void;
+    }
+    interface ImageView {
+    }
+    interface SelectionBox {
+        "onSelectionClicked"?: (event: CustomEvent<Rectangle>) => void;
+        "selection"?: Rectangle | undefined;
     }
     interface ViVprView {
         /**
@@ -172,29 +220,33 @@ declare namespace LocalJSX {
     interface VprResult {
         "imageRatio"?: number;
         "imageWidth"?: number;
-        "item"?: Interfaces['VisualProductSearch'];
+        "item"?: Interfaces["VisualProductSearch"];
         /**
           * Event fires ones when user click on deeplink
          */
-        "onRecommendationClick"?: (event: CustomEvent<Interfaces['VisualProductSearch']>) => void;
+        "onRecommendationClick"?: (event: CustomEvent<Interfaces["VisualProductSearch"]>) => void;
         /**
           * Event fires ones when recommendation rendered on page
          */
-        "onRecommendationLoad"?: (event: CustomEvent<Interfaces['VisualProductSearch']>) => void;
+        "onRecommendationLoad"?: (event: CustomEvent<Interfaces["VisualProductSearch"]>) => void;
         /**
           * Event fires ones when recommendation appears on the viewport
          */
-        "onRecommendationView"?: (event: CustomEvent<Interfaces['VisualProductSearch']>) => void;
+        "onRecommendationView"?: (event: CustomEvent<Interfaces["VisualProductSearch"]>) => void;
     }
     interface VprSlider {
         "imageRatio"?: number;
         "imageWidth"?: number;
         "mode"?: GridMode;
+        "productsInGrid"?: number;
     }
     interface IntrinsicElements {
         "cropper-handler": CropperHandler;
         "image-cropper": ImageCropper;
+        "image-search": ImageSearch;
         "image-selector": ImageSelector;
+        "image-view": ImageView;
+        "selection-box": SelectionBox;
         "vi-vpr-view": ViVprView;
         "vpr-result": VprResult;
         "vpr-slider": VprSlider;
@@ -206,7 +258,10 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "cropper-handler": LocalJSX.CropperHandler & JSXBase.HTMLAttributes<HTMLCropperHandlerElement>;
             "image-cropper": LocalJSX.ImageCropper & JSXBase.HTMLAttributes<HTMLImageCropperElement>;
+            "image-search": LocalJSX.ImageSearch & JSXBase.HTMLAttributes<HTMLImageSearchElement>;
             "image-selector": LocalJSX.ImageSelector & JSXBase.HTMLAttributes<HTMLImageSelectorElement>;
+            "image-view": LocalJSX.ImageView & JSXBase.HTMLAttributes<HTMLImageViewElement>;
+            "selection-box": LocalJSX.SelectionBox & JSXBase.HTMLAttributes<HTMLSelectionBoxElement>;
             "vi-vpr-view": LocalJSX.ViVprView & JSXBase.HTMLAttributes<HTMLViVprViewElement>;
             "vpr-result": LocalJSX.VprResult & JSXBase.HTMLAttributes<HTMLVprResultElement>;
             "vpr-slider": LocalJSX.VprSlider & JSXBase.HTMLAttributes<HTMLVprSliderElement>;

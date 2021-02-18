@@ -11,21 +11,11 @@ import { pipe } from "fp-ts/lib/pipeable";
 import * as TE from "fp-ts/lib/TaskEither";
 import * as E from "fp-ts/lib/Either";
 import * as O from "fp-ts/lib/Option";
-import { authOptionsFromToken } from "./token-helpers";
+import { createBearAuthedHeader } from "./token-helpers";
 import { Interfaces } from "../../interfaces/recommendation";
 import state from "../../store/store";
-import { GridMode } from "./GridMode";
 import { CampaignName } from "../../campaign/Campaign";
 import { getRecommendationsService } from "../../campaign/CampaignService";
-
-const emptyId = (x: string): E.Either<Error, string> =>
-  x.length === 0 ? E.left(new Error("Product id is empty")) : E.right(x);
-
-const getProductId = (x: string): E.Either<Error, string> =>
-  pipe(
-    E.fromNullable(new Error("Product id not provided"))(x),
-    E.chain(emptyId)
-  );
 
 @Component({
   tag: "vi-vpr-view",
@@ -57,7 +47,6 @@ export class VIVprView implements ComponentInterface {
 
   @State() recommendations: Interfaces["VisualProductSearch"][] = [];
   @State() loaded: boolean = false;
-  @State() gridMode: GridMode = "auto";
 
   private cssPartsDetector: HTMLDivElement;
   private slider: HTMLVprSliderElement;
@@ -82,20 +71,16 @@ export class VIVprView implements ComponentInterface {
   }
 
   async componentWillLoad() {
-    if (this.columns) {
-      this.el.style.setProperty("--columns", `${this.columns}`);
-      this.gridMode = "grid";
-    }
-
-    this.el.style.setProperty("--column-width", `${this.imageWidth}px`);
-
     state.pricePrefix = this.pricePrefix;
     state.currencySign = this.currencySign;
 
+    if (this.productId === undefined || this.token === undefined) return;
+
+    const headers = createBearAuthedHeader(this.token);
     const request = pipe(
       TE.of(getRecommendationsService(this.campaignType)),
-      TE.ap(TE.fromEither(getProductId(this.productId))),
-      TE.ap(TE.fromEither(authOptionsFromToken(this.token))),
+      TE.ap(TE.of(this.productId)),
+      TE.ap(TE.of(headers)),
       TE.flatten
     );
 
@@ -115,40 +100,13 @@ export class VIVprView implements ComponentInterface {
   }
 
   handleRecommendationsSucces(data: any) {
-    const recommendations = data?.extended ?? data;
+    this.recommendations = data?.extended ?? data;
 
-    this.el.style.setProperty("--items-size", `${recommendations.length}`);
-    this.recommendations = recommendations;
-
-    if (this.sliderMode) {
-      setTimeout(() => {
-        this.slider.loadProducts(recommendations);
-      });
-    }
+    setTimeout(() => {
+      this.slider.loadProducts(this.recommendations);
+    });
 
     this.loaded = true;
-  }
-
-  getBody(): HTMLElement {
-    return this.sliderMode ? (
-      <vpr-slider
-        mode={this.gridMode}
-        imageWidth={this.imageWidth}
-        imageRatio={this.imageRatio}
-        part="grid"
-        ref={(el) => (this.slider = el)}
-      ></vpr-slider>
-    ) : (
-        <div class="results" data-mode={this.gridMode} part="grid">
-          {this.recommendations.map((r) => (
-            <vpr-result
-              item={r}
-              imageWidth={this.imageWidth}
-              imageRatio={this.imageRatio}
-            />
-          ))}
-        </div>
-      );
   }
 
   render() {
@@ -160,7 +118,14 @@ export class VIVprView implements ComponentInterface {
       >
         <style>{state.fallbackStyles}</style>
         <h2 part="recommendations-title">{this.blockTitle}</h2>
-        {this.getBody()}
+        <vpr-slider
+          mode={this.sliderMode ? "auto" : "grid"}
+          imageWidth={this.imageWidth}
+          imageRatio={this.imageRatio}
+          productsInGrid={this.columns}
+          part="grid"
+          ref={(el) => (this.slider = el)}
+        ></vpr-slider>
         <div
           class="visually-hidden"
           part="shadow-parts-detect"

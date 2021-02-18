@@ -11,6 +11,7 @@ img {
   align-content: center;
   object-position: 50% 50%;
   object-fit: contain;
+  width: 100%;
 }
 
 .product.title {

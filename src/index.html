@@ -7,45 +7,27 @@
   <script type="module" src="/build/mediaopt-widgets.esm.js"></script>
   <script nomodule src="/build/mediaopt-widgets.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet"> 
-  <style id="kek">
+  <style>
     body {
       color: #101010;
       font-family: Open Sans,Helvetica,Arial,sans-serif;
       font-size: 14px;
       line-height: 1.42857;
       margin: 0;
+      display: grid;
+      justify-content: center;
+      margin-top: 1rem;
     }
 
-    vi-vpr-view::part(price-outdated) {
-      color: inherit;
-      font-size: 12px;
-      font-weight: 400;
-      text-align: center;
-    }
-
-    vi-vpr-view::part(price-discount) {
-      color: #dc616d;
-      font-size: 14px;
-      font-weight: 600;
-      text-align: center;
-    }
-
-    vi-vpr-view::part(product-title) {
-      color: #101010;
-      font-size: 16px;
-      text-align: center;
-      font-weight: 400;
-      text-decoration: none;
-    }
-
-    @media screen and (max-width: 600px) {
-      vi-vpr-view::part(grid) {
-        --columns: 2;
-      }    
+    image-search {
+      display: grid;
+      width: 100%;
     }
   </style>
 </head>
 <body>
-  <image-selector/>
+  <image-search token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjU0LCJqdGkiOiI4OTRmMThiYy0zZTA3LTQ1M2MtYTgyMS1hYTQ0ZjU0MzI3NjAiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.Ey7Lw9mwrlhkwL085KXSTr56sfax86HFFAwN7uDcrKsmOEEpn8DhtCazQBpRj-hZ30m_zhla7j8_U_rvD5edkSpc7ZcjYN5Ur-1fHYHTex6dBn8DAXtT2TQplefZoQgtVUciGqmr3T0xN0JoV0L1WR2lUuIosPhvM_aCokR3YQo"/>
+  <div slot="loader"> HELLO WORLD!!! </div>
+</image-search>
 </body>
 </html>

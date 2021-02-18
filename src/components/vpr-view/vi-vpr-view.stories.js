@@ -10,6 +10,9 @@ const MoptVprStory = ({
   fontColor,
   imageWidth,
   crossSellingCampaign,
+  mobileColumns,
+  tabletColumns,
+  desktopColumns
 }) => `
 <style>
 body {
@@ -51,6 +54,52 @@ vi-vpr-view::part(price-outdated) {
   margin-top: 2px;
 }
 
+${ mobileColumns ? `
+@media (max-width: 43em) {
+  body::after {
+    content: "mobile"
+  }
+
+  body {
+    font-size: 10px;
+    line-height: 10px;
+  }
+
+  vi-vpr-view::part(grid) {
+    --columns: ${mobileColumns};
+  }
+}
+` : ''}
+
+${ tabletColumns ? `
+@media (min-width: 43em) {
+  body::after {
+    content: "tablet"
+  }
+
+  body {
+    font-size: 10px;
+    line-height: 10px;
+  }
+
+  vi-vpr-view::part(grid) {
+    --columns: ${tabletColumns};
+  }
+}
+` : ''}
+
+${ desktopColumns ? `
+@media (min-width: 62em) {
+  body::after {
+    content: "desktop"
+  }
+
+  vi-vpr-view::part(grid) {
+    --columns: ${desktopColumns};
+  }
+}
+` : ''}
+
   </style>
   <vi-vpr-view token=${token}
             product-id=${productId}
@@ -78,13 +127,20 @@ VI_VPR_View.args = {
   imageWidth: 200,
   fontColor: "#19181e",
   crossSellingCampaign: false,
+  mobileColumns: undefined,
+  tabletColumns: undefined,
+  desktopColumns: undefined
 };
 
 export default {
   title: "Web Component",
   component: MoptVprStory(VI_VPR_View),
   argTypes: {
-    fontColor: { control: "color" },
+    fontColor: { name: "Font color", control: "color" },
+    mobileColumns: { name: "Slider columns on mobile", control: "number" },
+    tabletColumns: { name: "Slider columns on tablet", control: "number" },
+    desktopColumns: { name: "Slider columns on desktop", control: "number" },
+    columns: { name: "Products in grid mode", control: "number" },
   },
   parameters: {
     actions: {

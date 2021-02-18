@@ -1,10 +1,9 @@
-import { FetchOptions } from "../network/fetchOptions";
-import { request } from "../network/request";
+import { apiGet } from "../network/apiClient";
 import { VPRCampaignResponse } from "./VPRCampaignResponse";
 
 export const getVPRRecommendations = (productId: string) => (
-  options: FetchOptions
+  options: RequestInit
 ) => {
-  const recommendationsUrl = `${process.env.RECOMMENDATIONS_URL}${productId}/similar-products`;
-  return request<VPRCampaignResponse>(recommendationsUrl, options);
+  const url = `product/${productId}/similar-products`;
+  return apiGet<VPRCampaignResponse>(url, options);
 };

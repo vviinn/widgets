@@ -90,10 +90,7 @@ const transformSouthEast: RectangleTransform = (origin, handler) => {
   };
 };
 
-export const transformSouthWest = (
-  origin: Rectangle,
-  handler: Handler
-): Rectangle => {
+const transformSouthWest = (origin: Rectangle, handler: Handler): Rectangle => {
   return {
     position: pointSumSemigroup.concat(origin.position, {
       x: handler.position.x,
@@ -123,4 +120,26 @@ export const transform: RectangleTransform = (origin, handler) => {
     case HandlerDirection.SouthWest:
       return transformSouthWest(origin, handler);
   }
+};
+
+export const fromImage = (image: HTMLImageElement): Rectangle => {
+  return {
+    position: {
+      x: 0,
+      y: 0,
+    },
+    width: image.width,
+    height: image.height,
+  };
+};
+
+export const scale = (x: Rectangle, y: Rectangle): Rectangle => {
+  return {
+    position: {
+      x: x.width * x.position.x,
+      y: x.height * x.position.y,
+    },
+    width: y.width,
+    height: y.height,
+  };
 };
