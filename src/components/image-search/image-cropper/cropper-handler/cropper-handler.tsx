@@ -7,12 +7,12 @@ import {
   Event,
   EventEmitter,
 } from "@stencil/core";
-import { Handler, getCursorValue } from "../../../cropper/Handler";
+import { Handler, getCursorValue } from "../../../../cropper/Handler";
 import {
   Point,
   fromMouseEvent,
   pointDiffSemigroup,
-} from "../../../geometry/Point";
+} from "../../../../geometry/Point";
 
 @Component({
   tag: "cropper-handler",

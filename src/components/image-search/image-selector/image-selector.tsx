@@ -1,9 +1,9 @@
 import { Component, Host, h, State, Event, EventEmitter } from "@stencil/core";
 import * as O from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/function";
-import { fromFile } from "../../Image/fromFile";
-import { toFile } from "../../Image/toFile";
-import { resizeImage } from "../../Image/resizeImage";
+import { fromFile } from "../../../Image/fromFile";
+import { toFile } from "../../../Image/toFile";
+import { resizeImage } from "../../../Image/resizeImage";
 
 const checkImageType = (f: File): O.Option<File> =>
   f.type.split("/")[0] === "image" ? O.some(f) : O.none;

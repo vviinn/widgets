@@ -16,7 +16,7 @@
 
 ### Used by
 
- - [image-search](../image-search)
+ - [image-search](..)
 
 ### Graph
 ```mermaid
