@@ -1,0 +1,6 @@
+:host {
+  display: block;
+  position: absolute;
+  border: 1px dotted lightgray;
+  cursor: pointer;
+}
