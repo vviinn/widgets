@@ -9,7 +9,8 @@ Integrating a component built with Stencil to a project without a JavaScript fra
 ```html
 <html>
   <head>
-    <script src='https://unpkg.com/mediaopt-vpr@latest/dist/medaopt-vpr/medaopt-vpr.js'></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/mediaopt-vpr@latest/www/build/mediaopt-widgets.esm.js"></script>
+    <script nomodule src="https://cdn.jsdelivr.net/npm/mediaopt-vpr@latest/www/build/mediaopt-widgets.js"></script>
   </head>
   <body>
     <vi-vpr-view token="YOURS_TOKEN_HERE"
