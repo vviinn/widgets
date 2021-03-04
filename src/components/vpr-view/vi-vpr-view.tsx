@@ -112,7 +112,7 @@ export class VIVprView implements ComponentInterface {
   render() {
     return (
       <Host
-        class={{ loaded: this.loaded }}
+        class={{ loaded: this.loaded, empty: this.recommendations.length == 0 }}
         aria-hidden={this.loaded ? "false" : "true"}
         exportparts="grid"
       >

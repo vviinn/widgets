@@ -4,6 +4,10 @@ import { Meta, Story } from '@storybook/addon-docs/blocks';
 
 # Styling component
 
+If there are no products loaded, css class `.empty` will applied to component body.
+Also when recommendations are loaded, css class `.loaded` will applied too.
+You can use this classes to control visibility of component
+
 Because some of CSS style properties can not be inherited we provide an styling API based on [CSS Shadow Parts](https://developer.mozilla.org/en-US/docs/Web/CSS/::part) spec.
 
 *NB: If you don't need to support browsers without Shadow Parts support (IE, Firefox for Android and Samsung Internet) you can adding id to style tag and use Shadow Parts styling anywhere*

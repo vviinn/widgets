@@ -9,7 +9,7 @@
 
 | Property     | Attribute     | Description | Type                                                                                                                                                                                                                  | Default     |
 | ------------ | ------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| `imageRatio` | `image-ratio` |             | `number`                                                                                                                                                                                                              | `1.5`       |
+| `imageRatio` | `image-ratio` |             | `number`                                                                                                                                                                                                              | `1`         |
 | `imageWidth` | `image-width` |             | `number`                                                                                                                                                                                                              | `100`       |
 | `item`       | --            |             | `{ groupId?: string; productId?: string; title?: string; deeplink?: string; brand?: string; productType?: string; image?: { original?: string; thumbnail?: string; }; price?: { actual?: number; sale?: number; }; }` | `undefined` |
 
