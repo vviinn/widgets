@@ -13,7 +13,12 @@ http
     response.pipe(file);
     file.on('finish', () => {
       const yamlToJs = yaml.load(fs.readFileSync(path));
-      result.write(swaggerToTS.default(yamlToJs));
+
+      let text = swaggerToTS.default(yamlToJs);
+      text = text.replaceAll(` &
+          components["examples"]["rectangle"]`, '');
+
+      result.write(text);
       result.close();
       file.close();
       fs.unlinkSync(path);
