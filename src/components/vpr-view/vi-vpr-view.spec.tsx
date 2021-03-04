@@ -8,7 +8,7 @@ describe("vi-vpr-view", () => {
       html: `<vi-vpr-view></vi-vpr-view>`,
     });
     expect(page.root).toEqualHtml(`
-      <vi-vpr-view aria-hidden="true" exportparts="grid">
+      <vi-vpr-view aria-hidden="true"  class="empty" exportparts="grid">
         <mock:shadow-root>
           <style></style>
           <h2 part="recommendations-title">
@@ -27,7 +27,7 @@ describe("vi-vpr-view", () => {
       html: `<vi-vpr-view product-id="0100580000053" token="lol"></vi-vpr-view>`,
     });
     expect(page.root).toEqualHtml(`
-      <vi-vpr-view aria-hidden="true" exportparts="grid" product-id="0100580000053" token="lol">
+      <vi-vpr-view aria-hidden="true" class="empty" exportparts="grid" product-id="0100580000053" token="lol">
         <mock:shadow-root>
           <style></style>
           <h2 part="recommendations-title">
@@ -46,7 +46,7 @@ describe("vi-vpr-view", () => {
       html: `<vi-vpr-view product-id="0100580000053" token="lol" columns="4"></vi-vpr-view>`,
     });
     expect(page.root).toEqualHtml(`
-      <vi-vpr-view aria-hidden="true" columns="4" exportparts="grid" product-id="0100580000053" token="lol">
+      <vi-vpr-view aria-hidden="true" columns="4"  class="empty" exportparts="grid" product-id="0100580000053" token="lol">
         <mock:shadow-root>
           <style></style>
           <h2 part="recommendations-title">
