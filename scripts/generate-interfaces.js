@@ -15,7 +15,7 @@ http
       const yamlToJs = yaml.load(fs.readFileSync(path));
 
       let text = swaggerToTS.default(yamlToJs);
-      text = text.replaceAll(` &
+      text = text.replace(` &
           components["examples"]["rectangle"]`, '');
 
       result.write(text);
