@@ -7,15 +7,17 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { Handler } from "./cropper/Handler";
 import { Rectangle } from "./geometry/Rectangle";
+import { SearchSessionFilter } from "./searchSession/searchSession";
+import { IonLink } from "./network/ionClient";
 import { CampaignName } from "./campaign/Campaign";
-import { Interfaces } from "./interfaces/recommendation";
-import { GridMode } from "./slider/GridMode";
 import { Recommendation } from "./recommendation/recommendation";
+import { GridMode } from "./slider/GridMode";
 export namespace Components {
     interface CropperHandler {
         "handler": Handler;
     }
     interface ImageCropper {
+        "getSelection": () => Promise<Rectangle>;
     }
     interface ImageSearch {
         /**
@@ -26,6 +28,10 @@ export namespace Components {
     interface ImageSelector {
     }
     interface ImageView {
+        "hidden": boolean;
+    }
+    interface SearchFilters {
+        "filter": SearchSessionFilter | null;
     }
     interface SelectionBox {
         "selection": Rectangle | undefined;
@@ -75,7 +81,7 @@ export namespace Components {
     interface VprResult {
         "imageRatio": number;
         "imageWidth": number;
-        "item": Interfaces["VisualProductSearch"];
+        "item": Recommendation;
     }
     interface VprSlider {
         "imageRatio": number;
@@ -116,6 +122,12 @@ declare global {
         prototype: HTMLImageViewElement;
         new (): HTMLImageViewElement;
     };
+    interface HTMLSearchFiltersElement extends Components.SearchFilters, HTMLStencilElement {
+    }
+    var HTMLSearchFiltersElement: {
+        prototype: HTMLSearchFiltersElement;
+        new (): HTMLSearchFiltersElement;
+    };
     interface HTMLSelectionBoxElement extends Components.SelectionBox, HTMLStencilElement {
     }
     var HTMLSelectionBoxElement: {
@@ -146,6 +158,7 @@ declare global {
         "image-search": HTMLImageSearchElement;
         "image-selector": HTMLImageSelectorElement;
         "image-view": HTMLImageViewElement;
+        "search-filters": HTMLSearchFiltersElement;
         "selection-box": HTMLSelectionBoxElement;
         "vi-vpr-view": HTMLViVprViewElement;
         "vpr-result": HTMLVprResultElement;
@@ -170,6 +183,11 @@ declare namespace LocalJSX {
         "onImageSelected"?: (event: CustomEvent<File>) => void;
     }
     interface ImageView {
+        "hidden"?: boolean;
+    }
+    interface SearchFilters {
+        "filter"?: SearchSessionFilter | null;
+        "onFilterSelectedEvent"?: (event: CustomEvent<IonLink>) => void;
     }
     interface SelectionBox {
         "onSelectionClicked"?: (event: CustomEvent<Rectangle>) => void;
@@ -220,19 +238,19 @@ declare namespace LocalJSX {
     interface VprResult {
         "imageRatio"?: number;
         "imageWidth"?: number;
-        "item"?: Interfaces["VisualProductSearch"];
+        "item"?: Recommendation;
         /**
           * Event fires ones when user click on deeplink
          */
-        "onRecommendationClick"?: (event: CustomEvent<Interfaces["VisualProductSearch"]>) => void;
+        "onRecommendationClick"?: (event: CustomEvent<Recommendation>) => void;
         /**
           * Event fires ones when recommendation rendered on page
          */
-        "onRecommendationLoad"?: (event: CustomEvent<Interfaces["VisualProductSearch"]>) => void;
+        "onRecommendationLoad"?: (event: CustomEvent<Recommendation>) => void;
         /**
           * Event fires ones when recommendation appears on the viewport
          */
-        "onRecommendationView"?: (event: CustomEvent<Interfaces["VisualProductSearch"]>) => void;
+        "onRecommendationView"?: (event: CustomEvent<Recommendation>) => void;
     }
     interface VprSlider {
         "imageRatio"?: number;
@@ -246,6 +264,7 @@ declare namespace LocalJSX {
         "image-search": ImageSearch;
         "image-selector": ImageSelector;
         "image-view": ImageView;
+        "search-filters": SearchFilters;
         "selection-box": SelectionBox;
         "vi-vpr-view": ViVprView;
         "vpr-result": VprResult;
@@ -261,6 +280,7 @@ declare module "@stencil/core" {
             "image-search": LocalJSX.ImageSearch & JSXBase.HTMLAttributes<HTMLImageSearchElement>;
             "image-selector": LocalJSX.ImageSelector & JSXBase.HTMLAttributes<HTMLImageSelectorElement>;
             "image-view": LocalJSX.ImageView & JSXBase.HTMLAttributes<HTMLImageViewElement>;
+            "search-filters": LocalJSX.SearchFilters & JSXBase.HTMLAttributes<HTMLSearchFiltersElement>;
             "selection-box": LocalJSX.SelectionBox & JSXBase.HTMLAttributes<HTMLSelectionBoxElement>;
             "vi-vpr-view": LocalJSX.ViVprView & JSXBase.HTMLAttributes<HTMLViVprViewElement>;
             "vpr-result": LocalJSX.VprResult & JSXBase.HTMLAttributes<HTMLVprResultElement>;
