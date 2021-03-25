@@ -13,12 +13,12 @@ export const config: Config = {
     },
     {
       type: 'docs-readme'
+      dir: 'docs'
     },
     {
       type: 'www',
       serviceWorker: null, // disable service workers,
       copy: [
-        { src: 'mocks' },
         { src: 'assets' },
         { src: 'favicon.ico' }
       ],

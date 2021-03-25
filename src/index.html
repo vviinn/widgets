@@ -7,17 +7,21 @@
   <script type="module" src="/build/mediaopt-widgets.esm.js"></script>
   <script nomodule src="/build/mediaopt-widgets.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet"> 
-  <style>
-    body {
+    <style>
+      html {
+      display: grid;
+      }  
+      body {
       color: #101010;
       font-family: Open Sans,Helvetica,Arial,sans-serif;
       font-size: 14px;
       line-height: 1.42857;
       margin: 0;
       display: grid;
-      justify-content: center;
+      justify-self: center;
       margin-top: 1rem;
-    }
+      width: 300px;
+      }
 
     image-search {
       display: grid;
@@ -26,7 +30,7 @@
   </style>
 </head>
 <body>
-  <image-search token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjU0LCJqdGkiOiI4OTRmMThiYy0zZTA3LTQ1M2MtYTgyMS1hYTQ0ZjU0MzI3NjAiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.Ey7Lw9mwrlhkwL085KXSTr56sfax86HFFAwN7uDcrKsmOEEpn8DhtCazQBpRj-hZ30m_zhla7j8_U_rvD5edkSpc7ZcjYN5Ur-1fHYHTex6dBn8DAXtT2TQplefZoQgtVUciGqmr3T0xN0JoV0L1WR2lUuIosPhvM_aCokR3YQo"/>
+  <image-search token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjM5LCJqdGkiOiI0Yjk3N2Y0ZC01MWY2LTRiMTEtODcxNy0yNjM2NjllM2Q0ZjciLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.PIDYH0a5L5mF8sZHQHf4z6bGiSYGHcAWpgsRWGZB0_WaU9zaINQy1KE38olXiTdot-XC8RZ8K_uq2L7OeB-6bwHSf36uv4WK0FdKNn_KBDldaOECY6kLrowIdKePq9hraGdgaIrbBX5epkxj_SiInM7smt8-bZi9q4fpZUUIQiM"/>
   <div slot="loader"> HELLO WORLD!!! </div>
 </image-search>
 </body>
