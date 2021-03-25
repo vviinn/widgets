@@ -133,6 +133,17 @@ export const fromImage = (image: HTMLImageElement): Rectangle => {
   };
 };
 
+export const fromNaturalImage = (image: HTMLImageElement): Rectangle => {
+  return {
+    position: {
+      x: 0,
+      y: 0,
+    },
+    width: image.naturalWidth,
+    height: image.naturalHeight,
+  };
+};
+
 export const scale = (x: Rectangle, y: Rectangle): Rectangle => {
   return {
     position: {
@@ -141,5 +152,29 @@ export const scale = (x: Rectangle, y: Rectangle): Rectangle => {
     },
     width: y.width,
     height: y.height,
+  };
+};
+
+const getScaleRange = (source: Rectangle, target: Rectangle): Point => {
+  return {
+    x: target.width / source.width,
+    y: target.height / source.height,
+  };
+};
+
+export const scaleSelection = (
+  source: Rectangle,
+  sourceSelection: Rectangle,
+  target: Rectangle
+): Rectangle => {
+  const scale = getScaleRange(source, target);
+
+  return {
+    position: {
+      x: sourceSelection.position.x * scale.x,
+      y: sourceSelection.position.y * scale.y,
+    },
+    width: sourceSelection.width * scale.x,
+    height: sourceSelection.height * scale.y,
   };
 };

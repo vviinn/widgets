@@ -1,0 +1,26 @@
+:host {
+  display: grid;
+  grid-gap: 1rem;
+}
+
+.filters {
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.filter {
+  padding: 0.1rem;
+  cursor: pointer;
+  border: 1px solid lightgray;
+  transition: background 0.25s ease-in-out;
+}
+
+.filter.active {
+  border: 1px solid black;
+}
+
+.filter:hover {
+  border: 1px solid gray;
+}

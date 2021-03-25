@@ -1,20 +1,22 @@
+import { IonLink } from "../network/ionClient";
 import { Recommendation } from "../recommendation/recommendation";
-import { apiPost } from "../network/apiClient";
-import { TaskEither } from "fp-ts/TaskEither";
-import { NetworkError } from "../network/request";
 
-interface searchSessionBody {
-  value: Recommendation[];
+export interface SearchSessionProducts {
+  readonly products: Recommendation[];
 }
 
-export interface SearchSessionResponce {
-  vps: searchSessionBody;
-  searchId: string;
+export interface SearchSessionFilters {
+  readonly [key: string]: IonLink[];
 }
 
-export const startSearchSession = (
-  options: RequestInit
-): TaskEither<NetworkError, SearchSessionResponce> => {
-  const url = `search/session`;
-  return apiPost<SearchSessionResponce>(url, options);
-};
+export interface SearchSessionFilter {
+  name: string;
+  filters: IonLink[];
+}
+
+export const readFilters = (
+  filters: SearchSessionFilters
+): SearchSessionFilter[] =>
+  Object.entries(filters).map(([name, filters]) => {
+    return { name, filters };
+  });

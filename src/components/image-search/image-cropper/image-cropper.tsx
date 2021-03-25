@@ -6,6 +6,7 @@ import {
   State,
   Event,
   EventEmitter,
+  Method,
 } from "@stencil/core";
 import { fromRectangle, Handler } from "../../../cropper/Handler";
 import { Rectangle, move, transform } from "../../../geometry/Rectangle";
@@ -22,9 +23,9 @@ import {
 })
 export class ImageCropper {
   @State() cropArea: Rectangle = {
-    position: { x: 100, y: 100 },
-    width: 150,
-    height: 150,
+    position: { x: 20, y: 20 },
+    width: 25,
+    height: 25,
   };
 
   @State() handlers: Handler[] = fromRectangle(this.cropArea);
@@ -53,6 +54,11 @@ export class ImageCropper {
     this.cropArea = move(this.cropArea, distance);
     this.handlers = fromRectangle(this.cropArea);
     this.mouseStartPoint = destination;
+  }
+
+  @Method()
+  async getSelection(): Promise<Rectangle> {
+    return this.cropArea;
   }
 
   handleMouseUp() {

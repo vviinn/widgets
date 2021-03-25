@@ -8,12 +8,13 @@ import {
   Event,
   EventEmitter,
 } from "@stencil/core";
-import { Interfaces } from "../../../interfaces/recommendation";
+
 import { Image, Title, Price, Brand, ProductType } from "./render-helpers";
 import state from "../../../store/store";
 import { fold } from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/pipeable";
 import { getAnalyticsModule } from "../../../analytics/GeneralAnalytics";
+import { Recommendation } from "../../../recommendation/recommendation";
 
 @Component({
   tag: "vpr-result",
@@ -22,16 +23,16 @@ import { getAnalyticsModule } from "../../../analytics/GeneralAnalytics";
 })
 export class VprResult implements ComponentInterface {
   @Element() el: HTMLElement;
-  @Prop() item: Interfaces["VisualProductSearch"];
+  @Prop() item: Recommendation;
   @Prop() imageWidth: number = 100;
   @Prop() imageRatio: number = 1;
 
   /** Event fires ones when recommendation rendered on page */
-  @Event() recommendationLoad: EventEmitter<Interfaces["VisualProductSearch"]>;
+  @Event() recommendationLoad: EventEmitter<Recommendation>;
   /** Event fires ones when recommendation appears on the viewport */
-  @Event() recommendationView: EventEmitter<Interfaces["VisualProductSearch"]>;
+  @Event() recommendationView: EventEmitter<Recommendation>;
   /** Event fires ones when user click on deeplink */
-  @Event() recommendationClick: EventEmitter<Interfaces["VisualProductSearch"]>;
+  @Event() recommendationClick: EventEmitter<Recommendation>;
 
   private intersectionObserver = new IntersectionObserver(
     this.intersectionCallback.bind(this),
@@ -48,6 +49,7 @@ export class VprResult implements ComponentInterface {
   }
 
   componentDidLoad() {
+    console.log(this.item);
     this.recommendationLoad.emit(this.item);
     this.intersectionObserver.observe(this.el);
 

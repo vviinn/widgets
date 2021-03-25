@@ -3,6 +3,7 @@ import { pipe } from "fp-ts/lib/pipeable";
 import * as TE from "fp-ts/lib/TaskEither";
 import * as T from "fp-ts/lib/Task";
 import * as E from "fp-ts/lib/Either";
+import { mergeInitRequests, RequestWithPath } from "./utils";
 
 export interface NetworkError {
   errorType: "NetworkError" | "NotFound";
@@ -54,3 +55,15 @@ export const request = <I>(
     TE.chain(processResponce),
     TE.chain((x) => getJson<I>(x))
   );
+
+const initRequestSemigroup = mergeInitRequests;
+
+export const makeRequest = <T>(path: string, init: RequestInit) => ([
+  apiPath,
+  options,
+]: RequestWithPath): TE.TaskEither<NetworkError, T> => {
+  const fullUrl = `${apiPath}/${path}`;
+  const fullOptions = initRequestSemigroup.concat(options, init);
+
+  return request<T>(`${fullUrl}`, fullOptions);
+};

@@ -2,3 +2,7 @@
   display: grid;
   grid-gap: 1rem;
 }
+
+.image-view {
+  position: relative;
+}

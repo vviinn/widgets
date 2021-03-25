@@ -27,3 +27,24 @@ export const mergeInitRequests = S.getStructSemigroup<RequestInit>({
   body: S.getLastSemigroup<string>(),
   headers: headersSemigroupSum,
 });
+
+export type RequestWithPath = [string, RequestInit];
+export type RequestMethod = "GET" | "POST" | "DELETE";
+
+export const createBasicRequest = (method: RequestMethod): RequestInit => {
+  return {
+    method,
+  };
+};
+
+export const createRequestFromMethod = (
+  method: RequestMethod
+): E.Either<string, RequestInit> => E.of(createBasicRequest(method));
+
+export const createInitGetRequest: E.Either<string, RequestInit> = E.of(
+  createBasicRequest("GET")
+);
+
+export const createInitPostRequest: E.Either<string, RequestInit> = E.of(
+  createBasicRequest("POST")
+);

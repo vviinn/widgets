@@ -8,7 +8,6 @@ import {
   Prop,
 } from "@stencil/core";
 import { Recommendation } from "../../recommendation/recommendation";
-//import { chunksOf } from "fp-ts/Array";
 import { GridMode } from "../../slider/GridMode";
 import { rebuildProducts, rewrapProducts } from "./products.worker";
 import { animationFrameScheduler } from "rxjs";
