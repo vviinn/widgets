@@ -14,7 +14,6 @@ import {
   readFilters,
   SearchSessionFilter,
   SearchSessionFilters,
-  SearchSessionProducts,
 } from "../../searchSession/searchSession";
 import { Recommendation } from "../../recommendation/recommendation";
 import * as E from "fp-ts/Either";
