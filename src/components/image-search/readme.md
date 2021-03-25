@@ -25,6 +25,8 @@
 
 - [image-selector](image-selector)
 - [image-view](image-view)
+- [image-cropper](image-cropper)
+- [search-filters](search-filters)
 - [vpr-slider](../vpr-slider)
 
 ### Graph
@@ -32,8 +34,11 @@
 graph TD;
   image-search --> image-selector
   image-search --> image-view
+  image-search --> image-cropper
+  image-search --> search-filters
   image-search --> vpr-slider
   image-view --> selection-box
+  image-cropper --> cropper-handler
   vpr-slider --> vpr-result
   style image-search fill:#f9f,stroke:#333,stroke-width:4px
 ```
