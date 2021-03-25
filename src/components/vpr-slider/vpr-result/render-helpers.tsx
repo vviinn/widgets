@@ -1,4 +1,4 @@
-import { Interfaces } from "../../../interfaces/recommendation";
+import { Recommendation } from "../../../recommendation/recommendation";
 import { pipe } from "fp-ts/lib/pipeable";
 import * as O from "fp-ts/lib/Option";
 import * as E from "fp-ts/lib/Either";
@@ -11,10 +11,10 @@ const checkEmpryString = (x: string): O.Option<string> =>
   x.length > 0 ? O.some(x) : O.none;
 
 export const Image = (
-  data: Interfaces["VisualProductSearch"],
+  data: Recommendation,
   wi: number,
   he: number
-): FunctionalComponent<Interfaces["VisualProductSearch"]> =>
+): FunctionalComponent<Recommendation> =>
   pipe(
     O.fromNullable(data.image.thumbnail),
     O.fold(
@@ -76,8 +76,8 @@ export const Image = (
   );
 
 export const Title = (
-  data: Interfaces["VisualProductSearch"]
-): FunctionalComponent<Interfaces["VisualProductSearch"]> =>
+  data: Recommendation
+): FunctionalComponent<Recommendation> =>
   pipe(
     O.fromNullable(data.deeplink),
     O.chain(checkEmpryString),
@@ -142,7 +142,7 @@ const PriceComponent = (price: number, prefix: string, currency: string) =>
   );
 
 const bothPricesPresented = (
-  x: Interfaces["VisualProductSearch"]["price"]
+  x: Recommendation["price"]
 ): E.Either<number, [number, number]> =>
   sequenceTEither(
     E.fromNullable(x.actual)(x.sale),
@@ -158,10 +158,10 @@ const isSalePrice = (x: [number, number]): E.Either<number, [number, number]> =>
   x[0] < x[1] ? E.left(x[1]) : E.right(x);
 
 const getPriceComponent = (
-  data: Interfaces["VisualProductSearch"]["price"],
+  data: Recommendation["price"],
   prefix: string = null,
   currency: string = null
-): FunctionalComponent<Interfaces["VisualProductSearch"]["price"]> =>
+): FunctionalComponent<Recommendation["price"]> =>
   pipe(
     E.right(data),
     E.chain(bothPricesPresented),
@@ -185,10 +185,10 @@ const getPriceComponent = (
   );
 
 export const Price = (
-  data: Interfaces["VisualProductSearch"],
+  data: Recommendation,
   prefix: string = null,
   currency: string = null
-): FunctionalComponent<Interfaces["VisualProductSearch"]["price"]> =>
+): FunctionalComponent<Recommendation["price"]> =>
   pipe(
     O.fromNullable(data.price),
     O.fold(
@@ -198,8 +198,8 @@ export const Price = (
   );
 
 export const Brand = (
-  data: Interfaces["VisualProductSearch"]
-): FunctionalComponent<Interfaces["VisualProductSearch"]["brand"]> =>
+  data: Recommendation
+): FunctionalComponent<Recommendation["brand"]> =>
   pipe(
     O.fromNullable(data.brand),
     O.fold(
@@ -213,8 +213,8 @@ export const Brand = (
   );
 
 export const ProductType = (
-  data: Interfaces["VisualProductSearch"]
-): FunctionalComponent<Interfaces["VisualProductSearch"]["productType"]> =>
+  data: Recommendation
+): FunctionalComponent<Recommendation["productType"]> =>
   pipe(
     O.fromNullable(data.productType),
     O.fold(

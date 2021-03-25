@@ -23,7 +23,7 @@ import * as O from "fp-ts/Option";
 import { pipe } from "fp-ts/function";
 import {
   getLink,
-  //foldIonItem,
+  foldIonItem,
   IonItem,
   IonLink,
   linkRequest,
@@ -156,26 +156,21 @@ export class ImageSearch {
 
   private processSearchRequest(data: IonItem<null>) {
     this.loading = false;
-    //this.handleSearchSuccess(foldIonItem(data));
-    this.showFilters(data.filters);
+    this.handleSearchSuccess(data.value);
+    this.showFilters(data.filters as IonItem<SearchSessionFilters>);
     this.rectangleSearchLink = getLink(data, "withRectangle");
   }
 
-  private showFilters(filters: unknown[]) {
-    const f = filters.reduce((acc, cur) => {
-      acc[Object.keys(cur)[0]] = Object.values(cur)[0].value;
-      return acc;
-    }, {}) as SearchSessionFilters;
-
-    this.filters = readFilters(f);
+  private showFilters(filters: IonItem<SearchSessionFilters>) {
+    this.filters = readFilters(foldIonItem(filters));
   }
 
   private handleSearchError(_error: NetworkError) {
     this.loading = false;
   }
 
-  async handleSearchSuccess(_data: SearchSessionProducts) {
-    //await this.slider.loadProducts(data.products);
+  async handleSearchSuccess(data: Recommendation[]) {
+    await this.slider.loadProducts(data);
   }
 
   private async toggleCropper() {
@@ -242,7 +237,7 @@ export class ImageSearch {
           <search-filters filter={f} />
         ))}
         <vpr-slider
-          mode="auto"
+          mode="grid"
           imageWidth={100}
           imageRatio={1}
           part="grid"

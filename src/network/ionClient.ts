@@ -26,17 +26,17 @@ export interface IonItem<T> {
   };
   readonly desc: string;
   readonly type: string;
-  readonly filters?: unknown[];
+  readonly filters?: IonItem<unknown>;
 }
 
 export interface IonLinkParams {
   readonly [param: string]: string;
 }
 
-export const foldIonItem = (i: IonItem<any>): unknown => {
+export const foldIonItem = <T>(i: IonItem<T>): T => {
   switch (i.type) {
     case "array": {
-      return i.value.map(foldIonItem);
+      return (i.value as any).map(foldIonItem);
     }
     default: {
       return i.value;
