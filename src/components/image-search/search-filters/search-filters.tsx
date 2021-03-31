@@ -10,6 +10,8 @@ import {
 import { IonLink } from "../../../network/ionClient";
 import { SearchSessionFilter } from "../../../searchSession/searchSession";
 
+const getFilterId = (filter: IonLink): string => filter.href.split("/").reverse()[0];
+
 @Component({
   tag: "search-filters",
   styleUrl: "search-filters.css",
@@ -17,12 +19,12 @@ import { SearchSessionFilter } from "../../../searchSession/searchSession";
 })
 export class SearchFilters {
   @Prop() filter: SearchSessionFilter | null = null;
-  @State() selectedCategoryName: string | null = null;
+  @State() selectedCategoryId: string | null = null;
   @Event() filterSelectedEvent: EventEmitter<IonLink>;
 
   private filterSelected(f: IonLink) {
     this.filterSelectedEvent.emit(f);
-    this.selectedCategoryName = f.name;
+    this.selectedCategoryId = getFilterId(f);
   }
 
   render() {
@@ -34,7 +36,7 @@ export class SearchFilters {
             <div
               class={{
                 filter: true,
-                active: this.selectedCategoryName == f.name,
+                active: this.selectedCategoryId == getFilterId(f),
               }}
               onClick={() => this.filterSelected(f)}
             >
