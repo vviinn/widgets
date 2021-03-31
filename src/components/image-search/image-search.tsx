@@ -155,8 +155,9 @@ export class ImageSearch {
     );
   }
 
-  private processSearchRequest(data: IonItem<null>) {
+  private async processSearchRequest(data: IonItem<null>) {
     this.loading = false;
+    await this.slider.resetSliderPosition();
     this.handleSearchSuccess(data.value);
     this.showFilters(data.filters as IonItem<SearchSessionFilters>);
     this.rectangleSearchLink = getLink(data, "withRectangle");

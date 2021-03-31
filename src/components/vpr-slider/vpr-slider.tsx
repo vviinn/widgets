@@ -66,6 +66,12 @@ export class VprSlider {
   }
 
   @Method()
+  async resetSliderPosition() {
+    this.slidePosition = 0;
+    this.el.style.setProperty("--slide-position", `${this.slidePosition}`);
+  }
+
+  @Method()
   async loadProducts(products: Recommendation[]) {
     this.products = products;
 
