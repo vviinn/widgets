@@ -28,7 +28,12 @@ import {
   linkRequest,
   searchSessionClient,
 } from "../../network/ionClient";
-import { fromImage, fromNaturalImage, Rectangle, scaleSelection } from "../../geometry/Rectangle";
+import {
+  fromImage,
+  fromNaturalImage,
+  Rectangle,
+  scaleSelection,
+} from "../../geometry/Rectangle";
 
 const composeData = (
   token: string,
@@ -55,14 +60,14 @@ const composeRectangleData = (
   pipe(
     token,
     existAndNotEmpty,
-  E.map((token) => {
-    const data = {
-      left: rectangle.position.x,
-      top: rectangle.position.y,
-      width: rectangle.width,
-      height: rectangle.height
-    };
-    const body = JSON.stringify(data);
+    E.map((token) => {
+      const data = {
+        left: rectangle.position.x,
+        top: rectangle.position.y,
+        width: rectangle.width,
+        height: rectangle.height,
+      };
+      const body = JSON.stringify(data);
       return {
         headers: createBearerHeaders(token),
         body,
@@ -98,6 +103,7 @@ export class ImageSearch {
   @State() products: Recommendation[] = [];
   @State() filters: SearchSessionFilter[] = [];
   @State() rectangleSearchLink: O.Option<IonLink> = O.none;
+  @State() clearFiltersLink: O.Option<IonLink> = O.none;
 
   slider: HTMLVprSliderElement;
   private cropper: HTMLImageCropperElement | undefined;
@@ -154,6 +160,7 @@ export class ImageSearch {
     this.handleSearchSuccess(data.value);
     this.showFilters(data.filters as IonItem<SearchSessionFilters>);
     this.rectangleSearchLink = getLink(data, "withRectangle");
+    this.clearFiltersLink = getLink(data, "clearFilters");
   }
 
   private showFilters(filters: IonItem<SearchSessionFilters>) {
@@ -177,12 +184,16 @@ export class ImageSearch {
 
       const imageRect = fromImage(image);
       const originImageRect = fromNaturalImage(image);
-      const scaledSelection = scaleSelection(imageRect, selection, originImageRect);
+      const scaledSelection = scaleSelection(
+        imageRect,
+        selection,
+        originImageRect
+      );
 
       pipe(
         this.rectangleSearchLink,
         O.map((link) => this.createRectangleRequest(link, scaledSelection))
-      )
+      );
 
       //const rectangleSearchRequest = linkRequest()
     }
@@ -203,6 +214,13 @@ export class ImageSearch {
         (e: NetworkError) => this.handleSearchError(e),
         (data: IonItem<null>) => this.processSearchRequest(data)
       )
+    );
+  }
+
+  private clearFilters() {
+    pipe(
+      this.clearFiltersLink,
+      O.map((filterLink) => this.handleRecommendationsLink(filterLink))
     );
   }
 
@@ -229,6 +247,9 @@ export class ImageSearch {
         {this.filters.map((f) => (
           <search-filters filter={f} />
         ))}
+        {O.isSome(this.clearFiltersLink) ? (
+          <button onClick={() => this.clearFilters()}>Clear filters</button>
+        ) : null}
         <vpr-slider
           mode="grid"
           imageWidth={100}
