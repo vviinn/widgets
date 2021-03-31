@@ -121,8 +121,6 @@ export class ImageSearch {
       TE.flatten
     )();
 
-    console.log(request);
-
     pipe(
       request,
       E.fold(
@@ -149,8 +147,6 @@ export class ImageSearch {
         (data: IonItem<null>) => this.processSearchRequest(data)
       )
     );
-
-    console.log(request);
   }
 
   private processSearchRequest(data: IonItem<null>) {
@@ -188,9 +184,7 @@ export class ImageSearch {
         O.map((link) => this.createRectangleRequest(link, scaledSelection))
       )
 
-
       //const rectangleSearchRequest = linkRequest()
-      console.log(scaledSelection);
     }
     this.showCropper = !this.showCropper;
   }

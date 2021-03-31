@@ -49,7 +49,6 @@ export class VprResult implements ComponentInterface {
   }
 
   componentDidLoad() {
-    console.log(this.item);
     this.recommendationLoad.emit(this.item);
     this.intersectionObserver.observe(this.el);
 
