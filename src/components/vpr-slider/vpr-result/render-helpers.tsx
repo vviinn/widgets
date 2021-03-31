@@ -30,6 +30,7 @@ export const Image = (
                 height={he}
                 src={data.image.original}
                 alt={data.title}
+                loading="lazy"
               />
             ),
             (deeplink) => (
@@ -40,6 +41,7 @@ export const Image = (
                   height={he}
                   src={data.image.original}
                   alt={data.title}
+                  loading="lazy"
                 />
               </a>
             )
@@ -57,6 +59,7 @@ export const Image = (
                 height={he}
                 src={thumbnail}
                 alt={data.title}
+                loading="lazy"
               />
             ),
             (deeplink) => (
@@ -67,6 +70,7 @@ export const Image = (
                   height={he}
                   src={thumbnail}
                   alt={data.title}
+                  loading="lazy"
                 />
               </a>
             )
