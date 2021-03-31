@@ -7,6 +7,7 @@ import {
   Event,
   EventEmitter,
   Method,
+  Element
 } from "@stencil/core";
 import { fromRectangle, Handler } from "../../../cropper/Handler";
 import { Rectangle, move, transform } from "../../../geometry/Rectangle";
@@ -22,6 +23,8 @@ import {
   shadow: true,
 })
 export class ImageCropper {
+  @Element() el: HTMLElement;
+
   @State() cropArea: Rectangle = {
     position: { x: 20, y: 20 },
     width: 25,
@@ -32,6 +35,7 @@ export class ImageCropper {
   @State() handleMove: boolean = false;
 
   private mouseStartPoint: Point | undefined = undefined;
+  private bounds: DOMRect;
 
   @Event() mouseRelease: EventEmitter<void>;
 
@@ -54,6 +58,10 @@ export class ImageCropper {
     this.cropArea = move(this.cropArea, distance);
     this.handlers = fromRectangle(this.cropArea);
     this.mouseStartPoint = destination;
+  }
+
+  componentDidLoad() {
+    this.bounds = this.el.getBoundingClientRect();
   }
 
   @Method()
@@ -88,7 +96,7 @@ export class ImageCropper {
         ></div>
         <div class="wrapper">
           {this.handlers.map((handler) => (
-            <cropper-handler handler={handler}></cropper-handler>
+            <cropper-handler handler={handler} bounds={this.bounds}></cropper-handler>
           ))}
         </div>
       </Host>
