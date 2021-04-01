@@ -68,8 +68,10 @@ const composeRectangleData = (
         height: rectangle.height,
       };
       const body = JSON.stringify(data);
+      const headers = createBearerHeaders(token);
+      headers.append("content-type", "application/json");
       return {
-        headers: createBearerHeaders(token),
+        headers,
         body,
       };
     }),
@@ -160,7 +162,7 @@ export class ImageSearch {
     await this.slider.resetSliderPosition();
     this.handleSearchSuccess(data.value);
     this.showFilters(data.filters as IonItem<SearchSessionFilters>);
-    this.rectangleSearchLink = getLink(data, "withRectangle");
+    this.rectangleSearchLink = getLink(data, "rectangle");
     this.clearFiltersLink = getLink(data, "clearFilters");
   }
 
@@ -195,8 +197,6 @@ export class ImageSearch {
         this.rectangleSearchLink,
         O.map((link) => this.createRectangleRequest(link, scaledSelection))
       );
-
-      //const rectangleSearchRequest = linkRequest()
     }
     this.showCropper = !this.showCropper;
   }
