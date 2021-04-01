@@ -7,7 +7,7 @@ import {
   Event,
   EventEmitter,
   Method,
-  Element
+  Element,
 } from "@stencil/core";
 import { fromRectangle, Handler } from "../../../cropper/Handler";
 import { Rectangle, move, transform } from "../../../geometry/Rectangle";
@@ -41,7 +41,13 @@ export class ImageCropper {
 
   @Listen("handlerMoved")
   handleHandlerMove(event: CustomEvent<Handler>) {
-    this.cropArea = transform(this.cropArea, event.detail);
+    const newCropArea = transform(this.cropArea, event.detail);
+
+    if (!this.checkBounds(newCropArea)) {
+      return;
+    }
+
+    this.cropArea = newCropArea;
     this.handlers = fromRectangle(this.cropArea);
   }
 
@@ -55,7 +61,13 @@ export class ImageCropper {
       this.mouseStartPoint
     );
 
-    this.cropArea = move(this.cropArea, distance);
+    const newCropArea = move(this.cropArea, distance);
+
+    if (!this.checkBounds(newCropArea)) {
+      return;
+    }
+
+    this.cropArea = newCropArea;
     this.handlers = fromRectangle(this.cropArea);
     this.mouseStartPoint = destination;
   }
@@ -69,7 +81,7 @@ export class ImageCropper {
     return this.cropArea;
   }
 
-  handleMouseUp() {
+  private handleMouseUp() {
     this.handleMove = false;
     this.mouseStartPoint = undefined;
     this.mouseRelease.emit();
@@ -78,6 +90,17 @@ export class ImageCropper {
   private handleMouseDown(event: MouseEvent) {
     this.handleMove = true;
     this.mouseStartPoint = fromMouseEvent(event);
+  }
+
+  private checkBounds(rectangle: Rectangle): boolean {
+    const bounds = this.el.getBoundingClientRect();
+    const inTopBound = rectangle.position.y > 0;
+    const inLeftBound = rectangle.position.x > 0;
+    const inRightBound = rectangle.position.x + rectangle.width < bounds.width;
+    const inBottomBound =
+      rectangle.position.y + rectangle.height < bounds.height;
+
+    return inTopBound && inLeftBound && inRightBound && inBottomBound;
   }
 
   render() {
@@ -96,7 +119,10 @@ export class ImageCropper {
         ></div>
         <div class="wrapper">
           {this.handlers.map((handler) => (
-            <cropper-handler handler={handler} bounds={this.bounds}></cropper-handler>
+            <cropper-handler
+              handler={handler}
+              bounds={this.bounds}
+            ></cropper-handler>
           ))}
         </div>
       </Host>
