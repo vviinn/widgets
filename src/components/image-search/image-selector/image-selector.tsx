@@ -52,7 +52,7 @@ export class ImageSelector {
     const r = await fromFile(f);
 
     r.onload = async () => {
-      const t = resizeImage(300, r);
+      const t = resizeImage(600, r);
       const file = await toFile(t);
       this.imageSelected.emit(file);
     };

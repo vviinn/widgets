@@ -13,3 +13,11 @@
 img {
   border: 1px solid lightgray;
 }
+
+.detected-object {
+  position: absolute;
+}
+
+.detected-object-name {
+  display: inline-block; 
+}

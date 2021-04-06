@@ -6,6 +6,8 @@ import {
   Listen,
   State,
   Element,
+  Event,
+  EventEmitter,
 } from "@stencil/core";
 import { existAndNotEmpty } from "../../utils/collections/collectionsUtils";
 import { createBearerHeaders } from "../../utils/token/tokenUtils";
@@ -14,6 +16,9 @@ import {
   readFilters,
   SearchSessionFilter,
   SearchSessionFilters,
+  searchSessionClient,
+  IonSearchSession,
+  DetectedObject,
 } from "../../searchSession/searchSession";
 import { Recommendation } from "../../recommendation/recommendation";
 import * as E from "fp-ts/Either";
@@ -26,8 +31,8 @@ import {
   IonItem,
   IonLink,
   linkRequest,
-  searchSessionClient,
 } from "../../network/ionClient";
+
 import {
   fromImage,
   fromNaturalImage,
@@ -99,15 +104,18 @@ export class ImageSearch {
   /** Mediaopt customer token */
   @Prop() token: string;
 
+  @Event({ bubbles: true }) objectsDetected: EventEmitter<DetectedObject[]>;
+
   @State() loading: boolean = false;
   @State() imageSelected: boolean = false;
   @State() showCropper: boolean = false;
   @State() products: Recommendation[] = [];
   @State() filters: SearchSessionFilter[] = [];
+  @State() detectedObjects: DetectedObject[] = [];
   @State() rectangleSearchLink: O.Option<IonLink> = O.none;
   @State() clearFiltersLink: O.Option<IonLink> = O.none;
 
-  slider: HTMLVprSliderElement;
+  private slider: HTMLVprSliderElement;
   private cropper: HTMLImageCropperElement | undefined;
 
   @Element() el: HTMLElement;
@@ -133,7 +141,7 @@ export class ImageSearch {
       request,
       E.fold(
         (e: NetworkError) => this.handleSearchError(e),
-        (data) => this.processSearchRequest(data)
+        (data: IonSearchSession) => this.processSearchRequest(data)
       )
     );
   }
@@ -152,18 +160,23 @@ export class ImageSearch {
       request,
       E.fold(
         (e: NetworkError) => this.handleSearchError(e),
-        (data: IonItem<null>) => this.processSearchRequest(data)
+        (data: IonSearchSession) => this.processSearchRequest(data)
       )
     );
   }
 
-  private async processSearchRequest(data: IonItem<null>) {
+  private async processSearchRequest(data: IonSearchSession) {
     this.loading = false;
     await this.slider.resetSliderPosition();
     this.handleSearchSuccess(data.value);
-    this.showFilters(data.filters as IonItem<SearchSessionFilters>);
+    this.showFilters(data.filters);
+    this.showDetectedObjects(data.detectedObjects);
     this.rectangleSearchLink = getLink(data, "rectangle");
     this.clearFiltersLink = getLink(data, "clearFilters");
+  }
+
+  private showDetectedObjects(detectedObjects: DetectedObject[]) {
+    this.objectsDetected.emit(detectedObjects);
   }
 
   private showFilters(filters: IonItem<SearchSessionFilters>) {
@@ -213,7 +226,7 @@ export class ImageSearch {
       request,
       E.fold(
         (e: NetworkError) => this.handleSearchError(e),
-        (data: IonItem<null>) => this.processSearchRequest(data)
+        (data: IonSearchSession) => this.processSearchRequest(data)
       )
     );
   }

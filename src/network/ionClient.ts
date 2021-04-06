@@ -7,7 +7,6 @@ import {
   getApiPath,
   RequestMethod,
   createRequestFromMethod,
-  createInitPostRequest,
 } from "./utils";
 import { makeRequest, networkErrorFrom } from "./request";
 
@@ -19,14 +18,13 @@ export interface IonLink {
   readonly name: string;
 }
 
-export interface IonItem<T> {
+export type IonItem<T> = {
   readonly value: T;
-  readonly links: {
+  readonly links?: {
     [link: string]: IonLink;
   };
-  readonly desc: string;
+  readonly desc?: string;
   readonly type: string;
-  readonly filters?: IonItem<unknown>;
 }
 
 export interface IonLinkParams {
@@ -48,14 +46,6 @@ export const transformHref = (origin: string, params: IonLinkParams): string =>
   Object.entries(params).reduce(
     (acc, param) => acc.replace(`{${param[0]}}`, param[1]),
     origin
-  );
-
-export const searchSessionClient = (initialData: RequestInit) =>
-  pipe(
-    sequenceToEither(getApiPath(), createInitPostRequest),
-    TE.fromEither,
-    TE.mapLeft(networkErrorFrom),
-    TE.chain(makeRequest<IonItem<null>>("search/session", initialData))
   );
 
 export const linkRequest = <T>(link: IonLink, params: IonLinkParams = {}) => (
