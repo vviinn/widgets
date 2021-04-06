@@ -14,6 +14,7 @@ import { Recommendation } from "./recommendation/recommendation";
 import { GridMode } from "./slider/GridMode";
 export namespace Components {
     interface CropperHandler {
+        "bounds": DOMRect;
         "handler": Handler;
     }
     interface ImageCropper {
@@ -89,6 +90,7 @@ export namespace Components {
         "loadProducts": (products: Recommendation[]) => Promise<void>;
         "mode": GridMode;
         "productsInGrid": number;
+        "resetSliderPosition": () => Promise<void>;
     }
 }
 declare global {
@@ -167,6 +169,7 @@ declare global {
 }
 declare namespace LocalJSX {
     interface CropperHandler {
+        "bounds"?: DOMRect;
         "handler"?: Handler;
         "onHandlerMoved"?: (event: CustomEvent<Handler>) => void;
     }

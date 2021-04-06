@@ -7,6 +7,13 @@ export interface Rectangle {
   readonly height: number;
 }
 
+export interface RectangleAlt {
+  readonly top: number;
+  readonly left: number;
+  readonly width: number;
+  readonly height: number;
+}
+
 interface RectangleTransform {
   (x: Rectangle, y: Handler): Rectangle;
 }

@@ -14,6 +14,9 @@ import {
   readFilters,
   SearchSessionFilter,
   SearchSessionFilters,
+  searchSessionClient,
+  IonSearchSession,
+  DetectedObject,
 } from "../../searchSession/searchSession";
 import { Recommendation } from "../../recommendation/recommendation";
 import * as E from "fp-ts/Either";
@@ -26,8 +29,8 @@ import {
   IonItem,
   IonLink,
   linkRequest,
-  searchSessionClient,
 } from "../../network/ionClient";
+
 import {
   fromImage,
   fromNaturalImage,
@@ -104,6 +107,7 @@ export class ImageSearch {
   @State() showCropper: boolean = false;
   @State() products: Recommendation[] = [];
   @State() filters: SearchSessionFilter[] = [];
+  @State() detectedObjects: DetectedObject[] = [];
   @State() rectangleSearchLink: O.Option<IonLink> = O.none;
   @State() clearFiltersLink: O.Option<IonLink> = O.none;
 
@@ -152,18 +156,23 @@ export class ImageSearch {
       request,
       E.fold(
         (e: NetworkError) => this.handleSearchError(e),
-        (data: IonItem<null>) => this.processSearchRequest(data)
+        (data: IonSearchSession) => this.processSearchRequest(data)
       )
     );
   }
 
-  private async processSearchRequest(data: IonItem<null>) {
+  private async processSearchRequest(data: IonSearchSession) {
     this.loading = false;
     await this.slider.resetSliderPosition();
     this.handleSearchSuccess(data.value);
-    this.showFilters(data.filters as IonItem<SearchSessionFilters>);
+    this.showFilters(data.filters);
+    this.showDetectedObjects(data.detectedObjects);
     this.rectangleSearchLink = getLink(data, "rectangle");
     this.clearFiltersLink = getLink(data, "clearFilters");
+  }
+
+  private showDetectedObjects(detectedObjects: DetectedObject[]) {
+    this.detectedObjects = detectedObjects;
   }
 
   private showFilters(filters: IonItem<SearchSessionFilters>) {
@@ -213,7 +222,7 @@ export class ImageSearch {
       request,
       E.fold(
         (e: NetworkError) => this.handleSearchError(e),
-        (data: IonItem<null>) => this.processSearchRequest(data)
+        (data: IonSearchSession) => this.processSearchRequest(data)
       )
     );
   }
