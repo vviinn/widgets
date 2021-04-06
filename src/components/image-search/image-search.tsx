@@ -6,6 +6,8 @@ import {
   Listen,
   State,
   Element,
+  Event,
+  EventEmitter,
 } from "@stencil/core";
 import { existAndNotEmpty } from "../../utils/collections/collectionsUtils";
 import { createBearerHeaders } from "../../utils/token/tokenUtils";
@@ -102,6 +104,8 @@ export class ImageSearch {
   /** Mediaopt customer token */
   @Prop() token: string;
 
+  @Event({ bubbles: true }) objectsDetected: EventEmitter<DetectedObject[]>;
+
   @State() loading: boolean = false;
   @State() imageSelected: boolean = false;
   @State() showCropper: boolean = false;
@@ -111,7 +115,7 @@ export class ImageSearch {
   @State() rectangleSearchLink: O.Option<IonLink> = O.none;
   @State() clearFiltersLink: O.Option<IonLink> = O.none;
 
-  slider: HTMLVprSliderElement;
+  private slider: HTMLVprSliderElement;
   private cropper: HTMLImageCropperElement | undefined;
 
   @Element() el: HTMLElement;
@@ -137,7 +141,7 @@ export class ImageSearch {
       request,
       E.fold(
         (e: NetworkError) => this.handleSearchError(e),
-        (data) => this.processSearchRequest(data)
+        (data: IonSearchSession) => this.processSearchRequest(data)
       )
     );
   }
@@ -172,7 +176,7 @@ export class ImageSearch {
   }
 
   private showDetectedObjects(detectedObjects: DetectedObject[]) {
-    this.detectedObjects = detectedObjects;
+    this.objectsDetected.emit(detectedObjects);
   }
 
   private showFilters(filters: IonItem<SearchSessionFilters>) {
