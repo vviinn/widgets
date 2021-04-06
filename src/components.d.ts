@@ -7,13 +7,14 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { Handler } from "./cropper/Handler";
 import { Rectangle } from "./geometry/Rectangle";
-import { SearchSessionFilter } from "./searchSession/searchSession";
+import { DetectedObject, SearchSessionFilter } from "./searchSession/searchSession";
 import { IonLink } from "./network/ionClient";
 import { CampaignName } from "./campaign/Campaign";
 import { Recommendation } from "./recommendation/recommendation";
 import { GridMode } from "./slider/GridMode";
 export namespace Components {
     interface CropperHandler {
+        "bounds": DOMRect;
         "handler": Handler;
     }
     interface ImageCropper {
@@ -89,6 +90,7 @@ export namespace Components {
         "loadProducts": (products: Recommendation[]) => Promise<void>;
         "mode": GridMode;
         "productsInGrid": number;
+        "resetSliderPosition": () => Promise<void>;
     }
 }
 declare global {
@@ -167,6 +169,7 @@ declare global {
 }
 declare namespace LocalJSX {
     interface CropperHandler {
+        "bounds"?: DOMRect;
         "handler"?: Handler;
         "onHandlerMoved"?: (event: CustomEvent<Handler>) => void;
     }
@@ -174,6 +177,7 @@ declare namespace LocalJSX {
         "onMouseRelease"?: (event: CustomEvent<void>) => void;
     }
     interface ImageSearch {
+        "onObjectsDetected"?: (event: CustomEvent<DetectedObject[]>) => void;
         /**
           * Mediaopt customer token
          */
