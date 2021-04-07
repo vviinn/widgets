@@ -18,7 +18,7 @@ pipelines:
             - echo "RECOMMENDATIONS_URL=https://stage.mediaopt.tools/product/" >> .env
             - npm install
             - npm run build_interfaces
-            - ls -la src/interfaces
+            - npm run test
             - npm run build
     master:
       - step:
@@ -31,7 +31,7 @@ pipelines:
             - echo "RECOMMENDATIONS_URL=https://mediaopt.tools/product/" >> .env
             - npm install
             - npm run build_interfaces
-            - ls -la src/interfaces
+            - npm run test
             - npm run build
   # tags:
   #   'v*.*.*':
