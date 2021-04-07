@@ -39,7 +39,7 @@ describe("vpr-result", () => {
 
         <mock:shadow-root>
           <style></style>
-          <img alt="Fender Jazz Bass" part="product-image" part="product-image" height="100" src="path-to-image.jpg" width="100">
+          <img alt="Fender Jazz Bass" part="product-image" part="product-image" height="100" loading="lazy" src="path-to-image.jpg" width="100">
           <span class="product title" part="product-title" title="Fender Jazz Bass">
             Fender Jazz Bass
           </span>
@@ -68,7 +68,7 @@ describe("vpr-result", () => {
 
         <mock:shadow-root>
           <style></style>
-          <img alt="Fender Jazz Bass" part="product-image" height="100" src="path-to-thumb.jpg" width="100">
+          <img alt="Fender Jazz Bass" part="product-image" height="100" loading="lazy" src="path-to-thumb.jpg" width="100">
           <span class="product title" part="product-title" title="Fender Jazz Bass">
             Fender Jazz Bass
           </span>
@@ -94,7 +94,7 @@ describe("vpr-result", () => {
 
         <mock:shadow-root>
           <style></style>
-          <img alt="Fender Jazz Bass" part="product-image" height="100" src="path-to-thumb.jpg" width="100">
+          <img alt="Fender Jazz Bass" part="product-image" height="100" loading="lazy" src="path-to-thumb.jpg" width="100">
           <span class="product title" part="product-title" title="Fender Jazz Bass">
             Fender Jazz Bass
           </span>
@@ -121,7 +121,7 @@ describe("vpr-result", () => {
 
         <mock:shadow-root>
           <style></style>
-          <img alt="Fender Jazz Bass" part="product-image" height="100" src="path-to-thumb.jpg" width="100">
+          <img alt="Fender Jazz Bass" part="product-image" height="100" loading="lazy" src="path-to-thumb.jpg" width="100">
           <span class="product title" part="product-title" title="Fender Jazz Bass">
             Fender Jazz Bass
           </span>
@@ -150,7 +150,7 @@ describe("vpr-result", () => {
         <mock:shadow-root>
           <style></style>
           <a href="/basses/fjb.html" part="product-image-link">
-            <img alt="Fender Jazz Bass" part="product-image" height="100" src="path-to-thumb.jpg" width="100">
+            <img alt="Fender Jazz Bass" part="product-image" height="100" loading="lazy" src="path-to-thumb.jpg" width="100">
           </a>
           <a class="product title" href="/basses/fjb.html" part="product-title" title="Fender Jazz Bass">
             Fender Jazz Bass
@@ -183,7 +183,7 @@ describe("vpr-result", () => {
         <mock:shadow-root>
           <style></style>
           <a href="/basses/fjb.html" part="product-image-link">
-            <img alt="Fender Jazz Bass" part="product-image" height="100" src="path-to-thumb.jpg" width="100">
+            <img alt="Fender Jazz Bass" part="product-image" height="100" loading="lazy" src="path-to-thumb.jpg" width="100">
           </a>
           <a class="product title" href="/basses/fjb.html" part="product-title" title="Fender Jazz Bass">
             Fender Jazz Bass
@@ -221,7 +221,7 @@ describe("vpr-result", () => {
         <mock:shadow-root>
           <style></style>
           <a href="/basses/fjb.html" part="product-image-link">
-            <img alt="Fender Jazz Bass" part="product-image" height="100" src="path-to-thumb.jpg" width="100">
+            <img alt="Fender Jazz Bass" part="product-image" height="100" loading="lazy" src="path-to-thumb.jpg" width="100">
           </a>
           <a class="product title" href="/basses/fjb.html" part="product-title" title="Fender Jazz Bass">
             Fender Jazz Bass
@@ -260,7 +260,7 @@ describe("vpr-result", () => {
         <mock:shadow-root>
           <style></style>
           <a href="/basses/fjb.html" part="product-image-link">
-            <img alt="Fender Jazz Bass" part="product-image" height="100" src="path-to-thumb.jpg" width="100">
+            <img alt="Fender Jazz Bass" part="product-image" height="100" loading="lazy" src="path-to-thumb.jpg" width="100">
           </a>
           <a class="product title" href="/basses/fjb.html" part="product-title" title="Fender Jazz Bass">
             Fender Jazz Bass
@@ -299,7 +299,7 @@ describe("vpr-result", () => {
         <mock:shadow-root>
           <style></style>
           <a href="/basses/fjb.html" part="product-image-link">
-            <img alt="Fender Jazz Bass" part="product-image" height="100" src="path-to-thumb.jpg" width="100">
+            <img alt="Fender Jazz Bass" part="product-image" height="100" loading="lazy" src="path-to-thumb.jpg" width="100">
           </a>
           <a class="product title" href="/basses/fjb.html" part="product-title" title="Fender Jazz Bass">
             Fender Jazz Bass
@@ -338,7 +338,7 @@ describe("vpr-result", () => {
         <mock:shadow-root>
           <style></style>
           <a href="/basses/fjb.html" part="product-image-link">
-            <img alt="Fender Jazz Bass" part="product-image" height="100" src="path-to-thumb.jpg" width="100">
+            <img alt="Fender Jazz Bass" part="product-image" height="100" loading="lazy" src="path-to-thumb.jpg" width="100">
           </a>
           <a class="product title" href="/basses/fjb.html" part="product-title" title="Fender Jazz Bass">
             Fender Jazz Bass
@@ -382,7 +382,7 @@ describe("vpr-result", () => {
         <mock:shadow-root>
           <style></style>
           <a href="/basses/fjb.html" part="product-image-link">
-            <img alt="Fender Jazz Bass" part="product-image" height="100" src="path-to-thumb.jpg" width="100">
+            <img alt="Fender Jazz Bass" part="product-image" height="100" loading="lazy" src="path-to-thumb.jpg" width="100">
           </a>
           <a class="product title" href="/basses/fjb.html" part="product-title" title="Fender Jazz Bass">
             Fender Jazz Bass
@@ -420,7 +420,7 @@ describe("vpr-result", () => {
         <mock:shadow-root>
           <style></style>
           <a href="/basses/fjb.html" part="product-image-link">
-            <img alt="Fender Jazz Bass" part="product-image" height="100" src="path-to-thumb.jpg" width="100">
+            <img alt="Fender Jazz Bass" part="product-image" height="100" loading="lazy" src="path-to-thumb.jpg" width="100">
           </a>
           <a class="product title" href="/basses/fjb.html" part="product-title" title="Fender Jazz Bass">
             Fender Jazz Bass

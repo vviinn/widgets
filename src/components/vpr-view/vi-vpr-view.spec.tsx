@@ -8,7 +8,7 @@ describe("vi-vpr-view", () => {
       html: `<vi-vpr-view></vi-vpr-view>`,
     });
     expect(page.root).toEqualHtml(`
-      <vi-vpr-view aria-hidden="true"  class="empty" exportparts="grid">
+      <vi-vpr-view aria-hidden="true" class="empty" exportparts="grid">
         <mock:shadow-root>
           <style></style>
           <h2 part="recommendations-title">
