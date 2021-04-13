@@ -53,7 +53,7 @@
     "@types/node": "^14.14.22",
     "dotenv": "^8.2.0",
     "enhanced-ecommerce-types": "0.0.3",
-    "fp-ts": "^2.9.5",
+    "fp-ts": "^2",
     "rxjs": "^6.6.6"
   }
 }

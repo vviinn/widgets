@@ -16,6 +16,7 @@ import {
   fromMouseEvent,
   pointDiffSemigroup,
 } from "../../../geometry/Point";
+import { fromFile } from "../../../Image/fromFile";
 
 @Component({
   tag: "image-cropper",
@@ -38,6 +39,24 @@ export class ImageCropper {
   private bounds: DOMRect;
 
   @Event() mouseRelease: EventEmitter<void>;
+  @Event() cropperMoved: EventEmitter<Rectangle>;
+
+  @Listen("imageSelected", { target: "document" })
+  async handleImageSelect({ detail }: CustomEvent<File>) {
+    const image = await fromFile(detail);
+    image.onload = () => {
+      this.cropArea = {
+        position: {
+          x: 10,
+          y: 10
+        },
+        width: image.width * 0.5,
+        height: image.height * 0.5
+      };
+      this.handlers = fromRectangle(this.cropArea);
+      this.cropperMoved.emit(this.cropArea);
+    }
+  }
 
   @Listen("handlerMoved")
   handleHandlerMove(event: CustomEvent<Handler>) {
@@ -49,6 +68,7 @@ export class ImageCropper {
 
     this.cropArea = newCropArea;
     this.handlers = fromRectangle(this.cropArea);
+    this.cropperMoved.emit(this.cropArea);
   }
 
   @Listen("mousemove")
@@ -70,10 +90,19 @@ export class ImageCropper {
     this.cropArea = newCropArea;
     this.handlers = fromRectangle(this.cropArea);
     this.mouseStartPoint = destination;
+    this.cropperMoved.emit(this.cropArea);
   }
 
   componentDidLoad() {
     this.bounds = this.el.getBoundingClientRect();
+    const { width, height } = this.bounds;
+    this.cropArea = {
+      position: { x: 20, y: 20 },
+      width: width * 0.5,
+      height: height * 0.5,
+    };
+
+    this.handlers = fromRectangle(this.cropArea);
   }
 
   @Method()

@@ -1,6 +1,6 @@
 import { Rectangle, scaleSelection } from "./Rectangle";
 
-it("should LOL", async () => {
+it("should scale properly", async () => {
   const source: Rectangle = {
     position: {
       x: 0,

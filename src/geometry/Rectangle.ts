@@ -7,11 +7,18 @@ export interface Rectangle {
   readonly height: number;
 }
 
-export interface RectangleAlt {
-  readonly top: number;
-  readonly left: number;
+export interface Rectangular {
+  readonly kind: "rectangle",
+  readonly position: Point;
   readonly width: number;
   readonly height: number;
+}
+
+export function of(r: Rectangle): Rectangular {
+    return {
+        kind: "rectangle",
+        ...r
+    }
 }
 
 interface RectangleTransform {
@@ -148,17 +155,6 @@ export const fromNaturalImage = (image: HTMLImageElement): Rectangle => {
     },
     width: image.naturalWidth,
     height: image.naturalHeight,
-  };
-};
-
-export const scale = (x: Rectangle, y: Rectangle): Rectangle => {
-  return {
-    position: {
-      x: x.width * x.position.x,
-      y: x.height * x.position.y,
-    },
-    width: y.width,
-    height: y.height,
   };
 };
 

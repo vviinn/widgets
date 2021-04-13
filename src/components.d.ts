@@ -6,6 +6,7 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { Handler } from "./cropper/Handler";
+import { ClipShape } from "./geometry/Clip";
 import { Rectangle } from "./geometry/Rectangle";
 import { DetectedObject, SearchSessionFilter } from "./searchSession/searchSession";
 import { IonLink } from "./network/ionClient";
@@ -16,6 +17,10 @@ export namespace Components {
     interface CropperHandler {
         "bounds": DOMRect;
         "handler": Handler;
+    }
+    interface HighlightBox {
+        "image": HTMLImageElement | undefined;
+        "selection": ClipShape | undefined;
     }
     interface ImageCropper {
         "getSelection": () => Promise<Rectangle>;
@@ -29,7 +34,6 @@ export namespace Components {
     interface ImageSelector {
     }
     interface ImageView {
-        "hidden": boolean;
     }
     interface SearchFilters {
         "filter": SearchSessionFilter | null;
@@ -100,6 +104,12 @@ declare global {
         prototype: HTMLCropperHandlerElement;
         new (): HTMLCropperHandlerElement;
     };
+    interface HTMLHighlightBoxElement extends Components.HighlightBox, HTMLStencilElement {
+    }
+    var HTMLHighlightBoxElement: {
+        prototype: HTMLHighlightBoxElement;
+        new (): HTMLHighlightBoxElement;
+    };
     interface HTMLImageCropperElement extends Components.ImageCropper, HTMLStencilElement {
     }
     var HTMLImageCropperElement: {
@@ -156,6 +166,7 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "cropper-handler": HTMLCropperHandlerElement;
+        "highlight-box": HTMLHighlightBoxElement;
         "image-cropper": HTMLImageCropperElement;
         "image-search": HTMLImageSearchElement;
         "image-selector": HTMLImageSelectorElement;
@@ -173,11 +184,17 @@ declare namespace LocalJSX {
         "handler"?: Handler;
         "onHandlerMoved"?: (event: CustomEvent<Handler>) => void;
     }
+    interface HighlightBox {
+        "image"?: HTMLImageElement | undefined;
+        "selection"?: ClipShape | undefined;
+    }
     interface ImageCropper {
+        "onCropperMoved"?: (event: CustomEvent<Rectangle>) => void;
         "onMouseRelease"?: (event: CustomEvent<void>) => void;
     }
     interface ImageSearch {
         "onObjectsDetected"?: (event: CustomEvent<DetectedObject[]>) => void;
+        "onToggleCropping"?: (event: CustomEvent<boolean>) => void;
         /**
           * Mediaopt customer token
          */
@@ -187,7 +204,6 @@ declare namespace LocalJSX {
         "onImageSelected"?: (event: CustomEvent<File>) => void;
     }
     interface ImageView {
-        "hidden"?: boolean;
     }
     interface SearchFilters {
         "filter"?: SearchSessionFilter | null;
@@ -264,6 +280,7 @@ declare namespace LocalJSX {
     }
     interface IntrinsicElements {
         "cropper-handler": CropperHandler;
+        "highlight-box": HighlightBox;
         "image-cropper": ImageCropper;
         "image-search": ImageSearch;
         "image-selector": ImageSelector;
@@ -280,6 +297,7 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "cropper-handler": LocalJSX.CropperHandler & JSXBase.HTMLAttributes<HTMLCropperHandlerElement>;
+            "highlight-box": LocalJSX.HighlightBox & JSXBase.HTMLAttributes<HTMLHighlightBoxElement>;
             "image-cropper": LocalJSX.ImageCropper & JSXBase.HTMLAttributes<HTMLImageCropperElement>;
             "image-search": LocalJSX.ImageSearch & JSXBase.HTMLAttributes<HTMLImageSearchElement>;
             "image-selector": LocalJSX.ImageSelector & JSXBase.HTMLAttributes<HTMLImageSelectorElement>;

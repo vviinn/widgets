@@ -6,7 +6,7 @@ import { Recommendation } from "../recommendation/recommendation";
 import { sequenceT } from "fp-ts/Apply";
 import * as E from "fp-ts/Either";
 import * as TE from "fp-ts/TaskEither";
-import { RectangleAlt } from "../geometry/Rectangle";
+import { RectangleAlt } from "../geometry/RectangleAlt";
 
 const sequenceToEither = sequenceT(E.either);
 
