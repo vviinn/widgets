@@ -67,8 +67,8 @@ const composeRectangleData = (
     existAndNotEmpty,
     E.map((token) => {
       const data = {
-        left: rectangle.position.x,
-        top: rectangle.position.y,
+        left: rectangle.x,
+        top: rectangle.y,
         width: rectangle.width,
         height: rectangle.height,
       };
@@ -104,14 +104,17 @@ export class ImageSearch {
   /** Mediaopt customer token */
   @Prop() token: string;
 
-  @Event({ bubbles: true }) objectsDetected: EventEmitter<DetectedObject[]>;
+  @Event({ bubbles: true }) objectsDetected: EventEmitter<
+    IonItem<DetectedObject>[]
+  >;
+  @Event({ bubbles: true }) toggleCropping: EventEmitter<boolean>;
 
   @State() loading: boolean = false;
   @State() imageSelected: boolean = false;
   @State() showCropper: boolean = false;
+  @State() showDetectedObjects: boolean = false;
   @State() products: Recommendation[] = [];
   @State() filters: SearchSessionFilter[] = [];
-  @State() detectedObjects: DetectedObject[] = [];
   @State() rectangleSearchLink: O.Option<IonLink> = O.none;
   @State() clearFiltersLink: O.Option<IonLink> = O.none;
 
@@ -146,6 +149,12 @@ export class ImageSearch {
     );
   }
 
+  @Listen("detectedObjectSelected")
+  handleDetectedObjectSelected({ detail }: CustomEvent<[Rectangle, IonLink]>) {
+    const [rectangle, link] = detail;
+    this.createRectangleRequest(link, rectangle);
+  }
+
   private async handleRecommendationsLink(link: IonLink) {
     this.loading = true;
 
@@ -167,19 +176,22 @@ export class ImageSearch {
 
   private async processSearchRequest(data: IonSearchSession) {
     this.loading = false;
+    this.showDetectedObjects = false;
     await this.slider.resetSliderPosition();
     this.handleSearchSuccess(data.value);
-    this.showFilters(data.filters);
-    this.showDetectedObjects(data.detectedObjects);
+    this.renderFilters(data.filters);
+    this.renderDetectedObjects(data.detectedObjects);
     this.rectangleSearchLink = getLink(data, "rectangle");
     this.clearFiltersLink = getLink(data, "clearFilters");
   }
 
-  private showDetectedObjects(detectedObjects: DetectedObject[]) {
+  private renderDetectedObjects(detectedObjects: IonItem<DetectedObject>[]) {
     this.objectsDetected.emit(detectedObjects);
+    if (!this.showCropper && detectedObjects.length > 0)
+      this.showDetectedObjects = true;
   }
 
-  private showFilters(filters: IonItem<SearchSessionFilters>) {
+  private renderFilters(filters: IonItem<SearchSessionFilters>) {
     this.filters = readFilters(foldIonItem(filters));
   }
 
@@ -192,26 +204,30 @@ export class ImageSearch {
   }
 
   private async toggleCropper() {
-    if (this.showCropper && this.cropper) {
-      const selection: Rectangle = await this.cropper.getSelection();
-      const image: HTMLImageElement = this.el.shadowRoot
-        .querySelector("image-view")
-        .shadowRoot.querySelector("img");
-
-      const imageRect = fromImage(image);
-      const originImageRect = fromNaturalImage(image);
-      const scaledSelection = scaleSelection(
-        imageRect,
-        selection,
-        originImageRect
-      );
-
-      pipe(
-        this.rectangleSearchLink,
-        O.map((link) => this.createRectangleRequest(link, scaledSelection))
-      );
-    }
     this.showCropper = !this.showCropper;
+    this.showDetectedObjects = !this.showCropper;
+
+    this.toggleCropping.emit(this.showCropper);
+  }
+
+  private async cropImage() {
+    const selection: Rectangle = await this.cropper.getSelection();
+    const image: HTMLImageElement = this.el.shadowRoot
+      .querySelector("image-view")
+      .shadowRoot.querySelector("img");
+
+    const imageRect = fromImage(image);
+    const originImageRect = fromNaturalImage(image);
+    const scaledSelection = scaleSelection(
+      imageRect,
+      selection,
+      originImageRect
+    );
+
+    pipe(
+      this.rectangleSearchLink,
+      O.map((link) => this.createRectangleRequest(link, scaledSelection))
+    );
   }
 
   private async createRectangleRequest(link: IonLink, selection: Rectangle) {
@@ -243,10 +259,16 @@ export class ImageSearch {
       <Host>
         <image-selector />
         <div class="image-view">
-          <image-view hidden={!this.imageSelected} />
-          {this.showCropper ? (
-            <image-cropper ref={(el) => (this.cropper = el)} />
-          ) : null}
+          <image-view
+            class={{
+              hidden: !this.imageSelected,
+              dimmed: this.showCropper || this.showDetectedObjects,
+            }}
+          />
+          <image-cropper
+            class={{ hidden: !this.showCropper }}
+            ref={(el) => (this.cropper = el)}
+          />
         </div>
         {this.loading ? (
           <div class="loader">
@@ -254,9 +276,14 @@ export class ImageSearch {
           </div>
         ) : null}
         {O.isSome(this.rectangleSearchLink) ? (
-          <button onClick={() => this.toggleCropper()}>
-            {this.showCropper ? "select region" : "show cropper"}
-          </button>
+          <div class="cropper-controls">
+            <button onClick={() => this.toggleCropper()}>
+              {this.showCropper ? "hide cropper" : "show cropper"}
+            </button>
+            {this.showCropper ? (
+              <button onClick={() => this.cropImage()}>crop region</button>
+            ) : null}
+          </div>
         ) : null}
         {this.filters.map((f) => (
           <search-filters filter={f} />

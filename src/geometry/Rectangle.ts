@@ -1,37 +1,38 @@
-import { Point, pointSumSemigroup } from "./Point";
+import {
+  Point,
+  fromRectangle,
+  pointSumSemigroup,
+  pointProductSemigroup,
+} from "./Point";
 import { Handler, HandlerDirection } from "../cropper/Handler";
+import { Sized, sizedDivSemigroup } from "./Sized";
+import { RectangleAlt } from "./RectangleAlt";
 
-export interface Rectangle {
-  readonly position: Point;
-  readonly width: number;
-  readonly height: number;
-}
-
-export interface RectangleAlt {
-  readonly top: number;
-  readonly left: number;
-  readonly width: number;
-  readonly height: number;
-}
+export type Rectangle = Point & Sized;
 
 interface RectangleTransform {
   (x: Rectangle, y: Handler): Rectangle;
 }
 
 export const move = (origin: Rectangle, position: Point): Rectangle => {
+  const originPosition = fromRectangle(origin);
+  const newPosition = pointSumSemigroup.concat(originPosition, position);
+
   return {
-    position: pointSumSemigroup.concat(origin.position, position),
+    ...newPosition,
     width: origin.width,
     height: origin.height,
   };
 };
 
 const transformNorthEast: RectangleTransform = (origin, handler) => {
+  const newPosition = pointSumSemigroup.concat(fromRectangle(origin), {
+    x: 0,
+    y: handler.position.y,
+  });
+
   return {
-    position: pointSumSemigroup.concat(origin.position, {
-      x: 0,
-      y: handler.position.y,
-    }),
+    ...newPosition,
     width: origin.width + handler.position.x,
     height: origin.height - handler.position.y,
   };
@@ -41,22 +42,26 @@ export const transformNorthWest = (
   origin: Rectangle,
   handler: Handler
 ): Rectangle => {
+  const newPosition = pointSumSemigroup.concat(
+    fromRectangle(origin),
+    handler.position
+  );
+
   return {
-    position: pointSumSemigroup.concat(origin.position, {
-      x: handler.position.x,
-      y: handler.position.y,
-    }),
+    ...newPosition,
     width: origin.width - handler.position.x,
     height: origin.height - handler.position.y,
   };
 };
 
 const transformNorth: RectangleTransform = (origin, handler) => {
+  const newPosition = pointSumSemigroup.concat(fromRectangle(origin), {
+    x: 0,
+    y: handler.position.y,
+  });
+
   return {
-    position: pointSumSemigroup.concat(origin.position, {
-      x: 0,
-      y: handler.position.y,
-    }),
+    ...newPosition,
     width: origin.width,
     height: origin.height - handler.position.y,
   };
@@ -64,18 +69,20 @@ const transformNorth: RectangleTransform = (origin, handler) => {
 
 const transformEast: RectangleTransform = (origin, handler) => {
   return {
-    position: origin.position,
+    ...origin,
     width: origin.width + handler.position.x,
     height: origin.height,
   };
 };
 
 const transformWest: RectangleTransform = (origin, handler) => {
+  const newPosition = pointSumSemigroup.concat(fromRectangle(origin), {
+    x: handler.position.x,
+    y: 0,
+  });
+
   return {
-    position: pointSumSemigroup.concat(origin.position, {
-      x: handler.position.x,
-      y: 0,
-    }),
+    ...newPosition,
     width: origin.width - handler.position.x,
     height: origin.height,
   };
@@ -83,7 +90,7 @@ const transformWest: RectangleTransform = (origin, handler) => {
 
 const transformSouth: RectangleTransform = (origin, handler) => {
   return {
-    position: origin.position,
+    ...origin,
     width: origin.width,
     height: origin.height + handler.position.y,
   };
@@ -91,18 +98,20 @@ const transformSouth: RectangleTransform = (origin, handler) => {
 
 const transformSouthEast: RectangleTransform = (origin, handler) => {
   return {
-    position: origin.position,
+    ...origin,
     width: origin.width + handler.position.x,
     height: origin.height + handler.position.y,
   };
 };
 
 const transformSouthWest = (origin: Rectangle, handler: Handler): Rectangle => {
+  const newPosition = pointSumSemigroup.concat(fromRectangle(origin), {
+    x: handler.position.x,
+    y: 0,
+  });
+
   return {
-    position: pointSumSemigroup.concat(origin.position, {
-      x: handler.position.x,
-      y: 0,
-    }),
+    ...newPosition,
     width: origin.width - handler.position.x,
     height: origin.height + handler.position.y,
   };
@@ -131,10 +140,8 @@ export const transform: RectangleTransform = (origin, handler) => {
 
 export const fromImage = (image: HTMLImageElement): Rectangle => {
   return {
-    position: {
-      x: 0,
-      y: 0,
-    },
+    x: 0,
+    y: 0,
     width: image.width,
     height: image.height,
   };
@@ -142,30 +149,18 @@ export const fromImage = (image: HTMLImageElement): Rectangle => {
 
 export const fromNaturalImage = (image: HTMLImageElement): Rectangle => {
   return {
-    position: {
-      x: 0,
-      y: 0,
-    },
+    x: 0,
+    y: 0,
     width: image.naturalWidth,
     height: image.naturalHeight,
   };
 };
 
-export const scale = (x: Rectangle, y: Rectangle): Rectangle => {
+export const getScaleRange = (source: Rectangle, target: Rectangle): Point => {
+  const difference = sizedDivSemigroup.concat(target, source);
   return {
-    position: {
-      x: x.width * x.position.x,
-      y: x.height * x.position.y,
-    },
-    width: y.width,
-    height: y.height,
-  };
-};
-
-const getScaleRange = (source: Rectangle, target: Rectangle): Point => {
-  return {
-    x: target.width / source.width,
-    y: target.height / source.height,
+    x: difference.width,
+    y: difference.height,
   };
 };
 
@@ -174,14 +169,49 @@ export const scaleSelection = (
   sourceSelection: Rectangle,
   target: Rectangle
 ): Rectangle => {
+  const sourcePosition = fromRectangle(source);
   const scale = getScaleRange(source, target);
+  const newPosition = pointProductSemigroup.concat(sourcePosition, scale);
 
   return {
-    position: {
-      x: sourceSelection.position.x * scale.x,
-      y: sourceSelection.position.y * scale.y,
-    },
+    ...newPosition,
     width: sourceSelection.width * scale.x,
     height: sourceSelection.height * scale.y,
+  };
+};
+
+export const fromAlt = (r: RectangleAlt): Rectangle => {
+  const { width, height } = r;
+
+  return {
+    x: r.left,
+    y: r.top,
+    width,
+    height,
+  };
+};
+
+export const scaleWithSized = (s: Sized) => (r: Rectangle): Rectangle => {
+  return {
+    x: r.x * s.width,
+    y: r.y * s.height,
+    width: r.width * s.width,
+    height: r.height * s.height,
+  };
+};
+
+export const divideOnSized = (s: Sized) => (r: Rectangle): Rectangle => {
+  return {
+    x: r.x / s.width,
+    y: r.y / s.height,
+    width: r.width / s.width,
+    height: r.height / s.height,
+  };
+};
+
+export const center = (r: Rectangle): Point => {
+  return {
+    x: r.x + r.width * 0.5,
+    y: r.y + r.height * 0.5,
   };
 };

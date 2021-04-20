@@ -6,3 +6,10 @@
 .image-view {
   position: relative;
 }
+
+.cropper-controls {
+  display: grid;
+  grid-gap: 1rem;
+  grid-auto-flow: column;
+}
+

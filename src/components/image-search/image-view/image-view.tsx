@@ -1,7 +1,19 @@
-import { Component, Host, h, Listen, Prop, State } from "@stencil/core";
+import { Component, Host, h, Listen, State } from "@stencil/core";
 import { fromFile } from "../../../Image/fromFile";
-import { Rectangle } from "../../../geometry/Rectangle";
-import { DetectedObject } from "../../../searchSession/searchSession";
+import { fromAlt, Rectangle, divideOnSized } from "../../../geometry/Rectangle";
+import { ObjectsDetectedEvent } from "../../../searchSession/searchSession";
+import * as Arr from "fp-ts/Array";
+import * as O from "fp-ts/Option";
+import { getLink, IonLink } from "../../../network/ionClient";
+import * as Ord from "fp-ts/Ord";
+type Mode = "objects" | "crop";
+
+type DetectedObjectWithLink = [Rectangle, O.Option<IonLink>];
+
+const ordDetectedObjects: Ord.Ord<DetectedObjectWithLink> = Ord.contramap<
+  number,
+  DetectedObjectWithLink
+>((s) => s[0].width * s[0].height)(Ord.ordNumber);
 
 @Component({
   tag: "image-view",
@@ -11,52 +23,60 @@ import { DetectedObject } from "../../../searchSession/searchSession";
 export class ImageView {
   private imageContainer: HTMLImageElement | undefined;
   private image: HTMLImageElement | undefined;
+  private detectedObjects: DetectedObjectWithLink[] = [];
+  private cropView: Rectangle;
 
-  @Prop() hidden: boolean = false;
+  @State() selections: DetectedObjectWithLink[] = [];
+  @State() mode: Mode = "objects";
 
-  @State() objectsView: Map<DetectedObject, Rectangle> = new Map();
+  @Listen("toggleCropping", { target: "document" })
+  async handleTogglingCropper({ detail }: CustomEvent<boolean>) {
+    this.selections = detail ? [[this.cropView, O.none]] : this.detectedObjects;
+    this.mode = detail ? "crop" : "objects";
+  }
 
   @Listen("imageSelected", { target: "document" })
   async handleImageSelect({ detail }: CustomEvent<File>) {
     this.image = await fromFile(detail);
     this.imageContainer.src = this.image.src;
+
+    this.detectedObjects = [];
+    this.selections = [];
+    this.mode = "objects";
   }
 
   @Listen("objectsDetected", { target: "document" })
-  async handleObjectsDetected({ detail }: CustomEvent<DetectedObject[]>) {
-    this.objectsView = new Map();
+  async handleObjectsDetected({ detail }: ObjectsDetectedEvent) {
+    this.detectedObjects = detail.map((x) => [
+      fromAlt(x.value.rectangle),
+      getLink(x, "rectangle"),
+    ]);
 
-    for (const o of detail) {
-      const rect: Rectangle = {
-        position: {
-          x: this.image.width * o.rectangle.left,
-          y: this.image.height * o.rectangle.top,
-        },
-        width: this.image.width * o.rectangle.width,
-        height: this.image.height * o.rectangle.height,
-      };
-
-      this.objectsView.set(o, rect);
+    if (this.mode === "objects") {
+      this.selections = this.detectedObjects;
     }
+  }
+
+  @Listen("cropperMoved", { target: "document" })
+  handleCropping({ detail }: CustomEvent<Rectangle>) {
+    this.cropView = divideOnSized(this.image)(detail);
+    console.log(this.cropView);
+    this.selections = [[this.cropView, O.none]];
   }
 
   render() {
     return (
-      <Host class={{ hidden: this.hidden }}>
-        {[...this.objectsView.entries()].map(([object, rect]) => (
-          <div class="detected-object">
-            <selection-box selection={rect} />
-            <span
-              class="detected-object-name"
-              style={{
-                transform: `translate(${rect.position.x}px, ${rect.position.y}px)`,
-              }}
-            >
-              {object.class} {object.score}%
-            </span>
-          </div>
-        ))}
-
+      <Host>
+        {Arr.sort(ordDetectedObjects)(this.selections)
+          .reverse()
+          .map((s, i) => (
+            <highlight-box
+              image={this.image}
+              selection={s[0]}
+              link={s[1]}
+              index={i + 1}
+            />
+          ))}
         <img ref={(el) => (this.imageContainer = el)} />
       </Host>
     );

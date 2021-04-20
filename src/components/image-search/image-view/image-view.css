@@ -6,18 +6,12 @@
   display: none;
 }
 
-:host.hidden {
-  display: none;
-}
-
-img {
-  border: 1px solid lightgray;
+:host(.dimmed) img {
+  filter: brightness(60%);
+  position: relative;
+  z-index: -1;
 }
 
 .detected-object {
   position: absolute;
-}
-
-.detected-object-name {
-  display: inline-block; 
 }

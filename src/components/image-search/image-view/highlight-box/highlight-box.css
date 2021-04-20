@@ -1,0 +1,31 @@
+:host {
+  display: block;
+  position: absolute;
+  box-sizing: border-box;
+  border: none;
+
+  --size: 10px;
+}
+
+.pointer {
+  position: absolute;
+  width: var(--size);
+  height: var(--size);
+  background: black;
+  border-radius: 50%;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.pointer::after {
+  content: "";
+  cursor: pointer;
+  border: 5px solid black;
+  border-radius: 50%;
+  width: var(--size);
+  height: var(--size);
+  display: block;
+  transform: translate(calc(-50% + var(--size) * 0.5), calc(-50% + var(--size) * 0.5));
+  padding: calc(var(--size) * 0.5);
+  opacity: .75;
+}

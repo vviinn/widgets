@@ -6,7 +6,7 @@ import { Recommendation } from "../recommendation/recommendation";
 import { sequenceT } from "fp-ts/Apply";
 import * as E from "fp-ts/Either";
 import * as TE from "fp-ts/TaskEither";
-import { RectangleAlt } from "../geometry/Rectangle";
+import { RectangleAlt } from "../geometry/RectangleAlt";
 
 const sequenceToEither = sequenceT(E.either);
 
@@ -37,7 +37,7 @@ export type DetectedObject = {
 };
 
 type WithRectangle = {
-  readonly detectedObjects: DetectedObject[];
+  readonly detectedObjects: IonItem<DetectedObject>[];
 };
 
 export type IonSearchSession = IonItem<Recommendation[]> &
@@ -51,3 +51,5 @@ export const searchSessionClient = (initialData: RequestInit) =>
     TE.mapLeft(networkErrorFrom),
     TE.chain(makeRequest<IonSearchSession>("search/session", initialData))
   );
+
+export type ObjectsDetectedEvent = CustomEvent<IonItem<DetectedObject>[]>;

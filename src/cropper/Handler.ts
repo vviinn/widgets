@@ -1,4 +1,4 @@
-import { Point, pointSumSemigroup } from "../geometry/Point";
+import * as Point from "../geometry/Point";
 import { Rectangle } from "../geometry/Rectangle";
 
 export enum HandlerDirection {
@@ -36,47 +36,62 @@ export const getCursorValue = (direction: HandlerDirection): string => {
 };
 
 export interface Handler {
-  position: Point;
+  position: Point.Point;
   readonly direction: HandlerDirection;
 }
 
 export const fromRectangle = (r: Rectangle): Handler[] => [
   {
-    position: r.position,
+    position: Point.fromRectangle(r),
     direction: HandlerDirection.NorthWest,
   },
   {
-    position: pointSumSemigroup.concat(r.position, { x: r.width * 0.5, y: 0 }),
+    position: Point.pointSumSemigroup.concat(Point.fromRectangle(r), {
+      x: r.width * 0.5,
+      y: 0,
+    }),
     direction: HandlerDirection.North,
   },
   {
-    position: pointSumSemigroup.concat(r.position, { x: r.width, y: 0 }),
+    position: Point.pointSumSemigroup.concat(Point.fromRectangle(r), {
+      x: r.width,
+      y: 0,
+    }),
     direction: HandlerDirection.NorthEast,
   },
   {
-    position: pointSumSemigroup.concat(r.position, { x: 0, y: r.height * 0.5 }),
+    position: Point.pointSumSemigroup.concat(Point.fromRectangle(r), {
+      x: 0,
+      y: r.height * 0.5,
+    }),
     direction: HandlerDirection.West,
   },
   {
-    position: pointSumSemigroup.concat(r.position, {
+    position: Point.pointSumSemigroup.concat(Point.fromRectangle(r), {
       x: r.width,
       y: r.height * 0.5,
     }),
     direction: HandlerDirection.East,
   },
   {
-    position: pointSumSemigroup.concat(r.position, { x: 0, y: r.height }),
+    position: Point.pointSumSemigroup.concat(Point.fromRectangle(r), {
+      x: 0,
+      y: r.height,
+    }),
     direction: HandlerDirection.SouthWest,
   },
   {
-    position: pointSumSemigroup.concat(r.position, {
+    position: Point.pointSumSemigroup.concat(Point.fromRectangle(r), {
       x: r.width * 0.5,
       y: r.height,
     }),
     direction: HandlerDirection.South,
   },
   {
-    position: pointSumSemigroup.concat(r.position, { x: r.width, y: r.height }),
+    position: Point.pointSumSemigroup.concat(Point.fromRectangle(r), {
+      x: r.width,
+      y: r.height,
+    }),
     direction: HandlerDirection.SouthEast,
   },
 ];
