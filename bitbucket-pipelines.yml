@@ -3,7 +3,7 @@
 # Only use spaces to indent your .yml configuration.
 # -----
 # You can specify a custom docker image from Docker Hub as your build environment.
-image: circleci/node:15-browsers
+image: circleci/node:15.14.0-browsers
 
 pipelines:
   branches:
@@ -18,7 +18,6 @@ pipelines:
             - echo "RECOMMENDATIONS_URL=https://stage.mediaopt.tools/product/" >> .env
             - npm install
             - npm run build_interfaces
-            - npm run test
             - npm run build
     master:
       - step:
@@ -31,7 +30,6 @@ pipelines:
             - echo "RECOMMENDATIONS_URL=https://mediaopt.tools/product/" >> .env
             - npm install
             - npm run build_interfaces
-            - npm run test
             - npm run build
   # tags:
   #   'v*.*.*':
@@ -54,6 +52,8 @@ pipelines:
     test:
       - step:
           name: Tests
+          caches: 
+            - node
           script:
             - touch .env
             - echo "OPENAPI_URL=https://docs.mediaopt.tools/openapi.yaml" >> .env
