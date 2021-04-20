@@ -27,7 +27,8 @@ export class ImageCropper {
   @Element() el: HTMLElement;
 
   @State() cropArea: Rectangle = {
-    position: { x: 20, y: 20 },
+    x: 20,
+    y: 20,
     width: 25,
     height: 25,
   };
@@ -46,10 +47,8 @@ export class ImageCropper {
     const image = await fromFile(detail);
     image.onload = () => {
       this.cropArea = {
-        position: {
-          x: 10,
-          y: 10
-        },
+        x: 10,
+        y: 10,
         width: image.width * 0.5,
         height: image.height * 0.5
       };
@@ -97,7 +96,8 @@ export class ImageCropper {
     this.bounds = this.el.getBoundingClientRect();
     const { width, height } = this.bounds;
     this.cropArea = {
-      position: { x: 20, y: 20 },
+      x: 20,
+      y: 20,
       width: width * 0.5,
       height: height * 0.5,
     };
@@ -123,11 +123,11 @@ export class ImageCropper {
 
   private checkBounds(rectangle: Rectangle): boolean {
     const bounds = this.el.getBoundingClientRect();
-    const inTopBound = rectangle.position.y > 0;
-    const inLeftBound = rectangle.position.x > 0;
-    const inRightBound = rectangle.position.x + rectangle.width < bounds.width;
+    const inTopBound = rectangle.y > 0;
+    const inLeftBound = rectangle.x > 0;
+    const inRightBound = rectangle.x + rectangle.width < bounds.width;
     const inBottomBound =
-      rectangle.position.y + rectangle.height < bounds.height;
+      rectangle.y + rectangle.height < bounds.height;
 
     return inTopBound && inLeftBound && inRightBound && inBottomBound;
   }
@@ -140,7 +140,7 @@ export class ImageCropper {
           style={{
             width: `${this.cropArea.width}px`,
             height: `${this.cropArea.height}px`,
-            transform: `translate(${this.cropArea.position.x}px, ${this.cropArea.position.y}px)`,
+            transform: `translate(${this.cropArea.x}px, ${this.cropArea.y}px)`,
             cursor: this.handleMove ? "move" : "default",
           }}
           onMouseDown={(ev) => this.handleMouseDown(ev)}

@@ -67,8 +67,8 @@ const composeRectangleData = (
     existAndNotEmpty,
     E.map((token) => {
       const data = {
-        left: rectangle.position.x,
-        top: rectangle.position.y,
+        left: rectangle.x,
+        top: rectangle.y,
         width: rectangle.width,
         height: rectangle.height,
       };
@@ -104,7 +104,9 @@ export class ImageSearch {
   /** Mediaopt customer token */
   @Prop() token: string;
 
-  @Event({ bubbles: true }) objectsDetected: EventEmitter<DetectedObject[]>;
+  @Event({ bubbles: true }) objectsDetected: EventEmitter<
+    IonItem<DetectedObject>[]
+  >;
   @Event({ bubbles: true }) toggleCropping: EventEmitter<boolean>;
 
   @State() loading: boolean = false;
@@ -147,6 +149,12 @@ export class ImageSearch {
     );
   }
 
+  @Listen("detectedObjectSelected")
+  handleDetectedObjectSelected({ detail }: CustomEvent<[Rectangle, IonLink]>) {
+    const [rectangle, link] = detail;
+    this.createRectangleRequest(link, rectangle);
+  }
+
   private async handleRecommendationsLink(link: IonLink) {
     this.loading = true;
 
@@ -177,9 +185,10 @@ export class ImageSearch {
     this.clearFiltersLink = getLink(data, "clearFilters");
   }
 
-  private renderDetectedObjects(detectedObjects: DetectedObject[]) {
+  private renderDetectedObjects(detectedObjects: IonItem<DetectedObject>[]) {
     this.objectsDetected.emit(detectedObjects);
-    if (!this.showCropper && detectedObjects.length > 0) this.showDetectedObjects = true;
+    if (!this.showCropper && detectedObjects.length > 0)
+      this.showDetectedObjects = true;
   }
 
   private renderFilters(filters: IonItem<SearchSessionFilters>) {
@@ -253,13 +262,12 @@ export class ImageSearch {
           <image-view
             class={{
               hidden: !this.imageSelected,
-              dimmed: this.showCropper || this.showDetectedObjects
+              dimmed: this.showCropper || this.showDetectedObjects,
             }}
           />
           <image-cropper
             class={{ hidden: !this.showCropper }}
-      ref={(el) => (this.cropper = el)}
-      
+            ref={(el) => (this.cropper = el)}
           />
         </div>
         {this.loading ? (

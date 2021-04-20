@@ -8,6 +8,8 @@
 
 :host(.dimmed) img {
   filter: brightness(60%);
+  position: relative;
+  z-index: -1;
 }
 
 .detected-object {

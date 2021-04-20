@@ -1,9 +1,14 @@
-import { Component, Host, h, Prop } from "@stencil/core";
-import { ClipShape, getClipValue } from "../../../../geometry/Clip";
-import * as O from "fp-ts/Option";
+import { Component, Host, h, Prop, Event, EventEmitter } from "@stencil/core";
+import { getClipValue } from "../../../../geometry/Clip";
+import * as O from "fp-ts/lib/Option";
+import { Option } from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/function";
-import { Rectangular } from "../../../../geometry/Rectangle";
-import { RectangleAlt } from "../../../../geometry/RectangleAlt";
+import {
+  Rectangle,
+  scaleWithSized,
+  center,
+} from "../../../../geometry/Rectangle";
+import { IonLink } from "../../../../network/ionClient";
 
 @Component({
   tag: "highlight-box",
@@ -12,45 +17,60 @@ import { RectangleAlt } from "../../../../geometry/RectangleAlt";
 })
 export class HighlightBox {
   @Prop() image: HTMLImageElement | undefined;
-  @Prop() selection: ClipShape | undefined;
+  @Prop() selection: Rectangle | undefined;
+  @Prop() link: Option<IonLink> | undefined;
+  @Prop() index: number = 0;
+
+  @Event() detectedObjectSelected:
+    | EventEmitter<[Rectangle, IonLink]>
+    | undefined;
+
+  connectedCallback() {
+    console.log(this.selection);
+  }
 
   private getInsetValue(): string {
     return pipe(
       O.fromNullable(this.selection),
+      O.map(scaleWithSized(this.image)),
       O.map((selection) => getClipValue(selection, this.image)),
       O.getOrElse(() => "")
     );
   }
 
   private translate(): string {
-    switch (this.selection.kind) {
-      case "rectangle":
-        return this.translateRectangle(this.selection);
-      case "rectangleAlt":
-        return this.translateRectangleAlt(this.selection);
-    }
+    return pipe(
+      O.fromNullable(this.selection),
+      O.map(scaleWithSized(this.image)),
+      O.map(center),
+      O.map((selection) => `translate(${selection.x}px, ${selection.y}px)`),
+      O.getOrElse(() => "")
+    );
   }
 
-  private translateRectangle(rect: Rectangular): string {
-    return `translate(${rect.position.x}px, ${rect.position.y}px)`;
-  }
-
-  private translateRectangleAlt(rect: RectangleAlt): string {
-    const top = this.image.height * rect.top;
-    const left = this.image.width * rect.left;
-    const width = this.image.width * rect.width;
-    const height = this.image.height * rect.height;
-
-    return `translate(${left + width * 0.5}px, ${top + height * 0.5}px)`;
+  private drawPointer(): HTMLDivElement {
+    return pipe(
+      this.link,
+      O.map((link) => (
+        <div
+          class="pointer"
+          style={{
+            transform: this.translate(),
+            "z-index": `${this.index + 5}`,
+          }}
+          onClick={() =>
+            this.detectedObjectSelected.emit([this.selection, link])
+          }
+        ></div>
+      )),
+      O.getOrElse(() => null)
+    );
   }
 
   render() {
     return (
       <Host>
-        {this.selection.kind === "rectangleAlt" ? (
-          <div class="pointer" style={{ transform: this.translate() }}></div>
-        ) : null}
-
+        {this.drawPointer()}
         <img
           src={this.image.src}
           style={{

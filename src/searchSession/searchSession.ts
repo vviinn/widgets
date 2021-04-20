@@ -37,7 +37,7 @@ export type DetectedObject = {
 };
 
 type WithRectangle = {
-  readonly detectedObjects: DetectedObject[];
+  readonly detectedObjects: IonItem<DetectedObject>[];
 };
 
 export type IonSearchSession = IonItem<Recommendation[]> &
@@ -51,3 +51,5 @@ export const searchSessionClient = (initialData: RequestInit) =>
     TE.mapLeft(networkErrorFrom),
     TE.chain(makeRequest<IonSearchSession>("search/session", initialData))
   );
+
+export type ObjectsDetectedEvent = CustomEvent<IonItem<DetectedObject>[]>;
