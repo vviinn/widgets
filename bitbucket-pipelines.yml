@@ -58,6 +58,6 @@ pipelines:
             - touch .env
             - echo "OPENAPI_URL=https://docs.mediaopt.tools/openapi.yaml" >> .env
             - echo "RECOMMENDATIONS_URL=https://mediaopt.tools/product/" >> .env
-            - npm install
+            - PUPPETEER_PRODUCT=firefox npm install
             - npm run build_interfaces 
             - npm run test
