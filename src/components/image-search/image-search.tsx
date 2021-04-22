@@ -257,8 +257,20 @@ export class ImageSearch {
   render() {
     return (
       <Host>
-        <image-selector />
-        <div class="image-view">
+        <image-selector
+          part="image-selector"
+          exportparts="drop-zone, button"
+          class={{ active: !this.imageSelected }}
+        >
+          <slot slot="upload-button-text" name="upload-button-text">
+            Click to select files
+          </slot>
+          <slot slot="upload-error-text" name="upload-error-text">
+            Use only image files!
+          </slot>
+          <slot name="drop-helper-text">or drop files here</slot>
+        </image-selector>
+        <div class="image-view" part={this.imageSelected ? "image-view" : ""}>
           <image-view
             class={{
               hidden: !this.imageSelected,
@@ -276,26 +288,28 @@ export class ImageSearch {
           </div>
         ) : null}
         {O.isSome(this.rectangleSearchLink) ? (
-          <div class="cropper-controls">
-            <button onClick={() => this.toggleCropper()}>
+          <div class="cropper-controls" part="controls">
+            <button part="button" onClick={() => this.toggleCropper()}>
               {this.showCropper ? "hide cropper" : "show cropper"}
             </button>
             {this.showCropper ? (
-              <button onClick={() => this.cropImage()}>crop region</button>
+              <button part="button" onClick={() => this.cropImage()}>
+                crop region
+              </button>
             ) : null}
           </div>
         ) : null}
         {this.filters.map((f) => (
-          <search-filters filter={f} />
+          <search-filters filter={f} part="filters" />
         ))}
         {O.isSome(this.clearFiltersLink) ? (
           <button onClick={() => this.clearFilters()}>Clear filters</button>
         ) : null}
         <vpr-slider
+          part="results"
           mode="grid"
           imageWidth={100}
           imageRatio={1}
-          part="grid"
           ref={(el) => (this.slider = el)}
         ></vpr-slider>
       </Host>
