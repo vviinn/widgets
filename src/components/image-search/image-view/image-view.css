@@ -1,5 +1,7 @@
 :host {
-  display: block;
+  display: grid;
+  align-content: center;
+  justify-content: center;
 }
 
 :host(.hidden) {
