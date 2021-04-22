@@ -25,10 +25,6 @@ export class HighlightBox {
     | EventEmitter<[Rectangle, IonLink]>
     | undefined;
 
-  connectedCallback() {
-    console.log(this.selection);
-  }
-
   private getInsetValue(): string {
     return pipe(
       O.fromNullable(this.selection),

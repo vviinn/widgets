@@ -60,7 +60,6 @@ export class ImageView {
   @Listen("cropperMoved", { target: "document" })
   handleCropping({ detail }: CustomEvent<Rectangle>) {
     this.cropView = divideOnSized(this.image)(detail);
-    console.log(this.cropView);
     this.selections = [[this.cropView, O.none]];
   }
 

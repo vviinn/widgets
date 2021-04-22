@@ -1,4 +1,12 @@
-import { Component, Host, h, State, Event, EventEmitter } from "@stencil/core";
+import {
+  Component,
+  Host,
+  h,
+  Prop,
+  State,
+  Event,
+  EventEmitter,
+} from "@stencil/core";
 import * as O from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/function";
 import { fromFile } from "../../../Image/fromFile";
@@ -14,6 +22,7 @@ const checkImageType = (f: File): O.Option<File> =>
   shadow: true,
 })
 export class ImageSelector {
+  @Prop() useDrag: boolean = false;
   @State() dragover: boolean = false;
   @State() error: boolean = false;
 
@@ -64,9 +73,13 @@ export class ImageSelector {
 
   render() {
     const fileMessage = this.error ? (
-      <span class="error">use only image files!</span>
+      <span class="error">
+        <slot name="upload-error-text"></slot>
+      </span>
     ) : (
-      <span>or drop files here</span>
+      <span>
+        <slot name="drop-helper-text"></slot>
+      </span>
     );
 
     return (
@@ -74,11 +87,15 @@ export class ImageSelector {
         <div
           class={{ dragover: this.dragover, error: this.error }}
           id="drop-zone"
-          onDrop={(ev) => this.handleDrop(ev)}
           onDragOver={(ev) => this.handleDragOver(ev)}
+          onDrop={(ev) => this.handleDrop(ev)}
+          part="drop-zone"
+          exportparts="file-button"
         >
-          <label htmlFor="fileInput">Click to select files</label>
-          {fileMessage}
+          <label htmlFor="fileInput" part="button">
+            <slot name="upload-button-text"></slot>
+          </label>
+          {this.useDrag ? fileMessage : null}
           <input
             ref={(el) => (this.input = el)}
             id="fileInput"

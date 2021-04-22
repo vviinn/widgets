@@ -35,13 +35,14 @@ export class SearchFilters {
 
   render() {
     return (
-      <Host>
+      <Host exportparts="filter, show-more-filters">
         <span>{this.filter.name}:</span>
         <div class="filters">
           {this.filter.filters
             .filter((_, i) => (this.hideFilters ? i < 5 : true))
             .map((f, n) => (
               <div
+                part="filter"
                 class={{
                   filter: true,
                   active: this.selectedCategoryId == getFilterId(f),
@@ -52,7 +53,11 @@ export class SearchFilters {
                 {f.name}
               </div>
             ))}
-          <div class="filter" onClick={() => this.toggleFilters()}>
+          <div
+            class="filter"
+            onClick={() => this.toggleFilters()}
+            part="show-more-filters"
+          >
             {this.hideFilters ? "show more" : "show less"}
           </div>
         </div>
