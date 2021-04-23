@@ -33,12 +33,7 @@ import {
   linkRequest,
 } from "../../network/ionClient";
 
-import {
-  fromImage,
-  fromNaturalImage,
-  Rectangle,
-  scaleSelection,
-} from "../../geometry/Rectangle";
+import { Rectangle } from "../../geometry/Rectangle";
 
 const composeData = (
   token: string,
@@ -119,7 +114,7 @@ export class ImageSearch {
   @State() clearFiltersLink: O.Option<IonLink> = O.none;
 
   private slider: HTMLVprSliderElement;
-  private cropper: HTMLImageCropperElement | undefined;
+  private cropArea: Rectangle | undefined = undefined;
 
   @Element() el: HTMLElement;
 
@@ -205,28 +200,13 @@ export class ImageSearch {
 
   private async toggleCropper() {
     this.showCropper = !this.showCropper;
-    this.showDetectedObjects = !this.showCropper;
-
     this.toggleCropping.emit(this.showCropper);
   }
 
   private async cropImage() {
-    const selection: Rectangle = await this.cropper.getSelection();
-    const image: HTMLImageElement = this.el.shadowRoot
-      .querySelector("image-view")
-      .shadowRoot.querySelector("img");
-
-    const imageRect = fromImage(image);
-    const originImageRect = fromNaturalImage(image);
-    const scaledSelection = scaleSelection(
-      imageRect,
-      selection,
-      originImageRect
-    );
-
     pipe(
       this.rectangleSearchLink,
-      O.map((link) => this.createRectangleRequest(link, scaledSelection))
+      O.map((link) => this.createRectangleRequest(link, this.cropArea))
     );
   }
 
@@ -274,12 +254,10 @@ export class ImageSearch {
           <image-view
             class={{
               hidden: !this.imageSelected,
-              dimmed: this.showCropper || this.showDetectedObjects,
             }}
-          />
-          <image-cropper
-            class={{ hidden: !this.showCropper }}
-            ref={(el) => (this.cropper = el)}
+            onCropAreaChanged={({ detail }: CustomEvent<Rectangle>) =>
+              (this.cropArea = detail)
+            }
           />
         </div>
         {this.loading ? (
@@ -308,6 +286,7 @@ export class ImageSearch {
         <vpr-slider
           part="results"
           mode="grid"
+          productsInGrid={16}
           imageWidth={100}
           imageRatio={1}
           ref={(el) => (this.slider = el)}

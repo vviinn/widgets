@@ -27,8 +27,8 @@ export class ImageCropper {
   @Element() el: HTMLElement;
 
   @State() cropArea: Rectangle = {
-    x: 20,
-    y: 20,
+    x: 100,
+    y: 100,
     width: 25,
     height: 25,
   };
@@ -47,8 +47,8 @@ export class ImageCropper {
     const image = await fromFile(detail);
     image.onload = () => {
       this.cropArea = {
-        x: 10,
-        y: 10,
+        x: image.width * 0.25,
+        y: image.height * 0.25,
         width: image.width * 0.5,
         height: image.height * 0.5
       };
