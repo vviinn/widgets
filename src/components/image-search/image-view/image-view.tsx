@@ -1,4 +1,12 @@
-import { Component, Host, h, Listen, State } from "@stencil/core";
+import {
+  Component,
+  Host,
+  h,
+  Listen,
+  State,
+  Event,
+  EventEmitter,
+} from "@stencil/core";
 import { fromFile } from "../../../Image/fromFile";
 import { fromAlt, Rectangle, divideOnSized } from "../../../geometry/Rectangle";
 import { ObjectsDetectedEvent } from "../../../searchSession/searchSession";
@@ -28,9 +36,13 @@ export class ImageView {
 
   @State() selections: DetectedObjectWithLink[] = [];
   @State() mode: Mode = "objects";
+  @State() showCropper: boolean = false;
+
+  @Event() cropAreaChanged: EventEmitter<Rectangle>;
 
   @Listen("toggleCropping", { target: "document" })
   async handleTogglingCropper({ detail }: CustomEvent<boolean>) {
+    this.showCropper = detail;
     this.selections = detail ? [[this.cropView, O.none]] : this.detectedObjects;
     this.mode = detail ? "crop" : "objects";
   }
@@ -59,24 +71,36 @@ export class ImageView {
 
   @Listen("cropperMoved", { target: "document" })
   handleCropping({ detail }: CustomEvent<Rectangle>) {
-    this.cropView = divideOnSized(this.image)(detail);
+    this.cropView = divideOnSized(this.imageContainer)(detail);
+    this.cropAreaChanged.emit(this.cropView);
     this.selections = [[this.cropView, O.none]];
   }
 
   render() {
     return (
-      <Host>
+      <Host
+        class={{
+          dimmed: this.mode === "crop" || !Arr.isEmpty(this.detectedObjects),
+        }}
+      >
         {Arr.sort(ordDetectedObjects)(this.selections)
           .reverse()
           .map((s, i) => (
             <highlight-box
-              image={this.image}
+              image={this.imageContainer}
               selection={s[0]}
               link={s[1]}
               index={i + 1}
             />
           ))}
         <img ref={(el) => (this.imageContainer = el)} />
+        <image-cropper
+          style={{
+            width: `${this.imageContainer?.width}px`,
+            height: `${this.imageContainer?.height}px`,
+          }}
+          class={{ hidden: !this.showCropper }}
+        />
       </Host>
     );
   }
