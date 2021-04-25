@@ -291,6 +291,9 @@ export class ImageSearch {
           imageRatio={1}
           ref={(el) => (this.slider = el)}
         ></vpr-slider>
+        <slot name="teaser">
+          Upload image using button above. Then you can specify results by selecting detected objects, cropping or filtering by results categories.
+        </slot>
       </Host>
     );
   }
