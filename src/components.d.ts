@@ -6,10 +6,10 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { Handler } from "./cropper/Handler";
-import { ClipShape } from "./geometry/Clip";
 import { Rectangle } from "./geometry/Rectangle";
+import { Option } from "fp-ts/lib/Option";
+import { IonItem, IonLink } from "./network/ionClient";
 import { DetectedObject, SearchSessionFilter } from "./searchSession/searchSession";
-import { IonLink } from "./network/ionClient";
 import { CampaignName } from "./campaign/Campaign";
 import { Recommendation } from "./recommendation/recommendation";
 import { GridMode } from "./slider/GridMode";
@@ -20,7 +20,9 @@ export namespace Components {
     }
     interface HighlightBox {
         "image": HTMLImageElement | undefined;
-        "selection": ClipShape | undefined;
+        "index": number;
+        "link": Option<IonLink> | undefined;
+        "selection": Rectangle | undefined;
     }
     interface ImageCropper {
         "getSelection": () => Promise<Rectangle>;
@@ -32,14 +34,12 @@ export namespace Components {
         "token": string;
     }
     interface ImageSelector {
+        "useDrag": boolean;
     }
     interface ImageView {
     }
     interface SearchFilters {
         "filter": SearchSessionFilter | null;
-    }
-    interface SelectionBox {
-        "selection": Rectangle | undefined;
     }
     interface ViVprView {
         /**
@@ -140,12 +140,6 @@ declare global {
         prototype: HTMLSearchFiltersElement;
         new (): HTMLSearchFiltersElement;
     };
-    interface HTMLSelectionBoxElement extends Components.SelectionBox, HTMLStencilElement {
-    }
-    var HTMLSelectionBoxElement: {
-        prototype: HTMLSelectionBoxElement;
-        new (): HTMLSelectionBoxElement;
-    };
     interface HTMLViVprViewElement extends Components.ViVprView, HTMLStencilElement {
     }
     var HTMLViVprViewElement: {
@@ -172,7 +166,6 @@ declare global {
         "image-selector": HTMLImageSelectorElement;
         "image-view": HTMLImageViewElement;
         "search-filters": HTMLSearchFiltersElement;
-        "selection-box": HTMLSelectionBoxElement;
         "vi-vpr-view": HTMLViVprViewElement;
         "vpr-result": HTMLVprResultElement;
         "vpr-slider": HTMLVprSliderElement;
@@ -186,14 +179,17 @@ declare namespace LocalJSX {
     }
     interface HighlightBox {
         "image"?: HTMLImageElement | undefined;
-        "selection"?: ClipShape | undefined;
+        "index"?: number;
+        "link"?: Option<IonLink> | undefined;
+        "onDetectedObjectSelected"?: (event: CustomEvent<any>) => void;
+        "selection"?: Rectangle | undefined;
     }
     interface ImageCropper {
         "onCropperMoved"?: (event: CustomEvent<Rectangle>) => void;
         "onMouseRelease"?: (event: CustomEvent<void>) => void;
     }
     interface ImageSearch {
-        "onObjectsDetected"?: (event: CustomEvent<DetectedObject[]>) => void;
+        "onObjectsDetected"?: (event: CustomEvent<IonItem<DetectedObject>[]>) => void;
         "onToggleCropping"?: (event: CustomEvent<boolean>) => void;
         /**
           * Mediaopt customer token
@@ -202,16 +198,14 @@ declare namespace LocalJSX {
     }
     interface ImageSelector {
         "onImageSelected"?: (event: CustomEvent<File>) => void;
+        "useDrag"?: boolean;
     }
     interface ImageView {
+        "onCropAreaChanged"?: (event: CustomEvent<Rectangle>) => void;
     }
     interface SearchFilters {
         "filter"?: SearchSessionFilter | null;
         "onFilterSelectedEvent"?: (event: CustomEvent<IonLink>) => void;
-    }
-    interface SelectionBox {
-        "onSelectionClicked"?: (event: CustomEvent<Rectangle>) => void;
-        "selection"?: Rectangle | undefined;
     }
     interface ViVprView {
         /**
@@ -286,7 +280,6 @@ declare namespace LocalJSX {
         "image-selector": ImageSelector;
         "image-view": ImageView;
         "search-filters": SearchFilters;
-        "selection-box": SelectionBox;
         "vi-vpr-view": ViVprView;
         "vpr-result": VprResult;
         "vpr-slider": VprSlider;
@@ -303,7 +296,6 @@ declare module "@stencil/core" {
             "image-selector": LocalJSX.ImageSelector & JSXBase.HTMLAttributes<HTMLImageSelectorElement>;
             "image-view": LocalJSX.ImageView & JSXBase.HTMLAttributes<HTMLImageViewElement>;
             "search-filters": LocalJSX.SearchFilters & JSXBase.HTMLAttributes<HTMLSearchFiltersElement>;
-            "selection-box": LocalJSX.SelectionBox & JSXBase.HTMLAttributes<HTMLSelectionBoxElement>;
             "vi-vpr-view": LocalJSX.ViVprView & JSXBase.HTMLAttributes<HTMLViVprViewElement>;
             "vpr-result": LocalJSX.VprResult & JSXBase.HTMLAttributes<HTMLVprResultElement>;
             "vpr-slider": LocalJSX.VprSlider & JSXBase.HTMLAttributes<HTMLVprSliderElement>;
