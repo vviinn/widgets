@@ -5,6 +5,8 @@
   border: none;
 
   --size: 10px;
+  --x-position: 0;
+  --y-position: 0;
 }
 
 .pointer {
@@ -15,6 +17,9 @@
   border-radius: 50%;
   z-index: 2;
   cursor: pointer;
+  transform: translate(var(--x-position), var(--y-position)) scale(0);
+  animation: 0.25s linear fadein;
+  animation-fill-mode: forwards;
 }
 
 .pointer::after {
@@ -33,4 +38,14 @@
 img {
   width: 100%;
   height: auto;
+}
+
+@keyframes fadein {
+  from {
+    transform: translate(var(--x-position), var(--y-position)) scale(0);
+  }
+
+  to {
+    transform: translate(var(--x-position), var(--y-position)) scale(1);
+  }
 }
