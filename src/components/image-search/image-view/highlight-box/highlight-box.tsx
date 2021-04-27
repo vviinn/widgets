@@ -34,13 +34,13 @@ export class HighlightBox {
     );
   }
 
-  private translate(): string {
+  private translate(): [string, string] {
     return pipe(
       O.fromNullable(this.selection),
       O.map(scaleWithSized(this.image)),
       O.map(center),
-      O.map((selection) => `translate(${selection.x}px, ${selection.y}px)`),
-      O.getOrElse(() => "")
+      O.map((selection) => [`${selection.x}px`, `${selection.y}px`]),
+      O.getOrElse(() => ["0", "0"])
     );
   }
 
@@ -51,7 +51,8 @@ export class HighlightBox {
         <div
           class="pointer"
           style={{
-            transform: this.translate(),
+            "--x-position": this.translate()[0],
+            "--y-position": this.translate()[1],
             "z-index": `${this.index + 5}`,
           }}
           onClick={() =>
