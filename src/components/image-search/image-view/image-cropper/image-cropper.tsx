@@ -16,7 +16,6 @@ import {
   fromMouseEvent,
   pointDiffSemigroup,
 } from "../../../../geometry/Point";
-import { fromFile } from "../../../../Image/fromFile";
 
 @Component({
   tag: "image-cropper",
@@ -27,10 +26,10 @@ export class ImageCropper {
   @Element() el: HTMLElement;
 
   @State() cropArea: Rectangle = {
-    x: 100,
-    y: 100,
-    width: 25,
-    height: 25,
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
   };
 
   @State() handlers: Handler[] = fromRectangle(this.cropArea);
@@ -43,18 +42,13 @@ export class ImageCropper {
   @Event() cropperMoved: EventEmitter<Rectangle>;
 
   @Listen("imageSelected", { target: "document" })
-  async handleImageSelect({ detail }: CustomEvent<File>) {
-    const image = await fromFile(detail);
-    image.onload = () => {
-      this.cropArea = {
-        x: 0,
-        y: 0,
-        width: image.width,
-        height: image.height
-      };
-      this.handlers = fromRectangle(this.cropArea);
-      this.cropperMoved.emit(this.cropArea);
-    }
+  async handleImageSelect() {
+    this.setInitialSize();
+  }
+
+  @Listen("resetSearchArea", { target: "document" })
+  handleResetting() {
+    this.setInitialSize();
   }
 
   @Listen("handlerMoved")
@@ -92,17 +86,23 @@ export class ImageCropper {
     this.cropperMoved.emit(this.cropArea);
   }
 
-  componentDidLoad() {
+  connectedCallback() {
+    const resizeObserver = new ResizeObserver(() => this.setInitialSize());
+    resizeObserver.observe(this.el);
+  }
+
+  private setInitialSize() {
     this.bounds = this.el.getBoundingClientRect();
+
     const { width, height } = this.bounds;
     this.cropArea = {
-      x: 20,
-      y: 20,
-      width: width * 0.5,
-      height: height * 0.5,
+      x: 0,
+      y: 0,
+      width: width,
+      height: height,
     };
-
     this.handlers = fromRectangle(this.cropArea);
+    this.cropperMoved.emit(this.cropArea);
   }
 
   @Method()
@@ -126,8 +126,7 @@ export class ImageCropper {
     const inTopBound = rectangle.y >= 0;
     const inLeftBound = rectangle.x >= 0;
     const inRightBound = rectangle.x + rectangle.width <= bounds.width;
-    const inBottomBound =
-      rectangle.y + rectangle.height <= bounds.height;
+    const inBottomBound = rectangle.y + rectangle.height <= bounds.height;
 
     return inTopBound && inLeftBound && inRightBound && inBottomBound;
   }

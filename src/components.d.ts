@@ -208,7 +208,7 @@ declare namespace LocalJSX {
          */
         "currencySign"?: string;
         "onObjectsDetected"?: (event: CustomEvent<IonItem<DetectedObject>[]>) => void;
-        "onToggleCropping"?: (event: CustomEvent<boolean>) => void;
+        "onResetSearchArea"?: (event: CustomEvent<void>) => void;
         /**
           * Mediaopt customer token
          */
