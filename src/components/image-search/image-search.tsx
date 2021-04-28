@@ -34,6 +34,7 @@ import {
 } from "../../network/ionClient";
 
 import { Rectangle } from "../../geometry/Rectangle";
+import state from "../../store/store";
 
 const composeData = (
   token: string,
@@ -98,6 +99,8 @@ const composeAuth = (token: string): E.Either<NetworkError, RequestInit> =>
 export class ImageSearch {
   /** Mediaopt customer token */
   @Prop() token: string;
+  /** Currency sign will shown after price */
+  @Prop() currencySign: string;
 
   @Event({ bubbles: true }) objectsDetected: EventEmitter<
     IonItem<DetectedObject>[]
@@ -142,6 +145,10 @@ export class ImageSearch {
         (data: IonSearchSession) => this.processSearchRequest(data)
       )
     );
+  }
+
+  componentWillLoad() {
+    state.currencySign = this.currencySign;
   }
 
   @Listen("detectedObjectSelected")
