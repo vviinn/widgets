@@ -12,6 +12,7 @@
   height: var(--size);
   position: absolute;
   width: var(--size);
+  z-index: 2;
 }
 
 :host::after {

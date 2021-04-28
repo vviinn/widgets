@@ -220,6 +220,7 @@ declare namespace LocalJSX {
     }
     interface ImageView {
         "onCropAreaChanged"?: (event: CustomEvent<Rectangle>) => void;
+        "onDetectedObjectSelected"?: (event: CustomEvent<Rectangle>) => void;
     }
     interface SearchFilters {
         "filter"?: SearchSessionFilter | null;

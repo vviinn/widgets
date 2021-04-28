@@ -10,12 +10,20 @@ import {
   Element,
 } from "@stencil/core";
 import { fromRectangle, Handler } from "../../../../cropper/Handler";
-import { Rectangle, move, transform } from "../../../../geometry/Rectangle";
+import {
+  Rectangle,
+  move,
+  transform,
+  fromAlt,
+  scaleWithSized,
+} from "../../../../geometry/Rectangle";
 import {
   Point,
   fromMouseEvent,
   pointDiffSemigroup,
 } from "../../../../geometry/Point";
+import { IonItem, foldIonItem } from "../../../../network/ionClient";
+import { DetectedObject } from "../../../../searchSession/searchSession";
 
 @Component({
   tag: "image-cropper",
@@ -41,8 +49,17 @@ export class ImageCropper {
   @Event() mouseRelease: EventEmitter<void>;
   @Event() cropperMoved: EventEmitter<Rectangle>;
 
+  @Listen("detectedObjectSelected", { target: "document" })
+  handleObjectSelection({ detail }: CustomEvent<IonItem<DetectedObject>>) {
+    const scale = scaleWithSized(this.bounds);
+    const rect = fromAlt(foldIonItem(detail).rectangle);
+
+    this.cropArea = scale(rect);
+    this.handlers = fromRectangle(this.cropArea);
+  }
+
   @Listen("imageSelected", { target: "document" })
-  async handleImageSelect() {
+  handleImageSelect() {
     this.setInitialSize();
   }
 

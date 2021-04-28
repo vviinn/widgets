@@ -8,12 +8,12 @@ import {
   EventEmitter,
 } from "@stencil/core";
 import { fromFile } from "../../../Image/fromFile";
-import { Rectangle, divideOnSized } from "../../../geometry/Rectangle";
+import { Rectangle, divideOnSized, fromAlt } from "../../../geometry/Rectangle";
 import {
   DetectedObject,
   ObjectsDetectedEvent,
 } from "../../../searchSession/searchSession";
-import { IonItem } from "../../../network/ionClient";
+import { IonItem, foldIonItem } from "../../../network/ionClient";
 
 @Component({
   tag: "image-view",
@@ -21,18 +21,17 @@ import { IonItem } from "../../../network/ionClient";
   shadow: true,
 })
 export class ImageView {
-  private image: HTMLImageElement | undefined;
-
   @State() cropArea: Rectangle;
   @State() imageContainer: HTMLImageElement | undefined;
   @State() detectedObjects: IonItem<DetectedObject>[] = [];
+
   @Event() cropAreaChanged: EventEmitter<Rectangle>;
+  @Event() detectedObjectSelected: EventEmitter<Rectangle>;
 
   @Listen("imageSelected", { target: "document" })
   async handleImageSelect({ detail }: CustomEvent<File>) {
-    this.image = await fromFile(detail);
-    this.imageContainer.src = this.image.src;
-
+    const image = await fromFile(detail);
+    this.imageContainer.src = image.src;
     this.detectedObjects = [];
   }
 
@@ -41,9 +40,8 @@ export class ImageView {
     this.detectedObjects = detail;
   }
 
-  @Listen("cropperMoved", { target: "document" })
-  handleCropping({ detail }: CustomEvent<Rectangle>) {
-    this.cropArea = divideOnSized(this.imageContainer)(detail);
+  handleCropperMove(rectangle: Rectangle) {
+    this.cropArea = divideOnSized(this.imageContainer)(rectangle);
     this.cropAreaChanged.emit(this.cropArea);
   }
 
@@ -52,6 +50,11 @@ export class ImageView {
       <detected-object-view
         detectedObject={object}
         referenceImage={this.imageContainer}
+        onDetectedObjectSelected={({
+          detail,
+        }: CustomEvent<IonItem<DetectedObject>>) => {
+          this.cropArea = fromAlt(foldIonItem(detail).rectangle);
+        }}
       />
     );
   }
@@ -71,6 +74,9 @@ export class ImageView {
             width: `${this.imageContainer?.width}px`,
             height: `${this.imageContainer?.height}px`,
           }}
+          onCropperMoved={({ detail }: CustomEvent<Rectangle>) =>
+            this.handleCropperMove(detail)
+          }
         />
         {this.detectedObjects.map((o) => this.renderDetectedObject(o))}
       </Host>
