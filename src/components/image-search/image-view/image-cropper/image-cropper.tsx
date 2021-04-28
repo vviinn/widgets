@@ -9,14 +9,14 @@ import {
   Method,
   Element,
 } from "@stencil/core";
-import { fromRectangle, Handler } from "../../../cropper/Handler";
-import { Rectangle, move, transform } from "../../../geometry/Rectangle";
+import { fromRectangle, Handler } from "../../../../cropper/Handler";
+import { Rectangle, move, transform } from "../../../../geometry/Rectangle";
 import {
   Point,
   fromMouseEvent,
   pointDiffSemigroup,
-} from "../../../geometry/Point";
-import { fromFile } from "../../../Image/fromFile";
+} from "../../../../geometry/Point";
+import { fromFile } from "../../../../Image/fromFile";
 
 @Component({
   tag: "image-cropper",
@@ -47,10 +47,10 @@ export class ImageCropper {
     const image = await fromFile(detail);
     image.onload = () => {
       this.cropArea = {
-        x: image.width * 0.25,
-        y: image.height * 0.25,
-        width: image.width * 0.5,
-        height: image.height * 0.5
+        x: 0,
+        y: 0,
+        width: image.width,
+        height: image.height
       };
       this.handlers = fromRectangle(this.cropArea);
       this.cropperMoved.emit(this.cropArea);
@@ -123,11 +123,11 @@ export class ImageCropper {
 
   private checkBounds(rectangle: Rectangle): boolean {
     const bounds = this.el.getBoundingClientRect();
-    const inTopBound = rectangle.y > 0;
-    const inLeftBound = rectangle.x > 0;
-    const inRightBound = rectangle.x + rectangle.width < bounds.width;
+    const inTopBound = rectangle.y >= 0;
+    const inLeftBound = rectangle.x >= 0;
+    const inRightBound = rectangle.x + rectangle.width <= bounds.width;
     const inBottomBound =
-      rectangle.y + rectangle.height < bounds.height;
+      rectangle.y + rectangle.height <= bounds.height;
 
     return inTopBound && inLeftBound && inRightBound && inBottomBound;
   }

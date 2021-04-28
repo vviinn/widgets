@@ -9,7 +9,6 @@ import { Handler } from "./cropper/Handler";
 import { IonItem, IonLink } from "./network/ionClient";
 import { DetectedObject, SearchSessionFilter } from "./searchSession/searchSession";
 import { Rectangle } from "./geometry/Rectangle";
-import { Option } from "fp-ts/lib/Option";
 import { CampaignName } from "./campaign/Campaign";
 import { Recommendation } from "./recommendation/recommendation";
 import { GridMode } from "./slider/GridMode";
@@ -24,8 +23,6 @@ export namespace Components {
     }
     interface HighlightBox {
         "image": HTMLImageElement | undefined;
-        "index": number;
-        "link": Option<IonLink> | undefined;
         "selection": Rectangle | undefined;
     }
     interface ImageCropper {
@@ -199,9 +196,6 @@ declare namespace LocalJSX {
     }
     interface HighlightBox {
         "image"?: HTMLImageElement | undefined;
-        "index"?: number;
-        "link"?: Option<IonLink> | undefined;
-        "onDetectedObjectSelected"?: (event: CustomEvent<any>) => void;
         "selection"?: Rectangle | undefined;
     }
     interface ImageCropper {

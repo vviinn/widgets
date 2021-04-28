@@ -8,23 +8,12 @@ import {
   EventEmitter,
 } from "@stencil/core";
 import { fromFile } from "../../../Image/fromFile";
-import { fromAlt, Rectangle, divideOnSized } from "../../../geometry/Rectangle";
+import { Rectangle, divideOnSized } from "../../../geometry/Rectangle";
 import {
   DetectedObject,
   ObjectsDetectedEvent,
 } from "../../../searchSession/searchSession";
-import * as Arr from "fp-ts/Array";
-import * as O from "fp-ts/Option";
-import { getLink, IonLink, IonItem } from "../../../network/ionClient";
-import * as Ord from "fp-ts/Ord";
-type Mode = "objects" | "crop";
-
-type DetectedObjectWithLink = [Rectangle, O.Option<IonLink>];
-
-const ordDetectedObjects: Ord.Ord<DetectedObjectWithLink> = Ord.contramap<
-  number,
-  DetectedObjectWithLink
->((s) => s[0].width * s[0].height)(Ord.ordNumber);
+import { IonItem } from "../../../network/ionClient";
 
 @Component({
   tag: "image-view",
@@ -32,34 +21,19 @@ const ordDetectedObjects: Ord.Ord<DetectedObjectWithLink> = Ord.contramap<
   shadow: true,
 })
 export class ImageView {
-  private imageContainer: HTMLImageElement | undefined;
   private image: HTMLImageElement | undefined;
-  //private detectedObjects: DetectedObjectWithLink[] = [];
-  //private cropView: Rectangle;
 
-  @State() selections: DetectedObjectWithLink[] = [];
-  @State() mode: Mode = "objects";
-  @State() showCropper: boolean = false;
-
+  @State() cropArea: Rectangle;
+  @State() imageContainer: HTMLImageElement | undefined;
   @State() detectedObjects: IonItem<DetectedObject>[] = [];
-
   @Event() cropAreaChanged: EventEmitter<Rectangle>;
 
-  /* @Listen("toggleCropping", { target: "document" })
-   * async handleTogglingCropper({ detail }: CustomEvent<boolean>) {
-   *   this.showCropper = detail;
-   *   this.selections = detail ? [[this.cropView, O.none]] : this.detectedObjects;
-   *   this.mode = detail ? "crop" : "objects";
-   * }
-   */
   @Listen("imageSelected", { target: "document" })
   async handleImageSelect({ detail }: CustomEvent<File>) {
     this.image = await fromFile(detail);
     this.imageContainer.src = this.image.src;
 
     this.detectedObjects = [];
-    this.selections = [];
-    //this.mode = "objects";
   }
 
   @Listen("objectsDetected", { target: "document" })
@@ -67,13 +41,12 @@ export class ImageView {
     this.detectedObjects = detail;
   }
 
-  /* @Listen("cropperMoved", { target: "document" })
-   * handleCropping({ detail }: CustomEvent<Rectangle>) {
-   *   this.cropView = divideOnSized(this.imageContainer)(detail);
-   *   this.cropAreaChanged.emit(this.cropView);
-   *   this.selections = [[this.cropView, O.none]];
-   * }
-   */
+  @Listen("cropperMoved", { target: "document" })
+  handleCropping({ detail }: CustomEvent<Rectangle>) {
+    this.cropArea = divideOnSized(this.imageContainer)(detail);
+    this.cropAreaChanged.emit(this.cropArea);
+  }
+
   private renderDetectedObject(object: IonItem<DetectedObject>): HTMLElement {
     return (
       <detected-object-view
@@ -85,30 +58,21 @@ export class ImageView {
 
   render() {
     return (
-      <Host
-        class={{
-          dimmed: this.mode === "crop" || !Arr.isEmpty(this.detectedObjects),
-        }}
-      >
-        {this.detectedObjects.map((o) => this.renderDetectedObject(o))}
-        {Arr.sort(ordDetectedObjects)(this.selections)
-          .reverse()
-          .map((s, i) => (
-            <highlight-box
-              image={this.imageContainer}
-              selection={s[0]}
-              link={s[1]}
-              index={i + 1}
-            />
-          ))}
+      <Host class="dimmed">
         <img ref={(el) => (this.imageContainer = el)} />
+        {this.imageContainer ? (
+          <highlight-box
+            image={this.imageContainer}
+            selection={this.cropArea}
+          />
+        ) : null}
         <image-cropper
           style={{
             width: `${this.imageContainer?.width}px`,
             height: `${this.imageContainer?.height}px`,
           }}
-          class={{ hidden: !this.showCropper }}
         />
+        {this.detectedObjects.map((o) => this.renderDetectedObject(o))}
       </Host>
     );
   }

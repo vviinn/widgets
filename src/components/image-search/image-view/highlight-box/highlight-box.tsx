@@ -1,13 +1,11 @@
-import { Component, Host, h, Prop, Event, EventEmitter } from "@stencil/core";
+import { Component, Host, h, Prop } from "@stencil/core";
 import { getClipValue } from "../../../../geometry/Clip";
 import * as O from "fp-ts/lib/Option";
-import { Option } from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/function";
 import {
   Rectangle,
   scaleWithSized,
 } from "../../../../geometry/Rectangle";
-import { IonLink } from "../../../../network/ionClient";
 
 @Component({
   tag: "highlight-box",
@@ -17,12 +15,6 @@ import { IonLink } from "../../../../network/ionClient";
 export class HighlightBox {
   @Prop() image: HTMLImageElement | undefined;
   @Prop() selection: Rectangle | undefined;
-  @Prop() link: Option<IonLink> | undefined;
-  @Prop() index: number = 0;
-
-  @Event() detectedObjectSelected:
-    | EventEmitter<[Rectangle, IonLink]>
-    | undefined;
 
   private getInsetValue(): string {
     return pipe(
