@@ -33,7 +33,7 @@ import {
   linkRequest,
 } from "../../network/ionClient";
 
-import { Rectangle } from "../../geometry/Rectangle";
+import { Rectangle, fromAlt } from "../../geometry/Rectangle";
 import state from "../../store/store";
 
 const composeData = (
@@ -105,12 +105,10 @@ export class ImageSearch {
   @Event({ bubbles: true }) objectsDetected: EventEmitter<
     IonItem<DetectedObject>[]
   >;
-  @Event({ bubbles: true }) toggleCropping: EventEmitter<boolean>;
+  @Event({ bubbles: true }) resetSearchArea: EventEmitter<void>;
 
   @State() loading: boolean = false;
   @State() imageSelected: boolean = false;
-  @State() showCropper: boolean = false;
-  @State() showDetectedObjects: boolean = false;
   @State() products: Recommendation[] = [];
   @State() filters: SearchSessionFilter[] = [];
   @State() rectangleSearchLink: O.Option<IonLink> = O.none;
@@ -152,9 +150,17 @@ export class ImageSearch {
   }
 
   @Listen("detectedObjectSelected")
-  handleDetectedObjectSelected({ detail }: CustomEvent<[Rectangle, IonLink]>) {
-    const [rectangle, link] = detail;
-    this.createRectangleRequest(link, rectangle);
+  handleDetectedObjectSelected({
+    detail,
+  }: CustomEvent<IonItem<DetectedObject>>) {
+    pipe(
+      getLink(detail, "rectangle"),
+      O.map((link) => {
+        const rectangle = fromAlt(foldIonItem(detail).rectangle);
+
+        return this.createRectangleRequest(link, rectangle);
+      })
+    );
   }
 
   private async handleRecommendationsLink(link: IonLink) {
@@ -178,7 +184,6 @@ export class ImageSearch {
 
   private async processSearchRequest(data: IonSearchSession) {
     this.loading = false;
-    this.showDetectedObjects = false;
     await this.slider.resetSliderPosition();
     this.handleSearchSuccess(data.value);
     this.renderFilters(data.filters);
@@ -189,8 +194,6 @@ export class ImageSearch {
 
   private renderDetectedObjects(detectedObjects: IonItem<DetectedObject>[]) {
     this.objectsDetected.emit(detectedObjects);
-    if (!this.showCropper && detectedObjects.length > 0)
-      this.showDetectedObjects = true;
   }
 
   private renderFilters(filters: IonItem<SearchSessionFilters>) {
@@ -203,11 +206,6 @@ export class ImageSearch {
 
   async handleSearchSuccess(data: Recommendation[]) {
     await this.slider.loadProducts(data);
-  }
-
-  private async toggleCropper() {
-    this.showCropper = !this.showCropper;
-    this.toggleCropping.emit(this.showCropper);
   }
 
   private async cropImage() {
@@ -271,14 +269,12 @@ export class ImageSearch {
         </div>
         {O.isSome(this.rectangleSearchLink) ? (
           <div class="cropper-controls" part="controls">
-            <button part="button" onClick={() => this.toggleCropper()}>
-              {this.showCropper ? "hide cropper" : "show cropper"}
+            <button part="button" onClick={() => this.resetSearchArea.emit()}>
+              Reset search area
             </button>
-            {this.showCropper ? (
-              <button part="button" onClick={() => this.cropImage()}>
-                crop region
-              </button>
-            ) : null}
+            <button part="button" onClick={() => this.cropImage()}>
+              Crop region
+            </button>
           </div>
         ) : null}
         {this.filters.map((f) => (

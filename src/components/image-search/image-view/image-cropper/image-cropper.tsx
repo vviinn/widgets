@@ -9,14 +9,21 @@ import {
   Method,
   Element,
 } from "@stencil/core";
-import { fromRectangle, Handler } from "../../../cropper/Handler";
-import { Rectangle, move, transform } from "../../../geometry/Rectangle";
+import { fromRectangle, Handler } from "../../../../cropper/Handler";
+import {
+  Rectangle,
+  move,
+  transform,
+  fromAlt,
+  scaleWithSized,
+} from "../../../../geometry/Rectangle";
 import {
   Point,
   fromMouseEvent,
   pointDiffSemigroup,
-} from "../../../geometry/Point";
-import { fromFile } from "../../../Image/fromFile";
+} from "../../../../geometry/Point";
+import { IonItem, foldIonItem } from "../../../../network/ionClient";
+import { DetectedObject } from "../../../../searchSession/searchSession";
 
 @Component({
   tag: "image-cropper",
@@ -27,10 +34,10 @@ export class ImageCropper {
   @Element() el: HTMLElement;
 
   @State() cropArea: Rectangle = {
-    x: 100,
-    y: 100,
-    width: 25,
-    height: 25,
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
   };
 
   @State() handlers: Handler[] = fromRectangle(this.cropArea);
@@ -42,19 +49,23 @@ export class ImageCropper {
   @Event() mouseRelease: EventEmitter<void>;
   @Event() cropperMoved: EventEmitter<Rectangle>;
 
+  @Listen("detectedObjectSelected", { target: "document" })
+  handleObjectSelection({ detail }: CustomEvent<IonItem<DetectedObject>>) {
+    const scale = scaleWithSized(this.bounds);
+    const rect = fromAlt(foldIonItem(detail).rectangle);
+
+    this.cropArea = scale(rect);
+    this.handlers = fromRectangle(this.cropArea);
+  }
+
   @Listen("imageSelected", { target: "document" })
-  async handleImageSelect({ detail }: CustomEvent<File>) {
-    const image = await fromFile(detail);
-    image.onload = () => {
-      this.cropArea = {
-        x: image.width * 0.25,
-        y: image.height * 0.25,
-        width: image.width * 0.5,
-        height: image.height * 0.5
-      };
-      this.handlers = fromRectangle(this.cropArea);
-      this.cropperMoved.emit(this.cropArea);
-    }
+  handleImageSelect() {
+    this.setInitialSize();
+  }
+
+  @Listen("resetSearchArea", { target: "document" })
+  handleResetting() {
+    this.setInitialSize();
   }
 
   @Listen("handlerMoved")
@@ -92,17 +103,23 @@ export class ImageCropper {
     this.cropperMoved.emit(this.cropArea);
   }
 
-  componentDidLoad() {
+  connectedCallback() {
+    const resizeObserver = new ResizeObserver(() => this.setInitialSize());
+    resizeObserver.observe(this.el);
+  }
+
+  private setInitialSize() {
     this.bounds = this.el.getBoundingClientRect();
+
     const { width, height } = this.bounds;
     this.cropArea = {
-      x: 20,
-      y: 20,
-      width: width * 0.5,
-      height: height * 0.5,
+      x: 0,
+      y: 0,
+      width: width,
+      height: height,
     };
-
     this.handlers = fromRectangle(this.cropArea);
+    this.cropperMoved.emit(this.cropArea);
   }
 
   @Method()
@@ -123,11 +140,10 @@ export class ImageCropper {
 
   private checkBounds(rectangle: Rectangle): boolean {
     const bounds = this.el.getBoundingClientRect();
-    const inTopBound = rectangle.y > 0;
-    const inLeftBound = rectangle.x > 0;
-    const inRightBound = rectangle.x + rectangle.width < bounds.width;
-    const inBottomBound =
-      rectangle.y + rectangle.height < bounds.height;
+    const inTopBound = rectangle.y >= 0;
+    const inLeftBound = rectangle.x >= 0;
+    const inRightBound = rectangle.x + rectangle.width <= bounds.width;
+    const inBottomBound = rectangle.y + rectangle.height <= bounds.height;
 
     return inTopBound && inLeftBound && inRightBound && inBottomBound;
   }
