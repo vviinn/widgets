@@ -23,3 +23,24 @@ img {
   width: 100%;
   height: auto;
 }
+
+@keyframes spin {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loader {
+  animation: 1.5s cubic-bezier(.68, -0.55, .27, 1.55) 0s infinite spin;
+  filter: box-shadow(1px 1px 2px black);
+  height: 1rem;
+  margin-left: -0.5rem;
+  margin-top: -0.5rem;
+  position: absolute;
+  transform: translate(20px, 20px);
+  width: 1rem;
+  z-index: 10;
+}

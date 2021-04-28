@@ -110,8 +110,8 @@ export class ImageCropper {
 
   private setInitialSize() {
     this.bounds = this.el.getBoundingClientRect();
-
     const { width, height } = this.bounds;
+
     this.cropArea = {
       x: 0,
       y: 0,
