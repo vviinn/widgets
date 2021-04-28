@@ -57,6 +57,7 @@ export class ImageView {
   private renderDetectedObject(object: IonItem<DetectedObject>): HTMLElement {
     return (
       <detected-object-view
+        style={{ opacity: this.loading ? "0.5" : "1" }}
         detectedObject={object}
         referenceImage={this.imageContainer}
         onDetectedObjectSelected={({
@@ -69,8 +70,6 @@ export class ImageView {
   }
 
   private renderLoader(): HTMLElement {
-    if (this.cropArea === undefined && !this.loading) return;
-
     const scale = scaleWithSized(this.imageContainer);
     const { x, y } = center(scale(this.cropArea));
 
@@ -100,16 +99,12 @@ export class ImageView {
           />
         ) : null}
         <image-cropper
-          style={{
-            width: `${this.imageContainer?.width}px`,
-            height: `${this.imageContainer?.height}px`,
-          }}
           onCropperMoved={({ detail }: CustomEvent<Rectangle>) =>
             this.handleCropperMove(detail)
           }
         />
         {this.detectedObjects.map((o) => this.renderDetectedObject(o))}
-        {this.renderLoader()}
+        {this.loading ? this.renderLoader() : null}
       </Host>
     );
   }

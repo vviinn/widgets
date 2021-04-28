@@ -11,6 +11,7 @@
   display: block;
   height: var(--size);
   position: absolute;
+  transition: opacity 0.25s;
   width: var(--size);
   z-index: 2;
 }

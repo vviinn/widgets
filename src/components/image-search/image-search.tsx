@@ -241,6 +241,14 @@ export class ImageSearch {
     );
   }
 
+  private clearSearchArea() {
+    this.resetSearchArea.emit();
+    pipe(
+      this.rectangleSearchLink,
+      O.map((link) => this.createRectangleRequest(link, this.cropArea))
+    );
+  }
+
   render() {
     return (
       <Host>
@@ -270,7 +278,7 @@ export class ImageSearch {
         </div>
         {O.isSome(this.rectangleSearchLink) ? (
           <div class="cropper-controls" part="controls">
-            <button part="button" onClick={() => this.resetSearchArea.emit()}>
+            <button part="button" onClick={() => this.clearSearchArea()}>
               Reset search area
             </button>
             <button part="button" onClick={() => this.cropImage()}>

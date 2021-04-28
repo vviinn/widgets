@@ -42,6 +42,7 @@ export namespace Components {
         "useDrag": boolean;
     }
     interface ImageView {
+        "loading": boolean;
     }
     interface SearchFilters {
         "filter": SearchSessionFilter | null;
@@ -219,6 +220,7 @@ declare namespace LocalJSX {
         "useDrag"?: boolean;
     }
     interface ImageView {
+        "loading"?: boolean;
         "onCropAreaChanged"?: (event: CustomEvent<Rectangle>) => void;
         "onDetectedObjectSelected"?: (event: CustomEvent<Rectangle>) => void;
     }
