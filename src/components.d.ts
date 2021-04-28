@@ -6,10 +6,10 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { Handler } from "./cropper/Handler";
-import { Rectangle } from "./geometry/Rectangle";
-import { Option } from "fp-ts/lib/Option";
 import { IonItem, IonLink } from "./network/ionClient";
 import { DetectedObject, SearchSessionFilter } from "./searchSession/searchSession";
+import { Rectangle } from "./geometry/Rectangle";
+import { Option } from "fp-ts/lib/Option";
 import { CampaignName } from "./campaign/Campaign";
 import { Recommendation } from "./recommendation/recommendation";
 import { GridMode } from "./slider/GridMode";
@@ -17,6 +17,10 @@ export namespace Components {
     interface CropperHandler {
         "bounds": DOMRect;
         "handler": Handler;
+    }
+    interface DetectedObjectView {
+        "detectedObject": IonItem<DetectedObject>;
+        "referenceImage": HTMLImageElement;
     }
     interface HighlightBox {
         "image": HTMLImageElement | undefined;
@@ -28,6 +32,10 @@ export namespace Components {
         "getSelection": () => Promise<Rectangle>;
     }
     interface ImageSearch {
+        /**
+          * Currency sign will shown after price
+         */
+        "currencySign": string;
         /**
           * Mediaopt customer token
          */
@@ -104,6 +112,12 @@ declare global {
         prototype: HTMLCropperHandlerElement;
         new (): HTMLCropperHandlerElement;
     };
+    interface HTMLDetectedObjectViewElement extends Components.DetectedObjectView, HTMLStencilElement {
+    }
+    var HTMLDetectedObjectViewElement: {
+        prototype: HTMLDetectedObjectViewElement;
+        new (): HTMLDetectedObjectViewElement;
+    };
     interface HTMLHighlightBoxElement extends Components.HighlightBox, HTMLStencilElement {
     }
     var HTMLHighlightBoxElement: {
@@ -160,6 +174,7 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "cropper-handler": HTMLCropperHandlerElement;
+        "detected-object-view": HTMLDetectedObjectViewElement;
         "highlight-box": HTMLHighlightBoxElement;
         "image-cropper": HTMLImageCropperElement;
         "image-search": HTMLImageSearchElement;
@@ -177,6 +192,11 @@ declare namespace LocalJSX {
         "handler"?: Handler;
         "onHandlerMoved"?: (event: CustomEvent<Handler>) => void;
     }
+    interface DetectedObjectView {
+        "detectedObject"?: IonItem<DetectedObject>;
+        "onDetectedObjectSelected"?: (event: CustomEvent<any>) => void;
+        "referenceImage"?: HTMLImageElement;
+    }
     interface HighlightBox {
         "image"?: HTMLImageElement | undefined;
         "index"?: number;
@@ -189,6 +209,10 @@ declare namespace LocalJSX {
         "onMouseRelease"?: (event: CustomEvent<void>) => void;
     }
     interface ImageSearch {
+        /**
+          * Currency sign will shown after price
+         */
+        "currencySign"?: string;
         "onObjectsDetected"?: (event: CustomEvent<IonItem<DetectedObject>[]>) => void;
         "onToggleCropping"?: (event: CustomEvent<boolean>) => void;
         /**
@@ -274,6 +298,7 @@ declare namespace LocalJSX {
     }
     interface IntrinsicElements {
         "cropper-handler": CropperHandler;
+        "detected-object-view": DetectedObjectView;
         "highlight-box": HighlightBox;
         "image-cropper": ImageCropper;
         "image-search": ImageSearch;
@@ -290,6 +315,7 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "cropper-handler": LocalJSX.CropperHandler & JSXBase.HTMLAttributes<HTMLCropperHandlerElement>;
+            "detected-object-view": LocalJSX.DetectedObjectView & JSXBase.HTMLAttributes<HTMLDetectedObjectViewElement>;
             "highlight-box": LocalJSX.HighlightBox & JSXBase.HTMLAttributes<HTMLHighlightBoxElement>;
             "image-cropper": LocalJSX.ImageCropper & JSXBase.HTMLAttributes<HTMLImageCropperElement>;
             "image-search": LocalJSX.ImageSearch & JSXBase.HTMLAttributes<HTMLImageSearchElement>;

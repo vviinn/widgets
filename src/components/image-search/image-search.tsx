@@ -33,7 +33,7 @@ import {
   linkRequest,
 } from "../../network/ionClient";
 
-import { Rectangle } from "../../geometry/Rectangle";
+import { Rectangle, fromAlt } from "../../geometry/Rectangle";
 import state from "../../store/store";
 
 const composeData = (
@@ -152,9 +152,17 @@ export class ImageSearch {
   }
 
   @Listen("detectedObjectSelected")
-  handleDetectedObjectSelected({ detail }: CustomEvent<[Rectangle, IonLink]>) {
-    const [rectangle, link] = detail;
-    this.createRectangleRequest(link, rectangle);
+  handleDetectedObjectSelected({
+    detail,
+  }: CustomEvent<IonItem<DetectedObject>>) {
+    pipe(
+      getLink(detail, "rectangle"),
+      O.map((link) => {
+        const rectangle = fromAlt(foldIonItem(detail).rectangle);
+
+        return this.createRectangleRequest(link, rectangle);
+      })
+    );
   }
 
   private async handleRecommendationsLink(link: IonLink) {

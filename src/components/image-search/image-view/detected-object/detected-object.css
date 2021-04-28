@@ -1,0 +1,46 @@
+:host {
+  --size: 10px;
+  --x-position: 0;
+  --y-position: 0;
+
+  background: black;
+  border-radius: 50%;
+  border: none;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: block;
+  height: var(--size);
+  position: absolute;
+  width: var(--size);
+}
+
+:host::after {
+  border-radius: 50%;
+  border: 5px solid black;
+  content: "";
+  cursor: pointer;
+  display: block;
+  height: var(--size);
+  opacity: .75;
+  padding: calc(var(--size) * 0.5);
+  transform: translate(calc(-50% + var(--size) * 0.5), calc(-50% + var(--size) * 0.5));
+  width: var(--size);
+}
+
+@keyframes fadein {
+  from {
+    transform: translate(var(--x-position), var(--y-position)) scale(0);
+  }
+
+  to {
+    transform: translate(var(--x-position), var(--y-position)) scale(1);
+  }
+}
+
+:host {
+  animation-name: fadein;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+}
+
+
