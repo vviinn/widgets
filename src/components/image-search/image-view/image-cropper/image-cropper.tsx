@@ -81,7 +81,7 @@ export class ImageCropper {
     this.cropperMoved.emit(this.cropArea);
   }
 
-  @Listen("mousemove")
+  @Listen("pointermove")
   handleMouseMove(ev: MouseEvent) {
     if (!this.handleMove) return;
 
@@ -152,7 +152,10 @@ export class ImageCropper {
     return (
       <Host>
         <div
-          class="crop-area"
+          class={{
+            "crop-area": true,
+            active: this.handleMove,
+          }}
           style={{
             width: `${this.cropArea.width}px`,
             height: `${this.cropArea.height}px`,
