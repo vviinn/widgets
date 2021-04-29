@@ -181,13 +181,10 @@ export const scaleSelection = (
 };
 
 export const fromAlt = (r: RectangleAlt): Rectangle => {
-  const { width, height } = r;
-
   return {
     x: r.left,
     y: r.top,
-    width,
-    height,
+    ...r,
   };
 };
 

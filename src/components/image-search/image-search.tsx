@@ -113,6 +113,7 @@ export class ImageSearch {
   @State() filters: SearchSessionFilter[] = [];
   @State() rectangleSearchLink: O.Option<IonLink> = O.none;
   @State() clearFiltersLink: O.Option<IonLink> = O.none;
+  @State() isSearchAreaChanged: boolean = false;
 
   private slider: HTMLVprSliderElement;
   private cropArea: Rectangle | undefined = undefined;
@@ -146,15 +147,20 @@ export class ImageSearch {
   }
 
   @Listen("searchAreaChangeStart")
-  async handleKek({ detail }: CustomEvent<boolean>) {
-    if (detail) return;
-    await this.cropImage();
+  async handleSearchAreaRelease({ detail }: CustomEvent<boolean>) {
+    if (detail) {
+      this.isSearchAreaChanged = true;
+      return;
+    } else {
+      await this.cropImage();
+    }
   }
 
   @Listen("detectedObjectSelected")
   handleDetectedObjectSelected({
     detail,
   }: CustomEvent<IonItem<DetectedObject>>) {
+    this.isSearchAreaChanged = true;
     pipe(
       getLink(detail, "rectangle"),
       O.map((link) => {
@@ -248,6 +254,7 @@ export class ImageSearch {
   }
 
   private clearSearchArea() {
+    this.isSearchAreaChanged = false;
     this.resetSearchArea.emit();
     pipe(
       this.rectangleSearchLink,
@@ -282,13 +289,10 @@ export class ImageSearch {
             }
           />
         </div>
-        {O.isSome(this.rectangleSearchLink) ? (
+        {O.isSome(this.rectangleSearchLink) && this.isSearchAreaChanged ? (
           <div class="cropper-controls" part="controls">
             <button part="button" onClick={() => this.clearSearchArea()}>
               Reset search area
-            </button>
-            <button part="button" onClick={() => this.cropImage()}>
-              Crop region
             </button>
           </div>
         ) : null}
