@@ -8,6 +8,7 @@ import {
   EventEmitter,
   Method,
   Element,
+  Prop,
 } from "@stencil/core";
 import { fromRectangle, Handler } from "../../../../cropper/Handler";
 import {
@@ -33,6 +34,8 @@ import { DetectedObject } from "../../../../searchSession/searchSession";
 export class ImageCropper {
   @Element() el: HTMLElement;
 
+  @Prop() disabled: boolean = false;
+
   @State() cropArea: Rectangle = {
     x: 0,
     y: 0,
@@ -48,6 +51,7 @@ export class ImageCropper {
 
   @Event() mouseRelease: EventEmitter<void>;
   @Event() cropperMoved: EventEmitter<Rectangle>;
+  @Event() searchAreaChangeStart: EventEmitter<boolean>;
 
   @Listen("detectedObjectSelected", { target: "document" })
   handleObjectSelection({ detail }: CustomEvent<IonItem<DetectedObject>>) {
@@ -81,7 +85,7 @@ export class ImageCropper {
     this.cropperMoved.emit(this.cropArea);
   }
 
-  @Listen("mousemove")
+  @Listen("pointermove")
   handleMouseMove(ev: MouseEvent) {
     if (!this.handleMove) return;
 
@@ -127,15 +131,17 @@ export class ImageCropper {
     return this.cropArea;
   }
 
-  private handleMouseUp() {
+  private handlePointerUp() {
     this.handleMove = false;
     this.mouseStartPoint = undefined;
     this.mouseRelease.emit();
+    this.searchAreaChangeStart.emit(false);
   }
 
-  private handleMouseDown(event: MouseEvent) {
+  private handlePointerDown(event: MouseEvent) {
     this.handleMove = true;
     this.mouseStartPoint = fromMouseEvent(event);
+    this.searchAreaChangeStart.emit(true);
   }
 
   private checkBounds(rectangle: Rectangle): boolean {
@@ -152,19 +158,24 @@ export class ImageCropper {
     return (
       <Host>
         <div
-          class="crop-area"
+          class={{
+            "crop-area": true,
+            active: this.handleMove,
+            disabled: this.disabled,
+          }}
           style={{
             width: `${this.cropArea.width}px`,
             height: `${this.cropArea.height}px`,
             transform: `translate(${this.cropArea.x}px, ${this.cropArea.y}px)`,
             cursor: this.handleMove ? "move" : "default",
           }}
-          onMouseDown={(ev) => this.handleMouseDown(ev)}
-          onMouseUp={() => this.handleMouseUp()}
+          onPointerDown={(ev) => this.handlePointerDown(ev)}
+          onPointerUp={() => this.handlePointerUp()}
         ></div>
         <div class="wrapper">
           {this.handlers.map((handler) => (
             <cropper-handler
+              disabled={this.disabled}
               handler={handler}
               bounds={this.bounds}
             ></cropper-handler>

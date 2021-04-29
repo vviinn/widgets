@@ -16,7 +16,20 @@
 }
 
 .crop-area {
+  border: 2px dashed black;
+  box-sizing: border-box;
   position: absolute;
-  border: 1px dotted black;
+  touch-action: none;
+  transition-property: border-color, opacity;
+  transition-duration: .25s;
+  transition-timing-function: ease-in-out;
   z-index: 2;
+}
+
+.crop-area.active {
+  border-color: whitesmoke;
+}
+
+.crop-area.disabled {
+  opacity: 0.25;
 }

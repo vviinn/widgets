@@ -1,8 +1,46 @@
 :host {
+  --x: 0;
+  --y: 0;
+  --size: 10px;
+
   display: block;
   position: absolute;
   background: black;
-  height: 5px;
-  width: 5px;
+  box-sizing: border-box;
+  height: var(--size);
+  width: var(--size);
   z-index: 4;
+  touch-action: none;
+  transform: translate(var(--x), var(--y));
+  transition-property: border-color, opacity;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-in-out;
+}
+
+:host(.active) {
+  border: 1px solid whitesmoke;
+}
+
+:host(.disabled) {
+  opacity: 0.25;
+}
+
+:host(.nw-resize),
+:host(.n-resize),
+:host(.w-resize) {
+  transform: translate(var(--x), var(--y));
+}
+
+:host(.ne-resize),
+:host(.e-resize) {
+  transform: translate(calc(var(--x) - var(--size)), var(--y));
+}
+
+:host(.sw-resize),
+:host(.s-resize) {
+  transform: translate(var(--x), calc(var(--y) - var(--size)));
+}
+
+:host(.se-resize) {
+  transform: translate(calc(var(--x) - var(--size)), calc(var(--y) - var(--size)));
 }

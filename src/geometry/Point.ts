@@ -3,6 +3,7 @@ import {
   semigroupSum,
   semigroupProduct,
 } from "fp-ts/Semigroup";
+import { ClientEvent } from "../utils/event/Events";
 import { semigroupDiff } from "../utils/semigroup/semigroupDiff";
 import { Rectangle } from "./Rectangle";
 
@@ -18,7 +19,7 @@ export const fromRectangle = ({ x, y }: Rectangle): Point => {
   };
 };
 
-export const fromMouseEvent = ({ clientX, clientY }: MouseEvent): Point => {
+export const fromMouseEvent = ({ clientX, clientY }: ClientEvent): Point => {
   return {
     x: clientX,
     y: clientY,

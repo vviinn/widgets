@@ -6,6 +6,7 @@ import {
   Listen,
   Event,
   EventEmitter,
+  State,
 } from "@stencil/core";
 import { Handler, getCursorValue } from "../../../../../cropper/Handler";
 import {
@@ -20,51 +21,58 @@ import {
   shadow: true,
 })
 export class CropperHandler {
-  private handleMove: boolean = false;
-  private mouseStartPoint: Point | undefined = undefined;
+  private startPoint: Point | undefined;
+
+  @State() handleMove: boolean = false;
 
   @Prop() handler: Handler;
   @Prop() bounds: DOMRect;
+  @Prop() disabled: boolean = false;
 
   @Event() handlerMoved: EventEmitter<Handler>;
+  @Event() searchAreaChangeStart: EventEmitter<boolean>;
 
-  @Listen("mousedown")
-  handleMouseDown(event: MouseEvent) {
+  @Listen("pointerdown")
+  handlePointerStart(event: PointerEvent) {
     this.handleMove = true;
-    this.mouseStartPoint = fromMouseEvent(event);
+    this.startPoint = fromMouseEvent(event);
+    this.searchAreaChangeStart.emit(true);
   }
 
-  @Listen("mouseup", { target: "window" })
-  handleMouseUp() {
+  @Listen("pointerup")
+  handlePointerEnd() {
+    this.searchAreaChangeStart.emit(false);
     this.handleMove = false;
-    this.mouseStartPoint = undefined;
+    this.startPoint = undefined;
   }
 
-  @Listen("mousemove", { target: "window" })
-  handleMouseMove(event: MouseEvent) {
+  @Listen("pointermove", { target: "window" })
+  handlePointerMove(event: PointerEvent) {
     if (!this.handleMove) return;
 
     const destination = fromMouseEvent(event);
-
-    const distance = pointDiffSemigroup.concat(
-      destination,
-      this.mouseStartPoint
-    );
+    const distance = pointDiffSemigroup.concat(destination, this.startPoint);
 
     this.handlerMoved.emit({
       position: distance,
       direction: this.handler.direction,
     });
 
-    this.mouseStartPoint = destination;
+    this.startPoint = destination;
   }
 
   render() {
     return (
       <Host
+        class={{
+          active: this.handleMove,
+          disabled: this.disabled,
+          [getCursorValue(this.handler.direction)]: true,
+        }}
         style={{
+          "--x": `${this.handler.position.x}px`,
+          "--y": `${this.handler.position.y}px`,
           cursor: getCursorValue(this.handler.direction),
-          transform: `translate(${this.handler.position.x}px, ${this.handler.position.y}px)`,
         }}
       ></Host>
     );
