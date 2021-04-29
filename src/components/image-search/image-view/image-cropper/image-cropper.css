@@ -16,7 +16,14 @@
 }
 
 .crop-area {
+  border: 2px dashed black;
+  box-sizing: border-box;
   position: absolute;
-  border: 1px dotted black;
+  touch-action: none;
+  transition: border-color 0.25s ease-in-out;
   z-index: 2;
+}
+
+.crop-area.active {
+  border-color: whitesmoke;
 }
