@@ -12,11 +12,17 @@
   z-index: 4;
   touch-action: none;
   transform: translate(var(--x), var(--y));
-  transition: border-color 0.25s ease-in-out;
+  transition-property: border-color, opacity;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-in-out;
 }
 
 :host(.active) {
   border: 1px solid whitesmoke;
+}
+
+:host(.disabled) {
+  opacity: 0.25;
 }
 
 :host(.nw-resize),

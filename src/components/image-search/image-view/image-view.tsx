@@ -99,6 +99,7 @@ export class ImageView {
           />
         ) : null}
         <image-cropper
+          disabled={this.loading}
           onCropperMoved={({ detail }: CustomEvent<Rectangle>) =>
             this.handleCropperMove(detail)
           }

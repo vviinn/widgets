@@ -27,6 +27,7 @@ export class CropperHandler {
 
   @Prop() handler: Handler;
   @Prop() bounds: DOMRect;
+  @Prop() disabled: boolean = false;
 
   @Event() handlerMoved: EventEmitter<Handler>;
   @Event() searchAreaChangeStart: EventEmitter<boolean>;
@@ -38,7 +39,7 @@ export class CropperHandler {
     this.searchAreaChangeStart.emit(true);
   }
 
-  @Listen("pointerup", { target: "window" })
+  @Listen("pointerup")
   handlePointerEnd() {
     this.searchAreaChangeStart.emit(false);
     this.handleMove = false;
@@ -65,6 +66,7 @@ export class CropperHandler {
       <Host
         class={{
           active: this.handleMove,
+          disabled: this.disabled,
           [getCursorValue(this.handler.direction)]: true,
         }}
         style={{

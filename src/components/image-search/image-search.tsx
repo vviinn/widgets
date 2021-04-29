@@ -145,8 +145,10 @@ export class ImageSearch {
     );
   }
 
-  componentWillLoad() {
-    state.currencySign = this.currencySign;
+  @Listen("searchAreaChangeStart")
+  async handleKek({ detail }: CustomEvent<boolean>) {
+    if (detail) return;
+    await this.cropImage();
   }
 
   @Listen("detectedObjectSelected")
@@ -161,6 +163,10 @@ export class ImageSearch {
         return this.createRectangleRequest(link, rectangle);
       })
     );
+  }
+
+  componentWillLoad() {
+    state.currencySign = this.currencySign;
   }
 
   private async handleRecommendationsLink(link: IonLink) {
