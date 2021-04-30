@@ -106,6 +106,7 @@ export class ImageSearch {
     IonItem<DetectedObject>[]
   >;
   @Event({ bubbles: true }) resetSearchArea: EventEmitter<void>;
+  @Event({ bubbles: true }) filtersCleared: EventEmitter<void>;
 
   @State() loading: boolean = false;
   @State() imageSelected: boolean = false;
@@ -249,7 +250,10 @@ export class ImageSearch {
   private clearFilters() {
     pipe(
       this.clearFiltersLink,
-      O.map((filterLink) => this.handleRecommendationsLink(filterLink))
+      O.map((filterLink) => {
+        this.filtersCleared.emit();
+        this.handleRecommendationsLink(filterLink)
+      })
     );
   }
 
