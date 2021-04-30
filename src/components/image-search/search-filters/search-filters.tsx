@@ -6,6 +6,7 @@ import {
   EventEmitter,
   Event,
   State,
+  Listen
 } from "@stencil/core";
 import { IonLink } from "../../../network/ionClient";
 import { SearchSessionFilter } from "../../../searchSession/searchSession";
@@ -23,6 +24,11 @@ export class SearchFilters {
   @State() selectedCategoryId: string | null = null;
   @State() hideFilters: boolean = true;
   @Event() filterSelectedEvent: EventEmitter<IonLink>;
+
+  @Listen("filtersCleared", { target: "window" })
+  handleClearingFilters() {
+    this.selectedCategoryId = null;
+  }
 
   private filterSelected(f: IonLink) {
     this.filterSelectedEvent.emit(f);
@@ -45,7 +51,7 @@ export class SearchFilters {
                 part="filter"
                 class={{
                   filter: true,
-                  active: this.selectedCategoryId == getFilterId(f),
+                  active: this.selectedCategoryId === getFilterId(f),
                 }}
                 style={{ "animation-delay": `${n * 10}ms` }}
                 onClick={() => this.filterSelected(f)}
