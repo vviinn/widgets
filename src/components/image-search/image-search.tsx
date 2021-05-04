@@ -33,7 +33,7 @@ import {
   linkRequest,
 } from "../../network/ionClient";
 
-import { Rectangle, fromAlt } from "../../geometry/Rectangle";
+import { Rectangle } from "../../geometry/Rectangle";
 import state from "../../store/store";
 
 const composeData = (
@@ -48,31 +48,6 @@ const composeData = (
       body.append("image", file);
       return {
         headers: createBearerHeaders(token),
-        body,
-      };
-    }),
-    E.mapLeft(networkErrorFrom)
-  );
-
-const composeRectangleData = (
-  token: string,
-  rectangle: Rectangle
-): E.Either<NetworkError, RequestInit> =>
-  pipe(
-    token,
-    existAndNotEmpty,
-    E.map((token) => {
-      const data = {
-        left: rectangle.x,
-        top: rectangle.y,
-        width: rectangle.width,
-        height: rectangle.height,
-      };
-      const body = JSON.stringify(data);
-      const headers = createBearerHeaders(token);
-      headers.append("content-type", "application/json");
-      return {
-        headers,
         body,
       };
     }),
@@ -165,9 +140,7 @@ export class ImageSearch {
     pipe(
       getLink(detail, "rectangle"),
       O.map((link) => {
-        const rectangle = fromAlt(foldIonItem(detail).rectangle);
-
-        return this.createRectangleRequest(link, rectangle);
+        return this.createRectangleRequest(link);
       })
     );
   }
@@ -213,7 +186,8 @@ export class ImageSearch {
     this.filters = readFilters(foldIonItem(filters));
   }
 
-  private handleSearchError(_error: NetworkError) {
+  private handleSearchError(error: NetworkError) {
+    console.log(error);
     this.loading = false;
   }
 
@@ -224,15 +198,23 @@ export class ImageSearch {
   private async cropImage() {
     pipe(
       this.rectangleSearchLink,
-      O.map((link) => this.createRectangleRequest(link, this.cropArea))
+      O.map((link) => {
+        const newLink = {
+          ...link,
+          href: `${link.href}?left=${this.cropArea.x}&top=${this.cropArea.y}&width=${this.cropArea.width}&height=${this.cropArea.height}`
+        };
+
+        this.createRectangleRequest(newLink);
+      })
     );
   }
 
-  private async createRectangleRequest(link: IonLink, selection: Rectangle) {
+  private async createRectangleRequest(link: IonLink) {
+    console.log(link);
     this.loading = true;
 
     const request = await pipe(
-      composeRectangleData(this.token, selection),
+      composeAuth(this.token),
       TE.fromEither,
       TE.map(linkRequest(link)),
       TE.flatten
@@ -262,7 +244,7 @@ export class ImageSearch {
     this.resetSearchArea.emit();
     pipe(
       this.rectangleSearchLink,
-      O.map((link) => this.createRectangleRequest(link, this.cropArea))
+      O.map((link) => this.createRectangleRequest(link))
     );
   }
 
