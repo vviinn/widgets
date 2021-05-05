@@ -256,10 +256,10 @@ export class ImageSearch {
     this.resetSearchArea.emit();
 
     const data = {
-      left: 0,
-      top: 0,
-      width: 1,
-      height: 1,
+      left: 0.0,
+      top: 0.0,
+      width: 1.0,
+      height: 1.0,
     };
 
     this.rectangleFormRequest(this.rectangleSearchForm, data);
