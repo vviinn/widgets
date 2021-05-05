@@ -1,5 +1,12 @@
 import * as E from "fp-ts/Either";
+import * as TE from "fp-ts/TaskEither";
 import { pipe } from "fp-ts/lib/function";
+import { sequenceT } from "fp-ts/Apply";
+import { getApiPath } from "./utils";
+import { makeRequest, networkErrorFrom } from "./request";
+import { IonItem } from "./ionClient";
+
+const sequenceToEither = sequenceT(E.either);
 
 enum ObjectMemberName {
   eform = "eform",
@@ -63,7 +70,6 @@ type FormField = Partial<FormMemberObject>;
 
 export type FormType = {
   rel: FormRelation[];
-  form: FormField[];
 };
 
 export const checkFormFields = (
@@ -79,14 +85,14 @@ export const checkFormFields = (
     : E.left(`Data should contains feilds: ${diff.join(",")}`);
 };
 
-export type Form = Link & FormType;
+export type Form = Valueable<FormField[]> & Link & FormType;
 
 export const requestFromForm = (
   form: Form,
   data: Object
 ): E.Either<string, [string, RequestInit]> =>
   pipe(
-    checkFormFields(form.form, data),
+    checkFormFields(form.value, data),
     E.map((checkedData) =>
       form.rel.includes("query-form")
         ? transformGetForm(form, checkedData)
@@ -104,3 +110,17 @@ const transformGetForm = (form: Form, data: Object): [string, RequestInit] => {
 const transformSendForm = (form: Form, data: Object): [string, RequestInit] => {
   return [form.href, { body: JSON.stringify(data), method: "POST" }];
 };
+
+export const formRequest = <T>(form: Form, data: Object = {}) => (
+  payload: RequestInit
+) =>
+  pipe(
+    sequenceToEither(getApiPath(), requestFromForm(form, data)),
+    TE.fromEither,
+    TE.mapLeft(networkErrorFrom),
+    TE.chain((initialData) => {
+      const apiPath = initialData[0];
+      const [formUrl, initObject] = initialData[1];
+      return makeRequest<IonItem<T>>(formUrl, initObject)([apiPath, payload]);
+    })
+  );

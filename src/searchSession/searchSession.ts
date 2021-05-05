@@ -7,6 +7,7 @@ import { sequenceT } from "fp-ts/Apply";
 import * as E from "fp-ts/Either";
 import * as TE from "fp-ts/TaskEither";
 import { RectangleAlt } from "../geometry/RectangleAlt";
+import { Form } from "../network/hyperionClient";
 
 const sequenceToEither = sequenceT(E.either);
 
@@ -26,7 +27,7 @@ export const readFilters = (
     return { name, filters };
   });
 
-type Filterable = {
+type HaveFilters = {
   readonly filters: IonItem<SearchSessionFilters>;
 };
 
@@ -36,13 +37,18 @@ export type DetectedObject = {
   rectangle: RectangleAlt;
 };
 
-type WithRectangle = {
+type ContainDetectedObjects = {
   readonly detectedObjects: IonItem<DetectedObject>[];
 };
 
+type ContainRectangleSearch = {
+  readonly searchArea: Form;
+};
+
 export type IonSearchSession = IonItem<Recommendation[]> &
-  Filterable &
-  WithRectangle;
+  HaveFilters &
+  ContainDetectedObjects &
+  ContainRectangleSearch;
 
 export const searchSessionClient = (initialData: RequestInit) =>
   pipe(

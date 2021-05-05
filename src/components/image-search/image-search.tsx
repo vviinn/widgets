@@ -33,8 +33,11 @@ import {
   linkRequest,
 } from "../../network/ionClient";
 
+import { Form, formRequest } from "../../network/hyperionClient";
+
 import { Rectangle } from "../../geometry/Rectangle";
 import state from "../../store/store";
+import { RectangleAlt } from "../../geometry/RectangleAlt";
 
 const composeData = (
   token: string,
@@ -87,7 +90,7 @@ export class ImageSearch {
   @State() imageSelected: boolean = false;
   @State() products: Recommendation[] = [];
   @State() filters: SearchSessionFilter[] = [];
-  @State() rectangleSearchLink: O.Option<IonLink> = O.none;
+  @State() rectangleSearchForm: Form | undefined;
   @State() clearFiltersLink: O.Option<IonLink> = O.none;
   @State() isSearchAreaChanged: boolean = false;
 
@@ -140,7 +143,7 @@ export class ImageSearch {
     pipe(
       getLink(detail, "rectangle"),
       O.map((link) => {
-        return this.createRectangleRequest(link);
+        return this.linkRequest(link);
       })
     );
   }
@@ -174,7 +177,7 @@ export class ImageSearch {
     this.handleSearchSuccess(data.value);
     this.renderFilters(data.filters);
     this.renderDetectedObjects(data.detectedObjects);
-    this.rectangleSearchLink = getLink(data, "rectangle");
+    this.rectangleSearchForm = data.searchArea;
     this.clearFiltersLink = getLink(data, "clearFilters");
   }
 
@@ -187,7 +190,6 @@ export class ImageSearch {
   }
 
   private handleSearchError(error: NetworkError) {
-    console.log(error);
     this.loading = false;
   }
 
@@ -195,22 +197,35 @@ export class ImageSearch {
     await this.slider.loadProducts(data);
   }
 
-  private async cropImage() {
-    pipe(
-      this.rectangleSearchLink,
-      O.map((link) => {
-        const newLink = {
-          ...link,
-          href: `${link.href}?left=${this.cropArea.x}&top=${this.cropArea.y}&width=${this.cropArea.width}&height=${this.cropArea.height}`
-        };
+  private cropImage() {
+    const data = {
+      ...this.cropArea,
+      left: this.cropArea.x,
+      top: this.cropArea.y,
+    };
 
-        this.createRectangleRequest(newLink);
-      })
+    this.rectangleFormRequest(this.rectangleSearchForm, data);
+  }
+
+  private async rectangleFormRequest(form: Form, rectangle: RectangleAlt) {
+    this.loading = true;
+
+    const request = await pipe(
+      composeAuth(this.token),
+      TE.fromEither,
+      TE.chain(formRequest(form, rectangle))
+    )();
+
+    pipe(
+      request,
+      E.fold(
+        (e: NetworkError) => this.handleSearchError(e),
+        (data: IonSearchSession) => this.processSearchRequest(data)
+      )
     );
   }
 
-  private async createRectangleRequest(link: IonLink) {
-    console.log(link);
+  private async linkRequest(link: IonLink) {
     this.loading = true;
 
     const request = await pipe(
@@ -234,7 +249,7 @@ export class ImageSearch {
       this.clearFiltersLink,
       O.map((filterLink) => {
         this.filtersCleared.emit();
-        this.handleRecommendationsLink(filterLink)
+        this.handleRecommendationsLink(filterLink);
       })
     );
   }
@@ -242,10 +257,15 @@ export class ImageSearch {
   private clearSearchArea() {
     this.isSearchAreaChanged = false;
     this.resetSearchArea.emit();
-    pipe(
-      this.rectangleSearchLink,
-      O.map((link) => this.createRectangleRequest(link))
-    );
+
+    const data = {
+      left: 0,
+      top: 0,
+      width: 1,
+      height: 1,
+    };
+
+    this.rectangleFormRequest(this.rectangleSearchForm, data);
   }
 
   render() {
@@ -275,7 +295,7 @@ export class ImageSearch {
             }
           />
         </div>
-        {O.isSome(this.rectangleSearchLink) && this.isSearchAreaChanged ? (
+        {this.rectangleSearchForm && this.isSearchAreaChanged ? (
           <div class="cropper-controls" part="controls">
             <button part="button" onClick={() => this.clearSearchArea()}>
               Reset search area
