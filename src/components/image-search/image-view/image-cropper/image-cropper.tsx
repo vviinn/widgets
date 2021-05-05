@@ -23,7 +23,7 @@ import {
   fromMouseEvent,
   pointDiffSemigroup,
 } from "../../../../geometry/Point";
-import { IonItem, foldIonItem } from "../../../../network/ionClient";
+import { ValueObject, foldValueObject } from "../../../../network/ion/ValueObject";
 import { DetectedObject } from "../../../../searchSession/searchSession";
 
 @Component({
@@ -54,9 +54,9 @@ export class ImageCropper {
   @Event() searchAreaChangeStart: EventEmitter<boolean>;
 
   @Listen("detectedObjectSelected", { target: "document" })
-  handleObjectSelection({ detail }: CustomEvent<IonItem<DetectedObject>>) {
+  handleObjectSelection({ detail }: CustomEvent<ValueObject<DetectedObject>>) {
     const scale = scaleWithSized(this.bounds);
-    const rect = fromAlt(foldIonItem(detail).rectangle);
+    const rect = fromAlt(foldValueObject(detail).rectangle);
 
     this.cropArea = scale(rect);
     this.handlers = fromRectangle(this.cropArea);

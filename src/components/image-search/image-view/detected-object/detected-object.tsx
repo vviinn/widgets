@@ -1,6 +1,6 @@
 import { Component, Host, h, Prop, Event, EventEmitter } from "@stencil/core";
 import { pipe } from "fp-ts/lib/function";
-import { IonItem, foldIonItem } from "../../../../network/ionClient";
+import { ValueObject, foldValueObject } from "../../../../network/ion/ValueObject";
 import { DetectedObject } from "../../../../searchSession/searchSession";
 
 import {
@@ -16,14 +16,14 @@ import {
 })
 export class DetectedObjectView {
   @Prop() referenceImage: HTMLImageElement;
-  @Prop() detectedObject: IonItem<DetectedObject>;
+  @Prop() detectedObject: ValueObject<DetectedObject>;
 
   @Event() detectedObjectSelected:
-    | EventEmitter<IonItem<DetectedObject>>
+    | EventEmitter<ValueObject<DetectedObject>>
     | undefined;
 
   private translate(): [string, string] {
-    const objectRectangle = fromAlt(foldIonItem(this.detectedObject).rectangle);
+    const objectRectangle = fromAlt(foldValueObject(this.detectedObject).rectangle);
 
     const { x, y } = pipe(
       objectRectangle,

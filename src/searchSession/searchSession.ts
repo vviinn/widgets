@@ -1,5 +1,7 @@
 import { pipe } from "fp-ts/lib/pipeable";
-import { IonItem, IonLink } from "../network/ionClient";
+import { ValueObject } from "../network/ion/ValueObject";
+import { Link } from "../network/ion/Link";
+import { Form } from "../network/ion/Form";
 import { makeRequest, networkErrorFrom } from "../network/request";
 import { createInitPostRequest, getApiPath } from "../network/utils";
 import { Recommendation } from "../recommendation/recommendation";
@@ -11,12 +13,12 @@ import { RectangleAlt } from "../geometry/RectangleAlt";
 const sequenceToEither = sequenceT(E.either);
 
 export interface SearchSessionFilters {
-  readonly [key: string]: IonLink[];
+  readonly [key: string]: Link[];
 }
 
 export interface SearchSessionFilter {
   name: string;
-  filters: IonLink[];
+  filters: Link[];
 }
 
 export const readFilters = (
@@ -26,8 +28,8 @@ export const readFilters = (
     return { name, filters };
   });
 
-type Filterable = {
-  readonly filters: IonItem<SearchSessionFilters>;
+type HasFilters = {
+  readonly filters: ValueObject<SearchSessionFilters>;
 };
 
 export type DetectedObject = {
@@ -36,20 +38,25 @@ export type DetectedObject = {
   rectangle: RectangleAlt;
 };
 
-type WithRectangle = {
-  readonly detectedObjects: IonItem<DetectedObject>[];
+type ContainsDetectedObjects = {
+  readonly detectedObjects: ValueObject<DetectedObject>[];
 };
 
-export type IonSearchSession = IonItem<Recommendation[]> &
-  Filterable &
-  WithRectangle;
+type ContainsRectangleSearch = {
+  readonly searchArea: Form;
+};
+
+export type SearchSession = ValueObject<Recommendation[]> &
+  HasFilters &
+  ContainsDetectedObjects &
+  ContainsRectangleSearch;
 
 export const searchSessionClient = (initialData: RequestInit) =>
   pipe(
     sequenceToEither(getApiPath(), createInitPostRequest),
     TE.fromEither,
     TE.mapLeft(networkErrorFrom),
-    TE.chain(makeRequest<IonSearchSession>("search/session", initialData))
+    TE.chain(makeRequest<SearchSession>("search/session", initialData))
   );
 
-export type ObjectsDetectedEvent = CustomEvent<IonItem<DetectedObject>[]>;
+export type ObjectsDetectedEvent = CustomEvent<ValueObject<DetectedObject>[]>;

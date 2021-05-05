@@ -17,7 +17,7 @@ import {
   SearchSessionFilter,
   SearchSessionFilters,
   searchSessionClient,
-  IonSearchSession,
+  SearchSession,
   DetectedObject,
 } from "../../searchSession/searchSession";
 import { Recommendation } from "../../recommendation/recommendation";
@@ -25,16 +25,14 @@ import * as E from "fp-ts/Either";
 import * as TE from "fp-ts/TaskEither";
 import * as O from "fp-ts/Option";
 import { pipe } from "fp-ts/function";
-import {
-  getLink,
-  foldIonItem,
-  IonItem,
-  IonLink,
-  linkRequest,
-} from "../../network/ionClient";
+
+import { foldValueObject, ValueObject } from "../../network/ion/ValueObject";
+import { Form, formRequest } from "../../network/ion/Form";
+import { Link, getLink, linkRequest } from "../../network/ion/Link";
 
 import { Rectangle } from "../../geometry/Rectangle";
 import state from "../../store/store";
+import { RectangleAlt } from "../../geometry/RectangleAlt";
 
 const composeData = (
   token: string,
@@ -78,7 +76,7 @@ export class ImageSearch {
   @Prop() currencySign: string;
 
   @Event({ bubbles: true }) objectsDetected: EventEmitter<
-    IonItem<DetectedObject>[]
+    ValueObject<DetectedObject>[]
   >;
   @Event({ bubbles: true }) resetSearchArea: EventEmitter<void>;
   @Event({ bubbles: true }) filtersCleared: EventEmitter<void>;
@@ -87,8 +85,8 @@ export class ImageSearch {
   @State() imageSelected: boolean = false;
   @State() products: Recommendation[] = [];
   @State() filters: SearchSessionFilter[] = [];
-  @State() rectangleSearchLink: O.Option<IonLink> = O.none;
-  @State() clearFiltersLink: O.Option<IonLink> = O.none;
+  @State() rectangleSearchForm: Form | undefined;
+  @State() clearFiltersLink: O.Option<Link> = O.none;
   @State() isSearchAreaChanged: boolean = false;
 
   private slider: HTMLVprSliderElement;
@@ -97,7 +95,7 @@ export class ImageSearch {
   @Element() el: HTMLElement;
 
   @Listen("filterSelectedEvent")
-  handleFilterSelection({ detail }: CustomEvent<IonLink>) {
+  handleFilterSelection({ detail }: CustomEvent<Link>) {
     this.handleRecommendationsLink(detail);
   }
 
@@ -117,7 +115,7 @@ export class ImageSearch {
       request,
       E.fold(
         (e: NetworkError) => this.handleSearchError(e),
-        (data: IonSearchSession) => this.processSearchRequest(data)
+        (data: SearchSession) => this.processSearchRequest(data)
       )
     );
   }
@@ -135,12 +133,12 @@ export class ImageSearch {
   @Listen("detectedObjectSelected")
   handleDetectedObjectSelected({
     detail,
-  }: CustomEvent<IonItem<DetectedObject>>) {
+  }: CustomEvent<ValueObject<DetectedObject>>) {
     this.isSearchAreaChanged = true;
     pipe(
       getLink(detail, "rectangle"),
       O.map((link) => {
-        return this.createRectangleRequest(link);
+        return this.linkRequest(link);
       })
     );
   }
@@ -149,7 +147,7 @@ export class ImageSearch {
     state.currencySign = this.currencySign;
   }
 
-  private async handleRecommendationsLink(link: IonLink) {
+  private async handleRecommendationsLink(link: Link) {
     this.loading = true;
 
     const request = await pipe(
@@ -163,31 +161,32 @@ export class ImageSearch {
       request,
       E.fold(
         (e: NetworkError) => this.handleSearchError(e),
-        (data: IonSearchSession) => this.processSearchRequest(data)
+        (data: SearchSession) => this.processSearchRequest(data)
       )
     );
   }
 
-  private async processSearchRequest(data: IonSearchSession) {
+  private async processSearchRequest(data: SearchSession) {
     this.loading = false;
     await this.slider.resetSliderPosition();
     this.handleSearchSuccess(data.value);
     this.renderFilters(data.filters);
     this.renderDetectedObjects(data.detectedObjects);
-    this.rectangleSearchLink = getLink(data, "rectangle");
+    this.rectangleSearchForm = data.searchArea;
     this.clearFiltersLink = getLink(data, "clearFilters");
   }
 
-  private renderDetectedObjects(detectedObjects: IonItem<DetectedObject>[]) {
+  private renderDetectedObjects(
+    detectedObjects: ValueObject<DetectedObject>[]
+  ) {
     this.objectsDetected.emit(detectedObjects);
   }
 
-  private renderFilters(filters: IonItem<SearchSessionFilters>) {
-    this.filters = readFilters(foldIonItem(filters));
+  private renderFilters(filters: ValueObject<SearchSessionFilters>) {
+    this.filters = readFilters(foldValueObject(filters));
   }
 
-  private handleSearchError(error: NetworkError) {
-    console.log(error);
+  private handleSearchError(_error: NetworkError) {
     this.loading = false;
   }
 
@@ -195,22 +194,35 @@ export class ImageSearch {
     await this.slider.loadProducts(data);
   }
 
-  private async cropImage() {
-    pipe(
-      this.rectangleSearchLink,
-      O.map((link) => {
-        const newLink = {
-          ...link,
-          href: `${link.href}?left=${this.cropArea.x}&top=${this.cropArea.y}&width=${this.cropArea.width}&height=${this.cropArea.height}`
-        };
+  private cropImage() {
+    const data = {
+      ...this.cropArea,
+      left: this.cropArea.x,
+      top: this.cropArea.y,
+    };
 
-        this.createRectangleRequest(newLink);
-      })
+    this.rectangleFormRequest(this.rectangleSearchForm, data);
+  }
+
+  private async rectangleFormRequest(form: Form, rectangle: RectangleAlt) {
+    this.loading = true;
+
+    const request = await pipe(
+      composeAuth(this.token),
+      TE.fromEither,
+      TE.chain(formRequest(form, rectangle))
+    )();
+
+    pipe(
+      request,
+      E.fold(
+        (e: NetworkError) => this.handleSearchError(e),
+        (data: SearchSession) => this.processSearchRequest(data)
+      )
     );
   }
 
-  private async createRectangleRequest(link: IonLink) {
-    console.log(link);
+  private async linkRequest(link: Link) {
     this.loading = true;
 
     const request = await pipe(
@@ -224,7 +236,7 @@ export class ImageSearch {
       request,
       E.fold(
         (e: NetworkError) => this.handleSearchError(e),
-        (data: IonSearchSession) => this.processSearchRequest(data)
+        (data: SearchSession) => this.processSearchRequest(data)
       )
     );
   }
@@ -234,7 +246,7 @@ export class ImageSearch {
       this.clearFiltersLink,
       O.map((filterLink) => {
         this.filtersCleared.emit();
-        this.handleRecommendationsLink(filterLink)
+        this.handleRecommendationsLink(filterLink);
       })
     );
   }
@@ -242,10 +254,15 @@ export class ImageSearch {
   private clearSearchArea() {
     this.isSearchAreaChanged = false;
     this.resetSearchArea.emit();
-    pipe(
-      this.rectangleSearchLink,
-      O.map((link) => this.createRectangleRequest(link))
-    );
+
+    const data = {
+      left: 0.0,
+      top: 0.0,
+      width: 1.0,
+      height: 1.0,
+    };
+
+    this.rectangleFormRequest(this.rectangleSearchForm, data);
   }
 
   render() {
@@ -275,7 +292,7 @@ export class ImageSearch {
             }
           />
         </div>
-        {O.isSome(this.rectangleSearchLink) && this.isSearchAreaChanged ? (
+        {this.rectangleSearchForm && this.isSearchAreaChanged ? (
           <div class="cropper-controls" part="controls">
             <button part="button" onClick={() => this.clearSearchArea()}>
               Reset search area

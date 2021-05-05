@@ -20,7 +20,7 @@ import {
   DetectedObject,
   ObjectsDetectedEvent,
 } from "../../../searchSession/searchSession";
-import { IonItem, foldIonItem } from "../../../network/ionClient";
+import { ValueObject, foldValueObject } from "../../../network/ion/ValueObject";
 
 @Component({
   tag: "image-view",
@@ -32,7 +32,7 @@ export class ImageView {
 
   @State() cropArea: Rectangle;
   @State() imageContainer: HTMLImageElement | undefined;
-  @State() detectedObjects: IonItem<DetectedObject>[] = [];
+  @State() detectedObjects: ValueObject<DetectedObject>[] = [];
 
   @Event() cropAreaChanged: EventEmitter<Rectangle>;
   @Event() detectedObjectSelected: EventEmitter<Rectangle>;
@@ -54,7 +54,7 @@ export class ImageView {
     this.cropAreaChanged.emit(this.cropArea);
   }
 
-  private renderDetectedObject(object: IonItem<DetectedObject>): HTMLElement {
+  private renderDetectedObject(object: ValueObject<DetectedObject>): HTMLElement {
     return (
       <detected-object-view
         style={{ opacity: this.loading ? "0.5" : "1" }}
@@ -62,8 +62,8 @@ export class ImageView {
         referenceImage={this.imageContainer}
         onDetectedObjectSelected={({
           detail,
-        }: CustomEvent<IonItem<DetectedObject>>) => {
-          this.cropArea = fromAlt(foldIonItem(detail).rectangle);
+        }: CustomEvent<ValueObject<DetectedObject>>) => {
+          this.cropArea = fromAlt(foldValueObject(detail).rectangle);
         }}
       />
     );
