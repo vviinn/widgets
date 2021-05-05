@@ -25,15 +25,10 @@ import * as E from "fp-ts/Either";
 import * as TE from "fp-ts/TaskEither";
 import * as O from "fp-ts/Option";
 import { pipe } from "fp-ts/function";
-import {
-  getLink,
-  foldIonItem,
-  IonItem,
-  IonLink,
-  linkRequest,
-} from "../../network/ionClient";
 
-import { Form, formRequest } from "../../network/hyperionClient";
+import { foldValueObject, ValueObject } from "../../network/ion/ValueObject";
+import { Form, formRequest } from "../../network/ion/Form";
+import { Link, getLink, linkRequest } from "../../network/ion/Link";
 
 import { Rectangle } from "../../geometry/Rectangle";
 import state from "../../store/store";
@@ -81,7 +76,7 @@ export class ImageSearch {
   @Prop() currencySign: string;
 
   @Event({ bubbles: true }) objectsDetected: EventEmitter<
-    IonItem<DetectedObject>[]
+    ValueObject<DetectedObject>[]
   >;
   @Event({ bubbles: true }) resetSearchArea: EventEmitter<void>;
   @Event({ bubbles: true }) filtersCleared: EventEmitter<void>;
@@ -91,7 +86,7 @@ export class ImageSearch {
   @State() products: Recommendation[] = [];
   @State() filters: SearchSessionFilter[] = [];
   @State() rectangleSearchForm: Form | undefined;
-  @State() clearFiltersLink: O.Option<IonLink> = O.none;
+  @State() clearFiltersLink: O.Option<Link> = O.none;
   @State() isSearchAreaChanged: boolean = false;
 
   private slider: HTMLVprSliderElement;
@@ -100,7 +95,7 @@ export class ImageSearch {
   @Element() el: HTMLElement;
 
   @Listen("filterSelectedEvent")
-  handleFilterSelection({ detail }: CustomEvent<IonLink>) {
+  handleFilterSelection({ detail }: CustomEvent<Link>) {
     this.handleRecommendationsLink(detail);
   }
 
@@ -138,7 +133,7 @@ export class ImageSearch {
   @Listen("detectedObjectSelected")
   handleDetectedObjectSelected({
     detail,
-  }: CustomEvent<IonItem<DetectedObject>>) {
+  }: CustomEvent<ValueObject<DetectedObject>>) {
     this.isSearchAreaChanged = true;
     pipe(
       getLink(detail, "rectangle"),
@@ -152,7 +147,7 @@ export class ImageSearch {
     state.currencySign = this.currencySign;
   }
 
-  private async handleRecommendationsLink(link: IonLink) {
+  private async handleRecommendationsLink(link: Link) {
     this.loading = true;
 
     const request = await pipe(
@@ -181,15 +176,17 @@ export class ImageSearch {
     this.clearFiltersLink = getLink(data, "clearFilters");
   }
 
-  private renderDetectedObjects(detectedObjects: IonItem<DetectedObject>[]) {
+  private renderDetectedObjects(
+    detectedObjects: ValueObject<DetectedObject>[]
+  ) {
     this.objectsDetected.emit(detectedObjects);
   }
 
-  private renderFilters(filters: IonItem<SearchSessionFilters>) {
-    this.filters = readFilters(foldIonItem(filters));
+  private renderFilters(filters: ValueObject<SearchSessionFilters>) {
+    this.filters = readFilters(foldValueObject(filters));
   }
 
-  private handleSearchError(error: NetworkError) {
+  private handleSearchError(_error: NetworkError) {
     this.loading = false;
   }
 
@@ -225,7 +222,7 @@ export class ImageSearch {
     );
   }
 
-  private async linkRequest(link: IonLink) {
+  private async linkRequest(link: Link) {
     this.loading = true;
 
     const request = await pipe(

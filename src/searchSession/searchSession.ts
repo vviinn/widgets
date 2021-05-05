@@ -1,5 +1,7 @@
 import { pipe } from "fp-ts/lib/pipeable";
-import { IonItem, IonLink } from "../network/ionClient";
+import { ValueObject } from "../network/ion/ValueObject";
+import { Link } from "../network/ion/Link";
+import { Form } from "../network/ion/Form";
 import { makeRequest, networkErrorFrom } from "../network/request";
 import { createInitPostRequest, getApiPath } from "../network/utils";
 import { Recommendation } from "../recommendation/recommendation";
@@ -7,17 +9,16 @@ import { sequenceT } from "fp-ts/Apply";
 import * as E from "fp-ts/Either";
 import * as TE from "fp-ts/TaskEither";
 import { RectangleAlt } from "../geometry/RectangleAlt";
-import { Form } from "../network/hyperionClient";
 
 const sequenceToEither = sequenceT(E.either);
 
 export interface SearchSessionFilters {
-  readonly [key: string]: IonLink[];
+  readonly [key: string]: Link[];
 }
 
 export interface SearchSessionFilter {
   name: string;
-  filters: IonLink[];
+  filters: Link[];
 }
 
 export const readFilters = (
@@ -28,7 +29,7 @@ export const readFilters = (
   });
 
 type HaveFilters = {
-  readonly filters: IonItem<SearchSessionFilters>;
+  readonly filters: ValueObject<SearchSessionFilters>;
 };
 
 export type DetectedObject = {
@@ -38,14 +39,14 @@ export type DetectedObject = {
 };
 
 type ContainDetectedObjects = {
-  readonly detectedObjects: IonItem<DetectedObject>[];
+  readonly detectedObjects: ValueObject<DetectedObject>[];
 };
 
 type ContainRectangleSearch = {
   readonly searchArea: Form;
 };
 
-export type IonSearchSession = IonItem<Recommendation[]> &
+export type IonSearchSession = ValueObject<Recommendation[]> &
   HaveFilters &
   ContainDetectedObjects &
   ContainRectangleSearch;
@@ -58,4 +59,4 @@ export const searchSessionClient = (initialData: RequestInit) =>
     TE.chain(makeRequest<IonSearchSession>("search/session", initialData))
   );
 
-export type ObjectsDetectedEvent = CustomEvent<IonItem<DetectedObject>[]>;
+export type ObjectsDetectedEvent = CustomEvent<ValueObject<DetectedObject>[]>;

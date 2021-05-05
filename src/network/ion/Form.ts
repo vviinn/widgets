@@ -2,38 +2,13 @@ import * as E from "fp-ts/Either";
 import * as TE from "fp-ts/TaskEither";
 import { pipe } from "fp-ts/lib/function";
 import { sequenceT } from "fp-ts/Apply";
-import { getApiPath } from "./utils";
-import { makeRequest, networkErrorFrom } from "./request";
-import { IonItem } from "./ionClient";
+import { Valueable } from "./ValueObject";
+import { Link } from "./Link";
+import { ValueObject } from "./ValueObject";
+import { getApiPath } from "../utils";
+import { makeRequest, networkErrorFrom } from "../request";
 
 const sequenceToEither = sequenceT(E.either);
-
-enum ObjectMemberName {
-  eform = "eform",
-  etype = "etype",
-  form = "form",
-  href = "href",
-  method = "method",
-  accepts = "accepts",
-  produces = "produces",
-  rel = "rel",
-  type = "type",
-  value = "value",
-}
-
-type MemberObject = {
-  [key in ObjectMemberName]: unknown;
-};
-
-type Valueable<T> = {
-  readonly value: T;
-};
-
-export type ValueObject<T> = Valueable<T> & Partial<MemberObject>;
-
-export type Link = {
-  href: string;
-};
 
 type FormRelation = "form" | "edit-form" | "create-form" | "query-form";
 
@@ -68,10 +43,6 @@ type FormMemberObject = {
 
 type FormField = Partial<FormMemberObject>;
 
-export type FormType = {
-  rel: FormRelation[];
-};
-
 export const checkFormFields = (
   f: FormField[],
   data: Object
@@ -83,6 +54,10 @@ export const checkFormFields = (
   return diff.length === 0
     ? E.right(data)
     : E.left(`Data should contains feilds: ${diff.join(",")}`);
+};
+
+export type FormType = {
+  rel: FormRelation[];
 };
 
 export type Form = Valueable<FormField[]> & Link & FormType;
@@ -121,6 +96,9 @@ export const formRequest = <T>(form: Form, data: Object = {}) => (
     TE.chain((initialData) => {
       const apiPath = initialData[0];
       const [formUrl, initObject] = initialData[1];
-      return makeRequest<IonItem<T>>(formUrl, initObject)([apiPath, payload]);
+      return makeRequest<ValueObject<T>>(
+        formUrl,
+        initObject
+      )([apiPath, payload]);
     })
   );

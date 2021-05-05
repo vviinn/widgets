@@ -8,10 +8,10 @@ import {
   State,
   Listen
 } from "@stencil/core";
-import { IonLink } from "../../../network/ionClient";
+import { Link } from "../../../network/ion/Link";
 import { SearchSessionFilter } from "../../../searchSession/searchSession";
 
-const getFilterId = (filter: IonLink): string =>
+const getFilterId = (filter: Link): string =>
   filter.href.split("/").reverse()[0];
 
 @Component({
@@ -23,14 +23,14 @@ export class SearchFilters {
   @Prop() filter: SearchSessionFilter | null = null;
   @State() selectedCategoryId: string | null = null;
   @State() hideFilters: boolean = true;
-  @Event() filterSelectedEvent: EventEmitter<IonLink>;
+  @Event() filterSelectedEvent: EventEmitter<Link>;
 
   @Listen("filtersCleared", { target: "window" })
   handleClearingFilters() {
     this.selectedCategoryId = null;
   }
 
-  private filterSelected(f: IonLink) {
+  private filterSelected(f: Link) {
     this.filterSelectedEvent.emit(f);
     this.selectedCategoryId = getFilterId(f);
   }

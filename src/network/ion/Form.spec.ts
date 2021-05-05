@@ -1,5 +1,5 @@
 import { isRight, isLeft } from "fp-ts/lib/Either";
-import { Form, requestFromForm, checkFormFields } from "./hyperionClient";
+import { Form, requestFromForm, checkFormFields } from "./Form";
 
 it("should check data for form fields array", async () => {
   const form: Form = {
