@@ -47,13 +47,13 @@ export const checkFormFields = (
   f: FormField[],
   data: Object
 ): E.Either<string, Object> => {
-  const feilds = f.map((x) => x.name).flat() as string[];
+  const fields = f.map((x) => x.name) as string[];
   const keys = Object.keys(data);
-  const diff = feilds.filter((x) => !keys.includes(x));
+  const diff = fields.filter((x) => !keys.includes(x));
 
   return diff.length === 0
     ? E.right(data)
-    : E.left(`Data should contains feilds: ${diff.join(",")}`);
+    : E.left(`Data should contains fields: ${diff.join(", ")}`);
 };
 
 export type FormType = {

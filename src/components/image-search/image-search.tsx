@@ -17,7 +17,7 @@ import {
   SearchSessionFilter,
   SearchSessionFilters,
   searchSessionClient,
-  IonSearchSession,
+  SearchSession,
   DetectedObject,
 } from "../../searchSession/searchSession";
 import { Recommendation } from "../../recommendation/recommendation";
@@ -115,7 +115,7 @@ export class ImageSearch {
       request,
       E.fold(
         (e: NetworkError) => this.handleSearchError(e),
-        (data: IonSearchSession) => this.processSearchRequest(data)
+        (data: SearchSession) => this.processSearchRequest(data)
       )
     );
   }
@@ -161,12 +161,12 @@ export class ImageSearch {
       request,
       E.fold(
         (e: NetworkError) => this.handleSearchError(e),
-        (data: IonSearchSession) => this.processSearchRequest(data)
+        (data: SearchSession) => this.processSearchRequest(data)
       )
     );
   }
 
-  private async processSearchRequest(data: IonSearchSession) {
+  private async processSearchRequest(data: SearchSession) {
     this.loading = false;
     await this.slider.resetSliderPosition();
     this.handleSearchSuccess(data.value);
@@ -217,7 +217,7 @@ export class ImageSearch {
       request,
       E.fold(
         (e: NetworkError) => this.handleSearchError(e),
-        (data: IonSearchSession) => this.processSearchRequest(data)
+        (data: SearchSession) => this.processSearchRequest(data)
       )
     );
   }
@@ -236,7 +236,7 @@ export class ImageSearch {
       request,
       E.fold(
         (e: NetworkError) => this.handleSearchError(e),
-        (data: IonSearchSession) => this.processSearchRequest(data)
+        (data: SearchSession) => this.processSearchRequest(data)
       )
     );
   }

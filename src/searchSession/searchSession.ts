@@ -28,7 +28,7 @@ export const readFilters = (
     return { name, filters };
   });
 
-type HaveFilters = {
+type HasFilters = {
   readonly filters: ValueObject<SearchSessionFilters>;
 };
 
@@ -38,25 +38,25 @@ export type DetectedObject = {
   rectangle: RectangleAlt;
 };
 
-type ContainDetectedObjects = {
+type ContainsDetectedObjects = {
   readonly detectedObjects: ValueObject<DetectedObject>[];
 };
 
-type ContainRectangleSearch = {
+type ContainsRectangleSearch = {
   readonly searchArea: Form;
 };
 
-export type IonSearchSession = ValueObject<Recommendation[]> &
-  HaveFilters &
-  ContainDetectedObjects &
-  ContainRectangleSearch;
+export type SearchSession = ValueObject<Recommendation[]> &
+  HasFilters &
+  ContainsDetectedObjects &
+  ContainsRectangleSearch;
 
 export const searchSessionClient = (initialData: RequestInit) =>
   pipe(
     sequenceToEither(getApiPath(), createInitPostRequest),
     TE.fromEither,
     TE.mapLeft(networkErrorFrom),
-    TE.chain(makeRequest<IonSearchSession>("search/session", initialData))
+    TE.chain(makeRequest<SearchSession>("search/session", initialData))
   );
 
 export type ObjectsDetectedEvent = CustomEvent<ValueObject<DetectedObject>[]>;
