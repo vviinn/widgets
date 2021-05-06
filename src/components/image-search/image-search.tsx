@@ -96,6 +96,8 @@ export class ImageSearch {
 
   @Listen("filterSelectedEvent")
   handleFilterSelection({ detail }: CustomEvent<Link>) {
+    this.loading = true;
+
     pipe(
       this.linkRequest(detail),
       (request: TE.TaskEither<NetworkError, SearchSession>) =>
@@ -137,6 +139,7 @@ export class ImageSearch {
     detail,
   }: CustomEvent<ValueObject<DetectedObject>>) {
     this.isSearchAreaChanged = true;
+    this.loading = true;
 
     const error: NetworkError = {
       errorType: "NetworkError",
@@ -205,8 +208,6 @@ export class ImageSearch {
   private linkRequest<T>(
     link: Link
   ): TE.TaskEither<NetworkError, ValueObject<T>> {
-    this.loading = true;
-
     return pipe(
       composeAuth(this.token),
       TE.fromEither,
@@ -215,6 +216,8 @@ export class ImageSearch {
   }
 
   private clearFilters() {
+    this.loading = true;
+
     const error: NetworkError = {
       errorType: "NetworkError",
       body: "Can not get a link for clearing filters",
@@ -260,6 +263,7 @@ export class ImageSearch {
 
   private handleSearchRequestSuccess(data: SearchSession) {
     this.loading = false;
+
     this.slider.resetSliderPosition();
     this.slider.loadProducts(data.value);
     this.filters = readFilters(foldValueObject(data.filters));
