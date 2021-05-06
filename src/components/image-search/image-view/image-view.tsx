@@ -8,7 +8,6 @@ import {
   EventEmitter,
   Prop,
 } from "@stencil/core";
-import { fromFile } from "../../../Image/fromFile";
 import {
   Rectangle,
   divideOnSized,
@@ -36,11 +35,11 @@ export class ImageView {
 
   @Event() cropAreaChanged: EventEmitter<Rectangle>;
   @Event() detectedObjectSelected: EventEmitter<Rectangle>;
+  @Event() imageContainerResized: EventEmitter<void>;
 
   @Listen("imageSelected", { target: "document" })
-  async handleImageSelect({ detail }: CustomEvent<File>) {
-    const image = await fromFile(detail);
-    this.imageContainer.src = image.src;
+  async handleImageSelect({ detail }: CustomEvent<HTMLImageElement>) {
+    this.imageContainer.src = detail.src;
     this.detectedObjects = [];
   }
 
@@ -49,12 +48,22 @@ export class ImageView {
     this.detectedObjects = detail;
   }
 
+  componentDidRender() {
+    const resizeObserver = new ResizeObserver(() => {
+      this.imageContainerResized.emit();
+    });
+
+    resizeObserver.observe(this.imageContainer);
+  }
+
   handleCropperMove(rectangle: Rectangle) {
     this.cropArea = divideOnSized(this.imageContainer)(rectangle);
     this.cropAreaChanged.emit(this.cropArea);
   }
 
-  private renderDetectedObject(object: ValueObject<DetectedObject>): HTMLElement {
+  private renderDetectedObject(
+    object: ValueObject<DetectedObject>
+  ): HTMLElement {
     return (
       <detected-object-view
         style={{ opacity: this.loading ? "0.5" : "1" }}

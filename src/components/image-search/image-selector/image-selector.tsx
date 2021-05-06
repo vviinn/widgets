@@ -26,7 +26,8 @@ export class ImageSelector {
   @State() dragover: boolean = false;
   @State() error: boolean = false;
 
-  @Event() imageSelected: EventEmitter<File>;
+  @Event() imageSelected: EventEmitter<HTMLImageElement>;
+  @Event() imageResized: EventEmitter<File>;
 
   private input: HTMLInputElement | undefined;
 
@@ -58,12 +59,13 @@ export class ImageSelector {
   }
 
   private async fileSelectionSuccess(f: File) {
-    const r = await fromFile(f);
+    const image = await fromFile(f);
 
-    r.onload = async () => {
-      const t = resizeImage(600, r);
-      const file = await toFile(t);
-      this.imageSelected.emit(file);
+    image.onload = async () => {
+      const resized = resizeImage(300, image);
+      const file = await toFile(resized);
+      this.imageResized.emit(file);
+      this.imageSelected.emit(image);
     };
   }
 
