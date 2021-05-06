@@ -15,7 +15,6 @@ import { NetworkError, networkErrorFrom } from "../../network/request";
 import {
   readFilters,
   SearchSessionFilter,
-  SearchSessionFilters,
   searchSessionClient,
   SearchSession,
   DetectedObject,
@@ -23,6 +22,7 @@ import {
 import { Recommendation } from "../../recommendation/recommendation";
 import * as E from "fp-ts/Either";
 import * as TE from "fp-ts/TaskEither";
+import * as T from "fp-ts/Task";
 import * as O from "fp-ts/Option";
 import { pipe } from "fp-ts/function";
 
@@ -95,8 +95,14 @@ export class ImageSearch {
   @Element() el: HTMLElement;
 
   @Listen("filterSelectedEvent")
-  handleFilterSelection({ detail }: CustomEvent<Link>) {
-    this.linkRequest(detail);
+  async handleFilterSelection({ detail }: CustomEvent<Link>) {
+    await pipe(
+      this.linkRequest(detail),
+      TE.fold(
+        (e: NetworkError) => T.of(this.handleSearchError(e)),
+        (data: SearchSession) => T.of(this.processSearchRequest(data))
+      )
+    )();
   }
 
   @Listen("imageSelected")
@@ -104,20 +110,18 @@ export class ImageSearch {
     this.loading = true;
     this.imageSelected = true;
 
-    const request = await pipe(
+    await pipe(
       composeData(this.token, detail),
       TE.fromEither,
-      TE.map(searchSessionClient),
-      TE.flatten
-    )();
-
-    pipe(
-      request,
-      E.fold(
-        (e: NetworkError) => this.handleSearchError(e),
-        (data: SearchSession) => this.processSearchRequest(data)
+      TE.chain(searchSessionClient),
+      TE.fold(
+        (e: NetworkError) => T.of(this.handleSearchError(e)),
+        (data: SearchSession) => async () => {
+          this.processSearchRequest(data);
+          this.processObjectDetection(data);
+        }
       )
-    );
+    )();
   }
 
   @Listen("searchAreaChangeStart")
@@ -131,38 +135,60 @@ export class ImageSearch {
   }
 
   @Listen("detectedObjectSelected")
-  handleDetectedObjectSelected({
+  async handleDetectedObjectSelected({
     detail,
   }: CustomEvent<ValueObject<DetectedObject>>) {
     this.isSearchAreaChanged = true;
-    pipe(
+
+    const error: NetworkError = {
+      errorType: "NetworkError",
+      body: "Can not get a link rectangular search",
+    };
+
+    await pipe(
       getLink(detail, "rectangle"),
-      O.map((link) => {
-        return this.linkRequest(link);
-      })
-    );
+      TE.fromOption(() => error),
+      TE.chain((link) => this.linkRequest(link)),
+      TE.fold(
+        (e: NetworkError) => T.of(this.handleSearchError(e)),
+        (data: SearchSession) => T.of(this.processSearchRequest(data))
+      )
+    )();
   }
 
   componentWillLoad() {
     state.currencySign = this.currencySign;
   }
 
-  private async processSearchRequest(data: SearchSession) {
+  private async processObjectDetection(data: SearchSession) {
+    const error: NetworkError = {
+      errorType: "NetworkError",
+      body: "Can not get a link for objects detection",
+    };
+
+    await pipe(
+      getLink(data, "detectObjects"),
+      TE.fromOption(() => error),
+      TE.chain((link) => this.linkRequest(link)),
+      TE.fold(
+        (error: NetworkError) => T.of(this.handleSearchError(error)),
+        (objects: ValueObject<ValueObject<DetectedObject>[]>) =>
+          T.of(this.renderDetectedObjects(foldValueObject(objects)))
+      )
+    )();
+  }
+
+  private processSearchRequest(data: SearchSession) {
     this.loading = false;
-    await this.slider.resetSliderPosition();
-    this.handleSearchSuccess(data.value);
-    this.renderFilters(data.filters);
+    this.slider.resetSliderPosition();
+    this.slider.loadProducts(data.value);
+    this.filters = readFilters(foldValueObject(data.filters));
     this.rectangleSearchForm = data.searchArea;
     this.clearFiltersLink = getLink(data, "clearFilters");
 
     pipe(
       O.fromNullable(data.detectedObjects),
       O.map((objects) => this.renderDetectedObjects(objects))
-    );
-
-    pipe(
-      getLink(data, "detectObjects"),
-      O.map((link) => this.linkRequest(link))
     );
   }
 
@@ -172,16 +198,8 @@ export class ImageSearch {
     this.objectsDetected.emit(detectedObjects);
   }
 
-  private renderFilters(filters: ValueObject<SearchSessionFilters>) {
-    this.filters = readFilters(foldValueObject(filters));
-  }
-
   private handleSearchError(_error: NetworkError) {
     this.loading = false;
-  }
-
-  async handleSearchSuccess(data: Recommendation[]) {
-    await this.slider.loadProducts(data);
   }
 
   private cropImage() {
@@ -197,48 +215,45 @@ export class ImageSearch {
   private async rectangleFormRequest(form: Form, rectangle: RectangleAlt) {
     this.loading = true;
 
-    const request = await pipe(
+    await pipe(
       composeAuth(this.token),
       TE.fromEither,
-      TE.chain(formRequest(form, rectangle))
-    )();
-
-    pipe(
-      request,
-      E.fold(
-        (e: NetworkError) => this.handleSearchError(e),
-        (data: SearchSession) => this.processSearchRequest(data)
+      TE.chain(formRequest(form, rectangle)),
+      TE.fold(
+        (e: NetworkError) => T.of(this.handleSearchError(e)),
+        (data: SearchSession) => T.of(this.processSearchRequest(data))
       )
+    )();
+  }
+
+  private linkRequest<T>(
+    link: Link
+  ): TE.TaskEither<NetworkError, ValueObject<T>> {
+    return pipe(
+      composeAuth(this.token),
+      TE.fromEither,
+      TE.chain(linkRequest<T>(link))
     );
   }
 
-  private async linkRequest(link: Link) {
-    this.loading = true;
+  private async clearFilters() {
+    const error: NetworkError = {
+      errorType: "NetworkError",
+      body: "Can not get a link for clearing filters",
+    };
 
-    const request = await pipe(
-      composeAuth(this.token),
-      TE.fromEither,
-      TE.map(linkRequest(link)),
-      TE.flatten
-    )();
-
-    pipe(
-      request,
-      E.fold(
-        (e: NetworkError) => this.handleSearchError(e),
-        (data: SearchSession) => this.processSearchRequest(data)
-      )
-    );
-  }
-
-  private clearFilters() {
-    pipe(
+    await pipe(
       this.clearFiltersLink,
-      O.map((filterLink) => {
+      TE.fromOption(() => error),
+      TE.chain((filterLink) => {
         this.filtersCleared.emit();
-        this.linkRequest(filterLink);
-      })
-    );
+        return this.linkRequest(filterLink);
+      }),
+      TE.fold(
+        (e: NetworkError) => T.of(this.handleSearchError(e)),
+        (data: SearchSession) => T.of(this.processSearchRequest(data))
+      )
+    )();
   }
 
   private clearSearchArea() {
