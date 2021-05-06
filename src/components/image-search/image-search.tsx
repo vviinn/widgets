@@ -96,7 +96,7 @@ export class ImageSearch {
 
   @Listen("filterSelectedEvent")
   handleFilterSelection({ detail }: CustomEvent<Link>) {
-    this.handleRecommendationsLink(detail);
+    this.linkRequest(detail);
   }
 
   @Listen("imageSelected")
@@ -121,12 +121,12 @@ export class ImageSearch {
   }
 
   @Listen("searchAreaChangeStart")
-  async handleSearchAreaRelease({ detail }: CustomEvent<boolean>) {
+  handleSearchAreaRelease({ detail }: CustomEvent<boolean>) {
     if (detail) {
       this.isSearchAreaChanged = true;
       return;
     } else {
-      await this.cropImage();
+      this.cropImage();
     }
   }
 
@@ -147,33 +147,23 @@ export class ImageSearch {
     state.currencySign = this.currencySign;
   }
 
-  private async handleRecommendationsLink(link: Link) {
-    this.loading = true;
-
-    const request = await pipe(
-      composeAuth(this.token),
-      TE.fromEither,
-      TE.map(linkRequest(link)),
-      TE.flatten
-    )();
-
-    pipe(
-      request,
-      E.fold(
-        (e: NetworkError) => this.handleSearchError(e),
-        (data: SearchSession) => this.processSearchRequest(data)
-      )
-    );
-  }
-
   private async processSearchRequest(data: SearchSession) {
     this.loading = false;
     await this.slider.resetSliderPosition();
     this.handleSearchSuccess(data.value);
     this.renderFilters(data.filters);
-    this.renderDetectedObjects(data.detectedObjects);
     this.rectangleSearchForm = data.searchArea;
     this.clearFiltersLink = getLink(data, "clearFilters");
+
+    pipe(
+      O.fromNullable(data.detectedObjects),
+      O.map((objects) => this.renderDetectedObjects(objects))
+    );
+
+    pipe(
+      getLink(data, "detectObjects"),
+      O.map((link) => this.linkRequest(link))
+    );
   }
 
   private renderDetectedObjects(
@@ -246,7 +236,7 @@ export class ImageSearch {
       this.clearFiltersLink,
       O.map((filterLink) => {
         this.filtersCleared.emit();
-        this.handleRecommendationsLink(filterLink);
+        this.linkRequest(filterLink);
       })
     );
   }
