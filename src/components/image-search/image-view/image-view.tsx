@@ -36,6 +36,7 @@ export class ImageView {
 
   @Event() cropAreaChanged: EventEmitter<Rectangle>;
   @Event() detectedObjectSelected: EventEmitter<Rectangle>;
+  @Event() imageContainerResized: EventEmitter<void>;
 
   @Listen("imageSelected", { target: "document" })
   async handleImageSelect({ detail }: CustomEvent<HTMLImageElement>) {
@@ -46,6 +47,14 @@ export class ImageView {
   @Listen("objectsDetected", { target: "document" })
   async handleObjectsDetected({ detail }: ObjectsDetectedEvent) {
     this.detectedObjects = detail;
+  }
+
+  componentDidRender() {
+    const resizeObserver = new ResizeObserver(() => {
+      this.imageContainerResized.emit();
+    });
+
+    resizeObserver.observe(this.imageContainer);
   }
 
   handleCropperMove(rectangle: Rectangle) {
