@@ -5,20 +5,22 @@
 
 .filters {
   display: flex;
-  gap: 0.5rem;
   flex-direction: row;
   flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .filter {
-  transform: scale(0);
-  padding: 0.1rem;
-  cursor: pointer;
-  border: 1px solid lightgray;
-  transition: background 0.25s ease-in-out;
-  animation-fill-mode: forwards;
   animation-duration: 0.25s;
+  animation-fill-mode: forwards;
   animation-name: scalein;
+  border: 1px solid lightgray;
+  cursor: pointer;
+  height: 1.25rem;
+  min-width: max-content;
+  padding: 0.1rem;
+  transform: scale(0);
+  transition: background 0.25s ease-in-out;
 }
 
 .filter.active {
@@ -38,5 +40,18 @@
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@media (max-width: 800px) {
+  .filters {
+    flex-wrap: nowrap;
+    height: 2rem;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+  }
+
+  .filter {
+    scroll-snap-align: start;
   }
 }
