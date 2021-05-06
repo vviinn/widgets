@@ -38,9 +38,8 @@ export class ImageView {
   @Event() detectedObjectSelected: EventEmitter<Rectangle>;
 
   @Listen("imageSelected", { target: "document" })
-  async handleImageSelect({ detail }: CustomEvent<File>) {
-    const image = await fromFile(detail);
-    this.imageContainer.src = image.src;
+  async handleImageSelect({ detail }: CustomEvent<HTMLImageElement>) {
+    this.imageContainer.src = detail.src;
     this.detectedObjects = [];
   }
 
@@ -54,7 +53,9 @@ export class ImageView {
     this.cropAreaChanged.emit(this.cropArea);
   }
 
-  private renderDetectedObject(object: ValueObject<DetectedObject>): HTMLElement {
+  private renderDetectedObject(
+    object: ValueObject<DetectedObject>
+  ): HTMLElement {
     return (
       <detected-object-view
         style={{ opacity: this.loading ? "0.5" : "1" }}

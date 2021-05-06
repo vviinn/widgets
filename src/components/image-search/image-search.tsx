@@ -99,8 +99,8 @@ export class ImageSearch {
     this.handleRecommendationsLink(detail);
   }
 
-  @Listen("imageSelected")
-  async handleImageSelect({ detail }: CustomEvent<File>) {
+  @Listen("imageResized")
+  async handleImageResize({ detail }: CustomEvent<File>) {
     this.loading = true;
     this.imageSelected = true;
 
@@ -126,7 +126,7 @@ export class ImageSearch {
       this.isSearchAreaChanged = true;
       return;
     } else {
-      await this.cropImage();
+      this.cropImage();
     }
   }
 
