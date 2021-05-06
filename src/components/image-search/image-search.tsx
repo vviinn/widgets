@@ -105,8 +105,8 @@ export class ImageSearch {
     );
   }
 
-  @Listen("imageSelected")
-  async handleImageSelect({ detail }: CustomEvent<File>) {
+  @Listen("imageResized")
+  async handleImageResize({ detail }: CustomEvent<File>) {
     this.loading = true;
     this.imageSelected = true;
 
