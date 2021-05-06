@@ -8,7 +8,6 @@ import {
   EventEmitter,
   Prop,
 } from "@stencil/core";
-import { fromFile } from "../../../Image/fromFile";
 import {
   Rectangle,
   divideOnSized,
