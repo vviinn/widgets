@@ -30,9 +30,9 @@ import { foldValueObject, ValueObject } from "../../network/ion/ValueObject";
 import { Form, formRequest } from "../../network/ion/Form";
 import { Link, getLink, linkRequest } from "../../network/ion/Link";
 
+import { RectangleAlt } from "../../geometry/RectangleAlt";
 import { Rectangle } from "../../geometry/Rectangle";
 import state from "../../store/store";
-import { RectangleAlt } from "../../geometry/RectangleAlt";
 
 const composeData = (
   token: string,
@@ -74,6 +74,7 @@ export class ImageSearch {
   @Prop() token: string;
   /** Currency sign will shown after price */
   @Prop() currencySign: string;
+  @Prop() apiPath: string | undefined;
 
   @Event({ bubbles: true }) objectsDetected: EventEmitter<
     ValueObject<DetectedObject>[]
@@ -141,6 +142,10 @@ export class ImageSearch {
         return this.linkRequest(link);
       })
     );
+  }
+
+  connectedCallback() {
+    state.apiPath = this.apiPath;
   }
 
   componentWillLoad() {
