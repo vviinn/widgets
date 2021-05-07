@@ -1,9 +1,10 @@
 import { createStore } from "@stencil/store";
 
 const { state } = createStore({
-  fallbackStyles: '',
+  fallbackStyles: "",
   pricePrefix: null,
-  currencySign: null
+  currencySign: null,
+  apiPath: "",
 });
 
 export default state;

@@ -3,11 +3,16 @@ import * as E from "fp-ts/Either";
 import { IO } from "fp-ts/IO";
 import { pipe } from "fp-ts/function";
 import * as S from "fp-ts/Semigroup";
+import state from "../store/store";
+
+const stringMonoid = O.getFirstMonoid<string>();
 
 export const getApiPath: IO<E.Either<string, string>> = () =>
   pipe(
-    `${process.env.API_PATH}`,
-    O.fromNullable,
+    stringMonoid.concat(
+      O.fromNullable(state.apiPath),
+      O.fromNullable(`${process.env.API_PATH}`)
+    ),
     E.fromOption(() => "api path unknown")
   );
 

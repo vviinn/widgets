@@ -44,12 +44,17 @@ export class VIVprView implements ComponentInterface {
   @Prop() sliderMode: boolean = false;
   /** Campaign type */
   @Prop() campaignType: CampaignName = "VPR";
+  @Prop() apiPath: string | undefined;
 
   @State() recommendations: Interfaces["VisualProductSearch"][] = [];
   @State() loaded: boolean = false;
 
   private cssPartsDetector: HTMLDivElement;
   private slider: HTMLVprSliderElement;
+
+  connectedCallback() {
+    state.apiPath = this.apiPath;
+  }
 
   componentDidLoad() {
     const detectorBounds = this.cssPartsDetector.getBoundingClientRect();
