@@ -166,7 +166,7 @@ export class ImageSearch {
     };
 
     await pipe(
-      getLink(data, "detectObjects"),
+      getLink(data, "detectedObjects"),
       TE.fromOption(() => error),
       TE.chain((link) => this.linkRequest(link)),
       TE.fold(
