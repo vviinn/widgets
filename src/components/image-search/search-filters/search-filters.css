@@ -53,7 +53,7 @@
   }
 
   .filter {
-    scroll-snap-align: start;
+    scroll-snap-align: end;
     margin-right: 0.5rem;
   }
 }
