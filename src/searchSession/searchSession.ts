@@ -48,7 +48,7 @@ type ContainsRectangleSearch = {
 
 export type SearchSession = ValueObject<Recommendation[]> &
   HasFilters &
-  ContainsDetectedObjects &
+  Partial<ContainsDetectedObjects> &
   ContainsRectangleSearch;
 
 export const searchSessionClient = (initialData: RequestInit) =>
