@@ -16,7 +16,7 @@
   animation-name: scalein;
   border: 1px solid lightgray;
   cursor: pointer;
-  height: 1.25rem;
+  height: max-content;
   min-width: max-content;
   padding: 0.1rem;
   transform: scale(0);
@@ -49,9 +49,11 @@
     height: 2rem;
     overflow-x: scroll;
     scroll-snap-type: x mandatory;
+    grid-gap: unset;
   }
 
   .filter {
-    scroll-snap-align: start;
+    scroll-snap-align: end;
+    margin-right: 0.5rem;
   }
 }

@@ -4,5 +4,6 @@ dist/
 www/
 loader/
 src/interfaces/generated.ts
+src/components.d.ts
 node_modules/
 docs/
