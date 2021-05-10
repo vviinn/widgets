@@ -49,11 +49,17 @@ export class ImageView {
   }
 
   componentDidRender() {
-    const resizeObserver = new ResizeObserver(() => {
-      this.imageContainerResized.emit();
-    });
+    if (!("ResizeObserver" in window)) {
+      this.imageContainer.addEventListener("resize", () => {
+        this.imageContainerResized.emit();
+      });
+    } else {
+      const resizeObserver = new ResizeObserver(() => {
+        this.imageContainerResized.emit();
+      });
 
-    resizeObserver.observe(this.imageContainer);
+      resizeObserver.observe(this.imageContainer);
+    }
   }
 
   handleCropperMove(rectangle: Rectangle) {

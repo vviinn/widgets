@@ -23,7 +23,10 @@ import {
   fromMouseEvent,
   pointDiffSemigroup,
 } from "../../../../geometry/Point";
-import { ValueObject, foldValueObject } from "../../../../network/ion/ValueObject";
+import {
+  ValueObject,
+  foldValueObject,
+} from "../../../../network/ion/ValueObject";
 import { DetectedObject } from "../../../../searchSession/searchSession";
 
 @Component({
@@ -108,8 +111,12 @@ export class ImageCropper {
   }
 
   connectedCallback() {
-    const resizeObserver = new ResizeObserver(() => this.setInitialSize());
-    resizeObserver.observe(this.el);
+    if (!("ResizeObserver" in window)) {
+      this.el.addEventListener("resize", () => this.setInitialSize());
+    } else {
+      const resizeObserver = new ResizeObserver(() => this.setInitialSize());
+      resizeObserver.observe(this.el);
+    }
   }
 
   private setInitialSize() {
