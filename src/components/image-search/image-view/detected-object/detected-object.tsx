@@ -37,7 +37,9 @@ export class DetectedObjectView {
 
   @Listen("imageContainerResized", { target: "window" })
   handleImageResizing() {
-    this.position = this.translate();
+    setTimeout(() => {
+      this.position = this.translate();
+    }, 100);
   }
 
   private translate(): [string, string] {

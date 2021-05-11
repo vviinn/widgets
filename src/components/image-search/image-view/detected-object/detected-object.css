@@ -14,6 +14,7 @@
   transition: opacity 0.25s;
   width: var(--size);
   z-index: 2;
+  transform: translate(var(--x-position), var(--y-position));
 }
 
 :host::after {
@@ -28,21 +29,3 @@
   transform: translate(calc(-50% + var(--size) * 0.5), calc(-50% + var(--size) * 0.5));
   width: var(--size);
 }
-
-@keyframes fadein {
-  from {
-    transform: translate(var(--x-position), var(--y-position)) scale(0);
-  }
-
-  to {
-    transform: translate(var(--x-position), var(--y-position)) scale(1);
-  }
-}
-
-:host {
-  animation-name: fadein;
-  animation-duration: 0.5s;
-  animation-fill-mode: forwards;
-}
-
-
