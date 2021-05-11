@@ -110,13 +110,9 @@ export class ImageCropper {
     this.cropperMoved.emit(this.cropArea);
   }
 
-  connectedCallback() {
-    if (!("ResizeObserver" in window)) {
-      this.el.addEventListener("resize", () => this.setInitialSize());
-    } else {
-      const resizeObserver = new ResizeObserver(() => this.setInitialSize());
-      resizeObserver.observe(this.el);
-    }
+  @Listen("imageContainerResized", { target: "document" })
+  handleImageResizing() {
+    this.setInitialSize();
   }
 
   private setInitialSize() {

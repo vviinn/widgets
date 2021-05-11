@@ -41,25 +41,21 @@ export class ImageView {
   async handleImageSelect({ detail }: CustomEvent<HTMLImageElement>) {
     this.imageContainer.src = detail.src;
     this.detectedObjects = [];
+
+    this.imageContainer.onload = () => {
+      const painCheckInterval = setInterval(() => {
+        if (this.imageContainer.width > 0 && this.imageContainer.height > 0) {
+          clearInterval(painCheckInterval);
+          this.imageContainer.onload = null;
+          this.imageContainerResized.emit();
+        }
+      }, 10);
+    }
   }
 
   @Listen("objectsDetected", { target: "document" })
   async handleObjectsDetected({ detail }: ObjectsDetectedEvent) {
     this.detectedObjects = detail;
-  }
-
-  componentDidRender() {
-    if (!("ResizeObserver" in window)) {
-      this.imageContainer.addEventListener("resize", () => {
-        this.imageContainerResized.emit();
-      });
-    } else {
-      const resizeObserver = new ResizeObserver(() => {
-        this.imageContainerResized.emit();
-      });
-
-      resizeObserver.observe(this.imageContainer);
-    }
   }
 
   handleCropperMove(rectangle: Rectangle) {
