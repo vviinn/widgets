@@ -70,6 +70,11 @@ export class ImageCropper {
     this.setInitialSize();
   }
 
+  @Listen("imageContainerResized", { target: "document" })
+  handleInitialImageResize() {
+    this.setInitialSize();
+  }
+
   @Listen("resetSearchArea", { target: "document" })
   handleResetting() {
     this.setInitialSize();
@@ -108,11 +113,6 @@ export class ImageCropper {
     this.handlers = fromRectangle(this.cropArea);
     this.mouseStartPoint = destination;
     this.cropperMoved.emit(this.cropArea);
-  }
-
-  @Listen("imageContainerResized", { target: "document" })
-  handleImageResizing() {
-    this.setInitialSize();
   }
 
   private setInitialSize() {
