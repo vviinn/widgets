@@ -22,6 +22,7 @@ import {
 })
 export class CropperHandler {
   private startPoint: Point | undefined;
+  private id: number | undefined;
 
   @State() handleMove: boolean = false;
 
@@ -34,13 +35,17 @@ export class CropperHandler {
 
   @Listen("pointerdown")
   handlePointerStart(event: PointerEvent) {
+    this.id = event.pointerId;
     this.handleMove = true;
     this.startPoint = fromMouseEvent(event);
     this.searchAreaChangeStart.emit(true);
   }
 
-  @Listen("pointerup")
-  handlePointerEnd() {
+  @Listen("pointerup", { target: "window" })
+  handlePointerEnd({ pointerId }: PointerEvent) {
+    if (pointerId !== this.id) {
+      return;
+    }
     this.searchAreaChangeStart.emit(false);
     this.handleMove = false;
     this.startPoint = undefined;
