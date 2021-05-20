@@ -1,83 +1,86 @@
 import { Recommendation } from "../../../recommendation/recommendation";
-import { pipe } from "fp-ts/lib/pipeable";
+import { pipe } from "fp-ts/lib/function";
 import * as O from "fp-ts/lib/Option";
 import * as E from "fp-ts/lib/Either";
 import { sequenceT } from "fp-ts/lib/Apply";
 import { FunctionalComponent, h } from "@stencil/core";
+import { Sized } from "../../../geometry/Sized";
+
+type ImageProps = {
+  readonly url: string;
+  readonly title: string;
+};
+
+type ImageData = ImageProps & Sized;
 
 const sequenceTEither = sequenceT(E.either);
+const optionalStringM = O.getFirstMonoid<string>();
 
 const checkEmpryString = (x: string): O.Option<string> =>
   x.length > 0 ? O.some(x) : O.none;
 
-export const Image = (
-  data: Recommendation,
-  wi: number,
-  he: number
-): FunctionalComponent<Recommendation> =>
+const FIT_EXPR = /fit\/\d+\//;
+
+export const containsFit = (url: string): E.Either<string, string> => {
+  return pipe(
+    url.match(FIT_EXPR),
+    E.fromNullable(url),
+    E.map(() => url)
+  );
+};
+
+const imageUrlFromRecommendation = (r: Recommendation): string =>
   pipe(
-    O.fromNullable(data.image.thumbnail),
+    optionalStringM.concat(
+      O.fromNullable(r.image.thumbnail),
+      O.fromNullable(r.image.original)
+    ),
+    O.getOrElse(() => "")
+  );
+
+export const processWidth = (url: string, size: number): string => {
+  return pipe(
+    containsFit(url),
+    E.map((url) => url.replace(FIT_EXPR, `fit/${size}/`)),
+    E.getOrElse(() => url)
+  );
+};
+
+const createImage = (data: ImageData) => (
+  <img
+    part="product-image"
+    width={data.width}
+    height={data.height}
+    src={data.url}
+    alt={data.title}
+    loading="lazy"
+  />
+);
+
+const wrapInLink = (href: string, el: HTMLImageElement) => (
+  <a href={href} part="product-image-link">
+    {el}
+  </a>
+);
+
+export const Image = (
+  r: Recommendation,
+  width: number,
+  height: number
+): FunctionalComponent<Recommendation> => {
+  const url = processWidth(imageUrlFromRecommendation(r), width);
+  const image = createImage({ url, width, height, title: r.title });
+
+  return pipe(
+    r.deeplink,
+    O.fromNullable,
+    O.chain(checkEmpryString),
     O.fold(
-      () =>
-        pipe(
-          O.fromNullable(data.deeplink),
-          O.chain(checkEmpryString),
-          O.fold(
-            () => (
-              <img
-                part="product-image"
-                width={wi}
-                height={he}
-                src={data.image.original}
-                alt={data.title}
-                loading="lazy"
-              />
-            ),
-            (deeplink) => (
-              <a href={deeplink} part="product-image-link">
-                <img
-                  part="product-image"
-                  width={wi}
-                  height={he}
-                  src={data.image.original}
-                  alt={data.title}
-                  loading="lazy"
-                />
-              </a>
-            )
-          )
-        ),
-      (thumbnail) =>
-        pipe(
-          O.fromNullable(data.deeplink),
-          O.chain(checkEmpryString),
-          O.fold(
-            () => (
-              <img
-                part="product-image"
-                width={wi}
-                height={he}
-                src={thumbnail}
-                alt={data.title}
-                loading="lazy"
-              />
-            ),
-            (deeplink) => (
-              <a href={deeplink} part="product-image-link">
-                <img
-                  part="product-image"
-                  width={wi}
-                  height={he}
-                  src={thumbnail}
-                  alt={data.title}
-                  loading="lazy"
-                />
-              </a>
-            )
-          )
-        )
+      () => image,
+      (deeplink) => wrapInLink(deeplink, image)
     )
   );
+};
 
 export const Title = (
   data: Recommendation
