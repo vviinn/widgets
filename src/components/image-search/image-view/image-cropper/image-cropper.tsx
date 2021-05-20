@@ -153,8 +153,10 @@ export class ImageCropper {
     const inLeftBound = rectangle.x >= 0;
     const inRightBound = rectangle.x + rectangle.width <= bounds.width;
     const inBottomBound = rectangle.y + rectangle.height <= bounds.height;
+    const minWidth = rectangle.width > 20;
+    const minHeight = rectangle.height > 20;
 
-    return inTopBound && inLeftBound && inRightBound && inBottomBound;
+    return inTopBound && inLeftBound && inRightBound && inBottomBound && minHeight && minWidth;
   }
 
   render() {
