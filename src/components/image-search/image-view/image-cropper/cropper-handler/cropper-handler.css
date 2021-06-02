@@ -25,20 +25,32 @@
   opacity: 0.25;
 }
 
-:host(.nw-resize),
-:host(.n-resize),
-:host(.w-resize) {
+:host(.nw-resize) {
   transform: translate(var(--x), var(--y));
 }
 
-:host(.ne-resize),
-:host(.e-resize) {
+:host(.n-resize) {
+  transform: translate(calc(var(--x) - calc(var(--size) / 2)), var(--y));
+}
+
+:host(.w-resize) {
+  transform: translate(var(--x), calc(var(--y) - calc(var(--size) / 2)));
+}
+
+:host(.ne-resize) {
   transform: translate(calc(var(--x) - var(--size)), var(--y));
 }
 
-:host(.sw-resize),
-:host(.s-resize) {
+:host(.e-resize) {
+  transform: translate(calc(var(--x) - var(--size)), calc(var(--y) - calc(var(--size) / 2)));
+}
+
+:host(.sw-resize) {
   transform: translate(var(--x), calc(var(--y) - var(--size)));
+}
+
+:host(.s-resize) {
+  transform: translate(calc(var(--x) - calc(var(--size) / 2)), calc(var(--y) - var(--size)));
 }
 
 :host(.se-resize) {
