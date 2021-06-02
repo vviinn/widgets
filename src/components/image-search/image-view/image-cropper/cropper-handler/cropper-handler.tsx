@@ -35,6 +35,9 @@ export class CropperHandler {
 
   @Listen("pointerdown")
   handlePointerStart(event: PointerEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+
     this.id = event.pointerId;
     this.handleMove = true;
     this.startPoint = fromMouseEvent(event);
@@ -46,6 +49,7 @@ export class CropperHandler {
     if (pointerId !== this.id) {
       return;
     }
+
     this.searchAreaChangeStart.emit(false);
     this.handleMove = false;
     this.startPoint = undefined;
