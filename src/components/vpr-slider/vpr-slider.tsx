@@ -24,7 +24,7 @@ export class VprSlider {
 
   @Prop() mode: GridMode;
   @Prop() imageRatio: number = 1.5;
-  @Prop() imageWidth: number = 150;
+  @Prop() imageWidth: number = 100;
   @Prop() productsInGrid: number = 4;
 
   @State() wrappedItems: Recommendation[][] = [[]];
@@ -86,11 +86,10 @@ export class VprSlider {
   }
 
   private getColumns(): number {
-    const c = parseInt(getComputedStyle(this.el).getPropertyValue("--columns"));
-    return c;
+    return parseInt(getComputedStyle(this.el).getPropertyValue("--columns"));
   }
 
-  private getProductsCount(products): number {
+  private getProductsCount(products: Recommendation[]): number {
     return this.productsInGrid ?? products.length ?? 1;
   }
 

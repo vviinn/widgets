@@ -4,6 +4,7 @@
   grid-gap: .5rem;
   justify-items: center;
   align-content: start;
+  max-width: max-content;
 }
 
 img {

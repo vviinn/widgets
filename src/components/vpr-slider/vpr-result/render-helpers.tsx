@@ -49,8 +49,8 @@ export const processWidth = (url: string, size: number): string => {
 const createImage = (data: ImageData) => (
   <img
     part="product-image"
-    width={data.width}
-    height={data.height}
+    width={data?.width}
+    height={data?.height}
     src={data.url}
     alt={data.title}
     loading="lazy"

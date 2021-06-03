@@ -26,7 +26,7 @@ vpr-slider.minimal {
 }
 
 .slide.grid {
-  grid-template-columns: repeat(auto-fit, var(--item-size));
+  grid-template-columns: repeat(auto-fit, minmax(var(--item-size), 1fr));
   grid-auto-flow: unset; 
 }
 

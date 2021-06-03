@@ -328,8 +328,8 @@ export class ImageSearch {
         <vpr-slider
           part="results"
           mode="grid"
-          productsInGrid={16}
-          imageWidth={100}
+          productsInGrid={12}
+          imageWidth={120}
           imageRatio={1}
           ref={(el) => (this.slider = el)}
         ></vpr-slider>
