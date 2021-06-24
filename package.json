@@ -12,7 +12,6 @@
   "unpkg": "dist/mediaopt-widgets/mediaopt-vpr.js",
   "files": [
     "dist/",
-    "loader/",
     "www/"
   ],
   "scripts": {
