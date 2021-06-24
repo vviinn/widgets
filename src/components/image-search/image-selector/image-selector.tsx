@@ -24,7 +24,7 @@ export class ImageSelector {
   @Event() imageSelected: EventEmitter<HTMLImageElement>;
   @Event() imageResized: EventEmitter<File>;
 
-  private handleInputChange(ev: InputEvent) {
+  private handleInputChange(ev: Event) {
     const fileInput = ev.target as HTMLInputElement;
     this.handleFileSelection(O.fromNullable(fileInput.files[0]));
   }
