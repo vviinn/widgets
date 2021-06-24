@@ -46,7 +46,6 @@
 @media (max-width: 800px) {
   .filters {
     flex-wrap: nowrap;
-    height: 2rem;
     overflow-x: scroll;
     scroll-snap-type: x mandatory;
     grid-gap: unset;

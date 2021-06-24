@@ -1,0 +1,42 @@
+:host {
+  display: block;
+}
+
+vviinn-slide {
+  align-items: center;
+  background: #f4f4f4;
+  display: grid;
+  grid-template-rows: repeat(2, 1fr);
+  justify-items: center;
+  padding: 16px;
+}
+
+svg {
+  padding: 16px 0;
+}
+
+.text {
+  display: grid;
+  grid-gap: 8px;
+}
+
+.text > h4 {
+  color: #161616;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 32px;
+  margin: unset;
+  text-align: center;
+}
+
+.text > p {
+  color: #525252;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 20px;
+  margin: unset;
+  text-align: center;
+}
+
+

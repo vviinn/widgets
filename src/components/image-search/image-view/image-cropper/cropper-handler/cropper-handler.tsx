@@ -32,6 +32,7 @@ export class CropperHandler {
 
   @Event() handlerMoved: EventEmitter<Handler>;
   @Event() searchAreaChangeStart: EventEmitter<boolean>;
+  @Event() handlerReleased: EventEmitter<void>;
 
   @Listen("pointerdown")
   handlePointerStart(event: PointerEvent) {
@@ -45,12 +46,16 @@ export class CropperHandler {
   }
 
   @Listen("pointerup", { target: "window" })
-  handlePointerEnd({ pointerId }: PointerEvent) {
+  handlePointerEnd(event: PointerEvent) {
+    event.stopPropagation();
+
+    const { pointerId } = event;
     if (pointerId !== this.id) {
       return;
     }
 
     this.searchAreaChangeStart.emit(false);
+    this.handlerReleased.emit();
     this.handleMove = false;
     this.startPoint = undefined;
   }
@@ -72,7 +77,7 @@ export class CropperHandler {
 
   render() {
     return (
-      <Host
+      <Host part={`handle ${getCursorValue(this.handler.direction)}`}
         class={{
           active: this.handleMove,
           disabled: this.disabled,
@@ -81,6 +86,7 @@ export class CropperHandler {
         style={{
           "--x": `${this.handler.position.x}px`,
           "--y": `${this.handler.position.y}px`,
+          "--size": "20px",
           cursor: getCursorValue(this.handler.direction),
         }}
       ></Host>

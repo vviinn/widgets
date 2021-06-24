@@ -1,0 +1,27 @@
+:host {
+  display: none;
+}
+
+:host(.active) {
+  display: block;
+}
+
+vviinn-overlay {
+  align-items: center;
+  display: grid;
+  justify-items: center;
+}
+
+@media (max-width: 415px) {
+  vviinn-modal {
+    width: 100vw;
+    height: 90vh;
+    border-radius: 4px 4px 0 0;
+  }
+
+  vviinn-overlay {
+    align-items: end;
+    display: grid;
+    justify-items: center;
+  }
+}

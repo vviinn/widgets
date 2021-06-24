@@ -1,0 +1,21 @@
+:host {
+  animation: fade-in 0.5s ease-in-out;
+  background: rgba(0, 0, 0, 0.5);
+  display: block;
+  height: 100vh;
+  left: 0;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  width: 100vw;
+}
+
+@keyframes fade-in {
+  from {
+    clip-path: circle(0%);
+  }
+
+  to {
+    clip-path: circle(100%);
+  }
+}

@@ -101,8 +101,6 @@ export class ImageView {
         <img ref={(el) => (this.imageContainer = el)} />
         {this.imageContainer ? (
           <highlight-box
-            image={this.imageContainer}
-            selection={this.cropArea}
           />
         ) : null}
         <image-cropper

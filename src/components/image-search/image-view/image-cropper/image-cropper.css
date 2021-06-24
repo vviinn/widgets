@@ -12,11 +12,13 @@
 }
 
 .wrapper {
+  height: 100%;
   position: relative;
+  width: 100%;
 }
 
 .crop-area {
-  border: 2px dashed black;
+  border: 1px solid white;
   box-sizing: border-box;
   position: absolute;
   touch-action: none;
