@@ -76,6 +76,9 @@ export class VviinnVpsWidget {
                             </div>
                             <div class="start-page_block">
                                 <vviinn-onboarding />
+                                <vviinn-example-images
+                                    onImageSelected={() => this.handleImageSelection()}
+                                />
                             </div>
                         </vviinn-slide>
                         <vviinn-slide class="results-page">
