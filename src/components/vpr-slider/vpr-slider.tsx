@@ -90,6 +90,7 @@ export class VprSlider {
   }
 
   private getProductsCount(products: Recommendation[]): number {
+    debugger;
     return this.productsInGrid ?? products.length ?? 1;
   }
 

@@ -1,0 +1,136 @@
+:host {
+  display: block;
+}
+
+vviinn-overlayed-modal.first-screen::part(title),
+vviinn-overlayed-modal.first-screen::part(secondary-action) {
+  visibility: hidden;
+}
+
+.start-page {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.start-page_block {
+  align-content: center;
+  border-right: 1px solid #F4F4F4;
+  display: grid;
+  grid-gap: 16px;
+  padding: 20px;
+}
+
+.start-page_block:last-of-type {
+  border-right: unset;
+}
+
+image-selector {
+  background: #0F62FE;
+  border-radius: 2px;
+  border-color: #0F62FE;
+  color: white;
+}
+
+image-selector::hover {
+  background: #014CDA;
+  border-color: #014CDA;
+}
+
+.upload-button-content {
+  display: grid;
+  align-items: center;
+  justify-items: start;
+  justify-content: center;
+  grid-template-columns: max-content auto;
+  grid-gap: 16px;
+}
+
+.results-page {
+  display: grid;
+  grid-template-columns: 336px auto;
+  box-sizing: border-box;
+}
+
+.results-page > * {
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 173px);
+  align-items: start;
+  align-content: center;
+  justify-items: center;
+  grid-gap: 24px;
+  position: absolute;
+  width: calc(100% - 24px);
+}
+
+.products-wrapper {
+  position: relative;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.image-wrapper {
+  border-right: 1px solid #F4F4F4;
+  display: grid;
+  grid-template-rows: auto 170px;
+  grid-gap: 24px;
+  min-width: 100%;
+}
+
+vpr-result::part(product-image) {
+    background: #f4f4f4;
+}
+
+search-filters span {
+  display: none;
+}
+
+search-filters::part(filter),
+search-filters::part(show-more-filters) {
+  background: #F4F4F4;
+  border-radius: 4px;
+  padding: 6px 16px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  color: #161616;
+  border: none;
+}
+
+search-filters::part(filter active) {
+  background: rgba(15, 98, 254, 0.15);
+  color: #0F62FE;
+}
+
+.filters-wrapper {
+  overflow: auto;
+}
+
+@media (max-width: 415px) {
+  .start-page {
+    grid-template-columns: unset;
+    grid-template-rows: repeat(2, 1fr);
+  }
+
+  .results-page {
+    grid-template-columns: unset;
+  }
+
+  .image-wrapper {
+    grid-template-rows: unset;
+  }
+
+  .products-wrapper {
+    position: unset;
+    overflow-y: unset;
+    width: 100%;
+  }
+
+  .products {
+    position: 100%;
+  }
+}

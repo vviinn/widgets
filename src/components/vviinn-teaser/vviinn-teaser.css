@@ -1,0 +1,13 @@
+:host {
+  align-items: center;
+  display: grid;
+  justify-items: center;
+}
+
+.vviinn-teaser-text {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 40px;
+  size: 28px;
+  text-align: center;
+}

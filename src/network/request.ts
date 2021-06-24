@@ -12,33 +12,34 @@ export interface NetworkError {
 
 function errorFromUnknown(x: unknown): NetworkError {
   return {
-    errorType: "NetworkError", body: x
-  }
+    errorType: "NetworkError",
+    body: x,
+  };
 }
 
 export function networkErrorFrom<T>(x: T): NetworkError {
   return {
-    errorType: "NetworkError", body: x
-  }
+    errorType: "NetworkError",
+    body: x,
+  };
 }
 
 const getError = (x: Response): NetworkError =>
-  x.status === 500 ? { errorType: "NetworkError", body: x } : { errorType: "NotFound", body: x };
+  x.status === 500
+    ? { errorType: "NetworkError", body: x }
+    : { errorType: "NotFound", body: x };
 
 const safeRequest = (
   url: string | Request,
-  request: RequestInit = {method: 'GET'}
+  request: RequestInit = { method: "GET" }
 ): TE.TaskEither<NetworkError, Response> =>
-  TE.tryCatch(
-  () => fetch(url, request),
-    errorFromUnknown
-  );
+  TE.tryCatch(() => fetch(url, request), errorFromUnknown);
 
 const processResponce = flow((x: Response): E.Either<
   NetworkError,
   Response
 > => {
-  return (x.status >= 200 && x.status < 300) ? E.right(x) : E.left(getError(x));
+  return x.status >= 200 && x.status < 300 ? E.right(x) : E.left(getError(x));
 }, TE.fromEither);
 
 function getJson<I>(x: Response): TE.TaskEither<NetworkError, I> {
@@ -51,7 +52,7 @@ export const request = <I>(
   request: RequestInit = {}
 ): TE.TaskEither<NetworkError, I> =>
   pipe(
-  safeRequest(url, request),
+    safeRequest(url, request),
     TE.chain(processResponce),
     TE.chain((x) => getJson<I>(x))
   );
@@ -62,8 +63,8 @@ export const makeRequest = <T>(path: string, init: RequestInit) => ([
   apiPath,
   options,
 ]: RequestWithPath): TE.TaskEither<NetworkError, T> => {
-  const fullUrl = `${apiPath}/${path}`;
+  const url = new URL(path, apiPath);
   const fullOptions = initRequestSemigroup.concat(options, init);
 
-  return request<T>(`${fullUrl}`, fullOptions);
+  return request<T>(url.toString(), fullOptions);
 };

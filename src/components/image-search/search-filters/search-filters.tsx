@@ -10,6 +10,7 @@ import {
 } from "@stencil/core";
 import { Link } from "../../../network/ion/Link";
 import { SearchSessionFilter } from "../../../searchSession/searchSession";
+import { imageSearchState } from "../../../store/imageSearch.store";
 
 const getFilterId = (filter: Link): string =>
   filter.href.split("/").reverse()[0];
@@ -33,6 +34,7 @@ export class SearchFilters {
   private filterSelected(f: Link) {
     this.filterSelectedEvent.emit(f);
     this.selectedCategoryId = getFilterId(f);
+    imageSearchState.activeIonLink = f;
   }
 
   private toggleFilters() {
@@ -42,13 +44,12 @@ export class SearchFilters {
   render() {
     return (
       <Host exportparts="filter, show-more-filters">
-        <span>{this.filter.name}:</span>
         <div class="filters">
           {this.filter.filters
             .filter((_, i) => (this.hideFilters ? i < 5 : true))
             .map((f, n) => (
               <div
-                part="filter"
+                part={this.selectedCategoryId === getFilterId(f) ? "filter active" : "filter"}
                 class={{
                   filter: true,
                   active: this.selectedCategoryId === getFilterId(f),

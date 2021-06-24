@@ -1,0 +1,14 @@
+:host {
+  display: grid;
+  position: relative;
+  max-height: min-content;
+}
+
+img {
+  box-sizing: border-box;
+  filter: brightness(60%);
+  height: auto;
+  position: relative;
+  width: 100%;
+  z-index: -1;
+}

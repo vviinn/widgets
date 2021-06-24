@@ -1,5 +1,5 @@
 :host {
-  display: block;
+  display: grid;
   position: absolute;
   box-sizing: border-box;
   border: none;

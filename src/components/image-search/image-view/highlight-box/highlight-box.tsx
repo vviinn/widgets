@@ -1,11 +1,9 @@
-import { Component, Host, h, Prop } from "@stencil/core";
+import { Component, Host, h } from "@stencil/core";
 import { getClipValue } from "../../../../geometry/Clip";
 import * as O from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/function";
-import {
-  Rectangle,
-  scaleWithSized,
-} from "../../../../geometry/Rectangle";
+import { imageSearchState } from "../../../../store/imageSearch.store";
+import { sequenceToOption } from "../../../../utils/option/option";
 
 @Component({
   tag: "highlight-box",
@@ -13,14 +11,12 @@ import {
   shadow: true,
 })
 export class HighlightBox {
-  @Prop() image: HTMLImageElement | undefined;
-  @Prop() selection: Rectangle | undefined;
-
   private getInsetValue(): string {
+    const searchArea = O.fromNullable(imageSearchState.searchArea);
+    const imageBounds = O.fromNullable(imageSearchState.imageBounds);
     return pipe(
-      O.fromNullable(this.selection),
-      O.map(scaleWithSized(this.image)),
-      O.map((selection) => getClipValue(selection, this.image)),
+      sequenceToOption(searchArea, imageBounds),
+      O.map(([selection, image]) => getClipValue(selection, image)),
       O.getOrElse(() => "")
     );
   }
@@ -29,7 +25,7 @@ export class HighlightBox {
     return (
       <Host>
         <img
-          src={this.image.src}
+          src={imageSearchState.resizedImageUrl}
           style={{
             background: "black",
             "clip-path": `${this.getInsetValue()}`,
