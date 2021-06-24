@@ -11,11 +11,13 @@ import { sequenceToOption } from "../../../../utils/option/option";
   shadow: true,
 })
 export class HighlightBox {
+  private image: O.Option<HTMLImageElement> = O.none;
+
   private getInsetValue(): string {
     const searchArea = O.fromNullable(imageSearchState.searchArea);
-    const imageBounds = O.fromNullable(imageSearchState.imageBounds);
+
     return pipe(
-      sequenceToOption(searchArea, imageBounds),
+      sequenceToOption(searchArea, this.image),
       O.map(([selection, image]) => getClipValue(selection, image)),
       O.getOrElse(() => "")
     );
@@ -24,7 +26,7 @@ export class HighlightBox {
   render() {
     return (
       <Host>
-        <img
+        <img ref={(el) => this.image = O.some(el)}
           src={imageSearchState.resizedImageUrl}
           style={{
             background: "black",

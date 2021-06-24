@@ -118,19 +118,21 @@ search-filters::part(filter active) {
 
   .results-page {
     grid-template-columns: unset;
+    grid-template-rows: min-content auto;
   }
 
   .image-wrapper {
-    grid-template-rows: unset;
+    grid-template-rows: min-content auto;
   }
 
   .products-wrapper {
-    position: unset;
+    position: unsetstatic;
     overflow-y: unset;
     width: 100%;
   }
 
   .products {
-    position: 100%;
+    position: static;
+    width: unset;
   }
 }
