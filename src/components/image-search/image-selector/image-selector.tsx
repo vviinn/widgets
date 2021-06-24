@@ -24,8 +24,9 @@ export class ImageSelector {
   @Event() imageSelected: EventEmitter<HTMLImageElement>;
   @Event() imageResized: EventEmitter<File>;
 
-  private handleInputChange() {
-    this.handleFileSelection(O.fromNullable(this.input.files[0]));
+  private handleInputChange(ev: InputEvent) {
+    const fileInput = ev.target as HTMLInputElement;
+    this.handleFileSelection(O.fromNullable(fileInput.files[0]));
   }
 
   private handleFileSelection(file: O.Option<File>) {
@@ -60,7 +61,7 @@ export class ImageSelector {
           type="file"
           accept="image/*"
           capture="enviroment"
-          onChange={() => this.handleInputChange()}
+          onChange={(ev) => this.handleInputChange(ev)}
         />
       </Host>
     );
