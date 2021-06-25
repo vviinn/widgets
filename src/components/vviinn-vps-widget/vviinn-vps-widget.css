@@ -81,7 +81,7 @@ image-selector::hover {
 .image-wrapper {
   border-right: 1px solid #F4F4F4;
   display: grid;
-  grid-template-rows: auto 170px;
+  grid-template-rows: min-content 170px;
   grid-gap: 24px;
   min-width: 100%;
 }
