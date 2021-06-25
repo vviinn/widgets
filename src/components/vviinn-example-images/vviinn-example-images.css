@@ -1,3 +1,10 @@
 :host {
+  display: grid;
+  grid-gap: 8px;
+}
+
+.images {
   display: block;
+  column-count: 2;
+  column-gap: 8px;  
 }

@@ -1,3 +1,10 @@
 :host {
-  display: block;
+  display: grid;
+  margin-bottom: 8px;
+}
+
+img {
+  width: 100%;
+  height: auto;
+  cursor: pointer;
 }

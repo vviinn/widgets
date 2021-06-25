@@ -16,9 +16,12 @@ export class VviinnExampleImages {
   render() {
     return (
       <Host>
-        <vviinn-exampleimae src="https://unsplash.it/640/425" />
-        <vviinn-example-image src="https://unsplash.it/425/425" />
-        <vviinn-example-image src="https://unsplash.it/425/640" />
+        <h4>Get inspired by choosing an example from gallery</h4>
+        <div class="images">
+          <vviinn-example-image src="https://unsplash.it/640/425" />
+          <vviinn-example-image src="https://unsplash.it/425/425" />
+          <vviinn-example-image src="https://unsplash.it/425/640" />
+        </div>
       </Host>
     );
   }
