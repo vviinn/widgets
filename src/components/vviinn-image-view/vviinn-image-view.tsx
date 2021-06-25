@@ -23,6 +23,7 @@ export class VviinnImageView {
 
   private handleImageResize() {
     this.imageContainerResized.emit();
+    imageSearchState.imageBounds = this.image.getBoundingClientRect()
   }
 
   render() {
