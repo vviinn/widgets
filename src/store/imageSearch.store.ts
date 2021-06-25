@@ -12,9 +12,10 @@ import {
   SearchSession,
   searchSessionClient,
   SearchSessionFilter,
+  DetectedObject,
 } from "../searchSession/searchSession";
-import { foldValueObject } from "../network/ion/ValueObject";
-import { Link, linkRequest } from "../network/ion/Link";
+import { foldValueObject, ValueObject } from "../network/ion/ValueObject";
+import { Link, linkRequest, getLink } from "../network/ion/Link";
 import { divideOnSized, move, Rectangle } from "../geometry/Rectangle";
 import { Form, formRequest } from "../network/ion/Form";
 import { fromFile } from "../Image/fromFile";
@@ -81,6 +82,34 @@ const updateState = (response: SearchSession) => {
   state.results = response.value;
   state.filters = readFilters(foldValueObject(response.filters));
   state.rectangleSearchForm = response.searchArea;
+
+  detectObjects(response);
+};
+
+const makeLinkRequest = <T>(
+  link: Link
+): TE.TaskEither<NetworkError, ValueObject<T>> => {
+  return pipe(
+    composeAuth(state.token),
+    TE.fromEither,
+    TE.chain(linkRequest<T>(link))
+  );
+};
+
+const detectObjects = async (data: SearchSession) => {
+  const error: NetworkError = {
+    errorType: "NetworkError",
+    body: "Can not get a link for objects detection",
+  };
+
+  await pipe(
+    getLink(data, "detectedObjects"),
+    TE.fromOption(() => error),
+    TE.chain(makeLinkRequest),
+    TE.map((objects: ValueObject<ValueObject<DetectedObject>[]>) =>
+      console.log(objects)
+    )
+  )();
 };
 
 onChange("image", async (newImage: File) => {
@@ -88,7 +117,7 @@ onChange("image", async (newImage: File) => {
 
   image.onload = async () => {
     const [url, rect] = resizeImage(RESIZED_IMAGE_WIDTH, image);
-    const padding = 20;
+    const padding = 16;
     const { x, y } = move(rect, { x: padding, y: padding });
     const searchArea = {
       x,
