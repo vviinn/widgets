@@ -9,8 +9,9 @@ import { sequenceT } from "fp-ts/Apply";
 import * as E from "fp-ts/Either";
 import * as TE from "fp-ts/TaskEither";
 import { RectangleAlt } from "../geometry/RectangleAlt";
+import { Eq } from "fp-ts/lib/Eq";
 
-const sequenceToEither = sequenceT(E.either);
+const sequenceToEither = sequenceT(E.Apply);
 
 export interface SearchSessionFilters {
   readonly [key: string]: Link[];
@@ -36,6 +37,16 @@ export type DetectedObject = {
   class: string;
   score: number;
   rectangle: RectangleAlt;
+};
+
+export const detectedObjectEq: Eq<DetectedObject> = {
+  equals: (x: DetectedObject, y: DetectedObject) =>
+    x.class === y.class &&
+    x.score === y.score &&
+    x.rectangle.left === y.rectangle.left &&
+    x.rectangle.top === y.rectangle.top &&
+    x.rectangle.height === y.rectangle.height &&
+    x.rectangle.width === y.rectangle.width,
 };
 
 type ContainsDetectedObjects = {

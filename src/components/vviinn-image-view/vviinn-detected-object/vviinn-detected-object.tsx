@@ -1,7 +1,10 @@
 import { Component, Host, h, State, Prop } from "@stencil/core";
 import { pipe } from "fp-ts/lib/function";
 import { ValueObject, foldValueObject } from "../../../network/ion/ValueObject";
-import { DetectedObject } from "../../../searchSession/searchSession";
+import {
+  DetectedObject,
+  detectedObjectEq,
+} from "../../../searchSession/searchSession";
 import { fromAlt, scaleWithSized, center } from "../../../geometry/Rectangle";
 import {
   imageSearchState,
@@ -37,16 +40,30 @@ export class VviinnDetectedObject {
       transformedRect
     );
 
+    imageSearchState.detectedObject = this.detectedObject;
     imageSearchState.searchArea = scaledRect;
 
     makeRectangularSearchRequest();
+  }
+
+  private isActive(): boolean {
+    if (!this.detectedObject) return false;
+    if (!imageSearchState.detectedObject) return false;
+
+    const thisObject = foldValueObject(this.detectedObject);
+    const savedObject = foldValueObject(imageSearchState.detectedObject);
+
+    return detectedObjectEq.equals(thisObject, savedObject);
   }
 
   @State() position: [string, string] = ["0", "0"];
   render() {
     return (
       <Host
-        onCLick={() => this.selectDetectedObject()}
+        class={{
+          active: this.isActive(),
+        }}
+        onClick={() => this.selectDetectedObject()}
         style={{
           "--x-position": this.getObjectPosition()[0],
           "--y-position": this.getObjectPosition()[1],

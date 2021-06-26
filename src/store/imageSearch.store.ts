@@ -67,6 +67,7 @@ type ImageSearchStore = {
   cropperHandlers: Handler[];
   rectangleSearchForm: Form | undefined;
   detectedObjects: ValueObject<DetectedObject>[];
+  detectedObject: ValueObject<DetectedObject> | undefined;
 };
 
 const { state, onChange } = createStore<ImageSearchStore>({
@@ -81,6 +82,7 @@ const { state, onChange } = createStore<ImageSearchStore>({
   cropperHandlers: [],
   rectangleSearchForm: undefined,
   detectedObjects: [],
+  detectedObject: undefined,
 });
 
 const updateState = (response: SearchSession) => {

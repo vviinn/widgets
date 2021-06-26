@@ -6,7 +6,6 @@
   background: black;
   border-radius: 50%;
   border: none;
-  box-sizing: border-box;
   cursor: pointer;
   display: block;
   height: var(--size);
@@ -18,14 +17,19 @@
   transform: translate(var(--x-position), var(--y-position));
 }
 
+:host(.active) {
+  background: #0F62FE;
+  border: 1px solid white;
+}
+
 :host::after {
+  --size: 32px;
   border-radius: 50%;
-  border: 5px solid black;
   content: "";
   cursor: pointer;
   display: block;
-  height: 12px;
+  height: calc(var(--size) * 0.25);
   transform: translate(calc(-50% + var(--size) * 0.5), calc(-50% + var(--size) * 0.5));
-  width: 12px;
+  width: calc(var(--size) * 0.25);
   background: white;
 }
