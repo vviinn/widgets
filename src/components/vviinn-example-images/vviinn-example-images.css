@@ -8,3 +8,9 @@
   column-count: 2;
   column-gap: 8px;  
 }
+
+@media (max-width: 415px) {
+  :host {
+    padding-bottom: 24vh;
+  }
+}
