@@ -9,7 +9,7 @@ import {
   Element,
   Prop,
 } from "@stencil/core";
-import { fromRectangle, Handler } from "../../../../cropper/Handler";
+import { Handler } from "../../../../cropper/Handler";
 import {
   Rectangle,
   move,
@@ -38,8 +38,6 @@ export class ImageCropper {
   @Element() el: HTMLElement;
 
   @Prop() disabled: boolean = false;
-
-  @State() handlers: Handler[] = fromRectangle(imageSearchState.searchArea);
   @State() handleMove: boolean = false;
 
   private mouseStartPoint: Point | undefined = undefined;
@@ -55,7 +53,6 @@ export class ImageCropper {
     const rect = fromAlt(foldValueObject(detail).rectangle);
 
     imageSearchState.searchArea = scale(rect);
-    this.handlers = fromRectangle(imageSearchState.searchArea);
   }
 
   handleHandlerMove(event: CustomEvent<Handler>) {
@@ -66,7 +63,6 @@ export class ImageCropper {
     }
 
     imageSearchState.searchArea = newSearchArea;
-    this.handlers = fromRectangle(imageSearchState.searchArea);
   }
 
   @Listen("pointermove")
@@ -86,7 +82,6 @@ export class ImageCropper {
     }
 
     imageSearchState.searchArea = newSearchArea;
-    this.handlers = fromRectangle(imageSearchState.searchArea);
     this.mouseStartPoint = destination;
   }
 
@@ -140,7 +135,7 @@ export class ImageCropper {
           onPointerUp={(ev) => { ev.stopPropagation(); this.handleSearchAreaRelease() }}
         ></div>
         <div class="wrapper">
-          {this.handlers.map((handler) => (
+          {imageSearchState.cropperHandlers.map((handler) => (
             <cropper-handler
               disabled={this.disabled}
               handler={handler}

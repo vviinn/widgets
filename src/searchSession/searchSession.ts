@@ -1,4 +1,4 @@
-import { pipe } from "fp-ts/lib/pipeable";
+import { pipe } from "fp-ts/lib/function";
 import { ValueObject } from "../network/ion/ValueObject";
 import { Link } from "../network/ion/Link";
 import { Form } from "../network/ion/Form";

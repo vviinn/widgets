@@ -21,6 +21,7 @@ import { Form, formRequest } from "../network/ion/Form";
 import { fromFile } from "../Image/fromFile";
 import { resizeImage } from "../Image/resizeImage";
 import { toFile } from "../Image/toFile";
+import { Handler, fromRectangle } from "../cropper/Handler";
 
 const RESIZED_IMAGE_WIDTH = 300;
 
@@ -63,7 +64,9 @@ type ImageSearchStore = {
   activeIonLink: Link | undefined;
   imageBounds: Rectangle | undefined;
   searchArea: Rectangle | undefined;
+  cropperHandlers: Handler[];
   rectangleSearchForm: Form | undefined;
+  detectedObjects: ValueObject<DetectedObject>[];
 };
 
 const { state, onChange } = createStore<ImageSearchStore>({
@@ -75,7 +78,9 @@ const { state, onChange } = createStore<ImageSearchStore>({
   activeIonLink: undefined,
   imageBounds: undefined,
   searchArea: undefined,
+  cropperHandlers: [],
   rectangleSearchForm: undefined,
+  detectedObjects: [],
 });
 
 const updateState = (response: SearchSession) => {
@@ -106,8 +111,9 @@ const detectObjects = async (data: SearchSession) => {
     getLink(data, "detectedObjects"),
     TE.fromOption(() => error),
     TE.chain(makeLinkRequest),
-    TE.map((objects: ValueObject<ValueObject<DetectedObject>[]>) =>
-      console.log(objects)
+    TE.map(
+      (objects: ValueObject<ValueObject<DetectedObject>[]>) =>
+        (state.detectedObjects = foldValueObject(objects))
     )
   )();
 };
@@ -151,6 +157,10 @@ onChange(
       TE.map(updateState)
     )()
 );
+
+onChange("searchArea", async (newSearchArea: Rectangle) => {
+  state.cropperHandlers = fromRectangle(newSearchArea);
+});
 
 export const makeRectangularSearchRequest = async () => {
   const scaled = divideOnSized(state.imageBounds)(state.searchArea);

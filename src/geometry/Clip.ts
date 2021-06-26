@@ -14,8 +14,6 @@ const fromRectangle = (shape: Rectangle, target: Sized): Clip => {
   const right = `${target.width - (shape.x + shape.width)}px`;
   const bottom = `${target.height - (shape.y + shape.height)}px`;
 
-  console.log(shape, target);
-
   return {
     top,
     right,

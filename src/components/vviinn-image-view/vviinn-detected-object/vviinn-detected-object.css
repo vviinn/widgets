@@ -1,0 +1,31 @@
+:host {
+  --size: 32px;
+  --x-position: 0;
+  --y-position: 0;
+
+  background: black;
+  border-radius: 50%;
+  border: none;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: block;
+  height: var(--size);
+  opacity: .75;
+  position: absolute;
+  transition: opacity 0.25s;
+  width: var(--size);
+  z-index: 2;
+  transform: translate(var(--x-position), var(--y-position));
+}
+
+:host::after {
+  border-radius: 50%;
+  border: 5px solid black;
+  content: "";
+  cursor: pointer;
+  display: block;
+  height: 12px;
+  transform: translate(calc(-50% + var(--size) * 0.5), calc(-50% + var(--size) * 0.5));
+  width: 12px;
+  background: white;
+}
