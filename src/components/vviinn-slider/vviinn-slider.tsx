@@ -51,7 +51,7 @@ export class VviinnSlider {
   }
 
   private nextSlide() {
-    if (this.internalPosition === this.elementsCount) return;
+    if (this.internalPosition === this.elementsCount - 1) return;
     this.internalPosition++;
     this.el.style.setProperty("--position", `${this.internalPosition}`);
   }
