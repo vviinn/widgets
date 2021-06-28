@@ -63,6 +63,7 @@ export class ImageCropper {
     }
 
     imageSearchState.searchArea = newSearchArea;
+    imageSearchState.detectedObject = undefined;
   }
 
   @Listen("pointermove")
@@ -82,6 +83,7 @@ export class ImageCropper {
     }
 
     imageSearchState.searchArea = newSearchArea;
+    imageSearchState.detectedObject = undefined;
     this.mouseStartPoint = destination;
   }
 
