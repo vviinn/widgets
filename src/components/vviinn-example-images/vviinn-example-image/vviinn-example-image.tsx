@@ -9,6 +9,9 @@ import { imageSearchState } from "../../../store/imageSearch.store";
 })
 export class VviinnExampleImage {
   @Prop() src: string = "";
+  @Prop() width: number = 0;
+  @Prop() height: number = 0;
+
   @Event() exampleImageSelected: EventEmitter<void>;
 
   private async selectImage() {
@@ -19,7 +22,12 @@ export class VviinnExampleImage {
   render() {
     return (
       <Host>
-        <img onClick={() => this.selectImage()} src={this.src} />
+        <img
+          onClick={() => this.selectImage()}
+          src={this.src}
+          width={this.width}
+          height={this.height}
+        />
       </Host>
     );
   }
