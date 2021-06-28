@@ -45,7 +45,7 @@ export class VviinnVpsWidget {
             <vviinn-slide class="start-page">
               <div class="start-page_block">
                 <vviinn-teaser />
-                <image-selector
+                <vviinn-image-selector
                   onImageSelected={() => this.handleImageSelection()}
                 >
                   <span slot="upload-button-text" class="upload-button-content">
@@ -71,7 +71,7 @@ export class VviinnVpsWidget {
                     </svg>
                     <span>Take or upload a photo</span>
                   </span>
-                </image-selector>
+                </vviinn-image-selector>
                 <vviinn-privacy-badge />
               </div>
               <div class="start-page_block">

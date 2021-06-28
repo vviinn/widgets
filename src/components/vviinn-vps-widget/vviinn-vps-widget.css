@@ -29,14 +29,14 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   width: 100%;
 }
 
-image-selector {
+vviinn-image-selector {
   background: #0F62FE;
   border-radius: 2px;
   border-color: #0F62FE;
   color: white;
 }
 
-image-selector::hover {
+vviinn-image-selector::hover {
   background: #014CDA;
   border-color: #014CDA;
 }
