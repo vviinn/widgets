@@ -17,7 +17,7 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   align-content: center;
   border-right: 1px solid #F4F4F4;
   display: grid;
-  grid-gap: 16px;
+  grid-gap: 24px;
   padding: 20px;
 }
 
@@ -130,7 +130,8 @@ search-filters::part(filter active) {
 
   .start-page {
     grid-template-columns: unset;
-    grid-template-rows: 40% auto;
+    grid-gap: 24px;
+    padding-top: 24px;
   }
 
   .start-page_block:last-of-type {
