@@ -21,7 +21,7 @@ export class VviinnSlider {
     this.el.style.setProperty("--position", `${newValue}`);
   }
 
-  componentDidLoad() {
+  componentWillLoad() {
     const items = this.el.querySelectorAll("vviinn-slide");
     this.elementsCount = items.length;
     this.el.style.setProperty("--num-items", `${this.elementsCount}`);
