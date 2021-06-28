@@ -97,7 +97,7 @@ export class VviinnVpsWidget {
               <div class="products-wrapper">
                 <div class="products">
                   {imageSearchState.results.map((p) => (
-                    <vpr-result item={p} imageWidth={176} />
+                    <vpr-result item={p} imageWidth={168} />
                   ))}
                 </div>
               </div>

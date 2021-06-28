@@ -63,7 +63,7 @@ vviinn-image-selector::hover {
 
 .products {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 170px);
+  grid-template-columns: repeat(auto-fill, 168px);
   align-items: start;
   align-content: center;
   justify-items: center;
@@ -123,6 +123,11 @@ search-filters::part(filter active) {
 }
 
 @media (max-width: 415px) {
+  .results-page > * {
+    padding: 8px;
+    box-sizing: border-box;
+  }
+
   .start-page {
     grid-template-columns: unset;
     grid-template-rows: 40% auto;
@@ -165,5 +170,6 @@ search-filters::part(filter active) {
   .products {
     position: static;
     width: unset;
+    grid-gap: 8px;
   }
 }
