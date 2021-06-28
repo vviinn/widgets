@@ -1,5 +1,9 @@
 import { Component, Host, h, Element, State, Prop, Watch } from "@stencil/core";
 import { range } from "fp-ts/lib/Array";
+import { pipe } from "fp-ts/lib/function";
+import * as O from "fp-ts/lib/Option";
+import * as N from "fp-ts/number";
+import { sequenceToOption } from "../../utils/option/option";
 
 @Component({
   tag: "vviinn-slider",
@@ -11,11 +15,12 @@ export class VviinnSlider {
 
   @State() elementsCount: number = 0;
   @State() internalPosition: number = 0;
+  @State() swipeStartPosition: O.Option<number> = O.none;
 
   @Prop() showBullets: boolean = true;
   @Prop({ reflect: true }) position: number = 0;
 
-  @Watch('position')
+  @Watch("position")
   positionWatchHandler(newValue: number) {
     this.internalPosition = newValue;
     this.el.style.setProperty("--position", `${newValue}`);
@@ -45,11 +50,55 @@ export class VviinnSlider {
     ) : null;
   }
 
+  private nextSlide() {
+    if (this.internalPosition === this.elementsCount) return;
+    this.internalPosition++;
+    this.el.style.setProperty("--position", `${this.internalPosition}`);
+  }
+
+  private prevSlide() {
+    if (this.internalPosition === 0) return;
+    this.internalPosition--;
+    this.el.style.setProperty("--position", `${this.internalPosition}`);
+  }
+
+  private handleTouchStart(event: TouchEvent) {
+    if (!this.showBullets) return;
+
+    this.swipeStartPosition = pipe(
+      event.touches[0],
+      O.fromNullable,
+      O.map((t: Touch) => t.clientX)
+    );
+  }
+
+  private handleTouchEnd(event: TouchEvent) {
+    if (!this.showBullets) return;
+
+    const swipeEndPosition = pipe(
+      event.changedTouches[0],
+      O.fromNullable,
+      O.map((t: Touch) => t.clientX)
+    );
+
+    pipe(
+      sequenceToOption(this.swipeStartPosition, swipeEndPosition),
+      O.map(([start, end]) => N.Ord.compare(start, end)),
+      O.map((swipeDirection) =>
+        swipeDirection > 0 ? this.nextSlide() : this.prevSlide()
+      )
+    );
+  }
+
   render() {
     return (
       <Host>
         <div class="items-wrapper">
-          <div class="items">
+          <div
+            class="items"
+            onTouchStart={(e: TouchEvent) => this.handleTouchStart(e)}
+            onTouchEnd={(e: TouchEvent) => this.handleTouchEnd(e)}
+          >
             <slot></slot>
           </div>
         </div>
