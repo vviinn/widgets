@@ -38,7 +38,7 @@ export class VviinnImageSelector {
     return (
       <Host exportparts="image-upload-button">
         <label htmlFor="fileInput" part="image-upload-button">
-          <slot>upload file</slot>
+          <slot>Upload file</slot>
         </label>
         <input
           ref={(el) => (this.input = el)}
@@ -46,7 +46,7 @@ export class VviinnImageSelector {
           class="visually-hidden"
           type="file"
           accept="image/*"
-          capture="enviroment"
+          capture="user"
           onChange={() => this.handleInputChange()}
         />
       </Host>
