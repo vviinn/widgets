@@ -53,7 +53,6 @@ const createImage = (data: ImageData) => (
     height={data?.height}
     src={data.url}
     alt={data.title}
-    loading="lazy"
   />
 );
 
