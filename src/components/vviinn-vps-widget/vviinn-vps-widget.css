@@ -160,6 +160,7 @@ search-filters::part(filter active) {
 
   .image-wrapper {
     grid-template-rows: min-content auto;
+    justify-items: center;
   }
 
   .products-wrapper {

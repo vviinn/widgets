@@ -37,11 +37,6 @@
   opacity: .75;
 }
 
-img {
-  width: 100%;
-  height: auto;
-}
-
 @keyframes fadein {
   from {
     transform: translate(var(--x-position), var(--y-position)) scale(0);
