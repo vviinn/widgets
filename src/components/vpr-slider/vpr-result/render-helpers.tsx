@@ -5,15 +5,17 @@ import * as E from "fp-ts/lib/Either";
 import { sequenceT } from "fp-ts/lib/Apply";
 import { FunctionalComponent, h } from "@stencil/core";
 import { Sized } from "../../../geometry/Sized";
+import { ImageSizes } from "./vpr-result";
 
 type ImageProps = {
   readonly url: string;
+  readonly srcSet: string | null;
   readonly title: string;
 };
 
 type ImageData = ImageProps & Sized;
 
-const sequenceTEither = sequenceT(E.either);
+const sequenceTEither = sequenceT(E.Apply);
 const optionalStringM = O.getFirstMonoid<string>();
 
 const checkEmpryString = (x: string): O.Option<string> =>
@@ -46,12 +48,30 @@ export const processWidth = (url: string, size: number): string => {
   );
 };
 
+export const processSrcSet = (
+  url: string,
+  sizes: ImageSizes
+): string | null => {
+  return pipe(
+    containsFit(url),
+    E.map((url) =>
+      Object.entries(sizes).reduce((acc, value) => {
+        const [rule, size] = value;
+        const src = `${url.replace(FIT_EXPR, `fit/${size}/`)} ${rule}`;
+        return acc.length > 0 ? `${acc}, ${src}` : src;
+      }, "")
+    ),
+    E.getOrElse(() => null)
+  );
+};
+
 const createImage = (data: ImageData) => (
   <img
     part="product-image"
     width={data?.width}
     height={data?.height}
     src={data.url}
+    srcset={data.srcSet}
     alt={data.title}
   />
 );
@@ -65,10 +85,12 @@ const wrapInLink = (href: string, el: HTMLImageElement) => (
 export const Image = (
   r: Recommendation,
   width: number,
-  height: number
+  height: number,
+  imageSizes: ImageSizes | undefined
 ): FunctionalComponent<Recommendation> => {
   const url = processWidth(imageUrlFromRecommendation(r), width);
-  const image = createImage({ url, width, height, title: r.title });
+  const srcSet = processSrcSet(imageUrlFromRecommendation(r), imageSizes);
+  const image = createImage({ url, width, height, title: r.title, srcSet });
 
   return pipe(
     r.deeplink,

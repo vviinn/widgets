@@ -12,9 +12,13 @@ import {
 import { Image, Title, Price, Brand, ProductType } from "./render-helpers";
 import state from "../../../store/store";
 import { fold } from "fp-ts/lib/Option";
-import { pipe } from "fp-ts/lib/pipeable";
+import { pipe } from "fp-ts/lib/function";
 import { getAnalyticsModule } from "../../../analytics/GeneralAnalytics";
 import { Recommendation } from "../../../recommendation/recommendation";
+
+export type ImageSizes = {
+  [rule: string]: number;
+};
 
 @Component({
   tag: "vpr-result",
@@ -26,6 +30,7 @@ export class VprResult implements ComponentInterface {
   @Prop() item: Recommendation;
   @Prop() imageWidth: number = 100;
   @Prop() imageRatio: number = 1;
+  @Prop() imageSizes: ImageSizes | undefined = undefined;
 
   /** Event fires ones when recommendation rendered on page */
   @Event() recommendationLoad: EventEmitter<Recommendation>;
@@ -71,7 +76,7 @@ export class VprResult implements ComponentInterface {
 
         if (window.ga) {
           ga("send", "event", "UX", "click", "Results", {
-            hitCallback: function () {
+            hitCallback: function() {
               document.location.href = this.item.deeplink;
             },
           });
@@ -105,16 +110,17 @@ export class VprResult implements ComponentInterface {
         {this.item === undefined
           ? null
           : [
-              Image(
-                this.item,
-                this.imageWidth,
-                this.imageWidth * this.imageRatio
-              ),
-              Title(this.item),
-              Brand(this.item),
-              ProductType(this.item),
-              Price(this.item, state.pricePrefix, state.currencySign),
-            ]}
+            Image(
+              this.item,
+              this.imageWidth,
+              this.imageWidth * this.imageRatio,
+              this.imageSizes
+            ),
+            Title(this.item),
+            Brand(this.item),
+            ProductType(this.item),
+            Price(this.item, state.pricePrefix, state.currencySign),
+          ]}
       </Host>
     );
   }
