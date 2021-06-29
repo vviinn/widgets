@@ -1,4 +1,4 @@
-import { Component, Host, h, State, Prop } from "@stencil/core";
+import { Component, Host, h, State, Prop, Element } from "@stencil/core";
 import state from "../../store/store";
 import { imageSearchState } from "../../store/imageSearch.store";
 
@@ -8,13 +8,28 @@ import { imageSearchState } from "../../store/imageSearch.store";
   shadow: true,
 })
 export class VviinnVpsWidget {
+  @Element() el: HTMLElement;
+
   @Prop() token: string =
     "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjUxLCJqdGkiOiI1MThlOWNkNC1hYzlmLTRiMDMtOTEzNS03ZDRmNTgyZjRjOWUiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.kTNkhH90cpYUPVYvd7OAJJQ2WbUxAIY_MMJcLD1MxQxFiLx_0m3KkjTUk4ZyZIjPqd3jJj-NQglvlkV-RQA7fKk4oY3y7GxiLVKPaieEYi1ltxUChRNH-ggzgPQdxozRQh9TsIov-KJfLC9AUXUQBkbTBZF9FP4lOAAtNmDZ38Q";
   @State() slidePosition: number = 0;
+  @State() width: number = 0;
+
+  private body: HTMLVviinnSliderElement;
 
   connectedCallback() {
     state.apiPath = "https://stage.mediaopt.tools";
     imageSearchState.token = this.token;
+  }
+
+  componentDidLoad() {
+    const observer = new ResizeObserver((sizes: ResizeObserverEntry[]) => {
+      if (sizes.length === 0) return;
+      const entry = sizes[0];
+      this.width = entry.contentRect.width;
+    });
+
+    observer.observe(this.body);
   }
 
   private handleImageSelection() {
@@ -41,7 +56,11 @@ export class VviinnVpsWidget {
           active={true}
           onSecondaryActionClicked={() => this.resetState()}
         >
-          <vviinn-slider showBullets={false} position={this.slidePosition}>
+          <vviinn-slider
+            showBullets={false}
+            position={this.slidePosition}
+            ref={(el) => (this.body = el)}
+          >
             <vviinn-slide class="start-page">
               <div class="start-page_block">
                 <vviinn-teaser />
@@ -97,7 +116,14 @@ export class VviinnVpsWidget {
               <div class="products-wrapper">
                 <div class="products">
                   {imageSearchState.results.map((p) => (
-                    <vpr-result item={p} imageWidth={168} />
+                    <vpr-result
+                      item={p}
+                      imageWidth={this.width <= 320 ? 300 : 168}
+                      imageSizes={{
+                        "320w": 300,
+                        "321w": 168,
+                      }}
+                    />
                   ))}
                 </div>
               </div>

@@ -174,3 +174,9 @@ search-filters::part(filter active) {
     grid-gap: 8px;
   }
 }
+
+@media (max-width: 320px) {
+  .products {
+    grid-template-columns: unset;
+  }
+}
