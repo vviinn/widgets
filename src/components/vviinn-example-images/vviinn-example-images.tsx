@@ -21,37 +21,22 @@ export class VviinnExampleImages {
           <vviinn-example-image
             width={240}
             height={160}
-            src="https://cdn.vviinn.com/0/fit/240/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9EZXBvc2l0cGhvdG9zXzEzODk0MzE3X3hsLTIwMTUuanBn"
+            src="https://cdn.vviinn.com/0/fit/368/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9pbWctaW5zcGlyYXRpb24tMDEtTC5qcGc="
           />
           <vviinn-example-image
             width={240}
             height={360}
-            src="https://cdn.vviinn.com/0/fit/240/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9EZXBvc2l0cGhvdG9zXzMyNjA2NjYxNF94bC0yMDE1LmpwZw=="
+            src="https://cdn.vviinn.com/0/fit/368/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9pbWctaW5zcGlyYXRpb24tMDItTS5qcGc="
           />
           <vviinn-example-image
             width={240}
             height={149}
-            src="https://cdn.vviinn.com/0/fit/240/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9EZXBvc2l0cGhvdG9zXzc4NjUyMzQwX3hsLTIwMTUuanBn"
+            src="https://cdn.vviinn.com/0/fit/368/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9pbWctaW5zcGlyYXRpb24tMDMtTS5qcGc="
           />
           <vviinn-example-image
             width={240}
             height={161}
-            src="https://cdn.vviinn.com/0/fit/240/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9EZXBvc2l0cGhvdG9zXzQ5NDI1NzdfeGwtMjAxNS5qcGc="
-          />
-          <vviinn-example-image
-            width={240}
-            height={160}
-            src="https://cdn.vviinn.com/0/fit/240/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9EZXBvc2l0cGhvdG9zXzI1MjM3Njg1NF94bC0yMDE1LmpwZw=="
-          />
-          <vviinn-example-image
-            width={240}
-            height={160}
-            src="https://cdn.vviinn.com/0/fit/240/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9EZXBvc2l0cGhvdG9zXzIzODExNjA0OF94bC0yMDE1LmpwZw=="
-          />
-          <vviinn-example-image
-            width={240}
-            height={160}
-            src="https://cdn.vviinn.com/0/fit/240/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9EZXBvc2l0cGhvdG9zXzMxMTg3OTQ4Ml94bC0yMDE1LmpwZw=="
+            src="https://cdn.vviinn.com/0/fit/368/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9pbWctaW5zcGlyYXRpb24tMDQtTC5qcGc="
           />
         </div>
       </Host>

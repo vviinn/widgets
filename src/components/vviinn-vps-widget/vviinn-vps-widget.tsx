@@ -19,6 +19,7 @@ export class VviinnVpsWidget {
 
   connectedCallback() {
     state.apiPath = "https://stage.mediaopt.tools";
+    state.currencySign = "€";
     imageSearchState.token = this.token;
   }
 
