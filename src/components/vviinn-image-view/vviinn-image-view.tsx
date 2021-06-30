@@ -1,8 +1,19 @@
-import { Component, Host, h, State, Event, EventEmitter } from "@stencil/core";
+import { Component, Host, h } from "@stencil/core";
 import { imageSearchState } from "../../store/imageSearch.store";
 //import { scaleWithSized, center } from "../../geometry/Rectangle";
-import { ValueObject } from "../../network/ion/ValueObject"
-import { DetectedObject } from "../../searchSession/searchSession"
+import { ValueObject } from "../../network/ion/ValueObject";
+import { DetectedObject } from "../../searchSession/searchSession";
+import { pipe } from "fp-ts/lib/function";
+import * as O from "fp-ts/lib/Option";
+import { sequenceToOption } from "../../utils/option/option";
+import { fromImage, move } from "../../geometry/Rectangle";
+import * as N from "fp-ts/number";
+
+enum ImageOrientation {
+  "portrait" = -1,
+  "rectangle" = 0,
+  "landscape" = 1,
+}
 
 @Component({
   tag: "vviinn-image-view",
@@ -10,65 +21,76 @@ import { DetectedObject } from "../../searchSession/searchSession"
   shadow: true,
 })
 export class VviinnImageView {
-  private image: HTMLImageElement | undefined;
-
-  @Event() imageContainerResized: EventEmitter<void>;
-  @State() imageLoaded: boolean = false;
-
-  componentDidLoad() {
-    const resizeObserver = new ResizeObserver(() => this.handleImageResize());
-    resizeObserver.observe(this.image);
+  renderDetectedObject(object: ValueObject<DetectedObject>): HTMLElement {
+    return <vviinn-detected-object detectedObject={object} />;
   }
 
-  private handleImageLoad() {
-    this.imageLoaded = true;
+  handleInitialImageLoad(ev: Event) {
+    const target = ev.target as HTMLImageElement;
+    const imageBounds = fromImage(target);
+
+    const padding = 16;
+    const { x, y } = move(imageBounds, { x: padding, y: padding });
+
+    const searchArea = {
+      x,
+      y,
+      width: imageBounds.width - padding * 2,
+      height: imageBounds.height - padding * 2,
+    };
+
+    imageSearchState.imageBounds = O.some(imageBounds);
+    imageSearchState.n_searchArea = O.some(searchArea);
   }
 
-  private handleImageResize() {
-    imageSearchState.imageBounds = this.image.getBoundingClientRect()
-  }
+  private renderImage(): HTMLImageElement | null {
+    return pipe(
+      sequenceToOption(imageSearchState.imageUrl, imageSearchState.image),
+      O.map(([url, refImage]) => {
+        const sizeOrd = N.Ord.compare(
+          refImage.naturalWidth,
+          refImage.naturalHeight
+        );
 
-  private renderDetectedObject(
-    object: ValueObject<DetectedObject>
-  ): HTMLElement {
-    return (
-      <vviinn-detected-object
-        detectedObject={object}
-      />
+        const orientation = ImageOrientation[sizeOrd];
+
+        const image = (
+          <img
+            class={orientation}
+            src={url}
+            onLoad={(el) => this.handleInitialImageLoad(el)}
+          />
+        );
+
+        return image;
+      }),
+      O.getOrElse(() => null)
     );
   }
 
-  /* private renderLoader(): HTMLElement {
-   *   const scale = scaleWithSized(imageSearchState.imageBounds);
-   *   const { x, y } = center(scale(imageSearchState.searchArea));
+  private renderCropper(): HTMLImageCropperElement | null {
+    return pipe(
+      imageSearchState.imageUrl,
+      O.map(() => <image-cropper />),
+      O.getOrElse(() => null)
+    );
+  }
 
-   *   return (
-   *     <div class="loader" style={{ top: `${y}px`, left: `${x}px` }}>
-   *       <svg
-   *         aria-hidden="true"
-   *         focusable="false"
-   *         role="img"
-   *         xmlns="http://www.w3.org/2000/svg"
-   *         viewBox="0 0 512 512"
-   *       >
-   *         <path d="M304 48c0 26.51-21.49 48-48 48s-48-21.49-48-48 21.49-48 48-48 48 21.49 48 48zm-48 368c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zm208-208c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zM96 256c0-26.51-21.49-48-48-48S0 229.49 0 256s21.49 48 48 48 48-21.49 48-48zm12.922 99.078c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.491-48-48-48zm294.156 0c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.49-48-48-48zM108.922 60.922c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.491-48-48-48z" />
-   *       </svg>
-   *     </div>
-   *   );
-   * }
-   */
   render() {
     return (
       <Host>
         <highlight-box />
-        <img
-          ref={(el) => (this.image = el)}
-          src={imageSearchState.resizedImageUrl}
-          onLoad={() => this.handleImageLoad()}
-        />
-        {this.imageLoaded ? <image-cropper /> : null}
-        {imageSearchState.detectedObjects.map((o) => this.renderDetectedObject(o))}
+        {this.renderImage()}
+        {this.renderCropper()}
       </Host>
     );
   }
 }
+
+/**
+        <highlight-box />
+        {imageSearchState.detectedObjects.map((o) =>
+          this.renderDetectedObject(o)
+        )}
+        {this.imageLoaded ? <image-cropper /> : null}
+**/

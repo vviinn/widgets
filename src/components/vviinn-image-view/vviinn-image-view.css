@@ -1,13 +1,27 @@
 :host {
   display: grid;
   position: relative;
-  max-height: min-content;
+  justify-self: center;
 }
 
 img {
   box-sizing: border-box;
   filter: brightness(60%);
-  height: auto;
   position: relative;
   z-index: -1;
+}
+
+img.landscape {
+  height: auto;
+  width: 288px;
+}
+
+img.portrait {
+  height: 356px;
+  width: auto;
+}
+
+img.rectangle {
+  height: 288px;
+  width: 288px;
 }

@@ -1,6 +1,7 @@
 import { Component, Host, h, State, Prop, Element } from "@stencil/core";
 import state from "../../store/store";
 import { imageSearchState } from "../../store/imageSearch.store";
+import * as O from "fp-ts/lib/Option";
 
 @Component({
   tag: "vviinn-vps-widget",
@@ -39,13 +40,14 @@ export class VviinnVpsWidget {
 
   private resetState() {
     this.slidePosition = 0;
-    imageSearchState.image = undefined;
-    imageSearchState.resizedImageUrl = undefined;
+    imageSearchState.image = O.none;
+    imageSearchState.imageUrl = O.none;
+    imageSearchState.imageBounds = O.none;
     imageSearchState.results = [];
     imageSearchState.filters = [];
     imageSearchState.activeIonLink = undefined;
-    imageSearchState.imageBounds = undefined;
     imageSearchState.searchArea = undefined;
+    imageSearchState.n_searchArea = O.none;
     imageSearchState.rectangleSearchForm = undefined;
   }
 

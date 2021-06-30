@@ -155,12 +155,12 @@ search-filters::part(filter active) {
 
   .results-page {
     grid-template-columns: unset;
-    grid-template-rows: min-content auto;
+    grid-template-rows: 432px auto;
   }
 
   .image-wrapper {
-    grid-template-rows: min-content auto;
-    justify-items: center;
+    grid-template-rows: 360px auto;
+    width: 100%;
   }
 
   .products-wrapper {
