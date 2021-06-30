@@ -50,8 +50,10 @@ export const processWidth = (url: string, size: number): string => {
 
 export const processSrcSet = (
   url: string,
-  sizes: ImageSizes
+  sizes: ImageSizes | undefined
 ): string | null => {
+  if (sizes === undefined) return null;
+
   return pipe(
     containsFit(url),
     E.map((url) =>
