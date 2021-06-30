@@ -36,6 +36,11 @@ export class VviinnVpsWidget {
 
   private handleImageSelection() {
     this.slidePosition = 1;
+    const root = this.el.shadowRoot.querySelector("vviinn-overlayed-modal");
+    const overlay = root.shadowRoot.querySelector("vviinn-overlay");
+    const modal = overlay.querySelector("vviinn-modal");
+    const modalBody = modal.shadowRoot.querySelector(".body");
+    modalBody.scrollTop = 0;
   }
 
   private resetState() {
