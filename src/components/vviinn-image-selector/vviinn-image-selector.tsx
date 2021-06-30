@@ -1,7 +1,7 @@
 import { Component, Host, h, Event, EventEmitter } from "@stencil/core";
 import * as O from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/function";
-import { imageSearchState } from "../../store/imageSearch.store";
+import { uploadFile } from "../../store/imageSearch.store";
 
 const checkImageType = (f: File): O.Option<File> =>
   f.type.split("/")[0] === "image" ? O.some(f) : O.none;
@@ -13,24 +13,19 @@ const checkImageType = (f: File): O.Option<File> =>
 })
 export class VviinnImageSelector {
   @Event() imageSelected: EventEmitter<void>;
-  @Event() imageResized: EventEmitter<File>;
 
-  private input: HTMLInputElement | undefined;
-
-  private handleInputChange() {
-    this.handleFileSelection(O.fromNullable(this.input.files[0]));
+  private handleInputChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.handleFileSelection(O.fromNullable(input.files[0]));
   }
 
   private handleFileSelection(file: O.Option<File>) {
     pipe(
       file,
       O.chain(checkImageType),
-      O.map((file) => this.fileSelectionSuccess(file))
+      O.map(uploadFile)
     );
-  }
 
-  private async fileSelectionSuccess(f: File) {
-    imageSearchState.image = f;
     this.imageSelected.emit();
   }
 
@@ -41,12 +36,11 @@ export class VviinnImageSelector {
           <slot name="upload-button-text">Upload image</slot>
         </label>
         <input
-          ref={(el) => (this.input = el)}
           id="fileInput"
           class="visually-hidden"
           type="file"
           accept="image/*"
-          onChange={() => this.handleInputChange()}
+          onChange={(event: Event) => this.handleInputChange(event)}
         />
       </Host>
     );

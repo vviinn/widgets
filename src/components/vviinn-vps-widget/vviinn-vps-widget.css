@@ -160,6 +160,7 @@ search-filters::part(filter active) {
 
   .image-wrapper {
     grid-template-rows: min-content auto;
+    width: 100%;
   }
 
   .products-wrapper {
@@ -171,7 +172,8 @@ search-filters::part(filter active) {
   .products {
     position: static;
     width: unset;
-    grid-gap: 8px;
+    grid-gap: 16px;
+    justify-content: center;
   }
 }
 

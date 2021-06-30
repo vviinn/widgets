@@ -28,6 +28,8 @@ import {
 } from "../../../../network/ion/ValueObject";
 import { DetectedObject } from "../../../../searchSession/searchSession";
 import { imageSearchState, makeRectangularSearchRequest } from "../../../../store/imageSearch.store";
+import { pipe } from "fp-ts/lib/function";
+import * as O from "fp-ts/lib/Option";
 
 @Component({
   tag: "image-cropper",
@@ -52,18 +54,23 @@ export class ImageCropper {
     const scale = scaleWithSized(this.bounds);
     const rect = fromAlt(foldValueObject(detail).rectangle);
 
-    imageSearchState.searchArea = scale(rect);
+    imageSearchState.searchArea = O.some(scale(rect));
   }
 
   handleHandlerMove(event: CustomEvent<Handler>) {
-    const newSearchArea = transform(imageSearchState.searchArea, event.detail);
+    pipe(
+      imageSearchState.searchArea,
+      O.map((area) => {
+        const newSearchArea = transform(area, event.detail);
 
-    if (!this.checkBounds(newSearchArea)) {
-      return;
-    }
+        if (!this.checkBounds(newSearchArea)) {
+          return;
+        }
 
-    imageSearchState.searchArea = newSearchArea;
-    imageSearchState.detectedObject = undefined;
+        imageSearchState.searchArea = O.some(newSearchArea);
+        imageSearchState.detectedObject = undefined;
+      })
+    )
   }
 
   @Listen("pointermove")
@@ -76,15 +83,20 @@ export class ImageCropper {
       this.mouseStartPoint
     );
 
-    const newSearchArea = move(imageSearchState.searchArea, distance);
+    pipe(
+      imageSearchState.searchArea,
+      O.map((searchArea) => {
+        const newSearchArea = move(searchArea, distance);
 
-    if (!this.checkBounds(newSearchArea)) {
-      return;
-    }
+        if (!this.checkBounds(newSearchArea)) {
+          return;
+        }
 
-    imageSearchState.searchArea = newSearchArea;
-    imageSearchState.detectedObject = undefined;
-    this.mouseStartPoint = destination;
+        imageSearchState.searchArea = O.some(newSearchArea);
+        imageSearchState.detectedObject = undefined;
+        this.mouseStartPoint = destination;
+      })
+    )
   }
 
   private handlePointerDown(event: MouseEvent) {
@@ -118,6 +130,23 @@ export class ImageCropper {
     makeRectangularSearchRequest();
   }
 
+  private getStyleMap() {
+    return pipe(
+      imageSearchState.searchArea,
+      O.map((rectangle) => {
+        return {
+          width: `${rectangle.width}px`,
+          height: `${rectangle.height}px`,
+          transform: `translate(${rectangle.x}px, ${rectangle.y}px)`,
+          cursor: this.handleMove ? "move" : "default",
+        }
+      }),
+      O.getOrElse(() => {
+        return {}
+      })
+    )
+  }
+
   render() {
     return (
       <Host exportparts="handle, e-resize, n-resize, ne-resize, nw-resize, s-resize, se-resize, sw-resize, w-resize">
@@ -127,12 +156,7 @@ export class ImageCropper {
             active: this.handleMove,
             disabled: this.disabled,
           }}
-          style={{
-            width: `${imageSearchState.searchArea.width}px`,
-            height: `${imageSearchState.searchArea.height}px`,
-            transform: `translate(${imageSearchState.searchArea.x}px, ${imageSearchState.searchArea.y}px)`,
-            cursor: this.handleMove ? "move" : "default",
-          }}
+          style={this.getStyleMap()}
           onPointerDown={(ev) => this.handlePointerDown(ev)}
           onPointerUp={(ev) => { ev.stopPropagation(); this.handleSearchAreaRelease() }}
         ></div>

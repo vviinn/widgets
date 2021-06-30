@@ -12,27 +12,32 @@ import { sequenceToOption } from "../../../../utils/option/option";
 })
 export class HighlightBox {
   private getInsetValue(): string {
-    const searchArea = O.fromNullable(imageSearchState.searchArea);
-    const imageBounds = O.fromNullable(imageSearchState.imageBounds);
-
     return pipe(
-      sequenceToOption(searchArea, imageBounds),
+      sequenceToOption(
+        imageSearchState.searchArea,
+        imageSearchState.imageBounds
+      ),
       O.map(([selection, image]) => getClipValue(selection, image)),
       O.getOrElse(() => "")
     );
   }
 
-  render() {
-    return (
-      <Host>
+  private renderImage(): HTMLImageElement | string {
+    return pipe(
+      sequenceToOption(imageSearchState.imageUrl, imageSearchState.imageBounds),
+      O.map(([url, bounds]) => (
         <img
-          src={imageSearchState.resizedImageUrl}
-          style={{
-            background: "black",
-            "clip-path": `${this.getInsetValue()}`,
-          }}
+          src={url}
+          width={bounds.width}
+          height={bounds.height}
+          style={{ "clip-path": `${this.getInsetValue()}` }}
         />
-      </Host>
+      )),
+      O.getOrElse(() => "")
     );
+  }
+
+  render() {
+    return <Host>{this.renderImage()}</Host>;
   }
 }

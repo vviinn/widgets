@@ -1,6 +1,6 @@
 import { Component, Host, h, Prop, Event, EventEmitter } from "@stencil/core";
 import { toFile } from "../../../Image/toFile";
-import { imageSearchState } from "../../../store/imageSearch.store";
+import { uploadFile } from "../../../store/imageSearch.store";
 
 @Component({
   tag: "vviinn-example-image",
@@ -16,7 +16,7 @@ export class VviinnExampleImage {
 
   private async selectImage() {
     const file = await toFile(this.src);
-    imageSearchState.image = file;
+    uploadFile(file);
     this.exampleImageSelected.emit();
   }
   render() {

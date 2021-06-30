@@ -1,5 +1,5 @@
 import { createStore } from "@stencil/store";
-//import * as O from "fp-ts/lib/Option";
+import * as O from "fp-ts/lib/Option";
 import * as E from "fp-ts/Either";
 import * as TE from "fp-ts/TaskEither";
 import { pipe } from "fp-ts/function";
@@ -16,12 +16,13 @@ import {
 } from "../searchSession/searchSession";
 import { foldValueObject, ValueObject } from "../network/ion/ValueObject";
 import { Link, linkRequest, getLink } from "../network/ion/Link";
-import { divideOnSized, move, Rectangle } from "../geometry/Rectangle";
+import { divideOnSized, Rectangle } from "../geometry/Rectangle";
 import { Form, formRequest } from "../network/ion/Form";
 import { fromFile } from "../Image/fromFile";
 import { resizeImage } from "../Image/resizeImage";
 import { toFile } from "../Image/toFile";
 import { Handler, fromRectangle } from "../cropper/Handler";
+import { sequenceToOption } from "../utils/option/option";
 
 const RESIZED_IMAGE_WIDTH = 300;
 
@@ -57,32 +58,34 @@ const composeAuth = (token: string): E.Either<NetworkError, RequestInit> =>
 
 type ImageSearchStore = {
   token: string | undefined;
-  image: File | undefined;
-  resizedImageUrl: string | undefined;
   results: Recommendation[];
   filters: SearchSessionFilter[];
   activeIonLink: Link | undefined;
-  imageBounds: Rectangle | undefined;
-  searchArea: Rectangle | undefined;
   cropperHandlers: Handler[];
   rectangleSearchForm: Form | undefined;
   detectedObjects: ValueObject<DetectedObject>[];
   detectedObject: ValueObject<DetectedObject> | undefined;
+
+  image: O.Option<HTMLImageElement>;
+  imageUrl: O.Option<string>;
+  imageBounds: O.Option<Rectangle>;
+  searchArea: O.Option<Rectangle>;
 };
 
 const { state, onChange } = createStore<ImageSearchStore>({
   token: undefined,
-  image: undefined,
-  resizedImageUrl: undefined,
   results: [],
   filters: [],
   activeIonLink: undefined,
-  imageBounds: undefined,
-  searchArea: undefined,
   cropperHandlers: [],
   rectangleSearchForm: undefined,
   detectedObjects: [],
   detectedObject: undefined,
+
+  image: O.none,
+  imageUrl: O.none,
+  imageBounds: O.none,
+  searchArea: O.none,
 });
 
 const updateState = (response: SearchSession) => {
@@ -120,35 +123,6 @@ const detectObjects = async (data: SearchSession) => {
   )();
 };
 
-onChange("image", async (newImage: File) => {
-  const image = await fromFile(newImage);
-
-  image.onload = async () => {
-    const [url, rect] = resizeImage(RESIZED_IMAGE_WIDTH, image);
-    const padding = 16;
-    const { x, y } = move(rect, { x: padding, y: padding });
-    const searchArea = {
-      x,
-      y,
-      width: rect.width - padding * 2,
-      height: rect.height - padding * 2,
-    };
-
-    state.searchArea = searchArea;
-    state.resizedImageUrl = url;
-    state.imageBounds = rect;
-
-    const resizedImageFile = await toFile(state.resizedImageUrl);
-
-    await pipe(
-      composeSearchSessionData(state.token, resizedImageFile),
-      TE.fromEither,
-      TE.chain(searchSessionClient),
-      TE.map(updateState)
-    )();
-  };
-});
-
 onChange(
   "activeIonLink",
   async (newLink: Link) =>
@@ -160,26 +134,54 @@ onChange(
     )()
 );
 
-onChange("searchArea", async (newSearchArea: Rectangle) => {
-  state.cropperHandlers = fromRectangle(newSearchArea);
+onChange("searchArea", (newSearchArea: O.Option<Rectangle>) => {
+  pipe(
+    newSearchArea,
+    O.map((area) => {
+      state.cropperHandlers = fromRectangle(area);
+    })
+  );
 });
 
 export const makeRectangularSearchRequest = async () => {
-  const scaled = divideOnSized(state.imageBounds)(state.searchArea);
+  pipe(
+    sequenceToOption(state.imageBounds, state.searchArea),
+    O.map(async ([bounds, searchArea]) => {
+      const scaled = divideOnSized(bounds)(searchArea);
+      const searchRectangle = {
+        width: scaled.width,
+        height: scaled.height,
+        left: scaled.x,
+        top: scaled.y,
+      };
 
-  const searchRectangle = {
-    width: scaled.width,
-    height: scaled.height,
-    left: scaled.x,
-    top: scaled.y,
+      return await pipe(
+        composeAuth(state.token),
+        TE.fromEither,
+        TE.chain(formRequest(state.rectangleSearchForm, searchRectangle)),
+        TE.map(updateState)
+      )();
+    })
+  );
+};
+
+export const uploadFile = async (file: File) => {
+  const image = await fromFile(file);
+
+  image.onload = async () => {
+    const [url] = resizeImage(RESIZED_IMAGE_WIDTH, image);
+    const resizedImageFile = await toFile(url);
+
+    state.image = O.some(image);
+    state.imageUrl = O.some(image.src);
+
+    await pipe(
+      composeSearchSessionData(state.token, resizedImageFile),
+      TE.fromEither,
+      TE.chain(searchSessionClient),
+      TE.map(updateState)
+    )();
   };
-
-  return await pipe(
-    composeAuth(state.token),
-    TE.fromEither,
-    TE.chain(formRequest(state.rectangleSearchForm, searchRectangle)),
-    TE.map(updateState)
-  )();
 };
 
 export const imageSearchState = state;

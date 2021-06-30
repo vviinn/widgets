@@ -1,6 +1,7 @@
 import { Component, Host, h, State, Prop, Element } from "@stencil/core";
 import state from "../../store/store";
 import { imageSearchState } from "../../store/imageSearch.store";
+import * as O from "fp-ts/lib/Option";
 
 @Component({
   tag: "vviinn-vps-widget",
@@ -35,17 +36,22 @@ export class VviinnVpsWidget {
 
   private handleImageSelection() {
     this.slidePosition = 1;
+    const root = this.el.shadowRoot.querySelector("vviinn-overlayed-modal");
+    const overlay = root.shadowRoot.querySelector("vviinn-overlay");
+    const modal = overlay.querySelector("vviinn-modal");
+    const modalBody = modal.shadowRoot.querySelector(".body");
+    modalBody.scrollTop = 0;
   }
 
   private resetState() {
     this.slidePosition = 0;
-    imageSearchState.image = undefined;
-    imageSearchState.resizedImageUrl = undefined;
+    imageSearchState.image = O.none;
+    imageSearchState.imageUrl = O.none;
+    imageSearchState.imageBounds = O.none;
+    imageSearchState.searchArea = O.none;
     imageSearchState.results = [];
     imageSearchState.filters = [];
     imageSearchState.activeIonLink = undefined;
-    imageSearchState.imageBounds = undefined;
-    imageSearchState.searchArea = undefined;
     imageSearchState.rectangleSearchForm = undefined;
   }
 
