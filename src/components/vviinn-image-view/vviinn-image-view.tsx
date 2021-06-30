@@ -21,10 +21,6 @@ enum ImageOrientation {
   shadow: true,
 })
 export class VviinnImageView {
-  renderDetectedObject(object: ValueObject<DetectedObject>): HTMLElement {
-    return <vviinn-detected-object detectedObject={object} />;
-  }
-
   handleInitialImageLoad(ev: Event) {
     const target = ev.target as HTMLImageElement;
     const imageBounds = fromImage(target);
@@ -40,7 +36,13 @@ export class VviinnImageView {
     };
 
     imageSearchState.imageBounds = O.some(imageBounds);
-    imageSearchState.n_searchArea = O.some(searchArea);
+    imageSearchState.searchArea = O.some(searchArea);
+  }
+
+  private renderDetectedObject(
+    object: ValueObject<DetectedObject>
+  ): HTMLElement {
+    return <vviinn-detected-object detectedObject={object} />;
   }
 
   private renderImage(): HTMLImageElement | null {
@@ -82,6 +84,9 @@ export class VviinnImageView {
         <highlight-box />
         {this.renderImage()}
         {this.renderCropper()}
+        {imageSearchState.detectedObjects.map((o) =>
+          this.renderDetectedObject(o)
+        )}
       </Host>
     );
   }

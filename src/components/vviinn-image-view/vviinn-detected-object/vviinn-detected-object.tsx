@@ -45,7 +45,7 @@ export class VviinnDetectedObject {
         const scaledRect = scaleWithSized(bounds)(transformedRect);
 
         imageSearchState.detectedObject = this.detectedObject;
-        imageSearchState.searchArea = scaledRect;
+        imageSearchState.searchArea = O.some(scaledRect);
       })
     );
 

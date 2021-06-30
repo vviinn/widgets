@@ -155,11 +155,11 @@ search-filters::part(filter active) {
 
   .results-page {
     grid-template-columns: unset;
-    grid-template-rows: 432px auto;
+    grid-template-rows: min-content auto;
   }
 
   .image-wrapper {
-    grid-template-rows: 360px auto;
+    grid-template-rows: min-content auto;
     width: 100%;
   }
 
@@ -172,7 +172,8 @@ search-filters::part(filter active) {
   .products {
     position: static;
     width: unset;
-    grid-gap: 8px;
+    grid-gap: 16px;
+    justify-content: center;
   }
 }
 

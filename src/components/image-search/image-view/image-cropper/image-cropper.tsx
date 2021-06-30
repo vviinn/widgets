@@ -54,12 +54,12 @@ export class ImageCropper {
     const scale = scaleWithSized(this.bounds);
     const rect = fromAlt(foldValueObject(detail).rectangle);
 
-    imageSearchState.searchArea = scale(rect);
+    imageSearchState.searchArea = O.some(scale(rect));
   }
 
   handleHandlerMove(event: CustomEvent<Handler>) {
     pipe(
-      imageSearchState.n_searchArea,
+      imageSearchState.searchArea,
       O.map((area) => {
         const newSearchArea = transform(area, event.detail);
 
@@ -67,7 +67,7 @@ export class ImageCropper {
           return;
         }
 
-        imageSearchState.n_searchArea = O.some(newSearchArea);
+        imageSearchState.searchArea = O.some(newSearchArea);
         imageSearchState.detectedObject = undefined;
       })
     )
@@ -84,7 +84,7 @@ export class ImageCropper {
     );
 
     pipe(
-      imageSearchState.n_searchArea,
+      imageSearchState.searchArea,
       O.map((searchArea) => {
         const newSearchArea = move(searchArea, distance);
 
@@ -92,7 +92,7 @@ export class ImageCropper {
           return;
         }
 
-        imageSearchState.n_searchArea = O.some(newSearchArea);
+        imageSearchState.searchArea = O.some(newSearchArea);
         imageSearchState.detectedObject = undefined;
         this.mouseStartPoint = destination;
       })
@@ -132,7 +132,7 @@ export class ImageCropper {
 
   private getStyleMap() {
     return pipe(
-      imageSearchState.n_searchArea,
+      imageSearchState.searchArea,
       O.map((rectangle) => {
         return {
           width: `${rectangle.width}px`,

@@ -61,7 +61,6 @@ type ImageSearchStore = {
   results: Recommendation[];
   filters: SearchSessionFilter[];
   activeIonLink: Link | undefined;
-  searchArea: Rectangle | undefined;
   cropperHandlers: Handler[];
   rectangleSearchForm: Form | undefined;
   detectedObjects: ValueObject<DetectedObject>[];
@@ -70,7 +69,7 @@ type ImageSearchStore = {
   image: O.Option<HTMLImageElement>;
   imageUrl: O.Option<string>;
   imageBounds: O.Option<Rectangle>;
-  n_searchArea: O.Option<Rectangle>;
+  searchArea: O.Option<Rectangle>;
 };
 
 const { state, onChange } = createStore<ImageSearchStore>({
@@ -78,7 +77,6 @@ const { state, onChange } = createStore<ImageSearchStore>({
   results: [],
   filters: [],
   activeIonLink: undefined,
-  searchArea: undefined,
   cropperHandlers: [],
   rectangleSearchForm: undefined,
   detectedObjects: [],
@@ -87,7 +85,7 @@ const { state, onChange } = createStore<ImageSearchStore>({
   image: O.none,
   imageUrl: O.none,
   imageBounds: O.none,
-  n_searchArea: O.none,
+  searchArea: O.none,
 });
 
 const updateState = (response: SearchSession) => {
@@ -136,7 +134,7 @@ onChange(
     )()
 );
 
-onChange("n_searchArea", (newSearchArea: O.Option<Rectangle>) => {
+onChange("searchArea", (newSearchArea: O.Option<Rectangle>) => {
   pipe(
     newSearchArea,
     O.map((area) => {
@@ -147,7 +145,7 @@ onChange("n_searchArea", (newSearchArea: O.Option<Rectangle>) => {
 
 export const makeRectangularSearchRequest = async () => {
   pipe(
-    sequenceToOption(state.imageBounds, state.n_searchArea),
+    sequenceToOption(state.imageBounds, state.searchArea),
     O.map(async ([bounds, searchArea]) => {
       const scaled = divideOnSized(bounds)(searchArea);
       const searchRectangle = {

@@ -14,7 +14,7 @@ export class HighlightBox {
   private getInsetValue(): string {
     return pipe(
       sequenceToOption(
-        imageSearchState.n_searchArea,
+        imageSearchState.searchArea,
         imageSearchState.imageBounds
       ),
       O.map(([selection, image]) => getClipValue(selection, image)),
