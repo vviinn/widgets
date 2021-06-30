@@ -92,8 +92,6 @@ const updateState = (response: SearchSession) => {
   state.results = response.value;
   state.filters = readFilters(foldValueObject(response.filters));
   state.rectangleSearchForm = response.searchArea;
-
-  detectObjects(response);
 };
 
 const makeLinkRequest = <T>(
@@ -179,7 +177,10 @@ export const uploadFile = async (file: File) => {
       composeSearchSessionData(state.token, resizedImageFile),
       TE.fromEither,
       TE.chain(searchSessionClient),
-      TE.map(updateState)
+      TE.map((sessionResponse) => {
+        updateState(sessionResponse);
+        detectObjects(sessionResponse);
+      })
     )();
   };
 };
