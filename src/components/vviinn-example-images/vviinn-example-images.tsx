@@ -16,7 +16,7 @@ export class VviinnExampleImages {
   render() {
     return (
       <Host>
-        <h4>Get inspired by choosing an example from gallery</h4>
+        <h4>Mit den Beispielbildern die Suche direkt ausprobieren</h4>
         <div class="images">
           <vviinn-example-image
             width={240}
