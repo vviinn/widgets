@@ -7,18 +7,9 @@
   max-width: 960px;
 }
 
-:host(.closed) {
-  animation: fade-out 0.5s ease-in-out;
-  animation-fill-mode: forwards;
-}
-
 @media (max-width: 415px) {
   .body {
     overflow-y: auto;
-  }
-  :host(.closed) {
-    animation: slide-out 0.5s ease-in-out;
-    animation-fill-mode: forwards;
   }
 }
 
@@ -43,34 +34,4 @@ button {
   cursor: pointer;
   display: grid;
   padding: unset;
-}
-
-@keyframes fade-out {
-  from {
-    clip-path: circle(100%);
-  }
-
-  to {
-    clip-path: circle(0%);
-  }
-}
-
-@keyframes slide-in {
-  from {
-    transform: translateY(100%);
-  }
-
-  to {
-    transform: translateY(0);
-  }
-}
-
-@keyframes slide-out {
-  from {
-    transform: translateY(0);
-  }
-
-  to {
-    transform: translateY(100%);
-  }
 }

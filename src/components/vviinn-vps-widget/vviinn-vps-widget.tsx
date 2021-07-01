@@ -14,6 +14,8 @@ export class VviinnVpsWidget {
   @Prop() token: string | undefined;
   @Prop() apiPath: string | undefined;
 
+  @Prop({ mutable: true }) active: boolean = false;
+
   @State() slidePosition: number = 0;
   @State() width: number = 0;
 
@@ -61,8 +63,9 @@ export class VviinnVpsWidget {
       <Host>
         <vviinn-overlayed-modal
           class={{ "first-screen": this.slidePosition === 0 }}
-          active={true}
+          active={this.active}
           onSecondaryActionClicked={() => this.resetState()}
+          onModalClosed={() => this.active = false}
         >
           <vviinn-slider
             showBullets={false}
@@ -123,7 +126,7 @@ export class VviinnVpsWidget {
             </vviinn-slide>
           </vviinn-slider>
         </vviinn-overlayed-modal>
-      </Host>
+      </Host >
     );
   }
 }

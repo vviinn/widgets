@@ -13,13 +13,13 @@ export class VviinnModal {
 
   private close() {
     this.active = false;
+    this.modalClosed.emit();
   }
 
   render() {
     return (
       <Host exportparts="secondary-action,title"
         class={{ closed: !this.active }}
-        onAnimationEnd={(ev: AnimationEvent) => this.modalClosed.emit(ev)}
       >
         <div class="head">
           <button part="secondary-action" onClick={() => this.secondaryActionClicked.emit()}>
