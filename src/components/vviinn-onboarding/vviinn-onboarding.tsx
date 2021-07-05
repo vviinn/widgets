@@ -9,6 +9,7 @@ export class VviinnOnboarding {
   render() {
     return (
       <Host>
+        <h3>So funktioniert es</h3>
         <vviinn-slider>
           <vviinn-slide>
             <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" fill="none">
@@ -21,7 +22,7 @@ export class VviinnOnboarding {
               <h4>Starte die Bildsuche</h4>
               <p>
                 Lade ein Bild aus Deiner Galerie hoch oder fotografiere ein Produkt mit deiner Kamera.
-              </p>
+                </p>
             </div>
           </vviinn-slide>
           <vviinn-slide>

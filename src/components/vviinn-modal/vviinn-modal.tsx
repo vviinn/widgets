@@ -28,7 +28,7 @@ export class VviinnModal {
               <path d="M10.5 5.25L3.75 12L10.5 18.75" stroke="#161616" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </button>
-          <div part="title">Visual Search</div>
+          <div class="title" part="title">Bildsuche</div>
           <button onClick={() => this.close()}>
             <svg
               width="16"

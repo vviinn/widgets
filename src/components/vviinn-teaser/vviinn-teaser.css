@@ -2,6 +2,7 @@
   align-items: center;
   display: grid;
   justify-items: center;
+  grid-gap: 16px;
 }
 
 .vviinn-teaser-text {

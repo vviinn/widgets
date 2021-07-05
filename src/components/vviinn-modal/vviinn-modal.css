@@ -17,14 +17,16 @@
   align-items: center;
   border-bottom: 1px solid #F4F4F4;
   display: grid;
-  grid-gap: 20px;
+  grid-gap: 16px;
   grid-template-columns: min-content auto min-content;
   justify-items: center;
-  padding: 20px;
+  padding: 16px;
 }
 
 .title {
   font-weight: 600;
+  font-size: 18px;
+  line-height: 24px;
 }
 
 button {
