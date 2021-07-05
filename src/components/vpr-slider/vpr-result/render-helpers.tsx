@@ -185,7 +185,16 @@ const pricesAreDifferent = (
   x[0] === x[1] ? E.left(x[0]) : E.right(x);
 
 const isSalePrice = (x: [number, number]): E.Either<number, [number, number]> =>
-  x[0] < x[1] ? E.left(x[1]) : E.right(x);
+  x[0] > x[1] ? E.left(x[1]) : E.right(x);
+
+export const getPrice = (
+  data: Recommendation["price"]
+): E.Either<number, [number, number]> =>
+  pipe(
+    bothPricesPresented(data),
+    E.chain(pricesAreDifferent),
+    E.chain(isSalePrice)
+  );
 
 const getPriceComponent = (
   data: Recommendation["price"],
@@ -193,10 +202,7 @@ const getPriceComponent = (
   currency: string = null
 ): FunctionalComponent<Recommendation["price"]> =>
   pipe(
-    E.right(data),
-    E.chain(bothPricesPresented),
-    E.chain(pricesAreDifferent),
-    E.chain(isSalePrice),
+    getPrice(data),
     E.fold(
       (singlePrice) => (
         <span part="price-regular" class="price regular">
@@ -205,10 +211,10 @@ const getPriceComponent = (
       ),
       (prices) => [
         <span part="price-outdated" class="price outdated">
-          {PriceComponent(prices[0], prefix, currency)}
+          {PriceComponent(prices[1], prefix, currency)}
         </span>,
         <span part="price-discount" class="price discount">
-          {PriceComponent(prices[1], prefix, currency)}
+          {PriceComponent(prices[0], prefix, currency)}
         </span>,
       ]
     )

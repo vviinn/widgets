@@ -134,11 +134,20 @@ vpr-result::part(product-title) {
   text-decoration: none;
 }
 
-vpr-result::part(price-regular) {
+vpr-result::part(price-regular),
+vpr-result::part(price-discount) {
   justify-self: start;
   color: #161616;
   font-weight: 600;
   font-size: 16px;
+  line-height: 24px;
+}
+
+vpr-result::part(price-outdated) {
+  justify-self: start;
+  color: #161616;
+  font-weight: 600;
+  font-size: 14px;
   line-height: 24px;
 }
 

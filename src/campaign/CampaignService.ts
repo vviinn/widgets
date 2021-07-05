@@ -1,5 +1,5 @@
 import * as C from "./Campaign";
-import { pipe } from "fp-ts/lib/pipeable";
+import { pipe } from "fp-ts/lib/function";
 import { getVPRRecommendations } from "./VPRCampaignService";
 import { getVCSRecommendations } from "./VCSCampaignService";
 
