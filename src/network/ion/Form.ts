@@ -8,7 +8,7 @@ import { ValueObject } from "./ValueObject";
 import { getApiPath } from "../utils";
 import { makeRequest, networkErrorFrom } from "../request";
 
-const sequenceToEither = sequenceT(E.either);
+const sequenceToEither = sequenceT(E.Apply);
 
 type FormRelation = "form" | "edit-form" | "create-form" | "query-form";
 
