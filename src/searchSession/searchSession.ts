@@ -58,7 +58,7 @@ type ContainsRectangleSearch = {
 };
 
 type ContainsHiresImageUpload = {
-  readonly hiresImageUpload: Form;
+  readonly uploadHighResolutionImage: Form;
 };
 
 export type SearchSession = ValueObject<Recommendation[]> &

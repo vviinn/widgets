@@ -128,13 +128,15 @@ const uploadHiresFile = async (sessionResponse: SearchSession, file: File) => {
     image: ionFile,
   };
 
-  const form = sessionResponse.hiresImageUpload;
+  const form = sessionResponse.uploadHighResolutionImage;
 
-  await pipe(
+  const r = await pipe(
     composeAuth(state.token),
     TE.fromEither,
     TE.chain(formRequest<void>(form, formPayload))
   )();
+
+  console.log(r);
 };
 
 onChange(
@@ -195,7 +197,7 @@ export const uploadFile = async (file: File) => {
       TE.chain(searchSessionClient),
       TE.map((sessionResponse) => {
         updateState(sessionResponse);
-        detectObjects(sessionResponse);
+        //detectObjects(sessionResponse);
         uploadHiresFile(sessionResponse, file);
       })
     )();

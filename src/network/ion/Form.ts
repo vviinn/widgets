@@ -82,9 +82,10 @@ const transformGetForm = (form: Form, data: Object): [string, RequestInit] => {
   return [url, { method: "GET" }];
 };
 
-const transformSendForm = (form: Form, data: Object): [string, RequestInit] => {
-  return [form.href, { body: JSON.stringify(data), method: "POST" }];
-};
+const transformSendForm = (form: Form, data: Object): [string, RequestInit] => [
+  form.href,
+  { body: JSON.stringify(data), method: form.method },
+];
 
 export const formRequest = <T>(form: Form, data: Object = {}) => (
   payload: RequestInit
@@ -96,6 +97,7 @@ export const formRequest = <T>(form: Form, data: Object = {}) => (
     TE.chain((initialData) => {
       const apiPath = initialData[0];
       const [formUrl, initObject] = initialData[1];
+
       return makeRequest<ValueObject<T>>(
         formUrl,
         initObject
