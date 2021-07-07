@@ -195,7 +195,7 @@ export const uploadFile = async (file: File) => {
       TE.chain(searchSessionClient),
       TE.map((sessionResponse) => {
         updateState(sessionResponse);
-        //detectObjects(sessionResponse);
+        detectObjects(sessionResponse);
         uploadHiresFile(sessionResponse, file);
       })
     )();
