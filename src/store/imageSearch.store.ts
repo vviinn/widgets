@@ -130,13 +130,11 @@ const uploadHiresFile = async (sessionResponse: SearchSession, file: File) => {
 
   const form = sessionResponse.uploadHighResolutionImage;
 
-  const r = await pipe(
+  await pipe(
     composeAuth(state.token),
     TE.fromEither,
     TE.chain(formRequest<void>(form, formPayload))
   )();
-
-  console.log(r);
 };
 
 onChange(

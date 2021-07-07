@@ -84,7 +84,13 @@ const transformGetForm = (form: Form, data: Object): [string, RequestInit] => {
 
 const transformSendForm = (form: Form, data: Object): [string, RequestInit] => [
   form.href,
-  { body: JSON.stringify(data), method: form.method },
+  {
+    body: JSON.stringify(data),
+    method: form.method,
+    headers: new Headers({
+      "Content-Type": "application/ion+json",
+    }),
+  },
 ];
 
 export const formRequest = <T>(form: Form, data: Object = {}) => (
