@@ -16,6 +16,7 @@
   animation-name: scalein;
   border: 1px solid lightgray;
   cursor: pointer;
+  display: block;
   height: max-content;
   min-width: max-content;
   padding: 0.1rem;

@@ -205,18 +205,22 @@ const getPriceComponent = (
     getPrice(data),
     E.fold(
       (singlePrice) => (
-        <span part="price-regular" class="price regular">
-          {PriceComponent(singlePrice, prefix, currency)}
+        <span class="price-container" part="price-container">
+          <span part="price-regular" class="price regular">
+            {PriceComponent(singlePrice, prefix, currency)}
+          </span>
         </span>
       ),
-      (prices) => [
-        <span part="price-outdated" class="price outdated">
-          {PriceComponent(prices[1], prefix, currency)}
-        </span>,
-        <span part="price-discount" class="price discount">
-          {PriceComponent(prices[0], prefix, currency)}
-        </span>,
-      ]
+      (prices) => (
+        <span class="price-container" part="price-container">
+          <span part="price-outdated" class="price outdated">
+            {PriceComponent(prices[1], prefix, currency)}
+          </span>
+          <span part="price-discount" class="price discount">
+            {PriceComponent(prices[0], prefix, currency)}
+          </span>
+        </span>
+      )
     )
   );
 

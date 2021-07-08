@@ -6,7 +6,7 @@ import {
   EventEmitter,
   Event,
   State,
-  Listen
+  Listen,
 } from "@stencil/core";
 import { Link } from "../../../network/ion/Link";
 import { SearchSessionFilter } from "../../../searchSession/searchSession";
@@ -41,6 +41,11 @@ export class SearchFilters {
     this.hideFilters = !this.hideFilters;
   }
 
+  private handleEnter(ev: KeyboardEvent, f: Link) {
+    if (ev.key !== "Enter") return;
+    this.filterSelected(f);
+  }
+
   render() {
     return (
       <Host exportparts="filter, show-more-filters">
@@ -49,20 +54,36 @@ export class SearchFilters {
             .filter((_, i) => (this.hideFilters ? i < 5 : true))
             .map((f, n) => (
               <div
-                part={this.selectedCategoryId === getFilterId(f) ? "filter active" : "filter"}
+                role="button"
+                tabindex="0"
+                part={
+                  this.selectedCategoryId === getFilterId(f)
+                    ? "filter active"
+                    : "filter"
+                }
                 class={{
                   filter: true,
                   active: this.selectedCategoryId === getFilterId(f),
                 }}
                 style={{ "animation-delay": `${n * 10}ms` }}
                 onClick={() => this.filterSelected(f)}
+                onKeyPress={(ev) => this.handleEnter(ev, f)}
               >
                 {f.name}
               </div>
             ))}
+
           <div
             class="filter"
+            role="button"
+            tabindex="0"
+            aria-role="button"
             onClick={() => this.toggleFilters()}
+            onKeyPress={(ev) => {
+              if (ev.key === "Enter") {
+                this.toggleFilters();
+              }
+            }}
             part="show-more-filters"
           >
             {this.hideFilters ? "show more" : "show less"}

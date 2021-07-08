@@ -3,23 +3,27 @@
   --x-position: 0;
   --y-position: 0;
 
-  background: black;
+  background: rgba(22, 22, 22, 0.5);
   border-radius: 50%;
   border: none;
   cursor: pointer;
   display: block;
   height: var(--size);
-  opacity: .75;
   position: absolute;
   transition: opacity 0.25s;
   width: var(--size);
   z-index: 2;
-  transform: translate(var(--x-position), var(--y-position));
+  transform: translate(calc(var(--x-position) - (var(--size) * 0.5)), calc(var(--y-position) - (var(--size) * 0.5)));
+  transition: background 0.1 ease-in-out;
+}
+
+:host(:hover) {
+  background: rgba(22, 22, 22, 0.75);
 }
 
 :host(.active) {
-  background: #0F62FE;
-  border: 1px solid white;
+  background: rgba(15, 98, 254, 0.95);
+  border: 2px solid white;
 }
 
 :host::after {

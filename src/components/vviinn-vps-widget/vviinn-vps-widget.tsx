@@ -115,10 +115,10 @@ export class VviinnVpsWidget {
                   {imageSearchState.results.map((p) => (
                     <vpr-result
                       item={p}
-                      imageWidth={this.width <= 320 ? 300 : 168}
+                      imageWidth={400}
                       imageSizes={{
                         "320w": 300,
-                        "321w": 168,
+                        "321w": 400,
                       }}
                     />
                   ))}
