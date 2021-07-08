@@ -14,10 +14,11 @@ vviinn-overlay {
 
 @media (max-width: 415px) {
   vviinn-modal {
-    width: 100vw;
-    height: 100vh;
     border-radius: 4px 4px 0 0;
+    height: 100vh;
     margin-top: 32px;
+    transform: translateY(100%);
+    width: 100vw;
   }
 
   vviinn-overlay {

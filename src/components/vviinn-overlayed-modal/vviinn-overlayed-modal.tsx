@@ -11,18 +11,12 @@ export class VviinnOverlayedModal {
   @Event() secondaryActionClicked: EventEmitter<void>;
   @Event() modalClosed: EventEmitter<void>;
 
-  private close() {
-    this.active = false;
-    this.modalClosed.emit();
-  }
-
   render() {
     return (
       <Host class={{ active: this.active }}>
         <vviinn-overlay>
           <vviinn-modal
             onSecondaryActionClicked={() => this.secondaryActionClicked.emit()}
-            onModalClosed={() => this.close()}
           >
             <slot>CONTENT</slot>
           </vviinn-modal>

@@ -7,28 +7,65 @@ import { Component, Host, h, State, Event, EventEmitter } from "@stencil/core";
 })
 export class VviinnModal {
   @State() active: boolean = true;
+  @State() slider: boolean = false;
 
   @Event() modalClosed: EventEmitter<AnimationEvent>;
   @Event() secondaryActionClicked: EventEmitter<void>;
 
   private close() {
     this.active = false;
-    this.modalClosed.emit();
+
+    setTimeout(
+      () => {
+        this.modalClosed.emit();
+      },
+      this.slider ? 500 : 0
+    );
+  }
+
+  private handleAnimationEnd(ev: AnimationEvent) {
+    if (ev.animationName !== "fade-in") return;
+    this.slider = true;
   }
 
   render() {
     return (
-      <Host exportparts="secondary-action,title"
+      <Host
+        exportparts="secondary-action,title"
         class={{ closed: !this.active }}
+        onAnimationEnd={(ev: AnimationEvent) => this.handleAnimationEnd(ev)}
       >
         <div class="head">
-          <button part="secondary-action" onClick={() => this.secondaryActionClicked.emit()}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M20.25 12H3.75" stroke="#161616" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-              <path d="M10.5 5.25L3.75 12L10.5 18.75" stroke="#161616" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          <button
+            part="secondary-action"
+            onClick={() => this.secondaryActionClicked.emit()}
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M20.25 12H3.75"
+                stroke="#161616"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M10.5 5.25L3.75 12L10.5 18.75"
+                stroke="#161616"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
             </svg>
           </button>
-          <div class="title" part="title">Bildsuche</div>
+          <div class="title" part="title">
+            Bildsuche
+          </div>
           <button onClick={() => this.close()}>
             <svg
               width="16"
