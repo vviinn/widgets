@@ -17,6 +17,7 @@ export class VviinnOverlayedModal {
         <vviinn-overlay>
           <vviinn-modal
             onSecondaryActionClicked={() => this.secondaryActionClicked.emit()}
+            active={this.active}
           >
             <slot>CONTENT</slot>
           </vviinn-modal>

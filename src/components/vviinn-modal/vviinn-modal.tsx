@@ -1,4 +1,4 @@
-import { Component, Host, h, State, Event, EventEmitter } from "@stencil/core";
+import { Component, Host, h, State, Event, EventEmitter, Prop } from "@stencil/core";
 
 @Component({
   tag: "vviinn-modal",
@@ -6,7 +6,8 @@ import { Component, Host, h, State, Event, EventEmitter } from "@stencil/core";
   shadow: true,
 })
 export class VviinnModal {
-  @State() active: boolean = true;
+  @Prop({ mutable: true }) active: boolean = false;
+
   @State() slider: boolean = false;
 
   @Event() modalClosed: EventEmitter<AnimationEvent>;

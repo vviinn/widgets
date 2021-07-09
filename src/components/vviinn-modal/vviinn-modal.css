@@ -16,6 +16,7 @@
 
   :host(.closed) {
     animation-name: fade-out;
+    animation-fill-mode: none;
   }
 
   .body {

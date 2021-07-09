@@ -233,10 +233,14 @@ search-filters::part(filter active) {
     padding: 24px;
   }
 
+  vviinn-slide {
+    padding-bottom: 48px;
+  }
+
   .start-page {
     grid-template-columns: unset;
     grid-gap: 48px;
-    padding-top: 24px;
+    padding: 24px 0 48px 0;
   }
 
   .start-page_block:last-of-type {

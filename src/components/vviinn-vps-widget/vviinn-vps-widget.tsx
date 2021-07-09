@@ -14,7 +14,7 @@ export class VviinnVpsWidget {
   @Prop() token: string | undefined;
   @Prop() apiPath: string | undefined;
 
-  @Prop({ mutable: true }) active: boolean = true;
+  @Prop({ mutable: true }) active: boolean = false;
 
   @State() slidePosition: number = 0;
   @State() width: number = 0;
