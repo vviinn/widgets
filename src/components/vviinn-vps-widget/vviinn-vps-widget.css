@@ -122,11 +122,8 @@ vpr-result {
 }
 
 vpr-result::part(product-image) {
-  aspect-ratio: 1;
   border: 1px solid #eaeaea;
   margin-bottom: 8px;
-  width: 100%;
-  height: auto;
 }
 
 vpr-result::part(product-title) {

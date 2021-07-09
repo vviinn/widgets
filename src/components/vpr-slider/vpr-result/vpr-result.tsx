@@ -7,14 +7,23 @@ import {
   h,
   Event,
   EventEmitter,
+  State,
 } from "@stencil/core";
 
-import { Image, Title, Price, Brand, ProductType } from "./render-helpers";
+import { processWidth } from "./render-helpers";
 import state from "../../../store/store";
-import { fold } from "fp-ts/lib/Option";
+import { match, fromNullable, chain, map, getOrElse } from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/function";
 import { getAnalyticsModule } from "../../../analytics/GeneralAnalytics";
 import { Recommendation } from "../../../recommendation/recommendation";
+import { fetchInBackground } from "./imageLoader.worker";
+import {
+  ImageData,
+  createImage,
+  wrapInLink,
+  getPriceComponent,
+} from "./render-helpers";
+import { checkEmpryString } from "../../../utils/option/option";
 
 export type ImageSizes = {
   [rule: string]: number;
@@ -32,6 +41,8 @@ export class VprResult implements ComponentInterface {
   @Prop() imageRatio: number = 1;
   @Prop() imageSizes: ImageSizes | undefined = undefined;
 
+  @State() imageUrl: string | undefined = undefined;
+
   /** Event fires ones when recommendation rendered on page */
   @Event() recommendationLoad: EventEmitter<Recommendation>;
   /** Event fires ones when recommendation appears on the viewport */
@@ -43,6 +54,13 @@ export class VprResult implements ComponentInterface {
     this.intersectionCallback.bind(this),
     { threshold: 1.0 }
   );
+
+  async connectedCallback() {
+    const imageUrl = this.item.image?.thumbnail ?? this.item.image.original;
+    const resizedUrl = processWidth(imageUrl, this.imageWidth);
+
+    this.imageUrl = await fetchInBackground(resizedUrl);
+  }
 
   async componentWillLoad() {
     this.el.style.setProperty(
@@ -68,7 +86,7 @@ export class VprResult implements ComponentInterface {
 
         pipe(
           getAnalyticsModule(),
-          fold(
+          match(
             () => null,
             (analytics) => analytics.sendClick(this.item)
           )
@@ -89,7 +107,7 @@ export class VprResult implements ComponentInterface {
     if (data.some((entry) => entry.isIntersecting)) {
       pipe(
         getAnalyticsModule(),
-        fold(
+        match(
           () => null,
           (analytics) => analytics.sendImpression(this.item)
         )
@@ -98,6 +116,100 @@ export class VprResult implements ComponentInterface {
       this.recommendationView.emit(this.item);
       this.intersectionObserver.disconnect();
     }
+  }
+
+  private renderImage() {
+    if (!this.imageUrl) return null;
+
+    const imageData: ImageData = {
+      width: this.imageWidth,
+      height: this.imageWidth * this.imageRatio,
+      url: this.imageUrl,
+      srcSet: null,
+      title: this.item.title,
+    };
+
+    return pipe(
+      this.item.deeplink,
+      fromNullable,
+      chain(checkEmpryString),
+      match(
+        () => createImage(imageData),
+        (deeplink) => wrapInLink(deeplink, createImage(imageData))
+      )
+    );
+  }
+
+  private renderTitle() {
+    if (!this.imageUrl) return null;
+
+    return pipe(
+      this.item.deeplink,
+      fromNullable,
+      chain(checkEmpryString),
+      match(
+        () => (
+          <span
+            part="product-title"
+            class="product title"
+            title={this.item.title}
+          >
+            {this.item.title}
+          </span>
+        ),
+        (deeplink) => (
+          <a
+            part="product-title"
+            class="product title"
+            title={this.item.title}
+            href={deeplink}
+          >
+            {this.item.title}
+          </a>
+        )
+      )
+    );
+  }
+
+  private renderBrand() {
+    if (!this.imageUrl) return null;
+
+    return pipe(
+      this.item.brand,
+      fromNullable,
+      map((brand) => (
+        <span part="brand" class="brand">
+          {brand}
+        </span>
+      )),
+      getOrElse(() => null)
+    );
+  }
+
+  private renderProductType() {
+    if (!this.imageUrl) return null;
+
+    return pipe(
+      this.item.productType,
+      fromNullable,
+      map((productType) => (
+        <span part="product-type" class="product-type">
+          {productType}
+        </span>
+      )),
+      getOrElse(() => null)
+    );
+  }
+
+  private renderPrice() {
+    if (!this.imageUrl) return null;
+
+    return pipe(
+      this.item.price,
+      fromNullable,
+      map(getPriceComponent),
+      getOrElse(() => null)
+    );
   }
 
   render() {
@@ -110,16 +222,11 @@ export class VprResult implements ComponentInterface {
         {this.item === undefined
           ? null
           : [
-            Image(
-              this.item,
-              this.imageWidth,
-              this.imageWidth * this.imageRatio,
-              this.imageSizes
-            ),
-            Title(this.item),
-            Brand(this.item),
-            ProductType(this.item),
-            Price(this.item, state.pricePrefix, state.currencySign),
+            this.renderImage(),
+            this.renderTitle(),
+            this.renderBrand(),
+            this.renderProductType(),
+            this.renderPrice(),
           ]}
       </Host>
     );
