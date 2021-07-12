@@ -20,6 +20,7 @@ export const config: Config = {
       copy: [{ src: "assets" }, { src: "favicon.ico" }],
     },
   ],
+  globalScript: "src/global",
   plugins: [
     dotenvPlugin(),
     postcss({
