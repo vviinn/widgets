@@ -18,6 +18,7 @@ import { foldValueObject, ValueObject } from "../network/ion/ValueObject";
 import { Link, linkRequest, getLink } from "../network/ion/Link";
 import { divideOnSized, Rectangle } from "../geometry/Rectangle";
 import { Form, formRequest } from "../network/ion/Form";
+import * as F from "../network/ion/File";
 import { fromFile } from "../Image/fromFile";
 import { resizeImage } from "../Image/resizeImage";
 import { toFile } from "../Image/toFile";
@@ -125,6 +126,21 @@ const detectObjects = async (data: SearchSession) => {
   )();
 };
 
+const uploadHiresFile = async (sessionResponse: SearchSession, file: File) => {
+  const ionFile: F.IonFile = await F.fromFile(file);
+  const formPayload = {
+    image: ionFile,
+  };
+
+  const form = sessionResponse.uploadHighResolutionImage;
+
+  await pipe(
+    composeAuth(state.token),
+    TE.fromEither,
+    TE.chain(formRequest<void>(form, formPayload))
+  )();
+};
+
 onChange(
   "activeIonLink",
   async (newLink: Link) =>
@@ -184,6 +200,7 @@ export const uploadFile = async (file: File) => {
       TE.map((sessionResponse) => {
         updateState(sessionResponse);
         detectObjects(sessionResponse);
+        uploadHiresFile(sessionResponse, file);
       })
     )();
   };

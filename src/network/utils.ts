@@ -27,8 +27,18 @@ const headersSemigroupSum: S.Semigroup<Headers> = {
   },
 };
 
-export const mergeInitRequests = S.getStructSemigroup<RequestInit>({
-  method: S.getFirstSemigroup<string>(),
+export const mergeInitRequests = S.struct<RequestInit>({
+  method: {
+    concat: (a: string, b: string) => {
+      const m = O.getFirstMonoid<string>();
+      const method = m.concat(O.fromNullable(a), O.fromNullable(b));
+
+      return pipe(
+        method,
+        O.getOrElse(() => "GET")
+      );
+    },
+  },
   body: S.getLastSemigroup<string>(),
   headers: headersSemigroupSum,
 });

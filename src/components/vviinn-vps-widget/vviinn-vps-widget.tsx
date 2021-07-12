@@ -54,8 +54,8 @@ export class VviinnVpsWidget {
     imageSearchState.searchArea = O.none;
     imageSearchState.results = [];
     imageSearchState.filters = [];
-    imageSearchState.detectedObjects = [],
-      imageSearchState.activeIonLink = undefined;
+    imageSearchState.detectedObjects = [];
+    imageSearchState.activeIonLink = undefined;
     imageSearchState.rectangleSearchForm = undefined;
   }
 

@@ -57,6 +57,8 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@sentry/browser": "^6.9.0",
+    "@sentry/tracing": "^6.9.0",
     "@types/google.analytics": "0.0.41",
     "@types/gtag.js": "0.0.4",
     "@types/node": "^14.14.22",

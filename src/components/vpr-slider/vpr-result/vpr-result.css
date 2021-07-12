@@ -12,6 +12,7 @@ img {
   align-content: center;
   object-position: 50% 50%;
   object-fit: contain;
+  text-align: center;
 }
 
 .sale-container {

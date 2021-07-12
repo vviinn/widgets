@@ -57,10 +57,15 @@ type ContainsRectangleSearch = {
   readonly searchArea: Form;
 };
 
+type ContainsHiresImageUpload = {
+  readonly uploadHighResolutionImage: Form;
+};
+
 export type SearchSession = ValueObject<Recommendation[]> &
   HasFilters &
   Partial<ContainsDetectedObjects> &
-  ContainsRectangleSearch;
+  ContainsRectangleSearch &
+  ContainsHiresImageUpload;
 
 export const searchSessionClient = (initialData: RequestInit) =>
   pipe(
