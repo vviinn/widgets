@@ -13,7 +13,7 @@ type ImageProps = {
   readonly title: string;
 };
 
-type ImageData = ImageProps & Sized;
+export type ImageData = ImageProps & Sized;
 
 const sequenceTEither = sequenceT(E.Apply);
 const optionalStringM = O.getFirstMonoid<string>();
@@ -67,7 +67,7 @@ export const processSrcSet = (
   );
 };
 
-const createImage = (data: ImageData) => (
+export const createImage = (data: ImageData) => (
   <img
     part="product-image"
     width={data?.width}
@@ -78,7 +78,7 @@ const createImage = (data: ImageData) => (
   />
 );
 
-const wrapInLink = (href: string, el: HTMLImageElement) => (
+export const wrapInLink = (href: string, el: HTMLImageElement) => (
   <a href={href} part="product-image-link">
     {el}
   </a>
@@ -196,7 +196,7 @@ export const getPrice = (
     E.chain(isSalePrice)
   );
 
-const getPriceComponent = (
+export const getPriceComponent = (
   data: Recommendation["price"],
   prefix: string = null,
   currency: string = null
@@ -205,59 +205,20 @@ const getPriceComponent = (
     getPrice(data),
     E.fold(
       (singlePrice) => (
-        <span part="price-regular" class="price regular">
-          {PriceComponent(singlePrice, prefix, currency)}
+        <span class="price-container" part="price-container">
+          <span part="price-regular" class="price regular">
+            {PriceComponent(singlePrice, prefix, currency)}
+          </span>
         </span>
       ),
-      (prices) => [
-        <span part="price-outdated" class="price outdated">
-          {PriceComponent(prices[1], prefix, currency)}
-        </span>,
-        <span part="price-discount" class="price discount">
-          {PriceComponent(prices[0], prefix, currency)}
-        </span>,
-      ]
-    )
-  );
-
-export const Price = (
-  data: Recommendation,
-  prefix: string = null,
-  currency: string = null
-): FunctionalComponent<Recommendation["price"]> =>
-  pipe(
-    O.fromNullable(data.price),
-    O.fold(
-      () => null,
-      (price) => getPriceComponent(price, prefix, currency)
-    )
-  );
-
-export const Brand = (
-  data: Recommendation
-): FunctionalComponent<Recommendation["brand"]> =>
-  pipe(
-    O.fromNullable(data.brand),
-    O.fold(
-      () => null,
-      (brand) => (
-        <span part="brand" class="brand">
-          {brand}
-        </span>
-      )
-    )
-  );
-
-export const ProductType = (
-  data: Recommendation
-): FunctionalComponent<Recommendation["productType"]> =>
-  pipe(
-    O.fromNullable(data.productType),
-    O.fold(
-      () => null,
-      (productType) => (
-        <span part="product-type" class="product-type">
-          {productType}
+      (prices) => (
+        <span class="price-container" part="price-container">
+          <span part="price-outdated" class="price outdated">
+            {PriceComponent(prices[1], prefix, currency)}
+          </span>
+          <span part="price-discount" class="price discount">
+            {PriceComponent(prices[0], prefix, currency)}
+          </span>
         </span>
       )
     )

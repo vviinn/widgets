@@ -71,6 +71,8 @@ type ImageSearchStore = {
   imageUrl: O.Option<string>;
   imageBounds: O.Option<Rectangle>;
   searchArea: O.Option<Rectangle>;
+
+  resultsComponents: HTMLElement[];
 };
 
 const { state, onChange } = createStore<ImageSearchStore>({
@@ -87,9 +89,11 @@ const { state, onChange } = createStore<ImageSearchStore>({
   imageUrl: O.none,
   imageBounds: O.none,
   searchArea: O.none,
+
+  resultsComponents: [],
 });
 
-const updateState = (response: SearchSession) => {
+const updateState = async (response: SearchSession) => {
   state.results = response.value;
   state.filters = readFilters(foldValueObject(response.filters));
   state.rectangleSearchForm = response.searchArea;

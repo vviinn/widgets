@@ -14,7 +14,7 @@ export class VviinnVpsWidget {
   @Prop() token: string | undefined;
   @Prop() apiPath: string | undefined;
 
-  @Prop({ mutable: true }) active: boolean = true;
+  @Prop({ mutable: true }) active: boolean = false;
 
   @State() slidePosition: number = 0;
   @State() width: number = 0;
@@ -115,11 +115,7 @@ export class VviinnVpsWidget {
                   {imageSearchState.results.map((p) => (
                     <vpr-result
                       item={p}
-                      imageWidth={this.width <= 320 ? 300 : 168}
-                      imageSizes={{
-                        "320w": 300,
-                        "321w": 168,
-                      }}
+                      imageWidth={160}
                     />
                   ))}
                 </div>

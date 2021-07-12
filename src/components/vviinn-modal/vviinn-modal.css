@@ -8,6 +8,17 @@
 }
 
 @media (max-width: 415px) {
+  :host {
+    animation-name: fade-in;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+  }
+
+  :host(.closed) {
+    animation-name: fade-out;
+    animation-fill-mode: none;
+  }
+
   .body {
     overflow-y: auto;
   }
@@ -36,4 +47,24 @@ button {
   cursor: pointer;
   display: grid;
   padding: unset;
+}
+
+@keyframes fade-in {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-out {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(100%);
+  }
 }
