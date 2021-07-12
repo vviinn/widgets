@@ -8,6 +8,7 @@ import {
   Event,
   EventEmitter,
   State,
+  Watch
 } from "@stencil/core";
 
 import { processWidth } from "./render-helpers";
@@ -56,10 +57,7 @@ export class VprResult implements ComponentInterface {
   );
 
   async connectedCallback() {
-    const imageUrl = this.item.image?.thumbnail ?? this.item.image.original;
-    const resizedUrl = processWidth(imageUrl, this.imageWidth);
-
-    this.imageUrl = await fetchInBackground(resizedUrl);
+    await this.processImageUrl();
   }
 
   async componentWillLoad() {
@@ -69,6 +67,11 @@ export class VprResult implements ComponentInterface {
     );
 
     this.el.style.setProperty("--image-ratio", `${this.imageRatio}`);
+  }
+
+  @Watch("item")
+  async handleItemMutation() {
+    await this.processImageUrl();
   }
 
   componentDidLoad() {
@@ -116,6 +119,13 @@ export class VprResult implements ComponentInterface {
       this.recommendationView.emit(this.item);
       this.intersectionObserver.disconnect();
     }
+  }
+
+  private async processImageUrl() {
+    const imageUrl = this.item.image?.thumbnail ?? this.item.image.original;
+    const resizedUrl = processWidth(imageUrl, this.imageWidth);
+
+    this.imageUrl = await fetchInBackground(resizedUrl);
   }
 
   private renderImage() {
