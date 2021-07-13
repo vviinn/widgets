@@ -74,7 +74,11 @@ export class SearchFilters {
             ))}
 
           <div
-            class="filter"
+            class={{
+              filter: true,
+              "show-more": true,
+              active: !this.hideFilters,
+            }}
             role="button"
             tabindex="0"
             aria-role="button"
@@ -86,7 +90,7 @@ export class SearchFilters {
             }}
             part="show-more-filters"
           >
-            {this.hideFilters ? "show more" : "show less"}
+            {this.hideFilters ? "Zeig mehr" : "Zeige weniger"}
           </div>
         </div>
       </Host>

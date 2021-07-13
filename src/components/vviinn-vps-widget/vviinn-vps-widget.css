@@ -168,8 +168,7 @@ search-filters span {
   display: none;
 }
 
-search-filters::part(filter),
-search-filters::part(show-more-filters) {
+search-filters::part(filter) {
   background: #F4F4F4;
   border-radius: 4px;
   border: 1px solid #F4F4F4;
@@ -183,12 +182,10 @@ search-filters::part(show-more-filters) {
 }
 
 search-filters::part(show-more-filters) {
-  background: #e5e5e5;
   border: 1px solid #f4f4f4;
   border-radius: 4px;
   box-sizing: border-box;
   color: #161616;
-  display: block;
   font-size: 14px;
   font-weight: 600;
   line-height: 20px;
