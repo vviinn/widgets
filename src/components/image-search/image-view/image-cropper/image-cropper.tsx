@@ -67,7 +67,10 @@ export class ImageCropper {
           return;
         }
 
-        imageSearchState.searchArea = O.some(newSearchArea);
+        requestAnimationFrame(() => {
+          imageSearchState.searchArea = O.some(newSearchArea);
+        });
+
         imageSearchState.detectedObject = undefined;
       })
     )

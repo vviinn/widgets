@@ -7,6 +7,7 @@ const setupSentry = () => {
       "https://2e48bb2503b749daae7628504d02853a@o731435.ingest.sentry.io/5783489",
     integrations: [new Integrations.BrowserTracing()],
     tracesSampleRate: 1.0,
+    maxBreadcrumbs: 4,
   });
 };
 

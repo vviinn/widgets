@@ -64,15 +64,20 @@ export class CropperHandler {
   handlePointerMove(event: PointerEvent) {
     if (!this.handleMove) return;
 
-    const destination = fromMouseEvent(event);
-    const distance = pointDiffSemigroup.concat(destination, this.startPoint);
+    requestAnimationFrame(() => {
+      const destination = fromMouseEvent(event);
 
-    this.handlerMoved.emit({
-      position: distance,
-      direction: this.handler.direction,
+      if (this.startPoint !== undefined) {
+        const distance = pointDiffSemigroup.concat(destination, this.startPoint);
+
+        this.handlerMoved.emit({
+          position: distance,
+          direction: this.handler.direction,
+        });
+      }
+
+      this.startPoint = destination;
     });
-
-    this.startPoint = destination;
   }
 
   render() {

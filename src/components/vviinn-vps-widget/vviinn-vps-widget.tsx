@@ -73,7 +73,7 @@ export class VviinnVpsWidget {
             position={this.slidePosition}
             ref={(el) => (this.body = el)}
           >
-            <vviinn-slide class="start-page">
+            <vviinn-slide class={{ "start-page": true }}>
               <div class="start-page_block">
                 <vviinn-teaser />
                 <vviinn-image-selector
@@ -99,7 +99,7 @@ export class VviinnVpsWidget {
                 </div>
               </div>
             </vviinn-slide>
-            <vviinn-slide class="results-page">
+            <vviinn-slide class={{ "results-page": true, active: this.slidePosition == 1 }}>
               <div class="image-wrapper">
                 <vviinn-image-view />
                 <div class="filters-wrapper">

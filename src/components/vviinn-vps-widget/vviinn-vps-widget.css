@@ -14,7 +14,7 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
 }
 
 .start-page_block {
-  align-content: center;
+  align-content: start;
   border-right: 1px solid #F4F4F4;
   display: grid;
   padding: 48px;
@@ -214,6 +214,10 @@ search-filters::part(filter active) {
   overflow: auto;
 }
 
+.results-page:not(.active) {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .start-page_block {
     padding: 24px;
@@ -235,6 +239,7 @@ search-filters::part(filter active) {
   }
 
   .start-page {
+    grid-template-rows: min-content;
     grid-template-columns: unset;
     grid-gap: 48px;
     padding: 24px 0 48px 0;
