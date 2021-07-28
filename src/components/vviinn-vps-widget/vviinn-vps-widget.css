@@ -121,19 +121,35 @@ vpr-result {
   width: 100%;
 }
 
+vpr-result::part(product-image-link) {
+  grid-row: 1/2;
+}
+
 vpr-result::part(product-image) {
   border: 1px solid #eaeaea;
   margin-bottom: 8px;
 }
 
-vpr-result::part(product-title) {
+vpr-result::part(product-title),
+vpr-result::part(brand) {
   color: #525252;
   font-size: 14px;
   font-weight: 400;
   justify-self: start;
   line-height: 20px;
-  margin-bottom: 4px;
   text-decoration: none;
+}
+
+vpr-result::part(brand) {
+  line-height: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #161616;
+  grid-row: 2/3;
+}
+
+vpr-result::part(product-type) {
+  display: none;
 }
 
 vpr-result::part(price-container) {
