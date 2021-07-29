@@ -12,6 +12,8 @@ import { Link } from "../../../network/ion/Link";
 import { SearchSessionFilter } from "../../../searchSession/searchSession";
 import { imageSearchState } from "../../../store/imageSearch.store";
 
+const FILTERS_COUNT: number = 5;
+
 const getFilterId = (filter: Link): string =>
   filter.href.split("/").reverse()[0];
 
@@ -51,7 +53,7 @@ export class SearchFilters {
       <Host exportparts="filter, show-more-filters">
         <div class="filters">
           {this.filter.filters
-            .filter((_, i) => (this.hideFilters ? i < 5 : true))
+            .filter((_, i) => (this.hideFilters ? i < FILTERS_COUNT : true))
             .map((f, n) => (
               <div
                 role="button"
@@ -77,6 +79,7 @@ export class SearchFilters {
             class={{
               filter: true,
               "show-more": true,
+              hidden: this.filter.filters.length <= FILTERS_COUNT,
               active: !this.hideFilters,
             }}
             role="button"
