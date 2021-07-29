@@ -8,7 +8,7 @@ import {
   Event,
   EventEmitter,
   State,
-  Watch
+  Watch,
 } from "@stencil/core";
 
 import { processWidth } from "./render-helpers";
@@ -217,7 +217,9 @@ export class VprResult implements ComponentInterface {
     return pipe(
       this.item.price,
       fromNullable,
-      map(getPriceComponent),
+      map((price) =>
+        getPriceComponent(price, state.pricePrefix, state.currencySign)
+      ),
       getOrElse(() => null)
     );
   }

@@ -37,6 +37,10 @@
   display: flex;
 }
 
+.show-more.hidden {
+  display: none;
+}
+
 .show-more::after {
   content: url("data:image/svg+xml,%3Csvg width='16' height='16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8 12.2l-6-6L3.2 5 8 9.8 12.8 5 14 6.2l-6 6z' fill='%23525252'/%3E%3C/svg%3E");
   display: block;
