@@ -7,37 +7,50 @@
 
 ## Properties
 
-| Property | Attribute | Description             | Type     | Default     |
-| -------- | --------- | ----------------------- | -------- | ----------- |
-| `token`  | `token`   | Mediaopt customer token | `string` | `undefined` |
+| Property       | Attribute       | Description                          | Type     | Default     |
+| -------------- | --------------- | ------------------------------------ | -------- | ----------- |
+| `apiPath`      | `api-path`      |                                      | `string` | `undefined` |
+| `currencySign` | `currency-sign` | Currency sign will shown after price | `string` | `undefined` |
+| `token`        | `token`         | Mediaopt customer token              | `string` | `undefined` |
+
+
+## Events
+
+| Event             | Description | Type                                         |
+| ----------------- | ----------- | -------------------------------------------- |
+| `filtersCleared`  |             | `CustomEvent<void>`                          |
+| `objectsDetected` |             | `CustomEvent<ValueObject<DetectedObject>[]>` |
+| `resetSearchArea` |             | `CustomEvent<void>`                          |
 
 
 ## Shadow Parts
 
-| Part     | Description |
-| -------- | ----------- |
-| `"grid"` |             |
+| Part               | Description |
+| ------------------ | ----------- |
+| `"button"`         |             |
+| `"controls"`       |             |
+| `"filters"`        |             |
+| `"image-selector"` |             |
+| `"results"`        |             |
 
 
 ## Dependencies
 
 ### Depends on
 
-- [image-selector](image-selector)
 - [image-view](image-view)
-- [image-cropper](image-cropper)
 - [search-filters](search-filters)
 - [vpr-slider](../vpr-slider)
 
 ### Graph
 ```mermaid
 graph TD;
-  image-search --> image-selector
   image-search --> image-view
-  image-search --> image-cropper
   image-search --> search-filters
   image-search --> vpr-slider
-  image-view --> selection-box
+  image-view --> detected-object-view
+  image-view --> highlight-box
+  image-view --> image-cropper
   image-cropper --> cropper-handler
   vpr-slider --> vpr-result
   style image-search fill:#f9f,stroke:#333,stroke-width:4px

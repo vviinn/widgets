@@ -11,10 +11,14 @@ import * as O from "fp-ts/lib/Option";
 export class VviinnVpsWidget {
   @Element() el: HTMLElement;
 
+  /** vviinn customer token */
   @Prop() token: string | undefined;
+  /** @internal */
   @Prop() apiPath: string | undefined;
-
+  /** When true modal window with widget will be shown */
   @Prop({ mutable: true }) active: boolean = false;
+  /** Currency sign will shown after price */
+  @Prop() currencySign: string = "€";
 
   @State() slidePosition: number = 0;
   @State() width: number = 0;
@@ -23,7 +27,7 @@ export class VviinnVpsWidget {
 
   connectedCallback() {
     state.apiPath = this.apiPath;
-    state.currencySign = "€";
+    state.currencySign = this.currencySign;
     imageSearchState.token = this.token;
   }
 

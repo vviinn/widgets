@@ -14,9 +14,16 @@
 
 ## Events
 
-| Event                 | Description | Type                   |
-| --------------------- | ----------- | ---------------------- |
-| `filterSelectedEvent` |             | `CustomEvent<IonLink>` |
+| Event                 | Description | Type                                                                                      |
+| --------------------- | ----------- | ----------------------------------------------------------------------------------------- |
+| `filterSelectedEvent` |             | `CustomEvent<{ href: string; readonly method?: RequestMethod; readonly name?: string; }>` |
+
+
+## Shadow Parts
+
+| Part                  | Description |
+| --------------------- | ----------- |
+| `"show-more-filters"` |             |
 
 
 ## Dependencies
@@ -24,11 +31,13 @@
 ### Used by
 
  - [image-search](..)
+ - [vviinn-vps-widget](../../vviinn-vps-widget)
 
 ### Graph
 ```mermaid
 graph TD;
   image-search --> search-filters
+  vviinn-vps-widget --> search-filters
   style search-filters fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

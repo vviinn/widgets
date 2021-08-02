@@ -34,7 +34,7 @@ export class VIVprView implements ComponentInterface {
   @Prop() imageWidth: number = 150;
   /** Id of product you need recommendations for */
   @Prop() productId: string;
-  /** Mediaopt customer token */
+  /** vviinn customer token */
   @Prop() token: string;
   /** Currency sign will shown after price */
   @Prop() currencySign: string;

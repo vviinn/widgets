@@ -10,6 +10,7 @@
 | Property     | Attribute     | Description | Type                                                                                                                                                                                                                  | Default     |
 | ------------ | ------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
 | `imageRatio` | `image-ratio` |             | `number`                                                                                                                                                                                                              | `1`         |
+| `imageSizes` | --            |             | `{ [rule: string]: number; }`                                                                                                                                                                                         | `undefined` |
 | `imageWidth` | `image-width` |             | `number`                                                                                                                                                                                                              | `100`       |
 | `item`       | --            |             | `{ groupId?: string; productId?: string; title?: string; deeplink?: string; brand?: string; productType?: string; image?: { original?: string; thumbnail?: string; }; price?: { actual?: number; sale?: number; }; }` | `undefined` |
 
@@ -25,9 +26,12 @@
 
 ## Shadow Parts
 
-| Part        | Description |
-| ----------- | ----------- |
-| `"product"` |             |
+| Part              | Description |
+| ----------------- | ----------- |
+| `"brand"`         |             |
+| `"product"`       |             |
+| `"product-title"` |             |
+| `"product-type"`  |             |
 
 
 ## Dependencies
@@ -35,11 +39,13 @@
 ### Used by
 
  - [vpr-slider](..)
+ - [vviinn-vps-widget](../../vviinn-vps-widget)
 
 ### Graph
 ```mermaid
 graph TD;
   vpr-slider --> vpr-result
+  vviinn-vps-widget --> vpr-result
   style vpr-result fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

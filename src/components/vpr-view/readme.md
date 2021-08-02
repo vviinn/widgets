@@ -74,6 +74,7 @@ mopt-vpr::part(product-title) {
 
 | Property       | Attribute       | Description                                | Type             | Default                  |
 | -------------- | --------------- | ------------------------------------------ | ---------------- | ------------------------ |
+| `apiPath`      | `api-path`      |                                            | `string`         | `undefined`              |
 | `blockTitle`   | `block-title`   | Title for recommendations widget           | `string`         | `"Recommended products"` |
 | `campaignType` | `campaign-type` | Campaign type                              | `"VPR" \| "VSC"` | `"VPR"`                  |
 | `columns`      | `columns`       | Number of columns for recommendations      | `number`         | `undefined`              |

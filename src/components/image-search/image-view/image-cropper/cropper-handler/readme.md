@@ -7,16 +7,20 @@
 
 ## Properties
 
-| Property  | Attribute | Description | Type      | Default     |
-| --------- | --------- | ----------- | --------- | ----------- |
-| `handler` | --        |             | `Handler` | `undefined` |
+| Property   | Attribute  | Description | Type      | Default     |
+| ---------- | ---------- | ----------- | --------- | ----------- |
+| `bounds`   | --         |             | `DOMRect` | `undefined` |
+| `disabled` | `disabled` |             | `boolean` | `false`     |
+| `handler`  | --         |             | `Handler` | `undefined` |
 
 
 ## Events
 
-| Event          | Description | Type                   |
-| -------------- | ----------- | ---------------------- |
-| `handlerMoved` |             | `CustomEvent<Handler>` |
+| Event                   | Description | Type                   |
+| ----------------------- | ----------- | ---------------------- |
+| `handlerMoved`          |             | `CustomEvent<Handler>` |
+| `handlerReleased`       |             | `CustomEvent<void>`    |
+| `searchAreaChangeStart` |             | `CustomEvent<boolean>` |
 
 
 ## Dependencies

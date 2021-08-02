@@ -5,31 +5,28 @@
 <!-- Auto Generated Below -->
 
 
+## Properties
+
+| Property   | Attribute  | Description | Type      | Default |
+| ---------- | ---------- | ----------- | --------- | ------- |
+| `disabled` | `disabled` |             | `boolean` | `false` |
+
+
 ## Events
 
-| Event          | Description | Type                |
-| -------------- | ----------- | ------------------- |
-| `mouseRelease` |             | `CustomEvent<void>` |
-
-
-## Methods
-
-### `getSelection() => Promise<Rectangle>`
-
-
-
-#### Returns
-
-Type: `Promise<Rectangle>`
-
-
+| Event                   | Description | Type                         |
+| ----------------------- | ----------- | ---------------------------- |
+| `cropperMoved`          |             | `CustomEvent<Point & Sized>` |
+| `mouseRelease`          |             | `CustomEvent<void>`          |
+| `searchAreaChangeStart` |             | `CustomEvent<boolean>`       |
 
 
 ## Dependencies
 
 ### Used by
 
- - [image-search](..)
+ - [image-view](..)
+ - [vviinn-image-view](../../../vviinn-image-view)
 
 ### Depends on
 
@@ -39,7 +36,8 @@ Type: `Promise<Rectangle>`
 ```mermaid
 graph TD;
   image-cropper --> cropper-handler
-  image-search --> image-cropper
+  image-view --> image-cropper
+  vviinn-image-view --> image-cropper
   style image-cropper fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
