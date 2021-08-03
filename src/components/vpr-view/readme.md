@@ -2,16 +2,18 @@
 
 ## Using this component
 
-- Put a script tag similar to this
-  ```
-  <script type="module" src="https://cdn.jsdelivr.net/npm/mediaopt-vpr@latest/www/build/mediaopt-widgets.esm.js"></script>
-  <script nomodule src="https://cdn.jsdelivr.net/npm/mediaopt-vpr@latest/www/build/mediaopt-widgets.js"></script>
-  ```
-  in the head of your index.html
+Put a script tag similar to this
 
-  You can skip script tag with `nomodule` attribute if you do not need to support browsers without JavaScript modules feature
-- Then you can use the element anywhere in your template with `<vi-vpr-view></vi-vpr-view>` tag
-- Use attributes for provide credentials or customize component view
+```
+<script type="module" src="https://cdn.jsdelivr.net/npm/mediaopt-vpr@latest/www/build/mediaopt-widgets.esm.js"></script>
+<script nomodule src="https://cdn.jsdelivr.net/npm/mediaopt-vpr@latest/www/build/mediaopt-widgets.js"></script>
+```
+
+in the head of your index.html
+
+You can skip script tag with `nomodule` attribute if you do not need to support browsers without JavaScript modules feature.
+Then you can use the element anywhere in your template with `<vi-vpr-view></vi-vpr-view>` tag.
+Use attributes for provide credentials or customize component view.
 
 ### Styling a component
 
