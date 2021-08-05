@@ -2,6 +2,11 @@
   display: block;
 }
 
+.hidden {
+  visibility: hidden;
+  height: 1px;
+}
+
 vviinn-overlayed-modal.first-screen::part(title),
 vviinn-overlayed-modal.first-screen::part(secondary-action) {
   visibility: hidden;
@@ -18,6 +23,10 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   border-right: 1px solid #F4F4F4;
   display: grid;
   padding: 48px;
+}
+
+.start-page_block.error {
+  align-content: center;
 }
 
 .start-page_block:last-of-type {
@@ -318,4 +327,10 @@ search-filters::part(filter active) {
   .products {
     grid-template-columns: unset;
   }
+}
+
+vviinn-error {
+  width: 280px;
+  align-self: center;
+  justify-self: center;
 }

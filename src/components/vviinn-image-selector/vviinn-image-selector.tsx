@@ -1,4 +1,4 @@
-import { Component, Host, h, Event, EventEmitter } from "@stencil/core";
+import { Component, Host, h, Event, EventEmitter, State } from "@stencil/core";
 import * as O from "fp-ts/lib/Option";
 import * as TE from "fp-ts/TaskEither";
 import * as TO from "fp-ts/lib/TaskOption";
@@ -27,6 +27,7 @@ const checkImageType = (f: File): O.Option<File> => {
 })
 export class VviinnImageSelector {
   @Event() imageSelected: EventEmitter<void>;
+  @Event() imageSelectedError: EventEmitter<void>;
 
   private handleInputChange(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -40,11 +41,16 @@ export class VviinnImageSelector {
       O.chain(checkImageType),
       TO.fromOption,
       TO.chainTaskK(resizeTask),
-      TE.fromTaskOption(() => "File format not supported")
+      TE.fromTaskOption(() => "File format not supported"),
+      TE.mapLeft((error) => {
+        this.imageSelectedError.emit();
+        return error;
+      })
       //TE.chain(uploadFile2)
     );
 
     console.log(await kek());
+
 
     //this.imageSelected.emit();
   }

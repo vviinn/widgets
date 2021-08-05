@@ -2,7 +2,7 @@ export type BasicError<T> = {
   kind: "client" | "server" | "app";
   inner: T;
 };
-b;
+
 export const basicErrorFromResponse = (
   error: Response
 ): BasicError<Response> => {
