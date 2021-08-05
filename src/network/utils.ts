@@ -3,17 +3,19 @@ import * as E from "fp-ts/Either";
 import { IO } from "fp-ts/IO";
 import { pipe } from "fp-ts/function";
 import * as S from "fp-ts/Semigroup";
+import * as String from "fp-ts/string";
 import state from "../store/store";
+import { BasicError, emptyApiPathError } from "../error";
 
-const stringMonoid = O.getFirstMonoid<string>();
+const stringMonoid = O.getMonoid(String.Monoid);
 
-export const getApiPath: IO<E.Either<string, string>> = () =>
+export const getApiPath: IO<E.Either<BasicError<string>, string>> = () =>
   pipe(
     stringMonoid.concat(
       O.fromNullable(state.apiPath),
       O.fromNullable(`${process.env.API_PATH}`)
     ),
-    E.fromOption(() => "api path unknown")
+    E.fromOption(() => emptyApiPathError)
   );
 
 const headersSemigroupSum: S.Semigroup<Headers> = {
@@ -30,8 +32,7 @@ const headersSemigroupSum: S.Semigroup<Headers> = {
 export const mergeInitRequests = S.struct<RequestInit>({
   method: {
     concat: (a: string, b: string) => {
-      const m = O.getFirstMonoid<string>();
-      const method = m.concat(O.fromNullable(a), O.fromNullable(b));
+      const method = stringMonoid.concat(O.fromNullable(a), O.fromNullable(b));
 
       return pipe(
         method,
@@ -39,7 +40,7 @@ export const mergeInitRequests = S.struct<RequestInit>({
       );
     },
   },
-  body: S.getLastSemigroup<string>(),
+  body: S.last<string>(),
   headers: headersSemigroupSum,
 });
 
@@ -54,12 +55,12 @@ export const createBasicRequest = (method: RequestMethod): RequestInit => {
 
 export const createRequestFromMethod = (
   method: RequestMethod
-): E.Either<string, RequestInit> => E.of(createBasicRequest(method));
+): E.Either<any, RequestInit> => E.right(createBasicRequest(method));
 
-export const createInitGetRequest: E.Either<string, RequestInit> = E.of(
+export const createInitGetRequest: E.Either<any, RequestInit> = E.right(
   createBasicRequest("GET")
 );
 
-export const createInitPostRequest: E.Either<string, RequestInit> = E.of(
+export const createInitPostRequest: E.Either<any, RequestInit> = E.right(
   createBasicRequest("POST")
 );

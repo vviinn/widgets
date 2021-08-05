@@ -1,9 +1,9 @@
-import { Rectangle } from "../geometry/Rectangle";
+import { pipe } from "fp-ts/function";
+import * as T from "fp-ts/Task";
+import { imageFromFileTask } from "./fromFile";
+import { convertB64toFileTask } from "./toFile";
 
-export const resizeImage = (
-  width: number,
-  i: HTMLImageElement
-): [string, Rectangle] => {
+export const resizeImage = (width: number, i: HTMLImageElement): string => {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
   const imageWidth = i.naturalWidth;
@@ -16,12 +16,13 @@ export const resizeImage = (
 
   ctx.drawImage(i, 0, 0, width, height);
 
-  const imageRectangle = {
-    x: 0,
-    y: 0,
-    width,
-    height,
-  };
-
-  return [canvas.toDataURL(), imageRectangle];
+  return canvas.toDataURL();
 };
+
+export const imageResizeTask = (width: number) => (file: File): T.Task<File> =>
+  pipe(
+    file,
+    imageFromFileTask,
+    T.map((image) => resizeImage(width, image)),
+    T.chain(convertB64toFileTask)
+  );

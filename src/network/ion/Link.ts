@@ -1,13 +1,10 @@
 import { ValueObject } from "./ValueObject";
 import * as O from "fp-ts/Option";
 import * as TE from "fp-ts/TaskEither";
-import * as E from "fp-ts/Either";
-import { sequenceT } from "fp-ts/Apply";
 import { pipe } from "fp-ts/function";
 import { getApiPath, RequestMethod, createRequestFromMethod } from "../utils";
-import { makeRequest, networkErrorFrom } from "../request";
-
-const sequenceToEither = sequenceT(E.either);
+import { makeRequest } from "../request";
+import { sequenceToEither } from "../../utils/either";
 
 export interface IonLinkParams {
   readonly [param: string]: string;
@@ -35,6 +32,5 @@ export const linkRequest = <T>(link: Link) => (data: RequestInit) =>
   pipe(
     sequenceToEither(getApiPath(), createRequestFromMethod(link.method)),
     TE.fromEither,
-    TE.mapLeft(networkErrorFrom),
-    TE.chain(makeRequest<ValueObject<T>>(link.href, data))
+    TE.chainW(makeRequest<ValueObject<T>>(link.href, data))
   );
