@@ -86,7 +86,7 @@ mopt-vpr::part(product-title) {
 | `pricePrefix`  | `price-prefix`  | prefix will shown before price             | `string`         | `undefined`              |
 | `productId`    | `product-id`    | Id of product you need recommendations for | `string`         | `undefined`              |
 | `sliderMode`   | `slider-mode`   | Use slider or grid view                    | `boolean`        | `false`                  |
-| `token`        | `token`         | Mediaopt customer token                    | `string`         | `undefined`              |
+| `token`        | `token`         | vviinn customer token                      | `string`         | `undefined`              |
 
 
 ## Shadow Parts

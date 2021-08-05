@@ -19,10 +19,11 @@ Then you can use the element anywhere in your template with `<vviinn-vps-widget 
 
 ## Properties
 
-| Property | Attribute | Description | Type      | Default     |
-| -------- | --------- | ----------- | --------- | ----------- |
-| `active` | `active`  |             | `boolean` | `false`     |
-| `token`  | `token`   |             | `string`  | `undefined` |
+| Property       | Attribute       | Description                                      | Type      | Default     |
+| -------------- | --------------- | ------------------------------------------------ | --------- | ----------- |
+| `active`       | `active`        | When true modal window with widget will be shown | `boolean` | `false`     |
+| `currencySign` | `currency-sign` | Currency sign will shown after price             | `string`  | `"€"`       |
+| `token`        | `token`         | vviinn customer token                            | `string`  | `undefined` |
 
 
 ## Dependencies
