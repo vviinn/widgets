@@ -11,7 +11,7 @@ const stringMonoid = O.getMonoid(String.Monoid);
 
 export const getApiPath: IO<E.Either<BasicError<string>, string>> = () =>
   pipe(
-    stringMonoid.concat(
+    O.getFirstMonoid<string>().concat(
       O.fromNullable(state.apiPath),
       O.fromNullable(`${process.env.API_PATH}`)
     ),
