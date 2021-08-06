@@ -3,11 +3,13 @@ import * as O from "fp-ts/lib/Option";
 import * as E from "fp-ts/Either";
 import * as TE from "fp-ts/TaskEither";
 import { pipe } from "fp-ts/lib/function";
-import { imageResizeTask } from "../../Image/resizeImage";
+import { resizeImage } from "../../Image/resizeImage";
 import { imageSearchState } from "../../store/imageSearch.store";
 
 import { uploadFile } from "../../store/imageSearch.store";
 import { checkImageType, fileDoesntExist } from "../../Image/error";
+import { imageFromFileTask } from "../../Image/fromFile";
+import { convertB64toFileTask } from "../../Image/toFile";
 
 @Component({
   tag: "vviinn-image-selector",
@@ -24,20 +26,35 @@ export class VviinnImageSelector {
   }
 
   private async handleFileSelection(file: O.Option<File>) {
-    const resizeTask = imageResizeTask(imageSearchState.imageWidth);
-    const checkImageAndStartSessionTask = pipe(
+    const convertImageTaskEither = pipe(
       file,
       E.fromOption(() => fileDoesntExist),
       E.chain(checkImageType),
       TE.fromEither,
-      TE.chainTaskK(resizeTask),
+      TE.chainTaskK(imageFromFileTask),
       TE.mapLeft((error) => {
         this.imageSelectedError.emit();
         return error;
       }),
-      TE.chain(uploadFile)
     );
 
+    const sendImageToStoreTaskEither = pipe(
+      convertImageTaskEither,
+      TE.map((image) => {
+        imageSearchState.image = O.some(image);
+        imageSearchState.imageUrl = O.some(image.src);
+      })
+    );
+
+    const checkImageAndStartSessionTask = pipe(
+      convertImageTaskEither,
+      TE.map((image) => resizeImage(imageSearchState.imageWidth, image)),
+      TE.chainTaskK(convertB64toFileTask),
+      TE.chain(uploadFile),
+      TE.map(() => this.imageSelected.emit())
+    );
+
+    await sendImageToStoreTaskEither();
     await checkImageAndStartSessionTask();
   }
 
