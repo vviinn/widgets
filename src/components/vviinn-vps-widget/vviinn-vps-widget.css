@@ -329,7 +329,8 @@ search-filters::part(filter active) {
   }
 }
 
-vviinn-error {
+vviinn-wrong-format,
+vviinn-server-error {
   width: 280px;
   align-self: center;
   justify-self: center;

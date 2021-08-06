@@ -64,6 +64,10 @@ export class VviinnVpsWidget {
     imageSearchState.rectangleSearchForm = undefined;
   }
 
+  private haveErrors(): boolean {
+    return this.wrongImageFormat || imageSearchState.serverError;
+  }
+
   render() {
     return (
       <Host>
@@ -81,26 +85,21 @@ export class VviinnVpsWidget {
             <vviinn-slide class={{ "start-page": true }}>
               <div
                 class={{
-                  error: this.wrongImageFormat,
+                  error: this.haveErrors(),
                   "start-page_block": true,
                 }}
               >
-                <vviinn-error class={{ hidden: !this.wrongImageFormat }}>
-                  <h4 slot="title">Leider nichts gefunden</h4>
-                  <span slot="text">
-                    Leider konnten wir keine passenden Produkte finden. Bitte
-                    versuche es mit einem anderen Bildausschnitt noch einmal.
-                  </span>
-                  <button
-                    slot="action"
-                    onClick={() => (this.wrongImageFormat = false)}
-                  >
-                    Erneut versuchen
-                  </button>
-                </vviinn-error>
-                <vviinn-teaser class={{ hidden: this.wrongImageFormat }} />
+                <vviinn-wrong-format
+                  class={{ hidden: !this.wrongImageFormat }}
+                  onActionClick={() => (this.wrongImageFormat = false)}
+                />
+                <vviinn-server-error
+                  class={{ hidden: !imageSearchState.serverError }}
+                  onActionClick={() => (imageSearchState.serverError = false)}
+                />
+                <vviinn-teaser class={{ hidden: this.haveErrors() }} />
                 <vviinn-image-selector
-                  class={{ hidden: this.wrongImageFormat }}
+                  class={{ hidden: this.haveErrors() }}
                   onImageSelected={() => this.handleImageSelection()}
                   onImageSelectedError={() => (this.wrongImageFormat = true)}
                 >
@@ -128,9 +127,7 @@ export class VviinnVpsWidget {
                     <span>Kamera oder Bild auswählen</span>
                   </span>
                 </vviinn-image-selector>
-                <vviinn-privacy-badge
-                  class={{ hidden: this.wrongImageFormat }}
-                />
+                <vviinn-privacy-badge class={{ hidden: this.haveErrors() }} />
               </div>
               <div class="start-page_block">
                 <div class="onboarding-wrapper">

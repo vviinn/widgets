@@ -7,11 +7,9 @@ import { Recommendation } from "../recommendation/recommendation";
 import {
   readFilters,
   SearchSession,
-  //searchSessionClient,
   SearchSessionFilter,
   DetectedObject,
   searchSessionClient,
-  //makeRequestFromFile,
 } from "../searchSession/searchSession";
 import { foldValueObject, ValueObject } from "../network/ion/ValueObject";
 import { Link, linkRequest, getLink } from "../network/ion/Link";
@@ -57,6 +55,8 @@ type ImageSearchStore = {
   searchArea: O.Option<Rectangle>;
 
   resultsComponents: HTMLElement[];
+
+  serverError: boolean;
 };
 
 const { state, onChange } = createStore<ImageSearchStore>({
@@ -77,6 +77,8 @@ const { state, onChange } = createStore<ImageSearchStore>({
   searchArea: O.none,
 
   resultsComponents: [],
+
+  serverError: false,
 });
 
 const updateState = async (response: SearchSession) => {
@@ -126,32 +128,6 @@ const uploadHiresFile = async (sessionResponse: SearchSession, file: File) => {
     TE.chainW(formRequest<void>(form, formPayload))
   )();
 };
-
-onChange(
-  "activeIonLink",
-  async (newLink: Link) =>
-    await pipe(
-      makeAuthorizedRequest(state.token),
-      TE.fromEither,
-      TE.chainW(linkRequest(newLink)),
-      TE.map(updateState),
-      TE.mapLeft((error) => {
-        return {
-          kind: "network error",
-          inner: error,
-        };
-      })
-    )()
-);
-
-onChange("searchArea", (newSearchArea: O.Option<Rectangle>) => {
-  pipe(
-    newSearchArea,
-    O.map((area) => {
-      state.cropperHandlers = fromRectangle(area);
-    })
-  );
-});
 
 export const makeRectangularSearchRequest = async () => {
   pipe(
@@ -203,8 +179,38 @@ export const uploadFile = (
       uploadHiresFile(sessionResponse, file);
 
       return sessionResponse;
+    }),
+    TE.mapLeft((error) => {
+      state.serverError = true;
+      return error;
     })
   );
 };
 
 export const imageSearchState = state;
+
+onChange(
+  "activeIonLink",
+  async (newLink: Link) =>
+    await pipe(
+      makeAuthorizedRequest(state.token),
+      TE.fromEither,
+      TE.chainW(linkRequest(newLink)),
+      TE.map(updateState),
+      TE.mapLeft((error) => {
+        return {
+          kind: "network error",
+          inner: error,
+        };
+      })
+    )()
+);
+
+onChange("searchArea", (newSearchArea: O.Option<Rectangle>) => {
+  pipe(
+    newSearchArea,
+    O.map((area) => {
+      state.cropperHandlers = fromRectangle(area);
+    })
+  );
+});
