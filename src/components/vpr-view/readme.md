@@ -22,7 +22,7 @@ Because some of CSS style properties can not be inherited we provide an styling 
 *NB: If you don't need to support browsers without Shadow Parts support (IE, Firefox for Android and Samsung Internet) you can adding id to style tag and use Shadow Parts styling anywhere*
 
 To use Shadow Parts add *style* tag to head of your page:
-```html
+```
 <style id="vpr-styles">
     mopt-vpr::part(price-outdated) {
       color: inherit;

@@ -1,4 +1,4 @@
-# vviinn-vps-widget
+# Visual Product Search
 
 ## Using this component
 
