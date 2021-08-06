@@ -1,24 +1,13 @@
-import { Component, Host, h, Event, EventEmitter, State } from "@stencil/core";
+import { Component, Host, h, Event, EventEmitter } from "@stencil/core";
 import * as O from "fp-ts/lib/Option";
+import * as E from "fp-ts/Either";
 import * as TE from "fp-ts/TaskEither";
-import * as TO from "fp-ts/lib/TaskOption";
-//import * as T from "fp-ts/lib/Task";
 import { pipe } from "fp-ts/lib/function";
-import { findFirstMap } from "fp-ts/Array";
 import { imageResizeTask } from "../../Image/resizeImage";
 import { imageSearchState } from "../../store/imageSearch.store";
 
-import { uploadFile2 } from "../../store/imageSearch.store";
-
-const SUPPORTED_FILE_TYPES = ["jpg", "jpeg", "png"];
-
-const checkImageType = (f: File): O.Option<File> => {
-  const fileType = f.type.split("/")[1];
-  return findFirstMap((supportedType: string) =>
-    supportedType === fileType ? O.some(f) : O.none
-  )(SUPPORTED_FILE_TYPES);
-};
-//f.type.split("/")[0] === "image" ? O.some(f) : O.none;
+import { uploadFile } from "../../store/imageSearch.store";
+import { checkImageType, fileDoesntExist } from "../../Image/error";
 
 @Component({
   tag: "vviinn-image-selector",
@@ -36,23 +25,20 @@ export class VviinnImageSelector {
 
   private async handleFileSelection(file: O.Option<File>) {
     const resizeTask = imageResizeTask(imageSearchState.imageWidth);
-    let kek = pipe(
+    const checkImageAndStartSessionTask = pipe(
       file,
-      O.chain(checkImageType),
-      TO.fromOption,
-      TO.chainTaskK(resizeTask),
-      TE.fromTaskOption(() => "File format not supported"),
+      E.fromOption(() => fileDoesntExist),
+      E.chain(checkImageType),
+      TE.fromEither,
+      TE.chainTaskK(resizeTask),
       TE.mapLeft((error) => {
         this.imageSelectedError.emit();
         return error;
-      })
-      //TE.chain(uploadFile2)
+      }),
+      TE.chain(uploadFile)
     );
 
-    console.log(await kek());
-
-
-    //this.imageSelected.emit();
+    await checkImageAndStartSessionTask();
   }
 
   render() {

@@ -4,59 +4,39 @@ import * as E from "fp-ts/Either";
 import * as TE from "fp-ts/TaskEither";
 import { pipe } from "fp-ts/function";
 import { Recommendation } from "../recommendation/recommendation";
-import { existAndNotEmpty } from "../utils/collections/collectionsUtils";
-import { createBearerHeaders } from "../utils/token/tokenUtils";
 import {
   readFilters,
   SearchSession,
-  searchSessionClient,
+  //searchSessionClient,
   SearchSessionFilter,
   DetectedObject,
+  searchSessionClient,
+  //makeRequestFromFile,
 } from "../searchSession/searchSession";
 import { foldValueObject, ValueObject } from "../network/ion/ValueObject";
 import { Link, linkRequest, getLink } from "../network/ion/Link";
 import { divideOnSized, Rectangle } from "../geometry/Rectangle";
 import { Form, formRequest } from "../network/ion/Form";
 import * as F from "../network/ion/File";
-import { fromFile } from "../Image/fromFile";
-import { resizeImage } from "../Image/resizeImage";
-import { toFile } from "../Image/toFile";
 import { Handler, fromRectangle } from "../cropper/Handler";
 import { sequenceToOption } from "../utils/option/option";
-import { BasicError, invalidTokenError } from "../error";
+import { processBearerToken } from "../utils/token/tokenUtils";
+import { BasicError } from "../error";
+import { sequenceToEither } from "../utils/either";
+import { imageFormFromFile } from "../Image/form";
 
 const RESIZED_IMAGE_WIDTH = 300;
-
-const composeSearchSessionData = (
-  token: string,
-  file: File
-): E.Either<BasicError<string>, RequestInit> =>
-  pipe(
-    token,
-    existAndNotEmpty,
-    E.map((token) => {
-      const body = new FormData();
-      body.append("image", file);
-      return {
-        headers: createBearerHeaders(token),
-        body,
-      };
-    }),
-    E.mapLeft(() => invalidTokenError)
-  );
-
-const composeAuth = (
+const makeAuthorizedRequest = (
   token: string
 ): E.Either<BasicError<string>, RequestInit> =>
   pipe(
     token,
-    existAndNotEmpty,
-    E.map((token) => {
+    processBearerToken,
+    E.map((headers: Headers) => {
       return {
-        headers: createBearerHeaders(token),
+        headers,
       };
-    }),
-    E.mapLeft(() => invalidTokenError)
+    })
   );
 
 type ImageSearchStore = {
@@ -109,7 +89,7 @@ const makeLinkRequest = <T>(
   link: Link
 ): TE.TaskEither<BasicError<Response | string>, ValueObject<T>> => {
   return pipe(
-    composeAuth(state.token),
+    makeAuthorizedRequest(state.token),
     TE.fromEither,
     TE.chainW(linkRequest<T>(link))
   );
@@ -141,7 +121,7 @@ const uploadHiresFile = async (sessionResponse: SearchSession, file: File) => {
   const form = sessionResponse.uploadHighResolutionImage;
 
   await pipe(
-    composeAuth(state.token),
+    makeAuthorizedRequest(state.token),
     TE.fromEither,
     TE.chainW(formRequest<void>(form, formPayload))
   )();
@@ -151,7 +131,7 @@ onChange(
   "activeIonLink",
   async (newLink: Link) =>
     await pipe(
-      composeAuth(state.token),
+      makeAuthorizedRequest(state.token),
       TE.fromEither,
       TE.chainW(linkRequest(newLink)),
       TE.map(updateState),
@@ -186,7 +166,7 @@ export const makeRectangularSearchRequest = async () => {
       };
 
       return await pipe(
-        composeAuth(state.token),
+        makeAuthorizedRequest(state.token),
         TE.fromEither,
         TE.chainW(formRequest(state.rectangleSearchForm, searchRectangle)),
         TE.map(updateState)
@@ -195,39 +175,36 @@ export const makeRectangularSearchRequest = async () => {
   );
 };
 
-export const uploadFile = async (file: File) => {
-  const image = await fromFile(file);
+export const uploadFile = (
+  file: File
+): TE.TaskEither<BasicError<string | Response>, SearchSession> => {
+  const fileForm = imageFormFromFile(file);
 
-  image.onload = async () => {
-    const url = resizeImage(RESIZED_IMAGE_WIDTH, image);
-    const _resizedImageFile = await toFile(url);
+  const tokenWithFile = sequenceToEither(
+    processBearerToken(state.token),
+    E.right(fileForm)
+  );
 
-    state.image = O.some(image);
-    state.imageUrl = O.some(image.src);
+  return pipe(
+    tokenWithFile,
+    E.map(
+      ([headers, body]): RequestInit => {
+        return {
+          headers,
+          body,
+        };
+      }
+    ),
+    TE.fromEither,
+    TE.chain(searchSessionClient),
+    TE.map((sessionResponse) => {
+      updateState(sessionResponse);
+      detectObjects(sessionResponse);
+      uploadHiresFile(sessionResponse, file);
 
-    // await pipe(
-    //   composeSearchSessionData(state.token, resizedImageFile),
-    //   TE.fromEither,
-    //   TE.chain(searchSessionClient),
-    //   TE.map((sessionResponse) => {
-    //     updateState(sessionResponse);
-    //     detectObjects(sessionResponse);
-    //     uploadHiresFile(sessionResponse, file);
-    //   })
-    // )();
-  };
+      return sessionResponse;
+    })
+  );
 };
-
-export const uploadFile2 = (_file: File) => undefined;
-// pipe(
-//   composeSearchSessionData(state.token, file),
-//   TE.fromEither,
-//   TE.chain(searchSessionClient),
-//   TE.map((sessionResponse) => {
-//     updateState(sessionResponse);
-//     detectObjects(sessionResponse);
-//     uploadHiresFile(sessionResponse, file);
-//   })
-// )();
 
 export const imageSearchState = state;
