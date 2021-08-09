@@ -181,6 +181,7 @@ export const uploadFile = (
       return sessionResponse;
     }),
     TE.mapLeft((error) => {
+      console.log(error);
       state.serverError = true;
       return error;
     })
