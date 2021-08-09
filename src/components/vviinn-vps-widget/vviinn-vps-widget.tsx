@@ -152,7 +152,15 @@ export class VviinnVpsWidget {
                 </div>
               </div>
               <div class="products-wrapper">
-                <div class="products">
+                <vviinn-empty-results
+                  class={{ hidden: imageSearchState.results.length > 0 }}
+                />
+                <div
+                  class={{
+                    hidden: imageSearchState.results.length <= 0,
+                    products: true,
+                  }}
+                >
                   {imageSearchState.results.map((p) => (
                     <vpr-result item={p} imageWidth={160} />
                   ))}

@@ -99,6 +99,16 @@ vviinn-image-selector:active {
   width: calc(100% - 16px);
 }
 
+.products.hidden {
+  display: none;
+}
+
+vviinn-empty-results {
+  width: 280px;
+  align-self: center;
+  justify-self: center;
+}
+
 .products-wrapper {
   display: grid;
   overflow-y: auto;

@@ -17,9 +17,6 @@ export class VviinnEmptyResults {
             Leider konnten wir keine passenden Produkte finden. Bitte versuche
             es mit einem anderen Bildausschnitt noch einmal.
           </span>
-          <button slot="action" onClick={() => this.actionClick.emit()}>
-            Erneut versuchen
-          </button>
         </vviinn-error>
       </Host>
     );
