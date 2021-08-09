@@ -2,16 +2,17 @@ import { pipe } from "fp-ts/lib/function";
 import { ValueObject } from "../network/ion/ValueObject";
 import { Link } from "../network/ion/Link";
 import { Form } from "../network/ion/Form";
-import { makeRequest, networkErrorFrom } from "../network/request";
+import { makeRequest } from "../network/request";
 import { createInitPostRequest, getApiPath } from "../network/utils";
 import { Recommendation } from "../recommendation/recommendation";
-import { sequenceT } from "fp-ts/Apply";
 import * as E from "fp-ts/Either";
 import * as TE from "fp-ts/TaskEither";
 import { RectangleAlt } from "../geometry/RectangleAlt";
 import { Eq } from "fp-ts/lib/Eq";
-
-const sequenceToEither = sequenceT(E.Apply);
+import { BasicError } from "../error";
+import { processBearerToken } from "../utils/token/tokenUtils";
+import { sequenceToEither } from "../utils/either";
+import { imageFormFromFile } from "../Image/form";
 
 export interface SearchSessionFilters {
   readonly [key: string]: Link[];
@@ -67,12 +68,30 @@ export type SearchSession = ValueObject<Recommendation[]> &
   ContainsRectangleSearch &
   ContainsHiresImageUpload;
 
-export const searchSessionClient = (initialData: RequestInit) =>
+export const searchSessionClient = (
+  initialData: RequestInit
+): TE.TaskEither<BasicError<Response | string>, SearchSession> =>
   pipe(
     sequenceToEither(getApiPath(), createInitPostRequest),
     TE.fromEither,
-    TE.mapLeft(networkErrorFrom),
-    TE.chain(makeRequest<SearchSession>("search/session", initialData))
+    TE.chainW(makeRequest<SearchSession>("search/session", initialData))
   );
 
 export type ObjectsDetectedEvent = CustomEvent<ValueObject<DetectedObject>[]>;
+
+export const makeRequestFromFile = (
+  token: string,
+  file: File
+): E.Either<BasicError<string>, RequestInit> =>
+  pipe(
+    sequenceToEither(
+      processBearerToken(token),
+      E.right(imageFormFromFile(file))
+    ),
+    E.map(([headers, body]) => {
+      return {
+        headers,
+        body,
+      };
+    })
+  );

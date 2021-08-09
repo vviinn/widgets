@@ -1,9 +1,4 @@
-import { Rectangle } from "../geometry/Rectangle";
-
-export const resizeImage = (
-  width: number,
-  i: HTMLImageElement
-): [string, Rectangle] => {
+export const resizeImage = (width: number, i: HTMLImageElement): string => {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
   const imageWidth = i.naturalWidth;
@@ -16,12 +11,5 @@ export const resizeImage = (
 
   ctx.drawImage(i, 0, 0, width, height);
 
-  const imageRectangle = {
-    x: 0,
-    y: 0,
-    width,
-    height,
-  };
-
-  return [canvas.toDataURL(), imageRectangle];
+  return canvas.toDataURL();
 };

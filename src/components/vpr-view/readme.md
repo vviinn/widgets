@@ -22,7 +22,7 @@ Because some of CSS style properties can not be inherited we provide an styling 
 *NB: If you don't need to support browsers without Shadow Parts support (IE, Firefox for Android and Samsung Internet) you can adding id to style tag and use Shadow Parts styling anywhere*
 
 To use Shadow Parts add *style* tag to head of your page:
-```html
+```
 <style id="vpr-styles">
     mopt-vpr::part(price-outdated) {
       color: inherit;
@@ -86,7 +86,7 @@ mopt-vpr::part(product-title) {
 | `pricePrefix`  | `price-prefix`  | prefix will shown before price             | `string`         | `undefined`              |
 | `productId`    | `product-id`    | Id of product you need recommendations for | `string`         | `undefined`              |
 | `sliderMode`   | `slider-mode`   | Use slider or grid view                    | `boolean`        | `false`                  |
-| `token`        | `token`         | Mediaopt customer token                    | `string`         | `undefined`              |
+| `token`        | `token`         | vviinn customer token                      | `string`         | `undefined`              |
 
 
 ## Shadow Parts
