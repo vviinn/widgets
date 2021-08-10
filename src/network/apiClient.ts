@@ -7,22 +7,27 @@ import {
   createInitPostRequest,
   getApiPath,
 } from "./utils";
-import { networkErrorFrom, makeRequest } from "./request";
+import { BasicError } from "../error";
+import { makeRequest } from "./request";
 
 const sequenceToEither = sequenceT(E.Apply);
 
-export const apiGet = <T>(path: string, data: RequestInit = {}) =>
+export const apiGet = <T>(
+  path: string,
+  data: RequestInit = {}
+): TE.TaskEither<BasicError<Response | string>, T> =>
   pipe(
     sequenceToEither(getApiPath(), createInitGetRequest),
     TE.fromEither,
-    TE.mapLeft(networkErrorFrom),
-    TE.chain(makeRequest<T>(path, data))
+    TE.chainW(makeRequest<T>(path, data))
   );
 
-export const apiPost = <T>(path: string, data: RequestInit = {}) =>
+export const apiPost = <T>(
+  path: string,
+  data: RequestInit = {}
+): TE.TaskEither<BasicError<Response | string>, T> =>
   pipe(
     sequenceToEither(getApiPath(), createInitPostRequest),
     TE.fromEither,
-    TE.mapLeft(networkErrorFrom),
-    TE.chain(makeRequest<T>(path, data))
+    TE.chainW(makeRequest<T>(path, data))
   );

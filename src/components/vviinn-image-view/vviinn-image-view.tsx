@@ -15,6 +15,48 @@ enum ImageOrientation {
   "landscape" = 1,
 }
 
+const widthMap = new Map<string, number | null>([
+  ["portrait", null],
+  ["rectangle", 288],
+  ["landscape", 288],
+]);
+
+const heightMap = new Map<string, number | null>([
+  ["portrait", 356],
+  ["rectangle", 288],
+  ["landscape", null],
+]);
+
+const ratioCalculator = new Map<string, (i: HTMLImageElement) => number>([
+  ["portrait", (i) => i.naturalWidth / i.naturalHeight],
+  ["rectangle", (_) => 1],
+  ["landscape", (i) => i.naturalHeight / i.naturalWidth],
+]);
+
+const getImageSizes = (i: HTMLImageElement, o: string): [number, number] => {
+  switch (o) {
+    case "rectangle": {
+      return [widthMap.get("rectangle"), heightMap.get("rectangle")];
+    }
+    case "landscape": {
+      const width = widthMap.get("landscape");
+      const ratioCalc = ratioCalculator.get("landscape");
+      const ratio = ratioCalc(i);
+      const height = width * ratio;
+
+      return [width, height];
+    }
+    case "portrait": {
+      const height = heightMap.get("portrait");
+      const ratioCalc = ratioCalculator.get("portrait");
+      const ratio = ratioCalc(i);
+      const width = height * ratio;
+
+      return [width, height];
+    }
+  }
+};
+
 @Component({
   tag: "vviinn-image-view",
   styleUrl: "vviinn-image-view.css",
@@ -23,6 +65,7 @@ enum ImageOrientation {
 export class VviinnImageView {
   handleInitialImageLoad(ev: Event) {
     const target = ev.target as HTMLImageElement;
+
     const imageBounds = fromImage(target);
 
     const padding = 16;
@@ -55,10 +98,14 @@ export class VviinnImageView {
         );
 
         const orientation = ImageOrientation[sizeOrd];
+        const [width, height] = getImageSizes(refImage, orientation);
 
         const image = (
           <img
+            decoding="async"
             class={orientation}
+            width={width}
+            height={height}
             src={url}
             onLoad={(el) => this.handleInitialImageLoad(el)}
           />
@@ -91,11 +138,3 @@ export class VviinnImageView {
     );
   }
 }
-
-/**
-        <highlight-box />
-        {imageSearchState.detectedObjects.map((o) =>
-          this.renderDetectedObject(o)
-        )}
-        {this.imageLoaded ? <image-cropper /> : null}
-**/

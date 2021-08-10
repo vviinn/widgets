@@ -1,0 +1,31 @@
+:host {
+  background: #F4F4F4;
+  border-radius: 8px;
+  display: grid;
+  grid-gap: 20px;
+  padding: 24px;
+  text-align: center;
+}
+
+::slotted(h4) {
+  margin: unset;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+::slotted(span) {
+  font-size: 14px;
+  line-height: 20px;
+}
+
+::slotted(button) {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: #0F62FE;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  cursor: pointer;
+}
