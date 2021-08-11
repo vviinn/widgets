@@ -1,4 +1,4 @@
-import { Component, Host, h, State, Prop, Element } from "@stencil/core";
+import { Component, Host, h, State, Prop, Element, Watch } from "@stencil/core";
 import state from "../../store/store";
 import { imageSearchState } from "../../store/imageSearch.store";
 import * as O from "fp-ts/lib/Option";
@@ -25,6 +25,17 @@ export class VviinnVpsWidget {
   @State() wrongImageFormat: boolean = false;
 
   private body: HTMLVviinnSliderElement;
+  private overflow: string;
+
+  @Watch("active")
+  activeWatcher(value: boolean) {
+    if (value) {
+      this.overflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = this.overflow;
+    }
+  }
 
   connectedCallback() {
     state.apiPath = this.apiPath;

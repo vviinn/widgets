@@ -5,9 +5,10 @@
   height: 100vh;
   left: 0;
   overflow: hidden;
-  position: absolute;
+  position: fixed;
   top: 0;
   width: 100vw;
+  z-index: 9999;
 }
 
 @keyframes fade-in {
