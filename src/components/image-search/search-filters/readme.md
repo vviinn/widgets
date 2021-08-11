@@ -30,13 +30,11 @@
 
 ### Used by
 
- - [image-search](..)
  - [vviinn-vps-widget](../../vviinn-vps-widget)
 
 ### Graph
 ```mermaid
 graph TD;
-  image-search --> search-filters
   vviinn-vps-widget --> search-filters
   style search-filters fill:#f9f,stroke:#333,stroke-width:4px
 ```

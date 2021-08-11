@@ -7,9 +7,10 @@
 
 ## Events
 
-| Event           | Description | Type                |
-| --------------- | ----------- | ------------------- |
-| `imageSelected` |             | `CustomEvent<void>` |
+| Event                | Description | Type                |
+| -------------------- | ----------- | ------------------- |
+| `imageSelected`      |             | `CustomEvent<void>` |
+| `imageSelectedError` |             | `CustomEvent<void>` |
 
 
 ## Shadow Parts

@@ -42,7 +42,6 @@ Type: `Promise<void>`
 
 ### Used by
 
- - [image-search](../image-search)
  - [vi-vpr-view](../vpr-view)
 
 ### Depends on
@@ -53,7 +52,6 @@ Type: `Promise<void>`
 ```mermaid
 graph TD;
   vpr-slider --> vpr-result
-  image-search --> vpr-slider
   vi-vpr-view --> vpr-slider
   style vpr-slider fill:#f9f,stroke:#333,stroke-width:4px
 ```

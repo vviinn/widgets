@@ -23,10 +23,6 @@
 
 ## Dependencies
 
-### Used by
-
- - [image-search](..)
-
 ### Depends on
 
 - [detected-object-view](detected-object)
@@ -40,7 +36,6 @@ graph TD;
   image-view --> highlight-box
   image-view --> image-cropper
   image-cropper --> cropper-handler
-  image-search --> image-view
   style image-view fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
