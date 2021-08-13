@@ -23,7 +23,7 @@
   appearance: none;
   border: none;
   background: transparent;
-  color: #0F62FE;
+  color: var(--color-primary);
   font-weight: 600;
   font-size: 16px;
   line-height: 20px;
