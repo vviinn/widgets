@@ -44,6 +44,9 @@ export class VIVprView implements ComponentInterface {
   @Prop() sliderMode: boolean = false;
   /** Campaign type */
   @Prop() campaignType: CampaignName = "VPR";
+  /** Locale for currency formatting */
+  @Prop() locale: string = "de-DE";
+  /** @internal */
   @Prop() apiPath: string | undefined;
 
   @State() recommendations: Interfaces["VisualProductSearch"][] = [];
@@ -54,6 +57,8 @@ export class VIVprView implements ComponentInterface {
 
   connectedCallback() {
     state.apiPath = this.apiPath;
+    state.currencySign = this.currencySign;
+    state.locale = this.locale;
   }
 
   componentDidLoad() {

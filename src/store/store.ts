@@ -5,6 +5,7 @@ const store = createStore({
   pricePrefix: null,
   currencySign: null,
   apiPath: undefined,
+  locale: "de-DE",
 });
 
 export default store.state;

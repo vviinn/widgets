@@ -6,6 +6,7 @@ import { sequenceT } from "fp-ts/lib/Apply";
 import { FunctionalComponent, h } from "@stencil/core";
 import { Sized } from "../../../geometry/Sized";
 import { ImageSizes } from "./vpr-result";
+import store from "../../../store/store";
 
 type ImageProps = {
   readonly url: string;
@@ -164,7 +165,7 @@ const PriceComponent = (price: number, prefix: string, currency: string) =>
       () => [
         Prefix(prefix),
         <span part="price-amount" class="price amount">
-          {price}
+          {new Intl.NumberFormat(store.locale).format(price)}
         </span>,
         Currency(currency),
       ]
