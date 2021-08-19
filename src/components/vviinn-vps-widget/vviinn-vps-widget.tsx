@@ -19,6 +19,8 @@ export class VviinnVpsWidget {
   @Prop({ mutable: true }) active: boolean = false;
   /** Currency sign will shown after price */
   @Prop() currencySign: string = "€";
+  /** Locale for currency formatting */
+  @Prop() locale: string = "de-DE";
 
   @State() slidePosition: number = 0;
   @State() width: number = 0;
@@ -40,6 +42,7 @@ export class VviinnVpsWidget {
   connectedCallback() {
     state.apiPath = this.apiPath;
     state.currencySign = this.currencySign;
+    state.locale = this.locale;
     imageSearchState.token = this.token;
   }
 
