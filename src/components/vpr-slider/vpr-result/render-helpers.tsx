@@ -165,7 +165,9 @@ const PriceComponent = (price: number, prefix: string, currency: string) =>
       () => [
         Prefix(prefix),
         <span part="price-amount" class="price amount">
-          {new Intl.NumberFormat(store.locale).format(price)}
+          {new Intl.NumberFormat(store.locale, {
+            minimumFractionDigits: 2,
+          }).format(price)}
         </span>,
         Currency(currency),
       ]
