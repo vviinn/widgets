@@ -59,8 +59,8 @@ vviinn-image-selector {
 }
 
 vviinn-image-selector:hover {
-  background: #014CDA;
-  border-color: #014CDA;
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
 }
 
 vviinn-image-selector:active {

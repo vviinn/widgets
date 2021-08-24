@@ -1,3 +1,5 @@
-:root {
+:host {
   --color-primary: #0F62FE;
+  --color-primary-hover: #014CDA;
+  --color-icons: #2F8EDF;
 }
