@@ -40,10 +40,10 @@
 }
 
 .bullet.active {
-  background: #0F62FE;
+  background: var(--color-primary);
 }
 
 .bullet:active {
   background: transparent;
-  border: 2px solid #0F62FE;
+  border: 2px solid var(--color-primary);
 }
