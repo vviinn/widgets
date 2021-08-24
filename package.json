@@ -1,6 +1,6 @@
 {
   "name": "mediaopt-vpr",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "description": "vviinn web components",
   "main": "./dist/index.cjs.js",
   "module": "./dist/index.js",
