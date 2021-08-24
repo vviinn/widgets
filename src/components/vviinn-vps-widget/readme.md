@@ -23,6 +23,7 @@ Then you can use the element anywhere in your template with `<vviinn-vps-widget 
 | -------------- | --------------- | ------------------------------------------------ | --------- | ----------- |
 | `active`       | `active`        | When true modal window with widget will be shown | `boolean` | `false`     |
 | `currencySign` | `currency-sign` | Currency sign will shown after price             | `string`  | `"€"`       |
+| `locale`       | `locale`        | Locale for currency formatting                   | `string`  | `"de-DE"`   |
 | `token`        | `token`         | vviinn customer token                            | `string`  | `undefined` |
 
 
