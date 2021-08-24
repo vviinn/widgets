@@ -76,13 +76,13 @@ mopt-vpr::part(product-title) {
 
 | Property       | Attribute       | Description                                | Type             | Default                  |
 | -------------- | --------------- | ------------------------------------------ | ---------------- | ------------------------ |
-| `apiPath`      | `api-path`      |                                            | `string`         | `undefined`              |
 | `blockTitle`   | `block-title`   | Title for recommendations widget           | `string`         | `"Recommended products"` |
 | `campaignType` | `campaign-type` | Campaign type                              | `"VPR" \| "VSC"` | `"VPR"`                  |
 | `columns`      | `columns`       | Number of columns for recommendations      | `number`         | `undefined`              |
 | `currencySign` | `currency-sign` | Currency sign will shown after price       | `string`         | `undefined`              |
 | `imageRatio`   | `image-ratio`   | Ratio of each recommended product image    | `number`         | `1`                      |
 | `imageWidth`   | `image-width`   | Width of each recommended product image    | `number`         | `150`                    |
+| `locale`       | `locale`        | Locale for currency formatting             | `string`         | `"de-DE"`                |
 | `pricePrefix`  | `price-prefix`  | prefix will shown before price             | `string`         | `undefined`              |
 | `productId`    | `product-id`    | Id of product you need recommendations for | `string`         | `undefined`              |
 | `sliderMode`   | `slider-mode`   | Use slider or grid view                    | `boolean`        | `false`                  |

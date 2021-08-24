@@ -20,6 +20,7 @@ export const config: Config = {
     },
   ],
   globalScript: "src/global",
+  globalStyle: "src/variables.css",
   plugins: [
     dotenvPlugin(),
     postcss({
