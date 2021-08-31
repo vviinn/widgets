@@ -1,0 +1,16 @@
+:host {
+  display: block;
+  background: lightcoral;
+}
+
+:host(:active) {
+  background: lightblue;
+}
+
+:host(:focus) {
+  background: lightblue;
+}
+
+:host:focus {
+  background: lightblue;
+}
