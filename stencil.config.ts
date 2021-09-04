@@ -14,6 +14,10 @@ export const config: Config = {
       type: "docs-readme",
     },
     {
+      type: "docs-json",
+      file: "./docs.json",
+    },
+    {
       type: "www",
       serviceWorker: null, // disable service workers,
       copy: [{ src: "assets" }, { src: "favicon.ico" }],

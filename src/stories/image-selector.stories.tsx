@@ -1,5 +1,6 @@
 export default {
-  title: 'Components/Image Selector',
+  title: "Components/Image Selector",
+  component: "vviinn-image-selector",
 };
 
 const Template = () => "<vviinn-image-selector />";
