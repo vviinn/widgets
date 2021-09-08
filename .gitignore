@@ -7,3 +7,6 @@ src/interfaces/generated.ts
 src/components.d.ts
 node_modules/
 docs/
+docs.json
+docs.d.ts
+src/**/readme.md

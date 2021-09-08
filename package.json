@@ -16,7 +16,7 @@
   ],
   "scripts": {
     "build": "stencil build --docs",
-    "build.watch": "stencil build --watch",
+    "build.watch": "stencil build --watch --docs",
     "build.docs": "stencil build --docs",
     "build_interfaces": "node ./scripts/generate-interfaces.js ./src/interfaces/generated.ts",
     "build_storybook": "stencil build --docs && build-storybook -s www",
