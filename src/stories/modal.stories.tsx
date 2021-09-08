@@ -1,10 +1,14 @@
 export default {
   title: "Components/Modal",
+  component: "vviinn-modal",
   decorators: [
-    (story) => `<style>html { background: rgba(0,0,0,0.5) }</style>${story()}`,
+    (story: () => any) => `<style>html { background: rgba(0,0,0,0.5) }</style>${story()}`,
   ],
 };
 
-const Template = () => "<vviinn-modal>CONTENT</vviinn-modal>";
+const Template = ({ active }) => `<vviinn-modal active=${active}>CONTENT</vviinn-modal>`;
 
 export const Default = Template.bind({});
+Default.args = {
+  active: true
+};

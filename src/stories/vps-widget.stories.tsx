@@ -1,8 +1,9 @@
 export default {
   title: "Widgets/VPS",
+  component: "vviinn-vps-widget"
 };
 
-const Template = () => "<vviinn-vps-widget />";
+const Template = () => "<vviinn-vps-widget></vviinn-vps-widget>";
 
 export const Default = Template.bind({});
 Default.storyName = "Modal window";

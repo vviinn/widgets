@@ -3,6 +3,6 @@ export default {
   component: "vviinn-image-selector",
 };
 
-const Template = () => "<vviinn-image-selector />";
+const Template = () => "<vviinn-image-selector>lol</vviinn-image-selector>";
 
 export const Default = Template.bind({});
