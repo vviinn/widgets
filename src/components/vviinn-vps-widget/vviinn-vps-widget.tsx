@@ -3,6 +3,28 @@ import state from "../../store/store";
 import { imageSearchState } from "../../store/imageSearch.store";
 import * as O from "fp-ts/lib/Option";
 
+/**
+ * @prop --color-primary: color used for action button, slider bullets and selected detected object;
+ *
+ * @part close-button - close button on modal header.
+ * @part secondary-action - back button on modal header.
+ * @part title - modal window title.
+ *
+ * @part select-image_button
+ *
+ * @part product-card_brand - product card brand.
+ * @part product-card_currency - currency sign. Renders after price-amount inside product card.
+ * @part product-card_deeplink - anchor element for title. Rendered only if "deeplink" property filled.
+ * @part product-card_image - product image inside product card.
+ * @part product-card_image-link - anchor element for image. Rendered only if "deeplink" property filled.
+ * @part product-card_price-amount - numeric part of price inside product card.
+ * @part product-card_price-container - block contains all prices inside product card.
+ * @part product-card_price-outdated - renders inside price-container when "sale-price" property filled. Contains regular price.
+ * @part product-card_price-prefix - renders before price-amount. Can be set with "price-prefix" property or inherited from parent component.
+ * @part product-card_price-regular - renders inside price-container when "sale-price" property is empty.
+ * @part product-card_price-sale - renders inside price-container when "sale-price" property filled. Contains sale price.
+ * @part product-card_title - product title
+ */
 @Component({
   tag: "vviinn-vps-widget",
   styleUrl: "vviinn-vps-widget.css",
@@ -33,7 +55,7 @@ export class VviinnVpsWidget {
   activeWatcher(value: boolean) {
     if (value) {
       this.overflow = document.body.style.overflow;
-      document.body.style.overflow = "hidden"
+      document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = this.overflow;
     }
@@ -90,6 +112,7 @@ export class VviinnVpsWidget {
           active={this.active}
           onSecondaryActionClicked={() => this.resetState()}
           onModalClosed={() => (this.active = false)}
+          exportparts="secondary-action, title, close-button"
         >
           <vviinn-slider
             showBullets={false}
@@ -116,6 +139,7 @@ export class VviinnVpsWidget {
                   class={{ hidden: this.haveErrors() }}
                   onImageSelected={() => this.handleImageSelection()}
                   onImageSelectedError={() => (this.wrongImageFormat = true)}
+                  part="select-image_button"
                 >
                   <span slot="upload-button-text" class="upload-button-content">
                     <svg
@@ -176,7 +200,16 @@ export class VviinnVpsWidget {
                   }}
                 >
                   {imageSearchState.results.map((p) => (
-                    <vpr-result item={p} imageWidth={160} />
+                    <vviinn-product-card
+                      productTitle={p.title}
+                      brand={p.brand}
+                      deeplink={p.deeplink}
+                      price={p.price.actual}
+                      salePrice={p.price.sale}
+                      imageWidth={160}
+                      image={p.image.thumbnail ?? p.image.original}
+                      exportparts="brand : product-card_brand, currency : product-card_currency, deeplink : product-card_deeplink, image : product-card_image, image-link : product-card_image-link, price-amount : product-card_price-amount, price-container : product-card_price-container, price-outdated : product-card_price-outdated, price-prefix : product-card_price-prefix, price-regular : product-card_price-regular, price-sale : product-card_price-sale, title: product-card_title"
+                    />
                   ))}
                 </div>
               </div>
