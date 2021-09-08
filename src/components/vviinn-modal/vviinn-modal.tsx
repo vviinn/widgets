@@ -6,11 +6,13 @@ import { Component, Host, h, State, Event, EventEmitter, Prop } from "@stencil/c
   shadow: true,
 })
 export class VviinnModal {
-  @Prop({ mutable: true }) active: boolean = false;
+  @Prop({ mutable: true, reflect: true }) active: boolean = false;
 
   @State() slider: boolean = false;
 
+  /** Event emitted when close button clicked and close animation ends */
   @Event() modalClosed: EventEmitter<AnimationEvent>;
+  /** Event emitted when secondary action button clicked */
   @Event() secondaryActionClicked: EventEmitter<void>;
 
   private close() {
@@ -32,7 +34,7 @@ export class VviinnModal {
   render() {
     return (
       <Host
-        exportparts="secondary-action,title"
+        exportparts="secondary-action, title, close-button"
         class={{ closed: !this.active }}
         onAnimationEnd={(ev: AnimationEvent) => this.handleAnimationEnd(ev)}
       >
@@ -67,7 +69,7 @@ export class VviinnModal {
           <div class="title" part="title">
             Bildsuche
           </div>
-          <button onClick={() => this.close()}>
+          <button onClick={() => this.close()} class="close-button" part="close-button">
             <svg
               width="16"
               height="16"

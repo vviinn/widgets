@@ -1,6 +1,5 @@
 import { Component, Host, h } from "@stencil/core";
 import { imageSearchState } from "../../store/imageSearch.store";
-//import { scaleWithSized, center } from "../../geometry/Rectangle";
 import { ValueObject } from "../../network/ion/ValueObject";
 import { DetectedObject } from "../../searchSession/searchSession";
 import { pipe } from "fp-ts/lib/function";
@@ -65,9 +64,7 @@ const getImageSizes = (i: HTMLImageElement, o: string): [number, number] => {
 export class VviinnImageView {
   handleInitialImageLoad(ev: Event) {
     const target = ev.target as HTMLImageElement;
-
     const imageBounds = fromImage(target);
-
     const padding = 16;
     const { x, y } = move(imageBounds, { x: padding, y: padding });
 

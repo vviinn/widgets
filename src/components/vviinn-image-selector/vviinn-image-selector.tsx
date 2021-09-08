@@ -11,13 +11,18 @@ import { checkImageType, fileDoesntExist } from "../../Image/error";
 import { imageFromFileTask } from "../../Image/fromFile";
 import { convertB64toFileTask } from "../../Image/toFile";
 
+/**
+  * @part button -  button look and feel
+  */
 @Component({
   tag: "vviinn-image-selector",
   styleUrl: "vviinn-image-selector.css",
   shadow: true,
 })
 export class VviinnImageSelector {
+  /** Event fires when user select file */
   @Event() imageSelected: EventEmitter<void>;
+  /** Event fires when user select file that no .jpg, .jpeg or png */
   @Event() imageSelectedError: EventEmitter<void>;
 
   private handleInputChange(event: Event) {
