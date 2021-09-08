@@ -1,103 +1,11 @@
-![Built With Stencil](https://img.shields.io/badge/-Built%20With%20Stencil-16161d.svg?logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjIuMSwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTIgNTEyOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI%2BCjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI%2BCgkuc3Qwe2ZpbGw6I0ZGRkZGRjt9Cjwvc3R5bGU%2BCjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik00MjQuNywzNzMuOWMwLDM3LjYtNTUuMSw2OC42LTkyLjcsNjguNkgxODAuNGMtMzcuOSwwLTkyLjctMzAuNy05Mi43LTY4LjZ2LTMuNmgzMzYuOVYzNzMuOXoiLz4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTQyNC43LDI5Mi4xSDE4MC40Yy0zNy42LDAtOTIuNy0zMS05Mi43LTY4LjZ2LTMuNkgzMzJjMzcuNiwwLDkyLjcsMzEsOTIuNyw2OC42VjI5Mi4xeiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNNDI0LjcsMTQxLjdIODcuN3YtMy42YzAtMzcuNiw1NC44LTY4LjYsOTIuNy02OC42SDMzMmMzNy45LDAsOTIuNywzMC43LDkyLjcsNjguNlYxNDEuN3oiLz4KPC9zdmc%2BCg%3D%3D&colorA=16161d&style=flat-square)
-# Mediaopt Visual Product Recommendations component
-
-## Using this component
-
-- Put a script tag similar to this
-  ```
-  <script type="module" src="https://cdn.jsdelivr.net/npm/mediaopt-vpr@latest/www/build/mediaopt-widgets.esm.js"></script>
-  <script nomodule src="https://cdn.jsdelivr.net/npm/mediaopt-vpr@latest/www/build/mediaopt-widgets.js"></script>
-  ```
-in the head of your index.html
-- Then you can use the element anywhere in your template with `<vi-vpr-view></vi-vpr-view>` tag
-- Use attributes for provide credentials or customize component view
-
-### Component properties
-
-| Property       | Attribute       | Description                                | Type      | Default                  |
-| -------------- | --------------- | ------------------------------------------ | --------- | ------------------------ |
-| `blockTitle`   | `block-title`   | Title for recommendations widget           | `string`  | `'Recommended products'` |
-| `columns`      | `columns`       | Number of columns for recommendations      | `number`  | `4`                      |
-| `currencySign` | `currency-sign` | Currency sign will shown after price       | `string`  | `undefined`              |
-| `imageRatio`   | `image-ratio`   | Ratio of each recommended product image    | `number`  | `1.5`                    |
-| `imageWidth`   | `image-width`   | Width of each recommended product image    | `number`  | `150`                    |
-| `pricePrefix`  | `price-prefix`  | prefix will shown before price             | `string`  | `undefined`              |
-| `productId`    | `product-id`    | Id of product you need recommendations for | `string`  | `undefined`              |
-| `sliderMode`   | `slider-mode`   | Use slider or grid view                    | `boolean` | `false`                  |
-| `token`        | `token`         | Mediaopt customer token                    | `string`  | `undefined`              |
-
-### Component events
-
-| Event                 | Description                                                  | Type                                                                                                                                                                                                               |
-| --------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `recommendationClick` | Event fires ones when user click on deeplink                 | `CustomEvent<{ productId?: string; title?: string; brand?: string; productType?: string; deeplink?: string; image?: { original?: string; thumbnail?: string; }; price?: { actual?: number; sale?: number; }; }>` |
-| `recommendationLoad`  | Event fires ones when recommendation rendered on page        | `CustomEvent<{ productId?: string; title?: string; brand?: string; productType?: string; deeplink?: string; image?: { original?: string; thumbnail?: string; }; price?: { actual?: number; sale?: number; }; }>` |
-| `recommendationView`  | Event fires ones when recommendation appears on the viewport | `CustomEvent<{ productId?: string; title?: string; brand?: string; productType?: string; deeplink?: string; image?: { original?: string; thumbnail?: string; }; price?: { actual?: number; sale?: number; }; }>` |
-
-
-
-### Styling a component
-
-Because some of CSS style properties can not be inherited we provide an styling API based on [CSS Shadow Parts](https://developer.mozilla.org/en-US/docs/Web/CSS/::part) spec.
-
-*NB: If you don't need to support browsers without Shadow Parts support (IE, Firefox for Android and Samsung Internet) you can adding id to style tag and use Shadow Parts styling anywhere*
-
-To use Shadow Parts add *style* tag to head of your page:
-```html
-<style id="vpr-styles">
-    mopt-vpr::part(price-outdated) {
-      color: inherit;
-      font-size: 12px;
-      font-weight: 400;
-      text-align: center;
-    }
-
-    mopt-vpr::part(price-discount) {
-      color: #dc616d;
-      font-size: 14px;
-      font-weight: 600;
-      text-align: center;
-    }
-</style>
-```
-
-Here is a list of shadow parts you can style:
-
-- product
-- recommendations-title
-- product-image
-- product-image-link
-- product-title
-- price-prefix
-- price-currency
-- price-regular
-- price-outdated
-- price-discount
-- brand
-- product-type
-
-This image describe which elements affected by parts:
-
-![exported-parts](/web_component_shadow_parts.png)
-
-Combination of CSS Grids and Shadow Parts allows to change visual position of some elements. For example, if you want to put title below image use
-
-```css
-    mopt-vpr::part(product-title) {
-      grid-row: 1;
-    }
-```
-
-*NB: This feature will not work if you will change display property of element!*
-
-## Development
-### Automatic interfaces generations
+# Development
+## Automatic interfaces generations
 
 Before running or build project you should generate interfaces.
 Use ```npm run build_interfaces``` to generate interface schema from Swagger docs. Docs url should be in .env file as value for OPENAPI_URL key.
 Interfaces will be saved to /src/interfaces/generated.ts
 
-### Building
+## Building
 
 To build the component for production, run:
 
