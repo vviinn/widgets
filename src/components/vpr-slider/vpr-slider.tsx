@@ -90,7 +90,6 @@ export class VprSlider {
   }
 
   private getProductsCount(products: Recommendation[]): number {
-    debugger;
     return this.productsInGrid ?? products.length ?? 1;
   }
 
@@ -179,10 +178,15 @@ export class VprSlider {
             {this.wrappedItems.map((items) => (
               <div class={{ slide: true, [this.mode]: true }}>
                 {items.map((item) => (
-                  <vpr-result
-                    item={item}
-                    imageWidth={this.imageWidth}
+                  <vviinn-product-card
+                    brand={item.brand}
+                    image={item.image.thumbnail ?? item.image.original}
                     imageRatio={this.imageRatio}
+                    imageWidth={this.imageWidth}
+                    price={item.price.actual}
+                    productTitle={item.title}
+                    productType={item.productType}
+                    salePrice={item.price.sale}
                   />
                 ))}
               </div>
