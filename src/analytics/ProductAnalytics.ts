@@ -1,6 +1,6 @@
-import { Interfaces } from "../interfaces/recommendation";
+import { Recommendation } from "../recommendation/recommendation";
 
 export interface ProductAnalytics {
-  sendImpression: (product: Interfaces['VisualProductSearch']) => undefined,
-  sendClick: (product: Interfaces['VisualProductSearch']) => undefined,
+  sendImpression: (product: Recommendation) => undefined;
+  sendClick: (product: Recommendation) => undefined;
 }
