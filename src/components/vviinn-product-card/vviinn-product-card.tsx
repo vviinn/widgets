@@ -1,6 +1,11 @@
-import { Component, Host, h, Prop } from "@stencil/core";
+import { Component, Host, h, Prop, Event, EventEmitter, Element } from "@stencil/core";
+import { pipe } from "fp-ts/lib/function";
+import { getAnalyticsModule } from "../../analytics/GeneralAnalytics";
 import { state } from "../../store/store";
 import { createImage, ImageData, wrapInLink } from "./render-helpers";
+import * as O from "fp-ts/lib/Option";
+import { imageSearchState } from "../../store/imageSearch.store";
+import { Recommendation } from "../../recommendation/recommendation";
 
 /**
  * @part brand - product brand.
@@ -22,6 +27,7 @@ import { createImage, ImageData, wrapInLink } from "./render-helpers";
   shadow: true,
 })
 export class VviinnProductCard {
+  @Element() el: HTMLElement;
   @Prop() brand: string | undefined;
   @Prop() currency: string | undefined = undefined;
   @Prop() deeplink: string | undefined;
@@ -31,9 +37,72 @@ export class VviinnProductCard {
   @Prop() locale: string | undefined = undefined;
   @Prop() price: number | undefined;
   @Prop() pricePrefix: string | undefined = undefined;
+  @Prop() productId: string;
   @Prop() productTitle: string;
   @Prop() productType: string | undefined;
   @Prop() salePrice: number | undefined;
+
+  /** Event fires ones when recommendation rendered on page */
+  @Event({ bubbles: true }) recommendationLoad: EventEmitter<string>;
+  /** Event fires ones when recommendation appears on the viewport */
+  @Event({ bubbles: true }) recommendationView: EventEmitter<string>;
+  /** Event fires ones when user click on deeplink */
+  @Event({ bubbles: true }) recommendationClick: EventEmitter<string>;
+
+  private intersectionObserver = new IntersectionObserver(
+    this.intersectionCallback.bind(this),
+    { threshold: 1.0 }
+  );
+
+  intersectionCallback(data: IntersectionObserverEntry[]) {
+    if (data.some((entry) => entry.isIntersecting)) {
+      pipe(
+        getAnalyticsModule,
+        O.map((analytics) => analytics.sendImpression(this.getProduct()))
+      );
+
+      this.recommendationView.emit(this.productId);
+      this.intersectionObserver.disconnect();
+    }
+  }
+
+  componentDidLoad() {
+    this.recommendationLoad.emit(this.productId);
+    this.intersectionObserver.observe(this.el);
+
+    const links = this.el.shadowRoot.querySelectorAll("a");
+    links.forEach((link) =>
+      link.addEventListener("mousedown", (event) => {
+        this.recommendationClick.emit(this.productId);
+
+        if (window.ga) {
+          event.preventDefault();
+        }
+
+        pipe(
+          getAnalyticsModule,
+          O.match(
+            () => null,
+            (analytics) => analytics.sendClick(this.getProduct())
+          )
+        );
+
+        if (window.ga) {
+          ga("send", "event", "UX", "click", "Results", {
+            hitCallback: function() {
+              document.location.href = this.item.deeplink;
+            },
+          });
+        }
+      })
+    );
+  }
+
+  private getProduct(): Recommendation {
+    return imageSearchState.results.find(
+      (r) => r.productId === this.productId
+    );
+  }
 
   private renderSpan(
     content: string | HTMLElement | HTMLElement[],
