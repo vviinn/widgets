@@ -185,6 +185,7 @@ export class VprSlider {
                     imageWidth={this.imageWidth}
                     price={item.price.actual}
                     productTitle={item.title}
+                    productId={item.productId}
                     productType={item.productType}
                     salePrice={item.price.sale}
                   />

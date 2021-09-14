@@ -90,7 +90,7 @@ export class VviinnProductCard {
         if (window.ga) {
           ga("send", "event", "UX", "click", "Results", {
             hitCallback: function() {
-              document.location.href = this.item.deeplink;
+              document.location.href = this.deeplink;
             },
           });
         }

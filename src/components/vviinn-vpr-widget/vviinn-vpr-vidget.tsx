@@ -16,6 +16,7 @@ import { Interfaces } from "../../interfaces/recommendation";
 import state from "../../store/store";
 import { CampaignName } from "../../campaign/Campaign";
 import { getRecommendationsService } from "../../campaign/CampaignService";
+import { imageSearchState } from "../../store/imageSearch.store";
 
 @Component({
   tag: "vviinn-vpr-widget",
@@ -116,6 +117,7 @@ export class VviinnVprWidget implements ComponentInterface {
       this.slider.loadProducts(this.recommendations);
     });
 
+    imageSearchState.results = this.recommendations;
     this.loaded = true;
   }
 

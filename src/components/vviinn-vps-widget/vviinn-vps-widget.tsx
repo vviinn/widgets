@@ -202,6 +202,7 @@ export class VviinnVpsWidget {
                   {imageSearchState.results.map((p) => (
                     <vviinn-product-card
                       productTitle={p.title}
+                      productId={p.productId}
                       brand={p.brand}
                       deeplink={p.deeplink}
                       price={p.price.actual}
