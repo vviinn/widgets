@@ -28,6 +28,7 @@ export class VviinnImageSelector {
   private handleInputChange(event: Event) {
     const input = event.target as HTMLInputElement;
     this.handleFileSelection(O.fromNullable(input.files[0]));
+    input.value = null;
   }
 
   private async handleFileSelection(file: O.Option<File>) {
