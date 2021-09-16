@@ -16,6 +16,7 @@ export class VviinnExampleImage {
   @Prop() height: number = 0;
 
   @Event() exampleImageSelected: EventEmitter<void>;
+  @Event() exampleImageError: EventEmitter<void>;
 
   private async selectImage(event: UIEvent) {
     const image = event.target as HTMLImageElement;
@@ -27,9 +28,13 @@ export class VviinnExampleImage {
         imageSearchState.image = some(image);
         imageSearchState.imageUrl = some(this.src);
         this.exampleImageSelected.emit();
+      }),
+      TE.mapLeft(() => {
+        this.exampleImageError.emit();
       })
     )();
   }
+
   render() {
     return (
       <Host>

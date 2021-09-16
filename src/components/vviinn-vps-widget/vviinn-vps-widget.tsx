@@ -104,6 +104,11 @@ export class VviinnVpsWidget {
     return this.wrongImageFormat || imageSearchState.serverError;
   }
 
+  private resetScroll() {
+    const block = this.el.shadowRoot.getElementById("onboarding-block");
+    block.scrollTop = 0;
+  }
+
   render() {
     return (
       <Host>
@@ -167,11 +172,12 @@ export class VviinnVpsWidget {
                 </vviinn-image-selector>
                 <vviinn-privacy-badge class={{ hidden: this.haveErrors() }} />
               </div>
-              <div class="start-page_block">
+              <div id="onboarding-block" class="start-page_block">
                 <div class="onboarding-wrapper">
                   <vviinn-onboarding />
                   <vviinn-example-images
                     onImageSelected={() => this.handleImageSelection()}
+                    onImageSelectedError={() => this.resetScroll()}
                   />
                 </div>
               </div>
