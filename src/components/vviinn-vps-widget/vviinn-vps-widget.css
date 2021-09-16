@@ -31,12 +31,14 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   align-content: center;
 }
 
-.start-page_block:last-of-type {
+
+#onboarding-block {
   border-right: unset;
+  box-sizing: border-box;
   grid-gap: 24px;
   overflow-y: auto;
   position: relative;
-  box-sizing: border-box;
+  scroll-behavior: smooth;
   width: 100%;
 }
 
