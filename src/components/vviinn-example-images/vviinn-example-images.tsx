@@ -7,10 +7,16 @@ import { Component, Host, h, Event, EventEmitter, Listen } from "@stencil/core";
 })
 export class VviinnExampleImages {
   @Event() imageSelected: EventEmitter<void>;
+  @Event() imageSelectedError: EventEmitter<void>;
 
   @Listen("exampleImageSelected")
   handleImageSelection() {
     this.imageSelected.emit();
+  }
+
+  @Listen("exampleImageError")
+  handleImageSelectionError() {
+    this.imageSelectedError.emit();
   }
 
   render() {
