@@ -1,5 +1,5 @@
 import { Component, Host, h, Element, State, Prop, Watch } from "@stencil/core";
-import { range } from "fp-ts/lib/Array";
+import { range } from "fp-ts/lib/NonEmptyArray";
 import { pipe } from "fp-ts/lib/function";
 import * as O from "fp-ts/lib/Option";
 import * as N from "fp-ts/number";
@@ -24,17 +24,34 @@ export class VviinnSlider {
   positionWatchHandler(newValue: number) {
     this.internalPosition = newValue;
     this.el.style.setProperty("--position", `${newValue}`);
+    this.setActiveCssClassToSlide(newValue);
   }
 
-  componentWillLoad() {
+  connectedCallback() {
+    this.handleDomContentChanges();
+    /* const targetNode = this.el;
+* const config = { childList: true, subtree: true };
+* const observer = new MutationObserver(() => this.handleDomContentChanges());
+* observer.observe(targetNode, config); */
+  }
+
+  private handleDomContentChanges() {
     const items = this.el.querySelectorAll("vviinn-slide");
     this.elementsCount = items.length;
     this.el.style.setProperty("--num-items", `${this.elementsCount}`);
+    this.setActiveCssClassToSlide(0);
+  }
+
+  private setActiveCssClassToSlide(index: number) {
+    const items = this.el.querySelectorAll("vviinn-slide");
+    items.forEach((i) => i.classList.remove("active"));
+    items[index].classList.add("active");
   }
 
   private goToSlide(index: number) {
     this.internalPosition = index;
     this.el.style.setProperty("--position", `${index}`);
+    this.setActiveCssClassToSlide(index);
   }
 
   private renderBullets() {

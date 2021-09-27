@@ -9,6 +9,7 @@ export class VviinnError {
   render() {
     return (
       <Host>
+        <slot name="icon"></slot>
         <slot name="title"></slot>
         <slot name="text"></slot>
         <slot name="action"></slot>

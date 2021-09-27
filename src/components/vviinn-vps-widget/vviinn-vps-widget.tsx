@@ -196,12 +196,13 @@ export class VviinnVpsWidget {
                 </div>
               </div>
               <div class="products-wrapper">
-                <vviinn-empty-results
-                  class={{ hidden: imageSearchState.results.length > 0 }}
-                />
+                <div class={{ "nothing-found": true, hidden: imageSearchState.results.length <= 0 }}>
+                  <vviinn-empty-results />
+                  <vviinn-onboarding />
+                </div>
                 <div
                   class={{
-                    hidden: imageSearchState.results.length <= 0,
+                    hidden: imageSearchState.results.length > 0,
                     products: true,
                   }}
                 >
@@ -223,7 +224,7 @@ export class VviinnVpsWidget {
             </vviinn-slide>
           </vviinn-slider>
         </vviinn-overlayed-modal>
-      </Host>
+      </Host >
     );
   }
 }

@@ -7,6 +7,11 @@
   text-align: center;
 }
 
+::slotted(svg) {
+  display: grid;
+  align-self: center;
+}
+
 ::slotted(h4) {
   margin: unset;
   font-weight: 600;

@@ -262,6 +262,16 @@ search-filters::part(filter active) {
   display: none;
 }
 
+.nothing-found {
+  display: grid;
+  grid-gap: 64px;
+  justify-self: center;
+  padding-top: 64px;
+  padding-bottom: 16px;
+  position: absolute;
+  width: 60%;
+}
+
 @media (max-width: 768px) {
   .start-page_block {
     padding: 24px;
@@ -327,7 +337,7 @@ search-filters::part(filter active) {
   }
 
   .products-wrapper {
-    position: unsetstatic;
+    position: static;
     overflow-y: unset;
     width: 100%;
     padding-top: 0;
@@ -339,6 +349,14 @@ search-filters::part(filter active) {
     width: unset;
     grid-gap: 32px 16px;
     justify-content: center;
+  }
+
+  .nothing-found {
+    position: static;
+    grid-gap: 64px;
+    padding: unset;
+    align-content: start;
+    width: unset;
   }
 } 
 
