@@ -109,6 +109,11 @@ export class VviinnVpsWidget {
     block.scrollTop = 0;
   }
 
+  private handleModalClose() {
+    this.active = false;
+    this.resetState();
+  }
+
   render() {
     return (
       <Host>
@@ -116,7 +121,7 @@ export class VviinnVpsWidget {
           class={{ "first-screen": this.slidePosition === 0 }}
           active={this.active}
           onSecondaryActionClicked={() => this.resetState()}
-          onModalClosed={() => (this.active = false)}
+          onModalClosed={() => this.handleModalClose()}
           exportparts="secondary-action, title, close-button"
         >
           <vviinn-slider
@@ -196,13 +201,13 @@ export class VviinnVpsWidget {
                 </div>
               </div>
               <div class="products-wrapper">
-                <div class={{ "nothing-found": true, hidden: imageSearchState.results.length <= 0 }}>
+                <div class={{ "nothing-found": true, hidden: imageSearchState.results.length > 0 }}>
                   <vviinn-empty-results />
                   <vviinn-onboarding />
                 </div>
                 <div
                   class={{
-                    hidden: imageSearchState.results.length > 0,
+                    hidden: imageSearchState.results.length <= 0,
                     products: true,
                   }}
                 >
