@@ -68,7 +68,8 @@ export class SearchFilters {
                   active: this.selectedCategoryId === getFilterId(f),
                 }}
                 style={{ "animation-delay": `${n * 10}ms` }}
-                onClick={() => this.filterSelected(f)}
+                onClick={(ev) => { ev.preventDefault(); this.filterSelected(f) }}
+                onPointerUp={(ev) => { ev.stopPropagation(); this.filterSelected(f) }}
                 onKeyPress={(ev) => this.handleEnter(ev, f)}
               >
                 {f.name}
