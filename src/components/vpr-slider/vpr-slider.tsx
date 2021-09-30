@@ -188,6 +188,7 @@ export class VprSlider {
                     productId={item.productId}
                     productType={item.productType}
                     salePrice={item.price.sale}
+                    deeplink={item.deeplink}
                   />
                 ))}
               </div>
