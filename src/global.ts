@@ -4,7 +4,7 @@ import { Integrations } from "@sentry/tracing";
 const setupSentry = () => {
   Sentry.init({
     dsn:
-      "https://2e48bb2503b749daae7628504d02853a@o731435.ingest.sentry.io/5783489",
+      "https://70bcf561598b44148bd3cabc7c142a6c@o1015876.ingest.sentry.io/5983034",
     integrations: [new Integrations.BrowserTracing()],
     tracesSampleRate: 1.0,
     maxBreadcrumbs: 4,
