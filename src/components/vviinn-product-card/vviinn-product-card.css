@@ -6,26 +6,26 @@
   max-width: min-content;
 }
 
-:host::part(price-container) {
+.price-container {
   display: grid;
   grid-template-rows: repeat(2, max-content);
   grid-gap: .5rem;
 }
 
-:host::part(price-sale),
-:host::part(price-regular) {
+.price-sale,
+.price-regular {
   font-weight: 600;
 }
 
-:host::part(price-outdated) {
+.price-outdated {
   text-decoration: line-through;
 }
 
-:host::part(product-type) {
+.product-type {
   word-wrap: anywhere;
 }
 
-:host::part(image) {
+.image {
   display: grid;
   align-content: center;
   object-position: 50% 50%;

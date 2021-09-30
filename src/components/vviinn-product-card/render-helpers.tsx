@@ -37,6 +37,7 @@ export const processWidth = (url: string, size: number): string => {
 export const createImage = (data: ImageData) => (
   <img
     part="image"
+    class="image"
     width={data.width}
     height={data?.height}
     src={processWidth(data.url, data.width)}
