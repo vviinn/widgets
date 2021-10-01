@@ -8,6 +8,7 @@ const setupSentry = () => {
     integrations: [new Integrations.BrowserTracing()],
     tracesSampleRate: 1.0,
     maxBreadcrumbs: 4,
+    allowUrls: [/https?:\/\/.+vviinn-widgets.+.js/],
   });
 };
 
