@@ -14,6 +14,7 @@ import {
   fromMouseEvent,
   pointDiffSemigroup,
 } from "../../../../../geometry/Point";
+import { imageSearchState } from "../../../../../store/imageSearch.store";
 
 @Component({
   tag: "cropper-handler",
@@ -22,7 +23,6 @@ import {
 })
 export class CropperHandler {
   private startPoint: Point | undefined;
-  private id: number | undefined;
 
   @State() handleMove: boolean = false;
 
@@ -36,10 +36,10 @@ export class CropperHandler {
 
   @Listen("pointerdown")
   handlePointerStart(event: PointerEvent) {
-    event.preventDefault();
     event.stopPropagation();
 
-    this.id = event.pointerId;
+    imageSearchState.selectedCropper = this.handler.direction;
+
     this.handleMove = true;
     this.startPoint = fromMouseEvent(event);
     this.searchAreaChangeStart.emit(true);
@@ -49,8 +49,7 @@ export class CropperHandler {
   handlePointerEnd(event: PointerEvent) {
     event.stopPropagation();
 
-    const { pointerId } = event;
-    if (pointerId !== this.id) {
+    if (imageSearchState.selectedCropper === undefined || imageSearchState.selectedCropper !== this.handler.direction) {
       return;
     }
 
@@ -58,26 +57,25 @@ export class CropperHandler {
     this.handlerReleased.emit();
     this.handleMove = false;
     this.startPoint = undefined;
+    imageSearchState.selectedCropper = undefined;
   }
 
   @Listen("pointermove", { target: "window" })
   handlePointerMove(event: PointerEvent) {
     if (!this.handleMove) return;
 
-    requestAnimationFrame(() => {
-      const destination = fromMouseEvent(event);
+    const destination = fromMouseEvent(event);
 
-      if (this.startPoint !== undefined) {
-        const distance = pointDiffSemigroup.concat(destination, this.startPoint);
+    if (this.startPoint !== undefined) {
+      const distance = pointDiffSemigroup.concat(destination, this.startPoint);
 
-        this.handlerMoved.emit({
-          position: distance,
-          direction: this.handler.direction,
-        });
-      }
+      this.handlerMoved.emit({
+        position: distance,
+        direction: this.handler.direction,
+      });
+    }
 
-      this.startPoint = destination;
-    });
+    this.startPoint = destination;
   }
 
   render() {

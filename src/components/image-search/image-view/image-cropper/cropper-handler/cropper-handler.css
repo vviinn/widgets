@@ -16,6 +16,7 @@
   transition-timing-function: ease-in-out;
   width: var(--size);
   z-index: 4;
+  will-change: transform;
 }
 
 :host(.disabled) {
