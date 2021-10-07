@@ -43,6 +43,7 @@ type ImageSearchStore = {
   filters: SearchSessionFilter[];
   activeIonLink: Link | undefined;
   cropperHandlers: Handler[];
+  selectedCropper: number | undefined;
   rectangleSearchForm: Form | undefined;
   detectedObjects: ValueObject<DetectedObject>[];
   detectedObject: ValueObject<DetectedObject> | undefined;
@@ -65,6 +66,7 @@ const { state, onChange } = createStore<ImageSearchStore>({
   filters: [],
   activeIonLink: undefined,
   cropperHandlers: [],
+  selectedCropper: undefined,
   rectangleSearchForm: undefined,
   detectedObjects: [],
   detectedObject: undefined,
