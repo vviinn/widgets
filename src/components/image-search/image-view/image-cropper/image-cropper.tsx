@@ -4,12 +4,10 @@ import {
   h,
   Listen,
   State,
-  Event,
-  EventEmitter,
   Element,
   Prop,
 } from "@stencil/core";
-import { Handler } from "../../../../cropper/Handler";
+import { HandlerDirection } from "../../../../cropper/Handler";
 import {
   Rectangle,
   move,
@@ -30,6 +28,7 @@ import { DetectedObject } from "../../../../searchSession/searchSession";
 import { imageSearchState, makeRectangularSearchRequest } from "../../../../store/imageSearch.store";
 import { pipe } from "fp-ts/lib/function";
 import * as O from "fp-ts/lib/Option";
+import { findTarget } from "../../../../dom";
 
 @Component({
   tag: "image-cropper",
@@ -40,14 +39,14 @@ export class ImageCropper {
   @Element() el: HTMLElement;
 
   @Prop() disabled: boolean = false;
+
   @State() handleMove: boolean = false;
 
+  private handlerMoveDirection: HandlerDirection | null;
   private mouseStartPoint: Point | undefined = undefined;
   private bounds: DOMRect;
-
-  @Event() mouseRelease: EventEmitter<void>;
-  @Event() cropperMoved: EventEmitter<Rectangle>;
-  @Event() searchAreaChangeStart: EventEmitter<boolean>;
+  private pointerMoveListener: EventListener;
+  private pointerReleaseListener: EventListener;
 
   @Listen("detectedObjectSelected", { target: "document" })
   handleObjectSelection({ detail }: CustomEvent<ValueObject<DetectedObject>>) {
@@ -57,27 +56,42 @@ export class ImageCropper {
     imageSearchState.searchArea = O.some(scale(rect));
   }
 
-  handleHandlerMove(event: CustomEvent<Handler>) {
+  private handleHandlerMove(event: PointerEvent) {
+    if (!imageSearchState.searchArea) return;
+
+    const destination = fromMouseEvent(event);
+    const distance = pointDiffSemigroup.concat(
+      destination,
+      this.mouseStartPoint
+    );
+
+    const transformedHandler = {
+      position: distance,
+      direction: this.handlerMoveDirection,
+    };
+
     pipe(
       imageSearchState.searchArea,
       O.map((area) => {
-        const newSearchArea = transform(area, event.detail);
+        const newSearchArea = transform(area, transformedHandler);
 
         if (!this.checkBounds(newSearchArea)) {
           return;
         }
 
-        imageSearchState.searchArea = O.some(newSearchArea);
+        requestAnimationFrame(() => {
+          imageSearchState.searchArea = O.some(newSearchArea);
+          this.mouseStartPoint = destination;
+        });
+
         imageSearchState.detectedObject = undefined;
       })
     )
   }
 
-  @Listen("pointermove")
-  handleMouseMove(ev: MouseEvent) {
-    if (!this.handleMove) return;
-
+  private handleCropperMove(ev: MouseEvent) {
     const destination = fromMouseEvent(ev);
+
     const distance = pointDiffSemigroup.concat(
       destination,
       this.mouseStartPoint
@@ -92,16 +106,34 @@ export class ImageCropper {
           return;
         }
 
-        imageSearchState.searchArea = O.some(newSearchArea);
         imageSearchState.detectedObject = undefined;
-        this.mouseStartPoint = destination;
+
+        requestAnimationFrame(() => {
+          imageSearchState.searchArea = O.some(newSearchArea);
+          this.mouseStartPoint = destination;
+        });
       })
     )
   }
 
-  private handlePointerDown(event: MouseEvent) {
-    this.handleMove = true;
+  private handlePointerDown(event: PointerEvent) {
     this.mouseStartPoint = fromMouseEvent(event);
+
+    // should be htmlelement or handler
+    const target = findTarget(event) as any;
+
+    if (target.localName === "cropper-handler") {
+      this.handlerMoveDirection = target.handler.direction;
+      this.pointerMoveListener = this.handleHandlerMove.bind(this);
+    } else {
+      this.pointerMoveListener = this.handleCropperMove.bind(this);
+    }
+
+    this.pointerReleaseListener = this.handleSearchAreaRelease.bind(this);
+
+    this.el.addEventListener("pointermove", this.pointerMoveListener);
+    window.addEventListener("pointerup", this.pointerReleaseListener, { once: true });
+
   }
 
   private checkBounds(rectangle: Rectangle): boolean {
@@ -124,9 +156,9 @@ export class ImageCropper {
   }
 
   private handleSearchAreaRelease() {
-    this.handleMove = false;
+    this.el.removeEventListener("pointermove", this.pointerMoveListener);
+    document.removeEventListener("pointerup", this.pointerReleaseListener);
     this.mouseStartPoint = undefined;
-
     makeRectangularSearchRequest();
   }
 
@@ -150,26 +182,24 @@ export class ImageCropper {
   render() {
     return (
       <Host exportparts="handle, e-resize, n-resize, ne-resize, nw-resize, s-resize, se-resize, sw-resize, w-resize">
-        <div
+        <div onContextMenu={() => false}
           class={{
             "crop-area": true,
             active: this.handleMove,
             disabled: this.disabled,
           }}
+          draggable={false}
           style={this.getStyleMap()}
           onPointerDown={(ev) => this.handlePointerDown(ev)}
-          onPointerUp={(ev) => { ev.stopPropagation(); this.handleSearchAreaRelease() }}
-        ></div>
-        <div class="wrapper">
+        >
           {imageSearchState.cropperHandlers.map((handler) => (
             <cropper-handler
               disabled={this.disabled}
               handler={handler}
               bounds={this.bounds}
-              onHandlerMoved={(e) => this.handleHandlerMove(e)}
-              onHandlerReleased={() => this.handleSearchAreaRelease()}
             ></cropper-handler>
           ))}
+
         </div>
       </Host>
     );

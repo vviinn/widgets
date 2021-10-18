@@ -11,12 +11,6 @@
   visibility: hidden;
 }
 
-.wrapper {
-  height: 100%;
-  position: relative;
-  width: 100%;
-}
-
 .crop-area {
   border: 1px solid white;
   box-sizing: border-box;
@@ -26,6 +20,8 @@
   transition-duration: .25s;
   transition-timing-function: ease-in-out;
   z-index: 2;
+  position: relative;
+  will-change: transform;
 }
 
 .crop-area.active {
