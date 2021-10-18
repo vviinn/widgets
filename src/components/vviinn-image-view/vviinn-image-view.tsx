@@ -105,6 +105,7 @@ export class VviinnImageView {
             height={height}
             src={url}
             onLoad={(el) => this.handleInitialImageLoad(el)}
+            draggable={false}
           />
         );
 
