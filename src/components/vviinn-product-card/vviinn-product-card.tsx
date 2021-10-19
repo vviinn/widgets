@@ -1,4 +1,4 @@
-import { Component, Host, h, Prop, Event, EventEmitter, Element } from "@stencil/core";
+import { Component, Host, h, Prop, Event, EventEmitter, Element, State } from "@stencil/core";
 import { pipe } from "fp-ts/lib/function";
 import { getAnalyticsModule } from "../../analytics/GeneralAnalytics";
 import { state } from "../../store/store";
@@ -42,6 +42,15 @@ export class VviinnProductCard {
   @Prop() productType: string | undefined;
   @Prop() salePrice: number | undefined;
 
+  @State() imageLoaded: boolean = false;
+
+  private imageEl;
+  private titleEl;
+  private brandEl;
+  private typeEl;
+  private priceEl;
+
+
   /** Event fires ones when recommendation rendered on page */
   @Event({ bubbles: true }) recommendationLoad: EventEmitter<string>;
   /** Event fires ones when recommendation appears on the viewport */
@@ -64,6 +73,14 @@ export class VviinnProductCard {
       this.recommendationView.emit(this.productId);
       this.intersectionObserver.disconnect();
     }
+  }
+
+  connectedCallback() {
+    this.renderElements();
+  }
+
+  componentWillUpdate() {
+    this.renderElements();
   }
 
   componentDidLoad() {
@@ -96,6 +113,15 @@ export class VviinnProductCard {
         }
       })
     );
+  }
+
+  private renderElements() {
+    this.imageEl = this.renderImage();
+    this.titleEl = this.renderTitle();
+    this.brandEl = this.renderSpan(this.brand, "brand");
+    this.typeEl = this.renderSpan(this.productType, "product-type");
+    this.priceEl = this.renderPrice();
+
   }
 
   private getProduct(): Recommendation {
@@ -198,11 +224,11 @@ export class VviinnProductCard {
   render() {
     return (
       <Host exportparts="brand, currency, deeplink, image, image-link, price-amount, price-container, price-outdated, price-prefix, price-regular, price-sale, title">
-        {this.renderImage()}
-        {this.renderTitle()}
-        {this.renderSpan(this.brand, "brand")}
-        {this.renderSpan(this.productType, "product-type")}
-        {this.renderPrice()}
+        {this.imageEl}
+        {this.titleEl}
+        {this.brandEl}
+        {this.typeEl}
+        {this.priceEl}
       </Host>
     );
   }

@@ -54,48 +54,6 @@ export const transformNorthWest = (
   };
 };
 
-const transformNorth: RectangleTransform = (origin, handler) => {
-  const newPosition = pointSumSemigroup.concat(fromRectangle(origin), {
-    x: 0,
-    y: handler.position.y,
-  });
-
-  return {
-    ...newPosition,
-    width: origin.width,
-    height: origin.height - handler.position.y,
-  };
-};
-
-const transformEast: RectangleTransform = (origin, handler) => {
-  return {
-    ...origin,
-    width: origin.width + handler.position.x,
-    height: origin.height,
-  };
-};
-
-const transformWest: RectangleTransform = (origin, handler) => {
-  const newPosition = pointSumSemigroup.concat(fromRectangle(origin), {
-    x: handler.position.x,
-    y: 0,
-  });
-
-  return {
-    ...newPosition,
-    width: origin.width - handler.position.x,
-    height: origin.height,
-  };
-};
-
-const transformSouth: RectangleTransform = (origin, handler) => {
-  return {
-    ...origin,
-    width: origin.width,
-    height: origin.height + handler.position.y,
-  };
-};
-
 const transformSouthEast: RectangleTransform = (origin, handler) => {
   return {
     ...origin,
@@ -119,18 +77,10 @@ const transformSouthWest = (origin: Rectangle, handler: Handler): Rectangle => {
 
 export const transform: RectangleTransform = (origin, handler) => {
   switch (handler.direction) {
-    case HandlerDirection.North:
-      return transformNorth(origin, handler);
     case HandlerDirection.NorthEast:
       return transformNorthEast(origin, handler);
     case HandlerDirection.NorthWest:
       return transformNorthWest(origin, handler);
-    case HandlerDirection.East:
-      return transformEast(origin, handler);
-    case HandlerDirection.West:
-      return transformWest(origin, handler);
-    case HandlerDirection.South:
-      return transformSouth(origin, handler);
     case HandlerDirection.SouthEast:
       return transformSouthEast(origin, handler);
     case HandlerDirection.SouthWest:

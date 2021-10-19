@@ -1,8 +1,4 @@
-import {
-  getStructSemigroup,
-  semigroupSum,
-  semigroupProduct,
-} from "fp-ts/Semigroup";
+import { semigroupSum, semigroupProduct, struct } from "fp-ts/Semigroup";
 import { ClientEvent } from "../utils/event/Events";
 import { semigroupDiff } from "../utils/semigroup/semigroupDiff";
 import { Rectangle } from "./Rectangle";
@@ -26,17 +22,24 @@ export const fromMouseEvent = ({ clientX, clientY }: ClientEvent): Point => {
   };
 };
 
-export const pointDiffSemigroup = getStructSemigroup<Point>({
+export const fromTouchEvent = ({ touches }: TouchEvent): Point => {
+  return {
+    x: touches[0].clientX,
+    y: touches[0].clientY,
+  };
+};
+
+export const pointDiffSemigroup = struct<Point>({
   x: semigroupDiff,
   y: semigroupDiff,
 });
 
-export const pointSumSemigroup = getStructSemigroup<Point>({
+export const pointSumSemigroup = struct<Point>({
   x: semigroupSum,
   y: semigroupSum,
 });
 
-export const pointProductSemigroup = getStructSemigroup<Point>({
+export const pointProductSemigroup = struct<Point>({
   x: semigroupProduct,
   y: semigroupProduct,
 });
