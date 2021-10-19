@@ -8,6 +8,7 @@ img {
   box-sizing: border-box;
   filter: brightness(60%);
   position: relative;
+  user-select: none;
   z-index: -1;
 }
 
