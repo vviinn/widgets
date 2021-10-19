@@ -1,6 +1,4 @@
 :host {
-  --x: 0;
-  --y: 0;
   --size: 20px;
 
   background: transparent;
@@ -8,15 +6,11 @@
   box-sizing: content-box;
   display: block;
   height: var(--size);
-  position: absolute;
   touch-action: none;
-
-  transition-duration: 0.25s;
-  transition-property: border-color, opacity;
-  transition-timing-function: ease-in-out;
+  position: absolute;
   width: var(--size);
   z-index: 4;
-  will-change: transform;
+  user-select: none;
 }
 
 :host(.disabled) {
@@ -24,45 +18,29 @@
 }
 
 :host(.nw-resize) {
-  transform: translate(calc(var(--x) - 4px), calc(var(--y) - 4px));
   border-bottom: none;
   border-right: none;
-}
-
-:host(.n-resize) {
-  transform: translate(calc(var(--x) - calc(var(--size) / 2)), var(--y));
-  border: none;
-}
-
-:host(.w-resize) {
-  transform: translate(var(--x), calc(var(--y) - calc(var(--size) / 2)));
-  border: none;
+  top: 0;
+  left: 0;
 }
 
 :host(.ne-resize) {
-  transform: translate(calc(var(--x) - var(--size)), calc(var(--y) - 4px));
   border-left: none;
   border-bottom: none;
-}
-
-:host(.e-resize) {
-  transform: translate(calc(var(--x) - var(--size)), calc(var(--y) - calc(var(--size) / 2)));
-  border: none;
+  right: 0;
+  top: 0;
 }
 
 :host(.sw-resize) {
-  transform: translate(calc(var(--x) - 4px), calc(var(--y) - var(--size)));
   border-right: none;
   border-top: none;
-}
-
-:host(.s-resize) {
-  transform: translate(calc(var(--x) - calc(var(--size) / 2)), calc(var(--y) - var(--size)));
-  border: none;
+  left: 0;
+  bottom: 0;
 }
 
 :host(.se-resize) {
-  transform: translate(calc(var(--x) - var(--size)), calc(var(--y) - var(--size)));
   border-left: none;
   border-top: none;
+  bottom: 0;
+  right: 0;
 }

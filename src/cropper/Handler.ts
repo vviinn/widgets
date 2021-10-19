@@ -47,13 +47,6 @@ export const fromRectangle = (r: Rectangle): Handler[] => [
   },
   {
     position: Point.pointSumSemigroup.concat(Point.fromRectangle(r), {
-      x: r.width * 0.5,
-      y: 0,
-    }),
-    direction: HandlerDirection.North,
-  },
-  {
-    position: Point.pointSumSemigroup.concat(Point.fromRectangle(r), {
       x: r.width,
       y: 0,
     }),
@@ -62,30 +55,9 @@ export const fromRectangle = (r: Rectangle): Handler[] => [
   {
     position: Point.pointSumSemigroup.concat(Point.fromRectangle(r), {
       x: 0,
-      y: r.height * 0.5,
-    }),
-    direction: HandlerDirection.West,
-  },
-  {
-    position: Point.pointSumSemigroup.concat(Point.fromRectangle(r), {
-      x: r.width,
-      y: r.height * 0.5,
-    }),
-    direction: HandlerDirection.East,
-  },
-  {
-    position: Point.pointSumSemigroup.concat(Point.fromRectangle(r), {
-      x: 0,
       y: r.height,
     }),
     direction: HandlerDirection.SouthWest,
-  },
-  {
-    position: Point.pointSumSemigroup.concat(Point.fromRectangle(r), {
-      x: r.width * 0.5,
-      y: r.height,
-    }),
-    direction: HandlerDirection.South,
   },
   {
     position: Point.pointSumSemigroup.concat(Point.fromRectangle(r), {
