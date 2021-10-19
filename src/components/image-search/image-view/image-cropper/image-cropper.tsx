@@ -117,6 +117,8 @@ export class ImageCropper {
   }
 
   private handlePointerDown(event: PointerEvent) {
+    event.stopPropagation();
+
     this.mouseStartPoint = fromMouseEvent(event);
 
     // should be htmlelement or handler
@@ -182,7 +184,7 @@ export class ImageCropper {
   render() {
     return (
       <Host exportparts="handle, e-resize, n-resize, ne-resize, nw-resize, s-resize, se-resize, sw-resize, w-resize">
-        <div onContextMenu={() => false}
+        <div
           class={{
             "crop-area": true,
             active: this.handleMove,
@@ -190,6 +192,7 @@ export class ImageCropper {
           }}
           draggable={false}
           style={this.getStyleMap()}
+          onContextMenu={() => false}
           onPointerDown={(ev) => this.handlePointerDown(ev)}
         >
           {imageSearchState.cropperHandlers.map((handler) => (
@@ -197,6 +200,7 @@ export class ImageCropper {
               disabled={this.disabled}
               handler={handler}
               bounds={this.bounds}
+              onPointerDown={(ev) => this.handlePointerDown(ev)}
             ></cropper-handler>
           ))}
 

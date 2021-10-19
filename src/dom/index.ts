@@ -1,1 +1,3 @@
-export const findTarget = (ev: any) => ev?.explicitOriginalTarget ?? ev.path[0];
+export const findTarget = (ev: any) => {
+  return ev.target;
+};
