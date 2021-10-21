@@ -57,6 +57,8 @@ export class ImageCropper {
   }
 
   private handleHandlerMove(event: PointerEvent) {
+    event.preventDefault();
+    event.stopPropagation();
     if (!imageSearchState.searchArea) return;
 
     const destination = fromMouseEvent(event);
@@ -90,6 +92,8 @@ export class ImageCropper {
   }
 
   private handleCropperMove(ev: MouseEvent) {
+    ev.preventDefault();
+    ev.stopPropagation();
     const destination = fromMouseEvent(ev);
 
     const distance = pointDiffSemigroup.concat(
