@@ -2,29 +2,20 @@ import {
   Component,
   Host,
   h,
-  Listen,
   State,
   Element,
   Prop,
 } from "@stencil/core";
 import { HandlerDirection } from "../../../../cropper/Handler";
 import {
-  Rectangle,
   move,
   transform,
-  fromAlt,
-  scaleWithSized,
 } from "../../../../geometry/Rectangle";
 import {
   Point,
   fromMouseEvent,
   pointDiffSemigroup,
 } from "../../../../geometry/Point";
-import {
-  ValueObject,
-  foldValueObject,
-} from "../../../../network/ion/ValueObject";
-import { DetectedObject } from "../../../../searchSession/searchSession";
 import { imageSearchState, makeRectangularSearchRequest } from "../../../../store/imageSearch.store";
 import { pipe } from "fp-ts/lib/function";
 import * as O from "fp-ts/lib/Option";
@@ -44,22 +35,12 @@ export class ImageCropper {
 
   private handlerMoveDirection: HandlerDirection | null;
   private mouseStartPoint: Point | undefined = undefined;
-  private bounds: DOMRect;
   private pointerMoveListener: EventListener;
   private pointerReleaseListener: EventListener;
-
-  @Listen("detectedObjectSelected", { target: "document" })
-  handleObjectSelection({ detail }: CustomEvent<ValueObject<DetectedObject>>) {
-    const scale = scaleWithSized(this.bounds);
-    const rect = fromAlt(foldValueObject(detail).rectangle);
-
-    imageSearchState.searchArea = O.some(scale(rect));
-  }
 
   private handleHandlerMove(event: PointerEvent) {
     event.preventDefault();
     event.stopPropagation();
-    if (!imageSearchState.searchArea) return;
 
     const destination = fromMouseEvent(event);
     const distance = pointDiffSemigroup.concat(
@@ -77,15 +58,11 @@ export class ImageCropper {
       O.map((area) => {
         const newSearchArea = transform(area, transformedHandler);
 
-        if (!this.checkBounds(newSearchArea)) {
-          return;
-        }
-
         requestAnimationFrame(() => {
           imageSearchState.searchArea = O.some(newSearchArea);
-          this.mouseStartPoint = destination;
         });
 
+        this.mouseStartPoint = destination;
         imageSearchState.detectedObject = undefined;
       })
     )
@@ -106,23 +83,19 @@ export class ImageCropper {
       O.map((searchArea) => {
         const newSearchArea = move(searchArea, distance);
 
-        if (!this.checkBounds(newSearchArea)) {
-          return;
-        }
-
         imageSearchState.detectedObject = undefined;
 
         requestAnimationFrame(() => {
           imageSearchState.searchArea = O.some(newSearchArea);
-          this.mouseStartPoint = destination;
         });
+
+        this.mouseStartPoint = destination;
       })
     )
   }
 
   private handlePointerDown(event: PointerEvent) {
     event.stopPropagation();
-
     this.mouseStartPoint = fromMouseEvent(event);
 
     // should be htmlelement or handler
@@ -140,25 +113,6 @@ export class ImageCropper {
     this.el.addEventListener("pointermove", this.pointerMoveListener);
     window.addEventListener("pointerup", this.pointerReleaseListener, { once: true });
 
-  }
-
-  private checkBounds(rectangle: Rectangle): boolean {
-    const bounds = this.el.getBoundingClientRect();
-    const inTopBound = rectangle.y >= 0;
-    const inLeftBound = rectangle.x >= 0;
-    const inRightBound = rectangle.x + rectangle.width <= bounds.width;
-    const inBottomBound = rectangle.y + rectangle.height <= bounds.height;
-    const minWidth = rectangle.width > 20;
-    const minHeight = rectangle.height > 20;
-
-    return (
-      inTopBound &&
-      inLeftBound &&
-      inRightBound &&
-      inBottomBound &&
-      minHeight &&
-      minWidth
-    );
   }
 
   private handleSearchAreaRelease() {
@@ -203,7 +157,6 @@ export class ImageCropper {
             <cropper-handler
               disabled={this.disabled}
               handler={handler}
-              bounds={this.bounds}
               onPointerDown={(ev) => this.handlePointerDown(ev)}
             ></cropper-handler>
           ))}
