@@ -1,25 +1,20 @@
-import {
-  Component,
-  Host,
-  h,
-  State,
-  Element,
-  Prop,
-} from "@stencil/core";
+import { Component, Host, h, State, Element, Prop } from "@stencil/core";
 import { HandlerDirection } from "../../../../cropper/Handler";
-import {
-  move,
-  transform,
-} from "../../../../geometry/Rectangle";
+import { move, transform } from "../../../../geometry/Rectangle";
 import {
   Point,
   fromMouseEvent,
   pointDiffSemigroup,
 } from "../../../../geometry/Point";
-import { imageSearchState, makeRectangularSearchRequest } from "../../../../store/imageSearch.store";
+import {
+  imageSearchState,
+  makeRectangularSearchRequest,
+} from "../../../../store/imageSearch.store";
 import { pipe } from "fp-ts/lib/function";
 import * as O from "fp-ts/lib/Option";
 import { findTarget } from "../../../../dom";
+
+const MIN_SEARCHAREA_SIZE = 40;
 
 @Component({
   tag: "image-cropper",
@@ -58,14 +53,17 @@ export class ImageCropper {
       O.map((area) => {
         const newSearchArea = transform(area, transformedHandler);
 
-        requestAnimationFrame(() => {
-          imageSearchState.searchArea = O.some(newSearchArea);
-        });
+        if (
+          newSearchArea.width < MIN_SEARCHAREA_SIZE ||
+          newSearchArea.height < MIN_SEARCHAREA_SIZE
+        )
+          return;
 
+        imageSearchState.searchArea = O.some(newSearchArea);
         this.mouseStartPoint = destination;
         imageSearchState.detectedObject = undefined;
       })
-    )
+    );
   }
 
   private handleCropperMove(ev: MouseEvent) {
@@ -84,14 +82,10 @@ export class ImageCropper {
         const newSearchArea = move(searchArea, distance);
 
         imageSearchState.detectedObject = undefined;
-
-        requestAnimationFrame(() => {
-          imageSearchState.searchArea = O.some(newSearchArea);
-        });
-
+        imageSearchState.searchArea = O.some(newSearchArea);
         this.mouseStartPoint = destination;
       })
-    )
+    );
   }
 
   private handlePointerDown(event: PointerEvent) {
@@ -111,8 +105,9 @@ export class ImageCropper {
     this.pointerReleaseListener = this.handleSearchAreaRelease.bind(this);
 
     this.el.addEventListener("pointermove", this.pointerMoveListener);
-    window.addEventListener("pointerup", this.pointerReleaseListener, { once: true });
-
+    window.addEventListener("pointerup", this.pointerReleaseListener, {
+      once: true,
+    });
   }
 
   private handleSearchAreaRelease() {
@@ -129,14 +124,14 @@ export class ImageCropper {
         return {
           width: `${rectangle.width}px`,
           height: `${rectangle.height}px`,
-          transform: `translate(${rectangle.x}px, ${rectangle.y}px)`,
+          transform: `translate3d(${rectangle.x}px, ${rectangle.y}px, 0)`,
           cursor: this.handleMove ? "move" : "default",
-        }
+        };
       }),
       O.getOrElse(() => {
-        return {}
+        return {};
       })
-    )
+    );
   }
 
   render() {
@@ -160,7 +155,6 @@ export class ImageCropper {
               onPointerDown={(ev) => this.handlePointerDown(ev)}
             ></cropper-handler>
           ))}
-
         </div>
       </Host>
     );

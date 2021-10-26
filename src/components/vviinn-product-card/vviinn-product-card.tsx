@@ -2,10 +2,10 @@ import { Component, Host, h, Prop, Event, EventEmitter, Element, State } from "@
 import { pipe } from "fp-ts/lib/function";
 import { getAnalyticsModule } from "../../analytics/GeneralAnalytics";
 import { state } from "../../store/store";
-import { createImage, ImageData, wrapInLink } from "./render-helpers";
 import * as O from "fp-ts/lib/Option";
 import { imageSearchState } from "../../store/imageSearch.store";
 import { Recommendation } from "../../recommendation/recommendation";
+import { Linked, Price, processWidth } from "./render-helpers";
 
 /**
  * @part brand - product brand.
@@ -44,13 +44,6 @@ export class VviinnProductCard {
 
   @State() imageLoaded: boolean = false;
 
-  private imageEl;
-  private titleEl;
-  private brandEl;
-  private typeEl;
-  private priceEl;
-
-
   /** Event fires ones when recommendation rendered on page */
   @Event({ bubbles: true }) recommendationLoad: EventEmitter<string>;
   /** Event fires ones when recommendation appears on the viewport */
@@ -63,7 +56,7 @@ export class VviinnProductCard {
     { threshold: 1.0 }
   );
 
-  intersectionCallback(data: IntersectionObserverEntry[]) {
+  private intersectionCallback(data: IntersectionObserverEntry[]) {
     if (data.some((entry) => entry.isIntersecting)) {
       pipe(
         getAnalyticsModule,
@@ -75,17 +68,9 @@ export class VviinnProductCard {
     }
   }
 
-  connectedCallback() {
-    this.renderElements();
-  }
-
-  componentWillUpdate() {
-    this.renderElements();
-  }
-
   componentDidLoad() {
     this.recommendationLoad.emit(this.productId);
-    this.intersectionObserver.observe(this.el);
+    //this.intersectionObserver.observe(this.el);
 
     const links = this.el.shadowRoot.querySelectorAll("a");
     links.forEach((link) =>
@@ -115,120 +100,38 @@ export class VviinnProductCard {
     );
   }
 
-  private renderElements() {
-    this.imageEl = this.renderImage();
-    this.titleEl = this.renderTitle();
-    this.brandEl = this.renderSpan(this.brand, "brand");
-    this.typeEl = this.renderSpan(this.productType, "product-type");
-    this.priceEl = this.renderPrice();
-
-  }
-
   private getProduct(): Recommendation {
     return imageSearchState.results.find(
       (r) => r.productId === this.productId
     );
   }
 
-  private renderSpan(
-    content: string | HTMLElement | HTMLElement[],
-    name: string
-  ): HTMLElement | null {
-    return content ? (
-      <span part={name} class={name}>
-        {content}
-      </span>
-    ) : null;
-  }
-
-  private renderImage(): HTMLElement | null {
-    if (!this.image) return null;
-
-    const imageData: ImageData = {
-      width: this.imageWidth,
-      height: this.imageWidth * this.imageRatio,
-      url: this.image,
-      title: this.productTitle,
-    };
-
-    if (!this.deeplink) return createImage(imageData);
-
-    const linkData = {
-      href: this.deeplink,
-      class: "image-link",
-      part: "image-link",
-    };
-
-    return wrapInLink(linkData, createImage(imageData));
-  }
-
-  private renderTitle(): HTMLElement {
-    const title = this.renderSpan(this.productTitle, "title");
-
-    if (!this.deeplink) return title;
-
-    const linkData = {
-      href: this.deeplink,
-      class: "deeplink",
-      part: "deeplink",
-    };
-
-    return wrapInLink(linkData, title);
-  }
-
-  private havePrice(): boolean {
-    return (this.salePrice ?? this.price) != undefined;
-  }
-
-  private renderPricePrefix(): HTMLElement | null {
-    const prefix = this.pricePrefix ?? state.pricePrefix;
-    return prefix ? this.renderSpan(prefix, "price-prefix") : null;
-  }
-
-  private renderCurrency(): HTMLElement | null {
-    const currency = this.currency ?? state.currencySign;
-    return currency ? this.renderSpan(currency, "currency") : null;
-  }
-
-  private formatPrice(price: number): HTMLElement[] {
-    const locale = this.locale ?? state.locale;
-    const formattedPrice = new Intl.NumberFormat(locale, {
-      minimumFractionDigits: 2,
-    }).format(price);
-    const priceElement = this.renderSpan(formattedPrice, "price-amount");
-
-    return [this.renderPricePrefix(), priceElement, this.renderCurrency()];
-  }
-
-  renderRegularPrice(): HTMLElement {
-    return this.salePrice
-      ? this.renderSpan(this.formatPrice(this.price), "price-outdated")
-      : this.renderSpan(this.formatPrice(this.price), "price-regular");
-  }
-
-  renderSalePrice(): HTMLElement | null {
-    return this.salePrice
-      ? this.renderSpan(this.formatPrice(this.salePrice), "price-sale")
-      : null;
-  }
-
-  private renderPrice(): HTMLElement | null {
-    return this.havePrice()
-      ? this.renderSpan(
-        [this.renderRegularPrice(), this.renderSalePrice()],
-        "price-container"
-      )
-      : null;
-  }
-
   render() {
+    console.log("kek");
     return (
       <Host exportparts="brand, currency, deeplink, image, image-link, price-amount, price-container, price-outdated, price-prefix, price-regular, price-sale, title">
-        {this.imageEl}
-        {this.titleEl}
-        {this.brandEl}
-        {this.typeEl}
-        {this.priceEl}
+        <Linked deeplink={this.deeplink} part="image-link">
+          <img
+            loading="lazy"
+            part="image"
+            class="image"
+            width={this.imageWidth}
+            height={this.imageWidth * this.imageRatio}
+            src={processWidth(this.image, this.imageWidth)}
+            alt={this.productTitle}
+          />
+        </Linked>
+        <Linked deeplink={this.deeplink} part="deeplink">
+          <span class="title" part="title">{this.productTitle}</span>
+        </Linked>
+        <span class="brand" part="brand">{this.brand}</span>
+        <span class="type" part="type">{this.productType}</span>
+        <Price prefix={this.pricePrefix ?? state.pricePrefix}
+          currency={this.currency ?? state.currencySign}
+          price={this.price}
+          salePrice={this.salePrice}
+          locale={this.locale ?? state.locale}
+        />
       </Host>
     );
   }
