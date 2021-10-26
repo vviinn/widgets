@@ -140,16 +140,17 @@ vviinn-empty-results {
 }
 
 vviinn-product-card {
-  grid-gap: 0;
+  gap: 0;
   width: 100%;
 }
 
 vviinn-product-card::part(image-link) {
-  grid-row: 1/2;
+  order: 1;
 }
 
 vviinn-product-card::part(deeplink) {
   text-decoration: none;
+  order: 2;
 }
 
 vviinn-product-card::part(image) {
@@ -172,7 +173,7 @@ vviinn-product-card::part(brand) {
   font-size: 14px;
   font-weight: 600;
   color: #161616;
-  grid-row: 2/3;
+  order: 3;
 }
 
 vviinn-product-card::part(product-type) {
@@ -180,32 +181,23 @@ vviinn-product-card::part(product-type) {
 }
 
 vviinn-product-card::part(price-container) {
-  display: grid;
-  grid-gap: 8px;
-  grid-template-columns: repeat(2, max-content);
-  justify-self: start;
-  align-items: baseline;
+  display: flex;
+  gap: 8px;
+  order: 4;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 24px;
 }
 
 vviinn-product-card::part(price-regular),
 vviinn-product-card::part(price-discount) {
   color: #161616;
-  font-size: 16px;
-  font-weight: 600;
-  grid-column: 1 / 2;
-  grid-row: 1 / -1;
-  justify-self: start;
-  line-height: 24px;
+  order: 1;
 }
 
 vviinn-product-card::part(price-outdated) {
   color: #8D8D8D;
-  font-size: 16px;
-  font-weight: 600;
-  grid-column: 2 / 3;
-  grid-row: 1 / -1;
-  justify-self: start;
-  line-height: 24px;
+  order: 2;
 }
 
 search-filters span {

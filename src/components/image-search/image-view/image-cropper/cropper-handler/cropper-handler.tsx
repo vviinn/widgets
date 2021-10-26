@@ -13,7 +13,6 @@ import { Handler, getCursorValue } from "../../../../../cropper/Handler";
 })
 export class CropperHandler {
   @Prop() handler: Handler;
-  @Prop() bounds: DOMRect;
   @Prop() disabled: boolean = false;
 
   render() {

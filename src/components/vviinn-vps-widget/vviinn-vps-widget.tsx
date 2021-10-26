@@ -48,7 +48,6 @@ export class VviinnVpsWidget {
   @State() width: number = 0;
   @State() wrongImageFormat: boolean = false;
 
-  private body: HTMLVviinnSliderElement;
   private overflow: string;
 
   @Watch("active")
@@ -66,16 +65,6 @@ export class VviinnVpsWidget {
     state.currencySign = this.currencySign;
     state.locale = this.locale;
     imageSearchState.token = this.token;
-  }
-
-  componentDidLoad() {
-    const observer = new ResizeObserver((sizes: ResizeObserverEntry[]) => {
-      if (sizes.length === 0) return;
-      const entry = sizes[0];
-      this.width = entry.contentRect.width;
-    });
-
-    observer.observe(this.body);
   }
 
   private handleImageSelection() {
@@ -127,7 +116,6 @@ export class VviinnVpsWidget {
           <vviinn-slider
             showBullets={false}
             position={this.slidePosition}
-            ref={(el) => (this.body = el)}
           >
             <vviinn-slide class={{ "start-page": true }}>
               <div
@@ -213,6 +201,7 @@ export class VviinnVpsWidget {
                 >
                   {imageSearchState.results.map((p) => (
                     <vviinn-product-card
+                      hidden={true}
                       productTitle={p.title}
                       productId={p.productId}
                       brand={p.brand}

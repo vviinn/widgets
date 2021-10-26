@@ -1,20 +1,6 @@
 import { pipe } from "fp-ts/lib/function";
 import * as E from "fp-ts/lib/Either";
-import { h } from "@stencil/core";
-import { Sized } from "../../geometry/Sized";
-
-type ImageProps = {
-  readonly url: string;
-  readonly title: string;
-};
-
-export type ImageData = ImageProps & Sized;
-
-export type LinkData = {
-  href: string,
-  part: string,
-  class: string
-};
+import { FunctionalComponent, h } from "@stencil/core";
 
 const FIT_EXPR = /fit\/\d+\//;
 
@@ -34,22 +20,68 @@ export const processWidth = (url: string, size: number): string => {
   );
 };
 
-export const createImage = (data: ImageData) => (
-  <img
-    part="image"
-    class="image"
-    width={data.width}
-    height={data?.height}
-    src={processWidth(data.url, data.width)}
-    alt={data.title}
-  />
-);
+export const Linked = (props, child) =>
+  props.deeplink ? (
+    <a class={props.part} part={props.part} href={props.deeplink}>
+      {child}
+    </a>
+  ) : (
+    child
+  );
 
-export const wrapInLink = (linkData: LinkData, el: HTMLElement) => (
-  <a href={linkData.href}
-    part={linkData.part}
-    class={linkData.class}
-  >
-    {el}
-  </a>
-);
+type PriceElementProps = {
+  readonly locale: string;
+  readonly price: number;
+  readonly prefix: string;
+  readonly currency: string;
+};
+
+const FormattedPrice: FunctionalComponent<PriceElementProps> = (props) => {
+  const locale = props.locale;
+  const formattedPrice = new Intl.NumberFormat(locale, {
+    minimumFractionDigits: 2,
+  }).format(props.price);
+
+  const fullPrice = `${props.prefix ?? ""} ${formattedPrice} ${props.currency}`;
+
+  return (
+    <span class="price-amount" part="price-amount">
+      {fullPrice}
+    </span>
+  );
+};
+
+type PriceProps = PriceElementProps & {
+  salePrice: number;
+};
+
+export const Price: FunctionalComponent<PriceProps> = (props) => {
+  const priceEl = (
+    <FormattedPrice
+      prefix={props.prefix}
+      currency={props.currency}
+      price={props.price}
+      locale={props.locale}
+    />
+  );
+
+  return (
+    <span class="price-container" part="price-container">
+      {props.salePrice ? (
+        [
+          <span class="price-outdated" part="price-outdated">{priceEl}</span>,
+          <span class="price-sale" part="price-sale">
+            <FormattedPrice
+              prefix={props.prefix}
+              currency={props.currency}
+              price={props.salePrice}
+              locale={props.locale}
+            />
+          </span>,
+        ]
+      ) : (
+        <span class="price-regular">{priceEl}</span>
+      )}
+    </span>
+  );
+};

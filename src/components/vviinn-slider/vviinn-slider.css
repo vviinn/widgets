@@ -17,6 +17,7 @@
   grid-auto-flow: column;
   grid-template-columns: repeat(var(--num-items), 100%);
   transform: translateX(calc(-100% * var(--position)));
+  transition: transform 0.33s ease-in-out;
 }
 
 .controls {
