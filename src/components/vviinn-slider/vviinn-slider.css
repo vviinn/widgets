@@ -4,6 +4,7 @@
   display: grid;
   grid-gap: 20px;
   justify-items: center;
+  position: relative;
 }
 
 .items-wrapper {
@@ -47,4 +48,44 @@
 .bullet:active {
   background: transparent;
   border: 2px solid var(--color-primary);
+}
+
+.prev,
+.next {
+  width: 30px;
+  height: 30px;
+  background: red;
+  position: absolute;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  transform: translate3d(0, -50%, 0);
+}
+
+.prev:hover,
+.next:hover {
+  background: blueviolet;
+}
+
+.prev:active,
+.next:active {
+  background: salmon;
+}
+
+.prev:focus,
+.next:focus {
+  background: green;
+}
+
+.prev.disabled,
+.next.disabled {
+  background: black;
+}
+
+.prev {
+  left: 0;
+}
+
+.next {
+  right: 0;
 }

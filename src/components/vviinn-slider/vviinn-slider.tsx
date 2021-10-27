@@ -4,6 +4,7 @@ import { pipe } from "fp-ts/lib/function";
 import * as O from "fp-ts/lib/Option";
 import * as N from "fp-ts/number";
 import { sequenceToOption } from "../../utils/option/option";
+import { Arrow } from "./arrow";
 
 @Component({
   tag: "vviinn-slider",
@@ -29,10 +30,6 @@ export class VviinnSlider {
 
   connectedCallback() {
     this.handleDomContentChanges();
-    /* const targetNode = this.el;
-* const config = { childList: true, subtree: true };
-* const observer = new MutationObserver(() => this.handleDomContentChanges());
-* observer.observe(targetNode, config); */
   }
 
   private handleDomContentChanges() {
@@ -79,6 +76,21 @@ export class VviinnSlider {
     this.el.style.setProperty("--position", `${this.internalPosition}`);
   }
 
+  private handleKeyDown(event: KeyboardEvent) {
+    if (event.key !== "Space" && event.key !== "Enter") return;
+    const target = event.target as HTMLElement;
+    const targetClass = target.className;
+
+    switch (targetClass) {
+      case "prev":
+        this.prevSlide();
+        break;
+      case "next":
+        this.nextSlide();
+        break;
+    }
+  }
+
   private handleTouchStart(event: TouchEvent) {
     if (!this.showBullets) return;
 
@@ -119,6 +131,20 @@ export class VviinnSlider {
             <slot></slot>
           </div>
         </div>
+        <Arrow
+          kind="prev"
+          onClick={() => this.prevSlide()}
+          onKeyDown={(ev) => this.handleKeyDown(ev)}
+          tabindex={1}
+          disabled={this.internalPosition === 0}
+        />
+        <Arrow
+          kind="next"
+          onClick={() => this.nextSlide()}
+          onKeyDown={(ev) => this.handleKeyDown(ev)}
+          tabindex={0}
+          disabled={this.internalPosition === this.elementsCount - 1}
+        />
         {this.renderBullets()}
       </Host>
     );
