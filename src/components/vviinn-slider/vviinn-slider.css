@@ -1,3 +1,5 @@
+@import "../../variables.css";
+
 :host {
   --num-items: 0;
   --position: 0;
@@ -50,36 +52,32 @@
   border: 2px solid var(--color-primary);
 }
 
-.prev,
-.next {
-  width: 30px;
-  height: 30px;
-  background: red;
-  position: absolute;
-  margin: auto;
-  top: 0;
+.arrow-wrapper {
+  align-items: center;
+  background: white;
+  border: 2px solid white;
   bottom: 0;
+  box-sizing: border-box;
+  display: grid;
+  height: calc(var(--spacer) * 6);
+  justify-items: center;
+  margin: auto;
+  position: absolute;
+  top: 0;
   transform: translate3d(0, -50%, 0);
+  transition: border 0.25ms ease-in-out;
+  width: calc(var(--spacer) * 4);
 }
 
-.prev:hover,
-.next:hover {
-  background: blueviolet;
+.arrow-wrapper:active {
+  border-color: var(--color-primary);
+  opacity: 0.75;
 }
 
-.prev:active,
-.next:active {
-  background: salmon;
-}
-
-.prev:focus,
-.next:focus {
-  background: green;
-}
-
-.prev.disabled,
-.next.disabled {
-  background: black;
+.arrow-wrapper:focus {
+  border-color: var(--color-primary);
+  opacity: 0.5;
+  outline: none;
 }
 
 .prev {
@@ -88,4 +86,17 @@
 
 .next {
   right: 0;
+}
+
+.next > svg {
+  transform: rotate3d(0, 1, 0, 180deg);
+}
+
+.arrow-wrapper > svg {
+  transition: fill 0.25ms ease-in-out;
+  fill: #A8A8A8;
+}
+
+.arrow-wrapper:hover > svg {
+  fill: #8D8D8D;
 }

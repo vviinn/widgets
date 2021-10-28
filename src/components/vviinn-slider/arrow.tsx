@@ -1,4 +1,5 @@
 import { FunctionalComponent, h } from "@stencil/core";
+import { ArrowIcon } from "../vviinn-icons";
 
 export type ArrowKind = "prev" | "next";
 
@@ -14,6 +15,7 @@ const getStyleMap = (
   data: Partial<ArrowProp>
 ): { [className: string]: boolean } => {
   return {
+    "arrow-wrapper": true,
     [data.kind]: true,
     disabled: data.disabled,
   };
@@ -32,6 +34,6 @@ export const Arrow: FunctionalComponent<ArrowProp> = ({
     tabindex={tabindex}
     onKeyDown={onKeyDown}
   >
-    {kind === "prev" ? "<" : ">"}
+    <ArrowIcon />
   </div>
 );
