@@ -4,6 +4,7 @@ import { pipe } from "fp-ts/lib/function";
 import * as O from "fp-ts/lib/Option";
 import * as N from "fp-ts/number";
 import { sequenceToOption } from "../../utils/option/option";
+import { Arrow } from "./arrow";
 
 @Component({
   tag: "vviinn-slider",
@@ -19,6 +20,7 @@ export class VviinnSlider {
 
   @Prop() showBullets: boolean = true;
   @Prop({ reflect: true }) position: number = 0;
+  @Prop() showArrows: boolean = false;
 
   @Watch("position")
   positionWatchHandler(newValue: number) {
@@ -29,10 +31,6 @@ export class VviinnSlider {
 
   connectedCallback() {
     this.handleDomContentChanges();
-    /* const targetNode = this.el;
-* const config = { childList: true, subtree: true };
-* const observer = new MutationObserver(() => this.handleDomContentChanges());
-* observer.observe(targetNode, config); */
   }
 
   private handleDomContentChanges() {
@@ -59,7 +57,10 @@ export class VviinnSlider {
       <div class="controls">
         {range(0, this.elementsCount - 1).map((i) => (
           <div
-            class={{ bullet: true, active: i == this.internalPosition }}
+            class={{
+              bullet: true,
+              active: i == this.internalPosition % this.elementsCount,
+            }}
             onClick={() => this.goToSlide(i)}
           ></div>
         ))}
@@ -68,15 +69,41 @@ export class VviinnSlider {
   }
 
   private nextSlide() {
-    if (this.internalPosition === this.elementsCount - 1) return;
     this.internalPosition++;
-    this.el.style.setProperty("--position", `${this.internalPosition}`);
+    this.renderSlidePosition();
   }
 
   private prevSlide() {
-    if (this.internalPosition === 0) return;
-    this.internalPosition--;
-    this.el.style.setProperty("--position", `${this.internalPosition}`);
+    const nextPostion = this.internalPosition - 1;
+
+    this.internalPosition =
+      nextPostion > -1 ? nextPostion : this.elementsCount - 1;
+
+    this.renderSlidePosition();
+  }
+
+  private renderSlidePosition() {
+    requestAnimationFrame(() => {
+      this.el.style.setProperty(
+        "--position",
+        `${this.internalPosition % this.elementsCount}`
+      );
+    });
+  }
+
+  private handleKeyDown(event: KeyboardEvent) {
+    if (event.key !== "Space" && event.key !== "Enter") return;
+    const target = event.target as HTMLElement;
+    const direction = target.className.includes("prev") ? "prev" : "next";
+
+    switch (direction) {
+      case "prev":
+        this.prevSlide();
+        break;
+      case "next":
+        this.nextSlide();
+        break;
+    }
   }
 
   private handleTouchStart(event: TouchEvent) {
@@ -119,6 +146,24 @@ export class VviinnSlider {
             <slot></slot>
           </div>
         </div>
+        {this.showArrows
+          ? [
+            <Arrow
+              kind="prev"
+              onClick={() => this.prevSlide()}
+              onKeyDown={(ev) => this.handleKeyDown(ev)}
+              tabindex={1}
+              disabled={false}
+            />,
+            <Arrow
+              kind="next"
+              onClick={() => this.nextSlide()}
+              onKeyDown={(ev) => this.handleKeyDown(ev)}
+              tabindex={0}
+              disabled={false}
+            />,
+          ]
+          : null}
         {this.renderBullets()}
       </Host>
     );

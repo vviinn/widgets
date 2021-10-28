@@ -1,9 +1,12 @@
+@import "../../variables.css";
+
 :host {
   --num-items: 0;
   --position: 0;
   display: grid;
   grid-gap: 20px;
   justify-items: center;
+  position: relative;
 }
 
 .items-wrapper {
@@ -47,4 +50,53 @@
 .bullet:active {
   background: transparent;
   border: 2px solid var(--color-primary);
+}
+
+.arrow-wrapper {
+  align-items: center;
+  background: white;
+  border: 2px solid white;
+  bottom: 0;
+  box-sizing: border-box;
+  display: grid;
+  height: calc(var(--spacer) * 6);
+  justify-items: center;
+  margin: auto;
+  position: absolute;
+  top: 0;
+  transform: translate3d(0, -50%, 0);
+  transition: border 0.25ms ease-in-out;
+  width: calc(var(--spacer) * 4);
+}
+
+.arrow-wrapper:active {
+  border-color: var(--color-primary);
+  opacity: 0.75;
+}
+
+.arrow-wrapper:focus {
+  border-color: var(--color-primary);
+  opacity: 0.5;
+  outline: none;
+}
+
+.prev {
+  left: 0;
+}
+
+.next {
+  right: 0;
+}
+
+.next > svg {
+  transform: rotate3d(0, 1, 0, 180deg);
+}
+
+.arrow-wrapper > svg {
+  transition: fill 0.25ms ease-in-out;
+  fill: #A8A8A8;
+}
+
+.arrow-wrapper:hover > svg {
+  fill: #8D8D8D;
 }

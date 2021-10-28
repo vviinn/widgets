@@ -10,7 +10,7 @@ export class VviinnOnboarding {
     return (
       <Host>
         <h3>So funktioniert es</h3>
-        <vviinn-slider>
+        <vviinn-slider showArrows={true}>
           <vviinn-slide>
             <svg
               xmlns="http://www.w3.org/2000/svg"
