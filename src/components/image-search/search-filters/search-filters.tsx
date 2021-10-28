@@ -94,7 +94,7 @@ export class SearchFilters {
             }}
             part="show-more-filters"
           >
-            {this.hideFilters ? "Zeig mehr" : "Zeige weniger"}
+            {this.hideFilters ? "Zeige mehr" : "Zeige weniger"}
           </div>
         </div>
       </Host>

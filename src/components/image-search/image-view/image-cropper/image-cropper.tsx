@@ -32,6 +32,11 @@ export class ImageCropper {
   private mouseStartPoint: Point | undefined = undefined;
   private pointerMoveListener: EventListener;
   private pointerReleaseListener: EventListener;
+  private bounds: DOMRect | undefined = undefined;
+
+  componentDidLoad() {
+    this.bounds = this.el.getBoundingClientRect();
+  }
 
   private handleHandlerMove(event: PointerEvent) {
     event.preventDefault();
@@ -55,7 +60,11 @@ export class ImageCropper {
 
         if (
           newSearchArea.width < MIN_SEARCHAREA_SIZE ||
-          newSearchArea.height < MIN_SEARCHAREA_SIZE
+          newSearchArea.height < MIN_SEARCHAREA_SIZE ||
+          newSearchArea.x < 0 ||
+          newSearchArea.y < 0 ||
+          this.bounds.height - (newSearchArea.y + newSearchArea.height) < 0 ||
+          this.bounds.width - (newSearchArea.x + newSearchArea.width) < 0
         )
           return;
 
@@ -80,6 +89,14 @@ export class ImageCropper {
       imageSearchState.searchArea,
       O.map((searchArea) => {
         const newSearchArea = move(searchArea, distance);
+
+        if (
+          newSearchArea.x < 0 ||
+          newSearchArea.y < 0 ||
+          this.bounds.height - (newSearchArea.y + newSearchArea.height) < 0 ||
+          this.bounds.width - (newSearchArea.x + newSearchArea.width) < 0
+        )
+          return;
 
         imageSearchState.detectedObject = undefined;
         imageSearchState.searchArea = O.some(newSearchArea);

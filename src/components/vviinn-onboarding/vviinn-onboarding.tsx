@@ -36,7 +36,7 @@ export class VviinnOnboarding {
               <h4>Starte die Bildsuche</h4>
               <p>
                 Lade ein Bild aus Deiner Galerie hoch oder fotografiere ein
-                Produkt mit deiner Kamera.
+                Produkt mit Deiner Kamera.
               </p>
             </div>
           </vviinn-slide>

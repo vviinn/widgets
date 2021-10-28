@@ -17,7 +17,7 @@ export class VviinnPrivacyBadge {
               <path fill="#525252" d="M8 15A7 7 0 118 1a7 7 0 010 14zM8 2a6 6 0 100 12A6 6 0 008 2z" />
             </svg>
             <p>
-              Wir gehen sorgfältig mit Deinen Daten um. Deine Bilder werden nur zum Zweck der Bildsuche gespeichert
+              Wir gehen sorgfältig mit Deinen Daten um. Deine Bilder werden nur zum Zweck der Bildsuche gespeichert.
             </p>
           </div>
         </slot>
