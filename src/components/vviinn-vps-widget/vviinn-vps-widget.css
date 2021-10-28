@@ -116,6 +116,7 @@ vviinn-empty-results {
 .products-wrapper {
   display: grid;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: unset;
   position: relative;
   width: 100%;
