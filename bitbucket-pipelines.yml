@@ -18,6 +18,7 @@ pipelines:
             - echo "RECOMMENDATIONS_URL=https://api.stage.vviinn.com/product/" >> .env
             - npm install
             - npm run build_interfaces
+            - npm test
             - npm run build
     master:
       - step:
@@ -30,6 +31,7 @@ pipelines:
             - echo "RECOMMENDATIONS_URL=https://api.vviinn.com/product/" >> .env
             - npm install
             - npm run build_interfaces
+            - npm test
             - npm run build
   # tags:
   #   'v*.*.*':
