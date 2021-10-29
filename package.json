@@ -46,6 +46,7 @@
     "jest-cli": "^26.6.3",
     "jest-config": "^27.3.1",
     "puppeteer": "^10.0.0",
-    "rollup-plugin-dotenv": "^0.3.0"
+    "rollup-plugin-dotenv": "^0.3.0",
+    "yocto-queue": "^1.0.0"
   }
 }
