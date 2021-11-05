@@ -70,7 +70,7 @@ export class VviinnProductCard {
 
   componentDidLoad() {
     this.recommendationLoad.emit(this.productId);
-    //this.intersectionObserver.observe(this.el);
+    this.intersectionObserver.observe(this.el);
 
     const links = this.el.shadowRoot.querySelectorAll("a");
     links.forEach((link) =>
