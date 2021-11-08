@@ -128,8 +128,14 @@ export class VviinnSlider {
     pipe(
       sequenceToOption(this.swipeStartPosition, swipeEndPosition),
       O.map(([start, end]) => N.Ord.compare(start, end)),
-      O.map((swipeDirection) =>
-        swipeDirection > 0 ? this.nextSlide() : this.prevSlide()
+      O.map((swipeDirection) => {
+        switch (swipeDirection) {
+          case 1:
+            return this.nextSlide();
+          case -1:
+            return this.prevSlide();
+        }
+      }
       )
     );
   }
