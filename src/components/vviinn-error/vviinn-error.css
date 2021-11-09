@@ -28,7 +28,7 @@
   appearance: none;
   border: none;
   background: transparent;
-  color: var(--color-primary);
+  color: var(--color-primary, var(--color-primary-system));
   font-weight: 600;
   font-size: 16px;
   line-height: 20px;

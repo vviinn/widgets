@@ -48,8 +48,8 @@ vviinn-teaser {
 }
 
 vviinn-image-selector {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
+  background: var(--color-primary, var(--color-primary-system));
+  border-color: var(--color-primary, var(--color-primary-system));
   border-radius: 2px;
   color: white;
   display: grid;
@@ -61,8 +61,8 @@ vviinn-image-selector {
 }
 
 vviinn-image-selector:hover {
-  background: var(--color-primary-hover);
-  border-color: var(--color-primary-hover);
+  background: var(--color-primary-hover, var(--color-primary-hover-system));
+  border-color: var(--color-primary-hover, var(--color-primary-hover-system));
 }
 
 vviinn-image-selector:active {
@@ -239,12 +239,12 @@ search-filters::part(filter):hover {
 
 search-filters::part(filter):focus {
   outline: none;
-  border: 1px solid var(--color-primary);
+  border: 1px solid var(--color-primary, var(--color-primary-system));
 }
 
 search-filters::part(filter active) {
   background: rgba(15, 98, 254, 0.15);
-  color: var(--color-primary);
+  color: var(--color-primary, var(--color-primary-system));
 }
 
 .filters-wrapper {
