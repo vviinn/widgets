@@ -80,7 +80,7 @@ export const Price: FunctionalComponent<PriceProps> = (props) => {
           </span>,
         ]
       ) : (
-        <span class="price-regular">{priceEl}</span>
+        <span class="price-regular" part="price-regular">{priceEl}</span>
       )}
     </span>
   );
