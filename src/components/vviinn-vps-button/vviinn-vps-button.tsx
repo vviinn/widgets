@@ -1,7 +1,19 @@
 import { Component, Host, h, Prop, State, Listen, Element, Event, EventEmitter } from "@stencil/core";
 import { CameraIcon } from "../vviinn-icons";
-import { SlotSkeleton } from "../vviinn-skeleton/test";
+import { SlotSkeleton } from "../customized-slots";
 
+/**
+* @slot vviinn-onboarding-card-1-icon
+* @slot vviinn-onboarding-card-1-text
+* @slot vviinn-onboarding-card-2-icon
+* @slot vviinn-onboarding-card-2-text
+* @slot vviinn-onboarding-card-3-icon
+* @slot vviinn-onboarding-card-3-text
+* @slot vviinn-example-images-1
+* @slot vviinn-example-images-2
+* @slot vviinn-example-images-3
+* @slot vviinn-example-images-4
+ */
 @Component({
   tag: "vviinn-vps-button",
   styleUrl: "vviinn-vps-button.css",
@@ -17,7 +29,7 @@ export class VviinnVpsButton {
   @Prop() locale: string = "de-DE";
 
   @State() pressed: boolean = false;
-
+  /** @internal */
   @Event({ bubbles: true, composed: true }) globalSlotsChanged: EventEmitter<any>;
 
   @Listen("modalClosed")
@@ -48,10 +60,10 @@ export class VviinnVpsButton {
         onClick={() => this.handleClick()}
         onKeyDown={(ev: KeyboardEvent) => this.handleKeyDown(ev)}
       >
-        <SlotSkeleton />
-        <slot name="vviinn-vps-button-icon">
+        <slot>
           <CameraIcon />
         </slot>
+        <SlotSkeleton />
         <vviinn-vps-widget
           active={this.pressed}
           currency-sign="€"

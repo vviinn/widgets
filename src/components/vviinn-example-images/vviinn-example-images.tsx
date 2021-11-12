@@ -1,4 +1,5 @@
-import { Component, Host, h, Event, EventEmitter, Listen } from "@stencil/core";
+import { Component, Host, h, Event, EventEmitter, Listen, Element } from "@stencil/core";
+import { slotChangeListener } from "../customized-slots";
 
 @Component({
   tag: "vviinn-example-images",
@@ -6,6 +7,7 @@ import { Component, Host, h, Event, EventEmitter, Listen } from "@stencil/core";
   shadow: true,
 })
 export class VviinnExampleImages {
+  @Element() el: HTMLElement;
   @Event() imageSelected: EventEmitter<void>;
   @Event() imageSelectedError: EventEmitter<void>;
 
@@ -19,16 +21,22 @@ export class VviinnExampleImages {
     this.imageSelectedError.emit();
   }
 
+  componentWillLoad() {
+    slotChangeListener(this, this.el);
+  }
+
   render() {
     return (
       <Host>
         <h3>Mit den Beispielbildern die Suche direkt ausprobieren</h3>
         <div class="images">
-          <vviinn-example-image
-            width={240}
-            height={160}
-            src="https://cdn.vviinn.com/0/fit/368/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9pbWctaW5zcGlyYXRpb24tMDEtTC5qcGc="
-          />
+          <slot name="vviinn-example-images-1">
+            <vviinn-example-image
+              width={240}
+              height={160}
+              src="https://cdn.vviinn.com/0/fit/368/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9pbWctaW5zcGlyYXRpb24tMDEtTC5qcGc="
+            />
+          </slot>
           <vviinn-example-image
             width={240}
             height={360}
