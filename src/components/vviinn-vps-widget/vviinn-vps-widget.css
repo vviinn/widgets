@@ -38,7 +38,6 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   grid-gap: 24px;
   overflow-y: auto;
   position: relative;
-  scroll-behavior: smooth;
   width: 100%;
 }
 
