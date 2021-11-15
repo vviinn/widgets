@@ -1,19 +1,11 @@
-import {
-  Component,
-  Host,
-  h,
-  Prop,
-  EventEmitter,
-  Event,
-  State,
-  Listen,
-} from "@stencil/core";
+import { Component, Host, h, Prop, State, Element } from "@stencil/core";
 import { Link } from "../../../network/ion/Link";
 import { SearchSessionFilter } from "../../../searchSession/searchSession";
 import { imageSearchState } from "../../../store/imageSearch.store";
 import { CheckIcon } from "../../vviinn-icons";
 
 const FILTERS_COUNT: number = 5;
+const ACTIVE_FILTER_CLASSNAME = ".filter.active";
 
 const getFilterId = (filter: Link): string =>
   filter.href.split("/").reverse()[0];
@@ -24,20 +16,32 @@ const getFilterId = (filter: Link): string =>
   shadow: true,
 })
 export class SearchFilters {
+  @Element() el: HTMLElement;
+
   @Prop() filter: SearchSessionFilter | null = null;
   @State() selectedCategoryId: string | null = null;
   @State() hideFilters: boolean = true;
-  @Event() filterSelectedEvent: EventEmitter<Link>;
 
-  @Listen("filtersCleared", { target: "window" })
-  handleClearingFilters() {
-    this.selectedCategoryId = null;
+  private handleFilterSelection(filter: Link): void {
+    return this.isFilterSelected(filter)
+      ? this.clearSelectedFilter()
+      : this.selectFilter(filter);
   }
 
-  private filterSelected(f: Link) {
-    this.filterSelectedEvent.emit(f);
-    this.selectedCategoryId = getFilterId(f);
-    imageSearchState.activeIonLink = f;
+  private selectFilter(filter: Link) {
+    this.selectedCategoryId = getFilterId(filter);
+    imageSearchState.activeIonLink = filter;
+  }
+
+  private clearSelectedFilter() {
+    this.selectedCategoryId = null;
+    imageSearchState.activeIonLink = undefined;
+
+    this.findSelectedFilter().blur();
+  }
+
+  private findSelectedFilter(): HTMLElement {
+    return this.el.shadowRoot.querySelector(ACTIVE_FILTER_CLASSNAME);
   }
 
   private toggleFilters() {
@@ -46,7 +50,7 @@ export class SearchFilters {
 
   private handleEnter(ev: KeyboardEvent, f: Link) {
     if (ev.key !== "Enter") return;
-    this.filterSelected(f);
+    this.handleFilterSelection(f);
   }
 
   private isFilterSelected(filterLink: Link): boolean {
@@ -63,21 +67,19 @@ export class SearchFilters {
               <div
                 role="button"
                 tabindex="0"
-                part={
-                  this.isFilterSelected(f)
-                    ? "filter active"
-                    : "filter"
-                }
+                part={this.isFilterSelected(f) ? "filter active" : "filter"}
                 class={{
                   filter: true,
                   active: this.selectedCategoryId === getFilterId(f),
                 }}
                 style={{ "animation-delay": `${n * 10}ms` }}
-                onClick={(ev) => { ev.preventDefault(); this.filterSelected(f) }}
-                onPointerUp={(ev) => { ev.stopPropagation(); this.filterSelected(f) }}
+                onPointerUp={(ev) => {
+                  ev.stopPropagation();
+                  this.handleFilterSelection(f);
+                }}
                 onKeyPress={(ev) => this.handleEnter(ev, f)}
               >
-                { this.isFilterSelected(f) ? <CheckIcon /> : null}
+                {this.isFilterSelected(f) ? <CheckIcon /> : null}
                 {f.name}
               </div>
             ))}
