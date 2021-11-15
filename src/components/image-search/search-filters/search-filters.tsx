@@ -11,6 +11,7 @@ import {
 import { Link } from "../../../network/ion/Link";
 import { SearchSessionFilter } from "../../../searchSession/searchSession";
 import { imageSearchState } from "../../../store/imageSearch.store";
+import { CheckIcon } from "../../vviinn-icons";
 
 const FILTERS_COUNT: number = 5;
 
@@ -48,6 +49,10 @@ export class SearchFilters {
     this.filterSelected(f);
   }
 
+  private isFilterSelected(filterLink: Link): boolean {
+    return this.selectedCategoryId === getFilterId(filterLink);
+  }
+
   render() {
     return (
       <Host exportparts="filter, show-more-filters">
@@ -59,7 +64,7 @@ export class SearchFilters {
                 role="button"
                 tabindex="0"
                 part={
-                  this.selectedCategoryId === getFilterId(f)
+                  this.isFilterSelected(f)
                     ? "filter active"
                     : "filter"
                 }
@@ -72,6 +77,7 @@ export class SearchFilters {
                 onPointerUp={(ev) => { ev.stopPropagation(); this.filterSelected(f) }}
                 onKeyPress={(ev) => this.handleEnter(ev, f)}
               >
+                { this.isFilterSelected(f) ? <CheckIcon /> : null}
                 {f.name}
               </div>
             ))}
