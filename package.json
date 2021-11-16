@@ -1,6 +1,6 @@
 {
   "name": "vviinn-widgets",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "description": "vviinn web components",
   "main": "./dist/index.cjs.js",
   "module": "./dist/index.js",
