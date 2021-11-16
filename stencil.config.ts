@@ -1,7 +1,7 @@
 import { Config } from "@stencil/core";
-import dotenvPlugin from "rollup-plugin-dotenv";
 import { postcss } from "@stencil/postcss";
 import autoprefixer from "autoprefixer";
+import dotenvPlugin from "rollup-plugin-dotenv";
 
 export const config: Config = {
   namespace: "vviinn-widgets",
@@ -20,6 +20,10 @@ export const config: Config = {
       copy: [{ src: "assets" }, { src: "favicon.ico" }],
     },
   ],
+  env: {
+    packageVersion: process.env.npm_package_version,
+    packageName: process.env.npm_package_name,
+  },
   globalScript: "src/global",
   globalStyle: "src/variables.css",
   plugins: [
