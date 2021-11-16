@@ -213,7 +213,6 @@ search-filters::part(filter) {
   font-size: 14px;
   font-weight: 600;
   line-height: 20px;
-  padding: 6px 16px;
 }
 
 search-filters::part(show-more-filters) {
