@@ -24,6 +24,12 @@
   }
 }
 
+@media (max-width: 640px) and (min-width: 415px) {
+  :host {
+    max-width: 80%;
+  }
+}
+
 .head {
   align-items: center;
   border-bottom: 1px solid #F4F4F4;
