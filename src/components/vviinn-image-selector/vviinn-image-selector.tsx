@@ -60,8 +60,8 @@ export class VviinnImageSelector {
       TE.map(() => this.imageSelected.emit())
     );
 
-    await sendImageToStoreTaskEither();
     await checkImageAndStartSessionTask();
+    await sendImageToStoreTaskEither();
   }
 
   render() {

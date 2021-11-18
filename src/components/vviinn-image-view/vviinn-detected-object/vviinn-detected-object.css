@@ -24,7 +24,7 @@
 }
 
 :host(.active) {
-  background: var(--color-primary)!important;
+  background: var(--color-primary, var(--color-primary-system))!important;
   border: 2px solid white;
 }
 

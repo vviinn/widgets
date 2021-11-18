@@ -41,6 +41,7 @@ type ImageSearchStore = {
   token: string | undefined;
   results: Recommendation[];
   filters: SearchSessionFilter[];
+  resetCategoryLink: Link | undefined;
   activeIonLink: Link | undefined;
   cropperHandlers: Handler[];
   selectedCropper: number | undefined;
@@ -64,6 +65,7 @@ const { state, onChange } = createStore<ImageSearchStore>({
   token: undefined,
   results: [],
   filters: [],
+  resetCategoryLink: undefined,
   activeIonLink: undefined,
   cropperHandlers: [],
   selectedCropper: undefined,
@@ -87,6 +89,7 @@ const updateState = async (response: SearchSession) => {
   state.results = response.value;
   state.filters = readFilters(foldValueObject(response.filters));
   state.rectangleSearchForm = response.searchArea;
+  state.resetCategoryLink = response.links?.clearFilters;
 };
 
 const makeLinkRequest = <T>(
@@ -192,22 +195,22 @@ export const uploadFile = (
 
 export const imageSearchState = state;
 
-onChange(
-  "activeIonLink",
-  async (newLink: Link) =>
-    await pipe(
-      makeAuthorizedRequest(state.token),
-      TE.fromEither,
-      TE.chainW(linkRequest(newLink)),
-      TE.map(updateState),
-      TE.mapLeft((error) => {
-        return {
-          kind: "network error",
-          inner: error,
-        };
-      })
-    )()
-);
+onChange("activeIonLink", async (newLink: Link) => {
+  const link = newLink ? newLink : state.resetCategoryLink;
+
+  await pipe(
+    makeAuthorizedRequest(state.token),
+    TE.fromEither,
+    TE.chainW(linkRequest(link)),
+    TE.map(updateState),
+    TE.mapLeft((error) => {
+      return {
+        kind: "network error",
+        inner: error,
+      };
+    })
+  )();
+});
 
 onChange("searchArea", (newSearchArea: O.Option<Rectangle>) => {
   pipe(

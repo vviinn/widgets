@@ -44,12 +44,12 @@
 }
 
 .bullet.active {
-  background: var(--color-primary);
+  background: var(--color-primary, var(--color-primary-system));
 }
 
 .bullet:active {
   background: transparent;
-  border: 2px solid var(--color-primary);
+  border: 2px solid var(--color-primary, var(--color-primary-system));
 }
 
 .arrow-wrapper {
@@ -70,12 +70,12 @@
 }
 
 .arrow-wrapper:active {
-  border-color: var(--color-primary);
+  border-color: var(--color-primary, var(--color-primary-system));
   opacity: 0.75;
 }
 
 .arrow-wrapper:focus {
-  border-color: var(--color-primary);
+  border-color: var(--color-primary, var(--color-primary-system));
   opacity: 0.5;
   outline: none;
 }

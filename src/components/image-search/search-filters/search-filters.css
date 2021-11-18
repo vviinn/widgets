@@ -11,22 +11,29 @@
 }
 
 .filter {
+  align-items: center;
   animation-duration: 0.25s;
   animation-fill-mode: forwards;
   animation-name: scalein;
   border: 1px solid lightgray;
   cursor: pointer;
-  display: block;
+  display: flex;
+  flex-direction: row;
+  grid-gap: 8px;
   height: max-content;
   min-width: max-content;
   padding: 0.1rem;
   transform: scale(0);
-  transition: background 0.25s ease-in-out;
+  transition-property: background;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-in-out;
   user-select: none;
+  padding: 6px 16px;
 }
 
 .filter.active {
   border: 1px solid black;
+  padding: 6px 8px;
 }
 
 .filter:hover {

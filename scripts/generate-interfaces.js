@@ -1,38 +1,28 @@
-const dotenv = require('dotenv').config();
-const swaggerToTS = require('@manifoldco/swagger-to-ts');
-const http = require('https');
-const fs = require('fs');
-const path = __dirname + '/schema.yaml';
-const outPath = process.argv[2];
-const file = fs.createWriteStream(path);
-const result = fs.createWriteStream(outPath);
-const yaml = require('js-yaml');
+const dotenv = require("dotenv").config();
+const swaggerToTS = require("openapi-typescript").default;
+const fs = require("fs");
 
-http
-  .get(process.env.OPENAPI_URL, (response) => {
-    response.pipe(file);
-    file.on('finish', () => {
-      const yamlToJs = yaml.load(fs.readFileSync(path));
+const main = async () => {
+  const outPath = process.argv[2];
+  const result = fs.createWriteStream(outPath);
 
-      let text = swaggerToTS.default(yamlToJs);
-      text = text.replace(` &
-          components["examples"]["rectangle"]`, '');
+  try {
+    let text = await swaggerToTS(process.env.OPENAPI_URL);
 
-      result.write(text);
-      result.close();
-      file.close();
-      fs.unlinkSync(path);
-      console.info('Interfaces created!');
-      process.exit(0);
-    });
+    text = text.replace(
+      ` &
+          components["examples"]["rectangle"]`,
+      ""
+    );
 
-    file.on('error', (err) => {
-      fs.unlinkSync(path);
-      console.error('Can not read schema:', err.message);
-      process.exit(1);
-    });
-  })
-  .on('error', (err) => {
-    console.error('Can not load Swagger schema:', err.message);
+    result.write(text);
+    result.close();
+    console.info("Interfaces created!");
+    process.exit(0);
+  } catch (err) {
+    console.error("Can not load Swagger schema:", err.message);
     process.exit(1);
-  });
+  }
+};
+
+main();

@@ -12,6 +12,7 @@ import * as O from "fp-ts/lib/Option";
  *
  * @part select-image_button
  *
+ * @part product-card - product card.
  * @part product-card_brand - product card brand.
  * @part product-card_currency - currency sign. Renders after price-amount inside product card.
  * @part product-card_deeplink - anchor element for title. Rendered only if "deeplink" property filled.
@@ -77,6 +78,8 @@ export class VviinnVpsWidget {
   }
 
   private resetState() {
+    this.resetScroll("onboarding-block");
+
     this.slidePosition = 0;
     imageSearchState.image = O.none;
     imageSearchState.imageUrl = O.none;
@@ -87,20 +90,25 @@ export class VviinnVpsWidget {
     imageSearchState.detectedObjects = [];
     imageSearchState.activeIonLink = undefined;
     imageSearchState.rectangleSearchForm = undefined;
+
+    this.resetScroll("results-block");
   }
 
   private haveErrors(): boolean {
     return this.wrongImageFormat || imageSearchState.serverError;
   }
 
-  private resetScroll() {
-    const block = this.el.shadowRoot.getElementById("onboarding-block");
-    block.scrollTop = 0;
+  private resetScroll(elementId: string, behavior: ScrollBehavior = "auto") {
+    const element: HTMLElement = this.el.shadowRoot.getElementById(elementId);
+    element.scroll({ top: 0, left: 0, behavior });
   }
 
   private handleModalClose() {
     this.active = false;
     this.resetState();
+
+    const elementsToReset = ["onboarding-block", "results-block"];
+    elementsToReset.forEach((name) => this.resetScroll(name));
   }
 
   render() {
@@ -170,7 +178,7 @@ export class VviinnVpsWidget {
                   <vviinn-onboarding />
                   <vviinn-example-images
                     onImageSelected={() => this.handleImageSelection()}
-                    onImageSelectedError={() => this.resetScroll()}
+                    onImageSelectedError={() => this.resetScroll("onboarding-block", "smooth")}
                   />
                 </div>
               </div>
@@ -188,7 +196,7 @@ export class VviinnVpsWidget {
                   </div>
                 </div>
               </div>
-              <div class="products-wrapper">
+              <div id="results-block" class="products-wrapper">
                 <div class={{ "nothing-found": true, hidden: imageSearchState.results.length > 0 }}>
                   <vviinn-empty-results />
                   <vviinn-onboarding />
@@ -210,6 +218,7 @@ export class VviinnVpsWidget {
                       salePrice={p.price.sale}
                       imageWidth={160}
                       image={p.image.thumbnail ?? p.image.original}
+                      part="product-card"
                       exportparts="brand : product-card_brand, currency : product-card_currency, deeplink : product-card_deeplink, image : product-card_image, image-link : product-card_image-link, price-amount : product-card_price-amount, price-container : product-card_price-container, price-outdated : product-card_price-outdated, price-prefix : product-card_price-prefix, price-regular : product-card_price-regular, price-sale : product-card_price-sale, title: product-card_title"
                     />
                   ))}
