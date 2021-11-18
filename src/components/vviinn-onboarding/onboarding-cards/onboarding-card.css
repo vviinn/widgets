@@ -32,7 +32,7 @@ p {
 }
 
 .colored {
-  fill: var(--color-icons);
+  fill: var(--color-icons, var(--color-icons-system));
 }
 
 .text {

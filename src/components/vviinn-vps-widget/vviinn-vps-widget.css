@@ -272,6 +272,30 @@ search-filters::part(filter active) {
   }
 }
 
+@media (max-width: 640px) {
+  .start-page {
+    grid-template-rows: min-content;
+    grid-template-columns: unset;
+    grid-gap: 48px;
+    padding: 24px 0 48px 0;
+  }
+}
+
+@media (max-width: 640px) and (min-width: 415px) {
+  .onboarding-wrapper {
+    position: unset;
+  }
+
+  #onboarding-block {
+    overflow: unset;
+  }
+
+  .start-page.active {
+    height: 1px;
+    overflow: auto;
+  }
+}
+
 @media (max-width: 415px) {
   .results-page > * {
     box-sizing: border-box;
@@ -280,13 +304,6 @@ search-filters::part(filter active) {
 
   vviinn-slide {
     padding-bottom: 48px;
-  }
-
-  .start-page {
-    grid-template-rows: min-content;
-    grid-template-columns: unset;
-    grid-gap: 48px;
-    padding: 24px 0 48px 0;
   }
 
   .start-page_block:last-of-type {

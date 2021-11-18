@@ -14,11 +14,7 @@ vviinn-onboarding h3 {
 }
 
 vviinn-onboarding vviinn-slide {
-  align-items: center;
   background: #f4f4f4;
-  display: grid;
-  grid-template-rows: repeat(2, 1fr);
-  justify-items: center;
   padding: 24px;
 }
 
