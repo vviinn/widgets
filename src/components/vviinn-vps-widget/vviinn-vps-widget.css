@@ -346,6 +346,7 @@ search-filters::part(filter active) {
   }
 
   .products-wrapper {
+    align-content: start;
     position: static;
     overflow-y: unset;
     width: 100%;
