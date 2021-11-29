@@ -15,7 +15,7 @@ export class VviinnWrongFormat {
           <h4 slot="title">Dateityp wird nicht unterstützt</h4>
           <span slot="text">
             Leider unterstützen wir dieses Format nicht. Bitte laden Sie eine
-            .jpg, .png oder .gif Bilddatei hoch.
+            .jpg, .png oder .webp Bilddatei hoch.
           </span>
           <button slot="action" onClick={() => this.actionClick.emit()}>
             Neues Bild hochladen

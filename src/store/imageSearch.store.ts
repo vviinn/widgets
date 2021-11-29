@@ -48,7 +48,7 @@ type ImageSearchStore = {
   rectangleSearchForm: Form | undefined;
   detectedObjects: ValueObject<DetectedObject>[];
   detectedObject: ValueObject<DetectedObject> | undefined;
-
+  objectDetectionInProgress: boolean;
   imageWidth: number;
 
   image: O.Option<HTMLImageElement>;
@@ -73,6 +73,7 @@ const { state, onChange } = createStore<ImageSearchStore>({
   rectangleSearchForm: undefined,
   detectedObjects: [],
   detectedObject: undefined,
+  objectDetectionInProgress: false,
 
   imageWidth: RESIZED_IMAGE_WIDTH,
 
@@ -106,6 +107,8 @@ const makeLinkRequest = <T>(
 };
 
 const detectObjects = async (data: SearchSession) => {
+  state.objectDetectionInProgress = true;
+
   const error: BasicError<string> = {
     kind: "server",
     inner: "Can not get a link for objects detection",
@@ -120,6 +123,8 @@ const detectObjects = async (data: SearchSession) => {
         (state.detectedObjects = foldValueObject(objects))
     )
   )();
+
+  state.objectDetectionInProgress = false;
 };
 
 const uploadHiresFile = async (sessionResponse: SearchSession, file: File) => {
@@ -199,6 +204,7 @@ export const uploadFile = (
 export const imageSearchState = state;
 
 onChange("activeIonLink", async (newLink: Link) => {
+  state.loading = true;
   const link = newLink ? newLink : state.resetCategoryLink;
 
   await pipe(

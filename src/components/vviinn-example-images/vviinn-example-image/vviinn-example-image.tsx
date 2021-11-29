@@ -1,4 +1,12 @@
-import { Component, Host, h, Prop, Event, EventEmitter, State } from "@stencil/core";
+import {
+  Component,
+  Host,
+  h,
+  Prop,
+  Event,
+  EventEmitter,
+  State,
+} from "@stencil/core";
 import { pipe } from "fp-ts/lib/function";
 import { toFile } from "../../../Image/toFile";
 import { imageSearchState, uploadFile } from "../../../store/imageSearch.store";
@@ -42,7 +50,11 @@ export class VviinnExampleImage {
   }
 
   private showPreloader(): boolean {
-    return imageSearchState.loading && this.selected
+    return (
+      (imageSearchState.objectDetectionInProgress ||
+        imageSearchState.loading) &&
+      this.selected
+    );
   }
 
   render() {

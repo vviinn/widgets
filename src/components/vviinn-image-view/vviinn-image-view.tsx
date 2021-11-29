@@ -126,7 +126,8 @@ export class VviinnImageView {
   render() {
     return (
       <Host>
-        {imageSearchState.loading ? (
+        {imageSearchState.loading ||
+          imageSearchState.objectDetectionInProgress ? (
           <div class="image-preloader">
             <vviinn-preloader />
           </div>

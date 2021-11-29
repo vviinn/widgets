@@ -8,6 +8,14 @@ import { imageSearchState } from "../../store/imageSearch.store";
 })
 export class VviinnPreloader {
   render() {
-    return <Host class={{ active: imageSearchState.loading }}></Host>;
+    return (
+      <Host
+        class={{
+          active:
+            imageSearchState.loading ||
+            imageSearchState.objectDetectionInProgress,
+        }}
+      ></Host>
+    );
   }
 }
