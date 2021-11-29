@@ -93,3 +93,9 @@ export const OnboardingCard3Icon = () => (
 export const CheckIcon = () => (
   <svg width="14" height="11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 10.414 0 5.413 1.413 4 5 7.586 12.585 0 14 1.415l-9 8.999Z" fill="var(--color-primary, var(--color-primary-system))" /></svg>
 )
+
+export const LoaderIcon = () => (
+  <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28">
+    <path fill="#fff" d="M23,14a9,9,0,1,1-9-9V2A12,12,0,1,0,26,14Z" />
+  </svg>
+)

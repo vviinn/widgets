@@ -126,6 +126,11 @@ export class VviinnImageView {
   render() {
     return (
       <Host>
+        {imageSearchState.loading ? (
+          <div class="image-preloader">
+            <vviinn-preloader />
+          </div>
+        ) : null}
         <highlight-box />
         {this.renderImage()}
         {this.renderCropper()}

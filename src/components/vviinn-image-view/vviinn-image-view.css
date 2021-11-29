@@ -26,3 +26,18 @@ img.rectangle {
   height: 288px;
   width: 288px;
 }
+
+.image-preloader {
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 4px;
+    bottom: 12px;
+    padding: 4px 6px;
+    pointer-events: none;
+    position: absolute;
+    right: 12px;
+    z-index: 4;
+}
+
+vviinn-preloader {
+    --preloader-size: 12px;
+}

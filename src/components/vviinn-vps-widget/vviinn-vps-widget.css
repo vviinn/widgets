@@ -47,6 +47,7 @@ vviinn-teaser {
 }
 
 vviinn-image-selector {
+  align-items: center;
   background: var(--color-primary, var(--color-primary-system));
   border-color: var(--color-primary, var(--color-primary-system));
   border-radius: 2px;
@@ -55,6 +56,7 @@ vviinn-image-selector {
   font-size: 16px;
   font-weight: 600;
   height: 56px;
+  justify-items: center;
   margin-bottom: 16px;
   transition: background 0.1s ease-in-out;
 }

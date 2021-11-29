@@ -59,6 +59,7 @@ type ImageSearchStore = {
   resultsComponents: HTMLElement[];
 
   serverError: boolean;
+  loading: boolean;
 };
 
 const { state, onChange } = createStore<ImageSearchStore>({
@@ -83,6 +84,7 @@ const { state, onChange } = createStore<ImageSearchStore>({
   resultsComponents: [],
 
   serverError: false,
+  loading: false,
 });
 
 const updateState = async (response: SearchSession) => {
@@ -90,6 +92,7 @@ const updateState = async (response: SearchSession) => {
   state.filters = readFilters(foldValueObject(response.filters));
   state.rectangleSearchForm = response.searchArea;
   state.resetCategoryLink = response.links?.clearFilters;
+  state.loading = false;
 };
 
 const makeLinkRequest = <T>(
@@ -135,6 +138,7 @@ const uploadHiresFile = async (sessionResponse: SearchSession, file: File) => {
 };
 
 export const makeRectangularSearchRequest = async () => {
+  state.loading = true;
   pipe(
     sequenceToOption(state.imageBounds, state.searchArea),
     O.map(async ([bounds, searchArea]) => {
@@ -159,6 +163,8 @@ export const makeRectangularSearchRequest = async () => {
 export const uploadFile = (
   file: File
 ): TE.TaskEither<BasicError<string | Response>, SearchSession> => {
+  state.loading = true;
+
   const fileForm = imageFormFromFile(file);
 
   const tokenWithFile = sequenceToEither(
@@ -168,14 +174,12 @@ export const uploadFile = (
 
   return pipe(
     tokenWithFile,
-    E.map(
-      ([headers, body]): RequestInit => {
-        return {
-          headers,
-          body,
-        };
-      }
-    ),
+    E.map(([headers, body]): RequestInit => {
+      return {
+        headers,
+        body,
+      };
+    }),
     TE.fromEither,
     TE.chain(searchSessionClient),
     TE.map((sessionResponse) => {
@@ -186,7 +190,6 @@ export const uploadFile = (
       return sessionResponse;
     }),
     TE.mapLeft((error) => {
-      console.log(error);
       state.serverError = true;
       return error;
     })
