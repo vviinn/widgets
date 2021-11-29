@@ -1,4 +1,4 @@
-import { Component, Host, h, Prop, Event, EventEmitter } from "@stencil/core";
+import { Component, Host, h, Prop, Event, EventEmitter, State } from "@stencil/core";
 import { pipe } from "fp-ts/lib/function";
 import { toFile } from "../../../Image/toFile";
 import { imageSearchState, uploadFile } from "../../../store/imageSearch.store";
@@ -15,10 +15,14 @@ export class VviinnExampleImage {
   @Prop() width: number = 0;
   @Prop() height: number = 0;
 
+  @State() selected: boolean = false;
+
   @Event() exampleImageSelected: EventEmitter<void>;
   @Event() exampleImageError: EventEmitter<void>;
 
   private async selectImage(event: UIEvent) {
+    this.selected = true;
+
     const image = event.target as HTMLImageElement;
     const file = await toFile(this.src);
 
@@ -33,11 +37,22 @@ export class VviinnExampleImage {
         this.exampleImageError.emit();
       })
     )();
+
+    this.selected = false;
+  }
+
+  private showPreloader(): boolean {
+    return imageSearchState.loading && this.selected
   }
 
   render() {
     return (
       <Host>
+        {this.showPreloader() ? (
+          <div class="image-preloader">
+            <vviinn-preloader />
+          </div>
+        ) : null}
         <img
           onClick={(ev) => this.selectImage(ev)}
           src={this.src}

@@ -12,8 +12,8 @@ import { imageFromFileTask } from "../../Image/fromFile";
 import { convertB64toFileTask } from "../../Image/toFile";
 
 /**
-  * @part button -  button look and feel
-  */
+ * @part button -  button look and feel
+ */
 @Component({
   tag: "vviinn-image-selector",
   styleUrl: "vviinn-image-selector.css",
@@ -41,7 +41,7 @@ export class VviinnImageSelector {
       TE.mapLeft((error) => {
         this.imageSelectedError.emit();
         return error;
-      }),
+      })
     );
 
     const sendImageToStoreTaskEither = pipe(
@@ -67,9 +67,12 @@ export class VviinnImageSelector {
   render() {
     return (
       <Host exportparts="button">
-        <label htmlFor="fileInput" part="button">
-          <slot name="upload-button-text">Upload image</slot>
-        </label>
+        <vviinn-preloader />
+        {imageSearchState.loading ? null : (
+          <label htmlFor="fileInput" part="button">
+            <slot name="upload-button-text">Upload image</slot>
+          </label>
+        )}
         <input
           id="fileInput"
           class="visually-hidden"
