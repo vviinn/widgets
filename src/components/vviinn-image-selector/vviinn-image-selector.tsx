@@ -64,11 +64,15 @@ export class VviinnImageSelector {
     await sendImageToStoreTaskEither();
   }
 
+  private isLoading(): boolean {
+    return imageSearchState.loading || imageSearchState.objectDetectionInProgress;
+  }
+
   render() {
     return (
       <Host exportparts="button">
         <vviinn-preloader />
-        {imageSearchState.loading ? null : (
+        {this.isLoading() ? null : (
           <label htmlFor="fileInput" part="button">
             <slot name="upload-button-text">Upload image</slot>
           </label>
