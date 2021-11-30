@@ -17,7 +17,7 @@ import { SlotSkeleton } from "../customized-slots";
 @Component({
   tag: "vviinn-vps-button",
   styleUrl: "vviinn-vps-button.css",
-  shadow: true,
+  shadow: false,
 })
 export class VviinnVpsButton {
   @Element() el: HTMLElement;
