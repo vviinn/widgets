@@ -1,7 +1,6 @@
 import { Component, Host, h, Prop, State, Listen, Element, Event, EventEmitter } from "@stencil/core";
 import { CameraIcon } from "../vviinn-icons";
 import { SlotSkeleton } from "../customized-slots";
-import state from "../../store/store";
 
 /**
 * @slot vviinn-onboarding-card-1-icon
