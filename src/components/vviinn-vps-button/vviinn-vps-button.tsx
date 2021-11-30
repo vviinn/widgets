@@ -1,6 +1,7 @@
 import { Component, Host, h, Prop, State, Listen, Element, Event, EventEmitter } from "@stencil/core";
 import { CameraIcon } from "../vviinn-icons";
 import { SlotSkeleton } from "../customized-slots";
+import state from "../../store/store";
 
 /**
 * @slot vviinn-onboarding-card-1-icon
@@ -27,6 +28,9 @@ export class VviinnVpsButton {
   @Prop() currencySign: string = "€";
   /** Locale for currency formatting */
   @Prop() locale: string = "de-DE";
+
+  /** @internal */
+  @Prop() apiPath: string | undefined;
 
   @State() pressed: boolean = false;
   /** @internal */
@@ -68,6 +72,8 @@ export class VviinnVpsButton {
           active={this.pressed}
           currency-sign="€"
           token={this.token}
+          locale={this.locale}
+          apiPath={this.apiPath}
         />
       </Host>
     );
