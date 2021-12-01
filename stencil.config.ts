@@ -23,6 +23,7 @@ export const config: Config = {
   env: {
     packageVersion: process.env.npm_package_version,
     packageName: process.env.npm_package_name,
+    environment: process.env.ENVIRONMENT,
   },
   globalScript: "src/global",
   globalStyle: "src/variables.css",
