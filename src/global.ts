@@ -8,11 +8,12 @@ const setupSentry = () => {
     environment: Env.environment,
     tracesSampleRate: 1.0,
     maxBreadcrumbs: 4,
+    defaultIntegrations: false,
     integrations: (integrations) => {
       console.log("Integrations:", integrations);
       return integrations;
     },
-    tracesSampler: (samplingContext) => {
+    tracesSampler(samplingContext) {
       console.log("samplingContext", samplingContext);
       return 1.0;
     },
