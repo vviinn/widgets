@@ -1,14 +1,18 @@
 import { Event, Exception, StackFrame } from "@sentry/browser";
 
-const getExeptionValues = (event: Event): Exception[] => event.exception.values;
+const getExeptionValues = (event: Event): Exception[] =>
+  event?.exception?.values ?? [];
 
 const getExeptionStackFrames = (exeption: Exception): StackFrame[] =>
-  exeption.stacktrace.frames;
+  exeption?.stacktrace?.frames ?? [];
 
 const filterStackFrameByFilename =
   (query: string) =>
-    (frame: StackFrame): boolean =>
-      frame.filename.includes(query);
+    (frame: StackFrame): boolean => {
+      const filename = frame?.filename;
+
+      return filename ? filename.includes(query) : false;
+    };
 
 const isInternalStackFrame = filterStackFrameByFilename("vviinn");
 
