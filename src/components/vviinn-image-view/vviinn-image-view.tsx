@@ -65,7 +65,7 @@ export class VviinnImageView {
   handleInitialImageLoad(ev: Event) {
     const target = ev.target as HTMLImageElement;
     const imageBounds = fromImage(target);
-    const padding = 16;
+    const padding = 12;
     const { x, y } = move(imageBounds, { x: padding, y: padding });
 
     const searchArea = {
