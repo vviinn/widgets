@@ -7,13 +7,17 @@ import { imageSearchState } from "../../store/imageSearch.store";
   shadow: true,
 })
 export class VviinnPreloader {
+  private isActive(): boolean {
+    return (
+      imageSearchState.loading || imageSearchState.objectDetectionInProgress
+    );
+  }
+
   render() {
     return (
       <Host
         class={{
-          active:
-            imageSearchState.loading ||
-            imageSearchState.objectDetectionInProgress,
+          active: this.isActive(),
         }}
       ></Host>
     );
