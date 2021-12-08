@@ -113,7 +113,7 @@ export class VviinnVpsWidget {
 
   render() {
     return (
-      <Host exportparts="product-card_price-sale">
+      <Host>
         <vviinn-overlayed-modal
           class={{ "first-screen": this.slidePosition === 0 }}
           active={this.active}
