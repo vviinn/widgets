@@ -113,7 +113,7 @@ export class VviinnVpsWidget {
 
   render() {
     return (
-      <Host>
+      <Host exportparts="product-card_price-sale">
         <vviinn-overlayed-modal
           class={{ "first-screen": this.slidePosition === 0 }}
           active={this.active}
@@ -218,8 +218,6 @@ export class VviinnVpsWidget {
                       salePrice={p.price.sale}
                       imageWidth={160}
                       image={p.image.thumbnail ?? p.image.original}
-                      part="product-card"
-                      exportparts="brand : product-card_brand, currency : product-card_currency, deeplink : product-card_deeplink, image : product-card_image, image-link : product-card_image-link, price-amount : product-card_price-amount, price-container : product-card_price-container, price-outdated : product-card_price-outdated, price-prefix : product-card_price-prefix, price-regular : product-card_price-regular, price-sale : product-card_price-sale, title: product-card_title"
                     />
                   ))}
                 </div>
