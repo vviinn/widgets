@@ -97,7 +97,7 @@ export class VviinnVpsButton {
           token={this.token}
           locale={this.locale}
           apiPath={this.apiPath}
-          exportparts="brand, currency, deeplink, image, image-link, price-amount, price-container, price-outdated, price-prefix, price-regular, price-sale, title"
+          exportparts="brand, currency, deeplink, image, image-link, price-amount, price-container, price-outdated, price-prefix, price-regular, price-sale, title, product-card"
         />
       </Host>
     );

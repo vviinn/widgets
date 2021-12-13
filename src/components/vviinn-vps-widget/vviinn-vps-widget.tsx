@@ -218,6 +218,7 @@ export class VviinnVpsWidget {
                       salePrice={p.price.sale}
                       imageWidth={160}
                       image={p.image.thumbnail ?? p.image.original}
+                      part="product-card"
                     />
                   ))}
                 </div>
