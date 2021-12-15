@@ -4,12 +4,15 @@ import * as E from "fp-ts/Either";
 import * as TE from "fp-ts/TaskEither";
 import { pipe } from "fp-ts/lib/function";
 import { resizeImage } from "../../Image/resizeImage";
-import { imageSearchState } from "../../store/imageSearch.store";
+import { imageSearchState, uploadHiresFile } from "../../store/imageSearch.store";
 
 import { uploadFile } from "../../store/imageSearch.store";
 import { checkImageType, fileDoesntExist } from "../../Image/error";
 import { imageFromFileTask } from "../../Image/fromFile";
 import { convertB64toFileTask } from "../../Image/toFile";
+import { BasicError } from "../../error";
+import { SearchSession } from "../../searchSession/searchSession";
+import { sequenceT } from "fp-ts/lib/Apply";
 
 /**
  * @part button -  button look and feel
@@ -32,10 +35,14 @@ export class VviinnImageSelector {
   }
 
   private async handleFileSelection(file: O.Option<File>) {
-    const convertImageTaskEither = pipe(
+    const checkFileAndFileType: E.Either<BasicError<string>, File> = pipe(
       file,
       E.fromOption(() => fileDoesntExist),
       E.chain(checkImageType),
+    );
+
+    const convertImageTaskEither = pipe(
+      checkFileAndFileType,
       TE.fromEither,
       TE.chainTaskK(imageFromFileTask),
       TE.mapLeft((error) => {
@@ -57,11 +64,23 @@ export class VviinnImageSelector {
       TE.map((image) => resizeImage(imageSearchState.imageWidth, image)),
       TE.chainTaskK(convertB64toFileTask),
       TE.chain(uploadFile),
-      TE.map(() => this.imageSelected.emit())
+      TE.map((response: SearchSession) => {
+        this.imageSelected.emit();
+        return response;
+      })
     );
 
-    await checkImageAndStartSessionTask();
+    const sessionStarted = await checkImageAndStartSessionTask();
     await sendImageToStoreTaskEither();
+
+    const sequenceTEither = sequenceT(E.Apply);
+
+    pipe(
+      sequenceTEither(sessionStarted, checkFileAndFileType),
+      E.map(([session, file]) => {
+        uploadHiresFile(session, file);
+      })
+    )
   }
 
   private isLoading(): boolean {
