@@ -127,10 +127,7 @@ const detectObjects = async (data: SearchSession) => {
   state.objectDetectionInProgress = false;
 };
 
-export const uploadHiresFile = async (
-  sessionResponse: SearchSession,
-  file: File
-) => {
+const uploadHiresFile = async (sessionResponse: SearchSession, file: File) => {
   const ionFile: F.IonFile = await F.fromFile(file);
   const formPayload = {
     image: ionFile,
@@ -193,7 +190,7 @@ export const uploadFile = (
     TE.map((sessionResponse) => {
       updateState(sessionResponse);
       detectObjects(sessionResponse);
-      //uploadHiresFile(sessionResponse, file);
+      uploadHiresFile(sessionResponse, file);
 
       return sessionResponse;
     }),
