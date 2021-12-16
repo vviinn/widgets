@@ -22,6 +22,8 @@ import { processBearerToken } from "../utils/token/tokenUtils";
 import { BasicError } from "../error";
 import { sequenceToEither } from "../utils/either";
 import { imageFormFromFile } from "../Image/form";
+import { checkFileWithExtention, resizeFileTo } from "./file-processing";
+import { imageFromFileTask } from "../Image/fromFile";
 
 const RESIZED_IMAGE_WIDTH = 300;
 const makeAuthorizedRequest = (
@@ -231,3 +233,34 @@ onChange("searchArea", (newSearchArea: O.Option<Rectangle>) => {
     })
   );
 });
+
+const setSelectedImage = (image: HTMLImageElement) => {
+  imageSearchState.image = O.some(image);
+  imageSearchState.imageUrl = O.some(image.src);
+};
+
+export const processSelectedFile = async (file: File) => {
+  const originFile = checkFileWithExtention(file);
+
+  const fileResizer = resizeFileTo(RESIZED_IMAGE_WIDTH);
+  const resizedFile = pipe(
+    originFile,
+    TE.fromEither,
+    TE.chainTaskK(fileResizer)
+  );
+
+  const session = await pipe(resizedFile, TE.chain(uploadFile))();
+
+  pipe(
+    sequenceToEither(session, originFile),
+    E.map(([sessionObject, file]) => uploadHiresFile(sessionObject, file))
+  );
+
+  await pipe(
+    resizedFile,
+    TE.chainTaskK(imageFromFileTask),
+    TE.map(setSelectedImage)
+  )();
+
+  return session;
+};

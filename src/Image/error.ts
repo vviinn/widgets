@@ -11,11 +11,6 @@ const unsupportedFileTypeError: BasicError<string> = {
   inner: "File format not supported",
 };
 
-export const fileDoesntExist: BasicError<string> = {
-  kind: "app",
-  inner: "File doesnt exist",
-};
-
 export const checkImageType = (
   file: File
 ): Either<BasicError<string>, File> => {

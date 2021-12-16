@@ -9,9 +9,11 @@ import {
 } from "@stencil/core";
 import { pipe } from "fp-ts/lib/function";
 import { toFile } from "../../../Image/toFile";
-import { imageSearchState, uploadFile } from "../../../store/imageSearch.store";
-import * as TE from "fp-ts/lib/TaskEither";
-import { some } from "fp-ts/lib/Option";
+import {
+  imageSearchState,
+  processSelectedFile,
+} from "../../../store/imageSearch.store";
+import * as E from "fp-ts/lib/Either";
 
 @Component({
   tag: "vviinn-example-image",
@@ -28,23 +30,19 @@ export class VviinnExampleImage {
   @Event() exampleImageSelected: EventEmitter<void>;
   @Event() exampleImageError: EventEmitter<void>;
 
-  private async selectImage(event: UIEvent) {
+  private async selectImage(_event: UIEvent) {
     this.selected = true;
 
-    const image = event.target as HTMLImageElement;
     const file = await toFile(this.src);
+    const processResult = await processSelectedFile(file);
 
-    await pipe(
-      uploadFile(file),
-      TE.map(() => {
-        imageSearchState.image = some(image);
-        imageSearchState.imageUrl = some(this.src);
-        this.exampleImageSelected.emit();
-      }),
-      TE.mapLeft(() => {
-        this.exampleImageError.emit();
-      })
-    )();
+    pipe(
+      processResult,
+      E.match(
+        () => this.exampleImageError.emit(),
+        () => this.exampleImageSelected.emit()
+      )
+    );
 
     this.selected = false;
   }
