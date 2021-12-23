@@ -35,7 +35,9 @@
     "enhanced-ecommerce-types": "0.0.3",
     "fp-ts": "^2.11",
     "openapi-typescript": "^4.4.0",
-    "rxjs": "^6.6.6"
+    "rxjs": "^6.6.6",
+    "save-dev": "^0.0.1-security",
+    "standard-version": "^9.3.2"
   },
   "devDependencies": {
     "@stencil/core": "^2.9.0",
