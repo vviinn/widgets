@@ -22,7 +22,10 @@
     "generate": "stencil generate",
     "start": "stencil build --dev --watch --serve --docs",
     "test": "stencil test --spec --e2e",
-    "test.watch": "stencil test --spec --e2e --watchAll"
+    "test.watch": "stencil test --spec --e2e --watchAll",
+    "release": "standard-version",
+    "release:minor": "npm run release -- --release-as minor",
+    "release:patch": "npm run release -- --release-as patch"
   },
   "license": "MIT",
   "dependencies": {
