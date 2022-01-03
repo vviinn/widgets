@@ -25,7 +25,7 @@ import { imageFormFromFile } from "../Image/form";
 import { checkFileWithExtention, resizeFileTo } from "./file-processing";
 import { imageFromFileTask } from "../Image/fromFile";
 
-const RESIZED_IMAGE_WIDTH = 300;
+const RESIZED_IMAGE_WIDTH = 500;
 const makeAuthorizedRequest = (
   token: string
 ): E.Either<BasicError<string>, RequestInit> =>
@@ -243,13 +243,14 @@ export const processSelectedFile = async (file: File) => {
   const originFile = checkFileWithExtention(file);
 
   const fileResizer = resizeFileTo(RESIZED_IMAGE_WIDTH);
-  const resizedFile = pipe(
+
+  const resizeFileTask = pipe(
     originFile,
     TE.fromEither,
     TE.chainTaskK(fileResizer)
   );
 
-  const session = await pipe(resizedFile, TE.chain(uploadFile))();
+  const session = await pipe(resizeFileTask, TE.chain(uploadFile))();
 
   pipe(
     sequenceToEither(session, originFile),
@@ -257,7 +258,7 @@ export const processSelectedFile = async (file: File) => {
   );
 
   await pipe(
-    resizedFile,
+    resizeFileTask,
     TE.chainTaskK(imageFromFileTask),
     TE.map(setSelectedImage)
   )();

@@ -29,6 +29,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@rgba-image/lanczos": "^0.1.1",
     "@sentry/browser": "^6.15.0",
     "@sentry/tracing": "^6.15.0",
     "@types/google.analytics": "0.0.41",
