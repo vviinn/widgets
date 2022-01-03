@@ -1,6 +1,5 @@
 import * as O from "fp-ts/lib/Option";
 import * as E from "fp-ts/lib/Either";
-//import * as TE from "fp-ts/lib/TaskEither";
 import * as T from "fp-ts/lib/Task";
 import { checkImageType } from "../Image/error";
 import { pipe } from "fp-ts/lib/function";

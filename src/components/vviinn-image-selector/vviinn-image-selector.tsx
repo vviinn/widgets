@@ -1,9 +1,10 @@
 import { Component, Host, h, Event, EventEmitter } from "@stencil/core";
-//import * as O from "fp-ts/lib/Option";
 import * as E from "fp-ts/Either";
-//import * as TE from "fp-ts/TaskEither";
 import { pipe } from "fp-ts/lib/function";
-import { imageSearchState, processSelectedFile } from "../../store/imageSearch.store";
+import {
+  imageSearchState,
+  processSelectedFile,
+} from "../../store/imageSearch.store";
 
 /**
  * @part button -  button look and feel
@@ -25,14 +26,19 @@ export class VviinnImageSelector {
 
     pipe(
       processingResult,
-      E.match(() => this.imageSelectedError.emit(), () => this.imageSelected.emit())
+      E.match(
+        () => this.imageSelectedError.emit(),
+        () => this.imageSelected.emit()
+      )
     );
 
     input.value = null;
   }
 
   private isLoading(): boolean {
-    return imageSearchState.loading || imageSearchState.objectDetectionInProgress;
+    return (
+      imageSearchState.loading || imageSearchState.objectDetectionInProgress
+    );
   }
 
   render() {

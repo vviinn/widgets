@@ -1,11 +1,12 @@
 export const imageToB64 = (i: HTMLImageElement): string => {
   const canvas = document.createElement("canvas");
-
-  canvas.width = i.naturalWidth;
-  canvas.height = i.naturalHeight;
+  const { naturalWidth, naturalHeight } = i;
   const ctx = canvas.getContext("2d");
 
-  ctx.drawImage(i, 0, 0, i.naturalWidth, i.naturalHeight);
+  canvas.width = naturalWidth;
+  canvas.height = naturalHeight;
+
+  ctx.drawImage(i, 0, 0, naturalWidth, naturalHeight);
 
   return canvas.toDataURL();
 };
