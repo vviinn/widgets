@@ -108,7 +108,7 @@ export class VviinnProductCard {
 
   render() {
     return (
-      <Host exportparts="brand, currency, deeplink, image, image-link, price-amount, price-container, price-outdated, price-prefix, price-regular, price-sale, title">
+      <Host exportparts="brand, currency, deeplink, image, type, image-link, price-amount, price-container, price-outdated, price-prefix, price-regular, price-sale, title">
         <Linked deeplink={this.deeplink} part="image-link">
           <img
             loading="lazy"

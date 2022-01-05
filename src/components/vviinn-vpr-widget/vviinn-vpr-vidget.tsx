@@ -6,6 +6,7 @@ import {
   Prop,
   State,
   Element,
+  Watch,
 } from "@stencil/core";
 import { pipe } from "fp-ts/lib/function";
 import * as TE from "fp-ts/lib/TaskEither";
@@ -56,6 +57,11 @@ export class VviinnVprWidget implements ComponentInterface {
   private cssPartsDetector: HTMLDivElement;
   private slider: HTMLVprSliderElement;
 
+  @Watch('productId')
+  handleProductIdChange() {
+    this.getRecommendations();
+  }
+
   connectedCallback() {
     state.apiPath = this.apiPath;
     state.currencySign = this.currencySign;
@@ -85,6 +91,10 @@ export class VviinnVprWidget implements ComponentInterface {
     state.pricePrefix = this.pricePrefix;
     state.currencySign = this.currencySign;
 
+    this.getRecommendations();
+  }
+
+  private async getRecommendations() {
     if (this.productId === undefined || this.token === undefined) return;
 
     const headers = createBearAuthedHeader(this.token);
