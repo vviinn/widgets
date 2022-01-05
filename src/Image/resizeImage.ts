@@ -1,4 +1,9 @@
 import { lanczos } from "@rgba-image/lanczos";
+import {
+  dimensionsFromImage,
+  ImageDimension,
+  scaleByLargestSide,
+} from "./sizing";
 
 const createCanvasWithContext = (): [
   HTMLCanvasElement,
@@ -22,22 +27,27 @@ const imageDataFromImage = (image: HTMLImageElement): ImageData => {
   return context.getImageData(0, 0, naturalWidth, naturalHeight);
 };
 
-const getImageAspectRatio = (image: HTMLImageElement): number => {
-  const { naturalWidth, naturalHeight } = image;
-
-  return naturalHeight / naturalWidth;
-};
-
 export const resizeImage = (width: number, i: HTMLImageElement): string => {
-  const aspectRatio = getImageAspectRatio(i);
+  const scale = scaleByLargestSide(width);
   const [destinationCanvas, destinationContext] = createCanvasWithContext();
-  const destinationImageData = new ImageData(width, width * aspectRatio);
+  const imageDimensions = dimensionsFromImage(i);
+  const [destinationWidth, destinationHeight] = scale(imageDimensions).map(
+    (d: ImageDimension) => d.size
+  );
+
+  const destinationImageData = new ImageData(
+    destinationWidth,
+    destinationHeight
+  );
+
   const originImageData = imageDataFromImage(i);
 
-  destinationCanvas.width = width;
-  destinationCanvas.height = width * aspectRatio;
+  destinationCanvas.width = destinationWidth;
+  destinationCanvas.height = destinationHeight;
 
   lanczos(originImageData, destinationImageData);
+
+  console.log(destinationWidth, destinationHeight);
 
   destinationContext.putImageData(destinationImageData, 0, 0);
 
