@@ -12,21 +12,6 @@ img {
   z-index: -1;
 }
 
-img.landscape {
-  height: auto;
-  width: 288px;
-}
-
-img.portrait {
-  height: 356px;
-  width: auto;
-}
-
-img.rectangle {
-  height: 288px;
-  width: 288px;
-}
-
 .image-preloader {
     background: rgba(0, 0, 0, 0.25);
     border-radius: 4px;
