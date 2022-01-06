@@ -6,54 +6,16 @@ import { pipe } from "fp-ts/lib/function";
 import * as O from "fp-ts/lib/Option";
 import { sequenceToOption } from "../../utils/option/option";
 import { fromImage, move } from "../../geometry/Rectangle";
-import * as N from "fp-ts/number";
+import { dimensionsFromImage, scaleByLargestSide } from "../../Image/sizing";
 
-enum ImageOrientation {
-  "portrait" = -1,
-  "rectangle" = 0,
-  "landscape" = 1,
-}
+const getImageSizes = (i: HTMLImageElement): [number, number] => {
+  const dimensions = dimensionsFromImage(i);
+  const resize = scaleByLargestSide(288)
+  const newDimensions = resize(dimensions);
 
-const widthMap = new Map<string, number | null>([
-  ["portrait", null],
-  ["rectangle", 288],
-  ["landscape", 288],
-]);
+  const sizes = newDimensions.map(d => d.size);
 
-const heightMap = new Map<string, number | null>([
-  ["portrait", 356],
-  ["rectangle", 288],
-  ["landscape", null],
-]);
-
-const ratioCalculator = new Map<string, (i: HTMLImageElement) => number>([
-  ["portrait", (i) => i.naturalWidth / i.naturalHeight],
-  ["rectangle", (_) => 1],
-  ["landscape", (i) => i.naturalHeight / i.naturalWidth],
-]);
-
-const getImageSizes = (i: HTMLImageElement, o: string): [number, number] => {
-  switch (o) {
-    case "rectangle": {
-      return [widthMap.get("rectangle"), heightMap.get("rectangle")];
-    }
-    case "landscape": {
-      const width = widthMap.get("landscape");
-      const ratioCalc = ratioCalculator.get("landscape");
-      const ratio = ratioCalc(i);
-      const height = width * ratio;
-
-      return [width, height];
-    }
-    case "portrait": {
-      const height = heightMap.get("portrait");
-      const ratioCalc = ratioCalculator.get("portrait");
-      const ratio = ratioCalc(i);
-      const width = height * ratio;
-
-      return [width, height];
-    }
-  }
+  return [sizes[0], sizes[1]];
 };
 
 @Component({
@@ -89,18 +51,11 @@ export class VviinnImageView {
     return pipe(
       sequenceToOption(imageSearchState.imageUrl, imageSearchState.image),
       O.map(([url, refImage]) => {
-        const sizeOrd = N.Ord.compare(
-          refImage.naturalWidth,
-          refImage.naturalHeight
-        );
-
-        const orientation = ImageOrientation[sizeOrd];
-        const [width, height] = getImageSizes(refImage, orientation);
+        const [width, height] = getImageSizes(refImage);
 
         const image = (
           <img
             decoding="async"
-            class={orientation}
             width={width}
             height={height}
             src={url}
