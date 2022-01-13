@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.1](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v1.1.0...v1.1.1) (2022-01-13)
+
+
+### Bug Fixes
+
+* reset loader after server errors ([3d70c97](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/3d70c976866ea59c1e5ed2e2eacebf80c6ddee58))
+
 ## [1.1.0](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v1.0.2...v1.1.0) (2022-01-06)
 
 
