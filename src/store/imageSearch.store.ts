@@ -195,11 +195,12 @@ export const uploadFile = (
     TE.map((sessionResponse) => {
       updateState(sessionResponse);
       detectObjects(sessionResponse);
-
+      state.loading = false;
       return sessionResponse;
     }),
     TE.mapLeft((error) => {
       state.serverError = true;
+      state.loading = false;
       return error;
     })
   );
@@ -232,6 +233,10 @@ onChange("searchArea", (newSearchArea: O.Option<Rectangle>) => {
       state.cropperHandlers = fromRectangle(area);
     })
   );
+});
+
+onChange("serverError", () => {
+  state.loading = false;
 });
 
 const setSelectedImage = (image: HTMLImageElement) => {
