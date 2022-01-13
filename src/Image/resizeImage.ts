@@ -47,8 +47,6 @@ export const resizeImage = (width: number, i: HTMLImageElement): string => {
 
   lanczos(originImageData, destinationImageData);
 
-  console.log(destinationWidth, destinationHeight);
-
   destinationContext.putImageData(destinationImageData, 0, 0);
 
   return destinationCanvas.toDataURL();

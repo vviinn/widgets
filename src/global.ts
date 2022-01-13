@@ -10,6 +10,9 @@ const setupSentry = () => {
     tracesSampleRate: 0.0,
     maxBreadcrumbs: 4,
     beforeSend: filterInternalExeptions,
+    allowUrls: [
+      /https?:\/\/cdn\.jsdelivr\.net\/npm\/vviinn-widgets.+/
+    ]
   });
 };
 
