@@ -146,60 +146,9 @@ vviinn-product-card {
   width: 100%;
 }
 
-vviinn-product-card::part(image-link) {
-  order: 1;
-}
-
-vviinn-product-card::part(deeplink) {
-  text-decoration: none;
-  order: 2;
-}
-
 vviinn-product-card::part(image) {
   border: 1px solid #eaeaea;
   margin-bottom: 8px;
-}
-
-vviinn-product-card::part(title),
-vviinn-product-card::part(brand) {
-  color: #525252;
-  font-size: 14px;
-  font-weight: 400;
-  justify-self: start;
-  line-height: 20px;
-  text-decoration: none;
-}
-
-vviinn-product-card::part(brand) {
-  line-height: 20px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #161616;
-  order: 3;
-}
-
-vviinn-product-card::part(product-type) {
-  display: none;
-}
-
-vviinn-product-card::part(price-container) {
-  display: flex;
-  gap: 8px;
-  order: 4;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 24px;
-}
-
-vviinn-product-card::part(price-regular),
-vviinn-product-card::part(price-discount) {
-  color: #161616;
-  order: 1;
-}
-
-vviinn-product-card::part(price-outdated) {
-  color: #8D8D8D;
-  order: 2;
 }
 
 search-filters span {
