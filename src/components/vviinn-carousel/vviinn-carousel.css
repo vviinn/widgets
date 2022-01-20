@@ -1,0 +1,25 @@
+:host {
+  display: flex;
+  flex-direction: row;
+}
+
+.content-wrapper * {
+  box-sizing: border-box;
+}
+
+.content-wrapper {
+  overflow-y: hidden;
+  overflow-x: auto;
+  flex-grow: 1;
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  grid-gap: 10px;
+  scroll-snap-type: x mandatory;
+}
+
+.content * {
+  scroll-snap-align: start;
+}
