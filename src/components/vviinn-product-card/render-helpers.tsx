@@ -69,7 +69,6 @@ export const Price: FunctionalComponent<PriceProps> = (props) => {
     <span class="price-container" part="price-container">
       {props.salePrice ? (
         [
-          <span class="price-outdated" part="price-outdated">{priceEl}</span>,
           <span class="price-sale" part="price-sale">
             <FormattedPrice
               prefix={props.prefix}
@@ -78,6 +77,7 @@ export const Price: FunctionalComponent<PriceProps> = (props) => {
               locale={props.locale}
             />
           </span>,
+          <span class="price-outdated" part="price-outdated">{priceEl}</span>
         ]
       ) : (
         <span class="price-regular" part="price-regular">{priceEl}</span>

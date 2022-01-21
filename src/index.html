@@ -5,16 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
     <title>Stencil Component Starter</title>
     <link rel="preconnect" href="https://cdn.vviinn.com">
+    <link rel="preconnect" href="https://d1rgjmn2wmqeif.cloudfront.net">
     <script type="module" src="/build/vviinn-widgets.esm.js"></script>
     <script nomodule src="/build/vviinn-widgets.js"></script>
     <style>
-     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
-
-     html, body { font-family: 'Inter', sans-serif; font-family: 'Inter', sans-serif;
-       height: 100vh;
-       width: 100vw;
+     html, body {
+       width: 600px;
        margin: 0;
-       padding: 0;
+       padding: 20px;
        display: grid;
        align-content: center;
        justify-content: center;
@@ -25,50 +23,76 @@
        position: absolute;
      }
 
-     vviinn-vps-widget::part(price-sale) {
-       color: red;
-     }
-
-     vviinn-vps-button::part(rootpart) {
-       color: green;
-     }
-
-     rootpart::part(price-sale) {
-       color: green;
+     vviinn-product-card::part(brand) {
+       display: flex;
      }
     </style>
   </head>
   <body>
-    <vviinn-vps-button
-      token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjkwLCJqdGkiOiI5NWE5YzM5My1hMDUxLTQwNzQtODcxYS03YzYxYWEwZThiYjIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.FzpQB_1v0CYsrenlQ15F-flm7BX67wHhGAwq-Pd8j0rlUqfgpgXQdnfpdh3vxeUYmPYRMOsnGzw4Zi8UVYoDyRZjlZNPph5UoQ2qSKKIzBnaXGFLFpd6sLC8PSuq6ci6BMHho_qaO-ddF6S4nwr06rC50IRHpQFcUWW_GpOwVd0"
-      locale="de-DE"
-      currency-sign="€"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="28"
-        height="28"
-        fill="none"
-      >
-        <path
-          fill="#525252"
-          fill-rule="evenodd"
-          d="M9.771 3.89a.875.875 0 01.728-.39h7c.293 0 .566.146.728.39l1.49 2.235h3.033a2.625 2.625 0 012.625 2.625V21a2.625 2.625 0 01-2.625 2.625H5.25A2.625 2.625 0 012.625 21V8.75A2.625 2.625 0 015.25 6.125h3.031l1.49-2.235zm1.197 1.36l-1.49 2.235a.875.875 0 01-.729.39H5.25a.875.875 0 00-.875.875V21a.875.875 0 00.875.875h17.5a.875.875 0 00.875-.875V8.75a.875.875 0 00-.875-.875h-3.5a.875.875 0 01-.729-.39l-1.49-2.235h-6.063z"
-          clip-rule="evenodd"
-        />
-        <path
-          fill="#525252"
-          fill-rule="evenodd"
-          d="M14 11.375a3.062 3.062 0 100 6.125 3.062 3.062 0 000-6.125zm-4.813 3.063a4.812 4.812 0 119.625 0 4.812 4.812 0 01-9.625 0z"
-          clip-rule="evenodd"
-        />
-      </svg>
-      <vviinn-example-image slot="vviinn-example-images-1" src="https://cdn.vviinn.com/0/fit/240/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9vc3Rlcm1hbm4tZXhhbXBsZS1pbWFnZTEuanBn" width="240" height="320"></vviinn-example-image>
-      <vviinn-example-image slot="vviinn-example-images-2" src="https://cdn.vviinn.com/0/fit/240/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9vc3Rlcm1hbm4tZXhhbXBsZS1pbWFnZTIuanBn" width="240" height="240"></vviinn-example-image>
-      <vviinn-example-image slot="vviinn-example-images-3" src="https://cdn.vviinn.com/0/fit/240/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9vc3Rlcm1hbm4tZXhhbXBsZS1pbWFnZTMuanBn" width="240" height="240"></vviinn-example-image>
-      <vviinn-example-image slot="vviinn-example-images-4" src="https://cdn.vviinn.com/0/fit/240/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9vc3Rlcm1hbm4tZXhhbXBsZS1pbWFnZTQuanBn" width="240" height="320"></vviinn-example-image>
-    </vviinn-vps-button>
-    <!-- <vviinn-vpr-widget token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjUxLCJqdGkiOiI1MThlOWNkNC1hYzlmLTRiMDMtOTEzNS03ZDRmNTgyZjRjOWUiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.kTNkhH90cpYUPVYvd7OAJJQ2WbUxAIY_MMJcLD1MxQxFiLx_0m3KkjTUk4ZyZIjPqd3jJj-NQglvlkV-RQA7fKk4oY3y7GxiLVKPaieEYi1ltxUChRNH-ggzgPQdxozRQh9TsIov-KJfLC9AUXUQBkbTBZF9FP4lOAAtNmDZ38Q" product-id="51-100060" api-path="https://api.stage.vviinn.com"></vviinn-vpr-widget> -->
-    
+    <!-- <vviinn-vps-button
+         token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjkwLCJqdGkiOiI5NWE5YzM5My1hMDUxLTQwNzQtODcxYS03YzYxYWEwZThiYjIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.FzpQB_1v0CYsrenlQ15F-flm7BX67wHhGAwq-Pd8j0rlUqfgpgXQdnfpdh3vxeUYmPYRMOsnGzw4Zi8UVYoDyRZjlZNPph5UoQ2qSKKIzBnaXGFLFpd6sLC8PSuq6ci6BMHho_qaO-ddF6S4nwr06rC50IRHpQFcUWW_GpOwVd0"
+         locale="de-DE"
+         currency-sign="€"
+         >
+         </vviinn-vps-button> -->
+    <!-- <vviinn-vpr-widget token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4" product-id="4114460310" api-path="https://api.vviinn.com"></vviinn-vpr-widget> -->
+    <vviinn-carousel>
+      <vviinn-product-card
+        product-title="Fragments 2022"
+        image="https://d1rgjmn2wmqeif.cloudfront.net/r/b/250192-1.jpg"
+        price="32.00"
+        brand="Bonobo"
+        image-width="200">
+      </vviinn-product-card>
+      <vviinn-product-card
+        product-title="Empathy Alpha"
+        image="https://d1rgjmn2wmqeif.cloudfront.net/r/b/266632.jpg"
+        price="20.99"
+        brand="clocolan"
+        image-width="200">
+      </vviinn-product-card>
+      <vviinn-product-card
+        product-title="Season Of The Lost"
+        image="https://d1rgjmn2wmqeif.cloudfront.net/r/b/256969.png"
+        price="11.49"
+        brand="AshTreJinkins"
+        image-width="200">
+      </vviinn-product-card>
+      <vviinn-product-card
+        product-title="Delay x Takuma"
+        image="https://d1rgjmn2wmqeif.cloudfront.net/r/b/265822.jpg"
+        price="32.5"
+        brand="Takuma Watanabe"
+        image-width="200">
+      </vviinn-product-card>
+      <vviinn-product-card
+        product-title="Forse"
+        image="https://d1rgjmn2wmqeif.cloudfront.net/r/b/255273.jpg"
+        price="46.49"
+        brand="Alessandro Cortini"
+        image-width="200">
+      </vviinn-product-card>
+      <vviinn-product-card
+        product-title="NOISEEM"
+        image="https://d1rgjmn2wmqeif.cloudfront.net/r/b/255055.jpg"
+        price="6.99"
+        brand="FUJI||||||||||TA"
+        image-width="200">
+      </vviinn-product-card>
+      <vviinn-product-card
+        product-title="The Silver Threshold"
+        image="https://d1rgjmn2wmqeif.cloudfront.net/r/b/254976.jpg"
+        price="9.99"
+        brand="hackedepicciotto"
+        image-width="200">
+      </vviinn-product-card>
+      <vviinn-product-card
+        product-title="Simulacrum"
+        image="https://d1rgjmn2wmqeif.cloudfront.net/r/b/249498-1.jpg"
+        price="21.99"
+        brand="Aho Ssan"
+        image-width="200">
+      </vviinn-product-card>
+    </vviinn-carousel>
 </html>
 
