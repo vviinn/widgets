@@ -114,8 +114,6 @@ export class VviinnProductCard {
             loading="lazy"
             part="image"
             class="image"
-            width={this.imageWidth}
-            height={this.imageWidth * this.imageRatio}
             src={processWidth(this.image, this.imageWidth)}
             alt={this.productTitle}
           />

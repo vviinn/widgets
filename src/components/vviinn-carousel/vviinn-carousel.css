@@ -1,6 +1,11 @@
 :host {
+  --vviinn-carousel-content-width: 0;
+  --vviinn-carousel-item-width: 300px;
+  --vviinn-carousel-columns: 2;
   display: flex;
   flex-direction: row;
+  position: relative;
+  width: var(--vviinn-carousel-content-width);
 }
 
 .content-wrapper * {
@@ -18,8 +23,49 @@
   flex-direction: row;
   grid-gap: 10px;
   scroll-snap-type: x mandatory;
+  overflow-y: hidden;
+  overflow-x: auto;
+  flex-grow: 1;
 }
 
-.content * {
+.content.modern > * {
+  min-width: var(--vviinn-carousel-item-width);
+}
+
+.content.left > * {
   scroll-snap-align: start;
+}
+
+.content.right > * {
+  scroll-snap-align: end;
+}
+
+button {
+  position: absolute;
+  top: calc(50% - 20px);
+  z-index: 1;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: white;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
+  border: none;
+  cursor: pointer;
+}
+
+.prev {
+  left: 0;
+}
+
+.next {
+  right: 0;
+}
+
+.items-group {
+  display: grid;
+  min-width: var(--vviinn-carousel-content-width);
+  grid-template-columns: repeat(auto-fit,minmax(140px, 1fr));
+  align-items: center;
+  justify-items: center;
+  grid-gap: 16px;
 }
