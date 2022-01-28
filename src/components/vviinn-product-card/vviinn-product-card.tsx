@@ -5,7 +5,7 @@ import { state } from "../../store/store";
 import * as O from "fp-ts/lib/Option";
 import { imageSearchState } from "../../store/imageSearch.store";
 import { Recommendation } from "../../recommendation/recommendation";
-import { Linked, Price, processWidth } from "./render-helpers";
+import { ImageProps, Linked, Price, ResponsiveImage, Image } from "./render-helpers";
 
 /**
  * @part brand - product brand.
@@ -33,7 +33,7 @@ export class VviinnProductCard {
   @Prop() deeplink: string | undefined;
   @Prop() image: string | undefined;
   @Prop() imageRatio: number = 1;
-  @Prop() imageWidth: number = 100;
+  @Prop() imageWidth: number = 200;
   @Prop() locale: string | undefined = undefined;
   @Prop() price: number | undefined;
   @Prop() pricePrefix: string | undefined = undefined;
@@ -41,6 +41,7 @@ export class VviinnProductCard {
   @Prop() productTitle: string;
   @Prop() productType: string | undefined;
   @Prop() salePrice: number | undefined;
+  @Prop() responsive: boolean = false;
 
   @State() imageLoaded: boolean = false;
 
@@ -106,19 +107,22 @@ export class VviinnProductCard {
     );
   }
 
+  private renderImage() {
+    const props: ImageProps = {
+      width: this.imageWidth,
+      height: this.imageWidth * this.imageRatio,
+      src: this.image,
+      title: this.productTitle
+    };
+
+    return this.responsive ? ResponsiveImage(props) : Image(props);
+  }
+
   render() {
     return (
       <Host exportparts="brand, currency, deeplink, image, type, image-link, price-amount, price-container, price-outdated, price-prefix, price-regular, price-sale, title">
         <Linked deeplink={this.deeplink} part="image-link">
-          <img
-            loading="lazy"
-            part="image"
-            class="image"
-            width={this.imageWidth}
-            height={this.imageWidth * this.imageRatio}
-            src={processWidth(this.image, this.imageWidth)}
-            alt={this.productTitle}
-          />
+          {this.renderImage()}
         </Linked>
         <Linked deeplink={this.deeplink} part="deeplink">
           <span class="title" part="title">{this.productTitle}</span>

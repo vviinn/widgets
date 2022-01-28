@@ -1,6 +1,15 @@
 :host {
+  --vviinn-progressbar-width: 0;
+  --vviinn-carousel-item-width: 150px;
+  --vviinn-carousel-columns: 4;
+  --vviinn-carousel-image-width-system: 140px;
+}
+
+.body {
   display: flex;
-  flex-direction: row;
+  position: relative;
+  width: var(--vviinn-carousel-content-width);
+  flex-direction: column;
 }
 
 .content-wrapper * {
@@ -13,13 +22,118 @@
   flex-grow: 1;
 }
 
+.progressbar {
+  display: none;
+  position: relative;
+}
+
+.progressbar-modern {
+  position: absolute;
+  height: 4px;
+  width: var(--vviinn-progressbar-width);
+  background: black;
+  margin-top: 16px;
+}
+
+.progressbar-classic {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: row;
+  grid-gap: 24px;
+  justify-content: center;
+}
+
+.bullet {
+  width: 10px;
+  height: 10px;
+  background: #E0E0E0;
+  border-radius: 50%;
+}
+
+.bullet.active {
+  background: #161616;
+}
+
+@media(min-width: 480px) {
+  .content::-webkit-scrollbar {
+    display: none;
+  }
+
+  .content {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .progressbar {
+    display: block;
+  }
+}
+
 .content {
   display: flex;
   flex-direction: row;
-  grid-gap: 10px;
+  grid-gap: 8px;
   scroll-snap-type: x mandatory;
+  overflow-y: hidden;
+  overflow-x: auto;
+  flex-grow: 1;
 }
 
-.content * {
+.content.left > * {
   scroll-snap-align: start;
+}
+
+.content.right > * {
+  scroll-snap-align: end;
+}
+
+:host(.modern) button {
+  border-radius: 50%;
+}
+
+:host(.classic) button {
+  border-radius: 2px;
+}
+
+button {
+  align-items: center;
+  background-color: white;
+  border: none;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  display: grid;
+  height: 40px;
+  justify-items: center;
+  position: absolute;
+  top: calc(50% - 20px);
+  width: 40px;
+  z-index: 1;
+  padding: 0;
+  margin: 0;
+}
+
+button.prev svg {
+  transform: rotate(180deg);
+  margin-left: -5px;
+}
+
+.prev {
+  left: 0;
+}
+
+.next {
+  right: 0;
+}
+
+.items-group {
+  display: grid;
+  min-width: 100%;
+  grid-template-columns: repeat(auto-fit, minmax(var(--vviinn-carousel-image-width, --vviinn-carousel-image-width-system), 1fr));
+  align-items: center;
+  justify-items: center;
+  grid-gap: 16px;
+}
+
+.items-group.incomplete {
+  grid-template-columns: repeat(auto-fill, minmax(var(--vviinn-carousel-image-width, --vviinn-carousel-image-width-system), 1fr));
 }
