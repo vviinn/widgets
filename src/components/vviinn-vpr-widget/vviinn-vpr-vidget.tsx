@@ -11,7 +11,7 @@ import {
 import { pipe } from "fp-ts/lib/function";
 import * as TE from "fp-ts/lib/TaskEither";
 import * as E from "fp-ts/lib/Either";
-import * as O from "fp-ts/lib/Option";
+//import * as O from "fp-ts/lib/Option";
 import { createBearAuthedHeader } from "./token-helpers";
 import { Interfaces } from "../../interfaces/recommendation";
 import state from "../../store/store";
@@ -54,10 +54,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @State() recommendations: Interfaces["VisualProductSearch"][] = [];
   @State() loaded: boolean = false;
 
-  private cssPartsDetector: HTMLDivElement;
-  private slider: HTMLVprSliderElement;
-
-  @Watch('productId')
+  @Watch("productId")
   handleProductIdChange() {
     this.getRecommendations();
   }
@@ -66,25 +63,6 @@ export class VviinnVprWidget implements ComponentInterface {
     state.apiPath = this.apiPath;
     state.currencySign = this.currencySign;
     state.locale = this.locale;
-  }
-
-  componentDidLoad() {
-    const detectorBounds = this.cssPartsDetector.getBoundingClientRect();
-
-    if (detectorBounds.width === 0 && detectorBounds.height === 0) {
-      state.fallbackStyles = pipe(
-        O.fromNullable(
-          document.head.getElementsByTagName("style")["vpr-styles"]
-        ),
-        O.map((style) =>
-          style.textContent.replace(
-            /(?:vi-vpr-view::part\()(\w+)-(\w+)\)/g,
-            ".$1.$2"
-          )
-        ),
-        O.getOrElse(() => "")
-      );
-    }
   }
 
   async componentWillLoad() {
@@ -122,11 +100,6 @@ export class VviinnVprWidget implements ComponentInterface {
 
   handleRecommendationsSucces(data: any) {
     this.recommendations = data?.extended ?? data;
-
-    setTimeout(() => {
-      this.slider.loadProducts(this.recommendations);
-    });
-
     imageSearchState.results = this.recommendations;
     this.loaded = true;
   }
@@ -136,23 +109,27 @@ export class VviinnVprWidget implements ComponentInterface {
       <Host
         class={{ loaded: this.loaded, empty: this.recommendations.length == 0 }}
         aria-hidden={this.loaded ? "false" : "true"}
-        exportparts="grid"
       >
         <style>{state.fallbackStyles}</style>
         <h2 part="recommendations-title">{this.blockTitle}</h2>
-        <vpr-slider
-          mode={this.sliderMode ? "auto" : "grid"}
-          imageWidth={this.imageWidth}
-          imageRatio={this.imageRatio}
-          productsInGrid={this.columns}
-          part="grid"
-          ref={(el) => (this.slider = el)}
-        ></vpr-slider>
-        <div
-          class="visually-hidden"
-          part="shadow-parts-detect"
-          ref={(el) => (this.cssPartsDetector = el)}
-        ></div>
+        <vviinn-carousel
+          exportparts="brand, currency, deeplink, image, type, image-link, price-amount, price-container, price-outdated, price-prefix, price-regular, price-sale, title, title: product-title"
+          mode={this.sliderMode ? "classic" : "modern"}
+          image-width={this.imageWidth}
+        >
+          {this.recommendations.map((r) => (
+            <vviinn-product-card
+              productTitle={r.title}
+              image={r.image.thumbnail}
+              brand={r.brand}
+              imageWidth={this.imageWidth}
+              imageRatio={this.imageRatio}
+              price={r.price.actual}
+              salePrice={r.price.sale}
+              responsive={this.sliderMode}
+            />
+          ))}
+        </vviinn-carousel>
       </Host>
     );
   }

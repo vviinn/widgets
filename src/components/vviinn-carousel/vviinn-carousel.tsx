@@ -1,5 +1,12 @@
 import { Component, Host, h, Element, State, Prop } from "@stencil/core";
 import { chunksOf } from "fp-ts/lib/Array";
+import { ChevronIcon } from "../vviinn-icons";
+
+const COLUMNS_NUMBER_CSS_VAR = "--vviinn-carousel-columns";
+const CAROUSEL_WIDTH_CSS_VAR = "--vviinn-carousel-content-width";
+const CAROUSEL_IMAGE_WIDTH_CSS_VAR = "--vviinn-carousel-image-width";
+const CONTENT_GROUP_CSS_CLASS = "items-group";
+const INCOMPLETE_GROUP_CSS_CLASS = "incomplete";
 
 type MoveDirection = "left" | "right";
 export type CarouselMode = "classic" | "modern";
@@ -13,26 +20,32 @@ export class VviinnCarousel {
   @Element() el: HTMLElement;
 
   @State() moveDirection: MoveDirection = "right";
+  @State() contentGroups: HTMLElement[] = [];
+  @State() activeContentGroup: number = 0;
 
-  @Prop() mode: CarouselMode = "classic";
+  @Prop() mode: CarouselMode = "modern";
+  @Prop() imageWidth: number = 140;
 
-  private moveStep: number = 0;
   private content: Element[] = [];
+  private isContentClonned: boolean = false;
   private resizeObserver: ResizeObserver = new ResizeObserver(() =>
     this.handleResize()
   );
 
   connectedCallback() {
-    this.setWidth();
+    this.el.style.setProperty(
+      CAROUSEL_IMAGE_WIDTH_CSS_VAR,
+      `${this.imageWidth}px`
+    );
   }
 
   disconnectedCallback() {
-    this.resizeObserver.unobserve(this.el.parentElement);
+    this.resizeObserver.unobserve(this.el.offsetParent);
   }
 
   componentDidRender() {
-    this.moveStep = this.calculateMoveStep();
-    this.resizeObserver.observe(this.el.parentElement);
+    this.setWidth();
+    this.processScrollbarWidth();
   }
 
   private getContentClassMap() {
@@ -45,6 +58,7 @@ export class VviinnCarousel {
 
   private handleResize() {
     this.setWidth();
+    this.processScrollbarWidth();
   }
 
   private calculateMoveStep() {
@@ -57,7 +71,9 @@ export class VviinnCarousel {
   }
 
   private setWidth() {
-    const parent = this.el.parentElement;
+    const parent = this.el.offsetParent;
+    if (!parent) return;
+
     const parentStyles = getComputedStyle(parent);
     const parentWidth = parent.getBoundingClientRect().width;
     const width =
@@ -65,44 +81,77 @@ export class VviinnCarousel {
       (parseInt(parentStyles["padding-right"]) +
         parseInt(parentStyles["padding-left"]));
 
-    this.el.style.setProperty("--vviinn-carousel-content-width", `${width}px`);
+    this.el.style.setProperty(CAROUSEL_WIDTH_CSS_VAR, `${width}px`);
   }
 
   private cloneSlottedContent(event: Event) {
+    if (this.isContentClonned) return;
+
     const slot: HTMLSlotElement = event.target as HTMLSlotElement;
     this.content = slot.assignedElements();
+    this.isContentClonned = true;
 
     this.renderContent();
+    this.setWidth();
+    this.resizeObserver.observe(this.el.offsetParent);
   }
 
   private renderContent() {
     const c: any =
       this.mode === "classic"
-        ? chunksOf(4)(this.content)
+        ? chunksOf(this.getColumnsNumber())(this.content)
         : this.content.reduce((fragment, element) => {
-          fragment.append(element);
-          return fragment;
-        }, new DocumentFragment());
+            fragment.append(element);
+            return fragment;
+          }, new DocumentFragment());
 
-    this.mode === "classic" ? this.renderGroup(c) : this.appendToContent(c);
+    this.mode === "classic" ? this.renderGroup(c) : this.renderLine(c);
   }
 
   private renderGroup(content: Element[][]) {
-    const kek = content.map((el: Element[]) => {
-      const lol = document.createElement("div");
-      lol.classList.add("items-group");
+    const columnsNumber = this.getColumnsNumber();
+    const groups = content.map((el: Element[]) => {
+      const container = document.createElement("div");
+      const groupClassNames =
+        el.length < columnsNumber
+          ? [CONTENT_GROUP_CSS_CLASS, INCOMPLETE_GROUP_CSS_CLASS]
+          : [CONTENT_GROUP_CSS_CLASS];
+
+      container.classList.add(...groupClassNames);
+
       return el.reduce((acc, el) => {
         acc.append(el);
         return acc;
-      }, lol);
+      }, container);
     });
 
-    const combinedElements = kek.reduce((fragment, element) => {
+    const combinedElements = groups.reduce((fragment, element) => {
       fragment.append(element);
       return fragment;
     }, new DocumentFragment());
 
     this.appendToContent(combinedElements);
+    this.contentGroups = this.getContentGroups();
+  }
+
+  private renderLine(item: HTMLElement | DocumentFragment) {
+    this.appendToContent(item);
+  }
+
+  private getActiveGroupIndex(): number {
+    const contentNodeLeft =
+      this.getContentNode()?.getBoundingClientRect()?.left;
+
+    if (!contentNodeLeft) return 0;
+
+    const groups = this.getContentGroups();
+    const groupsPositions = groups.map((g) => g.getBoundingClientRect().left);
+
+    const indexedPositions = groupsPositions
+      .map((value: number, index: number) => [value, index])
+      .filter((x) => x[0] >= 0);
+
+    return indexedPositions.length > 0 ? indexedPositions[0][1] : 0;
   }
 
   private getContentNode(): HTMLElement {
@@ -114,7 +163,19 @@ export class VviinnCarousel {
     return Array.from(children).map((c) => c as HTMLElement);
   }
 
-  appendToContent(content: HTMLElement | DocumentFragment) {
+  private getColumnsNumber(): number {
+    const styleSheet = getComputedStyle(this.el);
+    const columnsInCss = styleSheet.getPropertyValue(COLUMNS_NUMBER_CSS_VAR);
+    return parseInt(columnsInCss);
+  }
+
+  private getContentGroups(): HTMLElement[] {
+    return Array.from(
+      this.el.shadowRoot.querySelectorAll(`.${CONTENT_GROUP_CSS_CLASS}`)
+    );
+  }
+
+  private appendToContent(content: HTMLElement | DocumentFragment) {
     const contentNode = this.getContentNode();
     contentNode.append(content);
   }
@@ -123,10 +184,12 @@ export class VviinnCarousel {
     this.moveDirection = "right";
     const contentContainer = this.getContentNode();
 
-    contentContainer.scrollTo({
-      top: 0,
-      left: contentContainer.scrollLeft + this.moveStep,
-      behavior: "smooth",
+    requestAnimationFrame(() => {
+      contentContainer.scrollTo({
+        top: 0,
+        left: contentContainer.scrollLeft + this.calculateMoveStep(),
+        behavior: "smooth",
+      });
     });
   }
 
@@ -134,23 +197,62 @@ export class VviinnCarousel {
     this.moveDirection = "left";
     const contentContainer = this.getContentNode();
 
-    contentContainer.scrollTo({
-      top: 0,
-      left: contentContainer.scrollLeft - this.moveStep,
-      behavior: "smooth",
+    requestAnimationFrame(() => {
+      contentContainer.scrollTo({
+        top: 0,
+        left: contentContainer.scrollLeft - this.calculateMoveStep(),
+        behavior: "smooth",
+      });
     });
+  }
+
+  private processScrollbarWidth() {
+    const target = this.getContentNode();
+    const scrollRatio =
+      (target.scrollLeft + target.clientWidth) / target.scrollWidth;
+    const scrolledWidth = target.clientWidth * scrollRatio;
+
+    this.el.style.setProperty(
+      "--vviinn-progressbar-width",
+      `${scrolledWidth}px`
+    );
+
+    this.activeContentGroup = this.getActiveGroupIndex();
   }
 
   render() {
     return (
-      <Host>
-        <button class="prev" onClick={() => this.showPrev()}>
-          P
-        </button>
-        <div class={this.getContentClassMap()}></div>
-        <button class="next" onClick={() => this.showNext()}>
-          N
-        </button>
+      <Host class={this.mode}>
+        <div class="body">
+          <button class="prev" onClick={() => this.showPrev()}>
+            <ChevronIcon />
+          </button>
+          <div
+            class={this.getContentClassMap()}
+            onScroll={() => this.processScrollbarWidth()}
+          ></div>
+          <button class="next" onClick={() => this.showNext()}>
+            <ChevronIcon />
+          </button>
+        </div>
+        <div class="progressbar">
+          {this.mode === "modern" ? (
+            <div class="progressbar-modern"></div>
+          ) : (
+            <div class="progressbar-classic">
+              {this.contentGroups
+                .map((_, i) => i)
+                .map((i) => (
+                  <div
+                    class={{
+                      bullet: true,
+                      active: this.activeContentGroup === i,
+                    }}
+                  />
+                ))}
+            </div>
+          )}
+        </div>
         <slot onSlotchange={(x) => this.cloneSlottedContent(x)}></slot>
       </Host>
     );

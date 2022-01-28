@@ -3,7 +3,6 @@
   gap: 8px;
   flex-direction: column;
   height: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 .price-container {
@@ -39,11 +38,13 @@
   object-position: 50% 50%;
   object-fit: contain;
   text-align: center;
+  max-width: min-content;
 }
 
-img {
+img.responsive {
   width: 100%;
   height: auto;
+  aspect-ratio: 1;
 }
 
 .brand,

@@ -77,11 +77,44 @@ export const Price: FunctionalComponent<PriceProps> = (props) => {
               locale={props.locale}
             />
           </span>,
-          <span class="price-outdated" part="price-outdated">{priceEl}</span>
+          <span class="price-outdated" part="price-outdated">
+            {priceEl}
+          </span>,
         ]
       ) : (
-        <span class="price-regular" part="price-regular">{priceEl}</span>
+        <span class="price-regular" part="price-regular">
+          {priceEl}
+        </span>
       )}
     </span>
   );
 };
+
+export type ImageProps = {
+  width: number;
+  height: number;
+  title: string;
+  src: string;
+};
+
+export const Image = (props: ImageProps) => (
+  <img
+    loading="lazy"
+    part="image"
+    class="image"
+    width={props.width}
+    height={props.height}
+    src={processWidth(props.src, props.width)}
+    alt={props.title}
+  />
+);
+
+export const ResponsiveImage = (props: ImageProps) => (
+  <img
+    loading="lazy"
+    part="image"
+    class="image responsive"
+    src={processWidth(props.src, props.width)}
+    alt={props.title}
+  />
+);

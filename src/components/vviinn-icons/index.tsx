@@ -7,12 +7,7 @@ export const ArrowIcon = () => (
 );
 
 export const CameraIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="28"
-    height="28"
-    fill="none"
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none">
     <defs />
     <path
       fill="#525252"
@@ -27,15 +22,10 @@ export const CameraIcon = () => (
       clip-rule="evenodd"
     />
   </svg>
-)
+);
 
 export const OnboardingCard1Icon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="120"
-    height="120"
-    fill="none"
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" fill="none">
     <defs />
     <path
       fill="#393939"
@@ -50,15 +40,10 @@ export const OnboardingCard1Icon = () => (
       d="M60 42a24 24 0 100 48.001A24 24 0 0060 42zm12 26H62v10a2 2 0 01-4 0V68H48a2 2 0 010-4h10V54a2 2 0 014 0v10h10a2 2 0 110 4z"
     />
   </svg>
-)
+);
 
 export const OnboardingCard2Icon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="120"
-    height="120"
-    fill="none"
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" fill="none">
     <defs />
     <path
       fill="#393939"
@@ -69,15 +54,10 @@ export const OnboardingCard2Icon = () => (
       d="M12 36H8V20A12 12 0 0120 8h16v4H20a8 8 0 00-8 8v16zM112 36h-4V20a8.001 8.001 0 00-8-8H84V8h16a11.998 11.998 0 0112 12v16zM36 112H20a11.998 11.998 0 01-12-12V84h4v16a8 8 0 008 8h16v4zM100 112H84v-4h16a8 8 0 008-8V84h4v16c0 3.183-1.264 6.235-3.515 8.485A11.996 11.996 0 01100 112z"
     />
   </svg>
-)
+);
 
 export const OnboardingCard3Icon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="120"
-    height="120"
-    fill="none"
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" fill="none">
     <defs />
     <path
       class="colored"
@@ -88,14 +68,30 @@ export const OnboardingCard3Icon = () => (
       d="M100 7.94H20a12 12 0 00-12 12v80a11.998 11.998 0 0012 12h80c3.183 0 6.235-1.264 8.485-3.515A11.996 11.996 0 00112 99.94v-80a11.998 11.998 0 00-12-12zm-8 69.24a1.69 1.69 0 01-.85 1.45l-30.31 17.1a1.77 1.77 0 01-1.67 0l-30.32-17.1a1.689 1.689 0 01-.85-1.45V42.82a1.66 1.66 0 01.85-1.45l30.32-17.21a1.71 1.71 0 011.67 0l30.31 17.21a1.67 1.67 0 01.85 1.45v34.36z"
     />
   </svg>
-)
+);
 
 export const CheckIcon = () => (
-  <svg width="14" height="11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 10.414 0 5.413 1.413 4 5 7.586 12.585 0 14 1.415l-9 8.999Z" fill="var(--color-primary, var(--color-primary-system))" /></svg>
-)
+  <svg width="14" height="11" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M5 10.414 0 5.413 1.413 4 5 7.586 12.585 0 14 1.415l-9 8.999Z"
+      fill="var(--color-primary, var(--color-primary-system))"
+    />
+  </svg>
+);
 
 export const LoaderIcon = () => (
-  <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28">
+  <svg
+    width="100%"
+    height="100%"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 28 28"
+  >
     <path fill="#fff" d="M23,14a9,9,0,1,1-9-9V2A12,12,0,1,0,26,14Z" />
   </svg>
-)
+);
+
+export const ChevronIcon = () => (
+  <svg width="9" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="m9 8-7.895 8L0 14.88 6.79 8 0 1.12 1.105 0 9 8Z" fill="#525252" />
+  </svg>
+);
