@@ -8,26 +8,114 @@
     <link rel="preconnect" href="https://d1rgjmn2wmqeif.cloudfront.net">
     <script type="module" src="/build/vviinn-widgets.esm.js"></script>
     <script nomodule src="/build/vviinn-widgets.js"></script>
-    <style>
-     html, body {
-       width: 100vw;
-       margin: 0;
-       padding: 20px;
-       display: grid;
-       align-content: center;
-       justify-content: center;
-       box-sizing: border-box;
-     }
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400&display=swap" rel="stylesheet"> 
+    <!-- <style>
+         /* latin-ext */
+         @font-face {
+         font-family: 'Lato';
+         font-style: normal;
+         font-weight: 300;
+         src: url(https://fonts.gstatic.com/s/lato/v20/S6u9w4BMUTPHh7USSwaPGR_p.woff2) format('woff2');
+         unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+         }
+         /* latin */
+         @font-face {
+         font-family: 'Lato';
+         font-style: normal;
+         font-weight: 300;
+         src: url(https://fonts.gstatic.com/s/lato/v20/S6u9w4BMUTPHh7USSwiPGQ.woff2) format('woff2');
+         unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+         }
+         /* latin-ext */
+         @font-face {
+         font-family: 'Lato';
+         font-style: normal;
+         font-weight: 400;
+         src: url(https://fonts.gstatic.com/s/lato/v20/S6uyw4BMUTPHjxAwXjeu.woff2) format('woff2');
+         unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+         }
+         /* latin */
+         @font-face {
+         font-family: 'Lato';
+         font-style: normal;
+         font-weight: 400;
+         src: url(https://fonts.gstatic.com/s/lato/v20/S6uyw4BMUTPHjx4wXg.woff2) format('woff2');
+         unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+         }
+         /* latin-ext */
+         @font-face {
+         font-family: 'Lato';
+         font-style: normal;
+         font-weight: 700;
+         src: url(https://fonts.gstatic.com/s/lato/v20/S6u9w4BMUTPHh6UVSwaPGR_p.woff2) format('woff2');
+         unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+         }
+         /* latin */
+         @font-face {
+         font-family: 'Lato';
+         font-style: normal;
+         font-weight: 700;
+         src: url(https://fonts.gstatic.com/s/lato/v20/S6u9w4BMUTPHh6UVSwiPGQ.woff2) format('woff2');
+         unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+         }
 
-     vviinn-vps-button [slot] {
-       visibility: hidden;
-       position: absolute;
-     }
+         body {
+         font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+         font-size: 14px;
+         line-height: 1.42857143;
+         color: #333;
+         }
+         * {
+       --vviinn-carousel-columns: 6;
+         }
+         html, body {
+         margin: 0;
+         padding: 20px;
+         align-content: center;
+         justify-content: center;
+         box-sizing: border-box;
+         }
 
-     vviinn-product-card::part(brand) {
-       display: flex;
-     }
-    </style>
+         vviinn-vps-button [slot] {
+         visibility: hidden;
+         position: absolute;
+         }
+
+         vviinn-vpr-widget {
+         margin-bottom:50px
+         }
+         vviinn-vpr-widget.empty {
+         display:none
+         }
+         vviinn-vpr-widget::part(recommendations-title) {
+         margin-bottom:10px;
+         text-transform:uppercase;
+         text-align:center;
+         font-size:24px;
+         font-weight:300;
+         color:#ae9962
+         }
+
+         vviinn-vpr-widget::part(product-title) {
+         text-transform:uppercase;
+         font-weight:300;
+         color: #333;
+         text-decoration:none;
+         text-align:center
+         }
+
+         vviinn-vpr-widget::part(brand) {
+         display:none
+         }
+         vviinn-vpr-widget::part(price-regular) {
+         font-weight:normal
+         }
+         vviinn-vpr-widget::part(price-currency) {
+         font-weight:normal
+         }
+         </style> -->
   </head>
   <body>
     <!-- <vviinn-vps-button
@@ -36,64 +124,74 @@
          currency-sign="€"
          >
          </vviinn-vps-button> -->
-    <!-- <vviinn-vpr-widget token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4" product-id="4114460310" api-path="https://api.vviinn.com"></vviinn-vpr-widget> -->
-    <vviinn-carousel>
-      <vviinn-product-card
-        product-title="Fragments 2022"
-        image="https://d1rgjmn2wmqeif.cloudfront.net/r/b/250192-1.jpg"
-        price="32.00"
-        brand="Bonobo"
-        image-width="200">
-      </vviinn-product-card>
-      <vviinn-product-card
-        product-title="Empathy Alpha"
-        image="https://d1rgjmn2wmqeif.cloudfront.net/r/b/266632.jpg"
-        price="20.99"
-        brand="clocolan"
-        image-width="200">
-      </vviinn-product-card>
-      <vviinn-product-card
-        product-title="Season Of The Lost"
-        image="https://d1rgjmn2wmqeif.cloudfront.net/r/b/256969.png"
-        price="11.49"
-        brand="AshTreJinkins"
-        image-width="200">
-      </vviinn-product-card>
-      <vviinn-product-card
-        product-title="Delay x Takuma"
-        image="https://d1rgjmn2wmqeif.cloudfront.net/r/b/265822.jpg"
-        price="32.5"
-        brand="Takuma Watanabe"
-        image-width="200">
-      </vviinn-product-card>
-      <vviinn-product-card
-        product-title="Forse"
-        image="https://d1rgjmn2wmqeif.cloudfront.net/r/b/255273.jpg"
-        price="46.49"
-        brand="Alessandro Cortini"
-        image-width="200">
-      </vviinn-product-card>
-      <vviinn-product-card
-        product-title="NOISEEM"
-        image="https://d1rgjmn2wmqeif.cloudfront.net/r/b/255055.jpg"
-        price="6.99"
-        brand="FUJI||||||||||TA"
-        image-width="200">
-      </vviinn-product-card>
-      <vviinn-product-card
-        product-title="The Silver Threshold"
-        image="https://d1rgjmn2wmqeif.cloudfront.net/r/b/254976.jpg"
-        price="9.99"
-        brand="hackedepicciotto"
-        image-width="200">
-      </vviinn-product-card>
-      <vviinn-product-card
-        product-title="Simulacrum"
-        image="https://d1rgjmn2wmqeif.cloudfront.net/r/b/249498-1.jpg"
-        price="21.99"
-        brand="Aho Ssan"
-        image-width="200">
-      </vviinn-product-card>
-    </vviinn-carousel>
+    <div class="wrapper">
+      <vviinn-vpr-widget token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjYzLCJqdGkiOiI1MTIxZTE5Zi1hNzU5LTRiNDMtYWY2MS0yZGExMTJkNTA0MmUiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.MBMXwhQFbxysVVB01FxhXGx0I9JiaZnJL0ol_bmOopOfZYo8RxibDw1zK-PNdfkhi85SQUtug7V16wzAibhGOiMYEEHPV-zGDIaHSx7HCprqUeH0QmrinXllBtAy8E8vnS1c1Gt48BaCE2dsq7IIgmlJGU4gzod_NbdYytzIn1w" product-id="692526" api-path="https://api.vviinn.com" image-width="240" mode="classic"></vviinn-vpr-widget>
+    </div>
+    <!-- <vviinn-carousel>
+         <vviinn-product-card
+         product-title="Fragments 2022"
+         image="https://d1rgjmn2wmqeif.cloudfront.net/r/b/250192-1.jpg"
+         price="32.00"
+         brand="Bonobo"
+         image-width="200"
+         responsive="true">
+         </vviinn-product-card>
+         <vviinn-product-card
+         product-title="Empathy Alpha"
+         image="https://d1rgjmn2wmqeif.cloudfront.net/r/b/266632.jpg"
+         price="20.99"
+         brand="clocolan"
+         image-width="200"
+         responsive="true">
+         </vviinn-product-card>
+         <vviinn-product-card
+         product-title="Season Of The Lost"
+         image="https://d1rgjmn2wmqeif.cloudfront.net/r/b/256969.png"
+         price="11.49"
+         brand="AshTreJinkins"
+         image-width="200"
+         responsive="true">
+         </vviinn-product-card>
+         <vviinn-product-card
+         product-title="Delay x Takuma"
+         image="https://d1rgjmn2wmqeif.cloudfront.net/r/b/265822.jpg"
+         price="32.5"
+         brand="Takuma Watanabe"
+         image-width="200"
+         responsive="true">
+         </vviinn-product-card>
+         <vviinn-product-card
+         product-title="Forse"
+         image="https://d1rgjmn2wmqeif.cloudfront.net/r/b/255273.jpg"
+         price="46.49"
+         brand="Alessandro Cortini"
+         image-width="200"
+         responsive="true">
+         </vviinn-product-card>
+         <vviinn-product-card
+         product-title="NOISEEM"
+         image="https://d1rgjmn2wmqeif.cloudfront.net/r/b/255055.jpg"
+         price="6.99"
+         brand="FUJI||||||||||TA"
+         image-width="200"
+         responsive="true">
+         </vviinn-product-card>
+         <vviinn-product-card
+         product-title="The Silver Threshold"
+         image="https://d1rgjmn2wmqeif.cloudfront.net/r/b/254976.jpg"
+         price="9.99"
+         brand="hackedepicciotto"
+         image-width="200"
+         responsive="true">
+         </vviinn-product-card>
+         <vviinn-product-card
+         product-title="Simulacrum"
+         image="https://d1rgjmn2wmqeif.cloudfront.net/r/b/249498-1.jpg"
+         price="21.99"
+         brand="Aho Ssan"
+         image-width="200"
+         responsive="true">
+         </vviinn-product-card>
+         </vviinn-carousel> -->
 </html>
 

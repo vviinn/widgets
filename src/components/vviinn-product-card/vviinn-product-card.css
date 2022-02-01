@@ -1,7 +1,8 @@
 :host {
+  align-items: center;
   display: flex;
-  gap: 8px;
   flex-direction: column;
+  gap: 8px;
   height: 100%;
 }
 
@@ -53,15 +54,15 @@ img.responsive {
 }
 
 .title {
-  font-style: normal;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 24px;
-  color: #161616;
-  margin-bottom: 8px;
-  display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+  color: #161616;
+  display: -webkit-box;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px;
+  margin-bottom: 8px;
   overflow: hidden;
 }
 

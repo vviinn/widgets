@@ -9,17 +9,18 @@
   visibility: hidden;
 }
 
+:host(.classic) vviinn-product-card::part(image) {
+  border: 1px solid #DDDDDD;
+}
+
+:host(.modern) vviinn-product-card::part(price-container) {
+  align-self: start;
+  text-align: left;
+}
+
 .results {
   display: grid;
   grid-gap: 1rem;
-}
-
-.results[data-mode="grid"] {
-  grid-template-columns: repeat(var(--columns), var(--column-width))  
-}
-
-.results[data-mode="auto"] {
-  grid-template-columns: repeat(auto-fill, var(--column-width))  
 }
 
 .visually-hidden {
@@ -29,9 +30,4 @@
   z-index: -1;
   height: 0;
   width: 0;
-}
-
-::part(shadow-parts-detect) {
-  height: 10px!important;
-  width: 10px!important;
 }

@@ -1,0 +1,33 @@
+:host {
+  display: block;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+:host(.hidden) {
+  visibility: hidden;
+}
+
+.crop-area {
+  border: 1px solid white;
+  box-sizing: border-box;
+  position: absolute;
+  touch-action: none;
+  transition-property: border-color, opacity;
+  transition-duration: .25s;
+  transition-timing-function: ease-in-out;
+  z-index: 2;
+  position: relative;
+  will-change: transform;
+}
+
+.crop-area.active {
+  border-color: whitesmoke;
+}
+
+.crop-area.disabled {
+  opacity: 0.25;
+}
