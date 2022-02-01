@@ -1,0 +1,26 @@
+import * as E from "fp-ts/Either";
+import { IO } from "fp-ts/IO";
+import * as S from "fp-ts/Semigroup";
+import { BasicError } from "../error";
+export declare const getApiPath: IO<E.Either<BasicError<string>, string>>;
+export declare const mergeInitRequests: S.Semigroup<{
+  readonly body?: BodyInit;
+  readonly cache?: RequestCache;
+  readonly credentials?: RequestCredentials;
+  readonly headers?: HeadersInit;
+  readonly integrity?: string;
+  readonly keepalive?: boolean;
+  readonly method?: string;
+  readonly mode?: RequestMode;
+  readonly redirect?: RequestRedirect;
+  readonly referrer?: string;
+  readonly referrerPolicy?: ReferrerPolicy;
+  readonly signal?: AbortSignal;
+  readonly window?: any;
+}>;
+export declare type RequestWithPath = [string, RequestInit];
+export declare type RequestMethod = "GET" | "POST" | "DELETE";
+export declare const createBasicRequest: (method: RequestMethod) => RequestInit;
+export declare const createRequestFromMethod: (method: RequestMethod) => E.Either<any, RequestInit>;
+export declare const createInitGetRequest: E.Either<any, RequestInit>;
+export declare const createInitPostRequest: E.Either<any, RequestInit>;

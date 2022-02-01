@@ -1,0 +1,19 @@
+:host {
+}
+
+h3 {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 32px;
+  margin: 0;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.images {
+  display: block;
+  -moz-column-count: 2;
+       column-count: 2;
+  -moz-column-gap: 16px;
+       column-gap: 16px;  
+}

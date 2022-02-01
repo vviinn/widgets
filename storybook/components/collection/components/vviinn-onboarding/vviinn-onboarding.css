@@ -1,0 +1,58 @@
+:host {
+  --color-primary-system: #0F62FE;
+  --color-primary-hover-system: #014CDA;
+  --color-icons-system: #2F8EDF;
+  --spacer: 8px;
+}
+
+
+vviinn-onboarding {
+  display: block;
+}
+
+vviinn-onboarding h3 {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 32px;
+  margin: 0;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+vviinn-onboarding vviinn-slide {
+  background: #f4f4f4;
+  padding: 24px;
+}
+
+vviinn-onboarding svg {
+  padding: 16px 0;
+}
+
+vviinn-onboarding .text {
+  display: grid;
+  grid-gap: 8px;
+}
+
+vviinn-onboarding .text > h4 {
+  color: #161616;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+  margin: unset;
+  text-align: center;
+}
+
+vviinn-onboarding .text > p {
+  color: #525252;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 20px;
+  margin: unset;
+  text-align: center;
+}
+
+vviinn-onboarding .colored {
+  fill: var(--color-icons, var(--color-icons-system));
+}
+

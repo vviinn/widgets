@@ -16,6 +16,7 @@
   ],
   "scripts": {
     "build": "stencil build --docs",
+    "postbuild": "cp -R dist/* storybook/components && cp docs.json ./storybook",
     "build.watch": "stencil build --watch --docs",
     "build.docs": "stencil build --docs",
     "build_interfaces": "node ./scripts/generate-interfaces.js ./src/interfaces/generated.ts",

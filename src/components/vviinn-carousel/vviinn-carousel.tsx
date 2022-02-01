@@ -2,7 +2,7 @@ import { Component, Host, h, Element, State, Prop } from "@stencil/core";
 import { chunksOf } from "fp-ts/lib/Array";
 import { ChevronIcon } from "../vviinn-icons";
 
-const COLUMNS_NUMBER_CSS_VAR = "--vviinn-carousel-columns";
+const COLUMNS_NUMBER_CSS_VAR = "--vviinn-carousel-columns-internal";
 const CAROUSEL_WIDTH_CSS_VAR = "--vviinn-carousel-content-width";
 const CAROUSEL_IMAGE_WIDTH_CSS_VAR = "--vviinn-carousel-image-width";
 const CONTENT_GROUP_CSS_CLASS = "items-group";
@@ -25,9 +25,11 @@ export class VviinnCarousel {
 
   @Prop() mode: CarouselMode = "modern";
   @Prop() imageWidth: number = 140;
+  @Prop() showScroll: boolean = true;
 
   private content: Element[] = [];
   private isContentClonned: boolean = false;
+  private columns: number = 0;
   private resizeObserver: ResizeObserver = new ResizeObserver(() =>
     this.handleResize()
   );
@@ -46,6 +48,7 @@ export class VviinnCarousel {
   componentDidRender() {
     this.setWidth();
     this.processScrollbarWidth();
+    this.columns = this.getColumnsNumber();
   }
 
   private getContentClassMap() {
@@ -59,6 +62,15 @@ export class VviinnCarousel {
   private handleResize() {
     this.setWidth();
     this.processScrollbarWidth();
+
+    console.log("resize");
+
+    const newColumns = this.getColumnsNumber();
+    console.log("KEK", this.columns, newColumns);
+    if (newColumns !== this.columns) {
+      this.renderContent();
+      this.columns = newColumns;
+    }
   }
 
   private calculateMoveStep() {
@@ -177,6 +189,7 @@ export class VviinnCarousel {
 
   private appendToContent(content: HTMLElement | DocumentFragment) {
     const contentNode = this.getContentNode();
+    contentNode.innerHTML = "";
     contentNode.append(content);
   }
 
@@ -220,9 +233,24 @@ export class VviinnCarousel {
     this.activeContentGroup = this.getActiveGroupIndex();
   }
 
+  private showBullets(): boolean {
+    return this.mode === "classic" && this.showScroll;
+  }
+
+  private showScrollbar(): boolean {
+    return this.mode === "modern" && this.showScroll;
+  }
+
+  private getClassMap() {
+    return {
+      [this.mode]: true,
+      "show-scrollbar": this.showScrollbar(),
+    };
+  }
+
   render() {
     return (
-      <Host class={this.mode}>
+      <Host class={this.getClassMap()}>
         <div class="body">
           <button class="prev" onClick={() => this.showPrev()}>
             <ChevronIcon />
@@ -235,24 +263,22 @@ export class VviinnCarousel {
             <ChevronIcon />
           </button>
         </div>
-        <div class="progressbar">
-          {this.mode === "modern" ? (
-            <div class="progressbar-modern"></div>
-          ) : (
-            <div class="progressbar-classic">
-              {this.contentGroups
-                .map((_, i) => i)
-                .map((i) => (
-                  <div
-                    class={{
-                      bullet: true,
-                      active: this.activeContentGroup === i,
-                    }}
-                  />
-                ))}
-            </div>
-          )}
-        </div>
+        {this.showBullets() ? (
+          <div class="bullets">
+            {this.contentGroups
+              .map((_, i) => i)
+              .map((i) => (
+                <div
+                  class={{
+                    bullet: true,
+                    active: this.activeContentGroup === i,
+                  }}
+                />
+              ))}
+          </div>
+        ) : (
+          ""
+        )}
         <slot onSlotchange={(x) => this.cloneSlottedContent(x)}></slot>
       </Host>
     );

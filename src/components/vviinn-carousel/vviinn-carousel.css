@@ -1,7 +1,7 @@
 :host {
   --vviinn-progressbar-width: 0;
   --vviinn-carousel-item-width: 150px;
-  --vviinn-carousel-columns: 4;
+  --vviinn-carousel-columns-internal: var(--vviinn-carousel-columns, 4);
   --vviinn-carousel-image-width-system: 140px;
 }
 
@@ -22,20 +22,7 @@
   flex-grow: 1;
 }
 
-.progressbar {
-  display: none;
-  position: relative;
-}
-
-.progressbar-modern {
-  position: absolute;
-  height: 4px;
-  width: var(--vviinn-progressbar-width);
-  background: black;
-  margin-top: 16px;
-}
-
-.progressbar-classic {
+.bullets {
   margin-top: 16px;
   display: flex;
   flex-direction: row;
@@ -54,18 +41,14 @@
   background: #161616;
 }
 
-@media(min-width: 480px) {
-  .content::-webkit-scrollbar {
-    display: none;
-  }
-
-  .content {
+:host(:not(.show-scrollbar)) .content {
     -ms-overflow-style: none;
     scrollbar-width: none;
-  }
+}
 
-  .progressbar {
-    display: block;
+@media(max-width: 480px) {
+  :host(.modern) button {
+    display: none;
   }
 }
 
@@ -88,11 +71,11 @@
 }
 
 :host(.modern) button {
-  border-radius: 50%;
+  border-radius: 2px;
 }
 
 :host(.classic) button {
-  border-radius: 2px;
+  border-radius: 50%;
 }
 
 button {
@@ -136,4 +119,8 @@ button.prev svg {
 
 .items-group.incomplete {
   grid-template-columns: repeat(auto-fill, minmax(var(--vviinn-carousel-image-width, --vviinn-carousel-image-width-system), 1fr));
+}
+
+vviinn-product-card::part(price-container) {
+  text-align: center;
 }

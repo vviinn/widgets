@@ -11,7 +11,6 @@ import {
 import { pipe } from "fp-ts/lib/function";
 import * as TE from "fp-ts/lib/TaskEither";
 import * as E from "fp-ts/lib/Either";
-//import * as O from "fp-ts/lib/Option";
 import { createBearAuthedHeader } from "./token-helpers";
 import { Interfaces } from "../../interfaces/recommendation";
 import state from "../../store/store";
@@ -33,7 +32,7 @@ export class VviinnVprWidget implements ComponentInterface {
   /** Ratio of each recommended product image */
   @Prop() imageRatio: number = 1;
   /** Width of each recommended product image */
-  @Prop() imageWidth: number = 150;
+  @Prop() imageWidth: number = 300;
   /** Id of product you need recommendations for */
   @Prop() productId: string;
   /** vviinn customer token */
@@ -43,13 +42,15 @@ export class VviinnVprWidget implements ComponentInterface {
   /** prefix will shown before price */
   @Prop() pricePrefix: string;
   /** Use slider or grid view */
-  @Prop() sliderMode: boolean = false;
+  @Prop() mode: "classic" | "modern" = "modern";
   /** Campaign type */
   @Prop() campaignType: CampaignName = "VPR";
   /** Locale for currency formatting */
   @Prop() locale: string = "de-DE";
   /** @internal */
   @Prop() apiPath: string | undefined;
+
+  @Prop() showScroll = true;
 
   @State() recommendations: Interfaces["VisualProductSearch"][] = [];
   @State() loaded: boolean = false;
@@ -107,15 +108,16 @@ export class VviinnVprWidget implements ComponentInterface {
   render() {
     return (
       <Host
-        class={{ loaded: this.loaded, empty: this.recommendations.length == 0 }}
+        class={{ loaded: this.loaded, empty: this.recommendations.length == 0, [this.mode]: true }}
         aria-hidden={this.loaded ? "false" : "true"}
       >
         <style>{state.fallbackStyles}</style>
         <h2 part="recommendations-title">{this.blockTitle}</h2>
         <vviinn-carousel
           exportparts="brand, currency, deeplink, image, type, image-link, price-amount, price-container, price-outdated, price-prefix, price-regular, price-sale, title, title: product-title"
-          mode={this.sliderMode ? "classic" : "modern"}
-          image-width={this.imageWidth}
+          mode={this.mode}
+          imageWidth={this.imageWidth}
+          showScroll={this.showScroll}
         >
           {this.recommendations.map((r) => (
             <vviinn-product-card
@@ -126,7 +128,7 @@ export class VviinnVprWidget implements ComponentInterface {
               imageRatio={this.imageRatio}
               price={r.price.actual}
               salePrice={r.price.sale}
-              responsive={this.sliderMode}
+              responsive={this.mode === "classic" }
             />
           ))}
         </vviinn-carousel>

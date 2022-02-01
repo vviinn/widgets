@@ -1,0 +1,105 @@
+:host {
+  background: white;
+  border-radius: 4px;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-rows: -webkit-min-content auto;
+  grid-template-rows: min-content auto;
+  max-width: 960px;
+}
+
+@media (max-width: 415px) {
+  :host {
+    -webkit-animation-name: fade-in;
+            animation-name: fade-in;
+    -webkit-animation-duration: 0.5s;
+            animation-duration: 0.5s;
+    -webkit-animation-fill-mode: forwards;
+            animation-fill-mode: forwards;
+  }
+
+  :host(.closed) {
+    -webkit-animation-name: fade-out;
+            animation-name: fade-out;
+    -webkit-animation-fill-mode: none;
+            animation-fill-mode: none;
+  }
+
+  .body {
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 640px) and (min-width: 415px) {
+  :host {
+    max-width: 80%;
+  }
+}
+
+.head {
+  align-items: center;
+  border-bottom: 1px solid #F4F4F4;
+  display: grid;
+  grid-gap: 16px;
+  grid-template-columns: -webkit-min-content auto -webkit-min-content;
+  grid-template-columns: min-content auto min-content;
+  justify-items: center;
+  padding: 16px;
+}
+
+.title {
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: grid;
+  padding: unset;
+}
+
+@-webkit-keyframes fade-in {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+@-webkit-keyframes fade-out {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes fade-out {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(100%);
+  }
+}
