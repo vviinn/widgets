@@ -42,9 +42,7 @@ export class VviinnCarousel {
   }
 
   disconnectedCallback() {
-    if (this.el.offsetParent) {
-      this.resizeObserver.unobserve(this.el.offsetParent);
-    }
+    this.resizeObserver.disconnect();
   }
 
   componentDidRender() {
