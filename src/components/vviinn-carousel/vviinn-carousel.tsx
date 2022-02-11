@@ -42,7 +42,9 @@ export class VviinnCarousel {
   }
 
   disconnectedCallback() {
-    this.resizeObserver.unobserve(this.el.offsetParent);
+    if (this.el.offsetParent) {
+      this.resizeObserver.unobserve(this.el.offsetParent);
+    }
   }
 
   componentDidRender() {
@@ -63,10 +65,8 @@ export class VviinnCarousel {
     this.setWidth();
     this.processScrollbarWidth();
 
-    console.log("resize");
-
     const newColumns = this.getColumnsNumber();
-    console.log("KEK", this.columns, newColumns);
+
     if (newColumns !== this.columns) {
       this.renderContent();
       this.columns = newColumns;
