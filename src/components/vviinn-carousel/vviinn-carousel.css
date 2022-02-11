@@ -125,3 +125,9 @@ button.prev svg {
 vviinn-product-card::part(price-container) {
   text-align: center;
 }
+
+:host(.classic) vviinn-product-card::part(title),
+:host(.classic) vviinn-product-card::part(brand),
+:host(.classic) vviinn-product-card::part(type) {
+  text-align: center;
+}
