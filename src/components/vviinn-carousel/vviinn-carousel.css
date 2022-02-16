@@ -119,7 +119,7 @@ button.prev svg {
 }
 
 .items-group.incomplete {
-  grid-template-columns: repeat(auto-fill, minmax(var(--vviinn-carousel-image-width, --vviinn-carousel-image-width-system), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(var(--vviinn-carousel-image-width, --vviinn-carousel-image-width-system), 1fr));
 }
 
 vviinn-product-card::part(price-container) {
