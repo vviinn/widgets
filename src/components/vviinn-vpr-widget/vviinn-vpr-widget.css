@@ -13,9 +13,10 @@
   border: 1px solid #DDDDDD;
 }
 
-:host(.modern) vviinn-product-card::part(price-container) {
-  align-self: start;
+vviinn-product-card::part(price-container) {
+  align-self: flex-start;
   text-align: left;
+  display: flex;
 }
 
 .results {
@@ -30,4 +31,21 @@
   z-index: -1;
   height: 0;
   width: 0;
+}
+
+:host(.classic) vviinn-product-card::part(title),
+:host(.classic) vviinn-product-card::part(brand),
+:host(.classic) vviinn-product-card::part(type) {
+  text-align: center;
+}
+
+:host(.classic) vviinn-product-card::part(price-container) {
+  align-self: center;
+}
+
+:host(.modern) vviinn-product-card::part(title),
+:host(.modern) vviinn-product-card::part(brand),
+:host(.modern) vviinn-product-card::part(type) {
+  text-align: left;
+  max-width: unset;
 }

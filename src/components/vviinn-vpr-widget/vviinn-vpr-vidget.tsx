@@ -128,7 +128,9 @@ export class VviinnVprWidget implements ComponentInterface {
               imageRatio={this.imageRatio}
               price={r.price.actual}
               salePrice={r.price.sale}
-              responsive={this.mode === "classic" }
+              responsive={this.mode === "classic"}
+              dimmedBackground={this.mode === "modern"}
+              exportparts="title"
             />
           ))}
         </vviinn-carousel>
