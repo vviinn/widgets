@@ -42,6 +42,7 @@ export class VviinnProductCard {
   @Prop() productType: string | undefined;
   @Prop() salePrice: number | undefined;
   @Prop() responsive: boolean = false;
+  @Prop() dimmedBackground: boolean = false;
 
   @State() imageLoaded: boolean = false;
 
@@ -120,7 +121,7 @@ export class VviinnProductCard {
 
   render() {
     return (
-      <Host exportparts="brand, currency, deeplink, image, type, image-link, price-amount, price-container, price-outdated, price-prefix, price-regular, price-sale, title">
+      <Host exportparts="brand, currency, deeplink, image, type, image-link, price-amount, price-container, price-outdated, price-prefix, price-regular, price-sale, title" class={{dimmed: this.dimmedBackground}}>
         <Linked deeplink={this.deeplink} part="image-link">
           {this.renderImage()}
         </Linked>
