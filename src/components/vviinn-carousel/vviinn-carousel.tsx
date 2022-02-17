@@ -38,16 +38,7 @@ export class VviinnCarousel {
   );
 
   connectedCallback() {
-    const itemWidth = parseInt(
-      getComputedStyle(this.el).getPropertyValue(CAROUSEL_IMAGE_WIDTH_CSS_VAR)
-    );
-
-    if (!isNaN(itemWidth)) return;
-
-    this.el.style.setProperty(
-      CAROUSEL_IMAGE_WIDTH_CSS_VAR,
-      `${this.getItemWidth()}px`
-    );
+    this.setItemWidth();
   }
 
   disconnectedCallback() {
@@ -63,8 +54,20 @@ export class VviinnCarousel {
     this.mutationObserver.observe(slot, { subtree: true, childList: true });
   }
 
-  private getItemWidth(): number {
-    return 0;
+  private getItemWidthFromDocument(): number {
+    return parseInt(
+      getComputedStyle(document.body).getPropertyValue(CAROUSEL_IMAGE_WIDTH_CSS_VAR)
+    );
+  }
+
+  private setItemWidth() {
+    const widthInDocument = this.getItemWidthFromDocument();
+    const itemWidth = isNaN(widthInDocument) ? this.imageWidth : widthInDocument;
+
+    this.el.style.setProperty(
+      CAROUSEL_IMAGE_WIDTH_CSS_VAR,
+      `${itemWidth}px`
+    );
   }
 
   private getContentClassMap() {
@@ -78,6 +81,7 @@ export class VviinnCarousel {
   private handleResize() {
     this.setWidth();
     this.processScrollbarWidth();
+    this.setItemWidth();
 
     const newColumns = this.getColumnsNumber();
 
