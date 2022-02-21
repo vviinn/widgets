@@ -151,6 +151,12 @@ vviinn-product-card::part(image) {
   margin-bottom: 8px;
 }
 
+vviinn-product-card::part(price-container),
+vviinn-product-card::part(deeplink),
+vviinn-product-card::part(title) {
+  align-self: start;
+}
+
 search-filters span {
   display: none;
 }
