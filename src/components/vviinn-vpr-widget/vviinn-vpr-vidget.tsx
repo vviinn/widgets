@@ -121,6 +121,7 @@ export class VviinnVprWidget implements ComponentInterface {
         >
           {this.recommendations.map((r) => (
             <vviinn-product-card
+              productId={r.productId}
               productTitle={r.title}
               image={r.image.thumbnail}
               brand={r.brand}
