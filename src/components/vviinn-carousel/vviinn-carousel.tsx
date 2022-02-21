@@ -14,7 +14,7 @@ export type CarouselMode = "classic" | "modern";
 @Component({
   tag: "vviinn-carousel",
   styleUrl: "vviinn-carousel.css",
-  shadow: true,
+  shadow: false,
 })
 export class VviinnCarousel {
   @Element() el: HTMLElement;
@@ -28,17 +28,17 @@ export class VviinnCarousel {
   @Prop() showScroll: boolean = true;
 
   private content: Element[] = [];
-  private isContentClonned: boolean = false;
   private columns: number = 0;
   private resizeObserver: ResizeObserver = new ResizeObserver(() =>
     this.handleResize()
   );
 
+  private mutationObserver = new MutationObserver(() =>
+    this.cloneSlottedContent()
+  );
+
   connectedCallback() {
-    this.el.style.setProperty(
-      CAROUSEL_IMAGE_WIDTH_CSS_VAR,
-      `${this.imageWidth}px`
-    );
+    this.setItemWidth();
   }
 
   disconnectedCallback() {
@@ -49,6 +49,25 @@ export class VviinnCarousel {
     this.setWidth();
     this.processScrollbarWidth();
     this.columns = this.getColumnsNumber();
+    const slot = this.el.querySelector("#slot");
+
+    this.mutationObserver.observe(slot, { subtree: true, childList: true });
+  }
+
+  private getItemWidthFromDocument(): number {
+    return parseInt(
+      getComputedStyle(document.body).getPropertyValue(CAROUSEL_IMAGE_WIDTH_CSS_VAR)
+    );
+  }
+
+  private setItemWidth() {
+    const widthInDocument = this.getItemWidthFromDocument();
+    const itemWidth = isNaN(widthInDocument) ? this.imageWidth : widthInDocument;
+
+    this.el.style.setProperty(
+      CAROUSEL_IMAGE_WIDTH_CSS_VAR,
+      `${itemWidth}px`
+    );
   }
 
   private getContentClassMap() {
@@ -62,6 +81,7 @@ export class VviinnCarousel {
   private handleResize() {
     this.setWidth();
     this.processScrollbarWidth();
+    this.setItemWidth();
 
     const newColumns = this.getColumnsNumber();
 
@@ -94,16 +114,18 @@ export class VviinnCarousel {
     this.el.style.setProperty(CAROUSEL_WIDTH_CSS_VAR, `${width}px`);
   }
 
-  private cloneSlottedContent(event: Event) {
-    if (this.isContentClonned) return;
+  private cloneSlottedContent() {
+    const slot = this.el.querySelector("#slot");
 
-    const slot: HTMLSlotElement = event.target as HTMLSlotElement;
-    this.content = slot.assignedElements();
-    this.isContentClonned = true;
+    const content = Array.from(slot.children);
 
-    this.renderContent();
-    this.setWidth();
-    this.resizeObserver.observe(this.el.offsetParent);
+    if (content.length > 0) {
+      this.content = content;
+      this.renderContent();
+      this.setWidth();
+      this.resizeObserver.observe(this.el.offsetParent);
+      this.mutationObserver.disconnect();
+    }
   }
 
   private renderContent() {
@@ -165,7 +187,7 @@ export class VviinnCarousel {
   }
 
   private getContentNode(): HTMLElement {
-    return this.el.shadowRoot.querySelector(".content");
+    return this.el.querySelector(".content");
   }
 
   private getContent(): HTMLElement[] {
@@ -180,9 +202,7 @@ export class VviinnCarousel {
   }
 
   private getContentGroups(): HTMLElement[] {
-    return Array.from(
-      this.el.shadowRoot.querySelectorAll(`.${CONTENT_GROUP_CSS_CLASS}`)
-    );
+    return Array.from(this.el.querySelectorAll(`.${CONTENT_GROUP_CSS_CLASS}`));
   }
 
   private appendToContent(content: HTMLElement | DocumentFragment) {
@@ -212,6 +232,18 @@ export class VviinnCarousel {
       contentContainer.scrollTo({
         top: 0,
         left: contentContainer.scrollLeft - this.calculateMoveStep(),
+        behavior: "smooth",
+      });
+    });
+  }
+
+  private scroll(index: number) {
+    const contentContainer = this.getContentNode();
+    
+    requestAnimationFrame(() => {
+      contentContainer.scrollTo({
+        top: 0,
+        left: this.calculateMoveStep() * index,
         behavior: "smooth",
       });
     });
@@ -271,13 +303,16 @@ export class VviinnCarousel {
                     bullet: true,
                     active: this.activeContentGroup === i,
                   }}
+                  onClick={() => this.scroll(i) }
                 />
               ))}
           </div>
         ) : (
           ""
         )}
-        <slot onSlotchange={(x) => this.cloneSlottedContent(x)}></slot>
+        <div id="slot">
+          <slot></slot>
+        </div>
       </Host>
     );
   }
