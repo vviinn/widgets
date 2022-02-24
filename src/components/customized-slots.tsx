@@ -1,16 +1,21 @@
 import { h } from "@stencil/core";
 
 const defaultSlotsNames: string[] = [
+  "vviinn-onboarding-title",
   "vviinn-onboarding-card-1-icon",
   "vviinn-onboarding-card-1-text",
   "vviinn-onboarding-card-2-icon",
   "vviinn-onboarding-card-2-text",
   "vviinn-onboarding-card-3-icon",
   "vviinn-onboarding-card-3-text",
+  "vviinn-example-images-title",
   "vviinn-example-images-1",
   "vviinn-example-images-2",
   "vviinn-example-images-3",
   "vviinn-example-images-4",
+  "vviinn-teaser-text",
+  "vviinn-image-upload-button-text",
+  "vviinn-privacy-badge-text"
 ];
 
 const renderNamedSlot = (name: string) => <slot name={name} />;

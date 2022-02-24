@@ -2,6 +2,7 @@ import { Component, Host, h, State, Prop, Element, Watch } from "@stencil/core";
 import state from "../../store/store";
 import { imageSearchState } from "../../store/imageSearch.store";
 import * as O from "fp-ts/lib/Option";
+import { slotChangeListener } from "../customized-slots";
 
 /**
  * @prop --color-primary: color used for action button, slider bullets and selected detected object;
@@ -59,6 +60,10 @@ export class VviinnVpsWidget {
     } else {
       document.body.style.overflow = this.overflow;
     }
+  }
+
+  componentWillLoad() {
+    slotChangeListener(this, this.el);
   }
 
   connectedCallback() {
@@ -168,7 +173,9 @@ export class VviinnVpsWidget {
                         clip-rule="evenodd"
                       />
                     </svg>
-                    <span>Kamera oder Bild auswählen</span>
+                    <slot name="vviinn-image-upload-button-text">
+                      <span>Kamera oder Bild auswählen</span>
+                    </slot>
                   </span>
                 </vviinn-image-selector>
                 <vviinn-privacy-badge class={{ hidden: this.haveErrors() }} />

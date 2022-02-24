@@ -8,6 +8,7 @@ import { slotChangeListener } from "../customized-slots";
 })
 export class VviinnExampleImages {
   @Element() el: HTMLElement;
+
   @Event() imageSelected: EventEmitter<void>;
   @Event() imageSelectedError: EventEmitter<void>;
 
@@ -28,7 +29,9 @@ export class VviinnExampleImages {
   render() {
     return (
       <Host>
-        <h3>Mit den Beispielbildern die Suche direkt ausprobieren</h3>
+        <slot name="vviinn-example-images-title">
+          <h3>Mit den Beispielbildern die Suche direkt ausprobieren</h3>
+        </slot>
         <div class="images">
           <slot name="vviinn-example-images-1">
             <vviinn-example-image

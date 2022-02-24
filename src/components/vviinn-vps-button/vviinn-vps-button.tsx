@@ -13,16 +13,21 @@ import { CameraIcon } from "../vviinn-icons";
 import { SlotSkeleton } from "../customized-slots";
 
 /**
+ * @slot vviinn-onboarding-title
  * @slot vviinn-onboarding-card-1-icon
  * @slot vviinn-onboarding-card-1-text
  * @slot vviinn-onboarding-card-2-icon
  * @slot vviinn-onboarding-card-2-text
  * @slot vviinn-onboarding-card-3-icon
  * @slot vviinn-onboarding-card-3-text
+ * @slot vviinn-example-images-title
  * @slot vviinn-example-images-1
  * @slot vviinn-example-images-2
  * @slot vviinn-example-images-3
  * @slot vviinn-example-images-4
+ * @slot vviinn-teaser-text
+ * @slot vviinn-image-upload-button-text
+ * @slot vviinn-privacy-badge-text
  *
  * @part brand - product brand.
  * @part currency - currency sign. Renders after price-amount.

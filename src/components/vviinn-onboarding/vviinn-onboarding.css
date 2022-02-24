@@ -1,10 +1,10 @@
 @import "../../variables.css";
 
-vviinn-onboarding {
+::host {
   display: block;
 }
 
-vviinn-onboarding h3 {
+h3 {
   font-size: 22px;
   font-weight: 600;
   line-height: 32px;
@@ -13,21 +13,21 @@ vviinn-onboarding h3 {
   text-align: center;
 }
 
-vviinn-onboarding vviinn-slide {
+vviinn-slide {
   background: #f4f4f4;
   padding: 24px;
 }
 
-vviinn-onboarding svg {
+svg {
   padding: 16px 0;
 }
 
-vviinn-onboarding .text {
+.text {
   display: grid;
   grid-gap: 8px;
 }
 
-vviinn-onboarding .text > h4 {
+.text > h4 {
   color: #161616;
   font-size: 18px;
   font-weight: 600;
@@ -36,7 +36,7 @@ vviinn-onboarding .text > h4 {
   text-align: center;
 }
 
-vviinn-onboarding .text > p {
+.text > p {
   color: #525252;
   font-size: 14px;
   font-style: normal;
@@ -46,7 +46,7 @@ vviinn-onboarding .text > p {
   text-align: center;
 }
 
-vviinn-onboarding .colored {
+.colored {
   fill: var(--color-icons, var(--color-icons-system));
 }
 
