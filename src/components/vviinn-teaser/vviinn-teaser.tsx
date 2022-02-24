@@ -1,4 +1,5 @@
-import { Component, Host, h } from "@stencil/core";
+import { Component, Host, h, Element } from "@stencil/core";
+import { slotChangeListener } from "../customized-slots";
 
 @Component({
   tag: "vviinn-teaser",
@@ -6,6 +7,12 @@ import { Component, Host, h } from "@stencil/core";
   shadow: true,
 })
 export class VviinnTeaser {
+  @Element() el: HTMLElement;
+  
+  componentWillLoad() {
+    slotChangeListener(this, this.el);
+  }
+
   render() {
     return (
       <Host>
@@ -16,7 +23,9 @@ export class VviinnTeaser {
             <path fill="#C6C6C6" d="M24 48H8V35.993L18 26l11.172 11.172L32 34.336 20.828 23.165a4 4 0 00-5.656 0L8 30.336V8h40v12h4V8a4.004 4.004 0 00-4-4H8a4.004 4.004 0 00-4 4v40a4.005 4.005 0 004 4h16v-4z" />
           </svg>
           <span class="vviinn-teaser-text">
-            Finde Produkte auf <br /> einem Foto
+            <slot name="vviinn-teaser-text">
+              Finde Produkte auf <br /> einem Foto
+            </slot>
           </span>
         </slot>
       </Host>
