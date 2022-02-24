@@ -9,7 +9,7 @@
   visibility: hidden;
 }
 
-:host(.classic) vviinn-product-card::part(image) {
+:host(.grid) vviinn-product-card::part(image) {
   border: 1px solid #DDDDDD;
 }
 
