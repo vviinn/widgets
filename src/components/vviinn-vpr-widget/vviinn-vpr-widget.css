@@ -48,4 +48,5 @@ vviinn-product-card::part(price-container) {
 :host(.continuity) vviinn-product-card::part(type) {
   text-align: left;
   max-width: unset;
+  align-self: start;
 }
