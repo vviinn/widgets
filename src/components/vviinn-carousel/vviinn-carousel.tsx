@@ -9,7 +9,7 @@ const CONTENT_GROUP_CSS_CLASS = "items-group";
 const INCOMPLETE_GROUP_CSS_CLASS = "incomplete";
 
 type MoveDirection = "left" | "right";
-export type CarouselMode = "classic" | "modern";
+export type CarouselMode = "grid" | "continuity";
 
 @Component({
   tag: "vviinn-carousel",
@@ -23,7 +23,7 @@ export class VviinnCarousel {
   @State() contentGroups: HTMLElement[] = [];
   @State() activeContentGroup: number = 0;
 
-  @Prop() mode: CarouselMode = "modern";
+  @Prop() mode: CarouselMode = "continuity";
   @Prop() imageWidth: number = 140;
   @Prop() showScroll: boolean = true;
 
@@ -130,14 +130,14 @@ export class VviinnCarousel {
 
   private renderContent() {
     const c: any =
-      this.mode === "classic"
+      this.mode === "grid"
         ? chunksOf(this.getColumnsNumber())(this.content)
         : this.content.reduce((fragment, element) => {
             fragment.append(element);
             return fragment;
           }, new DocumentFragment());
 
-    this.mode === "classic" ? this.renderGroup(c) : this.renderLine(c);
+    this.mode === "grid" ? this.renderGroup(c) : this.renderLine(c);
   }
 
   private renderGroup(content: Element[][]) {
@@ -264,11 +264,11 @@ export class VviinnCarousel {
   }
 
   private showBullets(): boolean {
-    return this.mode === "classic" && this.showScroll;
+    return this.mode === "grid" && this.showScroll;
   }
 
   private showScrollbar(): boolean {
-    return this.mode === "modern" && this.showScroll;
+    return this.mode === "continuity" && this.showScroll;
   }
 
   private getClassMap() {

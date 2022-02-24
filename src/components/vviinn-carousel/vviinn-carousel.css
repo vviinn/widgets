@@ -71,11 +71,11 @@
   scroll-snap-align: end;
 }
 
-:host(.modern) button {
+:host(.continuity) button {
   border-radius: 2px;
 }
 
-:host(.classic) button {
+:host(.grid) button {
   border-radius: 50%;
 }
 

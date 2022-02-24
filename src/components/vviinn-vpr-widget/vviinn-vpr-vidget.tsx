@@ -17,6 +17,7 @@ import state from "../../store/store";
 import { CampaignName } from "../../campaign/Campaign";
 import { getRecommendationsService } from "../../campaign/CampaignService";
 import { imageSearchState } from "../../store/imageSearch.store";
+import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 
 @Component({
   tag: "vviinn-vpr-widget",
@@ -42,7 +43,7 @@ export class VviinnVprWidget implements ComponentInterface {
   /** prefix will shown before price */
   @Prop() pricePrefix: string;
   /** Use slider or grid view */
-  @Prop() mode: "classic" | "modern" = "modern";
+  @Prop() mode: CarouselMode = "continuity";
   /** Campaign type */
   @Prop() campaignType: CampaignName = "VPR";
   /** Locale for currency formatting */
@@ -129,8 +130,8 @@ export class VviinnVprWidget implements ComponentInterface {
               imageRatio={this.imageRatio}
               price={r.price.actual}
               salePrice={r.price.sale}
-              responsive={this.mode === "classic"}
-              dimmedBackground={this.mode === "modern"}
+              responsive={this.mode === "grid"}
+              dimmedBackground={this.mode === "continuity"}
               exportparts="title"
             />
           ))}

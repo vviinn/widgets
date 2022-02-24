@@ -33,19 +33,19 @@ vviinn-product-card::part(price-container) {
   width: 0;
 }
 
-:host(.classic) vviinn-product-card::part(title),
-:host(.classic) vviinn-product-card::part(brand),
-:host(.classic) vviinn-product-card::part(type) {
+:host(.grid) vviinn-product-card::part(title),
+:host(.grid) vviinn-product-card::part(brand),
+:host(.grid) vviinn-product-card::part(type) {
   text-align: center;
 }
 
-:host(.classic) vviinn-product-card::part(price-container) {
+:host(.grid) vviinn-product-card::part(price-container) {
   align-self: center;
 }
 
-:host(.modern) vviinn-product-card::part(title),
-:host(.modern) vviinn-product-card::part(brand),
-:host(.modern) vviinn-product-card::part(type) {
+:host(.continuity) vviinn-product-card::part(title),
+:host(.continuity) vviinn-product-card::part(brand),
+:host(.continuity) vviinn-product-card::part(type) {
   text-align: left;
   max-width: unset;
 }
