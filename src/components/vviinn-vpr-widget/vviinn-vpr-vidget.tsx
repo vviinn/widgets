@@ -124,6 +124,7 @@ export class VviinnVprWidget implements ComponentInterface {
             <vviinn-product-card
               productId={r.productId}
               productTitle={r.title}
+              deeplink={r.deeplink}
               image={r.image.thumbnail}
               brand={r.brand}
               imageWidth={this.imageWidth}
