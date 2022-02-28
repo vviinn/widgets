@@ -11,6 +11,7 @@
 
 :host(.grid) vviinn-product-card::part(image) {
   border: 1px solid #DDDDDD;
+  width: 100%;
 }
 
 vviinn-product-card::part(price-container) {

@@ -47,12 +47,6 @@
     overflow: hidden;
 }
 
-@media(max-width: 480px) {
-  :host(.modern) button {
-    display: none;
-  }
-}
-
 .content {
   display: flex;
   flex-direction: row;
@@ -110,16 +104,12 @@ button.prev svg {
 }
 
 .items-group {
-  display: grid;
-  min-width: 100%;
-  grid-template-columns: repeat(auto-fit, minmax(var(--vviinn-carousel-image-width, --vviinn-carousel-image-width-system), 1fr));
   align-items: center;
-  justify-items: center;
+  display: grid;
   grid-gap: 16px;
-}
-
-.items-group.incomplete {
-  grid-template-columns: repeat(auto-fit, minmax(var(--vviinn-carousel-image-width, --vviinn-carousel-image-width-system), 1fr));
+  grid-template-columns: repeat(var(--vviinn-carousel-columns-internal), 1fr);
+  justify-items: center;
+  min-width: 100%;
 }
 
 vviinn-product-card::part(price-container) {
@@ -130,4 +120,14 @@ vviinn-product-card::part(price-container) {
 :host(.classic) vviinn-product-card::part(brand),
 :host(.classic) vviinn-product-card::part(type) {
   text-align: center;
+}
+
+@media(max-width: 480px) {
+  :host(.modern) button {
+    display: none;
+  }
+
+  .items-group {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
