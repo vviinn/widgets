@@ -34,6 +34,14 @@ vviinn-product-card::part(price-container) {
   width: 0;
 }
 
+h2 {
+  margin: 0;
+}
+
+:host(.grid) h2 {
+  justify-content: center;
+}
+     
 :host(.grid) vviinn-product-card::part(title),
 :host(.grid) vviinn-product-card::part(brand),
 :host(.grid) vviinn-product-card::part(type) {

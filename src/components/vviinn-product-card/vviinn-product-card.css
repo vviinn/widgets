@@ -71,6 +71,10 @@ img.responsive {
   text-decoration: none;
 }
 
+.image-link {
+  display: contents;
+}
+
 picture {
   position: relative;
 }

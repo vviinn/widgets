@@ -100,8 +100,14 @@ export class VviinnCarousel {
     return sum / contentWidths.length;
   }
 
+  private getHostParent(): Element {
+    const parent = this.el.parentNode as any;
+    return parent.host.parentElement;
+  }
+
   private setWidth() {
-    const parent = this.el.offsetParent;
+    const parent = this.getHostParent();
+
     if (!parent) return;
 
     const parentStyles = getComputedStyle(parent);
@@ -123,7 +129,7 @@ export class VviinnCarousel {
       this.content = content;
       this.renderContent();
       this.setWidth();
-      this.resizeObserver.observe(this.el.offsetParent);
+      this.resizeObserver.observe(this.getHostParent());
       this.mutationObserver.disconnect();
     }
   }
