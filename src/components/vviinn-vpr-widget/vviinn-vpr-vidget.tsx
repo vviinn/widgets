@@ -61,6 +61,11 @@ export class VviinnVprWidget implements ComponentInterface {
     this.getRecommendations();
   }
 
+  @Watch("campaignType")
+  handleCampaignTypeChange() {
+    this.getRecommendations();
+  }
+
   connectedCallback() {
     state.apiPath = this.apiPath;
     state.currencySign = this.currencySign;
@@ -77,9 +82,11 @@ export class VviinnVprWidget implements ComponentInterface {
   private async getRecommendations() {
     if (this.productId === undefined || this.token === undefined) return;
 
+    const campaignType =
+      this.campaignType.length > 0 ? this.campaignType : "VPR";
     const headers = createBearAuthedHeader(this.token);
     const request = pipe(
-      TE.of(getRecommendationsService(this.campaignType)),
+      TE.of(getRecommendationsService(campaignType)),
       TE.ap(TE.of(this.productId)),
       TE.ap(TE.of(headers)),
       TE.flatten
@@ -109,7 +116,11 @@ export class VviinnVprWidget implements ComponentInterface {
   render() {
     return (
       <Host
-        class={{ loaded: this.loaded, empty: this.recommendations.length == 0, [this.mode]: true }}
+        class={{
+          loaded: this.loaded,
+          empty: this.recommendations.length == 0,
+          [this.mode]: true,
+        }}
         aria-hidden={this.loaded ? "false" : "true"}
       >
         <style>{state.fallbackStyles}</style>
