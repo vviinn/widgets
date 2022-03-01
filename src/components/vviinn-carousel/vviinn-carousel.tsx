@@ -56,18 +56,19 @@ export class VviinnCarousel {
 
   private getItemWidthFromDocument(): number {
     return parseInt(
-      getComputedStyle(document.body).getPropertyValue(CAROUSEL_IMAGE_WIDTH_CSS_VAR)
+      getComputedStyle(document.body).getPropertyValue(
+        CAROUSEL_IMAGE_WIDTH_CSS_VAR
+      )
     );
   }
 
   private setItemWidth() {
     const widthInDocument = this.getItemWidthFromDocument();
-    const itemWidth = isNaN(widthInDocument) ? this.imageWidth : widthInDocument;
+    const itemWidth = isNaN(widthInDocument)
+      ? this.imageWidth
+      : widthInDocument;
 
-    this.el.style.setProperty(
-      CAROUSEL_IMAGE_WIDTH_CSS_VAR,
-      `${itemWidth}px`
-    );
+    this.el.style.setProperty(CAROUSEL_IMAGE_WIDTH_CSS_VAR, `${itemWidth}px`);
   }
 
   private getContentClassMap() {
@@ -245,7 +246,7 @@ export class VviinnCarousel {
 
   private scroll(index: number) {
     const contentContainer = this.getContentNode();
-    
+
     requestAnimationFrame(() => {
       contentContainer.scrollTo({
         top: 0,
@@ -287,7 +288,7 @@ export class VviinnCarousel {
   render() {
     return (
       <Host class={this.getClassMap()}>
-        <div class="body">
+        <div class={{ body: true, ...this.getClassMap() }}>
           <button class="prev" onClick={() => this.showPrev()}>
             <ChevronIcon />
           </button>
@@ -309,7 +310,7 @@ export class VviinnCarousel {
                     bullet: true,
                     active: this.activeContentGroup === i,
                   }}
-                  onClick={() => this.scroll(i) }
+                  onClick={() => this.scroll(i)}
                 />
               ))}
           </div>

@@ -41,10 +41,10 @@
   background: #161616;
 }
 
-:host(:not(.show-scrollbar)) .content {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-    overflow: hidden;
+.body:not(.show-scrollbar) .content {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  overflow: hidden;
 }
 
 .content {
