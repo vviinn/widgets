@@ -52,6 +52,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() apiPath: string | undefined;
 
   @Prop() showScroll = true;
+  @Prop() cssUrl: string | null = null;
 
   @State() recommendations: Interfaces["VisualProductSearch"][] = [];
   @State() loaded: boolean = false;
@@ -103,14 +104,22 @@ export class VviinnVprWidget implements ComponentInterface {
     );
   }
 
-  handleError(error: unknown): any {
+  private handleError(error: unknown): any {
     console.log("ERROR:", error);
   }
 
-  handleRecommendationsSucces(data: any) {
+  private handleRecommendationsSucces(data: any) {
     this.recommendations = data?.extended ?? data;
     imageSearchState.results = this.recommendations;
     this.loaded = true;
+  }
+
+  private isExternalCSS(): boolean {
+    return this.cssUrl && this.cssUrl.length > 0;
+  }
+
+  private renderExternalCSS() {
+    return this.isExternalCSS() ? <link href={this.cssUrl} rel="stylesheet" /> : "";
   }
 
   render() {
@@ -123,6 +132,7 @@ export class VviinnVprWidget implements ComponentInterface {
         }}
         aria-hidden={this.loaded ? "false" : "true"}
       >
+        {this.renderExternalCSS()}
         <style>{state.fallbackStyles}</style>
         <h2 part="recommendations-title">{this.blockTitle}</h2>
         <vviinn-carousel
