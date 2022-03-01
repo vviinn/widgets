@@ -1,12 +1,12 @@
 import { Component, Host, h, Element, State, Prop } from "@stencil/core";
 import { chunksOf } from "fp-ts/lib/Array";
+import { Recommendation } from "../../recommendation/recommendation";
 import { ChevronIcon } from "../vviinn-icons";
 
 const COLUMNS_NUMBER_CSS_VAR = "--vviinn-carousel-columns-internal";
 const CAROUSEL_WIDTH_CSS_VAR = "--vviinn-carousel-content-width";
 const CAROUSEL_IMAGE_WIDTH_CSS_VAR = "--vviinn-carousel-image-width";
 const CONTENT_GROUP_CSS_CLASS = "items-group";
-const INCOMPLETE_GROUP_CSS_CLASS = "incomplete";
 
 type MoveDirection = "left" | "right";
 export type CarouselMode = "grid" | "continuity";
@@ -27,7 +27,8 @@ export class VviinnCarousel {
   @Prop() imageWidth: number = 140;
   @Prop() showScroll: boolean = true;
 
-  private content: Element[] = [];
+  @Prop() recommendations: Recommendation[] = [];
+
   private columns: number = 0;
   private resizeObserver: ResizeObserver = new ResizeObserver(() =>
     this.handleResize()
@@ -45,13 +46,14 @@ export class VviinnCarousel {
     this.resizeObserver.disconnect();
   }
 
-  componentDidRender() {
+  componentDidLoad() {
     this.setWidth();
     this.processScrollbarWidth();
     this.columns = this.getColumnsNumber();
-    const slot = this.el.querySelector("#slot");
+    const slot = this.el.querySelector(".content");
 
     this.mutationObserver.observe(slot, { subtree: true, childList: true });
+    this.resizeObserver.observe(this.getHostParent());
   }
 
   private getItemWidthFromDocument(): number {
@@ -87,7 +89,6 @@ export class VviinnCarousel {
     const newColumns = this.getColumnsNumber();
 
     if (newColumns !== this.columns) {
-      this.renderContent();
       this.columns = newColumns;
     }
   }
@@ -122,59 +123,7 @@ export class VviinnCarousel {
   }
 
   private cloneSlottedContent() {
-    const slot = this.el.querySelector("#slot");
-
-    const content = Array.from(slot.children);
-
-    if (content.length > 0) {
-      this.content = content;
-      this.renderContent();
-      this.setWidth();
-      this.resizeObserver.observe(this.getHostParent());
-      this.mutationObserver.disconnect();
-    }
-  }
-
-  private renderContent() {
-    const c: any =
-      this.mode === "grid"
-        ? chunksOf(this.getColumnsNumber())(this.content)
-        : this.content.reduce((fragment, element) => {
-            fragment.append(element);
-            return fragment;
-          }, new DocumentFragment());
-
-    this.mode === "grid" ? this.renderGroup(c) : this.renderLine(c);
-  }
-
-  private renderGroup(content: Element[][]) {
-    const columnsNumber = this.getColumnsNumber();
-    const groups = content.map((el: Element[]) => {
-      const container = document.createElement("div");
-      const groupClassNames =
-        el.length < columnsNumber
-          ? [CONTENT_GROUP_CSS_CLASS, INCOMPLETE_GROUP_CSS_CLASS]
-          : [CONTENT_GROUP_CSS_CLASS];
-
-      container.classList.add(...groupClassNames);
-
-      return el.reduce((acc, el) => {
-        acc.append(el);
-        return acc;
-      }, container);
-    });
-
-    const combinedElements = groups.reduce((fragment, element) => {
-      fragment.append(element);
-      return fragment;
-    }, new DocumentFragment());
-
-    this.appendToContent(combinedElements);
-    this.contentGroups = this.getContentGroups();
-  }
-
-  private renderLine(item: HTMLElement | DocumentFragment) {
-    this.appendToContent(item);
+    this.setWidth();
   }
 
   private getActiveGroupIndex(): number {
@@ -210,12 +159,6 @@ export class VviinnCarousel {
 
   private getContentGroups(): HTMLElement[] {
     return Array.from(this.el.querySelectorAll(`.${CONTENT_GROUP_CSS_CLASS}`));
-  }
-
-  private appendToContent(content: HTMLElement | DocumentFragment) {
-    const contentNode = this.getContentNode();
-    contentNode.innerHTML = "";
-    contentNode.append(content);
   }
 
   private showNext() {
@@ -285,6 +228,54 @@ export class VviinnCarousel {
     };
   }
 
+  private renderRecommendation(
+    recommendation: Recommendation
+  ): HTMLVviinnProductCardElement {
+    return (
+      <vviinn-product-card
+        productId={recommendation.productId}
+        productTitle={recommendation.title}
+        deeplink={recommendation.deeplink}
+        image={recommendation.image.thumbnail}
+        brand={recommendation.brand}
+        imageWidth={this.imageWidth}
+        imageRatio={1}
+        price={recommendation.price.actual}
+        salePrice={recommendation.price.sale}
+        responsive={this.mode === "grid"}
+        dimmedBackground={this.mode === "continuity"}
+        exportparts="title"
+      />
+    );
+  }
+
+  private renderRecommendationGroup(elements: HTMLVviinnProductCardElement[]) {
+    return <div class={CONTENT_GROUP_CSS_CLASS}>{...elements}</div>;
+  }
+
+  private renderRecommendationGroups(
+    elements: HTMLVviinnProductCardElement[][]
+  ) {
+    return elements.map((el) => this.renderRecommendationGroup(el));
+  }
+
+  private renderRecommendations() {
+    return this.mode === "grid"
+      ? this.renderGrid()
+      : this.renderRecommendationsElements();
+  }
+
+  private renderRecommendationsElements(): HTMLVviinnProductCardElement[] {
+    return this.recommendations.map((r) => this.renderRecommendation(r));
+  }
+
+  private renderGrid() {
+    const recommendations = this.renderRecommendationsElements();
+    const grouppedContent = chunksOf(this.getColumnsNumber())(recommendations);
+
+    return this.renderRecommendationGroups(grouppedContent);
+  }
+
   render() {
     return (
       <Host class={this.getClassMap()}>
@@ -295,14 +286,16 @@ export class VviinnCarousel {
           <div
             class={this.getContentClassMap()}
             onScroll={() => this.processScrollbarWidth()}
-          ></div>
+          >
+            {this.renderRecommendations()}
+          </div>
           <button class="next" onClick={() => this.showNext()}>
             <ChevronIcon />
           </button>
         </div>
         {this.showBullets() ? (
           <div class="bullets">
-            {this.contentGroups
+            {Array.from(Array(this.getColumnsNumber() - 1).keys())
               .map((_, i) => i)
               .map((i) => (
                 <div
@@ -317,9 +310,6 @@ export class VviinnCarousel {
         ) : (
           ""
         )}
-        <div id="slot">
-          <slot></slot>
-        </div>
       </Host>
     );
   }

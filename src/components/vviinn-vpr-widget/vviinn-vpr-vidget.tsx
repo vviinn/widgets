@@ -64,6 +64,7 @@ export class VviinnVprWidget implements ComponentInterface {
 
   @Watch("campaignType")
   handleCampaignTypeChange() {
+    console.log("campaign type changed");
     this.getRecommendations();
   }
 
@@ -140,23 +141,8 @@ export class VviinnVprWidget implements ComponentInterface {
           mode={this.mode}
           imageWidth={this.imageWidth}
           showScroll={this.showScroll}
+          recommendations={this.recommendations}
         >
-          {this.recommendations.map((r) => (
-            <vviinn-product-card
-              productId={r.productId}
-              productTitle={r.title}
-              deeplink={r.deeplink}
-              image={r.image.thumbnail}
-              brand={r.brand}
-              imageWidth={this.imageWidth}
-              imageRatio={this.imageRatio}
-              price={r.price.actual}
-              salePrice={r.price.sale}
-              responsive={this.mode === "grid"}
-              dimmedBackground={this.mode === "continuity"}
-              exportparts="title"
-            />
-          ))}
         </vviinn-carousel>
       </Host>
     );
