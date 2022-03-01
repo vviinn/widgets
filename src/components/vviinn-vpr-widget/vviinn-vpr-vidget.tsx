@@ -64,7 +64,12 @@ export class VviinnVprWidget implements ComponentInterface {
 
   @Watch("campaignType")
   handleCampaignTypeChange() {
-    console.log("campaign type changed");
+    this.getRecommendations();
+  }
+
+  @Watch("apiPath")
+  handleApiPathChange(newPath: string) {
+    state.apiPath = newPath;
     this.getRecommendations();
   }
 
