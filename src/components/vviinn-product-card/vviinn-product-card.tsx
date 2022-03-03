@@ -134,7 +134,10 @@ export class VviinnProductCard {
 
   render() {
     return (
-      <Host class={{ dimmed: this.dimmedBackground }} exportparts="title">
+      <Host
+        class={{ dimmed: this.dimmedBackground }}
+        exportparts="brand, currency, deeplink, image, image-link, price-amount, price-container, price-outdated, price-prefix, price-regular, price-sale, title"
+      >
         <Linked deeplink={this.deeplink} part="image-link">
           {this.renderImage()}
         </Linked>

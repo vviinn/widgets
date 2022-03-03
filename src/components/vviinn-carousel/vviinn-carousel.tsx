@@ -244,7 +244,6 @@ export class VviinnCarousel {
         salePrice={recommendation.price.sale}
         responsive={this.mode === "grid"}
         dimmedBackground={this.mode === "continuity"}
-        exportparts="title"
       />
     );
   }
