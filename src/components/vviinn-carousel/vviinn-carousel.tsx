@@ -276,6 +276,23 @@ export class VviinnCarousel {
     return this.renderRecommendationGroups(grouppedContent);
   }
 
+  private renderBullets() {
+    const numberOfBullets = Math.ceil(
+      this.recommendations.length / this.getColumnsNumber()
+    );
+    const bulletsArray = Array.from(Array(numberOfBullets).keys());
+
+    return bulletsArray.map((index) => (
+      <div
+        class={{
+          bullet: true,
+          active: this.activeContentGroup === index,
+        }}
+        onClick={() => this.scroll(index)}
+      />
+    ));
+  }
+
   render() {
     return (
       <Host class={this.getClassMap()}>
@@ -294,19 +311,7 @@ export class VviinnCarousel {
           </button>
         </div>
         {this.showBullets() ? (
-          <div class="bullets">
-            {Array.from(Array(this.getColumnsNumber() - 1).keys())
-              .map((_, i) => i)
-              .map((i) => (
-                <div
-                  class={{
-                    bullet: true,
-                    active: this.activeContentGroup === i,
-                  }}
-                  onClick={() => this.scroll(i)}
-                />
-              ))}
-          </div>
+          <div class="bullets">{this.renderBullets()}</div>
         ) : (
           ""
         )}

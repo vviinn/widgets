@@ -41,7 +41,15 @@ h2 {
 :host(.grid) h2 {
   justify-content: center;
 }
-     
+
+:host(.grid) vviinn-product-card::part(image) {
+  min-width: 100%;
+}
+
+:host(.grid) vviinn-product-card::part(image-link) {
+  width: 100%;
+}
+
 :host(.grid) vviinn-product-card::part(title),
 :host(.grid) vviinn-product-card::part(brand),
 :host(.grid) vviinn-product-card::part(type) {
@@ -54,7 +62,8 @@ h2 {
 
 :host(.continuity) vviinn-product-card::part(title),
 :host(.continuity) vviinn-product-card::part(brand),
-:host(.continuity) vviinn-product-card::part(type) {
+:host(.continuity) vviinn-product-card::part(type),
+:host(.continuity) vviinn-product-card::part(deeplink) {
   text-align: left;
   max-width: unset;
   align-self: start;

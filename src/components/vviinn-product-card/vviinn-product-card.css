@@ -39,7 +39,6 @@
   object-position: 50% 50%;
   object-fit: contain;
   text-align: center;
-  max-width: min-content;
   box-sizing: border-box;
 }
 
@@ -77,6 +76,7 @@ img.responsive {
 
 picture {
   position: relative;
+  width: 100%;
 }
 
 :host(.dimmed) picture::before {

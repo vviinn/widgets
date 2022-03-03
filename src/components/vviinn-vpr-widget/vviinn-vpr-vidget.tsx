@@ -142,7 +142,6 @@ export class VviinnVprWidget implements ComponentInterface {
         <style>{state.fallbackStyles}</style>
         <h2 part="recommendations-title">{this.blockTitle}</h2>
         <vviinn-carousel
-          exportparts="brand, currency, deeplink, image, type, image-link, price-amount, price-container, price-outdated, price-prefix, price-regular, price-sale, title, title: product-title"
           mode={this.mode}
           imageWidth={this.imageWidth}
           showScroll={this.showScroll}
