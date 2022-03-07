@@ -43,9 +43,11 @@
 }
 
 .body:not(.show-scrollbar) .content {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  overflow: hidden;
+  scrollbar-color: #fff0 #fff0;
+}
+
+.body:not(.show-scrollbar) .content::-webkit-scrollbar {
+  opacity: 0;
 }
 
 .content {

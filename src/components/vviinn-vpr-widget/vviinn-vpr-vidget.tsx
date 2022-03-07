@@ -20,18 +20,18 @@ import { imageSearchState } from "../../store/imageSearch.store";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 
 /**
- * @part product-card
+ * @part product-card - product card itself
  * @part title - title inside product card
  * @part brand - brand inside product card
  * @part currency - brand inside product card
  * @part image - product card image
  * @part image-link - anchor element around product image
- * @part price-amount
- * @part price-container
- * @part price-outdated
- * @part price-prefix
- * @part price-regular
- * @part price-sale
+ * @part price-amount - span element around every prices
+ * @part price-container - block of prices
+ * @part price-outdated - block for outdated price. rendered when product contains sale price
+ * @part price-prefix - block rendered before each price element (for ex. "from")
+ * @part price-regular - block for price if no sale price presented
+ * @part price-sale -  block for sale price. rendered only if sale price presented
  */
 @Component({
   tag: "vviinn-vpr-widget",
