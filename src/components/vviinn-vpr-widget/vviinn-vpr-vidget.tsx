@@ -19,6 +19,20 @@ import { getRecommendationsService } from "../../campaign/CampaignService";
 import { imageSearchState } from "../../store/imageSearch.store";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 
+/**
+ * @part product-card
+ * @part title - title inside product card
+ * @part brand - brand inside product card
+ * @part currency - brand inside product card
+ * @part image - product card image
+ * @part image-link - anchor element around product image
+ * @part price-amount
+ * @part price-container
+ * @part price-outdated
+ * @part price-prefix
+ * @part price-regular
+ * @part price-sale
+ */
 @Component({
   tag: "vviinn-vpr-widget",
   styleUrl: "vviinn-vpr-widget.css",
@@ -28,8 +42,6 @@ export class VviinnVprWidget implements ComponentInterface {
   @Element() el: HTMLElement;
   /** Title for recommendations widget */
   @Prop() blockTitle: string = "Recommended products";
-  /** Number of columns for recommendations */
-  @Prop() columns: number;
   /** Ratio of each recommended product image */
   @Prop() imageRatio: number = 1;
   /** Width of each recommended product image */

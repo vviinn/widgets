@@ -233,6 +233,7 @@ export class VviinnCarousel {
   ): HTMLVviinnProductCardElement {
     return (
       <vviinn-product-card
+        part="product-part"
         productId={recommendation.productId}
         productTitle={recommendation.title}
         deeplink={recommendation.deeplink}

@@ -134,7 +134,7 @@ export class VviinnProductCard {
 
   render() {
     return (
-      <Host
+      <Host part="product-card"
         class={{ dimmed: this.dimmedBackground }}
         exportparts="brand, currency, deeplink, image, image-link, price-amount, price-container, price-outdated, price-prefix, price-regular, price-sale, title"
       >
