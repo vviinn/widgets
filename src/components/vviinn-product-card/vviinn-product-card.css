@@ -39,7 +39,6 @@
   object-position: 50% 50%;
   object-fit: contain;
   text-align: center;
-  max-width: min-content;
   box-sizing: border-box;
 }
 
@@ -65,15 +64,19 @@ img.responsive {
   line-height: 24px;
   margin-bottom: 8px;
   overflow: hidden;
-  max-width: min-content;
 }
 
 .deeplink {
   text-decoration: none;
 }
 
+.image-link {
+  display: contents;
+}
+
 picture {
   position: relative;
+  width: 100%;
 }
 
 :host(.dimmed) picture::before {

@@ -1,11 +1,26 @@
-import { Component, Host, h, Prop, Event, EventEmitter, Element, State } from "@stencil/core";
+import {
+  Component,
+  Host,
+  h,
+  Prop,
+  Event,
+  EventEmitter,
+  Element,
+  State,
+} from "@stencil/core";
 import { pipe } from "fp-ts/lib/function";
 import { getAnalyticsModule } from "../../analytics/GeneralAnalytics";
 import { state } from "../../store/store";
 import * as O from "fp-ts/lib/Option";
 import { imageSearchState } from "../../store/imageSearch.store";
 import { Recommendation } from "../../recommendation/recommendation";
-import { ImageProps, Linked, Price, ResponsiveImage, Image } from "./render-helpers";
+import {
+  ImageProps,
+  Linked,
+  Price,
+  ResponsiveImage,
+  Image,
+} from "./render-helpers";
 
 /**
  * @part brand - product brand.
@@ -93,7 +108,7 @@ export class VviinnProductCard {
 
         if (window.ga) {
           ga("send", "event", "UX", "click", "Results", {
-            hitCallback: function() {
+            hitCallback: function () {
               document.location.href = this.deeplink;
             },
           });
@@ -103,9 +118,7 @@ export class VviinnProductCard {
   }
 
   private getProduct(): Recommendation {
-    return imageSearchState.results.find(
-      (r) => r.productId === this.productId
-    );
+    return imageSearchState.results.find((r) => r.productId === this.productId);
   }
 
   private renderImage() {
@@ -113,7 +126,7 @@ export class VviinnProductCard {
       width: this.imageWidth,
       height: this.imageWidth * this.imageRatio,
       src: this.image,
-      title: this.productTitle
+      title: this.productTitle,
     };
 
     return this.responsive ? ResponsiveImage(props) : Image(props);
@@ -121,16 +134,26 @@ export class VviinnProductCard {
 
   render() {
     return (
-      <Host exportparts="brand, currency, deeplink, image, type, image-link, price-amount, price-container, price-outdated, price-prefix, price-regular, price-sale, title" class={{dimmed: this.dimmedBackground}}>
+      <Host part="product-card"
+        class={{ dimmed: this.dimmedBackground }}
+        exportparts="brand, currency, deeplink, image, image-link, price-amount, price-container, price-outdated, price-prefix, price-regular, price-sale, title"
+      >
         <Linked deeplink={this.deeplink} part="image-link">
           {this.renderImage()}
         </Linked>
         <Linked deeplink={this.deeplink} part="deeplink">
-          <span class="title" part="title">{this.productTitle}</span>
+          <span class="title" part="title">
+            {this.productTitle}
+          </span>
         </Linked>
-        <span class="brand" part="brand">{this.brand}</span>
-        <span class="type" part="type">{this.productType}</span>
-        <Price prefix={this.pricePrefix ?? state.pricePrefix}
+        <span class="brand" part="brand">
+          {this.brand}
+        </span>
+        <span class="type" part="type">
+          {this.productType}
+        </span>
+        <Price
+          prefix={this.pricePrefix ?? state.pricePrefix}
           currency={this.currency ?? state.currencySign}
           price={this.price}
           salePrice={this.salePrice}

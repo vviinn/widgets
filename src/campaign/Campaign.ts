@@ -1,4 +1,4 @@
-export type CampaignName = "VPR" | "VSC";
+export type CampaignName = "VPR" | "VCS";
 
 export interface VPR {
   readonly _tag: "VPR";

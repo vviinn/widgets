@@ -35,22 +35,19 @@
   height: 10px;
   background: #E0E0E0;
   border-radius: 50%;
+  cursor: pointer;
 }
 
 .bullet.active {
   background: #161616;
 }
 
-:host(:not(.show-scrollbar)) .content {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-    overflow: hidden;
+.body:not(.show-scrollbar) .content {
+  scrollbar-color: #fff0 #fff0;
 }
 
-@media(max-width: 480px) {
-  :host(.modern) button {
-    display: none;
-  }
+.body:not(.show-scrollbar) .content::-webkit-scrollbar {
+  opacity: 0;
 }
 
 .content {
@@ -111,15 +108,9 @@ button.prev svg {
 
 .items-group {
   display: grid;
-  min-width: 100%;
-  grid-template-columns: repeat(auto-fit, minmax(var(--vviinn-carousel-image-width, --vviinn-carousel-image-width-system), 1fr));
-  align-items: center;
-  justify-items: center;
   grid-gap: 16px;
-}
-
-.items-group.incomplete {
-  grid-template-columns: repeat(auto-fit, minmax(var(--vviinn-carousel-image-width, --vviinn-carousel-image-width-system), 1fr));
+  grid-template-columns: repeat(var(--vviinn-carousel-columns-internal), 1fr);
+  min-width: 100%;
 }
 
 vviinn-product-card::part(price-container) {
@@ -130,4 +121,14 @@ vviinn-product-card::part(price-container) {
 :host(.classic) vviinn-product-card::part(brand),
 :host(.classic) vviinn-product-card::part(type) {
   text-align: center;
+}
+
+@media(max-width: 480px) {
+  :host(.modern) button {
+    display: none;
+  }
+
+  .items-group {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }

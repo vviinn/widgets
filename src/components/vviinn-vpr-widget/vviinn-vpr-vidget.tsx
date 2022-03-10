@@ -19,6 +19,20 @@ import { getRecommendationsService } from "../../campaign/CampaignService";
 import { imageSearchState } from "../../store/imageSearch.store";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 
+/**
+ * @part product-card - product card itself
+ * @part title - title inside product card
+ * @part brand - brand inside product card
+ * @part currency - brand inside product card
+ * @part image - product card image
+ * @part image-link - anchor element around product image
+ * @part price-amount - span element around every prices
+ * @part price-container - block of prices
+ * @part price-outdated - block for outdated price. rendered when product contains sale price
+ * @part price-prefix - block rendered before each price element (for ex. "from")
+ * @part price-regular - block for price if no sale price presented
+ * @part price-sale -  block for sale price. rendered only if sale price presented
+ */
 @Component({
   tag: "vviinn-vpr-widget",
   styleUrl: "vviinn-vpr-widget.css",
@@ -28,8 +42,6 @@ export class VviinnVprWidget implements ComponentInterface {
   @Element() el: HTMLElement;
   /** Title for recommendations widget */
   @Prop() blockTitle: string = "Recommended products";
-  /** Number of columns for recommendations */
-  @Prop() columns: number;
   /** Ratio of each recommended product image */
   @Prop() imageRatio: number = 1;
   /** Width of each recommended product image */
@@ -52,12 +64,24 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
 
   @Prop() showScroll = true;
+  @Prop() cssUrl: string | null = null;
 
   @State() recommendations: Interfaces["VisualProductSearch"][] = [];
   @State() loaded: boolean = false;
 
   @Watch("productId")
   handleProductIdChange() {
+    this.getRecommendations();
+  }
+
+  @Watch("campaignType")
+  handleCampaignTypeChange() {
+    this.getRecommendations();
+  }
+
+  @Watch("apiPath")
+  handleApiPathChange(newPath: string) {
+    state.apiPath = newPath;
     this.getRecommendations();
   }
 
@@ -77,9 +101,11 @@ export class VviinnVprWidget implements ComponentInterface {
   private async getRecommendations() {
     if (this.productId === undefined || this.token === undefined) return;
 
+    const campaignType =
+      this.campaignType.length > 0 ? this.campaignType : "VPR";
     const headers = createBearAuthedHeader(this.token);
     const request = pipe(
-      TE.of(getRecommendationsService(this.campaignType)),
+      TE.of(getRecommendationsService(campaignType)),
       TE.ap(TE.of(this.productId)),
       TE.ap(TE.of(headers)),
       TE.flatten
@@ -96,45 +122,43 @@ export class VviinnVprWidget implements ComponentInterface {
     );
   }
 
-  handleError(error: unknown): any {
+  private handleError(error: unknown): any {
     console.log("ERROR:", error);
   }
 
-  handleRecommendationsSucces(data: any) {
+  private handleRecommendationsSucces(data: any) {
     this.recommendations = data?.extended ?? data;
     imageSearchState.results = this.recommendations;
     this.loaded = true;
   }
 
+  private isExternalCSS(): boolean {
+    return this.cssUrl && this.cssUrl.length > 0;
+  }
+
+  private renderExternalCSS() {
+    return this.isExternalCSS() ? <link href={this.cssUrl} rel="stylesheet" /> : "";
+  }
+
   render() {
     return (
       <Host
-        class={{ loaded: this.loaded, empty: this.recommendations.length == 0, [this.mode]: true }}
+        class={{
+          loaded: this.loaded,
+          empty: this.recommendations.length == 0,
+          [this.mode]: true,
+        }}
         aria-hidden={this.loaded ? "false" : "true"}
       >
+        {this.renderExternalCSS()}
         <style>{state.fallbackStyles}</style>
         <h2 part="recommendations-title">{this.blockTitle}</h2>
         <vviinn-carousel
-          exportparts="brand, currency, deeplink, image, type, image-link, price-amount, price-container, price-outdated, price-prefix, price-regular, price-sale, title, title: product-title"
           mode={this.mode}
           imageWidth={this.imageWidth}
           showScroll={this.showScroll}
+          recommendations={this.recommendations}
         >
-          {this.recommendations.map((r) => (
-            <vviinn-product-card
-              productId={r.productId}
-              productTitle={r.title}
-              image={r.image.thumbnail}
-              brand={r.brand}
-              imageWidth={this.imageWidth}
-              imageRatio={this.imageRatio}
-              price={r.price.actual}
-              salePrice={r.price.sale}
-              responsive={this.mode === "grid"}
-              dimmedBackground={this.mode === "continuity"}
-              exportparts="title"
-            />
-          ))}
         </vviinn-carousel>
       </Host>
     );
