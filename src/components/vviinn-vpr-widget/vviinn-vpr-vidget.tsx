@@ -49,7 +49,7 @@ export class VviinnVprWidget implements ComponentInterface {
   /** Locale for currency formatting */
   @Prop() locale: string = "de-DE";
   /** @internal */
-  @Prop() apiPath: string | undefined;
+  @Prop() apiPath: string | undefined = "https://api.vviinn.com";
 
   @Prop() showScroll = true;
 

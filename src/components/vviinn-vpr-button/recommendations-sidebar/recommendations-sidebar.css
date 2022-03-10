@@ -1,0 +1,41 @@
+:host {
+  --vviinn-carousel-columns: 0;
+  background: rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  display: block;
+  display: flex;
+  height: 100vh;
+  left: 0;
+  position: fixed;
+  top: 0;
+  transition: background 0.1s ease-in-out;
+  width: 100vw;
+}
+
+:host(.bottom) {
+  flex-direction: column;
+  justify-content: end;
+}
+
+:host(.right) {
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.sidebar {
+  background: white;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  grid-gap: 24px;
+  padding: 24px;
+}
+
+.title {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 40px;
+  text-align: center;
+  color: #000000;
+}

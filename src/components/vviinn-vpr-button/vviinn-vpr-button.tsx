@@ -1,4 +1,4 @@
-import { Component, Host, h } from "@stencil/core";
+import { Component, Host, h, Prop } from "@stencil/core";
 import { VisualSearchIcon } from "../vviinn-icons";
 
 @Component({
@@ -7,6 +7,10 @@ import { VisualSearchIcon } from "../vviinn-icons";
   shadow: true,
 })
 export class VviinnVprButton {
+  @Prop() token: string;
+  @Prop() productId: string;
+  @Prop() position: "bottom" | "right" = "bottom";
+
   render() {
     return (
       <Host>
@@ -24,7 +28,12 @@ export class VviinnVprButton {
   }
 
   handleClick(): void {
-    console.log("Clicked!");
-    //throw new Error("Method not implemented.");
+    const sidebar = document.createElement("recommendations-sidebar");
+    sidebar.sidebarTitle = "Visually similar product";
+    sidebar.productId = this.productId;
+    sidebar.token = this.token;
+    sidebar.position = this.position;
+
+    document.body.append(sidebar);
   }
 }

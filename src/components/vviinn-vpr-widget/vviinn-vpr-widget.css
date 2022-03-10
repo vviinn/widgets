@@ -13,6 +13,10 @@
   border: 1px solid #DDDDDD;
 }
 
+h2 {
+  margin: 0;
+}
+
 vviinn-product-card::part(price-container) {
   align-self: flex-start;
   text-align: left;

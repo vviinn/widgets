@@ -101,7 +101,7 @@ export class VviinnCarousel {
   }
 
   private setWidth() {
-    const parent = this.el.offsetParent;
+    const parent = this.getParent();
     if (!parent) return;
 
     const parentStyles = getComputedStyle(parent);
@@ -112,6 +112,12 @@ export class VviinnCarousel {
         parseInt(parentStyles["padding-left"]));
 
     this.el.style.setProperty(CAROUSEL_WIDTH_CSS_VAR, `${width}px`);
+  }
+
+  getParent(): HTMLElement {
+    const parentNode: any = this.el.parentNode;
+    const host = parentNode.host;
+    return host.parentElement as HTMLElement;
   }
 
   private cloneSlottedContent() {
