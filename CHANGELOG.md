@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.0.0...v2.1.0) (2022-03-14)
+
+
+### Features
+
+* Recommendations Widget - add property for loading external css ([707ef5b](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/707ef5b8e980d8905f55058d7d4996eb08090d87))
+
+
+### Bug Fixes
+
+* add default border for images in recommendation widget ([27631da](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/27631da08e5feec8e657125097d13eef560a94ab))
+* fetch recommendation if campaignType changed ([4e82c11](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/4e82c118bda8de63fa1915d13be381bff86b0b0c))
+* find carousel parent properly ([698b175](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/698b17517addc6f558780d280d873c2b55700c3e))
+* fix broken deeplinks in recommendation widget ([6d079b6](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/6d079b67b87e3f78caf42b3693e026a29be3613a))
+* fix bug with scrollbars in recommendation widgets ([4002c27](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/4002c2704cb8d633d484e38ac6f7f76e7cf14155))
+* fix buggy layout with on Grid Mode of Recommendations widget ([7fa0776](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/7fa07762a3d13d00e2a1f5ad6ec8451f45e6d9a4))
+* fix scrollbars property on recommendations widget ([af9b356](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/af9b3560da5e9b5bad6c843694df30e1083e4ae2))
+* fix scrolling if scrollbar is hidden ([fee4bff](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/fee4bff1a3cc8ccdb8c1ff5d86f6631f30229922))
+* fix title allignement in recommendations component ([e616bf5](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/e616bf5e02241b1bc65d94b923caf8c9193d6d08))
+* minor style fixes ([909d23d](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/909d23d86162ae0bf739a0168aa493af1fb3e51b))
+* refactor exported shadow parts of product card component ([afe475d](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/afe475d9c614183ab3bf55c828accd037e33985b))
+
 ## [2.0.0](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v1.1.2...v2.0.0) (2022-02-24)
 
 
