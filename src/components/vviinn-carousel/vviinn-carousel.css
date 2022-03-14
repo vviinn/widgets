@@ -42,11 +42,13 @@
   background: #161616;
 }
 
-.content:not(.show-scrollbar) {
+.content:not(.show-scrollbar),
+.content.grid {
   scrollbar-color: #fff0 #fff0;
 }
 
-.content:not(.show-scrollbar)::-webkit-scrollbar {
+.content:not(.show-scrollbar)::-webkit-scrollbar,
+.content.grid::-webkit-scrollbar {
   opacity: 0;
 }
 
