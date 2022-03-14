@@ -78,6 +78,7 @@ export class VviinnCarousel {
       content: true,
       [this.moveDirection]: true,
       [this.mode]: true,
+      "show-scrollbar": this.showScroll
     };
   }
 

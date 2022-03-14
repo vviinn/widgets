@@ -42,11 +42,11 @@
   background: #161616;
 }
 
-.body:not(.show-scrollbar) .content {
+.content:not(.show-scrollbar) {
   scrollbar-color: #fff0 #fff0;
 }
 
-.body:not(.show-scrollbar) .content::-webkit-scrollbar {
+.content:not(.show-scrollbar)::-webkit-scrollbar {
   opacity: 0;
 }
 
@@ -58,6 +58,7 @@
   overflow-y: hidden;
   overflow-x: auto;
   flex-grow: 1;
+  padding-bottom: 16px;
 }
 
 .content.left > * {
