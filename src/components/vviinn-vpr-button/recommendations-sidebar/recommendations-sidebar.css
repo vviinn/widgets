@@ -1,6 +1,5 @@
 :host {
   --vviinn-carousel-columns: 0;
-  background: rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
   display: block;
   display: flex;
@@ -10,6 +9,10 @@
   top: 0;
   transition: background 0.1s ease-in-out;
   width: 100vw;
+}
+
+:host(.open) {
+  background: rgba(0, 0, 0, 0.2);
 }
 
 :host(.bottom) {
@@ -22,13 +25,74 @@
   justify-content: flex-end;
 }
 
+header {
+  text-align: center;
+  padding: 32px;
+}
+
+:host(.right) header {
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+main {
+  padding: 0 24px;
+}
+
+:host(.right) main {
+  overflow: auto;
+}
+
 .sidebar {
   background: white;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+}
+
+:host(.bottom.idle) .sidebar,
+:host(.bottom.closed) .sidebar {
+  transform: translateY(100%);
+}
+
+:host(.bottom.closed) .sidebar {
+  animation-name: slideOutFromBottom;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+}
+
+:host(.bottom.open) .sidebar {
+  animation-name: slideInFromBottom;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+}
+
+:host(.right.idle) .sidebar,
+:host(.right.closed) .sidebar {
+  transform: translateX(100%);
+}
+
+:host(.right.open) .sidebar {
+  animation-name: slideInFromRight;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+}
+
+:host(.right) .sidebar {
+  max-width: 480px;
+}
+
+:host(.right) vviinn-vpr-widget::part(recommendations-grid) {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   grid-gap: 24px;
-  padding: 24px;
+}
+
+:host(.right) vviinn-vpr-widget {
+  overflow: auto;
+}
+
+:host(.right) vviinn-vpr-widget::part(image) {
+  border: none;
 }
 
 .title {
@@ -38,4 +102,54 @@
   line-height: 40px;
   text-align: center;
   color: #000000;
+}
+
+vviinn-vpr-widget::part(title),
+vviinn-vpr-widget::part(brand),
+vviinn-vpr-widget::part(type) {
+  text-align: left;
+}
+
+vviinn-vpr-widget::part(price-container) {
+  align-self: start;
+}
+
+@keyframes slideInFromBottom {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideOutFromBottom {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutFromRight {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
 }
