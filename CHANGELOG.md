@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.1.1](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.1.0...v2.1.1) (2022-03-14)
+
+
+### Bug Fixes
+
+* permanently hide scrollbars in grid mode for Recommendation ([4238bf4](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/4238bf4085a98c29da0020a5f5dcaa88a0c7988c))
+
 ## [2.1.0](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.0.0...v2.1.0) (2022-03-14)
 
 
