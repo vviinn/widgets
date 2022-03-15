@@ -1,5 +1,5 @@
-import { defineCustomElements } from "../components/loader/index";
-import docJson from "../docs.json";
+import { defineCustomElements } from "../../dist/loader/index";
+import docJson from "../../docs.json";
 import {
   extractArgTypes,
   extractComponentDescription,

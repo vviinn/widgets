@@ -28,7 +28,7 @@ export class VviinnVprButton {
   }
 
   handleClick(): void {
-    const sidebar = document.createElement("recommendations-sidebar");
+    const sidebar = document.createElement("recommendations-sidebar") as any;
     sidebar.sidebarTitle = "Visually similar product";
     sidebar.productId = this.productId;
     sidebar.token = this.token;
