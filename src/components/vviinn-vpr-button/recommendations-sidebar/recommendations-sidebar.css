@@ -26,8 +26,23 @@
 }
 
 header {
+  position: relative;
   text-align: center;
   padding: 32px;
+}
+
+header.contains-source-img {
+  display: grid;
+  justify-items: center;
+  grid-gap: 12px;
+}
+
+img.source-image {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15);
+  padding: 8px;
 }
 
 :host(.right) header {
@@ -66,9 +81,14 @@ main {
   animation-fill-mode: forwards;
 }
 
-:host(.right.idle) .sidebar,
-:host(.right.closed) .sidebar {
+:host(.right.idle) .sidebar {
   transform: translateX(100%);
+}
+
+:host(.right.closed) .sidebar {
+  animation-name: slideOutFromRight;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
 }
 
 :host(.right.open) .sidebar {
@@ -114,6 +134,17 @@ vviinn-vpr-widget::part(price-container) {
   align-self: start;
 }
 
+.close-sidebar {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  right: 24px;
+  top: 24px;
+}
+
 @keyframes slideInFromBottom {
   from {
     transform: translateY(100%);
@@ -146,10 +177,10 @@ vviinn-vpr-widget::part(price-container) {
 
 @keyframes slideOutFromRight {
   from {
-    transform: translateX(100%);
+    transform: translateX(0);
   }
 
   to {
-    transform: translateX(0);
+    transform: translateX(100%);
   }
 }
