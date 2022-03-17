@@ -35,7 +35,7 @@ export class VviinnVprButton {
   }
 
   handleClick(): void {
-    const sidebar = document.createElement("vviinn-recommendations-sidebar") as HTMLRecommendationsSidebarElement;
+    const sidebar = document.createElement("vviinn-recommendations-sidebar") as HTMLVviinnRecommendationsSidebarElement;
     sidebar.sidebarTitle = this.sidebarTitle;
     sidebar.productId = this.productId;
     sidebar.token = this.token;
