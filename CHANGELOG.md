@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.0](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.1.1...v2.2.0) (2022-03-17)
+
+
+### Features
+
+* add vviinn-vpr-button component ([6593382](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/6593382c52647bd989beb4cae5e2d0a77a979c30))
+
 ### [2.1.1](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.1.0...v2.1.1) (2022-03-14)
 
 
