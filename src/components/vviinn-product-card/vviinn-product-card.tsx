@@ -68,6 +68,8 @@ export class VviinnProductCard {
   /** Event fires ones when user click on deeplink */
   @Event({ bubbles: true }) recommendationClick: EventEmitter<string>;
 
+  @Event() productImageLoaded: EventEmitter<string>;
+
   private intersectionObserver = new IntersectionObserver(
     this.intersectionCallback.bind(this),
     { threshold: 1.0 }
@@ -127,14 +129,22 @@ export class VviinnProductCard {
       height: this.imageWidth * this.imageRatio,
       src: this.image,
       title: this.productTitle,
+      lazy: false,
     };
 
-    return this.responsive ? ResponsiveImage(props) : Image(props);
+    return this.responsive
+      ? ResponsiveImage(props, () => this.kek())
+      : Image(props, () => this.kek());
+  }
+
+  private kek() {
+    this.productImageLoaded.emit(this.productId);
   }
 
   render() {
     return (
-      <Host part="product-card"
+      <Host
+        part="product-card"
         class={{ dimmed: this.dimmedBackground }}
         exportparts="brand, currency, deeplink, image, image-link, price-amount, price-container, price-outdated, price-prefix, price-regular, price-sale, title"
       >

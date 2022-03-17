@@ -123,6 +123,12 @@ export class VviinnCarousel {
     this.el.style.setProperty(CAROUSEL_WIDTH_CSS_VAR, `${width}px`);
   }
 
+  getParent(): HTMLElement {
+    const parentNode: any = this.el.parentNode;
+    const host = parentNode.host;
+    return host.parentElement as HTMLElement;
+  }
+
   private cloneSlottedContent() {
     this.setWidth();
   }

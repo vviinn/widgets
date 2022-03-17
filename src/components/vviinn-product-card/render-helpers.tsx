@@ -95,30 +95,36 @@ export type ImageProps = {
   height: number;
   title: string;
   src: string;
+  lazy: boolean;
 };
 
-export const Image = (props: ImageProps) => (
+export const Image = (props: ImageProps, onLoadEnd = () => undefined) => (
   <picture>
     <img
-      loading="lazy"
+      loading={props.lazy ? "lazy" : "eager"}
       part="image"
       class="image"
       width={props.width}
       height={props.height}
       src={processWidth(props.src, props.width)}
       alt={props.title}
+      onLoad={onLoadEnd}
     />
   </picture>
 );
 
-export const ResponsiveImage = (props: ImageProps) => (
+export const ResponsiveImage = (
+  props: ImageProps,
+  onLoadEnd = () => undefined
+) => (
   <picture>
     <img
-      loading="lazy"
+      loading={props.lazy ? "lazy" : "eager"}
       part="image"
       class="image responsive"
       src={processWidth(props.src, props.width)}
       alt={props.title}
+      onLoad={onLoadEnd}
     />
   </picture>
 );

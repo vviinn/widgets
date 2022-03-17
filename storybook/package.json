@@ -19,7 +19,8 @@
     "@storybook/addon-links": "^6.4.17",
     "@storybook/web-components": "^6.4.17",
     "babel-loader": "^8.2.3",
-    "chromatic": "^6.4.3"
+    "chromatic": "^6.4.3",
+    "storybook-addon-designs": "^6.2.1"
   },
   "dependencies": {
     "@storybook/builder-webpack5": "^6.4.17",

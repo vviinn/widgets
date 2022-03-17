@@ -1,0 +1,186 @@
+:host {
+  --vviinn-carousel-columns: 0;
+  box-sizing: border-box;
+  display: block;
+  display: flex;
+  height: 100vh;
+  left: 0;
+  position: fixed;
+  top: 0;
+  transition: background 0.1s ease-in-out;
+  width: 100vw;
+}
+
+:host(.open) {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+:host(.bottom) {
+  flex-direction: column;
+  justify-content: end;
+}
+
+:host(.right) {
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+header {
+  position: relative;
+  text-align: center;
+  padding: 32px;
+}
+
+header.contains-source-img {
+  display: grid;
+  justify-items: center;
+  grid-gap: 12px;
+}
+
+img.source-image {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15);
+  padding: 8px;
+}
+
+:host(.right) header {
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+main {
+  padding: 0 24px;
+}
+
+:host(.right) main {
+  overflow: auto;
+}
+
+.sidebar {
+  background: white;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+:host(.bottom.idle) .sidebar,
+:host(.bottom.closed) .sidebar {
+  transform: translateY(100%);
+}
+
+:host(.bottom.closed) .sidebar {
+  animation-name: slideOutFromBottom;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+}
+
+:host(.bottom.open) .sidebar {
+  animation-name: slideInFromBottom;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+}
+
+:host(.right.idle) .sidebar {
+  transform: translateX(100%);
+}
+
+:host(.right.closed) .sidebar {
+  animation-name: slideOutFromRight;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+}
+
+:host(.right.open) .sidebar {
+  animation-name: slideInFromRight;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+}
+
+:host(.right) .sidebar {
+  max-width: 480px;
+}
+
+:host(.right) vviinn-vpr-widget::part(recommendations-grid) {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 24px;
+}
+
+:host(.right) vviinn-vpr-widget {
+  overflow: auto;
+}
+
+:host(.right) vviinn-vpr-widget::part(image) {
+  border: none;
+}
+
+.title {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 40px;
+  text-align: center;
+  color: #000000;
+}
+
+vviinn-vpr-widget::part(title),
+vviinn-vpr-widget::part(brand),
+vviinn-vpr-widget::part(type) {
+  text-align: left;
+}
+
+vviinn-vpr-widget::part(price-container) {
+  align-self: start;
+}
+
+.close-sidebar {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  right: 24px;
+  top: 24px;
+}
+
+@keyframes slideInFromBottom {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideOutFromBottom {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutFromRight {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(100%);
+  }
+}

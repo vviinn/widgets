@@ -7,17 +7,21 @@ import {
   State,
   Element,
   Watch,
+  Event,
+  EventEmitter,
+  Listen
 } from "@stencil/core";
 import { pipe } from "fp-ts/lib/function";
 import * as TE from "fp-ts/lib/TaskEither";
 import * as E from "fp-ts/lib/Either";
 import { createBearAuthedHeader } from "./token-helpers";
-import { Interfaces } from "../../interfaces/recommendation";
 import state from "../../store/store";
 import { CampaignName } from "../../campaign/Campaign";
 import { getRecommendationsService } from "../../campaign/CampaignService";
 import { imageSearchState } from "../../store/imageSearch.store";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
+import { Recommendation } from "../../recommendation/recommendation";
+import { Subject } from "rxjs";
 
 /**
  * @part product-card - product card itself
@@ -61,13 +65,20 @@ export class VviinnVprWidget implements ComponentInterface {
   /** Locale for currency formatting */
   @Prop() locale: string = "de-DE";
   /** @internal */
-  @Prop() apiPath: string | undefined;
+  @Prop() apiPath: string | undefined = "https://api.vviinn.com";
+  /** @internal */
+  @Prop() useCarousel: boolean = true;
 
   @Prop() showScroll = true;
   @Prop() cssUrl: string | null = null;
 
-  @State() recommendations: Interfaces["VisualProductSearch"][] = [];
+  @State() recommendations: Recommendation[] = [];
   @State() loaded: boolean = false;
+
+  @Event() recommendationsLoaded: EventEmitter;
+
+  private productIds: string[];
+  private productImageLoadedSubject = new Subject();
 
   @Watch("productId")
   handleProductIdChange() {
@@ -83,6 +94,11 @@ export class VviinnVprWidget implements ComponentInterface {
   handleApiPathChange(newPath: string) {
     state.apiPath = newPath;
     this.getRecommendations();
+  }
+
+  @Listen("productImageLoaded")
+  lol({detail}: CustomEvent<string>) {
+    this.productImageLoadedSubject.next(detail);
   }
 
   connectedCallback() {
@@ -130,6 +146,16 @@ export class VviinnVprWidget implements ComponentInterface {
     this.recommendations = data?.extended ?? data;
     imageSearchState.results = this.recommendations;
     this.loaded = true;
+    //this.recommendationsLoaded.emit();
+
+    this.productIds = this.recommendations.map(r => r.productId);
+    this.productImageLoadedSubject.subscribe((id) => {
+      this.productIds = this.productIds.filter(x => x !== id);
+
+      if(this.productIds.length === 0) {
+        this.recommendationsLoaded.emit();
+      }
+    })
   }
 
   private isExternalCSS(): boolean {
@@ -137,7 +163,11 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   private renderExternalCSS() {
-    return this.isExternalCSS() ? <link href={this.cssUrl} rel="stylesheet" /> : "";
+    return this.isExternalCSS() ? (
+      <link href={this.cssUrl} rel="stylesheet" />
+    ) : (
+      ""
+    );
   }
 
   render() {
@@ -153,14 +183,52 @@ export class VviinnVprWidget implements ComponentInterface {
         {this.renderExternalCSS()}
         <style>{state.fallbackStyles}</style>
         <h2 part="recommendations-title">{this.blockTitle}</h2>
-        <vviinn-carousel
-          mode={this.mode}
-          imageWidth={this.imageWidth}
-          showScroll={this.showScroll}
-          recommendations={this.recommendations}
-        >
-        </vviinn-carousel>
+        {this.useCarousel ? this.renderCarousel() : this.renderResults()}
       </Host>
+    );
+  }
+
+  private renderRecommendation(
+    recommendation: Recommendation
+  ): HTMLVviinnProductCardElement {
+    return (
+      <vviinn-product-card
+        part="product-part"
+        productId={recommendation.productId}
+        productTitle={recommendation.title}
+        deeplink={recommendation.deeplink}
+        image={recommendation.image.thumbnail}
+        brand={recommendation.brand}
+        imageWidth={this.imageWidth}
+        imageRatio={1}
+        price={recommendation.price.actual}
+        salePrice={recommendation.price.sale}
+        responsive={this.mode === "grid"}
+        dimmedBackground={this.useDimmedBackgroundInCard()}
+      />
+    );
+  }
+
+  private useDimmedBackgroundInCard(): boolean {
+    return this.mode === "continuity" || !this.useCarousel;
+  }
+
+  private renderResults() {
+    return (
+      <div class="recommendations-grid" part="recommendations-grid">
+        {this.recommendations.map((r) => this.renderRecommendation(r))}
+      </div>
+    );
+  }
+
+  private renderCarousel(): HTMLVviinnCarouselElement {
+    return (
+      <vviinn-carousel
+        mode={this.mode}
+        imageWidth={this.imageWidth}
+        showScroll={this.showScroll}
+        recommendations={this.recommendations}
+      ></vviinn-carousel>
     );
   }
 }
