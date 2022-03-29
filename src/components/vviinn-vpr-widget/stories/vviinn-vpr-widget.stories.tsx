@@ -1,8 +1,3 @@
-//import { ViinnVprWidget } from "./vviinn-vpr-widget";
-//import { gridDecorator, continuityDecorator } from "./recommendations-story-decorator";
-//import { commonWidgetArgTypes, gridLayout, continuityLayout } from "../../../stories_arguments/widgets";
-//import { cardAlignementAndColors } from "../../../stories_arguments/productCard";
-
 import { argTypes, continuityLayoutArgs, gridLayoutArgs } from "./args";
 
 const excludeControls = [
@@ -33,6 +28,42 @@ export default {
   }
 };
 
+const allignementLeft = `
+  vviinn-vpr-widget::part(title),
+  vviinn-vpr-widget::part(brand),
+  vviinn-vpr-widget::part(type),
+  vviinn-vpr-widget::part(deeplink),
+  vviinn-vpr-widget::part(price-container) {
+    align-self: start;
+    text-align: left;
+  }`;
+
+const allignementCenter = `
+  vviinn-vpr-widget::part(title),
+  vviinn-vpr-widget::part(brand),
+  vviinn-vpr-widget::part(type),
+  vviinn-vpr-widget::part(deeplink),
+  vviinn-vpr-widget::part(price-container) {
+    align-self: center;
+    text-align: center;
+  }`;
+
+const allignementRight = `
+  vviinn-vpr-widget::part(title),
+  vviinn-vpr-widget::part(brand),
+  vviinn-vpr-widget::part(type),
+  vviinn-vpr-widget::part(deeplink),
+  vviinn-vpr-widget::part(price-container) {
+    align-self: end;
+    text-align: right;
+  }`;
+
+const allignement = new Map([
+  [0, allignementLeft],
+  [1, allignementCenter],
+  [2, allignementRight],
+]);
+
 const Template = (args) => `
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -45,6 +76,7 @@ const Template = (args) => `
       gtag("require", "ec");
     </script>
     <style>
+      ${allignement.get(args.contentAlignment)}
       vviinn-vpr-widget::part(title),
       vviinn-vpr-widget::part(brand),
       vviinn-vpr-widget::part(type),
@@ -80,6 +112,49 @@ const Template = (args) => `
         }
 
         vviinn-product-card::part(title) {
+          font-size: 14px; 
+        }
+      }
+
+      @media(min-width: 1024px) {
+        vviinn-product-card,
+        vviinn-vpr-widget::part(image) {
+          width: ${args.recommendationsContinuityProductsDesktop}px;
+          max-width: ${args.recommendationsContinuityProductsDesktop}px;
+        }
+
+        vviinn-vpr-widget::part(image) {
+          height: 100%;
+          aspect-ratio: 1;
+        }
+      }
+
+      @media(max-width: 1024px) and (min-width: 768px) {
+        vviinn-product-card,
+        vviinn-vpr-widget::part(image) {
+          width: ${args.recommendationsContinuityProductsTablet}px;
+          max-width: ${args.recommendationsContinuityProductsTablet}px;
+        }
+
+        vviinn-vpr-widget::part(image) {
+          height: 100%;
+          aspect-ratio: 1;
+        }
+      }
+
+      @media(max-width: 768px) and (min-width: 460px) {
+        vviinn-product-card,
+        vviinn-vpr-widget::part(image) {
+          width: ${args.recommendationsContinuityProductsMobile}px;
+          max-width: ${args.recommendationsContinuityProductsMobile}px;
+        }
+
+        vviinn-vpr-widget::part(image) {
+          height: 100%;
+          aspect-ratio: 1;
+        }
+
+        vviinn-vpr-widget::part(title) {
           font-size: 14px; 
         }
       }
