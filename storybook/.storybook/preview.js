@@ -19,4 +19,10 @@ export const parameters = {
     extractArgTypes,
     extractComponentDescription,
   },
+  options: {
+    storySort: {
+      method: "alphabetical",
+      order: ["Installation", "Getting Started", "Widgets", "Elements"],
+    },
+  },
 };

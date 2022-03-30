@@ -1,0 +1,58 @@
+import { Meta, Story, Canvas } from '@storybook/addon-docs';
+
+<Meta title="Getting Started/Styling"></Meta>
+
+# Styling
+
+There are two ways of styling web components: [Custom properties](https://developer.mozilla.org/en-US/docs/Web/CSS/--*)
+and [Shadow Parts](https://developer.mozilla.org/en-US/docs/Web/CSS/::part)
+
+## Using Custom Properties
+
+You can customize vviinn-vps-button component with these properties:
+  - --color-primary *used on main action button, on slider bullets and on selected detected object*
+  - --color-primary-hover *used on main action button when hover*
+  - --color-icons: *used in svg icons fills*
+
+## Using Shadow Parts
+
+Almost every component you can use exports some shadow-parts.
+Use this API is a straightforward. Use `component-name::part(part-name)` to add CSS rules to any exported shadow part.
+
+```css
+vviinn-product-card::part(image) {
+  border: 1px solid lightgray;
+  box-sizing: border-box;
+  padding: 4px;
+}
+
+vviinn-product-card::part(title) {
+  text-decoration: underline;
+  font-weight: bold;
+  grid-row-start: -1;
+}
+```
+
+You can check the list of exported shadow parts at the bottom on component controls.
+Vviinn lets you easily change the style of your shop with custom CSS. The following parts can be customized with CSS:
+
+Usually it can be:
+
+- brand
+- currency
+- image
+- image-link
+- price-amount
+- price-container
+- price-outdated
+- price-regular
+- price-sale
+- title (or product-title)
+
+For example, to hide the price in `vviinn-vpr-widget` you can use this css snippet:
+
+```css
+vviinn-vpr-widget::part(price-containet) {
+  display: none;
+}
+```

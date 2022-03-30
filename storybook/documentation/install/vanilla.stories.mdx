@@ -1,0 +1,74 @@
+import { Meta, Story, Canvas } from '@storybook/addon-docs';
+
+<Meta title="Installation/Frameworkless"></Meta>
+
+# JavaScript
+
+## Install using CDN
+
+Paste scripts to `head` section of your page.<br />
+You don't need to include script tag with `nomodule` attribute if you do not need to support browsers without JavaScript modules feature.
+
+```html
+<script type="module" src="cdnPath/npmPackageName.esm.js"></script>
+<script nomodule src="cdnPath/npmPackageName.js"></script>
+```
+
+Then you will be able to use VPR or VPS widgets.
+
+### Visual Product Recommendations
+
+To use recommendations widget insert snippet below where you want to render widget.<br />
+`token` and `product-id` attributes are only nessesary, but you can tweak widget with other attributes.
+
+```html
+<vprTag
+  token="INSERT_YOURS_TOKEN"
+  product-id="YOURS_PRODUCT_ID">
+</vprTag>
+```
+[Check other attributes here ](/docs/components-visual-recommendations--default)
+
+Also can create component instance with DOM API:
+
+```javascript
+const component = document.createElement('vprTag');
+component.token = YOURS_TOKEN;
+component.productId = YOURS_PRODUCT_ID;
+
+document.append(component);
+```
+
+### Visual Product Search
+
+To use search widget first insert `<vpsTag token="INSERT_YOURS_TOKEN"></vpsTag>` anywhere to page.
+Widget implemented as modal window, so you need to trigger it.
+
+```html
+<vpsTag token="INSERT_YOURS_TOKEN"></vpsTag>
+```
+
+[Check other attributes here ](/docs/components-visual-search-widget--default)
+
+Also can create component instance with DOM API:
+
+```javascript
+const component = document.createElement('vpsTag');
+component.token = YOURS_TOKEN;
+
+document.append(component);
+```
+
+## Install using NPM
+
+If you want to use widgets as ES6 modules you should install it from NPM
+
+`npm i npmPackageName`
+
+And then add it to your JavaScript code:
+
+```javascript
+import { defineCustomElements } from 'npmPackageName';
+defineCustomElements();
+```
+After that you can use both Recommendation or Search widgets in html template or with javascript.

@@ -1,4 +1,5 @@
 import { argTypes, continuityLayoutArgs, gridLayoutArgs } from "./args";
+import { gridDecorator, continuityDecorator } from "./decorators";
 
 const excludeControls = [
   "blockTitle",
@@ -197,9 +198,9 @@ Grid.argTypes = {
   ...gridLayoutArgs
 };
 
-/* Grid.decorators = [
-*   gridDecorator
-* ]; */
+Grid.decorators = [
+  gridDecorator
+];
 
 export const Continuity = Template.bind({});
 Continuity.args = {
@@ -222,9 +223,9 @@ Continuity.args = {
   token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4"
 };
 
-/* Continuity.decorators = [
-*   continuityDecorator
-* ]; */
+Continuity.decorators = [
+  continuityDecorator
+];
 
 Continuity.argTypes = {
   ...continuityLayoutArgs
