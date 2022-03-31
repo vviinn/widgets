@@ -2,7 +2,8 @@ steps:
   - name: node
     entrypoint: npm
     args: ['install']
-  - name: node
-    entrypoint: npm
-    args: ['run', 'build-storybook']
+  - name: bash
+    args: ['ls', '-la']
+  - name: bash
+    args: ['ls', '-la ../']
 
