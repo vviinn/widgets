@@ -1,2 +1,0 @@
-import * as C from "./Campaign";
-export declare const getRecommendationsService: (campaignType: C.CampaignName) => ((productId: string) => (options: RequestInit) => import("fp-ts/lib/TaskEither").TaskEither<import("../error").BasicError<string | Response>, import("./VPRCampaignResponse").VPRCampaignResponse>) | ((productId: string) => (options: RequestInit) => import("fp-ts/lib/TaskEither").TaskEither<import("../error").BasicError<string | Response>, import("./VCSCampaignResponse").VCSCampaignResponse>);
