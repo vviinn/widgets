@@ -1,10 +1,11 @@
 steps:
-  - id: "Install widgets dependencies" 
+  - id: 'install_widgets'
     name: node
     entrypoint: npm
     args: ['install']
-  - name: bash
-    args: ['ls', '/workspace']
-  - name: node
+    dir: '/workspace'
+  - id: 'build_widgets'
+    name: node
     entrypoint: npm
     args: ['run', 'build']
+    dir: '/workspace'
