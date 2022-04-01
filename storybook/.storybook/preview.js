@@ -1,4 +1,3 @@
-import { defineCustomElements } from "../../dist/loader/index";
 import docJson from "../../docs.json";
 import {
   extractArgTypes,
@@ -7,7 +6,7 @@ import {
 } from "@pxtrn/storybook-addon-docs-stencil";
 
 import { defineCustomElements as loadProductionComponents } from "vviinn-widgets/dist/loader";
-import { defineCustomElements as loadLocalComponents } from "../vviinn_widgets/loader/index.js";
+import { defineCustomElements as loadLocalComponents } from "../../dist/loader/index.js";
 
 const env = process.env.NODE_ENV;
 
