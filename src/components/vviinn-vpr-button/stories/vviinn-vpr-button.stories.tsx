@@ -1,0 +1,87 @@
+import { withDesign } from "storybook-addon-designs";
+import { argTypes } from "./args";
+
+type StoryArgs = typeof argTypes;
+
+export default {
+  title: "Widgets/Visual Recommendation Button",
+  component: "vviinn-vpr-button",
+  decorators: [withDesign],
+  argTypes
+};
+
+const Template = (args: StoryArgs): any =>
+  `<style>
+     body {
+       font-family: ${args.font};
+     }
+
+     vviinn-vpr-button::part(button) {
+       width: ${args.buttonSize}px;
+       height: ${args.buttonSize}px;
+       fill: ${args.iconColor};
+       background: ${args.backgroundColor};
+       opacity: ${args.backgroundOpacity}%;
+       border-radius: ${args.radius}px;
+       border: ${args.border ? "1px solid" : "none"};
+       border-color: ${args.borderColor};
+       ${args.shadow ? "" : "box-shadow: none;"}
+     }
+
+     vviinn-recommendations-sidebar::part(title) {
+       display: ${args.modalTitle ? "inline" : "none"};
+       font-size: ${args.modalTitleFontSize}px;
+     }
+
+     vviinn-recommendations-sidebar::part(product-title),
+     vviinn-recommendations-sidebar::part(brand),
+     vviinn-recommendations-sidebar::part(type),
+     vviinn-recommendations-sidebar::part(price-regular),
+     vviinn-recommendations-sidebar::part(price-sale) {
+       color: ${args.primaryTextColor};
+     }
+
+     vviinn-recommendations-sidebar::part(price-outdated) {
+       color: ${args.secondaryTextColor};
+     }
+
+     vviinn-recommendations-sidebar.open {
+       background: rgba(0, 0, 0, 0.1);
+     }
+
+     vviinn-recommendations-sidebar::part(body) {
+       border-radius: ${args.sidebarBorderRadius}px ${args.sidebarBorderRadius}px 0 0;
+     }
+
+     vviinn-recommendations-sidebar::part(source-image) {
+       width: ${args.sourceImageSize}px;
+       height: ${args.sourceImageSize}px;
+       border: ${args.sourceImageBorder ? "1px solid" : "none"};
+       border-color: ${args.sourceImageBorderColor};
+       ${args.sourceImageShadow ? "" : "box-shadow: none;"}
+     }
+   </style>
+   <vviinn-vpr-button token="${args.token}"
+                      product-id="${args.productId}"
+                      position="${args.position}"
+                      sidebar-title="${args.sidebarTitle}"
+                      modal-scrollbar="${args.modalScrollbar}"
+                      source-image="${args.showSourceImage 
+    ? "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg"
+    : ""
+  }"></vviinn-vpr-button>`;
+
+export const Default = Template.bind({});
+
+Default.args = {
+  token:
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4",
+  productId: "4114460310",
+};
+
+Default.parameters = {
+  design: {
+    type: "figma",
+    url: "https://www.figma.com/file/YR5ZK1s4z9ZRUXytB8uVuj/Widgets?node-id=591%3A3859",
+  },
+};

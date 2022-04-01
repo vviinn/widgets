@@ -1,1 +1,0 @@
-export{V as vpr_slider}from"./p-b7e15368.js";import"./p-92f78b55.js";

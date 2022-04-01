@@ -6,9 +6,19 @@ import {
   setStencilDocJson,
 } from "@pxtrn/storybook-addon-docs-stencil";
 
+import { defineCustomElements as loadProductionComponents } from "vviinn-widgets/dist/loader";
+import { defineCustomElements as loadLocalComponents } from "../vviinn_widgets/loader/index.js";
+
+const env = process.env.NODE_ENV;
+
 if (docJson) setStencilDocJson(docJson);
 
-defineCustomElements();
+if (env === "production") {
+  loadProductionComponents();
+} else {
+  loadLocalComponents();
+  console.log("use repo components");
+}
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -18,5 +28,11 @@ export const parameters = {
   docs: {
     extractArgTypes,
     extractComponentDescription,
+  },
+  options: {
+    storySort: {
+      method: "alphabetical",
+      order: ["Installation", "Getting Started", "Widgets", "Elements"],
+    },
   },
 };

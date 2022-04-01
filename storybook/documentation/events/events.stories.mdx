@@ -1,0 +1,35 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="Getting Started/Events"></Meta>
+
+# Listening events
+
+Every `vviinn-product-card` generates three events:
+
+- recommendationClick
+- recommendationLoad
+- recommendationView
+
+User can work listen this events with `document.addEventListener()`.
+
+## Recommendation load and view
+
+```javascript
+document.addEventListener('recommendationLoad', ({detail}) => {
+  console.log(`Load product ${detail.title} with id ${detail.productId}`);
+});
+
+document.addEventListener('recommendationView', ({detail}) => {
+  console.log(`Product ${detail.title} with id ${detail.productId} is rendered on viewport`);
+});
+```
+
+## Recommendation click
+
+When a deeplink is clicked we dispatch `recommendationClick()` and user is redirected to the product. You can use [Beacon API](https://developer.mozilla.org/en-US/docs/Web/API/Beacon_API) to handle these events.
+
+```javascript
+document.addEventListener('recommendationClick', ({detail}) => {
+  navigator.sendBeacon(some_url, detail);
+});
+```

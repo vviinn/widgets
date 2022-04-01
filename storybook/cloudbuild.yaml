@@ -1,0 +1,9 @@
+steps:
+  - name: node
+    entrypoint: npm
+    args: ['install']
+  - name: bash
+    args: ['ls', '-la']
+  - name: bash
+    args: ['ls', '-la ../']
+

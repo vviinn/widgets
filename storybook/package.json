@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@storybook/builder-webpack5": "^6.4.17",
-    "@storybook/manager-webpack5": "^6.4.17"
+    "@storybook/manager-webpack5": "^6.4.17",
+    "lit-html": "^1.4.1"
   }
 }
