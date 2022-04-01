@@ -26,3 +26,4 @@ steps:
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args: [ 'run', 'deploy', 'storybook-$_ENVIRONMENT', '--image', 'eu.gcr.io/$PROJECT_ID/storybook:$_DOCKER_TAG', '--region', 'europe-west1',  '--platform', 'managed' ]
+    dir: '/workspace/storybook/storybook-static'
