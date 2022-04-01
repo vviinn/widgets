@@ -22,7 +22,7 @@ steps:
     dir: '/workspace/storybook'
     waitFor: ['install_storybook', 'build_widgets']
     env:
-      - 'NODE_ENV=development'
+      - 'NODE_ENV=$_NODE_ENV'
   - name: 'gcr.io/cloud-builders/docker'
     args: [ 'build', '-t', 'eu.gcr.io/$PROJECT_ID/storybook:$_DOCKER_TAG', '.' ]
     dir: '/workspace/storybook'
