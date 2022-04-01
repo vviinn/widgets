@@ -25,7 +25,7 @@ steps:
       - 'NODE_ENV=development'
   - name: 'gcr.io/cloud-builders/docker'
     args: [ 'build', '-t', 'eu.gcr.io/$PROJECT_ID/storybook:$_DOCKER_TAG', '.' ]
-    dir: '/workspace/storybook/storybook-static'
+    dir: '/workspace/storybook'
   - name: 'gcr.io/cloud-builders/docker'
     args: [ 'push', 'eu.gcr.io/$PROJECT_ID/storybook:$_DOCKER_TAG' ]
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
