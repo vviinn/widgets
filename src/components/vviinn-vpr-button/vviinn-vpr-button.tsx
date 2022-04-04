@@ -18,6 +18,11 @@ export class VviinnVprButton {
   @Prop() sidebarTitle: string = "Visually similar products";
   @Prop() modalScrollbar: boolean = false;
 
+  private sidebar: HTMLVviinnRecommendationsSidebarElement | null = null;
+  private sidebarCloseListener: () => void = () => {
+    document.body.removeChild(this.sidebar);
+  }
+
   render() {
     return (
       <Host>
@@ -35,18 +40,21 @@ export class VviinnVprButton {
   }
 
   handleClick(): void {
-    const sidebar = document.createElement("vviinn-recommendations-sidebar") as HTMLVviinnRecommendationsSidebarElement;
+    const sidebar = document.createElement("vviinn-recommendations-sidebar");
     sidebar.sidebarTitle = this.sidebarTitle;
     sidebar.productId = this.productId;
     sidebar.token = this.token;
     sidebar.position = this.position;
     sidebar.sourceImage = this.sourceImage;
     sidebar.widgetScrollbar = this.modalScrollbar;
+    this.sidebar = sidebar;
 
-    sidebar.addEventListener("modalClosed", () => {
-      document.body.removeChild(sidebar);
-    });
+    sidebar.addEventListener("modalClosed", this.sidebarCloseListener);
+    document.body.append(this.sidebar);
+  }
 
-    document.body.append(sidebar);
+  disconnectedCallback() {
+    this.sidebar.removeEventListener("modalCLosed", this.sidebarCloseListener);
+    document.body.removeChild(this.sidebar);
   }
 }
