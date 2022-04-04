@@ -3,11 +3,24 @@ import { argTypes } from "./args";
 
 type StoryArgs = typeof argTypes;
 
+const centerDecorator = (story: () => any) => `
+    <div style="display: grid;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                align-items: center;
+                justify-items: center;">
+      ${story()}
+    </div>
+  `;
+
 export default {
   title: "Widgets/Visual Recommendations/Button",
   component: "vviinn-vpr-button",
-  decorators: [withDesign],
-  argTypes
+  decorators: [withDesign, centerDecorator],
+  argTypes,
 };
 
 const Template = (args: StoryArgs): any =>
@@ -50,7 +63,9 @@ const Template = (args: StoryArgs): any =>
      }
 
      vviinn-recommendations-sidebar::part(body) {
-       border-radius: ${args.sidebarBorderRadius}px ${args.sidebarBorderRadius}px 0 0;
+       border-radius: ${args.sidebarBorderRadius}px ${
+    args.sidebarBorderRadius
+  }px 0 0;
      }
 
      vviinn-recommendations-sidebar::part(source-image) {
@@ -66,10 +81,11 @@ const Template = (args: StoryArgs): any =>
                       position="${args.position}"
                       sidebar-title="${args.sidebarTitle}"
                       modal-scrollbar="${args.modalScrollbar}"
-                      source-image="${args.showSourceImage 
-    ? "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg"
-    : ""
-  }"></vviinn-vpr-button>`;
+                      source-image="${
+                        args.showSourceImage
+                          ? "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg"
+                          : ""
+                      }"></vviinn-vpr-button>`;
 
 export const Default = Template.bind({});
 
