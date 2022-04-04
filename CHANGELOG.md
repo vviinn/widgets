@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.3.0](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.2.2...v2.3.0) (2022-04-04)
+
+
+### Features
+
+* export carousel buttons as shadow parts ([c8b65bf](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/c8b65bf53f223a99c61b6f31a11c24388c83b3c1))
+
+
+### Bug Fixes
+
+* remove sidebar when vviinn-vpr-button removed from dom ([41a5ad5](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/41a5ad5d032506a8a5a63e9cd9de35f5a6fdc2a0))
+
 ### [2.2.2](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.2.1...v2.2.2) (2022-03-22)
 
 ### [2.2.1](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.2.0...v2.2.1) (2022-03-17)
