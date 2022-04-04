@@ -96,6 +96,10 @@ button {
   margin: 0;
 }
 
+button {
+  fill: #525252;
+}
+
 button.prev svg {
   transform: rotate(180deg);
   margin-left: -5px;

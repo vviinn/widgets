@@ -36,6 +36,7 @@ import { Subject } from "rxjs";
  * @part price-prefix - block rendered before each price element (for ex. "from")
  * @part price-regular - block for price if no sale price presented
  * @part price-sale -  block for sale price. rendered only if sale price presented
+ * @part carousel-button
  */
 @Component({
   tag: "vviinn-vpr-widget",

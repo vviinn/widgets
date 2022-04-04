@@ -11,6 +11,9 @@ const CONTENT_GROUP_CSS_CLASS = "items-group";
 type MoveDirection = "left" | "right";
 export type CarouselMode = "grid" | "continuity";
 
+/**
+ * @part carousel-button
+ **/
 @Component({
   tag: "vviinn-carousel",
   styleUrl: "vviinn-carousel.css",
@@ -78,7 +81,7 @@ export class VviinnCarousel {
       content: true,
       [this.moveDirection]: true,
       [this.mode]: true,
-      "show-scrollbar": this.showScroll
+      "show-scrollbar": this.showScroll,
     };
   }
 
@@ -304,7 +307,11 @@ export class VviinnCarousel {
     return (
       <Host class={this.getClassMap()}>
         <div class={{ body: true, ...this.getClassMap() }}>
-          <button class="prev" onClick={() => this.showPrev()}>
+          <button
+            class="prev"
+            onClick={() => this.showPrev()}
+            part="carousel-button"
+          >
             <ChevronIcon />
           </button>
           <div
@@ -313,7 +320,11 @@ export class VviinnCarousel {
           >
             {this.renderRecommendations()}
           </div>
-          <button class="next" onClick={() => this.showNext()}>
+          <button
+            class="next"
+            onClick={() => this.showNext()}
+            part="carousel-button"
+          >
             <ChevronIcon />
           </button>
         </div>
