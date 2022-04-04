@@ -1,5 +1,5 @@
 export default {
-  title: "Widgets/Visual Search Button",
+  title: "Widgets/Visual Search/Button",
   component: "vviinn-vps-button",
   parameters: {
     viewport: {

@@ -12,7 +12,7 @@ const excludeControls = [
 ];
 
 export default {
-  title: "Widgets/Visual Recommendation",
+  title: "Widgets/Visual Recommendations/Widget",
   component: "vviinn-vpr-widget",
   argTypes: {
     ...argTypes,

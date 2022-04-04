@@ -1,5 +1,5 @@
 export default {
-  title: "Widgets/Visual Search",
+  title: "Widgets/Visual Search/Widget",
   parameters: {
     viewport: {
       defaultViewport: "mobile2"
