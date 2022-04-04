@@ -4,7 +4,7 @@ import { argTypes } from "./args";
 type StoryArgs = typeof argTypes;
 
 export default {
-  title: "Widgets/Visual Recommendation Button",
+  title: "Widgets/Visual Recommendations/Button",
   component: "vviinn-vpr-button",
   decorators: [withDesign],
   argTypes
