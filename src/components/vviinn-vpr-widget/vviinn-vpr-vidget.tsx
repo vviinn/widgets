@@ -22,6 +22,9 @@ import { imageSearchState } from "../../store/imageSearch.store";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 import { Recommendation } from "../../recommendation/recommendation";
 import { Subject } from "rxjs";
+import {v4 as uuidv4} from 'uuid';
+
+import { Configuration, createConfiguration, DefaultApi, ProductViewEvent, servers, Widget } from "@vviinn/tracking-client-ts"
 
 /**
  * @part product-card - product card itself
@@ -80,6 +83,8 @@ export class VviinnVprWidget implements ComponentInterface {
 
   private productIds: string[];
   private productImageLoadedSubject = new Subject();
+  trackingApi: DefaultApi;
+  uiSessionId: any;
 
   @Watch("productId")
   handleProductIdChange() {
@@ -102,10 +107,31 @@ export class VviinnVprWidget implements ComponentInterface {
     this.productImageLoadedSubject.next(detail);
   }
 
+  @Listen("recommendationView")
+  trackRecommendationView({detail}: CustomEvent<string>) {
+    const viewEvent: ProductViewEvent = {
+      typ: "product_view_event",
+      widget: "VPR",
+      product: detail,
+      rank: 0,
+      sessionId: this.uiSessionId
+    }
+
+    this.trackingApi.trackEvent(viewEvent);
+  }
+
   connectedCallback() {
     state.apiPath = this.apiPath;
     state.currencySign = this.currencySign;
     state.locale = this.locale;
+    this.uiSessionId = uuidv4();
+
+    const confParams = {
+      baseServer: state.apiPath
+     };
+
+    const conf = createConfiguration(confParams);
+    this.trackingApi = new DefaultApi(conf);
   }
 
   async componentWillLoad() {
