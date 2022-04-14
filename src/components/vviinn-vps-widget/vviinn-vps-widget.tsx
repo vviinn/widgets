@@ -1,5 +1,5 @@
 import { Component, Host, h, State, Prop, Element, Watch } from "@stencil/core";
-import state from "../../store/store";
+import { state } from "../../store/store";
 import { imageSearchState } from "../../store/imageSearch.store";
 import * as O from "fp-ts/lib/Option";
 import { slotChangeListener } from "../customized-slots";

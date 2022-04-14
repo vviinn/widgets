@@ -9,22 +9,31 @@ import {
   Watch,
   Event,
   EventEmitter,
-  Listen
+  Listen,
 } from "@stencil/core";
 import { pipe } from "fp-ts/lib/function";
 import * as TE from "fp-ts/lib/TaskEither";
 import * as E from "fp-ts/lib/Either";
 import { createBearAuthedHeader } from "./token-helpers";
-import state from "../../store/store";
+import { state } from "../../store/store";
+import { state as trackingState } from "../../store/tracking.store";
 import { CampaignName } from "../../campaign/Campaign";
 import { getRecommendationsService } from "../../campaign/CampaignService";
 import { imageSearchState } from "../../store/imageSearch.store";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 import { Recommendation } from "../../recommendation/recommendation";
 import { Subject } from "rxjs";
-import {v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
-import { Configuration, createConfiguration, DefaultApi, ProductViewEvent, servers, Widget } from "@vviinn/tracking-client-ts"
+import {
+  createConfiguration,
+  DefaultApi,
+  HttpBearerConfiguration,
+  TokenProvider,
+  WidgetEvent,
+} from "@vviinn/tracking-client-ts";
+import { servers } from "@vviinn/tracking-client-ts/dist/servers";
+import { ConfigurationParameters } from "@vviinn/tracking-client-ts/dist/configuration";
 
 /**
  * @part product-card - product card itself
@@ -103,21 +112,13 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   @Listen("productImageLoaded")
-  lol({detail}: CustomEvent<string>) {
+  lol({ detail }: CustomEvent<string>) {
     this.productImageLoadedSubject.next(detail);
   }
 
   @Listen("recommendationView")
-  trackRecommendationView({detail}: CustomEvent<string>) {
-    const viewEvent: ProductViewEvent = {
-      typ: "product_view_event",
-      widget: "VPR",
-      product: detail,
-      rank: 0,
-      sessionId: this.uiSessionId
-    }
-
-    this.trackingApi.trackEvent(viewEvent);
+  trackRecommendationView({ detail }: CustomEvent<string>) {
+    console.log(`View event: ${detail}`);
   }
 
   connectedCallback() {
@@ -126,12 +127,37 @@ export class VviinnVprWidget implements ComponentInterface {
     state.locale = this.locale;
     this.uiSessionId = uuidv4();
 
-    const confParams = {
-      baseServer: state.apiPath
-     };
+    const server = servers[0];
 
-    const conf = createConfiguration(confParams);
-    this.trackingApi = new DefaultApi(conf);
+    const provider: TokenProvider = {
+      getToken: () => {
+        return new Promise((resolve) => resolve(this.token));
+      },
+    };
+
+    const bearerConf: HttpBearerConfiguration = {
+      tokenProvider: provider,
+    };
+
+    const conf: ConfigurationParameters = {
+      baseServer: server,
+      authMethods: {
+        bearerAuth: bearerConf,
+      },
+    };
+
+    const c = createConfiguration(conf);
+    const api = new DefaultApi(c);
+
+    const wEvent: WidgetEvent = {
+      widget: "VPR",
+      action: "open",
+      sessionId: this.uiSessionId,
+      typ: "widget_event",
+    };
+
+    api.trackEvent(wEvent);
+    console.log(api);
   }
 
   async componentWillLoad() {
@@ -175,14 +201,14 @@ export class VviinnVprWidget implements ComponentInterface {
     this.loaded = true;
     //this.recommendationsLoaded.emit();
 
-    this.productIds = this.recommendations.map(r => r.productId);
+    this.productIds = this.recommendations.map((r) => r.productId);
     this.productImageLoadedSubject.subscribe((id) => {
-      this.productIds = this.productIds.filter(x => x !== id);
+      this.productIds = this.productIds.filter((x) => x !== id);
 
-      if(this.productIds.length === 0) {
+      if (this.productIds.length === 0) {
         this.recommendationsLoaded.emit();
       }
-    })
+    });
   }
 
   private isExternalCSS(): boolean {
