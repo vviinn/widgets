@@ -16,7 +16,6 @@ import * as TE from "fp-ts/lib/TaskEither";
 import * as E from "fp-ts/lib/Either";
 import { createBearAuthedHeader } from "./token-helpers";
 import { state } from "../../store/store";
-import { state as trackingState } from "../../store/tracking.store";
 import { CampaignName } from "../../campaign/Campaign";
 import { getRecommendationsService } from "../../campaign/CampaignService";
 import { imageSearchState } from "../../store/imageSearch.store";
@@ -26,14 +25,10 @@ import { Subject } from "rxjs";
 import { v4 as uuidv4 } from "uuid";
 
 import {
-  createConfiguration,
   DefaultApi,
-  HttpBearerConfiguration,
-  TokenProvider,
   WidgetEvent,
 } from "@vviinn/tracking-client-ts";
-import { servers } from "@vviinn/tracking-client-ts/dist/servers";
-import { ConfigurationParameters } from "@vviinn/tracking-client-ts/dist/configuration";
+import { createTrackingApi } from "../../openApi";
 
 /**
  * @part product-card - product card itself
@@ -126,28 +121,7 @@ export class VviinnVprWidget implements ComponentInterface {
     state.currencySign = this.currencySign;
     state.locale = this.locale;
     this.uiSessionId = uuidv4();
-
-    const server = servers[0];
-
-    const provider: TokenProvider = {
-      getToken: () => {
-        return new Promise((resolve) => resolve(this.token));
-      },
-    };
-
-    const bearerConf: HttpBearerConfiguration = {
-      tokenProvider: provider,
-    };
-
-    const conf: ConfigurationParameters = {
-      baseServer: server,
-      authMethods: {
-        bearerAuth: bearerConf,
-      },
-    };
-
-    const c = createConfiguration(conf);
-    const api = new DefaultApi(c);
+    this.trackingApi = createTrackingApi(this.apiPath, this.token);
 
     const wEvent: WidgetEvent = {
       widget: "VPR",
@@ -156,8 +130,18 @@ export class VviinnVprWidget implements ComponentInterface {
       typ: "widget_event",
     };
 
-    api.trackEvent(wEvent);
-    console.log(api);
+    this.trackingApi.trackEvent(wEvent);
+  }
+
+  disconnectedCallback() {
+    const wEvent: WidgetEvent = {
+      widget: "VPR",
+      action: "close",
+      sessionId: this.uiSessionId,
+      typ: "widget_event",
+    };
+
+    this.trackingApi.trackEvent(wEvent);
   }
 
   async componentWillLoad() {
