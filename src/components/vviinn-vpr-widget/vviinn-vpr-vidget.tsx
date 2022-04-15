@@ -29,6 +29,8 @@ import {
   WidgetEvent,
 } from "@vviinn/tracking-client-ts";
 import { createTrackingApi } from "../../openApi";
+import { ProductCardEvent } from "../../recommendation/events";
+import { createWidgetVprEvent } from "../../tracking";
 
 /**
  * @part product-card - product card itself
@@ -88,7 +90,7 @@ export class VviinnVprWidget implements ComponentInterface {
   private productIds: string[];
   private productImageLoadedSubject = new Subject();
   trackingApi: DefaultApi;
-  uiSessionId: any;
+  uiSessionId: string;
 
   @Watch("productId")
   handleProductIdChange() {
@@ -112,7 +114,7 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   @Listen("recommendationView")
-  trackRecommendationView({ detail }: CustomEvent<string>) {
+  trackRecommendationView({ detail }: ProductCardEvent) {
     console.log(`View event: ${detail}`);
   }
 
@@ -123,14 +125,12 @@ export class VviinnVprWidget implements ComponentInterface {
     this.uiSessionId = uuidv4();
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
 
-    const wEvent: WidgetEvent = {
-      widget: "VPR",
+    const widgetOpenEvent = createWidgetVprEvent({
       action: "open",
       sessionId: this.uiSessionId,
-      typ: "widget_event",
-    };
+    });
 
-    this.trackingApi.trackEvent(wEvent);
+    this.trackingApi.trackEvent(widgetOpenEvent);
   }
 
   disconnectedCallback() {
