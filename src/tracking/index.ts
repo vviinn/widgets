@@ -5,8 +5,11 @@ import {
   vpsProductClick,
   vpsProductView,
 } from "./product";
+import { vprWidget, vpsWidget } from "./widget";
 
 export const createProductViewVprEvent = createTrackingEvent(vprProductView);
 export const createProductViewVpsEvent = createTrackingEvent(vpsProductView);
 export const createProductClickVprEvent = createTrackingEvent(vprProductClick);
 export const createProductClickVpsEvent = createTrackingEvent(vpsProductClick);
+export const createWidgetVprEvent = createTrackingEvent(vprWidget);
+export const createWidgetVpsEvent = createTrackingEvent(vpsWidget);
