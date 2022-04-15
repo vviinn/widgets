@@ -21,6 +21,7 @@ import {
   ResponsiveImage,
   Image,
 } from "./render-helpers";
+import { ProductCardEventData } from "../../recommendation/events";
 
 /**
  * @part brand - product brand.
@@ -59,21 +60,33 @@ export class VviinnProductCard {
   @Prop() responsive: boolean = false;
   @Prop() dimmedBackground: boolean = false;
 
+  /** @internal */
+  @Prop() index: number = 0;
+
   @State() imageLoaded: boolean = false;
 
   /** Event fires ones when recommendation rendered on page */
-  @Event({ bubbles: true }) recommendationLoad: EventEmitter<string>;
+  @Event({ bubbles: true }) recommendationLoad: EventEmitter<ProductCardEventData>;
   /** Event fires ones when recommendation appears on the viewport */
-  @Event({ bubbles: true }) recommendationView: EventEmitter<string>;
+  @Event({ bubbles: true }) recommendationView: EventEmitter<ProductCardEventData>;
   /** Event fires ones when user click on deeplink */
-  @Event({ bubbles: true }) recommendationClick: EventEmitter<string>;
+  @Event({ bubbles: true }) recommendationClick: EventEmitter<ProductCardEventData>;
 
   @Event() productImageLoaded: EventEmitter<string>;
+
+  private productData: ProductCardEventData | null = null;
 
   private intersectionObserver = new IntersectionObserver(
     this.intersectionCallback.bind(this),
     { threshold: 1.0 }
   );
+
+  connectedCallback() {
+    this.productData = {
+      productId: this.productId,
+      productPosition: this.index
+    }
+  }
 
   private intersectionCallback(data: IntersectionObserverEntry[]) {
     if (data.some((entry) => entry.isIntersecting)) {
@@ -82,19 +95,19 @@ export class VviinnProductCard {
         O.map((analytics) => analytics.sendImpression(this.getProduct()))
       );
 
-      this.recommendationView.emit(this.productId);
+      this.recommendationView.emit(this.productData);
       this.intersectionObserver.disconnect();
     }
   }
 
   componentDidLoad() {
-    this.recommendationLoad.emit(this.productId);
+    this.recommendationLoad.emit(this.productData);
     this.intersectionObserver.observe(this.el);
 
     const links = this.el.shadowRoot.querySelectorAll("a");
     links.forEach((link) =>
       link.addEventListener("mousedown", (event) => {
-        this.recommendationClick.emit(this.productId);
+        this.recommendationClick.emit(this.productData);
 
         if (window.ga) {
           event.preventDefault();
