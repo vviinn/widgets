@@ -1,8 +1,30 @@
-import { Component, Host, h, State, Prop, Element, Watch } from "@stencil/core";
+import {
+  Component,
+  Host,
+  h,
+  State,
+  Prop,
+  Element,
+  Watch,
+  Listen,
+} from "@stencil/core";
 import { state } from "../../store/store";
 import { imageSearchState } from "../../store/imageSearch.store";
 import * as O from "fp-ts/lib/Option";
 import { slotChangeListener } from "../customized-slots";
+import { v4 as uuidv4 } from "uuid";
+import { createTrackingApi } from "../../openApi";
+import {
+  DefaultApi,
+  ProductClickEvent,
+  ProductViewEvent,
+  WidgetEvent,
+} from "@vviinn/tracking-client-ts";
+import {
+  createProductViewVpsEvent,
+  createWidgetVpsEvent,
+} from "../../tracking";
+import { ProductCardEvent } from "../../recommendation/events";
 
 /**
  * @prop --color-primary: color used for action button, slider bullets and selected detected object;
@@ -51,6 +73,8 @@ export class VviinnVpsWidget {
   @State() wrongImageFormat: boolean = false;
 
   private overflow: string;
+  private uiSessionId: string;
+  private trackingApi: DefaultApi;
 
   @Watch("active")
   activeWatcher(value: boolean) {
@@ -62,6 +86,23 @@ export class VviinnVpsWidget {
     }
   }
 
+  @Listen("recommendationView")
+  trackRecommendationView({ detail }: ProductCardEvent) {
+    const recommendationViewEvent: ProductViewEvent = createProductViewVpsEvent(
+      detail
+    );
+
+    this.trackingApi.trackEvent(recommendationViewEvent);
+  }
+
+  @Listen("recommendationClick")
+  trackRecommendationClick({ detail }: ProductCardEvent) {
+    const recommendationClickEvent: ProductClickEvent = createProductViewVpsEvent(
+      detail
+    );
+    this.trackingApi.trackEvent(recommendationClickEvent);
+  }
+
   componentWillLoad() {
     slotChangeListener(this, this.el);
   }
@@ -71,6 +112,25 @@ export class VviinnVpsWidget {
     state.currencySign = this.currencySign;
     state.locale = this.locale;
     imageSearchState.token = this.token;
+
+    this.uiSessionId = uuidv4();
+    this.trackingApi = createTrackingApi(this.apiPath, this.token);
+
+    const widgetOpenEvent: WidgetEvent = createWidgetVpsEvent({
+      action: "open",
+      sessionId: this.uiSessionId,
+    });
+
+    this.trackingApi.trackEvent(widgetOpenEvent);
+  }
+
+  disconnectedCallback() {
+    const widgetOpenEvent: WidgetEvent = createWidgetVpsEvent({
+      action: "close",
+      sessionId: this.uiSessionId,
+    });
+
+    this.trackingApi.trackEvent(widgetOpenEvent);
   }
 
   private handleImageSelection() {
@@ -126,10 +186,7 @@ export class VviinnVpsWidget {
           onModalClosed={() => this.handleModalClose()}
           exportparts="secondary-action, title, close-button"
         >
-          <vviinn-slider
-            showBullets={false}
-            position={this.slidePosition}
-          >
+          <vviinn-slider showBullets={false} position={this.slidePosition}>
             <vviinn-slide class={{ "start-page": true }}>
               <div
                 class={{
@@ -185,7 +242,9 @@ export class VviinnVpsWidget {
                   <vviinn-onboarding />
                   <vviinn-example-images
                     onImageSelected={() => this.handleImageSelection()}
-                    onImageSelectedError={() => this.resetScroll("onboarding-block", "smooth")}
+                    onImageSelectedError={() =>
+                      this.resetScroll("onboarding-block", "smooth")
+                    }
                   />
                 </div>
               </div>
@@ -204,7 +263,12 @@ export class VviinnVpsWidget {
                 </div>
               </div>
               <div id="results-block" class="products-wrapper">
-                <div class={{ "nothing-found": true, hidden: imageSearchState.results.length > 0 }}>
+                <div
+                  class={{
+                    "nothing-found": true,
+                    hidden: imageSearchState.results.length > 0,
+                  }}
+                >
                   <vviinn-empty-results />
                   <vviinn-onboarding />
                 </div>
@@ -233,7 +297,7 @@ export class VviinnVpsWidget {
             </vviinn-slide>
           </vviinn-slider>
         </vviinn-overlayed-modal>
-      </Host >
+      </Host>
     );
   }
 }
