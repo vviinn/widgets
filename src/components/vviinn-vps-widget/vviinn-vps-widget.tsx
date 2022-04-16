@@ -278,7 +278,7 @@ export class VviinnVpsWidget {
                     products: true,
                   }}
                 >
-                  {imageSearchState.results.map((p) => (
+                  {imageSearchState.results.map((p, i) => (
                     <vviinn-product-card
                       hidden={true}
                       productTitle={p.title}
@@ -290,6 +290,7 @@ export class VviinnVpsWidget {
                       imageWidth={160}
                       image={p.image.thumbnail ?? p.image.original}
                       part="product-card"
+                      index={i}
                     />
                   ))}
                 </div>

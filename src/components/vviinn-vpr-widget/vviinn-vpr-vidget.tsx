@@ -241,7 +241,8 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   private renderRecommendation(
-    recommendation: Recommendation
+    recommendation: Recommendation,
+    index: number
   ): HTMLVviinnProductCardElement {
     return (
       <vviinn-product-card
@@ -257,6 +258,7 @@ export class VviinnVprWidget implements ComponentInterface {
         salePrice={recommendation.price.sale}
         responsive={this.mode === "grid"}
         dimmedBackground={this.useDimmedBackgroundInCard()}
+        index={index}
       />
     );
   }
@@ -268,7 +270,7 @@ export class VviinnVprWidget implements ComponentInterface {
   private renderResults() {
     return (
       <div class="recommendations-grid" part="recommendations-grid">
-        {this.recommendations.map((r) => this.renderRecommendation(r))}
+        {this.recommendations.map((r, i) => this.renderRecommendation(r, i))}
       </div>
     );
   }
