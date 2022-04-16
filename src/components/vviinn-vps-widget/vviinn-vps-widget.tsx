@@ -16,12 +16,14 @@ import { v4 as uuidv4 } from "uuid";
 import { createTrackingApi } from "../../openApi";
 import {
   DefaultApi,
+  FilterAction,
   ProductClickEvent,
   ProductViewEvent,
   SearchImageSource,
   WidgetEvent,
 } from "@vviinn/tracking-client-ts";
 import {
+  createFilterEvent,
   createProductViewVpsEvent,
   createSearchEvent,
   createWidgetVpsEvent,
@@ -128,6 +130,18 @@ export class VviinnVpsWidget {
       sessionId: this.uiSessionId,
       source: this.imageSource,
       searchArea: "attention-point",
+    });
+
+    this.trackingApi.trackEvent(searchEvent);
+  }
+
+  @Listen("filterSelected")
+  trackFilter({ detail }: CustomEvent<FilterAction>) {
+    const searchEvent: WidgetEvent = createFilterEvent({
+      sessionId: this.uiSessionId,
+      source: this.imageSource,
+      kind: "category",
+      action: detail,
     });
 
     this.trackingApi.trackEvent(searchEvent);

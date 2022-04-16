@@ -1,4 +1,5 @@
-import { Component, Host, h, Prop, State, Element } from "@stencil/core";
+import { Component, Host, h, Prop, State, Element, Event, EventEmitter } from "@stencil/core";
+import { FilterAction } from "@vviinn/tracking-client-ts";
 import { Link } from "../../../network/ion/Link";
 import { SearchSessionFilter } from "../../../searchSession/searchSession";
 import { imageSearchState } from "../../../store/imageSearch.store";
@@ -21,7 +22,8 @@ export class SearchFilters {
   @Prop() filter: SearchSessionFilter | null = null;
   @State() selectedCategoryId: string | null = null;
   @State() hideFilters: boolean = true;
-
+  @Event() filterSelected: EventEmitter<FilterAction>;
+  
   private handleFilterSelection(filter: Link): void {
     return this.isFilterSelected(filter)
       ? this.clearSelectedFilter()
@@ -31,6 +33,7 @@ export class SearchFilters {
   private selectFilter(filter: Link) {
     this.selectedCategoryId = getFilterId(filter);
     imageSearchState.activeIonLink = filter;
+    this.filterSelected.emit("select");
   }
 
   private clearSelectedFilter() {
@@ -38,6 +41,7 @@ export class SearchFilters {
     imageSearchState.activeIonLink = undefined;
 
     this.findSelectedFilter().blur();
+    this.filterSelected.emit("deselect");
   }
 
   private findSelectedFilter(): HTMLElement {
