@@ -121,7 +121,10 @@ export class VviinnVprWidget implements ComponentInterface {
   @Listen("recommendationView")
   trackRecommendationView({ detail }: ProductCardEvent) {
     const recommendationViewEvent: ProductViewEvent = createProductViewVprEvent(
-      detail
+      {
+        sessionId: this.uiSessionId,
+        ...detail,
+      }
     );
 
     this.trackingApi.trackEvent(recommendationViewEvent);
@@ -130,7 +133,10 @@ export class VviinnVprWidget implements ComponentInterface {
   @Listen("recommendationClick")
   trackRecommendationClick({ detail }: ProductCardEvent) {
     const recommendationClickEvent: ProductClickEvent = createProductViewVprEvent(
-      detail
+      {
+        sessionId: this.uiSessionId,
+        ...detail,
+      }
     );
     this.trackingApi.trackEvent(recommendationClickEvent);
   }

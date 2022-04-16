@@ -18,10 +18,12 @@ import {
   DefaultApi,
   ProductClickEvent,
   ProductViewEvent,
+  SearchImageSource,
   WidgetEvent,
 } from "@vviinn/tracking-client-ts";
 import {
   createProductViewVpsEvent,
+  createSearchEvent,
   createWidgetVpsEvent,
 } from "../../tracking";
 import { ProductCardEvent } from "../../recommendation/events";
@@ -60,7 +62,7 @@ export class VviinnVpsWidget {
   /** vviinn customer token */
   @Prop() token: string | undefined;
   /** @internal */
-  @Prop() apiPath: string | undefined;
+  @Prop() apiPath: string = "https://api.vviinn.com";
   /** When true modal window with widget will be shown */
   @Prop({ mutable: true }) active: boolean = false;
   /** Currency sign will shown after price */
@@ -75,6 +77,7 @@ export class VviinnVpsWidget {
   private overflow: string;
   private uiSessionId: string;
   private trackingApi: DefaultApi;
+  private imageSource: SearchImageSource | null = null;
 
   @Watch("active")
   activeWatcher(value: boolean) {
@@ -89,18 +92,45 @@ export class VviinnVpsWidget {
   @Listen("recommendationView")
   trackRecommendationView({ detail }: ProductCardEvent) {
     const recommendationViewEvent: ProductViewEvent = createProductViewVpsEvent(
-      detail
+      {
+        sessionId: this.uiSessionId,
+        ...detail,
+      }
     );
-
     this.trackingApi.trackEvent(recommendationViewEvent);
   }
 
   @Listen("recommendationClick")
   trackRecommendationClick({ detail }: ProductCardEvent) {
     const recommendationClickEvent: ProductClickEvent = createProductViewVpsEvent(
-      detail
+      {
+        sessionId: this.uiSessionId,
+        ...detail,
+      }
     );
     this.trackingApi.trackEvent(recommendationClickEvent);
+  }
+
+  @Listen("cropperChanged")
+  trachSearchAreaChanges() {
+    const searchEvent: WidgetEvent = createSearchEvent({
+      sessionId: this.uiSessionId,
+      source: this.imageSource,
+      searchArea: "manual-selection",
+    });
+
+    this.trackingApi.trackEvent(searchEvent);
+  }
+
+  @Listen("detectedObjectClicked")
+  trackDetectedObject() {
+    const searchEvent: WidgetEvent = createSearchEvent({
+      sessionId: this.uiSessionId,
+      source: this.imageSource,
+      searchArea: "attention-point",
+    });
+
+    this.trackingApi.trackEvent(searchEvent);
   }
 
   componentWillLoad() {
@@ -133,13 +163,26 @@ export class VviinnVpsWidget {
     this.trackingApi.trackEvent(widgetOpenEvent);
   }
 
-  private handleImageSelection() {
+  private handleImageSelection(source: SearchImageSource) {
+    this.imageSource = source;
     this.slidePosition = 1;
     const root = this.el.shadowRoot.querySelector("vviinn-overlayed-modal");
     const overlay = root.shadowRoot.querySelector("vviinn-overlay");
     const modal = overlay.querySelector("vviinn-modal");
     const modalBody = modal.shadowRoot.querySelector(".body");
     modalBody.scrollTop = 0;
+
+    this.trackInitialSearch();
+  }
+
+  private trackInitialSearch() {
+    const searchEvent: WidgetEvent = createSearchEvent({
+      sessionId: this.uiSessionId,
+      source: this.imageSource,
+      searchArea: "full",
+    });
+
+    this.trackingApi.trackEvent(searchEvent);
   }
 
   private resetState() {
@@ -205,7 +248,7 @@ export class VviinnVpsWidget {
                 <vviinn-teaser class={{ hidden: this.haveErrors() }} />
                 <vviinn-image-selector
                   class={{ hidden: this.haveErrors() }}
-                  onImageSelected={() => this.handleImageSelection()}
+                  onImageSelected={() => this.handleImageSelection("upload")}
                   onImageSelectedError={() => (this.wrongImageFormat = true)}
                   part="select-image_button"
                 >
@@ -241,7 +284,7 @@ export class VviinnVpsWidget {
                 <div class="onboarding-wrapper">
                   <vviinn-onboarding />
                   <vviinn-example-images
-                    onImageSelected={() => this.handleImageSelection()}
+                    onImageSelected={() => this.handleImageSelection("example")}
                     onImageSelectedError={() =>
                       this.resetScroll("onboarding-block", "smooth")
                     }

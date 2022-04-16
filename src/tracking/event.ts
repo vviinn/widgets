@@ -1,11 +1,4 @@
-import {
-  // FilterEvent,
-  // ProductClickEvent,
-  // ProductViewEvent,
-  // SearchEvent,
-  // WidgetEvent,
-  Event,
-} from "@vviinn/tracking-client-ts";
+import { Event } from "@vviinn/tracking-client-ts";
 import { WidgetEventType } from "./models";
 
 export const createTrackingEvent = (widget: WidgetEventType) => <
