@@ -26,11 +26,13 @@ import { v4 as uuidv4 } from "uuid";
 
 import {
   DefaultApi,
+  ProductClickEvent,
+  ProductViewEvent,
   WidgetEvent,
 } from "@vviinn/tracking-client-ts";
 import { createTrackingApi } from "../../openApi";
 import { ProductCardEvent } from "../../recommendation/events";
-import { createWidgetVprEvent } from "../../tracking";
+import { createProductViewVprEvent, createWidgetVprEvent } from "../../tracking";
 
 /**
  * @part product-card - product card itself
@@ -109,13 +111,21 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   @Listen("productImageLoaded")
-  lol({ detail }: CustomEvent<string>) {
+  handleImageLoading({ detail }: CustomEvent<string>) {
     this.productImageLoadedSubject.next(detail);
   }
 
   @Listen("recommendationView")
   trackRecommendationView({ detail }: ProductCardEvent) {
-    console.log(`View event: ${detail}`);
+    const recommendationViewEvent: ProductViewEvent = createProductViewVprEvent(detail);
+
+    this.trackingApi.trackEvent(recommendationViewEvent);
+  }
+
+  @Listen("recommendationClick")
+  trackRecommendationClick({ detail }: ProductCardEvent) {
+    const recommendationClickEvent: ProductClickEvent = createProductViewVprEvent(detail);
+    this.trackingApi.trackEvent(recommendationClickEvent);
   }
 
   connectedCallback() {
