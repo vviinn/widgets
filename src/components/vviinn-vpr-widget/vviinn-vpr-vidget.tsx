@@ -125,7 +125,7 @@ export class VviinnVprWidget implements ComponentInterface {
     this.uiSessionId = uuidv4();
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
 
-    const widgetOpenEvent = createWidgetVprEvent({
+    const widgetOpenEvent: WidgetEvent = createWidgetVprEvent({
       action: "open",
       sessionId: this.uiSessionId,
     });
@@ -134,14 +134,12 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   disconnectedCallback() {
-    const wEvent: WidgetEvent = {
-      widget: "VPR",
+    const widgetCloseEvent: WidgetEvent = createWidgetVprEvent( {
       action: "close",
       sessionId: this.uiSessionId,
-      typ: "widget_event",
-    };
+    });
 
-    this.trackingApi.trackEvent(wEvent);
+    this.trackingApi.trackEvent(widgetCloseEvent);
   }
 
   async componentWillLoad() {

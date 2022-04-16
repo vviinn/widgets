@@ -1,26 +1,20 @@
 import {
-  FilterEvent,
-  ProductClickEvent,
-  ProductViewEvent,
-  SearchEvent,
-  WidgetEvent,
+  // FilterEvent,
+  // ProductClickEvent,
+  // ProductViewEvent,
+  // SearchEvent,
+  // WidgetEvent,
+  Event,
 } from "@vviinn/tracking-client-ts";
 import { WidgetEventType } from "./models";
 
-type TrackingEvent = Partial<
-  | (ProductViewEvent & ProductClickEvent)
-  | FilterEvent
-  | SearchEvent
-  | WidgetEvent
->;
-
-type AgnosticTrackingEvent = Omit<TrackingEvent, keyof WidgetEventType>;
-
-export const createTrackingEvent = (widget: WidgetEventType) => (
-  eventData: AgnosticTrackingEvent
-): TrackingEvent => {
+export const createTrackingEvent = (widget: WidgetEventType) => <
+  T extends Event
+>(
+  eventData: any
+): T => {
   return {
-    ...widget,
     ...eventData,
+    ...widget,
   };
 };
