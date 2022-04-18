@@ -15,6 +15,7 @@
     "www/"
   ],
   "scripts": {
+    "preinstall": "npm run artifactregistry-login",
     "build": "stencil build --docs",
     "build.watch": "stencil build --watch --docs",
     "build.docs": "stencil build --docs",
