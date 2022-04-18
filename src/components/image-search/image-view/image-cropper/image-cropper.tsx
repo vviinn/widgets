@@ -1,6 +1,15 @@
-import { Component, Host, h, State, Element, Prop } from "@stencil/core";
+import {
+  Component,
+  Host,
+  h,
+  State,
+  Element,
+  Prop,
+  Event,
+  EventEmitter,
+} from "@stencil/core";
 import { HandlerDirection } from "../../../../cropper/Handler";
-import { move, transform } from "../../../../geometry/Rectangle";
+import { move, Rectangle, transform } from "../../../../geometry/Rectangle";
 import {
   Point,
   fromMouseEvent,
@@ -27,6 +36,8 @@ export class ImageCropper {
   @Prop() disabled: boolean = false;
 
   @State() handleMove: boolean = false;
+
+  @Event() cropperChanged: EventEmitter;
 
   private handlerMoveDirection: HandlerDirection | null;
   private mouseStartPoint: Point | undefined = undefined;
@@ -58,20 +69,23 @@ export class ImageCropper {
       O.map((area) => {
         const newSearchArea = transform(area, transformedHandler);
 
-        if (
-          newSearchArea.width < MIN_SEARCHAREA_SIZE ||
-          newSearchArea.height < MIN_SEARCHAREA_SIZE ||
-          newSearchArea.x < 0 ||
-          newSearchArea.y < 0 ||
-          this.bounds.height - (newSearchArea.y + newSearchArea.height) < 0 ||
-          this.bounds.width - (newSearchArea.x + newSearchArea.width) < 0
-        )
-          return;
+        if (this.outOfBounds(newSearchArea)) return;
 
         imageSearchState.searchArea = O.some(newSearchArea);
         this.mouseStartPoint = destination;
         imageSearchState.detectedObject = undefined;
       })
+    );
+  }
+
+  private outOfBounds(area: Rectangle): boolean {
+    return (
+      area.width < MIN_SEARCHAREA_SIZE ||
+      area.height < MIN_SEARCHAREA_SIZE ||
+      area.x < 0 ||
+      area.y < 0 ||
+      this.bounds.height - (area.y + area.height) < 0 ||
+      this.bounds.width - (area.x + area.width) < 0
     );
   }
 
@@ -132,6 +146,7 @@ export class ImageCropper {
     document.removeEventListener("pointerup", this.pointerReleaseListener);
     this.mouseStartPoint = undefined;
     makeRectangularSearchRequest();
+    this.cropperChanged.emit();
   }
 
   private getStyleMap() {

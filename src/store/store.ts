@@ -1,14 +1,20 @@
 import { createStore } from "@stencil/store";
+import { trackingStore } from "./tracking.store";
 
-const store = createStore({
+export const { state, onChange } = createStore({
   fallbackStyles: "",
   pricePrefix: null,
   currencySign: null,
-  apiPath: undefined,
+  apiPath: null,
+  token: null,
   locale: "de-DE",
+  ...trackingStore,
 });
 
-export default store.state;
+onChange("apiPath", (val) => {
+  console.log("apiPathChanged", val);
+});
 
-export const dispose = store.dispose;
-export const state = store.state;
+onChange("token", (val) => {
+  console.log("tokenChanged", val);
+});

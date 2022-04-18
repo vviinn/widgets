@@ -25,7 +25,8 @@
     "test.watch": "stencil test --spec --e2e --watchAll",
     "release": "standard-version",
     "release:minor": "npm run release -- --release-as minor",
-    "release:patch": "npm run release -- --release-as patch"
+    "release:patch": "npm run release -- --release-as patch",
+    "artifactregistry-login": "npx google-artifactregistry-auth"
   },
   "license": "MIT",
   "dependencies": {
@@ -35,13 +36,18 @@
     "@types/google.analytics": "0.0.41",
     "@types/gtag.js": "0.0.4",
     "@types/node": "^14.14.22",
+    "@vviinn/tracking-client-ts": "^1.0.0-rc8",
     "dotenv": "^8.2.0",
     "enhanced-ecommerce-types": "0.0.3",
     "fp-ts": "^2.11",
     "openapi-typescript": "^4.4.0",
     "rxjs": "^7.5.5",
     "save-dev": "^0.0.1-security",
-    "standard-version": "^9.3.2"
+    "standard-version": "^9.3.2",
+    "tslib": "^1.14.1",
+    "typescript": "^4.6.3",
+    "uuid": "^8.3.2",
+    "whatwg-fetch": "^3.6.2"
   },
   "devDependencies": {
     "@babel/core": "^7.16.12",
@@ -49,6 +55,7 @@
     "@stencil/postcss": "^2.1.0",
     "@stencil/store": "^1.5.0",
     "@types/jest": "^26.0.21",
+    "@types/uuid": "^8.3.4",
     "babel-loader": "^8.2.3",
     "jest": "^26.6.3",
     "jest-cli": "^26.6.3",

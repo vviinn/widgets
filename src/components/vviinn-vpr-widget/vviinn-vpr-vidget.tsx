@@ -9,19 +9,33 @@ import {
   Watch,
   Event,
   EventEmitter,
-  Listen
+  Listen,
 } from "@stencil/core";
 import { pipe } from "fp-ts/lib/function";
 import * as TE from "fp-ts/lib/TaskEither";
 import * as E from "fp-ts/lib/Either";
 import { createBearAuthedHeader } from "./token-helpers";
-import state from "../../store/store";
+import { state } from "../../store/store";
 import { CampaignName } from "../../campaign/Campaign";
 import { getRecommendationsService } from "../../campaign/CampaignService";
 import { imageSearchState } from "../../store/imageSearch.store";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 import { Recommendation } from "../../recommendation/recommendation";
 import { Subject } from "rxjs";
+import { v4 as uuidv4 } from "uuid";
+
+import {
+  DefaultApi,
+  ProductClickEvent,
+  ProductViewEvent,
+  WidgetEvent,
+} from "@vviinn/tracking-client-ts";
+import { createTrackingApi } from "../../openApi";
+import { ProductCardEvent } from "../../recommendation/events";
+import {
+  createProductViewVprEvent,
+  createWidgetVprEvent,
+} from "../../tracking";
 
 /**
  * @part product-card - product card itself
@@ -80,6 +94,8 @@ export class VviinnVprWidget implements ComponentInterface {
 
   private productIds: string[];
   private productImageLoadedSubject = new Subject();
+  trackingApi: DefaultApi;
+  uiSessionId: string;
 
   @Watch("productId")
   handleProductIdChange() {
@@ -98,14 +114,55 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   @Listen("productImageLoaded")
-  lol({detail}: CustomEvent<string>) {
+  handleImageLoading({ detail }: CustomEvent<string>) {
     this.productImageLoadedSubject.next(detail);
+  }
+
+  @Listen("recommendationView")
+  trackRecommendationView({ detail }: ProductCardEvent) {
+    const recommendationViewEvent: ProductViewEvent = createProductViewVprEvent(
+      {
+        sessionId: this.uiSessionId,
+        ...detail,
+      }
+    );
+
+    this.trackingApi.trackEvent(recommendationViewEvent);
+  }
+
+  @Listen("recommendationClick")
+  trackRecommendationClick({ detail }: ProductCardEvent) {
+    const recommendationClickEvent: ProductClickEvent = createProductViewVprEvent(
+      {
+        sessionId: this.uiSessionId,
+        ...detail,
+      }
+    );
+    this.trackingApi.trackEvent(recommendationClickEvent);
   }
 
   connectedCallback() {
     state.apiPath = this.apiPath;
     state.currencySign = this.currencySign;
     state.locale = this.locale;
+    this.uiSessionId = uuidv4();
+    this.trackingApi = createTrackingApi(this.apiPath, this.token);
+
+    const widgetOpenEvent: WidgetEvent = createWidgetVprEvent({
+      action: "open",
+      sessionId: this.uiSessionId,
+    });
+
+    this.trackingApi.trackEvent(widgetOpenEvent);
+  }
+
+  disconnectedCallback() {
+    const widgetCloseEvent: WidgetEvent = createWidgetVprEvent({
+      action: "close",
+      sessionId: this.uiSessionId,
+    });
+
+    this.trackingApi.trackEvent(widgetCloseEvent);
   }
 
   async componentWillLoad() {
@@ -149,14 +206,14 @@ export class VviinnVprWidget implements ComponentInterface {
     this.loaded = true;
     //this.recommendationsLoaded.emit();
 
-    this.productIds = this.recommendations.map(r => r.productId);
+    this.productIds = this.recommendations.map((r) => r.productId);
     this.productImageLoadedSubject.subscribe((id) => {
-      this.productIds = this.productIds.filter(x => x !== id);
+      this.productIds = this.productIds.filter((x) => x !== id);
 
-      if(this.productIds.length === 0) {
+      if (this.productIds.length === 0) {
         this.recommendationsLoaded.emit();
       }
-    })
+    });
   }
 
   private isExternalCSS(): boolean {
@@ -190,7 +247,8 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   private renderRecommendation(
-    recommendation: Recommendation
+    recommendation: Recommendation,
+    index: number
   ): HTMLVviinnProductCardElement {
     return (
       <vviinn-product-card
@@ -206,6 +264,7 @@ export class VviinnVprWidget implements ComponentInterface {
         salePrice={recommendation.price.sale}
         responsive={this.mode === "grid"}
         dimmedBackground={this.useDimmedBackgroundInCard()}
+        index={index}
       />
     );
   }
@@ -217,7 +276,7 @@ export class VviinnVprWidget implements ComponentInterface {
   private renderResults() {
     return (
       <div class="recommendations-grid" part="recommendations-grid">
-        {this.recommendations.map((r) => this.renderRecommendation(r))}
+        {this.recommendations.map((r, i) => this.renderRecommendation(r, i))}
       </div>
     );
   }
