@@ -1,5 +1,5 @@
 export const apiPath = {
-  name: "Api Path",
+  name: "api-path",
   control: {
     type: "text",
   },
@@ -9,21 +9,21 @@ export const apiPath = {
 };
 
 const token = {
-  name: "Token",
+  name: "token",
   control: {
     type: "text",
   },
 };
 
 const productId = {
-  name: "Product ID",
+  name: "product-id",
   control: {
     type: "text",
   },
 };
 
 const cssUrl = {
-  name: "CSS URL",
+  name: "css-url",
   description:
     "Optional for custom CSS.  It will overwrite all other settings.",
   control: {
@@ -43,7 +43,7 @@ const analyticsId = {
 };
 
 export const campaignType = {
-  name: "Campaign type",
+  name: "campaign-type",
   control: {
     type: "select",
     labels: {
@@ -66,7 +66,7 @@ const showTitle = {
 };
 
 const titleName = {
-  name: "Section title name",
+  name: "block-title",
   control: {
     type: "text",
   },
@@ -85,7 +85,7 @@ const titleFontSize = {
 };
 
 const showScrollbars = {
-  name: "Use default scrollbar / pagination",
+  name: "show-scroll",
   description:
     "Add browser default horizontal scroll bar (in continuity mode) or pagination bullets (in grid mode) to add extra cue for users ",
   control: {
@@ -95,7 +95,7 @@ const showScrollbars = {
 };
 
 const imageWidth = {
-  name: "Image Width (px)",
+  name: "image-width",
   control: {
     type: "number",
   },
