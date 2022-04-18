@@ -1,4 +1,6 @@
 steps:
+  - name: gcr.io/cloud-builders/npm
+    args: ['run', 'artifactregistry-login']
   - id: 'install_widgets'
     name: node
     entrypoint: npm
