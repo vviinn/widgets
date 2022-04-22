@@ -83,8 +83,8 @@ export class VviinnProductCard {
 
   connectedCallback() {
     this.productData = {
-      productId: this.productId,
-      productPosition: this.index
+      product: this.productId,
+      rank: this.index
     }
   }
 
