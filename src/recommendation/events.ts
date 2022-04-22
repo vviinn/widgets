@@ -1,6 +1,6 @@
 export type ProductCardEventData = {
-  productId: string;
-  productPosition: number;
+  product: string;
+  rank: number;
 };
 
 export type ProductCardEvent = CustomEvent<ProductCardEventData>;
