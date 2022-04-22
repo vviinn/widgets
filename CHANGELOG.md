@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.4.1](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.4.0...v2.4.1) (2022-04-22)
+
+
+### Bug Fixes
+
+* fix telemetry events for search widget ([83429e6](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/83429e61e63b85f40191a0f1263fc9a14a1a432d))
+
 ## [2.4.0](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.3.1...v2.4.0) (2022-04-22)
 
 
