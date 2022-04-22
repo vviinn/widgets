@@ -150,7 +150,7 @@ export class VviinnVprWidget implements ComponentInterface {
 
     const widgetOpenEvent: WidgetEvent = createWidgetVprEvent({
       action: "open",
-      sessionId: this.uiSessionId,
+      session_id: this.uiSessionId,
     });
 
     this.trackingApi.trackEvent(widgetOpenEvent);
@@ -159,7 +159,7 @@ export class VviinnVprWidget implements ComponentInterface {
   disconnectedCallback() {
     const widgetCloseEvent: WidgetEvent = createWidgetVprEvent({
       action: "close",
-      sessionId: this.uiSessionId,
+      session_id: this.uiSessionId,
     });
 
     this.trackingApi.trackEvent(widgetCloseEvent);
@@ -204,7 +204,6 @@ export class VviinnVprWidget implements ComponentInterface {
     this.recommendations = data?.extended ?? data;
     imageSearchState.results = this.recommendations;
     this.loaded = true;
-    //this.recommendationsLoaded.emit();
 
     this.productIds = this.recommendations.map((r) => r.productId);
     this.productImageLoadedSubject.subscribe((id) => {

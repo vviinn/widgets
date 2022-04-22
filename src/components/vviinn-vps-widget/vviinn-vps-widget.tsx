@@ -95,7 +95,7 @@ export class VviinnVpsWidget {
   trackRecommendationView({ detail }: ProductCardEvent) {
     const recommendationViewEvent: ProductViewEvent = createProductViewVpsEvent(
       {
-        sessionId: this.uiSessionId,
+        session_id: this.uiSessionId,
         ...detail,
       }
     );
@@ -116,9 +116,9 @@ export class VviinnVpsWidget {
   @Listen("cropperChanged")
   trachSearchAreaChanges() {
     const searchEvent: WidgetEvent = createSearchEvent({
-      sessionId: this.uiSessionId,
+      session_id: this.uiSessionId,
       source: this.imageSource,
-      searchArea: "manual-selection",
+      search_area: "manual-selection",
     });
 
     this.trackingApi.trackEvent(searchEvent);
@@ -127,9 +127,9 @@ export class VviinnVpsWidget {
   @Listen("detectedObjectClicked")
   trackDetectedObject() {
     const searchEvent: WidgetEvent = createSearchEvent({
-      sessionId: this.uiSessionId,
+      session_id: this.uiSessionId,
       source: this.imageSource,
-      searchArea: "attention-point",
+      search_area: "attention-point",
     });
 
     this.trackingApi.trackEvent(searchEvent);
@@ -138,7 +138,7 @@ export class VviinnVpsWidget {
   @Listen("filterSelected")
   trackFilter({ detail }: CustomEvent<FilterAction>) {
     const searchEvent: WidgetEvent = createFilterEvent({
-      sessionId: this.uiSessionId,
+      session_id: this.uiSessionId,
       source: this.imageSource,
       kind: "category",
       action: detail,
@@ -162,16 +162,7 @@ export class VviinnVpsWidget {
 
     const widgetOpenEvent: WidgetEvent = createWidgetVpsEvent({
       action: "open",
-      sessionId: this.uiSessionId,
-    });
-
-    this.trackingApi.trackEvent(widgetOpenEvent);
-  }
-
-  disconnectedCallback() {
-    const widgetOpenEvent: WidgetEvent = createWidgetVpsEvent({
-      action: "close",
-      sessionId: this.uiSessionId,
+      session_id: this.uiSessionId,
     });
 
     this.trackingApi.trackEvent(widgetOpenEvent);
@@ -191,9 +182,9 @@ export class VviinnVpsWidget {
 
   private trackInitialSearch() {
     const searchEvent: WidgetEvent = createSearchEvent({
-      sessionId: this.uiSessionId,
+      session_id: this.uiSessionId,
       source: this.imageSource,
-      searchArea: "full",
+      search_area: "full",
     });
 
     this.trackingApi.trackEvent(searchEvent);
@@ -231,6 +222,13 @@ export class VviinnVpsWidget {
 
     const elementsToReset = ["onboarding-block", "results-block"];
     elementsToReset.forEach((name) => this.resetScroll(name));
+
+    const widgetOpenEvent: WidgetEvent = createWidgetVpsEvent({
+      action: "close",
+      session_id: this.uiSessionId,
+    });
+
+    this.trackingApi.trackEvent(widgetOpenEvent);
   }
 
   render() {
