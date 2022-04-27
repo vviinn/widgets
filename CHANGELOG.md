@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.4.2](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.4.1...v2.4.2) (2022-04-27)
+
+
+### Bug Fixes
+
+* fix bug with wrong rank in telemetry for recommendations ([519b081](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/519b08185969a5b8c104044c1f58763ed14e29ab))
+* increase example images sizes ([027a113](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/027a113463c85883fc28fb902ed149a32157d3b2))
+
 ### [2.4.1](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.4.0...v2.4.1) (2022-04-22)
 
 
