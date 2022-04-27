@@ -239,7 +239,8 @@ export class VviinnCarousel {
   }
 
   private renderRecommendation(
-    recommendation: Recommendation
+    recommendation: Recommendation,
+    rank: number
   ): HTMLVviinnProductCardElement {
     return (
       <vviinn-product-card
@@ -255,6 +256,7 @@ export class VviinnCarousel {
         salePrice={recommendation.price.sale}
         responsive={this.mode === "grid"}
         dimmedBackground={this.mode === "continuity"}
+        index={rank}
       />
     );
   }
@@ -276,7 +278,7 @@ export class VviinnCarousel {
   }
 
   private renderRecommendationsElements(): HTMLVviinnProductCardElement[] {
-    return this.recommendations.map((r) => this.renderRecommendation(r));
+    return this.recommendations.map((r, i) => this.renderRecommendation(r, i));
   }
 
   private renderGrid() {
