@@ -11,3 +11,4 @@ docs.json
 docs.d.ts
 src/**/readme.md
 src/stories
+storybook/storybook-static
