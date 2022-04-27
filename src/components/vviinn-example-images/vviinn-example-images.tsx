@@ -35,30 +35,30 @@ export class VviinnExampleImages {
         <div class="images">
           <slot name="vviinn-example-images-1">
             <vviinn-example-image
-              width={240}
-              height={320}
-              src="https://cdn.vviinn.com/0/fit/240/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9pbWctaW5zcGlyYXRpb24tMDEtTC5qcGc="
+              width={480}
+              height={640}
+              src="https://cdn.vviinn.com/0/fit/480/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9pbWctaW5zcGlyYXRpb24tMDEtTC5qcGc="
             />
           </slot>
           <slot name="vviinn-example-images-2">
             <vviinn-example-image
-              width={240}
-              height={240}
-              src="https://cdn.vviinn.com/0/fit/240/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9pbWctaW5zcGlyYXRpb24tMDItTS5qcGc="
+              width={280}
+              height={480}
+              src="https://cdn.vviinn.com/0/fit/480/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9pbWctaW5zcGlyYXRpb24tMDItTS5qcGc="
             />
           </slot>
           <slot name="vviinn-example-images-3">
             <vviinn-example-image
-              width={240}
-              height={240}
-              src="https://cdn.vviinn.com/0/fit/240/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9pbWctaW5zcGlyYXRpb24tMDMtTS5qcGc="
+              width={280}
+              height={480}
+              src="https://cdn.vviinn.com/0/fit/480/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9pbWctaW5zcGlyYXRpb24tMDMtTS5qcGc="
             />
           </slot>
           <slot name="vviinn-example-images-4">
             <vviinn-example-image
-              width={240}
-              height={320}
-              src="https://cdn.vviinn.com/0/fit/240/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9pbWctaW5zcGlyYXRpb24tMDQtTC5qcGc="
+              width={480}
+              height={640}
+              src="https://cdn.vviinn.com/0/fit/480/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9pbWctaW5zcGlyYXRpb24tMDQtTC5qcGc="
             />
           </slot>
         </div>
