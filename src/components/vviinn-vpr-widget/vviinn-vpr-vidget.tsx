@@ -29,7 +29,7 @@ import {
   ProductClickEvent,
   ProductViewEvent,
   WidgetEvent,
-} from "@vviinn/tracking-client-ts";
+} from "vviinn-tracking-client-ts";
 import { createTrackingApi } from "../../openApi";
 import { ProductCardEvent } from "../../recommendation/events";
 import {

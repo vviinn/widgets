@@ -5,8 +5,8 @@ import {
   HttpBearerConfiguration,
   servers,
   TokenProvider,
-} from "@vviinn/tracking-client-ts";
-import { ConfigurationParameters } from "@vviinn/tracking-client-ts/dist/configuration";
+} from "vviinn-tracking-client-ts";
+import { ConfigurationParameters } from "vviinn-tracking-client-ts/dist/configuration";
 
 const STAGE_SERVER_IDENTIFIER = "stage";
 

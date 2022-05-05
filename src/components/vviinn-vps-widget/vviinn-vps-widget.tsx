@@ -21,7 +21,7 @@ import {
   ProductViewEvent,
   SearchImageSource,
   WidgetEvent,
-} from "@vviinn/tracking-client-ts";
+} from "vviinn-tracking-client-ts";
 import {
   createFilterEvent,
   createProductViewVpsEvent,

@@ -1,4 +1,4 @@
-import { Widget } from "@vviinn/tracking-client-ts";
+import { Widget } from "vviinn-tracking-client-ts";
 
 const PRODUCT_CLICK_EVENT_TYPE = "product_click_event";
 const PRODUCT_VIEW_EVENT_TYPE = "product_view_event";

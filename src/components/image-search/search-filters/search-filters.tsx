@@ -1,5 +1,5 @@
 import { Component, Host, h, Prop, State, Element, Event, EventEmitter } from "@stencil/core";
-import { FilterAction } from "@vviinn/tracking-client-ts";
+import { FilterAction } from "vviinn-tracking-client-ts";
 import { Link } from "../../../network/ion/Link";
 import { SearchSessionFilter } from "../../../searchSession/searchSession";
 import { imageSearchState } from "../../../store/imageSearch.store";
