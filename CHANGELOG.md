@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.4.3](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.4.2...v2.4.3) (2022-09-08)
+
+
+### Bug Fixes
+
+* fix tracking open event for Search widget ([fc02751](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/fc02751e9cbbf954c133fe2136ca0edea10ccd40)), closes [#31926](https://bitbucket.org/mediaopt/vpr_webcomponent/issues/31926)
+
 ### [2.4.2](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.4.1...v2.4.2) (2022-04-27)
 
 
