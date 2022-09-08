@@ -86,6 +86,7 @@ export class VviinnVpsWidget {
     if (value) {
       this.overflow = document.body.style.overflow;
       document.body.style.overflow = "hidden";
+      this.trackOpenEvent();
     } else {
       document.body.style.overflow = this.overflow;
     }
@@ -104,12 +105,11 @@ export class VviinnVpsWidget {
 
   @Listen("recommendationClick")
   trackRecommendationClick({ detail }: ProductCardEvent) {
-    const recommendationClickEvent: ProductClickEvent = createProductViewVpsEvent(
-      {
+    const recommendationClickEvent: ProductClickEvent =
+      createProductViewVpsEvent({
         sessionId: this.uiSessionId,
         ...detail,
-      }
-    );
+      });
     this.trackingApi.trackEvent(recommendationClickEvent);
   }
 
@@ -158,6 +158,9 @@ export class VviinnVpsWidget {
     imageSearchState.token = this.token;
 
     this.uiSessionId = uuidv4();
+  }
+
+  private trackOpenEvent() {
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
 
     const widgetOpenEvent: WidgetEvent = createWidgetVpsEvent({
