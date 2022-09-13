@@ -24,6 +24,7 @@ import {
 } from "vviinn-tracking-client-ts";
 import {
   createFilterEvent,
+  createProductClickVpsEvent,
   createProductViewVpsEvent,
   createSearchEvent,
   createWidgetVpsEvent,
@@ -104,13 +105,22 @@ export class VviinnVpsWidget {
   }
 
   @Listen("recommendationClick")
-  trackRecommendationClick({ detail }: ProductCardEvent) {
+  async trackRecommendationClick({ detail }: ProductCardEvent) {
     const recommendationClickEvent: ProductClickEvent =
-      createProductViewVpsEvent({
+      createProductClickVpsEvent({
         sessionId: this.uiSessionId,
         ...detail,
       });
-    this.trackingApi.trackEvent(recommendationClickEvent);
+
+    await this.trackingApi.trackEvent(recommendationClickEvent);
+
+    const product = imageSearchState.results.find(
+      (r) => r.productId === detail.product
+    );
+
+    if (!product || !product.deeplink) return;
+
+    window.location.href = product.deeplink;
   }
 
   @Listen("cropperChanged")

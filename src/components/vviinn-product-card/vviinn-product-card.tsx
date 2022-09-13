@@ -66,11 +66,14 @@ export class VviinnProductCard {
   @State() imageLoaded: boolean = false;
 
   /** Event fires ones when recommendation rendered on page */
-  @Event({ bubbles: true }) recommendationLoad: EventEmitter<ProductCardEventData>;
+  @Event({ bubbles: true })
+  recommendationLoad: EventEmitter<ProductCardEventData>;
   /** Event fires ones when recommendation appears on the viewport */
-  @Event({ bubbles: true }) recommendationView: EventEmitter<ProductCardEventData>;
+  @Event({ bubbles: true })
+  recommendationView: EventEmitter<ProductCardEventData>;
   /** Event fires ones when user click on deeplink */
-  @Event({ bubbles: true }) recommendationClick: EventEmitter<ProductCardEventData>;
+  @Event({ bubbles: true })
+  recommendationClick: EventEmitter<ProductCardEventData>;
 
   @Event() productImageLoaded: EventEmitter<string>;
 
@@ -84,8 +87,8 @@ export class VviinnProductCard {
   connectedCallback() {
     this.productData = {
       product: this.productId,
-      rank: this.index
-    }
+      rank: this.index,
+    };
   }
 
   private intersectionCallback(data: IntersectionObserverEntry[]) {
@@ -105,13 +108,12 @@ export class VviinnProductCard {
     this.intersectionObserver.observe(this.el);
 
     const links = this.el.shadowRoot.querySelectorAll("a");
-    links.forEach((link) =>
-      link.addEventListener("mousedown", (event) => {
-        this.recommendationClick.emit(this.productData);
 
-        if (window.ga) {
-          event.preventDefault();
-        }
+    links.forEach((link) =>
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        this.recommendationClick.emit(this.productData);
 
         pipe(
           getAnalyticsModule,
@@ -120,14 +122,6 @@ export class VviinnProductCard {
             (analytics) => analytics.sendClick(this.getProduct())
           )
         );
-
-        if (window.ga) {
-          ga("send", "event", "UX", "click", "Results", {
-            hitCallback: function () {
-              document.location.href = this.deeplink;
-            },
-          });
-        }
       })
     );
   }

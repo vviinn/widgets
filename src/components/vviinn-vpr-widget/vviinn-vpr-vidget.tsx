@@ -33,6 +33,7 @@ import {
 import { createTrackingApi } from "../../openApi";
 import { ProductCardEvent } from "../../recommendation/events";
 import {
+  createProductClickVprEvent,
   createProductViewVprEvent,
   createWidgetVprEvent,
 } from "../../tracking";
@@ -131,14 +132,22 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   @Listen("recommendationClick")
-  trackRecommendationClick({ detail }: ProductCardEvent) {
-    const recommendationClickEvent: ProductClickEvent = createProductViewVprEvent(
-      {
+  async trackRecommendationClick({ detail }: ProductCardEvent) {
+    const recommendationClickEvent: ProductClickEvent =
+      createProductClickVprEvent({
         session_id: this.uiSessionId,
         ...detail,
-      }
+      });
+
+    await this.trackingApi.trackEvent(recommendationClickEvent);
+
+    const product = this.recommendations.find(
+      (r) => r.productId === detail.product
     );
-    this.trackingApi.trackEvent(recommendationClickEvent);
+
+    if (!product || !product.deeplink) return;
+
+    window.location.href = product.deeplink;
   }
 
   connectedCallback() {
