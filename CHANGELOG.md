@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.4.4](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.4.3...v2.4.4) (2022-09-13)
+
+
+### Bug Fixes
+
+* fix tracking product click event ([5897419](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/5897419a521a5fc36c29173c574735c60f277650)), closes [#31927](https://bitbucket.org/mediaopt/vpr_webcomponent/issues/31927)
+
 ### [2.4.3](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.4.2...v2.4.3) (2022-09-08)
 
 
