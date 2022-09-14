@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.5.0](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.4.4...v2.5.0) (2022-09-14)
+
+
+### Features
+
+* export example images block as shadow part ([c55cf82](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/c55cf82fda846d358f5bb012e4c25ceea8e26f19))
+
 ### [2.4.4](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.4.3...v2.4.4) (2022-09-13)
 
 
