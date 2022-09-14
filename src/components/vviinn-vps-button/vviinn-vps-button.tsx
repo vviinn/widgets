@@ -41,6 +41,7 @@ import { SlotSkeleton } from "../customized-slots";
  * @part price-regular - renders inside price-container when "sale-price" property is empty.
  * @part price-sale - renders inside price-container when "sale-price" property filled. Contains sale price.
  * @part title - product title
+ * @part example-images - example images block
  */
 @Component({
   tag: "vviinn-vps-button",
@@ -102,7 +103,7 @@ export class VviinnVpsButton {
           token={this.token}
           locale={this.locale}
           apiPath={this.apiPath}
-          exportparts="brand, currency, deeplink, image, image-link, price-amount, price-container, price-outdated, price-prefix, price-regular, price-sale, title, product-card"
+          exportparts="brand, currency, deeplink, image, image-link, price-amount, price-container, price-outdated, price-prefix, price-regular, price-sale, title, product-card, example-images"
         />
       </Host>
     );

@@ -53,6 +53,7 @@ import { ProductCardEvent } from "../../recommendation/events";
  * @part product-card_price-regular - renders inside price-container when "sale-price" property is empty.
  * @part product-card_price-sale - renders inside price-container when "sale-price" property filled. Contains sale price.
  * @part product-card_title - product title
+ * @part example-images - example images block
  */
 @Component({
   tag: "vviinn-vps-widget",
@@ -252,7 +253,7 @@ export class VviinnVpsWidget {
           active={this.active}
           onSecondaryActionClicked={() => this.resetState()}
           onModalClosed={() => this.handleModalClose()}
-          exportparts="secondary-action, title, close-button"
+          exportparts="secondary-action, title, close-button, example-images"
         >
           <vviinn-slider showBullets={false} position={this.slidePosition}>
             <vviinn-slide class={{ "start-page": true }}>
@@ -309,6 +310,7 @@ export class VviinnVpsWidget {
                 <div class="onboarding-wrapper">
                   <vviinn-onboarding />
                   <vviinn-example-images
+                    part="example-images"
                     onImageSelected={() => this.handleImageSelection("example")}
                     onImageSelectedError={() =>
                       this.resetScroll("onboarding-block", "smooth")
