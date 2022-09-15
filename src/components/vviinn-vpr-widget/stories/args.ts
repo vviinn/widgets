@@ -22,6 +22,13 @@ const productId = {
   },
 };
 
+const campaigns = {
+  name: "campaigns",
+  control: {
+    type: "text",
+  },
+};
+
 const cssUrl = {
   name: "css-url",
   description:
@@ -136,6 +143,7 @@ export const argTypes = {
   analyticsId,
   apiPath,
   campaignType,
+  campaigns,
   contentAlignment,
   cssUrl,
   imageWidth,

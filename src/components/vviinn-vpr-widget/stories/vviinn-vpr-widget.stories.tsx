@@ -7,7 +7,7 @@ const excludeControls = [
   "imageRatio",
   "imageWidth",
   "locale",
-  "pricePrefix", 
+  "pricePrefix",
   "showScroll",
 ];
 
@@ -18,15 +18,15 @@ export default {
     ...argTypes,
     mode: {
       table: {
-        disable: true
-      }
-    }
+        disable: true,
+      },
+    },
   },
   parameters: {
     controls: {
-      exclude: excludeControls
-    }
-  }
+      exclude: excludeControls,
+    },
+  },
 };
 
 const allignementLeft = `
@@ -169,6 +169,7 @@ const Template = (args) => `
       show-scroll="${args.showScrollbars}"
       image-width="${args.imageWidth}"
       campaign-type="${args.campaignType}"
+      campaigns="${args.campaigns}"
     >
     </vviinn-vpr-widget>
 `;
@@ -177,6 +178,7 @@ export const Grid = Template.bind({});
 Grid.args = {
   analyticsId: "UA-34442043-5",
   apiPath: "https://api.vviinn.com",
+  campaigns: "",
   campaignType: "VPR",
   contentAlignment: "Centered",
   imageWidth: 420,
@@ -191,21 +193,21 @@ Grid.args = {
   showTitle: true,
   titleFontSize: 28,
   titleName: "Recommended products",
-  token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4"
+  token:
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4",
 };
 
 Grid.argTypes = {
-  ...gridLayoutArgs
+  ...gridLayoutArgs,
 };
 
-Grid.decorators = [
-  gridDecorator
-];
+Grid.decorators = [gridDecorator];
 
 export const Continuity = Template.bind({});
 Continuity.args = {
   analyticsId: "UA-34442043-5",
   apiPath: "https://api.vviinn.com",
+  campaigns: "",
   campaignType: "VPR",
   contentAlignment: "Left",
   imageWidth: 300,
@@ -220,13 +222,12 @@ Continuity.args = {
   showTitle: true,
   titleFontSize: 28,
   titleName: "Recommended products",
-  token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4"
+  token:
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4",
 };
 
-Continuity.decorators = [
-  continuityDecorator
-];
+Continuity.decorators = [continuityDecorator];
 
 Continuity.argTypes = {
-  ...continuityLayoutArgs
-}
+  ...continuityLayoutArgs,
+};
