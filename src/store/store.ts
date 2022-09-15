@@ -10,11 +10,3 @@ export const { state, onChange } = createStore({
   locale: "de-DE",
   ...trackingStore,
 });
-
-onChange("apiPath", (val) => {
-  console.log("apiPathChanged", val);
-});
-
-onChange("token", (val) => {
-  console.log("tokenChanged", val);
-});
