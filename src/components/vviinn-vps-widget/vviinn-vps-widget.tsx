@@ -106,22 +106,22 @@ export class VviinnVpsWidget {
   }
 
   @Listen("recommendationClick")
-  async trackRecommendationClick({ detail }: ProductCardEvent) {
+  trackRecommendationClick({ detail }: ProductCardEvent) {
     const recommendationClickEvent: ProductClickEvent =
       createProductClickVpsEvent({
         sessionId: this.uiSessionId,
         ...detail,
       });
 
-    await this.trackingApi.trackEvent(recommendationClickEvent);
+    this.trackingApi.trackEvent(recommendationClickEvent).finally(() => {
+      const product = imageSearchState.results.find(
+        (r) => r.productId === detail.product
+      );
 
-    const product = imageSearchState.results.find(
-      (r) => r.productId === detail.product
-    );
+      if (!product || !product.deeplink) return;
 
-    if (!product || !product.deeplink) return;
-
-    window.location.href = product.deeplink;
+      window.location.href = product.deeplink;
+    });
   }
 
   @Listen("cropperChanged")
