@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.5.1](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.5.0...v2.5.1) (2022-09-15)
+
+
+### Bug Fixes
+
+* redirect to product deeplink even if tracking request fall ([385d80f](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/385d80ffcdb3b0f9d786ad0a5ab28598df97f1cf))
+
 ## [2.5.0](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.4.4...v2.5.0) (2022-09-14)
 
 
