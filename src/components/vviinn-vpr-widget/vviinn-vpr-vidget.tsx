@@ -111,6 +111,11 @@ export class VviinnVprWidget implements ComponentInterface {
     this.getRecommendations();
   }
 
+  @Watch("campaigns")
+  handleCampaignsChange() {
+    this.getRecommendations();
+  }
+
   @Watch("apiPath")
   handleApiPathChange(newPath: string) {
     state.apiPath = newPath;
