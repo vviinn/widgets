@@ -57,6 +57,7 @@ export class VviinnVprButton {
   }
 
   disconnectedCallback() {
+    if (!this.sidebar) return;
     this.sidebar.removeEventListener("modalCLosed", this.sidebarCloseListener);
     document.body.removeChild(this.sidebar);
   }
