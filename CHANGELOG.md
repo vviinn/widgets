@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.6.0](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.5.2...v2.6.0) (2022-09-20)
+
+
+### Features
+
+* add campaigns parameter to recommendations widget ([eabd7f1](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/eabd7f1ca244b645820787023c2c9bea12f3d745))
+* add property with campaigns ids to search widget for targeting campaigns ([efcb541](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/efcb541e58ca33eb7a4e062a1689b3fa10fac95d))
+
 ### [2.5.2](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.5.1...v2.5.2) (2022-09-15)
 
 
