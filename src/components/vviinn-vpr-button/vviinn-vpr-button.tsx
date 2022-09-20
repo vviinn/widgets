@@ -17,11 +17,13 @@ export class VviinnVprButton {
   @Prop() sourceImage: string | null = null;
   @Prop() sidebarTitle: string = "Visually similar products";
   @Prop() modalScrollbar: boolean = false;
+  /** comma-separated list of campaign-ids */
+  @Prop() campaigns: string = "";
 
   private sidebar: HTMLVviinnRecommendationsSidebarElement | null = null;
   private sidebarCloseListener: () => void = () => {
     document.body.removeChild(this.sidebar);
-  }
+  };
 
   render() {
     return (
@@ -47,6 +49,7 @@ export class VviinnVprButton {
     sidebar.position = this.position;
     sidebar.sourceImage = this.sourceImage;
     sidebar.widgetScrollbar = this.modalScrollbar;
+    sidebar.campaigns = this.campaigns;
     this.sidebar = sidebar;
 
     sidebar.addEventListener("modalClosed", this.sidebarCloseListener);

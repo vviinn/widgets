@@ -204,4 +204,10 @@ export const argTypes = {
   token: {
     name: "Token",
   },
+  campaigns: {
+    name: "campaigns",
+    control: {
+      type: "text",
+    },
+  },
 };

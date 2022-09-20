@@ -28,6 +28,8 @@ export class RecommendationsSidebar {
   @Prop() position: "bottom" | "right" = "bottom";
   @Prop() sourceImage: string | null = null;
   @Prop() widgetScrollbar: boolean = false;
+  /** comma-separated list of campaign-ids */
+  @Prop() campaigns: string = "";
 
   @State() state: SidebarState = "idle";
 
@@ -96,6 +98,7 @@ export class RecommendationsSidebar {
               useCarousel={this.position === "bottom"}
               onRecommendationsLoaded={() => (this.state = "open")}
               showScroll={this.widgetScrollbar}
+              campaigns={this.campaigns}
             />
           </main>
         </aside>
