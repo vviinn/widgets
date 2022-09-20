@@ -73,6 +73,8 @@ export class VviinnVpsWidget {
   @Prop() currencySign: string = "€";
   /** Locale for currency formatting */
   @Prop() locale: string = "de-DE";
+  /** search campaign id */
+  @Prop() campaignId: number;
 
   @State() slidePosition: number = 0;
   @State() width: number = 0;
@@ -167,6 +169,7 @@ export class VviinnVpsWidget {
     state.currencySign = this.currencySign;
     state.locale = this.locale;
     imageSearchState.token = this.token;
+    imageSearchState.campaignId = this.campaignId;
 
     this.uiSessionId = uuidv4();
   }
