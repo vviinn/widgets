@@ -26,6 +26,6 @@
     "@storybook/builder-webpack5": "^6.4.17",
     "@storybook/manager-webpack5": "^6.4.17",
     "lit-html": "^1.4.1",
-    "vviinn-widgets": "^2.5.2"
+    "vviinn-widgets": "^2.6.0"
   }
 }
