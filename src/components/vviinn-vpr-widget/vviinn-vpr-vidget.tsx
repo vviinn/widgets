@@ -37,6 +37,7 @@ import {
   createProductViewVprEvent,
   createWidgetVprEvent,
 } from "../../tracking";
+import { checkEmpryString } from "../../utils/option/option";
 
 /**
  * @part product-card - product card itself
@@ -80,6 +81,8 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() campaignType: CampaignName = "VPR";
   /** Locale for currency formatting */
   @Prop() locale: string = "de-DE";
+  /** comma-separated list of campaign-ids */
+  @Prop() campaigns: string = "";
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
   /** @internal */
@@ -190,6 +193,7 @@ export class VviinnVprWidget implements ComponentInterface {
     const request = pipe(
       TE.of(getRecommendationsService(campaignType)),
       TE.ap(TE.of(this.productId)),
+      TE.ap(TE.of(checkEmpryString(this.campaigns))),
       TE.ap(TE.of(headers)),
       TE.flatten
     );

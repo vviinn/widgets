@@ -6,7 +6,7 @@ import {
 } from "@pxtrn/storybook-addon-docs-stencil";
 
 import { defineCustomElements as loadProductionComponents } from "vviinn-widgets/dist/loader";
-import { defineCustomElements as loadLocalComponents } from "../../dist/loader/index.js";
+import { defineCustomElements as loadLocalComponents } from "../dist/loader/index.js";
 
 const env = process.env.NODE_ENV;
 
