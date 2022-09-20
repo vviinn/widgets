@@ -6,8 +6,15 @@ steps:
     dir: '/workspace'
   - id: 'build_widgets'
     name: node
-    entrypoint: npm
-    args: ['run', 'build']
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        npm run build
+        cp -r dist /widgets
+    volumes:
+      - name: 'widgets_local_build'
+        path: '/widgets'
     dir: '/workspace'
     waitFor: ['install_widgets']
   - id: 'install_storybook'
@@ -17,8 +24,15 @@ steps:
     dir: '/workspace/storybook'
   - id: 'build_storybook'
     name: node
-    entrypoint: npm
-    args: ['run', 'build-storybook']
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        mv /widgets/dist .
+        npm run build-storybook
+    volumes:
+      - name: 'widgets_local_build'
+        path: '/widgets'
     dir: '/workspace/storybook'
     waitFor: ['install_storybook', 'build_widgets']
     env:
