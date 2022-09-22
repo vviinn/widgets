@@ -41,6 +41,7 @@ const makeAuthorizedRequest = (
 
 type ImageSearchStore = {
   token?: string;
+  campaignId: O.Option<string>;
   results: Recommendation[];
   filters: SearchSessionFilter[];
   resetCategoryLink?: Link;
@@ -52,8 +53,6 @@ type ImageSearchStore = {
   detectedObject?: ValueObject<DetectedObject>;
   objectDetectionInProgress: boolean;
   imageWidth: number;
-
-  campaignId?: number;
 
   image: O.Option<HTMLImageElement>;
   imageUrl: O.Option<string>;
@@ -67,7 +66,7 @@ type ImageSearchStore = {
 };
 
 const { state, onChange } = createStore<ImageSearchStore>({
-  token: undefined,
+  campaignId: O.none,
   results: [],
   filters: [],
   cropperHandlers: [],
@@ -188,7 +187,7 @@ export const uploadFile = (
       };
     }),
     TE.fromEither,
-    TE.chain(searchSessionClient),
+    TE.chain((request) => searchSessionClient(request, state.campaignId)),
     TE.map((sessionResponse) => {
       updateState(sessionResponse);
       detectObjects(sessionResponse);
