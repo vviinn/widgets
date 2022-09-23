@@ -56,6 +56,8 @@ export class VviinnVpsButton {
   @Prop() currencySign: string = "€";
   /** Locale for currency formatting */
   @Prop() locale: string = "de-DE";
+  /** Campaign using for visual search */
+  @Prop() campaignId?: string;
 
   /** @internal */
   @Prop() apiPath: string | undefined;
@@ -104,6 +106,7 @@ export class VviinnVpsButton {
           locale={this.locale}
           apiPath={this.apiPath}
           exportparts="brand, currency, deeplink, image, image-link, price-amount, price-container, price-outdated, price-prefix, price-regular, price-sale, title, product-card, example-images"
+          campaignId={this.campaignId}
         />
       </Host>
     );

@@ -7,6 +7,7 @@ import { createInitPostRequest, getApiPath } from "../network/utils";
 import { Recommendation } from "../recommendation/recommendation";
 import * as E from "fp-ts/Either";
 import * as TE from "fp-ts/TaskEither";
+import * as O from "fp-ts/Option";
 import { RectangleAlt } from "../geometry/RectangleAlt";
 import { Eq } from "fp-ts/lib/Eq";
 import { BasicError } from "../error";
@@ -69,13 +70,25 @@ export type SearchSession = ValueObject<Recommendation[]> &
   ContainsHiresImageUpload;
 
 export const searchSessionClient = (
-  initialData: RequestInit
-): TE.TaskEither<BasicError<Response | string>, SearchSession> =>
-  pipe(
+  initialData: RequestInit,
+  campaignId: O.Option<string> = O.none
+): TE.TaskEither<BasicError<Response | string>, SearchSession> => {
+  const searchUrl = "search/session";
+
+  const requestUrl = pipe(
+    campaignId,
+    O.fold(
+      () => searchUrl,
+      (campaignId) => `${searchUrl}?campaign-id=${campaignId}`
+    )
+  );
+
+  return pipe(
     sequenceToEither(getApiPath(), createInitPostRequest),
     TE.fromEither,
-    TE.chainW(makeRequest<SearchSession>("search/session", initialData))
+    TE.chainW(makeRequest<SearchSession>(requestUrl, initialData))
   );
+};
 
 export type ObjectsDetectedEvent = CustomEvent<ValueObject<DetectedObject>[]>;
 

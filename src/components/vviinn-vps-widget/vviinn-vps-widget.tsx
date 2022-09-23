@@ -11,6 +11,7 @@ import {
 import { state } from "../../store/store";
 import { imageSearchState } from "../../store/imageSearch.store";
 import * as O from "fp-ts/lib/Option";
+import { isEmpty } from "fp-ts/string";
 import { slotChangeListener } from "../customized-slots";
 import { v4 as uuidv4 } from "uuid";
 import { createTrackingApi } from "../../openApi";
@@ -30,6 +31,13 @@ import {
   createWidgetVpsEvent,
 } from "../../tracking";
 import { ProductCardEvent } from "../../recommendation/events";
+import { pipe } from "fp-ts/lib/function";
+
+const filterInt = (value: string) =>
+  /^[-+]?(\d+|Infinity)$/.test(value) ? Number(value) : NaN;
+
+const notEmptyString = (s: string) => !isEmpty(s);
+const notNan = (n: number): boolean => !isNaN(n);
 
 /**
  * @prop --color-primary: color used for action button, slider bullets and selected detected object;
@@ -73,6 +81,8 @@ export class VviinnVpsWidget {
   @Prop() currencySign: string = "€";
   /** Locale for currency formatting */
   @Prop() locale: string = "de-DE";
+  /** Campaign using for visual search */
+  @Prop() campaignId?: string;
 
   @State() slidePosition: number = 0;
   @State() width: number = 0;
@@ -167,6 +177,14 @@ export class VviinnVpsWidget {
     state.currencySign = this.currencySign;
     state.locale = this.locale;
     imageSearchState.token = this.token;
+    imageSearchState.campaignId = pipe(
+      this.campaignId,
+      O.fromNullable,
+      O.chain(O.fromPredicate(notEmptyString)),
+      O.map(filterInt),
+      O.chain(O.fromPredicate(notNan)),
+      O.map((s) => `${s}`)
+    );
 
     this.uiSessionId = uuidv4();
   }

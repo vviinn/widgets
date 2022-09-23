@@ -40,16 +40,17 @@ const makeAuthorizedRequest = (
   );
 
 type ImageSearchStore = {
-  token: string | undefined;
+  token?: string;
+  campaignId: O.Option<string>;
   results: Recommendation[];
   filters: SearchSessionFilter[];
-  resetCategoryLink: Link | undefined;
-  activeIonLink: Link | undefined;
+  resetCategoryLink?: Link;
+  activeIonLink?: Link;
   cropperHandlers: Handler[];
-  selectedCropper: number | undefined;
-  rectangleSearchForm: Form | undefined;
+  selectedCropper?: number;
+  rectangleSearchForm?: Form;
   detectedObjects: ValueObject<DetectedObject>[];
-  detectedObject: ValueObject<DetectedObject> | undefined;
+  detectedObject?: ValueObject<DetectedObject>;
   objectDetectionInProgress: boolean;
   imageWidth: number;
 
@@ -65,16 +66,11 @@ type ImageSearchStore = {
 };
 
 const { state, onChange } = createStore<ImageSearchStore>({
-  token: undefined,
+  campaignId: O.none,
   results: [],
   filters: [],
-  resetCategoryLink: undefined,
-  activeIonLink: undefined,
   cropperHandlers: [],
-  selectedCropper: undefined,
-  rectangleSearchForm: undefined,
   detectedObjects: [],
-  detectedObject: undefined,
   objectDetectionInProgress: false,
 
   imageWidth: RESIZED_IMAGE_WIDTH,
@@ -191,7 +187,7 @@ export const uploadFile = (
       };
     }),
     TE.fromEither,
-    TE.chain(searchSessionClient),
+    TE.chain((request) => searchSessionClient(request, state.campaignId)),
     TE.map((sessionResponse) => {
       updateState(sessionResponse);
       detectObjects(sessionResponse);

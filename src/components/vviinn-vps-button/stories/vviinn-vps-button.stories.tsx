@@ -3,10 +3,11 @@ export default {
   component: "vviinn-vps-button",
   parameters: {
     viewport: {
-      defaultViewport: "mobile2"
-    }
+      defaultViewport: "mobile2",
+    },
   },
-  decorators: [(story: () => any) => `
+  decorators: [
+    (story: () => any) => `
     <div style="display: grid;
                 position: absolute;
                 top: 0;
@@ -17,17 +18,21 @@ export default {
                 justify-items: center;">
       ${story()}
     </div>
-  `],
+  `,
+  ],
 };
 
 const Template = (args) => `
 <vviinn-vps-button
   api-path="${args.apiPath}"
   token="${args.token}"
+  campaign-id="${args.campaignId}"
 ></vviinn-vps-button>`;
 
 export const Default = Template.bind({});
 Default.args = {
-  token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4",
-  apiPath: "https://api.vviinn.com"
+  token:
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4",
+  apiPath: "https://api.vviinn.com",
+  campaignId: "",
 };
