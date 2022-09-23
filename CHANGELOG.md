@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.7.0](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.6.0...v2.7.0) (2022-09-23)
+
+
+### Features
+
+* use campaign id in search sessions and example images ([e6e0609](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/e6e0609317327d85f9eb579593b28a9822072dc4)), closes [#32169](https://bitbucket.org/mediaopt/vpr_webcomponent/issues/32169)
+
 ## [2.6.0](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.5.2...v2.6.0) (2022-09-20)
 
 
