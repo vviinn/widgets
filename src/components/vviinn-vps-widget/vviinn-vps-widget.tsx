@@ -187,11 +187,10 @@ export class VviinnVpsWidget {
     );
 
     this.uiSessionId = uuidv4();
+    this.trackingApi = createTrackingApi(this.apiPath, this.token);
   }
 
   private trackOpenEvent() {
-    this.trackingApi = createTrackingApi(this.apiPath, this.token);
-
     const widgetOpenEvent: WidgetEvent = createWidgetVpsEvent({
       action: "open",
       session_id: this.uiSessionId,
