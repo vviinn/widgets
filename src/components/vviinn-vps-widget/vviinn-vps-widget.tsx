@@ -119,7 +119,7 @@ export class VviinnVpsWidget {
   trackRecommendationClick({ detail }: ProductCardEvent) {
     const recommendationClickEvent: ProductClickEvent =
       createProductClickVpsEvent({
-        sessionId: this.uiSessionId,
+        session_id: this.uiSessionId,
         ...detail,
       });
 
