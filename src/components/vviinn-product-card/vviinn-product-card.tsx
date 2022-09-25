@@ -85,7 +85,11 @@ export class VviinnProductCard {
   );
 
   connectedCallback() {
-    this.productData = {
+    this.productData = this.getProductData();
+  }
+
+  private getProductData() {
+    return {
       product: this.productId,
       rank: this.index,
     };
@@ -113,7 +117,7 @@ export class VviinnProductCard {
       link.addEventListener("click", (event) => {
         event.preventDefault();
         event.stopImmediatePropagation();
-        this.recommendationClick.emit(this.productData);
+        this.recommendationClick.emit(this.getProductData());
 
         pipe(
           getAnalyticsModule,
