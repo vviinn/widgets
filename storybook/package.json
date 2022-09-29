@@ -13,18 +13,18 @@
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.16.12",
-    "@pxtrn/storybook-addon-docs-stencil": "^6.4.0",
-    "@storybook/addon-actions": "^6.4.17",
-    "@storybook/addon-essentials": "^6.4.17",
-    "@storybook/addon-links": "^6.4.17",
-    "@storybook/web-components": "^6.4.17",
+    "@pxtrn/storybook-addon-docs-stencil": "^6.4.1",
+    "@storybook/addon-actions": "^6.5.12",
+    "@storybook/addon-essentials": "^6.5.12",
+    "@storybook/addon-links": "^6.5.12",
+    "@storybook/web-components": "^6.5.12",
     "babel-loader": "^8.2.3",
     "chromatic": "^6.4.3",
-    "storybook-addon-designs": "^6.2.1"
+    "storybook-addon-designs": "^6.3.1"
   },
   "dependencies": {
-    "@storybook/builder-webpack5": "^6.4.17",
-    "@storybook/manager-webpack5": "^6.4.17",
+    "@storybook/builder-webpack5": "^6.5.12",
+    "@storybook/manager-webpack5": "^6.5.12",
     "lit-html": "^1.4.1",
     "vviinn-widgets": "^2.7.3"
   }
