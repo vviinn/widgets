@@ -1,4 +1,3 @@
-import { withDesign } from "storybook-addon-designs";
 import { argTypes } from "./args";
 
 type StoryArgs = typeof argTypes;
@@ -19,7 +18,7 @@ const centerDecorator = (story: () => any) => `
 export default {
   title: "Widgets/Visual Recommendations/Button",
   component: "vviinn-vpr-button",
-  decorators: [withDesign, centerDecorator],
+  decorators: [centerDecorator],
   argTypes,
 };
 

@@ -1,4 +1,6 @@
-module.exports = {
+import type { StorybookViteConfig } from "@storybook/builder-vite";
+
+const config: StorybookViteConfig = {
   stories: [
     "../../src/components/**/*.stories.@(js|jsx|ts|tsx)",
     "../documentation/**/*.stories.mdx",
@@ -7,10 +9,14 @@ module.exports = {
     "@storybook/addon-links",
     "@storybook/addon-essentials",
     "@pxtrn/storybook-addon-docs-stencil",
-    "storybook-addon-designs",
   ],
-  framework: "@storybook/web-components",
   core: {
-    builder: "webpack5",
+    builder: "@storybook/builder-vite",
+    disableTelemetry: true,
+  },
+  async viteFinal(config) {
+    return config;
   },
 };
+
+export default config;
