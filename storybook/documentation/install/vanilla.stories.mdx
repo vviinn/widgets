@@ -10,8 +10,8 @@ Paste scripts to `head` section of your page.<br />
 You don't need to include script tag with `nomodule` attribute if you do not need to support browsers without JavaScript modules feature.
 
 ```html
-<script type="module" src="cdnPath/npmPackageName.esm.js"></script>
-<script nomodule src="cdnPath/npmPackageName.js"></script>
+<script type="module" src="STORYBOOK_CDN_PATH/STORYBOOK_NPM_PACKAGE_NAME.esm.js"></script>
+<script nomodule src="STORYBOOK_CDN_PATH/STORYBOOK_NPM_PACKAGE_NAME.js"></script>
 ```
 
 Then you will be able to use VPR or VPS widgets.
@@ -22,17 +22,17 @@ To use recommendations widget insert snippet below where you want to render widg
 `token` and `product-id` attributes are only nessesary, but you can tweak widget with other attributes.
 
 ```html
-<vprTag
+<STORYBOOK_VPR_WIDGET_TAG
   token="INSERT_YOURS_TOKEN"
   product-id="YOURS_PRODUCT_ID">
-</vprTag>
+</STORYBOOK_VPR_WIDGET_TAG>
 ```
 [Check other attributes here ](/docs/components-visual-recommendations--default)
 
 Also can create component instance with DOM API:
 
 ```javascript
-const component = document.createElement('vprTag');
+const component = document.createElement('STORYBOOK_VPR_WIDGET_TAG');
 component.token = YOURS_TOKEN;
 component.productId = YOURS_PRODUCT_ID;
 
@@ -41,11 +41,11 @@ document.append(component);
 
 ### Visual Product Search
 
-To use search widget first insert `<vpsTag token="INSERT_YOURS_TOKEN"></vpsTag>` anywhere to page.
+To use search widget first insert `<STORYBOOK_VPS_WIDGET_TAG token="INSERT_YOURS_TOKEN"></STORYBOOK_VPS_WIDGET_TAG>` anywhere to page.
 Widget implemented as modal window, so you need to trigger it.
 
 ```html
-<vpsTag token="INSERT_YOURS_TOKEN"></vpsTag>
+<STORYBOOK_VPS_WIDGET_TAG token="INSERT_YOURS_TOKEN"></STORYBOOK_VPS_WIDGET_TAG>
 ```
 
 [Check other attributes here ](/docs/components-visual-search-widget--default)
@@ -53,7 +53,7 @@ Widget implemented as modal window, so you need to trigger it.
 Also can create component instance with DOM API:
 
 ```javascript
-const component = document.createElement('vpsTag');
+const component = document.createElement('STORYBOOK_VPS_WIDGET_TAG');
 component.token = YOURS_TOKEN;
 
 document.append(component);
@@ -63,12 +63,12 @@ document.append(component);
 
 If you want to use widgets as ES6 modules you should install it from NPM
 
-`npm i npmPackageName`
+`npm i STORYBOOK_NPM_PACKAGE_NAME`
 
 And then add it to your JavaScript code:
 
 ```javascript
-import { defineCustomElements } from 'npmPackageName';
+import { defineCustomElements } from 'STORYBOOK_NPM_PACKAGE_NAME';
 defineCustomElements();
 ```
 After that you can use both Recommendation or Search widgets in html template or with javascript.
