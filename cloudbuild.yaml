@@ -31,6 +31,7 @@ steps:
         rm -rf dist
         mv /widgets/dist .
         ls -la .
+        export NODE_OPTIONS=--openssl-legacy-provider
         npm run build-storybook
     volumes:
       - name: 'widgets_local_build'
