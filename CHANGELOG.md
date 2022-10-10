@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.8.0](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.7.3...v2.8.0) (2022-10-10)
+
+
+### Features
+
+* move image resizing in WebWorker ([544300f](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/544300fc0676aa9b01c20eee420f4b51b5ca86f7))
+* move tracking WebWorker thread ([fefd89b](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/fefd89ba2008edbbedb9e2a75638d4fa83462497))
+* use cssnano for css minification ([62cdb5f](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/62cdb5f71d3bf0a7e01efdbf696f5a7a60b56847))
+
+
+### Bug Fixes
+
+* fix bug with wrong image sizes when convert File to Image ([275cb70](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/275cb7045b62ece43667a6049baf78bc505fd311))
+
 ### [2.7.3](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.7.2...v2.7.3) (2022-09-25)
 
 
