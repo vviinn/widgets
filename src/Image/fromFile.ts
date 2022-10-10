@@ -7,22 +7,26 @@ export const fromFile = (f: File): Promise<HTMLImageElement> =>
 
     reader.onload = (e: ProgressEvent<FileReader>) => {
       image.src = e.target.result as string;
-      resolve(image);
+      image.onload = () => {
+        resolve(image);
+      };
     };
 
     reader.readAsDataURL(f);
   });
 
-export const imageFromFileTask = (f: File): Task<HTMLImageElement> => () =>
-  new Promise((resolve, _) => {
-    const reader = new FileReader();
-    const image = new Image();
+export const imageFromFileTask =
+  (f: File): Task<HTMLImageElement> =>
+  () =>
+    new Promise((resolve, _) => {
+      const reader = new FileReader();
+      const image = new Image();
 
-    reader.onload = (e: ProgressEvent<FileReader>) => {
-      image.src = e.target.result as string;
-    };
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        image.src = e.target.result as string;
+      };
 
-    image.onload = () => resolve(image);
+      image.onload = () => resolve(image);
 
-    reader.readAsDataURL(f);
-  });
+      reader.readAsDataURL(f);
+    });
