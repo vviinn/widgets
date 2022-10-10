@@ -1,14 +1,16 @@
 import { Config } from "@stencil/core";
-import { postcss } from "@stencil/postcss";
+import { postcss } from "@stencil-community/postcss";
 import autoprefixer from "autoprefixer";
 import dotenvPlugin from "rollup-plugin-dotenv";
+import { readFileSync } from "fs";
+import preset from "cssnano-preset-advanced";
 
 export const config: Config = {
   namespace: "vviinn-widgets",
   taskQueue: "async",
   outputTargets: [
     {
-      type: "dist",
+      type: "dist-custom-elements",
     },
     {
       type: "docs-json",
@@ -16,8 +18,6 @@ export const config: Config = {
     },
     {
       type: "www",
-      serviceWorker: null, // disable service workers,
-      copy: [{ src: "assets" }, { src: "favicon.ico" }],
     },
   ],
   env: {
@@ -25,16 +25,28 @@ export const config: Config = {
     packageName: process.env.npm_package_name,
     environment: process.env.ENVIRONMENT,
   },
-  globalScript: "src/global",
   globalStyle: "src/variables.css",
   plugins: [
     dotenvPlugin(),
     postcss({
-      plugins: [autoprefixer()],
+      plugins: [
+        autoprefixer(),
+        require("cssnano")({
+          preset,
+        }),
+      ],
     }),
   ],
   testing: {
     browserArgs: ["--no-sandbox", "--disable-setuid-sandbox"],
     browserHeadless: true,
+  },
+  devServer: {
+    reloadStrategy: "pageReload",
+    port: 4444,
+    https: {
+      cert: readFileSync("./cert/cert.pem", "utf8"),
+      key: readFileSync("./cert/key.pem", "utf8"),
+    },
   },
 };
