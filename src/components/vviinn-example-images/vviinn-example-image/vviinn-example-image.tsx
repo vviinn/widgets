@@ -7,13 +7,8 @@ import {
   EventEmitter,
   State,
 } from "@stencil/core";
-import { pipe } from "fp-ts/lib/function";
 import { toFile } from "../../../Image/toFile";
-import {
-  imageSearchState,
-  processSelectedFile,
-} from "../../../store/imageSearch.store";
-import * as E from "fp-ts/lib/Either";
+import { imageSearchState } from "../../../store/imageSearch.store";
 
 @Component({
   tag: "vviinn-example-image",
@@ -30,27 +25,18 @@ export class VviinnExampleImage {
   @Event() exampleImageSelected: EventEmitter<void>;
   @Event() exampleImageError: EventEmitter<void>;
 
-  private async selectImage(_event: UIEvent) {
+  private async selectImage() {
     this.selected = true;
 
     const file = await toFile(this.src);
-    const processResult = await processSelectedFile(file);
-
-    pipe(
-      processResult,
-      E.match(
-        () => this.exampleImageError.emit(),
-        () => this.exampleImageSelected.emit()
-      )
-    );
-
+    imageSearchState.imageSelectedObserver.next(file);
     this.selected = false;
   }
 
   private showPreloader(): boolean {
     return (
       (imageSearchState.objectDetectionInProgress ||
-        imageSearchState.loading) &&
+        imageSearchState.status === "pending") &&
       this.selected
     );
   }
@@ -64,7 +50,7 @@ export class VviinnExampleImage {
           </div>
         ) : null}
         <img
-          onClick={(ev) => this.selectImage(ev)}
+          onClick={() => this.selectImage()}
           src={this.src}
           width={this.width}
           height={this.height}

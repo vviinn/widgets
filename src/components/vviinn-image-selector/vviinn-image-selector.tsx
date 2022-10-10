@@ -1,9 +1,10 @@
 import { Component, Host, h, Event, EventEmitter } from "@stencil/core";
 import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/lib/function";
+import { checkFileWithExtention } from "../../store/file-processing";
 import {
   imageSearchState,
-  processSelectedFile,
+  imageSearcStateListener,
 } from "../../store/imageSearch.store";
 
 /**
@@ -22,22 +23,32 @@ export class VviinnImageSelector {
 
   private async handleInputChange(event: Event) {
     const input = event.target as HTMLInputElement;
-    const processingResult = await processSelectedFile(input.files[0]);
 
     pipe(
-      processingResult,
-      E.match(
+      checkFileWithExtention(input.files[0]),
+      E.matchW(
         () => this.imageSelectedError.emit(),
-        () => this.imageSelected.emit()
+        (file) => {
+          imageSearchState.imageSelectedObserver.next(file);
+        }
       )
     );
 
     input.value = null;
   }
 
+  componentWillLoad() {
+    imageSearcStateListener("status", (status) => {
+      if (status !== "imageProcessed") return;
+      this.imageSelected.emit();
+    });
+  }
+
   private isLoading(): boolean {
     return (
-      imageSearchState.loading || imageSearchState.objectDetectionInProgress
+      imageSearchState.status === "imageSelected" ||
+      imageSearchState.status === "pending" ||
+      imageSearchState.objectDetectionInProgress
     );
   }
 

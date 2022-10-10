@@ -10,6 +10,7 @@ import {
   SearchSessionFilter,
   DetectedObject,
   searchSessionClient,
+  SearchSessionStatus,
 } from "../searchSession/searchSession";
 import { foldValueObject, ValueObject } from "../network/ion/ValueObject";
 import { Link, linkRequest, getLink } from "../network/ion/Link";
@@ -22,8 +23,15 @@ import { processBearerToken } from "../utils/token/tokenUtils";
 import { BasicError } from "../error";
 import { sequenceToEither } from "../utils/either";
 import { imageFormFromFile } from "../Image/form";
-import { checkFileWithExtention, resizeFileTo } from "./file-processing";
-import { imageFromFileTask } from "../Image/fromFile";
+import { fromFile } from "../Image/fromFile";
+import { fromEvent, Subject, Observable, map, concatMap, tap } from "rxjs";
+import { resize } from "../Image/resizer.worker";
+import { worker } from "../Image/resizer.worker.ts?worker";
+import { prepareImageForResizing } from "../Image/resizeImage";
+import { fromImageData } from "../Image";
+import { toFile } from "../Image/toFile";
+
+type ResizerWorkerMessage = [string, number, ImageData, any];
 
 const RESIZED_IMAGE_WIDTH = 500;
 const makeAuthorizedRequest = (
@@ -63,6 +71,14 @@ type ImageSearchStore = {
 
   serverError: boolean;
   loading: boolean;
+
+  imageSelectedObserver: Subject<File>;
+  imageResizerObserver: Observable<MessageEvent<ResizerWorkerMessage>>;
+  searchSessionObserver: Subject<string>;
+  objectDetectionObserver: Subject<string>;
+
+  kek: boolean;
+  status: SearchSessionStatus;
 };
 
 const { state, onChange } = createStore<ImageSearchStore>({
@@ -84,7 +100,19 @@ const { state, onChange } = createStore<ImageSearchStore>({
 
   serverError: false,
   loading: false,
+  imageSelectedObserver: new Subject(),
+  imageResizerObserver: fromEvent<MessageEvent<ResizerWorkerMessage>>(
+    worker,
+    "message"
+  ),
+  searchSessionObserver: new Subject(),
+  objectDetectionObserver: new Subject(),
+
+  kek: false,
+  status: "idle",
 });
+
+const prepareToResize = prepareImageForResizing(state.imageWidth);
 
 const updateState = async (response: SearchSession) => {
   state.results = response.value;
@@ -92,6 +120,7 @@ const updateState = async (response: SearchSession) => {
   state.rectangleSearchForm = response.searchArea;
   state.resetCategoryLink = response.links?.clearFilters;
   state.loading = false;
+  state.status = "fullfield";
 };
 
 const makeLinkRequest = <T>(
@@ -170,6 +199,7 @@ export const uploadFile = (
   file: File
 ): TE.TaskEither<BasicError<string | Response>, SearchSession> => {
   state.loading = true;
+  state.status = "pending";
 
   const fileForm = imageFormFromFile(file);
 
@@ -191,21 +221,24 @@ export const uploadFile = (
     TE.map((sessionResponse) => {
       updateState(sessionResponse);
       detectObjects(sessionResponse);
-      state.loading = false;
       return sessionResponse;
     }),
     TE.mapLeft((error) => {
       state.serverError = true;
       state.loading = false;
+      state.status = "error";
       return error;
     })
   );
 };
 
 export const imageSearchState = state;
+export const imageSearcStateListener = onChange;
 
 onChange("activeIonLink", async (newLink: Link) => {
   state.loading = true;
+  state.status = "pending";
+
   const link = newLink ? newLink : state.resetCategoryLink;
 
   await pipe(
@@ -233,6 +266,11 @@ onChange("searchArea", (newSearchArea: O.Option<Rectangle>) => {
 
 onChange("serverError", () => {
   state.loading = false;
+  state.status = "error";
+});
+
+onChange("kek", () => {
+  console.log("kek changed in store");
 });
 
 const setSelectedImage = (image: HTMLImageElement) => {
@@ -240,29 +278,27 @@ const setSelectedImage = (image: HTMLImageElement) => {
   imageSearchState.imageUrl = O.some(image.src);
 };
 
-export const processSelectedFile = async (file: File) => {
-  const originFile = checkFileWithExtention(file);
+state.imageSelectedObserver
+  .pipe(
+    tap(() => (state.status = "imageSelected")),
+    concatMap(fromFile),
+    map(prepareToResize)
+  )
+  .subscribe((prepearedImageData) => {
+    // to not copy data use direct api with postMessage
+    resize(prepearedImageData);
+  });
 
-  const fileResizer = resizeFileTo(RESIZED_IMAGE_WIDTH);
+const imageResizeStream = state.imageResizerObserver.pipe(
+  map((event) => event.data[2]),
+  map(fromImageData),
+  map((canvas) => canvas.toDataURL()),
+  concatMap(toFile),
+  tap(() => (state.status = "imageProcessed"))
+);
 
-  const resizeFileTask = pipe(
-    originFile,
-    TE.fromEither,
-    TE.chainTaskK(fileResizer)
-  );
+imageResizeStream.subscribe((f) => {
+  uploadFile(f)();
+});
 
-  const session = await pipe(resizeFileTask, TE.chain(uploadFile))();
-
-  pipe(
-    sequenceToEither(session, originFile),
-    E.map(([sessionObject, file]) => uploadHiresFile(sessionObject, file))
-  );
-
-  await pipe(
-    resizeFileTask,
-    TE.chainTaskK(imageFromFileTask),
-    TE.map(setSelectedImage)
-  )();
-
-  return session;
-};
+imageResizeStream.pipe(concatMap(fromFile)).subscribe(setSelectedImage);

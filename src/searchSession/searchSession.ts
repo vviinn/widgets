@@ -15,6 +15,14 @@ import { processBearerToken } from "../utils/token/tokenUtils";
 import { sequenceToEither } from "../utils/either";
 import { imageFormFromFile } from "../Image/form";
 
+export type SearchSessionStatus =
+  | "idle"
+  | "imageSelected"
+  | "imageProcessed"
+  | "pending"
+  | "fullfield"
+  | "error";
+
 export interface SearchSessionFilters {
   readonly [key: string]: Link[];
 }

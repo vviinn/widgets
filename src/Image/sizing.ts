@@ -46,22 +46,22 @@ const getDimentionsRatio = (sortedDimensions: ImageDimensions): number => {
 
 export const scaleByLargestSide =
   (toSize: number) =>
-    (dimensions: ImageDimensions): ImageDimensions => {
-      const sortedDimensions = sortDimentionsBySize(dimensions);
-      const ratio = getDimentionsRatio(sortedDimensions);
+  (dimensions: ImageDimensions): ImageDimensions => {
+    const sortedDimensions = sortDimentionsBySize(dimensions);
+    const ratio = getDimentionsRatio(sortedDimensions);
 
-      const newSmallestSide: ImageDimension = {
-        ...sortedDimensions[0],
-        size: toSize * ratio,
-      };
-
-      const newLargestSide: ImageDimension = {
-        ...sortedDimensions[1],
-        size: toSize,
-      };
-
-      return sortDimentionsByKind([newLargestSide, newSmallestSide]);
+    const newSmallestSide: ImageDimension = {
+      ...sortedDimensions[0],
+      size: toSize * ratio,
     };
+
+    const newLargestSide: ImageDimension = {
+      ...sortedDimensions[1],
+      size: toSize,
+    };
+
+    return sortDimentionsByKind([newLargestSide, newSmallestSide]);
+  };
 
 export const dimensionsFromImage = (
   image: HTMLImageElement
