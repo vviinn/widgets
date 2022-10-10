@@ -1,8 +1,41 @@
-import type { StorybookViteConfig } from "@storybook/builder-vite";
-import { replaceCodePlugin } from "vite-plugin-replace";
-import { mergeConfig, loadEnv } from "vite";
+import { Plugin, Compiler, Configuration } from "webpack";
 
-const config: StorybookViteConfig = {
+// class MyExampleWebpackPlugin implements Plugin {
+//   apply(compiler: Compiler) {
+//     // Specify the event hook to attach to
+//     compiler.hooks.thisCompilation.tap(
+//       "MyExampleWebpackPlugin",
+//       (compilation) => {
+//         compilation.hooks.buildModule.tap(
+//           "MyExampleWebpackPlugin",
+//           (module, callback) => {
+//             console.log(module._source);
+
+//             return module;
+//           }
+//         );
+//       }
+//     );
+//   }
+// }
+
+class MyExampleWebpackPlugin implements Plugin {
+  apply(compiler: Compiler) {
+    // Specify the event hook to attach to
+    compiler.hooks.compilation.tap("MyExampleWebpackPlugin", (compilation) => {
+      compilation.hooks.optimizeAssets.tap(
+        "MyExampleWebpackPlugin",
+        (module, callback) => {
+          console.log(module._source);
+
+          return module;
+        }
+      );
+    });
+  }
+}
+
+const config = {
   stories: [
     "../../src/components/**/*.stories.@(js|jsx|ts|tsx)",
     "../documentation/**/*.stories.mdx",
@@ -14,29 +47,17 @@ const config: StorybookViteConfig = {
   ],
   features: {
     previewMdx2: true,
+    storyStoreV7: true,
   },
   core: {
-    builder: "@storybook/builder-vite",
+    builder: {
+      name: "webpack5",
+    },
     disableTelemetry: true,
   },
-  async viteFinal(config) {
-    const env = loadEnv("development", process.cwd(), "");
-    const replacements = Object.entries(env)
-      .filter(([key]) => key.includes("STORYBOOK"))
-      .map(([key, value]) => {
-        return {
-          from: new RegExp(key, "g"),
-          to: value,
-        };
-      });
-
-    return mergeConfig(config, {
-      plugins: [
-        replaceCodePlugin({
-          replacements,
-        }),
-      ],
-    });
+  webpackFinal: async (config: Configuration) => {
+    config.plugins.push(new MyExampleWebpackPlugin());
+    return config;
   },
 };
 

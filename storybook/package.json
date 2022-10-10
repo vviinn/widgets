@@ -7,22 +7,29 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "storybook": "start-storybook -p 6006 --no-manager-cache",
     "build-storybook": "build-storybook",
+    "postbuild-storybook": "cp -r node_modules/vviinn-widgets storybook-static/assets",
     "chromatic": "npx chromatic --project-token 124f815087df"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.16.12",
+    "@babel/plugin-proposal-decorators": "^7.19.3",
+    "@babel/plugin-transform-typescript": "^7.19.3",
     "@pxtrn/storybook-addon-docs-stencil": "^6.4.1",
     "@storybook/addon-actions": "^6.5.12",
     "@storybook/addon-essentials": "^6.5.12",
     "@storybook/addon-links": "^6.5.12",
     "@storybook/builder-vite": "^0.2.3",
+    "@storybook/builder-webpack5": "^6.5.12",
+    "@storybook/manager-webpack5": "^6.5.12",
     "@storybook/mdx2-csf": "^0.0.3",
     "@storybook/web-components": "^6.5.12",
     "babel-loader": "^8.2.3",
     "chromatic": "^6.4.3",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "vite-plugin-babel": "^1.1.2",
+    "webpack-plugin-replace": "^1.2.0"
   },
   "dependencies": {
     "lit-html": "^1.4.1",
