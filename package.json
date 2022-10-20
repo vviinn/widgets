@@ -52,16 +52,12 @@
   },
   "devDependencies": {
     "@babel/core": "^7.16.12",
-    "@stencil-community/postcss": "^2.1.0",
     "@stencil/core": "^2.9.0",
+    "@stencil/postcss": "^2.1.0",
     "@stencil/store": "^1.5.0",
-    "@types/autoprefixer": "^10.2.0",
     "@types/jest": "^26.0.21",
     "@types/uuid": "^8.3.4",
-    "autoprefixer": "^10.4.12",
     "babel-loader": "^8.2.3",
-    "cssnano": "^5.1.13",
-    "cssnano-preset-advanced": "^5.3.8",
     "jest": "^26.6.3",
     "jest-cli": "^26.6.3",
     "jest-config": "^27.3.1",
@@ -69,7 +65,6 @@
     "rollup-plugin-dotenv": "^0.3.0",
     "storybook-addon-designs": "^6.2.1",
     "vite-plugin-replace": "^0.1.1",
-    "workbox-build": "^4.3.1",
     "yocto-queue": "^1.0.0"
   }
 }
