@@ -1,10 +1,19 @@
+import { lanczos } from "@rgba-image/lanczos";
 import {
   dimensionsFromImage,
   ImageDimension,
   scaleByLargestSide,
 } from "./sizing";
 
-import { createCanvasWithContext } from "../canvas";
+const createCanvasWithContext = (): [
+  HTMLCanvasElement,
+  CanvasRenderingContext2D
+] => {
+  const canvas = document.createElement("canvas");
+  const contenx = canvas.getContext("2d");
+
+  return [canvas, contenx];
+};
 
 const imageDataFromImage = (image: HTMLImageElement): ImageData => {
   const { naturalWidth, naturalHeight } = image;
@@ -18,25 +27,27 @@ const imageDataFromImage = (image: HTMLImageElement): ImageData => {
   return context.getImageData(0, 0, naturalWidth, naturalHeight);
 };
 
-export const prepareImageForResizing =
-  (width: number) =>
-  (i: HTMLImageElement): [ImageData, ImageData] => {
-    const scale = scaleByLargestSide(width);
-    const destinationCanvas = document.createElement("canvas");
-    const imageDimensions = dimensionsFromImage(i);
-    const [destinationWidth, destinationHeight] = scale(imageDimensions).map(
-      (d: ImageDimension) => d.size
-    );
+export const resizeImage = (width: number, i: HTMLImageElement): string => {
+  const scale = scaleByLargestSide(width);
+  const [destinationCanvas, destinationContext] = createCanvasWithContext();
+  const imageDimensions = dimensionsFromImage(i);
+  const [destinationWidth, destinationHeight] = scale(imageDimensions).map(
+    (d: ImageDimension) => d.size
+  );
 
-    const destinationImageData = new ImageData(
-      destinationWidth,
-      destinationHeight
-    );
+  const destinationImageData = new ImageData(
+    destinationWidth,
+    destinationHeight
+  );
 
-    const originImageData = imageDataFromImage(i);
+  const originImageData = imageDataFromImage(i);
 
-    destinationCanvas.width = destinationWidth;
-    destinationCanvas.height = destinationHeight;
+  destinationCanvas.width = destinationWidth;
+  destinationCanvas.height = destinationHeight;
 
-    return [originImageData, destinationImageData];
-  };
+  lanczos(originImageData, destinationImageData);
+
+  destinationContext.putImageData(destinationImageData, 0, 0);
+
+  return destinationCanvas.toDataURL();
+};

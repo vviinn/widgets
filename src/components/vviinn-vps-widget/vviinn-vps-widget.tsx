@@ -234,7 +234,6 @@ export class VviinnVpsWidget {
     imageSearchState.detectedObjects = [];
     imageSearchState.activeIonLink = undefined;
     imageSearchState.rectangleSearchForm = undefined;
-    imageSearchState.status = "idle";
 
     this.resetScroll("results-block");
   }

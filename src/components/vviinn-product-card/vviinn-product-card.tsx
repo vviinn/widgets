@@ -140,16 +140,15 @@ export class VviinnProductCard {
       height: this.imageWidth * this.imageRatio,
       src: this.image,
       title: this.productTitle,
-      lazy: true,
+      lazy: false,
     };
 
     return this.responsive
-      ? ResponsiveImage(props, () => this.handleImageLoaded())
-      : Image(props, () => this.handleImageLoaded());
+      ? ResponsiveImage(props, () => this.kek())
+      : Image(props, () => this.kek());
   }
 
-  private handleImageLoaded() {
-    this.imageLoaded = true;
+  private kek() {
     this.productImageLoaded.emit(this.productId);
   }
 
