@@ -9,15 +9,14 @@ import {
   Listen,
 } from "@stencil/core";
 import { state } from "../../store/store";
-import {
-  imageSearchState,
-  imageSearcStateListener,
-} from "../../store/imageSearch.store";
+import { imageSearchState } from "../../store/imageSearch.store";
 import * as O from "fp-ts/lib/Option";
 import { isEmpty } from "fp-ts/string";
 import { slotChangeListener } from "../customized-slots";
 import { v4 as uuidv4 } from "uuid";
+import { createTrackingApi } from "../../openApi";
 import {
+  DefaultApi,
   FilterAction,
   ProductClickEvent,
   ProductViewEvent,
@@ -33,7 +32,6 @@ import {
 } from "../../tracking";
 import { ProductCardEvent } from "../../recommendation/events";
 import { pipe } from "fp-ts/lib/function";
-import { trackEvent } from "../../tracking/tracking.worker";
 
 const filterInt = (value: string) =>
   /^[-+]?(\d+|Infinity)$/.test(value) ? Number(value) : NaN;
@@ -92,6 +90,7 @@ export class VviinnVpsWidget {
 
   private overflow: string;
   private uiSessionId: string;
+  private trackingApi: DefaultApi;
   private imageSource: SearchImageSource | null = null;
 
   @Watch("active")
@@ -113,8 +112,7 @@ export class VviinnVpsWidget {
         ...detail,
       }
     );
-
-    trackEvent(this.apiPath, this.token, recommendationViewEvent);
+    this.trackingApi.trackEvent(recommendationViewEvent);
   }
 
   @Listen("recommendationClick")
@@ -125,17 +123,15 @@ export class VviinnVpsWidget {
         ...detail,
       });
 
-    trackEvent(this.apiPath, this.token, recommendationClickEvent).finally(
-      () => {
-        const product = imageSearchState.results.find(
-          (r) => r.productId === detail.product
-        );
+    this.trackingApi.trackEvent(recommendationClickEvent).finally(() => {
+      const product = imageSearchState.results.find(
+        (r) => r.productId === detail.product
+      );
 
-        if (!product || !product.deeplink) return;
+      if (!product || !product.deeplink) return;
 
-        window.location.href = product.deeplink;
-      }
-    );
+      window.location.href = product.deeplink;
+    });
   }
 
   @Listen("cropperChanged")
@@ -146,7 +142,7 @@ export class VviinnVpsWidget {
       search_area: "manual-selection",
     });
 
-    trackEvent(this.apiPath, this.token, searchEvent);
+    this.trackingApi.trackEvent(searchEvent);
   }
 
   @Listen("detectedObjectClicked")
@@ -157,7 +153,7 @@ export class VviinnVpsWidget {
       search_area: "attention-point",
     });
 
-    trackEvent(this.apiPath, this.token, searchEvent);
+    this.trackingApi.trackEvent(searchEvent);
   }
 
   @Listen("filterSelected")
@@ -169,7 +165,7 @@ export class VviinnVpsWidget {
       action: detail,
     });
 
-    trackEvent(this.apiPath, this.token, searchEvent);
+    this.trackingApi.trackEvent(searchEvent);
   }
 
   componentWillLoad() {
@@ -191,10 +187,7 @@ export class VviinnVpsWidget {
     );
 
     this.uiSessionId = uuidv4();
-
-    imageSearcStateListener("status", (status) => {
-      this.slidePosition = status === "fullfield" ? 1 : 0;
-    });
+    this.trackingApi = createTrackingApi(this.apiPath, this.token);
   }
 
   private trackOpenEvent() {
@@ -203,11 +196,12 @@ export class VviinnVpsWidget {
       session_id: this.uiSessionId,
     });
 
-    trackEvent(this.apiPath, this.token, widgetOpenEvent);
+    this.trackingApi.trackEvent(widgetOpenEvent);
   }
 
   private handleImageSelection(source: SearchImageSource) {
     this.imageSource = source;
+    this.slidePosition = 1;
     const root = this.el.shadowRoot.querySelector("vviinn-overlayed-modal");
     const overlay = root.shadowRoot.querySelector("vviinn-overlay");
     const modal = overlay.querySelector("vviinn-modal");
@@ -224,12 +218,13 @@ export class VviinnVpsWidget {
       search_area: "full",
     });
 
-    trackEvent(this.apiPath, this.token, searchEvent);
+    this.trackingApi.trackEvent(searchEvent);
   }
 
   private resetState() {
     this.resetScroll("onboarding-block");
 
+    this.slidePosition = 0;
     imageSearchState.image = O.none;
     imageSearchState.imageUrl = O.none;
     imageSearchState.imageBounds = O.none;
@@ -265,7 +260,7 @@ export class VviinnVpsWidget {
       session_id: this.uiSessionId,
     });
 
-    trackEvent(this.apiPath, this.token, widgetOpenEvent);
+    this.trackingApi.trackEvent(widgetOpenEvent);
   }
 
   render() {
