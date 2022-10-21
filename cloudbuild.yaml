@@ -28,9 +28,7 @@ steps:
     args:
       - '-c'
       - |
-        rm -rf dist
-        mv /widgets .
-        ls -la .
+        cp -r /widgets .
         if [ $_ENVIRONMENT = "stage" ]; then npm install ./widgets; else npm install vviinn-widgets; fi
         export NODE_OPTIONS=--openssl-legacy-provider
         npm run build-storybook
