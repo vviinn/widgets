@@ -7,7 +7,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "storybook": "start-storybook -p 6006 --no-manager-cache",
     "build-storybook": "build-storybook",
-    "postbuild-storybook": "cp -r node_modules/vviinn-widgets storybook-static/assets",
     "chromatic": "npx chromatic --project-token 124f815087df"
   },
   "author": "",
