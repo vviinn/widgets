@@ -1,39 +1,6 @@
-import { Plugin, Compiler, Configuration } from "webpack";
+import { Configuration } from "webpack";
 
-// class MyExampleWebpackPlugin implements Plugin {
-//   apply(compiler: Compiler) {
-//     // Specify the event hook to attach to
-//     compiler.hooks.thisCompilation.tap(
-//       "MyExampleWebpackPlugin",
-//       (compilation) => {
-//         compilation.hooks.buildModule.tap(
-//           "MyExampleWebpackPlugin",
-//           (module, callback) => {
-//             console.log(module._source);
-
-//             return module;
-//           }
-//         );
-//       }
-//     );
-//   }
-// }
-
-class MyExampleWebpackPlugin implements Plugin {
-  apply(compiler: Compiler) {
-    // Specify the event hook to attach to
-    compiler.hooks.compilation.tap("MyExampleWebpackPlugin", (compilation) => {
-      compilation.hooks.optimizeAssets.tap(
-        "MyExampleWebpackPlugin",
-        (module, callback) => {
-          console.log(module._source);
-
-          return module;
-        }
-      );
-    });
-  }
-}
+import { resolve } from "path";
 
 const config = {
   stories: [
@@ -56,7 +23,16 @@ const config = {
     disableTelemetry: true,
   },
   webpackFinal: async (config: Configuration) => {
-    config.plugins.push(new MyExampleWebpackPlugin());
+    config.module.rules = [
+      {
+        test: /\.stories\.mdx$/,
+        use: {
+          loader: resolve("./stories.loader.ts"),
+        },
+      },
+      ...config.module.rules,
+    ];
+
     return config;
   },
 };

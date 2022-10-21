@@ -12,8 +12,6 @@ if (docJson) setStencilDocJson(docJson);
 
 defineCustomElements();
 
-console.log(process.env.STORYBOOK_NPM_PACKAGE_NAME);
-
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
   controls: {
