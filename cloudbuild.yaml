@@ -11,7 +11,7 @@ steps:
       - '-c'
       - |
         npm run build
-        cp -r dist /widgets
+        cp -r . /widgets
     volumes:
       - name: 'widgets_local_build'
         path: '/widgets'
@@ -29,8 +29,9 @@ steps:
       - '-c'
       - |
         rm -rf dist
-        mv /widgets/dist .
+        mv /widgets .
         ls -la .
+        if [ $_ENVIRONMENT = "stage" ]; then npm install ./widgets; else npm install vviinn-widgets; fi
         export NODE_OPTIONS=--openssl-legacy-provider
         npm run build-storybook
     volumes:
