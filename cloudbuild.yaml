@@ -28,8 +28,7 @@ steps:
           cp -r /widgets .
           npm pkg set dependencies.vviinn-widgets="./widgets"
         fi
-        npm install
-        export NODE_OPTIONS=--openssl-legacy-provider
+        npm install --production=false
         npm run build-storybook
     volumes:
       - name: 'widgets_local_build'
@@ -38,6 +37,7 @@ steps:
     waitFor: ['build_widgets']
     env:
       - 'NODE_ENV=$_NODE_ENV'
+      - 'NODE_OPTIONS=--openssl-legacy-provider'
   - name: 'gcr.io/cloud-builders/docker'
     args: [ 'build', '-t', 'eu.gcr.io/$PROJECT_ID/storybook:$_DOCKER_TAG', '.' ]
     dir: '/workspace/storybook'
