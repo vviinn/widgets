@@ -29,7 +29,7 @@ steps:
       - '-c'
       - |
         cp -r /widgets .
-        if [ $_ENVIRONMENT = "stage" ]; then npm install ./widgets; else npm install vviinn-widgets; fi
+        if [ "$_ENVIRONMENT" = "production" ]; then npm install vviinn-widgets; else npm install ./widgets; fi
         export NODE_OPTIONS=--openssl-legacy-provider
         npm run build-storybook
     volumes:
