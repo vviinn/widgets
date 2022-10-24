@@ -32,6 +32,7 @@
     "webpack-plugin-replace": "^1.2.0"
   },
   "dependencies": {
-    "lit-html": "^1.4.1"
+    "lit-html": "^1.4.1",
+    "vviinn-widgets": "^2.8.1"
   }
 }
