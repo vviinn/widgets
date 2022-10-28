@@ -203,4 +203,15 @@ export const argTypes = {
       type: "text",
     },
   },
+  token: {
+    control: {
+      type: "text",
+    },
+  },
+  productId: {
+    name: "product-id",
+    control: {
+      type: "text",
+    },
+  },
 };
