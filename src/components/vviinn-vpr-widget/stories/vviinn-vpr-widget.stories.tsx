@@ -6,7 +6,6 @@ const excludeControls = [
   "currencySign",
   "imageRatio",
   "imageWidth",
-  "locale",
   "pricePrefix",
   "showScroll",
 ];
