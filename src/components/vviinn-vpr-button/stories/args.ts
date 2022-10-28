@@ -67,7 +67,6 @@ export const argTypes = {
     defaultValue: true,
   },
   position: {
-    name: "Modal container appearance",
     options: ["bottom", "right"],
     control: {
       type: "select",
@@ -178,7 +177,7 @@ export const argTypes = {
     defaultValue: true,
   },
   sidebarTitle: {
-    name: "Modal container title name",
+    name: "sidebar-title",
     control: {
       type: "text",
     },
@@ -192,17 +191,11 @@ export const argTypes = {
     defaultValue: 28,
   },
   modalScrollbar: {
-    name: "Use default horizontal scrollbar in modal container",
+    name: "modal-scrollbar",
     control: {
       type: "boolean",
     },
     defaultValue: false,
-  },
-  productId: {
-    name: "Product id",
-  },
-  token: {
-    name: "Token",
   },
   campaigns: {
     name: "campaigns",
