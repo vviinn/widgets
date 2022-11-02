@@ -11,34 +11,33 @@ steps:
       - '-c'
       - |
         npm run build
-        cp -r dist /widgets
+        cp -r . /widgets
     volumes:
       - name: 'widgets_local_build'
         path: '/widgets'
     dir: '/workspace'
     waitFor: ['install_widgets']
-  - id: 'install_storybook'
-    name: node
-    entrypoint: npm
-    args: ['install']
-    dir: '/workspace/storybook'
   - id: 'build_storybook'
     name: node
     entrypoint: bash
     args:
       - '-c'
       - |
-        rm -rf dist
-        mv /widgets/dist .
-        ls -la .
+        if [ "$_ENVIRONMENT" = "stage" ]
+        then
+          cp -r /widgets .
+          npm pkg set dependencies.vviinn-widgets="./widgets"
+        fi
+        npm install --production=false
         npm run build-storybook
     volumes:
       - name: 'widgets_local_build'
         path: '/widgets'
     dir: '/workspace/storybook'
-    waitFor: ['install_storybook', 'build_widgets']
+    waitFor: ['build_widgets']
     env:
       - 'NODE_ENV=$_NODE_ENV'
+      - 'NODE_OPTIONS=--openssl-legacy-provider'
   - name: 'gcr.io/cloud-builders/docker'
     args: [ 'build', '-t', 'eu.gcr.io/$PROJECT_ID/storybook:$_DOCKER_TAG', '.' ]
     dir: '/workspace/storybook'

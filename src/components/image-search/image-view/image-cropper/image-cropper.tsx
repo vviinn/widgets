@@ -44,9 +44,16 @@ export class ImageCropper {
   private pointerMoveListener: EventListener;
   private pointerReleaseListener: EventListener;
   private bounds: DOMRect | undefined = undefined;
+  private resizeObserver = new ResizeObserver(() => {
+    this.bounds = this.el.getBoundingClientRect();
+  });
 
   componentDidLoad() {
-    this.bounds = this.el.getBoundingClientRect();
+    this.resizeObserver.observe(this.el);
+  }
+
+  disconnectedCallback() {
+    this.resizeObserver.disconnect();
   }
 
   private handleHandlerMove(event: PointerEvent) {

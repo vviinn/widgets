@@ -1,5 +1,6 @@
 export default {
   title: "Widgets/Visual Search/Widget",
+  component: "vviinn-vps-widget",
   parameters: {
     viewport: {
       defaultViewport: "mobile2",

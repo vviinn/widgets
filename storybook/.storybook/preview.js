@@ -5,19 +5,12 @@ import {
   setStencilDocJson,
 } from "@pxtrn/storybook-addon-docs-stencil";
 
-import { defineCustomElements as loadProductionComponents } from "vviinn-widgets/dist/loader";
-import { defineCustomElements as loadLocalComponents } from "../dist/loader/index.js";
-
-const env = process.env.NODE_ENV;
+import { defineCustomElements } from "../node_modules/vviinn-widgets/dist/loader";
+import "../node_modules/vviinn-widgets";
 
 if (docJson) setStencilDocJson(docJson);
 
-if (env === "production") {
-  loadProductionComponents();
-} else {
-  loadLocalComponents();
-  console.log("use repo components");
-}
+defineCustomElements();
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },

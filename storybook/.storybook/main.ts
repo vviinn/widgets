@@ -1,6 +1,8 @@
-import type { StorybookViteConfig } from "@storybook/builder-vite";
+import { Configuration } from "webpack";
 
-const config: StorybookViteConfig = {
+import { resolve } from "path";
+
+const config = {
   stories: [
     "../../src/components/**/*.stories.@(js|jsx|ts|tsx)",
     "../documentation/**/*.stories.mdx",
@@ -10,11 +12,27 @@ const config: StorybookViteConfig = {
     "@storybook/addon-essentials",
     "@pxtrn/storybook-addon-docs-stencil",
   ],
+  features: {
+    previewMdx2: true,
+    storyStoreV7: true,
+  },
   core: {
-    builder: "@storybook/builder-vite",
+    builder: {
+      name: "webpack5",
+    },
     disableTelemetry: true,
   },
-  async viteFinal(config) {
+  webpackFinal: async (config: Configuration) => {
+    config.module.rules = [
+      {
+        test: /\.stories\.mdx$/,
+        use: {
+          loader: resolve("./stories.loader.ts"),
+        },
+      },
+      ...config.module.rules,
+    ];
+
     return config;
   },
 };

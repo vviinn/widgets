@@ -1,4 +1,9 @@
 :host {
+  /**
+   * @prop --vviinn-carousel-columns: control number of items in grid mode
+   * @prop --vviinn-carousel-image-width: control image width in continuity mode
+   */
+
   display: block;
 }
 
