@@ -62,6 +62,23 @@ const notNan = (n: number): boolean => !isNaN(n);
  * @part product-card_price-sale - renders inside price-container when "sale-price" property filled. Contains sale price.
  * @part product-card_title - product title
  * @part example-images - example images block
+
+ * @slot vviinn-onboarding-title - Title of onboarding section
+ * @slot vviinn-onboarding-card-1-icon - Icon (or other graphics) on first onboarding slide
+ * @slot vviinn-onboarding-card-1-text - Text content of first onboarding slide
+ * @slot vviinn-onboarding-card-2-icon - Icon (or other graphics) on second onboarding slide
+ * @slot vviinn-onboarding-card-2-text - Text content of second onboarding slide
+ * @slot vviinn-onboarding-card-3-icon - Icon (or other graphics) on third onboarding slide
+ * @slot vviinn-onboarding-card-3-text - Text content of third onboarding slide
+ * @slot vviinn-example-images-title - Header of example images block
+ * @slot vviinn-example-images-1 - First image in example images block
+ * @slot vviinn-example-images-2 - Second image in example images block
+ * @slot vviinn-example-images-3 - Third image in example images block
+ * @slot vviinn-example-images-4 - Fourth image in example images block
+ * @slot vviinn-teaser-text - Text on widget's main screen
+ * @slot vviinn-image-upload-button-text - Title of upload button
+ * @slot vviinn-privacy-badge-text - Text content of privacy notification block
+ *
  */
 @Component({
   tag: "vviinn-vps-widget",
