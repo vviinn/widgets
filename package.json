@@ -24,6 +24,7 @@
     "start": "stencil build --dev --watch --serve --docs",
     "test": "stencil test --spec --e2e",
     "test.watch": "stencil test --spec --e2e --watchAll",
+    "test.watchE2E": "stencil test --e2e --watchAll --devtools",
     "release": "standard-version",
     "release:minor": "npm run release -- --release-as minor",
     "release:patch": "npm run release -- --release-as patch",
