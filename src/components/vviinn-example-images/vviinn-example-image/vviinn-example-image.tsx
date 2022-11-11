@@ -24,13 +24,14 @@ export class VviinnExampleImage {
   @Prop() src: string = "";
   @Prop() width: number = 0;
   @Prop() height: number = 0;
+  @Prop() tabIndex: number = -1;
 
   @State() selected: boolean = false;
 
   @Event() exampleImageSelected: EventEmitter<void>;
   @Event() exampleImageError: EventEmitter<void>;
 
-  private async selectImage(_event: UIEvent) {
+  private async selectImage() {
     this.selected = true;
 
     const file = await toFile(this.src);
@@ -47,6 +48,11 @@ export class VviinnExampleImage {
     this.selected = false;
   }
 
+  private handleKeyPress({ key }: KeyboardEvent) {
+    if (key !== "Enter" && key !== " ") return;
+    this.selectImage();
+  }
+
   private showPreloader(): boolean {
     return (
       (imageSearchState.objectDetectionInProgress ||
@@ -57,18 +63,17 @@ export class VviinnExampleImage {
 
   render() {
     return (
-      <Host>
+      <Host
+        tabindex={`${this.tabIndex}`}
+        onClick={() => this.selectImage()}
+        onKeyUp={(ev: KeyboardEvent) => this.handleKeyPress(ev)}
+      >
         {this.showPreloader() ? (
           <div class="image-preloader">
             <vviinn-preloader />
           </div>
         ) : null}
-        <img
-          onClick={(ev) => this.selectImage(ev)}
-          src={this.src}
-          width={this.width}
-          height={this.height}
-        />
+        <img src={this.src} width={this.width} height={this.height} />
       </Host>
     );
   }
