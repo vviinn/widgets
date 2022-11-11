@@ -1,6 +1,6 @@
 import { Meta, Story, Canvas } from '@storybook/addon-docs';
 
-<Meta title="Getting Started/Styling"></Meta>
+<Meta title="Getting Started/Styling and customization"></Meta>
 
 # Styling
 
@@ -56,3 +56,77 @@ vviinn-vpr-widget::part(price-containet) {
   display: none;
 }
 ```
+
+# Customization
+
+For Visual Product Search widgets (`vviinn-vps-widget` and `vviinn-vps-button`)
+There is a posibility not only customize look and feel using css APIs, but also
+customize some content using [slots](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_templates_and_slots#adding_flexibility_with_slots).
+
+Here are general slots you can use in Visual Product Search widgets:
+
+- vviinn-example-images-1: *First image in example images block*
+- vviinn-example-images-2	: *Second image in example images block*
+- vviinn-example-images-3	: *Third image in example images block*
+- vviinn-example-images-4	: *Fourth image in example images block*
+- vviinn-example-images-title	: *Header of example images block*
+- vviinn-image-upload-button-text	: *Title of upload button*
+- vviinn-onboarding-card-1-icon	: *Icon (or other graphics) on first onboarding slide*
+- vviinn-onboarding-card-1-text	: *Text content of first onboarding slide*
+- vviinn-onboarding-card-2-icon	: *Icon (or other graphics) on second onboarding slide*
+- vviinn-onboarding-card-2-text	: *Text content of second onboarding slide*
+- vviinn-onboarding-card-3-icon	: *Icon (or other graphics) on third onboarding slide*
+- vviinn-onboarding-card-3-text	: *Text content of third onboarding slide*
+- vviinn-onboarding-title	: *Title of onboarding section*
+- vviinn-privacy-badge-text	: *Text content of privacy notification block*
+- vviinn-teaser-text: *Text on widget's main screen*
+
+Also `vviinn-vps-button` uses "default" slot for icon customzation.
+Here is a code example:
+
+```html
+<vviinn-vps-button>
+  <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" class="icon icon-tabler icon-tabler-apple" viewBox="0 0 24 24">
+    <path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="14" r="7"/>
+    <path d="M12 11V5a2 2 0 0 1 2-2h2v1a2 2 0 0 1-2 2h-2"/>
+    <path d="M10 10.5c1.333.667 2.667.667 4 0"/>
+  </svg>
+</vviinn-vps-button>
+```
+
+Now this fancy apple is actual `vviinn-vps-button`
+
+<vviinn-vps-button>
+  <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" class="icon icon-tabler icon-tabler-apple" viewBox="0 0 24 24">
+    <path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="14" r="7"/>
+    <path d="M12 11V5a2 2 0 0 1 2-2h2v1a2 2 0 0 1-2 2h-2"/>
+    <path d="M10 10.5c1.333.667 2.667.667 4 0"/>
+  </svg>
+</vviinn-vps-button>
+
+Slot has no restrictions for any element type so any SVG or HTML will be valid.
+
+```html
+<vviinn-vps-button>
+  <span>I'm looking like text, but try to click!</span>
+</vviinn-vps-button>
+```
+
+<vviinn-vps-button>
+  <span>I'm looking like text, but try to click!</span>
+</vviinn-vps-button>
+
+Of course, any text inside button will inherit default widget styles.
+
+*NB:* If you're using any named slots with `vviinn-vps-button` you will also need to provide an icon to default slot.
+
+## Example images customization
+
+In general you can use any valid HTML or SVG content inside slots, but for example images
+you should use special component that will fire search events:
+
+```html
+  <vviinn-example-image src="URL"></vviinn-example-image>
+```
+
+For now image should stored in vviinn cdn.

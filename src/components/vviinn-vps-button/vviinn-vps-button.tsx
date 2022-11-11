@@ -13,21 +13,21 @@ import { CameraIcon } from "../vviinn-icons";
 import { SlotSkeleton } from "../customized-slots";
 
 /**
- * @slot vviinn-onboarding-title
- * @slot vviinn-onboarding-card-1-icon
- * @slot vviinn-onboarding-card-1-text
- * @slot vviinn-onboarding-card-2-icon
- * @slot vviinn-onboarding-card-2-text
- * @slot vviinn-onboarding-card-3-icon
- * @slot vviinn-onboarding-card-3-text
- * @slot vviinn-example-images-title
- * @slot vviinn-example-images-1
- * @slot vviinn-example-images-2
- * @slot vviinn-example-images-3
- * @slot vviinn-example-images-4
- * @slot vviinn-teaser-text
- * @slot vviinn-image-upload-button-text
- * @slot vviinn-privacy-badge-text
+ * @slot vviinn-onboarding-title - Title of onboarding section
+ * @slot vviinn-onboarding-card-1-icon - Icon (or other graphics) on first onboarding slide
+ * @slot vviinn-onboarding-card-1-text - Text content of first onboarding slide
+ * @slot vviinn-onboarding-card-2-icon - Icon (or other graphics) on second onboarding slide
+ * @slot vviinn-onboarding-card-2-text - Text content of second onboarding slide
+ * @slot vviinn-onboarding-card-3-icon - Icon (or other graphics) on third onboarding slide
+ * @slot vviinn-onboarding-card-3-text - Text content of third onboarding slide
+ * @slot vviinn-example-images-title - Header of example images block
+ * @slot vviinn-example-images-1 - First image in example images block
+ * @slot vviinn-example-images-2 - Second image in example images block
+ * @slot vviinn-example-images-3 - Third image in example images block
+ * @slot vviinn-example-images-4 - Fourth image in example images block
+ * @slot vviinn-teaser-text - Text on widget's main screen
+ * @slot vviinn-image-upload-button-text - Title of upload button
+ * @slot vviinn-privacy-badge-text - Text content of privacy notification block
  *
  * @part brand - product brand.
  * @part currency - currency sign. Renders after price-amount.
