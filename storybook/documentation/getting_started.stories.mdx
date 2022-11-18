@@ -17,7 +17,7 @@ You can customize vviinn-vps-button component with these properties:
 ## Using Shadow Parts
 
 Almost every component you can use exports some shadow-parts.
-Use this API is a straightforward. Use `component-name::part(part-name)` to add CSS rules to any exported shadow part.
+Using this API is straightforward. Use `component-name::part(part-name)` to add CSS rules to any exported shadow part.
 
 ```css
 vviinn-product-card::part(image) {
@@ -60,10 +60,10 @@ vviinn-vpr-widget::part(price-containet) {
 # Customization
 
 For Visual Product Search widgets (`vviinn-vps-widget` and `vviinn-vps-button`)
-There is a posibility not only customize look and feel using css APIs, but also
+There is a posibility to not only customize the look and feel of the widgets using css APIs, but also
 customize some content using [slots](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_templates_and_slots#adding_flexibility_with_slots).
 
-Here are general slots you can use in Visual Product Search widgets:
+Here are some general slots you can use in Visual Product Search widgets:
 
 - vviinn-example-images-1: *First image in example images block*
 - vviinn-example-images-2	: *Second image in example images block*
@@ -116,17 +116,17 @@ Slot has no restrictions for any element type so any SVG or HTML will be valid.
   <span>I'm looking like text, but try to click!</span>
 </vviinn-vps-button>
 
-Of course, any text inside button will inherit default widget styles.
+Of course, any text inside the button will inherit default widget styles.
 
 *NB:* If you're using any named slots with `vviinn-vps-button` you will also need to provide an icon to default slot.
 
 ## Example images customization
 
-In general you can use any valid HTML or SVG content inside slots, but for example images
+In general you can use any valid HTML or SVG content inside slots, but for example with images
 you should use special component that will fire search events:
 
 ```html
   <vviinn-example-image src="URL"></vviinn-example-image>
 ```
 
-For now image should stored in vviinn cdn.
+For now, image should be stored in vviinn cdn.

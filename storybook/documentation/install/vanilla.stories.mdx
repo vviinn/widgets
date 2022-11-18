@@ -18,7 +18,7 @@ Then you will be able to use VPR or VPS widgets.
 
 ### Visual Product Recommendations
 
-To use recommendations widget insert snippet below where you want to render widget.<br />
+To use recommendations widget, insert snippet below where you want to render widget.<br />
 `token` and `product-id` attributes are only nessesary, but you can tweak widget with other attributes.
 
 ```html
@@ -41,8 +41,8 @@ document.append(component);
 
 ### Visual Product Search
 
-To use search widget first insert `<STORYBOOK_VPS_WIDGET_TAG token="INSERT_YOURS_TOKEN"></STORYBOOK_VPS_WIDGET_TAG>` anywhere to page.
-Widget implemented as modal window, so you need to trigger it.
+To use search widget, first insert `<STORYBOOK_VPS_WIDGET_TAG token="INSERT_YOURS_TOKEN"></STORYBOOK_VPS_WIDGET_TAG>` anywhere to page.
+Widget is implemented as modal window, so you need to trigger it.
 
 ```html
 <STORYBOOK_VPS_WIDGET_TAG token="INSERT_YOURS_TOKEN"></STORYBOOK_VPS_WIDGET_TAG>
@@ -50,7 +50,7 @@ Widget implemented as modal window, so you need to trigger it.
 
 [Check other attributes here ](/docs/components-visual-search-widget--default)
 
-Also can create component instance with DOM API:
+You can also create component instance with DOM API:
 
 ```javascript
 const component = document.createElement('STORYBOOK_VPS_WIDGET_TAG');
@@ -71,4 +71,4 @@ And then add it to your JavaScript code:
 import { defineCustomElements } from 'STORYBOOK_NPM_PACKAGE_NAME';
 defineCustomElements();
 ```
-After that you can use both Recommendation or Search widgets in html template or with javascript.
+After that you can use both Recommendation or Search Widgets in html template or with javascript.
