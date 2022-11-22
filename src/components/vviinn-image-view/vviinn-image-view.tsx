@@ -7,21 +7,22 @@ import * as O from "fp-ts/lib/Option";
 import { sequenceToOption } from "../../utils/option/option";
 import { fromImage, move } from "../../geometry/Rectangle";
 import { dimensionsFromImage, scaleByLargestSide } from "../../Image/sizing";
+import styles from "./vviinn-image-view.css";
 
 const getImageSizes = (i: HTMLImageElement): [number, number] => {
   const dimensions = dimensionsFromImage(i);
-  const resize = scaleByLargestSide(288)
+  const resize = scaleByLargestSide(288);
   const newDimensions = resize(dimensions);
 
-  const sizes = newDimensions.map(d => d.size);
+  const sizes = newDimensions.map((d) => d.size);
 
   return [sizes[0], sizes[1]];
 };
 
 @Component({
   tag: "vviinn-image-view",
-  styleUrl: "vviinn-image-view.css",
   shadow: true,
+  styles,
 })
 export class VviinnImageView {
   handleInitialImageLoad(ev: Event) {
@@ -82,7 +83,7 @@ export class VviinnImageView {
     return (
       <Host>
         {imageSearchState.loading ||
-          imageSearchState.objectDetectionInProgress ? (
+        imageSearchState.objectDetectionInProgress ? (
           <div class="image-preloader">
             <vviinn-preloader />
           </div>

@@ -22,13 +22,14 @@ import {
 import { pipe } from "fp-ts/lib/function";
 import * as O from "fp-ts/lib/Option";
 import { findTarget } from "../../../../dom";
+import styles from "./image-cropper.css";
 
 const MIN_SEARCHAREA_SIZE = 40;
 
 @Component({
   tag: "image-cropper",
-  styleUrl: "image-cropper.css",
   shadow: true,
+  styles,
 })
 export class ImageCropper {
   @Element() el: HTMLElement;

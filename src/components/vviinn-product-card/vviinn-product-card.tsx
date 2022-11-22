@@ -23,6 +23,8 @@ import {
 } from "./render-helpers";
 import { ProductCardEventData } from "../../recommendation/events";
 
+import styles from "./vviinn-product-card.css";
+
 /**
  * @part brand - product brand.
  * @part currency - currency sign. Renders after price-amount.
@@ -39,8 +41,8 @@ import { ProductCardEventData } from "../../recommendation/events";
  */
 @Component({
   tag: "vviinn-product-card",
-  styleUrl: "vviinn-product-card.css",
   shadow: true,
+  styles,
 })
 export class VviinnProductCard {
   @Element() el: HTMLElement;

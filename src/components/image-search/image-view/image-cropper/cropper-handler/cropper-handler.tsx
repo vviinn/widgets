@@ -1,15 +1,11 @@
-import {
-  Component,
-  Host,
-  h,
-  Prop
-} from "@stencil/core";
+import { Component, Host, h, Prop } from "@stencil/core";
 import { Handler, getCursorValue } from "../../../../../cropper/Handler";
+import styles from "./cropper-handler.css";
 
 @Component({
   tag: "cropper-handler",
-  styleUrl: "cropper-handler.css",
   shadow: true,
+  styles,
 })
 export class CropperHandler {
   @Prop() handler: Handler;
@@ -17,7 +13,8 @@ export class CropperHandler {
 
   render() {
     return (
-      <Host part={`handle ${getCursorValue(this.handler.direction)}`}
+      <Host
+        part={`handle ${getCursorValue(this.handler.direction)}`}
         class={{
           disabled: this.disabled,
           [getCursorValue(this.handler.direction)]: true,
