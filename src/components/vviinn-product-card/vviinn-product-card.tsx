@@ -117,8 +117,8 @@ export class VviinnProductCard {
 
     links.forEach((link) => {
 
-      ['click', 'auxclick'].forEach((e) =>
-        link.addEventListener(e, (event) => {
+      ['click', 'auxclick'].forEach((eventType) =>
+        link.addEventListener(eventType, (event) => {
           event.preventDefault();
           event.stopImmediatePropagation();
           this.recommendationClick.emit(this.getProductData());
