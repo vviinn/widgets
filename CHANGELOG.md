@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.8.3](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.8.2...v2.8.3) (2022-11-23)
+
+
+### Bug Fixes
+
+* inline styles for some components to reduce number of requests ([9ba0ecf](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/9ba0ecfddab9efadea39cf8ab98cfdcad1320d1e))
+
 ### [2.8.2](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.8.1...v2.8.2) (2022-11-11)
 
 ### [2.8.1](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.8.0...v2.8.1) (2022-10-21)
