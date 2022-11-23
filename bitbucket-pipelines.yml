@@ -20,6 +20,13 @@ pipelines:
             - npm run build_interfaces
             - npm test
             - npm run build
+      - step:
+          name: Generate version
+          caches:
+            - node
+          script:
+            - npm run release.ci
+            - git push --follow-tags origin develop
     master:
       - step:
           name: Build app
