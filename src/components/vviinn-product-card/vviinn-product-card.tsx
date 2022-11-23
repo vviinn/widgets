@@ -115,21 +115,25 @@ export class VviinnProductCard {
 
     const links = this.el.shadowRoot.querySelectorAll("a");
 
-    links.forEach((link) =>
-      link.addEventListener("click", (event) => {
-        event.preventDefault();
-        event.stopImmediatePropagation();
-        this.recommendationClick.emit(this.getProductData());
+    links.forEach((link) => {
 
-        pipe(
-          getAnalyticsModule,
-          O.match(
-            () => null,
-            (analytics) => analytics.sendClick(this.getProduct())
-          )
-        );
-      })
-    );
+      ['click', 'auxclick'].forEach((e) =>
+        link.addEventListener(e, (event) => {
+          event.preventDefault();
+
+          event.stopImmediatePropagation();
+          this.recommendationClick.emit(this.getProductData());
+
+          pipe(
+            getAnalyticsModule,
+            O.match(
+              () => null,
+              (analytics) => analytics.sendClick(this.getProduct())
+            )
+          );
+        })
+      )
+    });
   }
 
   private getProduct(): Recommendation {
@@ -170,7 +174,7 @@ export class VviinnProductCard {
           </span>
         </Linked>
         <span class="brand" part="brand">
-          {this.brand}
+          {this.brand} 
         </span>
         <span class="type" part="type">
           {this.productType}
