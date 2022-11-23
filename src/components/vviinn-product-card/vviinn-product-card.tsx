@@ -120,7 +120,6 @@ export class VviinnProductCard {
       ['click', 'auxclick'].forEach((e) =>
         link.addEventListener(e, (event) => {
           event.preventDefault();
-
           event.stopImmediatePropagation();
           this.recommendationClick.emit(this.getProductData());
 
@@ -174,7 +173,7 @@ export class VviinnProductCard {
           </span>
         </Linked>
         <span class="brand" part="brand">
-          {this.brand} 
+          {this.brand}
         </span>
         <span class="type" part="type">
           {this.productType}
