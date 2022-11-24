@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.9.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.8.4...v2.9.0) (2022-11-24)
+
+
+### Features
+
+* added auxclick event to the product ([6e6fecb](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/6e6fecbd2c89abdf3462b64954ee80716d58a1f1))
+
 ### [2.8.4](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.8.3...v2.8.4) (2022-11-24)
 
 ### [2.8.3](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.8.2...v2.8.3) (2022-11-23)
