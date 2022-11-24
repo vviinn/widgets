@@ -23,6 +23,7 @@
     "generate": "stencil generate",
     "start": "stencil build --dev --watch --serve --docs",
     "test": "stencil test --spec",
+    "test.e2e": "stencil test --e2e",
     "test.watch": "stencil test --spec --e2e --watchAll",
     "test.watchE2E": "stencil test --e2e --watchAll --devtools",
     "release": "standard-version",
