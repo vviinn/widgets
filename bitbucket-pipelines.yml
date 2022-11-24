@@ -67,7 +67,6 @@ pipelines:
             - echo "RECOMMENDATIONS_URL=https://api.vviinn.com/product/" >> .env
             - npm install
             - npm run build_interfaces
-            - ls -la src/interfaces
             - npm run build
             - npm run test
             - pipe: atlassian/npm-publish:0.3.2
