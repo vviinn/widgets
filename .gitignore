@@ -13,3 +13,4 @@ src/**/readme.md
 src/stories
 storybook/storybook-static
 !storybook/.env
+.vscode/
