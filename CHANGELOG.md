@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.10.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.9.1...v2.10.0) (2022-11-28)
+
+
+### Features
+
+* hide preloader on vps button after 5sec timeout ([1afd321](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/1afd3214c6c48505be2031e5ecb696df27148a88))
+
 ### [2.9.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.9.0...v2.9.1) (2022-11-24)
 
 ## [2.9.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.8.4...v2.9.0) (2022-11-24)
