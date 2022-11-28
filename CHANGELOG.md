@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.11.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.10.0...v2.11.0) (2022-11-28)
+
+
+### Features
+
+* hide recommendation widget if there are no results ([e1c31f0](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/e1c31f0f3bce3b75e4b9ae59940ee5d672aca5e9))
+
 ## [2.10.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.9.1...v2.10.0) (2022-11-28)
 
 
