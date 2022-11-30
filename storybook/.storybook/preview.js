@@ -24,7 +24,13 @@ export const parameters = {
   options: {
     storySort: {
       method: "alphabetical",
-      order: ["Installation", "Getting Started", "Widgets", "Elements"],
+      order: [
+        "VVIINN Widgets",
+        "Installation",
+        "Getting Started",
+        "Widgets",
+        "Elements",
+      ],
     },
   },
 };
