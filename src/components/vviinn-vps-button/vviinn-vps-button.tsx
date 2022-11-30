@@ -9,7 +9,6 @@ import {
   Event,
   EventEmitter,
 } from "@stencil/core";
-import { CameraIcon } from "../vviinn-icons";
 import { SlotSkeleton } from "../customized-slots";
 
 /**
@@ -95,9 +94,7 @@ export class VviinnVpsButton {
         onClick={() => this.handleClick()}
         onKeyDown={(ev: KeyboardEvent) => this.handleKeyDown(ev)}
       >
-        <slot>
-          <CameraIcon />
-        </slot>
+        <vviinn-button />
         <SlotSkeleton />
         <vviinn-vps-widget
           active={this.pressed}
