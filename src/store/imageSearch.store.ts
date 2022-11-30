@@ -203,7 +203,6 @@ export const uploadFile = (
 };
 
 export const imageSearchState = state;
-export const imageSearchStateListener = onChange;
 
 onChange("activeIonLink", async (newLink: Link) => {
   state.loading = true;
