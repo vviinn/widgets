@@ -246,8 +246,6 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   render() {
-    if (this.recommendations.length === 0) return;
-
     return (
       <Host
         class={{
