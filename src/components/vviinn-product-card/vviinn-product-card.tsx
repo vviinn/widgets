@@ -115,24 +115,21 @@ export class VviinnProductCard {
 
     const links = this.el.shadowRoot.querySelectorAll("a");
 
-    links.forEach((link) => {
+    links.forEach((link) =>
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        this.recommendationClick.emit(this.getProductData());
 
-      ['click', 'auxclick'].forEach((eventType) =>
-        link.addEventListener(eventType, (event) => {
-          event.preventDefault();
-          event.stopImmediatePropagation();
-          this.recommendationClick.emit(this.getProductData());
-
-          pipe(
-            getAnalyticsModule,
-            O.match(
-              () => null,
-              (analytics) => analytics.sendClick(this.getProduct())
-            )
-          );
-        })
-      )
-    });
+        pipe(
+          getAnalyticsModule,
+          O.match(
+            () => null,
+            (analytics) => analytics.sendClick(this.getProduct())
+          )
+        );
+      })
+    );
   }
 
   private getProduct(): Recommendation {
