@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.11.13](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.11.12...v2.11.13) (2022-12-01)
+
+### [2.11.12](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.11.11...v2.11.12) (2022-12-01)
+
+### [2.11.11](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.11.10...v2.11.11) (2022-12-01)
+
+### [2.11.10](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.11.9...v2.11.10) (2022-12-01)
+
+
+### Bug Fixes
+
+* fixing safari crash issue ([9049c25](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/9049c257a4ea1fb3535acde12420ece85040a487))
+
+### [2.11.9](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.11.8...v2.11.9) (2022-12-01)
+
+### [2.11.8](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.11.6...v2.11.8) (2022-12-01)
+
+
+### Bug Fixes
+
+* removed a change to fix the crach safari issue ([0e794c1](https://bitbucket.org/mediaopt/vpr_webcomponent/commit/0e794c1b75e44b2613f996ecaece2492fd57c359))
+
+### [2.11.7](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.11.6...v2.11.7) (2022-12-01)
+
+
+### Bug Fixes
+
+* removed a change to fix the crach safari issue ([0e794c1](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/0e794c1b75e44b2613f996ecaece2492fd57c359))
+
+### [2.11.6](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.11.5...v2.11.6) (2022-12-01)
+
+### [2.11.5](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.11.4...v2.11.5) (2022-12-01)
+
+### [2.11.4](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.11.3...v2.11.4) (2022-12-01)
+
 ### [2.11.3](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.11.2...v2.11.3) (2022-11-30)
 
 ### [2.11.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.11.1...v2.11.2) (2022-11-28)
