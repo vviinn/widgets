@@ -1,9 +1,9 @@
 :host {
   /**
-   * @prop --color-primary: set color of search button and bullets in onboarding block
-   * @prop --color-primary-hover: set color of search button and bullets in onboarding block on mouse hover
-   * @prop --color-icons: set fill color of svg icons in onboarding block 
-   */
+    * @prop --color-primary: set color of search button and bullets in onboarding block
+    * @prop --color-primary-hover: set color of search button and bullets in onboarding block on mouse hover
+    * @prop --color-icons: set fill color of svg icons in onboarding block 
+    */
 
-  cursor: pointer;
+  display: block;
 }

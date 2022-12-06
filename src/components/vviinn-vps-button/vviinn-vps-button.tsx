@@ -91,10 +91,9 @@ export class VviinnVpsButton {
         tabindex="0"
         role="button"
         pressed={this.pressed}
-        onClick={() => this.handleClick()}
         onKeyDown={(ev: KeyboardEvent) => this.handleKeyDown(ev)}
       >
-        <vviinn-button />
+        <vviinn-button onClick={() => this.handleClick()} />
         <SlotSkeleton />
         <vviinn-vps-widget
           active={this.pressed}
