@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.12.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.11.13...v2.12.0) (2022-12-06)
+
+
+### Features
+
+* made styles of recommendation and search button persistent ([49bf95e](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/49bf95ea7fb0179326525067f854211886fb247a))
+
+
+### Bug Fixes
+
+* Fixed issue of cursor pointer on search button ([f50f5f0](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/f50f5f03cebf727276a44d1d218178834fb81b00))
+
 ### [2.11.13](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.11.12...v2.11.13) (2022-12-01)
 
 ### [2.11.12](https://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.11.11...v2.11.12) (2022-12-01)
