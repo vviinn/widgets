@@ -27,6 +27,7 @@ const Template = (args) => `
   api-path="${args.apiPath}"
   token="${args.token}"
   campaign-id="${args.campaignId}"
+  add-style="true"
 ></vviinn-vps-button>`;
 
 export const Default = Template.bind({});

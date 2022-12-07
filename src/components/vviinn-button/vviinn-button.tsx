@@ -1,4 +1,4 @@
-import { Component, Host, h } from "@stencil/core";
+import { Component, Host, h, Prop } from "@stencil/core";
 import { VisualSearchIcon } from "../vviinn-icons";
 
 /**
@@ -11,10 +11,15 @@ import { VisualSearchIcon } from "../vviinn-icons";
   shadow: true,
 })
 export class VviinnButton {
+  @Prop() addStyle: boolean = true;
+
   render() {
     return (
       <Host>
-        <button class="open-button" part="button">
+        <button
+          class={this.addStyle ? "open-button" : "raw-open-button"}
+          part="button"
+        >
           <slot>
             <VisualSearchIcon />
           </slot>
