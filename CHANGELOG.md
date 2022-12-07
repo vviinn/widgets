@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.13.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.12.1...v2.13.0) (2022-12-07)
+
+
+### Features
+
+* add the ability to add style to buttons or not ([6698d97](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/6698d97f6f422badc09811154a8e5463719b6d54))
+
 ### [2.12.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.12.0...v2.12.1) (2022-12-07)
 
 ## [2.12.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.11.13...v2.12.0) (2022-12-06)
