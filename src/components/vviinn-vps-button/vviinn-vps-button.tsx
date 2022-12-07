@@ -58,6 +58,8 @@ export class VviinnVpsButton {
   @Prop() locale: string = "de-DE";
   /** Campaign using for visual search */
   @Prop() campaignId?: string;
+  /** Add style to the button */
+  @Prop() addStyle: boolean = false;
 
   /** @internal */
   @Prop() apiPath: string | undefined;
@@ -94,7 +96,10 @@ export class VviinnVpsButton {
         pressed={this.pressed}
         onKeyDown={(ev: KeyboardEvent) => this.handleKeyDown(ev)}
       >
-        <vviinn-button onClick={() => this.handleClick()}>
+        <vviinn-button
+          onClick={() => this.handleClick()}
+          addStyle={this.addStyle}
+        >
           <CameraIcon />
         </vviinn-button>
         <SlotSkeleton />

@@ -18,6 +18,7 @@ export class VviinnVprButton {
   @Prop() modalScrollbar: boolean = false;
   /** comma-separated list of campaign-ids */
   @Prop() campaigns: string = "";
+  @Prop() addStyle: boolean = true;
 
   private sidebar: HTMLVviinnRecommendationsSidebarElement | null = null;
   private sidebarCloseListener: () => void = () => {
@@ -27,7 +28,7 @@ export class VviinnVprButton {
   render() {
     return (
       <Host onClick={(): void => this.handleClick()} role="button" tabindex="0">
-        <vviinn-button />
+        <vviinn-button addStyle={this.addStyle} />
       </Host>
     );
   }
