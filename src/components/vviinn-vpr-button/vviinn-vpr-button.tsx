@@ -1,4 +1,5 @@
 import { Component, Host, h, Prop } from "@stencil/core";
+import { VisualSearchIcon } from "../vviinn-icons";
 
 /**
  *
@@ -28,7 +29,11 @@ export class VviinnVprButton {
   render() {
     return (
       <Host onClick={(): void => this.handleClick()} role="button" tabindex="0">
-        <vviinn-button addStyle={this.addStyle} />
+        <vviinn-button addStyle={this.addStyle}>
+          <slot>
+            <VisualSearchIcon />
+          </slot>
+        </vviinn-button>
       </Host>
     );
   }
