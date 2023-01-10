@@ -93,6 +93,7 @@ export class VviinnVprWidget implements ComponentInterface {
 
   @State() recommendations: Recommendation[] = [];
   @State() loaded: boolean = false;
+  @State() trackingDeactivated: boolean = false;
 
   @Event() recommendationsLoaded: EventEmitter;
 
@@ -136,7 +137,12 @@ export class VviinnVprWidget implements ComponentInterface {
       }
     );
 
-    this.trackingApi.trackEvent(recommendationViewEvent);
+    if (this.trackingDeactivated) return;
+    this.trackingApi.trackEvent(recommendationViewEvent).then((result) => {
+      if (result.status === "rejected") {
+        this.trackingDeactivated = true;
+      }
+    });
   }
 
   @Listen("recommendationClick")
@@ -147,15 +153,20 @@ export class VviinnVprWidget implements ComponentInterface {
         ...detail,
       });
 
-    this.trackingApi.trackEvent(recommendationClickEvent).finally(() => {
-      const product = this.recommendations.find(
-        (r) => r.productId === detail.product
-      );
-
-      if (!product || !product.deeplink) return;
-
-      window.location.href = product.deeplink;
-    });
+    this.trackingApi
+      .trackEvent(this.trackingDeactivated ? null : recommendationClickEvent)
+      .then((result) => {
+        if (result.status === "rejected") {
+          this.trackingDeactivated = true;
+        }
+      })
+      .finally(() => {
+        const product = this.recommendations.find(
+          (r) => r.productId === detail.product
+        );
+        if (!product || !product.deeplink) return;
+        window.location.href = product.deeplink;
+      });
   }
 
   connectedCallback() {
@@ -170,7 +181,12 @@ export class VviinnVprWidget implements ComponentInterface {
       session_id: this.uiSessionId,
     });
 
-    this.trackingApi.trackEvent(widgetOpenEvent);
+    if (this.trackingDeactivated) return;
+    this.trackingApi.trackEvent(widgetOpenEvent).then((result) => {
+      if (result.status === "rejected") {
+        this.trackingDeactivated = true;
+      }
+    });
   }
 
   disconnectedCallback() {
@@ -179,7 +195,12 @@ export class VviinnVprWidget implements ComponentInterface {
       session_id: this.uiSessionId,
     });
 
-    this.trackingApi.trackEvent(widgetCloseEvent);
+    if (this.trackingDeactivated) return;
+    this.trackingApi.trackEvent(widgetCloseEvent).then((result) => {
+      if (result.status === "rejected") {
+        this.trackingDeactivated = true;
+      }
+    });
   }
 
   async componentWillLoad() {
