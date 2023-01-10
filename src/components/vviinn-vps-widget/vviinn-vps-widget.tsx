@@ -104,6 +104,7 @@ export class VviinnVpsWidget {
   @State() slidePosition: number = 0;
   @State() width: number = 0;
   @State() wrongImageFormat: boolean = false;
+  @State() trackingDeactivated: boolean = false;
 
   private overflow: string;
   private uiSessionId: string;
@@ -129,7 +130,13 @@ export class VviinnVpsWidget {
         ...detail,
       }
     );
-    this.trackingApi.trackEvent(recommendationViewEvent);
+
+    if (this.trackingDeactivated) return;
+    this.trackingApi.trackEvent(recommendationViewEvent).then((result) => {
+      if (result.status === "rejected") {
+        this.trackingDeactivated = true;
+      }
+    });
   }
 
   @Listen("recommendationClick")
@@ -140,15 +147,20 @@ export class VviinnVpsWidget {
         ...detail,
       });
 
-    this.trackingApi.trackEvent(recommendationClickEvent).finally(() => {
-      const product = imageSearchState.results.find(
-        (r) => r.productId === detail.product
-      );
-
-      if (!product || !product.deeplink) return;
-
-      window.location.href = product.deeplink;
-    });
+    this.trackingApi
+      .trackEvent(this.trackingDeactivated ? null : recommendationClickEvent)
+      .then((result) => {
+        if (result.status === "rejected") {
+          this.trackingDeactivated = true;
+        }
+      })
+      .finally(() => {
+        const product = imageSearchState.results.find(
+          (r) => r.productId === detail.product
+        );
+        if (!product || !product.deeplink) return;
+        window.location.href = product.deeplink;
+      });
   }
 
   @Listen("cropperChanged")
@@ -159,7 +171,12 @@ export class VviinnVpsWidget {
       search_area: "manual-selection",
     });
 
-    this.trackingApi.trackEvent(searchEvent);
+    if (this.trackingDeactivated) return;
+    this.trackingApi.trackEvent(searchEvent).then((result) => {
+      if (result.status === "rejected") {
+        this.trackingDeactivated = true;
+      }
+    });
   }
 
   @Listen("detectedObjectClicked")
@@ -170,7 +187,12 @@ export class VviinnVpsWidget {
       search_area: "attention-point",
     });
 
-    this.trackingApi.trackEvent(searchEvent);
+    if (this.trackingDeactivated) return;
+    this.trackingApi.trackEvent(searchEvent).then((result) => {
+      if (result.status === "rejected") {
+        this.trackingDeactivated = true;
+      }
+    });
   }
 
   @Listen("filterSelected")
@@ -182,7 +204,12 @@ export class VviinnVpsWidget {
       action: detail,
     });
 
-    this.trackingApi.trackEvent(searchEvent);
+    if (this.trackingDeactivated) return;
+    this.trackingApi.trackEvent(searchEvent).then((result) => {
+      if (result.status === "rejected") {
+        this.trackingDeactivated = true;
+      }
+    });
   }
 
   componentWillLoad() {
@@ -213,7 +240,12 @@ export class VviinnVpsWidget {
       session_id: this.uiSessionId,
     });
 
-    this.trackingApi.trackEvent(widgetOpenEvent);
+    if (this.trackingDeactivated) return;
+    this.trackingApi.trackEvent(widgetOpenEvent).then((result) => {
+      if (result.status === "rejected") {
+        this.trackingDeactivated = true;
+      }
+    });
   }
 
   private handleImageSelection(source: SearchImageSource) {
@@ -235,7 +267,12 @@ export class VviinnVpsWidget {
       search_area: "full",
     });
 
-    this.trackingApi.trackEvent(searchEvent);
+    if (this.trackingDeactivated) return;
+    this.trackingApi.trackEvent(searchEvent).then((result) => {
+      if (result.status === "rejected") {
+        this.trackingDeactivated = true;
+      }
+    });
   }
 
   private resetState() {
@@ -276,7 +313,12 @@ export class VviinnVpsWidget {
       session_id: this.uiSessionId,
     });
 
-    this.trackingApi.trackEvent(widgetOpenEvent);
+    if (this.trackingDeactivated) return;
+    this.trackingApi.trackEvent(widgetOpenEvent).then((result) => {
+      if (result.status === "rejected") {
+        this.trackingDeactivated = true;
+      }
+    });
   }
 
   render() {
