@@ -33,6 +33,6 @@
   },
   "dependencies": {
     "lit-html": "^1.4.1",
-    "vviinn-widgets": "^2.13.0"
+    "vviinn-widgets": "^2.13.3"
   }
 }
