@@ -39,7 +39,6 @@ import {
   createWidgetVprEvent,
 } from "../../tracking";
 import { checkEmpryString } from "../../utils/option/option";
-import { isReturnStatement } from "typescript";
 
 /**
  * @part product-card - product card itself
