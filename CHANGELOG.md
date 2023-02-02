@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.14.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.13.4...v2.14.0) (2023-02-02)
+
+
+### Features
+
+* Disable tracking api when the server rejected ([93a5914](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/93a5914a160b83fb5a34b5ac72281a7b3218c43a))
+
 ### [2.13.4](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.13.3...v2.13.4) (2023-01-10)
 
 ### [2.13.3](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.13.2...v2.13.3) (2023-01-05)
