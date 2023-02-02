@@ -47,7 +47,9 @@ import { checkEmpryString } from "../../utils/option/option";
  * @part currency - brand inside product card
  * @part image - product card image
  * @part image-link - anchor element around product image
- * @part price-amount - span element around every prices
+ * @part price-amount-sale - numeric part of price.
+ * @part price-amount-outdated - numeric part of price.
+ * @part price-amount-regular - numeric part of price.
  * @part price-container - block of prices
  * @part price-outdated - block for outdated price. rendered when product contains sale price
  * @part price-prefix - block rendered before each price element (for ex. "from")
