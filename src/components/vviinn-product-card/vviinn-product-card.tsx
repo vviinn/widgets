@@ -31,7 +31,9 @@ import styles from "./vviinn-product-card.css";
  * @part deeplink - anchor element for title. Rendered only if "deeplink" property filled.
  * @part image - product image.
  * @part image-link - anchor element for image. Rendered only if "deeplink" property filled.
- * @part price-amount - numeric part of price.
+ * @part price-amount-sale - numeric part of price.
+ * @part price-amount-outdated - numeric part of price.
+ * @part price-amount-regular - numeric part of price.
  * @part price-container - block contains all prices.
  * @part price-outdated - renders inside price-container when "sale-price" property filled. Contains regular price.
  * @part price-prefix - renders before price-amount. Can be set with "price-prefix" property or inherited from parent component.
@@ -159,7 +161,7 @@ export class VviinnProductCard {
       <Host
         part="product-card"
         class={{ dimmed: this.dimmedBackground }}
-        exportparts="brand, currency, deeplink, image, image-link, price-amount, price-container, price-outdated, price-prefix, price-regular, price-sale, title"
+        exportparts="brand, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-prefix, price-regular, price-sale, title"
       >
         <Linked deeplink={this.deeplink} part="image-link">
           {this.renderImage()}

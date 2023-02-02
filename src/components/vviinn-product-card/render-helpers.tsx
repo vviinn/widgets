@@ -34,10 +34,13 @@ type PriceElementProps = {
   readonly price: number;
   readonly prefix: string;
   readonly currency: string;
+  readonly priceType?: "sale" | "outdated" | "regular";
 };
 
 const FormattedPrice: FunctionalComponent<PriceElementProps> = (props) => {
   const locale = props.locale;
+  const priceType = props.priceType;
+
   const formattedPrice = new Intl.NumberFormat(locale, {
     minimumFractionDigits: 2,
   }).format(props.price);
@@ -45,7 +48,10 @@ const FormattedPrice: FunctionalComponent<PriceElementProps> = (props) => {
   const fullPrice = `${props.prefix ?? ""} ${formattedPrice} ${props.currency}`;
 
   return (
-    <span class="price-amount" part="price-amount">
+    <span
+      class="price-amount"
+      part={`price-amount${priceType ? "-" + priceType : ""}`}
+    >
       {fullPrice}
     </span>
   );
@@ -56,15 +62,6 @@ type PriceProps = PriceElementProps & {
 };
 
 export const Price: FunctionalComponent<PriceProps> = (props) => {
-  const priceEl = (
-    <FormattedPrice
-      prefix={props.prefix}
-      currency={props.currency}
-      price={props.price}
-      locale={props.locale}
-    />
-  );
-
   return (
     <span class="price-container" part="price-container">
       {props.salePrice ? (
@@ -75,15 +72,28 @@ export const Price: FunctionalComponent<PriceProps> = (props) => {
               currency={props.currency}
               price={props.salePrice}
               locale={props.locale}
+              priceType="sale"
             />
           </span>,
           <span class="price-outdated" part="price-outdated">
-            {priceEl}
+            <FormattedPrice
+              prefix={props.prefix}
+              currency={props.currency}
+              price={props.price}
+              locale={props.locale}
+              priceType="outdated"
+            />
           </span>,
         ]
       ) : (
         <span class="price-regular" part="price-regular">
-          {priceEl}
+          <FormattedPrice
+            prefix={props.prefix}
+            currency={props.currency}
+            price={props.price}
+            locale={props.locale}
+            priceType="regular"
+          />
         </span>
       )}
     </span>
