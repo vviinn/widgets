@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.15.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.14.0...v2.15.0) (2023-02-02)
+
+
+### Features
+
+* Added the ability to be able to change numeric part of price ([a0ad351](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/a0ad351ba18f01d61afa96ae9ccc649f594bb8f5))
+
 ## [2.14.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.13.4...v2.14.0) (2023-02-02)
 
 
