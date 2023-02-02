@@ -26,6 +26,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import {
   DefaultApi,
+  EventConfirmation,
   ProductClickEvent,
   ProductViewEvent,
   WidgetEvent,
@@ -93,6 +94,7 @@ export class VviinnVprWidget implements ComponentInterface {
 
   @State() recommendations: Recommendation[] = [];
   @State() loaded: boolean = false;
+  @State() trackingDeactivated: boolean = false;
 
   @Event() recommendationsLoaded: EventEmitter;
 
@@ -100,6 +102,12 @@ export class VviinnVprWidget implements ComponentInterface {
   private productImageLoadedSubject = new Subject();
   trackingApi: DefaultApi;
   uiSessionId: string;
+
+  setTrackingDeactivated = (result: EventConfirmation) => {
+    if (result.status === "rejected") {
+      this.trackingDeactivated = true;
+    }
+  };
 
   @Watch("productId")
   handleProductIdChange() {
@@ -129,33 +137,38 @@ export class VviinnVprWidget implements ComponentInterface {
 
   @Listen("recommendationView")
   trackRecommendationView({ detail }: ProductCardEvent) {
+    if (this.trackingDeactivated) return;
+
     const recommendationViewEvent: ProductViewEvent = createProductViewVprEvent(
       {
         session_id: this.uiSessionId,
         ...detail,
       }
     );
-
-    this.trackingApi.trackEvent(recommendationViewEvent);
+    this.trackingApi
+      .trackEvent(recommendationViewEvent)
+      .then(this.setTrackingDeactivated);
   }
 
   @Listen("recommendationClick")
-  trackRecommendationClick({ detail }: ProductCardEvent) {
+  async trackRecommendationClick({ detail }: ProductCardEvent) {
     const recommendationClickEvent: ProductClickEvent =
       createProductClickVprEvent({
         session_id: this.uiSessionId,
         ...detail,
       });
 
-    this.trackingApi.trackEvent(recommendationClickEvent).finally(() => {
-      const product = this.recommendations.find(
-        (r) => r.productId === detail.product
-      );
+    if (!this.trackingDeactivated) {
+      await this.trackingApi
+        .trackEvent(recommendationClickEvent)
+        .then(this.setTrackingDeactivated);
+    }
 
-      if (!product || !product.deeplink) return;
-
-      window.location.href = product.deeplink;
-    });
+    const product = this.recommendations.find(
+      (r) => r.productId === detail.product
+    );
+    if (!product || !product.deeplink) return;
+    window.location.href = product.deeplink;
   }
 
   connectedCallback() {
@@ -165,21 +178,27 @@ export class VviinnVprWidget implements ComponentInterface {
     this.uiSessionId = uuidv4();
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
 
+    if (this.trackingDeactivated) return;
+
     const widgetOpenEvent: WidgetEvent = createWidgetVprEvent({
       action: "open",
       session_id: this.uiSessionId,
     });
-
-    this.trackingApi.trackEvent(widgetOpenEvent);
+    this.trackingApi
+      .trackEvent(widgetOpenEvent)
+      .then(this.setTrackingDeactivated);
   }
 
   disconnectedCallback() {
+    if (this.trackingDeactivated) return;
+
     const widgetCloseEvent: WidgetEvent = createWidgetVprEvent({
       action: "close",
       session_id: this.uiSessionId,
     });
-
-    this.trackingApi.trackEvent(widgetCloseEvent);
+    this.trackingApi
+      .trackEvent(widgetCloseEvent)
+      .then(this.setTrackingDeactivated);
   }
 
   async componentWillLoad() {

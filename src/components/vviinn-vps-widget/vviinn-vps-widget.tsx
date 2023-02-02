@@ -17,6 +17,7 @@ import { v4 as uuidv4 } from "uuid";
 import { createTrackingApi } from "../../openApi";
 import {
   DefaultApi,
+  EventConfirmation,
   FilterAction,
   ProductClickEvent,
   ProductViewEvent,
@@ -104,11 +105,18 @@ export class VviinnVpsWidget {
   @State() slidePosition: number = 0;
   @State() width: number = 0;
   @State() wrongImageFormat: boolean = false;
+  @State() trackingDeactivated: boolean = false;
 
   private overflow: string;
   private uiSessionId: string;
   private trackingApi: DefaultApi;
   private imageSource: SearchImageSource | null = null;
+
+  setTrackingDeactivated = (result: EventConfirmation) => {
+    if (result.status === "rejected") {
+      this.trackingDeactivated = true;
+    }
+  };
 
   @Watch("active")
   activeWatcher(value: boolean) {
@@ -123,66 +131,75 @@ export class VviinnVpsWidget {
 
   @Listen("recommendationView")
   trackRecommendationView({ detail }: ProductCardEvent) {
+    if (this.trackingDeactivated) return;
+
     const recommendationViewEvent: ProductViewEvent = createProductViewVpsEvent(
       {
         session_id: this.uiSessionId,
         ...detail,
       }
     );
-    this.trackingApi.trackEvent(recommendationViewEvent);
+    this.trackingApi
+      .trackEvent(recommendationViewEvent)
+      .then(this.setTrackingDeactivated);
   }
 
   @Listen("recommendationClick")
-  trackRecommendationClick({ detail }: ProductCardEvent) {
+  async trackRecommendationClick({ detail }: ProductCardEvent) {
     const recommendationClickEvent: ProductClickEvent =
       createProductClickVpsEvent({
         session_id: this.uiSessionId,
         ...detail,
       });
 
-    this.trackingApi.trackEvent(recommendationClickEvent).finally(() => {
-      const product = imageSearchState.results.find(
-        (r) => r.productId === detail.product
-      );
+    if (!this.trackingDeactivated) {
+      await this.trackingApi
+        .trackEvent(this.trackingDeactivated ? null : recommendationClickEvent)
+        .then(this.setTrackingDeactivated);
+    }
 
-      if (!product || !product.deeplink) return;
-
-      window.location.href = product.deeplink;
-    });
+    const product = imageSearchState.results.find(
+      (r) => r.productId === detail.product
+    );
+    if (!product || !product.deeplink) return;
+    window.location.href = product.deeplink;
   }
 
   @Listen("cropperChanged")
   trachSearchAreaChanges() {
+    if (this.trackingDeactivated) return;
+
     const searchEvent: WidgetEvent = createSearchEvent({
       session_id: this.uiSessionId,
       source: this.imageSource,
       search_area: "manual-selection",
     });
-
-    this.trackingApi.trackEvent(searchEvent);
+    this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
   }
 
   @Listen("detectedObjectClicked")
   trackDetectedObject() {
+    if (this.trackingDeactivated) return;
+
     const searchEvent: WidgetEvent = createSearchEvent({
       session_id: this.uiSessionId,
       source: this.imageSource,
       search_area: "attention-point",
     });
-
-    this.trackingApi.trackEvent(searchEvent);
+    this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
   }
 
   @Listen("filterSelected")
   trackFilter({ detail }: CustomEvent<FilterAction>) {
+    if (this.trackingDeactivated) return;
+
     const searchEvent: WidgetEvent = createFilterEvent({
       session_id: this.uiSessionId,
       source: this.imageSource,
       kind: "category",
       action: detail,
     });
-
-    this.trackingApi.trackEvent(searchEvent);
+    this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
   }
 
   componentWillLoad() {
@@ -208,12 +225,15 @@ export class VviinnVpsWidget {
   }
 
   private trackOpenEvent() {
+    if (this.trackingDeactivated) return;
+
     const widgetOpenEvent: WidgetEvent = createWidgetVpsEvent({
       action: "open",
       session_id: this.uiSessionId,
     });
-
-    this.trackingApi.trackEvent(widgetOpenEvent);
+    this.trackingApi
+      .trackEvent(widgetOpenEvent)
+      .then(this.setTrackingDeactivated);
   }
 
   private handleImageSelection(source: SearchImageSource) {
@@ -229,13 +249,14 @@ export class VviinnVpsWidget {
   }
 
   private trackInitialSearch() {
+    if (this.trackingDeactivated) return;
+
     const searchEvent: WidgetEvent = createSearchEvent({
       session_id: this.uiSessionId,
       source: this.imageSource,
       search_area: "full",
     });
-
-    this.trackingApi.trackEvent(searchEvent);
+    this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
   }
 
   private resetState() {
@@ -271,12 +292,15 @@ export class VviinnVpsWidget {
     const elementsToReset = ["onboarding-block", "results-block"];
     elementsToReset.forEach((name) => this.resetScroll(name));
 
+    if (this.trackingDeactivated) return;
+
     const widgetOpenEvent: WidgetEvent = createWidgetVpsEvent({
       action: "close",
       session_id: this.uiSessionId,
     });
-
-    this.trackingApi.trackEvent(widgetOpenEvent);
+    this.trackingApi
+      .trackEvent(widgetOpenEvent)
+      .then(this.setTrackingDeactivated);
   }
 
   render() {
