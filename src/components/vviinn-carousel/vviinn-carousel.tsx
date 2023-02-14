@@ -72,6 +72,7 @@ export class VviinnCarousel {
     const itemWidth = isNaN(widthInDocument)
       ? this.imageWidth
       : widthInDocument;
+
     this.el.style.setProperty(CAROUSEL_IMAGE_WIDTH_CSS_VAR, `${itemWidth}px`);
   }
 
