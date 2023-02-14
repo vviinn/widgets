@@ -1,5 +1,5 @@
 :host {
-  --vviinn-carousel-columns: 0;
+  --vviinn-carousel-columns: 4;
   box-sizing: border-box;
   display: block;
   display: flex;
@@ -182,5 +182,11 @@ vviinn-vpr-widget::part(price-container) {
 
   to {
     transform: translateX(100%);
+  }
+}
+
+@media (max-width: 768px) {
+  :host {
+    --vviinn-carousel-columns: 2;
   }
 }
