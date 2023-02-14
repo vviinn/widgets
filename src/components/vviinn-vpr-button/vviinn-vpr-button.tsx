@@ -1,5 +1,6 @@
 import { Component, Host, h, Prop } from "@stencil/core";
 import { VisualSearchIcon } from "../vviinn-icons";
+import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 
 /**
  *
@@ -20,6 +21,8 @@ export class VviinnVprButton {
   /** comma-separated list of campaign-ids */
   @Prop() campaigns: string = "";
   @Prop() addStyle: boolean = true;
+  @Prop() mode: CarouselMode = "continuity";
+  @Prop() imageWidth: number = 300;
 
   private sidebar: HTMLVviinnRecommendationsSidebarElement | null = null;
   private sidebarCloseListener: () => void = () => {
@@ -47,6 +50,8 @@ export class VviinnVprButton {
     sidebar.sourceImage = this.sourceImage;
     sidebar.widgetScrollbar = this.modalScrollbar;
     sidebar.campaigns = this.campaigns;
+    sidebar.mode = this.position === "right" ? "grid" : this.mode;
+    sidebar.imageWidth = this.imageWidth;
     this.sidebar = sidebar;
 
     sidebar.addEventListener("modalClosed", this.sidebarCloseListener);

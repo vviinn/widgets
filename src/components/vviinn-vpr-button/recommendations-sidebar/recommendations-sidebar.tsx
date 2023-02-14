@@ -10,6 +10,7 @@ import {
   EventEmitter,
 } from "@stencil/core";
 import { CrossIcon } from "../../vviinn-icons";
+import { CarouselMode } from "../../vviinn-carousel/vviinn-carousel";
 
 type SidebarState = "idle" | "open" | "closed";
 type ClickEvent = Event & { clientX: number; clientY: number };
@@ -28,8 +29,10 @@ export class RecommendationsSidebar {
   @Prop() position: "bottom" | "right" = "bottom";
   @Prop() sourceImage: string | null = null;
   @Prop() widgetScrollbar: boolean = false;
+  @Prop() mode: CarouselMode = "continuity";
   /** comma-separated list of campaign-ids */
   @Prop() campaigns: string = "";
+  @Prop() imageWidth: number = 300;
 
   @State() state: SidebarState = "idle";
 
@@ -89,12 +92,12 @@ export class RecommendationsSidebar {
           </header>
           <main part="sidebar-content">
             <vviinn-vpr-widget
-              exportparts="brand, currency, deeplink, image, image-link, price-amount, price-container, price-outdated, price-prefix, price-regular, price-sale, title: product-title"
+              exportparts="brand, currency, deeplink, image, image-link, price-amount, price-container, price-outdated, price-prefix, price-regular, price-sale, title: product-title, carousel-button"
               token={this.token}
               productId={this.productId}
-              imageWidth={300}
+              imageWidth={this.imageWidth}
               blockTitle=""
-              mode={this.position === "bottom" ? "continuity" : "grid"}
+              mode={this.mode}
               useCarousel={this.position === "bottom"}
               onRecommendationsLoaded={() => (this.state = "open")}
               showScroll={this.widgetScrollbar}
