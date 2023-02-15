@@ -262,7 +262,11 @@ export class VviinnCarousel {
   }
 
   private renderRecommendationGroup(elements: HTMLVviinnProductCardElement[]) {
-    return <div class={CONTENT_GROUP_CSS_CLASS}>{...elements}</div>;
+    return (
+      <div class={CONTENT_GROUP_CSS_CLASS} part="items-group">
+        {...elements}
+      </div>
+    );
   }
 
   private renderRecommendationGroups(
