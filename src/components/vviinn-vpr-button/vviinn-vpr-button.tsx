@@ -32,7 +32,7 @@ export class VviinnVprButton {
   render() {
     return (
       <Host onClick={(): void => this.handleClick()} role="button" tabindex="0">
-        <vviinn-button addStyle={this.addStyle}>
+        <vviinn-button addStyle={this.addStyle} part="vviinn-button">
           <slot>
             <VisualSearchIcon />
           </slot>

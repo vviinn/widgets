@@ -101,6 +101,7 @@ export class VviinnVpsButton {
         <vviinn-button
           onClick={() => this.handleClick()}
           addStyle={this.addStyle}
+          part="vviinn-button"
         >
           <slot>
             <CameraIcon />
