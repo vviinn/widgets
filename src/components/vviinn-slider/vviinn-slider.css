@@ -30,7 +30,7 @@
 }
 
 .bullet {
-  background: #E0E0E0;
+  background: #e0e0e0;
   border-radius: 50%;
   box-sizing: border-box;
   cursor: pointer;
@@ -40,7 +40,7 @@
 }
 
 .bullet:hover {
-  background: #C6C6C6;
+  background: #c6c6c6;
 }
 
 .bullet.active {
@@ -54,6 +54,7 @@
 
 .arrow-wrapper {
   align-items: center;
+  cursor: pointer;
   background: white;
   border: 2px solid white;
   bottom: 0;
@@ -94,9 +95,9 @@
 
 .arrow-wrapper > svg {
   transition: fill 0.25ms ease-in-out;
-  fill: #A8A8A8;
+  fill: #a8a8a8;
 }
 
 .arrow-wrapper:hover > svg {
-  fill: #8D8D8D;
+  fill: #8d8d8d;
 }
