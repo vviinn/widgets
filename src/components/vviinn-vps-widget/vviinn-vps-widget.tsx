@@ -370,7 +370,6 @@ export class VviinnVpsWidget {
                 <div class="onboarding-wrapper">
                   <vviinn-onboarding />
                   <vviinn-example-images
-                    tabindex={0}
                     part="example-images"
                     onImageSelected={() => this.handleImageSelection("example")}
                     onImageSelectedError={() =>

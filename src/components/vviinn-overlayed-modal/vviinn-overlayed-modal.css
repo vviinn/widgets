@@ -10,6 +10,7 @@ vviinn-overlay {
   align-items: center;
   display: grid;
   justify-items: center;
+  cursor: default;
 }
 
 @media (max-width: 415px) {

@@ -3,7 +3,7 @@
 }
 
 :host(::hover) {
-  background: whitesmoke;  
+  background: whitesmoke;
 }
 
 .visually-hidden {
@@ -19,6 +19,7 @@
 label {
   cursor: pointer;
   display: grid;
-  padding: 0.5rem;
+  width: 100%;
+  height: 100%;
   transition: background 0.1s ease-in-out;
 }
