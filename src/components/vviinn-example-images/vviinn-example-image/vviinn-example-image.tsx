@@ -24,7 +24,6 @@ export class VviinnExampleImage {
   @Prop() src: string = "";
   @Prop() width: number = 0;
   @Prop() height: number = 0;
-  @Prop() tabIndex: number = -1;
 
   @State() selected: boolean = false;
 
@@ -64,7 +63,6 @@ export class VviinnExampleImage {
   render() {
     return (
       <Host
-        tabindex={`${this.tabIndex}`}
         onClick={() => this.selectImage()}
         onKeyUp={(ev: KeyboardEvent) => this.handleKeyPress(ev)}
       >
@@ -73,7 +71,12 @@ export class VviinnExampleImage {
             <vviinn-preloader />
           </div>
         ) : null}
-        <img src={this.src} width={this.width} height={this.height} />
+        <img
+          src={this.src}
+          width={this.width}
+          height={this.height}
+          tabindex={1}
+        />
       </Host>
     );
   }

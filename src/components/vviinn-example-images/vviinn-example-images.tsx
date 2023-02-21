@@ -58,7 +58,6 @@ export class VviinnExampleImages {
               width={480}
               height={640}
               src="https://cdn.vviinn.com/0/fit/480/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9pbWctaW5zcGlyYXRpb24tMDEtTC5qcGc="
-              tabIndex={0}
             />
           </slot>
           <slot name="vviinn-example-images-2">
@@ -66,7 +65,6 @@ export class VviinnExampleImages {
               width={280}
               height={480}
               src="https://cdn.vviinn.com/0/fit/480/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9pbWctaW5zcGlyYXRpb24tMDItTS5qcGc="
-              tabIndex={1}
             />
           </slot>
           <slot name="vviinn-example-images-3">
@@ -74,7 +72,6 @@ export class VviinnExampleImages {
               width={280}
               height={480}
               src="https://cdn.vviinn.com/0/fit/480/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9pbWctaW5zcGlyYXRpb24tMDMtTS5qcGc="
-              tabIndex={2}
             />
           </slot>
           <slot name="vviinn-example-images-4">
@@ -82,7 +79,6 @@ export class VviinnExampleImages {
               width={480}
               height={640}
               src="https://cdn.vviinn.com/0/fit/480/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9pbWctaW5zcGlyYXRpb24tMDQtTC5qcGc="
-              tabIndex={3}
             />
           </slot>
         </div>
