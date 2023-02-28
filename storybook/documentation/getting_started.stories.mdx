@@ -9,9 +9,9 @@ and [Shadow Parts](https://developer.mozilla.org/en-US/docs/Web/CSS/::part)
 
 ## Using Custom Properties
 
-You can customize vviinn-vps-button component with these properties:
-  - --color-primary *used on main action button, on slider bullets and on selected detected object*
-  - --color-primary-hover *used on main action button when hover*
+You can customize `vviinn-vps-button` component with these properties:
+  - --color-primary *used on the main action button, slider bullets, and selected detected object*
+  - --color-primary-hover *used on the main action button when hovering*
   - --color-icons: *used in svg icons fills*
 
 ## Using Shadow Parts
@@ -33,10 +33,8 @@ vviinn-product-card::part(title) {
 }
 ```
 
-You can check the list of exported shadow parts at the bottom on component controls.
-Vviinn lets you easily change the style of your shop with custom CSS. The following parts can be customized with CSS:
-
-Usually it can be:
+You can check the list of exported shadow parts at the bottom of the component controls.
+Vviinn lets you easily change the style of your shop with custom CSS. The following parts can be customized with CSS and usually, it can be:
 
 - brand
 - currency
@@ -49,7 +47,7 @@ Usually it can be:
 - price-sale
 - title (or product-title)
 
-For example, to hide the price in `vviinn-vpr-widget` you can use this css snippet:
+For example, to hide the price in `vviinn-vpr-widget` you can use this CSS snippet:
 
 ```css
 vviinn-vpr-widget::part(price-containet) {
@@ -60,7 +58,7 @@ vviinn-vpr-widget::part(price-containet) {
 # Customization
 
 For Visual Product Search widgets (`vviinn-vps-widget` and `vviinn-vps-button`)
-There is a posibility to not only customize the look and feel of the widgets using css APIs, but also
+There is a possibility to not only customize the look and feel of the widgets using CSS APIs but also
 customize some content using [slots](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_templates_and_slots#adding_flexibility_with_slots).
 
 Here are some general slots you can use in Visual Product Search widgets:
@@ -94,7 +92,7 @@ Here is a code example:
 </vviinn-vps-button>
 ```
 
-Now this fancy apple is actual `vviinn-vps-button`
+Now, this fancy apple is an actual `vviinn-vps-button`
 
 <vviinn-vps-button>
   <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="none" stroke="#000" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" className="icon icon-tabler icon-tabler-apple" viewBox="0 0 24 24">
@@ -104,7 +102,7 @@ Now this fancy apple is actual `vviinn-vps-button`
   </svg>
 </vviinn-vps-button>
 
-Slot has no restrictions for any element type so any SVG or HTML will be valid.
+The slot has no restrictions for any element type so any SVG or HTML will be valid.
 
 ```html
 <vviinn-vps-button>
@@ -118,15 +116,14 @@ Slot has no restrictions for any element type so any SVG or HTML will be valid.
 
 Of course, any text inside the button will inherit default widget styles.
 
-*NB:* If you're using any named slots with `vviinn-vps-button` you will also need to provide an icon to default slot.
+*NB:* If you're using any named slots with `vviinn-vps-button` you will also need to provide an icon to the "default" slot.
 
-## Example images customization
+## Images customization example
 
-In general you can use any valid HTML or SVG content inside slots, but for example with images
-you should use special component that will fire search events:
+In general, you can use any valid HTML or SVG content inside slots, but for example, with images, you should use a special component that will fire search events:
 
 ```html
   <vviinn-example-image src="URL"></vviinn-example-image>
 ```
 
-For now, image should be stored in vviinn cdn.
+For now, the image should be stored in vviinn cdn.
