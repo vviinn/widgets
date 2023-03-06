@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.16.3](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.16.2...v2.16.3) (2023-03-06)
+
+
+### Bug Fixes
+
+* Additional checks in vviinn-carousel methods: processScrollbarWidth and renderBullets ([5e6e807](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/5e6e807a374169bb1986c6c74291999b6bedf8b2))
+
 ### [2.16.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.16.1...v2.16.2) (2023-02-22)
 
 ### [2.16.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.16.0...v2.16.1) (2023-02-21)
