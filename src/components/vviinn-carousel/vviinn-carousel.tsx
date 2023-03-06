@@ -164,7 +164,8 @@ export class VviinnCarousel {
   private getColumnsNumber(): number {
     const styleSheet = getComputedStyle(this.el);
     const columnsInCss = styleSheet.getPropertyValue(COLUMNS_NUMBER_CSS_VAR);
-    return parseInt(columnsInCss);
+    const columnsNumber = parseInt(columnsInCss);
+    return columnsNumber && !isNaN(columnsNumber) ? columnsNumber : 0;
   }
 
   private getContentGroups(): HTMLElement[] {
@@ -211,6 +212,7 @@ export class VviinnCarousel {
 
   private processScrollbarWidth() {
     const target = this.getContentNode();
+    if (!target) return;
     const scrollRatio =
       (target.scrollLeft + target.clientWidth) / target.scrollWidth;
     const scrolledWidth = target.clientWidth * scrollRatio;
@@ -293,6 +295,7 @@ export class VviinnCarousel {
   }
 
   private renderBullets() {
+    if (this.getColumnsNumber() === 0) return null;
     const numberOfBullets = Math.ceil(
       this.recommendations.length / this.getColumnsNumber()
     );
@@ -334,7 +337,7 @@ export class VviinnCarousel {
             <ChevronIcon />
           </button>
         </div>
-        {this.showBullets() ? (
+        {this.showBullets() && this.recommendations.length ? (
           <div class="bullets">{this.renderBullets()}</div>
         ) : (
           ""
