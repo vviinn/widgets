@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "storybook": "start-storybook -p 6006 --no-manager-cache",
+    "storybook": "STORYBOOK_ENV=local start-storybook -p 6006 --no-manager-cache",
     "build-storybook": "build-storybook",
     "chromatic": "npx chromatic --project-token 124f815087df"
   },
