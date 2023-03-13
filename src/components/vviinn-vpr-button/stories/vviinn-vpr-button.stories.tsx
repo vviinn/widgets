@@ -31,7 +31,6 @@ const Template = (args: StoryArgs): any =>
      vviinn-vpr-button::part(button) {
        width: ${args.buttonSize}px;
        height: ${args.buttonSize}px;
-       fill: ${args.iconColor};
        background: ${args.backgroundColor};
        opacity: ${args.backgroundOpacity}%;
        border-radius: ${args.radius}px;
@@ -78,9 +77,12 @@ const Template = (args: StoryArgs): any =>
    <vviinn-vpr-button token="${args.token}"
                       product-id="${args.productId}"
                       position="${args.position}"
+                      add-style="${args.addStyle}"
                       sidebar-title="${args.sidebarTitle}"
                       modal-scrollbar="${args.modalScrollbar}"
+                      mode="${args.mode}"
                       campaigns="${args.campaigns}"
+                      image-width="${args.imageWidth}"
                       source-image="${
                         args.showSourceImage
                           ? "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg"

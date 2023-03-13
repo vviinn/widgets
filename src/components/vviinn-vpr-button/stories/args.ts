@@ -17,13 +17,6 @@ export const argTypes = {
     },
     defaultValue: "Default",
   },
-  iconColor: {
-    name: "Icon color",
-    control: {
-      type: "color",
-    },
-    defaultValue: "#000000",
-  },
   backgroundColor: {
     name: "Background color",
     control: {
@@ -76,13 +69,6 @@ export const argTypes = {
       },
     },
     defaultValue: "bottom",
-  },
-  backdropOpacity: {
-    name: "Backdrop opacity (%)",
-    control: {
-      type: "number",
-    },
-    defaultValue: 50,
   },
   sidebarBorderRadius: {
     name: "Modal container round corners (px)",
@@ -201,6 +187,34 @@ export const argTypes = {
     name: "campaigns",
     control: {
       type: "text",
+    },
+  },
+  addStyle: {
+    name: "add-style",
+    control: {
+      type: "boolean",
+    },
+    defaultValue: true,
+  },
+  imageWidth: {
+    name: "image-width",
+    control: {
+      type: "text",
+    },
+    defaultValue: "200",
+  },
+  mode: {
+    name: "mode",
+    options: ["continuity", "grid"],
+    control: {
+      type: "select",
+    },
+    defaultValue: "grid",
+  },
+  sourceImage: {
+    name: "source-image",
+    control: {
+      type: "disabled",
     },
   },
   token: {
