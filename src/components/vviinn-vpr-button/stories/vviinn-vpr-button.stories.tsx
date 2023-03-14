@@ -67,6 +67,7 @@ const Template = (args: StoryArgs): any =>
      }
 
      vviinn-recommendations-sidebar::part(source-image) {
+       display: ${args.sourceImage && args.showSourceImage ? "block" : "none"};
        width: ${args.sourceImageSize}px;
        height: ${args.sourceImageSize}px;
        border: ${args.sourceImageBorder ? "1px solid" : "none"};
@@ -83,11 +84,7 @@ const Template = (args: StoryArgs): any =>
                       mode="${args.mode}"
                       campaigns="${args.campaigns}"
                       image-width="${args.imageWidth}"
-                      source-image="${
-                        args.showSourceImage
-                          ? "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg"
-                          : ""
-                      }"></vviinn-vpr-button>`;
+                      source-image="${args.sourceImage}"></vviinn-vpr-button>`;
 
 export const Default = Template.bind({});
 

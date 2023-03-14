@@ -148,11 +148,11 @@ export class VviinnProductCard {
     };
 
     return this.responsive
-      ? ResponsiveImage(props, () => this.kek())
-      : Image(props, () => this.kek());
+      ? ResponsiveImage(props, () => this.emitImageLoaded())
+      : Image(props, () => this.emitImageLoaded());
   }
 
-  private kek() {
+  private emitImageLoaded() {
     this.productImageLoaded.emit(this.productId);
   }
 

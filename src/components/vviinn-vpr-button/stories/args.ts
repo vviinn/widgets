@@ -213,9 +213,8 @@ export const argTypes = {
   },
   sourceImage: {
     name: "source-image",
-    control: {
-      type: "disabled",
-    },
+    defaultValue:
+      "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg",
   },
   token: {
     control: {

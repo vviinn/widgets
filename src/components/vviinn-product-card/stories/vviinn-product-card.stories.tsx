@@ -1,13 +1,11 @@
-import { argTypes } from "./args"
-import { productDecorator } from "./decorators"
+import { argTypes } from "./args";
+import { productDecorator } from "./decorators";
 
 export default {
   title: "Elements/Product Card",
   component: "vviinn-product-card",
-  decorators: [
-    productDecorator
-  ],
-  argTypes
+  decorators: [productDecorator],
+  argTypes,
 };
 
 const showImageBorders = (x, color) => {
@@ -32,7 +30,7 @@ const setupTitleLineCount = (count) => `
   }
 `;
 
-const allignementLeft = `
+const alignmentLeft = `
   vviinn-product-card::part(title),
   vviinn-product-card::part(brand),
   vviinn-product-card::part(type),
@@ -42,7 +40,7 @@ const allignementLeft = `
     text-align: left;
   }`;
 
-const allignementCenter = `
+const alignmentCenter = `
   vviinn-product-card::part(title),
   vviinn-product-card::part(brand),
   vviinn-product-card::part(type),
@@ -52,7 +50,7 @@ const allignementCenter = `
     text-align: center;
   }`;
 
-const allignementRight = `
+const alignmentRight = `
   vviinn-product-card::part(title),
   vviinn-product-card::part(brand),
   vviinn-product-card::part(type),
@@ -62,15 +60,15 @@ const allignementRight = `
     text-align: right;
   }`;
 
-const allignement = new Map([
-  [0, allignementLeft],
-  [1, allignementCenter],
-  [2, allignementRight],
+const alignment = new Map([
+  [0, alignmentLeft],
+  [1, alignmentCenter],
+  [2, alignmentRight],
 ]);
 
 const Template = (args) => `
   <style>
-    ${allignement.get(args.contentAlignment)}
+    ${alignment.get(args.contentAlignment)}
     ${showImageBorders(args.imageBorder, args.imageBorderColor)}
     ${setupBrandVisibility(args.showBrand)}
     ${setupTitleLineCount(args.titleLineCount)}
@@ -112,5 +110,5 @@ Default.args = {
   showBrand: false,
   titleLineCount: 2,
   locale: "en-US",
-  currencyValue: "€"
+  currencyValue: "€",
 };

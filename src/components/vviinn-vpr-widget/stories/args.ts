@@ -72,31 +72,10 @@ const showTitle = {
   required: false,
 };
 
-const titleName = {
-  name: "block-title",
-  control: {
-    type: "text",
-  },
-  table: {
-    defaultValue: { summary: "Recommended products" },
-  },
-  required: false,
-};
-
 const titleFontSize = {
   name: "Section title name font size (px)",
   control: {
     type: "number",
-  },
-  required: false,
-};
-
-const showScrollbars = {
-  name: "show-scroll",
-  description:
-    "Add browser default horizontal scroll bar (in continuity mode) or pagination bullets (in grid mode) to add extra cue for users ",
-  control: {
-    type: "boolean",
   },
   required: false,
 };
@@ -150,10 +129,8 @@ export const argTypes = {
   primaryTextColor,
   productId,
   secondaryTextColor,
-  showScrollbars,
   showTitle,
   titleFontSize,
-  titleName,
   token,
 };
 

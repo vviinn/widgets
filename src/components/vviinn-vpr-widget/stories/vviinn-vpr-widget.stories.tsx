@@ -1,15 +1,6 @@
 import { argTypes, continuityLayoutArgs, gridLayoutArgs } from "./args";
 import { gridDecorator, continuityDecorator } from "./decorators";
 
-const excludeControls = [
-  "blockTitle",
-  "currencySign",
-  "imageRatio",
-  "imageWidth",
-  "pricePrefix",
-  "showScroll",
-];
-
 export default {
   title: "Widgets/Visual Recommendations/Widget",
   component: "vviinn-vpr-widget",
@@ -21,14 +12,9 @@ export default {
       },
     },
   },
-  parameters: {
-    controls: {
-      exclude: excludeControls,
-    },
-  },
 };
 
-const allignementLeft = `
+const alignmentLeft = `
   vviinn-vpr-widget::part(title),
   vviinn-vpr-widget::part(brand),
   vviinn-vpr-widget::part(type),
@@ -38,7 +24,7 @@ const allignementLeft = `
     text-align: left;
   }`;
 
-const allignementCenter = `
+const alignmentCenter = `
   vviinn-vpr-widget::part(title),
   vviinn-vpr-widget::part(brand),
   vviinn-vpr-widget::part(type),
@@ -48,7 +34,7 @@ const allignementCenter = `
     text-align: center;
   }`;
 
-const allignementRight = `
+const alignmentRight = `
   vviinn-vpr-widget::part(title),
   vviinn-vpr-widget::part(brand),
   vviinn-vpr-widget::part(type),
@@ -58,10 +44,10 @@ const allignementRight = `
     text-align: right;
   }`;
 
-const allignement = new Map([
-  [0, allignementLeft],
-  [1, allignementCenter],
-  [2, allignementRight],
+const alignment = new Map([
+  [0, alignmentLeft],
+  [1, alignmentCenter],
+  [2, alignmentRight],
 ]);
 
 const Template = (args) => `
@@ -76,7 +62,7 @@ const Template = (args) => `
       gtag("require", "ec");
     </script>
     <style>
-      ${allignement.get(args.contentAlignment)}
+      ${alignment.get(args.contentAlignment)}
       vviinn-vpr-widget::part(title),
       vviinn-vpr-widget::part(brand),
       vviinn-vpr-widget::part(type),
@@ -160,12 +146,17 @@ const Template = (args) => `
       }
     </style>
     <vviinn-vpr-widget
-      block-title="${args.titleName}"
+      block-title="${args.blockTitle}"
+      css-url="${args.cssUrl}"
+      currency-sign="${args.currencySign}"
+      show-scroll="${args.showScroll}"
+      image-ratio="${args.imageRatio}"
+      locale="${args.locale}"
+      price-prefix="${args.pricePrefix}"
       api-path="${args.apiPath}"
       product-id="${args.productId}"
       token="${args.token}"
       mode="${args.mode}"
-      show-scroll="${args.showScrollbars}"
       image-width="${args.imageWidth}"
       campaign-type="${args.campaignType}"
       campaigns="${args.campaigns}"
@@ -188,10 +179,15 @@ Grid.args = {
   recommendationsGridProductsMobile: 4,
   recommendationsGridProductsTablet: 4,
   secondaryTextColor: "#757575",
-  showScrollbars: true,
+  showScroll: true,
   showTitle: true,
   titleFontSize: 28,
-  titleName: "Recommended products",
+  blockTitle: "Recommended products",
+  cssUrl: "",
+  locale: "en-US",
+  currencySign: "€",
+  pricePrefix: "",
+  imageRatio: 1,
   token:
     "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4",
 };
@@ -217,10 +213,15 @@ Continuity.args = {
   recommendationsContinuityProductsMobile: 160,
   recommendationsContinuityProductsTablet: 150,
   secondaryTextColor: "#757575",
-  showScrollbars: false,
+  showScroll: false,
   showTitle: true,
   titleFontSize: 28,
-  titleName: "Recommended products",
+  blockTitle: "Recommended products",
+  cssUrl: "",
+  locale: "en-US",
+  currencySign: "€",
+  pricePrefix: "",
+  imageRatio: 1,
   token:
     "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4",
 };
