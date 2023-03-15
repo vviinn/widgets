@@ -1,7 +1,6 @@
 :host {
   /**
    * @prop --vviinn-carousel-columns: control number of items in grid mode
-   * @prop --vviinn-carousel-image-width: control image width in continuity mode
    */
 
   display: grid;
@@ -15,7 +14,7 @@
 }
 
 :host(.grid) vviinn-product-card::part(image) {
-  border: 1px solid #DDDDDD;
+  border: 1px solid #dddddd;
   width: 100%;
 }
 

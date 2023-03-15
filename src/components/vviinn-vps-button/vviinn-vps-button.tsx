@@ -30,7 +30,6 @@ import { SlotSkeleton } from "../customized-slots";
  * @slot vviinn-privacy-badge-text - Text content of privacy notification block
  *
  * @part brand - product brand.
- * @part currency - currency sign. Renders after price-amount.
  * @part deeplink - anchor element for title. Rendered only if "deeplink" property filled.
  * @part image - product image.
  * @part image-link - anchor element for image. Rendered only if "deeplink" property filled.
@@ -39,7 +38,6 @@ import { SlotSkeleton } from "../customized-slots";
  * @part price-amount-regular - numeric part of price.
  * @part price-container - block contains all prices.
  * @part price-outdated - renders inside price-container when "sale-price" property filled. Contains regular price.
- * @part price-prefix - renders before price-amount. Can be set with "price-prefix" property or inherited from parent component.
  * @part price-regular - renders inside price-container when "sale-price" property is empty.
  * @part price-sale - renders inside price-container when "sale-price" property filled. Contains sale price.
  * @part title - product title

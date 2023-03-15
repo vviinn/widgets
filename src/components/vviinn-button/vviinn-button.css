@@ -1,9 +1,4 @@
 :host {
-  /**
-   * @prop --vviinn-carousel-columns: control number of items in grid mode
-   * @prop --vviinn-carousel-image-width: control image width in continuity mode
-   */
-
   display: block;
 }
 
@@ -39,6 +34,6 @@
 }
 
 .open-button:active {
-  background: #F4F4F4;
+  background: #f4f4f4;
   outline: none;
 }
