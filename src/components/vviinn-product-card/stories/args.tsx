@@ -1,24 +1,20 @@
 export const argTypes = {
-  imageWidth: {
-    name: "Card width (px)",
-  },
-  imageBorder: {
-    name: "Image border",
-  },
   imageBorderColor: {
     name: "Image border color",
     control: {
       type: "color",
     },
   },
-  imageBackground: {
-    name: "Image background",
+  dimmedBackground: {
+    name: "dimmed-background",
     description:
       "Adding a light-gray filter on top of the image to distinguish it from the rest of the product card content.",
   },
-  showBrand: {
-    name: "Show brand",
+  brand: {
     description: "Using the [title] attribute from product feed.",
+    control: {
+      type: "boolean",
+    },
   },
   titleLineCount: {
     name: "Number of text lines for Product title",
@@ -29,15 +25,13 @@ export const argTypes = {
     },
   },
   locale: {
-    name: "Locale",
     options: ["de-DE", "en-US"],
     control: {
       type: "select",
       default: 0,
     },
   },
-  currencyValue: {
-    name: "Currency",
+  currency: {
     options: ["$", "€", "£", "¥", "₽"],
     control: {
       type: "select",

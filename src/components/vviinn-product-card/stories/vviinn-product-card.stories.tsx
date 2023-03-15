@@ -70,7 +70,7 @@ const Template = (args) => `
   <style>
     ${alignment.get(args.contentAlignment)}
     ${showImageBorders(args.imageBorder, args.imageBorderColor)}
-    ${setupBrandVisibility(args.showBrand)}
+    ${setupBrandVisibility(args.brand)}
     ${setupTitleLineCount(args.titleLineCount)}
 
     vviinn-product-card::part(title),
@@ -86,29 +86,46 @@ const Template = (args) => `
     }
   </style>
   <vviinn-product-card
-    product-title="Couchtisch Rolf Benz 8770 Ronald Schmitt"
+    product-title="${args.productTitle}"
+    product-id="${args.productId}"
     brand="Ronald Schmitt"
-    product-type="Couchtische"
-    price="3629"
-    sale-price="1653"
-    image="https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg"
+    product-type="${args.productType}"
+    price="${args.price}"
+    sale-price="${args.salePrice}"
+    price-prefix="${args.pricePrefix}"
+    image="${args.image}"
     image-width="${args.imageWidth}"
-    dimmed-background="${args.imageBackground}"
+    responsive="${args.responsive}"
+    image-ratio="${args.imageRatio}"
+    dimmed-background="${args.dimmedBackground}"
     locale="${args.locale}"
-    currency="${args.currencyValue}"
+    currency="${args.currency}"
+    deeplink="${args.deeplink}"
+    imageRatio="${args.imageRatio}"
   ></vviinn-product-card>`;
 
 export const Default = Template.bind({});
 Default.args = {
+  productTitle: "Couchtisch Rolf Benz 8770 Ronald Schmitt",
+  productType: "Couchtische",
+  productId: "",
   imageWidth: 240,
   contentAlignment: "Left",
   imageBorder: true,
   imageBorderColor: "#dddddd",
-  imageBackground: false,
+  dimmedBackground: false,
   primaryTextColor: "#161616",
   secondaryTextColor: "#757575",
-  showBrand: false,
+  brand: false,
   titleLineCount: 2,
   locale: "en-US",
-  currencyValue: "€",
+  currency: "€",
+  deeplink: "",
+  image:
+    "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg",
+  responsive: false,
+  imageRatio: 1,
+  price: 3629,
+  salePrice: 1653,
+  pricePrefix: "",
 };
