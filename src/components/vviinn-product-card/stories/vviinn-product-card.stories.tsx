@@ -88,7 +88,7 @@ const Template = (args) => `
   <vviinn-product-card
     product-title="${args.productTitle}"
     product-id="${args.productId}"
-    brand="Ronald Schmitt"
+    brand="${args.brand}"
     product-type="${args.productType}"
     price="${args.price}"
     sale-price="${args.salePrice}"
@@ -116,7 +116,7 @@ Default.args = {
   dimmedBackground: false,
   primaryTextColor: "#161616",
   secondaryTextColor: "#757575",
-  brand: false,
+  brand: "Ronald Schmitt",
   titleLineCount: 2,
   locale: "en-US",
   currency: "€",

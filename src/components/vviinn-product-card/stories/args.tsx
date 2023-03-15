@@ -12,9 +12,6 @@ export const argTypes = {
   },
   brand: {
     description: "Using the [title] attribute from product feed.",
-    control: {
-      type: "boolean",
-    },
   },
   titleLineCount: {
     name: "Number of text lines for Product title",
