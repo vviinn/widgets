@@ -159,7 +159,7 @@ export class VviinnProductCard {
       <Host
         part="product-card"
         class={{ dimmed: this.dimmedBackground }}
-        exportparts="brand, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-prefix, price-regular, price-sale, title"
+        exportparts="brand, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, title"
       >
         <Linked deeplink={this.deeplink} part="image-link">
           {this.renderImage()}
