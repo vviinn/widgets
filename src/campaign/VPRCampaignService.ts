@@ -5,6 +5,7 @@ import { pipe } from "fp-ts/lib/function";
 
 export const getVPRRecommendations =
   (productId: string) =>
+  (color: string) =>
   (campaigns: O.Option<string>) =>
   (options: RequestInit) => {
     const url = pipe(
@@ -16,6 +17,6 @@ export const getVPRRecommendations =
           `product/${productId}/similar-products?campaigns=${encodedCampaignsIds}`
       )
     );
-
-    return apiGet<VPRCampaignResponse>(url, options);
+    const urlWithParams = color?.length > 0 ? `${url}?color=${color}` : url;
+    return apiGet<VPRCampaignResponse>(urlWithParams, options);
   };
