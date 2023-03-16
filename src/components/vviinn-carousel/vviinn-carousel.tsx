@@ -165,7 +165,7 @@ export class VviinnCarousel {
     const styleSheet = getComputedStyle(this.el);
     const columnsInCss = styleSheet.getPropertyValue(COLUMNS_NUMBER_CSS_VAR);
     const columnsNumber = parseInt(columnsInCss);
-    return columnsNumber && !isNaN(columnsNumber) ? columnsNumber : 0;
+    return columnsNumber && !isNaN(columnsNumber) ? columnsNumber : 4;
   }
 
   private getContentGroups(): HTMLElement[] {
@@ -295,7 +295,6 @@ export class VviinnCarousel {
   }
 
   private renderBullets() {
-    if (this.getColumnsNumber() === 0) return null;
     const numberOfBullets = Math.ceil(
       this.recommendations.length / this.getColumnsNumber()
     );
