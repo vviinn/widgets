@@ -2,6 +2,7 @@ import { apiGet } from "../network/apiClient";
 import { VCSCampaignResponse } from "./VCSCampaignResponse";
 import * as O from "fp-ts/Option";
 import { pipe } from "fp-ts/lib/function";
+import { addColorToUrl } from "./Campaign";
 
 export const getVCSRecommendations =
   (productId: string) =>
@@ -17,6 +18,6 @@ export const getVCSRecommendations =
           `product/${productId}/cross-selling-products?campaigns=${encodedCampaignsIds}`
       )
     );
-    const urlWithParams = color?.length > 0 ? `${url}?color=${color}` : url;
+    const urlWithParams = addColorToUrl(url, color);
     return apiGet<VCSCampaignResponse>(urlWithParams, options);
   };
