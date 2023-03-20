@@ -44,6 +44,7 @@ import { checkEmpryString } from "../../utils/option/option";
  * @part product-card - product card itself
  * @part title - title inside product card
  * @part brand - brand inside product card
+ * @part currency - brand inside product card
  * @part image - product card image
  * @part image-link - anchor element around product image
  * @part deeplink - anchor element around product title
@@ -54,6 +55,7 @@ import { checkEmpryString } from "../../utils/option/option";
  * @part price-outdated - block for outdated price. rendered when product contains sale price
  * @part price-regular - block for price if no sale price presented
  * @part price-sale -  block for sale price. rendered only if sale price presented
+ * @part price-prefix - block rendered before each price element (for ex. "from")
  * @part carousel-button
  */
 @Component({

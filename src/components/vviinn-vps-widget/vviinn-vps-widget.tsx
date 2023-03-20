@@ -51,6 +51,7 @@ const notNan = (n: number): boolean => !isNaN(n);
  *
  * @part product-card - product card.
  * @part brand - product card brand.
+ * @part currency - currency sign. Renders after price-amount inside product card.
  * @part deeplink - anchor element for title. Rendered only if "deeplink" property filled.
  * @part image - product image inside product card.
  * @part image-link - anchor element for image. Rendered only if "deeplink" property filled.
@@ -61,6 +62,7 @@ const notNan = (n: number): boolean => !isNaN(n);
  * @part price-outdated - renders inside price-container when "sale-price" property filled. Contains regular price.
  * @part price-regular - renders inside price-container when "sale-price" property is empty.
  * @part price-sale - renders inside price-container when "sale-price" property filled. Contains sale price.
+ * @part price-prefix - renders before price-amount. Can be set with "price-prefix" property or inherited from parent component.
  * @part title - product title
  * @part example-images - example images block
 
