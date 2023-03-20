@@ -1,12 +1,4 @@
-import {
-  Component,
-  Host,
-  h,
-  Element,
-  State,
-  Prop,
-  Fragment,
-} from "@stencil/core";
+import { Component, Host, h, Element, State, Prop } from "@stencil/core";
 import { chunksOf } from "fp-ts/lib/Array";
 import { Recommendation } from "../../recommendation/recommendation";
 import { ChevronIcon } from "../vviinn-icons";
