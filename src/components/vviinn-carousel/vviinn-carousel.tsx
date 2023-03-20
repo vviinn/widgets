@@ -1,4 +1,12 @@
-import { Component, Host, h, Element, State, Prop } from "@stencil/core";
+import {
+  Component,
+  Host,
+  h,
+  Element,
+  State,
+  Prop,
+  Fragment,
+} from "@stencil/core";
 import { chunksOf } from "fp-ts/lib/Array";
 import { Recommendation } from "../../recommendation/recommendation";
 import { ChevronIcon } from "../vviinn-icons";
@@ -322,12 +330,14 @@ export class VviinnCarousel {
           >
             <ChevronIcon />
           </button>
+
           <div
             class={this.getContentClassMap()}
             onScroll={() => this.processScrollbarWidth()}
           >
             {this.renderRecommendations()}
           </div>
+
           <button
             class="next"
             onClick={() => this.showNext()}
@@ -336,10 +346,8 @@ export class VviinnCarousel {
             <ChevronIcon />
           </button>
         </div>
-        {this.showBullets() && this.recommendations.length ? (
+        {this.showBullets() && (
           <div class="bullets">{this.renderBullets()}</div>
-        ) : (
-          ""
         )}
       </Host>
     );
