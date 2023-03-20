@@ -10,6 +10,7 @@ import {
   Event,
   EventEmitter,
   Listen,
+  Fragment,
 } from "@stencil/core";
 import { pipe } from "fp-ts/lib/function";
 import * as TE from "fp-ts/lib/TaskEither";
@@ -276,10 +277,16 @@ export class VviinnVprWidget implements ComponentInterface {
         }}
         aria-hidden={this.loaded ? "false" : "true"}
       >
-        {this.renderExternalCSS()}
-        <style>{state.fallbackStyles}</style>
-        <h2 part="recommendations-title">{this.blockTitle}</h2>
-        {this.useCarousel ? this.renderCarousel() : this.renderResults()}
+        {this.recommendations.length ? (
+          <Fragment>
+            {this.renderExternalCSS()}
+            <style>{state.fallbackStyles}</style>
+            <h2 part="recommendations-title">{this.blockTitle}</h2>
+            {this.useCarousel ? this.renderCarousel() : this.renderResults()}
+          </Fragment>
+        ) : (
+          ""
+        )}
       </Host>
     );
   }

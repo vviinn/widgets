@@ -1,4 +1,12 @@
-import { Component, Host, h, Element, State, Prop } from "@stencil/core";
+import {
+  Component,
+  Host,
+  h,
+  Element,
+  State,
+  Prop,
+  Fragment,
+} from "@stencil/core";
 import { chunksOf } from "fp-ts/lib/Array";
 import { Recommendation } from "../../recommendation/recommendation";
 import { ChevronIcon } from "../vviinn-icons";
@@ -164,7 +172,8 @@ export class VviinnCarousel {
   private getColumnsNumber(): number {
     const styleSheet = getComputedStyle(this.el);
     const columnsInCss = styleSheet.getPropertyValue(COLUMNS_NUMBER_CSS_VAR);
-    return parseInt(columnsInCss);
+    const columnsNumber = parseInt(columnsInCss);
+    return columnsNumber && !isNaN(columnsNumber) ? columnsNumber : 4;
   }
 
   private getContentGroups(): HTMLElement[] {
@@ -211,6 +220,7 @@ export class VviinnCarousel {
 
   private processScrollbarWidth() {
     const target = this.getContentNode();
+    if (!target) return;
     const scrollRatio =
       (target.scrollLeft + target.clientWidth) / target.scrollWidth;
     const scrolledWidth = target.clientWidth * scrollRatio;
@@ -320,12 +330,14 @@ export class VviinnCarousel {
           >
             <ChevronIcon />
           </button>
+
           <div
             class={this.getContentClassMap()}
             onScroll={() => this.processScrollbarWidth()}
           >
             {this.renderRecommendations()}
           </div>
+
           <button
             class="next"
             onClick={() => this.showNext()}
@@ -334,10 +346,8 @@ export class VviinnCarousel {
             <ChevronIcon />
           </button>
         </div>
-        {this.showBullets() ? (
+        {this.showBullets() && (
           <div class="bullets">{this.renderBullets()}</div>
-        ) : (
-          ""
         )}
       </Host>
     );
