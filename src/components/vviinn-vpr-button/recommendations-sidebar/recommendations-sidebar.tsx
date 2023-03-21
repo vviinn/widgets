@@ -32,6 +32,7 @@ export class RecommendationsSidebar {
   @Prop() mode: CarouselMode = "continuity";
   /** comma-separated list of campaign-ids */
   @Prop() campaigns: string = "";
+  @Prop() color: string;
   @Prop() imageWidth: number = 300;
 
   @State() state: SidebarState = "idle";
@@ -102,6 +103,7 @@ export class RecommendationsSidebar {
               onRecommendationsLoaded={() => (this.state = "open")}
               showScroll={this.widgetScrollbar}
               campaigns={this.campaigns}
+              color={this.color}
             />
           </main>
         </aside>
