@@ -145,6 +145,7 @@ const Template = (args) => `
         }
       }
     </style>
+
     <vviinn-vpr-widget
       block-title="${args.blockTitle}"
       css-url="${args.cssUrl}"
@@ -160,6 +161,7 @@ const Template = (args) => `
       image-width="${args.imageWidth}"
       campaign-type="${args.campaignType}"
       campaigns="${args.campaigns}"
+      color="${args.color.slice(1)}"
     >
     </vviinn-vpr-widget>
 `;
@@ -173,6 +175,7 @@ Grid.args = {
   contentAlignment: "Centered",
   imageWidth: 420,
   mode: "grid",
+  color: "",
   primaryTextColor: "#161616",
   productId: "4114460310",
   recommendationsGridProductsDesktop: 4,
@@ -207,6 +210,7 @@ Continuity.args = {
   contentAlignment: "Left",
   imageWidth: 300,
   mode: "continuity",
+  color: "",
   primaryTextColor: "#161616",
   productId: "4114460310",
   recommendationsContinuityProductsDesktop: 200,

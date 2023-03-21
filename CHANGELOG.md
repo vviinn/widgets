@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.17.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.16.6...v2.17.0) (2023-03-21)
+
+
+### Features
+
+* add Color to the storybook ([c8db3c8](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/c8db3c818cc1f21787f3550f2b0128a4f1995b0f))
+
 ### [2.16.6](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.16.5...v2.16.6) (2023-03-20)
 
 ### [2.16.5](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.16.1...v2.16.5) (2023-03-20)

@@ -22,6 +22,13 @@ const productId = {
   },
 };
 
+const color = {
+  name: "color",
+  control: {
+    type: "color",
+  },
+};
+
 const campaigns = {
   name: "campaigns",
   control: {
@@ -132,6 +139,7 @@ export const argTypes = {
   showTitle,
   titleFontSize,
   token,
+  color,
 };
 
 const recommendationsGridProductsDesktop = {

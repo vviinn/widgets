@@ -13,10 +13,17 @@ export const isVCS = (c: Campaign): c is VCS => c._tag === "VCS";
 
 export type Campaign = VPR | VCS;
 
-export function fold<A, B>(onVPR: () => A, onVCS: () => B): (c: Campaign) => A|B {
+export function fold<A, B>(
+  onVPR: () => A,
+  onVCS: () => B
+): (c: Campaign) => A | B {
   return (c) => (isVPR(c) ? onVPR() : onVCS());
 }
 
 export function fromString(s: CampaignName): Campaign {
   return s === "VPR" ? { _tag: "VPR" } : { _tag: "VCS" };
+}
+
+export function addColorToUrl(url: string, color: string): string {
+  return color?.length > 0 ? `${url}?color=${color}` : url;
 }

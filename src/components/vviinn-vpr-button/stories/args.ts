@@ -201,7 +201,7 @@ export const argTypes = {
     control: {
       type: "text",
     },
-    defaultValue: "200",
+    defaultValue: "400",
   },
   mode: {
     name: "mode",
@@ -215,6 +215,12 @@ export const argTypes = {
     name: "source-image",
     defaultValue:
       "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg",
+  },
+  color: {
+    name: "color",
+    control: {
+      type: "color",
+    },
   },
   token: {
     control: {

@@ -20,6 +20,7 @@ export class VviinnVprButton {
   @Prop() modalScrollbar: boolean = false;
   /** comma-separated list of campaign-ids */
   @Prop() campaigns: string = "";
+  @Prop() color: string;
   @Prop() addStyle: boolean = true;
   @Prop() mode: CarouselMode = "continuity";
   @Prop() imageWidth: number = 300;
@@ -50,6 +51,7 @@ export class VviinnVprButton {
     sidebar.sourceImage = this.sourceImage;
     sidebar.widgetScrollbar = this.modalScrollbar;
     sidebar.campaigns = this.campaigns;
+    sidebar.color = this.color;
     sidebar.mode = this.position === "right" ? "grid" : this.mode;
     sidebar.imageWidth = this.imageWidth;
     this.sidebar = sidebar;

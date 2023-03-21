@@ -88,6 +88,8 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() locale: string = "de-DE";
   /** comma-separated list of campaign-ids */
   @Prop() campaigns: string = "";
+  /** Color accepts any hexcode string */
+  @Prop() color: string;
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
   /** @internal */
@@ -214,13 +216,13 @@ export class VviinnVprWidget implements ComponentInterface {
 
   private async getRecommendations() {
     if (this.productId === undefined || this.token === undefined) return;
-
     const campaignType =
       this.campaignType.length > 0 ? this.campaignType : "VPR";
     const headers = createBearAuthedHeader(this.token);
     const request = pipe(
       TE.of(getRecommendationsService(campaignType)),
       TE.ap(TE.of(this.productId)),
+      TE.ap(TE.of(this.color)),
       TE.ap(TE.of(checkEmpryString(this.campaigns))),
       TE.ap(TE.of(headers)),
       TE.flatten
