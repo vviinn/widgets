@@ -203,6 +203,12 @@ export const argTypes = {
       type: "text",
     },
   },
+  color: {
+    name: "color",
+    control: {
+      type: "color",
+    },
+  },
   token: {
     control: {
       type: "text",
