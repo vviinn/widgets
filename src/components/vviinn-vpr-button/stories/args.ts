@@ -201,7 +201,7 @@ export const argTypes = {
     control: {
       type: "text",
     },
-    defaultValue: "400",
+    defaultValue: "300",
   },
   mode: {
     name: "mode",
@@ -209,7 +209,7 @@ export const argTypes = {
     control: {
       type: "select",
     },
-    defaultValue: "grid",
+    defaultValue: "continuity",
   },
   sourceImage: {
     name: "source-image",

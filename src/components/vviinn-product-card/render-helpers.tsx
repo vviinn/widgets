@@ -45,12 +45,13 @@ const FormattedPrice: FunctionalComponent<PriceElementProps> = (props) => {
     minimumFractionDigits: 2,
   }).format(props.price);
 
-  const prefixElement = (
-    <span part="price-prefix">{props.prefix ? `${props.prefix} ` : ""}</span>
-  );
-  const currencyElement = (
-    <span part="currency">{props.currency ? ` ${props.currency}` : ""}</span>
-  );
+  const prefixElement = props.prefix ? (
+    <span part="price-prefix">{props.prefix}</span>
+  ) : null;
+
+  const currencyElement = props.currency ? (
+    <span part="currency">{props.currency}</span>
+  ) : null;
 
   return (
     <span
