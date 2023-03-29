@@ -23,7 +23,3 @@ export function fold<A, B>(
 export function fromString(s: CampaignName): Campaign {
   return s === "VPR" ? { _tag: "VPR" } : { _tag: "VCS" };
 }
-
-export function addColorToUrl(url: string, color: string): string {
-  return color?.length > 0 ? `${url}?color=${color}` : url;
-}
