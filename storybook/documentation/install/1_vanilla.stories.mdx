@@ -6,8 +6,8 @@ import { Meta, Story, Canvas } from '@storybook/addon-docs';
 
 ## Install using CDN
 
-Paste scripts to `head` section of your page.<br />
-You don't need to include script tag with `nomodule` attribute if you do not need to support browsers without JavaScript modules feature.
+Paste scripts to the `head` section of your page.<br />
+You don't need to include a script tag with `nomodule` attribute if you don't need to support browsers without JavaScript modules feature.
 
 ```html
 <script type="module" src="STORYBOOK_CDN_PATH/STORYBOOK_NPM_PACKAGE_NAME.esm.js"></script>
@@ -18,50 +18,50 @@ Then you will be able to use VPR or VPS widgets.
 
 ### Visual Product Recommendations
 
-To use recommendations widget, insert snippet below where you want to render widget.<br />
-`token` and `product-id` attributes are only nessesary, but you can tweak widget with other attributes.
+To use recommendations widget, insert a snippet below where you want to render the widget.<br />
+`token` and `product-id` attributes are only necessary, but you can tweak the widget with other attributes.
 
 ```html
 <STORYBOOK_VPR_WIDGET_TAG
-  token="INSERT_YOURS_TOKEN"
-  product-id="YOURS_PRODUCT_ID">
+  token="YOUR_TOKEN"
+  product-id="YOUR_PRODUCT_ID">
 </STORYBOOK_VPR_WIDGET_TAG>
 ```
 [Check other attributes here ](/docs/components-visual-recommendations--default)
 
-Also can create component instance with DOM API:
+Also, it’s possible to create the component instance with DOM API:
 
 ```javascript
 const component = document.createElement('STORYBOOK_VPR_WIDGET_TAG');
-component.token = YOURS_TOKEN;
-component.productId = YOURS_PRODUCT_ID;
+component.token = YOUR_TOKEN;
+component.productId = YOUR_PRODUCT_ID;
 
 document.append(component);
 ```
 
 ### Visual Product Search
 
-To use search widget, first insert `<STORYBOOK_VPS_WIDGET_TAG token="INSERT_YOURS_TOKEN"></STORYBOOK_VPS_WIDGET_TAG>` anywhere to page.
-Widget is implemented as modal window, so you need to trigger it.
+To use the search widget, first, insert the snippet below anywhere on the page.
+The widget is implemented as a modal window, so you need to trigger it.
 
 ```html
-<STORYBOOK_VPS_WIDGET_TAG token="INSERT_YOURS_TOKEN"></STORYBOOK_VPS_WIDGET_TAG>
+<STORYBOOK_VPS_WIDGET_TAG token="YOUR_TOKEN"></STORYBOOK_VPS_WIDGET_TAG>
 ```
 
 [Check other attributes here ](/docs/components-visual-search-widget--default)
 
-You can also create component instance with DOM API:
+You can also create a component instance with DOM API:
 
 ```javascript
 const component = document.createElement('STORYBOOK_VPS_WIDGET_TAG');
-component.token = YOURS_TOKEN;
+component.token = YOUR_TOKEN;
 
 document.append(component);
 ```
 
 ## Install using NPM
 
-If you want to use widgets as ES6 modules you should install it from NPM
+If you want to use widgets as ES6 modules you should install them from NPM.
 
 `npm i STORYBOOK_NPM_PACKAGE_NAME`
 
@@ -71,4 +71,4 @@ And then add it to your JavaScript code:
 import { defineCustomElements } from 'STORYBOOK_NPM_PACKAGE_NAME';
 defineCustomElements();
 ```
-After that you can use both Recommendation or Search Widgets in html template or with javascript.
+After that, you can use both Recommendation or Search Widgets in an HTML template or with Javascript.

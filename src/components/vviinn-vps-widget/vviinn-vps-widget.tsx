@@ -50,20 +50,20 @@ const notNan = (n: number): boolean => !isNaN(n);
  * @part select-image_button
  *
  * @part product-card - product card.
- * @part product-card_brand - product card brand.
- * @part product-card_currency - currency sign. Renders after price-amount inside product card.
- * @part product-card_deeplink - anchor element for title. Rendered only if "deeplink" property filled.
- * @part product-card_image - product image inside product card.
- * @part product-card_image-link - anchor element for image. Rendered only if "deeplink" property filled.
- * @part product-card_price-amount-sale - numeric part of price inside product card.
- * @part product-card_price-amount-outdated - numeric part of price inside product card.
- * @part product-card_price-amount-regular - numeric part of price inside product card.
- * @part product-card_price-container - block contains all prices inside product card.
- * @part product-card_price-outdated - renders inside price-container when "sale-price" property filled. Contains regular price.
- * @part product-card_price-prefix - renders before price-amount. Can be set with "price-prefix" property or inherited from parent component.
- * @part product-card_price-regular - renders inside price-container when "sale-price" property is empty.
- * @part product-card_price-sale - renders inside price-container when "sale-price" property filled. Contains sale price.
- * @part product-card_title - product title
+ * @part brand - product card brand.
+ * @part currency - currency sign. Renders after price-amount inside product card.
+ * @part deeplink - anchor element for title. Rendered only if "deeplink" property filled.
+ * @part image - product image inside product card.
+ * @part image-link - anchor element for image. Rendered only if "deeplink" property filled.
+ * @part price-amount-sale - numeric part of price inside product card.
+ * @part price-amount-outdated - numeric part of price inside product card.
+ * @part price-amount-regular - numeric part of price inside product card.
+ * @part price-container - block contains all prices inside product card.
+ * @part price-outdated - renders inside price-container when "sale-price" property filled. Contains regular price.
+ * @part price-regular - renders inside price-container when "sale-price" property is empty.
+ * @part price-sale - renders inside price-container when "sale-price" property filled. Contains sale price.
+ * @part price-prefix - renders before price-amount. Can be set with "price-prefix" property or inherited from parent component.
+ * @part title - product title
  * @part example-images - example images block
 
  * @slot vviinn-onboarding-title - Title of onboarding section

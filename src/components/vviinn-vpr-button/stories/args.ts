@@ -17,13 +17,6 @@ export const argTypes = {
     },
     defaultValue: "Default",
   },
-  iconColor: {
-    name: "Icon color",
-    control: {
-      type: "color",
-    },
-    defaultValue: "#000000",
-  },
   backgroundColor: {
     name: "Background color",
     control: {
@@ -76,13 +69,6 @@ export const argTypes = {
       },
     },
     defaultValue: "bottom",
-  },
-  backdropOpacity: {
-    name: "Backdrop opacity (%)",
-    control: {
-      type: "number",
-    },
-    defaultValue: 50,
   },
   sidebarBorderRadius: {
     name: "Modal container round corners (px)",
@@ -202,6 +188,33 @@ export const argTypes = {
     control: {
       type: "text",
     },
+  },
+  addStyle: {
+    name: "add-style",
+    control: {
+      type: "boolean",
+    },
+    defaultValue: true,
+  },
+  imageWidth: {
+    name: "image-width",
+    control: {
+      type: "text",
+    },
+    defaultValue: "300",
+  },
+  mode: {
+    name: "mode",
+    options: ["continuity", "grid"],
+    control: {
+      type: "select",
+    },
+    defaultValue: "continuity",
+  },
+  sourceImage: {
+    name: "source-image",
+    defaultValue:
+      "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg",
   },
   color: {
     name: "color",

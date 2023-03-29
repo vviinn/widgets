@@ -15,7 +15,7 @@ export class VviinnButton {
 
   render() {
     return (
-      <Host>
+      <Host exportparts="button">
         <button
           class={this.addStyle ? "open-button" : "raw-open-button"}
           part="button"

@@ -30,7 +30,6 @@ import { SlotSkeleton } from "../customized-slots";
  * @slot vviinn-privacy-badge-text - Text content of privacy notification block
  *
  * @part brand - product brand.
- * @part currency - currency sign. Renders after price-amount.
  * @part deeplink - anchor element for title. Rendered only if "deeplink" property filled.
  * @part image - product image.
  * @part image-link - anchor element for image. Rendered only if "deeplink" property filled.
@@ -39,11 +38,11 @@ import { SlotSkeleton } from "../customized-slots";
  * @part price-amount-regular - numeric part of price.
  * @part price-container - block contains all prices.
  * @part price-outdated - renders inside price-container when "sale-price" property filled. Contains regular price.
- * @part price-prefix - renders before price-amount. Can be set with "price-prefix" property or inherited from parent component.
  * @part price-regular - renders inside price-container when "sale-price" property is empty.
  * @part price-sale - renders inside price-container when "sale-price" property filled. Contains sale price.
  * @part title - product title
  * @part example-images - example images block
+ * @part button - button
  */
 @Component({
   tag: "vviinn-vps-button",
@@ -114,7 +113,7 @@ export class VviinnVpsButton {
           token={this.token}
           locale={this.locale}
           apiPath={this.apiPath}
-          exportparts="brand, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-prefix, price-regular, price-sale, title, product-card, example-images"
+          exportparts="brand, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, product-card, example-images"
           campaignId={this.campaignId}
         />
       </Host>

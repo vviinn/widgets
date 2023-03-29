@@ -31,7 +31,6 @@ const Template = (args: StoryArgs): any =>
      vviinn-vpr-button::part(button) {
        width: ${args.buttonSize}px;
        height: ${args.buttonSize}px;
-       fill: ${args.iconColor};
        background: ${args.backgroundColor};
        opacity: ${args.backgroundOpacity}%;
        border-radius: ${args.radius}px;
@@ -68,6 +67,7 @@ const Template = (args: StoryArgs): any =>
      }
 
      vviinn-recommendations-sidebar::part(source-image) {
+       display: ${args.sourceImage && args.showSourceImage ? "block" : "none"};
        width: ${args.sourceImageSize}px;
        height: ${args.sourceImageSize}px;
        border: ${args.sourceImageBorder ? "1px solid" : "none"};
@@ -78,9 +78,13 @@ const Template = (args: StoryArgs): any =>
    <vviinn-vpr-button token="${args.token}"
                       product-id="${args.productId}"
                       position="${args.position}"
+                      add-style="${args.addStyle}"
                       sidebar-title="${args.sidebarTitle}"
                       modal-scrollbar="${args.modalScrollbar}"
+                      mode="${args.mode}"
                       campaigns="${args.campaigns}"
+                      image-width="${args.imageWidth}"
+                      source-image="${args.sourceImage}"
                       color="${args.color.toString().slice(1)}"
                       source-image="${
                         args.showSourceImage

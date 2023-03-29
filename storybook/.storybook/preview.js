@@ -5,12 +5,23 @@ import {
   setStencilDocJson,
 } from "@pxtrn/storybook-addon-docs-stencil";
 
-import { defineCustomElements } from "../node_modules/vviinn-widgets/dist/loader";
-import "../node_modules/vviinn-widgets";
+let loader;
+let vviinnWidgets;
+let isLocalEnv = process.env.STORYBOOK_ENV === "local";
+
+(async () => {
+  if (isLocalEnv) {
+    loader = await import("../../dist/loader");
+    loader.defineCustomElements();
+    vviinnWidgets = await import("../../dist");
+  } else {
+    loader = await import("../node_modules/vviinn-widgets/dist/loader");
+    loader.defineCustomElements();
+    vviinnWidgets = await import("../node_modules/vviinn-widgets");
+  }
+})();
 
 if (docJson) setStencilDocJson(docJson);
-
-defineCustomElements();
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -23,7 +34,6 @@ export const parameters = {
   },
   options: {
     storySort: {
-      method: "alphabetical",
       order: [
         "VVIINN Widgets",
         "Installation",

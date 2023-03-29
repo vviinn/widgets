@@ -3,14 +3,14 @@ import { Meta, Story } from '@storybook/addon-docs';
 <Meta title="Installation/Angular"></Meta>
 
 # Angular
-Using a Stencil built web component collection within an Angular CLI project is a two-step process. We need to:
+Using a Stencil-built web component collection within an Angular CLI project is a two-step process. We need to:
 
 - Include the `CUSTOM_ELEMENTS_SCHEMA` in the modules that use the components.
 - Call `defineCustomElements()` from main.ts (or some other appropriate place).
 
 ## Including the Custom Elements Schema
 
-Including the `CUSTOM_ELEMENTS_SCHEMA` in the module allows the use of the web components in the HTML markup without the compiler producing errors. This code should be added into the `AppModule` and in every other modules that use your custom elements. Here is an example of adding it to `AppModule`:
+Including the `CUSTOM_ELEMENTS_SCHEMA` in the module allows the use of the web components in the HTML markup without the compiler producing errors. This code should be added to the `AppModule` and every other module that uses your custom elements. Here is an example of adding it to `AppModule`:
 
 ```javascript
 import { BrowserModule } from '@angular/platform-browser';
@@ -53,4 +53,4 @@ platformBrowserDynamic().bootstrapModule(AppModule)
 defineCustomElements();
 ```
 
-for more informantion check https://stenciljs.com/docs/angular
+For more information, check [Stencil documentation](https://stenciljs.com/docs/angular)
