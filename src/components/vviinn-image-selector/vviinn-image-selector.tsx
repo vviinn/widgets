@@ -36,9 +36,7 @@ export class VviinnImageSelector {
   }
 
   private isLoading(): boolean {
-    return (
-      imageSearchState.loading || imageSearchState.objectDetectionInProgress
-    );
+    return imageSearchState.loading;
   }
 
   render() {
