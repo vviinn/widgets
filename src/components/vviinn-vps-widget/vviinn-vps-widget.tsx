@@ -274,7 +274,7 @@ export class VviinnVpsWidget {
     imageSearchState.detectedObjects = [];
     imageSearchState.activeIonLink = undefined;
     imageSearchState.rectangleSearchForm = undefined;
-
+    imageSearchState.loading = false;
     this.resetScroll("results-block");
   }
 
