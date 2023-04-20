@@ -1,10 +1,10 @@
-import { Component, Host, h, Element } from '@stencil/core';
-import { OnboardingCard2Icon } from '../../../vviinn-icons';
-import { slotChangeListener } from '../../../customized-slots';
+import { Component, Host, h, Element } from "@stencil/core";
+import { OnboardingCard2Icon } from "../../../vviinn-icons";
+import { slotChangeListener } from "../../../customized-slots";
 
 @Component({
-  tag: 'vviinn-onboarding-card-2',
-  styleUrl: '../onboarding-card.css',
+  tag: "vviinn-onboarding-card-2",
+  styleUrl: "../onboarding-card.css",
   shadow: true,
 })
 export class VviinnOnboardingCard2 {
@@ -32,5 +32,4 @@ export class VviinnOnboardingCard2 {
       </Host>
     );
   }
-
 }
