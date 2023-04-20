@@ -7,6 +7,8 @@ import {
   Element,
   Watch,
   Listen,
+  Event,
+  EventEmitter,
 } from "@stencil/core";
 import { state } from "../../store/store";
 import { imageSearchState } from "../../store/imageSearch.store";
@@ -109,10 +111,19 @@ export class VviinnVpsWidget {
   @State() wrongImageFormat: boolean = false;
   @State() trackingDeactivated: boolean = false;
 
+  /** @internal */
+  @Event({ bubbles: true, composed: true })
+  globalSlotsChanged: EventEmitter<any>;
+
   private overflow: string;
   private uiSessionId: string;
   private trackingApi: DefaultApi;
   private imageSource: SearchImageSource | null = null;
+
+  componentDidLoad() {
+    const slots = this.el.querySelectorAll("[slot]");
+    this.globalSlotsChanged.emit(Array.from(slots));
+  }
 
   setTrackingDeactivated = (result: EventConfirmation) => {
     if (result.status === "rejected") {
