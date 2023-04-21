@@ -109,7 +109,7 @@ export class VviinnVpsButton {
         <SlotSkeleton />
         <vviinn-vps-widget
           active={this.pressed}
-          currency-sign="€"
+          currency-sign={this.currencySign}
           token={this.token}
           locale={this.locale}
           apiPath={this.apiPath}

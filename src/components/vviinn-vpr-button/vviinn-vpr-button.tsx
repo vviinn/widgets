@@ -24,6 +24,7 @@ export class VviinnVprButton {
   @Prop() addStyle: boolean = true;
   @Prop() mode: CarouselMode = "continuity";
   @Prop() imageWidth: number = 300;
+  @Prop() currencySign: string = "€";
 
   private sidebar: HTMLVviinnRecommendationsSidebarElement | null = null;
   private sidebarCloseListener: () => void = () => {
@@ -54,6 +55,7 @@ export class VviinnVprButton {
     sidebar.color = this.color;
     sidebar.mode = this.position === "right" ? "grid" : this.mode;
     sidebar.imageWidth = this.imageWidth;
+    sidebar.currencySign = this.currencySign;
     this.sidebar = sidebar;
 
     sidebar.addEventListener("modalClosed", this.sidebarCloseListener);
