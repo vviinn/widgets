@@ -83,7 +83,9 @@ const Template = (args) =>
                       campaigns="${args.campaigns}"
                       image-width="${args.imageWidth}"
                       source-image="${args.sourceImage}"
-                      color="${args.color.toString().slice(1)}"
+                      color="${
+                        args.color ? args.color.toString().slice(1) : ""
+                      }"
                       source-image="${
                         args.showSourceImage
                           ? "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg"

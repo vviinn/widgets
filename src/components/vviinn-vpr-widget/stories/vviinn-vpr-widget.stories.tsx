@@ -161,7 +161,7 @@ const Template = (args) => `
       image-width="${args.imageWidth}"
       campaign-type="${args.campaignType}"
       campaigns="${args.campaigns}"
-      color="${args.color.slice(1)}"
+      color="${args.color ? args.color.slice(1) : ""}"
     >
     </vviinn-vpr-widget>
 `;
