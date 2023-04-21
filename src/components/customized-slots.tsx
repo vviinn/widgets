@@ -2,12 +2,12 @@ import { h } from "@stencil/core";
 
 const defaultSlotsNames: string[] = [
   "vviinn-onboarding-title",
-  "vviinn-onboarding-card-1-icon",
-  "vviinn-onboarding-card-1-text",
-  "vviinn-onboarding-card-2-icon",
-  "vviinn-onboarding-card-2-text",
-  "vviinn-onboarding-card-3-icon",
-  "vviinn-onboarding-card-3-text",
+  "onboarding-card-1-icon",
+  "onboarding-card-1-text",
+  "onboarding-card-2-icon",
+  "onboarding-card-2-text",
+  "onboarding-card-3-icon",
+  "onboarding-card-3-text",
   "vviinn-example-images-title",
   "vviinn-example-images-1",
   "vviinn-example-images-2",
@@ -15,7 +15,7 @@ const defaultSlotsNames: string[] = [
   "vviinn-example-images-4",
   "vviinn-teaser-text",
   "vviinn-image-upload-button-text",
-  "vviinn-privacy-badge-text"
+  "vviinn-privacy-badge-text",
 ];
 
 const renderNamedSlot = (name: string) => <slot name={name} />;
@@ -31,27 +31,29 @@ const getNameAttribute = (element: HTMLElement): string | null =>
 const getSlotAttribute = (element: HTMLElement): string | null =>
   element.getAttribute("slot");
 
-const elementContainSlot = (slot: HTMLSlotElement) => (
-  container: HTMLElement
-): boolean => {
-  const name1 = getNameAttribute(slot);
-  const name2 = getSlotAttribute(container);
+const elementContainSlot =
+  (slot: HTMLSlotElement) =>
+  (container: HTMLElement): boolean => {
+    const name1 = getNameAttribute(slot);
+    const name2 = getSlotAttribute(container);
 
-  return name1 === name2;
-};
+    return name1 === name2;
+  };
 
-const getContentToReplace = (targets: HTMLElement[]) => (
-  acc: Map<HTMLSlotElement, HTMLElement>,
-  content: HTMLSlotElement
-): Map<HTMLSlotElement, HTMLElement> => {
-  const replaceCandidate = targets.find(elementContainSlot(content));
+const getContentToReplace =
+  (targets: HTMLElement[]) =>
+  (
+    acc: Map<HTMLSlotElement, HTMLElement>,
+    content: HTMLSlotElement
+  ): Map<HTMLSlotElement, HTMLElement> => {
+    const replaceCandidate = targets.find(elementContainSlot(content));
 
-  if (replaceCandidate) {
-    acc.set(content, replaceCandidate);
-  }
+    if (replaceCandidate) {
+      acc.set(content, replaceCandidate);
+    }
 
-  return acc;
-};
+    return acc;
+  };
 
 const replaceSlotContent = (
   content: HTMLSlotElement,
@@ -61,7 +63,7 @@ const replaceSlotContent = (
 };
 
 export const slotChangeListener = (component: any, element: HTMLElement) => {
-  component.connectedCallback = function() {
+  component.connectedCallback = function () {
     document.addEventListener(
       "globalSlotsChanged",
       ({ detail }: CustomEvent<HTMLElement[]>) => {

@@ -7,6 +7,8 @@ import {
   Element,
   Watch,
   Listen,
+  Event,
+  EventEmitter,
 } from "@stencil/core";
 import { state } from "../../store/store";
 import { imageSearchState } from "../../store/imageSearch.store";
@@ -33,6 +35,7 @@ import {
 } from "../../tracking";
 import { ProductCardEvent } from "../../recommendation/events";
 import { pipe } from "fp-ts/lib/function";
+import { SlotSkeleton } from "../customized-slots";
 
 const filterInt = (value: string) =>
   /^[-+]?(\d+|Infinity)$/.test(value) ? Number(value) : NaN;
@@ -67,12 +70,12 @@ const notNan = (n: number): boolean => !isNaN(n);
  * @part example-images - example images block
 
  * @slot vviinn-onboarding-title - Title of onboarding section
- * @slot vviinn-onboarding-card-1-icon - Icon (or other graphics) on first onboarding slide
- * @slot vviinn-onboarding-card-1-text - Text content of first onboarding slide
- * @slot vviinn-onboarding-card-2-icon - Icon (or other graphics) on second onboarding slide
- * @slot vviinn-onboarding-card-2-text - Text content of second onboarding slide
- * @slot vviinn-onboarding-card-3-icon - Icon (or other graphics) on third onboarding slide
- * @slot vviinn-onboarding-card-3-text - Text content of third onboarding slide
+ * @slot onboarding-card-1-icon - Icon (or other graphics) on first onboarding slide
+ * @slot onboarding-card-1-text - Text content of first onboarding slide
+ * @slot onboarding-card-2-icon - Icon (or other graphics) on second onboarding slide
+ * @slot onboarding-card-2-text - Text content of second onboarding slide
+ * @slot onboarding-card-3-icon - Icon (or other graphics) on third onboarding slide
+ * @slot onboarding-card-3-text - Text content of third onboarding slide
  * @slot vviinn-example-images-title - Header of example images block
  * @slot vviinn-example-images-1 - First image in example images block
  * @slot vviinn-example-images-2 - Second image in example images block
@@ -103,16 +106,27 @@ export class VviinnVpsWidget {
   @Prop() locale: string = "de-DE";
   /** Campaign using for visual search */
   @Prop() campaignId?: string;
+  /** set true when showing the widget in button */
+  @Prop() showingInButton?: boolean = false;
 
   @State() slidePosition: number = 0;
   @State() width: number = 0;
   @State() wrongImageFormat: boolean = false;
   @State() trackingDeactivated: boolean = false;
 
+  /** @internal */
+  @Event({ bubbles: true, composed: true })
+  globalSlotsChanged: EventEmitter<any>;
+
   private overflow: string;
   private uiSessionId: string;
   private trackingApi: DefaultApi;
   private imageSource: SearchImageSource | null = null;
+
+  componentDidLoad() {
+    const slots = this.el.querySelectorAll("[slot]");
+    this.globalSlotsChanged.emit(Array.from(slots));
+  }
 
   setTrackingDeactivated = (result: EventConfirmation) => {
     if (result.status === "rejected") {
@@ -308,6 +322,8 @@ export class VviinnVpsWidget {
   render() {
     return (
       <Host>
+        {!this.showingInButton && <SlotSkeleton />}
+
         <vviinn-overlayed-modal
           class={{ "first-screen": this.slidePosition === 0 }}
           active={this.active}
