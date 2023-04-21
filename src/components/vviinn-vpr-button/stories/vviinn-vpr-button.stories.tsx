@@ -108,6 +108,11 @@ Default.args = {
   imageWidth: "300",
   sourceImage:
     "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg",
+  shadow: true,
+  modalTitle: true,
+  showSourceImage: true,
+  sourceImageShadow: true,
+  font: "Inter",
 };
 
 Default.parameters = {
