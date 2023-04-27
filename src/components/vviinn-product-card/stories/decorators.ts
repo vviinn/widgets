@@ -1,4 +1,4 @@
-export const productDecorator = (story: () => any) => `
+export const productDecorator = (story) => `
 <style>
 html, body, #root, #root-inner {
   width: 100%;

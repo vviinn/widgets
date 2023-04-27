@@ -1,4 +1,4 @@
-import { Meta, Story, Canvas } from '@storybook/addon-docs';
+import { Meta, Story, Canvas } from "@storybook/addon-docs";
 
 <Meta title="Installation/Frameworkless"></Meta>
 
@@ -10,8 +10,14 @@ Paste scripts to the `head` section of your page.<br />
 You don't need to include a script tag with `nomodule` attribute if you don't need to support browsers without JavaScript modules feature.
 
 ```html
-<script type="module" src="STORYBOOK_CDN_PATH/STORYBOOK_NPM_PACKAGE_NAME.esm.js"></script>
-<script nomodule src="STORYBOOK_CDN_PATH/STORYBOOK_NPM_PACKAGE_NAME.js"></script>
+<script
+  type="module"
+  src="STORYBOOK_CDN_PATH/STORYBOOK_NPM_PACKAGE_NAME.esm.js"
+></script>
+<script
+  nomodule
+  src="STORYBOOK_CDN_PATH/STORYBOOK_NPM_PACKAGE_NAME.js"
+></script>
 ```
 
 Then you will be able to use VPR or VPS widgets.
@@ -22,17 +28,16 @@ To use recommendations widget, insert a snippet below where you want to render t
 `token` and `product-id` attributes are only necessary, but you can tweak the widget with other attributes.
 
 ```html
-<STORYBOOK_VPR_WIDGET_TAG
-  token="YOUR_TOKEN"
-  product-id="YOUR_PRODUCT_ID">
+<STORYBOOK_VPR_WIDGET_TAG token="YOUR_TOKEN" product-id="YOUR_PRODUCT_ID">
 </STORYBOOK_VPR_WIDGET_TAG>
 ```
-[Check other attributes here ](/docs/components-visual-recommendations--default)
+
+[Check other attributes here ](?path=/story/widgets-visual-recommendations-widget--continuity)
 
 Also, it’s possible to create the component instance with DOM API:
 
 ```javascript
-const component = document.createElement('STORYBOOK_VPR_WIDGET_TAG');
+const component = document.createElement("STORYBOOK_VPR_WIDGET_TAG");
 component.token = YOUR_TOKEN;
 component.productId = YOUR_PRODUCT_ID;
 
@@ -48,12 +53,12 @@ The widget is implemented as a modal window, so you need to trigger it.
 <STORYBOOK_VPS_WIDGET_TAG token="YOUR_TOKEN"></STORYBOOK_VPS_WIDGET_TAG>
 ```
 
-[Check other attributes here ](/docs/components-visual-search-widget--default)
+[Check other attributes here ](?path=/story/widgets-visual-search-widget--default)
 
 You can also create a component instance with DOM API:
 
 ```javascript
-const component = document.createElement('STORYBOOK_VPS_WIDGET_TAG');
+const component = document.createElement("STORYBOOK_VPS_WIDGET_TAG");
 component.token = YOUR_TOKEN;
 
 document.append(component);
@@ -68,7 +73,8 @@ If you want to use widgets as ES6 modules you should install them from NPM.
 And then add it to your JavaScript code:
 
 ```javascript
-import { defineCustomElements } from 'STORYBOOK_NPM_PACKAGE_NAME';
+import { defineCustomElements } from "STORYBOOK_NPM_PACKAGE_NAME";
 defineCustomElements();
 ```
+
 After that, you can use both Recommendation or Search Widgets in an HTML template or with Javascript.

@@ -1,4 +1,4 @@
-export const gridDecorator = (story: () => any) => `
+export const gridDecorator = (story) => `
 <style>
   @media (min-width: 836px) {
     #root-inner {
@@ -18,7 +18,7 @@ export const gridDecorator = (story: () => any) => `
 ${story()}
 `;
 
-export const continuityDecorator = (story: () => any) => `
+export const continuityDecorator = (story) => `
 <style>
   @media (min-width: 836px) {
     #root-inner {

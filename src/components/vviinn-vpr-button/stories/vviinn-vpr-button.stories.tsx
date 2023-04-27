@@ -1,8 +1,6 @@
 import { argTypes } from "./args";
 
-type StoryArgs = typeof argTypes;
-
-const centerDecorator = (story: () => any) => `
+const centerDecorator = (story) => `
     <div style="display: grid;
                 position: absolute;
                 top: 0;
@@ -22,7 +20,7 @@ export default {
   argTypes,
 };
 
-const Template = (args: StoryArgs): any =>
+const Template = (args) =>
   `<style>
      body {
        font-family: ${args.font};
@@ -85,7 +83,9 @@ const Template = (args: StoryArgs): any =>
                       campaigns="${args.campaigns}"
                       image-width="${args.imageWidth}"
                       source-image="${args.sourceImage}"
-                      color="${args.color.toString().slice(1)}"
+                      color="${
+                        args.color ? args.color.toString().slice(1) : ""
+                      }"
                       source-image="${
                         args.showSourceImage
                           ? "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg"
@@ -100,6 +100,19 @@ Default.args = {
   productId: "4114460310",
   campaigns: "",
   color: "",
+  position: "bottom",
+  addStyle: true,
+  sidebarTitle: "Visually similar products",
+  modalScrollbar: false,
+  mode: "continuity",
+  imageWidth: "300",
+  sourceImage:
+    "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg",
+  shadow: true,
+  modalTitle: true,
+  showSourceImage: true,
+  sourceImageShadow: true,
+  font: "Inter",
 };
 
 Default.parameters = {
