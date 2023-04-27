@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.18.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.17.12...v2.18.0) (2023-04-27)
+
+
+### Features
+
+* Added currency to VPR button and VPR widget ([ba99fc8](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/ba99fc84880ff238c6a4e593159e04b9b3a05220))
+
 ### [2.17.12](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.17.11...v2.17.12) (2023-04-27)
 
 ### [2.17.11](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.17.10...v2.17.11) (2023-04-21)
