@@ -34,6 +34,7 @@ export class RecommendationsSidebar {
   @Prop() campaigns: string = "";
   @Prop() color: string;
   @Prop() imageWidth: number = 300;
+  @Prop() currencySign: string = "€";
 
   @State() state: SidebarState = "idle";
 
@@ -104,6 +105,7 @@ export class RecommendationsSidebar {
               showScroll={this.widgetScrollbar}
               campaigns={this.campaigns}
               color={this.color}
+              currencySign={this.currencySign}
             />
           </main>
         </aside>

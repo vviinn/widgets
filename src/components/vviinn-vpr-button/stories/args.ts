@@ -233,4 +233,10 @@ export const argTypes = {
       type: "text",
     },
   },
+  currencySign: {
+    name: "currency-sign",
+    control: {
+      type: "text",
+    },
+  },
 };

@@ -78,6 +78,7 @@ const Template = (args) =>
                       position="${args.position}"
                       add-style="${args.addStyle}"
                       sidebar-title="${args.sidebarTitle}"
+                      currency-sign="${args.currencySign}"
                       modal-scrollbar="${args.modalScrollbar}"
                       mode="${args.mode}"
                       campaigns="${args.campaigns}"
@@ -100,6 +101,7 @@ Default.args = {
   productId: "4114460310",
   campaigns: "",
   color: "",
+  currencySign: "€",
   position: "bottom",
   addStyle: true,
   sidebarTitle: "Visually similar products",
