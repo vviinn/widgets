@@ -161,45 +161,10 @@ const Template = (args) => `
       image-width="${args.imageWidth}"
       campaign-type="${args.campaignType}"
       campaigns="${args.campaigns}"
-      color="${args.color.slice(1)}"
+      color="${args.color ? args.color.slice(1) : ""}"
     >
     </vviinn-vpr-widget>
 `;
-
-export const Grid = Template.bind({});
-Grid.args = {
-  analyticsId: "UA-34442043-5",
-  apiPath: "https://api.vviinn.com",
-  campaigns: "",
-  campaignType: "VPR",
-  contentAlignment: "Centered",
-  imageWidth: 420,
-  mode: "grid",
-  color: "",
-  primaryTextColor: "#161616",
-  productId: "4114460310",
-  recommendationsGridProductsDesktop: 4,
-  recommendationsGridProductsMobile: 4,
-  recommendationsGridProductsTablet: 4,
-  secondaryTextColor: "#757575",
-  showScroll: true,
-  showTitle: true,
-  titleFontSize: 28,
-  blockTitle: "Recommended products",
-  cssUrl: "",
-  locale: "en-US",
-  currencySign: "€",
-  pricePrefix: "",
-  imageRatio: 1,
-  token:
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4",
-};
-
-Grid.argTypes = {
-  ...gridLayoutArgs,
-};
-
-Grid.decorators = [gridDecorator];
 
 export const Continuity = Template.bind({});
 Continuity.args = {
@@ -235,3 +200,38 @@ Continuity.decorators = [continuityDecorator];
 Continuity.argTypes = {
   ...continuityLayoutArgs,
 };
+
+export const Grid = Template.bind({});
+Grid.args = {
+  analyticsId: "UA-34442043-5",
+  apiPath: "https://api.vviinn.com",
+  campaigns: "",
+  campaignType: "VPR",
+  contentAlignment: "Centered",
+  imageWidth: 420,
+  mode: "grid",
+  color: "",
+  primaryTextColor: "#161616",
+  productId: "4114460310",
+  recommendationsGridProductsDesktop: 4,
+  recommendationsGridProductsMobile: 4,
+  recommendationsGridProductsTablet: 4,
+  secondaryTextColor: "#757575",
+  showScroll: true,
+  showTitle: true,
+  titleFontSize: 28,
+  blockTitle: "Recommended products",
+  cssUrl: "",
+  locale: "en-US",
+  currencySign: "€",
+  pricePrefix: "",
+  imageRatio: 1,
+  token:
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4",
+};
+
+Grid.argTypes = {
+  ...gridLayoutArgs,
+};
+
+Grid.decorators = [gridDecorator];

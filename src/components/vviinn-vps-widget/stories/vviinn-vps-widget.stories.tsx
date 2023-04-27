@@ -38,7 +38,7 @@ Default.args = {
 Default.storyName = "Modal Window";
 
 Default.decorators = [
-  (Story: () => any): string => `
+  (Story) => `
 <style>
 .sb-show-main.sb-main-padded {
   padding: unset;

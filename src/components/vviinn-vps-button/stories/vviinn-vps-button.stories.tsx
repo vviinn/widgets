@@ -7,7 +7,7 @@ export default {
     },
   },
   decorators: [
-    (story: () => any) => `
+    (story) => `
     <div style="display: grid;
                 position: absolute;
                 top: 0;
