@@ -35,6 +35,8 @@ export class RecommendationsSidebar {
   @Prop() color: string;
   @Prop() imageWidth: number = 300;
   @Prop() currencySign: string = "€";
+  /** @internal */
+  @Prop() apiPath: string | undefined = "https://api.vviinn.com";
 
   @State() state: SidebarState = "idle";
 
@@ -106,6 +108,7 @@ export class RecommendationsSidebar {
               campaigns={this.campaigns}
               color={this.color}
               currencySign={this.currencySign}
+              apiPath={this.apiPath}
             />
           </main>
         </aside>

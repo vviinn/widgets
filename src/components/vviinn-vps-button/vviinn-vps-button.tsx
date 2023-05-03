@@ -28,6 +28,7 @@ import { SlotSkeleton } from "../customized-slots";
  * @slot vviinn-teaser-text - Text on widget's main screen
  * @slot vviinn-image-upload-button-text - Title of upload button
  * @slot vviinn-privacy-badge-text - Text content of privacy notification block
+ * @slot vviinn-image-search-modal-title - Image search modal title
  *
  * @part brand - product brand.
  * @part deeplink - anchor element for title. Rendered only if "deeplink" property filled.
