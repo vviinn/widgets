@@ -154,8 +154,6 @@ export class VviinnCarousel {
       .map((value: number, index: number) => [value, index])
       .filter((x) => x[0] >= 0);
 
-    console.log();
-
     return indexedPositions.length > 0
       ? this.isRTL
         ? indexedPositions[indexedPositions.length - 1][1]
