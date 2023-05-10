@@ -17,6 +17,7 @@ export class VviinnSlider {
   @State() elementsCount: number = 0;
   @State() internalPosition: number = 0;
   @State() swipeStartPosition: O.Option<number> = O.none;
+  @State() isRTL: boolean = false;
 
   @Prop() showBullets: boolean = true;
   @Prop({ reflect: true }) position: number = 0;
@@ -25,8 +26,15 @@ export class VviinnSlider {
   @Watch("position")
   positionWatchHandler(newValue: number) {
     this.internalPosition = newValue;
-    this.el.style.setProperty("--position", `${newValue}`);
+    this.el.style.setProperty(
+      "--position",
+      `${this.calculatePosition(newValue)}`
+    );
     this.setActiveCssClassToSlide(newValue);
+  }
+
+  componentWillLoad() {
+    this.isRTL = document.dir === "rtl";
   }
 
   connectedCallback() {
@@ -59,7 +67,7 @@ export class VviinnSlider {
           <div
             class={{
               bullet: true,
-              active: i == this.internalPosition % this.elementsCount,
+              active: i == Math.abs(this.internalPosition) % this.elementsCount,
             }}
             onClick={() => this.goToSlide(i)}
           ></div>
@@ -70,6 +78,7 @@ export class VviinnSlider {
 
   private nextSlide() {
     this.internalPosition++;
+
     this.renderSlidePosition();
   }
 
@@ -83,12 +92,18 @@ export class VviinnSlider {
   }
 
   private renderSlidePosition() {
+    const position = this.internalPosition % this.elementsCount;
+
     requestAnimationFrame(() => {
       this.el.style.setProperty(
         "--position",
-        `${this.internalPosition % this.elementsCount}`
+        `${this.calculatePosition(position)}`
       );
     });
+  }
+
+  private calculatePosition(position: number) {
+    return this.isRTL ? position * -1 : position;
   }
 
   private handleKeyDown(event: KeyboardEvent) {
@@ -135,8 +150,7 @@ export class VviinnSlider {
           case -1:
             return this.prevSlide();
         }
-      }
-      )
+      })
     );
   }
 
@@ -154,21 +168,25 @@ export class VviinnSlider {
         </div>
         {this.showArrows
           ? [
-            <Arrow
-              kind="prev"
-              onClick={() => this.prevSlide()}
-              onKeyDown={(ev) => this.handleKeyDown(ev)}
-              tabindex={1}
-              disabled={false}
-            />,
-            <Arrow
-              kind="next"
-              onClick={() => this.nextSlide()}
-              onKeyDown={(ev) => this.handleKeyDown(ev)}
-              tabindex={0}
-              disabled={false}
-            />,
-          ]
+              <Arrow
+                kind="prev"
+                onClick={() =>
+                  this.isRTL ? this.nextSlide() : this.prevSlide()
+                }
+                onKeyDown={(ev) => this.handleKeyDown(ev)}
+                tabindex={1}
+                disabled={false}
+              />,
+              <Arrow
+                kind="next"
+                onClick={() =>
+                  this.isRTL ? this.prevSlide() : this.nextSlide()
+                }
+                onKeyDown={(ev) => this.handleKeyDown(ev)}
+                tabindex={0}
+                disabled={false}
+              />,
+            ]
           : null}
         {this.renderBullets()}
       </Host>

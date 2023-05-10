@@ -2,6 +2,7 @@
   display: grid;
   position: relative;
   justify-self: center;
+  direction: ltr;
 }
 
 img {
@@ -13,16 +14,16 @@ img {
 }
 
 .image-preloader {
-    background: rgba(0, 0, 0, 0.25);
-    border-radius: 4px;
-    bottom: 18px;
-    padding: 4px 6px;
-    pointer-events: none;
-    position: absolute;
-    right: 18px;
-    z-index: 4;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  bottom: 18px;
+  padding: 4px 6px;
+  pointer-events: none;
+  position: absolute;
+  right: 18px;
+  z-index: 4;
 }
 
 vviinn-preloader {
-    --preloader-size: 12px;
+  --preloader-size: 12px;
 }

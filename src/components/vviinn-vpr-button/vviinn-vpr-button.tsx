@@ -25,6 +25,8 @@ export class VviinnVprButton {
   @Prop() mode: CarouselMode = "continuity";
   @Prop() imageWidth: number = 300;
   @Prop() currencySign: string = "€";
+  /** @internal */
+  @Prop() apiPath: string | undefined = "https://api.vviinn.com";
 
   private sidebar: HTMLVviinnRecommendationsSidebarElement | null = null;
   private sidebarCloseListener: () => void = () => {
@@ -56,6 +58,8 @@ export class VviinnVprButton {
     sidebar.mode = this.position === "right" ? "grid" : this.mode;
     sidebar.imageWidth = this.imageWidth;
     sidebar.currencySign = this.currencySign;
+    sidebar.apiPath = this.apiPath;
+
     this.sidebar = sidebar;
 
     sidebar.addEventListener("modalClosed", this.sidebarCloseListener);

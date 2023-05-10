@@ -25,6 +25,7 @@ export class VviinnCarousel {
   @State() moveDirection: MoveDirection = "right";
   @State() contentGroups: HTMLElement[] = [];
   @State() activeContentGroup: number = 0;
+  @State() isRTL: boolean = false;
 
   @Prop() mode: CarouselMode = "continuity";
   @Prop() imageWidth: number = 140;
@@ -40,6 +41,10 @@ export class VviinnCarousel {
   private mutationObserver = new MutationObserver(() =>
     this.cloneSlottedContent()
   );
+
+  componentWillLoad() {
+    this.isRTL = document.dir === "rtl";
+  }
 
   connectedCallback() {
     this.setItemWidth();
@@ -149,7 +154,11 @@ export class VviinnCarousel {
       .map((value: number, index: number) => [value, index])
       .filter((x) => x[0] >= 0);
 
-    return indexedPositions.length > 0 ? indexedPositions[0][1] : 0;
+    return indexedPositions.length > 0
+      ? this.isRTL
+        ? indexedPositions[indexedPositions.length - 1][1]
+        : indexedPositions[0][1]
+      : 0;
   }
 
   private getContentNode(): HTMLElement {
@@ -298,6 +307,7 @@ export class VviinnCarousel {
     const numberOfBullets = Math.ceil(
       this.recommendations.length / this.getColumnsNumber()
     );
+
     const bulletsArray = Array.from(Array(numberOfBullets).keys());
 
     return bulletsArray.map((index) => (

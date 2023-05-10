@@ -1,4 +1,14 @@
-import { Component, Host, h, State, Event, EventEmitter, Prop } from "@stencil/core";
+import {
+  Component,
+  Host,
+  h,
+  State,
+  Event,
+  EventEmitter,
+  Prop,
+  Element,
+} from "@stencil/core";
+import { slotChangeListener } from "../customized-slots";
 
 @Component({
   tag: "vviinn-modal",
@@ -6,6 +16,8 @@ import { Component, Host, h, State, Event, EventEmitter, Prop } from "@stencil/c
   shadow: true,
 })
 export class VviinnModal {
+  @Element() el: HTMLElement;
+
   @Prop({ mutable: true, reflect: true }) active: boolean = false;
 
   @State() slider: boolean = false;
@@ -14,6 +26,10 @@ export class VviinnModal {
   @Event() modalClosed: EventEmitter<AnimationEvent>;
   /** Event emitted when secondary action button clicked */
   @Event() secondaryActionClicked: EventEmitter<void>;
+
+  componentWillLoad() {
+    slotChangeListener(this, this.el);
+  }
 
   private close() {
     this.active = false;
@@ -66,10 +82,16 @@ export class VviinnModal {
               />
             </svg>
           </button>
+
           <div class="title" part="title">
-            Bildsuche
+            <slot name="vviinn-image-search-modal-title">Bildsuche</slot>
           </div>
-          <button onClick={() => this.close()} class="close-button" part="close-button">
+
+          <button
+            onClick={() => this.close()}
+            class="close-button"
+            part="close-button"
+          >
             <svg
               width="16"
               height="16"
