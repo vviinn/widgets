@@ -19,13 +19,12 @@ export class VviinnModal {
   @Element() el: HTMLElement;
 
   @Prop({ mutable: true, reflect: true }) active: boolean = false;
+  @Prop() resetState: () => void;
 
   @State() slider: boolean = false;
 
   /** Event emitted when close button clicked and close animation ends */
   @Event() modalClosed: EventEmitter<AnimationEvent>;
-  /** Event emitted when secondary action button clicked */
-  @Event() secondaryActionClicked: EventEmitter<void>;
 
   componentWillLoad() {
     slotChangeListener(this, this.el);
@@ -55,10 +54,7 @@ export class VviinnModal {
         onAnimationEnd={(ev: AnimationEvent) => this.handleAnimationEnd(ev)}
       >
         <div class="head">
-          <button
-            part="secondary-action"
-            onClick={() => this.secondaryActionClicked.emit()}
-          >
+          <button part="secondary-action" onClick={() => this.resetState()}>
             <svg
               width="24"
               height="24"

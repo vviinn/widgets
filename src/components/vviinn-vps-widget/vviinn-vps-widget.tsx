@@ -328,7 +328,7 @@ export class VviinnVpsWidget {
         <vviinn-overlayed-modal
           class={{ "first-screen": this.slidePosition === 0 }}
           active={this.active}
-          onSecondaryActionClicked={() => this.resetState()}
+          resetState={this.resetState.bind(this)}
           onModalClosed={() => this.handleModalClose()}
           exportparts="secondary-action, title, close-button, example-images"
         >
