@@ -79,8 +79,6 @@ export class VviinnProductCard {
   @Event({ eventName: "VviinnProductClick", bubbles: true })
   vviinnProductClick: EventEmitter<ProductCardEventData>;
 
-  @Event() productImageLoaded: EventEmitter<string>;
-
   private productData: ProductCardEventData | null = null;
 
   private intersectionObserver = new IntersectionObserver(
@@ -112,7 +110,6 @@ export class VviinnProductCard {
   }
 
   componentDidLoad() {
-    console.log("LOADED", this.vviinnProductLoad);
     this.vviinnProductLoad.emit(this.productData);
     this.intersectionObserver.observe(this.el);
 
@@ -148,13 +145,7 @@ export class VviinnProductCard {
       lazy: false,
     };
 
-    return this.responsive
-      ? ResponsiveImage(props, () => this.emitImageLoaded())
-      : Image(props, () => this.emitImageLoaded());
-  }
-
-  private emitImageLoaded() {
-    this.productImageLoaded.emit(this.productId);
+    return this.responsive ? ResponsiveImage(props) : Image(props);
   }
 
   render() {
