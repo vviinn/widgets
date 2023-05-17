@@ -146,32 +146,29 @@ export class VviinnVpsWidget {
     }
   }
 
-  @Listen("recommendationView")
-  trackRecommendationView({ detail }: ProductCardEvent) {
+  @Listen("VviinnProductView")
+  trackProductView({ detail }: ProductCardEvent) {
     if (this.trackingDeactivated) return;
 
-    const recommendationViewEvent: ProductViewEvent = createProductViewVpsEvent(
-      {
-        session_id: this.uiSessionId,
-        ...detail,
-      }
-    );
+    const productViewEvent: ProductViewEvent = createProductViewVpsEvent({
+      session_id: this.uiSessionId,
+      ...detail,
+    });
     this.trackingApi
-      .trackEvent(recommendationViewEvent)
+      .trackEvent(productViewEvent)
       .then(this.setTrackingDeactivated);
   }
 
-  @Listen("recommendationClick")
-  async trackRecommendationClick({ detail }: ProductCardEvent) {
-    const recommendationClickEvent: ProductClickEvent =
-      createProductClickVpsEvent({
-        session_id: this.uiSessionId,
-        ...detail,
-      });
+  @Listen("VviinnProductClick")
+  async trackProductClick({ detail }: ProductCardEvent) {
+    const productClickEvent: ProductClickEvent = createProductClickVpsEvent({
+      session_id: this.uiSessionId,
+      ...detail,
+    });
 
     if (!this.trackingDeactivated) {
       await this.trackingApi
-        .trackEvent(this.trackingDeactivated ? null : recommendationClickEvent)
+        .trackEvent(this.trackingDeactivated ? null : productClickEvent)
         .then(this.setTrackingDeactivated);
     }
 

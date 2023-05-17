@@ -70,14 +70,14 @@ export class VviinnProductCard {
   @State() imageLoaded: boolean = false;
 
   /** Event fires ones when recommendation rendered on page */
-  @Event({ bubbles: true })
-  recommendationLoad: EventEmitter<ProductCardEventData>;
+  @Event({ eventName: "VviinnProductLoad", bubbles: true })
+  vviinnProductLoad: EventEmitter<ProductCardEventData>;
   /** Event fires ones when recommendation appears on the viewport */
-  @Event({ bubbles: true })
-  recommendationView: EventEmitter<ProductCardEventData>;
+  @Event({ eventName: "VviinnProductView", bubbles: true })
+  vviinnProductView: EventEmitter<ProductCardEventData>;
   /** Event fires ones when user click on deeplink */
-  @Event({ bubbles: true })
-  recommendationClick: EventEmitter<ProductCardEventData>;
+  @Event({ eventName: "VviinnProductClick", bubbles: true })
+  vviinnProductClick: EventEmitter<ProductCardEventData>;
 
   @Event() productImageLoaded: EventEmitter<string>;
 
@@ -106,13 +106,14 @@ export class VviinnProductCard {
         O.map((analytics) => analytics.sendImpression(this.getProduct()))
       );
 
-      this.recommendationView.emit(this.productData);
+      this.vviinnProductView.emit(this.productData);
       this.intersectionObserver.disconnect();
     }
   }
 
   componentDidLoad() {
-    this.recommendationLoad.emit(this.productData);
+    console.log("LOADED", this.vviinnProductLoad);
+    this.vviinnProductLoad.emit(this.productData);
     this.intersectionObserver.observe(this.el);
 
     const links = this.el.shadowRoot.querySelectorAll("a");
@@ -121,7 +122,7 @@ export class VviinnProductCard {
       link.addEventListener("click", (event) => {
         event.preventDefault();
         event.stopImmediatePropagation();
-        this.recommendationClick.emit(this.getProductData());
+        this.vviinnProductClick.emit(this.getProductData());
 
         pipe(
           getAnalyticsModule,

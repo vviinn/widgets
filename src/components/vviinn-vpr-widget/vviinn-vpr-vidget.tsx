@@ -141,32 +141,28 @@ export class VviinnVprWidget implements ComponentInterface {
     this.productImageLoadedSubject.next(detail);
   }
 
-  @Listen("recommendationView")
-  trackRecommendationView({ detail }: ProductCardEvent) {
+  @Listen("VviinnProductView")
+  trackProductView({ detail }: ProductCardEvent) {
     if (this.trackingDeactivated) return;
 
-    const recommendationViewEvent: ProductViewEvent = createProductViewVprEvent(
-      {
-        session_id: this.uiSessionId,
-        ...detail,
-      }
-    );
+    const productViewEvent: ProductViewEvent = createProductViewVprEvent({
+      session_id: this.uiSessionId,
+      ...detail,
+    });
     this.trackingApi
-      .trackEvent(recommendationViewEvent)
+      .trackEvent(productViewEvent)
       .then(this.setTrackingDeactivated);
   }
 
-  @Listen("recommendationClick")
-  async trackRecommendationClick({ detail }: ProductCardEvent) {
-    const recommendationClickEvent: ProductClickEvent =
-      createProductClickVprEvent({
-        session_id: this.uiSessionId,
-        ...detail,
-      });
-
+  @Listen("VviinnProductClick")
+  async trackProductClick({ detail }: ProductCardEvent) {
+    const productClickEvent: ProductClickEvent = createProductClickVprEvent({
+      session_id: this.uiSessionId,
+      ...detail,
+    });
     if (!this.trackingDeactivated) {
       await this.trackingApi
-        .trackEvent(recommendationClickEvent)
+        .trackEvent(productClickEvent)
         .then(this.setTrackingDeactivated);
     }
 
