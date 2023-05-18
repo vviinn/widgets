@@ -348,8 +348,10 @@ export class VviinnVpsWidget {
                 <vviinn-teaser class={{ hidden: this.haveErrors() }} />
                 <vviinn-image-selector
                   class={{ hidden: this.haveErrors() }}
-                  onImageSelected={() => this.handleImageSelection("upload")}
-                  onImageSelectedError={() => (this.wrongImageFormat = true)}
+                  onVviinnImageUpload={() =>
+                    this.handleImageSelection("upload")
+                  }
+                  onVviinnNoResult={() => (this.wrongImageFormat = true)}
                   part="select-image_button"
                 >
                   <span slot="upload-button-text" class="upload-button-content">
@@ -385,8 +387,10 @@ export class VviinnVpsWidget {
                   <vviinn-onboarding />
                   <vviinn-example-images
                     part="example-images"
-                    onImageSelected={() => this.handleImageSelection("example")}
-                    onImageSelectedError={() =>
+                    onVviinnImageUpload={() =>
+                      this.handleImageSelection("example")
+                    }
+                    onVviinnNoResult={() =>
                       this.resetScroll("onboarding-block", "smooth")
                     }
                   />

@@ -17,20 +17,10 @@ import { slotChangeListener } from "../customized-slots";
 export class VviinnExampleImages {
   @Element() el: HTMLElement;
 
-  @Event() imageSelected: EventEmitter<void>;
-  @Event() imageSelectedError: EventEmitter<void>;
+  @Event() vviinnImageUpload: EventEmitter<void>;
+  @Event() vviinnNoResult: EventEmitter<void>;
 
   private imagesBlock!: HTMLDivElement;
-
-  @Listen("exampleImageSelected")
-  handleImageSelection() {
-    this.imageSelected.emit();
-  }
-
-  @Listen("exampleImageError")
-  handleImageSelectionError() {
-    this.imageSelectedError.emit();
-  }
 
   componentWillLoad() {
     slotChangeListener(this, this.el);

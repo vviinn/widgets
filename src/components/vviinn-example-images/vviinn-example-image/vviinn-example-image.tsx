@@ -27,8 +27,8 @@ export class VviinnExampleImage {
 
   @State() selected: boolean = false;
 
-  @Event() exampleImageSelected: EventEmitter<void>;
-  @Event() exampleImageError: EventEmitter<void>;
+  @Event() vviinnImageUpload: EventEmitter<void>;
+  @Event() vviinnNoResult: EventEmitter<void>;
 
   private async selectImage() {
     this.selected = true;
@@ -39,8 +39,8 @@ export class VviinnExampleImage {
     pipe(
       processResult,
       E.match(
-        () => this.exampleImageError.emit(),
-        () => this.exampleImageSelected.emit()
+        () => this.vviinnNoResult.emit(),
+        () => this.vviinnImageUpload.emit()
       )
     );
 

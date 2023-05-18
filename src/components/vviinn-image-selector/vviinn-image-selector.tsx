@@ -16,9 +16,9 @@ import {
 })
 export class VviinnImageSelector {
   /** Event fires when user select file */
-  @Event() imageSelected: EventEmitter<void>;
+  @Event() vviinnImageUpload: EventEmitter<void>;
   /** Event fires when user select file that no .jpg, .jpeg or png */
-  @Event() imageSelectedError: EventEmitter<void>;
+  @Event() vviinnNoResult: EventEmitter<void>;
 
   private async handleInputChange(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -27,8 +27,8 @@ export class VviinnImageSelector {
     pipe(
       processingResult,
       E.match(
-        () => this.imageSelectedError.emit(),
-        () => this.imageSelected.emit()
+        () => this.vviinnNoResult.emit(),
+        () => this.vviinnImageUpload.emit()
       )
     );
 
