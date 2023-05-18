@@ -119,6 +119,9 @@ export class VviinnVpsWidget {
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
 
+  @Event({ eventName: "VviinnWidgetLoad", bubbles: true })
+  vviinnWidgetLoad: EventEmitter<CustomEvent>;
+
   private overflow: string;
   private uiSessionId: string;
   private trackingApi: DefaultApi;
@@ -217,6 +220,7 @@ export class VviinnVpsWidget {
   }
 
   componentWillLoad() {
+    this.vviinnWidgetLoad.emit();
     slotChangeListener(this, this.el);
   }
 

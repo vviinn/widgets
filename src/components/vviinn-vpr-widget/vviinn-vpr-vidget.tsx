@@ -104,6 +104,9 @@ export class VviinnVprWidget implements ComponentInterface {
 
   @Event() recommendationsLoaded: EventEmitter;
 
+  @Event({ eventName: "VviinnWidgetLoad", bubbles: true })
+  vviinnWidgetLoad: EventEmitter<CustomEvent>;
+
   private productIds: string[];
   private productImageLoadedSubject = new Subject();
   trackingApi: DefaultApi;
@@ -207,6 +210,7 @@ export class VviinnVprWidget implements ComponentInterface {
     state.pricePrefix = this.pricePrefix;
     state.currencySign = this.currencySign;
 
+    this.vviinnWidgetLoad.emit();
     this.getRecommendations();
   }
 
