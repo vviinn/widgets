@@ -71,6 +71,10 @@ export class VviinnVpsButton {
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
 
+  /** Event emitted when vps-button clicked */
+  @Event({ eventName: "VviinnWidgetOpen" })
+  vviinnWidgetOpen: EventEmitter<CustomEvent>;
+
   @Listen("vviinnWidgetClose")
   handleModalClosed() {
     this.pressed = false;
@@ -99,7 +103,10 @@ export class VviinnVpsButton {
         onKeyDown={(ev: KeyboardEvent) => this.handleKeyDown(ev)}
       >
         <vviinn-button
-          onClick={() => this.handleClick()}
+          onClick={() => {
+            this.handleClick();
+            this.vviinnWidgetOpen.emit();
+          }}
           addStyle={this.addStyle}
           part="vviinn-button"
         >

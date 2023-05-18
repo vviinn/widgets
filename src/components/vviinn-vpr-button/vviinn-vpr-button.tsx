@@ -1,4 +1,4 @@
-import { Component, Host, h, Prop } from "@stencil/core";
+import { Component, Host, h, Prop, Event, EventEmitter } from "@stencil/core";
 import { VisualSearchIcon } from "../vviinn-icons";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 
@@ -28,6 +28,10 @@ export class VviinnVprButton {
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
 
+  /** Event emitted when vpr-button clicked */
+  @Event({ eventName: "VviinnWidgetOpen" })
+  vviinnWidgetOpen: EventEmitter<CustomEvent>;
+
   private sidebar: HTMLVviinnRecommendationsSidebarElement | null = null;
   private sidebarCloseListener: () => void = () => {
     document.body.removeChild(this.sidebar);
@@ -35,7 +39,14 @@ export class VviinnVprButton {
 
   render() {
     return (
-      <Host onClick={(): void => this.handleClick()} role="button" tabindex="0">
+      <Host
+        onClick={(): void => {
+          this.handleClick();
+          this.vviinnWidgetOpen.emit();
+        }}
+        role="button"
+        tabindex="0"
+      >
         <vviinn-button addStyle={this.addStyle} part="vviinn-button">
           <slot>
             <VisualSearchIcon />
