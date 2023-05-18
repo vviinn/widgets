@@ -136,6 +136,11 @@ export class VviinnVprWidget implements ComponentInterface {
     this.getRecommendations();
   }
 
+  @Listen("VviinnProductLoad")
+  handleProductLoading({ detail }: ProductCardEvent) {
+    this.productImageLoadedSubject.next(detail.product);
+  }
+
   @Listen("VviinnProductView")
   trackProductView({ detail }: ProductCardEvent) {
     if (this.trackingDeactivated) return;
