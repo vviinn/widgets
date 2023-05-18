@@ -179,7 +179,7 @@ export class VviinnVpsWidget {
     window.location.href = product.deeplink;
   }
 
-  @Listen("cropperChanged")
+  @Listen("VviinnImageCrop")
   trachSearchAreaChanges() {
     if (this.trackingDeactivated) return;
 

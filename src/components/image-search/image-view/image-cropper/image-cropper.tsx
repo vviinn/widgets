@@ -38,7 +38,8 @@ export class ImageCropper {
 
   @State() handleMove: boolean = false;
 
-  @Event() cropperChanged: EventEmitter;
+  @Event({ eventName: "VviinnImageCrop" })
+  vviinnImageCrop: EventEmitter;
 
   private handlerMoveDirection: HandlerDirection | null;
   private mouseStartPoint: Point | undefined = undefined;
@@ -154,7 +155,7 @@ export class ImageCropper {
     document.removeEventListener("pointerup", this.pointerReleaseListener);
     this.mouseStartPoint = undefined;
     makeRectangularSearchRequest();
-    this.cropperChanged.emit();
+    this.vviinnImageCrop.emit();
   }
 
   private getStyleMap() {

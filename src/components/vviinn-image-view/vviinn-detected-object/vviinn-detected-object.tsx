@@ -29,7 +29,7 @@ export class VviinnDetectedObject {
   @Prop() detectedObject: ValueObject<DetectedObject>;
 
   @Event({ eventName: "VviinnSelectObject" })
-  selectObject: EventEmitter;
+  vviinnSelectObject: EventEmitter;
 
   private getObjectPosition(): [string, string] {
     return pipe(
@@ -61,7 +61,7 @@ export class VviinnDetectedObject {
     );
 
     makeRectangularSearchRequest();
-    this.selectObject.emit();
+    this.vviinnSelectObject.emit();
   }
 
   private isActive(): boolean {
