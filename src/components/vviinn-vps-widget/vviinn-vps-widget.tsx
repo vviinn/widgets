@@ -339,11 +339,11 @@ export class VviinnVpsWidget {
               >
                 <vviinn-wrong-format
                   class={{ hidden: !this.wrongImageFormat }}
-                  onActionClick={() => (this.wrongImageFormat = false)}
+                  handler={() => (this.wrongImageFormat = false)}
                 />
                 <vviinn-server-error
                   class={{ hidden: !imageSearchState.serverError }}
-                  onActionClick={() => (imageSearchState.serverError = false)}
+                  handler={() => (imageSearchState.serverError = false)}
                 />
                 <vviinn-teaser class={{ hidden: this.haveErrors() }} />
                 <vviinn-image-selector

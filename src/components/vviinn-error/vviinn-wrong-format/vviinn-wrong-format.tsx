@@ -1,4 +1,4 @@
-import { Component, Host, h, Event, EventEmitter } from "@stencil/core";
+import { Component, Host, h, Prop } from "@stencil/core";
 
 @Component({
   tag: "vviinn-wrong-format",
@@ -6,7 +6,7 @@ import { Component, Host, h, Event, EventEmitter } from "@stencil/core";
   shadow: true,
 })
 export class VviinnWrongFormat {
-  @Event() actionClick: EventEmitter<void>;
+  @Prop() handler: VoidFunction;
 
   render() {
     return (
@@ -17,7 +17,7 @@ export class VviinnWrongFormat {
             Leider unterstützen wir dieses Format nicht. Bitte laden Sie eine
             .jpg, .png oder .webp Bilddatei hoch.
           </span>
-          <button slot="action" onClick={() => this.actionClick.emit()}>
+          <button slot="action" onClick={this.handler}>
             Neues Bild hochladen
           </button>
         </vviinn-error>
