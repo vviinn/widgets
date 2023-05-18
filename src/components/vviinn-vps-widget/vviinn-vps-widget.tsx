@@ -191,7 +191,7 @@ export class VviinnVpsWidget {
     this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
   }
 
-  @Listen("detectedObjectClicked")
+  @Listen("VviinnSelectObject")
   trackDetectedObject() {
     if (this.trackingDeactivated) return;
 
