@@ -71,7 +71,7 @@ export class VviinnVpsButton {
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
 
-  @Listen("modalClosed")
+  @Listen("vviinnWidgetClose")
   handleModalClosed() {
     this.pressed = false;
   }

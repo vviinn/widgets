@@ -9,7 +9,7 @@ export class VviinnOverlayedModal {
   @Prop() active: boolean = false;
   @Prop() resetState: () => void;
 
-  @Event() modalClosed: EventEmitter<void>;
+  @Event() vviinnWidgetClose: EventEmitter<void>;
 
   render() {
     return (

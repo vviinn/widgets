@@ -4,7 +4,6 @@ import {
   h,
   Event,
   EventEmitter,
-  Listen,
   Element,
 } from "@stencil/core";
 import { slotChangeListener } from "../customized-slots";

@@ -62,13 +62,16 @@ export class VviinnVprButton {
 
     this.sidebar = sidebar;
 
-    sidebar.addEventListener("modalClosed", this.sidebarCloseListener);
+    sidebar.addEventListener("vviinnWidgetClose", this.sidebarCloseListener);
     document.body.append(this.sidebar);
   }
 
   disconnectedCallback() {
     if (!this.sidebar) return;
-    this.sidebar.removeEventListener("modalCLosed", this.sidebarCloseListener);
+    this.sidebar.removeEventListener(
+      "vviinnWidgetClose",
+      this.sidebarCloseListener
+    );
     document.body.removeChild(this.sidebar);
   }
 }

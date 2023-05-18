@@ -24,7 +24,7 @@ export class VviinnModal {
   @State() slider: boolean = false;
 
   /** Event emitted when close button clicked and close animation ends */
-  @Event() modalClosed: EventEmitter<AnimationEvent>;
+  @Event() vviinnWidgetClose: EventEmitter<AnimationEvent>;
 
   componentWillLoad() {
     slotChangeListener(this, this.el);
@@ -35,7 +35,7 @@ export class VviinnModal {
 
     setTimeout(
       () => {
-        this.modalClosed.emit();
+        this.vviinnWidgetClose.emit();
       },
       this.slider ? 500 : 0
     );

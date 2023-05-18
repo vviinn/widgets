@@ -40,7 +40,7 @@ export class RecommendationsSidebar {
 
   @State() state: SidebarState = "idle";
 
-  @Event() modalClosed: EventEmitter<void>;
+  @Event() vviinnWidgetClose: EventEmitter<void>;
 
   @Listen("click", { target: "body" })
   bodyClickListener(event: ClickEvent) {
@@ -130,6 +130,6 @@ export class RecommendationsSidebar {
     const isClosingAnimation = animationName.includes("slideOut");
     if (!isClosingAnimation) return;
 
-    this.modalClosed.emit();
+    this.vviinnWidgetClose.emit();
   }
 }
