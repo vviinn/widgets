@@ -203,7 +203,7 @@ export class VviinnVpsWidget {
     this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
   }
 
-  @Listen("filterSelected")
+  @Listen("VviinnSelectFilter")
   trackFilter({ detail }: CustomEvent<FilterAction>) {
     if (this.trackingDeactivated) return;
 
