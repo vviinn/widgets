@@ -33,7 +33,7 @@ import {
   createSearchEvent,
   createWidgetVpsEvent,
 } from "../../tracking";
-import { ProductCardEvent } from "../../recommendation/events";
+import { ProductCardEvent, WidgetEventData } from "../../recommendation/events";
 import { pipe } from "fp-ts/lib/function";
 import { SlotSkeleton } from "../customized-slots";
 
@@ -120,7 +120,7 @@ export class VviinnVpsWidget {
   globalSlotsChanged: EventEmitter<any>;
 
   @Event({ eventName: "VviinnWidgetLoad", bubbles: true })
-  vviinnWidgetLoad: EventEmitter<CustomEvent>;
+  vviinnWidgetLoad: EventEmitter<WidgetEventData>;
 
   private overflow: string;
   private uiSessionId: string;
@@ -220,7 +220,10 @@ export class VviinnVpsWidget {
   }
 
   componentWillLoad() {
-    this.vviinnWidgetLoad.emit();
+    this.vviinnWidgetLoad.emit({
+      campaignTypeId: "VPS",
+      campaignTitle: "Visual Search",
+    });
     slotChangeListener(this, this.el);
   }
 

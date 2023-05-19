@@ -7,4 +7,9 @@ export type ProductCardEventData = {
   campaignTitle: CampaignTitle;
 };
 
+export type WidgetEventData = {
+  campaignTypeId: CampaignTypeId;
+  campaignTitle: CampaignTitle;
+};
+
 export type ProductCardEvent = CustomEvent<ProductCardEventData>;

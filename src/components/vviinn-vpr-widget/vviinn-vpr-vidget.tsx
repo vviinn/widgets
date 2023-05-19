@@ -17,7 +17,7 @@ import * as TE from "fp-ts/lib/TaskEither";
 import * as E from "fp-ts/lib/Either";
 import { createBearAuthedHeader } from "./token-helpers";
 import { state } from "../../store/store";
-import { CampaignName } from "../../campaign/Campaign";
+import { CampaignName, campaignTypeTitle } from "../../campaign/Campaign";
 import { getRecommendationsService } from "../../campaign/CampaignService";
 import { imageSearchState } from "../../store/imageSearch.store";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
@@ -33,7 +33,7 @@ import {
   WidgetEvent,
 } from "vviinn-tracking-client-ts";
 import { createTrackingApi } from "../../openApi";
-import { ProductCardEvent } from "../../recommendation/events";
+import { ProductCardEvent, WidgetEventData } from "../../recommendation/events";
 import {
   createProductClickVprEvent,
   createProductViewVprEvent,
@@ -105,7 +105,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @Event() recommendationsLoaded: EventEmitter;
 
   @Event({ eventName: "VviinnWidgetLoad", bubbles: true })
-  vviinnWidgetLoad: EventEmitter<CustomEvent>;
+  vviinnWidgetLoad: EventEmitter<WidgetEventData>;
 
   private productIds: string[];
   private productImageLoadedSubject = new Subject();
@@ -210,7 +210,10 @@ export class VviinnVprWidget implements ComponentInterface {
     state.pricePrefix = this.pricePrefix;
     state.currencySign = this.currencySign;
 
-    this.vviinnWidgetLoad.emit();
+    this.vviinnWidgetLoad.emit({
+      campaignTypeId: this.campaignType,
+      campaignTitle: campaignTypeTitle[this.campaignType],
+    });
     this.getRecommendations();
   }
 
