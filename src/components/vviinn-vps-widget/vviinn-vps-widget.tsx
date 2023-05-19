@@ -442,6 +442,7 @@ export class VviinnVpsWidget {
                       imageWidth={160}
                       image={p.image.thumbnail ?? p.image.original}
                       part="product-card"
+                      campaignTypeId="VPS"
                       index={i}
                     />
                   ))}

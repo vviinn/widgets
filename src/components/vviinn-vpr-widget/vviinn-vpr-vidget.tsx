@@ -312,6 +312,7 @@ export class VviinnVprWidget implements ComponentInterface {
         salePrice={recommendation.price.sale}
         responsive={this.mode === "grid"}
         dimmedBackground={this.useDimmedBackgroundInCard()}
+        campaignTypeId={this.campaignType}
         index={index}
       />
     );
@@ -333,6 +334,7 @@ export class VviinnVprWidget implements ComponentInterface {
     return (
       <vviinn-carousel
         mode={this.mode}
+        campaignTypeId={this.campaignType}
         imageWidth={this.imageWidth}
         showScroll={this.showScroll}
         recommendations={this.recommendations}

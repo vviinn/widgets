@@ -1,5 +1,19 @@
 export type CampaignName = "VPR" | "VCS";
 
+export type CampaignTypeId = "VPR" | "VPS" | "VCS";
+export type CampaignTitle =
+  | "Similar Products"
+  | "Visual Search"
+  | "Products Cross-Selling";
+
+type CampaignTypeTitle = Record<CampaignTypeId, CampaignTitle>;
+
+export const campaignTypeTitle: CampaignTypeTitle = {
+  VPR: "Similar Products",
+  VPS: "Visual Search",
+  VCS: "Products Cross-Selling",
+};
+
 export interface VPR {
   readonly _tag: "VPR";
 }

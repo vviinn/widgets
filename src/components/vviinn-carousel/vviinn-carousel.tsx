@@ -2,6 +2,7 @@ import { Component, Host, h, Element, State, Prop } from "@stencil/core";
 import { chunksOf } from "fp-ts/lib/Array";
 import { Recommendation } from "../../recommendation/recommendation";
 import { ChevronIcon } from "../vviinn-icons";
+import { CampaignTypeId } from "../../campaign/Campaign";
 
 const COLUMNS_NUMBER_CSS_VAR = "--vviinn-carousel-columns-internal";
 const CAROUSEL_WIDTH_CSS_VAR = "--vviinn-carousel-content-width";
@@ -30,6 +31,7 @@ export class VviinnCarousel {
   @Prop() mode: CarouselMode = "continuity";
   @Prop() imageWidth: number = 140;
   @Prop() showScroll: boolean = true;
+  @Prop() campaignTypeId: CampaignTypeId;
 
   @Prop() recommendations: Recommendation[] = [];
 
@@ -267,6 +269,7 @@ export class VviinnCarousel {
         salePrice={recommendation.price.sale}
         responsive={this.mode === "grid"}
         dimmedBackground={this.mode === "continuity"}
+        campaignTypeId={this.campaignTypeId}
         index={rank}
       />
     );

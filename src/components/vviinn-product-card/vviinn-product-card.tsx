@@ -24,6 +24,7 @@ import {
 import { ProductCardEventData } from "../../recommendation/events";
 
 import styles from "./vviinn-product-card.css";
+import { CampaignTypeId, campaignTypeTitle } from "../../campaign/Campaign";
 
 /**
  * @part brand - product brand.
@@ -62,6 +63,7 @@ export class VviinnProductCard {
   @Prop() productType: string | undefined;
   @Prop() salePrice: number | undefined;
   @Prop() responsive: boolean = false;
+  @Prop() campaignTypeId: CampaignTypeId;
   @Prop() dimmedBackground: boolean = false;
 
   /** @internal */
@@ -94,6 +96,8 @@ export class VviinnProductCard {
     return {
       product: this.productId,
       rank: this.index,
+      campaignTypeId: this.campaignTypeId,
+      campaignTitle: campaignTypeTitle[this.campaignTypeId],
     };
   }
 
