@@ -119,7 +119,7 @@ export class VviinnVpsWidget {
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
 
-  @Event({ eventName: "VviinnWidgetLoad", bubbles: true })
+  @Event({ bubbles: true })
   vviinnWidgetLoad: EventEmitter<WidgetEventData>;
 
   private overflow: string;
@@ -149,7 +149,7 @@ export class VviinnVpsWidget {
     }
   }
 
-  @Listen("VviinnProductView")
+  @Listen("vviinnProductView")
   trackProductView({ detail }: ProductCardEvent) {
     if (this.trackingDeactivated) return;
 
@@ -162,7 +162,7 @@ export class VviinnVpsWidget {
       .then(this.setTrackingDeactivated);
   }
 
-  @Listen("VviinnProductClick")
+  @Listen("vviinnProductClick")
   async trackProductClick({ detail }: ProductCardEvent) {
     const productClickEvent: ProductClickEvent = createProductClickVpsEvent({
       session_id: this.uiSessionId,
@@ -182,7 +182,7 @@ export class VviinnVpsWidget {
     window.location.href = product.deeplink;
   }
 
-  @Listen("VviinnImageCrop")
+  @Listen("vviinnImageCrop")
   trachSearchAreaChanges() {
     if (this.trackingDeactivated) return;
 
@@ -194,7 +194,7 @@ export class VviinnVpsWidget {
     this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
   }
 
-  @Listen("VviinnSelectObject")
+  @Listen("vviinnSelectObject")
   trackDetectedObject() {
     if (this.trackingDeactivated) return;
 
@@ -206,7 +206,7 @@ export class VviinnVpsWidget {
     this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
   }
 
-  @Listen("VviinnSelectFilter")
+  @Listen("vviinnSelectFilter")
   trackFilter({ detail }: CustomEvent<FilterAction>) {
     if (this.trackingDeactivated) return;
 

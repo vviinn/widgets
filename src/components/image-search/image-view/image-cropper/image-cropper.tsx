@@ -38,8 +38,7 @@ export class ImageCropper {
 
   @State() handleMove: boolean = false;
 
-  @Event({ eventName: "VviinnImageCrop" })
-  vviinnImageCrop: EventEmitter;
+  @Event() vviinnImageCrop: EventEmitter;
 
   private handlerMoveDirection: HandlerDirection | null;
   private mouseStartPoint: Point | undefined = undefined;

@@ -6,20 +6,20 @@ import { Meta } from "@storybook/addon-docs";
 
 Every `vviinn-product-card` generates 3 events:
 
-- VviinnProductClick
-- VviinnProductView
-- VviinnProductLoad
+- vviinnProductClick
+- vviinnProductView
+- vviinnProductLoad
 
 Users can work and listen to these events with `document.addEventListener()`.
 
 ## Recommendation load and view
 
 ```javascript
-document.addEventListener("VviinnProductLoad", ({ detail }) => {
+document.addEventListener("vviinnProductLoad", ({ detail }) => {
   console.log(`Load product ${detail.title} with id ${detail.productId}`);
 });
 
-document.addEventListener("VviinnProductView", ({ detail }) => {
+document.addEventListener("vviinnProductView", ({ detail }) => {
   console.log(
     `Product ${detail.title} with id ${detail.productId} is rendered on viewport`
   );
@@ -31,7 +31,7 @@ document.addEventListener("VviinnProductView", ({ detail }) => {
 When a deeplink is clicked we dispatch `productClick()` and the user is redirected to the product. You can use [Beacon API](https://developer.mozilla.org/en-US/docs/Web/API/Beacon_API) to handle these events.
 
 ```javascript
-document.addEventListener("VviinnProductClick", ({ detail }) => {
+document.addEventListener("vviinnProductClick", ({ detail }) => {
   navigator.sendBeacon(some_url, detail);
 });
 ```
@@ -40,13 +40,13 @@ document.addEventListener("VviinnProductClick", ({ detail }) => {
 
 Here you can see a list of events that we have for Visual Search.
 
-- VviinnWidgetLoad
-- VviinnWidgetOpen
+- vviinnWidgetLoad
+- vviinnWidgetOpen
 - vviinnWidgetClose
 
 - vviinnImageUpload
-- VviinnImageCrop
-- VviinnSelectObject
-- VviinnSelectFilter
+- vviinnImageCrop
+- vviinnSelectObject
+- vviinnSelectFilter
 
 - vviinnNoResult

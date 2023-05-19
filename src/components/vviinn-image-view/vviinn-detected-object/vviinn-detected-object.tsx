@@ -27,9 +27,7 @@ import {
 })
 export class VviinnDetectedObject {
   @Prop() detectedObject: ValueObject<DetectedObject>;
-
-  @Event({ eventName: "VviinnSelectObject" })
-  vviinnSelectObject: EventEmitter;
+  @Event() vviinnSelectObject: EventEmitter;
 
   private getObjectPosition(): [string, string] {
     return pipe(

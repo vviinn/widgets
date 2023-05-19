@@ -104,7 +104,7 @@ export class VviinnVprWidget implements ComponentInterface {
 
   @Event() recommendationsLoaded: EventEmitter;
 
-  @Event({ eventName: "VviinnWidgetLoad", bubbles: true })
+  @Event({ bubbles: true })
   vviinnWidgetLoad: EventEmitter<WidgetEventData>;
 
   private productIds: string[];
@@ -139,12 +139,12 @@ export class VviinnVprWidget implements ComponentInterface {
     this.getRecommendations();
   }
 
-  @Listen("VviinnProductLoad")
+  @Listen("vviinnProductLoad")
   handleProductLoading({ detail }: ProductCardEvent) {
     this.productImageLoadedSubject.next(detail.product);
   }
 
-  @Listen("VviinnProductView")
+  @Listen("vviinnProductView")
   trackProductView({ detail }: ProductCardEvent) {
     if (this.trackingDeactivated) return;
 
@@ -157,7 +157,7 @@ export class VviinnVprWidget implements ComponentInterface {
       .then(this.setTrackingDeactivated);
   }
 
-  @Listen("VviinnProductClick")
+  @Listen("vviinnProductClick")
   async trackProductClick({ detail }: ProductCardEvent) {
     const productClickEvent: ProductClickEvent = createProductClickVprEvent({
       session_id: this.uiSessionId,

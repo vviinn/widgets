@@ -76,13 +76,13 @@ export class VviinnProductCard {
   @State() imageLoaded: boolean = false;
 
   /** Event fires ones when recommendation rendered on page */
-  @Event({ eventName: "VviinnProductLoad", bubbles: true })
+  @Event({ bubbles: true })
   vviinnProductLoad: EventEmitter<ProductCardEventData>;
   /** Event fires ones when recommendation appears on the viewport */
-  @Event({ eventName: "VviinnProductView", bubbles: true })
+  @Event({ bubbles: true })
   vviinnProductView: EventEmitter<ProductCardEventData>;
   /** Event fires ones when user click on deeplink */
-  @Event({ eventName: "VviinnProductClick", bubbles: true })
+  @Event({ bubbles: true })
   vviinnProductClick: EventEmitter<ProductCardEventData>;
 
   private productData: ProductCardEventData | null = null;

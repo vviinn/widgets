@@ -73,8 +73,7 @@ export class VviinnVpsButton {
   globalSlotsChanged: EventEmitter<any>;
 
   /** Event emitted when vps-button clicked */
-  @Event({ eventName: "VviinnWidgetOpen" })
-  vviinnWidgetOpen: EventEmitter<WidgetEventData>;
+  @Event() vviinnWidgetOpen: EventEmitter<WidgetEventData>;
 
   @Listen("vviinnWidgetClose")
   handleModalClosed() {

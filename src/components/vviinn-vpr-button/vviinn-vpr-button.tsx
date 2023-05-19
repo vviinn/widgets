@@ -29,8 +29,7 @@ export class VviinnVprButton {
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
 
   /** Event emitted when vpr-button clicked */
-  @Event({ eventName: "VviinnWidgetOpen" })
-  vviinnWidgetOpen: EventEmitter<CustomEvent>;
+  @Event() vviinnWidgetOpen: EventEmitter<CustomEvent>;
 
   private sidebar: HTMLVviinnRecommendationsSidebarElement | null = null;
   private sidebarCloseListener: () => void = () => {

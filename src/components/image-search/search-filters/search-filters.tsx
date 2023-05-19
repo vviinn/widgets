@@ -32,8 +32,7 @@ export class SearchFilters {
   @State() selectedCategoryId: string | null = null;
   @State() hideFilters: boolean = true;
 
-  @Event({ eventName: "VviinnSelectFilter" })
-  vviinnSelectFilter: EventEmitter<FilterAction>;
+  @Event() vviinnSelectFilter: EventEmitter<FilterAction>;
 
   private handleFilterSelection(filter: Link): void {
     return this.isFilterSelected(filter)
