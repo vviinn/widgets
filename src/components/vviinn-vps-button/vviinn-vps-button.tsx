@@ -11,6 +11,7 @@ import {
 } from "@stencil/core";
 import { CameraIcon } from "../vviinn-icons";
 import { SlotSkeleton } from "../customized-slots";
+import { WidgetEventData } from "../../recommendation/events";
 
 /**
  * @slot vviinn-onboarding-title - Title of onboarding section
@@ -73,7 +74,7 @@ export class VviinnVpsButton {
 
   /** Event emitted when vps-button clicked */
   @Event({ eventName: "VviinnWidgetOpen" })
-  vviinnWidgetOpen: EventEmitter<CustomEvent>;
+  vviinnWidgetOpen: EventEmitter<WidgetEventData>;
 
   @Listen("vviinnWidgetClose")
   handleModalClosed() {

@@ -24,7 +24,11 @@ import {
 import { ProductCardEventData } from "../../recommendation/events";
 
 import styles from "./vviinn-product-card.css";
-import { CampaignTypeId, campaignTypeTitle } from "../../campaign/Campaign";
+import {
+  CampaignTypeId,
+  WidgetType,
+  campaignTypeTitle,
+} from "../../campaign/Campaign";
 
 /**
  * @part brand - product brand.
@@ -92,12 +96,19 @@ export class VviinnProductCard {
     this.productData = this.getProductData();
   }
 
+  private getWidgetType() {
+    return this.campaignTypeId === "VPR" || this.campaignTypeId === "VCS"
+      ? ("VPR" as WidgetType)
+      : ("VPS" as WidgetType);
+  }
+
   private getProductData() {
     return {
       product: this.productId,
       rank: this.index,
+      widgetType: this.getWidgetType(),
       campaignTypeId: this.campaignTypeId,
-      campaignTitle: campaignTypeTitle[this.campaignTypeId],
+      campaignTypeTitle: campaignTypeTitle[this.campaignTypeId],
     };
   }
 

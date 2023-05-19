@@ -211,8 +211,9 @@ export class VviinnVprWidget implements ComponentInterface {
     state.currencySign = this.currencySign;
 
     this.vviinnWidgetLoad.emit({
+      widgetType: "VPR",
       campaignTypeId: this.campaignType,
-      campaignTitle: campaignTypeTitle[this.campaignType],
+      campaignTypeTitle: campaignTypeTitle[this.campaignType],
     });
     this.getRecommendations();
   }

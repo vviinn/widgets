@@ -221,8 +221,9 @@ export class VviinnVpsWidget {
 
   componentWillLoad() {
     this.vviinnWidgetLoad.emit({
+      widgetType: "VPS",
       campaignTypeId: "VPS",
-      campaignTitle: "Visual Search",
+      campaignTypeTitle: "Visual Search",
     });
     slotChangeListener(this, this.el);
   }
