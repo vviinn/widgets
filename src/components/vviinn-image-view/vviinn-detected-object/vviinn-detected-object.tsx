@@ -19,6 +19,10 @@ import {
   imageSearchState,
   makeRectangularSearchRequest,
 } from "../../../store/imageSearch.store";
+import {
+  BasicEventData,
+  DetectedObjectEventData,
+} from "../../../recommendation/events";
 
 @Component({
   tag: "vviinn-detected-object",
@@ -27,7 +31,8 @@ import {
 })
 export class VviinnDetectedObject {
   @Prop() detectedObject: ValueObject<DetectedObject>;
-  @Event() vviinnSelectObject: EventEmitter;
+  @Prop() basicEventData: BasicEventData;
+  @Event() vviinnSelectObject: EventEmitter<DetectedObjectEventData>;
 
   private getObjectPosition(): [string, string] {
     return pipe(
@@ -59,7 +64,10 @@ export class VviinnDetectedObject {
     );
 
     makeRectangularSearchRequest();
-    this.vviinnSelectObject.emit();
+    this.vviinnSelectObject.emit({
+      ...this.basicEventData,
+      detectedObject: this.detectedObject,
+    });
   }
 
   private isActive(): boolean {

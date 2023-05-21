@@ -48,7 +48,12 @@ export class VviinnImageView {
   private renderDetectedObject(
     object: ValueObject<DetectedObject>
   ): HTMLElement {
-    return <vviinn-detected-object detectedObject={object} />;
+    return (
+      <vviinn-detected-object
+        detectedObject={object}
+        basicEventData={this.basicEventData}
+      />
+    );
   }
 
   private renderImage(): HTMLImageElement | null {
