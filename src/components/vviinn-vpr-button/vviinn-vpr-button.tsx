@@ -9,6 +9,8 @@ import {
 } from "@stencil/core";
 import { VisualSearchIcon } from "../vviinn-icons";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
+import { WidgetEventData } from "../../recommendation/events";
+import { CampaignName, campaignTypeTitle } from "../../campaign/Campaign";
 
 /**
  *
@@ -29,6 +31,8 @@ export class VviinnVprButton {
   @Prop() modalScrollbar: boolean = false;
   /** comma-separated list of campaign-ids */
   @Prop() campaigns: string = "";
+  /** Campaign type */
+  @Prop() campaignType: CampaignName = "VPR";
   @Prop() color: string;
   @Prop() addStyle: boolean = true;
   @Prop() mode: CarouselMode = "continuity";
@@ -38,7 +42,7 @@ export class VviinnVprButton {
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
 
   /** Event emitted when vpr-button clicked */
-  @Event() vviinnWidgetOpen: EventEmitter<CustomEvent>;
+  @Event() vviinnWidgetOpen: EventEmitter<WidgetEventData>;
 
   private sidebar: HTMLVviinnRecommendationsSidebarElement | null = null;
   private sidebarCloseListener: () => void = () => {
@@ -50,7 +54,12 @@ export class VviinnVprButton {
       <Host
         onClick={(): void => {
           this.handleClick();
-          this.vviinnWidgetOpen.emit();
+          this.vviinnWidgetOpen.emit({
+            widgetType: "VPR",
+            campaignTypeId: this.campaignType,
+            campaignTypeTitle: campaignTypeTitle[this.campaignType],
+            id: this.el.id,
+          });
         }}
         role="button"
         tabindex="0"
@@ -78,7 +87,7 @@ export class VviinnVprButton {
     sidebar.imageWidth = this.imageWidth;
     sidebar.currencySign = this.currencySign;
     sidebar.apiPath = this.apiPath;
-    sidebar.buttonElementId = this.el.getAttribute("id");
+    sidebar.buttonElementId = this.el.id;
 
     this.sidebar = sidebar;
 

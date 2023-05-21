@@ -183,7 +183,7 @@ export class VviinnVprWidget implements ComponentInterface {
     state.apiPath = this.apiPath;
     state.currencySign = this.currencySign;
     state.locale = this.locale;
-    this.id = this.buttonElementId ?? this.el.getAttribute("id");
+    this.id = this.buttonElementId ?? this.el.id;
     this.uiSessionId = uuidv4();
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
 

@@ -238,7 +238,7 @@ export class VviinnVpsWidget {
 
     this.uiSessionId = uuidv4();
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
-    this.id = this.el.getAttribute("id");
+    this.id = this.el.id;
   }
 
   componentWillLoad() {
