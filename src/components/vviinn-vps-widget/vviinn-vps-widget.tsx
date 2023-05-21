@@ -427,7 +427,7 @@ export class VviinnVpsWidget {
               class={{ "results-page": true, active: this.slidePosition == 1 }}
             >
               <div class="image-wrapper">
-                <vviinn-image-view />
+                <vviinn-image-view basicEventData={this.getBasicEventData()} />
                 <div class="filters-wrapper">
                   <div class="filters">
                     {imageSearchState.filters.map((filter) => (

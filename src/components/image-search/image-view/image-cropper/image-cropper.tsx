@@ -23,6 +23,7 @@ import { pipe } from "fp-ts/lib/function";
 import * as O from "fp-ts/lib/Option";
 import { findTarget } from "../../../../dom";
 import styles from "./image-cropper.css";
+import { BasicEventData } from "../../../../recommendation/events";
 
 const MIN_SEARCHAREA_SIZE = 40;
 
@@ -35,10 +36,11 @@ export class ImageCropper {
   @Element() el: HTMLElement;
 
   @Prop() disabled: boolean = false;
+  @Prop() basicEventData: BasicEventData;
 
   @State() handleMove: boolean = false;
 
-  @Event() vviinnImageCrop: EventEmitter;
+  @Event() vviinnImageCrop: EventEmitter<BasicEventData>;
 
   private handlerMoveDirection: HandlerDirection | null;
   private mouseStartPoint: Point | undefined = undefined;
@@ -154,7 +156,7 @@ export class ImageCropper {
     document.removeEventListener("pointerup", this.pointerReleaseListener);
     this.mouseStartPoint = undefined;
     makeRectangularSearchRequest();
-    this.vviinnImageCrop.emit();
+    this.vviinnImageCrop.emit(this.basicEventData);
   }
 
   private getStyleMap() {
