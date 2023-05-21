@@ -20,7 +20,6 @@ import { createTrackingApi } from "../../openApi";
 import {
   DefaultApi,
   EventConfirmation,
-  FilterAction,
   ProductClickEvent,
   ProductViewEvent,
   SearchImageSource,
@@ -33,7 +32,11 @@ import {
   createSearchEvent,
   createWidgetVpsEvent,
 } from "../../tracking";
-import { ProductCardEvent, BasicEventData } from "../../recommendation/events";
+import {
+  ProductCardEvent,
+  BasicEventData,
+  SelectFilterEventData,
+} from "../../recommendation/events";
 import { pipe } from "fp-ts/lib/function";
 import { SlotSkeleton } from "../customized-slots";
 
@@ -219,14 +222,14 @@ export class VviinnVpsWidget {
   }
 
   @Listen("vviinnSelectFilter")
-  trackFilter({ detail }: CustomEvent<FilterAction>) {
+  trackFilter({ detail }: CustomEvent<SelectFilterEventData>) {
     if (this.trackingDeactivated) return;
 
     const searchEvent: WidgetEvent = createFilterEvent({
       session_id: this.uiSessionId,
       source: this.imageSource,
       kind: "category",
-      action: detail,
+      action: detail.action,
     });
     this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
   }
