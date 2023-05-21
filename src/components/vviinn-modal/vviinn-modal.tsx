@@ -9,6 +9,7 @@ import {
   Element,
 } from "@stencil/core";
 import { slotChangeListener } from "../customized-slots";
+import { WidgetEventData } from "../../recommendation/events";
 
 @Component({
   tag: "vviinn-modal",
@@ -20,11 +21,12 @@ export class VviinnModal {
 
   @Prop({ mutable: true, reflect: true }) active: boolean = false;
   @Prop() resetState: () => void;
+  @Prop() buttonElementId?: string;
 
   @State() slider: boolean = false;
 
   /** Event emitted when close button clicked and close animation ends */
-  @Event() vviinnWidgetClose: EventEmitter<AnimationEvent>;
+  @Event() vviinnWidgetClose: EventEmitter<WidgetEventData>;
 
   componentWillLoad() {
     slotChangeListener(this, this.el);
@@ -35,7 +37,12 @@ export class VviinnModal {
 
     setTimeout(
       () => {
-        this.vviinnWidgetClose.emit();
+        this.vviinnWidgetClose.emit({
+          widgetType: "VPS",
+          campaignTypeId: "VPS",
+          campaignTypeTitle: "Visual Search",
+          id: this.buttonElementId,
+        });
       },
       this.slider ? 500 : 0
     );

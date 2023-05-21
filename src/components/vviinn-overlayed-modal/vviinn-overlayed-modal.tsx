@@ -8,6 +8,7 @@ import { Component, Host, h, Prop, Event, EventEmitter } from "@stencil/core";
 export class VviinnOverlayedModal {
   @Prop() active: boolean = false;
   @Prop() resetState: () => void;
+  @Prop() buttonElementId?: string;
 
   @Event() vviinnWidgetClose: EventEmitter<void>;
 
@@ -15,7 +16,11 @@ export class VviinnOverlayedModal {
     return (
       <Host class={{ active: this.active }}>
         <vviinn-overlay>
-          <vviinn-modal resetState={this.resetState} active={this.active}>
+          <vviinn-modal
+            resetState={this.resetState}
+            active={this.active}
+            buttonElementId={this.buttonElementId}
+          >
             <slot>CONTENT</slot>
           </vviinn-modal>
         </vviinn-overlay>

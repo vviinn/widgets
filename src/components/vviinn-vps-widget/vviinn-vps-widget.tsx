@@ -341,6 +341,7 @@ export class VviinnVpsWidget {
           active={this.active}
           resetState={this.resetState.bind(this)}
           onVviinnWidgetClose={() => this.handleModalClose()}
+          buttonElementId={this.buttonElementId}
           exportparts="secondary-action, title, close-button, example-images"
         >
           <vviinn-slider showBullets={false} position={this.slidePosition}>

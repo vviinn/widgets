@@ -11,6 +11,8 @@ import {
 } from "@stencil/core";
 import { CrossIcon } from "../../vviinn-icons";
 import { CarouselMode } from "../../vviinn-carousel/vviinn-carousel";
+import { WidgetEventData } from "../../../recommendation/events";
+import { CampaignTypeId, campaignTypeTitle } from "../../../campaign/Campaign";
 
 type SidebarState = "idle" | "open" | "closed";
 type ClickEvent = Event & { clientX: number; clientY: number };
@@ -32,6 +34,7 @@ export class RecommendationsSidebar {
   @Prop() mode: CarouselMode = "continuity";
   /** comma-separated list of campaign-ids */
   @Prop() campaigns: string = "";
+  @Prop() campaignType: CampaignTypeId;
   @Prop() color: string;
   @Prop() imageWidth: number = 300;
   @Prop() currencySign: string = "€";
@@ -41,7 +44,7 @@ export class RecommendationsSidebar {
 
   @State() state: SidebarState = "idle";
 
-  @Event() vviinnWidgetClose: EventEmitter<void>;
+  @Event() vviinnWidgetClose: EventEmitter<WidgetEventData>;
 
   @Listen("click", { target: "body" })
   bodyClickListener(event: ClickEvent) {
@@ -132,6 +135,11 @@ export class RecommendationsSidebar {
     const isClosingAnimation = animationName.includes("slideOut");
     if (!isClosingAnimation) return;
 
-    this.vviinnWidgetClose.emit();
+    this.vviinnWidgetClose.emit({
+      widgetType: "VPR",
+      campaignTypeId: this.campaignType,
+      campaignTypeTitle: campaignTypeTitle[this.campaignType],
+      id: this.buttonElementId,
+    });
   }
 }

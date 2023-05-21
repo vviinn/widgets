@@ -106,10 +106,10 @@ export class VviinnVpsButton {
           onClick={() => {
             this.handleClick();
             this.vviinnWidgetOpen.emit({
-              id: this.el.id,
               widgetType: "VPS",
               campaignTypeId: "VPS",
               campaignTypeTitle: "Visual Search",
+              id: this.el.id,
             });
           }}
           addStyle={this.addStyle}

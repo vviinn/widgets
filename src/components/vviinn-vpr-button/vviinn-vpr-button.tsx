@@ -82,6 +82,7 @@ export class VviinnVprButton {
     sidebar.sourceImage = this.sourceImage;
     sidebar.widgetScrollbar = this.modalScrollbar;
     sidebar.campaigns = this.campaigns;
+    sidebar.campaignType = this.campaignType;
     sidebar.color = this.color;
     sidebar.mode = this.position === "right" ? "grid" : this.mode;
     sidebar.imageWidth = this.imageWidth;
