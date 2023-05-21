@@ -11,7 +11,7 @@ import {
 } from "@stencil/core";
 import { CrossIcon } from "../../vviinn-icons";
 import { CarouselMode } from "../../vviinn-carousel/vviinn-carousel";
-import { WidgetEventData } from "../../../recommendation/events";
+import { BasicEventData } from "../../../recommendation/events";
 import { CampaignTypeId, campaignTypeTitle } from "../../../campaign/Campaign";
 
 type SidebarState = "idle" | "open" | "closed";
@@ -44,7 +44,7 @@ export class RecommendationsSidebar {
 
   @State() state: SidebarState = "idle";
 
-  @Event() vviinnWidgetClose: EventEmitter<WidgetEventData>;
+  @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
 
   @Listen("click", { target: "body" })
   bodyClickListener(event: ClickEvent) {

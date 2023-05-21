@@ -9,7 +9,7 @@ import {
 } from "@stencil/core";
 import { VisualSearchIcon } from "../vviinn-icons";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
-import { WidgetEventData } from "../../recommendation/events";
+import { BasicEventData } from "../../recommendation/events";
 import { CampaignName, campaignTypeTitle } from "../../campaign/Campaign";
 
 /**
@@ -42,7 +42,7 @@ export class VviinnVprButton {
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
 
   /** Event emitted when vpr-button clicked */
-  @Event() vviinnWidgetOpen: EventEmitter<WidgetEventData>;
+  @Event() vviinnWidgetOpen: EventEmitter<BasicEventData>;
 
   private sidebar: HTMLVviinnRecommendationsSidebarElement | null = null;
   private sidebarCloseListener: () => void = () => {

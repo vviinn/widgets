@@ -9,7 +9,7 @@ import {
   Element,
 } from "@stencil/core";
 import { slotChangeListener } from "../customized-slots";
-import { WidgetEventData } from "../../recommendation/events";
+import { BasicEventData } from "../../recommendation/events";
 
 @Component({
   tag: "vviinn-modal",
@@ -26,7 +26,7 @@ export class VviinnModal {
   @State() slider: boolean = false;
 
   /** Event emitted when close button clicked and close animation ends */
-  @Event() vviinnWidgetClose: EventEmitter<WidgetEventData>;
+  @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
 
   componentWillLoad() {
     slotChangeListener(this, this.el);

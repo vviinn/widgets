@@ -1,10 +1,11 @@
-import { Component, Host, h, Event, EventEmitter } from "@stencil/core";
+import { Component, Host, h, Event, EventEmitter, Prop } from "@stencil/core";
 import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/lib/function";
 import {
   imageSearchState,
   processSelectedFile,
 } from "../../store/imageSearch.store";
+import { BasicEventData } from "../../recommendation/events";
 
 /**
  * @part button -  button look and feel
@@ -16,9 +17,11 @@ import {
 })
 export class VviinnImageSelector {
   /** Event fires when user select file */
-  @Event() vviinnImageUpload: EventEmitter<void>;
+  @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
   /** Event fires when user select file that no .jpg, .jpeg or png */
-  @Event() vviinnNoResult: EventEmitter<void>;
+  @Event() vviinnNoResult: EventEmitter<BasicEventData | void>;
+
+  @Prop() basicEventData: BasicEventData;
 
   private async handleInputChange(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -28,7 +31,7 @@ export class VviinnImageSelector {
       processingResult,
       E.match(
         () => this.vviinnNoResult.emit(),
-        () => this.vviinnImageUpload.emit()
+        () => this.vviinnImageUpload.emit(this.basicEventData)
       )
     );
 

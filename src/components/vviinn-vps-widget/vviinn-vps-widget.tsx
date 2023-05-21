@@ -33,7 +33,7 @@ import {
   createSearchEvent,
   createWidgetVpsEvent,
 } from "../../tracking";
-import { ProductCardEvent, WidgetEventData } from "../../recommendation/events";
+import { ProductCardEvent, BasicEventData } from "../../recommendation/events";
 import { pipe } from "fp-ts/lib/function";
 import { SlotSkeleton } from "../customized-slots";
 
@@ -122,7 +122,7 @@ export class VviinnVpsWidget {
   globalSlotsChanged: EventEmitter<any>;
 
   @Event({ bubbles: true })
-  vviinnWidgetLoad: EventEmitter<WidgetEventData>;
+  vviinnWidgetLoad: EventEmitter<BasicEventData>;
 
   private overflow: string;
   private uiSessionId: string;
@@ -139,6 +139,15 @@ export class VviinnVpsWidget {
     if (result.status === "rejected") {
       this.trackingDeactivated = true;
     }
+  };
+
+  getBasicEventData = (): BasicEventData => {
+    return {
+      widgetType: "VPS",
+      campaignTypeId: "VPS",
+      campaignTypeTitle: "Visual Search",
+      id: this.buttonElementId ?? this.id,
+    };
   };
 
   @Watch("active")
@@ -367,6 +376,7 @@ export class VviinnVpsWidget {
                     this.handleImageSelection("upload")
                   }
                   onVviinnNoResult={() => (this.wrongImageFormat = true)}
+                  basicEventData={this.getBasicEventData()}
                   part="select-image_button"
                 >
                   <span slot="upload-button-text" class="upload-button-content">
@@ -408,6 +418,7 @@ export class VviinnVpsWidget {
                     onVviinnNoResult={() =>
                       this.resetScroll("onboarding-block", "smooth")
                     }
+                    basicEventData={this.getBasicEventData()}
                   />
                 </div>
               </div>

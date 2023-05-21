@@ -33,7 +33,7 @@ import {
   WidgetEvent,
 } from "vviinn-tracking-client-ts";
 import { createTrackingApi } from "../../openApi";
-import { ProductCardEvent, WidgetEventData } from "../../recommendation/events";
+import { ProductCardEvent, BasicEventData } from "../../recommendation/events";
 import {
   createProductClickVprEvent,
   createProductViewVprEvent,
@@ -106,7 +106,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @Event() recommendationsLoaded: EventEmitter;
 
   @Event({ bubbles: true })
-  vviinnWidgetLoad: EventEmitter<WidgetEventData>;
+  vviinnWidgetLoad: EventEmitter<BasicEventData>;
 
   private productIds: string[];
   private productImageLoadedSubject = new Subject();

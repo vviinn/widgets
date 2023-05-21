@@ -11,7 +11,7 @@ import {
 } from "@stencil/core";
 import { CameraIcon } from "../vviinn-icons";
 import { SlotSkeleton } from "../customized-slots";
-import { WidgetEventData } from "../../recommendation/events";
+import { BasicEventData } from "../../recommendation/events";
 
 /**
  * @slot vviinn-onboarding-title - Title of onboarding section
@@ -73,7 +73,7 @@ export class VviinnVpsButton {
   globalSlotsChanged: EventEmitter<any>;
 
   /** Event emitted when vps-button clicked */
-  @Event() vviinnWidgetOpen: EventEmitter<WidgetEventData>;
+  @Event() vviinnWidgetOpen: EventEmitter<BasicEventData>;
 
   @Listen("vviinnWidgetClose")
   handleModalClosed() {
