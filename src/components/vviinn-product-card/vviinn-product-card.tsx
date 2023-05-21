@@ -69,6 +69,8 @@ export class VviinnProductCard {
   @Prop() responsive: boolean = false;
   @Prop() campaignTypeId: CampaignTypeId;
   @Prop() dimmedBackground: boolean = false;
+  @Prop() widgetElementId?: string;
+  @Prop() buttonElementId?: string;
 
   /** @internal */
   @Prop() index: number = 0;
@@ -109,6 +111,7 @@ export class VviinnProductCard {
       widgetType: this.getWidgetType(),
       campaignTypeId: this.campaignTypeId,
       campaignTypeTitle: campaignTypeTitle[this.campaignTypeId],
+      id: this.buttonElementId ?? this.widgetElementId,
     };
   }
 
@@ -134,7 +137,7 @@ export class VviinnProductCard {
       link.addEventListener("click", (event) => {
         event.preventDefault();
         event.stopImmediatePropagation();
-        this.vviinnProductClick.emit(this.getProductData());
+        this.vviinnProductClick.emit(this.productData);
 
         pipe(
           getAnalyticsModule,

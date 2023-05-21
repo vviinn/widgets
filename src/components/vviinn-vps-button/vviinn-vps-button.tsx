@@ -124,6 +124,7 @@ export class VviinnVpsButton {
           exportparts="brand, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, product-card, example-images"
           campaignId={this.campaignId}
           showingInButton={true}
+          buttonElementId={this.el.getAttribute("id")}
         />
       </Host>
     );

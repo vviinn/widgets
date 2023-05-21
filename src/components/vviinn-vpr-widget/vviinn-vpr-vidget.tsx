@@ -97,6 +97,7 @@ export class VviinnVprWidget implements ComponentInterface {
 
   @Prop() showScroll = true;
   @Prop() cssUrl: string | null = null;
+  @Prop() buttonElementId?: string;
 
   @State() recommendations: Recommendation[] = [];
   @State() loaded: boolean = false;
@@ -109,6 +110,8 @@ export class VviinnVprWidget implements ComponentInterface {
 
   private productIds: string[];
   private productImageLoadedSubject = new Subject();
+  private id?: string;
+
   trackingApi: DefaultApi;
   uiSessionId: string;
 
@@ -180,6 +183,7 @@ export class VviinnVprWidget implements ComponentInterface {
     state.apiPath = this.apiPath;
     state.currencySign = this.currencySign;
     state.locale = this.locale;
+    this.id = this.buttonElementId ?? this.el.getAttribute("id");
     this.uiSessionId = uuidv4();
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
 
@@ -214,6 +218,7 @@ export class VviinnVprWidget implements ComponentInterface {
       widgetType: "VPR",
       campaignTypeId: this.campaignType,
       campaignTypeTitle: campaignTypeTitle[this.campaignType],
+      id: this.id,
     });
     this.getRecommendations();
   }
@@ -318,6 +323,7 @@ export class VviinnVprWidget implements ComponentInterface {
         dimmedBackground={this.useDimmedBackgroundInCard()}
         campaignTypeId={this.campaignType}
         index={index}
+        widgetElementId={this.id}
       />
     );
   }
@@ -342,6 +348,7 @@ export class VviinnVprWidget implements ComponentInterface {
         imageWidth={this.imageWidth}
         showScroll={this.showScroll}
         recommendations={this.recommendations}
+        widgetElementId={this.id}
       ></vviinn-carousel>
     );
   }

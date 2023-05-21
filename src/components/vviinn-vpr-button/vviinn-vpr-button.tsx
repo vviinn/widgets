@@ -1,4 +1,12 @@
-import { Component, Host, h, Prop, Event, EventEmitter } from "@stencil/core";
+import {
+  Component,
+  Host,
+  h,
+  Prop,
+  Event,
+  EventEmitter,
+  Element,
+} from "@stencil/core";
 import { VisualSearchIcon } from "../vviinn-icons";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 
@@ -12,6 +20,7 @@ import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
   shadow: true,
 })
 export class VviinnVprButton {
+  @Element() el: HTMLElement;
   @Prop() token: string;
   @Prop() productId: string;
   @Prop() position: "bottom" | "right" = "bottom";
@@ -69,6 +78,7 @@ export class VviinnVprButton {
     sidebar.imageWidth = this.imageWidth;
     sidebar.currencySign = this.currencySign;
     sidebar.apiPath = this.apiPath;
+    sidebar.buttonElementId = this.el.getAttribute("id");
 
     this.sidebar = sidebar;
 

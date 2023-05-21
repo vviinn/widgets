@@ -32,6 +32,7 @@ export class VviinnCarousel {
   @Prop() imageWidth: number = 140;
   @Prop() showScroll: boolean = true;
   @Prop() campaignTypeId: CampaignTypeId;
+  @Prop() widgetElementId?: string;
 
   @Prop() recommendations: Recommendation[] = [];
 
@@ -271,6 +272,7 @@ export class VviinnCarousel {
         dimmedBackground={this.mode === "continuity"}
         campaignTypeId={this.campaignTypeId}
         index={rank}
+        widgetElementId={this.widgetElementId}
       />
     );
   }

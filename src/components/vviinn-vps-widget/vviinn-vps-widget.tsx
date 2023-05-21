@@ -107,8 +107,10 @@ export class VviinnVpsWidget {
   @Prop() locale: string = "de-DE";
   /** Campaign using for visual search */
   @Prop() campaignId?: string;
-  /** set true when showing the widget in button */
+  /** Set true when showing the widget in button */
   @Prop() showingInButton?: boolean = false;
+  /** Element Id, passed from vps-button */
+  @Prop() buttonElementId?: string;
 
   @State() slidePosition: number = 0;
   @State() width: number = 0;
@@ -126,6 +128,7 @@ export class VviinnVpsWidget {
   private uiSessionId: string;
   private trackingApi: DefaultApi;
   private imageSource: SearchImageSource | null = null;
+  private id?: string;
 
   componentDidLoad() {
     const slots = this.el.querySelectorAll("[slot]");
@@ -219,15 +222,6 @@ export class VviinnVpsWidget {
     this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
   }
 
-  componentWillLoad() {
-    this.vviinnWidgetLoad.emit({
-      widgetType: "VPS",
-      campaignTypeId: "VPS",
-      campaignTypeTitle: "Visual Search",
-    });
-    slotChangeListener(this, this.el);
-  }
-
   connectedCallback() {
     state.apiPath = this.apiPath;
     state.currencySign = this.currencySign;
@@ -244,6 +238,18 @@ export class VviinnVpsWidget {
 
     this.uiSessionId = uuidv4();
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
+    this.id = this.el.getAttribute("id");
+  }
+
+  componentWillLoad() {
+    slotChangeListener(this, this.el);
+
+    this.vviinnWidgetLoad.emit({
+      widgetType: "VPS",
+      campaignTypeId: "VPS",
+      campaignTypeTitle: "Visual Search",
+      id: this.buttonElementId ?? this.id,
+    });
   }
 
   private trackOpenEvent() {
@@ -448,6 +454,8 @@ export class VviinnVpsWidget {
                       part="product-card"
                       campaignTypeId="VPS"
                       index={i}
+                      widgetElementId={this.id}
+                      buttonElementId={this.buttonElementId}
                     />
                   ))}
                 </div>

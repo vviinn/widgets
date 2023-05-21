@@ -37,6 +37,7 @@ export class RecommendationsSidebar {
   @Prop() currencySign: string = "€";
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
+  @Prop() buttonElementId?: string;
 
   @State() state: SidebarState = "idle";
 
@@ -109,6 +110,7 @@ export class RecommendationsSidebar {
               color={this.color}
               currencySign={this.currencySign}
               apiPath={this.apiPath}
+              buttonElementId={this.buttonElementId}
             />
           </main>
         </aside>
