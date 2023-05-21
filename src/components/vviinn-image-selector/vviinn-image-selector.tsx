@@ -19,7 +19,7 @@ export class VviinnImageSelector {
   /** Event fires when user select file */
   @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
   /** Event fires when user select file that no .jpg, .jpeg or png */
-  @Event() vviinnNoResult: EventEmitter<BasicEventData | void>;
+  @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
   @Prop() basicEventData: BasicEventData;
 
@@ -30,7 +30,7 @@ export class VviinnImageSelector {
     pipe(
       processingResult,
       E.match(
-        () => this.vviinnNoResult.emit(),
+        () => this.vviinnNoResult.emit(this.basicEventData),
         () => this.vviinnImageUpload.emit(this.basicEventData)
       )
     );

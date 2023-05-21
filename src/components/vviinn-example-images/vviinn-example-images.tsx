@@ -18,8 +18,8 @@ import { BasicEventData } from "../../recommendation/events";
 export class VviinnExampleImages {
   @Element() el: HTMLElement;
 
-  @Event() vviinnImageUpload: EventEmitter<void>;
-  @Event() vviinnNoResult: EventEmitter<void>;
+  @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
+  @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
   @Prop() basicEventData: BasicEventData;
 
