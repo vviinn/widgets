@@ -299,16 +299,16 @@ export class VviinnVprWidget implements ComponentInterface {
         }}
         aria-hidden={this.loaded ? "false" : "true"}
       >
-        {this.recommendations.length ? (
-          <Fragment>
-            {this.renderExternalCSS()}
-            <style>{state.fallbackStyles}</style>
-            <h2 part="recommendations-title">{this.blockTitle}</h2>
-            {this.useCarousel ? this.renderCarousel() : this.renderResults()}
-          </Fragment>
-        ) : (
-          ""
-        )}
+        <Fragment>
+          {this.renderExternalCSS()}
+          <style>{state.fallbackStyles}</style>
+          <h2 part="recommendations-title">{this.blockTitle}</h2>
+          {this.recommendations.length
+            ? this.useCarousel
+              ? this.renderCarousel()
+              : this.renderResults()
+            : "No Results! Please, try again later."}
+        </Fragment>
       </Host>
     );
   }
