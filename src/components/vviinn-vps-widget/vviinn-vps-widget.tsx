@@ -431,7 +431,10 @@ export class VviinnVpsWidget {
                 <div class="filters-wrapper">
                   <div class="filters">
                     {imageSearchState.filters.map((filter) => (
-                      <search-filters filter={filter} />
+                      <search-filters
+                        filter={filter}
+                        basicEventData={this.getBasicEventData()}
+                      />
                     ))}
                   </div>
                 </div>

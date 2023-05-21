@@ -8,11 +8,14 @@ import {
   Event,
   EventEmitter,
 } from "@stencil/core";
-import { FilterAction } from "vviinn-tracking-client-ts";
 import { Link } from "../../../network/ion/Link";
 import { SearchSessionFilter } from "../../../searchSession/searchSession";
 import { imageSearchState } from "../../../store/imageSearch.store";
 import { CheckIcon } from "../../vviinn-icons";
+import {
+  BasicEventData,
+  SelectFilterEventData,
+} from "../../../recommendation/events";
 
 const FILTERS_COUNT: number = 5;
 const ACTIVE_FILTER_CLASSNAME = ".filter.active";
@@ -29,10 +32,12 @@ export class SearchFilters {
   @Element() el: HTMLElement;
 
   @Prop() filter: SearchSessionFilter | null = null;
+  @Prop() basicEventData: BasicEventData;
+
   @State() selectedCategoryId: string | null = null;
   @State() hideFilters: boolean = true;
 
-  @Event() vviinnSelectFilter: EventEmitter<FilterAction>;
+  @Event() vviinnSelectFilter: EventEmitter<SelectFilterEventData>;
 
   private handleFilterSelection(filter: Link): void {
     return this.isFilterSelected(filter)
@@ -43,15 +48,23 @@ export class SearchFilters {
   private selectFilter(filter: Link) {
     this.selectedCategoryId = getFilterId(filter);
     imageSearchState.activeIonLink = filter;
-    this.vviinnSelectFilter.emit("select");
+
+    this.vviinnSelectFilter.emit({
+      ...this.basicEventData,
+      action: "select",
+      filterName: filter.name,
+    });
   }
 
   private clearSelectedFilter() {
     this.selectedCategoryId = null;
     imageSearchState.activeIonLink = undefined;
-
     this.findSelectedFilter().blur();
-    this.vviinnSelectFilter.emit("deselect");
+
+    this.vviinnSelectFilter.emit({
+      ...this.basicEventData,
+      action: "deselect",
+    });
   }
 
   private findSelectedFilter(): HTMLElement {

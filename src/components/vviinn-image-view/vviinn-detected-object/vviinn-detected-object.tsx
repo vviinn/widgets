@@ -21,7 +21,7 @@ import {
 } from "../../../store/imageSearch.store";
 import {
   BasicEventData,
-  DetectedObjectEventData,
+  SelectObjectEventData,
 } from "../../../recommendation/events";
 
 @Component({
@@ -32,7 +32,7 @@ import {
 export class VviinnDetectedObject {
   @Prop() detectedObject: ValueObject<DetectedObject>;
   @Prop() basicEventData: BasicEventData;
-  @Event() vviinnSelectObject: EventEmitter<DetectedObjectEventData>;
+  @Event() vviinnSelectObject: EventEmitter<SelectObjectEventData>;
 
   private getObjectPosition(): [string, string] {
     return pipe(

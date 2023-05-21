@@ -1,3 +1,4 @@
+import { FilterAction } from "vviinn-tracking-client-ts";
 import {
   CampaignTypeTitle,
   CampaignTypeId,
@@ -13,8 +14,13 @@ export type BasicEventData = {
   id?: string;
 };
 
-export type DetectedObjectEventData = BasicEventData & {
+export type SelectObjectEventData = BasicEventData & {
   detectedObject: ValueObject<DetectedObject>;
+};
+
+export type SelectFilterEventData = BasicEventData & {
+  action: FilterAction;
+  filterName?: string;
 };
 
 export type ProductCardEventData = BasicEventData & {
