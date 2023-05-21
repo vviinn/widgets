@@ -103,14 +103,26 @@ export class VviinnVprWidget implements ComponentInterface {
   @State() loaded: boolean = false;
   @State() trackingDeactivated: boolean = false;
 
-  @Event() recommendationsLoaded: EventEmitter;
-
   @Event({ bubbles: true })
   vviinnWidgetLoad: EventEmitter<BasicEventData>;
+
+  @Event() vviinnNoResult: EventEmitter<BasicEventData>;
+
+  /** @internal */
+  @Event() recommendationsLoaded: EventEmitter;
 
   private productIds: string[];
   private productImageLoadedSubject = new Subject();
   private id?: string;
+
+  private getEventData() {
+    return {
+      widgetType: "VPR",
+      campaignTypeId: this.campaignType,
+      campaignTypeTitle: campaignTypeTitle[this.campaignType],
+      id: this.id,
+    } as BasicEventData;
+  }
 
   trackingApi: DefaultApi;
   uiSessionId: string;
@@ -214,12 +226,7 @@ export class VviinnVprWidget implements ComponentInterface {
     state.pricePrefix = this.pricePrefix;
     state.currencySign = this.currencySign;
 
-    this.vviinnWidgetLoad.emit({
-      widgetType: "VPR",
-      campaignTypeId: this.campaignType,
-      campaignTypeTitle: campaignTypeTitle[this.campaignType],
-      id: this.id,
-    });
+    this.vviinnWidgetLoad.emit(this.getEventData());
     this.getRecommendations();
   }
 
@@ -242,8 +249,11 @@ export class VviinnVprWidget implements ComponentInterface {
     pipe(
       runRequest,
       E.fold(
-        (error) => this.handleError(error),
-        (data) => this.handleRecommendationsSucces(data)
+        (error) => {
+          this.handleError(error);
+          this.vviinnNoResult.emit(this.getEventData());
+        },
+        (data) => this.handleRecommendationsSuccess(data)
       )
     );
   }
@@ -252,7 +262,7 @@ export class VviinnVprWidget implements ComponentInterface {
     console.log("ERROR:", error);
   }
 
-  private handleRecommendationsSucces(data: any) {
+  private handleRecommendationsSuccess(data: any) {
     this.recommendations = data?.extended ?? data;
     imageSearchState.results = this.recommendations;
     this.loaded = true;
