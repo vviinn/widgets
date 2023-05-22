@@ -10,6 +10,7 @@ import {
 } from "@stencil/core";
 import { slotChangeListener } from "../customized-slots";
 import { BasicEventData } from "../../recommendation/events";
+import { campaignTypeTitles } from "../../campaign/Campaign";
 
 @Component({
   tag: "vviinn-modal",
@@ -40,7 +41,7 @@ export class VviinnModal {
         this.vviinnWidgetClose.emit({
           widgetType: "VPS",
           campaignTypeId: "VPS",
-          campaignTypeTitle: "Visual Search",
+          campaignTypeTitle: campaignTypeTitles["VPS"],
           id: this.buttonElementId,
         });
       },

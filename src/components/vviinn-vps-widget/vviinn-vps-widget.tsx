@@ -39,6 +39,7 @@ import {
 } from "../../recommendation/events";
 import { pipe } from "fp-ts/lib/function";
 import { SlotSkeleton } from "../customized-slots";
+import { campaignTypeTitles } from "../../campaign/Campaign";
 
 const filterInt = (value: string) =>
   /^[-+]?(\d+|Infinity)$/.test(value) ? Number(value) : NaN;
@@ -148,7 +149,7 @@ export class VviinnVpsWidget {
     return {
       widgetType: "VPS",
       campaignTypeId: "VPS",
-      campaignTypeTitle: "Visual Search",
+      campaignTypeTitle: campaignTypeTitles["VPS"],
       id: this.buttonElementId ?? this.id,
     };
   };
@@ -259,7 +260,7 @@ export class VviinnVpsWidget {
     this.vviinnWidgetLoad.emit({
       widgetType: "VPS",
       campaignTypeId: "VPS",
-      campaignTypeTitle: "Visual Search",
+      campaignTypeTitle: campaignTypeTitles["VPS"],
       id: this.buttonElementId ?? this.id,
     });
   }

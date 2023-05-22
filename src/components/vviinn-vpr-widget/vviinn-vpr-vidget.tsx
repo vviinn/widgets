@@ -17,7 +17,7 @@ import * as TE from "fp-ts/lib/TaskEither";
 import * as E from "fp-ts/lib/Either";
 import { createBearAuthedHeader } from "./token-helpers";
 import { state } from "../../store/store";
-import { CampaignName, campaignTypeTitle } from "../../campaign/Campaign";
+import { CampaignName, campaignTypeTitles } from "../../campaign/Campaign";
 import { getRecommendationsService } from "../../campaign/CampaignService";
 import { imageSearchState } from "../../store/imageSearch.store";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
@@ -109,7 +109,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
   /** @internal */
-  @Event() recommendationsLoaded: EventEmitter;
+  @Event() vviinnRecommendationsLoaded: EventEmitter;
 
   private productIds: string[];
   private productImageLoadedSubject = new Subject();
@@ -119,7 +119,7 @@ export class VviinnVprWidget implements ComponentInterface {
     return {
       widgetType: "VPR",
       campaignTypeId: this.campaignType,
-      campaignTypeTitle: campaignTypeTitle[this.campaignType],
+      campaignTypeTitle: campaignTypeTitles[this.campaignType],
       id: this.id,
     } as BasicEventData;
   }
@@ -272,7 +272,7 @@ export class VviinnVprWidget implements ComponentInterface {
       this.productIds = this.productIds.filter((x) => x !== id);
 
       if (this.productIds.length === 0) {
-        this.recommendationsLoaded.emit();
+        this.vviinnRecommendationsLoaded.emit();
       }
     });
   }
