@@ -1,4 +1,12 @@
-import { Component, Host, h, State, Prop, Event, EventEmitter } from "@stencil/core";
+import {
+  Component,
+  Host,
+  h,
+  State,
+  Prop,
+  Event,
+  EventEmitter,
+} from "@stencil/core";
 import { pipe } from "fp-ts/lib/function";
 import * as O from "fp-ts/lib/Option";
 import { ValueObject, foldValueObject } from "../../../network/ion/ValueObject";
@@ -11,6 +19,10 @@ import {
   imageSearchState,
   makeRectangularSearchRequest,
 } from "../../../store/imageSearch.store";
+import {
+  BasicEventData,
+  SelectObjectEventData,
+} from "../../../recommendation/events";
 
 @Component({
   tag: "vviinn-detected-object",
@@ -19,7 +31,9 @@ import {
 })
 export class VviinnDetectedObject {
   @Prop() detectedObject: ValueObject<DetectedObject>;
-  @Event() detectedObjectClicked: EventEmitter;
+  @Prop() basicEventData: BasicEventData;
+
+  @Event() vviinnSelectObject: EventEmitter<SelectObjectEventData>;
 
   private getObjectPosition(): [string, string] {
     return pipe(
@@ -51,7 +65,10 @@ export class VviinnDetectedObject {
     );
 
     makeRectangularSearchRequest();
-    this.detectedObjectClicked.emit();
+    this.vviinnSelectObject.emit({
+      ...this.basicEventData,
+      detectedObject: this.detectedObject,
+    });
   }
 
   private isActive(): boolean {

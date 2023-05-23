@@ -8,11 +8,7 @@ token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00
 
     const widget = await page.find("vviinn-vps-widget");
     await page.waitForChanges();
-    const spy = await widget.spyOnEvent("recommendationView");
-
-    const exampleImages = await page.find(
-      "vviinn-vps-widget >>> vviinn-example-images"
-    );
+    const spy = await widget.spyOnEvent("viinnProductView");
 
     await page.waitForChanges();
 

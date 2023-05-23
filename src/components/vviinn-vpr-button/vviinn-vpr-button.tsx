@@ -1,6 +1,16 @@
-import { Component, Host, h, Prop } from "@stencil/core";
+import {
+  Component,
+  Host,
+  h,
+  Prop,
+  Event,
+  EventEmitter,
+  Element,
+} from "@stencil/core";
 import { VisualSearchIcon } from "../vviinn-icons";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
+import { BasicEventData } from "../../recommendation/events";
+import { CampaignName, campaignTypeTitles } from "../../campaign/Campaign";
 
 /**
  *
@@ -12,6 +22,7 @@ import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
   shadow: true,
 })
 export class VviinnVprButton {
+  @Element() el: HTMLElement;
   @Prop() token: string;
   @Prop() productId: string;
   @Prop() position: "bottom" | "right" = "bottom";
@@ -20,13 +31,19 @@ export class VviinnVprButton {
   @Prop() modalScrollbar: boolean = false;
   /** comma-separated list of campaign-ids */
   @Prop() campaigns: string = "";
+  /** Campaign type */
+  @Prop() campaignType: CampaignName = "VPR";
   @Prop() color: string;
   @Prop() addStyle: boolean = true;
   @Prop() mode: CarouselMode = "continuity";
   @Prop() imageWidth: number = 300;
   @Prop() currencySign: string = "€";
+  @Prop() noResultText?: string;
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
+
+  /** Event emitted when vpr-button clicked */
+  @Event() vviinnWidgetOpen: EventEmitter<BasicEventData>;
 
   private sidebar: HTMLVviinnRecommendationsSidebarElement | null = null;
   private sidebarCloseListener: () => void = () => {
@@ -35,7 +52,19 @@ export class VviinnVprButton {
 
   render() {
     return (
-      <Host onClick={(): void => this.handleClick()} role="button" tabindex="0">
+      <Host
+        onClick={(): void => {
+          this.handleClick();
+          this.vviinnWidgetOpen.emit({
+            widgetType: "VPR",
+            campaignTypeId: this.campaignType,
+            campaignTypeTitle: campaignTypeTitles[this.campaignType],
+            id: this.el.id,
+          });
+        }}
+        role="button"
+        tabindex="0"
+      >
         <vviinn-button addStyle={this.addStyle} part="vviinn-button">
           <slot>
             <VisualSearchIcon />
@@ -54,21 +83,27 @@ export class VviinnVprButton {
     sidebar.sourceImage = this.sourceImage;
     sidebar.widgetScrollbar = this.modalScrollbar;
     sidebar.campaigns = this.campaigns;
+    sidebar.campaignType = this.campaignType;
     sidebar.color = this.color;
     sidebar.mode = this.position === "right" ? "grid" : this.mode;
     sidebar.imageWidth = this.imageWidth;
     sidebar.currencySign = this.currencySign;
     sidebar.apiPath = this.apiPath;
+    sidebar.buttonElementId = this.el.id;
+    sidebar.noResultText = this.noResultText;
 
     this.sidebar = sidebar;
 
-    sidebar.addEventListener("modalClosed", this.sidebarCloseListener);
+    sidebar.addEventListener("vviinnWidgetClose", this.sidebarCloseListener);
     document.body.append(this.sidebar);
   }
 
   disconnectedCallback() {
     if (!this.sidebar) return;
-    this.sidebar.removeEventListener("modalCLosed", this.sidebarCloseListener);
+    this.sidebar.removeEventListener(
+      "vviinnWidgetClose",
+      this.sidebarCloseListener
+    );
     document.body.removeChild(this.sidebar);
   }
 }

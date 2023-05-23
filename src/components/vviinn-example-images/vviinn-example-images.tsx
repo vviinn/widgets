@@ -4,10 +4,11 @@ import {
   h,
   Event,
   EventEmitter,
-  Listen,
   Element,
+  Prop,
 } from "@stencil/core";
 import { slotChangeListener } from "../customized-slots";
+import { BasicEventData } from "../../recommendation/events";
 
 @Component({
   tag: "vviinn-example-images",
@@ -17,20 +18,12 @@ import { slotChangeListener } from "../customized-slots";
 export class VviinnExampleImages {
   @Element() el: HTMLElement;
 
-  @Event() imageSelected: EventEmitter<void>;
-  @Event() imageSelectedError: EventEmitter<void>;
+  @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
+  @Event() vviinnNoResult: EventEmitter<BasicEventData>;
+
+  @Prop() basicEventData: BasicEventData;
 
   private imagesBlock!: HTMLDivElement;
-
-  @Listen("exampleImageSelected")
-  handleImageSelection() {
-    this.imageSelected.emit();
-  }
-
-  @Listen("exampleImageError")
-  handleImageSelectionError() {
-    this.imageSelectedError.emit();
-  }
 
   componentWillLoad() {
     slotChangeListener(this, this.el);
@@ -58,6 +51,7 @@ export class VviinnExampleImages {
               width={480}
               height={640}
               src="https://cdn.vviinn.com/0/fit/480/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9pbWctaW5zcGlyYXRpb24tMDEtTC5qcGc="
+              basicEventData={this.basicEventData}
             />
           </slot>
           <slot name="vviinn-example-images-2">
@@ -65,6 +59,7 @@ export class VviinnExampleImages {
               width={280}
               height={480}
               src="https://cdn.vviinn.com/0/fit/480/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9pbWctaW5zcGlyYXRpb24tMDItTS5qcGc="
+              basicEventData={this.basicEventData}
             />
           </slot>
           <slot name="vviinn-example-images-3">
@@ -72,6 +67,7 @@ export class VviinnExampleImages {
               width={280}
               height={480}
               src="https://cdn.vviinn.com/0/fit/480/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9pbWctaW5zcGlyYXRpb24tMDMtTS5qcGc="
+              basicEventData={this.basicEventData}
             />
           </slot>
           <slot name="vviinn-example-images-4">
@@ -79,6 +75,7 @@ export class VviinnExampleImages {
               width={480}
               height={640}
               src="https://cdn.vviinn.com/0/fit/480/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9pbWctaW5zcGlyYXRpb24tMDQtTC5qcGc="
+              basicEventData={this.basicEventData}
             />
           </slot>
         </div>

@@ -1,4 +1,4 @@
-import { Component, Host, h } from "@stencil/core";
+import { Component, Host, h, Prop } from "@stencil/core";
 import { imageSearchState } from "../../store/imageSearch.store";
 import { ValueObject } from "../../network/ion/ValueObject";
 import { DetectedObject } from "../../searchSession/searchSession";
@@ -8,6 +8,7 @@ import { sequenceToOption } from "../../utils/option/option";
 import { fromImage, move } from "../../geometry/Rectangle";
 import { dimensionsFromImage, scaleByLargestSide } from "../../Image/sizing";
 import styles from "./vviinn-image-view.css";
+import { BasicEventData } from "../../recommendation/events";
 
 const getImageSizes = (i: HTMLImageElement): [number, number] => {
   const dimensions = dimensionsFromImage(i);
@@ -25,6 +26,8 @@ const getImageSizes = (i: HTMLImageElement): [number, number] => {
   styles,
 })
 export class VviinnImageView {
+  @Prop() basicEventData: BasicEventData;
+
   handleInitialImageLoad(ev: Event) {
     const target = ev.target as HTMLImageElement;
     const imageBounds = fromImage(target);
@@ -45,7 +48,12 @@ export class VviinnImageView {
   private renderDetectedObject(
     object: ValueObject<DetectedObject>
   ): HTMLElement {
-    return <vviinn-detected-object detectedObject={object} />;
+    return (
+      <vviinn-detected-object
+        detectedObject={object}
+        basicEventData={this.basicEventData}
+      />
+    );
   }
 
   private renderImage(): HTMLImageElement | null {
@@ -74,7 +82,7 @@ export class VviinnImageView {
   private renderCropper(): HTMLImageCropperElement | null {
     return pipe(
       imageSearchState.imageUrl,
-      O.map(() => <image-cropper />),
+      O.map(() => <image-cropper basicEventData={this.basicEventData} />),
       O.getOrElse(() => null)
     );
   }

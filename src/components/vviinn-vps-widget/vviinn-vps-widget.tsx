@@ -20,7 +20,6 @@ import { createTrackingApi } from "../../openApi";
 import {
   DefaultApi,
   EventConfirmation,
-  FilterAction,
   ProductClickEvent,
   ProductViewEvent,
   SearchImageSource,
@@ -33,9 +32,14 @@ import {
   createSearchEvent,
   createWidgetVpsEvent,
 } from "../../tracking";
-import { ProductCardEvent } from "../../recommendation/events";
+import {
+  ProductCardEvent,
+  BasicEventData,
+  SelectFilterEventData,
+} from "../../recommendation/events";
 import { pipe } from "fp-ts/lib/function";
 import { SlotSkeleton } from "../customized-slots";
+import { campaignTypeTitles } from "../../campaign/Campaign";
 
 const filterInt = (value: string) =>
   /^[-+]?(\d+|Infinity)$/.test(value) ? Number(value) : NaN;
@@ -107,8 +111,10 @@ export class VviinnVpsWidget {
   @Prop() locale: string = "de-DE";
   /** Campaign using for visual search */
   @Prop() campaignId?: string;
-  /** set true when showing the widget in button */
+  /** Set true when showing the widget in button */
   @Prop() showingInButton?: boolean = false;
+  /** Element Id, passed from vps-button */
+  @Prop() buttonElementId?: string;
 
   @State() slidePosition: number = 0;
   @State() width: number = 0;
@@ -119,10 +125,14 @@ export class VviinnVpsWidget {
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
 
+  @Event({ bubbles: true })
+  vviinnWidgetLoad: EventEmitter<BasicEventData>;
+
   private overflow: string;
   private uiSessionId: string;
   private trackingApi: DefaultApi;
   private imageSource: SearchImageSource | null = null;
+  private id?: string;
 
   componentDidLoad() {
     const slots = this.el.querySelectorAll("[slot]");
@@ -133,6 +143,15 @@ export class VviinnVpsWidget {
     if (result.status === "rejected") {
       this.trackingDeactivated = true;
     }
+  };
+
+  getBasicEventData = (): BasicEventData => {
+    return {
+      widgetType: "VPS",
+      campaignTypeId: "VPS",
+      campaignTypeTitle: campaignTypeTitles["VPS"],
+      id: this.buttonElementId ?? this.id,
+    };
   };
 
   @Watch("active")
@@ -146,32 +165,29 @@ export class VviinnVpsWidget {
     }
   }
 
-  @Listen("recommendationView")
-  trackRecommendationView({ detail }: ProductCardEvent) {
+  @Listen("vviinnProductView")
+  trackProductView({ detail }: ProductCardEvent) {
     if (this.trackingDeactivated) return;
 
-    const recommendationViewEvent: ProductViewEvent = createProductViewVpsEvent(
-      {
-        session_id: this.uiSessionId,
-        ...detail,
-      }
-    );
+    const productViewEvent: ProductViewEvent = createProductViewVpsEvent({
+      session_id: this.uiSessionId,
+      ...detail,
+    });
     this.trackingApi
-      .trackEvent(recommendationViewEvent)
+      .trackEvent(productViewEvent)
       .then(this.setTrackingDeactivated);
   }
 
-  @Listen("recommendationClick")
-  async trackRecommendationClick({ detail }: ProductCardEvent) {
-    const recommendationClickEvent: ProductClickEvent =
-      createProductClickVpsEvent({
-        session_id: this.uiSessionId,
-        ...detail,
-      });
+  @Listen("vviinnProductClick")
+  async trackProductClick({ detail }: ProductCardEvent) {
+    const productClickEvent: ProductClickEvent = createProductClickVpsEvent({
+      session_id: this.uiSessionId,
+      ...detail,
+    });
 
     if (!this.trackingDeactivated) {
       await this.trackingApi
-        .trackEvent(this.trackingDeactivated ? null : recommendationClickEvent)
+        .trackEvent(this.trackingDeactivated ? null : productClickEvent)
         .then(this.setTrackingDeactivated);
     }
 
@@ -182,7 +198,7 @@ export class VviinnVpsWidget {
     window.location.href = product.deeplink;
   }
 
-  @Listen("cropperChanged")
+  @Listen("vviinnImageCrop")
   trachSearchAreaChanges() {
     if (this.trackingDeactivated) return;
 
@@ -194,7 +210,7 @@ export class VviinnVpsWidget {
     this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
   }
 
-  @Listen("detectedObjectClicked")
+  @Listen("vviinnSelectObject")
   trackDetectedObject() {
     if (this.trackingDeactivated) return;
 
@@ -206,21 +222,17 @@ export class VviinnVpsWidget {
     this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
   }
 
-  @Listen("filterSelected")
-  trackFilter({ detail }: CustomEvent<FilterAction>) {
+  @Listen("vviinnSelectFilter")
+  trackFilter({ detail }: CustomEvent<SelectFilterEventData>) {
     if (this.trackingDeactivated) return;
 
     const searchEvent: WidgetEvent = createFilterEvent({
       session_id: this.uiSessionId,
       source: this.imageSource,
       kind: "category",
-      action: detail,
+      action: detail.action,
     });
     this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
-  }
-
-  componentWillLoad() {
-    slotChangeListener(this, this.el);
   }
 
   connectedCallback() {
@@ -239,6 +251,18 @@ export class VviinnVpsWidget {
 
     this.uiSessionId = uuidv4();
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
+    this.id = this.el.id;
+  }
+
+  componentWillLoad() {
+    slotChangeListener(this, this.el);
+
+    this.vviinnWidgetLoad.emit({
+      widgetType: "VPS",
+      campaignTypeId: "VPS",
+      campaignTypeTitle: campaignTypeTitles["VPS"],
+      id: this.buttonElementId ?? this.id,
+    });
   }
 
   private trackOpenEvent() {
@@ -328,8 +352,9 @@ export class VviinnVpsWidget {
         <vviinn-overlayed-modal
           class={{ "first-screen": this.slidePosition === 0 }}
           active={this.active}
-          onSecondaryActionClicked={() => this.resetState()}
-          onModalClosed={() => this.handleModalClose()}
+          resetState={this.resetState.bind(this)}
+          onVviinnWidgetClose={() => this.handleModalClose()}
+          buttonElementId={this.buttonElementId}
           exportparts="secondary-action, title, close-button, example-images"
         >
           <vviinn-slider showBullets={false} position={this.slidePosition}>
@@ -342,17 +367,20 @@ export class VviinnVpsWidget {
               >
                 <vviinn-wrong-format
                   class={{ hidden: !this.wrongImageFormat }}
-                  onActionClick={() => (this.wrongImageFormat = false)}
+                  handler={() => (this.wrongImageFormat = false)}
                 />
                 <vviinn-server-error
                   class={{ hidden: !imageSearchState.serverError }}
-                  onActionClick={() => (imageSearchState.serverError = false)}
+                  handler={() => (imageSearchState.serverError = false)}
                 />
                 <vviinn-teaser class={{ hidden: this.haveErrors() }} />
                 <vviinn-image-selector
                   class={{ hidden: this.haveErrors() }}
-                  onImageSelected={() => this.handleImageSelection("upload")}
-                  onImageSelectedError={() => (this.wrongImageFormat = true)}
+                  onVviinnImageUpload={() =>
+                    this.handleImageSelection("upload")
+                  }
+                  onVviinnNoResult={() => (this.wrongImageFormat = true)}
+                  basicEventData={this.getBasicEventData()}
                   part="select-image_button"
                 >
                   <span slot="upload-button-text" class="upload-button-content">
@@ -388,10 +416,13 @@ export class VviinnVpsWidget {
                   <vviinn-onboarding />
                   <vviinn-example-images
                     part="example-images"
-                    onImageSelected={() => this.handleImageSelection("example")}
-                    onImageSelectedError={() =>
+                    onVviinnImageUpload={() =>
+                      this.handleImageSelection("example")
+                    }
+                    onVviinnNoResult={() =>
                       this.resetScroll("onboarding-block", "smooth")
                     }
+                    basicEventData={this.getBasicEventData()}
                   />
                 </div>
               </div>
@@ -400,11 +431,14 @@ export class VviinnVpsWidget {
               class={{ "results-page": true, active: this.slidePosition == 1 }}
             >
               <div class="image-wrapper">
-                <vviinn-image-view />
+                <vviinn-image-view basicEventData={this.getBasicEventData()} />
                 <div class="filters-wrapper">
                   <div class="filters">
                     {imageSearchState.filters.map((filter) => (
-                      <search-filters filter={filter} />
+                      <search-filters
+                        filter={filter}
+                        basicEventData={this.getBasicEventData()}
+                      />
                     ))}
                   </div>
                 </div>
@@ -437,7 +471,10 @@ export class VviinnVpsWidget {
                       imageWidth={160}
                       image={p.image.thumbnail ?? p.image.original}
                       part="product-card"
+                      campaignTypeId="VPS"
                       index={i}
+                      widgetElementId={this.id}
+                      buttonElementId={this.buttonElementId}
                     />
                   ))}
                 </div>

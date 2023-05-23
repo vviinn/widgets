@@ -1,4 +1,4 @@
-import { Component, Host, h, Event, EventEmitter } from "@stencil/core";
+import { Component, Host, h, Prop } from "@stencil/core";
 
 @Component({
   tag: "vviinn-server-error",
@@ -6,7 +6,7 @@ import { Component, Host, h, Event, EventEmitter } from "@stencil/core";
   shadow: true,
 })
 export class VviinnServerError {
-  @Event() actionClick: EventEmitter<void>;
+  @Prop() handler: VoidFunction;
 
   render() {
     return (
@@ -17,7 +17,7 @@ export class VviinnServerError {
             Etwas hat leider nicht funktioniert. Bitte prüfen Sie Ihre
             Internetverbindung und laden Sie das Bild noch einmal hoch.
           </span>
-          <button slot="action" onClick={() => this.actionClick.emit()}>
+          <button slot="action" onClick={this.handler}>
             Erneut versuchen
           </button>
         </vviinn-error>

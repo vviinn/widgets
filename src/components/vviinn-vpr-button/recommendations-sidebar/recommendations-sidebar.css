@@ -51,6 +51,7 @@ img.source-image {
 
 main {
   padding: 0 24px;
+  min-height: 100px;
 }
 
 :host(.right) main {

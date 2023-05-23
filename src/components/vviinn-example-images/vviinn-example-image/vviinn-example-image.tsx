@@ -14,6 +14,7 @@ import {
   processSelectedFile,
 } from "../../../store/imageSearch.store";
 import * as E from "fp-ts/lib/Either";
+import { BasicEventData } from "../../../recommendation/events";
 
 @Component({
   tag: "vviinn-example-image",
@@ -24,11 +25,12 @@ export class VviinnExampleImage {
   @Prop() src: string = "";
   @Prop() width: number = 0;
   @Prop() height: number = 0;
+  @Prop() basicEventData: BasicEventData;
 
   @State() selected: boolean = false;
 
-  @Event() exampleImageSelected: EventEmitter<void>;
-  @Event() exampleImageError: EventEmitter<void>;
+  @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
+  @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
   private async selectImage() {
     this.selected = true;
@@ -39,8 +41,8 @@ export class VviinnExampleImage {
     pipe(
       processResult,
       E.match(
-        () => this.exampleImageError.emit(),
-        () => this.exampleImageSelected.emit()
+        () => this.vviinnNoResult.emit(this.basicEventData),
+        () => this.vviinnImageUpload.emit(this.basicEventData)
       )
     );
 

@@ -24,6 +24,11 @@ import {
 import { ProductCardEventData } from "../../recommendation/events";
 
 import styles from "./vviinn-product-card.css";
+import {
+  CampaignTypeId,
+  WidgetType,
+  campaignTypeTitles,
+} from "../../campaign/Campaign";
 
 /**
  * @part brand - product brand.
@@ -62,7 +67,10 @@ export class VviinnProductCard {
   @Prop() productType: string | undefined;
   @Prop() salePrice: number | undefined;
   @Prop() responsive: boolean = false;
+  @Prop() campaignTypeId: CampaignTypeId;
   @Prop() dimmedBackground: boolean = false;
+  @Prop() widgetElementId?: string;
+  @Prop() buttonElementId?: string;
 
   /** @internal */
   @Prop() index: number = 0;
@@ -71,15 +79,13 @@ export class VviinnProductCard {
 
   /** Event fires ones when recommendation rendered on page */
   @Event({ bubbles: true })
-  recommendationLoad: EventEmitter<ProductCardEventData>;
+  vviinnProductLoad: EventEmitter<ProductCardEventData>;
   /** Event fires ones when recommendation appears on the viewport */
   @Event({ bubbles: true })
-  recommendationView: EventEmitter<ProductCardEventData>;
+  vviinnProductView: EventEmitter<ProductCardEventData>;
   /** Event fires ones when user click on deeplink */
   @Event({ bubbles: true })
-  recommendationClick: EventEmitter<ProductCardEventData>;
-
-  @Event() productImageLoaded: EventEmitter<string>;
+  vviinnProductClick: EventEmitter<ProductCardEventData>;
 
   private productData: ProductCardEventData | null = null;
 
@@ -92,10 +98,20 @@ export class VviinnProductCard {
     this.productData = this.getProductData();
   }
 
+  private getWidgetType() {
+    return this.campaignTypeId === "VPR" || this.campaignTypeId === "VCS"
+      ? ("VPR" as WidgetType)
+      : ("VPS" as WidgetType);
+  }
+
   private getProductData() {
     return {
       product: this.productId,
       rank: this.index,
+      widgetType: this.getWidgetType(),
+      campaignTypeId: this.campaignTypeId,
+      campaignTypeTitle: campaignTypeTitles[this.campaignTypeId],
+      id: this.buttonElementId ?? this.widgetElementId,
     };
   }
 
@@ -106,13 +122,13 @@ export class VviinnProductCard {
         O.map((analytics) => analytics.sendImpression(this.getProduct()))
       );
 
-      this.recommendationView.emit(this.productData);
+      this.vviinnProductView.emit(this.productData);
       this.intersectionObserver.disconnect();
     }
   }
 
   componentDidLoad() {
-    this.recommendationLoad.emit(this.productData);
+    this.vviinnProductLoad.emit(this.productData);
     this.intersectionObserver.observe(this.el);
 
     const links = this.el.shadowRoot.querySelectorAll("a");
@@ -121,7 +137,7 @@ export class VviinnProductCard {
       link.addEventListener("click", (event) => {
         event.preventDefault();
         event.stopImmediatePropagation();
-        this.recommendationClick.emit(this.getProductData());
+        this.vviinnProductClick.emit(this.productData);
 
         pipe(
           getAnalyticsModule,
@@ -147,13 +163,7 @@ export class VviinnProductCard {
       lazy: false,
     };
 
-    return this.responsive
-      ? ResponsiveImage(props, () => this.emitImageLoaded())
-      : Image(props, () => this.emitImageLoaded());
-  }
-
-  private emitImageLoaded() {
-    this.productImageLoaded.emit(this.productId);
+    return this.responsive ? ResponsiveImage(props) : Image(props);
   }
 
   render() {

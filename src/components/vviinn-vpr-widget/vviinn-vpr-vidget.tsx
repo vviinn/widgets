@@ -17,7 +17,7 @@ import * as TE from "fp-ts/lib/TaskEither";
 import * as E from "fp-ts/lib/Either";
 import { createBearAuthedHeader } from "./token-helpers";
 import { state } from "../../store/store";
-import { CampaignName } from "../../campaign/Campaign";
+import { CampaignName, campaignTypeTitles } from "../../campaign/Campaign";
 import { getRecommendationsService } from "../../campaign/CampaignService";
 import { imageSearchState } from "../../store/imageSearch.store";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
@@ -33,7 +33,7 @@ import {
   WidgetEvent,
 } from "vviinn-tracking-client-ts";
 import { createTrackingApi } from "../../openApi";
-import { ProductCardEvent } from "../../recommendation/events";
+import { ProductCardEvent, BasicEventData } from "../../recommendation/events";
 import {
   createProductClickVprEvent,
   createProductViewVprEvent,
@@ -97,15 +97,34 @@ export class VviinnVprWidget implements ComponentInterface {
 
   @Prop() showScroll = true;
   @Prop() cssUrl: string | null = null;
+  @Prop() buttonElementId?: string;
+  @Prop() noResultText?: string;
 
   @State() recommendations: Recommendation[] = [];
-  @State() loaded: boolean = false;
   @State() trackingDeactivated: boolean = false;
+  @State() hasErrorOnLoad: boolean = false;
 
-  @Event() recommendationsLoaded: EventEmitter;
+  @Event({ bubbles: true })
+  vviinnWidgetLoad: EventEmitter<BasicEventData>;
+
+  @Event() vviinnNoResult: EventEmitter<BasicEventData>;
+
+  /** @internal */
+  @Event() vviinnRecommendationsLoaded: EventEmitter;
 
   private productIds: string[];
   private productImageLoadedSubject = new Subject();
+  private id?: string;
+
+  private getEventData() {
+    return {
+      widgetType: "VPR",
+      campaignTypeId: this.campaignType,
+      campaignTypeTitle: campaignTypeTitles[this.campaignType],
+      id: this.id,
+    } as BasicEventData;
+  }
+
   trackingApi: DefaultApi;
   uiSessionId: string;
 
@@ -136,37 +155,33 @@ export class VviinnVprWidget implements ComponentInterface {
     this.getRecommendations();
   }
 
-  @Listen("productImageLoaded")
-  handleImageLoading({ detail }: CustomEvent<string>) {
-    this.productImageLoadedSubject.next(detail);
+  @Listen("vviinnProductLoad")
+  handleProductLoading({ detail }: ProductCardEvent) {
+    this.productImageLoadedSubject.next(detail.product);
   }
 
-  @Listen("recommendationView")
-  trackRecommendationView({ detail }: ProductCardEvent) {
+  @Listen("vviinnProductView")
+  trackProductView({ detail }: ProductCardEvent) {
     if (this.trackingDeactivated) return;
 
-    const recommendationViewEvent: ProductViewEvent = createProductViewVprEvent(
-      {
-        session_id: this.uiSessionId,
-        ...detail,
-      }
-    );
+    const productViewEvent: ProductViewEvent = createProductViewVprEvent({
+      session_id: this.uiSessionId,
+      ...detail,
+    });
     this.trackingApi
-      .trackEvent(recommendationViewEvent)
+      .trackEvent(productViewEvent)
       .then(this.setTrackingDeactivated);
   }
 
-  @Listen("recommendationClick")
-  async trackRecommendationClick({ detail }: ProductCardEvent) {
-    const recommendationClickEvent: ProductClickEvent =
-      createProductClickVprEvent({
-        session_id: this.uiSessionId,
-        ...detail,
-      });
-
+  @Listen("vviinnProductClick")
+  async trackProductClick({ detail }: ProductCardEvent) {
+    const productClickEvent: ProductClickEvent = createProductClickVprEvent({
+      session_id: this.uiSessionId,
+      ...detail,
+    });
     if (!this.trackingDeactivated) {
       await this.trackingApi
-        .trackEvent(recommendationClickEvent)
+        .trackEvent(productClickEvent)
         .then(this.setTrackingDeactivated);
     }
 
@@ -181,6 +196,7 @@ export class VviinnVprWidget implements ComponentInterface {
     state.apiPath = this.apiPath;
     state.currencySign = this.currencySign;
     state.locale = this.locale;
+    this.id = this.buttonElementId ?? this.el.id;
     this.uiSessionId = uuidv4();
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
 
@@ -211,6 +227,7 @@ export class VviinnVprWidget implements ComponentInterface {
     state.pricePrefix = this.pricePrefix;
     state.currencySign = this.currencySign;
 
+    this.vviinnWidgetLoad.emit(this.getEventData());
     this.getRecommendations();
   }
 
@@ -233,27 +250,31 @@ export class VviinnVprWidget implements ComponentInterface {
     pipe(
       runRequest,
       E.fold(
-        (error) => this.handleError(error),
-        (data) => this.handleRecommendationsSucces(data)
+        (error) => {
+          this.handleError(error);
+          this.vviinnNoResult.emit(this.getEventData());
+          this.vviinnRecommendationsLoaded.emit();
+        },
+        (data) => this.handleRecommendationsSuccess(data)
       )
     );
   }
 
   private handleError(error: unknown): any {
     console.log("ERROR:", error);
+    this.hasErrorOnLoad = true;
   }
 
-  private handleRecommendationsSucces(data: any) {
+  private handleRecommendationsSuccess(data: any) {
     this.recommendations = data?.extended ?? data;
     imageSearchState.results = this.recommendations;
-    this.loaded = true;
 
     this.productIds = this.recommendations.map((r) => r.productId);
     this.productImageLoadedSubject.subscribe((id) => {
       this.productIds = this.productIds.filter((x) => x !== id);
 
       if (this.productIds.length === 0) {
-        this.recommendationsLoaded.emit();
+        this.vviinnRecommendationsLoaded.emit();
       }
     });
   }
@@ -274,22 +295,25 @@ export class VviinnVprWidget implements ComponentInterface {
     return (
       <Host
         class={{
-          loaded: this.loaded,
+          loaded: true,
           empty: this.recommendations.length == 0,
           [this.mode]: true,
         }}
-        aria-hidden={this.loaded ? "false" : "true"}
+        aria-hidden="false"
       >
-        {this.recommendations.length ? (
-          <Fragment>
-            {this.renderExternalCSS()}
-            <style>{state.fallbackStyles}</style>
-            <h2 part="recommendations-title">{this.blockTitle}</h2>
-            {this.useCarousel ? this.renderCarousel() : this.renderResults()}
-          </Fragment>
-        ) : (
-          ""
-        )}
+        <Fragment>
+          {this.renderExternalCSS()}
+          <style>{state.fallbackStyles}</style>
+          <h2 part="recommendations-title">{this.blockTitle}</h2>
+          {this.recommendations.length > 0 &&
+            (this.useCarousel ? this.renderCarousel() : this.renderResults())}
+
+          {!this.recommendations.length && this.hasErrorOnLoad && (
+            <p class="no-result-text">{`${
+              this?.noResultText ?? "No results! Please, try again later."
+            }`}</p>
+          )}
+        </Fragment>
       </Host>
     );
   }
@@ -312,7 +336,9 @@ export class VviinnVprWidget implements ComponentInterface {
         salePrice={recommendation.price.sale}
         responsive={this.mode === "grid"}
         dimmedBackground={this.useDimmedBackgroundInCard()}
+        campaignTypeId={this.campaignType}
         index={index}
+        widgetElementId={this.id}
       />
     );
   }
@@ -333,9 +359,11 @@ export class VviinnVprWidget implements ComponentInterface {
     return (
       <vviinn-carousel
         mode={this.mode}
+        campaignTypeId={this.campaignType}
         imageWidth={this.imageWidth}
         showScroll={this.showScroll}
         recommendations={this.recommendations}
+        widgetElementId={this.id}
       ></vviinn-carousel>
     );
   }

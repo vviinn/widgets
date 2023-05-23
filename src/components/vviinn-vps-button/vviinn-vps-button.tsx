@@ -11,6 +11,8 @@ import {
 } from "@stencil/core";
 import { CameraIcon } from "../vviinn-icons";
 import { SlotSkeleton } from "../customized-slots";
+import { BasicEventData } from "../../recommendation/events";
+import { campaignTypeTitles } from "../../campaign/Campaign";
 
 /**
  * @slot vviinn-onboarding-title - Title of onboarding section
@@ -71,7 +73,10 @@ export class VviinnVpsButton {
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
 
-  @Listen("modalClosed")
+  /** Event emitted when vps-button clicked */
+  @Event() vviinnWidgetOpen: EventEmitter<BasicEventData>;
+
+  @Listen("vviinnWidgetClose")
   handleModalClosed() {
     this.pressed = false;
   }
@@ -99,7 +104,15 @@ export class VviinnVpsButton {
         onKeyDown={(ev: KeyboardEvent) => this.handleKeyDown(ev)}
       >
         <vviinn-button
-          onClick={() => this.handleClick()}
+          onClick={() => {
+            this.handleClick();
+            this.vviinnWidgetOpen.emit({
+              widgetType: "VPS",
+              campaignTypeId: "VPS",
+              campaignTypeTitle: campaignTypeTitles["VPS"],
+              id: this.el.id,
+            });
+          }}
           addStyle={this.addStyle}
           part="vviinn-button"
         >
@@ -117,6 +130,7 @@ export class VviinnVpsButton {
           exportparts="brand, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, product-card, example-images"
           campaignId={this.campaignId}
           showingInButton={true}
+          buttonElementId={this.el.id}
         />
       </Host>
     );

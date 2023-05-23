@@ -11,6 +11,8 @@ import {
 } from "@stencil/core";
 import { CrossIcon } from "../../vviinn-icons";
 import { CarouselMode } from "../../vviinn-carousel/vviinn-carousel";
+import { BasicEventData } from "../../../recommendation/events";
+import { CampaignTypeId, campaignTypeTitles } from "../../../campaign/Campaign";
 
 type SidebarState = "idle" | "open" | "closed";
 type ClickEvent = Event & { clientX: number; clientY: number };
@@ -32,15 +34,18 @@ export class RecommendationsSidebar {
   @Prop() mode: CarouselMode = "continuity";
   /** comma-separated list of campaign-ids */
   @Prop() campaigns: string = "";
+  @Prop() campaignType: CampaignTypeId;
   @Prop() color: string;
   @Prop() imageWidth: number = 300;
   @Prop() currencySign: string = "€";
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
+  @Prop() buttonElementId?: string;
+  @Prop() noResultText?: string;
 
   @State() state: SidebarState = "idle";
 
-  @Event() modalClosed: EventEmitter<void>;
+  @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
 
   @Listen("click", { target: "body" })
   bodyClickListener(event: ClickEvent) {
@@ -103,12 +108,14 @@ export class RecommendationsSidebar {
               blockTitle=""
               mode={this.mode}
               useCarousel={this.position === "bottom"}
-              onRecommendationsLoaded={() => (this.state = "open")}
+              onVviinnRecommendationsLoaded={() => (this.state = "open")}
               showScroll={this.widgetScrollbar}
               campaigns={this.campaigns}
               color={this.color}
               currencySign={this.currencySign}
               apiPath={this.apiPath}
+              buttonElementId={this.buttonElementId}
+              noResultText={this.noResultText}
             />
           </main>
         </aside>
@@ -130,6 +137,11 @@ export class RecommendationsSidebar {
     const isClosingAnimation = animationName.includes("slideOut");
     if (!isClosingAnimation) return;
 
-    this.modalClosed.emit();
+    this.vviinnWidgetClose.emit({
+      widgetType: "VPR",
+      campaignTypeId: this.campaignType,
+      campaignTypeTitle: campaignTypeTitles[this.campaignType],
+      id: this.buttonElementId,
+    });
   }
 }
