@@ -4,49 +4,236 @@ import { Meta } from "@storybook/addon-docs";
 
 # Listening events
 
-Every `vviinn-product-card` generates 3 events:
+Every `vviinn` widget has some events that users can work and listen to these events with `document.addEventListener()`.
 
-- vviinnProductClick
-- vviinnProductView
-- vviinnProductLoad
+# Vviinn Events
 
-Users can work and listen to these events with `document.addEventListener()`.
+## Widgets
 
-## Recommendation load and view
+<table width="100%">
+  <thead>
+    <tr><th>Name</th><th>Available on</th><th>Props</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>vviinnWidgetLoad</td>
+      <td>
+        <ul> 
+          <li>Visual Product Recommendation</li>
+          <li>Visual Search</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>campaignTypeId</li>
+          <li>campaignTypeTitle</li>
+          <li>id</li>
+          <li>widgetType</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>vviinnWidgetOpen</td>
+      <td>
+        <ul>
+          <li>Visual Product Recommendation Button</li>
+          <li>Visual Search Button</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>campaignTypeId</li>
+          <li>campaignTypeTitle</li>
+          <li>id</li>
+          <li>widgetType</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>vviinnWidgetClose</td>
+      <td>
+        <ul>
+          <li>Visual Product Recommendation Button</li>
+          <li>Visual Search</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>campaignTypeId</li>
+          <li>campaignTypeTitle</li>
+          <li>id</li>
+          <li>widgetType</li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+## Products
+
+<table width="100%">
+  <thead>
+    <tr><th>Name</th><th>Available on</th><th>Props</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>vviinnProductLoad</td>
+      <td>
+        <ul>
+          <li>Visual Product Recommendation</li>
+          <li>Visual Search</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>campaignTypeId</li>
+          <li>campaignTypeTitle</li>
+          <li>id</li>
+          <li>product</li>
+          <li>rank</li>
+          <li>widgetType</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>vviinnProductView</td>
+      <td>
+        <ul>
+          <li>Visual Product Recommendation</li>
+          <li>Visual Search</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>campaignTypeId</li>
+          <li>campaignTypeTitle</li>
+          <li>id</li>
+          <li>product</li>
+          <li>rank</li>
+          <li>widgetType</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>vviinnProductClick</td>
+      <td>
+        <ul>
+          <li>Visual Product Recommendation</li>
+          <li>Visual Search</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>campaignTypeId</li>
+          <li>campaignTypeTitle</li>
+          <li>id</li>
+          <li>product</li>
+          <li>rank</li>
+          <li>widgetType</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>vviinnNoResult</td>
+      <td>
+        <ul>
+          <li>Visual Product Recommendation</li>
+          <li>Visual Search</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>campaignTypeId</li>
+          <li>campaignTypeTitle</li>
+          <li>id</li>
+          <li>widgetType</li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+## Search
+
+<table width="100%">
+  <thead>
+    <tr><th>Name</th><th>Available on</th><th>Props</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>vviinnImageUpload</td>
+      <td>
+        <ul>
+          <li>Visual Search</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>campaignTypeId</li>
+          <li>campaignTypeTitle</li>
+          <li>id</li>
+          <li>widgetType</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>vviinnImageCrop</td>
+      <td>
+        <ul>
+          <li>Visual Search</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>campaignTypeId</li>
+          <li>campaignTypeTitle</li>
+          <li>id</li>
+          <li>widgetType</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>vviinnSelectObject</td>
+      <td>
+        <ul>
+          <li>Visual Search</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>campaignTypeId</li>
+          <li>campaignTypeTitle</li>
+          <li>detectedObject</li>
+          <li>id</li>
+          <li>widgetType</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>vviinnSelectFilter</td>
+      <td>
+        <ul>
+          <li>Visual Search</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>action</li>
+          <li>campaignTypeId</li>
+          <li>campaignTypeTitle</li>
+          <li>filterName</li>
+          <li>id</li>
+          <li>widgetType</li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+## Listen to Events Example
 
 ```javascript
 document.addEventListener("vviinnProductLoad", ({ detail }) => {
-  console.log(`Load product ${detail.title} with id ${detail.productId}`);
-});
-
-document.addEventListener("vviinnProductView", ({ detail }) => {
-  console.log(
-    `Product ${detail.title} with id ${detail.productId} is rendered on viewport`
-  );
+  console.log(detail);
 });
 ```
-
-## Recommendation click
-
-When a deeplink is clicked we dispatch `vviinnProductClick()` and the user is redirected to the product. You can use [Beacon API](https://developer.mozilla.org/en-US/docs/Web/API/Beacon_API) to handle these events.
-
-```javascript
-document.addEventListener("vviinnProductClick", ({ detail }) => {
-  navigator.sendBeacon(some_url, detail);
-});
-```
-
-## Visual Search
-
-Here you can see a list of events that we have for Visual Search.
-
-- vviinnWidgetLoad
-- vviinnWidgetOpen
-- vviinnWidgetClose
-
-- vviinnImageUpload
-- vviinnImageCrop
-- vviinnSelectObject
-- vviinnSelectFilter
-
-- vviinnNoResult
