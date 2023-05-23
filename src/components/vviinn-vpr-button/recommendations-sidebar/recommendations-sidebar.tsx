@@ -41,6 +41,7 @@ export class RecommendationsSidebar {
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
   @Prop() buttonElementId?: string;
+  @Prop() noResultText?: string;
 
   @State() state: SidebarState = "idle";
 
@@ -114,6 +115,7 @@ export class RecommendationsSidebar {
               currencySign={this.currencySign}
               apiPath={this.apiPath}
               buttonElementId={this.buttonElementId}
+              noResultText={this.noResultText}
             />
           </main>
         </aside>

@@ -98,6 +98,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() showScroll = true;
   @Prop() cssUrl: string | null = null;
   @Prop() buttonElementId?: string;
+  @Prop() noResultText?: string;
 
   @State() recommendations: Recommendation[] = [];
   @State() trackingDeactivated: boolean = false;
@@ -308,11 +309,9 @@ export class VviinnVprWidget implements ComponentInterface {
             (this.useCarousel ? this.renderCarousel() : this.renderResults())}
 
           {!this.recommendations.length && this.hasErrorOnLoad && (
-            <slot name="vviinn-no-result-text">
-              <p style={{ fontSize: "20px" }}>
-                No Results! Please, try again later.
-              </p>
-            </slot>
+            <p class="no-result-text">{`${
+              this?.noResultText ?? "No results! Please, try again later."
+            }`}</p>
           )}
         </Fragment>
       </Host>

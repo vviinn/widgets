@@ -38,6 +38,7 @@ export class VviinnVprButton {
   @Prop() mode: CarouselMode = "continuity";
   @Prop() imageWidth: number = 300;
   @Prop() currencySign: string = "€";
+  @Prop() noResultText?: string;
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
 
@@ -89,6 +90,7 @@ export class VviinnVprButton {
     sidebar.currencySign = this.currencySign;
     sidebar.apiPath = this.apiPath;
     sidebar.buttonElementId = this.el.id;
+    sidebar.noResultText = this.noResultText;
 
     this.sidebar = sidebar;
 
