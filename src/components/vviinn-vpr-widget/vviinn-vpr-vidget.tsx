@@ -100,8 +100,8 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() buttonElementId?: string;
 
   @State() recommendations: Recommendation[] = [];
-  @State() loaded: boolean = false;
   @State() trackingDeactivated: boolean = false;
+  @State() hasErrorOnLoad: boolean = false;
 
   @Event({ bubbles: true })
   vviinnWidgetLoad: EventEmitter<BasicEventData>;
@@ -252,6 +252,7 @@ export class VviinnVprWidget implements ComponentInterface {
         (error) => {
           this.handleError(error);
           this.vviinnNoResult.emit(this.getEventData());
+          this.vviinnRecommendationsLoaded.emit();
         },
         (data) => this.handleRecommendationsSuccess(data)
       )
@@ -260,12 +261,12 @@ export class VviinnVprWidget implements ComponentInterface {
 
   private handleError(error: unknown): any {
     console.log("ERROR:", error);
+    this.hasErrorOnLoad = true;
   }
 
   private handleRecommendationsSuccess(data: any) {
     this.recommendations = data?.extended ?? data;
     imageSearchState.results = this.recommendations;
-    this.loaded = true;
 
     this.productIds = this.recommendations.map((r) => r.productId);
     this.productImageLoadedSubject.subscribe((id) => {
@@ -293,21 +294,26 @@ export class VviinnVprWidget implements ComponentInterface {
     return (
       <Host
         class={{
-          loaded: this.loaded,
+          loaded: true,
           empty: this.recommendations.length == 0,
           [this.mode]: true,
         }}
-        aria-hidden={this.loaded ? "false" : "true"}
+        aria-hidden="false"
       >
         <Fragment>
           {this.renderExternalCSS()}
           <style>{state.fallbackStyles}</style>
           <h2 part="recommendations-title">{this.blockTitle}</h2>
-          {this.recommendations.length
-            ? this.useCarousel
-              ? this.renderCarousel()
-              : this.renderResults()
-            : "No Results! Please, try again later."}
+          {this.recommendations.length > 0 &&
+            (this.useCarousel ? this.renderCarousel() : this.renderResults())}
+
+          {!this.recommendations.length && this.hasErrorOnLoad && (
+            <slot name="vviinn-no-result-text">
+              <p style={{ fontSize: "20px" }}>
+                No Results! Please, try again later.
+              </p>
+            </slot>
+          )}
         </Fragment>
       </Host>
     );
