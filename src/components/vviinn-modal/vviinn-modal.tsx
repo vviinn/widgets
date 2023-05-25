@@ -22,6 +22,7 @@ export class VviinnModal {
 
   @Prop({ mutable: true, reflect: true }) active: boolean = false;
   @Prop() resetState: () => void;
+  /** @internal */
   @Prop() buttonElementId?: string;
 
   @State() slider: boolean = false;

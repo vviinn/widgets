@@ -69,7 +69,9 @@ export class VviinnProductCard {
   @Prop() responsive: boolean = false;
   @Prop() campaignTypeId: CampaignTypeId;
   @Prop() dimmedBackground: boolean = false;
+  /** @internal */
   @Prop() widgetElementId?: string;
+  /** @internal */
   @Prop() buttonElementId?: string;
 
   /** @internal */

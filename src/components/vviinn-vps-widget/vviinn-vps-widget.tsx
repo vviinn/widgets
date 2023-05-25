@@ -114,6 +114,7 @@ export class VviinnVpsWidget {
   /** Set true when showing the widget in button */
   @Prop() showingInButton?: boolean = false;
   /** Element Id, passed from vps-button */
+  /** @internal */
   @Prop() buttonElementId?: string;
 
   @State() slidePosition: number = 0;

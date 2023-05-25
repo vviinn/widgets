@@ -38,10 +38,11 @@ export class RecommendationsSidebar {
   @Prop() color: string;
   @Prop() imageWidth: number = 300;
   @Prop() currencySign: string = "€";
+  @Prop() noResultText?: string;
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
+  /** @internal */
   @Prop() buttonElementId?: string;
-  @Prop() noResultText?: string;
 
   @State() state: SidebarState = "idle";
 

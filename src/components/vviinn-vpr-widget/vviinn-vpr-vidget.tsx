@@ -97,8 +97,9 @@ export class VviinnVprWidget implements ComponentInterface {
 
   @Prop() showScroll = true;
   @Prop() cssUrl: string | null = null;
-  @Prop() buttonElementId?: string;
   @Prop() noResultText?: string;
+  /** @internal */
+  @Prop() buttonElementId?: string;
 
   @State() recommendations: Recommendation[] = [];
   @State() trackingDeactivated: boolean = false;
