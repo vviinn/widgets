@@ -121,13 +121,13 @@ export class VviinnVprWidget implements ComponentInterface {
   private productImageLoadedSubject = new Subject();
   private id?: string;
 
-  private getEventData() {
+  private getEventData(): BasicEventData {
     return {
       widgetType: "VPR",
       campaignTypeId: this.campaignType,
       campaignTypeName: campaignTypeNames[this.campaignType],
-      id: this.id,
-    } as BasicEventData;
+      widgetId: this.id,
+    };
   }
 
   trackingApi: DefaultApi;
