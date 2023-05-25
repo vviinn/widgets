@@ -76,6 +76,18 @@ export class VviinnVpsButton {
   /** Event emitted when vps-button clicked */
   @Event() vviinnWidgetOpen: EventEmitter<BasicEventData>;
 
+  // List to show in the Storybook:
+  @Event() vviinnWidgetLoad: EventEmitter;
+  @Event() vviinnWidgetClose: EventEmitter;
+  @Event() vviinnProductClick: EventEmitter;
+  @Event() vviinnProductView: EventEmitter;
+  @Event() vviinnProductLoad: EventEmitter;
+  @Event() vviinnImageUpload: EventEmitter;
+  @Event() vviinnImageCrop: EventEmitter;
+  @Event() vviinnSelectObject: EventEmitter;
+  @Event() vviinnSelectFilter: EventEmitter;
+  @Event() vviinnNoResult: EventEmitter;
+
   @Listen("vviinnWidgetClose")
   handleModalClosed() {
     this.pressed = false;

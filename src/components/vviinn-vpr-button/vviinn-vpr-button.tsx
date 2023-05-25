@@ -45,6 +45,14 @@ export class VviinnVprButton {
   /** Event emitted when vpr-button clicked */
   @Event() vviinnWidgetOpen: EventEmitter<BasicEventData>;
 
+  // List to show in the Storybook:
+  @Event() vviinnWidgetLoad: EventEmitter;
+  @Event() vviinnWidgetClose: EventEmitter;
+  @Event() vviinnProductClick: EventEmitter;
+  @Event() vviinnProductView: EventEmitter;
+  @Event() vviinnProductLoad: EventEmitter;
+  @Event() vviinnNoResult: EventEmitter;
+
   private sidebar: HTMLVviinnRecommendationsSidebarElement | null = null;
   private sidebarCloseListener: () => void = () => {
     document.body.removeChild(this.sidebar);

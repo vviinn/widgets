@@ -108,7 +108,11 @@ export class VviinnVprWidget implements ComponentInterface {
   @Event({ bubbles: true })
   vviinnWidgetLoad: EventEmitter<BasicEventData>;
 
-  @Event() vviinnNoResult: EventEmitter<BasicEventData>;
+  // List to show in the Storybook:
+  @Event() vviinnProductClick: EventEmitter;
+  @Event() vviinnProductView: EventEmitter;
+  @Event() vviinnProductLoad: EventEmitter;
+  @Event() vviinnNoResult: EventEmitter;
 
   /** @internal */
   @Event() vviinnRecommendationsLoaded: EventEmitter;

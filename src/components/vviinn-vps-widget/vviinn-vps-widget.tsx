@@ -129,6 +129,17 @@ export class VviinnVpsWidget {
   @Event({ bubbles: true })
   vviinnWidgetLoad: EventEmitter<BasicEventData>;
 
+  // List to show in the Storybook:
+  @Event() vviinnWidgetClose: EventEmitter;
+  @Event() vviinnProductClick: EventEmitter;
+  @Event() vviinnProductView: EventEmitter;
+  @Event() vviinnProductLoad: EventEmitter;
+  @Event() vviinnImageUpload: EventEmitter;
+  @Event() vviinnImageCrop: EventEmitter;
+  @Event() vviinnSelectObject: EventEmitter;
+  @Event() vviinnSelectFilter: EventEmitter;
+  @Event() vviinnNoResult: EventEmitter;
+
   private overflow: string;
   private uiSessionId: string;
   private trackingApi: DefaultApi;
