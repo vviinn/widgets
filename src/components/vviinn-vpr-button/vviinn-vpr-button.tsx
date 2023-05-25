@@ -10,7 +10,7 @@ import {
 import { VisualSearchIcon } from "../vviinn-icons";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 import { BasicEventData } from "../../recommendation/events";
-import { CampaignName, campaignTypeTitles } from "../../campaign/Campaign";
+import { CampaignName, campaignTypeNames } from "../../campaign/Campaign";
 
 /**
  *
@@ -45,6 +45,14 @@ export class VviinnVprButton {
   /** Event emitted when vpr-button clicked */
   @Event() vviinnWidgetOpen: EventEmitter<BasicEventData>;
 
+  // List to show in the Storybook:
+  @Event() vviinnWidgetLoad: EventEmitter;
+  @Event() vviinnWidgetClose: EventEmitter;
+  @Event() vviinnProductClick: EventEmitter;
+  @Event() vviinnProductView: EventEmitter;
+  @Event() vviinnProductLoad: EventEmitter;
+  @Event() vviinnNoResult: EventEmitter;
+
   private sidebar: HTMLVviinnRecommendationsSidebarElement | null = null;
   private sidebarCloseListener: () => void = () => {
     document.body.removeChild(this.sidebar);
@@ -58,8 +66,8 @@ export class VviinnVprButton {
           this.vviinnWidgetOpen.emit({
             widgetType: "VPR",
             campaignTypeId: this.campaignType,
-            campaignTypeTitle: campaignTypeTitles[this.campaignType],
-            id: this.el.id,
+            campaignTypeName: campaignTypeNames[this.campaignType],
+            widgetId: this.el.id,
           });
         }}
         role="button"

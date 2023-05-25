@@ -87,6 +87,7 @@ const Template = (args) =>
                       color="${
                         args.color ? args.color.toString().slice(1) : ""
                       }"
+                      no-result-text="${args.noResultText}"
                       source-image="${
                         args.showSourceImage
                           ? "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg"
@@ -115,6 +116,7 @@ Default.args = {
   showSourceImage: true,
   sourceImageShadow: true,
   font: "Inter",
+  noResultText: "No results! Please, try again later.",
 };
 
 Default.parameters = {

@@ -10,7 +10,7 @@ import {
 } from "@stencil/core";
 import { slotChangeListener } from "../customized-slots";
 import { BasicEventData } from "../../recommendation/events";
-import { campaignTypeTitles } from "../../campaign/Campaign";
+import { campaignTypeNames } from "../../campaign/Campaign";
 
 @Component({
   tag: "vviinn-modal",
@@ -22,6 +22,7 @@ export class VviinnModal {
 
   @Prop({ mutable: true, reflect: true }) active: boolean = false;
   @Prop() resetState: () => void;
+  /** @internal */
   @Prop() buttonElementId?: string;
 
   @State() slider: boolean = false;
@@ -41,8 +42,8 @@ export class VviinnModal {
         this.vviinnWidgetClose.emit({
           widgetType: "VPS",
           campaignTypeId: "VPS",
-          campaignTypeTitle: campaignTypeTitles["VPS"],
-          id: this.buttonElementId,
+          campaignTypeName: campaignTypeNames["VPS"],
+          widgetId: this.buttonElementId,
         });
       },
       this.slider ? 500 : 0

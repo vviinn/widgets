@@ -8,6 +8,7 @@ import { Component, Host, h, Prop, Event, EventEmitter } from "@stencil/core";
 export class VviinnOverlayedModal {
   @Prop() active: boolean = false;
   @Prop() resetState: () => void;
+  /** @internal */
   @Prop() buttonElementId?: string;
 
   @Event() vviinnWidgetClose: EventEmitter<void>;

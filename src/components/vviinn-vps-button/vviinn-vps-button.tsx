@@ -12,7 +12,7 @@ import {
 import { CameraIcon } from "../vviinn-icons";
 import { SlotSkeleton } from "../customized-slots";
 import { BasicEventData } from "../../recommendation/events";
-import { campaignTypeTitles } from "../../campaign/Campaign";
+import { campaignTypeNames } from "../../campaign/Campaign";
 
 /**
  * @slot vviinn-onboarding-title - Title of onboarding section
@@ -76,6 +76,18 @@ export class VviinnVpsButton {
   /** Event emitted when vps-button clicked */
   @Event() vviinnWidgetOpen: EventEmitter<BasicEventData>;
 
+  // List to show in the Storybook:
+  @Event() vviinnWidgetLoad: EventEmitter;
+  @Event() vviinnWidgetClose: EventEmitter;
+  @Event() vviinnProductClick: EventEmitter;
+  @Event() vviinnProductView: EventEmitter;
+  @Event() vviinnProductLoad: EventEmitter;
+  @Event() vviinnImageUpload: EventEmitter;
+  @Event() vviinnImageCrop: EventEmitter;
+  @Event() vviinnSelectObject: EventEmitter;
+  @Event() vviinnSelectFilter: EventEmitter;
+  @Event() vviinnNoResult: EventEmitter;
+
   @Listen("vviinnWidgetClose")
   handleModalClosed() {
     this.pressed = false;
@@ -109,8 +121,8 @@ export class VviinnVpsButton {
             this.vviinnWidgetOpen.emit({
               widgetType: "VPS",
               campaignTypeId: "VPS",
-              campaignTypeTitle: campaignTypeTitles["VPS"],
-              id: this.el.id,
+              campaignTypeName: campaignTypeNames["VPS"],
+              widgetId: this.el.id,
             });
           }}
           addStyle={this.addStyle}

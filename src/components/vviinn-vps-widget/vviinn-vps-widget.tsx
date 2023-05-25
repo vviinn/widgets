@@ -39,7 +39,7 @@ import {
 } from "../../recommendation/events";
 import { pipe } from "fp-ts/lib/function";
 import { SlotSkeleton } from "../customized-slots";
-import { campaignTypeTitles } from "../../campaign/Campaign";
+import { campaignTypeNames } from "../../campaign/Campaign";
 
 const filterInt = (value: string) =>
   /^[-+]?(\d+|Infinity)$/.test(value) ? Number(value) : NaN;
@@ -114,6 +114,7 @@ export class VviinnVpsWidget {
   /** Set true when showing the widget in button */
   @Prop() showingInButton?: boolean = false;
   /** Element Id, passed from vps-button */
+  /** @internal */
   @Prop() buttonElementId?: string;
 
   @State() slidePosition: number = 0;
@@ -127,6 +128,17 @@ export class VviinnVpsWidget {
 
   @Event({ bubbles: true })
   vviinnWidgetLoad: EventEmitter<BasicEventData>;
+
+  // List to show in the Storybook:
+  @Event() vviinnWidgetClose: EventEmitter;
+  @Event() vviinnProductClick: EventEmitter;
+  @Event() vviinnProductView: EventEmitter;
+  @Event() vviinnProductLoad: EventEmitter;
+  @Event() vviinnImageUpload: EventEmitter;
+  @Event() vviinnImageCrop: EventEmitter;
+  @Event() vviinnSelectObject: EventEmitter;
+  @Event() vviinnSelectFilter: EventEmitter;
+  @Event() vviinnNoResult: EventEmitter;
 
   private overflow: string;
   private uiSessionId: string;
@@ -149,8 +161,8 @@ export class VviinnVpsWidget {
     return {
       widgetType: "VPS",
       campaignTypeId: "VPS",
-      campaignTypeTitle: campaignTypeTitles["VPS"],
-      id: this.buttonElementId ?? this.id,
+      campaignTypeName: campaignTypeNames["VPS"],
+      widgetId: this.buttonElementId ?? this.id,
     };
   };
 
@@ -169,10 +181,24 @@ export class VviinnVpsWidget {
   trackProductView({ detail }: ProductCardEvent) {
     if (this.trackingDeactivated) return;
 
+    const {
+      productRank,
+      productId,
+      productName,
+      widgetType,
+      widgetId,
+      campaignTypeId,
+      campaignTypeName,
+      ...rest
+    } = detail;
+
     const productViewEvent: ProductViewEvent = createProductViewVpsEvent({
       session_id: this.uiSessionId,
-      ...detail,
+      rank: productRank,
+      product: productId,
+      ...rest,
     });
+
     this.trackingApi
       .trackEvent(productViewEvent)
       .then(this.setTrackingDeactivated);
@@ -180,9 +206,22 @@ export class VviinnVpsWidget {
 
   @Listen("vviinnProductClick")
   async trackProductClick({ detail }: ProductCardEvent) {
+    const {
+      productRank,
+      productId,
+      productName,
+      widgetType,
+      widgetId,
+      campaignTypeId,
+      campaignTypeName,
+      ...rest
+    } = detail;
+
     const productClickEvent: ProductClickEvent = createProductClickVpsEvent({
       session_id: this.uiSessionId,
-      ...detail,
+      rank: productRank,
+      product: productId,
+      ...rest,
     });
 
     if (!this.trackingDeactivated) {
@@ -192,7 +231,7 @@ export class VviinnVpsWidget {
     }
 
     const product = imageSearchState.results.find(
-      (r) => r.productId === detail.product
+      (r) => r.productId === detail.productId
     );
     if (!product || !product.deeplink) return;
     window.location.href = product.deeplink;
@@ -260,8 +299,8 @@ export class VviinnVpsWidget {
     this.vviinnWidgetLoad.emit({
       widgetType: "VPS",
       campaignTypeId: "VPS",
-      campaignTypeTitle: campaignTypeTitles["VPS"],
-      id: this.buttonElementId ?? this.id,
+      campaignTypeName: campaignTypeNames["VPS"],
+      widgetId: this.buttonElementId ?? this.id,
     });
   }
 
@@ -335,12 +374,12 @@ export class VviinnVpsWidget {
 
     if (this.trackingDeactivated) return;
 
-    const widgetOpenEvent: WidgetEvent = createWidgetVpsEvent({
+    const widgetCloseEvent: WidgetEvent = createWidgetVpsEvent({
       action: "close",
       session_id: this.uiSessionId,
     });
     this.trackingApi
-      .trackEvent(widgetOpenEvent)
+      .trackEvent(widgetCloseEvent)
       .then(this.setTrackingDeactivated);
   }
 
@@ -354,7 +393,7 @@ export class VviinnVpsWidget {
           active={this.active}
           resetState={this.resetState.bind(this)}
           onVviinnWidgetClose={() => this.handleModalClose()}
-          buttonElementId={this.buttonElementId}
+          buttonElementId={this.buttonElementId ?? this.id}
           exportparts="secondary-action, title, close-button, example-images"
         >
           <vviinn-slider showBullets={false} position={this.slidePosition}>

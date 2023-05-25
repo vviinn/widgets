@@ -17,7 +17,7 @@ import * as TE from "fp-ts/lib/TaskEither";
 import * as E from "fp-ts/lib/Either";
 import { createBearAuthedHeader } from "./token-helpers";
 import { state } from "../../store/store";
-import { CampaignName, campaignTypeTitles } from "../../campaign/Campaign";
+import { CampaignName, campaignTypeNames } from "../../campaign/Campaign";
 import { getRecommendationsService } from "../../campaign/CampaignService";
 import { imageSearchState } from "../../store/imageSearch.store";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
@@ -97,8 +97,9 @@ export class VviinnVprWidget implements ComponentInterface {
 
   @Prop() showScroll = true;
   @Prop() cssUrl: string | null = null;
-  @Prop() buttonElementId?: string;
   @Prop() noResultText?: string;
+  /** @internal */
+  @Prop() buttonElementId?: string;
 
   @State() recommendations: Recommendation[] = [];
   @State() trackingDeactivated: boolean = false;
@@ -107,7 +108,11 @@ export class VviinnVprWidget implements ComponentInterface {
   @Event({ bubbles: true })
   vviinnWidgetLoad: EventEmitter<BasicEventData>;
 
-  @Event() vviinnNoResult: EventEmitter<BasicEventData>;
+  // List to show in the Storybook:
+  @Event() vviinnProductClick: EventEmitter;
+  @Event() vviinnProductView: EventEmitter;
+  @Event() vviinnProductLoad: EventEmitter;
+  @Event() vviinnNoResult: EventEmitter;
 
   /** @internal */
   @Event() vviinnRecommendationsLoaded: EventEmitter;
@@ -116,13 +121,13 @@ export class VviinnVprWidget implements ComponentInterface {
   private productImageLoadedSubject = new Subject();
   private id?: string;
 
-  private getEventData() {
+  private getEventData(): BasicEventData {
     return {
       widgetType: "VPR",
       campaignTypeId: this.campaignType,
-      campaignTypeTitle: campaignTypeTitles[this.campaignType],
-      id: this.id,
-    } as BasicEventData;
+      campaignTypeName: campaignTypeNames[this.campaignType],
+      widgetId: this.id,
+    };
   }
 
   trackingApi: DefaultApi;
@@ -157,16 +162,28 @@ export class VviinnVprWidget implements ComponentInterface {
 
   @Listen("vviinnProductLoad")
   handleProductLoading({ detail }: ProductCardEvent) {
-    this.productImageLoadedSubject.next(detail.product);
+    this.productImageLoadedSubject.next(detail.productId);
   }
 
   @Listen("vviinnProductView")
   trackProductView({ detail }: ProductCardEvent) {
     if (this.trackingDeactivated) return;
+    const {
+      productRank,
+      productId,
+      productName,
+      widgetType,
+      widgetId,
+      campaignTypeId,
+      campaignTypeName,
+      ...rest
+    } = detail;
 
     const productViewEvent: ProductViewEvent = createProductViewVprEvent({
       session_id: this.uiSessionId,
-      ...detail,
+      rank: productRank,
+      product: productId,
+      ...rest,
     });
     this.trackingApi
       .trackEvent(productViewEvent)
@@ -175,9 +192,22 @@ export class VviinnVprWidget implements ComponentInterface {
 
   @Listen("vviinnProductClick")
   async trackProductClick({ detail }: ProductCardEvent) {
+    const {
+      productRank,
+      productId,
+      productName,
+      widgetType,
+      widgetId,
+      campaignTypeId,
+      campaignTypeName,
+      ...rest
+    } = detail;
+
     const productClickEvent: ProductClickEvent = createProductClickVprEvent({
       session_id: this.uiSessionId,
-      ...detail,
+      rank: productRank,
+      product: productId,
+      ...rest,
     });
     if (!this.trackingDeactivated) {
       await this.trackingApi
@@ -186,7 +216,7 @@ export class VviinnVprWidget implements ComponentInterface {
     }
 
     const product = this.recommendations.find(
-      (r) => r.productId === detail.product
+      (r) => r.productId === detail.productId
     );
     if (!product || !product.deeplink) return;
     window.location.href = product.deeplink;

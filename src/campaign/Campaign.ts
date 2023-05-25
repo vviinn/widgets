@@ -7,7 +7,7 @@ export type CampaignTypeTitle =
   | "Visual Search"
   | "Products Cross-Selling";
 
-export const campaignTypeTitles: Record<CampaignTypeId, CampaignTypeTitle> = {
+export const campaignTypeNames: Record<CampaignTypeId, CampaignTypeTitle> = {
   VPR: "Similar Products",
   VPS: "Visual Search",
   VCS: "Products Cross-Selling",
