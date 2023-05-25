@@ -241,7 +241,8 @@ Every `vviinn` widget has some events that users can work and listen to these ev
 document.addEventListener("vviinnProductLoad", ({ detail }) => {
   console.log(detail);
 });
- // Output:
+
+// Output:
 {
     "productId": "123456",
     "productRank": 0,
@@ -251,7 +252,7 @@ document.addEventListener("vviinnProductLoad", ({ detail }) => {
     "campaignTypeName": "Similar Products",
     "widgetId": "vpr-widget-1"
 }
- // ... and other loaded products
+// ... and other loaded products
 ```
 
 ### Visual Search Button
@@ -261,7 +262,8 @@ document.addEventListener("vviinnProductLoad", ({ detail }) => {
 document.addEventListener("vviinnSelectFilter", ({ detail }) => {
   console.log(detail);
 });
- // Output: 
+
+// Output: 
 {
     "widgetType": "VPS",
     "campaignTypeId": "VPS",
