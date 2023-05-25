@@ -12,7 +12,7 @@ import {
 import { CrossIcon } from "../../vviinn-icons";
 import { CarouselMode } from "../../vviinn-carousel/vviinn-carousel";
 import { BasicEventData } from "../../../recommendation/events";
-import { CampaignTypeId, campaignTypeTitles } from "../../../campaign/Campaign";
+import { CampaignTypeId, campaignTypeNames } from "../../../campaign/Campaign";
 
 type SidebarState = "idle" | "open" | "closed";
 type ClickEvent = Event & { clientX: number; clientY: number };
@@ -140,8 +140,8 @@ export class RecommendationsSidebar {
     this.vviinnWidgetClose.emit({
       widgetType: "VPR",
       campaignTypeId: this.campaignType,
-      campaignTypeTitle: campaignTypeTitles[this.campaignType],
-      id: this.buttonElementId,
+      campaignTypeName: campaignTypeNames[this.campaignType],
+      widgetId: this.buttonElementId,
     });
   }
 }

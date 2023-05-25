@@ -10,7 +10,7 @@ import {
 import { VisualSearchIcon } from "../vviinn-icons";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 import { BasicEventData } from "../../recommendation/events";
-import { CampaignName, campaignTypeTitles } from "../../campaign/Campaign";
+import { CampaignName, campaignTypeNames } from "../../campaign/Campaign";
 
 /**
  *
@@ -58,8 +58,8 @@ export class VviinnVprButton {
           this.vviinnWidgetOpen.emit({
             widgetType: "VPR",
             campaignTypeId: this.campaignType,
-            campaignTypeTitle: campaignTypeTitles[this.campaignType],
-            id: this.el.id,
+            campaignTypeName: campaignTypeNames[this.campaignType],
+            widgetId: this.el.id,
           });
         }}
         role="button"

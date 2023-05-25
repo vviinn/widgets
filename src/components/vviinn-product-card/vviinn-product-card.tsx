@@ -27,7 +27,7 @@ import styles from "./vviinn-product-card.css";
 import {
   CampaignTypeId,
   WidgetType,
-  campaignTypeTitles,
+  campaignTypeNames,
 } from "../../campaign/Campaign";
 
 /**
@@ -106,12 +106,13 @@ export class VviinnProductCard {
 
   private getProductData() {
     return {
-      product: this.productId,
-      rank: this.index,
+      productId: this.productId,
+      productRank: this.index,
+      productName: this.productTitle,
       widgetType: this.getWidgetType(),
       campaignTypeId: this.campaignTypeId,
-      campaignTypeTitle: campaignTypeTitles[this.campaignTypeId],
-      id: this.buttonElementId ?? this.widgetElementId,
+      campaignTypeName: campaignTypeNames[this.campaignTypeId],
+      widgetId: this.buttonElementId ?? this.widgetElementId,
     };
   }
 

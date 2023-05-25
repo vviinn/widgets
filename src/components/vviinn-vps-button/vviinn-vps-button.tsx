@@ -12,7 +12,7 @@ import {
 import { CameraIcon } from "../vviinn-icons";
 import { SlotSkeleton } from "../customized-slots";
 import { BasicEventData } from "../../recommendation/events";
-import { campaignTypeTitles } from "../../campaign/Campaign";
+import { campaignTypeNames } from "../../campaign/Campaign";
 
 /**
  * @slot vviinn-onboarding-title - Title of onboarding section
@@ -109,8 +109,8 @@ export class VviinnVpsButton {
             this.vviinnWidgetOpen.emit({
               widgetType: "VPS",
               campaignTypeId: "VPS",
-              campaignTypeTitle: campaignTypeTitles["VPS"],
-              id: this.el.id,
+              campaignTypeName: campaignTypeNames["VPS"],
+              widgetId: this.el.id,
             });
           }}
           addStyle={this.addStyle}

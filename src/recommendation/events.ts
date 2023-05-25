@@ -10,8 +10,8 @@ import { DetectedObject } from "../searchSession/searchSession";
 export type BasicEventData = {
   widgetType: WidgetType;
   campaignTypeId: CampaignTypeId;
-  campaignTypeTitle: CampaignTypeTitle;
-  id?: string;
+  campaignTypeName: CampaignTypeTitle;
+  widgetId?: string;
 };
 
 export type SelectObjectEventData = BasicEventData & {
@@ -24,8 +24,9 @@ export type SelectFilterEventData = BasicEventData & {
 };
 
 export type ProductCardEventData = BasicEventData & {
-  product: string;
-  rank: number;
+  productId: string;
+  productRank: number;
+  productName: string;
 };
 
 export type ProductCardEvent = CustomEvent<ProductCardEventData>;
