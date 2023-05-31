@@ -101,7 +101,7 @@ button {
 }
 
 button:disabled {
-  cursor: default;
+  display: none;
 }
 
 button.prev svg {
