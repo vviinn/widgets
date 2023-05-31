@@ -45,6 +45,13 @@ export class VviinnCarousel {
     this.cloneSlottedContent()
   );
 
+  private isLastGroup = () =>
+    this.activeContentGroup === this.getContentGroups().length - 1 &&
+    this.mode === "grid";
+
+  private isFirstGroup = () =>
+    this.activeContentGroup === 0 && this.mode === "grid";
+
   componentWillLoad() {
     this.isRTL = document.dir === "rtl";
   }
@@ -334,6 +341,7 @@ export class VviinnCarousel {
             class="prev"
             onClick={() => this.showPrev()}
             part="carousel-button"
+            disabled={this.isFirstGroup()}
           >
             <ChevronIcon />
           </button>
@@ -349,6 +357,7 @@ export class VviinnCarousel {
             class="next"
             onClick={() => this.showNext()}
             part="carousel-button"
+            disabled={this.isLastGroup()}
           >
             <ChevronIcon />
           </button>
