@@ -33,7 +33,7 @@
 .bullet {
   width: 10px;
   height: 10px;
-  background: #E0E0E0;
+  background: #e0e0e0;
   border-radius: 50%;
   cursor: pointer;
 }
@@ -100,6 +100,10 @@ button {
   fill: #525252;
 }
 
+button:disabled {
+  cursor: default;
+}
+
 button.prev svg {
   transform: rotate(180deg);
   margin-left: -5px;
@@ -130,7 +134,7 @@ vviinn-product-card::part(price-container) {
   text-align: center;
 }
 
-@media(max-width: 480px) {
+@media (max-width: 480px) {
   :host(.modern) button {
     display: none;
   }
