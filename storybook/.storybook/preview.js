@@ -38,6 +38,7 @@ export const parameters = {
         "VVIINN Widgets",
         "Installation",
         "Getting Started",
+        "Styling and Customization",
         "Widgets",
         "Elements",
       ],
