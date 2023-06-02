@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.18.16](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.18.15...v2.18.16) (2023-06-02)
+
 ### [2.18.15](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.18.14...v2.18.15) (2023-06-02)
 
 ### [2.18.14](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.18.13...v2.18.14) (2023-06-02)
