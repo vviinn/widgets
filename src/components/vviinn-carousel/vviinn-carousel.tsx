@@ -33,6 +33,7 @@ export class VviinnCarousel {
   @Prop() showScroll: boolean = true;
   @Prop() campaignTypeId: CampaignTypeId;
   @Prop() widgetElementId?: string;
+  @Prop() gridArrowsDynamic: boolean;
 
   @Prop() recommendations: Recommendation[] = [];
 
@@ -341,7 +342,7 @@ export class VviinnCarousel {
             class="prev"
             onClick={() => this.showPrev()}
             part="carousel-button"
-            disabled={this.isFirstGroup()}
+            disabled={this.gridArrowsDynamic && this.isFirstGroup()}
           >
             <ChevronIcon />
           </button>
@@ -357,7 +358,7 @@ export class VviinnCarousel {
             class="next"
             onClick={() => this.showNext()}
             part="carousel-button"
-            disabled={this.isLastGroup()}
+            disabled={this.gridArrowsDynamic && this.isLastGroup()}
           >
             <ChevronIcon />
           </button>

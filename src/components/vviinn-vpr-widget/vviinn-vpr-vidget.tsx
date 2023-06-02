@@ -90,6 +90,8 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() campaigns: string = "";
   /** Color accepts any hexcode string */
   @Prop() color: string;
+  /** Hiding disabled arrows in the carousel if true */
+  @Prop() gridArrowsDynamic: boolean = false;
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
   /** @internal */
@@ -394,6 +396,7 @@ export class VviinnVprWidget implements ComponentInterface {
         showScroll={this.showScroll}
         recommendations={this.recommendations}
         widgetElementId={this.id}
+        gridArrowsDynamic={this.gridArrowsDynamic}
       ></vviinn-carousel>
     );
   }
