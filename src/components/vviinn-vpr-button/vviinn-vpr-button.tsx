@@ -39,6 +39,9 @@ export class VviinnVprButton {
   @Prop() imageWidth: number = 300;
   @Prop() currencySign: string = "€";
   @Prop() noResultText?: string;
+  /** Hiding disabled arrows in the carousel if true */
+  @Prop() gridArrowsDynamic: boolean = false;
+
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
 
@@ -99,6 +102,7 @@ export class VviinnVprButton {
     sidebar.apiPath = this.apiPath;
     sidebar.buttonElementId = this.el.id;
     sidebar.noResultText = this.noResultText;
+    sidebar.gridArrowsDynamic = this.gridArrowsDynamic;
 
     this.sidebar = sidebar;
 

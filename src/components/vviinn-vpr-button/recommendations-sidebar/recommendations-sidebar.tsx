@@ -39,6 +39,9 @@ export class RecommendationsSidebar {
   @Prop() imageWidth: number = 300;
   @Prop() currencySign: string = "€";
   @Prop() noResultText?: string;
+  /** Hiding disabled arrows in the carousel if true */
+  @Prop() gridArrowsDynamic: boolean;
+
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
   /** @internal */
@@ -117,6 +120,7 @@ export class RecommendationsSidebar {
               apiPath={this.apiPath}
               buttonElementId={this.buttonElementId}
               noResultText={this.noResultText}
+              gridArrowsDynamic={this.gridArrowsDynamic}
             />
           </main>
         </aside>
