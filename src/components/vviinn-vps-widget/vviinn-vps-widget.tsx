@@ -500,6 +500,7 @@ export class VviinnVpsWidget {
                 >
                   {imageSearchState.results.map((p, i) => (
                     <vviinn-product-card
+                      key={p.productId}
                       hidden={true}
                       productTitle={p.title}
                       productId={p.productId}
