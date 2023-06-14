@@ -41,7 +41,7 @@ export class VviinnVprButton {
   /** This message is displayed when no results */
   @Prop() noResultText?: string;
   /** Showing message (when true) or hiding the whole widget, when no results */
-  @Prop() noResultShow?: boolean;
+  @Prop() noResultShow?: boolean = true;
   /** Hiding disabled arrows in the carousel if true */
   @Prop() gridArrowsDynamic: boolean = false;
 
