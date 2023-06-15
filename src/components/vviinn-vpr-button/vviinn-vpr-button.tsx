@@ -38,7 +38,10 @@ export class VviinnVprButton {
   @Prop() mode: CarouselMode = "continuity";
   @Prop() imageWidth: number = 300;
   @Prop() currencySign: string = "€";
+  /** This message is displayed when no results */
   @Prop() noResultText?: string;
+  /** Showing message (when true) or hiding the whole widget, when no results */
+  @Prop() noResultShow?: boolean = true;
   /** Hiding disabled arrows in the carousel if true */
   @Prop() gridArrowsDynamic: boolean = false;
 
@@ -102,6 +105,7 @@ export class VviinnVprButton {
     sidebar.apiPath = this.apiPath;
     sidebar.buttonElementId = this.el.id;
     sidebar.noResultText = this.noResultText;
+    sidebar.noResultShow = this.noResultShow;
     sidebar.gridArrowsDynamic = this.gridArrowsDynamic;
 
     this.sidebar = sidebar;
