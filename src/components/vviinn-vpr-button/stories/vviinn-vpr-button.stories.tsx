@@ -88,6 +88,7 @@ const Template = (args) =>
                         args.color ? args.color.toString().slice(1) : ""
                       }"
                       no-result-text="${args.noResultText}"
+                      no-result-show="${args.noResultShow}"
                       grid-arrows-dynamic="${args.gridArrowsDynamic}"
                       source-image="${
                         args.showSourceImage
@@ -118,6 +119,7 @@ Default.args = {
   sourceImageShadow: true,
   font: "Inter",
   noResultText: "No results! Please, try again later.",
+  noResultShow: true,
   gridArrowsDynamic: false,
 };
 

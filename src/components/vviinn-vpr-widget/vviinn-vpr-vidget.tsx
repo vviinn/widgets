@@ -92,6 +92,10 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() color: string;
   /** Hiding disabled arrows in the carousel if true */
   @Prop() gridArrowsDynamic: boolean = false;
+  /** This message is displayed when no results */
+  @Prop() noResultText?: string;
+  /** Showing message (when true) or hiding the whole widget, when no results */
+  @Prop() noResultShow?: boolean = true;
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
   /** @internal */
@@ -99,7 +103,7 @@ export class VviinnVprWidget implements ComponentInterface {
 
   @Prop() showScroll = true;
   @Prop() cssUrl: string | null = null;
-  @Prop() noResultText?: string;
+
   /** @internal */
   @Prop() buttonElementId?: string;
 
@@ -292,8 +296,7 @@ export class VviinnVprWidget implements ComponentInterface {
     );
   }
 
-  private handleError(error: unknown): any {
-    console.log("ERROR:", error);
+  private handleError(_: unknown): any {
     this.hasErrorOnLoad = true;
   }
 
@@ -324,6 +327,9 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   render() {
+    if (this.recommendations.length === 0 && this.noResultShow === false)
+      return null;
+
     return (
       <Host
         class={{
@@ -340,7 +346,7 @@ export class VviinnVprWidget implements ComponentInterface {
           {this.recommendations.length > 0 &&
             (this.useCarousel ? this.renderCarousel() : this.renderResults())}
 
-          {!this.recommendations.length && this.hasErrorOnLoad && (
+          {this.recommendations.length === 0 && this.hasErrorOnLoad && (
             <p class="no-result-text">{`${
               this?.noResultText ?? "No results! Please, try again later."
             }`}</p>
