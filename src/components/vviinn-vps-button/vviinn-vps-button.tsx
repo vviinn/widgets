@@ -133,7 +133,7 @@ export class VviinnVpsButton {
   render() {
     return (
       <Host tabindex="0" role="button">
-        <label htmlFor="fileInput" class="input-label">
+        <label htmlFor="fileInput">
           <vviinn-button addStyle={this.addStyle} part="vviinn-button">
             <slot>
               <CameraIcon />
