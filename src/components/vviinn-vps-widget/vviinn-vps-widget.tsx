@@ -116,6 +116,8 @@ export class VviinnVpsWidget {
   /** Element Id, passed from vps-button */
   /** @internal */
   @Prop() buttonElementId?: string;
+  /** @internal */
+  @Prop() imageUploaded?: boolean;
 
   @State() slidePosition: number = 0;
   @State() width: number = 0;
@@ -128,6 +130,8 @@ export class VviinnVpsWidget {
 
   @Event({ bubbles: true })
   vviinnWidgetLoad: EventEmitter<BasicEventData>;
+  @Event({ bubbles: true })
+  vviinnWidgetOpen: EventEmitter<BasicEventData>;
 
   // List to show in the Storybook:
   @Event() vviinnWidgetClose: EventEmitter;
@@ -174,6 +178,15 @@ export class VviinnVpsWidget {
       this.trackOpenEvent();
     } else {
       document.body.style.overflow = this.overflow;
+    }
+  }
+
+  @Watch("imageUploaded")
+  imageUploadedWatcher(uploaded: boolean) {
+    if (uploaded) {
+      this.active = true;
+      this.vviinnWidgetOpen.emit(this.getBasicEventData());
+      this.handleImageSelection("upload");
     }
   }
 
@@ -295,13 +308,7 @@ export class VviinnVpsWidget {
 
   componentWillLoad() {
     slotChangeListener(this, this.el);
-
-    this.vviinnWidgetLoad.emit({
-      widgetType: "VPS",
-      campaignTypeId: "VPS",
-      campaignTypeName: campaignTypeNames["VPS"],
-      widgetId: this.buttonElementId ?? this.id,
-    });
+    this.vviinnWidgetLoad.emit(this.getBasicEventData());
   }
 
   private trackOpenEvent() {
