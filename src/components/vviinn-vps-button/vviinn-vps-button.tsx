@@ -70,8 +70,6 @@ export class VviinnVpsButton {
 
   /** @internal */
   @Prop() apiPath: string | undefined;
-
-  @State() pressed: boolean = false;
   @State() uploaded: boolean = false;
 
   /** @internal */
@@ -107,21 +105,11 @@ export class VviinnVpsButton {
   @Listen("vviinnWidgetClose")
   handleModalClosed() {
     this.uploaded = false;
-    this.pressed = false;
   }
 
   componentDidLoad() {
     const slots = this.el.querySelectorAll("[slot]");
     this.globalSlotsChanged.emit(Array.from(slots));
-  }
-
-  private handleKeyDown(ev: KeyboardEvent) {
-    if (ev.code !== "Enter" && ev.code !== "Space") return;
-    this.pressed = true;
-  }
-
-  private handleClick() {
-    this.pressed = true;
   }
 
   private async handleInputChange(event: Event) {
@@ -144,23 +132,15 @@ export class VviinnVpsButton {
 
   render() {
     return (
-      <Host
-        tabindex="0"
-        role="button"
-        pressed={this.pressed}
-        onKeyDown={(ev: KeyboardEvent) => this.handleKeyDown(ev)}
-      >
-        <label htmlFor="fileInput">
-          <vviinn-button
-            onClick={() => this.handleClick()}
-            addStyle={this.addStyle}
-            part="vviinn-button"
-          >
+      <Host tabindex="0" role="button">
+        <label htmlFor="fileInput" class="input-label">
+          <vviinn-button addStyle={this.addStyle} part="vviinn-button">
             <slot>
               <CameraIcon />
             </slot>
           </vviinn-button>
         </label>
+
         <input
           id="fileInput"
           class="visually-hidden"
