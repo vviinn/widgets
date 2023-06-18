@@ -117,7 +117,11 @@ export class VviinnVpsWidget {
   /** @internal */
   @Prop() buttonElementId?: string;
   /** @internal */
-  @Prop() imageUploaded?: boolean;
+  @Prop() buttonPressed?: boolean;
+  /** @internal */
+  @Prop() mode: "modal" | "upload" = "modal";
+  /** @internal */
+  @Prop() resetButton: () => void;
 
   @State() slidePosition: number = 0;
   @State() width: number = 0;
@@ -181,13 +185,15 @@ export class VviinnVpsWidget {
     }
   }
 
-  @Watch("imageUploaded")
-  imageUploadedWatcher(uploaded: boolean) {
-    if (uploaded) {
+  @Watch("buttonPressed")
+  buttonPressedWatcher(pressed: boolean) {
+    if (!pressed) return;
+    if (this.mode === "modal") {
       this.active = true;
-      this.vviinnWidgetOpen.emit(this.getBasicEventData());
-      this.handleImageSelection("upload");
     }
+    setTimeout(() => {
+      this.resetButton();
+    }, 100);
   }
 
   @Listen("vviinnProductView")
@@ -422,12 +428,19 @@ export class VviinnVpsWidget {
                 <vviinn-teaser class={{ hidden: this.haveErrors() }} />
                 <vviinn-image-selector
                   class={{ hidden: this.haveErrors() }}
-                  onVviinnImageUpload={() =>
-                    this.handleImageSelection("upload")
-                  }
+                  onVviinnImageUpload={() => {
+                    this.active = true;
+                    this.vviinnWidgetOpen.emit(this.getBasicEventData());
+                    this.handleImageSelection("upload");
+                  }}
                   onVviinnNoResult={() => (this.wrongImageFormat = true)}
                   basicEventData={this.getBasicEventData()}
                   part="select-image_button"
+                  startUpload={
+                    this.buttonPressed &&
+                    this.showingInButton &&
+                    this.mode === "upload"
+                  }
                 >
                   <span slot="upload-button-text" class="upload-button-content">
                     <svg

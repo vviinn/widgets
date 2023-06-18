@@ -13,9 +13,6 @@ import { CameraIcon } from "../vviinn-icons";
 import { SlotSkeleton } from "../customized-slots";
 import { BasicEventData } from "../../recommendation/events";
 import { campaignTypeNames } from "../../campaign/Campaign";
-import { processSelectedFile } from "../../store/imageSearch.store";
-import { pipe } from "fp-ts/lib/function";
-import * as E from "fp-ts/Either";
 
 /**
  * @slot vviinn-onboarding-title - Title of onboarding section
@@ -67,10 +64,13 @@ export class VviinnVpsButton {
   @Prop() campaignId?: string;
   /** Add style to the button */
   @Prop() addStyle: boolean = false;
+  /** Add style to the button */
+  @Prop() mode: "modal" | "upload" = "modal";
 
   /** @internal */
   @Prop() apiPath: string | undefined;
-  @State() uploaded: boolean = false;
+
+  @State() buttonPressed: boolean = false;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -104,7 +104,7 @@ export class VviinnVpsButton {
 
   @Listen("vviinnWidgetClose")
   handleModalClosed() {
-    this.uploaded = false;
+    this.buttonPressed = false;
   }
 
   componentDidLoad() {
@@ -112,46 +112,32 @@ export class VviinnVpsButton {
     this.globalSlotsChanged.emit(Array.from(slots));
   }
 
-  private async handleInputChange(event: Event) {
-    const input = event.target as HTMLInputElement;
-    const processingResult = await processSelectedFile(input.files[0]);
+  private handleClick() {
+    this.buttonPressed = true;
+  }
 
-    pipe(
-      processingResult,
-      E.match(
-        () => this.vviinnNoResult.emit(this.getBasicEventData()),
-        () => {
-          this.uploaded = true;
-          return this.vviinnImageUpload.emit(this.getBasicEventData());
-        }
-      )
-    );
-
-    input.value = null;
+  private resetButton() {
+    this.buttonPressed = false;
   }
 
   render() {
     return (
       <Host tabindex="0" role="button">
-        <label htmlFor="fileInput">
-          <vviinn-button addStyle={this.addStyle} part="vviinn-button">
-            <slot>
-              <CameraIcon />
-            </slot>
-          </vviinn-button>
-        </label>
-
-        <input
-          id="fileInput"
-          class="visually-hidden"
-          type="file"
-          accept="image/*"
-          onChange={(event: Event) => this.handleInputChange(event)}
-        />
+        <vviinn-button
+          onClick={() => {
+            this.handleClick();
+          }}
+          addStyle={this.addStyle}
+          part="vviinn-button"
+        >
+          <slot>
+            <CameraIcon />
+          </slot>
+        </vviinn-button>
 
         <SlotSkeleton />
         <vviinn-vps-widget
-          image-uploaded={this.uploaded}
+          mode={this.mode}
           currency-sign={this.currencySign}
           token={this.token}
           locale={this.locale}
@@ -159,6 +145,8 @@ export class VviinnVpsButton {
           exportparts="brand, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, product-card, example-images"
           campaignId={this.campaignId}
           showingInButton={true}
+          buttonPressed={this.buttonPressed}
+          resetButton={this.resetButton.bind(this)}
           buttonElementId={this.el.id}
         />
       </Host>
