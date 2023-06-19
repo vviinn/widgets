@@ -121,7 +121,7 @@ export class VviinnVpsWidget {
   /** @internal */
   @Prop() mode: "modal" | "upload" = "modal";
   /** @internal */
-  @Prop() resetButton: () => void;
+  @Prop() resetVpsButton: () => void;
 
   @State() slidePosition: number = 0;
   @State() width: number = 0;
@@ -190,10 +190,8 @@ export class VviinnVpsWidget {
     if (!pressed) return;
     if (this.mode === "modal") {
       this.active = true;
+      this.resetVpsButton();
     }
-    setTimeout(() => {
-      this.resetButton();
-    }, 100);
   }
 
   @Listen("vviinnProductView")
@@ -434,6 +432,7 @@ export class VviinnVpsWidget {
                     this.handleImageSelection("upload");
                   }}
                   onVviinnNoResult={() => (this.wrongImageFormat = true)}
+                  resetVpsButton={this.resetVpsButton}
                   basicEventData={this.getBasicEventData()}
                   part="select-image_button"
                   startUpload={

@@ -31,6 +31,7 @@ export class VviinnImageSelector {
 
   @Prop() basicEventData: BasicEventData;
   @Prop() startUpload: boolean;
+  @Prop() resetVpsButton: () => void;
 
   private fileInput: HTMLInputElement;
 
@@ -57,6 +58,7 @@ export class VviinnImageSelector {
   startUploadWatcher(upload: boolean) {
     if (upload) {
       this.fileInput.click();
+      this.resetVpsButton();
     }
   }
 

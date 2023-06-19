@@ -146,7 +146,7 @@ export class VviinnVpsButton {
           campaignId={this.campaignId}
           showingInButton={true}
           buttonPressed={this.buttonPressed}
-          resetButton={this.resetButton.bind(this)}
+          resetVpsButton={this.resetButton.bind(this)}
           buttonElementId={this.el.id}
         />
       </Host>
