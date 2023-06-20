@@ -30,6 +30,7 @@ const Template = (args) => `
   add-style="${args.addStyle}"
   currency-sign="${args.currencySign}"
   locale="${args.locale}"
+  mode="${args.mode}"
 ></vviinn-vps-button>`;
 
 export const Default = Template.bind({});
@@ -41,4 +42,5 @@ Default.args = {
   addStyle: true,
   currencySign: "€",
   locale: "en-US",
+  mode: "modal",
 };
