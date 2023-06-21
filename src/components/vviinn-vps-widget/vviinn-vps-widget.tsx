@@ -190,6 +190,7 @@ export class VviinnVpsWidget {
     if (!pressed) return;
     if (this.mode === "modal") {
       this.active = true;
+      this.vviinnWidgetOpen.emit(this.getBasicEventData());
     }
   }
 
@@ -428,8 +429,10 @@ export class VviinnVpsWidget {
                   class={{ hidden: this.haveErrors() }}
                   onVviinnImageUpload={() => {
                     this.active = true;
-                    this.vviinnWidgetOpen.emit(this.getBasicEventData());
                     this.handleImageSelection("upload");
+                    if (this.mode === "upload") {
+                      this.vviinnWidgetOpen.emit(this.getBasicEventData());
+                    }
                   }}
                   onVviinnNoResult={() => (this.wrongImageFormat = true)}
                   resetVpsButton={this.resetVpsButton}
