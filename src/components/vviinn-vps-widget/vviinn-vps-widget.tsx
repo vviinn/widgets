@@ -190,7 +190,6 @@ export class VviinnVpsWidget {
     if (!pressed) return;
     if (this.mode === "modal") {
       this.active = true;
-      this.resetVpsButton();
     }
   }
 
