@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.19.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.18.22...v2.19.0) (2023-06-21)
+
+
+### Features
+
+* Add upload mode to vps button ([74d9ece](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/74d9ece4a2e63b886a543cf50a5f6a30e73349af))
+* Add upload mode to vps button and update packages ([b39572b](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/b39572bbdd933c211a70b9a8727603b12d81b7ce))
+* Add upload mode to vps button, update packages ([b31e2fb](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/b31e2fbf8d5bf213fab02fba5ce3cbff7964797c))
+
 ### [2.18.22](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.18.21...v2.18.22) (2023-06-15)
 
 ### [2.18.21](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.18.20...v2.18.21) (2023-06-15)
