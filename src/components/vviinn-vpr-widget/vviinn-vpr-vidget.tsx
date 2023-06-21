@@ -12,6 +12,7 @@ import {
   Listen,
   Fragment,
 } from "@stencil/core";
+import { version } from "../../../package.json";
 import { pipe } from "fp-ts/lib/function";
 import * as TE from "fp-ts/lib/TaskEither";
 import * as E from "fp-ts/lib/Either";
@@ -100,6 +101,8 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
   /** @internal */
   @Prop() useCarousel: boolean = true;
+  /** @internal */
+  @Prop() showingInButton: boolean = false;
 
   @Prop() showScroll = true;
   @Prop() cssUrl: string | null = null;
@@ -113,6 +116,10 @@ export class VviinnVprWidget implements ComponentInterface {
 
   @Event({ bubbles: true })
   vviinnWidgetLoad: EventEmitter<BasicEventData>;
+
+  /** @internal */
+  @Event({ bubbles: true })
+  vviinnWidgetOpen: EventEmitter<BasicEventData>;
 
   // List to show in the Storybook:
   @Event() vviinnProductClick: EventEmitter;
@@ -133,6 +140,7 @@ export class VviinnVprWidget implements ComponentInterface {
       campaignTypeId: this.campaignType,
       campaignTypeName: campaignTypeNames[this.campaignType],
       widgetId: this.id,
+      widgetVersion: version,
     };
   }
 
@@ -377,6 +385,7 @@ export class VviinnVprWidget implements ComponentInterface {
         campaignTypeId={this.campaignType}
         index={index}
         widgetElementId={this.id}
+        widgetVersion={version}
       />
     );
   }
@@ -394,6 +403,10 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   private renderCarousel(): HTMLVviinnCarouselElement {
+    if (this.showingInButton) {
+      this.vviinnWidgetOpen.emit(this.getEventData());
+    }
+
     return (
       <vviinn-carousel
         mode={this.mode}
@@ -402,6 +415,7 @@ export class VviinnVprWidget implements ComponentInterface {
         showScroll={this.showScroll}
         recommendations={this.recommendations}
         widgetElementId={this.id}
+        widgetVersion={version}
         gridArrowsDynamic={this.gridArrowsDynamic}
       ></vviinn-carousel>
     );

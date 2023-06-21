@@ -9,6 +9,7 @@ import {
   Event,
   EventEmitter,
 } from "@stencil/core";
+import { version } from "../../../package.json";
 import { CameraIcon } from "../vviinn-icons";
 import { SlotSkeleton } from "../customized-slots";
 import { BasicEventData } from "../../recommendation/events";
@@ -76,7 +77,7 @@ export class VviinnVpsButton {
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
 
-  /** Event emitted when vps-button clicked */
+  /** Event emitted when modal opens */
   @Event() vviinnWidgetOpen: EventEmitter<BasicEventData>;
   /** Event fires when user select file */
   @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
@@ -99,6 +100,7 @@ export class VviinnVpsButton {
       campaignTypeId: "VPS",
       campaignTypeName: campaignTypeNames["VPS"],
       widgetId: this.el.id,
+      widgetVersion: version,
     };
   };
 

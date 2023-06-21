@@ -11,6 +11,7 @@ export type BasicEventData = {
   widgetType: WidgetType;
   campaignTypeId: CampaignTypeId;
   campaignTypeName: CampaignTypeTitle;
+  widgetVersion: string;
   widgetId?: string;
 };
 

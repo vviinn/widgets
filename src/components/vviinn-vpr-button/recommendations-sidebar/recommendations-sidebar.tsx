@@ -47,6 +47,10 @@ export class RecommendationsSidebar {
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
   /** @internal */
   @Prop() buttonElementId?: string;
+  /** @internal */
+  @Prop() widgetVersion: string;
+  /** @internal */
+  @Prop() showingInButton: boolean;
 
   @State() state: SidebarState = "idle";
 
@@ -123,6 +127,7 @@ export class RecommendationsSidebar {
               noResultText={this.noResultText}
               noResultShow={this.noResultShow}
               gridArrowsDynamic={this.gridArrowsDynamic}
+              showingInButton={this.showingInButton}
             />
           </main>
         </aside>
@@ -149,6 +154,7 @@ export class RecommendationsSidebar {
       campaignTypeId: this.campaignType,
       campaignTypeName: campaignTypeNames[this.campaignType],
       widgetId: this.buttonElementId,
+      widgetVersion: this.widgetVersion,
     });
   }
 }

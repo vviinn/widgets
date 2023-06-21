@@ -25,6 +25,8 @@ export class VviinnModal {
   /** @internal */
   @Prop() buttonElementId?: string;
   /** @internal */
+  @Prop() widgetVersion: string;
+  /** @internal */
   @Prop() hideBackButton: boolean = false;
 
   @State() slider: boolean = false;
@@ -46,6 +48,7 @@ export class VviinnModal {
           campaignTypeId: "VPS",
           campaignTypeName: campaignTypeNames["VPS"],
           widgetId: this.buttonElementId,
+          widgetVersion: this.widgetVersion,
         });
       },
       this.slider ? 500 : 0
