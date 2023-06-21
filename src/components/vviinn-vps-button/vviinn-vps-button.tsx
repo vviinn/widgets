@@ -64,17 +64,24 @@ export class VviinnVpsButton {
   @Prop() campaignId?: string;
   /** Add style to the button */
   @Prop() addStyle: boolean = false;
+  /** Add style to the button */
+  @Prop() mode: "modal" | "upload" = "modal";
 
   /** @internal */
   @Prop() apiPath: string | undefined;
 
-  @State() pressed: boolean = false;
+  @State() buttonPressed: boolean = false;
+
   /** @internal */
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
 
   /** Event emitted when vps-button clicked */
   @Event() vviinnWidgetOpen: EventEmitter<BasicEventData>;
+  /** Event fires when user select file */
+  @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
+  /** Event fires when user select file that no .jpg, .jpeg or png */
+  @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
   // List to show in the Storybook:
   @Event() vviinnWidgetLoad: EventEmitter;
@@ -82,15 +89,22 @@ export class VviinnVpsButton {
   @Event() vviinnProductClick: EventEmitter;
   @Event() vviinnProductView: EventEmitter;
   @Event() vviinnProductLoad: EventEmitter;
-  @Event() vviinnImageUpload: EventEmitter;
   @Event() vviinnImageCrop: EventEmitter;
   @Event() vviinnSelectObject: EventEmitter;
   @Event() vviinnSelectFilter: EventEmitter;
-  @Event() vviinnNoResult: EventEmitter;
+
+  getBasicEventData = (): BasicEventData => {
+    return {
+      widgetType: "VPS",
+      campaignTypeId: "VPS",
+      campaignTypeName: campaignTypeNames["VPS"],
+      widgetId: this.el.id,
+    };
+  };
 
   @Listen("vviinnWidgetClose")
   handleModalClosed() {
-    this.pressed = false;
+    this.buttonPressed = false;
   }
 
   componentDidLoad() {
@@ -98,32 +112,20 @@ export class VviinnVpsButton {
     this.globalSlotsChanged.emit(Array.from(slots));
   }
 
-  private handleKeyDown(ev: KeyboardEvent) {
-    if (ev.code !== "Enter" && ev.code !== "Space") return;
-    this.pressed = true;
+  private handleClick() {
+    this.buttonPressed = true;
   }
 
-  private handleClick() {
-    this.pressed = true;
+  private resetButton() {
+    this.buttonPressed = false;
   }
 
   render() {
     return (
-      <Host
-        tabindex="0"
-        role="button"
-        pressed={this.pressed}
-        onKeyDown={(ev: KeyboardEvent) => this.handleKeyDown(ev)}
-      >
+      <Host tabindex="0" role="button">
         <vviinn-button
           onClick={() => {
             this.handleClick();
-            this.vviinnWidgetOpen.emit({
-              widgetType: "VPS",
-              campaignTypeId: "VPS",
-              campaignTypeName: campaignTypeNames["VPS"],
-              widgetId: this.el.id,
-            });
           }}
           addStyle={this.addStyle}
           part="vviinn-button"
@@ -132,9 +134,10 @@ export class VviinnVpsButton {
             <CameraIcon />
           </slot>
         </vviinn-button>
+
         <SlotSkeleton />
         <vviinn-vps-widget
-          active={this.pressed}
+          mode={this.mode}
           currency-sign={this.currencySign}
           token={this.token}
           locale={this.locale}
@@ -142,6 +145,8 @@ export class VviinnVpsButton {
           exportparts="brand, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, product-card, example-images"
           campaignId={this.campaignId}
           showingInButton={true}
+          buttonPressed={this.buttonPressed}
+          resetVpsButton={this.resetButton.bind(this)}
           buttonElementId={this.el.id}
         />
       </Host>

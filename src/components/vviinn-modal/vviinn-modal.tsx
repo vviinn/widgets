@@ -24,6 +24,8 @@ export class VviinnModal {
   @Prop() resetState: () => void;
   /** @internal */
   @Prop() buttonElementId?: string;
+  /** @internal */
+  @Prop() hideBackButton: boolean = false;
 
   @State() slider: boolean = false;
 
@@ -63,30 +65,32 @@ export class VviinnModal {
         onAnimationEnd={(ev: AnimationEvent) => this.handleAnimationEnd(ev)}
       >
         <div class="head">
-          <button part="secondary-action" onClick={() => this.resetState()}>
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M20.25 12H3.75"
-                stroke="#161616"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M10.5 5.25L3.75 12L10.5 18.75"
-                stroke="#161616"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </button>
+          {!this.hideBackButton && (
+            <button part="secondary-action" onClick={() => this.resetState()}>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M20.25 12H3.75"
+                  stroke="#161616"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M10.5 5.25L3.75 12L10.5 18.75"
+                  stroke="#161616"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+          )}
 
           <div class="title" part="title">
             <slot name="vviinn-image-search-modal-title">Bildsuche</slot>

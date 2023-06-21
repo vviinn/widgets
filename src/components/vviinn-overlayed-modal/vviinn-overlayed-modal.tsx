@@ -10,6 +10,8 @@ export class VviinnOverlayedModal {
   @Prop() resetState: () => void;
   /** @internal */
   @Prop() buttonElementId?: string;
+  /** @internal */
+  @Prop() hideBackButton: boolean = false;
 
   @Event() vviinnWidgetClose: EventEmitter<void>;
 
@@ -21,6 +23,7 @@ export class VviinnOverlayedModal {
             resetState={this.resetState}
             active={this.active}
             buttonElementId={this.buttonElementId}
+            hideBackButton={this.hideBackButton}
           >
             <slot>CONTENT</slot>
           </vviinn-modal>

@@ -116,6 +116,12 @@ export class VviinnVpsWidget {
   /** Element Id, passed from vps-button */
   /** @internal */
   @Prop() buttonElementId?: string;
+  /** @internal */
+  @Prop() buttonPressed?: boolean;
+  /** @internal */
+  @Prop() mode: "modal" | "upload" = "modal";
+  /** @internal */
+  @Prop() resetVpsButton: () => void;
 
   @State() slidePosition: number = 0;
   @State() width: number = 0;
@@ -128,6 +134,8 @@ export class VviinnVpsWidget {
 
   @Event({ bubbles: true })
   vviinnWidgetLoad: EventEmitter<BasicEventData>;
+  @Event({ bubbles: true })
+  vviinnWidgetOpen: EventEmitter<BasicEventData>;
 
   // List to show in the Storybook:
   @Event() vviinnWidgetClose: EventEmitter;
@@ -174,6 +182,15 @@ export class VviinnVpsWidget {
       this.trackOpenEvent();
     } else {
       document.body.style.overflow = this.overflow;
+    }
+  }
+
+  @Watch("buttonPressed")
+  buttonPressedWatcher(pressed: boolean) {
+    if (!pressed) return;
+    if (this.mode === "modal") {
+      this.active = true;
+      this.vviinnWidgetOpen.emit(this.getBasicEventData());
     }
   }
 
@@ -295,13 +312,7 @@ export class VviinnVpsWidget {
 
   componentWillLoad() {
     slotChangeListener(this, this.el);
-
-    this.vviinnWidgetLoad.emit({
-      widgetType: "VPS",
-      campaignTypeId: "VPS",
-      campaignTypeName: campaignTypeNames["VPS"],
-      widgetId: this.buttonElementId ?? this.id,
-    });
+    this.vviinnWidgetLoad.emit(this.getBasicEventData());
   }
 
   private trackOpenEvent() {
@@ -394,6 +405,7 @@ export class VviinnVpsWidget {
           resetState={this.resetState.bind(this)}
           onVviinnWidgetClose={() => this.handleModalClose()}
           buttonElementId={this.buttonElementId ?? this.id}
+          hideBackButton={this.mode === "upload"}
           exportparts="secondary-action, title, close-button, example-images"
         >
           <vviinn-slider showBullets={false} position={this.slidePosition}>
@@ -415,12 +427,22 @@ export class VviinnVpsWidget {
                 <vviinn-teaser class={{ hidden: this.haveErrors() }} />
                 <vviinn-image-selector
                   class={{ hidden: this.haveErrors() }}
-                  onVviinnImageUpload={() =>
-                    this.handleImageSelection("upload")
-                  }
+                  onVviinnImageUpload={() => {
+                    this.active = true;
+                    this.handleImageSelection("upload");
+                    if (this.mode === "upload") {
+                      this.vviinnWidgetOpen.emit(this.getBasicEventData());
+                    }
+                  }}
                   onVviinnNoResult={() => (this.wrongImageFormat = true)}
+                  resetVpsButton={this.resetVpsButton}
                   basicEventData={this.getBasicEventData()}
                   part="select-image_button"
+                  startUpload={
+                    this.buttonPressed &&
+                    this.showingInButton &&
+                    this.mode === "upload"
+                  }
                 >
                   <span slot="upload-button-text" class="upload-button-content">
                     <svg

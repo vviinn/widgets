@@ -1,4 +1,12 @@
-import { Component, Host, h, Event, EventEmitter, Prop } from "@stencil/core";
+import {
+  Component,
+  Host,
+  h,
+  Event,
+  EventEmitter,
+  Prop,
+  Watch,
+} from "@stencil/core";
 import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/lib/function";
 import {
@@ -22,6 +30,10 @@ export class VviinnImageSelector {
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
   @Prop() basicEventData: BasicEventData;
+  @Prop() startUpload: boolean;
+  @Prop() resetVpsButton: () => void;
+
+  private fileInput: HTMLInputElement;
 
   private async handleInputChange(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -42,6 +54,14 @@ export class VviinnImageSelector {
     return imageSearchState.loading;
   }
 
+  @Watch("startUpload")
+  startUploadWatcher(upload: boolean) {
+    if (upload) {
+      this.fileInput.click();
+      this.resetVpsButton();
+    }
+  }
+
   render() {
     return (
       <Host exportparts="button">
@@ -57,6 +77,7 @@ export class VviinnImageSelector {
           type="file"
           accept="image/*"
           onChange={(event: Event) => this.handleInputChange(event)}
+          ref={(el) => (this.fileInput = el as HTMLInputElement)}
         />
       </Host>
     );
