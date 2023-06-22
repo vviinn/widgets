@@ -113,6 +113,7 @@ export class VviinnVpsWidget {
   /** Campaign using for visual search */
   @Prop() campaignId?: string;
   /** Set true when showing the widget in button */
+  /** @internal */
   @Prop() showingInButton?: boolean = false;
   /** Element Id, passed from vps-button */
   /** @internal */
