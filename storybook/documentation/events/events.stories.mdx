@@ -29,6 +29,7 @@ Every `vviinn` widget has some events that users can work and listen to these ev
           <li>campaignTypeName</li>
           <li>widgetId</li>
           <li>widgetType</li>
+          <li>widgetVersion</li>
         </ul>
       </td>
     </tr>
@@ -46,6 +47,7 @@ Every `vviinn` widget has some events that users can work and listen to these ev
           <li>campaignTypeName</li>
           <li>widgetId</li>
           <li>widgetType</li>
+          <li>widgetVersion</li>
         </ul>
       </td>
     </tr>
@@ -63,6 +65,7 @@ Every `vviinn` widget has some events that users can work and listen to these ev
           <li>campaignTypeName</li>
           <li>widgetId</li>
           <li>widgetType</li>
+          <li>widgetVersion</li>
         </ul>
       </td>
     </tr>
@@ -93,6 +96,7 @@ Every `vviinn` widget has some events that users can work and listen to these ev
           <li>productName</li>
           <li>productRank</li>
           <li>widgetType</li>
+          <li>widgetVersion</li>
         </ul>
       </td>
     </tr>
@@ -113,6 +117,7 @@ Every `vviinn` widget has some events that users can work and listen to these ev
           <li>productName</li>
           <li>productRank</li>
           <li>widgetType</li>
+          <li>widgetVersion</li>
         </ul>
       </td>
     </tr>
@@ -133,6 +138,7 @@ Every `vviinn` widget has some events that users can work and listen to these ev
           <li>productName</li>
           <li>productRank</li>
           <li>widgetType</li>
+          <li>widgetVersion</li>
         </ul>
       </td>
     </tr>
@@ -150,6 +156,7 @@ Every `vviinn` widget has some events that users can work and listen to these ev
           <li>campaignTypeName</li>
           <li>widgetId</li>
           <li>widgetType</li>
+          <li>widgetVersion</li>
         </ul>
       </td>
     </tr>
@@ -176,6 +183,7 @@ Every `vviinn` widget has some events that users can work and listen to these ev
           <li>campaignTypeName</li>
           <li>widgetId</li>
           <li>widgetType</li>
+          <li>widgetVersion</li>
         </ul>
       </td>
     </tr>
@@ -192,6 +200,7 @@ Every `vviinn` widget has some events that users can work and listen to these ev
           <li>campaignTypeName</li>
           <li>widgetId</li>
           <li>widgetType</li>
+          <li>widgetVersion</li>
         </ul>
       </td>
     </tr>
@@ -209,6 +218,7 @@ Every `vviinn` widget has some events that users can work and listen to these ev
           <li>detectedObject</li>
           <li>widgetId</li>
           <li>widgetType</li>
+          <li>widgetVersion</li>
         </ul>
       </td>
     </tr>
@@ -227,6 +237,7 @@ Every `vviinn` widget has some events that users can work and listen to these ev
           <li>filterName</li>
           <li>widgetId</li>
           <li>widgetType</li>
+          <li>widgetVersion</li>
         </ul>
       </td>
     </tr>
@@ -250,7 +261,8 @@ document.addEventListener("vviinnProductLoad", ({ detail }) => {
     "widgetType": "VPR",
     "campaignTypeId": "VPR",
     "campaignTypeName": "Similar Products",
-    "widgetId": "vpr-widget-1"
+    "widgetId": "vpr-widget-1",
+    "widgetVersion": "2.1.0"
 }
 // ... and other loaded products
 ```
@@ -271,5 +283,6 @@ document.addEventListener("vviinnSelectFilter", ({ detail }) => {
     "widgetId": "vps-button-1",
     "action": "select",
     "filterName": "Vintage Teppiche"
+    "widgetVersion": "2.1.0"
 }
 ```
