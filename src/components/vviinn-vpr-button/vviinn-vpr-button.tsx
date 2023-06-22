@@ -7,10 +7,10 @@ import {
   EventEmitter,
   Element,
 } from "@stencil/core";
+import { version } from "../../../package.json";
 import { VisualSearchIcon } from "../vviinn-icons";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
-import { BasicEventData } from "../../recommendation/events";
-import { CampaignName, campaignTypeNames } from "../../campaign/Campaign";
+import { CampaignName } from "../../campaign/Campaign";
 
 /**
  *
@@ -48,11 +48,9 @@ export class VviinnVprButton {
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
 
-  /** Event emitted when vpr-button clicked */
-  @Event() vviinnWidgetOpen: EventEmitter<BasicEventData>;
-
   // List to show in the Storybook:
   @Event() vviinnWidgetLoad: EventEmitter;
+  @Event() vviinnWidgetOpen: EventEmitter;
   @Event() vviinnWidgetClose: EventEmitter;
   @Event() vviinnProductClick: EventEmitter;
   @Event() vviinnProductView: EventEmitter;
@@ -69,12 +67,6 @@ export class VviinnVprButton {
       <Host
         onClick={(): void => {
           this.handleClick();
-          this.vviinnWidgetOpen.emit({
-            widgetType: "VPR",
-            campaignTypeId: this.campaignType,
-            campaignTypeName: campaignTypeNames[this.campaignType],
-            widgetId: this.el.id,
-          });
         }}
         role="button"
         tabindex="0"
@@ -107,6 +99,8 @@ export class VviinnVprButton {
     sidebar.noResultText = this.noResultText;
     sidebar.noResultShow = this.noResultShow;
     sidebar.gridArrowsDynamic = this.gridArrowsDynamic;
+    sidebar.widgetVersion = version;
+    sidebar.showingInButton = true;
 
     this.sidebar = sidebar;
 

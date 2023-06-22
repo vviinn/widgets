@@ -73,6 +73,8 @@ export class VviinnProductCard {
   @Prop() widgetElementId?: string;
   /** @internal */
   @Prop() buttonElementId?: string;
+  /** @internal */
+  @Prop() widgetVersion: string;
 
   /** @internal */
   @Prop() index: number = 0;
@@ -115,6 +117,7 @@ export class VviinnProductCard {
       campaignTypeId: this.campaignTypeId,
       campaignTypeName: campaignTypeNames[this.campaignTypeId],
       widgetId: this.buttonElementId ?? this.widgetElementId,
+      widgetVersion: this.widgetVersion,
     };
   }
 

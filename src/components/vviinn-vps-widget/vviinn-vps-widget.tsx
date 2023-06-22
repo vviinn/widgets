@@ -10,6 +10,7 @@ import {
   Event,
   EventEmitter,
 } from "@stencil/core";
+import { version } from "../../../package.json";
 import { state } from "../../store/store";
 import { imageSearchState } from "../../store/imageSearch.store";
 import * as O from "fp-ts/lib/Option";
@@ -171,6 +172,7 @@ export class VviinnVpsWidget {
       campaignTypeId: "VPS",
       campaignTypeName: campaignTypeNames["VPS"],
       widgetId: this.buttonElementId ?? this.id,
+      widgetVersion: version,
     };
   };
 
@@ -405,6 +407,7 @@ export class VviinnVpsWidget {
           resetState={this.resetState.bind(this)}
           onVviinnWidgetClose={() => this.handleModalClose()}
           buttonElementId={this.buttonElementId ?? this.id}
+          widgetVersion={version}
           hideBackButton={this.mode === "upload"}
           exportparts="secondary-action, title, close-button, example-images"
         >
@@ -537,6 +540,7 @@ export class VviinnVpsWidget {
                       index={i}
                       widgetElementId={this.id}
                       buttonElementId={this.buttonElementId}
+                      widgetVersion={version}
                     />
                   ))}
                 </div>

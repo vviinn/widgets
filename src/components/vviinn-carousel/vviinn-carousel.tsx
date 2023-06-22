@@ -34,8 +34,9 @@ export class VviinnCarousel {
   @Prop() campaignTypeId: CampaignTypeId;
   @Prop() widgetElementId?: string;
   @Prop() gridArrowsDynamic: boolean;
-
   @Prop() recommendations: Recommendation[] = [];
+  /** @internal */
+  @Prop() widgetVersion: string;
 
   private columns: number = 0;
   private resizeObserver: ResizeObserver = new ResizeObserver(() =>
@@ -281,6 +282,7 @@ export class VviinnCarousel {
         campaignTypeId={this.campaignTypeId}
         index={rank}
         widgetElementId={this.widgetElementId}
+        widgetVersion={this.widgetVersion}
       />
     );
   }
