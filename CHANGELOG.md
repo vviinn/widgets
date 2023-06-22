@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.20.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.19.2...v2.20.0) (2023-06-22)
+
+
+### Features
+
+* show widgetVersion in the Events, fix order of load and open events for vpr button ([9f19bd3](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/9f19bd3ea99149d6ba563d6d85e1884499fad520))
+
 ### [2.19.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.19.1...v2.19.2) (2023-06-21)
 
 ### [2.19.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.19.0...v2.19.1) (2023-06-21)
