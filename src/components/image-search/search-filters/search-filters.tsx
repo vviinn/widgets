@@ -99,7 +99,7 @@ export class SearchFilters {
     const { name, filters } = this.filter;
     return (
       <Host exportparts="filter, show-more-filters">
-        <div class="filters">
+        <div class="filters no-scrollbar">
           {filters
             .filter((_, i) => (this.hideFilters ? i < FILTERS_COUNT : true))
             .map((f, n) => {
