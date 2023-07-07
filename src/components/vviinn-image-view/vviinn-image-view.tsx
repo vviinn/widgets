@@ -9,6 +9,7 @@ import { fromImage, move } from "../../geometry/Rectangle";
 import { dimensionsFromImage, scaleByLargestSide } from "../../Image/sizing";
 import styles from "./vviinn-image-view.css";
 import { BasicEventData } from "../../recommendation/events";
+import Cropper from "cropperjs";
 
 const getImageSizes = (i: HTMLImageElement): [number, number] => {
   const dimensions = dimensionsFromImage(i);
@@ -30,6 +31,7 @@ export class VviinnImageView {
 
   handleInitialImageLoad(ev: Event) {
     const target = ev.target as HTMLImageElement;
+
     const imageBounds = fromImage(target);
     const padding = 12;
     const { x, y } = move(imageBounds, { x: padding, y: padding });
@@ -43,6 +45,18 @@ export class VviinnImageView {
 
     imageSearchState.imageBounds = O.some(imageBounds);
     imageSearchState.searchArea = O.some(searchArea);
+
+    new Cropper(ev.target as HTMLImageElement, {
+      crop(event) {
+        console.log(event.detail.x);
+        console.log(event.detail.y);
+        console.log(event.detail.width);
+        console.log(event.detail.height);
+        console.log(event.detail.rotate);
+        console.log(event.detail.scaleX);
+        console.log(event.detail.scaleY);
+      },
+    });
   }
 
   private renderDetectedObject(
@@ -79,13 +93,13 @@ export class VviinnImageView {
     );
   }
 
-  private renderCropper(): HTMLImageCropperElement | null {
-    return pipe(
-      imageSearchState.imageUrl,
-      O.map(() => <image-cropper basicEventData={this.basicEventData} />),
-      O.getOrElse(() => null)
-    );
-  }
+  // private renderCropper(): HTMLImageCropperElement | null {
+  //   return pipe(
+  //     imageSearchState.imageUrl,
+  //     O.map(() => <image-cropper basicEventData={this.basicEventData} />),
+  //     O.getOrElse(() => null)
+  //   );
+  // }
 
   render() {
     return (
@@ -96,9 +110,7 @@ export class VviinnImageView {
             <vviinn-preloader />
           </div>
         ) : null}
-        <highlight-box />
-        {this.renderImage()}
-        {this.renderCropper()}
+        <div>{this.renderImage()}</div>
         {imageSearchState.detectedObjects.map((o) =>
           this.renderDetectedObject(o)
         )}
