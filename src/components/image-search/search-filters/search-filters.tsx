@@ -11,17 +11,31 @@ import {
 import { Link } from "../../../network/ion/Link";
 import { SearchSessionFilter } from "../../../searchSession/searchSession";
 import { imageSearchState } from "../../../store/imageSearch.store";
-import { CheckIcon } from "../../vviinn-icons";
 import {
   BasicEventData,
   SelectFilterEventData,
 } from "../../../recommendation/events";
 
 const FILTERS_COUNT: number = 5;
-const ACTIVE_FILTER_CLASSNAME = ".filter.active";
 
-const getFilterId = (filter: Link): string =>
-  filter.href.split("/").reverse()[0];
+const parseFilters = (filter: Link, filterType): any => {
+  const result = {};
+  if (!filter) return result;
+  filter.href
+    .split("?")[1]
+    .split("included[]=")
+    .join("")
+    .split("&")
+    .forEach((f) => {
+      const [key, value] = f.split("%3A");
+      result[key] = value;
+    });
+
+  if (filterType === "categories") {
+    return result["product_type"];
+  }
+  return result[filterType];
+};
 
 @Component({
   tag: "search-filters",
@@ -34,20 +48,20 @@ export class SearchFilters {
   @Prop() filter: SearchSessionFilter | null = null;
   @Prop() basicEventData: BasicEventData;
 
-  @State() selectedCategoryId: string | null = null;
+  @State() selectedFilter = "";
   @State() hideFilters: boolean = true;
 
   @Event() vviinnSelectFilter: EventEmitter<SelectFilterEventData>;
 
   private handleFilterSelection(filter: Link): void {
     return this.isFilterSelected(filter)
-      ? this.clearSelectedFilter()
+      ? this.clearSelectedFilter(filter)
       : this.selectFilter(filter);
   }
 
   private selectFilter(filter: Link) {
-    this.selectedCategoryId = getFilterId(filter);
     imageSearchState.activeIonLink = filter;
+    this.selectedFilter = parseFilters(filter, this.filter.name);
 
     this.vviinnSelectFilter.emit({
       ...this.basicEventData,
@@ -56,19 +70,14 @@ export class SearchFilters {
     });
   }
 
-  private clearSelectedFilter() {
-    this.selectedCategoryId = null;
-    imageSearchState.activeIonLink = undefined;
-    this.findSelectedFilter().blur();
+  private clearSelectedFilter(filter: Link) {
+    imageSearchState.activeIonLink = filter.clear;
+    this.selectedFilter = parseFilters(filter.clear, this.filter.name);
 
     this.vviinnSelectFilter.emit({
       ...this.basicEventData,
       action: "deselect",
     });
-  }
-
-  private findSelectedFilter(): HTMLElement {
-    return this.el.shadowRoot.querySelector(ACTIVE_FILTER_CLASSNAME);
   }
 
   private toggleFilters() {
@@ -81,56 +90,69 @@ export class SearchFilters {
   }
 
   private isFilterSelected(filterLink: Link): boolean {
-    return this.selectedCategoryId === getFilterId(filterLink);
+    return this.filter.name === "categories"
+      ? this.selectedFilter === parseFilters(filterLink, "categories")
+      : this.selectedFilter === filterLink.name;
   }
 
   render() {
+    const { name, filters } = this.filter;
     return (
       <Host exportparts="filter, show-more-filters">
         <div class="filters">
-          {this.filter.filters
+          {filters
             .filter((_, i) => (this.hideFilters ? i < FILTERS_COUNT : true))
-            .map((f, n) => (
-              <div
-                role="button"
-                tabindex="0"
-                part={this.isFilterSelected(f) ? "filter active" : "filter"}
-                class={{
-                  filter: true,
-                  active: this.selectedCategoryId === getFilterId(f),
-                }}
-                style={{ "animation-delay": `${n * 10}ms` }}
-                onPointerUp={(ev) => {
-                  ev.stopPropagation();
-                  this.handleFilterSelection(f);
-                }}
-                onKeyPress={(ev) => this.handleEnter(ev, f)}
-              >
-                {this.isFilterSelected(f) ? <CheckIcon /> : null}
-                {f.name}
-              </div>
-            ))}
+            .map((f, n) => {
+              const filterActive =
+                name === "categories"
+                  ? this.selectedFilter === parseFilters(f, "categories")
+                  : this.selectedFilter === f.name;
+              return (
+                <div
+                  role="button"
+                  tabindex="0"
+                  part={filterActive ? "filter active" : "filter"}
+                  class={{
+                    filter: true,
+                    active: filterActive,
+                  }}
+                  style={{ "animation-delay": `${n * 10}ms` }}
+                  onPointerUp={(ev) => {
+                    if (imageSearchState.loading) return;
+                    ev.stopPropagation();
+                    this.handleFilterSelection(f);
+                  }}
+                  onKeyPress={(ev) => {
+                    if (imageSearchState.loading) return;
+                    this.handleEnter(ev, f);
+                  }}
+                >
+                  {f.name}
+                </div>
+              );
+            })}
 
-          <div
-            class={{
-              filter: true,
-              "show-more": true,
-              hidden: this.filter.filters.length <= FILTERS_COUNT,
-              active: !this.hideFilters,
-            }}
-            role="button"
-            tabindex="0"
-            aria-role="button"
-            onClick={() => this.toggleFilters()}
-            onKeyPress={(ev) => {
-              if (ev.key === "Enter") {
-                this.toggleFilters();
-              }
-            }}
-            part="show-more-filters"
-          >
-            {this.hideFilters ? "Zeige mehr" : "Zeige weniger"}
-          </div>
+          {this.hideFilters && (
+            <div
+              class={{
+                "show-more": true,
+                hidden: filters.length <= FILTERS_COUNT,
+                active: !this.hideFilters,
+              }}
+              role="button"
+              tabindex="0"
+              aria-role="button"
+              onClick={() => {
+                setTimeout(() => this.toggleFilters(), 300);
+              }}
+              onKeyPress={(ev) => {
+                if (ev.key === "Enter") {
+                  this.toggleFilters();
+                }
+              }}
+              part="show-more-filters"
+            ></div>
+          )}
         </div>
       </Host>
     );
