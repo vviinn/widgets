@@ -530,6 +530,7 @@ export class VviinnVpsWidget {
                       hidden={true}
                       productTitle={p.title}
                       productId={p.productId}
+                      productType={p.productType}
                       brand={p.brand}
                       deeplink={p.deeplink}
                       price={p.price.actual}
