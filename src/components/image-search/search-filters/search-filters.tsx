@@ -18,9 +18,9 @@ import {
 
 const FILTERS_COUNT: number = 5;
 
-const parseFilters = (filter: Link, filterType): any => {
+const parseFilters = (filter: Link, filterType): string => {
   const result = {};
-  if (!filter) return result;
+  if (!filter) return "";
   filter.href
     .split("?")[1]
     .split("included[]=")
@@ -96,6 +96,7 @@ export class SearchFilters {
   }
 
   render() {
+    if (!this.filter) return null;
     const { name, filters } = this.filter;
     return (
       <Host exportparts="filter, show-more-filters">
