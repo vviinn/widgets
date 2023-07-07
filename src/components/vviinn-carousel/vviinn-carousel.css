@@ -56,7 +56,6 @@
   display: flex;
   flex-direction: row;
   grid-gap: 8px;
-  scroll-snap-type: x mandatory;
   overflow-y: hidden;
   overflow-x: auto;
   flex-grow: 1;
