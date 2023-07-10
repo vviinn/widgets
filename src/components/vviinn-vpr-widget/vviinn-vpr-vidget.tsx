@@ -223,17 +223,22 @@ export class VviinnVprWidget implements ComponentInterface {
       product: productId,
       ...rest,
     });
-    if (!this.trackingDeactivated) {
-      await this.trackingApi
-        .trackEvent(productClickEvent)
-        .then(this.setTrackingDeactivated);
-    }
 
     const product = this.recommendations.find(
       (r) => r.productId === detail.productId
     );
     if (!product || !product.deeplink) return;
-    window.location.href = product.deeplink;
+
+    if (!this.trackingDeactivated) {
+      await this.trackingApi
+        .trackEvent(productClickEvent)
+        .then(this.setTrackingDeactivated)
+        .finally(() => {
+          window.location.href = product.deeplink;
+        });
+    } else {
+      window.location.href = product.deeplink;
+    }
   }
 
   connectedCallback() {
