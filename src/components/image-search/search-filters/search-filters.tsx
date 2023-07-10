@@ -15,27 +15,9 @@ import {
   BasicEventData,
   SelectFilterEventData,
 } from "../../../recommendation/events";
+import { parseFilters } from "../../../filters/parseFilters";
 
 const FILTERS_COUNT: number = 5;
-
-const parseFilters = (filter: Link, filterType): string => {
-  const result = {};
-  if (!filter) return "";
-  filter.href
-    .split("?")[1]
-    .split("included[]=")
-    .join("")
-    .split("&")
-    .forEach((f) => {
-      const [key, value] = f.split("%3A");
-      result[key] = value;
-    });
-
-  if (filterType === "categories") {
-    return result["product_type"];
-  }
-  return result[filterType];
-};
 
 @Component({
   tag: "search-filters",
@@ -53,26 +35,28 @@ export class SearchFilters {
 
   @Event() vviinnSelectFilter: EventEmitter<SelectFilterEventData>;
 
+  private filterType: string = this.filter.name;
+
   private handleFilterSelection(filter: Link): void {
     return this.isFilterSelected(filter)
       ? this.clearSelectedFilter(filter)
       : this.selectFilter(filter);
   }
 
-  private selectFilter(filter: Link) {
-    imageSearchState.activeIonLink = filter;
-    this.selectedFilter = parseFilters(filter, this.filter.name);
+  private selectFilter(selectedFilter: Link) {
+    imageSearchState.activeIonLink = selectedFilter;
+    this.selectedFilter = parseFilters(selectedFilter, this.filterType);
 
     this.vviinnSelectFilter.emit({
       ...this.basicEventData,
       action: "select",
-      filterName: filter.name,
+      filterName: selectedFilter.name,
     });
   }
 
-  private clearSelectedFilter(filter: Link) {
-    imageSearchState.activeIonLink = filter.clear;
-    this.selectedFilter = parseFilters(filter.clear, this.filter.name);
+  private clearSelectedFilter(selectedFilter: Link) {
+    imageSearchState.activeIonLink = selectedFilter.clear;
+    this.selectedFilter = parseFilters(selectedFilter.clear, this.filterType);
 
     this.vviinnSelectFilter.emit({
       ...this.basicEventData,
@@ -90,7 +74,7 @@ export class SearchFilters {
   }
 
   private isFilterSelected(filterLink: Link): boolean {
-    return this.filter.name === "categories"
+    return this.filterType === "categories"
       ? this.selectedFilter === parseFilters(filterLink, "categories")
       : this.selectedFilter === filterLink.name;
   }
@@ -103,32 +87,33 @@ export class SearchFilters {
         <div class="filters no-scrollbar">
           {filters
             .filter((_, i) => (this.hideFilters ? i < FILTERS_COUNT : true))
-            .map((f, n) => {
+            .map((filter, index) => {
               const filterActive =
                 name === "categories"
-                  ? this.selectedFilter === parseFilters(f, "categories")
-                  : this.selectedFilter === f.name;
+                  ? this.selectedFilter === parseFilters(filter, "categories")
+                  : this.selectedFilter === filter.name;
               return (
                 <div
                   role="button"
                   tabindex="0"
+                  key={index}
                   part={filterActive ? "filter active" : "filter"}
                   class={{
                     filter: true,
                     active: filterActive,
                   }}
-                  style={{ "animation-delay": `${n * 10}ms` }}
+                  style={{ "animation-delay": `${index * 10}ms` }}
                   onPointerUp={(ev) => {
                     if (imageSearchState.loading) return;
                     ev.stopPropagation();
-                    this.handleFilterSelection(f);
+                    this.handleFilterSelection(filter);
                   }}
                   onKeyPress={(ev) => {
                     if (imageSearchState.loading) return;
-                    this.handleEnter(ev, f);
+                    this.handleEnter(ev, filter);
                   }}
                 >
-                  {f.name}
+                  {filter.name}
                 </div>
               );
             })}

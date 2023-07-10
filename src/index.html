@@ -28,11 +28,16 @@
       position: absolute;
     }
   </style>
+  <script>
+    document.addEventListener("vviinnSelectFilter", ({ detail }) => {
+      console.log(detail);
+    });
+  </script>
   <body>
-    <vviinn-vpr-widget
+    <vviinn-vps-widget
       active="true"
-      token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4"
-      product-id="4114460310"
-    ></vviinn-vpr-widget>
+      token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjEwOCwianRpIjoiM2NmN2E2NDgtNzU2Ny00YjE2LWI5ODEtODIwNDEwZjkwZTQ3Iiwic2NvcGVzIjpbInZwciIsInZwcyIsInZwYyJdfQ.NB-tIbE1GzZdE0Iq2trEPZStaeP1oyEogIH1FFuCzT_hRhfZtV4GnIUCKGhLD33fI1yvYlzU59mxSwfBfiKQqLDuG9kuSVX6pMGw-prEolnxJr2nwVa_kI_00GjMx4Gp2OkR15tRe3asKY6xDPhm41FOZ6K4mGp0-UU56LiXMW3Z-MR1DyxXV62TPMqlLr3QcC5oqD7Qoh6uWfakLrBOYcAqAHfc_FeL8AsEWa9abnzb90WvPPZi0ccY_89P18F-m-rpE-srBPmbE32_ebm4-H-VoEXSSagtMCmewKZTQctcrhumQRqwfDpmWb4DM1_YvH4rlE0IbzbzuPeaxvaYCA"
+    >
+    </vviinn-vps-widget>
   </body>
 </html>
