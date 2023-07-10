@@ -113,7 +113,7 @@ export class VviinnProductCard {
       productId: this.productId,
       productRank: this.index,
       productName: this.productTitle,
-      productType: this.productType ?? "",
+      productType: this.productType,
       widgetType: this.getWidgetType(),
       campaignTypeId: this.campaignTypeId,
       campaignTypeName: campaignTypeNames[this.campaignTypeId],

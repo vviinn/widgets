@@ -28,7 +28,7 @@ export type ProductCardEventData = BasicEventData & {
   productId: string;
   productRank: number;
   productName: string;
-  productType?: string;
+  productType: string;
 };
 
 export type ProductCardEvent = CustomEvent<ProductCardEventData>;
