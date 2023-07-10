@@ -244,17 +244,21 @@ export class VviinnVpsWidget {
       ...rest,
     });
 
-    if (!this.trackingDeactivated) {
-      await this.trackingApi
-        .trackEvent(this.trackingDeactivated ? null : productClickEvent)
-        .then(this.setTrackingDeactivated);
-    }
-
     const product = imageSearchState.results.find(
       (r) => r.productId === detail.productId
     );
     if (!product || !product.deeplink) return;
-    window.location.href = product.deeplink;
+
+    if (!this.trackingDeactivated) {
+      await this.trackingApi
+        .trackEvent(this.trackingDeactivated ? null : productClickEvent)
+        .then(this.setTrackingDeactivated)
+        .finally(() => {
+          window.location.href = product.deeplink;
+        });
+    } else {
+      window.location.href = product.deeplink;
+    }
   }
 
   @Listen("vviinnImageCrop")
