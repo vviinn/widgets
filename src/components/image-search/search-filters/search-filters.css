@@ -46,3 +46,14 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+@media (max-width: 640px) {
+  .no-scrollbar-mobile {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar-mobile::-webkit-scrollbar {
+    display: none;
+  }
+}

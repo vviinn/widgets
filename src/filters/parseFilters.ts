@@ -1,8 +1,6 @@
 import { Link } from "../network/ion/Link";
 
 export const parseFilters = (filter: Link, filterType: string): string => {
-  console.log({ filter });
-  console.log({ filterType });
   if (!filter) return "";
 
   const result = {};

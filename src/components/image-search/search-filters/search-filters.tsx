@@ -84,7 +84,13 @@ export class SearchFilters {
     const { name, filters } = this.filter;
     return (
       <Host exportparts="filter, show-more-filters">
-        <div class="filters no-scrollbar">
+        <div
+          class={{
+            filters: true,
+            "no-scrollbar-mobile": this.filterType === "categories",
+            "no-scrollbar": this.filterType !== "categories",
+          }}
+        >
           {filters
             .filter((_, i) => (this.hideFilters ? i < FILTERS_COUNT : true))
             .map((filter, index) => {
