@@ -270,6 +270,7 @@ export class VviinnCarousel {
         part="product-part"
         productId={recommendation.productId}
         productTitle={recommendation.title}
+        productType={recommendation.productType}
         deeplink={recommendation.deeplink}
         image={recommendation.image.thumbnail}
         brand={recommendation.brand}

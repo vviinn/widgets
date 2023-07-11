@@ -108,11 +108,12 @@ export class VviinnProductCard {
       : ("VPS" as WidgetType);
   }
 
-  private getProductData() {
+  private getProductData(): ProductCardEventData {
     return {
       productId: this.productId,
       productRank: this.index,
       productName: this.productTitle,
+      productType: this.productType,
       widgetType: this.getWidgetType(),
       campaignTypeId: this.campaignTypeId,
       campaignTypeName: campaignTypeNames[this.campaignTypeId],
