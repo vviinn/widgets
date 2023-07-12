@@ -3,7 +3,8 @@ import { Link } from "../network/ion/Link";
 export const parseFilters = (filter: Link, filterType: string): string => {
   if (!filter) return "";
 
-  const result = {};
+  const result: { [key: string]: string } = {};
+
   filter.href
     .split("?")[1]
     .split("included[]=")
