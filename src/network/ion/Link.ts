@@ -12,6 +12,7 @@ export interface IonLinkParams {
 
 export type Link = {
   href: string;
+  clear?: Link;
   // for backward compatibility
   readonly method?: RequestMethod;
   // for backward compatibility
@@ -28,9 +29,11 @@ export const getLink = (
     O.chain((linksObject) => O.fromNullable(linksObject[path]))
   );
 
-export const linkRequest = <T>(link: Link) => (data: RequestInit) =>
-  pipe(
-    sequenceToEither(getApiPath(), createRequestFromMethod(link.method)),
-    TE.fromEither,
-    TE.chainW(makeRequest<ValueObject<T>>(link.href, data))
-  );
+export const linkRequest =
+  <T>(link: Link) =>
+  (data: RequestInit) =>
+    pipe(
+      sequenceToEither(getApiPath(), createRequestFromMethod(link.method)),
+      TE.fromEither,
+      TE.chainW(makeRequest<ValueObject<T>>(link.href, data))
+    );
