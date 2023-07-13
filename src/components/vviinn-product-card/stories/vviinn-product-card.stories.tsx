@@ -8,83 +8,7 @@ export default {
   argTypes,
 };
 
-const showImageBorders = (x, color) => {
-  const borderRule = x ? `1px solid ${color}` : "none";
-
-  return `
-  vviinn-product-card::part(image) {
-    border: ${borderRule};
-  }
-`;
-};
-
-const setupBrandVisibility = (show) => `
-  vviinn-product-card::part(brand) {
-    display: ${show ? "flex" : "none"};
-  }
-`;
-
-const setupTitleLineCount = (count) => `
-  vviinn-product-card::part(title) {
-    -webkit-line-clamp: ${count};
-  }
-`;
-
-const alignmentLeft = `
-  vviinn-product-card::part(title),
-  vviinn-product-card::part(brand),
-  vviinn-product-card::part(type),
-  vviinn-product-card::part(deeplink),
-  vviinn-product-card::part(price-container) {
-    align-self: start;
-    text-align: left;
-  }`;
-
-const alignmentCenter = `
-  vviinn-product-card::part(title),
-  vviinn-product-card::part(brand),
-  vviinn-product-card::part(type),
-  vviinn-product-card::part(deeplink),
-  vviinn-product-card::part(price-container) {
-    align-self: center;
-    text-align: center;
-  }`;
-
-const alignmentRight = `
-  vviinn-product-card::part(title),
-  vviinn-product-card::part(brand),
-  vviinn-product-card::part(type),
-  vviinn-product-card::part(deeplink),
-  vviinn-product-card::part(price-container) {
-    align-self: end;
-    text-align: right;
-  }`;
-
-const alignment = new Map([
-  [0, alignmentLeft],
-  [1, alignmentCenter],
-  [2, alignmentRight],
-]);
-
 const Template = (args) => `
-  <style>
-    ${alignment.get(args.contentAlignment)}
-    ${showImageBorders(args.imageBorder, args.imageBorderColor)}
-    ${setupBrandVisibility(args.brand)}
-    ${setupTitleLineCount(args.titleLineCount)}
-
-    vviinn-product-card::part(title),
-    vviinn-product-card::part(brand),
-    vviinn-product-card::part(type),
-    vviinn-product-card::part(price-sale),
-    vviinn-product-card::part(price-regular) {
-      color: ${args.primaryTextColor};
-    }
-
-    vviinn-product-card::part(price-outdated) {
-      color: ${args.secondaryTextColor};
-    }
-  </style>
   <vviinn-product-card
     product-title="${args.productTitle}"
     product-id="${args.productId}"
@@ -110,14 +34,8 @@ Default.args = {
   productType: "Couchtische",
   productId: "",
   imageWidth: 240,
-  contentAlignment: "Left",
-  imageBorder: true,
-  imageBorderColor: "#dddddd",
   dimmedBackground: false,
-  primaryTextColor: "#161616",
-  secondaryTextColor: "#757575",
   brand: "Ronald Schmitt",
-  titleLineCount: 2,
   locale: "en-US",
   currency: "€",
   deeplink: "",
