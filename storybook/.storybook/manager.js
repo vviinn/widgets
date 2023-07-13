@@ -3,4 +3,5 @@ import vviinnTheme from "./vviinn-theme";
 
 addons.setConfig({
   theme: vviinnTheme,
+  panelPosition: "bottom",
 });

@@ -25,9 +25,7 @@ if (docJson) setStencilDocJson(docJson);
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
-  controls: {
-    controls: { hideNoControlsWarning: true },
-  },
+  controls: { hideNoControlsWarning: true, expanded: true },
   docs: {
     extractArgTypes,
     extractComponentDescription,
