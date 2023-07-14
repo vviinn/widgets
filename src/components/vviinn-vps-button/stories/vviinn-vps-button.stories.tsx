@@ -5,7 +5,8 @@ export default {
     viewport: {
       defaultViewport: "mobile2",
     },
-    controls: { sort: "requiredFirst" },
+    //
+    // controls: { sort: "requiredFirst" },
   },
   decorators: [
     (story) => `
