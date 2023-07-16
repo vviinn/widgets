@@ -1,5 +1,5 @@
 export default {
-  title: "Widgets/Visual Search/Widget",
+  title: "Widgets/Search/Main",
   component: "vviinn-vps-widget",
   parameters: {
     viewport: {
@@ -26,7 +26,7 @@ Default.args = {
   active: true,
 };
 
-Default.storyName = "Modal Window";
+Default.storyName = "Main";
 
 Default.decorators = [
   (Story) => `

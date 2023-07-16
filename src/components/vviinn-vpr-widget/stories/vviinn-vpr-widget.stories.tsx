@@ -2,7 +2,7 @@ import { argTypes } from "./args";
 import { gridDecorator, continuityDecorator } from "./decorators";
 
 export default {
-  title: "Widgets/Visual Recommendations/Widget",
+  title: "Widgets/Recommendations/Main",
   component: "vviinn-vpr-widget",
   argTypes: {
     ...argTypes,

@@ -14,7 +14,7 @@ const centerDecorator = (story) => `
   `;
 
 export default {
-  title: "Widgets/Visual Recommendations/Button",
+  title: "Widgets/Recommendations/Button",
   component: "vviinn-vpr-button",
   decorators: [centerDecorator],
   argTypes,
@@ -41,6 +41,8 @@ const Template = (args) =>
                       source-image="${args.sourceImage}"></vviinn-vpr-button>`;
 
 export const Default = Template.bind({});
+
+Default.storyName = "Button";
 
 Default.args = {
   token:
