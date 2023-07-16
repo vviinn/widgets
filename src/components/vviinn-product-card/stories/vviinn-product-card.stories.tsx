@@ -29,6 +29,9 @@ const Template = (args) => `
   ></vviinn-product-card>`;
 
 export const Default = Template.bind({});
+
+Default.storyName = "Product Card";
+
 Default.args = {
   productTitle: "Couchtisch Rolf Benz 8770 Ronald Schmitt",
   productType: "Couchtische",
