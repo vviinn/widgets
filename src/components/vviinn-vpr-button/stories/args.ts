@@ -1,4 +1,10 @@
 export const argTypes = {
+  token: {
+    control: {
+      type: "text",
+    },
+    primary: true,
+  },
   sidebarTitle: {
     name: "sidebar-title",
     control: {
@@ -50,11 +56,6 @@ export const argTypes = {
     name: "color",
     control: {
       type: "color",
-    },
-  },
-  token: {
-    control: {
-      type: "text",
     },
   },
   productId: {

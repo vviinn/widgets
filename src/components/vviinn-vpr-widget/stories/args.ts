@@ -28,8 +28,6 @@ const campaigns = {
 
 const cssUrl = {
   name: "css-url",
-  description:
-    "Optional for custom CSS.  It will overwrite all other settings.",
   control: {
     type: "text",
   },

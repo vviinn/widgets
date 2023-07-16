@@ -73,13 +73,13 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() imageRatio: number = 1;
   /** Width of each recommended product image */
   @Prop() imageWidth: number = 300;
-  /** Id of product you need recommendations for */
+  /** Id of product you need recommendations for (required) */
   @Prop() productId: string;
-  /** vviinn customer token */
+  /** Vviinn customer token (required) */
   @Prop() token: string;
   /** Currency sign will shown after price */
   @Prop() currencySign: string = "€";
-  /** prefix will shown before price */
+  /** Prefix will shown before price */
   @Prop() pricePrefix: string;
   /** Use slider or grid view */
   @Prop() mode: CarouselMode = "continuity";
@@ -87,26 +87,27 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() campaignType: CampaignName = "VPR";
   /** Locale for currency formatting */
   @Prop() locale: string = "de-DE";
-  /** comma-separated list of campaign-ids */
+  /** Comma-separated list of campaign-ids */
   @Prop() campaigns: string = "";
   /** Color accepts any hexcode string */
   @Prop() color: string;
   /** Hiding disabled arrows in the carousel if true */
   @Prop() gridArrowsDynamic: boolean = false;
-  /** This message is displayed when no results */
+  /** Message is displayed when no results */
   @Prop() noResultText?: string;
   /** Showing message (when true) or hiding the whole widget, when no results */
   @Prop() noResultShow?: boolean = true;
+  /** Show or hide scrollbar */
+  @Prop() showScroll = true;
+  /** Optional for custom CSS.  It will overwrite all other settings. */
+  @Prop() cssUrl: string | null = null;
+
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
   /** @internal */
   @Prop() useCarousel: boolean = true;
   /** @internal */
   @Prop() showingInButton: boolean = false;
-
-  @Prop() showScroll = true;
-  @Prop() cssUrl: string | null = null;
-
   /** @internal */
   @Prop() buttonElementId?: string;
 

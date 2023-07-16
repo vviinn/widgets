@@ -23,22 +23,33 @@ import { CampaignName } from "../../campaign/Campaign";
 })
 export class VviinnVprButton {
   @Element() el: HTMLElement;
+  /** Vviinn customer token (required) */
   @Prop() token: string;
+  /** Id of product you need recommendations for (required) */
   @Prop() productId: string;
+  /** Choose position of the modal */
   @Prop() position: "bottom" | "right" = "bottom";
+  /** Image for showing in the modal's header */
   @Prop() sourceImage: string | null = null;
+  /** Customize sidebar title */
   @Prop() sidebarTitle: string = "Visually similar products";
+  /** Show or hide scrollbar */
   @Prop() modalScrollbar: boolean = false;
-  /** comma-separated list of campaign-ids */
+  /** Comma-separated list of campaign-ids */
   @Prop() campaigns: string = "";
   /** Campaign type */
   @Prop() campaignType: CampaignName = "VPR";
+  /** Color accepts any hexcode string */
   @Prop() color: string;
+  /** Add default styles to the button */
   @Prop() addStyle: boolean = true;
+  /** Choose one of carousel modes */
   @Prop() mode: CarouselMode = "continuity";
+  /** Width of each recommended product image */
   @Prop() imageWidth: number = 300;
+  /** Currency sign will shown after price */
   @Prop() currencySign: string = "€";
-  /** This message is displayed when no results */
+  /** Message is displayed when no results */
   @Prop() noResultText?: string;
   /** Showing message (when true) or hiding the whole widget, when no results */
   @Prop() noResultShow?: boolean = true;
