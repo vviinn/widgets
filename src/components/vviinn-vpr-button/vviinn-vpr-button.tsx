@@ -23,36 +23,36 @@ import { CampaignName } from "../../campaign/Campaign";
 })
 export class VviinnVprButton {
   @Element() el: HTMLElement;
-  /** Vviinn customer token (required) */
+  /** Vviinn customer’s token (required) */
   @Prop() token: string;
-  /** Id of product you need recommendations for (required) */
+  /** ID of product you need recommendations for (required) */
   @Prop() productId: string;
-  /** Choose position of the modal */
+  /** Position of the modal */
   @Prop() position: "bottom" | "right" = "bottom";
   /** Image for showing in the modal's header */
   @Prop() sourceImage: string | null = null;
-  /** Customize sidebar title */
+  /** Sidebar title */
   @Prop() sidebarTitle: string = "Visually similar products";
-  /** Show or hide scrollbar */
+  /** Show or hide the scrollbar */
   @Prop() modalScrollbar: boolean = false;
-  /** Comma-separated list of campaign-ids */
+  /** Comma-separated list of campaign IDs */
   @Prop() campaigns: string = "";
   /** Campaign type */
   @Prop() campaignType: CampaignName = "VPR";
-  /** Color accepts any hexcode string */
-  @Prop() color: string;
+  /** Accepts any hex color code */
+  @Prop() color: string = "";
   /** Add default styles to the button */
   @Prop() addStyle: boolean = true;
-  /** Choose one of carousel modes */
+  /** Switch between carousel modes */
   @Prop() mode: CarouselMode = "continuity";
   /** Width of each recommended product image */
   @Prop() imageWidth: number = 300;
-  /** Currency sign will shown after price */
+  /**  The currency sign is displayed after the price */
   @Prop() currencySign: string = "€";
-  /** Message is displayed when no results */
-  @Prop() noResultText?: string;
-  /** Showing message (when true) or hiding the whole widget, when no results */
-  @Prop() noResultShow?: boolean = true;
+  /** The message is displayed when no results */
+  @Prop() noResultText: string = "No results! Please, try again later.";
+  /** Showing a message (when true) or hiding the whole widget, when no results */
+  @Prop() noResultShow: boolean = true;
   /** Hiding disabled arrows in the carousel if true */
   @Prop() gridArrowsDynamic: boolean = false;
 

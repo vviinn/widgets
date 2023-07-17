@@ -100,15 +100,15 @@ const notNan = (n: number): boolean => !isNaN(n);
 export class VviinnVpsWidget {
   @Element() el: HTMLElement;
 
-  /** vviinn customer token */
+  /** Vviinn customer’s token */
   @Prop() token: string | undefined;
   /** @internal */
   @Prop() apiPath: string = "https://api.vviinn.com";
   /** When true modal window with widget will be shown */
   @Prop({ mutable: true }) active: boolean = false;
-  /** Currency sign will shown after price */
+  /**  The currency sign is displayed after the price */
   @Prop() currencySign: string = "€";
-  /** Locale for currency formatting */
+  /** The locale for currency formatting */
   @Prop() locale: string = "de-DE";
   /** Campaign using for visual search */
   @Prop() campaignId?: string;

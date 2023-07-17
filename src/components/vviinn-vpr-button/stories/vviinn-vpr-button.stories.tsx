@@ -48,20 +48,20 @@ Default.args = {
   token:
     "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4",
   productId: "4114460310",
+  mode: "continuity",
   campaignType: "VPR",
   campaigns: "",
-  color: "",
-  currencySign: "€",
-  position: "bottom",
-  addStyle: true,
   sidebarTitle: "Visually similar products",
-  modalScrollbar: false,
-  mode: "continuity",
-  imageWidth: "300",
+  position: "bottom",
   sourceImage:
     "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg",
-  noResultText: "No results! Please, try again later.",
+  imageWidth: "300",
+  currencySign: "€",
+  color: "",
+  addStyle: true,
+  modalScrollbar: false,
   noResultShow: true,
+  noResultText: "No results! Please, try again later.",
   gridArrowsDynamic: false,
 };
 

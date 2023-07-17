@@ -55,11 +55,11 @@ import { campaignTypeNames } from "../../campaign/Campaign";
 })
 export class VviinnVpsButton {
   @Element() el: HTMLElement;
-  /** vviinn customer token */
+  /** Vviinn customer’s token */
   @Prop() token: string;
-  /** Currency sign will shown after price */
+  /**  The currency sign is displayed after the price */
   @Prop() currencySign: string = "€";
-  /** Locale for currency formatting */
+  /** The locale for currency formatting */
   @Prop() locale: string = "de-DE";
   /** Campaign using for visual search */
   @Prop() campaignId?: string;

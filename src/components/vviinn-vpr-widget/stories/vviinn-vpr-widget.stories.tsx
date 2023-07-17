@@ -37,50 +37,50 @@ const Template = (args) => `
     </vviinn-vpr-widget>
 `;
 
-export const Continuity = Template.bind({});
-Continuity.args = {
-  campaigns: "",
-  campaignType: "VPR",
-  imageWidth: 300,
-  mode: "continuity",
-  color: "",
-  productId: "4114460310",
-  showScroll: false,
-  blockTitle: "Recommended products",
-  cssUrl: "",
-  locale: "en-US",
-  currencySign: "€",
-  pricePrefix: "",
-  imageRatio: 1,
-  noResultText: "No results! Please, try again later.",
-  noResultShow: true,
-  gridArrowsDynamic: false,
-  token:
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4",
-};
-
-Continuity.decorators = [continuityDecorator];
-
 export const Grid = Template.bind({});
 Grid.args = {
-  campaigns: "",
-  campaignType: "VPR",
-  imageWidth: 420,
-  mode: "grid",
-  color: "",
+  token:
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4",
   productId: "4114460310",
-  showScroll: true,
+  mode: "grid",
+  campaignType: "VPR",
+  campaigns: "",
   blockTitle: "Recommended products",
-  cssUrl: "",
+  imageWidth: 420,
+  imageRatio: 1,
   locale: "en-US",
   currencySign: "€",
   pricePrefix: "",
-  imageRatio: 1,
-  noResultText: "No results! Please, try again later.",
+  color: "",
+  cssUrl: "",
+  showScroll: false,
   noResultShow: true,
+  noResultText: "No results! Please, try again later.",
   gridArrowsDynamic: false,
-  token:
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4",
 };
 
 Grid.decorators = [gridDecorator];
+
+export const Continuity = Template.bind({});
+Continuity.args = {
+  token:
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4",
+  productId: "4114460310",
+  mode: "continuity",
+  campaignType: "VPR",
+  campaigns: "",
+  blockTitle: "Recommended products",
+  imageWidth: 300,
+  imageRatio: 1,
+  locale: "en-US",
+  currencySign: "€",
+  pricePrefix: "",
+  color: "",
+  cssUrl: "",
+  showScroll: false,
+  noResultShow: true,
+  noResultText: "No results! Please, try again later.",
+  gridArrowsDynamic: false,
+};
+
+Continuity.decorators = [continuityDecorator];

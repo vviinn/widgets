@@ -67,39 +67,39 @@ import { checkEmpryString } from "../../utils/option/option";
 })
 export class VviinnVprWidget implements ComponentInterface {
   @Element() el: HTMLElement;
-  /** Title for recommendations widget */
+  /** Widget’s title */
   @Prop() blockTitle: string = "Recommended products";
-  /** Ratio of each recommended product image */
+  /** The ratio of each recommended product image */
   @Prop() imageRatio: number = 1;
   /** Width of each recommended product image */
   @Prop() imageWidth: number = 300;
-  /** Id of product you need recommendations for (required) */
+  /** ID of product you need recommendations for (required) */
   @Prop() productId: string;
-  /** Vviinn customer token (required) */
+  /** Vviinn customer’s token (required) */
   @Prop() token: string;
-  /** Currency sign will shown after price */
+  /** The currency sign is displayed after the price */
   @Prop() currencySign: string = "€";
-  /** Prefix will shown before price */
-  @Prop() pricePrefix: string;
-  /** Use slider or grid view */
+  /** Prefix is displayed before the price */
+  @Prop() pricePrefix: string = "";
+  /** Switch between carousel modes */
   @Prop() mode: CarouselMode = "continuity";
   /** Campaign type */
   @Prop() campaignType: CampaignName = "VPR";
-  /** Locale for currency formatting */
+  /** The locale for currency formatting */
   @Prop() locale: string = "de-DE";
-  /** Comma-separated list of campaign-ids */
+  /** Comma-separated list of campaign IDs */
   @Prop() campaigns: string = "";
-  /** Color accepts any hexcode string */
-  @Prop() color: string;
+  /** Accepts any hex color code */
+  @Prop() color: string = "";
   /** Hiding disabled arrows in the carousel if true */
   @Prop() gridArrowsDynamic: boolean = false;
-  /** Message is displayed when no results */
-  @Prop() noResultText?: string;
-  /** Showing message (when true) or hiding the whole widget, when no results */
-  @Prop() noResultShow?: boolean = true;
-  /** Show or hide scrollbar */
+  /** The message is displayed when no results*/
+  @Prop() noResultText: string = "No results! Please, try again later.";
+  /** Showing a message (when true) or hiding the whole widget, when no results */
+  @Prop() noResultShow: boolean = true;
+  /** Show or hide the scrollbar */
   @Prop() showScroll = true;
-  /** Optional for custom CSS.  It will overwrite all other settings. */
+  /** Optional for custom CSS. It will overwrite all other settings */
   @Prop() cssUrl: string | null = null;
 
   /** @internal */
@@ -361,9 +361,7 @@ export class VviinnVprWidget implements ComponentInterface {
             (this.useCarousel ? this.renderCarousel() : this.renderResults())}
 
           {this.recommendations.length === 0 && this.hasErrorOnLoad && (
-            <p class="no-result-text">{`${
-              this?.noResultText ?? "No results! Please, try again later."
-            }`}</p>
+            <p class="no-result-text">{this.noResultText}</p>
           )}
         </Fragment>
       </Host>
