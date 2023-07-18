@@ -100,18 +100,19 @@ const notNan = (n: number): boolean => !isNaN(n);
 export class VviinnVpsWidget {
   @Element() el: HTMLElement;
 
-  /** Vviinn customer’s token */
+  /** Vviinn customer’s token (required) */
   @Prop() token: string | undefined;
-  /** @internal */
-  @Prop() apiPath: string = "https://api.vviinn.com";
-  /** When true modal window with widget will be shown */
+  /** Toggle the widget's modal showing */
   @Prop({ mutable: true }) active: boolean = false;
   /**  The currency sign is displayed after the price */
   @Prop() currencySign: string = "€";
   /** The locale for currency formatting */
   @Prop() locale: string = "de-DE";
-  /** Campaign using for visual search */
-  @Prop() campaignId?: string;
+  /** Campaign ID applied for visual search */
+  @Prop() campaignId: string = "";
+
+  /** @internal */
+  @Prop() apiPath: string = "https://api.vviinn.com";
   /** Set true when showing the widget in button */
   /** @internal */
   @Prop() showingInButton?: boolean = false;

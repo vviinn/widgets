@@ -55,17 +55,17 @@ import { campaignTypeNames } from "../../campaign/Campaign";
 })
 export class VviinnVpsButton {
   @Element() el: HTMLElement;
-  /** Vviinn customer’s token */
+  /** Vviinn customer’s token (required) */
   @Prop() token: string;
   /**  The currency sign is displayed after the price */
   @Prop() currencySign: string = "€";
   /** The locale for currency formatting */
   @Prop() locale: string = "de-DE";
-  /** Campaign using for visual search */
-  @Prop() campaignId?: string;
+  /** Campaign ID applied for visual search */
+  @Prop() campaignId: string = "";
   /** Add style to the button */
   @Prop() addStyle: boolean = false;
-  /** Add style to the button */
+  /** Show the onboarding step or skip it and move to the direct image upload. */
   @Prop() mode: "modal" | "upload" = "modal";
 
   /** @internal */
