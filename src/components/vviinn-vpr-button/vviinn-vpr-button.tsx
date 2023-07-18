@@ -18,7 +18,7 @@ import {
 
 /**
  *
- * @part button - Clickable button element
+ * @part button - clickable button element
  */
 @Component({
   tag: "vviinn-vpr-button",
@@ -93,7 +93,7 @@ export class VviinnVprButton {
         role="button"
         tabindex="0"
       >
-        <vviinn-button addStyle={this.addStyle} exportparts="button">
+        <vviinn-button addStyle={this.addStyle} part="vviinn-button">
           <slot>
             <VisualSearchIcon />
           </slot>

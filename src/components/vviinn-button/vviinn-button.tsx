@@ -1,6 +1,10 @@
 import { Component, Host, h, Prop } from "@stencil/core";
 import { VisualSearchIcon } from "../vviinn-icons";
 
+/**
+ *
+ * @part button - clickable button element
+ */
 @Component({
   tag: "vviinn-button",
   styleUrl: "vviinn-button.css",
@@ -11,7 +15,7 @@ export class VviinnButton {
 
   render() {
     return (
-      <Host>
+      <Host exportparts="button">
         <button
           class={this.addStyle ? "open-button" : "raw-open-button"}
           part="button"
