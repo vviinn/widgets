@@ -5,6 +5,9 @@ export default {
   title: "Elements/Product Card",
   component: "vviinn-product-card",
   decorators: [productDecorator],
+  parameters: {
+    controls: { expanded: false },
+  },
   argTypes,
 };
 
