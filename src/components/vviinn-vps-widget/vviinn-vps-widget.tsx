@@ -37,6 +37,8 @@ import {
   ProductCardEvent,
   BasicEventData,
   SelectFilterEventData,
+  ProductCardEventData,
+  SelectObjectEventData,
 } from "../../recommendation/events";
 import { pipe } from "fp-ts/lib/function";
 import { SlotSkeleton } from "../customized-slots";
@@ -135,21 +137,32 @@ export class VviinnVpsWidget {
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
 
+  /** The event emits on widget load */
   @Event({ bubbles: true })
   vviinnWidgetLoad: EventEmitter<BasicEventData>;
+  /** The event emits on modal open */
   @Event({ bubbles: true })
   vviinnWidgetOpen: EventEmitter<BasicEventData>;
+  /** The event emits on modal close */
+  @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
 
-  // List to show in the Storybook:
-  @Event() vviinnWidgetClose: EventEmitter;
-  @Event() vviinnProductClick: EventEmitter;
-  @Event() vviinnProductView: EventEmitter;
-  @Event() vviinnProductLoad: EventEmitter;
-  @Event() vviinnImageUpload: EventEmitter;
-  @Event() vviinnImageCrop: EventEmitter;
-  @Event() vviinnSelectObject: EventEmitter;
-  @Event() vviinnSelectFilter: EventEmitter;
-  @Event() vviinnNoResult: EventEmitter;
+  /** The image uploaded */
+  @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
+  /** Wrong image format, that isn’t .jpg, .jpeg, png, or the request failed */
+  @Event() vviinnNoResult: EventEmitter<BasicEventData>;
+  /** The recommendation renders on the page */
+  @Event() vviinnProductLoad: EventEmitter<ProductCardEventData>;
+  /** Click on the product’s link */
+  @Event() vviinnProductClick: EventEmitter<ProductCardEventData>;
+  /** The recommendation appears in the viewport */
+  @Event() vviinnProductView: EventEmitter<ProductCardEventData>;
+
+  /** Crop area changes */
+  @Event() vviinnImageCrop: EventEmitter<BasicEventData>;
+  /** User selects the detected object */
+  @Event() vviinnSelectObject: EventEmitter<SelectObjectEventData>;
+  /** User selects one of the filters */
+  @Event() vviinnSelectFilter: EventEmitter<SelectFilterEventData>;
 
   private overflow: string;
   private uiSessionId: string;

@@ -24,9 +24,9 @@ import { BasicEventData } from "../../recommendation/events";
   shadow: true,
 })
 export class VviinnImageSelector {
-  /** Event fires when user select file */
+  /** The image uploaded */
   @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
-  /** Event fires when user select file that no .jpg, .jpeg or png */
+  /** Wrong image format, that isn’t .jpg, .jpeg, png */
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
   @Prop() basicEventData: BasicEventData;

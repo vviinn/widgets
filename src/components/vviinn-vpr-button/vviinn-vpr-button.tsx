@@ -11,6 +11,10 @@ import { version } from "../../../package.json";
 import { VisualSearchIcon } from "../vviinn-icons";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 import { CampaignName } from "../../campaign/Campaign";
+import {
+  BasicEventData,
+  ProductCardEventData,
+} from "../../recommendation/events";
 
 /**
  *
@@ -59,14 +63,21 @@ export class VviinnVprButton {
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
 
-  // List to show in the Storybook:
-  @Event() vviinnWidgetLoad: EventEmitter;
-  @Event() vviinnWidgetOpen: EventEmitter;
-  @Event() vviinnWidgetClose: EventEmitter;
-  @Event() vviinnProductClick: EventEmitter;
-  @Event() vviinnProductView: EventEmitter;
-  @Event() vviinnProductLoad: EventEmitter;
-  @Event() vviinnNoResult: EventEmitter;
+  /** The event emits on widget load */
+  @Event() vviinnWidgetLoad: EventEmitter<BasicEventData>;
+  /** The event emits on modal open */
+  @Event() vviinnWidgetOpen: EventEmitter<BasicEventData>;
+  /** The event emits on modal close */
+  @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
+  /** Recommendations request failed */
+  @Event() vviinnNoResult: EventEmitter<BasicEventData>;
+
+  /** The recommendation renders on the page */
+  @Event() vviinnProductLoad: EventEmitter<ProductCardEventData>;
+  /** Click on the product’s link */
+  @Event() vviinnProductClick: EventEmitter<ProductCardEventData>;
+  /** The recommendation appears in the viewport */
+  @Event() vviinnProductView: EventEmitter<ProductCardEventData>;
 
   private sidebar: HTMLVviinnRecommendationsSidebarElement | null = null;
   private sidebarCloseListener: () => void = () => {

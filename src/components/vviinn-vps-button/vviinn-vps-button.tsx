@@ -12,7 +12,12 @@ import {
 import { version } from "../../../package.json";
 import { CameraIcon } from "../vviinn-icons";
 import { SlotSkeleton } from "../customized-slots";
-import { BasicEventData } from "../../recommendation/events";
+import {
+  BasicEventData,
+  ProductCardEventData,
+  SelectFilterEventData,
+  SelectObjectEventData,
+} from "../../recommendation/events";
 import { campaignTypeNames } from "../../campaign/Campaign";
 
 /**
@@ -73,26 +78,34 @@ export class VviinnVpsButton {
 
   @State() buttonPressed: boolean = false;
 
+  /** The event emits on widget load. */
+  @Event() vviinnWidgetLoad: EventEmitter<BasicEventData>;
+  /** The event emits on modal open. */
+  @Event() vviinnWidgetOpen: EventEmitter<BasicEventData>;
+  /** The event emits on modal close. */
+  @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
+
+  /** The image uploaded */
+  @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
+  /** Wrong image format, that isn’t .jpg, .jpeg, png, or the request failed */
+  @Event() vviinnNoResult: EventEmitter<BasicEventData>;
+  /** The recommendation renders on the page */
+  @Event() vviinnProductLoad: EventEmitter<ProductCardEventData>;
+  /** Click on the product’s link */
+  @Event() vviinnProductClick: EventEmitter<ProductCardEventData>;
+  /** The recommendation appears in the viewport */
+  @Event() vviinnProductView: EventEmitter<ProductCardEventData>;
+
+  /** Crop area changes */
+  @Event() vviinnImageCrop: EventEmitter<BasicEventData>;
+  /** User selects the detected object */
+  @Event() vviinnSelectObject: EventEmitter<SelectObjectEventData>;
+  /** User selects one of the filters */
+  @Event() vviinnSelectFilter: EventEmitter<SelectFilterEventData>;
+
   /** @internal */
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
-
-  /** Event emitted when modal opens */
-  @Event() vviinnWidgetOpen: EventEmitter<BasicEventData>;
-  /** Event fires when user select file */
-  @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
-  /** Event fires when user select file that no .jpg, .jpeg or png */
-  @Event() vviinnNoResult: EventEmitter<BasicEventData>;
-
-  // List to show in the Storybook:
-  @Event() vviinnWidgetLoad: EventEmitter;
-  @Event() vviinnWidgetClose: EventEmitter;
-  @Event() vviinnProductClick: EventEmitter;
-  @Event() vviinnProductView: EventEmitter;
-  @Event() vviinnProductLoad: EventEmitter;
-  @Event() vviinnImageCrop: EventEmitter;
-  @Event() vviinnSelectObject: EventEmitter;
-  @Event() vviinnSelectFilter: EventEmitter;
 
   getBasicEventData = (): BasicEventData => {
     return {

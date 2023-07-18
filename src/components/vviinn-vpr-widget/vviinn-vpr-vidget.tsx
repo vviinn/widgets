@@ -34,7 +34,11 @@ import {
   WidgetEvent,
 } from "vviinn-tracking-client-ts";
 import { createTrackingApi } from "../../openApi";
-import { ProductCardEvent, BasicEventData } from "../../recommendation/events";
+import {
+  ProductCardEvent,
+  BasicEventData,
+  ProductCardEventData,
+} from "../../recommendation/events";
 import {
   createProductClickVprEvent,
   createProductViewVprEvent,
@@ -115,21 +119,24 @@ export class VviinnVprWidget implements ComponentInterface {
   @State() trackingDeactivated: boolean = false;
   @State() hasErrorOnLoad: boolean = false;
 
+  /** The event emits on widget load */
   @Event({ bubbles: true })
   vviinnWidgetLoad: EventEmitter<BasicEventData>;
 
-  /** @internal */
-  @Event({ bubbles: true })
-  vviinnWidgetOpen: EventEmitter<BasicEventData>;
-
-  // List to show in the Storybook:
-  @Event() vviinnProductClick: EventEmitter;
-  @Event() vviinnProductView: EventEmitter;
-  @Event() vviinnProductLoad: EventEmitter;
-  @Event() vviinnNoResult: EventEmitter;
+  /** The recommendation renders on the page */
+  @Event() vviinnProductLoad: EventEmitter<ProductCardEventData>;
+  /** Click on the product’s link */
+  @Event() vviinnProductClick: EventEmitter<ProductCardEventData>;
+  /** The recommendation appears in the viewport */
+  @Event() vviinnProductView: EventEmitter<ProductCardEventData>;
+  /** Recommendations request failed */
+  @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
   /** @internal */
   @Event() vviinnRecommendationsLoaded: EventEmitter;
+  /** @internal */
+  @Event({ bubbles: true })
+  vviinnWidgetOpen: EventEmitter<BasicEventData>;
 
   private productIds: string[];
   private productImageLoadedSubject = new Subject();
