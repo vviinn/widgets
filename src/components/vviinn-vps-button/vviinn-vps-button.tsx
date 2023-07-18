@@ -51,7 +51,8 @@ import { campaignTypeNames } from "../../campaign/Campaign";
  * @part price-sale - renders inside price-container when "sale-price" property filled. Contains sale price.
  * @part title - product title
  * @part example-images - example images block
- * @part button - button
+ * @part button - clickable button element
+ * @part vviinn-button - button element container
  */
 @Component({
   tag: "vviinn-vps-button",
