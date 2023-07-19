@@ -47,22 +47,25 @@ import {
 import { checkEmpryString } from "../../utils/option/option";
 
 /**
- * @part product-card - product card itself
- * @part title - title inside product card
- * @part brand - brand inside product card
- * @part currency - brand inside product card
- * @part image - product card image
- * @part image-link - anchor element around product image
- * @part deeplink - anchor element around product title
- * @part price-amount-sale - numeric part of price.
- * @part price-amount-outdated - numeric part of price.
- * @part price-amount-regular - numeric part of price.
- * @part price-container - block of prices
- * @part price-outdated - block for outdated price. rendered when product contains sale price
- * @part price-regular - block for price if no sale price presented
- * @part price-sale -  block for sale price. rendered only if sale price presented
- * @part price-prefix - block rendered before each price element (for ex. "from")
- * @part carousel-button
+ * @part product-card - Product card itself.
+ * @part product-part - Will be deprecated. Use "product-card" instead.
+ * @part title - Title inside product card.
+ * @part brand - Brand inside product card.
+ * @part currency - Currency related to price.
+ * @part image - Product card image.
+ * @part image-link - Anchor element around product image.
+ * @part deeplink - Anchor element around product title.
+ * @part price-amount-sale - Numeric part of the price.
+ * @part price-amount-outdated - Numeric part of the price.
+ * @part price-amount-regular - Numeric part of the price.
+ * @part price-container - Block of prices.
+ * @part price-outdated - Block for outdated price. Rendered when the product contains the sale price.
+ * @part price-regular - Block for a price if no sale price is presented.
+ * @part price-sale - Block for sale price. Rendered only if the sale price presented
+ * @part price-prefix - Block rendered before each price element (for ex. "from")
+ * @part carousel-button - Button for carousel navigation.
+ * @part recommendations-grid - For internal usage only!
+ * @part recommendations-title - Title of the recommendations grid.
  */
 @Component({
   tag: "vviinn-vpr-widget",

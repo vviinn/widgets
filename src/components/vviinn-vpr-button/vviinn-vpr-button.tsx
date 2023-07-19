@@ -18,8 +18,8 @@ import {
 
 /**
  *
- * @part button - clickable button element
- * @part vviinn-button - button element container
+ * @part button - Clickable button element.
+ * @part vviinn-button - Button element container.
  */
 @Component({
   tag: "vviinn-vpr-button",
