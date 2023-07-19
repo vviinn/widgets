@@ -74,7 +74,7 @@ export class VviinnVpsButton {
   @Prop() addStyle: boolean = false;
   /** Show the onboarding step or skip it and move to the direct image upload. */
   @Prop() mode: "modal" | "upload" = "modal";
-  /** Condition to open product link in new tab or not */
+  /** Toggle for opening product link in new tab or not */
   @Prop() productDetailNewTab: boolean = true;
 
   /** @internal */

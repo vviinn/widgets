@@ -108,7 +108,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() showScroll = true;
   /** Optional for custom CSS. It will overwrite all other settings */
   @Prop() cssUrl: string | null = null;
-  /** Condition to open product link in new tab or not */
+  /** Toggle for opening product link in new tab or not */
   @Prop() productDetailNewTab: boolean = false;
 
   /** @internal */

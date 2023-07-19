@@ -108,7 +108,7 @@ export class VviinnVpsWidget {
   @Prop() locale: string = "de-DE";
   /** Campaign ID applied for visual search */
   @Prop() campaignId: string = "";
-  /** Condition to open product link in new tab or not */
+  /** Toggle for opening product link in new tab or not */
   @Prop() productDetailNewTab: boolean = true;
 
   /** @internal */
