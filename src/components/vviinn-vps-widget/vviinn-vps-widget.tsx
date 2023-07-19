@@ -101,7 +101,7 @@ export class VviinnVpsWidget {
   /** Vviinn customer’s token (required) */
   @Prop() token: string | undefined;
   /** Toggle the widget's modal showing */
-  @Prop({ mutable: true }) active: boolean = false;
+  @Prop({ mutable: true }) active: boolean = true;
   /**  The currency sign is displayed after the price */
   @Prop() currencySign: string = "€";
   /** The locale for currency formatting */

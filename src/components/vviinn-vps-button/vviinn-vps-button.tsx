@@ -165,6 +165,7 @@ export class VviinnVpsButton {
           buttonPressed={this.buttonPressed}
           resetVpsButton={this.resetButton.bind(this)}
           buttonElementId={this.el.id}
+          active={this.buttonPressed}
         />
       </Host>
     );
