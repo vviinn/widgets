@@ -47,22 +47,22 @@ import {
 import { checkEmpryString } from "../../utils/option/option";
 
 /**
- * @part product-card - Product card itself.
+ * @part product-card - Product Card itself.
  * @part product-part - Will be deprecated. Use "product-card" instead.
- * @part title - Title inside product card.
- * @part brand - Brand inside product card.
+ * @part title - Title inside Product Card.
+ * @part brand - Brand inside Product Card.
  * @part currency - Currency related to price.
- * @part image - Product card image.
- * @part image-link - Anchor element around product image.
- * @part deeplink - Anchor element around product title.
+ * @part image - Product Card image.
+ * @part image-link - Anchor element around product image. Rendered only if "deeplink" property is filled.
+ * @part deeplink - Anchor element around product title. Rendered only if "deeplink" property is filled.
  * @part price-amount-sale - Numeric part of the price.
  * @part price-amount-outdated - Numeric part of the price.
  * @part price-amount-regular - Numeric part of the price.
  * @part price-container - Block of prices.
  * @part price-outdated - Block for outdated price. Rendered when the product contains the sale price.
  * @part price-regular - Block for a price if no sale price is presented.
- * @part price-sale - Block for sale price. Rendered only if the sale price presented
- * @part price-prefix - Block rendered before each price element (for ex. "from")
+ * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
+ * @part price-prefix - Block rendered before each price element (for ex. "from").
  * @part carousel-button - Button for carousel navigation.
  * @part recommendations-grid - For internal usage only!
  * @part recommendations-title - Title of the recommendations grid.

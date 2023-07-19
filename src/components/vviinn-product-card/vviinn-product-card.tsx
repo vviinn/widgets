@@ -33,7 +33,7 @@ import {
 /**
  * @part brand - product brand.
  * @part currency - currency sign. Renders after price-amount.
- * @part deeplink - anchor element for title. Rendered only if "deeplink" property filled.
+ * @part deeplink - anchor element for title. Rendered only if "deeplink" property is filled.
  * @part image - product image.
  * @part image-link - anchor element for image. Rendered only if "deeplink" property filled.
  * @part price-amount-sale - numeric part of price.
@@ -44,7 +44,7 @@ import {
  * @part price-regular - renders inside price-container when "sale-price" property is empty.
  * @part price-sale - renders inside price-container when "sale-price" property filled. Contains sale price.
  * @part price-prefix - renders before price-amount. Can be set with "price-prefix" property or inherited from parent component.
- * @part title - product title
+ * @part title - Product title
  */
 @Component({
   tag: "vviinn-product-card",

@@ -24,7 +24,7 @@ import { BasicEventData } from "../../recommendation/events";
   shadow: true,
 })
 export class VviinnImageSelector {
-  /** The image uploaded */
+  /** The image was uploaded */
   @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
   /** Wrong image format, that isn’t .jpg, .jpeg, png */
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;

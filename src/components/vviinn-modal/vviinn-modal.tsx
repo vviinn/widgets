@@ -31,7 +31,7 @@ export class VviinnModal {
 
   @State() slider: boolean = false;
 
-  /** Event emitted when close button clicked and close animation ends */
+  /** Event emitted when Close Button clicked and close animation ends */
   @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
 
   componentWillLoad() {
