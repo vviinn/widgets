@@ -130,7 +130,7 @@ export class RecommendationsSidebar {
               noResultShow={this.noResultShow}
               gridArrowsDynamic={this.gridArrowsDynamic}
               showingInButton={this.showingInButton}
-              productDetailNewTab={this.openInNewTab}
+              productDetailNewTab={this.productDetailNewTab}
             />
           </main>
         </aside>

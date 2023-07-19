@@ -160,7 +160,7 @@ export class VviinnVpsWidget {
   private id?: string;
 
   private handleOpenLink(deeplink: string, productDetailNewTab: boolean) {
-    if (openInNewTab) {
+    if (productDetailNewTab) {
       window.open(deeplink);
     } else {
       window.location.href = deeplink;
@@ -265,10 +265,10 @@ export class VviinnVpsWidget {
         .trackEvent(this.trackingDeactivated ? null : productClickEvent)
         .then(this.setTrackingDeactivated)
         .finally(() => {
-          this.handleOpenLink(product.deeplink, this.openInNewTab);
+          this.handleOpenLink(product.deeplink, this.productDetailNewTab);
         });
     } else {
-      this.handleOpenLink(product.deeplink, this.openInNewTab);
+      this.handleOpenLink(product.deeplink, this.productDetailNewTab);
     }
   }
 

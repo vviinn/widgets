@@ -101,7 +101,7 @@ export class VviinnVprButton {
     sidebar.noResultText = this.noResultText;
     sidebar.noResultShow = this.noResultShow;
     sidebar.gridArrowsDynamic = this.gridArrowsDynamic;
-    sidebar.openInNewTab = this.openInNewTab;
+    sidebar.productDetailNewTab = this.productDetailNewTab;
     sidebar.widgetVersion = version;
     sidebar.showingInButton = true;
 

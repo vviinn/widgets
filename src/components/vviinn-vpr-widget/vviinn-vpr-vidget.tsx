@@ -148,7 +148,7 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   private handleOpenLink(deeplink: string, productDetailNewTab: boolean) {
-    if (openInNewTab) {
+    if (productDetailNewTab) {
       window.open(deeplink);
     } else {
       window.location.href = deeplink;
@@ -245,10 +245,10 @@ export class VviinnVprWidget implements ComponentInterface {
         .trackEvent(productClickEvent)
         .then(this.setTrackingDeactivated)
         .finally(() => {
-          this.handleOpenLink(product.deeplink, this.openInNewTab);
+          this.handleOpenLink(product.deeplink, this.productDetailNewTab);
         });
     } else {
-      this.handleOpenLink(product.deeplink, this.openInNewTab);
+      this.handleOpenLink(product.deeplink, this.productDetailNewTab);
     }
   }
 

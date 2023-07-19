@@ -152,7 +152,7 @@ export class VviinnVpsButton {
           buttonPressed={this.buttonPressed}
           resetVpsButton={this.resetButton.bind(this)}
           buttonElementId={this.el.id}
-          productDetailNewTab={this.openInNewTab}
+          productDetailNewTab={this.productDetailNewTab}
         />
       </Host>
     );
