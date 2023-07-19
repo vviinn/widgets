@@ -159,8 +159,8 @@ export class VviinnVpsWidget {
   private imageSource: SearchImageSource | null = null;
   private id?: string;
 
-  private handleOpenLink(deeplink: string, productDetailNewTab: boolean) {
-    if (productDetailNewTab) {
+  private handleOpenLink(deeplink: string) {
+    if (this.productDetailNewTab) {
       window.open(deeplink);
     } else {
       window.location.href = deeplink;
@@ -265,10 +265,10 @@ export class VviinnVpsWidget {
         .trackEvent(this.trackingDeactivated ? null : productClickEvent)
         .then(this.setTrackingDeactivated)
         .finally(() => {
-          this.handleOpenLink(product.deeplink, this.productDetailNewTab);
+          this.handleOpenLink(product.deeplink);
         });
     } else {
-      this.handleOpenLink(product.deeplink, this.productDetailNewTab);
+      this.handleOpenLink(product.deeplink);
     }
   }
 

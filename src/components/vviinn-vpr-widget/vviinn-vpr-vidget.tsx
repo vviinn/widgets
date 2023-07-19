@@ -147,8 +147,8 @@ export class VviinnVprWidget implements ComponentInterface {
     };
   }
 
-  private handleOpenLink(deeplink: string, productDetailNewTab: boolean) {
-    if (productDetailNewTab) {
+  private handleOpenLink(deeplink: string) {
+    if (this.productDetailNewTab) {
       window.open(deeplink);
     } else {
       window.location.href = deeplink;
@@ -245,10 +245,10 @@ export class VviinnVprWidget implements ComponentInterface {
         .trackEvent(productClickEvent)
         .then(this.setTrackingDeactivated)
         .finally(() => {
-          this.handleOpenLink(product.deeplink, this.productDetailNewTab);
+          this.handleOpenLink(product.deeplink);
         });
     } else {
-      this.handleOpenLink(product.deeplink, this.productDetailNewTab);
+      this.handleOpenLink(product.deeplink);
     }
   }
 
