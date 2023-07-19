@@ -98,7 +98,7 @@ export class VviinnVprWidget implements ComponentInterface {
   /** Showing message (when true) or hiding the whole widget, when no results */
   @Prop() noResultShow?: boolean = true;
   /** Condition to open product link in new tab or not */
-  @Prop() openInNewTab: boolean = false;
+  @Prop() productDetailNewTab: boolean = false;
 
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
@@ -147,7 +147,7 @@ export class VviinnVprWidget implements ComponentInterface {
     };
   }
 
-  private handleOpenLink(deeplink: string, openInNewTab: boolean) {
+  private handleOpenLink(deeplink: string, productDetailNewTab: boolean) {
     if (openInNewTab) {
       window.open(deeplink);
     } else {

@@ -113,7 +113,7 @@ export class VviinnVpsWidget {
   /** Campaign using for visual search */
   @Prop() campaignId?: string;
   /** Condition to open product link in new tab or not */
-  @Prop() openInNewTab: boolean = true;
+  @Prop() productDetailNewTab: boolean = true;
 
   /** Set true when showing the widget in button */
   /** @internal */
@@ -159,7 +159,7 @@ export class VviinnVpsWidget {
   private imageSource: SearchImageSource | null = null;
   private id?: string;
 
-  private handleOpenLink(deeplink: string, openInNewTab: boolean) {
+  private handleOpenLink(deeplink: string, productDetailNewTab: boolean) {
     if (openInNewTab) {
       window.open(deeplink);
     } else {

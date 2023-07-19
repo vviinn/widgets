@@ -45,7 +45,7 @@ export class VviinnVprButton {
   /** Hiding disabled arrows in the carousel if true */
   @Prop() gridArrowsDynamic: boolean = false;
   /** Condition to open product link in new tab or not */
-  @Prop() openInNewTab: boolean = false;
+  @Prop() productDetailNewTab: boolean = false;
 
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
