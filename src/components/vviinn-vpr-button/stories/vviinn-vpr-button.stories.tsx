@@ -22,23 +22,23 @@ export default {
 
 const Template = (args) =>
   `<vviinn-vpr-button token="${args.token}"
-                      product-id="${args.productId}"
-                      campaign-type="${args.campaignType}"
-                      position="${args.position}"
-                      add-style="${args.addStyle}"
-                      sidebar-title="${args.sidebarTitle}"
-                      currency-sign="${args.currencySign}"
-                      modal-scrollbar="${args.modalScrollbar}"
-                      mode="${args.mode}"
-                      campaigns="${args.campaigns}"
-                      image-width="${args.imageWidth}"
-                      color="${
-                        args.color ? args.color.toString().slice(1) : ""
-                      }"
-                      no-result-text="${args.noResultText}"
-                      no-result-show="${args.noResultShow}"
-                      grid-arrows-dynamic="${args.gridArrowsDynamic}"
-                      source-image="${args.sourceImage}"></vviinn-vpr-button>`;
+      product-id="${args.productId}"
+      campaign-type="${args.campaignType}"
+      position="${args.position}"
+      add-style="${args.addStyle}"
+      sidebar-title="${args.sidebarTitle}"
+      currency-sign="${args.currencySign}"
+      modal-scrollbar="${args.modalScrollbar}"
+      mode="${args.mode}"
+      campaigns="${args.campaigns}"
+      image-width="${args.imageWidth}"
+      color="${args.color ? args.color.toString().slice(1) : ""}"
+      no-result-text="${args.noResultText}"
+      no-result-show="${args.noResultShow}"
+      grid-arrows-dynamic="${args.gridArrowsDynamic}"
+      source-image="${args.sourceImage}"
+      excluded="${args.excluded}"
+    ></vviinn-vpr-button>`;
 
 export const Default = Template.bind({});
 
@@ -63,6 +63,7 @@ Default.args = {
   noResultShow: true,
   noResultText: "No results! Please, try again later.",
   gridArrowsDynamic: false,
+  excluded: "",
 };
 
 Default.parameters = {

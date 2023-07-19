@@ -30,6 +30,7 @@ const Template = (args) => `
   currency-sign="${args.currencySign}"
   locale="${args.locale}"
   mode="${args.mode}"
+  excluded="${args.excluded}"
 ></vviinn-vps-button>`;
 
 export const Classic = Template.bind({});
@@ -43,6 +44,7 @@ Classic.args = {
   locale: "en-US",
   currencySign: "€",
   addStyle: true,
+  excluded: "",
 };
 
 export const Upload = Template.bind({});
@@ -55,4 +57,5 @@ Upload.args = {
   locale: "en-US",
   currencySign: "€",
   addStyle: true,
+  excluded: "",
 };

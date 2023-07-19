@@ -12,3 +12,6 @@ const checkEmpty = <T extends Sized>(x: T): E.Either<string, T> =>
 
 export const existAndNotEmpty = <T extends Sized>(x: T): E.Either<string, T> =>
   pipe(x, E.fromNullable("entity not exist"), E.chain(checkEmpty));
+
+export const arrayToQueryString = (params: string[]) =>
+  params.length ? `?${params.join("&")}` : "";

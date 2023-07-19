@@ -108,6 +108,8 @@ export class VviinnVpsWidget {
   @Prop() locale: string = "de-DE";
   /** Campaign ID applied for visual search */
   @Prop() campaignId: string = "";
+  /** Excuded filter, excluded[]=brand:Nike&excluded[]=custom_label_0:summer */
+  @Prop() excluded: string = "";
 
   /** @internal */
   @Prop() apiPath: string = "https://api.vviinn.com";
@@ -321,6 +323,7 @@ export class VviinnVpsWidget {
       O.chain(O.fromPredicate(notNan)),
       O.map((s) => `${s}`)
     );
+    imageSearchState.excluded = this.excluded;
 
     this.uiSessionId = uuidv4();
     this.trackingApi = createTrackingApi(this.apiPath, this.token);

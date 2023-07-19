@@ -108,6 +108,8 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() showScroll = true;
   /** Optional for custom CSS. It will overwrite all other settings */
   @Prop() cssUrl: string | null = null;
+  /** Excuded filter, excluded[]=brand:Nike&excluded[]=custom_label_0:summer */
+  @Prop() excluded: string = "";
 
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
@@ -296,10 +298,12 @@ export class VviinnVprWidget implements ComponentInterface {
     const campaignType =
       this.campaignType.length > 0 ? this.campaignType : "VPR";
     const headers = createBearAuthedHeader(this.token);
+
     const request = pipe(
       TE.of(getRecommendationsService(campaignType)),
       TE.ap(TE.of(this.productId)),
       TE.ap(TE.of(this.color)),
+      TE.ap(TE.of(this.excluded)),
       TE.ap(TE.of(checkEmpryString(this.campaigns))),
       TE.ap(TE.of(headers)),
       TE.flatten

@@ -60,6 +60,8 @@ export class VviinnVprButton {
   @Prop() noResultShow: boolean = true;
   /** Hiding disabled arrows in the carousel if true */
   @Prop() gridArrowsDynamic: boolean = false;
+  /** Excuded filter, excluded[]=brand:Nike&excluded[]=custom_label_0:summer */
+  @Prop() excluded: string = "";
 
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
@@ -124,6 +126,7 @@ export class VviinnVprButton {
     sidebar.gridArrowsDynamic = this.gridArrowsDynamic;
     sidebar.widgetVersion = version;
     sidebar.showingInButton = true;
+    sidebar.excluded = this.excluded;
 
     this.sidebar = sidebar;
 

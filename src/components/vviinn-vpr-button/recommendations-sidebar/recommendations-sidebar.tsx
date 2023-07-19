@@ -42,6 +42,7 @@ export class RecommendationsSidebar {
   @Prop() noResultShow: boolean;
   /** Hiding disabled arrows in the carousel if true */
   @Prop() gridArrowsDynamic: boolean;
+  @Prop() excluded: string;
 
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
@@ -128,6 +129,7 @@ export class RecommendationsSidebar {
               noResultShow={this.noResultShow}
               gridArrowsDynamic={this.gridArrowsDynamic}
               showingInButton={this.showingInButton}
+              excluded={this.excluded}
             />
           </main>
         </aside>

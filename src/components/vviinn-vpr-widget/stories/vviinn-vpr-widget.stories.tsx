@@ -33,6 +33,7 @@ const Template = (args) => `
       grid-arrows-dynamic="${args.gridArrowsDynamic}"
       no-result-text="${args.noResultText}"
       no-result-show="${args.noResultShow}"
+      excluded="${args.excluded}"
     >
     </vviinn-vpr-widget>
 `;
@@ -57,6 +58,7 @@ Grid.args = {
   noResultShow: true,
   noResultText: "No results! Please, try again later.",
   gridArrowsDynamic: false,
+  excluded: "",
 };
 
 Grid.decorators = [gridDecorator];
@@ -81,6 +83,7 @@ Continuity.args = {
   noResultShow: true,
   noResultText: "No results! Please, try again later.",
   gridArrowsDynamic: false,
+  excluded: "",
 };
 
 Continuity.decorators = [continuityDecorator];

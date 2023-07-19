@@ -8,12 +8,21 @@ export default {
   },
 };
 
-const Template = ({ token, campaignId, currencySign, locale, active }) => `
+const Template = ({
+  token,
+  campaignId,
+  currencySign,
+  locale,
+  active,
+  excluded,
+}) => `
   <vviinn-vps-widget token="${token}"
                      campaign-id="${campaignId}"
                      currency-sign="${currencySign}"
                      locale="${locale}"
-                     active="${active}">
+                     active="${active}"
+                     excluded="${excluded}"
+                     >
   </vviinn-vps-widget>`;
 
 export const Default = Template.bind({});
@@ -24,6 +33,7 @@ Default.args = {
   locale: "en-US",
   currencySign: "€",
   active: true,
+  excluded: "",
 };
 
 Default.storyName = "Main";
