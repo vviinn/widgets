@@ -97,6 +97,9 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() noResultText?: string;
   /** Showing message (when true) or hiding the whole widget, when no results */
   @Prop() noResultShow?: boolean = true;
+  /** Condition to open product link in new tab or not */
+  @Prop() productDetailNewTab: boolean = false;
+
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
   /** @internal */
@@ -142,6 +145,14 @@ export class VviinnVprWidget implements ComponentInterface {
       widgetId: this.id,
       widgetVersion: version,
     };
+  }
+
+  private handleOpenLink(deeplink: string) {
+    if (this.productDetailNewTab) {
+      window.open(deeplink);
+    } else {
+      window.location.href = deeplink;
+    }
   }
 
   trackingApi: DefaultApi;
@@ -234,10 +245,10 @@ export class VviinnVprWidget implements ComponentInterface {
         .trackEvent(productClickEvent)
         .then(this.setTrackingDeactivated)
         .finally(() => {
-          window.location.href = product.deeplink;
+          this.handleOpenLink(product.deeplink);
         });
     } else {
-      window.location.href = product.deeplink;
+      this.handleOpenLink(product.deeplink);
     }
   }
 

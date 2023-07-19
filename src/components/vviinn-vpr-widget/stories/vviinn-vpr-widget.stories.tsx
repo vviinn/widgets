@@ -161,6 +161,7 @@ const Template = (args) => `
       image-width="${args.imageWidth}"
       campaign-type="${args.campaignType}"
       campaigns="${args.campaigns}"
+      product-detail-new-tab="${args.productDetailNewTab}"
       color="${args.color ? args.color.slice(1) : ""}"
       grid-arrows-dynamic="${args.gridArrowsDynamic}"
       no-result-text="${args.noResultText}"
@@ -194,6 +195,7 @@ Continuity.args = {
   currencySign: "€",
   pricePrefix: "",
   imageRatio: 1,
+  productDetailNewTab: false,
   noResultText: "No results! Please, try again later.",
   noResultShow: true,
   gridArrowsDynamic: false,
@@ -232,6 +234,7 @@ Grid.args = {
   currencySign: "€",
   pricePrefix: "",
   imageRatio: 1,
+  productDetailNewTab: false,
   noResultText: "No results! Please, try again later.",
   noResultShow: true,
   gridArrowsDynamic: false,

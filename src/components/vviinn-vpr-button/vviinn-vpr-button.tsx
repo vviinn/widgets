@@ -44,6 +44,8 @@ export class VviinnVprButton {
   @Prop() noResultShow?: boolean = true;
   /** Hiding disabled arrows in the carousel if true */
   @Prop() gridArrowsDynamic: boolean = false;
+  /** Condition to open product link in new tab or not */
+  @Prop() productDetailNewTab: boolean = false;
 
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
@@ -99,6 +101,7 @@ export class VviinnVprButton {
     sidebar.noResultText = this.noResultText;
     sidebar.noResultShow = this.noResultShow;
     sidebar.gridArrowsDynamic = this.gridArrowsDynamic;
+    sidebar.productDetailNewTab = this.productDetailNewTab;
     sidebar.widgetVersion = version;
     sidebar.showingInButton = true;
 
