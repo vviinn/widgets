@@ -74,6 +74,8 @@ export class VviinnVpsButton {
   @Prop() addStyle: boolean = false;
   /** Show the onboarding step or skip it and move to the direct image upload. */
   @Prop() mode: "modal" | "upload" = "modal";
+  /** Condition to open product link in new tab or not */
+  @Prop() productDetailNewTab: boolean = true;
 
   /** @internal */
   @Prop() apiPath: string | undefined;
@@ -166,6 +168,7 @@ export class VviinnVpsButton {
           resetVpsButton={this.resetButton.bind(this)}
           buttonElementId={this.el.id}
           active={this.buttonPressed}
+          productDetailNewTab={this.productDetailNewTab}
         />
       </Host>
     );

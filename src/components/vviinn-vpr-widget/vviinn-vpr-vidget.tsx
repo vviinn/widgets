@@ -108,6 +108,8 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() showScroll = true;
   /** Optional for custom CSS. It will overwrite all other settings */
   @Prop() cssUrl: string | null = null;
+  /** Condition to open product link in new tab or not */
+  @Prop() productDetailNewTab: boolean = false;
 
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
@@ -153,6 +155,14 @@ export class VviinnVprWidget implements ComponentInterface {
       widgetId: this.id,
       widgetVersion: version,
     };
+  }
+
+  private handleOpenLink(deeplink: string) {
+    if (this.productDetailNewTab) {
+      window.open(deeplink);
+    } else {
+      window.location.href = deeplink;
+    }
   }
 
   trackingApi: DefaultApi;
@@ -245,10 +255,10 @@ export class VviinnVprWidget implements ComponentInterface {
         .trackEvent(productClickEvent)
         .then(this.setTrackingDeactivated)
         .finally(() => {
-          window.location.href = product.deeplink;
+          this.handleOpenLink(product.deeplink);
         });
     } else {
-      window.location.href = product.deeplink;
+      this.handleOpenLink(product.deeplink);
     }
   }
 

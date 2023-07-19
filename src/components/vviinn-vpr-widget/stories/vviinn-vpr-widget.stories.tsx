@@ -29,6 +29,7 @@ const Template = (args) => `
       image-width="${args.imageWidth}"
       campaign-type="${args.campaignType}"
       campaigns="${args.campaigns}"
+      product-detail-new-tab="${args.productDetailNewTab}"
       color="${args.color ? args.color.slice(1) : ""}"
       grid-arrows-dynamic="${args.gridArrowsDynamic}"
       no-result-text="${args.noResultText}"
@@ -46,6 +47,7 @@ Grid.args = {
   campaignType: "VPR",
   campaigns: "",
   blockTitle: "Recommended products",
+  productDetailNewTab: false,
   imageWidth: 420,
   imageRatio: 1,
   locale: "en-US",
@@ -70,6 +72,7 @@ Continuity.args = {
   campaignType: "VPR",
   campaigns: "",
   blockTitle: "Recommended products",
+  productDetailNewTab: false,
   imageWidth: 300,
   imageRatio: 1,
   locale: "en-US",

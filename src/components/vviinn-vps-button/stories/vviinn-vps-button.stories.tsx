@@ -30,6 +30,7 @@ const Template = (args) => `
   currency-sign="${args.currencySign}"
   locale="${args.locale}"
   mode="${args.mode}"
+  product-detail-new-tab="${args.productDetailNewTab}"
 ></vviinn-vps-button>`;
 
 export const Classic = Template.bind({});
@@ -39,6 +40,7 @@ Classic.args = {
   token:
     "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4",
   campaignId: "",
+  productDetailNewTab: true,
   mode: "modal",
   locale: "en-US",
   currencySign: "€",
@@ -51,6 +53,7 @@ Upload.args = {
   token:
     "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4",
   campaignId: "",
+  productDetailNewTab: true,
   mode: "upload",
   locale: "en-US",
   currencySign: "€",
