@@ -67,6 +67,8 @@ export class VviinnVpsButton {
   @Prop() addStyle: boolean = false;
   /** Add style to the button */
   @Prop() mode: "modal" | "upload" = "modal";
+  /** Condition to open product link in new tab or not */
+  @Prop() productDetailNewTab: boolean = true;
 
   /** @internal */
   @Prop() apiPath: string | undefined;
@@ -150,6 +152,7 @@ export class VviinnVpsButton {
           buttonPressed={this.buttonPressed}
           resetVpsButton={this.resetButton.bind(this)}
           buttonElementId={this.el.id}
+          productDetailNewTab={this.productDetailNewTab}
         />
       </Host>
     );

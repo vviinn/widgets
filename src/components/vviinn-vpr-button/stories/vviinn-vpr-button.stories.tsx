@@ -82,6 +82,7 @@ const Template = (args) =>
                       modal-scrollbar="${args.modalScrollbar}"
                       mode="${args.mode}"
                       campaigns="${args.campaigns}"
+                      product-detail-new-tab="${args.productDetailNewTab}"
                       image-width="${args.imageWidth}"
                       source-image="${args.sourceImage}"
                       color="${
@@ -121,6 +122,7 @@ Default.args = {
   noResultText: "No results! Please, try again later.",
   noResultShow: true,
   gridArrowsDynamic: false,
+  productDetailNewTab: false,
 };
 
 Default.parameters = {

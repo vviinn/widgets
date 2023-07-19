@@ -112,6 +112,9 @@ export class VviinnVpsWidget {
   @Prop() locale: string = "de-DE";
   /** Campaign using for visual search */
   @Prop() campaignId?: string;
+  /** Condition to open product link in new tab or not */
+  @Prop() productDetailNewTab: boolean = true;
+
   /** Set true when showing the widget in button */
   /** @internal */
   @Prop() showingInButton?: boolean = false;
@@ -155,6 +158,14 @@ export class VviinnVpsWidget {
   private trackingApi: DefaultApi;
   private imageSource: SearchImageSource | null = null;
   private id?: string;
+
+  private handleOpenLink(deeplink: string) {
+    if (this.productDetailNewTab) {
+      window.open(deeplink);
+    } else {
+      window.location.href = deeplink;
+    }
+  }
 
   componentDidLoad() {
     const slots = this.el.querySelectorAll("[slot]");
@@ -254,10 +265,10 @@ export class VviinnVpsWidget {
         .trackEvent(this.trackingDeactivated ? null : productClickEvent)
         .then(this.setTrackingDeactivated)
         .finally(() => {
-          window.location.href = product.deeplink;
+          this.handleOpenLink(product.deeplink);
         });
     } else {
-      window.location.href = product.deeplink;
+      this.handleOpenLink(product.deeplink);
     }
   }
 
