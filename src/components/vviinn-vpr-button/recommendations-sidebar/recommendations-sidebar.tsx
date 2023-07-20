@@ -43,6 +43,8 @@ export class RecommendationsSidebar {
   /** Hiding disabled arrows in the carousel if true */
   @Prop() gridArrowsDynamic: boolean;
   @Prop() excluded: string;
+  /** Toggle for opening product link in new tab or not */
+  @Prop() productDetailNewTab: boolean;
 
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
@@ -130,6 +132,7 @@ export class RecommendationsSidebar {
               gridArrowsDynamic={this.gridArrowsDynamic}
               showingInButton={this.showingInButton}
               excluded={this.excluded}
+              productDetailNewTab={this.productDetailNewTab}
             />
           </main>
         </aside>

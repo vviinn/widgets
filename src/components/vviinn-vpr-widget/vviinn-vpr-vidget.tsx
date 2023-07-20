@@ -110,6 +110,8 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() cssUrl: string | null = null;
   /** Excuded filter, excluded[]=brand:Nike&excluded[]=custom_label_0:summer */
   @Prop() excluded: string = "";
+  /** Toggle for opening product link in new tab or not */
+  @Prop() productDetailNewTab: boolean = false;
 
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
@@ -155,6 +157,14 @@ export class VviinnVprWidget implements ComponentInterface {
       widgetId: this.id,
       widgetVersion: version,
     };
+  }
+
+  private handleOpenLink(deeplink: string) {
+    if (this.productDetailNewTab) {
+      window.open(deeplink);
+    } else {
+      window.location.href = deeplink;
+    }
   }
 
   trackingApi: DefaultApi;
@@ -247,10 +257,10 @@ export class VviinnVprWidget implements ComponentInterface {
         .trackEvent(productClickEvent)
         .then(this.setTrackingDeactivated)
         .finally(() => {
-          window.location.href = product.deeplink;
+          this.handleOpenLink(product.deeplink);
         });
     } else {
-      window.location.href = product.deeplink;
+      this.handleOpenLink(product.deeplink);
     }
   }
 

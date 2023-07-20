@@ -62,6 +62,8 @@ export class VviinnVprButton {
   @Prop() gridArrowsDynamic: boolean = false;
   /** Excuded filter, excluded[]=brand:Nike&excluded[]=custom_label_0:summer */
   @Prop() excluded: string = "";
+  /** Toggle for opening product link in new tab or not */
+  @Prop() productDetailNewTab: boolean = false;
 
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
@@ -124,6 +126,7 @@ export class VviinnVprButton {
     sidebar.noResultText = this.noResultText;
     sidebar.noResultShow = this.noResultShow;
     sidebar.gridArrowsDynamic = this.gridArrowsDynamic;
+    sidebar.productDetailNewTab = this.productDetailNewTab;
     sidebar.widgetVersion = version;
     sidebar.showingInButton = true;
     sidebar.excluded = this.excluded;

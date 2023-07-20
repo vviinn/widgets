@@ -2,10 +2,6 @@ import { FilterAction } from "vviinn-tracking-client-ts";
 import { ValueObject } from "../network/ion/ValueObject";
 import { DetectedObject } from "../searchSession/searchSession";
 
-/* widgetType: WidgetType, 
-campaignTypeId: CampaignTypeId, 
-campaignTypeName: CampaignTypeTitle */
-
 export type BasicEventData = {
   widgetType: "VPR" | "VPS";
   campaignTypeId: "VPR" | "VPS" | "VCS";
@@ -13,8 +9,8 @@ export type BasicEventData = {
     | "Similar Products"
     | "Visual Search"
     | "Products Cross-Selling";
+  widgetId: string;
   widgetVersion: string;
-  widgetId?: string;
 };
 
 export type SelectObjectEventData = {
@@ -24,8 +20,8 @@ export type SelectObjectEventData = {
     | "Similar Products"
     | "Visual Search"
     | "Products Cross-Selling";
+  widgetId: string;
   widgetVersion: string;
-  widgetId?: string;
   detectedObject: ValueObject<DetectedObject>;
 };
 
@@ -36,8 +32,8 @@ export type SelectFilterEventData = {
     | "Similar Products"
     | "Visual Search"
     | "Products Cross-Selling";
+  widgetId: string;
   widgetVersion: string;
-  widgetId?: string;
   action: FilterAction;
   filterName?: string;
 };
@@ -49,8 +45,8 @@ export type ProductCardEventData = {
     | "Similar Products"
     | "Visual Search"
     | "Products Cross-Selling";
+  widgetId: string;
   widgetVersion: string;
-  widgetId?: string;
   productId: string;
   productRank: number;
   productName: string;

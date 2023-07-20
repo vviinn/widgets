@@ -76,6 +76,8 @@ export class VviinnVpsButton {
   @Prop() mode: "modal" | "upload" = "modal";
   /** Excuded filter, excluded[]=brand:Nike&excluded[]=custom_label_0:summer */
   @Prop() excluded: string = "";
+  /** Toggle for opening product link in new tab or not */
+  @Prop() productDetailNewTab: boolean = true;
 
   /** @internal */
   @Prop() apiPath: string | undefined;
@@ -169,6 +171,7 @@ export class VviinnVpsButton {
           buttonElementId={this.el.id}
           active={this.buttonPressed}
           excluded={this.excluded}
+          productDetailNewTab={this.productDetailNewTab}
         />
       </Host>
     );
