@@ -1,5 +1,5 @@
 export default {
-  title: "Widgets/Visual Search/Button",
+  title: "Widgets/Search/Button",
   component: "vviinn-vps-button",
   parameters: {
     viewport: {
@@ -24,7 +24,6 @@ export default {
 
 const Template = (args) => `
 <vviinn-vps-button
-  api-path="${args.apiPath}"
   token="${args.token}"
   campaign-id="${args.campaignId}"
   add-style="${args.addStyle}"
@@ -34,15 +33,29 @@ const Template = (args) => `
   product-detail-new-tab="${args.productDetailNewTab}"
 ></vviinn-vps-button>`;
 
-export const Default = Template.bind({});
-Default.args = {
+export const Classic = Template.bind({});
+Classic.storyName = "Classic (modal)";
+
+Classic.args = {
   token:
     "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4",
-  apiPath: "https://api.vviinn.com",
   campaignId: "",
-  productDetailNewTab: true,
-  addStyle: true,
-  currencySign: "€",
-  locale: "en-US",
   mode: "modal",
+  productDetailNewTab: true,
+  locale: "en-US",
+  currencySign: "€",
+  addStyle: true,
+};
+
+export const Upload = Template.bind({});
+
+Upload.args = {
+  token:
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4",
+  campaignId: "",
+  mode: "upload",
+  productDetailNewTab: true,
+  locale: "en-US",
+  currencySign: "€",
+  addStyle: true,
 };

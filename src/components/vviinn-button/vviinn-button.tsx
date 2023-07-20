@@ -3,7 +3,7 @@ import { VisualSearchIcon } from "../vviinn-icons";
 
 /**
  *
- * @part button - clickable button element
+ * @part button - Clickable button element.
  */
 @Component({
   tag: "vviinn-button",

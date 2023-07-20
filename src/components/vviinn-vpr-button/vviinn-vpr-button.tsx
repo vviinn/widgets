@@ -11,10 +11,15 @@ import { version } from "../../../package.json";
 import { VisualSearchIcon } from "../vviinn-icons";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 import { CampaignName } from "../../campaign/Campaign";
+import {
+  BasicEventData,
+  ProductCardEventData,
+} from "../../recommendation/events";
 
 /**
  *
- * @part button - clickable button element
+ * @part button - Clickable button element.
+ * @part vviinn-button - Button element container.
  */
 @Component({
   tag: "vviinn-vpr-button",
@@ -23,41 +28,59 @@ import { CampaignName } from "../../campaign/Campaign";
 })
 export class VviinnVprButton {
   @Element() el: HTMLElement;
+  /** Vviinn customer’s token (required) */
   @Prop() token: string;
+  /** ID of product you need recommendations for (required) */
   @Prop() productId: string;
+  /** Position of the modal */
   @Prop() position: "bottom" | "right" = "bottom";
+  /** Image for showing in the modal's header */
   @Prop() sourceImage: string | null = null;
+  /** Sidebar title */
   @Prop() sidebarTitle: string = "Visually similar products";
+  /** Show or hide the scrollbar */
   @Prop() modalScrollbar: boolean = false;
-  /** comma-separated list of campaign-ids */
+  /** Comma-separated list of campaign IDs */
   @Prop() campaigns: string = "";
   /** Campaign type */
   @Prop() campaignType: CampaignName = "VPR";
-  @Prop() color: string;
+  /** Accepts any hex color code */
+  @Prop() color: string = "";
+  /** Add default styles to the button */
   @Prop() addStyle: boolean = true;
+  /** Switch between carousel modes */
   @Prop() mode: CarouselMode = "continuity";
+  /** Width of each recommended product image */
   @Prop() imageWidth: number = 300;
+  /**  The currency sign is displayed after the price */
   @Prop() currencySign: string = "€";
-  /** This message is displayed when no results */
-  @Prop() noResultText?: string;
-  /** Showing message (when true) or hiding the whole widget, when no results */
-  @Prop() noResultShow?: boolean = true;
+  /** The message is displayed when no results */
+  @Prop() noResultText: string = "No results! Please, try again later.";
+  /** Showing a message (when true) or hiding the whole widget, when no results */
+  @Prop() noResultShow: boolean = true;
   /** Hiding disabled arrows in the carousel if true */
   @Prop() gridArrowsDynamic: boolean = false;
-  /** Condition to open product link in new tab or not */
+  /** Toggle for opening product link in new tab or not */
   @Prop() productDetailNewTab: boolean = false;
 
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
 
-  // List to show in the Storybook:
-  @Event() vviinnWidgetLoad: EventEmitter;
-  @Event() vviinnWidgetOpen: EventEmitter;
-  @Event() vviinnWidgetClose: EventEmitter;
-  @Event() vviinnProductClick: EventEmitter;
-  @Event() vviinnProductView: EventEmitter;
-  @Event() vviinnProductLoad: EventEmitter;
-  @Event() vviinnNoResult: EventEmitter;
+  /** The event emits on widget load */
+  @Event() vviinnWidgetLoad: EventEmitter<BasicEventData>;
+  /** The event emits on modal open */
+  @Event() vviinnWidgetOpen: EventEmitter<BasicEventData>;
+  /** The event emits on modal close */
+  @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
+  /** Recommendations request failed */
+  @Event() vviinnNoResult: EventEmitter<BasicEventData>;
+
+  /** The recommendation renders on the page */
+  @Event() vviinnProductLoad: EventEmitter<ProductCardEventData>;
+  /** Click on the product’s link */
+  @Event() vviinnProductClick: EventEmitter<ProductCardEventData>;
+  /** The recommendation appears in the viewport */
+  @Event() vviinnProductView: EventEmitter<ProductCardEventData>;
 
   private sidebar: HTMLVviinnRecommendationsSidebarElement | null = null;
   private sidebarCloseListener: () => void = () => {

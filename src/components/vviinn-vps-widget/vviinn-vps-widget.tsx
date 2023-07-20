@@ -37,6 +37,8 @@ import {
   ProductCardEvent,
   BasicEventData,
   SelectFilterEventData,
+  ProductCardEventData,
+  SelectObjectEventData,
 } from "../../recommendation/events";
 import { pipe } from "fp-ts/lib/function";
 import { SlotSkeleton } from "../customized-slots";
@@ -49,47 +51,43 @@ const notEmptyString = (s: string) => !isEmpty(s);
 const notNan = (n: number): boolean => !isNaN(n);
 
 /**
- * @prop --color-primary: color used for action button, slider bullets and selected detected object;
- *
- * @part close-button - close button on modal header.
- * @part secondary-action - back button on modal header.
- * @part title - modal window title.
- *
- * @part select-image_button
- *
- * @part product-card - product card.
- * @part brand - product card brand.
- * @part currency - currency sign. Renders after price-amount inside product card.
- * @part deeplink - anchor element for title. Rendered only if "deeplink" property filled.
- * @part image - product image inside product card.
- * @part image-link - anchor element for image. Rendered only if "deeplink" property filled.
- * @part price-amount-sale - numeric part of price inside product card.
- * @part price-amount-outdated - numeric part of price inside product card.
- * @part price-amount-regular - numeric part of price inside product card.
- * @part price-container - block contains all prices inside product card.
- * @part price-outdated - renders inside price-container when "sale-price" property filled. Contains regular price.
- * @part price-regular - renders inside price-container when "sale-price" property is empty.
- * @part price-sale - renders inside price-container when "sale-price" property filled. Contains sale price.
- * @part price-prefix - renders before price-amount. Can be set with "price-prefix" property or inherited from parent component.
- * @part title - product title
- * @part example-images - example images block
+ * @part close-button - Close Button in the modal's header.
+ * @part secondary-action - Back Button in the modal's header.
+ * @part title - Modal window title.
+ * @part select-image_button - Upload Button.
+ * @part product-card - Product Card itself.
+ * @part brand - Brand inside Product Card.
+ * @part currency - Currency related to price.
+ * @part deeplink - Anchor element around troduct title. Rendered only if "deeplink" property is filled.
+ * @part image - Product Card image.
+ * @part image-link - Anchor element around product image. Rendered only if "deeplink" property is filled.
+ * @part price-amount-sale - Numeric part of the price.
+ * @part price-amount-outdated - Numeric part of the price.
+ * @part price-amount-regular - Numeric part of the price.
+ * @part price-container - Block of prices.
+ * @part price-outdated - Block for outdated price. Rendered when the product contains the sale price.
+ * @part price-regular - Block for a price if no sale price is presented.
+ * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
+ * @part price-prefix - Block rendered before each price element (for ex. "from").
+ * @part title - Title inside Product Card.
+ * @part example-images - Example Images block.
 
- * @slot vviinn-onboarding-title - Title of onboarding section
- * @slot onboarding-card-1-icon - Icon (or other graphics) on first onboarding slide
- * @slot onboarding-card-1-text - Text content of first onboarding slide
- * @slot onboarding-card-2-icon - Icon (or other graphics) on second onboarding slide
- * @slot onboarding-card-2-text - Text content of second onboarding slide
- * @slot onboarding-card-3-icon - Icon (or other graphics) on third onboarding slide
- * @slot onboarding-card-3-text - Text content of third onboarding slide
- * @slot vviinn-example-images-title - Header of example images block
- * @slot vviinn-example-images-1 - First image in example images block
- * @slot vviinn-example-images-2 - Second image in example images block
- * @slot vviinn-example-images-3 - Third image in example images block
- * @slot vviinn-example-images-4 - Fourth image in example images block
- * @slot vviinn-teaser-text - Text on widget's main screen
- * @slot vviinn-image-upload-button-text - Title of upload button
- * @slot vviinn-privacy-badge-text - Text content of privacy notification block
- * @slot vviinn-image-search-modal-title - Image search title
+ * @slot vviinn-onboarding-title - Title of onboarding section.
+ * @slot onboarding-card-1-icon - Icon (or other graphics) on the first onboarding slide.
+ * @slot onboarding-card-1-text - Text content of first onboarding slide.
+ * @slot onboarding-card-2-icon - Icon (or other graphics) on the second onboarding slide.
+ * @slot onboarding-card-2-text - Text content of second onboarding slide.
+ * @slot onboarding-card-3-icon - Icon (or other graphics) on the third onboarding slide.
+ * @slot onboarding-card-3-text - Text content of third onboarding slide.
+ * @slot vviinn-example-images-title - Header of Example Images block.
+ * @slot vviinn-example-images-1 - First image in Example Images block.
+ * @slot vviinn-example-images-2 - Second image in Example Images block.
+ * @slot vviinn-example-images-3 - Third image in Example Images block.
+ * @slot vviinn-example-images-4 - Fourth image in Example Images block.
+ * @slot vviinn-teaser-text - Text on widget's main screen.
+ * @slot vviinn-image-upload-button-text - Title of Upload Button.
+ * @slot vviinn-privacy-badge-text - Text content of privacy notification block.
+ * @slot vviinn-image-search-modal-title - Image search modal title.
  *
  */
 @Component({
@@ -100,21 +98,21 @@ const notNan = (n: number): boolean => !isNaN(n);
 export class VviinnVpsWidget {
   @Element() el: HTMLElement;
 
-  /** vviinn customer token */
+  /** Vviinn customer’s token (required) */
   @Prop() token: string | undefined;
-  /** @internal */
-  @Prop() apiPath: string = "https://api.vviinn.com";
-  /** When true modal window with widget will be shown */
-  @Prop({ mutable: true }) active: boolean = false;
-  /** Currency sign will shown after price */
+  /** Toggle the widget's modal showing */
+  @Prop({ mutable: true }) active: boolean = true;
+  /**  The currency sign is displayed after the price */
   @Prop() currencySign: string = "€";
-  /** Locale for currency formatting */
+  /** The locale for currency formatting */
   @Prop() locale: string = "de-DE";
-  /** Campaign using for visual search */
-  @Prop() campaignId?: string;
-  /** Condition to open product link in new tab or not */
+  /** Campaign ID applied for visual search */
+  @Prop() campaignId: string = "";
+  /** Toggle for opening product link in new tab or not */
   @Prop() productDetailNewTab: boolean = true;
 
+  /** @internal */
+  @Prop() apiPath: string = "https://api.vviinn.com";
   /** Set true when showing the widget in button */
   /** @internal */
   @Prop() showingInButton?: boolean = false;
@@ -137,21 +135,32 @@ export class VviinnVpsWidget {
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
 
+  /** The event emits on widget load */
   @Event({ bubbles: true })
   vviinnWidgetLoad: EventEmitter<BasicEventData>;
+  /** The event emits on modal open */
   @Event({ bubbles: true })
   vviinnWidgetOpen: EventEmitter<BasicEventData>;
+  /** The event emits on modal close */
+  @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
 
-  // List to show in the Storybook:
-  @Event() vviinnWidgetClose: EventEmitter;
-  @Event() vviinnProductClick: EventEmitter;
-  @Event() vviinnProductView: EventEmitter;
-  @Event() vviinnProductLoad: EventEmitter;
-  @Event() vviinnImageUpload: EventEmitter;
-  @Event() vviinnImageCrop: EventEmitter;
-  @Event() vviinnSelectObject: EventEmitter;
-  @Event() vviinnSelectFilter: EventEmitter;
-  @Event() vviinnNoResult: EventEmitter;
+  /** The image was uploaded */
+  @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
+  /** Wrong image format, that isn’t .jpg, .jpeg, png, or the request failed */
+  @Event() vviinnNoResult: EventEmitter<BasicEventData>;
+  /** The recommendation renders on the page */
+  @Event() vviinnProductLoad: EventEmitter<ProductCardEventData>;
+  /** Click on the product’s link */
+  @Event() vviinnProductClick: EventEmitter<ProductCardEventData>;
+  /** The recommendation appears in the viewport */
+  @Event() vviinnProductView: EventEmitter<ProductCardEventData>;
+
+  /** Crop area changes */
+  @Event() vviinnImageCrop: EventEmitter<BasicEventData>;
+  /** User selects the detected object */
+  @Event() vviinnSelectObject: EventEmitter<SelectObjectEventData>;
+  /** User selects one of the filters */
+  @Event() vviinnSelectFilter: EventEmitter<SelectFilterEventData>;
 
   private overflow: string;
   private uiSessionId: string;
