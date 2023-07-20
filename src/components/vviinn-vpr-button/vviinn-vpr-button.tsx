@@ -60,7 +60,7 @@ export class VviinnVprButton {
   @Prop() noResultShow: boolean = true;
   /** Hiding disabled arrows in the carousel if true */
   @Prop() gridArrowsDynamic: boolean = false;
-  /** Excuded filter, excluded[]=brand:Nike&excluded[]=custom_label_0:summer */
+  /** Excuded filter, brand:Nike;custom_label_0:summer */
   @Prop() excluded: string = "";
   /** Toggle for opening product link in new tab or not */
   @Prop() productDetailNewTab: boolean = false;

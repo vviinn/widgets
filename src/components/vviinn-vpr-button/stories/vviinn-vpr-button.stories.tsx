@@ -51,6 +51,8 @@ Default.args = {
   productId: "4114460310",
   campaignType: "VPR",
   campaigns: "",
+  excluded: "",
+  color: "",
   mode: "continuity",
   productDetailNewTab: false,
   sidebarTitle: "Visually similar products",
@@ -59,13 +61,11 @@ Default.args = {
     "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg",
   imageWidth: "300",
   currencySign: "€",
-  color: "",
   addStyle: true,
   modalScrollbar: false,
   noResultShow: true,
   noResultText: "No results! Please, try again later.",
   gridArrowsDynamic: false,
-  excluded: "",
 };
 
 Default.parameters = {

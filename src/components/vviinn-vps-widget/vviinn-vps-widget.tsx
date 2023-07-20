@@ -43,6 +43,7 @@ import {
 import { pipe } from "fp-ts/lib/function";
 import { SlotSkeleton } from "../customized-slots";
 import { campaignTypeNames } from "../../campaign/Campaign";
+import { parseExcluded } from "../../utils/collections/collectionsUtils";
 
 const filterInt = (value: string) =>
   /^[-+]?(\d+|Infinity)$/.test(value) ? Number(value) : NaN;
@@ -108,7 +109,7 @@ export class VviinnVpsWidget {
   @Prop() locale: string = "de-DE";
   /** Campaign ID applied for visual search */
   @Prop() campaignId: string = "";
-  /** Excuded filter, excluded[]=brand:Nike&excluded[]=custom_label_0:summer */
+  /** Excuded filter, brand:Nike;custom_label_0:summer */
   @Prop() excluded: string = "";
   /** Toggle for opening product link in new tab or not */
   @Prop() productDetailNewTab: boolean = true;
@@ -333,6 +334,11 @@ export class VviinnVpsWidget {
       O.chain(O.fromPredicate(notNan)),
       O.map((s) => `${s}`)
     );
+
+    if (this.excluded) {
+      this.excluded = parseExcluded(this.excluded);
+    }
+
     imageSearchState.excluded = this.excluded;
 
     this.uiSessionId = uuidv4();
@@ -342,6 +348,7 @@ export class VviinnVpsWidget {
 
   componentWillLoad() {
     slotChangeListener(this, this.el);
+
     this.vviinnWidgetLoad.emit(this.getBasicEventData());
   }
 

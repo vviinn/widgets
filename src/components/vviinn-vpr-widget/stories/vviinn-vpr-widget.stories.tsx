@@ -46,6 +46,8 @@ Grid.args = {
   productId: "4114460310",
   campaignType: "VPR",
   campaigns: "",
+  color: "",
+  excluded: "",
   mode: "grid",
   blockTitle: "Recommended products",
   productDetailNewTab: false,
@@ -54,13 +56,11 @@ Grid.args = {
   locale: "en-US",
   currencySign: "€",
   pricePrefix: "",
-  color: "",
   cssUrl: "",
   showScroll: false,
   noResultShow: true,
   noResultText: "No results! Please, try again later.",
   gridArrowsDynamic: false,
-  excluded: "",
 };
 
 Grid.decorators = [gridDecorator];
@@ -72,6 +72,8 @@ Continuity.args = {
   productId: "4114460310",
   campaignType: "VPR",
   campaigns: "",
+  color: "",
+  excluded: "",
   mode: "continuity",
   blockTitle: "Recommended products",
   productDetailNewTab: false,
@@ -80,13 +82,11 @@ Continuity.args = {
   locale: "en-US",
   currencySign: "€",
   pricePrefix: "",
-  color: "",
   cssUrl: "",
   showScroll: false,
   noResultShow: true,
   noResultText: "No results! Please, try again later.",
   gridArrowsDynamic: false,
-  excluded: "",
 };
 
 Continuity.decorators = [continuityDecorator];

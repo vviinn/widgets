@@ -74,7 +74,7 @@ export class VviinnVpsButton {
   @Prop() addStyle: boolean = false;
   /** Show the onboarding step or skip it and move to the direct image upload. */
   @Prop() mode: "modal" | "upload" = "modal";
-  /** Excuded filter, excluded[]=brand:Nike&excluded[]=custom_label_0:summer */
+  /** Excuded filter, brand:Nike;custom_label_0:summer */
   @Prop() excluded: string = "";
   /** Toggle for opening product link in new tab or not */
   @Prop() productDetailNewTab: boolean = true;

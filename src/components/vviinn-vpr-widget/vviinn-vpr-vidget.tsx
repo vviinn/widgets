@@ -45,6 +45,7 @@ import {
   createWidgetVprEvent,
 } from "../../tracking";
 import { checkEmpryString } from "../../utils/option/option";
+import { parseExcluded } from "../../utils/collections/collectionsUtils";
 
 /**
  * @part product-card - Product Card itself.
@@ -108,7 +109,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() showScroll = true;
   /** Optional for custom CSS. It will overwrite all other settings */
   @Prop() cssUrl: string | null = null;
-  /** Excuded filter, excluded[]=brand:Nike&excluded[]=custom_label_0:summer */
+  /** Excuded filter, brand:Nike;custom_label_0:summer */
   @Prop() excluded: string = "";
   /** Toggle for opening product link in new tab or not */
   @Prop() productDetailNewTab: boolean = false;
@@ -298,6 +299,10 @@ export class VviinnVprWidget implements ComponentInterface {
   async componentWillLoad() {
     state.pricePrefix = this.pricePrefix;
     state.currencySign = this.currencySign;
+
+    if (this.excluded) {
+      this.excluded = parseExcluded(this.excluded);
+    }
 
     this.vviinnWidgetLoad.emit(this.getEventData());
     this.getRecommendations();
