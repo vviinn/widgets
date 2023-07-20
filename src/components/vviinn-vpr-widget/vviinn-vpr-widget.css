@@ -1,6 +1,6 @@
 :host {
   /**
-   * @prop --vviinn-carousel-columns: control number of items in grid mode
+   * @prop --vviinn-carousel-columns: A number of items in grid mode.
    */
 
   display: grid;

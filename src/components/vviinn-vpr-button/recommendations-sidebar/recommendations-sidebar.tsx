@@ -38,11 +38,11 @@ export class RecommendationsSidebar {
   @Prop() color: string;
   @Prop() imageWidth: number = 300;
   @Prop() currencySign: string = "€";
-  @Prop() noResultText?: string;
-  @Prop() noResultShow?: boolean;
+  @Prop() noResultText: string;
+  @Prop() noResultShow: boolean;
   /** Hiding disabled arrows in the carousel if true */
   @Prop() gridArrowsDynamic: boolean;
-  /** Condition to open product link in new tab or not */
+  /** Toggle for opening product link in new tab or not */
   @Prop() productDetailNewTab: boolean;
 
   /** @internal */

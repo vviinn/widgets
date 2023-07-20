@@ -1,30 +1,52 @@
 import { FilterAction } from "vviinn-tracking-client-ts";
-import {
-  CampaignTypeTitle,
-  CampaignTypeId,
-  WidgetType,
-} from "../campaign/Campaign";
 import { ValueObject } from "../network/ion/ValueObject";
 import { DetectedObject } from "../searchSession/searchSession";
 
 export type BasicEventData = {
-  widgetType: WidgetType;
-  campaignTypeId: CampaignTypeId;
-  campaignTypeName: CampaignTypeTitle;
+  widgetType: "VPR" | "VPS";
+  campaignTypeId: "VPR" | "VPS" | "VCS";
+  campaignTypeName:
+    | "Similar Products"
+    | "Visual Search"
+    | "Products Cross-Selling";
+  widgetId: string;
   widgetVersion: string;
-  widgetId?: string;
 };
 
-export type SelectObjectEventData = BasicEventData & {
+export type SelectObjectEventData = {
+  widgetType: "VPR" | "VPS";
+  campaignTypeId: "VPR" | "VPS" | "VCS";
+  campaignTypeName:
+    | "Similar Products"
+    | "Visual Search"
+    | "Products Cross-Selling";
+  widgetId: string;
+  widgetVersion: string;
   detectedObject: ValueObject<DetectedObject>;
 };
 
-export type SelectFilterEventData = BasicEventData & {
+export type SelectFilterEventData = {
+  widgetType: "VPR" | "VPS";
+  campaignTypeId: "VPR" | "VPS" | "VCS";
+  campaignTypeName:
+    | "Similar Products"
+    | "Visual Search"
+    | "Products Cross-Selling";
+  widgetId: string;
+  widgetVersion: string;
   action: FilterAction;
   filterName?: string;
 };
 
-export type ProductCardEventData = BasicEventData & {
+export type ProductCardEventData = {
+  widgetType: "VPR" | "VPS";
+  campaignTypeId: "VPR" | "VPS" | "VCS";
+  campaignTypeName:
+    | "Similar Products"
+    | "Visual Search"
+    | "Products Cross-Selling";
+  widgetId: string;
+  widgetVersion: string;
   productId: string;
   productRank: number;
   productName: string;
