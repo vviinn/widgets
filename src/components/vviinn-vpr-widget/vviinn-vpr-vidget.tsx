@@ -109,7 +109,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() showScroll = true;
   /** Optional for custom CSS. It will overwrite all other settings */
   @Prop() cssUrl: string | null = null;
-  /** Excuded filter, brand:Nike;custom_label_0:summer */
+  /** Excluded filter. Example: "brand:Nike;custom_label_0:summer" */
   @Prop() excluded: string = "";
   /** Toggle for opening product link in new tab or not */
   @Prop() productDetailNewTab: boolean = false;
