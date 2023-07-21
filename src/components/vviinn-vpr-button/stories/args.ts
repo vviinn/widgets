@@ -5,6 +5,12 @@ export const argTypes = {
     },
     primary: true,
   },
+  excluded: {
+    name: "excluded",
+    control: {
+      type: "text",
+    },
+  },
   sidebarTitle: {
     name: "sidebar-title",
     control: {

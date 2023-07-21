@@ -74,6 +74,8 @@ export class VviinnVpsButton {
   @Prop() addStyle: boolean = false;
   /** Show the onboarding step or skip it and move to the direct image upload. */
   @Prop() mode: "modal" | "upload" = "modal";
+  /** Excluded filter. Example: "brand:Nike;custom_label_0:summer" */
+  @Prop() excluded: string = "";
   /** Toggle for opening product link in new tab or not */
   @Prop() productDetailNewTab: boolean = true;
 
@@ -168,6 +170,7 @@ export class VviinnVpsButton {
           resetVpsButton={this.resetButton.bind(this)}
           buttonElementId={this.el.id}
           active={this.buttonPressed}
+          excluded={this.excluded}
           productDetailNewTab={this.productDetailNewTab}
         />
       </Host>

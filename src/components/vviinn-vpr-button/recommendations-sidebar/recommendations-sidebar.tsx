@@ -42,6 +42,7 @@ export class RecommendationsSidebar {
   @Prop() noResultShow: boolean;
   /** Hiding disabled arrows in the carousel if true */
   @Prop() gridArrowsDynamic: boolean;
+  @Prop() excluded: string;
   /** Toggle for opening product link in new tab or not */
   @Prop() productDetailNewTab: boolean;
 
@@ -130,6 +131,7 @@ export class RecommendationsSidebar {
               noResultShow={this.noResultShow}
               gridArrowsDynamic={this.gridArrowsDynamic}
               showingInButton={this.showingInButton}
+              excluded={this.excluded}
               productDetailNewTab={this.productDetailNewTab}
             />
           </main>

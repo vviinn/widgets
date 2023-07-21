@@ -14,6 +14,7 @@ import { BasicError } from "../error";
 import { processBearerToken } from "../utils/token/tokenUtils";
 import { sequenceToEither } from "../utils/either";
 import { imageFormFromFile } from "../Image/form";
+import { arrayToQueryString } from "../utils/collections/collectionsUtils";
 
 export interface SearchSessionFilters {
   readonly [key: string]: Link[];
@@ -71,15 +72,29 @@ export type SearchSession = ValueObject<Recommendation[]> &
 
 export const searchSessionClient = (
   initialData: RequestInit,
-  campaignId: O.Option<string> = O.none
+  campaignId: O.Option<string> = O.none,
+  excludedFilters: string
 ): TE.TaskEither<BasicError<Response | string>, SearchSession> => {
   const searchUrl = "search/session";
 
   const requestUrl = pipe(
     campaignId,
     O.fold(
-      () => searchUrl,
-      (campaignId) => `${searchUrl}?campaign-id=${campaignId}`
+      () => {
+        const params: string[] = [];
+        if (excludedFilters) params.push(excludedFilters);
+        const queryString = arrayToQueryString(params);
+
+        return `${searchUrl}${queryString}`;
+      },
+      (campaignId) => {
+        const params: string[] = [];
+        if (campaignId) params.push(`campaign-id=${campaignId}`);
+        if (excludedFilters) params.push(excludedFilters);
+        const queryString = arrayToQueryString(params);
+
+        return `${searchUrl}${queryString}`;
+      }
     )
   );
 

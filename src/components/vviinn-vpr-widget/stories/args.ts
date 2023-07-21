@@ -5,6 +5,13 @@ const token = {
   },
 };
 
+const excluded = {
+  name: "excluded",
+  control: {
+    type: "text",
+  },
+};
+
 const productId = {
   name: "product-id",
   control: {
@@ -61,4 +68,5 @@ export const argTypes = {
   productId,
   token,
   color,
+  excluded,
 };
