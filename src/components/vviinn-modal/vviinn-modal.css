@@ -8,7 +8,7 @@
   overflow: auto;
 }
 
-@media (max-width: 415px) {
+@media (max-width: 640px) {
   :host {
     animation-name: fade-in;
     animation-duration: 0.5s;
@@ -22,12 +22,6 @@
 
   .body {
     overflow-y: auto;
-  }
-}
-
-@media (max-width: 640px) and (min-width: 415px) {
-  :host {
-    max-width: 80%;
   }
 }
 
