@@ -45,6 +45,7 @@ import {
   createWidgetVprEvent,
 } from "../../tracking";
 import { checkEmpryString } from "../../utils/option/option";
+import { parseExcluded } from "../../utils/collections/collectionsUtils";
 
 /**
  * @part product-card - Product Card itself.
@@ -108,6 +109,8 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() showScroll = true;
   /** Optional for custom CSS. It will overwrite all other settings */
   @Prop() cssUrl: string | null = null;
+  /** Excluded filter. Example: "brand:Nike;custom_label_0:summer" */
+  @Prop() excluded: string = "";
   /** Toggle for opening product link in new tab or not */
   @Prop() productDetailNewTab: boolean = false;
 
@@ -297,6 +300,10 @@ export class VviinnVprWidget implements ComponentInterface {
     state.pricePrefix = this.pricePrefix;
     state.currencySign = this.currencySign;
 
+    if (this.excluded) {
+      this.excluded = parseExcluded(this.excluded);
+    }
+
     this.vviinnWidgetLoad.emit(this.getEventData());
     this.getRecommendations();
   }
@@ -306,10 +313,12 @@ export class VviinnVprWidget implements ComponentInterface {
     const campaignType =
       this.campaignType.length > 0 ? this.campaignType : "VPR";
     const headers = createBearAuthedHeader(this.token);
+
     const request = pipe(
       TE.of(getRecommendationsService(campaignType)),
       TE.ap(TE.of(this.productId)),
       TE.ap(TE.of(this.color)),
+      TE.ap(TE.of(this.excluded)),
       TE.ap(TE.of(checkEmpryString(this.campaigns))),
       TE.ap(TE.of(headers)),
       TE.flatten

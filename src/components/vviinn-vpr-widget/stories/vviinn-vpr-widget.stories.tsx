@@ -34,6 +34,7 @@ const Template = (args) => `
       grid-arrows-dynamic="${args.gridArrowsDynamic}"
       no-result-text="${args.noResultText}"
       no-result-show="${args.noResultShow}"
+      excluded="${args.excluded}"
     >
     </vviinn-vpr-widget>
 `;
@@ -45,6 +46,8 @@ Grid.args = {
   productId: "4114460310",
   campaignType: "VPR",
   campaigns: "",
+  color: "",
+  excluded: "",
   mode: "grid",
   blockTitle: "Recommended products",
   productDetailNewTab: false,
@@ -53,7 +56,6 @@ Grid.args = {
   locale: "en-US",
   currencySign: "€",
   pricePrefix: "",
-  color: "",
   cssUrl: "",
   showScroll: false,
   noResultShow: true,
@@ -70,6 +72,8 @@ Continuity.args = {
   productId: "4114460310",
   campaignType: "VPR",
   campaigns: "",
+  color: "",
+  excluded: "",
   mode: "continuity",
   blockTitle: "Recommended products",
   productDetailNewTab: false,
@@ -78,7 +82,6 @@ Continuity.args = {
   locale: "en-US",
   currencySign: "€",
   pricePrefix: "",
-  color: "",
   cssUrl: "",
   showScroll: false,
   noResultShow: true,
