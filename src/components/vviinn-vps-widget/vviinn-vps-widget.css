@@ -244,22 +244,7 @@ search-filters::part(filter active) {
   }
 }
 
-@media (max-width: 640px) and (min-width: 415px) {
-  .onboarding-wrapper {
-    position: unset;
-  }
-
-  #onboarding-block {
-    overflow: unset;
-  }
-
-  .start-page.active {
-    height: 1px;
-    overflow: auto;
-  }
-}
-
-@media (max-width: 415px) {
+@media (max-width: 640px) {
   .results-page > * {
     box-sizing: border-box;
     padding: 24px;
