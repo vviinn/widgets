@@ -5,10 +5,7 @@ import { DetectedObject } from "../searchSession/searchSession";
 export type BasicEventData = {
   widgetType: "VPR" | "VPS";
   campaignTypeId: "VPR" | "VPS" | "VCS";
-  campaignTypeName:
-    | "Similar Products"
-    | "Visual Search"
-    | "Products Cross-Selling";
+  campaignTypeName: "Similar Products" | "Visual Search" | "Cross-Selling";
   widgetId: string;
   widgetVersion: string;
 };
@@ -16,10 +13,7 @@ export type BasicEventData = {
 export type SelectObjectEventData = {
   widgetType: "VPR" | "VPS";
   campaignTypeId: "VPR" | "VPS" | "VCS";
-  campaignTypeName:
-    | "Similar Products"
-    | "Visual Search"
-    | "Products Cross-Selling";
+  campaignTypeName: "Similar Products" | "Visual Search" | "Cross-Selling";
   widgetId: string;
   widgetVersion: string;
   detectedObject: ValueObject<DetectedObject>;
@@ -28,10 +22,7 @@ export type SelectObjectEventData = {
 export type SelectFilterEventData = {
   widgetType: "VPR" | "VPS";
   campaignTypeId: "VPR" | "VPS" | "VCS";
-  campaignTypeName:
-    | "Similar Products"
-    | "Visual Search"
-    | "Products Cross-Selling";
+  campaignTypeName: "Similar Products" | "Visual Search" | "Cross-Selling";
   widgetId: string;
   widgetVersion: string;
   action: FilterAction;
@@ -41,10 +32,7 @@ export type SelectFilterEventData = {
 export type ProductCardEventData = {
   widgetType: "VPR" | "VPS";
   campaignTypeId: "VPR" | "VPS" | "VCS";
-  campaignTypeName:
-    | "Similar Products"
-    | "Visual Search"
-    | "Products Cross-Selling";
+  campaignTypeName: "Similar Products" | "Visual Search" | "Cross-Selling";
   widgetId: string;
   widgetVersion: string;
   productId: string;
