@@ -34,7 +34,7 @@ Default.args = {
   campaignId: "",
   excluded: "",
   productDetailNewTab: true,
-  locale: "en-US",
+  locale: "de-DE",
   currencySign: "€",
   active: true,
 };
