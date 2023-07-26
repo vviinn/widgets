@@ -10,6 +10,7 @@ import {
   Event,
   EventEmitter,
 } from "@stencil/core";
+import i18next from "i18next";
 import { version } from "../../../package.json";
 import { state } from "../../store/store";
 import { imageSearchState } from "../../store/imageSearch.store";
@@ -344,6 +345,24 @@ export class VviinnVpsWidget {
     this.uiSessionId = uuidv4();
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
     this.id = this.el.id;
+
+    i18next.init({
+      lng: this.locale,
+      fallbackLng: "de-DE",
+      // debug: true,
+      resources: {
+        en: {
+          translation: {
+            key: "hello world",
+          },
+        },
+        "de-DE": {
+          translation: {
+            key: "Hallo Welt",
+          },
+        },
+      },
+    });
   }
 
   componentWillLoad() {
