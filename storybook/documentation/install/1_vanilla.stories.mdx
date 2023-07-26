@@ -22,9 +22,9 @@ You don't need to include a script tag with `nomodule` attribute if you don't ne
 
 Then you will be able to use VPR or VPS widgets.
 
-### Visual Product Recommendations
+### Recommendation Widget
 
-To use recommendations widget, insert a snippet below where you want to render the widget.<br />
+To use recommendation widget, insert a snippet below where you want to render the widget.<br />
 `token` and `product-id` attributes are only necessary, but you can tweak the widget with other attributes.
 
 ```html
@@ -32,7 +32,7 @@ To use recommendations widget, insert a snippet below where you want to render t
 </STORYBOOK_VPR_WIDGET_TAG>
 ```
 
-[Check other attributes here ](?path=/story/widgets-visual-recommendations-widget--continuity)
+[Check other attributes here ](?path=/story/widgets-recommendation-main--continuity)
 
 Also, it’s possible to create the component instance with DOM API:
 
@@ -44,7 +44,7 @@ component.productId = YOUR_PRODUCT_ID;
 document.append(component);
 ```
 
-### Visual Product Search
+### Search Widget
 
 To use the search widget, first, insert the snippet below anywhere on the page.
 The widget is implemented as a modal window, so you need to trigger it.
@@ -53,7 +53,7 @@ The widget is implemented as a modal window, so you need to trigger it.
 <STORYBOOK_VPS_WIDGET_TAG token="YOUR_TOKEN"></STORYBOOK_VPS_WIDGET_TAG>
 ```
 
-[Check other attributes here ](?path=/story/widgets-visual-search-widget--default)
+[Check other attributes here ](?path=/story/widgets-search-main--default)
 
 You can also create a component instance with DOM API:
 

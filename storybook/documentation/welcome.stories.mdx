@@ -6,20 +6,42 @@ import { Meta, Story, Canvas } from "@storybook/addon-docs";
 
 By using Vviinn widgets you can easily integrate your website with Vviinn's visual relevance machine that uses machine learning to analyze product images in a split second and use this data to create the most relevant digital shopping experience for users.
 
-## Widgets Types
+## Widget Types
 
-We have `Visual Recommendation` and `Visual Search` widget types. Each one provides you with `button` and `widget` components.
+We have `VPR` (Recommendation) and `VPS` (Search) widget types. Each one provides you with `button` and `widget` components. Recommendation Widget supports 2 campaign types: `VPR` and `VCS`. You can see the campaign types in the table below:
+
+<table width="100%">
+  <thead>
+    <tr><th>Campaign Type ID</th><th>Campaign Type Name</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>VPR</td>
+      <td>Similiar Products</td>
+    </tr>
+    <tr>
+      <td>VCS</td>
+      <td>Cross-Selling</td>
+    </tr>
+    <tr>
+      <td>VPS</td>
+      <td>Visual Search</td>
+    </tr>
+  </tbody>
+</table>
 
 ## Widgets
 
 You can see the widgets in action in the `Widgets` menu as listed below:
 
-- Visual Recommendations
-  - [Button](?path=/story/widgets-visual-recommendations-button--default)
-  - [Widget](?path=/story/widgets-visual-recommendations-widget--grid)
-- Visual Search
-  - [Button](?path=/story/widgets-visual-search-button--default)
-  - [Widget](?path=/story/widgets-visual-search-widget--default)
+- Recommendation
+  - [Button](?path=/story/widgets-recommendation-button--default)
+  - [Widget Grid](?path=/story/widgets-recommendation-main--grid)
+  - [Widget Continuity](?path=/story/widgets-recommendation-main--continuity)
+- Search
+  - [Button Modal](?path=/story/widgets-search-button--modal)
+  - [Button Upload](?path=/story/widgets-search-button--upload)
+  - [Widget](?path=/story/widgets-search-main--default)
 
 ## Installation
 

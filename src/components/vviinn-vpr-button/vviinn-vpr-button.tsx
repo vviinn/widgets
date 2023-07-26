@@ -74,7 +74,7 @@ export class VviinnVprButton {
   @Event() vviinnWidgetOpen: EventEmitter<BasicEventData>;
   /** The event emits on modal close */
   @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
-  /** Recommendations request failed */
+  /** Recommendation request failed */
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
   /** The recommendation renders on the page */
