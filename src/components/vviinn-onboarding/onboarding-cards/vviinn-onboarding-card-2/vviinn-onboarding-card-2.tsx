@@ -1,4 +1,4 @@
-import { Component, Host, h, Element } from "@stencil/core";
+import { Component, Host, h, Element, Prop } from "@stencil/core";
 import { OnboardingCard2Icon } from "../../../vviinn-icons";
 import { slotChangeListener } from "../../../customized-slots";
 
@@ -9,6 +9,8 @@ import { slotChangeListener } from "../../../customized-slots";
 })
 export class VviinnOnboardingCard2 {
   @Element() el: HTMLElement;
+  @Prop() cardTitle: string;
+  @Prop() cardText: string;
 
   componentWillLoad() {
     slotChangeListener(this, this.el);
@@ -22,11 +24,8 @@ export class VviinnOnboardingCard2 {
         </slot>
         <slot name="onboarding-card-2-text">
           <div class="text">
-            <h4>Verfeiner Deine Suche</h4>
-            <p>
-              Du kannst den Bildrahmen selber festlegen und so die Produkte
-              genau auswählen.
-            </p>
+            <h4>{this.cardTitle}</h4>
+            <p>{this.cardText}</p>
           </div>
         </slot>
       </Host>

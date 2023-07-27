@@ -471,7 +471,10 @@ export class VviinnVpsWidget {
                   class={{ hidden: !imageSearchState.serverError }}
                   handler={() => (imageSearchState.serverError = false)}
                 />
-                <vviinn-teaser class={{ hidden: this.haveErrors() }} />
+                <vviinn-teaser
+                  class={{ hidden: this.haveErrors() }}
+                  teaserText={i18next.t("teaserText")}
+                />
                 <vviinn-image-selector
                   class={{ hidden: this.haveErrors() }}
                   onVviinnImageUpload={() => {
@@ -513,17 +516,21 @@ export class VviinnVpsWidget {
                       />
                     </svg>
                     <slot name="vviinn-image-upload-button-text">
-                      <span>{i18next.t("key")}</span>
+                      <span>{i18next.t("imageUploadButtonText")}</span>
                     </slot>
                   </span>
                 </vviinn-image-selector>
-                <vviinn-privacy-badge class={{ hidden: this.haveErrors() }} />
+                <vviinn-privacy-badge
+                  class={{ hidden: this.haveErrors() }}
+                  privacyBadgeText={i18next.t("privacyBadgeText")}
+                />
               </div>
               <div id="onboarding-block" class="start-page_block">
                 <div class="onboarding-wrapper">
                   <vviinn-onboarding />
                   <vviinn-example-images
                     part="example-images"
+                    exampleImagesTitle={i18next.t("exampleImagesTitle")}
                     onVviinnImageUpload={() =>
                       this.handleImageSelection("example")
                     }

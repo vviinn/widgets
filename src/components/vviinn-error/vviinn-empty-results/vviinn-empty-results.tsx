@@ -1,5 +1,7 @@
 import { Component, Host, h } from "@stencil/core";
 
+import i18next from "i18next";
+
 @Component({
   tag: "vviinn-empty-results",
   styleUrl: "vviinn-empty-results.css",
@@ -27,11 +29,8 @@ export class VviinnEmptyResults {
               fill="#525252"
             />
           </svg>
-          <h4 slot="title">Leider nichts gefunden</h4>
-          <span slot="text">
-            Leider konnten wir keine passenden Produkte finden. Bitte versuche
-            es mit einem anderen Bildausschnitt noch einmal.
-          </span>
+          <h4 slot="title">{i18next.t("emptyResultsBlock.title")}</h4>
+          <span slot="text">{i18next.t("emptyResultsBlock.text")}</span>
         </vviinn-error>
       </Host>
     );
