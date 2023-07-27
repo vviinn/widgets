@@ -10,14 +10,16 @@ import {
   Event,
   EventEmitter,
 } from "@stencil/core";
-import i18next from "i18next";
-import { version } from "../../../package.json";
-import { state } from "../../store/store";
-import { imageSearchState } from "../../store/imageSearch.store";
 import * as O from "fp-ts/lib/Option";
+import { pipe } from "fp-ts/lib/function";
 import { isEmpty } from "fp-ts/string";
-import { slotChangeListener } from "../customized-slots";
 import { v4 as uuidv4 } from "uuid";
+import i18next from "i18next";
+
+import { version } from "../../../package.json";
+import { imageSearchState } from "../../store/imageSearch.store";
+import { state } from "../../store/store";
+import { slotChangeListener } from "../customized-slots";
 import { createTrackingApi } from "../../openApi";
 import {
   DefaultApi,
@@ -41,10 +43,10 @@ import {
   ProductCardEventData,
   SelectObjectEventData,
 } from "../../recommendation/events";
-import { pipe } from "fp-ts/lib/function";
 import { SlotSkeleton } from "../customized-slots";
 import { campaignTypeNames } from "../../campaign/Campaign";
 import { parseExcluded } from "../../utils/collections/collectionsUtils";
+import { resources } from "../../locale/resources-vps";
 
 const filterInt = (value: string) =>
   /^[-+]?(\d+|Infinity)$/.test(value) ? Number(value) : NaN;
@@ -349,19 +351,7 @@ export class VviinnVpsWidget {
     i18next.init({
       lng: this.locale,
       fallbackLng: "de-DE",
-      // debug: true,
-      resources: {
-        en: {
-          translation: {
-            key: "hello world",
-          },
-        },
-        "de-DE": {
-          translation: {
-            key: "Hallo Welt",
-          },
-        },
-      },
+      resources,
     });
   }
 
@@ -523,7 +513,7 @@ export class VviinnVpsWidget {
                       />
                     </svg>
                     <slot name="vviinn-image-upload-button-text">
-                      <span>Kamera oder Bild auswählen</span>
+                      <span>{i18next.t("key")}</span>
                     </slot>
                   </span>
                 </vviinn-image-selector>
