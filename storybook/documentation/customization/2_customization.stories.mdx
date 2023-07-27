@@ -8,12 +8,16 @@ import './customization.css'
 There is a possibility to not only style widgets using CSS APIs but also
 customize some content using [slots](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_templates_and_slots#adding_flexibility_with_slots).
 
-Here are slots you can use for Recommendation Button (`vviinn-vpr-button`):
+## Recommendation
+
+Here are slots that could be used for Recommendation Button (`vviinn-vpr-button`):
 
 - button – _vpr button container_
 - vviinn-button – _vpr button itself_
 
-Here are slots you can use in Search Widget and Search Button (`vviinn-vps-widget` and `vviinn-vps-button`):
+## Search
+
+Slots that could be used in Search Widget and Search Button (`vviinn-vps-widget` and `vviinn-vps-button`):
 
 - vviinn-example-images-1 – _the first image in the Example Images block_
 - vviinn-example-images-2 – _the second image in the Example Images block_
@@ -32,45 +36,9 @@ Here are slots you can use in Search Widget and Search Button (`vviinn-vps-widge
 - vviinn-privacy-badge-text – _text content of privacy notification block_
 - vviinn-teaser-text – _text on the widget's main screen_
 
-Also, `vviinn-vps-button` uses a "default" slot for icon customization.
-Here is a code example:
+## Customization example of vviinn-vps-button
 
-```html
-<vviinn-vps-button>
-  <svg xmlns="http://www.w3.org/2000/svg" 
-    fill="none" 
-    viewBox="0 0 24 24" 
-    stroke-width="1.5"        
-    stroke="green" 
-    width="40" 
-    height="40"
-  >
-    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75l-2.489-2.489m0 0a3.375 3.375 0 10-4.773-4.773 3.375 3.375 0 004.774 4.774zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-  </svg>
-</vviinn-vps-button>
-```
-
-Now, this custom icon is an actual `vviinn-vps-button`
-
-<vviinn-vps-button>
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"        stroke="green" width="40" height="40">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 15.75l-2.489-2.489m0 0a3.375 3.375 0 10-4.773-4.773 3.375 3.375 0 004.774 4.774zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-  </svg>
-</vviinn-vps-button>
-
-The slot has no restrictions for any element type so any SVG or HTML will be valid.
-
-```html
-<vviinn-vps-button>
-  <span>I'm looking like text, but try to click!</span>
-</vviinn-vps-button>
-```
-
-<vviinn-vps-button>
-  <span>I'm looking like text, but try to click!</span>
-</vviinn-vps-button>
-
-Let's improve the example above and customize `vviinn-onboarding-title`. When we use any named slots with `vviinn-vps-button` we also need to provide an icon to "default" slot.
+Let's customize `vviinn-onboarding-title` and replace it with the custom text. It's important to note that when we use any named slots inside `vviinn-vps-button` we also need to provide an icon to "default" slot.
 
 ```html
 <vviinn-vps-button>
@@ -95,7 +63,7 @@ Let's improve the example above and customize `vviinn-onboarding-title`. When we
 </vviinn-vps-button>
 ```
 
-And here is our result: 
+Here is our button with the custom icon. If we click on it, we will also see the customized `vviinn-onboarding-title`.
 
 <vviinn-vps-button>
   <svg width="22" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -109,6 +77,18 @@ And here is our result:
   <h3 slot="vviinn-onboarding-title">Your custom title</h3>
 </vviinn-vps-button>
 
+ Anything we put between the opening and closing tags without the `slot` attribute will be placed inside the "default" slot. The slot has no restrictions for any element type. It could be an `<svg>` like in the example above or any HTML will be valid.
+
+```html
+<vviinn-vps-button>
+  <span>I'm looking like text, but try to click!</span>
+</vviinn-vps-button>
+```
+
+<vviinn-vps-button>
+  <span>I'm looking like text, but try to click!</span>
+</vviinn-vps-button>
+
 ## Images customization example
 
 In general, you can use any valid HTML or SVG content inside slots, but for example, with images, you should use a special component that will fire search events:
@@ -117,4 +97,4 @@ In general, you can use any valid HTML or SVG content inside slots, but for exam
 <vviinn-example-image src="URL" slot="vviinn-example-images-1"></vviinn-example-image>
 ```
 
-For now, the image should be stored in vviinn cdn.
+For now, the image should be stored in Vviinn CDN.
