@@ -26,17 +26,28 @@
 }
 
 .head {
+  display: flex;
   align-items: center;
   border-bottom: 1px solid #f4f4f4;
-  display: flex;
   padding: 16px;
 }
 
 .title {
+  display: flex;
+  align-items: center;
+  transform: translateX(-6px);
   font-weight: 600;
   font-size: 18px;
   line-height: 24px;
   margin: 0 auto;
+}
+
+.title-image {
+  border-radius: 50%;
+  border: 1px solid rgb(244, 244, 244);
+  object-fit: cover;
+  object-position: center;
+  margin-right: 8px;
 }
 
 button {
@@ -45,7 +56,12 @@ button {
   border: none;
   cursor: pointer;
   display: grid;
-  padding: unset;
+  padding: 4px;
+  color: #c6c6c6;
+}
+
+button:hover {
+  color: #000;
 }
 
 @keyframes fade-in {
