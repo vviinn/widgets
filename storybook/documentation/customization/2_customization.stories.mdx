@@ -8,12 +8,16 @@ import './customization.css'
 There is a possibility to not only style widgets using CSS APIs but also
 customize some content using [slots](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_templates_and_slots#adding_flexibility_with_slots).
 
-Here are slots you can use for Recommendation Button (`vviinn-vpr-button`):
+## Recommendation
+
+Here are slots that could be used for Recommendation Button (`vviinn-vpr-button`):
 
 - button – _vpr button container_
 - vviinn-button – _vpr button itself_
 
-Here are slots you can use in Search Widget and Search Button (`vviinn-vps-widget` and `vviinn-vps-button`):
+## Search
+
+Slots that could be used in Search Widget and Search Button (`vviinn-vps-widget` and `vviinn-vps-button`):
 
 - vviinn-example-images-1 – _the first image in the Example Images block_
 - vviinn-example-images-2 – _the second image in the Example Images block_
@@ -32,66 +36,9 @@ Here are slots you can use in Search Widget and Search Button (`vviinn-vps-widge
 - vviinn-privacy-badge-text – _text content of privacy notification block_
 - vviinn-teaser-text – _text on the widget's main screen_
 
-Also, `vviinn-vps-button` uses a "default" slot for icon customization.
-Here is a code example:
+## Customization example of vviinn-vps-button
 
-```html
-<vviinn-vps-button>
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="50"
-    height="50"
-    fill="none"
-    stroke="#000"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    stroke-width="1.5"
-    class="icon icon-tabler icon-tabler-apple"
-    viewBox="0 0 24 24"
-  >
-    <path stroke="none" d="M0 0h24v24H0z" />
-    <circle cx="12" cy="14" r="7" />
-    <path d="M12 11V5a2 2 0 0 1 2-2h2v1a2 2 0 0 1-2 2h-2" />
-    <path d="M10 10.5c1.333.667 2.667.667 4 0" />
-  </svg>
-</vviinn-vps-button>
-```
-
-Now, this fancy apple is an actual `vviinn-vps-button`
-
-<vviinn-vps-button>
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="50"
-    height="50"
-    fill="none"
-    stroke="#000"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    strokeWidth="1.5"
-    className="icon icon-tabler icon-tabler-apple"
-    viewBox="0 0 24 24"
-  >
-    <path stroke="none" d="M0 0h24v24H0z" />
-    <circle cx="12" cy="14" r="7" />
-    <path d="M12 11V5a2 2 0 0 1 2-2h2v1a2 2 0 0 1-2 2h-2" />
-    <path d="M10 10.5c1.333.667 2.667.667 4 0" />
-  </svg>
-</vviinn-vps-button>
-
-The slot has no restrictions for any element type so any SVG or HTML will be valid.
-
-```html
-<vviinn-vps-button>
-  <span>I'm looking like text, but try to click!</span>
-</vviinn-vps-button>
-```
-
-<vviinn-vps-button>
-  <span>I'm looking like text, but try to click!</span>
-</vviinn-vps-button>
-
-Let's improve the example above and customize `vviinn-onboarding-title`. When we use any named slots with `vviinn-vps-button` we also need to provide an icon to "default" slot.
+Let's customize `vviinn-onboarding-title` and replace it with the custom text. It's important to note that when we use any named slots inside `vviinn-vps-button` we also need to provide an icon to "default" slot.
 
 ```html
 <vviinn-vps-button>
@@ -108,7 +55,7 @@ Let's improve the example above and customize `vviinn-onboarding-title`. When we
       fill-rule="evenodd"
       clip-rule="evenodd"
       d="M16.567 3H19A3.01 3.01 0 0 1 22 6v7.69h-2V6c0-.55-.451-1-1.001-1h-3.502l-2.03-3H8.543L6.603 5H3.001c-.55 0-1 .45-1 1v11c0 .55.45 1 1 1h5.933v2H3.001A3.01 3.01 0 0 1 0 17V6c0-1.65 1.35-3 3.001-3h2.522l1.94-3h7.074l2.03 3Zm-5.562 3c1.28 0 2.561.48 3.542 1.46h-.01a4.992 4.992 0 0 1 .64 6.29l3.051 3.05-1.41 1.41-3.052-3.05c-.84.55-1.8.83-2.76.83-1.282 0-2.562-.48-3.543-1.46a5.002 5.002 0 0 1 0-7.07A5.026 5.026 0 0 1 11.005 6Zm-2.771 5a2.763 2.763 0 0 0 2.771 2.77A2.763 2.763 0 0 0 13.776 11a2.763 2.763 0 0 0-2.771-2.77A2.763 2.763 0 0 0 8.234 11Z"
-      fill="#161616"
+      fill="#008080"
     />
   </svg>
   <!-- Our named slot -->
@@ -116,7 +63,7 @@ Let's improve the example above and customize `vviinn-onboarding-title`. When we
 </vviinn-vps-button>
 ```
 
-And here is our result: 
+Here is our button with the custom icon. If we click on it, we will also see the customized `vviinn-onboarding-title`.
 
 <vviinn-vps-button>
   <svg width="22" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -124,10 +71,22 @@ And here is our result:
       fillRule="evenodd"
       clipRule="evenodd"
       d="M16.567 3H19A3.01 3.01 0 0 1 22 6v7.69h-2V6c0-.55-.451-1-1.001-1h-3.502l-2.03-3H8.543L6.603 5H3.001c-.55 0-1 .45-1 1v11c0 .55.45 1 1 1h5.933v2H3.001A3.01 3.01 0 0 1 0 17V6c0-1.65 1.35-3 3.001-3h2.522l1.94-3h7.074l2.03 3Zm-5.562 3c1.28 0 2.561.48 3.542 1.46h-.01a4.992 4.992 0 0 1 .64 6.29l3.051 3.05-1.41 1.41-3.052-3.05c-.84.55-1.8.83-2.76.83-1.282 0-2.562-.48-3.543-1.46a5.002 5.002 0 0 1 0-7.07A5.026 5.026 0 0 1 11.005 6Zm-2.771 5a2.763 2.763 0 0 0 2.771 2.77A2.763 2.763 0 0 0 13.776 11a2.763 2.763 0 0 0-2.771-2.77A2.763 2.763 0 0 0 8.234 11Z"
-      fill="#161616"
+      fill="#008080"
     />
   </svg>
   <h3 slot="vviinn-onboarding-title">Your custom title</h3>
+</vviinn-vps-button>
+
+ Anything we put between the opening and closing tags without the `slot` attribute will be placed inside the "default" slot. The slot has no restrictions for any element type. It could be an `<svg>` like in the example above or any HTML will be valid.
+
+```html
+<vviinn-vps-button>
+  <span>I'm looking like text, but try to click!</span>
+</vviinn-vps-button>
+```
+
+<vviinn-vps-button>
+  <span>I'm looking like text, but try to click!</span>
 </vviinn-vps-button>
 
 ## Images customization example
@@ -138,4 +97,4 @@ In general, you can use any valid HTML or SVG content inside slots, but for exam
 <vviinn-example-image src="URL" slot="vviinn-example-images-1"></vviinn-example-image>
 ```
 
-For now, the image should be stored in vviinn cdn.
+For now, the image should be stored in Vviinn CDN.
