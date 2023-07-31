@@ -8,7 +8,8 @@ export const resources: Resource = {
       imageUploadButtonText: "Kamera oder Bild auswählen",
       privacyBadgeText:
         "Durch das Hochladen eines Bildes willigst Du in die Verarbeitung durch unseren Partner Vviinn ein. Das Bild wird nach einer Stunde Inaktivität gelöscht.",
-      teaserText: "Finde Produkte auf einem Foto",
+      teaserText_1: "Finde Produkte auf",
+      teaserText_2: "einem Foto",
       imageSearchModalTitle: "Bildsuche",
       onboardingBlock: {
         onboardingTitleText: "So funktioniert es",
@@ -37,7 +38,8 @@ export const resources: Resource = {
       imageUploadButtonText: "Select camera or image",
       privacyBadgeText:
         "By uploading a picture you agree to the processing by our partner Vviinn. The image will be deleted after one hour of inactivity.",
-      teaserText: "Find products in a photo",
+      teaserText_1: "Find products in a photo",
+      teaserText_2: "",
       imageSearchModalTitle: "Visual Search",
       onboardingBlock: {
         onboardingTitleText: "This is how it works",

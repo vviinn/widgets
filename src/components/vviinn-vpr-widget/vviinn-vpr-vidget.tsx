@@ -394,7 +394,7 @@ export class VviinnVprWidget implements ComponentInterface {
         <Fragment>
           {this.renderExternalCSS()}
           <style>{state.fallbackStyles}</style>
-          <h2 part="recommendations-title">{i18next.t("blockTitle")}</h2>
+          <h2 part="recommendations-title">{this.blockTitle}</h2>
           {this.recommendations.length > 0 &&
             (this.useCarousel ? this.renderCarousel() : this.renderResults())}
 

@@ -471,10 +471,7 @@ export class VviinnVpsWidget {
                   class={{ hidden: !imageSearchState.serverError }}
                   handler={() => (imageSearchState.serverError = false)}
                 />
-                <vviinn-teaser
-                  class={{ hidden: this.haveErrors() }}
-                  teaserText={i18next.t("teaserText")}
-                />
+                <vviinn-teaser class={{ hidden: this.haveErrors() }} />
                 <vviinn-image-selector
                   class={{ hidden: this.haveErrors() }}
                   onVviinnImageUpload={() => {

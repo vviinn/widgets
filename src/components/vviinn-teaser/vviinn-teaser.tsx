@@ -1,4 +1,5 @@
-import { Component, Host, h, Element, Prop } from "@stencil/core";
+import { Component, Host, h, Element } from "@stencil/core";
+import i18next from "i18next";
 
 import { slotChangeListener } from "../customized-slots";
 
@@ -9,7 +10,6 @@ import { slotChangeListener } from "../customized-slots";
 })
 export class VviinnTeaser {
   @Element() el: HTMLElement;
-  @Prop() teaserText: string;
 
   componentWillLoad() {
     slotChangeListener(this, this.el);
@@ -37,8 +37,9 @@ export class VviinnTeaser {
           </svg>
           <span class="vviinn-teaser-text">
             <slot name="vviinn-teaser-text">
-              {/* TODO: Finde Produkte auf <br /> einem Foto */}
-              {this.teaserText}
+              {i18next.t("teaserText_1")}
+              <br />
+              {i18next.t("teaserText_2")}
             </slot>
           </span>
         </slot>
