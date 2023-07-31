@@ -79,7 +79,7 @@ import { resources } from "../../locale/resources-vpr";
 export class VviinnVprWidget implements ComponentInterface {
   @Element() el: HTMLElement;
   /** Widget’s title */
-  @Prop() blockTitle?: string;
+  @Prop() blockTitle: string = "Recommended products";
   /** The ratio of each recommended product image */
   @Prop() imageRatio: number = 1;
   /** Width of each recommended product image */
@@ -394,9 +394,7 @@ export class VviinnVprWidget implements ComponentInterface {
         <Fragment>
           {this.renderExternalCSS()}
           <style>{state.fallbackStyles}</style>
-          <h2 part="recommendations-title">
-            {this.blockTitle ?? i18next.t("blockTitle")}
-          </h2>
+          <h2 part="recommendations-title">{i18next.t("blockTitle")}</h2>
           {this.recommendations.length > 0 &&
             (this.useCarousel ? this.renderCarousel() : this.renderResults())}
 
