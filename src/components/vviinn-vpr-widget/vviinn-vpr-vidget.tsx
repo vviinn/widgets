@@ -96,7 +96,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() mode: CarouselMode = "continuity";
   /** Campaign type */
   @Prop() campaignType: CampaignName = "VPR";
-  /** The locale for currency formatting */
+  /** The locale for currency formatting and text localization */
   @Prop() locale: string = "en-GB";
   /** Comma-separated list of campaign IDs */
   @Prop() campaigns: string = "";
@@ -400,7 +400,9 @@ export class VviinnVprWidget implements ComponentInterface {
 
           {this.recommendations.length === 0 && this.hasErrorOnLoad && (
             <p class="no-result-text">
-              {this.noResultText ?? i18next.t("noResultText")}
+              {this.noResultText.length
+                ? this.noResultText
+                : i18next.t("noResultText")}
             </p>
           )}
         </Fragment>

@@ -59,7 +59,7 @@ Grid.args = {
   cssUrl: "",
   showScroll: false,
   noResultShow: true,
-  noResultText: "No results! Please, try again later.",
+  noResultText: "",
   gridArrowsDynamic: false,
 };
 
@@ -85,7 +85,7 @@ Continuity.args = {
   cssUrl: "",
   showScroll: false,
   noResultShow: true,
-  noResultText: "No results! Please, try again later.",
+  noResultText: "",
   gridArrowsDynamic: false,
 };
 

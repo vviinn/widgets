@@ -108,7 +108,7 @@ export class VviinnVpsWidget {
   @Prop({ mutable: true }) active: boolean = true;
   /**  The currency sign is displayed after the price */
   @Prop() currencySign: string = "€";
-  /** The locale for currency formatting */
+  /** The locale for currency formatting and text localization */
   @Prop() locale: string = "de-DE";
   /** Campaign ID applied for visual search */
   @Prop() campaignId: string = "";
