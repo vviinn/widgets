@@ -12,10 +12,14 @@ import {
   Listen,
   Fragment,
 } from "@stencil/core";
-import { version } from "../../../package.json";
+import i18next from "i18next";
 import { pipe } from "fp-ts/lib/function";
+import { Subject } from "rxjs";
+import { v4 as uuidv4 } from "uuid";
 import * as TE from "fp-ts/lib/TaskEither";
 import * as E from "fp-ts/lib/Either";
+import { version } from "../../../package.json";
+
 import { createBearAuthedHeader } from "./token-helpers";
 import { state } from "../../store/store";
 import { CampaignName, campaignTypeNames } from "../../campaign/Campaign";
@@ -23,8 +27,6 @@ import { getRecommendationsService } from "../../campaign/CampaignService";
 import { imageSearchState } from "../../store/imageSearch.store";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 import { Recommendation } from "../../recommendation/recommendation";
-import { Subject } from "rxjs";
-import { v4 as uuidv4 } from "uuid";
 
 import {
   DefaultApi,
@@ -46,6 +48,7 @@ import {
 } from "../../tracking";
 import { checkEmpryString } from "../../utils/option/option";
 import { parseExcluded } from "../../utils/collections/collectionsUtils";
+import { resources } from "../../locale/resources-vpr";
 
 /**
  * @part product-card - Product Card itself.
@@ -76,7 +79,7 @@ import { parseExcluded } from "../../utils/collections/collectionsUtils";
 export class VviinnVprWidget implements ComponentInterface {
   @Element() el: HTMLElement;
   /** Widget’s title */
-  @Prop() blockTitle: string = "Recommended products";
+  @Prop() blockTitle?: string;
   /** The ratio of each recommended product image */
   @Prop() imageRatio: number = 1;
   /** Width of each recommended product image */
@@ -94,7 +97,7 @@ export class VviinnVprWidget implements ComponentInterface {
   /** Campaign type */
   @Prop() campaignType: CampaignName = "VPR";
   /** The locale for currency formatting */
-  @Prop() locale: string = "de-DE";
+  @Prop() locale: string = "en-GB";
   /** Comma-separated list of campaign IDs */
   @Prop() campaigns: string = "";
   /** Accepts any hex color code */
@@ -102,7 +105,7 @@ export class VviinnVprWidget implements ComponentInterface {
   /** Hiding disabled arrows in the carousel if true */
   @Prop() gridArrowsDynamic: boolean = false;
   /** The message is displayed when no results*/
-  @Prop() noResultText: string = "No results! Please, try again later.";
+  @Prop() noResultText?: string;
   /** Showing a message (when true) or hiding the whole widget, when no results */
   @Prop() noResultShow: boolean = true;
   /** Show or hide the scrollbar */
@@ -282,6 +285,12 @@ export class VviinnVprWidget implements ComponentInterface {
     this.trackingApi
       .trackEvent(widgetOpenEvent)
       .then(this.setTrackingDeactivated);
+
+    i18next.init({
+      lng: this.locale,
+      fallbackLng: "en-Gb",
+      resources,
+    });
   }
 
   disconnectedCallback() {
@@ -385,12 +394,16 @@ export class VviinnVprWidget implements ComponentInterface {
         <Fragment>
           {this.renderExternalCSS()}
           <style>{state.fallbackStyles}</style>
-          <h2 part="recommendations-title">{this.blockTitle}</h2>
+          <h2 part="recommendations-title">
+            {this.blockTitle ?? i18next.t("blockTitle")}
+          </h2>
           {this.recommendations.length > 0 &&
             (this.useCarousel ? this.renderCarousel() : this.renderResults())}
 
           {this.recommendations.length === 0 && this.hasErrorOnLoad && (
-            <p class="no-result-text">{this.noResultText}</p>
+            <p class="no-result-text">
+              {this.noResultText ?? i18next.t("noResultText")}
+            </p>
           )}
         </Fragment>
       </Host>

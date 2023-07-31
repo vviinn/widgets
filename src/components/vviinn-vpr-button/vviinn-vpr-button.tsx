@@ -55,7 +55,7 @@ export class VviinnVprButton {
   /**  The currency sign is displayed after the price */
   @Prop() currencySign: string = "€";
   /** The message is displayed when no results */
-  @Prop() noResultText: string = "No results! Please, try again later.";
+  @Prop() noResultText?: string;
   /** Showing a message (when true) or hiding the whole widget, when no results */
   @Prop() noResultShow: boolean = true;
   /** Hiding disabled arrows in the carousel if true */
