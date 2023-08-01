@@ -11,6 +11,10 @@ import {
 import { slotChangeListener } from "../customized-slots";
 import { BasicEventData } from "../../recommendation/events";
 import { campaignTypeNames } from "../../campaign/Campaign";
+import { imageSearchState } from "../../store/imageSearch.store";
+import * as O from "fp-ts/lib/Option";
+import { pipe } from "fp-ts/lib/function";
+import { sequenceToOption } from "../../utils/option/option";
 
 @Component({
   tag: "vviinn-modal",
@@ -60,6 +64,20 @@ export class VviinnModal {
     this.slider = true;
   }
 
+  private renderImage(): HTMLImageElement | null {
+    return pipe(
+      sequenceToOption(imageSearchState.imageUrl, imageSearchState.image),
+      O.map(([url]) => {
+        const image = (
+          <img width="32" height="32" src={url} class="title-image" />
+        );
+
+        return image;
+      }),
+      O.getOrElse(() => null)
+    );
+  }
+
   render() {
     return (
       <Host
@@ -79,14 +97,14 @@ export class VviinnModal {
               >
                 <path
                   d="M20.25 12H3.75"
-                  stroke="#161616"
+                  stroke="currentColor"
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
                 />
                 <path
                   d="M10.5 5.25L3.75 12L10.5 18.75"
-                  stroke="#161616"
+                  stroke="currentColor"
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -96,6 +114,7 @@ export class VviinnModal {
           )}
 
           <div class="title" part="title">
+            {this.renderImage()}
             <slot name="vviinn-image-search-modal-title">Bildsuche</slot>
           </div>
 
@@ -113,7 +132,7 @@ export class VviinnModal {
             >
               <path
                 d="M16 1.4L14.6 0L8 6.6L1.4 0L0 1.4L6.6 8L0 14.6L1.4 16L8 9.4L14.6 16L16 14.6L9.4 8L16 1.4Z"
-                fill="#333333"
+                fill="currentColor"
               />
             </svg>
           </button>
