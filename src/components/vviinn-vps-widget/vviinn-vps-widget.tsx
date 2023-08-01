@@ -47,6 +47,7 @@ import { SlotSkeleton } from "../customized-slots";
 import { campaignTypeNames } from "../../campaign/Campaign";
 import { parseExcluded } from "../../utils/collections/collectionsUtils";
 import { resources } from "../../locale/resources-vps";
+import { Locale } from "../../locale";
 
 const filterInt = (value: string) =>
   /^[-+]?(\d+|Infinity)$/.test(value) ? Number(value) : NaN;
@@ -109,7 +110,7 @@ export class VviinnVpsWidget {
   /**  The currency sign is displayed after the price */
   @Prop() currencySign: string = "€";
   /** The locale for currency formatting and text localization */
-  @Prop() locale: string = "de-DE";
+  @Prop() locale: Locale = "de-DE";
   /** Campaign ID applied for visual search */
   @Prop() campaignId: string = "";
   /** Excluded filter. Example: "brand:Nike;custom_label_0:summer" */

@@ -49,6 +49,7 @@ import {
 import { checkEmpryString } from "../../utils/option/option";
 import { parseExcluded } from "../../utils/collections/collectionsUtils";
 import { resources } from "../../locale/resources-vpr";
+import { Locale } from "../../locale";
 
 /**
  * @part product-card - Product Card itself.
@@ -97,15 +98,15 @@ export class VviinnVprWidget implements ComponentInterface {
   /** Campaign type */
   @Prop() campaignType: CampaignName = "VPR";
   /** The locale for currency formatting and text localization */
-  @Prop() locale: string = "de-DE";
+  @Prop() locale: Locale = "de-DE";
   /** Comma-separated list of campaign IDs */
   @Prop() campaigns: string = "";
   /** Accepts any hex color code */
   @Prop() color: string = "";
   /** Hiding disabled arrows in the carousel if true */
   @Prop() gridArrowsDynamic: boolean = false;
-  /** The message is displayed when no results*/
-  @Prop() noResultText?: string;
+  /** A custom message is displayed when no results */
+  @Prop() noResultText: string = "";
   /** Showing a message (when true) or hiding the whole widget, when no results */
   @Prop() noResultShow: boolean = true;
   /** Show or hide the scrollbar */

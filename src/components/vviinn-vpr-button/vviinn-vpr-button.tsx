@@ -15,6 +15,7 @@ import {
   BasicEventData,
   ProductCardEventData,
 } from "../../recommendation/events";
+import { Locale } from "../../locale";
 
 /**
  *
@@ -45,7 +46,7 @@ export class VviinnVprButton {
   /** Campaign type */
   @Prop() campaignType: CampaignName = "VPR";
   /** The locale for currency formatting and text localization */
-  @Prop() locale: string = "de-DE";
+  @Prop() locale: Locale = "de-DE";
   /** Accepts any hex color code */
   @Prop() color: string = "";
   /** Add default styles to the button */
@@ -56,8 +57,8 @@ export class VviinnVprButton {
   @Prop() imageWidth: number = 300;
   /**  The currency sign is displayed after the price */
   @Prop() currencySign: string = "€";
-  /** The message is displayed when no results */
-  @Prop() noResultText?: string;
+  /** A custom message is displayed when no results */
+  @Prop() noResultText: string = "";
   /** Showing a message (when true) or hiding the whole widget, when no results */
   @Prop() noResultShow: boolean = true;
   /** Hiding disabled arrows in the carousel if true */
