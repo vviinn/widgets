@@ -97,7 +97,7 @@ export class VviinnVprWidget implements ComponentInterface {
   /** Campaign type */
   @Prop() campaignType: CampaignName = "VPR";
   /** The locale for currency formatting and text localization */
-  @Prop() locale: string = "en-GB";
+  @Prop() locale: string = "de-DE";
   /** Comma-separated list of campaign IDs */
   @Prop() campaigns: string = "";
   /** Accepts any hex color code */
@@ -288,7 +288,7 @@ export class VviinnVprWidget implements ComponentInterface {
 
     i18next.init({
       lng: this.locale,
-      fallbackLng: "en-Gb",
+      fallbackLng: "de-DE",
       resources,
     });
   }

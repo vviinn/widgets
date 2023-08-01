@@ -44,6 +44,8 @@ export class VviinnVprButton {
   @Prop() campaigns: string = "";
   /** Campaign type */
   @Prop() campaignType: CampaignName = "VPR";
+  /** The locale for currency formatting and text localization */
+  @Prop() locale: string = "de-DE";
   /** Accepts any hex color code */
   @Prop() color: string = "";
   /** Add default styles to the button */
@@ -118,6 +120,7 @@ export class VviinnVprButton {
     sidebar.campaigns = this.campaigns;
     sidebar.campaignType = this.campaignType;
     sidebar.color = this.color;
+    sidebar.locale = this.locale;
     sidebar.mode = this.position === "right" ? "grid" : this.mode;
     sidebar.imageWidth = this.imageWidth;
     sidebar.currencySign = this.currencySign;

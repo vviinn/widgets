@@ -44,7 +44,7 @@ Modal.args = {
   excluded: "",
   mode: "modal",
   productDetailNewTab: true,
-  locale: "de-DE",
+  locale: "en-GB",
   currencySign: "€",
   addStyle: true,
 };
@@ -58,7 +58,7 @@ Upload.args = {
   excluded: "",
   mode: "upload",
   productDetailNewTab: true,
-  locale: "de-DE",
+  locale: "en-GB",
   currencySign: "€",
   addStyle: true,
 };

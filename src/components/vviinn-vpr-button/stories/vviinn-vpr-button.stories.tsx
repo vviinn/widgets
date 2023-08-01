@@ -27,6 +27,7 @@ const Template = (args) =>
     position="${args.position}"
     add-style="${args.addStyle}"
     sidebar-title="${args.sidebarTitle}"
+    locale="${args.locale}"
     currency-sign="${args.currencySign}"
     modal-scrollbar="${args.modalScrollbar}"
     mode="${args.mode}"
@@ -60,6 +61,7 @@ Default.args = {
   sourceImage:
     "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg",
   imageWidth: "300",
+  locale: "en-GB",
   currencySign: "€",
   addStyle: true,
   modalScrollbar: false,

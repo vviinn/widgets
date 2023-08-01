@@ -36,6 +36,7 @@ export class RecommendationsSidebar {
   @Prop() campaigns: string = "";
   @Prop() campaignType: CampaignTypeId;
   @Prop() color: string;
+  @Prop() locale: string;
   @Prop() imageWidth: number = 300;
   @Prop() currencySign: string = "€";
   @Prop() noResultText: string;
@@ -126,6 +127,7 @@ export class RecommendationsSidebar {
               color={this.color}
               currencySign={this.currencySign}
               apiPath={this.apiPath}
+              locale={this.locale}
               buttonElementId={this.buttonElementId}
               noResultText={this.noResultText}
               noResultShow={this.noResultShow}
