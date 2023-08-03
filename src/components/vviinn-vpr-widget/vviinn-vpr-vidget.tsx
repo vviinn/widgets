@@ -79,7 +79,7 @@ import { Locale } from "../../locale";
 })
 export class VviinnVprWidget implements ComponentInterface {
   @Element() el: HTMLElement;
-  /** Widget’s title */
+  /** Widget’s title (change it to fit your locale) */
   @Prop() blockTitle: string = "Recommended products";
   /** The ratio of each recommended product image */
   @Prop() imageRatio: number = 1;

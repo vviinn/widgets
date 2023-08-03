@@ -37,7 +37,7 @@ export class VviinnVprButton {
   @Prop() position: "bottom" | "right" = "bottom";
   /** Image for showing in the modal's header */
   @Prop() sourceImage: string | null = null;
-  /** Sidebar title */
+  /** Sidebar title (change it to fit your locale) */
   @Prop() sidebarTitle: string = "Visually similar products";
   /** Show or hide the scrollbar */
   @Prop() modalScrollbar: boolean = false;
