@@ -137,7 +137,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @Event() vviinnProductClick: EventEmitter<ProductCardEventData>;
   /** The recommendation appears in the viewport */
   @Event() vviinnProductView: EventEmitter<ProductCardEventData>;
-  /** Recommendations request failed */
+  /** Recommendation request failed */
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
   /** @internal */

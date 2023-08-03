@@ -46,8 +46,8 @@ const campaignType = {
   control: {
     type: "select",
     labels: {
-      VPR: "Visually similar products (VPR)",
-      VCS: "Visually cross-selling (VCS)",
+      VPR: "Similar Products (VPR)",
+      VCS: "Cross-Selling (VCS)",
     },
   },
   required: false,

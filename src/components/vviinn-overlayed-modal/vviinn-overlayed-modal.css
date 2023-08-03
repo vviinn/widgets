@@ -13,7 +13,7 @@ vviinn-overlay {
   cursor: default;
 }
 
-@media (max-width: 415px) {
+@media (max-width: 640px) {
   vviinn-modal {
     border-radius: 4px 4px 0 0;
     height: 100vh;

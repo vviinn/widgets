@@ -22,7 +22,7 @@ export class VviinnOnboardingCard2 {
         </slot>
         <slot name="onboarding-card-2-text">
           <div class="text">
-            <h4>Verfeiner deine Suche</h4>
+            <h4>Verfeiner Deine Suche</h4>
             <p>
               Du kannst den Bildrahmen selber festlegen und so die Produkte
               genau auswählen.

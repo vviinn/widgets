@@ -36,9 +36,9 @@ export class VviinnPrivacyBadge {
             </svg>
             <slot name="vviinn-privacy-badge-text">
               <p>
-                Durch das Hochladen eines Bildes willigen Sie in die
-                Verarbeitung durch unseren Partner Vviinn ein. Das Bild wird
-                nach einer Stunde Inaktivität gelöscht.
+                Durch das Hochladen eines Bildes willigst Du in die Verarbeitung
+                durch unseren Partner Vviinn ein. Das Bild wird nach einer
+                Stunde Inaktivität gelöscht.
               </p>
             </slot>
           </div>

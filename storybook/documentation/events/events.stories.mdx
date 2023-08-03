@@ -4,11 +4,11 @@ import { Meta } from "@storybook/addon-docs";
 
 # Listening events
 
-Every `vviinn` widget has some events that users can work and listen to these events with `document.addEventListener()`.
+Every Vviinn Widget has some events that users can work and listen to these events with `document.addEventListener()`.
 
 # Vviinn Events
 
-## Widgets
+## Widget Events
 
 <table width="100%">
   <thead>
@@ -19,8 +19,8 @@ Every `vviinn` widget has some events that users can work and listen to these ev
       <td>vviinnWidgetLoad</td>
       <td>
         <ul> 
-          <li>Visual Product Recommendation</li>
-          <li>Visual Search</li>
+          <li>Recommendation Button / Widget</li>
+          <li>Search Button / Widget</li>
         </ul>
       </td>
       <td>
@@ -37,8 +37,8 @@ Every `vviinn` widget has some events that users can work and listen to these ev
       <td>vviinnWidgetOpen</td>
       <td>
         <ul>
-          <li>Visual Product Recommendation Button</li>
-          <li>Visual Search Button</li>
+          <li>Recommendation Button</li>
+          <li>Search Button</li>
         </ul>
       </td>
       <td>
@@ -55,8 +55,8 @@ Every `vviinn` widget has some events that users can work and listen to these ev
       <td>vviinnWidgetClose</td>
       <td>
         <ul>
-          <li>Visual Product Recommendation Button</li>
-          <li>Visual Search</li>
+          <li>Recommendation Button</li>
+          <li>Search Button / Widget</li>
         </ul>
       </td>
       <td>
@@ -72,7 +72,7 @@ Every `vviinn` widget has some events that users can work and listen to these ev
   </tbody>
 </table>
 
-## Products
+## Product Events
 
 <table width="100%">
   <thead>
@@ -83,8 +83,8 @@ Every `vviinn` widget has some events that users can work and listen to these ev
       <td>vviinnProductLoad</td>
       <td>
         <ul>
-          <li>Visual Product Recommendation</li>
-          <li>Visual Search</li>
+          <li>Recommendation Button / Widget</li>
+          <li>Search Button / Widget</li>
         </ul>
       </td>
       <td>
@@ -105,8 +105,8 @@ Every `vviinn` widget has some events that users can work and listen to these ev
       <td>vviinnProductView</td>
       <td>
         <ul>
-          <li>Visual Product Recommendation</li>
-          <li>Visual Search</li>
+          <li>Recommendation Button / Widget</li>
+          <li>Search Button / Widget</li>
         </ul>
       </td>
       <td>
@@ -127,8 +127,8 @@ Every `vviinn` widget has some events that users can work and listen to these ev
       <td>vviinnProductClick</td>
       <td>
         <ul>
-          <li>Visual Product Recommendation</li>
-          <li>Visual Search</li>
+          <li>Recommendation Button / Widget</li>
+          <li>Search Button / Widget</li>
         </ul>
       </td>
       <td>
@@ -149,8 +149,8 @@ Every `vviinn` widget has some events that users can work and listen to these ev
       <td>vviinnNoResult</td>
       <td>
         <ul>
-          <li>Visual Product Recommendation</li>
-          <li>Visual Search</li>
+          <li>Recommendation Button / Widget</li>
+          <li>Search Button / Widget</li>
         </ul>
       </td>
       <td>
@@ -166,7 +166,7 @@ Every `vviinn` widget has some events that users can work and listen to these ev
   </tbody>
 </table>
 
-## Search
+## Search Events
 
 <table width="100%">
   <thead>
@@ -177,7 +177,7 @@ Every `vviinn` widget has some events that users can work and listen to these ev
       <td>vviinnImageUpload</td>
       <td>
         <ul>
-          <li>Visual Search</li>
+          <li>Search Button / Widget</li>
         </ul>
       </td>
       <td>
@@ -194,7 +194,7 @@ Every `vviinn` widget has some events that users can work and listen to these ev
       <td>vviinnImageCrop</td>
       <td>
         <ul>
-          <li>Visual Search</li>
+          <li>Search Button / Widget</li>
         </ul>
       </td>
       <td>
@@ -211,7 +211,7 @@ Every `vviinn` widget has some events that users can work and listen to these ev
       <td>vviinnSelectObject</td>
       <td>
         <ul>
-          <li>Visual Search</li>
+          <li>Search Button / Widget</li>
         </ul>
       </td>
       <td>
@@ -229,7 +229,7 @@ Every `vviinn` widget has some events that users can work and listen to these ev
       <td>vviinnSelectFilter</td>
       <td>
         <ul>
-          <li>Visual Search</li>
+          <li>Search Button / Widget</li>
         </ul>
       </td>
       <td>
@@ -247,9 +247,9 @@ Every `vviinn` widget has some events that users can work and listen to these ev
   </tbody>
 </table>
 
-## Listen to Events Examples
+## Listen to Events. Examples
 
-### Visual Product Recommendation
+### Recommendation Widget
 
 ```javascript
 document.addEventListener("vviinnProductLoad", ({ detail }) => {
@@ -271,7 +271,7 @@ document.addEventListener("vviinnProductLoad", ({ detail }) => {
 // ... and other loaded products
 ```
 
-### Visual Search Button
+### Search Button
 
 ```javascript
 
