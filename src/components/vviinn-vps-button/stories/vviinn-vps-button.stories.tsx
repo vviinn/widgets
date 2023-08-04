@@ -32,6 +32,7 @@ const Template = (args) => `
   locale="${args.locale}"
   mode="${args.mode}"
   product-detail-new-tab="${args.productDetailNewTab}"
+  api-path="${args.apiPath}"
 ></vviinn-vps-button>`;
 
 export const Modal = Template.bind({});
@@ -47,6 +48,7 @@ Modal.args = {
   locale: "en-US",
   currencySign: "€",
   addStyle: true,
+  apiPath: "https://api.vviinn.com",
 };
 
 export const Upload = Template.bind({});
@@ -61,4 +63,5 @@ Upload.args = {
   locale: "en-US",
   currencySign: "€",
   addStyle: true,
+  apiPath: "https://api.vviinn.com",
 };

@@ -8,22 +8,15 @@ export default {
   },
 };
 
-const Template = ({
-  token,
-  campaignId,
-  currencySign,
-  locale,
-  active,
-  excluded,
-  productDetailNewTab,
-}) => `
-  <vviinn-vps-widget token="${token}"
-    campaign-id="${campaignId}"
-    currency-sign="${currencySign}"
-    locale="${locale}"
-    active="${active}"
-    excluded="${excluded}"
-    product-detail-new-tab="${productDetailNewTab}"
+const Template = (args) => `
+  <vviinn-vps-widget token="${args.token}"
+    campaign-id="${args.campaignId}"
+    currency-sign="${args.currencySign}"
+    locale="${args.locale}"
+    active="${args.active}"
+    excluded="${args.excluded}"
+    product-detail-new-tab="${args.productDetailNewTab}"
+    api-path="${args.apiPath}"
   >
   </vviinn-vps-widget>`;
 
@@ -37,6 +30,7 @@ Default.args = {
   locale: "en-US",
   currencySign: "€",
   active: true,
+  apiPath: "https://api.vviinn.com",
 };
 
 Default.storyName = "Main";

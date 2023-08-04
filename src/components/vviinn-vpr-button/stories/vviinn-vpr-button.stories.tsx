@@ -39,6 +39,7 @@ const Template = (args) =>
     grid-arrows-dynamic="${args.gridArrowsDynamic}"
     source-image="${args.sourceImage}"
     excluded="${args.excluded}"
+    api-path="${args.apiPath}"
   ></vviinn-vpr-button>`;
 
 export const Default = Template.bind({});
@@ -66,6 +67,7 @@ Default.args = {
   noResultShow: true,
   noResultText: "No results! Please, try again later.",
   gridArrowsDynamic: false,
+  apiPath: "https://api.vviinn.com",
 };
 
 Default.parameters = {
