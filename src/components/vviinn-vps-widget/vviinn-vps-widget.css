@@ -312,6 +312,10 @@ search-filters::part(filter active) {
 }
 
 @media (max-width: 480px) {
+  .start-page {
+    padding-top: 0;
+  }
+
   .start-page_block {
     padding: 20px;
   }
