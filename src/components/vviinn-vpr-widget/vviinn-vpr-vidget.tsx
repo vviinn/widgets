@@ -135,6 +135,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @Event({ bubbles: true })
   vviinnWidgetLoad: EventEmitter<BasicEventData>;
 
+  @Event() vviinnResultLoad: EventEmitter<BasicEventData>;
   /** The recommendation renders on the page */
   @Event() vviinnProductLoad: EventEmitter<ProductCardEventData>;
   /** Click on the product’s link */
@@ -154,7 +155,7 @@ export class VviinnVprWidget implements ComponentInterface {
   private productImageLoadedSubject = new Subject();
   private id?: string;
 
-  private getEventData(): BasicEventData {
+  private getBasicEventData(): BasicEventData {
     return {
       widgetType: "VPR",
       campaignTypeId: this.campaignType,
@@ -314,7 +315,7 @@ export class VviinnVprWidget implements ComponentInterface {
       this.excluded = parseExcluded(this.excluded);
     }
 
-    this.vviinnWidgetLoad.emit(this.getEventData());
+    this.vviinnWidgetLoad.emit(this.getBasicEventData());
     this.getRecommendations();
   }
 
@@ -341,7 +342,7 @@ export class VviinnVprWidget implements ComponentInterface {
       E.fold(
         (error) => {
           this.handleError(error);
-          this.vviinnNoResult.emit(this.getEventData());
+          this.vviinnNoResult.emit(this.getBasicEventData());
           this.vviinnRecommendationsLoaded.emit();
         },
         (data) => this.handleRecommendationsSuccess(data)
@@ -354,6 +355,8 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   private handleRecommendationsSuccess(data: any) {
+    this.vviinnResultLoad.emit(this.getBasicEventData());
+
     this.recommendations = data?.extended ?? data;
     imageSearchState.results = this.recommendations;
 
@@ -452,7 +455,7 @@ export class VviinnVprWidget implements ComponentInterface {
 
   private renderCarousel(): HTMLVviinnCarouselElement {
     if (this.showingInButton) {
-      this.vviinnWidgetOpen.emit(this.getEventData());
+      this.vviinnWidgetOpen.emit(this.getBasicEventData());
     }
 
     return (
