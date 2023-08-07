@@ -8,7 +8,7 @@
   overflow: auto;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   :host {
     animation-name: fade-in;
     animation-duration: 0.5s;
