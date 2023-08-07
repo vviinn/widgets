@@ -262,10 +262,6 @@ search-filters::part(filter active) {
     width: unset;
   }
 
-  .start-page_block {
-    padding: 0 24px;
-  }
-
   vviinn-teaser {
     margin-top: 24px;
   }
@@ -313,6 +309,20 @@ search-filters::part(filter active) {
     padding: unset;
     align-content: start;
     width: unset;
+  }
+}
+
+@media (max-width: 480px) {
+  .start-page_block {
+    padding: 20px;
+  }
+
+  .onboarding-wrapper {
+    padding: 0;
+  }
+
+  .upload-button-content {
+    grid-gap: 10px;
   }
 }
 
