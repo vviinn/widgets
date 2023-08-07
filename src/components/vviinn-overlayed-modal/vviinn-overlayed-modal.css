@@ -13,6 +13,11 @@ vviinn-overlay {
   cursor: default;
 }
 
+vviinn-modal {
+  margin-left: 24px;
+  margin-right: 24px;
+}
+
 @media (max-width: 640px) {
   vviinn-modal {
     border-radius: 4px 4px 0 0;
@@ -20,6 +25,8 @@ vviinn-overlay {
     margin-top: 32px;
     transform: translateY(100%);
     width: 100vw;
+    margin-left: 0;
+    margin-right: 0;
   }
 
   vviinn-overlay {
