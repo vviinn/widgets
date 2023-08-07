@@ -22,6 +22,9 @@ export class VviinnExampleImages {
   @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
+  /** @internal */
+  @Event() vviinnImageUploadFinished: EventEmitter<BasicEventData>;
+
   @Prop() basicEventData: BasicEventData;
   @Prop() exampleImagesTitle: string;
 

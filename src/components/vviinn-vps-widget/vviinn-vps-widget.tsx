@@ -151,7 +151,7 @@ export class VviinnVpsWidget {
   /** The event emits on modal close */
   @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
 
-  /** The image was uploaded */
+  /** The image upload has started */
   @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
   /** Wrong image format, that isn’t .jpg, .jpeg, png, or the request failed */
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
@@ -475,7 +475,7 @@ export class VviinnVpsWidget {
                 <vviinn-teaser class={{ hidden: this.haveErrors() }} />
                 <vviinn-image-selector
                   class={{ hidden: this.haveErrors() }}
-                  onVviinnImageUpload={() => {
+                  onVviinnImageUploadFinished={() => {
                     this.active = true;
                     this.handleImageSelection("upload");
                     if (this.mode === "upload") {
@@ -529,7 +529,7 @@ export class VviinnVpsWidget {
                   <vviinn-example-images
                     part="example-images"
                     exampleImagesTitle={i18next.t("exampleImagesTitle")}
-                    onVviinnImageUpload={() =>
+                    onVviinnImageUploadFinished={() =>
                       this.handleImageSelection("example")
                     }
                     onVviinnNoResult={() =>

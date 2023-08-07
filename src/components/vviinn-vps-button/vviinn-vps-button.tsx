@@ -92,7 +92,7 @@ export class VviinnVpsButton {
   /** The event emits on modal close. */
   @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
 
-  /** The image was uploaded */
+  /** The image upload has started */
   @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
   /** Wrong image format, that isn’t .jpg, .jpeg, png, or the request failed */
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
