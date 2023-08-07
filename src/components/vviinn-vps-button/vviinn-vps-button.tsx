@@ -19,6 +19,7 @@ import {
   SelectObjectEventData,
 } from "../../recommendation/events";
 import { campaignTypeNames } from "../../campaign/Campaign";
+import { Locale } from "../../locale";
 
 /**
  * @slot vviinn-onboarding-title - Title of onboarding section.
@@ -66,8 +67,8 @@ export class VviinnVpsButton {
   @Prop() token: string;
   /**  The currency sign is displayed after the price */
   @Prop() currencySign: string = "€";
-  /** The locale for currency formatting */
-  @Prop() locale: string = "de-DE";
+  /** The locale for currency formatting and text localization */
+  @Prop() locale: Locale = "de-DE";
   /** Campaign ID applied for visual search */
   @Prop() campaignId: string = "";
   /** Add style to the button */

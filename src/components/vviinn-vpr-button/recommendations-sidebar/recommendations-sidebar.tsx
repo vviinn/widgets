@@ -13,6 +13,7 @@ import { CrossIcon } from "../../vviinn-icons";
 import { CarouselMode } from "../../vviinn-carousel/vviinn-carousel";
 import { BasicEventData } from "../../../recommendation/events";
 import { CampaignTypeId, campaignTypeNames } from "../../../campaign/Campaign";
+import { Locale } from "../../../locale";
 
 type SidebarState = "idle" | "open" | "closed";
 type ClickEvent = Event & { clientX: number; clientY: number };
@@ -36,6 +37,7 @@ export class RecommendationsSidebar {
   @Prop() campaigns: string = "";
   @Prop() campaignType: CampaignTypeId;
   @Prop() color: string;
+  @Prop() locale: Locale;
   @Prop() imageWidth: number = 300;
   @Prop() currencySign: string = "€";
   @Prop() noResultText: string;
@@ -126,6 +128,7 @@ export class RecommendationsSidebar {
               color={this.color}
               currencySign={this.currencySign}
               apiPath={this.apiPath}
+              locale={this.locale}
               buttonElementId={this.buttonElementId}
               noResultText={this.noResultText}
               noResultShow={this.noResultShow}

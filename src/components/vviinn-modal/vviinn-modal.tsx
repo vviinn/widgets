@@ -8,6 +8,8 @@ import {
   Prop,
   Element,
 } from "@stencil/core";
+import i18next from "i18next";
+
 import { slotChangeListener } from "../customized-slots";
 import { BasicEventData } from "../../recommendation/events";
 import { campaignTypeNames } from "../../campaign/Campaign";
@@ -115,7 +117,9 @@ export class VviinnModal {
 
           <div class="title" part="title">
             {this.renderImage()}
-            <slot name="vviinn-image-search-modal-title">Bildsuche</slot>
+            <slot name="vviinn-image-search-modal-title">
+              {i18next.t("imageSearchModalTitle")}
+            </slot>
           </div>
 
           <button

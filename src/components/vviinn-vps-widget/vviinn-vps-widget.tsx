@@ -10,13 +10,16 @@ import {
   Event,
   EventEmitter,
 } from "@stencil/core";
-import { version } from "../../../package.json";
-import { state } from "../../store/store";
-import { imageSearchState } from "../../store/imageSearch.store";
 import * as O from "fp-ts/lib/Option";
+import { pipe } from "fp-ts/lib/function";
 import { isEmpty } from "fp-ts/string";
-import { slotChangeListener } from "../customized-slots";
 import { v4 as uuidv4 } from "uuid";
+import i18next from "i18next";
+
+import { version } from "../../../package.json";
+import { imageSearchState } from "../../store/imageSearch.store";
+import { state } from "../../store/store";
+import { slotChangeListener } from "../customized-slots";
 import { createTrackingApi } from "../../openApi";
 import {
   DefaultApi,
@@ -40,10 +43,11 @@ import {
   ProductCardEventData,
   SelectObjectEventData,
 } from "../../recommendation/events";
-import { pipe } from "fp-ts/lib/function";
 import { SlotSkeleton } from "../customized-slots";
 import { campaignTypeNames } from "../../campaign/Campaign";
 import { parseExcluded } from "../../utils/collections/collectionsUtils";
+import { resources } from "../../locale/resources-vps";
+import { Locale } from "../../locale";
 
 const filterInt = (value: string) =>
   /^[-+]?(\d+|Infinity)$/.test(value) ? Number(value) : NaN;
@@ -105,8 +109,8 @@ export class VviinnVpsWidget {
   @Prop({ mutable: true }) active: boolean = true;
   /**  The currency sign is displayed after the price */
   @Prop() currencySign: string = "€";
-  /** The locale for currency formatting */
-  @Prop() locale: string = "de-DE";
+  /** The locale for currency formatting and text localization */
+  @Prop() locale: Locale = "de-DE";
   /** Campaign ID applied for visual search */
   @Prop() campaignId: string = "";
   /** Excluded filter. Example: "brand:Nike;custom_label_0:summer" */
@@ -344,6 +348,12 @@ export class VviinnVpsWidget {
     this.uiSessionId = uuidv4();
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
     this.id = this.el.id;
+
+    i18next.init({
+      lng: this.locale,
+      fallbackLng: "de-DE",
+      resources,
+    });
   }
 
   componentWillLoad() {
@@ -504,17 +514,21 @@ export class VviinnVpsWidget {
                       />
                     </svg>
                     <slot name="vviinn-image-upload-button-text">
-                      <span>Kamera oder Bild auswählen</span>
+                      <span>{i18next.t("imageUploadButtonText")}</span>
                     </slot>
                   </span>
                 </vviinn-image-selector>
-                <vviinn-privacy-badge class={{ hidden: this.haveErrors() }} />
+                <vviinn-privacy-badge
+                  class={{ hidden: this.haveErrors() }}
+                  privacyBadgeText={i18next.t("privacyBadgeText")}
+                />
               </div>
               <div id="onboarding-block" class="start-page_block">
                 <div class="onboarding-wrapper">
                   <vviinn-onboarding />
                   <vviinn-example-images
                     part="example-images"
+                    exampleImagesTitle={i18next.t("exampleImagesTitle")}
                     onVviinnImageUpload={() =>
                       this.handleImageSelection("example")
                     }

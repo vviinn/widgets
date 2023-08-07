@@ -41,6 +41,7 @@
     "dotenv": "^8.2.0",
     "enhanced-ecommerce-types": "0.0.3",
     "fp-ts": "^2.12.3",
+    "i18next": "^23.2.11",
     "openapi-typescript": "^4.4.0",
     "rxjs": "^7.5.5",
     "save-dev": "^0.0.1-security",

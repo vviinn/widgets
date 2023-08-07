@@ -15,6 +15,7 @@ import {
   BasicEventData,
   ProductCardEventData,
 } from "../../recommendation/events";
+import { Locale } from "../../locale";
 
 /**
  *
@@ -36,7 +37,7 @@ export class VviinnVprButton {
   @Prop() position: "bottom" | "right" = "bottom";
   /** Image for showing in the modal's header */
   @Prop() sourceImage: string | null = null;
-  /** Sidebar title */
+  /** Sidebar title (change it to fit your locale) */
   @Prop() sidebarTitle: string = "Visually similar products";
   /** Show or hide the scrollbar */
   @Prop() modalScrollbar: boolean = false;
@@ -44,6 +45,8 @@ export class VviinnVprButton {
   @Prop() campaigns: string = "";
   /** Campaign type */
   @Prop() campaignType: CampaignName = "VPR";
+  /** The locale for currency formatting and text localization */
+  @Prop() locale: Locale = "de-DE";
   /** Accepts any hex color code */
   @Prop() color: string = "";
   /** Add default styles to the button */
@@ -54,8 +57,8 @@ export class VviinnVprButton {
   @Prop() imageWidth: number = 300;
   /**  The currency sign is displayed after the price */
   @Prop() currencySign: string = "€";
-  /** The message is displayed when no results */
-  @Prop() noResultText: string = "No results! Please, try again later.";
+  /** A custom message is displayed when no results */
+  @Prop() noResultText: string = "";
   /** Showing a message (when true) or hiding the whole widget, when no results */
   @Prop() noResultShow: boolean = true;
   /** Hiding disabled arrows in the carousel if true */
@@ -118,6 +121,7 @@ export class VviinnVprButton {
     sidebar.campaigns = this.campaigns;
     sidebar.campaignType = this.campaignType;
     sidebar.color = this.color;
+    sidebar.locale = this.locale;
     sidebar.mode = this.position === "right" ? "grid" : this.mode;
     sidebar.imageWidth = this.imageWidth;
     sidebar.currencySign = this.currencySign;
