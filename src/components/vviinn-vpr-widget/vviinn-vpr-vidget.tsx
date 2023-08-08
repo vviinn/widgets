@@ -136,6 +136,7 @@ export class VviinnVprWidget implements ComponentInterface {
   vviinnWidgetLoad: EventEmitter<BasicEventData>;
 
   @Event() vviinnResultLoad: EventEmitter<BasicEventData>;
+  @Event() vviinnResultView: EventEmitter<BasicEventData>;
   /** The recommendation renders on the page */
   @Event() vviinnProductLoad: EventEmitter<ProductCardEventData>;
   /** Click on the product’s link */
@@ -446,6 +447,7 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   private renderResults() {
+    // DO we need this?
     return (
       <div class="recommendations-grid" part="recommendations-grid">
         {this.recommendations.map((r, i) => this.renderRecommendation(r, i))}

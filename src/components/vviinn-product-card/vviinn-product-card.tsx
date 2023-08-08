@@ -130,8 +130,11 @@ export class VviinnProductCard {
         O.map((analytics) => analytics.sendImpression(this.getProduct()))
       );
 
-      this.vviinnProductView.emit(this.productData);
-      this.intersectionObserver.disconnect();
+      // FIXME: Are there any better way to do this?
+      setTimeout(() => {
+        this.vviinnProductView.emit(this.productData);
+        this.intersectionObserver.disconnect();
+      }, 0);
     }
   }
 
