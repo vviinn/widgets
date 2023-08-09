@@ -447,7 +447,7 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   private renderResults() {
-    // DO we need this?
+    // FIXME: DO we need this?
     return (
       <div class="recommendations-grid" part="recommendations-grid">
         {this.recommendations.map((r, i) => this.renderRecommendation(r, i))}

@@ -161,6 +161,8 @@ export class VviinnVpsWidget {
   @Event() vviinnProductClick: EventEmitter<ProductCardEventData>;
   /** The recommendation appears in the viewport */
   @Event() vviinnProductView: EventEmitter<ProductCardEventData>;
+  @Event() vviinnResultLoad: EventEmitter<BasicEventData>;
+  @Event() vviinnResultView: EventEmitter<BasicEventData>;
 
   /** Crop area changes */
   @Event() vviinnImageCrop: EventEmitter<BasicEventData>;
@@ -174,6 +176,7 @@ export class VviinnVpsWidget {
   private trackingApi: DefaultApi;
   private imageSource: SearchImageSource | null = null;
   private id?: string;
+  private resultLoaded: boolean = false;
 
   private handleOpenLink(deeplink: string) {
     if (this.productDetailNewTab) {
@@ -290,6 +293,7 @@ export class VviinnVpsWidget {
 
   @Listen("vviinnImageCrop")
   trachSearchAreaChanges() {
+    this.resultLoaded = false;
     if (this.trackingDeactivated) return;
 
     const searchEvent: WidgetEvent = createSearchEvent({
@@ -302,6 +306,7 @@ export class VviinnVpsWidget {
 
   @Listen("vviinnSelectObject")
   trackDetectedObject() {
+    this.resultLoaded = false;
     if (this.trackingDeactivated) return;
 
     const searchEvent: WidgetEvent = createSearchEvent({
@@ -314,6 +319,7 @@ export class VviinnVpsWidget {
 
   @Listen("vviinnSelectFilter")
   trackFilter({ detail }: CustomEvent<SelectFilterEventData>) {
+    this.resultLoaded = false;
     if (this.trackingDeactivated) return;
 
     const searchEvent: WidgetEvent = createFilterEvent({
@@ -395,6 +401,37 @@ export class VviinnVpsWidget {
       search_area: "full",
     });
     this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
+  }
+
+  private renderResults() {
+    if (imageSearchState.results.length === 0) return null;
+
+    if (!this.resultLoaded) {
+      this.vviinnResultLoad.emit(this.getBasicEventData());
+      this.resultLoaded = true;
+    }
+
+    return imageSearchState.results.map((p, i) => (
+      <vviinn-product-card
+        key={p.productId}
+        hidden={true}
+        productTitle={p.title}
+        productId={p.productId}
+        productType={p.productType}
+        brand={p.brand}
+        deeplink={p.deeplink}
+        price={p.price.actual}
+        salePrice={p.price.sale}
+        imageWidth={160}
+        image={p.image.thumbnail ?? p.image.original}
+        part="product-card"
+        campaignTypeId="VPS"
+        index={i}
+        widgetElementId={this.id}
+        buttonElementId={this.buttonElementId}
+        widgetVersion={version}
+      />
+    ));
   }
 
   private resetState() {
@@ -572,27 +609,7 @@ export class VviinnVpsWidget {
                     products: true,
                   }}
                 >
-                  {imageSearchState.results.map((p, i) => (
-                    <vviinn-product-card
-                      key={p.productId}
-                      hidden={true}
-                      productTitle={p.title}
-                      productId={p.productId}
-                      productType={p.productType}
-                      brand={p.brand}
-                      deeplink={p.deeplink}
-                      price={p.price.actual}
-                      salePrice={p.price.sale}
-                      imageWidth={160}
-                      image={p.image.thumbnail ?? p.image.original}
-                      part="product-card"
-                      campaignTypeId="VPS"
-                      index={i}
-                      widgetElementId={this.id}
-                      buttonElementId={this.buttonElementId}
-                      widgetVersion={version}
-                    />
-                  ))}
+                  {this.renderResults()}
                 </div>
               </div>
             </vviinn-slide>
