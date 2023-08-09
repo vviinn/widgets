@@ -177,6 +177,12 @@ export class VviinnVpsWidget {
   private imageSource: SearchImageSource | null = null;
   private id?: string;
   private resultLoaded: boolean = false;
+  private resultViewed: boolean = false;
+
+  private initResultEvents() {
+    this.resultLoaded = false;
+    this.resultViewed = false;
+  }
 
   private handleOpenLink(deeplink: string) {
     if (this.productDetailNewTab) {
@@ -229,6 +235,11 @@ export class VviinnVpsWidget {
 
   @Listen("vviinnProductView")
   trackProductView({ detail }: ProductCardEvent) {
+    if (!this.resultViewed) {
+      this.resultViewed = true;
+      this.vviinnResultView.emit(this.getBasicEventData());
+    }
+
     if (this.trackingDeactivated) return;
 
     const {
@@ -293,7 +304,7 @@ export class VviinnVpsWidget {
 
   @Listen("vviinnImageCrop")
   trachSearchAreaChanges() {
-    this.resultLoaded = false;
+    this.initResultEvents();
     if (this.trackingDeactivated) return;
 
     const searchEvent: WidgetEvent = createSearchEvent({
@@ -306,7 +317,7 @@ export class VviinnVpsWidget {
 
   @Listen("vviinnSelectObject")
   trackDetectedObject() {
-    this.resultLoaded = false;
+    this.initResultEvents();
     if (this.trackingDeactivated) return;
 
     const searchEvent: WidgetEvent = createSearchEvent({
@@ -319,7 +330,7 @@ export class VviinnVpsWidget {
 
   @Listen("vviinnSelectFilter")
   trackFilter({ detail }: CustomEvent<SelectFilterEventData>) {
-    this.resultLoaded = false;
+    this.initResultEvents();
     if (this.trackingDeactivated) return;
 
     const searchEvent: WidgetEvent = createFilterEvent({
