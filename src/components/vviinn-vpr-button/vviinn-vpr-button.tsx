@@ -73,19 +73,30 @@ export class VviinnVprButton {
 
   /** The event emits on widget load */
   @Event() vviinnWidgetLoad: EventEmitter<BasicEventData>;
+
   /** The event emits on modal open */
   @Event() vviinnWidgetOpen: EventEmitter<BasicEventData>;
+
   /** The event emits on modal close */
   @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
-  /** Recommendation request failed */
-  @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
   /** The recommendation renders on the page */
   @Event() vviinnProductLoad: EventEmitter<ProductCardEventData>;
+
   /** Click on the product’s link */
   @Event() vviinnProductClick: EventEmitter<ProductCardEventData>;
+
   /** The recommendation appears in the viewport */
   @Event() vviinnProductView: EventEmitter<ProductCardEventData>;
+
+  /** The recommendation result renders on the page */
+  @Event() vviinnResultLoad: EventEmitter<BasicEventData>;
+
+  /** The recommendation result appears in the viewport */
+  @Event() vviinnResultView: EventEmitter<BasicEventData>;
+
+  /** Recommendation request failed */
+  @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
   private sidebar: HTMLVviinnRecommendationsSidebarElement | null = null;
   private sidebarCloseListener: () => void = () => {
