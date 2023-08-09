@@ -155,6 +155,7 @@ export class VviinnVprWidget implements ComponentInterface {
   private productIds: string[];
   private productImageLoadedSubject = new Subject();
   private id?: string;
+  private resultViewed: boolean = false;
 
   private getBasicEventData(): BasicEventData {
     return {
@@ -211,6 +212,11 @@ export class VviinnVprWidget implements ComponentInterface {
 
   @Listen("vviinnProductView")
   trackProductView({ detail }: ProductCardEvent) {
+    if (!this.resultViewed) {
+      this.resultViewed = true;
+      this.vviinnResultView.emit(this.getBasicEventData());
+    }
+
     if (this.trackingDeactivated) return;
     const {
       productRank,
@@ -447,7 +453,6 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   private renderResults() {
-    // FIXME: DO we need this?
     return (
       <div class="recommendations-grid" part="recommendations-grid">
         {this.recommendations.map((r, i) => this.renderRecommendation(r, i))}

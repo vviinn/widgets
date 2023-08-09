@@ -1,13 +1,4 @@
-import {
-  Component,
-  Host,
-  h,
-  Element,
-  State,
-  Prop,
-  Event,
-  EventEmitter,
-} from "@stencil/core";
+import { Component, Host, h, Element, State, Prop } from "@stencil/core";
 import { chunksOf } from "fp-ts/lib/Array";
 import { Recommendation } from "../../recommendation/recommendation";
 import { ChevronIcon } from "../vviinn-icons";
@@ -46,17 +37,9 @@ export class VviinnCarousel {
   @Prop() recommendations: Recommendation[] = [];
   @Prop() widgetVersion: string;
 
-  @Event({ bubbles: true })
-  vviinnResultView: EventEmitter;
-
   private columns: number = 0;
   private resizeObserver: ResizeObserver = new ResizeObserver(() =>
     this.handleResize()
-  );
-
-  private intersectionObserver = new IntersectionObserver(
-    this.intersectionCallback.bind(this),
-    { threshold: 1.0 }
   );
 
   private mutationObserver = new MutationObserver(() =>
@@ -80,17 +63,6 @@ export class VviinnCarousel {
 
   disconnectedCallback() {
     this.resizeObserver.disconnect();
-  }
-
-  private intersectionCallback(data: IntersectionObserverEntry[]) {
-    if (data.some((entry) => entry.isIntersecting)) {
-      this.vviinnResultView.emit();
-      this.intersectionObserver.disconnect();
-    }
-  }
-
-  componentDidRender() {
-    this.intersectionObserver.observe(this.el);
   }
 
   componentDidLoad() {
