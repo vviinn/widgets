@@ -135,14 +135,21 @@ export class VviinnVprWidget implements ComponentInterface {
   @Event({ bubbles: true })
   vviinnWidgetLoad: EventEmitter<BasicEventData>;
 
-  @Event() vviinnResultLoad: EventEmitter<BasicEventData>;
-  @Event() vviinnResultView: EventEmitter<BasicEventData>;
-  /** The recommendation renders on the page */
+  /** Recommended product renders on the page */
   @Event() vviinnProductLoad: EventEmitter<ProductCardEventData>;
+
+  /** Recommended product appears in the viewport */
+  @Event() vviinnProductView: EventEmitter<ProductCardEventData>;
+
   /** Click on the product’s link */
   @Event() vviinnProductClick: EventEmitter<ProductCardEventData>;
-  /** The recommendation appears in the viewport */
-  @Event() vviinnProductView: EventEmitter<ProductCardEventData>;
+
+  /** The recommendation result renders on the page */
+  @Event() vviinnResultLoad: EventEmitter<BasicEventData>;
+
+  /** The recommendation result appears in the viewport */
+  @Event() vviinnResultView: EventEmitter<BasicEventData>;
+
   /** Recommendation request failed */
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 

@@ -145,29 +145,41 @@ export class VviinnVpsWidget {
   /** The event emits on widget load */
   @Event({ bubbles: true })
   vviinnWidgetLoad: EventEmitter<BasicEventData>;
+
   /** The event emits on modal open */
   @Event({ bubbles: true })
   vviinnWidgetOpen: EventEmitter<BasicEventData>;
+
   /** The event emits on modal close */
   @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
 
   /** The image upload has started */
   @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
-  /** Wrong image format, that isn’t .jpg, .jpeg, png, or the request failed */
-  @Event() vviinnNoResult: EventEmitter<BasicEventData>;
-  /** The recommendation renders on the page */
+
+  /** Recommended product renders on the page */
   @Event() vviinnProductLoad: EventEmitter<ProductCardEventData>;
+
+  /** Recommended product appears in the viewport. */
+  @Event() vviinnProductView: EventEmitter<ProductCardEventData>;
+
   /** Click on the product’s link */
   @Event() vviinnProductClick: EventEmitter<ProductCardEventData>;
-  /** The recommendation appears in the viewport */
-  @Event() vviinnProductView: EventEmitter<ProductCardEventData>;
+
+  /** The search result renders on the page */
   @Event() vviinnResultLoad: EventEmitter<BasicEventData>;
+
+  /** The search result appears in the viewport */
   @Event() vviinnResultView: EventEmitter<BasicEventData>;
+
+  /** Wrong image format, that isn’t .jpg, .jpeg, png, or the request failed */
+  @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
   /** Crop area changes */
   @Event() vviinnImageCrop: EventEmitter<BasicEventData>;
+
   /** User selects the detected object */
   @Event() vviinnSelectObject: EventEmitter<SelectObjectEventData>;
+
   /** User selects one of the filters */
   @Event() vviinnSelectFilter: EventEmitter<SelectFilterEventData>;
 
