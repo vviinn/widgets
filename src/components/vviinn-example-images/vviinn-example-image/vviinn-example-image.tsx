@@ -33,7 +33,7 @@ export class VviinnExampleImage {
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
   /** @internal */
-  @Event() vviinnImageUploadFinished: EventEmitter<BasicEventData>;
+  @Event() vviinnImageUploadFinished: EventEmitter;
 
   private async selectImage() {
     this.selected = true;
@@ -45,7 +45,7 @@ export class VviinnExampleImage {
       processResult,
       E.match(
         () => this.vviinnNoResult.emit(this.basicEventData),
-        () => this.vviinnImageUploadFinished.emit(this.basicEventData)
+        () => this.vviinnImageUploadFinished.emit()
       )
     );
 

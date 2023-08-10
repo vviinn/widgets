@@ -354,6 +354,11 @@ export class VviinnVpsWidget {
     this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
   }
 
+  @Listen("secondaryActionClicked")
+  trackSecondaryAction() {
+    this.initResultEvents();
+  }
+
   connectedCallback() {
     state.apiPath = this.apiPath;
     state.currencySign = this.currencySign;
@@ -429,7 +434,7 @@ export class VviinnVpsWidget {
   private renderResults() {
     if (imageSearchState.results.length === 0) return null;
 
-    if (!this.resultLoaded) {
+    if (!this.resultLoaded && this.slidePosition === 1) {
       this.vviinnResultLoad.emit(this.getBasicEventData());
       this.resultLoaded = true;
     }
