@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.21.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.32...v2.21.0) (2023-08-11)
+
+
+### Features
+
+* Add vviinnResultLoad and vviinnResultView events ([b812334](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/b81233410144caace60a0d17236155da248e3ad8))
+
 ### [2.20.32](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.31...v2.20.32) (2023-08-08)
 
 ### [2.20.31](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.30...v2.20.31) (2023-08-08)
