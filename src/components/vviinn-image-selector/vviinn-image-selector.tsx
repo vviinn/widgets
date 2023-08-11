@@ -24,10 +24,12 @@ import { BasicEventData } from "../../recommendation/events";
   shadow: true,
 })
 export class VviinnImageSelector {
-  /** The image was uploaded */
   @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
   /** Wrong image format, that isn’t .jpg, .jpeg, png */
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
+
+  /** @internal */
+  @Event() vviinnImageUploadFinished: EventEmitter;
 
   @Prop() basicEventData: BasicEventData;
   @Prop() startUpload: boolean;
@@ -36,6 +38,7 @@ export class VviinnImageSelector {
   private fileInput: HTMLInputElement;
 
   private async handleInputChange(event: Event) {
+    this.vviinnImageUpload.emit(this.basicEventData);
     const input = event.target as HTMLInputElement;
     const processingResult = await processSelectedFile(input.files[0]);
 
@@ -43,7 +46,7 @@ export class VviinnImageSelector {
       processingResult,
       E.match(
         () => this.vviinnNoResult.emit(this.basicEventData),
-        () => this.vviinnImageUpload.emit(this.basicEventData)
+        () => this.vviinnImageUploadFinished.emit()
       )
     );
 

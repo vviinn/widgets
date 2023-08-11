@@ -209,9 +209,10 @@ export const uploadFile = (
 export const imageSearchState = state;
 
 onChange("activeIonLink", async (newLink: Link) => {
-  state.loading = true;
   const link = newLink ? newLink : state.resetCategoryLink;
+  if (!link) return;
 
+  state.loading = true;
   await pipe(
     makeAuthorizedRequest(state.token),
     TE.fromEither,
