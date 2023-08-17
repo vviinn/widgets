@@ -228,11 +228,12 @@ export class VviinnVpsWidget {
   };
 
   @Watch("active")
-  activeWatcher(open: boolean) {
-    if (open) {
+  activeWatcher(active: boolean) {
+    if (active) {
       this.overflow = document.body.style.overflow;
       document.body.style.overflow = "hidden";
-      this.trackOpenEvent();
+      this.vviinnWidgetOpen.emit(this.getBasicEventData());
+      this.trackWidgetOpenEvent();
     } else {
       document.body.style.overflow = this.overflow;
     }
@@ -243,7 +244,6 @@ export class VviinnVpsWidget {
     if (!pressed) return;
     if (this.mode === "modal") {
       this.active = true;
-      this.vviinnWidgetOpen.emit(this.getBasicEventData());
     }
   }
 
@@ -422,10 +422,10 @@ export class VviinnVpsWidget {
   componentWillLoad() {
     slotChangeListener(this, this.el);
     this.vviinnWidgetLoad.emit(this.getBasicEventData());
-    this.trackLoadEvent();
+    this.trackWidgetLoadEvent();
   }
 
-  private trackLoadEvent() {
+  private trackWidgetLoadEvent() {
     if (this.trackingDeactivated) return;
 
     const widgetLoadEvent: WidgetEvent = createWidgetVpsEvent({
@@ -437,7 +437,7 @@ export class VviinnVpsWidget {
       .then(this.setTrackingDeactivated);
   }
 
-  private trackOpenEvent() {
+  private trackWidgetOpenEvent() {
     if (this.trackingDeactivated) return;
 
     const widgetOpenEvent: WidgetEvent = createWidgetVpsEvent({
@@ -446,6 +446,18 @@ export class VviinnVpsWidget {
     });
     this.trackingApi
       .trackEvent(widgetOpenEvent)
+      .then(this.setTrackingDeactivated);
+  }
+
+  private trackWidgetCloseEvent() {
+    if (this.trackingDeactivated) return;
+
+    const widgetCloseEvent: WidgetEvent = createWidgetVpsEvent({
+      action: "close",
+      session_id: this.uiSessionId,
+    });
+    this.trackingApi
+      .trackEvent(widgetCloseEvent)
       .then(this.setTrackingDeactivated);
   }
 
@@ -533,16 +545,7 @@ export class VviinnVpsWidget {
 
     const elementsToReset = ["onboarding-block", "results-block"];
     elementsToReset.forEach((name) => this.resetScroll(name));
-
-    if (this.trackingDeactivated) return;
-
-    const widgetCloseEvent: WidgetEvent = createWidgetVpsEvent({
-      action: "close",
-      session_id: this.uiSessionId,
-    });
-    this.trackingApi
-      .trackEvent(widgetCloseEvent)
-      .then(this.setTrackingDeactivated);
+    this.trackWidgetCloseEvent();
   }
 
   render() {
@@ -582,6 +585,7 @@ export class VviinnVpsWidget {
                   onVviinnImageUploadFinished={() => {
                     this.handleImageSelection("upload");
                     if (this.mode === "upload") {
+                      this.active = true;
                       this.vviinnWidgetOpen.emit(this.getBasicEventData());
                     }
                   }}
