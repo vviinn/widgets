@@ -1,6 +1,8 @@
 import { createTrackingEvent } from "./event";
 import { filterEvent } from "./filter";
 import {
+  vprProductLoad,
+  vpsProductLoad,
   vprProductClick,
   vprProductView,
   vpsProductClick,
@@ -9,6 +11,8 @@ import {
 import { searchEvent } from "./search";
 import { vprWidget, vpsWidget } from "./widget";
 
+export const createProductLoadVprEvent = createTrackingEvent(vprProductLoad);
+export const createProductLoadVpsEvent = createTrackingEvent(vpsProductLoad);
 export const createProductViewVprEvent = createTrackingEvent(vprProductView);
 export const createProductViewVpsEvent = createTrackingEvent(vpsProductView);
 export const createProductClickVprEvent = createTrackingEvent(vprProductClick);

@@ -32,6 +32,7 @@ import {
   DefaultApi,
   EventConfirmation,
   ProductClickEvent,
+  ProductLoadEvent,
   ProductViewEvent,
   WidgetEvent,
 } from "vviinn-tracking-client-ts";
@@ -43,6 +44,7 @@ import {
 } from "../../recommendation/events";
 import {
   createProductClickVprEvent,
+  createProductLoadVprEvent,
   createProductViewVprEvent,
   createWidgetVprEvent,
 } from "../../tracking";
@@ -213,8 +215,31 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   @Listen("vviinnProductLoad")
-  handleProductLoading({ detail }: ProductCardEvent) {
+  trackProductLoad({ detail }: ProductCardEvent) {
     this.productImageLoadedSubject.next(detail.productId);
+    if (this.trackingDeactivated) return;
+
+    const {
+      productRank,
+      productId,
+      productName,
+      widgetType,
+      widgetId,
+      campaignTypeId,
+      campaignTypeName,
+      ...rest
+    } = detail;
+
+    const productLoadEvent: ProductLoadEvent = createProductLoadVprEvent({
+      session_id: this.uiSessionId,
+      rank: productRank,
+      product: productId,
+      ...rest,
+    });
+
+    this.trackingApi
+      .trackEvent(productLoadEvent)
+      .then(this.setTrackingDeactivated);
   }
 
   @Listen("vviinnProductView")
@@ -242,6 +267,7 @@ export class VviinnVprWidget implements ComponentInterface {
       product: productId,
       ...rest,
     });
+
     this.trackingApi
       .trackEvent(productViewEvent)
       .then(this.setTrackingDeactivated);
