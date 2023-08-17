@@ -136,6 +136,8 @@ export class RecommendationsSidebar {
               showingInButton={this.showingInButton}
               excluded={this.excluded}
               productDetailNewTab={this.productDetailNewTab}
+              closed={this.state === "closed"}
+              opened={this.state === "open"}
             />
           </main>
         </aside>

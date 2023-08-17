@@ -128,6 +128,10 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() showingInButton: boolean = false;
   /** @internal */
   @Prop() buttonElementId?: string;
+  /** @internal */
+  @Prop() closed?: boolean;
+  /** @internal */
+  @Prop() opened?: boolean;
 
   @State() recommendations: Recommendation[] = [];
   @State() trackingDeactivated: boolean = false;
@@ -212,6 +216,35 @@ export class VviinnVprWidget implements ComponentInterface {
   handleApiPathChange(newPath: string) {
     state.apiPath = newPath;
     this.getRecommendations();
+  }
+
+  @Watch("opened")
+  trackWidgetOpen() {
+    if (!this.opened) return;
+    this.vviinnWidgetOpen.emit(this.getBasicEventData());
+    if (this.trackingDeactivated) return;
+
+    const widgetOpenEvent: WidgetEvent = createWidgetVprEvent({
+      action: "open",
+      session_id: this.uiSessionId,
+    });
+    this.trackingApi
+      .trackEvent(widgetOpenEvent)
+      .then(this.setTrackingDeactivated);
+  }
+
+  @Watch("closed")
+  trackWidgetClose() {
+    if (!this.closed) return;
+    if (this.trackingDeactivated) return;
+
+    const widgetCloseEvent: WidgetEvent = createWidgetVprEvent({
+      action: "close",
+      session_id: this.uiSessionId,
+    });
+    this.trackingApi
+      .trackEvent(widgetCloseEvent)
+      .then(this.setTrackingDeactivated);
   }
 
   @Listen("vviinnProductLoad")
@@ -317,33 +350,23 @@ export class VviinnVprWidget implements ComponentInterface {
     this.id = this.buttonElementId ?? this.el.id;
     this.uiSessionId = uuidv4();
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
-
-    if (this.trackingDeactivated) return;
-
-    const widgetOpenEvent: WidgetEvent = createWidgetVprEvent({
-      action: "open",
-      session_id: this.uiSessionId,
-    });
-    this.trackingApi
-      .trackEvent(widgetOpenEvent)
-      .then(this.setTrackingDeactivated);
+    this.getRecommendations();
 
     i18next.init({
       lng: this.locale,
       fallbackLng: "de-DE",
       resources,
     });
-  }
 
-  disconnectedCallback() {
+    this.vviinnWidgetLoad.emit(this.getBasicEventData());
     if (this.trackingDeactivated) return;
 
-    const widgetCloseEvent: WidgetEvent = createWidgetVprEvent({
-      action: "close",
+    const widgetLoadEvent: WidgetEvent = createWidgetVprEvent({
+      action: "load",
       session_id: this.uiSessionId,
     });
     this.trackingApi
-      .trackEvent(widgetCloseEvent)
+      .trackEvent(widgetLoadEvent)
       .then(this.setTrackingDeactivated);
   }
 
@@ -354,9 +377,6 @@ export class VviinnVprWidget implements ComponentInterface {
     if (this.excluded) {
       this.excluded = parseExcluded(this.excluded);
     }
-
-    this.vviinnWidgetLoad.emit(this.getBasicEventData());
-    this.getRecommendations();
   }
 
   private async getRecommendations() {
@@ -494,10 +514,6 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   private renderCarousel(): HTMLVviinnCarouselElement {
-    if (this.showingInButton) {
-      this.vviinnWidgetOpen.emit(this.getBasicEventData());
-    }
-
     return (
       <vviinn-carousel
         mode={this.mode}
