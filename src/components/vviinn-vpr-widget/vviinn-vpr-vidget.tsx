@@ -357,17 +357,6 @@ export class VviinnVprWidget implements ComponentInterface {
       fallbackLng: "de-DE",
       resources,
     });
-
-    this.vviinnWidgetLoad.emit(this.getBasicEventData());
-    if (this.trackingDeactivated) return;
-
-    const widgetLoadEvent: WidgetEvent = createWidgetVprEvent({
-      action: "load",
-      session_id: this.uiSessionId,
-    });
-    this.trackingApi
-      .trackEvent(widgetLoadEvent)
-      .then(this.setTrackingDeactivated);
   }
 
   async componentWillLoad() {
@@ -377,6 +366,21 @@ export class VviinnVprWidget implements ComponentInterface {
     if (this.excluded) {
       this.excluded = parseExcluded(this.excluded);
     }
+
+    this.vviinnWidgetLoad.emit(this.getBasicEventData());
+    this.trackWidgetLoadEvent();
+  }
+
+  private trackWidgetLoadEvent() {
+    if (this.trackingDeactivated) return;
+
+    const widgetLoadEvent: WidgetEvent = createWidgetVprEvent({
+      action: "load",
+      session_id: this.uiSessionId,
+    });
+    this.trackingApi
+      .trackEvent(widgetLoadEvent)
+      .then(this.setTrackingDeactivated);
   }
 
   private async getRecommendations() {
