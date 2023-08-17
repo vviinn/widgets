@@ -228,8 +228,8 @@ export class VviinnVpsWidget {
   };
 
   @Watch("active")
-  activeWatcher(value: boolean) {
-    if (value) {
+  activeWatcher(open: boolean) {
+    if (open) {
       this.overflow = document.body.style.overflow;
       document.body.style.overflow = "hidden";
       this.trackOpenEvent();
@@ -422,6 +422,19 @@ export class VviinnVpsWidget {
   componentWillLoad() {
     slotChangeListener(this, this.el);
     this.vviinnWidgetLoad.emit(this.getBasicEventData());
+    this.trackLoadEvent();
+  }
+
+  private trackLoadEvent() {
+    if (this.trackingDeactivated) return;
+
+    const widgetLoadEvent: WidgetEvent = createWidgetVpsEvent({
+      action: "load",
+      session_id: this.uiSessionId,
+    });
+    this.trackingApi
+      .trackEvent(widgetLoadEvent)
+      .then(this.setTrackingDeactivated);
   }
 
   private trackOpenEvent() {
@@ -436,16 +449,6 @@ export class VviinnVpsWidget {
       .then(this.setTrackingDeactivated);
   }
 
-  private handleImageSelection(source: SearchImageSource) {
-    this.imageSource = source;
-    this.slidePosition = 1;
-    const root = this.el.shadowRoot.querySelector("vviinn-overlayed-modal");
-    const overlay = root.shadowRoot.querySelector("vviinn-overlay");
-    const modal = overlay.querySelector("vviinn-modal");
-    const modalBody = modal.shadowRoot.querySelector(".body");
-    modalBody.scrollTop = 0;
-  }
-
   private trackInitialSearch(source: SearchImageSource) {
     if (this.trackingDeactivated) return;
 
@@ -455,6 +458,16 @@ export class VviinnVpsWidget {
       source,
     });
     this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
+  }
+
+  private handleImageSelection(source: SearchImageSource) {
+    this.imageSource = source;
+    this.slidePosition = 1;
+    const root = this.el.shadowRoot.querySelector("vviinn-overlayed-modal");
+    const overlay = root.shadowRoot.querySelector("vviinn-overlay");
+    const modal = overlay.querySelector("vviinn-modal");
+    const modalBody = modal.shadowRoot.querySelector(".body");
+    modalBody.scrollTop = 0;
   }
 
   private renderResults() {
