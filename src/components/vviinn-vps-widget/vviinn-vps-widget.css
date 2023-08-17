@@ -40,10 +40,23 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
 #onboarding-block {
   border-right: unset;
   box-sizing: border-box;
+  padding: 0;
   grid-gap: 24px;
   overflow-y: auto;
   position: relative;
   width: 100%;
+}
+
+@media (max-width: 768px) {
+  #onboarding-block {
+    padding: 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  #onboarding-block {
+    padding: 20px;
+  }
 }
 
 vviinn-teaser {
@@ -224,7 +237,7 @@ search-filters::part(filter active) {
   width: 60%;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .start-page_block {
     padding: 24px;
   }
@@ -238,7 +251,7 @@ search-filters::part(filter active) {
   .start-page {
     grid-template-rows: min-content;
     grid-template-columns: unset;
-    grid-gap: 48px;
+    grid-gap: 24px;
     padding: 24px 0 48px 0;
   }
 }
