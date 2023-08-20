@@ -189,7 +189,7 @@ search-filters::part(filter) {
   line-height: 20px;
 }
 
-search-filters:first-child::part(show-more-filters) {
+search-filters::part(show-more-filters) {
   display: flex;
   align-items: center;
   justify-content: center;

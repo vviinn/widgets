@@ -1,4 +1,4 @@
-import { FilterAction } from "vviinn-tracking-client-ts";
+import { FilterAction, FilterKind } from "vviinn-tracking-client-ts";
 import { ValueObject } from "../network/ion/ValueObject";
 import { DetectedObject } from "../searchSession/searchSession";
 
@@ -26,6 +26,7 @@ export type SelectFilterEventData = {
   widgetId: string;
   widgetVersion: string;
   action: FilterAction;
+  kind: FilterKind;
   filterName?: string;
 };
 

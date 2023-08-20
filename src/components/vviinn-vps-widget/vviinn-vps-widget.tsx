@@ -377,7 +377,7 @@ export class VviinnVpsWidget {
     const searchEvent: WidgetEvent = createFilterEvent({
       session_id: this.uiSessionId,
       source: this.imageSource,
-      kind: "category",
+      kind: detail.kind,
       action: detail.action,
     });
     this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
