@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.22.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.21.1...v2.22.0) (2023-08-23)
+
+
+### Features
+
+* Distinguish Between VPC and VPR in Recommendations Widget ([0aa64e2](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/0aa64e21febd20650511dc1db1a632ac3f537e15))
+
 ### [2.21.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.21.0...v2.21.1) (2023-08-11)
 
 ## [2.21.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.32...v2.21.0) (2023-08-11)
