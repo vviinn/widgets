@@ -2,19 +2,21 @@ import { createTrackingEvent } from "./event";
 import { filterEvent } from "./filter";
 import {
   vprProductLoad,
-  vpsProductLoad,
-  vpcProductClick,
-  vpcProductView,
+  vpcProductLoad,
   vprProductClick,
+  vpcProductClick,
   vprProductView,
+  vpcProductView,
   vpsProductClick,
   vpsProductView,
+  vpsProductLoad,
 } from "./product";
 import { searchEvent } from "./search";
 import { vpcWidget, vprWidget, vpsWidget } from "./widget";
 
 export const createProductLoadVprEvent = createTrackingEvent(vprProductLoad);
 export const createProductLoadVpsEvent = createTrackingEvent(vpsProductLoad);
+export const createProductLoadVpcEvent = createTrackingEvent(vpcProductLoad);
 export const createProductViewVprEvent = createTrackingEvent(vprProductView);
 export const createProductViewVpsEvent = createTrackingEvent(vpsProductView);
 export const createProductViewVpcEvent = createTrackingEvent(vpcProductView);

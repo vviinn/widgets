@@ -46,6 +46,7 @@ import {
   createProductClickVprEvent,
   createProductLoadVprEvent,
   createProductViewVprEvent,
+  createProductLoadVpcEvent,
   createProductViewVpcEvent,
   createProductClickVpcEvent,
   createWidgetVprEvent,
@@ -266,12 +267,20 @@ export class VviinnVprWidget implements ComponentInterface {
       ...rest
     } = detail;
 
-    const productLoadEvent: ProductLoadEvent = createProductLoadVprEvent({
+    const eventBody = {
       session_id: this.uiSessionId,
       rank: productRank,
       product: productId,
       ...rest,
-    });
+    };
+
+    let productLoadEvent: ProductLoadEvent;
+
+    if (campaignTypeId === "VCS") {
+      productLoadEvent = createProductLoadVpcEvent(eventBody);
+    } else if (campaignTypeId === "VPR") {
+      productLoadEvent = createProductLoadVprEvent(eventBody);
+    }
 
     this.trackingApi
       .trackEvent(productLoadEvent)
@@ -429,10 +438,19 @@ export class VviinnVprWidget implements ComponentInterface {
   private trackWidgetLoadEvent() {
     if (this.trackingDeactivated) return;
 
-    const widgetLoadEvent: WidgetEvent = createWidgetVprEvent({
+    const eventBody = {
       action: "load",
       session_id: this.uiSessionId,
-    });
+    };
+
+    let widgetLoadEvent: WidgetEvent;
+
+    if (this.campaignType === "VCS") {
+      widgetLoadEvent = createWidgetVpcEvent(eventBody);
+    } else if (this.campaignType === "VPR") {
+      widgetLoadEvent = createWidgetVprEvent(eventBody);
+    }
+
     this.trackingApi
       .trackEvent(widgetLoadEvent)
       .then(this.setTrackingDeactivated);

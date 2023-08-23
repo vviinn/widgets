@@ -10,6 +10,11 @@ const vprProductLoad: WidgetEventType = {
   typ: PRODUCT_LOAD_EVENT_TYPE,
 };
 
+const vpcProductLoad: WidgetEventType = {
+  widget: "VPC",
+  typ: PRODUCT_LOAD_EVENT_TYPE,
+};
+
 const vpsProductLoad: WidgetEventType = {
   widget: "VPS",
   typ: PRODUCT_LOAD_EVENT_TYPE,
@@ -52,6 +57,7 @@ export {
   vpsProductClick,
   vpsProductView,
   vpsProductLoad,
+  vpcProductLoad,
   vpcProductClick,
   vpcProductView,
 };
