@@ -183,7 +183,6 @@ search-filters::part(filter) {
   border-radius: 8px;
   box-sizing: border-box;
   color: #161616;
-  margin-bottom: 4px;
   font-size: 14px;
   font-weight: 400;
   line-height: 20px;
@@ -217,12 +216,6 @@ search-filters::part(filter active) {
   min-width: calc(100% + 48px);
 }
 
-@media (max-width: 768px) {
-  .filters-wrapper {
-    min-width: calc(100% + 40px);
-  }
-}
-
 .results-page:not(.active) {
   display: none;
 }
@@ -237,29 +230,32 @@ search-filters::part(filter active) {
   width: 60%;
 }
 
-@media (max-width: 480px) {
-  .start-page_block {
-    padding: 24px;
-  }
-
-  .onboarding-wrapper {
-    padding: 24px;
-  }
-}
-
-@media (max-width: 768px) {
-  .start-page {
-    grid-template-rows: min-content;
-    grid-template-columns: unset;
-    grid-gap: 24px;
-    padding: 24px 0 48px 0;
-  }
-}
-
 @media (max-width: 768px) {
   .results-page > * {
     box-sizing: border-box;
     padding: 24px;
+  }
+
+  .filters-wrapper {
+    min-width: calc(100% + 40px);
+  }
+
+  .start-page {
+    grid-gap: 24px;
+    padding: 24px 0 48px 0;
+  }
+
+  .start-page.active {
+    grid-template-columns: unset;
+  }
+
+  .start-page:not(.active) {
+    overflow: hidden;
+  }
+
+  .results-page {
+    grid-template-rows: min-content;
+    grid-template-columns: unset;
   }
 
   vviinn-slide {
@@ -283,11 +279,6 @@ search-filters::part(filter active) {
     width: unset;
     padding: unset;
     box-sizing: border-box;
-  }
-
-  .results-page {
-    grid-template-columns: unset;
-    grid-template-rows: min-content auto;
   }
 
   .image {
