@@ -12,7 +12,7 @@ import {
 import { CrossIcon } from "../../vviinn-icons";
 import { CarouselMode } from "../../vviinn-carousel/vviinn-carousel";
 import { BasicEventData } from "../../../recommendation/events";
-import { CampaignTypeId, campaignTypeNames } from "../../../campaign/Campaign";
+import { CampaignName, campaignTypeNames } from "../../../campaign/Campaign";
 import { Locale } from "../../../locale";
 
 type SidebarState = "idle" | "open" | "closed";
@@ -35,7 +35,7 @@ export class RecommendationsSidebar {
   @Prop() mode: CarouselMode = "continuity";
   /** comma-separated list of campaign-ids */
   @Prop() campaigns: string = "";
-  @Prop() campaignType: CampaignTypeId;
+  @Prop() campaignType: CampaignName;
   @Prop() color: string;
   @Prop() locale: Locale;
   @Prop() imageWidth: number = 300;
@@ -121,6 +121,7 @@ export class RecommendationsSidebar {
               imageWidth={this.imageWidth}
               blockTitle=""
               mode={this.mode}
+              campaign-type={this.campaignType}
               useCarousel={this.position === "bottom"}
               onVviinnRecommendationsLoaded={() => (this.state = "open")}
               showScroll={this.widgetScrollbar}

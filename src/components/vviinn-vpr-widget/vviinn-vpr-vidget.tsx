@@ -42,9 +42,12 @@ import {
   ProductCardEventData,
 } from "../../recommendation/events";
 import {
-  createProductClickVprEvent,
   createProductViewVprEvent,
+  createProductViewVpcEvent,
+  createProductClickVprEvent,
+  createProductClickVpcEvent,
   createWidgetVprEvent,
+  createWidgetVpcEvent,
 } from "../../tracking";
 import { checkEmpryString } from "../../utils/option/option";
 import { parseExcluded } from "../../utils/collections/collectionsUtils";
@@ -236,12 +239,20 @@ export class VviinnVprWidget implements ComponentInterface {
       ...rest
     } = detail;
 
-    const productViewEvent: ProductViewEvent = createProductViewVprEvent({
+    const eventBody = {
       session_id: this.uiSessionId,
       rank: productRank,
       product: productId,
       ...rest,
-    });
+    };
+
+    let productViewEvent: ProductViewEvent;
+    if (campaignTypeId === "VCS") {
+      productViewEvent = createProductViewVpcEvent(eventBody);
+    } else if (campaignTypeId === "VPR") {
+      productViewEvent = createProductViewVprEvent(eventBody);
+    }
+
     this.trackingApi
       .trackEvent(productViewEvent)
       .then(this.setTrackingDeactivated);
@@ -260,12 +271,19 @@ export class VviinnVprWidget implements ComponentInterface {
       ...rest
     } = detail;
 
-    const productClickEvent: ProductClickEvent = createProductClickVprEvent({
+    const eventBody = {
       session_id: this.uiSessionId,
       rank: productRank,
       product: productId,
       ...rest,
-    });
+    };
+
+    let productClickEvent: ProductClickEvent;
+    if (campaignTypeId === "VCS") {
+      productClickEvent = createProductClickVpcEvent(eventBody);
+    } else if (campaignTypeId === "VPR") {
+      productClickEvent = createProductClickVprEvent(eventBody);
+    }
 
     const product = this.recommendations.find(
       (r) => r.productId === detail.productId
@@ -292,30 +310,46 @@ export class VviinnVprWidget implements ComponentInterface {
     this.uiSessionId = uuidv4();
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
 
-    if (this.trackingDeactivated) return;
-
-    const widgetOpenEvent: WidgetEvent = createWidgetVprEvent({
-      action: "open",
-      session_id: this.uiSessionId,
-    });
-    this.trackingApi
-      .trackEvent(widgetOpenEvent)
-      .then(this.setTrackingDeactivated);
-
     i18next.init({
       lng: this.locale,
       fallbackLng: "de-DE",
       resources,
     });
+
+    if (this.trackingDeactivated || !this.showingInButton) return;
+
+    const eventBody = {
+      action: "open",
+      session_id: this.uiSessionId,
+    };
+
+    let widgetOpenEvent: WidgetEvent;
+    if (this.campaignType === "VCS") {
+      widgetOpenEvent = createWidgetVpcEvent(eventBody);
+    } else if (this.campaignType === "VPR") {
+      widgetOpenEvent = createWidgetVprEvent(eventBody);
+    }
+
+    this.trackingApi
+      .trackEvent(widgetOpenEvent)
+      .then(this.setTrackingDeactivated);
   }
 
   disconnectedCallback() {
     if (this.trackingDeactivated) return;
 
-    const widgetCloseEvent: WidgetEvent = createWidgetVprEvent({
+    const eventBody = {
       action: "close",
       session_id: this.uiSessionId,
-    });
+    };
+
+    let widgetCloseEvent: WidgetEvent;
+    if (this.campaignType === "VCS") {
+      widgetCloseEvent = createWidgetVpcEvent(eventBody);
+    } else if (this.campaignType === "VPR") {
+      widgetCloseEvent = createWidgetVprEvent(eventBody);
+    }
+
     this.trackingApi
       .trackEvent(widgetCloseEvent)
       .then(this.setTrackingDeactivated);
