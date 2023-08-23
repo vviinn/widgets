@@ -12,7 +12,7 @@ import {
 import { CrossIcon } from "../../vviinn-icons";
 import { CarouselMode } from "../../vviinn-carousel/vviinn-carousel";
 import { BasicEventData } from "../../../recommendation/events";
-import { CampaignName, campaignTypeNames } from "../../../campaign/Campaign";
+import { CampaignName } from "../../../campaign/Campaign";
 import { Locale } from "../../../locale";
 
 type SidebarState = "idle" | "open" | "closed";
@@ -159,13 +159,5 @@ export class RecommendationsSidebar {
   private handleAnimationEnd({ animationName }: AnimationEvent): void {
     const isClosingAnimation = animationName.includes("slideOut");
     if (!isClosingAnimation) return;
-
-    this.vviinnWidgetClose.emit({
-      widgetType: "VPR",
-      campaignTypeId: this.campaignType,
-      campaignTypeName: campaignTypeNames[this.campaignType],
-      widgetId: this.buttonElementId,
-      widgetVersion: this.widgetVersion,
-    });
   }
 }

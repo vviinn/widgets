@@ -31,9 +31,7 @@ import { Recommendation } from "../../recommendation/recommendation";
 import {
   DefaultApi,
   EventConfirmation,
-  ProductClickEvent,
-  ProductLoadEvent,
-  ProductViewEvent,
+  WidgetAction,
   WidgetEvent,
 } from "vviinn-tracking-client-ts";
 import { createTrackingApi } from "../../openApi";
@@ -41,16 +39,14 @@ import {
   ProductCardEvent,
   BasicEventData,
   ProductCardEventData,
+  ProductEventType,
+  ProductEvent,
 } from "../../recommendation/events";
 import {
-  createProductClickVprEvent,
-  createProductLoadVprEvent,
-  createProductViewVprEvent,
-  createProductLoadVpcEvent,
-  createProductViewVpcEvent,
-  createProductClickVpcEvent,
   createWidgetVprEvent,
   createWidgetVpcEvent,
+  createProductVpcEventByType,
+  createProductVprEventByType,
 } from "../../tracking";
 import { checkEmpryString } from "../../utils/option/option";
 import { parseExcluded } from "../../utils/collections/collectionsUtils";
@@ -168,6 +164,9 @@ export class VviinnVprWidget implements ComponentInterface {
   /** @internal */
   @Event({ bubbles: true })
   vviinnWidgetOpen: EventEmitter<BasicEventData>;
+  /** @internal */
+  @Event({ bubbles: true })
+  vviinnWidgetClose: EventEmitter<BasicEventData>;
 
   private productIds: string[];
   private productImageLoadedSubject = new Subject();
@@ -226,147 +225,14 @@ export class VviinnVprWidget implements ComponentInterface {
   trackWidgetOpen() {
     if (!this.opened) return;
     this.vviinnWidgetOpen.emit(this.getBasicEventData());
-    if (this.trackingDeactivated) return;
-
-    const widgetOpenEvent: WidgetEvent = createWidgetVprEvent({
-      action: "open",
-      session_id: this.uiSessionId,
-    });
-    this.trackingApi
-      .trackEvent(widgetOpenEvent)
-      .then(this.setTrackingDeactivated);
+    this.trackWidgetEvent("open");
   }
 
   @Watch("closed")
   trackWidgetClose() {
     if (!this.closed) return;
-    if (this.trackingDeactivated) return;
-
-    const widgetCloseEvent: WidgetEvent = createWidgetVprEvent({
-      action: "close",
-      session_id: this.uiSessionId,
-    });
-    this.trackingApi
-      .trackEvent(widgetCloseEvent)
-      .then(this.setTrackingDeactivated);
-  }
-
-  @Listen("vviinnProductLoad")
-  trackProductLoad({ detail }: ProductCardEvent) {
-    this.productImageLoadedSubject.next(detail.productId);
-    if (this.trackingDeactivated) return;
-
-    const {
-      productRank,
-      productId,
-      productName,
-      widgetType,
-      widgetId,
-      campaignTypeId,
-      campaignTypeName,
-      ...rest
-    } = detail;
-
-    const eventBody = {
-      session_id: this.uiSessionId,
-      rank: productRank,
-      product: productId,
-      ...rest,
-    };
-
-    let productLoadEvent: ProductLoadEvent;
-
-    if (campaignTypeId === "VCS") {
-      productLoadEvent = createProductLoadVpcEvent(eventBody);
-    } else if (campaignTypeId === "VPR") {
-      productLoadEvent = createProductLoadVprEvent(eventBody);
-    }
-
-    this.trackingApi
-      .trackEvent(productLoadEvent)
-      .then(this.setTrackingDeactivated);
-  }
-
-  @Listen("vviinnProductView")
-  trackProductView({ detail }: ProductCardEvent) {
-    if (!this.resultViewed) {
-      this.resultViewed = true;
-      this.vviinnResultView.emit(this.getBasicEventData());
-    }
-
-    if (this.trackingDeactivated) return;
-    const {
-      productRank,
-      productId,
-      productName,
-      widgetType,
-      widgetId,
-      campaignTypeId,
-      campaignTypeName,
-      ...rest
-    } = detail;
-
-    const eventBody = {
-      session_id: this.uiSessionId,
-      rank: productRank,
-      product: productId,
-      ...rest,
-    };
-
-    let productViewEvent: ProductViewEvent;
-    if (campaignTypeId === "VCS") {
-      productViewEvent = createProductViewVpcEvent(eventBody);
-    } else if (campaignTypeId === "VPR") {
-      productViewEvent = createProductViewVprEvent(eventBody);
-    }
-
-    this.trackingApi
-      .trackEvent(productViewEvent)
-      .then(this.setTrackingDeactivated);
-  }
-
-  @Listen("vviinnProductClick")
-  async trackProductClick({ detail }: ProductCardEvent) {
-    const {
-      productRank,
-      productId,
-      productName,
-      widgetType,
-      widgetId,
-      campaignTypeId,
-      campaignTypeName,
-      ...rest
-    } = detail;
-
-    const eventBody = {
-      session_id: this.uiSessionId,
-      rank: productRank,
-      product: productId,
-      ...rest,
-    };
-
-    let productClickEvent: ProductClickEvent;
-    if (campaignTypeId === "VCS") {
-      productClickEvent = createProductClickVpcEvent(eventBody);
-    } else if (campaignTypeId === "VPR") {
-      productClickEvent = createProductClickVprEvent(eventBody);
-    }
-
-    const product = this.recommendations.find(
-      (r) => r.productId === detail.productId
-    );
-    if (!product || !product.deeplink) return;
-
-    if (!this.trackingDeactivated) {
-      await this.trackingApi
-        .trackEvent(productClickEvent)
-        .then(this.setTrackingDeactivated)
-        .finally(() => {
-          this.handleOpenLink(product.deeplink);
-        });
-    } else {
-      this.handleOpenLink(product.deeplink);
-    }
+    this.vviinnWidgetClose.emit(this.getBasicEventData());
+    this.trackWidgetEvent("close");
   }
 
   connectedCallback() {
@@ -383,44 +249,8 @@ export class VviinnVprWidget implements ComponentInterface {
       fallbackLng: "de-DE",
       resources,
     });
-
-    if (this.trackingDeactivated || !this.showingInButton) return;
-
-    const eventBody = {
-      action: "open",
-      session_id: this.uiSessionId,
-    };
-
-    let widgetOpenEvent: WidgetEvent;
-    if (this.campaignType === "VCS") {
-      widgetOpenEvent = createWidgetVpcEvent(eventBody);
-    } else if (this.campaignType === "VPR") {
-      widgetOpenEvent = createWidgetVprEvent(eventBody);
-    }
-
-    this.trackingApi
-      .trackEvent(widgetOpenEvent)
-      .then(this.setTrackingDeactivated);
-  }
-
-  disconnectedCallback() {
-    if (this.trackingDeactivated) return;
-
-    const eventBody = {
-      action: "close",
-      session_id: this.uiSessionId,
-    };
-
-    let widgetCloseEvent: WidgetEvent;
-    if (this.campaignType === "VCS") {
-      widgetCloseEvent = createWidgetVpcEvent(eventBody);
-    } else if (this.campaignType === "VPR") {
-      widgetCloseEvent = createWidgetVprEvent(eventBody);
-    }
-
-    this.trackingApi
-      .trackEvent(widgetCloseEvent)
-      .then(this.setTrackingDeactivated);
+    this.vviinnWidgetLoad.emit(this.getBasicEventData());
+    this.trackWidgetEvent("load");
   }
 
   async componentWillLoad() {
@@ -430,30 +260,96 @@ export class VviinnVprWidget implements ComponentInterface {
     if (this.excluded) {
       this.excluded = parseExcluded(this.excluded);
     }
-
-    this.vviinnWidgetLoad.emit(this.getBasicEventData());
-    this.trackWidgetLoadEvent();
   }
 
-  private trackWidgetLoadEvent() {
+  @Listen("vviinnProductLoad")
+  trackProductLoad({ detail }: ProductCardEvent) {
+    this.productImageLoadedSubject.next(detail.productId);
+
+    const productLoadEvent = this.getProductTrackEvent(detail, "load");
+    if (!productLoadEvent) return;
+
+    this.trackingApi
+      .trackEvent(productLoadEvent)
+      .then(this.setTrackingDeactivated);
+  }
+
+  @Listen("vviinnProductView")
+  trackProductView({ detail }: ProductCardEvent) {
+    if (!this.resultViewed) {
+      this.resultViewed = true;
+      this.vviinnResultView.emit(this.getBasicEventData());
+    }
+
+    const productViewEvent = this.getProductTrackEvent(detail, "view");
+    if (!productViewEvent) return;
+
+    this.trackingApi
+      .trackEvent(productViewEvent)
+      .then(this.setTrackingDeactivated);
+  }
+
+  @Listen("vviinnProductClick")
+  async trackProductClick({ detail }: ProductCardEvent) {
+    const product = this.recommendations.find(
+      (r) => r.productId === detail.productId
+    );
+    if (!product || !product.deeplink) return;
+
+    const productClickEvent = this.getProductTrackEvent(detail, "click");
+
+    if (!this.trackingDeactivated) {
+      await this.trackingApi
+        .trackEvent(productClickEvent)
+        .then(this.setTrackingDeactivated)
+        .finally(() => {
+          this.handleOpenLink(product.deeplink);
+        });
+    } else {
+      this.handleOpenLink(product.deeplink);
+    }
+  }
+
+  private trackWidgetEvent(action: WidgetAction) {
     if (this.trackingDeactivated) return;
 
+    let widgetEvent: WidgetEvent;
     const eventBody = {
-      action: "load",
+      action,
       session_id: this.uiSessionId,
     };
 
-    let widgetLoadEvent: WidgetEvent;
-
     if (this.campaignType === "VCS") {
-      widgetLoadEvent = createWidgetVpcEvent(eventBody);
+      widgetEvent = createWidgetVpcEvent(eventBody);
     } else if (this.campaignType === "VPR") {
-      widgetLoadEvent = createWidgetVprEvent(eventBody);
+      widgetEvent = createWidgetVprEvent(eventBody);
     }
 
-    this.trackingApi
-      .trackEvent(widgetLoadEvent)
-      .then(this.setTrackingDeactivated);
+    this.trackingApi.trackEvent(widgetEvent).then(this.setTrackingDeactivated);
+  }
+
+  private getProductTrackEvent(
+    detail: ProductCardEventData,
+    eventType: ProductEventType
+  ): ProductEvent | null {
+    if (this.trackingDeactivated) return null;
+
+    const { productRank, productId, campaignTypeId } = detail;
+
+    let productEvent: ProductEvent;
+    const eventBody = {
+      session_id: this.uiSessionId,
+      rank: productRank,
+      product: productId,
+    };
+
+    if (campaignTypeId === "VCS") {
+      productEvent = createProductVpcEventByType(eventType)(eventBody);
+    } else if (campaignTypeId === "VPR") {
+      productEvent = createProductVprEventByType(eventType)(eventBody);
+    }
+
+    return productEvent;
   }
 
   private async getRecommendations() {

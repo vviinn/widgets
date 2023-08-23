@@ -1,3 +1,4 @@
+import { ProductEventType } from "../recommendation/events";
 import { createTrackingEvent } from "./event";
 import { filterEvent } from "./filter";
 import {
@@ -20,10 +21,31 @@ export const createProductLoadVpcEvent = createTrackingEvent(vpcProductLoad);
 export const createProductViewVprEvent = createTrackingEvent(vprProductView);
 export const createProductViewVpsEvent = createTrackingEvent(vpsProductView);
 export const createProductViewVpcEvent = createTrackingEvent(vpcProductView);
-
 export const createProductClickVprEvent = createTrackingEvent(vprProductClick);
 export const createProductClickVpsEvent = createTrackingEvent(vpsProductClick);
 export const createProductClickVpcEvent = createTrackingEvent(vpcProductClick);
+
+export const createProductVprEventByType = (type: ProductEventType) => {
+  switch (type) {
+    case "load":
+      return createProductLoadVprEvent;
+    case "view":
+      return createProductViewVprEvent;
+    case "click":
+      return createProductClickVprEvent;
+  }
+};
+
+export const createProductVpcEventByType = (type: ProductEventType) => {
+  switch (type) {
+    case "load":
+      return createProductLoadVpcEvent;
+    case "view":
+      return createProductViewVpcEvent;
+    case "click":
+      return createProductClickVpcEvent;
+  }
+};
 
 export const createWidgetVprEvent = createTrackingEvent(vprWidget);
 export const createWidgetVpsEvent = createTrackingEvent(vpsWidget);
