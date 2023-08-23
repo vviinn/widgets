@@ -15,15 +15,17 @@ import {
 import { searchEvent } from "./search";
 import { vpcWidget, vprWidget, vpsWidget } from "./widget";
 
-export const createProductLoadVprEvent = createTrackingEvent(vprProductLoad);
-export const createProductLoadVpsEvent = createTrackingEvent(vpsProductLoad);
-export const createProductLoadVpcEvent = createTrackingEvent(vpcProductLoad);
-export const createProductViewVprEvent = createTrackingEvent(vprProductView);
-export const createProductViewVpsEvent = createTrackingEvent(vpsProductView);
-export const createProductViewVpcEvent = createTrackingEvent(vpcProductView);
-export const createProductClickVprEvent = createTrackingEvent(vprProductClick);
-export const createProductClickVpsEvent = createTrackingEvent(vpsProductClick);
-export const createProductClickVpcEvent = createTrackingEvent(vpcProductClick);
+const createProductLoadVprEvent = createTrackingEvent(vprProductLoad);
+const createProductViewVprEvent = createTrackingEvent(vprProductView);
+const createProductClickVprEvent = createTrackingEvent(vprProductClick);
+
+const createProductLoadVpcEvent = createTrackingEvent(vpcProductLoad);
+const createProductViewVpcEvent = createTrackingEvent(vpcProductView);
+const createProductClickVpcEvent = createTrackingEvent(vpcProductClick);
+
+const createProductLoadVpsEvent = createTrackingEvent(vpsProductLoad);
+const createProductViewVpsEvent = createTrackingEvent(vpsProductView);
+const createProductClickVpsEvent = createTrackingEvent(vpsProductClick);
 
 export const createProductVprEventByType = (type: ProductEventType) => {
   switch (type) {
@@ -44,6 +46,17 @@ export const createProductVpcEventByType = (type: ProductEventType) => {
       return createProductViewVpcEvent;
     case "click":
       return createProductClickVpcEvent;
+  }
+};
+
+export const createProductVpsEventByType = (type: ProductEventType) => {
+  switch (type) {
+    case "load":
+      return createProductLoadVpsEvent;
+    case "view":
+      return createProductViewVpsEvent;
+    case "click":
+      return createProductClickVpsEvent;
   }
 };
 

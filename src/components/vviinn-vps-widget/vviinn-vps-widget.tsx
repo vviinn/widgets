@@ -24,19 +24,15 @@ import { createTrackingApi } from "../../openApi";
 import {
   DefaultApi,
   EventConfirmation,
-  ProductClickEvent,
-  ProductLoadEvent,
-  ProductViewEvent,
   SearchImageSource,
+  WidgetAction,
   WidgetEvent,
 } from "vviinn-tracking-client-ts";
 import {
-  createFilterEvent,
-  createProductClickVpsEvent,
-  createProductLoadVpsEvent,
-  createProductViewVpsEvent,
-  createSearchEvent,
   createWidgetVpsEvent,
+  createFilterEvent,
+  createSearchEvent,
+  createProductVpsEventByType,
 } from "../../tracking";
 import {
   ProductCardEvent,
@@ -44,6 +40,8 @@ import {
   SelectFilterEventData,
   ProductCardEventData,
   SelectObjectEventData,
+  ProductEventType,
+  ProductEvent,
 } from "../../recommendation/events";
 import { SlotSkeleton } from "../customized-slots";
 import { campaignTypeNames } from "../../campaign/Campaign";
@@ -233,7 +231,7 @@ export class VviinnVpsWidget {
       this.overflow = document.body.style.overflow;
       document.body.style.overflow = "hidden";
       this.vviinnWidgetOpen.emit(this.getBasicEventData());
-      this.trackWidgetOpenEvent();
+      this.trackWidgetEvent("open");
     } else {
       document.body.style.overflow = this.overflow;
     }
@@ -249,25 +247,7 @@ export class VviinnVpsWidget {
 
   @Listen("vviinnProductLoad")
   trackProductLoad({ detail }: ProductCardEvent) {
-    if (this.trackingDeactivated) return;
-
-    const {
-      productRank,
-      productId,
-      productName,
-      widgetType,
-      widgetId,
-      campaignTypeId,
-      campaignTypeName,
-      ...rest
-    } = detail;
-
-    const productLoadEvent: ProductLoadEvent = createProductLoadVpsEvent({
-      session_id: this.uiSessionId,
-      rank: productRank,
-      product: productId,
-      ...rest,
-    });
+    const productLoadEvent = this.getProductTrackEvent(detail, "load");
 
     this.trackingApi
       .trackEvent(productLoadEvent)
@@ -281,25 +261,7 @@ export class VviinnVpsWidget {
       this.vviinnResultView.emit(this.getBasicEventData());
     }
 
-    if (this.trackingDeactivated) return;
-
-    const {
-      productRank,
-      productId,
-      productName,
-      widgetType,
-      widgetId,
-      campaignTypeId,
-      campaignTypeName,
-      ...rest
-    } = detail;
-
-    const productViewEvent: ProductViewEvent = createProductViewVpsEvent({
-      session_id: this.uiSessionId,
-      rank: productRank,
-      product: productId,
-      ...rest,
-    });
+    const productViewEvent = this.getProductTrackEvent(detail, "view");
 
     this.trackingApi
       .trackEvent(productViewEvent)
@@ -308,23 +270,7 @@ export class VviinnVpsWidget {
 
   @Listen("vviinnProductClick")
   async trackProductClick({ detail }: ProductCardEvent) {
-    const {
-      productRank,
-      productId,
-      productName,
-      widgetType,
-      widgetId,
-      campaignTypeId,
-      campaignTypeName,
-      ...rest
-    } = detail;
-
-    const productClickEvent: ProductClickEvent = createProductClickVpsEvent({
-      session_id: this.uiSessionId,
-      rank: productRank,
-      product: productId,
-      ...rest,
-    });
+    const productClickEvent = this.getProductTrackEvent(detail, "click");
 
     const product = imageSearchState.results.find(
       (r) => r.productId === detail.productId
@@ -422,43 +368,39 @@ export class VviinnVpsWidget {
   componentWillLoad() {
     slotChangeListener(this, this.el);
     this.vviinnWidgetLoad.emit(this.getBasicEventData());
-    this.trackWidgetLoadEvent();
+    this.trackWidgetEvent("load");
   }
 
-  private trackWidgetLoadEvent() {
+  private trackWidgetEvent(action: WidgetAction) {
     if (this.trackingDeactivated) return;
 
-    const widgetLoadEvent: WidgetEvent = createWidgetVpsEvent({
-      action: "load",
+    const eventBody = {
+      action,
       session_id: this.uiSessionId,
-    });
-    this.trackingApi
-      .trackEvent(widgetLoadEvent)
-      .then(this.setTrackingDeactivated);
+    };
+
+    const widgetEvent: WidgetEvent = createWidgetVpsEvent(eventBody);
+    this.trackingApi.trackEvent(widgetEvent).then(this.setTrackingDeactivated);
   }
 
-  private trackWidgetOpenEvent() {
-    if (this.trackingDeactivated) return;
+  private getProductTrackEvent(
+    detail: ProductCardEventData,
+    eventType: ProductEventType
+  ): ProductEvent | null {
+    if (this.trackingDeactivated) return null;
 
-    const widgetOpenEvent: WidgetEvent = createWidgetVpsEvent({
-      action: "open",
+    const { productRank, productId } = detail;
+
+    const eventBody = {
       session_id: this.uiSessionId,
-    });
-    this.trackingApi
-      .trackEvent(widgetOpenEvent)
-      .then(this.setTrackingDeactivated);
-  }
+      rank: productRank,
+      product: productId,
+    };
 
-  private trackWidgetCloseEvent() {
-    if (this.trackingDeactivated) return;
+    const productEvent: ProductEvent =
+      createProductVpsEventByType(eventType)(eventBody);
 
-    const widgetCloseEvent: WidgetEvent = createWidgetVpsEvent({
-      action: "close",
-      session_id: this.uiSessionId,
-    });
-    this.trackingApi
-      .trackEvent(widgetCloseEvent)
-      .then(this.setTrackingDeactivated);
+    return productEvent;
   }
 
   private trackInitialSearch(source: SearchImageSource) {
@@ -545,7 +487,7 @@ export class VviinnVpsWidget {
 
     const elementsToReset = ["onboarding-block", "results-block"];
     elementsToReset.forEach((name) => this.resetScroll(name));
-    this.trackWidgetCloseEvent();
+    this.trackWidgetEvent("close");
   }
 
   render() {
