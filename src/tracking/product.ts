@@ -20,6 +20,11 @@ const vprProductView: WidgetEventType = {
   typ: PRODUCT_VIEW_EVENT_TYPE,
 };
 
+const vpcProductView: WidgetEventType = {
+  widget: "VPC",
+  typ: PRODUCT_VIEW_EVENT_TYPE,
+};
+
 const vpsProductView: WidgetEventType = {
   widget: "VPS",
   typ: PRODUCT_VIEW_EVENT_TYPE,
@@ -27,6 +32,11 @@ const vpsProductView: WidgetEventType = {
 
 const vprProductClick: WidgetEventType = {
   widget: "VPR",
+  typ: PRODUCT_CLICK_EVENT_TYPE,
+};
+
+const vpcProductClick: WidgetEventType = {
+  widget: "VPC",
   typ: PRODUCT_CLICK_EVENT_TYPE,
 };
 
@@ -38,8 +48,10 @@ const vpsProductClick: WidgetEventType = {
 export {
   vprProductClick,
   vprProductView,
+  vprProductLoad,
   vpsProductClick,
   vpsProductView,
-  vprProductLoad,
   vpsProductLoad,
+  vpcProductClick,
+  vpcProductView,
 };

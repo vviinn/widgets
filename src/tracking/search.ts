@@ -1,6 +1,6 @@
-import { SEARCH_EVENT_EVENT_TYPE, WidgetEventType } from "./models";
+import { SEARCH_EVENT_TYPE, WidgetEventType } from "./models";
 
 export const searchEvent: WidgetEventType = {
   widget: "VPS",
-  typ: SEARCH_EVENT_EVENT_TYPE,
+  typ: SEARCH_EVENT_TYPE,
 };

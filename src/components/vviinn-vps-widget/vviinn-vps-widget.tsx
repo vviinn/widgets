@@ -392,6 +392,12 @@ export class VviinnVpsWidget {
     state.apiPath = this.apiPath;
     state.currencySign = this.currencySign;
     state.locale = this.locale;
+    i18next.init({
+      lng: this.locale,
+      fallbackLng: "de-DE",
+      resources,
+    });
+
     imageSearchState.token = this.token;
     imageSearchState.campaignId = pipe(
       this.campaignId,
@@ -411,12 +417,6 @@ export class VviinnVpsWidget {
     this.uiSessionId = uuidv4();
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
     this.id = this.el.id;
-
-    i18next.init({
-      lng: this.locale,
-      fallbackLng: "de-DE",
-      resources,
-    });
   }
 
   componentWillLoad() {

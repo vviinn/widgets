@@ -46,7 +46,10 @@ import {
   createProductClickVprEvent,
   createProductLoadVprEvent,
   createProductViewVprEvent,
+  createProductViewVpcEvent,
+  createProductClickVpcEvent,
   createWidgetVprEvent,
+  createWidgetVpcEvent,
 } from "../../tracking";
 import { checkEmpryString } from "../../utils/option/option";
 import { parseExcluded } from "../../utils/collections/collectionsUtils";
@@ -294,12 +297,19 @@ export class VviinnVprWidget implements ComponentInterface {
       ...rest
     } = detail;
 
-    const productViewEvent: ProductViewEvent = createProductViewVprEvent({
+    const eventBody = {
       session_id: this.uiSessionId,
       rank: productRank,
       product: productId,
       ...rest,
-    });
+    };
+
+    let productViewEvent: ProductViewEvent;
+    if (campaignTypeId === "VCS") {
+      productViewEvent = createProductViewVpcEvent(eventBody);
+    } else if (campaignTypeId === "VPR") {
+      productViewEvent = createProductViewVprEvent(eventBody);
+    }
 
     this.trackingApi
       .trackEvent(productViewEvent)
@@ -319,12 +329,19 @@ export class VviinnVprWidget implements ComponentInterface {
       ...rest
     } = detail;
 
-    const productClickEvent: ProductClickEvent = createProductClickVprEvent({
+    const eventBody = {
       session_id: this.uiSessionId,
       rank: productRank,
       product: productId,
       ...rest,
-    });
+    };
+
+    let productClickEvent: ProductClickEvent;
+    if (campaignTypeId === "VCS") {
+      productClickEvent = createProductClickVpcEvent(eventBody);
+    } else if (campaignTypeId === "VPR") {
+      productClickEvent = createProductClickVprEvent(eventBody);
+    }
 
     const product = this.recommendations.find(
       (r) => r.productId === detail.productId
@@ -357,6 +374,44 @@ export class VviinnVprWidget implements ComponentInterface {
       fallbackLng: "de-DE",
       resources,
     });
+
+    if (this.trackingDeactivated || !this.showingInButton) return;
+
+    const eventBody = {
+      action: "open",
+      session_id: this.uiSessionId,
+    };
+
+    let widgetOpenEvent: WidgetEvent;
+    if (this.campaignType === "VCS") {
+      widgetOpenEvent = createWidgetVpcEvent(eventBody);
+    } else if (this.campaignType === "VPR") {
+      widgetOpenEvent = createWidgetVprEvent(eventBody);
+    }
+
+    this.trackingApi
+      .trackEvent(widgetOpenEvent)
+      .then(this.setTrackingDeactivated);
+  }
+
+  disconnectedCallback() {
+    if (this.trackingDeactivated) return;
+
+    const eventBody = {
+      action: "close",
+      session_id: this.uiSessionId,
+    };
+
+    let widgetCloseEvent: WidgetEvent;
+    if (this.campaignType === "VCS") {
+      widgetCloseEvent = createWidgetVpcEvent(eventBody);
+    } else if (this.campaignType === "VPR") {
+      widgetCloseEvent = createWidgetVprEvent(eventBody);
+    }
+
+    this.trackingApi
+      .trackEvent(widgetCloseEvent)
+      .then(this.setTrackingDeactivated);
   }
 
   async componentWillLoad() {
