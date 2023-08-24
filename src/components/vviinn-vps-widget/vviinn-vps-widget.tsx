@@ -513,7 +513,7 @@ export class VviinnVpsWidget {
           onVviinnWidgetClose={() => this.handleModalClose()}
           buttonElementId={this.buttonElementId ?? this.id}
           widgetVersion={version}
-          hideBackButton={this.mode === "upload"}
+          hideBackButton={this.mode === "upload" && this.showingInButton}
           exportparts="secondary-action, title, close-button, example-images"
         >
           <vviinn-slider showBullets={false} position={this.slidePosition}>
@@ -537,9 +537,8 @@ export class VviinnVpsWidget {
                   class={{ hidden: this.haveErrors() }}
                   onVviinnImageUploadFinished={() => {
                     this.handleImageSelection("upload");
-                    if (this.mode === "upload") {
+                    if (this.mode === "upload" && this.showingInButton) {
                       this.active = true;
-                      this.vviinnWidgetOpen.emit(this.getBasicEventData());
                     }
                   }}
                   onVviinnImageUpload={() => {
