@@ -427,7 +427,7 @@ export class VviinnVpsWidget {
   private renderResults() {
     if (imageSearchState.results.length === 0) return null;
 
-    if (!this.resultLoaded && this.slidePosition === 1) {
+    if (!this.resultLoaded) {
       this.vviinnResultLoad.emit(this.getBasicEventData());
       this.resultLoaded = true;
     }
@@ -459,6 +459,8 @@ export class VviinnVpsWidget {
     this.resetScroll("onboarding-block");
 
     this.slidePosition = 0;
+    imageSearchState.resetCategoryLink = undefined;
+    imageSearchState.activeIonLink = undefined;
     imageSearchState.image = O.none;
     imageSearchState.imageUrl = O.none;
     imageSearchState.imageBounds = O.none;
@@ -466,7 +468,6 @@ export class VviinnVpsWidget {
     imageSearchState.results = [];
     imageSearchState.filters = [];
     imageSearchState.detectedObjects = [];
-    imageSearchState.activeIonLink = undefined;
     imageSearchState.rectangleSearchForm = undefined;
     imageSearchState.loading = false;
     this.resetScroll("results-block");
