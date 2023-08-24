@@ -312,11 +312,13 @@ export class VviinnVprWidget implements ComponentInterface {
 
   private trackWidgetEvent(action: WidgetAction) {
     if (this.trackingDeactivated) return;
+    const { campaignTypeId, ...rest } = this.getBasicEventData();
 
     let widgetEvent: WidgetEvent;
     const eventBody = {
       action,
       session_id: this.uiSessionId,
+      ...rest,
     };
 
     if (this.campaignType === "VCS") {
@@ -334,13 +336,14 @@ export class VviinnVprWidget implements ComponentInterface {
   ): ProductEvent | null {
     if (this.trackingDeactivated) return null;
 
-    const { productRank, productId, campaignTypeId } = detail;
+    const { productRank, productId, campaignTypeId, ...rest } = detail;
 
     let productEvent: ProductEvent;
     const eventBody = {
       session_id: this.uiSessionId,
       rank: productRank,
       product: productId,
+      ...rest,
     };
 
     if (campaignTypeId === "VCS") {

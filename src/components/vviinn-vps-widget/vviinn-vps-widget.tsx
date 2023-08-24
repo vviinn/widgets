@@ -293,11 +293,13 @@ export class VviinnVpsWidget {
   trachSearchAreaChanges() {
     this.initResultEvents();
     if (this.trackingDeactivated) return;
+    const { campaignTypeId, ...rest } = this.getBasicEventData();
 
     const searchEvent: WidgetEvent = createSearchEvent({
       session_id: this.uiSessionId,
       source: this.imageSource,
       search_area: "manual-selection",
+      ...rest,
     });
     this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
   }
@@ -306,11 +308,13 @@ export class VviinnVpsWidget {
   trackDetectedObject() {
     this.initResultEvents();
     if (this.trackingDeactivated) return;
+    const { campaignTypeId, ...rest } = this.getBasicEventData();
 
     const searchEvent: WidgetEvent = createSearchEvent({
       session_id: this.uiSessionId,
       source: this.imageSource,
       search_area: "attention-point",
+      ...rest,
     });
     this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
   }
@@ -319,12 +323,14 @@ export class VviinnVpsWidget {
   trackFilter({ detail }: CustomEvent<SelectFilterEventData>) {
     this.initResultEvents();
     if (this.trackingDeactivated) return;
+    const { campaignTypeId, ...rest } = this.getBasicEventData();
 
     const searchEvent: WidgetEvent = createFilterEvent({
       session_id: this.uiSessionId,
       source: this.imageSource,
       kind: detail.kind,
       action: detail.action,
+      ...rest,
     });
     this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
   }
@@ -374,9 +380,12 @@ export class VviinnVpsWidget {
   private trackWidgetEvent(action: WidgetAction) {
     if (this.trackingDeactivated) return;
 
+    const { campaignTypeId, ...rest } = this.getBasicEventData();
+
     const eventBody = {
       action,
       session_id: this.uiSessionId,
+      ...rest,
     };
 
     const widgetEvent: WidgetEvent = createWidgetVpsEvent(eventBody);
@@ -389,12 +398,13 @@ export class VviinnVpsWidget {
   ): ProductEvent | null {
     if (this.trackingDeactivated) return null;
 
-    const { productRank, productId } = detail;
+    const { productRank, productId, campaignTypeId, ...rest } = detail;
 
     const eventBody = {
       session_id: this.uiSessionId,
       rank: productRank,
       product: productId,
+      ...rest,
     };
 
     const productEvent: ProductEvent =
