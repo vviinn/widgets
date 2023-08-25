@@ -16,7 +16,7 @@ export const parseFilters = (filter: Link, filterType: string): string => {
     });
 
   if (filterType === "categories") {
-    return result["product_type"];
+    return result["product_type"] ?? result["google_product_category"];
   }
   return result[filterType];
 };
