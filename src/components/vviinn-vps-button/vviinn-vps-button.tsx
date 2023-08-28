@@ -182,7 +182,7 @@ export class VviinnVpsButton {
           buttonPressed={this.buttonPressed}
           resetVpsButton={this.resetButton.bind(this)}
           buttonElementId={this.el.id}
-          active={this.buttonPressed}
+          active={this.buttonPressed && this.mode === "modal"}
           excluded={this.excluded}
           productDetailNewTab={this.productDetailNewTab}
         />

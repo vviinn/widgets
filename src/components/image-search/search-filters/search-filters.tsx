@@ -16,6 +16,7 @@ import {
   SelectFilterEventData,
 } from "../../../recommendation/events";
 import { parseFilters } from "../../../filters/parseFilters";
+import { FilterKind } from "vviinn-tracking-client-ts";
 
 const FILTERS_COUNT: number = 5;
 
@@ -37,6 +38,16 @@ export class SearchFilters {
 
   private filterType: string = this.filter.name;
 
+  private isCategoriesFilterType(): boolean {
+    return this.filterType === "categories";
+  }
+
+  private getFilterKind(): FilterKind {
+    return this.isCategoriesFilterType()
+      ? "category"
+      : (this.filterType as FilterKind);
+  }
+
   private handleFilterSelection(filter: Link): void {
     return this.isFilterSelected(filter)
       ? this.clearSelectedFilter(filter)
@@ -50,7 +61,7 @@ export class SearchFilters {
     this.vviinnSelectFilter.emit({
       ...this.basicEventData,
       action: "select",
-      filterName: selectedFilter.name,
+      kind: this.getFilterKind(),
     });
   }
 
@@ -61,6 +72,7 @@ export class SearchFilters {
     this.vviinnSelectFilter.emit({
       ...this.basicEventData,
       action: "deselect",
+      kind: this.getFilterKind(),
     });
   }
 
@@ -74,7 +86,7 @@ export class SearchFilters {
   }
 
   private isFilterSelected(filterLink: Link): boolean {
-    return this.filterType === "categories"
+    return this.isCategoriesFilterType()
       ? this.selectedFilter === parseFilters(filterLink, "categories")
       : this.selectedFilter === filterLink.name;
   }
@@ -87,8 +99,8 @@ export class SearchFilters {
         <div
           class={{
             filters: true,
-            "no-scrollbar-mobile": this.filterType === "categories",
-            "no-scrollbar": this.filterType !== "categories",
+            "no-scrollbar-mobile": this.isCategoriesFilterType(),
+            "no-scrollbar": !this.isCategoriesFilterType(),
           }}
         >
           {filters
