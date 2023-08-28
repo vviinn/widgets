@@ -1,4 +1,10 @@
-import { FilterAction } from "vviinn-tracking-client-ts";
+import {
+  FilterAction,
+  FilterKind,
+  ProductClickEvent,
+  ProductLoadEvent,
+  ProductViewEvent,
+} from "vviinn-tracking-client-ts";
 import { ValueObject } from "../network/ion/ValueObject";
 import { DetectedObject } from "../searchSession/searchSession";
 
@@ -26,6 +32,7 @@ export type SelectFilterEventData = {
   widgetId: string;
   widgetVersion: string;
   action: FilterAction;
+  kind: FilterKind;
   filterName?: string;
 };
 
@@ -40,5 +47,12 @@ export type ProductCardEventData = {
   productName: string;
   productType: string;
 };
+
+export type ProductEventType = "load" | "view" | "click";
+
+export type ProductEvent =
+  | ProductLoadEvent
+  | ProductClickEvent
+  | ProductViewEvent;
 
 export type ProductCardEvent = CustomEvent<ProductCardEventData>;
