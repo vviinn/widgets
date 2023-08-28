@@ -79,6 +79,8 @@ export class VviinnVpsButton {
   @Prop() excluded: string = "";
   /** Toggle for opening product link in new tab or not */
   @Prop() productDetailNewTab: boolean = true;
+  /** Resolution width of an image in the product card */
+  @Prop() imageResolutionWidth: number = 250;
 
   /** @internal */
   @Prop() apiPath: string | undefined;
@@ -185,6 +187,7 @@ export class VviinnVpsButton {
           active={this.buttonPressed}
           excluded={this.excluded}
           productDetailNewTab={this.productDetailNewTab}
+          imageResolutionWidth={this.imageResolutionWidth}
         />
       </Host>
     );

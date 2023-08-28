@@ -117,6 +117,8 @@ export class VviinnVpsWidget {
   @Prop() excluded: string = "";
   /** Toggle for opening product link in new tab or not */
   @Prop() productDetailNewTab: boolean = true;
+  /** Resolution width of an image in the product card */
+  @Prop() imageResolutionWidth: number = 250;
 
   /** @internal */
   @Prop() apiPath: string = "https://api.vviinn.com";
@@ -451,7 +453,7 @@ export class VviinnVpsWidget {
         price={p.price.actual}
         salePrice={p.price.sale}
         responsive={true}
-        imageWidth={160}
+        imageWidth={this.imageResolutionWidth}
         image={p.image.thumbnail ?? p.image.original}
         part="product-card"
         campaignTypeId="VPS"
