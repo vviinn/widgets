@@ -109,16 +109,16 @@ vviinn-image-selector:active {
 }
 
 .products {
+  width: 100%;
   align-content: center;
   align-items: start;
   box-sizing: border-box;
   display: grid;
   grid-gap: 32px 16px;
-  grid-template-columns: repeat(auto-fill, minmax(152px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
   justify-items: center;
   padding: 24px;
   position: absolute;
-  width: calc(100% - 16px);
 }
 
 .products.hidden {
