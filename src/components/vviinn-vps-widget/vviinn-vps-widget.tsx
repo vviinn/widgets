@@ -450,6 +450,7 @@ export class VviinnVpsWidget {
         deeplink={p.deeplink}
         price={p.price.actual}
         salePrice={p.price.sale}
+        responsive={true}
         imageWidth={160}
         image={p.image.thumbnail ?? p.image.original}
         part="product-card"
