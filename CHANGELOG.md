@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.24.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.23.0...v2.24.0) (2023-08-28)
+
+
+### Features
+
+* Track product_load_event, widet's load event, distinguishing clicked filter kind, layout fix on the desktop for VPS widget ([b6e8b82](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/b6e8b828b970fe1e2ba9f8a92e735e81c81e511e))
+
 ## [2.23.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.22.3...v2.23.0) (2023-08-28)
 
 
