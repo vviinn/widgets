@@ -17,6 +17,7 @@ const Template = (args) => `
     excluded="${args.excluded}"
     product-detail-new-tab="${args.productDetailNewTab}"
     api-path="${args.apiPath}"
+    image-resolution-width="${args.imageResolutionWidth}"
   >
   </vviinn-vps-widget>`;
 
@@ -31,6 +32,7 @@ Default.args = {
   currencySign: "€",
   active: true,
   apiPath: "https://api.vviinn.com",
+  imageResolutionWidth: 250,
 };
 
 Default.storyName = "Main";

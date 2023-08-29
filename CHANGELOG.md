@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.25.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.25.1...v2.25.2) (2023-08-29)
+
+
+### Bug Fixes
+
+* Fix bug with emitting product load events for non-active search widget instances ([2b24bf6](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/2b24bf67d0f83d2f7eb8bffe32a55990b7321786))
+
+### [2.25.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.25.0...v2.25.1) (2023-08-29)
+
+## [2.25.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.24.1...v2.25.0) (2023-08-29)
+
+
+### Features
+
+* Add image-resolution-width prop for VPS components; Change default resolution width to 250px ([cf596a5](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/cf596a5b53fd2f832591adbd9c7549a43463ffe4))
+
 ### [2.24.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.24.0...v2.24.1) (2023-08-28)
 
 ## [2.24.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.23.0...v2.24.0) (2023-08-28)
