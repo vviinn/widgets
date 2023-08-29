@@ -42,7 +42,7 @@ Default.args = {
   imageWidth: 240,
   dimmedBackground: false,
   brand: "Ronald Schmitt",
-  locale: "en-US",
+  locale: "de-DE",
   currency: "€",
   deeplink: "",
   image:

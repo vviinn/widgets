@@ -35,6 +35,7 @@ const Template = (args) => `
       no-result-text="${args.noResultText}"
       no-result-show="${args.noResultShow}"
       excluded="${args.excluded}"
+      api-path="${args.apiPath}"
     >
     </vviinn-vpr-widget>
 `;
@@ -59,8 +60,9 @@ Grid.args = {
   cssUrl: "",
   showScroll: false,
   noResultShow: true,
-  noResultText: "No results! Please, try again later.",
+  noResultText: "",
   gridArrowsDynamic: false,
+  apiPath: "https://api.vviinn.com",
 };
 
 Grid.decorators = [gridDecorator];
@@ -85,8 +87,9 @@ Continuity.args = {
   cssUrl: "",
   showScroll: false,
   noResultShow: true,
-  noResultText: "No results! Please, try again later.",
+  noResultText: "",
   gridArrowsDynamic: false,
+  apiPath: "https://api.vviinn.com",
 };
 
 Continuity.decorators = [continuityDecorator];

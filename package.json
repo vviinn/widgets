@@ -1,6 +1,6 @@
 {
   "name": "vviinn-widgets",
-  "version": "2.20.27",
+  "version": "2.25.3",
   "description": "vviinn web components",
   "main": "./dist/index.cjs.js",
   "module": "./dist/index.js",
@@ -42,6 +42,7 @@
     "dotenv": "^8.2.0",
     "enhanced-ecommerce-types": "0.0.3",
     "fp-ts": "^2.12.3",
+    "i18next": "^23.2.11",
     "openapi-typescript": "^4.4.0",
     "rxjs": "^7.5.5",
     "save-dev": "^0.0.1-security",
@@ -49,7 +50,7 @@
     "tslib": "^1.14.1",
     "typescript": "^4.6.3",
     "uuid": "^8.3.2",
-    "vviinn-tracking-client-ts": "^1.0.0",
+    "vviinn-tracking-client-ts": "^1.5.1",
     "whatwg-fetch": "^3.6.2"
   },
   "devDependencies": {

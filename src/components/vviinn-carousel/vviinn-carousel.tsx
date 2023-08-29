@@ -35,7 +35,6 @@ export class VviinnCarousel {
   @Prop() widgetElementId?: string;
   @Prop() gridArrowsDynamic: boolean;
   @Prop() recommendations: Recommendation[] = [];
-  /** @internal */
   @Prop() widgetVersion: string;
 
   private columns: number = 0;

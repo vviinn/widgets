@@ -7,6 +7,7 @@ import {
   Element,
   Prop,
 } from "@stencil/core";
+
 import { slotChangeListener } from "../customized-slots";
 import { BasicEventData } from "../../recommendation/events";
 
@@ -21,7 +22,11 @@ export class VviinnExampleImages {
   @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
+  /** @internal */
+  @Event() vviinnImageUploadFinished: EventEmitter;
+
   @Prop() basicEventData: BasicEventData;
+  @Prop() exampleImagesTitle: string;
 
   private imagesBlock!: HTMLDivElement;
 
@@ -40,7 +45,7 @@ export class VviinnExampleImages {
     return (
       <Host onFocus={() => this.delegateFocus()}>
         <slot name="vviinn-example-images-title">
-          <h3>Mit den Beispielbildern die Suche direkt ausprobieren</h3>
+          <h3>{this.exampleImagesTitle}</h3>
         </slot>
         <div
           class="images"

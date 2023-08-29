@@ -2,6 +2,72 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.25.3](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.25.2...v2.25.3) (2023-08-29)
+
+### [2.25.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.25.1...v2.25.2) (2023-08-29)
+
+
+### Bug Fixes
+
+* Fix bug with emitting product load events for non-active search widget instances ([2b24bf6](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/2b24bf67d0f83d2f7eb8bffe32a55990b7321786))
+
+### [2.25.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.25.0...v2.25.1) (2023-08-29)
+
+## [2.25.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.24.1...v2.25.0) (2023-08-29)
+
+
+### Features
+
+* Add image-resolution-width prop for VPS components; Change default resolution width to 250px ([cf596a5](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/cf596a5b53fd2f832591adbd9c7549a43463ffe4))
+
+### [2.24.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.24.0...v2.24.1) (2023-08-28)
+
+## [2.24.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.23.0...v2.24.0) (2023-08-28)
+
+
+### Features
+
+* Track product_load_event, widet's load event, distinguishing clicked filter kind, layout fix on the desktop for VPS widget ([b6e8b82](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/b6e8b828b970fe1e2ba9f8a92e735e81c81e511e))
+
+## [2.23.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.22.3...v2.23.0) (2023-08-28)
+
+
+### Features
+
+* Use responsive images for VPS widget ([4b080c0](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/4b080c0a895b18b8b19056317b119bc271c88d92))
+
+### [2.22.3](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.22.2...v2.22.3) (2023-08-25)
+
+### [2.22.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.22.1...v2.22.2) (2023-08-25)
+
+### [2.22.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.22.0...v2.22.1) (2023-08-23)
+
+## [2.22.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.21.1...v2.22.0) (2023-08-23)
+
+
+### Features
+
+* Distinguish Between VPC and VPR in Recommendations Widget ([0aa64e2](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/0aa64e21febd20650511dc1db1a632ac3f537e15))
+
+### [2.21.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.21.0...v2.21.1) (2023-08-11)
+
+## [2.21.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.32...v2.21.0) (2023-08-11)
+
+
+### Features
+
+* Add vviinnResultLoad and vviinnResultView events ([b812334](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/b81233410144caace60a0d17236155da248e3ad8))
+
+### [2.20.32](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.31...v2.20.32) (2023-08-08)
+
+### [2.20.31](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.30...v2.20.31) (2023-08-08)
+
+### [2.20.30](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.29...v2.20.30) (2023-08-07)
+
+### [2.20.29](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.28...v2.20.29) (2023-08-07)
+
+### [2.20.28](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.27...v2.20.28) (2023-08-04)
+
 ### [2.20.27](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.26...v2.20.27) (2023-08-02)
 
 ### [2.20.26](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.25...v2.20.26) (2023-08-01)

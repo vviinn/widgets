@@ -12,7 +12,8 @@ import {
 import { CrossIcon } from "../../vviinn-icons";
 import { CarouselMode } from "../../vviinn-carousel/vviinn-carousel";
 import { BasicEventData } from "../../../recommendation/events";
-import { CampaignTypeId, campaignTypeNames } from "../../../campaign/Campaign";
+import { CampaignName } from "../../../campaign/Campaign";
+import { Locale } from "../../../locale";
 
 type SidebarState = "idle" | "open" | "closed";
 type ClickEvent = Event & { clientX: number; clientY: number };
@@ -34,8 +35,9 @@ export class RecommendationsSidebar {
   @Prop() mode: CarouselMode = "continuity";
   /** comma-separated list of campaign-ids */
   @Prop() campaigns: string = "";
-  @Prop() campaignType: CampaignTypeId;
+  @Prop() campaignType: CampaignName;
   @Prop() color: string;
+  @Prop() locale: Locale;
   @Prop() imageWidth: number = 300;
   @Prop() currencySign: string = "€";
   @Prop() noResultText: string;
@@ -119,6 +121,7 @@ export class RecommendationsSidebar {
               imageWidth={this.imageWidth}
               blockTitle=""
               mode={this.mode}
+              campaign-type={this.campaignType}
               useCarousel={this.position === "bottom"}
               onVviinnRecommendationsLoaded={() => (this.state = "open")}
               showScroll={this.widgetScrollbar}
@@ -126,6 +129,7 @@ export class RecommendationsSidebar {
               color={this.color}
               currencySign={this.currencySign}
               apiPath={this.apiPath}
+              locale={this.locale}
               buttonElementId={this.buttonElementId}
               noResultText={this.noResultText}
               noResultShow={this.noResultShow}
@@ -133,6 +137,8 @@ export class RecommendationsSidebar {
               showingInButton={this.showingInButton}
               excluded={this.excluded}
               productDetailNewTab={this.productDetailNewTab}
+              closed={this.state === "closed"}
+              opened={this.state === "open"}
             />
           </main>
         </aside>
@@ -153,13 +159,5 @@ export class RecommendationsSidebar {
   private handleAnimationEnd({ animationName }: AnimationEvent): void {
     const isClosingAnimation = animationName.includes("slideOut");
     if (!isClosingAnimation) return;
-
-    this.vviinnWidgetClose.emit({
-      widgetType: "VPR",
-      campaignTypeId: this.campaignType,
-      campaignTypeName: campaignTypeNames[this.campaignType],
-      widgetId: this.buttonElementId,
-      widgetVersion: this.widgetVersion,
-    });
   }
 }

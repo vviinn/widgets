@@ -1,4 +1,4 @@
-import { Component, Host, h, Element } from "@stencil/core";
+import { Component, Host, h, Element, Prop } from "@stencil/core";
 import { slotChangeListener } from "../customized-slots";
 
 @Component({
@@ -8,6 +8,7 @@ import { slotChangeListener } from "../customized-slots";
 })
 export class VviinnPrivacyBadge {
   @Element() el: HTMLElement;
+  @Prop() privacyBadgeText: string;
 
   componentWillLoad() {
     slotChangeListener(this, this.el);
@@ -35,11 +36,7 @@ export class VviinnPrivacyBadge {
               />
             </svg>
             <slot name="vviinn-privacy-badge-text">
-              <p>
-                Durch das Hochladen eines Bildes willigst Du in die Verarbeitung
-                durch unseren Partner Vviinn ein. Das Bild wird nach einer
-                Stunde Inaktivität gelöscht.
-              </p>
+              <p>{this.privacyBadgeText}</p>
             </slot>
           </div>
         </slot>

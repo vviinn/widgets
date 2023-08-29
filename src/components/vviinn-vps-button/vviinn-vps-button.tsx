@@ -19,6 +19,7 @@ import {
   SelectObjectEventData,
 } from "../../recommendation/events";
 import { campaignTypeNames } from "../../campaign/Campaign";
+import { Locale } from "../../locale";
 
 /**
  * @slot vviinn-onboarding-title - Title of onboarding section.
@@ -66,8 +67,8 @@ export class VviinnVpsButton {
   @Prop() token: string;
   /**  The currency sign is displayed after the price */
   @Prop() currencySign: string = "€";
-  /** The locale for currency formatting */
-  @Prop() locale: string = "de-DE";
+  /** The locale for currency formatting and text localization */
+  @Prop() locale: Locale = "de-DE";
   /** Campaign ID applied for visual search */
   @Prop() campaignId: string = "";
   /** Add style to the button */
@@ -78,6 +79,8 @@ export class VviinnVpsButton {
   @Prop() excluded: string = "";
   /** Toggle for opening product link in new tab or not */
   @Prop() productDetailNewTab: boolean = true;
+  /** Resolution width of an image in the product card */
+  @Prop() imageResolutionWidth: number = 250;
 
   /** @internal */
   @Prop() apiPath: string | undefined;
@@ -86,21 +89,33 @@ export class VviinnVpsButton {
 
   /** The event emits on widget load. */
   @Event() vviinnWidgetLoad: EventEmitter<BasicEventData>;
+
   /** The event emits on modal open. */
   @Event() vviinnWidgetOpen: EventEmitter<BasicEventData>;
+
   /** The event emits on modal close. */
   @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
 
-  /** The image was uploaded */
+  /** The image upload has started */
   @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
-  /** Wrong image format, that isn’t .jpg, .jpeg, png, or the request failed */
-  @Event() vviinnNoResult: EventEmitter<BasicEventData>;
+
   /** The recommendation renders on the page */
   @Event() vviinnProductLoad: EventEmitter<ProductCardEventData>;
+
   /** Click on the product’s link */
   @Event() vviinnProductClick: EventEmitter<ProductCardEventData>;
+
   /** The recommendation appears in the viewport */
   @Event() vviinnProductView: EventEmitter<ProductCardEventData>;
+
+  /** The search result renders on the page */
+  @Event() vviinnResultLoad: EventEmitter<BasicEventData>;
+
+  /** The search result appears in the viewport */
+  @Event() vviinnResultView: EventEmitter<BasicEventData>;
+
+  /** Wrong image format, that isn’t .jpg, .jpeg, png, or the request failed */
+  @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
   /** Crop area changes */
   @Event() vviinnImageCrop: EventEmitter<BasicEventData>;
@@ -169,9 +184,10 @@ export class VviinnVpsButton {
           buttonPressed={this.buttonPressed}
           resetVpsButton={this.resetButton.bind(this)}
           buttonElementId={this.el.id}
-          active={this.buttonPressed}
+          active={this.buttonPressed && this.mode === "modal"}
           excluded={this.excluded}
           productDetailNewTab={this.productDetailNewTab}
+          imageResolutionWidth={this.imageResolutionWidth}
         />
       </Host>
     );
