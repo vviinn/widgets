@@ -607,7 +607,10 @@ export class VviinnVpsWidget {
               </div>
             </vviinn-slide>
             <vviinn-slide
-              class={{ "results-page": true, active: this.slidePosition == 1 }}
+              class={{
+                "results-page": true,
+                active: this.slidePosition == 1,
+              }}
             >
               <div class="image-wrapper">
                 <vviinn-image-view basicEventData={this.getBasicEventData()} />
@@ -638,7 +641,7 @@ export class VviinnVpsWidget {
                     products: true,
                   }}
                 >
-                  {this.renderResults()}
+                  {this.active && this.renderResults()}
                 </div>
               </div>
             </vviinn-slide>
