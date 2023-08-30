@@ -17,14 +17,17 @@ import { DetectedObject } from "../../searchSession/searchSession";
 import { pipe } from "fp-ts/lib/function";
 import * as O from "fp-ts/lib/Option";
 import { sequenceToOption } from "../../utils/option/option";
-import { fromImage, move } from "../../geometry/Rectangle";
+import { fromImage } from "../../geometry/Rectangle";
 import { dimensionsFromImage, scaleByLargestSide } from "../../Image/sizing";
 import styles from "./vviinn-image-view.css";
 import { BasicEventData } from "../../recommendation/events";
 import Cropper from "cropperjs";
 
+const initialCropArea = 0.92;
+const initialCropAreaOffset = 1 - initialCropArea;
+
 const cropperOptions: Cropper.Options = {
-  autoCropArea: 0.92,
+  autoCropArea: initialCropArea,
   movable: false,
   zoomable: false,
   rotatable: false,
@@ -62,34 +65,37 @@ export class VviinnImageView {
     if (imageElement) {
       if (this.cropper) {
         this.cropper.destroy();
-      }
+      } else {
+        const imageBounds = fromImage(imageElement);
+        console.log(imageBounds);
+        const { x, y } = imageBounds;
 
+        const searchArea = {
+          x,
+          y,
+          width: imageBounds.width - imageBounds.width * initialCropAreaOffset,
+          height:
+            imageBounds.height - imageBounds.height * initialCropAreaOffset,
+        };
+
+        imageSearchState.imageBounds = O.some(imageBounds);
+        imageSearchState.searchArea = O.some(searchArea);
+      }
       this.cropper = new Cropper(imageElement, {
         ...cropperOptions,
         cropend: this.cropEnd,
       });
-
-      const imageBounds = fromImage(imageElement);
-      const padding = 12;
-      const { x, y } = move(imageBounds, { x: padding, y: padding });
-
-      const searchArea = {
-        x,
-        y,
-        width: imageBounds.width - padding * 2,
-        height: imageBounds.height - padding * 2,
-      };
-
-      imageSearchState.imageBounds = O.some(imageBounds);
-      imageSearchState.searchArea = O.some(searchArea);
     }
   }
 
   private cropEnd = () => {
-    const { aspectRatio } = this.cropper.getImageData();
-    const data = this.cropper.getData(true);
-    data.width = Math.round(data.width * aspectRatio);
-    data.height = Math.round(data.height * aspectRatio);
+    const { left, top, width, height } = this.cropper.getCropBoxData();
+    const data = {
+      x: left,
+      y: top,
+      width,
+      height,
+    };
 
     imageSearchState.searchArea = O.some(data);
     makeRectangularSearchRequest();
