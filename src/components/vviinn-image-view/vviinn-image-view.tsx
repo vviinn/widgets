@@ -1,5 +1,17 @@
-import { Component, Host, h, Prop } from "@stencil/core";
-import { imageSearchState } from "../../store/imageSearch.store";
+import {
+  Component,
+  Host,
+  h,
+  Prop,
+  State,
+  Event,
+  EventEmitter,
+  Element,
+} from "@stencil/core";
+import {
+  imageSearchState,
+  makeRectangularSearchRequest,
+} from "../../store/imageSearch.store";
 import { ValueObject } from "../../network/ion/ValueObject";
 import { DetectedObject } from "../../searchSession/searchSession";
 import { pipe } from "fp-ts/lib/function";
@@ -10,6 +22,17 @@ import { dimensionsFromImage, scaleByLargestSide } from "../../Image/sizing";
 import styles from "./vviinn-image-view.css";
 import { BasicEventData } from "../../recommendation/events";
 import Cropper from "cropperjs";
+
+const cropperOptions: Cropper.Options = {
+  autoCropArea: 0.92,
+  movable: false,
+  zoomable: false,
+  rotatable: false,
+  scalable: false,
+  zoomOnTouch: false,
+  zoomOnWheel: false,
+  toggleDragModeOnDblclick: false,
+};
 
 const getImageSizes = (i: HTMLImageElement): [number, number] => {
   const dimensions = dimensionsFromImage(i);
@@ -27,36 +50,51 @@ const getImageSizes = (i: HTMLImageElement): [number, number] => {
   styles,
 })
 export class VviinnImageView {
+  @Element() el: HTMLElement;
+
   @Prop() basicEventData: BasicEventData;
+  @State() cropper: Cropper = null;
 
-  handleInitialImageLoad(ev: Event) {
-    const target = ev.target as HTMLImageElement;
+  @Event() vviinnImageCrop: EventEmitter<BasicEventData>;
 
-    const imageBounds = fromImage(target);
-    const padding = 12;
-    const { x, y } = move(imageBounds, { x: padding, y: padding });
+  private loadImage() {
+    const imageElement = this.el.shadowRoot.querySelector("img");
+    if (imageElement) {
+      if (this.cropper) {
+        this.cropper.destroy();
+      }
 
-    const searchArea = {
-      x,
-      y,
-      width: imageBounds.width - padding * 2,
-      height: imageBounds.height - padding * 2,
-    };
+      this.cropper = new Cropper(imageElement, {
+        ...cropperOptions,
+        cropend: this.cropEnd,
+      });
 
-    imageSearchState.imageBounds = O.some(imageBounds);
-    imageSearchState.searchArea = O.some(searchArea);
+      const imageBounds = fromImage(imageElement);
+      const padding = 12;
+      const { x, y } = move(imageBounds, { x: padding, y: padding });
 
-    new Cropper(ev.target as HTMLImageElement, {
-      autoCropArea: 0.9,
-      movable: false,
-      zoomable: false,
-      rotatable: false,
-      scalable: false,
-      crop(event) {
-        console.log(event);
-      },
-    });
+      const searchArea = {
+        x,
+        y,
+        width: imageBounds.width - padding * 2,
+        height: imageBounds.height - padding * 2,
+      };
+
+      imageSearchState.imageBounds = O.some(imageBounds);
+      imageSearchState.searchArea = O.some(searchArea);
+    }
   }
+
+  private cropEnd = () => {
+    const { aspectRatio } = this.cropper.getImageData();
+    const data = this.cropper.getData(true);
+    data.width = Math.round(data.width * aspectRatio);
+    data.height = Math.round(data.height * aspectRatio);
+
+    imageSearchState.searchArea = O.some(data);
+    makeRectangularSearchRequest();
+    this.vviinnImageCrop.emit(this.basicEventData);
+  };
 
   private renderDetectedObject(
     object: ValueObject<DetectedObject>
@@ -75,30 +113,20 @@ export class VviinnImageView {
       O.map(([url, refImage]) => {
         const [width, height] = getImageSizes(refImage);
 
-        const image = (
+        return (
           <img
             decoding="async"
             width={width}
             height={height}
             src={url}
-            onLoad={(el) => this.handleInitialImageLoad(el)}
             draggable={false}
+            onLoad={() => this.loadImage()}
           />
         );
-
-        return image;
       }),
       O.getOrElse(() => null)
     );
   }
-
-  // private renderCropper(): HTMLImageCropperElement | null {
-  //   return pipe(
-  //     imageSearchState.imageUrl,
-  //     O.map(() => <image-cropper basicEventData={this.basicEventData} />),
-  //     O.getOrElse(() => null)
-  //   );
-  // }
 
   render() {
     return (
@@ -109,7 +137,7 @@ export class VviinnImageView {
             <vviinn-preloader />
           </div>
         ) : null}
-        <div>{this.renderImage()}</div>
+        {<div>{this.renderImage()}</div>}
         {imageSearchState.detectedObjects.map((o) =>
           this.renderDetectedObject(o)
         )}
