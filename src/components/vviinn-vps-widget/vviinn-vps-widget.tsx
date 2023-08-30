@@ -198,11 +198,11 @@ export class VviinnVpsWidget {
     this.resultViewed = false;
   }
 
-  private isFirstSlide() {
+  private isOnboardingSlide() {
     return this.slidePosition === 0;
   }
 
-  private isSecondSlide() {
+  private isResultSlide() {
     return this.slidePosition === 1;
   }
 
@@ -518,7 +518,7 @@ export class VviinnVpsWidget {
         {!this.showingInButton && <SlotSkeleton />}
 
         <vviinn-overlayed-modal
-          class={{ "first-screen": this.isFirstSlide() }}
+          class={{ "first-screen": this.isOnboardingSlide() }}
           active={this.active}
           resetState={this.resetState.bind(this)}
           onVviinnWidgetClose={() => this.handleModalClose()}
@@ -619,11 +619,11 @@ export class VviinnVpsWidget {
             <vviinn-slide
               class={{
                 "results-page": true,
-                active: this.isSecondSlide(),
+                active: this.isResultSlide(),
               }}
             >
               <div class="image-wrapper">
-                {this.isSecondSlide() && (
+                {this.isResultSlide() && (
                   <vviinn-image-view
                     basicEventData={this.getBasicEventData()}
                   />
