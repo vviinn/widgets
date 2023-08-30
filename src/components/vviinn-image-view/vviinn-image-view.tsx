@@ -7,15 +7,18 @@ import {
   Event,
   EventEmitter,
   Element,
+  Listen,
 } from "@stencil/core";
+import { pipe } from "fp-ts/lib/function";
+import * as O from "fp-ts/lib/Option";
+import Cropper from "cropperjs";
+
 import {
   imageSearchState,
   makeRectangularSearchRequest,
 } from "../../store/imageSearch.store";
 import { ValueObject } from "../../network/ion/ValueObject";
 import { DetectedObject } from "../../searchSession/searchSession";
-import { pipe } from "fp-ts/lib/function";
-import * as O from "fp-ts/lib/Option";
 import { sequenceToOption } from "../../utils/option/option";
 import { fromImage } from "../../geometry/Rectangle";
 import { dimensionsFromImage, scaleByLargestSide } from "../../Image/sizing";
@@ -24,12 +27,10 @@ import {
   BasicEventData,
   SelectObjectEventData,
 } from "../../recommendation/events";
-import Cropper from "cropperjs";
-import { Listen } from "@stencil/core";
 
 const INITIAL_CROP_AREA = 0.92;
 const INITIAL_CROP_AREA_OFFSET = 1 - INITIAL_CROP_AREA;
-const MIN_SEARCH_AREA_SIZE = 0;
+const MIN_SEARCH_AREA_SIZE = 1;
 
 const cropperOptions: Cropper.Options = {
   autoCropArea: INITIAL_CROP_AREA,
@@ -66,11 +67,15 @@ export class VviinnImageView {
   @State() cropper: Cropper = null;
   @Event() vviinnImageCrop: EventEmitter<BasicEventData>;
 
+  disconnectedCallback() {
+    this.cropper.destroy();
+  }
+
   @Listen("vviinnSelectObject")
   selectDetectedObject(event: CustomEvent<SelectObjectEventData>) {
     const { left, top, width, height } =
       event.detail.detectedObject.value.rectangle;
-    const image = this.cropper.getData();
+    const image = this.cropper.getImageData();
 
     const data = {
       left: left * image.width,
