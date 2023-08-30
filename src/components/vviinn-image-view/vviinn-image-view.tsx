@@ -63,26 +63,29 @@ export class VviinnImageView {
   private loadImage() {
     const imageElement = this.el.shadowRoot.querySelector("img");
     if (imageElement) {
+      let data = {};
       if (this.cropper) {
+        data = this.cropper.getData(true);
         this.cropper.destroy();
-      } else {
-        const imageBounds = fromImage(imageElement);
-        const { x, y } = imageBounds;
-
-        const searchArea = {
-          x,
-          y,
-          width: imageBounds.width - imageBounds.width * initialCropAreaOffset,
-          height:
-            imageBounds.height - imageBounds.height * initialCropAreaOffset,
-        };
-
-        imageSearchState.imageBounds = O.some(imageBounds);
-        imageSearchState.searchArea = O.some(searchArea);
       }
+
+      const imageBounds = fromImage(imageElement);
+      const { x, y } = imageBounds;
+
+      const searchArea = {
+        x,
+        y,
+        width: imageBounds.width - imageBounds.width * initialCropAreaOffset,
+        height: imageBounds.height - imageBounds.height * initialCropAreaOffset,
+      };
+
+      imageSearchState.imageBounds = O.some(imageBounds);
+      imageSearchState.searchArea = O.some(searchArea);
+
       this.cropper = new Cropper(imageElement, {
         ...cropperOptions,
         cropend: this.cropEnd,
+        data,
       });
     }
   }
