@@ -67,7 +67,6 @@ export class VviinnImageView {
         this.cropper.destroy();
       } else {
         const imageBounds = fromImage(imageElement);
-        console.log(imageBounds);
         const { x, y } = imageBounds;
 
         const searchArea = {
