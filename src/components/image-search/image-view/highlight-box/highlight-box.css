@@ -37,9 +37,12 @@ img {
   width: var(--size);
   height: var(--size);
   display: block;
-  transform: translate(calc(-50% + var(--size) * 0.5), calc(-50% + var(--size) * 0.5));
+  transform: translate(
+    calc(-50% + var(--size) * 0.5),
+    calc(-50% + var(--size) * 0.5)
+  );
   padding: calc(var(--size) * 0.5);
-  opacity: .75;
+  opacity: 0.75;
 }
 
 @keyframes fadein {

@@ -23,11 +23,14 @@ import styles from "./vviinn-image-view.css";
 import { BasicEventData } from "../../recommendation/events";
 import Cropper from "cropperjs";
 
-const initialCropArea = 0.92;
-const initialCropAreaOffset = 1 - initialCropArea;
+const INITIAL_CROP_AREA = 0.92;
+const INITIAL_CROP_AREA_OFFSET = 1 - INITIAL_CROP_AREA;
+const MIN_SEARCH_AREA_SIZE = 60;
 
 const cropperOptions: Cropper.Options = {
-  autoCropArea: initialCropArea,
+  autoCropArea: INITIAL_CROP_AREA,
+  minCropBoxHeight: MIN_SEARCH_AREA_SIZE,
+  minCropBoxWidth: MIN_SEARCH_AREA_SIZE,
   movable: false,
   zoomable: false,
   rotatable: false,
@@ -75,8 +78,9 @@ export class VviinnImageView {
       const searchArea = {
         x,
         y,
-        width: imageBounds.width - imageBounds.width * initialCropAreaOffset,
-        height: imageBounds.height - imageBounds.height * initialCropAreaOffset,
+        width: imageBounds.width - imageBounds.width * INITIAL_CROP_AREA_OFFSET,
+        height:
+          imageBounds.height - imageBounds.height * INITIAL_CROP_AREA_OFFSET,
       };
 
       imageSearchState.imageBounds = O.some(imageBounds);
