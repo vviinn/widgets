@@ -20,12 +20,16 @@ import { sequenceToOption } from "../../utils/option/option";
 import { fromImage } from "../../geometry/Rectangle";
 import { dimensionsFromImage, scaleByLargestSide } from "../../Image/sizing";
 import styles from "./vviinn-image-view.css";
-import { BasicEventData } from "../../recommendation/events";
+import {
+  BasicEventData,
+  SelectObjectEventData,
+} from "../../recommendation/events";
 import Cropper from "cropperjs";
+import { Listen } from "@stencil/core";
 
 const INITIAL_CROP_AREA = 0.92;
 const INITIAL_CROP_AREA_OFFSET = 1 - INITIAL_CROP_AREA;
-const MIN_SEARCH_AREA_SIZE = 60;
+const MIN_SEARCH_AREA_SIZE = 0;
 
 const cropperOptions: Cropper.Options = {
   autoCropArea: INITIAL_CROP_AREA,
@@ -60,8 +64,33 @@ export class VviinnImageView {
 
   @Prop() basicEventData: BasicEventData;
   @State() cropper: Cropper = null;
-
   @Event() vviinnImageCrop: EventEmitter<BasicEventData>;
+
+  @Listen("vviinnSelectObject")
+  selectDetectedObject(event: CustomEvent<SelectObjectEventData>) {
+    const { left, top, width, height } =
+      event.detail.detectedObject.value.rectangle;
+    const image = this.cropper.getData();
+
+    const data = {
+      left: left * image.width,
+      top: top * image.height,
+      width: width * image.width,
+      height: height * image.height,
+    };
+
+    this.cropper.setCropBoxData(data);
+  }
+
+  private getCropboxData() {
+    const { left, top, width, height } = this.cropper.getCropBoxData();
+    return {
+      x: left,
+      y: top,
+      width,
+      height,
+    };
+  }
 
   private loadImage() {
     const imageElement = this.el.shadowRoot.querySelector("img");
@@ -95,15 +124,7 @@ export class VviinnImageView {
   }
 
   private cropEnd = () => {
-    const { left, top, width, height } = this.cropper.getCropBoxData();
-    const data = {
-      x: left,
-      y: top,
-      width,
-      height,
-    };
-
-    imageSearchState.searchArea = O.some(data);
+    imageSearchState.searchArea = O.some(this.getCropboxData());
     makeRectangularSearchRequest();
     this.vviinnImageCrop.emit(this.basicEventData);
   };
