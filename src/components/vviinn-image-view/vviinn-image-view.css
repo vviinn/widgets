@@ -5,7 +5,7 @@
   direction: ltr;
 }
 
-img {
+.image-container > img {
   display: block;
   max-width: 100%;
 }
@@ -75,7 +75,6 @@ vviinn-preloader {
 .cropper-view-box {
   display: block;
   height: 100%;
-  outline-color: white;
   overflow: hidden;
   width: 100%;
 }

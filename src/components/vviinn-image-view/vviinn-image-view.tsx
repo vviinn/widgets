@@ -159,12 +159,16 @@ export class VviinnImageView {
   render() {
     return (
       <Host>
-        {imageSearchState.objectDetectionInProgress && (
-          <div class="image-preloader">
-            <vviinn-preloader />
-          </div>
-        )}
-        {<div>{this.renderImage()}</div>}
+        <div class="image-container">
+          {imageSearchState.loading ||
+          imageSearchState.objectDetectionInProgress ? (
+            <div class="image-preloader">
+              <vviinn-preloader />
+            </div>
+          ) : null}
+
+          {this.renderImage()}
+        </div>
         {imageSearchState.detectedObjects.map((o) =>
           this.renderDetectedObject(o)
         )}
