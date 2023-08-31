@@ -23,14 +23,11 @@ import { sequenceToOption } from "../../utils/option/option";
 import { fromImage } from "../../geometry/Rectangle";
 import { dimensionsFromImage, scaleByLargestSide } from "../../Image/sizing";
 import styles from "./vviinn-image-view.css";
-import {
-  BasicEventData,
-  SelectObjectEventData,
-} from "../../recommendation/events";
+import { BasicEventData } from "../../recommendation/events";
 
 const INITIAL_CROP_AREA = 0.92;
 const INITIAL_CROP_AREA_OFFSET = 1 - INITIAL_CROP_AREA;
-const MIN_SEARCH_AREA_SIZE = 1;
+const MIN_SEARCH_AREA_SIZE = 64;
 
 const cropperOptions: Cropper.Options = {
   autoCropArea: INITIAL_CROP_AREA,
@@ -65,6 +62,7 @@ export class VviinnImageView {
 
   @Prop() basicEventData: BasicEventData;
   @State() cropper: Cropper = null;
+
   @Event() vviinnImageCrop: EventEmitter<BasicEventData>;
 
   disconnectedCallback() {
@@ -72,19 +70,10 @@ export class VviinnImageView {
   }
 
   @Listen("vviinnSelectObject")
-  selectDetectedObject(event: CustomEvent<SelectObjectEventData>) {
-    const { left, top, width, height } =
-      event.detail.detectedObject.value.rectangle;
-    const image = this.cropper.getImageData();
-
-    const data = {
-      left: left * image.width,
-      top: top * image.height,
-      width: width * image.width,
-      height: height * image.height,
-    };
-
-    this.cropper.setCropBoxData(data);
+  selectDetectedObject() {
+    if (this.cropper) {
+      this.cropper.reset();
+    }
   }
 
   private getCropboxData() {
@@ -131,6 +120,7 @@ export class VviinnImageView {
   private cropEnd = () => {
     imageSearchState.searchArea = O.some(this.getCropboxData());
     makeRectangularSearchRequest();
+    imageSearchState.detectedObject = undefined;
     this.vviinnImageCrop.emit(this.basicEventData);
   };
 
