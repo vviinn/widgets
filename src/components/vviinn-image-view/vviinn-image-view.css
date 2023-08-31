@@ -98,66 +98,66 @@ vviinn-preloader {
   height: 14px;
   width: 14px;
   opacity: 1;
+}
 
-  &.point-e,
-  &.point-s,
-  &.point-w,
-  &.point-n {
-    display: none;
-  }
+.point-e,
+.point-s,
+.point-w,
+.point-n {
+  display: none;
+}
 
-  &.point-ne {
-    cursor: nesw-resize;
-    right: -2px;
-    top: -2px;
-  }
+.point-ne {
+  cursor: nesw-resize;
+  right: -2px;
+  top: -2px;
+}
 
-  &.point-nw {
-    cursor: nwse-resize;
-    left: -2px;
-    top: -2px;
-  }
+.point-nw {
+  cursor: nwse-resize;
+  left: -2px;
+  top: -2px;
+}
 
-  &.point-sw {
-    bottom: -2px;
-    cursor: nesw-resize;
-    left: -2px;
-  }
+.point-sw {
+  bottom: -2px;
+  cursor: nesw-resize;
+  left: -2px;
+}
 
-  &.point-se {
-    bottom: -2px;
-    cursor: nwse-resize;
-    right: -2px;
-  }
+.point-se {
+  bottom: -2px;
+  cursor: nwse-resize;
+  right: -2px;
+}
 
-  &::before {
-    position: absolute;
-    content: url("data:image/svg+xml,%3Csvg width='28' height='28' viewBox='0 0 28 28' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M26 2L26 22C26 24.2091 24.2091 26 22 26L2 26' stroke='white' stroke-width='4' stroke-linecap='square'/%3E%3C/svg%3E");
-    display: block;
-  }
+.cropper-point::before {
+  position: absolute;
+  content: url("data:image/svg+xml,%3Csvg width='28' height='28' viewBox='0 0 28 28' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M26 2L26 22C26 24.2091 24.2091 26 22 26L2 26' stroke='white' stroke-width='4' stroke-linecap='square'/%3E%3C/svg%3E");
+  display: block;
+}
 
-  &.point-ne::before {
-    transform: rotate(-90deg);
-    left: -14px;
-    top: 0px;
-  }
+.point-ne::before {
+  transform: rotate(-90deg);
+  left: -14px;
+  top: 0px;
+}
 
-  &.point-nw::before {
-    transform: rotate(180deg);
-    left: 0;
-    top: 0px;
-  }
+.point-nw::before {
+  transform: rotate(180deg);
+  left: 0;
+  top: 0px;
+}
 
-  &.point-sw::before {
-    transform: rotate(90deg);
-    left: 0;
-    top: -14px;
-  }
+.point-sw::before {
+  transform: rotate(90deg);
+  left: 0;
+  top: -14px;
+}
 
-  &.point-se::before {
-    left: -14px;
-    top: -14px;
-  }
+.point-se::before {
+  left: -14px;
+  top: -14px;
 }
 
 .cropper-invisible {
