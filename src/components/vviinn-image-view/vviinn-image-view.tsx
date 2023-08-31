@@ -25,7 +25,7 @@ import { dimensionsFromImage, scaleByLargestSide } from "../../Image/sizing";
 import styles from "./vviinn-image-view.css";
 import { BasicEventData } from "../../recommendation/events";
 
-const INITIAL_CROP_AREA = 0.92;
+const INITIAL_CROP_AREA = 0.91;
 const INITIAL_CROP_AREA_OFFSET = 1 - INITIAL_CROP_AREA;
 const MIN_SEARCH_AREA_SIZE = 64;
 

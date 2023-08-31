@@ -95,8 +95,8 @@ vviinn-preloader {
 }
 
 .cropper-point {
-  height: 14px;
-  width: 14px;
+  height: 20px;
+  width: 20px;
   opacity: 1;
 }
 
@@ -109,55 +109,56 @@ vviinn-preloader {
 
 .point-ne {
   cursor: nesw-resize;
-  right: -2px;
-  top: -2px;
+  right: -10px;
+  top: -10px;
 }
 
 .point-nw {
   cursor: nwse-resize;
-  left: -2px;
-  top: -2px;
+  left: -10px;
+  top: -10px;
 }
 
 .point-sw {
-  bottom: -2px;
+  bottom: -10px;
   cursor: nesw-resize;
-  left: -2px;
+  left: -10px;
 }
 
 .point-se {
-  bottom: -2px;
+  bottom: -10px;
   cursor: nwse-resize;
-  right: -2px;
+  right: -10px;
 }
 
 .cropper-point::before {
   position: absolute;
   content: url("data:image/svg+xml,%3Csvg width='28' height='28' viewBox='0 0 28 28' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M26 2L26 22C26 24.2091 24.2091 26 22 26L2 26' stroke='white' stroke-width='4' stroke-linecap='square'/%3E%3C/svg%3E");
   display: block;
+  poiter-events: none;
 }
 
 .point-ne::before {
   transform: rotate(-90deg);
-  left: -14px;
-  top: 0px;
+  left: -16px;
+  top: 8px;
 }
 
 .point-nw::before {
   transform: rotate(180deg);
-  left: 0;
-  top: 0px;
+  left: 8px;
+  top: 8px;
 }
 
 .point-sw::before {
   transform: rotate(90deg);
-  left: 0;
-  top: -14px;
+  left: 8px;
+  top: -16px;
 }
 
 .point-se::before {
-  left: -14px;
-  top: -14px;
+  left: -16px;
+  top: -16px;
 }
 
 .cropper-invisible {
