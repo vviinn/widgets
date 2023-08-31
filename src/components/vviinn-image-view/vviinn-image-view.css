@@ -95,8 +95,8 @@ vviinn-preloader {
 }
 
 .cropper-point {
-  height: 20px;
-  width: 20px;
+  height: 30px;
+  width: 30px;
   opacity: 1;
 }
 
@@ -109,26 +109,26 @@ vviinn-preloader {
 
 .point-ne {
   cursor: nesw-resize;
-  right: -10px;
-  top: -10px;
+  right: -15px;
+  top: -15px;
 }
 
 .point-nw {
   cursor: nwse-resize;
-  left: -10px;
-  top: -10px;
+  left: -15px;
+  top: -15px;
 }
 
 .point-sw {
-  bottom: -10px;
+  bottom: -15px;
   cursor: nesw-resize;
-  left: -10px;
+  left: -15px;
 }
 
 .point-se {
-  bottom: -10px;
+  bottom: -15px;
   cursor: nwse-resize;
-  right: -10px;
+  right: -15px;
 }
 
 .cropper-point::before {
@@ -140,25 +140,25 @@ vviinn-preloader {
 
 .point-ne::before {
   transform: rotate(-90deg);
-  left: -16px;
-  top: 8px;
+  left: -11px;
+  top: 13px;
 }
 
 .point-nw::before {
   transform: rotate(180deg);
-  left: 8px;
-  top: 8px;
+  left: 13px;
+  top: 13px;
 }
 
 .point-sw::before {
   transform: rotate(90deg);
-  left: 8px;
-  top: -16px;
+  left: 13px;
+  top: -11px;
 }
 
 .point-se::before {
-  left: -16px;
-  top: -16px;
+  left: -11px;
+  top: -11px;
 }
 
 .cropper-invisible {
