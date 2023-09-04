@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.26.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.25.3...v2.26.0) (2023-09-04)
+
+
+### Features
+
+* Replace old custom cropper with cropper.js ([132ae94](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/132ae9414af854ba50445c34d3ef4a4f41bae9b4))
+
 ### [2.25.3](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.25.2...v2.25.3) (2023-08-29)
 
 ### [2.25.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.25.1...v2.25.2) (2023-08-29)
