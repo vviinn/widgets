@@ -5,12 +5,9 @@
   direction: ltr;
 }
 
-img {
-  box-sizing: border-box;
-  filter: brightness(60%);
-  position: relative;
-  user-select: none;
-  z-index: -1;
+.image-container > img {
+  display: block;
+  max-width: 100%;
 }
 
 .image-preloader {
@@ -23,7 +20,173 @@ img {
   right: 18px;
   z-index: 4;
 }
-
 vviinn-preloader {
   --preloader-size: 12px;
+}
+
+.cropper-container {
+  direction: ltr;
+  font-size: 0;
+  line-height: 0;
+  position: relative;
+  touch-action: none;
+  user-select: none;
+
+  & img {
+    backface-visibility: hidden;
+    display: block;
+    height: 100%;
+    image-orientation: 0deg;
+    max-height: none !important;
+    max-width: none !important;
+    min-height: 0 !important;
+    min-width: 0 !important;
+    width: 100%;
+  }
+}
+
+.cropper-wrap-box,
+.cropper-canvas,
+.cropper-drag-box,
+.cropper-crop-box,
+.cropper-modal {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.cropper-wrap-box,
+.cropper-canvas {
+  overflow: hidden;
+}
+
+.cropper-drag-box {
+  background-color: #fff;
+  opacity: 0;
+}
+
+.cropper-modal {
+  background-color: #000;
+  opacity: 0.4;
+}
+
+.cropper-view-box {
+  display: block;
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
+}
+
+.cropper-face,
+.cropper-point {
+  display: block;
+  height: 100%;
+  opacity: 0.1;
+  position: absolute;
+  width: 100%;
+}
+
+.cropper-face {
+  background-color: #fff;
+  left: 0;
+  top: 0;
+}
+
+.cropper-point {
+  height: 30px;
+  width: 30px;
+  opacity: 1;
+}
+
+.point-e,
+.point-s,
+.point-w,
+.point-n {
+  display: none;
+}
+
+.point-ne {
+  cursor: nesw-resize;
+  right: -15px;
+  top: -15px;
+}
+
+.point-nw {
+  cursor: nwse-resize;
+  left: -15px;
+  top: -15px;
+}
+
+.point-sw {
+  bottom: -15px;
+  cursor: nesw-resize;
+  left: -15px;
+}
+
+.point-se {
+  bottom: -15px;
+  cursor: nwse-resize;
+  right: -15px;
+}
+
+.cropper-point::before {
+  position: absolute;
+  content: url("data:image/svg+xml,%3Csvg width='28' height='28' viewBox='0 0 28 28' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M26 2L26 22C26 24.2091 24.2091 26 22 26L2 26' stroke='white' stroke-width='4' stroke-linecap='square'/%3E%3C/svg%3E");
+  display: block;
+  poiter-events: none;
+}
+
+.point-ne::before {
+  transform: rotate(-90deg);
+  left: -11px;
+  top: 13px;
+}
+
+.point-nw::before {
+  transform: rotate(180deg);
+  left: 13px;
+  top: 13px;
+}
+
+.point-sw::before {
+  transform: rotate(90deg);
+  left: 13px;
+  top: -11px;
+}
+
+.point-se::before {
+  left: -11px;
+  top: -11px;
+}
+
+.cropper-invisible {
+  opacity: 0;
+}
+
+.cropper-hide {
+  display: block;
+  height: 0;
+  position: absolute;
+  width: 0;
+}
+
+.cropper-hidden {
+  display: none !important;
+}
+
+.cropper-move {
+  cursor: move;
+}
+
+.cropper-crop {
+  cursor: crosshair;
+}
+
+.cropper-disabled .cropper-drag-box,
+.cropper-disabled .cropper-face,
+.cropper-disabled .cropper-line,
+.cropper-disabled .cropper-point {
+  cursor: not-allowed;
 }

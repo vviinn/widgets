@@ -198,6 +198,14 @@ export class VviinnVpsWidget {
     this.resultViewed = false;
   }
 
+  private isOnboardingSlide() {
+    return this.slidePosition === 0;
+  }
+
+  private isResultSlide() {
+    return this.slidePosition === 1;
+  }
+
   private handleOpenLink(deeplink: string) {
     if (this.productDetailNewTab) {
       window.open(deeplink);
@@ -510,7 +518,7 @@ export class VviinnVpsWidget {
         {!this.showingInButton && <SlotSkeleton />}
 
         <vviinn-overlayed-modal
-          class={{ "first-screen": this.slidePosition === 0 }}
+          class={{ "first-screen": this.isOnboardingSlide() }}
           active={this.active}
           resetState={this.resetState.bind(this)}
           onVviinnWidgetClose={() => this.handleModalClose()}
@@ -611,11 +619,15 @@ export class VviinnVpsWidget {
             <vviinn-slide
               class={{
                 "results-page": true,
-                active: this.slidePosition == 1,
+                active: this.isResultSlide(),
               }}
             >
               <div class="image-wrapper">
-                <vviinn-image-view basicEventData={this.getBasicEventData()} />
+                {this.isResultSlide() && (
+                  <vviinn-image-view
+                    basicEventData={this.getBasicEventData()}
+                  />
+                )}
                 <div class="filters-wrapper">
                   <div class="filters">
                     {imageSearchState.filters.map((filter) => (

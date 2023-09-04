@@ -33,7 +33,8 @@ export class VviinnDetectedObject {
   @Prop() detectedObject: ValueObject<DetectedObject>;
   @Prop() basicEventData: BasicEventData;
 
-  @Event() vviinnSelectObject: EventEmitter<SelectObjectEventData>;
+  @Event({ bubbles: true })
+  vviinnSelectObject: EventEmitter<SelectObjectEventData>;
 
   private getObjectPosition(): [string, string] {
     return pipe(
