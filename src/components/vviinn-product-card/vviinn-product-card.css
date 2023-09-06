@@ -9,6 +9,7 @@
 .price-container {
   display: flex;
   flex-direction: column;
+  margin-top: auto;
 }
 
 .price-sale,
@@ -77,6 +78,39 @@ img.responsive {
 picture {
   position: relative;
   width: 100%;
+}
+
+.basket-button {
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 10px 12px;
+  margin-top: 8px;
+}
+
+.basket-button.basket-button-grid {
+  width: 100%;
+  background: none;
+  border: 1px solid #dddddd;
+}
+
+.basket-button.basket-button-continuity {
+  align-self: start;
+  background: #f7f7f7;
+}
+
+.basket-button-continuity:hover {
+  background: #eaeaea;
+}
+
+.basket-button-grid:hover {
+  background: #f7f7f7;
+}
+
+@media (max-width: 640px) {
+  .basket-button {
+    padding: 8px 10px;
+  }
 }
 
 :host(.dimmed) picture::before {

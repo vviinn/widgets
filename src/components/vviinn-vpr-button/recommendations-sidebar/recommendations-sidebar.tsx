@@ -47,6 +47,8 @@ export class RecommendationsSidebar {
   @Prop() excluded: string;
   /** Toggle for opening product link in new tab or not */
   @Prop() productDetailNewTab: boolean;
+  /** Show or hide Add to Basket button */
+  @Prop() addToBasketShow: boolean = false;
 
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
@@ -139,6 +141,7 @@ export class RecommendationsSidebar {
               productDetailNewTab={this.productDetailNewTab}
               closed={this.state === "closed"}
               opened={this.state === "open"}
+              addToBasketShow={this.addToBasketShow}
             />
           </main>
         </aside>

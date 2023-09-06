@@ -67,6 +67,8 @@ export class VviinnVprButton {
   @Prop() excluded: string = "";
   /** Toggle for opening product link in new tab or not */
   @Prop() productDetailNewTab: boolean = false;
+  /** Show or hide Add to Basket button */
+  @Prop() addToBasketShow: boolean = false;
 
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
@@ -97,6 +99,9 @@ export class VviinnVprButton {
 
   /** Recommendation request failed */
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
+
+  /** Add to Basket button clicked */
+  @Event() vviinnAddToBasket: EventEmitter<BasicEventData>;
 
   private sidebar: HTMLVviinnRecommendationsSidebarElement | null = null;
   private sidebarCloseListener: () => void = () => {
@@ -145,6 +150,7 @@ export class VviinnVprButton {
     sidebar.widgetVersion = version;
     sidebar.showingInButton = true;
     sidebar.excluded = this.excluded;
+    sidebar.addToBasketShow = this.addToBasketShow;
 
     this.sidebar = sidebar;
 

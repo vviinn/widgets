@@ -119,6 +119,8 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() excluded: string = "";
   /** Toggle for opening product link in new tab or not */
   @Prop() productDetailNewTab: boolean = false;
+  /** Show or hide Add to Basket button */
+  @Prop() addToBasketShow: boolean = false;
 
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
@@ -158,6 +160,9 @@ export class VviinnVprWidget implements ComponentInterface {
 
   /** Recommendation request failed */
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
+
+  /** Add to Basket button clicked */
+  @Event() vviinnAddToBasket: EventEmitter<BasicEventData>;
 
   /** @internal */
   @Event() vviinnRecommendationsLoaded: EventEmitter;
@@ -308,6 +313,11 @@ export class VviinnVprWidget implements ComponentInterface {
     } else {
       this.handleOpenLink(product.deeplink);
     }
+  }
+
+  @Listen("vviinnAddToBasket")
+  async trackAddToBasket({ detail }: ProductCardEvent) {
+    console.log("Add to basket", detail);
   }
 
   private trackWidgetEvent(action: WidgetAction) {
@@ -468,6 +478,8 @@ export class VviinnVprWidget implements ComponentInterface {
         price={recommendation.price.actual}
         salePrice={recommendation.price.sale}
         responsive={this.mode === "grid"}
+        addToBasketShow={this.addToBasketShow}
+        mode={this.mode}
         dimmedBackground={this.useDimmedBackgroundInCard()}
         campaignTypeId={this.campaignType}
         index={index}
@@ -500,6 +512,7 @@ export class VviinnVprWidget implements ComponentInterface {
         widgetElementId={this.id}
         widgetVersion={version}
         gridArrowsDynamic={this.gridArrowsDynamic}
+        addToBasketShow={this.addToBasketShow}
       ></vviinn-carousel>
     );
   }

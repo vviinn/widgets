@@ -36,6 +36,7 @@ export class VviinnCarousel {
   @Prop() gridArrowsDynamic: boolean;
   @Prop() recommendations: Recommendation[] = [];
   @Prop() widgetVersion: string;
+  @Prop() addToBasketShow: boolean;
 
   private columns: number = 0;
   private resizeObserver: ResizeObserver = new ResizeObserver(() =>
@@ -283,6 +284,8 @@ export class VviinnCarousel {
         index={rank}
         widgetElementId={this.widgetElementId}
         widgetVersion={this.widgetVersion}
+        addToBasketShow={this.addToBasketShow}
+        mode={this.mode}
       />
     );
   }

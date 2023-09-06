@@ -29,6 +29,7 @@ import {
   WidgetType,
   campaignTypeNames,
 } from "../../campaign/Campaign";
+import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 
 /**
  * @part brand - product brand.
@@ -68,6 +69,9 @@ export class VviinnProductCard {
   @Prop() salePrice: number | undefined;
   @Prop() responsive: boolean = false;
   @Prop() dimmedBackground: boolean = false;
+  @Prop() mode?: CarouselMode;
+  @Prop() addToBasketShow: boolean;
+
   /** @internal */
   @Prop() campaignTypeId: CampaignTypeId;
   /** @internal */
@@ -91,6 +95,9 @@ export class VviinnProductCard {
   /** Event fires ones when user click on deeplink */
   @Event({ bubbles: true })
   vviinnProductClick: EventEmitter<ProductCardEventData>;
+  /** Event fires when user click on Add to Basket button */
+  @Event({ bubbles: true })
+  vviinnAddToBasket: EventEmitter<ProductCardEventData>;
 
   private productData: ProductCardEventData | null = null;
 
@@ -202,6 +209,20 @@ export class VviinnProductCard {
           salePrice={this.salePrice}
           locale={this.locale ?? state.locale}
         />
+        {this.addToBasketShow && (
+          <button
+            class={{
+              "basket-button": true,
+              "basket-button-grid": this.mode === "grid",
+              "basket-button-continuity ": this.mode === "continuity",
+            }}
+            onClick={() => {
+              this.vviinnAddToBasket.emit(this.productData);
+            }}
+          >
+            Add to Basket
+          </button>
+        )}
       </Host>
     );
   }
