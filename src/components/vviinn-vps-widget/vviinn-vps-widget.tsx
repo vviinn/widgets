@@ -390,7 +390,7 @@ export class VviinnVpsWidget {
   private trackWidgetEvent(action: WidgetAction) {
     if (this.trackingDeactivated) return;
 
-    const { campaignTypeId, ...rest } = this.getBasicEventData();
+    const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
 
     const eventBody = {
       action,
@@ -408,7 +408,8 @@ export class VviinnVpsWidget {
   ): ProductEvent | null {
     if (this.trackingDeactivated) return null;
 
-    const { productRank, productId, campaignTypeId, ...rest } = detail;
+    const { productRank, productId, campaignTypeId, widgetType, ...rest } =
+      detail;
 
     const eventBody = {
       session_id: this.uiSessionId,
