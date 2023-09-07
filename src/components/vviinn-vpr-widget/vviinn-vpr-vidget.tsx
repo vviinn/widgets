@@ -47,6 +47,8 @@ import {
   createWidgetVpcEvent,
   createProductVpcEventByType,
   createProductVprEventByType,
+  createAddToBasketVpcEvent,
+  createAddToBasketVprEvent,
 } from "../../tracking";
 import { checkEmpryString } from "../../utils/option/option";
 import { parseExcluded } from "../../utils/collections/collectionsUtils";
@@ -317,7 +319,26 @@ export class VviinnVprWidget implements ComponentInterface {
 
   @Listen("vviinnAddToBasket")
   async trackAddToBasket({ detail }: ProductCardEvent) {
-    console.log("Add to basket", detail);
+    const { productRank, productId, campaignTypeId, widgetType, ...rest } =
+      detail;
+
+    let addToBasketEvent: WidgetEvent;
+    const eventBody = {
+      session_id: this.uiSessionId,
+      rank: productRank,
+      product: productId,
+      ...rest,
+    };
+
+    if (this.campaignType === "VCS") {
+      addToBasketEvent = createAddToBasketVpcEvent(eventBody);
+    } else if (this.campaignType === "VPR") {
+      addToBasketEvent = createAddToBasketVprEvent(eventBody);
+    }
+
+    this.trackingApi
+      .trackEvent(addToBasketEvent)
+      .then(this.setTrackingDeactivated);
   }
 
   private trackWidgetEvent(action: WidgetAction) {
