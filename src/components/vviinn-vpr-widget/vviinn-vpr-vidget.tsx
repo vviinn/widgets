@@ -27,6 +27,7 @@ import { getRecommendationsService } from "../../campaign/CampaignService";
 import { imageSearchState } from "../../store/imageSearch.store";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 import { Recommendation } from "../../recommendation/recommendation";
+import { SlotSkeleton } from "../customized-slots";
 
 import {
   DefaultApi,
@@ -75,6 +76,8 @@ import { Locale } from "../../locale";
  * @part carousel-button - Button for carousel navigation.
  * @part recommendations-grid - For internal usage only!
  * @part recommendations-title - Title of the recommendations grid.
+ *
+ * @slot vviinn-basket-button-text - Title of Add to Basket button.
  */
 @Component({
   tag: "vviinn-vpr-widget",
@@ -167,6 +170,9 @@ export class VviinnVprWidget implements ComponentInterface {
   @Event() vviinnAddToBasket: EventEmitter<BasicEventData>;
 
   /** @internal */
+  @Event({ bubbles: true, composed: true })
+  globalSlotsChanged: EventEmitter<any>;
+  /** @internal */
   @Event() vviinnRecommendationsLoaded: EventEmitter;
   /** @internal */
   @Event({ bubbles: true })
@@ -240,6 +246,11 @@ export class VviinnVprWidget implements ComponentInterface {
     if (!this.closed) return;
     this.vviinnWidgetClose.emit(this.getBasicEventData());
     this.trackWidgetEvent("close");
+  }
+
+  componentDidRender() {
+    const slots = this.el.querySelectorAll("[slot]");
+    this.globalSlotsChanged.emit(Array.from(slots));
   }
 
   connectedCallback() {
@@ -463,6 +474,8 @@ export class VviinnVprWidget implements ComponentInterface {
         }}
         aria-hidden="false"
       >
+        {this.addToBasketShow && <SlotSkeleton />}
+
         <Fragment>
           {this.renderExternalCSS()}
           <style>{state.fallbackStyles}</style>
