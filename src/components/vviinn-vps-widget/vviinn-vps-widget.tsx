@@ -426,11 +426,13 @@ export class VviinnVpsWidget {
 
   private trackInitialSearch(source: SearchImageSource) {
     if (this.trackingDeactivated) return;
+    const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
 
     const searchEvent: WidgetEvent = createSearchEvent({
       session_id: this.uiSessionId,
       search_area: "full",
       source,
+      ...rest,
     });
     this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
   }
