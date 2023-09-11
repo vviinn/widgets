@@ -36,6 +36,7 @@ const Template = (args) => `
       no-result-show="${args.noResultShow}"
       excluded="${args.excluded}"
       api-path="${args.apiPath}"
+      add-to-basket-show="${args.addToBasketShow}"
     >
     </vviinn-vpr-widget>
 `;
@@ -63,6 +64,7 @@ Grid.args = {
   noResultText: "",
   gridArrowsDynamic: false,
   apiPath: "https://api.vviinn.com",
+  addToBasketShow: false,
 };
 
 Grid.decorators = [gridDecorator];
@@ -90,6 +92,7 @@ Continuity.args = {
   noResultText: "",
   gridArrowsDynamic: false,
   apiPath: "https://api.vviinn.com",
+  addToBasketShow: true,
 };
 
 Continuity.decorators = [continuityDecorator];
