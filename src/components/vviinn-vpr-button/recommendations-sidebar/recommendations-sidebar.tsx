@@ -51,6 +51,8 @@ export class RecommendationsSidebar {
   @Prop() addToBasketShow: boolean = false;
 
   /** @internal */
+  @Prop() buttonChildren: HTMLCollection;
+  /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
   /** @internal */
   @Prop() buttonElementId?: string;
@@ -90,6 +92,16 @@ export class RecommendationsSidebar {
 
   private getSidebarRectangle(): DOMRect {
     return this.el.shadowRoot.querySelector("aside")?.getBoundingClientRect();
+  }
+
+  componentDidLoad() {
+    const widgetElement = this.el.shadowRoot.querySelector("vviinn-vpr-widget");
+    Array.from(this.buttonChildren).forEach((child) => {
+      const childClone = child.cloneNode(true);
+      if (child.hasAttribute("slot")) {
+        widgetElement.appendChild(childClone);
+      }
+    });
   }
 
   render(): any {

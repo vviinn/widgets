@@ -151,6 +151,7 @@ export class VviinnVprButton {
     sidebar.showingInButton = true;
     sidebar.excluded = this.excluded;
     sidebar.addToBasketShow = this.addToBasketShow;
+    sidebar.buttonChildren = this.el.children;
 
     this.sidebar = sidebar;
 

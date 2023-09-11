@@ -249,6 +249,7 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   componentDidRender() {
+    if (this.showingInButton && this.closed) return;
     const slots = this.el.querySelectorAll("[slot]");
     this.globalSlotsChanged.emit(Array.from(slots));
   }
