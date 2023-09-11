@@ -69,6 +69,7 @@ img.responsive {
 
 .deeplink {
   text-decoration: none;
+  max-width: 100%;
 }
 
 .image-link {
