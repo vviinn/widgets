@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.27.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.26.1...v2.27.0) (2023-09-13)
+
+
+### Features
+
+* Make crop after clicking detected objects ([f878c43](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/f878c43577baf23c9ec8cad2da389bf77866408d))
+
 ### [2.26.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.26.0...v2.26.1) (2023-09-04)
 
 ## [2.26.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.25.3...v2.26.0) (2023-09-04)
