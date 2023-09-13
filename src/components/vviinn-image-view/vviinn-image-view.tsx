@@ -23,11 +23,21 @@ import { sequenceToOption } from "../../utils/option/option";
 import { fromImage } from "../../geometry/Rectangle";
 import { dimensionsFromImage, scaleByLargestSide } from "../../Image/sizing";
 import styles from "./vviinn-image-view.css";
-import { BasicEventData } from "../../recommendation/events";
+import {
+  BasicEventData,
+  SelectObjectEventData,
+} from "../../recommendation/events";
 
 const INITIAL_CROP_AREA = 0.91;
 const INITIAL_CROP_AREA_OFFSET = 1 - INITIAL_CROP_AREA;
 const MIN_SEARCH_AREA_SIZE = 64;
+
+type CropBoxData = {
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+};
 
 const cropperOptions: Cropper.Options = {
   autoCropArea: INITIAL_CROP_AREA,
@@ -52,6 +62,30 @@ const getImageSizes = (i: HTMLImageElement): [number, number] => {
   return [sizes[0], sizes[1]];
 };
 
+const ValidateCropBoxData = (cropBoxData: CropBoxData) => {
+  const { width, height, left, top } = cropBoxData;
+  const minSize = MIN_SEARCH_AREA_SIZE;
+  let result = {
+    width,
+    height,
+    left,
+    top,
+  };
+
+  if (width < minSize) {
+    result.width = minSize;
+    const deltaX = minSize - width;
+    result.left = left - deltaX / 2;
+  }
+  if (height < minSize) {
+    result.height = minSize;
+    const deltaY = minSize - height;
+    result.top = top - deltaY / 2;
+  }
+
+  return result;
+};
+
 @Component({
   tag: "vviinn-image-view",
   shadow: true,
@@ -70,10 +104,18 @@ export class VviinnImageView {
   }
 
   @Listen("vviinnSelectObject")
-  selectDetectedObject() {
-    if (this.cropper) {
-      this.cropper.reset();
-    }
+  selectDetectedObject({ detail }: CustomEvent<SelectObjectEventData>) {
+    const { top, left, width, height } = detail.detectedObject.value.rectangle;
+    const data = this.cropper.getImageData();
+
+    const cropBoxData = {
+      left: left * data.width,
+      top: top * data.height,
+      width: width * data.width,
+      height: height * data.height,
+    };
+
+    this.cropper.setCropBoxData(ValidateCropBoxData(cropBoxData));
   }
 
   private getCropboxData() {
