@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.28.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.27.1...v2.28.0) (2023-09-14)
+
+
+### Features
+
+* Add 'vviinnAddToBasket' event for Recommendation Widget with possibility to show or hide button ([e7da833](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/e7da83365afe72da64272f45a747b0a77b3f0cd9))
+* Add slot for Add to Basket text customization, add shadow part for button's styles customization ([5d338c5](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/5d338c575d77a1b5f55b8590d7ef1e412d2ee28b))
+* send addToBasket event to the tracking service ([594222e](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/594222e64ddbf3da1e302cfd07b766b140a19f2b))
+
 ### [2.27.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.27.0...v2.27.1) (2023-09-14)
 
 ## [2.27.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.26.1...v2.27.0) (2023-09-13)
