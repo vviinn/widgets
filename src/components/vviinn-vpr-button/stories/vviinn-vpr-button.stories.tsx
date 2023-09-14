@@ -41,6 +41,7 @@ const Template = (args) =>
     source-image="${args.sourceImage}"
     excluded="${args.excluded}"
     api-path="${args.apiPath}"
+    add-to-basket-show="${args.addToBasketShow}"
   ></vviinn-vpr-button>`;
 
 export const Default = Template.bind({});
@@ -70,6 +71,7 @@ Default.args = {
   noResultText: "",
   gridArrowsDynamic: false,
   apiPath: "https://api.vviinn.com",
+  addToBasketShow: false,
 };
 
 Default.parameters = {

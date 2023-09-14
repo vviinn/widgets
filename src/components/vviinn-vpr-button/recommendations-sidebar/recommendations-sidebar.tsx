@@ -47,7 +47,11 @@ export class RecommendationsSidebar {
   @Prop() excluded: string;
   /** Toggle for opening product link in new tab or not */
   @Prop() productDetailNewTab: boolean;
+  /** Show or hide Add to Basket button */
+  @Prop() addToBasketShow: boolean = false;
 
+  /** @internal */
+  @Prop() buttonChildren: HTMLCollection;
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
   /** @internal */
@@ -88,6 +92,16 @@ export class RecommendationsSidebar {
 
   private getSidebarRectangle(): DOMRect {
     return this.el.shadowRoot.querySelector("aside")?.getBoundingClientRect();
+  }
+
+  componentDidLoad() {
+    const widgetElement = this.el.shadowRoot.querySelector("vviinn-vpr-widget");
+    Array.from(this.buttonChildren).forEach((child) => {
+      const childClone = child.cloneNode(true);
+      if (child.hasAttribute("slot")) {
+        widgetElement.appendChild(childClone);
+      }
+    });
   }
 
   render(): any {
@@ -139,6 +153,7 @@ export class RecommendationsSidebar {
               productDetailNewTab={this.productDetailNewTab}
               closed={this.state === "closed"}
               opened={this.state === "open"}
+              addToBasketShow={this.addToBasketShow}
             />
           </main>
         </aside>

@@ -8,6 +8,8 @@ import {
   vpcProductClick,
   vprProductView,
   vpcProductView,
+  vprAddToBasket,
+  vpcAddToBasket,
   vpsProductClick,
   vpsProductView,
   vpsProductLoad,
@@ -26,6 +28,9 @@ const createProductClickVpcEvent = createTrackingEvent(vpcProductClick);
 const createProductLoadVpsEvent = createTrackingEvent(vpsProductLoad);
 const createProductViewVpsEvent = createTrackingEvent(vpsProductView);
 const createProductClickVpsEvent = createTrackingEvent(vpsProductClick);
+
+export const createAddToBasketVprEvent = createTrackingEvent(vprAddToBasket);
+export const createAddToBasketVpcEvent = createTrackingEvent(vpcAddToBasket);
 
 export const createProductVprEventByType = (type: ProductEventType) => {
   switch (type) {

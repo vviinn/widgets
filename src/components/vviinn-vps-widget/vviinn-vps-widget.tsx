@@ -390,7 +390,7 @@ export class VviinnVpsWidget {
   private trackWidgetEvent(action: WidgetAction) {
     if (this.trackingDeactivated) return;
 
-    const { campaignTypeId, ...rest } = this.getBasicEventData();
+    const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
 
     const eventBody = {
       action,
@@ -408,7 +408,8 @@ export class VviinnVpsWidget {
   ): ProductEvent | null {
     if (this.trackingDeactivated) return null;
 
-    const { productRank, productId, campaignTypeId, ...rest } = detail;
+    const { productRank, productId, campaignTypeId, widgetType, ...rest } =
+      detail;
 
     const eventBody = {
       session_id: this.uiSessionId,
@@ -425,11 +426,13 @@ export class VviinnVpsWidget {
 
   private trackInitialSearch(source: SearchImageSource) {
     if (this.trackingDeactivated) return;
+    const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
 
     const searchEvent: WidgetEvent = createSearchEvent({
       session_id: this.uiSessionId,
       search_area: "full",
       source,
+      ...rest,
     });
     this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
   }

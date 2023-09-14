@@ -25,6 +25,11 @@
   justify-content: flex-end;
 }
 
+:host [slot] {
+  visibility: hidden;
+  position: absolute;
+}
+
 header {
   position: relative;
   text-align: center;

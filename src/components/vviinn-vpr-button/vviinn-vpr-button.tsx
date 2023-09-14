@@ -21,6 +21,8 @@ import { Locale } from "../../locale";
  *
  * @part button - Clickable button element.
  * @part vviinn-button - Button element container.
+ *
+ * @slot vviinn-basket-button-text - Title of Add to Basket button.
  */
 @Component({
   tag: "vviinn-vpr-button",
@@ -67,6 +69,8 @@ export class VviinnVprButton {
   @Prop() excluded: string = "";
   /** Toggle for opening product link in new tab or not */
   @Prop() productDetailNewTab: boolean = false;
+  /** Show or hide Add to Basket button */
+  @Prop() addToBasketShow: boolean = false;
 
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
@@ -97,6 +101,9 @@ export class VviinnVprButton {
 
   /** Recommendation request failed */
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
+
+  /** Add to Basket button clicked */
+  @Event() vviinnAddToBasket: EventEmitter<BasicEventData>;
 
   private sidebar: HTMLVviinnRecommendationsSidebarElement | null = null;
   private sidebarCloseListener: () => void = () => {
@@ -145,6 +152,8 @@ export class VviinnVprButton {
     sidebar.widgetVersion = version;
     sidebar.showingInButton = true;
     sidebar.excluded = this.excluded;
+    sidebar.addToBasketShow = this.addToBasketShow;
+    sidebar.buttonChildren = this.el.children;
 
     this.sidebar = sidebar;
 

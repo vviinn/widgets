@@ -17,6 +17,7 @@ const defaultSlotsNames: string[] = [
   "vviinn-image-upload-button-text",
   "vviinn-privacy-badge-text",
   "vviinn-image-search-modal-title",
+  "vviinn-basket-button-text",
 ];
 
 const renderNamedSlot = (name: string) => <slot name={name} />;

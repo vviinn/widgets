@@ -10,8 +10,10 @@ import {
 } from "@stencil/core";
 import { pipe } from "fp-ts/lib/function";
 import { getAnalyticsModule } from "../../analytics/GeneralAnalytics";
-import { state } from "../../store/store";
 import * as O from "fp-ts/lib/Option";
+import i18next from "i18next";
+
+import { state } from "../../store/store";
 import { imageSearchState } from "../../store/imageSearch.store";
 import { Recommendation } from "../../recommendation/recommendation";
 import {
@@ -29,6 +31,8 @@ import {
   WidgetType,
   campaignTypeNames,
 } from "../../campaign/Campaign";
+import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
+import { slotChangeListener } from "../customized-slots";
 
 /**
  * @part brand - product brand.
@@ -45,6 +49,8 @@ import {
  * @part price-sale - renders inside price-container when "sale-price" property filled. Contains sale price.
  * @part price-prefix - renders before price-amount. Can be set with "price-prefix" property or inherited from parent component.
  * @part title - Product title
+ *
+ * @slot vviinn-basket-button-text - Title of Add to Basket button.
  */
 @Component({
   tag: "vviinn-product-card",
@@ -68,6 +74,9 @@ export class VviinnProductCard {
   @Prop() salePrice: number | undefined;
   @Prop() responsive: boolean = false;
   @Prop() dimmedBackground: boolean = false;
+  @Prop() mode?: CarouselMode;
+  @Prop() addToBasketShow: boolean;
+
   /** @internal */
   @Prop() campaignTypeId: CampaignTypeId;
   /** @internal */
@@ -91,6 +100,9 @@ export class VviinnProductCard {
   /** Event fires ones when user click on deeplink */
   @Event({ bubbles: true })
   vviinnProductClick: EventEmitter<ProductCardEventData>;
+  /** Event fires when user click on Add to Basket button */
+  @Event({ bubbles: true })
+  vviinnAddToBasket: EventEmitter<ProductCardEventData>;
 
   private productData: ProductCardEventData | null = null;
 
@@ -101,6 +113,10 @@ export class VviinnProductCard {
 
   connectedCallback() {
     this.productData = this.getProductData();
+  }
+
+  componentWillLoad() {
+    slotChangeListener(this, this.el);
   }
 
   private getWidgetType() {
@@ -179,7 +195,7 @@ export class VviinnProductCard {
       <Host
         part="product-card"
         class={{ dimmed: this.dimmedBackground }}
-        exportparts="brand, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title"
+        exportparts="brand, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, basket-button"
       >
         <Linked deeplink={this.deeplink} part="image-link">
           {this.renderImage()}
@@ -202,6 +218,23 @@ export class VviinnProductCard {
           salePrice={this.salePrice}
           locale={this.locale ?? state.locale}
         />
+        {this.addToBasketShow && (
+          <button
+            class={{
+              "basket-button": true,
+              "basket-button-grid": this.mode === "grid",
+              "basket-button-continuity ": this.mode === "continuity",
+            }}
+            part="basket-button"
+            onClick={() => {
+              this.vviinnAddToBasket.emit(this.productData);
+            }}
+          >
+            <slot name="vviinn-basket-button-text">
+              <span>{i18next.t("basketButtonText")}</span>
+            </slot>
+          </button>
+        )}
       </Host>
     );
   }

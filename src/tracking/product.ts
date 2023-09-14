@@ -2,6 +2,7 @@ import {
   PRODUCT_VIEW_EVENT_TYPE,
   PRODUCT_CLICK_EVENT_TYPE,
   PRODUCT_LOAD_EVENT_TYPE,
+  ADD_TO_BASKET_EVENT_TYPE,
   WidgetEventType,
 } from "./models";
 
@@ -50,14 +51,26 @@ const vpsProductClick: WidgetEventType = {
   typ: PRODUCT_CLICK_EVENT_TYPE,
 };
 
+const vprAddToBasket: WidgetEventType = {
+  widget: "VPR",
+  typ: ADD_TO_BASKET_EVENT_TYPE,
+};
+
+const vpcAddToBasket: WidgetEventType = {
+  widget: "VPC",
+  typ: ADD_TO_BASKET_EVENT_TYPE,
+};
+
 export {
-  vprProductClick,
-  vprProductView,
   vprProductLoad,
+  vprProductView,
+  vprProductClick,
+  vprAddToBasket,
+  vpcProductLoad,
+  vpcProductView,
+  vpcProductClick,
+  vpcAddToBasket,
   vpsProductClick,
   vpsProductView,
   vpsProductLoad,
-  vpcProductLoad,
-  vpcProductClick,
-  vpcProductView,
 };

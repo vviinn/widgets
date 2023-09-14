@@ -27,6 +27,7 @@ import { getRecommendationsService } from "../../campaign/CampaignService";
 import { imageSearchState } from "../../store/imageSearch.store";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 import { Recommendation } from "../../recommendation/recommendation";
+import { SlotSkeleton } from "../customized-slots";
 
 import {
   DefaultApi,
@@ -47,6 +48,8 @@ import {
   createWidgetVpcEvent,
   createProductVpcEventByType,
   createProductVprEventByType,
+  createAddToBasketVpcEvent,
+  createAddToBasketVprEvent,
 } from "../../tracking";
 import { checkEmpryString } from "../../utils/option/option";
 import { parseExcluded } from "../../utils/collections/collectionsUtils";
@@ -73,6 +76,9 @@ import { Locale } from "../../locale";
  * @part carousel-button - Button for carousel navigation.
  * @part recommendations-grid - For internal usage only!
  * @part recommendations-title - Title of the recommendations grid.
+ * @part basket-button - Add to Basket button.
+ *
+ * @slot vviinn-basket-button-text - Title of Add to Basket button.
  */
 @Component({
   tag: "vviinn-vpr-widget",
@@ -119,6 +125,8 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() excluded: string = "";
   /** Toggle for opening product link in new tab or not */
   @Prop() productDetailNewTab: boolean = false;
+  /** Show or hide Add to Basket button */
+  @Prop() addToBasketShow: boolean = false;
 
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
@@ -159,6 +167,12 @@ export class VviinnVprWidget implements ComponentInterface {
   /** Recommendation request failed */
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
+  /** Add to Basket button clicked */
+  @Event() vviinnAddToBasket: EventEmitter<BasicEventData>;
+
+  /** @internal */
+  @Event({ bubbles: true, composed: true })
+  globalSlotsChanged: EventEmitter<any>;
   /** @internal */
   @Event() vviinnRecommendationsLoaded: EventEmitter;
   /** @internal */
@@ -233,6 +247,12 @@ export class VviinnVprWidget implements ComponentInterface {
     if (!this.closed) return;
     this.vviinnWidgetClose.emit(this.getBasicEventData());
     this.trackWidgetEvent("close");
+  }
+
+  componentDidRender() {
+    if (this.showingInButton && this.closed) return;
+    const slots = this.el.querySelectorAll("[slot]");
+    this.globalSlotsChanged.emit(Array.from(slots));
   }
 
   connectedCallback() {
@@ -310,9 +330,33 @@ export class VviinnVprWidget implements ComponentInterface {
     }
   }
 
+  @Listen("vviinnAddToBasket")
+  async trackAddToBasket({ detail }: ProductCardEvent) {
+    const { productRank, productId, campaignTypeId, widgetType, ...rest } =
+      detail;
+
+    let addToBasketEvent: WidgetEvent;
+    const eventBody = {
+      session_id: this.uiSessionId,
+      rank: productRank,
+      product: productId,
+      ...rest,
+    };
+
+    if (this.campaignType === "VCS") {
+      addToBasketEvent = createAddToBasketVpcEvent(eventBody);
+    } else if (this.campaignType === "VPR") {
+      addToBasketEvent = createAddToBasketVprEvent(eventBody);
+    }
+
+    this.trackingApi
+      .trackEvent(addToBasketEvent)
+      .then(this.setTrackingDeactivated);
+  }
+
   private trackWidgetEvent(action: WidgetAction) {
     if (this.trackingDeactivated) return;
-    const { campaignTypeId, ...rest } = this.getBasicEventData();
+    const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
 
     let widgetEvent: WidgetEvent;
     const eventBody = {
@@ -336,7 +380,8 @@ export class VviinnVprWidget implements ComponentInterface {
   ): ProductEvent | null {
     if (this.trackingDeactivated) return null;
 
-    const { productRank, productId, campaignTypeId, ...rest } = detail;
+    const { productRank, productId, campaignTypeId, widgetType, ...rest } =
+      detail;
 
     let productEvent: ProductEvent;
     const eventBody = {
@@ -431,6 +476,8 @@ export class VviinnVprWidget implements ComponentInterface {
         }}
         aria-hidden="false"
       >
+        {this.addToBasketShow && <SlotSkeleton />}
+
         <Fragment>
           {this.renderExternalCSS()}
           <style>{state.fallbackStyles}</style>
@@ -468,6 +515,8 @@ export class VviinnVprWidget implements ComponentInterface {
         price={recommendation.price.actual}
         salePrice={recommendation.price.sale}
         responsive={this.mode === "grid"}
+        addToBasketShow={this.addToBasketShow}
+        mode={this.mode}
         dimmedBackground={this.useDimmedBackgroundInCard()}
         campaignTypeId={this.campaignType}
         index={index}
@@ -500,6 +549,7 @@ export class VviinnVprWidget implements ComponentInterface {
         widgetElementId={this.id}
         widgetVersion={version}
         gridArrowsDynamic={this.gridArrowsDynamic}
+        addToBasketShow={this.addToBasketShow}
       ></vviinn-carousel>
     );
   }
