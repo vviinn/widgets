@@ -208,7 +208,12 @@ export class VviinnVpsWidget {
 
   private handleOpenLink(deeplink: string, event: MouseEvent) {
     if (this.productDetailNewTab || event.ctrlKey || event.metaKey) {
-      window.open(deeplink);
+      let newTab = window.open();
+      if (newTab) {
+        newTab.location.href = deeplink;
+      } else {
+        window.location.href = deeplink;
+      }
     } else {
       window.location.href = deeplink;
     }
