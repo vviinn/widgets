@@ -46,6 +46,7 @@ export type ProductCardEventData = {
   productRank: number;
   productName: string;
   productType: string;
+  clickEvent?: MouseEvent;
 };
 
 export type ProductEventType = "load" | "view" | "click";
