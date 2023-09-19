@@ -197,9 +197,14 @@ export class VviinnVprWidget implements ComponentInterface {
     };
   }
 
-  private handleOpenLink(deeplink: string) {
-    if (this.productDetailNewTab) {
-      window.open(deeplink);
+  private handleOpenLink(deeplink: string, event: MouseEvent) {
+    if (this.productDetailNewTab || event.ctrlKey || event.metaKey) {
+      let newTab = window.open();
+      if (newTab) {
+        newTab.location.href = deeplink;
+      } else {
+        window.location.href = deeplink;
+      }
     } else {
       window.location.href = deeplink;
     }
@@ -311,9 +316,9 @@ export class VviinnVprWidget implements ComponentInterface {
 
   @Listen("vviinnProductClick")
   async trackProductClick({ detail }: ProductCardEvent) {
-    const product = this.recommendations.find(
-      (r) => r.productId === detail.productId
-    );
+    const { productId, clickEvent } = detail;
+
+    const product = this.recommendations.find((r) => r.productId === productId);
     if (!product || !product.deeplink) return;
 
     const productClickEvent = this.getProductTrackEvent(detail, "click");
@@ -323,10 +328,10 @@ export class VviinnVprWidget implements ComponentInterface {
         .trackEvent(productClickEvent)
         .then(this.setTrackingDeactivated)
         .finally(() => {
-          this.handleOpenLink(product.deeplink);
+          this.handleOpenLink(product.deeplink, clickEvent);
         });
     } else {
-      this.handleOpenLink(product.deeplink);
+      this.handleOpenLink(product.deeplink, clickEvent);
     }
   }
 
@@ -380,8 +385,14 @@ export class VviinnVprWidget implements ComponentInterface {
   ): ProductEvent | null {
     if (this.trackingDeactivated) return null;
 
-    const { productRank, productId, campaignTypeId, widgetType, ...rest } =
-      detail;
+    const {
+      productRank,
+      productId,
+      campaignTypeId,
+      widgetType,
+      clickEvent,
+      ...rest
+    } = detail;
 
     let productEvent: ProductEvent;
     const eventBody = {

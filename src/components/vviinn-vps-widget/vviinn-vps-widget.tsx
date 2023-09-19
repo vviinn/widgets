@@ -206,9 +206,14 @@ export class VviinnVpsWidget {
     return this.slidePosition === 1;
   }
 
-  private handleOpenLink(deeplink: string) {
-    if (this.productDetailNewTab) {
-      window.open(deeplink);
+  private handleOpenLink(deeplink: string, event: MouseEvent) {
+    if (this.productDetailNewTab || event.ctrlKey || event.metaKey) {
+      let newTab = window.open();
+      if (newTab) {
+        newTab.location.href = deeplink;
+      } else {
+        window.location.href = deeplink;
+      }
     } else {
       window.location.href = deeplink;
     }
@@ -280,10 +285,12 @@ export class VviinnVpsWidget {
 
   @Listen("vviinnProductClick")
   async trackProductClick({ detail }: ProductCardEvent) {
+    const { productId, clickEvent } = detail;
+
     const productClickEvent = this.getProductTrackEvent(detail, "click");
 
     const product = imageSearchState.results.find(
-      (r) => r.productId === detail.productId
+      (r) => r.productId === productId
     );
     if (!product || !product.deeplink) return;
 
@@ -292,10 +299,10 @@ export class VviinnVpsWidget {
         .trackEvent(this.trackingDeactivated ? null : productClickEvent)
         .then(this.setTrackingDeactivated)
         .finally(() => {
-          this.handleOpenLink(product.deeplink);
+          this.handleOpenLink(product.deeplink, clickEvent);
         });
     } else {
-      this.handleOpenLink(product.deeplink);
+      this.handleOpenLink(product.deeplink, clickEvent);
     }
   }
 
@@ -408,8 +415,14 @@ export class VviinnVpsWidget {
   ): ProductEvent | null {
     if (this.trackingDeactivated) return null;
 
-    const { productRank, productId, campaignTypeId, widgetType, ...rest } =
-      detail;
+    const {
+      productRank,
+      productId,
+      campaignTypeId,
+      widgetType,
+      clickEvent,
+      ...rest
+    } = detail;
 
     const eventBody = {
       session_id: this.uiSessionId,

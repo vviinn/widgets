@@ -161,7 +161,10 @@ export class VviinnProductCard {
       link.addEventListener("click", (event) => {
         event.preventDefault();
         event.stopImmediatePropagation();
-        this.vviinnProductClick.emit(this.productData);
+        this.vviinnProductClick.emit({
+          ...this.productData,
+          clickEvent: event,
+        });
 
         pipe(
           getAnalyticsModule,
