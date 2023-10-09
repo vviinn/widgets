@@ -26,6 +26,7 @@ pipelines:
             - node
           script:
             - npm run release.ci
+            - npm run update_storybook_changelog
             - git push --follow-tags origin develop
     master:
       - step:
@@ -72,16 +73,16 @@ pipelines:
             - pipe: atlassian/npm-publish:0.3.2
               variables:
                 NPM_TOKEN: $NPM_TOKEN
-                EXTRA_ARGS: '--tag beta'
+                EXTRA_ARGS: "--tag beta"
     test:
       - step:
           name: Tests
-          caches: 
+          caches:
             - node
           script:
             - touch .env
             - echo "OPENAPI_URL=https://docs.vviinn.com/openapi.yaml" >> .env
             - echo "RECOMMENDATIONS_URL=https://api.vviinn.com/product/" >> .env
             - PUPPETEER_PRODUCT=firefox npm install
-            - npm run build_interfaces 
+            - npm run build_interfaces
             - npm run test.e2e
