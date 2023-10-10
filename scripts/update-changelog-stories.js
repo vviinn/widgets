@@ -27,7 +27,7 @@ fs.readFile("./CHANGELOG.md", "utf8", (err, data) => {
         releases[index + 1] === "### Features" ||
         releases[index + 1] === "### ⚠ BREAKING CHANGES"
           ? ""
-          : "\nInternal release"
+          : "\n\rInternal release"
       }`;
     } else {
       return `${releae.replace("*", "-").split("(")[0].trimEnd()}`;
