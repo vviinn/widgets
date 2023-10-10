@@ -32,6 +32,8 @@ import { SlotSkeleton } from "../customized-slots";
 import {
   DefaultApi,
   EventConfirmation,
+  ResultLoadEvent,
+  ResultViewEvent,
   WidgetAction,
   WidgetEvent,
 } from "vviinn-tracking-client-ts";
@@ -50,6 +52,8 @@ import {
   createProductVprEventByType,
   createAddToBasketVpcEvent,
   createAddToBasketVprEvent,
+  createResultVpcEventByType,
+  createResultVprEventByType,
 } from "../../tracking";
 import { checkEmpryString } from "../../utils/option/option";
 import { parseExcluded } from "../../utils/collections/collectionsUtils";
@@ -304,6 +308,7 @@ export class VviinnVprWidget implements ComponentInterface {
     if (!this.resultViewed) {
       this.resultViewed = true;
       this.vviinnResultView.emit(this.getBasicEventData());
+      this.trackResultEvent("view");
     }
 
     const productViewEvent = this.getProductTrackEvent(detail, "view");
@@ -379,6 +384,25 @@ export class VviinnVprWidget implements ComponentInterface {
     this.trackingApi.trackEvent(widgetEvent).then(this.setTrackingDeactivated);
   }
 
+  private trackResultEvent(action: "load" | "view") {
+    if (this.trackingDeactivated) return;
+    const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
+
+    let resultEvent: ResultViewEvent | ResultLoadEvent;
+    const eventBody = {
+      session_id: this.uiSessionId,
+      ...rest,
+    };
+
+    if (this.campaignType === "VCS") {
+      resultEvent = createResultVpcEventByType(action)(eventBody);
+    } else if (this.campaignType === "VPR") {
+      resultEvent = createResultVprEventByType(action)(eventBody);
+    }
+
+    this.trackingApi.trackEvent(resultEvent).then(this.setTrackingDeactivated);
+  }
+
   private getProductTrackEvent(
     detail: ProductCardEventData,
     eventType: ProductEventType
@@ -448,6 +472,7 @@ export class VviinnVprWidget implements ComponentInterface {
 
   private handleRecommendationsSuccess(data: any) {
     this.vviinnResultLoad.emit(this.getBasicEventData());
+    this.trackResultEvent("load");
 
     this.recommendations = data?.extended ?? data;
     imageSearchState.results = this.recommendations;

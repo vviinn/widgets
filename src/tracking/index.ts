@@ -16,52 +16,72 @@ import {
 } from "./product";
 import { searchEvent } from "./search";
 import { vpcWidget, vprWidget, vpsWidget } from "./widget";
-
-const createProductLoadVprEvent = createTrackingEvent(vprProductLoad);
-const createProductViewVprEvent = createTrackingEvent(vprProductView);
-const createProductClickVprEvent = createTrackingEvent(vprProductClick);
-
-const createProductLoadVpcEvent = createTrackingEvent(vpcProductLoad);
-const createProductViewVpcEvent = createTrackingEvent(vpcProductView);
-const createProductClickVpcEvent = createTrackingEvent(vpcProductClick);
-
-const createProductLoadVpsEvent = createTrackingEvent(vpsProductLoad);
-const createProductViewVpsEvent = createTrackingEvent(vpsProductView);
-const createProductClickVpsEvent = createTrackingEvent(vpsProductClick);
-
-export const createAddToBasketVprEvent = createTrackingEvent(vprAddToBasket);
-export const createAddToBasketVpcEvent = createTrackingEvent(vpcAddToBasket);
+import {
+  vprResultLoad,
+  vpcResultLoad,
+  vpsResultLoad,
+  vprResultView,
+  vpcResultView,
+  vpsResultView,
+} from "./result";
 
 export const createProductVprEventByType = (type: ProductEventType) => {
   switch (type) {
     case "load":
-      return createProductLoadVprEvent;
+      return createTrackingEvent(vprProductLoad);
     case "view":
-      return createProductViewVprEvent;
+      return createTrackingEvent(vprProductView);
     case "click":
-      return createProductClickVprEvent;
+      return createTrackingEvent(vprProductClick);
   }
 };
 
 export const createProductVpcEventByType = (type: ProductEventType) => {
   switch (type) {
     case "load":
-      return createProductLoadVpcEvent;
+      return createTrackingEvent(vpcProductLoad);
     case "view":
-      return createProductViewVpcEvent;
+      return createTrackingEvent(vpcProductView);
     case "click":
-      return createProductClickVpcEvent;
+      return createTrackingEvent(vpcProductClick);
   }
 };
 
 export const createProductVpsEventByType = (type: ProductEventType) => {
   switch (type) {
     case "load":
-      return createProductLoadVpsEvent;
+      return createTrackingEvent(vpsProductLoad);
     case "view":
-      return createProductViewVpsEvent;
+      return createTrackingEvent(vpsProductView);
     case "click":
-      return createProductClickVpsEvent;
+      return createTrackingEvent(vpsProductClick);
+  }
+};
+
+export const createResultVprEventByType = (type: "load" | "view") => {
+  switch (type) {
+    case "load":
+      return createTrackingEvent(vprResultLoad);
+    case "view":
+      return createTrackingEvent(vprResultView);
+  }
+};
+
+export const createResultVpcEventByType = (type: "load" | "view") => {
+  switch (type) {
+    case "load":
+      return createTrackingEvent(vpcResultLoad);
+    case "view":
+      return createTrackingEvent(vpcResultView);
+  }
+};
+
+export const createResultVpsEventByType = (type: "load" | "view") => {
+  switch (type) {
+    case "load":
+      return createTrackingEvent(vpsResultLoad);
+    case "view":
+      return createTrackingEvent(vpsResultView);
   }
 };
 
@@ -71,3 +91,6 @@ export const createWidgetVpcEvent = createTrackingEvent(vpcWidget);
 
 export const createSearchEvent = createTrackingEvent(searchEvent);
 export const createFilterEvent = createTrackingEvent(filterEvent);
+
+export const createAddToBasketVprEvent = createTrackingEvent(vprAddToBasket);
+export const createAddToBasketVpcEvent = createTrackingEvent(vpcAddToBasket);
