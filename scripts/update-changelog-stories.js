@@ -8,11 +8,11 @@ fs.readFile("./CHANGELOG.md", "utf8", (err, data) => {
 
   const releases = data.split("\n").filter((result) => result !== "");
 
-  let releasesFilter = releases.map((releae, index) => {
-    const titleSplit = releae.split(" ");
+  let releasesFilter = releases.map((release, index) => {
+    const titleSplit = release.split(" ");
 
     if (index === 1) {
-      releae = releae.replace(". See [standard-version]", "");
+      release = release.replace(". See [standard-version]", "");
     }
 
     if (
@@ -30,7 +30,7 @@ fs.readFile("./CHANGELOG.md", "utf8", (err, data) => {
           : "\n\rInternal release"
       }`;
     } else {
-      return `${releae.replace("*", "-").split("(")[0].trimEnd()}`;
+      return `${release.replace("*", "-").split("(")[0].trimEnd()}`;
     }
   });
 
@@ -38,8 +38,6 @@ fs.readFile("./CHANGELOG.md", "utf8", (err, data) => {
   releasesFilter.unshift(
     'import { Meta, Story, Canvas } from "@storybook/addon-docs";'
   );
-
-  console.log();
 
   fs.writeFile(
     "./storybook/documentation/changelog.stories.mdx",
