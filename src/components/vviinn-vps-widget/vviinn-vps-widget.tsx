@@ -441,12 +441,12 @@ export class VviinnVpsWidget {
     return productEvent;
   }
 
-  private trackResultEvent(action: "load" | "view") {
+  private trackResultEvent(type: "load" | "view") {
     if (this.trackingDeactivated) return;
     const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
 
     let resultEvent: ResultViewEvent | ResultLoadEvent =
-      createResultVpsEventByType(action)({
+      createResultVpsEventByType(type)({
         session_id: this.uiSessionId,
         ...rest,
       });

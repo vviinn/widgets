@@ -384,7 +384,7 @@ export class VviinnVprWidget implements ComponentInterface {
     this.trackingApi.trackEvent(widgetEvent).then(this.setTrackingDeactivated);
   }
 
-  private trackResultEvent(action: "load" | "view") {
+  private trackResultEvent(type: "load" | "view") {
     if (this.trackingDeactivated) return;
     const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
 
@@ -395,9 +395,9 @@ export class VviinnVprWidget implements ComponentInterface {
     };
 
     if (this.campaignType === "VCS") {
-      resultEvent = createResultVpcEventByType(action)(eventBody);
+      resultEvent = createResultVpcEventByType(type)(eventBody);
     } else if (this.campaignType === "VPR") {
-      resultEvent = createResultVprEventByType(action)(eventBody);
+      resultEvent = createResultVprEventByType(type)(eventBody);
     }
 
     this.trackingApi.trackEvent(resultEvent).then(this.setTrackingDeactivated);
