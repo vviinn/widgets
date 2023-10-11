@@ -1,4 +1,4 @@
-import { ProductEventType } from "../recommendation/events";
+import { ProductEventType, ResultEventType } from "../recommendation/events";
 import { createTrackingEvent } from "./event";
 import { filterEvent } from "./filter";
 import {
@@ -58,7 +58,7 @@ export const createProductVpsEventByType = (type: ProductEventType) => {
   }
 };
 
-export const createResultVprEventByType = (type: "load" | "view") => {
+export const createResultVprEventByType = (type: ResultEventType) => {
   switch (type) {
     case "load":
       return createTrackingEvent(vprResultLoad);
@@ -67,7 +67,7 @@ export const createResultVprEventByType = (type: "load" | "view") => {
   }
 };
 
-export const createResultVpcEventByType = (type: "load" | "view") => {
+export const createResultVpcEventByType = (type: ResultEventType) => {
   switch (type) {
     case "load":
       return createTrackingEvent(vpcResultLoad);
@@ -76,7 +76,7 @@ export const createResultVpcEventByType = (type: "load" | "view") => {
   }
 };
 
-export const createResultVpsEventByType = (type: "load" | "view") => {
+export const createResultVpsEventByType = (type: ResultEventType) => {
   switch (type) {
     case "load":
       return createTrackingEvent(vpsResultLoad);

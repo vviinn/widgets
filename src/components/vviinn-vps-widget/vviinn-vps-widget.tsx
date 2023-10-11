@@ -45,6 +45,7 @@ import {
   SelectObjectEventData,
   ProductEventType,
   ProductEvent,
+  ResultEventType,
 } from "../../recommendation/events";
 import { SlotSkeleton } from "../customized-slots";
 import { campaignTypeNames } from "../../campaign/Campaign";
@@ -441,7 +442,7 @@ export class VviinnVpsWidget {
     return productEvent;
   }
 
-  private trackResultEvent(type: "load" | "view") {
+  private trackResultEvent(type: ResultEventType) {
     if (this.trackingDeactivated) return;
     const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
 

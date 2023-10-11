@@ -44,6 +44,7 @@ import {
   ProductCardEventData,
   ProductEventType,
   ProductEvent,
+  ResultEventType,
 } from "../../recommendation/events";
 import {
   createWidgetVprEvent,
@@ -384,7 +385,7 @@ export class VviinnVprWidget implements ComponentInterface {
     this.trackingApi.trackEvent(widgetEvent).then(this.setTrackingDeactivated);
   }
 
-  private trackResultEvent(type: "load" | "view") {
+  private trackResultEvent(type: ResultEventType) {
     if (this.trackingDeactivated) return;
     const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
 
