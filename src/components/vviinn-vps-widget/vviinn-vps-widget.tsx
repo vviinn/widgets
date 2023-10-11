@@ -24,6 +24,8 @@ import { createTrackingApi } from "../../openApi";
 import {
   DefaultApi,
   EventConfirmation,
+  ResultLoadEvent,
+  ResultViewEvent,
   SearchImageSource,
   WidgetAction,
   WidgetEvent,
@@ -33,6 +35,7 @@ import {
   createFilterEvent,
   createSearchEvent,
   createProductVpsEventByType,
+  createResultVpsEventByType,
 } from "../../tracking";
 import {
   ProductCardEvent,
@@ -42,6 +45,7 @@ import {
   SelectObjectEventData,
   ProductEventType,
   ProductEvent,
+  ResultEventType,
 } from "../../recommendation/events";
 import { SlotSkeleton } from "../customized-slots";
 import { campaignTypeNames } from "../../campaign/Campaign";
@@ -274,6 +278,7 @@ export class VviinnVpsWidget {
     if (!this.resultViewed) {
       this.resultViewed = true;
       this.vviinnResultView.emit(this.getBasicEventData());
+      this.trackResultEvent("view");
     }
 
     const productViewEvent = this.getProductTrackEvent(detail, "view");
@@ -437,6 +442,19 @@ export class VviinnVpsWidget {
     return productEvent;
   }
 
+  private trackResultEvent(type: ResultEventType) {
+    if (this.trackingDeactivated) return;
+    const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
+
+    let resultEvent: ResultViewEvent | ResultLoadEvent =
+      createResultVpsEventByType(type)({
+        session_id: this.uiSessionId,
+        ...rest,
+      });
+
+    this.trackingApi.trackEvent(resultEvent).then(this.setTrackingDeactivated);
+  }
+
   private trackInitialSearch(source: SearchImageSource) {
     if (this.trackingDeactivated) return;
     const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
@@ -465,6 +483,7 @@ export class VviinnVpsWidget {
 
     if (!this.resultLoaded) {
       this.vviinnResultLoad.emit(this.getBasicEventData());
+      this.trackResultEvent("load");
       this.resultLoaded = true;
     }
 

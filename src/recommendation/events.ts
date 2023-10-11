@@ -50,6 +50,7 @@ export type ProductCardEventData = {
 };
 
 export type ProductEventType = "load" | "view" | "click";
+export type ResultEventType = "load" | "view";
 
 export type ProductEvent =
   | ProductLoadEvent
