@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.30.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.29.3...v2.30.0) (2023-10-11)
+
+
+### Features
+
+* Send resultView and resultLoad events to the tracking service ([367b486](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/367b4862670b7eb10ffe580209e9be4a7ece0ac1))
+
 ### [2.29.3](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.29.2...v2.29.3) (2023-10-11)
 
 ### [2.29.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.29.1...v2.29.2) (2023-09-19)
