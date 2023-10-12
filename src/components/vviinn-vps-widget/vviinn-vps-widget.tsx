@@ -253,6 +253,7 @@ export class VviinnVpsWidget {
       this.trackWidgetEvent("open");
     } else {
       document.body.style.overflow = this.overflow;
+      this.initResultEvents();
     }
   }
 
