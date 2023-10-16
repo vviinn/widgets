@@ -341,6 +341,21 @@ export class VviinnVprWidget implements ComponentInterface {
     }
   }
 
+  @Listen("vviinnAuxClick")
+  async trackAuxClick({ detail }: ProductCardEvent) {
+    const { productId } = detail;
+    const product = this.recommendations.find((r) => r.productId === productId);
+    if (!product || !product.deeplink) return;
+
+    const productClickEvent = this.getProductTrackEvent(detail, "click");
+
+    if (!this.trackingDeactivated) {
+      await this.trackingApi
+        .trackEvent(productClickEvent)
+        .then(this.setTrackingDeactivated);
+    }
+  }
+
   @Listen("vviinnAddToBasket")
   async trackAddToBasket({ detail }: ProductCardEvent) {
     const { productRank, productId, campaignTypeId, widgetType, ...rest } =

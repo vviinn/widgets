@@ -292,7 +292,6 @@ export class VviinnVpsWidget {
   @Listen("vviinnProductClick")
   async trackProductClick({ detail }: ProductCardEvent) {
     const { productId, clickEvent } = detail;
-
     const productClickEvent = this.getProductTrackEvent(detail, "click");
 
     const product = imageSearchState.results.find(
@@ -302,13 +301,30 @@ export class VviinnVpsWidget {
 
     if (!this.trackingDeactivated) {
       await this.trackingApi
-        .trackEvent(this.trackingDeactivated ? null : productClickEvent)
+        .trackEvent(productClickEvent)
         .then(this.setTrackingDeactivated)
         .finally(() => {
           this.handleOpenLink(product.deeplink, clickEvent);
         });
     } else {
       this.handleOpenLink(product.deeplink, clickEvent);
+    }
+  }
+
+  @Listen("vviinnAuxClick")
+  async trackAuxClick({ detail }: ProductCardEvent) {
+    const { productId } = detail;
+    const productClickEvent = this.getProductTrackEvent(detail, "click");
+
+    const product = imageSearchState.results.find(
+      (r) => r.productId === productId
+    );
+    if (!product || !product.deeplink) return;
+
+    if (!this.trackingDeactivated) {
+      await this.trackingApi
+        .trackEvent(productClickEvent)
+        .then(this.setTrackingDeactivated);
     }
   }
 
