@@ -27,6 +27,7 @@ pipelines:
           script:
             - npm run release.ci
             - npm run update_storybook_changelog
+            - git add . & git commit -m "update storybook changelog"
             - git push --follow-tags origin develop
     master:
       - step:
