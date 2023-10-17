@@ -28,8 +28,11 @@ pipelines:
             - npm run release.ci
             - git push --follow-tags origin develop
             - npm run update_storybook_changelog
+            - git status
             - git add ./storybook/documentation/changelog.stories.mdx
-            - git commit -m "update storybook changelog"
+            - git status
+            - git commit -m '[skip ci] update storybook changelog'
+            - git status
             - git push origin develop
     master:
       - step:
