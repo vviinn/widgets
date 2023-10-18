@@ -29,7 +29,8 @@
     "release": "standard-version",
     "release.ci": "standard-version --releaseCommitMessageFormat '[skip ci] chore(release): {{currentTag}}'",
     "artifactregistry-login": "npx google-artifactregistry-auth",
-    "update_storybook_changelog": "node ./scripts/update-changelog-stories.js"
+    "update_storybook_changelog": "node ./scripts/update-changelog-stories.js",
+    "update_storybook_widget_version": "node ./scripts/update-widget-version.js"
   },
   "license": "MIT",
   "dependencies": {

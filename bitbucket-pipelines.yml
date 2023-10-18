@@ -30,6 +30,16 @@ pipelines:
             - npm run update_storybook_changelog
             - git add ./storybook/documentation/changelog.stories.mdx
             - git commit -m '[skip ci] update storybook changelog'
+            - npm run build
+            - npm run test
+            - pipe: atlassian/npm-publish:1.0.0
+              variables:
+                NPM_TOKEN: $NPM_TOKEN
+            - npm run update_storybook_widget_version
+            - cd storybook
+            - npm install
+            - git add ./storybook/package.json ./storybook/package-lock.json
+            - git commit -m "[skip ci] update widget's version for storybook"
             - git push origin develop
     master:
       - step:
