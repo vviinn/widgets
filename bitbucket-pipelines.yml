@@ -32,9 +32,11 @@ pipelines:
             - git commit -m '[skip ci] update storybook changelog'
             - npm run build
             - npm run test
+            - echo $NPM_TOKEN
             - pipe: atlassian/npm-publish:1.0.0
               variables:
                 NPM_TOKEN: $NPM_TOKEN
+                EXTRA_ARGS: "--tag beta"
             - npm run update_storybook_widget_version
             - cd storybook
             - npm install
