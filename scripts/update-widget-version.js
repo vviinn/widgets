@@ -1,9 +1,14 @@
 const fs = require("fs");
-const packageJson = require("./package.json");
-const packageJsonStorybook = require("./storybook/package.json");
+const path = require("path");
+
+console.log("Current Working Directory:", process.cwd());
+console.log("Resolved package.json Path:", path.resolve("./package.json"));
+
+const packageJson = require("../package.json");
+const storybookPackageJsonPath = "../storybook/package.json";
+const packageJsonStorybook = require(storybookPackageJsonPath);
 
 const packageName = "vviinn-widgets";
-const storybookPackageJsonPath = "./storybook/package.json";
 
 function updatePackageVersion() {
   const widgetVersion = packageJson.version;
