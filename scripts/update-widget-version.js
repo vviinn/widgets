@@ -15,7 +15,7 @@ function updatePackageVersion() {
   const widgetVersion = packageJson.version;
 
   if (packageJsonStorybook?.dependencies?.[packageName]) {
-    packageJsonStorybook.dependencies.packageName = widgetVersion;
+    packageJsonStorybook.dependencies[packageName] = widgetVersion;
   } else {
     console.error(`Package "${packageName}" not found in dependencies.`);
     return;
