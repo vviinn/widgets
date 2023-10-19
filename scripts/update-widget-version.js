@@ -3,8 +3,8 @@ const path = require("path");
 
 console.log("Current Files in Directory:", fs.readdirSync("."));
 
-const packageJson = require("./package.json");
-const packageJsonStorybook = require("./storybook/package.json");
+const packageJson = require("package.json");
+const packageJsonStorybook = require("storybook/package.json");
 const packageName = "vviinn-widgets";
 
 function updatePackageVersion() {
@@ -18,7 +18,7 @@ function updatePackageVersion() {
   }
 
   fs.writeFileSync(
-    "./storybook/package.json",
+    "storybook/package.json",
     JSON.stringify(packageJsonStorybook, null, 2)
   );
 
