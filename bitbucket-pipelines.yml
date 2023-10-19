@@ -48,7 +48,11 @@ pipelines:
             - node
           script:
             - npm run update_storybook_widget_version
+            - pwd
+            - ls
             - cd storybook
+            - pwd
+            - ls
             - npm install
             - git add ./storybook/package.json ./storybook/package-lock.json
             - git commit -m "[skip ci] update widget's version in storybook"

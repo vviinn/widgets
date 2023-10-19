@@ -1,8 +1,6 @@
 const fs = require("fs");
 const path = require("path");
 
-console.log("Current Files in Directory:", fs.readdirSync("."));
-
 const packageJsonPath = path.resolve(__dirname, "../package.json");
 const storybookPackageJsonPath = path.resolve(
   __dirname,
