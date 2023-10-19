@@ -47,6 +47,7 @@ pipelines:
           caches:
             - node
           script:
+            - git pull
             - npm run update_storybook_widget_version
             - git add ./storybook/package.json
             - git commit -m "[skip ci] update widget's version in storybook"
