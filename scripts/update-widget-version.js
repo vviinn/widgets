@@ -1,11 +1,11 @@
 const fs = require("fs");
 const path = require("path");
 
+console.log("Current Files in Directory:", fs.readdirSync("."));
+
 const packageJson = require("./package.json");
 const packageJsonStorybook = require("./storybook/package.json");
 const packageName = "vviinn-widgets";
-
-console.log("Current Files in Directory:", fs.readdirSync("."));
 
 function updatePackageVersion() {
   const widgetVersion = packageJson.version;
