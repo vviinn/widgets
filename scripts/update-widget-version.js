@@ -1,11 +1,12 @@
 const fs = require("fs");
+const packageJson = require("./package.json");
+const packageJsonStorybook = require("./storybook/package.json");
 
 const packageName = "vviinn-widgets";
 const storybookPackageJsonPath = "./storybook/package.json";
 
 function updatePackageVersion() {
-  const widgetVersion = require("./package.json").version;
-  const packageJsonStorybook = require(storybookPackageJsonPath);
+  const widgetVersion = packageJson.version;
 
   if (packageJsonStorybook?.dependencies?.[packageName]) {
     packageJsonStorybook.dependencies.packageName = widgetVersion;
