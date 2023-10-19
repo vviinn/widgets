@@ -36,6 +36,7 @@ pipelines:
           caches:
             - node
           script:
+            - git pull
             - npm run build
             - npm run test
             - pipe: atlassian/npm-publish:1.0.0
