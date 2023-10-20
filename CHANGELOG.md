@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.30.17](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.30.16...v2.30.17) (2023-10-19)
+
+### [2.30.16](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.30.15...v2.30.16) (2023-10-19)
+
+### [2.30.15](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.30.14...v2.30.15) (2023-10-19)
+
+### [2.30.14](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.30.13...v2.30.14) (2023-10-19)
+
+### [2.30.13](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.30.12...v2.30.13) (2023-10-19)
+
+### [2.30.12](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.30.11...v2.30.12) (2023-10-19)
+
+### [2.30.11](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.30.10...v2.30.11) (2023-10-19)
+
+### [2.30.10](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.30.9...v2.30.10) (2023-10-18)
+
+### [2.30.9](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.30.8...v2.30.9) (2023-10-18)
+
+### [2.30.8](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.30.6...v2.30.8) (2023-10-17)
+
+### [2.30.7](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.30.6...v2.30.7) (2023-10-17)
+
+### [2.30.6](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.30.5...v2.30.6) (2023-10-17)
+
+### [2.30.5](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.30.4...v2.30.5) (2023-10-17)
+
+### [2.30.4](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.30.3...v2.30.4) (2023-10-17)
+
 ### [2.30.3](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.30.2...v2.30.3) (2023-10-12)
 
 ### [2.30.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.30.1...v2.30.2) (2023-10-12)
