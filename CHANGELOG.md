@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.31.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.30.17...v2.31.0) (2023-10-25)
+
+
+### Features
+
+* Track mouse wheel click as product click. ([8a25617](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/8a25617dbcfa6d68aa88f42e947a6ae52ea759c4))
+
+### [2.30.3](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.30.2...v2.30.3) (2023-10-12)
+
+### [2.30.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.30.1...v2.30.2) (2023-10-12)
+
+
+### Bug Fixes
+
+* Fix result events behavior for Search Button ([7fad37b](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/7fad37b1d0a354fda8deea64484fa7cba1d1b2d8))
+
+### [2.30.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.30.0...v2.30.1) (2023-10-11)
+
+## [2.30.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.29.3...v2.30.0) (2023-10-11)
+
+### [2.29.3](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.29.2...v2.29.3) (2023-10-11)
+
+
+### Features
+
+* Send resultView and resultLoad events to the tracking service ([367b486](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/367b4862670b7eb10ffe580209e9be4a7ece0ac1))
+
 ### [2.30.17](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.30.16...v2.30.17) (2023-10-19)
 
 ### [2.30.16](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.30.15...v2.30.16) (2023-10-19)
