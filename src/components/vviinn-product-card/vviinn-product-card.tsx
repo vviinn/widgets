@@ -104,6 +104,10 @@ export class VviinnProductCard {
   @Event({ bubbles: true })
   vviinnAddToBasket: EventEmitter<ProductCardEventData>;
 
+  /** @internal */
+  @Event({ bubbles: true })
+  vviinnAuxClick: EventEmitter<ProductCardEventData>;
+
   private productData: ProductCardEventData | null = null;
 
   private intersectionObserver = new IntersectionObserver(
@@ -157,7 +161,7 @@ export class VviinnProductCard {
 
     const links = this.el.shadowRoot.querySelectorAll("a");
 
-    links.forEach((link) =>
+    links.forEach((link) => {
       link.addEventListener("click", (event) => {
         event.preventDefault();
         event.stopImmediatePropagation();
@@ -173,8 +177,14 @@ export class VviinnProductCard {
             (analytics) => analytics.sendClick(this.getProduct())
           )
         );
-      })
-    );
+      });
+
+      link.addEventListener("auxclick", () => {
+        this.vviinnAuxClick.emit({
+          ...this.productData,
+        });
+      });
+    });
   }
 
   private getProduct(): Recommendation {
