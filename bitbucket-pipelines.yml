@@ -40,6 +40,7 @@ pipelines:
             - touch .env
             - echo "OPENAPI_URL=https://docs.vviinn.com/openapi.yaml" >> .env
             - echo "RECOMMENDATIONS_URL=https://api.vviinn.com/product/" >> .env
+            - echo "API_PATH=https://api.vviinn.com" >> .env
             - npm install
             - npm run test
             - npm run build
