@@ -18,7 +18,7 @@ pipelines:
             - echo "RECOMMENDATIONS_URL=https://api.stage.vviinn.com/product/" >> .env
             - npm install
             - npm run build_interfaces
-            - npm test
+            - npm run test
             - npm run build
       - step:
           name: Generate version
@@ -41,8 +41,7 @@ pipelines:
             - echo "OPENAPI_URL=https://docs.stage.vviinn.com/openapi.yaml" >> .env
             - echo "RECOMMENDATIONS_URL=https://api.stage.vviinn.com/product/" >> .env
             - npm install
-            - npm run build_interfaces
-            - npm test
+            - npm run test
             - npm run build
             - pipe: atlassian/npm-publish:1.0.0
               variables:
