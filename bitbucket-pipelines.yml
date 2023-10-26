@@ -5,6 +5,10 @@
 # You can specify a custom docker image from Docker Hub as your build environment.
 image: circleci/node:15.14.0-browsers
 
+definitions:
+  caches:
+    env: .env
+
 pipelines:
   branches:
     develop:
