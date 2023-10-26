@@ -15,13 +15,13 @@
     "www/"
   ],
   "scripts": {
-    "build": "stencil build --docs",
+    "build": "ENV=production stencil build --docs",
     "postbuild": "cp .npmrc ./dist",
     "build.watch": "stencil build --watch --docs",
     "build.docs": "stencil build --docs",
     "build_interfaces": "node ./scripts/generate-interfaces.js ./src/interfaces/generated.ts",
     "generate": "stencil generate",
-    "start": "stencil build --dev --watch --serve --docs",
+    "start": "ENV=local stencil build --dev --watch --serve --docs",
     "test": "stencil test --spec",
     "test.e2e": "stencil test --e2e",
     "test.watch": "stencil test --spec --e2e --watchAll",
