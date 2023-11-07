@@ -114,6 +114,7 @@ export type ImageProps = {
   title: string;
   src: string;
   lazy: boolean;
+  ref: (el: HTMLImageElement) => void;
 };
 
 export const Image = (props: ImageProps, onLoadEnd = () => undefined) => (
@@ -126,6 +127,7 @@ export const Image = (props: ImageProps, onLoadEnd = () => undefined) => (
       height={props.height}
       src={processWidth(props.src, props.width)}
       alt={props.title}
+      ref={props.ref}
       onLoad={onLoadEnd}
     />
   </picture>
@@ -142,6 +144,7 @@ export const ResponsiveImage = (
       class="image responsive"
       src={processWidth(props.src, props.width)}
       alt={props.title}
+      ref={props.ref}
       onLoad={onLoadEnd}
     />
   </picture>

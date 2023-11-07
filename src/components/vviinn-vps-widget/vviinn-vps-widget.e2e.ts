@@ -16,8 +16,6 @@ token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00
 
     await page.waitForChanges();
 
-    console.log(exampleImage.nodeName);
-
     exampleImage.classList.add("ololo");
 
     await page.waitForChanges();

@@ -109,11 +109,8 @@ export class VviinnProductCard {
   vviinnAuxClick: EventEmitter<ProductCardEventData>;
 
   private productData: ProductCardEventData | null = null;
-
-  private intersectionObserver = new IntersectionObserver(
-    this.intersectionCallback.bind(this),
-    { threshold: 1.0 }
-  );
+  private imageElement?: HTMLImageElement;
+  private intersectionObserver;
 
   connectedCallback() {
     this.productData = this.getProductData();
@@ -143,21 +140,25 @@ export class VviinnProductCard {
     };
   }
 
-  private intersectionCallback(data: IntersectionObserverEntry[]) {
+  private intersectionCallback = (data: IntersectionObserverEntry[]) => {
     if (data.some((entry) => entry.isIntersecting)) {
       pipe(
         getAnalyticsModule,
         O.map((analytics) => analytics.sendImpression(this.getProduct()))
       );
-
       this.vviinnProductView.emit(this.productData);
       this.intersectionObserver.disconnect();
     }
-  }
+  };
 
   componentDidLoad() {
     this.vviinnProductLoad.emit(this.productData);
-    this.intersectionObserver.observe(this.el);
+
+    this.intersectionObserver = new IntersectionObserver(
+      this.intersectionCallback.bind(this.imageElement),
+      { threshold: 1.0 }
+    );
+    this.intersectionObserver.observe(this.imageElement);
 
     const links = this.el.shadowRoot.querySelectorAll("a");
 
@@ -198,6 +199,9 @@ export class VviinnProductCard {
       src: this.image,
       title: this.productTitle,
       lazy: false,
+      ref: (el) => {
+        this.imageElement = el as HTMLImageElement;
+      },
     };
 
     return this.responsive ? ResponsiveImage(props) : Image(props);
