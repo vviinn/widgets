@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.32.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.31.4...v2.32.0) (2023-11-07)
+
+
+### Features
+
+* Trigger vviinnProductView event when product image appears in the viewport. ([4b24cad](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/4b24cad5e133cffa5c6ef10fc14e67030894fefd))
+
 ### [2.31.4](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.31.3...v2.31.4) (2023-11-02)
 
 ### [2.31.3](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.31.2...v2.31.3) (2023-10-26)
