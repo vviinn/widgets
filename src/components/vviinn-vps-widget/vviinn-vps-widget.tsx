@@ -52,6 +52,7 @@ import { campaignTypeNames } from "../../campaign/Campaign";
 import { parseExcluded } from "../../utils/collections/collectionsUtils";
 import { resources } from "../../locale/resources-vps";
 import { Locale } from "../../locale";
+import { UploadIcon } from "../vviinn-icons";
 
 const filterInt = (value: string) =>
   /^[-+]?(\d+|Infinity)$/.test(value) ? Number(value) : NaN;
@@ -571,6 +572,7 @@ export class VviinnVpsWidget {
 
         <vviinn-overlayed-modal
           class={{ "first-screen": this.isOnboardingSlide() }}
+          isFirstScreen={this.isOnboardingSlide()}
           active={this.active}
           resetState={this.resetState.bind(this)}
           onVviinnWidgetClose={() => this.handleModalClose()}
@@ -581,91 +583,83 @@ export class VviinnVpsWidget {
         >
           <vviinn-slider showBullets={false} position={this.slidePosition}>
             <vviinn-slide class={{ "start-page": true }}>
+              <div id="onboarding-block">
+                <slot name="vviinn-example-images-1">
+                  <vviinn-example-image
+                    src="https://cdn.vviinn.com/0/fit/600/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9pbWctaW5zcGlyYXRpb24tMDQtTC5qcGc="
+                    is-clickable="false"
+                  />
+                </slot>
+              </div>
+
               <div
                 class={{
                   error: this.haveErrors(),
                   "start-page_block": true,
                 }}
               >
-                <vviinn-wrong-format
-                  class={{ hidden: !this.wrongImageFormat }}
-                  handler={() => (this.wrongImageFormat = false)}
-                />
-                <vviinn-server-error
-                  class={{ hidden: !imageSearchState.serverError }}
-                  handler={() => (imageSearchState.serverError = false)}
-                />
-                <vviinn-teaser class={{ hidden: this.haveErrors() }} />
-                <vviinn-image-selector
-                  class={{ hidden: this.haveErrors() }}
-                  onVviinnImageUploadFinished={() => {
-                    this.handleImageSelection("upload");
-                    if (this.mode === "upload" && this.showingInButton) {
-                      this.active = true;
+                <div class="start-page_main-content">
+                  <vviinn-wrong-format
+                    class={{ hidden: !this.wrongImageFormat }}
+                    handler={() => (this.wrongImageFormat = false)}
+                  />
+                  <vviinn-server-error
+                    class={{ hidden: !imageSearchState.serverError }}
+                    handler={() => (imageSearchState.serverError = false)}
+                  />
+                  <vviinn-teaser class={{ hidden: this.haveErrors() }} />
+                  <vviinn-image-selector
+                    class={{ hidden: this.haveErrors() }}
+                    onVviinnImageUploadFinished={() => {
+                      this.handleImageSelection("upload");
+                      if (this.mode === "upload" && this.showingInButton) {
+                        this.active = true;
+                      }
+                    }}
+                    onVviinnImageUpload={() => {
+                      this.trackInitialSearch("upload");
+                    }}
+                    onVviinnNoResult={() => (this.wrongImageFormat = true)}
+                    resetVpsButton={this.resetVpsButton}
+                    basicEventData={this.getBasicEventData()}
+                    part="select-image_button"
+                    startUpload={
+                      this.buttonPressed &&
+                      this.showingInButton &&
+                      this.mode === "upload"
                     }
-                  }}
-                  onVviinnImageUpload={() => {
-                    this.trackInitialSearch("upload");
-                  }}
-                  onVviinnNoResult={() => (this.wrongImageFormat = true)}
-                  resetVpsButton={this.resetVpsButton}
-                  basicEventData={this.getBasicEventData()}
-                  part="select-image_button"
-                  startUpload={
-                    this.buttonPressed &&
-                    this.showingInButton &&
-                    this.mode === "upload"
-                  }
-                >
-                  <span slot="upload-button-text" class="upload-button-content">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="29"
-                      height="28"
-                      fill="none"
+                  >
+                    <span
+                      slot="upload-button-text"
+                      class="upload-button-content"
                     >
-                      <defs />
-                      <path
-                        fill="#fff"
-                        fill-rule="evenodd"
-                        d="M10.271 3.89A.875.875 0 0111 3.5h7c.293 0 .566.146.728.39l1.49 2.235h3.033a2.625 2.625 0 012.625 2.625V21a2.625 2.625 0 01-2.625 2.625H5.75A2.625 2.625 0 013.125 21V8.75A2.625 2.625 0 015.75 6.125h3.031l1.49-2.235zm1.197 1.36l-1.49 2.235a.875.875 0 01-.729.39H5.75a.875.875 0 00-.875.875V21a.875.875 0 00.875.875h17.5a.875.875 0 00.875-.875V8.75a.875.875 0 00-.875-.875h-3.5a.875.875 0 01-.729-.39l-1.49-2.235h-6.063z"
-                        clip-rule="evenodd"
-                      />
-                      <path
-                        fill="#fff"
-                        fill-rule="evenodd"
-                        d="M14.5 11.375a3.062 3.062 0 100 6.125 3.062 3.062 0 000-6.125zm-4.813 3.063a4.812 4.812 0 119.625 0 4.812 4.812 0 01-9.625 0z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                    <slot name="vviinn-image-upload-button-text">
-                      <span>{i18next.t("imageUploadButtonText")}</span>
-                    </slot>
-                  </span>
-                </vviinn-image-selector>
+                      <UploadIcon />
+                      <slot name="vviinn-image-upload-button-text">
+                        <span>{i18next.t("imageUploadButtonText")}</span>
+                      </slot>
+                    </span>
+                  </vviinn-image-selector>
+                </div>
                 <vviinn-privacy-badge
                   class={{ hidden: this.haveErrors() }}
                   privacyBadgeText={i18next.t("privacyBadgeText")}
                 />
-              </div>
-              <div id="onboarding-block" class="start-page_block">
-                <div class="onboarding-wrapper">
-                  <vviinn-onboarding />
-                  <vviinn-example-images
-                    part="example-images"
-                    exampleImagesTitle={i18next.t("exampleImagesTitle")}
-                    onVviinnImageUploadFinished={() =>
-                      this.handleImageSelection("example")
-                    }
-                    onVviinnImageUpload={() => {
-                      this.trackInitialSearch("example");
-                    }}
-                    onVviinnNoResult={() =>
-                      this.resetScroll("onboarding-block", "smooth")
-                    }
-                    basicEventData={this.getBasicEventData()}
-                  />
-                </div>
+                {/* TODO: wait until the design is ready */}
+                {/* <vviinn-onboarding />
+                <vviinn-example-images
+                  part="example-images"
+                  exampleImagesTitle={i18next.t("exampleImagesTitle")}
+                  onVviinnImageUploadFinished={() =>
+                    this.handleImageSelection("example")
+                  }
+                  onVviinnImageUpload={() => {
+                    this.trackInitialSearch("example");
+                  }}
+                  onVviinnNoResult={() =>
+                    this.resetScroll("onboarding-block", "smooth")
+                  }
+                  basicEventData={this.getBasicEventData()}
+                /> */}
               </div>
             </vviinn-slide>
             <vviinn-slide

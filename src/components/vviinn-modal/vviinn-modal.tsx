@@ -34,6 +34,8 @@ export class VviinnModal {
   @Prop() widgetVersion: string;
   /** @internal */
   @Prop() hideBackButton: boolean = false;
+  /** @internal */
+  @Prop() isFirstScreen: boolean;
 
   @State() slider: boolean = false;
 
@@ -91,7 +93,7 @@ export class VviinnModal {
         class={{ closed: !this.active }}
         onAnimationEnd={(ev: AnimationEvent) => this.handleAnimationEnd(ev)}
       >
-        <div class="head">
+        <div class={{ head: true, "first-screen": this.isFirstScreen }}>
           {!this.hideBackButton && (
             <button
               part="secondary-action"

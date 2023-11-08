@@ -26,6 +26,7 @@ export class VviinnExampleImage {
   @Prop() width: number = 0;
   @Prop() height: number = 0;
   @Prop() basicEventData: BasicEventData;
+  @Prop() isClickable: boolean = true;
 
   @State() selected: boolean = false;
 
@@ -68,8 +69,12 @@ export class VviinnExampleImage {
   render() {
     return (
       <Host
-        onClick={() => this.selectImage()}
-        onKeyUp={(ev: KeyboardEvent) => this.handleKeyPress(ev)}
+        onClick={this.isClickable ? () => this.selectImage() : undefined}
+        onKeyUp={
+          this.isClickable
+            ? (ev: KeyboardEvent) => this.handleKeyPress(ev)
+            : undefined
+        }
       >
         {this.showPreloader() ? (
           <div class="image-preloader">
@@ -81,6 +86,9 @@ export class VviinnExampleImage {
           width={this.width}
           height={this.height}
           tabindex={1}
+          class={{
+            "is-clickable": this.isClickable,
+          }}
         />
       </Host>
     );

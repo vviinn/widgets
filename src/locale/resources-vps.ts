@@ -35,10 +35,10 @@ export const resources: Resource = {
   en: {
     translation: {
       exampleImagesTitle: "Try out the search with the example images",
-      imageUploadButtonText: "Select camera or image",
+      imageUploadButtonText: "Upload a Photo",
       privacyBadgeText:
         "By uploading a picture you agree to the processing by our partner Vviinn. The image will be deleted after one hour of inactivity.",
-      teaserText_1: "Find products in a photo",
+      teaserText_1: "Find Product by Photo",
       teaserText_2: "",
       imageSearchModalTitle: "Visual Search",
       onboardingBlock: {

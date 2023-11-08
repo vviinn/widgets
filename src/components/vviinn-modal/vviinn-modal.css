@@ -1,11 +1,22 @@
 :host {
   background: white;
-  border-radius: 4px;
+  border-radius: 24px;
   box-sizing: border-box;
   display: grid;
   grid-template-rows: min-content auto;
   max-width: 960px;
   overflow: auto;
+  position: relative;
+}
+
+.head {
+  position: absolute;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  z-index: 1;
+  padding: 16px;
 }
 
 @media (max-width: 768px) {
@@ -13,6 +24,7 @@
     animation-name: fade-in;
     animation-duration: 0.5s;
     animation-fill-mode: forwards;
+    border-radius: 24px 24px 0 0;
   }
 
   :host(.closed) {
@@ -20,16 +32,19 @@
     animation-fill-mode: none;
   }
 
+  .head {
+    position: sticky;
+    z-index: 1;
+  }
+
+  .head:not(.first-screen) {
+    background-color: white;
+  }
+
   .body {
     overflow-y: auto;
+    transform: translateY(-64px);
   }
-}
-
-.head {
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid #f4f4f4;
-  padding: 16px;
 }
 
 .title {
