@@ -644,9 +644,7 @@ export class VviinnVpsWidget {
                   class={{ hidden: this.haveErrors() }}
                   privacyBadgeText={i18next.t("privacyBadgeText")}
                 />
-                {/* TODO: wait until the design is ready */}
-                {/* <vviinn-onboarding />
-                <vviinn-example-images
+                {/* <vviinn-example-images
                   part="example-images"
                   exampleImagesTitle={i18next.t("exampleImagesTitle")}
                   onVviinnImageUploadFinished={() =>
@@ -659,7 +657,7 @@ export class VviinnVpsWidget {
                     this.resetScroll("onboarding-block", "smooth")
                   }
                   basicEventData={this.getBasicEventData()}
-                /> */}
+                />  */}
               </div>
             </vviinn-slide>
             <vviinn-slide
