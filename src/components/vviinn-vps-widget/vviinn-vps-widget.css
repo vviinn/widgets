@@ -23,7 +23,7 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
 .start-page {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  min-height: 580px;
+  height: 640px;
 }
 
 .start-page_block {

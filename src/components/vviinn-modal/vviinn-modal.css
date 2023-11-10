@@ -16,7 +16,7 @@
   display: flex;
   align-items: center;
   z-index: 1;
-  padding: 16px;
+  padding: 14px;
 }
 
 @media (max-width: 768px) {
@@ -71,8 +71,8 @@ button {
   border: none;
   cursor: pointer;
   display: grid;
-  padding: 4px;
-  color: #c6c6c6;
+  padding: 6px;
+  color: #525252;
 }
 
 button:hover {
