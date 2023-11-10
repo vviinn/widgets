@@ -1,0 +1,23 @@
+:host {
+  border-right: unset;
+  box-sizing: border-box;
+  position: relative;
+  width: 100%;
+}
+
+:host slot {
+  height: 100%;
+  width: 100%;
+}
+
+.onboarding-button {
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  border: 2px solid white;
+  position: absolute;
+  bottom: 26px;
+  left: calc(50% - 36px);
+  background-color: transparent;
+  line-height: 0;
+}

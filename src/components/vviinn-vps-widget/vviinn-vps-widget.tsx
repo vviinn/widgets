@@ -80,7 +80,7 @@ const notNan = (n: number): boolean => !isNaN(n);
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
  * @part price-prefix - Block rendered before each price element (for ex. "from").
  * @part title - Title inside Product Card.
- * @part example-images - Example Images block.
+ * @part example-block - Example block.
 
  * @slot vviinn-onboarding-title - Title of onboarding section.
  * @slot onboarding-card-1-icon - Icon (or other graphics) on the first onboarding slide.
@@ -583,15 +583,20 @@ export class VviinnVpsWidget {
         >
           <vviinn-slider showBullets={false} position={this.slidePosition}>
             <vviinn-slide class={{ "start-page": true }}>
-              <div id="onboarding-block">
-                <slot name="vviinn-example-images-1">
-                  <vviinn-example-image
-                    src="https://cdn.vviinn.com/0/fit/600/0/ce/0/Z3M6Ly9haWFhcy1pbWdwcm94eS9leGFtcGxlcy9pbWctaW5zcGlyYXRpb24tMDQtTC5qcGc="
-                    is-clickable="false"
-                  />
-                </slot>
-              </div>
-
+              <vviinn-example-block
+                part="example-block"
+                exampleImagesTitle={i18next.t("exampleImagesTitle")}
+                onVviinnImageUploadFinished={() =>
+                  this.handleImageSelection("example")
+                }
+                onVviinnImageUpload={() => {
+                  this.trackInitialSearch("example");
+                }}
+                onVviinnNoResult={() =>
+                  this.resetScroll("onboarding-block", "smooth")
+                }
+                basicEventData={this.getBasicEventData()}
+              />
               <div
                 class={{
                   error: this.haveErrors(),
@@ -644,20 +649,6 @@ export class VviinnVpsWidget {
                   class={{ hidden: this.haveErrors() }}
                   privacyBadgeText={i18next.t("privacyBadgeText")}
                 />
-                {/* <vviinn-example-images
-                  part="example-images"
-                  exampleImagesTitle={i18next.t("exampleImagesTitle")}
-                  onVviinnImageUploadFinished={() =>
-                    this.handleImageSelection("example")
-                  }
-                  onVviinnImageUpload={() => {
-                    this.trackInitialSearch("example");
-                  }}
-                  onVviinnNoResult={() =>
-                    this.resetScroll("onboarding-block", "smooth")
-                  }
-                  basicEventData={this.getBasicEventData()}
-                />  */}
               </div>
             </vviinn-slide>
             <vviinn-slide
