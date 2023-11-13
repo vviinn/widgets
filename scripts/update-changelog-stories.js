@@ -22,13 +22,15 @@ fs.readFile("./CHANGELOG.md", "utf8", (err, data) => {
     ) {
       const date = titleSplit[2].replace("(", "").replace(")", "");
       const version = titleSplit[1].split("]")[0].replace("[", "");
-      return `## v. ${version} - ${date}${
+      if (
         releases[index + 1] === "### Bug Fixes" ||
         releases[index + 1] === "### Features" ||
         releases[index + 1] === "### ⚠ BREAKING CHANGES"
-          ? ""
-          : "\n\rInternal release"
-      }`;
+      ) {
+        return `## v. ${version} - ${date}`;
+      } else {
+        return;
+      }
     } else {
       return `${release.replace("*", "-").split("(")[0].trimEnd()}`;
     }
@@ -41,7 +43,7 @@ fs.readFile("./CHANGELOG.md", "utf8", (err, data) => {
 
   fs.writeFile(
     "./storybook/documentation/changelog.stories.mdx",
-    releasesFilter.join("\n\r"),
+    releasesFilter.filter((release) => release).join("\n\r"),
     (err) => {
       if (err) {
         console.error(err);
