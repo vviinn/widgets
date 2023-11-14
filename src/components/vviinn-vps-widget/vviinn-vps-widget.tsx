@@ -526,7 +526,7 @@ export class VviinnVpsWidget {
   }
 
   private resetState() {
-    this.resetScroll("onboarding-block");
+    this.resetScroll("start-page_block");
 
     this.slidePosition = 0;
     imageSearchState.resetCategoryLink = undefined;
@@ -556,7 +556,7 @@ export class VviinnVpsWidget {
     this.active = false;
     this.resetState();
 
-    const elementsToReset = ["onboarding-block", "results-block"];
+    const elementsToReset = ["start-page_block", "results-block"];
     elementsToReset.forEach((name) => this.resetScroll(name));
     this.trackWidgetEvent("close");
   }
@@ -589,15 +589,15 @@ export class VviinnVpsWidget {
                   this.trackInitialSearch("example");
                 }}
                 onVviinnNoResult={() =>
-                  this.resetScroll("onboarding-block", "smooth")
+                  this.resetScroll("start-page_block", "smooth")
                 }
                 basicEventData={this.getBasicEventData()}
               />
               <div
                 class={{
                   error: this.haveErrors(),
-                  "start-page_block": true,
                 }}
+                id="start-page_block"
               >
                 <div class="start-page_main-content">
                   <vviinn-wrong-format

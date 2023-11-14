@@ -26,7 +26,7 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   height: 640px;
 }
 
-.start-page_block {
+#start-page_block {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -35,7 +35,7 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   padding: 42px 62px;
 }
 
-.start-page_block.error {
+#start-page_block.error {
   align-content: center;
 }
 
@@ -203,7 +203,7 @@ search-filters::part(filter active) {
 }
 
 @media (max-width: 1080px) {
-  .start-page_block {
+  #start-page_block {
     padding: 24px 36px;
   }
 }
@@ -228,20 +228,16 @@ search-filters::part(filter active) {
     overflow: hidden;
   }
 
-  #onboarding-block {
-    max-height: 60vh;
-  }
-
   .results-page {
     grid-template-rows: min-content;
     grid-template-columns: unset;
   }
 
-  .start-page_block {
+  #start-page_block {
     padding: 14px 24px 20px;
   }
 
-  .start-page_block:last-of-type {
+  #start-page_block:last-of-type {
     border-right: unset;
     overflow-y: unset;
     position: static;
@@ -292,7 +288,7 @@ search-filters::part(filter active) {
     padding-top: 0;
   }
 
-  .start-page_block {
+  #start-page_block {
     padding: 20px;
   }
 

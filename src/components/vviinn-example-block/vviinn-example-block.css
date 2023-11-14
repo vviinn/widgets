@@ -1,0 +1,11 @@
+:host {
+  border-right: unset;
+  box-sizing: border-box;
+  position: relative;
+  width: 100%;
+}
+
+:host slot {
+  height: 100%;
+  width: 100%;
+}

@@ -9,12 +9,10 @@ import {
 } from "@stencil/core";
 import { pipe } from "fp-ts/lib/function";
 import { toFile } from "../../../Image/toFile";
-import {
-  imageSearchState,
-  processSelectedFile,
-} from "../../../store/imageSearch.store";
+import { processSelectedFile } from "../../../store/imageSearch.store";
 import * as E from "fp-ts/lib/Either";
 import { BasicEventData } from "../../../recommendation/events";
+import { RoundCameraIcon } from "../../vviinn-icons";
 
 @Component({
   tag: "vviinn-example-image",
@@ -58,38 +56,27 @@ export class VviinnExampleImage {
     this.selectImage();
   }
 
-  private showPreloader(): boolean {
-    return (
-      (imageSearchState.objectDetectionInProgress ||
-        imageSearchState.loading) &&
-      this.selected
-    );
-  }
-
   render() {
     return (
       <Host
-        onClick={this.isClickable ? () => this.selectImage() : undefined}
         onKeyUp={
           this.isClickable
             ? (ev: KeyboardEvent) => this.handleKeyPress(ev)
             : undefined
         }
       >
-        {this.showPreloader() ? (
-          <div class="image-preloader">
-            <vviinn-preloader />
-          </div>
-        ) : null}
         <img
           src={this.src}
           width={this.width}
           height={this.height}
           tabindex={1}
-          class={{
-            "is-clickable": this.isClickable,
-          }}
         />
+        <button
+          class="onboarding-button"
+          onClick={this.isClickable ? () => this.selectImage() : undefined}
+        >
+          <RoundCameraIcon />
+        </button>
       </Host>
     );
   }

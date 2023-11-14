@@ -10,7 +10,6 @@ import {
 
 import { slotChangeListener } from "../customized-slots";
 import { BasicEventData } from "../../recommendation/events";
-import { RoundCameraIcon } from "../vviinn-icons";
 
 @Component({
   tag: "vviinn-example-block",
@@ -37,15 +36,8 @@ export class VviinnExampleBlock {
     return (
       <Host>
         <slot name="vviinn-example-image">
-          <vviinn-example-image
-            src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fdesignbump.com%2Fwp-content%2Fuploads%2F2015%2F08%2FLiving-Room-Furniture.jpg&f=1&nofb=1&ipt=cd1aa91486be296714331de6746acb3169edf13a69040cbaaac30ed958569419&ipo=images"
-            is-clickable="false"
-          />
+          <vviinn-example-image src="https://cdn.stage.vviinn.com/image/0/fit/1200/0/ce/0/Z3M6Ly92dmlpbm4tY2F0YWxvZy1pbWFnZXMtc3RhZ2Uvc3RvcmFnZS5nb29nbGVhcGlzLmNvbS9FTWE1UWhvVWNlQS1MM1oyYVdsdWJpMXlaV1psY21WdVkyVXRZMkYwWVd4dlp5OXBiV0ZuWlY5aGRIUnlhV0oxZEdWZlkyRjBZV3h2Wnk5cGJXRm5aWE12VWtNeE15OVNRekV6WDJsdFlXZGxYekF3TG1wd1p3LmpwZw==" />
         </slot>
-
-        <button class="onboarding-button">
-          <RoundCameraIcon />
-        </button>
       </Host>
     );
   }
