@@ -68,8 +68,9 @@ export class VviinnImageSelector {
   render() {
     return (
       <Host exportparts="button">
-        {this.isLoading() ? <vviinn-preloader /> : null}
-        {this.isLoading() ? null : (
+        {this.isLoading() ? (
+          <vviinn-preloader />
+        ) : (
           <label htmlFor="fileInput" part="button">
             <slot name="upload-button-text">Upload image</slot>
           </label>
