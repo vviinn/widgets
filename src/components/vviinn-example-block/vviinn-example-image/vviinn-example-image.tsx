@@ -70,9 +70,10 @@ export class VviinnExampleImage {
           width={this.width}
           height={this.height}
           tabindex={1}
+          class="example-image"
         />
         <button
-          class="onboarding-button"
+          class="example-button"
           onClick={this.isClickable ? () => this.selectImage() : undefined}
         >
           <RoundCameraIcon />

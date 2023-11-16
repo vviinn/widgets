@@ -52,7 +52,11 @@ import { campaignTypeNames } from "../../campaign/Campaign";
 import { parseExcluded } from "../../utils/collections/collectionsUtils";
 import { resources } from "../../locale/resources-vps";
 import { Locale } from "../../locale";
-import { UploadIcon } from "../vviinn-icons";
+import {
+  CameraActionIcon,
+  GalleryActionIcon,
+  UploadActionIcon,
+} from "../vviinn-icons";
 
 const filterInt = (value: string) =>
   /^[-+]?(\d+|Infinity)$/.test(value) ? Number(value) : NaN;
@@ -140,6 +144,7 @@ export class VviinnVpsWidget {
   @State() width: number = 0;
   @State() wrongImageFormat: boolean = false;
   @State() trackingDeactivated: boolean = false;
+  @State() cameraActive: boolean = false;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -600,51 +605,78 @@ export class VviinnVpsWidget {
                 id="start-page_block"
               >
                 <div class="start-page_main-content">
-                  <vviinn-wrong-format
-                    class={{ hidden: !this.wrongImageFormat }}
-                    handler={() => (this.wrongImageFormat = false)}
-                  />
-                  <vviinn-server-error
-                    class={{ hidden: !imageSearchState.serverError }}
-                    handler={() => (imageSearchState.serverError = false)}
-                  />
-                  <vviinn-teaser class={{ hidden: this.haveErrors() }} />
-                  <vviinn-image-selector
-                    class={{ hidden: this.haveErrors() }}
-                    onVviinnImageUploadFinished={() => {
-                      this.handleImageSelection("upload");
-                      if (this.mode === "upload" && this.showingInButton) {
-                        this.active = true;
-                      }
-                    }}
-                    onVviinnImageUpload={() => {
-                      this.trackInitialSearch("upload");
-                    }}
-                    onVviinnNoResult={() => (this.wrongImageFormat = true)}
-                    resetVpsButton={this.resetVpsButton}
-                    basicEventData={this.getBasicEventData()}
-                    part="select-image_button"
-                    startUpload={
-                      this.buttonPressed &&
-                      this.showingInButton &&
-                      this.mode === "upload"
-                    }
-                  >
-                    <span
-                      slot="upload-button-text"
-                      class="upload-button-content"
-                    >
-                      <UploadIcon />
-                      <slot name="vviinn-image-upload-button-text">
-                        <span>{i18next.t("imageUploadButtonText")}</span>
-                      </slot>
-                    </span>
-                  </vviinn-image-selector>
+                  <div class="start-page_errors-block">
+                    <vviinn-wrong-format
+                      class={{ hidden: !this.wrongImageFormat }}
+                      handler={() => (this.wrongImageFormat = false)}
+                    />
+                    <vviinn-server-error
+                      class={{ hidden: !imageSearchState.serverError }}
+                      handler={() => (imageSearchState.serverError = false)}
+                    />
+                  </div>
+
+                  {!this.haveErrors() && <vviinn-teaser />}
+                  {!this.haveErrors() && (
+                    <div class="buttons-group">
+                      <button
+                        class="action-button"
+                        onClick={() => {
+                          this.cameraActive = true;
+                        }}
+                      >
+                        <span class="action-button-content">
+                          <CameraActionIcon />
+                          <span>Start Camera</span>
+                        </span>
+                      </button>
+
+                      <button class="action-button">
+                        <span class="action-button-content">
+                          <GalleryActionIcon />
+                          <span>Show Gallery</span>
+                        </span>
+                      </button>
+
+                      <vviinn-image-selector
+                        class="action-button"
+                        onVviinnImageUploadFinished={() => {
+                          this.handleImageSelection("upload");
+                          if (this.mode === "upload" && this.showingInButton) {
+                            this.active = true;
+                          }
+                        }}
+                        onVviinnImageUpload={() => {
+                          this.trackInitialSearch("upload");
+                        }}
+                        onVviinnNoResult={() => (this.wrongImageFormat = true)}
+                        resetVpsButton={this.resetVpsButton}
+                        basicEventData={this.getBasicEventData()}
+                        part="select-image_button"
+                        startUpload={
+                          this.buttonPressed &&
+                          this.showingInButton &&
+                          this.mode === "upload"
+                        }
+                      >
+                        <span
+                          slot="upload-button-text"
+                          class="action-button-content"
+                        >
+                          <UploadActionIcon />
+                          <slot name="vviinn-image-upload-button-text">
+                            <span>{i18next.t("imageUploadButtonText")}</span>
+                          </slot>
+                        </span>
+                      </vviinn-image-selector>
+                    </div>
+                  )}
                 </div>
-                <vviinn-privacy-badge
-                  class={{ hidden: this.haveErrors() }}
-                  privacyBadgeText={i18next.t("privacyBadgeText")}
-                />
+                {!this.haveErrors() && (
+                  <vviinn-privacy-badge
+                    privacyBadgeText={i18next.t("privacyBadgeText")}
+                  />
+                )}
               </div>
             </vviinn-slide>
             <vviinn-slide

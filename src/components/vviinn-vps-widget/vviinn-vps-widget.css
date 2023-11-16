@@ -29,6 +29,7 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
 #start-page_block {
   box-sizing: border-box;
   display: flex;
+  overflow-y: auto;
   flex-direction: column;
   justify-content: center;
   min-height: 100%;
@@ -46,31 +47,55 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   justify-content: center;
 }
 
-vviinn-image-selector {
-  align-items: center;
-  background: var(--color-primary, var(--color-primary-system));
-  border-color: var(--color-primary, var(--color-primary-system));
-  border-radius: 8px;
-  color: white;
-  display: grid;
-  font-size: 16px;
-  font-weight: 600;
-  height: 48px;
-  justify-items: center;
-  margin: 24px 0;
-  transition: background 0.1s ease-in-out;
+.start-page_errors-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
 }
 
-vviinn-image-selector:hover {
+.buttons-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.action-button {
+  display: grid;
+  border: none;
+  cursor: pointer;
+  align-items: center;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  height: 48px;
+  justify-items: center;
+  transition: background 0.1s ease-in-out;
+  color: #525252;
+  background-color: #f4f4f4;
+}
+
+.action-button:hover {
+  background-color: #eaeaea;
+}
+
+.action-button:first-child {
+  background: var(--color-primary, var(--color-primary-system));
+  border-color: var(--color-primary, var(--color-primary-system));
+  color: white;
+}
+
+.action-button:first-child:hover {
   background: var(--color-primary-hover, var(--color-primary-hover-system));
   border-color: var(--color-primary-hover, var(--color-primary-hover-system));
 }
 
-vviinn-image-selector:active {
+.action-button:active {
   border-color: black;
 }
 
-.upload-button-content {
+.action-button-content {
   display: grid;
   align-items: center;
   justify-items: start;
@@ -209,6 +234,10 @@ search-filters::part(filter active) {
 }
 
 @media (max-width: 768px) {
+  .start-page {
+    height: auto;
+  }
+
   .results-page > * {
     box-sizing: border-box;
     padding: 24px;
@@ -292,7 +321,7 @@ search-filters::part(filter active) {
     padding: 20px;
   }
 
-  .upload-button-content {
+  .action-button-content {
     grid-gap: 10px;
   }
 }
@@ -312,4 +341,14 @@ vviinn-server-error {
   width: 280px;
   align-self: center;
   justify-self: center;
+}
+
+.visually-hidden {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
 }

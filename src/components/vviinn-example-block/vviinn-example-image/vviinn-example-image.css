@@ -19,11 +19,7 @@ img {
   object-position: center;
 }
 
-img.is-clickable {
-  cursor: pointer;
-}
-
-.onboarding-button {
+.example-button {
   cursor: pointer;
   padding: 4px;
   border-radius: 50%;

@@ -3,7 +3,7 @@
   --preloader-width: calc(var(--preloader-size) / 6);
   transform-origin: center;
   animation: rotate 3s linear infinite;
-  border: var(--preloader-width) solid white;
+  border: var(--preloader-width) solid currentColor;
   border-radius: 50%;
   border-top-color: transparent;
   display: none;
