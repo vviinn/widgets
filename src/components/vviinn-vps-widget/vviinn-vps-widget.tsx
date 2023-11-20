@@ -144,6 +144,7 @@ export class VviinnVpsWidget {
   @State() wrongImageFormat: boolean = false;
   @State() trackingDeactivated: boolean = false;
   @State() isCameraActive: boolean = false;
+  @State() stream: MediaStream | null = null;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -197,7 +198,6 @@ export class VviinnVpsWidget {
   private id?: string;
   private resultLoaded: boolean = false;
   private resultViewed: boolean = false;
-  // private stream: MediaStream;
 
   private initResultEvents() {
     this.resultLoaded = false;
@@ -225,22 +225,22 @@ export class VviinnVpsWidget {
     }
   }
 
-  private handleCameraClick = () => {
-    // this.isCameraActive = true;
-
+  private handleCameraClick = async () => {
+    if (this.stream) return;
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices
         .getUserMedia({ video: { facingMode: "environment" } })
-        .then(function (videoStream) {
-          this.stream = videoStream;
-          // Assign the stream to the video element
-          // cameraPreview.srcObject = videoStream;
-          //  capturePhotoButton.removeAttribute("disabled");
+        .then((videoStream) => {
+          if (videoStream) {
+            this.stream = videoStream;
+          }
         })
         .catch(function (error) {
+          // FIXME: show error properly
           console.error("Error accessing camera:", error.message);
         });
     } else {
+      // FIXME: show error properly
       console.error("getUserMedia not supported on your browser");
     }
   };
@@ -615,6 +615,7 @@ export class VviinnVpsWidget {
                   this.resetScroll("start-page_block", "smooth")
                 }
                 basicEventData={this.getBasicEventData()}
+                srcObject={this.stream}
               />
               <div
                 class={{
