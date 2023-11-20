@@ -143,7 +143,6 @@ export class VviinnVpsWidget {
   @State() width: number = 0;
   @State() wrongImageFormat: boolean = false;
   @State() trackingDeactivated: boolean = false;
-  @State() isCameraActive: boolean = false;
   @State() stream: MediaStream | null = null;
 
   /** @internal */
