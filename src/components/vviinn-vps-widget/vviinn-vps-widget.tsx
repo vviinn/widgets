@@ -84,7 +84,6 @@ const notNan = (n: number): boolean => !isNaN(n);
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
  * @part price-prefix - Block rendered before each price element (for ex. "from").
  * @part title - Title inside Product Card.
- * @part example-block - Example block.
 
  * @slot vviinn-onboarding-title - Title of onboarding section.
  * @slot onboarding-card-1-icon - Icon (or other graphics) on the first onboarding slide.
@@ -144,7 +143,7 @@ export class VviinnVpsWidget {
   @State() width: number = 0;
   @State() wrongImageFormat: boolean = false;
   @State() trackingDeactivated: boolean = false;
-  @State() cameraActive: boolean = false;
+  @State() isCameraActive: boolean = false;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -198,6 +197,7 @@ export class VviinnVpsWidget {
   private id?: string;
   private resultLoaded: boolean = false;
   private resultViewed: boolean = false;
+  // private stream: MediaStream;
 
   private initResultEvents() {
     this.resultLoaded = false;
@@ -224,6 +224,26 @@ export class VviinnVpsWidget {
       window.location.href = deeplink;
     }
   }
+
+  private handleCameraClick = () => {
+    // this.isCameraActive = true;
+
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices
+        .getUserMedia({ video: { facingMode: "environment" } })
+        .then(function (videoStream) {
+          this.stream = videoStream;
+          // Assign the stream to the video element
+          // cameraPreview.srcObject = videoStream;
+          //  capturePhotoButton.removeAttribute("disabled");
+        })
+        .catch(function (error) {
+          console.error("Error accessing camera:", error.message);
+        });
+    } else {
+      console.error("getUserMedia not supported on your browser");
+    }
+  };
 
   componentDidLoad() {
     const slots = this.el.querySelectorAll("[slot]");
@@ -580,13 +600,11 @@ export class VviinnVpsWidget {
           buttonElementId={this.buttonElementId ?? this.id}
           widgetVersion={version}
           hideBackButton={this.mode === "upload" && this.showingInButton}
-          exportparts="secondary-action, title, close-button, example-images"
+          exportparts="secondary-action, title, close-button"
         >
           <vviinn-slider showBullets={false} position={this.slidePosition}>
             <vviinn-slide class={{ "start-page": true }}>
-              <vviinn-example-block
-                part="example-block"
-                exampleImagesTitle={i18next.t("exampleImagesTitle")}
+              <vviinn-example-image
                 onVviinnImageUploadFinished={() =>
                   this.handleImageSelection("example")
                 }
@@ -621,9 +639,7 @@ export class VviinnVpsWidget {
                     <div class="buttons-group">
                       <button
                         class="action-button"
-                        onClick={() => {
-                          this.cameraActive = true;
-                        }}
+                        onClick={this.handleCameraClick}
                       >
                         <span class="action-button-content">
                           <CameraActionIcon />

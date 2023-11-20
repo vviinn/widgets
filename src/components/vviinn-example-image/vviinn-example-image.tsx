@@ -8,11 +8,11 @@ import {
   State,
 } from "@stencil/core";
 import { pipe } from "fp-ts/lib/function";
-import { toFile } from "../../../Image/toFile";
-import { processSelectedFile } from "../../../store/imageSearch.store";
+import { toFile } from "../../Image/toFile";
+import { processSelectedFile } from "../../store/imageSearch.store";
 import * as E from "fp-ts/lib/Either";
-import { BasicEventData } from "../../../recommendation/events";
-import { RoundCameraIcon } from "../../vviinn-icons";
+import { BasicEventData } from "../../recommendation/events";
+import { RoundCameraIcon } from "../vviinn-icons";
 
 @Component({
   tag: "vviinn-example-image",
@@ -20,7 +20,8 @@ import { RoundCameraIcon } from "../../vviinn-icons";
   shadow: true,
 })
 export class VviinnExampleImage {
-  @Prop() src: string = "";
+  @Prop() src: string =
+    "https://cdn.stage.vviinn.com/image/0/fit/1200/0/ce/0/Z3M6Ly92dmlpbm4tY2F0YWxvZy1pbWFnZXMtc3RhZ2Uvc3RvcmFnZS5nb29nbGVhcGlzLmNvbS9FTWE1UWhvVWNlQS1MM1oyYVdsdWJpMXlaV1psY21WdVkyVXRZMkYwWVd4dlp5OXBiV0ZuWlY5aGRIUnlhV0oxZEdWZlkyRjBZV3h2Wnk5cGJXRm5aWE12VWtNeE15OVNRekV6WDJsdFlXZGxYekF3TG1wd1p3LmpwZw==";
   @Prop() width: number = 0;
   @Prop() height: number = 0;
   @Prop() basicEventData: BasicEventData;

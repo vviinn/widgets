@@ -48,7 +48,6 @@ import { Locale } from "../../locale";
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
  * @part price-prefix - Block rendered before each price element (for ex. "from").
  * @part title - Title inside Product Card.
- * @part example-images - Example Images block.
  * @part button - Clickable button element.
  * @part vviinn-button - Button element container.
  */
@@ -174,7 +173,7 @@ export class VviinnVpsButton {
           token={this.token}
           locale={this.locale}
           apiPath={this.apiPath}
-          exportparts="brand, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, product-card, example-images"
+          exportparts="brand, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, product-card"
           campaignId={this.campaignId}
           showingInButton={true}
           buttonPressed={this.buttonPressed}
