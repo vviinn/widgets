@@ -29,7 +29,6 @@ import { Locale } from "../../locale";
  * @slot onboarding-card-2-text - Text content of second onboarding slide.
  * @slot onboarding-card-3-icon - Icon (or other graphics) on the third onboarding slide.
  * @slot onboarding-card-3-text - Text content of third onboarding slide.
- * @slot vviinn-example-image - Image in Example Image block.
  * @slot vviinn-teaser-text - Text on widget's main screen.
  * @slot vviinn-image-upload-button-text - Title of Upload Button.
  * @slot vviinn-privacy-badge-text - Text content of privacy notification block.
@@ -76,6 +75,8 @@ export class VviinnVpsButton {
   @Prop() productDetailNewTab: boolean = true;
   /** Resolution width of an image in the product card */
   @Prop() imageResolutionWidth: number = 250;
+  /** Example image source */
+  @Prop() exampleImageSource: string;
 
   /** @internal */
   @Prop() apiPath: string | undefined;
@@ -183,6 +184,7 @@ export class VviinnVpsButton {
           excluded={this.excluded}
           productDetailNewTab={this.productDetailNewTab}
           imageResolutionWidth={this.imageResolutionWidth}
+          exampleImageSource={this.exampleImageSource}
         />
       </Host>
     );

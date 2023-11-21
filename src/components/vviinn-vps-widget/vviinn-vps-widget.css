@@ -24,6 +24,7 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   height: 640px;
+  max-height: 95vh;
 }
 
 #start-page_block {

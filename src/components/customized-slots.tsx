@@ -2,7 +2,6 @@ import { h } from "@stencil/core";
 
 const defaultSlotsNames: string[] = [
   "vviinn-onboarding-title",
-  "vviinn-example-image",
   "vviinn-teaser-text",
   "vviinn-image-upload-button-text",
   "vviinn-privacy-badge-text",

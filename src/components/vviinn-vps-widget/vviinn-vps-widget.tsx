@@ -52,11 +52,7 @@ import { campaignTypeNames } from "../../campaign/Campaign";
 import { parseExcluded } from "../../utils/collections/collectionsUtils";
 import { resources } from "../../locale/resources-vps";
 import { Locale } from "../../locale";
-import {
-  CameraActionIcon,
-  GalleryActionIcon,
-  UploadActionIcon,
-} from "../vviinn-icons";
+import { CameraActionIcon, UploadActionIcon } from "../vviinn-icons";
 
 const filterInt = (value: string) =>
   /^[-+]?(\d+|Infinity)$/.test(value) ? Number(value) : NaN;
@@ -92,7 +88,6 @@ const notNan = (n: number): boolean => !isNaN(n);
  * @slot onboarding-card-2-text - Text content of second onboarding slide.
  * @slot onboarding-card-3-icon - Icon (or other graphics) on the third onboarding slide.
  * @slot onboarding-card-3-text - Text content of third onboarding slide.
- * @slot vviinn-example-image - Image in Example Images block.
  * @slot vviinn-teaser-text - Text on widget's main screen.
  * @slot vviinn-image-upload-button-text - Title of Upload Button.
  * @slot vviinn-privacy-badge-text - Text content of privacy notification block.
@@ -123,6 +118,8 @@ export class VviinnVpsWidget {
   @Prop() productDetailNewTab: boolean = true;
   /** Resolution width of an image in the product card */
   @Prop() imageResolutionWidth: number = 250;
+  /** Example image source */
+  @Prop() exampleImageSource: string;
 
   /** @internal */
   @Prop() apiPath: string = "https://api.vviinn.com";
@@ -615,6 +612,7 @@ export class VviinnVpsWidget {
                 }
                 basicEventData={this.getBasicEventData()}
                 srcObject={this.stream}
+                exampleImageSource={this.exampleImageSource}
               />
               <div
                 class={{
@@ -644,13 +642,6 @@ export class VviinnVpsWidget {
                         <span class="action-button-content">
                           <CameraActionIcon />
                           <span>Start Camera</span>
-                        </span>
-                      </button>
-
-                      <button class="action-button">
-                        <span class="action-button-content">
-                          <GalleryActionIcon />
-                          <span>Show Gallery</span>
                         </span>
                       </button>
 

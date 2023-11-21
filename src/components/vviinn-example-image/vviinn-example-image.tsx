@@ -16,6 +16,8 @@ import * as E from "fp-ts/lib/Either";
 import { BasicEventData } from "../../recommendation/events";
 import { RoundCameraIcon } from "../vviinn-icons";
 
+const exampleImageSourceFallback = "../../assets/vviinn_img_start-hero.jpg";
+
 @Component({
   tag: "vviinn-example-image",
   styleUrl: "vviinn-example-image.css",
@@ -23,8 +25,7 @@ import { RoundCameraIcon } from "../vviinn-icons";
 })
 export class VviinnExampleImage {
   @Element() el: HTMLElement;
-  @Prop() src: string =
-    "https://cdn.stage.vviinn.com/image/0/fit/1200/0/ce/0/Z3M6Ly92dmlpbm4tY2F0YWxvZy1pbWFnZXMtc3RhZ2Uvc3RvcmFnZS5nb29nbGVhcGlzLmNvbS9FTWE1UWhvVWNlQS1MM1oyYVdsdWJpMXlaV1psY21WdVkyVXRZMkYwWVd4dlp5OXBiV0ZuWlY5aGRIUnlhV0oxZEdWZlkyRjBZV3h2Wnk5cGJXRm5aWE12VWtNeE15OVNRekV6WDJsdFlXZGxYekF3TG1wd1p3LmpwZw==";
+  @Prop() exampleImageSource: string;
   @Prop() width: number = 0;
   @Prop() height: number = 0;
   @Prop() basicEventData: BasicEventData;
@@ -60,7 +61,9 @@ export class VviinnExampleImage {
       const dataURI = canvas.toDataURL("image/jpeg");
       file = await toFile(dataURI);
     } else {
-      file = await toFile(this.src);
+      file = await toFile(
+        this.exampleImageSource ?? exampleImageSourceFallback
+      );
     }
 
     pipe(
@@ -96,7 +99,7 @@ export class VviinnExampleImage {
           muted
         ></video>
         <img
-          src={this.src}
+          src={this.exampleImageSource ?? exampleImageSourceFallback}
           width={this.width}
           height={this.height}
           tabindex={1}
