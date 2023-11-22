@@ -38,7 +38,7 @@ export class VviinnExampleImage {
   /** @internal */
   @Event() vviinnImageUploadFinished: EventEmitter;
 
-  private videoElement: HTMLVideoElement;
+  private videoElement: HTMLVideoElement | null;
 
   componentDidLoad() {
     this.videoElement = this.el.shadowRoot.getElementById(
@@ -54,6 +54,7 @@ export class VviinnExampleImage {
     if (this.srcObject) {
       const video = this.videoElement;
       const canvas = document.createElement("canvas");
+      this.videoElement.pause();
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
       const ctx = canvas.getContext("2d");

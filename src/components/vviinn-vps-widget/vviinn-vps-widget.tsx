@@ -194,10 +194,17 @@ export class VviinnVpsWidget {
   private id?: string;
   private resultLoaded: boolean = false;
   private resultViewed: boolean = false;
+  private cameraAvailable: boolean = false;
 
   private initResultEvents() {
     this.resultLoaded = false;
     this.resultViewed = false;
+  }
+
+  private stopStreamTracks() {
+    this.stream?.getTracks().forEach((track) => {
+      track.stop();
+    });
   }
 
   private isOnboardingSlide() {
@@ -223,22 +230,17 @@ export class VviinnVpsWidget {
 
   private handleCameraClick = async () => {
     if (this.stream) return;
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices
-        .getUserMedia({ video: { facingMode: "environment" } })
-        .then((videoStream) => {
-          if (videoStream) {
-            this.stream = videoStream;
-          }
-        })
-        .catch(function (error) {
-          // FIXME: show error properly
-          console.error("Error accessing camera:", error.message);
-        });
-    } else {
-      // FIXME: show error properly
-      console.error("getUserMedia not supported on your browser");
-    }
+    navigator.mediaDevices
+      .getUserMedia({ video: { facingMode: "environment" } })
+      .then((videoStream) => {
+        if (videoStream) {
+          this.stream = videoStream;
+        }
+      })
+      .catch(function (error) {
+        // FIXME: show error properly
+        console.error("Error accessing camera:", error.message);
+      });
   };
 
   componentDidLoad() {
@@ -395,6 +397,7 @@ export class VviinnVpsWidget {
   @Listen("secondaryActionClicked")
   trackSecondaryAction() {
     this.initResultEvents();
+    this.stream = null;
   }
 
   connectedCallback() {
@@ -406,6 +409,9 @@ export class VviinnVpsWidget {
       fallbackLng: "de-DE",
       resources,
     });
+
+    this.cameraAvailable =
+      !!navigator.mediaDevices && !!navigator.mediaDevices.getUserMedia;
 
     imageSearchState.token = this.token;
     imageSearchState.campaignId = pipe(
@@ -511,6 +517,7 @@ export class VviinnVpsWidget {
     const modal = overlay.querySelector("vviinn-modal");
     const modalBody = modal.shadowRoot.querySelector(".body");
     modalBody.scrollTop = 0;
+    this.stopStreamTracks();
   }
 
   private renderResults() {
@@ -562,6 +569,8 @@ export class VviinnVpsWidget {
     imageSearchState.rectangleSearchForm = undefined;
     imageSearchState.loading = false;
     this.resetScroll("results-block");
+    this.stopStreamTracks();
+    this.stream = null;
   }
 
   private haveErrors(): boolean {
@@ -635,15 +644,17 @@ export class VviinnVpsWidget {
                   {!this.haveErrors() && <vviinn-teaser />}
                   {!this.haveErrors() && (
                     <div class="buttons-group">
-                      <button
-                        class="action-button"
-                        onClick={this.handleCameraClick}
-                      >
-                        <span class="action-button-content">
-                          <CameraActionIcon />
-                          <span>Start Camera</span>
-                        </span>
-                      </button>
+                      {this.cameraAvailable && (
+                        <button
+                          class="action-button"
+                          onClick={this.handleCameraClick}
+                        >
+                          <span class="action-button-content">
+                            <CameraActionIcon />
+                            <span>Start Camera</span>
+                          </span>
+                        </button>
+                      )}
 
                       <vviinn-image-selector
                         class="action-button"
