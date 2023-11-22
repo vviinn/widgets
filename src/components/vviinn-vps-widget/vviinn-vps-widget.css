@@ -237,6 +237,7 @@ search-filters::part(filter active) {
 @media (max-width: 768px) {
   .start-page {
     height: auto;
+    max-height: unset;
   }
 
   .results-page > * {
