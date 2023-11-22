@@ -16,8 +16,6 @@ import * as E from "fp-ts/lib/Either";
 import { BasicEventData } from "../../recommendation/events";
 import { RoundCameraIcon } from "../vviinn-icons";
 
-const exampleImageSourceFallback = "../../assets/vviinn_img_start-hero.jpg";
-
 @Component({
   tag: "vviinn-example-image",
   styleUrl: "vviinn-example-image.css",
@@ -32,6 +30,7 @@ export class VviinnExampleImage {
   @Prop() srcObject: MediaStream;
 
   @State() selected: boolean = false;
+  @State() videoInitialized: boolean = false;
 
   @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
@@ -62,9 +61,7 @@ export class VviinnExampleImage {
       const dataURI = canvas.toDataURL("image/jpeg");
       file = await toFile(dataURI);
     } else {
-      file = await toFile(
-        this.exampleImageSource ?? exampleImageSourceFallback
-      );
+      file = await toFile(this.exampleImageSource);
     }
 
     pipe(
@@ -87,6 +84,10 @@ export class VviinnExampleImage {
   handleSrcObjectChange() {
     if (!this.srcObject) return;
     this.videoElement.srcObject = this.srcObject;
+    //FIXME this is a hack to make sure the video is initialized
+    setTimeout(() => {
+      this.videoInitialized = true;
+    }, 600);
   }
 
   render() {
@@ -94,17 +95,17 @@ export class VviinnExampleImage {
       <Host onKeyUp={(ev: KeyboardEvent) => this.handleKeyPress(ev)}>
         <video
           id="camera-preview"
-          class={{ hidden: !this.srcObject }}
+          class={{ hidden: !this.videoInitialized }}
           autoplay
           playsinline
           muted
         ></video>
         <img
-          src={this.exampleImageSource ?? exampleImageSourceFallback}
+          src={this.exampleImageSource}
           width={this.width}
           height={this.height}
           tabindex={1}
-          class={{ hidden: !!this.srcObject }}
+          class={{ hidden: this.videoInitialized }}
         />
         <button class="example-button" onClick={() => this.selectImage()}>
           <RoundCameraIcon />

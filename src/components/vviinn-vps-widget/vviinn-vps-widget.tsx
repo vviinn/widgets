@@ -119,7 +119,8 @@ export class VviinnVpsWidget {
   /** Resolution width of an image in the product card */
   @Prop() imageResolutionWidth: number = 250;
   /** Example image source */
-  @Prop() exampleImageSource: string;
+  @Prop() exampleImageSource: string =
+    "https://cdn.vviinn.com/assets/merchant/default/vviinn_img_start-hero.jpg";
 
   /** @internal */
   @Prop() apiPath: string = "https://api.vviinn.com";
