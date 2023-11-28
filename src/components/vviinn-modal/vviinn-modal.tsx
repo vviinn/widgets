@@ -153,7 +153,7 @@ export class VviinnModal {
             </svg>
           </button>
         </div>
-        <div class="body">
+        <div class={{ body: true, "first-screen": this.isFirstScreen }}>
           <slot></slot>
         </div>
       </Host>
