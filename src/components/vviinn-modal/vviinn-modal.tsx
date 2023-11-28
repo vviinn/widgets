@@ -50,6 +50,11 @@ export class VviinnModal {
     slotChangeListener(this, this.el);
   }
 
+  private resetTopScroll() {
+    const element: HTMLElement = this.el.shadowRoot.querySelector(".body");
+    element.scroll({ top: 0 });
+  }
+
   private close() {
     this.active = false;
 
@@ -99,6 +104,7 @@ export class VviinnModal {
               part="secondary-action"
               onClick={() => {
                 this.resetState();
+                this.resetTopScroll();
                 this.secondaryActionClicked.emit();
               }}
             >
