@@ -524,7 +524,7 @@ export class VviinnVprWidget implements ComponentInterface {
         class={{
           loaded: true,
           empty: this.recommendations.length == 0,
-          [this.mode]: true,
+          [this.mode === "cross-selling" ? "grid" : this.mode]: true,
         }}
         aria-hidden="false"
       >
@@ -566,7 +566,7 @@ export class VviinnVprWidget implements ComponentInterface {
         imageRatio={1}
         price={recommendation.price.actual}
         salePrice={recommendation.price.sale}
-        responsive={this.mode === "grid"}
+        responsive={this.mode === "grid" || this.mode === "cross-selling"}
         addToBasketShow={this.addToBasketShow}
         mode={this.mode}
         dimmedBackground={this.useDimmedBackgroundInCard()}

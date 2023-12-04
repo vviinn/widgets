@@ -239,7 +239,8 @@ export class VviinnProductCard {
           <button
             class={{
               "basket-button": true,
-              "basket-button-grid": this.mode === "grid",
+              "basket-button-grid":
+                this.mode === "grid" || this.mode === "cross-selling",
               "basket-button-continuity ": this.mode === "continuity",
             }}
             part="basket-button"

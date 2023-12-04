@@ -10,7 +10,7 @@ const CAROUSEL_IMAGE_WIDTH_CSS_VAR = "--vviinn-carousel-image-width";
 const CONTENT_GROUP_CSS_CLASS = "items-group";
 
 type MoveDirection = "left" | "right";
-export type CarouselMode = "grid" | "continuity";
+export type CarouselMode = "grid" | "continuity" | "cross-selling";
 
 /**
  * @part carousel-button
@@ -43,16 +43,20 @@ export class VviinnCarousel {
     this.handleResize()
   );
 
+  private isCrossSelling = () => this.mode === "cross-selling";
+  private isGrid = () => this.mode === "grid";
+  private isContinuity = () => this.mode === "continuity";
+  private isGridLike = () => this.isGrid() || this.isCrossSelling();
+
   private mutationObserver = new MutationObserver(() =>
     this.cloneSlottedContent()
   );
 
   private isLastGroup = () =>
     this.activeContentGroup === this.getContentGroups().length - 1 &&
-    this.mode === "grid";
+    this.isGrid();
 
-  private isFirstGroup = () =>
-    this.activeContentGroup === 0 && this.mode === "grid";
+  private isFirstGroup = () => this.activeContentGroup === 0 && this.isGrid();
 
   componentWillLoad() {
     this.isRTL = document.dir === "rtl";
@@ -97,7 +101,7 @@ export class VviinnCarousel {
     return {
       content: true,
       [this.moveDirection]: true,
-      [this.mode]: true,
+      [this.isCrossSelling() ? "grid" : this.mode]: true,
       "show-scrollbar": this.showScroll,
     };
   }
@@ -130,7 +134,6 @@ export class VviinnCarousel {
 
   private setWidth() {
     const parent = this.getHostParent();
-
     if (!parent) return;
 
     const parentStyles = getComputedStyle(parent);
@@ -247,16 +250,16 @@ export class VviinnCarousel {
   }
 
   private showBullets(): boolean {
-    return this.mode === "grid" && this.showScroll;
+    return this.isGrid() && this.showScroll;
   }
 
   private showScrollbar(): boolean {
-    return this.mode === "continuity" && this.showScroll;
+    return this.isContinuity() && this.showScroll;
   }
 
   private getClassMap() {
     return {
-      [this.mode]: true,
+      [this.isCrossSelling() ? "grid" : this.mode]: true,
       "show-scrollbar": this.showScrollbar(),
     };
   }
@@ -278,8 +281,8 @@ export class VviinnCarousel {
         imageRatio={1}
         price={recommendation.price.actual}
         salePrice={recommendation.price.sale}
-        responsive={this.mode === "grid"}
-        dimmedBackground={this.mode === "continuity"}
+        responsive={this.isGridLike()}
+        dimmedBackground={this.isContinuity()}
         campaignTypeId={this.campaignTypeId}
         index={rank}
         widgetElementId={this.widgetElementId}
@@ -305,7 +308,7 @@ export class VviinnCarousel {
   }
 
   private renderRecommendations() {
-    return this.mode === "grid"
+    return this.isGridLike()
       ? this.renderGrid()
       : this.renderRecommendationsElements();
   }
@@ -318,7 +321,9 @@ export class VviinnCarousel {
     const recommendations = this.renderRecommendationsElements();
     const grouppedContent = chunksOf(this.getColumnsNumber())(recommendations);
 
-    return this.renderRecommendationGroups(grouppedContent);
+    return this.isCrossSelling
+      ? this.renderRecommendationGroups(grouppedContent)[0]
+      : this.renderRecommendationGroups(grouppedContent);
   }
 
   private renderBullets() {
@@ -343,14 +348,16 @@ export class VviinnCarousel {
     return (
       <Host class={this.getClassMap()}>
         <div class={{ body: true, ...this.getClassMap() }}>
-          <button
-            class="prev"
-            onClick={() => this.showPrev()}
-            part="carousel-button"
-            disabled={this.gridArrowsDynamic && this.isFirstGroup()}
-          >
-            <ChevronIcon />
-          </button>
+          {!this.isCrossSelling() && (
+            <button
+              class="prev"
+              onClick={() => this.showPrev()}
+              part="carousel-button"
+              disabled={this.gridArrowsDynamic && this.isFirstGroup()}
+            >
+              <ChevronIcon />
+            </button>
+          )}
 
           <div
             class={this.getContentClassMap()}
@@ -359,14 +366,16 @@ export class VviinnCarousel {
             {this.renderRecommendations()}
           </div>
 
-          <button
-            class="next"
-            onClick={() => this.showNext()}
-            part="carousel-button"
-            disabled={this.gridArrowsDynamic && this.isLastGroup()}
-          >
-            <ChevronIcon />
-          </button>
+          {!this.isCrossSelling() && (
+            <button
+              class="next"
+              onClick={() => this.showNext()}
+              part="carousel-button"
+              disabled={this.gridArrowsDynamic && this.isLastGroup()}
+            >
+              <ChevronIcon />
+            </button>
+          )}
         </div>
         {this.showBullets() && (
           <div class="bullets">{this.renderBullets()}</div>
