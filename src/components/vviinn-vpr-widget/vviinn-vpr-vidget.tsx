@@ -82,8 +82,10 @@ import { Locale } from "../../locale";
  * @part recommendations-grid - For internal usage only!
  * @part recommendations-title - Title of the recommendations grid.
  * @part basket-button - Add to Basket button.
+ * @part cross-selling-button - Cross-selling button.
  *
  * @slot vviinn-basket-button-text - Title of Add to Basket button.
+ * @slot vviinn-cross-selling-icon - Icon of cross-selling button.
  */
 @Component({
   tag: "vviinn-vpr-widget",

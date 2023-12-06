@@ -51,8 +51,11 @@ import { MagicIcon } from "../vviinn-icons";
  * @part price-sale - renders inside price-container when "sale-price" property filled. Contains sale price.
  * @part price-prefix - renders before price-amount. Can be set with "price-prefix" property or inherited from parent component.
  * @part title - Product title
+ * @part basket-button - Add to Basket button.
+ * @part cross-selling-button - Cross-selling button.
  *
  * @slot vviinn-basket-button-text - Title of Add to Basket button.
+ * @slot vviinn-cross-selling-icon - Icon of cross-selling button.
  */
 @Component({
   tag: "vviinn-product-card",
@@ -222,7 +225,7 @@ export class VviinnProductCard {
       <Host
         part="product-card"
         class={{ dimmed: this.dimmedBackground }}
-        exportparts="brand, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, basket-button"
+        exportparts="brand, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, basket-button, cross-selling-button"
       >
         <Linked deeplink={this.deeplink} part="image-link">
           {this.renderImage()}
@@ -267,9 +270,12 @@ export class VviinnProductCard {
         {this.mode === "cross-selling" && (
           <button
             class="cross-selling-button"
+            part="cross-selling-button"
             onClick={() => this.vviinnCrossSellingClick.emit(this.productData)}
           >
-            <MagicIcon />
+            <slot name="vviinn-cross-selling-icon">
+              <MagicIcon />
+            </slot>
           </button>
         )}
       </Host>
