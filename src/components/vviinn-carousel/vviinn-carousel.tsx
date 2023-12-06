@@ -1,4 +1,12 @@
-import { Component, Host, h, Element, State, Prop } from "@stencil/core";
+import {
+  Component,
+  Host,
+  h,
+  Element,
+  State,
+  Prop,
+  Listen,
+} from "@stencil/core";
 import { chunksOf } from "fp-ts/lib/Array";
 import { Recommendation } from "../../recommendation/recommendation";
 import { ChevronIcon } from "../vviinn-icons";
@@ -27,6 +35,7 @@ export class VviinnCarousel {
   @State() contentGroups: HTMLElement[] = [];
   @State() activeContentGroup: number = 0;
   @State() isRTL: boolean = false;
+  @State() crossSellingRecommendations: Recommendation[] = [];
 
   @Prop() mode: CarouselMode = "continuity";
   @Prop() imageWidth: number = 140;
@@ -43,10 +52,10 @@ export class VviinnCarousel {
     this.handleResize()
   );
 
-  private isCrossSelling = () => this.mode === "cross-selling";
-  private isGrid = () => this.mode === "grid";
-  private isContinuity = () => this.mode === "continuity";
-  private isGridLike = () => this.isGrid() || this.isCrossSelling();
+  private isCrossSelling: boolean;
+  private isGrid: boolean;
+  private isContinuity: boolean;
+  private isGridLike: boolean;
 
   private mutationObserver = new MutationObserver(() =>
     this.cloneSlottedContent()
@@ -54,9 +63,8 @@ export class VviinnCarousel {
 
   private isLastGroup = () =>
     this.activeContentGroup === this.getContentGroups().length - 1 &&
-    this.isGrid();
-
-  private isFirstGroup = () => this.activeContentGroup === 0 && this.isGrid();
+    this.isGrid;
+  private isFirstGroup = () => this.activeContentGroup === 0 && this.isGrid;
 
   componentWillLoad() {
     this.isRTL = document.dir === "rtl";
@@ -64,6 +72,20 @@ export class VviinnCarousel {
 
   connectedCallback() {
     this.setItemWidth();
+
+    this.isCrossSelling = this.mode === "cross-selling";
+    this.isGrid = this.mode === "grid";
+    this.isContinuity = this.mode === "continuity";
+    this.isGridLike = this.isGrid || this.isCrossSelling;
+
+    const columnsNumber = this.getColumnsNumber();
+
+    if (this.isCrossSelling && this.recommendations.length >= columnsNumber) {
+      this.crossSellingRecommendations = this.recommendations.slice(
+        0,
+        columnsNumber
+      );
+    }
   }
 
   disconnectedCallback() {
@@ -78,6 +100,37 @@ export class VviinnCarousel {
 
     this.mutationObserver.observe(slot, { subtree: true, childList: true });
     this.resizeObserver.observe(this.getHostParent());
+  }
+
+  @Listen("vviinnCrossSellingClick")
+  crossSellingClickListener({ detail }) {
+    const step = this.getColumnsNumber();
+    let clickedProduct = this.crossSellingRecommendations.find(
+      (item) => item.productId === detail.productId
+    );
+    const crossSellingIndex =
+      this.crossSellingRecommendations.indexOf(clickedProduct);
+    const recommendationIndex = this.recommendations.indexOf(clickedProduct);
+    const newCrossSellingRecommendations = this.crossSellingRecommendations;
+
+    if (recommendationIndex + step < this.recommendations.length) {
+      newCrossSellingRecommendations[crossSellingIndex] =
+        this.recommendations[recommendationIndex + step];
+
+      const timer = setTimeout(() => {
+        this.crossSellingRecommendations = [...newCrossSellingRecommendations];
+
+        if (recommendationIndex + step * 2 > this.recommendations.length - 1) {
+          let element = this.el.querySelector(
+            `[data-id="${detail.productId}"]`
+          );
+          element.shadowRoot
+            .querySelector(".cross-selling-button")
+            .classList.add("hidden");
+        }
+        clearTimeout(timer);
+      }, 250);
+    }
   }
 
   private getItemWidthFromDocument(): number {
@@ -101,7 +154,7 @@ export class VviinnCarousel {
     return {
       content: true,
       [this.moveDirection]: true,
-      [this.isCrossSelling() ? "grid" : this.mode]: true,
+      [this.isCrossSelling ? "grid" : this.mode]: true,
       "show-scrollbar": this.showScroll,
     };
   }
@@ -112,7 +165,6 @@ export class VviinnCarousel {
     this.setItemWidth();
 
     const newColumns = this.getColumnsNumber();
-
     if (newColumns !== this.columns) {
       this.columns = newColumns;
     }
@@ -250,16 +302,16 @@ export class VviinnCarousel {
   }
 
   private showBullets(): boolean {
-    return this.isGrid() && this.showScroll;
+    return this.isGrid && this.showScroll;
   }
 
   private showScrollbar(): boolean {
-    return this.isContinuity() && this.showScroll;
+    return this.isContinuity && this.showScroll;
   }
 
   private getClassMap() {
     return {
-      [this.isCrossSelling() ? "grid" : this.mode]: true,
+      [this.isCrossSelling ? "grid" : this.mode]: true,
       "show-scrollbar": this.showScrollbar(),
     };
   }
@@ -281,14 +333,15 @@ export class VviinnCarousel {
         imageRatio={1}
         price={recommendation.price.actual}
         salePrice={recommendation.price.sale}
-        responsive={this.isGridLike()}
-        dimmedBackground={this.isContinuity()}
+        responsive={this.isGridLike}
+        dimmedBackground={this.isContinuity}
         campaignTypeId={this.campaignTypeId}
         index={rank}
         widgetElementId={this.widgetElementId}
         widgetVersion={this.widgetVersion}
         addToBasketShow={this.addToBasketShow}
         mode={this.mode}
+        data-id={recommendation.productId}
       />
     );
   }
@@ -308,22 +361,22 @@ export class VviinnCarousel {
   }
 
   private renderRecommendations() {
-    return this.isGridLike()
+    return this.isGridLike
       ? this.renderGrid()
       : this.renderRecommendationsElements();
   }
 
   private renderRecommendationsElements(): HTMLVviinnProductCardElement[] {
-    return this.recommendations.map((r, i) => this.renderRecommendation(r, i));
+    const recommendations = this.isCrossSelling
+      ? this.crossSellingRecommendations
+      : this.recommendations;
+    return recommendations.map((r, i) => this.renderRecommendation(r, i));
   }
 
   private renderGrid() {
     const recommendations = this.renderRecommendationsElements();
     const grouppedContent = chunksOf(this.getColumnsNumber())(recommendations);
-
-    return this.isCrossSelling
-      ? this.renderRecommendationGroups(grouppedContent)[0]
-      : this.renderRecommendationGroups(grouppedContent);
+    return this.renderRecommendationGroups(grouppedContent);
   }
 
   private renderBullets() {
@@ -348,7 +401,7 @@ export class VviinnCarousel {
     return (
       <Host class={this.getClassMap()}>
         <div class={{ body: true, ...this.getClassMap() }}>
-          {!this.isCrossSelling() && (
+          {!this.isCrossSelling && (
             <button
               class="prev"
               onClick={() => this.showPrev()}
@@ -366,7 +419,7 @@ export class VviinnCarousel {
             {this.renderRecommendations()}
           </div>
 
-          {!this.isCrossSelling() && (
+          {!this.isCrossSelling && (
             <button
               class="next"
               onClick={() => this.showNext()}

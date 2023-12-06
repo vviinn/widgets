@@ -7,6 +7,7 @@ import {
   EventEmitter,
   Element,
   State,
+  Watch,
 } from "@stencil/core";
 import { pipe } from "fp-ts/lib/function";
 import { getAnalyticsModule } from "../../analytics/GeneralAnalytics";
@@ -33,6 +34,7 @@ import {
 } from "../../campaign/Campaign";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 import { slotChangeListener } from "../customized-slots";
+import { MagicIcon } from "../vviinn-icons";
 
 /**
  * @part brand - product brand.
@@ -107,6 +109,9 @@ export class VviinnProductCard {
   /** @internal */
   @Event({ bubbles: true })
   vviinnAuxClick: EventEmitter<ProductCardEventData>;
+  /** @internal */
+  @Event({ bubbles: true })
+  vviinnCrossSellingClick: EventEmitter<ProductCardEventData>;
 
   private productData: ProductCardEventData | null = null;
   private imageElement?: HTMLImageElement;
@@ -118,6 +123,11 @@ export class VviinnProductCard {
 
   componentWillLoad() {
     slotChangeListener(this, this.el);
+  }
+
+  @Watch("productId")
+  productIdWatcher() {
+    this.productData = this.getProductData();
   }
 
   private getWidgetType() {
@@ -251,6 +261,15 @@ export class VviinnProductCard {
             <slot name="vviinn-basket-button-text">
               <span>{i18next.t("basketButtonText")}</span>
             </slot>
+          </button>
+        )}
+
+        {this.mode === "cross-selling" && (
+          <button
+            class="cross-selling-button"
+            onClick={() => this.vviinnCrossSellingClick.emit(this.productData)}
+          >
+            <MagicIcon />
           </button>
         )}
       </Host>

@@ -2,6 +2,7 @@
   align-items: center;
   display: flex;
   flex-direction: column;
+  position: relative;
   gap: 8px;
   height: 100%;
 }
@@ -79,6 +80,31 @@ img.responsive {
 picture {
   position: relative;
   width: 100%;
+}
+
+.cross-selling-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: #f7f7f7;
+  border: 1px solid #dddddd;
+  color: black;
+  cursor: pointer;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.cross-selling-button:hover {
+  background: #dddddd;
+}
+
+.cross-selling-button.hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .basket-button {
