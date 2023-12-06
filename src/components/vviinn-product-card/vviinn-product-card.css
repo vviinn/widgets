@@ -64,7 +64,6 @@ img.responsive {
   font-style: normal;
   font-weight: 500;
   line-height: 24px;
-  margin-bottom: 8px;
   overflow: hidden;
 }
 
@@ -112,7 +111,6 @@ picture {
   cursor: pointer;
   font-size: 16px;
   padding: 10px 12px;
-  margin-top: 8px;
 }
 
 .basket-button.basket-button-grid {
