@@ -120,7 +120,7 @@ CrossSelling.args = {
   noResultText: "",
   gridArrowsDynamic: false,
   apiPath: "https://api.vviinn.com",
-  addToBasketShow: false,
+  addToBasketShow: true,
 };
 
 CrossSelling.decorators = [gridDecorator];

@@ -129,7 +129,7 @@ export class VviinnCarousel {
             .classList.add("hidden");
         }
         clearTimeout(timer);
-      }, 250);
+      }, 450);
     }
   }
 
