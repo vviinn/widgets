@@ -47,7 +47,7 @@ export const argTypes = {
   },
   mode: {
     name: "mode",
-    options: ["continuity", "grid"],
+    options: ["continuity", "grid", "cross-selling"],
     control: {
       type: "select",
     },

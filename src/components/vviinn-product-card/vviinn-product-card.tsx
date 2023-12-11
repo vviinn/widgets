@@ -7,6 +7,7 @@ import {
   EventEmitter,
   Element,
   State,
+  Watch,
 } from "@stencil/core";
 import { pipe } from "fp-ts/lib/function";
 import { getAnalyticsModule } from "../../analytics/GeneralAnalytics";
@@ -33,6 +34,7 @@ import {
 } from "../../campaign/Campaign";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 import { slotChangeListener } from "../customized-slots";
+import { MagicIcon } from "../vviinn-icons";
 
 /**
  * @part brand - product brand.
@@ -49,8 +51,11 @@ import { slotChangeListener } from "../customized-slots";
  * @part price-sale - renders inside price-container when "sale-price" property filled. Contains sale price.
  * @part price-prefix - renders before price-amount. Can be set with "price-prefix" property or inherited from parent component.
  * @part title - Product title
+ * @part basket-button - Add to Basket button.
+ * @part cross-selling-button - Cross-selling button.
  *
  * @slot vviinn-basket-button-text - Title of Add to Basket button.
+ * @slot vviinn-cross-selling-icon - Icon of cross-selling button.
  */
 @Component({
   tag: "vviinn-product-card",
@@ -107,6 +112,9 @@ export class VviinnProductCard {
   /** @internal */
   @Event({ bubbles: true })
   vviinnAuxClick: EventEmitter<ProductCardEventData>;
+  /** @internal */
+  @Event({ bubbles: true })
+  vviinnCrossSellingClick: EventEmitter<ProductCardEventData>;
 
   private productData: ProductCardEventData | null = null;
   private imageElement?: HTMLImageElement;
@@ -118,6 +126,11 @@ export class VviinnProductCard {
 
   componentWillLoad() {
     slotChangeListener(this, this.el);
+  }
+
+  @Watch("productId")
+  productIdWatcher() {
+    this.productData = this.getProductData();
   }
 
   private getWidgetType() {
@@ -212,7 +225,7 @@ export class VviinnProductCard {
       <Host
         part="product-card"
         class={{ dimmed: this.dimmedBackground }}
-        exportparts="brand, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, basket-button"
+        exportparts="brand, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, basket-button, cross-selling-button"
       >
         <Linked deeplink={this.deeplink} part="image-link">
           {this.renderImage()}
@@ -239,7 +252,8 @@ export class VviinnProductCard {
           <button
             class={{
               "basket-button": true,
-              "basket-button-grid": this.mode === "grid",
+              "basket-button-grid":
+                this.mode === "grid" || this.mode === "cross-selling",
               "basket-button-continuity ": this.mode === "continuity",
             }}
             part="basket-button"
@@ -249,6 +263,18 @@ export class VviinnProductCard {
           >
             <slot name="vviinn-basket-button-text">
               <span>{i18next.t("basketButtonText")}</span>
+            </slot>
+          </button>
+        )}
+
+        {this.mode === "cross-selling" && (
+          <button
+            class="cross-selling-button"
+            part="cross-selling-button"
+            onClick={() => this.vviinnCrossSellingClick.emit(this.productData)}
+          >
+            <slot name="vviinn-cross-selling-icon">
+              <MagicIcon />
             </slot>
           </button>
         )}
