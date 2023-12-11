@@ -2,6 +2,7 @@
   align-items: center;
   display: flex;
   flex-direction: column;
+  position: relative;
   gap: 8px;
   height: 100%;
 }
@@ -63,7 +64,6 @@ img.responsive {
   font-style: normal;
   font-weight: 500;
   line-height: 24px;
-  margin-bottom: 8px;
   overflow: hidden;
 }
 
@@ -81,12 +81,38 @@ picture {
   width: 100%;
 }
 
+.cross-selling-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  z-index: 1;
+  background: rgba(224, 224, 224, 0.85);
+  border: none;
+  color: #6f6f6f;
+  cursor: pointer;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.cross-selling-button:hover {
+  background: rgba(224, 224, 224, 1);
+}
+
+.cross-selling-button.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .basket-button {
   border: none;
   cursor: pointer;
   font-size: 16px;
   padding: 10px 12px;
-  margin-top: 8px;
 }
 
 .basket-button.basket-button-grid {

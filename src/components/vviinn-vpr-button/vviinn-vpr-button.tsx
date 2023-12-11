@@ -23,6 +23,7 @@ import { Locale } from "../../locale";
  * @part vviinn-button - Button element container.
  *
  * @slot vviinn-basket-button-text - Title of Add to Basket button.
+ * @slot vviinn-cross-selling-icon - Icon of cross-selling button.
  */
 @Component({
   tag: "vviinn-vpr-button",

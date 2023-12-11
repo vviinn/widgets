@@ -82,8 +82,10 @@ import { Locale } from "../../locale";
  * @part recommendations-grid - For internal usage only!
  * @part recommendations-title - Title of the recommendations grid.
  * @part basket-button - Add to Basket button.
+ * @part cross-selling-button - Cross-selling button.
  *
  * @slot vviinn-basket-button-text - Title of Add to Basket button.
+ * @slot vviinn-cross-selling-icon - Icon of cross-selling button.
  */
 @Component({
   tag: "vviinn-vpr-widget",
@@ -524,7 +526,7 @@ export class VviinnVprWidget implements ComponentInterface {
         class={{
           loaded: true,
           empty: this.recommendations.length == 0,
-          [this.mode]: true,
+          [this.mode === "cross-selling" ? "grid" : this.mode]: true,
         }}
         aria-hidden="false"
       >
@@ -566,7 +568,7 @@ export class VviinnVprWidget implements ComponentInterface {
         imageRatio={1}
         price={recommendation.price.actual}
         salePrice={recommendation.price.sale}
-        responsive={this.mode === "grid"}
+        responsive={this.mode === "grid" || this.mode === "cross-selling"}
         addToBasketShow={this.addToBasketShow}
         mode={this.mode}
         dimmedBackground={this.useDimmedBackgroundInCard()}

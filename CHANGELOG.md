@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.33.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.32.1...v2.33.0) (2023-12-11)
+
+
+### Features
+
+* Add 'cross-selling' mode for Recommendation Widget ([c1075f0](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/c1075f00c50606a6195f1588fe540e3aec063d1c))
+
 ### [2.32.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.32.0...v2.32.1) (2023-11-13)
 
 ## [2.32.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.31.4...v2.32.0) (2023-11-07)
