@@ -117,19 +117,24 @@ export class VviinnCarousel {
       newCrossSellingRecommendations[crossSellingIndex] =
         this.recommendations[recommendationIndex + step];
 
-      const timer = setTimeout(() => {
-        this.crossSellingRecommendations = [...newCrossSellingRecommendations];
+      let element = this.el.querySelector(`[data-id="${detail.productId}"]`);
+      const button = element.shadowRoot.querySelector(".cross-selling-button");
+      const picture = element.shadowRoot.querySelector("picture");
+
+      picture.classList.add("animate-out");
+      button.classList.add("hidden-icon");
+      this.crossSellingRecommendations = [...newCrossSellingRecommendations];
+
+      const animationTimer = setTimeout(() => {
+        picture.classList.remove("animate-out");
 
         if (recommendationIndex + step * 2 > this.recommendations.length - 1) {
-          let element = this.el.querySelector(
-            `[data-id="${detail.productId}"]`
-          );
-          element.shadowRoot
-            .querySelector(".cross-selling-button")
-            .classList.add("hidden");
+          button.classList.add("hidden");
+        } else {
+          button.classList.remove("hidden-icon");
         }
-        clearTimeout(timer);
-      }, 450);
+        clearTimeout(animationTimer);
+      }, 600);
     }
   }
 
