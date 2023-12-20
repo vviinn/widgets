@@ -4,13 +4,7 @@
   height: 100%;
   position: relative;
   overflow: hidden;
-  aspect-ratio: 1;
-}
-
-@media (max-width: 768px) {
-  :host {
-    max-height: 60vh;
-  }
+  flex-grow: 1;
 }
 
 img {

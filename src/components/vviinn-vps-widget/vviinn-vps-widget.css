@@ -24,7 +24,6 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   height: 640px;
-  max-height: 95vh;
 }
 
 #start-page_block {
@@ -235,8 +234,18 @@ search-filters::part(filter active) {
 
 @media (max-width: 768px) {
   .start-page {
-    height: auto;
-    max-height: unset;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .start-page.active {
+    height: calc(100vh - 67px);
+    height: calc(100svh - 67px);
+  }
+
+  .start-page:not(.active) {
+    overflow: hidden;
   }
 
   .results-page {
@@ -252,22 +261,14 @@ search-filters::part(filter active) {
     min-width: calc(100% + 40px);
   }
 
-  .start-page.active {
-    min-height: calc(100vh - 64px);
-    grid-template-columns: unset;
-    grid-template-rows: min-content auto;
-  }
-
-  .start-page:not(.active) {
-    overflow: hidden;
-  }
-
   .results-page {
     grid-template-rows: min-content;
     grid-template-columns: unset;
   }
 
   #start-page_block {
+    overflow-y: unset;
+    min-height: fit-content;
     padding: 14px 24px 20px;
   }
 
