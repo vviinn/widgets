@@ -5,6 +5,7 @@
   position: relative;
   overflow: hidden;
   flex-grow: 1;
+  transition: height 0.6s ease-in-out;
 }
 
 img {
@@ -16,7 +17,7 @@ img {
 }
 
 video {
-  max-width: 100%;
+  width: 100%;
   min-height: 100%;
   object-fit: cover;
   object-position: center;
@@ -32,6 +33,7 @@ video {
   left: calc(50% - 36px);
   background-color: transparent;
   line-height: 0;
+  opacity: 0.6;
 }
 
 .hidden {

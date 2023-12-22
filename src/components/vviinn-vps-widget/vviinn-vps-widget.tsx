@@ -142,6 +142,7 @@ export class VviinnVpsWidget {
   @State() wrongImageFormat: boolean = false;
   @State() trackingDeactivated: boolean = false;
   @State() stream: MediaStream | null = null;
+  @State() cameraEnabled: boolean = false;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -284,6 +285,11 @@ export class VviinnVpsWidget {
     if (this.mode === "modal") {
       this.active = true;
     }
+  }
+
+  @Listen("vviinnCameraEnabled")
+  trackCameraEnabled({ detail: isEnabled }: CustomEvent<boolean>) {
+    this.cameraEnabled = isEnabled;
   }
 
   @Listen("vviinnProductLoad")
@@ -609,7 +615,12 @@ export class VviinnVpsWidget {
           exportparts="secondary-action, title, close-button"
         >
           <vviinn-slider showBullets={false} position={this.slidePosition}>
-            <vviinn-slide class={{ "start-page": true }}>
+            <vviinn-slide
+              class={{
+                "start-page": true,
+                "camera-enabled": this.cameraEnabled,
+              }}
+            >
               <vviinn-example-image
                 onVviinnImageUploadFinished={() =>
                   this.handleImageSelection("example")

@@ -36,6 +36,8 @@ export class VviinnExampleImage {
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
   /** @internal */
   @Event() vviinnImageUploadFinished: EventEmitter;
+  /** @internal */
+  @Event() vviinnCameraEnabled: EventEmitter;
 
   private videoElement: HTMLVideoElement | null;
 
@@ -73,6 +75,8 @@ export class VviinnExampleImage {
     );
 
     this.selected = false;
+    this.videoInitialized = false;
+    this.vviinnCameraEnabled.emit(false);
   }
 
   private handleKeyPress({ key }: KeyboardEvent) {
@@ -84,8 +88,9 @@ export class VviinnExampleImage {
   handleSrcObjectChange() {
     if (!this.srcObject) return;
     this.videoElement.srcObject = this.srcObject;
-    //FIXME this is a hack to make sure the video is initialized
+    //FIXME: this is a hack to make sure the video is initialized
     setTimeout(() => {
+      this.vviinnCameraEnabled.emit(true);
       this.videoInitialized = true;
     }, 600);
   }
@@ -107,7 +112,10 @@ export class VviinnExampleImage {
           tabindex={1}
           class={{ hidden: this.videoInitialized }}
         />
-        <button class="example-button" onClick={() => this.selectImage()}>
+        <button
+          class={{ "example-button": true, hidden: !this.videoInitialized }}
+          onClick={() => this.selectImage()}
+        >
           <RoundCameraIcon />
         </button>
       </Host>
