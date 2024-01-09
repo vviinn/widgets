@@ -120,18 +120,15 @@ export class VviinnCarousel {
       let element = this.el.querySelector(`[data-id="${detail.productId}"]`);
       const button = element.shadowRoot.querySelector(".cross-selling-button");
       const picture = element.shadowRoot.querySelector("picture");
-
+      button.classList.add("hidden");
       picture.classList.add("animate-out");
-      button.classList.add("hidden-icon");
       this.crossSellingRecommendations = [...newCrossSellingRecommendations];
 
       const animationTimer = setTimeout(() => {
         picture.classList.remove("animate-out");
 
-        if (recommendationIndex + step * 2 > this.recommendations.length - 1) {
-          button.classList.add("hidden");
-        } else {
-          button.classList.remove("hidden-icon");
+        if (recommendationIndex + step * 2 <= this.recommendations.length - 1) {
+          button.classList.remove("hidden");
         }
         clearTimeout(animationTimer);
       }, 600);

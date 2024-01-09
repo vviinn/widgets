@@ -102,31 +102,33 @@ picture::before {
   position: absolute;
   top: 8px;
   right: 8px;
-  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   z-index: 1;
-  background: rgba(224, 224, 224, 0.85);
+  background: rgba(127, 127, 127, 0.4);
   border: none;
-  color: #6f6f6f;
+  color: white;
   cursor: pointer;
-  transition: opacity 0.1s ease-in-out;
+}
+
+.cross-selling-button::after {
+  content: "";
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: calc(100% + 8px);
+  height: calc(100% + 8px);
 }
 
 .cross-selling-button:hover {
-  background: rgba(224, 224, 224, 1);
+  background: rgba(127, 127, 127, 0.5);
 }
 
 .cross-selling-button.hidden {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.cross-selling-button.hidden-icon svg {
-  opacity: 0;
+  display: none;
 }
 
 .basket-button {

@@ -34,7 +34,7 @@ import {
 } from "../../campaign/Campaign";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 import { slotChangeListener } from "../customized-slots";
-import { MagicIcon } from "../vviinn-icons";
+import { UpdateIcon } from "../vviinn-icons";
 
 /**
  * @part brand - product brand.
@@ -274,7 +274,7 @@ export class VviinnProductCard {
             onClick={() => this.vviinnCrossSellingClick.emit(this.productData)}
           >
             <slot name="vviinn-cross-selling-icon">
-              <MagicIcon />
+              <UpdateIcon />
             </slot>
           </button>
         )}
