@@ -10,7 +10,6 @@
 .price-container {
   display: flex;
   flex-direction: column;
-  margin-top: auto;
 }
 
 .price-sale,
@@ -87,15 +86,10 @@ picture::before {
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  background: #f7f7f7;
   display: block;
   top: 0;
   left: 0;
   position: absolute;
-}
-
-.animate-out::before {
-  opacity: 1;
 }
 
 .cross-selling-button {
@@ -109,6 +103,7 @@ picture::before {
   height: 32px;
   z-index: 1;
   background: rgba(127, 127, 127, 0.4);
+  backdrop-filter: blur(2px);
   border: none;
   color: white;
   cursor: pointer;
@@ -129,6 +124,11 @@ picture::before {
 
 .cross-selling-button.hidden {
   display: none;
+}
+
+.basket-button-container {
+  margin-top: auto;
+  width: 100%;
 }
 
 .basket-button {
@@ -157,12 +157,6 @@ picture::before {
   background: #f7f7f7;
 }
 
-@media (max-width: 640px) {
-  .basket-button {
-    padding: 8px 10px;
-  }
-}
-
 :host(.dimmed) picture::before {
   content: "";
   width: 100%;
@@ -176,12 +170,19 @@ picture::before {
   mix-blend-mode: multiply;
 }
 
+:host(.animated) picture::before {
+  opacity: 1;
+  animation: pulse 1.2s infinite;
+}
+
 @keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
+  0% {
+    background-color: rgb(244, 244, 244);
   }
   50% {
-    opacity: 0.5;
+    background-color: rgb(232, 232, 232);
+  }
+  100% {
+    background-color: rgba(244, 244, 244);
   }
 }

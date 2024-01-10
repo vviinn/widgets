@@ -8,6 +8,8 @@ import {
   Element,
   State,
   Watch,
+  Fragment,
+  Listen,
 } from "@stencil/core";
 import { pipe } from "fp-ts/lib/function";
 import { getAnalyticsModule } from "../../analytics/GeneralAnalytics";
@@ -24,7 +26,11 @@ import {
   ResponsiveImage,
   Image,
 } from "./render-helpers";
-import { ProductCardEventData } from "../../recommendation/events";
+import {
+  CrossSellingClickEvent,
+  CrossSellingClickEventData,
+  ProductCardEventData,
+} from "../../recommendation/events";
 
 import styles from "./vviinn-product-card.css";
 import {
@@ -95,6 +101,7 @@ export class VviinnProductCard {
   @Prop() index: number = 0;
 
   @State() imageLoaded: boolean = false;
+  @State() isTransitioning: boolean = false;
 
   /** Event fires ones when recommendation rendered on page */
   @Event({ bubbles: true })
@@ -114,7 +121,7 @@ export class VviinnProductCard {
   vviinnAuxClick: EventEmitter<ProductCardEventData>;
   /** @internal */
   @Event({ bubbles: true })
-  vviinnCrossSellingClick: EventEmitter<ProductCardEventData>;
+  vviinnCrossSellingClick: EventEmitter<CrossSellingClickEventData>;
 
   private productData: ProductCardEventData | null = null;
   private imageElement?: HTMLImageElement;
@@ -126,6 +133,17 @@ export class VviinnProductCard {
 
   componentWillLoad() {
     slotChangeListener(this, this.el);
+  }
+
+  @Listen("vviinnCrossSellingClick")
+  crossSellingClickListener({ detail }: CrossSellingClickEvent) {
+    const { animationInterval } = detail;
+    this.isTransitioning = true;
+
+    const animationTimer = setTimeout(() => {
+      this.isTransitioning = false;
+      clearTimeout(animationTimer);
+    }, animationInterval);
   }
 
   @Watch("productId")
@@ -220,58 +238,85 @@ export class VviinnProductCard {
     return this.responsive ? ResponsiveImage(props) : Image(props);
   }
 
+  private generateRandomNumber(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
   render() {
     return (
       <Host
         part="product-card"
-        class={{ dimmed: this.dimmedBackground }}
+        class={{
+          dimmed: this.dimmedBackground,
+          animated: this.isTransitioning,
+        }}
         exportparts="brand, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, basket-button, cross-selling-button"
       >
         <Linked deeplink={this.deeplink} part="image-link">
           {this.renderImage()}
         </Linked>
-        <Linked deeplink={this.deeplink} part="deeplink">
-          <span class="title" part="title">
-            {this.productTitle}
-          </span>
-        </Linked>
-        <span class="brand" part="brand">
-          {this.brand}
-        </span>
-        <span class="type" part="type">
-          {this.productType}
-        </span>
-        <Price
-          prefix={this.pricePrefix ?? state.pricePrefix}
-          currency={this.currency ?? state.currencySign}
-          price={this.price}
-          salePrice={this.salePrice}
-          locale={this.locale ?? state.locale}
-        />
-        {this.addToBasketShow && (
-          <button
-            class={{
-              "basket-button": true,
-              "basket-button-grid":
-                this.mode === "grid" || this.mode === "cross-selling",
-              "basket-button-continuity ": this.mode === "continuity",
-            }}
-            part="basket-button"
-            onClick={() => {
-              this.vviinnAddToBasket.emit(this.productData);
-            }}
-          >
-            <slot name="vviinn-basket-button-text">
-              <span>{i18next.t("basketButtonText")}</span>
-            </slot>
-          </button>
-        )}
 
+        {this.isTransitioning ? (
+          <Fragment>
+            <vviinn-skeleton height={20}></vviinn-skeleton>
+            <vviinn-skeleton height={20} halfWidth={true}></vviinn-skeleton>
+          </Fragment>
+        ) : (
+          <Fragment>
+            <Linked deeplink={this.deeplink} part="deeplink">
+              <span class="title" part="title">
+                {this.productTitle}
+              </span>
+            </Linked>
+            <span class="brand" part="brand">
+              {this.brand}
+            </span>
+            <span class="type" part="type">
+              {this.productType}
+            </span>
+            <Price
+              prefix={this.pricePrefix ?? state.pricePrefix}
+              currency={this.currency ?? state.currencySign}
+              price={this.price}
+              salePrice={this.salePrice}
+              locale={this.locale ?? state.locale}
+            />
+          </Fragment>
+        )}
+        {this.addToBasketShow && (
+          <div class="basket-button-container">
+            {this.isTransitioning ? (
+              <vviinn-skeleton height={40}></vviinn-skeleton>
+            ) : (
+              <button
+                class={{
+                  "basket-button": true,
+                  "basket-button-grid":
+                    this.mode === "grid" || this.mode === "cross-selling",
+                  "basket-button-continuity ": this.mode === "continuity",
+                }}
+                part="basket-button"
+                onClick={() => {
+                  this.vviinnAddToBasket.emit(this.productData);
+                }}
+              >
+                <slot name="vviinn-basket-button-text">
+                  <span>{i18next.t("basketButtonText")}</span>
+                </slot>
+              </button>
+            )}
+          </div>
+        )}
         {this.mode === "cross-selling" && (
           <button
             class="cross-selling-button"
             part="cross-selling-button"
-            onClick={() => this.vviinnCrossSellingClick.emit(this.productData)}
+            onClick={() => {
+              this.vviinnCrossSellingClick.emit({
+                animationInterval: this.generateRandomNumber(800, 1400),
+                productData: this.productData,
+              });
+            }}
           >
             <slot name="vviinn-cross-selling-icon">
               <UpdateIcon />

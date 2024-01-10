@@ -11,6 +11,7 @@ import { chunksOf } from "fp-ts/lib/Array";
 import { Recommendation } from "../../recommendation/recommendation";
 import { ChevronIcon } from "../vviinn-icons";
 import { CampaignTypeId } from "../../campaign/Campaign";
+import { CrossSellingClickEvent } from "../../recommendation/events";
 
 const COLUMNS_NUMBER_CSS_VAR = "--vviinn-carousel-columns-internal";
 const CAROUSEL_WIDTH_CSS_VAR = "--vviinn-carousel-content-width";
@@ -36,6 +37,7 @@ export class VviinnCarousel {
   @State() activeContentGroup: number = 0;
   @State() isRTL: boolean = false;
   @State() crossSellingRecommendations: Recommendation[] = [];
+  @State() animationInterval: number = 1200;
 
   @Prop() mode: CarouselMode = "continuity";
   @Prop() imageWidth: number = 140;
@@ -103,10 +105,12 @@ export class VviinnCarousel {
   }
 
   @Listen("vviinnCrossSellingClick")
-  crossSellingClickListener({ detail }) {
+  crossSellingClickListener({ detail }: CrossSellingClickEvent) {
     const step = this.getColumnsNumber();
+    const { animationInterval, productData } = detail;
+
     let clickedProduct = this.crossSellingRecommendations.find(
-      (item) => item.productId === detail.productId
+      (item) => item.productId === productData.productId
     );
     const crossSellingIndex =
       this.crossSellingRecommendations.indexOf(clickedProduct);
@@ -117,21 +121,20 @@ export class VviinnCarousel {
       newCrossSellingRecommendations[crossSellingIndex] =
         this.recommendations[recommendationIndex + step];
 
-      let element = this.el.querySelector(`[data-id="${detail.productId}"]`);
+      let element = this.el.querySelector(
+        `[data-id="${productData.productId}"]`
+      );
       const button = element.shadowRoot.querySelector(".cross-selling-button");
-      const picture = element.shadowRoot.querySelector("picture");
       button.classList.add("hidden");
-      picture.classList.add("animate-out");
+
       this.crossSellingRecommendations = [...newCrossSellingRecommendations];
 
       const animationTimer = setTimeout(() => {
-        picture.classList.remove("animate-out");
-
         if (recommendationIndex + step * 2 <= this.recommendations.length - 1) {
           button.classList.remove("hidden");
         }
         clearTimeout(animationTimer);
-      }, 600);
+      }, animationInterval);
     }
   }
 
