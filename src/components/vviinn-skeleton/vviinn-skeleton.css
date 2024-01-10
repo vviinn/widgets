@@ -8,10 +8,6 @@
   animation: pulse 1.2s infinite;
 }
 
-vviinn-skeleton--squared {
-  aspect-ratio: 1 / 1;
-}
-
 @keyframes pulse {
   0% {
     background-color: rgb(244, 244, 244);

@@ -283,6 +283,7 @@ export class VviinnProductCard {
             />
           </Fragment>
         )}
+
         {this.addToBasketShow && (
           <div class="basket-button-container">
             {this.isTransitioning ? (

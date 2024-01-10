@@ -9,7 +9,6 @@ export class VviinnSkeleton {
   @Element() el: HTMLElement;
 
   @Prop() height: number;
-  @Prop() squared: boolean = false;
   @Prop() halfWidth: boolean = false;
 
   render() {
@@ -18,7 +17,6 @@ export class VviinnSkeleton {
         <div
           class={{
             "vviinn-skeleton": true,
-            "vviinn-skeleton--squared": this.squared,
           }}
           style={{
             height: `${this.height.toString()}px`,
