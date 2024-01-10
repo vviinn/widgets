@@ -285,7 +285,7 @@ export class VviinnProductCard {
         )}
 
         {this.addToBasketShow && (
-          <div class="basket-button-container">
+          <Fragment>
             {this.isTransitioning ? (
               <vviinn-skeleton height={40}></vviinn-skeleton>
             ) : (
@@ -306,7 +306,7 @@ export class VviinnProductCard {
                 </slot>
               </button>
             )}
-          </div>
+          </Fragment>
         )}
         {this.mode === "cross-selling" && (
           <button
