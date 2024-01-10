@@ -126,6 +126,11 @@ picture::before {
   display: none;
 }
 
+.basket-button-container {
+  margin-top: auto;
+  width: 100%;
+}
+
 .basket-button {
   border: none;
   cursor: pointer;
