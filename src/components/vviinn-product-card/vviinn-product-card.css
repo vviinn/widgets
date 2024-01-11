@@ -157,7 +157,7 @@ picture::before {
   background: #f7f7f7;
 }
 
-:host(.dimmed) picture::before {
+:host(.dimmed) picture::after {
   content: "";
   width: 100%;
   height: 100%;
