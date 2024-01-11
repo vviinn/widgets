@@ -59,10 +59,10 @@ import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-vidget";
  * @part price-prefix - renders before price-amount. Can be set with "price-prefix" property or inherited from parent component.
  * @part title - Product title
  * @part basket-button - Add to Basket button.
- * @part update-button - Update button for Set mode.
+ * @part update-button-item - Update button for Set mode.
  *
  * @slot vviinn-basket-button-text - Title of Add to Basket button.
- * @slot vviinn-update-icon - Icon of update button for Set mode.
+ * @slot vviinn-update-icon-item - Icon of update button for Set mode.
  */
 @Component({
   tag: "vviinn-product-card",
@@ -271,7 +271,7 @@ export class VviinnProductCard {
           dimmed: this.dimmedBackground,
           animated: this.isTransitioning,
         }}
-        exportparts="brand, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, basket-button, update-button"
+        exportparts="brand, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, basket-button, update-button-item"
       >
         <Linked deeplink={this.deeplink} part="image-link">
           {this.renderImage()}
@@ -335,7 +335,7 @@ export class VviinnProductCard {
               "update-button": true,
               hidden: this.updateButtonLocation === "onTop",
             }}
-            part="update-button"
+            part="update-button-item"
             onClick={() => {
               this.vviinnCrossSellingClick.emit({
                 animationInterval: this.generateRandomNumber(800, 1400),
@@ -343,7 +343,7 @@ export class VviinnProductCard {
               });
             }}
           >
-            <slot name="vviinn-update-icon">
+            <slot name="vviinn-update-icon-item">
               <UpdateIcon />
             </slot>
           </button>

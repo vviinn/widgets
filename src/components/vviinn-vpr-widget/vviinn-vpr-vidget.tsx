@@ -85,10 +85,12 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @part recommendations-grid - For internal usage only!
  * @part recommendations-title - Title of the recommendations grid.
  * @part basket-button - Add to Basket button.
- * @part update-button - Update button for Set mode.
+ * @part update-button-item - Update button for Set mode (on Item).
+ * @part update-button-top - Update button for Set mode (on Top).
  *
  * @slot vviinn-basket-button-text - Title of Add to Basket button.
- * @slot vviinn-update-icon - Icon of update button for Set mode.
+ * @slot vviinn-update-icon-item - Icon of update button for Set mode (on Item).
+ * @slot vviinn-update-icon-top - Icon of update button for Set mode (on Top).
  */
 @Component({
   tag: "vviinn-vpr-widget",
@@ -552,9 +554,12 @@ export class VviinnVprWidget implements ComponentInterface {
             {this.mode === "set" && this.updateButtonLocation !== "onItem" ? (
               <button
                 class="update-button"
+                part="update-button-top"
                 onClick={() => (this.updatingAllCards = true)}
               >
-                <UpdateIcon />
+                <slot name="vviinn-update-icon-top">
+                  <UpdateIcon />
+                </slot>
               </button>
             ) : null}
           </div>
