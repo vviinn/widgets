@@ -92,7 +92,7 @@ picture::before {
   position: absolute;
 }
 
-.cross-selling-button {
+.update-button {
   position: absolute;
   top: 8px;
   right: 8px;
@@ -109,7 +109,7 @@ picture::before {
   cursor: pointer;
 }
 
-.cross-selling-button::after {
+.update-button::after {
   content: "";
   position: absolute;
   top: -4px;
@@ -118,11 +118,11 @@ picture::before {
   height: calc(100% + 8px);
 }
 
-.cross-selling-button:hover {
+.update-button:hover {
   background: rgba(127, 127, 127, 0.5);
 }
 
-.cross-selling-button.hidden {
+.update-button.hidden {
   display: none;
 }
 

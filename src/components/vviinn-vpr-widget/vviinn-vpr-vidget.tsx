@@ -62,6 +62,8 @@ import { resources } from "../../locale/resources-vpr";
 import { Locale } from "../../locale";
 import { UpdateIcon } from "../vviinn-icons";
 
+export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
+
 /**
  * @part product-card - Product Card itself.
  * @part product-part - Will be deprecated. Use "product-card" instead.
@@ -83,10 +85,10 @@ import { UpdateIcon } from "../vviinn-icons";
  * @part recommendations-grid - For internal usage only!
  * @part recommendations-title - Title of the recommendations grid.
  * @part basket-button - Add to Basket button.
- * @part cross-selling-button - Cross-selling button.
+ * @part update-button - Update button for Set mode.
  *
  * @slot vviinn-basket-button-text - Title of Add to Basket button.
- * @slot vviinn-cross-selling-icon - Icon of cross-selling button.
+ * @slot vviinn-update-icon - Icon of update button for Set mode.
  */
 @Component({
   tag: "vviinn-vpr-widget",
@@ -135,6 +137,8 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() productDetailNewTab: boolean = false;
   /** Show or hide Add to Basket button */
   @Prop() addToBasketShow: boolean = false;
+  /** Location of Update button for Set mode */
+  @Prop() updateButtonLocation: UpdateButtonLocation = "topAndItem";
 
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
@@ -534,7 +538,7 @@ export class VviinnVprWidget implements ComponentInterface {
         class={{
           loaded: true,
           empty: this.recommendations.length == 0,
-          [this.mode === "cross-selling" ? "grid" : this.mode]: true,
+          [this.mode === "set" ? "grid" : this.mode]: true,
         }}
         aria-hidden="false"
       >
@@ -545,12 +549,14 @@ export class VviinnVprWidget implements ComponentInterface {
           <style>{state.fallbackStyles}</style>
           <div class="title-container">
             <h2 part="recommendations-title">{this.blockTitle}</h2>
-            <button
-              class="update-button"
-              onClick={() => (this.updatingAllCards = true)}
-            >
-              <UpdateIcon />
-            </button>
+            {this.mode === "set" && this.updateButtonLocation !== "onItem" ? (
+              <button
+                class="update-button"
+                onClick={() => (this.updatingAllCards = true)}
+              >
+                <UpdateIcon />
+              </button>
+            ) : null}
           </div>
           {this.recommendations.length > 0 &&
             (this.useCarousel ? this.renderCarousel() : this.renderResults())}
@@ -584,7 +590,7 @@ export class VviinnVprWidget implements ComponentInterface {
         imageRatio={1}
         price={recommendation.price.actual}
         salePrice={recommendation.price.sale}
-        responsive={this.mode === "grid" || this.mode === "cross-selling"}
+        responsive={this.mode === "grid" || this.mode === "set"}
         addToBasketShow={this.addToBasketShow}
         mode={this.mode}
         dimmedBackground={this.useDimmedBackgroundInCard()}
@@ -621,6 +627,7 @@ export class VviinnVprWidget implements ComponentInterface {
         gridArrowsDynamic={this.gridArrowsDynamic}
         addToBasketShow={this.addToBasketShow}
         updatingAllCards={this.updatingAllCards}
+        updateButtonLocation={this.updateButtonLocation}
       ></vviinn-carousel>
     );
   }

@@ -13,6 +13,7 @@ import { Recommendation } from "../../recommendation/recommendation";
 import { ChevronIcon } from "../vviinn-icons";
 import { CampaignTypeId } from "../../campaign/Campaign";
 import { CrossSellingClickEvent } from "../../recommendation/events";
+import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-vidget";
 
 const COLUMNS_NUMBER_CSS_VAR = "--vviinn-carousel-columns-internal";
 const CAROUSEL_WIDTH_CSS_VAR = "--vviinn-carousel-content-width";
@@ -20,7 +21,7 @@ const CAROUSEL_IMAGE_WIDTH_CSS_VAR = "--vviinn-carousel-image-width";
 const CONTENT_GROUP_CSS_CLASS = "items-group";
 
 type MoveDirection = "left" | "right";
-export type CarouselMode = "grid" | "continuity" | "cross-selling";
+export type CarouselMode = "grid" | "continuity" | "set";
 
 /**
  * @part carousel-button
@@ -49,15 +50,16 @@ export class VviinnCarousel {
   @Prop() widgetVersion: string;
   @Prop() addToBasketShow: boolean;
   @Prop() updatingAllCards: boolean;
+  @Prop() updateButtonLocation: UpdateButtonLocation;
 
   private columns: number = 0;
   private resizeObserver: ResizeObserver = new ResizeObserver(() =>
     this.handleResize()
   );
 
-  private isCrossSelling: boolean;
-  private isGrid: boolean;
-  private isContinuity: boolean;
+  private isSetMode: boolean;
+  private isGridMode: boolean;
+  private isContinuityMode: boolean;
   private isGridLike: boolean;
   private defaultAnimationInterval: number = 2000;
 
@@ -67,8 +69,8 @@ export class VviinnCarousel {
 
   private isLastGroup = () =>
     this.activeContentGroup === this.getContentGroups().length - 1 &&
-    this.isGrid;
-  private isFirstGroup = () => this.activeContentGroup === 0 && this.isGrid;
+    this.isGridMode;
+  private isFirstGroup = () => this.activeContentGroup === 0 && this.isGridMode;
 
   private updateCard = (
     productId: string,
@@ -88,7 +90,7 @@ export class VviinnCarousel {
         this.recommendations[recommendationIndex + step];
 
       let element = this.el.querySelector(`[data-id="${productId}"]`);
-      const button = element.shadowRoot.querySelector(".cross-selling-button");
+      const button = element.shadowRoot.querySelector(".update-button");
       button.classList.add("hidden");
 
       this.crossSellingRecommendations = [...newCrossSellingRecommendations];
@@ -109,14 +111,14 @@ export class VviinnCarousel {
   connectedCallback() {
     this.setItemWidth();
 
-    this.isCrossSelling = this.mode === "cross-selling";
-    this.isGrid = this.mode === "grid";
-    this.isContinuity = this.mode === "continuity";
-    this.isGridLike = this.isGrid || this.isCrossSelling;
+    this.isSetMode = this.mode === "set";
+    this.isGridMode = this.mode === "grid";
+    this.isContinuityMode = this.mode === "continuity";
+    this.isGridLike = this.isGridMode || this.isSetMode;
 
     const columnsNumber = this.getColumnsNumber();
 
-    if (this.isCrossSelling && this.recommendations.length >= columnsNumber) {
+    if (this.isSetMode && this.recommendations.length >= columnsNumber) {
       this.crossSellingRecommendations = this.recommendations.slice(
         0,
         columnsNumber
@@ -176,7 +178,7 @@ export class VviinnCarousel {
     return {
       content: true,
       [this.moveDirection]: true,
-      [this.isCrossSelling ? "grid" : this.mode]: true,
+      [this.isSetMode ? "grid" : this.mode]: true,
       "show-scrollbar": this.showScroll,
     };
   }
@@ -324,16 +326,16 @@ export class VviinnCarousel {
   }
 
   private showBullets(): boolean {
-    return this.isGrid && this.showScroll;
+    return this.isGridMode && this.showScroll;
   }
 
   private showScrollbar(): boolean {
-    return this.isContinuity && this.showScroll;
+    return this.isContinuityMode && this.showScroll;
   }
 
   private getClassMap() {
     return {
-      [this.isCrossSelling ? "grid" : this.mode]: true,
+      [this.isSetMode ? "grid" : this.mode]: true,
       "show-scrollbar": this.showScrollbar(),
     };
   }
@@ -356,7 +358,7 @@ export class VviinnCarousel {
         price={recommendation.price.actual}
         salePrice={recommendation.price.sale}
         responsive={this.isGridLike}
-        dimmedBackground={this.isContinuity}
+        dimmedBackground={this.isContinuityMode}
         campaignTypeId={this.campaignTypeId}
         index={rank}
         widgetElementId={this.widgetElementId}
@@ -366,6 +368,7 @@ export class VviinnCarousel {
         data-id={recommendation.productId}
         updatingAllCards={this.updatingAllCards}
         defaultAnimationInterval={this.defaultAnimationInterval}
+        updateButtonLocation={this.updateButtonLocation}
       />
     );
   }
@@ -391,7 +394,7 @@ export class VviinnCarousel {
   }
 
   private renderRecommendationsElements(): HTMLVviinnProductCardElement[] {
-    const recommendations = this.isCrossSelling
+    const recommendations = this.isSetMode
       ? this.crossSellingRecommendations
       : this.recommendations;
     return recommendations.map((r, i) => this.renderRecommendation(r, i));
@@ -425,7 +428,7 @@ export class VviinnCarousel {
     return (
       <Host class={this.getClassMap()}>
         <div class={{ body: true, ...this.getClassMap() }}>
-          {!this.isCrossSelling && (
+          {!this.isSetMode && (
             <button
               class="prev"
               onClick={() => this.showPrev()}
@@ -443,7 +446,7 @@ export class VviinnCarousel {
             {this.renderRecommendations()}
           </div>
 
-          {!this.isCrossSelling && (
+          {!this.isSetMode && (
             <button
               class="next"
               onClick={() => this.showNext()}

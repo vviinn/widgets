@@ -41,6 +41,7 @@ import {
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 import { slotChangeListener } from "../customized-slots";
 import { UpdateIcon } from "../vviinn-icons";
+import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-vidget";
 
 /**
  * @part brand - product brand.
@@ -58,10 +59,10 @@ import { UpdateIcon } from "../vviinn-icons";
  * @part price-prefix - renders before price-amount. Can be set with "price-prefix" property or inherited from parent component.
  * @part title - Product title
  * @part basket-button - Add to Basket button.
- * @part cross-selling-button - Cross-selling button.
+ * @part update-button - Update button for Set mode.
  *
  * @slot vviinn-basket-button-text - Title of Add to Basket button.
- * @slot vviinn-cross-selling-icon - Icon of cross-selling button.
+ * @slot vviinn-update-icon - Icon of update button for Set mode.
  */
 @Component({
   tag: "vviinn-product-card",
@@ -87,6 +88,7 @@ export class VviinnProductCard {
   @Prop() dimmedBackground: boolean = false;
   @Prop() mode?: CarouselMode;
   @Prop() addToBasketShow: boolean;
+  @Prop() updateButtonLocation: UpdateButtonLocation;
 
   /** @internal */
   @Prop() campaignTypeId: CampaignTypeId;
@@ -269,7 +271,7 @@ export class VviinnProductCard {
           dimmed: this.dimmedBackground,
           animated: this.isTransitioning,
         }}
-        exportparts="brand, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, basket-button, cross-selling-button"
+        exportparts="brand, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, basket-button, update-button"
       >
         <Linked deeplink={this.deeplink} part="image-link">
           {this.renderImage()}
@@ -312,7 +314,7 @@ export class VviinnProductCard {
                 class={{
                   "basket-button": true,
                   "basket-button-grid":
-                    this.mode === "grid" || this.mode === "cross-selling",
+                    this.mode === "grid" || this.mode === "set",
                   "basket-button-continuity ": this.mode === "continuity",
                 }}
                 part="basket-button"
@@ -327,10 +329,13 @@ export class VviinnProductCard {
             )}
           </div>
         )}
-        {this.mode === "cross-selling" && (
+        {this.mode === "set" ? (
           <button
-            class="cross-selling-button"
-            part="cross-selling-button"
+            class={{
+              "update-button": true,
+              hidden: this.updateButtonLocation === "onTop",
+            }}
+            part="update-button"
             onClick={() => {
               this.vviinnCrossSellingClick.emit({
                 animationInterval: this.generateRandomNumber(800, 1400),
@@ -338,11 +343,11 @@ export class VviinnProductCard {
               });
             }}
           >
-            <slot name="vviinn-cross-selling-icon">
+            <slot name="vviinn-update-icon">
               <UpdateIcon />
             </slot>
           </button>
-        )}
+        ) : null}
       </Host>
     );
   }
