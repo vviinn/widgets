@@ -53,6 +53,19 @@ const campaignType = {
   required: false,
 };
 
+const updateButtonLocation = {
+  name: "update-button-location",
+  control: {
+    type: "select",
+    labels: {
+      onTop: "On Top",
+      onItem: "On Item",
+      topAndItem: "Top and item",
+    },
+  },
+  required: false,
+};
+
 const imageWidth = {
   name: "image-width",
   control: {
@@ -69,4 +82,5 @@ export const argTypes = {
   token,
   color,
   excluded,
+  updateButtonLocation,
 };

@@ -37,6 +37,7 @@ const Template = (args) => `
       excluded="${args.excluded}"
       api-path="${args.apiPath}"
       add-to-basket-show="${args.addToBasketShow}"
+      update-button-location="${args.updateButtonLocation}"
     >
     </vviinn-vpr-widget>
 `;
@@ -97,8 +98,8 @@ Continuity.args = {
 
 Continuity.decorators = [continuityDecorator];
 
-export const CrossSelling = Template.bind({});
-CrossSelling.args = {
+export const Set = Template.bind({});
+Set.args = {
   token:
     "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4",
   productId: "4114460310",
@@ -106,7 +107,7 @@ CrossSelling.args = {
   campaigns: "",
   color: "",
   excluded: "",
-  mode: "cross-selling",
+  mode: "set",
   blockTitle: "Recommended products",
   productDetailNewTab: false,
   imageWidth: 300,
@@ -121,6 +122,7 @@ CrossSelling.args = {
   gridArrowsDynamic: false,
   apiPath: "https://api.vviinn.com",
   addToBasketShow: true,
+  updateButtonLocation: "topAndItem",
 };
 
-CrossSelling.decorators = [gridDecorator];
+Set.decorators = [gridDecorator];

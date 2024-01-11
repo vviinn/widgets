@@ -49,6 +49,11 @@ export type ProductCardEventData = {
   clickEvent?: MouseEvent;
 };
 
+export type CrossSellingClickEventData = {
+  productData: ProductCardEventData;
+  animationInterval: number;
+};
+
 export type ProductEventType = "load" | "view" | "click";
 export type ResultEventType = "load" | "view";
 
@@ -58,3 +63,4 @@ export type ProductEvent =
   | ProductViewEvent;
 
 export type ProductCardEvent = CustomEvent<ProductCardEventData>;
+export type CrossSellingClickEvent = CustomEvent<CrossSellingClickEventData>;
