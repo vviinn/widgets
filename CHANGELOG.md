@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.34.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.33.0...v2.34.0) (2024-01-11)
+
+
+### Features
+
+* Add Update All Cards Funtionality ([616fec2](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/616fec230746e15ef0502bb0f421ace6f3a56b05))
+
 ## [2.33.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.32.1...v2.33.0) (2023-12-11)
 
 
