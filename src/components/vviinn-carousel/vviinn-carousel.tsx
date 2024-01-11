@@ -6,6 +6,7 @@ import {
   State,
   Prop,
   Listen,
+  Watch,
 } from "@stencil/core";
 import { chunksOf } from "fp-ts/lib/Array";
 import { Recommendation } from "../../recommendation/recommendation";
@@ -37,7 +38,6 @@ export class VviinnCarousel {
   @State() activeContentGroup: number = 0;
   @State() isRTL: boolean = false;
   @State() crossSellingRecommendations: Recommendation[] = [];
-  @State() animationInterval: number = 1200;
 
   @Prop() mode: CarouselMode = "continuity";
   @Prop() imageWidth: number = 140;
@@ -48,6 +48,7 @@ export class VviinnCarousel {
   @Prop() recommendations: Recommendation[] = [];
   @Prop() widgetVersion: string;
   @Prop() addToBasketShow: boolean;
+  @Prop() updatingAllCards: boolean;
 
   private columns: number = 0;
   private resizeObserver: ResizeObserver = new ResizeObserver(() =>
@@ -58,6 +59,7 @@ export class VviinnCarousel {
   private isGrid: boolean;
   private isContinuity: boolean;
   private isGridLike: boolean;
+  private defaultAnimationInterval: number = 2000;
 
   private mutationObserver = new MutationObserver(() =>
     this.cloneSlottedContent()
@@ -67,6 +69,38 @@ export class VviinnCarousel {
     this.activeContentGroup === this.getContentGroups().length - 1 &&
     this.isGrid;
   private isFirstGroup = () => this.activeContentGroup === 0 && this.isGrid;
+
+  private updateCard = (
+    productId: string,
+    step: number,
+    animationInterval: number
+  ) => {
+    let clickedProduct = this.crossSellingRecommendations.find(
+      (item) => item.productId === productId
+    );
+    const crossSellingIndex =
+      this.crossSellingRecommendations.indexOf(clickedProduct);
+    const recommendationIndex = this.recommendations.indexOf(clickedProduct);
+    const newCrossSellingRecommendations = this.crossSellingRecommendations;
+
+    if (recommendationIndex + step < this.recommendations.length) {
+      newCrossSellingRecommendations[crossSellingIndex] =
+        this.recommendations[recommendationIndex + step];
+
+      let element = this.el.querySelector(`[data-id="${productId}"]`);
+      const button = element.shadowRoot.querySelector(".cross-selling-button");
+      button.classList.add("hidden");
+
+      this.crossSellingRecommendations = [...newCrossSellingRecommendations];
+
+      const animationTimer = setTimeout(() => {
+        if (recommendationIndex + step * 2 <= this.recommendations.length - 1) {
+          button.classList.remove("hidden");
+        }
+        clearTimeout(animationTimer);
+      }, animationInterval);
+    }
+  };
 
   componentWillLoad() {
     this.isRTL = document.dir === "rtl";
@@ -104,38 +138,21 @@ export class VviinnCarousel {
     this.resizeObserver.observe(this.getHostParent());
   }
 
+  @Watch("updatingAllCards")
+  updatingAllCardsWatcher() {
+    if (!this.updatingAllCards) return;
+    const step = this.getColumnsNumber();
+
+    this.crossSellingRecommendations.forEach((item) => {
+      this.updateCard(item.productId, step, this.defaultAnimationInterval);
+    });
+  }
+
   @Listen("vviinnCrossSellingClick")
   crossSellingClickListener({ detail }: CrossSellingClickEvent) {
     const step = this.getColumnsNumber();
     const { animationInterval, productData } = detail;
-
-    let clickedProduct = this.crossSellingRecommendations.find(
-      (item) => item.productId === productData.productId
-    );
-    const crossSellingIndex =
-      this.crossSellingRecommendations.indexOf(clickedProduct);
-    const recommendationIndex = this.recommendations.indexOf(clickedProduct);
-    const newCrossSellingRecommendations = this.crossSellingRecommendations;
-
-    if (recommendationIndex + step < this.recommendations.length) {
-      newCrossSellingRecommendations[crossSellingIndex] =
-        this.recommendations[recommendationIndex + step];
-
-      let element = this.el.querySelector(
-        `[data-id="${productData.productId}"]`
-      );
-      const button = element.shadowRoot.querySelector(".cross-selling-button");
-      button.classList.add("hidden");
-
-      this.crossSellingRecommendations = [...newCrossSellingRecommendations];
-
-      const animationTimer = setTimeout(() => {
-        if (recommendationIndex + step * 2 <= this.recommendations.length - 1) {
-          button.classList.remove("hidden");
-        }
-        clearTimeout(animationTimer);
-      }, animationInterval);
-    }
+    this.updateCard(productData.productId, step, animationInterval);
   }
 
   private getItemWidthFromDocument(): number {
@@ -347,6 +364,8 @@ export class VviinnCarousel {
         addToBasketShow={this.addToBasketShow}
         mode={this.mode}
         data-id={recommendation.productId}
+        updatingAllCards={this.updatingAllCards}
+        defaultAnimationInterval={this.defaultAnimationInterval}
       />
     );
   }

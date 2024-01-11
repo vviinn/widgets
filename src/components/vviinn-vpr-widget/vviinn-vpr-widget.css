@@ -18,6 +18,32 @@
   width: 100%;
 }
 
+.title-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.update-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgb(244, 244, 244);
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.update-button:hover {
+  background: rgb(234, 234, 234);
+}
+
+.update-button svg {
+  color: #6f6f6f;
+}
+
 h2 {
   margin: 0;
 }

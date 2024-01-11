@@ -60,6 +60,7 @@ import { checkEmpryString } from "../../utils/option/option";
 import { parseExcluded } from "../../utils/collections/collectionsUtils";
 import { resources } from "../../locale/resources-vpr";
 import { Locale } from "../../locale";
+import { UpdateIcon } from "../vviinn-icons";
 
 /**
  * @part product-card - Product Card itself.
@@ -151,6 +152,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @State() recommendations: Recommendation[] = [];
   @State() trackingDeactivated: boolean = false;
   @State() hasErrorOnLoad: boolean = false;
+  @State() updatingAllCards: boolean = false;
 
   /** The event emits on widget load */
   @Event({ bubbles: true })
@@ -382,6 +384,12 @@ export class VviinnVprWidget implements ComponentInterface {
       .then(this.setTrackingDeactivated);
   }
 
+  @Listen("vviinnUpdatingAllCardsFinished")
+  updatingAllCardsFinishedListener() {
+    if (!this.updatingAllCards) return;
+    this.updatingAllCards = false;
+  }
+
   private trackWidgetEvent(action: WidgetAction) {
     if (this.trackingDeactivated) return;
     const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
@@ -535,7 +543,15 @@ export class VviinnVprWidget implements ComponentInterface {
         <Fragment>
           {this.renderExternalCSS()}
           <style>{state.fallbackStyles}</style>
-          <h2 part="recommendations-title">{this.blockTitle}</h2>
+          <div class="title-container">
+            <h2 part="recommendations-title">{this.blockTitle}</h2>
+            <button
+              class="update-button"
+              onClick={() => (this.updatingAllCards = true)}
+            >
+              <UpdateIcon />
+            </button>
+          </div>
           {this.recommendations.length > 0 &&
             (this.useCarousel ? this.renderCarousel() : this.renderResults())}
 
@@ -604,6 +620,7 @@ export class VviinnVprWidget implements ComponentInterface {
         widgetVersion={version}
         gridArrowsDynamic={this.gridArrowsDynamic}
         addToBasketShow={this.addToBasketShow}
+        updatingAllCards={this.updatingAllCards}
       ></vviinn-carousel>
     );
   }

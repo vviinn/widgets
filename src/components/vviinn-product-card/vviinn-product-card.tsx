@@ -96,9 +96,12 @@ export class VviinnProductCard {
   @Prop() buttonElementId?: string;
   /** @internal */
   @Prop() widgetVersion: string;
-
   /** @internal */
   @Prop() index: number = 0;
+  /** @internal */
+  @Prop() updatingAllCards: boolean;
+  /** @internal */
+  @Prop() defaultAnimationInterval: number;
 
   @State() imageLoaded: boolean = false;
   @State() isTransitioning: boolean = false;
@@ -122,6 +125,9 @@ export class VviinnProductCard {
   /** @internal */
   @Event({ bubbles: true })
   vviinnCrossSellingClick: EventEmitter<CrossSellingClickEventData>;
+  /** @internal */
+  @Event({ bubbles: true })
+  vviinnUpdatingAllCardsFinished: EventEmitter;
 
   private productData: ProductCardEventData | null = null;
   private imageElement?: HTMLImageElement;
@@ -144,6 +150,19 @@ export class VviinnProductCard {
       this.isTransitioning = false;
       clearTimeout(animationTimer);
     }, animationInterval);
+  }
+
+  @Watch("updatingAllCards")
+  updatingAllCardsWatcher() {
+    if (!this.updatingAllCards) return;
+    this.isTransitioning = true;
+
+    const animationTimer = setTimeout(() => {
+      this.vviinnUpdatingAllCardsFinished.emit();
+
+      this.isTransitioning = false;
+      clearTimeout(animationTimer);
+    }, this.defaultAnimationInterval);
   }
 
   @Watch("productId")
