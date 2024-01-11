@@ -60,6 +60,9 @@ import { checkEmpryString } from "../../utils/option/option";
 import { parseExcluded } from "../../utils/collections/collectionsUtils";
 import { resources } from "../../locale/resources-vpr";
 import { Locale } from "../../locale";
+import { UpdateIcon } from "../vviinn-icons";
+
+export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
 
 /**
  * @part product-card - Product Card itself.
@@ -82,10 +85,12 @@ import { Locale } from "../../locale";
  * @part recommendations-grid - For internal usage only!
  * @part recommendations-title - Title of the recommendations grid.
  * @part basket-button - Add to Basket button.
- * @part cross-selling-button - Cross-selling button.
+ * @part update-button-item - Update button for Set mode (on Item).
+ * @part update-button-top - Update button for Set mode (on Top).
  *
  * @slot vviinn-basket-button-text - Title of Add to Basket button.
- * @slot vviinn-cross-selling-icon - Icon of cross-selling button.
+ * @slot vviinn-update-icon-item - Icon of update button for Set mode (on Item).
+ * @slot vviinn-update-icon-top - Icon of update button for Set mode (on Top).
  */
 @Component({
   tag: "vviinn-vpr-widget",
@@ -134,6 +139,8 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() productDetailNewTab: boolean = false;
   /** Show or hide Add to Basket button */
   @Prop() addToBasketShow: boolean = false;
+  /** Location of Update button for Set mode */
+  @Prop() updateButtonLocation: UpdateButtonLocation = "topAndItem";
 
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
@@ -151,6 +158,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @State() recommendations: Recommendation[] = [];
   @State() trackingDeactivated: boolean = false;
   @State() hasErrorOnLoad: boolean = false;
+  @State() updatingAllCards: boolean = false;
 
   /** The event emits on widget load */
   @Event({ bubbles: true })
@@ -382,6 +390,12 @@ export class VviinnVprWidget implements ComponentInterface {
       .then(this.setTrackingDeactivated);
   }
 
+  @Listen("vviinnUpdatingAllCardsFinished")
+  updatingAllCardsFinishedListener() {
+    if (!this.updatingAllCards) return;
+    this.updatingAllCards = false;
+  }
+
   private trackWidgetEvent(action: WidgetAction) {
     if (this.trackingDeactivated) return;
     const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
@@ -526,7 +540,7 @@ export class VviinnVprWidget implements ComponentInterface {
         class={{
           loaded: true,
           empty: this.recommendations.length == 0,
-          [this.mode === "cross-selling" ? "grid" : this.mode]: true,
+          [this.mode === "set" ? "grid" : this.mode]: true,
         }}
         aria-hidden="false"
       >
@@ -535,7 +549,20 @@ export class VviinnVprWidget implements ComponentInterface {
         <Fragment>
           {this.renderExternalCSS()}
           <style>{state.fallbackStyles}</style>
-          <h2 part="recommendations-title">{this.blockTitle}</h2>
+          <div class="title-container">
+            <h2 part="recommendations-title">{this.blockTitle}</h2>
+            {this.mode === "set" && this.updateButtonLocation !== "onItem" ? (
+              <button
+                class="update-button"
+                part="update-button-top"
+                onClick={() => (this.updatingAllCards = true)}
+              >
+                <slot name="vviinn-update-icon-top">
+                  <UpdateIcon />
+                </slot>
+              </button>
+            ) : null}
+          </div>
           {this.recommendations.length > 0 &&
             (this.useCarousel ? this.renderCarousel() : this.renderResults())}
 
@@ -568,7 +595,7 @@ export class VviinnVprWidget implements ComponentInterface {
         imageRatio={1}
         price={recommendation.price.actual}
         salePrice={recommendation.price.sale}
-        responsive={this.mode === "grid" || this.mode === "cross-selling"}
+        responsive={this.mode === "grid" || this.mode === "set"}
         addToBasketShow={this.addToBasketShow}
         mode={this.mode}
         dimmedBackground={this.useDimmedBackgroundInCard()}
@@ -604,6 +631,8 @@ export class VviinnVprWidget implements ComponentInterface {
         widgetVersion={version}
         gridArrowsDynamic={this.gridArrowsDynamic}
         addToBasketShow={this.addToBasketShow}
+        updatingAllCards={this.updatingAllCards}
+        updateButtonLocation={this.updateButtonLocation}
       ></vviinn-carousel>
     );
   }
