@@ -240,7 +240,7 @@ export class VviinnVpsWidget {
         }
       })
       .catch(function (error) {
-        // FIXME: show error properly
+        // TODO: Show error in the UI
         console.error("Error accessing camera:", error.message);
       });
   };

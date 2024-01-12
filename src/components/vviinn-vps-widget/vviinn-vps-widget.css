@@ -244,11 +244,6 @@ search-filters::part(filter active) {
     height: calc(100svh - 67px);
   }
 
-  .start-page.active.camera-enabled {
-    /* height: auto; */
-    /* TODO: fix this, check corner cases and add an animation ? */
-  }
-
   .start-page:not(.active) {
     overflow: hidden;
   }
