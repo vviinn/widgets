@@ -33,6 +33,7 @@ export class VviinnImageSelector {
 
   @Prop() basicEventData: BasicEventData;
   @Prop() startUpload: boolean;
+  @Prop() accept: "image" | "application-octet-stream" = "image";
   @Prop() resetVpsButton: () => void;
 
   private fileInput: HTMLInputElement;
@@ -78,7 +79,9 @@ export class VviinnImageSelector {
           id="fileInput"
           class="visually-hidden"
           type="file"
-          accept="image/*"
+          accept={
+            this.accept === "image" ? "image/*" : "application/octet-stream"
+          }
           onChange={(event: Event) => this.handleInputChange(event)}
           ref={(el) => (this.fileInput = el as HTMLInputElement)}
         />
