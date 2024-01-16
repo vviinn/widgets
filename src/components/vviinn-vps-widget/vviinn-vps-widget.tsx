@@ -646,7 +646,7 @@ export class VviinnVpsWidget {
                   <div class="start-page_errors-block">
                     <vviinn-wrong-format
                       class={{ hidden: !this.wrongImageFormat }}
-                      handler={() => (this.wrongImageFormat = false)}
+                      handler={() => this.resetState()}
                     />
                     <vviinn-server-error
                       class={{ hidden: !imageSearchState.serverError }}
