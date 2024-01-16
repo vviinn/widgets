@@ -15,3 +15,5 @@ storybook/storybook-static
 !storybook/.env
 .vscode/
 .DS_Store
+localhost-key.pem
+localhost.pem
