@@ -1,34 +1,54 @@
 import { Resource } from "i18next";
 
 export const resources: Resource = {
-  "de-DE": {
+  de: {
     translation: {
       exampleImagesTitle:
         "Mit den Beispielbildern die Suche direkt ausprobieren",
-      imageUploadButtonText: "Kamera oder Bild auswählen",
+      imageUploadButtonText: "Bild Hochladen",
+      cameraButtonText: "Kamera Starten",
+      galleryButtonText: "Galerie Anzeigen",
       privacyBadgeText:
         "Durch das Hochladen eines Bildes willigst Du in die Verarbeitung durch unseren Partner Vviinn ein. Das Bild wird nach einer Stunde Inaktivität gelöscht.",
-      teaserText_1: "Finde Produkte auf",
-      teaserText_2: "einem Foto",
+      teaserText: "Finde Produkte auf \n einem Foto",
       imageSearchModalTitle: "Bildsuche",
       emptyResultsBlock: {
         title: "Leider nichts gefunden",
-        text: "Leider konnten wir keine passenden Produkte finden. Bitte versuche es mit einem anderen Bildausschnitt noch einmal.",
+        button: "Neues Bild hochladen",
+      },
+      serverErrorBlock: {
+        title: "Keine Verbindung",
+        button: "Erneut versuchen",
+      },
+      wrongFormatBlock: {
+        title: "Dateityp wird nicht unterstützt",
+        text: "Bitte laden Sie eine .jpg, .png oder .webp Bilddatei hoch.",
+        button: "Neues Bild hochladen",
       },
     },
   },
   en: {
     translation: {
       exampleImagesTitle: "Try out the search with the example images",
-      imageUploadButtonText: "Upload a Photo",
+      imageUploadButtonText: "Upload Photo",
+      cameraButtonText: "Start Camera",
+      galleryButtonText: "Show Gallery",
       privacyBadgeText:
         "By uploading a picture you agree to the processing by our partner Vviinn. The image will be deleted after one hour of inactivity.",
-      teaserText_1: "Find Product by Photo",
-      teaserText_2: "",
+      teaserText: "Find Product by Photo",
       imageSearchModalTitle: "Visual Search",
       emptyResultsBlock: {
-        title: "Sorry, nothing was found",
-        text: "Sorry, we could not find any matching products. Please try again by selecting a different area of the image.",
+        title: "Sorry, nothing found",
+        button: "Upload another image",
+      },
+      serverErrorBlock: {
+        title: "Something went wrong",
+        button: "Try again",
+      },
+      wrongFormatBlock: {
+        title: "Wrong file format",
+        text: "Please upload a .jpg, .png or .webp image file.",
+        button: "Upload another file",
       },
     },
   },

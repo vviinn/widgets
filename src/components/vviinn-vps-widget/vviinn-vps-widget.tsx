@@ -663,7 +663,7 @@ export class VviinnVpsWidget {
                         >
                           <span class="action-button-content">
                             <CameraActionIcon />
-                            <span>Start Camera</span>
+                            <span>{i18next.t("cameraButtonText")}</span>
                           </span>
                         </button>
                       )}
@@ -679,7 +679,11 @@ export class VviinnVpsWidget {
                         onVviinnImageUpload={() => {
                           this.trackInitialSearch("upload");
                         }}
-                        onVviinnNoResult={() => (this.wrongImageFormat = true)}
+                        onVviinnNoResult={({ detail }) => {
+                          if (detail.reason === "client") {
+                            this.wrongImageFormat = true;
+                          }
+                        }}
                         resetVpsButton={this.resetVpsButton}
                         basicEventData={this.getBasicEventData()}
                         part="select-image_button"
@@ -739,7 +743,7 @@ export class VviinnVpsWidget {
                     hidden: imageSearchState.results.length > 0,
                   }}
                 >
-                  <vviinn-empty-results />
+                  <vviinn-empty-results handler={() => this.resetState()} />
                   <vviinn-onboarding />
                 </div>
                 <div

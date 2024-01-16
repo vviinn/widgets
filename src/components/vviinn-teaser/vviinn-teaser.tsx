@@ -20,11 +20,7 @@ export class VviinnTeaser {
       <Host>
         <slot>
           <span class="vviinn-teaser-text">
-            <slot name="vviinn-teaser-text">
-              {i18next.t("teaserText_1")}
-              <br />
-              {i18next.t("teaserText_2")}
-            </slot>
+            <slot name="vviinn-teaser-text">{i18next.t("teaserText")}</slot>
           </span>
         </slot>
       </Host>

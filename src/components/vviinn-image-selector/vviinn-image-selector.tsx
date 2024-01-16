@@ -13,7 +13,7 @@ import {
   imageSearchState,
   processSelectedFile,
 } from "../../store/imageSearch.store";
-import { BasicEventData } from "../../recommendation/events";
+import { BasicEventData, NoResultEventData } from "../../recommendation/events";
 
 /**
  * @part button -  button look and feel
@@ -26,7 +26,7 @@ import { BasicEventData } from "../../recommendation/events";
 export class VviinnImageSelector {
   @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
   /** Wrong image format, that isn’t .jpg, .jpeg, png */
-  @Event() vviinnNoResult: EventEmitter<BasicEventData>;
+  @Event() vviinnNoResult: EventEmitter<NoResultEventData>;
 
   /** @internal */
   @Event() vviinnImageUploadFinished: EventEmitter;
@@ -45,7 +45,11 @@ export class VviinnImageSelector {
     pipe(
       processingResult,
       E.match(
-        () => this.vviinnNoResult.emit(this.basicEventData),
+        (data) =>
+          this.vviinnNoResult.emit({
+            ...this.basicEventData,
+            reason: data.kind,
+          }),
         () => this.vviinnImageUploadFinished.emit()
       )
     );
