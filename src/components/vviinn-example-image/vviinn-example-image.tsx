@@ -88,11 +88,11 @@ export class VviinnExampleImage {
   handleSrcObjectChange() {
     if (!this.srcObject) return;
     this.videoElement.srcObject = this.srcObject;
-    //FIXME: This is a hack to make sure the video is initialized.
-    setTimeout(() => {
+
+    this.videoElement.onloadedmetadata = () => {
       this.vviinnCameraEnabled.emit(true);
       this.videoInitialized = true;
-    }, 600);
+    };
   }
 
   render() {

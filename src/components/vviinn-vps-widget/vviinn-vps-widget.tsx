@@ -53,6 +53,7 @@ import { parseExcluded } from "../../utils/collections/collectionsUtils";
 import { resources } from "../../locale/resources-vps";
 import { Locale } from "../../locale";
 import { CameraActionIcon, UploadActionIcon } from "../vviinn-icons";
+import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 
 const filterInt = (value: string) =>
   /^[-+]?(\d+|Infinity)$/.test(value) ? Number(value) : NaN;
@@ -119,8 +120,7 @@ export class VviinnVpsWidget {
   /** Resolution width of an image in the product card */
   @Prop() imageResolutionWidth: number = 250;
   /** Example image source */
-  @Prop() exampleImageSource: string =
-    "https://cdn.vviinn.com/assets/merchant/default/vviinn_img_start-hero.jpg";
+  @Prop() exampleImageSource: string = DEFAULT_EXAMPLE_IMAGE;
 
   /** @internal */
   @Prop() apiPath: string = "https://api.vviinn.com";
@@ -232,17 +232,16 @@ export class VviinnVpsWidget {
 
   private handleCameraClick = async () => {
     if (this.stream) return;
-    navigator.mediaDevices
-      .getUserMedia({ video: { facingMode: "environment" } })
-      .then((videoStream) => {
-        if (videoStream) {
-          this.stream = videoStream;
-        }
-      })
-      .catch(function (error) {
-        // TODO: Show error in the UI
-        console.error("Error accessing camera:", error.message);
+
+    try {
+      const videoStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment" },
       });
+      this.stream = videoStream;
+    } catch (error) {
+      // TODO: Show error in the UI
+      console.error("Error accessing camera:", error.message);
+    }
   };
 
   componentDidLoad() {
@@ -575,6 +574,8 @@ export class VviinnVpsWidget {
     imageSearchState.detectedObjects = [];
     imageSearchState.rectangleSearchForm = undefined;
     imageSearchState.loading = false;
+    imageSearchState.serverError = false;
+    this.wrongImageFormat = false;
     this.resetScroll("results-block");
     this.stopStreamTracks();
     this.stream = null;
@@ -649,7 +650,7 @@ export class VviinnVpsWidget {
                     />
                     <vviinn-server-error
                       class={{ hidden: !imageSearchState.serverError }}
-                      handler={() => (imageSearchState.serverError = false)}
+                      handler={() => this.resetState()}
                     />
                   </div>
 
@@ -706,11 +707,10 @@ export class VviinnVpsWidget {
                     </div>
                   )}
                 </div>
-                {!this.haveErrors() && (
-                  <vviinn-privacy-badge
-                    privacyBadgeText={i18next.t("privacyBadgeText")}
-                  />
-                )}
+                <vviinn-privacy-badge
+                  privacyBadgeText={i18next.t("privacyBadgeText")}
+                  class={{ visible: this.haveErrors() }}
+                />
               </div>
             </vviinn-slide>
             <vviinn-slide

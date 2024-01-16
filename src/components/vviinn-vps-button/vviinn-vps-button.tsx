@@ -20,6 +20,7 @@ import {
 } from "../../recommendation/events";
 import { campaignTypeNames } from "../../campaign/Campaign";
 import { Locale } from "../../locale";
+import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 
 /**
  * @slot vviinn-onboarding-title - Title of onboarding section.
@@ -76,8 +77,7 @@ export class VviinnVpsButton {
   /** Resolution width of an image in the product card */
   @Prop() imageResolutionWidth: number = 250;
   /** Example image source */
-  @Prop() exampleImageSource: string =
-    "https://cdn.vviinn.com/assets/merchant/default/vviinn_img_start-hero.jpg";
+  @Prop() exampleImageSource: string = DEFAULT_EXAMPLE_IMAGE;
 
   /** @internal */
   @Prop() apiPath: string | undefined;

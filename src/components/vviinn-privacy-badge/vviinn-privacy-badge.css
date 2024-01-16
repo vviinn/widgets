@@ -3,3 +3,13 @@
   font-size: 12px;
   line-height: 16px;
 }
+
+:host(.visible) {
+  color: transparent;
+}
+
+@media (max-width: 768px) {
+  :host(.visible) {
+    display: none;
+  }
+}

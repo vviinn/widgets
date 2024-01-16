@@ -45,10 +45,10 @@ export class VviinnImageSelector {
     pipe(
       processingResult,
       E.match(
-        (data) =>
+        ({ kind }) =>
           this.vviinnNoResult.emit({
             ...this.basicEventData,
-            reason: data.kind,
+            reason: kind,
           }),
         () => this.vviinnImageUploadFinished.emit()
       )

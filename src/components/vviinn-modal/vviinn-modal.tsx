@@ -95,10 +95,10 @@ export class VviinnModal {
     return (
       <Host
         exportparts="secondary-action, title, close-button"
-        class={{ closed: !this.active }}
+        class={{ closed: !this.active, "first-screen": this.isFirstScreen }}
         onAnimationEnd={(ev: AnimationEvent) => this.handleAnimationEnd(ev)}
       >
-        <div class={{ head: true, "first-screen": this.isFirstScreen }}>
+        <div class="head">
           {!this.hideBackButton && (
             <button
               part="secondary-action"
@@ -159,7 +159,7 @@ export class VviinnModal {
             </svg>
           </button>
         </div>
-        <div class={{ body: true, "first-screen": this.isFirstScreen }}>
+        <div class="body">
           <slot></slot>
         </div>
       </Host>

@@ -37,7 +37,7 @@
     z-index: 1;
   }
 
-  .head:not(.first-screen) {
+  :host(:not(.first-screen)) .head {
     background-color: white;
   }
 
@@ -45,11 +45,11 @@
     overflow-y: auto;
   }
 
-  .body.first-screen {
+  :host(.first-screen) .body {
     transform: translateY(-64px);
   }
 
-  .body:not(.first-screen) {
+  :host(:not(.first-screen)) .body {
     padding-bottom: 64px;
   }
 }
