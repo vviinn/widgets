@@ -1,8 +1,9 @@
 import { Component, Host, h, Prop } from "@stencil/core";
+import i18next from "i18next";
+import { WarningIcon } from "../../vviinn-icons";
 
 @Component({
   tag: "vviinn-wrong-format",
-  styleUrl: "vviinn-wrong-format.css",
   shadow: true,
 })
 export class VviinnWrongFormat {
@@ -12,13 +13,11 @@ export class VviinnWrongFormat {
     return (
       <Host>
         <vviinn-error>
-          <h4 slot="title">Dateityp wird nicht unterstützt</h4>
-          <span slot="text">
-            Leider unterstützen wir dieses Format nicht. Bitte laden Sie eine
-            .jpg, .png oder .webp Bilddatei hoch.
-          </span>
+          <WarningIcon />
+          <h4 slot="title">{i18next.t("wrongFormatBlock.title")}</h4>
+          <span slot="text">{i18next.t("wrongFormatBlock.text")}</span>
           <button slot="action" onClick={this.handler}>
-            Neues Bild hochladen
+            {i18next.t("wrongFormatBlock.button")}
           </button>
         </vviinn-error>
       </Host>

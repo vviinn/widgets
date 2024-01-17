@@ -14,6 +14,8 @@ export class VviinnOverlayedModal {
   @Prop() hideBackButton: boolean = false;
   /** @internal */
   @Prop() widgetVersion: string;
+  /** @internal */
+  @Prop() isFirstScreen: boolean;
 
   @Event() vviinnWidgetClose: EventEmitter<void>;
 
@@ -27,6 +29,7 @@ export class VviinnOverlayedModal {
             buttonElementId={this.buttonElementId}
             hideBackButton={this.hideBackButton}
             widgetVersion={this.widgetVersion}
+            isFirstScreen={this.isFirstScreen}
           >
             <slot>CONTENT</slot>
           </vviinn-modal>

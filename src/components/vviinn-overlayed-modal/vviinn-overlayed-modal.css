@@ -20,9 +20,9 @@ vviinn-modal {
 
 @media (max-width: 768px) {
   vviinn-modal {
-    border-radius: 4px 4px 0 0;
     height: 100vh;
-    margin-top: 32px;
+    height: 100svh;
+    margin-top: 64px;
     transform: translateY(100%);
     width: 100vw;
     margin-left: 0;

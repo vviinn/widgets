@@ -1,5 +1,7 @@
+export type ErrorKind = "client" | "server" | "app";
+
 export type BasicError<T> = {
-  kind: "client" | "server" | "app";
+  kind: ErrorKind;
   inner: T;
 };
 

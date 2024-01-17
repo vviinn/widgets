@@ -1,8 +1,9 @@
 import { Component, Host, h, Prop } from "@stencil/core";
+import i18next from "i18next";
+import { WarningIcon } from "../../vviinn-icons";
 
 @Component({
   tag: "vviinn-server-error",
-  styleUrl: "vviinn-server-error.css",
   shadow: true,
 })
 export class VviinnServerError {
@@ -12,13 +13,10 @@ export class VviinnServerError {
     return (
       <Host>
         <vviinn-error>
-          <h4 slot="title">Keine Verbindung</h4>
-          <span slot="text">
-            Etwas hat leider nicht funktioniert. Bitte prüfen Sie Ihre
-            Internetverbindung und laden Sie das Bild noch einmal hoch.
-          </span>
+          <WarningIcon />
+          <h4 slot="title">{i18next.t("serverErrorBlock.title")}</h4>
           <button slot="action" onClick={this.handler}>
-            Erneut versuchen
+            {i18next.t("serverErrorBlock.button")}
           </button>
         </vviinn-error>
       </Host>
