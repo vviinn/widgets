@@ -7,6 +7,7 @@ import {
 } from "vviinn-tracking-client-ts";
 import { ValueObject } from "../network/ion/ValueObject";
 import { DetectedObject } from "../searchSession/searchSession";
+import { ErrorKind } from "../error";
 
 export type BasicEventData = {
   widgetType: "VPR" | "VPS";
@@ -14,6 +15,15 @@ export type BasicEventData = {
   campaignTypeName: "Similar Products" | "Visual Search" | "Cross-Selling";
   widgetId: string;
   widgetVersion: string;
+};
+
+export type NoResultEventData = {
+  widgetType: "VPR" | "VPS";
+  campaignTypeId: "VPR" | "VPS" | "VCS";
+  campaignTypeName: "Similar Products" | "Visual Search" | "Cross-Selling";
+  widgetId: string;
+  widgetVersion: string;
+  reason: ErrorKind;
 };
 
 export type SelectObjectEventData = {

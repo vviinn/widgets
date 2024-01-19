@@ -20,6 +20,7 @@ import {
 } from "../../recommendation/events";
 import { campaignTypeNames } from "../../campaign/Campaign";
 import { Locale } from "../../locale";
+import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 
 /**
  * @slot vviinn-onboarding-title - Title of onboarding section.
@@ -29,13 +30,9 @@ import { Locale } from "../../locale";
  * @slot onboarding-card-2-text - Text content of second onboarding slide.
  * @slot onboarding-card-3-icon - Icon (or other graphics) on the third onboarding slide.
  * @slot onboarding-card-3-text - Text content of third onboarding slide.
- * @slot vviinn-example-images-title - Header of Example Images block.
- * @slot vviinn-example-images-1 - First image in Example Images block.
- * @slot vviinn-example-images-2 - Second image in Example Images block.
- * @slot vviinn-example-images-3 - Third image in Example Images block.
- * @slot vviinn-example-images-4 - Fourth image in Example Images block.
  * @slot vviinn-teaser-text - Text on widget's main screen.
  * @slot vviinn-image-upload-button-text - Title of Upload Button.
+ * @slot vviinn-camera-button-text - Title of Camera Button.
  * @slot vviinn-privacy-badge-text - Text content of privacy notification block.
  * @slot vviinn-image-search-modal-title - Image search modal title.
  *
@@ -52,7 +49,6 @@ import { Locale } from "../../locale";
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
  * @part price-prefix - Block rendered before each price element (for ex. "from").
  * @part title - Title inside Product Card.
- * @part example-images - Example Images block.
  * @part button - Clickable button element.
  * @part vviinn-button - Button element container.
  */
@@ -81,6 +77,8 @@ export class VviinnVpsButton {
   @Prop() productDetailNewTab: boolean = true;
   /** Resolution width of an image in the product card */
   @Prop() imageResolutionWidth: number = 250;
+  /** Example image source */
+  @Prop() exampleImageSource: string = DEFAULT_EXAMPLE_IMAGE;
 
   /** @internal */
   @Prop() apiPath: string | undefined;
@@ -178,7 +176,7 @@ export class VviinnVpsButton {
           token={this.token}
           locale={this.locale}
           apiPath={this.apiPath}
-          exportparts="brand, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, product-card, example-images"
+          exportparts="brand, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, product-card"
           campaignId={this.campaignId}
           showingInButton={true}
           buttonPressed={this.buttonPressed}
@@ -188,6 +186,7 @@ export class VviinnVpsButton {
           excluded={this.excluded}
           productDetailNewTab={this.productDetailNewTab}
           imageResolutionWidth={this.imageResolutionWidth}
+          exampleImageSource={this.exampleImageSource}
         />
       </Host>
     );

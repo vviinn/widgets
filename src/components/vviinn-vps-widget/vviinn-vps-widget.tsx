@@ -52,6 +52,8 @@ import { campaignTypeNames } from "../../campaign/Campaign";
 import { parseExcluded } from "../../utils/collections/collectionsUtils";
 import { resources } from "../../locale/resources-vps";
 import { Locale } from "../../locale";
+import { CameraActionIcon, UploadActionIcon } from "../vviinn-icons";
+import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 
 const filterInt = (value: string) =>
   /^[-+]?(\d+|Infinity)$/.test(value) ? Number(value) : NaN;
@@ -79,7 +81,6 @@ const notNan = (n: number): boolean => !isNaN(n);
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
  * @part price-prefix - Block rendered before each price element (for ex. "from").
  * @part title - Title inside Product Card.
- * @part example-images - Example Images block.
 
  * @slot vviinn-onboarding-title - Title of onboarding section.
  * @slot onboarding-card-1-icon - Icon (or other graphics) on the first onboarding slide.
@@ -88,13 +89,9 @@ const notNan = (n: number): boolean => !isNaN(n);
  * @slot onboarding-card-2-text - Text content of second onboarding slide.
  * @slot onboarding-card-3-icon - Icon (or other graphics) on the third onboarding slide.
  * @slot onboarding-card-3-text - Text content of third onboarding slide.
- * @slot vviinn-example-images-title - Header of Example Images block.
- * @slot vviinn-example-images-1 - First image in Example Images block.
- * @slot vviinn-example-images-2 - Second image in Example Images block.
- * @slot vviinn-example-images-3 - Third image in Example Images block.
- * @slot vviinn-example-images-4 - Fourth image in Example Images block.
  * @slot vviinn-teaser-text - Text on widget's main screen.
  * @slot vviinn-image-upload-button-text - Title of Upload Button.
+ * @slot vviinn-camera-button-text - Title of Camera Button.
  * @slot vviinn-privacy-badge-text - Text content of privacy notification block.
  * @slot vviinn-image-search-modal-title - Image search modal title.
  *
@@ -123,6 +120,8 @@ export class VviinnVpsWidget {
   @Prop() productDetailNewTab: boolean = true;
   /** Resolution width of an image in the product card */
   @Prop() imageResolutionWidth: number = 250;
+  /** Example image source */
+  @Prop() exampleImageSource: string = DEFAULT_EXAMPLE_IMAGE;
 
   /** @internal */
   @Prop() apiPath: string = "https://api.vviinn.com";
@@ -143,6 +142,8 @@ export class VviinnVpsWidget {
   @State() width: number = 0;
   @State() wrongImageFormat: boolean = false;
   @State() trackingDeactivated: boolean = false;
+  @State() stream: MediaStream | null = null;
+  @State() cameraEnabled: boolean = false;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -196,10 +197,17 @@ export class VviinnVpsWidget {
   private id?: string;
   private resultLoaded: boolean = false;
   private resultViewed: boolean = false;
+  private cameraAvailable: boolean = false;
 
   private initResultEvents() {
     this.resultLoaded = false;
     this.resultViewed = false;
+  }
+
+  private stopStreamTracks() {
+    this.stream?.getTracks().forEach((track) => {
+      track.stop();
+    });
   }
 
   private isOnboardingSlide() {
@@ -222,6 +230,20 @@ export class VviinnVpsWidget {
       window.location.href = deeplink;
     }
   }
+
+  private handleCameraClick = async () => {
+    if (this.stream) return;
+
+    try {
+      const videoStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment" },
+      });
+      this.stream = videoStream;
+    } catch (error) {
+      // TODO: Show error in the UI
+      console.error("Error accessing camera:", error.message);
+    }
+  };
 
   componentDidLoad() {
     const slots = this.el.querySelectorAll("[slot]");
@@ -263,6 +285,11 @@ export class VviinnVpsWidget {
     if (this.mode === "modal") {
       this.active = true;
     }
+  }
+
+  @Listen("vviinnCameraEnabled")
+  trackCameraEnabled({ detail: isEnabled }: CustomEvent<boolean>) {
+    this.cameraEnabled = isEnabled;
   }
 
   @Listen("vviinnProductLoad")
@@ -377,6 +404,7 @@ export class VviinnVpsWidget {
   @Listen("secondaryActionClicked")
   trackSecondaryAction() {
     this.initResultEvents();
+    this.stream = null;
   }
 
   connectedCallback() {
@@ -388,6 +416,9 @@ export class VviinnVpsWidget {
       fallbackLng: "de-DE",
       resources,
     });
+
+    this.cameraAvailable =
+      !!navigator.mediaDevices && !!navigator.mediaDevices.getUserMedia;
 
     imageSearchState.token = this.token;
     imageSearchState.campaignId = pipe(
@@ -493,6 +524,7 @@ export class VviinnVpsWidget {
     const modal = overlay.querySelector("vviinn-modal");
     const modalBody = modal.shadowRoot.querySelector(".body");
     modalBody.scrollTop = 0;
+    this.stopStreamTracks();
   }
 
   private renderResults() {
@@ -529,7 +561,7 @@ export class VviinnVpsWidget {
   }
 
   private resetState() {
-    this.resetScroll("onboarding-block");
+    this.resetScroll("start-page_block");
 
     this.slidePosition = 0;
     imageSearchState.resetCategoryLink = undefined;
@@ -543,7 +575,11 @@ export class VviinnVpsWidget {
     imageSearchState.detectedObjects = [];
     imageSearchState.rectangleSearchForm = undefined;
     imageSearchState.loading = false;
+    imageSearchState.serverError = false;
+    this.wrongImageFormat = false;
     this.resetScroll("results-block");
+    this.stopStreamTracks();
+    this.stream = null;
   }
 
   private haveErrors(): boolean {
@@ -559,7 +595,7 @@ export class VviinnVpsWidget {
     this.active = false;
     this.resetState();
 
-    const elementsToReset = ["onboarding-block", "results-block"];
+    const elementsToReset = ["start-page_block", "results-block"];
     elementsToReset.forEach((name) => this.resetScroll(name));
     this.trackWidgetEvent("close");
   }
@@ -571,101 +607,113 @@ export class VviinnVpsWidget {
 
         <vviinn-overlayed-modal
           class={{ "first-screen": this.isOnboardingSlide() }}
+          isFirstScreen={this.isOnboardingSlide()}
           active={this.active}
           resetState={this.resetState.bind(this)}
           onVviinnWidgetClose={() => this.handleModalClose()}
           buttonElementId={this.buttonElementId ?? this.id}
           widgetVersion={version}
           hideBackButton={this.mode === "upload" && this.showingInButton}
-          exportparts="secondary-action, title, close-button, example-images"
+          exportparts="secondary-action, title, close-button"
         >
           <vviinn-slider showBullets={false} position={this.slidePosition}>
-            <vviinn-slide class={{ "start-page": true }}>
+            <vviinn-slide
+              class={{
+                "start-page": true,
+                "camera-enabled": this.cameraEnabled,
+              }}
+            >
+              <vviinn-example-image
+                onVviinnImageUploadFinished={() =>
+                  this.handleImageSelection("example")
+                }
+                onVviinnImageUpload={() => {
+                  this.trackInitialSearch("example");
+                }}
+                onVviinnNoResult={() =>
+                  this.resetScroll("start-page_block", "smooth")
+                }
+                basicEventData={this.getBasicEventData()}
+                srcObject={this.stream}
+                exampleImageSource={this.exampleImageSource}
+              />
               <div
                 class={{
                   error: this.haveErrors(),
-                  "start-page_block": true,
                 }}
+                id="start-page_block"
               >
-                <vviinn-wrong-format
-                  class={{ hidden: !this.wrongImageFormat }}
-                  handler={() => (this.wrongImageFormat = false)}
-                />
-                <vviinn-server-error
-                  class={{ hidden: !imageSearchState.serverError }}
-                  handler={() => (imageSearchState.serverError = false)}
-                />
-                <vviinn-teaser class={{ hidden: this.haveErrors() }} />
-                <vviinn-image-selector
-                  class={{ hidden: this.haveErrors() }}
-                  onVviinnImageUploadFinished={() => {
-                    this.handleImageSelection("upload");
-                    if (this.mode === "upload" && this.showingInButton) {
-                      this.active = true;
-                    }
-                  }}
-                  onVviinnImageUpload={() => {
-                    this.trackInitialSearch("upload");
-                  }}
-                  onVviinnNoResult={() => (this.wrongImageFormat = true)}
-                  resetVpsButton={this.resetVpsButton}
-                  basicEventData={this.getBasicEventData()}
-                  part="select-image_button"
-                  startUpload={
-                    this.buttonPressed &&
-                    this.showingInButton &&
-                    this.mode === "upload"
-                  }
-                >
-                  <span slot="upload-button-text" class="upload-button-content">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="29"
-                      height="28"
-                      fill="none"
-                    >
-                      <defs />
-                      <path
-                        fill="#fff"
-                        fill-rule="evenodd"
-                        d="M10.271 3.89A.875.875 0 0111 3.5h7c.293 0 .566.146.728.39l1.49 2.235h3.033a2.625 2.625 0 012.625 2.625V21a2.625 2.625 0 01-2.625 2.625H5.75A2.625 2.625 0 013.125 21V8.75A2.625 2.625 0 015.75 6.125h3.031l1.49-2.235zm1.197 1.36l-1.49 2.235a.875.875 0 01-.729.39H5.75a.875.875 0 00-.875.875V21a.875.875 0 00.875.875h17.5a.875.875 0 00.875-.875V8.75a.875.875 0 00-.875-.875h-3.5a.875.875 0 01-.729-.39l-1.49-2.235h-6.063z"
-                        clip-rule="evenodd"
-                      />
-                      <path
-                        fill="#fff"
-                        fill-rule="evenodd"
-                        d="M14.5 11.375a3.062 3.062 0 100 6.125 3.062 3.062 0 000-6.125zm-4.813 3.063a4.812 4.812 0 119.625 0 4.812 4.812 0 01-9.625 0z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                    <slot name="vviinn-image-upload-button-text">
-                      <span>{i18next.t("imageUploadButtonText")}</span>
-                    </slot>
-                  </span>
-                </vviinn-image-selector>
-                <vviinn-privacy-badge
-                  class={{ hidden: this.haveErrors() }}
-                  privacyBadgeText={i18next.t("privacyBadgeText")}
-                />
-              </div>
-              <div id="onboarding-block" class="start-page_block">
-                <div class="onboarding-wrapper">
-                  <vviinn-onboarding />
-                  <vviinn-example-images
-                    part="example-images"
-                    exampleImagesTitle={i18next.t("exampleImagesTitle")}
-                    onVviinnImageUploadFinished={() =>
-                      this.handleImageSelection("example")
-                    }
-                    onVviinnImageUpload={() => {
-                      this.trackInitialSearch("example");
-                    }}
-                    onVviinnNoResult={() =>
-                      this.resetScroll("onboarding-block", "smooth")
-                    }
-                    basicEventData={this.getBasicEventData()}
-                  />
+                <div class="start-page_main-content">
+                  <div class="start-page_errors-block">
+                    <vviinn-wrong-format
+                      class={{ hidden: !this.wrongImageFormat }}
+                      handler={() => this.resetState()}
+                    />
+                    <vviinn-server-error
+                      class={{ hidden: !imageSearchState.serverError }}
+                      handler={() => this.resetState()}
+                    />
+                  </div>
+
+                  {!this.haveErrors() && <vviinn-teaser />}
+                  {!this.haveErrors() && (
+                    <div class="buttons-group">
+                      {this.cameraAvailable && (
+                        <button
+                          class="action-button"
+                          onClick={this.handleCameraClick}
+                        >
+                          <span class="action-button-content">
+                            <CameraActionIcon />
+                            <slot name="vviinn-camera-button-text">
+                              <span>{i18next.t("cameraButtonText")}</span>
+                            </slot>
+                          </span>
+                        </button>
+                      )}
+
+                      <vviinn-image-selector
+                        class="action-button"
+                        onVviinnImageUploadFinished={() => {
+                          this.handleImageSelection("upload");
+                          if (this.mode === "upload" && this.showingInButton) {
+                            this.active = true;
+                          }
+                        }}
+                        onVviinnImageUpload={() => {
+                          this.trackInitialSearch("upload");
+                        }}
+                        onVviinnNoResult={({ detail }) => {
+                          if (detail.reason === "client") {
+                            this.wrongImageFormat = true;
+                          }
+                        }}
+                        resetVpsButton={this.resetVpsButton}
+                        basicEventData={this.getBasicEventData()}
+                        part="select-image_button"
+                        startUpload={
+                          this.buttonPressed &&
+                          this.showingInButton &&
+                          this.mode === "upload"
+                        }
+                      >
+                        <span
+                          slot="upload-button-text"
+                          class="action-button-content"
+                        >
+                          <UploadActionIcon />
+                          <slot name="vviinn-image-upload-button-text">
+                            <span>{i18next.t("imageUploadButtonText")}</span>
+                          </slot>
+                        </span>
+                      </vviinn-image-selector>
+                    </div>
+                  )}
                 </div>
+                <vviinn-privacy-badge
+                  privacyBadgeText={i18next.t("privacyBadgeText")}
+                  class={{ visible: this.haveErrors() }}
+                />
               </div>
             </vviinn-slide>
             <vviinn-slide
@@ -698,7 +746,7 @@ export class VviinnVpsWidget {
                     hidden: imageSearchState.results.length > 0,
                   }}
                 >
-                  <vviinn-empty-results />
+                  <vviinn-empty-results handler={() => this.resetState()} />
                   <vviinn-onboarding />
                 </div>
                 <div

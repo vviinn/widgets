@@ -34,6 +34,8 @@ export class VviinnModal {
   @Prop() widgetVersion: string;
   /** @internal */
   @Prop() hideBackButton: boolean = false;
+  /** @internal */
+  @Prop() isFirstScreen: boolean;
 
   @State() slider: boolean = false;
 
@@ -46,6 +48,11 @@ export class VviinnModal {
 
   componentWillLoad() {
     slotChangeListener(this, this.el);
+  }
+
+  private resetTopScroll() {
+    const element: HTMLElement = this.el.shadowRoot.querySelector(".body");
+    element.scroll({ top: 0 });
   }
 
   private close() {
@@ -88,7 +95,7 @@ export class VviinnModal {
     return (
       <Host
         exportparts="secondary-action, title, close-button"
-        class={{ closed: !this.active }}
+        class={{ closed: !this.active, "first-screen": this.isFirstScreen }}
         onAnimationEnd={(ev: AnimationEvent) => this.handleAnimationEnd(ev)}
       >
         <div class="head">
@@ -97,6 +104,7 @@ export class VviinnModal {
               part="secondary-action"
               onClick={() => {
                 this.resetState();
+                this.resetTopScroll();
                 this.secondaryActionClicked.emit();
               }}
             >
