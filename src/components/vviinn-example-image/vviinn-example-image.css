@@ -2,10 +2,15 @@
   display: block;
   width: 100%;
   height: 100%;
+  min-height: 0;
   position: relative;
   overflow: hidden;
   flex-grow: 1;
-  transition: height 0.6s ease-in-out;
+}
+
+:host(.video-expanded) {
+  min-height: 100%;
+  transition: min-height 0.8s;
 }
 
 img {

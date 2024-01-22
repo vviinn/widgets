@@ -144,6 +144,7 @@ export class VviinnVpsWidget {
   @State() trackingDeactivated: boolean = false;
   @State() stream: MediaStream | null = null;
   @State() cameraEnabled: boolean = false;
+  @State() cameraButtonClicked: boolean = false;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -233,6 +234,7 @@ export class VviinnVpsWidget {
 
   private handleCameraClick = async () => {
     if (this.stream) return;
+    this.cameraButtonClicked = true;
 
     try {
       const videoStream = await navigator.mediaDevices.getUserMedia({
@@ -635,6 +637,7 @@ export class VviinnVpsWidget {
                 }
                 basicEventData={this.getBasicEventData()}
                 srcObject={this.stream}
+                cameraButtonClicked={this.cameraButtonClicked}
                 exampleImageSource={this.exampleImageSource}
               />
               <div

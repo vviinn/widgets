@@ -240,8 +240,8 @@ search-filters::part(filter active) {
   }
 
   .start-page.active {
-    height: calc(100vh - 67px);
-    height: calc(100svh - 67px);
+    height: calc(100vh - 64px);
+    height: calc(100svh - 64px);
   }
 
   .start-page:not(.active) {

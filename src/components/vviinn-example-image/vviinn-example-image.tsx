@@ -28,6 +28,7 @@ export class VviinnExampleImage {
   @Prop() height: number = 0;
   @Prop() basicEventData: BasicEventData;
   @Prop() srcObject: MediaStream;
+  @Prop() cameraButtonClicked: boolean = false;
 
   @State() selected: boolean = false;
   @State() videoInitialized: boolean = false;
@@ -97,10 +98,15 @@ export class VviinnExampleImage {
 
   render() {
     return (
-      <Host onKeyUp={(ev: KeyboardEvent) => this.handleKeyPress(ev)}>
+      <Host
+        onKeyUp={(ev: KeyboardEvent) => this.handleKeyPress(ev)}
+        class={{ "video-expanded": this.cameraButtonClicked }}
+      >
         <video
           id="camera-preview"
-          class={{ hidden: !this.videoInitialized }}
+          class={{
+            hidden: !this.videoInitialized,
+          }}
           autoplay
           playsinline
           muted

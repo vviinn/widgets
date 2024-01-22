@@ -46,11 +46,11 @@
   }
 
   :host(.first-screen) .body {
-    transform: translateY(-64px);
+    transform: translateY(-66px);
   }
 
   :host(:not(.first-screen)) .body {
-    padding-bottom: 64px;
+    padding-bottom: 66px;
   }
 }
 
