@@ -94,8 +94,8 @@ const notNan = (n: number): boolean => !isNaN(n);
  * @slot onboarding-card-3-icon - Icon (or other graphics) on the third onboarding slide.
  * @slot onboarding-card-3-text - Text content of third onboarding slide.
  * @slot vviinn-teaser-text - Text on widget's main screen.
- * @slot vviinn-image-upload-button-text - Title of show Files Button.
- * @slot vviinn-show-files-button-text - Title of Upload Button.
+ * @slot vviinn-image-upload-button-text - Title of Upload Button.
+ * @slot vviinn-show-files-button-text - Title of show Files Button.
  * @slot vviinn-camera-button-text - Title of Camera Button.
  * @slot vviinn-privacy-badge-text - Text content of privacy notification block.
  * @slot vviinn-image-search-modal-title - Image search modal title.
