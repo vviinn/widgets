@@ -6,6 +6,7 @@
   position: relative;
   overflow: hidden;
   flex-grow: 1;
+  transition: min-height 1s;
 }
 
 :host(.video-expanded) {
@@ -30,15 +31,13 @@ video {
 
 .example-button {
   cursor: pointer;
-  padding: 4px;
-  border-radius: 50%;
-  border: 2px solid white;
+  border: none;
   position: absolute;
-  bottom: 26px;
+  bottom: 64px;
+  padding: 0;
   left: calc(50% - 36px);
   background-color: transparent;
   line-height: 0;
-  opacity: 0.6;
 }
 
 .hidden {

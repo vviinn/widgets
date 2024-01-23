@@ -623,7 +623,7 @@ export class VviinnVpsWidget {
           widgetVersion={version}
           hideBackButton={
             (this.mode === "upload" && this.showingInButton) ||
-            !this.cameraEnabled
+            (!this.cameraEnabled && this.isOnboardingSlide())
           }
           exportparts="secondary-action, title, close-button"
         >

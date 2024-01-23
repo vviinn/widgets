@@ -85,8 +85,8 @@ button:hover {
     padding-bottom: 64px;
   }
 
-  button,
-  button:hover {
+  :host(.first-screen) button,
+  :host(.first-screen) button:hover {
     color: white;
   }
 }
