@@ -54,6 +54,7 @@ import { resources } from "../../locale/resources-vps";
 import { Locale } from "../../locale";
 import { CameraActionIcon, UploadActionIcon } from "../vviinn-icons";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
+import { sequenceToOption } from "../../utils/option/option";
 
 const filterInt = (value: string) =>
   /^[-+]?(\d+|Infinity)$/.test(value) ? Number(value) : NaN;
@@ -600,6 +601,18 @@ export class VviinnVpsWidget {
     this.trackWidgetEvent("close");
   }
 
+  private renderImage(): HTMLImageElement | null {
+    return pipe(
+      sequenceToOption(imageSearchState.imageUrl, imageSearchState.image),
+      O.map(([url]) => {
+        const image = <img src={url} />;
+
+        return image;
+      }),
+      O.getOrElse(() => null)
+    );
+  }
+
   render() {
     return (
       <Host>
@@ -723,11 +736,15 @@ export class VviinnVpsWidget {
               }}
             >
               <div class="image-wrapper">
+                {this.renderImage()}
                 {this.isResultSlide() && (
                   <vviinn-image-view
                     basicEventData={this.getBasicEventData()}
                   />
                 )}
+              </div>
+
+              <div class="filters">
                 <div class="filters-wrapper">
                   <div class="filters">
                     {imageSearchState.filters.map((filter) => (
@@ -739,6 +756,7 @@ export class VviinnVpsWidget {
                   </div>
                 </div>
               </div>
+
               <div id="results-block" class="products-wrapper">
                 <div
                   class={{

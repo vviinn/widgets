@@ -13,10 +13,11 @@ import i18next from "i18next";
 import { slotChangeListener } from "../customized-slots";
 import { BasicEventData } from "../../recommendation/events";
 import { campaignTypeNames } from "../../campaign/Campaign";
+/*
 import { imageSearchState } from "../../store/imageSearch.store";
 import * as O from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/function";
-import { sequenceToOption } from "../../utils/option/option";
+import { sequenceToOption } from "../../utils/option/option";*/
 
 @Component({
   tag: "vviinn-modal",
@@ -77,7 +78,7 @@ export class VviinnModal {
     this.slider = true;
   }
 
-  private renderImage(): HTMLImageElement | null {
+  /*private renderImage(): HTMLImageElement | null {
     return pipe(
       sequenceToOption(imageSearchState.imageUrl, imageSearchState.image),
       O.map(([url]) => {
@@ -89,7 +90,7 @@ export class VviinnModal {
       }),
       O.getOrElse(() => null)
     );
-  }
+  }*/
 
   render() {
     return (
@@ -134,7 +135,6 @@ export class VviinnModal {
           )}
 
           <div class="title" part="title">
-            {this.renderImage()}
             <slot name="vviinn-image-search-modal-title">
               {i18next.t("imageSearchModalTitle")}
             </slot>

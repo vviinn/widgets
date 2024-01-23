@@ -16,7 +16,7 @@
   display: flex;
   align-items: center;
   z-index: 1;
-  padding: 14px;
+  padding: 16px;
 }
 
 @media (max-width: 768px) {
@@ -38,7 +38,7 @@
   }
 
   :host(:not(.first-screen)) .head {
-    background-color: white;
+    background: #ffffff;
   }
 
   .body {
@@ -55,11 +55,12 @@
 }
 
 .title {
+  color: #161616;
   display: flex;
   align-items: center;
   transform: translateX(-6px);
-  font-weight: 600;
-  font-size: 18px;
+  font-weight: 500;
+  font-size: 16px;
   line-height: 24px;
   margin: 0 auto;
 }
@@ -78,8 +79,8 @@ button {
   border: none;
   cursor: pointer;
   display: grid;
-  padding: 6px;
-  color: #525252;
+  color: #6F6F6F;
+  padding: 0;
 }
 
 button:hover {
