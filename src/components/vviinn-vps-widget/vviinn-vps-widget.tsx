@@ -233,7 +233,11 @@ export class VviinnVpsWidget {
   }
 
   private handleCameraClick = async () => {
-    if (this.stream) return;
+    if (this.stream) {
+      this.resetState();
+      return;
+    }
+
     this.cameraButtonClicked = true;
 
     try {
@@ -582,6 +586,8 @@ export class VviinnVpsWidget {
     this.resetScroll("results-block");
     this.stopStreamTracks();
     this.stream = null;
+    this.cameraEnabled = false;
+    this.cameraButtonClicked = false;
   }
 
   private haveErrors(): boolean {
@@ -615,7 +621,10 @@ export class VviinnVpsWidget {
           onVviinnWidgetClose={() => this.handleModalClose()}
           buttonElementId={this.buttonElementId ?? this.id}
           widgetVersion={version}
-          hideBackButton={this.mode === "upload" && this.showingInButton}
+          hideBackButton={
+            (this.mode === "upload" && this.showingInButton) ||
+            !this.cameraEnabled
+          }
           exportparts="secondary-action, title, close-button"
         >
           <vviinn-slider showBullets={false} position={this.slidePosition}>
@@ -668,9 +677,17 @@ export class VviinnVpsWidget {
                         >
                           <span class="action-button-content">
                             <CameraActionIcon />
-                            <slot name="vviinn-camera-button-text">
-                              <span>{i18next.t("cameraButtonText")}</span>
-                            </slot>
+                            {this.cameraEnabled ? (
+                              <slot name="vviinn-camera-button-text-stop">
+                                <span>{i18next.t("cameraButtonTextStop")}</span>
+                              </slot>
+                            ) : (
+                              <slot name="vviinn-camera-button-text-start">
+                                <span>
+                                  {i18next.t("cameraButtonTextStart")}
+                                </span>
+                              </slot>
+                            )}
                           </span>
                         </button>
                       )}

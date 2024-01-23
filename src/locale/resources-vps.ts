@@ -6,7 +6,8 @@ export const resources: Resource = {
       exampleImagesTitle:
         "Mit den Beispielbildern die Suche direkt ausprobieren",
       imageUploadButtonText: "Bild Hochladen",
-      cameraButtonText: "Kamera Starten",
+      cameraButtonTextStart: "Kamera Starten",
+      cameraButtonTextStop: "Kamera Stop",
       galleryButtonText: "Galerie Anzeigen",
       privacyBadgeText:
         "Durch das Hochladen eines Bildes willigst Du in die Verarbeitung durch unseren Partner Vviinn ein. Das Bild wird nach einer Stunde Inaktivität gelöscht.",
@@ -31,7 +32,8 @@ export const resources: Resource = {
     translation: {
       exampleImagesTitle: "Try out the search with the example images",
       imageUploadButtonText: "Upload Photo",
-      cameraButtonText: "Start Camera",
+      cameraButtonTextStart: "Start Camera",
+      cameraButtonTextStop: "Stop Camera",
       galleryButtonText: "Show Gallery",
       privacyBadgeText:
         "By uploading a picture you agree to the processing by our partner Vviinn. The image will be deleted after one hour of inactivity.",

@@ -87,7 +87,10 @@ export class VviinnExampleImage {
 
   @Watch("srcObject")
   handleSrcObjectChange() {
-    if (!this.srcObject) return;
+    if (!this.srcObject) {
+      this.videoInitialized = false;
+      return;
+    }
     this.videoElement.srcObject = this.srcObject;
 
     this.videoElement.onloadedmetadata = () => {
