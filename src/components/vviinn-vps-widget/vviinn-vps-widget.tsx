@@ -607,15 +607,6 @@ export class VviinnVpsWidget {
 
   uploadSource: "showFiles" | "uploadFiles" = "uploadFiles";
 
-  vviinnImageSelector = {
-    onVviinnImageUploadFinished: () => {
-      this.handleImageSelection("upload");
-      if (this.mode === "upload" && this.showingInButton) {
-        this.active = true;
-      }
-    },
-  };
-
   render() {
     return (
       <Host>
