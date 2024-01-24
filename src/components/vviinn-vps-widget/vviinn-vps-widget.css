@@ -110,9 +110,13 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   box-sizing: border-box;
 }
 
-.results-page > *:not(.image-wrapper) {
+.results-page > *:not(.results-page-left) {
   padding: 24px;
   box-sizing: border-box;
+}
+
+.filters {
+  padding: 24px;
 }
 
 .products {
@@ -267,8 +271,12 @@ search-filters::part(filter active) {
     margin-top: 0;
   }
 
-  .results-page > *:not(.image-wrapper) {
+  .results-page > *:not(.results-page-left) {
     box-sizing: border-box;
+    padding: 24px;
+  }
+
+  .filters {
     padding: 24px;
   }
 
@@ -336,7 +344,8 @@ search-filters::part(filter active) {
 }
 
 @media (max-width: 380px) {
-  .results-page > *:not(.image-wrapper) {
+  .results-page > *:not(.results-page-left),
+  .filters {
     padding: 12px;
   }
 

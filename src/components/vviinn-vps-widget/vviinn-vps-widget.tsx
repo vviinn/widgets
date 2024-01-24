@@ -735,18 +735,18 @@ export class VviinnVpsWidget {
                 active: this.isResultSlide(),
               }}
             >
-              <div class="image-wrapper">
-                {this.renderImage()}
-                {this.isResultSlide() && (
-                  <vviinn-image-view
-                    basicEventData={this.getBasicEventData()}
-                  />
-                )}
-              </div>
+              <div class="results-page-left">
+                <div class="image-wrapper">
+                  {this.renderImage()}
+                  {this.isResultSlide() && (
+                    <vviinn-image-view
+                      basicEventData={this.getBasicEventData()}
+                    />
+                  )}
+                </div>
 
-              <div class="filters">
-                <div class="filters-wrapper">
-                  <div class="filters">
+                <div class="filters">
+                  <div class="filters-wrapper">
                     {imageSearchState.filters.map((filter) => (
                       <search-filters
                         filter={filter}
