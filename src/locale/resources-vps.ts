@@ -8,6 +8,7 @@ export const resources: Resource = {
       imageUploadButtonText: "Bild Hochladen",
       cameraButtonTextStart: "Kamera Starten",
       cameraButtonTextStop: "Kamera Stop",
+      showFilesButtonText: "Dateien anzeigen",
       galleryButtonText: "Galerie Anzeigen",
       privacyBadgeText:
         "Durch das Hochladen eines Bildes willigst Du in die Verarbeitung durch unseren Partner Vviinn ein. Das Bild wird nach einer Stunde Inaktivität gelöscht.",
@@ -34,6 +35,7 @@ export const resources: Resource = {
       imageUploadButtonText: "Upload Photo",
       cameraButtonTextStart: "Start Camera",
       cameraButtonTextStop: "Stop Camera",
+      showFilesButtonText: "Show Files",
       galleryButtonText: "Show Gallery",
       privacyBadgeText:
         "By uploading a picture you agree to the processing by our partner Vviinn. The image will be deleted after one hour of inactivity.",

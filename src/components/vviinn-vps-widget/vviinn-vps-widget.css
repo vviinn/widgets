@@ -226,6 +226,12 @@ search-filters::part(filter active) {
   width: 60%;
 }
 
+@media (min-width: 769px) {
+  .mobile-show {
+    display: none;
+  }
+}
+
 @media (max-width: 1080px) {
   #start-page_block {
     padding: 24px 36px;
