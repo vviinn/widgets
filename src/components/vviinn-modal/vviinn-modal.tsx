@@ -42,11 +42,8 @@ export class VviinnModal {
 
   /** Event emitted when Close Button clicked and close animation ends */
   @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
-
   /** @internal */
   @Event({ bubbles: true })
-  secondaryActionClicked: EventEmitter;
-
   componentWillLoad() {
     slotChangeListener(this, this.el);
   }
@@ -106,7 +103,6 @@ export class VviinnModal {
               onClick={() => {
                 this.resetState();
                 this.resetTopScroll();
-                this.secondaryActionClicked.emit();
               }}
             >
               <SecondaryActionIcon />

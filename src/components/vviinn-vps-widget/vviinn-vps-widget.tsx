@@ -247,7 +247,8 @@ export class VviinnVpsWidget {
       this.stream = videoStream;
     } catch (error) {
       // TODO: Show error in the UI
-      console.error("Error accessing camera:", error.message);
+      console.log("Error accessing camera: ", error.message);
+      this.resetState();
     }
   };
 
@@ -405,12 +406,6 @@ export class VviinnVpsWidget {
       ...rest,
     });
     this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
-  }
-
-  @Listen("secondaryActionClicked")
-  trackSecondaryAction() {
-    this.initResultEvents();
-    this.stream = null;
   }
 
   connectedCallback() {
@@ -585,6 +580,7 @@ export class VviinnVpsWidget {
     this.wrongImageFormat = false;
     this.resetScroll("results-block");
     this.stopStreamTracks();
+    this.initResultEvents();
     this.stream = null;
     this.cameraEnabled = false;
     this.cameraButtonClicked = false;
@@ -732,7 +728,7 @@ export class VviinnVpsWidget {
                 </div>
                 <vviinn-privacy-badge
                   privacyBadgeText={i18next.t("privacyBadgeText")}
-                  class={{ visible: this.haveErrors() }}
+                  class={{ invisible: this.haveErrors() }}
                 />
               </div>
             </vviinn-slide>

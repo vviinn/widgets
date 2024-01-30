@@ -121,12 +121,15 @@ export class VviinnExampleImage {
           tabindex={1}
           class={{ hidden: this.videoInitialized }}
         />
-        <button
-          class={{ "example-button": true, hidden: !this.videoInitialized }}
-          onClick={() => this.selectImage()}
-        >
-          <RoundCameraIcon />
-        </button>
+
+        <div class="buttons-group">
+          <button
+            class={{ "photo-button": true, visible: this.videoInitialized }}
+            onClick={() => this.selectImage()}
+          >
+            <RoundCameraIcon />
+          </button>
+        </div>
       </Host>
     );
   }

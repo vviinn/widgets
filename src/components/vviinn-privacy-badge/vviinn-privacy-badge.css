@@ -4,12 +4,16 @@
   line-height: 16px;
 }
 
-:host(.visible) {
+:host(.invisible) {
   color: transparent;
 }
 
 @media (max-width: 768px) {
-  :host(.visible) {
+  :host(:not(.invisible)) {
+    margin-bottom: 10px;
+  }
+
+  :host(.invisible) {
     display: none;
   }
 }
