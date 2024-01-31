@@ -4,6 +4,7 @@ const defaultSlotsNames: string[] = [
   "vviinn-onboarding-title",
   "vviinn-teaser-text",
   "vviinn-image-upload-button-text",
+  "vviinn-show-files-button-text",
   "vviinn-camera-button-text",
   "vviinn-privacy-badge-text",
   "vviinn-image-search-modal-title",

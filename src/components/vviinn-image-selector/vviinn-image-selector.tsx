@@ -9,10 +9,7 @@ import {
 } from "@stencil/core";
 import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/lib/function";
-import {
-  imageSearchState,
-  processSelectedFile,
-} from "../../store/imageSearch.store";
+import { processSelectedFile } from "../../store/imageSearch.store";
 import { BasicEventData, NoResultEventData } from "../../recommendation/events";
 
 /**
@@ -33,6 +30,8 @@ export class VviinnImageSelector {
 
   @Prop() basicEventData: BasicEventData;
   @Prop() startUpload: boolean;
+  @Prop() loading: boolean = false;
+  @Prop() accept: "image" | "application-octet-stream" = "image";
   @Prop() resetVpsButton: () => void;
 
   private fileInput: HTMLInputElement;
@@ -57,10 +56,6 @@ export class VviinnImageSelector {
     input.value = null;
   }
 
-  private isLoading(): boolean {
-    return imageSearchState.loading;
-  }
-
   @Watch("startUpload")
   startUploadWatcher(upload: boolean) {
     if (upload) {
@@ -72,7 +67,7 @@ export class VviinnImageSelector {
   render() {
     return (
       <Host exportparts="button">
-        {this.isLoading() ? (
+        {this.loading ? (
           <vviinn-preloader />
         ) : (
           <label htmlFor="fileInput" part="button">
@@ -83,7 +78,9 @@ export class VviinnImageSelector {
           id="fileInput"
           class="visually-hidden"
           type="file"
-          accept="image/*"
+          accept={
+            this.accept === "image" ? "image/*" : "application/octet-stream"
+          }
           onChange={(event: Event) => this.handleInputChange(event)}
           ref={(el) => (this.fileInput = el as HTMLInputElement)}
         />
