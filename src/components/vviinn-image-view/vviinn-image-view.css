@@ -111,26 +111,26 @@ vviinn-preloader {
 
 .point-ne {
   cursor: nesw-resize;
-  right: -5px;
-  top: -17px;
+  right: -5.5px;
+  top: -17.5px;
 }
 
 .point-nw {
   cursor: nwse-resize;
-  left: -17px;
-  top: -17px;
+  left: -17.5px;
+  top: -17.5px;
 }
 
 .point-sw {
-  bottom: -5px;
+  bottom: -5.5px;
   cursor: nesw-resize;
-  left: -17px;
+  left: -17.5px;
 }
 
 .point-se {
-  bottom: -5px;
+  bottom: -5.5px;
   cursor: nwse-resize;
-  right: -5px;
+  right: -5.5px;
 }
 
 .cropper-point::before {

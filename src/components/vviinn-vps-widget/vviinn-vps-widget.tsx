@@ -58,7 +58,6 @@ import {
   GalleryActionIcon,
 } from "../vviinn-icons";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
-import { sequenceToOption } from "../../utils/option/option";
 
 const filterInt = (value: string) =>
   /^[-+]?(\d+|Infinity)$/.test(value) ? Number(value) : NaN;
@@ -606,18 +605,6 @@ export class VviinnVpsWidget {
     this.trackWidgetEvent("close");
   }
 
-  private renderImage(): HTMLImageElement | null {
-    return pipe(
-      sequenceToOption(imageSearchState.imageUrl, imageSearchState.image),
-      O.map(([url]) => {
-        const image = <img src={url} />;
-
-        return image;
-      }),
-      O.getOrElse(() => null)
-    );
-  }
-
   uploadSource: "showFiles" | "uploadFiles" = "uploadFiles";
 
   render() {
@@ -789,18 +776,14 @@ export class VviinnVpsWidget {
                 active: this.isResultSlide(),
               }}
             >
-              <div class="results-page-left">
-                <div class="image-wrapper">
-                  {this.renderImage()}
-                  {this.isResultSlide() && (
-                    <vviinn-image-view
-                      basicEventData={this.getBasicEventData()}
-                    />
-                  )}
-                </div>
-
-                <div class="filters">
-                  <div class="filters-wrapper">
+              <div class="image-wrapper">
+                {this.isResultSlide() && (
+                  <vviinn-image-view
+                    basicEventData={this.getBasicEventData()}
+                  />
+                )}
+                <div class="filters-wrapper">
+                  <div class="filters">
                     {imageSearchState.filters.map((filter) => (
                       <search-filters
                         filter={filter}
