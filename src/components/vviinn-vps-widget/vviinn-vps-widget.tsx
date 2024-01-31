@@ -52,7 +52,11 @@ import { campaignTypeNames } from "../../campaign/Campaign";
 import { parseExcluded } from "../../utils/collections/collectionsUtils";
 import { resources } from "../../locale/resources-vps";
 import { Locale } from "../../locale";
-import { CameraActionIcon, UploadActionIcon } from "../vviinn-icons";
+import {
+  CameraActionIcon,
+  UploadActionIcon,
+  GalleryActionIcon,
+} from "../vviinn-icons";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 
 const filterInt = (value: string) =>
@@ -91,6 +95,7 @@ const notNan = (n: number): boolean => !isNaN(n);
  * @slot onboarding-card-3-text - Text content of third onboarding slide.
  * @slot vviinn-teaser-text - Text on widget's main screen.
  * @slot vviinn-image-upload-button-text - Title of Upload Button.
+ * @slot vviinn-show-files-button-text - Title of show Files Button.
  * @slot vviinn-camera-button-text - Title of Camera Button.
  * @slot vviinn-privacy-badge-text - Text content of privacy notification block.
  * @slot vviinn-image-search-modal-title - Image search modal title.
@@ -600,6 +605,8 @@ export class VviinnVpsWidget {
     this.trackWidgetEvent("close");
   }
 
+  uploadSource: "showFiles" | "uploadFiles" = "uploadFiles";
+
   render() {
     return (
       <Host>
@@ -673,6 +680,48 @@ export class VviinnVpsWidget {
                       )}
 
                       <vviinn-image-selector
+                        class="action-button mobile-show"
+                        accept="application-octet-stream"
+                        onVviinnImageUploadFinished={() => {
+                          this.handleImageSelection("upload");
+                          if (this.mode === "upload" && this.showingInButton) {
+                            this.active = true;
+                          }
+                        }}
+                        onVviinnImageUpload={() => {
+                          this.uploadSource = "showFiles";
+                          this.trackInitialSearch("upload");
+                        }}
+                        onVviinnNoResult={({ detail }) => {
+                          if (detail.reason === "client") {
+                            this.wrongImageFormat = true;
+                          }
+                        }}
+                        resetVpsButton={this.resetVpsButton}
+                        basicEventData={this.getBasicEventData()}
+                        part="show-files_button"
+                        startUpload={
+                          this.buttonPressed &&
+                          this.showingInButton &&
+                          this.mode === "upload"
+                        }
+                        loading={
+                          imageSearchState.loading &&
+                          this.uploadSource === "showFiles"
+                        }
+                      >
+                        <span
+                          slot="upload-button-text"
+                          class="action-button-content"
+                        >
+                          <GalleryActionIcon />
+                          <slot name="vviinn-show-files-button-text">
+                            <span>{i18next.t("showFilesButtonText")}</span>
+                          </slot>
+                        </span>
+                      </vviinn-image-selector>
+
+                      <vviinn-image-selector
                         class="action-button"
                         onVviinnImageUploadFinished={() => {
                           this.handleImageSelection("upload");
@@ -681,6 +730,7 @@ export class VviinnVpsWidget {
                           }
                         }}
                         onVviinnImageUpload={() => {
+                          this.uploadSource = "uploadFiles";
                           this.trackInitialSearch("upload");
                         }}
                         onVviinnNoResult={({ detail }) => {
@@ -695,6 +745,10 @@ export class VviinnVpsWidget {
                           this.buttonPressed &&
                           this.showingInButton &&
                           this.mode === "upload"
+                        }
+                        loading={
+                          imageSearchState.loading &&
+                          this.uploadSource === "uploadFiles"
                         }
                       >
                         <span
