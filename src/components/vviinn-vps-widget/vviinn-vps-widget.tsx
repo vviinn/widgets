@@ -95,7 +95,7 @@ const notNan = (n: number): boolean => !isNaN(n);
  * @slot onboarding-card-3-text - Text content of third onboarding slide.
  * @slot vviinn-teaser-text - Text on widget's main screen.
  * @slot vviinn-image-upload-button-text - Title of Upload Button.
- * @slot vviinn-show-files-button-text - Title of show Files Button.
+ * @slot vviinn-show-files-button-text - Title of Show Files Button.
  * @slot vviinn-camera-button-text - Title of Camera Button.
  * @slot vviinn-privacy-badge-text - Text content of privacy notification block.
  * @slot vviinn-image-search-modal-title - Image search modal title.
@@ -610,15 +610,6 @@ export class VviinnVpsWidget {
   }
 
   uploadSource: "showFiles" | "uploadFiles" = "uploadFiles";
-
-  vviinnImageSelector = {
-    onVviinnImageUploadFinished: () => {
-      this.handleImageSelection("upload");
-      if (this.mode === "upload" && this.showingInButton) {
-        this.active = true;
-      }
-    },
-  };
 
   render() {
     return (
