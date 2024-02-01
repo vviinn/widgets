@@ -226,12 +226,6 @@ search-filters::part(filter active) {
   width: 60%;
 }
 
-@media (min-width: 769px) {
-  .mobile-show {
-    display: none;
-  }
-}
-
 @media (max-width: 1080px) {
   #start-page_block {
     padding: 24px 36px;
@@ -245,9 +239,13 @@ search-filters::part(filter active) {
     height: 100%;
   }
 
+  vviinn-overlayed-modal.first-screen::part(secondary-action) {
+    visibility: visible;
+  }
+
   .start-page.active {
-    height: calc(100vh - 67px);
-    height: calc(100svh - 67px);
+    height: calc(100vh - 64px);
+    height: calc(100svh - 64px);
   }
 
   .start-page:not(.active) {
@@ -275,7 +273,7 @@ search-filters::part(filter active) {
   #start-page_block {
     overflow-y: unset;
     min-height: fit-content;
-    padding: 14px 24px 20px;
+    padding: 24px 20px;
   }
 
   .image {
@@ -315,10 +313,6 @@ search-filters::part(filter active) {
 @media (max-width: 480px) {
   .start-page {
     padding-top: 0;
-  }
-
-  #start-page_block {
-    padding: 20px;
   }
 
   .action-button-content {

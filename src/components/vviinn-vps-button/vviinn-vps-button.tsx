@@ -177,7 +177,7 @@ export class VviinnVpsButton {
           token={this.token}
           locale={this.locale}
           apiPath={this.apiPath}
-          exportparts="brand, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, product-card"
+          exportparts="brand, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, product-card, upload-photo_button, show-files_button, start-camera_button"
           campaignId={this.campaignId}
           showingInButton={true}
           buttonPressed={this.buttonPressed}

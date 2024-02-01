@@ -6,7 +6,8 @@ export const resources: Resource = {
       exampleImagesTitle:
         "Mit den Beispielbildern die Suche direkt ausprobieren",
       imageUploadButtonText: "Bild Hochladen",
-      cameraButtonText: "Kamera Starten",
+      cameraButtonTextStart: "Kamera Starten",
+      cameraButtonTextStop: "Kamera Stop",
       showFilesButtonText: "Dateien anzeigen",
       galleryButtonText: "Galerie Anzeigen",
       privacyBadgeText:
@@ -32,7 +33,8 @@ export const resources: Resource = {
     translation: {
       exampleImagesTitle: "Try out the search with the example images",
       imageUploadButtonText: "Upload Photo",
-      cameraButtonText: "Start Camera",
+      cameraButtonTextStart: "Start Camera",
+      cameraButtonTextStop: "Stop Camera",
       showFilesButtonText: "Show Files",
       galleryButtonText: "Show Gallery",
       privacyBadgeText:
