@@ -10,10 +10,6 @@
 }
 
 @media (max-width: 768px) {
-  /* :host(:not(.invisible)) {
-    margin-bottom: 4px;
-  } */
-
   :host(.invisible) {
     display: none;
   }
