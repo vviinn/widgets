@@ -273,7 +273,7 @@ search-filters::part(filter active) {
   #start-page_block {
     overflow-y: unset;
     min-height: fit-content;
-    padding: 14px 24px 20px;
+    padding: 24px 20px;
   }
 
   .image {
@@ -313,10 +313,6 @@ search-filters::part(filter active) {
 @media (max-width: 480px) {
   .start-page {
     padding-top: 0;
-  }
-
-  #start-page_block {
-    padding: 20px;
   }
 
   .action-button-content {

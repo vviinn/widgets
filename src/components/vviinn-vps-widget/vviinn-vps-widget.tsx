@@ -86,7 +86,9 @@ type UploadSource = "showFiles" | "uploadPhoto" | "startCamera";
  * @part close-button - Close Button in the modal's header.
  * @part secondary-action - Back Button in the modal's header.
  * @part title - Modal window title.
- * @part select-image_button - Upload Button.
+ * @part upload-photo_button - Upload Photo Button.
+ * @part show-files_button - Show Files Button.
+ * @part start-camera_button - Start Camera Button.
  * @part product-card - Product Card itself.
  * @part brand - Brand inside Product Card.
  * @part currency - Currency related to price.
@@ -113,7 +115,8 @@ type UploadSource = "showFiles" | "uploadPhoto" | "startCamera";
  * @slot vviinn-teaser-text - Text on widget's main screen.
  * @slot vviinn-image-upload-button-text - Title of Upload Button.
  * @slot vviinn-show-files-button-text - Title of Show Files Button.
- * @slot vviinn-camera-button-text - Title of Camera Button.
+ * @slot vviinn-camera-button-text-start - Title of Camera Button, Start Camera.
+ * @slot vviinn-camera-button-text-stop - Title of Camera Button, Stop Camera (for Desktop).
  * @slot vviinn-privacy-badge-text - Text content of privacy notification block.
  * @slot vviinn-image-search-modal-title - Image search modal title.
  *
@@ -692,7 +695,13 @@ export class VviinnVpsWidget {
                 id="start-page_block"
               >
                 <div class="start-page_main-content">
-                  <div class="start-page_errors-block">
+                  <div
+                    class={{
+                      "start-page_errors-block": true,
+                      hidden:
+                        !this.wrongImageFormat && !imageSearchState.serverError,
+                    }}
+                  >
                     <vviinn-wrong-format
                       class={{ hidden: !this.wrongImageFormat }}
                       handler={() => this.resetState()}
@@ -710,6 +719,7 @@ export class VviinnVpsWidget {
                         (this.isTabletOrMobile ? (
                           <vviinn-image-selector
                             class="action-button"
+                            part="start-camera_button"
                             accept="image"
                             capture="environment"
                             onVviinnNoResult={({ detail }) =>
@@ -723,7 +733,6 @@ export class VviinnVpsWidget {
                             }
                             resetVpsButton={this.resetVpsButton}
                             basicEventData={this.getBasicEventData()}
-                            part="show-files_button"
                             startUpload={
                               this.buttonPressed &&
                               this.showingInButton &&
@@ -739,7 +748,7 @@ export class VviinnVpsWidget {
                               class="action-button-content"
                             >
                               <CameraActionIcon />
-                              <slot name="vviinn-show-files-button-text">
+                              <slot name="vviinn-camera-button-text-start">
                                 <span>
                                   {i18next.t("cameraButtonTextStart")}
                                 </span>
@@ -749,6 +758,7 @@ export class VviinnVpsWidget {
                         ) : (
                           <button
                             class="action-button"
+                            part="start-camera_button"
                             onClick={() => {
                               this.handleStartCameraClick();
                               this.uploadSource = "startCamera";
@@ -831,7 +841,7 @@ export class VviinnVpsWidget {
                         }
                         resetVpsButton={this.resetVpsButton}
                         basicEventData={this.getBasicEventData()}
-                        part="select-image_button"
+                        part="upload-photo_button"
                         startUpload={
                           this.buttonPressed &&
                           this.showingInButton &&

@@ -2,6 +2,7 @@
   color: #525252;
   font-size: 12px;
   line-height: 16px;
+  text-align: center;
 }
 
 :host(.invisible) {
@@ -9,9 +10,9 @@
 }
 
 @media (max-width: 768px) {
-  :host(:not(.invisible)) {
-    margin-bottom: 10px;
-  }
+  /* :host(:not(.invisible)) {
+    margin-bottom: 4px;
+  } */
 
   :host(.invisible) {
     display: none;
