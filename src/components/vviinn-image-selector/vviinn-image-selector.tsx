@@ -33,6 +33,7 @@ export class VviinnImageSelector {
   @Prop() loading: boolean = false;
   @Prop() accept: "image" | "application-octet-stream" = "image";
   @Prop() resetVpsButton: () => void;
+  @Prop() capture?: "environment" | "user";
 
   private fileInput: HTMLInputElement;
 
@@ -78,6 +79,7 @@ export class VviinnImageSelector {
           id="fileInput"
           class="visually-hidden"
           type="file"
+          capture={this.capture}
           accept={
             this.accept === "image" ? "image/*" : "application/octet-stream"
           }
