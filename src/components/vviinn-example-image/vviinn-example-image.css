@@ -2,10 +2,16 @@
   display: block;
   width: 100%;
   height: 100%;
+  min-height: 0;
   position: relative;
   overflow: hidden;
   flex-grow: 1;
-  transition: height 0.6s ease-in-out;
+  transition: min-height 1s;
+}
+
+:host(.video-expanded) {
+  min-height: 100%;
+  transition: min-height 0.8s;
 }
 
 img {
@@ -23,19 +29,32 @@ video {
   object-position: center;
 }
 
-.example-button {
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 50%;
-  border: 2px solid white;
+.buttons-group {
   position: absolute;
-  bottom: 26px;
+  width: 100%;
+  height: 64px;
+  left: 0;
+  bottom: 64px;
+  display: flex;
+  align-items: center;
+}
+
+.photo-button {
+  display: none;
+  cursor: pointer;
+  border: none;
+  position: absolute;
+  padding: 0;
   left: calc(50% - 36px);
+  color: #6f6f6f;
   background-color: transparent;
   line-height: 0;
-  opacity: 0.6;
 }
 
 .hidden {
   display: none;
+}
+
+.visible {
+  display: flex;
 }

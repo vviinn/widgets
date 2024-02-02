@@ -19,6 +19,38 @@
   padding: 16px;
 }
 
+.title {
+  display: flex;
+  align-items: center;
+  transform: translateX(-6px);
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 24px;
+  margin: 0 auto;
+}
+
+.title-image {
+  border-radius: 50%;
+  border: 1px solid rgb(244, 244, 244);
+  object-fit: cover;
+  object-position: center;
+  margin-right: 8px;
+}
+
+button {
+  appearance: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: grid;
+  padding: 6px;
+  color: #8d8d8d;
+}
+
+button:hover {
+  color: #000;
+}
+
 @media (max-width: 768px) {
   :host {
     animation-name: fade-in;
@@ -52,39 +84,44 @@
   :host(:not(.first-screen)) .body {
     padding-bottom: 64px;
   }
-}
 
-.title {
-  color: #161616;
-  display: flex;
-  align-items: center;
-  transform: translateX(-6px);
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 24px;
-  margin: 0 auto;
-}
+  .title {
+    color: #161616;
+    display: flex;
+    align-items: center;
+    transform: translateX(-6px);
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    margin: 0 auto;
+  }
 
-.title-image {
-  border-radius: 50%;
-  border: 1px solid rgb(244, 244, 244);
-  object-fit: cover;
-  object-position: center;
-  margin-right: 8px;
-}
+  .title-image {
+    border-radius: 50%;
+    border: 1px solid rgb(244, 244, 244);
+    object-fit: cover;
+    object-position: center;
+    margin-right: 8px;
+  }
 
-button {
-  appearance: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: grid;
-  color: #6F6F6F;
-  padding: 0;
-}
+  button {
+    appearance: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: grid;
+    color: #6F6F6F;
+    padding: 0;
+  }
 
-button:hover {
-  color: #000;
+  button:hover {
+    color: #000;
+  }
+
+  :host(.first-screen) button,
+  :host(.first-screen) button:hover {
+    color: white;
+  }
 }
 
 @keyframes fade-in {

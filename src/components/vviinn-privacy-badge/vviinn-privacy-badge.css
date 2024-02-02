@@ -2,14 +2,15 @@
   color: #525252;
   font-size: 12px;
   line-height: 16px;
+  text-align: center;
 }
 
-:host(.visible) {
+:host(.invisible) {
   color: transparent;
 }
 
 @media (max-width: 768px) {
-  :host(.visible) {
+  :host(.invisible) {
     display: none;
   }
 }

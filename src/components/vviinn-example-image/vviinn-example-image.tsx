@@ -28,6 +28,7 @@ export class VviinnExampleImage {
   @Prop() height: number = 0;
   @Prop() basicEventData: BasicEventData;
   @Prop() srcObject: MediaStream;
+  @Prop() cameraButtonClicked: boolean = false;
 
   @State() selected: boolean = false;
   @State() videoInitialized: boolean = false;
@@ -86,7 +87,10 @@ export class VviinnExampleImage {
 
   @Watch("srcObject")
   handleSrcObjectChange() {
-    if (!this.srcObject) return;
+    if (!this.srcObject) {
+      this.videoInitialized = false;
+      return;
+    }
     this.videoElement.srcObject = this.srcObject;
 
     this.videoElement.onloadedmetadata = () => {
@@ -97,10 +101,15 @@ export class VviinnExampleImage {
 
   render() {
     return (
-      <Host onKeyUp={(ev: KeyboardEvent) => this.handleKeyPress(ev)}>
+      <Host
+        onKeyUp={(ev: KeyboardEvent) => this.handleKeyPress(ev)}
+        class={{ "video-expanded": this.cameraButtonClicked }}
+      >
         <video
           id="camera-preview"
-          class={{ hidden: !this.videoInitialized }}
+          class={{
+            hidden: !this.videoInitialized,
+          }}
           autoplay
           playsinline
           muted
@@ -112,12 +121,15 @@ export class VviinnExampleImage {
           tabindex={1}
           class={{ hidden: this.videoInitialized }}
         />
-        <button
-          class={{ "example-button": true, hidden: !this.videoInitialized }}
-          onClick={() => this.selectImage()}
-        >
-          <RoundCameraIcon />
-        </button>
+
+        <div class="buttons-group">
+          <button
+            class={{ "photo-button": true, visible: this.videoInitialized }}
+            onClick={() => this.selectImage()}
+          >
+            <RoundCameraIcon />
+          </button>
+        </div>
       </Host>
     );
   }

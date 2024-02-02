@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.37.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.36.1...v2.37.0) (2024-02-01)
+
+
+### Features
+
+* Add Native Camera Experience for Search Widget ([d17874c](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/d17874c810f6f510ed680aaac9568639d10e6329))
+
+### [2.36.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.36.0...v2.36.1) (2024-02-01)
+
+## [2.36.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.35.1...v2.36.0) (2024-01-31)
+
+
+### Features
+
+* Added show files feature ([c16d55e](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/c16d55e9c975e4f424e2af06ca8764d55482ef48))
+
 ### [2.35.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.35.0...v2.35.1) (2024-01-31)
 
 ## [2.35.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.34.0...v2.35.0) (2024-01-17)
