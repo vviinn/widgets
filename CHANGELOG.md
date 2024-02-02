@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.38.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.37.0...v2.38.0) (2024-02-02)
+
+
+### Features
+
+* copper design ([8c2a874](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/8c2a8747d7797461a67fac2fedda6f4c17b401a0))
+
 ## [2.37.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.36.1...v2.37.0) (2024-02-01)
 
 
