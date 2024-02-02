@@ -894,6 +894,7 @@ export class VviinnVpsWidget {
                   </div>
                 </div>
               </div>
+
               <div id="results-block" class="products-wrapper">
                 <div
                   class={{

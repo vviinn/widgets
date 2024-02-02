@@ -80,9 +80,8 @@ export class VviinnModal {
       sequenceToOption(imageSearchState.imageUrl, imageSearchState.image),
       O.map(([url]) => {
         const image = (
-          <img width="32" height="32" src={url} class="title-image" />
+          <img width="28" height="28" src={url} class="title-image" />
         );
-
         return image;
       }),
       O.getOrElse(() => null)

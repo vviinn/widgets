@@ -21,6 +21,7 @@
   right: 18px;
   z-index: 4;
 }
+
 vviinn-preloader {
   --preloader-size: 12px;
 }
@@ -110,31 +111,31 @@ vviinn-preloader {
 
 .point-ne {
   cursor: nesw-resize;
-  right: -15px;
-  top: -15px;
+  right: -5.5px;
+  top: -17.5px;
 }
 
 .point-nw {
   cursor: nwse-resize;
-  left: -15px;
-  top: -15px;
+  left: -17.5px;
+  top: -17.5px;
 }
 
 .point-sw {
-  bottom: -15px;
+  bottom: -5.5px;
   cursor: nesw-resize;
-  left: -15px;
+  left: -17.5px;
 }
 
 .point-se {
-  bottom: -15px;
+  bottom: -5.5px;
   cursor: nwse-resize;
-  right: -15px;
+  right: -5.5px;
 }
 
 .cropper-point::before {
   position: absolute;
-  content: url("data:image/svg+xml,%3Csvg width='28' height='28' viewBox='0 0 28 28' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M26 2L26 22C26 24.2091 24.2091 26 22 26L2 26' stroke='white' stroke-width='4' stroke-linecap='square'/%3E%3C/svg%3E");
+  content: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciA2IiBkPSJNNCAzNkgyNEMzMC42Mjc0IDM2IDM2IDMwLjYyNzQgMzYgMjRWNCIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSI4IiBzdHJva2UtbGluZWNhcD0ic3F1YXJlIi8+Cjwvc3ZnPgo=");
   display: block;
   poiter-events: none;
 }

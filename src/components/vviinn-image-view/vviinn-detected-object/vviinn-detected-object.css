@@ -1,34 +1,32 @@
 @import "../../../variables.css";
 
 :host {
-  --size: 32px;
+  --size: 40px;
   --x-position: 0;
   --y-position: 0;
-
-  background: rgba(22, 22, 22, 0.4);
+  background: rgba(0, 0, 0, 0.16);
+  backdrop-filter: blur(4px);
   border-radius: 50%;
-  border: none;
   cursor: pointer;
   display: block;
-  height: var(--size);
   position: absolute;
   transition: opacity 0.25s;
   width: var(--size);
+  height: var(--size);
   z-index: 2;
-  transform: translate(
-    calc(var(--x-position) - (var(--size) * 0.5)),
-    calc(var(--y-position) - (var(--size) * 0.5))
-  );
+  transform: translate(calc(var(--x-position) - (var(--size) * 0.5)), calc(var(--y-position) - (var(--size) * 0.5)));
   transition: background 0.1 ease-in-out;
 }
 
 :host(:hover) {
-  background: rgba(22, 22, 22, 0.6);
+  background: rgba(0, 0, 0, 0.32);
 }
 
 :host(.active) {
-  background: var(--color-primary, var(--color-primary-system)) !important;
-  border: 2px solid white;
+  background: rgba(0, 0, 0, 0.4);
+  width: calc(var(--size) * 0.80);
+  height: calc(var(--size) * 0.80);
+  transform: translate(calc(var(--x-position) - (var(--size) * 0.4)), calc(var(--y-position) - (var(--size) * 0.4)));
 }
 
 :host::after {
@@ -37,11 +35,14 @@
   content: "";
   cursor: pointer;
   display: block;
-  height: calc(var(--size) * 0.25);
-  transform: translate(
-    calc(-50% + var(--size) * 0.5),
-    calc(-50% + var(--size) * 0.5)
-  );
-  width: calc(var(--size) * 0.25);
+  height: calc(var(--size) * 0.5);
+  transform: translate(calc(-25% + var(--size) * 0.5), calc(-25% + var(--size) * 0.5));
+  width: calc(var(--size) * 0.5);
   background: white;
+}
+
+:host(.active)::after {
+  height: calc(var(--size) * 0.375);
+  width: calc(var(--size) * 0.375);
+  transform: translate(calc(-25% + var(--size) * 0.4), calc(-25% + var(--size) * 0.4));
 }
