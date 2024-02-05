@@ -62,6 +62,20 @@ const filterInt = (value: string) =>
 const notEmptyString = (s: string) => !isEmpty(s);
 const notNan = (n: number): boolean => !isNaN(n);
 
+const checkDeviceType = () => {
+  const ua = navigator.userAgent;
+  if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+    return "tablet";
+  } else if (
+    /Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(
+      ua
+    )
+  ) {
+    return "mobile";
+  }
+  return "desktop";
+};
+
 type UploadSource = "uploadPhoto" | "startCamera";
 
 /**
@@ -207,6 +221,7 @@ export class VviinnVpsWidget {
   private resultLoaded: boolean = false;
   private resultViewed: boolean = false;
   private cameraAvailable: boolean = false;
+  private isDesktop: boolean = false;
 
   private initResultEvents() {
     this.resultLoaded = false;
@@ -435,6 +450,7 @@ export class VviinnVpsWidget {
   }
 
   connectedCallback() {
+    this.isDesktop = checkDeviceType() === "desktop";
     state.apiPath = this.apiPath;
     state.currencySign = this.currencySign;
     state.locale = this.locale;
@@ -552,6 +568,65 @@ export class VviinnVpsWidget {
     const modalBody = modal.shadowRoot.querySelector(".body");
     modalBody.scrollTop = 0;
     this.stopStreamTracks();
+  }
+
+  private renderButtons() {
+    const buttons = [
+      this.cameraAvailable && (
+        <button
+          class="action-button"
+          part="start-camera_button"
+          onClick={() => {
+            this.handleStartCameraClick();
+            this.uploadSource = "startCamera";
+          }}
+        >
+          {imageSearchState.loading && this.uploadSource === "startCamera" ? (
+            <vviinn-preloader />
+          ) : (
+            <span class="action-button-content">
+              <CameraActionIcon />
+              {this.cameraEnabled ? (
+                <slot name="vviinn-camera-button-text-stop">
+                  <span>{i18next.t("cameraButtonTextStop")}</span>
+                </slot>
+              ) : (
+                <slot name="vviinn-camera-button-text-start">
+                  <span>{i18next.t("cameraButtonTextStart")}</span>
+                </slot>
+              )}
+            </span>
+          )}
+        </button>
+      ),
+      <vviinn-image-selector
+        class="action-button"
+        onClick={() => (this.uploadSource = "uploadPhoto")}
+        onVviinnImageUploadFinished={this.handleVviinnImageUploadFinished}
+        onVviinnImageUpload={() => {
+          this.handleVviinnImageUpload("uploadPhoto");
+        }}
+        onVviinnNoResult={({ detail }) => this.handleVviinnNoResult(detail)}
+        resetVpsButton={this.resetVpsButton}
+        basicEventData={this.getBasicEventData()}
+        part="upload-photo_button"
+        startUpload={
+          this.buttonPressed && this.showingInButton && this.mode === "upload"
+        }
+        loading={
+          imageSearchState.loading && this.uploadSource === "uploadPhoto"
+        }
+      >
+        <span slot="upload-button-text" class="action-button-content">
+          <UploadActionIcon />
+          <slot name="vviinn-image-upload-button-text">
+            <span>{i18next.t("imageUploadButtonText")}</span>
+          </slot>
+        </span>
+      </vviinn-image-selector>,
+    ];
+
+    return this.isDesktop ? buttons.reverse() : buttons;
   }
 
   private renderResults() {
@@ -694,76 +769,7 @@ export class VviinnVpsWidget {
 
                   {!this.haveErrors() && <vviinn-teaser />}
                   {!this.haveErrors() && (
-                    <div class="buttons-group">
-                      {this.cameraAvailable && (
-                        <button
-                          class="action-button"
-                          part="start-camera_button"
-                          onClick={() => {
-                            this.handleStartCameraClick();
-                            this.uploadSource = "startCamera";
-                          }}
-                        >
-                          {imageSearchState.loading &&
-                          this.uploadSource === "startCamera" ? (
-                            <vviinn-preloader />
-                          ) : (
-                            <span class="action-button-content">
-                              <CameraActionIcon />
-                              {this.cameraEnabled ? (
-                                <slot name="vviinn-camera-button-text-stop">
-                                  <span>
-                                    {i18next.t("cameraButtonTextStop")}
-                                  </span>
-                                </slot>
-                              ) : (
-                                <slot name="vviinn-camera-button-text-start">
-                                  <span>
-                                    {i18next.t("cameraButtonTextStart")}
-                                  </span>
-                                </slot>
-                              )}
-                            </span>
-                          )}
-                        </button>
-                      )}
-
-                      <vviinn-image-selector
-                        class="action-button"
-                        onClick={() => (this.uploadSource = "uploadPhoto")}
-                        onVviinnImageUploadFinished={
-                          this.handleVviinnImageUploadFinished
-                        }
-                        onVviinnImageUpload={() => {
-                          this.handleVviinnImageUpload("uploadPhoto");
-                        }}
-                        onVviinnNoResult={({ detail }) =>
-                          this.handleVviinnNoResult(detail)
-                        }
-                        resetVpsButton={this.resetVpsButton}
-                        basicEventData={this.getBasicEventData()}
-                        part="upload-photo_button"
-                        startUpload={
-                          this.buttonPressed &&
-                          this.showingInButton &&
-                          this.mode === "upload"
-                        }
-                        loading={
-                          imageSearchState.loading &&
-                          this.uploadSource === "uploadPhoto"
-                        }
-                      >
-                        <span
-                          slot="upload-button-text"
-                          class="action-button-content"
-                        >
-                          <UploadActionIcon />
-                          <slot name="vviinn-image-upload-button-text">
-                            <span>{i18next.t("imageUploadButtonText")}</span>
-                          </slot>
-                        </span>
-                      </vviinn-image-selector>
-                    </div>
+                    <div class="buttons-group">{this.renderButtons()}</div>
                   )}
                 </div>
                 <vviinn-privacy-badge
