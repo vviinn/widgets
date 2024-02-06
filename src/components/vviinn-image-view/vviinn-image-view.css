@@ -81,6 +81,11 @@ vviinn-preloader {
   width: 100%;
 }
 
+.cropper-view-box,
+.cropper-face {
+  border-radius: 5px;
+}
+
 .cropper-face,
 .cropper-point {
   display: block;
@@ -111,31 +116,31 @@ vviinn-preloader {
 
 .point-ne {
   cursor: nesw-resize;
-  right: -5.5px;
-  top: -17.5px;
+  right: -6px;
+  top: -16px;
 }
 
 .point-nw {
   cursor: nwse-resize;
-  left: -17.5px;
-  top: -17.5px;
+  left: -16px;
+  top: -16px;
 }
 
 .point-sw {
-  bottom: -5.5px;
+  bottom: -6px;
   cursor: nesw-resize;
-  left: -17.5px;
+  left: -16px;
 }
 
 .point-se {
-  bottom: -5.5px;
+  bottom: -6px;
   cursor: nwse-resize;
-  right: -5.5px;
+  right: -6px;
 }
 
 .cropper-point::before {
   position: absolute;
-  content: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlZlY3RvciA2IiBkPSJNNCAzNkgyNEMzMC42Mjc0IDM2IDM2IDMwLjYyNzQgMzYgMjRWNCIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSI4IiBzdHJva2UtbGluZWNhcD0ic3F1YXJlIi8+Cjwvc3ZnPgo=");
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='38' height='38' viewBox='0 0 38 38' fill='none'%3E%3Cpath d='M3 35H23C29.6274 35 35 29.6274 35 23V3' stroke='white' stroke-width='6' stroke-linecap='square'/%3E%3C/svg%3E");
   display: block;
   poiter-events: none;
 }
