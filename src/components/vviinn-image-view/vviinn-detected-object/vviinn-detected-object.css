@@ -1,48 +1,53 @@
 @import "../../../variables.css";
 
 :host {
-  --size: 40px;
-  --x-position: 0;
-  --y-position: 0;
-  background: rgba(0, 0, 0, 0.16);
-  backdrop-filter: blur(4px);
-  border-radius: 50%;
-  cursor: pointer;
   display: block;
   position: absolute;
-  transition: opacity 0.25s;
-  width: var(--size);
+  left: calc(var(--x-position));
+  top: calc(var(--y-position));
+}
+
+:host::before,
+:host::after {
+  content: "";
+  cursor: pointer;
+  position: absolute;
   height: var(--size);
-  z-index: 2;
-  transform: translate(calc(var(--x-position) - (var(--size) * 0.5)), calc(var(--y-position) - (var(--size) * 0.5)));
-  transition: background 0.1 ease-in-out;
+  width: var(--size);
+  left: calc(-1 * var(--size) / 2);
+  top: calc(-1 * var(--size) / 2);
 }
 
-:host(:hover) {
-  background: rgba(0, 0, 0, 0.32);
-}
-
-:host(.active) {
-  background: rgba(0, 0, 0, 0.4);
-  width: calc(var(--size) * 0.80);
-  height: calc(var(--size) * 0.80);
-  transform: translate(calc(var(--x-position) - (var(--size) * 0.4)), calc(var(--y-position) - (var(--size) * 0.4)));
+:host::before {
+  --size: 36px;
+  border-radius: 50%;
+  z-index: 0;
+  background: rgba(0, 0, 0, 0.16);
+  backdrop-filter: blur(4px);
+  transition: transform 0.05s ease-out;
 }
 
 :host::after {
-  --size: 32px;
+  --size: 13px;
   border-radius: 50%;
-  content: "";
-  cursor: pointer;
-  display: block;
-  height: calc(var(--size) * 0.5);
-  transform: translate(calc(-25% + var(--size) * 0.5), calc(-25% + var(--size) * 0.5));
-  width: calc(var(--size) * 0.5);
+  z-index: 1;
   background: white;
+  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.15);
+  transition: transform 0.05s ease-out;
+}
+
+:host(.active)::before {
+  transform: scale(0.88);
+  background: rgba(0, 0, 0, 0.4);
 }
 
 :host(.active)::after {
-  height: calc(var(--size) * 0.375);
-  width: calc(var(--size) * 0.375);
-  transform: translate(calc(-25% + var(--size) * 0.4), calc(-25% + var(--size) * 0.4));
+  transform: scale(0.67);
+}
+
+@media (min-width: 768px) {
+  :host(:not(.active):hover)::before {
+    transform: scale(1.08);
+    background: rgba(0, 0, 0, 0.32);
+  }
 }
