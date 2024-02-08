@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.39.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.38.0...v2.39.0) (2024-02-08)
+
+
+### Features
+
+* Open Camera in the Browser (Mobile) ([ecb6173](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/ecb61739fdb390df2fbaaa7ffb85630ca8979a36))
+
 ## [2.38.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.37.0...v2.38.0) (2024-02-02)
 
 
