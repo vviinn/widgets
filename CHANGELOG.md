@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.40.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.39.0...v2.40.0) (2024-02-08)
+
+
+### Features
+
+* Add Transitions For Detected Object's Points ([72bbeb6](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/72bbeb65869ec7d82b50c54303979a761cc16744))
+
 ## [2.39.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.38.0...v2.39.0) (2024-02-08)
 
 
