@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.40.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.40.0...v2.40.1) (2024-02-08)
+
+
+### Bug Fixes
+
+* Improve Cropper Controls ([ca77599](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/ca77599731bd5f06d95e2444513149e43aee30fa))
+
 ## [2.40.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.39.0...v2.40.0) (2024-02-08)
 
 
