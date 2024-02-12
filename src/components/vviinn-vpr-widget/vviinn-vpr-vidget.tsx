@@ -277,25 +277,23 @@ export class VviinnVprWidget implements ComponentInterface {
 
   connectedCallback() {
     state.apiPath = this.apiPath;
+    state.pricePrefix = this.pricePrefix;
     state.currencySign = this.currencySign;
     state.locale = this.locale;
     this.id = this.buttonElementId ?? this.el.id;
     this.uiSessionId = uuidv4();
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
     this.getRecommendations();
-
-    i18next.init({
-      lng: this.locale,
-      fallbackLng: "de-DE",
-      resources,
-    });
     this.vviinnWidgetLoad.emit(this.getBasicEventData());
     this.trackWidgetEvent("load");
   }
 
   async componentWillLoad() {
-    state.pricePrefix = this.pricePrefix;
-    state.currencySign = this.currencySign;
+    await i18next.init({
+      lng: this.locale,
+      fallbackLng: "de-DE",
+      resources,
+    });
 
     if (this.excluded) {
       this.excluded = parseExcluded(this.excluded);

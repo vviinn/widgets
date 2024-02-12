@@ -454,11 +454,6 @@ export class VviinnVpsWidget {
     state.apiPath = this.apiPath;
     state.currencySign = this.currencySign;
     state.locale = this.locale;
-    i18next.init({
-      lng: this.locale,
-      fallbackLng: "de-DE",
-      resources,
-    });
 
     this.cameraAvailable =
       !!navigator.mediaDevices && !!navigator.mediaDevices.getUserMedia;
@@ -484,7 +479,12 @@ export class VviinnVpsWidget {
     this.id = this.el.id;
   }
 
-  componentWillLoad() {
+  async componentWillLoad() {
+    await i18next.init({
+      lng: this.locale,
+      fallbackLng: "de-DE",
+      resources,
+    });
     slotChangeListener(this, this.el);
     this.vviinnWidgetLoad.emit(this.getBasicEventData());
     this.trackWidgetEvent("load");
