@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.41.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.40.2...v2.41.0) (2024-02-13)
+
+
+### Features
+
+* Add Slots for Icons (Search Widget) ([da8490e](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/da8490ede9dd789a17eb62d72636f4f6c4159c1c))
+
 ### [2.40.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.40.1...v2.40.2) (2024-02-12)
 
 
