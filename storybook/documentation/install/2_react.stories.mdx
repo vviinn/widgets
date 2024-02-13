@@ -4,23 +4,183 @@ import { Meta, Story } from '@storybook/addon-docs';
 
 # React
 
-With an application built using the `create-react-app` script, the easiest way to include the component library is to call `defineCustomElements()` from the `index.js` file. Note that in this scenario `applyPolyfills` is needed if you are targeting Edge or IE11.
+With an application built using the `create-react-app` script, the easiest way to include the component library is to call `defineCustomElements()` from the `index.js` file. So that you know, in this scenario applyPolyfills is needed if you are targeting Edge or IE11.
 
+## JavaScript Example
+
+In this example, we create an `importVviinn.js` file and import it in `App.js` and then we can use Vviinn widgets as shown below:
+
+`importVviinn.js`
 ```javascript
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
-import { applyPolyfills, defineCustomElements } from 'STORYBOOK_NPM_PACKAGE_NAME/loader';
-
-ReactDOM.render(<App />, document.getElementById('root'));
-registerServiceWorker();
+import { applyPolyfills, defineCustomElements  } from 'vviinn-widgets/dist/loader';
 
 applyPolyfills().then(() => {
   defineCustomElements();
 });
 ```
+
+`App.js`
+```javascript
+import "./importVviinn"
+
+function App() {
+  return (
+    <div className="App">
+      <vviinn-vps-button token="TOKEN"></vviinn-vps-button>
+    </div>
+  );
+}
+
+export default App;
+```
+
+## TypeScript Example
+
+In this example, we create an `importVviinn.ts` file and import it in `App.tsx` and then we can use Vviinn widgets as shown below:
+
+`importVviinn.ts`
+```typescript
+import { applyPolyfills, defineCustomElements, JSX as LocalJSX  } from 'vviinn-widgets/dist/loader';
+import { HTMLAttributes } from 'react';
+
+type StencilToReact<T> = {
+  [P in keyof T]?: T[P] & Omit<HTMLAttributes<Element>, 'className'> & {
+    class?: string;
+  };
+} ;
+
+declare global {
+  export namespace JSX {
+    interface IntrinsicElements extends StencilToReact<LocalJSX.IntrinsicElements> {
+    }
+  }
+}
+
+applyPolyfills().then(() => {
+  defineCustomElements(window);
+});
+```
+
+`App.tsx`
+```typescript
+import "./importVviinn"
+
+function App() {
+  return (
+    <div className="App">
+       <vviinn-vps-button token="TOKEN"></vviinn-vps-button>
+    </div>
+  );
+}
+
+export default App;
+```
+
+## Troubleshooting
+
+Sometimes other libraries define custom elements and there would be some conflict, in this case, you can integrate `Vviinn Widgets` as shown below:
+
+### useScript.ts
+
+With this `custom hook`, we will add related scripts to our page:
+```typescript
+import { useEffect } from "react";
+
+export const useScript = (
+  url: string,
+  type: string = "",
+  noModule: boolean = false
+) => {
+  useEffect(() => {
+    const script = document.createElement("script");
+
+    script.src = url;
+    script.async = true;
+    script.defer = true;
+    script.type = type;
+    script.noModule = noModule;
+
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, [url]);
+};
+```
+
+### VviinnWidgets.ts
+
+In this file, we define a wrapper for `Vviinn Widgets` and then show the widgets:
+
+```typescript
+import { FC } from "react";
+import { useScript } from "./useScript";
+
+type Tag = React.DetailedHTMLProps<
+  React.HTMLAttributes<HTMLElement>,
+  HTMLElement
+>;
+
+type ElementType = "vviinn-vps-button" | "vviinn-vpr-button";
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      "vviinn-vpr-button": VviinnTag & { "product-id": string };
+      "vviinn-vps-button": VviinnTag;
+    }
+  }
+}
+
+type VviinnWidgetProps = {
+  type: ElementType;
+  token: string;
+  productId?: string;
+};
+
+type ApiPath =
+  | "https://api.vviinn.com"
+  | "https://api.stage.vviinn.com/";
+
+type VviinnTag = Tag & {
+  token: string;
+  "api-path": ApiPath;
+};
+
+export const VviinnWidget: FC<VviinnWidgetProps> = ({
+  type,
+  token,
+  productId,
+}) => {
+  useScript(`${CDN_URL}vviinn-widgets.esm.js`, "module");
+  useScript(`${CDN_URL}vviinn-widgets.js`, "", true);
+
+  const apiPath: ApiPath = isProduction
+    ? "https://api.vviinn.com"
+    : "https://api.stage.vviinn.com/";
+
+  const generalVviinnTagProps: VviinnTag = { token, "api-path": apiPath };
+
+  return (
+    <>
+      {type === "vviinn-vpr-button" && productId && (
+        <vviinn-vpr-button
+          {...generalVviinnTagProps}
+          product-id={productId}
+          add-style="false"
+        ></vviinn-vpr-button>
+      )}
+
+      {type === "vviinn-vps-button" && (
+        <vviinn-vps-button {...generalVviinnTagProps}></vviinn-vps-button>
+      )}
+    </>
+  );
+};
+
+```
+
 Following the steps above will enable your web components to be used in React. However, there are some additional complexities that must also be considered. [Custom Elements Everywhere](https://custom-elements-everywhere.com) contains a synopsis of the current issues.
 
 For more information, check [Stencil documentation](https://stenciljs.com/docs/react)
