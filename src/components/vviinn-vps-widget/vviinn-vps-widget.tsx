@@ -345,6 +345,7 @@ export class VviinnVpsWidget {
   @Listen("vviinnProductLoad")
   trackProductLoad({ detail }: ProductCardEvent) {
     const productLoadEvent = this.getProductTrackEvent(detail, "load");
+    if (!productLoadEvent) return;
 
     this.trackingApi
       .trackEvent(productLoadEvent)
@@ -360,6 +361,7 @@ export class VviinnVpsWidget {
     }
 
     const productViewEvent = this.getProductTrackEvent(detail, "view");
+    if (!productViewEvent) return;
 
     this.trackingApi
       .trackEvent(productViewEvent)
