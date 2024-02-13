@@ -110,9 +110,11 @@ type UploadSource = "uploadPhoto" | "startCamera";
  * @slot onboarding-card-3-text - Text content of third onboarding slide.
  * @slot vviinn-teaser-text - Text on widget's main screen.
  * @slot vviinn-image-upload-button-text - Title of Upload Button.
+ * @slot vviinn-image-upload-icon - Icon of Upload Button.
  * @slot vviinn-show-files-button-text - Title of Show Files Button.
  * @slot vviinn-camera-button-text-start - Title of Camera Button, Start Camera.
  * @slot vviinn-camera-button-text-stop - Title of Camera Button, Stop Camera (for Desktop).
+ * @slot vviinn-camera-icon - Icon of Camera Button.
  * @slot vviinn-privacy-badge-text - Text content of privacy notification block.
  * @slot vviinn-image-search-modal-title - Image search modal title.
  *
@@ -585,7 +587,9 @@ export class VviinnVpsWidget {
             <vviinn-preloader />
           ) : (
             <span class="action-button-content">
-              <CameraActionIcon />
+              <slot name="vviinn-camera-icon">
+                <CameraActionIcon />
+              </slot>
               {this.cameraEnabled ? (
                 <slot name="vviinn-camera-button-text-stop">
                   <span>{i18next.t("cameraButtonTextStop")}</span>
@@ -618,7 +622,10 @@ export class VviinnVpsWidget {
         }
       >
         <span slot="upload-button-text" class="action-button-content">
-          <UploadActionIcon />
+          <slot name="vviinn-image-upload-icon">
+            <UploadActionIcon />
+          </slot>
+
           <slot name="vviinn-image-upload-button-text">
             <span>{i18next.t("imageUploadButtonText")}</span>
           </slot>
