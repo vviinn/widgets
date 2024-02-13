@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.41.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.41.0...v2.41.1) (2024-02-13)
+
+
+### Bug Fixes
+
+* Fix For Visual Search When Tracking is Deactivated ([4ea9dcc](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/4ea9dccbbf301281228dfbf282d380d8be344e56))
+
 ## [2.41.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.40.2...v2.41.0) (2024-02-13)
 
 
