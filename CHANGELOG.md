@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.42.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.41.2...v2.42.0) (2024-02-14)
+
+
+### Features
+
+* update react documentation ([ad5a0be](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/ad5a0bed84138a363d6ab5885ef0df01c18b2ffd))
+
 ### [2.41.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.41.1...v2.41.2) (2024-02-14)
 
 
