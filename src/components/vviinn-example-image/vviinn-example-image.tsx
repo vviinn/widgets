@@ -49,23 +49,31 @@ export class VviinnExampleImage {
   }
 
   private async selectImage() {
+    if (!this.srcObject) return;
     this.selected = true;
     this.vviinnImageUpload.emit(this.basicEventData);
     let file: File;
 
-    if (this.srcObject) {
-      const video = this.videoElement;
-      const canvas = document.createElement("canvas");
-      this.videoElement.pause();
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-      const dataURI = canvas.toDataURL("image/jpeg");
-      file = await toFile(dataURI);
-    } else {
-      file = await toFile(this.exampleImageSource);
-    }
+    const photoFrame = this.el.shadowRoot.getElementById("photo-frame");
+    const photoFrameRect = photoFrame.getBoundingClientRect();
+    const cropSize = Math.min(photoFrameRect.width, photoFrameRect.height);
+
+    const video = this.videoElement;
+    const { videoWidth, videoHeight } = video;
+
+    const canvas = document.createElement("canvas");
+    this.videoElement.pause();
+
+    canvas.width = cropSize;
+    canvas.height = cropSize;
+    const dx = (videoWidth - cropSize) / 2;
+    const dy = (videoHeight - cropSize) / 2;
+
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(video, dx, dy, cropSize, cropSize, 0, 0, cropSize, cropSize);
+
+    const dataURI = canvas.toDataURL("image/jpeg");
+    file = await toFile(dataURI);
 
     pipe(
       await processSelectedFile(file),
@@ -122,13 +130,22 @@ export class VviinnExampleImage {
           class={{ hidden: this.videoInitialized }}
         />
 
-        <div class="buttons-group">
-          <button
-            class={{ "photo-button": true, visible: this.videoInitialized }}
-            onClick={() => this.selectImage()}
-          >
-            <RoundCameraIcon />
-          </button>
+        <div class="container">
+          <div
+            class={{
+              hidden: !this.videoInitialized,
+            }}
+            id="photo-frame"
+          ></div>
+
+          <div class="buttons-group">
+            <button
+              class={{ "photo-button": true, visible: this.videoInitialized }}
+              onClick={() => this.selectImage()}
+            >
+              <RoundCameraIcon />
+            </button>
+          </div>
         </div>
       </Host>
     );

@@ -27,14 +27,43 @@ video {
   min-height: 100%;
   object-fit: cover;
   object-position: center;
+  position: relative;
+}
+
+.container {
+  position: absolute;
+  width: 100%;
+  height: calc(100% - 56px);
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  padding-top: 56px;
+  justify-content: space-around;
+}
+
+#photo-frame {
+  position: relative;
+  left: 20px;
+  width: calc(100% - 40px);
+  aspect-ratio: 1/1;
+  border: 2px solid #fff;
+  border-radius: 10px;
+  background-color: transparent;
+  box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.32);
+}
+
+@media (min-width: 768px) {
+  #photo-frame {
+    left: 40px;
+    width: calc(100% - 80px);
+  }
 }
 
 .buttons-group {
-  position: absolute;
   width: 100%;
-  height: 64px;
+  height: 80px;
   left: 0;
-  bottom: 64px;
   display: flex;
   align-items: center;
 }
