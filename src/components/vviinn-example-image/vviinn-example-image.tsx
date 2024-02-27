@@ -15,6 +15,7 @@ import { processSelectedFile } from "../../store/imageSearch.store";
 import * as E from "fp-ts/lib/Either";
 import { BasicEventData } from "../../recommendation/events";
 import { RoundCameraIcon } from "../vviinn-icons";
+import { ZoomCapabilities } from "../vviinn-vps-widget/vviinn-vps-widget";
 
 @Component({
   tag: "vviinn-example-image",
@@ -29,6 +30,8 @@ export class VviinnExampleImage {
   @Prop() basicEventData: BasicEventData;
   @Prop() srcObject: MediaStream;
   @Prop() cameraButtonClicked: boolean = false;
+  @Prop() videoTrack: MediaStreamTrack;
+  @Prop() zoomCapabilities: ZoomCapabilities | null = null;
 
   @State() selected: boolean = false;
   @State() videoInitialized: boolean = false;

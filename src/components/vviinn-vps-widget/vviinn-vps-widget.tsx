@@ -78,6 +78,24 @@ const checkDeviceType = () => {
 
 type UploadSource = "uploadPhoto" | "startCamera";
 
+export type ZoomCapabilities = {
+  min: number;
+  max: number;
+};
+
+// interface ExtendedMediaTrackConstraints extends MediaTrackConstraints {
+//   focusMode?: string;
+//   exposureMode?: string;
+//   facingMode?: string;
+// }
+
+// const constraints: ExtendedMediaTrackConstraints = {
+//   video: {
+//     facingMode: "environment",
+//     focusMode: "continuous",
+//   },
+// };
+
 /**
  * @part close-button - Close Button in the modal's header.
  * @part secondary-action - Back Button in the modal's header.
@@ -224,6 +242,8 @@ export class VviinnVpsWidget {
   private resultViewed: boolean = false;
   private cameraAvailable: boolean = false;
   private isDesktop: boolean = false;
+  private zoomCapabilities: ZoomCapabilities | null = null;
+  private videoTrack: MediaStreamTrack | null = null;
 
   private initResultEvents() {
     this.resultLoaded = false;
@@ -275,6 +295,55 @@ export class VviinnVpsWidget {
     }
   };
 
+  private initializeZoom = async () => {
+    if (!this.videoTrack) return;
+    const capabilities = this.videoTrack.getCapabilities() as any;
+
+    if ("zoom" in capabilities) {
+      const zoomCapabilities: ZoomCapabilities = capabilities.zoom;
+      this.zoomCapabilities = zoomCapabilities;
+
+      await this.videoTrack.applyConstraints({
+        advanced: [{ zoom: zoomCapabilities.min }] as any,
+      });
+    }
+  };
+
+  private adjustCameraSettings = async () => {
+    if (!this.videoTrack) return;
+    const capabilities = this.videoTrack.getCapabilities();
+
+    if ("focusMode" in capabilities) {
+      try {
+        await this.videoTrack.applyConstraints({
+          advanced: [{ focusMode: "continuous" }] as any,
+        });
+      } catch (error) {
+        console.error("Failed to apply focus mode constraints", error);
+      }
+    }
+
+    if ("focusMode" in capabilities) {
+      try {
+        await this.videoTrack.applyConstraints({
+          advanced: [{ exposureMode: "continuous" }] as any,
+        });
+      } catch (error) {
+        console.error("Failed to apply exposure mode constraints", error);
+      }
+    }
+
+    if ("whiteBalanceMode" in capabilities) {
+      try {
+        await this.videoTrack.applyConstraints({
+          advanced: [{ whiteBalanceMode: "continuous" }] as any,
+        });
+      } catch (error) {
+        console.error("Failed to apply white balance mode constraints", error);
+      }
+    }
+  };
+
   private handleStartCameraClick = async () => {
     if (this.stream) {
       this.resetState();
@@ -285,8 +354,18 @@ export class VviinnVpsWidget {
 
     try {
       const videoStream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "environment" },
+        video: {
+          facingMode: "environment",
+          width: { ideal: 1920 },
+          height: { ideal: 1080 },
+          frameRate: { ideal: 30 },
+        },
       });
+      this.videoTrack = videoStream.getVideoTracks()[0];
+
+      this.initializeZoom();
+      this.adjustCameraSettings();
+
       this.stream = videoStream;
     } catch (error) {
       // TODO: Show error in the UI
@@ -751,6 +830,8 @@ export class VviinnVpsWidget {
                 srcObject={this.stream}
                 cameraButtonClicked={this.cameraButtonClicked}
                 exampleImageSource={this.exampleImageSource}
+                zoomCapabilities={this.zoomCapabilities}
+                videoTrack={this.videoTrack}
               />
               <div
                 class={{
