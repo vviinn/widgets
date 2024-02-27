@@ -78,19 +78,6 @@ const checkDeviceType = () => {
 
 type UploadSource = "uploadPhoto" | "startCamera";
 
-// interface ExtendedMediaTrackConstraints extends MediaTrackConstraints {
-//   focusMode?: string;
-//   exposureMode?: string;
-//   facingMode?: string;
-// }
-
-// const constraints: ExtendedMediaTrackConstraints = {
-//   video: {
-//     facingMode: "environment",
-//     focusMode: "continuous",
-//   },
-// };
-
 /**
  * @part close-button - Close Button in the modal's header.
  * @part secondary-action - Back Button in the modal's header.
