@@ -14,7 +14,7 @@ import { toFile } from "../../Image/toFile";
 import { processSelectedFile } from "../../store/imageSearch.store";
 import * as E from "fp-ts/lib/Either";
 import { BasicEventData } from "../../recommendation/events";
-import { RoundCameraIcon } from "../vviinn-icons";
+import { MinusIcon, PlusIcon, RoundCameraIcon } from "../vviinn-icons";
 
 type ZoomCapabilities = {
   min: number;
@@ -66,6 +66,21 @@ export class VviinnExampleImage {
         advanced: [{ zoom: this.zoomCapabilities.min }] as any,
       });
     }
+  };
+
+  private onZoom = async (action: "in" | "out") => {
+    if (!this.videoTrack || !this.zoomCapabilities) return;
+
+    const currentSettings = this.videoTrack.getSettings() as any;
+    const currentZoom = currentSettings.zoom ?? 1;
+    const step = (this.zoomCapabilities.max - this.zoomCapabilities.min) / 3;
+
+    let newZoom: number;
+    newZoom = action === "in" ? currentZoom + step : currentZoom - step;
+
+    await this.videoTrack.applyConstraints({
+      advanced: [{ zoom: newZoom }] as any,
+    });
   };
 
   private async selectImage() {
@@ -143,6 +158,17 @@ export class VviinnExampleImage {
           tabindex={1}
           class={{ hidden: this.videoInitialized }}
         />
+
+        {this.zoomCapabilities && this.videoInitialized && !this.selected && (
+          <div class="buttons-group zoom-buttons">
+            <button onClick={() => this.onZoom("out")}>
+              <MinusIcon />
+            </button>
+            <button onClick={() => this.onZoom("in")}>
+              <PlusIcon />
+            </button>
+          </div>
+        )}
 
         <div class="buttons-group">
           <button
