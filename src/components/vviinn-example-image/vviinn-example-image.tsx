@@ -15,7 +15,11 @@ import { processSelectedFile } from "../../store/imageSearch.store";
 import * as E from "fp-ts/lib/Either";
 import { BasicEventData } from "../../recommendation/events";
 import { RoundCameraIcon } from "../vviinn-icons";
-import { ZoomCapabilities } from "../vviinn-vps-widget/vviinn-vps-widget";
+
+type ZoomCapabilities = {
+  min: number;
+  max: number;
+};
 
 @Component({
   tag: "vviinn-example-image",
@@ -30,11 +34,10 @@ export class VviinnExampleImage {
   @Prop() basicEventData: BasicEventData;
   @Prop() srcObject: MediaStream;
   @Prop() cameraButtonClicked: boolean = false;
-  @Prop() videoTrack: MediaStreamTrack;
-  @Prop() zoomCapabilities: ZoomCapabilities | null = null;
 
   @State() selected: boolean = false;
   @State() videoInitialized: boolean = false;
+  @State() zoomCapabilities: ZoomCapabilities | null = null;
 
   @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
@@ -44,12 +47,26 @@ export class VviinnExampleImage {
   @Event() vviinnCameraEnabled: EventEmitter;
 
   private videoElement: HTMLVideoElement | null;
+  private videoTrack: MediaStreamTrack | null = null;
 
   componentDidLoad() {
     this.videoElement = this.el.shadowRoot.getElementById(
       "camera-preview"
     ) as HTMLVideoElement;
   }
+
+  private initializeZoom = async () => {
+    if (!this.videoTrack) return;
+    const capabilities = this.videoTrack.getCapabilities() as any;
+
+    if ("zoom" in capabilities) {
+      this.zoomCapabilities = capabilities.zoom;
+
+      await this.videoTrack.applyConstraints({
+        advanced: [{ zoom: this.zoomCapabilities.min }] as any,
+      });
+    }
+  };
 
   private async selectImage() {
     this.selected = true;
@@ -95,6 +112,8 @@ export class VviinnExampleImage {
       return;
     }
     this.videoElement.srcObject = this.srcObject;
+    this.videoTrack = this.srcObject.getVideoTracks()[0];
+    this.initializeZoom();
 
     this.videoElement.onloadedmetadata = () => {
       this.vviinnCameraEnabled.emit(true);

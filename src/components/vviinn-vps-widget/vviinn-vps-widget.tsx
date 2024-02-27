@@ -78,11 +78,6 @@ const checkDeviceType = () => {
 
 type UploadSource = "uploadPhoto" | "startCamera";
 
-export type ZoomCapabilities = {
-  min: number;
-  max: number;
-};
-
 // interface ExtendedMediaTrackConstraints extends MediaTrackConstraints {
 //   focusMode?: string;
 //   exposureMode?: string;
@@ -242,7 +237,6 @@ export class VviinnVpsWidget {
   private resultViewed: boolean = false;
   private cameraAvailable: boolean = false;
   private isDesktop: boolean = false;
-  private zoomCapabilities: ZoomCapabilities | null = null;
   private videoTrack: MediaStreamTrack | null = null;
 
   private initResultEvents() {
@@ -292,20 +286,6 @@ export class VviinnVpsWidget {
   private handleVviinnNoResult = (detail: NoResultEventData) => {
     if (detail.reason === "client") {
       this.wrongImageFormat = true;
-    }
-  };
-
-  private initializeZoom = async () => {
-    if (!this.videoTrack) return;
-    const capabilities = this.videoTrack.getCapabilities() as any;
-
-    if ("zoom" in capabilities) {
-      const zoomCapabilities: ZoomCapabilities = capabilities.zoom;
-      this.zoomCapabilities = zoomCapabilities;
-
-      await this.videoTrack.applyConstraints({
-        advanced: [{ zoom: zoomCapabilities.min }] as any,
-      });
     }
   };
 
@@ -362,8 +342,6 @@ export class VviinnVpsWidget {
         },
       });
       this.videoTrack = videoStream.getVideoTracks()[0];
-
-      this.initializeZoom();
       this.adjustCameraSettings();
 
       this.stream = videoStream;
@@ -830,8 +808,6 @@ export class VviinnVpsWidget {
                 srcObject={this.stream}
                 cameraButtonClicked={this.cameraButtonClicked}
                 exampleImageSource={this.exampleImageSource}
-                zoomCapabilities={this.zoomCapabilities}
-                videoTrack={this.videoTrack}
               />
               <div
                 class={{
