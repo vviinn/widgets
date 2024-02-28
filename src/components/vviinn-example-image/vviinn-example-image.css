@@ -48,6 +48,7 @@ video {
   left: calc(50% - 36px);
   color: #6f6f6f;
   background-color: transparent;
+  -webkit-tap-highlight-color: transparent;
   line-height: 0;
 }
 
