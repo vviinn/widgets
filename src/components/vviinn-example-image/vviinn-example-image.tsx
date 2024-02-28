@@ -48,6 +48,26 @@ export class VviinnExampleImage {
     ) as HTMLVideoElement;
   }
 
+  private createPlaceholderImageCanvas() {
+    const imgPlaceholder = this.el.shadowRoot.getElementById(
+      "captured-image-placeholder"
+    ) as HTMLImageElement;
+
+    const video = this.videoElement;
+    const { videoWidth, videoHeight } = video;
+    const canvas = document.createElement("canvas");
+
+    canvas.width = videoWidth;
+    canvas.height = videoHeight;
+
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    const dataURI = canvas.toDataURL("image/jpeg");
+    imgPlaceholder.src = dataURI;
+    imgPlaceholder.classList.remove("hidden");
+  }
+
   private async selectImage() {
     if (!this.srcObject) return;
     this.selected = true;
@@ -63,16 +83,15 @@ export class VviinnExampleImage {
 
     const canvas = document.createElement("canvas");
     this.videoElement.pause();
+    this.createPlaceholderImageCanvas();
 
     canvas.width = cropSize;
     canvas.height = cropSize;
-
     const dx = (videoWidth - cropSize) / 2;
     const dy = (videoHeight - cropSize) / 3;
 
     const ctx = canvas.getContext("2d");
     ctx.drawImage(video, dx, dy, cropSize, cropSize, 0, 0, cropSize, cropSize);
-
     const dataURI = canvas.toDataURL("image/jpeg");
     file = await toFile(dataURI);
 
@@ -117,7 +136,7 @@ export class VviinnExampleImage {
         <video
           id="camera-preview"
           class={{
-            hidden: !this.videoInitialized,
+            hidden: !this.videoInitialized || this.selected,
           }}
           autoplay
           playsinline
@@ -128,8 +147,10 @@ export class VviinnExampleImage {
           width={this.width}
           height={this.height}
           tabindex={1}
-          class={{ hidden: this.videoInitialized }}
+          class={{ hidden: this.videoInitialized || this.selected }}
         />
+
+        <img id="captured-image-placeholder" class="hidden" />
 
         <div class="container">
           <div
