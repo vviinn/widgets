@@ -55,6 +55,7 @@ import { resources } from "../../locale/resources-vps";
 import { Locale } from "../../locale";
 import { CameraActionIcon, UploadActionIcon } from "../vviinn-icons";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
+import { videoStreamSettings } from "../../video/settings";
 
 const filterInt = (value: string) =>
   /^[-+]?(\d+|Infinity)$/.test(value) ? Number(value) : NaN;
@@ -321,12 +322,7 @@ export class VviinnVpsWidget {
 
     try {
       const videoStream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          facingMode: "environment",
-          width: { ideal: 1920 },
-          height: { ideal: 1080 },
-          frameRate: { ideal: 30 },
-        },
+        video: videoStreamSettings,
       });
       this.videoTrack = videoStream.getVideoTracks()[0];
       this.adjustCameraSettings();
