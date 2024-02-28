@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.42.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.42.0...v2.42.1) (2024-02-28)
+
+
+### Bug Fixes
+
+* Remove Highlighting on Photo Button's Click (Mobile) ([c177bc0](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/c177bc06fbe49cf19dafdfbc41e5dab0357c3cd7))
+
 ## [2.42.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.41.2...v2.42.0) (2024-02-14)
 
 
