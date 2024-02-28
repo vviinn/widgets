@@ -66,8 +66,9 @@ export class VviinnExampleImage {
 
     canvas.width = cropSize;
     canvas.height = cropSize;
+
     const dx = (videoWidth - cropSize) / 2;
-    const dy = (videoHeight - cropSize) / 2;
+    const dy = (videoHeight - cropSize) / 3;
 
     const ctx = canvas.getContext("2d");
     ctx.drawImage(video, dx, dy, cropSize, cropSize, 0, 0, cropSize, cropSize);
