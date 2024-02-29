@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.43.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.42.1...v2.43.0) (2024-02-29)
+
+
+### Features
+
+* Add Zoom Controls for Camera ([8b2d1fb](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/8b2d1fb8c1ecc68182b956f72661e97e3cae49ae))
+* Improve Camera's quality ([6ce2876](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/6ce2876b7dfe8869c1c914c202ecf14136d1b0f8))
+
+### [2.42.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.42.0...v2.42.1) (2024-02-28)
+
+
+### Bug Fixes
+
+* Remove Highlighting on Photo Button's Click (Mobile) ([c177bc0](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/c177bc06fbe49cf19dafdfbc41e5dab0357c3cd7))
+
 ## [2.42.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.41.2...v2.42.0) (2024-02-14)
 
 
