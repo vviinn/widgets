@@ -65,20 +65,16 @@ button:hover {
   }
 
   .head {
-    position: sticky;
     z-index: 1;
   }
 
   :host(:not(.first-screen)) .head {
+    position: sticky;
     background: #ffffff;
   }
 
   .body {
     overflow-y: auto;
-  }
-
-  :host(.first-screen) .body {
-    transform: translateY(-64px);
   }
 
   :host(:not(.first-screen)) .body {

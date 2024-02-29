@@ -101,9 +101,3 @@
 .arrow-wrapper:hover > svg {
   fill: #8d8d8d;
 }
-
-@media (max-width: 768px) {
-  :host {
-    transform: translateY(8px);
-  }
-}
