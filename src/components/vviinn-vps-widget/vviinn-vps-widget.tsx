@@ -55,6 +55,7 @@ import { resources } from "../../locale/resources-vps";
 import { Locale } from "../../locale";
 import { CameraActionIcon, UploadActionIcon } from "../vviinn-icons";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
+import { videoStreamSettings } from "../../video/settings";
 
 const filterInt = (value: string) =>
   /^[-+]?(\d+|Infinity)$/.test(value) ? Number(value) : NaN;
@@ -224,6 +225,7 @@ export class VviinnVpsWidget {
   private resultViewed: boolean = false;
   private cameraAvailable: boolean = false;
   private isDesktop: boolean = false;
+  private videoTrack: MediaStreamTrack | null = null;
 
   private initResultEvents() {
     this.resultLoaded = false;
@@ -275,6 +277,41 @@ export class VviinnVpsWidget {
     }
   };
 
+  private adjustCameraSettings = async () => {
+    if (!this.videoTrack) return;
+    const capabilities = this.videoTrack.getCapabilities();
+
+    if ("focusMode" in capabilities) {
+      try {
+        await this.videoTrack.applyConstraints({
+          advanced: [{ focusMode: "continuous" }] as any,
+        });
+      } catch (error) {
+        console.error("Failed to apply focus mode constraints", error);
+      }
+    }
+
+    if ("focusMode" in capabilities) {
+      try {
+        await this.videoTrack.applyConstraints({
+          advanced: [{ exposureMode: "continuous" }] as any,
+        });
+      } catch (error) {
+        console.error("Failed to apply exposure mode constraints", error);
+      }
+    }
+
+    if ("whiteBalanceMode" in capabilities) {
+      try {
+        await this.videoTrack.applyConstraints({
+          advanced: [{ whiteBalanceMode: "continuous" }] as any,
+        });
+      } catch (error) {
+        console.error("Failed to apply white balance mode constraints", error);
+      }
+    }
+  };
+
   private handleStartCameraClick = async () => {
     if (this.stream) {
       this.resetState();
@@ -285,8 +322,11 @@ export class VviinnVpsWidget {
 
     try {
       const videoStream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "environment" },
+        video: videoStreamSettings,
       });
+      this.videoTrack = videoStream.getVideoTracks()[0];
+      this.adjustCameraSettings();
+
       this.stream = videoStream;
     } catch (error) {
       // TODO: Show error in the UI

@@ -14,7 +14,12 @@ import { toFile } from "../../Image/toFile";
 import { processSelectedFile } from "../../store/imageSearch.store";
 import * as E from "fp-ts/lib/Either";
 import { BasicEventData } from "../../recommendation/events";
-import { RoundCameraIcon } from "../vviinn-icons";
+import { MinusIcon, PlusIcon, RoundCameraIcon } from "../vviinn-icons";
+
+type ZoomCapabilities = {
+  min: number;
+  max: number;
+};
 
 @Component({
   tag: "vviinn-example-image",
@@ -32,6 +37,7 @@ export class VviinnExampleImage {
 
   @State() selected: boolean = false;
   @State() videoInitialized: boolean = false;
+  @State() zoomCapabilities: ZoomCapabilities | null = null;
 
   @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
@@ -41,12 +47,41 @@ export class VviinnExampleImage {
   @Event() vviinnCameraEnabled: EventEmitter;
 
   private videoElement: HTMLVideoElement | null;
+  private videoTrack: MediaStreamTrack | null = null;
 
   componentDidLoad() {
     this.videoElement = this.el.shadowRoot.getElementById(
       "camera-preview"
     ) as HTMLVideoElement;
   }
+
+  private initializeZoom = async () => {
+    if (!this.videoTrack) return;
+    const capabilities = this.videoTrack.getCapabilities() as any;
+
+    if ("zoom" in capabilities) {
+      this.zoomCapabilities = capabilities.zoom;
+
+      await this.videoTrack.applyConstraints({
+        advanced: [{ zoom: this.zoomCapabilities.min }] as any,
+      });
+    }
+  };
+
+  private onZoom = async (action: "in" | "out") => {
+    if (!this.videoTrack || !this.zoomCapabilities) return;
+
+    const currentSettings = this.videoTrack.getSettings() as any;
+    const currentZoom = currentSettings.zoom ?? 1;
+    const step = (this.zoomCapabilities.max - this.zoomCapabilities.min) / 3;
+
+    let newZoom: number;
+    newZoom = action === "in" ? currentZoom + step : currentZoom - step;
+
+    await this.videoTrack.applyConstraints({
+      advanced: [{ zoom: newZoom }] as any,
+    });
+  };
 
   private async selectImage() {
     this.selected = true;
@@ -92,6 +127,8 @@ export class VviinnExampleImage {
       return;
     }
     this.videoElement.srcObject = this.srcObject;
+    this.videoTrack = this.srcObject.getVideoTracks()[0];
+    this.initializeZoom();
 
     this.videoElement.onloadedmetadata = () => {
       this.vviinnCameraEnabled.emit(true);
@@ -121,6 +158,17 @@ export class VviinnExampleImage {
           tabindex={1}
           class={{ hidden: this.videoInitialized }}
         />
+
+        {this.zoomCapabilities && this.videoInitialized && !this.selected && (
+          <div class="buttons-group zoom-buttons">
+            <button onClick={() => this.onZoom("out")}>
+              <MinusIcon />
+            </button>
+            <button onClick={() => this.onZoom("in")}>
+              <PlusIcon />
+            </button>
+          </div>
+        )}
 
         <div class="buttons-group">
           <button

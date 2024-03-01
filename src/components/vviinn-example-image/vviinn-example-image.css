@@ -52,6 +52,25 @@ video {
   line-height: 0;
 }
 
+.zoom-buttons {
+  bottom: 168px;
+  justify-content: center;
+  gap: 12px;
+}
+
+.zoom-buttons button {
+  display: flex;
+  width: 48px;
+  height: 48px;
+  padding: 8px;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--radius-radius-md, 8px);
+  background: rgba(0, 0, 0, 0.25);
+  border: none;
+  cursor: pointer;
+}
+
 .hidden {
   display: none;
 }
