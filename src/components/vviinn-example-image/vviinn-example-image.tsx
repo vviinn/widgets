@@ -55,25 +55,6 @@ export class VviinnExampleImage {
     ) as HTMLVideoElement;
   }
 
-  private createPlaceholderImageCanvas() {
-    const imgPlaceholder = this.el.shadowRoot.getElementById(
-      "captured-image-placeholder"
-    ) as HTMLImageElement;
-
-    const video = this.videoElement;
-    const { videoWidth, videoHeight } = video;
-    const canvas = document.createElement("canvas");
-
-    canvas.width = videoWidth;
-    canvas.height = videoHeight;
-
-    const ctx = canvas.getContext("2d");
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-    const dataURI = canvas.toDataURL("image/jpeg");
-    imgPlaceholder.src = dataURI;
-    imgPlaceholder.classList.remove("hidden");
-  }
   private initializeZoom = async () => {
     if (!this.videoTrack) return;
     const capabilities = this.videoTrack.getCapabilities() as any;
@@ -91,7 +72,7 @@ export class VviinnExampleImage {
     if (!this.videoTrack || !this.zoomCapabilities) return;
 
     const currentSettings = this.videoTrack.getSettings() as any;
-    const currentZoom = currentSettings.zoom ?? 1;
+    const currentZoom = currentSettings.zoom ?? this.zoomCapabilities.min;
     const step = (this.zoomCapabilities.max - this.zoomCapabilities.min) / 3;
 
     let newZoom: number;
@@ -109,23 +90,56 @@ export class VviinnExampleImage {
     let file: File;
 
     const photoFrame = this.el.shadowRoot.getElementById("photo-frame");
-    const photoFrameRect = photoFrame.getBoundingClientRect();
-    const cropSize = Math.min(photoFrameRect.width, photoFrameRect.height);
-
     const video = this.videoElement;
+
+    // Get bounding rectangles
+    const photoFrameRect = photoFrame.getBoundingClientRect();
+    const videoRect = video.getBoundingClientRect();
     const { videoWidth, videoHeight } = video;
 
     const canvas = document.createElement("canvas");
     this.videoElement.pause();
-    this.createPlaceholderImageCanvas();
 
-    canvas.width = cropSize;
-    canvas.height = cropSize;
-    const dx = (videoWidth - cropSize) / 2;
-    const dy = (videoHeight - cropSize) / 3;
+    // Calculate scale factors
+    const videoCoefficientWidth = videoWidth / videoRect.width;
+    const videoCoefficientHeight = videoHeight / videoRect.height;
+
+    // Determine the smallest dimension to maintain aspect ratio
+    const cropDimension = Math.min(
+      photoFrameRect.width * videoCoefficientWidth,
+      photoFrameRect.height * videoCoefficientHeight
+    );
+
+    canvas.width = cropDimension;
+    canvas.height = cropDimension;
+
+    // Calculate offsets
+    const dxFrame =
+      photoFrameRect.left -
+      videoRect.left +
+      (photoFrameRect.width - cropDimension / videoCoefficientWidth) / 2;
+    const dyFrame =
+      photoFrameRect.top -
+      videoRect.top +
+      (photoFrameRect.height - cropDimension / videoCoefficientHeight) / 2;
+
+    // Adjust dx and dy to account for the scaling
+    const dx = dxFrame * videoCoefficientWidth;
+    const dy = dyFrame * videoCoefficientHeight;
 
     const ctx = canvas.getContext("2d");
-    ctx.drawImage(video, dx, dy, cropSize, cropSize, 0, 0, cropSize, cropSize);
+    ctx.drawImage(
+      video,
+      dx,
+      dy,
+      cropDimension,
+      cropDimension,
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+
     const dataURI = canvas.toDataURL("image/jpeg");
     file = await toFile(dataURI);
 
@@ -188,7 +202,7 @@ export class VviinnExampleImage {
 
         <img id="captured-image-placeholder" class="hidden" />
 
-        <div class="container">
+        <div class="container" id="container">
           <div
             class={{
               hidden: !this.videoInitialized,
@@ -196,7 +210,7 @@ export class VviinnExampleImage {
             id="photo-frame"
           ></div>
 
-          {this.zoomCapabilities && this.videoInitialized && !this.selected && (
+          {this.zoomCapabilities && this.videoInitialized && (
             <div class="buttons-group zoom-buttons">
               <button onClick={() => this.onZoom("out")}>
                 <MinusIcon />
