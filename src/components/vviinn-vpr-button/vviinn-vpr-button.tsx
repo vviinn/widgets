@@ -168,6 +168,5 @@ export class VviinnVprButton {
       "vviinnWidgetClose",
       this.sidebarCloseListener
     );
-    document.body.removeChild(this.sidebar);
   }
 }
