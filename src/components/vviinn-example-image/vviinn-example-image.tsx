@@ -91,20 +91,17 @@ export class VviinnExampleImage {
 
     const photoFrame = this.el.shadowRoot.getElementById("photo-frame");
     const video = this.videoElement;
-
-    // Get bounding rectangles
     const photoFrameRect = photoFrame.getBoundingClientRect();
     const videoRect = video.getBoundingClientRect();
+
     const { videoWidth, videoHeight } = video;
 
     const canvas = document.createElement("canvas");
     this.videoElement.pause();
 
-    // Calculate scale factors
     const videoCoefficientWidth = videoWidth / videoRect.width;
     const videoCoefficientHeight = videoHeight / videoRect.height;
 
-    // Determine the smallest dimension to maintain aspect ratio
     const cropDimension = Math.min(
       photoFrameRect.width * videoCoefficientWidth,
       photoFrameRect.height * videoCoefficientHeight
@@ -113,7 +110,6 @@ export class VviinnExampleImage {
     canvas.width = cropDimension;
     canvas.height = cropDimension;
 
-    // Calculate offsets
     const dxFrame =
       photoFrameRect.left -
       videoRect.left +
@@ -123,7 +119,6 @@ export class VviinnExampleImage {
       videoRect.top +
       (photoFrameRect.height - cropDimension / videoCoefficientHeight) / 2;
 
-    // Adjust dx and dy to account for the scaling
     const dx = dxFrame * videoCoefficientWidth;
     const dy = dyFrame * videoCoefficientHeight;
 
