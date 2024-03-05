@@ -83,9 +83,27 @@ export class VviinnExampleImage {
     });
   };
 
+  private createPlaceholderImageCanvas() {
+    const imgPlaceholder = this.el.shadowRoot.getElementById(
+      "captured-image-placeholder"
+    ) as HTMLImageElement;
+
+    const video = this.videoElement;
+    const { videoWidth, videoHeight } = video;
+    const canvas = document.createElement("canvas");
+
+    canvas.width = videoWidth;
+    canvas.height = videoHeight;
+
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    const dataURI = canvas.toDataURL("image/jpeg");
+    imgPlaceholder.src = dataURI;
+  }
+
   private async selectImage() {
     if (!this.srcObject) return;
-    this.selected = true;
     this.vviinnImageUpload.emit(this.basicEventData);
     let file: File;
 
@@ -97,7 +115,9 @@ export class VviinnExampleImage {
     const { videoWidth, videoHeight } = video;
 
     const canvas = document.createElement("canvas");
+    this.selected = true;
     this.videoElement.pause();
+    this.createPlaceholderImageCanvas();
 
     const videoCoefficientWidth = videoWidth / videoRect.width;
     const videoCoefficientHeight = videoHeight / videoRect.height;
@@ -195,7 +215,10 @@ export class VviinnExampleImage {
           class={{ hidden: this.videoInitialized || this.selected }}
         />
 
-        <img id="captured-image-placeholder" class="hidden" />
+        <img
+          id="captured-image-placeholder"
+          class={{ hidden: !this.selected }}
+        />
 
         <div class="container" id="container">
           <div
