@@ -72,7 +72,7 @@ export class VviinnExampleImage {
     if (!this.videoTrack || !this.zoomCapabilities) return;
 
     const currentSettings = this.videoTrack.getSettings() as any;
-    const currentZoom = currentSettings.zoom ?? 1;
+    const currentZoom = currentSettings.zoom ?? this.zoomCapabilities.min;
     const step = (this.zoomCapabilities.max - this.zoomCapabilities.min) / 3;
 
     let newZoom: number;
@@ -83,24 +83,80 @@ export class VviinnExampleImage {
     });
   };
 
+  private createPlaceholderImageCanvas() {
+    const imgPlaceholder = this.el.shadowRoot.getElementById(
+      "captured-image-placeholder"
+    ) as HTMLImageElement;
+
+    const video = this.videoElement;
+    const { videoWidth, videoHeight } = video;
+    const canvas = document.createElement("canvas");
+
+    canvas.width = videoWidth;
+    canvas.height = videoHeight;
+
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    const dataURI = canvas.toDataURL("image/jpeg");
+    imgPlaceholder.src = dataURI;
+  }
+
   private async selectImage() {
-    this.selected = true;
+    if (!this.srcObject) return;
     this.vviinnImageUpload.emit(this.basicEventData);
     let file: File;
 
-    if (this.srcObject) {
-      const video = this.videoElement;
-      const canvas = document.createElement("canvas");
-      this.videoElement.pause();
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-      const dataURI = canvas.toDataURL("image/jpeg");
-      file = await toFile(dataURI);
-    } else {
-      file = await toFile(this.exampleImageSource);
-    }
+    const photoFrame = this.el.shadowRoot.getElementById("photo-frame");
+    const video = this.videoElement;
+    const photoFrameRect = photoFrame.getBoundingClientRect();
+    const videoRect = video.getBoundingClientRect();
+
+    const { videoWidth, videoHeight } = video;
+
+    const canvas = document.createElement("canvas");
+    this.selected = true;
+    this.videoElement.pause();
+    this.createPlaceholderImageCanvas();
+
+    const videoCoefficientWidth = videoWidth / videoRect.width;
+    const videoCoefficientHeight = videoHeight / videoRect.height;
+
+    const cropDimension = Math.min(
+      photoFrameRect.width * videoCoefficientWidth,
+      photoFrameRect.height * videoCoefficientHeight
+    );
+
+    canvas.width = cropDimension;
+    canvas.height = cropDimension;
+
+    const dxFrame =
+      photoFrameRect.left -
+      videoRect.left +
+      (photoFrameRect.width - cropDimension / videoCoefficientWidth) / 2;
+    const dyFrame =
+      photoFrameRect.top -
+      videoRect.top +
+      (photoFrameRect.height - cropDimension / videoCoefficientHeight) / 2;
+
+    const dx = dxFrame * videoCoefficientWidth;
+    const dy = dyFrame * videoCoefficientHeight;
+
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(
+      video,
+      dx,
+      dy,
+      cropDimension,
+      cropDimension,
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+
+    const dataURI = canvas.toDataURL("image/jpeg");
+    file = await toFile(dataURI);
 
     pipe(
       await processSelectedFile(file),
@@ -145,7 +201,7 @@ export class VviinnExampleImage {
         <video
           id="camera-preview"
           class={{
-            hidden: !this.videoInitialized,
+            hidden: !this.videoInitialized || this.selected,
           }}
           autoplay
           playsinline
@@ -156,27 +212,41 @@ export class VviinnExampleImage {
           width={this.width}
           height={this.height}
           tabindex={1}
-          class={{ hidden: this.videoInitialized }}
+          class={{ hidden: this.videoInitialized || this.selected }}
         />
 
-        {this.zoomCapabilities && this.videoInitialized && !this.selected && (
-          <div class="buttons-group zoom-buttons">
-            <button onClick={() => this.onZoom("out")}>
-              <MinusIcon />
-            </button>
-            <button onClick={() => this.onZoom("in")}>
-              <PlusIcon />
+        <img
+          id="captured-image-placeholder"
+          class={{ hidden: !this.selected }}
+        />
+
+        <div class="container" id="container">
+          <div
+            class={{
+              hidden: !this.videoInitialized,
+            }}
+            id="photo-frame"
+          ></div>
+
+          {this.zoomCapabilities && this.videoInitialized && (
+            <div class="buttons-group zoom-buttons">
+              <button onClick={() => this.onZoom("out")}>
+                <MinusIcon />
+              </button>
+              <button onClick={() => this.onZoom("in")}>
+                <PlusIcon />
+              </button>
+            </div>
+          )}
+
+          <div class="buttons-group">
+            <button
+              class={{ "photo-button": true, visible: this.videoInitialized }}
+              onClick={() => this.selectImage()}
+            >
+              <RoundCameraIcon />
             </button>
           </div>
-        )}
-
-        <div class="buttons-group">
-          <button
-            class={{ "photo-button": true, visible: this.videoInitialized }}
-            onClick={() => this.selectImage()}
-          >
-            <RoundCameraIcon />
-          </button>
         </div>
       </Host>
     );
