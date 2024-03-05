@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.44.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.43.1...v2.44.0) (2024-03-05)
+
+
+### Features
+
+* Take Square Image by the Camera ([31fd2f8](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/31fd2f897e3830879f2846c71ced0e58574e544f))
+
 ### [2.43.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.43.0...v2.43.1) (2024-03-04)
 
 
