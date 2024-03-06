@@ -31,6 +31,7 @@ import {
 const INITIAL_CROP_AREA = 0.91;
 const INITIAL_CROP_AREA_OFFSET = 1 - INITIAL_CROP_AREA;
 const MIN_SEARCH_AREA_SIZE = 82;
+const MIN_IMAGE_WIDTH_FOR_CROPPER = 90;
 
 type CropBoxData = {
   left: number;
@@ -138,7 +139,8 @@ export class VviinnImageView {
       }
 
       const imageBounds = fromImage(imageElement);
-      const { x, y } = imageBounds;
+      const { x, y, width } = imageBounds;
+      if (width < MIN_IMAGE_WIDTH_FOR_CROPPER) return;
 
       const searchArea = {
         x,
