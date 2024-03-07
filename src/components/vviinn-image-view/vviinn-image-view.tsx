@@ -32,6 +32,7 @@ const INITIAL_CROP_AREA = 0.91;
 const INITIAL_CROP_AREA_OFFSET = 1 - INITIAL_CROP_AREA;
 const MIN_SEARCH_AREA_SIZE = 82;
 const MIN_IMAGE_WIDTH_FOR_CROPPER = 90;
+const DEFAULT_IMAGE_SIZE = 288;
 
 type CropBoxData = {
   left: number;
@@ -51,15 +52,15 @@ const cropperOptions: Cropper.Options = {
   zoomOnTouch: false,
   zoomOnWheel: false,
   toggleDragModeOnDblclick: false,
+  viewMode: 1,
 };
 
 const getImageSizes = (i: HTMLImageElement): [number, number] => {
   const dimensions = dimensionsFromImage(i);
-  const resize = scaleByLargestSide(288);
+  const resize = scaleByLargestSide(DEFAULT_IMAGE_SIZE);
   const newDimensions = resize(dimensions);
 
   const sizes = newDimensions.map((d) => d.size);
-
   return [sizes[0], sizes[1]];
 };
 
@@ -131,6 +132,8 @@ export class VviinnImageView {
 
   private loadImage() {
     const imageElement = this.el.shadowRoot.querySelector("img");
+    const container = this.el.shadowRoot.querySelector(".container");
+
     if (imageElement) {
       let data = {};
       if (this.cropper) {
@@ -139,19 +142,22 @@ export class VviinnImageView {
       }
 
       const imageBounds = fromImage(imageElement);
-      const { x, y, width } = imageBounds;
-      if (width < MIN_IMAGE_WIDTH_FOR_CROPPER) return;
+      const { x, y, width, height } = imageBounds;
 
       const searchArea = {
         x,
         y,
-        width: imageBounds.width - imageBounds.width * INITIAL_CROP_AREA_OFFSET,
-        height:
-          imageBounds.height - imageBounds.height * INITIAL_CROP_AREA_OFFSET,
+        width: width - width * INITIAL_CROP_AREA_OFFSET,
+        height: height - height * INITIAL_CROP_AREA_OFFSET,
       };
 
       imageSearchState.imageBounds = O.some(imageBounds);
       imageSearchState.searchArea = O.some(searchArea);
+
+      if (width < MIN_IMAGE_WIDTH_FOR_CROPPER) return;
+      if (width > height) {
+        container.classList.remove("squared");
+      }
 
       this.cropper = new Cropper(imageElement, {
         ...cropperOptions,
@@ -184,7 +190,6 @@ export class VviinnImageView {
       sequenceToOption(imageSearchState.imageUrl, imageSearchState.image),
       O.map(([url, refImage]) => {
         const [width, height] = getImageSizes(refImage);
-
         return (
           <img
             decoding="async"
@@ -203,19 +208,21 @@ export class VviinnImageView {
   render() {
     return (
       <Host>
-        <div class="image-container">
+        <div class="container squared">
+          <div class="image-container">
+            {this.renderImage()}
+            {imageSearchState.detectedObjects.map((o) =>
+              this.renderDetectedObject(o)
+            )}
+          </div>
+
           {imageSearchState.loading ||
           imageSearchState.objectDetectionInProgress ? (
             <div class="image-preloader">
               <vviinn-preloader />
             </div>
           ) : null}
-
-          {this.renderImage()}
         </div>
-        {imageSearchState.detectedObjects.map((o) =>
-          this.renderDetectedObject(o)
-        )}
       </Host>
     );
   }
