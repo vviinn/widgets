@@ -31,7 +31,8 @@ import {
 const INITIAL_CROP_AREA = 0.91;
 const INITIAL_CROP_AREA_OFFSET = 1 - INITIAL_CROP_AREA;
 const MIN_SEARCH_AREA_SIZE = 82;
-const MIN_IMAGE_WIDTH_FOR_CROPPER = 90;
+const MIN_IMAGE_SIDE_FOR_CROPPER = 90;
+const SUPPORTED_ASPECT_RATIO = 0.1;
 const DEFAULT_IMAGE_SIZE = 288;
 
 type CropBoxData = {
@@ -45,6 +46,8 @@ const cropperOptions: Cropper.Options = {
   autoCropArea: INITIAL_CROP_AREA,
   minCropBoxHeight: MIN_SEARCH_AREA_SIZE,
   minCropBoxWidth: MIN_SEARCH_AREA_SIZE,
+  minContainerWidth: MIN_IMAGE_SIDE_FOR_CROPPER,
+  minContainerHeight: MIN_IMAGE_SIDE_FOR_CROPPER,
   movable: false,
   zoomable: false,
   rotatable: false,
@@ -97,12 +100,14 @@ export class VviinnImageView {
   @Element() el: HTMLElement;
 
   @Prop() basicEventData: BasicEventData;
+  @Prop() setShowAspectRatioError: (isError: boolean) => void;
+
   @State() cropper: Cropper = null;
 
   @Event() vviinnImageCrop: EventEmitter<BasicEventData>;
 
   disconnectedCallback() {
-    this.cropper.destroy();
+    if (this.cropper) this.cropper.destroy();
   }
 
   @Listen("vviinnSelectObject")
@@ -132,7 +137,6 @@ export class VviinnImageView {
 
   private loadImage() {
     const imageElement = this.el.shadowRoot.querySelector("img");
-    const container = this.el.shadowRoot.querySelector(".container");
 
     if (imageElement) {
       let data = {};
@@ -154,8 +158,22 @@ export class VviinnImageView {
       imageSearchState.imageBounds = O.some(imageBounds);
       imageSearchState.searchArea = O.some(searchArea);
 
-      if (width < MIN_IMAGE_WIDTH_FOR_CROPPER) return;
+      if (
+        width / height < SUPPORTED_ASPECT_RATIO ||
+        height / width < SUPPORTED_ASPECT_RATIO
+      ) {
+        this.setShowAspectRatioError(true);
+        return;
+      }
+
+      if (
+        width < MIN_IMAGE_SIDE_FOR_CROPPER ||
+        height < MIN_IMAGE_SIDE_FOR_CROPPER
+      )
+        return;
+
       if (width > height) {
+        const container = this.el.shadowRoot.querySelector(".container");
         container.classList.remove("squared");
       }
 

@@ -170,6 +170,7 @@ export class VviinnVpsWidget {
   @State() cameraEnabled: boolean = false;
   @State() cameraButtonClicked: boolean = false;
   @State() uploadSource: UploadSource;
+  @State() showAspectRatioError = false;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -333,6 +334,10 @@ export class VviinnVpsWidget {
       console.log("Error accessing camera: ", error.message);
       this.resetState();
     }
+  };
+
+  private setShowAspectRatioError = (isError: boolean) => {
+    this.showAspectRatioError = isError;
   };
 
   componentDidLoad() {
@@ -734,6 +739,7 @@ export class VviinnVpsWidget {
     this.stream = null;
     this.cameraEnabled = false;
     this.cameraButtonClicked = false;
+    this.setShowAspectRatioError(false);
   }
 
   private haveErrors(): boolean {
@@ -837,9 +843,15 @@ export class VviinnVpsWidget {
                 {this.isResultSlide() && (
                   <vviinn-image-view
                     basicEventData={this.getBasicEventData()}
+                    setShowAspectRatioError={this.setShowAspectRatioError}
                   />
                 )}
-                <div class="filters-wrapper">
+                <div
+                  class={{
+                    "filters-wrapper": true,
+                    hidden: this.showAspectRatioError,
+                  }}
+                >
                   <div class="filters">
                     {imageSearchState.filters.map((filter) => (
                       <search-filters
@@ -859,11 +871,24 @@ export class VviinnVpsWidget {
                   }}
                 >
                   <vviinn-empty-results handler={() => this.resetState()} />
-                  <vviinn-onboarding />
                 </div>
+
                 <div
                   class={{
-                    hidden: imageSearchState.results.length <= 0,
+                    "nothing-found": true,
+                    hidden: !this.showAspectRatioError,
+                  }}
+                >
+                  <vviinn-wrong-aspect-ratio
+                    handler={() => this.resetState()}
+                  />
+                </div>
+
+                <div
+                  class={{
+                    hidden:
+                      imageSearchState.results.length <= 0 ||
+                      this.showAspectRatioError,
                     products: true,
                   }}
                 >
