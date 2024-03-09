@@ -17,7 +17,7 @@ export class VviinnWrongAspectRatio {
           <WarningIcon />
           <h4 slot="title">
             {/* TODO: Add translations */}
-            Image is too narrow for visual search
+            The image is too narrow
           </h4>
           <button slot="action" onClick={this.handler}>
             {i18next.t("emptyResultsBlock.button")}

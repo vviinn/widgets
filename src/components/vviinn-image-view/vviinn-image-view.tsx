@@ -101,6 +101,7 @@ export class VviinnImageView {
 
   @Prop() basicEventData: BasicEventData;
   @Prop() setShowAspectRatioError: (isError: boolean) => void;
+  @Prop() showPreloader: boolean;
 
   @State() cropper: Cropper = null;
 
@@ -234,8 +235,9 @@ export class VviinnImageView {
             )}
           </div>
 
-          {imageSearchState.loading ||
-          imageSearchState.objectDetectionInProgress ? (
+          {(imageSearchState.loading ||
+            imageSearchState.objectDetectionInProgress) &&
+          !this.showPreloader ? (
             <div class="image-preloader">
               <vviinn-preloader />
             </div>
