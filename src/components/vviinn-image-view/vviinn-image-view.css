@@ -19,6 +19,11 @@
   aspect-ratio: 1 / 1;
 }
 
+.container.bordered {
+  background-color: transparent;
+  border: 1px solid #eaeaea;
+}
+
 .image-container {
   display: flex;
   flex-direction: column;

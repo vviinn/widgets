@@ -101,9 +101,10 @@ export class VviinnImageView {
 
   @Prop() basicEventData: BasicEventData;
   @Prop() setShowAspectRatioError: (isError: boolean) => void;
-  @Prop() showPreloader: boolean;
+  @Prop() showAspectRatioError: boolean;
 
   @State() cropper: Cropper = null;
+  @State() hidePreloader = false;
 
   @Event() vviinnImageCrop: EventEmitter<BasicEventData>;
 
@@ -136,6 +137,11 @@ export class VviinnImageView {
     };
   }
 
+  private setBorderedImage() {
+    const container = this.el.shadowRoot.querySelector(".container");
+    container.classList.add("bordered");
+  }
+
   private loadImage() {
     const imageElement = this.el.shadowRoot.querySelector("img");
 
@@ -164,14 +170,18 @@ export class VviinnImageView {
         height / width < SUPPORTED_ASPECT_RATIO
       ) {
         this.setShowAspectRatioError(true);
+        this.setBorderedImage();
         return;
       }
 
       if (
         width < MIN_IMAGE_SIDE_FOR_CROPPER ||
         height < MIN_IMAGE_SIDE_FOR_CROPPER
-      )
+      ) {
+        this.setBorderedImage();
+        this.hidePreloader = true;
         return;
+      }
 
       if (width > height) {
         const container = this.el.shadowRoot.querySelector(".container");
@@ -237,7 +247,8 @@ export class VviinnImageView {
 
           {(imageSearchState.loading ||
             imageSearchState.objectDetectionInProgress) &&
-          !this.showPreloader ? (
+          !this.showAspectRatioError &&
+          !this.hidePreloader ? (
             <div class="image-preloader">
               <vviinn-preloader />
             </div>

@@ -844,7 +844,7 @@ export class VviinnVpsWidget {
                   <vviinn-image-view
                     basicEventData={this.getBasicEventData()}
                     setShowAspectRatioError={this.setShowAspectRatioError}
-                    showPreloader={this.showAspectRatioError}
+                    showAspectRatioError={this.showAspectRatioError}
                   />
                 )}
                 <div
