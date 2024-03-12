@@ -127,6 +127,10 @@ export class VviinnImageView {
     this.cropper.setCropBoxData(ValidateCropBoxData(cropBoxData));
   }
 
+  private isSafari = () => {
+    return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  };
+
   private getCropboxData() {
     const { left, top, width, height } = this.cropper.getCropBoxData();
     return {
@@ -144,6 +148,7 @@ export class VviinnImageView {
 
   private loadImage() {
     const imageElement = this.el.shadowRoot.querySelector("img");
+    const container = this.el.shadowRoot.querySelector(".container");
 
     if (imageElement) {
       let data = {};
@@ -165,6 +170,10 @@ export class VviinnImageView {
       imageSearchState.imageBounds = O.some(imageBounds);
       imageSearchState.searchArea = O.some(searchArea);
 
+      if (this.isSafari()) {
+        container.classList.add("safari");
+      }
+
       if (
         width / height < SUPPORTED_ASPECT_RATIO ||
         height / width < SUPPORTED_ASPECT_RATIO
@@ -184,7 +193,6 @@ export class VviinnImageView {
       }
 
       if (width > height) {
-        const container = this.el.shadowRoot.querySelector(".container");
         container.classList.remove("squared");
       }
 
