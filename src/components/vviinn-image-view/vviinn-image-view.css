@@ -35,7 +35,7 @@
   position: relative;
 }
 
-.image-container img {
+.image-container > img {
   display: block;
   max-width: 100%;
 }
