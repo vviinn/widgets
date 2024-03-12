@@ -15,12 +15,9 @@ export class VviinnWrongAspectRatio {
       <Host>
         <vviinn-error>
           <WarningIcon />
-          <h4 slot="title">
-            {/* TODO: Add translations */}
-            The image is too narrow
-          </h4>
+          <h4 slot="title">{i18next.t("wrongAspectRatioBlock.title")}</h4>
           <button slot="action" onClick={this.handler}>
-            {i18next.t("emptyResultsBlock.button")}
+            {i18next.t("wrongAspectRatioBlock.button")}
           </button>
         </vviinn-error>
       </Host>

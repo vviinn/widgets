@@ -25,6 +25,10 @@ export const resources: Resource = {
         text: "Bitte laden Sie eine .jpg, .png oder .webp Bilddatei hoch.",
         button: "Neues Bild hochladen",
       },
+      wrongAspectRatioBlock: {
+        title: "Das Bild ist zu schmal",
+        button: "Neues Bild hochladen",
+      },
     },
   },
   en: {
@@ -49,6 +53,10 @@ export const resources: Resource = {
         title: "Wrong file format",
         text: "Please upload a .jpg, .png or .webp image file.",
         button: "Upload another file",
+      },
+      wrongAspectRatioBlock: {
+        title: "The image is too narrow",
+        button: "Upload another image",
       },
     },
   },
