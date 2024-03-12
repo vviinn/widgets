@@ -103,7 +103,7 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
 }
 
 .results-page {
-  margin-top: 60px;
+  margin-top: 64px;
   display: grid;
   grid-template-columns: 336px auto;
   box-sizing: border-box;
@@ -257,7 +257,7 @@ search-filters::part(filter active) {
 
   .results-page > * {
     box-sizing: border-box;
-    padding: 0 24px 24px;
+    padding: 12px 24px 24px;
   }
 
   .filters-wrapper {
