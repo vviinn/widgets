@@ -70,13 +70,20 @@ export class VviinnExampleImage {
 
   private onZoom = async (action: "in" | "out") => {
     if (!this.videoTrack || !this.zoomCapabilities) return;
+    const { max, min } = this.zoomCapabilities;
 
     const currentSettings = this.videoTrack.getSettings() as any;
-    const currentZoom = currentSettings.zoom ?? this.zoomCapabilities.min;
-    const step = (this.zoomCapabilities.max - this.zoomCapabilities.min) / 3;
+    const currentZoom = currentSettings.zoom ?? min;
+
+    const step = (max - min) / 3;
+    const roundedStep = Math.round(step * 10) / 10;
 
     let newZoom: number;
-    newZoom = action === "in" ? currentZoom + step : currentZoom - step;
+    newZoom =
+      action === "in" ? currentZoom + roundedStep : currentZoom - roundedStep;
+
+    if (newZoom < min) newZoom = min;
+    if (newZoom > max) newZoom = max;
 
     await this.videoTrack.applyConstraints({
       advanced: [{ zoom: newZoom }] as any,
