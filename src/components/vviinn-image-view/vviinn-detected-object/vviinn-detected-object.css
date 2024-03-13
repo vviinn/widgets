@@ -5,6 +5,7 @@
   position: absolute;
   left: calc(var(--x-position));
   top: calc(var(--y-position));
+  z-index: 2;
 }
 
 :host::before,

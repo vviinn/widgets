@@ -103,7 +103,7 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
 }
 
 .results-page {
-  margin-top: 60px;
+  margin-top: 64px;
   display: grid;
   grid-template-columns: 336px auto;
   box-sizing: border-box;
@@ -149,8 +149,14 @@ vviinn-empty-results {
 .image-wrapper {
   display: grid;
   grid-template-rows: min-content 1fr;
-  grid-gap: 24px;
   min-width: 100%;
+}
+
+.filters-wrapper {
+  margin-top: 24px;
+  overflow-x: auto;
+  transform: translateX(-24px);
+  min-width: calc(100% + 48px);
 }
 
 vviinn-product-card {
@@ -205,12 +211,6 @@ search-filters::part(filter active) {
   color: white;
 }
 
-.filters-wrapper {
-  overflow-x: auto;
-  transform: translateX(-24px);
-  min-width: calc(100% + 48px);
-}
-
 .results-page:not(.active) {
   display: none;
 }
@@ -257,10 +257,15 @@ search-filters::part(filter active) {
 
   .results-page > * {
     box-sizing: border-box;
-    padding: 0 24px 24px;
+    padding: 12px 24px 24px;
+  }
+
+  .image-wrapper {
+    padding: 0;
   }
 
   .filters-wrapper {
+    padding-left: 24px;
     min-width: calc(100% + 40px);
   }
 
@@ -290,6 +295,7 @@ search-filters::part(filter active) {
     overflow-y: unset;
     width: 100%;
     padding-top: 0;
+    margin-top: 24px;
   }
 
   .products {
@@ -320,8 +326,8 @@ search-filters::part(filter active) {
 }
 
 @media (max-width: 380px) {
-  .results-page > * {
-    padding: 12px;
+  .filters-wrapper {
+    padding-left: 24px;
   }
 
   .products {
