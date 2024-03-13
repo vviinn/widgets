@@ -2,6 +2,24 @@
   min-height: 160px;
   display: flex;
   justify-content: center;
+  background-color: rgba(0, 0, 0, 0.32);
+}
+
+:host(.bordered) {
+  background-color: transparent;
+  border: 1px solid #eaeaea;
+  margin-top: 40px;
+}
+
+@media (max-width: 768px) {
+  :host {
+    min-height: unset;
+  }
+
+  :host(.bordered) {
+    border: none;
+    margin-top: 48px;
+  }
 }
 
 .container {
@@ -12,20 +30,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: rgba(0, 0, 0, 0.32);
-}
-
-.container.safari {
-  min-height: fit-content;
-}
-
-.container.squared {
-  aspect-ratio: 1 / 1;
-}
-
-.container.bordered {
-  background-color: transparent;
-  border: 1px solid #eaeaea;
 }
 
 .image-container {

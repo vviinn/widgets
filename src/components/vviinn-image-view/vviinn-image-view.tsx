@@ -28,7 +28,7 @@ import {
   SelectObjectEventData,
 } from "../../recommendation/events";
 
-const INITIAL_CROP_AREA = 0.91;
+const INITIAL_CROP_AREA = 0.9;
 const INITIAL_CROP_AREA_OFFSET = 1 - INITIAL_CROP_AREA;
 const MIN_SEARCH_AREA_SIZE = 82;
 const MIN_IMAGE_SIDE_FOR_CROPPER = 90;
@@ -127,10 +127,6 @@ export class VviinnImageView {
     this.cropper.setCropBoxData(ValidateCropBoxData(cropBoxData));
   }
 
-  private isSafari = () => {
-    return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-  };
-
   private getCropboxData() {
     const { left, top, width, height } = this.cropper.getCropBoxData();
     return {
@@ -141,14 +137,8 @@ export class VviinnImageView {
     };
   }
 
-  private setBorderedImage() {
-    const container = this.el.shadowRoot.querySelector(".container");
-    container.classList.add("bordered");
-  }
-
   private loadImage() {
     const imageElement = this.el.shadowRoot.querySelector("img");
-    const container = this.el.shadowRoot.querySelector(".container");
 
     if (imageElement) {
       let data = {};
@@ -170,16 +160,12 @@ export class VviinnImageView {
       imageSearchState.imageBounds = O.some(imageBounds);
       imageSearchState.searchArea = O.some(searchArea);
 
-      if (this.isSafari()) {
-        container.classList.add("safari");
-      }
-
       if (
         width / height < SUPPORTED_ASPECT_RATIO ||
         height / width < SUPPORTED_ASPECT_RATIO
       ) {
         this.setShowAspectRatioError(true);
-        this.setBorderedImage();
+        this.el.classList.add("bordered");
         return;
       }
 
@@ -187,13 +173,9 @@ export class VviinnImageView {
         width < MIN_IMAGE_SIDE_FOR_CROPPER ||
         height < MIN_IMAGE_SIDE_FOR_CROPPER
       ) {
-        this.setBorderedImage();
+        this.el.classList.add("bordered");
         this.hidePreloader = true;
         return;
-      }
-
-      if (width > height) {
-        container.classList.remove("squared");
       }
 
       this.cropper = new Cropper(imageElement, {
@@ -245,7 +227,7 @@ export class VviinnImageView {
   render() {
     return (
       <Host>
-        <div class="container squared">
+        <div class="container">
           <div class="image-container">
             {this.renderImage()}
             {imageSearchState.detectedObjects.map((o) =>
