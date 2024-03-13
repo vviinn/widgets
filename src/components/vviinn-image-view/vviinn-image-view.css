@@ -148,28 +148,35 @@ vviinn-preloader {
   display: none;
 }
 
+.point-ne,
+.point-nw,
+.point-sw,
+.point-se {
+  --delta: -9px;
+}
+
 .point-ne {
   cursor: nesw-resize;
-  right: -9px;
-  top: -9px;
+  right: var(--delta);
+  top: var(--delta);
 }
 
 .point-nw {
   cursor: nwse-resize;
-  left: -9px;
-  top: -9px;
+  left: var(--delta);
+  top: var(--delta);
 }
 
 .point-sw {
   cursor: nesw-resize;
-  bottom: -9px;
-  left: -9px;
+  bottom: var(--delta);
+  left: var(--delta);
 }
 
 .point-se {
   cursor: nwse-resize;
-  bottom: -9px;
-  right: -9px;
+  bottom: var(--delta);
+  right: var(--delta);
 }
 
 .cropper-point::before {
