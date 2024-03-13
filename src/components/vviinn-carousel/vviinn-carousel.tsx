@@ -60,7 +60,6 @@ export class VviinnCarousel {
   private isSetMode: boolean;
   private isGridMode: boolean;
   private isContinuityMode: boolean;
-  private isGridLike: boolean;
   private defaultAnimationInterval: number = 2000;
 
   private mutationObserver = new MutationObserver(() =>
@@ -114,7 +113,6 @@ export class VviinnCarousel {
     this.isSetMode = this.mode === "set";
     this.isGridMode = this.mode === "grid";
     this.isContinuityMode = this.mode === "continuity";
-    this.isGridLike = this.isGridMode || this.isSetMode;
 
     const columnsNumber = this.getColumnsNumber();
 
@@ -178,7 +176,7 @@ export class VviinnCarousel {
     return {
       content: true,
       [this.moveDirection]: true,
-      [this.isSetMode ? "grid" : this.mode]: true,
+      [this.mode]: true,
       "show-scrollbar": this.showScroll,
     };
   }
@@ -335,7 +333,7 @@ export class VviinnCarousel {
 
   private getClassMap() {
     return {
-      [this.isSetMode ? "grid" : this.mode]: true,
+      [this.mode]: true,
       "show-scrollbar": this.showScrollbar(),
     };
   }
@@ -357,7 +355,7 @@ export class VviinnCarousel {
         imageRatio={1}
         price={recommendation.price.actual}
         salePrice={recommendation.price.sale}
-        responsive={this.isGridLike}
+        responsive={this.isGridMode}
         dimmedBackground={this.isContinuityMode}
         campaignTypeId={this.campaignTypeId}
         index={rank}
@@ -388,7 +386,7 @@ export class VviinnCarousel {
   }
 
   private renderRecommendations() {
-    return this.isGridLike
+    return this.isGridMode
       ? this.renderGrid()
       : this.renderRecommendationsElements();
   }

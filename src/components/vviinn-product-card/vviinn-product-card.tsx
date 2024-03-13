@@ -134,9 +134,15 @@ export class VviinnProductCard {
   private productData: ProductCardEventData | null = null;
   private imageElement?: HTMLImageElement;
   private intersectionObserver;
+  private isSetMode: boolean;
+  private isGridMode: boolean;
+  private isContinuityMode: boolean;
 
   connectedCallback() {
     this.productData = this.getProductData();
+    this.isSetMode = this.mode === "set";
+    this.isGridMode = this.mode === "grid";
+    this.isContinuityMode = this.mode === "continuity";
   }
 
   componentWillLoad() {
@@ -313,9 +319,8 @@ export class VviinnProductCard {
               <button
                 class={{
                   "basket-button": true,
-                  "basket-button-grid":
-                    this.mode === "grid" || this.mode === "set",
-                  "basket-button-continuity ": this.mode === "continuity",
+                  "basket-button-grid": this.isGridMode || this.isSetMode,
+                  "basket-button-continuity ": this.isContinuityMode,
                 }}
                 part="basket-button"
                 onClick={() => {
@@ -329,7 +334,7 @@ export class VviinnProductCard {
             )}
           </div>
         )}
-        {this.mode === "set" ? (
+        {this.isSetMode ? (
           <button
             class={{
               "update-button": true,
