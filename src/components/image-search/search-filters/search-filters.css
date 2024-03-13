@@ -2,8 +2,7 @@
   display: flex;
   flex-direction: row;
   overflow-x: auto;
-  padding-left: 24px;
-  padding-right: 12px;
+  padding: 0 12px 12px 24px;
 }
 
 .filter {
@@ -44,6 +43,13 @@
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+@media (max-width: 768px) {
+  .filters {
+    padding-right: 54px;
+    padding-bottom: 0;
+  }
 }
 
 @media (max-width: 640px) {
