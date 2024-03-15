@@ -356,7 +356,7 @@ export class VviinnCarousel {
         price={recommendation.price.actual}
         salePrice={recommendation.price.sale}
         responsive={this.isGridMode}
-        dimmedBackground={this.isContinuityMode}
+        dimmedBackground={this.isContinuityMode || this.isSetMode}
         campaignTypeId={this.campaignTypeId}
         index={rank}
         widgetElementId={this.widgetElementId}

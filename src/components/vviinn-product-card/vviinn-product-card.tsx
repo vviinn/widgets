@@ -40,7 +40,7 @@ import {
 } from "../../campaign/Campaign";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 import { slotChangeListener } from "../customized-slots";
-import { UpdateIcon } from "../vviinn-icons";
+import { BasketIcon, UpdateIcon } from "../vviinn-icons";
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-vidget";
 
 /**
@@ -276,6 +276,7 @@ export class VviinnProductCard {
         class={{
           dimmed: this.dimmedBackground,
           animated: this.isTransitioning,
+          "set-mode": this.isSetMode,
         }}
         exportparts="brand, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, basket-button, update-button-item"
       >
@@ -327,9 +328,18 @@ export class VviinnProductCard {
                   this.vviinnAddToBasket.emit(this.productData);
                 }}
               >
-                <slot name="vviinn-basket-button-text">
-                  <span>{i18next.t("basketButtonText")}</span>
-                </slot>
+                {this.isSetMode ? (
+                  <Fragment>
+                    <BasketIcon />
+                    <slot name="vviinn-basket-button-text">
+                      <span>{i18next.t("setBasketButtonText")}</span>
+                    </slot>
+                  </Fragment>
+                ) : (
+                  <slot name="vviinn-basket-button-text">
+                    <span>{i18next.t("basketButtonText")}</span>
+                  </slot>
+                )}
               </button>
             )}
           </div>

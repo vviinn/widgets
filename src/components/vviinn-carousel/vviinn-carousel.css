@@ -62,6 +62,10 @@
   padding-bottom: 16px;
 }
 
+.content.set {
+  grid-gap: 20px;
+}
+
 .content.left > * {
   scroll-snap-align: start;
 }
@@ -128,17 +132,7 @@ vviinn-product-card::part(price-container) {
   text-align: center;
 }
 
-:host(.classic) vviinn-product-card::part(title),
-:host(.classic) vviinn-product-card::part(brand),
-:host(.classic) vviinn-product-card::part(type) {
-  text-align: center;
-}
-
 @media (max-width: 480px) {
-  :host(.modern) button {
-    display: none;
-  }
-
   .items-group {
     grid-template-columns: repeat(2, 1fr);
   }
