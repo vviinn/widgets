@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.45.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.44.2...v2.45.0) (2024-03-18)
+
+
+### Features
+
+* Updated the documentation related to the Vue Framework. ([cdc400f](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/cdc400f7e1553bfbfd9b498f998d144e3071bf28))
+
 ### [2.44.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.44.1...v2.44.2) (2024-03-13)
 
 
