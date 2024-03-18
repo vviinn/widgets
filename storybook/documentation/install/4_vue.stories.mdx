@@ -4,9 +4,9 @@ import { Meta, Story } from '@storybook/addon-docs';
 
 # Vue
 
-In order to use the custom element library within the Vue app, the application must be modified to define the custom elements and to inform the Vue compiler which elements to ignore during compilation. This can all be done within the `main.js/ts` file.
+To use the custom element library within the Vue app, the application must be modified to define the custom elements and to inform the Vue compiler which elements to ignore during compilation. This can all be done within the `main.js/ts` file.
 
-As you see in the following example, we imported `applyPolyfills` and `defineCustomElements` from `vviinn-widgets/dist/loader` and then in the next line calling `applyPolyfills()` and `defineCustomElements()` to register the vviinn widgets. The rest is related to Vue itself.
+As you see in the following example, we imported `applyPolyfills` and `defineCustomElements` from `vviinn-widgets/dist/loader` and then in the next line calling `applyPolyfills()` and `defineCustomElements()` to register the Vviinn widgets. The rest is related to Vue itself.
 
 `main.js/main.ts`
 ```javascript
@@ -34,7 +34,7 @@ app.mount('#app')
 <script setup lang="ts"></script>
 
 <template>
-  <vviinn-vps-button token="TOKEN"></vviinn-vps-button>
+  <vviinn-vps-button token="YOUR_TOKEN"></vviinn-vps-button>
 </template>
 
 <style scoped></style>
