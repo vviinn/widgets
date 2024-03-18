@@ -207,12 +207,12 @@ picture::before {
   color: #525252;
 }
 
-:host(.set-mode) picture::after {
-  border-radius: var(--set-mode-border-radius);
-}
-
 :host(.set-mode) .title {
   font-weight: 400;
+}
+
+:host(.set-mode) .img {
+  max-width: 100px;
 }
 
 @keyframes pulse {

@@ -93,8 +93,6 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @slot vviinn-update-icon-top - Icon of update button for Set mode (on Top).
  */
 
-const SET_MODE_IMAGE_WIDTH = 155;
-
 @Component({
   tag: "vviinn-vpr-widget",
   styleUrl: "vviinn-vpr-widget.css",
@@ -557,8 +555,16 @@ export class VviinnVprWidget implements ComponentInterface {
         <Fragment>
           {this.renderExternalCSS()}
           <style>{state.fallbackStyles}</style>
-          <div class="title-container">
-            <h2 part="recommendations-title">{this.blockTitle}</h2>
+          <div class="widget-header">
+            <div class="title-container">
+              <h2 part="recommendations-title">
+                {this.isSetMode ? "Buy a set to get discount" : this.blockTitle}
+              </h2>
+              {this.isSetMode && (
+                <p>Save up to 15% for buying products from the list</p>
+              )}
+            </div>
+
             {this.isSetMode && this.updateButtonLocation !== "onItem" ? (
               <button
                 class="update-button"
@@ -599,7 +605,7 @@ export class VviinnVprWidget implements ComponentInterface {
         deeplink={recommendation.deeplink}
         image={recommendation.image.thumbnail}
         brand={recommendation.brand}
-        imageWidth={this.isSetMode ? SET_MODE_IMAGE_WIDTH : this.imageWidth}
+        imageWidth={this.imageWidth}
         imageRatio={1}
         price={recommendation.price.actual}
         salePrice={recommendation.price.sale}
@@ -632,7 +638,7 @@ export class VviinnVprWidget implements ComponentInterface {
       <vviinn-carousel
         mode={this.mode}
         campaignTypeId={this.campaignType}
-        imageWidth={this.isSetMode ? SET_MODE_IMAGE_WIDTH : this.imageWidth}
+        imageWidth={this.imageWidth}
         showScroll={this.showScroll}
         recommendations={this.recommendations}
         widgetElementId={this.id}
