@@ -61,6 +61,7 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
 }
 
 .action-button {
+  font-family: inherit;
   display: grid;
   border: none;
   cursor: pointer;
