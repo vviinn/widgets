@@ -12,14 +12,18 @@
   flex-direction: column;
 }
 
-.content-wrapper * {
-  box-sizing: border-box;
+.body.set {
+  margin-left: auto;
+  display: flex;
+  /* TODO: */
+  /* grid-template-columns: auto 1fr; */
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 112px;
 }
 
-.content-wrapper {
-  overflow-y: hidden;
-  overflow-x: auto;
-  flex-grow: 1;
+.body.set .content {
+  max-width: fit-content;
 }
 
 .bullets {

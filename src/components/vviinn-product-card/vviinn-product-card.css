@@ -211,8 +211,14 @@ picture::before {
   font-weight: 400;
 }
 
-:host(.set-mode) .img {
-  max-width: 100px;
+:host(.set-mode) img {
+  --min-image-size: 155px;
+  min-width: var(--min-image-size);
+  min-height: var(--min-image-size);
+}
+
+:host(.set-mode.product-card--source) {
+  /* TODO: */
 }
 
 @keyframes pulse {

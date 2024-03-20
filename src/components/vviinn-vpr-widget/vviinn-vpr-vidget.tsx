@@ -556,12 +556,12 @@ export class VviinnVprWidget implements ComponentInterface {
           {this.renderExternalCSS()}
           <style>{state.fallbackStyles}</style>
           <div class="widget-header">
-            <div class="title-container">
+            <div>
               <h2 part="recommendations-title">
                 {this.isSetMode ? "Buy a set to get discount" : this.blockTitle}
               </h2>
               {this.isSetMode && (
-                <p>Save up to 15% for buying products from the list</p>
+                <h3>Save up to 15% for buying products from the list</h3>
               )}
             </div>
 
@@ -574,6 +574,7 @@ export class VviinnVprWidget implements ComponentInterface {
                 <slot name="vviinn-update-icon-top">
                   <UpdateIcon />
                 </slot>
+                <span>Suggest New Set</span>
               </button>
             ) : null}
           </div>

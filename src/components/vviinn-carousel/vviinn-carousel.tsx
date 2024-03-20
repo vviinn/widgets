@@ -14,6 +14,7 @@ import { ChevronIcon } from "../vviinn-icons";
 import { CampaignTypeId } from "../../campaign/Campaign";
 import { CrossSellingClickEvent } from "../../recommendation/events";
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-vidget";
+import { SET_MODE_EXAMPLE_IMAGE } from "../../assets/constants";
 
 const COLUMNS_NUMBER_CSS_VAR = "--vviinn-carousel-columns-internal";
 const CAROUSEL_WIDTH_CSS_VAR = "--vviinn-carousel-content-width";
@@ -22,6 +23,14 @@ const CONTENT_GROUP_CSS_CLASS = "items-group";
 
 type MoveDirection = "left" | "right";
 export type CarouselMode = "grid" | "continuity" | "set";
+
+const setModeSourceExample = {
+  productTitle: "Cryen-2S brown wooden desk cabinet",
+  image: SET_MODE_EXAMPLE_IMAGE,
+  price: 799.96,
+  imageRatio: 1,
+  imageWidth: 350,
+};
 
 /**
  * @part carousel-button
@@ -423,6 +432,8 @@ export class VviinnCarousel {
   }
 
   render() {
+    const { productTitle, image, price, imageRatio, imageWidth } =
+      setModeSourceExample;
     return (
       <Host class={this.getClassMap()}>
         <div class={{ body: true, ...this.getClassMap() }}>
@@ -435,6 +446,18 @@ export class VviinnCarousel {
             >
               <ChevronIcon />
             </button>
+          )}
+          {this.isSetMode && (
+            <vviinn-product-card
+              part="product-part"
+              class="set-mode product-card--source"
+              productTitle={productTitle}
+              image={image}
+              price={price}
+              imageRatio={imageRatio}
+              imageWidth={imageWidth}
+              dimmedBackground={true}
+            />
           )}
 
           <div
