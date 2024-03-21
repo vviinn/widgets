@@ -15,10 +15,7 @@
 .body.set {
   margin-left: auto;
   display: flex;
-  /* TODO: */
-  /* grid-template-columns: auto 1fr; */
   flex-direction: row;
-  justify-content: space-between;
   gap: 112px;
 }
 

@@ -12,7 +12,10 @@ import { chunksOf } from "fp-ts/lib/Array";
 import { Recommendation } from "../../recommendation/recommendation";
 import { ChevronIcon } from "../vviinn-icons";
 import { CampaignTypeId } from "../../campaign/Campaign";
-import { CrossSellingClickEvent } from "../../recommendation/events";
+import {
+  CrossSellingClickEvent,
+  ProductCardEvent,
+} from "../../recommendation/events";
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-vidget";
 import { SET_MODE_EXAMPLE_IMAGE } from "../../assets/constants";
 
@@ -20,6 +23,10 @@ const COLUMNS_NUMBER_CSS_VAR = "--vviinn-carousel-columns-internal";
 const CAROUSEL_WIDTH_CSS_VAR = "--vviinn-carousel-content-width";
 const CAROUSEL_IMAGE_WIDTH_CSS_VAR = "--vviinn-carousel-image-width";
 const CONTENT_GROUP_CSS_CLASS = "items-group";
+const SET_MODE_IMAGE_WIDTH = 250;
+const SET_MODE_INITIAL_DISCOUNT = 5;
+const SET_MODE_MAX_DISCOUNT = 15;
+const SET_MODE_DISCOUNT_STEP = 5;
 
 type MoveDirection = "left" | "right";
 export type CarouselMode = "grid" | "continuity" | "set";
@@ -48,6 +55,9 @@ export class VviinnCarousel {
   @State() activeContentGroup: number = 0;
   @State() isRTL: boolean = false;
   @State() crossSellingRecommendations: Recommendation[] = [];
+
+  @State() setModeDiscount: number = SET_MODE_INITIAL_DISCOUNT;
+  @State() setModeAppliedDiscounts: { [key: string]: number } = {};
 
   @Prop() mode: CarouselMode = "continuity";
   @Prop() imageWidth: number = 140;
@@ -79,6 +89,10 @@ export class VviinnCarousel {
     this.activeContentGroup === this.getContentGroups().length - 1 &&
     this.isGridMode;
   private isFirstGroup = () => this.activeContentGroup === 0 && this.isGridMode;
+
+  private calculateDiscount = (price: number, discount: number) => {
+    return Math.round(price * (1 - discount / 100) * 100) / 100;
+  };
 
   private updateCard = (
     productId: string,
@@ -172,6 +186,24 @@ export class VviinnCarousel {
     );
   }
 
+  @Listen("vviinnAddToBasket")
+  async trackAddToBasket({ detail }: ProductCardEvent) {
+    if (!this.isSetMode) return;
+
+    const { productId } = detail;
+
+    if (this.setModeAppliedDiscounts.hasOwnProperty(productId)) return;
+    this.setModeAppliedDiscounts = {
+      ...this.setModeAppliedDiscounts,
+      [productId]: this.setModeDiscount,
+    };
+
+    const isMaxDiscount = this.setModeDiscount === SET_MODE_MAX_DISCOUNT;
+    if (!isMaxDiscount) {
+      this.setModeDiscount += SET_MODE_DISCOUNT_STEP;
+    }
+  }
+
   private setItemWidth() {
     const widthInDocument = this.getItemWidthFromDocument();
     const itemWidth = isNaN(widthInDocument)
@@ -186,7 +218,7 @@ export class VviinnCarousel {
       content: true,
       [this.moveDirection]: true,
       [this.mode]: true,
-      "show-scrollbar": this.showScroll,
+      "show-scrollbar": this.isSetMode ? false : this.showScroll,
     };
   }
 
@@ -351,6 +383,18 @@ export class VviinnCarousel {
     recommendation: Recommendation,
     rank: number
   ): HTMLVviinnProductCardElement {
+    const appliedDiscount =
+      this.setModeAppliedDiscounts[recommendation.productId];
+
+    const setModeDiscount = this.calculateDiscount(
+      recommendation.price?.actual,
+      appliedDiscount ?? this.setModeDiscount
+    );
+
+    const salePrice = this.isSetMode
+      ? setModeDiscount
+      : recommendation.price.sale;
+
     return (
       <vviinn-product-card
         part="product-part"
@@ -360,10 +404,10 @@ export class VviinnCarousel {
         deeplink={recommendation.deeplink}
         image={recommendation.image.thumbnail}
         brand={recommendation.brand}
-        imageWidth={this.imageWidth}
+        imageWidth={this.isSetMode ? SET_MODE_IMAGE_WIDTH : this.imageWidth}
         imageRatio={1}
         price={recommendation.price.actual}
-        salePrice={recommendation.price.sale}
+        salePrice={salePrice}
         responsive={this.isGridMode}
         dimmedBackground={this.isContinuityMode || this.isSetMode}
         campaignTypeId={this.campaignTypeId}
@@ -376,6 +420,7 @@ export class VviinnCarousel {
         updatingAllCards={this.updatingAllCards}
         defaultAnimationInterval={this.defaultAnimationInterval}
         updateButtonLocation={this.updateButtonLocation}
+        appliedDiscountPercentage={appliedDiscount}
       />
     );
   }

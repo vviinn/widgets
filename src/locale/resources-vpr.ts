@@ -5,7 +5,7 @@ export const resources: Resource = {
     translation: {
       noResultText: "Keine Ergebnisse! Versuche es bitte später erneut.",
       basketButtonText: "In den Warenkorb",
-      //TODO: Add translation for setBasketButtonText
+      //TODO: Add translations
       setBasketButtonText: "Buy as set",
     },
   },

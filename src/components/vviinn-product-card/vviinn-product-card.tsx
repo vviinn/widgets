@@ -40,7 +40,7 @@ import {
 } from "../../campaign/Campaign";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 import { slotChangeListener } from "../customized-slots";
-import { BasketIcon, UpdateIcon } from "../vviinn-icons";
+import { BasketIcon, CheckCircleIcon, UpdateIcon } from "../vviinn-icons";
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-vidget";
 
 /**
@@ -89,6 +89,7 @@ export class VviinnProductCard {
   @Prop() mode?: CarouselMode;
   @Prop() addToBasketShow: boolean;
   @Prop() updateButtonLocation: UpdateButtonLocation;
+  @Prop() appliedDiscountPercentage?: number;
 
   /** @internal */
   @Prop() campaignTypeId: CampaignTypeId;
@@ -322,6 +323,7 @@ export class VviinnProductCard {
                   "basket-button": true,
                   "basket-button-grid": this.isGridMode || this.isSetMode,
                   "basket-button-continuity ": this.isContinuityMode,
+                  "applied-discount": !!this.appliedDiscountPercentage,
                 }}
                 part="basket-button"
                 onClick={() => {
@@ -330,9 +332,17 @@ export class VviinnProductCard {
               >
                 {this.isSetMode ? (
                   <Fragment>
-                    <BasketIcon />
+                    {this.appliedDiscountPercentage ? (
+                      <CheckCircleIcon />
+                    ) : (
+                      <BasketIcon />
+                    )}
                     <slot name="vviinn-basket-button-text">
-                      <span>{i18next.t("setBasketButtonText")}</span>
+                      <span>
+                        {this.appliedDiscountPercentage
+                          ? `${this.appliedDiscountPercentage}% saved`
+                          : i18next.t("setBasketButtonText")}
+                      </span>
                     </slot>
                   </Fragment>
                 ) : (
