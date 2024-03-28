@@ -18,6 +18,7 @@ import i18next from "i18next";
 
 import { version } from "../../../package.json";
 import { imageSearchState } from "../../store/imageSearch.store";
+import { textSearchState } from "../../store/textSearch.store";
 import { state } from "../../store/store";
 import { slotChangeListener } from "../customized-slots";
 import { createTrackingApi } from "../../openApi";
@@ -56,6 +57,7 @@ import { Locale } from "../../locale";
 import { CameraActionIcon, UploadActionIcon } from "../vviinn-icons";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 import { videoStreamSettings } from "../../video/settings";
+import { Recommendation } from "../..";
 
 const filterInt = (value: string) =>
   /^[-+]?(\d+|Infinity)$/.test(value) ? Number(value) : NaN;
@@ -172,6 +174,8 @@ export class VviinnVpsWidget {
   @State() uploadSource: UploadSource;
   @State() showAspectRatioError = false;
 
+  @State() products: Recommendation[] = [];
+
   /** @internal */
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
@@ -245,6 +249,11 @@ export class VviinnVpsWidget {
 
   private isResultSlide() {
     return this.slidePosition === 1;
+  }
+
+  private setStates(key, value = null) {
+    imageSearchState[key] = value ?? this[key];
+    textSearchState[key] = value ?? this[key];
   }
 
   private handleOpenLink(deeplink: string, event: MouseEvent) {
@@ -507,8 +516,7 @@ export class VviinnVpsWidget {
     this.cameraAvailable =
       !!navigator.mediaDevices && !!navigator.mediaDevices.getUserMedia;
 
-    imageSearchState.token = this.token;
-    imageSearchState.campaignId = pipe(
+    const campaignId = pipe(
       this.campaignId,
       O.fromNullable,
       O.chain(O.fromPredicate(notEmptyString)),
@@ -521,7 +529,9 @@ export class VviinnVpsWidget {
       this.excluded = parseExcluded(this.excluded);
     }
 
-    imageSearchState.excluded = this.excluded;
+    this.setStates("token");
+    this.setStates("campaignId", campaignId);
+    this.setStates("excluded");
 
     this.uiSessionId = uuidv4();
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
@@ -826,6 +836,7 @@ export class VviinnVpsWidget {
                   {!this.haveErrors() && (
                     <div class="buttons-group">{this.renderButtons()}</div>
                   )}
+                  {!this.haveErrors() && <vviinn-text-search />}
                 </div>
                 <vviinn-privacy-badge
                   privacyBadgeText={i18next.t("privacyBadgeText")}
