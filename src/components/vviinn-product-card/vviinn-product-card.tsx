@@ -17,7 +17,7 @@ import * as O from "fp-ts/lib/Option";
 import i18next from "i18next";
 
 import { state } from "../../store/store";
-import { imageSearchState } from "../../store/imageSearch.store";
+import { searchState } from "../../store/search.store";
 import { Recommendation } from "../../recommendation/recommendation";
 import {
   ImageProps,
@@ -241,7 +241,7 @@ export class VviinnProductCard {
   }
 
   private getProduct(): Recommendation {
-    return imageSearchState.results.find((r) => r.productId === this.productId);
+    return searchState.results.find((r) => r.productId === this.productId);
   }
 
   private renderImage() {

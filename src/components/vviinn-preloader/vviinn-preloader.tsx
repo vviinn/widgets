@@ -1,5 +1,5 @@
 import { Component, Host, h } from "@stencil/core";
-import { imageSearchState } from "../../store/imageSearch.store";
+import { searchState } from "../../store/search.store";
 
 @Component({
   tag: "vviinn-preloader",
@@ -8,9 +8,7 @@ import { imageSearchState } from "../../store/imageSearch.store";
 })
 export class VviinnPreloader {
   private isActive(): boolean {
-    return (
-      imageSearchState.loading || imageSearchState.objectDetectionInProgress
-    );
+    return searchState.loading || searchState.objectDetectionInProgress;
   }
 
   render() {

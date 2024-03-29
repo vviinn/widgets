@@ -13,7 +13,7 @@ import i18next from "i18next";
 import { slotChangeListener } from "../customized-slots";
 import { BasicEventData } from "../../recommendation/events";
 import { campaignTypeNames } from "../../campaign/Campaign";
-import { imageSearchState } from "../../store/imageSearch.store";
+import { searchState } from "../../store/search.store";
 import * as O from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/function";
 import { sequenceToOption } from "../../utils/option/option";
@@ -77,7 +77,7 @@ export class VviinnModal {
 
   private renderImage(): HTMLImageElement | null {
     return pipe(
-      sequenceToOption(imageSearchState.imageUrl, imageSearchState.image),
+      sequenceToOption(searchState.imageUrl, searchState.image),
       O.map(([url]) => {
         const image = (
           <img width="28" height="28" src={url} class="title-image" />

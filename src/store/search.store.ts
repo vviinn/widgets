@@ -10,6 +10,9 @@ import {
   SearchSessionFilter,
   DetectedObject,
   imageSearchSessionClient,
+  MultiSearchRequestBody,
+  textSearchSessionClient,
+  TextSearchSession,
 } from "../searchSession/searchSession";
 import { foldValueObject, ValueObject } from "../network/ion/ValueObject";
 import { Link, linkRequest, getLink } from "../network/ion/Link";
@@ -39,10 +42,10 @@ const makeAuthorizedRequest = (
     })
   );
 
-type ImageSearchStore = {
+type SearchStore = {
   token?: string;
   campaignId: O.Option<string>;
-  excluded: string;
+  excluded?: string;
   results: Recommendation[];
   filters: SearchSessionFilter[];
   resetCategoryLink?: Link;
@@ -66,7 +69,7 @@ type ImageSearchStore = {
   loading: boolean;
 };
 
-const { state, onChange } = createStore<ImageSearchStore>({
+const { state, onChange } = createStore<SearchStore>({
   campaignId: O.none,
   excluded: "",
   results: [],
@@ -87,6 +90,8 @@ const { state, onChange } = createStore<ImageSearchStore>({
   serverError: false,
   loading: false,
 });
+
+export const searchState = state;
 
 const updateState = async (response: SearchSession) => {
   state.results = response.value;
@@ -206,7 +211,44 @@ export const uploadFile = (
   );
 };
 
-export const imageSearchState = state;
+export const performTextSearch = (query: string) => {
+  state.loading = true;
+
+  return pipe(
+    O.fromNullable(state.token),
+    O.fold(
+      () => TE.left(new Error("Token is missing")),
+      (token) =>
+        TE.tryCatch(
+          () => {
+            const requestBody: MultiSearchRequestBody = {
+              query,
+              campaign: O.getOrElse(() => "")(state.campaignId),
+            };
+            return textSearchSessionClient(requestBody, token);
+          },
+          (reason) => new Error(String(reason))
+        )
+    ),
+    TE.fold(
+      (error) => async () => {
+        console.error("Error:", error);
+        state.serverError = true;
+        state.loading = false;
+      },
+      (result) => async () => {
+        const products = E.fold(
+          () => [],
+          (session) => session
+        )(result) as TextSearchSession;
+
+        state.results = products.data.products;
+        state.serverError = false;
+        state.loading = false;
+      }
+    )
+  )();
+};
 
 onChange("activeIonLink", async (newLink: Link) => {
   const link = newLink ? newLink : state.resetCategoryLink;
@@ -241,8 +283,8 @@ onChange("serverError", () => {
 });
 
 const setSelectedImage = (image: HTMLImageElement) => {
-  imageSearchState.image = O.some(image);
-  imageSearchState.imageUrl = O.some(image.src);
+  searchState.image = O.some(image);
+  searchState.imageUrl = O.some(image.src);
 };
 
 export const processSelectedFile = async (file: File) => {

@@ -24,7 +24,7 @@ import { createBearAuthedHeader } from "./token-helpers";
 import { state } from "../../store/store";
 import { CampaignName, campaignTypeNames } from "../../campaign/Campaign";
 import { getRecommendationsService } from "../../campaign/CampaignService";
-import { imageSearchState } from "../../store/imageSearch.store";
+import { searchState } from "../../store/search.store";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 import { Recommendation } from "../../recommendation/recommendation";
 import { SlotSkeleton } from "../customized-slots";
@@ -505,7 +505,7 @@ export class VviinnVprWidget implements ComponentInterface {
     this.trackResultEvent("load");
 
     this.recommendations = data?.extended ?? data;
-    imageSearchState.results = this.recommendations;
+    searchState.results = this.recommendations;
 
     this.productIds = this.recommendations.map((r) => r.productId);
     this.productImageLoadedSubject.subscribe((id) => {

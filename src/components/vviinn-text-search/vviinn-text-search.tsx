@@ -1,7 +1,6 @@
-import { Component, Host, h, State } from "@stencil/core";
-import "../../store/imageSearch.store";
+import { Component, Host, h, State, Event, EventEmitter } from "@stencil/core";
+import { performTextSearch } from "../../store/search.store";
 import { TextSearchIcon } from "../vviinn-icons";
-import { performTextSearch } from "../../store/textSearch.store";
 
 /**
  * @part button -  button look and feel
@@ -13,13 +12,17 @@ import { performTextSearch } from "../../store/textSearch.store";
 })
 export class VviinnTextSearch {
   @State() searchQuery: string = "";
+  @Event() vviinnTextSearchFinished: EventEmitter;
 
   handleInputChange(event: Event) {
     this.searchQuery = (event.target as HTMLInputElement).value;
   }
 
   private async handleSearch() {
+    if (!this.searchQuery) return;
     await performTextSearch(this.searchQuery);
+    this.vviinnTextSearchFinished.emit();
+    this.searchQuery = "";
   }
 
   render() {
