@@ -147,6 +147,8 @@ export class VviinnVpsWidget {
   @Prop() imageResolutionWidth: number = 250;
   /** Example image source */
   @Prop() exampleImageSource: string = DEFAULT_EXAMPLE_IMAGE;
+  /** Show the text search */
+  @Prop() textSearchShow: boolean = false;
 
   /** @internal */
   @Prop() apiPath: string = "https://api.vviinn.com";
@@ -836,7 +838,9 @@ export class VviinnVpsWidget {
                   {!this.haveErrors() && (
                     <div class="buttons-group">{this.renderButtons()}</div>
                   )}
-                  {!this.haveErrors() && <vviinn-text-search />}
+                  {this.textSearchShow && !this.haveErrors() && (
+                    <vviinn-text-search />
+                  )}
                 </div>
                 <vviinn-privacy-badge
                   privacyBadgeText={i18next.t("privacyBadgeText")}
@@ -877,11 +881,13 @@ export class VviinnVpsWidget {
                 </div>
               )}
 
-              {this.isResultSlide() && searchState.searchType === "text" && (
-                <div class="text-search-wrapper">
-                  <vviinn-text-search />
-                </div>
-              )}
+              {this.textSearchShow &&
+                this.isResultSlide() &&
+                searchState.searchType === "text" && (
+                  <div class="text-search-wrapper">
+                    <vviinn-text-search />
+                  </div>
+                )}
 
               <div id="results-block" class="products-wrapper">
                 <div

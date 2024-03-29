@@ -135,7 +135,9 @@ export async function textSearchSessionClient(
       (error) => Promise.resolve(E.left(error)),
       async (url) => {
         try {
-          const response = await fetch(`${url}multi-search`, {
+          const multiSearchUrl = new URL("multi-search", url);
+
+          const response = await fetch(multiSearchUrl, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
