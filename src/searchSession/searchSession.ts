@@ -30,6 +30,8 @@ export type TextSearchSession = {
   };
 };
 
+export type SearchType = "text" | "image";
+
 export interface SearchSessionFilters {
   readonly [key: string]: Link[];
 }

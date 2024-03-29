@@ -13,6 +13,7 @@ import {
   MultiSearchRequestBody,
   textSearchSessionClient,
   TextSearchSession,
+  SearchType,
 } from "../searchSession/searchSession";
 import { foldValueObject, ValueObject } from "../network/ion/ValueObject";
 import { Link, linkRequest, getLink } from "../network/ion/Link";
@@ -57,6 +58,7 @@ type SearchStore = {
   detectedObject?: ValueObject<DetectedObject>;
   objectDetectionInProgress: boolean;
   imageWidth: number;
+  searchType?: SearchType;
 
   image: O.Option<HTMLImageElement>;
   imageUrl: O.Option<string>;
@@ -176,6 +178,7 @@ export const makeRectangularSearchRequest = async () => {
 export const uploadFile = (
   file: File
 ): TE.TaskEither<BasicError<string | Response>, SearchSession> => {
+  state.searchType = "image";
   state.loading = true;
 
   const fileForm = imageFormFromFile(file);
@@ -212,6 +215,7 @@ export const uploadFile = (
 };
 
 export const performTextSearch = (query: string) => {
+  state.searchType = "text";
   state.loading = true;
 
   return pipe(

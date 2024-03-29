@@ -1,5 +1,5 @@
 import { Component, Host, h, State, Event, EventEmitter } from "@stencil/core";
-import { performTextSearch } from "../../store/search.store";
+import { performTextSearch, searchState } from "../../store/search.store";
 import { TextSearchIcon } from "../vviinn-icons";
 
 /**
@@ -39,8 +39,13 @@ export class VviinnTextSearch {
           type="submit"
           class="text-search-button"
           onClick={() => this.handleSearch()}
+          disabled={searchState.loading}
         >
-          <TextSearchIcon />
+          {searchState.loading && searchState.searchType === "text" ? (
+            <vviinn-preloader />
+          ) : (
+            <TextSearchIcon />
+          )}
         </button>
       </Host>
     );

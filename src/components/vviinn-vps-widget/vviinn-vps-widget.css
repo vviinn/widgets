@@ -109,9 +109,19 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   box-sizing: border-box;
 }
 
+.results-page.one-column {
+  grid-template-columns: auto;
+  grid-template-rows: min-content auto;
+}
+
 .results-page > * {
   padding: 24px;
   box-sizing: border-box;
+}
+
+.results-page .text-search-wrapper {
+  width: 100%;
+  padding: 24px;
 }
 
 .products {
@@ -223,6 +233,11 @@ search-filters::part(filter active) {
   padding-bottom: 16px;
   position: absolute;
   width: 60%;
+}
+
+vviinn-preloader {
+  --preloader-size: 24px;
+  display: flex;
 }
 
 @media (max-width: 1080px) {

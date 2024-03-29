@@ -25,7 +25,17 @@
 .text-search-button {
   border: none;
   box-sizing: border-box;
-  padding: 12px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background: #f4f4f4;
   cursor: pointer;
+}
+
+vviinn-preloader {
+  --preloader-size: 16px;
+  display: flex;
+  color: #525252;
 }

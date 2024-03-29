@@ -635,7 +635,9 @@ export class VviinnVpsWidget {
             this.uploadSource = "startCamera";
           }}
         >
-          {searchState.loading && this.uploadSource === "startCamera" ? (
+          {searchState.loading &&
+          searchState.searchType === "image" &&
+          this.uploadSource === "startCamera" ? (
             <vviinn-preloader />
           ) : (
             <span class="action-button-content">
@@ -669,7 +671,11 @@ export class VviinnVpsWidget {
         startUpload={
           this.buttonPressed && this.showingInButton && this.mode === "upload"
         }
-        loading={searchState.loading && this.uploadSource === "uploadPhoto"}
+        loading={
+          searchState.loading &&
+          searchState.searchType === "image" &&
+          this.uploadSource === "uploadPhoto"
+        }
       >
         <span slot="upload-button-text" class="action-button-content">
           <slot name="vviinn-image-upload-icon">
@@ -735,6 +741,7 @@ export class VviinnVpsWidget {
     searchState.rectangleSearchForm = undefined;
     searchState.loading = false;
     searchState.serverError = false;
+    searchState.searchType = undefined;
     this.wrongImageFormat = false;
     this.resetScroll("results-block");
     this.stopStreamTracks();
@@ -837,36 +844,44 @@ export class VviinnVpsWidget {
                 />
               </div>
             </vviinn-slide>
+
             <vviinn-slide
               class={{
                 "results-page": true,
+                "one-column": searchState.searchType === "text",
                 active: this.isResultSlide(),
               }}
             >
-              <div class="image-wrapper">
-                {this.isResultSlide() && (
+              {this.isResultSlide() && searchState.searchType === "image" && (
+                <div class="image-wrapper">
                   <vviinn-image-view
                     basicEventData={this.getBasicEventData()}
                     setShowAspectRatioError={this.setShowAspectRatioError}
                     showAspectRatioError={this.showAspectRatioError}
                   />
-                )}
-                <div
-                  class={{
-                    "filters-wrapper": true,
-                    hidden: this.showAspectRatioError,
-                  }}
-                >
-                  <div class="filters">
-                    {searchState.filters.map((filter) => (
-                      <search-filters
-                        filter={filter}
-                        basicEventData={this.getBasicEventData()}
-                      />
-                    ))}
+                  <div
+                    class={{
+                      "filters-wrapper": true,
+                      hidden: this.showAspectRatioError,
+                    }}
+                  >
+                    <div class="filters">
+                      {searchState.filters.map((filter) => (
+                        <search-filters
+                          filter={filter}
+                          basicEventData={this.getBasicEventData()}
+                        />
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
+
+              {this.isResultSlide() && searchState.searchType === "text" && (
+                <div class="text-search-wrapper">
+                  <vviinn-text-search />
+                </div>
+              )}
 
               <div id="results-block" class="products-wrapper">
                 <div
