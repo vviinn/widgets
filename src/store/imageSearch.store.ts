@@ -9,7 +9,7 @@ import {
   SearchSession,
   SearchSessionFilter,
   DetectedObject,
-  searchSessionClient,
+  imageSearchSessionClient,
 } from "../searchSession/searchSession";
 import { foldValueObject, ValueObject } from "../network/ion/ValueObject";
 import { Link, linkRequest, getLink } from "../network/ion/Link";
@@ -190,7 +190,7 @@ export const uploadFile = (
     }),
     TE.fromEither,
     TE.chain((request) =>
-      searchSessionClient(request, state.campaignId, state.excluded)
+      imageSearchSessionClient(request, state.campaignId, state.excluded)
     ),
     TE.map((sessionResponse) => {
       updateState(sessionResponse);

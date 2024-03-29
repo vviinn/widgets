@@ -5,11 +5,10 @@ import * as O from "fp-ts/Option";
 import { pipe } from "fp-ts/function";
 
 import {
-  DEFAULT_RESULTS_COUNT,
   MultiSearchRequestBody,
   TextSearchSession,
-  callMultiSearchEndpoint,
-} from "../searchSession/textSearchSession";
+  textSearchSessionClient,
+} from "../searchSession/searchSession";
 import { Recommendation } from "../components";
 
 type TextSearchStore = {
@@ -22,16 +21,12 @@ type TextSearchStore = {
   loading: boolean;
 };
 
-const { state, onChange } = createStore<TextSearchStore>({
+const { state } = createStore<TextSearchStore>({
   campaignId: O.none,
   excluded: "",
   results: [],
   serverError: false,
   loading: false,
-});
-
-onChange("results", (results) => {
-  console.log("New results:", results);
 });
 
 export const textSearchState = state;
@@ -49,9 +44,8 @@ export const performTextSearch = (query: string) => {
             const requestBody: MultiSearchRequestBody = {
               query,
               campaign: O.getOrElse(() => "")(state.campaignId),
-              resultsCount: DEFAULT_RESULTS_COUNT,
             };
-            return callMultiSearchEndpoint(requestBody, token);
+            return textSearchSessionClient(requestBody, token);
           },
           (reason) => new Error(String(reason))
         )
