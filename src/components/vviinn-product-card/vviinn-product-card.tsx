@@ -313,7 +313,7 @@ export class VviinnProductCard {
           </Fragment>
         )}
 
-        {this.addToBasketShow && (
+        {(this.addToBasketShow || this.isSetMode) && (
           <div class="basket-button-container">
             {this.isTransitioning ? (
               <vviinn-skeleton height={40}></vviinn-skeleton>
@@ -354,7 +354,7 @@ export class VviinnProductCard {
             )}
           </div>
         )}
-        {this.isSetMode ? (
+        {this.isSetMode && !this.appliedDiscountPercentage && (
           <button
             class={{
               "update-button": true,
@@ -372,7 +372,7 @@ export class VviinnProductCard {
               <UpdateIcon />
             </slot>
           </button>
-        ) : null}
+        )}
       </Host>
     );
   }
