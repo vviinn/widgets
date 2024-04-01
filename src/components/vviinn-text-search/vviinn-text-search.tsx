@@ -10,6 +10,7 @@ import {
 import { performTextSearch, searchState } from "../../store/search.store";
 import { TextSearchIcon } from "../vviinn-icons";
 import { slotChangeListener } from "../customized-slots";
+import i18next from "i18next";
 
 /**
  * @part text-search - Text search block with input and button.
@@ -48,7 +49,7 @@ export class VviinnTextSearch {
         <input
           class="text-search-input"
           type="text"
-          placeholder="Search by text"
+          placeholder={i18next.t("textSearchPlaceholder")}
           value={this.searchQuery}
           onInput={(event) => this.handleInputChange(event)}
         />

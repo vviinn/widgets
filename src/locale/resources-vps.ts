@@ -12,6 +12,7 @@ export const resources: Resource = {
         "Durch das Hochladen eines Bildes willigst Du in die Verarbeitung durch unseren Partner Vviinn ein. Das Bild wird nach einer Stunde Inaktivität gelöscht.",
       teaserText: "Finde Produkte auf \n einem Foto",
       imageSearchModalTitle: "Bildsuche",
+      textSearchPlaceholder: "Suche nach Text",
       emptyResultsBlock: {
         title: "Leider nichts gefunden",
         button: "Neues Bild hochladen",
@@ -41,6 +42,7 @@ export const resources: Resource = {
         "By uploading a picture you agree to the processing by our partner Vviinn. The image will be deleted after one hour of inactivity.",
       teaserText: "Find Product by Photo",
       imageSearchModalTitle: "Visual Search",
+      textSearchPlaceholder: "Search by text",
       emptyResultsBlock: {
         title: "Sorry, nothing found",
         button: "Upload another image",
