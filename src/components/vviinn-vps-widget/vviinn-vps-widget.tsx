@@ -102,6 +102,7 @@ type UploadSource = "uploadPhoto" | "startCamera";
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
  * @part price-prefix - Block rendered before each price element (for ex. "from").
  * @part title - Title inside Product Card.
+ * @part text-search - Text search block with input and button.
 
  * @slot vviinn-onboarding-title - Title of onboarding section.
  * @slot onboarding-card-1-icon - Icon (or other graphics) on the first onboarding slide.
@@ -119,6 +120,7 @@ type UploadSource = "uploadPhoto" | "startCamera";
  * @slot vviinn-camera-icon - Icon of Camera Button.
  * @slot vviinn-privacy-badge-text - Text content of privacy notification block.
  * @slot vviinn-image-search-modal-title - Image search modal title.
+ * @slot vviinn-text-search-icon - Icon of text search block.
  *
  */
 @Component({
@@ -774,7 +776,7 @@ export class VviinnVpsWidget {
 
   render() {
     return (
-      <Host>
+      <Host exportparts="text-search">
         {!this.showingInButton && <SlotSkeleton />}
 
         <vviinn-overlayed-modal

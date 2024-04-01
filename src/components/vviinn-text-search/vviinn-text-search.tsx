@@ -1,9 +1,19 @@
-import { Component, Host, h, State, Event, EventEmitter } from "@stencil/core";
+import {
+  Component,
+  Host,
+  h,
+  State,
+  Event,
+  EventEmitter,
+  Element,
+} from "@stencil/core";
 import { performTextSearch, searchState } from "../../store/search.store";
 import { TextSearchIcon } from "../vviinn-icons";
+import { slotChangeListener } from "../customized-slots";
 
 /**
- * @part button -  button look and feel
+ * @part text-search - Text search block with input and button.
+ * @slot vviinn-text-search-icon - Icon of text search block.
  */
 @Component({
   tag: "vviinn-text-search",
@@ -11,8 +21,15 @@ import { TextSearchIcon } from "../vviinn-icons";
   shadow: true,
 })
 export class VviinnTextSearch {
+  @Element() el: HTMLElement;
+
   @State() searchQuery: string = "";
+
   @Event() vviinnTextSearchFinished: EventEmitter;
+
+  componentWillLoad() {
+    slotChangeListener(this, this.el);
+  }
 
   handleInputChange(event: Event) {
     this.searchQuery = (event.target as HTMLInputElement).value;
@@ -27,7 +44,7 @@ export class VviinnTextSearch {
 
   render() {
     return (
-      <Host exportparts="button">
+      <Host part="text-search">
         <input
           class="text-search-input"
           type="text"
@@ -44,7 +61,9 @@ export class VviinnTextSearch {
           {searchState.loading && searchState.searchType === "text" ? (
             <vviinn-preloader />
           ) : (
-            <TextSearchIcon />
+            <slot name="vviinn-text-search-icon">
+              <TextSearchIcon />
+            </slot>
           )}
         </button>
       </Host>
