@@ -176,8 +176,8 @@ export class VviinnVpsWidget {
   @State() cameraButtonClicked: boolean = false;
   @State() uploadSource: UploadSource;
   @State() showAspectRatioError = false;
-
   @State() products: Recommendation[] = [];
+  @State() initialSearchQuery: string = "";
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -502,7 +502,8 @@ export class VviinnVpsWidget {
   }
 
   @Listen("vviinnTextSearchFinished")
-  async trackTextSearchFinished() {
+  async trackTextSearchFinished({ detail }: CustomEvent<string>) {
+    this.initialSearchQuery = detail;
     this.slidePosition = 1;
   }
 
@@ -841,7 +842,7 @@ export class VviinnVpsWidget {
                     <div class="buttons-group">{this.renderButtons()}</div>
                   )}
                   {this.textSearchShow && !this.haveErrors() && (
-                    <vviinn-text-search />
+                    <vviinn-text-search clearSearchQuery={true} />
                   )}
                 </div>
                 <vviinn-privacy-badge
@@ -887,7 +888,9 @@ export class VviinnVpsWidget {
                 this.isResultSlide() &&
                 searchState.searchType === "text" && (
                   <div class="text-search-wrapper">
-                    <vviinn-text-search />
+                    <vviinn-text-search
+                      initialSearchQuery={this.initialSearchQuery}
+                    />
                   </div>
                 )}
 

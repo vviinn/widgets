@@ -1,6 +1,7 @@
 import {
   Component,
   Host,
+  Prop,
   h,
   State,
   Event,
@@ -24,7 +25,10 @@ import i18next from "i18next";
 export class VviinnTextSearch {
   @Element() el: HTMLElement;
 
-  @State() searchQuery: string = "";
+  @Prop() clearSearchQuery: boolean = false;
+  @Prop() initialSearchQuery: string = "";
+
+  @State() searchQuery: string = this.initialSearchQuery;
 
   @Event() vviinnTextSearchFinished: EventEmitter;
 
@@ -36,11 +40,21 @@ export class VviinnTextSearch {
     this.searchQuery = (event.target as HTMLInputElement).value;
   }
 
+  private handleKeyPress(event: KeyboardEvent) {
+    if (event.key === "Enter") {
+      this.handleSearch();
+    }
+  }
+
   private async handleSearch() {
     if (!this.searchQuery) return;
+
     await performTextSearch(this.searchQuery);
-    this.vviinnTextSearchFinished.emit();
-    this.searchQuery = "";
+    this.vviinnTextSearchFinished.emit(this.searchQuery);
+
+    if (this.clearSearchQuery) {
+      this.searchQuery = "";
+    }
   }
 
   render() {
@@ -52,9 +66,9 @@ export class VviinnTextSearch {
           placeholder={i18next.t("textSearchPlaceholder")}
           value={this.searchQuery}
           onInput={(event) => this.handleInputChange(event)}
+          onKeyUp={(event) => this.handleKeyPress(event as KeyboardEvent)}
         />
         <button
-          type="submit"
           class="text-search-button"
           onClick={() => this.handleSearch()}
           disabled={searchState.loading}
