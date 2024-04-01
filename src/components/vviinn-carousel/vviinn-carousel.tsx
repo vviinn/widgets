@@ -17,7 +17,6 @@ import {
   ProductCardEvent,
 } from "../../recommendation/events";
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-vidget";
-import { SET_MODE_EXAMPLE_IMAGE } from "../../assets/constants";
 
 const COLUMNS_NUMBER_CSS_VAR = "--vviinn-carousel-columns-internal";
 const CAROUSEL_WIDTH_CSS_VAR = "--vviinn-carousel-content-width";
@@ -30,14 +29,6 @@ const SET_MODE_DISCOUNT_STEP = 5;
 
 type MoveDirection = "left" | "right";
 export type CarouselMode = "grid" | "continuity" | "set";
-
-const setModeSourceExample = {
-  productTitle: "Cryen-2S brown wooden desk cabinet",
-  image: SET_MODE_EXAMPLE_IMAGE,
-  price: 799.96,
-  imageRatio: 1,
-  imageWidth: 350,
-};
 
 /**
  * @part carousel-button
@@ -80,6 +71,7 @@ export class VviinnCarousel {
   private isGridMode: boolean;
   private isContinuityMode: boolean;
   private defaultAnimationInterval: number = 2000;
+  private sourceProduct?: Recommendation;
 
   private mutationObserver = new MutationObserver(() =>
     this.cloneSlottedContent()
@@ -139,6 +131,10 @@ export class VviinnCarousel {
 
     const columnsNumber = this.getColumnsNumber();
 
+    if (this.isSetMode) {
+      this.sourceProduct = this.recommendations[0];
+      this.recommendations = this.recommendations.slice(1);
+    }
     if (this.isSetMode && this.recommendations.length >= columnsNumber) {
       this.crossSellingRecommendations = this.recommendations.slice(
         0,
@@ -477,8 +473,6 @@ export class VviinnCarousel {
   }
 
   render() {
-    const { productTitle, image, price, imageRatio, imageWidth } =
-      setModeSourceExample;
     return (
       <Host class={this.getClassMap()}>
         <div class={{ body: true, ...this.getClassMap() }}>
@@ -496,11 +490,11 @@ export class VviinnCarousel {
             <vviinn-product-card
               part="product-part"
               class="set-mode product-card--source"
-              productTitle={productTitle}
-              image={image}
-              price={price}
-              imageRatio={imageRatio}
-              imageWidth={imageWidth}
+              productTitle={this.sourceProduct.title}
+              image={this.sourceProduct.image.thumbnail}
+              price={this.sourceProduct.price.actual}
+              imageRatio={1}
+              imageWidth={300}
               dimmedBackground={true}
             />
           )}
