@@ -56,7 +56,7 @@ export class VviinnCarousel {
   @Prop() campaignTypeId: CampaignTypeId;
   @Prop() widgetElementId?: string;
   @Prop() gridArrowsDynamic: boolean;
-  @Prop() recommendations: Recommendation[] = [];
+  @Prop({ mutable: true }) recommendations: Recommendation[] = [];
   @Prop() widgetVersion: string;
   @Prop() addToBasketShow: boolean;
   @Prop() updatingAllCards: boolean;
@@ -417,6 +417,7 @@ export class VviinnCarousel {
         defaultAnimationInterval={this.defaultAnimationInterval}
         updateButtonLocation={this.updateButtonLocation}
         appliedDiscountPercentage={appliedDiscount}
+        currentDiscountPercentage={this.setModeDiscount}
       />
     );
   }

@@ -90,6 +90,7 @@ export class VviinnProductCard {
   @Prop() addToBasketShow: boolean;
   @Prop() updateButtonLocation: UpdateButtonLocation;
   @Prop() appliedDiscountPercentage?: number;
+  @Prop() currentDiscountPercentage?: number;
 
   /** @internal */
   @Prop() campaignTypeId: CampaignTypeId;
@@ -327,7 +328,10 @@ export class VviinnProductCard {
                 }}
                 part="basket-button"
                 onClick={() => {
-                  this.vviinnAddToBasket.emit(this.productData);
+                  this.vviinnAddToBasket.emit({
+                    ...this.productData,
+                    discount: this.currentDiscountPercentage,
+                  });
                 }}
               >
                 {this.isSetMode ? (

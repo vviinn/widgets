@@ -375,8 +375,8 @@ export class VviinnVprWidget implements ComponentInterface {
   async trackAddToBasket({ detail }: ProductCardEvent) {
     const { productRank, productId, campaignTypeId, widgetType, ...rest } =
       detail;
-
     let addToBasketEvent: WidgetEvent;
+
     const eventBody = {
       session_id: this.uiSessionId,
       rank: productRank,
