@@ -187,8 +187,8 @@ export class VviinnCarousel {
     if (!this.isSetMode) return;
 
     const { productId } = detail;
-
     if (this.setModeAppliedDiscounts.hasOwnProperty(productId)) return;
+
     this.setModeAppliedDiscounts = {
       ...this.setModeAppliedDiscounts,
       [productId]: this.setModeDiscount,
