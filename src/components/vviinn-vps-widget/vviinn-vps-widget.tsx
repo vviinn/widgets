@@ -254,6 +254,12 @@ export class VviinnVpsWidget {
     return this.slidePosition === 1;
   }
 
+  private findProductById(
+    id: Recommendation["productId"]
+  ): Recommendation | undefined {
+    return searchState.results.find((r) => r.productId === id);
+  }
+
   private handleOpenLink(deeplink: string, event: MouseEvent) {
     if (this.productDetailNewTab || event.ctrlKey || event.metaKey) {
       let newTab = window.open();
@@ -425,7 +431,7 @@ export class VviinnVpsWidget {
     const { productId, clickEvent } = detail;
     const productClickEvent = this.getProductTrackEvent(detail, "click");
 
-    const product = searchState.results.find((r) => r.productId === productId);
+    const product = this.findProductById(productId);
     if (!product || !product.deeplink) return;
 
     if (!this.trackingDeactivated) {
@@ -445,7 +451,7 @@ export class VviinnVpsWidget {
     const { productId } = detail;
     const productClickEvent = this.getProductTrackEvent(detail, "click");
 
-    const product = searchState.results.find((r) => r.productId === productId);
+    const product = this.findProductById(productId);
     if (!product || !product.deeplink) return;
 
     if (!this.trackingDeactivated) {

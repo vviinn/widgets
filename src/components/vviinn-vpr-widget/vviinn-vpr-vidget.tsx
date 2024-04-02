@@ -225,6 +225,12 @@ export class VviinnVprWidget implements ComponentInterface {
     }
   }
 
+  private findProductById(
+    id: Recommendation["productId"]
+  ): Recommendation | undefined {
+    return this.recommendations.find((r) => r.productId === id);
+  }
+
   trackingApi: DefaultApi;
   uiSessionId: string;
 
@@ -332,7 +338,7 @@ export class VviinnVprWidget implements ComponentInterface {
   async trackProductClick({ detail }: ProductCardEvent) {
     const { productId, clickEvent } = detail;
 
-    const product = this.recommendations.find((r) => r.productId === productId);
+    const product = this.findProductById(productId);
     if (!product || !product.deeplink) return;
 
     const productClickEvent = this.getProductTrackEvent(detail, "click");
@@ -352,7 +358,8 @@ export class VviinnVprWidget implements ComponentInterface {
   @Listen("vviinnAuxClick")
   async trackAuxClick({ detail }: ProductCardEvent) {
     const { productId } = detail;
-    const product = this.recommendations.find((r) => r.productId === productId);
+    const product = this.findProductById(productId);
+
     if (!product || !product.deeplink) return;
 
     const productClickEvent = this.getProductTrackEvent(detail, "click");
