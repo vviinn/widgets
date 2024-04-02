@@ -1,37 +1,55 @@
 :host {
-  display: block;
+  position: relative;
   width: 100%;
-  display: flex;
-  height: 48px;
   margin-top: 12px;
-  border-radius: 8px;
-  border: 1px solid #e0e0e0;
-  background: #fff;
-  box-sizing: border-box;
-  overflow: hidden;
 }
 
 .text-search-input {
+  width: 100%;
+  height: 48px;
   padding: 0 16px;
   font-size: 16px;
-  font-style: normal;
-  font-weight: 500;
-  width: 100%;
-  border: none;
   box-sizing: border-box;
+  font-style: normal;
+  font-weight: 400;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  transition: border-color 0.2s;
   outline: none;
+  overflow: hidden;
+}
+
+.text-search-input::placeholder {
+  color: #a8a8a8;
+}
+
+.text-search-input:focus,
+.text-search-input:active {
+  border-color: #8d8d8d;
 }
 
 .text-search-button {
+  position: absolute;
+  right: 1px;
+  top: 1px;
   border: none;
-  box-sizing: border-box;
-  width: 48px;
-  height: 48px;
+  border-radius: 0 7px 7px 0;
+  width: 46px;
+  height: 46px;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #f4f4f4;
+  background-color: #f4f4f4;
+  transition: background-color 0.2s;
   cursor: pointer;
+}
+
+.text-search-button:not(:disabled):hover {
+  background-color: #e0e0e0;
+}
+
+.text-search-button:disabled {
+  cursor: unset;
 }
 
 vviinn-preloader {
