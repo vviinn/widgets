@@ -246,7 +246,7 @@ export const performTextSearch = (query: string) => {
           (session) => session
         )(result) as TextSearchSession;
 
-        state.results = products.data.products;
+        state.results = products.data?.products ?? [];
         state.serverError = false;
         state.loading = false;
       }
