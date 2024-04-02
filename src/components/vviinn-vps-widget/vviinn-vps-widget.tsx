@@ -102,7 +102,7 @@ type UploadSource = "uploadPhoto" | "startCamera";
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
  * @part price-prefix - Block rendered before each price element (for ex. "from").
  * @part title - Title inside Product Card.
- * @part text-search - Text search block with input and button.
+ * @part text-search-input - Text search input.
 
  * @slot vviinn-onboarding-title - Title of onboarding section.
  * @slot onboarding-card-1-icon - Icon (or other graphics) on the first onboarding slide.
@@ -783,7 +783,7 @@ export class VviinnVpsWidget {
 
   render() {
     return (
-      <Host exportparts="text-search">
+      <Host exportparts="text-search-input">
         {!this.showingInButton && <SlotSkeleton />}
 
         <vviinn-overlayed-modal

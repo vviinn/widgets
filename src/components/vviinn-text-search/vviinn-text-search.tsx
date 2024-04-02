@@ -14,7 +14,7 @@ import { slotChangeListener } from "../customized-slots";
 import i18next from "i18next";
 
 /**
- * @part text-search - Text search block with input and button.
+ * @part text-search-input - Text search input.
  * @slot vviinn-text-search-icon - Icon of text search block.
  */
 @Component({
@@ -59,9 +59,10 @@ export class VviinnTextSearch {
 
   render() {
     return (
-      <Host part="text-search">
+      <Host exportparts="text-search-input">
         <input
           class="text-search-input"
+          part="text-search-input"
           type="text"
           placeholder={i18next.t("textSearchPlaceholder")}
           value={this.searchQuery}
