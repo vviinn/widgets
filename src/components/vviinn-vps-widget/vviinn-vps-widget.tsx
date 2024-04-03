@@ -861,7 +861,6 @@ export class VviinnVpsWidget {
             <vviinn-slide
               class={{
                 "results-page": true,
-                "one-column": searchState.searchType === "text",
                 active: this.isResultSlide(),
               }}
             >
