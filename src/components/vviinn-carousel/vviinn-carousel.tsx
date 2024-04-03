@@ -17,15 +17,16 @@ import {
   ProductCardEvent,
 } from "../../recommendation/events";
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-vidget";
-
-const COLUMNS_NUMBER_CSS_VAR = "--vviinn-carousel-columns-internal";
-const CAROUSEL_WIDTH_CSS_VAR = "--vviinn-carousel-content-width";
-const CAROUSEL_IMAGE_WIDTH_CSS_VAR = "--vviinn-carousel-image-width";
-const CONTENT_GROUP_CSS_CLASS = "items-group";
-const SET_MODE_IMAGE_WIDTH = 250;
-const SET_MODE_INITIAL_DISCOUNT = 5;
-const SET_MODE_MAX_DISCOUNT = 15;
-const SET_MODE_DISCOUNT_STEP = 5;
+import {
+  CAROUSEL_IMAGE_WIDTH_CSS_VAR,
+  CAROUSEL_WIDTH_CSS_VAR,
+  COLUMNS_NUMBER_CSS_VAR,
+  CONTENT_GROUP_CSS_CLASS,
+  SET_MODE_DISCOUNT_STEP,
+  SET_MODE_INITIAL_DISCOUNT,
+  SET_MODE_MAX_DISCOUNT,
+} from "./constants";
+import { calculateDiscount } from "../../utils/number";
 
 type MoveDirection = "left" | "right";
 export type CarouselMode = "grid" | "continuity" | "set";
@@ -48,7 +49,9 @@ export class VviinnCarousel {
   @State() crossSellingRecommendations: Recommendation[] = [];
 
   @State() setModeDiscount: number = SET_MODE_INITIAL_DISCOUNT;
-  @State() setModeAppliedDiscounts: { [key: string]: number } = {};
+  @State() setModeAppliedDiscounts: {
+    [key: Recommendation["productId"]]: number;
+  } = {};
 
   @Prop() mode: CarouselMode = "continuity";
   @Prop() imageWidth: number = 140;
@@ -81,10 +84,6 @@ export class VviinnCarousel {
     this.activeContentGroup === this.getContentGroups().length - 1 &&
     this.isGridMode;
   private isFirstGroup = () => this.activeContentGroup === 0 && this.isGridMode;
-
-  private calculateDiscount = (price: number, discount: number) => {
-    return Math.round(price * (1 - discount / 100) * 100) / 100;
-  };
 
   private updateCard = (
     productId: string,
@@ -382,7 +381,7 @@ export class VviinnCarousel {
     const appliedDiscount =
       this.setModeAppliedDiscounts[recommendation.productId];
 
-    const setModeDiscount = this.calculateDiscount(
+    const setModeDiscount = calculateDiscount(
       recommendation.price?.actual,
       appliedDiscount ?? this.setModeDiscount
     );
@@ -400,7 +399,7 @@ export class VviinnCarousel {
         deeplink={recommendation.deeplink}
         image={recommendation.image.thumbnail}
         brand={recommendation.brand}
-        imageWidth={this.isSetMode ? SET_MODE_IMAGE_WIDTH : this.imageWidth}
+        imageWidth={this.imageWidth}
         imageRatio={1}
         price={recommendation.price.actual}
         salePrice={salePrice}

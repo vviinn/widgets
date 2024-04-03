@@ -6,7 +6,6 @@
   display: grid;
   grid-gap: 1rem;
   width: 100%;
-  --set-mode-border-radius: 8px;
 }
 
 :host(:not(.loaded)) {
@@ -41,7 +40,6 @@
   justify-content: center;
   color: #525252;
   gap: 8px;
-  border-radius: var(--set-mode-border-radius);
   padding: 8px 10px;
   background: rgb(244, 244, 244);
   border: none;

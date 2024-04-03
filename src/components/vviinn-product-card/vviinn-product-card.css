@@ -5,8 +5,6 @@
   position: relative;
   gap: 8px;
   height: 100%;
-
-  --set-mode-border-radius: 8px;
 }
 
 .price-container {
@@ -192,10 +190,6 @@ picture::before {
   line-height: 20px;
 }
 
-:host(.set-mode) .update-button {
-  border-radius: var(--set-mode-border-radius);
-}
-
 :host(.set-mode.animated) .update-button {
   display: none;
 }
@@ -205,7 +199,6 @@ picture::before {
   gap: 8px;
   align-items: center;
   justify-content: center;
-  border-radius: var(--set-mode-border-radius);
   border: none;
   background-color: #f4f4f4;
   font-weight: 500;
