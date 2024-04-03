@@ -53,6 +53,10 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   gap: 12px;
 }
 
+#start-page_block vviinn-text-search {
+  margin-top: 12px;
+}
+
 .buttons-group {
   display: flex;
   flex-direction: column;
