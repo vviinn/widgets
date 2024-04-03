@@ -196,6 +196,10 @@ picture::before {
   border-radius: var(--set-mode-border-radius);
 }
 
+:host(.set-mode.animated) .update-button {
+  display: none;
+}
+
 :host(.set-mode) .basket-button {
   display: flex;
   gap: 8px;

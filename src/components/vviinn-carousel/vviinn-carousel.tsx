@@ -105,13 +105,13 @@ export class VviinnCarousel {
 
       let element = this.el.querySelector(`[data-id="${productId}"]`);
       const button = element.shadowRoot.querySelector(".update-button");
-      button.classList.add("hidden");
+      button?.classList.add("hidden");
 
       this.crossSellingRecommendations = [...newCrossSellingRecommendations];
 
       const animationTimer = setTimeout(() => {
         if (recommendationIndex + step * 2 <= this.recommendations.length - 1) {
-          button.classList.remove("hidden");
+          button?.classList.remove("hidden");
         }
         clearTimeout(animationTimer);
       }, animationInterval);
