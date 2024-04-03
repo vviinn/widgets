@@ -315,9 +315,9 @@ export class VviinnProductCard {
         )}
 
         {(this.addToBasketShow || this.isSetMode) && (
-          <div class="basket-button-container">
+          <Fragment>
             {this.isTransitioning ? (
-              <vviinn-skeleton height={40}></vviinn-skeleton>
+              <vviinn-skeleton height={44}></vviinn-skeleton>
             ) : (
               <button
                 class={{
@@ -356,7 +356,7 @@ export class VviinnProductCard {
                 )}
               </button>
             )}
-          </div>
+          </Fragment>
         )}
         {this.isSetMode && !this.appliedDiscountPercentage && (
           <button
