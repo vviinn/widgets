@@ -1,43 +1,20 @@
-import { ArrowIcon } from "./icons/ArrowIcon";
-import { BasketIcon } from "./icons/BasketIcon";
-import { CameraActionIcon } from "./icons/CameraActionIcon";
-import { CameraIcon } from "./icons/CameraIcon";
-import { CheckCircleIcon } from "./icons/CheckCircleIcon";
-import { CheckIcon } from "./icons/CheckIcon";
-import { ChevronIcon } from "./icons/ChevronIcon";
-import { CloseIcon } from "./icons/CloseIcon";
-import { CrossIcon } from "./icons/CrossIcon";
-import { GalleryActionIcon } from "./icons/GalleryActionIcon";
-import { LoaderIcon } from "./icons/LoaderIcon";
-import { MinusIcon } from "./icons/MinusIcon";
-import { PlusIcon } from "./icons/PlusIcon";
-import { RoundCameraIcon } from "./icons/RoundCameraIcon";
-import { SecondaryActionIcon } from "./icons/SecondaryActionIcon";
-import { TextSearchIcon } from "./icons/TextSearchIcon";
-import { UpdateIcon } from "./icons/UpdateIcon";
-import { UploadActionIcon } from "./icons/UploadActionIcon";
-import { VisualSearchIcon } from "./icons/VisualSearchIcon";
-import { WarningIcon } from "./icons/WarningIcon";
-
-export {
-  ArrowIcon,
-  BasketIcon,
-  CameraActionIcon,
-  CameraIcon,
-  CheckCircleIcon,
-  CheckIcon,
-  ChevronIcon,
-  CloseIcon,
-  CrossIcon,
-  GalleryActionIcon,
-  LoaderIcon,
-  MinusIcon,
-  PlusIcon,
-  RoundCameraIcon,
-  SecondaryActionIcon,
-  TextSearchIcon,
-  UpdateIcon,
-  UploadActionIcon,
-  VisualSearchIcon,
-  WarningIcon,
-};
+export { ArrowIcon } from "./icons/ArrowIcon";
+export { BasketIcon } from "./icons/BasketIcon";
+export { CameraActionIcon } from "./icons/CameraActionIcon";
+export { CameraIcon } from "./icons/CameraIcon";
+export { CheckCircleIcon } from "./icons/CheckCircleIcon";
+export { CheckIcon } from "./icons/CheckIcon";
+export { ChevronIcon } from "./icons/ChevronIcon";
+export { CloseIcon } from "./icons/CloseIcon";
+export { CrossIcon } from "./icons/CrossIcon";
+export { GalleryActionIcon } from "./icons/GalleryActionIcon";
+export { LoaderIcon } from "./icons/LoaderIcon";
+export { MinusIcon } from "./icons/MinusIcon";
+export { PlusIcon } from "./icons/PlusIcon";
+export { RoundCameraIcon } from "./icons/RoundCameraIcon";
+export { SecondaryActionIcon } from "./icons/SecondaryActionIcon";
+export { TextSearchIcon } from "./icons/TextSearchIcon";
+export { UpdateIcon } from "./icons/UpdateIcon";
+export { UploadActionIcon } from "./icons/UploadActionIcon";
+export { VisualSearchIcon } from "./icons/VisualSearchIcon";
+export { WarningIcon } from "./icons/WarningIcon";
