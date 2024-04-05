@@ -30,6 +30,7 @@ export class VviinnTextSearch {
 
   @State() searchQuery: string = this.initialSearchQuery;
 
+  /** @internal */
   @Event() vviinnTextSearchFinished: EventEmitter;
 
   componentWillLoad() {
