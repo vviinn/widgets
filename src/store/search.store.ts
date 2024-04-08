@@ -10,9 +10,7 @@ import {
   SearchSessionFilter,
   DetectedObject,
   imageSearchSessionClient,
-  MultiSearchRequestBody,
   textSearchSessionClient,
-  TextSearchSession,
   SearchType,
 } from "../searchSession/searchSession";
 import { foldValueObject, ValueObject } from "../network/ion/ValueObject";
@@ -214,44 +212,46 @@ export const uploadFile = (
   );
 };
 
-export const performTextSearch = (query: string) => {
+const uploadText = (query: string) => {
   state.searchType = "text";
   state.loading = true;
 
-  return pipe(
-    O.fromNullable(state.token),
-    O.fold(
-      () => TE.left(new Error("Token is missing")),
-      (token) =>
-        TE.tryCatch(
-          () => {
-            const requestBody: MultiSearchRequestBody = {
-              query,
-              campaign: O.getOrElse(() => "")(state.campaignId),
-            };
-            return textSearchSessionClient(requestBody, token);
-          },
-          (reason) => new Error(String(reason))
-        )
-    ),
-    TE.fold(
-      (error) => async () => {
-        console.error("Error:", error);
-        state.serverError = true;
-        state.loading = false;
-      },
-      (result) => async () => {
-        const products = E.fold(
-          () => [],
-          (session) => session
-        )(result) as TextSearchSession;
+  const body = JSON.stringify({
+    query,
+    campaign: O.getOrElse(() => "")(state.campaignId),
+  });
 
-        state.results = products.data?.products ?? [];
-        state.serverError = false;
-        state.loading = false;
-      }
-    )
-  )();
+  const tokenWithBody = sequenceToEither(
+    processBearerToken(state.token),
+    E.right(body)
+  );
+
+  return pipe(
+    tokenWithBody,
+    E.map(([headers, body]): RequestInit => {
+      headers.set("Content-Type", "application/json");
+      return {
+        headers,
+        body,
+      };
+    }),
+    TE.fromEither,
+    TE.chain((request) => textSearchSessionClient(request)),
+    TE.map((sessionResponse) => {
+      state.results = sessionResponse.data?.products ?? [];
+      state.loading = false;
+      return sessionResponse;
+    }),
+    TE.mapLeft((error) => {
+      state.serverError = true;
+      state.loading = false;
+      return error;
+    })
+  );
+};
+
+export const processSelectedText = async (query: string) => {
+  return await uploadText(query)();
 };
 
 onChange("activeIonLink", async (newLink: Link) => {

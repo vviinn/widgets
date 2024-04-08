@@ -7,7 +7,6 @@ import { createInitPostRequest, getApiPath } from "../network/utils";
 import { Recommendation } from "../recommendation/recommendation";
 import * as TE from "fp-ts/TaskEither";
 import * as O from "fp-ts/Option";
-import * as E from "fp-ts/Either";
 import { RectangleAlt } from "../geometry/RectangleAlt";
 import { Eq } from "fp-ts/lib/Eq";
 import { BasicError } from "../error";
@@ -123,43 +122,14 @@ export const imageSearchSessionClient = (
   );
 };
 
-export async function textSearchSessionClient(
-  requestBody: MultiSearchRequestBody,
-  token: string
-): Promise<E.Either<BasicError<string>, TextSearchSession>> {
-  const urlEither: E.Either<BasicError<string>, string> = getApiPath();
+export const textSearchSessionClient = (
+  initialData: RequestInit
+): TE.TaskEither<BasicError<Response | string>, TextSearchSession> => {
+  const requestUrl = "multi-search";
 
   return pipe(
-    urlEither,
-    E.fold(
-      (error) => Promise.resolve(E.left(error)),
-      async (url) => {
-        try {
-          const multiSearchUrl = new URL("multi-search", url);
-
-          const response = await fetch(multiSearchUrl, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(requestBody),
-          });
-
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-
-          const data: TextSearchSession = await response.json();
-          return E.right(data);
-        } catch (error) {
-          console.error("Error calling /multi-search:", error);
-          return E.left({
-            kind: "server",
-            inner: error instanceof Error ? error.message : String(error),
-          });
-        }
-      }
-    )
+    sequenceToEither(getApiPath(), createInitPostRequest),
+    TE.fromEither,
+    TE.chainW(makeRequest<TextSearchSession>(requestUrl, initialData))
   );
-}
+};

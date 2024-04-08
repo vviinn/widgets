@@ -8,7 +8,7 @@ import {
   EventEmitter,
   Element,
 } from "@stencil/core";
-import { performTextSearch, searchState } from "../../store/search.store";
+import { processSelectedText, searchState } from "../../store/search.store";
 import { TextSearchIcon } from "../vviinn-icons";
 import { slotChangeListener } from "../customized-slots";
 import i18next from "i18next";
@@ -50,7 +50,7 @@ export class VviinnTextSearch {
   private async handleSearch() {
     if (!this.searchQuery) return;
 
-    await performTextSearch(this.searchQuery);
+    await processSelectedText(this.searchQuery);
     this.vviinnTextSearchFinished.emit(this.searchQuery);
 
     if (this.clearSearchQuery) {
