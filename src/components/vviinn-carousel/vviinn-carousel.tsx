@@ -403,7 +403,7 @@ export class VviinnCarousel {
         imageRatio={1}
         price={recommendation.price.actual}
         salePrice={salePrice}
-        responsive={this.isGridMode}
+        responsive={this.isGridMode || this.isSetMode}
         dimmedBackground={this.isContinuityMode || this.isSetMode}
         campaignTypeId={this.campaignTypeId}
         index={rank}

@@ -545,8 +545,7 @@ export class VviinnVprWidget implements ComponentInterface {
         class={{
           loaded: true,
           empty: this.recommendations.length == 0,
-          [this.isSetMode || this.isContinuityMode ? "continuity" : "grid"]:
-            true,
+          [this.mode]: true,
         }}
         aria-hidden="false"
       >

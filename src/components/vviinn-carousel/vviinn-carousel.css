@@ -13,10 +13,17 @@
 }
 
 .body.set {
+  justify-content: space-between;
   margin-left: auto;
   display: flex;
   flex-direction: row;
   gap: 112px;
+}
+
+@media (max-width: 768px) {
+  .body.set {
+    gap: 40px;
+  }
 }
 
 .body.set .content {
