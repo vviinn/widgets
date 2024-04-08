@@ -41,7 +41,7 @@ import {
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 import { slotChangeListener } from "../customized-slots";
 import { BasketIcon, CheckCircleIcon, UpdateIcon } from "../vviinn-icons";
-import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-vidget";
+import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
 
 /**
  * @part brand - product brand.

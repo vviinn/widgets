@@ -16,7 +16,7 @@ import {
   CrossSellingClickEvent,
   ProductCardEvent,
 } from "../../recommendation/events";
-import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-vidget";
+import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
 import {
   CAROUSEL_IMAGE_WIDTH_CSS_VAR,
   CAROUSEL_WIDTH_CSS_VAR,
