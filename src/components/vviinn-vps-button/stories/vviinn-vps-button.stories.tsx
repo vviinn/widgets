@@ -34,6 +34,7 @@ const Template = (args) => `
   product-detail-new-tab="${args.productDetailNewTab}"
   api-path="${args.apiPath}"
   image-resolution-width="${args.imageResolutionWidth}"
+  text-search-show="${args.textSearchShow}"
 ></vviinn-vps-button>`;
 
 export const Modal = Template.bind({});
@@ -51,6 +52,7 @@ Modal.args = {
   addStyle: true,
   apiPath: "https://api.vviinn.com",
   imageResolutionWidth: 250,
+  textSearchShow: false,
 };
 
 export const Upload = Template.bind({});

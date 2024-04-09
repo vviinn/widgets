@@ -10,7 +10,7 @@ import {
 } from "@stencil/core";
 import { Link } from "../../../network/ion/Link";
 import { SearchSessionFilter } from "../../../searchSession/searchSession";
-import { imageSearchState } from "../../../store/imageSearch.store";
+import { searchState } from "../../../store/search.store";
 import {
   BasicEventData,
   SelectFilterEventData,
@@ -55,7 +55,7 @@ export class SearchFilters {
   }
 
   private selectFilter(selectedFilter: Link) {
-    imageSearchState.activeIonLink = selectedFilter;
+    searchState.activeIonLink = selectedFilter;
     this.selectedFilter = parseFilters(selectedFilter, this.filterType);
 
     this.vviinnSelectFilter.emit({
@@ -66,7 +66,7 @@ export class SearchFilters {
   }
 
   private clearSelectedFilter(selectedFilter: Link) {
-    imageSearchState.activeIonLink = selectedFilter.clear;
+    searchState.activeIonLink = selectedFilter.clear;
     this.selectedFilter = parseFilters(selectedFilter.clear, this.filterType);
 
     this.vviinnSelectFilter.emit({
@@ -122,12 +122,12 @@ export class SearchFilters {
                   }}
                   style={{ "animation-delay": `${index * 10}ms` }}
                   onPointerUp={(ev) => {
-                    if (imageSearchState.loading) return;
+                    if (searchState.loading) return;
                     ev.stopPropagation();
                     this.handleFilterSelection(filter);
                   }}
                   onKeyPress={(ev) => {
-                    if (imageSearchState.loading) return;
+                    if (searchState.loading) return;
                     this.handleEnter(ev, filter);
                   }}
                 >

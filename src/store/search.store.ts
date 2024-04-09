@@ -9,7 +9,9 @@ import {
   SearchSession,
   SearchSessionFilter,
   DetectedObject,
-  searchSessionClient,
+  imageSearchSessionClient,
+  textSearchSessionClient,
+  SearchType,
 } from "../searchSession/searchSession";
 import { foldValueObject, ValueObject } from "../network/ion/ValueObject";
 import { Link, linkRequest, getLink } from "../network/ion/Link";
@@ -39,10 +41,10 @@ const makeAuthorizedRequest = (
     })
   );
 
-type ImageSearchStore = {
+type SearchStore = {
   token?: string;
   campaignId: O.Option<string>;
-  excluded: string;
+  excluded?: string;
   results: Recommendation[];
   filters: SearchSessionFilter[];
   resetCategoryLink?: Link;
@@ -54,6 +56,7 @@ type ImageSearchStore = {
   detectedObject?: ValueObject<DetectedObject>;
   objectDetectionInProgress: boolean;
   imageWidth: number;
+  searchType?: SearchType;
 
   image: O.Option<HTMLImageElement>;
   imageUrl: O.Option<string>;
@@ -66,7 +69,7 @@ type ImageSearchStore = {
   loading: boolean;
 };
 
-const { state, onChange } = createStore<ImageSearchStore>({
+const { state, onChange } = createStore<SearchStore>({
   campaignId: O.none,
   excluded: "",
   results: [],
@@ -87,6 +90,8 @@ const { state, onChange } = createStore<ImageSearchStore>({
   serverError: false,
   loading: false,
 });
+
+export const searchState = state;
 
 const updateState = async (response: SearchSession) => {
   state.results = response.value;
@@ -171,6 +176,7 @@ export const makeRectangularSearchRequest = async () => {
 export const uploadFile = (
   file: File
 ): TE.TaskEither<BasicError<string | Response>, SearchSession> => {
+  state.searchType = "image";
   state.loading = true;
 
   const fileForm = imageFormFromFile(file);
@@ -190,7 +196,7 @@ export const uploadFile = (
     }),
     TE.fromEither,
     TE.chain((request) =>
-      searchSessionClient(request, state.campaignId, state.excluded)
+      imageSearchSessionClient(request, state.campaignId, state.excluded)
     ),
     TE.map((sessionResponse) => {
       updateState(sessionResponse);
@@ -206,7 +212,47 @@ export const uploadFile = (
   );
 };
 
-export const imageSearchState = state;
+const uploadText = (query: string) => {
+  state.searchType = "text";
+  state.loading = true;
+
+  const body = JSON.stringify({
+    query,
+    campaign: O.getOrElse(() => "")(state.campaignId),
+  });
+
+  const tokenWithBody = sequenceToEither(
+    processBearerToken(state.token),
+    E.right(body)
+  );
+
+  return pipe(
+    tokenWithBody,
+    E.map(([headers, body]): RequestInit => {
+      headers.set("Content-Type", "application/json");
+      return {
+        headers,
+        body,
+      };
+    }),
+    TE.fromEither,
+    TE.chain((request) => textSearchSessionClient(request)),
+    TE.map((sessionResponse) => {
+      state.results = sessionResponse.data?.products ?? [];
+      state.loading = false;
+      return sessionResponse;
+    }),
+    TE.mapLeft((error) => {
+      state.serverError = true;
+      state.loading = false;
+      return error;
+    })
+  );
+};
+
+export const processSelectedText = async (query: string) => {
+  return await uploadText(query)();
+};
 
 onChange("activeIonLink", async (newLink: Link) => {
   const link = newLink ? newLink : state.resetCategoryLink;
@@ -241,8 +287,8 @@ onChange("serverError", () => {
 });
 
 const setSelectedImage = (image: HTMLImageElement) => {
-  imageSearchState.image = O.some(image);
-  imageSearchState.imageUrl = O.some(image.src);
+  searchState.image = O.some(image);
+  searchState.imageUrl = O.some(image.src);
 };
 
 export const processSelectedFile = async (file: File) => {

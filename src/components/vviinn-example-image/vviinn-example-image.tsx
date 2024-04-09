@@ -11,7 +11,7 @@ import {
 } from "@stencil/core";
 import { pipe } from "fp-ts/lib/function";
 import { toFile } from "../../Image/toFile";
-import { processSelectedFile } from "../../store/imageSearch.store";
+import { processSelectedFile } from "../../store/search.store";
 import * as E from "fp-ts/lib/Either";
 import { BasicEventData } from "../../recommendation/events";
 import { MinusIcon, PlusIcon, RoundCameraIcon } from "../vviinn-icons";

@@ -2,6 +2,7 @@ import { Component, Host, h, Prop } from "@stencil/core";
 
 import i18next from "i18next";
 import { WarningIcon } from "../../vviinn-icons";
+import { searchState } from "../../../store/search.store";
 
 @Component({
   tag: "vviinn-empty-results",
@@ -16,9 +17,11 @@ export class VviinnEmptyResults {
         <vviinn-error>
           <WarningIcon />
           <h4 slot="title">{i18next.t("emptyResultsBlock.title")}</h4>
-          <button slot="action" onClick={this.handler}>
-            {i18next.t("emptyResultsBlock.button")}
-          </button>
+          {searchState.searchType === "image" && (
+            <button slot="action" onClick={this.handler}>
+              {i18next.t("emptyResultsBlock.button")}
+            </button>
+          )}
         </vviinn-error>
       </Host>
     );
