@@ -80,6 +80,8 @@ export class VviinnVpsButton {
   @Prop() imageResolutionWidth: number = 250;
   /** Example image source */
   @Prop() exampleImageSource: string = DEFAULT_EXAMPLE_IMAGE;
+  /** Show the text search */
+  @Prop() textSearchShow: boolean = false;
 
   /** @internal */
   @Prop() apiPath: string | undefined;
@@ -188,6 +190,7 @@ export class VviinnVpsButton {
           productDetailNewTab={this.productDetailNewTab}
           imageResolutionWidth={this.imageResolutionWidth}
           exampleImageSource={this.exampleImageSource}
+          textSearchShow={this.textSearchShow}
         />
       </Host>
     );

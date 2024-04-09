@@ -9,7 +9,7 @@ import {
 } from "@stencil/core";
 import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/lib/function";
-import { processSelectedFile } from "../../store/imageSearch.store";
+import { processSelectedFile } from "../../store/search.store";
 import { BasicEventData, NoResultEventData } from "../../recommendation/events";
 
 /**

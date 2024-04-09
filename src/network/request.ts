@@ -37,15 +37,17 @@ export const request = <I>(
 
 const initRequestSemigroup = mergeInitRequests;
 
-export const makeRequest = <T>(path: string, init: RequestInit) => ([
-  apiPath,
-  options,
-]: RequestWithPath): TE.TaskEither<BasicError<Response>, T> => {
-  const url = new URL(path, apiPath);
-  const fullOptions = initRequestSemigroup.concat(options, init);
+export const makeRequest =
+  <T>(path: string, init: RequestInit) =>
+  ([apiPath, options]: RequestWithPath): TE.TaskEither<
+    BasicError<Response>,
+    T
+  > => {
+    const url = new URL(path, apiPath);
+    const fullOptions = initRequestSemigroup.concat(options, init);
 
-  return pipe(
-    request<T>(url.toString(), fullOptions),
-    TE.mapLeft(basicErrorFromResponse)
-  );
-};
+    return pipe(
+      request<T>(url.toString(), fullOptions),
+      TE.mapLeft(basicErrorFromResponse)
+    );
+  };

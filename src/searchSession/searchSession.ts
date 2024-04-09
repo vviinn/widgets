@@ -5,16 +5,31 @@ import { Form } from "../network/ion/Form";
 import { makeRequest } from "../network/request";
 import { createInitPostRequest, getApiPath } from "../network/utils";
 import { Recommendation } from "../recommendation/recommendation";
-import * as E from "fp-ts/Either";
 import * as TE from "fp-ts/TaskEither";
 import * as O from "fp-ts/Option";
 import { RectangleAlt } from "../geometry/RectangleAlt";
 import { Eq } from "fp-ts/lib/Eq";
 import { BasicError } from "../error";
-import { processBearerToken } from "../utils/token/tokenUtils";
 import { sequenceToEither } from "../utils/either";
-import { imageFormFromFile } from "../Image/form";
 import { arrayToQueryString } from "../utils/collections/collectionsUtils";
+
+export interface MultiSearchRequestBody {
+  query: string;
+  campaign: string;
+  resultsCount?: number;
+  excluded?: {
+    column: string;
+    values: string[];
+  }[];
+}
+
+export type TextSearchSession = {
+  data: {
+    products: Recommendation[];
+  };
+};
+
+export type SearchType = "text" | "image";
 
 export interface SearchSessionFilters {
   readonly [key: string]: Link[];
@@ -70,7 +85,9 @@ export type SearchSession = ValueObject<Recommendation[]> &
   ContainsRectangleSearch &
   ContainsHiresImageUpload;
 
-export const searchSessionClient = (
+export type ObjectsDetectedEvent = CustomEvent<ValueObject<DetectedObject>[]>;
+
+export const imageSearchSessionClient = (
   initialData: RequestInit,
   campaignId: O.Option<string> = O.none,
   excludedFilters: string
@@ -105,21 +122,14 @@ export const searchSessionClient = (
   );
 };
 
-export type ObjectsDetectedEvent = CustomEvent<ValueObject<DetectedObject>[]>;
+export const textSearchSessionClient = (
+  initialData: RequestInit
+): TE.TaskEither<BasicError<Response | string>, TextSearchSession> => {
+  const requestUrl = "multi-search";
 
-export const makeRequestFromFile = (
-  token: string,
-  file: File
-): E.Either<BasicError<string>, RequestInit> =>
-  pipe(
-    sequenceToEither(
-      processBearerToken(token),
-      E.right(imageFormFromFile(file))
-    ),
-    E.map(([headers, body]) => {
-      return {
-        headers,
-        body,
-      };
-    })
+  return pipe(
+    sequenceToEither(getApiPath(), createInitPostRequest),
+    TE.fromEither,
+    TE.chainW(makeRequest<TextSearchSession>(requestUrl, initialData))
   );
+};

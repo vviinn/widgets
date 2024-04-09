@@ -18,6 +18,7 @@ const Template = (args) => `
     product-detail-new-tab="${args.productDetailNewTab}"
     api-path="${args.apiPath}"
     image-resolution-width="${args.imageResolutionWidth}"
+    text-search-show="${args.textSearchShow}"
   >
   </vviinn-vps-widget>`;
 
@@ -33,6 +34,7 @@ Default.args = {
   active: true,
   apiPath: "https://api.vviinn.com",
   imageResolutionWidth: 250,
+  textSearchShow: false,
 };
 
 Default.storyName = "Main";

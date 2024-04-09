@@ -17,7 +17,7 @@ import { v4 as uuidv4 } from "uuid";
 import i18next from "i18next";
 
 import { version } from "../../../package.json";
-import { imageSearchState } from "../../store/imageSearch.store";
+import { searchState } from "../../store/search.store";
 import { state } from "../../store/store";
 import { slotChangeListener } from "../customized-slots";
 import { createTrackingApi } from "../../openApi";
@@ -56,6 +56,7 @@ import { Locale } from "../../locale";
 import { CameraActionIcon, UploadActionIcon } from "../vviinn-icons";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 import { videoStreamSettings } from "../../video/settings";
+import { Recommendation } from "../..";
 
 const filterInt = (value: string) =>
   /^[-+]?(\d+|Infinity)$/.test(value) ? Number(value) : NaN;
@@ -101,6 +102,7 @@ type UploadSource = "uploadPhoto" | "startCamera";
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
  * @part price-prefix - Block rendered before each price element (for ex. "from").
  * @part title - Title inside Product Card.
+ * @part text-search-input - Text search input.
 
  * @slot vviinn-onboarding-title - Title of onboarding section.
  * @slot onboarding-card-1-icon - Icon (or other graphics) on the first onboarding slide.
@@ -118,6 +120,7 @@ type UploadSource = "uploadPhoto" | "startCamera";
  * @slot vviinn-camera-icon - Icon of Camera Button.
  * @slot vviinn-privacy-badge-text - Text content of privacy notification block.
  * @slot vviinn-image-search-modal-title - Image search modal title.
+ * @slot vviinn-text-search-icon - Icon of text search block.
  *
  */
 @Component({
@@ -146,6 +149,8 @@ export class VviinnVpsWidget {
   @Prop() imageResolutionWidth: number = 250;
   /** Example image source */
   @Prop() exampleImageSource: string = DEFAULT_EXAMPLE_IMAGE;
+  /** Show the text search */
+  @Prop() textSearchShow: boolean = false;
 
   /** @internal */
   @Prop() apiPath: string = "https://api.vviinn.com";
@@ -171,6 +176,8 @@ export class VviinnVpsWidget {
   @State() cameraButtonClicked: boolean = false;
   @State() uploadSource: UploadSource;
   @State() showAspectRatioError = false;
+  @State() products: Recommendation[] = [];
+  @State() initialSearchQuery: string = "";
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -245,6 +252,12 @@ export class VviinnVpsWidget {
 
   private isResultSlide() {
     return this.slidePosition === 1;
+  }
+
+  private findProductById(
+    id: Recommendation["productId"]
+  ): Recommendation | undefined {
+    return searchState.results.find((r) => r.productId === id);
   }
 
   private handleOpenLink(deeplink: string, event: MouseEvent) {
@@ -418,9 +431,7 @@ export class VviinnVpsWidget {
     const { productId, clickEvent } = detail;
     const productClickEvent = this.getProductTrackEvent(detail, "click");
 
-    const product = imageSearchState.results.find(
-      (r) => r.productId === productId
-    );
+    const product = this.findProductById(productId);
     if (!product || !product.deeplink) return;
 
     if (!this.trackingDeactivated) {
@@ -440,9 +451,7 @@ export class VviinnVpsWidget {
     const { productId } = detail;
     const productClickEvent = this.getProductTrackEvent(detail, "click");
 
-    const product = imageSearchState.results.find(
-      (r) => r.productId === productId
-    );
+    const product = this.findProductById(productId);
     if (!product || !product.deeplink) return;
 
     if (!this.trackingDeactivated) {
@@ -498,6 +507,12 @@ export class VviinnVpsWidget {
     this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
   }
 
+  @Listen("vviinnTextSearchFinished")
+  async trackTextSearchFinished({ detail }: CustomEvent<string>) {
+    this.initialSearchQuery = detail;
+    this.slidePosition = 1;
+  }
+
   connectedCallback() {
     this.isDesktop = checkDeviceType() === "desktop";
     state.apiPath = this.apiPath;
@@ -507,8 +522,7 @@ export class VviinnVpsWidget {
     this.cameraAvailable =
       !!navigator.mediaDevices && !!navigator.mediaDevices.getUserMedia;
 
-    imageSearchState.token = this.token;
-    imageSearchState.campaignId = pipe(
+    const campaignId = pipe(
       this.campaignId,
       O.fromNullable,
       O.chain(O.fromPredicate(notEmptyString)),
@@ -521,7 +535,9 @@ export class VviinnVpsWidget {
       this.excluded = parseExcluded(this.excluded);
     }
 
-    imageSearchState.excluded = this.excluded;
+    searchState.token = this.token;
+    searchState.campaignId = campaignId;
+    searchState.excluded = this.excluded;
 
     this.uiSessionId = uuidv4();
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
@@ -630,7 +646,9 @@ export class VviinnVpsWidget {
             this.uploadSource = "startCamera";
           }}
         >
-          {imageSearchState.loading && this.uploadSource === "startCamera" ? (
+          {searchState.loading &&
+          searchState.searchType === "image" &&
+          this.uploadSource === "startCamera" ? (
             <vviinn-preloader />
           ) : (
             <span class="action-button-content">
@@ -665,7 +683,9 @@ export class VviinnVpsWidget {
           this.buttonPressed && this.showingInButton && this.mode === "upload"
         }
         loading={
-          imageSearchState.loading && this.uploadSource === "uploadPhoto"
+          searchState.loading &&
+          searchState.searchType === "image" &&
+          this.uploadSource === "uploadPhoto"
         }
       >
         <span slot="upload-button-text" class="action-button-content">
@@ -684,7 +704,7 @@ export class VviinnVpsWidget {
   }
 
   private renderResults() {
-    if (imageSearchState.results.length === 0) return null;
+    if (searchState.results.length === 0) return null;
 
     if (!this.resultLoaded) {
       this.vviinnResultLoad.emit(this.getBasicEventData());
@@ -692,7 +712,7 @@ export class VviinnVpsWidget {
       this.resultLoaded = true;
     }
 
-    return imageSearchState.results.map((p, i) => (
+    return searchState.results.map((p, i) => (
       <vviinn-product-card
         key={p.productId}
         hidden={true}
@@ -720,18 +740,19 @@ export class VviinnVpsWidget {
     this.resetScroll("start-page_block");
 
     this.slidePosition = 0;
-    imageSearchState.resetCategoryLink = undefined;
-    imageSearchState.activeIonLink = undefined;
-    imageSearchState.image = O.none;
-    imageSearchState.imageUrl = O.none;
-    imageSearchState.imageBounds = O.none;
-    imageSearchState.searchArea = O.none;
-    imageSearchState.results = [];
-    imageSearchState.filters = [];
-    imageSearchState.detectedObjects = [];
-    imageSearchState.rectangleSearchForm = undefined;
-    imageSearchState.loading = false;
-    imageSearchState.serverError = false;
+    searchState.resetCategoryLink = undefined;
+    searchState.activeIonLink = undefined;
+    searchState.image = O.none;
+    searchState.imageUrl = O.none;
+    searchState.imageBounds = O.none;
+    searchState.searchArea = O.none;
+    searchState.results = [];
+    searchState.filters = [];
+    searchState.detectedObjects = [];
+    searchState.rectangleSearchForm = undefined;
+    searchState.loading = false;
+    searchState.serverError = false;
+    searchState.searchType = undefined;
     this.wrongImageFormat = false;
     this.resetScroll("results-block");
     this.stopStreamTracks();
@@ -743,7 +764,7 @@ export class VviinnVpsWidget {
   }
 
   private haveErrors(): boolean {
-    return this.wrongImageFormat || imageSearchState.serverError;
+    return this.wrongImageFormat || searchState.serverError;
   }
 
   private resetScroll(elementId: string, behavior: ScrollBehavior = "auto") {
@@ -762,7 +783,7 @@ export class VviinnVpsWidget {
 
   render() {
     return (
-      <Host>
+      <Host exportparts="text-search-input">
         {!this.showingInButton && <SlotSkeleton />}
 
         <vviinn-overlayed-modal
@@ -809,7 +830,7 @@ export class VviinnVpsWidget {
                     class={{
                       "start-page_errors-block": true,
                       hidden:
-                        !this.wrongImageFormat && !imageSearchState.serverError,
+                        !this.wrongImageFormat && !searchState.serverError,
                     }}
                   >
                     <vviinn-wrong-format
@@ -817,7 +838,7 @@ export class VviinnVpsWidget {
                       handler={() => this.resetState()}
                     />
                     <vviinn-server-error
-                      class={{ hidden: !imageSearchState.serverError }}
+                      class={{ hidden: !searchState.serverError }}
                       handler={() => this.resetState()}
                     />
                   </div>
@@ -826,6 +847,9 @@ export class VviinnVpsWidget {
                   {!this.haveErrors() && (
                     <div class="buttons-group">{this.renderButtons()}</div>
                   )}
+                  {this.textSearchShow && !this.haveErrors() && (
+                    <vviinn-text-search clearSearchQuery={true} />
+                  )}
                 </div>
                 <vviinn-privacy-badge
                   privacyBadgeText={i18next.t("privacyBadgeText")}
@@ -833,42 +857,53 @@ export class VviinnVpsWidget {
                 />
               </div>
             </vviinn-slide>
+
             <vviinn-slide
               class={{
                 "results-page": true,
                 active: this.isResultSlide(),
               }}
             >
-              <div class="image-wrapper">
-                {this.isResultSlide() && (
+              {this.isResultSlide() && searchState.searchType === "image" && (
+                <div class="image-wrapper">
                   <vviinn-image-view
                     basicEventData={this.getBasicEventData()}
                     setShowAspectRatioError={this.setShowAspectRatioError}
                     showAspectRatioError={this.showAspectRatioError}
                   />
-                )}
-                <div
-                  class={{
-                    "filters-wrapper": true,
-                    hidden: this.showAspectRatioError,
-                  }}
-                >
-                  <div class="filters">
-                    {imageSearchState.filters.map((filter) => (
-                      <search-filters
-                        filter={filter}
-                        basicEventData={this.getBasicEventData()}
-                      />
-                    ))}
+                  <div
+                    class={{
+                      "filters-wrapper": true,
+                      hidden: this.showAspectRatioError,
+                    }}
+                  >
+                    <div class="filters">
+                      {searchState.filters.map((filter) => (
+                        <search-filters
+                          filter={filter}
+                          basicEventData={this.getBasicEventData()}
+                        />
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
+
+              {this.textSearchShow &&
+                this.isResultSlide() &&
+                searchState.searchType === "text" && (
+                  <div class="text-search-wrapper">
+                    <vviinn-text-search
+                      initialSearchQuery={this.initialSearchQuery}
+                    />
+                  </div>
+                )}
 
               <div id="results-block" class="products-wrapper">
                 <div
                   class={{
                     "nothing-found": true,
-                    hidden: imageSearchState.results.length > 0,
+                    hidden: searchState.results.length > 0,
                   }}
                 >
                   <vviinn-empty-results handler={() => this.resetState()} />
@@ -888,7 +923,7 @@ export class VviinnVpsWidget {
                 <div
                   class={{
                     hidden:
-                      imageSearchState.results.length <= 0 ||
+                      searchState.results.length <= 0 ||
                       this.showAspectRatioError,
                     products: true,
                   }}

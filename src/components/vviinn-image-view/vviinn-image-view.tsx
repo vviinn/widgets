@@ -14,9 +14,9 @@ import * as O from "fp-ts/lib/Option";
 import Cropper from "cropperjs";
 
 import {
-  imageSearchState,
+  searchState,
   makeRectangularSearchRequest,
-} from "../../store/imageSearch.store";
+} from "../../store/search.store";
 import { ValueObject } from "../../network/ion/ValueObject";
 import { DetectedObject } from "../../searchSession/searchSession";
 import { sequenceToOption } from "../../utils/option/option";
@@ -157,8 +157,8 @@ export class VviinnImageView {
         height: height - height * INITIAL_CROP_AREA_OFFSET,
       };
 
-      imageSearchState.imageBounds = O.some(imageBounds);
-      imageSearchState.searchArea = O.some(searchArea);
+      searchState.imageBounds = O.some(imageBounds);
+      searchState.searchArea = O.some(searchArea);
 
       if (
         width / height < SUPPORTED_ASPECT_RATIO ||
@@ -187,9 +187,9 @@ export class VviinnImageView {
   }
 
   private cropEnd = () => {
-    imageSearchState.searchArea = O.some(this.getCropboxData());
+    searchState.searchArea = O.some(this.getCropboxData());
     makeRectangularSearchRequest();
-    imageSearchState.detectedObject = undefined;
+    searchState.detectedObject = undefined;
     this.vviinnImageCrop.emit(this.basicEventData);
   };
 
@@ -206,7 +206,7 @@ export class VviinnImageView {
 
   private renderImage(): HTMLImageElement | null {
     return pipe(
-      sequenceToOption(imageSearchState.imageUrl, imageSearchState.image),
+      sequenceToOption(searchState.imageUrl, searchState.image),
       O.map(([url, refImage]) => {
         const [width, height] = getImageSizes(refImage);
         return (
@@ -230,13 +230,12 @@ export class VviinnImageView {
         <div class="container">
           <div class="image-container">
             {this.renderImage()}
-            {imageSearchState.detectedObjects.map((o) =>
+            {searchState.detectedObjects.map((o) =>
               this.renderDetectedObject(o)
             )}
           </div>
 
-          {(imageSearchState.loading ||
-            imageSearchState.objectDetectionInProgress) &&
+          {(searchState.loading || searchState.objectDetectionInProgress) &&
           !this.showAspectRatioError &&
           !this.hidePreloader ? (
             <div class="image-preloader">

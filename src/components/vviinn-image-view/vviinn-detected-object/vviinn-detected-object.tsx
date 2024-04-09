@@ -16,9 +16,9 @@ import {
 } from "../../../searchSession/searchSession";
 import { fromAlt, scaleWithSized, center } from "../../../geometry/Rectangle";
 import {
-  imageSearchState,
+  searchState,
   makeRectangularSearchRequest,
-} from "../../../store/imageSearch.store";
+} from "../../../store/search.store";
 import {
   BasicEventData,
   SelectObjectEventData,
@@ -38,7 +38,7 @@ export class VviinnDetectedObject {
 
   private getObjectPosition(): [string, string] {
     return pipe(
-      imageSearchState.imageBounds,
+      searchState.imageBounds,
       O.map((bounds) => {
         const objectRectangle = fromAlt(
           foldValueObject(this.detectedObject).rectangle
@@ -54,14 +54,14 @@ export class VviinnDetectedObject {
 
   private selectDetectedObject() {
     pipe(
-      imageSearchState.imageBounds,
+      searchState.imageBounds,
       O.map((bounds) => {
         const rectangle = foldValueObject(this.detectedObject).rectangle;
         const transformedRect = fromAlt(rectangle);
         const scaledRect = scaleWithSized(bounds)(transformedRect);
 
-        imageSearchState.detectedObject = this.detectedObject;
-        imageSearchState.searchArea = O.some(scaledRect);
+        searchState.detectedObject = this.detectedObject;
+        searchState.searchArea = O.some(scaledRect);
       })
     );
 
@@ -74,10 +74,10 @@ export class VviinnDetectedObject {
 
   private isActive(): boolean {
     if (!this.detectedObject) return false;
-    if (!imageSearchState.detectedObject) return false;
+    if (!searchState.detectedObject) return false;
 
     const thisObject = foldValueObject(this.detectedObject);
-    const savedObject = foldValueObject(imageSearchState.detectedObject);
+    const savedObject = foldValueObject(searchState.detectedObject);
 
     return detectedObjectEq.equals(thisObject, savedObject);
   }
