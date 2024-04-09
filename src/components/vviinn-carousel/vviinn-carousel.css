@@ -14,10 +14,15 @@
 
 .body.set {
   justify-content: space-between;
+  overflow-x: auto;
   margin-left: auto;
   display: flex;
   flex-direction: row;
   gap: 112px;
+}
+
+.body.set::-webkit-scrollbar {
+  display: none;
 }
 
 @media (max-width: 768px) {
@@ -28,6 +33,7 @@
 
 .body.set .content {
   max-width: fit-content;
+  overflow: unset;
 }
 
 .bullets {

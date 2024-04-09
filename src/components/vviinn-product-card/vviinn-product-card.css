@@ -5,6 +5,8 @@
   position: relative;
   gap: 8px;
   height: 100%;
+
+  --min-image-size-set-mode: 155px;
 }
 
 .price-container {
@@ -43,7 +45,7 @@
   box-sizing: border-box;
 }
 
-img.responsive {
+.image.responsive {
   width: 100%;
   height: auto;
   aspect-ratio: 1;
@@ -217,11 +219,10 @@ picture::before {
   align-items: flex-start;
 }
 
-:host(.set-mode) img {
+:host(.set-mode) .image {
   border: none;
-  --min-image-size: 155px;
-  min-width: var(--min-image-size);
-  min-height: var(--min-image-size);
+  min-width: var(--min-image-size-set-mode);
+  min-height: var(--min-image-size-set-mode);
 }
 
 :host(.set-mode.product-card--source) {
@@ -230,7 +231,7 @@ picture::before {
 }
 
 :host(.set-mode.product-card--source) .image {
-  position: relative;
+  aspect-ratio: 1;
   width: 100%;
   height: 100%;
 }
