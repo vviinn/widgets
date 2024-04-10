@@ -210,6 +210,10 @@ picture::before {
   color: #525252;
 }
 
+:host(.set-mode) .basket-button:hover {
+  background-color: rgb(234, 234, 234);
+}
+
 :host(.set-mode) .title {
   font-weight: 400;
 }
@@ -274,4 +278,16 @@ picture::before {
   100% {
     background-color: rgba(244, 244, 244);
   }
+}
+
+.discount-label {
+  position: absolute;
+  left: 0;
+  top: 13px;
+  line-height: 20px;
+  padding: 2px 4px;
+  border-radius: 0px 4px 4px 0px;
+  color: white;
+  background-color: #ff3944;
+  letter-spacing: 0.5px;
 }

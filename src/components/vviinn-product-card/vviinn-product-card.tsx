@@ -308,6 +308,9 @@ export class VviinnProductCard {
               salePrice={this.salePrice}
               locale={this.locale ?? state.locale}
             />
+            {this.isSetMode && !this.appliedDiscountPercentage && (
+              <div class="discount-label">{`-${this.currentDiscountPercentage}%`}</div>
+            )}
           </Fragment>
         )}
 
