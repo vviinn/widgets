@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.48.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.47.0...v2.48.0) (2024-04-10)
+
+
+### Features
+
+* Add translations for Set Mode (Recommendations) ([f2d877a](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/f2d877a0521958f0d379b69760e03dce3eeb13e2))
+
 ## [2.47.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.46.0...v2.47.0) (2024-04-10)
 
 
