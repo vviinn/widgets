@@ -92,6 +92,7 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @slot vviinn-update-icon-item - Icon of update button for Set mode (on Item).
  * @slot vviinn-update-icon-top - Icon of update button for Set mode (on Top).
  */
+
 @Component({
   tag: "vviinn-vpr-widget",
   styleUrl: "vviinn-vpr-widget.css",
@@ -201,6 +202,9 @@ export class VviinnVprWidget implements ComponentInterface {
   private productImageLoadedSubject = new Subject();
   private id?: string;
   private resultViewed: boolean = false;
+  private isSetMode: boolean;
+  private isGridMode: boolean;
+  private isContinuityMode: boolean;
 
   private getBasicEventData(): BasicEventData {
     return {
@@ -292,6 +296,9 @@ export class VviinnVprWidget implements ComponentInterface {
     this.getRecommendations();
     this.vviinnWidgetLoad.emit(this.getBasicEventData());
     this.trackWidgetEvent("load");
+    this.isSetMode = this.mode === "set";
+    this.isGridMode = this.mode === "grid";
+    this.isContinuityMode = this.mode === "continuity";
   }
 
   async componentWillLoad() {
@@ -375,8 +382,8 @@ export class VviinnVprWidget implements ComponentInterface {
   async trackAddToBasket({ detail }: ProductCardEvent) {
     const { productRank, productId, campaignTypeId, widgetType, ...rest } =
       detail;
-
     let addToBasketEvent: WidgetEvent;
+
     const eventBody = {
       session_id: this.uiSessionId,
       rank: productRank,
@@ -545,7 +552,7 @@ export class VviinnVprWidget implements ComponentInterface {
         class={{
           loaded: true,
           empty: this.recommendations.length == 0,
-          [this.mode === "set" ? "grid" : this.mode]: true,
+          [this.mode]: true,
         }}
         aria-hidden="false"
       >
@@ -554,9 +561,17 @@ export class VviinnVprWidget implements ComponentInterface {
         <Fragment>
           {this.renderExternalCSS()}
           <style>{state.fallbackStyles}</style>
-          <div class="title-container">
-            <h2 part="recommendations-title">{this.blockTitle}</h2>
-            {this.mode === "set" && this.updateButtonLocation !== "onItem" ? (
+          <div class="widget-header">
+            <div>
+              <h2 part="recommendations-title">
+                {this.isSetMode ? "Buy a set to get discount" : this.blockTitle}
+              </h2>
+              {this.isSetMode && (
+                <h3>Save up to 15% for buying products from the list</h3>
+              )}
+            </div>
+
+            {this.isSetMode && this.updateButtonLocation !== "onItem" ? (
               <button
                 class="update-button"
                 part="update-button-top"
@@ -565,6 +580,7 @@ export class VviinnVprWidget implements ComponentInterface {
                 <slot name="vviinn-update-icon-top">
                   <UpdateIcon />
                 </slot>
+                <span>Suggest New Set</span>
               </button>
             ) : null}
           </div>
@@ -600,7 +616,7 @@ export class VviinnVprWidget implements ComponentInterface {
         imageRatio={1}
         price={recommendation.price.actual}
         salePrice={recommendation.price.sale}
-        responsive={this.mode === "grid" || this.mode === "set"}
+        responsive={this.isGridMode}
         addToBasketShow={this.addToBasketShow}
         mode={this.mode}
         dimmedBackground={this.useDimmedBackgroundInCard()}
@@ -613,7 +629,7 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   private useDimmedBackgroundInCard(): boolean {
-    return this.mode === "continuity" || !this.useCarousel;
+    return this.isContinuityMode || this.isSetMode || !this.useCarousel;
   }
 
   private renderResults() {

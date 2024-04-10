@@ -40,8 +40,9 @@ import {
 } from "../../campaign/Campaign";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 import { slotChangeListener } from "../customized-slots";
-import { UpdateIcon } from "../vviinn-icons";
-import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-vidget";
+import { BasketIcon, CheckCircleIcon, UpdateIcon } from "../vviinn-icons";
+import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
+import { generateRandomNumber } from "../../utils/number";
 
 /**
  * @part brand - product brand.
@@ -89,6 +90,8 @@ export class VviinnProductCard {
   @Prop() mode?: CarouselMode;
   @Prop() addToBasketShow: boolean;
   @Prop() updateButtonLocation: UpdateButtonLocation;
+  @Prop() appliedDiscountPercentage?: number;
+  @Prop() currentDiscountPercentage?: number;
 
   /** @internal */
   @Prop() campaignTypeId: CampaignTypeId;
@@ -105,7 +108,6 @@ export class VviinnProductCard {
   /** @internal */
   @Prop() defaultAnimationInterval: number;
 
-  @State() imageLoaded: boolean = false;
   @State() isTransitioning: boolean = false;
 
   /** Event fires ones when recommendation rendered on page */
@@ -134,9 +136,15 @@ export class VviinnProductCard {
   private productData: ProductCardEventData | null = null;
   private imageElement?: HTMLImageElement;
   private intersectionObserver;
+  private isSetMode: boolean;
+  private isGridMode: boolean;
+  private isContinuityMode: boolean;
 
   connectedCallback() {
     this.productData = this.getProductData();
+    this.isSetMode = this.mode === "set";
+    this.isGridMode = this.mode === "grid";
+    this.isContinuityMode = this.mode === "continuity";
   }
 
   componentWillLoad() {
@@ -255,12 +263,7 @@ export class VviinnProductCard {
         this.imageElement = el as HTMLImageElement;
       },
     };
-
     return this.responsive ? ResponsiveImage(props) : Image(props);
-  }
-
-  private generateRandomNumber(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
   render() {
@@ -270,12 +273,15 @@ export class VviinnProductCard {
         class={{
           dimmed: this.dimmedBackground,
           animated: this.isTransitioning,
+          "set-mode": this.isSetMode,
         }}
         exportparts="brand, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, basket-button, update-button-item"
       >
-        <Linked deeplink={this.deeplink} part="image-link">
-          {this.renderImage()}
-        </Linked>
+        {
+          <Linked deeplink={this.deeplink} part="image-link">
+            {this.renderImage()}
+          </Linked>
+        }
 
         {this.isTransitioning ? (
           <Fragment>
@@ -305,31 +311,51 @@ export class VviinnProductCard {
           </Fragment>
         )}
 
-        {this.addToBasketShow && (
-          <div class="basket-button-container">
+        {(this.addToBasketShow || this.isSetMode) && (
+          <Fragment>
             {this.isTransitioning ? (
-              <vviinn-skeleton height={40}></vviinn-skeleton>
+              <vviinn-skeleton height={44}></vviinn-skeleton>
             ) : (
               <button
                 class={{
                   "basket-button": true,
-                  "basket-button-grid":
-                    this.mode === "grid" || this.mode === "set",
-                  "basket-button-continuity ": this.mode === "continuity",
+                  "basket-button-grid": this.isGridMode || this.isSetMode,
+                  "basket-button-continuity ": this.isContinuityMode,
+                  "applied-discount": !!this.appliedDiscountPercentage,
                 }}
                 part="basket-button"
                 onClick={() => {
-                  this.vviinnAddToBasket.emit(this.productData);
+                  this.vviinnAddToBasket.emit({
+                    ...this.productData,
+                    discount: this.currentDiscountPercentage,
+                  });
                 }}
               >
-                <slot name="vviinn-basket-button-text">
-                  <span>{i18next.t("basketButtonText")}</span>
-                </slot>
+                {this.isSetMode ? (
+                  <Fragment>
+                    {this.appliedDiscountPercentage ? (
+                      <CheckCircleIcon />
+                    ) : (
+                      <BasketIcon />
+                    )}
+                    <slot name="vviinn-basket-button-text">
+                      <span>
+                        {this.appliedDiscountPercentage
+                          ? `${this.appliedDiscountPercentage}% saved`
+                          : i18next.t("setBasketButtonText")}
+                      </span>
+                    </slot>
+                  </Fragment>
+                ) : (
+                  <slot name="vviinn-basket-button-text">
+                    <span>{i18next.t("basketButtonText")}</span>
+                  </slot>
+                )}
               </button>
             )}
-          </div>
+          </Fragment>
         )}
-        {this.mode === "set" ? (
+        {this.isSetMode && !this.appliedDiscountPercentage && (
           <button
             class={{
               "update-button": true,
@@ -338,7 +364,7 @@ export class VviinnProductCard {
             part="update-button-item"
             onClick={() => {
               this.vviinnCrossSellingClick.emit({
-                animationInterval: this.generateRandomNumber(800, 1400),
+                animationInterval: generateRandomNumber(800, 1400),
                 productData: this.productData,
               });
             }}
@@ -347,7 +373,7 @@ export class VviinnProductCard {
               <UpdateIcon />
             </slot>
           </button>
-        ) : null}
+        )}
       </Host>
     );
   }

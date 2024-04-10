@@ -57,6 +57,7 @@ export type ProductCardEventData = {
   productName: string;
   productType: string;
   clickEvent?: MouseEvent;
+  discount?: number;
 };
 
 export type CrossSellingClickEventData = {

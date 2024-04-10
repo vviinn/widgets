@@ -12,13 +12,21 @@ import { chunksOf } from "fp-ts/lib/Array";
 import { Recommendation } from "../../recommendation/recommendation";
 import { ChevronIcon } from "../vviinn-icons";
 import { CampaignTypeId } from "../../campaign/Campaign";
-import { CrossSellingClickEvent } from "../../recommendation/events";
-import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-vidget";
-
-const COLUMNS_NUMBER_CSS_VAR = "--vviinn-carousel-columns-internal";
-const CAROUSEL_WIDTH_CSS_VAR = "--vviinn-carousel-content-width";
-const CAROUSEL_IMAGE_WIDTH_CSS_VAR = "--vviinn-carousel-image-width";
-const CONTENT_GROUP_CSS_CLASS = "items-group";
+import {
+  CrossSellingClickEvent,
+  ProductCardEvent,
+} from "../../recommendation/events";
+import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
+import {
+  CAROUSEL_IMAGE_WIDTH_CSS_VAR,
+  CAROUSEL_WIDTH_CSS_VAR,
+  COLUMNS_NUMBER_CSS_VAR,
+  CONTENT_GROUP_CSS_CLASS,
+  SET_MODE_DISCOUNT_STEP,
+  SET_MODE_INITIAL_DISCOUNT,
+  SET_MODE_MAX_DISCOUNT,
+} from "./constants";
+import { calculateDiscount } from "../../utils/number";
 
 type MoveDirection = "left" | "right";
 export type CarouselMode = "grid" | "continuity" | "set";
@@ -40,13 +48,18 @@ export class VviinnCarousel {
   @State() isRTL: boolean = false;
   @State() crossSellingRecommendations: Recommendation[] = [];
 
+  @State() setModeDiscount: number = SET_MODE_INITIAL_DISCOUNT;
+  @State() setModeAppliedDiscounts: {
+    [key: Recommendation["productId"]]: number;
+  } = {};
+
   @Prop() mode: CarouselMode = "continuity";
   @Prop() imageWidth: number = 140;
   @Prop() showScroll: boolean = true;
   @Prop() campaignTypeId: CampaignTypeId;
   @Prop() widgetElementId?: string;
   @Prop() gridArrowsDynamic: boolean;
-  @Prop() recommendations: Recommendation[] = [];
+  @Prop({ mutable: true }) recommendations: Recommendation[] = [];
   @Prop() widgetVersion: string;
   @Prop() addToBasketShow: boolean;
   @Prop() updatingAllCards: boolean;
@@ -60,8 +73,8 @@ export class VviinnCarousel {
   private isSetMode: boolean;
   private isGridMode: boolean;
   private isContinuityMode: boolean;
-  private isGridLike: boolean;
   private defaultAnimationInterval: number = 2000;
+  private sourceProduct?: Recommendation;
 
   private mutationObserver = new MutationObserver(() =>
     this.cloneSlottedContent()
@@ -91,13 +104,13 @@ export class VviinnCarousel {
 
       let element = this.el.querySelector(`[data-id="${productId}"]`);
       const button = element.shadowRoot.querySelector(".update-button");
-      button.classList.add("hidden");
+      button?.classList.add("hidden");
 
       this.crossSellingRecommendations = [...newCrossSellingRecommendations];
 
       const animationTimer = setTimeout(() => {
         if (recommendationIndex + step * 2 <= this.recommendations.length - 1) {
-          button.classList.remove("hidden");
+          button?.classList.remove("hidden");
         }
         clearTimeout(animationTimer);
       }, animationInterval);
@@ -114,10 +127,13 @@ export class VviinnCarousel {
     this.isSetMode = this.mode === "set";
     this.isGridMode = this.mode === "grid";
     this.isContinuityMode = this.mode === "continuity";
-    this.isGridLike = this.isGridMode || this.isSetMode;
 
     const columnsNumber = this.getColumnsNumber();
 
+    if (this.isSetMode) {
+      this.sourceProduct = this.recommendations[0];
+      this.recommendations = this.recommendations.slice(1);
+    }
     if (this.isSetMode && this.recommendations.length >= columnsNumber) {
       this.crossSellingRecommendations = this.recommendations.slice(
         0,
@@ -165,6 +181,24 @@ export class VviinnCarousel {
     );
   }
 
+  @Listen("vviinnAddToBasket")
+  async trackAddToBasket({ detail }: ProductCardEvent) {
+    if (!this.isSetMode) return;
+
+    const { productId } = detail;
+    if (this.setModeAppliedDiscounts.hasOwnProperty(productId)) return;
+
+    this.setModeAppliedDiscounts = {
+      ...this.setModeAppliedDiscounts,
+      [productId]: this.setModeDiscount,
+    };
+
+    const isMaxDiscount = this.setModeDiscount === SET_MODE_MAX_DISCOUNT;
+    if (!isMaxDiscount) {
+      this.setModeDiscount += SET_MODE_DISCOUNT_STEP;
+    }
+  }
+
   private setItemWidth() {
     const widthInDocument = this.getItemWidthFromDocument();
     const itemWidth = isNaN(widthInDocument)
@@ -178,8 +212,8 @@ export class VviinnCarousel {
     return {
       content: true,
       [this.moveDirection]: true,
-      [this.isSetMode ? "grid" : this.mode]: true,
-      "show-scrollbar": this.showScroll,
+      [this.mode]: true,
+      "show-scrollbar": this.isSetMode ? false : this.showScroll,
     };
   }
 
@@ -335,7 +369,7 @@ export class VviinnCarousel {
 
   private getClassMap() {
     return {
-      [this.isSetMode ? "grid" : this.mode]: true,
+      [this.mode]: true,
       "show-scrollbar": this.showScrollbar(),
     };
   }
@@ -344,6 +378,18 @@ export class VviinnCarousel {
     recommendation: Recommendation,
     rank: number
   ): HTMLVviinnProductCardElement {
+    const appliedDiscount =
+      this.setModeAppliedDiscounts[recommendation.productId];
+
+    const setModeDiscount = calculateDiscount(
+      recommendation.price?.actual,
+      appliedDiscount ?? this.setModeDiscount
+    );
+
+    const salePrice = this.isSetMode
+      ? setModeDiscount
+      : recommendation.price.sale;
+
     return (
       <vviinn-product-card
         part="product-part"
@@ -356,9 +402,9 @@ export class VviinnCarousel {
         imageWidth={this.imageWidth}
         imageRatio={1}
         price={recommendation.price.actual}
-        salePrice={recommendation.price.sale}
-        responsive={this.isGridLike}
-        dimmedBackground={this.isContinuityMode}
+        salePrice={salePrice}
+        responsive={this.isGridMode || this.isSetMode}
+        dimmedBackground={this.isContinuityMode || this.isSetMode}
         campaignTypeId={this.campaignTypeId}
         index={rank}
         widgetElementId={this.widgetElementId}
@@ -369,6 +415,8 @@ export class VviinnCarousel {
         updatingAllCards={this.updatingAllCards}
         defaultAnimationInterval={this.defaultAnimationInterval}
         updateButtonLocation={this.updateButtonLocation}
+        appliedDiscountPercentage={appliedDiscount}
+        currentDiscountPercentage={this.setModeDiscount}
       />
     );
   }
@@ -388,7 +436,7 @@ export class VviinnCarousel {
   }
 
   private renderRecommendations() {
-    return this.isGridLike
+    return this.isGridMode
       ? this.renderGrid()
       : this.renderRecommendationsElements();
   }
@@ -437,6 +485,18 @@ export class VviinnCarousel {
             >
               <ChevronIcon />
             </button>
+          )}
+          {this.isSetMode && (
+            <vviinn-product-card
+              part="product-part"
+              class="set-mode product-card--source"
+              productTitle={this.sourceProduct.title}
+              image={this.sourceProduct.image.thumbnail}
+              price={this.sourceProduct.price.actual}
+              imageRatio={1}
+              imageWidth={300}
+              dimmedBackground={true}
+            />
           )}
 
           <div
