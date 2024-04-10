@@ -13,3 +13,7 @@ export const numberUnderDivisionMonoid: Monoid<number> = {
 export const calculateDiscount = (price: number, discount: number) => {
   return Math.round(price * (1 - discount / 100) * 100) / 100;
 };
+
+export const generateRandomNumber = (min: number, max: number) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};

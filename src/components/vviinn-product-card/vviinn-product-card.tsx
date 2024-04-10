@@ -42,6 +42,7 @@ import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 import { slotChangeListener } from "../customized-slots";
 import { BasketIcon, CheckCircleIcon, UpdateIcon } from "../vviinn-icons";
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
+import { generateRandomNumber } from "../../utils/number";
 
 /**
  * @part brand - product brand.
@@ -107,7 +108,6 @@ export class VviinnProductCard {
   /** @internal */
   @Prop() defaultAnimationInterval: number;
 
-  @State() imageLoaded: boolean = false;
   @State() isTransitioning: boolean = false;
 
   /** Event fires ones when recommendation rendered on page */
@@ -263,12 +263,7 @@ export class VviinnProductCard {
         this.imageElement = el as HTMLImageElement;
       },
     };
-
     return this.responsive ? ResponsiveImage(props) : Image(props);
-  }
-
-  private generateRandomNumber(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
   render() {
@@ -282,9 +277,11 @@ export class VviinnProductCard {
         }}
         exportparts="brand, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, basket-button, update-button-item"
       >
-        <Linked deeplink={this.deeplink} part="image-link">
-          {this.renderImage()}
-        </Linked>
+        {
+          <Linked deeplink={this.deeplink} part="image-link">
+            {this.renderImage()}
+          </Linked>
+        }
 
         {this.isTransitioning ? (
           <Fragment>
@@ -367,7 +364,7 @@ export class VviinnProductCard {
             part="update-button-item"
             onClick={() => {
               this.vviinnCrossSellingClick.emit({
-                animationInterval: this.generateRandomNumber(800, 1400),
+                animationInterval: generateRandomNumber(800, 1400),
                 productData: this.productData,
               });
             }}
