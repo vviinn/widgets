@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.47.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.46.0...v2.47.0) (2024-04-10)
+
+
+### Features
+
+* Add Buy as Set functionality to Recommendation Widget (set mode) ([fe128a5](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/fe128a5b0305b840bdcc1187e2923d5d0ca342fb))
+
 ## [2.46.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.45.0...v2.46.0) (2024-04-09)
 
 
