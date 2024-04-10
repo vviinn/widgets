@@ -169,10 +169,6 @@ picture::before {
   mix-blend-mode: multiply;
 }
 
-:host(.set-mode) {
-  line-height: 20px;
-}
-
 :host(.animated) picture::after {
   mix-blend-mode: normal;
 }
@@ -196,6 +192,12 @@ picture::before {
   display: none;
 }
 
+:host(.set-mode) {
+  line-height: 20px;
+  align-items: flex-start;
+  height: fit-content;
+}
+
 :host(.set-mode) .basket-button {
   display: flex;
   gap: 8px;
@@ -210,17 +212,13 @@ picture::before {
 
 :host(.set-mode) .title {
   font-weight: 400;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-:host(.set-mode) {
-  align-items: flex-start;
 }
 
 :host(.set-mode) .image {
+  width: var(--vviinn-set-mode-image-width, 100%);
+  height: auto;
   border: none;
+  aspect-ratio: 1;
   min-width: var(--min-image-size-set-mode);
   min-height: var(--min-image-size-set-mode);
 }

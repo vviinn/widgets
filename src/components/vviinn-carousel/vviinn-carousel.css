@@ -1,14 +1,11 @@
 :host {
   --vviinn-progressbar-width: 0;
-  --vviinn-carousel-item-width: 150px;
   --vviinn-carousel-columns-internal: var(--vviinn-carousel-columns, 4);
-  --vviinn-carousel-image-width-system: 140px;
 }
 
 .body {
   display: flex;
   position: relative;
-  width: var(--vviinn-carousel-content-width);
   flex-direction: column;
 }
 
@@ -78,6 +75,7 @@
 
 .content.set {
   grid-gap: 20px;
+  height: fit-content;
 }
 
 .content.left > * {

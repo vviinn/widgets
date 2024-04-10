@@ -23,6 +23,7 @@ import {
   COLUMNS_NUMBER_CSS_VAR,
   CONTENT_GROUP_CSS_CLASS,
   SET_MODE_DISCOUNT_STEP,
+  SET_MODE_IMAGE_WIDTH,
   SET_MODE_INITIAL_DISCOUNT,
   SET_MODE_MAX_DISCOUNT,
 } from "./constants";
@@ -80,6 +81,8 @@ export class VviinnCarousel {
     this.cloneSlottedContent()
   );
 
+  private handleWindowResize = () => this.setImageWidthSetMode("100%");
+
   private isLastGroup = () =>
     this.activeContentGroup === this.getContentGroups().length - 1 &&
     this.isGridMode;
@@ -106,6 +109,9 @@ export class VviinnCarousel {
       const button = element.shadowRoot.querySelector(".update-button");
       button?.classList.add("hidden");
 
+      const imageWidth = element.getBoundingClientRect().width;
+      this.setImageWidthSetMode(`${imageWidth}px`);
+
       this.crossSellingRecommendations = [...newCrossSellingRecommendations];
 
       const animationTimer = setTimeout(() => {
@@ -131,6 +137,8 @@ export class VviinnCarousel {
     const columnsNumber = this.getColumnsNumber();
 
     if (this.isSetMode) {
+      window.addEventListener("resize", this.handleWindowResize);
+
       this.sourceProduct = this.recommendations[0];
       this.recommendations = this.recommendations.slice(1);
     }
@@ -144,6 +152,7 @@ export class VviinnCarousel {
 
   disconnectedCallback() {
     this.resizeObserver.disconnect();
+    window.removeEventListener("resize", this.handleWindowResize);
   }
 
   componentDidLoad() {
@@ -206,6 +215,10 @@ export class VviinnCarousel {
       : widthInDocument;
 
     this.el.style.setProperty(CAROUSEL_IMAGE_WIDTH_CSS_VAR, `${itemWidth}px`);
+  }
+
+  private setImageWidthSetMode(width: string) {
+    this.el.style.setProperty(SET_MODE_IMAGE_WIDTH, width);
   }
 
   private getContentClassMap() {
@@ -403,7 +416,7 @@ export class VviinnCarousel {
         imageRatio={1}
         price={recommendation.price.actual}
         salePrice={salePrice}
-        responsive={this.isGridMode || this.isSetMode}
+        responsive={this.isGridMode}
         dimmedBackground={this.isContinuityMode || this.isSetMode}
         campaignTypeId={this.campaignTypeId}
         index={rank}
