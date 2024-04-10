@@ -564,11 +564,11 @@ export class VviinnVprWidget implements ComponentInterface {
           <div class="widget-header">
             <div>
               <h2 part="recommendations-title">
-                {this.isSetMode ? "Buy a set to get discount" : this.blockTitle}
+                {this.isSetMode
+                  ? i18next.t("setMode.widgetTitle")
+                  : this.blockTitle}
               </h2>
-              {this.isSetMode && (
-                <h3>Save up to 15% for buying products from the list</h3>
-              )}
+              {this.isSetMode && <h3>{i18next.t("setMode.widgetSubtitle")}</h3>}
             </div>
 
             {this.isSetMode && this.updateButtonLocation !== "onItem" ? (
@@ -580,7 +580,7 @@ export class VviinnVprWidget implements ComponentInterface {
                 <slot name="vviinn-update-icon-top">
                   <UpdateIcon />
                 </slot>
-                <span>Suggest New Set</span>
+                <span>{i18next.t("setMode.updateButtonText")}</span>
               </button>
             ) : null}
           </div>

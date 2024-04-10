@@ -341,8 +341,10 @@ export class VviinnProductCard {
                     <slot name="vviinn-basket-button-text">
                       <span>
                         {this.appliedDiscountPercentage
-                          ? `${this.appliedDiscountPercentage}% saved`
-                          : i18next.t("setBasketButtonText")}
+                          ? `${this.appliedDiscountPercentage}% ${i18next.t(
+                              "setMode.appliedDiscountText"
+                            )}`
+                          : i18next.t("setMode.basketButtonText")}
                       </span>
                     </slot>
                   </Fragment>
