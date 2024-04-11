@@ -92,6 +92,7 @@ export class VviinnProductCard {
   @Prop() updateButtonLocation: UpdateButtonLocation;
   @Prop() appliedDiscountPercentage?: number;
   @Prop() currentDiscountPercentage?: number;
+  @Prop() isSourceProduct: boolean = false;
 
   /** @internal */
   @Prop() campaignTypeId: CampaignTypeId;
@@ -262,6 +263,7 @@ export class VviinnProductCard {
       ref: (el) => {
         this.imageElement = el as HTMLImageElement;
       },
+      isSource: this.isSourceProduct,
     };
     return this.responsive ? ResponsiveImage(props) : Image(props);
   }

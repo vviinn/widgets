@@ -509,6 +509,7 @@ export class VviinnCarousel {
               imageRatio={1}
               imageWidth={300}
               dimmedBackground={true}
+              isSourceProduct={true}
             />
           )}
 
