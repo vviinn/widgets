@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.48.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.48.0...v2.48.1) (2024-04-11)
+
+
+### Bug Fixes
+
+* Fix issue with resizing cards in Set Widget (Recommendation) ([2b91166](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/2b911663884ce26df17dcc08a3c4981b7b45be15))
+
 ## [2.48.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.47.0...v2.48.0) (2024-04-10)
 
 
