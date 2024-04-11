@@ -94,6 +94,7 @@ img {
 }
 
 .zoom-buttons button {
+  color: white;
   display: flex;
   width: 48px;
   height: 48px;

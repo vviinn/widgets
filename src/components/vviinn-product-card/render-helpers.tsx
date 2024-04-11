@@ -1,6 +1,7 @@
 import { pipe } from "fp-ts/lib/function";
 import * as E from "fp-ts/lib/Either";
 import { FunctionalComponent, h } from "@stencil/core";
+import { PlusIcon } from "../vviinn-icons";
 
 const FIT_EXPR = /fit\/\d+\//;
 
@@ -115,6 +116,7 @@ export type ImageProps = {
   src: string;
   lazy: boolean;
   ref: (el: HTMLImageElement) => void;
+  isSource?: boolean;
 };
 
 export const Image = (props: ImageProps, onLoadEnd = () => undefined) => (
@@ -130,6 +132,7 @@ export const Image = (props: ImageProps, onLoadEnd = () => undefined) => (
       ref={props.ref}
       onLoad={onLoadEnd}
     />
+    {props.isSource && <PlusIcon />}
   </picture>
 );
 
