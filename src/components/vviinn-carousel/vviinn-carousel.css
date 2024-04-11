@@ -1,39 +1,12 @@
 :host {
   --vviinn-progressbar-width: 0;
-  --vviinn-carousel-item-width: 150px;
   --vviinn-carousel-columns-internal: var(--vviinn-carousel-columns, 4);
-  --vviinn-carousel-image-width-system: 140px;
 }
 
 .body {
   display: flex;
   position: relative;
-  width: var(--vviinn-carousel-content-width);
   flex-direction: column;
-}
-
-.body.set {
-  justify-content: space-between;
-  overflow-x: auto;
-  margin-left: auto;
-  display: flex;
-  flex-direction: row;
-  gap: 112px;
-}
-
-.body.set::-webkit-scrollbar {
-  display: none;
-}
-
-@media (max-width: 768px) {
-  .body.set {
-    gap: 40px;
-  }
-}
-
-.body.set .content {
-  max-width: fit-content;
-  overflow: unset;
 }
 
 .bullets {
@@ -74,10 +47,6 @@
   overflow-x: auto;
   flex-grow: 1;
   padding-bottom: 16px;
-}
-
-.content.set {
-  grid-gap: 20px;
 }
 
 .content.left > * {
@@ -150,4 +119,30 @@ vviinn-product-card::part(price-container) {
   .items-group {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+.body.set {
+  max-width: 100%;
+  justify-content: space-between;
+  margin-left: auto;
+  display: flex;
+  flex-direction: row;
+  gap: 112px;
+}
+
+.body.set::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .body.set {
+    gap: 40px;
+  }
+}
+
+.content.set {
+  grid-gap: 20px;
+  height: fit-content;
+  max-width: fit-content;
+  overflow: unset;
 }

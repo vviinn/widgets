@@ -304,7 +304,7 @@ export class VviinnVprWidget implements ComponentInterface {
   async componentWillLoad() {
     await i18next.init({
       lng: this.locale,
-      fallbackLng: "de-DE",
+      fallbackLng: "en",
       resources,
     });
 

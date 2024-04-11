@@ -98,9 +98,7 @@ picture::before {
   position: absolute;
   top: 8px;
   right: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 6px;
   width: 32px;
   height: 32px;
   z-index: 1;
@@ -109,6 +107,11 @@ picture::before {
   border: none;
   color: white;
   cursor: pointer;
+}
+
+.update-button svg {
+  width: 20px;
+  height: 20px;
 }
 
 .update-button::after {
@@ -169,10 +172,6 @@ picture::before {
   mix-blend-mode: multiply;
 }
 
-:host(.set-mode) {
-  line-height: 20px;
-}
-
 :host(.animated) picture::after {
   mix-blend-mode: normal;
 }
@@ -196,6 +195,12 @@ picture::before {
   display: none;
 }
 
+:host(.set-mode) {
+  line-height: 20px;
+  align-items: flex-start;
+  height: auto;
+}
+
 :host(.set-mode) .basket-button {
   display: flex;
   gap: 8px;
@@ -208,24 +213,29 @@ picture::before {
   color: #525252;
 }
 
-:host(.set-mode) .title {
-  font-weight: 400;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
+:host(.set-mode:not(.animated)) .basket-button {
+  margin-top: auto;
 }
 
-:host(.set-mode) {
-  align-items: flex-start;
+:host(.set-mode) .basket-button:hover {
+  background-color: rgb(234, 234, 234);
+}
+
+:host(.set-mode) .title {
+  font-weight: 400;
 }
 
 :host(.set-mode) .image {
+  width: var(--vviinn-set-mode-image-width, 100%);
+  height: auto;
   border: none;
+  aspect-ratio: 1;
   min-width: var(--min-image-size-set-mode);
   min-height: var(--min-image-size-set-mode);
 }
 
 :host(.set-mode.product-card--source) {
+  height: fit-content;
   position: relative;
   flex-grow: 1;
 }
@@ -276,4 +286,16 @@ picture::before {
   100% {
     background-color: rgba(244, 244, 244);
   }
+}
+
+.discount-label {
+  position: absolute;
+  left: 0;
+  top: 13px;
+  line-height: 20px;
+  padding: 2px 4px;
+  border-radius: 0px 4px 4px 0px;
+  color: white;
+  background-color: #ff3944;
+  letter-spacing: 0.5px;
 }
