@@ -9,30 +9,6 @@
   flex-direction: column;
 }
 
-.body.set {
-  justify-content: space-between;
-  overflow-x: auto;
-  margin-left: auto;
-  display: flex;
-  flex-direction: row;
-  gap: 112px;
-}
-
-.body.set::-webkit-scrollbar {
-  display: none;
-}
-
-@media (max-width: 768px) {
-  .body.set {
-    gap: 40px;
-  }
-}
-
-.body.set .content {
-  max-width: fit-content;
-  overflow: unset;
-}
-
 .bullets {
   margin-top: 16px;
   display: flex;
@@ -71,11 +47,6 @@
   overflow-x: auto;
   flex-grow: 1;
   padding-bottom: 16px;
-}
-
-.content.set {
-  grid-gap: 20px;
-  height: fit-content;
 }
 
 .content.left > * {
@@ -148,4 +119,30 @@ vviinn-product-card::part(price-container) {
   .items-group {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+.body.set {
+  max-width: 100%;
+  justify-content: space-between;
+  margin-left: auto;
+  display: flex;
+  flex-direction: row;
+  gap: 112px;
+}
+
+.body.set::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .body.set {
+    gap: 40px;
+  }
+}
+
+.content.set {
+  grid-gap: 20px;
+  height: fit-content;
+  max-width: fit-content;
+  overflow: unset;
 }

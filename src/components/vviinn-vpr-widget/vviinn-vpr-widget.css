@@ -18,6 +18,14 @@
   width: 100%;
 }
 
+:host(.set) vviinn-carousel {
+  overflow-x: auto;
+}
+
+:host(.set) vviinn-carousel::-webkit-scrollbar {
+  display: none;
+}
+
 .widget-header {
   display: flex;
   flex-wrap: wrap;

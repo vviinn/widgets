@@ -105,14 +105,14 @@ export class VviinnCarousel {
       newCrossSellingRecommendations[crossSellingIndex] =
         this.recommendations[recommendationIndex + step];
 
+      this.crossSellingRecommendations = [...newCrossSellingRecommendations];
+
       let element = this.el.querySelector(`[data-id="${productId}"]`);
       const button = element.shadowRoot.querySelector(".update-button");
       button?.classList.add("hidden");
 
       const imageWidth = element.getBoundingClientRect().width;
       this.setImageWidthSetMode(`${imageWidth}px`);
-
-      this.crossSellingRecommendations = [...newCrossSellingRecommendations];
 
       const animationTimer = setTimeout(() => {
         if (recommendationIndex + step * 2 <= this.recommendations.length - 1) {

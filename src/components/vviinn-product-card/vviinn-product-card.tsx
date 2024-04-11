@@ -285,8 +285,8 @@ export class VviinnProductCard {
 
         {this.isTransitioning ? (
           <Fragment>
-            <vviinn-skeleton height={20}></vviinn-skeleton>
-            <vviinn-skeleton height={20} halfWidth={true}></vviinn-skeleton>
+            <vviinn-skeleton height={20} />
+            <vviinn-skeleton height={20} halfWidth={true} />
           </Fragment>
         ) : (
           <Fragment>
@@ -317,7 +317,7 @@ export class VviinnProductCard {
         {(this.addToBasketShow || this.isSetMode) && (
           <Fragment>
             {this.isTransitioning ? (
-              <vviinn-skeleton height={44}></vviinn-skeleton>
+              <vviinn-skeleton height={44} />
             ) : (
               <button
                 class={{

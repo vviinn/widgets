@@ -195,7 +195,7 @@ picture::before {
 :host(.set-mode) {
   line-height: 20px;
   align-items: flex-start;
-  height: fit-content;
+  height: auto;
 }
 
 :host(.set-mode) .basket-button {
@@ -208,6 +208,10 @@ picture::before {
   background-color: #f4f4f4;
   font-weight: 500;
   color: #525252;
+}
+
+:host(.set-mode:not(.animated)) .basket-button {
+  margin-top: auto;
 }
 
 :host(.set-mode) .basket-button:hover {
@@ -228,6 +232,7 @@ picture::before {
 }
 
 :host(.set-mode.product-card--source) {
+  height: fit-content;
   position: relative;
   flex-grow: 1;
 }
