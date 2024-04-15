@@ -23,13 +23,6 @@ import { Locale } from "../../locale";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 
 /**
- * @slot vviinn-onboarding-title - Title of onboarding section.
- * @slot onboarding-card-1-icon - Icon (or other graphics) on the first onboarding slide.
- * @slot onboarding-card-1-text - Text content of first onboarding slide.
- * @slot onboarding-card-2-icon - Icon (or other graphics) on the second onboarding slide.
- * @slot onboarding-card-2-text - Text content of second onboarding slide.
- * @slot onboarding-card-3-icon - Icon (or other graphics) on the third onboarding slide.
- * @slot onboarding-card-3-text - Text content of third onboarding slide.
  * @slot vviinn-teaser-text - Text on widget's main screen.
  * @slot vviinn-image-upload-button-text - Title of Upload Button.
  * @slot vviinn-show-files-button-text - Title of Show Files Button.

@@ -216,6 +216,7 @@ const uploadText = (query: string) => {
   state.searchType = "text";
   state.loading = true;
 
+  console.log(state.campaignId);
   const body = JSON.stringify({
     query,
     campaign: O.getOrElse(() => "")(state.campaignId),

@@ -104,13 +104,6 @@ type UploadSource = "uploadPhoto" | "startCamera";
  * @part title - Title inside Product Card.
  * @part text-search-input - Text search input.
 
- * @slot vviinn-onboarding-title - Title of onboarding section.
- * @slot onboarding-card-1-icon - Icon (or other graphics) on the first onboarding slide.
- * @slot onboarding-card-1-text - Text content of first onboarding slide.
- * @slot onboarding-card-2-icon - Icon (or other graphics) on the second onboarding slide.
- * @slot onboarding-card-2-text - Text content of second onboarding slide.
- * @slot onboarding-card-3-icon - Icon (or other graphics) on the third onboarding slide.
- * @slot onboarding-card-3-text - Text content of third onboarding slide.
  * @slot vviinn-teaser-text - Text on widget's main screen.
  * @slot vviinn-image-upload-button-text - Title of Upload Button.
  * @slot vviinn-image-upload-icon - Icon of Upload Button.
