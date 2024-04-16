@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.48.3](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.48.2...v2.48.3) (2024-04-16)
+
+
+### Bug Fixes
+
+* Add thin scrollbar for set widget (Recommendation) ([16f2d68](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/16f2d6803a6386aa96a8a0f4c29f48f99792d076))
+
 ### [2.48.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.48.1...v2.48.2) (2024-04-11)
 
 
