@@ -89,13 +89,13 @@ export type ObjectsDetectedEvent = CustomEvent<ValueObject<DetectedObject>[]>;
 
 export const imageSearchSessionClient = (
   initialData: RequestInit,
-  campaignId: O.Option<string> = O.none,
+  campaignId: string,
   excludedFilters: string
 ): TE.TaskEither<BasicError<Response | string>, SearchSession> => {
   const searchUrl = "search/session";
 
   const requestUrl = pipe(
-    campaignId,
+    O.fromNullable(campaignId),
     O.fold(
       () => {
         const params: string[] = [];

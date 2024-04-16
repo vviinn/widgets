@@ -11,8 +11,6 @@ import {
   EventEmitter,
 } from "@stencil/core";
 import * as O from "fp-ts/lib/Option";
-import { pipe } from "fp-ts/lib/function";
-import { isEmpty } from "fp-ts/string";
 import { v4 as uuidv4 } from "uuid";
 import i18next from "i18next";
 
@@ -57,12 +55,6 @@ import { CameraActionIcon, UploadActionIcon } from "../vviinn-icons";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 import { videoStreamSettings } from "../../video/settings";
 import { Recommendation } from "../..";
-
-const filterInt = (value: string) =>
-  /^[-+]?(\d+|Infinity)$/.test(value) ? Number(value) : NaN;
-
-const notEmptyString = (s: string) => !isEmpty(s);
-const notNan = (n: number): boolean => !isNaN(n);
 
 const checkDeviceType = () => {
   const ua = navigator.userAgent;
@@ -515,21 +507,12 @@ export class VviinnVpsWidget {
     this.cameraAvailable =
       !!navigator.mediaDevices && !!navigator.mediaDevices.getUserMedia;
 
-    const campaignId = pipe(
-      this.campaignId,
-      O.fromNullable,
-      O.chain(O.fromPredicate(notEmptyString)),
-      O.map(filterInt),
-      O.chain(O.fromPredicate(notNan)),
-      O.map((s) => `${s}`)
-    );
-
     if (this.excluded) {
       this.excluded = parseExcluded(this.excluded);
     }
 
     searchState.token = this.token;
-    searchState.campaignId = campaignId;
+    searchState.campaignId = this.campaignId;
     searchState.excluded = this.excluded;
 
     this.uiSessionId = uuidv4();
