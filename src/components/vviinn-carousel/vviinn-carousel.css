@@ -6,6 +6,7 @@
 .body {
   display: flex;
   position: relative;
+  width: var(--vviinn-carousel-content-width);
   flex-direction: column;
 }
 
