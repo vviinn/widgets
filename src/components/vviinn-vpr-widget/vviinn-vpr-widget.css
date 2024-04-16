@@ -22,8 +22,8 @@
   overflow-x: auto;
 }
 
-:host(.set) vviinn-carousel::-webkit-scrollbar {
-  display: none;
+:host(.set) vviinn-carousel {
+  scrollbar-width: thin;
 }
 
 .widget-header {
