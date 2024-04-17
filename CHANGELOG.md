@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.48.4](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.48.3...v2.48.4) (2024-04-17)
+
+
+### Bug Fixes
+
+* Add possibility to pass campaign-id as string to Search Widget ([05f54c8](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/05f54c867e079a110453c9d0575f11c3547b9d8d))
+* Remove unused slots and make according changes in documentation ([c2b8022](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/c2b802267b090da7972cc9bbeac121a52cdda582))
+
 ### [2.48.3](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.48.2...v2.48.3) (2024-04-16)
 
 
