@@ -218,7 +218,7 @@ const uploadText = (query: string) => {
 
   const body = JSON.stringify({
     query,
-    campaign: state.campaignId,
+    ...(state.campaignId.length ? { campaign: state.campaignId } : {}),
   });
 
   const tokenWithBody = sequenceToEither(
