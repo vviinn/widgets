@@ -23,19 +23,12 @@ Slots that could be used in Search Widget and Search Button (`vviinn-vps-widget`
 - vviinn-image-upload-button-text – _title of Upload Button_
 - vviinn-show-files-button-text – _title of Show Files Button_
 - vviinn-camera-button-text – _title of Camera Button_
-- onboarding-card-1-icon – _icon (or other graphics) on the first onboarding slide_
-- onboarding-card-1-text – _text content of the first onboarding slide_
-- onboarding-card-2-icon – _icon (or other graphics) on the second onboarding slide_
-- onboarding-card-2-text – _text content of the second onboarding slide_
-- onboarding-card-3-icon – _icon (or other graphics) on the third onboarding slide_
-- onboarding-card-3-text – _text content of the third onboarding slide_
-- vviinn-onboarding-title – _title of onboarding section_
 - vviinn-privacy-badge-text – _text content of privacy notification block_
 - vviinn-teaser-text – _text on the widget's main screen_
 
 ## Customization example of vviinn-vps-button
 
-Let's customize `vviinn-onboarding-title` and replace it with the custom text. It's important to note that when we use any named slots inside `vviinn-vps-button` we also need to provide an icon to "default" slot.
+Let's customize `vviinn-teaser-text` and replace it with the custom text. It's important to note that when we use any named slots inside `vviinn-vps-button` we also need to provide an icon to "default" slot.
 
 ```html
 <vviinn-vps-button>
@@ -56,11 +49,11 @@ Let's customize `vviinn-onboarding-title` and replace it with the custom text. I
     />
   </svg>
   <!-- Our named slot -->
-  <h3 slot="vviinn-onboarding-title">Your custom title</h3>
+  <h3 slot="vviinn-teaser-text">Your custom text</h3>
 </vviinn-vps-button>
 ```
 
-Here is our button with the custom icon. If we click on it, we will also see the customized `vviinn-onboarding-title`.
+Here is our button with the custom icon. If we click on it, we will also see the customized `vviinn-teaser-text`.
 
 <vviinn-vps-button>
   <svg width="22" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -71,7 +64,7 @@ Here is our button with the custom icon. If we click on it, we will also see the
       fill="#008080"
     />
   </svg>
-  <h3 slot="vviinn-onboarding-title">Your custom title</h3>
+  <h3 slot="vviinn-teaser-text">Your custom text</h3>
 </vviinn-vps-button>
 
  Anything we put between the opening and closing tags without the `slot` attribute will be placed inside the "default" slot. The slot has no restrictions for any element type. It could be an `<svg>` like in the example above or any HTML will be valid.

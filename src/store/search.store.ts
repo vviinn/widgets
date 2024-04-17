@@ -43,7 +43,7 @@ const makeAuthorizedRequest = (
 
 type SearchStore = {
   token?: string;
-  campaignId: O.Option<string>;
+  campaignId?: string;
   excluded?: string;
   results: Recommendation[];
   filters: SearchSessionFilter[];
@@ -70,7 +70,7 @@ type SearchStore = {
 };
 
 const { state, onChange } = createStore<SearchStore>({
-  campaignId: O.none,
+  campaignId: "",
   excluded: "",
   results: [],
   filters: [],
@@ -218,7 +218,7 @@ const uploadText = (query: string) => {
 
   const body = JSON.stringify({
     query,
-    campaign: O.getOrElse(() => "")(state.campaignId),
+    ...(state.campaignId.length ? { campaign: state.campaignId } : {}),
   });
 
   const tokenWithBody = sequenceToEither(
