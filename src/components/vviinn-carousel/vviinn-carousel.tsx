@@ -247,7 +247,13 @@ export class VviinnCarousel {
     );
     const sum = contentWidths.reduce((acc, val) => acc + val, 0);
 
-    return sum / contentWidths.length;
+    const contentBlockStyle = window.getComputedStyle(this.getContentNode());
+    const contentGapString = contentBlockStyle.getPropertyValue("gap");
+    const contentGap = !isNaN(parseInt(contentGapString.split("px")[0]))
+      ? parseInt(contentGapString)
+      : 0;
+
+    return sum / contentWidths.length + contentGap;
   }
 
   private getHostParent(): Element {
