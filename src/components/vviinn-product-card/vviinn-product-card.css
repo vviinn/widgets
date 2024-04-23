@@ -59,6 +59,8 @@
 .title {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+  overflow-wrap: anywhere;
+  text-overflow: ellipsis;
   color: #161616;
   display: -webkit-box;
   font-size: 16px;
