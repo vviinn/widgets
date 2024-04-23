@@ -28,6 +28,8 @@ import { checkFileWithExtention, resizeFileTo } from "./file-processing";
 import { imageFromFileTask } from "../Image/fromFile";
 
 const RESIZED_IMAGE_WIDTH = 500;
+const HI_RES_RESIZED_IMAGE_WIDTH = 1024;
+
 const makeAuthorizedRequest = (
   token: string
 ): E.Either<BasicError<string>, RequestInit> =>
@@ -132,7 +134,7 @@ const detectObjects = async (data: SearchSession) => {
   state.objectDetectionInProgress = false;
 };
 
-export const uploadHiresFile = async (
+export const uploadHiResFile = async (
   sessionResponse: SearchSession,
   file: File
 ) => {
@@ -295,6 +297,7 @@ export const processSelectedFile = async (file: File) => {
   const originFile = checkFileWithExtention(file);
 
   const fileResizer = resizeFileTo(RESIZED_IMAGE_WIDTH);
+  const hiResFileResizer = resizeFileTo(HI_RES_RESIZED_IMAGE_WIDTH);
 
   const resizeFileTask = pipe(
     originFile,
@@ -302,18 +305,26 @@ export const processSelectedFile = async (file: File) => {
     TE.chainTaskK(fileResizer)
   );
 
-  const session = await pipe(resizeFileTask, TE.chain(uploadFile))();
-
-  pipe(
-    sequenceToEither(session, originFile),
-    E.map(([sessionObject, file]) => uploadHiresFile(sessionObject, file))
+  const resizeHiResFileTask = pipe(
+    originFile,
+    TE.fromEither,
+    TE.chainTaskK(hiResFileResizer)
   );
+
+  const session = await pipe(resizeFileTask, TE.chain(uploadFile))();
 
   await pipe(
     resizeFileTask,
     TE.chainTaskK(imageFromFileTask),
     TE.map(setSelectedImage)
   )();
+
+  const resizedHiResFile = await resizeHiResFileTask();
+
+  pipe(
+    sequenceToEither(session, resizedHiResFile),
+    E.map(([sessionObject, file]) => uploadHiResFile(sessionObject, file))
+  );
 
   return session;
 };
