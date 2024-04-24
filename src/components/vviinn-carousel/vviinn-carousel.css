@@ -11,7 +11,6 @@
 }
 
 .bullets {
-  margin-top: 16px;
   display: flex;
   flex-direction: row;
   grid-gap: 24px;
@@ -43,7 +42,7 @@
 .content {
   display: flex;
   flex-direction: row;
-  grid-gap: 8px;
+  gap: 8px;
   overflow-y: hidden;
   overflow-x: auto;
   flex-grow: 1;

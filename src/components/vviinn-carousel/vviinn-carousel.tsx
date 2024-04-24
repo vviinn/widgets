@@ -9,6 +9,7 @@ import {
   Watch,
 } from "@stencil/core";
 import { chunksOf } from "fp-ts/lib/Array";
+import { pipe } from "fp-ts/lib/function";
 import { Recommendation } from "../../recommendation/recommendation";
 import { ChevronIcon } from "../vviinn-icons";
 import { CampaignTypeId } from "../../campaign/Campaign";
@@ -247,7 +248,14 @@ export class VviinnCarousel {
     );
     const sum = contentWidths.reduce((acc, val) => acc + val, 0);
 
-    return sum / contentWidths.length;
+    const contentGap = pipe(
+      window.getComputedStyle(this.getContentNode()),
+      (computedStyle) => computedStyle.getPropertyValue("gap"),
+      (contentGapString) => parseInt(contentGapString.split("px")[0]),
+      (contentGap) => (isNaN(contentGap) ? 0 : contentGap)
+    );
+
+    return sum / contentWidths.length + contentGap;
   }
 
   private getHostParent(): Element {
