@@ -250,8 +250,7 @@ export class VviinnCarousel {
 
     const contentGap = pipe(
       window.getComputedStyle(this.getContentNode()),
-      (contentBlockComputedStyle) =>
-        contentBlockComputedStyle.getPropertyValue("gap"),
+      (computedStyle) => computedStyle.getPropertyValue("gap"),
       (contentGapString) => parseInt(contentGapString.split("px")[0]),
       (contentGap) => (isNaN(contentGap) ? 0 : contentGap)
     );
