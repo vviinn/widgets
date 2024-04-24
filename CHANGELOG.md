@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.48.6](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.48.5...v2.48.6) (2024-04-24)
+
+
+### Bug Fixes
+
+* Fix basket button overflow issue and set mode bug with displaying prices ([598cb42](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/598cb42230f1355b4129a14e2b872fb0bc0c048d))
+* Fix growing card issue for Recommendation widget ([68c2bf6](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/68c2bf651dc55d6ebdcb806b2a5f6b1b1acda6a8))
+* Fix scrolling behaviour for Recommendation widget, grid mode ([aa9be1c](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/aa9be1cc09f6c8151aa70a3f5d0c46cac211d8fc))
+* remove extra margin for bullets block in Recommendation widget, grid mode ([df412af](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/df412af4bc3861259850c845bb26c3082922fde2))
+
 ### [2.48.5](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.48.4...v2.48.5) (2024-04-24)
 
 
