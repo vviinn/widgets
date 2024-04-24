@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.48.5](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.48.4...v2.48.5) (2024-04-24)
+
+
+### Bug Fixes
+
+* Add downscaling for uploaded Hi-Res image ([b3775ed](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/b3775edd7a4f59a8a4f29f8cce73fdbfa53b213a))
+
 ### [2.48.4](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.48.3...v2.48.4) (2024-04-17)
 
 
