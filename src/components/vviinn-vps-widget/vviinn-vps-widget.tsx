@@ -680,8 +680,7 @@ export class VviinnVpsWidget {
   }
 
   private renderResults() {
-    if (searchState.results.length === 0) return null;
-
+    if (searchState.results.length === 0 || !this.isResultSlide()) return null;
     if (!this.resultLoaded) {
       this.vviinnResultLoad.emit(this.getBasicEventData());
       this.trackResultEvent("load");
@@ -899,12 +898,12 @@ export class VviinnVpsWidget {
                 <div
                   class={{
                     hidden:
-                      searchState.results.length <= 0 ||
+                      searchState.results.length === 0 ||
                       this.showAspectRatioError,
                     products: true,
                   }}
                 >
-                  {this.active && this.renderResults()}
+                  {this.renderResults()}
                 </div>
               </div>
             </vviinn-slide>
