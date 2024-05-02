@@ -55,7 +55,7 @@ import { CameraActionIcon, UploadActionIcon } from "../vviinn-icons";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 import { videoStreamSettings } from "../../video/settings";
 import { Recommendation } from "../..";
-import { checkDeviceType } from "../../device";
+import { checkDeviceType } from "../../helpers/device";
 
 type UploadSource = "uploadPhoto" | "startCamera";
 
