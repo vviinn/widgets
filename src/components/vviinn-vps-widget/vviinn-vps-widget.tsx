@@ -135,7 +135,7 @@ export class VviinnVpsWidget {
   /** @internal */
   @Prop() buttonPressed?: boolean;
   /** @internal */
-  @Prop() mode: "modal" | "upload" = "modal";
+  @Prop() mode: "modal" | "upload" | "camera" = "modal";
   /** @internal */
   @Prop() resetVpsButton: () => void;
 
@@ -314,6 +314,7 @@ export class VviinnVpsWidget {
       this.adjustCameraSettings();
 
       this.stream = videoStream;
+      this.uploadSource = "startCamera";
     } catch (error) {
       // TODO: Show error in the UI
       console.log("Error accessing camera: ", error.message);
@@ -352,6 +353,7 @@ export class VviinnVpsWidget {
       this.overflow = document.body.style.overflow;
       document.body.style.overflow = "hidden";
       this.vviinnWidgetOpen.emit(this.getBasicEventData());
+      if (this.mode === "camera") this.handleStartCameraClick();
       this.trackWidgetEvent("open");
     } else {
       document.body.style.overflow = this.overflow;
@@ -362,7 +364,7 @@ export class VviinnVpsWidget {
   @Watch("buttonPressed")
   buttonPressedWatcher(pressed: boolean) {
     if (!pressed) return;
-    if (this.mode === "modal") {
+    if (this.mode === "modal" || this.mode === "camera") {
       this.active = true;
     }
   }
@@ -606,7 +608,6 @@ export class VviinnVpsWidget {
           part="start-camera_button"
           onClick={() => {
             this.handleStartCameraClick();
-            this.uploadSource = "startCamera";
           }}
         >
           {searchState.loading &&
