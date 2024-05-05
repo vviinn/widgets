@@ -178,7 +178,10 @@ export class VviinnVpsButton {
           buttonPressed={this.buttonPressed}
           resetVpsButton={this.resetButton.bind(this)}
           buttonElementId={this.el.id}
-          active={this.buttonPressed && this.mode === "modal"}
+          active={
+            this.buttonPressed &&
+            (this.mode === "modal" || this.mode === "camera")
+          }
           excluded={this.excluded}
           productDetailNewTab={this.productDetailNewTab}
           imageResolutionWidth={this.imageResolutionWidth}

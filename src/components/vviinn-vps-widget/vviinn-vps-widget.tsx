@@ -361,14 +361,6 @@ export class VviinnVpsWidget {
     }
   }
 
-  @Watch("buttonPressed")
-  buttonPressedWatcher(pressed: boolean) {
-    if (!pressed) return;
-    if (this.mode === "modal" || this.mode === "camera") {
-      this.active = true;
-    }
-  }
-
   @Listen("vviinnCameraEnabled")
   trackCameraEnabled({ detail: isEnabled }: CustomEvent<boolean>) {
     this.cameraEnabled = isEnabled;
