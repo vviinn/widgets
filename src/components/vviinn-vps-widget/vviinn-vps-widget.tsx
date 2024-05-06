@@ -144,6 +144,7 @@ export class VviinnVpsWidget {
   @State() wrongImageFormat: boolean = false;
   @State() trackingDeactivated: boolean = false;
   @State() stream: MediaStream | null = null;
+  @State() cameraInitializing: boolean = false;
   @State() cameraEnabled: boolean = false;
   @State() cameraButtonClicked: boolean = false;
   @State() uploadSource: UploadSource;
@@ -305,6 +306,7 @@ export class VviinnVpsWidget {
     }
 
     this.cameraButtonClicked = true;
+    this.cameraInitializing = true;
 
     try {
       const videoStream = await navigator.mediaDevices.getUserMedia({
@@ -319,6 +321,7 @@ export class VviinnVpsWidget {
       // TODO: Show error in the UI
       console.log("Error accessing camera: ", error.message);
       this.resetState();
+      this.cameraInitializing = false;
     }
   };
 
@@ -364,6 +367,7 @@ export class VviinnVpsWidget {
   @Listen("vviinnCameraEnabled")
   trackCameraEnabled({ detail: isEnabled }: CustomEvent<boolean>) {
     this.cameraEnabled = isEnabled;
+    this.cameraInitializing = false;
   }
 
   @Listen("vviinnProductLoad")
@@ -602,9 +606,10 @@ export class VviinnVpsWidget {
             this.handleStartCameraClick();
           }}
         >
-          {searchState.loading &&
-          searchState.searchType === "image" &&
-          this.uploadSource === "startCamera" ? (
+          {(searchState.loading &&
+            searchState.searchType === "image" &&
+            this.uploadSource === "startCamera") ||
+          this.cameraInitializing ? (
             <vviinn-preloader />
           ) : (
             <span class="action-button-content">
@@ -716,6 +721,7 @@ export class VviinnVpsWidget {
     this.stream = null;
     this.cameraEnabled = false;
     this.cameraButtonClicked = false;
+    this.cameraInitializing = false;
     this.setShowAspectRatioError(false);
   }
 
