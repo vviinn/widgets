@@ -58,6 +58,7 @@ import { Recommendation } from "../..";
 import { checkDeviceType } from "../../helpers/device";
 
 type UploadSource = "uploadPhoto" | "startCamera";
+const CAMERA_START_DELAY = 500;
 
 /**
  * @part close-button - Close Button in the modal's header.
@@ -304,25 +305,26 @@ export class VviinnVpsWidget {
       this.resetState();
       return;
     }
-
-    this.cameraButtonClicked = true;
     this.cameraInitializing = true;
 
-    try {
-      const videoStream = await navigator.mediaDevices.getUserMedia({
-        video: videoStreamSettings,
-      });
-      this.videoTrack = videoStream.getVideoTracks()[0];
-      this.adjustCameraSettings();
+    setTimeout(async () => {
+      this.cameraButtonClicked = true;
+      try {
+        const videoStream = await navigator.mediaDevices.getUserMedia({
+          video: videoStreamSettings,
+        });
+        this.videoTrack = videoStream.getVideoTracks()[0];
+        this.adjustCameraSettings();
 
-      this.stream = videoStream;
-      this.uploadSource = "startCamera";
-    } catch (error) {
-      // TODO: Show error in the UI
-      console.log("Error accessing camera: ", error.message);
-      this.resetState();
-      this.cameraInitializing = false;
-    }
+        this.stream = videoStream;
+        this.uploadSource = "startCamera";
+      } catch (error) {
+        // TODO: Show error in the UI
+        console.log("Error accessing camera: ", error.message);
+        this.resetState();
+        this.cameraInitializing = false;
+      }
+    }, CAMERA_START_DELAY);
   };
 
   private setShowAspectRatioError = (isError: boolean) => {
