@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.49.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.48.7...v2.49.0) (2024-05-13)
+
+
+### Features
+
+* Add camera mode for Search Widget ([6c4edab](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/6c4edab71fbeff75f695eccc0e85deea912e41a5))
+
 ### [2.48.7](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.48.6...v2.48.7) (2024-05-02)
 
 
