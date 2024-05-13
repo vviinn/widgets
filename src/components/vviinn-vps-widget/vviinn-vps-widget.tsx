@@ -55,7 +55,7 @@ import { CameraActionIcon, UploadActionIcon } from "../vviinn-icons";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 import { videoStreamSettings } from "../../video/settings";
 import { Recommendation } from "../..";
-import { checkDeviceType } from "../../helpers/device";
+import { checkDeviceType } from "../../helpers";
 
 type UploadSource = "uploadPhoto" | "startCamera";
 const CAMERA_START_DELAY = 500;
