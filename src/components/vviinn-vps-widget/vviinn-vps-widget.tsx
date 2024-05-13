@@ -55,22 +55,10 @@ import { CameraActionIcon, UploadActionIcon } from "../vviinn-icons";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 import { videoStreamSettings } from "../../video/settings";
 import { Recommendation } from "../..";
-
-const checkDeviceType = () => {
-  const ua = navigator.userAgent;
-  if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
-    return "tablet";
-  } else if (
-    /Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(
-      ua
-    )
-  ) {
-    return "mobile";
-  }
-  return "desktop";
-};
+import { checkDeviceType } from "../../helpers";
 
 type UploadSource = "uploadPhoto" | "startCamera";
+const CAMERA_START_DELAY = 500;
 
 /**
  * @part close-button - Close Button in the modal's header.
@@ -148,7 +136,7 @@ export class VviinnVpsWidget {
   /** @internal */
   @Prop() buttonPressed?: boolean;
   /** @internal */
-  @Prop() mode: "modal" | "upload" = "modal";
+  @Prop() mode: "modal" | "upload" | "camera" = "modal";
   /** @internal */
   @Prop() resetVpsButton: () => void;
 
@@ -157,6 +145,7 @@ export class VviinnVpsWidget {
   @State() wrongImageFormat: boolean = false;
   @State() trackingDeactivated: boolean = false;
   @State() stream: MediaStream | null = null;
+  @State() cameraInitializing: boolean = false;
   @State() cameraEnabled: boolean = false;
   @State() cameraButtonClicked: boolean = false;
   @State() uploadSource: UploadSource;
@@ -316,22 +305,26 @@ export class VviinnVpsWidget {
       this.resetState();
       return;
     }
+    this.cameraInitializing = true;
 
-    this.cameraButtonClicked = true;
+    setTimeout(async () => {
+      this.cameraButtonClicked = true;
+      try {
+        const videoStream = await navigator.mediaDevices.getUserMedia({
+          video: videoStreamSettings,
+        });
+        this.videoTrack = videoStream.getVideoTracks()[0];
+        this.adjustCameraSettings();
 
-    try {
-      const videoStream = await navigator.mediaDevices.getUserMedia({
-        video: videoStreamSettings,
-      });
-      this.videoTrack = videoStream.getVideoTracks()[0];
-      this.adjustCameraSettings();
-
-      this.stream = videoStream;
-    } catch (error) {
-      // TODO: Show error in the UI
-      console.log("Error accessing camera: ", error.message);
-      this.resetState();
-    }
+        this.stream = videoStream;
+        this.uploadSource = "startCamera";
+      } catch (error) {
+        // TODO: Show error in the UI
+        console.log("Error accessing camera: ", error.message);
+        this.resetState();
+        this.cameraInitializing = false;
+      }
+    }, CAMERA_START_DELAY);
   };
 
   private setShowAspectRatioError = (isError: boolean) => {
@@ -365,6 +358,7 @@ export class VviinnVpsWidget {
       this.overflow = document.body.style.overflow;
       document.body.style.overflow = "hidden";
       this.vviinnWidgetOpen.emit(this.getBasicEventData());
+      if (this.mode === "camera") this.handleStartCameraClick();
       this.trackWidgetEvent("open");
     } else {
       document.body.style.overflow = this.overflow;
@@ -372,17 +366,10 @@ export class VviinnVpsWidget {
     }
   }
 
-  @Watch("buttonPressed")
-  buttonPressedWatcher(pressed: boolean) {
-    if (!pressed) return;
-    if (this.mode === "modal") {
-      this.active = true;
-    }
-  }
-
   @Listen("vviinnCameraEnabled")
   trackCameraEnabled({ detail: isEnabled }: CustomEvent<boolean>) {
     this.cameraEnabled = isEnabled;
+    this.cameraInitializing = false;
   }
 
   @Listen("vviinnProductLoad")
@@ -619,12 +606,12 @@ export class VviinnVpsWidget {
           part="start-camera_button"
           onClick={() => {
             this.handleStartCameraClick();
-            this.uploadSource = "startCamera";
           }}
         >
-          {searchState.loading &&
-          searchState.searchType === "image" &&
-          this.uploadSource === "startCamera" ? (
+          {(searchState.loading &&
+            searchState.searchType === "image" &&
+            this.uploadSource === "startCamera") ||
+          this.cameraInitializing ? (
             <vviinn-preloader />
           ) : (
             <span class="action-button-content">
@@ -735,6 +722,7 @@ export class VviinnVpsWidget {
     this.stream = null;
     this.cameraEnabled = false;
     this.cameraButtonClicked = false;
+    this.cameraInitializing = false;
     this.setShowAspectRatioError(false);
   }
 

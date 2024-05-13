@@ -63,8 +63,8 @@ export class VviinnVpsButton {
   @Prop() campaignId: string = "";
   /** Add style to the button */
   @Prop() addStyle: boolean = false;
-  /** Show the onboarding step or skip it and move to the direct image upload. */
-  @Prop() mode: "modal" | "upload" = "modal";
+  /** Show the onboarding step, start the camera on opening, or skip the onboarding and move to the direct image upload. */
+  @Prop() mode: "modal" | "upload" | "camera" = "modal";
   /** Excluded filter. Example: "brand:Nike;custom_label_0:summer" */
   @Prop() excluded: string = "";
   /** Toggle for opening product link in new tab or not */
@@ -178,7 +178,10 @@ export class VviinnVpsButton {
           buttonPressed={this.buttonPressed}
           resetVpsButton={this.resetButton.bind(this)}
           buttonElementId={this.el.id}
-          active={this.buttonPressed && this.mode === "modal"}
+          active={
+            this.buttonPressed &&
+            (this.mode === "modal" || this.mode === "camera")
+          }
           excluded={this.excluded}
           productDetailNewTab={this.productDetailNewTab}
           imageResolutionWidth={this.imageResolutionWidth}
