@@ -85,9 +85,10 @@ export class VviinnCarousel {
   private handleWindowResize = () => this.setImageWidthSetMode("100%");
 
   private isLastGroup = () =>
-    this.activeContentGroup === this.getContentGroups().length - 1 &&
-    this.isGridMode;
-  private isFirstGroup = () => this.activeContentGroup === 0 && this.isGridMode;
+    this.isGridMode &&
+    this.activeContentGroup === this.getContentGroups().length - 1;
+
+  private isFirstGroup = () => this.isGridMode && this.activeContentGroup === 0;
 
   private updateCard = (
     productId: string,
@@ -327,27 +328,16 @@ export class VviinnCarousel {
     return Array.from(this.el.querySelectorAll(`.${CONTENT_GROUP_CSS_CLASS}`));
   }
 
-  private showNext() {
-    this.moveDirection = "right";
+  private handleCarouselButtonClick(action: MoveDirection) {
+    this.moveDirection = action;
     const contentContainer = this.getContentNode();
+    const { scrollLeft } = contentContainer;
+    const step = this.calculateMoveStep();
 
     requestAnimationFrame(() => {
       contentContainer.scrollTo({
         top: 0,
-        left: contentContainer.scrollLeft + this.calculateMoveStep(),
-        behavior: "smooth",
-      });
-    });
-  }
-
-  private showPrev() {
-    this.moveDirection = "left";
-    const contentContainer = this.getContentNode();
-
-    requestAnimationFrame(() => {
-      contentContainer.scrollTo({
-        top: 0,
-        left: contentContainer.scrollLeft - this.calculateMoveStep(),
+        left: action === "right" ? scrollLeft + step : scrollLeft - step,
         behavior: "smooth",
       });
     });
@@ -500,7 +490,7 @@ export class VviinnCarousel {
           {!this.isSetMode && (
             <button
               class="prev"
-              onClick={() => this.showPrev()}
+              onClick={() => this.handleCarouselButtonClick("left")}
               part="carousel-button"
               disabled={this.gridArrowsDynamic && this.isFirstGroup()}
             >
@@ -531,7 +521,7 @@ export class VviinnCarousel {
           {!this.isSetMode && (
             <button
               class="next"
-              onClick={() => this.showNext()}
+              onClick={() => this.handleCarouselButtonClick("right")}
               part="carousel-button"
               disabled={this.gridArrowsDynamic && this.isLastGroup()}
             >
