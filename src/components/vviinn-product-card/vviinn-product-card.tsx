@@ -152,6 +152,18 @@ export class VviinnProductCard {
     slotChangeListener(this, this.el);
   }
 
+  componentDidLoad() {
+    this.vviinnProductLoad.emit(this.productData);
+
+    this.intersectionObserver = new IntersectionObserver(
+      this.intersectionCallback.bind(this.imageElement),
+      { threshold: 1.0 }
+    );
+    this.intersectionObserver.observe(this.imageElement);
+
+    this.addLinksEventListeners();
+  }
+
   @Listen("vviinnCrossSellingClick")
   crossSellingClickListener({ detail }: CrossSellingClickEvent) {
     const { animationInterval } = detail;
@@ -212,15 +224,7 @@ export class VviinnProductCard {
     }
   };
 
-  componentDidLoad() {
-    this.vviinnProductLoad.emit(this.productData);
-
-    this.intersectionObserver = new IntersectionObserver(
-      this.intersectionCallback.bind(this.imageElement),
-      { threshold: 1.0 }
-    );
-    this.intersectionObserver.observe(this.imageElement);
-
+  private addLinksEventListeners() {
     const links = this.el.shadowRoot.querySelectorAll("a");
 
     links.forEach((link) => {

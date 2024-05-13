@@ -1,1 +1,0 @@
-export { checkDeviceType } from "./checkDeviceType";
