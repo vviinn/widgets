@@ -57,13 +57,37 @@ img {
 #photo-frame {
   position: relative;
   aspect-ratio: 1/1;
-  border: 1px solid white;
-  border-radius: 10px;
-  background-color: transparent;
-  box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.32);
+  border-radius: 16px;
+  box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.25);
   width: 100%;
   max-width: 580px;
   margin: 0 auto;
+}
+
+.photo-frame-corner {
+  position: absolute;
+  --delta: -1px;
+}
+
+.photo-frame-corner.top-left {
+  top: var(--delta);
+  left: var(--delta);
+}
+
+.photo-frame-corner.top-right {
+  top: var(--delta);
+  right: var(--delta);
+  transform: rotate(90deg);
+}
+.photo-frame-corner.bottom-left {
+  bottom: var(--delta);
+  left: var(--delta);
+  transform: rotate(-90deg);
+}
+.photo-frame-corner.bottom-right {
+  bottom: var(--delta);
+  right: var(--delta);
+  transform: rotate(180deg);
 }
 
 .buttons-group {

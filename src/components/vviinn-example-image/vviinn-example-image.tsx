@@ -14,7 +14,12 @@ import { toFile } from "../../Image/toFile";
 import { processSelectedFile } from "../../store/search.store";
 import * as E from "fp-ts/lib/Either";
 import { BasicEventData } from "../../recommendation/events";
-import { MinusIcon, PlusIcon, RoundCameraIcon } from "../vviinn-icons";
+import {
+  MinusIcon,
+  PhotoFrameCorner,
+  PlusIcon,
+  RoundCameraIcon,
+} from "../vviinn-icons";
 
 type ZoomCapabilities = {
   min: number;
@@ -233,7 +238,12 @@ export class VviinnExampleImage {
               hidden: !this.videoInitialized,
             }}
             id="photo-frame"
-          ></div>
+          >
+            <PhotoFrameCorner className="photo-frame-corner top-left" />
+            <PhotoFrameCorner className="photo-frame-corner top-right" />
+            <PhotoFrameCorner className="photo-frame-corner bottom-left" />
+            <PhotoFrameCorner className="photo-frame-corner bottom-right" />
+          </div>
 
           {this.zoomCapabilities && this.videoInitialized && (
             <div class="buttons-group zoom-buttons">
