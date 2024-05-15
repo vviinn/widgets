@@ -63,7 +63,6 @@ export class VviinnExampleImage {
   private initializeZoom = async () => {
     if (!this.videoTrack) return;
     const capabilities = this.videoTrack.getCapabilities() as any;
-
     if ("zoom" in capabilities) {
       this.zoomCapabilities = capabilities.zoom;
 
@@ -76,7 +75,6 @@ export class VviinnExampleImage {
   private onZoom = async (action: "in" | "out") => {
     if (!this.videoTrack || !this.zoomCapabilities) return;
     const { max, min } = this.zoomCapabilities;
-
     const currentSettings = this.videoTrack.getSettings() as any;
     const currentZoom = currentSettings.zoom ?? min;
 
@@ -232,21 +230,18 @@ export class VviinnExampleImage {
           class={{ hidden: !this.selected }}
         />
 
-        <div class="container" id="container">
-          <div
-            class={{
-              hidden: !this.videoInitialized,
-            }}
-            id="photo-frame"
-          >
-            <PhotoFrameCorner className="photo-frame-corner top-left" />
-            <PhotoFrameCorner className="photo-frame-corner top-right" />
-            <PhotoFrameCorner className="photo-frame-corner bottom-left" />
-            <PhotoFrameCorner className="photo-frame-corner bottom-right" />
-          </div>
+        <div class={{ container: true, hidden: !this.videoInitialized }}>
+          <div class="photo-frame-container">
+            <div id="photo-frame">
+              <PhotoFrameCorner className="photo-frame-corner top-left" />
+              <PhotoFrameCorner className="photo-frame-corner top-right" />
+              <PhotoFrameCorner className="photo-frame-corner bottom-left" />
+              <PhotoFrameCorner className="photo-frame-corner bottom-right" />
+            </div>
 
-          {this.zoomCapabilities && this.videoInitialized && (
-            <div class="buttons-group zoom-buttons">
+            <div
+              class={{ "zoom-buttons": true, hidden: !this.zoomCapabilities }}
+            >
               <button onClick={() => this.onZoom("out")}>
                 <MinusIcon />
               </button>
@@ -254,13 +249,14 @@ export class VviinnExampleImage {
                 <PlusIcon />
               </button>
             </div>
-          )}
+          </div>
 
           <div class="buttons-group">
-            <button
-              class={{ "photo-button": true, visible: this.videoInitialized }}
-              onClick={() => this.selectImage()}
-            >
+            <div class="buttons-group-info">
+              Put object into the square area
+            </div>
+
+            <button class="photo-button" onClick={() => this.selectImage()}>
               <RoundCameraIcon />
             </button>
           </div>
