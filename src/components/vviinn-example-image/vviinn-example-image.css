@@ -62,7 +62,7 @@ img {
   border-radius: 16px;
   box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.32);
   height: 100%;
-  max-width: 420px;
+  max-width: 500px;
   margin: 0 auto;
 }
 
@@ -83,12 +83,9 @@ img {
   }
 
   .photo-frame-container {
+    margin-top: auto;
     width: auto;
     height: auto;
-  }
-
-  .buttons-group {
-    margin-top: auto;
   }
 }
 
