@@ -1,6 +1,6 @@
-import { Meta, Story } from '@storybook/addon-docs';
+import { Meta, Story } from '@storybook/blocks';
 
-<Meta title="Installation/Vue"></Meta>
+<Meta title="Installation/Vue" />
 
 # Vue
 
@@ -9,6 +9,7 @@ To use the custom element library within the Vue app, the application must be mo
 As you see in the following example, we imported `applyPolyfills` and `defineCustomElements` from `vviinn-widgets/dist/loader` and then in the next line calling `applyPolyfills()` and `defineCustomElements()` to register the Vviinn widgets. The rest is related to Vue itself.
 
 `main.js/main.ts`
+
 ```javascript
 import './assets/main.css'
 
@@ -30,6 +31,7 @@ app.mount('#app')
 ```
 
 `In a Vue component`
+
 ```javascript
 <script setup lang="ts"></script>
 
@@ -40,7 +42,7 @@ app.mount('#app')
 <style scoped></style>
 ```
 
-## [Vue warn]: Failed to resolve component: ...
+## \[Vue warn]: Failed to resolve component: ...
 
 If you see the following Vue warning in the browser console:
 

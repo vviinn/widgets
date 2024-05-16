@@ -1,35 +1,48 @@
-import { Configuration } from "webpack";
+import { StorybookConfig } from "@storybook/web-components-webpack5";
 import { resolve } from "path";
-const config = {
-  stories: ["../../src/components/**/*.stories.@(js|jsx|ts|tsx)", "../documentation/**/*.stories.mdx"],
-  addons: ["@storybook/addon-links", "@storybook/addon-essentials", "@pxtrn/storybook-addon-docs-stencil"],
-  features: {
-    previewMdx2: true,
-    storyStoreV7: true,
-  },
+
+const config: StorybookConfig = {
+  stories: [
+    "../../src/components/**/*.stories.@(js|jsx|ts|tsx)",
+    "../documentation/**/*.mdx",
+  ],
+  addons: [
+    "@storybook/addon-links",
+    "@storybook/addon-essentials",
+    "@pxtrn/storybook-addon-docs-stencil",
+    "@storybook/addon-mdx-gfm",
+    "@storybook/addon-webpack5-compiler-babel",
+    "@chromatic-com/storybook",
+  ],
+  // features: {
+  //   previewMdx2: true,
+  // },
   core: {
-    disableTelemetry: true
+    disableTelemetry: true,
   },
-  webpackFinal: async (config: Configuration) => {
-    if(config && config.module && config.module.rules){
-      config.module.rules = [{
-        test: /\.stories\.mdx$/,
-        use: {
-          loader: resolve("./stories.loader.ts")
-        }
-      }, ...config.module.rules];
+  webpackFinal: async (config) => {
+    if (config && config.module && config.module.rules) {
+      config.module.rules = [
+        {
+          test: /\.stories\.mdx$/,
+          use: {
+            loader: resolve("./stories.loader.ts"),
+          },
+        },
+        ...config.module.rules,
+      ];
     }
-    if(config && config.entry && Array.isArray(config.entry)){
-      config.entry = config.entry.filter(singleEntry => !singleEntry.includes('/webpack-hot-middleware/'))
+    if (config && config.entry && Array.isArray(config.entry)) {
+      config.entry = config.entry.filter(
+        (singleEntry) => !singleEntry.includes("/webpack-hot-middleware/")
+      );
     }
     return config;
   },
   framework: {
     name: "@storybook/web-components-webpack5",
-    options: {}
+    options: {},
   },
-  docs: {
-    autodocs: "tag"
-  }
+  docs: {},
 };
 export default config;

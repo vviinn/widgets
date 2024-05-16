@@ -1,7 +1,7 @@
-import { Meta } from "@storybook/addon-docs";
+import { Meta } from "@storybook/blocks";
 import './events.css'
 
-<Meta title="Getting Started/Events"></Meta>
+<Meta title="Getting Started/Events" />
 
 # Listening events
 
@@ -15,15 +15,18 @@ Every Vviinn Widget has some events that users can work on and listen to these e
   <thead>
     <tr><th>Name</th><th>Description</th><th>Available on</th><th>Props</th></tr>
   </thead>
+
   <tbody>
     <tr>
-       <td>vviinnWidgetLoad</td><td>Triggered when the widget is loaded and initialized. For `vviinn-vpr-button` (Product AI recommendation) it triggers in the background when the button is rendered. For `vviinn-vps-button` (Product AI search) it triggers after initializing, but only after clicking the button.</td>
+      <td>vviinnWidgetLoad</td><td>Triggered when the widget is loaded and initialized. For `vviinn-vpr-button` (Product AI recommendation) it triggers in the background when the button is rendered. For `vviinn-vps-button` (Product AI search) it triggers after initializing, but only after clicking the button.</td>
+
       <td>
-        <ul> 
-          <li>Recommendation (Button,&nbsp;Widget)</li>
-          <li>Search (Button,&nbsp;Widget)</li>
+        <ul>
+          <li>Recommendation (Button, Widget)</li>
+          <li>Search (Button, Widget)</li>
         </ul>
       </td>
+
       <td>
         <ul>
           <li>campaignTypeId</li>
@@ -34,14 +37,17 @@ Every Vviinn Widget has some events that users can work on and listen to these e
         </ul>
       </td>
     </tr>
+
     <tr>
       <td>vviinnWidgetOpen</td><td>Triggered by clicking on the widget button, right after opening the modal.</td>
+
       <td>
         <ul>
           <li>Recommendation Button</li>
           <li>Search Button</li>
         </ul>
       </td>
+
       <td>
         <ul>
           <li>campaignTypeId</li>
@@ -52,14 +58,17 @@ Every Vviinn Widget has some events that users can work on and listen to these e
         </ul>
       </td>
     </tr>
+
     <tr>
       <td>vviinnWidgetClose</td><td>Triggered by closing the widget.</td>
+
       <td>
         <ul>
           <li>Recommendation Button</li>
-          <li>Search (Button,&nbsp;Widget)</li>
+          <li>Search (Button, Widget)</li>
         </ul>
       </td>
+
       <td>
         <ul>
           <li>campaignTypeId</li>
@@ -79,15 +88,18 @@ Every Vviinn Widget has some events that users can work on and listen to these e
   <thead>
     <tr><th>Name</th><th>Description</th><th>Available on</th><th>Props</th></tr>
   </thead>
+
   <tbody>
     <tr>
       <td>vviinnProductLoad</td><td>The event is valid for all products that are received by the component after a successful search request.</td>
+
       <td>
         <ul>
-          <li>Recommendation (Button,&nbsp;Widget)</li>
-          <li>Search (Button,&nbsp;Widget)</li>
+          <li>Recommendation (Button, Widget)</li>
+          <li>Search (Button, Widget)</li>
         </ul>
       </td>
+
       <td>
         <ul>
           <li>campaignTypeId</li>
@@ -102,14 +114,17 @@ Every Vviinn Widget has some events that users can work on and listen to these e
         </ul>
       </td>
     </tr>
+
     <tr>
       <td>vviinnProductView</td><td>Triggered once for each product within one session when the product card's image appears in the browser's viewport.</td>
+
       <td>
         <ul>
-          <li>Recommendation (Button,&nbsp;Widget)</li>
-          <li>Search (Button,&nbsp;Widget)</li>
+          <li>Recommendation (Button, Widget)</li>
+          <li>Search (Button, Widget)</li>
         </ul>
       </td>
+
       <td>
         <ul>
           <li>campaignTypeId</li>
@@ -124,14 +139,17 @@ Every Vviinn Widget has some events that users can work on and listen to these e
         </ul>
       </td>
     </tr>
+
     <tr>
       <td>vviinnProductClick</td><td>Triggered when the user clicks on the product link.</td>
+
       <td>
         <ul>
-          <li>Recommendation (Button,&nbsp;Widget)</li>
-          <li>Search (Button,&nbsp;Widget)</li>
+          <li>Recommendation (Button, Widget)</li>
+          <li>Search (Button, Widget)</li>
         </ul>
       </td>
+
       <td>
         <ul>
           <li>campaignTypeId</li>
@@ -147,14 +165,17 @@ Every Vviinn Widget has some events that users can work on and listen to these e
         </ul>
       </td>
     </tr>
+
     <tr>
       <td>vviinnResultLoad</td><td>Triggered after at least one result is loaded.</td>
+
       <td>
         <ul>
-          <li>Recommendation (Button,&nbsp;Widget)</li>
-          <li>Search (Button,&nbsp;Widget)</li>
+          <li>Recommendation (Button, Widget)</li>
+          <li>Search (Button, Widget)</li>
         </ul>
       </td>
+
       <td>
         <ul>
           <li>campaignTypeId</li>
@@ -165,14 +186,17 @@ Every Vviinn Widget has some events that users can work on and listen to these e
         </ul>
       </td>
     </tr>
+
     <tr>
       <td>vviinnResultView</td><td>The event is related to `vviinnProductView`. It is triggered only once per each Product AI request. Also, `VviinnResultView` is triggered when the user changes any filter, changes crop area, or clicks on objects while using Product AI Search.</td>
+
       <td>
         <ul>
-          <li>Recommendation (Button,&nbsp;Widget)</li>
-          <li>Search (Button,&nbsp;Widget)</li>
+          <li>Recommendation (Button, Widget)</li>
+          <li>Search (Button, Widget)</li>
         </ul>
       </td>
+
       <td>
         <ul>
           <li>campaignTypeId</li>
@@ -183,14 +207,17 @@ Every Vviinn Widget has some events that users can work on and listen to these e
         </ul>
       </td>
     </tr>
+
     <tr>
       <td>vviinnNoResult</td><td>Triggered when an error has occurred after the Product AI recommendation, search request or because of an image’s wrong format uploaded to the Product AI search.</td>
+
       <td>
         <ul>
-          <li>Recommendation (Button,&nbsp;Widget)</li>
-          <li>Search (Button,&nbsp;Widget)</li>
+          <li>Recommendation (Button, Widget)</li>
+          <li>Search (Button, Widget)</li>
         </ul>
       </td>
+
       <td>
         <ul>
           <li>campaignTypeId</li>
@@ -201,13 +228,16 @@ Every Vviinn Widget has some events that users can work on and listen to these e
         </ul>
       </td>
     </tr>
+
     <tr>
       <td>vviinnAddToBasket</td><td>Triggered when the user clicks on the "Add to Basket" button. The button can be shown by passing `add-to-basket-show` property.</td>
+
       <td>
         <ul>
-          <li>Recommendation (Button,&nbsp;Widget)</li>
+          <li>Recommendation (Button, Widget)</li>
         </ul>
       </td>
+
       <td>
         <ul>
           <li>campaignTypeId</li>
@@ -231,14 +261,17 @@ Every Vviinn Widget has some events that users can work on and listen to these e
   <thead>
     <tr><th>Name</th><th>Description</th><th>Available on</th><th>Props</th></tr>
   </thead>
+
   <tbody>
     <tr>
       <td>vviinnImageUpload</td><td>Triggered after the image upload button is clicked.</td>
+
       <td>
         <ul>
-          <li>Search (Button,&nbsp;Widget)</li>
+          <li>Search (Button, Widget)</li>
         </ul>
       </td>
+
       <td>
         <ul>
           <li>campaignTypeId</li>
@@ -249,13 +282,16 @@ Every Vviinn Widget has some events that users can work on and listen to these e
         </ul>
       </td>
     </tr>
+
     <tr>
       <td>vviinnImageCrop</td><td>Triggered after an image is cropped.</td>
+
       <td>
         <ul>
-          <li>Search (Button,&nbsp;Widget)</li>
+          <li>Search (Button, Widget)</li>
         </ul>
       </td>
+
       <td>
         <ul>
           <li>campaignTypeId</li>
@@ -266,13 +302,16 @@ Every Vviinn Widget has some events that users can work on and listen to these e
         </ul>
       </td>
     </tr>
+
     <tr>
       <td>vviinnSelectObject</td><td>Triggered after an object is selected.</td>
+
       <td>
         <ul>
-          <li>Search (Button,&nbsp;Widget)</li>
+          <li>Search (Button, Widget)</li>
         </ul>
       </td>
+
       <td>
         <ul>
           <li>campaignTypeId</li>
@@ -284,13 +323,16 @@ Every Vviinn Widget has some events that users can work on and listen to these e
         </ul>
       </td>
     </tr>
+
     <tr>
       <td>vviinnSelectFilter</td><td>Triggered after a filter is selected.</td>
+
       <td>
         <ul>
-          <li>Search (Button,&nbsp;Widget)</li>
+          <li>Search (Button, Widget)</li>
         </ul>
       </td>
+
       <td>
         <ul>
           <li>action</li>
