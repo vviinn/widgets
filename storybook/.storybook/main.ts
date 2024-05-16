@@ -9,14 +9,9 @@ const config: StorybookConfig = {
   addons: [
     "@storybook/addon-links",
     "@storybook/addon-essentials",
-    "@pxtrn/storybook-addon-docs-stencil",
-    "@storybook/addon-mdx-gfm",
     "@storybook/addon-webpack5-compiler-babel",
     "@chromatic-com/storybook",
   ],
-  // features: {
-  //   previewMdx2: true,
-  // },
   core: {
     disableTelemetry: true,
   },

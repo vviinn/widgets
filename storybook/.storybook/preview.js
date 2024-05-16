@@ -1,9 +1,4 @@
 import docJson from "../../docs.json";
-import {
-  extractArgTypes,
-  extractComponentDescription,
-  setStencilDocJson,
-} from "@pxtrn/storybook-addon-docs-stencil";
 import { fn } from "@storybook/test";
 
 let loader;
@@ -22,15 +17,9 @@ let isLocalEnv = process.env.STORYBOOK_ENV === "local";
   }
 })();
 
-if (docJson) setStencilDocJson(docJson);
-
 export const parameters = {
   actions: { onClick: fn() },
   controls: { hideNoControlsWarning: true, expanded: true },
-  docs: {
-    extractArgTypes,
-    extractComponentDescription,
-  },
   options: {
     storySort: {
       order: [
