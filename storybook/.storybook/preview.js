@@ -10,8 +10,6 @@ let loader;
 let vviinnWidgets;
 let isLocalEnv = process.env.STORYBOOK_ENV === "local";
 
-if (docJson) setStencilDocJson(docJson);
-
 (async () => {
   if (isLocalEnv) {
     loader = await import("../../dist/loader");
@@ -23,6 +21,8 @@ if (docJson) setStencilDocJson(docJson);
     vviinnWidgets = await import("../node_modules/vviinn-widgets");
   }
 })();
+
+if (docJson) setStencilDocJson(docJson);
 
 export const parameters = {
   actions: { onClick: fn() },

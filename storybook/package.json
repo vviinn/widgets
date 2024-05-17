@@ -15,7 +15,6 @@
     "@babel/core": "^7.21.4",
     "@babel/plugin-proposal-decorators": "^7.21.0",
     "@babel/plugin-transform-typescript": "^7.21.3",
-    "@chromatic-com/storybook": "^1.4.0",
     "@pxtrn/storybook-addon-docs-stencil": "^6.4.1",
     "@storybook/addon-actions": "^8.1.1",
     "@storybook/addon-essentials": "^8.1.1",
