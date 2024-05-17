@@ -1,609 +1,305 @@
-import { Meta, Story, Canvas } from "@storybook/blocks";
-
-<Meta title="Changelog/Changelog" />
-
-# Changelog
-
-All notable changes to this project will be documented in this file
-
-## v. 2.49.0 - 2024-05-13
-
-### Features
-
-* Add camera mode for Search Widget
-
-## v. 2.48.7 - 2024-05-02
-
-### Bug Fixes
-
-* Prevent triggering extra vviinnProductLoad events for the Search Widget
-
-## v. 2.48.6 - 2024-04-24
-
-### Bug Fixes
-
-* Fix basket button overflow issue and set mode bug with displaying prices
-
-* Fix growing card issue for Recommendation widget
-
-* Fix scrolling behaviour for Recommendation widget, grid mode
-
-* remove extra margin for bullets block in Recommendation widget, grid mode
-
-## v. 2.48.5 - 2024-04-24
-
-### Bug Fixes
-
-* Add downscaling for uploaded Hi-Res image
-
-## v. 2.48.4 - 2024-04-17
-
-### Bug Fixes
-
-* Add possibility to pass campaign-id as string to Search Widget
-
-* Remove unused slots and make according changes in documentation
-
-## v. 2.48.3 - 2024-04-16
-
-### Bug Fixes
-
-* Add thin scrollbar for set widget
-
-## v. 2.48.2 - 2024-04-11
-
-### Bug Fixes
-
-* Fix Plus Icon positioning
-
-## v. 2.48.1 - 2024-04-11
-
-### Bug Fixes
-
-* Fix issue with resizing cards in Set Widget
-
-## v. 2.48.0 - 2024-04-10
-
-### Features
-
-* Add translations for Set Mode
-
-## v. 2.47.0 - 2024-04-10
-
-### Features
-
-* Add Buy as Set functionality to Recommendation Widget
-
-## v. 2.46.0 - 2024-04-09
-
-### Features
-
-* Add Text Search Feature
-
-## v. 2.45.0 - 2024-03-18
-
-### Features
-
-* Updated the documentation related to the Vue Framework.
-
-## v. 2.44.2 - 2024-03-13
-
-### Bug Fixes
-
-* Fix zoom bug on the iOS 17.4
-
-## v. 2.44.1 - 2024-03-13
-
-### Bug Fixes
-
-* Fix Cropper Behavior for Different Image Ratios
-
-## v. 2.44.0 - 2024-03-05
-
-### Features
-
-* Take Square Image by the Camera
-
-## v. 2.43.1 - 2024-03-04
-
-### Bug Fixes
-
-* Fix console error
-
-## v. 2.43.0 - 2024-02-29
-
-### Features
-
-* Add Zoom Controls for Camera
-
-* Improve Camera's quality
-
-## v. 2.42.1 - 2024-02-28
-
-### Bug Fixes
-
-* Remove Highlighting on Photo Button's Click
-
-## v. 2.42.0 - 2024-02-14
-
-### Features
-
-* update react documentation
-
-## v. 2.41.2 - 2024-02-14
-
-### Bug Fixes
-
-* Search Widget: Translations Improvements
-
-## v. 2.41.1 - 2024-02-13
-
-### Bug Fixes
-
-* Fix For Visual Search When Tracking is Deactivated
-
-## v. 2.41.0 - 2024-02-13
-
-### Features
-
-* Add Slots for Icons
-
-## v. 2.40.2 - 2024-02-12
-
-### Bug Fixes
-
-* Translation Functionality Improvements
-
-## v. 2.40.1 - 2024-02-08
-
-### Bug Fixes
-
-* Improve Cropper Controls
-
-## v. 2.40.0 - 2024-02-08
-
-### Features
-
-* Add Transitions For Detected Object's Points
-
-## v. 2.39.0 - 2024-02-08
-
-### Features
-
-* Open Camera in the Browser
-
-## v. 2.38.0 - 2024-02-02
-
-### Features
-
-* copper design
-
-## v. 2.37.0 - 2024-02-01
-
-### Features
-
-* Add Native Camera Experience for Search Widget
-
-## v. 2.36.0 - 2024-01-31
-
-### Features
-
-* Added show files feature
-
-## v. 2.35.0 - 2024-01-17
-
-### Features
-
-* New design of Search Widget: first screen
-
-## v. 2.34.0 - 2024-01-11
-
-### Features
-
-* Add Update All Cards Funtionality
-
-## v. 2.33.0 - 2023-12-11
-
-### Features
-
-* Add 'cross-selling' mode for Recommendation Widget
-
-## v. 2.32.0 - 2023-11-07
-
-### Features
-
-* Trigger vviinnProductView event when product image appears in the viewport.
-
-## v. 2.31.0 - 2023-10-25
-
-### Features
-
-* Track mouse wheel click as product click.
-
-## v. 2.30.2 - 2023-10-12
-
-### Bug Fixes
-
-* Fix result events behavior for Search Button
-
-## v. 2.29.3 - 2023-10-11
-
-### Features
-
-* Send resultView and resultLoad events to the tracking service
-
-## v. 2.30.2 - 2023-10-12
-
-### Bug Fixes
-
-* Fix result events behavior for Search Button
-
-## v. 2.30.0 - 2023-10-11
-
-### Features
-
-* Send resultView and resultLoad events to the tracking service
-
-## v. 2.29.0 - 2023-09-19
-
-### Features
-
-* If opening product details in new tab is blocked by the browser
-
-* Open product details in new tab on click + holding ctrl or command button.
-
-## v. 2.28.0 - 2023-09-14
-
-### Features
-
-* Add 'vviinnAddToBasket' event for Recommendation Widget with possibility to show or hide button
-
-* Add slot for Add to Basket text customization, add shadow part for button's styles customization
-
-* send addToBasket event to the tracking service
-
-## v. 2.27.0 - 2023-09-13
-
-### Features
-
-* Make crop after clicking detected objects
-
-## v. 2.26.0 - 2023-09-04
-
-### Features
-
-* Replace old custom cropper with cropper.js
-
-## v. 2.25.2 - 2023-08-29
-
-### Bug Fixes
-
-* Fix bug with emitting product load events for non-active search widget instances
-
-## v. 2.25.0 - 2023-08-29
-
-### Features
-
-* Add image-resolution-width prop for VPS components; Change default resolution width to 250px
-
-## v. 2.24.0 - 2023-08-28
-
-### Features
-
-* Track product\_load\_event, widet's load event, distinguishing clicked filter kind, layout fix on the desktop for VPS widget
-
-## v. 2.23.0 - 2023-08-28
-
-### Features
-
-* Use responsive images for VPS widget
-
-## v. 2.22.0 - 2023-08-23
-
-### Features
-
-* Distinguish Between VPC and VPR in Recommendations Widget
-
-## v. 2.21.0 - 2023-08-11
-
-### Features
-
-* Add vviinnResultLoad and vviinnResultView events
-
-## v. 2.20.0 - 2023-06-22
-
-### Features
-
-* show widgetVersion in the Events, fix order of load and open events for vpr button
-
-## v. 2.19.0 - 2023-06-21
-
-### Features
-
-* Add upload mode to vps button
-
-* Add upload mode to vps button and update packages
-
-* Add upload mode to vps button, update packages
-
-## v. 2.18.0 - 2023-04-27
-
-### Features
-
-* Added currency to VPR button and VPR widget
-
-## v. 2.17.0 - 2023-03-21
-
-### Features
-
-* add Color to the storybook
-
-## v. 2.16.0 - 2023-02-15
-
-### Features
-
-* added some parts for styling
-
-## v. 2.15.0 - 2023-02-02
-
-### Features
-
-* Added the ability to be able to change numeric part of price
-
-## v. 2.14.0 - 2023-02-02
-
-### Features
-
-* Disable tracking api when the server rejected
-
-## v. 2.13.0 - 2022-12-07
-
-### Features
-
-* add the ability to add style to buttons or not
-
-## v. 2.12.0 - 2022-12-06
-
-### Features
-
-* made styles of recommendation and search button persistent
-
-### Bug Fixes
-
-* Fixed issue of cursor pointer on search button
-
-## v. 2.11.10 - 2022-12-01
-
-### Bug Fixes
-
-* fixing safari crash issue
-
-## v. 2.11.8 - 2022-12-01
-
-### Bug Fixes
-
-* removed a change to fix the crach safari issue
-
-## v. 2.11.7 - 2022-12-01
-
-### Bug Fixes
-
-* removed a change to fix the crach safari issue
-
-## v. 2.11.0 - 2022-11-28
-
-### Features
-
-* hide recommendation widget if there are no results
-
-## v. 2.10.0 - 2022-11-28
-
-### Features
-
-* hide preloader on vps button after 5sec timeout
-
-## v. 2.9.0 - 2022-11-24
-
-### Features
-
-* added auxclick event to the product
-
-## v. 2.8.3 - 2022-11-23
-
-### Bug Fixes
-
-* inline styles for some components to reduce number of requests
-
-## v. 2.8.0 - 2022-10-10
-
-### Features
-
-* move image resizing in WebWorker
-
-* move tracking WebWorker thread
-
-* use cssnano for css minification
-
-### Bug Fixes
-
-* fix bug with wrong image sizes when convert File to Image
-
-## v. 2.7.3 - 2022-09-25
-
-### Bug Fixes
-
-* fix bug with broken redirect on product deeplink
-
-## v. 2.7.0 - 2022-09-23
-
-### Features
-
-* use campaign id in search sessions and example images
-
-## v. 2.6.0 - 2022-09-20
-
-### Features
-
-* add campaigns parameter to recommendations widget
-
-* add property with campaigns ids to search widget for targeting campaigns
-
-## v. 2.5.2 - 2022-09-15
-
-### Bug Fixes
-
-* remove unnessesary logs
-
-## v. 2.5.1 - 2022-09-15
-
-### Bug Fixes
-
-* redirect to product deeplink even if tracking request fall
-
-## v. 2.5.0 - 2022-09-14
-
-### Features
-
-* export example images block as shadow part
-
-## v. 2.4.4 - 2022-09-13
-
-### Bug Fixes
-
-* fix tracking product click event
-
-## v. 2.4.3 - 2022-09-08
-
-### Bug Fixes
-
-* fix tracking open event for Search widget
-
-## v. 2.4.2 - 2022-04-27
-
-### Bug Fixes
-
-* fix bug with wrong rank in telemetry for recommendations
-
-* increase example images sizes
-
-## v. 2.4.1 - 2022-04-22
-
-### Bug Fixes
-
-* fix telemetry events for search widget
-
-## v. 2.4.0 - 2022-04-22
-
-### Features
-
-* integrate telemetry
-
-## v. 2.3.0 - 2022-04-04
-
-### Features
-
-* export carousel buttons as shadow parts
-
-### Bug Fixes
-
-* remove sidebar when vviinn-vpr-button removed from dom
-
-## v. 2.2.1 - 2022-03-17
-
-### Bug Fixes
-
-* type typo fix
-
-## v. 2.2.0 - 2022-03-17
-
-### Features
-
-* add vviinn-vpr-button component
-
-## v. 2.1.1 - 2022-03-14
-
-### Bug Fixes
-
-* permanently hide scrollbars in grid mode for Recommendation
-
-## v. 2.1.0 - 2022-03-14
-
-### Features
-
-* Recommendations Widget - add property for loading external css
-
-### Bug Fixes
-
-* add default border for images in recommendation widget
-
-* fetch recommendation if campaignType changed
-
-* find carousel parent properly
-
-* fix broken deeplinks in recommendation widget
-
-* fix bug with scrollbars in recommendation widgets
-
-* fix buggy layout with on Grid Mode of Recommendations widget
-
-* fix scrollbars property on recommendations widget
-
-* fix scrolling if scrollbar is hidden
-
-* fix title allignement in recommendations component
-
-* minor style fixes
-
-* refactor exported shadow parts of product card component
-
-## v. 2.0.0 - 2022-02-24
-
-### ⚠ BREAKING CHANGES
-
-* new slider implementation for recommendation widget
-
-### Features
-
-* add new customizable slots
-
-* Change default style for product cards
-
-* improve slider on recommendation widget
-
-* new slider implementation for recommendation widget
-
-### Bug Fixes
-
-* fix bug with sending google analytics
-
-* fix default cards style on search widget
-
-* fix layout in recommendation widget
-
-* Fixed bug with getting item width in recommendation widget
-
-* recommendation widget improvements
-
-* unobserve ResizeObserver when VviinnCarousel removed
-
-## v. 1.1.1 - 2022-01-13
-
-### Bug Fixes
-
-* reset loader after server errors
-
-## v. 1.1.0 - 2022-01-06
-
-### Features
-
-* fetch recommendations when product-id changed
-
-* use Lanczos algorythm for image resizing on client
-
-### Bug Fixes
-
-* export shadow part for product type
-
-* fix bug with wrong selected image size on results view
-
-* image resizing now resize on larger side
+import { Meta, Story, Canvas } from "@storybook/addon-docs";
+<Meta title="Changelog/Changelog"></Meta>
+# Changelog
+All notable changes to this project will be documented in this file
+## v. 2.49.0 - 2024-05-13
+### Features
+- Add camera mode for Search Widget
+## v. 2.48.7 - 2024-05-02
+### Bug Fixes
+- Prevent triggering extra vviinnProductLoad events for the Search Widget
+## v. 2.48.6 - 2024-04-24
+### Bug Fixes
+- Fix basket button overflow issue and set mode bug with displaying prices
+- Fix growing card issue for Recommendation widget
+- Fix scrolling behaviour for Recommendation widget, grid mode
+- remove extra margin for bullets block in Recommendation widget, grid mode
+## v. 2.48.5 - 2024-04-24
+### Bug Fixes
+- Add downscaling for uploaded Hi-Res image
+## v. 2.48.4 - 2024-04-17
+### Bug Fixes
+- Add possibility to pass campaign-id as string to Search Widget
+- Remove unused slots and make according changes in documentation
+## v. 2.48.3 - 2024-04-16
+### Bug Fixes
+- Add thin scrollbar for set widget
+## v. 2.48.2 - 2024-04-11
+### Bug Fixes
+- Fix Plus Icon positioning
+## v. 2.48.1 - 2024-04-11
+### Bug Fixes
+- Fix issue with resizing cards in Set Widget
+## v. 2.48.0 - 2024-04-10
+### Features
+- Add translations for Set Mode
+## v. 2.47.0 - 2024-04-10
+### Features
+- Add Buy as Set functionality to Recommendation Widget
+## v. 2.46.0 - 2024-04-09
+### Features
+- Add Text Search Feature
+## v. 2.45.0 - 2024-03-18
+### Features
+- Updated the documentation related to the Vue Framework.
+## v. 2.44.2 - 2024-03-13
+### Bug Fixes
+- Fix zoom bug on the iOS 17.4
+## v. 2.44.1 - 2024-03-13
+### Bug Fixes
+- Fix Cropper Behavior for Different Image Ratios
+## v. 2.44.0 - 2024-03-05
+### Features
+- Take Square Image by the Camera
+## v. 2.43.1 - 2024-03-04
+### Bug Fixes
+- Fix console error
+## v. 2.43.0 - 2024-02-29
+### Features
+- Add Zoom Controls for Camera
+- Improve Camera's quality
+## v. 2.42.1 - 2024-02-28
+### Bug Fixes
+- Remove Highlighting on Photo Button's Click
+## v. 2.42.0 - 2024-02-14
+### Features
+- update react documentation
+## v. 2.41.2 - 2024-02-14
+### Bug Fixes
+- Search Widget: Translations Improvements
+## v. 2.41.1 - 2024-02-13
+### Bug Fixes
+- Fix For Visual Search When Tracking is Deactivated
+## v. 2.41.0 - 2024-02-13
+### Features
+- Add Slots for Icons
+## v. 2.40.2 - 2024-02-12
+### Bug Fixes
+- Translation Functionality Improvements
+## v. 2.40.1 - 2024-02-08
+### Bug Fixes
+- Improve Cropper Controls
+## v. 2.40.0 - 2024-02-08
+### Features
+- Add Transitions For Detected Object's Points
+## v. 2.39.0 - 2024-02-08
+### Features
+- Open Camera in the Browser
+## v. 2.38.0 - 2024-02-02
+### Features
+- copper design
+## v. 2.37.0 - 2024-02-01
+### Features
+- Add Native Camera Experience for Search Widget
+## v. 2.36.0 - 2024-01-31
+### Features
+- Added show files feature
+## v. 2.35.0 - 2024-01-17
+### Features
+- New design of Search Widget: first screen
+## v. 2.34.0 - 2024-01-11
+### Features
+- Add Update All Cards Funtionality
+## v. 2.33.0 - 2023-12-11
+### Features
+- Add 'cross-selling' mode for Recommendation Widget
+## v. 2.32.0 - 2023-11-07
+### Features
+- Trigger vviinnProductView event when product image appears in the viewport.
+## v. 2.31.0 - 2023-10-25
+### Features
+- Track mouse wheel click as product click.
+## v. 2.30.2 - 2023-10-12
+### Bug Fixes
+- Fix result events behavior for Search Button
+## v. 2.29.3 - 2023-10-11
+### Features
+- Send resultView and resultLoad events to the tracking service
+## v. 2.30.2 - 2023-10-12
+### Bug Fixes
+- Fix result events behavior for Search Button
+## v. 2.30.0 - 2023-10-11
+### Features
+- Send resultView and resultLoad events to the tracking service
+## v. 2.29.0 - 2023-09-19
+### Features
+- If opening product details in new tab is blocked by the browser
+- Open product details in new tab on click + holding ctrl or command button.
+## v. 2.28.0 - 2023-09-14
+### Features
+- Add 'vviinnAddToBasket' event for Recommendation Widget with possibility to show or hide button
+- Add slot for Add to Basket text customization, add shadow part for button's styles customization
+- send addToBasket event to the tracking service
+## v. 2.27.0 - 2023-09-13
+### Features
+- Make crop after clicking detected objects
+## v. 2.26.0 - 2023-09-04
+### Features
+- Replace old custom cropper with cropper.js
+## v. 2.25.2 - 2023-08-29
+### Bug Fixes
+- Fix bug with emitting product load events for non-active search widget instances
+## v. 2.25.0 - 2023-08-29
+### Features
+- Add image-resolution-width prop for VPS components; Change default resolution width to 250px
+## v. 2.24.0 - 2023-08-28
+### Features
+- Track product_load_event, widet's load event, distinguishing clicked filter kind, layout fix on the desktop for VPS widget
+## v. 2.23.0 - 2023-08-28
+### Features
+- Use responsive images for VPS widget
+## v. 2.22.0 - 2023-08-23
+### Features
+- Distinguish Between VPC and VPR in Recommendations Widget
+## v. 2.21.0 - 2023-08-11
+### Features
+- Add vviinnResultLoad and vviinnResultView events
+## v. 2.20.0 - 2023-06-22
+### Features
+- show widgetVersion in the Events, fix order of load and open events for vpr button
+## v. 2.19.0 - 2023-06-21
+### Features
+- Add upload mode to vps button
+- Add upload mode to vps button and update packages
+- Add upload mode to vps button, update packages
+## v. 2.18.0 - 2023-04-27
+### Features
+- Added currency to VPR button and VPR widget
+## v. 2.17.0 - 2023-03-21
+### Features
+- add Color to the storybook
+## v. 2.16.0 - 2023-02-15
+### Features
+- added some parts for styling
+## v. 2.15.0 - 2023-02-02
+### Features
+- Added the ability to be able to change numeric part of price
+## v. 2.14.0 - 2023-02-02
+### Features
+- Disable tracking api when the server rejected
+## v. 2.13.0 - 2022-12-07
+### Features
+- add the ability to add style to buttons or not
+## v. 2.12.0 - 2022-12-06
+### Features
+- made styles of recommendation and search button persistent
+### Bug Fixes
+- Fixed issue of cursor pointer on search button
+## v. 2.11.10 - 2022-12-01
+### Bug Fixes
+- fixing safari crash issue
+## v. 2.11.8 - 2022-12-01
+### Bug Fixes
+- removed a change to fix the crach safari issue
+## v. 2.11.7 - 2022-12-01
+### Bug Fixes
+- removed a change to fix the crach safari issue
+## v. 2.11.0 - 2022-11-28
+### Features
+- hide recommendation widget if there are no results
+## v. 2.10.0 - 2022-11-28
+### Features
+- hide preloader on vps button after 5sec timeout
+## v. 2.9.0 - 2022-11-24
+### Features
+- added auxclick event to the product
+## v. 2.8.3 - 2022-11-23
+### Bug Fixes
+- inline styles for some components to reduce number of requests
+## v. 2.8.0 - 2022-10-10
+### Features
+- move image resizing in WebWorker
+- move tracking WebWorker thread
+- use cssnano for css minification
+### Bug Fixes
+- fix bug with wrong image sizes when convert File to Image
+## v. 2.7.3 - 2022-09-25
+### Bug Fixes
+- fix bug with broken redirect on product deeplink
+## v. 2.7.0 - 2022-09-23
+### Features
+- use campaign id in search sessions and example images
+## v. 2.6.0 - 2022-09-20
+### Features
+- add campaigns parameter to recommendations widget
+- add property with campaigns ids to search widget for targeting campaigns
+## v. 2.5.2 - 2022-09-15
+### Bug Fixes
+- remove unnessesary logs
+## v. 2.5.1 - 2022-09-15
+### Bug Fixes
+- redirect to product deeplink even if tracking request fall
+## v. 2.5.0 - 2022-09-14
+### Features
+- export example images block as shadow part
+## v. 2.4.4 - 2022-09-13
+### Bug Fixes
+- fix tracking product click event
+## v. 2.4.3 - 2022-09-08
+### Bug Fixes
+- fix tracking open event for Search widget
+## v. 2.4.2 - 2022-04-27
+### Bug Fixes
+- fix bug with wrong rank in telemetry for recommendations
+- increase example images sizes
+## v. 2.4.1 - 2022-04-22
+### Bug Fixes
+- fix telemetry events for search widget
+## v. 2.4.0 - 2022-04-22
+### Features
+- integrate telemetry
+## v. 2.3.0 - 2022-04-04
+### Features
+- export carousel buttons as shadow parts
+### Bug Fixes
+- remove sidebar when vviinn-vpr-button removed from dom
+## v. 2.2.1 - 2022-03-17
+### Bug Fixes
+- type typo fix
+## v. 2.2.0 - 2022-03-17
+### Features
+- add vviinn-vpr-button component
+## v. 2.1.1 - 2022-03-14
+### Bug Fixes
+- permanently hide scrollbars in grid mode for Recommendation
+## v. 2.1.0 - 2022-03-14
+### Features
+- Recommendations Widget - add property for loading external css
+### Bug Fixes
+- add default border for images in recommendation widget
+- fetch recommendation if campaignType changed
+- find carousel parent properly
+- fix broken deeplinks in recommendation widget
+- fix bug with scrollbars in recommendation widgets
+- fix buggy layout with on Grid Mode of Recommendations widget
+- fix scrollbars property on recommendations widget
+- fix scrolling if scrollbar is hidden
+- fix title allignement in recommendations component
+- minor style fixes
+- refactor exported shadow parts of product card component
+## v. 2.0.0 - 2022-02-24
+### ⚠ BREAKING CHANGES
+- new slider implementation for recommendation widget
+### Features
+- add new customizable slots
+- Change default style for product cards
+- improve slider on recommendation widget
+- new slider implementation for recommendation widget
+### Bug Fixes
+- fix bug with sending google analytics
+- fix default cards style on search widget
+- fix layout in recommendation widget
+- Fixed bug with getting item width in recommendation widget
+- recommendation widget improvements
+- unobserve ResizeObserver when VviinnCarousel removed
+## v. 1.1.1 - 2022-01-13
+### Bug Fixes
+- reset loader after server errors
+## v. 1.1.0 - 2022-01-06
+### Features
+- fetch recommendations when product-id changed
+- use Lanczos algorythm for image resizing on client
+### Bug Fixes
+- export shadow part for product type
+- fix bug with wrong selected image size on results view
+- image resizing now resize on larger side
