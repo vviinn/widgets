@@ -159,12 +159,18 @@ export class VviinnCarousel {
 
   componentDidLoad() {
     this.setWidth();
-    this.processScrollbarWidth();
     this.columns = this.getColumnsNumber();
     const slot = this.el.querySelector(".content");
 
     this.mutationObserver.observe(slot, { subtree: true, childList: true });
     this.resizeObserver.observe(this.getHostParent());
+
+    if (this.isGridMode) {
+      const contentNode = this.getContentNode();
+      contentNode.addEventListener("scrollend", () => {
+        this.activeContentGroup = this.getActiveGroupIndex();
+      });
+    }
   }
 
   @Watch("updatingAllCards")
@@ -234,7 +240,6 @@ export class VviinnCarousel {
 
   private handleResize() {
     this.setWidth();
-    this.processScrollbarWidth();
     this.setItemWidth();
 
     const newColumns = this.getColumnsNumber();
@@ -289,11 +294,6 @@ export class VviinnCarousel {
   }
 
   private getActiveGroupIndex(): number {
-    const contentNodeLeft =
-      this.getContentNode()?.getBoundingClientRect()?.left;
-
-    if (!contentNodeLeft) return 0;
-
     const groups = this.getContentGroups();
     const groupsPositions = groups.map((g) => g.getBoundingClientRect().left);
 
@@ -353,21 +353,6 @@ export class VviinnCarousel {
         behavior: "smooth",
       });
     });
-  }
-
-  private processScrollbarWidth() {
-    const target = this.getContentNode();
-    if (!target) return;
-    const scrollRatio =
-      (target.scrollLeft + target.clientWidth) / target.scrollWidth;
-    const scrolledWidth = target.clientWidth * scrollRatio;
-
-    this.el.style.setProperty(
-      "--vviinn-progressbar-width",
-      `${scrolledWidth}px`
-    );
-
-    this.activeContentGroup = this.getActiveGroupIndex();
   }
 
   private showBullets(): boolean {
@@ -511,10 +496,7 @@ export class VviinnCarousel {
             />
           )}
 
-          <div
-            class={this.getContentClassMap()}
-            onScroll={() => this.processScrollbarWidth()}
-          >
+          <div class={this.getContentClassMap()}>
             {this.renderRecommendations()}
           </div>
 
