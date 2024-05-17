@@ -42,7 +42,7 @@ fs.readFile("./CHANGELOG.md", "utf8", (err, data) => {
   );
 
   fs.writeFile(
-    "./storybook/documentation/changelog.stories.mdx",
+    "./storybook/documentation/changelog.mdx",
     releasesFilter.filter((release) => release).join("\n\r"),
     (err) => {
       if (err) {
