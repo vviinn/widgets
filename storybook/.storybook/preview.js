@@ -1,4 +1,5 @@
 import docJson from "../../docs.json";
+import { fn } from "@storybook/test";
 import {
   extractArgTypes,
   extractComponentDescription,
@@ -24,7 +25,7 @@ let isLocalEnv = process.env.STORYBOOK_ENV === "local";
 if (docJson) setStencilDocJson(docJson);
 
 export const parameters = {
-  actions: { argTypesRegex: "^on[A-Z].*" },
+  actions: { onClick: fn() },
   controls: { hideNoControlsWarning: true, expanded: true },
   docs: {
     extractArgTypes,

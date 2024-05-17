@@ -1,6 +1,6 @@
-import { Meta, Story } from '@storybook/addon-docs';
+import { Meta, Story } from '@storybook/blocks';
 
-<Meta title="Installation/React"></Meta>
+<Meta title="Installation/React" />
 
 # React
 
@@ -11,6 +11,7 @@ With an application built using the `create-react-app` script, the easiest way t
 In this example, we create an `importVviinn.js` file and import it in `App.js` and then, we can use Vviinn widgets as shown below:
 
 `importVviinn.js`
+
 ```javascript
 import { applyPolyfills, defineCustomElements  } from 'vviinn-widgets/dist/loader';
 
@@ -20,6 +21,7 @@ applyPolyfills().then(() => {
 ```
 
 `App.js`
+
 ```javascript
 import "./importVviinn"
 
@@ -39,6 +41,7 @@ export default App;
 In this example, we create an `importVviinn.ts` file and import it in `App.tsx` and then, we can use Vviinn widgets as shown below:
 
 `importVviinn.ts`
+
 ```typescript
 import { applyPolyfills, defineCustomElements, JSX as LocalJSX  } from 'vviinn-widgets/dist/loader';
 import { HTMLAttributes } from 'react';
@@ -62,6 +65,7 @@ applyPolyfills().then(() => {
 ```
 
 `App.tsx`
+
 ```typescript
 import "./importVviinn"
 
@@ -83,6 +87,7 @@ Sometimes other libraries define custom elements and there would be some conflic
 ### useScript.ts
 
 With this `custom hook`, we will add related scripts to our page:
+
 ```typescript
 import { useEffect } from "react";
 

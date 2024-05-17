@@ -1,7 +1,7 @@
-import { Meta, Story, Canvas } from "@storybook/addon-docs";
+import { Meta, Story, Canvas } from "@storybook/blocks";
 import './customization.css'
 
-<Meta title="Styling and Customization/Customization"></Meta>
+<Meta title="Styling and Customization/Customization" />
 
 # Customization
 
@@ -12,19 +12,19 @@ customize some content using [slots](https://developer.mozilla.org/en-US/docs/We
 
 Here are slots that could be used for Recommendation Button (`vviinn-vpr-button`):
 
-- button – _vpr button container_
-- vviinn-button – _vpr button itself_
+* button – *vpr button container*
+* vviinn-button – *vpr button itself*
 
 ## Search
 
 Slots that could be used in Search Widget and Search Button (`vviinn-vps-widget` and `vviinn-vps-button`):
 
-- vviinn-image-search-modal-title – _title on the top of search results_
-- vviinn-image-upload-button-text – _title of Upload Button_
-- vviinn-show-files-button-text – _title of Show Files Button_
-- vviinn-camera-button-text – _title of Camera Button_
-- vviinn-privacy-badge-text – _text content of privacy notification block_
-- vviinn-teaser-text – _text on the widget's main screen_
+* vviinn-image-search-modal-title – *title on the top of search results*
+* vviinn-image-upload-button-text – *title of Upload Button*
+* vviinn-show-files-button-text – *title of Show Files Button*
+* vviinn-camera-button-text – *title of Camera Button*
+* vviinn-privacy-badge-text – *text content of privacy notification block*
+* vviinn-teaser-text – *text on the widget's main screen*
 
 ## Customization example of vviinn-vps-button
 
@@ -57,17 +57,13 @@ Here is our button with the custom icon. If we click on it, we will also see the
 
 <vviinn-vps-button>
   <svg width="22" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path
-      fillRule="evenodd"
-      clipRule="evenodd"
-      d="M16.567 3H19A3.01 3.01 0 0 1 22 6v7.69h-2V6c0-.55-.451-1-1.001-1h-3.502l-2.03-3H8.543L6.603 5H3.001c-.55 0-1 .45-1 1v11c0 .55.45 1 1 1h5.933v2H3.001A3.01 3.01 0 0 1 0 17V6c0-1.65 1.35-3 3.001-3h2.522l1.94-3h7.074l2.03 3Zm-5.562 3c1.28 0 2.561.48 3.542 1.46h-.01a4.992 4.992 0 0 1 .64 6.29l3.051 3.05-1.41 1.41-3.052-3.05c-.84.55-1.8.83-2.76.83-1.282 0-2.562-.48-3.543-1.46a5.002 5.002 0 0 1 0-7.07A5.026 5.026 0 0 1 11.005 6Zm-2.771 5a2.763 2.763 0 0 0 2.771 2.77A2.763 2.763 0 0 0 13.776 11a2.763 2.763 0 0 0-2.771-2.77A2.763 2.763 0 0 0 8.234 11Z"
-      fill="#008080"
-    />
+    <path fillRule="evenodd" clipRule="evenodd" d="M16.567 3H19A3.01 3.01 0 0 1 22 6v7.69h-2V6c0-.55-.451-1-1.001-1h-3.502l-2.03-3H8.543L6.603 5H3.001c-.55 0-1 .45-1 1v11c0 .55.45 1 1 1h5.933v2H3.001A3.01 3.01 0 0 1 0 17V6c0-1.65 1.35-3 3.001-3h2.522l1.94-3h7.074l2.03 3Zm-5.562 3c1.28 0 2.561.48 3.542 1.46h-.01a4.992 4.992 0 0 1 .64 6.29l3.051 3.05-1.41 1.41-3.052-3.05c-.84.55-1.8.83-2.76.83-1.282 0-2.562-.48-3.543-1.46a5.002 5.002 0 0 1 0-7.07A5.026 5.026 0 0 1 11.005 6Zm-2.771 5a2.763 2.763 0 0 0 2.771 2.77A2.763 2.763 0 0 0 13.776 11a2.763 2.763 0 0 0-2.771-2.77A2.763 2.763 0 0 0 8.234 11Z" fill="#008080" />
   </svg>
+
   <h3 slot="vviinn-teaser-text">Your custom text</h3>
 </vviinn-vps-button>
 
- Anything we put between the opening and closing tags without the `slot` attribute will be placed inside the "default" slot. The slot has no restrictions for any element type. It could be an `<svg>` like in the example above or any HTML will be valid.
+Anything we put between the opening and closing tags without the `slot` attribute will be placed inside the "default" slot. The slot has no restrictions for any element type. It could be an `<svg>` like in the example above or any HTML will be valid.
 
 ```html
 <vviinn-vps-button>

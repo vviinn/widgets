@@ -1,6 +1,6 @@
 {
   "name": "vviinn-widgets",
-  "version": "2.49.0",
+  "version": "2.49.2",
   "description": "vviinn web components",
   "main": "./dist/index.cjs.js",
   "module": "./dist/index.js",
@@ -29,7 +29,7 @@
     "release": "standard-version",
     "release.ci": "standard-version --releaseCommitMessageFormat '[skip ci] chore(release): {{currentTag}}'",
     "artifactregistry-login": "npx google-artifactregistry-auth",
-    "update_storybook_changelog": "node ./scripts/update-changelog-stories.js",
+    "update_storybook_changelog": "node ./scripts/update-changelog.js",
     "update_storybook_widget_version": "node ./scripts/update-widget-version.js"
   },
   "license": "MIT",
