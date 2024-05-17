@@ -1,9 +1,16 @@
 import docJson from "../../docs.json";
 import { fn } from "@storybook/test";
+import {
+  extractArgTypes,
+  extractComponentDescription,
+  setStencilDocJson,
+} from "@pxtrn/storybook-addon-docs-stencil";
 
 let loader;
 let vviinnWidgets;
 let isLocalEnv = process.env.STORYBOOK_ENV === "local";
+
+if (docJson) setStencilDocJson(docJson);
 
 (async () => {
   if (isLocalEnv) {
@@ -20,6 +27,10 @@ let isLocalEnv = process.env.STORYBOOK_ENV === "local";
 export const parameters = {
   actions: { onClick: fn() },
   controls: { hideNoControlsWarning: true, expanded: true },
+  docs: {
+    extractArgTypes,
+    extractComponentDescription,
+  },
   options: {
     storySort: {
       order: [
