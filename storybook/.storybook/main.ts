@@ -9,8 +9,7 @@ const config: StorybookConfig = {
   addons: [
     "@storybook/addon-links",
     "@storybook/addon-essentials",
-    "@storybook/addon-webpack5-compiler-babel",
-    "@chromatic-com/storybook",
+    "@storybook/addon-webpack5-compiler-babel"
   ],
   core: {
     disableTelemetry: true,
