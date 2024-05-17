@@ -3,7 +3,7 @@
 # Only use spaces to indent your .yml configuration.
 # -----
 # You can specify a custom docker image from Docker Hub as your build environment.
-image: circleci/node:15.14.0-browsers
+image: node:18.20.2
 
 pipelines:
   branches:
@@ -28,7 +28,7 @@ pipelines:
             - npm run release.ci
             - git push --follow-tags origin develop
             - npm run update_storybook_changelog
-            - git add ./storybook/documentation/changelog.stories.mdx
+            - git add ./storybook/documentation/changelog.mdx
             - git commit -m '[skip ci] update storybook changelog'
             - git push origin develop
       - step:

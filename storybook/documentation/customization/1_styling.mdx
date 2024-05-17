@@ -1,6 +1,6 @@
-import { Meta, Story, Canvas } from "@storybook/addon-docs";
+import { Meta, Story, Canvas } from "@storybook/blocks";
 
-<Meta title="Styling and Customization/Styling"></Meta>
+<Meta title="Styling and Customization/Styling" />
 
 # Styling
 
@@ -11,9 +11,9 @@ and [Shadow Parts](https://developer.mozilla.org/en-US/docs/Web/CSS/::part)
 
 You can customize `vviinn-vps-button` and `vviinn-vps-widget` with these properties:
 
-- --color-primary _used on the main action button, slider bullets, selected detected object or filter, and some other parts_
-- --color-primary-hover _used on the main action button when hovering_
-- --color-icons _used in svg icons fill_
+* \--color-primary *used on the main action button, slider bullets, selected detected object or filter, and some other parts*
+* \--color-primary-hover *used on the main action button when hovering*
+* \--color-icons *used in svg icons fill*
 
 ```css
 html {
@@ -25,7 +25,7 @@ html {
 
 ## Using Shadow Parts
 
-Almost every component you can use exports some Shadow Parts. Use `component-name::part(part-name)` to add CSS rules to any exported part. 
+Almost every component you can use exports some Shadow Parts. Use `component-name::part(part-name)` to add CSS rules to any exported part.
 For example, to style the title of product cards in `vviinn-vpr-widget` and to hide the price you can use this CSS snippet:
 
 ```css
@@ -49,7 +49,6 @@ vviinn-vps-button::part(price-regular) {
 ```
 
 Shadow Parts are listed in Widgets section of this documentation.
-It could be _image, title, price-regular, price-sale_, and others.
-
+It could be *image, title, price-regular, price-sale*, and others.
 
 For example, [check](?path=/story/widgets-recommendation-main--grid) the list of available Shadow Parts for `vviinn-vpr-widget` component at the bottom of Controls tab.

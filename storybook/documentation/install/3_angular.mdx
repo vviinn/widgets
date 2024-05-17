@@ -1,12 +1,13 @@
-import { Meta, Story } from '@storybook/addon-docs';
+import { Meta, Story } from '@storybook/blocks';
 
-<Meta title="Installation/Angular"></Meta>
+<Meta title="Installation/Angular" />
 
 # Angular
+
 Using a Stencil-built web component collection within an Angular CLI project is a two-step process. We need to:
 
-- Include the `CUSTOM_ELEMENTS_SCHEMA` in the modules that use the components.
-- Call `defineCustomElements()` from main.ts (or some other appropriate place).
+* Include the `CUSTOM_ELEMENTS_SCHEMA` in the modules that use the components.
+* Call `defineCustomElements()` from main.ts (or some other appropriate place).
 
 ## Including the Custom Elements Schema
 
@@ -30,7 +31,7 @@ export class AppModule {}
 
 The `CUSTOM_ELEMENTS_SCHEMA` needs to be included in any module that uses custom elements.
 
-## Calling defineCustomElements 
+## Calling defineCustomElements
 
 A component collection built with Stencil includes a main function that is used to load the components in the collection. That function is called `defineCustomElements()` and it needs to be called once during the bootstrapping of your application. One convenient place to do this is in `main.ts` as such:
 
