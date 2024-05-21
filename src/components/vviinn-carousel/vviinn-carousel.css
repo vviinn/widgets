@@ -1,5 +1,4 @@
 :host {
-  --vviinn-progressbar-width: 0;
   --vviinn-carousel-columns-internal: var(--vviinn-carousel-columns, 4);
 }
 
