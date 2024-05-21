@@ -2,7 +2,14 @@
   display: flex;
   flex-direction: row;
   overflow-x: auto;
-  padding: 0 12px 12px 24px;
+  padding: 0 0 6px 24px;
+  padding-left: 24px;
+  padding-bottom: 6px;
+  scrollbar-width: thin;
+}
+
+:host(:not(:first-child)) .filters {
+  margin-top: 6px;
 }
 
 .filter {
@@ -45,14 +52,11 @@
   scrollbar-width: none;
 }
 
-@media (max-width: 768px) {
-  .filters {
-    padding-right: 54px;
-    padding-bottom: 0;
-  }
-}
-
 @media (max-width: 640px) {
+  .filters {
+    padding-right: 40px;
+  }
+
   .no-scrollbar-mobile {
     -ms-overflow-style: none;
     scrollbar-width: none;
