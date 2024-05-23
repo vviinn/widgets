@@ -9,6 +9,7 @@ import {
   Listen,
   Event,
   EventEmitter,
+  Fragment,
 } from "@stencil/core";
 import * as O from "fp-ts/lib/Option";
 import { v4 as uuidv4 } from "uuid";
@@ -746,7 +747,6 @@ export class VviinnVpsWidget {
   }
 
   render() {
-    console.log(searchState.multiSearchFilters);
     return (
       <Host exportparts="text-search-input">
         {!this.showingInButton && <SlotSkeleton />}
@@ -808,12 +808,16 @@ export class VviinnVpsWidget {
                     />
                   </div>
 
-                  {!this.haveErrors() && <vviinn-teaser />}
                   {!this.haveErrors() && (
-                    <div class="buttons-group">{this.renderButtons()}</div>
-                  )}
-                  {this.textSearchShow && !this.haveErrors() && (
-                    <vviinn-text-search clearSearchQuery={true} />
+                    <Fragment>
+                      <vviinn-teaser />
+
+                      <div class="buttons-group">{this.renderButtons()}</div>
+
+                      {this.textSearchShow && (
+                        <vviinn-text-search clearSearchQuery={true} />
+                      )}
+                    </Fragment>
                   )}
                 </div>
                 <vviinn-privacy-badge
@@ -849,7 +853,24 @@ export class VviinnVpsWidget {
                           basicEventData={this.getBasicEventData()}
                         />
                       ))}
+                    </div>
+                  </div>
+                </div>
+              )}
 
+              {this.isResultSlide() && searchState.searchType === "text" && (
+                <div class="text-search-wrapper">
+                  <vviinn-text-search
+                    initialSearchQuery={this.initialSearchQuery}
+                  />
+
+                  <div
+                    class={{
+                      "filters-wrapper": true,
+                      hidden: this.showAspectRatioError,
+                    }}
+                  >
+                    <div class="filters">
                       {searchState.multiSearchFilters.map((filter) => (
                         <search-filters
                           multiSearchFilter={filter}
@@ -860,16 +881,6 @@ export class VviinnVpsWidget {
                   </div>
                 </div>
               )}
-
-              {this.textSearchShow &&
-                this.isResultSlide() &&
-                searchState.searchType === "text" && (
-                  <div class="text-search-wrapper">
-                    <vviinn-text-search
-                      initialSearchQuery={this.initialSearchQuery}
-                    />
-                  </div>
-                )}
 
               <div id="results-block" class="products-wrapper">
                 <div

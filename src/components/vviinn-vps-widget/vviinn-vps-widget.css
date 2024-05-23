@@ -119,11 +119,6 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   box-sizing: border-box;
 }
 
-.results-page .text-search-wrapper {
-  width: 100%;
-  padding: 24px;
-}
-
 .products {
   width: 100%;
   align-content: center;
@@ -160,6 +155,11 @@ vviinn-empty-results {
   display: grid;
   grid-template-rows: min-content 1fr;
   min-width: 100%;
+}
+
+.text-search-wrapper {
+  width: 100%;
+  padding: 24px;
 }
 
 .filters-wrapper {

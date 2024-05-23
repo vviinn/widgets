@@ -40,7 +40,8 @@ export class SearchFilters {
 
   @Event() vviinnSelectFilter: EventEmitter<SelectFilterEventData>;
 
-  private filterType: string = this.filter.name;
+  private filterType: string =
+    this.filter?.name ?? this.multiSearchFilter?.column;
 
   private isCategoriesFilterType(): boolean {
     return this.filterType === "categories";
@@ -96,11 +97,11 @@ export class SearchFilters {
   }
 
   render() {
-    console.log(this.multiSearchFilter);
+    const multiSearchFilters = this.multiSearchFilter?.values || [];
+    const filters = this.filter?.filters || [];
 
-    if (!this.filter || !this.multiSearchFilter) return null;
-    console.log(this.multiSearchFilter);
-    const { name, filters } = this.filter;
+    console.log(multiSearchFilters);
+
     return (
       <Host exportparts="filter, show-more-filters">
         <div
@@ -110,44 +111,77 @@ export class SearchFilters {
             "no-scrollbar": !this.isCategoriesFilterType(),
           }}
         >
-          {filters
-            .filter((_, i) => (this.hideFilters ? i < FILTERS_COUNT : true))
-            .map((filter, index) => {
-              const filterActive =
-                name === "categories"
-                  ? this.selectedFilter === parseFilters(filter, "categories")
-                  : this.selectedFilter === filter.name;
-              return (
-                <div
-                  role="button"
-                  tabindex="0"
-                  key={index}
-                  part={filterActive ? "filter active" : "filter"}
-                  class={{
-                    filter: true,
-                    active: filterActive,
-                  }}
-                  style={{ "animation-delay": `${index * 10}ms` }}
-                  onPointerUp={(ev) => {
-                    if (searchState.loading) return;
-                    ev.stopPropagation();
-                    this.handleFilterSelection(filter);
-                  }}
-                  onKeyPress={(ev) => {
-                    if (searchState.loading) return;
-                    this.handleEnter(ev, filter);
-                  }}
-                >
-                  {filter.name}
-                </div>
-              );
-            })}
+          {!!filters.length &&
+            filters
+              .filter((_, i) => (this.hideFilters ? i < FILTERS_COUNT : true))
+              .map((filter, index) => {
+                const filterActive =
+                  this.filter.name === "categories"
+                    ? this.selectedFilter === parseFilters(filter, "categories")
+                    : this.selectedFilter === filter.name;
+                return (
+                  <div
+                    role="button"
+                    tabindex="0"
+                    key={index}
+                    part={filterActive ? "filter active" : "filter"}
+                    class={{
+                      filter: true,
+                      active: filterActive,
+                    }}
+                    style={{ "animation-delay": `${index * 10}ms` }}
+                    onPointerUp={(ev) => {
+                      if (searchState.loading) return;
+                      ev.stopPropagation();
+                      this.handleFilterSelection(filter);
+                    }}
+                    onKeyPress={(ev) => {
+                      if (searchState.loading) return;
+                      this.handleEnter(ev, filter);
+                    }}
+                  >
+                    {filter.name}
+                  </div>
+                );
+              })}
+
+          {!!multiSearchFilters.length &&
+            multiSearchFilters
+              .filter((_, i) => (this.hideFilters ? i < FILTERS_COUNT : true))
+              .map(({ value, label, selected }, index) => {
+                return (
+                  <div
+                    role="button"
+                    tabindex="0"
+                    key={index}
+                    part={selected ? "filter active" : "filter"}
+                    class={{
+                      filter: true,
+                      active: selected,
+                    }}
+                    style={{ "animation-delay": `${index * 10}ms` }}
+                    onPointerUp={(ev) => {
+                      if (searchState.loading) return;
+                      ev.stopPropagation();
+                      // this.handleFilterSelection(filter);
+                    }}
+                    onKeyPress={(ev) => {
+                      if (searchState.loading) return;
+                      // this.handleEnter(ev, filter);
+                    }}
+                  >
+                    {label}
+                  </div>
+                );
+              })}
 
           {this.hideFilters && (
             <div
               class={{
                 "show-more": true,
-                hidden: filters.length <= FILTERS_COUNT,
+                hidden:
+                  filters.length <= FILTERS_COUNT ||
+                  multiSearchFilters.length <= FILTERS_COUNT,
                 active: !this.hideFilters,
               }}
               role="button"
