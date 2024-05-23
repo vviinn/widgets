@@ -5,6 +5,7 @@ import { Form } from "../network/ion/Form";
 import { makeRequest } from "../network/request";
 import { createInitPostRequest, getApiPath } from "../network/utils";
 import { Recommendation } from "../recommendation/recommendation";
+import { SearchInterfaces } from "../interfaces/search";
 import * as TE from "fp-ts/TaskEither";
 import * as O from "fp-ts/Option";
 import { RectangleAlt } from "../geometry/RectangleAlt";
@@ -13,41 +14,10 @@ import { BasicError } from "../error";
 import { sequenceToEither } from "../utils/either";
 import { arrayToQueryString } from "../utils/collections/collectionsUtils";
 
-export interface MultiSearchRequestBody {
-  query: string;
-  campaign: string;
-  resultsCount?: number;
-  excluded?: {
-    column: string;
-    values: string[];
-  }[];
-  filters?: [
-    {
-      column: string;
-      values: string[];
-    }
-  ];
-}
+export type MultiSearchRequestBody = SearchInterfaces["MultiSearchRequest"];
 
-export type MultiSearchFilter = {
-  column: string;
-  values: {
-    label: string;
-    selected: boolean;
-    value: string;
-  }[];
-};
-
-export type MultiSearchInteractions = {
-  filters: MultiSearchFilter[];
-};
-
-export type TextSearchSession = {
-  data: {
-    products: Recommendation[];
-    interactions: MultiSearchInteractions;
-  };
-};
+type MultiSearchResponse = SearchInterfaces["MultiSearchResponse"];
+export type ResponseFilterItem = SearchInterfaces["ResponseFilterItem"];
 
 export type SearchType = "text" | "image";
 
@@ -144,12 +114,12 @@ export const imageSearchSessionClient = (
 
 export const textSearchSessionClient = (
   initialData: RequestInit
-): TE.TaskEither<BasicError<Response | string>, TextSearchSession> => {
+): TE.TaskEither<BasicError<Response | string>, MultiSearchResponse> => {
   const requestUrl = "multi-search";
 
   return pipe(
     sequenceToEither(getApiPath(), createInitPostRequest),
     TE.fromEither,
-    TE.chainW(makeRequest<TextSearchSession>(requestUrl, initialData))
+    TE.chainW(makeRequest<MultiSearchResponse>(requestUrl, initialData))
   );
 };

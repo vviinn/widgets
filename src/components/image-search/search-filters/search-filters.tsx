@@ -9,7 +9,10 @@ import {
   EventEmitter,
 } from "@stencil/core";
 import { Link } from "../../../network/ion/Link";
-import { SearchSessionFilter } from "../../../searchSession/searchSession";
+import {
+  ResponseFilterItem,
+  SearchSessionFilter,
+} from "../../../searchSession/searchSession";
 import { searchState } from "../../../store/search.store";
 import {
   BasicEventData,
@@ -29,6 +32,7 @@ export class SearchFilters {
   @Element() el: HTMLElement;
 
   @Prop() filter: SearchSessionFilter | null = null;
+  @Prop() multiSearchFilter: ResponseFilterItem | null = null;
   @Prop() basicEventData: BasicEventData;
 
   @State() selectedFilter = "";
@@ -92,7 +96,10 @@ export class SearchFilters {
   }
 
   render() {
-    if (!this.filter) return null;
+    console.log(this.multiSearchFilter);
+
+    if (!this.filter || !this.multiSearchFilter) return null;
+    console.log(this.multiSearchFilter);
     const { name, filters } = this.filter;
     return (
       <Host exportparts="filter, show-more-filters">

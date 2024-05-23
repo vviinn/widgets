@@ -1,4 +1,3 @@
-import { components } from "../interfaces/generated";
+import { SearchInterfaces } from "../interfaces/search";
 
-export type Recommendation =
-  components["schemas"]["visual-product-search-object"];
+export type Recommendation = SearchInterfaces["VisualProductSearch"];

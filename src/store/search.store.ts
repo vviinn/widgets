@@ -12,7 +12,8 @@ import {
   imageSearchSessionClient,
   textSearchSessionClient,
   SearchType,
-  MultiSearchInteractions,
+  MultiSearchRequestBody,
+  ResponseFilterItem,
 } from "../searchSession/searchSession";
 import { foldValueObject, ValueObject } from "../network/ion/ValueObject";
 import { Link, linkRequest, getLink } from "../network/ion/Link";
@@ -50,7 +51,7 @@ type SearchStore = {
   excluded?: string;
   results: Recommendation[];
   filters: SearchSessionFilter[];
-  multiSearchFilters: MultiSearchInteractions["filters"];
+  multiSearchFilters: ResponseFilterItem[];
   resetCategoryLink?: Link;
   activeIonLink?: Link;
   cropperHandlers: Handler[];
@@ -221,10 +222,10 @@ const uploadText = (query: string) => {
   state.searchType = "text";
   state.loading = true;
 
-  const body = JSON.stringify({
+  const body: MultiSearchRequestBody = {
     query,
     ...(state.campaignId.length ? { campaign: state.campaignId } : {}),
-  });
+  };
 
   const tokenWithBody = sequenceToEither(
     processBearerToken(state.token),
@@ -237,15 +238,15 @@ const uploadText = (query: string) => {
       headers.set("Content-Type", "application/json");
       return {
         headers,
-        body,
+        body: JSON.stringify(body),
       };
     }),
     TE.fromEither,
     TE.chain((request) => textSearchSessionClient(request)),
     TE.map((sessionResponse) => {
-      state.results = sessionResponse.data?.products ?? [];
+      state.results = sessionResponse?.data.products ?? [];
       state.multiSearchFilters =
-        sessionResponse.data?.interactions?.filters ?? [];
+        sessionResponse?.data?.interactions.filters ?? [];
       state.loading = false;
       return sessionResponse;
     }),

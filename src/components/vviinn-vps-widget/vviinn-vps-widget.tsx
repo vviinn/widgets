@@ -710,6 +710,7 @@ export class VviinnVpsWidget {
     searchState.searchArea = O.none;
     searchState.results = [];
     searchState.filters = [];
+    searchState.multiSearchFilters = [];
     searchState.detectedObjects = [];
     searchState.rectangleSearchForm = undefined;
     searchState.loading = false;
@@ -745,6 +746,7 @@ export class VviinnVpsWidget {
   }
 
   render() {
+    console.log(searchState.multiSearchFilters);
     return (
       <Host exportparts="text-search-input">
         {!this.showingInButton && <SlotSkeleton />}
@@ -844,6 +846,13 @@ export class VviinnVpsWidget {
                       {searchState.filters.map((filter) => (
                         <search-filters
                           filter={filter}
+                          basicEventData={this.getBasicEventData()}
+                        />
+                      ))}
+
+                      {searchState.multiSearchFilters.map((filter) => (
+                        <search-filters
+                          multiSearchFilter={filter}
                           basicEventData={this.getBasicEventData()}
                         />
                       ))}

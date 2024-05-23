@@ -1,37 +1,41 @@
 import { ProductAnalytics } from "./ProductAnalytics";
-import { Interfaces } from "../interfaces/recommendation";
+import { SearchInterfaces } from "../interfaces/search";
 
 export class GtagAnalytics implements ProductAnalytics {
-  sendImpression(product: Interfaces['VisualProductSearch']) {
-    gtag('event', 'view_item_list', {
-        items: [
-          {
-            id: product.productId,
-            name: product.title,
-            brand: product.brand ?? '',
-            category: product.productType ?? '',
-            list_name: 'VI VPR View',
-            price: Math.min(...[product.price.actual, product.price.sale ?? Infinity])
-          }
-        ]
+  sendImpression(product: SearchInterfaces["VisualProductSearch"]) {
+    gtag("event", "view_item_list", {
+      items: [
+        {
+          id: product.productId,
+          name: product.title,
+          brand: product.brand ?? "",
+          category: product.productType ?? "",
+          list_name: "VI VPR View",
+          price: Math.min(
+            ...[product.price.actual, product.price.sale ?? Infinity]
+          ),
+        },
+      ],
     });
 
     return undefined;
   }
 
-  sendClick(product: Interfaces['VisualProductSearch']) {
-    gtag('event', 'select_content', {
-      content_type: 'product',
+  sendClick(product: SearchInterfaces["VisualProductSearch"]) {
+    gtag("event", "select_content", {
+      content_type: "product",
       items: [
         {
           id: product.productId,
           name: product.title,
-          brand: product.brand ?? '',
-          category: product.productType ?? '',
-          list_name: 'VI VPR View',
-          price: Math.min(...[product.price.actual, product.price.sale ?? Infinity])
-        }
-      ]
+          brand: product.brand ?? "",
+          category: product.productType ?? "",
+          list_name: "VI VPR View",
+          price: Math.min(
+            ...[product.price.actual, product.price.sale ?? Infinity]
+          ),
+        },
+      ],
     });
 
     return undefined;
