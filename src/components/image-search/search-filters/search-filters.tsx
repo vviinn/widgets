@@ -10,6 +10,7 @@ import {
 } from "@stencil/core";
 import { Link } from "../../../network/ion/Link";
 import {
+  RequestFilterItem,
   ResponseFilterItem,
   SearchSessionFilter,
 } from "../../../searchSession/searchSession";
@@ -22,8 +23,10 @@ import { parseFilters } from "../../../filters/parseFilters";
 import { FilterKind } from "vviinn-tracking-client-ts";
 
 const FILTERS_COUNT: number = 4;
-
-type MultiSearchFilterValue = ResponseFilterItem["values"][0]["value"];
+type MultiSearchFilterSelectProps = {
+  column: ResponseFilterItem["column"];
+  value: ResponseFilterItem["values"][0]["value"];
+};
 
 @Component({
   tag: "search-filters",
@@ -41,6 +44,7 @@ export class SearchFilters {
   @State() hideFilters: boolean = true;
 
   @Event() vviinnSelectFilter: EventEmitter<SelectFilterEventData>;
+  @Event() vviinnMultiSearchFilterSelected: EventEmitter<RequestFilterItem[0]>;
 
   private filterType: string =
     this.filter?.name ?? this.multiSearchFilter?.column;
@@ -48,7 +52,6 @@ export class SearchFilters {
   private isCategoriesFilterType(): boolean {
     return this.filterType === "categories";
   }
-
   private getFilterKind(): FilterKind {
     return this.isCategoriesFilterType()
       ? "category"
@@ -92,23 +95,38 @@ export class SearchFilters {
     this.handleFilterSelection(f);
   }
 
-  private handleMultiSearchFilterSelection(value: MultiSearchFilterValue) {
-    //TODO:
-  }
-
-  private handleMultiSearchEnter(
-    ev: KeyboardEvent,
-    value: MultiSearchFilterValue
-  ) {
-    if (ev.key !== "Enter") return;
-    this.handleMultiSearchFilterSelection(value);
-  }
-
   private isFilterSelected(filterLink: Link): boolean {
     return this.isCategoriesFilterType()
       ? this.selectedFilter === parseFilters(filterLink, "categories")
       : this.selectedFilter === filterLink.name;
   }
+
+  private handleMultiSearchEnter(
+    ev: KeyboardEvent,
+    { column, value }: MultiSearchFilterSelectProps
+  ) {
+    if (ev.key !== "Enter") return;
+    this.handleMultiSearchFilterSelection({ column, value });
+  }
+
+  private handleMultiSearchFilterSelection({
+    column,
+    value,
+  }: MultiSearchFilterSelectProps) {
+    this.vviinnMultiSearchFilterSelected.emit(
+      this.getMultiSearchFilterRequestValue({ column, value })
+    );
+  }
+
+  private getMultiSearchFilterRequestValue = ({
+    column,
+    value,
+  }: MultiSearchFilterSelectProps): RequestFilterItem[0] => {
+    return {
+      column,
+      values: [value],
+    };
+  };
 
   render() {
     const multiSearchFilters = this.multiSearchFilter?.values || [];
@@ -176,11 +194,17 @@ export class SearchFilters {
                     onPointerUp={(ev) => {
                       if (searchState.loading) return;
                       ev.stopPropagation();
-                      this.handleMultiSearchFilterSelection(value);
+                      this.handleMultiSearchFilterSelection({
+                        column: this.multiSearchFilter["column"],
+                        value,
+                      });
                     }}
                     onKeyPress={(ev) => {
                       if (searchState.loading) return;
-                      this.handleMultiSearchEnter(ev, value);
+                      this.handleMultiSearchEnter(ev, {
+                        column: this.multiSearchFilter["column"],
+                        value,
+                      });
                     }}
                   >
                     {label}

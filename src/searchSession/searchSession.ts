@@ -18,6 +18,7 @@ export type MultiSearchRequestBody = SearchInterfaces["MultiSearchRequest"];
 
 type MultiSearchResponse = SearchInterfaces["MultiSearchResponse"];
 export type ResponseFilterItem = SearchInterfaces["ResponseFilterItem"];
+export type RequestFilterItem = SearchInterfaces["RequestFilterItem"];
 
 export type SearchType = "text" | "image";
 

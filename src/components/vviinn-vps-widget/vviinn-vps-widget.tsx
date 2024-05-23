@@ -16,7 +16,7 @@ import { v4 as uuidv4 } from "uuid";
 import i18next from "i18next";
 
 import { version } from "../../../package.json";
-import { searchState } from "../../store/search.store";
+import { processSelectedText, searchState } from "../../store/search.store";
 import { state } from "../../store/store";
 import { slotChangeListener } from "../customized-slots";
 import { createTrackingApi } from "../../openApi";
@@ -57,6 +57,7 @@ import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 import { videoStreamSettings } from "../../video/settings";
 import { Recommendation } from "../..";
 import { checkDeviceType } from "../../helpers";
+import { SearchInterfaces } from "../../interfaces/search";
 
 type UploadSource = "uploadPhoto" | "startCamera";
 const CAMERA_START_DELAY = 500;
@@ -152,7 +153,8 @@ export class VviinnVpsWidget {
   @State() uploadSource: UploadSource;
   @State() showAspectRatioError = false;
   @State() products: Recommendation[] = [];
-  @State() initialSearchQuery: string = "";
+  @State() searchQuery: string = "";
+  @State() multiSearchFilters: SearchInterfaces["RequestFilterItem"] = [];
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -332,11 +334,6 @@ export class VviinnVpsWidget {
     this.showAspectRatioError = isError;
   };
 
-  componentDidLoad() {
-    const slots = this.el.querySelectorAll("[slot]");
-    this.globalSlotsChanged.emit(Array.from(slots));
-  }
-
   setTrackingDeactivated = (result: EventConfirmation) => {
     if (result.status === "rejected") {
       this.trackingDeactivated = true;
@@ -351,6 +348,16 @@ export class VviinnVpsWidget {
       widgetId: this.buttonElementId ?? this.id,
       widgetVersion: version,
     };
+  };
+
+  private async handleMultiSearch() {
+    if (!this.searchQuery) return;
+    await processSelectedText(this.searchQuery);
+    this.slidePosition = 1;
+  }
+
+  private setSearchQuery = (query: string) => {
+    this.searchQuery = query;
   };
 
   @Watch("active")
@@ -480,10 +487,9 @@ export class VviinnVpsWidget {
     this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
   }
 
-  @Listen("vviinnTextSearchFinished")
-  async trackTextSearchFinished({ detail }: CustomEvent<string>) {
-    this.initialSearchQuery = detail;
-    this.slidePosition = 1;
+  @Listen("vviinnMultiSearchFilterSelected")
+  trackMultiSearchFilterSelected({ detail }) {
+    processSelectedText(this.searchQuery, detail);
   }
 
   connectedCallback() {
@@ -517,6 +523,11 @@ export class VviinnVpsWidget {
     slotChangeListener(this, this.el);
     this.vviinnWidgetLoad.emit(this.getBasicEventData());
     this.trackWidgetEvent("load");
+  }
+
+  componentDidLoad() {
+    const slots = this.el.querySelectorAll("[slot]");
+    this.globalSlotsChanged.emit(Array.from(slots));
   }
 
   private trackWidgetEvent(action: WidgetAction) {
@@ -717,6 +728,7 @@ export class VviinnVpsWidget {
     searchState.loading = false;
     searchState.serverError = false;
     searchState.searchType = undefined;
+    this.searchQuery = "";
     this.wrongImageFormat = false;
     this.resetScroll("results-block");
     this.stopStreamTracks();
@@ -815,7 +827,11 @@ export class VviinnVpsWidget {
                       <div class="buttons-group">{this.renderButtons()}</div>
 
                       {this.textSearchShow && (
-                        <vviinn-text-search clearSearchQuery={true} />
+                        <vviinn-text-search
+                          searchQuery={this.searchQuery}
+                          setSearchQuery={this.setSearchQuery}
+                          handleMultiSearch={this.handleMultiSearch.bind(this)}
+                        />
                       )}
                     </Fragment>
                   )}
@@ -861,7 +877,9 @@ export class VviinnVpsWidget {
               {this.isResultSlide() && searchState.searchType === "text" && (
                 <div class="source-wrapper text-search-wrapper">
                   <vviinn-text-search
-                    initialSearchQuery={this.initialSearchQuery}
+                    searchQuery={this.searchQuery}
+                    setSearchQuery={this.setSearchQuery}
+                    handleMultiSearch={this.handleMultiSearch.bind(this)}
                   />
 
                   <div

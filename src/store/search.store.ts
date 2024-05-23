@@ -14,6 +14,7 @@ import {
   SearchType,
   MultiSearchRequestBody,
   ResponseFilterItem,
+  RequestFilterItem,
 } from "../searchSession/searchSession";
 import { foldValueObject, ValueObject } from "../network/ion/ValueObject";
 import { Link, linkRequest, getLink } from "../network/ion/Link";
@@ -218,12 +219,17 @@ export const uploadFile = (
   );
 };
 
-const uploadText = (query: string) => {
+const uploadText = (query: string, filter?: RequestFilterItem[0]) => {
   state.searchType = "text";
   state.loading = true;
 
   const body: MultiSearchRequestBody = {
     query,
+    ...(filter
+      ? {
+          filters: [filter],
+        }
+      : {}),
     ...(state.campaignId.length ? { campaign: state.campaignId } : {}),
   };
 
@@ -258,8 +264,11 @@ const uploadText = (query: string) => {
   );
 };
 
-export const processSelectedText = async (query: string) => {
-  return await uploadText(query)();
+export const processSelectedText = async (
+  query: string,
+  filter?: RequestFilterItem[0]
+) => {
+  return await uploadText(query, filter)();
 };
 
 onChange("activeIonLink", async (newLink: Link) => {

@@ -5,4 +5,5 @@ export interface SearchInterfaces {
   MultiSearchRequest: components["schemas"]["multi-search-request"];
   MultiSearchResponse: components["schemas"]["multi-search-response"];
   ResponseFilterItem: components["schemas"]["response-filter-item"];
+  RequestFilterItem: components["schemas"]["request-filters"];
 }
