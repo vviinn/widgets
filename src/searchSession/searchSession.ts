@@ -21,11 +21,31 @@ export interface MultiSearchRequestBody {
     column: string;
     values: string[];
   }[];
+  filters?: [
+    {
+      column: string;
+      values: string[];
+    }
+  ];
 }
+
+export type MultiSearchFilter = {
+  column: string;
+  values: {
+    label: string;
+    selected: boolean;
+    value: string;
+  }[];
+};
+
+export type MultiSearchInteractions = {
+  filters: MultiSearchFilter[];
+};
 
 export type TextSearchSession = {
   data: {
     products: Recommendation[];
+    interactions: MultiSearchInteractions;
   };
 };
 

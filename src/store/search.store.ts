@@ -12,6 +12,7 @@ import {
   imageSearchSessionClient,
   textSearchSessionClient,
   SearchType,
+  MultiSearchInteractions,
 } from "../searchSession/searchSession";
 import { foldValueObject, ValueObject } from "../network/ion/ValueObject";
 import { Link, linkRequest, getLink } from "../network/ion/Link";
@@ -49,6 +50,7 @@ type SearchStore = {
   excluded?: string;
   results: Recommendation[];
   filters: SearchSessionFilter[];
+  multiSearchFilters: MultiSearchInteractions["filters"];
   resetCategoryLink?: Link;
   activeIonLink?: Link;
   cropperHandlers: Handler[];
@@ -76,6 +78,7 @@ const { state, onChange } = createStore<SearchStore>({
   excluded: "",
   results: [],
   filters: [],
+  multiSearchFilters: [],
   cropperHandlers: [],
   detectedObjects: [],
   objectDetectionInProgress: false,
@@ -241,6 +244,8 @@ const uploadText = (query: string) => {
     TE.chain((request) => textSearchSessionClient(request)),
     TE.map((sessionResponse) => {
       state.results = sessionResponse.data?.products ?? [];
+      state.multiSearchFilters =
+        sessionResponse.data?.interactions?.filters ?? [];
       state.loading = false;
       return sessionResponse;
     }),
