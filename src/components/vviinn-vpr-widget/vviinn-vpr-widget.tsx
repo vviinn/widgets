@@ -618,29 +618,27 @@ export class VviinnVprWidget implements ComponentInterface {
     index: number
   ): HTMLVviinnProductCardElement {
     return (
-      <Fragment>
-        <vviinn-product-card
-          part="product-part"
-          productId={recommendation.productId}
-          productTitle={recommendation.title}
-          productType={recommendation.productType}
-          deeplink={recommendation.deeplink}
-          image={recommendation.image.thumbnail}
-          brand={recommendation.brand}
-          imageWidth={this.imageWidth}
-          imageRatio={1}
-          price={recommendation.price.actual}
-          salePrice={recommendation.price.sale}
-          responsive={this.isGridMode}
-          addToBasketShow={this.addToBasketShow}
-          mode={this.mode}
-          dimmedBackground={this.useDimmedBackgroundInCard()}
-          campaignTypeId={this.campaignType}
-          index={index}
-          widgetElementId={this.id}
-          widgetVersion={version}
-        />
-      </Fragment>
+      <vviinn-product-card
+        part="product-part"
+        productId={recommendation.productId}
+        productTitle={recommendation.title}
+        productType={recommendation.productType}
+        deeplink={recommendation.deeplink}
+        image={recommendation.image.thumbnail}
+        brand={recommendation.brand}
+        imageWidth={this.imageWidth}
+        imageRatio={1}
+        price={recommendation.price.actual}
+        salePrice={recommendation.price.sale}
+        responsive={this.isGridMode}
+        addToBasketShow={this.addToBasketShow}
+        mode={this.mode}
+        dimmedBackground={this.useDimmedBackgroundInCard()}
+        campaignTypeId={this.campaignType}
+        index={index}
+        widgetElementId={this.id}
+        widgetVersion={version}
+      />
     );
   }
 
