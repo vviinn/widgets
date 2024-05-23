@@ -27,7 +27,7 @@ import { getRecommendationsService } from "../../campaign/CampaignService";
 import { searchState } from "../../store/search.store";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 import { Recommendation } from "../../recommendation/recommendation";
-import { SlotSkeleton } from "../customized-slots";
+import { SlotSkeleton, slotChangeListener } from "../customized-slots";
 
 import {
   DefaultApi,
@@ -84,13 +84,16 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @part carousel-button - Button for carousel navigation.
  * @part recommendations-grid - For internal usage only!
  * @part recommendations-title - Title of the recommendations grid.
+ * @part recommendations-subtitle - Subtitle of the recommendations grid.
  * @part basket-button - Add to Basket button.
- * @part update-button-item - Update button for Set mode (on Item).
- * @part update-button-top - Update button for Set mode (on Top).
+ * @part update-button-top - Update Button on the top (Set mode).
+ * @part update-button-item - Update Button inside the Product Card (Set mode).
  *
- * @slot vviinn-basket-button-text - Title of Add to Basket button.
- * @slot vviinn-update-icon-item - Icon of update button for Set mode (on Item).
- * @slot vviinn-update-icon-top - Icon of update button for Set mode (on Top).
+ * @slot vviinn-recommendations-title - Recommendations title text.
+ * @slot vviinn-recommendations-subtitle - Recommendations subtitle text.
+ * @slot vviinn-basket-button-text - Text of Add to Basket button.
+ * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
+ * @slot vviinn-update-button-text - Text of Update Button on the top (Set mode).
  */
 
 @Component({
@@ -160,6 +163,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @State() trackingDeactivated: boolean = false;
   @State() hasErrorOnLoad: boolean = false;
   @State() updatingAllCards: boolean = false;
+  @State() updatedCardsAmount: number = 0;
 
   /** The event emits on widget load */
   @Event({ bubbles: true })
@@ -205,6 +209,8 @@ export class VviinnVprWidget implements ComponentInterface {
   private isSetMode: boolean;
   private isGridMode: boolean;
   private isContinuityMode: boolean;
+  trackingApi: DefaultApi;
+  uiSessionId: string;
 
   private getBasicEventData(): BasicEventData {
     return {
@@ -234,9 +240,6 @@ export class VviinnVprWidget implements ComponentInterface {
   ): Recommendation | undefined {
     return this.recommendations.find((r) => r.productId === id);
   }
-
-  trackingApi: DefaultApi;
-  uiSessionId: string;
 
   setTrackingDeactivated = (result: EventConfirmation) => {
     if (result.status === "rejected") {
@@ -311,6 +314,7 @@ export class VviinnVprWidget implements ComponentInterface {
     if (this.excluded) {
       this.excluded = parseExcluded(this.excluded);
     }
+    slotChangeListener(this, this.el);
   }
 
   @Listen("vviinnProductLoad")
@@ -556,19 +560,26 @@ export class VviinnVprWidget implements ComponentInterface {
         }}
         aria-hidden="false"
       >
-        {this.addToBasketShow && <SlotSkeleton />}
-
         <Fragment>
           {this.renderExternalCSS()}
+          <SlotSkeleton />
           <style>{state.fallbackStyles}</style>
           <div class="widget-header">
             <div>
               <h2 part="recommendations-title">
-                {this.isSetMode
-                  ? i18next.t("setMode.widgetTitle")
-                  : this.blockTitle}
+                <slot name="vviinn-recommendations-title">
+                  {this.isSetMode
+                    ? i18next.t("setMode.widgetTitle")
+                    : this.blockTitle}
+                </slot>
               </h2>
-              {this.isSetMode && <h3>{i18next.t("setMode.widgetSubtitle")}</h3>}
+              {this.isSetMode && (
+                <h3 part="recommendations-subtitle">
+                  <slot name="vviinn-recommendations-subtitle">
+                    {i18next.t("setMode.widgetSubtitle")}
+                  </slot>
+                </h3>
+              )}
             </div>
 
             {this.isSetMode && this.updateButtonLocation !== "onItem" ? (
@@ -577,13 +588,16 @@ export class VviinnVprWidget implements ComponentInterface {
                 part="update-button-top"
                 onClick={() => (this.updatingAllCards = true)}
               >
-                <slot name="vviinn-update-icon-top">
+                <slot name="vviinn-update-button-icon">
                   <UpdateIcon />
                 </slot>
-                <span>{i18next.t("setMode.updateButtonText")}</span>
+                <slot name="vviinn-update-button-text">
+                  <span>{i18next.t("setMode.updateButtonText")}</span>
+                </slot>
               </button>
             ) : null}
           </div>
+
           {this.recommendations.length > 0 &&
             (this.useCarousel ? this.renderCarousel() : this.renderResults())}
 
@@ -604,27 +618,29 @@ export class VviinnVprWidget implements ComponentInterface {
     index: number
   ): HTMLVviinnProductCardElement {
     return (
-      <vviinn-product-card
-        part="product-part"
-        productId={recommendation.productId}
-        productTitle={recommendation.title}
-        productType={recommendation.productType}
-        deeplink={recommendation.deeplink}
-        image={recommendation.image.thumbnail}
-        brand={recommendation.brand}
-        imageWidth={this.imageWidth}
-        imageRatio={1}
-        price={recommendation.price.actual}
-        salePrice={recommendation.price.sale}
-        responsive={this.isGridMode}
-        addToBasketShow={this.addToBasketShow}
-        mode={this.mode}
-        dimmedBackground={this.useDimmedBackgroundInCard()}
-        campaignTypeId={this.campaignType}
-        index={index}
-        widgetElementId={this.id}
-        widgetVersion={version}
-      />
+      <Fragment>
+        <vviinn-product-card
+          part="product-part"
+          productId={recommendation.productId}
+          productTitle={recommendation.title}
+          productType={recommendation.productType}
+          deeplink={recommendation.deeplink}
+          image={recommendation.image.thumbnail}
+          brand={recommendation.brand}
+          imageWidth={this.imageWidth}
+          imageRatio={1}
+          price={recommendation.price.actual}
+          salePrice={recommendation.price.sale}
+          responsive={this.isGridMode}
+          addToBasketShow={this.addToBasketShow}
+          mode={this.mode}
+          dimmedBackground={this.useDimmedBackgroundInCard()}
+          campaignTypeId={this.campaignType}
+          index={index}
+          widgetElementId={this.id}
+          widgetVersion={version}
+        />
+      </Fragment>
     );
   }
 

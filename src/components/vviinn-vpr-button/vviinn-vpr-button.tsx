@@ -21,9 +21,6 @@ import { Locale } from "../../locale";
  *
  * @part button - Clickable button element.
  * @part vviinn-button - Button element container.
- *
- * @slot vviinn-basket-button-text - Title of Add to Basket button.
- * @slot vviinn-update-icon - Icon of update button for Set mode.
  */
 @Component({
   tag: "vviinn-vpr-button",
