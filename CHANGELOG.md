@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.50.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.49.3...v2.50.0) (2024-05-23)
+
+
+### Features
+
+* Add slots for customizing Set widget, Recommendation ([c68a49d](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/c68a49dd03b0244a0e474104e5276e07627a344a))
+
 ### [2.49.3](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.49.2...v2.49.3) (2024-05-21)
 
 
