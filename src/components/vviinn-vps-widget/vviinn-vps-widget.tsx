@@ -834,7 +834,7 @@ export class VviinnVpsWidget {
               }}
             >
               {this.isResultSlide() && searchState.searchType === "image" && (
-                <div class="image-wrapper">
+                <div class="source-wrapper image-wrapper">
                   <vviinn-image-view
                     basicEventData={this.getBasicEventData()}
                     setShowAspectRatioError={this.setShowAspectRatioError}
@@ -859,7 +859,7 @@ export class VviinnVpsWidget {
               )}
 
               {this.isResultSlide() && searchState.searchType === "text" && (
-                <div class="text-search-wrapper">
+                <div class="source-wrapper text-search-wrapper">
                   <vviinn-text-search
                     initialSearchQuery={this.initialSearchQuery}
                   />

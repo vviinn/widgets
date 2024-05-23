@@ -21,7 +21,9 @@ import {
 import { parseFilters } from "../../../filters/parseFilters";
 import { FilterKind } from "vviinn-tracking-client-ts";
 
-const FILTERS_COUNT: number = 5;
+const FILTERS_COUNT: number = 4;
+
+type MultiSearchFilterValue = ResponseFilterItem["values"][0]["value"];
 
 @Component({
   tag: "search-filters",
@@ -90,6 +92,18 @@ export class SearchFilters {
     this.handleFilterSelection(f);
   }
 
+  private handleMultiSearchFilterSelection(value: MultiSearchFilterValue) {
+    //TODO:
+  }
+
+  private handleMultiSearchEnter(
+    ev: KeyboardEvent,
+    value: MultiSearchFilterValue
+  ) {
+    if (ev.key !== "Enter") return;
+    this.handleMultiSearchFilterSelection(value);
+  }
+
   private isFilterSelected(filterLink: Link): boolean {
     return this.isCategoriesFilterType()
       ? this.selectedFilter === parseFilters(filterLink, "categories")
@@ -99,16 +113,15 @@ export class SearchFilters {
   render() {
     const multiSearchFilters = this.multiSearchFilter?.values || [];
     const filters = this.filter?.filters || [];
-
-    console.log(multiSearchFilters);
-
     return (
       <Host exportparts="filter, show-more-filters">
         <div
           class={{
             filters: true,
-            "no-scrollbar-mobile": this.isCategoriesFilterType(),
-            "no-scrollbar": !this.isCategoriesFilterType(),
+            "no-scrollbar-mobile":
+              this.isCategoriesFilterType() || this.multiSearchFilter !== null,
+            "no-scrollbar":
+              !this.isCategoriesFilterType() && this.multiSearchFilter === null,
           }}
         >
           {!!filters.length &&
@@ -163,11 +176,11 @@ export class SearchFilters {
                     onPointerUp={(ev) => {
                       if (searchState.loading) return;
                       ev.stopPropagation();
-                      // this.handleFilterSelection(filter);
+                      this.handleMultiSearchFilterSelection(value);
                     }}
                     onKeyPress={(ev) => {
                       if (searchState.loading) return;
-                      // this.handleEnter(ev, filter);
+                      this.handleMultiSearchEnter(ev, value);
                     }}
                   >
                     {label}
@@ -180,7 +193,7 @@ export class SearchFilters {
               class={{
                 "show-more": true,
                 hidden:
-                  filters.length <= FILTERS_COUNT ||
+                  filters.length <= FILTERS_COUNT &&
                   multiSearchFilters.length <= FILTERS_COUNT,
                 active: !this.hideFilters,
               }}
