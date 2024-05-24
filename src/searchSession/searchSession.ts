@@ -14,9 +14,9 @@ import { BasicError } from "../error";
 import { sequenceToEither } from "../utils/either";
 import { arrayToQueryString } from "../utils/collections/collectionsUtils";
 
-export type MultiSearchRequestBody = SearchInterfaces["MultiSearchRequest"];
+export type TextSearchRequestBody = SearchInterfaces["TextSearchRequest"];
 
-type MultiSearchResponse = SearchInterfaces["MultiSearchResponse"];
+type TextSearchResponse = SearchInterfaces["TextSearchResponse"];
 export type ResponseFilterItem = SearchInterfaces["ResponseFilterItem"];
 export type RequestFilterItem = SearchInterfaces["RequestFilterItem"];
 
@@ -115,12 +115,12 @@ export const imageSearchSessionClient = (
 
 export const textSearchSessionClient = (
   initialData: RequestInit
-): TE.TaskEither<BasicError<Response | string>, MultiSearchResponse> => {
+): TE.TaskEither<BasicError<Response | string>, TextSearchResponse> => {
   const requestUrl = "multi-search";
 
   return pipe(
     sequenceToEither(getApiPath(), createInitPostRequest),
     TE.fromEither,
-    TE.chainW(makeRequest<MultiSearchResponse>(requestUrl, initialData))
+    TE.chainW(makeRequest<TextSearchResponse>(requestUrl, initialData))
   );
 };

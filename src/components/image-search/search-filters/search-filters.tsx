@@ -23,7 +23,7 @@ import { parseFilters } from "../../../filters/parseFilters";
 import { FilterKind } from "vviinn-tracking-client-ts";
 
 const FILTERS_COUNT: number = 4;
-type MultiSearchFilterSelectProps = {
+type TextSearchFilterSelectProps = {
   column: ResponseFilterItem["column"];
   value: ResponseFilterItem["values"][0]["value"];
 };
@@ -37,17 +37,17 @@ export class SearchFilters {
   @Element() el: HTMLElement;
 
   @Prop() filter: SearchSessionFilter | null = null;
-  @Prop() multiSearchFilter: ResponseFilterItem | null = null;
+  @Prop() textSearchFilter: ResponseFilterItem | null = null;
   @Prop() basicEventData: BasicEventData;
 
   @State() selectedFilter = "";
   @State() hideFilters: boolean = true;
 
   @Event() vviinnSelectFilter: EventEmitter<SelectFilterEventData>;
-  @Event() vviinnMultiSearchFilterSelected: EventEmitter<RequestFilterItem[0]>;
+  @Event() vviinnTextSearchFilterSelected: EventEmitter<RequestFilterItem[0]>;
 
   private filterType: string =
-    this.filter?.name ?? this.multiSearchFilter?.column;
+    this.filter?.name ?? this.textSearchFilter?.column;
 
   private isCategoriesFilterType(): boolean {
     return this.filterType === "categories";
@@ -101,27 +101,27 @@ export class SearchFilters {
       : this.selectedFilter === filterLink.name;
   }
 
-  private handleMultiSearchEnter(
+  private handleTextSearchEnter(
     ev: KeyboardEvent,
-    { column, value }: MultiSearchFilterSelectProps
+    { column, value }: TextSearchFilterSelectProps
   ) {
     if (ev.key !== "Enter") return;
-    this.handleMultiSearchFilterSelection({ column, value });
+    this.handleTextSearchFilterSelection({ column, value });
   }
 
-  private handleMultiSearchFilterSelection({
+  private handleTextSearchFilterSelection({
     column,
     value,
-  }: MultiSearchFilterSelectProps) {
-    this.vviinnMultiSearchFilterSelected.emit(
-      this.getMultiSearchFilterRequestValue({ column, value })
+  }: TextSearchFilterSelectProps) {
+    this.vviinnTextSearchFilterSelected.emit(
+      this.getTextSearchFilterRequestValue({ column, value })
     );
   }
 
-  private getMultiSearchFilterRequestValue = ({
+  private getTextSearchFilterRequestValue = ({
     column,
     value,
-  }: MultiSearchFilterSelectProps): RequestFilterItem[0] => {
+  }: TextSearchFilterSelectProps): RequestFilterItem[0] => {
     return {
       column,
       values: [value],
@@ -129,7 +129,7 @@ export class SearchFilters {
   };
 
   render() {
-    const multiSearchFilters = this.multiSearchFilter?.values || [];
+    const textSearchFilters = this.textSearchFilter?.values || [];
     const filters = this.filter?.filters || [];
     return (
       <Host exportparts="filter, show-more-filters">
@@ -137,9 +137,9 @@ export class SearchFilters {
           class={{
             filters: true,
             "no-scrollbar-mobile":
-              this.isCategoriesFilterType() || this.multiSearchFilter !== null,
+              this.isCategoriesFilterType() || this.textSearchFilter !== null,
             "no-scrollbar":
-              !this.isCategoriesFilterType() && this.multiSearchFilter === null,
+              !this.isCategoriesFilterType() && this.textSearchFilter === null,
           }}
         >
           {!!filters.length &&
@@ -176,8 +176,8 @@ export class SearchFilters {
                 );
               })}
 
-          {!!multiSearchFilters.length &&
-            multiSearchFilters
+          {!!textSearchFilters.length &&
+            textSearchFilters
               .filter((_, i) => (this.hideFilters ? i < FILTERS_COUNT : true))
               .map(({ value, label, selected }, index) => {
                 return (
@@ -194,15 +194,15 @@ export class SearchFilters {
                     onPointerUp={(ev) => {
                       if (searchState.loading) return;
                       ev.stopPropagation();
-                      this.handleMultiSearchFilterSelection({
-                        column: this.multiSearchFilter["column"],
+                      this.handleTextSearchFilterSelection({
+                        column: this.textSearchFilter["column"],
                         value,
                       });
                     }}
                     onKeyPress={(ev) => {
                       if (searchState.loading) return;
-                      this.handleMultiSearchEnter(ev, {
-                        column: this.multiSearchFilter["column"],
+                      this.handleTextSearchEnter(ev, {
+                        column: this.textSearchFilter["column"],
                         value,
                       });
                     }}
@@ -218,7 +218,7 @@ export class SearchFilters {
                 "show-more": true,
                 hidden:
                   filters.length <= FILTERS_COUNT &&
-                  multiSearchFilters.length <= FILTERS_COUNT,
+                  textSearchFilters.length <= FILTERS_COUNT,
                 active: !this.hideFilters,
               }}
               role="button"

@@ -154,7 +154,7 @@ export class VviinnVpsWidget {
   @State() showAspectRatioError = false;
   @State() products: Recommendation[] = [];
   @State() searchQuery: string = "";
-  @State() multiSearchFilters: SearchInterfaces["RequestFilterItem"] = [];
+  @State() textSearchFilters: SearchInterfaces["RequestFilterItem"] = [];
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -350,7 +350,7 @@ export class VviinnVpsWidget {
     };
   };
 
-  private async handleMultiSearch() {
+  private async handleTextSearch() {
     if (!this.searchQuery) return;
     await processSelectedText(this.searchQuery);
     this.slidePosition = 1;
@@ -487,8 +487,8 @@ export class VviinnVpsWidget {
     this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
   }
 
-  @Listen("vviinnMultiSearchFilterSelected")
-  trackMultiSearchFilterSelected({ detail }) {
+  @Listen("vviinnTextSearchFilterSelected")
+  trackTextSearchFilterSelected({ detail }) {
     processSelectedText(this.searchQuery, detail);
   }
 
@@ -722,7 +722,7 @@ export class VviinnVpsWidget {
     searchState.searchArea = O.none;
     searchState.results = [];
     searchState.filters = [];
-    searchState.multiSearchFilters = [];
+    searchState.textSearchFilters = [];
     searchState.detectedObjects = [];
     searchState.rectangleSearchForm = undefined;
     searchState.loading = false;
@@ -830,7 +830,7 @@ export class VviinnVpsWidget {
                         <vviinn-text-search
                           searchQuery={this.searchQuery}
                           setSearchQuery={this.setSearchQuery}
-                          handleMultiSearch={this.handleMultiSearch.bind(this)}
+                          handleTextSearch={this.handleTextSearch.bind(this)}
                         />
                       )}
                     </Fragment>
@@ -879,7 +879,7 @@ export class VviinnVpsWidget {
                   <vviinn-text-search
                     searchQuery={this.searchQuery}
                     setSearchQuery={this.setSearchQuery}
-                    handleMultiSearch={this.handleMultiSearch.bind(this)}
+                    handleTextSearch={this.handleTextSearch.bind(this)}
                   />
 
                   <div
@@ -889,9 +889,9 @@ export class VviinnVpsWidget {
                     }}
                   >
                     <div class="filters">
-                      {searchState.multiSearchFilters.map((filter) => (
+                      {searchState.textSearchFilters.map((filter) => (
                         <search-filters
-                          multiSearchFilter={filter}
+                          textSearchFilter={filter}
                           basicEventData={this.getBasicEventData()}
                         />
                       ))}

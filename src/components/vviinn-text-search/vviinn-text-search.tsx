@@ -18,7 +18,7 @@ export class VviinnTextSearch {
 
   @Prop() searchQuery: string;
   @Prop() setSearchQuery: (query: string) => void;
-  @Prop() handleMultiSearch: () => void;
+  @Prop() handleTextSearch: () => void;
 
   componentWillLoad() {
     slotChangeListener(this, this.el);
@@ -30,7 +30,7 @@ export class VviinnTextSearch {
 
   private handleKeyPress(event: KeyboardEvent) {
     if (event.key === "Enter") {
-      this.handleMultiSearch();
+      this.handleTextSearch();
     }
   }
 
@@ -48,7 +48,7 @@ export class VviinnTextSearch {
         />
         <button
           class="text-search-button"
-          onClick={() => this.handleMultiSearch()}
+          onClick={() => this.handleTextSearch()}
           disabled={searchState.loading}
         >
           {searchState.loading && searchState.searchType === "text" ? (

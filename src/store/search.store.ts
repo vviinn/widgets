@@ -12,7 +12,7 @@ import {
   imageSearchSessionClient,
   textSearchSessionClient,
   SearchType,
-  MultiSearchRequestBody,
+  TextSearchRequestBody,
   ResponseFilterItem,
   RequestFilterItem,
 } from "../searchSession/searchSession";
@@ -52,7 +52,7 @@ type SearchStore = {
   excluded?: string;
   results: Recommendation[];
   filters: SearchSessionFilter[];
-  multiSearchFilters: ResponseFilterItem[];
+  textSearchFilters: ResponseFilterItem[];
   resetCategoryLink?: Link;
   activeIonLink?: Link;
   cropperHandlers: Handler[];
@@ -80,7 +80,7 @@ const { state, onChange } = createStore<SearchStore>({
   excluded: "",
   results: [],
   filters: [],
-  multiSearchFilters: [],
+  textSearchFilters: [],
   cropperHandlers: [],
   detectedObjects: [],
   objectDetectionInProgress: false,
@@ -223,7 +223,7 @@ const uploadText = (query: string, filter?: RequestFilterItem[0]) => {
   state.searchType = "text";
   state.loading = true;
 
-  const body: MultiSearchRequestBody = {
+  const body: TextSearchRequestBody = {
     query,
     ...(filter
       ? {
@@ -251,7 +251,7 @@ const uploadText = (query: string, filter?: RequestFilterItem[0]) => {
     TE.chain((request) => textSearchSessionClient(request)),
     TE.map((sessionResponse) => {
       state.results = sessionResponse?.data.products ?? [];
-      state.multiSearchFilters =
+      state.textSearchFilters =
         sessionResponse?.data?.interactions.filters ?? [];
       state.loading = false;
       return sessionResponse;
