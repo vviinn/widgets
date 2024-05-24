@@ -219,7 +219,7 @@ export const uploadFile = (
   );
 };
 
-const uploadText = (query: string, filter?: RequestFilterItem[0]) => {
+const uploadText = (query: string, filter?: RequestFilterItem[number]) => {
   state.searchType = "text";
   state.loading = true;
 
@@ -266,7 +266,7 @@ const uploadText = (query: string, filter?: RequestFilterItem[0]) => {
 
 export const processSelectedText = async (
   query: string,
-  filter?: RequestFilterItem[0]
+  filter?: RequestFilterItem[number]
 ) => {
   return await uploadText(query, filter)();
 };

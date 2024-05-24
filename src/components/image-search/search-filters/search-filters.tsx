@@ -25,7 +25,7 @@ import { FilterKind } from "vviinn-tracking-client-ts";
 const FILTERS_COUNT: number = 4;
 type TextSearchFilterSelectProps = {
   column: ResponseFilterItem["column"];
-  value: ResponseFilterItem["values"][0]["value"];
+  value: ResponseFilterItem["values"][number]["value"];
 };
 
 @Component({
@@ -44,7 +44,9 @@ export class SearchFilters {
   @State() hideFilters: boolean = true;
 
   @Event() vviinnSelectFilter: EventEmitter<SelectFilterEventData>;
-  @Event() vviinnTextSearchFilterSelected: EventEmitter<RequestFilterItem[0]>;
+  @Event() vviinnTextSearchFilterSelected: EventEmitter<
+    RequestFilterItem[number]
+  >;
 
   private filterType: string =
     this.filter?.name ?? this.textSearchFilter?.column;
@@ -103,25 +105,27 @@ export class SearchFilters {
 
   private handleTextSearchEnter(
     ev: KeyboardEvent,
-    { column, value }: TextSearchFilterSelectProps
+    value: TextSearchFilterSelectProps["value"]
   ) {
     if (ev.key !== "Enter") return;
-    this.handleTextSearchFilterSelection({ column, value });
+    this.handleTextSearchFilterSelection(value);
   }
 
-  private handleTextSearchFilterSelection({
-    column,
-    value,
-  }: TextSearchFilterSelectProps) {
+  private handleTextSearchFilterSelection(
+    value: TextSearchFilterSelectProps["value"]
+  ) {
     this.vviinnTextSearchFilterSelected.emit(
-      this.getTextSearchFilterRequestValue({ column, value })
+      this.getTextSearchFilterRequestValue({
+        column: this.textSearchFilter.column,
+        value,
+      })
     );
   }
 
   private getTextSearchFilterRequestValue = ({
     column,
     value,
-  }: TextSearchFilterSelectProps): RequestFilterItem[0] => {
+  }: TextSearchFilterSelectProps): RequestFilterItem[number] => {
     return {
       column,
       values: [value],
@@ -194,17 +198,11 @@ export class SearchFilters {
                     onPointerUp={(ev) => {
                       if (searchState.loading) return;
                       ev.stopPropagation();
-                      this.handleTextSearchFilterSelection({
-                        column: this.textSearchFilter["column"],
-                        value,
-                      });
+                      this.handleTextSearchFilterSelection(value);
                     }}
                     onKeyPress={(ev) => {
                       if (searchState.loading) return;
-                      this.handleTextSearchEnter(ev, {
-                        column: this.textSearchFilter["column"],
-                        value,
-                      });
+                      this.handleTextSearchEnter(ev, value);
                     }}
                   >
                     {label}
