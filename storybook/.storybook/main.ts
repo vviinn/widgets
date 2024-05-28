@@ -18,7 +18,7 @@ const config: StorybookConfig = {
     if (config && config.module && config.module.rules) {
       config.module.rules = [
         {
-          test: /\.stories\.mdx$/,
+          test: /\.mdx$/,
           use: {
             loader: resolve("./stories.loader.ts"),
           },
