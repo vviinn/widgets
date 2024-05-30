@@ -1,8 +1,15 @@
 import { h } from "@stencil/core";
 
-const defaultSlotsNames: string[] = [
+const vprSlotsNames: string[] = [
   "vviinn-recommendations-title",
   "vviinn-recommendations-subtitle",
+  "vviinn-basket-button-text",
+  "vviinn-basket-button-icon",
+  "vviinn-update-button-icon",
+  "vviinn-update-button-text",
+];
+
+const vpsSlotsNames: string[] = [
   "vviinn-teaser-text",
   "vviinn-image-upload-button-text",
   "vviinn-image-upload-icon",
@@ -13,15 +20,15 @@ const defaultSlotsNames: string[] = [
   "vviinn-text-search-icon",
   "vviinn-privacy-badge-text",
   "vviinn-image-search-modal-title",
-  "vviinn-basket-button-text",
-  "vviinn-basket-button-icon",
-  "vviinn-update-button-icon",
-  "vviinn-update-button-text",
 ];
 
 const renderNamedSlot = (name: string) => <slot name={name} />;
 
-export const SlotSkeleton = () => defaultSlotsNames.map(renderNamedSlot);
+export const SlotSkeleton = (renderType: string) => {
+  return (renderType === "vps" ? vpsSlotsNames : vprSlotsNames).map(
+    renderNamedSlot
+  );
+};
 
 const getSlots = (element: HTMLElement): HTMLSlotElement[] =>
   Array.from(element.shadowRoot.querySelectorAll("slot"));

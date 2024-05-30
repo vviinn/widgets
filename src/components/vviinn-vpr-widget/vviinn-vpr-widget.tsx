@@ -562,7 +562,9 @@ export class VviinnVprWidget implements ComponentInterface {
       >
         <Fragment>
           {this.renderExternalCSS()}
-          <SlotSkeleton />
+
+          {SlotSkeleton("vpr")}
+
           <style>{state.fallbackStyles}</style>
           <div class="widget-header">
             <div>

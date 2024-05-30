@@ -747,7 +747,7 @@ export class VviinnVpsWidget {
   render() {
     return (
       <Host exportparts="text-search-input">
-        {!this.showingInButton && <SlotSkeleton />}
+        {!this.showingInButton && SlotSkeleton("vps")}
 
         <vviinn-overlayed-modal
           class={{ "first-screen": this.isOnboardingSlide() }}
