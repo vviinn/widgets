@@ -49,7 +49,7 @@ import {
 import { SlotSkeleton } from "../customized-slots";
 import { campaignTypeNames } from "../../campaign/Campaign";
 import { parseExcluded } from "../../utils/collections/collectionsUtils";
-import { resources } from "../../locale/resources-vps";
+import { resources } from "../../locale";
 import { Locale } from "../../locale";
 import { CameraActionIcon, UploadActionIcon } from "../vviinn-icons";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
@@ -508,6 +508,8 @@ export class VviinnVpsWidget {
   }
 
   async componentWillLoad() {
+    console.log("VPS componentWillLoad");
+
     await i18next.init({
       lng: this.locale,
       fallbackLng: "en",

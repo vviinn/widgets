@@ -58,7 +58,7 @@ import {
 } from "../../tracking";
 import { checkEmpryString } from "../../utils/option/option";
 import { parseExcluded } from "../../utils/collections/collectionsUtils";
-import { resources } from "../../locale/resources-vpr";
+import { resources } from "../../locale";
 import { Locale } from "../../locale";
 import { UpdateIcon } from "../vviinn-icons";
 
@@ -305,6 +305,7 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   async componentWillLoad() {
+    console.log("VPR componentWillLoad");
     await i18next.init({
       lng: this.locale,
       fallbackLng: "en",
