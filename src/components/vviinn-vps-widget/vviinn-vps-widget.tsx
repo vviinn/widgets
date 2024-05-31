@@ -508,8 +508,6 @@ export class VviinnVpsWidget {
   }
 
   async componentWillLoad() {
-    console.log("VPS componentWillLoad");
-
     await i18next.init({
       lng: this.locale,
       fallbackLng: "en",

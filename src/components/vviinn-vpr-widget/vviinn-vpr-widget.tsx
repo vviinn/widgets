@@ -305,7 +305,6 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   async componentWillLoad() {
-    console.log("VPR componentWillLoad");
     await i18next.init({
       lng: this.locale,
       fallbackLng: "en",
