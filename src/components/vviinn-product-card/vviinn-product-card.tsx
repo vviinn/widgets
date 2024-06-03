@@ -60,10 +60,11 @@ import { generateRandomNumber } from "../../utils/number";
  * @part price-prefix - renders before price-amount. Can be set with "price-prefix" property or inherited from parent component.
  * @part title - Product title
  * @part basket-button - Add to Basket button.
- * @part update-button-item - Update button for Set mode.
+ * @part update-button-item - Update button in product card (Set mode).
  *
- * @slot vviinn-basket-button-text - Title of Add to Basket button.
- * @slot vviinn-update-icon-item - Icon of update button for Set mode.
+ * @slot vviinn-basket-button-text - Text of Add to Basket button.
+ * @slot vviinn-basket-button-icon - Icon of Add to Basket button.
+ * @slot vviinn-update-button-icon - Icon of update button (Set mode).
  */
 @Component({
   tag: "vviinn-product-card",
@@ -136,7 +137,7 @@ export class VviinnProductCard {
 
   private productData: ProductCardEventData | null = null;
   private imageElement?: HTMLImageElement;
-  private intersectionObserver;
+  private intersectionObserver: IntersectionObserver;
   private isSetMode: boolean;
   private isGridMode: boolean;
   private isContinuityMode: boolean;
@@ -283,11 +284,9 @@ export class VviinnProductCard {
         }}
         exportparts="brand, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, basket-button, update-button-item"
       >
-        {
-          <Linked deeplink={this.deeplink} part="image-link">
-            {this.renderImage()}
-          </Linked>
-        }
+        <Linked deeplink={this.deeplink} part="image-link">
+          {this.renderImage()}
+        </Linked>
 
         {this.isTransitioning ? (
           <Fragment>
@@ -345,17 +344,22 @@ export class VviinnProductCard {
                     {this.appliedDiscountPercentage ? (
                       <CheckCircleIcon />
                     ) : (
-                      <BasketIcon />
+                      <slot name="vviinn-basket-button-icon">
+                        <BasketIcon />
+                      </slot>
                     )}
-                    <slot name="vviinn-basket-button-text">
-                      <span>
-                        {this.appliedDiscountPercentage
-                          ? `${this.appliedDiscountPercentage}% ${i18next.t(
-                              "setMode.appliedDiscountText"
-                            )}`
-                          : i18next.t("setMode.basketButtonText")}
-                      </span>
-                    </slot>
+
+                    <span>
+                      {this.appliedDiscountPercentage ? (
+                        `${this.appliedDiscountPercentage}% ${i18next.t(
+                          "setMode.appliedDiscountText"
+                        )}`
+                      ) : (
+                        <slot name="vviinn-basket-button-text">
+                          {i18next.t("setMode.basketButtonText")}
+                        </slot>
+                      )}
+                    </span>
                   </Fragment>
                 ) : (
                   <slot name="vviinn-basket-button-text">
@@ -366,6 +370,7 @@ export class VviinnProductCard {
             )}
           </Fragment>
         )}
+
         {this.isSetMode && !this.appliedDiscountPercentage && (
           <button
             class={{
@@ -380,7 +385,7 @@ export class VviinnProductCard {
               });
             }}
           >
-            <slot name="vviinn-update-icon-item">
+            <slot name="vviinn-update-button-icon">
               <UpdateIcon />
             </slot>
           </button>

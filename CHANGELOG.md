@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.50.3](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.50.2...v2.50.3) (2024-05-30)
+
+
+### Bug Fixes
+
+* Fixed issue of repeating slots ([2f27b7e](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/2f27b7e1b0c28c3d7065f7cf1b119ef0bb073894))
+
+### [2.50.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.50.1...v2.50.2) (2024-05-28)
+
+
+### Bug Fixes
+
+* Fixed storybook issue ([ac94a4b](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/ac94a4bb552cb865a9faa8f67e180e466e7835d7))
+
+### [2.50.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.50.0...v2.50.1) (2024-05-28)
+
+## [2.50.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.49.3...v2.50.0) (2024-05-23)
+
+
+### Features
+
+* Add slots for customizing Set widget, Recommendation ([c68a49d](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/c68a49dd03b0244a0e474104e5276e07627a344a))
+
+### [2.49.3](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.49.2...v2.49.3) (2024-05-21)
+
+
+### Bug Fixes
+
+* Adjust scrolling for grid mode in Recommendation widget ([5bba459](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/5bba4591ee63f7c2650930225ab053a9d7717e16))
+
 ### [2.49.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.49.1...v2.49.2) (2024-05-17)
 
 

@@ -165,7 +165,8 @@ export class VviinnVpsButton {
           </slot>
         </vviinn-button>
 
-        <SlotSkeleton />
+        {SlotSkeleton("vps")}
+
         <vviinn-vps-widget
           mode={this.mode}
           currency-sign={this.currencySign}

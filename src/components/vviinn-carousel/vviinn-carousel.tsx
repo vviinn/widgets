@@ -85,9 +85,10 @@ export class VviinnCarousel {
   private handleWindowResize = () => this.setImageWidthSetMode("100%");
 
   private isLastGroup = () =>
-    this.activeContentGroup === this.getContentGroups().length - 1 &&
-    this.isGridMode;
-  private isFirstGroup = () => this.activeContentGroup === 0 && this.isGridMode;
+    this.isGridMode &&
+    this.activeContentGroup === this.getContentGroups().length - 1;
+
+  private isFirstGroup = () => this.isGridMode && this.activeContentGroup === 0;
 
   private updateCard = (
     productId: string,
@@ -158,12 +159,18 @@ export class VviinnCarousel {
 
   componentDidLoad() {
     this.setWidth();
-    this.processScrollbarWidth();
     this.columns = this.getColumnsNumber();
     const slot = this.el.querySelector(".content");
 
     this.mutationObserver.observe(slot, { subtree: true, childList: true });
     this.resizeObserver.observe(this.getHostParent());
+
+    if (this.isGridMode) {
+      const contentNode = this.getContentNode();
+      contentNode.addEventListener("scrollend", () => {
+        this.activeContentGroup = this.getActiveGroupIndex();
+      });
+    }
   }
 
   @Watch("updatingAllCards")
@@ -233,7 +240,6 @@ export class VviinnCarousel {
 
   private handleResize() {
     this.setWidth();
-    this.processScrollbarWidth();
     this.setItemWidth();
 
     const newColumns = this.getColumnsNumber();
@@ -288,11 +294,6 @@ export class VviinnCarousel {
   }
 
   private getActiveGroupIndex(): number {
-    const contentNodeLeft =
-      this.getContentNode()?.getBoundingClientRect()?.left;
-
-    if (!contentNodeLeft) return 0;
-
     const groups = this.getContentGroups();
     const groupsPositions = groups.map((g) => g.getBoundingClientRect().left);
 
@@ -327,27 +328,16 @@ export class VviinnCarousel {
     return Array.from(this.el.querySelectorAll(`.${CONTENT_GROUP_CSS_CLASS}`));
   }
 
-  private showNext() {
-    this.moveDirection = "right";
+  private handleCarouselButtonClick(action: MoveDirection) {
+    this.moveDirection = action;
     const contentContainer = this.getContentNode();
+    const { scrollLeft } = contentContainer;
+    const step = this.calculateMoveStep();
 
     requestAnimationFrame(() => {
       contentContainer.scrollTo({
         top: 0,
-        left: contentContainer.scrollLeft + this.calculateMoveStep(),
-        behavior: "smooth",
-      });
-    });
-  }
-
-  private showPrev() {
-    this.moveDirection = "left";
-    const contentContainer = this.getContentNode();
-
-    requestAnimationFrame(() => {
-      contentContainer.scrollTo({
-        top: 0,
-        left: contentContainer.scrollLeft - this.calculateMoveStep(),
+        left: action === "right" ? scrollLeft + step : scrollLeft - step,
         behavior: "smooth",
       });
     });
@@ -363,21 +353,6 @@ export class VviinnCarousel {
         behavior: "smooth",
       });
     });
-  }
-
-  private processScrollbarWidth() {
-    const target = this.getContentNode();
-    if (!target) return;
-    const scrollRatio =
-      (target.scrollLeft + target.clientWidth) / target.scrollWidth;
-    const scrolledWidth = target.clientWidth * scrollRatio;
-
-    this.el.style.setProperty(
-      "--vviinn-progressbar-width",
-      `${scrolledWidth}px`
-    );
-
-    this.activeContentGroup = this.getActiveGroupIndex();
   }
 
   private showBullets(): boolean {
@@ -500,7 +475,7 @@ export class VviinnCarousel {
           {!this.isSetMode && (
             <button
               class="prev"
-              onClick={() => this.showPrev()}
+              onClick={() => this.handleCarouselButtonClick("left")}
               part="carousel-button"
               disabled={this.gridArrowsDynamic && this.isFirstGroup()}
             >
@@ -521,17 +496,14 @@ export class VviinnCarousel {
             />
           )}
 
-          <div
-            class={this.getContentClassMap()}
-            onScroll={() => this.processScrollbarWidth()}
-          >
+          <div class={this.getContentClassMap()}>
             {this.renderRecommendations()}
           </div>
 
           {!this.isSetMode && (
             <button
               class="next"
-              onClick={() => this.showNext()}
+              onClick={() => this.handleCarouselButtonClick("right")}
               part="carousel-button"
               disabled={this.gridArrowsDynamic && this.isLastGroup()}
             >

@@ -1,6 +1,6 @@
-import { components } from './generated';
+import { components } from "./generated";
 
 export interface Interfaces {
-  VisualProductSearch: components['schemas']['visual-product-search-object'],
-  VisualProductRecommendations: components['schemas']['visual-product-recommendations']
+  VisualProductSearch: components["schemas"]["response-product-item"];
+  VisualProductRecommendations: components["schemas"]["visual-product-recommendations"];
 }
