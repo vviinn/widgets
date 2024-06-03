@@ -1,5 +1,8 @@
 import { Resource } from "i18next";
 
+const VVIINN_LINK =
+  "<a href='https://www.vviinn.com/' target='_blank'>Vviinn</a>";
+
 export const resources: Resource = {
   de: {
     translation: {
@@ -19,8 +22,7 @@ export const resources: Resource = {
       imageUploadButtonText: "Bild hochladen",
       cameraButtonTextStart: "Kamera starten",
       cameraButtonTextStop: "Kamera stoppen",
-      privacyBadgeText:
-        "Durch das Hochladen eines Bildes willigst Du in die Verarbeitung durch unseren Partner Vviinn ein. Das Bild wird nach einer Stunde Inaktivität gelöscht.",
+      privacyBadgeText: `Durch das Hochladen eines Bildes willigst Du in die Verarbeitung durch unseren Partner ${VVIINN_LINK} ein . Das Bild wird nach einer Stunde Inaktivität gelöscht.`,
       teaserText: "Finde Produkte auf \n einem Foto",
       imageSearchModalTitle: "Bildsuche",
       textSearchPlaceholder: "mit Text suchen",
@@ -59,8 +61,7 @@ export const resources: Resource = {
       imageUploadButtonText: "Upload Photo",
       cameraButtonTextStart: "Start Camera",
       cameraButtonTextStop: "Stop Camera",
-      privacyBadgeText:
-        "By uploading a picture you agree to the processing by our partner Vviinn. The image will be deleted after one hour of inactivity.",
+      privacyBadgeText: `By uploading a picture you agree to the processing by our partner ${VVIINN_LINK}. The image will be deleted after one hour of inactivity.`,
       teaserText: "Find Product by Photo",
       imageSearchModalTitle: "Visual Search",
       textSearchPlaceholder: "Search by text",

@@ -6,6 +6,11 @@
   margin-top: 24px;
 }
 
+:host a {
+  color: inherit;
+  text-decoration: none;
+}
+
 :host(.invisible) {
   color: transparent;
 }

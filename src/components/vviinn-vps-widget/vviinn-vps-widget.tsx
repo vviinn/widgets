@@ -744,6 +744,10 @@ export class VviinnVpsWidget {
     this.trackWidgetEvent("close");
   }
 
+  LinkText = ({ href, children }) => {
+    return <a href={href || ""}>{children}</a>;
+  };
+
   render() {
     return (
       <Host exportparts="text-search-input">
@@ -815,7 +819,9 @@ export class VviinnVpsWidget {
                   )}
                 </div>
                 <vviinn-privacy-badge
-                  privacyBadgeText={i18next.t("privacyBadgeText")}
+                  privacyBadgeText={i18next.t("privacyBadgeText", {
+                    interpolation: { escapeValue: false },
+                  })}
                   class={{ invisible: this.haveErrors() }}
                 />
               </div>

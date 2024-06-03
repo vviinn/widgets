@@ -18,7 +18,7 @@ export class VviinnPrivacyBadge {
     return (
       <Host>
         <slot name="vviinn-privacy-badge-text">
-          <div>{this.privacyBadgeText}</div>
+          <div innerHTML={this.privacyBadgeText}></div>
         </slot>
       </Host>
     );
