@@ -49,7 +49,7 @@ import {
 import { SlotSkeleton } from "../customized-slots";
 import { campaignTypeNames } from "../../campaign/Campaign";
 import { parseExcluded } from "../../utils/collections/collectionsUtils";
-import { resources } from "../../locale/resources-vps";
+import { resources } from "../../locale";
 import { Locale } from "../../locale";
 import { CameraActionIcon, UploadActionIcon } from "../vviinn-icons";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
@@ -746,6 +746,10 @@ export class VviinnVpsWidget {
     this.trackWidgetEvent("close");
   }
 
+  LinkText = ({ href, children }) => {
+    return <a href={href || ""}>{children}</a>;
+  };
+
   render() {
     return (
       <Host exportparts="text-search-input">
@@ -817,7 +821,9 @@ export class VviinnVpsWidget {
                   )}
                 </div>
                 <vviinn-privacy-badge
-                  privacyBadgeText={i18next.t("privacyBadgeText")}
+                  privacyBadgeText={i18next.t("privacyBadgeText", {
+                    interpolation: { escapeValue: false },
+                  })}
                   class={{ invisible: this.haveErrors() }}
                 />
               </div>
