@@ -43,7 +43,7 @@ img {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 64px 0 164px 0;
+  padding: 64px 0 164px;
   justify-content: center;
   align-content: center;
   box-sizing: border-box;
