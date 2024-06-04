@@ -1,1 +1,2 @@
-export type Locale = "en-US" | "de-DE";
+export * from "./resources";
+export * from "./types";
