@@ -22,7 +22,7 @@ export const resources: Resource = {
       imageUploadButtonText: "Bild hochladen",
       cameraButtonTextStart: "Kamera starten",
       cameraButtonTextStop: "Kamera stoppen",
-      privacyBadgeText: `Durch das Hochladen eines Bildes willigst Du in die Verarbeitung durch unseren Partner ${VVIINN_LINK} ein . Das Bild wird nach einer Stunde Inaktivität gelöscht.`,
+      privacyBadgeText: `Durch das Hochladen eines Bildes willigst Du in die Verarbeitung durch unseren Partner ${VVIINN_LINK} ein. Das Bild wird nach einer Stunde Inaktivität gelöscht.`,
       teaserText: "Finde Produkte auf \n einem Foto",
       imageSearchModalTitle: "Bildsuche",
       textSearchPlaceholder: "mit Text suchen",
