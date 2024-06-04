@@ -24,7 +24,7 @@ export const resources: Resource = {
       cameraButtonTextStop: "Kamera stoppen",
       privacyBadgeText: `Durch das Hochladen eines Bildes willigst Du in die Verarbeitung durch unseren Partner ${VVIINN_LINK} ein. Das Bild wird nach einer Stunde Inaktivität gelöscht.`,
       teaserText: "Finde Produkte auf \n einem Foto",
-      imageSearchModalTitle: "Bildsuche",
+      imageSearchModalTitle: "AI Search",
       textSearchPlaceholder: "mit Text suchen",
       emptyResultsBlock: {
         title: "Leider nichts gefunden",
@@ -63,7 +63,7 @@ export const resources: Resource = {
       cameraButtonTextStop: "Stop Camera",
       privacyBadgeText: `By uploading a picture you agree to the processing by our partner ${VVIINN_LINK}. The image will be deleted after one hour of inactivity.`,
       teaserText: "Find Product by Photo",
-      imageSearchModalTitle: "Visual Search",
+      imageSearchModalTitle: "AI Search",
       textSearchPlaceholder: "Search by text",
       emptyResultsBlock: {
         title: "Sorry, nothing found",
