@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.50.4](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.50.3...v2.50.4) (2024-06-04)
+
+
+### Bug Fixes
+
+* Fixed issue of multi language when using 2 widget ([1b061f3](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/1b061f3178fc19d5fbac37c0f8eab251c9bdac9f))
+
 ### [2.50.3](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.50.2...v2.50.3) (2024-05-30)
 
 
