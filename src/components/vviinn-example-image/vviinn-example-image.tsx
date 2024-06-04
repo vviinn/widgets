@@ -62,7 +62,10 @@ export class VviinnExampleImage {
 
   private initializeZoom = async () => {
     if (!this.videoTrack) return;
-    const capabilities = this.videoTrack.getCapabilities() as any;
+
+    const capabilities = this.videoTrack?.getCapabilities
+      ? (this.videoTrack.getCapabilities() as any)
+      : {};
     if ("zoom" in capabilities) {
       this.zoomCapabilities = capabilities.zoom;
 

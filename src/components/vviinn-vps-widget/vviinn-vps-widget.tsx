@@ -267,7 +267,9 @@ export class VviinnVpsWidget {
 
   private adjustCameraSettings = async () => {
     if (!this.videoTrack) return;
-    const capabilities = this.videoTrack.getCapabilities();
+    const capabilities = this.videoTrack?.getCapabilities
+      ? this.videoTrack.getCapabilities()
+      : {};
 
     if ("focusMode" in capabilities) {
       try {
@@ -279,7 +281,7 @@ export class VviinnVpsWidget {
       }
     }
 
-    if ("focusMode" in capabilities) {
+    if ("exposureMode" in capabilities) {
       try {
         await this.videoTrack.applyConstraints({
           advanced: [{ exposureMode: "continuous" }] as any,
