@@ -14,12 +14,14 @@ import { toFile } from "../../Image/toFile";
 import { processSelectedFile } from "../../store/search.store";
 import * as E from "fp-ts/lib/Either";
 import { BasicEventData } from "../../recommendation/events";
+import { slotChangeListener } from "../customized-slots";
 import {
   MinusIcon,
   PhotoFrameCorner,
   PlusIcon,
   RoundCameraIcon,
 } from "../vviinn-icons";
+import i18next from "i18next";
 
 type ZoomCapabilities = {
   min: number;
@@ -53,6 +55,10 @@ export class VviinnExampleImage {
 
   private videoElement: HTMLVideoElement | null;
   private videoTrack: MediaStreamTrack | null = null;
+
+  componentWillLoad() {
+    slotChangeListener(this, this.el);
+  }
 
   componentDidLoad() {
     this.videoElement = this.el.shadowRoot.getElementById(
@@ -256,7 +262,9 @@ export class VviinnExampleImage {
 
           <div class="buttons-group">
             <div class="buttons-group-info">
-              Put object into the square area
+              <slot name="vviinn-camera-capture-text">
+                {i18next.t("cameraCaptureText")}
+              </slot>
             </div>
 
             <button class="photo-button" onClick={() => this.selectImage()}>
