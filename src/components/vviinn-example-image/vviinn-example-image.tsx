@@ -28,6 +28,9 @@ type ZoomCapabilities = {
   max: number;
 };
 
+/**
+ * @slot vviinn-camera-capture-text - Text above the Camera Capture button.
+ */
 @Component({
   tag: "vviinn-example-image",
   styleUrl: "vviinn-example-image.css",
