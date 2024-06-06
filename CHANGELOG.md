@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.51.5](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.51.4...v2.51.5) (2024-06-06)
+
+
+### Bug Fixes
+
+* Fix basket-button slots behaviour after card updating for Set widget ([749eaf5](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/749eaf5124c74a381f82a1b41b550cbe68687c12))
+
 ### [2.51.4](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.51.3...v2.51.4) (2024-06-06)
 
 
