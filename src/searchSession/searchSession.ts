@@ -116,7 +116,7 @@ export const imageSearchSessionClient = (
 export const textSearchSessionClient = (
   initialData: RequestInit
 ): TE.TaskEither<BasicError<Response | string>, TextSearchResponse> => {
-  const requestUrl = "multi-search";
+  const requestUrl = "text-search";
 
   return pipe(
     sequenceToEither(getApiPath(), createInitPostRequest),
