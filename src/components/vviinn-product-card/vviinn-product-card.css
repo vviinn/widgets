@@ -273,6 +273,10 @@ picture::before {
   border: 1px solid #e0e0e0;
 }
 
+:host(.set-mode) .basket-button.hidden {
+  display: none;
+}
+
 :host(.set-mode) .price-container {
   flex-direction: row;
   flex-wrap: wrap;

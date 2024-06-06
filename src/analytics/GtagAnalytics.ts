@@ -3,6 +3,7 @@ import { SearchInterfaces } from "../interfaces/search";
 
 export class GtagAnalytics implements ProductAnalytics {
   sendImpression(product: SearchInterfaces["VisualProductSearch"]) {
+    if (!product) return undefined;
     gtag("event", "view_item_list", {
       items: [
         {

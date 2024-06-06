@@ -321,53 +321,52 @@ export class VviinnProductCard {
 
         {(this.addToBasketShow || this.isSetMode) && (
           <Fragment>
-            {this.isTransitioning ? (
-              <vviinn-skeleton height={44} />
-            ) : (
-              <button
-                class={{
-                  "basket-button": true,
-                  "basket-button-grid": this.isGridMode || this.isSetMode,
-                  "basket-button-continuity ": this.isContinuityMode,
-                  "applied-discount": !!this.appliedDiscountPercentage,
-                }}
-                part="basket-button"
-                onClick={() => {
-                  this.vviinnAddToBasket.emit({
-                    ...this.productData,
-                    discount: this.currentDiscountPercentage,
-                  });
-                }}
-              >
-                {this.isSetMode ? (
-                  <Fragment>
+            {this.isTransitioning && <vviinn-skeleton height={44} />}
+
+            <button
+              class={{
+                "basket-button": true,
+                "basket-button-grid": this.isGridMode || this.isSetMode,
+                "basket-button-continuity ": this.isContinuityMode,
+                "applied-discount": !!this.appliedDiscountPercentage,
+                hidden: this.isTransitioning,
+              }}
+              part="basket-button"
+              onClick={() => {
+                this.vviinnAddToBasket.emit({
+                  ...this.productData,
+                  discount: this.currentDiscountPercentage,
+                });
+              }}
+            >
+              {this.isSetMode ? (
+                <Fragment>
+                  {this.appliedDiscountPercentage ? (
+                    <CheckCircleIcon />
+                  ) : (
+                    <slot name="vviinn-basket-button-icon">
+                      <BasketIcon />
+                    </slot>
+                  )}
+
+                  <span>
                     {this.appliedDiscountPercentage ? (
-                      <CheckCircleIcon />
+                      `${this.appliedDiscountPercentage}% ${i18next.t(
+                        "setMode.appliedDiscountText"
+                      )}`
                     ) : (
-                      <slot name="vviinn-basket-button-icon">
-                        <BasketIcon />
+                      <slot name="vviinn-basket-button-text">
+                        {i18next.t("setMode.basketButtonText")}
                       </slot>
                     )}
-
-                    <span>
-                      {this.appliedDiscountPercentage ? (
-                        `${this.appliedDiscountPercentage}% ${i18next.t(
-                          "setMode.appliedDiscountText"
-                        )}`
-                      ) : (
-                        <slot name="vviinn-basket-button-text">
-                          {i18next.t("setMode.basketButtonText")}
-                        </slot>
-                      )}
-                    </span>
-                  </Fragment>
-                ) : (
-                  <slot name="vviinn-basket-button-text">
-                    <span>{i18next.t("basketButtonText")}</span>
-                  </slot>
-                )}
-              </button>
-            )}
+                  </span>
+                </Fragment>
+              ) : (
+                <slot name="vviinn-basket-button-text">
+                  <span>{i18next.t("basketButtonText")}</span>
+                </slot>
+              )}
+            </button>
           </Fragment>
         )}
 

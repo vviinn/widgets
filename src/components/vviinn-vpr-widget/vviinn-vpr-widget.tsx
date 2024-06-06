@@ -58,7 +58,7 @@ import {
 } from "../../tracking";
 import { checkEmpryString } from "../../utils/option/option";
 import { parseExcluded } from "../../utils/collections/collectionsUtils";
-import { resources } from "../../locale/resources-vpr";
+import { resources } from "../../locale";
 import { Locale } from "../../locale";
 import { UpdateIcon } from "../vviinn-icons";
 
@@ -562,7 +562,9 @@ export class VviinnVprWidget implements ComponentInterface {
       >
         <Fragment>
           {this.renderExternalCSS()}
-          <SlotSkeleton />
+
+          {SlotSkeleton("vpr")}
+
           <style>{state.fallbackStyles}</style>
           <div class="widget-header">
             <div>

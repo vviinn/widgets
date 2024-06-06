@@ -2,6 +2,75 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.52.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.51.5...v2.52.0) (2024-06-06)
+
+
+### Features
+
+* Redesign camera screen ([508b2c0](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/508b2c060bdbb61d172a020cad3ac6a880167f71))
+
+### [2.51.5](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.51.4...v2.51.5) (2024-06-06)
+
+
+### Bug Fixes
+
+* Fix basket-button slots behaviour after card updating for Set widget ([749eaf5](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/749eaf5124c74a381f82a1b41b550cbe68687c12))
+
+### [2.51.4](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.51.3...v2.51.4) (2024-06-06)
+
+
+### Bug Fixes
+
+* Fixed conflict of Vviinn  events and gtag ([1b3b4c4](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/1b3b4c42c3fb279b21e840621621b6991fe49f38))
+
+### [2.51.3](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.51.2...v2.51.3) (2024-06-06)
+
+### [2.51.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.51.1...v2.51.2) (2024-06-06)
+
+
+### Bug Fixes
+
+* Fixed issue of Vviinn widgets clicks in storybook ([c5fbdbe](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/c5fbdbee639644d5c727682f65091d364b959ce0))
+
+### [2.51.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.51.0...v2.51.1) (2024-06-04)
+
+
+### Bug Fixes
+
+* Changed title ([18ddb37](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/18ddb37ca16bafb25b8bf1b15dba344b97bace83))
+
+## [2.51.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.50.5...v2.51.0) (2024-06-04)
+
+
+### Features
+
+* Changed some titles and translations ([3fe7717](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/3fe7717af5b0469eeb488feb62a7d1e5a90dff11))
+
+### [2.50.5](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.50.4...v2.50.5) (2024-06-04)
+
+### [2.50.4](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.50.3...v2.50.4) (2024-06-04)
+
+
+### Bug Fixes
+
+* Fixed issue of multi language when using 2 widget ([1b061f3](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/1b061f3178fc19d5fbac37c0f8eab251c9bdac9f))
+
+### [2.50.3](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.50.2...v2.50.3) (2024-05-30)
+
+
+### Bug Fixes
+
+* Fixed issue of repeating slots ([2f27b7e](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/2f27b7e1b0c28c3d7065f7cf1b119ef0bb073894))
+
+### [2.50.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.50.1...v2.50.2) (2024-05-28)
+
+
+### Bug Fixes
+
+* Fixed storybook issue ([ac94a4b](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/ac94a4bb552cb865a9faa8f67e180e466e7835d7))
+
+### [2.50.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.50.0...v2.50.1) (2024-05-28)
+
 ## [2.50.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.49.3...v2.50.0) (2024-05-23)
 
 
