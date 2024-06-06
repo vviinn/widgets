@@ -88,9 +88,10 @@ const CAMERA_START_DELAY = 500;
  * @slot vviinn-image-upload-button-text - Title of Upload Button.
  * @slot vviinn-image-upload-icon - Icon of Upload Button.
  * @slot vviinn-show-files-button-text - Title of Show Files Button.
- * @slot vviinn-camera-button-text-start - Title of Camera Button, Start Camera.
- * @slot vviinn-camera-button-text-stop - Title of Camera Button, Stop Camera (for Desktop).
+ * @slot vviinn-camera-button-text-start - Title of Start Camera button.
+ * @slot vviinn-camera-button-text-stop - Title of Stop Camera button (for Desktop).
  * @slot vviinn-camera-icon - Icon of Camera Button.
+ * @slot vviinn-camera-capture-text - Text above the Camera Capture button.
  * @slot vviinn-privacy-badge-text - Text content of privacy notification block.
  * @slot vviinn-image-search-modal-title - Image search modal title.
  * @slot vviinn-text-search-icon - Icon of text search block.
@@ -267,7 +268,9 @@ export class VviinnVpsWidget {
 
   private adjustCameraSettings = async () => {
     if (!this.videoTrack) return;
-    const capabilities = this.videoTrack.getCapabilities();
+    const capabilities = this.videoTrack?.getCapabilities
+      ? this.videoTrack.getCapabilities()
+      : {};
 
     if ("focusMode" in capabilities) {
       try {
@@ -279,7 +282,7 @@ export class VviinnVpsWidget {
       }
     }
 
-    if ("focusMode" in capabilities) {
+    if ("exposureMode" in capabilities) {
       try {
         await this.videoTrack.applyConstraints({
           advanced: [{ exposureMode: "continuous" }] as any,
