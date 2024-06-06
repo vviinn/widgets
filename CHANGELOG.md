@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.52.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.51.5...v2.52.0) (2024-06-06)
+
+
+### Features
+
+* Redesign camera screen ([508b2c0](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/508b2c060bdbb61d172a020cad3ac6a880167f71))
+
 ### [2.51.5](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.51.4...v2.51.5) (2024-06-06)
 
 
