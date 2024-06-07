@@ -27,6 +27,7 @@ import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
  * @slot vviinn-image-upload-button-text - Title of Upload Button.
  * @slot vviinn-image-upload-icon - Icon of Upload Button.
  * @slot vviinn-camera-button-text-start - Title of Camera Button, Start Camera.
+ * @slot vviinn-camera-button-text-stop - Title of Camera Button, Stop Camera (for Desktop).
  * @slot vviinn-privacy-badge-text - Text content of privacy notification block.
  * @slot vviinn-image-search-modal-title - Image search modal title.
  *
