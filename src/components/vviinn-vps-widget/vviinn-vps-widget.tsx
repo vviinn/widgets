@@ -57,7 +57,6 @@ import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 import { videoStreamSettings } from "../../video/settings";
 import { Recommendation } from "../..";
 import { checkDeviceType } from "../../helpers";
-import { SearchInterfaces } from "../../interfaces/search";
 
 type UploadSource = "uploadPhoto" | "startCamera";
 const CAMERA_START_DELAY = 500;
@@ -155,7 +154,6 @@ export class VviinnVpsWidget {
   @State() showAspectRatioError = false;
   @State() products: Recommendation[] = [];
   @State() searchQuery: string = "";
-  @State() textSearchFilters: SearchInterfaces["RequestFilterItem"] = [];
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -492,6 +490,7 @@ export class VviinnVpsWidget {
 
   @Listen("vviinnTextSearchFilterSelected")
   trackTextSearchFilterSelected({ detail }) {
+    // TODO: implement
     processSelectedText(this.searchQuery, detail);
   }
 
@@ -900,7 +899,7 @@ export class VviinnVpsWidget {
                     <div class="filters">
                       {searchState.textSearchFilters.map((filter) => (
                         <search-filters
-                          textSearchFilter={filter}
+                          textSearchFiltersGroup={filter}
                           basicEventData={this.getBasicEventData()}
                         />
                       ))}

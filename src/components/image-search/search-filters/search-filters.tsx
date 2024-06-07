@@ -23,10 +23,7 @@ import { parseFilters } from "../../../filters/parseFilters";
 import { FilterKind } from "vviinn-tracking-client-ts";
 
 const FILTERS_COUNT: number = 4;
-type TextSearchFilterSelectProps = {
-  column: ResponseFilterItem["column"];
-  value: ResponseFilterItem["values"][number]["value"];
-};
+type TextSearchFilter = ResponseFilterItem["values"][number];
 
 @Component({
   tag: "search-filters",
@@ -37,7 +34,7 @@ export class SearchFilters {
   @Element() el: HTMLElement;
 
   @Prop() filter: SearchSessionFilter | null = null;
-  @Prop() textSearchFilter: ResponseFilterItem | null = null;
+  @Prop() textSearchFiltersGroup: ResponseFilterItem | null = null;
   @Prop() basicEventData: BasicEventData;
 
   @State() selectedFilter = "";
@@ -49,7 +46,7 @@ export class SearchFilters {
   >;
 
   private filterType: string =
-    this.filter?.name ?? this.textSearchFilter?.column;
+    this.filter?.name ?? this.textSearchFiltersGroup?.column;
 
   private isCategoriesFilterType(): boolean {
     return this.filterType === "categories";
@@ -103,37 +100,28 @@ export class SearchFilters {
       : this.selectedFilter === filterLink.name;
   }
 
-  private handleTextSearchEnter(
-    ev: KeyboardEvent,
-    value: TextSearchFilterSelectProps["value"]
-  ) {
+  private handleTextSearchEnter(ev: KeyboardEvent, filter: TextSearchFilter) {
     if (ev.key !== "Enter") return;
-    this.handleTextSearchFilterSelection(value);
+    this.handleTextSearchFilterSelection(filter);
   }
 
-  private handleTextSearchFilterSelection(
-    value: TextSearchFilterSelectProps["value"]
-  ) {
+  private handleTextSearchFilterSelection(filter: TextSearchFilter) {
     this.vviinnTextSearchFilterSelected.emit(
-      this.getTextSearchFilterRequestValue({
-        column: this.textSearchFilter.column,
-        value,
-      })
+      this.getTextSearchFilterRequestValue(filter)
     );
   }
 
-  private getTextSearchFilterRequestValue = ({
-    column,
-    value,
-  }: TextSearchFilterSelectProps): RequestFilterItem[number] => {
+  private getTextSearchFilterRequestValue = (
+    filter: TextSearchFilter
+  ): RequestFilterItem[number] => {
     return {
-      column,
-      values: [value],
+      column: this.textSearchFiltersGroup.column,
+      values: [filter.value],
     };
   };
 
   render() {
-    const textSearchFilters = this.textSearchFilter?.values || [];
+    const textSearchFilters = this.textSearchFiltersGroup?.values || [];
     const filters = this.filter?.filters || [];
     return (
       <Host exportparts="filter, show-more-filters">
@@ -141,9 +129,11 @@ export class SearchFilters {
           class={{
             filters: true,
             "no-scrollbar-mobile":
-              this.isCategoriesFilterType() || this.textSearchFilter !== null,
+              this.isCategoriesFilterType() ||
+              this.textSearchFiltersGroup !== null,
             "no-scrollbar":
-              !this.isCategoriesFilterType() && this.textSearchFilter === null,
+              !this.isCategoriesFilterType() &&
+              this.textSearchFiltersGroup === null,
           }}
         >
           {!!filters.length &&
@@ -183,7 +173,8 @@ export class SearchFilters {
           {!!textSearchFilters.length &&
             textSearchFilters
               .filter((_, i) => (this.hideFilters ? i < FILTERS_COUNT : true))
-              .map(({ value, label, selected }, index) => {
+              .map((filter, index) => {
+                const { label, selected } = filter;
                 return (
                   <div
                     role="button"
@@ -198,11 +189,11 @@ export class SearchFilters {
                     onPointerUp={(ev) => {
                       if (searchState.loading) return;
                       ev.stopPropagation();
-                      this.handleTextSearchFilterSelection(value);
+                      this.handleTextSearchFilterSelection(filter);
                     }}
                     onKeyPress={(ev) => {
                       if (searchState.loading) return;
-                      this.handleTextSearchEnter(ev, value);
+                      this.handleTextSearchEnter(ev, filter);
                     }}
                   >
                     {label}
