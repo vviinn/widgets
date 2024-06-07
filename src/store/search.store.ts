@@ -219,15 +219,15 @@ export const uploadFile = (
   );
 };
 
-const uploadText = (query: string, filter?: RequestFilterItem[number]) => {
+const uploadText = (query: string, filters?: RequestFilterItem) => {
   state.searchType = "text";
   state.loading = true;
 
   const body: TextSearchRequestBody = {
     query,
-    ...(filter
+    ...(filters
       ? {
-          filters: [filter],
+          filters,
         }
       : {}),
     ...(state.campaignId.length ? { campaign: state.campaignId } : {}),
@@ -266,10 +266,8 @@ const uploadText = (query: string, filter?: RequestFilterItem[number]) => {
 
 export const processSelectedText = async (
   query: string,
-  filter?: RequestFilterItem[number]
-) => {
-  return await uploadText(query, filter)();
-};
+  filters?: RequestFilterItem
+) => await uploadText(query, filters)();
 
 onChange("activeIonLink", async (newLink: Link) => {
   const link = newLink ? newLink : state.resetCategoryLink;

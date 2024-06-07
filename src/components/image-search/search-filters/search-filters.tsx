@@ -23,7 +23,7 @@ import { parseFilters } from "../../../filters/parseFilters";
 import { FilterKind } from "vviinn-tracking-client-ts";
 
 const FILTERS_COUNT: number = 4;
-type TextSearchFilter = ResponseFilterItem["values"][number];
+type TextSearchFilterItem = ResponseFilterItem["values"][number];
 
 @Component({
   tag: "search-filters",
@@ -41,9 +41,7 @@ export class SearchFilters {
   @State() hideFilters: boolean = true;
 
   @Event() vviinnSelectFilter: EventEmitter<SelectFilterEventData>;
-  @Event() vviinnTextSearchFilterSelected: EventEmitter<
-    RequestFilterItem[number]
-  >;
+  @Event() vviinnTextSearchFilterSelected: EventEmitter<RequestFilterItem>;
 
   private filterType: string =
     this.filter?.name ?? this.textSearchFiltersGroup?.column;
@@ -100,25 +98,51 @@ export class SearchFilters {
       : this.selectedFilter === filterLink.name;
   }
 
-  private handleTextSearchEnter(ev: KeyboardEvent, filter: TextSearchFilter) {
-    if (ev.key !== "Enter") return;
-    this.handleTextSearchFilterSelection(filter);
-  }
-
-  private handleTextSearchFilterSelection(filter: TextSearchFilter) {
-    this.vviinnTextSearchFilterSelected.emit(
-      this.getTextSearchFilterRequestValue(filter)
-    );
-  }
-
   private getTextSearchFilterRequestValue = (
-    filter: TextSearchFilter
+    filter: TextSearchFilterItem
   ): RequestFilterItem[number] => {
     return {
       column: this.textSearchFiltersGroup.column,
       values: [filter.value],
     };
   };
+
+  private handleTextSearchEnter(
+    ev: KeyboardEvent,
+    filter: TextSearchFilterItem
+  ) {
+    if (ev.key !== "Enter") return;
+    this.handleTextSearchFilterSelection(filter);
+  }
+
+  private handleTextSearchFilterSelection(filter: TextSearchFilterItem) {
+    const selectedFilters = searchState.textSearchFilters
+      .filter((f: ResponseFilterItem) => {
+        if (!f?.values) return false;
+        return f.values.find((v) => v.selected);
+      })
+      .map((f: ResponseFilterItem) => {
+        return {
+          column: f.column,
+          values: f.values.filter((v) => v.selected).map((v) => v.value),
+        };
+      });
+
+    const newFilter = this.getTextSearchFilterRequestValue(filter);
+    const filterActiveIndex = selectedFilters.findIndex(
+      (f) =>
+        f.column === newFilter.column && f.values.includes(newFilter.values[0])
+    );
+
+    let parsedFilters: RequestFilterItem = [];
+    if (filterActiveIndex !== -1) {
+      parsedFilters = selectedFilters.filter((_, i) => i !== filterActiveIndex);
+    } else {
+      parsedFilters = [...selectedFilters, newFilter];
+    }
+
+    this.vviinnTextSearchFilterSelected.emit(parsedFilters);
+  }
 
   render() {
     const textSearchFilters = this.textSearchFiltersGroup?.values || [];

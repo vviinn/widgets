@@ -490,7 +490,6 @@ export class VviinnVpsWidget {
 
   @Listen("vviinnTextSearchFilterSelected")
   trackTextSearchFilterSelected({ detail }) {
-    // TODO: implement
     processSelectedText(this.searchQuery, detail);
   }
 
