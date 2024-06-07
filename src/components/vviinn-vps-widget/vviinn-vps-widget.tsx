@@ -87,7 +87,6 @@ const CAMERA_START_DELAY = 500;
  * @slot vviinn-teaser-text - Text on widget's main screen.
  * @slot vviinn-image-upload-button-text - Title of Upload Button.
  * @slot vviinn-image-upload-icon - Icon of Upload Button.
- * @slot vviinn-show-files-button-text - Title of Show Files Button.
  * @slot vviinn-camera-button-text-start - Title of Camera Button, Start Camera.
  * @slot vviinn-camera-button-text-stop - Title of Camera Button, Stop Camera (for Desktop).
  * @slot vviinn-camera-icon - Icon of Camera Button.

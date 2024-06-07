@@ -25,7 +25,6 @@ import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 /**
  * @slot vviinn-teaser-text - Text on widget's main screen.
  * @slot vviinn-image-upload-button-text - Title of Upload Button.
- * @slot vviinn-show-files-button-text - Title of Show Files Button.
  * @slot vviinn-camera-button-text - Title of Camera Button.
  * @slot vviinn-privacy-badge-text - Text content of privacy notification block.
  * @slot vviinn-image-search-modal-title - Image search modal title.
