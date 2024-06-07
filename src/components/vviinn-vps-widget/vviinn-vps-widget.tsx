@@ -67,9 +67,9 @@ const CAMERA_START_DELAY = 500;
  * @slot vviinn-camera-button-text-start - Title of Camera Button, Start Camera.
  * @slot vviinn-camera-button-text-stop - Title of Camera Button, Stop Camera (for Desktop).
  * @slot vviinn-camera-icon - Icon of Camera Button.
+ * @slot vviinn-text-search-icon - Icon of text search block.
  * @slot vviinn-privacy-badge-text - Text content of privacy notification block.
  * @slot vviinn-image-search-modal-title - Image search modal title.
- * @slot vviinn-text-search-icon - Icon of text search block.
  *
  * @part close-button - Close Button in the modal's header.
  * @part secondary-action - Back Button in the modal's header.
