@@ -16,6 +16,7 @@ const vpsSlotsNames: string[] = [
   "vviinn-camera-button-text-start",
   "vviinn-camera-button-text-stop",
   "vviinn-camera-icon",
+  "vviinn-camera-capture-text",
   "vviinn-text-search-icon",
   "vviinn-privacy-badge-text",
   "vviinn-image-search-modal-title",

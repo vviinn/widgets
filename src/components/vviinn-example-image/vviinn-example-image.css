@@ -37,44 +37,102 @@ img {
 .container {
   position: absolute;
   width: 100%;
-  height: 96%;
+  height: 100%;
   left: 0;
   top: 0;
   display: flex;
   flex-direction: column;
-  padding: 56px 25px 0 25px;
-  justify-content: space-around;
+  gap: 12px;
+  padding: 64px 0 164px;
+  justify-content: center;
   align-content: center;
   box-sizing: border-box;
 }
 
-@media (min-width: 768px) {
-  .container {
-    padding: 56px 40px 0 40px;
-  }
+.photo-frame-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 #photo-frame {
   position: relative;
   aspect-ratio: 1/1;
-  border: 1px solid white;
-  border-radius: 10px;
-  background-color: transparent;
+  border-radius: 16px;
   box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.32);
   width: 100%;
-  max-width: 580px;
+  height: auto;
+  max-width: 400px;
   margin: 0 auto;
 }
 
+@media (max-width: 960px) {
+  .photo-frame-container {
+    width: auto;
+    height: auto;
+  }
+
+  #photo-frame {
+    max-width: 80%;
+    height: auto;
+  }
+}
+
+@media (max-width: 380px) {
+  #photo-frame {
+    max-width: 70%;
+  }
+}
+
+.photo-frame-corner {
+  position: absolute;
+  --delta: -1px;
+}
+
+.photo-frame-corner.top-left {
+  top: var(--delta);
+  left: var(--delta);
+}
+
+.photo-frame-corner.top-right {
+  top: var(--delta);
+  right: var(--delta);
+  transform: rotate(90deg);
+}
+.photo-frame-corner.bottom-left {
+  bottom: var(--delta);
+  left: var(--delta);
+  transform: rotate(-90deg);
+}
+.photo-frame-corner.bottom-right {
+  bottom: var(--delta);
+  right: var(--delta);
+  transform: rotate(180deg);
+}
+
 .buttons-group {
+  display: flex;
   width: 100%;
   left: 0;
-  display: flex;
+  gap: 12px;
+  flex-direction: column;
   align-items: center;
+  position: absolute;
+  bottom: 32px;
+}
+
+.buttons-group-info {
+  padding: 4px 12px;
+  border-radius: 8px;
+  background-color: rgba(0, 0, 0, 0.48);
+  color: white;
+  font-size: 14px;
+  line-height: 20px;
 }
 
 .photo-button {
-  display: none;
   cursor: pointer;
   border: none;
   position: relative;
@@ -88,7 +146,8 @@ img {
 }
 
 .zoom-buttons {
-  bottom: 168px;
+  display: flex;
+  position: relative;
   justify-content: center;
   gap: 12px;
 }
@@ -98,19 +157,14 @@ img {
   display: flex;
   width: 48px;
   height: 48px;
-  padding: 8px;
   justify-content: center;
   align-items: center;
   border-radius: var(--radius-radius-md, 8px);
-  background: rgba(0, 0, 0, 0.25);
+  background-color: rgba(0, 0, 0, 0.48);
   border: none;
   cursor: pointer;
 }
 
 .hidden {
   display: none;
-}
-
-.visible {
-  display: flex;
 }

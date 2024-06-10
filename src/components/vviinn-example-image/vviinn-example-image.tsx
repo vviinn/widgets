@@ -14,13 +14,23 @@ import { toFile } from "../../Image/toFile";
 import { processSelectedFile } from "../../store/search.store";
 import * as E from "fp-ts/lib/Either";
 import { BasicEventData } from "../../recommendation/events";
-import { MinusIcon, PlusIcon, RoundCameraIcon } from "../vviinn-icons";
+import { slotChangeListener } from "../customized-slots";
+import {
+  MinusIcon,
+  PhotoFrameCorner,
+  PlusIcon,
+  RoundCameraIcon,
+} from "../vviinn-icons";
+import i18next from "i18next";
 
 type ZoomCapabilities = {
   min: number;
   max: number;
 };
 
+/**
+ * @slot vviinn-camera-capture-text - Text above the Camera Capture button.
+ */
 @Component({
   tag: "vviinn-example-image",
   styleUrl: "vviinn-example-image.css",
@@ -49,6 +59,10 @@ export class VviinnExampleImage {
   private videoElement: HTMLVideoElement | null;
   private videoTrack: MediaStreamTrack | null = null;
 
+  componentWillLoad() {
+    slotChangeListener(this, this.el);
+  }
+
   componentDidLoad() {
     this.videoElement = this.el.shadowRoot.getElementById(
       "camera-preview"
@@ -57,8 +71,10 @@ export class VviinnExampleImage {
 
   private initializeZoom = async () => {
     if (!this.videoTrack) return;
-    const capabilities = this.videoTrack.getCapabilities() as any;
 
+    const capabilities = this.videoTrack?.getCapabilities
+      ? (this.videoTrack.getCapabilities() as any)
+      : {};
     if ("zoom" in capabilities) {
       this.zoomCapabilities = capabilities.zoom;
 
@@ -71,7 +87,6 @@ export class VviinnExampleImage {
   private onZoom = async (action: "in" | "out") => {
     if (!this.videoTrack || !this.zoomCapabilities) return;
     const { max, min } = this.zoomCapabilities;
-
     const currentSettings = this.videoTrack.getSettings() as any;
     const currentZoom = currentSettings.zoom ?? min;
 
@@ -227,16 +242,18 @@ export class VviinnExampleImage {
           class={{ hidden: !this.selected }}
         />
 
-        <div class="container" id="container">
-          <div
-            class={{
-              hidden: !this.videoInitialized,
-            }}
-            id="photo-frame"
-          ></div>
+        <div class={{ container: true, hidden: !this.videoInitialized }}>
+          <div class="photo-frame-container">
+            <div id="photo-frame">
+              <PhotoFrameCorner className="photo-frame-corner top-left" />
+              <PhotoFrameCorner className="photo-frame-corner top-right" />
+              <PhotoFrameCorner className="photo-frame-corner bottom-left" />
+              <PhotoFrameCorner className="photo-frame-corner bottom-right" />
+            </div>
 
-          {this.zoomCapabilities && this.videoInitialized && (
-            <div class="buttons-group zoom-buttons">
+            <div
+              class={{ "zoom-buttons": true, hidden: !this.zoomCapabilities }}
+            >
               <button onClick={() => this.onZoom("out")}>
                 <MinusIcon />
               </button>
@@ -244,13 +261,16 @@ export class VviinnExampleImage {
                 <PlusIcon />
               </button>
             </div>
-          )}
+          </div>
 
           <div class="buttons-group">
-            <button
-              class={{ "photo-button": true, visible: this.videoInitialized }}
-              onClick={() => this.selectImage()}
-            >
+            <div class="buttons-group-info">
+              <slot name="vviinn-camera-capture-text">
+                {i18next.t("cameraCaptureText")}
+              </slot>
+            </div>
+
+            <button class="photo-button" onClick={() => this.selectImage()}>
               <RoundCameraIcon />
             </button>
           </div>

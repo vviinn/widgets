@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.52.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.51.5...v2.52.0) (2024-06-06)
+
+
+### Features
+
+* Redesign camera screen ([508b2c0](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/508b2c060bdbb61d172a020cad3ac6a880167f71))
+
+### [2.51.5](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.51.4...v2.51.5) (2024-06-06)
+
+
+### Bug Fixes
+
+* Fix basket-button slots behaviour after card updating for Set widget ([749eaf5](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/749eaf5124c74a381f82a1b41b550cbe68687c12))
+
+### [2.51.4](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.51.3...v2.51.4) (2024-06-06)
+
+
+### Bug Fixes
+
+* Fixed conflict of Vviinn  events and gtag ([1b3b4c4](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/1b3b4c42c3fb279b21e840621621b6991fe49f38))
+
+### [2.51.3](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.51.2...v2.51.3) (2024-06-06)
+
 ### [2.51.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.51.1...v2.51.2) (2024-06-06)
 
 
