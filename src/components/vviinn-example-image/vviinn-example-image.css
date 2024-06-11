@@ -83,7 +83,7 @@ img {
 
 .photo-frame-corner {
   position: absolute;
-  --delta: -1px;
+  --delta: -2px;
 }
 
 .photo-frame-corner.top-left {
