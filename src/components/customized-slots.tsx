@@ -1,4 +1,5 @@
 import { h } from "@stencil/core";
+import { cons } from "fp-ts/lib/ReadonlyNonEmptyArray";
 
 const vprSlotsNames: string[] = [
   "vviinn-recommendations-title",
@@ -31,8 +32,9 @@ export const SlotSkeleton = (renderType: string) => {
   );
 };
 
-const getSlots = (element: HTMLElement): HTMLSlotElement[] =>
-  Array.from(element.shadowRoot.querySelectorAll("slot"));
+const getSlots = (element: HTMLElement): HTMLSlotElement[] => {
+  return Array.from(element.shadowRoot.querySelectorAll("slot"));
+};
 
 const getNameAttribute = (element: HTMLElement): string | null =>
   element.getAttribute("name");
@@ -71,14 +73,32 @@ const replaceSlotContent = (
   target.innerHTML = content.outerHTML;
 };
 
+type Detail = CustomEvent<{
+  slots: HTMLElement[];
+  element: HTMLElement;
+}>;
+
 export const slotChangeListener = (component: any, element: HTMLElement) => {
   component.connectedCallback = function () {
     document.addEventListener(
       "globalSlotsChanged",
-      ({ detail }: CustomEvent<HTMLElement[]>) => {
+      ({ detail }: Detail) => {
+        if (
+          element !== detail.element &&
+          element.tagName !== "VVIINN-PRODUCT-CARD"
+        ) {
+          return;
+        }
+
+        if (element.tagName === "VVIINN-PRODUCT-CARD") {
+          console.log(detail);
+        }
+
         const slotsToReplace: Map<HTMLSlotElement, HTMLElement> = getSlots(
           element
-        ).reduce(getContentToReplace(detail), new Map());
+        ).reduce(getContentToReplace(detail.slots), new Map());
+
+        //console.log(slotsToReplace);
 
         slotsToReplace.forEach(replaceSlotContent);
       },

@@ -144,7 +144,10 @@ export class VviinnVpsButton {
 
   componentDidLoad() {
     const slots = this.el.querySelectorAll("[slot]");
-    this.globalSlotsChanged.emit(Array.from(slots));
+    this.globalSlotsChanged.emit({
+      slots: Array.from(slots),
+      element: this.el,
+    });
   }
 
   private handleClick() {
