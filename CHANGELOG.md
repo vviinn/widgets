@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.52.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.52.0...v2.52.1) (2024-06-11)
+
+
+### Bug Fixes
+
+* Fix slots for Start Camera button ([81bf221](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/81bf221633b6aebdd971035d31b92a79ff78e83d))
+
 ## [2.52.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.51.5...v2.52.0) (2024-06-06)
 
 
