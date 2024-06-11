@@ -92,6 +92,19 @@ export class SearchFilters {
     this.handleFilterSelection(f);
   }
 
+  private getSelectedTextSearchFilters = () =>
+    searchState.textSearchFilters
+      .filter((f: ResponseFilterItem) => {
+        if (!f?.values) return false;
+        return f.values.find((v) => v.selected);
+      })
+      .map(({ column, values }: ResponseFilterItem) => {
+        return {
+          column: column,
+          values: values.filter((v) => v.selected).map((v) => v.value),
+        };
+      });
+
   private isFilterSelected(filterLink: Link): boolean {
     return this.isCategoriesFilterType()
       ? this.selectedFilter === parseFilters(filterLink, "categories")
@@ -116,27 +129,23 @@ export class SearchFilters {
   }
 
   private handleTextSearchFilterSelection(filter: TextSearchFilterItem) {
-    const selectedFilters = searchState.textSearchFilters
-      .filter((f: ResponseFilterItem) => {
-        if (!f?.values) return false;
-        return f.values.find((v) => v.selected);
-      })
-      .map((f: ResponseFilterItem) => {
-        return {
-          column: f.column,
-          values: f.values.filter((v) => v.selected).map((v) => v.value),
-        };
-      });
+    let parsedFilters: RequestFilterItem = [];
 
+    const selectedFilters = this.getSelectedTextSearchFilters();
     const newFilter = this.getTextSearchFilterRequestValue(filter);
-    const filterActiveIndex = selectedFilters.findIndex(
-      (f) =>
-        f.column === newFilter.column && f.values.includes(newFilter.values[0])
+    const isNewFilterSelected = filter.selected;
+    const isSameColumnSelected = selectedFilters.some(
+      ({ column }) => column === newFilter.column
     );
 
-    let parsedFilters: RequestFilterItem = [];
-    if (filterActiveIndex !== -1) {
-      parsedFilters = selectedFilters.filter((_, i) => i !== filterActiveIndex);
+    if (isNewFilterSelected) {
+      parsedFilters = selectedFilters.filter(({ column }) => {
+        return column !== newFilter.column;
+      });
+    } else if (isSameColumnSelected) {
+      parsedFilters = selectedFilters.map((f) => {
+        return f.column === newFilter.column ? newFilter : f;
+      });
     } else {
       parsedFilters = [...selectedFilters, newFilter];
     }
