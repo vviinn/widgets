@@ -43,8 +43,8 @@ img {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 64px 0 164px;
-  justify-content: center;
+  padding: 68px 0 48px;
+  justify-content: space-around;
   align-content: center;
   box-sizing: border-box;
 }
@@ -64,18 +64,13 @@ img {
   box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.32);
   width: 100%;
   height: auto;
-  max-width: 400px;
+  max-width: 80%;
   margin: 0 auto;
 }
 
 @media (max-width: 960px) {
   .photo-frame-container {
     width: auto;
-    height: auto;
-  }
-
-  #photo-frame {
-    max-width: 80%;
     height: auto;
   }
 }
@@ -112,24 +107,11 @@ img {
   transform: rotate(180deg);
 }
 
-.buttons-group {
+.photo-button-container {
   display: flex;
   width: 100%;
-  left: 0;
-  gap: 12px;
-  flex-direction: column;
   align-items: center;
-  position: absolute;
-  bottom: 32px;
-}
-
-.buttons-group-info {
-  padding: 4px 12px;
-  border-radius: 8px;
-  background-color: rgba(0, 0, 0, 0.48);
-  color: white;
-  font-size: 14px;
-  line-height: 20px;
+  justify-self: flex-end;
 }
 
 .photo-button {
