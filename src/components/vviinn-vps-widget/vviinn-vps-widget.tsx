@@ -602,6 +602,12 @@ export class VviinnVpsWidget {
   }
 
   private renderButtons() {
+    const isLoading =
+      (searchState.loading &&
+        searchState.searchType === "image" &&
+        this.uploadSource === "startCamera") ||
+      this.cameraInitializing;
+
     const buttons = [
       this.cameraAvailable && (
         <button
@@ -611,27 +617,23 @@ export class VviinnVpsWidget {
             this.handleStartCameraClick();
           }}
         >
-          {(searchState.loading &&
-            searchState.searchType === "image" &&
-            this.uploadSource === "startCamera") ||
-          this.cameraInitializing ? (
-            <vviinn-preloader />
-          ) : (
-            <span class="action-button-content">
-              <slot name="vviinn-camera-icon">
-                <CameraActionIcon />
+          <vviinn-preloader class={{ hidden: !isLoading }} />
+
+          <span class={{ "action-button-content": true, hidden: isLoading }}>
+            <slot name="vviinn-camera-icon">
+              <CameraActionIcon />
+            </slot>
+            <span class={{ hidden: !this.cameraEnabled }}>
+              <slot name="vviinn-camera-button-text-stop">
+                {i18next.t("cameraButtonTextStop")}
               </slot>
-              {this.cameraEnabled ? (
-                <slot name="vviinn-camera-button-text-stop">
-                  <span>{i18next.t("cameraButtonTextStop")}</span>
-                </slot>
-              ) : (
-                <slot name="vviinn-camera-button-text-start">
-                  <span>{i18next.t("cameraButtonTextStart")}</span>
-                </slot>
-              )}
             </span>
-          )}
+            <span class={{ hidden: this.cameraEnabled }}>
+              <slot name="vviinn-camera-button-text-start">
+                {i18next.t("cameraButtonTextStart")}
+              </slot>
+            </span>
+          </span>
         </button>
       ),
       <vviinn-image-selector
