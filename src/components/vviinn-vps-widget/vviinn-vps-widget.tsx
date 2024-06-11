@@ -625,12 +625,12 @@ export class VviinnVpsWidget {
             </slot>
             <span class={{ hidden: !this.cameraEnabled }}>
               <slot name="vviinn-camera-button-text-stop">
-                {i18next.t("cameraButtonTextStop")}{" "}
+                {i18next.t("cameraButtonTextStop")}
               </slot>
             </span>
             <span class={{ hidden: this.cameraEnabled }}>
               <slot name="vviinn-camera-button-text-start">
-                {i18next.t("cameraButtonTextStart")}{" "}
+                {i18next.t("cameraButtonTextStart")}
               </slot>
             </span>
           </span>
