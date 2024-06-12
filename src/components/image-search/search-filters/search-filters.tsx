@@ -94,10 +94,9 @@ export class SearchFilters {
 
   private getSelectedTextSearchFilters = () =>
     searchState.textSearchFilters
-      .filter((f: ResponseFilterItem) => {
-        if (!f?.values) return false;
-        return f.values.find((v) => v.selected);
-      })
+      .filter(({ values }: ResponseFilterItem) =>
+        values?.find(({ selected }) => selected)
+      )
       .map(({ column, values }: ResponseFilterItem) => {
         return {
           column: column,
