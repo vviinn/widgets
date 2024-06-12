@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.52.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.52.1...v2.52.2) (2024-06-12)
+
+
+### Bug Fixes
+
+* Added vviinn-camera-button-text-start slot to the search widget button and storybook ([2ee6b40](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/2ee6b40978a3778070caba25b7425895052338c1))
+* Added vviinn-camera-button-text-stop slot to the search widget button and storybook ([cb39803](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/cb39803fdc54474a93a339553234d62dbf08aa86))
+* Added vviinn-camera-icon slot to the search widget button and storybook ([c8bd0fb](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/c8bd0fb5735a7295d8c46d4b5f94206f3fbe68b0))
+* Added vviinn-image-upload-icon slot to the search widget button and storybook ([7711126](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/7711126ac0cb831aee44eef94a65934f1467dfd3))
+* Added vviinn-text-search-icon slot to the search widget button and storybook ([1b5a7c3](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/1b5a7c363e7b954d44f534bbffcc6fb9997e62b1))
+* Removed vviinn-camera-button-text slot from the search widget ([7cf217e](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/7cf217ef74e3b5f62db00d50b91547c928bafa90))
+* Removed vviinn-show-files-button-text slot from the search widget ([88f8ce8](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/88f8ce83fbf8dc5c905b857aac5683bb90698bc1))
+* synchronized the slots on recommendation widgets ([85b48cf](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/85b48cf97b13aba0030633efbc8726d7e4834fee))
+
 ### [2.52.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.52.0...v2.52.1) (2024-06-11)
 
 
