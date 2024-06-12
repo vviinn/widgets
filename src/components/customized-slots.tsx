@@ -100,6 +100,7 @@ export const slotChangeListener = (component: any, element: HTMLElement) => {
           "VVIINN-EXAMPLE-IMAGE",
           "VVIINN-PRIVACY-BADGE",
           "VVIINN-MODAL",
+          "VVIINN-TEXT-SEARCH",
         ].includes(elementTagName);
 
         const elementsAreDifferent = element !== detail.element;
