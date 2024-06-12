@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.52.3](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.52.2...v2.52.3) (2024-06-12)
+
+
+### Bug Fixes
+
+* Fixed influence case of different widgets in the level of events, props, and slots. ([2d87f13](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/2d87f1391611681f9646d0e1caf305651200d357))
+
 ### [2.52.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.52.1...v2.52.2) (2024-06-12)
 
 
