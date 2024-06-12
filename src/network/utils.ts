@@ -57,10 +57,6 @@ export const createRequestFromMethod = (
   method: RequestMethod
 ): E.Either<any, RequestInit> => E.right(createBasicRequest(method));
 
-export const createInitGetRequest: E.Either<any, RequestInit> = E.right(
-  createBasicRequest("GET")
-);
-
 export const createInitPostRequest: E.Either<any, RequestInit> = E.right(
   createBasicRequest("POST")
 );

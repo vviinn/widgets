@@ -218,14 +218,14 @@ const uploadText = (query: string) => {
   state.searchType = "text";
   state.loading = true;
 
-  const body = JSON.stringify({
+  const body = {
     query,
     ...(state.campaignId.length ? { campaign: state.campaignId } : {}),
-  });
+  };
 
   const tokenWithBody = sequenceToEither(
     processBearerToken(state.token),
-    E.right(body)
+    E.right(JSON.stringify(body))
   );
 
   return pipe(

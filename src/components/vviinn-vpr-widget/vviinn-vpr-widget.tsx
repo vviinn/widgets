@@ -56,11 +56,10 @@ import {
   createResultVpcEventByType,
   createResultVprEventByType,
 } from "../../tracking";
-import { checkEmpryString } from "../../utils/option/option";
-import { parseExcluded } from "../../utils/collections/collectionsUtils";
 import { resources } from "../../locale";
 import { Locale } from "../../locale";
 import { UpdateIcon } from "../vviinn-icons";
+import { getRecommendationsBody } from "../../recommendation";
 
 export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
 
@@ -311,9 +310,9 @@ export class VviinnVprWidget implements ComponentInterface {
       resources,
     });
 
-    if (this.excluded) {
-      this.excluded = parseExcluded(this.excluded);
-    }
+    // if (this.excluded) {
+    //   this.excluded = parseExcluded(this.excluded);
+    // }
     slotChangeListener(this, this.el);
   }
 
@@ -489,12 +488,16 @@ export class VviinnVprWidget implements ComponentInterface {
       this.campaignType.length > 0 ? this.campaignType : "VPR";
     const headers = createBearAuthedHeader(this.token);
 
+    const body = getRecommendationsBody({
+      productId: this.productId,
+      color: this.color,
+      excluded: this.excluded,
+      campaigns: this.campaigns,
+    });
+
     const request = pipe(
       TE.of(getRecommendationsService(campaignType)),
-      TE.ap(TE.of(this.productId)),
-      TE.ap(TE.of(this.color)),
-      TE.ap(TE.of(this.excluded)),
-      TE.ap(TE.of(checkEmpryString(this.campaigns))),
+      TE.ap(TE.of(JSON.stringify(body))),
       TE.ap(TE.of(headers)),
       TE.flatten
     );
@@ -518,11 +521,11 @@ export class VviinnVprWidget implements ComponentInterface {
     this.hasErrorOnLoad = true;
   }
 
-  private handleRecommendationsSuccess(data: any) {
+  private handleRecommendationsSuccess({ data }: any) {
     this.vviinnResultLoad.emit(this.getBasicEventData());
     this.trackResultEvent("load");
 
-    this.recommendations = data?.extended ?? data;
+    this.recommendations = data.products;
     searchState.results = this.recommendations;
 
     this.productIds = this.recommendations.map((r) => r.productId);
