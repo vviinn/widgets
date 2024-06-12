@@ -16,7 +16,6 @@ import { getAnalyticsModule } from "../../analytics/GeneralAnalytics";
 import * as O from "fp-ts/lib/Option";
 import i18next from "i18next";
 
-import { state } from "../../store/store";
 import { searchState } from "../../store/search.store";
 import { Recommendation } from "../../recommendation/recommendation";
 import {
