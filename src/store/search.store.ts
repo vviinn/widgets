@@ -48,6 +48,7 @@ type SearchStore = {
   campaignId?: string;
   excluded?: string;
   results: Recommendation[];
+  sourceProduct: Recommendation | null;
   filters: SearchSessionFilter[];
   resetCategoryLink?: Link;
   activeIonLink?: Link;
@@ -75,6 +76,7 @@ const { state, onChange } = createStore<SearchStore>({
   campaignId: "",
   excluded: "",
   results: [],
+  sourceProduct: null,
   filters: [],
   cropperHandlers: [],
   detectedObjects: [],

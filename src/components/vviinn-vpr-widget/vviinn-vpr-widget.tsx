@@ -159,6 +159,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() opened?: boolean;
 
   @State() recommendations: Recommendation[] = [];
+  @State() sourceProduct: Recommendation | null = null;
   @State() trackingDeactivated: boolean = false;
   @State() hasErrorOnLoad: boolean = false;
   @State() updatingAllCards: boolean = false;
@@ -525,8 +526,11 @@ export class VviinnVprWidget implements ComponentInterface {
     this.vviinnResultLoad.emit(this.getBasicEventData());
     this.trackResultEvent("load");
 
-    this.recommendations = data.products;
+    const { products, sourceProduct } = data;
+    this.recommendations = products;
+    this.sourceProduct = sourceProduct;
     searchState.results = this.recommendations;
+    searchState.sourceProduct = this.sourceProduct;
 
     this.productIds = this.recommendations.map((r) => r.productId);
     this.productImageLoadedSubject.subscribe((id) => {
