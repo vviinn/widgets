@@ -30,9 +30,8 @@ export const SlotSkeleton = (renderType: string) => {
   );
 };
 
-const getSlots = (element: HTMLElement): HTMLSlotElement[] => {
-  return Array.from(element.shadowRoot.querySelectorAll("slot"));
-};
+const getSlots = (element: HTMLElement): HTMLSlotElement[] =>
+  Array.from(element.shadowRoot.querySelectorAll("slot"));
 
 const getNameAttribute = (element: HTMLElement): string | null =>
   element.getAttribute("name");
