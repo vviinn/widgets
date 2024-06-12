@@ -61,6 +61,17 @@ type UploadSource = "uploadPhoto" | "startCamera";
 const CAMERA_START_DELAY = 500;
 
 /**
+ * @slot vviinn-teaser-text - Text on widget's main screen.
+ * @slot vviinn-image-upload-button-text - Title of Upload Button.
+ * @slot vviinn-image-upload-icon - Icon of Upload Button.
+ * @slot vviinn-camera-button-text-start - Title of Start Camera button.
+ * @slot vviinn-camera-button-text-stop - Title of Stop Camera button (for Desktop).
+ * @slot vviinn-camera-icon - Icon of Camera Button.
+ * @slot vviinn-camera-capture-text - Text above the Camera Capture button.
+ * @slot vviinn-text-search-icon - Icon of text search block.
+ * @slot vviinn-privacy-badge-text - Text content of privacy notification block.
+ * @slot vviinn-image-search-modal-title - Image search modal title.
+ *
  * @part close-button - Close Button in the modal's header.
  * @part secondary-action - Back Button in the modal's header.
  * @part title - Modal window title.
@@ -83,18 +94,6 @@ const CAMERA_START_DELAY = 500;
  * @part price-prefix - Block rendered before each price element (for ex. "from").
  * @part title - Title inside Product Card.
  * @part text-search-input - Text search input.
-
- * @slot vviinn-teaser-text - Text on widget's main screen.
- * @slot vviinn-image-upload-button-text - Title of Upload Button.
- * @slot vviinn-image-upload-icon - Icon of Upload Button.
- * @slot vviinn-show-files-button-text - Title of Show Files Button.
- * @slot vviinn-camera-button-text-start - Title of Start Camera button.
- * @slot vviinn-camera-button-text-stop - Title of Stop Camera button (for Desktop).
- * @slot vviinn-camera-icon - Icon of Camera Button.
- * @slot vviinn-privacy-badge-text - Text content of privacy notification block.
- * @slot vviinn-image-search-modal-title - Image search modal title.
- * @slot vviinn-text-search-icon - Icon of text search block.
- *
  */
 @Component({
   tag: "vviinn-vps-widget",
@@ -601,6 +600,12 @@ export class VviinnVpsWidget {
   }
 
   private renderButtons() {
+    const isLoading =
+      (searchState.loading &&
+        searchState.searchType === "image" &&
+        this.uploadSource === "startCamera") ||
+      this.cameraInitializing;
+
     const buttons = [
       this.cameraAvailable && (
         <button
@@ -610,27 +615,23 @@ export class VviinnVpsWidget {
             this.handleStartCameraClick();
           }}
         >
-          {(searchState.loading &&
-            searchState.searchType === "image" &&
-            this.uploadSource === "startCamera") ||
-          this.cameraInitializing ? (
-            <vviinn-preloader />
-          ) : (
-            <span class="action-button-content">
-              <slot name="vviinn-camera-icon">
-                <CameraActionIcon />
+          <vviinn-preloader class={{ hidden: !isLoading }} />
+
+          <span class={{ "action-button-content": true, hidden: isLoading }}>
+            <slot name="vviinn-camera-icon">
+              <CameraActionIcon />
+            </slot>
+            <span class={{ hidden: !this.cameraEnabled }}>
+              <slot name="vviinn-camera-button-text-stop">
+                {i18next.t("cameraButtonTextStop")}
               </slot>
-              {this.cameraEnabled ? (
-                <slot name="vviinn-camera-button-text-stop">
-                  <span>{i18next.t("cameraButtonTextStop")}</span>
-                </slot>
-              ) : (
-                <slot name="vviinn-camera-button-text-start">
-                  <span>{i18next.t("cameraButtonTextStart")}</span>
-                </slot>
-              )}
             </span>
-          )}
+            <span class={{ hidden: this.cameraEnabled }}>
+              <slot name="vviinn-camera-button-text-start">
+                {i18next.t("cameraButtonTextStart")}
+              </slot>
+            </span>
+          </span>
         </button>
       ),
       <vviinn-image-selector

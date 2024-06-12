@@ -26,7 +26,6 @@ import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
  * @slot vviinn-teaser-text - Text on widget's main screen.
  * @slot vviinn-image-upload-button-text - Title of Upload Button.
  * @slot vviinn-image-upload-icon - Icon of Upload Button.
- * @slot vviinn-show-files-button-text - Title of Show Files Button.
  * @slot vviinn-camera-button-text-start - Title of Start Camera button.
  * @slot vviinn-camera-button-text-stop - Title of Stop Camera button (for Desktop).
  * @slot vviinn-camera-icon - Icon of Camera Button.
