@@ -286,7 +286,10 @@ export class VviinnVprWidget implements ComponentInterface {
   componentDidRender() {
     if (this.showingInButton && this.closed) return;
     const slots = this.el.querySelectorAll("[slot]");
-    this.globalSlotsChanged.emit(Array.from(slots));
+    this.globalSlotsChanged.emit({
+      slots: Array.from(slots),
+      element: this.el,
+    });
   }
 
   connectedCallback() {
@@ -641,6 +644,9 @@ export class VviinnVprWidget implements ComponentInterface {
         index={index}
         widgetElementId={this.id}
         widgetVersion={version}
+        currency={this.currencySign}
+        pricePrefix={this.pricePrefix}
+        locale={this.locale}
       />
     );
   }
@@ -671,6 +677,9 @@ export class VviinnVprWidget implements ComponentInterface {
         addToBasketShow={this.addToBasketShow}
         updatingAllCards={this.updatingAllCards}
         updateButtonLocation={this.updateButtonLocation}
+        currencySign={this.currencySign}
+        pricePrefix={this.pricePrefix}
+        locale={this.locale}
       ></vviinn-carousel>
     );
   }

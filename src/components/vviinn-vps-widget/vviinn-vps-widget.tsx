@@ -334,7 +334,10 @@ export class VviinnVpsWidget {
 
   componentDidLoad() {
     const slots = this.el.querySelectorAll("[slot]");
-    this.globalSlotsChanged.emit(Array.from(slots));
+    this.globalSlotsChanged.emit({
+      slots: Array.from(slots),
+      element: this.el,
+    });
   }
 
   setTrackingDeactivated = (result: EventConfirmation) => {
@@ -697,6 +700,9 @@ export class VviinnVpsWidget {
         widgetElementId={this.id}
         buttonElementId={this.buttonElementId}
         widgetVersion={version}
+        currency={this.currencySign}
+        pricePrefix=""
+        locale={this.locale}
       />
     ));
   }

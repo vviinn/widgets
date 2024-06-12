@@ -107,14 +107,12 @@ export class VviinnModal {
               <SecondaryActionIcon />
             </button>
           )}
-
           <div class="title" part="title">
             {this.renderImage()}
             <slot name="vviinn-image-search-modal-title">
               {i18next.t("imageSearchModalTitle")}
             </slot>
           </div>
-
           <button
             onClick={() => this.close()}
             class="close-button"
