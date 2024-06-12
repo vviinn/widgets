@@ -107,6 +107,10 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   grid-gap: 8px;
 }
 
+.action-button .hidden {
+  display: none;
+}
+
 .results-page {
   margin-top: 64px;
   display: grid;
