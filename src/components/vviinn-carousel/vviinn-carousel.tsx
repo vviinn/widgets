@@ -30,6 +30,7 @@ import {
 } from "./constants";
 import { calculateDiscount } from "../../utils/number";
 import { searchState } from "../../store/search.store";
+import { Locale } from "../../locale";
 
 type MoveDirection = "left" | "right";
 export type CarouselMode = "grid" | "continuity" | "set";
@@ -67,6 +68,10 @@ export class VviinnCarousel {
   @Prop() addToBasketShow: boolean;
   @Prop() updatingAllCards: boolean;
   @Prop() updateButtonLocation: UpdateButtonLocation;
+
+  @Prop() currencySign: string;
+  @Prop() pricePrefix: string = "";
+  @Prop() locale: Locale;
 
   private columns: number = 0;
   private resizeObserver: ResizeObserver = new ResizeObserver(() =>
@@ -412,6 +417,9 @@ export class VviinnCarousel {
         updateButtonLocation={this.updateButtonLocation}
         appliedDiscountPercentage={appliedDiscount}
         currentDiscountPercentage={this.setModeDiscount}
+        currency={this.currencySign}
+        pricePrefix={this.pricePrefix}
+        locale={this.locale}
       />
     );
   }
@@ -492,6 +500,9 @@ export class VviinnCarousel {
               imageWidth={300}
               dimmedBackground={true}
               isSourceProduct={true}
+              currency={this.currencySign}
+              pricePrefix={this.pricePrefix}
+              locale={this.locale}
             />
           )}
 
