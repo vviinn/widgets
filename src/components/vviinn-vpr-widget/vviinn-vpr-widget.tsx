@@ -315,9 +315,6 @@ export class VviinnVprWidget implements ComponentInterface {
       resources,
     });
 
-    // if (this.excluded) {
-    //   this.excluded = parseExcluded(this.excluded);
-    // }
     slotChangeListener(this, this.el);
   }
 
