@@ -6,17 +6,17 @@ type PhotoFrameCornerProps = {
 
 export const PhotoFrameCorner = ({ className }): PhotoFrameCornerProps => (
   <svg
-    width="30"
-    height="30"
-    viewBox="0 0 30 30"
+    width="34"
+    height="34"
+    viewBox="0 0 34 34"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     class={className}
   >
     <path
-      d="M29 1H17C8.16344 1 1 8.16344 1 17V29"
+      d="M31 3H15C8.37258 3 3 8.37258 3 15V31"
       stroke="white"
-      stroke-width="2"
+      stroke-width="6"
       stroke-linecap="square"
     />
   </svg>

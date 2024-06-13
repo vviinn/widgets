@@ -12,6 +12,9 @@ import {
   imageSearchSessionClient,
   textSearchSessionClient,
   SearchType,
+  TextSearchRequestBody,
+  ResponseFilterItem,
+  RequestFilterItem,
 } from "../searchSession/searchSession";
 import { foldValueObject, ValueObject } from "../network/ion/ValueObject";
 import { Link, linkRequest, getLink } from "../network/ion/Link";
@@ -50,6 +53,7 @@ type SearchStore = {
   results: Recommendation[];
   sourceProduct: Recommendation | null;
   filters: SearchSessionFilter[];
+  textSearchFilters: ResponseFilterItem[];
   resetCategoryLink?: Link;
   activeIonLink?: Link;
   cropperHandlers: Handler[];
@@ -78,6 +82,7 @@ const { state, onChange } = createStore<SearchStore>({
   results: [],
   sourceProduct: null,
   filters: [],
+  textSearchFilters: [],
   cropperHandlers: [],
   detectedObjects: [],
   objectDetectionInProgress: false,
@@ -216,12 +221,17 @@ export const uploadFile = (
   );
 };
 
-const uploadText = (query: string) => {
+const uploadText = (query: string, filters?: RequestFilterItem) => {
   state.searchType = "text";
   state.loading = true;
 
-  const body = {
+  const body: TextSearchRequestBody = {
     query,
+    ...(filters
+      ? {
+          filters,
+        }
+      : {}),
     ...(state.campaignId.length ? { campaign: state.campaignId } : {}),
   };
 
@@ -236,13 +246,15 @@ const uploadText = (query: string) => {
       headers.set("Content-Type", "application/json");
       return {
         headers,
-        body,
+        body: JSON.stringify(body),
       };
     }),
     TE.fromEither,
     TE.chain((request) => textSearchSessionClient(request)),
     TE.map((sessionResponse) => {
-      state.results = sessionResponse.data?.products ?? [];
+      state.results = sessionResponse?.data.products ?? [];
+      state.textSearchFilters =
+        sessionResponse?.data?.interactions.filters ?? [];
       state.loading = false;
       return sessionResponse;
     }),
@@ -254,9 +266,10 @@ const uploadText = (query: string) => {
   );
 };
 
-export const processSelectedText = async (query: string) => {
-  return await uploadText(query)();
-};
+export const processSelectedText = async (
+  query: string,
+  filters?: RequestFilterItem
+) => await uploadText(query, filters)();
 
 onChange("activeIonLink", async (newLink: Link) => {
   const link = newLink ? newLink : state.resetCategoryLink;
