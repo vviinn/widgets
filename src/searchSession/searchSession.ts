@@ -5,6 +5,7 @@ import { Form } from "../network/ion/Form";
 import { makeRequest } from "../network/request";
 import { createInitPostRequest, getApiPath } from "../network/utils";
 import { Recommendation } from "../recommendation/recommendation";
+import { SearchInterfaces } from "../interfaces/search";
 import * as TE from "fp-ts/TaskEither";
 import * as O from "fp-ts/Option";
 import { RectangleAlt } from "../geometry/RectangleAlt";
@@ -13,21 +14,11 @@ import { BasicError } from "../error";
 import { sequenceToEither } from "../utils/either";
 import { arrayToQueryString } from "../utils/collections/collectionsUtils";
 
-export interface MultiSearchRequestBody {
-  query: string;
-  campaign: string;
-  resultsCount?: number;
-  excluded?: {
-    column: string;
-    values: string[];
-  }[];
-}
+export type TextSearchRequestBody = SearchInterfaces["TextSearchRequest"];
 
-export type TextSearchSession = {
-  data: {
-    products: Recommendation[];
-  };
-};
+type TextSearchResponse = SearchInterfaces["TextSearchResponse"];
+export type ResponseFilterItem = SearchInterfaces["ResponseFilterItem"];
+export type RequestFilterItem = SearchInterfaces["RequestFilterItem"];
 
 export type SearchType = "text" | "image";
 
@@ -124,12 +115,12 @@ export const imageSearchSessionClient = (
 
 export const textSearchSessionClient = (
   initialData: RequestInit
-): TE.TaskEither<BasicError<Response | string>, TextSearchSession> => {
-  const requestUrl = "multi-search";
+): TE.TaskEither<BasicError<Response | string>, TextSearchResponse> => {
+  const requestUrl = "text-search";
 
   return pipe(
     sequenceToEither(getApiPath(), createInitPostRequest),
     TE.fromEither,
-    TE.chainW(makeRequest<TextSearchSession>(requestUrl, initialData))
+    TE.chainW(makeRequest<TextSearchResponse>(requestUrl, initialData))
   );
 };
