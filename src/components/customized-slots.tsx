@@ -16,7 +16,6 @@ const vpsSlotsNames: string[] = [
   "vviinn-camera-button-text-start",
   "vviinn-camera-button-text-stop",
   "vviinn-camera-icon",
-  "vviinn-camera-capture-text",
   "vviinn-text-search-icon",
   "vviinn-privacy-badge-text",
   "vviinn-image-search-modal-title",
@@ -70,14 +69,89 @@ const replaceSlotContent = (
   target.innerHTML = content.outerHTML;
 };
 
+type Detail = CustomEvent<{
+  slots: HTMLElement[];
+  element: HTMLElement;
+}>;
+
+const castAsHtmlElement = (element: ChildNode) => element as HTMLElement;
+const getShadowRoots = (shadowRoot: ShadowRoot) => {
+  const levelOne = shadowRoot;
+  const levelTwo = levelOne && castAsHtmlElement(levelOne.lastChild).shadowRoot;
+  const levelThree =
+    levelTwo && castAsHtmlElement(levelTwo.lastChild).shadowRoot;
+
+  return { levelOne, levelTwo, levelThree };
+};
+
 export const slotChangeListener = (component: any, element: HTMLElement) => {
   component.connectedCallback = function () {
     document.addEventListener(
       "globalSlotsChanged",
-      ({ detail }: CustomEvent<HTMLElement[]>) => {
+      ({ detail }: Detail) => {
+        const elementTagName = element.tagName;
+
+        const isElementChildTag = [
+          "VVIINN-PRODUCT-CARD",
+          "VVIINN-TEASER",
+          "VVIINN-EXAMPLE-IMAGE",
+          "VVIINN-PRIVACY-BADGE",
+          "VVIINN-MODAL",
+          "VVIINN-TEXT-SEARCH",
+        ].includes(elementTagName);
+
+        const elementsAreDifferent = element !== detail.element;
+
+        const elementsAreDifferentAndNotChildTag =
+          elementsAreDifferent && !isElementChildTag;
+
+        const isSearchButtonTag =
+          detail.element.tagName === "VVIINN-VPS-BUTTON" &&
+          elementTagName === "VVIINN-VPS-WIDGET";
+
+        const detailElementShadowRoot = detail.element.shadowRoot;
+
+        const {
+          levelOne: detailLevelOneShadowRoot,
+          levelTwo: detailLevelTwoShadowRoot,
+          levelThree: detailLevelThreeShadowRoot,
+        } = getShadowRoots(detailElementShadowRoot);
+
+        const elementIsNotChildOfDetailElement =
+          !(
+            detailLevelOneShadowRoot &&
+            detailLevelOneShadowRoot.contains(element)
+          ) &&
+          !(
+            detailLevelTwoShadowRoot &&
+            detailLevelTwoShadowRoot.contains(element)
+          ) &&
+          !(
+            detailLevelThreeShadowRoot &&
+            detailLevelThreeShadowRoot.contains(element)
+          );
+
+        const elementIsChildTagButNotChildOfDetailElement =
+          isElementChildTag && elementIsNotChildOfDetailElement;
+
+        const isNotChildOfCurrentDetailElement =
+          (elementsAreDifferentAndNotChildTag ||
+            elementIsChildTagButNotChildOfDetailElement) &&
+          !isSearchButtonTag;
+
+        const isNotChildOfCurrentSearchButton =
+          isSearchButtonTag && !detailElementShadowRoot.contains(element);
+
+        const elementIsNotRelatedToCurrentDetailElement =
+          isNotChildOfCurrentDetailElement || isNotChildOfCurrentSearchButton;
+
+        if (elementIsNotRelatedToCurrentDetailElement) {
+          return;
+        }
+
         const slotsToReplace: Map<HTMLSlotElement, HTMLElement> = getSlots(
           element
-        ).reduce(getContentToReplace(detail), new Map());
+        ).reduce(getContentToReplace(detail.slots), new Map());
 
         slotsToReplace.forEach(replaceSlotContent);
       },

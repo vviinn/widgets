@@ -21,16 +21,12 @@ import {
   PlusIcon,
   RoundCameraIcon,
 } from "../vviinn-icons";
-import i18next from "i18next";
 
 type ZoomCapabilities = {
   min: number;
   max: number;
 };
 
-/**
- * @slot vviinn-camera-capture-text - Text above the Camera Capture button.
- */
 @Component({
   tag: "vviinn-example-image",
   styleUrl: "vviinn-example-image.css",
@@ -263,13 +259,7 @@ export class VviinnExampleImage {
             </div>
           </div>
 
-          <div class="buttons-group">
-            <div class="buttons-group-info">
-              <slot name="vviinn-camera-capture-text">
-                {i18next.t("cameraCaptureText")}
-              </slot>
-            </div>
-
+          <div class="photo-button-container">
             <button class="photo-button" onClick={() => this.selectImage()}>
               <RoundCameraIcon />
             </button>

@@ -333,6 +333,25 @@ export class VviinnVpsWidget {
     this.showAspectRatioError = isError;
   };
 
+  async componentWillLoad() {
+    await i18next.init({
+      lng: this.locale,
+      fallbackLng: "en",
+      resources,
+    });
+    slotChangeListener(this, this.el);
+    this.vviinnWidgetLoad.emit(this.getBasicEventData());
+    this.trackWidgetEvent("load");
+  }
+
+  componentDidLoad() {
+    const slots = this.el.querySelectorAll("[slot]");
+    this.globalSlotsChanged.emit({
+      slots: Array.from(slots),
+      element: this.el,
+    });
+  }
+
   setTrackingDeactivated = (result: EventConfirmation) => {
     if (result.status === "rejected") {
       this.trackingDeactivated = true;
@@ -513,22 +532,6 @@ export class VviinnVpsWidget {
     this.id = this.el.id;
   }
 
-  async componentWillLoad() {
-    await i18next.init({
-      lng: this.locale,
-      fallbackLng: "en",
-      resources,
-    });
-    slotChangeListener(this, this.el);
-    this.vviinnWidgetLoad.emit(this.getBasicEventData());
-    this.trackWidgetEvent("load");
-  }
-
-  componentDidLoad() {
-    const slots = this.el.querySelectorAll("[slot]");
-    this.globalSlotsChanged.emit(Array.from(slots));
-  }
-
   private trackWidgetEvent(action: WidgetAction) {
     if (this.trackingDeactivated) return;
 
@@ -707,6 +710,9 @@ export class VviinnVpsWidget {
         widgetElementId={this.id}
         buttonElementId={this.buttonElementId}
         widgetVersion={version}
+        currency={this.currencySign}
+        pricePrefix=""
+        locale={this.locale}
       />
     ));
   }

@@ -16,7 +16,6 @@ import { getAnalyticsModule } from "../../analytics/GeneralAnalytics";
 import * as O from "fp-ts/lib/Option";
 import i18next from "i18next";
 
-import { state } from "../../store/store";
 import { searchState } from "../../store/search.store";
 import { Recommendation } from "../../recommendation/recommendation";
 import {
@@ -307,11 +306,11 @@ export class VviinnProductCard {
               {this.productType}
             </span>
             <Price
-              prefix={this.pricePrefix ?? state.pricePrefix}
-              currency={this.currency ?? state.currencySign}
+              prefix={this.pricePrefix}
+              currency={this.currency}
               price={this.price}
               salePrice={this.salePrice}
-              locale={this.locale ?? state.locale}
+              locale={this.locale}
             />
             {this.isSetMode && !this.appliedDiscountPercentage && (
               <div class="discount-label">{`-${this.currentDiscountPercentage}%`}</div>
