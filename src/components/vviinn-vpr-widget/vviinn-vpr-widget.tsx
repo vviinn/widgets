@@ -499,7 +499,7 @@ export class VviinnVprWidget implements ComponentInterface {
 
     const request = pipe(
       TE.of(getRecommendationsService(campaignType)),
-      TE.ap(TE.of(JSON.stringify(body))),
+      TE.ap(TE.of(body)),
       TE.ap(TE.of(headers)),
       TE.flatten
     );

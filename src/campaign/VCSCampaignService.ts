@@ -1,11 +1,15 @@
 import { apiPost } from "../network/apiClient";
-import { VCSCampaignResponse } from "./VCSCampaignResponse";
+import { Interfaces } from "../interfaces/recommendation";
 
-export const getVCSRecommendations = (body: any) => (options: RequestInit) => {
-  const url = "cross-selling";
+type CrossSellingRequest = Interfaces["CrossSellingRequest"];
+type CrossSellingResponse = Interfaces["CrossSellingResponse"];
 
-  return apiPost<VCSCampaignResponse>(url, {
-    ...options,
-    body,
-  });
-};
+export const getVCSRecommendations =
+  (body: CrossSellingRequest) => (options: RequestInit) => {
+    const url = "cross-selling";
+
+    return apiPost<CrossSellingResponse>(url, {
+      ...options,
+      body: JSON.stringify(body),
+    });
+  };
