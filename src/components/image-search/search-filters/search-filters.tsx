@@ -9,11 +9,7 @@ import {
   EventEmitter,
 } from "@stencil/core";
 import { Link } from "../../../network/ion/Link";
-import {
-  RequestFilterItem,
-  ResponseFilterItem,
-  SearchSessionFilter,
-} from "../../../searchSession/searchSession";
+import { SearchSessionFilter } from "../../../searchSession/searchSession";
 import { searchState } from "../../../store/search.store";
 import {
   BasicEventData,
@@ -21,9 +17,13 @@ import {
 } from "../../../recommendation/events";
 import { parseFilters } from "../../../filters/parseFilters";
 import { FilterKind } from "vviinn-tracking-client-ts";
+import {
+  RequestFilterItem,
+  ResponseFilterItem,
+} from "../../../interfaces/search";
 
 const FILTERS_COUNT: number = 4;
-type TextSearchFilterItem = ResponseFilterItem["values"][number];
+type TextSearchFilterValue = ResponseFilterItem["values"][0];
 
 @Component({
   tag: "search-filters",
@@ -41,7 +41,7 @@ export class SearchFilters {
   @State() hideFilters: boolean = true;
 
   @Event() vviinnSelectFilter: EventEmitter<SelectFilterEventData>;
-  @Event() vviinnTextSearchFilterSelected: EventEmitter<RequestFilterItem>;
+  @Event() vviinnTextSearchFilterSelected: EventEmitter<RequestFilterItem[]>;
 
   private filterType: string =
     this.filter?.name ?? this.textSearchFiltersGroup?.column;
@@ -92,7 +92,7 @@ export class SearchFilters {
     this.handleFilterSelection(f);
   }
 
-  private getSelectedTextSearchFilters = () =>
+  private getSelectedTextSearchFilters = (): RequestFilterItem[] =>
     searchState.textSearchFilters
       .filter(({ values }: ResponseFilterItem) =>
         values?.find(({ selected }) => selected)
@@ -102,7 +102,7 @@ export class SearchFilters {
           column: column,
           values: values.filter((v) => v.selected).map((v) => v.value),
         };
-      });
+      }) as RequestFilterItem[];
 
   private isFilterSelected(filterLink: Link): boolean {
     return this.isCategoriesFilterType()
@@ -111,24 +111,24 @@ export class SearchFilters {
   }
 
   private getTextSearchFilterRequestValue = (
-    filter: TextSearchFilterItem
-  ): RequestFilterItem[number] => {
+    filter: TextSearchFilterValue
+  ): RequestFilterItem => {
     return {
       column: this.textSearchFiltersGroup.column,
-      values: [filter.value],
+      values: [filter.value.toString()],
     };
   };
 
   private handleTextSearchEnter(
     ev: KeyboardEvent,
-    filter: TextSearchFilterItem
+    filter: TextSearchFilterValue
   ) {
     if (ev.key !== "Enter") return;
     this.handleTextSearchFilterSelection(filter);
   }
 
-  private handleTextSearchFilterSelection(filter: TextSearchFilterItem) {
-    let parsedFilters: RequestFilterItem = [];
+  private handleTextSearchFilterSelection(filter: TextSearchFilterValue) {
+    let parsedFilters: RequestFilterItem[];
 
     const selectedFilters = this.getSelectedTextSearchFilters();
     const newFilter = this.getTextSearchFilterRequestValue(filter);

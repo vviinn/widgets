@@ -12,9 +12,6 @@ import {
   imageSearchSessionClient,
   textSearchSessionClient,
   SearchType,
-  TextSearchRequestBody,
-  ResponseFilterItem,
-  RequestFilterItem,
 } from "../searchSession/searchSession";
 import { foldValueObject, ValueObject } from "../network/ion/ValueObject";
 import { Link, linkRequest, getLink } from "../network/ion/Link";
@@ -29,6 +26,7 @@ import { sequenceToEither } from "../utils/either";
 import { imageFormFromFile } from "../Image/form";
 import { checkFileWithExtention, resizeFileTo } from "./file-processing";
 import { imageFromFileTask } from "../Image/fromFile";
+import { RequestFilterItem, ResponseFilterItem } from "../interfaces/search";
 
 const RESIZED_IMAGE_WIDTH = 500;
 const HI_RES_RESIZED_IMAGE_WIDTH = 1024;
@@ -51,6 +49,7 @@ type SearchStore = {
   campaignId?: string;
   excluded?: string;
   results: Recommendation[];
+  sourceProduct: Recommendation | null;
   filters: SearchSessionFilter[];
   textSearchFilters: ResponseFilterItem[];
   resetCategoryLink?: Link;
@@ -79,6 +78,7 @@ const { state, onChange } = createStore<SearchStore>({
   campaignId: "",
   excluded: "",
   results: [],
+  sourceProduct: null,
   filters: [],
   textSearchFilters: [],
   cropperHandlers: [],
@@ -223,7 +223,7 @@ const uploadText = (query: string, filters?: RequestFilterItem) => {
   state.searchType = "text";
   state.loading = true;
 
-  const body: TextSearchRequestBody = {
+  const body = {
     query,
     ...(filters
       ? {
@@ -235,7 +235,7 @@ const uploadText = (query: string, filters?: RequestFilterItem) => {
 
   const tokenWithBody = sequenceToEither(
     processBearerToken(state.token),
-    E.right(body)
+    E.right(JSON.stringify(body))
   );
 
   return pipe(
@@ -244,7 +244,7 @@ const uploadText = (query: string, filters?: RequestFilterItem) => {
       headers.set("Content-Type", "application/json");
       return {
         headers,
-        body: JSON.stringify(body),
+        body,
       };
     }),
     TE.fromEither,
@@ -252,7 +252,8 @@ const uploadText = (query: string, filters?: RequestFilterItem) => {
     TE.map((sessionResponse) => {
       state.results = sessionResponse?.data.products ?? [];
       state.textSearchFilters =
-        sessionResponse?.data?.interactions.filters ?? [];
+        (sessionResponse?.data?.interactions
+          ?.filters as ResponseFilterItem[]) ?? [];
       state.loading = false;
       return sessionResponse;
     }),

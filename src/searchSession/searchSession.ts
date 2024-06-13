@@ -14,11 +14,7 @@ import { BasicError } from "../error";
 import { sequenceToEither } from "../utils/either";
 import { arrayToQueryString } from "../utils/collections/collectionsUtils";
 
-export type TextSearchRequestBody = SearchInterfaces["TextSearchRequest"];
-
 type TextSearchResponse = SearchInterfaces["TextSearchResponse"];
-export type ResponseFilterItem = SearchInterfaces["ResponseFilterItem"];
-export type RequestFilterItem = SearchInterfaces["RequestFilterItem"];
 
 export type SearchType = "text" | "image";
 

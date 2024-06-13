@@ -29,6 +29,7 @@ import {
   SET_MODE_MAX_DISCOUNT,
 } from "./constants";
 import { calculateDiscount } from "../../utils/number";
+import { searchState } from "../../store/search.store";
 import { Locale } from "../../locale";
 
 type MoveDirection = "left" | "right";
@@ -145,9 +146,7 @@ export class VviinnCarousel {
 
     if (this.isSetMode) {
       window.addEventListener("resize", this.handleWindowResize);
-
-      this.sourceProduct = this.recommendations[0];
-      this.recommendations = this.recommendations.slice(1);
+      this.sourceProduct = searchState.sourceProduct;
     }
     if (this.isSetMode && this.recommendations.length >= columnsNumber) {
       this.crossSellingRecommendations = this.recommendations.slice(
