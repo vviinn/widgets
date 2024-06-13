@@ -1,11 +1,15 @@
+import { Interfaces } from "../interfaces/recommendation";
 import { apiPost } from "../network/apiClient";
-import { VPRCampaignResponse } from "./VPRCampaignResponse";
 
-export const getVPRRecommendations = (body: any) => (options: RequestInit) => {
-  const url = "similar-products";
+type SimilarProductsRequest = Interfaces["SimilarProductsRequest"];
+export type SimilarProductsResponse = Interfaces["SimilarProductsResponse"];
 
-  return apiPost<VPRCampaignResponse>(url, {
-    ...options,
-    body,
-  });
-};
+export const getVPRRecommendations =
+  (body: SimilarProductsRequest) => (options: RequestInit) => {
+    const url = "similar-products";
+
+    return apiPost<SimilarProductsResponse>(url, {
+      ...options,
+      body: JSON.stringify(body),
+    });
+  };

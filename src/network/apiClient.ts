@@ -8,12 +8,12 @@ import { makeRequest } from "./request";
 
 const sequenceToEither = sequenceT(E.Apply);
 
-export const apiPost = <T>(
+export const apiPost = <TResponse>(
   path: string,
   data: RequestInit = {}
-): TE.TaskEither<BasicError<Response | string>, T> =>
+): TE.TaskEither<BasicError<Response | string>, TResponse> =>
   pipe(
     sequenceToEither(getApiPath(), createInitPostRequest),
     TE.fromEither,
-    TE.chainW(makeRequest<T>(path, data))
+    TE.chainW(makeRequest<TResponse>(path, data))
   );
