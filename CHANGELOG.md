@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.54.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.53.0...v2.54.0) (2024-06-13)
+
+
+### Features
+
+* Migrate recommendations to the new endpoint ([ebc2d98](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/ebc2d98cf546e5b3e6c6a1f0caaaf6c49a19a6c6))
+* Use source product in the Set widget ([3f85b56](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/3f85b56a489c2547878a2dd32071f0bbc009fd69))
+
 ## [2.53.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.52.4...v2.53.0) (2024-06-13)
 
 
