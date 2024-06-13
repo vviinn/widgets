@@ -2,7 +2,7 @@ import { apiPost } from "../network/apiClient";
 import { Interfaces } from "../interfaces/recommendation";
 
 type CrossSellingRequest = Interfaces["CrossSellingRequest"];
-type CrossSellingResponse = Interfaces["CrossSellingResponse"];
+export type CrossSellingResponse = Interfaces["CrossSellingResponse"];
 
 export const getVCSRecommendations =
   (body: CrossSellingRequest) => (options: RequestInit) => {

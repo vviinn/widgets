@@ -60,6 +60,8 @@ import { resources } from "../../locale";
 import { Locale } from "../../locale";
 import { UpdateIcon } from "../vviinn-icons";
 import { getRecommendationsBody } from "../../recommendation";
+import { SimilarProductsResponse } from "../../campaign/VPRCampaignService";
+import { CrossSellingResponse } from "../../campaign/VCSCampaignService";
 
 export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
 
@@ -523,7 +525,9 @@ export class VviinnVprWidget implements ComponentInterface {
     this.hasErrorOnLoad = true;
   }
 
-  private handleRecommendationsSuccess({ data }: any) {
+  private handleRecommendationsSuccess({
+    data,
+  }: SimilarProductsResponse | CrossSellingResponse) {
     this.vviinnResultLoad.emit(this.getBasicEventData());
     this.trackResultEvent("load");
 
