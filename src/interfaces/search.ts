@@ -2,9 +2,14 @@ import { components } from "./generated";
 
 export interface SearchInterfaces {
   VisualProductSearch: components["schemas"]["response-product-item"];
-  // TODO: migrate to text-search schemas
-  TextSearchRequest: components["schemas"]["multi-search-request"];
-  TextSearchResponse: components["schemas"]["multi-search-response"];
-  ResponseFilterItem: components["schemas"]["response-filter-item"];
-  RequestFilterItem: components["schemas"]["request-filters"];
+  TextSearchRequest: components["schemas"]["text-search-request"];
+  TextSearchResponse: components["schemas"]["text-search-response"];
+  ResponseFilterItem: components["schemas"]["response-categorical-filter-item"];
 }
+
+export type RequestFilterItem = {
+  column: string;
+  values: string[];
+};
+
+export type ResponseFilterItem = SearchInterfaces["ResponseFilterItem"];
