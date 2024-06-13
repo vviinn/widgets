@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.52.4](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.52.3...v2.52.4) (2024-06-13)
+
+
+### Bug Fixes
+
+* Change the style of the photo frame ([ab9dedb](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/ab9dedbfc75d739362febf13241ac5f36c2b14b6))
+* Remove camera capture text and adjust camera layout ([ec5ebcd](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/ec5ebcdc2b977bf6eded386389fac9fadd5bf80e))
+
 ### [2.52.3](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.52.2...v2.52.3) (2024-06-12)
 
 
