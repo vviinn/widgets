@@ -48,6 +48,7 @@ type SearchStore = {
   campaignId?: string;
   excluded?: string;
   results: Recommendation[];
+  sourceProduct: Recommendation | null;
   filters: SearchSessionFilter[];
   resetCategoryLink?: Link;
   activeIonLink?: Link;
@@ -75,6 +76,7 @@ const { state, onChange } = createStore<SearchStore>({
   campaignId: "",
   excluded: "",
   results: [],
+  sourceProduct: null,
   filters: [],
   cropperHandlers: [],
   detectedObjects: [],
@@ -218,14 +220,14 @@ const uploadText = (query: string) => {
   state.searchType = "text";
   state.loading = true;
 
-  const body = JSON.stringify({
+  const body = {
     query,
     ...(state.campaignId.length ? { campaign: state.campaignId } : {}),
-  });
+  };
 
   const tokenWithBody = sequenceToEither(
     processBearerToken(state.token),
-    E.right(body)
+    E.right(JSON.stringify(body))
   );
 
   return pipe(

@@ -48,7 +48,7 @@ import {
 } from "../../recommendation/events";
 import { SlotSkeleton } from "../customized-slots";
 import { campaignTypeNames } from "../../campaign/Campaign";
-import { parseExcluded } from "../../utils/collections/collectionsUtils";
+import { parseExcludedToParams } from "../../utils/collections/collectionsUtils";
 import { resources } from "../../locale";
 import { Locale } from "../../locale";
 import { CameraActionIcon, UploadActionIcon } from "../vviinn-icons";
@@ -499,7 +499,7 @@ export class VviinnVpsWidget {
       !!navigator.mediaDevices && !!navigator.mediaDevices.getUserMedia;
 
     if (this.excluded) {
-      this.excluded = parseExcluded(this.excluded);
+      this.excluded = parseExcludedToParams(this.excluded);
     }
 
     searchState.token = this.token;

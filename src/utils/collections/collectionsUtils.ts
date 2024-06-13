@@ -16,7 +16,7 @@ export const existAndNotEmpty = <T extends Sized>(x: T): E.Either<string, T> =>
 export const arrayToQueryString = (params: string[]) =>
   params.length ? `?${params.join("&")}` : "";
 
-export const parseExcluded = (value: string) =>
+export const parseExcludedToParams = (value: string) =>
   value
     .split(";")
     .map((value) => (value ? `excluded[]=${value}` : ""))
