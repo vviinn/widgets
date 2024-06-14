@@ -69,7 +69,7 @@ pipelines:
             - echo "OPENAPI_URL=https://docs.vviinn.com/openapi.yaml" >> .env
             - echo "RECOMMENDATIONS_URL=https://api.vviinn.com/product/" >> .env
             - npm install
-            - npm test
+            - npm run test
             - npm run build_interfaces
             - npm run build
   custom:
@@ -81,9 +81,9 @@ pipelines:
             - echo "OPENAPI_URL=https://docs.vviinn.com/openapi.yaml" >> .env
             - echo "RECOMMENDATIONS_URL=https://api.vviinn.com/product/" >> .env
             - npm install
+            - npm run test
             - npm run build_interfaces
             - npm run build
-            - npm run test
             - pipe: atlassian/npm-publish:0.3.2
               variables:
                 NPM_TOKEN: $NPM_TOKEN
