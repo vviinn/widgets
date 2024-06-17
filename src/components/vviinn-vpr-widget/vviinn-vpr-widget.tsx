@@ -89,6 +89,7 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @part basket-button - Add to Basket button.
  * @part update-button-top - Update Button on the top (Set mode).
  * @part update-button-item - Update Button inside the Product Card (Set mode).
+ * @part discount-label - Discount label in Product Card (Set mode).
  *
  * @slot vviinn-recommendations-title - Recommendations title text.
  * @slot vviinn-recommendations-subtitle - Recommendations subtitle text (Set mode).

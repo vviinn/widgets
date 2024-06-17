@@ -59,11 +59,12 @@ import { generateRandomNumber } from "../../utils/number";
  * @part price-prefix - renders before price-amount. Can be set with "price-prefix" property or inherited from parent component.
  * @part title - Product title
  * @part basket-button - Add to Basket button.
- * @part update-button-item - Update button in product card (Set mode).
+ * @part update-button-item - Update button in Product Card (Set mode).
+ * @part discount-label - Discount label in Product Card (Set mode).
  *
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
  * @slot vviinn-basket-button-icon - Icon of Add to Basket button.
- * @slot vviinn-update-button-icon - Icon of update button (Set mode).
+ * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
  */
 @Component({
   tag: "vviinn-product-card",
@@ -281,7 +282,7 @@ export class VviinnProductCard {
           animated: this.isTransitioning,
           "set-mode": this.isSetMode,
         }}
-        exportparts="brand, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, basket-button, update-button-item"
+        exportparts="brand, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, discount-label, title, basket-button, update-button-item"
       >
         <Linked deeplink={this.deeplink} part="image-link">
           {this.renderImage()}
@@ -313,7 +314,10 @@ export class VviinnProductCard {
               locale={this.locale}
             />
             {this.isSetMode && !this.appliedDiscountPercentage && (
-              <div class="discount-label">{`-${this.currentDiscountPercentage}%`}</div>
+              <div
+                class="discount-label"
+                part="discount-label"
+              >{`-${this.currentDiscountPercentage}%`}</div>
             )}
           </Fragment>
         )}
