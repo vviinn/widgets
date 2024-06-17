@@ -345,24 +345,27 @@ export class VviinnProductCard {
               {this.isSetMode ? (
                 <Fragment>
                   {this.appliedDiscountPercentage ? (
-                    <CheckCircleIcon />
+                    <slot name="vviinn-basket-button-pressed-icon">
+                      <CheckCircleIcon />
+                    </slot>
                   ) : (
                     <slot name="vviinn-basket-button-icon">
                       <BasketIcon />
                     </slot>
                   )}
 
-                  <span>
-                    {this.appliedDiscountPercentage ? (
-                      `${this.appliedDiscountPercentage}% ${i18next.t(
-                        "setMode.appliedDiscountText"
-                      )}`
-                    ) : (
-                      <slot name="vviinn-basket-button-text">
-                        {i18next.t("setMode.basketButtonText")}
+                  {this.appliedDiscountPercentage ? (
+                    <Fragment>
+                      <span>{this.appliedDiscountPercentage}% </span>
+                      <slot name="vviinn-basket-button-pressed-text">
+                        {i18next.t("setMode.appliedDiscountText")}
                       </slot>
-                    )}
-                  </span>
+                    </Fragment>
+                  ) : (
+                    <slot name="vviinn-basket-button-text">
+                      {i18next.t("setMode.basketButtonText")}
+                    </slot>
+                  )}
                 </Fragment>
               ) : (
                 <slot name="vviinn-basket-button-text">
