@@ -64,6 +64,8 @@ import { generateRandomNumber } from "../../utils/number";
  *
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
  * @slot vviinn-basket-button-icon - Icon of Add to Basket button.
+ * @slot vviinn-basket-button-text-pressed - Text of pressed Add to Basket button (Set mode).
+ * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button (Set mode).
  * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
  */
 @Component({
@@ -345,21 +347,27 @@ export class VviinnProductCard {
               {this.isSetMode ? (
                 <Fragment>
                   {this.appliedDiscountPercentage ? (
-                    <slot name="vviinn-basket-button-pressed-icon">
-                      <CheckCircleIcon />
-                    </slot>
+                    <span>
+                      <slot name="vviinn-basket-button-icon--pressed">
+                        <CheckCircleIcon />
+                      </slot>
+                    </span>
                   ) : (
-                    <slot name="vviinn-basket-button-icon">
-                      <BasketIcon />
-                    </slot>
+                    <span>
+                      <slot name="vviinn-basket-button-icon">
+                        <BasketIcon />
+                      </slot>
+                    </span>
                   )}
 
                   {this.appliedDiscountPercentage ? (
                     <Fragment>
                       <span>{this.appliedDiscountPercentage}% </span>
-                      <slot name="vviinn-basket-button-pressed-text">
-                        {i18next.t("setMode.appliedDiscountText")}
-                      </slot>
+                      <span>
+                        <slot name="vviinn-basket-button-text--pressed">
+                          {i18next.t("setMode.appliedDiscountText")}
+                        </slot>
+                      </span>
                     </Fragment>
                   ) : (
                     <slot name="vviinn-basket-button-text">
@@ -368,9 +376,11 @@ export class VviinnProductCard {
                   )}
                 </Fragment>
               ) : (
-                <slot name="vviinn-basket-button-text">
-                  <span>{i18next.t("basketButtonText")}</span>
-                </slot>
+                <span>
+                  <slot name="vviinn-basket-button-text">
+                    {i18next.t("basketButtonText")}
+                  </slot>
+                </span>
               )}
             </button>
           </Fragment>

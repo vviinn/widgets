@@ -95,6 +95,8 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @slot vviinn-recommendations-subtitle - Recommendations subtitle text (Set mode).
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
  * @slot vviinn-basket-button-icon - Text of Add to Basket icon (Set mode).
+ * @slot vviinn-basket-button-text-pressed - Text of pressed Add to Basket button (Set mode).
+ * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button (Set mode).
  * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
  * @slot vviinn-update-button-text - Text of Update Button on the top (Set mode).
  */
@@ -251,6 +253,14 @@ export class VviinnVprWidget implements ComponentInterface {
     }
   };
 
+  private replaceSlotsContent() {
+    const slots = this.el.querySelectorAll("[slot]");
+    this.globalSlotsChanged.emit({
+      slots: Array.from(slots),
+      element: this.el,
+    });
+  }
+
   @Watch("productId")
   handleProductIdChange() {
     this.getRecommendations();
@@ -288,11 +298,7 @@ export class VviinnVprWidget implements ComponentInterface {
 
   componentDidRender() {
     if (this.showingInButton && this.closed) return;
-    const slots = this.el.querySelectorAll("[slot]");
-    this.globalSlotsChanged.emit({
-      slots: Array.from(slots),
-      element: this.el,
-    });
+    this.replaceSlotsContent();
   }
 
   connectedCallback() {
@@ -686,6 +692,7 @@ export class VviinnVprWidget implements ComponentInterface {
         addToBasketShow={this.addToBasketShow}
         updatingAllCards={this.updatingAllCards}
         updateButtonLocation={this.updateButtonLocation}
+        replaceSlotsContent={this.replaceSlotsContent.bind(this)}
         currencySign={this.currencySign}
         pricePrefix={this.pricePrefix}
         locale={this.locale}
