@@ -331,10 +331,10 @@ export class VviinnProductCard {
             <button
               class={{
                 "basket-button": true,
+                "basket-button--hidden": this.isTransitioning,
                 "basket-button-grid": this.isGridMode || this.isSetMode,
                 "basket-button-continuity ": this.isContinuityMode,
                 "applied-discount": !!this.appliedDiscountPercentage,
-                hidden: this.isTransitioning,
               }}
               part="basket-button"
               onClick={() => {
@@ -348,7 +348,7 @@ export class VviinnProductCard {
                 <Fragment>
                   {this.appliedDiscountPercentage ? (
                     <span>
-                      <slot name="vviinn-basket-button-icon--pressed">
+                      <slot name="vviinn-basket-button-icon-pressed">
                         <CheckCircleIcon />
                       </slot>
                     </span>
@@ -364,7 +364,7 @@ export class VviinnProductCard {
                     <Fragment>
                       <span>{this.appliedDiscountPercentage}% </span>
                       <span>
-                        <slot name="vviinn-basket-button-text--pressed">
+                        <slot name="vviinn-basket-button-text-pressed">
                           {i18next.t("setMode.appliedDiscountText")}
                         </slot>
                       </span>
