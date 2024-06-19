@@ -68,6 +68,7 @@ export class VviinnCarousel {
   @Prop() addToBasketShow: boolean;
   @Prop() updatingAllCards: boolean;
   @Prop() updateButtonLocation: UpdateButtonLocation;
+  @Prop() replaceSlotsContent: () => void;
 
   @Prop() currencySign: string;
   @Prop() pricePrefix: string = "";
@@ -159,6 +160,10 @@ export class VviinnCarousel {
   disconnectedCallback() {
     this.resizeObserver.disconnect();
     window.removeEventListener("resize", this.handleWindowResize);
+  }
+
+  componentDidUpdate() {
+    this.replaceSlotsContent();
   }
 
   componentDidLoad() {
