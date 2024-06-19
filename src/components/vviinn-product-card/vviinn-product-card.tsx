@@ -62,11 +62,11 @@ import { generateRandomNumber } from "../../utils/number";
  * @part update-button-item - Update button in Product Card (Set mode).
  * @part discount-label - Discount label in Product Card (Set mode).
  *
+ * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
  * @slot vviinn-basket-button-icon - Icon of Add to Basket button.
  * @slot vviinn-basket-button-text-pressed - Text of pressed Add to Basket button (Set mode).
  * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button (Set mode).
- * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
  */
 @Component({
   tag: "vviinn-product-card",

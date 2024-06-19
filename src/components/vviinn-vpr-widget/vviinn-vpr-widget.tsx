@@ -93,12 +93,12 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  *
  * @slot vviinn-recommendations-title - Recommendations title text.
  * @slot vviinn-recommendations-subtitle - Recommendations subtitle text (Set mode).
+ * @slot vviinn-update-button-text - Text of Update Button on the top (Set mode).
+ * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
  * @slot vviinn-basket-button-icon - Text of Add to Basket icon (Set mode).
  * @slot vviinn-basket-button-text-pressed - Text of pressed Add to Basket button (Set mode).
  * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button (Set mode).
- * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
- * @slot vviinn-update-button-text - Text of Update Button on the top (Set mode).
  */
 
 @Component({

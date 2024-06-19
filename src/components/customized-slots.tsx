@@ -3,12 +3,12 @@ import { h } from "@stencil/core";
 const vprSlotsNames: string[] = [
   "vviinn-recommendations-title",
   "vviinn-recommendations-subtitle",
-  "vviinn-update-button-icon",
   "vviinn-update-button-text",
+  "vviinn-update-button-icon",
   "vviinn-basket-button-text",
   "vviinn-basket-button-icon",
-  "vviinn-basket-button-icon-pressed",
   "vviinn-basket-button-text-pressed",
+  "vviinn-basket-button-icon-pressed",
 ];
 
 const vpsSlotsNames: string[] = [
