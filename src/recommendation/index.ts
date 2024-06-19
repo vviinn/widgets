@@ -1,8 +1,11 @@
+import { RequestFilters } from "../campaign/VPRCampaignService";
+
 type GetRecommendationsBodyProps = {
   productId: string;
   color?: string;
   excluded?: string;
   campaigns?: string;
+  filters?: RequestFilters;
 };
 
 const parseExcluded = (excluded: string) =>
@@ -27,9 +30,11 @@ export const getRecommendationsBody = ({
   color = "",
   excluded = "",
   campaigns = "",
+  filters = [],
 }: GetRecommendationsBodyProps) => {
   return {
     "product-id": productId,
+    filters: filters ?? undefined,
     ...(color.length ? { color } : {}),
     ...(excluded.length ? { excluded: parseExcluded(excluded) } : {}),
     ...(campaigns.length ? { campaigns: parseCampaigns(campaigns) } : {}),

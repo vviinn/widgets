@@ -1,6 +1,19 @@
 :host {
-  --color-primary-system: #0F62FE;
-  --color-primary-hover-system: #014CDA;
-  --color-icons-system: #2F8EDF;
+  --color-primary-system: #0f62fe;
+  --color-primary-hover-system: #014cda;
+  --color-icons-system: #2f8edf;
   --spacer: 8px;
+
+  --surface-color-surface-01: #f4f4f4;
+  --text-color-text-primary: #161616;
+  --font-family: Inter;
+  --font-size-body: 14px;
+  --font-weight-regular: 400;
+  --line-height-body: 20px;
+  --letter-spacing-default: 0px;
+  --background-color-background: #fff;
+  --border-color-border-01: #f4f4f4;
+  --gray-100: #161616;
+  --gray-10: #f4f4f4;
+  --gray-70: #525252;
 }

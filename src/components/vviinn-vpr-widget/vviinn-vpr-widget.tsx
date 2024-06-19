@@ -60,7 +60,11 @@ import { resources } from "../../locale";
 import { Locale } from "../../locale";
 import { UpdateIcon } from "../vviinn-icons";
 import { getRecommendationsBody } from "../../recommendation";
-import { SimilarProductsResponse } from "../../campaign/VPRCampaignService";
+import {
+  RequestFilters,
+  SimilarProductsResponse,
+  Filters,
+} from "../../campaign/VPRCampaignService";
 import { CrossSellingResponse } from "../../campaign/VCSCampaignService";
 
 export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
@@ -162,6 +166,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() opened?: boolean;
 
   @State() recommendations: Recommendation[] = [];
+  @State() filters: Filters = [];
   @State() sourceProduct: Recommendation | null = null;
   @State() trackingDeactivated: boolean = false;
   @State() hasErrorOnLoad: boolean = false;
@@ -193,6 +198,9 @@ export class VviinnVprWidget implements ComponentInterface {
   /** Add to Basket button clicked */
   @Event() vviinnAddToBasket: EventEmitter<BasicEventData>;
 
+  /** When the filters change */
+  @Event() vviinnFiltersChanged: EventEmitter<RequestFilters>;
+
   /** @internal */
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
@@ -212,6 +220,7 @@ export class VviinnVprWidget implements ComponentInterface {
   private isSetMode: boolean;
   private isGridMode: boolean;
   private isContinuityMode: boolean;
+  private requestFilters: RequestFilters = [];
   trackingApi: DefaultApi;
   uiSessionId: string;
 
@@ -415,6 +424,12 @@ export class VviinnVprWidget implements ComponentInterface {
     this.updatingAllCards = false;
   }
 
+  @Listen("vviinnFiltersChanged")
+  async filtersChanged({ detail }: CustomEvent<RequestFilters>) {
+    this.requestFilters = detail;
+    this.getRecommendations();
+  }
+
   private trackWidgetEvent(action: WidgetAction) {
     if (this.trackingDeactivated) return;
     const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
@@ -490,6 +505,7 @@ export class VviinnVprWidget implements ComponentInterface {
     if (this.productId === undefined || this.token === undefined) return;
     const campaignType =
       this.campaignType.length > 0 ? this.campaignType : "VPR";
+
     const headers = createBearAuthedHeader(this.token);
 
     const body = getRecommendationsBody({
@@ -497,6 +513,7 @@ export class VviinnVprWidget implements ComponentInterface {
       color: this.color,
       excluded: this.excluded,
       campaigns: this.campaigns,
+      filters: this.requestFilters,
     });
 
     const request = pipe(
@@ -527,10 +544,11 @@ export class VviinnVprWidget implements ComponentInterface {
 
   private handleRecommendationsSuccess({
     data,
+    interactions,
   }: SimilarProductsResponse | CrossSellingResponse) {
     this.vviinnResultLoad.emit(this.getBasicEventData());
     this.trackResultEvent("load");
-
+    this.filters = interactions.filters as Filters;
     const { products, sourceProduct } = data;
     this.recommendations = products;
     this.sourceProduct = sourceProduct;
@@ -611,6 +629,11 @@ export class VviinnVprWidget implements ComponentInterface {
               </button>
             ) : null}
           </div>
+
+          <vviinn-filters
+            filters={this.filters}
+            widgetElementId={this.id}
+          ></vviinn-filters>
 
           {this.recommendations.length > 0 &&
             (this.useCarousel ? this.renderCarousel() : this.renderResults())}
