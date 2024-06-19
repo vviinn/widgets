@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.55.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.55.0...v2.55.1) (2024-06-19)
+
+
+### Bug Fixes
+
+* Fix product events for Set widget ([e21707f](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/e21707fb11ca6c97fbdd4057c24e4be5921b1be7))
+
 ## [2.55.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.54.1...v2.55.0) (2024-06-19)
 
 
