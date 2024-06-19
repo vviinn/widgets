@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.55.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.54.1...v2.55.0) (2024-06-19)
+
+
+### Features
+
+* Add discount-label part for Set widget ([01ba9b6](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/01ba9b60f4505eb42abbb7d3db1fa08f6d967635))
+* Add slots for pressed Add to Basket button, Set mode ([cd54e52](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/cd54e524ad3dcbe409ce1c16802c9b1d1e147703))
+
 ### [2.54.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.54.0...v2.54.1) (2024-06-14)
 
 
