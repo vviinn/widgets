@@ -125,7 +125,7 @@ export class VviinnVprWidget implements ComponentInterface {
   /** Switch between carousel modes */
   @Prop() mode: CarouselMode = "continuity";
   /** Campaign type */
-  @Prop() campaignType: CampaignName = "VPR";
+  @Prop() campaignType: CampaignName = this.mode === "set" ? "VCS" : "VPR";
   /** The locale for currency formatting and text localization */
   @Prop() locale: Locale = "de-DE";
   /** Comma-separated list of campaign IDs */
