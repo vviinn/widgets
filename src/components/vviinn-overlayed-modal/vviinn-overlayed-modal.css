@@ -21,7 +21,6 @@ vviinn-modal {
 @media (max-width: 768px) {
   vviinn-modal {
     height: 100vh;
-    height: 100svh;
     margin-top: 64px;
     transform: translateY(100%);
     width: 100vw;

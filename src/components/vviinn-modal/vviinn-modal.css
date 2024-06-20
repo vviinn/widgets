@@ -78,7 +78,7 @@ button:hover {
   }
 
   :host(:not(.first-screen)) .body {
-    padding-bottom: 64px;
+    padding-bottom: 160px;
   }
 
   .title {

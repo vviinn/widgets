@@ -32,7 +32,7 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   overflow-y: auto;
   flex-direction: column;
   justify-content: center;
-  padding: 42px 62px;
+  padding: 40px 62px;
 }
 
 #start-page_block.error {
@@ -301,7 +301,7 @@ vviinn-preloader {
   #start-page_block {
     overflow-y: unset;
     min-height: fit-content;
-    padding: 24px 20px;
+    padding: 24px 20px 20px;
   }
 
   .products-wrapper {
