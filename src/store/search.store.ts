@@ -26,6 +26,7 @@ import { sequenceToEither } from "../utils/either";
 import { imageFormFromFile } from "../Image/form";
 import { checkFileWithExtention, resizeFileTo } from "./file-processing";
 import { imageFromFileTask } from "../Image/fromFile";
+import { RequestFilterItem, ResponseFilterItem } from "../interfaces/search";
 
 const RESIZED_IMAGE_WIDTH = 500;
 const HI_RES_RESIZED_IMAGE_WIDTH = 1024;
@@ -50,6 +51,7 @@ type SearchStore = {
   results: Recommendation[];
   sourceProduct: Recommendation | null;
   filters: SearchSessionFilter[];
+  textSearchFilters: ResponseFilterItem[];
   resetCategoryLink?: Link;
   activeIonLink?: Link;
   cropperHandlers: Handler[];
@@ -78,6 +80,7 @@ const { state, onChange } = createStore<SearchStore>({
   results: [],
   sourceProduct: null,
   filters: [],
+  textSearchFilters: [],
   cropperHandlers: [],
   detectedObjects: [],
   objectDetectionInProgress: false,
@@ -216,12 +219,17 @@ export const uploadFile = (
   );
 };
 
-const uploadText = (query: string) => {
+const uploadText = (query: string, filters?: RequestFilterItem) => {
   state.searchType = "text";
   state.loading = true;
 
   const body = {
     query,
+    ...(filters
+      ? {
+          filters,
+        }
+      : {}),
     ...(state.campaignId.length ? { campaign: state.campaignId } : {}),
   };
 
@@ -242,7 +250,10 @@ const uploadText = (query: string) => {
     TE.fromEither,
     TE.chain((request) => textSearchSessionClient(request)),
     TE.map((sessionResponse) => {
-      state.results = sessionResponse.data?.products ?? [];
+      state.results = sessionResponse?.data.products ?? [];
+      state.textSearchFilters =
+        (sessionResponse?.data?.interactions
+          ?.filters as ResponseFilterItem[]) ?? [];
       state.loading = false;
       return sessionResponse;
     }),
@@ -254,9 +265,10 @@ const uploadText = (query: string) => {
   );
 };
 
-export const processSelectedText = async (query: string) => {
-  return await uploadText(query)();
-};
+export const processSelectedText = async (
+  query: string,
+  filters?: RequestFilterItem
+) => await uploadText(query, filters)();
 
 onChange("activeIonLink", async (newLink: Link) => {
   const link = newLink ? newLink : state.resetCategoryLink;

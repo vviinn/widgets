@@ -9,13 +9,14 @@ import {
   Listen,
   Event,
   EventEmitter,
+  Fragment,
 } from "@stencil/core";
 import * as O from "fp-ts/lib/Option";
 import { v4 as uuidv4 } from "uuid";
 import i18next from "i18next";
 
 import { version } from "../../../package.json";
-import { searchState } from "../../store/search.store";
+import { processSelectedText, searchState } from "../../store/search.store";
 import { state } from "../../store/store";
 import { slotChangeListener } from "../customized-slots";
 import { createTrackingApi } from "../../openApi";
@@ -150,7 +151,7 @@ export class VviinnVpsWidget {
   @State() uploadSource: UploadSource;
   @State() showAspectRatioError = false;
   @State() products: Recommendation[] = [];
-  @State() initialSearchQuery: string = "";
+  @State() searchQuery: string = "";
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -332,6 +333,17 @@ export class VviinnVpsWidget {
     this.showAspectRatioError = isError;
   };
 
+  async componentWillLoad() {
+    await i18next.init({
+      lng: this.locale,
+      fallbackLng: "en",
+      resources,
+    });
+    slotChangeListener(this, this.el);
+    this.vviinnWidgetLoad.emit(this.getBasicEventData());
+    this.trackWidgetEvent("load");
+  }
+
   componentDidLoad() {
     const slots = this.el.querySelectorAll("[slot]");
     this.globalSlotsChanged.emit({
@@ -354,6 +366,16 @@ export class VviinnVpsWidget {
       widgetId: this.buttonElementId ?? this.id,
       widgetVersion: version,
     };
+  };
+
+  private async handleTextSearch() {
+    if (!this.searchQuery) return;
+    await processSelectedText(this.searchQuery);
+    this.slidePosition = 1;
+  }
+
+  private setSearchQuery = (query: string) => {
+    this.searchQuery = query;
   };
 
   @Watch("active")
@@ -483,10 +505,9 @@ export class VviinnVpsWidget {
     this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
   }
 
-  @Listen("vviinnTextSearchFinished")
-  async trackTextSearchFinished({ detail }: CustomEvent<string>) {
-    this.initialSearchQuery = detail;
-    this.slidePosition = 1;
+  @Listen("vviinnTextSearchFilterSelected")
+  trackTextSearchFilterSelected({ detail }) {
+    processSelectedText(this.searchQuery, detail);
   }
 
   connectedCallback() {
@@ -509,17 +530,6 @@ export class VviinnVpsWidget {
     this.uiSessionId = uuidv4();
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
     this.id = this.el.id;
-  }
-
-  async componentWillLoad() {
-    await i18next.init({
-      lng: this.locale,
-      fallbackLng: "en",
-      resources,
-    });
-    slotChangeListener(this, this.el);
-    this.vviinnWidgetLoad.emit(this.getBasicEventData());
-    this.trackWidgetEvent("load");
   }
 
   private trackWidgetEvent(action: WidgetAction) {
@@ -719,11 +729,13 @@ export class VviinnVpsWidget {
     searchState.searchArea = O.none;
     searchState.results = [];
     searchState.filters = [];
+    searchState.textSearchFilters = [];
     searchState.detectedObjects = [];
     searchState.rectangleSearchForm = undefined;
     searchState.loading = false;
     searchState.serverError = false;
     searchState.searchType = undefined;
+    this.searchQuery = "";
     this.wrongImageFormat = false;
     this.resetScroll("results-block");
     this.stopStreamTracks();
@@ -819,12 +831,20 @@ export class VviinnVpsWidget {
                     />
                   </div>
 
-                  {!this.haveErrors() && <vviinn-teaser />}
                   {!this.haveErrors() && (
-                    <div class="buttons-group">{this.renderButtons()}</div>
-                  )}
-                  {this.textSearchShow && !this.haveErrors() && (
-                    <vviinn-text-search clearSearchQuery={true} />
+                    <Fragment>
+                      <vviinn-teaser />
+
+                      <div class="buttons-group">{this.renderButtons()}</div>
+
+                      {this.textSearchShow && (
+                        <vviinn-text-search
+                          searchQuery={this.searchQuery}
+                          setSearchQuery={this.setSearchQuery}
+                          handleTextSearch={this.handleTextSearch.bind(this)}
+                        />
+                      )}
+                    </Fragment>
                   )}
                 </div>
                 <vviinn-privacy-badge
@@ -843,7 +863,7 @@ export class VviinnVpsWidget {
               }}
             >
               {this.isResultSlide() && searchState.searchType === "image" && (
-                <div class="image-wrapper">
+                <div class="source-wrapper image-wrapper">
                   <vviinn-image-view
                     basicEventData={this.getBasicEventData()}
                     setShowAspectRatioError={this.setShowAspectRatioError}
@@ -867,15 +887,31 @@ export class VviinnVpsWidget {
                 </div>
               )}
 
-              {this.textSearchShow &&
-                this.isResultSlide() &&
-                searchState.searchType === "text" && (
-                  <div class="text-search-wrapper">
-                    <vviinn-text-search
-                      initialSearchQuery={this.initialSearchQuery}
-                    />
+              {this.isResultSlide() && searchState.searchType === "text" && (
+                <div class="source-wrapper text-search-wrapper">
+                  <vviinn-text-search
+                    searchQuery={this.searchQuery}
+                    setSearchQuery={this.setSearchQuery}
+                    handleTextSearch={this.handleTextSearch.bind(this)}
+                  />
+
+                  <div
+                    class={{
+                      "filters-wrapper": true,
+                      hidden: this.showAspectRatioError,
+                    }}
+                  >
+                    <div class="filters">
+                      {searchState.textSearchFilters.map((filter) => (
+                        <search-filters
+                          textSearchFiltersGroup={filter}
+                          basicEventData={this.getBasicEventData()}
+                        />
+                      ))}
+                    </div>
                   </div>
-                )}
+                </div>
+              )}
 
               <div id="results-block" class="products-wrapper">
                 <div

@@ -7,15 +7,18 @@ import {
   Prop,
   Listen,
   Watch,
+  Event,
+  EventEmitter,
 } from "@stencil/core";
 import { chunksOf } from "fp-ts/lib/Array";
 import { pipe } from "fp-ts/lib/function";
 import { Recommendation } from "../../recommendation/recommendation";
 import { ChevronIcon } from "../vviinn-icons";
-import { CampaignTypeId } from "../../campaign/Campaign";
+import { CampaignTypeId, campaignTypeNames } from "../../campaign/Campaign";
 import {
   CrossSellingClickEvent,
   ProductCardEvent,
+  ProductCardEventData,
 } from "../../recommendation/events";
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
 import {
@@ -68,10 +71,18 @@ export class VviinnCarousel {
   @Prop() addToBasketShow: boolean;
   @Prop() updatingAllCards: boolean;
   @Prop() updateButtonLocation: UpdateButtonLocation;
+  @Prop() replaceSlotsContent: () => void;
 
   @Prop() currencySign: string;
   @Prop() pricePrefix: string = "";
   @Prop() locale: Locale;
+
+  /** Event fires ones when recommendation rendered on page */
+  @Event({ bubbles: true })
+  vviinnProductLoad: EventEmitter<ProductCardEventData>;
+  /** Event fires ones when recommendation appears on the viewport */
+  @Event({ bubbles: true })
+  vviinnProductView: EventEmitter<ProductCardEventData>;
 
   private columns: number = 0;
   private resizeObserver: ResizeObserver = new ResizeObserver(() =>
@@ -83,6 +94,20 @@ export class VviinnCarousel {
   private isContinuityMode: boolean;
   private defaultAnimationInterval: number = 2000;
   private sourceProduct?: Recommendation;
+
+  private getProductData(recommendation, productRank): ProductCardEventData {
+    return {
+      productId: recommendation.productId,
+      productRank,
+      productName: recommendation.productTitle,
+      productType: recommendation.productType,
+      widgetType: "VPR",
+      campaignTypeId: this.campaignTypeId,
+      campaignTypeName: campaignTypeNames[this.campaignTypeId],
+      widgetId: this.widgetElementId,
+      widgetVersion: this.widgetVersion,
+    };
+  }
 
   private mutationObserver = new MutationObserver(() =>
     this.cloneSlottedContent()
@@ -110,8 +135,15 @@ export class VviinnCarousel {
     const newCrossSellingRecommendations = this.crossSellingRecommendations;
 
     if (recommendationIndex + step < this.recommendations.length) {
-      newCrossSellingRecommendations[crossSellingIndex] =
+      const newRecommendation =
         this.recommendations[recommendationIndex + step];
+      newCrossSellingRecommendations[crossSellingIndex] = newRecommendation;
+
+      const productData = this.getProductData(
+        newRecommendation,
+        recommendationIndex + step
+      );
+      this.vviinnProductLoad.emit(productData);
 
       this.crossSellingRecommendations = [...newCrossSellingRecommendations];
 
@@ -126,6 +158,7 @@ export class VviinnCarousel {
         if (recommendationIndex + step * 2 <= this.recommendations.length - 1) {
           button?.classList.remove("hidden");
         }
+        this.vviinnProductView.emit(productData);
         clearTimeout(animationTimer);
       }, animationInterval);
     }
@@ -159,6 +192,10 @@ export class VviinnCarousel {
   disconnectedCallback() {
     this.resizeObserver.disconnect();
     window.removeEventListener("resize", this.handleWindowResize);
+  }
+
+  componentDidUpdate() {
+    this.replaceSlotsContent();
   }
 
   componentDidLoad() {

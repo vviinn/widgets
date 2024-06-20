@@ -59,11 +59,14 @@ import { generateRandomNumber } from "../../utils/number";
  * @part price-prefix - renders before price-amount. Can be set with "price-prefix" property or inherited from parent component.
  * @part title - Product title
  * @part basket-button - Add to Basket button.
- * @part update-button-item - Update button in product card (Set mode).
+ * @part update-button-item - Update button in Product Card (Set mode).
+ * @part discount-label - Discount label in Product Card (Set mode).
  *
+ * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
  * @slot vviinn-basket-button-icon - Icon of Add to Basket button.
- * @slot vviinn-update-button-icon - Icon of update button (Set mode).
+ * @slot vviinn-basket-button-text-pressed - Text of pressed Add to Basket button (Set mode).
+ * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button (Set mode).
  */
 @Component({
   tag: "vviinn-product-card",
@@ -281,7 +284,7 @@ export class VviinnProductCard {
           animated: this.isTransitioning,
           "set-mode": this.isSetMode,
         }}
-        exportparts="brand, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, basket-button, update-button-item"
+        exportparts="brand, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, discount-label, title, basket-button, update-button-item"
       >
         <Linked deeplink={this.deeplink} part="image-link">
           {this.renderImage()}
@@ -313,7 +316,10 @@ export class VviinnProductCard {
               locale={this.locale}
             />
             {this.isSetMode && !this.appliedDiscountPercentage && (
-              <div class="discount-label">{`-${this.currentDiscountPercentage}%`}</div>
+              <div
+                class="discount-label"
+                part="discount-label"
+              >{`-${this.currentDiscountPercentage}%`}</div>
             )}
           </Fragment>
         )}
@@ -325,10 +331,10 @@ export class VviinnProductCard {
             <button
               class={{
                 "basket-button": true,
+                "basket-button--hidden": this.isTransitioning,
                 "basket-button-grid": this.isGridMode || this.isSetMode,
                 "basket-button-continuity ": this.isContinuityMode,
                 "applied-discount": !!this.appliedDiscountPercentage,
-                hidden: this.isTransitioning,
               }}
               part="basket-button"
               onClick={() => {
@@ -341,29 +347,40 @@ export class VviinnProductCard {
               {this.isSetMode ? (
                 <Fragment>
                   {this.appliedDiscountPercentage ? (
-                    <CheckCircleIcon />
+                    <span>
+                      <slot name="vviinn-basket-button-icon-pressed">
+                        <CheckCircleIcon />
+                      </slot>
+                    </span>
                   ) : (
-                    <slot name="vviinn-basket-button-icon">
-                      <BasketIcon />
-                    </slot>
+                    <span>
+                      <slot name="vviinn-basket-button-icon">
+                        <BasketIcon />
+                      </slot>
+                    </span>
                   )}
 
-                  <span>
-                    {this.appliedDiscountPercentage ? (
-                      `${this.appliedDiscountPercentage}% ${i18next.t(
-                        "setMode.appliedDiscountText"
-                      )}`
-                    ) : (
-                      <slot name="vviinn-basket-button-text">
-                        {i18next.t("setMode.basketButtonText")}
-                      </slot>
-                    )}
-                  </span>
+                  {this.appliedDiscountPercentage ? (
+                    <Fragment>
+                      <span>{this.appliedDiscountPercentage}% </span>
+                      <span>
+                        <slot name="vviinn-basket-button-text-pressed">
+                          {i18next.t("setMode.appliedDiscountText")}
+                        </slot>
+                      </span>
+                    </Fragment>
+                  ) : (
+                    <slot name="vviinn-basket-button-text">
+                      {i18next.t("setMode.basketButtonText")}
+                    </slot>
+                  )}
                 </Fragment>
               ) : (
-                <slot name="vviinn-basket-button-text">
-                  <span>{i18next.t("basketButtonText")}</span>
-                </slot>
+                <span>
+                  <slot name="vviinn-basket-button-text">
+                    {i18next.t("basketButtonText")}
+                  </slot>
+                </span>
               )}
             </button>
           </Fragment>

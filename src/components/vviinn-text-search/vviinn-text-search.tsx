@@ -1,14 +1,5 @@
-import {
-  Component,
-  Host,
-  Prop,
-  h,
-  State,
-  Event,
-  EventEmitter,
-  Element,
-} from "@stencil/core";
-import { processSelectedText, searchState } from "../../store/search.store";
+import { Component, Host, Prop, h, Element } from "@stencil/core";
+import { searchState } from "../../store/search.store";
 import { TextSearchIcon } from "../vviinn-icons";
 import { slotChangeListener } from "../customized-slots";
 import i18next from "i18next";
@@ -25,36 +16,21 @@ import i18next from "i18next";
 export class VviinnTextSearch {
   @Element() el: HTMLElement;
 
-  @Prop() clearSearchQuery: boolean = false;
-  @Prop() initialSearchQuery: string = "";
-
-  @State() searchQuery: string = this.initialSearchQuery;
-
-  /** @internal */
-  @Event() vviinnTextSearchFinished: EventEmitter;
+  @Prop() searchQuery: string;
+  @Prop() setSearchQuery: (query: string) => void;
+  @Prop() handleTextSearch: () => void;
 
   componentWillLoad() {
     slotChangeListener(this, this.el);
   }
 
   handleInputChange(event: Event) {
-    this.searchQuery = (event.target as HTMLInputElement).value;
+    this.setSearchQuery((event.target as HTMLInputElement).value);
   }
 
   private handleKeyPress(event: KeyboardEvent) {
     if (event.key === "Enter") {
-      this.handleSearch();
-    }
-  }
-
-  private async handleSearch() {
-    if (!this.searchQuery) return;
-
-    await processSelectedText(this.searchQuery);
-    this.vviinnTextSearchFinished.emit(this.searchQuery);
-
-    if (this.clearSearchQuery) {
-      this.searchQuery = "";
+      this.handleTextSearch();
     }
   }
 
@@ -72,7 +48,7 @@ export class VviinnTextSearch {
         />
         <button
           class="text-search-button"
-          onClick={() => this.handleSearch()}
+          onClick={() => this.handleTextSearch()}
           disabled={searchState.loading}
         >
           {searchState.loading && searchState.searchType === "text" ? (

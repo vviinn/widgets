@@ -2,6 +2,43 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.55.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.55.0...v2.55.1) (2024-06-19)
+
+
+### Bug Fixes
+
+* Fix product events for Set widget ([e21707f](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/e21707fb11ca6c97fbdd4057c24e4be5921b1be7))
+
+## [2.55.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.54.1...v2.55.0) (2024-06-19)
+
+
+### Features
+
+* Add discount-label part for Set widget ([01ba9b6](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/01ba9b60f4505eb42abbb7d3db1fa08f6d967635))
+* Add slots for pressed Add to Basket button, Set mode ([cd54e52](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/cd54e524ad3dcbe409ce1c16802c9b1d1e147703))
+
+### [2.54.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.54.0...v2.54.1) (2024-06-14)
+
+
+### Bug Fixes
+
+* Fix scripts for building the project ([c911c86](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/c911c8685442cfaef84446bdafca79d3806f6ab3))
+
+## [2.54.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.53.0...v2.54.0) (2024-06-13)
+
+
+### Features
+
+* Migrate recommendations to the new endpoint ([ebc2d98](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/ebc2d98cf546e5b3e6c6a1f0caaaf6c49a19a6c6))
+* Use source product in the Set widget ([3f85b56](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/3f85b56a489c2547878a2dd32071f0bbc009fd69))
+
+## [2.53.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.52.4...v2.53.0) (2024-06-13)
+
+
+### Features
+
+* Filters functionality for text search ([59075bf](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/59075bf95186540e1dedb262d7974d23890fc8ae))
+
 ### [2.52.4](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.52.3...v2.52.4) (2024-06-13)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "vviinn-widgets",
-  "version": "2.52.4",
+  "version": "2.55.1",
   "description": "vviinn web components",
   "main": "./dist/index.cjs.js",
   "module": "./dist/index.js",
@@ -21,7 +21,7 @@
     "build.docs": "stencil build --docs",
     "build_interfaces": "node ./scripts/generate-interfaces.js ./src/interfaces/generated.ts",
     "generate": "stencil generate",
-    "start": "ENV=local stencil build --dev --watch --serve --docs",
+    "start": "npm run build_interfaces && ENV=local stencil build --dev --watch --serve --docs",
     "test": "stencil test --spec",
     "test.e2e": "stencil test --e2e",
     "test.watch": "stencil test --spec --e2e --watchAll",

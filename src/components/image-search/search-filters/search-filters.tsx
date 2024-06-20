@@ -17,8 +17,13 @@ import {
 } from "../../../recommendation/events";
 import { parseFilters } from "../../../filters/parseFilters";
 import { FilterKind } from "vviinn-tracking-client-ts";
+import {
+  RequestFilterItem,
+  ResponseFilterItem,
+} from "../../../interfaces/search";
 
-const FILTERS_COUNT: number = 5;
+const FILTERS_COUNT: number = 4;
+type TextSearchFilterValue = ResponseFilterItem["values"][0];
 
 @Component({
   tag: "search-filters",
@@ -29,19 +34,21 @@ export class SearchFilters {
   @Element() el: HTMLElement;
 
   @Prop() filter: SearchSessionFilter | null = null;
+  @Prop() textSearchFiltersGroup: ResponseFilterItem | null = null;
   @Prop() basicEventData: BasicEventData;
 
   @State() selectedFilter = "";
   @State() hideFilters: boolean = true;
 
   @Event() vviinnSelectFilter: EventEmitter<SelectFilterEventData>;
+  @Event() vviinnTextSearchFilterSelected: EventEmitter<RequestFilterItem[]>;
 
-  private filterType: string = this.filter.name;
+  private filterType: string =
+    this.filter?.name ?? this.textSearchFiltersGroup?.column;
 
   private isCategoriesFilterType(): boolean {
     return this.filterType === "categories";
   }
-
   private getFilterKind(): FilterKind {
     return this.isCategoriesFilterType()
       ? "category"
@@ -85,62 +92,154 @@ export class SearchFilters {
     this.handleFilterSelection(f);
   }
 
+  private getSelectedTextSearchFilters = (): RequestFilterItem[] =>
+    searchState.textSearchFilters
+      .filter(({ values }: ResponseFilterItem) =>
+        values?.find(({ selected }) => selected)
+      )
+      .map(({ column, values }: ResponseFilterItem) => {
+        return {
+          column: column,
+          values: values.filter((v) => v.selected).map((v) => v.value),
+        };
+      }) as RequestFilterItem[];
+
   private isFilterSelected(filterLink: Link): boolean {
     return this.isCategoriesFilterType()
       ? this.selectedFilter === parseFilters(filterLink, "categories")
       : this.selectedFilter === filterLink.name;
   }
 
+  private getTextSearchFilterRequestValue = (
+    filter: TextSearchFilterValue
+  ): RequestFilterItem => {
+    return {
+      column: this.textSearchFiltersGroup.column,
+      values: [filter.value.toString()],
+    };
+  };
+
+  private handleTextSearchEnter(
+    ev: KeyboardEvent,
+    filter: TextSearchFilterValue
+  ) {
+    if (ev.key !== "Enter") return;
+    this.handleTextSearchFilterSelection(filter);
+  }
+
+  private handleTextSearchFilterSelection(filter: TextSearchFilterValue) {
+    let parsedFilters: RequestFilterItem[];
+
+    const selectedFilters = this.getSelectedTextSearchFilters();
+    const newFilter = this.getTextSearchFilterRequestValue(filter);
+    const isNewFilterSelected = filter.selected;
+    const isSameColumnSelected = selectedFilters.some(
+      ({ column }) => column === newFilter.column
+    );
+
+    if (isNewFilterSelected) {
+      parsedFilters = selectedFilters.filter(({ column }) => {
+        return column !== newFilter.column;
+      });
+    } else if (isSameColumnSelected) {
+      parsedFilters = selectedFilters.map((f) => {
+        return f.column === newFilter.column ? newFilter : f;
+      });
+    } else {
+      parsedFilters = [...selectedFilters, newFilter];
+    }
+
+    this.vviinnTextSearchFilterSelected.emit(parsedFilters);
+  }
+
   render() {
-    if (!this.filter) return null;
-    const { name, filters } = this.filter;
+    const textSearchFilters = this.textSearchFiltersGroup?.values || [];
+    const filters = this.filter?.filters || [];
     return (
       <Host exportparts="filter, show-more-filters">
         <div
           class={{
             filters: true,
-            "no-scrollbar-mobile": this.isCategoriesFilterType(),
-            "no-scrollbar": !this.isCategoriesFilterType(),
+            "no-scrollbar-mobile":
+              this.isCategoriesFilterType() ||
+              this.textSearchFiltersGroup !== null,
+            "no-scrollbar":
+              !this.isCategoriesFilterType() &&
+              this.textSearchFiltersGroup === null,
           }}
         >
-          {filters
-            .filter((_, i) => (this.hideFilters ? i < FILTERS_COUNT : true))
-            .map((filter, index) => {
-              const filterActive =
-                name === "categories"
-                  ? this.selectedFilter === parseFilters(filter, "categories")
-                  : this.selectedFilter === filter.name;
-              return (
-                <div
-                  role="button"
-                  tabindex="0"
-                  key={index}
-                  part={filterActive ? "filter active" : "filter"}
-                  class={{
-                    filter: true,
-                    active: filterActive,
-                  }}
-                  style={{ "animation-delay": `${index * 10}ms` }}
-                  onPointerUp={(ev) => {
-                    if (searchState.loading) return;
-                    ev.stopPropagation();
-                    this.handleFilterSelection(filter);
-                  }}
-                  onKeyPress={(ev) => {
-                    if (searchState.loading) return;
-                    this.handleEnter(ev, filter);
-                  }}
-                >
-                  {filter.name}
-                </div>
-              );
-            })}
+          {!!filters.length &&
+            filters
+              .filter((_, i) => (this.hideFilters ? i < FILTERS_COUNT : true))
+              .map((filter, index) => {
+                const filterActive =
+                  this.filter.name === "categories"
+                    ? this.selectedFilter === parseFilters(filter, "categories")
+                    : this.selectedFilter === filter.name;
+                return (
+                  <div
+                    role="button"
+                    tabindex="0"
+                    key={index}
+                    part={filterActive ? "filter active" : "filter"}
+                    class={{
+                      filter: true,
+                      active: filterActive,
+                    }}
+                    style={{ "animation-delay": `${index * 10}ms` }}
+                    onPointerUp={(ev) => {
+                      if (searchState.loading) return;
+                      ev.stopPropagation();
+                      this.handleFilterSelection(filter);
+                    }}
+                    onKeyPress={(ev) => {
+                      if (searchState.loading) return;
+                      this.handleEnter(ev, filter);
+                    }}
+                  >
+                    {filter.name}
+                  </div>
+                );
+              })}
+
+          {!!textSearchFilters.length &&
+            textSearchFilters
+              .filter((_, i) => (this.hideFilters ? i < FILTERS_COUNT : true))
+              .map((filter, index) => {
+                const { label, selected } = filter;
+                return (
+                  <div
+                    role="button"
+                    tabindex="0"
+                    key={index}
+                    part={selected ? "filter active" : "filter"}
+                    class={{
+                      filter: true,
+                      active: selected,
+                    }}
+                    style={{ "animation-delay": `${index * 10}ms` }}
+                    onPointerUp={(ev) => {
+                      if (searchState.loading) return;
+                      ev.stopPropagation();
+                      this.handleTextSearchFilterSelection(filter);
+                    }}
+                    onKeyPress={(ev) => {
+                      if (searchState.loading) return;
+                      this.handleTextSearchEnter(ev, filter);
+                    }}
+                  >
+                    {label}
+                  </div>
+                );
+              })}
 
           {this.hideFilters && (
             <div
               class={{
                 "show-more": true,
-                hidden: filters.length <= FILTERS_COUNT,
+                hidden:
+                  filters.length <= FILTERS_COUNT &&
+                  textSearchFilters.length <= FILTERS_COUNT,
                 active: !this.hideFilters,
               }}
               role="button"

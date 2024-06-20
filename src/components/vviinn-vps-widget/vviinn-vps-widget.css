@@ -123,9 +123,36 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   box-sizing: border-box;
 }
 
-.results-page .text-search-wrapper {
+vviinn-empty-results {
+  width: 280px;
+  align-self: center;
+  justify-self: center;
+}
+
+.source-wrapper {
+  display: grid;
+  grid-template-rows: min-content 1fr;
+  min-width: 100%;
+}
+
+.results-page .source-wrapper.text-search-wrapper {
+  padding: 24px 24px 0 24px;
+}
+
+.filters-wrapper {
+  margin-top: 24px;
+  overflow-x: auto;
+  transform: translateX(-24px);
+  min-width: calc(100% + 48px);
+}
+
+.products-wrapper {
+  display: grid;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: unset;
+  position: relative;
   width: 100%;
-  padding: 24px;
 }
 
 .products {
@@ -143,34 +170,6 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
 
 .products.hidden {
   display: none;
-}
-
-vviinn-empty-results {
-  width: 280px;
-  align-self: center;
-  justify-self: center;
-}
-
-.products-wrapper {
-  display: grid;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: unset;
-  position: relative;
-  width: 100%;
-}
-
-.image-wrapper {
-  display: grid;
-  grid-template-rows: min-content 1fr;
-  min-width: 100%;
-}
-
-.filters-wrapper {
-  margin-top: 24px;
-  overflow-x: auto;
-  transform: translateX(-24px);
-  min-width: calc(100% + 48px);
 }
 
 vviinn-product-card {
@@ -279,13 +278,19 @@ vviinn-preloader {
     padding: 12px 24px 24px;
   }
 
-  .image-wrapper {
+  .source-wrapper {
+    grid-template-rows: min-content auto;
+    width: 100%;
     padding: 0;
   }
 
-  .filters-wrapper {
+  .source-wrapper.image-wrapper .filters-wrapper {
     padding-left: 24px;
-    min-width: calc(100% + 40px);
+    min-width: 100%;
+  }
+
+  .image {
+    margin-bottom: 8px;
   }
 
   .results-page {
@@ -297,15 +302,6 @@ vviinn-preloader {
     overflow-y: unset;
     min-height: fit-content;
     padding: 24px 20px;
-  }
-
-  .image {
-    margin-bottom: 8px;
-  }
-
-  .image-wrapper {
-    grid-template-rows: min-content auto;
-    width: 100%;
   }
 
   .products-wrapper {
@@ -345,10 +341,6 @@ vviinn-preloader {
 }
 
 @media (max-width: 380px) {
-  .filters-wrapper {
-    padding-left: 24px;
-  }
-
   .products {
     grid-gap: 24px 10px;
   }
