@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.55.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.55.1...v2.55.2) (2024-06-20)
+
+
+### Bug Fixes
+
+* Fix starting page layout of Search Widget ([1ee0b20](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/1ee0b20ba021f94227757611954266b2d8d4dea1))
+
 ### [2.55.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.55.0...v2.55.1) (2024-06-19)
 
 
