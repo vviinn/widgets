@@ -151,6 +151,8 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() addToBasketShow: boolean = false;
   /** Location of Update button for Set mode */
   @Prop() updateButtonLocation: UpdateButtonLocation = "topAndItem";
+  /** Show filters on top */
+  @Prop() showFilters: boolean = false;
 
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
@@ -630,10 +632,12 @@ export class VviinnVprWidget implements ComponentInterface {
             ) : null}
           </div>
 
-          <vviinn-filters
-            filters={this.filters}
-            widgetElementId={this.id}
-          ></vviinn-filters>
+          {this.showFilters && (
+            <vviinn-filters
+              filters={this.filters}
+              widgetElementId={this.id}
+            ></vviinn-filters>
+          )}
 
           {this.recommendations.length > 0 &&
             (this.useCarousel ? this.renderCarousel() : this.renderResults())}

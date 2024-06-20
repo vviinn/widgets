@@ -119,6 +119,7 @@
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 98;
 }
+
 .filters-modal.open {
   display: block;
 }
@@ -128,9 +129,18 @@
   top: 0;
   bottom: 0;
   right: 0;
-  width: 300px;
+  width: 420px;
   background-color: #ffffff;
   z-index: 99;
+  border-radius: 32px 0px 0px 32px;
+}
+
+@media (max-width: 768px) {
+  .filters-modal-wrapper {
+    width: 100%;
+    top: 20%;
+    border-radius: 32px 32px 0px 0px;
+  }
 }
 
 .filters-modal-header {
@@ -184,4 +194,71 @@
   top: 15px;
   cursor: pointer;
   background: none;
+}
+
+.filters-more-modal-button {
+  background: none;
+  display: block;
+  border: none;
+  cursor: pointer;
+}
+
+.filters-more-modal-button.active {
+  color: var(--color-primary-system);
+}
+
+.filters-modal-actions {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--gray-10);
+  padding: 24px;
+}
+
+.filters-modal-apply {
+  color: var(--text-color-text-inverse);
+  text-align: center;
+  font-family: Inter;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px;
+
+  display: flex;
+  width: 100%;
+  padding: 12px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+  border-radius: var(--radius-radius-md);
+  background: var(--button-color-button-primary);
+
+  cursor: pointer;
+  border: none;
+}
+
+.filters-modal-apply:disabled {
+  background: var(--button-color-button-disabled);
+  color: var(--text-color-text-disabled);
+}
+
+.filters-modal-reset {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: block;
+  text-align: center;
+  width: 100%;
+  margin-top: 20px;
+
+  color: var(--text-color-text-secondary);
+  text-align: center;
+  font-family: var(--font-family);
+  font-size: var(--font-size-body);
+  font-style: normal;
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-body);
+  letter-spacing: var(--letter-spacing-default);
 }
