@@ -253,7 +253,7 @@ const uploadText = (query: string, filters?: RequestFilterItem) => {
       state.results = sessionResponse?.data.products ?? [];
       state.textSearchFilters =
         (sessionResponse?.data?.interactions
-          ?.filters as ResponseFilterItem[]) ?? [];
+          ?.dynamicFilters as ResponseFilterItem[]) ?? [];
       state.loading = false;
       return sessionResponse;
     }),

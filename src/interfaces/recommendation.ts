@@ -9,4 +9,10 @@ export interface Interfaces {
 
   CrossSellingRequest: components["schemas"]["cross-selling-request"];
   CrossSellingResponse: components["schemas"]["cross-selling-response"];
+
+  StaticFilters: components["schemas"]["request-static-filters"];
 }
+
+export type SimilarProductsRequest = Interfaces["SimilarProductsRequest"];
+export type CrossSellingRequest = Interfaces["CrossSellingRequest"];
+export type StaticFilters = Interfaces["StaticFilters"];
