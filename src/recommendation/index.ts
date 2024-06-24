@@ -1,7 +1,7 @@
 import {
   CrossSellingRequest,
   SimilarProductsRequest,
-  StaticFilters,
+  RequestStaticFilters,
 } from "../interfaces/recommendation";
 
 type GetRecommendationsBodyProps = {
@@ -36,7 +36,7 @@ export const getRecommendationsBody = ({
 }: GetRecommendationsBodyProps):
   | SimilarProductsRequest
   | CrossSellingRequest => {
-  let staticFilters: StaticFilters = {
+  const staticFilters: RequestStaticFilters = {
     ...(color.length ? { color } : {}),
     ...(excluded.length ? { excluded: parseExcluded(excluded) } : {}),
   };
