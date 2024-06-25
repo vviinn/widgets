@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.55.3](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.55.2...v2.55.3) (2024-06-25)
+
+
+### Bug Fixes
+
+* Show no-result-text when receiving empty recommendations ([d9dcc07](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/d9dcc0753729cf8c89907f5cace3fa3fb36ab26b))
+
 ### [2.55.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.55.1...v2.55.2) (2024-06-20)
 
 

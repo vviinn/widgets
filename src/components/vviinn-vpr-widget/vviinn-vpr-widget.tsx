@@ -622,7 +622,7 @@ export class VviinnVprWidget implements ComponentInterface {
           {this.recommendations.length > 0 &&
             (this.useCarousel ? this.renderCarousel() : this.renderResults())}
 
-          {this.recommendations.length === 0 && this.hasErrorOnLoad && (
+          {(this.recommendations.length === 0 || this.hasErrorOnLoad) && (
             <p class="no-result-text">
               {this.noResultText.length
                 ? this.noResultText
