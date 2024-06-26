@@ -495,6 +495,7 @@ export class VviinnVprWidget implements ComponentInterface {
 
   private async getRecommendations() {
     if (this.productId === undefined || this.token === undefined) return;
+    searchState.loading = true;
     const campaignType =
       this.campaignType.length > 0 ? this.campaignType : "VPR";
     const headers = createBearAuthedHeader(this.token);
@@ -522,8 +523,12 @@ export class VviinnVprWidget implements ComponentInterface {
           this.handleError(error);
           this.vviinnNoResult.emit(this.getBasicEventData());
           this.vviinnRecommendationsLoaded.emit();
+          searchState.loading = false;
         },
-        (data) => this.handleRecommendationsSuccess(data)
+        (data) => {
+          this.handleRecommendationsSuccess(data);
+          searchState.loading = false;
+        }
       )
     );
   }
@@ -622,13 +627,14 @@ export class VviinnVprWidget implements ComponentInterface {
           {this.recommendations.length > 0 &&
             (this.useCarousel ? this.renderCarousel() : this.renderResults())}
 
-          {(this.recommendations.length === 0 || this.hasErrorOnLoad) && (
-            <p class="no-result-text">
-              {this.noResultText.length
-                ? this.noResultText
-                : i18next.t("noResultText")}
-            </p>
-          )}
+          {(this.recommendations.length === 0 || this.hasErrorOnLoad) &&
+            !searchState.loading && (
+              <p class="no-result-text">
+                {this.noResultText.length
+                  ? this.noResultText
+                  : i18next.t("noResultText")}
+              </p>
+            )}
         </Fragment>
       </Host>
     );
