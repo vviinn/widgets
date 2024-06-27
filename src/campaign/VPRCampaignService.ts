@@ -3,10 +3,10 @@ import { apiPost } from "../network/apiClient";
 
 type SimilarProductsRequest = Interfaces["SimilarProductsRequest"];
 export type SimilarProductsResponse = Interfaces["SimilarProductsResponse"];
-export type Filters = Interfaces["Filters"];
-export type Filter = Interfaces["Filter"];
-export type FilterValue = Interfaces["FilterValue"];
-export type RequestFilters = Interfaces["RequestFilters"];
+export type DynamicFilters = Interfaces["DynamicFilters"];
+export type DynamicFilter = Interfaces["DynamicFilter"];
+export type DynamicFilterValue = Interfaces["DynamicFilterValue"];
+export type RequestDynamicFilters = Interfaces["RequestDynamicFilters"];
 
 export const getVPRRecommendations =
   (body: SimilarProductsRequest) => (options: RequestInit) => {

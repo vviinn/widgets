@@ -9,10 +9,10 @@ import {
   EventEmitter,
 } from "@stencil/core";
 import {
-  Filters,
-  Filter,
-  FilterValue,
-  RequestFilters,
+  DynamicFilters,
+  DynamicFilter,
+  DynamicFilterValue,
+  RequestDynamicFilters,
 } from "../../campaign/VPRCampaignService";
 import { FiltersIcon, NewCloseIcon } from "../vviinn-icons";
 
@@ -26,23 +26,23 @@ import { getFilterOptions } from "./helpers";
   shadow: true,
 })
 export class VviinnFilters {
-  @Prop() filters: Filters = [];
+  @Prop() filters: DynamicFilters = [];
 
   /** @internal */
   @Prop() widgetElementId?: string;
 
-  @State() seletedFilter: Filter;
-  @State() requestFilters: RequestFilters = [];
-  @State() requestFiltersMore: RequestFilters = [];
+  @State() seletedFilter: DynamicFilter;
+  @State() requestFilters: RequestDynamicFilters = [];
+  @State() requestFiltersMore: RequestDynamicFilters = [];
   @State() showMore: boolean = false;
   @State() selectedMoreOptions: string[] = [];
 
   /** Event fires when user click on Add to Basket button */
   @Event({ bubbles: true })
-  vviinnFiltersChanged: EventEmitter<RequestFilters>;
+  vviinnFiltersChanged: EventEmitter<RequestDynamicFilters>;
 
-  private mainFilters: Filters = [];
-  private moreFilters: Filters = [];
+  private mainFilters: DynamicFilters = [];
+  private moreFilters: DynamicFilters = [];
 
   connectedCallback() {
     this.setMainAndMoreFilters();
@@ -54,14 +54,14 @@ export class VviinnFilters {
     this.moreFilters = this.filters.slice(4);
   }
 
-  private handleMainFilterSelection(filter: Filter) {
+  private handleMainFilterSelection(filter: DynamicFilter) {
     this.seletedFilter = filter;
   }
 
   private subFilterSelection(
-    filters: RequestFilters,
-    seletedFilter: Filter,
-    filterValue: FilterValue
+    filters: RequestDynamicFilters,
+    seletedFilter: DynamicFilter,
+    filterValue: DynamicFilterValue
   ) {
     const index = filters.findIndex(
       (filter) => filter.column === seletedFilter.column
@@ -81,14 +81,14 @@ export class VviinnFilters {
     return filters;
   }
 
-  private emitTequestFiltersMore(requestFilters: RequestFilters) {
+  private emitTequestFiltersMore(requestFilters: RequestDynamicFilters) {
     this.vviinnFiltersChanged.emit(requestFilters);
     this.showMore = false;
   }
 
   private handleSubFilterSelection(
-    filterValue: FilterValue,
-    seletedFilter: Filter,
+    filterValue: DynamicFilterValue,
+    seletedFilter: DynamicFilter,
     type: "main" | "more" = "main"
   ) {
     if (type === "main") {
@@ -110,15 +110,15 @@ export class VviinnFilters {
     }
   }
 
-  private showActiveOnMainButton({ column }: Filter) {
+  private showActiveOnMainButton({ column }: DynamicFilter) {
     if (!this.seletedFilter) return "";
 
     return this.seletedFilter.column === column ? "active" : "";
   }
 
   private showActiveOnSubButton(
-    requestFilters: RequestFilters,
-    filterValue: FilterValue
+    requestFilters: RequestDynamicFilters,
+    filterValue: DynamicFilterValue
   ) {
     if (!this.seletedFilter) return "";
 
@@ -136,8 +136,8 @@ export class VviinnFilters {
   }
 
   private showActiveOnModalSubButton(
-    requestFilters: RequestFilters,
-    filterValue: FilterValue
+    requestFilters: RequestDynamicFilters,
+    filterValue: DynamicFilterValue
   ) {
     let className = "";
     requestFilters.forEach((filter) => {

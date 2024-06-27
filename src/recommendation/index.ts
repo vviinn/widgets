@@ -2,6 +2,7 @@ import {
   CrossSellingRequest,
   SimilarProductsRequest,
   RequestStaticFilters,
+  RequestDynamicFilters,
 } from "../interfaces/recommendation";
 
 type GetRecommendationsBodyProps = {
@@ -9,7 +10,7 @@ type GetRecommendationsBodyProps = {
   color?: string;
   excluded?: string;
   campaigns?: string;
-  filters?: RequestFilters;
+  dynamicFilters?: RequestDynamicFilters;
 };
 
 const parseExcluded = (excluded: string) =>
@@ -34,6 +35,7 @@ export const getRecommendationsBody = ({
   campaigns,
   color,
   excluded,
+  dynamicFilters = [],
 }: GetRecommendationsBodyProps):
   | SimilarProductsRequest
   | CrossSellingRequest => {
@@ -44,6 +46,7 @@ export const getRecommendationsBody = ({
 
   return {
     productId,
+    dynamicFilters: dynamicFilters ?? undefined,
     ...(campaigns.length ? { campaigns: parseCampaigns(campaigns) } : {}),
     ...(Object.keys(staticFilters).length ? { staticFilters } : {}),
   };
