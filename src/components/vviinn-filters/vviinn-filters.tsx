@@ -31,7 +31,7 @@ export class VviinnFilters {
   /** @internal */
   @Prop() widgetElementId?: string;
 
-  @State() seletedFilter: DynamicFilter;
+  @State() selectedFilter: DynamicFilter;
   @State() requestFilters: RequestDynamicFilters = [];
   @State() requestFiltersMore: RequestDynamicFilters = [];
   @State() showMore: boolean = false;
@@ -55,7 +55,7 @@ export class VviinnFilters {
   }
 
   private handleMainFilterSelection(filter: DynamicFilter) {
-    this.seletedFilter = filter;
+    this.selectedFilter = filter;
   }
 
   private subFilterSelection(
@@ -111,19 +111,19 @@ export class VviinnFilters {
   }
 
   private showActiveOnMainButton({ column }: DynamicFilter) {
-    if (!this.seletedFilter) return "";
+    if (!this.selectedFilter) return "";
 
-    return this.seletedFilter.column === column ? "active" : "";
+    return this.selectedFilter.column === column ? "active" : "";
   }
 
   private showActiveOnSubButton(
     requestFilters: RequestDynamicFilters,
     filterValue: DynamicFilterValue
   ) {
-    if (!this.seletedFilter) return "";
+    if (!this.selectedFilter) return "";
 
     const mainFilter = requestFilters.find(
-      (filter) => filter.column === this.seletedFilter.column
+      (filter) => filter.column === this.selectedFilter.column
     );
 
     if (!mainFilter) return undefined;
@@ -170,7 +170,7 @@ export class VviinnFilters {
   }
 
   render() {
-    const selectedFilterOptions = getFilterOptions(this.seletedFilter);
+    const selectedFilterOptions = getFilterOptions(this.selectedFilter);
 
     let moreFiltersOptionCount = 0;
     this.moreFilters.forEach((filter) => {
@@ -207,7 +207,7 @@ export class VviinnFilters {
           )}
         </div>
 
-        {this.seletedFilter !== undefined && (
+        {this.selectedFilter !== undefined && (
           <div class="filters-footer">
             <ul class="sub-filters-wrapper">
               {selectedFilterOptions &&
@@ -218,7 +218,7 @@ export class VviinnFilters {
                         onClick={() =>
                           this.handleSubFilterSelection(
                             filter.value,
-                            this.seletedFilter
+                            this.selectedFilter
                           )
                         }
                         class={`filters-sub-button ${this.showActiveOnSubButton(
