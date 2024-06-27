@@ -141,6 +141,12 @@ picture::before {
   cursor: pointer;
 }
 
+.basket-button-icon-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .basket-button.basket-button-grid {
   width: 100%;
   background-color: unset;
@@ -203,15 +209,18 @@ picture::before {
 }
 
 :host(.set-mode) .basket-button {
+  border: none;
+  background-color: #f4f4f4;
+  font-weight: 500;
+  color: #525252;
+}
+
+:host(.set-mode) .basket-button-container {
   display: flex;
   gap: 8px;
   align-items: center;
   box-sizing: border-box;
   justify-content: center;
-  border: none;
-  background-color: #f4f4f4;
-  font-weight: 500;
-  color: #525252;
 }
 
 :host(.set-mode:not(.animated)) .basket-button {
@@ -268,9 +277,13 @@ picture::before {
   }
 }
 
-:host(.set-mode) .basket-button.applied-discount {
+:host(.set-mode) .basket-button.pressed {
   background: transparent;
   border: 1px solid #e0e0e0;
+}
+
+:host(.set-mode) .basket-button.pressed .discount-percentage {
+  padding-right: 5px;
 }
 
 :host(.set-mode) .basket-button--hidden {
