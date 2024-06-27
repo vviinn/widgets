@@ -23,4 +23,3 @@ export interface Interfaces {
 export type SimilarProductsRequest = Interfaces["SimilarProductsRequest"];
 export type CrossSellingRequest = Interfaces["CrossSellingRequest"];
 export type RequestStaticFilters = Interfaces["RequestStaticFilters"];
-export type RequestDynamicFilters = Interfaces["RequestDynamicFilters"];

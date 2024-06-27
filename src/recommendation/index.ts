@@ -2,8 +2,9 @@ import {
   CrossSellingRequest,
   SimilarProductsRequest,
   RequestStaticFilters,
-  RequestDynamicFilters,
 } from "../interfaces/recommendation";
+
+import { RequestDynamicFilters } from "../campaign/VPRCampaignService";
 
 type GetRecommendationsBodyProps = {
   productId: string;
