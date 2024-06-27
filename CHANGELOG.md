@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.55.4](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.55.3...v2.55.4) (2024-06-26)
+
+
+### Bug Fixes
+
+* Recommendations and Search endpoints refactoring ([201bb45](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/201bb45bef858c06e214fcbfc0bf73efd36d3c9b))
+
+### [2.55.3](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.55.2...v2.55.3) (2024-06-25)
+
+
+### Bug Fixes
+
+* Show no-result-text when receiving empty recommendations ([d9dcc07](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/d9dcc0753729cf8c89907f5cace3fa3fb36ab26b))
+
+### [2.55.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.55.1...v2.55.2) (2024-06-20)
+
+
+### Bug Fixes
+
+* Fix starting page layout of Search Widget ([1ee0b20](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/1ee0b20ba021f94227757611954266b2d8d4dea1))
+
 ### [2.55.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.55.0...v2.55.1) (2024-06-19)
 
 

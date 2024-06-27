@@ -1,4 +1,8 @@
-import { RequestFilters } from "../campaign/VPRCampaignService";
+import {
+  CrossSellingRequest,
+  SimilarProductsRequest,
+  RequestStaticFilters,
+} from "../interfaces/recommendation";
 
 type GetRecommendationsBodyProps = {
   productId: string;
@@ -27,16 +31,20 @@ const parseCampaigns = (campaigns: string) =>
 
 export const getRecommendationsBody = ({
   productId,
-  color = "",
-  excluded = "",
-  campaigns = "",
-  filters = [],
-}: GetRecommendationsBodyProps) => {
-  return {
-    "product-id": productId,
-    filters: filters ?? undefined,
+  campaigns,
+  color,
+  excluded,
+}: GetRecommendationsBodyProps):
+  | SimilarProductsRequest
+  | CrossSellingRequest => {
+  const staticFilters: RequestStaticFilters = {
     ...(color.length ? { color } : {}),
     ...(excluded.length ? { excluded: parseExcluded(excluded) } : {}),
+  };
+
+  return {
+    productId,
     ...(campaigns.length ? { campaigns: parseCampaigns(campaigns) } : {}),
+    ...(Object.keys(staticFilters).length ? { staticFilters } : {}),
   };
 };

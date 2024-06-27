@@ -10,10 +10,9 @@ export interface Interfaces {
   CrossSellingRequest: components["schemas"]["cross-selling-request"];
   CrossSellingResponse: components["schemas"]["cross-selling-response"];
 
-  Filter:
-    | components["schemas"]["response-categorical-filter-item"]
-    | components["schemas"]["response-interval-filter-item"];
-  Filters: components["schemas"]["response-filters"];
-  FilterValue: components["schemas"]["interval-suggestion"];
-  RequestFilters: components["schemas"]["request-filters"];
+  RequestStaticFilters: components["schemas"]["request-static-filters"];
 }
+
+export type SimilarProductsRequest = Interfaces["SimilarProductsRequest"];
+export type CrossSellingRequest = Interfaces["CrossSellingRequest"];
+export type RequestStaticFilters = Interfaces["RequestStaticFilters"];
