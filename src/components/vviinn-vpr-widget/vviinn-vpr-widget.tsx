@@ -152,7 +152,7 @@ export class VviinnVprWidget implements ComponentInterface {
   /** Location of Update button for Set mode */
   @Prop() updateButtonLocation: UpdateButtonLocation = "topAndItem";
   /** List of discounts for Set mode. Example: "5, 10, 15, 20" (could be less than 4 numbers) */
-  @Prop() setModeDiscounts: string = "";
+  @Prop() setModeDiscounts: string = this.mode === "set" ? "5, 10, 15" : "";
 
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
