@@ -38,6 +38,7 @@ const Template = (args) => `
       api-path="${args.apiPath}"
       add-to-basket-show="${args.addToBasketShow}"
       update-button-location="${args.updateButtonLocation}"
+      set-mode-discounts="${args.setModeDiscounts}"
     >
     </vviinn-vpr-widget>
 `;
@@ -123,6 +124,7 @@ Set.args = {
   apiPath: "https://api.vviinn.com",
   addToBasketShow: true,
   updateButtonLocation: "topAndItem",
+  setModeDiscounts: "5, 10, 15",
 };
 
 Set.decorators = [gridDecorator];
