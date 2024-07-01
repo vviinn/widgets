@@ -9,7 +9,8 @@ const config: StorybookConfig = {
   addons: [
     "@storybook/addon-links",
     "@storybook/addon-essentials",
-    "@storybook/addon-webpack5-compiler-babel"
+    "@storybook/addon-webpack5-compiler-babel",
+    "../addons/expand-sidebar/register.js",
   ],
   core: {
     disableTelemetry: true,
