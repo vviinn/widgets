@@ -17,8 +17,7 @@ import {
 import { FiltersIcon, NewCloseIcon } from "../vviinn-icons";
 
 import { getFilterOptions } from "./helpers";
-import { filter } from "rxjs";
-import { string } from "fp-ts";
+
 /**
  * * @part filters - Wrapper itself.
  */
@@ -39,7 +38,7 @@ export class VviinnFilters {
   @State() showMore: boolean = false;
   @State() selectedMoreOptions: string[] = [];
 
-  /** Event fires when user click on Add to Basket button */
+  /** Event fires when filters position change */
   @Event({ bubbles: true })
   vviinnFiltersChanged: EventEmitter<RequestDynamicFilters>;
 
@@ -245,8 +244,8 @@ export class VviinnFilters {
         <div class={`filters-modal ${this.showMore ? "open" : ""}`}>
           <div class="filters-modal-wrapper">
             <div class="filters-modal-header">
-              Filters{" "}
-              {moreFiltersOptionCount > 0 ? `(${moreFiltersOptionCount})` : ""}
+              Filters
+              {moreFiltersOptionCount > 0 ? ` (${moreFiltersOptionCount})` : ""}
               <button
                 class="filters-modal-close"
                 onClick={() => {
@@ -258,7 +257,7 @@ export class VviinnFilters {
               </button>
             </div>
 
-            <ul class="filters-modal-ul">
+            <ul class="filters-modal-list">
               {this.moreFilters.map((mainFilter) => {
                 const filterOptions = getFilterOptions(mainFilter);
 
@@ -277,7 +276,7 @@ export class VviinnFilters {
                     </button>
 
                     <ul
-                      class={`filters-modal-sub-ul ${
+                      class={`filters-modal-sub-list ${
                         this.selectedMoreOptions.includes(mainFilter.column)
                           ? "open"
                           : ""

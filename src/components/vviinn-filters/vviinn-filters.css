@@ -164,7 +164,7 @@
   border-bottom: 1px solid var(--gray-10);
 }
 
-.filters-modal-ul {
+.filters-modal-list {
   margin: 4px 24px;
 }
 .filters-modal-main-button {
@@ -182,15 +182,15 @@
   line-height: 24px;
 }
 
-.filters-modal-sub-ul {
+.filters-modal-sub-list {
   display: none;
 }
 
-.filters-modal-sub-ul.open {
+.filters-modal-sub-list.open {
   display: block;
 }
 
-.filters-modal-sub-ul > li {
+.filters-modal-sub-list > li {
   margin-top: 10px;
 }
 
