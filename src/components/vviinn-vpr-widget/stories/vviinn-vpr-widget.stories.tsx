@@ -1,4 +1,4 @@
-import { STORYBOOK_TOKEN } from "../../../network/constants";
+import { STORYBOOK_API_PATH, STORYBOOK_TOKEN } from "../../../storybook";
 import { argTypes } from "./args";
 import { gridDecorator, continuityDecorator } from "./decorators";
 
@@ -47,7 +47,7 @@ const Template = (args) => `
 export const Grid = Template.bind({});
 Grid.args = {
   token: STORYBOOK_TOKEN,
-  productId: "4114460310",
+  productId: "95906126752",
   campaignType: "VPR",
   campaigns: "",
   color: "",
@@ -65,7 +65,7 @@ Grid.args = {
   noResultShow: true,
   noResultText: "",
   gridArrowsDynamic: false,
-  apiPath: "https://api.vviinn.com",
+  apiPath: STORYBOOK_API_PATH,
   addToBasketShow: false,
 };
 
@@ -73,9 +73,8 @@ Grid.decorators = [gridDecorator];
 
 export const Continuity = Template.bind({});
 Continuity.args = {
-  token:
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.skAkdwLTQ0sfeqfMCHWRN3QmoNGjb6YEUr3Z5mt9wvXyl447EXTx7nYRIpCVSF6T65bo5BEbDsCyjCII5jpfNWVgmHzNWfm9ZZ1_4vPdl7QsdMfQ7RZ6zEdVwCGVkQr34OLmsrHrSwnVv22Lkf74X_0uEkh1AUZcyTC8lGzdV0rYaipBIg47yKx1MpK3QegaXwCNshuPPDbl9s_Y-tiGkBI2761fElDaEIXUkeWLvkwL3Y2pUO3CpfzDYdS6coS0blBq_yCfuw_u2bkJbakg2JOiGkFnUBA7bZcDaLhx7Yl7ofsVeObaRic77wJR9cIU4RVec26kPTXw2Wxi4sjfmg",
-  productId: "4114460310",
+  token: STORYBOOK_TOKEN,
+  productId: "95906126752",
   campaignType: "VPR",
   campaigns: "",
   color: "",
@@ -93,7 +92,7 @@ Continuity.args = {
   noResultShow: true,
   noResultText: "",
   gridArrowsDynamic: false,
-  apiPath: "https://api.vviinn.com",
+  apiPath: STORYBOOK_API_PATH,
   addToBasketShow: true,
 };
 
@@ -101,9 +100,8 @@ Continuity.decorators = [continuityDecorator];
 
 export const Set = Template.bind({});
 Set.args = {
-  token:
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.skAkdwLTQ0sfeqfMCHWRN3QmoNGjb6YEUr3Z5mt9wvXyl447EXTx7nYRIpCVSF6T65bo5BEbDsCyjCII5jpfNWVgmHzNWfm9ZZ1_4vPdl7QsdMfQ7RZ6zEdVwCGVkQr34OLmsrHrSwnVv22Lkf74X_0uEkh1AUZcyTC8lGzdV0rYaipBIg47yKx1MpK3QegaXwCNshuPPDbl9s_Y-tiGkBI2761fElDaEIXUkeWLvkwL3Y2pUO3CpfzDYdS6coS0blBq_yCfuw_u2bkJbakg2JOiGkFnUBA7bZcDaLhx7Yl7ofsVeObaRic77wJR9cIU4RVec26kPTXw2Wxi4sjfmg",
-  productId: "4114460310",
+  token: STORYBOOK_TOKEN,
+  productId: "95906126752",
   campaignType: "VCS",
   campaigns: "",
   color: "",
@@ -111,7 +109,7 @@ Set.args = {
   mode: "set",
   blockTitle: "Recommended products",
   productDetailNewTab: false,
-  imageWidth: 300,
+  imageWidth: 420,
   imageRatio: 1,
   locale: "en-US",
   currencySign: "€",
@@ -121,7 +119,7 @@ Set.args = {
   noResultShow: true,
   noResultText: "",
   gridArrowsDynamic: false,
-  apiPath: "https://api.vviinn.com",
+  apiPath: STORYBOOK_API_PATH,
   addToBasketShow: true,
   updateButtonLocation: "topAndItem",
   setModeDiscounts: "5, 10, 15",

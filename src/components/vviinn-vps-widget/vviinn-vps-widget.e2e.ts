@@ -1,5 +1,5 @@
 import { newE2EPage } from "@stencil/core/testing";
-import { STORYBOOK_TOKEN } from "../../network/constants";
+import { STORYBOOK_TOKEN } from "../../storybook";
 
 describe("example", () => {
   it("should render a foo-component", async () => {

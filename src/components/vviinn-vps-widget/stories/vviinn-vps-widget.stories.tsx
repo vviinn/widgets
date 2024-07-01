@@ -1,4 +1,4 @@
-import { STORYBOOK_TOKEN } from "../../../network/constants";
+import { STORYBOOK_API_PATH, STORYBOOK_TOKEN } from "../../../storybook";
 
 export default {
   title: "Widgets/Search/Main",
@@ -33,7 +33,7 @@ Default.args = {
   locale: "en-US",
   currencySign: "€",
   active: true,
-  apiPath: "https://api.vviinn.com",
+  apiPath: STORYBOOK_API_PATH,
   imageResolutionWidth: 250,
   textSearchShow: false,
 };

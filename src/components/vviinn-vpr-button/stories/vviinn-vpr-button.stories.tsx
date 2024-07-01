@@ -1,4 +1,4 @@
-import { STORYBOOK_TOKEN } from "../../../network/constants";
+import { STORYBOOK_API_PATH, STORYBOOK_TOKEN } from "../../../storybook";
 import { argTypes } from "./args";
 
 const centerDecorator = (story) => `
@@ -51,7 +51,7 @@ Default.storyName = "Button";
 
 Default.args = {
   token: STORYBOOK_TOKEN,
-  productId: "4114460310",
+  productId: "95906126752",
   campaignType: "VPR",
   campaigns: "",
   color: "",
@@ -70,7 +70,7 @@ Default.args = {
   noResultShow: true,
   noResultText: "",
   gridArrowsDynamic: false,
-  apiPath: "https://api.vviinn.com",
+  apiPath: STORYBOOK_API_PATH,
   addToBasketShow: false,
 };
 

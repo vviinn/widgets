@@ -1,4 +1,4 @@
-import { STORYBOOK_TOKEN } from "../../../network/constants";
+import { STORYBOOK_API_PATH, STORYBOOK_TOKEN } from "../../../storybook";
 
 export default {
   title: "Widgets/Search/Button",
@@ -51,7 +51,7 @@ Modal.args = {
   locale: "en-US",
   currencySign: "€",
   addStyle: true,
-  apiPath: "https://api.vviinn.com",
+  apiPath: STORYBOOK_API_PATH,
   imageResolutionWidth: 250,
   textSearchShow: false,
 };
@@ -59,8 +59,7 @@ Modal.args = {
 export const Upload = Template.bind({});
 
 Upload.args = {
-  token:
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.skAkdwLTQ0sfeqfMCHWRN3QmoNGjb6YEUr3Z5mt9wvXyl447EXTx7nYRIpCVSF6T65bo5BEbDsCyjCII5jpfNWVgmHzNWfm9ZZ1_4vPdl7QsdMfQ7RZ6zEdVwCGVkQr34OLmsrHrSwnVv22Lkf74X_0uEkh1AUZcyTC8lGzdV0rYaipBIg47yKx1MpK3QegaXwCNshuPPDbl9s_Y-tiGkBI2761fElDaEIXUkeWLvkwL3Y2pUO3CpfzDYdS6coS0blBq_yCfuw_u2bkJbakg2JOiGkFnUBA7bZcDaLhx7Yl7ofsVeObaRic77wJR9cIU4RVec26kPTXw2Wxi4sjfmg",
+  token: STORYBOOK_TOKEN,
   campaignId: "",
   excluded: "",
   mode: "upload",
@@ -68,6 +67,6 @@ Upload.args = {
   locale: "en-US",
   currencySign: "€",
   addStyle: true,
-  apiPath: "https://api.vviinn.com",
+  apiPath: STORYBOOK_API_PATH,
   imageResolutionWidth: 250,
 };
