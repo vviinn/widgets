@@ -15,10 +15,10 @@
   gap: 14px;
 }
 
-.filters-modal-ul,
+.filters-modal-list,
 .sub-filters-wrapper,
 .main-filters-wrapper,
-.filters-modal-sub-ul {
+.filters-modal-sub-list {
   list-style: none;
   margin: 0;
   padding: 0;
