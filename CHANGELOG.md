@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.56.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.55.7...v2.56.0) (2024-07-01)
+
+
+### Features
+
+* Recommendation's Set mode customization of discounts ([7ff40ea](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/7ff40eacb3688408b40278c7ccbd9aaad468c9f8))
+
 ### [2.55.7](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.55.6...v2.55.7) (2024-07-01)
 
 
