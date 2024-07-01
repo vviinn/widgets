@@ -61,6 +61,7 @@ import { generateRandomNumber } from "../../utils/number";
  * @part basket-button - Add to Basket button.
  * @part update-button-item - Update button in Product Card (Set mode).
  * @part discount-label - Discount label in Product Card (Set mode).
+ * @part discount-percentage - Discount percentage inside the Add to Basket button (Set mode).
  *
  * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
@@ -91,7 +92,7 @@ export class VviinnProductCard {
   @Prop() responsive: boolean = false;
   @Prop() dimmedBackground: boolean = false;
   @Prop() mode?: CarouselMode;
-  @Prop() addToBasketShow: boolean;
+  @Prop() basketButtonShow: boolean;
   @Prop() updateButtonLocation: UpdateButtonLocation;
   @Prop() appliedDiscountPercentage?: number;
   @Prop() currentDiscountPercentage?: number;
@@ -113,6 +114,7 @@ export class VviinnProductCard {
   @Prop() defaultAnimationInterval: number;
 
   @State() isTransitioning: boolean = false;
+  @State() basketButonPressed: boolean = false;
 
   /** Event fires ones when recommendation rendered on page */
   @Event({ bubbles: true })
@@ -171,6 +173,7 @@ export class VviinnProductCard {
   crossSellingClickListener({ detail }: CrossSellingClickEvent) {
     const { animationInterval } = detail;
     this.isTransitioning = true;
+    this.basketButonPressed = false;
 
     const animationTimer = setTimeout(() => {
       this.isTransitioning = false;
@@ -182,6 +185,7 @@ export class VviinnProductCard {
   updatingAllCardsWatcher() {
     if (!this.updatingAllCards) return;
     this.isTransitioning = true;
+    this.basketButonPressed = false;
 
     const animationTimer = setTimeout(() => {
       this.vviinnUpdatingAllCardsFinished.emit();
@@ -284,7 +288,7 @@ export class VviinnProductCard {
           animated: this.isTransitioning,
           "set-mode": this.isSetMode,
         }}
-        exportparts="brand, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, discount-label, title, basket-button, update-button-item"
+        exportparts="brand, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, discount-label, discount-percentage, title, basket-button, update-button-item"
       >
         <Linked deeplink={this.deeplink} part="image-link">
           {this.renderImage()}
@@ -315,16 +319,18 @@ export class VviinnProductCard {
               salePrice={this.salePrice}
               locale={this.locale}
             />
-            {this.isSetMode && !this.appliedDiscountPercentage && (
-              <div
-                class="discount-label"
-                part="discount-label"
-              >{`-${this.currentDiscountPercentage}%`}</div>
-            )}
+            {this.isSetMode &&
+              !this.appliedDiscountPercentage &&
+              this.currentDiscountPercentage && (
+                <div
+                  class="discount-label"
+                  part="discount-label"
+                >{`-${this.currentDiscountPercentage}%`}</div>
+              )}
           </Fragment>
         )}
 
-        {(this.addToBasketShow || this.isSetMode) && (
+        {(this.basketButtonShow || this.isSetMode) && (
           <Fragment>
             {this.isTransitioning && <vviinn-skeleton height={44} />}
 
@@ -334,7 +340,7 @@ export class VviinnProductCard {
                 "basket-button--hidden": this.isTransitioning,
                 "basket-button-grid": this.isGridMode || this.isSetMode,
                 "basket-button-continuity ": this.isContinuityMode,
-                "applied-discount": !!this.appliedDiscountPercentage,
+                pressed: this.basketButonPressed,
               }}
               part="basket-button"
               onClick={() => {
@@ -342,51 +348,59 @@ export class VviinnProductCard {
                   ...this.productData,
                   discount: this.currentDiscountPercentage,
                 });
+                this.basketButonPressed = true;
               }}
             >
               {this.isSetMode ? (
                 <Fragment>
-                  {this.appliedDiscountPercentage ? (
-                    <span>
-                      <slot name="vviinn-basket-button-icon-pressed">
-                        <CheckCircleIcon />
-                      </slot>
-                    </span>
-                  ) : (
-                    <span>
-                      <slot name="vviinn-basket-button-icon">
-                        <BasketIcon />
-                      </slot>
-                    </span>
+                  {!this.basketButonPressed && (
+                    <div key="set-not-pressed" class="basket-button-container">
+                      <span class="basket-button-icon-container">
+                        <slot name="vviinn-basket-button-icon">
+                          <BasketIcon />
+                        </slot>
+                      </span>
+                      <span>
+                        <slot name="vviinn-basket-button-text">
+                          {i18next.t("setMode.basketButtonText")}
+                        </slot>
+                      </span>
+                    </div>
                   )}
 
-                  {this.appliedDiscountPercentage ? (
-                    <Fragment>
-                      <span>{this.appliedDiscountPercentage}% </span>
+                  {this.basketButonPressed && (
+                    <div key="set-pressed" class="basket-button-container">
+                      <span class="basket-button-icon-container">
+                        <slot name="vviinn-basket-button-icon-pressed">
+                          <CheckCircleIcon />
+                        </slot>
+                      </span>
                       <span>
+                        {this.appliedDiscountPercentage && (
+                          <span
+                            class="discount-percentage"
+                            part="discount-percentage"
+                          >
+                            {this.appliedDiscountPercentage}%
+                          </span>
+                        )}
                         <slot name="vviinn-basket-button-text-pressed">
                           {i18next.t("setMode.appliedDiscountText")}
                         </slot>
                       </span>
-                    </Fragment>
-                  ) : (
-                    <slot name="vviinn-basket-button-text">
-                      {i18next.t("setMode.basketButtonText")}
-                    </slot>
+                    </div>
                   )}
                 </Fragment>
               ) : (
-                <span>
-                  <slot name="vviinn-basket-button-text">
-                    {i18next.t("basketButtonText")}
-                  </slot>
-                </span>
+                <slot name="vviinn-basket-button-text">
+                  {i18next.t("basketButtonText")}
+                </slot>
               )}
             </button>
           </Fragment>
         )}
 
-        {this.isSetMode && !this.appliedDiscountPercentage && (
+        {this.isSetMode && !this.basketButonPressed && (
           <button
             class={{
               "update-button": true,
