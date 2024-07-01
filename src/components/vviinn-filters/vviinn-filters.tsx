@@ -3,10 +3,10 @@ import {
   Host,
   h,
   Prop,
-  Watch,
   State,
   Event,
   EventEmitter,
+  Element,
 } from "@stencil/core";
 import {
   DynamicFilters,
@@ -14,100 +14,52 @@ import {
   DynamicFilterValue,
   RequestDynamicFilters,
 } from "../../campaign/VPRCampaignService";
-import { FiltersIcon, NewCloseIcon } from "../vviinn-icons";
 
-import { getFilterOptions } from "./helpers";
+import { getFilterOptions, subFilterSelection } from "./helpers";
 /**
  * * @part filters - Wrapper itself.
  */
+
 @Component({
   tag: "vviinn-filters",
   styleUrl: "vviinn-filters.css",
   shadow: true,
 })
 export class VviinnFilters {
-  @Prop() filters: DynamicFilters = [];
+  @Element() el: HTMLElement;
 
-  /** @internal */
-  @Prop() widgetElementId?: string;
+  @Prop() filters: DynamicFilters = [];
+  @Prop() showExtended: boolean = false;
+  @Prop() showFirst: number = 4;
 
   @State() selectedFilter: DynamicFilter;
   @State() requestFilters: RequestDynamicFilters = [];
-  @State() requestFiltersMore: RequestDynamicFilters = [];
-  @State() showMore: boolean = false;
-  @State() selectedMoreOptions: string[] = [];
 
   /** Event fires when user click on Add to Basket button */
   @Event({ bubbles: true })
   vviinnFiltersChanged: EventEmitter<RequestDynamicFilters>;
 
-  private mainFilters: DynamicFilters = [];
-  private moreFilters: DynamicFilters = [];
-
-  connectedCallback() {
-    this.setMainAndMoreFilters();
-  }
-
-  @Watch("filters")
-  setMainAndMoreFilters() {
-    this.mainFilters = this.filters.slice(0, 4);
-    this.moreFilters = this.filters.slice(4);
-  }
-
   private handleMainFilterSelection(filter: DynamicFilter) {
     this.selectedFilter = filter;
   }
 
-  private subFilterSelection(
-    filters: RequestDynamicFilters,
-    seletedFilter: DynamicFilter,
-    filterValue: DynamicFilterValue
-  ) {
-    const index = filters.findIndex(
-      (filter) => filter.column === seletedFilter.column
-    );
-    const value = filterValue.interval ?? filterValue;
-    const pushObject = {
-      column: seletedFilter.column,
-      values: [],
-    };
-    pushObject.values.push(value);
-    if (index !== -1) {
-      filters[index] = pushObject;
-      filters = [...filters];
-    } else {
-      filters = [...filters, pushObject];
-    }
-    return filters;
-  }
-
   private emitTequestFiltersMore(requestFilters: RequestDynamicFilters) {
     this.vviinnFiltersChanged.emit(requestFilters);
-    this.showMore = false;
   }
 
   private handleSubFilterSelection(
     filterValue: DynamicFilterValue,
-    seletedFilter: DynamicFilter,
-    type: "main" | "more" = "main"
+    seletedFilter: DynamicFilter
   ) {
-    if (type === "main") {
-      this.requestFilters = this.subFilterSelection(
-        this.requestFilters,
-        seletedFilter,
-        filterValue
-      );
+    this.requestFilters = subFilterSelection(
+      this.requestFilters,
+      seletedFilter,
+      filterValue
+    );
 
-      this.emitTequestFiltersMore({
-        ...this.requestFilters,
-      });
-    } else {
-      this.requestFiltersMore = this.subFilterSelection(
-        this.requestFiltersMore,
-        seletedFilter,
-        filterValue
-      );
-    }
+    this.emitTequestFiltersMore({
+      ...this.requestFilters,
+    });
   }
 
   private showActiveOnMainButton({ column }: DynamicFilter) {
@@ -126,7 +78,7 @@ export class VviinnFilters {
       (filter) => filter.column === this.selectedFilter.column
     );
 
-    if (!mainFilter) return undefined;
+    if (!mainFilter) return "";
 
     return mainFilter.values.some(
       (value) => value === filterValue || value === filterValue.interval
@@ -135,53 +87,29 @@ export class VviinnFilters {
       : "";
   }
 
-  private showActiveOnModalSubButton(
-    requestFilters: RequestDynamicFilters,
-    filterValue: DynamicFilterValue
-  ) {
-    let className = "";
-    requestFilters.forEach((filter) => {
-      if (
-        filter.values.some(
-          (value) => value === filterValue || value === filterValue.interval
-        )
-      ) {
-        className = "active";
-      }
-    });
-    return className;
+  private handleFiltersChanged = (event) => {
+    this.filters = event.detail;
+  };
+
+  connectedCallback() {
+    document.addEventListener("vviinnFilters", this.handleFiltersChanged);
   }
 
-  private handleMoreOptionsMainClick(column: string) {
-    if (this.selectedMoreOptions.includes(column)) {
-      this.selectedMoreOptions = this.selectedMoreOptions.filter(
-        (option) => option !== column
-      );
-    } else {
-      this.selectedMoreOptions = [...this.selectedMoreOptions, column];
-    }
-  }
-
-  private filtersModalApply() {
-    this.emitTequestFiltersMore({
-      ...this.requestFilters,
-      ...this.requestFiltersMore,
-    });
+  disconnectedCallback() {
+    document.removeEventListener("vviinnFilters", this.handleFiltersChanged);
   }
 
   render() {
     const selectedFilterOptions = getFilterOptions(this.selectedFilter);
+    const filters = this.filters.slice(0, this.showFirst);
 
-    let moreFiltersOptionCount = 0;
-    this.moreFilters.forEach((filter) => {
-      moreFiltersOptionCount += getFilterOptions(filter).length;
-    });
+    if (filters.length === 0) return <Host></Host>;
 
     return (
       <Host part="filters">
         <div class="filters-header">
           <ul class="main-filters-wrapper">
-            {this.mainFilters.map((filter) => {
+            {filters.map((filter) => {
               return (
                 <li>
                   <button
@@ -196,14 +124,10 @@ export class VviinnFilters {
               );
             })}
           </ul>
-
-          {this.moreFilters.length > 0 && (
-            <button
-              class="filters-more-button"
-              onClick={() => (this.showMore = true)}
-            >
-              <FiltersIcon />
-            </button>
+          {this.showExtended && (
+            <vviinn-extended-filters
+              filters={this.filters}
+            ></vviinn-extended-filters>
           )}
         </div>
 
@@ -234,94 +158,6 @@ export class VviinnFilters {
             </ul>
           </div>
         )}
-
-        <div class={`filters-modal ${this.showMore ? "open" : ""}`}>
-          <div class="filters-modal-wrapper">
-            <div class="filters-modal-header">
-              Filters{" "}
-              {moreFiltersOptionCount > 0 ? `(${moreFiltersOptionCount})` : ""}
-              <button
-                class="filters-modal-close"
-                onClick={() => {
-                  this.showMore = false;
-                  this.requestFiltersMore = [];
-                }}
-              >
-                <NewCloseIcon />
-              </button>
-            </div>
-
-            <ul class="filters-modal-ul">
-              {this.moreFilters.map((mainFilter) => {
-                const filterOptions = getFilterOptions(mainFilter);
-
-                return (
-                  <li>
-                    <button
-                      onClick={() =>
-                        this.handleMoreOptionsMainClick(mainFilter.column)
-                      }
-                      class="filters-modal-main-button"
-                    >
-                      {mainFilter.column}{" "}
-                      {filterOptions.length > 0
-                        ? `(${filterOptions.length})`
-                        : ""}
-                    </button>
-
-                    <ul
-                      class={`filters-modal-sub-ul ${
-                        this.selectedMoreOptions.includes(mainFilter.column)
-                          ? "open"
-                          : ""
-                      }`}
-                    >
-                      {filterOptions &&
-                        filterOptions.map((filter) => {
-                          return (
-                            <li>
-                              <button
-                                onClick={() =>
-                                  this.handleSubFilterSelection(
-                                    filter.value,
-                                    mainFilter,
-                                    "more"
-                                  )
-                                }
-                                class={`filters-more-modal-button ${this.showActiveOnModalSubButton(
-                                  this.requestFiltersMore,
-                                  filter.value
-                                )}`}
-                              >
-                                {filter.label}
-                              </button>
-                            </li>
-                          );
-                        })}
-                    </ul>
-                  </li>
-                );
-              })}
-            </ul>
-
-            <div class="filters-modal-actions">
-              <button
-                class="filters-modal-apply"
-                onClick={() => this.filtersModalApply()}
-                disabled={this.requestFiltersMore.length === 0}
-              >
-                Apply
-              </button>
-
-              <button
-                class="filters-modal-reset"
-                onClick={() => (this.requestFiltersMore = [])}
-              >
-                Reset Filters
-              </button>
-            </div>
-          </div>
-        </div>
       </Host>
     );
   }

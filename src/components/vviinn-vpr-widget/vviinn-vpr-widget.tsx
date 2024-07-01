@@ -647,7 +647,8 @@ export class VviinnVprWidget implements ComponentInterface {
           {this.showFilters && (
             <vviinn-filters
               filters={this.dynamicFilters}
-              widgetElementId={this.id}
+              show-extended={false}
+              show-first={100}
             ></vviinn-filters>
           )}
 
