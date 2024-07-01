@@ -12,7 +12,7 @@ If you are interested to learn more about the `WebView` component, you can check
 
 The first step of integrating `Vviinn Widgets` is to create some HTML files and locate them in an HTTPS server. If you want to know how to integrate `Vviinn Widgets` as a web component in a web page, you can check [Frameworkless integration](?path=/docs/installation-frameworkless--docs) page.
 
-Now you have a URL which when you open it in a browser shows `Vviinn Widgets` there. Also, `WebViews` supports passing the HTML to it on the fly. It works fine for Recommendation widgets but Search widget requires HTTPS to be able to show the camera, so in this case we highly recommend hosting the HTML file on a server.
+Now you have a URL which when you open it in a browser shows `Vviinn Widgets` there. Recommendation widgets can be passed (as HTML) to `WebViews` on fly. Search widget requires HTTPS to be able to show the camera, so in this case we highly recommend hosting the HTML file on a server.
 
 After that, you need to integrate the `WebView` component into your mobile app. Here are some requirements that you need to consider:
 
@@ -127,7 +127,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 ```
 
-In this example, we also asked for microphone permission, but it is not required, and we made it for testing purposes but the camera permission is required.
+In this example, we also asked for microphone permission, but only the camera permission is required.
 
 Also, we used 2 packages `webview_flutter` and `permission_handler` to be able to use WebView and ask for camera permission. However, you can use any package which suits your needs.
 
