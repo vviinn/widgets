@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.55.7](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.55.6...v2.55.7) (2024-07-01)
+
+
+### Bug Fixes
+
+* fixed an issue in storybook ([75b44fd](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/75b44fdb06001dc7af83d0dcc27ebb4f361b527a))
+
 ### [2.55.6](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.55.5...v2.55.6) (2024-07-01)
 
 ### [2.55.5](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.55.4...v2.55.5) (2024-07-01)
