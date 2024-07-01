@@ -6,23 +6,28 @@ import {
 
 export const subFilterSelection = (
   filters: RequestDynamicFilters,
-  seletedFilter: DynamicFilter,
+  { column: selectedColumn }: DynamicFilter,
   filterValue: DynamicFilterValue
 ) => {
-  const index = filters.findIndex(
-    (filter) => filter.column === seletedFilter.column
-  );
   const value = filterValue.interval ?? filterValue;
-  const pushObject = {
-    column: seletedFilter.column,
-    values: [],
-  };
-  pushObject.values.push(value);
-  if (index !== -1) {
+
+  const index = filters.findIndex(({ column }) => column === selectedColumn);
+  const valueIndex = filters[index]?.values.findIndex((val) => val === value);
+
+  const pushObject = { column: selectedColumn, values: [] };
+  if (valueIndex > -1) pushObject.values.splice(valueIndex, 1);
+  else pushObject.values.push(value);
+
+  if (index === -1) filters = [...filters, pushObject];
+  else {
     filters[index] = pushObject;
-    filters = [...filters];
-  } else {
-    filters = [...filters, pushObject];
+
+    if (filters[index].values.length === 0) {
+      filters = [...filters.filter((filter) => filters[index] !== filter)];
+    } else {
+      filters = [...filters];
+    }
   }
+
   return filters;
 };

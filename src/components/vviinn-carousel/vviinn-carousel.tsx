@@ -26,10 +26,7 @@ import {
   CAROUSEL_WIDTH_CSS_VAR,
   COLUMNS_NUMBER_CSS_VAR,
   CONTENT_GROUP_CSS_CLASS,
-  SET_MODE_DISCOUNT_STEP,
   SET_MODE_IMAGE_WIDTH,
-  SET_MODE_INITIAL_DISCOUNT,
-  SET_MODE_MAX_DISCOUNT,
 } from "./constants";
 import { calculateDiscount } from "../../utils/number";
 import { searchState } from "../../store/search.store";
@@ -55,7 +52,8 @@ export class VviinnCarousel {
   @State() isRTL: boolean = false;
   @State() crossSellingRecommendations: Recommendation[] = [];
 
-  @State() setModeDiscount: number = SET_MODE_INITIAL_DISCOUNT;
+  @State() setModeDiscount: number | null = null;
+  @State() currentDiscountIndex: number = 0;
   @State() setModeAppliedDiscounts: {
     [key: Recommendation["productId"]]: number;
   } = {};
@@ -72,6 +70,7 @@ export class VviinnCarousel {
   @Prop() updatingAllCards: boolean;
   @Prop() updateButtonLocation: UpdateButtonLocation;
   @Prop() replaceSlotsContent: () => void;
+  @Prop() setModeDiscountsArray: number[];
 
   @Prop() currencySign: string;
   @Prop() pricePrefix: string = "";
@@ -94,6 +93,7 @@ export class VviinnCarousel {
   private isContinuityMode: boolean;
   private defaultAnimationInterval: number = 2000;
   private sourceProduct?: Recommendation;
+  private setModeMaxDiscount: number | null = null;
 
   private getProductData(recommendation, productRank): ProductCardEventData {
     return {
@@ -180,6 +180,9 @@ export class VviinnCarousel {
     if (this.isSetMode) {
       window.addEventListener("resize", this.handleWindowResize);
       this.sourceProduct = searchState.sourceProduct;
+      this.setModeDiscount = this.setModeDiscountsArray[0];
+      this.setModeMaxDiscount =
+        this.setModeDiscountsArray[this.setModeDiscountsArray.length - 1];
     }
     if (this.isSetMode && this.recommendations.length >= columnsNumber) {
       this.crossSellingRecommendations = this.recommendations.slice(
@@ -251,9 +254,11 @@ export class VviinnCarousel {
       [productId]: this.setModeDiscount,
     };
 
-    const isMaxDiscount = this.setModeDiscount === SET_MODE_MAX_DISCOUNT;
+    const isMaxDiscount = this.setModeDiscount === this.setModeMaxDiscount;
     if (!isMaxDiscount) {
-      this.setModeDiscount += SET_MODE_DISCOUNT_STEP;
+      this.currentDiscountIndex += 1;
+      this.setModeDiscount =
+        this.setModeDiscountsArray[this.currentDiscountIndex];
     }
   }
 
@@ -446,7 +451,7 @@ export class VviinnCarousel {
         index={rank}
         widgetElementId={this.widgetElementId}
         widgetVersion={this.widgetVersion}
-        addToBasketShow={this.addToBasketShow}
+        basketButtonShow={this.addToBasketShow}
         mode={this.mode}
         data-id={recommendation.productId}
         updatingAllCards={this.updatingAllCards}

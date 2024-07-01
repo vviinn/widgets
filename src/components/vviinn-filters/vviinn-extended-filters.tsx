@@ -129,7 +129,7 @@ export class VviinnExtendedFilters {
               </button>
             </div>
 
-            <ul class="filters-modal-ul">
+            <ul class="filters-modal-list">
               {this.filters.map((mainFilter) => {
                 const filterOptions = getFilterOptions(mainFilter);
 
@@ -148,7 +148,7 @@ export class VviinnExtendedFilters {
                     </button>
 
                     <ul
-                      class={`filters-modal-sub-ul ${
+                      class={`filters-modal-sub-list ${
                         this.selectedMoreOptions.includes(mainFilter.column)
                           ? "open"
                           : ""

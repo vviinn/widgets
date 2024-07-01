@@ -94,6 +94,7 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @part update-button-top - Update Button on the top (Set mode).
  * @part update-button-item - Update Button inside the Product Card (Set mode).
  * @part discount-label - Discount label in Product Card (Set mode).
+ * @part discount-percentage - Discount percentage inside the Add to Basket button (Set mode).
  *
  * @slot vviinn-recommendations-title - Recommendations title text.
  * @slot vviinn-recommendations-subtitle - Recommendations subtitle text (Set mode).
@@ -156,6 +157,10 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() updateButtonLocation: UpdateButtonLocation = "topAndItem";
   /** Show filters on top */
   @Prop() showFilters: boolean = false;
+  /** Show filters on top */
+  @Prop() showExtendedFilters: boolean = false;
+  /** List of discounts for Set mode. Example: "5, 10, 15, 20" (could be less than 4 numbers) */
+  @Prop() setModeDiscounts: string = this.mode === "set" ? "5, 10, 15" : "";
 
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
@@ -177,6 +182,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @State() hasErrorOnLoad: boolean = false;
   @State() updatingAllCards: boolean = false;
   @State() updatedCardsAmount: number = 0;
+  @State() setModeDiscountsArray: number[] = [];
 
   /** The event emits on widget load */
   @Event({ bubbles: true })
@@ -326,6 +332,12 @@ export class VviinnVprWidget implements ComponentInterface {
     this.isSetMode = this.mode === "set";
     this.isGridMode = this.mode === "grid";
     this.isContinuityMode = this.mode === "continuity";
+    if (this.isSetMode && this.setModeDiscounts.length) {
+      this.setModeDiscountsArray = this.setModeDiscounts
+        .split(",")
+        .map((d) => parseInt(d.trim()))
+        .filter((d) => !isNaN(d));
+    }
   }
 
   async componentWillLoad() {
@@ -647,6 +659,7 @@ export class VviinnVprWidget implements ComponentInterface {
           {this.showFilters && (
             <vviinn-filters
               filters={this.dynamicFilters}
+              showExtended={this.showExtendedFilters}
               show-extended={false}
               show-first={100}
             ></vviinn-filters>
@@ -686,7 +699,7 @@ export class VviinnVprWidget implements ComponentInterface {
         price={recommendation.price.actual}
         salePrice={recommendation.price.sale}
         responsive={this.isGridMode}
-        addToBasketShow={this.addToBasketShow}
+        basketButtonShow={this.addToBasketShow}
         mode={this.mode}
         dimmedBackground={this.useDimmedBackgroundInCard()}
         campaignTypeId={this.campaignType}
@@ -727,6 +740,7 @@ export class VviinnVprWidget implements ComponentInterface {
         updatingAllCards={this.updatingAllCards}
         updateButtonLocation={this.updateButtonLocation}
         replaceSlotsContent={this.replaceSlotsContent.bind(this)}
+        setModeDiscountsArray={this.setModeDiscountsArray}
         currencySign={this.currencySign}
         pricePrefix={this.pricePrefix}
         locale={this.locale}

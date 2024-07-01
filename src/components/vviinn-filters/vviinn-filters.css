@@ -69,6 +69,9 @@
 
   background: var(--surface-color-surface-01);
 }
+.filters-main-button:hover {
+  color: var(--text-color-text-secondary);
+}
 
 .filters-main-button.active {
   background: var(--background-color-background);
@@ -89,6 +92,9 @@
 
   border: 1px solid var(--border-color-border-01);
   background: var(--background-color-background);
+}
+.filters-sub-button:hover {
+  color: var(--text-color-text-secondary);
 }
 
 .filters-sub-button.active {
@@ -149,7 +155,7 @@
 
   color: var(--gray-100);
   text-align: center;
-  font-family: Inter;
+  font-family: var(--font-family);
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
@@ -158,7 +164,7 @@
   border-bottom: 1px solid var(--gray-10);
 }
 
-.filters-modal-ul {
+.filters-modal-list {
   margin: 4px 24px;
 }
 .filters-modal-main-button {
@@ -169,22 +175,22 @@
   padding: 20px 0;
 
   color: var(--gray-70);
-  font-family: Inter;
+  font-family: var(--font-family);
   font-size: 18px;
   font-style: normal;
   font-weight: 500;
   line-height: 24px;
 }
 
-.filters-modal-sub-ul {
+.filters-modal-sub-list {
   display: none;
 }
 
-.filters-modal-sub-ul.open {
+.filters-modal-sub-list.open {
   display: block;
 }
 
-.filters-modal-sub-ul > li {
+.filters-modal-sub-list > li {
   margin-top: 10px;
 }
 
@@ -219,7 +225,7 @@
 .filters-modal-apply {
   color: var(--text-color-text-inverse);
   text-align: center;
-  font-family: Inter;
+  font-family: var(--font-family);
   font-size: 16px;
   font-style: normal;
   font-weight: 500;

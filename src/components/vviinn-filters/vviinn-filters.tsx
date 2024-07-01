@@ -35,7 +35,7 @@ export class VviinnFilters {
   @State() selectedFilter: DynamicFilter;
   @State() requestFilters: RequestDynamicFilters = [];
 
-  /** Event fires when user click on Add to Basket button */
+  /** Event fires when filters position change */
   @Event({ bubbles: true })
   vviinnFiltersChanged: EventEmitter<RequestDynamicFilters>;
 
@@ -104,6 +104,8 @@ export class VviinnFilters {
     const filters = this.filters.slice(0, this.showFirst);
 
     if (filters.length === 0) return <Host></Host>;
+
+    console.log(this.showExtended);
 
     return (
       <Host part="filters">

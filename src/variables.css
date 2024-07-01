@@ -6,7 +6,7 @@
 
   --surface-color-surface-01: #f4f4f4;
   --text-color-text-primary: #161616;
-  --font-family: Inter;
+  --font-family: Inter, system-ui, sans-serif;
   --font-size-body: 14px;
   --font-weight-regular: 400;
   --line-height-body: 20px;
