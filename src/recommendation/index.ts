@@ -1,3 +1,9 @@
+import {
+  CrossSellingRequest,
+  SimilarProductsRequest,
+  RequestStaticFilters,
+} from "../interfaces/recommendation";
+
 type GetRecommendationsBodyProps = {
   productId: string;
   color?: string;
@@ -24,14 +30,20 @@ const parseCampaigns = (campaigns: string) =>
 
 export const getRecommendationsBody = ({
   productId,
-  color = "",
-  excluded = "",
-  campaigns = "",
-}: GetRecommendationsBodyProps) => {
-  return {
-    "product-id": productId,
+  campaigns,
+  color,
+  excluded,
+}: GetRecommendationsBodyProps):
+  | SimilarProductsRequest
+  | CrossSellingRequest => {
+  const staticFilters: RequestStaticFilters = {
     ...(color.length ? { color } : {}),
     ...(excluded.length ? { excluded: parseExcluded(excluded) } : {}),
+  };
+
+  return {
+    productId,
     ...(campaigns.length ? { campaigns: parseCampaigns(campaigns) } : {}),
+    ...(Object.keys(staticFilters).length ? { staticFilters } : {}),
   };
 };
