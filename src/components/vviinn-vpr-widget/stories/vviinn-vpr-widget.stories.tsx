@@ -39,6 +39,7 @@ const Template = (args) => `
       add-to-basket-show="${args.addToBasketShow}"
       update-button-location="${args.updateButtonLocation}"
       show-filters="${args.showFilters}"
+      set-mode-discounts="${args.setModeDiscounts}"
     >
     </vviinn-vpr-widget>
 `;
@@ -127,6 +128,7 @@ Set.args = {
   addToBasketShow: true,
   updateButtonLocation: "topAndItem",
   showFilters: false,
+  setModeDiscounts: "5, 10, 15",
 };
 
 Set.decorators = [gridDecorator];
