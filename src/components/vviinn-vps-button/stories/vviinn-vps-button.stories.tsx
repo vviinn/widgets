@@ -1,5 +1,3 @@
-import { STORYBOOK_API_PATH, STORYBOOK_TOKEN } from "../../../storybook";
-
 export default {
   title: "Widgets/Search/Button",
   component: "vviinn-vps-button",
@@ -43,7 +41,8 @@ export const Modal = Template.bind({});
 Modal.storyName = "Modal";
 
 Modal.args = {
-  token: STORYBOOK_TOKEN,
+  token: process.env.STORYBOOK_TOKEN,
+  apiPath: process.env.STORYBOOK_API_PATH,
   campaignId: "",
   excluded: "",
   mode: "modal",
@@ -51,7 +50,6 @@ Modal.args = {
   locale: "en-US",
   currencySign: "€",
   addStyle: true,
-  apiPath: STORYBOOK_API_PATH,
   imageResolutionWidth: 250,
   textSearchShow: false,
 };
@@ -59,7 +57,8 @@ Modal.args = {
 export const Upload = Template.bind({});
 
 Upload.args = {
-  token: STORYBOOK_TOKEN,
+  token: process.env.STORYBOOK_TOKEN,
+  apiPath: process.env.STORYBOOK_API_PATH,
   campaignId: "",
   excluded: "",
   mode: "upload",
@@ -67,6 +66,5 @@ Upload.args = {
   locale: "en-US",
   currencySign: "€",
   addStyle: true,
-  apiPath: STORYBOOK_API_PATH,
   imageResolutionWidth: 250,
 };

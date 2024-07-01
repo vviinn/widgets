@@ -1,5 +1,3 @@
-import { STORYBOOK_API_PATH, STORYBOOK_TOKEN } from "../../../storybook";
-
 export default {
   title: "Widgets/Search/Main",
   component: "vviinn-vps-widget",
@@ -26,14 +24,14 @@ const Template = (args) => `
 
 export const Default = Template.bind({});
 Default.args = {
-  token: STORYBOOK_TOKEN,
+  token: process.env.STORYBOOK_TOKEN,
+  apiPath: process.env.STORYBOOK_API_PATH,
   campaignId: "",
   excluded: "",
   productDetailNewTab: true,
   locale: "en-US",
   currencySign: "€",
   active: true,
-  apiPath: STORYBOOK_API_PATH,
   imageResolutionWidth: 250,
   textSearchShow: false,
 };

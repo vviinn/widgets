@@ -1,4 +1,3 @@
-import { STORYBOOK_API_PATH, STORYBOOK_TOKEN } from "../../../storybook";
 import { argTypes } from "./args";
 
 const centerDecorator = (story) => `
@@ -50,8 +49,9 @@ export const Default = Template.bind({});
 Default.storyName = "Button";
 
 Default.args = {
-  token: STORYBOOK_TOKEN,
-  productId: "95906126752",
+  token: process.env.STORYBOOK_TOKEN,
+  apiPath: process.env.STORYBOOK_API_PATH,
+  productId: "4114460310",
   campaignType: "VPR",
   campaigns: "",
   color: "",
@@ -70,7 +70,6 @@ Default.args = {
   noResultShow: true,
   noResultText: "",
   gridArrowsDynamic: false,
-  apiPath: STORYBOOK_API_PATH,
   addToBasketShow: false,
 };
 

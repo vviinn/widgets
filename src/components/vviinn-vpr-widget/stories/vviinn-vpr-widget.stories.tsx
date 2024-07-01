@@ -1,4 +1,3 @@
-import { STORYBOOK_API_PATH, STORYBOOK_TOKEN } from "../../../storybook";
 import { argTypes } from "./args";
 import { gridDecorator, continuityDecorator } from "./decorators";
 
@@ -46,8 +45,9 @@ const Template = (args) => `
 
 export const Grid = Template.bind({});
 Grid.args = {
-  token: STORYBOOK_TOKEN,
-  productId: "95906126752",
+  token: process.env.STORYBOOK_TOKEN,
+  apiPath: process.env.STORYBOOK_API_PATH,
+  productId: "4114460310",
   campaignType: "VPR",
   campaigns: "",
   color: "",
@@ -65,7 +65,6 @@ Grid.args = {
   noResultShow: true,
   noResultText: "",
   gridArrowsDynamic: false,
-  apiPath: STORYBOOK_API_PATH,
   addToBasketShow: false,
 };
 
@@ -73,8 +72,9 @@ Grid.decorators = [gridDecorator];
 
 export const Continuity = Template.bind({});
 Continuity.args = {
-  token: STORYBOOK_TOKEN,
-  productId: "95906126752",
+  token: process.env.STORYBOOK_TOKEN,
+  apiPath: process.env.STORYBOOK_API_PATH,
+  productId: "4114460310",
   campaignType: "VPR",
   campaigns: "",
   color: "",
@@ -92,7 +92,6 @@ Continuity.args = {
   noResultShow: true,
   noResultText: "",
   gridArrowsDynamic: false,
-  apiPath: STORYBOOK_API_PATH,
   addToBasketShow: true,
 };
 
@@ -100,7 +99,8 @@ Continuity.decorators = [continuityDecorator];
 
 export const Set = Template.bind({});
 Set.args = {
-  token: STORYBOOK_TOKEN,
+  token: process.env.STORYBOOK_TOKEN,
+  apiPath: process.env.STORYBOOK_API_PATH,
   productId: "95906126752",
   campaignType: "VCS",
   campaigns: "",
@@ -119,7 +119,6 @@ Set.args = {
   noResultShow: true,
   noResultText: "",
   gridArrowsDynamic: false,
-  apiPath: STORYBOOK_API_PATH,
   addToBasketShow: true,
   updateButtonLocation: "topAndItem",
   setModeDiscounts: "5, 10, 15",

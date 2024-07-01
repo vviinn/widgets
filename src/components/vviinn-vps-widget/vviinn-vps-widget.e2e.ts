@@ -1,11 +1,10 @@
 import { newE2EPage } from "@stencil/core/testing";
-import { STORYBOOK_TOKEN } from "../../storybook";
 
 describe("example", () => {
   it("should render a foo-component", async () => {
     const page = await newE2EPage();
     await page.setContent(`<vviinn-vps-widget active="true"
-token=${STORYBOOK_TOKEN}></vviinn-vps-widget>`);
+token=${process.env.STORYBOOK_TOKEN}></vviinn-vps-widget>`);
 
     const widget = await page.find("vviinn-vps-widget");
     await page.waitForChanges();
