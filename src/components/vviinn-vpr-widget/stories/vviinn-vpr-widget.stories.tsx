@@ -101,7 +101,7 @@ export const Set = Template.bind({});
 Set.args = {
   token: process.env.STORYBOOK_TOKEN,
   apiPath: process.env.STORYBOOK_API_PATH,
-  productId: "95906126752",
+  productId: "105870136716",
   campaignType: "VCS",
   campaigns: "",
   color: "",
