@@ -62,8 +62,6 @@ export class VviinnVprButton {
   @Prop() position: "bottom" | "right" = "bottom";
   /** Image for showing in the modal's header */
   @Prop() sourceImage: string | null = null;
-  /** Sidebar title (change it to fit your locale) */
-  @Prop() sidebarTitle: string = "Visually similar products";
   /** Show or hide the scrollbar */
   @Prop() modalScrollbar: boolean = false;
   /** Comma-separated list of campaign IDs */
@@ -78,6 +76,9 @@ export class VviinnVprButton {
   @Prop() addStyle: boolean = true;
   /** Switch between carousel modes */
   @Prop() mode: CarouselMode = "continuity";
+  /** Sidebar title (change it to fit your locale) */
+  @Prop() sidebarTitle: string =
+    this.mode === "set" ? "" : "Visually similar products";
   /** Width of each recommended product image */
   @Prop() imageWidth: number = 300;
   /**  The currency sign is displayed after the price */

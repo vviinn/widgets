@@ -351,7 +351,6 @@ export class VviinnVprWidget implements ComponentInterface {
   @Listen("vviinnProductLoad")
   trackProductLoad({ detail }: ProductCardEvent) {
     this.productImageLoadedSubject.next(detail.productId);
-
     const productLoadEvent = this.getProductTrackEvent(detail, "load");
     if (!productLoadEvent) return;
 
@@ -580,11 +579,18 @@ export class VviinnVprWidget implements ComponentInterface {
     searchState.sourceProduct = this.sourceProduct;
 
     this.productIds = this.recommendations.map((r) => r.productId);
+
     this.productImageLoadedSubject.subscribe((id) => {
       this.productIds = this.productIds.filter((x) => x !== id);
 
-      if (this.productIds.length === 0) {
+      if (!this.isSetMode && this.productIds.length === 0)
         this.vviinnRecommendationsLoaded.emit();
+
+      if (this.isSetMode) {
+        const setModeProductsLoaded =
+          this.productIds.length === this.recommendations.length - 4;
+
+        if (setModeProductsLoaded) this.vviinnRecommendationsLoaded.emit();
       }
     });
   }
