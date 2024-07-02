@@ -42,6 +42,7 @@ const Template = (args) =>
     excluded="${args.excluded}"
     api-path="${args.apiPath}"
     add-to-basket-show="${args.addToBasketShow}"
+    show-filters="${args.showFilters}"
   ></vviinn-vpr-button>`;
 
 export const Default = Template.bind({});
@@ -71,6 +72,7 @@ Default.args = {
   noResultText: "",
   gridArrowsDynamic: false,
   addToBasketShow: false,
+  showFilters: false,
 };
 
 Default.parameters = {

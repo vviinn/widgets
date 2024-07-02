@@ -49,6 +49,7 @@ export class RecommendationsSidebar {
   @Prop() productDetailNewTab: boolean;
   /** Show or hide Add to Basket button */
   @Prop() addToBasketShow: boolean = false;
+  @Prop() showFilters: boolean = false;
 
   /** @internal */
   @Prop() buttonChildren: HTMLCollection;
@@ -154,6 +155,7 @@ export class RecommendationsSidebar {
               closed={this.state === "closed"}
               opened={this.state === "open"}
               addToBasketShow={this.addToBasketShow}
+              showFilters={this.showFilters}
             />
           </main>
         </aside>

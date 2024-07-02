@@ -11,6 +11,13 @@ export interface Interfaces {
   CrossSellingResponse: components["schemas"]["cross-selling-response"];
 
   RequestStaticFilters: components["schemas"]["request-static-filters"];
+
+  DynamicFilter:
+    | components["schemas"]["response-categorical-filter-item"]
+    | components["schemas"]["response-interval-filter-item"];
+  DynamicFilters: components["schemas"]["response-dynamic-filters"];
+  DynamicFilterValue: components["schemas"]["interval-suggestion"];
+  RequestDynamicFilters: components["schemas"]["request-dynamic-filters"];
 }
 
 export type SimilarProductsRequest = Interfaces["SimilarProductsRequest"];

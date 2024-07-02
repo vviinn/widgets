@@ -94,6 +94,8 @@ export class VviinnVprButton {
   @Prop() productDetailNewTab: boolean = false;
   /** Show or hide Add to Basket button */
   @Prop() addToBasketShow: boolean = false;
+  /** Show filters on top */
+  @Prop() showFilters: boolean = false;
 
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
@@ -177,6 +179,7 @@ export class VviinnVprButton {
     sidebar.excluded = this.excluded;
     sidebar.addToBasketShow = this.addToBasketShow;
     sidebar.buttonChildren = this.el.children;
+    sidebar.showFilters = this.showFilters;
 
     this.sidebar = sidebar;
 

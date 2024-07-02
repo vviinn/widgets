@@ -4,11 +4,14 @@ import {
   RequestStaticFilters,
 } from "../interfaces/recommendation";
 
+import { RequestDynamicFilters } from "../campaign/VPRCampaignService";
+
 type GetRecommendationsBodyProps = {
   productId: string;
   color?: string;
   excluded?: string;
   campaigns?: string;
+  dynamicFilters?: RequestDynamicFilters;
 };
 
 const parseExcluded = (excluded: string) =>
@@ -33,6 +36,7 @@ export const getRecommendationsBody = ({
   campaigns,
   color,
   excluded,
+  dynamicFilters = [],
 }: GetRecommendationsBodyProps):
   | SimilarProductsRequest
   | CrossSellingRequest => {
@@ -43,6 +47,7 @@ export const getRecommendationsBody = ({
 
   return {
     productId,
+    dynamicFilters: dynamicFilters ?? undefined,
     ...(campaigns.length ? { campaigns: parseCampaigns(campaigns) } : {}),
     ...(Object.keys(staticFilters).length ? { staticFilters } : {}),
   };

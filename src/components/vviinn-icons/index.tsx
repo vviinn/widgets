@@ -19,3 +19,5 @@ export { UploadActionIcon } from "./icons/UploadActionIcon";
 export { VisualSearchIcon } from "./icons/VisualSearchIcon";
 export { WarningIcon } from "./icons/WarningIcon";
 export { PhotoFrameCorner } from "./icons/PhotoFrameCorner";
+export { FiltersIcon } from "./icons/FiltersIcon";
+export { NewCloseIcon } from "./icons/NewCloseIcon";
