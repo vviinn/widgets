@@ -60,7 +60,11 @@ import { resources } from "../../locale";
 import { Locale } from "../../locale";
 import { UpdateIcon } from "../vviinn-icons";
 import { getRecommendationsBody } from "../../recommendation";
-import { SimilarProductsResponse } from "../../campaign/VPRCampaignService";
+import {
+  RequestDynamicFilters,
+  SimilarProductsResponse,
+  DynamicFilters,
+} from "../../campaign/VPRCampaignService";
 import { CrossSellingResponse } from "../../campaign/VCSCampaignService";
 
 export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
@@ -151,6 +155,8 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() addToBasketShow: boolean = false;
   /** Location of Update button for Set mode */
   @Prop() updateButtonLocation: UpdateButtonLocation = "topAndItem";
+  /** Show filters on top */
+  @Prop() showFilters: boolean = false;
   /** List of discounts for Set mode. Example: "5, 10, 15, 20" (could be less than 4 numbers) */
   @Prop() setModeDiscounts: string = this.mode === "set" ? "5, 10, 15" : "";
 
@@ -168,6 +174,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() opened?: boolean;
 
   @State() recommendations: Recommendation[] = [];
+  @State() dynamicFilters: DynamicFilters = [];
   @State() sourceProduct: Recommendation | null = null;
   @State() trackingDeactivated: boolean = false;
   @State() hasErrorOnLoad: boolean = false;
@@ -200,6 +207,9 @@ export class VviinnVprWidget implements ComponentInterface {
   /** Add to Basket button clicked */
   @Event() vviinnAddToBasket: EventEmitter<BasicEventData>;
 
+  /** When the filters change */
+  @Event() vviinnFiltersChanged: EventEmitter<RequestDynamicFilters>;
+
   /** @internal */
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
@@ -219,6 +229,7 @@ export class VviinnVprWidget implements ComponentInterface {
   private isSetMode: boolean;
   private isGridMode: boolean;
   private isContinuityMode: boolean;
+  private requestDynamicFilters: RequestDynamicFilters = [];
   trackingApi: DefaultApi;
   uiSessionId: string;
 
@@ -432,6 +443,12 @@ export class VviinnVprWidget implements ComponentInterface {
     this.updatingAllCards = false;
   }
 
+  @Listen("vviinnFiltersChanged")
+  async filtersChanged({ detail }: CustomEvent<RequestDynamicFilters>) {
+    this.requestDynamicFilters = detail;
+    this.getRecommendations();
+  }
+
   private trackWidgetEvent(action: WidgetAction) {
     if (this.trackingDeactivated) return;
     const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
@@ -508,6 +525,7 @@ export class VviinnVprWidget implements ComponentInterface {
     searchState.loading = true;
     const campaignType =
       this.campaignType.length > 0 ? this.campaignType : "VPR";
+
     const headers = createBearAuthedHeader(this.token);
 
     const body = getRecommendationsBody({
@@ -515,6 +533,7 @@ export class VviinnVprWidget implements ComponentInterface {
       color: this.color,
       excluded: this.excluded,
       campaigns: this.campaigns,
+      dynamicFilters: this.requestDynamicFilters,
     });
 
     const request = pipe(
@@ -549,10 +568,11 @@ export class VviinnVprWidget implements ComponentInterface {
 
   private handleRecommendationsSuccess({
     data,
+    interactions,
   }: SimilarProductsResponse | CrossSellingResponse) {
     this.vviinnResultLoad.emit(this.getBasicEventData());
     this.trackResultEvent("load");
-
+    this.dynamicFilters = interactions.dynamicFilters as DynamicFilters;
     const { products, sourceProduct } = data;
     this.recommendations = products;
     this.sourceProduct = sourceProduct;
@@ -633,6 +653,13 @@ export class VviinnVprWidget implements ComponentInterface {
               </button>
             ) : null}
           </div>
+
+          {this.showFilters && (
+            <vviinn-filters
+              filters={this.dynamicFilters}
+              widgetElementId={this.id}
+            ></vviinn-filters>
+          )}
 
           {this.recommendations.length > 0 &&
             (this.useCarousel ? this.renderCarousel() : this.renderResults())}

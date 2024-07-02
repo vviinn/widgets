@@ -42,6 +42,7 @@ const Template = (args) =>
     excluded="${args.excluded}"
     api-path="${args.apiPath}"
     add-to-basket-show="${args.addToBasketShow}"
+    show-filters="${args.showFilters}"
   ></vviinn-vpr-button>`;
 
 export const Default = Template.bind({});
@@ -72,6 +73,7 @@ Default.args = {
   gridArrowsDynamic: false,
   apiPath: "https://api.vviinn.com",
   addToBasketShow: false,
+  showFilters: false,
 };
 
 Default.parameters = {
