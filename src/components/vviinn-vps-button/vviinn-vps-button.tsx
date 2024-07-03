@@ -72,6 +72,8 @@ export class VviinnVpsButton {
   @Prop() excluded: string = "";
   /** Toggle for opening product link in new tab or not */
   @Prop() productDetailNewTab: boolean = true;
+  /** Toggle for redirection to PDP on product's click */
+  @Prop() productDetailsRedirection: boolean = true;
   /** Resolution width of an image in the product card */
   @Prop() imageResolutionWidth: number = 250;
   /** Example image source */
@@ -191,6 +193,7 @@ export class VviinnVpsButton {
           }
           excluded={this.excluded}
           productDetailNewTab={this.productDetailNewTab}
+          productDetailsRedirection={this.productDetailsRedirection}
           imageResolutionWidth={this.imageResolutionWidth}
           exampleImageSource={this.exampleImageSource}
           textSearchShow={this.textSearchShow}

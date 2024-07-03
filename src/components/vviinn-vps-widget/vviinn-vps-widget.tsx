@@ -118,6 +118,8 @@ export class VviinnVpsWidget {
   @Prop() excluded: string = "";
   /** Toggle for opening product link in new tab or not */
   @Prop() productDetailNewTab: boolean = true;
+  /** Toggle for redirection to PDP on product's click */
+  @Prop() productDetailsRedirection: boolean = true;
   /** Resolution width of an image in the product card */
   @Prop() imageResolutionWidth: number = 250;
   /** Example image source */
@@ -235,6 +237,7 @@ export class VviinnVpsWidget {
   }
 
   private handleOpenLink(deeplink: string, event: MouseEvent) {
+    if (!this.productDetailsRedirection) return;
     if (this.productDetailNewTab || event.ctrlKey || event.metaKey) {
       let newTab = window.open();
       if (newTab) {
