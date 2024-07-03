@@ -29,7 +29,7 @@ const Template = (args) => `
       image-width="${args.imageWidth}"
       campaign-type="${args.campaignType}"
       campaigns="${args.campaigns}"
-      product-detail-new-tab="${args.productDetailNewTab}"
+      product-details-new-tab="${args.productDetailsNewTab}"
       color="${args.color ? args.color.slice(1) : ""}"
       grid-arrows-dynamic="${args.gridArrowsDynamic}"
       no-result-text="${args.noResultText}"
@@ -55,7 +55,7 @@ Grid.args = {
   excluded: "",
   mode: "grid",
   blockTitle: "Recommended products",
-  productDetailNewTab: false,
+  productDetailsNewTab: false,
   imageWidth: 420,
   imageRatio: 1,
   locale: "en-US",
@@ -84,7 +84,7 @@ Continuity.args = {
   excluded: "",
   mode: "continuity",
   blockTitle: "Recommended products",
-  productDetailNewTab: false,
+  productDetailsNewTab: false,
   imageWidth: 300,
   imageRatio: 1,
   locale: "en-US",
@@ -113,7 +113,7 @@ Set.args = {
   excluded: "",
   mode: "set",
   blockTitle: "Recommended products",
-  productDetailNewTab: false,
+  productDetailsNewTab: false,
   imageWidth: 300,
   imageRatio: 1,
   locale: "en-US",

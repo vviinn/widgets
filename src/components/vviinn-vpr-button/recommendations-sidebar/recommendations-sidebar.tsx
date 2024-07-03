@@ -46,7 +46,7 @@ export class RecommendationsSidebar {
   @Prop() gridArrowsDynamic: boolean;
   @Prop() excluded: string;
   /** Toggle for opening product link in new tab or not */
-  @Prop() productDetailNewTab: boolean;
+  @Prop() productDetailsNewTab: boolean;
   /** Toggle for redirection to PDP on product's click */
   @Prop() productDetailsRedirection: boolean;
   /** Show or hide Add to Basket button */
@@ -153,7 +153,7 @@ export class RecommendationsSidebar {
               gridArrowsDynamic={this.gridArrowsDynamic}
               showingInButton={this.showingInButton}
               excluded={this.excluded}
-              productDetailNewTab={this.productDetailNewTab}
+              productDetailsNewTab={this.productDetailsNewTab}
               productDetailsRedirection={this.productDetailsRedirection}
               closed={this.state === "closed"}
               opened={this.state === "open"}

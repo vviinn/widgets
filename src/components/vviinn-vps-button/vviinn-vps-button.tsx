@@ -71,7 +71,7 @@ export class VviinnVpsButton {
   /** Excluded filter. Example: "brand:Nike;custom_label_0:summer" */
   @Prop() excluded: string = "";
   /** Toggle for opening product link in new tab or not */
-  @Prop() productDetailNewTab: boolean = true;
+  @Prop() productDetailsNewTab: boolean = true;
   /** Toggle for redirection to PDP on product's click */
   @Prop() productDetailsRedirection: boolean = true;
   /** Resolution width of an image in the product card */
@@ -192,7 +192,7 @@ export class VviinnVpsButton {
             (this.mode === "modal" || this.mode === "camera")
           }
           excluded={this.excluded}
-          productDetailNewTab={this.productDetailNewTab}
+          productDetailsNewTab={this.productDetailsNewTab}
           productDetailsRedirection={this.productDetailsRedirection}
           imageResolutionWidth={this.imageResolutionWidth}
           exampleImageSource={this.exampleImageSource}

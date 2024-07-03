@@ -15,7 +15,7 @@ const Template = (args) => `
     locale="${args.locale}"
     active="${args.active}"
     excluded="${args.excluded}"
-    product-detail-new-tab="${args.productDetailNewTab}"
+    product-details-new-tab="${args.productDetailsNewTab}"
     api-path="${args.apiPath}"
     image-resolution-width="${args.imageResolutionWidth}"
     text-search-show="${args.textSearchShow}"
@@ -28,7 +28,7 @@ Default.args = {
     "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4",
   campaignId: "",
   excluded: "",
-  productDetailNewTab: true,
+  productDetailsNewTab: true,
   locale: "en-US",
   currencySign: "€",
   active: true,

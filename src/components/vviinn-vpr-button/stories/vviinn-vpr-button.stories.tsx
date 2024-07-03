@@ -32,7 +32,7 @@ const Template = (args) =>
     modal-scrollbar="${args.modalScrollbar}"
     mode="${args.mode}"
     campaigns="${args.campaigns}"
-    product-detail-new-tab="${args.productDetailNewTab}"
+    product-details-new-tab="${args.productDetailsNewTab}"
     image-width="${args.imageWidth}"
     color="${args.color ? args.color.toString().slice(1) : ""}"
     no-result-text="${args.noResultText}"
@@ -58,7 +58,7 @@ Default.args = {
   color: "",
   excluded: "",
   mode: "continuity",
-  productDetailNewTab: false,
+  productDetailsNewTab: false,
   sidebarTitle: "Visually similar products",
   position: "bottom",
   sourceImage:

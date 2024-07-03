@@ -91,7 +91,7 @@ export class VviinnVprButton {
   /** Excluded filter. Example: "brand:Nike;custom_label_0:summer" */
   @Prop() excluded: string = "";
   /** Toggle for opening product link in new tab or not */
-  @Prop() productDetailNewTab: boolean = false;
+  @Prop() productDetailsNewTab: boolean = false;
   /** Toggle for redirection to PDP on product's click */
   @Prop() productDetailsRedirection: boolean = true;
   /** Show or hide Add to Basket button */
@@ -175,7 +175,7 @@ export class VviinnVprButton {
     sidebar.noResultText = this.noResultText;
     sidebar.noResultShow = this.noResultShow;
     sidebar.gridArrowsDynamic = this.gridArrowsDynamic;
-    sidebar.productDetailNewTab = this.productDetailNewTab;
+    sidebar.productDetailsNewTab = this.productDetailsNewTab;
     sidebar.productDetailsRedirection = this.productDetailsRedirection;
     sidebar.widgetVersion = version;
     sidebar.showingInButton = true;

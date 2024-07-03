@@ -150,8 +150,7 @@ export class VviinnVprWidget implements ComponentInterface {
   /** Excluded filter. Example: "brand:Nike;custom_label_0:summer" */
   @Prop() excluded: string = "";
   /** Toggle for opening product link in new tab or not */
-  // FIXME: Change to productDetailsNewTab?
-  @Prop() productDetailNewTab: boolean = false;
+  @Prop() productDetailsNewTab: boolean = false;
   /** Toggle for redirection to PDP on product's click */
   @Prop() productDetailsRedirection: boolean = true;
   /** Show or hide Add to Basket button */
@@ -248,7 +247,7 @@ export class VviinnVprWidget implements ComponentInterface {
 
   private handleOpenLink(deeplink: string, event: MouseEvent) {
     if (!this.productDetailsRedirection) return;
-    if (this.productDetailNewTab || event.ctrlKey || event.metaKey) {
+    if (this.productDetailsNewTab || event.ctrlKey || event.metaKey) {
       let newTab = window.open();
       if (newTab) {
         newTab.location.href = deeplink;
