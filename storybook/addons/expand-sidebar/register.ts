@@ -1,9 +1,11 @@
 import { addons } from "@storybook/addons";
 import { DOCS_RENDERED } from "@storybook/core-events";
 
-const getButtons = () => document.querySelectorAll("button.sidebar-item");
+const expandButtons = () => {
+  const buttons: NodeListOf<HTMLButtonElement> = document.querySelectorAll(
+    "button.sidebar-item"
+  );
 
-const expandButtons = (buttons) => {
   buttons.forEach((button) => {
     if (button.getAttribute("aria-expanded") === "false") {
       button.click();
@@ -17,7 +19,7 @@ addons.register("expand-sidebar", (api) => {
 
   api.on(DOCS_RENDERED, () => {
     if (isExpanded) return;
-    expandButtons(getButtons());
+    expandButtons();
     isExpanded = true;
   });
 });
