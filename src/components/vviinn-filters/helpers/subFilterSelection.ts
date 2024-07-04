@@ -9,7 +9,7 @@ export const subFilterSelection = (
   { column: selectedColumn }: DynamicFilter,
   filterValue: DynamicFilterValue
 ) => {
-  const value = filterValue.interval ?? filterValue;
+  const value = filterValue.full ?? filterValue;
 
   const index = filters.findIndex(({ column }) => column === selectedColumn);
   const valueIndex = filters[index]?.values.findIndex((val) => val === value);

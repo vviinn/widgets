@@ -26,6 +26,14 @@
   scrollbar-width: thin;
 }
 
+.filters-header {
+  overflow-x: auto;
+
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+}
+
 .widget-header {
   display: flex;
   flex-wrap: wrap;

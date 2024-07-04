@@ -6,6 +6,8 @@ import {
   State,
   Event,
   EventEmitter,
+  Element,
+  Watch,
 } from "@stencil/core";
 import {
   DynamicFilters,
@@ -14,8 +16,13 @@ import {
   RequestDynamicFilters,
 } from "../../campaign/VPRCampaignService";
 import { FiltersIcon, NewCloseIcon } from "../vviinn-icons";
-
 import { getFilterOptions, subFilterSelection } from "./helpers";
+import { FiltersEventData } from "./types";
+import { Locale } from "../../locale";
+import i18next from "i18next";
+import { resources } from "../../locale";
+import { SlotSkeleton, slotChangeListener } from "../customized-slots";
+
 /**
  * * @part filters - Wrapper itself.
  */
@@ -25,19 +32,48 @@ import { getFilterOptions, subFilterSelection } from "./helpers";
   shadow: true,
 })
 export class VviinnExtendedFilters {
+  @Element() el: HTMLElement;
+
   @Prop() filters: DynamicFilters = [];
+  @Prop() filtersString: string = "";
+  /** The locale for currency formatting and text localization */
+  @Prop() locale: Locale = "de-DE";
 
   @State() requestFilters: RequestDynamicFilters = [];
   @State() showMore: boolean = false;
   @State() selectedMoreOptions: string[] = [];
 
+  /** @internal */
+  @Event({ bubbles: true, composed: true })
+  globalSlotsChanged: EventEmitter<any>;
   /** Event fires when user click on Add to Basket button */
   @Event({ bubbles: true })
-  vviinnFiltersChanged: EventEmitter<RequestDynamicFilters>;
+  vviinnFiltersChanged: EventEmitter<FiltersEventData>;
+
+  private replaceSlotsContent() {
+    const slots = this.el.querySelectorAll("[slot]");
+    this.globalSlotsChanged.emit({
+      slots: Array.from(slots),
+      element: this.el,
+    });
+  }
+
+  componentDidRender() {
+    this.replaceSlotsContent();
+  }
+
+  async componentWillLoad() {
+    await i18next.init({
+      lng: this.locale,
+      fallbackLng: "en",
+      resources,
+    });
+
+    slotChangeListener(this, this.el);
+  }
 
   private emitTequestFiltersMore(requestFilters: RequestDynamicFilters) {
-    this.vviinnFiltersChanged.emit(requestFilters);
-    this.showMore = false;
+    this.vviinnFiltersChanged.emit({ filters: requestFilters, el: this.el });
   }
 
   private handleSubFilterSelection(
@@ -49,6 +85,8 @@ export class VviinnExtendedFilters {
       seletedFilter,
       filterValue
     );
+
+    this.emitTequestFiltersMore([...this.requestFilters]);
   }
 
   private showActiveOnModalSubButton(
@@ -59,7 +97,7 @@ export class VviinnExtendedFilters {
     requestFilters.forEach((filter) => {
       if (
         filter.values.some(
-          (value) => value === filterValue || value === filterValue.interval
+          (value) => value === filterValue || value === filterValue.full
         )
       ) {
         className = "active";
@@ -78,22 +116,46 @@ export class VviinnExtendedFilters {
     }
   }
 
-  private filtersModalApply() {
-    this.emitTequestFiltersMore({
-      ...this.requestFilters,
-    });
-  }
-
-  private handleFiltersChanged = (event) => {
+  private handleSetFilters = (event) => {
     this.filters = event.detail;
   };
 
+  private handleFiltersChanged = ({
+    detail,
+  }: CustomEvent<FiltersEventData>) => {
+    const { filters, el: senderElement } = detail;
+
+    if (senderElement === this.el) return;
+
+    this.requestFilters = filters;
+  };
+
+  @Watch("filtersString")
+  filtersStringWatcher() {
+    if (this.filtersString === "") return;
+
+    try {
+      this.filters = JSON.parse(this.filtersString) as DynamicFilters;
+    } catch (e) {
+      console.error("Invalid filters string", e);
+    }
+  }
+
   connectedCallback() {
-    document.addEventListener("vviinnFilters", this.handleFiltersChanged);
+    document.addEventListener("vviinnFilters", this.handleSetFilters);
+    document.addEventListener(
+      "vviinnFiltersChanged",
+      this.handleFiltersChanged
+    );
+    this.filtersStringWatcher();
   }
 
   disconnectedCallback() {
-    document.removeEventListener("vviinnFilters", this.handleFiltersChanged);
+    document.removeEventListener("vviinnFilters", this.handleSetFilters);
+    document.addEventListener(
+      "vviinnFiltersChanged",
+      this.handleFiltersChanged
+    );
   }
 
   render() {
@@ -104,6 +166,8 @@ export class VviinnExtendedFilters {
 
     return (
       <Host part="filters">
+        {SlotSkeleton("filters")}
+
         {this.filters.length > 0 && (
           <button
             class="filters-more-button"
@@ -116,7 +180,10 @@ export class VviinnExtendedFilters {
         <div class={`filters-modal ${this.showMore ? "open" : ""}`}>
           <div class="filters-modal-wrapper">
             <div class="filters-modal-header">
-              Filters{" "}
+              <slot name="vviinn-extended-filters-title">
+                <span>{i18next.t("filters.modal.title")}</span>
+              </slot>
+
               {moreFiltersOptionCount > 0 ? `(${moreFiltersOptionCount})` : ""}
               <button
                 class="filters-modal-close"
@@ -141,9 +208,9 @@ export class VviinnExtendedFilters {
                       }
                       class="filters-modal-main-button"
                     >
-                      {mainFilter.column}{" "}
+                      {mainFilter.column}
                       {filterOptions.length > 0
-                        ? `(${filterOptions.length})`
+                        ? ` (${filterOptions.length})`
                         : ""}
                     </button>
 
@@ -184,17 +251,21 @@ export class VviinnExtendedFilters {
             <div class="filters-modal-actions">
               <button
                 class="filters-modal-apply"
-                onClick={() => this.filtersModalApply()}
+                onClick={() => (this.showMore = false)}
                 disabled={this.requestFilters.length === 0}
               >
-                Apply
+                <slot name="vviinn-extended-filters-apply">
+                  {i18next.t("filters.modal.apply")}
+                </slot>
               </button>
 
               <button
                 class="filters-modal-reset"
                 onClick={() => (this.requestFilters = [])}
               >
-                Reset Filters
+                <slot name="vviinn-extended-filters-reset">
+                  {i18next.t("filters.modal.resetFilters")}
+                </slot>
               </button>
             </div>
           </div>

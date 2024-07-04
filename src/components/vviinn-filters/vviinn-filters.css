@@ -4,15 +4,8 @@
   overflow: hidden;
 }
 
-.filters-header,
 .filters-footer {
   overflow-x: auto;
-}
-
-.filters-header {
-  display: flex;
-  justify-content: space-between;
-  gap: 14px;
 }
 
 .filters-modal-list,
@@ -162,6 +155,10 @@
   line-height: 24px;
 
   border-bottom: 1px solid var(--gray-10);
+
+  display: flex;
+  justify-content: center;
+  gap: 5px;
 }
 
 .filters-modal-list {

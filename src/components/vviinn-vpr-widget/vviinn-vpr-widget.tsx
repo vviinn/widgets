@@ -66,6 +66,7 @@ import {
   DynamicFilters,
 } from "../../campaign/VPRCampaignService";
 import { CrossSellingResponse } from "../../campaign/VCSCampaignService";
+import { FiltersEventData } from "../../components/vviinn-filters/types";
 
 export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
 
@@ -210,7 +211,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @Event() vviinnAddToBasket: EventEmitter<BasicEventData>;
 
   /** When the filters change */
-  @Event() vviinnFiltersChanged: EventEmitter<RequestDynamicFilters>;
+  @Event() vviinnFiltersChanged: EventEmitter<FiltersEventData>;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -446,8 +447,8 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   @Listen("vviinnFiltersChanged")
-  async filtersChanged({ detail }: CustomEvent<RequestDynamicFilters>) {
-    this.requestDynamicFilters = detail;
+  async filtersChanged({ detail }: CustomEvent<FiltersEventData>) {
+    this.requestDynamicFilters = detail.filters;
     this.getRecommendations();
   }
 
@@ -656,13 +657,24 @@ export class VviinnVprWidget implements ComponentInterface {
             ) : null}
           </div>
 
-          {this.showFilters && (
-            <vviinn-filters
-              filters={this.dynamicFilters}
-              showExtended={this.showExtendedFilters}
-              show-extended={false}
-              show-first={100}
-            ></vviinn-filters>
+          {(this.showFilters || this.showExtendedFilters) && (
+            <div class="filters-header ">
+              {this.showFilters && (
+                <vviinn-filters
+                  filters={this.dynamicFilters}
+                  show-extended={false}
+                  show-first={100}
+                ></vviinn-filters>
+              )}
+
+              {this.showExtendedFilters && (
+                <vviinn-extended-filters
+                  filters={this.dynamicFilters}
+                  show-extended={false}
+                  show-first={100}
+                ></vviinn-extended-filters>
+              )}
+            </div>
           )}
 
           {this.recommendations.length > 0 &&
