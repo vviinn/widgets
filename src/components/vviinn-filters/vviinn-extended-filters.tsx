@@ -97,7 +97,7 @@ export class VviinnExtendedFilters {
     requestFilters.forEach((filter) => {
       if (
         filter.values.some(
-          (value) => value === filterValue || value === filterValue.full
+          (value) => value === filterValue || value === filterValue.interval
         )
       ) {
         className = "active";
