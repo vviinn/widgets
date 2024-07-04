@@ -48,7 +48,7 @@ export class RecommendationsSidebar {
   /** Toggle for opening product link in new tab or not */
   @Prop() productDetailsNewTab: boolean;
   /** Toggle for redirection to PDP on product's click */
-  @Prop() productDetailsRedirection: boolean;
+  @Prop() productDetailsRedirect: boolean;
   /** Show or hide Add to Basket button */
   @Prop() addToBasketShow: boolean = false;
   @Prop() showFilters: boolean = false;
@@ -154,7 +154,7 @@ export class RecommendationsSidebar {
               showingInButton={this.showingInButton}
               excluded={this.excluded}
               productDetailsNewTab={this.productDetailsNewTab}
-              productDetailsRedirection={this.productDetailsRedirection}
+              productDetailsRedirect={this.productDetailsRedirect}
               closed={this.state === "closed"}
               opened={this.state === "open"}
               addToBasketShow={this.addToBasketShow}

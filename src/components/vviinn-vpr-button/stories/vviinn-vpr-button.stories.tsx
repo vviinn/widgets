@@ -33,6 +33,7 @@ const Template = (args) =>
     mode="${args.mode}"
     campaigns="${args.campaigns}"
     product-details-new-tab="${args.productDetailsNewTab}"
+    product-details-redirect="${args.productDetailsRedirect}"
     image-width="${args.imageWidth}"
     color="${args.color ? args.color.toString().slice(1) : ""}"
     no-result-text="${args.noResultText}"
@@ -59,6 +60,7 @@ Default.args = {
   excluded: "",
   mode: "continuity",
   productDetailsNewTab: false,
+  productDetailsRedirect: true,
   sidebarTitle: "Visually similar products",
   position: "bottom",
   sourceImage:

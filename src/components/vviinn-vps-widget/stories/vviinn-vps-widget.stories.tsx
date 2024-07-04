@@ -16,6 +16,7 @@ const Template = (args) => `
     active="${args.active}"
     excluded="${args.excluded}"
     product-details-new-tab="${args.productDetailsNewTab}"
+    product-details-redirect="${args.productDetailsRedirect}"
     api-path="${args.apiPath}"
     image-resolution-width="${args.imageResolutionWidth}"
     text-search-show="${args.textSearchShow}"
@@ -29,6 +30,7 @@ Default.args = {
   campaignId: "",
   excluded: "",
   productDetailsNewTab: true,
+  productDetailsRedirect: true,
   locale: "en-US",
   currencySign: "€",
   active: true,

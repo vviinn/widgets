@@ -32,6 +32,7 @@ const Template = (args) => `
   locale="${args.locale}"
   mode="${args.mode}"
   product-details-new-tab="${args.productDetailsNewTab}"
+  product-details-redirect="${args.productDetailsRedirect}"
   api-path="${args.apiPath}"
   image-resolution-width="${args.imageResolutionWidth}"
   text-search-show="${args.textSearchShow}"
@@ -47,6 +48,7 @@ Modal.args = {
   excluded: "",
   mode: "modal",
   productDetailsNewTab: true,
+  productDetailsRedirect: true,
   locale: "en-US",
   currencySign: "€",
   addStyle: true,
@@ -64,6 +66,7 @@ Upload.args = {
   excluded: "",
   mode: "upload",
   productDetailsNewTab: true,
+  productDetailsRedirect: true,
   locale: "en-US",
   currencySign: "€",
   addStyle: true,
