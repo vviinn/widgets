@@ -14,6 +14,7 @@ import { CarouselMode } from "../../vviinn-carousel/vviinn-carousel";
 import { BasicEventData } from "../../../recommendation/events";
 import { CampaignName } from "../../../campaign/Campaign";
 import { Locale } from "../../../locale";
+import { UpdateButtonLocation } from "../../vviinn-vpr-widget/vviinn-vpr-widget";
 
 type SidebarState = "idle" | "open" | "closed";
 type ClickEvent = Event & { clientX: number; clientY: number };
@@ -39,7 +40,10 @@ export class RecommendationsSidebar {
   @Prop() color: string;
   @Prop() locale: Locale;
   @Prop() imageWidth: number = 300;
+  @Prop() imageRatio: number;
+  @Prop() cssUrl: string | null;
   @Prop() currencySign: string = "€";
+  @Prop() pricePrefix: string;
   @Prop() noResultText: string;
   @Prop() noResultShow: boolean;
   /** Hiding disabled arrows in the carousel if true */
@@ -50,6 +54,8 @@ export class RecommendationsSidebar {
   /** Show or hide Add to Basket button */
   @Prop() addToBasketShow: boolean = false;
   @Prop() showFilters: boolean = false;
+  @Prop() setModeDiscounts: string;
+  @Prop() updateButtonLocation: UpdateButtonLocation;
 
   /** @internal */
   @Prop() buttonChildren: HTMLCollection;
@@ -134,6 +140,7 @@ export class RecommendationsSidebar {
               token={this.token}
               productId={this.productId}
               imageWidth={this.imageWidth}
+              imageRatio={this.imageRatio}
               blockTitle=""
               mode={this.mode}
               campaign-type={this.campaignType}
@@ -143,6 +150,7 @@ export class RecommendationsSidebar {
               campaigns={this.campaigns}
               color={this.color}
               currencySign={this.currencySign}
+              pricePrefix={this.pricePrefix}
               apiPath={this.apiPath}
               locale={this.locale}
               buttonElementId={this.buttonElementId}
@@ -155,7 +163,10 @@ export class RecommendationsSidebar {
               closed={this.state === "closed"}
               opened={this.state === "open"}
               addToBasketShow={this.addToBasketShow}
+              cssUrl={this.cssUrl}
               showFilters={this.showFilters}
+              setModeDiscounts={this.setModeDiscounts}
+              updateButtonLocation={this.updateButtonLocation}
             />
           </main>
         </aside>
