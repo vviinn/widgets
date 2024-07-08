@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.58.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.57.0...v2.58.0) (2024-07-08)
+
+
+### Features
+
+* Change default Storybook token ([935168d](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/935168d2c903b121547e3a2b9d5b2df4ad1a7aaa))
+
 ## [2.57.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.56.1...v2.57.0) (2024-07-02)
 
 
