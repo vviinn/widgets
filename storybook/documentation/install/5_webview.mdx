@@ -131,4 +131,4 @@ In this example, we also asked for microphone permission, but only the camera pe
 
 Also, we used 2 packages `webview_flutter` and `permission_handler` to be able to use WebView and ask for camera permission. However, you can use any package which suits your needs.
 
-To redirect to the product details page that you have in your mobile app you need to listen to the `vviinnProductClick` event and based on the `product ID` redirect to the product details page.
+To redirect to the product details page in your mobile app you need to listen to the `vviinnProductClick` event and based on the `product ID` redirect to the product details page. To prevent the default redirection, you should set the `product-details-redirect` property to `false` in your widget component.
