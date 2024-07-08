@@ -1,13 +1,4 @@
 export const argTypes = {
-  showExtended: {
-    name: "Show Extended",
-    description:
-      "Show the extended filters. If true, the extended filters will be shown at right.",
-    control: {
-      type: "boolean",
-      default: true,
-    },
-  },
   showFirst: {
     name: "Show Filters",
     description: "How many filters should show.",
@@ -15,5 +6,8 @@ export const argTypes = {
       type: "number",
       default: 4,
     },
+  },
+  filters: {
+    control: false,
   },
 };
