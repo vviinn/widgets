@@ -28,12 +28,15 @@ const Template = (args) =>
     add-style="${args.addStyle}"
     sidebar-title="${args.sidebarTitle}"
     locale="${args.locale}"
+    css-url="${args.cssUrl}"
     currency-sign="${args.currencySign}"
+    price-prefix="${args.pricePrefix}"
     modal-scrollbar="${args.modalScrollbar}"
     mode="${args.mode}"
     campaigns="${args.campaigns}"
     product-detail-new-tab="${args.productDetailNewTab}"
     image-width="${args.imageWidth}"
+    image-ratio="${args.imageRatio}"
     color="${args.color ? args.color.toString().slice(1) : ""}"
     no-result-text="${args.noResultText}"
     no-result-show="${args.noResultShow}"
@@ -42,6 +45,8 @@ const Template = (args) =>
     excluded="${args.excluded}"
     api-path="${args.apiPath}"
     add-to-basket-show="${args.addToBasketShow}"
+    update-button-location="${args.updateButtonLocation}"
+    set-mode-discounts="${args.setModeDiscounts}"
     show-filters="${args.showFilters}"
   ></vviinn-vpr-button>`;
 
@@ -59,13 +64,18 @@ Default.args = {
   excluded: "",
   mode: "continuity",
   productDetailNewTab: false,
+  updateButtonLocation: "topAndItem",
+  setModeDiscounts: "5, 10, 15",
   sidebarTitle: "Visually similar products",
   position: "bottom",
   sourceImage:
     "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg",
   imageWidth: "300",
+  imageRatio: 1,
   locale: "en-US",
+  cssUrl: "",
   currencySign: "€",
+  pricePrefix: "",
   addStyle: true,
   modalScrollbar: false,
   noResultShow: true,
