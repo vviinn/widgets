@@ -143,10 +143,15 @@ export class VviinnFilters {
   }
 
   render() {
+    const { column } = this.selectedFilter ?? {};
     const selectedFilterOptions = getFilterOptions(this.selectedFilter);
     const filters = this.filters.slice(0, this.showFirst);
 
     if (filters.length === 0) return <Host></Host>;
+
+    if (column === "price") {
+      console.log(selectedFilterOptions);
+    }
 
     return (
       <Host part="filters">
@@ -169,29 +174,33 @@ export class VviinnFilters {
 
         {this.selectedFilter !== undefined && (
           <div class="filters-footer">
-            <ul class="sub-filters-wrapper">
-              {selectedFilterOptions &&
-                selectedFilterOptions.map((filter) => {
-                  return (
-                    <li>
-                      <button
-                        onClick={() =>
-                          this.handleSubFilterSelection(
-                            filter.value,
-                            this.selectedFilter
-                          )
-                        }
-                        class={`filters-sub-button ${this.showActiveOnSubButton(
-                          this.requestFilters,
-                          filter.value
-                        )}`}
-                      >
-                        {filter.label}
-                      </button>
-                    </li>
-                  );
-                })}
-            </ul>
+            {column === "price" ? (
+              <vviinn-price-range />
+            ) : (
+              <ul class="sub-filters-wrapper">
+                {selectedFilterOptions &&
+                  selectedFilterOptions.map((filter) => {
+                    return (
+                      <li>
+                        <button
+                          onClick={() =>
+                            this.handleSubFilterSelection(
+                              filter.value,
+                              this.selectedFilter
+                            )
+                          }
+                          class={`filters-sub-button ${this.showActiveOnSubButton(
+                            this.requestFilters,
+                            filter.value
+                          )}`}
+                        >
+                          {filter.label}
+                        </button>
+                      </li>
+                    );
+                  })}
+              </ul>
+            )}
           </div>
         )}
       </Host>
