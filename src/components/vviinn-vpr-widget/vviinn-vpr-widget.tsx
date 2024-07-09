@@ -158,7 +158,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() updateButtonLocation: UpdateButtonLocation = "topAndItem";
   /** Show filters on top */
   @Prop() showFilters: boolean = false;
-  /** Show filters on top */
+  /** Show extended filters on top */
   @Prop() showExtendedFilters: boolean = false;
   /** List of discounts for Set mode. Example: "5, 10, 15, 20" (could be less than 4 numbers) */
   @Prop() setModeDiscounts: string = this.mode === "set" ? "5, 10, 15" : "";
@@ -660,18 +660,13 @@ export class VviinnVprWidget implements ComponentInterface {
           {(this.showFilters || this.showExtendedFilters) && (
             <div class="filters-header ">
               {this.showFilters && (
-                <vviinn-filters
-                  filters={this.dynamicFilters}
-                  show-extended={false}
-                  show-first={100}
-                ></vviinn-filters>
+                <vviinn-filters filters={this.dynamicFilters}></vviinn-filters>
               )}
 
               {this.showExtendedFilters && (
                 <vviinn-extended-filters
                   filters={this.dynamicFilters}
-                  show-extended={false}
-                  show-first={100}
+                  locale={this.locale}
                 ></vviinn-extended-filters>
               )}
             </div>
