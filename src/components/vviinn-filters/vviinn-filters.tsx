@@ -140,7 +140,7 @@ export class VviinnFilters {
 
   render() {
     const selectedFilterOptions = getFilterOptions(this.selectedFilter);
-    //TODO: Will remove this logic then we have the `Primary filters` feature
+    //TODO - #36707: Will remove this logic then we have the `Primary filters` feature
     const filters = this.filters.slice(0, 4);
     if (filters.length === 0) return <Host></Host>;
 
