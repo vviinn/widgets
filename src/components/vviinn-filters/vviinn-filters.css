@@ -9,24 +9,23 @@
 
 .filters-modal-list,
 .sub-filters-wrapper,
-.main-filters-wrapper,
+.main-filters-list,
 .filters-modal-sub-list {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.sub-filters-wrapper,
 .main-filters-wrapper {
-  display: flex;
+  overflow-x: auto;
 }
 
-.main-filters-wrapper {
+.main-filters-list {
   padding: 2px;
   gap: 10px;
   border-radius: 8px;
   background: var(--surface-color-surface-01);
-  overflow-x: auto;
+  display: inline-flex;
 }
 
 .filters-modal-main-button,
@@ -76,6 +75,7 @@
 
 .sub-filters-wrapper {
   gap: 12px;
+  display: flex;
 }
 
 .filters-sub-button {

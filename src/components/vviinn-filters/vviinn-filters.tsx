@@ -146,22 +146,24 @@ export class VviinnFilters {
 
     return (
       <Host part="filters">
-        <ul class="main-filters-wrapper">
-          {filters.map((filter) => {
-            return (
-              <li>
-                <button
-                  class={`filters-main-button ${this.showActiveOnMainButton(
-                    filter
-                  )}`}
-                  onClick={() => this.handleMainFilterSelection(filter)}
-                >
-                  {filter.column}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
+        <div class="main-filters-wrapper">
+          <ul class="main-filters-list">
+            {filters.map((filter) => {
+              return (
+                <li>
+                  <button
+                    class={`filters-main-button ${this.showActiveOnMainButton(
+                      filter
+                    )}`}
+                    onClick={() => this.handleMainFilterSelection(filter)}
+                  >
+                    {filter.label}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
 
         {this.selectedFilter !== undefined && (
           <div class="filters-footer">
