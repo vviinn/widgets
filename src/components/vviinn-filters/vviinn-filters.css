@@ -1,7 +1,6 @@
 @import "../../variables.css";
 
 :host {
-  overflow: hidden;
 }
 
 .filters-footer {
@@ -27,6 +26,7 @@
   gap: 10px;
   border-radius: 8px;
   background: var(--surface-color-surface-01);
+  overflow-x: auto;
 }
 
 .filters-modal-main-button,
