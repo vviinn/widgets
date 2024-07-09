@@ -132,7 +132,7 @@ export class VviinnFilters {
 
   disconnectedCallback() {
     document.removeEventListener("vviinnFilters", this.handleSetFilters);
-    document.addEventListener(
+    document.removeEventListener(
       "vviinnFiltersChanged",
       this.handleFiltersChanged
     );
