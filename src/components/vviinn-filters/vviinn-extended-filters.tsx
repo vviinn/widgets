@@ -208,7 +208,7 @@ export class VviinnExtendedFilters {
                       }
                       class="filters-modal-main-button"
                     >
-                      {mainFilter.column}
+                      {mainFilter.label}
                       {filterOptions.length > 0
                         ? ` (${filterOptions.length})`
                         : ""}

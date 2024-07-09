@@ -15,7 +15,6 @@ export default {
 const Template = (args) => `
   <vviinn-filters
     filters-string='${JSON.stringify(args.filters)}'
-    show-first="${args.showFirst}"
   ></vviinn-filters>`;
 
 export const Default = Template.bind({});
@@ -24,5 +23,4 @@ Default.storyName = "Main";
 
 Default.args = {
   filters,
-  showFirst: 4,
 };

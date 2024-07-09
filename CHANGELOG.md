@@ -2,6 +2,74 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.58.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.57.0...v2.58.0) (2024-07-08)
+
+
+### Features
+
+* Change default Storybook token ([935168d](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/935168d2c903b121547e3a2b9d5b2df4ad1a7aaa))
+
+## [2.57.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.56.1...v2.57.0) (2024-07-02)
+
+
+### Features
+
+* developing filters component ([2b68d98](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/2b68d985607d6a24b895afd4c9d3960107e1e283))
+
+### [2.56.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.56.0...v2.56.1) (2024-07-01)
+
+### [2.20.27](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.26...v2.20.27) (2023-08-02)
+
+### [2.20.26](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.25...v2.20.26) (2023-08-01)
+
+### [2.20.25](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.24...v2.20.25) (2023-08-01)
+
+### [2.20.24](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.23...v2.20.24) (2023-07-28)
+
+### [2.20.23](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.22...v2.20.23) (2023-07-28)
+
+### [2.20.22](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.21...v2.20.22) (2023-07-26)
+
+### [2.20.21](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.20...v2.20.21) (2023-07-26)
+
+### [2.20.20](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.19...v2.20.20) (2023-07-25)
+
+### [2.20.19](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.18...v2.20.19) (2023-07-25)
+
+### [2.20.18](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.17...v2.20.18) (2023-07-25)
+
+### [2.20.17](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.16...v2.20.17) (2023-07-21)
+
+### [2.20.16](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.15...v2.20.16) (2023-07-21)
+
+### [2.20.15](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.14...v2.20.15) (2023-07-20)
+
+### [2.20.14](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.13...v2.20.14) (2023-07-20)
+
+### [2.20.13](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.12...v2.20.13) (2023-07-19)
+
+### [2.20.12](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.11...v2.20.12) (2023-07-19)
+
+### [2.20.11](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.10...v2.20.11) (2023-07-12)
+
+### [2.20.10](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.9...v2.20.10) (2023-07-12)
+
+### [2.20.9](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.8...v2.20.9) (2023-07-11)
+
+### [2.20.8](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.7...v2.20.8) (2023-07-11)
+
+### [2.20.7](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.6...v2.20.7) (2023-07-10)
+
+### [2.20.6](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.5...v2.20.6) (2023-07-10)
+
+### [2.20.5](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.4...v2.20.5) (2023-07-07)
+
+### [2.20.4](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.3...v2.20.4) (2023-06-22)
+
+### [2.20.3](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.20.2...v2.20.3) (2023-06-22)
+
+### 2.20.2 (2023-06-22)
+
 ## [2.56.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.55.7...v2.56.0) (2024-07-01)
 
 
