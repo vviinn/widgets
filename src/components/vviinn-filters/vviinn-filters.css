@@ -132,6 +132,8 @@
   background-color: #ffffff;
   z-index: 99;
   border-radius: 32px 0px 0px 32px;
+  display: flex;
+  flex-direction: column;
 }
 
 @media (max-width: 768px) {
@@ -162,7 +164,12 @@
 }
 
 .filters-modal-list {
-  margin: 4px 24px;
+  margin: 4px 0 0 24px;
+  flex: 1;
+  overflow-y: auto;
+}
+.filters-modal-list > li {
+  padding-right: 24px;
 }
 .filters-modal-main-button {
   border-bottom: 1px solid var(--gray-10);
@@ -211,12 +218,11 @@
 }
 
 .filters-modal-actions {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
   border-top: 1px solid var(--gray-10);
   padding: 24px;
+  z-index: 10;
+  background: #ffffff;
+  border-radius: 0px 0px 0px 32px;
 }
 
 .filters-modal-apply {
