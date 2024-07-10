@@ -74,6 +74,23 @@ export class RecommendationsSidebar {
 
   @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
 
+  @Listen("vviinnUpdatingAllCardsStarted")
+  updatingAllCardsStarted() {
+    const { height } = this.getSidebarRectangle();
+    const aside = this.getAsideElement();
+    if (aside.style.height !== `${height}px`) {
+      aside.style.height = `${height}px`;
+    }
+  }
+
+  @Listen("vviinnUpdatingAllCardsFinished")
+  updatingAllCardsFinished() {
+    const aside = this.getAsideElement();
+    if (aside.style.height !== "auto") {
+      aside.style.height = "auto";
+    }
+  }
+
   @Listen("click", { target: "body" })
   bodyClickListener(event: ClickEvent) {
     const { clientX, clientY } = event;
@@ -99,8 +116,12 @@ export class RecommendationsSidebar {
     };
   }
 
+  private getAsideElement(): HTMLElement {
+    return this.el.shadowRoot.querySelector("aside");
+  }
+
   private getSidebarRectangle(): DOMRect {
-    return this.el.shadowRoot.querySelector("aside")?.getBoundingClientRect();
+    return this.getAsideElement()?.getBoundingClientRect();
   }
 
   componentDidLoad() {
