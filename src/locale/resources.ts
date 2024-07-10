@@ -43,6 +43,13 @@ export const resources: Resource = {
         title: "Das Bild ist zu schmal",
         button: "Neues Bild hochladen",
       },
+      filters: {
+        modal: {
+          title: "Filter",
+          apply: "Anwenden",
+          resetFilters: "Filter zurücksetzen",
+        },
+      },
     },
   },
   en: {
@@ -81,6 +88,13 @@ export const resources: Resource = {
       wrongAspectRatioBlock: {
         title: "The image is too narrow",
         button: "Upload another image",
+      },
+      filters: {
+        modal: {
+          title: "Filters",
+          apply: "Apply",
+          resetFilters: "Reset Filters",
+        },
       },
     },
   },
