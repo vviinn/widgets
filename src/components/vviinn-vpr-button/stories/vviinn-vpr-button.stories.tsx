@@ -34,7 +34,8 @@ const Template = (args) =>
     modal-scrollbar="${args.modalScrollbar}"
     mode="${args.mode}"
     campaigns="${args.campaigns}"
-    product-detail-new-tab="${args.productDetailNewTab}"
+    product-details-new-tab="${args.productDetailsNewTab}"
+    product-details-redirect="${args.productDetailsRedirect}"
     image-width="${args.imageWidth}"
     image-ratio="${args.imageRatio}"
     color="${args.color ? args.color.toString().slice(1) : ""}"
@@ -63,9 +64,10 @@ Default.args = {
   color: "",
   excluded: "",
   mode: "continuity",
-  productDetailNewTab: false,
   updateButtonLocation: "topAndItem",
   setModeDiscounts: "5, 10, 15",
+  productDetailsNewTab: false,
+  productDetailsRedirect: true,
   sidebarTitle: "Visually similar products",
   position: "bottom",
   sourceImage:

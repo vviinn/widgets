@@ -147,7 +147,9 @@ export class VviinnVprWidget implements ComponentInterface {
   /** Hiding disabled arrows in the carousel if true */
   @Prop() gridArrowsDynamic: boolean = false;
   /** Toggle for opening product link in new tab or not */
-  @Prop() productDetailNewTab: boolean = false;
+  @Prop() productDetailsNewTab: boolean = false;
+  /** Toggle for redirection to PDP on product's click */
+  @Prop() productDetailsRedirect: boolean = true;
   /** Show or hide Add to Basket button */
   @Prop() addToBasketShow: boolean = false;
   /** Show filters on top */
@@ -248,7 +250,8 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   private handleOpenLink(deeplink: string, event: MouseEvent) {
-    if (this.productDetailNewTab || event.ctrlKey || event.metaKey) {
+    if (!this.productDetailsRedirect) return;
+    if (this.productDetailsNewTab || event.ctrlKey || event.metaKey) {
       let newTab = window.open();
       if (newTab) {
         newTab.location.href = deeplink;

@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.61.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.60.0...v2.61.0) (2024-07-10)
+
+
+### Features
+
+* Add product-details-redirection property ([cf01cac](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/cf01cac00865749d7a8bd2027f595efc57ea5195))
+
+
+### Bug Fixes
+
+* Rename new property to product-details-redirect. Rename product-detail-new-tab to product-details-new-tab ([4865828](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/4865828de2898d9639ae7864ffc5a56ccf43efdc))
+
 ## [2.60.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.59.0...v2.60.0) (2024-07-10)
 
 

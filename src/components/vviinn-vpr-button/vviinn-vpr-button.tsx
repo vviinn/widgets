@@ -94,7 +94,9 @@ export class VviinnVprButton {
   /** Hiding disabled arrows in the carousel if true */
   @Prop() gridArrowsDynamic: boolean = false;
   /** Toggle for opening product link in new tab or not */
-  @Prop() productDetailNewTab: boolean = false;
+  @Prop() productDetailsNewTab: boolean = false;
+  /** Toggle for redirection to PDP on product's click */
+  @Prop() productDetailsRedirect: boolean = true;
   /** Show or hide Add to Basket button */
   @Prop() addToBasketShow: boolean = false;
   /** Show filters on top */
@@ -194,7 +196,8 @@ export class VviinnVprButton {
     sidebar.noResultText = this.noResultText;
     sidebar.noResultShow = this.noResultShow;
     sidebar.gridArrowsDynamic = this.gridArrowsDynamic;
-    sidebar.productDetailNewTab = this.productDetailNewTab;
+    sidebar.productDetailsNewTab = this.productDetailsNewTab;
+    sidebar.productDetailsRedirect = this.productDetailsRedirect;
     sidebar.widgetVersion = version;
     sidebar.showingInButton = true;
     sidebar.excluded = this.excluded;
