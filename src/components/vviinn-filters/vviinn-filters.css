@@ -1,39 +1,31 @@
 @import "../../variables.css";
 
 :host {
-  overflow: hidden;
 }
 
-.filters-header,
 .filters-footer {
   overflow-x: auto;
 }
 
-.filters-header {
-  display: flex;
-  justify-content: space-between;
-  gap: 14px;
-}
-
 .filters-modal-list,
 .sub-filters-wrapper,
-.main-filters-wrapper,
+.main-filters-list,
 .filters-modal-sub-list {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.sub-filters-wrapper,
 .main-filters-wrapper {
-  display: flex;
+  overflow-x: auto;
 }
 
-.main-filters-wrapper {
+.main-filters-list {
   padding: 2px;
   gap: 10px;
   border-radius: 8px;
   background: var(--surface-color-surface-01);
+  display: inline-flex;
 }
 
 .filters-modal-main-button,
@@ -83,6 +75,7 @@
 
 .sub-filters-wrapper {
   gap: 12px;
+  display: flex;
 }
 
 .filters-sub-button {
@@ -139,6 +132,8 @@
   background-color: #ffffff;
   z-index: 99;
   border-radius: 32px 0px 0px 32px;
+  display: flex;
+  flex-direction: column;
 }
 
 @media (max-width: 768px) {
@@ -162,10 +157,20 @@
   line-height: 24px;
 
   border-bottom: 1px solid var(--gray-10);
+
+  display: flex;
+  justify-content: center;
+  gap: 5px;
 }
 
 .filters-modal-list {
-  margin: 4px 24px;
+  margin: 4px 0 0 24px;
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 20px;
+}
+.filters-modal-list > li {
+  padding-right: 24px;
 }
 .filters-modal-main-button {
   border-bottom: 1px solid var(--gray-10);
@@ -214,12 +219,11 @@
 }
 
 .filters-modal-actions {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
   border-top: 1px solid var(--gray-10);
   padding: 24px;
+  z-index: 10;
+  background: #ffffff;
+  border-radius: 0px 0px 0px 32px;
 }
 
 .filters-modal-apply {

@@ -40,6 +40,7 @@ const Template = (args) => `
       add-to-basket-show="${args.addToBasketShow}"
       update-button-location="${args.updateButtonLocation}"
       show-filters="${args.showFilters}"
+      show-extended-filters="${args.showExtendedFilters}"
       set-mode-discounts="${args.setModeDiscounts}"
     >
     </vviinn-vpr-widget>
@@ -70,6 +71,7 @@ Grid.args = {
   gridArrowsDynamic: false,
   addToBasketShow: false,
   showFilters: false,
+  showExtendedFilters: false,
 };
 
 Grid.decorators = [gridDecorator];
@@ -99,6 +101,7 @@ Continuity.args = {
   gridArrowsDynamic: false,
   addToBasketShow: true,
   showFilters: false,
+  showExtendedFilters: false,
 };
 
 Continuity.decorators = [continuityDecorator];
@@ -129,6 +132,7 @@ Set.args = {
   addToBasketShow: true,
   updateButtonLocation: "topAndItem",
   showFilters: false,
+  showExtendedFilters: false,
   setModeDiscounts: "5, 10, 15",
 };
 

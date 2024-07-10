@@ -66,6 +66,7 @@ import {
   DynamicFilters,
 } from "../../campaign/VPRCampaignService";
 import { CrossSellingResponse } from "../../campaign/VCSCampaignService";
+import { FiltersEventData } from "../../components/vviinn-filters/types";
 
 export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
 
@@ -159,6 +160,8 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() updateButtonLocation: UpdateButtonLocation = "topAndItem";
   /** Show filters on top */
   @Prop() showFilters: boolean = false;
+  /** Show extended filters on top */
+  @Prop() showExtendedFilters: boolean = false;
   /** List of discounts for Set mode. Example: "5, 10, 15, 20" (could be less than 4 numbers) */
   @Prop() setModeDiscounts: string = this.mode === "set" ? "5, 10, 15" : "";
 
@@ -210,7 +213,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @Event() vviinnAddToBasket: EventEmitter<BasicEventData>;
 
   /** When the filters change */
-  @Event() vviinnFiltersChanged: EventEmitter<RequestDynamicFilters>;
+  @Event() vviinnFiltersChanged: EventEmitter<FiltersEventData>;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -447,8 +450,8 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   @Listen("vviinnFiltersChanged")
-  async filtersChanged({ detail }: CustomEvent<RequestDynamicFilters>) {
-    this.requestDynamicFilters = detail;
+  async filtersChanged({ detail }: CustomEvent<FiltersEventData>) {
+    this.requestDynamicFilters = detail.filters;
     this.getRecommendations();
   }
 
@@ -657,11 +660,19 @@ export class VviinnVprWidget implements ComponentInterface {
             ) : null}
           </div>
 
-          {this.showFilters && (
-            <vviinn-filters
-              filters={this.dynamicFilters}
-              widgetElementId={this.id}
-            ></vviinn-filters>
+          {(this.showFilters || this.showExtendedFilters) && (
+            <div class="filters-header ">
+              {this.showFilters && (
+                <vviinn-filters filters={this.dynamicFilters}></vviinn-filters>
+              )}
+
+              {this.showExtendedFilters && (
+                <vviinn-extended-filters
+                  filters={this.dynamicFilters}
+                  locale={this.locale}
+                ></vviinn-extended-filters>
+              )}
+            </div>
           )}
 
           {this.recommendations.length > 0 &&
