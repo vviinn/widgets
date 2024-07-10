@@ -68,8 +68,6 @@ type SearchStore = {
   imageBounds: O.Option<Rectangle>;
   searchArea: O.Option<Rectangle>;
 
-  resultsComponents: HTMLElement[];
-
   serverError: boolean;
   loading: boolean;
 };
@@ -91,8 +89,6 @@ const { state, onChange } = createStore<SearchStore>({
   imageUrl: O.none,
   imageBounds: O.none,
   searchArea: O.none,
-
-  resultsComponents: [],
 
   serverError: false,
   loading: false,

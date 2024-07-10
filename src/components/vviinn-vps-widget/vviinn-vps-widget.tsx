@@ -685,41 +685,6 @@ export class VviinnVpsWidget {
     return this.isDesktop ? buttons.reverse() : buttons;
   }
 
-  private renderResults() {
-    if (searchState.results.length === 0 || !this.isResultSlide()) return null;
-    if (!this.resultLoaded) {
-      this.vviinnResultLoad.emit(this.getBasicEventData());
-      this.trackResultEvent("load");
-      this.resultLoaded = true;
-    }
-
-    return searchState.results.map((p, i) => (
-      <vviinn-product-card
-        key={p.productId}
-        hidden={true}
-        productTitle={p.title}
-        productId={p.productId}
-        productType={p.productType}
-        brand={p.brand}
-        deeplink={p.deeplink}
-        price={p.price.actual}
-        salePrice={p.price.sale}
-        responsive={true}
-        imageWidth={this.imageResolutionWidth}
-        image={p.image.thumbnail ?? p.image.original}
-        part="product-card"
-        campaignTypeId="VPS"
-        index={i}
-        widgetElementId={this.id}
-        buttonElementId={this.buttonElementId}
-        widgetVersion={version}
-        currency={this.currencySign}
-        pricePrefix=""
-        locale={this.locale}
-      />
-    ));
-  }
-
   private resetState() {
     this.resetScroll("start-page_block");
 
@@ -942,10 +907,21 @@ export class VviinnVpsWidget {
                     hidden:
                       searchState.results.length === 0 ||
                       this.showAspectRatioError,
-                    products: true,
+                    "results-wrapper": true,
                   }}
                 >
-                  {this.renderResults()}
+                  {this.isResultSlide() && (
+                    <vviinn-results
+                      campaignTypeId="VPS"
+                      image-width={this.imageResolutionWidth}
+                      widget-element-id={this.id}
+                      button-element-id={this.buttonElementId}
+                      widget-version={version}
+                      currency-sign={this.currencySign}
+                      locale={this.locale}
+                      result-loaded={this.resultLoaded}
+                    />
+                  )}
                 </div>
               </div>
             </vviinn-slide>
