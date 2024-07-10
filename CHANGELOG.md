@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.59.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.58.0...v2.59.0) (2024-07-10)
+
+
+### Features
+
+* Applied some changes on filters component ([15d2f4e](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/15d2f4efe8e3fb9ddd49cb845a1c05425b392979))
+
 ## [2.58.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.57.0...v2.58.0) (2024-07-08)
 
 
