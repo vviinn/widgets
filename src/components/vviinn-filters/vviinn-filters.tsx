@@ -83,7 +83,7 @@ export class VviinnFilters {
     if (!mainFilter) return "";
 
     return mainFilter.values.some(
-      (value) => value === filterValue || value === filterValue.full
+      (value) => value === filterValue || value === filterValue.interval
     )
       ? "active"
       : "";

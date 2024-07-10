@@ -7,6 +7,7 @@ export type DynamicFilters = Interfaces["DynamicFilters"];
 export type DynamicFilter = Interfaces["DynamicFilter"];
 export type DynamicFilterValue = Interfaces["DynamicFilterValue"];
 export type RequestDynamicFilters = Interfaces["RequestDynamicFilters"];
+export type DynamicFilterValueItem = Interfaces["DynamicFilterValueItem"];
 
 export const getVPRRecommendations =
   (body: SimilarProductsRequest) => (options: RequestInit) => {
