@@ -15,7 +15,8 @@ const Template = (args) => `
     locale="${args.locale}"
     active="${args.active}"
     excluded="${args.excluded}"
-    product-detail-new-tab="${args.productDetailNewTab}"
+    product-details-new-tab="${args.productDetailsNewTab}"
+    product-details-redirect="${args.productDetailsRedirect}"
     api-path="${args.apiPath}"
     image-resolution-width="${args.imageResolutionWidth}"
     text-search-show="${args.textSearchShow}"
@@ -28,7 +29,8 @@ Default.args = {
   apiPath: process.env.STORYBOOK_API_PATH,
   campaignId: "",
   excluded: "",
-  productDetailNewTab: true,
+  productDetailsNewTab: true,
+  productDetailsRedirect: true,
   locale: "en-US",
   currencySign: "€",
   active: true,
