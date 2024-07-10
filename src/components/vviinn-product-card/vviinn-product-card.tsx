@@ -137,6 +137,9 @@ export class VviinnProductCard {
   vviinnCrossSellingClick: EventEmitter<CrossSellingClickEventData>;
   /** @internal */
   @Event({ bubbles: true })
+  vviinnUpdatingAllCardsStarted: EventEmitter;
+  /** @internal */
+  @Event({ bubbles: true })
   vviinnUpdatingAllCardsFinished: EventEmitter;
 
   private productData: ProductCardEventData | null = null;
@@ -184,6 +187,7 @@ export class VviinnProductCard {
   @Watch("updatingAllCards")
   updatingAllCardsWatcher() {
     if (!this.updatingAllCards) return;
+    this.vviinnUpdatingAllCardsStarted.emit();
     this.isTransitioning = true;
     this.basketButonPressed = false;
 

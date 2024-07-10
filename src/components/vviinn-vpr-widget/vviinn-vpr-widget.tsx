@@ -114,56 +114,57 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
 })
 export class VviinnVprWidget implements ComponentInterface {
   @Element() el: HTMLElement;
-  /** Widget’s title (change it to fit your locale) */
-  @Prop() blockTitle: string = "Recommended products";
-  /** The ratio of each recommended product image */
-  @Prop() imageRatio: number = 1;
-  /** Width of each recommended product image */
-  @Prop() imageWidth: number = 300;
-  /** ID of product you need recommendations for (required) */
-  @Prop() productId: string;
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
-  /** The currency sign is displayed after the price */
-  @Prop() currencySign: string = "€";
-  /** Prefix is displayed before the price */
-  @Prop() pricePrefix: string = "";
+  /** ID of product you need recommendations for (required) */
+  @Prop() productId: string;
   /** Switch between carousel modes */
   @Prop() mode: CarouselMode = "continuity";
+  /** Comma-separated list of campaign IDs */
+  @Prop() campaigns: string = "";
+  /** Excluded filter. Example: "brand:Nike;custom_label_0:summer" */
+  @Prop() excluded: string = "";
   /** Campaign type */
   @Prop() campaignType: CampaignName = this.mode === "set" ? "VCS" : "VPR";
   /** The locale for currency formatting and text localization */
   @Prop() locale: Locale = "de-DE";
-  /** Comma-separated list of campaign IDs */
-  @Prop() campaigns: string = "";
   /** Accepts any hex color code */
   @Prop() color: string = "";
-  /** Hiding disabled arrows in the carousel if true */
-  @Prop() gridArrowsDynamic: boolean = false;
+  /** Width of each recommended product image */
+  @Prop() imageWidth: number = 300;
+  /** The ratio of each recommended product image */
+  @Prop() imageRatio: number = 1;
+  /** Optional for custom CSS. It will overwrite all other settings */
+  @Prop() cssUrl: string | null = null;
+  /** The currency sign is displayed after the price */
+  @Prop() currencySign: string = "€";
+  /** Prefix is displayed before the price */
+  @Prop() pricePrefix: string = "";
   /** A custom message is displayed when no results */
   @Prop() noResultText: string = "";
   /** Showing a message (when true) or hiding the whole widget, when no results */
   @Prop() noResultShow: boolean = true;
-  /** Show or hide the scrollbar */
-  @Prop() showScroll = true;
-  /** Optional for custom CSS. It will overwrite all other settings */
-  @Prop() cssUrl: string | null = null;
-  /** Excluded filter. Example: "brand:Nike;custom_label_0:summer" */
-  @Prop() excluded: string = "";
+  /** Hiding disabled arrows in the carousel if true */
+  @Prop() gridArrowsDynamic: boolean = false;
   /** Toggle for opening product link in new tab or not */
   @Prop() productDetailsNewTab: boolean = false;
   /** Toggle for redirection to PDP on product's click */
   @Prop() productDetailsRedirect: boolean = true;
   /** Show or hide Add to Basket button */
   @Prop() addToBasketShow: boolean = false;
-  /** Location of Update button for Set mode */
-  @Prop() updateButtonLocation: UpdateButtonLocation = "topAndItem";
   /** Show filters on top */
   @Prop() showFilters: boolean = false;
   /** Show extended filters on top */
   @Prop() showExtendedFilters: boolean = false;
   /** List of discounts for Set mode. Example: "5, 10, 15, 20" (could be less than 4 numbers) */
   @Prop() setModeDiscounts: string = this.mode === "set" ? "5, 10, 15" : "";
+  /** Location of Update button for Set mode */
+  @Prop() updateButtonLocation: UpdateButtonLocation = "topAndItem";
+
+  /** Widget’s title (change it to fit your locale) */
+  @Prop() blockTitle: string = "Recommended products";
+  /** Show or hide the widget's scrollbar */
+  @Prop() showScroll = true;
 
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
@@ -357,7 +358,6 @@ export class VviinnVprWidget implements ComponentInterface {
   @Listen("vviinnProductLoad")
   trackProductLoad({ detail }: ProductCardEvent) {
     this.productImageLoadedSubject.next(detail.productId);
-
     const productLoadEvent = this.getProductTrackEvent(detail, "load");
     if (!productLoadEvent) return;
 
@@ -586,11 +586,18 @@ export class VviinnVprWidget implements ComponentInterface {
     searchState.sourceProduct = this.sourceProduct;
 
     this.productIds = this.recommendations.map((r) => r.productId);
+
     this.productImageLoadedSubject.subscribe((id) => {
       this.productIds = this.productIds.filter((x) => x !== id);
 
-      if (this.productIds.length === 0) {
+      if (!this.isSetMode && this.productIds.length === 0)
         this.vviinnRecommendationsLoaded.emit();
+
+      if (this.isSetMode) {
+        const setModeProductsLoaded =
+          this.productIds.length === this.recommendations.length - 4;
+
+        if (setModeProductsLoaded) this.vviinnRecommendationsLoaded.emit();
       }
     });
   }
@@ -705,7 +712,7 @@ export class VviinnVprWidget implements ComponentInterface {
         image={recommendation.image.thumbnail}
         brand={recommendation.brand}
         imageWidth={this.imageWidth}
-        imageRatio={1}
+        imageRatio={this.imageRatio}
         price={recommendation.price.actual}
         salePrice={recommendation.price.sale}
         responsive={this.isGridMode}
@@ -754,6 +761,7 @@ export class VviinnVprWidget implements ComponentInterface {
         currencySign={this.currencySign}
         pricePrefix={this.pricePrefix}
         locale={this.locale}
+        imageRatio={this.imageRatio}
       ></vviinn-carousel>
     );
   }
