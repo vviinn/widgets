@@ -167,6 +167,7 @@
   margin: 4px 0 0 24px;
   flex: 1;
   overflow-y: auto;
+  padding-bottom: 20px;
 }
 .filters-modal-list > li {
   padding-right: 24px;
