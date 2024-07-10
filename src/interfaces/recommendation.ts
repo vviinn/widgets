@@ -16,7 +16,7 @@ export interface Interfaces {
     | components["schemas"]["response-categorical-filter-item"]
     | components["schemas"]["response-interval-filter-item"];
   DynamicFilters: components["schemas"]["response-dynamic-filters"];
-  DynamicFilterValue: components["schemas"]["interval-suggestion"];
+  DynamicFilterValue: components["schemas"]["response-interval-filter-item"];
   RequestDynamicFilters: components["schemas"]["request-dynamic-filters"];
 }
 

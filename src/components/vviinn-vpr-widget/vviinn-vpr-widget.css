@@ -26,6 +26,24 @@
   scrollbar-width: thin;
 }
 
+.filters-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.filters-header > vviinn-extended-filters {
+  width: 44px;
+  height: 44px;
+}
+
+@media (max-width: 768px) {
+  .filters-header > vviinn-filters {
+    flex: 1;
+    width: 100px;
+  }
+}
+
 .widget-header {
   display: flex;
   flex-wrap: wrap;

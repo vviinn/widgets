@@ -23,12 +23,22 @@ const vpsSlotsNames: string[] = [
   "vviinn-image-search-modal-title",
 ];
 
+const filtersSlotsNames: string[] = [
+  "vviinn-extended-filters-title",
+  "vviinn-extended-filters-apply",
+  "vviinn-extended-filters-reset",
+];
+
 const renderNamedSlot = (name: string) => <slot name={name} />;
 
 export const SlotSkeleton = (renderType: string) => {
-  return (renderType === "vps" ? vpsSlotsNames : vprSlotsNames).map(
-    renderNamedSlot
-  );
+  return (
+    renderType === "vps"
+      ? [...vpsSlotsNames, ...filtersSlotsNames]
+      : renderType === "filters"
+      ? filtersSlotsNames
+      : [...vprSlotsNames, ...filtersSlotsNames]
+  ).map(renderNamedSlot);
 };
 
 const getSlots = (element: HTMLElement): HTMLSlotElement[] =>
@@ -100,6 +110,7 @@ export const slotChangeListener = (component: any, element: HTMLElement) => {
           "VVIINN-PRIVACY-BADGE",
           "VVIINN-MODAL",
           "VVIINN-TEXT-SEARCH",
+          "VVIINN-EXTENDED-FILTERS",
         ].includes(elementTagName);
 
         const elementsAreDifferent = element !== detail.element;
@@ -147,7 +158,7 @@ export const slotChangeListener = (component: any, element: HTMLElement) => {
         const elementIsNotRelatedToCurrentDetailElement =
           isNotChildOfCurrentDetailElement || isNotChildOfCurrentSearchButton;
 
-        if (elementIsNotRelatedToCurrentDetailElement) {
+        if (elementsAreDifferent && elementIsNotRelatedToCurrentDetailElement) {
           return;
         }
 
