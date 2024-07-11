@@ -23,8 +23,6 @@ import { createTrackingApi } from "../../openApi";
 import {
   DefaultApi,
   EventConfirmation,
-  ResultLoadEvent,
-  ResultViewEvent,
   SearchImageSource,
   WidgetAction,
   WidgetEvent,
@@ -33,18 +31,11 @@ import {
   createWidgetVpsEvent,
   createFilterEvent,
   createSearchEvent,
-  createProductVpsEventByType,
-  createResultVpsEventByType,
 } from "../../tracking";
 import {
-  ProductCardEvent,
   BasicEventData,
   SelectFilterEventData,
-  ProductCardEventData,
   SelectObjectEventData,
-  ProductEventType,
-  ProductEvent,
-  ResultEventType,
   NoResultEventData,
 } from "../../recommendation/events";
 import { SlotSkeleton } from "../customized-slots";
@@ -170,27 +161,6 @@ export class VviinnVpsWidget {
   /** The event emits on modal close */
   @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
 
-  /** The image upload has started */
-  @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
-
-  /** Recommended product renders on the page */
-  @Event() vviinnProductLoad: EventEmitter<ProductCardEventData>;
-
-  /** Recommended product appears in the viewport. */
-  @Event() vviinnProductView: EventEmitter<ProductCardEventData>;
-
-  /** Click on the product’s link */
-  @Event() vviinnProductClick: EventEmitter<ProductCardEventData>;
-
-  /** The search result renders on the page */
-  @Event() vviinnResultLoad: EventEmitter<BasicEventData>;
-
-  /** The search result appears in the viewport */
-  @Event() vviinnResultView: EventEmitter<BasicEventData>;
-
-  /** Wrong image format, that isn’t .jpg, .jpeg, png, or the request failed */
-  @Event() vviinnNoResult: EventEmitter<BasicEventData>;
-
   /** Crop area changes */
   @Event() vviinnImageCrop: EventEmitter<BasicEventData>;
 
@@ -200,16 +170,22 @@ export class VviinnVpsWidget {
   /** User selects one of the filters */
   @Event() vviinnSelectFilter: EventEmitter<SelectFilterEventData>;
 
+  /** The image upload has started */
+  @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
+
+  /** Wrong image format, that isn’t .jpg, .jpeg, png, or the request failed */
+  @Event() vviinnNoResult: EventEmitter<BasicEventData>;
+
   private overflow: string;
   private uiSessionId: string;
   private trackingApi: DefaultApi;
   private imageSource: SearchImageSource | null = null;
-  private id?: string;
   private resultLoaded: boolean = false;
   private resultViewed: boolean = false;
   private cameraAvailable: boolean = false;
   private isDesktop: boolean = false;
   private videoTrack: MediaStreamTrack | null = null;
+  private widgetElementId: string;
 
   private initResultEvents() {
     this.resultLoaded = false;
@@ -228,26 +204,6 @@ export class VviinnVpsWidget {
 
   private isResultSlide() {
     return this.slidePosition === 1;
-  }
-
-  private findProductById(
-    id: Recommendation["productId"]
-  ): Recommendation | undefined {
-    return searchState.results.find((r) => r.productId === id);
-  }
-
-  private handleOpenLink(deeplink: string, event: MouseEvent) {
-    if (!this.productDetailsRedirect) return;
-    if (this.productDetailsNewTab || event.ctrlKey || event.metaKey) {
-      let newTab = window.open();
-      if (newTab) {
-        newTab.location.href = deeplink;
-      } else {
-        window.location.href = deeplink;
-      }
-    } else {
-      window.location.href = deeplink;
-    }
   }
 
   private handleVviinnImageUpload = (uploadSource: UploadSource) => {
@@ -366,7 +322,7 @@ export class VviinnVpsWidget {
       widgetType: "VPS",
       campaignTypeId: "VPS",
       campaignTypeName: campaignTypeNames["VPS"],
-      widgetId: this.buttonElementId ?? this.id,
+      widgetId: this.buttonElementId ?? this.widgetElementId,
       widgetVersion: version,
     };
   };
@@ -399,67 +355,6 @@ export class VviinnVpsWidget {
   trackCameraEnabled({ detail: isEnabled }: CustomEvent<boolean>) {
     this.cameraEnabled = isEnabled;
     this.cameraInitializing = false;
-  }
-
-  @Listen("vviinnProductLoad")
-  trackProductLoad({ detail }: ProductCardEvent) {
-    const productLoadEvent = this.getProductTrackEvent(detail, "load");
-    if (!productLoadEvent) return;
-
-    this.trackingApi
-      .trackEvent(productLoadEvent)
-      .then(this.setTrackingDeactivated);
-  }
-
-  @Listen("vviinnProductView")
-  trackProductView({ detail }: ProductCardEvent) {
-    if (!this.resultViewed) {
-      this.resultViewed = true;
-      this.vviinnResultView.emit(this.getBasicEventData());
-      this.trackResultEvent("view");
-    }
-
-    const productViewEvent = this.getProductTrackEvent(detail, "view");
-    if (!productViewEvent) return;
-
-    this.trackingApi
-      .trackEvent(productViewEvent)
-      .then(this.setTrackingDeactivated);
-  }
-
-  @Listen("vviinnProductClick")
-  async trackProductClick({ detail }: ProductCardEvent) {
-    const { productId, clickEvent } = detail;
-    const productClickEvent = this.getProductTrackEvent(detail, "click");
-
-    const product = this.findProductById(productId);
-    if (!product || !product.deeplink) return;
-
-    if (!this.trackingDeactivated) {
-      await this.trackingApi
-        .trackEvent(productClickEvent)
-        .then(this.setTrackingDeactivated)
-        .finally(() => {
-          this.handleOpenLink(product.deeplink, clickEvent);
-        });
-    } else {
-      this.handleOpenLink(product.deeplink, clickEvent);
-    }
-  }
-
-  @Listen("vviinnAuxClick")
-  async trackAuxClick({ detail }: ProductCardEvent) {
-    const { productId } = detail;
-    const productClickEvent = this.getProductTrackEvent(detail, "click");
-
-    const product = this.findProductById(productId);
-    if (!product || !product.deeplink) return;
-
-    if (!this.trackingDeactivated) {
-      await this.trackingApi
-        .trackEvent(productClickEvent)
-        .then(this.setTrackingDeactivated);
-    }
   }
 
   @Listen("vviinnImageCrop")
@@ -532,7 +427,7 @@ export class VviinnVpsWidget {
 
     this.uiSessionId = uuidv4();
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
-    this.id = this.el.id;
+    this.widgetElementId = this.el.id;
   }
 
   private trackWidgetEvent(action: WidgetAction) {
@@ -548,47 +443,6 @@ export class VviinnVpsWidget {
 
     const widgetEvent: WidgetEvent = createWidgetVpsEvent(eventBody);
     this.trackingApi.trackEvent(widgetEvent).then(this.setTrackingDeactivated);
-  }
-
-  private getProductTrackEvent(
-    detail: ProductCardEventData,
-    eventType: ProductEventType
-  ): ProductEvent | null {
-    if (this.trackingDeactivated) return null;
-
-    const {
-      productRank,
-      productId,
-      campaignTypeId,
-      widgetType,
-      clickEvent,
-      ...rest
-    } = detail;
-
-    const eventBody = {
-      session_id: this.uiSessionId,
-      rank: productRank,
-      product: productId,
-      ...rest,
-    };
-
-    const productEvent: ProductEvent =
-      createProductVpsEventByType(eventType)(eventBody);
-
-    return productEvent;
-  }
-
-  private trackResultEvent(type: ResultEventType) {
-    if (this.trackingDeactivated) return;
-    const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
-
-    let resultEvent: ResultViewEvent | ResultLoadEvent =
-      createResultVpsEventByType(type)({
-        session_id: this.uiSessionId,
-        ...rest,
-      });
-
-    this.trackingApi.trackEvent(resultEvent).then(this.setTrackingDeactivated);
   }
 
   private trackInitialSearch() {
@@ -748,7 +602,7 @@ export class VviinnVpsWidget {
           active={this.active}
           resetState={this.resetState.bind(this)}
           onVviinnWidgetClose={() => this.handleModalClose()}
-          buttonElementId={this.buttonElementId ?? this.id}
+          buttonElementId={this.buttonElementId ?? this.widgetElementId}
           widgetVersion={version}
           hideBackButton={
             (this.mode === "upload" && this.showingInButton) ||
@@ -913,13 +767,24 @@ export class VviinnVpsWidget {
                   {this.isResultSlide() && (
                     <vviinn-results
                       campaignTypeId="VPS"
-                      image-width={this.imageResolutionWidth}
-                      widget-element-id={this.id}
-                      button-element-id={this.buttonElementId}
-                      widget-version={version}
+                      widgetVersion={version}
+                      widgetElementId={
+                        this.buttonElementId ?? this.widgetElementId
+                      }
+                      buttonElementId={this.buttonElementId}
+                      imageWidth={this.imageResolutionWidth}
                       currency-sign={this.currencySign}
                       locale={this.locale}
-                      result-loaded={this.resultLoaded}
+                      resultLoaded={this.resultLoaded}
+                      resultViewed={this.resultViewed}
+                      productDetailsNewTab={this.productDetailsNewTab}
+                      productDetailsRedirect={this.productDetailsRedirect}
+                      trackingDeactivated={this.trackingDeactivated}
+                      uiSessionId={this.uiSessionId}
+                      token={this.token}
+                      setTrackingDeactivated={this.setTrackingDeactivated.bind(
+                        this
+                      )}
                     />
                   )}
                 </div>
