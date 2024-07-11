@@ -4,15 +4,10 @@ import {
   pointSumSemigroup,
   pointProductSemigroup,
 } from "./Point";
-import { Handler, HandlerDirection } from "../cropper/Handler";
 import { Sized, sizedDivSemigroup } from "./Sized";
 import { RectangleAlt } from "./RectangleAlt";
 
 export type Rectangle = Point & Sized;
-
-interface RectangleTransform {
-  (x: Rectangle, y: Handler): Rectangle;
-}
 
 export const move = (origin: Rectangle, position: Point): Rectangle => {
   const originPosition = fromRectangle(origin);
@@ -23,69 +18,6 @@ export const move = (origin: Rectangle, position: Point): Rectangle => {
     width: origin.width,
     height: origin.height,
   };
-};
-
-const transformNorthEast: RectangleTransform = (origin, handler) => {
-  const newPosition = pointSumSemigroup.concat(fromRectangle(origin), {
-    x: 0,
-    y: handler.position.y,
-  });
-
-  return {
-    ...newPosition,
-    width: origin.width + handler.position.x,
-    height: origin.height - handler.position.y,
-  };
-};
-
-export const transformNorthWest = (
-  origin: Rectangle,
-  handler: Handler
-): Rectangle => {
-  const newPosition = pointSumSemigroup.concat(
-    fromRectangle(origin),
-    handler.position
-  );
-
-  return {
-    ...newPosition,
-    width: origin.width - handler.position.x,
-    height: origin.height - handler.position.y,
-  };
-};
-
-const transformSouthEast: RectangleTransform = (origin, handler) => {
-  return {
-    ...origin,
-    width: origin.width + handler.position.x,
-    height: origin.height + handler.position.y,
-  };
-};
-
-const transformSouthWest = (origin: Rectangle, handler: Handler): Rectangle => {
-  const newPosition = pointSumSemigroup.concat(fromRectangle(origin), {
-    x: handler.position.x,
-    y: 0,
-  });
-
-  return {
-    ...newPosition,
-    width: origin.width - handler.position.x,
-    height: origin.height + handler.position.y,
-  };
-};
-
-export const transform: RectangleTransform = (origin, handler) => {
-  switch (handler.direction) {
-    case HandlerDirection.NorthEast:
-      return transformNorthEast(origin, handler);
-    case HandlerDirection.NorthWest:
-      return transformNorthWest(origin, handler);
-    case HandlerDirection.SouthEast:
-      return transformSouthEast(origin, handler);
-    case HandlerDirection.SouthWest:
-      return transformSouthWest(origin, handler);
-  }
 };
 
 export const fromImage = (image: HTMLImageElement): Rectangle => {
@@ -138,23 +70,27 @@ export const fromAlt = (r: RectangleAlt): Rectangle => {
   };
 };
 
-export const scaleWithSized = (s: Sized) => (r: Rectangle): Rectangle => {
-  return {
-    x: r.x * s.width,
-    y: r.y * s.height,
-    width: r.width * s.width,
-    height: r.height * s.height,
+export const scaleWithSized =
+  (s: Sized) =>
+  (r: Rectangle): Rectangle => {
+    return {
+      x: r.x * s.width,
+      y: r.y * s.height,
+      width: r.width * s.width,
+      height: r.height * s.height,
+    };
   };
-};
 
-export const divideOnSized = (s: Sized) => (r: Rectangle): Rectangle => {
-  return {
-    x: r.x / s.width,
-    y: r.y / s.height,
-    width: r.width / s.width,
-    height: r.height / s.height,
+export const divideOnSized =
+  (s: Sized) =>
+  (r: Rectangle): Rectangle => {
+    return {
+      x: r.x / s.width,
+      y: r.y / s.height,
+      width: r.width / s.width,
+      height: r.height / s.height,
+    };
   };
-};
 
 export const center = (r: Rectangle): Point => {
   return {

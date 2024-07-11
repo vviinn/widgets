@@ -18,7 +18,6 @@ import { Link, linkRequest, getLink } from "../network/ion/Link";
 import { divideOnSized, Rectangle } from "../geometry/Rectangle";
 import { Form, formRequest } from "../network/ion/Form";
 import * as F from "../network/ion/File";
-import { Handler, fromRectangle } from "../cropper/Handler";
 import { sequenceToOption } from "../utils/option/option";
 import { processBearerToken } from "../utils/token/tokenUtils";
 import { BasicError } from "../error";
@@ -54,7 +53,6 @@ type SearchStore = {
   textSearchFilters: ResponseFilterItem[];
   resetCategoryLink?: Link;
   activeIonLink?: Link;
-  cropperHandlers: Handler[];
   selectedCropper?: number;
   rectangleSearchForm?: Form;
   detectedObjects: ValueObject<DetectedObject>[];
@@ -79,7 +77,6 @@ const { state, onChange } = createStore<SearchStore>({
   sourceProduct: null,
   filters: [],
   textSearchFilters: [],
-  cropperHandlers: [],
   detectedObjects: [],
   objectDetectionInProgress: false,
 
@@ -283,15 +280,6 @@ onChange("activeIonLink", async (newLink: Link) => {
       };
     })
   )();
-});
-
-onChange("searchArea", (newSearchArea: O.Option<Rectangle>) => {
-  pipe(
-    newSearchArea,
-    O.map((area) => {
-      state.cropperHandlers = fromRectangle(area);
-    })
-  );
 });
 
 onChange("serverError", () => {
