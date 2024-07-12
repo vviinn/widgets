@@ -56,19 +56,21 @@ export class VviinnResults {
   /** The search result appears in the viewport */
   @Event() vviinnResultView: EventEmitter<BasicEventData>;
 
+  @Prop() token: string;
+  @Prop() uiSessionId: string;
   @Prop() campaignTypeId: CampaignTypeId;
   @Prop() imageWidth: number;
   @Prop() currencySign: string;
   @Prop() widgetVersion: string;
   @Prop() locale: string;
-  @Prop() uiSessionId: string;
-  @Prop() token: string;
   @Prop() buttonElementId?: string;
   @Prop() widgetElementId?: string;
   @Prop() productDetailsRedirect?: boolean;
   @Prop() productDetailsNewTab?: boolean;
   @Prop() trackingDeactivated?: boolean;
+  @Prop() showAspectRatioError?: boolean;
   @Prop() setTrackingDeactivated?: () => void;
+  @Prop() resetState?: () => void;
 
   /** @internal */
   @Prop() resultLoaded?: boolean;
@@ -95,7 +97,6 @@ export class VviinnResults {
   @Listen("vviinnProductView")
   trackProductView({ detail }: ProductCardEvent) {
     if (!this.resultViewed) {
-      this.resultViewed = true;
       this.vviinnResultView.emit(this.getBasicEventData());
       this.trackResultEvent("view");
     }
@@ -219,7 +220,6 @@ export class VviinnResults {
     if (!this.resultLoaded) {
       this.vviinnResultLoad.emit(this.getBasicEventData());
       this.trackResultEvent("load");
-      this.resultLoaded = true;
     }
 
     return searchState.results.map((p, i) => (
@@ -249,8 +249,34 @@ export class VviinnResults {
 
   render() {
     return (
-      <Host>
-        <div class="products">{this.renderResults()}</div>
+      <Host id="results-block">
+        <div
+          class={{
+            "nothing-found": true,
+            hidden: searchState.results.length > 0,
+          }}
+        >
+          <vviinn-empty-results handler={() => this.resetState()} />
+        </div>
+
+        <div
+          class={{
+            "nothing-found": true,
+            hidden: !this.showAspectRatioError,
+          }}
+        >
+          <vviinn-wrong-aspect-ratio handler={() => this.resetState()} />
+        </div>
+
+        <div
+          class={{
+            hidden:
+              searchState.results.length === 0 || this.showAspectRatioError,
+            products: true,
+          }}
+        >
+          {this.renderResults()}
+        </div>
       </Host>
     );
   }

@@ -351,6 +351,14 @@ export class VviinnVpsWidget {
     }
   }
 
+  @Listen("vviinnResultLoad") resultLoadHandler() {
+    this.resultLoaded = true;
+  }
+
+  @Listen("vviinnResultView") resultViewHandler() {
+    this.resultViewed = true;
+  }
+
   @Listen("vviinnCameraEnabled")
   trackCameraEnabled({ detail: isEnabled }: CustomEvent<boolean>) {
     this.cameraEnabled = isEnabled;
@@ -735,60 +743,29 @@ export class VviinnVpsWidget {
                 </div>
               )}
 
-              <div id="results-block" class="products-wrapper">
-                <div
-                  class={{
-                    "nothing-found": true,
-                    hidden: searchState.results.length > 0,
-                  }}
-                >
-                  <vviinn-empty-results handler={() => this.resetState()} />
-                </div>
-
-                <div
-                  class={{
-                    "nothing-found": true,
-                    hidden: !this.showAspectRatioError,
-                  }}
-                >
-                  <vviinn-wrong-aspect-ratio
-                    handler={() => this.resetState()}
-                  />
-                </div>
-
-                <div
-                  class={{
-                    hidden:
-                      searchState.results.length === 0 ||
-                      this.showAspectRatioError,
-                    "results-wrapper": true,
-                  }}
-                >
-                  {this.isResultSlide() && (
-                    <vviinn-results
-                      campaignTypeId="VPS"
-                      widgetVersion={version}
-                      widgetElementId={
-                        this.buttonElementId ?? this.widgetElementId
-                      }
-                      buttonElementId={this.buttonElementId}
-                      imageWidth={this.imageResolutionWidth}
-                      currency-sign={this.currencySign}
-                      locale={this.locale}
-                      resultLoaded={this.resultLoaded}
-                      resultViewed={this.resultViewed}
-                      productDetailsNewTab={this.productDetailsNewTab}
-                      productDetailsRedirect={this.productDetailsRedirect}
-                      trackingDeactivated={this.trackingDeactivated}
-                      uiSessionId={this.uiSessionId}
-                      token={this.token}
-                      setTrackingDeactivated={this.setTrackingDeactivated.bind(
-                        this
-                      )}
-                    />
+              {this.isResultSlide() && (
+                <vviinn-results
+                  token={this.token}
+                  uiSessionId={this.uiSessionId}
+                  campaignTypeId="VPS"
+                  widgetVersion={version}
+                  widgetElementId={this.buttonElementId ?? this.widgetElementId}
+                  buttonElementId={this.buttonElementId}
+                  imageWidth={this.imageResolutionWidth}
+                  currency-sign={this.currencySign}
+                  locale={this.locale}
+                  resultLoaded={this.resultLoaded}
+                  resultViewed={this.resultViewed}
+                  productDetailsNewTab={this.productDetailsNewTab}
+                  productDetailsRedirect={this.productDetailsRedirect}
+                  showAspectRatioError={this.showAspectRatioError}
+                  trackingDeactivated={this.trackingDeactivated}
+                  setTrackingDeactivated={this.setTrackingDeactivated.bind(
+                    this
                   )}
-                </div>
-              </div>
+                  resetState={this.resetState.bind(this)}
+                />
+              )}
             </vviinn-slide>
           </vviinn-slider>
         </vviinn-overlayed-modal>
