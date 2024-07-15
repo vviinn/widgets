@@ -29,6 +29,10 @@ export const getLink = (
     O.chain((linksObject) => O.fromNullable(linksObject[path]))
   );
 
+export const createLink = (href: string): Link => ({
+  href: `search/session/${href}`,
+});
+
 export const extractHrefValue = (link: O.Option<Link>): string =>
   pipe(
     link,

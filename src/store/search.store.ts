@@ -20,6 +20,7 @@ import {
   getLink,
   extractHrefValue,
   parseHrefString,
+  createLink,
 } from "../network/ion/Link";
 import { divideOnSized, Rectangle } from "../geometry/Rectangle";
 import { Form, formRequest } from "../network/ion/Form";
@@ -106,8 +107,11 @@ const { state, onChange } = createStore<SearchStore>({
 export const searchState = state;
 
 const updateState = async (response: SearchSession) => {
-  const selfLink = getLink(response, "self");
-  state.searchId = pipe(selfLink, extractHrefValue, parseHrefString);
+  state.searchId = pipe(
+    getLink(response, "self"),
+    extractHrefValue,
+    parseHrefString
+  );
   state.results = response.value;
   state.filters = readFilters(foldValueObject(response.filters));
   state.rectangleSearchForm = response.searchArea;
@@ -276,6 +280,22 @@ export const processSelectedText = async (
   query: string,
   dynamicFilters?: RequestFilterItem
 ) => await uploadText(query, dynamicFilters)();
+
+export const processSearchIdQuery = async (searchId: string) => {
+  state.loading = true;
+
+  await pipe(
+    makeAuthorizedRequest(state.token),
+    TE.fromEither,
+    TE.chainW(linkRequest(createLink(searchId))),
+    TE.map(updateState),
+    TE.mapLeft((error) => {
+      state.serverError = true;
+      state.loading = false;
+      return error;
+    })
+  )();
+};
 
 onChange("activeIonLink", async (newLink: Link) => {
   const link = newLink ? newLink : state.resetCategoryLink;

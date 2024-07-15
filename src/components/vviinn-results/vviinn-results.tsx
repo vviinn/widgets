@@ -7,13 +7,14 @@ import {
   Event,
   EventEmitter,
   Listen,
+  Watch,
 } from "@stencil/core";
 import {
   BasicEventData,
   CampaignTypeId,
   Recommendation,
 } from "../../components";
-import { searchState } from "../../store/search.store";
+import { processSearchIdQuery, searchState } from "../../store/search.store";
 import { campaignTypeNames } from "../../campaign/Campaign";
 import {
   ProductCardEvent,
@@ -63,6 +64,7 @@ export class VviinnResults {
   @Prop() currencySign: string;
   @Prop() widgetVersion: string;
   @Prop() locale: string;
+  @Prop() searchId?: string;
   @Prop() buttonElementId?: string;
   @Prop() widgetElementId?: string;
   @Prop() productDetailsRedirect?: boolean;
@@ -78,6 +80,15 @@ export class VviinnResults {
 
   connectedCallback() {
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
+
+    if (this.searchId) {
+      processSearchIdQuery(this.searchId);
+    }
+  }
+
+  @Watch("searchId")
+  processSearchId(newId: string) {
+    this.searchId?.length && processSearchIdQuery(newId);
   }
 
   @Listen("vviinnProductLoad")
