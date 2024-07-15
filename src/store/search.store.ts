@@ -14,7 +14,13 @@ import {
   SearchType,
 } from "../searchSession/searchSession";
 import { foldValueObject, ValueObject } from "../network/ion/ValueObject";
-import { Link, linkRequest, getLink } from "../network/ion/Link";
+import {
+  Link,
+  linkRequest,
+  getLink,
+  extractHrefValue,
+  parseHrefString,
+} from "../network/ion/Link";
 import { divideOnSized, Rectangle } from "../geometry/Rectangle";
 import { Form, formRequest } from "../network/ion/Form";
 import * as F from "../network/ion/File";
@@ -47,6 +53,7 @@ type SearchStore = {
   token?: string;
   campaignId?: string;
   excluded?: string;
+  searchId?: string;
   results: Recommendation[];
   resultLoaded: boolean;
   resultViewed: boolean;
@@ -75,6 +82,7 @@ type SearchStore = {
 const { state, onChange } = createStore<SearchStore>({
   campaignId: "",
   excluded: "",
+  searchId: "",
   results: [],
   sourceProduct: null,
   filters: [],
@@ -98,6 +106,8 @@ const { state, onChange } = createStore<SearchStore>({
 export const searchState = state;
 
 const updateState = async (response: SearchSession) => {
+  const selfLink = getLink(response, "self");
+  state.searchId = pipe(selfLink, extractHrefValue, parseHrefString);
   state.results = response.value;
   state.filters = readFilters(foldValueObject(response.filters));
   state.rectangleSearchForm = response.searchArea;
