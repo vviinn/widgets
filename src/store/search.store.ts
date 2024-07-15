@@ -48,6 +48,8 @@ type SearchStore = {
   campaignId?: string;
   excluded?: string;
   results: Recommendation[];
+  resultLoaded: boolean;
+  resultViewed: boolean;
   sourceProduct: Recommendation | null;
   filters: SearchSessionFilter[];
   textSearchFilters: ResponseFilterItem[];
@@ -79,6 +81,8 @@ const { state, onChange } = createStore<SearchStore>({
   textSearchFilters: [],
   detectedObjects: [],
   objectDetectionInProgress: false,
+  resultLoaded: false,
+  resultViewed: false,
 
   imageWidth: RESIZED_IMAGE_WIDTH,
 

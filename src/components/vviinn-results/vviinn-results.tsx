@@ -67,15 +67,11 @@ export class VviinnResults {
   @Prop() widgetElementId?: string;
   @Prop() productDetailsRedirect?: boolean;
   @Prop() productDetailsNewTab?: boolean;
-  @Prop() trackingDeactivated?: boolean;
   @Prop() showAspectRatioError?: boolean;
+  @Prop() trackingDeactivated?: boolean;
   @Prop() setTrackingDeactivated?: () => void;
   @Prop() resetState?: () => void;
 
-  /** @internal */
-  @Prop() resultLoaded?: boolean;
-  /** @internal */
-  @Prop() resultViewed?: boolean;
   /** @internal */
   @Prop() apiPath?: string = "https://api.vviinn.com";
   private trackingApi: DefaultApi;
@@ -96,9 +92,10 @@ export class VviinnResults {
 
   @Listen("vviinnProductView")
   trackProductView({ detail }: ProductCardEvent) {
-    if (!this.resultViewed) {
+    if (!searchState.resultViewed) {
       this.vviinnResultView.emit(this.getBasicEventData());
       this.trackResultEvent("view");
+      searchState.resultViewed = true;
     }
 
     const productViewEvent = this.getProductTrackEvent(detail, "view");
@@ -217,9 +214,10 @@ export class VviinnResults {
 
   private renderResults() {
     if (searchState.results.length === 0) return null;
-    if (!this.resultLoaded) {
+    if (!searchState.resultLoaded) {
       this.vviinnResultLoad.emit(this.getBasicEventData());
       this.trackResultEvent("load");
+      searchState.resultLoaded = true;
     }
 
     return searchState.results.map((p, i) => (

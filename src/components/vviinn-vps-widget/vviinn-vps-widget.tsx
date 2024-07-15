@@ -180,16 +180,14 @@ export class VviinnVpsWidget {
   private uiSessionId: string;
   private trackingApi: DefaultApi;
   private imageSource: SearchImageSource | null = null;
-  private resultLoaded: boolean = false;
-  private resultViewed: boolean = false;
   private cameraAvailable: boolean = false;
   private isDesktop: boolean = false;
   private videoTrack: MediaStreamTrack | null = null;
   private widgetElementId: string;
 
   private initResultEvents() {
-    this.resultLoaded = false;
-    this.resultViewed = false;
+    searchState.resultLoaded = false;
+    searchState.resultViewed = false;
   }
 
   private stopStreamTracks() {
@@ -352,11 +350,11 @@ export class VviinnVpsWidget {
   }
 
   @Listen("vviinnResultLoad") resultLoadHandler() {
-    this.resultLoaded = true;
+    searchState.resultLoaded = true;
   }
 
   @Listen("vviinnResultView") resultViewHandler() {
-    this.resultViewed = true;
+    searchState.resultViewed = true;
   }
 
   @Listen("vviinnCameraEnabled")
@@ -754,8 +752,6 @@ export class VviinnVpsWidget {
                   imageWidth={this.imageResolutionWidth}
                   currency-sign={this.currencySign}
                   locale={this.locale}
-                  resultLoaded={this.resultLoaded}
-                  resultViewed={this.resultViewed}
                   productDetailsNewTab={this.productDetailsNewTab}
                   productDetailsRedirect={this.productDetailsRedirect}
                   showAspectRatioError={this.showAspectRatioError}
