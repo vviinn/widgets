@@ -10,12 +10,9 @@ import {
   Watch,
   State,
 } from "@stencil/core";
+import { version } from "../../../package.json";
 import * as E from "fp-ts/Either";
-import {
-  BasicEventData,
-  CampaignTypeId,
-  Recommendation,
-} from "../../components";
+import { BasicEventData, Locale, Recommendation } from "../../components";
 import { v4 as uuidv4 } from "uuid";
 import { processSearchIdQuery, searchState } from "../../store/search.store";
 import { campaignTypeNames } from "../../campaign/Campaign";
@@ -32,6 +29,7 @@ import {
 } from "../../tracking";
 import {
   DefaultApi,
+  EventConfirmation,
   ResultLoadEvent,
   ResultViewEvent,
 } from "vviinn-tracking-client-ts";
@@ -60,26 +58,41 @@ export class VviinnResults {
   /** The search result appears in the viewport */
   @Event() vviinnResultView: EventEmitter<BasicEventData>;
 
+  /** Vviinn customer’s token (required) */
   @Prop() token: string;
-  @Prop() campaignTypeId: CampaignTypeId;
-  @Prop() imageWidth: number;
-  @Prop() currencySign: string;
-  @Prop() widgetVersion: string;
-  @Prop() locale: string;
-  @Prop({ mutable: true }) uiSessionId?: string;
-  @Prop() searchId?: string;
-  @Prop() buttonElementId?: string;
-  @Prop() widgetElementId?: string;
-  @Prop() productDetailsRedirect?: boolean;
-  @Prop() productDetailsNewTab?: boolean;
-  @Prop() showAspectRatioError?: boolean;
-  @Prop() trackingDeactivated?: boolean;
-  @Prop() setTrackingDeactivated?: () => void;
-  @Prop() resetState?: () => void;
-  @Prop() apiPath?: string = "https://api.vviinn.com";
+  /** Search ID for results request (required) */
+  @Prop() searchId: string;
+  /** Resolution width of an image in the product card */
+  @Prop() imageResolutionWidth?: number = 250;
+  /**  The currency sign is displayed after the price */
+  @Prop() currencySign?: string = "€";
+  /** The locale for currency formatting and text localization */
+  @Prop() locale?: Locale = "de-DE";
+  /** Toggle for opening product link in new tab or not */
+  @Prop() productDetailsNewTab?: boolean = true;
+  /** Toggle for redirection to PDP on product's click */
+  @Prop() productDetailsRedirect?: boolean = true;
 
+  /** True when we use vviinn-results inside the widget */
   /** @internal */
   @Prop() showingInWidget?: boolean = false;
+  /** uiSessionId from vps-widget */
+  /** @internal */
+  @Prop({ mutable: true }) uiSessionId?: string;
+  /** Element Id, passed from vps-button */
+  /** @internal */
+  @Prop() buttonElementId?: string;
+  /** Element Id, passed from vps-widget */
+  /** @internal */
+  @Prop() widgetElementId?: string;
+  /** @internal */
+  @Prop() apiPath?: string = "https://api.vviinn.com";
+  /** @internal */
+  @Prop() showAspectRatioError?: boolean;
+  /** @internal */
+  @Prop({ mutable: true }) trackingDeactivated?: boolean = false;
+  /** @internal */
+  @Prop() resetState?: () => void;
 
   @State() recommendations: Recommendation[] = [];
 
@@ -168,6 +181,12 @@ export class VviinnResults {
     }
   }
 
+  private setTrackingDeactivated = (result: EventConfirmation) => {
+    if (result.status === "rejected") {
+      this.trackingDeactivated = true;
+    }
+  };
+
   private trackResultEvent(type: ResultEventType) {
     if (this.trackingDeactivated) return;
     const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
@@ -232,10 +251,10 @@ export class VviinnResults {
   private getBasicEventData = (): BasicEventData => {
     return {
       widgetType: "VPS",
-      campaignTypeId: this.campaignTypeId,
+      campaignTypeId: "VPS",
       campaignTypeName: campaignTypeNames["VPS"],
       widgetId: this.widgetElementId,
-      widgetVersion: this.widgetVersion,
+      widgetVersion: version,
     };
   };
 
@@ -259,13 +278,13 @@ export class VviinnResults {
         price={p.price.actual}
         salePrice={p.price.sale}
         responsive={true}
-        imageWidth={this.imageWidth}
+        imageWidth={this.imageResolutionWidth}
         image={p.image.thumbnail ?? p.image.original}
         part="product-card"
-        campaignTypeId={this.campaignTypeId}
+        campaignTypeId="VPS"
         widgetElementId={this.widgetElementId}
         buttonElementId={this.buttonElementId}
-        widgetVersion={this.widgetVersion}
+        widgetVersion={version}
         currency={this.currencySign}
         locale={this.locale}
       />
@@ -286,7 +305,7 @@ export class VviinnResults {
             hidden: this.recommendations.length > 0 || !this.showingInWidget,
           }}
         >
-          <vviinn-empty-results handler={() => this.resetState()} />
+          <vviinn-empty-results handler={() => this?.resetState()} />
         </div>
 
         <div
@@ -295,7 +314,7 @@ export class VviinnResults {
             hidden: !this.showAspectRatioError || !this.showingInWidget,
           }}
         >
-          <vviinn-wrong-aspect-ratio handler={() => this.resetState()} />
+          <vviinn-wrong-aspect-ratio handler={() => this?.resetState()} />
         </div>
 
         <div

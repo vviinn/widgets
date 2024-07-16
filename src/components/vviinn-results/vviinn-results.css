@@ -20,6 +20,11 @@
   position: absolute;
 }
 
+:host(:not(.widget-results)) .products {
+  position: static;
+  padding: 0;
+}
+
 vviinn-product-card {
   gap: 0;
   width: 100%;

@@ -745,21 +745,17 @@ export class VviinnVpsWidget {
                 <vviinn-results
                   token={this.token}
                   uiSessionId={this.uiSessionId}
-                  campaignTypeId="VPS"
-                  widgetVersion={version}
+                  apiPath={this.apiPath}
                   widgetElementId={this.buttonElementId ?? this.widgetElementId}
                   showingInWidget={true}
                   buttonElementId={this.buttonElementId}
-                  imageWidth={this.imageResolutionWidth}
+                  imageResolutionWidth={this.imageResolutionWidth}
                   currency-sign={this.currencySign}
                   locale={this.locale}
                   productDetailsNewTab={this.productDetailsNewTab}
                   productDetailsRedirect={this.productDetailsRedirect}
                   showAspectRatioError={this.showAspectRatioError}
                   trackingDeactivated={this.trackingDeactivated}
-                  setTrackingDeactivated={this.setTrackingDeactivated.bind(
-                    this
-                  )}
                   resetState={this.resetState.bind(this)}
                 />
               )}
