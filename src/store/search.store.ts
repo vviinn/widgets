@@ -19,8 +19,7 @@ import {
   linkRequest,
   getLink,
   extractHrefValue,
-  parseHrefString,
-  createLink,
+  createLinkfromSearchId,
 } from "../network/ion/Link";
 import { divideOnSized, Rectangle } from "../geometry/Rectangle";
 import { Form, formRequest } from "../network/ion/Form";
@@ -54,7 +53,7 @@ type SearchStore = {
   token?: string;
   campaignId?: string;
   excluded?: string;
-  searchId?: string;
+  selfSearchId: string | null;
   results: Recommendation[];
   resultLoaded: boolean;
   resultViewed: boolean;
@@ -83,7 +82,7 @@ type SearchStore = {
 const { state, onChange } = createStore<SearchStore>({
   campaignId: "",
   excluded: "",
-  searchId: "",
+  selfSearchId: null,
   results: [],
   sourceProduct: null,
   filters: [],
@@ -107,11 +106,7 @@ const { state, onChange } = createStore<SearchStore>({
 export const searchState = state;
 
 const updateState = async (response: SearchSession) => {
-  state.searchId = pipe(
-    getLink(response, "self"),
-    extractHrefValue,
-    parseHrefString
-  );
+  state.selfSearchId = pipe(getLink(response, "self"), extractHrefValue);
   state.results = response.value;
   state.filters = readFilters(foldValueObject(response.filters));
   state.rectangleSearchForm = response.searchArea;
@@ -281,14 +276,15 @@ export const processSelectedText = async (
   dynamicFilters?: RequestFilterItem
 ) => await uploadText(query, dynamicFilters)();
 
-export const processSearchIdQuery = async (searchId: string) => {
+export const processSearchIdQuery = async (searchId: string, token: string) => {
   state.loading = true;
-
-  await pipe(
-    makeAuthorizedRequest(state.token),
+  return await pipe(
+    makeAuthorizedRequest(token),
     TE.fromEither,
-    TE.chainW(linkRequest(createLink(searchId))),
-    TE.map(updateState),
+    TE.chainW(linkRequest(createLinkfromSearchId(searchId))),
+    TE.map((response: ValueObject<Recommendation[]>) => {
+      return response.value;
+    }),
     TE.mapLeft((error) => {
       state.serverError = true;
       state.loading = false;

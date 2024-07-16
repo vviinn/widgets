@@ -8,12 +8,15 @@ import {
   EventEmitter,
   Listen,
   Watch,
+  State,
 } from "@stencil/core";
+import * as E from "fp-ts/Either";
 import {
   BasicEventData,
   CampaignTypeId,
   Recommendation,
 } from "../../components";
+import { v4 as uuidv4 } from "uuid";
 import { processSearchIdQuery, searchState } from "../../store/search.store";
 import { campaignTypeNames } from "../../campaign/Campaign";
 import {
@@ -58,12 +61,12 @@ export class VviinnResults {
   @Event() vviinnResultView: EventEmitter<BasicEventData>;
 
   @Prop() token: string;
-  @Prop() uiSessionId: string;
   @Prop() campaignTypeId: CampaignTypeId;
   @Prop() imageWidth: number;
   @Prop() currencySign: string;
   @Prop() widgetVersion: string;
   @Prop() locale: string;
+  @Prop({ mutable: true }) uiSessionId?: string;
   @Prop() searchId?: string;
   @Prop() buttonElementId?: string;
   @Prop() widgetElementId?: string;
@@ -73,22 +76,35 @@ export class VviinnResults {
   @Prop() trackingDeactivated?: boolean;
   @Prop() setTrackingDeactivated?: () => void;
   @Prop() resetState?: () => void;
+  @Prop() apiPath?: string = "https://api.vviinn.com";
 
   /** @internal */
-  @Prop() apiPath?: string = "https://api.vviinn.com";
+  @Prop() showingInWidget?: boolean = false;
+
+  @State() recommendations: Recommendation[] = [];
+
   private trackingApi: DefaultApi;
 
-  connectedCallback() {
+  async connectedCallback() {
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
 
+    if (searchState.results) {
+      this.recommendations = searchState.results;
+    }
+
+    if (!this.uiSessionId) {
+      this.uiSessionId = uuidv4();
+    }
+
     if (this.searchId) {
-      processSearchIdQuery(this.searchId);
+      const result = await processSearchIdQuery(this.searchId, this.token);
+      this.recommendations = E.getOrElse(() => [])(result);
     }
   }
 
   @Watch("searchId")
   processSearchId(newId: string) {
-    this.searchId?.length && processSearchIdQuery(newId);
+    this.searchId && processSearchIdQuery(newId, this.token);
   }
 
   @Listen("vviinnProductLoad")
@@ -168,7 +184,7 @@ export class VviinnResults {
   private findProductById(
     id: Recommendation["productId"]
   ): Recommendation | undefined {
-    return searchState.results.find((r) => r.productId === id);
+    return this.recommendations.find((r) => r.productId === id);
   }
 
   private handleOpenLink(deeplink: string, event: MouseEvent) {
@@ -224,14 +240,14 @@ export class VviinnResults {
   };
 
   private renderResults() {
-    if (searchState.results.length === 0) return null;
+    if (this.recommendations.length === 0) return null;
     if (!searchState.resultLoaded) {
       this.vviinnResultLoad.emit(this.getBasicEventData());
       this.trackResultEvent("load");
       searchState.resultLoaded = true;
     }
 
-    return searchState.results.map((p, i) => (
+    return this.recommendations.map((p, i) => (
       <vviinn-product-card
         key={p.productId}
         index={i}
@@ -258,11 +274,16 @@ export class VviinnResults {
 
   render() {
     return (
-      <Host id="results-block">
+      <Host
+        id="results-block"
+        class={{
+          "widget-results": this.showingInWidget,
+        }}
+      >
         <div
           class={{
             "nothing-found": true,
-            hidden: searchState.results.length > 0,
+            hidden: this.recommendations.length > 0 || !this.showingInWidget,
           }}
         >
           <vviinn-empty-results handler={() => this.resetState()} />
@@ -271,7 +292,7 @@ export class VviinnResults {
         <div
           class={{
             "nothing-found": true,
-            hidden: !this.showAspectRatioError,
+            hidden: !this.showAspectRatioError || !this.showingInWidget,
           }}
         >
           <vviinn-wrong-aspect-ratio handler={() => this.resetState()} />
@@ -280,7 +301,7 @@ export class VviinnResults {
         <div
           class={{
             hidden:
-              searchState.results.length === 0 || this.showAspectRatioError,
+              this.recommendations.length === 0 || this.showAspectRatioError,
             products: true,
           }}
         >

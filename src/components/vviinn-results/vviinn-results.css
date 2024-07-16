@@ -1,4 +1,4 @@
-:host {
+:host(.widget-results) {
   display: grid;
   overflow-y: auto;
   overflow-x: hidden;

@@ -748,6 +748,7 @@ export class VviinnVpsWidget {
                   campaignTypeId="VPS"
                   widgetVersion={version}
                   widgetElementId={this.buttonElementId ?? this.widgetElementId}
+                  showingInWidget={true}
                   buttonElementId={this.buttonElementId}
                   imageWidth={this.imageResolutionWidth}
                   currency-sign={this.currencySign}
