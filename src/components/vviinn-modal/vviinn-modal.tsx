@@ -50,7 +50,7 @@ export class VviinnModal {
 
   private resetTopScroll() {
     const element: HTMLElement = this.el.shadowRoot.querySelector(".body");
-    element.scroll({ top: 0 });
+    element?.scroll({ top: 0 });
   }
 
   private close() {
