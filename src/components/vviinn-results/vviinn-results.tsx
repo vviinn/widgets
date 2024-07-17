@@ -10,11 +10,19 @@ import {
   Watch,
   State,
 } from "@stencil/core";
-import { version } from "../../../package.json";
 import * as E from "fp-ts/Either";
-import { BasicEventData, Locale, Recommendation } from "../../components";
 import { v4 as uuidv4 } from "uuid";
+import {
+  DefaultApi,
+  EventConfirmation,
+  ResultLoadEvent,
+  ResultViewEvent,
+} from "vviinn-tracking-client-ts";
+import { version } from "../../../package.json";
 import { processSearchIdQuery, searchState } from "../../store/search.store";
+import { state } from "../../store/store";
+import { createTrackingApi } from "../../openApi";
+import { BasicEventData, Locale, Recommendation } from "../../components";
 import { campaignTypeNames } from "../../campaign/Campaign";
 import {
   ProductCardEvent,
@@ -27,13 +35,6 @@ import {
   createProductVpsEventByType,
   createResultVpsEventByType,
 } from "../../tracking";
-import {
-  DefaultApi,
-  EventConfirmation,
-  ResultLoadEvent,
-  ResultViewEvent,
-} from "vviinn-tracking-client-ts";
-import { createTrackingApi } from "../../openApi";
 
 /**
  * @part product-card - Product Card itself.
@@ -127,6 +128,8 @@ export class VviinnResults {
     }
 
     if (this.searchId) {
+      //FIXME: If we have 2 widgets on the page, they could conflict if they have different apiPath (stage and production)
+      state.apiPath = this.apiPath;
       const result = await processSearchIdQuery(this.searchId, this.token);
       this.recommendations = E.getOrElse(() => [])(result);
     }
