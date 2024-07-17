@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.63.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.62.0...v2.63.0) (2024-07-17)
+
+
+### Features
+
+* Add results component ([934b715](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/934b715408edfcc0eef89657c937bd3ce44f4bac))
+
 ## [2.62.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.61.0...v2.62.0) (2024-07-10)
 
 
