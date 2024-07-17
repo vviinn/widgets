@@ -276,22 +276,15 @@ export const processSelectedText = async (
   dynamicFilters?: RequestFilterItem
 ) => await uploadText(query, dynamicFilters)();
 
-export const processSearchIdQuery = async (searchId: string, token: string) => {
-  state.loading = true;
-  return await pipe(
+export const processSearchIdQuery = async (searchId: string, token: string) => await pipe(
     makeAuthorizedRequest(token),
     TE.fromEither,
     TE.chainW(linkRequest(createLinkfromSearchId(searchId))),
     TE.map((response: ValueObject<Recommendation[]>) => {
       return response.value;
     }),
-    TE.mapLeft((error) => {
-      state.serverError = true;
-      state.loading = false;
-      return error;
-    })
   )();
-};
+
 
 onChange("activeIonLink", async (newLink: Link) => {
   const link = newLink ? newLink : state.resetCategoryLink;

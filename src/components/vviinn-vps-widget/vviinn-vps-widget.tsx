@@ -599,7 +599,7 @@ export class VviinnVpsWidget {
 
   render() {
     return (
-      <Host exportparts="text-search-input">
+      <Host exportparts="brand, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, product-card, upload-photo_button, show-files_button, start-camera_button, text-search-input, close-button, secondary-action, close-button">
         {!this.showingInButton && SlotSkeleton("vps")}
 
         <vviinn-overlayed-modal

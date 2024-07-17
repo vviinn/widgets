@@ -33,8 +33,16 @@ import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
  * @slot vviinn-image-search-modal-title - Image search modal title.
  * @slot vviinn-text-search-icon - Icon of text search block.
  *
+ * @part close-button - Close Button in the modal's header.
+ * @part secondary-action - Back Button in the modal's header.
+ * @part title - Modal window title.
+ * @part upload-photo_button - Upload Photo Button.
+ * @part show-files_button - Show Files Button.
+ * @part start-camera_button - Start Camera Button.
+ * @part product-card - Product Card itself.
  * @part brand - Brand inside Product Card.
- * @part deeplink - Anchor element around product title. Rendered only if "deeplink" property is filled.
+ * @part currency - Currency related to price.
+ * @part deeplink - Anchor element around troduct title. Rendered only if "deeplink" property is filled.
  * @part image - Product Card image.
  * @part image-link - Anchor element around product image. Rendered only if "deeplink" property is filled.
  * @part price-amount-sale - Numeric part of the price.
@@ -46,6 +54,7 @@ import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
  * @part price-prefix - Block rendered before each price element (for ex. "from").
  * @part title - Title inside Product Card.
+ * @part text-search-input - Text search input.
  * @part button - Clickable button element.
  * @part vviinn-button - Button element container.
  */
@@ -181,7 +190,6 @@ export class VviinnVpsButton {
           token={this.token}
           locale={this.locale}
           apiPath={this.apiPath}
-          exportparts="brand, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, product-card, upload-photo_button, show-files_button, start-camera_button"
           campaignId={this.campaignId}
           showingInButton={true}
           buttonPressed={this.buttonPressed}
