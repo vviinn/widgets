@@ -122,7 +122,7 @@ export class VviinnResults {
     this.getResultsBySearchId(searchId);
   };
 
-  async connectedCallback() {
+  connectedCallback() {
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
 
     if (!this.uiSessionId) {
@@ -137,7 +137,7 @@ export class VviinnResults {
     this.getResultsBySearchId(this.searchId);
   }
 
-  async disconnectedCallback() {
+  disconnectedCallback() {
     document.removeEventListener(
       "vviinnSearchIdReceived",
       this.searchIdReceivedHandler
@@ -145,7 +145,7 @@ export class VviinnResults {
   }
 
   @Watch("searchId")
-  async processSearchId(newSearchIdProp: string) {
+  processSearchId(newSearchIdProp: string) {
     this.getResultsBySearchId(newSearchIdProp);
   }
 
