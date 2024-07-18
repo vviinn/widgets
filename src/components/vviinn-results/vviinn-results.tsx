@@ -367,9 +367,7 @@ export class VviinnResults {
           }}
         >
           {this.renderResults(
-            this.recommendations.length > 0
-              ? this.recommendations
-              : searchState.results
+            this.showingInWidget ? searchState.results : this.recommendations
           )}
         </div>
       </Host>
