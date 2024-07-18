@@ -30,6 +30,7 @@ import {
   ProductEvent,
   ProductEventType,
   ResultEventType,
+  SearchIdEvent,
 } from "../../recommendation/events";
 import {
   createProductVpsEventByType,
@@ -78,8 +79,8 @@ export class VviinnResults {
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
-  /** Search ID for results request (required) */
-  @Prop() searchId: string;
+  /** Search ID for results request */
+  @Prop() searchId?: string;
   /** Resolution width of an image in the product card */
   @Prop() imageResolutionWidth?: number = 250;
   /**  The currency sign is displayed after the price */
@@ -116,6 +117,11 @@ export class VviinnResults {
 
   private trackingApi: DefaultApi;
 
+  private searchIdReceivedHandler = ({ detail }: SearchIdEvent) => {
+    const { searchId } = detail;
+    this.getResultsBySearchId(searchId);
+  };
+
   async connectedCallback() {
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
 
@@ -123,19 +129,24 @@ export class VviinnResults {
       this.uiSessionId = uuidv4();
     }
 
-    if (this.searchId) {
-      //FIXME: If we have 2 widgets on the page, they could conflict if they have different apiPath (stage and production)
-      state.apiPath = this.apiPath;
-      const results = await processSearchIdQuery(this.searchId, this.token);
-      this.recommendations = E.getOrElse(() => [])(results);
-    }
+    document.addEventListener(
+      "vviinnSearchIdReceived",
+      this.searchIdReceivedHandler
+    );
+
+    this.getResultsBySearchId(this.searchId);
+  }
+
+  async disconnectedCallback() {
+    document.removeEventListener(
+      "vviinnSearchIdReceived",
+      this.searchIdReceivedHandler
+    );
   }
 
   @Watch("searchId")
-  async processSearchId(newSearchId: string) {
-    if (!newSearchId) return;
-    const results = await processSearchIdQuery(newSearchId, this.token);
-    this.recommendations = E.getOrElse(() => [])(results);
+  async processSearchId(newSearchIdProp: string) {
+    this.getResultsBySearchId(newSearchIdProp);
   }
 
   @Listen("vviinnProductLoad")
@@ -198,6 +209,13 @@ export class VviinnResults {
         .then(this.setTrackingDeactivated);
     }
   }
+
+  private getResultsBySearchId = async (newSearchId: string) => {
+    if (!newSearchId) return;
+    state.apiPath = this.apiPath; //FIXME: #36877
+    const results = await processSearchIdQuery(newSearchId, this.token);
+    this.recommendations = E.getOrElse(() => [])(results);
+  };
 
   private setTrackingDeactivated = (result: EventConfirmation) => {
     if (result.status === "rejected") {
@@ -348,8 +366,11 @@ export class VviinnResults {
             products: true,
           }}
         >
-          {this.renderResults(this.recommendations)}
-          {this.renderResults(searchState.results)}
+          {this.renderResults(
+            this.recommendations.length > 0
+              ? this.recommendations
+              : searchState.results
+          )}
         </div>
       </Host>
     );
