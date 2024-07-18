@@ -4,11 +4,24 @@
   display: block;
 }
 
+.histogram {
+  height: 64px;
+  display: flex;
+  align-items: flex-end;
+  gap: 1px;
+}
+.histogram-bar {
+  background: var(--surface-color-surface-active);
+  flex: 1;
+  border-radius: 2px 2px 0px 0px;
+}
+.histogram-bar.histogram-bar-inactive {
+  background: var(--surface-color-surface-inactive);
+}
 .range_container {
   display: flex;
   flex-direction: column;
-  width: 88%;
-  margin: 20px auto;
+  width: 99.4%;
 }
 
 .range_container .sliders_control {

@@ -17,6 +17,7 @@ import {
 } from "../../campaign/VPRCampaignService";
 import { FiltersEventData } from "./types";
 import { getFilterOptions, subFilterSelection } from "./helpers";
+import { Histogram } from "../vviinn-price-range/vviinn-price-range";
 
 /**
  * * @part filters - Wrapper itself.
@@ -50,6 +51,16 @@ export class VviinnFilters {
   private emitTequestFiltersMore(requestFilters: RequestDynamicFilters) {
     this.vviinnFiltersChanged.emit({ filters: requestFilters, el: this.el });
   }
+
+  timer: NodeJS.Timeout = null;
+
+  private priceChangeHandler = (filterValue: DynamicFilterValue) => {
+    if (this.timer) clearTimeout(this.timer);
+
+    this.timer = setTimeout(() => {
+      this.handleSubFilterSelection(filterValue, this.selectedFilter);
+    }, 200);
+  };
 
   private handleSubFilterSelection(
     filterValue: DynamicFilterValue,
@@ -145,10 +156,6 @@ export class VviinnFilters {
     const filters = this.filters.slice(0, 4);
     if (filters.length === 0) return <Host></Host>;
 
-    if (column === "price") {
-      console.log(selectedFilterOptions);
-    }
-
     return (
       <Host part="filters">
         <div class="main-filters-wrapper">
@@ -173,7 +180,10 @@ export class VviinnFilters {
         {this.selectedFilter !== undefined && (
           <div class="filters-footer">
             {column === "price" ? (
-              <vviinn-price-range />
+              <vviinn-price-range
+                histogram={selectedFilterOptions as Histogram}
+                priceChangeHandler={this.priceChangeHandler}
+              />
             ) : (
               <ul class="sub-filters-wrapper">
                 {selectedFilterOptions &&

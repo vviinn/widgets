@@ -22,6 +22,7 @@ import { Locale } from "../../locale";
 import i18next from "i18next";
 import { resources } from "../../locale";
 import { SlotSkeleton, slotChangeListener } from "../customized-slots";
+import { Histogram } from "../vviinn-price-range/vviinn-price-range";
 
 /**
  * * @part filters - Wrapper itself.
@@ -164,6 +165,22 @@ export class VviinnExtendedFilters {
     this.showMore = false;
   }
 
+  timer: NodeJS.Timeout = null;
+
+  private priceChangeHandler = (filterValue: DynamicFilterValue) => {
+    if (this.timer) clearTimeout(this.timer);
+
+    const seletedFilter = this.filters.find(
+      (filter) => filter.column === "price"
+    );
+
+    if (seletedFilter) {
+      this.timer = setTimeout(() => {
+        this.handleSubFilterSelection(filterValue, seletedFilter);
+      }, 200);
+    }
+  };
+
   render() {
     let moreFiltersOptionCount = 0;
     this.filters.forEach((filter) => {
@@ -204,6 +221,7 @@ export class VviinnExtendedFilters {
 
             <ul class="filters-modal-list">
               {this.filters.map((mainFilter) => {
+                const column = mainFilter.column;
                 const filterOptions = getFilterOptions(mainFilter);
 
                 return (
@@ -220,35 +238,43 @@ export class VviinnExtendedFilters {
                         : ""}
                     </button>
 
-                    <ul
-                      class={`filters-modal-sub-list ${
-                        this.selectedMoreOptions.includes(mainFilter.column)
-                          ? "open"
-                          : ""
-                      }`}
-                    >
-                      {filterOptions &&
-                        filterOptions.map((filter) => {
-                          return (
-                            <li>
-                              <button
-                                onClick={() =>
-                                  this.handleSubFilterSelection(
-                                    filter.value,
-                                    mainFilter
-                                  )
-                                }
-                                class={`filters-more-modal-button ${this.showActiveOnModalSubButton(
-                                  this.requestFilters,
-                                  filter.value
-                                )}`}
-                              >
-                                {filter.label}
-                              </button>
-                            </li>
-                          );
-                        })}
-                    </ul>
+                    {column === "price" &&
+                    this.selectedMoreOptions.includes(mainFilter.column) ? (
+                      <vviinn-price-range
+                        histogram={filterOptions as Histogram}
+                        priceChangeHandler={this.priceChangeHandler}
+                      />
+                    ) : (
+                      <ul
+                        class={`filters-modal-sub-list ${
+                          this.selectedMoreOptions.includes(mainFilter.column)
+                            ? "open"
+                            : ""
+                        }`}
+                      >
+                        {filterOptions &&
+                          filterOptions.map((filter) => {
+                            return (
+                              <li>
+                                <button
+                                  onClick={() =>
+                                    this.handleSubFilterSelection(
+                                      filter.value,
+                                      mainFilter
+                                    )
+                                  }
+                                  class={`filters-more-modal-button ${this.showActiveOnModalSubButton(
+                                    this.requestFilters,
+                                    filter.value
+                                  )}`}
+                                >
+                                  {filter.label}
+                                </button>
+                              </li>
+                            );
+                          })}
+                      </ul>
+                    )}
                   </li>
                 );
               })}

@@ -16,7 +16,9 @@ export const subFilterSelection = (
   const valueIndex = filters[index]?.values.findIndex((val) => val === value);
 
   const pushObject =
-    index === -1 ? { column: selectedColumn, values: [] } : filters[index];
+    index === -1 || selectedColumn === "price"
+      ? { column: selectedColumn, values: [] }
+      : filters[index];
 
   if (valueIndex > -1) pushObject.values.splice(valueIndex, 1);
   else pushObject.values.push(value as ValueRequest);

@@ -28,27 +28,577 @@
       font-family: system-ui;
       padding: 20px;
     }
-    vviinn-vps-button [slot] {
+    vviinn-results::part(product-card) {
+      background-color: red;
+    }
+
+    /*vviinn-vps-button [slot] {
       visibility: hidden;
       position: absolute;
-    }
-    vviinn-vps-widget [slot] {
+    }*/
+    /*vviinn-vps-widget [slot] {
       visibility: hidden;
       position: absolute;
-    }
-    vviinn-vpr-widget [slot] {
+    }*/
+    /*vviinn-vpr-widget [slot] {
       visibility: hidden;
       position: absolute;
-    }
-    vviinn-vpr-button [slot] {
+    }*/
+    /*vviinn-vpr-button [slot] {
       visibility: hidden;
       position: absolute;
-    }
+    }*/
   </style>
+  <script>
+    const data = [
+      {
+        column: "brand",
+        label: "Brand",
+        values: [
+          {
+            value: "MAGMA",
+            label: "MAGMA",
+            selected: false,
+          },
+          {
+            value: "WENKO",
+            label: "WENKO",
+            selected: false,
+          },
+        ],
+      },
+      {
+        column: "color",
+        label: "Color",
+        values: [
+          {
+            value: "",
+            label: "",
+            selected: false,
+          },
+          {
+            value: "",
+            label: "",
+            selected: false,
+          },
+          {
+            value: "",
+            label: "",
+            selected: false,
+          },
+        ],
+      },
+      {
+        column: "google_product_category",
+        label: "Category",
+        values: [
+          {
+            value: "SGVpbSAm",
+            label: "Kopfkissen",
+            selected: false,
+          },
+          {
+            value: "TcO2YmVs",
+            label: "Möbel",
+            selected: false,
+          },
+        ],
+      },
+      {
+        column: "price",
+        label: "Price",
+        full: {
+          start: 3,
+          end: 25,
+        },
+        suggestions: [
+          {
+            value: {
+              frequency: 0.2222222238779068,
+              interval: {
+                start: 3,
+                end: 9,
+              },
+            },
+            label: "[3-9)",
+            selected: false,
+          },
+          {
+            value: {
+              frequency: 0.2698412835597992,
+              interval: {
+                start: 9,
+                end: 11,
+              },
+            },
+            label: "[9-11)",
+            selected: false,
+          },
+        ],
+      },
+      {
+        column: "product_type",
+        label: "Category",
+        values: [
+          {
+            value: "LaXNzZW4",
+            label: "Gefüllte Kissen",
+            selected: false,
+          },
+          {
+            value: "LaXNzZW4g",
+            label: "Kissenhüllen",
+            selected: false,
+          },
+          {
+            value: "RpbGllbj",
+            label: "Badematten",
+            selected: false,
+          },
+        ],
+      },
+    ];
+
+    function send_data() {
+      document.dispatchEvent(
+        new CustomEvent("vviinnFilters", {
+          bubbles: false,
+          detail: data,
+        })
+      );
+    }
+  </script>
+
   <body>
+    <vviinn-vpr-widget
+      token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjY3NiwianRpIjoiZjg5MmY0MmYtM2M4Zi00Nzk4LTgyYjktMGYyMTkzN2EwZmNiIiwic2NvcGVzIjpbInZwciIsInZwcyIsInZwYyJdfQ.bXnFehw8ay2PoqN8xn4Itxx-lHVlbvidY_32gZeb21DmRr1C7m8jdcZMp3dlAA0qvm6XKURIihvj-ca8WE03HLpxB5t79WxWEEQ4jYniG7zCzWf3NV8MOlsW0rAvaikRoRzeA9nlXvWHZKRRtK0kxO7FAM7tL73-3zD_A8_6EtWNCVQTweFcLCEsJ6wDeBDqIV62uYO64HAikOkvQ-2nauO91pyt5VMeE7ZzOXNqeytogGbaEQ0jt50lTcBMB-uPRD-H0GBYRqJWta9Lw52FH-qLfBW3nl2F1RnrUMzQEEcgCtVm1G_HnEreHtCGZd7ytTwMXMXbdS6_3v1SbiaBqA"
+      product-id="101414"
+      mode="grid"
+      api-path="https://api.stage.vviinn.com"
+      show-filters="true"
+      show-extended-filters="true"
+    ></vviinn-vpr-widget>
+
+    <!--<vviinn-vps-widget
+      token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjY3NiwianRpIjoiZjg5MmY0MmYtM2M4Zi00Nzk4LTgyYjktMGYyMTkzN2EwZmNiIiwic2NvcGVzIjpbInZwciIsInZwcyIsInZwYyJdfQ.bXnFehw8ay2PoqN8xn4Itxx-lHVlbvidY_32gZeb21DmRr1C7m8jdcZMp3dlAA0qvm6XKURIihvj-ca8WE03HLpxB5t79WxWEEQ4jYniG7zCzWf3NV8MOlsW0rAvaikRoRzeA9nlXvWHZKRRtK0kxO7FAM7tL73-3zD_A8_6EtWNCVQTweFcLCEsJ6wDeBDqIV62uYO64HAikOkvQ-2nauO91pyt5VMeE7ZzOXNqeytogGbaEQ0jt50lTcBMB-uPRD-H0GBYRqJWta9Lw52FH-qLfBW3nl2F1RnrUMzQEEcgCtVm1G_HnEreHtCGZd7ytTwMXMXbdS6_3v1SbiaBqA"
+      product-id="101414"
+      api-path="https://api.stage.vviinn.com"
+      show-extended-filters="true"
+      show-filters="true"
+      product-details-redirect="false"
+      text-search-show="true"
+    ></vviinn-vps-widget>-->
+    <!--
+    <vviinn-vps-button
+      token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4"
+      text-search-show="true"
+      id="a-1"
+    ></vviinn-vps-button>
+
+    <vviinn-results
+      token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4"
+      search-id="/search/session/669765eb7dab71-06844122?"
+      campaign-type-id=""
+      image-width="200"
+      currency-sign="€"
+      widget-version="2.62.0"
+      locale="en-US"
+    ></vviinn-results>-->
+
+    <!--SEND FILTERS with events-->
+    <!--<vviinn-extended-filters></vviinn-extended-filters>
+    <vviinn-filters></vviinn-filters>
+    <button onclick="send_data()">Send Data</button>-->
+
+    <!--Show Extended Filters-->
+    <!--<vviinn-extended-filters
+      filters-string='[{"column":"brand","label":"Brand","values":[{"value":"MAGMA","label":"MAGMA","selected":false},{"value":"WENKO","label":"WENKO","selected":false}]},{"column":"color","label":"Color","values":[{"value":"","label":"","selected":false},{"value":"","label":"","selected":false},{"value":"","label":"","selected":false}]},{"column":"google_product_category","label":"Category","values":[{"value":"SGVpbSAm","label":"Kopfkissen","selected":false},{"value":"TcO2YmVs","label":"Möbel","selected":false}]},{"column":"price","label":"Price","full":{"start":3,"end":25},"suggestions":[{"value":{"frequency":0.2222222238779068,"interval":{"start":3,"end":9}},"label":"[3-9)","selected":false},{"value":{"frequency":0.2698412835597992,"interval":{"start":9,"end":11}},"label":"[9-11)","selected":false}]},{"column":"product_type","label":"Category","values":[{"value":"LaXNzZW4","label":"Gefüllte Kissen","selected":false},{"value":"LaXNzZW4g","label":"Kissenhüllen","selected":false},{"value":"RpbGllbj","label":"Badematten","selected":false}]}]'
+      show-extended="true"
+    >
+      <div slot="vviinn-extended-filters-title">Title 1</div>
+      <div slot="vviinn-extended-filters-apply">Apply 1</div>
+      <div slot="vviinn-extended-filters-reset">Reset 1</div>
+    </vviinn-extended-filters>
+
+    <vviinn-filters
+      filters-string='[{"column":"brand","label":"Brand","values":[{"value":"MAGMA","label":"MAGMA","selected":false},{"value":"WENKO","label":"WENKO","selected":false}]},{"column":"color","label":"Color","values":[{"value":"","label":"","selected":false},{"value":"","label":"","selected":false},{"value":"","label":"","selected":false}]},{"column":"google_product_category","label":"Category","values":[{"value":"SGVpbSAm","label":"Kopfkissen","selected":false},{"value":"TcO2YmVs","label":"Möbel","selected":false}]},{"column":"price","label":"Price","full":{"start":3,"end":25},"suggestions":[{"value":{"frequency":0.2222222238779068,"interval":{"start":3,"end":9}},"label":"[3-9)","selected":false},{"value":{"frequency":0.2698412835597992,"interval":{"start":9,"end":11}},"label":"[9-11)","selected":false}]},{"column":"product_type","label":"Category","values":[{"value":"LaXNzZW4","label":"Gefüllte Kissen","selected":false},{"value":"LaXNzZW4g","label":"Kissenhüllen","selected":false},{"value":"RpbGllbj","label":"Badematten","selected":false}]}]'
+      show-extended="true"
+    >
+      <div slot="vviinn-extended-filters-title">Title 2</div>
+      <div slot="vviinn-extended-filters-apply">Apply 2</div>
+      <div slot="vviinn-extended-filters-reset">Reset 2</div>
+    </vviinn-filters>-->
+    <!--
+    <vviinn-extended-filters
+      filters-string='[{"column":"brand","label":"Brand","values":[{"value":"MAGMA","label":"MAGMA","selected":false},{"value":"WENKO","label":"WENKO","selected":false}]},{"column":"color","label":"Color","values":[{"value":"","label":"","selected":false},{"value":"","label":"","selected":false},{"value":"","label":"","selected":false}]},{"column":"google_product_category","label":"Category","values":[{"value":"SGVpbSAm","label":"Kopfkissen","selected":false},{"value":"TcO2YmVs","label":"Möbel","selected":false}]},{"column":"price","label":"Price","full":{"start":3,"end":25},"suggestions":[{"value":{"frequency":0.2222222238779068,"interval":{"start":3,"end":9}},"label":"[3-9)","selected":false},{"value":{"frequency":0.2698412835597992,"interval":{"start":9,"end":11}},"label":"[9-11)","selected":false}]},{"column":"product_type","label":"Category","values":[{"value":"LaXNzZW4","label":"Gefüllte Kissen","selected":false},{"value":"LaXNzZW4g","label":"Kissenhüllen","selected":false},{"value":"RpbGllbj","label":"Badematten","selected":false}]}]'
+      show-extended="true"
+    >
+      <div slot="vviinn-extended-filters-title">Title 4</div>
+      <div slot="vviinn-extended-filters-apply">Apply 4</div>
+      <div slot="vviinn-extended-filters-reset">Reset 4</div>
+    </vviinn-extended-filters>-->
+
+    <!--Show Filters-->
+    <!--<vviinn-filters
+      filters-string='[{"column":"brand","label":"Brand","values":[{"value":"MAGMA","label":"MAGMA","selected":false},{"value":"WENKO","label":"WENKO","selected":false}]},{"column":"color","label":"Color","values":[{"value":"","label":"","selected":false},{"value":"","label":"","selected":false},{"value":"","label":"","selected":false}]},{"column":"google_product_category","label":"Category","values":[{"value":"SGVpbSAm","label":"Kopfkissen","selected":false},{"value":"TcO2YmVs","label":"Möbel","selected":false}]},{"column":"price","label":"Price","full":{"start":3,"end":25},"suggestions":[{"value":{"frequency":0.2222222238779068,"interval":{"start":3,"end":9}},"label":"[3-9)","selected":false},{"value":{"frequency":0.2698412835597992,"interval":{"start":9,"end":11}},"label":"[9-11)","selected":false}]},{"column":"product_type","label":"Category","values":[{"value":"LaXNzZW4","label":"Gefüllte Kissen","selected":false},{"value":"LaXNzZW4g","label":"Kissenhüllen","selected":false},{"value":"RpbGllbj","label":"Badematten","selected":false}]}]'
+      show-extended="true"
+    >
+      <div slot="vviinn-extended-filters-title">Title 2</div>
+      <div slot="vviinn-extended-filters-apply">Apply 2</div>
+      <div slot="vviinn-extended-filters-reset">Reset 2</div>
+    </vviinn-filters>
+
+    <vviinn-filters
+      filters-string='[{"column":"brand","label":"Brand","values":[{"value":"MAGMA","label":"MAGMA","selected":false},{"value":"WENKO","label":"WENKO","selected":false}]},{"column":"color","label":"Color","values":[{"value":"","label":"","selected":false},{"value":"","label":"","selected":false},{"value":"","label":"","selected":false}]},{"column":"google_product_category","label":"Category","values":[{"value":"SGVpbSAm","label":"Kopfkissen","selected":false},{"value":"TcO2YmVs","label":"Möbel","selected":false}]},{"column":"price","label":"Price","full":{"start":3,"end":25},"suggestions":[{"value":{"frequency":0.2222222238779068,"interval":{"start":3,"end":9}},"label":"[3-9)","selected":false},{"value":{"frequency":0.2698412835597992,"interval":{"start":9,"end":11}},"label":"[9-11)","selected":false}]},{"column":"product_type","label":"Category","values":[{"value":"LaXNzZW4","label":"Gefüllte Kissen","selected":false},{"value":"LaXNzZW4g","label":"Kissenhüllen","selected":false},{"value":"RpbGllbj","label":"Badematten","selected":false}]}]'
+      show-extended="true"
+    >
+      <div slot="vviinn-extended-filters-title">Title 3</div>
+      <div slot="vviinn-extended-filters-apply">Apply 3</div>
+      <div slot="vviinn-extended-filters-reset">Reset 3</div>
+    </vviinn-filters>-->
+
+    <!--Show VPR & Filters-->
+    <!--<vviinn-vpr-widget
+      token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjY3NiwianRpIjoiZjg5MmY0MmYtM2M4Zi00Nzk4LTgyYjktMGYyMTkzN2EwZmNiIiwic2NvcGVzIjpbInZwciIsInZwcyIsInZwYyJdfQ.bXnFehw8ay2PoqN8xn4Itxx-lHVlbvidY_32gZeb21DmRr1C7m8jdcZMp3dlAA0qvm6XKURIihvj-ca8WE03HLpxB5t79WxWEEQ4jYniG7zCzWf3NV8MOlsW0rAvaikRoRzeA9nlXvWHZKRRtK0kxO7FAM7tL73-3zD_A8_6EtWNCVQTweFcLCEsJ6wDeBDqIV62uYO64HAikOkvQ-2nauO91pyt5VMeE7ZzOXNqeytogGbaEQ0jt50lTcBMB-uPRD-H0GBYRqJWta9Lw52FH-qLfBW3nl2F1RnrUMzQEEcgCtVm1G_HnEreHtCGZd7ytTwMXMXbdS6_3v1SbiaBqA"
+      product-id="101414"
+      mode="grid"
+      api-path="https://api.stage.vviinn.com"
+      show-filters="true"
+      show-extended-filters="true"
+    >
+      <div slot="vviinn-extended-filters-title">Title 1</div>
+      <div slot="vviinn-extended-filters-apply">Apply 1</div>
+      <div slot="vviinn-extended-filters-reset">Reset 1</div>
+    </vviinn-vpr-widget>
+
+    <vviinn-vpr-widget
+      token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjY3NiwianRpIjoiZjg5MmY0MmYtM2M4Zi00Nzk4LTgyYjktMGYyMTkzN2EwZmNiIiwic2NvcGVzIjpbInZwciIsInZwcyIsInZwYyJdfQ.bXnFehw8ay2PoqN8xn4Itxx-lHVlbvidY_32gZeb21DmRr1C7m8jdcZMp3dlAA0qvm6XKURIihvj-ca8WE03HLpxB5t79WxWEEQ4jYniG7zCzWf3NV8MOlsW0rAvaikRoRzeA9nlXvWHZKRRtK0kxO7FAM7tL73-3zD_A8_6EtWNCVQTweFcLCEsJ6wDeBDqIV62uYO64HAikOkvQ-2nauO91pyt5VMeE7ZzOXNqeytogGbaEQ0jt50lTcBMB-uPRD-H0GBYRqJWta9Lw52FH-qLfBW3nl2F1RnrUMzQEEcgCtVm1G_HnEreHtCGZd7ytTwMXMXbdS6_3v1SbiaBqA"
+      product-id="101414"
+      mode="grid"
+      api-path="https://api.stage.vviinn.com"
+      show-filters="true"
+      show-extended-filters="true"
+    >
+      <div slot="vviinn-extended-filters-title">Title 3</div>
+      <div slot="vviinn-extended-filters-apply">Apply 3</div>
+      <div slot="vviinn-extended-filters-reset">Reset 3</div>
+    </vviinn-vpr-widget>-->
+
+    <!--SINGLE SEARCH WIDGET-->
+    <!--<vviinn-vps-widget
+      token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4"
+      product-id="4114460310"
+      show-scroll="true"
+      text-search-show="true"
+      id="a-1"
+    >
+      click me 1
+      <div slot="vviinn-teaser-text">majid text 1</div>
+      <div slot="vviinn-image-upload-button-text">Upload Image 1</div>
+      <div slot="vviinn-image-upload-icon">Icon 1</div>
+      <div slot="vviinn-camera-button-text-start">Start Camera 1</div>
+      <div slot="vviinn-camera-button-text-stop">Stop Camera 1</div>
+      <div slot="vviinn-camera-icon">Icon C 1</div>
+      <div slot="vviinn-camera-capture-text">Capture Text 1</div>
+      <div slot="vviinn-privacy-badge-text">Badge text 1</div>
+
+      <div slot="vviinn-image-search-modal-title">Result 1</div>
+      <div slot="vviinn-text-search-icon">Icon T 1</div>
+    </vviinn-vps-widget>-->
+
+    <!--DOUBLE SEARCH Button-->
+    <!--<vviinn-vps-button
+      token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4"
+      product-id="4114460310"
+      text-search-show="true"
+    >
+      click me 2
+      <div slot="vviinn-teaser-text">majid text 2</div>
+      <div slot="vviinn-image-upload-button-text">Upload Image 2</div>
+      <div slot="vviinn-image-upload-icon">Icon 2</div>
+      <div slot="vviinn-camera-button-text-start">Start Camera 2</div>
+      <div slot="vviinn-camera-button-text-stop">Stop Camera 2</div>
+      <div slot="vviinn-camera-icon">Icon C 2</div>
+      <div slot="vviinn-camera-capture-text">Capture Text 2</div>
+      <div slot="vviinn-privacy-badge-text">Badge text 2</div>
+      <div slot="vviinn-image-search-modal-title">Result 2</div>
+      <div slot="vviinn-text-search-icon">Icon T 2</div>
+    </vviinn-vps-button>
+
+    <vviinn-vps-button
+      token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4"
+      product-id="4114460310"
+      text-search-show="true"
+    >
+      click me 3
+      <div slot="vviinn-teaser-text">majid text 3</div>
+      <div slot="vviinn-image-upload-button-text">Upload Image 3</div>
+      <div slot="vviinn-image-upload-icon">Icon 3</div>
+      <div slot="vviinn-camera-button-text-start">Start Camera 3</div>
+      <div slot="vviinn-camera-button-text-stop">Stop Camera 3</div>
+      <div slot="vviinn-camera-icon">Icon C 3</div>
+      <div slot="vviinn-camera-capture-text">Capture Text 3</div>
+      <div slot="vviinn-privacy-badge-text">Badge text 3</div>
+      <div slot="vviinn-image-search-modal-title">Result 3</div>
+      <div slot="vviinn-text-search-icon">Icon T 3</div>
+    </vviinn-vps-button>-->
+
+    <!--SINGLE RECOMMENDATION WIDGET-->
+    <!--<vviinn-vpr-widget
+      token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4"
+      product-id="4114460310"
+      price-prefix="Price"
+      locale="en-US"
+      mode="set"
+      add-to-basket-show="true"
+    >
+      <div slot="vviinn-recommendations-title">test 1</div>
+      <div slot="vviinn-recommendations-subtitle">Wow 1</div>
+      <div slot="vviinn-update-button-icon">Ic 1</div>
+      <div slot="vviinn-update-button-text">Redresh 1</div>
+
+      <div slot="vviinn-basket-button-icon">IcATB 1</div>
+      <div slot="vviinn-basket-button-text">ATB 1</div>
+
+      <div slot="vviinn-basket-button-icon-pressed">PRI 1</div>
+      <div slot="vviinn-basket-button-text-pressed">PRT 1</div>
+    </vviinn-vpr-widget>-->
+
+    <!--SINGLE RECOMMENDATION BUTTON-->
+    <!--<vviinn-vpr-button
+      token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4"
+      product-id="4114460310"
+      price-prefix="Price"
+      locale="en-US"
+      mode="grid"
+      add-to-basket-show="true"
+    >
+      Click me 2
+      <div slot="vviinn-recommendations-title">test 2</div>
+      <div slot="vviinn-recommendations-subtitle">Wow 2</div>
+      <div slot="vviinn-update-button-icon">Ic 2</div>
+      <div slot="vviinn-update-button-text">Redresh 2</div>
+      <div slot="vviinn-basket-button-icon">IcATB 2</div>
+      <div slot="vviinn-basket-button-text">ATB 2</div>
+
+      <div slot="vviinn-basket-button-icon-pressed">PRI 2</div>
+      <div slot="vviinn-basket-button-text-pressed">PRT 2</div>
+    </vviinn-vpr-button>
+
+    <vviinn-vpr-button
+      token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4"
+      product-id="4114460310"
+      price-prefix="Price"
+      locale="en-US"
+      mode="set"
+      add-to-basket-show="true"
+    >
+      Click me S
+      <div slot="vviinn-recommendations-title">test S</div>
+      <div slot="vviinn-recommendations-subtitle">Wow S</div>
+      <div slot="vviinn-update-button-icon">Ic S</div>
+      <div slot="vviinn-update-button-text">Redresh S</div>
+      <div slot="vviinn-basket-button-icon">IcATB S</div>
+      <div slot="vviinn-basket-button-text">ATB S</div>
+
+      <div slot="vviinn-basket-button-icon-pressed">PRI S</div>
+      <div slot="vviinn-basket-button-text-pressed">PRT S</div>
+    </vviinn-vpr-button>-->
+
+    <!--MULTIPLE Recommendation WIDGET-->
+    <!--<vviinn-vpr-widget
+      token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4"
+      product-id="4114460310"
+      price-prefix="Price"
+      locale="en-US"
+      mode="set"
+      add-to-basket-show="true"
+    >
+      <div slot="vviinn-recommendations-title">test 3</div>
+      <div slot="vviinn-recommendations-subtitle">Wow 3</div>
+      <div slot="vviinn-update-button-icon">Ic 3</div>
+      <div slot="vviinn-update-button-text">Redresh 3</div>
+      <div slot="vviinn-basket-button-icon">IcATB 3</div>
+      <div slot="vviinn-basket-button-text">ATB 3</div>
+
+      <div slot="vviinn-basket-button-icon-pressed">PRI 3</div>
+      <div slot="vviinn-basket-button-text-pressed">PRT 3</div>
+    </vviinn-vpr-widget>
+
     <vviinn-vpr-widget
       token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4"
       product-id="4114460310"
-    ></vviinn-vpr-widget>
+      price-prefix="Price"
+      locale="en-US"
+      mode="set"
+      add-to-basket-show="true"
+    >
+      <div slot="vviinn-recommendations-title">test 4</div>
+      <div slot="vviinn-recommendations-subtitle">Wow 4</div>
+      <div slot="vviinn-update-button-icon">Ic 4</div>
+      <div slot="vviinn-update-button-text">Redresh 4</div>
+      <div slot="vviinn-basket-button-icon">IcATB 4</div>
+      <div slot="vviinn-basket-button-text">ATB 4</div>
+
+      <div slot="vviinn-basket-button-icon-pressed">PRI 4</div>
+      <div slot="vviinn-basket-button-text-pressed">PRT 4</div>
+    </vviinn-vpr-widget>
+
+    <vviinn-vpr-widget
+      token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4"
+      product-id="4114460310"
+      price-prefix="Price"
+      locale="en-US"
+      mode="grid"
+      add-to-basket-show="true"
+    >
+      <div slot="vviinn-recommendations-title">test 5</div>
+      <div slot="vviinn-recommendations-subtitle">Wow 5</div>
+      <div slot="vviinn-update-button-icon">Ic 5</div>
+      <div slot="vviinn-update-button-text">Redresh 5</div>
+      <div slot="vviinn-basket-button-icon">IcATB 5</div>
+      <div slot="vviinn-basket-button-text">ATB 5</div>
+
+      <div slot="vviinn-basket-button-icon-pressed">PRI 5</div>
+      <div slot="vviinn-basket-button-text-pressed">PRT 5</div>
+    </vviinn-vpr-widget>
+
+    <vviinn-vpr-widget
+      token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4"
+      product-id="4114460310"
+      price-prefix="Price"
+      locale="en-US"
+      mode="grid"
+      add-to-basket-show="true"
+    >
+      <div slot="vviinn-recommendations-title">test 6</div>
+      <div slot="vviinn-recommendations-subtitle">Wow 6</div>
+      <div slot="vviinn-update-button-icon">Ic 6</div>
+      <div slot="vviinn-update-button-text">Redresh 6</div>
+      <div slot="vviinn-basket-button-icon">IcATB 6</div>
+      <div slot="vviinn-basket-button-text">ATB 6</div>
+
+      <div slot="vviinn-basket-button-icon-pressed">PRI 6</div>
+      <div slot="vviinn-basket-button-text-pressed">PRT 6</div>
+    </vviinn-vpr-widget>
+
+    <vviinn-vpr-widget
+      token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4"
+      product-id="4114460310"
+      price-prefix="Price"
+      locale="en-US"
+      mode=""
+      add-to-basket-show="true"
+    >
+      <div slot="vviinn-recommendations-title">test 7</div>
+      <div slot="vviinn-recommendations-subtitle">Wow 7</div>
+      <div slot="vviinn-update-button-icon">Ic 7</div>
+      <div slot="vviinn-update-button-text">Redresh 7</div>
+      <div slot="vviinn-basket-button-icon">IcATB 7</div>
+      <div slot="vviinn-basket-button-text">ATB 7</div>
+
+      <div slot="vviinn-basket-button-icon-pressed">PRI 7</div>
+      <div slot="vviinn-basket-button-text-pressed">PRT 7</div>
+    </vviinn-vpr-widget>
+
+    <vviinn-vpr-widget
+      token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4"
+      product-id="4114460310"
+      price-prefix="Price"
+      locale="en-US"
+      mode=""
+      add-to-basket-show="true"
+    >
+      <div slot="vviinn-recommendations-title">test 8</div>
+      <div slot="vviinn-recommendations-subtitle">Wow 8</div>
+      <div slot="vviinn-update-button-icon">Ic 8</div>
+      <div slot="vviinn-update-button-text">Redresh 8</div>
+      <div slot="vviinn-basket-button-icon">IcATB 8</div>
+      <div slot="vviinn-basket-button-text">ATB 8</div>
+
+      <div slot="vviinn-basket-button-icon-pressed">PRI 8</div>
+      <div slot="vviinn-basket-button-text-pressed">PRT 8</div>
+    </vviinn-vpr-widget>-->
+
+    <!--MULTIPLE Recommendation BUTTON-->
+    <!--<vviinn-vpr-button
+      token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4"
+      product-id="4114460310"
+      price-prefix="Price"
+      locale="en-US"
+      mode="grid"
+      add-to-basket-show="true"
+    >
+      C M 9
+      <div slot="vviinn-recommendations-title">test 9</div>
+      <div slot="vviinn-recommendations-subtitle">Wow 9</div>
+      <div slot="vviinn-update-button-icon">Ic 9</div>
+      <div slot="vviinn-update-button-text">Redresh 9</div>
+      <div slot="vviinn-basket-button-icon">IcATB 9</div>
+      <div slot="vviinn-basket-button-text">ATB 9</div>
+
+      <div slot="vviinn-basket-button-icon-pressed">PRI 9</div>
+      <div slot="vviinn-basket-button-text-pressed">PRT 9</div>
+    </vviinn-vpr-button>
+
+    <vviinn-vpr-button
+      token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4"
+      product-id="4114460310"
+      price-prefix="Price"
+      locale="en-US"
+      mode="grid"
+      add-to-basket-show="true"
+    >
+      C M 0
+      <div slot="vviinn-recommendations-title">test 0</div>
+      <div slot="vviinn-recommendations-subtitle">Wow 0</div>
+      <div slot="vviinn-update-button-icon">Ic 0</div>
+      <div slot="vviinn-update-button-text">Redresh 0</div>
+      <div slot="vviinn-basket-button-icon">IcATB 0</div>
+      <div slot="vviinn-basket-button-text">ATB 0</div>
+
+      <div slot="vviinn-basket-button-icon-pressed">PRI 0</div>
+      <div slot="vviinn-basket-button-text-pressed">PRT 0</div>
+    </vviinn-vpr-button>
+
+    <vviinn-vpr-button
+      token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4"
+      product-id="4114460310"
+      price-prefix="Price"
+      locale="en-US"
+      mode=""
+      add-to-basket-show="true"
+    >
+      C M 1
+      <div slot="vviinn-recommendations-title">test 1</div>
+      <div slot="vviinn-recommendations-subtitle">Wow 1</div>
+      <div slot="vviinn-update-button-icon">Ic 1</div>
+      <div slot="vviinn-update-button-text">Redresh 1</div>
+      <div slot="vviinn-basket-button-icon">IcATB 1</div>
+      <div slot="vviinn-basket-button-text">ATB 1</div>
+
+      <div slot="vviinn-basket-button-icon-pressed">PRI 1</div>
+      <div slot="vviinn-basket-button-text-pressed">PRT 1</div>
+    </vviinn-vpr-button>
+
+    <vviinn-vpr-button
+      token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4"
+      product-id="4114460310"
+      price-prefix="Price"
+      locale="en-US"
+      mode=""
+      add-to-basket-show="true"
+    >
+      C M 2
+      <div slot="vviinn-recommendations-title">test 2</div>
+      <div slot="vviinn-recommendations-subtitle">Wow 2</div>
+      <div slot="vviinn-update-button-icon">Ic 2</div>
+      <div slot="vviinn-update-button-text">Redresh 2</div>
+      <div slot="vviinn-basket-button-icon">IcATB 2</div>
+      <div slot="vviinn-basket-button-text">ATB 2</div>
+
+      <div slot="vviinn-basket-button-icon-pressed">PRI 2</div>
+      <div slot="vviinn-basket-button-text-pressed">PRT 2</div>
+    </vviinn-vpr-button>-->
   </body>
 </html>
