@@ -14,11 +14,16 @@ import {
   SearchType,
 } from "../searchSession/searchSession";
 import { foldValueObject, ValueObject } from "../network/ion/ValueObject";
-import { Link, linkRequest, getLink } from "../network/ion/Link";
+import {
+  Link,
+  linkRequest,
+  getLink,
+  extractHrefValue,
+  createLinkfromSearchId,
+} from "../network/ion/Link";
 import { divideOnSized, Rectangle } from "../geometry/Rectangle";
 import { Form, formRequest } from "../network/ion/Form";
 import * as F from "../network/ion/File";
-import { Handler, fromRectangle } from "../cropper/Handler";
 import { sequenceToOption } from "../utils/option/option";
 import { processBearerToken } from "../utils/token/tokenUtils";
 import { BasicError } from "../error";
@@ -48,13 +53,15 @@ type SearchStore = {
   token?: string;
   campaignId?: string;
   excluded?: string;
+  selfSearchId: string | null;
   results: Recommendation[];
+  resultLoaded: boolean;
+  resultViewed: boolean;
   sourceProduct: Recommendation | null;
   filters: SearchSessionFilter[];
   textSearchFilters: ResponseFilterItem[];
   resetCategoryLink?: Link;
   activeIonLink?: Link;
-  cropperHandlers: Handler[];
   selectedCropper?: number;
   rectangleSearchForm?: Form;
   detectedObjects: ValueObject<DetectedObject>[];
@@ -68,8 +75,6 @@ type SearchStore = {
   imageBounds: O.Option<Rectangle>;
   searchArea: O.Option<Rectangle>;
 
-  resultsComponents: HTMLElement[];
-
   serverError: boolean;
   loading: boolean;
 };
@@ -77,13 +82,15 @@ type SearchStore = {
 const { state, onChange } = createStore<SearchStore>({
   campaignId: "",
   excluded: "",
+  selfSearchId: null,
   results: [],
   sourceProduct: null,
   filters: [],
   textSearchFilters: [],
-  cropperHandlers: [],
   detectedObjects: [],
   objectDetectionInProgress: false,
+  resultLoaded: false,
+  resultViewed: false,
 
   imageWidth: RESIZED_IMAGE_WIDTH,
 
@@ -92,8 +99,6 @@ const { state, onChange } = createStore<SearchStore>({
   imageBounds: O.none,
   searchArea: O.none,
 
-  resultsComponents: [],
-
   serverError: false,
   loading: false,
 });
@@ -101,6 +106,7 @@ const { state, onChange } = createStore<SearchStore>({
 export const searchState = state;
 
 const updateState = async (response: SearchSession) => {
+  state.selfSearchId = pipe(getLink(response, "self"), extractHrefValue);
   state.results = response.value;
   state.filters = readFilters(foldValueObject(response.filters));
   state.rectangleSearchForm = response.searchArea;
@@ -270,6 +276,16 @@ export const processSelectedText = async (
   dynamicFilters?: RequestFilterItem
 ) => await uploadText(query, dynamicFilters)();
 
+export const processSearchIdQuery = async (searchId: string, token: string) => await pipe(
+    makeAuthorizedRequest(token),
+    TE.fromEither,
+    TE.chainW(linkRequest(createLinkfromSearchId(searchId))),
+    TE.map((response: ValueObject<Recommendation[]>) => {
+      return response.value;
+    }),
+  )();
+
+
 onChange("activeIonLink", async (newLink: Link) => {
   const link = newLink ? newLink : state.resetCategoryLink;
   if (!link) return;
@@ -287,15 +303,6 @@ onChange("activeIonLink", async (newLink: Link) => {
       };
     })
   )();
-});
-
-onChange("searchArea", (newSearchArea: O.Option<Rectangle>) => {
-  pipe(
-    newSearchArea,
-    O.map((area) => {
-      state.cropperHandlers = fromRectangle(area);
-    })
-  );
 });
 
 onChange("serverError", () => {

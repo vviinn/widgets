@@ -16,6 +16,7 @@ import {
   ProductCardEventData,
 } from "../../recommendation/events";
 import { Locale } from "../../locale";
+import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
 /**
  * @part button - Clickable button element.
  * @part vviinn-button - Button element container.
@@ -44,7 +45,13 @@ import { Locale } from "../../locale";
  * @part update-button-item - Update Button inside the Product Card (Set mode).
  *
  * @slot vviinn-recommendations-title - Recommendations title text.
+ * @slot vviinn-recommendations-subtitle - Recommendations subtitle text (Set mode).
+ * @slot vviinn-update-button-text - Text of Update Button on the top (Set mode).
+ * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
+ * @slot vviinn-basket-button-icon - Text of Add to Basket icon (Set mode).
+ * @slot vviinn-basket-button-text-pressed - Text of pressed Add to Basket button (Set mode).
+ * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button (Set mode).
  */
 
 @Component({
@@ -58,44 +65,59 @@ export class VviinnVprButton {
   @Prop() token: string;
   /** ID of product you need recommendations for (required) */
   @Prop() productId: string;
-  /** Position of the modal */
-  @Prop() position: "bottom" | "right" = "bottom";
-  /** Image for showing in the modal's header */
-  @Prop() sourceImage: string | null = null;
-  /** Sidebar title (change it to fit your locale) */
-  @Prop() sidebarTitle: string = "Visually similar products";
-  /** Show or hide the scrollbar */
-  @Prop() modalScrollbar: boolean = false;
+  /** Switch between carousel modes */
+  @Prop() mode: CarouselMode = "continuity";
   /** Comma-separated list of campaign IDs */
   @Prop() campaigns: string = "";
+  /** Excluded filter. Example: "brand:Nike;custom_label_0:summer" */
+  @Prop() excluded: string = "";
   /** Campaign type */
   @Prop() campaignType: CampaignName = "VPR";
   /** The locale for currency formatting and text localization */
   @Prop() locale: Locale = "de-DE";
   /** Accepts any hex color code */
   @Prop() color: string = "";
-  /** Add default styles to the button */
-  @Prop() addStyle: boolean = true;
-  /** Switch between carousel modes */
-  @Prop() mode: CarouselMode = "continuity";
   /** Width of each recommended product image */
   @Prop() imageWidth: number = 300;
+  /** The ratio of each recommended product image */
+  @Prop() imageRatio: number = 1;
+  /** Optional for custom CSS. It will overwrite all other settings */
+  @Prop() cssUrl: string | null = null;
   /**  The currency sign is displayed after the price */
   @Prop() currencySign: string = "€";
+  /** Prefix is displayed before the price */
+  @Prop() pricePrefix: string = "";
   /** A custom message is displayed when no results */
   @Prop() noResultText: string = "";
   /** Showing a message (when true) or hiding the whole widget, when no results */
   @Prop() noResultShow: boolean = true;
   /** Hiding disabled arrows in the carousel if true */
   @Prop() gridArrowsDynamic: boolean = false;
-  /** Excluded filter. Example: "brand:Nike;custom_label_0:summer" */
-  @Prop() excluded: string = "";
   /** Toggle for opening product link in new tab or not */
-  @Prop() productDetailNewTab: boolean = false;
+  @Prop() productDetailsNewTab: boolean = false;
+  /** Toggle for redirection to PDP on product's click */
+  @Prop() productDetailsRedirect: boolean = true;
   /** Show or hide Add to Basket button */
   @Prop() addToBasketShow: boolean = false;
   /** Show filters on top */
   @Prop() showFilters: boolean = false;
+
+  /** List of discounts for Set mode. Example: "5, 10, 15, 20" (could be less than 4 numbers) */
+  @Prop() setModeDiscounts: string = this.mode === "set" ? "5, 10, 15" : "";
+  /** Location of Update button for Set mode */
+  @Prop() updateButtonLocation: UpdateButtonLocation = "topAndItem";
+
+  /** Sidebar title (change it to fit your locale) */
+  @Prop() sidebarTitle: string =
+    this.mode === "set" ? "" : "Visually similar products";
+  /** Show or hide the scrollbar */
+  @Prop() modalScrollbar: boolean = false;
+  /** Position of the modal */
+  @Prop() position: "bottom" | "right" = "bottom";
+  /** Image for showing in the modal's header */
+  @Prop() sourceImage: string | null = null;
+  /** Add default styles to the button */
+  @Prop() addStyle: boolean = true;
 
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
@@ -168,18 +190,24 @@ export class VviinnVprButton {
     sidebar.mode = this.position === "right" ? "grid" : this.mode;
     sidebar.imageWidth = this.imageWidth;
     sidebar.currencySign = this.currencySign;
+    sidebar.pricePrefix = this.pricePrefix;
     sidebar.apiPath = this.apiPath;
     sidebar.buttonElementId = this.el.id;
     sidebar.noResultText = this.noResultText;
     sidebar.noResultShow = this.noResultShow;
     sidebar.gridArrowsDynamic = this.gridArrowsDynamic;
-    sidebar.productDetailNewTab = this.productDetailNewTab;
+    sidebar.productDetailsNewTab = this.productDetailsNewTab;
+    sidebar.productDetailsRedirect = this.productDetailsRedirect;
     sidebar.widgetVersion = version;
     sidebar.showingInButton = true;
     sidebar.excluded = this.excluded;
     sidebar.addToBasketShow = this.addToBasketShow;
     sidebar.buttonChildren = this.el.children;
     sidebar.showFilters = this.showFilters;
+    sidebar.cssUrl = this.cssUrl;
+    sidebar.imageRatio = this.imageRatio;
+    sidebar.setModeDiscounts = this.setModeDiscounts;
+    sidebar.updateButtonLocation = this.updateButtonLocation;
 
     this.sidebar = sidebar;
 

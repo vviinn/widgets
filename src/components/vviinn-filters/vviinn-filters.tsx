@@ -17,7 +17,6 @@ import {
 } from "../../campaign/VPRCampaignService";
 import { FiltersEventData } from "./types";
 import { getFilterOptions, subFilterSelection } from "./helpers";
-import { Locale } from "../../locale";
 
 /**
  * * @part filters - Wrapper itself.
@@ -33,9 +32,6 @@ export class VviinnFilters {
 
   @Prop() filters: DynamicFilters = [];
   @Prop() filtersString: string = "";
-  @Prop() showFirst: number = 4;
-  /** The locale for currency formatting and text localization */
-  @Prop() locale: Locale = "de-DE";
 
   @State() selectedFilter: DynamicFilter;
   @State() requestFilters: RequestDynamicFilters = [];
@@ -136,7 +132,7 @@ export class VviinnFilters {
 
   disconnectedCallback() {
     document.removeEventListener("vviinnFilters", this.handleSetFilters);
-    document.addEventListener(
+    document.removeEventListener(
       "vviinnFiltersChanged",
       this.handleFiltersChanged
     );
@@ -145,8 +141,8 @@ export class VviinnFilters {
   render() {
     const { column } = this.selectedFilter ?? {};
     const selectedFilterOptions = getFilterOptions(this.selectedFilter);
-    const filters = this.filters.slice(0, this.showFirst);
-
+    //TODO - #36707: Will remove this logic then we have the `Primary filters` feature
+    const filters = this.filters.slice(0, 4);
     if (filters.length === 0) return <Host></Host>;
 
     if (column === "price") {
@@ -155,22 +151,24 @@ export class VviinnFilters {
 
     return (
       <Host part="filters">
-        <ul class="main-filters-wrapper">
-          {filters.map((filter) => {
-            return (
-              <li>
-                <button
-                  class={`filters-main-button ${this.showActiveOnMainButton(
-                    filter
-                  )}`}
-                  onClick={() => this.handleMainFilterSelection(filter)}
-                >
-                  {filter.column}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
+        <div class="main-filters-wrapper">
+          <ul class="main-filters-list">
+            {filters.map((filter) => {
+              return (
+                <li>
+                  <button
+                    class={`filters-main-button ${this.showActiveOnMainButton(
+                      filter
+                    )}`}
+                    onClick={() => this.handleMainFilterSelection(filter)}
+                  >
+                    {filter.label}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
 
         {this.selectedFilter !== undefined && (
           <div class="filters-footer">

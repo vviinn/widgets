@@ -158,6 +158,12 @@ export class VviinnExtendedFilters {
     );
   }
 
+  private resetModal() {
+    this.emitTequestFiltersMore([]);
+    this.requestFilters = [];
+    this.showMore = false;
+  }
+
   render() {
     let moreFiltersOptionCount = 0;
     this.filters.forEach((filter) => {
@@ -208,7 +214,7 @@ export class VviinnExtendedFilters {
                       }
                       class="filters-modal-main-button"
                     >
-                      {mainFilter.column}
+                      {mainFilter.label}
                       {filterOptions.length > 0
                         ? ` (${filterOptions.length})`
                         : ""}
@@ -261,7 +267,7 @@ export class VviinnExtendedFilters {
 
               <button
                 class="filters-modal-reset"
-                onClick={() => (this.requestFilters = [])}
+                onClick={() => this.resetModal()}
               >
                 <slot name="vviinn-extended-filters-reset">
                   {i18next.t("filters.modal.resetFilters")}

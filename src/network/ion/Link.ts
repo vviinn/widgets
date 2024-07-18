@@ -29,6 +29,17 @@ export const getLink = (
     O.chain((linksObject) => O.fromNullable(linksObject[path]))
   );
 
+export const createLinkfromSearchId = (searchId: string): Link => ({
+  href: searchId,
+});
+
+export const extractHrefValue = (link: O.Option<Link>): string =>
+  pipe(
+    link,
+    O.map((l) => l.href),
+    O.getOrElse(() => null)
+  );
+
 export const linkRequest =
   <T>(link: Link) =>
   (data: RequestInit) =>

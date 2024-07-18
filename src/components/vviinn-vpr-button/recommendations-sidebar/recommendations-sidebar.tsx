@@ -14,6 +14,7 @@ import { CarouselMode } from "../../vviinn-carousel/vviinn-carousel";
 import { BasicEventData } from "../../../recommendation/events";
 import { CampaignName } from "../../../campaign/Campaign";
 import { Locale } from "../../../locale";
+import { UpdateButtonLocation } from "../../vviinn-vpr-widget/vviinn-vpr-widget";
 
 type SidebarState = "idle" | "open" | "closed";
 type ClickEvent = Event & { clientX: number; clientY: number };
@@ -39,17 +40,24 @@ export class RecommendationsSidebar {
   @Prop() color: string;
   @Prop() locale: Locale;
   @Prop() imageWidth: number = 300;
+  @Prop() imageRatio: number;
+  @Prop() cssUrl: string | null;
   @Prop() currencySign: string = "€";
+  @Prop() pricePrefix: string;
   @Prop() noResultText: string;
   @Prop() noResultShow: boolean;
   /** Hiding disabled arrows in the carousel if true */
   @Prop() gridArrowsDynamic: boolean;
   @Prop() excluded: string;
   /** Toggle for opening product link in new tab or not */
-  @Prop() productDetailNewTab: boolean;
+  @Prop() productDetailsNewTab: boolean;
+  /** Toggle for redirection to PDP on product's click */
+  @Prop() productDetailsRedirect: boolean;
   /** Show or hide Add to Basket button */
   @Prop() addToBasketShow: boolean = false;
   @Prop() showFilters: boolean = false;
+  @Prop() setModeDiscounts: string;
+  @Prop() updateButtonLocation: UpdateButtonLocation;
 
   /** @internal */
   @Prop() buttonChildren: HTMLCollection;
@@ -65,6 +73,23 @@ export class RecommendationsSidebar {
   @State() state: SidebarState = "idle";
 
   @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
+
+  @Listen("vviinnUpdatingAllCardsStarted")
+  updatingAllCardsStarted() {
+    const { height } = this.getSidebarRectangle();
+    const aside = this.getAsideElement();
+    if (aside.style.height !== `${height}px`) {
+      aside.style.height = `${height}px`;
+    }
+  }
+
+  @Listen("vviinnUpdatingAllCardsFinished")
+  updatingAllCardsFinished() {
+    const aside = this.getAsideElement();
+    if (aside.style.height !== "auto") {
+      aside.style.height = "auto";
+    }
+  }
 
   @Listen("click", { target: "body" })
   bodyClickListener(event: ClickEvent) {
@@ -91,8 +116,12 @@ export class RecommendationsSidebar {
     };
   }
 
+  private getAsideElement(): HTMLElement {
+    return this.el.shadowRoot.querySelector("aside");
+  }
+
   private getSidebarRectangle(): DOMRect {
-    return this.el.shadowRoot.querySelector("aside")?.getBoundingClientRect();
+    return this.getAsideElement()?.getBoundingClientRect();
   }
 
   componentDidLoad() {
@@ -134,6 +163,7 @@ export class RecommendationsSidebar {
               token={this.token}
               productId={this.productId}
               imageWidth={this.imageWidth}
+              imageRatio={this.imageRatio}
               blockTitle=""
               mode={this.mode}
               campaign-type={this.campaignType}
@@ -143,6 +173,7 @@ export class RecommendationsSidebar {
               campaigns={this.campaigns}
               color={this.color}
               currencySign={this.currencySign}
+              pricePrefix={this.pricePrefix}
               apiPath={this.apiPath}
               locale={this.locale}
               buttonElementId={this.buttonElementId}
@@ -151,11 +182,15 @@ export class RecommendationsSidebar {
               gridArrowsDynamic={this.gridArrowsDynamic}
               showingInButton={this.showingInButton}
               excluded={this.excluded}
-              productDetailNewTab={this.productDetailNewTab}
+              productDetailsNewTab={this.productDetailsNewTab}
+              productDetailsRedirect={this.productDetailsRedirect}
               closed={this.state === "closed"}
               opened={this.state === "open"}
               addToBasketShow={this.addToBasketShow}
+              cssUrl={this.cssUrl}
               showFilters={this.showFilters}
+              setModeDiscounts={this.setModeDiscounts}
+              updateButtonLocation={this.updateButtonLocation}
             />
           </main>
         </aside>

@@ -28,12 +28,16 @@ const Template = (args) =>
     add-style="${args.addStyle}"
     sidebar-title="${args.sidebarTitle}"
     locale="${args.locale}"
+    css-url="${args.cssUrl}"
     currency-sign="${args.currencySign}"
+    price-prefix="${args.pricePrefix}"
     modal-scrollbar="${args.modalScrollbar}"
     mode="${args.mode}"
     campaigns="${args.campaigns}"
-    product-detail-new-tab="${args.productDetailNewTab}"
+    product-details-new-tab="${args.productDetailsNewTab}"
+    product-details-redirect="${args.productDetailsRedirect}"
     image-width="${args.imageWidth}"
+    image-ratio="${args.imageRatio}"
     color="${args.color ? args.color.toString().slice(1) : ""}"
     no-result-text="${args.noResultText}"
     no-result-show="${args.noResultShow}"
@@ -42,6 +46,8 @@ const Template = (args) =>
     excluded="${args.excluded}"
     api-path="${args.apiPath}"
     add-to-basket-show="${args.addToBasketShow}"
+    update-button-location="${args.updateButtonLocation}"
+    set-mode-discounts="${args.setModeDiscounts}"
     show-filters="${args.showFilters}"
   ></vviinn-vpr-button>`;
 
@@ -50,28 +56,33 @@ export const Default = Template.bind({});
 Default.storyName = "Button";
 
 Default.args = {
-  token:
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.SbaQnBkvoXer3GPCWUthFQStFKLHZNMBfj4Qu44WHM8nzaIt48I74yVy4gVbX29vtd6jIkDPdakqEXRXmAxOCtv7_nsd4iBs1yMegfOWW5g8f10PKfZqmWJcfhwKIEElnUMFmP6rXpogntZ7iFfeTBbiRNzQPhkaa7jUjgQkCC4",
+  token: process.env.STORYBOOK_TOKEN,
+  apiPath: process.env.STORYBOOK_API_PATH,
   productId: "4114460310",
   campaignType: "VPR",
   campaigns: "",
   color: "",
   excluded: "",
   mode: "continuity",
-  productDetailNewTab: false,
+  updateButtonLocation: "topAndItem",
+  setModeDiscounts: "5, 10, 15",
+  productDetailsNewTab: false,
+  productDetailsRedirect: true,
   sidebarTitle: "Visually similar products",
   position: "bottom",
   sourceImage:
     "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg",
   imageWidth: "300",
+  imageRatio: 1,
   locale: "en-US",
+  cssUrl: "",
   currencySign: "€",
+  pricePrefix: "",
   addStyle: true,
   modalScrollbar: false,
   noResultShow: true,
   noResultText: "",
   gridArrowsDynamic: false,
-  apiPath: "https://api.vviinn.com",
   addToBasketShow: false,
   showFilters: false,
 };

@@ -71,6 +71,7 @@ export class VviinnCarousel {
   @Prop() updateButtonLocation: UpdateButtonLocation;
   @Prop() replaceSlotsContent: () => void;
   @Prop() setModeDiscountsArray: number[];
+  @Prop() imageRatio: number;
 
   @Prop() currencySign: string;
   @Prop() pricePrefix: string = "";
@@ -442,7 +443,7 @@ export class VviinnCarousel {
         image={recommendation.image.thumbnail}
         brand={recommendation.brand}
         imageWidth={this.imageWidth}
-        imageRatio={1}
+        imageRatio={this.imageRatio}
         price={recommendation.price.actual}
         salePrice={salePrice}
         responsive={this.isGridMode}
