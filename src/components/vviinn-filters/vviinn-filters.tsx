@@ -47,7 +47,7 @@ export class VviinnFilters {
     this.selectedFilter = filter;
   }
 
-  private emitTequestFiltersMore(requestFilters: RequestDynamicFilters) {
+  private emitRequestFiltersMore(requestFilters: RequestDynamicFilters) {
     this.vviinnFiltersChanged.emit({ filters: requestFilters, el: this.el });
   }
 
@@ -61,7 +61,7 @@ export class VviinnFilters {
       filterValue
     );
 
-    this.emitTequestFiltersMore([...this.requestFilters]);
+    this.emitRequestFiltersMore([...this.requestFilters]);
   }
 
   private showActiveOnMainButton({ column }: DynamicFilter) {

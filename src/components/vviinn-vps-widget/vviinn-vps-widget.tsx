@@ -581,7 +581,7 @@ export class VviinnVpsWidget {
 
   private resetScroll(elementId: string, behavior: ScrollBehavior = "auto") {
     const element: HTMLElement = this.el.shadowRoot.getElementById(elementId);
-    element.scroll({ top: 0, left: 0, behavior });
+    element?.scroll({ top: 0, left: 0, behavior });
   }
 
   private handleModalClose() {
