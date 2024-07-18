@@ -119,10 +119,6 @@ export class VviinnResults {
   async connectedCallback() {
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
 
-    if (searchState.results) {
-      this.recommendations = searchState.results;
-    }
-
     if (!this.uiSessionId) {
       this.uiSessionId = uuidv4();
     }
@@ -130,14 +126,16 @@ export class VviinnResults {
     if (this.searchId) {
       //FIXME: If we have 2 widgets on the page, they could conflict if they have different apiPath (stage and production)
       state.apiPath = this.apiPath;
-      const result = await processSearchIdQuery(this.searchId, this.token);
-      this.recommendations = E.getOrElse(() => [])(result);
+      const results = await processSearchIdQuery(this.searchId, this.token);
+      this.recommendations = E.getOrElse(() => [])(results);
     }
   }
 
   @Watch("searchId")
-  processSearchId(newId: string) {
-    this.searchId && processSearchIdQuery(newId, this.token);
+  async processSearchId(newSearchId: string) {
+    if (!newSearchId) return;
+    const results = await processSearchIdQuery(newSearchId, this.token);
+    this.recommendations = E.getOrElse(() => [])(results);
   }
 
   @Listen("vviinnProductLoad")
@@ -278,15 +276,15 @@ export class VviinnResults {
     };
   };
 
-  private renderResults() {
-    if (this.recommendations.length === 0) return null;
+  private renderResults(results: Recommendation[]) {
+    if (results.length === 0) return null;
     if (!searchState.resultLoaded) {
       this.vviinnResultLoad.emit(this.getBasicEventData());
       this.trackResultEvent("load");
       searchState.resultLoaded = true;
     }
 
-    return this.recommendations.map((p, i) => (
+    return results.map((p, i) => (
       <vviinn-product-card
         key={p.productId}
         index={i}
@@ -323,7 +321,10 @@ export class VviinnResults {
         <div
           class={{
             "nothing-found": true,
-            hidden: this.recommendations.length > 0 || !this.showingInWidget,
+            hidden:
+              this.recommendations.length > 0 ||
+              searchState.results.length > 0 ||
+              !this.showingInWidget,
           }}
         >
           <vviinn-empty-results handler={() => this?.resetState()} />
@@ -341,11 +342,14 @@ export class VviinnResults {
         <div
           class={{
             hidden:
-              this.recommendations.length === 0 || this.showAspectRatioError,
+              this.showAspectRatioError ||
+              (this.recommendations.length === 0 &&
+                searchState.results.length === 0),
             products: true,
           }}
         >
-          {this.renderResults()}
+          {this.renderResults(this.recommendations)}
+          {this.renderResults(searchState.results)}
         </div>
       </Host>
     );
