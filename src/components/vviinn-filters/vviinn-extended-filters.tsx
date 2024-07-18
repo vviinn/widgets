@@ -72,7 +72,7 @@ export class VviinnExtendedFilters {
     slotChangeListener(this, this.el);
   }
 
-  private emitTequestFiltersMore(requestFilters: RequestDynamicFilters) {
+  private emitRequestFiltersMore(requestFilters: RequestDynamicFilters) {
     this.vviinnFiltersChanged.emit({ filters: requestFilters, el: this.el });
   }
 
@@ -86,7 +86,7 @@ export class VviinnExtendedFilters {
       filterValue
     );
 
-    this.emitTequestFiltersMore([...this.requestFilters]);
+    this.emitRequestFiltersMore([...this.requestFilters]);
   }
 
   private showActiveOnModalSubButton(
@@ -159,7 +159,7 @@ export class VviinnExtendedFilters {
   }
 
   private resetModal() {
-    this.emitTequestFiltersMore([]);
+    this.emitRequestFiltersMore([]);
     this.requestFilters = [];
     this.showMore = false;
   }
