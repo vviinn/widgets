@@ -225,7 +225,10 @@ export const uploadFile = (
   );
 };
 
-const uploadText = (query: string, dynamicFilters?: RequestFilterItem) => {
+export const makeTextSearchRequest = async (
+  query: string,
+  dynamicFilters?: RequestFilterItem
+) => {
   state.searchType = "text";
   state.loading = true;
 
@@ -268,15 +271,34 @@ const uploadText = (query: string, dynamicFilters?: RequestFilterItem) => {
       state.loading = false;
       return error;
     })
-  );
+  )();
 };
 
-export const processSelectedText = async (
-  query: string,
-  dynamicFilters?: RequestFilterItem
-) => await uploadText(query, dynamicFilters)();
+export const makeSearchQueryRequest = async (query: string, token: string) => {
+  const body = {
+    query,
+  };
 
-export const processSearchIdQuery = async (searchId: string, token: string) =>
+  const tokenWithBody = sequenceToEither(
+    processBearerToken(token),
+    E.right(JSON.stringify(body))
+  );
+
+  return pipe(
+    tokenWithBody,
+    E.map(([headers, body]): RequestInit => {
+      headers.set("Content-Type", "application/json");
+      return {
+        headers,
+        body,
+      };
+    }),
+    TE.fromEither,
+    TE.chain((request) => textSearchSessionClient(request))
+  )();
+};
+
+export const makeSearchIdRequest = async (searchId: string, token: string) =>
   await pipe(
     makeAuthorizedRequest(token),
     TE.fromEither,

@@ -7,7 +7,6 @@ import {
   Event,
   EventEmitter,
   Listen,
-  Watch,
   State,
 } from "@stencil/core";
 import * as E from "fp-ts/Either";
@@ -19,7 +18,11 @@ import {
   ResultViewEvent,
 } from "vviinn-tracking-client-ts";
 import { version } from "../../../package.json";
-import { processSearchIdQuery, searchState } from "../../store/search.store";
+import {
+  makeSearchIdRequest,
+  makeSearchQueryRequest,
+  searchState,
+} from "../../store/search.store";
 import { state } from "../../store/store";
 import { createTrackingApi } from "../../openApi";
 import { BasicEventData, Locale, Recommendation } from "../../components";
@@ -36,6 +39,7 @@ import {
   createProductVpsEventByType,
   createResultVpsEventByType,
 } from "../../tracking";
+import { pipe } from "fp-ts/lib/function";
 
 /**
  * @part product-card - Product Card itself.
@@ -83,7 +87,7 @@ export class VviinnResults {
   @Prop() searchId?: string;
   /** Resolution width of an image in the product card */
   @Prop() imageResolutionWidth?: number = 250;
-  /**  The currency sign is displayed after the price */
+  /** The currency sign is displayed after the price */
   @Prop() currencySign?: string = "€";
   /** The locale for currency formatting and text localization */
   @Prop() locale?: Locale = "de-DE";
@@ -91,6 +95,8 @@ export class VviinnResults {
   @Prop() productDetailsNewTab?: boolean = true;
   /** Toggle for redirection to PDP on product's click */
   @Prop() productDetailsRedirect?: boolean = true;
+  /** Query for performing text search */
+  @Prop() textSearchQuery?: string;
 
   /** True when we use vviinn-results inside the widget */
   /** @internal */
@@ -135,6 +141,7 @@ export class VviinnResults {
     );
 
     this.getResultsBySearchId(this.searchId);
+    this.getResultsByTextQuery(this.textSearchQuery);
   }
 
   disconnectedCallback() {
@@ -142,11 +149,6 @@ export class VviinnResults {
       "vviinnSearchIdReceived",
       this.searchIdReceivedHandler
     );
-  }
-
-  @Watch("searchId")
-  processSearchId(newSearchIdProp: string) {
-    this.getResultsBySearchId(newSearchIdProp);
   }
 
   @Listen("vviinnProductLoad")
@@ -210,12 +212,29 @@ export class VviinnResults {
     }
   }
 
-  private getResultsBySearchId = async (newSearchId: string) => {
-    if (!newSearchId) return;
+  private getResultsBySearchId = async (searchId: string) => {
+    if (!searchId) return;
     state.apiPath = this.apiPath; //FIXME: #36877
-    const results = await processSearchIdQuery(newSearchId, this.token);
-    this.recommendations = E.getOrElse(() => [])(results);
+    pipe(
+      await makeSearchIdRequest(searchId, this.token),
+      E.getOrElse(() => []),
+      (results) => {
+        this.recommendations = results;
+      }
+    );
   };
+
+  private async getResultsByTextQuery(query?: string) {
+    if (this.showingInWidget || query === undefined) return;
+    state.apiPath = this.apiPath; //FIXME: #36877
+    pipe(
+      await makeSearchQueryRequest(query, this.token),
+      E.getOrElse(() => null),
+      (results) => {
+        this.recommendations = results?.data?.products ?? [];
+      }
+    );
+  }
 
   private setTrackingDeactivated = (result: EventConfirmation) => {
     if (result.status === "rejected") {

@@ -16,7 +16,7 @@ import { v4 as uuidv4 } from "uuid";
 import i18next from "i18next";
 
 import { version } from "../../../package.json";
-import { processSelectedText, searchState } from "../../store/search.store";
+import { makeTextSearchRequest, searchState } from "../../store/search.store";
 import { state } from "../../store/store";
 import { slotChangeListener } from "../customized-slots";
 import { createTrackingApi } from "../../openApi";
@@ -327,7 +327,7 @@ export class VviinnVpsWidget {
 
   private async handleTextSearch() {
     if (!this.searchQuery) return;
-    await processSelectedText(this.searchQuery);
+    await makeTextSearchRequest(this.searchQuery);
     this.slidePosition = 1;
   }
 
@@ -411,7 +411,7 @@ export class VviinnVpsWidget {
 
   @Listen("vviinnTextSearchFilterSelected")
   trackTextSearchFilterSelected({ detail }) {
-    processSelectedText(this.searchQuery, detail);
+    makeTextSearchRequest(this.searchQuery, detail);
   }
 
   connectedCallback() {
@@ -757,6 +757,7 @@ export class VviinnVpsWidget {
                   showAspectRatioError={this.showAspectRatioError}
                   trackingDeactivated={this.trackingDeactivated}
                   resetState={this.resetState.bind(this)}
+                  textSearchQuery={this.searchQuery}
                 />
               )}
             </vviinn-slide>
