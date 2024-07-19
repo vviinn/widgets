@@ -1,4 +1,10 @@
+@import "../../variables.css";
+
 :host(.widget-results) {
+  /**
+    * @prop --vviinn-product-card-width: Minimum width of product card inside the grid.
+   */
+
   display: grid;
   overflow-y: auto;
   overflow-x: hidden;
@@ -14,7 +20,13 @@
   box-sizing: border-box;
   display: grid;
   grid-gap: 32px 16px;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(
+      var(--vviinn-product-card-width, var(--product-card-width-system)),
+      1fr
+    )
+  );
   justify-items: center;
   padding: 24px;
   position: absolute;

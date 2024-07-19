@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.65.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.64.0...v2.65.0) (2024-07-18)
+
+
+### Features
+
+* Add vviinn-product-card-width CSS variable ([064fc29](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/064fc2915eb02ceb69c0b4014135958268a01e57))
+
+## [2.64.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.63.0...v2.64.0) (2024-07-18)
+
+
+### Features
+
+* Add an event listener of searchId to vviinn-results widget ([c425217](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/c42521755db84afdc837cadb3f03d4777d8e2886))
+
 ## [2.63.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.62.0...v2.63.0) (2024-07-17)
 
 

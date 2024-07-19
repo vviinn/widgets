@@ -10,11 +10,19 @@ import {
   Watch,
   State,
 } from "@stencil/core";
-import { version } from "../../../package.json";
 import * as E from "fp-ts/Either";
-import { BasicEventData, Locale, Recommendation } from "../../components";
 import { v4 as uuidv4 } from "uuid";
+import {
+  DefaultApi,
+  EventConfirmation,
+  ResultLoadEvent,
+  ResultViewEvent,
+} from "vviinn-tracking-client-ts";
+import { version } from "../../../package.json";
 import { processSearchIdQuery, searchState } from "../../store/search.store";
+import { state } from "../../store/store";
+import { createTrackingApi } from "../../openApi";
+import { BasicEventData, Locale, Recommendation } from "../../components";
 import { campaignTypeNames } from "../../campaign/Campaign";
 import {
   ProductCardEvent,
@@ -22,18 +30,12 @@ import {
   ProductEvent,
   ProductEventType,
   ResultEventType,
+  SearchIdEvent,
 } from "../../recommendation/events";
 import {
   createProductVpsEventByType,
   createResultVpsEventByType,
 } from "../../tracking";
-import {
-  DefaultApi,
-  EventConfirmation,
-  ResultLoadEvent,
-  ResultViewEvent,
-} from "vviinn-tracking-client-ts";
-import { createTrackingApi } from "../../openApi";
 
 /**
  * @part product-card - Product Card itself.
@@ -77,8 +79,8 @@ export class VviinnResults {
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
-  /** Search ID for results request (required) */
-  @Prop() searchId: string;
+  /** Search ID for results request */
+  @Prop() searchId?: string;
   /** Resolution width of an image in the product card */
   @Prop() imageResolutionWidth?: number = 250;
   /**  The currency sign is displayed after the price */
@@ -115,26 +117,36 @@ export class VviinnResults {
 
   private trackingApi: DefaultApi;
 
-  async connectedCallback() {
-    this.trackingApi = createTrackingApi(this.apiPath, this.token);
+  private searchIdReceivedHandler = ({ detail }: SearchIdEvent) => {
+    const { searchId } = detail;
+    this.getResultsBySearchId(searchId);
+  };
 
-    if (searchState.results) {
-      this.recommendations = searchState.results;
-    }
+  connectedCallback() {
+    this.trackingApi = createTrackingApi(this.apiPath, this.token);
 
     if (!this.uiSessionId) {
       this.uiSessionId = uuidv4();
     }
 
-    if (this.searchId) {
-      const result = await processSearchIdQuery(this.searchId, this.token);
-      this.recommendations = E.getOrElse(() => [])(result);
-    }
+    document.addEventListener(
+      "vviinnSearchIdReceived",
+      this.searchIdReceivedHandler
+    );
+
+    this.getResultsBySearchId(this.searchId);
+  }
+
+  disconnectedCallback() {
+    document.removeEventListener(
+      "vviinnSearchIdReceived",
+      this.searchIdReceivedHandler
+    );
   }
 
   @Watch("searchId")
-  processSearchId(newId: string) {
-    this.searchId && processSearchIdQuery(newId, this.token);
+  processSearchId(newSearchIdProp: string) {
+    this.getResultsBySearchId(newSearchIdProp);
   }
 
   @Listen("vviinnProductLoad")
@@ -197,6 +209,13 @@ export class VviinnResults {
         .then(this.setTrackingDeactivated);
     }
   }
+
+  private getResultsBySearchId = async (newSearchId: string) => {
+    if (!newSearchId) return;
+    state.apiPath = this.apiPath; //FIXME: #36877
+    const results = await processSearchIdQuery(newSearchId, this.token);
+    this.recommendations = E.getOrElse(() => [])(results);
+  };
 
   private setTrackingDeactivated = (result: EventConfirmation) => {
     if (result.status === "rejected") {
@@ -275,15 +294,15 @@ export class VviinnResults {
     };
   };
 
-  private renderResults() {
-    if (this.recommendations.length === 0) return null;
+  private renderResults(results: Recommendation[]) {
+    if (results.length === 0) return null;
     if (!searchState.resultLoaded) {
       this.vviinnResultLoad.emit(this.getBasicEventData());
       this.trackResultEvent("load");
       searchState.resultLoaded = true;
     }
 
-    return this.recommendations.map((p, i) => (
+    return results.map((p, i) => (
       <vviinn-product-card
         key={p.productId}
         index={i}
@@ -320,7 +339,10 @@ export class VviinnResults {
         <div
           class={{
             "nothing-found": true,
-            hidden: this.recommendations.length > 0 || !this.showingInWidget,
+            hidden:
+              this.recommendations.length > 0 ||
+              searchState.results.length > 0 ||
+              !this.showingInWidget,
           }}
         >
           <vviinn-empty-results handler={() => this?.resetState()} />
@@ -338,11 +360,15 @@ export class VviinnResults {
         <div
           class={{
             hidden:
-              this.recommendations.length === 0 || this.showAspectRatioError,
+              this.showAspectRatioError ||
+              (this.recommendations.length === 0 &&
+                searchState.results.length === 0),
             products: true,
           }}
         >
-          {this.renderResults()}
+          {this.renderResults(
+            this.showingInWidget ? searchState.results : this.recommendations
+          )}
         </div>
       </Host>
     );

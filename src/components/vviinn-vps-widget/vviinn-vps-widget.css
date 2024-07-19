@@ -5,6 +5,7 @@
     * @prop --color-primary: Set the color of Search Button and bullets in Onboarding Block.
     * @prop --color-primary-hover: Set the color of Search Button and bullets in Onboarding Block on mouse hover.
     * @prop --color-icons: Set fill color of SVG icons in Onboarding Block.
+    * @prop --vviinn-product-card-width: Minimum width of product card inside the grid.
    */
 
   display: block;
