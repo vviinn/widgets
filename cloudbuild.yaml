@@ -29,6 +29,7 @@ steps:
           npm pkg set dependencies.vviinn-widgets="./widgets"
         fi
         npm install --production=false
+        npm install -g storybook
         npm run build-storybook
     volumes:
       - name: 'widgets_local_build'
