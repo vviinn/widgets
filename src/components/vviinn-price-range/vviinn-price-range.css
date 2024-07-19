@@ -9,6 +9,7 @@
   display: flex;
   align-items: flex-end;
   gap: 1px;
+  margin: 0 0.6%;
 }
 .histogram-bar {
   background: var(--surface-color-surface-active);
@@ -22,11 +23,12 @@
   display: flex;
   flex-direction: column;
   width: 99.4%;
+  margin-top: -2px;
 }
 
 .range_container .sliders_control {
   position: relative;
-  min-height: 50px;
+  min-height: 25px;
 }
 
 .range_container .form_control {
@@ -72,7 +74,7 @@
   -webkit-appearance: none;
   appearance: none;
   height: 2px;
-  width: 100%;
+  width: 99.4%;
   position: absolute;
   background-color: #c6c6c6;
   pointer-events: none;
