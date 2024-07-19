@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.66.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.66.1...v2.66.2) (2024-07-19)
+
+
+### Bug Fixes
+
+* install storybook generally ([3321484](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/33214844e2d59fe38fbd899dd488375599e0108f))
+
 ### [2.66.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.66.0...v2.66.1) (2024-07-19)
 
 
