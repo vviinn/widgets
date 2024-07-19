@@ -1,6 +1,5 @@
 import { Component, Host, h, Prop, Element, State } from "@stencil/core";
 import { components } from "../../interfaces/generated";
-import { DynamicFilterValue } from "../../campaign/VPRCampaignService";
 
 export type Histogram = components["schemas"]["interval-filter-values"][];
 
@@ -14,7 +13,9 @@ export class VviinnButton {
 
   @Prop() histogram: Histogram = [];
   @Prop() addStyle: boolean = true;
-  @Prop() priceChangeHandler: (filterValue: DynamicFilterValue) => void;
+  @Prop() priceChangeHandler: (
+    filterValue: components["schemas"]["interval-filter-value-item"]
+  ) => void;
 
   @State() minIndex: number = 0;
   @State() maxIndex: number;
