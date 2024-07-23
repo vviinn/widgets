@@ -77,7 +77,11 @@ export type ProductEvent =
   | ProductClickEvent
   | ProductViewEvent;
 
-export type SearchIdEvent = CustomEvent<SearchIdEventData>;
+export type TextSearchFinishedEventData = {
+  searchQuery: string;
+};
 
+export type SearchIdEvent = CustomEvent<SearchIdEventData>;
+export type TextSearchFinishedEvent = CustomEvent<TextSearchFinishedEventData>;
 export type ProductCardEvent = CustomEvent<ProductCardEventData>;
 export type CrossSellingClickEvent = CustomEvent<CrossSellingClickEventData>;

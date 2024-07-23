@@ -1,8 +1,17 @@
-import { Component, Host, Prop, h, Element } from "@stencil/core";
-import { searchState } from "../../store/search.store";
+import {
+  Component,
+  Host,
+  Prop,
+  h,
+  Element,
+  Event,
+  EventEmitter,
+} from "@stencil/core";
+import { makeTextSearchRequest, searchState } from "../../store/search.store";
 import { TextSearchIcon } from "../vviinn-icons";
 import { slotChangeListener } from "../customized-slots";
 import i18next from "i18next";
+import { TextSearchFinishedEventData } from "../../recommendation/events";
 
 /**
  * @part text-search-input - Text search input.
@@ -16,9 +25,16 @@ import i18next from "i18next";
 export class VviinnTextSearch {
   @Element() el: HTMLElement;
 
-  @Prop() searchQuery: string;
-  @Prop() setSearchQuery: (query: string) => void;
-  @Prop() handleTextSearch: () => void;
+  @Event() textSearchFinished: EventEmitter<TextSearchFinishedEventData>;
+
+  /** Vviinn customer’s token (required) */
+  @Prop() token: string;
+
+  /** @internal */
+  @Prop() showInWidget: boolean = false;
+  /** @internal */
+  /** Query for the text search */
+  @Prop({ mutable: true }) searchQuery: string;
 
   componentWillLoad() {
     slotChangeListener(this, this.el);
@@ -26,6 +42,19 @@ export class VviinnTextSearch {
 
   handleInputChange(event: Event) {
     this.setSearchQuery((event.target as HTMLInputElement).value);
+  }
+
+  private setSearchQuery = (query: string) => {
+    this.searchQuery = query;
+  };
+
+  private async handleTextSearch() {
+    if (!this.searchQuery) return;
+
+    await makeTextSearchRequest(this.searchQuery, this.token);
+    this.textSearchFinished.emit({
+      searchQuery: this.searchQuery,
+    });
   }
 
   private handleKeyPress(event: KeyboardEvent) {
