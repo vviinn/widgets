@@ -55,6 +55,7 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   gap: 12px;
 }
 

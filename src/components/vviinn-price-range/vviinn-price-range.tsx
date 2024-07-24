@@ -19,6 +19,7 @@ export class VviinnButton {
 
   @State() minIndex: number = 0;
   @State() maxIndex: number;
+  @State() scalingFactor: number;
 
   fromSlider: HTMLElement;
   toSlider: HTMLElement;
@@ -30,37 +31,23 @@ export class VviinnButton {
   }
 
   componentDidLoad() {
-    this.fillSlider(
-      this.fromSlider,
-      this.toSlider,
-      "#E0E0E0",
-      "#000000",
-      this.toSlider
-    );
     this.setToggleAccessible(this.toSlider);
   }
 
   componentWillLoad() {
     this.maxIndex = this.histogram.length - 1;
-  }
 
-  private fillSlider(from, to, sliderColor, rangeColor, controlSlider) {
-    const rangeDistance = to.max - to.min;
-    const fromPosition = from.value - to.min;
-    const toPosition = to.value - to.min;
-    controlSlider.style.background = `linear-gradient(
-      to right,
-      ${sliderColor} 0%,
-      ${sliderColor} ${(fromPosition / rangeDistance) * 100}%,
-      ${rangeColor} ${(fromPosition / rangeDistance) * 100}%,
-      ${rangeColor} ${(toPosition / rangeDistance) * 100}%, 
-      ${sliderColor} ${(toPosition / rangeDistance) * 100}%, 
-      ${sliderColor} 100%)`;
+    const maxValueofFrequency = Math.max(
+      ...this.histogram.map(({ value }) => {
+        return value.frequency;
+      })
+    );
+
+    this.scalingFactor = 1 / maxValueofFrequency;
   }
 
   private controlFromSlider(fromSlider, toSlider) {
     const [from, to] = this.getParsed(fromSlider, toSlider);
-    this.fillSlider(fromSlider, toSlider, "#C6C6C6", "#161616", toSlider);
     if (from > to) {
       fromSlider.value = to;
     }
@@ -69,7 +56,6 @@ export class VviinnButton {
 
   private controlToSlider(fromSlider, toSlider) {
     const [from, to] = this.getParsed(fromSlider, toSlider);
-    this.fillSlider(fromSlider, toSlider, "#C6C6C6", "#161616", toSlider);
     this.setToggleAccessible(toSlider);
     if (from <= to) {
       toSlider.value = to;
@@ -97,6 +83,10 @@ export class VviinnButton {
     }
   }
 
+  private calculateBarHeight(frequency: number) {
+    return frequency * this.scalingFactor * 100;
+  }
+
   render() {
     const histogramSize = this.histogram.length;
 
@@ -112,7 +102,9 @@ export class VviinnButton {
                       ? "histogram-bar-inactive"
                       : ""
                   }`}
-                  style={{ height: `${item.value.frequency * 100}%` }}
+                  style={{
+                    height: `${this.calculateBarHeight(item.value.frequency)}%`,
+                  }}
                 ></div>
               );
             })}
