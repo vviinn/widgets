@@ -70,7 +70,7 @@ export class VviinnResults {
   /** Recommended product renders on the page */
   @Event() vviinnProductLoad: EventEmitter<ProductCardEventData>;
 
-  /** Recommended product appears in the viewport. */
+  /** Recommended product appears in the viewport */
   @Event() vviinnProductView: EventEmitter<ProductCardEventData>;
 
   /** Click on the product’s link */

@@ -65,10 +65,6 @@ export type CrossSellingClickEventData = {
   animationInterval: number;
 };
 
-export type SearchIdEventData = {
-  searchId: string;
-};
-
 export type ProductEventType = "load" | "view" | "click";
 export type ResultEventType = "load" | "view";
 
@@ -76,6 +72,10 @@ export type ProductEvent =
   | ProductLoadEvent
   | ProductClickEvent
   | ProductViewEvent;
+
+export type SearchIdEventData = {
+  searchId: string;
+};
 
 export type TextSearchEventData = {
   query: string;
