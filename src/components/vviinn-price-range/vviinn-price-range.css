@@ -76,7 +76,7 @@
   height: 2px;
   width: 99.4%;
   position: absolute;
-  background-color: #c6c6c6;
+  background: var(--stroke-color-stroke-01);
   pointer-events: none;
 }
 
