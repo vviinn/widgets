@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.66.3](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.66.2...v2.66.3) (2024-07-19)
+
+### [2.66.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.66.1...v2.66.2) (2024-07-19)
+
+
+### Bug Fixes
+
+* install storybook generally ([3321484](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/33214844e2d59fe38fbd899dd488375599e0108f))
+
+### [2.66.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.66.0...v2.66.1) (2024-07-19)
+
+
+### Bug Fixes
+
+* Storybook issue ([a53c85c](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/a53c85c82c6ed70da46b672a745ae7369ae2e8a0))
+
+## [2.66.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.65.0...v2.66.0) (2024-07-19)
+
+
+### Features
+
+* Add textSearchQuery prop for vviinn-results component ([149937f](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/149937fcf0f586cf39b16dde0d1208d72730a28c))
+
 ## [2.65.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.64.0...v2.65.0) (2024-07-18)
 
 
