@@ -17,6 +17,7 @@ import {
 } from "../../campaign/VPRCampaignService";
 import { FiltersEventData } from "./types";
 import { getFilterOptions, subFilterSelection } from "./helpers";
+import { Histogram } from "../vviinn-price-range/vviinn-price-range";
 
 /**
  * * @part filters - Wrapper itself.
@@ -50,6 +51,16 @@ export class VviinnFilters {
   private emitRequestFiltersMore(requestFilters: RequestDynamicFilters) {
     this.vviinnFiltersChanged.emit({ filters: requestFilters, el: this.el });
   }
+
+  timer: NodeJS.Timeout = null;
+
+  private priceChangeHandler = (filterValue: DynamicFilterValue) => {
+    if (this.timer) clearTimeout(this.timer);
+
+    this.timer = setTimeout(() => {
+      this.handleSubFilterSelection(filterValue, this.selectedFilter);
+    }, 200);
+  };
 
   private handleSubFilterSelection(
     filterValue: DynamicFilterValue,
@@ -139,6 +150,7 @@ export class VviinnFilters {
   }
 
   render() {
+    const { column } = this.selectedFilter ?? {};
     const selectedFilterOptions = getFilterOptions(this.selectedFilter);
     //TODO - #36707: Will remove this logic then we have the `Primary filters` feature
     const filters = this.filters.slice(0, 4);
@@ -167,29 +179,36 @@ export class VviinnFilters {
 
         {this.selectedFilter !== undefined && (
           <div class="filters-footer">
-            <ul class="sub-filters-wrapper">
-              {selectedFilterOptions &&
-                selectedFilterOptions.map((filter) => {
-                  return (
-                    <li>
-                      <button
-                        onClick={() =>
-                          this.handleSubFilterSelection(
-                            filter.value,
-                            this.selectedFilter
-                          )
-                        }
-                        class={`filters-sub-button ${this.showActiveOnSubButton(
-                          this.requestFilters,
-                          filter.value
-                        )}`}
-                      >
-                        {filter.label}
-                      </button>
-                    </li>
-                  );
-                })}
-            </ul>
+            {column === "price" ? (
+              <vviinn-price-range
+                histogram={selectedFilterOptions as Histogram}
+                priceChangeHandler={this.priceChangeHandler}
+              />
+            ) : (
+              <ul class="sub-filters-wrapper">
+                {selectedFilterOptions &&
+                  selectedFilterOptions.map((filter) => {
+                    return (
+                      <li>
+                        <button
+                          onClick={() =>
+                            this.handleSubFilterSelection(
+                              filter.value,
+                              this.selectedFilter
+                            )
+                          }
+                          class={`filters-sub-button ${this.showActiveOnSubButton(
+                            this.requestFilters,
+                            filter.value
+                          )}`}
+                        >
+                          {filter.label}
+                        </button>
+                      </li>
+                    );
+                  })}
+              </ul>
+            )}
           </div>
         )}
       </Host>
