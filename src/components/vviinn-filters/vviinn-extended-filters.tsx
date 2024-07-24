@@ -98,7 +98,10 @@ export class VviinnExtendedFilters {
     requestFilters.forEach((filter) => {
       if (
         filter.values.some(
-          (value) => value === filterValue || value === filterValue.interval
+          (value) =>
+            value === filterValue ||
+            value === filterValue.interval ||
+            value === filterValue.value
         )
       ) {
         className = "active";
@@ -247,6 +250,10 @@ export class VviinnExtendedFilters {
                     ) : (
                       <ul
                         class={`filters-modal-sub-list ${
+                          column === "color_confirmed"
+                            ? "filters-modal-sub-list-inline"
+                            : ""
+                        } ${
                           this.selectedMoreOptions.includes(mainFilter.column)
                             ? "open"
                             : ""
@@ -254,6 +261,7 @@ export class VviinnExtendedFilters {
                       >
                         {filterOptions &&
                           filterOptions.map((filter) => {
+                            const hexCode = filter.value.hexCode;
                             return (
                               <li>
                                 <button
@@ -263,12 +271,15 @@ export class VviinnExtendedFilters {
                                       mainFilter
                                     )
                                   }
-                                  class={`filters-more-modal-button ${this.showActiveOnModalSubButton(
+                                  class={`filters-more-modal-button ${
+                                    hexCode ? "filters-sub-button-color" : ""
+                                  } ${this.showActiveOnModalSubButton(
                                     this.requestFilters,
                                     filter.value
                                   )}`}
+                                  style={{ backgroundColor: hexCode }}
                                 >
-                                  {filter.label}
+                                  <span>{filter.label}</span>
                                 </button>
                               </li>
                             );

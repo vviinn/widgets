@@ -94,6 +94,9 @@
   border-color: #000;
 }
 
+.filters-sub-button-color.active {
+  border: 1px solid #000;
+}
 .filters-more-button {
   display: flex;
   padding: 10px;
@@ -189,6 +192,13 @@
 
 .filters-modal-sub-list {
   display: none;
+}
+.filters-modal-sub-list-inline {
+  margin: 0 -6px;
+}
+.filters-modal-sub-list-inline > li {
+  display: inline-block;
+  margin: 0 6px;
 }
 
 .filters-modal-sub-list.open {
