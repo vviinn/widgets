@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.67.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.67.0...v2.67.1) (2024-07-24)
+
+
+### Bug Fixes
+
+* Fix errors layout in Search Widget ([77a6787](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/77a67877dd179583e8815377696991b229dc04fc))
+
 ## [2.67.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.66.3...v2.67.0) (2024-07-24)
 
 
