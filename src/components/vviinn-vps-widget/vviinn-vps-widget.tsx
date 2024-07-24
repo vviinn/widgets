@@ -37,7 +37,7 @@ import {
   SelectFilterEventData,
   SelectObjectEventData,
   NoResultEventData,
-  TextSearchFinishedEvent,
+  TextSearchEvent,
 } from "../../recommendation/events";
 import { SlotSkeleton } from "../customized-slots";
 import { campaignTypeNames } from "../../campaign/Campaign";
@@ -340,10 +340,10 @@ export class VviinnVpsWidget {
     }
   }
 
-  @Listen("textSearchFinished") textSearchFinishedHandler({
+  @Listen("vviinnTextSearchFinished") textSearchFinishedHandler({
     detail,
-  }: TextSearchFinishedEvent) {
-    this.searchQuery = detail.searchQuery;
+  }: TextSearchEvent) {
+    this.searchQuery = detail.query;
     this.slidePosition = 1;
   }
 
@@ -668,6 +668,7 @@ export class VviinnVpsWidget {
                           token={this.token}
                           showInWidget={true}
                           searchQuery={this.searchQuery}
+                          apiPath={this.apiPath}
                         />
                       )}
                     </Fragment>
@@ -719,6 +720,7 @@ export class VviinnVpsWidget {
                     token={this.token}
                     showInWidget={true}
                     searchQuery={this.searchQuery}
+                    apiPath={this.apiPath}
                   />
 
                   <div
