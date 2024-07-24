@@ -99,7 +99,9 @@ export class VviinnTextSearch {
           onClick={() => this.handleTextSearch()}
           disabled={searchState.loading}
         >
-          {searchState.loading && searchState.searchType === "text" ? (
+          {searchState.loading &&
+          searchState.searchType === "text" &&
+          this.showInWidget ? (
             <vviinn-preloader />
           ) : (
             <slot name="vviinn-text-search-icon">
