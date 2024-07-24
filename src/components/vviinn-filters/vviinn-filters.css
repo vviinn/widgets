@@ -272,3 +272,12 @@
   line-height: var(--line-height-body);
   letter-spacing: var(--letter-spacing-default);
 }
+.filters-sub-button-color {
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--border-color-border-01);
+  border-radius: 20px;
+}
+.filters-sub-button-color > span {
+  display: none;
+}

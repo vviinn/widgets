@@ -94,7 +94,10 @@ export class VviinnFilters {
     if (!mainFilter) return "";
 
     return mainFilter.values.some(
-      (value) => value === filterValue || value === filterValue.interval
+      (value) =>
+        value === filterValue ||
+        value === filterValue.interval ||
+        value === filterValue.value
     )
       ? "active"
       : "";
@@ -188,6 +191,7 @@ export class VviinnFilters {
               <ul class="sub-filters-wrapper">
                 {selectedFilterOptions &&
                   selectedFilterOptions.map((filter) => {
+                    const hexCode = filter.value.hexCode;
                     return (
                       <li>
                         <button
@@ -197,12 +201,15 @@ export class VviinnFilters {
                               this.selectedFilter
                             )
                           }
-                          class={`filters-sub-button ${this.showActiveOnSubButton(
+                          class={`filters-sub-button ${
+                            hexCode ? "filters-sub-button-color" : ""
+                          } ${this.showActiveOnSubButton(
                             this.requestFilters,
                             filter.value
                           )}`}
+                          style={{ backgroundColor: hexCode }}
                         >
-                          {filter.label}
+                          <span>{filter.label}</span>
                         </button>
                       </li>
                     );
