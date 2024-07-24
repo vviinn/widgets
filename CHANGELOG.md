@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.67.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.66.3...v2.67.0) (2024-07-24)
+
+
+### Features
+
+* implemented vviin-price filters component and used in the vviinn-filters ([cef8758](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/cef87582e802c19e595ba6f25d8aa60abb16223c))
+
 ### [2.66.3](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.66.2...v2.66.3) (2024-07-19)
 
 ### [2.66.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.66.1...v2.66.2) (2024-07-19)
