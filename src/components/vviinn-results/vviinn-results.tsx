@@ -8,6 +8,7 @@ import {
   EventEmitter,
   Listen,
   State,
+  Watch,
 } from "@stencil/core";
 import * as E from "fp-ts/Either";
 import { v4 as uuidv4 } from "uuid";
@@ -171,6 +172,11 @@ export class VviinnResults {
       "vviinnTextSearchStarted",
       this.textSearchStartedHandler
     );
+  }
+
+  @Watch("textSearchQuery")
+  watchTextSearchQuery(newQuery: string) {
+    this.getResultsByTextQuery(newQuery);
   }
 
   @Listen("vviinnProductLoad")
