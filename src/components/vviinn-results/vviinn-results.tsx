@@ -34,6 +34,7 @@ import {
   ProductEventType,
   ResultEventType,
   SearchIdEvent,
+  TextSearchEvent,
 } from "../../recommendation/events";
 import {
   createProductVpsEventByType,
@@ -69,7 +70,7 @@ export class VviinnResults {
   /** Recommended product renders on the page */
   @Event() vviinnProductLoad: EventEmitter<ProductCardEventData>;
 
-  /** Recommended product appears in the viewport. */
+  /** Recommended product appears in the viewport */
   @Event() vviinnProductView: EventEmitter<ProductCardEventData>;
 
   /** Click on the product’s link */
@@ -124,8 +125,11 @@ export class VviinnResults {
   private trackingApi: DefaultApi;
 
   private searchIdReceivedHandler = ({ detail }: SearchIdEvent) => {
-    const { searchId } = detail;
-    this.getResultsBySearchId(searchId);
+    this.getResultsBySearchId(detail.searchId);
+  };
+
+  private textSearchStartedHandler = ({ detail }: TextSearchEvent) => {
+    this.getResultsByTextQuery(detail.query);
   };
 
   connectedCallback() {
@@ -140,6 +144,11 @@ export class VviinnResults {
       this.searchIdReceivedHandler
     );
 
+    document.addEventListener(
+      "vviinnTextSearchStarted",
+      this.textSearchStartedHandler
+    );
+
     this.getResultsBySearchId(this.searchId);
     this.getResultsByTextQuery(this.textSearchQuery);
   }
@@ -148,6 +157,11 @@ export class VviinnResults {
     document.removeEventListener(
       "vviinnSearchIdReceived",
       this.searchIdReceivedHandler
+    );
+
+    document.removeEventListener(
+      "vviinnTextSearchStarted",
+      this.textSearchStartedHandler
     );
   }
 

@@ -1,5 +1,9 @@
 @import "../../variables.css";
 
+:host {
+  display: block;
+}
+
 :host(.widget-results) {
   /**
     * @prop --vviinn-product-card-width: Minimum width of product card inside the grid.

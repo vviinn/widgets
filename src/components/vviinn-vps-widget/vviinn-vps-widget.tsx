@@ -37,6 +37,7 @@ import {
   SelectFilterEventData,
   SelectObjectEventData,
   NoResultEventData,
+  TextSearchEvent,
 } from "../../recommendation/events";
 import { SlotSkeleton } from "../customized-slots";
 import { campaignTypeNames } from "../../campaign/Campaign";
@@ -325,16 +326,6 @@ export class VviinnVpsWidget {
     };
   };
 
-  private async handleTextSearch() {
-    if (!this.searchQuery) return;
-    await makeTextSearchRequest(this.searchQuery);
-    this.slidePosition = 1;
-  }
-
-  private setSearchQuery = (query: string) => {
-    this.searchQuery = query;
-  };
-
   @Watch("active")
   activeWatcher(active: boolean) {
     if (active) {
@@ -347,6 +338,13 @@ export class VviinnVpsWidget {
       document.body.style.overflow = this.overflow;
       this.initResultEvents();
     }
+  }
+
+  @Listen("vviinnTextSearchFinished") textSearchFinishedHandler({
+    detail,
+  }: TextSearchEvent) {
+    this.searchQuery = detail.query;
+    this.slidePosition = 1;
   }
 
   @Listen("vviinnResultLoad") resultLoadHandler() {
@@ -411,7 +409,7 @@ export class VviinnVpsWidget {
 
   @Listen("vviinnTextSearchFilterSelected")
   trackTextSearchFilterSelected({ detail }) {
-    makeTextSearchRequest(this.searchQuery, detail);
+    makeTextSearchRequest(this.searchQuery, this.token, detail);
   }
 
   connectedCallback() {
@@ -667,9 +665,10 @@ export class VviinnVpsWidget {
 
                       {this.textSearchShow && (
                         <vviinn-text-search
+                          token={this.token}
+                          showInWidget={true}
                           searchQuery={this.searchQuery}
-                          setSearchQuery={this.setSearchQuery}
-                          handleTextSearch={this.handleTextSearch.bind(this)}
+                          apiPath={this.apiPath}
                         />
                       )}
                     </Fragment>
@@ -718,9 +717,10 @@ export class VviinnVpsWidget {
               {this.isResultSlide() && searchState.searchType === "text" && (
                 <div class="source-wrapper text-search-wrapper">
                   <vviinn-text-search
+                    token={this.token}
+                    showInWidget={true}
                     searchQuery={this.searchQuery}
-                    setSearchQuery={this.setSearchQuery}
-                    handleTextSearch={this.handleTextSearch.bind(this)}
+                    apiPath={this.apiPath}
                   />
 
                   <div

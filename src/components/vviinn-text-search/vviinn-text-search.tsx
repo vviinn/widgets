@@ -1,8 +1,19 @@
-import { Component, Host, Prop, h, Element } from "@stencil/core";
-import { searchState } from "../../store/search.store";
+import {
+  Component,
+  Host,
+  Prop,
+  h,
+  Element,
+  Event,
+  EventEmitter,
+} from "@stencil/core";
+import { makeTextSearchRequest, searchState } from "../../store/search.store";
 import { TextSearchIcon } from "../vviinn-icons";
 import { slotChangeListener } from "../customized-slots";
+import { TextSearchEventData } from "../../recommendation/events";
 import i18next from "i18next";
+import { state } from "../../store/store";
+import { Locale, resources } from "../../locale";
 
 /**
  * @part text-search-input - Text search input.
@@ -16,16 +27,57 @@ import i18next from "i18next";
 export class VviinnTextSearch {
   @Element() el: HTMLElement;
 
-  @Prop() searchQuery: string;
-  @Prop() setSearchQuery: (query: string) => void;
-  @Prop() handleTextSearch: () => void;
+  /** A text search was initiated (used by the vviinn-results component) */
+  @Event() vviinnTextSearchStarted: EventEmitter<TextSearchEventData>;
 
-  componentWillLoad() {
+  /** @internal */
+  /** A text search API response was received (used internally by vviinn-vps-widget) */
+  @Event() vviinnTextSearchFinished: EventEmitter<TextSearchEventData>;
+
+  /** Vviinn customer’s token (required) */
+  @Prop() token: string;
+  /** The locale for currency formatting and text localization */
+  @Prop() locale: Locale = "de-DE";
+
+  /** @internal */
+  /** API path passed from widget */
+  @Prop() apiPath?: string = "https://api.vviinn.com";
+  /** @internal */
+  /** True, when used inside the widget */
+  @Prop() showInWidget?: boolean = false;
+  /** @internal */
+  /** Query for the text search passed from widget */
+  @Prop({ mutable: true }) searchQuery?: string;
+
+  async componentWillLoad() {
+    await i18next.init({
+      lng: this.locale,
+      fallbackLng: "en",
+      resources,
+    });
     slotChangeListener(this, this.el);
   }
 
   handleInputChange(event: Event) {
     this.setSearchQuery((event.target as HTMLInputElement).value);
+  }
+
+  private setSearchQuery = (query: string) => {
+    this.searchQuery = query;
+  };
+
+  private async handleTextSearch() {
+    if (!this.searchQuery) return;
+
+    if (this.showInWidget) {
+      state.apiPath = this.apiPath; //FIXME: #36877
+      await makeTextSearchRequest(this.searchQuery, this.token);
+      this.vviinnTextSearchFinished.emit({ query: this.searchQuery });
+    } else {
+      this.vviinnTextSearchStarted.emit({
+        query: this.searchQuery,
+      });
+    }
   }
 
   private handleKeyPress(event: KeyboardEvent) {
@@ -51,7 +103,9 @@ export class VviinnTextSearch {
           onClick={() => this.handleTextSearch()}
           disabled={searchState.loading}
         >
-          {searchState.loading && searchState.searchType === "text" ? (
+          {searchState.loading &&
+          searchState.searchType === "text" &&
+          this.showInWidget ? (
             <vviinn-preloader />
           ) : (
             <slot name="vviinn-text-search-icon">

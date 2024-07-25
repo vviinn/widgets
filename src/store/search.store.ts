@@ -227,6 +227,7 @@ export const uploadFile = (
 
 export const makeTextSearchRequest = async (
   query: string,
+  token: string,
   dynamicFilters?: RequestFilterItem
 ) => {
   state.searchType = "text";
@@ -243,7 +244,7 @@ export const makeTextSearchRequest = async (
   };
 
   const tokenWithBody = sequenceToEither(
-    processBearerToken(state.token),
+    processBearerToken(token),
     E.right(JSON.stringify(body))
   );
 
