@@ -9,7 +9,7 @@ import {
   Listen,
 } from "@stencil/core";
 import { makeTextSearchRequest, searchState } from "../../store/search.store";
-import { TextSearchIcon } from "../vviinn-icons";
+import { CameraIcon, TextSearchIcon } from "../vviinn-icons";
 import { slotChangeListener } from "../customized-slots";
 import {
   SearchIdEvent,
@@ -134,7 +134,11 @@ export class VviinnTextSearch {
             token={this.token}
             apiPath={this.apiPath}
             showInTextSearch={true}
-          ></vviinn-image-selector>
+          >
+            <span slot="upload-button-text">
+              <CameraIcon />
+            </span>
+          </vviinn-image-selector>
         )}
       </Host>
     );
