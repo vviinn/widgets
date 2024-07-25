@@ -152,8 +152,7 @@ export class VviinnFilters {
   render() {
     const { column } = this.selectedFilter ?? {};
     const selectedFilterOptions = getFilterOptions(this.selectedFilter);
-    //TODO - #36707: Will remove this logic then we have the `Primary filters` feature
-    const filters = this.filters.slice(0, 4);
+    const filters = this.filters.filter((filter) => filter.isPrimary);
     if (filters.length === 0) return <Host></Host>;
 
     return (
@@ -187,22 +186,23 @@ export class VviinnFilters {
             ) : (
               <ul class="sub-filters-wrapper">
                 {selectedFilterOptions &&
-                  selectedFilterOptions.map((filter) => {
+                  selectedFilterOptions.map(({ value, label, active }) => {
                     return (
                       <li>
                         <button
                           onClick={() =>
                             this.handleSubFilterSelection(
-                              filter.value,
+                              value,
                               this.selectedFilter
                             )
                           }
                           class={`filters-sub-button ${this.showActiveOnSubButton(
                             this.requestFilters,
-                            filter.value
+                            value
                           )}`}
+                          disabled={!active}
                         >
-                          {filter.label}
+                          {label}
                         </button>
                       </li>
                     );

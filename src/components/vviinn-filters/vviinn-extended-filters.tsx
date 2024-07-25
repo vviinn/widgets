@@ -253,22 +253,23 @@ export class VviinnExtendedFilters {
                         }`}
                       >
                         {filterOptions &&
-                          filterOptions.map((filter) => {
+                          filterOptions.map(({ value, label, active }) => {
                             return (
                               <li>
                                 <button
                                   onClick={() =>
                                     this.handleSubFilterSelection(
-                                      filter.value,
+                                      value,
                                       mainFilter
                                     )
                                   }
                                   class={`filters-more-modal-button ${this.showActiveOnModalSubButton(
                                     this.requestFilters,
-                                    filter.value
+                                    value
                                   )}`}
+                                  disabled={!active}
                                 >
-                                  {filter.label}
+                                  {label}
                                 </button>
                               </li>
                             );
