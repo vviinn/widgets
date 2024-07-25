@@ -21,7 +21,7 @@ import {
 import { campaignTypeNames } from "../../campaign/Campaign";
 import { Locale } from "../../locale";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
-import { VisualSearchMode } from "../../widget";
+import { VisualSearchMode } from "../../widget/types";
 
 /**
  * @slot vviinn-teaser-text - Text on widget's main screen.

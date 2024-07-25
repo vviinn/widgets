@@ -49,7 +49,7 @@ import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 import { videoStreamSettings } from "../../video/settings";
 import { Recommendation } from "../..";
 import { checkDeviceType } from "../../helpers";
-import { UploadSource, VisualSearchMode } from "../../widget";
+import { UploadSource, VisualSearchMode } from "../../widget/types";
 
 const CAMERA_START_DELAY = 500;
 

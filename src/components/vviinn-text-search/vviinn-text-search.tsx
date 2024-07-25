@@ -18,7 +18,7 @@ import {
 } from "../../recommendation/events";
 import i18next from "i18next";
 import { Locale, resources } from "../../locale";
-import { TextSearchMode } from "../../widget";
+import { TextSearchMode } from "../../widget/types";
 
 /**
  * @part text-search-input - Text search input.
