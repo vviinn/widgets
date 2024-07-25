@@ -34,6 +34,7 @@ import {
   ProductEventType,
   ResultEventType,
   SearchIdEvent,
+  SearchIdEventData,
   TextSearchEvent,
 } from "../../recommendation/events";
 import {
@@ -81,6 +82,9 @@ export class VviinnResults {
 
   /** The search result appears in the viewport */
   @Event() vviinnResultView: EventEmitter<BasicEventData>;
+
+  /** @internal */
+  @Event() vviinnSearchIdReceived: EventEmitter<SearchIdEventData>;
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string;

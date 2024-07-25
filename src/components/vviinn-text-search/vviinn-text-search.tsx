@@ -6,14 +6,19 @@ import {
   Element,
   Event,
   EventEmitter,
+  Listen,
 } from "@stencil/core";
 import { makeTextSearchRequest, searchState } from "../../store/search.store";
 import { TextSearchIcon } from "../vviinn-icons";
 import { slotChangeListener } from "../customized-slots";
-import { TextSearchEventData } from "../../recommendation/events";
+import {
+  SearchIdEvent,
+  SearchIdEventData,
+  TextSearchEventData,
+} from "../../recommendation/events";
 import i18next from "i18next";
-import { state } from "../../store/store";
 import { Locale, resources } from "../../locale";
+import { TextSearchMode } from "../../widget";
 
 /**
  * @part text-search-input - Text search input.
@@ -33,11 +38,15 @@ export class VviinnTextSearch {
   /** @internal */
   /** A text search API response was received (used internally by vviinn-vps-widget) */
   @Event() vviinnTextSearchFinished: EventEmitter<TextSearchEventData>;
+  /** @internal */
+  @Event() vviinnSearchIdReceived: EventEmitter<SearchIdEventData>;
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
   /** The locale for currency formatting and text localization */
   @Prop() locale: Locale = "de-DE";
+  /** Default text search or text search with an image upload button */
+  @Prop() mode: TextSearchMode = "text";
 
   /** @internal */
   /** API path passed from widget */
@@ -58,6 +67,13 @@ export class VviinnTextSearch {
     slotChangeListener(this, this.el);
   }
 
+  @Listen("vviinnImageUploadFinished")
+  imageUploadFinished({ detail }: SearchIdEvent) {
+    if (!this.showInWidget) {
+      this.vviinnSearchIdReceived.emit({ searchId: detail.searchId });
+    }
+  }
+
   handleInputChange(event: Event) {
     this.setSearchQuery((event.target as HTMLInputElement).value);
   }
@@ -70,7 +86,6 @@ export class VviinnTextSearch {
     if (!this.searchQuery) return;
 
     if (this.showInWidget) {
-      state.apiPath = this.apiPath; //FIXME: #36877
       await makeTextSearchRequest(this.searchQuery, this.token);
       this.vviinnTextSearchFinished.emit({ query: this.searchQuery });
     } else {
@@ -113,6 +128,14 @@ export class VviinnTextSearch {
             </slot>
           )}
         </button>
+
+        {this.mode === "textAndImage" && (
+          <vviinn-image-selector
+            token={this.token}
+            apiPath={this.apiPath}
+            showInTextSearch={true}
+          ></vviinn-image-selector>
+        )}
       </Host>
     );
   }
