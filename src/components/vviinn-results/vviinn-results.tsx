@@ -36,6 +36,7 @@ import {
   SearchIdEvent,
   SearchIdEventData,
   TextSearchEvent,
+  TextSearchEventData,
 } from "../../recommendation/events";
 import {
   createProductVpsEventByType,
@@ -83,8 +84,11 @@ export class VviinnResults {
   /** The search result appears in the viewport */
   @Event() vviinnResultView: EventEmitter<BasicEventData>;
 
-  /** @internal */
+  /** Event emitted when a 'searchId' is received for performing a Visual Search */
   @Event() vviinnSearchIdReceived: EventEmitter<SearchIdEventData>;
+
+  /** Event emitted when a 'query' is received for performing a Text Search */
+  @Event() vviinnTextSearchStarted: EventEmitter<TextSearchEventData>;
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
