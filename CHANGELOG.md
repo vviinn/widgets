@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.68.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.67.1...v2.68.0) (2024-07-25)
+
+
+### Features
+
+* Separate vviinn-text-search component ([d71eff2](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/d71eff24399541a34c9a1e89c5c3086dff563c77))
+
 ### [2.67.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.67.0...v2.67.1) (2024-07-24)
 
 
