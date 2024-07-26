@@ -190,6 +190,13 @@
 .filters-modal-sub-list {
   display: none;
 }
+.filters-modal-sub-list-inline {
+  margin: 0 -6px;
+}
+.filters-modal-sub-list-inline > li {
+  display: inline-block;
+  margin: 0 6px;
+}
 
 .filters-modal-sub-list.open {
   display: block;
@@ -271,4 +278,21 @@
   font-weight: var(--font-weight-regular);
   line-height: var(--line-height-body);
   letter-spacing: var(--letter-spacing-default);
+}
+.filters-sub-button-color {
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--border-color-border-01);
+  border-radius: 20px;
+}
+.filters-sub-button-color > span {
+  display: none;
+}
+.filters-sub-button-color.active {
+  border: 2px solid #fff;
+  outline: 2px solid #000;
+  margin: 2px 0;
+}
+.filters-sub-button-color:first-child.active {
+  margin-left: 2px;
 }
