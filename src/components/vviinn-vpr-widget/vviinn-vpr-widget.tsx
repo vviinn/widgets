@@ -45,6 +45,7 @@ import {
   ProductEventType,
   ProductEvent,
   ResultEventType,
+  ChangedFiltersEventData,
 } from "../../recommendation/events";
 import {
   createWidgetVprEvent,
@@ -66,7 +67,6 @@ import {
   DynamicFilters,
 } from "../../campaign/VPRCampaignService";
 import { CrossSellingResponse } from "../../campaign/VCSCampaignService";
-import { FiltersEventData } from "../../components/vviinn-filters/types";
 
 export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
 
@@ -214,7 +214,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @Event() vviinnAddToBasket: EventEmitter<BasicEventData>;
 
   /** When the filters change */
-  @Event() vviinnFiltersChanged: EventEmitter<FiltersEventData>;
+  @Event() vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -450,7 +450,7 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   @Listen("vviinnFiltersChanged")
-  async filtersChanged({ detail }: CustomEvent<FiltersEventData>) {
+  async filtersChanged({ detail }: CustomEvent<ChangedFiltersEventData>) {
     this.requestDynamicFilters = detail.filters;
     this.getRecommendations();
   }

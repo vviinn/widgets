@@ -17,13 +17,15 @@ import {
 } from "../../campaign/VPRCampaignService";
 import { FiltersIcon, NewCloseIcon } from "../vviinn-icons";
 import { getFilterOptions, subFilterSelection } from "./helpers";
-import { FiltersEventData } from "./types";
 import { Locale } from "../../locale";
 import i18next from "i18next";
 import { resources } from "../../locale";
 import { SlotSkeleton, slotChangeListener } from "../customized-slots";
 import { Histogram } from "../vviinn-price-range/vviinn-price-range";
-import { DynamicFiltersEventData } from "../../recommendation/events";
+import {
+  ChangedFiltersEventData,
+  DynamicFiltersEventData,
+} from "../../recommendation/events";
 
 /**
  * * @part filters - Wrapper itself.
@@ -47,7 +49,7 @@ export class VviinnExtendedFilters {
 
   /** Event fires when filters position change */
   @Event({ bubbles: true })
-  vviinnFiltersChanged: EventEmitter<FiltersEventData>;
+  vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
   /** @internal */
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
@@ -132,7 +134,7 @@ export class VviinnExtendedFilters {
 
   private handleFiltersChanged = ({
     detail,
-  }: CustomEvent<FiltersEventData>) => {
+  }: CustomEvent<ChangedFiltersEventData>) => {
     const { filters, el: senderElement } = detail;
 
     if (senderElement === this.el) return;

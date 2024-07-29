@@ -15,10 +15,12 @@ import {
   DynamicFilterValue,
   RequestDynamicFilters,
 } from "../../campaign/VPRCampaignService";
-import { FiltersEventData } from "./types";
 import { getFilterOptions, subFilterSelection } from "./helpers";
 import { Histogram } from "../vviinn-price-range/vviinn-price-range";
-import { DynamicFiltersEventData } from "../../recommendation/events";
+import {
+  ChangedFiltersEventData,
+  DynamicFiltersEventData,
+} from "../../recommendation/events";
 
 /**
  * * @part filters - Wrapper itself.
@@ -40,7 +42,7 @@ export class VviinnFilters {
 
   /** Event fires when filters position change */
   @Event({ bubbles: true })
-  vviinnFiltersChanged: EventEmitter<FiltersEventData>;
+  vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
   /** @internal */
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
@@ -115,7 +117,7 @@ export class VviinnFilters {
 
   private handleFiltersChanged = ({
     detail,
-  }: CustomEvent<FiltersEventData>) => {
+  }: CustomEvent<ChangedFiltersEventData>) => {
     const { filters, el: senderElement } = detail;
 
     if (senderElement === this.el) return;
