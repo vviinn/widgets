@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.70.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.69.0...v2.70.0) (2024-07-29)
+
+
+### Features
+
+* Add image upload button for vviinn-text-search ([f4b0fb5](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/f4b0fb55aca777b828eeb6dc282ef712873f5876))
+
 ## [2.69.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.68.0...v2.69.0) (2024-07-29)
 
 
