@@ -49,8 +49,8 @@ import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 import { videoStreamSettings } from "../../video/settings";
 import { Recommendation } from "../..";
 import { checkDeviceType } from "../../helpers";
+import { UploadSource, VisualSearchMode } from "../../widget/types";
 
-type UploadSource = "uploadPhoto" | "startCamera";
 const CAMERA_START_DELAY = 500;
 
 /**
@@ -130,7 +130,7 @@ export class VviinnVpsWidget {
   /** @internal */
   @Prop() buttonPressed?: boolean;
   /** @internal */
-  @Prop() mode: "modal" | "upload" | "camera" = "modal";
+  @Prop() mode: VisualSearchMode = "modal";
   /** @internal */
   @Prop() resetVpsButton: () => void;
 

@@ -7,10 +7,11 @@ import { createInitPostRequest, getApiPath } from "../network/utils";
 import { Recommendation } from "../recommendation/recommendation";
 import { SearchInterfaces } from "../interfaces/search";
 import * as TE from "fp-ts/TaskEither";
+import * as E from "fp-ts/Either";
 import * as O from "fp-ts/Option";
 import { RectangleAlt } from "../geometry/RectangleAlt";
 import { Eq } from "fp-ts/lib/Eq";
-import { BasicError } from "../error";
+import { BasicError, emptyApiPathError } from "../error";
 import { sequenceToEither } from "../utils/either";
 import { arrayToQueryString } from "../utils/collections/collectionsUtils";
 
@@ -76,11 +77,11 @@ export type ObjectsDetectedEvent = CustomEvent<ValueObject<DetectedObject>[]>;
 
 export const imageSearchSessionClient = (
   initialData: RequestInit,
-  campaignId: string,
-  excludedFilters: string
+  campaignId: string | null,
+  excludedFilters: string | null,
+  apiPath?: string
 ): TE.TaskEither<BasicError<Response | string>, SearchSession> => {
   const searchUrl = "search/session";
-
   const requestUrl = pipe(
     O.fromNullable(campaignId),
     O.fold(
@@ -102,8 +103,15 @@ export const imageSearchSessionClient = (
     )
   );
 
+  const apiPathOrError = apiPath
+    ? pipe(
+        O.fromNullable(apiPath),
+        E.fromOption(() => emptyApiPathError)
+      )
+    : getApiPath();
+
   return pipe(
-    sequenceToEither(getApiPath(), createInitPostRequest),
+    sequenceToEither(apiPathOrError, createInitPostRequest),
     TE.fromEither,
     TE.chainW(makeRequest<SearchSession>(requestUrl, initialData))
   );

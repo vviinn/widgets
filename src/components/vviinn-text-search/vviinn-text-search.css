@@ -52,6 +52,12 @@
   cursor: unset;
 }
 
+vviinn-image-selector {
+  position: absolute;
+  right: 60px;
+  top: 14px;
+}
+
 vviinn-preloader {
   --preloader-size: 16px;
   display: flex;

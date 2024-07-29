@@ -8,6 +8,7 @@ import {
   EventEmitter,
   Listen,
   State,
+  Watch,
 } from "@stencil/core";
 import * as E from "fp-ts/Either";
 import { v4 as uuidv4 } from "uuid";
@@ -34,7 +35,9 @@ import {
   ProductEventType,
   ResultEventType,
   SearchIdEvent,
+  SearchIdEventData,
   TextSearchEvent,
+  TextSearchEventData,
 } from "../../recommendation/events";
 import {
   createProductVpsEventByType,
@@ -81,6 +84,12 @@ export class VviinnResults {
 
   /** The search result appears in the viewport */
   @Event() vviinnResultView: EventEmitter<BasicEventData>;
+
+  /** Event emitted when a 'searchId' is received for performing a Visual Search */
+  @Event() vviinnSearchIdReceived: EventEmitter<SearchIdEventData>;
+
+  /** Event emitted when a 'query' is received for performing a Text Search */
+  @Event() vviinnTextSearchStarted: EventEmitter<TextSearchEventData>;
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
@@ -163,6 +172,11 @@ export class VviinnResults {
       "vviinnTextSearchStarted",
       this.textSearchStartedHandler
     );
+  }
+
+  @Watch("textSearchQuery")
+  watchTextSearchQuery(newQuery: string) {
+    this.getResultsByTextQuery(newQuery);
   }
 
   @Listen("vviinnProductLoad")
