@@ -38,7 +38,7 @@ import {
 export class VviinnExtendedFilters {
   @Element() el: HTMLElement;
 
-  @Prop() filters: DynamicFilters = [];
+  @Prop({ mutable: true }) filters: DynamicFilters = [];
   @Prop() filtersString: string = "";
   /** The locale for currency formatting and text localization */
   @Prop() locale: Locale = "de-DE";
@@ -47,7 +47,7 @@ export class VviinnExtendedFilters {
   @State() showMore: boolean = false;
   @State() selectedMoreOptions: string[] = [];
 
-  /** Event fires when filters position change */
+  /** The filter's state changes */
   @Event({ bubbles: true })
   vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
   /** @internal */

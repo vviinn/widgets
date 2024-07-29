@@ -36,6 +36,7 @@ import {
   ResponseFilterItem,
   SearchIdResponse,
 } from "../interfaces/search";
+import { RequestDynamicFilters } from "../campaign/VPRCampaignService";
 
 const RESIZED_IMAGE_WIDTH = 500;
 const HI_RES_RESIZED_IMAGE_WIDTH = 1024;
@@ -306,9 +307,18 @@ export const makeTextSearchRequest = async (
   )();
 };
 
-export const makeSearchQueryRequest = async (query: string, token: string) => {
+export const makeSearchQueryRequest = async (
+  token: string,
+  query: string,
+  filters?: RequestDynamicFilters
+) => {
   const body = {
     query,
+    ...(filters
+      ? {
+          dynamicFilters: filters,
+        }
+      : {}),
   };
 
   const tokenWithBody = sequenceToEither(

@@ -40,7 +40,7 @@ export class VviinnModal {
 
   @State() slider: boolean = false;
 
-  /** Event emitted when Close Button clicked and close animation ends */
+  /** Close Button clicked and close animation ends */
   @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
   /** @internal */
   @Event({ bubbles: true })

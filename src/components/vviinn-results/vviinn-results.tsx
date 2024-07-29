@@ -31,6 +31,8 @@ import { BasicEventData, Locale, Recommendation } from "../../components";
 import { campaignTypeNames } from "../../campaign/Campaign";
 import { SearchIdResponse, TextSearchResponse } from "../../interfaces/search";
 import {
+  ChangedFiltersEvent,
+  ChangedFiltersEventData,
   DynamicFiltersEventData,
   ProductCardEvent,
   ProductCardEventData,
@@ -46,6 +48,7 @@ import {
   createProductVpsEventByType,
   createResultVpsEventByType,
 } from "../../tracking";
+import { RequestDynamicFilters } from "../../campaign/VPRCampaignService";
 
 /**
  * @part product-card - Product Card itself.
@@ -87,14 +90,19 @@ export class VviinnResults {
   /** The search result appears in the viewport */
   @Event() vviinnResultView: EventEmitter<BasicEventData>;
 
-  /** Event emitted when a 'searchId' is received for performing a Visual Search */
+  /** The 'searchId' is received for performing a Visual Search */
   @Event() vviinnSearchIdReceived: EventEmitter<SearchIdEventData>;
 
-  /** Event emitted when a 'query' is received for performing a Text Search */
+  /** The 'query' is received for performing a Text Search */
   @Event() vviinnTextSearchStarted: EventEmitter<TextSearchEventData>;
 
-  /** Event emitted when dynamic filters are received from the API. */
+  /** Dynamic filters are received from the API. */
   @Event() vviinnFilters: EventEmitter<DynamicFiltersEventData>;
+
+  /** @internal */
+  /** The filter's state changes */
+  @Event({ bubbles: true })
+  vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
@@ -111,7 +119,7 @@ export class VviinnResults {
   /** Toggle for redirection to PDP on product's click */
   @Prop() productDetailsRedirect?: boolean = true;
   /** Query for performing text search */
-  @Prop() textSearchQuery?: string;
+  @Prop({ mutable: true }) textSearchQuery?: string;
 
   /** True when we use vviinn-results inside the widget */
   /** @internal */
@@ -144,6 +152,11 @@ export class VviinnResults {
 
   private textSearchStartedHandler = ({ detail }: TextSearchEvent) => {
     this.getResultsByTextQuery(detail.query);
+    this.textSearchQuery = detail.query;
+  };
+
+  private filtersChangedHandler = ({ detail }: ChangedFiltersEvent) => {
+    this.getResultsByTextQuery(this.textSearchQuery, detail.filters);
   };
 
   connectedCallback() {
@@ -163,6 +176,11 @@ export class VviinnResults {
       this.textSearchStartedHandler
     );
 
+    document.addEventListener(
+      "vviinnFiltersChanged",
+      this.filtersChangedHandler
+    );
+
     this.getResultsBySearchId(this.searchId);
     this.getResultsByTextQuery(this.textSearchQuery);
   }
@@ -176,6 +194,11 @@ export class VviinnResults {
     document.removeEventListener(
       "vviinnTextSearchStarted",
       this.textSearchStartedHandler
+    );
+
+    document.removeEventListener(
+      "vviinnFiltersChanged",
+      this.filtersChangedHandler
     );
   }
 
@@ -257,11 +280,15 @@ export class VviinnResults {
     );
   };
 
-  private async getResultsByTextQuery(query?: string) {
+  private async getResultsByTextQuery(
+    query?: string,
+    filters?: RequestDynamicFilters
+  ) {
     if (this.showingInWidget || query === undefined) return;
     state.apiPath = this.apiPath; //FIXME: #36877
+
     pipe(
-      await makeSearchQueryRequest(query, this.token),
+      await makeSearchQueryRequest(this.token, query, filters),
       E.getOrElse(() => null),
       (response: TextSearchResponse) => {
         this.recommendations = response?.data.products ?? [];

@@ -116,16 +116,16 @@ export class VviinnProductCard {
   @State() isTransitioning: boolean = false;
   @State() basketButonPressed: boolean = false;
 
-  /** Event fires ones when recommendation rendered on page */
+  /** Event emitted once when the recommendation is rendered on the page */
   @Event({ bubbles: true })
   vviinnProductLoad: EventEmitter<ProductCardEventData>;
-  /** Event fires ones when recommendation appears on the viewport */
+  /** Event emitted once when the recommendation appears in the viewport */
   @Event({ bubbles: true })
   vviinnProductView: EventEmitter<ProductCardEventData>;
-  /** Event fires ones when user click on deeplink */
+  /** Event emitted ones when user click on deeplink */
   @Event({ bubbles: true })
   vviinnProductClick: EventEmitter<ProductCardEventData>;
-  /** Event fires when user click on Add to Basket button */
+  /** User clicks on Add to Basket button */
   @Event({ bubbles: true })
   vviinnAddToBasket: EventEmitter<ProductCardEventData>;
 

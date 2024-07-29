@@ -122,13 +122,13 @@ export class VviinnVprButton {
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
 
-  /** The event emits on widget load */
+  /** Event emitted on widget load */
   @Event() vviinnWidgetLoad: EventEmitter<BasicEventData>;
 
-  /** The event emits on modal open */
+  /** Event emitted on modal open */
   @Event() vviinnWidgetOpen: EventEmitter<BasicEventData>;
 
-  /** The event emits on modal close */
+  /** Event emitted on modal close */
   @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
 
   /** The recommendation renders on the page */

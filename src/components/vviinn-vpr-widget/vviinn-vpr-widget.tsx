@@ -188,7 +188,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @State() updatedCardsAmount: number = 0;
   @State() setModeDiscountsArray: number[] = [];
 
-  /** The event emits on widget load */
+  /** Event emitted on widget load */
   @Event({ bubbles: true })
   vviinnWidgetLoad: EventEmitter<BasicEventData>;
 
@@ -213,7 +213,7 @@ export class VviinnVprWidget implements ComponentInterface {
   /** Add to Basket button clicked */
   @Event() vviinnAddToBasket: EventEmitter<BasicEventData>;
 
-  /** When the filters change */
+  /** The filter's state changes */
   @Event() vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
 
   /** @internal */

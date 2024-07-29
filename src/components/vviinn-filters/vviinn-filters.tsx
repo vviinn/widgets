@@ -34,13 +34,13 @@ import {
 export class VviinnFilters {
   @Element() el: HTMLElement;
 
-  @Prop() filters: DynamicFilters = [];
+  @Prop({ mutable: true }) filters: DynamicFilters = [];
   @Prop() filtersString: string = "";
 
   @State() selectedFilter: DynamicFilter;
   @State() requestFilters: RequestDynamicFilters = [];
 
-  /** Event fires when filters position change */
+  /** The filter's state changes */
   @Event({ bubbles: true })
   vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
   /** @internal */
