@@ -23,6 +23,7 @@ import i18next from "i18next";
 import { resources } from "../../locale";
 import { SlotSkeleton, slotChangeListener } from "../customized-slots";
 import { Histogram } from "../vviinn-price-range/vviinn-price-range";
+import { DynamicFiltersEventData } from "../../recommendation/events";
 
 /**
  * * @part filters - Wrapper itself.
@@ -44,12 +45,15 @@ export class VviinnExtendedFilters {
   @State() showMore: boolean = false;
   @State() selectedMoreOptions: string[] = [];
 
+  /** Event fires when filters position change */
+  @Event({ bubbles: true })
+  vviinnFiltersChanged: EventEmitter<FiltersEventData>;
   /** @internal */
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
-  /** Event fires when user click on Add to Basket button */
+  /** @internal */
   @Event({ bubbles: true })
-  vviinnFiltersChanged: EventEmitter<FiltersEventData>;
+  vviinnFilters: EventEmitter<DynamicFiltersEventData>;
 
   private replaceSlotsContent() {
     const slots = this.el.querySelectorAll("[slot]");
@@ -120,8 +124,10 @@ export class VviinnExtendedFilters {
     }
   }
 
-  private handleSetFilters = (event) => {
-    this.filters = event.detail;
+  private handleSetFilters = ({
+    detail,
+  }: CustomEvent<DynamicFiltersEventData>) => {
+    this.filters = detail;
   };
 
   private handleFiltersChanged = ({

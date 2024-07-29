@@ -11,6 +11,7 @@ import {
   Watch,
 } from "@stencil/core";
 import * as E from "fp-ts/Either";
+import { pipe } from "fp-ts/lib/function";
 import { v4 as uuidv4 } from "uuid";
 import {
   DefaultApi,
@@ -28,7 +29,9 @@ import { state } from "../../store/store";
 import { createTrackingApi } from "../../openApi";
 import { BasicEventData, Locale, Recommendation } from "../../components";
 import { campaignTypeNames } from "../../campaign/Campaign";
+import { SearchIdResponse, TextSearchResponse } from "../../interfaces/search";
 import {
+  DynamicFiltersEventData,
   ProductCardEvent,
   ProductCardEventData,
   ProductEvent,
@@ -43,7 +46,6 @@ import {
   createProductVpsEventByType,
   createResultVpsEventByType,
 } from "../../tracking";
-import { pipe } from "fp-ts/lib/function";
 
 /**
  * @part product-card - Product Card itself.
@@ -90,6 +92,9 @@ export class VviinnResults {
 
   /** Event emitted when a 'query' is received for performing a Text Search */
   @Event() vviinnTextSearchStarted: EventEmitter<TextSearchEventData>;
+
+  /** Event emitted when dynamic filters are received from the API. */
+  @Event() vviinnFilters: EventEmitter<DynamicFiltersEventData>;
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
@@ -246,7 +251,7 @@ export class VviinnResults {
     pipe(
       await makeSearchIdRequest(searchId, this.token),
       E.getOrElse(() => []),
-      (results) => {
+      (results: SearchIdResponse) => {
         this.recommendations = results;
       }
     );
@@ -258,8 +263,9 @@ export class VviinnResults {
     pipe(
       await makeSearchQueryRequest(query, this.token),
       E.getOrElse(() => null),
-      (results) => {
-        this.recommendations = results?.data?.products ?? [];
+      (response: TextSearchResponse) => {
+        this.recommendations = response?.data.products ?? [];
+        this.vviinnFilters.emit(response?.data?.interactions.dynamicFilters);
       }
     );
   }

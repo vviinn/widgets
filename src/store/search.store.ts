@@ -31,7 +31,11 @@ import { sequenceToEither } from "../utils/either";
 import { imageFormFromFile } from "../Image/form";
 import { checkFileWithExtention, resizeFileTo } from "./file-processing";
 import { imageFromFileTask } from "../Image/fromFile";
-import { RequestFilterItem, ResponseFilterItem } from "../interfaces/search";
+import {
+  RequestFilterItem,
+  ResponseFilterItem,
+  SearchIdResponse,
+} from "../interfaces/search";
 
 const RESIZED_IMAGE_WIDTH = 500;
 const HI_RES_RESIZED_IMAGE_WIDTH = 1024;
@@ -331,7 +335,7 @@ export const makeSearchIdRequest = async (searchId: string, token: string) =>
     makeAuthorizedRequest(token),
     TE.fromEither,
     TE.chainW(linkRequest(createLinkfromSearchId(searchId))),
-    TE.map((response: ValueObject<Recommendation[]>) => response.value)
+    TE.map((response: ValueObject<SearchIdResponse>) => response.value)
   )();
 
 onChange("activeIonLink", async (newLink: Link) => {
