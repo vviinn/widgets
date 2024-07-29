@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.69.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.68.0...v2.69.0) (2024-07-29)
+
+
+### Features
+
+* Added color filters in the new style ([7678768](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/76787685c8e8b0abd8f59b775e3241c69b6309b2))
+
+
+### Bug Fixes
+
+* fixed send color filters ([fc1b94c](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/fc1b94c82fdf2c94ccdbd8615be0ffe3764551f1))
+
 ## [2.68.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.67.1...v2.68.0) (2024-07-25)
 
 
