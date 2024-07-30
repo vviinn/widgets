@@ -151,15 +151,15 @@ export class VviinnVpsWidget {
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
 
-  /** The event emits on widget load */
+  /** Event emitted on widget load */
   @Event({ bubbles: true })
   vviinnWidgetLoad: EventEmitter<BasicEventData>;
 
-  /** The event emits on modal open */
+  /** Event emitted on modal open */
   @Event({ bubbles: true })
   vviinnWidgetOpen: EventEmitter<BasicEventData>;
 
-  /** The event emits on modal close */
+  /** Event emitted on modal close */
   @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
 
   /** Crop area changes */

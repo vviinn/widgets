@@ -77,10 +77,10 @@ export class VviinnCarousel {
   @Prop() pricePrefix: string = "";
   @Prop() locale: Locale;
 
-  /** Event fires ones when recommendation rendered on page */
+  /** Event emitted once when the recommendation is rendered on the page */
   @Event({ bubbles: true })
   vviinnProductLoad: EventEmitter<ProductCardEventData>;
-  /** Event fires ones when recommendation appears on the viewport */
+  /** Event emitted once when the recommendation appears in the viewport */
   @Event({ bubbles: true })
   vviinnProductView: EventEmitter<ProductCardEventData>;
 

@@ -17,12 +17,15 @@ import {
 } from "../../campaign/VPRCampaignService";
 import { FiltersIcon, NewCloseIcon } from "../vviinn-icons";
 import { getFilterOptions, subFilterSelection } from "./helpers";
-import { FiltersEventData } from "./types";
 import { Locale } from "../../locale";
 import i18next from "i18next";
 import { resources } from "../../locale";
 import { SlotSkeleton, slotChangeListener } from "../customized-slots";
 import { Histogram } from "../vviinn-price-range/vviinn-price-range";
+import {
+  ChangedFiltersEventData,
+  DynamicFiltersEventData,
+} from "../../recommendation/events";
 
 /**
  * * @part filters - Wrapper itself.
@@ -35,7 +38,7 @@ import { Histogram } from "../vviinn-price-range/vviinn-price-range";
 export class VviinnExtendedFilters {
   @Element() el: HTMLElement;
 
-  @Prop() filters: DynamicFilters = [];
+  @Prop({ mutable: true }) filters: DynamicFilters = [];
   @Prop() filtersString: string = "";
   /** The locale for currency formatting and text localization */
   @Prop() locale: Locale = "de-DE";
@@ -44,12 +47,15 @@ export class VviinnExtendedFilters {
   @State() showMore: boolean = false;
   @State() selectedMoreOptions: string[] = [];
 
+  /** The filter's state changes */
+  @Event({ bubbles: true })
+  vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
   /** @internal */
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
-  /** Event fires when user click on Add to Basket button */
+  /** @internal */
   @Event({ bubbles: true })
-  vviinnFiltersChanged: EventEmitter<FiltersEventData>;
+  vviinnFilters: EventEmitter<DynamicFiltersEventData>;
 
   private replaceSlotsContent() {
     const slots = this.el.querySelectorAll("[slot]");
@@ -120,13 +126,15 @@ export class VviinnExtendedFilters {
     }
   }
 
-  private handleSetFilters = (event) => {
-    this.filters = event.detail;
+  private handleSetFilters = ({
+    detail,
+  }: CustomEvent<DynamicFiltersEventData>) => {
+    this.filters = detail;
   };
 
   private handleFiltersChanged = ({
     detail,
-  }: CustomEvent<FiltersEventData>) => {
+  }: CustomEvent<ChangedFiltersEventData>) => {
     const { filters, el: senderElement } = detail;
 
     if (senderElement === this.el) return;

@@ -11,6 +11,7 @@ import {
   Watch,
 } from "@stencil/core";
 import * as E from "fp-ts/Either";
+import { pipe } from "fp-ts/lib/function";
 import { v4 as uuidv4 } from "uuid";
 import {
   DefaultApi,
@@ -28,7 +29,11 @@ import { state } from "../../store/store";
 import { createTrackingApi } from "../../openApi";
 import { BasicEventData, Locale, Recommendation } from "../../components";
 import { campaignTypeNames } from "../../campaign/Campaign";
+import { SearchIdResponse, TextSearchResponse } from "../../interfaces/search";
 import {
+  ChangedFiltersEvent,
+  ChangedFiltersEventData,
+  DynamicFiltersEventData,
   ProductCardEvent,
   ProductCardEventData,
   ProductEvent,
@@ -43,7 +48,7 @@ import {
   createProductVpsEventByType,
   createResultVpsEventByType,
 } from "../../tracking";
-import { pipe } from "fp-ts/lib/function";
+import { RequestDynamicFilters } from "../../campaign/VPRCampaignService";
 
 /**
  * @part product-card - Product Card itself.
@@ -85,11 +90,19 @@ export class VviinnResults {
   /** The search result appears in the viewport */
   @Event() vviinnResultView: EventEmitter<BasicEventData>;
 
-  /** Event emitted when a 'searchId' is received for performing a Visual Search */
+  /** The 'searchId' is received for performing a Visual Search */
   @Event() vviinnSearchIdReceived: EventEmitter<SearchIdEventData>;
 
-  /** Event emitted when a 'query' is received for performing a Text Search */
+  /** The 'query' is received for performing a Text Search */
   @Event() vviinnTextSearchStarted: EventEmitter<TextSearchEventData>;
+
+  /** Dynamic filters are received from the API. */
+  @Event() vviinnFilters: EventEmitter<DynamicFiltersEventData>;
+
+  /** @internal */
+  /** The filter's state changes */
+  @Event({ bubbles: true })
+  vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
@@ -106,7 +119,7 @@ export class VviinnResults {
   /** Toggle for redirection to PDP on product's click */
   @Prop() productDetailsRedirect?: boolean = true;
   /** Query for performing text search */
-  @Prop() textSearchQuery?: string;
+  @Prop({ mutable: true }) textSearchQuery?: string;
 
   /** True when we use vviinn-results inside the widget */
   /** @internal */
@@ -139,6 +152,11 @@ export class VviinnResults {
 
   private textSearchStartedHandler = ({ detail }: TextSearchEvent) => {
     this.getResultsByTextQuery(detail.query);
+    this.textSearchQuery = detail.query;
+  };
+
+  private filtersChangedHandler = ({ detail }: ChangedFiltersEvent) => {
+    this.getResultsByTextQuery(this.textSearchQuery, detail.filters);
   };
 
   connectedCallback() {
@@ -158,6 +176,11 @@ export class VviinnResults {
       this.textSearchStartedHandler
     );
 
+    document.addEventListener(
+      "vviinnFiltersChanged",
+      this.filtersChangedHandler
+    );
+
     this.getResultsBySearchId(this.searchId);
     this.getResultsByTextQuery(this.textSearchQuery);
   }
@@ -171,6 +194,11 @@ export class VviinnResults {
     document.removeEventListener(
       "vviinnTextSearchStarted",
       this.textSearchStartedHandler
+    );
+
+    document.removeEventListener(
+      "vviinnFiltersChanged",
+      this.filtersChangedHandler
     );
   }
 
@@ -246,20 +274,25 @@ export class VviinnResults {
     pipe(
       await makeSearchIdRequest(searchId, this.token),
       E.getOrElse(() => []),
-      (results) => {
+      (results: SearchIdResponse) => {
         this.recommendations = results;
       }
     );
   };
 
-  private async getResultsByTextQuery(query?: string) {
+  private async getResultsByTextQuery(
+    query?: string,
+    filters?: RequestDynamicFilters
+  ) {
     if (this.showingInWidget || query === undefined) return;
     state.apiPath = this.apiPath; //FIXME: #36877
+
     pipe(
-      await makeSearchQueryRequest(query, this.token),
+      await makeSearchQueryRequest(this.token, query, filters),
       E.getOrElse(() => null),
-      (results) => {
-        this.recommendations = results?.data?.products ?? [];
+      (response: TextSearchResponse) => {
+        this.recommendations = response?.data.products ?? [];
+        this.vviinnFilters.emit(response?.data?.interactions.dynamicFilters);
       }
     );
   }

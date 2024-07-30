@@ -15,9 +15,12 @@ import {
   DynamicFilterValue,
   RequestDynamicFilters,
 } from "../../campaign/VPRCampaignService";
-import { FiltersEventData } from "./types";
 import { getFilterOptions, subFilterSelection } from "./helpers";
 import { Histogram } from "../vviinn-price-range/vviinn-price-range";
+import {
+  ChangedFiltersEventData,
+  DynamicFiltersEventData,
+} from "../../recommendation/events";
 
 /**
  * * @part filters - Wrapper itself.
@@ -31,18 +34,21 @@ import { Histogram } from "../vviinn-price-range/vviinn-price-range";
 export class VviinnFilters {
   @Element() el: HTMLElement;
 
-  @Prop() filters: DynamicFilters = [];
+  @Prop({ mutable: true }) filters: DynamicFilters = [];
   @Prop() filtersString: string = "";
 
   @State() selectedFilter: DynamicFilter;
   @State() requestFilters: RequestDynamicFilters = [];
 
+  /** The filter's state changes */
+  @Event({ bubbles: true })
+  vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
   /** @internal */
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
-  /** Event fires when filters position change */
+  /** @internal */
   @Event({ bubbles: true })
-  vviinnFiltersChanged: EventEmitter<FiltersEventData>;
+  vviinnFilters: EventEmitter<DynamicFiltersEventData>;
 
   private handleMainFilterSelection(filter: DynamicFilter) {
     this.selectedFilter = filter;
@@ -103,13 +109,15 @@ export class VviinnFilters {
       : "";
   }
 
-  private handleSetFilters = (event) => {
-    this.filters = event.detail;
+  private handleSetFilters = ({
+    detail,
+  }: CustomEvent<DynamicFiltersEventData>) => {
+    this.filters = detail;
   };
 
   private handleFiltersChanged = ({
     detail,
-  }: CustomEvent<FiltersEventData>) => {
+  }: CustomEvent<ChangedFiltersEventData>) => {
     const { filters, el: senderElement } = detail;
 
     if (senderElement === this.el) return;

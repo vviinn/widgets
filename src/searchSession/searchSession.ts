@@ -5,7 +5,6 @@ import { Form } from "../network/ion/Form";
 import { makeRequest } from "../network/request";
 import { createInitPostRequest, getApiPath } from "../network/utils";
 import { Recommendation } from "../recommendation/recommendation";
-import { SearchInterfaces } from "../interfaces/search";
 import * as TE from "fp-ts/TaskEither";
 import * as E from "fp-ts/Either";
 import * as O from "fp-ts/Option";
@@ -14,8 +13,7 @@ import { Eq } from "fp-ts/lib/Eq";
 import { BasicError, emptyApiPathError } from "../error";
 import { sequenceToEither } from "../utils/either";
 import { arrayToQueryString } from "../utils/collections/collectionsUtils";
-
-type TextSearchResponse = SearchInterfaces["TextSearchResponse"];
+import { TextSearchResponse } from "../interfaces/search";
 
 export type SearchType = "text" | "image";
 

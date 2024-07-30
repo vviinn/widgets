@@ -8,6 +8,10 @@ import {
 import { ValueObject } from "../network/ion/ValueObject";
 import { DetectedObject } from "../searchSession/searchSession";
 import { ErrorKind } from "../error";
+import {
+  DynamicFilter,
+  RequestDynamicFilters,
+} from "../campaign/VPRCampaignService";
 
 export type BasicEventData = {
   widgetType: "VPR" | "VPS";
@@ -81,7 +85,16 @@ export type TextSearchEventData = {
   query: string;
 };
 
+export type ChangedFiltersEventData = {
+  filters: RequestDynamicFilters;
+  el: HTMLElement;
+};
+
+export type DynamicFiltersEventData = DynamicFilter[];
+
 export type SearchIdEvent = CustomEvent<SearchIdEventData>;
 export type TextSearchEvent = CustomEvent<TextSearchEventData>;
+export type DynamicFiltersEvent = CustomEvent<DynamicFiltersEventData>;
+export type ChangedFiltersEvent = CustomEvent<ChangedFiltersEventData>;
 export type ProductCardEvent = CustomEvent<ProductCardEventData>;
 export type CrossSellingClickEvent = CustomEvent<CrossSellingClickEventData>;
