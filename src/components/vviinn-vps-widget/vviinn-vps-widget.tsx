@@ -47,7 +47,7 @@ import { Locale } from "../../locale";
 import { CameraActionIcon, UploadActionIcon } from "../vviinn-icons";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 import { videoStreamSettings } from "../../video/settings";
-import { Recommendation } from "../..";
+import { Recommendation, RequestDynamicFilterItem } from "../..";
 import { checkDeviceType } from "../../helpers";
 import { UploadSource, VisualSearchMode } from "../../widget/types";
 
@@ -150,6 +150,11 @@ export class VviinnVpsWidget {
   /** @internal */
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
+
+  /** @internal */
+  @Event() vviinnTextSearchFilterSelected: EventEmitter<
+    RequestDynamicFilterItem[]
+  >;
 
   /** Event emitted on widget load */
   @Event({ bubbles: true })
@@ -408,7 +413,9 @@ export class VviinnVpsWidget {
   }
 
   @Listen("vviinnTextSearchFilterSelected")
-  trackTextSearchFilterSelected({ detail }) {
+  trackTextSearchFilterSelected({
+    detail,
+  }: CustomEvent<RequestDynamicFilterItem[]>) {
     makeTextSearchRequest(this.searchQuery, this.token, detail);
   }
 

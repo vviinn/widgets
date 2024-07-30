@@ -12,6 +12,7 @@ import {
   imageSearchSessionClient,
   textSearchSessionClient,
   SearchType,
+  productListingPageSessionClient,
 } from "../searchSession/searchSession";
 import { foldValueObject, ValueObject } from "../network/ion/ValueObject";
 import {
@@ -19,22 +20,27 @@ import {
   linkRequest,
   getLink,
   extractHrefValue,
-  createLinkfromSearchId,
+  createLinkfromHref,
 } from "../network/ion/Link";
 import { divideOnSized, Rectangle } from "../geometry/Rectangle";
 import { Form, formRequest } from "../network/ion/Form";
 import * as F from "../network/ion/File";
 import { sequenceToOption } from "../utils/option/option";
-import { processBearerToken } from "../utils/token/tokenUtils";
+import {
+  getTokenWithBody,
+  processBearerToken,
+} from "../utils/token/tokenUtils";
 import { BasicError } from "../error";
 import { sequenceToEither } from "../utils/either";
 import { imageFormFromFile } from "../Image/form";
 import { checkFileWithExtention, resizeFileTo } from "./file-processing";
 import { imageFromFileTask } from "../Image/fromFile";
 import {
-  RequestFilterItem,
+  ProductListingPageRequest,
+  RequestDynamicFilterItem,
   ResponseFilterItem,
   SearchIdResponse,
+  TextSearchRequest,
 } from "../interfaces/search";
 import { RequestDynamicFilters } from "../campaign/VPRCampaignService";
 
@@ -260,12 +266,12 @@ export const uploadFileFromWidget = (
 export const makeTextSearchRequest = async (
   query: string,
   token: string,
-  dynamicFilters?: RequestFilterItem
+  dynamicFilters?: RequestDynamicFilterItem[]
 ) => {
   state.searchType = "text";
   state.loading = true;
 
-  const body = {
+  const body: TextSearchRequest = {
     query,
     ...(dynamicFilters
       ? {
@@ -275,13 +281,8 @@ export const makeTextSearchRequest = async (
     ...(state.campaignId.length ? { campaign: state.campaignId } : {}),
   };
 
-  const tokenWithBody = sequenceToEither(
-    processBearerToken(token),
-    E.right(JSON.stringify(body))
-  );
-
   return pipe(
-    tokenWithBody,
+    getTokenWithBody<TextSearchRequest>(token, body),
     E.map(([headers, body]): RequestInit => {
       headers.set("Content-Type", "application/json");
       return {
@@ -307,12 +308,20 @@ export const makeTextSearchRequest = async (
   )();
 };
 
+export const makeSearchIdRequest = async (searchId: string, token: string) =>
+  await pipe(
+    makeAuthorizedRequest(token),
+    TE.fromEither,
+    TE.chainW(linkRequest(createLinkfromHref(searchId))),
+    TE.map((response: ValueObject<SearchIdResponse>) => response.value)
+  )();
+
 export const makeSearchQueryRequest = async (
   token: string,
   query: string,
   filters?: RequestDynamicFilters
 ) => {
-  const body = {
+  const body: TextSearchRequest = {
     query,
     ...(filters
       ? {
@@ -321,13 +330,8 @@ export const makeSearchQueryRequest = async (
       : {}),
   };
 
-  const tokenWithBody = sequenceToEither(
-    processBearerToken(token),
-    E.right(JSON.stringify(body))
-  );
-
   return pipe(
-    tokenWithBody,
+    getTokenWithBody<TextSearchRequest>(token, body),
     E.map(([headers, body]): RequestInit => {
       headers.set("Content-Type", "application/json");
       return {
@@ -336,28 +340,48 @@ export const makeSearchQueryRequest = async (
       };
     }),
     TE.fromEither,
-    TE.chain((request) => textSearchSessionClient(request))
+    TE.chain(textSearchSessionClient)
   )();
 };
 
-export const makeSearchIdRequest = async (searchId: string, token: string) =>
-  await pipe(
-    makeAuthorizedRequest(token),
+export const makeProductListingPageRequest = async (
+  token: string,
+  column: string,
+  value: string
+) => {
+  const body = {
+    staticFilters: {
+      included: [
+        {
+          column,
+          values: [value],
+        },
+      ],
+    },
+  };
+
+  return pipe(
+    getTokenWithBody<ProductListingPageRequest>(token, body),
+    E.map(([headers, body]): RequestInit => {
+      headers.set("Content-Type", "application/json");
+      return {
+        headers,
+        body,
+      };
+    }),
     TE.fromEither,
-    TE.chainW(linkRequest(createLinkfromSearchId(searchId))),
-    TE.map((response: ValueObject<SearchIdResponse>) => response.value)
+    TE.chain(productListingPageSessionClient)
   )();
+};
 
 onChange("activeIonLink", async (newLink: Link) => {
   const link = newLink ? newLink : state.resetCategoryLink;
   if (!link) return;
 
-  state.loading = true;
   await pipe(
     makeAuthorizedRequest(state.token),
     TE.fromEither,
     TE.chainW(linkRequest(link)),
-    TE.map(updateState),
     TE.mapLeft((error) => {
       return {
         kind: "network error",

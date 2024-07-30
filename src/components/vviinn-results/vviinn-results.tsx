@@ -21,6 +21,7 @@ import {
 } from "vviinn-tracking-client-ts";
 import { version } from "../../../package.json";
 import {
+  makeProductListingPageRequest,
   makeSearchIdRequest,
   makeSearchQueryRequest,
   searchState,
@@ -29,7 +30,11 @@ import { state } from "../../store/store";
 import { createTrackingApi } from "../../openApi";
 import { BasicEventData, Locale, Recommendation } from "../../components";
 import { campaignTypeNames } from "../../campaign/Campaign";
-import { SearchIdResponse, TextSearchResponse } from "../../interfaces/search";
+import {
+  ProductListingPageResponse,
+  SearchIdResponse,
+  TextSearchResponse,
+} from "../../interfaces/search";
 import {
   ChangedFiltersEvent,
   ChangedFiltersEventData,
@@ -120,6 +125,10 @@ export class VviinnResults {
   @Prop() productDetailsRedirect?: boolean = true;
   /** Query for performing text search */
   @Prop({ mutable: true }) textSearchQuery?: string;
+  /** Category for performing Product Listing Page request*/
+  @Prop() categoryType: string = "product_type";
+  /** Value for performing Product Listing Page request*/
+  @Prop() categoryValue: string = "";
 
   /** True when we use vviinn-results inside the widget */
   /** @internal */
@@ -183,6 +192,7 @@ export class VviinnResults {
 
     this.getResultsBySearchId(this.searchId);
     this.getResultsByTextQuery(this.textSearchQuery);
+    this.getResultsByCategory();
   }
 
   disconnectedCallback() {
@@ -293,6 +303,23 @@ export class VviinnResults {
       (response: TextSearchResponse) => {
         this.recommendations = response?.data.products ?? [];
         this.vviinnFilters.emit(response?.data?.interactions.dynamicFilters);
+      }
+    );
+  }
+
+  private async getResultsByCategory() {
+    if (!this.categoryType || !this.categoryValue) return;
+    state.apiPath = this.apiPath; //FIXME: #36877
+
+    pipe(
+      await makeProductListingPageRequest(
+        this.token,
+        this.categoryType,
+        this.categoryValue
+      ),
+      E.getOrElse(() => null),
+      (response: ProductListingPageResponse) => {
+        this.recommendations = response?.data.products ?? [];
       }
     );
   }

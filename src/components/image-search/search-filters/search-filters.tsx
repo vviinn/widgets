@@ -18,7 +18,7 @@ import {
 import { parseFilters } from "../../../filters/parseFilters";
 import { FilterKind } from "vviinn-tracking-client-ts";
 import {
-  RequestFilterItem,
+  RequestDynamicFilterItem,
   ResponseFilterItem,
 } from "../../../interfaces/search";
 
@@ -41,7 +41,9 @@ export class SearchFilters {
   @State() hideFilters: boolean = true;
 
   @Event() vviinnSelectFilter: EventEmitter<SelectFilterEventData>;
-  @Event() vviinnTextSearchFilterSelected: EventEmitter<RequestFilterItem[]>;
+  @Event() vviinnTextSearchFilterSelected: EventEmitter<
+    RequestDynamicFilterItem[]
+  >;
 
   private filterType: string =
     this.filter?.name ?? this.textSearchFiltersGroup?.column;
@@ -92,7 +94,7 @@ export class SearchFilters {
     this.handleFilterSelection(f);
   }
 
-  private getSelectedTextSearchFilters = (): RequestFilterItem[] =>
+  private getSelectedTextSearchFilters = (): RequestDynamicFilterItem[] =>
     searchState.textSearchFilters
       .filter(({ values }: ResponseFilterItem) =>
         values?.find(({ selected }) => selected)
@@ -102,7 +104,7 @@ export class SearchFilters {
           column: column,
           values: values.filter((v) => v.selected).map((v) => v.value),
         };
-      }) as RequestFilterItem[];
+      }) as RequestDynamicFilterItem[];
 
   private isFilterSelected(filterLink: Link): boolean {
     return this.isCategoriesFilterType()
@@ -112,7 +114,7 @@ export class SearchFilters {
 
   private getTextSearchFilterRequestValue = (
     filter: TextSearchFilterValue
-  ): RequestFilterItem => {
+  ): RequestDynamicFilterItem => {
     return {
       column: this.textSearchFiltersGroup.column,
       values: [filter.value.toString()],
@@ -128,7 +130,7 @@ export class SearchFilters {
   }
 
   private handleTextSearchFilterSelection(filter: TextSearchFilterValue) {
-    let parsedFilters: RequestFilterItem[];
+    let parsedFilters: RequestDynamicFilterItem[];
 
     const selectedFilters = this.getSelectedTextSearchFilters();
     const newFilter = this.getTextSearchFilterRequestValue(filter);
