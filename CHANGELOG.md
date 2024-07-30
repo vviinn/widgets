@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.72.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.71.0...v2.72.0) (2024-07-30)
+
+
+### Features
+
+* Connect vviinn-filters and vviinn-results components ([8da8e6f](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/8da8e6fe0162c1b09ed38112bda6534c3f48887d))
+
 ## [2.71.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.70.0...v2.71.0) (2024-07-30)
 
 
