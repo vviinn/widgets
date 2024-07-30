@@ -260,14 +260,14 @@ export class VviinnExtendedFilters {
                         }`}
                       >
                         {filterOptions &&
-                          filterOptions.map((filter) => {
-                            const hexCode = filter.value.hexCode;
+                          filterOptions.map(({ value, label, active }) => {
+                            const hexCode = value.hexCode;
                             return (
                               <li>
                                 <button
                                   onClick={() =>
                                     this.handleSubFilterSelection(
-                                      filter.value,
+                                      value,
                                       mainFilter
                                     )
                                   }
@@ -275,11 +275,12 @@ export class VviinnExtendedFilters {
                                     hexCode ? "filters-sub-button-color" : ""
                                   } ${this.showActiveOnModalSubButton(
                                     this.requestFilters,
-                                    filter.value
+                                    value
                                   )}`}
                                   style={{ backgroundColor: hexCode }}
+                                  disabled={!active}
                                 >
-                                  <span>{filter.label}</span>
+                                  <span>{label}</span>
                                 </button>
                               </li>
                             );

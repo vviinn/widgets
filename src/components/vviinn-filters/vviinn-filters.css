@@ -72,12 +72,10 @@
 .filters-footer {
   margin: 16px 0;
 }
-
 .sub-filters-wrapper {
   gap: 12px;
   display: flex;
 }
-
 .filters-sub-button {
   color: #000;
 
@@ -93,7 +91,11 @@
 .filters-sub-button.active {
   border-color: #000;
 }
-
+.filters-sub-button:disabled {
+  cursor: not-allowed;
+  background: var(--button-color-button-disabled);
+  color: var(--text-color-text-disabled, rgba(22, 22, 22, 0.25));
+}
 .filters-more-button {
   display: flex;
   padding: 10px;
@@ -223,6 +225,10 @@
 
 .filters-more-modal-button.active {
   color: var(--color-primary-system);
+}
+.filters-more-modal-button:disabled {
+  cursor: not-allowed;
+  color: var(--text-color-text-disabled, rgba(22, 22, 22, 0.25));
 }
 
 .filters-modal-actions {
