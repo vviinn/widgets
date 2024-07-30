@@ -21,6 +21,7 @@ import {
 import { campaignTypeNames } from "../../campaign/Campaign";
 import { Locale } from "../../locale";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
+import { VisualSearchMode } from "../../widget/types";
 
 /**
  * @slot vviinn-teaser-text - Text on widget's main screen.
@@ -76,7 +77,7 @@ export class VviinnVpsButton {
   /** Add style to the button */
   @Prop() addStyle: boolean = false;
   /** Show the onboarding step, start the camera on opening, or skip the onboarding and move to the direct image upload. */
-  @Prop() mode: "modal" | "upload" | "camera" = "modal";
+  @Prop() mode: VisualSearchMode = "modal";
   /** Excluded filter. Example: "brand:Nike;custom_label_0:summer" */
   @Prop() excluded: string = "";
   /** Toggle for opening product link in new tab or not */

@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.70.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.69.0...v2.70.0) (2024-07-29)
+
+
+### Features
+
+* Add image upload button for vviinn-text-search ([f4b0fb5](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/f4b0fb55aca777b828eeb6dc282ef712873f5876))
+
+## [2.69.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.68.0...v2.69.0) (2024-07-29)
+
+
+### Features
+
+* Added color filters in the new style ([7678768](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/76787685c8e8b0abd8f59b775e3241c69b6309b2))
+
+
+### Bug Fixes
+
+* fixed send color filters ([fc1b94c](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/fc1b94c82fdf2c94ccdbd8615be0ffe3764551f1))
+
+## [2.68.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.67.1...v2.68.0) (2024-07-25)
+
+
+### Features
+
+* Separate vviinn-text-search component ([d71eff2](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/d71eff24399541a34c9a1e89c5c3086dff563c77))
+
 ### [2.67.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.67.0...v2.67.1) (2024-07-24)
 
 

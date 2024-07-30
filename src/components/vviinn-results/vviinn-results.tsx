@@ -8,6 +8,7 @@ import {
   EventEmitter,
   Listen,
   State,
+  Watch,
 } from "@stencil/core";
 import * as E from "fp-ts/Either";
 import { v4 as uuidv4 } from "uuid";
@@ -34,6 +35,9 @@ import {
   ProductEventType,
   ResultEventType,
   SearchIdEvent,
+  SearchIdEventData,
+  TextSearchEvent,
+  TextSearchEventData,
 } from "../../recommendation/events";
 import {
   createProductVpsEventByType,
@@ -69,7 +73,7 @@ export class VviinnResults {
   /** Recommended product renders on the page */
   @Event() vviinnProductLoad: EventEmitter<ProductCardEventData>;
 
-  /** Recommended product appears in the viewport. */
+  /** Recommended product appears in the viewport */
   @Event() vviinnProductView: EventEmitter<ProductCardEventData>;
 
   /** Click on the product’s link */
@@ -80,6 +84,12 @@ export class VviinnResults {
 
   /** The search result appears in the viewport */
   @Event() vviinnResultView: EventEmitter<BasicEventData>;
+
+  /** Event emitted when a 'searchId' is received for performing a Visual Search */
+  @Event() vviinnSearchIdReceived: EventEmitter<SearchIdEventData>;
+
+  /** Event emitted when a 'query' is received for performing a Text Search */
+  @Event() vviinnTextSearchStarted: EventEmitter<TextSearchEventData>;
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
@@ -124,8 +134,11 @@ export class VviinnResults {
   private trackingApi: DefaultApi;
 
   private searchIdReceivedHandler = ({ detail }: SearchIdEvent) => {
-    const { searchId } = detail;
-    this.getResultsBySearchId(searchId);
+    this.getResultsBySearchId(detail.searchId);
+  };
+
+  private textSearchStartedHandler = ({ detail }: TextSearchEvent) => {
+    this.getResultsByTextQuery(detail.query);
   };
 
   connectedCallback() {
@@ -140,6 +153,11 @@ export class VviinnResults {
       this.searchIdReceivedHandler
     );
 
+    document.addEventListener(
+      "vviinnTextSearchStarted",
+      this.textSearchStartedHandler
+    );
+
     this.getResultsBySearchId(this.searchId);
     this.getResultsByTextQuery(this.textSearchQuery);
   }
@@ -149,6 +167,16 @@ export class VviinnResults {
       "vviinnSearchIdReceived",
       this.searchIdReceivedHandler
     );
+
+    document.removeEventListener(
+      "vviinnTextSearchStarted",
+      this.textSearchStartedHandler
+    );
+  }
+
+  @Watch("textSearchQuery")
+  watchTextSearchQuery(newQuery: string) {
+    this.getResultsByTextQuery(newQuery);
   }
 
   @Listen("vviinnProductLoad")

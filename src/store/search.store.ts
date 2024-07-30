@@ -186,7 +186,34 @@ export const makeRectangularSearchRequest = async () => {
   );
 };
 
-export const uploadFile = (
+export const uploadFileFromTextSearch = (
+  file: File,
+  token: string,
+  apiPath: string
+) => {
+  const fileForm = imageFormFromFile(file);
+
+  const tokenWithFile = sequenceToEither(
+    processBearerToken(token),
+    E.right(fileForm)
+  );
+
+  return pipe(
+    tokenWithFile,
+    E.map(
+      ([headers, body]): RequestInit => ({
+        headers,
+        body,
+      })
+    ),
+    TE.fromEither,
+    TE.chain((request) =>
+      imageSearchSessionClient(request, null, null, apiPath)
+    )
+  );
+};
+
+export const uploadFileFromWidget = (
   file: File
 ): TE.TaskEither<BasicError<string | Response>, SearchSession> => {
   state.searchType = "image";
@@ -201,12 +228,12 @@ export const uploadFile = (
 
   return pipe(
     tokenWithFile,
-    E.map(([headers, body]): RequestInit => {
-      return {
+    E.map(
+      ([headers, body]): RequestInit => ({
         headers,
         body,
-      };
-    }),
+      })
+    ),
     TE.fromEither,
     TE.chain((request) =>
       imageSearchSessionClient(request, state.campaignId, state.excluded)
@@ -227,6 +254,7 @@ export const uploadFile = (
 
 export const makeTextSearchRequest = async (
   query: string,
+  token: string,
   dynamicFilters?: RequestFilterItem
 ) => {
   state.searchType = "text";
@@ -243,7 +271,7 @@ export const makeTextSearchRequest = async (
   };
 
   const tokenWithBody = sequenceToEither(
-    processBearerToken(state.token),
+    processBearerToken(token),
     E.right(JSON.stringify(body))
   );
 
@@ -334,31 +362,41 @@ const setSelectedImage = (image: HTMLImageElement) => {
   searchState.imageUrl = O.some(image.src);
 };
 
-export const processSelectedFile = async (file: File) => {
+export const processSelectedFile = async (
+  file: File,
+  fromTextSearch: boolean = false,
+  token?: string,
+  apiPath?: string
+) => {
   const originFile = checkFileWithExtention(file);
 
   const fileResizer = resizeFileTo(RESIZED_IMAGE_WIDTH);
-  const hiResFileResizer = resizeFileTo(HI_RES_RESIZED_IMAGE_WIDTH);
-
   const resizeFileTask = pipe(
     originFile,
     TE.fromEither,
     TE.chainTaskK(fileResizer)
   );
 
-  const resizeHiResFileTask = pipe(
-    originFile,
-    TE.fromEither,
-    TE.chainTaskK(hiResFileResizer)
-  );
+  if (fromTextSearch)
+    return await pipe(
+      resizeFileTask,
+      TE.chain(() => uploadFileFromTextSearch(file, token, apiPath))
+    )();
 
-  const session = await pipe(resizeFileTask, TE.chain(uploadFile))();
+  const session = await pipe(resizeFileTask, TE.chain(uploadFileFromWidget))();
 
   await pipe(
     resizeFileTask,
     TE.chainTaskK(imageFromFileTask),
     TE.map(setSelectedImage)
   )();
+
+  const hiResFileResizer = resizeFileTo(HI_RES_RESIZED_IMAGE_WIDTH);
+  const resizeHiResFileTask = pipe(
+    originFile,
+    TE.fromEither,
+    TE.chainTaskK(hiResFileResizer)
+  );
 
   const resizedHiResFile = await resizeHiResFileTask();
 
