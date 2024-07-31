@@ -60,3 +60,11 @@ export const createRequestFromMethod = (
 export const createInitPostRequest: E.Either<any, RequestInit> = E.right(
   createBasicRequest("POST")
 );
+
+export const setBodyAndHeaders = E.map(([headers, body]): RequestInit => {
+  headers.set("Content-Type", "application/json");
+  return {
+    headers,
+    body,
+  };
+});

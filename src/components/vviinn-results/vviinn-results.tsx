@@ -125,10 +125,12 @@ export class VviinnResults {
   @Prop() productDetailsRedirect?: boolean = true;
   /** Query for performing text search */
   @Prop({ mutable: true }) textSearchQuery?: string;
-  /** Category for performing Product Listing Page request*/
+  /** Category for performing Product Listing Page request */
   @Prop() categoryType: string = "product_type";
-  /** Value for performing Product Listing Page request*/
-  @Prop() categoryValue: string = "";
+  /** Value for performing Product Listing Page request */
+  @Prop() categoryValue: string;
+  /** Number of results displayed for text search and product page (less or equal to the value, set in the campaign) */
+  @Prop() resultsCount?: number;
 
   /** True when we use vviinn-results inside the widget */
   /** @internal */
@@ -282,7 +284,7 @@ export class VviinnResults {
     if (!searchId) return;
     state.apiPath = this.apiPath; //FIXME: #36877
     pipe(
-      await makeSearchIdRequest(searchId, this.token),
+      await makeSearchIdRequest(this.token, searchId),
       E.getOrElse(() => []),
       (results: SearchIdResponse) => {
         this.recommendations = results;
@@ -298,7 +300,12 @@ export class VviinnResults {
     state.apiPath = this.apiPath; //FIXME: #36877
 
     pipe(
-      await makeSearchQueryRequest(this.token, query, filters),
+      await makeSearchQueryRequest(
+        this.token,
+        query,
+        this.resultsCount,
+        filters
+      ),
       E.getOrElse(() => null),
       (response: TextSearchResponse) => {
         this.recommendations = response?.data.products ?? [];
@@ -315,7 +322,8 @@ export class VviinnResults {
       await makeProductListingPageRequest(
         this.token,
         this.categoryType,
-        this.categoryValue
+        this.categoryValue,
+        this.resultsCount
       ),
       E.getOrElse(() => null),
       (response: ProductListingPageResponse) => {

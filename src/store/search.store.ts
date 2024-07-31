@@ -43,6 +43,7 @@ import {
   TextSearchRequest,
 } from "../interfaces/search";
 import { RequestDynamicFilters } from "../campaign/VPRCampaignService";
+import { setBodyAndHeaders } from "../network/utils";
 
 const RESIZED_IMAGE_WIDTH = 500;
 const HI_RES_RESIZED_IMAGE_WIDTH = 1024;
@@ -283,13 +284,7 @@ export const makeTextSearchRequest = async (
 
   return pipe(
     getTokenWithBody<TextSearchRequest>(token, body),
-    E.map(([headers, body]): RequestInit => {
-      headers.set("Content-Type", "application/json");
-      return {
-        headers,
-        body,
-      };
-    }),
+    setBodyAndHeaders,
     TE.fromEither,
     TE.chain((request) => textSearchSessionClient(request)),
     TE.map((sessionResponse) => {
@@ -308,7 +303,7 @@ export const makeTextSearchRequest = async (
   )();
 };
 
-export const makeSearchIdRequest = async (searchId: string, token: string) =>
+export const makeSearchIdRequest = async (token: string, searchId: string) =>
   await pipe(
     makeAuthorizedRequest(token),
     TE.fromEither,
@@ -319,10 +314,12 @@ export const makeSearchIdRequest = async (searchId: string, token: string) =>
 export const makeSearchQueryRequest = async (
   token: string,
   query: string,
+  resultsCount?: number,
   filters?: RequestDynamicFilters
 ) => {
   const body: TextSearchRequest = {
     query,
+    ...(resultsCount ? { resultsCount } : {}),
     ...(filters
       ? {
           dynamicFilters: filters,
@@ -332,13 +329,7 @@ export const makeSearchQueryRequest = async (
 
   return pipe(
     getTokenWithBody<TextSearchRequest>(token, body),
-    E.map(([headers, body]): RequestInit => {
-      headers.set("Content-Type", "application/json");
-      return {
-        headers,
-        body,
-      };
-    }),
+    setBodyAndHeaders,
     TE.fromEither,
     TE.chain(textSearchSessionClient)
   )();
@@ -347,9 +338,11 @@ export const makeSearchQueryRequest = async (
 export const makeProductListingPageRequest = async (
   token: string,
   column: string,
-  value: string
+  value: string,
+  resultsCount?: number
 ) => {
-  const body = {
+  const body: ProductListingPageRequest = {
+    ...(resultsCount ? { resultsCount } : {}),
     staticFilters: {
       included: [
         {
@@ -362,13 +355,7 @@ export const makeProductListingPageRequest = async (
 
   return pipe(
     getTokenWithBody<ProductListingPageRequest>(token, body),
-    E.map(([headers, body]): RequestInit => {
-      headers.set("Content-Type", "application/json");
-      return {
-        headers,
-        body,
-      };
-    }),
+    setBodyAndHeaders,
     TE.fromEither,
     TE.chain(productListingPageSessionClient)
   )();
