@@ -124,12 +124,12 @@ export class VviinnResults {
   /** Toggle for redirection to PDP on product's click */
   @Prop() productDetailsRedirect?: boolean = true;
   /** Query for performing text search */
-  @Prop({ mutable: true }) textSearchQuery?: string;
+  @Prop() textSearchQuery?: string;
   /** Category for performing Product Listing Page request */
   @Prop() categoryType: string = "product_type";
   /** Value for performing Product Listing Page request */
   @Prop() categoryValue: string;
-  /** Number of results displayed for text search and product page (less or equal to the value, set in the campaign) */
+  /** Number of results displayed for text search and product listing page (less or equal to the value, set in the campaign) */
   @Prop() resultsCount?: number;
 
   /** True when we use vviinn-results inside the widget */
@@ -154,6 +154,7 @@ export class VviinnResults {
   @Prop() resetState?: () => void;
 
   @State() recommendations: Recommendation[] = [];
+  @State() innerTextSearchQuery: string;
 
   private trackingApi: DefaultApi;
 
@@ -163,11 +164,11 @@ export class VviinnResults {
 
   private textSearchStartedHandler = ({ detail }: TextSearchEvent) => {
     this.getResultsByTextQuery(detail.query);
-    this.textSearchQuery = detail.query;
+    this.innerTextSearchQuery = detail.query;
   };
 
   private filtersChangedHandler = ({ detail }: ChangedFiltersEvent) => {
-    this.getResultsByTextQuery(this.textSearchQuery, detail.filters);
+    this.getResultsByTextQuery(this.innerTextSearchQuery, detail.filters);
   };
 
   connectedCallback() {

@@ -28,7 +28,7 @@ import {
 } from "../../recommendation/events";
 
 /**
- * * @part filters - Wrapper itself.
+ * @part filters - Wrapper itself.
  */
 @Component({
   tag: "vviinn-extended-filters",
