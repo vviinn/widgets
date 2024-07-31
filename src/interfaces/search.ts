@@ -14,11 +14,8 @@ export interface SearchInterfaces {
 export type TextSearchRequest = SearchInterfaces["TextSearchRequest"];
 export type TextSearchResponse = SearchInterfaces["TextSearchResponse"];
 
-// FIXME: Fis generated types for product-listing-page-request
-export type ProductListingPageRequest = {
-  resultsCount?: components["schemas"]["resultsCount"];
-  staticFilters?: components["schemas"]["request-static-filters"];
-};
+export type ProductListingPageRequest =
+  SearchInterfaces["ProductListingPageRequest"];
 
 export type ProductListingPageResponse =
   SearchInterfaces["ProductListingPageResponse"];
