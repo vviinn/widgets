@@ -68,6 +68,12 @@
   --stroke-width-200: 8px;
   --stroke-width-300: 12px;
 
+  /* Filters */
+  --filter-blur-none: 0px;
+  --filter-blur-100: 8px;
+  --filter-blur-150: 12px;
+  --filter-blur-200: 16px;
+
   /* Colors. Core */
   --color-bg-base: #ffffff;
   --color-bg-inverse: #161616;
