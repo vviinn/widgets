@@ -17,7 +17,7 @@ import * as O from "fp-ts/lib/Option";
 import i18next from "i18next";
 
 import { searchState } from "../../store/search.store";
-import { Recommendation } from "../../recommendation/recommendation";
+import { Recommendation } from "../../recommendation";
 import {
   ImageProps,
   Linked,

@@ -1,4 +1,4 @@
-import { Recommendation } from "../recommendation/recommendation";
+import { Recommendation } from "../recommendation";
 
 export interface ProductAnalytics {
   sendImpression: (product: Recommendation) => undefined;

@@ -4,7 +4,7 @@ import { Link } from "../network/ion/Link";
 import { Form } from "../network/ion/Form";
 import { makeRequest } from "../network/request";
 import { createInitPostRequest, getApiPath } from "../network/utils";
-import { Recommendation } from "../recommendation/recommendation";
+import { Recommendation } from "../recommendation";
 import * as TE from "fp-ts/TaskEither";
 import * as E from "fp-ts/Either";
 import * as O from "fp-ts/Option";

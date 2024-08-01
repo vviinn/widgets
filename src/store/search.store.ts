@@ -3,7 +3,7 @@ import * as O from "fp-ts/lib/Option";
 import * as E from "fp-ts/Either";
 import * as TE from "fp-ts/TaskEither";
 import { pipe } from "fp-ts/function";
-import { Recommendation } from "../recommendation/recommendation";
+import { Recommendation } from "../recommendation";
 import {
   readFilters,
   SearchSession,

@@ -26,7 +26,7 @@ import { CampaignName, campaignTypeNames } from "../../campaign/Campaign";
 import { getRecommendationsService } from "../../campaign/CampaignService";
 import { searchState } from "../../store/search.store";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
-import { Recommendation } from "../../recommendation/recommendation";
+import { Recommendation } from "../../recommendation";
 import { SlotSkeleton, slotChangeListener } from "../customized-slots";
 
 import {

@@ -5,6 +5,9 @@ import {
 } from "../interfaces/recommendation";
 
 import { RequestDynamicFilters } from "../campaign/VPRCampaignService";
+import { SearchInterfaces } from "../interfaces/search";
+
+export type Recommendation = SearchInterfaces["ResponseProductItem"];
 
 type GetRecommendationsBodyProps = {
   productId: string;
