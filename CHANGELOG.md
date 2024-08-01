@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.72.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.72.0...v2.72.1) (2024-08-01)
+
+
+### Bug Fixes
+
+* Fixed color filter ([e3a281c](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/e3a281c91c256cb515df36393e17cb9ad0b231e7))
+
 ## [2.72.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.71.0...v2.72.0) (2024-07-30)
 
 
