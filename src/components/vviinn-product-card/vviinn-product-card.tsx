@@ -331,6 +331,7 @@ export class VviinnProductCard {
                   part="discount-label"
                 >{`-${this.currentDiscountPercentage}%`}</div>
               )}
+            {/* <vviinn-energy-label></vviinn-energy-label> */}
           </Fragment>
         )}
 

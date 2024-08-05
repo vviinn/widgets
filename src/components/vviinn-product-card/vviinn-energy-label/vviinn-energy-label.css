@@ -1,0 +1,54 @@
+@import "../../../variables.css";
+
+:host {
+  display: block;
+  position: relative;
+  box-sizing: border-box;
+  letter-spacing: 0;
+  display: flex;
+}
+
+.energy-efficiency-container {
+  display: flex;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  left: 14px;
+  top: 0;
+  height: 100%;
+  width: 36px;
+}
+
+.energy-efficiency-container > span {
+  color: #fff;
+  text-align: center;
+  /* -webkit-text-stroke: 1px var(--color-brand-100, #000); */
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 0;
+}
+
+.range-block {
+  display: flex;
+  box-sizing: border-box;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 12px;
+  height: 38px;
+  background-color: white;
+  padding: 2px;
+  position: absolute;
+  left: 1px;
+  top: 1px;
+}
+
+.range-block > span {
+  color: var(--color-brand-100, #000);
+  text-align: center;
+  font-family: var(--font-family);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+}
