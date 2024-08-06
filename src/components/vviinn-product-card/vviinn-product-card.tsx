@@ -42,6 +42,7 @@ import { slotChangeListener } from "../customized-slots";
 import { BasketIcon, CheckCircleIcon, UpdateIcon } from "../vviinn-icons";
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
 import { generateRandomNumber } from "../../utils/number";
+import { EnergyEfficiencyClass } from "../../interfaces/recommendation";
 
 /**
  * @part brand - product brand.
@@ -97,6 +98,9 @@ export class VviinnProductCard {
   @Prop() appliedDiscountPercentage?: number;
   @Prop() currentDiscountPercentage?: number;
   @Prop() isSourceProduct: boolean = false;
+  @Prop() energyEfficiencyClass: EnergyEfficiencyClass;
+  @Prop() minEnergyEfficiencyClass: EnergyEfficiencyClass;
+  @Prop() maxEnergyEfficiencyClass: EnergyEfficiencyClass;
 
   /** @internal */
   @Prop() campaignTypeId: CampaignTypeId;
@@ -292,7 +296,7 @@ export class VviinnProductCard {
           animated: this.isTransitioning,
           "set-mode": this.isSetMode,
         }}
-        exportparts="brand, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, discount-label, discount-percentage, title, basket-button, update-button-item"
+        exportparts="brand, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, discount-label, discount-percentage, title, basket-button, update-button-item, energy-label"
       >
         <Linked deeplink={this.deeplink} part="image-link">
           {this.renderImage()}
@@ -313,9 +317,14 @@ export class VviinnProductCard {
             <span class="brand" part="brand">
               {this.brand}
             </span>
-            <span class="type" part="type">
-              {this.productType}
-            </span>
+
+            <vviinn-energy-label
+              energyEfficiencyClass={this.energyEfficiencyClass}
+              minEnergyEfficiencyClass={this.minEnergyEfficiencyClass}
+              maxEnergyEfficiencyClass={this.maxEnergyEfficiencyClass}
+              productType={this.productType}
+            ></vviinn-energy-label>
+
             <Price
               prefix={this.pricePrefix}
               currency={this.currency}
@@ -331,7 +340,6 @@ export class VviinnProductCard {
                   part="discount-label"
                 >{`-${this.currentDiscountPercentage}%`}</div>
               )}
-            {/* <vviinn-energy-label></vviinn-energy-label> */}
           </Fragment>
         )}
 

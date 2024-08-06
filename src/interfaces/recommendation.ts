@@ -20,8 +20,11 @@ export interface Interfaces {
     components["schemas"]["full-color-filter-response"];
   DynamicFilterValueItem: components["schemas"]["request-dynamic-filter-item"];
   RequestDynamicFilters: components["schemas"]["request-dynamic-filters"];
+
+  EnergyEfficiencyClass: components["schemas"]["energy-efficiency-class"];
 }
 
 export type SimilarProductsRequest = Interfaces["SimilarProductsRequest"];
 export type CrossSellingRequest = Interfaces["CrossSellingRequest"];
 export type RequestStaticFilters = Interfaces["RequestStaticFilters"];
+export type EnergyEfficiencyClass = Interfaces["EnergyEfficiencyClass"];
