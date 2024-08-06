@@ -71,7 +71,8 @@ vviinn-product-card::part(image) {
 
 vviinn-product-card::part(price-container),
 vviinn-product-card::part(deeplink),
-vviinn-product-card::part(title) {
+vviinn-product-card::part(title),
+vviinn-product-card::part(energy-label) {
   align-self: start;
 }
 
