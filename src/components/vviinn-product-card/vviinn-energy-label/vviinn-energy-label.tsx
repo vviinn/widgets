@@ -12,15 +12,27 @@ export class VviinnEnergyLabel {
   @Prop() minEnergyEfficiencyClass: EnergyEfficiencyClass;
   @Prop() maxEnergyEfficiencyClass: EnergyEfficiencyClass;
   @Prop() productType: string;
+
+  private energyLabelIcon: SVGElement | null = null;
+
+  connectedCallback() {
+    this.energyLabelIcon = getEnergyLabel(
+      this.energyEfficiencyClass,
+      this.minEnergyEfficiencyClass,
+      this.maxEnergyEfficiencyClass
+    );
+  }
+
   render() {
     return (
-      <Host part="energy-label">
+      <Host
+        part="energy-label"
+        class={{
+          hidden: !this.energyLabelIcon,
+        }}
+      >
         <div class="container">
-          {getEnergyLabel(
-            this.energyEfficiencyClass,
-            this.minEnergyEfficiencyClass,
-            this.maxEnergyEfficiencyClass
-          )}
+          {this.energyLabelIcon}
           <span class="product-type">{this.productType}</span>
         </div>
       </Host>
