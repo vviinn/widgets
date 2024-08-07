@@ -21,6 +21,7 @@ import {
 } from "vviinn-tracking-client-ts";
 import { version } from "../../../package.json";
 import {
+  makeProductListingPageRequest,
   makeSearchIdRequest,
   makeSearchQueryRequest,
   searchState,
@@ -29,7 +30,11 @@ import { state } from "../../store/store";
 import { createTrackingApi } from "../../openApi";
 import { BasicEventData, Locale, Recommendation } from "../../components";
 import { campaignTypeNames } from "../../campaign/Campaign";
-import { SearchIdResponse, TextSearchResponse } from "../../interfaces/search";
+import {
+  ProductListingPageResponse,
+  SearchIdResponse,
+  TextSearchResponse,
+} from "../../interfaces/search";
 import {
   ChangedFiltersEvent,
   ChangedFiltersEventData,
@@ -121,7 +126,14 @@ export class VviinnResults {
   /** Toggle for redirection to PDP on product's click */
   @Prop() productDetailsRedirect?: boolean = true;
   /** Query for performing text search */
-  @Prop({ mutable: true }) textSearchQuery?: string;
+  @Prop() textSearchQuery?: string;
+  /** Column for performing Product Listing Page request */
+  @Prop() filterColumn: string = "product_type";
+  /** Value for performing Product Listing Page request */
+  @Prop() filterValue: string;
+  /** Number of results displayed for text search and product listing page (less or equal to the value, set in the campaign) */
+  @Prop() resultsCount?: number;
+
   /** True when we use vviinn-results inside the widget */
   @Prop() showInWidget?: boolean = false;
 
@@ -141,6 +153,7 @@ export class VviinnResults {
   @Prop() resetState?: () => void;
 
   @State() recommendations: Recommendation[] = [];
+  @State() innerTextSearchQuery: string;
 
   private trackingApi: DefaultApi;
 
@@ -150,11 +163,14 @@ export class VviinnResults {
 
   private textSearchStartedHandler = ({ detail }: TextSearchEvent) => {
     this.getResultsByTextQuery(detail.query);
-    this.textSearchQuery = detail.query;
+    this.innerTextSearchQuery = detail.query;
   };
 
   private filtersChangedHandler = ({ detail }: ChangedFiltersEvent) => {
-    this.getResultsByTextQuery(this.textSearchQuery, detail.filters);
+    this.getResultsByTextQuery(
+      this.textSearchQuery ?? this.innerTextSearchQuery,
+      detail.filters
+    );
   };
 
   connectedCallback() {
@@ -181,6 +197,7 @@ export class VviinnResults {
 
     this.getResultsBySearchId(this.searchId);
     this.getResultsByTextQuery(this.textSearchQuery);
+    this.getResultsByCategory();
   }
 
   disconnectedCallback() {
@@ -270,7 +287,7 @@ export class VviinnResults {
     if (!searchId) return;
     state.apiPath = this.apiPath; //FIXME: #36877
     pipe(
-      await makeSearchIdRequest(searchId, this.token),
+      await makeSearchIdRequest(this.token, searchId),
       E.getOrElse(() => []),
       (results: SearchIdResponse) => {
         this.recommendations = results;
@@ -286,11 +303,34 @@ export class VviinnResults {
     state.apiPath = this.apiPath; //FIXME: #36877
 
     pipe(
-      await makeSearchQueryRequest(this.token, query, filters),
+      await makeSearchQueryRequest(
+        this.token,
+        query,
+        this.resultsCount,
+        filters
+      ),
       E.getOrElse(() => null),
       (response: TextSearchResponse) => {
         this.recommendations = response?.data.products ?? [];
         this.vviinnFilters.emit(response?.data?.interactions.dynamicFilters);
+      }
+    );
+  }
+
+  private async getResultsByCategory() {
+    if (!this.filterColumn || !this.filterValue) return;
+    state.apiPath = this.apiPath; //FIXME: #36877
+
+    pipe(
+      await makeProductListingPageRequest(
+        this.token,
+        this.filterColumn,
+        this.filterValue,
+        this.resultsCount
+      ),
+      E.getOrElse(() => null),
+      (response: ProductListingPageResponse) => {
+        this.recommendations = response?.data.products ?? [];
       }
     );
   }

@@ -3,7 +3,7 @@ import * as O from "fp-ts/lib/Option";
 import * as E from "fp-ts/Either";
 import * as TE from "fp-ts/TaskEither";
 import { pipe } from "fp-ts/function";
-import { Recommendation } from "../recommendation/recommendation";
+import { Recommendation } from "../interfaces/recommendation";
 import {
   readFilters,
   SearchSession,
@@ -12,6 +12,7 @@ import {
   imageSearchSessionClient,
   textSearchSessionClient,
   SearchType,
+  productListingPageSessionClient,
 } from "../searchSession/searchSession";
 import { foldValueObject, ValueObject } from "../network/ion/ValueObject";
 import {
@@ -19,24 +20,30 @@ import {
   linkRequest,
   getLink,
   extractHrefValue,
-  createLinkfromSearchId,
+  createLinkfromHref,
 } from "../network/ion/Link";
 import { divideOnSized, Rectangle } from "../geometry/Rectangle";
 import { Form, formRequest } from "../network/ion/Form";
 import * as F from "../network/ion/File";
 import { sequenceToOption } from "../utils/option/option";
-import { processBearerToken } from "../utils/token/tokenUtils";
+import {
+  getTokenWithBody,
+  processBearerToken,
+} from "../utils/token/tokenUtils";
 import { BasicError } from "../error";
 import { sequenceToEither } from "../utils/either";
 import { imageFormFromFile } from "../Image/form";
 import { checkFileWithExtention, resizeFileTo } from "./file-processing";
 import { imageFromFileTask } from "../Image/fromFile";
 import {
-  RequestFilterItem,
+  ProductListingPageRequest,
+  RequestDynamicFilterItem,
   ResponseFilterItem,
   SearchIdResponse,
+  TextSearchRequest,
 } from "../interfaces/search";
 import { RequestDynamicFilters } from "../campaign/VPRCampaignService";
+import { setBodyAndHeaders } from "../network/utils";
 
 const RESIZED_IMAGE_WIDTH = 500;
 const HI_RES_RESIZED_IMAGE_WIDTH = 1024;
@@ -260,12 +267,12 @@ export const uploadFileFromWidget = (
 export const makeTextSearchRequest = async (
   query: string,
   token: string,
-  dynamicFilters?: RequestFilterItem
+  dynamicFilters?: RequestDynamicFilterItem[]
 ) => {
   state.searchType = "text";
   state.loading = true;
 
-  const body = {
+  const body: TextSearchRequest = {
     query,
     ...(dynamicFilters
       ? {
@@ -275,20 +282,9 @@ export const makeTextSearchRequest = async (
     ...(state.campaignId.length ? { campaign: state.campaignId } : {}),
   };
 
-  const tokenWithBody = sequenceToEither(
-    processBearerToken(token),
-    E.right(JSON.stringify(body))
-  );
-
   return pipe(
-    tokenWithBody,
-    E.map(([headers, body]): RequestInit => {
-      headers.set("Content-Type", "application/json");
-      return {
-        headers,
-        body,
-      };
-    }),
+    getTokenWithBody<TextSearchRequest>(token, body),
+    setBodyAndHeaders,
     TE.fromEither,
     TE.chain((request) => textSearchSessionClient(request)),
     TE.map((sessionResponse) => {
@@ -307,13 +303,23 @@ export const makeTextSearchRequest = async (
   )();
 };
 
+export const makeSearchIdRequest = async (token: string, searchId: string) =>
+  await pipe(
+    makeAuthorizedRequest(token),
+    TE.fromEither,
+    TE.chainW(linkRequest(createLinkfromHref(searchId))),
+    TE.map((response: ValueObject<SearchIdResponse>) => response.value)
+  )();
+
 export const makeSearchQueryRequest = async (
   token: string,
   query: string,
+  resultsCount?: number,
   filters?: RequestDynamicFilters
 ) => {
-  const body = {
+  const body: TextSearchRequest = {
     query,
+    ...(resultsCount ? { resultsCount } : {}),
     ...(filters
       ? {
           dynamicFilters: filters,
@@ -321,43 +327,48 @@ export const makeSearchQueryRequest = async (
       : {}),
   };
 
-  const tokenWithBody = sequenceToEither(
-    processBearerToken(token),
-    E.right(JSON.stringify(body))
-  );
-
   return pipe(
-    tokenWithBody,
-    E.map(([headers, body]): RequestInit => {
-      headers.set("Content-Type", "application/json");
-      return {
-        headers,
-        body,
-      };
-    }),
+    getTokenWithBody<TextSearchRequest>(token, body),
+    setBodyAndHeaders,
     TE.fromEither,
-    TE.chain((request) => textSearchSessionClient(request))
+    TE.chain(textSearchSessionClient)
   )();
 };
 
-export const makeSearchIdRequest = async (searchId: string, token: string) =>
-  await pipe(
-    makeAuthorizedRequest(token),
+export const makeProductListingPageRequest = async (
+  token: string,
+  column: string,
+  value: string,
+  resultsCount?: number
+) => {
+  const body: ProductListingPageRequest = {
+    ...(resultsCount ? { resultsCount } : {}),
+    staticFilters: {
+      included: [
+        {
+          column,
+          values: [value],
+        },
+      ],
+    },
+  };
+
+  return pipe(
+    getTokenWithBody<ProductListingPageRequest>(token, body),
+    setBodyAndHeaders,
     TE.fromEither,
-    TE.chainW(linkRequest(createLinkfromSearchId(searchId))),
-    TE.map((response: ValueObject<SearchIdResponse>) => response.value)
+    TE.chain(productListingPageSessionClient)
   )();
+};
 
 onChange("activeIonLink", async (newLink: Link) => {
   const link = newLink ? newLink : state.resetCategoryLink;
   if (!link) return;
 
-  state.loading = true;
   await pipe(
     makeAuthorizedRequest(state.token),
     TE.fromEither,
     TE.chainW(linkRequest(link)),
-    TE.map(updateState),
     TE.mapLeft((error) => {
       return {
         kind: "network error",
