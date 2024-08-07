@@ -4,7 +4,7 @@ import { Link } from "../network/ion/Link";
 import { Form } from "../network/ion/Form";
 import { makeRequest } from "../network/request";
 import { createInitPostRequest, getApiPath } from "../network/utils";
-import { Recommendation } from "../recommendation/recommendation";
+import { Recommendation } from "../interfaces/recommendation";
 import * as TE from "fp-ts/TaskEither";
 import * as E from "fp-ts/Either";
 import * as O from "fp-ts/Option";
@@ -13,7 +13,10 @@ import { Eq } from "fp-ts/lib/Eq";
 import { BasicError, emptyApiPathError } from "../error";
 import { sequenceToEither } from "../utils/either";
 import { arrayToQueryString } from "../utils/collections/collectionsUtils";
-import { TextSearchResponse } from "../interfaces/search";
+import {
+  ProductListingPageResponse,
+  TextSearchResponse,
+} from "../interfaces/search";
 
 export type SearchType = "text" | "image";
 
@@ -124,5 +127,17 @@ export const textSearchSessionClient = (
     sequenceToEither(getApiPath(), createInitPostRequest),
     TE.fromEither,
     TE.chainW(makeRequest<TextSearchResponse>(requestUrl, initialData))
+  );
+};
+
+export const productListingPageSessionClient = (
+  initialData: RequestInit
+): TE.TaskEither<BasicError<Response | string>, ProductListingPageResponse> => {
+  const requestUrl = "product-listing-page";
+
+  return pipe(
+    sequenceToEither(getApiPath(), createInitPostRequest),
+    TE.fromEither,
+    TE.chainW(makeRequest<ProductListingPageResponse>(requestUrl, initialData))
   );
 };

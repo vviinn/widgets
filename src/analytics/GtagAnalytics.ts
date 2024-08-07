@@ -1,8 +1,8 @@
 import { ProductAnalytics } from "./ProductAnalytics";
-import { SearchInterfaces } from "../interfaces/search";
+import { Recommendation } from "../interfaces/recommendation";
 
 export class GtagAnalytics implements ProductAnalytics {
-  sendImpression(product: SearchInterfaces["VisualProductSearch"]) {
+  sendImpression(product: Recommendation) {
     if (!product) return undefined;
     gtag("event", "view_item_list", {
       items: [
@@ -22,7 +22,7 @@ export class GtagAnalytics implements ProductAnalytics {
     return undefined;
   }
 
-  sendClick(product: SearchInterfaces["VisualProductSearch"]) {
+  sendClick(product: Recommendation) {
     gtag("event", "select_content", {
       content_type: "product",
       items: [

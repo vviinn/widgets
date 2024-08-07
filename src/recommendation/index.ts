@@ -47,7 +47,7 @@ export const getRecommendationsBody = ({
 
   return {
     productId,
-    dynamicFilters: dynamicFilters ?? undefined,
+    ...(dynamicFilters.length ? { dynamicFilters } : {}),
     ...(campaigns.length ? { campaigns: parseCampaigns(campaigns) } : {}),
     ...(Object.keys(staticFilters).length ? { staticFilters } : {}),
   };
