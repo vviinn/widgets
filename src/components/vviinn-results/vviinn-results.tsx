@@ -168,7 +168,10 @@ export class VviinnResults {
   };
 
   private filtersChangedHandler = ({ detail }: ChangedFiltersEvent) => {
-    this.getResultsByTextQuery(this.innerTextSearchQuery, detail.filters);
+    this.getResultsByTextQuery(
+      this.textSearchQuery ?? this.innerTextSearchQuery,
+      detail.filters
+    );
   };
 
   connectedCallback() {
