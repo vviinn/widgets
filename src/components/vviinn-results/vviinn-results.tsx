@@ -108,6 +108,8 @@ export class VviinnResults {
   @Prop() token: string;
   /** Search ID for results request */
   @Prop() searchId?: string;
+  /** uiSessionId from vps-widget */
+  @Prop({ mutable: true }) uiSessionId?: string;
   /** Resolution width of an image in the product card */
   @Prop() imageResolutionWidth?: number = 250;
   /** The currency sign is displayed after the price */
@@ -120,21 +122,17 @@ export class VviinnResults {
   @Prop() productDetailsRedirect?: boolean = true;
   /** Query for performing text search */
   @Prop({ mutable: true }) textSearchQuery?: string;
-
   /** True when we use vviinn-results inside the widget */
+  @Prop() showInWidget?: boolean = false;
+
   /** @internal */
-  @Prop() showingInWidget?: boolean = false;
-  /** uiSessionId from vps-widget */
-  /** @internal */
-  @Prop({ mutable: true }) uiSessionId?: string;
+  @Prop() apiPath?: string = "https://api.vviinn.com";
   /** Element Id, passed from vps-button */
   /** @internal */
   @Prop() buttonElementId?: string;
   /** Element Id, passed from vps-widget */
   /** @internal */
   @Prop() widgetElementId?: string;
-  /** @internal */
-  @Prop() apiPath?: string = "https://api.vviinn.com";
   /** @internal */
   @Prop() showAspectRatioError?: boolean;
   /** @internal */
@@ -284,7 +282,7 @@ export class VviinnResults {
     query?: string,
     filters?: RequestDynamicFilters
   ) {
-    if (this.showingInWidget || query === undefined) return;
+    if (this.showInWidget || query === undefined) return;
     state.apiPath = this.apiPath; //FIXME: #36877
 
     pipe(
@@ -412,7 +410,7 @@ export class VviinnResults {
       <Host
         id="results-block"
         class={{
-          "widget-results": this.showingInWidget,
+          "widget-results": this.showInWidget,
         }}
         exportparts="brand, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, product-card"
       >
@@ -422,7 +420,7 @@ export class VviinnResults {
             hidden:
               this.recommendations.length > 0 ||
               searchState.results.length > 0 ||
-              !this.showingInWidget,
+              !this.showInWidget,
           }}
         >
           <vviinn-empty-results handler={() => this?.resetState()} />
@@ -431,7 +429,7 @@ export class VviinnResults {
         <div
           class={{
             "nothing-found": true,
-            hidden: !this.showAspectRatioError || !this.showingInWidget,
+            hidden: !this.showAspectRatioError || !this.showInWidget,
           }}
         >
           <vviinn-wrong-aspect-ratio handler={() => this?.resetState()} />
@@ -447,7 +445,7 @@ export class VviinnResults {
           }}
         >
           {this.renderResults(
-            this.showingInWidget ? searchState.results : this.recommendations
+            this.showInWidget ? searchState.results : this.recommendations
           )}
         </div>
       </Host>
