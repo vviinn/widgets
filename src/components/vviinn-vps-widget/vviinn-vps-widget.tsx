@@ -47,7 +47,8 @@ import { Locale } from "../../locale";
 import { CameraActionIcon, UploadActionIcon } from "../vviinn-icons";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 import { videoStreamSettings } from "../../video/settings";
-import { Recommendation, RequestDynamicFilterItem } from "../..";
+import { Recommendation } from "../../interfaces/recommendation";
+import { RequestDynamicFilterItem } from "../../interfaces/search";
 import { checkDeviceType } from "../../helpers";
 import { UploadSource, VisualSearchMode } from "../../widget/types";
 

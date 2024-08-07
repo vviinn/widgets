@@ -1,6 +1,8 @@
 import { components } from "./generated";
 
 export interface Interfaces {
+  Recommendation: components["schemas"]["response-product-item"];
+
   VisualProductSearch: components["schemas"]["response-product-item"];
   VisualProductRecommendations: components["schemas"]["visual-product-recommendations"];
 
@@ -25,3 +27,4 @@ export interface Interfaces {
 export type SimilarProductsRequest = Interfaces["SimilarProductsRequest"];
 export type CrossSellingRequest = Interfaces["CrossSellingRequest"];
 export type RequestStaticFilters = Interfaces["RequestStaticFilters"];
+export type Recommendation = Interfaces["Recommendation"];

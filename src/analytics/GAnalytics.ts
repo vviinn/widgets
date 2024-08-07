@@ -1,12 +1,12 @@
 import { ProductAnalytics } from "./ProductAnalytics";
-import { SearchInterfaces } from "../interfaces/search";
+import { Recommendation } from "../interfaces/recommendation";
 
 export class GAnalytics implements ProductAnalytics {
   constructor() {
     ga("require", "ec");
   }
 
-  convertProduct(product: SearchInterfaces["VisualProductSearch"]) {
+  convertProduct(product: Recommendation) {
     return {
       id: product.productId,
       name: product.title,
@@ -19,13 +19,13 @@ export class GAnalytics implements ProductAnalytics {
     };
   }
 
-  sendImpression(product: SearchInterfaces["VisualProductSearch"]) {
+  sendImpression(product: Recommendation) {
     ga("ec:addImpression", this.convertProduct(product));
 
     return undefined;
   }
 
-  sendClick(product: SearchInterfaces["VisualProductSearch"]) {
+  sendClick(product: Recommendation) {
     ga("ec:addProduct", {
       id: product.productId,
       name: product.title,
