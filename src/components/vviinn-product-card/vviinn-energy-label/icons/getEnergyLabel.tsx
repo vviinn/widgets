@@ -10,7 +10,7 @@ import {
   OldC,
   OldD,
 } from "./old-standard-icons";
-import { getStandardVersion } from "./getStandartVersion";
+import { getStandardVersion } from "./getStandardVersion";
 
 export const getEnergyLabel = (
   energyEfficiencyClass: EnergyEfficiencyClass,
