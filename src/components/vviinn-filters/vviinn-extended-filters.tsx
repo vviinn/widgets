@@ -28,7 +28,7 @@ import {
 } from "../../recommendation/events";
 
 /**
- * * @part filters - Wrapper itself.
+ * @part filters - Wrapper itself.
  */
 @Component({
   tag: "vviinn-extended-filters",
@@ -231,73 +231,75 @@ export class VviinnExtendedFilters {
             </div>
 
             <ul class="filters-modal-list">
-              {this.filters.map((mainFilter) => {
-                const column = mainFilter.column;
-                const filterOptions = getFilterOptions(mainFilter);
+              {this.filters
+                .filter((filter) => filter.column !== "color")
+                .map((mainFilter) => {
+                  const column = mainFilter.column;
+                  const filterOptions = getFilterOptions(mainFilter);
 
-                return (
-                  <li>
-                    <button
-                      onClick={() =>
-                        this.handleMoreOptionsMainClick(mainFilter.column)
-                      }
-                      class="filters-modal-main-button"
-                    >
-                      {mainFilter.label}
-                      {filterOptions.length > 0
-                        ? ` (${filterOptions.length})`
-                        : ""}
-                    </button>
-
-                    {column === "price" &&
-                    this.selectedMoreOptions.includes(mainFilter.column) ? (
-                      <vviinn-price-range
-                        histogram={filterOptions as Histogram}
-                        priceChangeHandler={this.priceChangeHandler}
-                      />
-                    ) : (
-                      <ul
-                        class={`filters-modal-sub-list ${
-                          column === "color_confirmed"
-                            ? "filters-modal-sub-list-inline"
-                            : ""
-                        } ${
-                          this.selectedMoreOptions.includes(mainFilter.column)
-                            ? "open"
-                            : ""
-                        }`}
+                  return (
+                    <li>
+                      <button
+                        onClick={() =>
+                          this.handleMoreOptionsMainClick(mainFilter.column)
+                        }
+                        class="filters-modal-main-button"
                       >
-                        {filterOptions &&
-                          filterOptions.map(({ value, label, active }) => {
-                            const hexCode = value.hexCode;
-                            return (
-                              <li>
-                                <button
-                                  onClick={() =>
-                                    this.handleSubFilterSelection(
-                                      value,
-                                      mainFilter
-                                    )
-                                  }
-                                  class={`filters-more-modal-button ${
-                                    hexCode ? "filters-sub-button-color" : ""
-                                  } ${this.showActiveOnModalSubButton(
-                                    this.requestFilters,
-                                    value
-                                  )}`}
-                                  style={{ backgroundColor: hexCode }}
-                                  disabled={!active}
-                                >
-                                  <span>{label}</span>
-                                </button>
-                              </li>
-                            );
-                          })}
-                      </ul>
-                    )}
-                  </li>
-                );
-              })}
+                        {mainFilter.label}
+                        {filterOptions.length > 0
+                          ? ` (${filterOptions.length})`
+                          : ""}
+                      </button>
+
+                      {column === "price" &&
+                      this.selectedMoreOptions.includes(mainFilter.column) ? (
+                        <vviinn-price-range
+                          histogram={filterOptions as Histogram}
+                          priceChangeHandler={this.priceChangeHandler}
+                        />
+                      ) : (
+                        <ul
+                          class={`filters-modal-sub-list ${
+                            column === "color_confirmed"
+                              ? "filters-modal-sub-list-inline"
+                              : ""
+                          } ${
+                            this.selectedMoreOptions.includes(mainFilter.column)
+                              ? "open"
+                              : ""
+                          }`}
+                        >
+                          {filterOptions &&
+                            filterOptions.map(({ value, label, active }) => {
+                              const hexCode = value.hexCode;
+                              return (
+                                <li>
+                                  <button
+                                    onClick={() =>
+                                      this.handleSubFilterSelection(
+                                        value,
+                                        mainFilter
+                                      )
+                                    }
+                                    class={`filters-more-modal-button ${
+                                      hexCode ? "filters-sub-button-color" : ""
+                                    } ${this.showActiveOnModalSubButton(
+                                      this.requestFilters,
+                                      value
+                                    )}`}
+                                    style={{ backgroundColor: hexCode }}
+                                    disabled={!active}
+                                  >
+                                    <span>{label}</span>
+                                  </button>
+                                </li>
+                              );
+                            })}
+                        </ul>
+                      )}
+                    </li>
+                  );
+                })}
             </ul>
 
             <div class="filters-modal-actions">

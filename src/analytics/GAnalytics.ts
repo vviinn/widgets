@@ -1,5 +1,5 @@
-import { Recommendation } from "../recommendation";
 import { ProductAnalytics } from "./ProductAnalytics";
+import { Recommendation } from "../interfaces/recommendation";
 
 export class GAnalytics implements ProductAnalytics {
   constructor() {

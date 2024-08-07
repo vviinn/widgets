@@ -17,7 +17,6 @@ import * as O from "fp-ts/lib/Option";
 import i18next from "i18next";
 
 import { searchState } from "../../store/search.store";
-import { Recommendation } from "../../recommendation";
 import {
   ImageProps,
   Linked,
@@ -42,7 +41,10 @@ import { slotChangeListener } from "../customized-slots";
 import { BasketIcon, CheckCircleIcon, UpdateIcon } from "../vviinn-icons";
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
 import { generateRandomNumber } from "../../utils/number";
-import { EnergyEfficiencyClass } from "../../interfaces/recommendation";
+import {
+  EnergyEfficiencyClass,
+  Recommendation,
+} from "../../interfaces/recommendation";
 
 /**
  * @part brand - product brand.

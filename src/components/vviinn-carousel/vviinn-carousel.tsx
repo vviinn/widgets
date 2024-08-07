@@ -12,7 +12,7 @@ import {
 } from "@stencil/core";
 import { chunksOf } from "fp-ts/lib/Array";
 import { pipe } from "fp-ts/lib/function";
-import { Recommendation } from "../../recommendation";
+import { Recommendation } from "../../interfaces/recommendation";
 import { ChevronIcon } from "../vviinn-icons";
 import { CampaignTypeId, campaignTypeNames } from "../../campaign/Campaign";
 import {

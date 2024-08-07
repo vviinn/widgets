@@ -3,11 +3,7 @@ import {
   SimilarProductsRequest,
   RequestStaticFilters,
 } from "../interfaces/recommendation";
-
 import { RequestDynamicFilters } from "../campaign/VPRCampaignService";
-import { SearchInterfaces } from "../interfaces/search";
-
-export type Recommendation = SearchInterfaces["ResponseProductItem"];
 
 type GetRecommendationsBodyProps = {
   productId: string;
@@ -50,7 +46,7 @@ export const getRecommendationsBody = ({
 
   return {
     productId,
-    dynamicFilters: dynamicFilters ?? undefined,
+    ...(dynamicFilters.length ? { dynamicFilters } : {}),
     ...(campaigns.length ? { campaigns: parseCampaigns(campaigns) } : {}),
     ...(Object.keys(staticFilters).length ? { staticFilters } : {}),
   };
