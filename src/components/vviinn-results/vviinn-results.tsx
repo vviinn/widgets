@@ -125,10 +125,10 @@ export class VviinnResults {
   @Prop() productDetailsRedirect?: boolean = true;
   /** Query for performing text search */
   @Prop() textSearchQuery?: string;
-  /** Category for performing Product Listing Page request */
-  @Prop() categoryType: string = "product_type";
+  /** Column for performing Product Listing Page request */
+  @Prop() filterColumn: string = "product_type";
   /** Value for performing Product Listing Page request */
-  @Prop() categoryValue: string;
+  @Prop() filterValue: string;
   /** Number of results displayed for text search and product listing page (less or equal to the value, set in the campaign) */
   @Prop() resultsCount?: number;
 
@@ -319,14 +319,14 @@ export class VviinnResults {
   }
 
   private async getResultsByCategory() {
-    if (!this.categoryType || !this.categoryValue) return;
+    if (!this.filterColumn || !this.filterValue) return;
     state.apiPath = this.apiPath; //FIXME: #36877
 
     pipe(
       await makeProductListingPageRequest(
         this.token,
-        this.categoryType,
-        this.categoryValue,
+        this.filterColumn,
+        this.filterValue,
         this.resultsCount
       ),
       E.getOrElse(() => null),
