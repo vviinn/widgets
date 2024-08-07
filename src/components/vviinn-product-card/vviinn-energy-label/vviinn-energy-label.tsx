@@ -1,6 +1,6 @@
 import { Component, Host, Prop, h } from "@stencil/core";
-import { getEnergyLabel } from "./icons";
 import { EnergyEfficiencyClass } from "../../../interfaces/recommendation";
+import { getEnergyLabel } from "./icons";
 
 @Component({
   tag: "vviinn-energy-label",

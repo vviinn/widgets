@@ -15,6 +15,7 @@ const Template = (args) => `
   <vviinn-product-card
     product-title="${args.productTitle}"
     product-id="${args.productId}"
+    mode="${args.mode}"
     brand="${args.brand}"
     product-type="${args.productType}"
     price="${args.price}"
@@ -27,12 +28,19 @@ const Template = (args) => `
     energy-efficiency-class="${args.energyEfficiencyClass}"
     min-energy-efficiency-class="${args.minEnergyEfficiencyClass}"
     max-energy-efficiency-class="${args.maxEnergyEfficiencyClass}"
+    applied-discount-percentage="${args.appliedDiscountPercentage}"
+    current-discount-percentage="${args.currentDiscountPercentage}"
+    update-button-location="${args.updateButtonLocation}"
+    is-source-product="${args.isSourceProduct}"
+    basket-button-show="${args.basketButtonShow}"
     dimmed-background="${args.dimmedBackground}"
     locale="${args.locale}"
     currency="${args.currency}"
     deeplink="${args.deeplink}"
-    imageRatio="${args.imageRatio}"
-  ></vviinn-product-card>`;
+    image-ratio="${args.imageRatio}"
+  >
+    <span slot="vviinn-basket-button-text">Add to basket</span>
+  </vviinn-product-card>`;
 
 export const Default = Template.bind({});
 
@@ -42,8 +50,9 @@ Default.args = {
   productTitle: "Couchtisch Rolf Benz 8770 Ronald Schmitt",
   productType: "Couchtische",
   productId: "",
+  mode: "continuity",
   imageWidth: 240,
-  dimmedBackground: false,
+  dimmedBackground: true,
   brand: "Ronald Schmitt",
   locale: "de-DE",
   currency: "€",
@@ -55,4 +64,12 @@ Default.args = {
   price: 3629,
   salePrice: 1653,
   pricePrefix: "",
+  appliedDiscountPercentage: 0,
+  currentDiscountPercentage: 0,
+  isSourceProduct: false,
+  basketButtonShow: true,
+  energyEfficiencyClass: "A",
+  minEnergyEfficiencyClass: "G",
+  maxEnergyEfficiencyClass: "A",
+  updateButtonLocation: "onItem",
 };
