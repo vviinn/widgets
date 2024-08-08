@@ -51,15 +51,20 @@ export class VviinnButton {
 
   @Watch("selectedInterval")
   updatingSelectedInterval() {
-    if (this.selectedInterval.start) {
+    if (this.selectedInterval.start !== undefined) {
       this.minIndex = this.histogram.findIndex(
         (item) => item.value.interval.start === this.selectedInterval.start
       );
+    } else {
+      this.minIndex = 0;
     }
+
     if (this.selectedInterval.end) {
       this.maxIndex = this.histogram.findIndex(
         (item) => item.value.interval.end === this.selectedInterval.end
       );
+    } else {
+      this.maxIndex = this.histogram.length - 1;
     }
   }
 
