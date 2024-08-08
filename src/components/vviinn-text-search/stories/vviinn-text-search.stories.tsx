@@ -1,7 +1,5 @@
 const textSearchDecorator = (story) => `
-    <div style="
-    padding: 20px;
-    ">
+    <div>
       ${story()}
     </div>
   `;
@@ -12,15 +10,20 @@ export default {
   decorators: [textSearchDecorator],
 };
 
-const Template = (args) =>
-  `<vviinn-text-search token="${args.token}"
+const Template = (args) => `
+  <vviinn-text-search 
+    token="${args.token}"
     api-path="${args.apiPath}"
     search-query="${args.searchQuery}"
     mode="${args.mode}"
     locale="${args.locale}"
     show-in-widget="${args.showInWidget}"
   ></vviinn-text-search>
-  <vviinn-results token="${args.token}></vviinn-results>`;
+  
+  <vviinn-results 
+    token="${args.token}"
+  ></vviinn-results>
+`;
 
 export const Default = Template.bind({});
 
