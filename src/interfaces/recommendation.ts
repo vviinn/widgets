@@ -29,5 +29,8 @@ export interface Interfaces {
 export type SimilarProductsRequest = Interfaces["SimilarProductsRequest"];
 export type CrossSellingRequest = Interfaces["CrossSellingRequest"];
 export type RequestStaticFilters = Interfaces["RequestStaticFilters"];
-export type EnergyEfficiencyClass = Interfaces["EnergyEfficiencyClass"];
 export type Recommendation = Interfaces["Recommendation"];
+
+export type EnergyEfficiencyClass = Interfaces["EnergyEfficiencyClass"];
+export type MinEnergyEfficiencyClass = "G" | "D";
+export type MaxEnergyEfficiencyClass = "A" | "A+++";

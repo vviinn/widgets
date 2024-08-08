@@ -51,6 +51,9 @@ Default.args = {
   productType: "Couchtische",
   productId: "",
   mode: "continuity",
+  energyEfficiencyClass: "A",
+  minEnergyEfficiencyClass: "G",
+  maxEnergyEfficiencyClass: "A",
   imageWidth: 240,
   dimmedBackground: true,
   brand: "Ronald Schmitt",
@@ -68,8 +71,5 @@ Default.args = {
   currentDiscountPercentage: 0,
   isSourceProduct: false,
   basketButtonShow: true,
-  energyEfficiencyClass: "A",
-  minEnergyEfficiencyClass: "G",
-  maxEnergyEfficiencyClass: "A",
   updateButtonLocation: "onItem",
 };

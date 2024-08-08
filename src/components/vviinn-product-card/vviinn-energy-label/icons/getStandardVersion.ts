@@ -1,8 +1,11 @@
-import { EnergyEfficiencyClass } from "../../../../interfaces/recommendation";
+import {
+  MaxEnergyEfficiencyClass,
+  MinEnergyEfficiencyClass,
+} from "../../../../interfaces/recommendation";
 
 export const getStandardVersion = (
-  minEnergyEfficiencyClass: EnergyEfficiencyClass,
-  maxEnergyEfficiencyClass: EnergyEfficiencyClass
+  minEnergyEfficiencyClass: MinEnergyEfficiencyClass,
+  maxEnergyEfficiencyClass: MaxEnergyEfficiencyClass
 ): "old" | "new" | "unknown" => {
   if (minEnergyEfficiencyClass === "G" && maxEnergyEfficiencyClass === "A") {
     return "new";

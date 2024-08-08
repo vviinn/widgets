@@ -43,6 +43,8 @@ import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
 import { generateRandomNumber } from "../../utils/number";
 import {
   EnergyEfficiencyClass,
+  MaxEnergyEfficiencyClass,
+  MinEnergyEfficiencyClass,
   Recommendation,
 } from "../../interfaces/recommendation";
 
@@ -101,8 +103,8 @@ export class VviinnProductCard {
   @Prop() currentDiscountPercentage?: number;
   @Prop() isSourceProduct: boolean = false;
   @Prop() energyEfficiencyClass: EnergyEfficiencyClass;
-  @Prop() minEnergyEfficiencyClass: EnergyEfficiencyClass;
-  @Prop() maxEnergyEfficiencyClass: EnergyEfficiencyClass;
+  @Prop() minEnergyEfficiencyClass: MinEnergyEfficiencyClass;
+  @Prop() maxEnergyEfficiencyClass: MaxEnergyEfficiencyClass;
 
   /** @internal */
   @Prop() campaignTypeId: CampaignTypeId;
