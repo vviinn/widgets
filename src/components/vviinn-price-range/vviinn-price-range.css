@@ -84,3 +84,27 @@
   height: 0;
   z-index: 1;
 }
+
+.label-wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+
+.label-wrapper .label {
+  display: flex;
+  padding: var(--spacing-25) var(--spacing-100);
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--border-radius-100);
+  background: var(--chip-color-badge-primary);
+
+  color: var(--color-text-inverse);
+  text-align: center;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-label);
+  font-style: normal;
+  font-weight: var(--font-weight-500);
+  line-height: var(--line-height-label);
+  letter-spacing: var(--letter-spacing-label, 0px);
+}

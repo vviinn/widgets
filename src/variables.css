@@ -31,4 +31,15 @@
   --surface-color-surface-inactive: #e0e0e0;
 
   --stroke-color-stroke-01: #f4f4f4;
+
+  --spacing-25: 2px;
+  --spacing-100: 8px;
+  --border-radius-100: 8px;
+  --chip-color-badge-primary: #161616;
+  --color-text-inverse: #fff;
+  --font-family-base: Inter;
+  --font-size-label: 14px;
+  --font-weight-500: 500;
+  --line-height-label: 20px;
+  --letter-spacing-label: 0px;
 }
