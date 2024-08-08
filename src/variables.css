@@ -1,10 +1,12 @@
 :host {
+  /*FIXME-36964: Egor should remove these variable and use the new names*/
   --color-primary-system: #0f62fe;
   --color-primary-hover-system: #014cda;
   --color-icons-system: #2f8edf;
   --product-card-width-system: 130px;
   --spacer: 8px;
 
+  /*FIXME-36773: Majid should remove these variable and use the new names*/
   --surface-color-surface-01: #f4f4f4;
   --text-color-text-primary: #161616;
   --font-family: Inter, system-ui, sans-serif;
@@ -31,4 +33,203 @@
   --surface-color-surface-inactive: #e0e0e0;
 
   --stroke-color-stroke-01: #f4f4f4;
+
+  /* New Styles */
+  --font-family-base: Inter, system-ui, sans-serif;
+  --font-family-mono: "JetBrains Mono", monospace;
+
+  --font-size-title: 24px;
+  --font-size-headline: 18px;
+  --font-size-label-large: 16px;
+  --font-size-label: 14px;
+  --font-size-body-large: 16px;
+  --font-size-body: 14px;
+  --font-size-caption: 12px;
+
+  --line-height-title: 32px;
+  --line-height-headline: 24px;
+  --line-height-label-large: 24px;
+  --line-height-label: 20px;
+  --line-height-body-large: 24px;
+  --line-height-body: 20px;
+  --line-height-caption: 16px;
+
+  --letter-spacing-title: 0px;
+  --letter-spacing-headline: 0px;
+  --letter-spacing-label-large: 0px;
+  --letter-spacing-label: 0px;
+  --letter-spacing-body-large: 0px;
+  --letter-spacing-body: 0px;
+  --letter-spacing-caption: 0px;
+
+  --font-weight-400: 400;
+  --font-weight-500: 500;
+  --font-weight-600: 600;
+  --font-weight-700: 700;
+
+  /* Spacing */
+  --spacing-none: 0px;
+  --spacing-25: 2px;
+  --spacing-50: 4px;
+  --spacing-75: 6px;
+  --spacing-100: 8px;
+  --spacing-125: 10px;
+  --spacing-150: 12px;
+  --spacing-200: 16px;
+  --spacing-250: 20px;
+  --spacing-300: 24px;
+  --spacing-400: 32px;
+  --spacing-500: 40px;
+  --spacing-600: 48px;
+
+  /* Border Radius */
+  --border-radius-none: 0px;
+  --border-radius-25: 2px;
+  --border-radius-50: 4px;
+  --border-radius-100: 8px;
+  --border-radius-150: 12px;
+  --border-radius-200: 16px;
+  --border-radius-300: 24px;
+  --border-radius-400: 32px;
+  --border-radius-full: 9999px;
+
+  /* Stroke Width */
+  --stroke-width-none: 0px;
+  --stroke-width-25: 1px;
+  --stroke-width-50: 2px;
+  --stroke-width-75: 3px;
+  --stroke-width-100: 4px;
+  --stroke-width-150: 6px;
+  --stroke-width-200: 8px;
+  --stroke-width-300: 12px;
+
+  /* Filters */
+  --filter-blur-none: 0px;
+  --filter-blur-100: 8px;
+  --filter-blur-150: 12px;
+  --filter-blur-200: 16px;
+
+  /* Colors. Core */
+  --color-bg-base: #ffffff;
+  --color-bg-inverse: #161616;
+
+  --color-border-00: #ffffff;
+  --color-border-01: #f4f4f4;
+  --color-border-02: #e0e0e0;
+  --color-border-03: #c6c6c6;
+  --color-border-inverse-00: #161616;
+  --color-border-inverse-01: #393939;
+
+  --color-field-01: #ffffff;
+  --color-field-02: #f4f4f4;
+
+  --color-icon-primary: #161616;
+  --color-icon-secondary: #525252;
+  --color-icon-helper: #8d8d8d;
+  --color-icon-on-color: #ffffff;
+  --color-icon-inverse: #ffffff;
+  --color-icon-disabled: #16161640;
+
+  --color-text-primary: #161616;
+  --color-text-secondary: #525252;
+  --color-text-helper: #8d8d8d;
+  --color-text-placeholder: #a8a8a8;
+  --color-text-on-color: #ffffff;
+  --color-text-inverse: #ffffff;
+  --color-text-disabled: #16161640;
+
+  /* Colors. Components */
+
+  --button-bg-color-primary: #000000;
+  --button-bg-color-primary-hover: #161616;
+  --button-bg-color-primary-active: #1e1e1e;
+  --button-bg-color-secondary: #f4f4f4;
+  --button-bg-color-secondary-hover: #e0e0e0;
+  --button-bg-color-secondary-active: #c6c6c6;
+  --button-bg-color-ghost-hover: #f4f4f4;
+  --button-bg-color-ghost-active: #eaeaea;
+  --button-bg-color-frosted: #6f6f6f66;
+  --button-bg-color-frosted-hover: #6f6f6f80;
+  --button-bg-color-frosted-active: #6f6f6f99;
+  --button-bg-color-disabled: #e0e0e0;
+
+  --surface-bg-color-01: #f4f4f4;
+  --surface-bg-color-01-hover: #eaeaea;
+  --surface-bg-color-01-active: #e0e0e0;
+  --surface-bg-color-02: #ffffff;
+  --surface-bg-color-inverse: #262626;
+  --surface-bg-color-inverse-hover: #303030;
+  --surface-bg-color-inverse-active: #393939;
+  --surface-bg-color-disabled: #e0e0e0;
+
+  --chip-bg-color-primary: #161616;
+  --chip-bg-color-primary-hover: #1e1e1e;
+  --chip-bg-color-primary-active: #262626;
+  --chip-bg-color-subtle: #f4f4f4;
+  --chip-bg-color-subtle-hover: #eaeaea;
+  --chip-bg-color-subtle-active: #e0e0e0;
+  --chip-bg-color-outline-hover: #f4f4f4;
+  --chip-bg-color-outline-active: #eaeaea;
+
+  /* DARK MODE SUPPORT
+  @media (prefers-color-scheme: dark) {
+    --color-bg-base: #161616;
+    --color-bg-inverse: #ffffff;
+
+    --color-border-00: #161616;
+    --color-border-01: #393939;
+    --color-border-02: #525252;
+    --color-border-03: #6f6f6f;
+    --color-border-inverse-00: #f4f4f4;
+    --color-border-inverse-01: #c6c6c6;
+
+    --color-field-01: #161616;
+    --color-field-02: #262626;
+
+    --color-icon-primary: #ffffff;
+    --color-icon-secondary: #c6c6c6;
+    --color-icon-helper: #8d8d8d;
+    --color-icon-on-color: #ffffff;
+    --color-icon-inverse: #161616;
+    --color-icon-disabled: #ffffff40;
+
+    --color-text-primary: #ffffff;
+    --color-text-secondary: #c6c6c6;
+    --color-text-helper: #8d8d8d;
+    --color-text-placeholder: #6f6f6f;
+    --color-text-on-color: #ffffff;
+    --color-text-inverse: #161616;
+    --color-text-disabled: #ffffff40;
+
+    --button-bg-color-primary: #ffffff;
+    --button-bg-color-primary-hover: #f9f9f9;
+    --button-bg-color-primary-active: #f4f4f4;
+    --button-bg-color-secondary: #262626;
+    --button-bg-color-secondary-hover: #303030;
+    --button-bg-color-secondary-active: #393939;
+    --button-bg-color-ghost-hover: #262626;
+    --button-bg-color-ghost-active: #303030;
+    --button-bg-color-frosted: #6f6f6f66;
+    --button-bg-color-frosted-hover: #6f6f6f80;
+    --button-bg-color-frosted-active: #6f6f6f99;
+    --button-bg-color-disabled: #393939;
+
+    --surface-bg-color-01: #262626;
+    --surface-bg-color-01-hover: #303030;
+    --surface-bg-color-01-active: #393939;
+    --surface-bg-color-02: #393939;
+    --surface-bg-color-inverse: #f4f4f4;
+    --surface-bg-color-inverse-hover: #eaeaea;
+    --surface-bg-color-inverse-active: #e0e0e0;
+    --surface-bg-color-disabled: #393939;
+
+    --chip-bg-color-primary: #ffffff;
+    --chip-bg-color-primary-hover: #f9f9f9;
+    --chip-bg-color-primary-active: #f4f4f4;
+    --chip-bg-color-subtle: #262626;
+    --chip-bg-color-subtle-hover: #303030;
+    --chip-bg-color-subtle-active: #393939;
+    --chip-bg-color-outline-hover: #262626;
+    --chip-bg-color-outline-active: #303030;
+  } */
 }

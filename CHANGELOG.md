@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.73.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.73.0...v2.73.1) (2024-08-08)
+
+
+### Bug Fixes
+
+* defined new variables ([b496441](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/b49644158462903b4b95fd94614d3ddbfd9661f4))
+
 ## [2.73.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.72.1...v2.73.0) (2024-08-07)
 
 
