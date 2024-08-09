@@ -53,7 +53,7 @@ export class VviinnButton {
   updatingSelectedInterval() {
     if (this.selectedInterval.start !== undefined) {
       this.minIndex = this.histogram.findIndex(
-        (item) => item.value.interval.start === this.selectedInterval.start
+        ({ value }) => value.interval.start === this.selectedInterval.start
       );
     } else {
       this.minIndex = 0;
