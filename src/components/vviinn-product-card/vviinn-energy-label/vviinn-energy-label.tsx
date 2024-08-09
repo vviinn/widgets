@@ -1,9 +1,5 @@
 import { Component, Host, Prop, h } from "@stencil/core";
-import {
-  EnergyEfficiencyClass,
-  MaxEnergyEfficiencyClass,
-  MinEnergyEfficiencyClass,
-} from "../../../interfaces/recommendation";
+import { EnergyEfficiencyClass } from "../../../interfaces/recommendation";
 import { getEnergyLabel } from "./icons";
 
 @Component({
@@ -13,8 +9,8 @@ import { getEnergyLabel } from "./icons";
 })
 export class VviinnEnergyLabel {
   @Prop() energyEfficiencyClass: EnergyEfficiencyClass;
-  @Prop() minEnergyEfficiencyClass: MinEnergyEfficiencyClass;
-  @Prop() maxEnergyEfficiencyClass: MaxEnergyEfficiencyClass;
+  @Prop() minEnergyEfficiencyClass: EnergyEfficiencyClass;
+  @Prop() maxEnergyEfficiencyClass: EnergyEfficiencyClass;
   @Prop() productType: string;
 
   private energyLabelIcon: SVGElement | null = null;

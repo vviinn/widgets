@@ -32,5 +32,3 @@ export type RequestStaticFilters = Interfaces["RequestStaticFilters"];
 export type Recommendation = Interfaces["Recommendation"];
 
 export type EnergyEfficiencyClass = Interfaces["EnergyEfficiencyClass"];
-export type MinEnergyEfficiencyClass = "G" | "D";
-export type MaxEnergyEfficiencyClass = "A" | "A+++";

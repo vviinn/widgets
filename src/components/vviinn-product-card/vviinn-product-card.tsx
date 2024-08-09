@@ -43,8 +43,6 @@ import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
 import { generateRandomNumber } from "../../utils/number";
 import {
   EnergyEfficiencyClass,
-  MaxEnergyEfficiencyClass,
-  MinEnergyEfficiencyClass,
   Recommendation,
 } from "../../interfaces/recommendation";
 
@@ -83,14 +81,12 @@ export class VviinnProductCard {
   @Element() el: HTMLElement;
   @Prop() brand: string | undefined;
   @Prop() currency: string | undefined = undefined;
-  @Prop() deeplink: string | undefined;
   @Prop() image: string | undefined;
   @Prop() imageRatio: number = 1;
   @Prop() imageWidth: number = 200;
   @Prop() locale: string | undefined = undefined;
   @Prop() price: number | undefined;
   @Prop() pricePrefix: string | undefined = undefined;
-  @Prop() productId: string;
   @Prop() productTitle: string;
   @Prop() productType: string | undefined;
   @Prop() salePrice: number | undefined;
@@ -99,13 +95,10 @@ export class VviinnProductCard {
   @Prop() mode?: CarouselMode;
   @Prop() basketButtonShow: boolean;
   @Prop() updateButtonLocation: UpdateButtonLocation;
-  @Prop() appliedDiscountPercentage?: number;
-  @Prop() currentDiscountPercentage?: number;
-  @Prop() isSourceProduct: boolean = false;
   @Prop() energyEfficiencyClass: EnergyEfficiencyClass;
-  @Prop() minEnergyEfficiencyClass: MinEnergyEfficiencyClass;
-  @Prop() maxEnergyEfficiencyClass: MaxEnergyEfficiencyClass;
 
+  /** @internal */
+  @Prop() productId: string;
   /** @internal */
   @Prop() campaignTypeId: CampaignTypeId;
   /** @internal */
@@ -115,11 +108,23 @@ export class VviinnProductCard {
   /** @internal */
   @Prop() widgetVersion: string;
   /** @internal */
+  @Prop() deeplink: string | undefined;
+  /** @internal */
   @Prop() index: number = 0;
   /** @internal */
   @Prop() updatingAllCards: boolean;
   /** @internal */
   @Prop() defaultAnimationInterval: number;
+  /** @internal */
+  @Prop() minEnergyEfficiencyClass: EnergyEfficiencyClass;
+  /** @internal */
+  @Prop() maxEnergyEfficiencyClass: EnergyEfficiencyClass;
+  /** @internal */
+  @Prop() appliedDiscountPercentage?: number;
+  /** @internal */
+  @Prop() currentDiscountPercentage?: number;
+  /** @internal */
+  @Prop() isSourceProduct: boolean = false;
 
   @State() isTransitioning: boolean = false;
   @State() basketButonPressed: boolean = false;

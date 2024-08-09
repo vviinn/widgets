@@ -1,9 +1,5 @@
 import { h } from "@stencil/core";
-import {
-  EnergyEfficiencyClass,
-  MaxEnergyEfficiencyClass,
-  MinEnergyEfficiencyClass,
-} from "../../../../interfaces/recommendation";
+import { EnergyEfficiencyClass } from "../../../../interfaces/recommendation";
 import { NewA, NewB, NewC, NewD, NewE, NewF, NewG } from "./new-standard-icons";
 import {
   OldAx3,
@@ -18,8 +14,8 @@ import { getStandardVersion } from "./getStandardVersion";
 
 export const getEnergyLabel = (
   energyEfficiencyClass: EnergyEfficiencyClass,
-  minEnergyEfficiencyClass: MinEnergyEfficiencyClass,
-  maxEnergyEfficiencyClass: MaxEnergyEfficiencyClass
+  minEnergyEfficiencyClass: EnergyEfficiencyClass,
+  maxEnergyEfficiencyClass: EnergyEfficiencyClass
 ): SVGElement | null => {
   const standardVersion = getStandardVersion(
     minEnergyEfficiencyClass,

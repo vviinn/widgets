@@ -1,17 +1,14 @@
-import {
-  MaxEnergyEfficiencyClass,
-  MinEnergyEfficiencyClass,
-} from "../../../../interfaces/recommendation";
+import { EnergyEfficiencyClass } from "../../../../interfaces/recommendation";
 
 export const getStandardVersion = (
-  minEnergyEfficiencyClass: MinEnergyEfficiencyClass,
-  maxEnergyEfficiencyClass: MaxEnergyEfficiencyClass
+  minEnergyEfficiencyClass: EnergyEfficiencyClass,
+  maxEnergyEfficiencyClass: EnergyEfficiencyClass
 ): "old" | "new" | "unknown" => {
-  if (minEnergyEfficiencyClass === "G" && maxEnergyEfficiencyClass === "A") {
+  if (minEnergyEfficiencyClass === "A" && maxEnergyEfficiencyClass === "G") {
     return "new";
   } else if (
-    minEnergyEfficiencyClass === "D" &&
-    maxEnergyEfficiencyClass === "A+++"
+    minEnergyEfficiencyClass === "A+++" &&
+    maxEnergyEfficiencyClass === "D"
   ) {
     return "old";
   } else {

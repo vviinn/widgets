@@ -21,4 +21,11 @@ export const argTypes = {
       default: 0,
     },
   },
+  energyEfficiencyStandard: {
+    options: ["2017/1369", "2017/1369 (updated)"],
+    control: {
+      type: "select",
+      default: "2017/1369 (updated)",
+    },
+  },
 };
