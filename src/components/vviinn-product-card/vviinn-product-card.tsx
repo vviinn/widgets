@@ -41,7 +41,10 @@ import { slotChangeListener } from "../customized-slots";
 import { BasketIcon, CheckCircleIcon, UpdateIcon } from "../vviinn-icons";
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
 import { generateRandomNumber } from "../../utils/number";
-import { Recommendation } from "../../interfaces/recommendation";
+import {
+  EnergyEfficiencyClass,
+  Recommendation,
+} from "../../interfaces/recommendation";
 
 /**
  * @part brand - product brand.
@@ -78,14 +81,12 @@ export class VviinnProductCard {
   @Element() el: HTMLElement;
   @Prop() brand: string | undefined;
   @Prop() currency: string | undefined = undefined;
-  @Prop() deeplink: string | undefined;
   @Prop() image: string | undefined;
   @Prop() imageRatio: number = 1;
   @Prop() imageWidth: number = 200;
   @Prop() locale: string | undefined = undefined;
   @Prop() price: number | undefined;
   @Prop() pricePrefix: string | undefined = undefined;
-  @Prop() productId: string;
   @Prop() productTitle: string;
   @Prop() productType: string | undefined;
   @Prop() salePrice: number | undefined;
@@ -94,10 +95,10 @@ export class VviinnProductCard {
   @Prop() mode?: CarouselMode;
   @Prop() basketButtonShow: boolean;
   @Prop() updateButtonLocation: UpdateButtonLocation;
-  @Prop() appliedDiscountPercentage?: number;
-  @Prop() currentDiscountPercentage?: number;
-  @Prop() isSourceProduct: boolean = false;
+  @Prop() energyEfficiencyClass: EnergyEfficiencyClass;
 
+  /** @internal */
+  @Prop() productId: string;
   /** @internal */
   @Prop() campaignTypeId: CampaignTypeId;
   /** @internal */
@@ -107,11 +108,23 @@ export class VviinnProductCard {
   /** @internal */
   @Prop() widgetVersion: string;
   /** @internal */
+  @Prop() deeplink: string | undefined;
+  /** @internal */
   @Prop() index: number = 0;
   /** @internal */
   @Prop() updatingAllCards: boolean;
   /** @internal */
   @Prop() defaultAnimationInterval: number;
+  /** @internal */
+  @Prop() minEnergyEfficiencyClass: EnergyEfficiencyClass;
+  /** @internal */
+  @Prop() maxEnergyEfficiencyClass: EnergyEfficiencyClass;
+  /** @internal */
+  @Prop() appliedDiscountPercentage?: number;
+  /** @internal */
+  @Prop() currentDiscountPercentage?: number;
+  /** @internal */
+  @Prop() isSourceProduct: boolean = false;
 
   @State() isTransitioning: boolean = false;
   @State() basketButonPressed: boolean = false;
@@ -292,7 +305,7 @@ export class VviinnProductCard {
           animated: this.isTransitioning,
           "set-mode": this.isSetMode,
         }}
-        exportparts="brand, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, discount-label, discount-percentage, title, basket-button, update-button-item"
+        exportparts="brand, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, discount-label, discount-percentage, title, basket-button, update-button-item, energy-label"
       >
         <Linked deeplink={this.deeplink} part="image-link">
           {this.renderImage()}
@@ -313,9 +326,14 @@ export class VviinnProductCard {
             <span class="brand" part="brand">
               {this.brand}
             </span>
-            <span class="type" part="type">
-              {this.productType}
-            </span>
+
+            <vviinn-energy-label
+              energyEfficiencyClass={this.energyEfficiencyClass}
+              minEnergyEfficiencyClass={this.minEnergyEfficiencyClass}
+              maxEnergyEfficiencyClass={this.maxEnergyEfficiencyClass}
+              productType={this.productType}
+            ></vviinn-energy-label>
+
             <Price
               prefix={this.pricePrefix}
               currency={this.currency}

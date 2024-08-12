@@ -51,8 +51,7 @@
   aspect-ratio: 1;
 }
 
-.brand,
-.type {
+.brand {
   display: none;
 }
 
