@@ -43,15 +43,15 @@ export class VviinnFilters {
   @State() requestFilters: RequestDynamicFilters = [];
 
   /** The filter's state changes */
-  /** @internal */
   @Event({ bubbles: true })
   vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
+  /** The filters received */
+  @Event({ bubbles: true })
+  vviinnFilters: EventEmitter<DynamicFiltersEventData>;
+
   /** @internal */
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
-  /** @internal */
-  @Event({ bubbles: true })
-  vviinnFilters: EventEmitter<DynamicFiltersEventData>;
 
   private handleMainFilterSelection(filter: DynamicFilter) {
     this.selectedFilter = filter;

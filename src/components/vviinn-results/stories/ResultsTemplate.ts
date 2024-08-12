@@ -16,7 +16,6 @@ export const ResultsTemplate = (args) => {
     textSearchQuery,
   } = args;
 
-  // Construct the attributes string conditionally
   const filterAttributes =
     filterColumn && filterValue
       ? `filter-column="${filterColumn}" filter-value="${filterValue}"`
