@@ -2,6 +2,7 @@ export const filters = [
   {
     column: "brand",
     label: "Brand",
+    isPrimary: true,
     values: [
       {
         value: "MAGMA",
@@ -18,6 +19,7 @@ export const filters = [
   {
     column: "color",
     label: "Color",
+    isPrimary: true,
     values: [
       {
         value: "",
@@ -39,6 +41,7 @@ export const filters = [
   {
     column: "google_product_category",
     label: "Category",
+    isPrimary: true,
     values: [
       {
         value: "SGVpbSAm",
@@ -55,6 +58,7 @@ export const filters = [
   {
     column: "price",
     label: "Price",
+    isPrimary: true,
     full: {
       start: 3,
       end: 25,
@@ -87,6 +91,7 @@ export const filters = [
   {
     column: "product_type",
     label: "Category",
+    isPrimary: true,
     values: [
       {
         value: "LaXNzZW4",

@@ -317,6 +317,7 @@ export const makeSearchQueryRequest = async (
   resultsCount?: number,
   filters?: RequestDynamicFilters
 ) => {
+  if (query.length === 0) return;
   const body: TextSearchRequest = {
     query,
     ...(resultsCount ? { resultsCount } : {}),

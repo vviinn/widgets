@@ -5,7 +5,7 @@ const resultsDecorator = (story) => `
   `;
 
 export default {
-  title: "Components/Results",
+  title: "Elements/Results",
   component: "vviinn-results",
   decorators: [resultsDecorator],
 };
