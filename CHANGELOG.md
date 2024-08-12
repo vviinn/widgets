@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.74.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.74.0...v2.74.1) (2024-08-12)
+
+
+### Bug Fixes
+
+* Applied new styles for vviinn-price-range ([30c6f01](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/30c6f0194a25c7c21c01a14238e7c04dfe6de5e7))
+
 ## [2.74.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.73.1...v2.74.0) (2024-08-12)
 
 
