@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.74.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.73.1...v2.74.0) (2024-08-12)
+
+
+### Features
+
+* Add vviinn-energy-label component ([a89e6fa](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/a89e6fa2172fab51f8e96a8e47e51d550f4ce493))
+
 ### [2.73.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.73.0...v2.73.1) (2024-08-08)
 
 
