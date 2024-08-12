@@ -1,4 +1,4 @@
-import { Component, Host, h, Prop, Element, State } from "@stencil/core";
+import { Component, Host, h, Prop, Element, State, Watch } from "@stencil/core";
 import { components } from "../../interfaces/generated";
 
 export type Histogram = components["schemas"]["interval-filter-values"][];
@@ -16,6 +16,7 @@ export class VviinnButton {
   @Prop() priceChangeHandler: (
     filterValue: components["schemas"]["interval-filter-value-item"]
   ) => void;
+  @Prop() selectedInterval?: components["schemas"]["interval"];
 
   @State() minIndex: number = 0;
   @State() maxIndex: number;
@@ -44,6 +45,27 @@ export class VviinnButton {
     );
 
     this.scalingFactor = 1 / maxValueofFrequency;
+
+    this.updatingSelectedInterval();
+  }
+
+  @Watch("selectedInterval")
+  updatingSelectedInterval() {
+    if (this.selectedInterval.start !== undefined) {
+      this.minIndex = this.histogram.findIndex(
+        ({ value }) => value.interval.start === this.selectedInterval.start
+      );
+    } else {
+      this.minIndex = 0;
+    }
+
+    if (this.selectedInterval.end) {
+      this.maxIndex = this.histogram.findIndex(
+        (item) => item.value.interval.end === this.selectedInterval.end
+      );
+    } else {
+      this.maxIndex = this.histogram.length - 1;
+    }
   }
 
   private controlFromSlider(fromSlider, toSlider) {
@@ -88,7 +110,7 @@ export class VviinnButton {
   }
 
   render() {
-    const histogramSize = this.histogram.length;
+    const histogramSize = this.histogram.length - 1;
 
     return (
       <Host>
@@ -116,8 +138,8 @@ export class VviinnButton {
                 id="fromSlider"
                 type="range"
                 min="0"
-                max={this.histogram.length}
-                value="0"
+                max={histogramSize}
+                value={this.minIndex}
                 onInput={(e: Event) => {
                   this.minIndex = parseInt(
                     (e.target as HTMLInputElement).value
@@ -131,7 +153,7 @@ export class VviinnButton {
                 type="range"
                 min="0"
                 max={histogramSize}
-                value={histogramSize}
+                value={this.maxIndex}
                 onInput={(e: Event) => {
                   this.maxIndex = parseInt(
                     (e.target as HTMLInputElement).value
@@ -140,6 +162,10 @@ export class VviinnButton {
                 }}
               />
             </div>
+          </div>
+          <div class="label-wrapper">
+            <div class="label">{this.histogram[this.minIndex].label}</div>
+            <div class="label">{this.histogram[this.maxIndex].label}</div>
           </div>
         </div>
       </Host>

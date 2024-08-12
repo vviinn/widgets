@@ -19,7 +19,6 @@
   --gray-100: #161616;
   --gray-10: #f4f4f4;
   --gray-70: #525252;
-
   --radius-radius-md: 8px;
   --button-color-button-primary: #000;
   --text-color-text-inverse: #fff;
@@ -28,11 +27,10 @@
   --text-color-text-disabled: rgba(22, 22, 22, 0.25);
   --surface-color-surface-accent: #e0e0e0;
   --border-color-border-02: #c6c6c6;
-
   --surface-color-surface-active: #161616;
   --surface-color-surface-inactive: #e0e0e0;
-
   --stroke-color-stroke-01: #f4f4f4;
+  --chip-color-badge-primary: #161616;
 
   /* New Styles */
   --font-family-base: Inter, system-ui, sans-serif;

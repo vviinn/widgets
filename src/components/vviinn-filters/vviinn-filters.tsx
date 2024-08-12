@@ -21,6 +21,7 @@ import {
   ChangedFiltersEventData,
   DynamicFiltersEventData,
 } from "../../recommendation/events";
+import { components } from "../../interfaces/generated";
 
 /**
  * @part filters - Wrapper itself.
@@ -114,6 +115,9 @@ export class VviinnFilters {
     detail,
   }: CustomEvent<DynamicFiltersEventData>) => {
     this.filters = detail;
+    if (!detail.some(({ column }) => column === this.selectedFilter?.column)) {
+      this.selectedFilter = undefined;
+    }
   };
 
   private handleFiltersChanged = ({
@@ -196,6 +200,10 @@ export class VviinnFilters {
               <vviinn-price-range
                 histogram={selectedFilterOptions as Histogram}
                 priceChangeHandler={this.priceChangeHandler}
+                selectedInterval={
+                  (this.requestFilters.find((f) => f.column === "price")
+                    ?.values[0] ?? {}) as components["schemas"]["interval"]
+                }
               />
             ) : (
               <ul class="sub-filters-wrapper">

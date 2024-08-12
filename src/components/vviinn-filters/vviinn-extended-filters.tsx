@@ -26,6 +26,7 @@ import {
   ChangedFiltersEventData,
   DynamicFiltersEventData,
 } from "../../recommendation/events";
+import { components } from "../../interfaces/generated";
 
 /**
  * @part filters - Wrapper itself.
@@ -257,6 +258,12 @@ export class VviinnExtendedFilters {
                         <vviinn-price-range
                           histogram={filterOptions as Histogram}
                           priceChangeHandler={this.priceChangeHandler}
+                          selectedInterval={
+                            (this.requestFilters.find(
+                              (f) => f.column === "price"
+                            )?.values[0] ??
+                              {}) as components["schemas"]["interval"]
+                          }
                         />
                       ) : (
                         <ul
