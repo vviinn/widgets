@@ -435,6 +435,9 @@ export class VviinnResults {
         responsive={true}
         imageWidth={this.imageResolutionWidth}
         image={p.image.thumbnail ?? p.image.original}
+        energyEfficiencyClass={p.energyEfficiencyClass}
+        minEnergyEfficiencyClass={p.minEnergyEfficiencyClass}
+        maxEnergyEfficiencyClass={p.maxEnergyEfficiencyClass}
         part="product-card"
         campaignTypeId="VPS"
         widgetElementId={this.widgetElementId}

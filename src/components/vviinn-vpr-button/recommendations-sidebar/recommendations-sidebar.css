@@ -134,8 +134,7 @@ main {
 }
 
 vviinn-vpr-widget::part(title),
-vviinn-vpr-widget::part(brand),
-vviinn-vpr-widget::part(type) {
+vviinn-vpr-widget::part(brand) {
   text-align: left;
 }
 

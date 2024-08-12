@@ -3,7 +3,6 @@ import {
   SimilarProductsRequest,
   RequestStaticFilters,
 } from "../interfaces/recommendation";
-
 import { RequestDynamicFilters } from "../campaign/VPRCampaignService";
 
 type GetRecommendationsBodyProps = {

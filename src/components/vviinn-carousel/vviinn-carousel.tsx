@@ -455,6 +455,9 @@ export class VviinnCarousel {
         basketButtonShow={this.addToBasketShow}
         mode={this.mode}
         data-id={recommendation.productId}
+        energyEfficiencyClass={recommendation.energyEfficiencyClass}
+        minEnergyEfficiencyClass={recommendation.minEnergyEfficiencyClass}
+        maxEnergyEfficiencyClass={recommendation.maxEnergyEfficiencyClass}
         updatingAllCards={this.updatingAllCards}
         defaultAnimationInterval={this.defaultAnimationInterval}
         updateButtonLocation={this.updateButtonLocation}

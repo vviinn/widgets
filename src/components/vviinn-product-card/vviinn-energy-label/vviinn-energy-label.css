@@ -1,0 +1,38 @@
+@import "../../../variables.css";
+
+:host {
+  display: block;
+  line-height: 0px;
+}
+
+:host(.hidden) {
+  display: none;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  max-width: 100%;
+  gap: 8px;
+}
+
+svg {
+  flex-shrink: 0;
+}
+
+.product-type {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow-wrap: anywhere;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5;
+
+  color: #8d8d8d;
+  font-size: var(--font-size-body);
+  font-style: normal;
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-body);
+  letter-spacing: var(--letter-spacing-default);
+}
