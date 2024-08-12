@@ -114,6 +114,9 @@ export class VviinnFilters {
     detail,
   }: CustomEvent<DynamicFiltersEventData>) => {
     this.filters = detail;
+    if (!detail.some(({ column }) => column === this.selectedFilter?.column)) {
+      this.selectedFilter = undefined;
+    }
   };
 
   private handleFiltersChanged = ({
