@@ -1,49 +1,35 @@
-const resultsDecorator = (story) => `
-    <div style="">
-      ${story()}
-    </div>
-  `;
+import { generalArgs } from "./generalArgs";
+import { ResultsTemplate } from "./ResultsTemplate";
 
 export default {
-  title: "Elements/Results",
+  title: "Elements/Product Listing",
   component: "vviinn-results",
-  decorators: [resultsDecorator],
 };
 
-const Template = (args) => `<vviinn-results
-token="${args.token}"
-api-path="${args.apiPath}"
-search-id="${args.searchId}"
-image-resolution-width="${args.imageResolutionWidth}"
-currency-sign="${args.currencySign}"
-locale="${args.locale}"
-product-details-redirect="${args.productDetailsRedirect}"
-product-details-new-tab="${args.productDetailsNewTab}"
-show-in-widget="${args.showInWidget}"
-text-search-query="${args.textSearchQuery}"
-ui-session-id="${args.uiSessionId}"
-filter-column="${args.filterColumn}"
-filter-value="${args.filterValue}"
-results-count="${args.resultsCount}"
-><vviinn-results/>`;
-
-export const Default = Template.bind({});
-
-Default.storyName = "Results";
-
-Default.args = {
-  token: process.env.STORYBOOK_TOKEN,
-  apiPath: process.env.STORYBOOK_API_PATH,
-  searchId: "",
-  textSearchQuery: "",
+export const StaticFilters = ResultsTemplate.bind({});
+StaticFilters.storyName = "Static Filters";
+StaticFilters.argTypes = {
+  textSearchQuery: {
+    control: false,
+  },
+};
+StaticFilters.args = {
   filterColumn: "product_type",
-  filterValue: "Möbel > Schränke & Regale > Kommoden",
-  resultsCount: 12,
-  imageResolutionWidth: 250,
-  currencySign: "€",
-  locale: "en-US",
-  productDetailsRedirect: true,
-  productDetailsNewTab: false,
-  showInWidget: false,
-  uiSessionId: "",
+  filterValue: "Möbel > Schränke & Regale",
+  ...generalArgs,
+};
+
+export const TextSearch = ResultsTemplate.bind({});
+TextSearch.storyName = "Text Search";
+TextSearch.argTypes = {
+  filterValue: {
+    control: false,
+  },
+  filterColumn: {
+    control: false,
+  },
+};
+TextSearch.args = {
+  textSearchQuery: "Chair",
+  ...generalArgs,
 };

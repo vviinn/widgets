@@ -128,9 +128,9 @@ export class VviinnResults {
   /** Query for performing text search */
   @Prop() textSearchQuery?: string;
   /** Column for performing Product Listing Page request */
-  @Prop() filterColumn: string = "product_type";
+  @Prop() filterColumn?: string = "product_type";
   /** Value for performing Product Listing Page request */
-  @Prop() filterValue: string;
+  @Prop() filterValue?: string;
   /** Number of results displayed for text search and product listing page (less or equal to the value, set in the campaign) */
   @Prop() resultsCount?: number;
 
