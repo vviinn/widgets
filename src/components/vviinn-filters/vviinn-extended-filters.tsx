@@ -29,6 +29,10 @@ import {
 import { components } from "../../interfaces/generated";
 
 /**
+ * @slot vviinn-extended-filters-title - Text on widget's header.
+ * @slot vviinn-extended-filters-apply - Title of Apply Button.
+ * @slot vviinn-extended-filters-reset - Title of Reset Button.
+ *
  * @part filters - Wrapper itself.
  */
 @Component({
@@ -40,6 +44,7 @@ export class VviinnExtendedFilters {
   @Element() el: HTMLElement;
 
   @Prop({ mutable: true }) filters: DynamicFilters = [];
+  /** @internal */
   @Prop() filtersString: string = "";
   /** The locale for currency formatting and text localization */
   @Prop() locale: Locale = "de-DE";

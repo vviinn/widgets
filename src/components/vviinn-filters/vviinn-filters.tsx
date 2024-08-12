@@ -36,6 +36,7 @@ export class VviinnFilters {
   @Element() el: HTMLElement;
 
   @Prop({ mutable: true }) filters: DynamicFilters = [];
+  /** @internal */
   @Prop() filtersString: string = "";
 
   @State() selectedFilter: DynamicFilter;
