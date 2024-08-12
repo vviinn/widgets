@@ -37,7 +37,7 @@ Default.args = {
   searchId: "",
   textSearchQuery: "",
   filterColumn: "product_type",
-  filterValue: "Bänke",
+  filterValue: "Möbel > Schränke & Regale > Kommoden",
   resultsCount: 12,
   imageResolutionWidth: 250,
   currencySign: "€",

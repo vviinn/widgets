@@ -299,7 +299,7 @@ export class VviinnResults {
     query?: string,
     filters?: RequestDynamicFilters
   ) {
-    if (this.showInWidget || query === undefined) return;
+    if (this.showInWidget || !query) return;
     state.apiPath = this.apiPath; //FIXME: #36877
 
     pipe(
@@ -311,7 +311,7 @@ export class VviinnResults {
       ),
       E.getOrElse(() => null),
       (response: TextSearchResponse) => {
-        this.recommendations = response?.data.products ?? [];
+        this.recommendations = response?.data?.products ?? [];
         this.vviinnFilters.emit(response?.data?.interactions.dynamicFilters);
       }
     );
@@ -330,7 +330,7 @@ export class VviinnResults {
       ),
       E.getOrElse(() => null),
       (response: ProductListingPageResponse) => {
-        this.recommendations = response?.data.products ?? [];
+        this.recommendations = response?.data?.products ?? [];
       }
     );
   }
