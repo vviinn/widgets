@@ -6,9 +6,6 @@ export default {
   title: "Elements/Filters/Main",
   component: "vviinn-filters",
   decorators: [filtersDecorator],
-  parameters: {
-    controls: { expanded: false },
-  },
   argTypes,
 };
 

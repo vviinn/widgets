@@ -95,19 +95,19 @@ export class VviinnResults {
   /** The search result appears in the viewport */
   @Event() vviinnResultView: EventEmitter<BasicEventData>;
 
-  /** The 'searchId' is received for performing a Visual Search */
-  @Event() vviinnSearchIdReceived: EventEmitter<SearchIdEventData>;
-
-  /** The 'query' is received for performing a Text Search */
-  @Event() vviinnTextSearchStarted: EventEmitter<TextSearchEventData>;
-
-  /** Dynamic filters are received from the API. */
-  @Event() vviinnFilters: EventEmitter<DynamicFiltersEventData>;
-
-  /** @internal */
   /** The filter's state changes */
+  /** @internal */
   @Event({ bubbles: true })
   vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
+  /** The 'searchId' is received for performing a Visual Search */
+  /** @internal */
+  @Event() vviinnSearchIdReceived: EventEmitter<SearchIdEventData>;
+  /** The 'query' is received for performing a Text Search */
+  /** @internal */
+  @Event() vviinnTextSearchStarted: EventEmitter<TextSearchEventData>;
+  /** Dynamic filters are received from the API. */
+  /** @internal */
+  @Event() vviinnFilters: EventEmitter<DynamicFiltersEventData>;
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string;

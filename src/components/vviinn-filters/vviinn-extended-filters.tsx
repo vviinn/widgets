@@ -48,6 +48,7 @@ export class VviinnExtendedFilters {
   @State() selectedMoreOptions: string[] = [];
 
   /** The filter's state changes */
+  /** @internal */
   @Event({ bubbles: true })
   vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
   /** @internal */

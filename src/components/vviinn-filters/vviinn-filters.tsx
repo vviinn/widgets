@@ -41,6 +41,7 @@ export class VviinnFilters {
   @State() requestFilters: RequestDynamicFilters = [];
 
   /** The filter's state changes */
+  /** @internal */
   @Event({ bubbles: true })
   vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
   /** @internal */

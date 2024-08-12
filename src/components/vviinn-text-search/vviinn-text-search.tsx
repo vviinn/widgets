@@ -34,12 +34,12 @@ export class VviinnTextSearch {
 
   /** A text search was initiated (used by vviinn-results component) */
   @Event() vviinnTextSearchStarted: EventEmitter<TextSearchEventData>;
-
-  /** @internal */
-  /** A text search API response was received (used internally by vviinn-vps-widget) */
-  @Event() vviinnTextSearchFinished: EventEmitter<TextSearchEventData>;
-  /** @internal */
+  /** An image search ID was received (used by vviinn-results component) */
   @Event() vviinnSearchIdReceived: EventEmitter<SearchIdEventData>;
+
+  /** A text search response was received (used internally by vviinn-vps-widget) */
+  /** @internal */
+  @Event() vviinnTextSearchFinished: EventEmitter<TextSearchEventData>;
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
