@@ -348,6 +348,54 @@ Every Vviinn Widget has some events that users can work on and listen to these e
   </tbody>
 </table>
 
+## Filters Events
+
+Events related to the filters  are mainly for internal usage inside Vviinn components, but if you need them you can also listen and send data to these components as well.
+
+<table width="100%" className="events-table">
+  <thead>
+    <tr><th>Name</th><th>Description</th><th>Available on</th><th>Props</th></tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>vviinnFilters</td><td>Catch list of filters inside the Vviinn filter components and show them.</td>
+
+      <td>
+        <ul>
+          <li>vviinn-filters</li>
+          <li>vviinn-extended-filters</li>
+        </ul>
+      </td>
+
+      <td>
+        <ul>
+          <li>Filters</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td>vviinnFiltersChanged</td><td>Send back the selected filters from Vviinn fillters components.</td>
+
+      <td>
+        <ul>
+          <li>vviinn-filters</li>
+          <li>vviinn-extended-filters</li>
+        </ul>
+      </td>
+
+      <td>
+        <ul>
+          <li>Selected filters</li>
+        </ul>
+      </td>
+    </tr>
+
+    
+  </tbody>
+</table>
+
 ## Separated Components Events
 
 <table width="100%" className="events-table">
