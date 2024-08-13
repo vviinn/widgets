@@ -21,10 +21,10 @@
 }
 
 .main-filters-list {
-  padding: 2px;
-  gap: 10px;
+  padding: var(--spacing-25);
+  gap: var(--spacing-25);
   border-radius: 8px;
-  background: var(--surface-color-surface-01);
+  background: var(--surface-bg-color-01);
   display: inline-flex;
 }
 
@@ -38,72 +38,70 @@
 
 .filters-sub-button,
 .filters-main-button {
-  font-family: var(--font-family);
+  font-family: var(--font-family-base);
   font-size: var(--font-size-body);
   font-style: normal;
-  font-weight: var(--font-weight-regular);
+  font-weight: var(--font-weight-400);
   line-height: var(--line-height-body);
-  letter-spacing: var(--letter-spacing-default);
+  letter-spacing: var(--letter-spacing-body);
 
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
 
   border-radius: 6px;
 }
 
 .filters-main-button {
-  color: var(--text-color-text-primary);
-
-  padding: 10px 16px;
-  flex: 1 0 0;
-
-  background: var(--surface-color-surface-01);
+  padding: var(--spacing-100) 18px;
+  color: var(--color-text-helper);
 }
+
+.filters-main-button.active,
 .filters-main-button:hover {
-  color: var(--text-color-text-secondary);
-}
-
-.filters-main-button.active {
-  background: var(--background-color-background);
+  background: var(--surface-bg-color-02);
+  color: var(--color-text-primary);
 }
 
 .filters-footer {
   margin: 16px 0;
 }
+
 .sub-filters-wrapper {
-  gap: 12px;
+  gap: var(--spacing-100);
   display: flex;
 }
+
 .filters-sub-button {
-  color: #000;
-
-  padding: 10px;
-
-  border: 1px solid var(--border-color-border-01);
-  background: var(--background-color-background);
+  color: var(--color-text-primary);
+  background: var(--surface-bg-color-01);
+  padding: var(--spacing-100);
+  gap: var(--spacing-25);
 }
+
+.filters-sub-button > span {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .filters-sub-button:hover {
-  color: var(--text-color-text-secondary);
+  background: var(--surface-bg-color-01-hover);
 }
 
-.filters-sub-button.active {
-  border-color: #000;
-}
 .filters-sub-button:disabled {
   cursor: not-allowed;
-  background: var(--button-color-button-disabled);
-  color: var(--text-color-text-disabled, rgba(22, 22, 22, 0.25));
+  background: var(--surface-bg-color-disabled);
+  color: var(--color-text-disabled);
 }
 .filters-more-button {
   display: flex;
-  padding: 10px;
-  align-items: flex-start;
-  gap: 10px;
+  padding: var(--spacing-100);
+  gap: var(--spacing-50);
+  border-radius: var(--border-radius-100);
 
-  border-radius: 8px;
-  background: var(--surface-color-surface-01);
+  align-items: flex-start;
+  background: var(--button-bg-color-secondary);
   border: none;
   cursor: pointer;
 }

@@ -22,6 +22,7 @@ import {
   DynamicFiltersEventData,
 } from "../../recommendation/events";
 import { components } from "../../interfaces/generated";
+import { StarsIcon } from "../vviinn-icons";
 
 /**
  * @part filters - Wrapper itself.
@@ -228,7 +229,9 @@ export class VviinnFilters {
                           style={{ backgroundColor: hexCode }}
                           disabled={!active}
                         >
-                          <span>{label}</span>
+                          <span>
+                            {label} <StarsIcon />
+                          </span>
                         </button>
                       </li>
                     );
