@@ -199,11 +199,6 @@ export class VviinnExtendedFilters {
   };
 
   render() {
-    let moreFiltersOptionCount = 0;
-    this.filters.forEach((filter) => {
-      moreFiltersOptionCount += getFilterOptions(filter).length;
-    });
-
     return (
       <Host part="filters">
         {SlotSkeleton("filters")}
@@ -224,7 +219,6 @@ export class VviinnExtendedFilters {
                 <span>{i18next.t("filters.modal.title")}</span>
               </slot>
 
-              {moreFiltersOptionCount > 0 ? `(${moreFiltersOptionCount})` : ""}
               <button
                 class="filters-modal-close"
                 onClick={() => {
@@ -252,9 +246,6 @@ export class VviinnExtendedFilters {
                         class="filters-modal-main-button"
                       >
                         {mainFilter.label}
-                        {filterOptions.length > 0
-                          ? ` (${filterOptions.length})`
-                          : ""}
                       </button>
 
                       {column === "price" &&

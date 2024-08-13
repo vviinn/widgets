@@ -15,14 +15,18 @@ import {
   DynamicFilterValue,
   RequestDynamicFilters,
 } from "../../campaign/VPRCampaignService";
-import { getFilterOptions, subFilterSelection } from "./helpers";
+import {
+  getFilterOptions,
+  subFilterSelection,
+  GetFilterOptions,
+} from "./helpers";
 import { Histogram } from "../vviinn-price-range/vviinn-price-range";
 import {
   ChangedFiltersEventData,
   DynamicFiltersEventData,
 } from "../../recommendation/events";
 import { components } from "../../interfaces/generated";
-import { StarsIcon } from "../vviinn-icons";
+import { StarsIcon, CheckFilterIcon, CloseFilterIcon } from "../vviinn-icons";
 
 /**
  * @part filters - Wrapper itself.
@@ -92,12 +96,13 @@ export class VviinnFilters {
 
   private showActiveOnSubButton(
     requestFilters: RequestDynamicFilters,
-    filterValue: DynamicFilterValue
+    filterValue: DynamicFilterValue,
+    selectedFilter: DynamicFilter
   ) {
-    if (!this.selectedFilter || !requestFilters) return "";
+    if (!selectedFilter || !requestFilters) return false;
 
     const mainFilter = requestFilters.find(
-      (filter) => filter.column === this.selectedFilter.column
+      (filter) => filter.column === selectedFilter.column
     );
 
     if (!mainFilter) return "";
@@ -108,8 +113,8 @@ export class VviinnFilters {
         value === filterValue.interval ||
         value === filterValue.value
     )
-      ? "active"
-      : "";
+      ? true
+      : false;
   }
 
   private handleSetFilters = ({
@@ -174,6 +179,49 @@ export class VviinnFilters {
     );
     if (filters.length === 0) return <Host></Host>;
 
+    const RenderButton = (
+      value,
+      label,
+      active,
+      selectedFilter,
+      isSelected = false
+    ) => {
+      const hexCode = value.hexCode;
+      return (
+        <li
+          onClick={() => this.handleSubFilterSelection(value, selectedFilter)}
+        >
+          <button
+            class={`filters-sub-button${isSelected ? "-selected" : ""} ${
+              hexCode ? "filters-sub-button-color" : ""
+            }`}
+            style={{ backgroundColor: hexCode }}
+            disabled={!active}
+          >
+            <span>
+              {label} {!isSelected ? <StarsIcon /> : <CheckFilterIcon />}
+            </span>
+          </button>
+          {isSelected && hexCode && <CloseFilterIcon />}
+        </li>
+      );
+    };
+
+    let selectedButtons = [];
+    this.filters.forEach((filter) => {
+      if (!("values" in filter)) return;
+
+      (filter.values as GetFilterOptions).forEach(
+        ({ value, label, active }) => {
+          if (this.showActiveOnSubButton(this.requestFilters, value, filter)) {
+            selectedButtons.push(
+              RenderButton(value, label, active, filter, true)
+            );
+          }
+        }
+      );
+    });
+
     return (
       <Host part="filters">
         <div class="main-filters-wrapper">
@@ -210,33 +258,28 @@ export class VviinnFilters {
               <ul class="sub-filters-wrapper">
                 {selectedFilterOptions &&
                   selectedFilterOptions.map(({ value, label, active }) => {
-                    const hexCode = value.hexCode;
-                    return (
-                      <li>
-                        <button
-                          onClick={() =>
-                            this.handleSubFilterSelection(
-                              value,
-                              this.selectedFilter
-                            )
-                          }
-                          class={`filters-sub-button ${
-                            hexCode ? "filters-sub-button-color" : ""
-                          } ${this.showActiveOnSubButton(
-                            this.requestFilters,
-                            value
-                          )}`}
-                          style={{ backgroundColor: hexCode }}
-                          disabled={!active}
-                        >
-                          <span>
-                            {label} <StarsIcon />
-                          </span>
-                        </button>
-                      </li>
+                    if (
+                      this.showActiveOnSubButton(
+                        this.requestFilters,
+                        value,
+                        this.selectedFilter
+                      )
+                    ) {
+                      return null;
+                    }
+
+                    return RenderButton(
+                      value,
+                      label,
+                      active,
+                      this.selectedFilter
                     );
                   })}
               </ul>
+            )}
+
+            {selectedButtons.length > 0 && (
+              <ul class="selected-filters-wrapper">{selectedButtons}</ul>
             )}
           </div>
         )}

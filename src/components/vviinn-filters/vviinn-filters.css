@@ -10,7 +10,8 @@
 .filters-modal-list,
 .sub-filters-wrapper,
 .main-filters-list,
-.filters-modal-sub-list {
+.filters-modal-sub-list,
+.selected-filters-wrapper {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -31,7 +32,8 @@
 .filters-modal-main-button,
 .filters-sub-button,
 .filters-main-button,
-.filters-modal-close {
+.filters-modal-close,
+.filters-sub-button-selected {
   cursor: pointer;
   border: none;
 }
@@ -71,6 +73,13 @@
   gap: var(--spacing-100);
   display: flex;
 }
+.selected-filters-wrapper {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--surface-bg-color-01);
+  gap: var(--spacing-100);
+  display: flex;
+}
 
 .filters-sub-button {
   color: var(--color-text-primary);
@@ -79,10 +88,12 @@
   gap: var(--spacing-25);
 }
 
-.filters-sub-button > span {
+.filters-sub-button > span,
+.filters-sub-button-selected > span {
   display: inline-flex;
   justify-content: center;
   align-items: center;
+  gap: var(--spacing-25);
 }
 
 .filters-sub-button:hover {
@@ -94,6 +105,7 @@
   background: var(--surface-bg-color-disabled);
   color: var(--color-text-disabled);
 }
+
 .filters-more-button {
   display: flex;
   padding: var(--spacing-100);
@@ -283,12 +295,45 @@
   line-height: var(--line-height-body);
   letter-spacing: var(--letter-spacing-default);
 }
+
+.selected-filters-wrapper > li {
+  border-radius: var(--border-radius-100);
+  background: var(--surface-bg-color-inverse);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-100);
+  cursor: pointer;
+}
+.filters-sub-button-selected {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-25);
+  background: var(--surface-bg-color-inverse);
+  border-radius: var(--border-radius-100);
+
+  color: var(--color-text-inverse);
+  text-overflow: ellipsis;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-body);
+  font-style: normal;
+  font-weight: var(--font-weight-400);
+  line-height: var(--line-height-body);
+  letter-spacing: var(--letter-spacing-body);
+}
+
 .filters-sub-button-color {
   width: 40px;
   height: 40px;
-  border: 2px solid var(--border-color-border-01);
+  border: 2px solid var(--color-border-01);
   border-radius: 20px;
 }
+.filters-sub-button-selected.filters-sub-button-color {
+  width: 24px;
+  height: 24px;
+  border: none;
+}
+
 .filters-sub-button-color > span {
   display: none;
 }
