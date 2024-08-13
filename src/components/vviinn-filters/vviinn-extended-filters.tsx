@@ -56,12 +56,13 @@ export class VviinnExtendedFilters {
   /** The filter's state changes */
   @Event({ bubbles: true })
   vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
+  /** The filters received */
+  @Event({ bubbles: true })
+  vviinnFilters: EventEmitter<DynamicFiltersEventData>;
+
   /** @internal */
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
-  /** @internal */
-  @Event({ bubbles: true })
-  vviinnFilters: EventEmitter<DynamicFiltersEventData>;
 
   private replaceSlotsContent() {
     const slots = this.el.querySelectorAll("[slot]");

@@ -755,7 +755,7 @@ export class VviinnVpsWidget {
                   uiSessionId={this.uiSessionId}
                   apiPath={this.apiPath}
                   widgetElementId={this.buttonElementId ?? this.widgetElementId}
-                  showingInWidget={true}
+                  showInWidget={true}
                   buttonElementId={this.buttonElementId}
                   imageResolutionWidth={this.imageResolutionWidth}
                   currency-sign={this.currencySign}
