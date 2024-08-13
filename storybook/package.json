@@ -38,6 +38,6 @@
   "dependencies": {
     "lit-html": "^2.7.2",
     "path": "^0.12.7",
-    "vviinn-widgets": "^2.74.2"
+    "vviinn-widgets": "^2.75.0"
   }
 }
