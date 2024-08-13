@@ -44,6 +44,7 @@ import {
 } from "../interfaces/search";
 import { RequestDynamicFilters } from "../campaign/VPRCampaignService";
 import { setBodyAndHeaders } from "../network/utils";
+import { encodeToBase64UTF8 } from "../utils/string";
 
 const RESIZED_IMAGE_WIDTH = 500;
 const HI_RES_RESIZED_IMAGE_WIDTH = 1024;
@@ -288,7 +289,7 @@ export const makeTextSearchRequest = async (
     TE.fromEither,
     TE.chain((request) => textSearchSessionClient(request)),
     TE.map((sessionResponse) => {
-      state.results = sessionResponse?.data.products ?? [];
+      state.results = sessionResponse?.data?.products ?? [];
       state.textSearchFilters =
         (sessionResponse?.data?.interactions
           ?.dynamicFilters as ResponseFilterItem[]) ?? [];
@@ -341,13 +342,23 @@ export const makeProductListingPageRequest = async (
   value: string,
   resultsCount?: number
 ) => {
+  const requestValue =
+    column === "product_type" || column === "google_product_category"
+      ? pipe(
+          value,
+          (string) => string.split(" > ").join(">"),
+          encodeToBase64UTF8,
+          (base64String) => base64String.split("=")[0]
+        )
+      : value;
+
   const body: ProductListingPageRequest = {
     ...(resultsCount ? { resultsCount } : {}),
     staticFilters: {
       included: [
         {
           column,
-          values: [value],
+          values: [requestValue],
         },
       ],
     },

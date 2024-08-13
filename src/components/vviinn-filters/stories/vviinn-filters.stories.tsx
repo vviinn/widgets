@@ -3,12 +3,9 @@ import { filtersDecorator } from "./decorators";
 import { filters } from "./constants";
 
 export default {
-  title: "Filters/Main",
+  title: "Elements/Filters/Main",
   component: "vviinn-filters",
   decorators: [filtersDecorator],
-  parameters: {
-    controls: { expanded: false },
-  },
   argTypes,
 };
 

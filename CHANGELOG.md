@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.75.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.74.2...v2.75.0) (2024-08-13)
+
+
+### Features
+
+* Make stories for vviinn-results and vviinn-text-search ([1313f2e](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/1313f2e99ab54f4623be1eb179e195094315df09))
+
+### [2.74.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.74.1...v2.74.2) (2024-08-12)
+
+
+### Bug Fixes
+
+* Updated documentation ([273d64a](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/273d64abc4a9717268b93509a2a51fc173911747))
+
 ### [2.74.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.74.0...v2.74.1) (2024-08-12)
 
 

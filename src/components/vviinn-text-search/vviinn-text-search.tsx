@@ -32,14 +32,14 @@ import { TextSearchMode } from "../../widget/types";
 export class VviinnTextSearch {
   @Element() el: HTMLElement;
 
-  /** A text search was initiated (used by the vviinn-results component) */
+  /** A text search was initiated (used by vviinn-results component) */
   @Event() vviinnTextSearchStarted: EventEmitter<TextSearchEventData>;
-
-  /** @internal */
-  /** A text search API response was received (used internally by vviinn-vps-widget) */
-  @Event() vviinnTextSearchFinished: EventEmitter<TextSearchEventData>;
-  /** @internal */
+  /** An image search ID was received (used by vviinn-results component) */
   @Event() vviinnSearchIdReceived: EventEmitter<SearchIdEventData>;
+
+  /** A text search response was received (used internally by vviinn-vps-widget) */
+  /** @internal */
+  @Event() vviinnTextSearchFinished: EventEmitter<TextSearchEventData>;
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
@@ -47,16 +47,13 @@ export class VviinnTextSearch {
   @Prop() locale: Locale = "de-DE";
   /** Default text search or text search with an image upload button */
   @Prop() mode: TextSearchMode = "text";
-
-  /** @internal */
-  /** API path passed from widget */
-  @Prop() apiPath?: string = "https://api.vviinn.com";
-  /** @internal */
   /** True, when used inside the widget */
   @Prop() showInWidget?: boolean = false;
-  /** @internal */
   /** Query for the text search passed from widget */
   @Prop({ mutable: true }) searchQuery?: string;
+
+  /** @internal */
+  @Prop() apiPath?: string = "https://api.vviinn.com";
 
   async componentWillLoad() {
     await i18next.init({
