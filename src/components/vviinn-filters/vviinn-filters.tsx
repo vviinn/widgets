@@ -175,9 +175,7 @@ export class VviinnFilters {
   render() {
     const { column } = this.selectedFilter ?? {};
     const selectedFilterOptions = getFilterOptions(this.selectedFilter);
-    const filters = this.filters.filter(
-      (filter) => filter.isPrimary && filter.column !== "color"
-    );
+    const filters = this.filters.filter((filter) => filter.isPrimary);
     if (filters.length === 0) return <Host></Host>;
 
     const RenderButton = (
