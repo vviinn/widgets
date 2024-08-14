@@ -5,7 +5,7 @@ const textSearchDecorator = (story) => `
   `;
 
 export default {
-  title: "Widgets/Search/Text Search",
+  title: "Widgets/Search",
   component: "vviinn-text-search",
   decorators: [textSearchDecorator],
 };
@@ -25,11 +25,11 @@ const Template = (args) => `
   ></vviinn-results>
 `;
 
-export const Default = Template.bind({});
+export const TextSearch = Template.bind({});
 
-Default.storyName = "Text Search";
+TextSearch.storyName = "Text Search";
 
-Default.args = {
+TextSearch.args = {
   token: process.env.STORYBOOK_TOKEN,
   apiPath: process.env.STORYBOOK_API_PATH,
   searchQuery: "",
@@ -38,7 +38,7 @@ Default.args = {
   showInWidget: false,
 };
 
-Default.parameters = {
+TextSearch.parameters = {
   design: {
     type: "figma",
     url: "https://www.figma.com/design/4xUlo6X4l7FHKcHkJRW4C4/Visual-Search-Widget?node-id=1370-226&t=iiWX4CdPIRXmBKQ3-0",

@@ -3,7 +3,7 @@ import { filtersDecorator } from "./decorators";
 import { filters } from "./constants";
 
 export default {
-  title: "Elements/Filters/Main",
+  title: "Elements/Filters",
   component: "vviinn-filters",
   decorators: [filtersDecorator],
   argTypes,
@@ -14,10 +14,10 @@ const Template = (args) => `
     filters-string='${JSON.stringify(args.filters)}'
   ></vviinn-filters>`;
 
-export const Default = Template.bind({});
+export const Main = Template.bind({});
 
-Default.storyName = "Main";
+Main.storyName = "Main";
 
-Default.args = {
+Main.args = {
   filters,
 };

@@ -1,6 +1,7 @@
 @import "../../variables.css";
 
 :host {
+  display: block;
 }
 
 .filters-footer {

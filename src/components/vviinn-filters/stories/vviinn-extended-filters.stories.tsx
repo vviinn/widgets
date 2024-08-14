@@ -3,7 +3,7 @@ import { extendedFiltersDecorator } from "./decorators";
 import { filters } from "./constants";
 
 export default {
-  title: "Elements/Filters/Extended",
+  title: "Elements/Filters",
   component: "vviinn-extended-filters",
   decorators: [extendedFiltersDecorator],
   argTypes,
@@ -15,11 +15,11 @@ const Template = (args) => `
     locale='${args.locale}'
   ></vviinn-extended-filters>`;
 
-export const Default = Template.bind({});
+export const Extended = Template.bind({});
 
-Default.storyName = "Extended";
+Extended.storyName = "Extended";
 
-Default.args = {
+Extended.args = {
   filters,
   locale: "en-US",
 };
