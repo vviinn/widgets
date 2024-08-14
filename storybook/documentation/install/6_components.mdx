@@ -4,8 +4,7 @@ import { Meta, Story } from '@storybook/blocks';
 
 # Separated Components
 
-
-Using `Vviinn Widgets` as separate components is a good choice when you want more control over the layout of the widgets and to cover a wider range of use cases. For example, combining `Text Search` and `Visual Search` functionality with refining results by using filters, displaying them on the same or even on a different page entirely.
+Using `Vviinn Widgets` as separate components allows for greater control over the layout of the widgets and supports a wider range of use cases. For example, you can combine `Text Search` and `Visual Search` functionality while refining results with filters, and display them on the same page or even on different pages entirely.
 
 ## Components List
 
@@ -17,23 +16,58 @@ Here is a list of the available components:
 
 ## Integration
 
-To integrate the components into your project, you need to install the `vviinn-widgets` using one of the approaches above in this section, such as [Frameworkless](?path=/docs/installation-frameworkless--docs), [React](?path=/docs/installation-react--docs), or others. Be aware, that you need to install at least [2.74.0](https://www.npmjs.com/package/vviinn-widgets/v/2.74.0) version of the package to use the components, but we recommend using the latest version.
+To integrate the components into your project, install the `vviinn-widgets` package using one of the methods mentioned in this section, such as [Frameworkless](?path=/docs/installation-frameworkless--docs) or [React](?path=/docs/installation-react--docs). Ensure you install at least version [2.74.0](https://www.npmjs.com/package/vviinn-widgets/v/2.74.0) of the package to use the components. However, using the latest version is recommended.
 
 ### Basic Example
 
-Here is an example of how to use the components in a framework agnostic way:
+Here is an example of how to use the components in a framework-agnostic way:
 
 ```html
-  <vviinn-text-search token="YOUR_TOKEN" mode="textAndImage"></vviinn-text-search>
-  <vviinn-filters></vviinn-filters>
-  <vviinn-extended-filters></vviinn-extended-filters>
-  <vviinn-results token="YOUR_TOKEN"></vviinn-results>
+<vviinn-text-search token="YOUR_TOKEN" mode="textAndImage"></vviinn-text-search>
+<vviinn-filters></vviinn-filters>
+<vviinn-extended-filters></vviinn-extended-filters>
+<vviinn-results token="YOUR_TOKEN"></vviinn-results>
 ```
-  In this basic example we use `vviinn-text-search`, `vviinn-results` and 2 variations of filter component. Be aware, that to show the filters you need to have some search results and 
+In this basic example, we use `vviinn-text-search`, `vviinn-results`, and two variations of the filter component. Let's take a closer look at the attributes we are using in this example: 
 
-  Let's take a closer look at the attributes we are using in this example: 
-  - The `token` attribute is required for all components (except filters) and is used to authenticate your requests.
-  - The `textAndImage` mode is enabling image search functionality.
+- The `token` attribute is required for all components (except filters) and is used to authenticate your requests.
+- The `textAndImage` mode enables image search functionality.
 
+Other properties you can use are detailed on the components' pages.
 
+To see the filter columns, enable Filters in the Interface Controls section inside the Text Search campaign via the [Panel](https://panel.vviinn.com). The Primary flag is responsible for showing filters in the vviinn-filters component.
 
+### Using Results on a Different Page Example
+
+Here is an example of how to use the components on different pages:
+
+```html
+<!-- Page 1 -->
+<script>
+  document.addEventListener("vviinnTextSearchStarted", ({ detail }) => {
+    // Redirection logic, using detail.query
+  });
+
+  document.addEventListener("vviinnSearchIdReceived", ({ detail }) => {
+    // Redirection logic, using detail.searchId
+  });
+</script>
+<vviinn-text-search
+  token="YOUR_TOKEN"
+  mode="textAndImage"
+></vviinn-text-search>
+
+<!-- Page 2 -->
+<script>
+  // Get query or searchId from URL
+</script>
+<vviinn-filters></vviinn-filters>
+<vviinn-extended-filters></vviinn-extended-filters>
+<vviinn-results token="YOUR_TOKEN" text-search-query="YOUR_QUERY"></vviinn-results>
+```
+
+In In this example, a `vviinn-text-search` component is on the first page, and the rest of the components are on the second page. First, you need to add event listeners to capture the `query` for a text search or `searchId` for a Visual Search. Then, pass this data to the second page via URL and use it to get the results.
+
+## Summary
+
+You can use the components in a framework-agnostic way or integrate them into your project using a specific framework. The components can be used together or separately, depending on your needs. They are highly customizable and suitable for a wide range of use cases.
