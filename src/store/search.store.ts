@@ -375,11 +375,13 @@ export const makeProductListingPageRequest = async (
 onChange("activeIonLink", async (newLink: Link) => {
   const link = newLink ? newLink : state.resetCategoryLink;
   if (!link) return;
+  state.loading = true;
 
   await pipe(
     makeAuthorizedRequest(state.token),
     TE.fromEither,
     TE.chainW(linkRequest(link)),
+    TE.map(updateState),
     TE.mapLeft((error) => {
       return {
         kind: "network error",
