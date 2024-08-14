@@ -26,7 +26,7 @@ After that, you need to integrate the `WebView` component into your mobile app. 
 
 #### Android
 On Android, you need to add these permissions in your `AndroidManifest.xml` file to be able to use a camera for taking images and videos:
-```android
+```xml
 <uses-permission android:name="android.permission.INTERNET"/>
 <uses-permission android:name="android.permission.CAMERA" />
 <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -37,7 +37,7 @@ On Android, you need to add these permissions in your `AndroidManifest.xml` file
 
 #### iOS
 On iOS, you need to add the following properties in your `Info.plist` file to be able to use a camera for taking images and videos:
-```swift
+```xml
 <key>NSMicrophoneUsageDescription</key>
 <string>Flutter requires acess to microphone.</string>
 <key>NSCameraUsageDescription</key>
