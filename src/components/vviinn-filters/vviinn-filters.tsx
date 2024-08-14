@@ -122,6 +122,13 @@ export class VviinnFilters {
     detail,
   }: CustomEvent<DynamicFiltersEventData>) => {
     this.filters = detail;
+
+    if (this.selectedFilter) {
+      this.selectedFilter = this.filters.find(
+        (f) => f.column === this.selectedFilter.column
+      );
+    }
+
     if (!detail.some(({ column }) => column === this.selectedFilter?.column)) {
       this.selectedFilter = undefined;
     }
@@ -186,6 +193,7 @@ export class VviinnFilters {
       isSelected = false
     ) => {
       const hexCode = value.hexCode;
+
       return (
         <li
           onClick={() => this.handleSubFilterSelection(value, selectedFilter)}
