@@ -1,0 +1,39 @@
+import { Meta, Story } from '@storybook/blocks';
+
+<Meta title="Installation/Separated Components" />
+
+# Separated Components
+
+
+Using `Vviinn Widgets` as separate components is a good choice when you want more control over the layout of the widgets and to cover a wider range of use cases. For example, combining `Text Search` and `Visual Search` functionality with refining results by using filters, displaying them on the same or even on a different page entirely.
+
+## Components List
+
+Here is a list of the available components:
+
+- [vviinn-text-search](?path=/story/widgets-search--text-search) - a text search input field that allows users to search by text or upload an image
+- [vviinn-filters](?path=/story/elements-filters--main), [vviinn-extended-filters](?path=/story/elements-filters--extended) - a set of filters that allow users to refine their search results
+- [vviinn-results](?path=/story/elements-product-listing--static-filters) - a container that displays the search results
+
+## Integration
+
+To integrate the components into your project, you need to install the `vviinn-widgets` using one of the approaches above in this section, such as [Frameworkless](?path=/docs/installation-frameworkless--docs), [React](?path=/docs/installation-react--docs), or others. Be aware, that you need to install at least [2.74.0](https://www.npmjs.com/package/vviinn-widgets/v/2.74.0) version of the package to use the components, but we recommend using the latest version.
+
+### Basic Example
+
+Here is an example of how to use the components in a framework agnostic way:
+
+```html
+  <vviinn-text-search token="YOUR_TOKEN" mode="textAndImage"></vviinn-text-search>
+  <vviinn-filters></vviinn-filters>
+  <vviinn-extended-filters></vviinn-extended-filters>
+  <vviinn-results token="YOUR_TOKEN"></vviinn-results>
+```
+  In this basic example we use `vviinn-text-search`, `vviinn-results` and 2 variations of filter component. Be aware, that to show the filters you need to have some search results and 
+
+  Let's take a closer look at the attributes we are using in this example: 
+  - The `token` attribute is required for all components (except filters) and is used to authenticate your requests.
+  - The `textAndImage` mode is enabling image search functionality.
+
+
+
