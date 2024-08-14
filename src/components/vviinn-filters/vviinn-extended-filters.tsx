@@ -242,12 +242,15 @@ export class VviinnExtendedFilters {
                     (f) => f.column === column
                   );
 
+                  const addedOptions = [];
                   requestFilter?.values?.forEach((value) => {
                     const index = filterOptions.findIndex(
                       (f) => f.value.value === value || f.value === value
                     );
                     if (index > -1) {
-                      console.log(filterOptions[index].label);
+                      addedOptions.push(
+                        <span>{filterOptions[index].label}</span>
+                      );
                     }
                   });
 
@@ -262,6 +265,11 @@ export class VviinnExtendedFilters {
                         >
                           {mainFilter.label}
                         </button>
+                        {addedOptions.length > 0 && (
+                          <div class="filters-modal-main-button-added-options">
+                            {addedOptions}
+                          </div>
+                        )}
                       </div>
                       {column === "price" &&
                       this.selectedMoreOptions.includes(mainFilter.column) ? (

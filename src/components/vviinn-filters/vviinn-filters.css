@@ -189,12 +189,13 @@
 }
 .filters-modal-main-button-wrapper {
   border-bottom: 1px solid var(--color-border-01);
+  padding: 20px 0;
 }
 .filters-modal-main-button {
   width: 100%;
   background: none;
   text-align: left;
-  padding: 20px 0;
+  padding: 0;
 
   color: var(--color-text-primary);
   font-family: var(--font-family-base);
@@ -350,4 +351,24 @@
 }
 .filters-sub-button-color:first-child.active {
   margin-left: 2px;
+}
+
+.filters-modal-main-button-added-options {
+  color: var(--color-text-secondary);
+  text-overflow: ellipsis;
+
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-body);
+  font-style: normal;
+  font-weight: var(--font-weight-400);
+  line-height: var(--line-height-body);
+  letter-spacing: var(--letter-spacing-body);
+}
+
+.filters-modal-main-button-added-options > span::after {
+  content: ", ";
+}
+
+.filters-modal-main-button-added-options > span:last-child::after {
+  content: "";
 }
