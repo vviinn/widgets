@@ -238,17 +238,31 @@ export class VviinnExtendedFilters {
                   const column = mainFilter.column;
                   const filterOptions = getFilterOptions(mainFilter);
 
+                  const requestFilter = this.requestFilters.find(
+                    (f) => f.column === column
+                  );
+
+                  requestFilter?.values?.forEach((value) => {
+                    const index = filterOptions.findIndex(
+                      (f) => f.value.value === value || f.value === value
+                    );
+                    if (index > -1) {
+                      console.log(filterOptions[index].label);
+                    }
+                  });
+
                   return (
                     <li>
-                      <button
-                        onClick={() =>
-                          this.handleMoreOptionsMainClick(mainFilter.column)
-                        }
-                        class="filters-modal-main-button"
-                      >
-                        {mainFilter.label}
-                      </button>
-
+                      <div class="filters-modal-main-button-wrapper">
+                        <button
+                          onClick={() =>
+                            this.handleMoreOptionsMainClick(mainFilter.column)
+                          }
+                          class="filters-modal-main-button"
+                        >
+                          {mainFilter.label}
+                        </button>
+                      </div>
                       {column === "price" &&
                       this.selectedMoreOptions.includes(mainFilter.column) ? (
                         <vviinn-price-range
