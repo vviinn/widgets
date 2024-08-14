@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.76.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.75.0...v2.76.0) (2024-08-14)
+
+
+### Features
+
+* Add instructions for a separated components ([51485c2](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/51485c2fa371817935f408f12fdda7705929b237))
+
 ## [2.75.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.74.2...v2.75.0) (2024-08-13)
 
 
