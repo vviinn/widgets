@@ -58,6 +58,7 @@
 .filters-main-button {
   padding: var(--spacing-100) 18px;
   color: var(--color-text-helper);
+  background: none;
 }
 
 .filters-main-button.active,
@@ -215,10 +216,10 @@
 .filters-modal-sub-list {
   display: none;
 }
-.filters-modal-sub-list-inline {
+.filters-modal-sub-list {
   margin: 0 -6px;
 }
-.filters-modal-sub-list-inline > li {
+.filters-modal-sub-list > li {
   display: inline-block;
   margin: 0 6px;
 }
