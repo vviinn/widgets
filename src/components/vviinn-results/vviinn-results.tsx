@@ -122,7 +122,7 @@ export class VviinnResults {
   /** The locale for currency formatting and text localization */
   @Prop() locale?: Locale = "de-DE";
   /** Toggle for opening product link in new tab or not */
-  @Prop() productDetailsNewTab?: boolean = true;
+  @Prop() productDetailsNewTab?: boolean = false;
   /** Toggle for redirection to PDP on product's click */
   @Prop() productDetailsRedirect?: boolean = true;
   /** Query for performing text search */
