@@ -1,7 +1,7 @@
 const textSearchDecorator = (story) => `
     <style>
-      vviinn-filters {
-        margin: 12px 0;
+      vviinn-text-search {
+        margin-top: 16px;
       }
     </style>
       ${story()}
@@ -14,8 +14,8 @@ export default {
 };
 
 const Template = (args) => `
-  <vviinn-extended-filters></vviinn-extended-filters>
-  <vviinn-filters></vviinn-filters>
+  <vviinn-filters show-extended-filters="true"></vviinn-filters>
+
   <vviinn-text-search 
     token="${args.token}"
     api-path="${args.apiPath}"
