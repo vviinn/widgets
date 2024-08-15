@@ -3,6 +3,8 @@
 :host {
   display: block;
   max-width: 400px;
+
+  font-family: var(--font-family-base);
 }
 
 .histogram {
@@ -13,12 +15,12 @@
   margin: 0 0.6%;
 }
 .histogram-bar {
-  background: var(--surface-color-surface-active);
+  background: var(--surface-inverse-bg-color, #262626);
   flex: 1;
   border-radius: 2px 2px 0px 0px;
 }
 .histogram-bar.histogram-bar-inactive {
-  background: var(--surface-color-surface-inactive);
+  background: var(--surface-bg-color-disabled);
 }
 .range_container {
   display: flex;
@@ -45,9 +47,9 @@
   pointer-events: all;
   width: 32px;
   height: 32px;
-  background-color: var(--background-color-background);
+  background-color: var(--color-bg-base);
   border-radius: 50%;
-  box-shadow: 0 0 0 1px var(--border-color-border-02);
+  box-shadow: 0 0 0 1px var(--color-border-02);
   cursor: pointer;
 }
 
@@ -56,9 +58,9 @@
   pointer-events: all;
   width: 32px;
   height: 32px;
-  background-color: var(--background-color-background);
+  background-color: var(--color-bg-base);
   border-radius: 50%;
-  box-shadow: 0 0 0 1px var(--border-color-border-02);
+  box-shadow: 0 0 0 1px var(--color-border-02);
   cursor: pointer;
 }
 
@@ -77,7 +79,7 @@
   height: 2px;
   width: 99.4%;
   position: absolute;
-  background: var(--stroke-color-stroke-01);
+  background: var(--color-border-01);
   pointer-events: none;
 }
 
@@ -98,14 +100,14 @@
   justify-content: center;
   align-items: center;
   border-radius: var(--border-radius-100);
-  background: var(--chip-color-badge-primary);
+  background: var(--chip-bg-color-primary);
 
   color: var(--color-text-inverse);
   text-align: center;
-  font-family: var(--font-family-base);
+
   font-size: var(--font-size-label);
   font-style: normal;
   font-weight: var(--font-weight-500);
   line-height: var(--line-height-label);
-  letter-spacing: var(--letter-spacing-label, 0px);
+  letter-spacing: var(--letter-spacing-label);
 }

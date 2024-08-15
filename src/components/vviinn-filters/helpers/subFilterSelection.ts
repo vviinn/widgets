@@ -23,8 +23,11 @@ export const subFilterSelection = (
   if (valueIndex > -1) pushObject.values.splice(valueIndex, 1);
   else pushObject.values.push(value as ValueRequest);
 
-  if (index === -1) filters = [...filters, pushObject];
-  else {
+  if (index === -1) {
+    filters = [...filters, pushObject];
+    if (document.getElementById("filters-footer"))
+      document.getElementById("filters-footer").scrollLeft = 0;
+  } else {
     filters[index] = pushObject;
 
     if (filters[index].values.length === 0) {

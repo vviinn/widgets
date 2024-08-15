@@ -21,3 +21,7 @@ export { WarningIcon } from "./icons/WarningIcon";
 export { PhotoFrameCorner } from "./icons/PhotoFrameCorner";
 export { FiltersIcon } from "./icons/FiltersIcon";
 export { NewCloseIcon } from "./icons/NewCloseIcon";
+export { StarsIcon } from "./icons/StarsIcon";
+export { CheckFilterIcon } from "./icons/CheckFilterIcon";
+export { CloseFilterIcon } from "./icons/CloseFilterIcon";
+export { SquareFilterIcon } from "./icons/SquareFilterIcon";
