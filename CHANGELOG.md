@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.76.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.76.1...v2.76.2) (2024-08-15)
+
+
+### Bug Fixes
+
+* Applied new designs to vviinn-filters component ([e322986](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/e3229869108d78cbc1a52a5dfed39c16792e1ebf))
+
 ### [2.76.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.76.0...v2.76.1) (2024-08-14)
 
 
