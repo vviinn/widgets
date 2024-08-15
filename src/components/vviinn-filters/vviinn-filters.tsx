@@ -107,7 +107,7 @@ export class VviinnFilters {
     if (!selectedFilter || !requestFilters) return false;
 
     const mainFilter = requestFilters.find(
-      (filter) => filter.column === selectedFilter.column
+      ({ column }) => column === selectedFilter.column
     );
 
     if (!mainFilter) return "";
@@ -270,7 +270,7 @@ export class VviinnFilters {
                 histogram={selectedFilterOptions as Histogram}
                 priceChangeHandler={this.priceChangeHandler}
                 selectedInterval={
-                  (this.requestFilters.find((f) => f.column === "price")
+                  (this.requestFilters.find(({ column }) => column === "price")
                     ?.values[0] ?? {}) as components["schemas"]["interval"]
                 }
               />

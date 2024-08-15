@@ -362,6 +362,9 @@
   border: 2px solid var(--color-border-01);
   border-radius: 20px;
 }
+.filters-sub-button-color:disabled {
+  opacity: 0.25;
+}
 .filters-sub-button-selected.filters-sub-button-color {
   width: 24px;
   height: 24px;

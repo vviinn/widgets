@@ -242,7 +242,7 @@ export class VviinnExtendedFilters {
                 const filterOptions = getFilterOptions(mainFilter);
 
                 const requestFilter = this.requestFilters.find(
-                  (f) => f.column === column
+                  ({ column }) => column === column
                 );
 
                 const addedOptions = [];
