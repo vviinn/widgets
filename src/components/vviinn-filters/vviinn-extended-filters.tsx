@@ -15,7 +15,12 @@ import {
   DynamicFilterValue,
   RequestDynamicFilters,
 } from "../../campaign/VPRCampaignService";
-import { FiltersIcon, NewCloseIcon } from "../vviinn-icons";
+import {
+  FiltersIcon,
+  NewCloseIcon,
+  SquareFilterIcon,
+  CheckFilterIcon,
+} from "../vviinn-icons";
 import { getFilterOptions, subFilterSelection } from "./helpers";
 import { Locale } from "../../locale";
 import i18next from "i18next";
@@ -107,7 +112,7 @@ export class VviinnExtendedFilters {
     requestFilters: RequestDynamicFilters,
     filterValue: DynamicFilterValue
   ) {
-    let className = "";
+    let className = false;
     requestFilters.forEach((filter) => {
       if (
         filter.values.some(
@@ -117,7 +122,7 @@ export class VviinnExtendedFilters {
             value === filterValue.value
         )
       ) {
-        className = "active";
+        className = true;
       }
     });
     return className;
@@ -295,6 +300,11 @@ export class VviinnExtendedFilters {
                         {filterOptions &&
                           filterOptions.map(({ value, label, active }) => {
                             const hexCode = value.hexCode;
+                            const selected = this.showActiveOnModalSubButton(
+                              this.requestFilters,
+                              value
+                            );
+
                             return (
                               <li>
                                 <button
@@ -306,14 +316,18 @@ export class VviinnExtendedFilters {
                                   }
                                   class={`filters-more-modal-button ${
                                     hexCode ? "filters-sub-button-color" : ""
-                                  } ${this.showActiveOnModalSubButton(
-                                    this.requestFilters,
-                                    value
-                                  )}`}
+                                  } ${selected ? "active" : ""}`}
                                   style={{ backgroundColor: hexCode }}
                                   disabled={!active}
                                 >
-                                  <span>{label}</span>
+                                  <span>
+                                    <span>{label}</span>
+                                    {selected ? (
+                                      <CheckFilterIcon />
+                                    ) : (
+                                      <SquareFilterIcon />
+                                    )}
+                                  </span>
                                 </button>
                               </li>
                             );

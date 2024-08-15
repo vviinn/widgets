@@ -2,6 +2,9 @@
 
 :host {
   display: block;
+
+  font-family: var(--font-family-base);
+  font-style: normal;
 }
 
 .filters-footer {
@@ -41,9 +44,8 @@
 
 .filters-sub-button,
 .filters-main-button {
-  font-family: var(--font-family-base);
   font-size: var(--font-size-body);
-  font-style: normal;
+
   font-weight: var(--font-weight-400);
   line-height: var(--line-height-body);
   letter-spacing: var(--letter-spacing-body);
@@ -171,9 +173,7 @@
   color: var(--color-text-primary);
   text-align: center;
 
-  font-family: var(--font-family-base);
   font-size: var(--font-size-headline);
-  font-style: normal;
   font-weight: var(--font-weight-500);
   line-height: var(--line-height-headline);
   letter-spacing: var(--letter-spacing-headline);
@@ -205,9 +205,8 @@
   padding: 0;
 
   color: var(--color-text-primary);
-  font-family: var(--font-family-base);
+
   font-size: var(--font-size-label-large);
-  font-style: normal;
   font-weight: var(--font-weight-500);
   line-height: var(--line-height-label-large);
   letter-spacing: var(--letter-spacing-label-large);
@@ -215,12 +214,16 @@
 
 .filters-modal-sub-list {
   display: none;
-}
-.filters-modal-sub-list {
-  margin: 0 -6px;
+  margin: 0 -4px;
 }
 .filters-modal-sub-list > li {
   display: inline-block;
+  margin: 0 4px;
+}
+.filters-modal-sub-list-inline {
+  margin: 0 -6px;
+}
+.filters-modal-sub-list-inline > li {
   margin: 0 6px;
 }
 
@@ -242,53 +245,72 @@
 
 .filters-more-modal-button {
   background: none;
-  display: block;
   border: none;
   cursor: pointer;
-}
 
+  display: flex;
+  padding: var(--spacing-100);
+  align-items: center;
+  gap: var(--spacing-25);
+
+  border-radius: var(--border-radius-100);
+  background: var(--surface-bg-color-01);
+
+  color: var(--color-text-primary);
+}
 .filters-more-modal-button.active {
-  color: var(--color-primary-system);
+  background: var(--surface-bg-color-inverse);
+  color: var(--color-text-inverse);
+}
+.filters-more-modal-button > span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-25);
+}
+.filters-more-modal-button > span > span {
+  padding: 2px;
 }
 .filters-more-modal-button:disabled {
   cursor: not-allowed;
-  color: var(--text-color-text-disabled, rgba(22, 22, 22, 0.25));
+  opacity: 0.5;
 }
 
 .filters-modal-actions {
-  border-top: 1px solid var(--gray-10);
-  padding: 24px;
+  border-top: 1px solid var(--color-border-01);
+  padding: var(--spacing-250);
   z-index: 10;
   background: #ffffff;
   border-radius: 0px 0px 0px 32px;
 }
 
 .filters-modal-apply {
-  color: var(--text-color-text-inverse);
-  text-align: center;
-  font-family: var(--font-family);
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 24px;
+  cursor: pointer;
+  width: 100%;
+  border: none;
 
   display: flex;
-  width: 100%;
-  padding: 12px;
+  padding: var(--spacing-150);
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: var(--spacing-50);
+  align-self: stretch;
 
-  border-radius: var(--radius-radius-md);
-  background: var(--button-color-button-primary);
+  color: var(--color-text-inverse);
+  text-align: center;
 
-  cursor: pointer;
-  border: none;
+  border-radius: var(--border-radius-150);
+  background: var(--button-bg-color-primary);
+
+  font-size: var(--font-size-label-large);
+  font-weight: var(--font-weight-500);
+  line-height: var(--line-height-label-large);
+  letter-spacing: var(--letter-spacing-label-large);
 }
 
 .filters-modal-apply:disabled {
-  background: var(--button-color-button-disabled);
-  color: var(--text-color-text-disabled);
+  background: var(--button-bg-color-disabled);
+  color: var(--color-text-disabled);
 }
 
 .filters-modal-reset {
@@ -300,14 +322,13 @@
   width: 100%;
   margin-top: 20px;
 
-  color: var(--text-color-text-secondary);
+  color: var(--color-text-secondary);
   text-align: center;
-  font-family: var(--font-family);
-  font-size: var(--font-size-body);
-  font-style: normal;
-  font-weight: var(--font-weight-regular);
-  line-height: var(--line-height-body);
-  letter-spacing: var(--letter-spacing-default);
+
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-500);
+  line-height: var(--line-height-label);
+  letter-spacing: var(--letter-spacing-label);
 }
 
 .selected-filters-wrapper > li {
@@ -328,9 +349,8 @@
 
   color: var(--color-text-inverse);
   text-overflow: ellipsis;
-  font-family: var(--font-family-base);
+
   font-size: var(--font-size-body);
-  font-style: normal;
   font-weight: var(--font-weight-400);
   line-height: var(--line-height-body);
   letter-spacing: var(--letter-spacing-body);
@@ -364,9 +384,7 @@
   color: var(--color-text-secondary);
   text-overflow: ellipsis;
 
-  font-family: var(--font-family-base);
   font-size: var(--font-size-body);
-  font-style: normal;
   font-weight: var(--font-weight-400);
   line-height: var(--line-height-body);
   letter-spacing: var(--letter-spacing-body);
