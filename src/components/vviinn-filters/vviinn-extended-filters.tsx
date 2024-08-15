@@ -280,8 +280,9 @@ export class VviinnExtendedFilters {
                         histogram={filterOptions as Histogram}
                         priceChangeHandler={this.priceChangeHandler}
                         selectedInterval={
-                          (this.requestFilters.find((f) => f.column === "price")
-                            ?.values[0] ??
+                          (this.requestFilters.find(
+                            ({ column }) => column === "price"
+                          )?.values[0] ??
                             {}) as components["schemas"]["interval"]
                         }
                       />
