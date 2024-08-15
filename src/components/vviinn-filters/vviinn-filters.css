@@ -67,7 +67,7 @@
 }
 
 .filters-footer {
-  margin: 16px 0;
+  padding: 16px 0;
 }
 
 .sub-filters-wrapper {
@@ -75,7 +75,7 @@
   display: flex;
 }
 .selected-filters-wrapper {
-  margin: 16px 0;
+  margin-top: 16px;
   padding-top: 16px;
   border-top: 1px solid var(--surface-bg-color-01);
   gap: var(--spacing-100);
@@ -95,6 +95,7 @@
   justify-content: center;
   align-items: center;
   gap: var(--spacing-25);
+  white-space: nowrap;
 }
 
 .filters-sub-button:hover {

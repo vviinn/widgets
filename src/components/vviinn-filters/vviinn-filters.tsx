@@ -226,7 +226,10 @@ export class VviinnFilters {
 
       (filter.values as GetFilterOptions).forEach(
         ({ value, label, active }) => {
-          if (this.showActiveOnSubButton(this.requestFilters, value, filter)) {
+          if (
+            this.showActiveOnSubButton(this.requestFilters, value, filter) &&
+            active
+          ) {
             selectedButtons.push(
               RenderButton(value, label, active, filter, true)
             );
