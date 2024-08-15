@@ -75,7 +75,7 @@
   display: flex;
 }
 .selected-filters-wrapper {
-  margin-top: 16px;
+  margin: 16px 0;
   padding-top: 16px;
   border-top: 1px solid var(--surface-bg-color-01);
   gap: var(--spacing-100);

@@ -58,6 +58,8 @@ export class VviinnFilters {
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
 
+  filtersFooter: HTMLElement;
+
   private handleMainFilterSelection(filter: DynamicFilter) {
     this.selectedFilter = filter;
   }
@@ -80,6 +82,8 @@ export class VviinnFilters {
     filterValue: DynamicFilterValue,
     seletedFilter: DynamicFilter
   ) {
+    this.filtersFooter.scrollLeft = 0;
+
     this.requestFilters = subFilterSelection(
       this.requestFilters,
       seletedFilter,
@@ -196,7 +200,9 @@ export class VviinnFilters {
 
       return (
         <li
-          onClick={() => this.handleSubFilterSelection(value, selectedFilter)}
+          onClick={() =>
+            active ? this.handleSubFilterSelection(value, selectedFilter) : null
+          }
         >
           <button
             class={`filters-sub-button${isSelected ? "-selected" : ""} ${
@@ -251,7 +257,10 @@ export class VviinnFilters {
         </div>
 
         {this.selectedFilter !== undefined && (
-          <div class="filters-footer">
+          <div
+            class="filters-footer"
+            ref={(el) => (this.filtersFooter = el as HTMLElement)}
+          >
             {column === "price" ? (
               <vviinn-price-range
                 histogram={selectedFilterOptions as Histogram}
