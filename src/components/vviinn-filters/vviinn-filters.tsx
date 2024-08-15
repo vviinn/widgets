@@ -212,7 +212,8 @@ export class VviinnFilters {
             disabled={!active}
           >
             <span>
-              {label} {!isSelected ? <StarsIcon /> : <CheckFilterIcon />}
+              {!isSelected ? label : <span>{label}</span>}{" "}
+              {!isSelected ? <StarsIcon /> : <CheckFilterIcon />}
             </span>
           </button>
           {isSelected && hexCode && <CloseFilterIcon />}
