@@ -398,7 +398,7 @@ export class VviinnVpsWidget {
   }
 
   @Listen("vviinnSelectFilter")
-  trackFilter({ detail }: CustomEvent<SelectFilterEventData>) {
+  trackFilterSelected({ detail }: CustomEvent<SelectFilterEventData>) {
     this.initResultEvents();
     if (this.trackingDeactivated) return;
     const { campaignTypeId, ...rest } = this.getBasicEventData();
