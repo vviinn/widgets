@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.77.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.76.2...v2.77.0) (2024-08-16)
+
+
+### Features
+
+* Show filters with the Text Search component in the Storybook ([413a6e9](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/413a6e9a46f87da6a7cf380c1cc956e58f23da8d))
+
 ### [2.76.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.76.1...v2.76.2) (2024-08-15)
 
 
