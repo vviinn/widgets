@@ -22,10 +22,7 @@
 }
 
 .main-filters-wrapper {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 16px;
+  overflow-x: auto;
 }
 
 .main-filters-list {

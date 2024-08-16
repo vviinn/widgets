@@ -27,7 +27,6 @@ import {
 } from "../../recommendation/events";
 import { components } from "../../interfaces/generated";
 import { StarsIcon, CheckFilterIcon, CloseFilterIcon } from "../vviinn-icons";
-import { Locale } from "../../locale";
 
 /**
  * @part filters - Wrapper itself.
@@ -42,10 +41,6 @@ export class VviinnFilters {
   @Element() el: HTMLElement;
 
   @Prop({ mutable: true }) filters: DynamicFilters = [];
-  /** Show extended filters button */
-  @Prop() showExtendedFilters: boolean = false;
-  /** The locale for currency formatting and text localization */
-  @Prop() locale: Locale = "de-DE";
   /** @internal */
   @Prop() filtersString: string = "";
 
@@ -263,12 +258,6 @@ export class VviinnFilters {
               );
             })}
           </ul>
-          {this.showExtendedFilters && (
-            <vviinn-extended-filters
-              filters={this.filters}
-              locale={this.locale}
-            ></vviinn-extended-filters>
-          )}
         </div>
 
         {this.selectedFilter !== undefined && (

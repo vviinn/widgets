@@ -12,8 +12,6 @@ export default {
 const Template = (args) => `
   <vviinn-filters
     filters-string='${JSON.stringify(args.filters)}'
-    show-extended-filters="${args.showExtendedFilters}"
-    locale="${args.locale}"
   ></vviinn-filters>`;
 
 export const Main = Template.bind({});
@@ -22,6 +20,4 @@ Main.storyName = "Main";
 
 Main.args = {
   filters,
-  showExtendedFilters: false,
-  locale: "de-DE",
 };
