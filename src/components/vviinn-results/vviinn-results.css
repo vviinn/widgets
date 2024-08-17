@@ -1,14 +1,13 @@
 @import "../../variables.css";
 
 :host {
+  /**
+    * @prop --vviinn-product-card-width: Minimum width of product card inside the grid.
+  */
   display: block;
 }
 
 :host(.widget-results) {
-  /**
-    * @prop --vviinn-product-card-width: Minimum width of product card inside the grid.
-   */
-
   display: grid;
   overflow-y: auto;
   overflow-x: hidden;
@@ -27,13 +26,26 @@
   grid-template-columns: repeat(
     auto-fill,
     minmax(
-      var(--vviinn-product-card-width, var(--product-card-width-system)),
+      var(--vviinn-product-card-width, var(--product-card-width-widget-system)),
       1fr
     )
   );
   justify-items: center;
   padding: 24px;
   position: absolute;
+}
+
+:host(.widget-results) .products {
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(
+      var(
+        --vviinn-product-card-width,
+        var(--product-card-width-results-system)
+      ),
+      1fr
+    )
+  );
 }
 
 :host(:not(.widget-results)) .products {
@@ -77,7 +89,7 @@ vviinn-product-card::part(energy-label) {
 }
 
 @media (max-width: 768px) {
-  :host {
+  :host(.widget-results) {
     align-content: start;
     position: static;
     overflow-y: unset;

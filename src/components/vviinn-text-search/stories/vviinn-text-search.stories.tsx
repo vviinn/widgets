@@ -8,6 +8,10 @@ const textSearchDecorator = (story) => `
         width: fit-content;
         margin-left: auto;
       }
+
+      vviinn-results {
+        margin: 20px 0;
+      }
     </style>
       ${story()}
   `;

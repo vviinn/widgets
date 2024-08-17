@@ -3,7 +3,8 @@
   --color-primary-system: #0f62fe;
   --color-primary-hover-system: #014cda;
   --color-icons-system: #2f8edf;
-  --product-card-width-system: 130px;
+  --product-card-width-widget-system: 130px;
+  --product-card-width-results-system: 200px;
   --spacer: 8px;
   --font-weight-regular: 400;
   --letter-spacing-default: 0px;
