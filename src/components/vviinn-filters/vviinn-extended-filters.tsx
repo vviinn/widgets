@@ -9,6 +9,8 @@ import {
   Element,
   Watch,
 } from "@stencil/core";
+import i18next from "i18next";
+
 import {
   DynamicFilters,
   DynamicFilter,
@@ -21,10 +23,13 @@ import {
   SquareFilterIcon,
   CheckFilterIcon,
 } from "../vviinn-icons";
-import { getFilterOptions, subFilterSelection } from "./helpers";
-import { Locale } from "../../locale";
-import i18next from "i18next";
-import { resources } from "../../locale";
+import {
+  getFilterOptions,
+  subFilterSelection,
+  emitRequestFiltersMore,
+} from "./helpers";
+import { Locale, resources } from "../../locale";
+
 import { SlotSkeleton, slotChangeListener } from "../customized-slots";
 import { Histogram } from "../vviinn-price-range/vviinn-price-range";
 import {
@@ -91,10 +96,6 @@ export class VviinnExtendedFilters {
     slotChangeListener(this, this.el);
   }
 
-  private emitRequestFiltersMore(requestFilters: RequestDynamicFilters) {
-    this.vviinnFiltersChanged.emit({ filters: requestFilters, el: this.el });
-  }
-
   private handleSubFilterSelection(
     filterValue: DynamicFilterValue,
     seletedFilter: DynamicFilter
@@ -105,7 +106,11 @@ export class VviinnExtendedFilters {
       filterValue
     );
 
-    this.emitRequestFiltersMore([...this.requestFilters]);
+    emitRequestFiltersMore(
+      [...this.requestFilters],
+      this.el,
+      this.vviinnFiltersChanged
+    );
   }
 
   private showActiveOnModalSubButton(
@@ -183,7 +188,7 @@ export class VviinnExtendedFilters {
   }
 
   private resetModal() {
-    this.emitRequestFiltersMore([]);
+    emitRequestFiltersMore([], this.el, this.vviinnFiltersChanged);
     this.requestFilters = [];
     this.showMore = false;
   }
@@ -238,13 +243,11 @@ export class VviinnExtendedFilters {
 
             <ul class="filters-modal-list">
               {this.filters.map((mainFilter) => {
-                const column = mainFilter.column;
+                const mianColumn = mainFilter.column;
                 const filterOptions = getFilterOptions(mainFilter);
-
                 const requestFilter = this.requestFilters.find(
-                  ({ column }) => column === column
+                  ({ column }) => column === mianColumn
                 );
-
                 const addedOptions = [];
                 requestFilter?.values?.forEach((value) => {
                   const index = filterOptions.findIndex(
@@ -274,7 +277,7 @@ export class VviinnExtendedFilters {
                         </div>
                       )}
                     </div>
-                    {column === "price" &&
+                    {mianColumn === "price" &&
                     this.selectedMoreOptions.includes(mainFilter.column) ? (
                       <vviinn-price-range
                         histogram={filterOptions as Histogram}
@@ -289,7 +292,7 @@ export class VviinnExtendedFilters {
                     ) : (
                       <ul
                         class={`filters-modal-sub-list ${
-                          column === "color_confirmed"
+                          mianColumn === "color_confirmed"
                             ? "filters-modal-sub-list-inline"
                             : ""
                         } ${

@@ -18,7 +18,9 @@ import {
 import {
   getFilterOptions,
   subFilterSelection,
-  GetFilterOptions,
+  RenderButton,
+  showActiveOnSubButton,
+  emitRequestFiltersMore,
 } from "./helpers";
 import { Histogram } from "../vviinn-price-range/vviinn-price-range";
 import {
@@ -26,7 +28,6 @@ import {
   DynamicFiltersEventData,
 } from "../../recommendation/events";
 import { components } from "../../interfaces/generated";
-import { StarsIcon, CheckFilterIcon, CloseFilterIcon } from "../vviinn-icons";
 
 /**
  * @part filters - Wrapper itself.
@@ -58,14 +59,8 @@ export class VviinnFilters {
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
 
-  filtersFooter: HTMLElement;
-
   private handleMainFilterSelection(filter: DynamicFilter) {
     this.selectedFilter = filter;
-  }
-
-  private emitRequestFiltersMore(requestFilters: RequestDynamicFilters) {
-    this.vviinnFiltersChanged.emit({ filters: requestFilters, el: this.el });
   }
 
   timer: NodeJS.Timeout = null;
@@ -82,44 +77,23 @@ export class VviinnFilters {
     filterValue: DynamicFilterValue,
     seletedFilter: DynamicFilter
   ) {
-    this.filtersFooter.scrollLeft = 0;
-
     this.requestFilters = subFilterSelection(
       this.requestFilters,
       seletedFilter,
       filterValue
     );
 
-    this.emitRequestFiltersMore([...this.requestFilters]);
+    emitRequestFiltersMore(
+      [...this.requestFilters],
+      this.el,
+      this.vviinnFiltersChanged
+    );
   }
 
   private showActiveOnMainButton({ column }: DynamicFilter) {
     if (!this.selectedFilter) return "";
 
     return this.selectedFilter.column === column ? "active" : "";
-  }
-
-  private showActiveOnSubButton(
-    requestFilters: RequestDynamicFilters,
-    filterValue: DynamicFilterValue,
-    selectedFilter: DynamicFilter
-  ) {
-    if (!selectedFilter || !requestFilters) return false;
-
-    const mainFilter = requestFilters.find(
-      ({ column }) => column === selectedFilter.column
-    );
-
-    if (!mainFilter) return "";
-
-    return mainFilter.values.some(
-      (value) =>
-        value === filterValue ||
-        value === filterValue.interval ||
-        value === filterValue.value
-    )
-      ? true
-      : false;
   }
 
   private handleSetFilters = ({
@@ -187,57 +161,8 @@ export class VviinnFilters {
     const { column } = this.selectedFilter ?? {};
     const selectedFilterOptions = getFilterOptions(this.selectedFilter);
     const filters = this.filters.filter((filter) => filter.isPrimary);
+
     if (filters.length === 0) return <Host></Host>;
-
-    const RenderButton = (
-      value,
-      label,
-      active,
-      selectedFilter,
-      isSelected = false
-    ) => {
-      const hexCode = value.hexCode;
-
-      return (
-        <li
-          onClick={() =>
-            active ? this.handleSubFilterSelection(value, selectedFilter) : null
-          }
-        >
-          <button
-            class={`filters-sub-button${isSelected ? "-selected" : ""} ${
-              hexCode ? "filters-sub-button-color" : ""
-            }`}
-            style={{ backgroundColor: hexCode }}
-            disabled={!active}
-          >
-            <span>
-              {!isSelected ? label : <span>{label}</span>}{" "}
-              {!isSelected ? <StarsIcon /> : <CheckFilterIcon />}
-            </span>
-          </button>
-          {isSelected && hexCode && <CloseFilterIcon />}
-        </li>
-      );
-    };
-
-    let selectedButtons = [];
-    this.filters.forEach((filter) => {
-      if (!("values" in filter)) return;
-
-      (filter.values as GetFilterOptions).forEach(
-        ({ value, label, active }) => {
-          if (
-            this.showActiveOnSubButton(this.requestFilters, value, filter) &&
-            active
-          ) {
-            selectedButtons.push(
-              RenderButton(value, label, active, filter, true)
-            );
-          }
-        }
-      );
-    });
 
     return (
       <Host part="filters">
@@ -261,10 +186,7 @@ export class VviinnFilters {
         </div>
 
         {this.selectedFilter !== undefined && (
-          <div
-            class="filters-footer"
-            ref={(el) => (this.filtersFooter = el as HTMLElement)}
-          >
+          <div class="filters-footer">
             {column === "price" ? (
               <vviinn-price-range
                 histogram={selectedFilterOptions as Histogram}
@@ -278,28 +200,22 @@ export class VviinnFilters {
               <ul class="sub-filters-wrapper">
                 {selectedFilterOptions &&
                   selectedFilterOptions.map(({ value, label, active }) => {
-                    if (
-                      this.showActiveOnSubButton(
-                        this.requestFilters,
-                        value,
-                        this.selectedFilter
-                      )
-                    ) {
-                      return null;
-                    }
+                    const isSelected = showActiveOnSubButton(
+                      this.requestFilters,
+                      value,
+                      this.selectedFilter
+                    );
 
                     return RenderButton(
+                      this.handleSubFilterSelection.bind(this),
                       value,
                       label,
                       active,
-                      this.selectedFilter
+                      this.selectedFilter,
+                      isSelected
                     );
                   })}
               </ul>
-            )}
-
-            {selectedButtons.length > 0 && (
-              <ul class="selected-filters-wrapper">{selectedButtons}</ul>
             )}
           </div>
         )}
