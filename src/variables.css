@@ -2,8 +2,8 @@
   /*FIXME-36964: Egor should remove these variable and use the new names*/
   --color-primary-system: #0f62fe;
   --color-primary-hover-system: #014cda;
-  --product-card-width-widget: 130px;
-  --product-card-width-results: 250px;
+  --product-card-min-width-widget: 130px;
+  --product-card-min-width-results: 250px;
 
   /* New Styles */
   --font-family-base: Inter, system-ui, sans-serif;
