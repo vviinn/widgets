@@ -32,7 +32,7 @@
   appearance: none;
   border: none;
   background: transparent;
-  color: var(--color-primary, var(--color-primary-system));
+  color: var(--color-primary, var(--button-bg-color-primary));
   font-weight: 600;
   font-size: 16px;
   line-height: 20px;
