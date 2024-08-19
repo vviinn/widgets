@@ -7,7 +7,7 @@
   display: block;
 }
 
-:host(.widget-results) {
+:host(.show-in-widget) {
   display: grid;
   overflow-y: auto;
   overflow-x: hidden;
@@ -26,7 +26,7 @@
   grid-template-columns: repeat(
     auto-fill,
     minmax(
-      var(--vviinn-product-card-width, var(--product-card-width-widget-system)),
+      var(--vviinn-product-card-width, var(--product-card-width-results)),
       1fr
     )
   );
@@ -35,20 +35,17 @@
   position: absolute;
 }
 
-:host(.widget-results) .products {
+:host(.show-in-widget) .products {
   grid-template-columns: repeat(
     auto-fill,
     minmax(
-      var(
-        --vviinn-product-card-width,
-        var(--product-card-width-results-system)
-      ),
+      var(--vviinn-product-card-width, var(--product-card-width-widget)),
       1fr
     )
   );
 }
 
-:host(:not(.widget-results)) .products {
+:host(:not(.show-in-widget)) .products {
   position: static;
   padding: 0;
 }
@@ -89,7 +86,7 @@ vviinn-product-card::part(energy-label) {
 }
 
 @media (max-width: 768px) {
-  :host(.widget-results) {
+  :host(.show-in-widget) {
     align-content: start;
     position: static;
     overflow-y: unset;
