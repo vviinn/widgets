@@ -60,14 +60,14 @@
   bottom: 0;
   box-sizing: border-box;
   display: grid;
-  height: calc(var(--spacer) * 6);
+  height: calc(var(--spacing-100) * 6);
   justify-items: center;
   margin: auto;
   position: absolute;
   top: 0;
   transform: translate3d(0, -50%, 0);
   transition: border 0.25ms ease-in-out;
-  width: calc(var(--spacer) * 4);
+  width: calc(var(--spacing-100) * 4);
 }
 
 .arrow-wrapper:active {
