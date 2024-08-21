@@ -3,7 +3,6 @@ export { BasketIcon } from "./icons/BasketIcon";
 export { CameraActionIcon } from "./icons/CameraActionIcon";
 export { CameraIcon } from "./icons/CameraIcon";
 export { CheckCircleIcon } from "./icons/CheckCircleIcon";
-export { CheckIcon } from "./icons/CheckIcon";
 export { ChevronIcon } from "./icons/ChevronIcon";
 export { CloseIcon } from "./icons/CloseIcon";
 export { CrossIcon } from "./icons/CrossIcon";
