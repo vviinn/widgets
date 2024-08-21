@@ -1,7 +1,7 @@
 :host {
   /* New Styles */
   --font-family-base: Inter, system-ui, sans-serif;
-  --font-family-mono: "JetBrains Mono", monospace;
+  --font-family-mono: monospace;
 
   --font-size-title: 24px;
   --font-size-headline: 18px;
@@ -70,8 +70,8 @@
 
   /* Product Card */
 
-  --product-card-width-widget: 130px;
-  --product-card-width-results: 250px;
+  --product-card-widget-min-width: 130px;
+  --product-card-results-min-width: 250px;
 
   /* Filters */
   --filter-blur-none: 0px;
