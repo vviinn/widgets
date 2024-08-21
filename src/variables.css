@@ -2,16 +2,12 @@
   /*FIXME-36964: Egor should remove these variable and use the new names*/
   --color-primary-system: #0f62fe;
   --color-primary-hover-system: #014cda;
-  --color-icons-system: #2f8edf;
-  --product-card-width-system: 130px;
-  --spacer: 8px;
-  --font-weight-regular: 400;
-  --letter-spacing-default: 0px;
-  --radius-radius-md: 8px;
+  --product-card-widget-min-width: 130px;
+  --product-card-results-min-width: 250px;
 
   /* New Styles */
   --font-family-base: Inter, system-ui, sans-serif;
-  --font-family-mono: "JetBrains Mono", monospace;
+  --font-family-mono: monospace;
 
   --font-size-title: 24px;
   --font-size-headline: 18px;

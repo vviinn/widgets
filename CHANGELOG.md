@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.78.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.77.0...v2.78.0) (2024-08-21)
+
+
+### Features
+
+* Fix layout issues for Text Search story ([fe93e92](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/fe93e924de6f920ae61559b2ec37e8ebc8c9be3a))
+
 ## [2.77.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.76.2...v2.77.0) (2024-08-16)
 
 

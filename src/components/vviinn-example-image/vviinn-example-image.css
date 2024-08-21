@@ -141,7 +141,7 @@ img {
   height: 48px;
   justify-content: center;
   align-items: center;
-  border-radius: var(--radius-radius-md, 8px);
+  border-radius: var(--border-radius-100, 8px);
   background-color: rgba(0, 0, 0, 0.48);
   border: none;
   cursor: pointer;
