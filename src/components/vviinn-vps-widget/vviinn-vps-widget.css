@@ -142,6 +142,10 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   min-width: calc(100% + 48px);
 }
 
+/* .vviinn-filters {
+  padding-left: 20px;
+} */
+
 search-filters span {
   display: none;
 }

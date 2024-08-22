@@ -1,10 +1,20 @@
 @import "../../variables.css";
 
+/* TODO: */
+
 :host {
   display: block;
 
   font-family: var(--font-family-base);
   font-style: normal;
+  /* overflow-x: auto; */
+}
+
+:host(.show-in-widget) {
+  padding-left: 24px;
+  /* transform: translateX(-24px);
+  padding-left: 48px;
+  width: calc(100% + 24px); */
 }
 
 .filters-footer {
@@ -21,9 +31,9 @@
   padding: 0;
 }
 
-.main-filters-wrapper {
+/* .main-filters-wrapper {
   overflow-x: auto;
-}
+} */
 
 .main-filters-list {
   padding: var(--spacing-25);
@@ -106,8 +116,7 @@
 }
 
 .filters-sub-button:hover {
-  background: var(--surface-bg-color-01);
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  background: var(--surface-bg-color-01-hover);
 }
 
 .filters-sub-button:disabled {

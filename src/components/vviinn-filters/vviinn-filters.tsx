@@ -22,6 +22,7 @@ import {
 } from "./helpers";
 import { Histogram } from "../vviinn-price-range/vviinn-price-range";
 import {
+  BasicEventData,
   ChangedFiltersEventData,
   DynamicFiltersEventData,
 } from "../../recommendation/events";
@@ -43,6 +44,10 @@ export class VviinnFilters {
   @Prop({ mutable: true }) filters: DynamicFilters = [];
   /** @internal */
   @Prop() filtersString: string = "";
+  /** @internal */
+  @Prop() showInWidget: boolean = false;
+  /** @internal */
+  @Prop() basicEventData?: BasicEventData;
 
   @State() selectedFilter: DynamicFilter;
   @State() requestFilters: RequestDynamicFilters = [];
@@ -240,7 +245,12 @@ export class VviinnFilters {
     });
 
     return (
-      <Host part="filters">
+      <Host
+        part="filters"
+        class={{
+          "show-in-widget": this.showInWidget,
+        }}
+      >
         <div class="main-filters-wrapper">
           <ul class="main-filters-list">
             {filters.map((filter) => {

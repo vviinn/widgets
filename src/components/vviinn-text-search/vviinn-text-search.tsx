@@ -83,7 +83,7 @@ export class VviinnTextSearch {
     if (!this.searchQuery) return;
 
     if (this.showInWidget) {
-      await makeTextSearchRequest(this.searchQuery, this.token);
+      await makeTextSearchRequest(this.token, this.searchQuery);
       this.vviinnTextSearchFinished.emit({ query: this.searchQuery });
     } else {
       this.vviinnTextSearchStarted.emit({

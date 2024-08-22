@@ -24,6 +24,7 @@ import {
   makeProductListingPageRequest,
   makeSearchIdRequest,
   makeSearchQueryRequest,
+  makeTextSearchRequest,
   searchState,
 } from "../../store/search.store";
 import { state } from "../../store/store";
@@ -299,15 +300,20 @@ export class VviinnResults {
     query?: string,
     filters?: RequestDynamicFilters
   ) {
-    if (this.showInWidget || !query) return;
+    if (!query) return;
     state.apiPath = this.apiPath; //FIXME: #36877
+
+    if (this.showInWidget) {
+      makeTextSearchRequest(this.token, query, filters);
+      return;
+    }
 
     pipe(
       await makeSearchQueryRequest(
         this.token,
         query,
-        this.resultsCount,
-        filters
+        filters,
+        this.resultsCount
       ),
       E.getOrElse(() => null),
       (response: TextSearchResponse) => {
