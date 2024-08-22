@@ -44,12 +44,12 @@
 }
 
 .bullet.active {
-  background: var(--color-primary, var(--color-primary-system));
+  background: var(--color-primary, var(--button-bg-color-primary));
 }
 
 .bullet:active {
   background: transparent;
-  border: 2px solid var(--color-primary, var(--color-primary-system));
+  border: 2px solid var(--color-primary, var(--button-bg-color-primary));
 }
 
 .arrow-wrapper {
@@ -71,12 +71,12 @@
 }
 
 .arrow-wrapper:active {
-  border-color: var(--color-primary, var(--color-primary-system));
+  border-color: var(--color-primary, var(--button-bg-color-primary));
   opacity: 0.75;
 }
 
 .arrow-wrapper:focus {
-  border-color: var(--color-primary, var(--color-primary-system));
+  border-color: var(--color-primary, var(--button-bg-color-primary));
   opacity: 0.5;
   outline: none;
 }
