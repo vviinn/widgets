@@ -7,7 +7,7 @@
 .text-search-input {
   width: 100%;
   height: 48px;
-  padding: 0 16px;
+  padding: 0 62px 0 16px;
   font-size: 16px;
   box-sizing: border-box;
   font-style: normal;
@@ -17,6 +17,10 @@
   transition: border-color 0.2s;
   outline: none;
   overflow: hidden;
+}
+
+.text-search-input--with-icon {
+  padding-right: 96px;
 }
 
 .text-search-input::placeholder {
