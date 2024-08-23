@@ -1,10 +1,4 @@
 :host {
-  /*FIXME-36964: Egor should remove these variable and use the new names*/
-  --color-primary-system: #0f62fe;
-  --color-primary-hover-system: #014cda;
-  --product-card-widget-min-width: 130px;
-  --product-card-results-min-width: 250px;
-
   /* New Styles */
   --font-family-base: Inter, system-ui, sans-serif;
   --font-family-mono: monospace;
@@ -73,6 +67,11 @@
   --stroke-width-150: 6px;
   --stroke-width-200: 8px;
   --stroke-width-300: 12px;
+
+  /* Product Card */
+
+  --product-card-widget-min-width: 130px;
+  --product-card-results-min-width: 250px;
 
   /* Filters */
   --filter-blur-none: 0px;

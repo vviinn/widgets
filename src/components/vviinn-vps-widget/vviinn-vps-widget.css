@@ -86,14 +86,17 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
 }
 
 .action-button:first-child {
-  background: var(--color-primary, var(--color-primary-system));
-  border-color: var(--color-primary, var(--color-primary-system));
+  background: var(--color-primary, var(--button-bg-color-primary));
+  border-color: var(--color-primary, var(--button-bg-color-primary));
   color: white;
 }
 
 .action-button:first-child:hover {
-  background: var(--color-primary-hover, var(--color-primary-hover-system));
-  border-color: var(--color-primary-hover, var(--color-primary-hover-system));
+  background: var(--color-primary-hover, var(--button-bg-color-primary-hover));
+  border-color: var(
+    --color-primary-hover,
+    var(--button-bg-color-primary-hover)
+  );
 }
 
 .action-button:active {
@@ -178,7 +181,7 @@ search-filters::part(show-more-filters):hover {
 }
 
 search-filters::part(filter active) {
-  background: var(--color-primary, var(--color-primary-system));
+  background: var(--color-primary, var(--button-bg-color-primary));
   color: white;
 }
 
