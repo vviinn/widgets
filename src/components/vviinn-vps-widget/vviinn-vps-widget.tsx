@@ -724,7 +724,7 @@ export class VviinnVpsWidget {
                       hidden: this.showAspectRatioError,
                     }}
                   >
-                    <div class="filters vviinn-filters">
+                    <div class="vviinn-filters-container">
                       <vviinn-filters
                         filters={searchState.textSearchFilters}
                         showInWidget={true}

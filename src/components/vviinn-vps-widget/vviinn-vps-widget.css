@@ -145,10 +145,6 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   min-width: calc(100% + 48px);
 }
 
-/* .vviinn-filters {
-  padding-left: 20px;
-} */
-
 search-filters span {
   display: none;
 }
@@ -181,12 +177,16 @@ search-filters::part(show-more-filters):hover {
 }
 
 search-filters::part(filter active) {
-  background: var(--color-primary, var(--button-bg-color-primary));
+  background: var(--color-primary, var(--color-primary-system));
   color: white;
 }
 
 .results-page:not(.active) {
   display: none;
+}
+
+.results-page vviinn-text-search {
+  width: calc(100% + 24px);
 }
 
 vviinn-preloader {
@@ -209,6 +209,10 @@ vviinn-preloader {
 
   vviinn-overlayed-modal.first-screen::part(secondary-action) {
     visibility: visible;
+  }
+
+  .results-page vviinn-text-search {
+    width: auto;
   }
 
   .start-page.active {
