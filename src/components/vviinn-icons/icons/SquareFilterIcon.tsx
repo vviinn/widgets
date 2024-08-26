@@ -11,8 +11,8 @@ export const SquareFilterIcon = () => (
     <rect
       x="3"
       y="3"
-      width="18"
-      height="18"
+      width="20"
+      height="20"
       rx="3"
       fill="white"
       stroke="#E0E0E0"

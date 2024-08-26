@@ -102,6 +102,7 @@
   white-space: nowrap;
 }
 
+.filters-sub-button > span > span,
 .filters-sub-button-selected > span > span {
   padding: 2px;
 }

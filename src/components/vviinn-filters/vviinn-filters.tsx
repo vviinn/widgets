@@ -31,6 +31,22 @@ import { components } from "../../interfaces/generated";
 
 /**
  * @part filters - Wrapper itself.
+ * @part filters-wrapper - Wrapper for the main filters.
+ * @part filters-list - List of main filters.
+ * @part filters-main-button - Main filter button.
+ * @part filters-footer - Wrapper for the sub filters.
+ * @part filters-footer-list - List of sub filters.
+
+ * @part filters-sub-button - Sub filter button.
+ 
+ * @part histogram - Wrapper itself.
+ * @part histogram-bar - Bar of the histogram.
+ * @part histogram-range-container - Container for the range sliders.
+ * @part histogram-sliders-control - Container for the range sliders control.
+ * @part histogram-from-slider - Slider for the minimum value.
+ * @part histogram-to-slider - Slider for the maximum value.
+ * @part histogram-label-wrapper - Wrapper for the labels.
+ * @part histogram-label - Label for the histogram.
  */
 
 @Component({
@@ -166,8 +182,8 @@ export class VviinnFilters {
 
     return (
       <Host part="filters">
-        <div class="main-filters-wrapper">
-          <ul class="main-filters-list">
+        <div class="main-filters-wrapper" part="filters-wrapper">
+          <ul class="main-filters-list" part="filters-list">
             {filters.map((filter) => {
               return (
                 <li>
@@ -176,6 +192,7 @@ export class VviinnFilters {
                       filter
                     )}`}
                     onClick={() => this.handleMainFilterSelection(filter)}
+                    part="filters-main-button"
                   >
                     {filter.label}
                   </button>
@@ -186,7 +203,7 @@ export class VviinnFilters {
         </div>
 
         {this.selectedFilter !== undefined && (
-          <div class="filters-footer">
+          <div class="filters-footer" part="filters-footer">
             {column === "price" ? (
               <vviinn-price-range
                 histogram={selectedFilterOptions as Histogram}
@@ -197,7 +214,7 @@ export class VviinnFilters {
                 }
               />
             ) : (
-              <ul class="sub-filters-wrapper">
+              <ul class="sub-filters-wrapper" part="filters-footer-list">
                 {selectedFilterOptions &&
                   selectedFilterOptions.map(({ value, label, active }) => {
                     const isSelected = showActiveOnSubButton(

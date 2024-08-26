@@ -26,7 +26,10 @@ import {
 } from "../../recommendation/events";
 
 /**
- * @part filters - Wrapper itself.
+ * @part selected-filters - Wrapper itself.
+ * @part selected-filters-list - List of selected filters.
+
+ * @part filters-sub-button - Sub filter button.
  */
 
 @Component({
@@ -124,9 +127,11 @@ export class VviinnSelectedFilters {
     });
 
     return (
-      <Host part="filters">
+      <Host part="selected-filters">
         {selectedButtons.length > 0 && (
-          <ul class="selected-filters-wrapper">{selectedButtons}</ul>
+          <ul class="selected-filters-wrapper" part="selected-filters-list">
+            {selectedButtons}
+          </ul>
         )}
       </Host>
     );

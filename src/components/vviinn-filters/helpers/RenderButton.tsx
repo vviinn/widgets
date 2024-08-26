@@ -29,9 +29,10 @@ export const RenderButton = (
         } ${isSelected ? "active" : ""}`}
         style={{ backgroundColor: hexCode }}
         disabled={!active}
+        part="filters-sub-button"
       >
         <span>
-          {!isSelected ? label : <span>{label}</span>}
+          <span>{label}</span>
           {!showClose ? (
             isSelected ? (
               <CheckFilterIcon />
