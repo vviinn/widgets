@@ -728,7 +728,6 @@ export class VviinnVpsWidget {
                       <vviinn-filters
                         filters={searchState.textSearchFilters}
                         showInWidget={true}
-                        basicEventData={this.getBasicEventData()}
                       ></vviinn-filters>
                     </div>
                   </div>
