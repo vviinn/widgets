@@ -181,7 +181,7 @@ export class VviinnFilters {
     if (filters.length === 0) return <Host></Host>;
 
     return (
-      <Host part="filters">
+      <Host>
         <div class="main-filters-wrapper" part="filters-wrapper">
           <ul class="main-filters-list" part="filters-list">
             {filters.map((filter) => {

@@ -127,7 +127,7 @@ export class VviinnSelectedFilters {
     });
 
     return (
-      <Host part="selected-filters">
+      <Host>
         {selectedButtons.length > 0 && (
           <ul class="selected-filters-wrapper" part="selected-filters-list">
             {selectedButtons}

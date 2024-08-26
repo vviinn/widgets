@@ -236,7 +236,7 @@ export class VviinnExtendedFilters {
 
   render() {
     return (
-      <Host part="extended-filters">
+      <Host>
         {SlotSkeleton("filters")}
 
         {this.filters.length > 0 && (
