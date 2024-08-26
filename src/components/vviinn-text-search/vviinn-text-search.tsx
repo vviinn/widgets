@@ -102,7 +102,10 @@ export class VviinnTextSearch {
     return (
       <Host exportparts="text-search-input">
         <input
-          class="text-search-input"
+          class={{
+            "text-search-input": true,
+            "text-search-input--with-icon": this.mode === "textAndImage",
+          }}
           part="text-search-input"
           type="text"
           placeholder={i18next.t("textSearchPlaceholder")}

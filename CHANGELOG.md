@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.79.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.79.0...v2.79.1) (2024-08-26)
+
+
+### Bug Fixes
+
+* Add additional padding for vviinn-text-search in textAndImage mode ([a5af8b1](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/a5af8b1365e70bdc6c5fc22e0fe7e3d4288cfdbb))
+
 ## [2.79.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.78.0...v2.79.0) (2024-08-22)
 
 
