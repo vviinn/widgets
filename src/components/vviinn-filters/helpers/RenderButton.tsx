@@ -26,16 +26,22 @@ export const RenderButton = (
       <button
         class={`filters-sub-button${isSelected ? "-selected" : ""} ${
           hexCode ? "filters-sub-button-color" : ""
-        }`}
+        } ${isSelected ? "active" : ""}`}
         style={{ backgroundColor: hexCode }}
         disabled={!active}
       >
         <span>
-          {!isSelected ? label : <span>{label}</span>}{" "}
-          {isSelected ? <CheckFilterIcon /> : <SquareFilterIcon />}
+          {!isSelected ? label : <span>{label}</span>}
+          {!showClose ? (
+            isSelected ? (
+              <CheckFilterIcon />
+            ) : (
+              <SquareFilterIcon />
+            )
+          ) : null}
         </span>
       </button>
-      {isSelected && hexCode && showClose && <CloseFilterIcon />}
+      {isSelected && showClose && <CloseFilterIcon />}
     </li>
   );
 };

@@ -367,6 +367,7 @@
   width: 40px;
   height: 40px;
   border: 2px solid var(--color-border-01);
+  outline: 2px solid var(--color-border-01);
   border-radius: 20px;
 }
 .filters-sub-button-color:disabled {
@@ -382,13 +383,10 @@
 .filters-sub-button-color > span {
   display: none;
 }
+
 .filters-sub-button-color.active {
   border: 2px solid #fff;
   outline: 2px solid #000;
-  margin: 2px 0;
-}
-.filters-sub-button-color:first-child.active {
-  margin-left: 2px;
 }
 
 .filters-modal-main-button-added-options {
