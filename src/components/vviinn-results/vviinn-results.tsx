@@ -116,7 +116,7 @@ export class VviinnResults {
   /** uiSessionId from vps-widget */
   @Prop({ mutable: true }) uiSessionId?: string;
   /** Resolution width of an image in the product card */
-  @Prop() imageResolutionWidth?: number = 250;
+  @Prop() imageResolutionWidth?: number = 500;
   /** The currency sign is displayed after the price */
   @Prop() currencySign?: string = "€";
   /** The locale for currency formatting and text localization */
@@ -453,7 +453,7 @@ export class VviinnResults {
       <Host
         id="results-block"
         class={{
-          "widget-results": this.showInWidget,
+          "show-in-widget": this.showInWidget,
         }}
         exportparts="brand, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, product-card"
       >

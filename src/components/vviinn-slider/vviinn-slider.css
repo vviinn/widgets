@@ -44,12 +44,12 @@
 }
 
 .bullet.active {
-  background: var(--color-primary, var(--color-primary-system));
+  background: var(--color-primary, var(--button-bg-color-primary));
 }
 
 .bullet:active {
   background: transparent;
-  border: 2px solid var(--color-primary, var(--color-primary-system));
+  border: 2px solid var(--color-primary, var(--button-bg-color-primary));
 }
 
 .arrow-wrapper {
@@ -60,23 +60,23 @@
   bottom: 0;
   box-sizing: border-box;
   display: grid;
-  height: calc(var(--spacer) * 6);
+  height: calc(var(--spacing-100) * 6);
   justify-items: center;
   margin: auto;
   position: absolute;
   top: 0;
   transform: translate3d(0, -50%, 0);
   transition: border 0.25ms ease-in-out;
-  width: calc(var(--spacer) * 4);
+  width: calc(var(--spacing-100) * 4);
 }
 
 .arrow-wrapper:active {
-  border-color: var(--color-primary, var(--color-primary-system));
+  border-color: var(--color-primary, var(--button-bg-color-primary));
   opacity: 0.75;
 }
 
 .arrow-wrapper:focus {
-  border-color: var(--color-primary, var(--color-primary-system));
+  border-color: var(--color-primary, var(--button-bg-color-primary));
   opacity: 0.5;
   outline: none;
 }
