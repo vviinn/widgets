@@ -30,7 +30,6 @@ import {
 import { components } from "../../interfaces/generated";
 
 /**
- * @part filters - Wrapper itself.
  * @part filters-wrapper - Wrapper for the main filters.
  * @part filters-list - List of main filters.
  * @part filters-main-button - Main filter button.

@@ -729,6 +729,9 @@ export class VviinnVpsWidget {
                         filters={searchState.textSearchFilters}
                         showInWidget={true}
                       ></vviinn-filters>
+                      <vviinn-selected-filters
+                        showInWidget={true}
+                      ></vviinn-selected-filters>
                     </div>
                   </div>
                 </div>

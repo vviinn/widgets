@@ -304,8 +304,11 @@ export class VviinnResults {
     state.apiPath = this.apiPath; //FIXME: #36877
 
     if (this.showInWidget) {
-      makeTextSearchRequest(this.token, query, filters);
-      return;
+      pipe(
+        await makeTextSearchRequest(this.token, query, filters),
+        E.getOrElse(() => null),
+        (response: TextSearchResponse) => response
+      );
     }
 
     pipe(
