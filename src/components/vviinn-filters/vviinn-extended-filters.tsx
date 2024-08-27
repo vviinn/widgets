@@ -9,6 +9,8 @@ import {
   Element,
   Watch,
 } from "@stencil/core";
+import i18next from "i18next";
+
 import {
   DynamicFilters,
   DynamicFilter,
@@ -21,10 +23,13 @@ import {
   SquareFilterIcon,
   CheckFilterIcon,
 } from "../vviinn-icons";
-import { getFilterOptions, subFilterSelection } from "./helpers";
-import { Locale } from "../../locale";
-import i18next from "i18next";
-import { resources } from "../../locale";
+import {
+  getFilterOptions,
+  subFilterSelection,
+  emitRequestFiltersMore,
+} from "./helpers";
+import { Locale, resources } from "../../locale";
+
 import { SlotSkeleton, slotChangeListener } from "../customized-slots";
 import { Histogram } from "../vviinn-price-range/vviinn-price-range";
 import {
@@ -38,7 +43,32 @@ import { components } from "../../interfaces/generated";
  * @slot vviinn-extended-filters-apply - Title of Apply Button.
  * @slot vviinn-extended-filters-reset - Title of Reset Button.
  *
- * @part filters - Wrapper itself.
+ * @part extended-filters - Wrapper itself.
+ * @part extended-filters-button - Button to open the modal.
+ * @part extended-filters-modal - Modal itself.
+ * @part extended-filters-modal-wrapper - Wrapper for the modal.
+ * @part extended-filters-header - Header of the modal.
+ * @part extended-filters-modal-close - Close button of the modal.
+ * @part extended-filters-list - List of filters.
+ * @part extended-filters-row - Row of the filters.
+ * @part extended-filters-row-wrapper - Wrapper for the row.
+ * @part extended-filters-main-button - Main button of the row.
+ * @part extended-filters-selected-wrapper - Wrapper for the selected options.
+ * @part extended-filters-sub-list - List of sub filters.
+ * @part extended-filters-sub-row - Row of the sub filters.
+ * @part extended-filters-option-button - Button for the sub filter.
+ * @part extended-filters-actions - Wrapper for the actions.
+ * @part extended-filters-apply - Apply button.
+ * @part extended-filters-reset - Reset button.
+ *
+ * @part histogram - Wrapper itself.
+ * @part histogram-bar - Bar of the histogram.
+ * @part histogram-range-container - Container for the range sliders.
+ * @part histogram-sliders-control - Container for the range sliders control.
+ * @part histogram-from-slider - Slider for the minimum value.
+ * @part histogram-to-slider - Slider for the maximum value.
+ * @part histogram-label-wrapper - Wrapper for the labels.
+ * @part histogram-label - Label for the histogram.
  */
 @Component({
   tag: "vviinn-extended-filters",
@@ -91,10 +121,6 @@ export class VviinnExtendedFilters {
     slotChangeListener(this, this.el);
   }
 
-  private emitRequestFiltersMore(requestFilters: RequestDynamicFilters) {
-    this.vviinnFiltersChanged.emit({ filters: requestFilters, el: this.el });
-  }
-
   private handleSubFilterSelection(
     filterValue: DynamicFilterValue,
     seletedFilter: DynamicFilter
@@ -105,7 +131,11 @@ export class VviinnExtendedFilters {
       filterValue
     );
 
-    this.emitRequestFiltersMore([...this.requestFilters]);
+    emitRequestFiltersMore(
+      [...this.requestFilters],
+      this.el,
+      this.vviinnFiltersChanged
+    );
   }
 
   private showActiveOnModalSubButton(
@@ -183,7 +213,7 @@ export class VviinnExtendedFilters {
   }
 
   private resetModal() {
-    this.emitRequestFiltersMore([]);
+    emitRequestFiltersMore([], this.el, this.vviinnFiltersChanged);
     this.requestFilters = [];
     this.showMore = false;
   }
@@ -206,21 +236,28 @@ export class VviinnExtendedFilters {
 
   render() {
     return (
-      <Host part="filters">
+      <Host>
         {SlotSkeleton("filters")}
 
         {this.filters.length > 0 && (
           <button
             class="filters-more-button"
             onClick={() => (this.showMore = true)}
+            part="extended-filters-button"
           >
             <FiltersIcon />
           </button>
         )}
 
-        <div class={`filters-modal ${this.showMore ? "open" : ""}`}>
-          <div class="filters-modal-wrapper">
-            <div class="filters-modal-header">
+        <div
+          class={`filters-modal ${this.showMore ? "open" : ""}`}
+          part="extended-filters-modal"
+        >
+          <div
+            class="filters-modal-wrapper"
+            part="extended-filters-modal-wrapper"
+          >
+            <div class="filters-modal-header" part="extended-filters-header">
               <slot name="vviinn-extended-filters-title">
                 <span>{i18next.t("filters.modal.title")}</span>
               </slot>
@@ -231,20 +268,19 @@ export class VviinnExtendedFilters {
                   this.showMore = false;
                   this.requestFilters = [];
                 }}
+                part="extended-filters-modal-close"
               >
                 <NewCloseIcon />
               </button>
             </div>
 
-            <ul class="filters-modal-list">
+            <ul class="filters-modal-list" part="extended-filters-list">
               {this.filters.map((mainFilter) => {
-                const column = mainFilter.column;
+                const mainColumn = mainFilter.column;
                 const filterOptions = getFilterOptions(mainFilter);
-
                 const requestFilter = this.requestFilters.find(
-                  ({ column }) => column === column
+                  ({ column }) => column === mainColumn
                 );
-
                 const addedOptions = [];
                 requestFilter?.values?.forEach((value) => {
                   const index = filterOptions.findIndex(
@@ -258,23 +294,30 @@ export class VviinnExtendedFilters {
                 });
 
                 return (
-                  <li>
-                    <div class="filters-modal-main-button-wrapper">
+                  <li part="extended-filters-row">
+                    <div
+                      class="filters-modal-main-button-wrapper"
+                      part="extended-filters-row-wrapper"
+                    >
                       <button
                         onClick={() =>
                           this.handleMoreOptionsMainClick(mainFilter.column)
                         }
                         class="filters-modal-main-button"
+                        part="extended-filters-main-button"
                       >
                         {mainFilter.label}
                       </button>
                       {addedOptions.length > 0 && (
-                        <div class="filters-modal-main-button-added-options">
+                        <div
+                          class="filters-modal-main-button-added-options"
+                          part="extended-filters-selected-wrapper"
+                        >
                           {addedOptions}
                         </div>
                       )}
                     </div>
-                    {column === "price" &&
+                    {mainColumn === "price" &&
                     this.selectedMoreOptions.includes(mainFilter.column) ? (
                       <vviinn-price-range
                         histogram={filterOptions as Histogram}
@@ -289,7 +332,7 @@ export class VviinnExtendedFilters {
                     ) : (
                       <ul
                         class={`filters-modal-sub-list ${
-                          column === "color_confirmed"
+                          mainColumn === "color_confirmed"
                             ? "filters-modal-sub-list-inline"
                             : ""
                         } ${
@@ -297,6 +340,7 @@ export class VviinnExtendedFilters {
                             ? "open"
                             : ""
                         }`}
+                        part="extended-filters-sub-list"
                       >
                         {filterOptions &&
                           filterOptions.map(({ value, label, active }) => {
@@ -307,7 +351,7 @@ export class VviinnExtendedFilters {
                             );
 
                             return (
-                              <li>
+                              <li part="extended-filters-sub-row">
                                 <button
                                   onClick={() =>
                                     this.handleSubFilterSelection(
@@ -320,6 +364,7 @@ export class VviinnExtendedFilters {
                                   } ${selected ? "active" : ""}`}
                                   style={{ backgroundColor: hexCode }}
                                   disabled={!active}
+                                  part="extended-filters-option-button"
                                 >
                                   <span>
                                     <span>{label}</span>
@@ -340,11 +385,12 @@ export class VviinnExtendedFilters {
               })}
             </ul>
 
-            <div class="filters-modal-actions">
+            <div class="filters-modal-actions" part="extended-filters-actions">
               <button
                 class="filters-modal-apply"
                 onClick={() => (this.showMore = false)}
                 disabled={this.requestFilters.length === 0}
+                part="extended-filters-apply"
               >
                 <slot name="vviinn-extended-filters-apply">
                   {i18next.t("filters.modal.apply")}
@@ -354,6 +400,7 @@ export class VviinnExtendedFilters {
               <button
                 class="filters-modal-reset"
                 onClick={() => this.resetModal()}
+                part="extended-filters-reset"
               >
                 <slot name="vviinn-extended-filters-reset">
                   {i18next.t("filters.modal.resetFilters")}

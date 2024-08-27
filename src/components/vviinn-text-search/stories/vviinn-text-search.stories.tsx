@@ -1,9 +1,11 @@
 const textSearchDecorator = (story) => `
     <style>
-       vviinn-filters {
+      vviinn-filters {
         margin: 12px 0;
       }
-
+      vviinn-selected-filters{
+        margin: 12px 0;
+      }
       vviinn-extended-filters {
         width: fit-content;
         margin-left: auto;
@@ -33,7 +35,7 @@ const Template = (args) => `
     locale="${args.locale}"
     show-in-widget="${args.showInWidget}"
   ></vviinn-text-search>
-  
+  <vviinn-selected-filters></vviinn-selected-filters>
   <vviinn-results 
     token="${args.token}"
   ></vviinn-results>
