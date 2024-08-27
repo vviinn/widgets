@@ -3,6 +3,17 @@ import { components } from "../../interfaces/generated";
 
 export type Histogram = components["schemas"]["interval-filter-values"][];
 
+/**
+ * @part histogram - Wrapper itself.
+ * @part histogram-bar - Bar of the histogram.
+ * @part histogram-range-container - Container for the range sliders.
+ * @part histogram-sliders-control - Container for the range sliders control.
+ * @part histogram-from-slider - Slider for the minimum value.
+ * @part histogram-to-slider - Slider for the maximum value.
+ * @part histogram-label-wrapper - Wrapper for the labels.
+ * @part histogram-label - Label for the histogram.
+ */
+
 @Component({
   tag: "vviinn-price-range",
   styleUrl: "vviinn-price-range.css",
@@ -113,59 +124,60 @@ export class VviinnButton {
     const histogramSize = this.histogram.length - 1;
 
     return (
-      <Host>
-        <div>
-          <div class="histogram">
-            {this.histogram.map((item, index) => {
-              return (
-                <div
-                  class={`histogram-bar ${
-                    index < this.minIndex || index > this.maxIndex
-                      ? "histogram-bar-inactive"
-                      : ""
-                  }`}
-                  style={{
-                    height: `${this.calculateBarHeight(item.value.frequency)}%`,
-                  }}
-                ></div>
-              );
-            })}
-          </div>
-          <div class="range_container">
-            <div class="sliders_control">
-              <input
-                ref={(el) => (this.fromSlider = el as HTMLElement)}
-                id="fromSlider"
-                type="range"
-                min="0"
-                max={histogramSize}
-                value={this.minIndex}
-                onInput={(e: Event) => {
-                  this.minIndex = parseInt(
-                    (e.target as HTMLInputElement).value
-                  );
-                  this.controlFromSlider(this.fromSlider, this.toSlider);
+      <Host exportparts="histogram, histogram-bar, histogram-range-container, histogram-sliders-control, histogram-from-slider, histogram-to-slider, histogram-label-wrapper, histogram-label">
+        <div class="histogram" part="histogram">
+          {this.histogram.map((item, index) => {
+            return (
+              <div
+                class={`histogram-bar ${
+                  index < this.minIndex || index > this.maxIndex
+                    ? "histogram-bar-inactive"
+                    : ""
+                }`}
+                style={{
+                  height: `${this.calculateBarHeight(item.value.frequency)}%`,
                 }}
-              />
-              <input
-                ref={(el) => (this.toSlider = el as HTMLElement)}
-                id="toSlider"
-                type="range"
-                min="0"
-                max={histogramSize}
-                value={this.maxIndex}
-                onInput={(e: Event) => {
-                  this.maxIndex = parseInt(
-                    (e.target as HTMLInputElement).value
-                  );
-                  this.controlToSlider(this.fromSlider, this.toSlider);
-                }}
-              />
-            </div>
+                part="histogram-bar"
+              ></div>
+            );
+          })}
+        </div>
+        <div class="range_container" part="histogram-range-container">
+          <div class="sliders_control" part="histogram-sliders-control">
+            <input
+              ref={(el) => (this.fromSlider = el as HTMLElement)}
+              id="fromSlider"
+              type="range"
+              min="0"
+              max={histogramSize}
+              value={this.minIndex}
+              onInput={(e: Event) => {
+                this.minIndex = parseInt((e.target as HTMLInputElement).value);
+                this.controlFromSlider(this.fromSlider, this.toSlider);
+              }}
+              part="histogram-from-slider"
+            />
+            <input
+              ref={(el) => (this.toSlider = el as HTMLElement)}
+              id="toSlider"
+              type="range"
+              min="0"
+              max={histogramSize}
+              value={this.maxIndex}
+              onInput={(e: Event) => {
+                this.maxIndex = parseInt((e.target as HTMLInputElement).value);
+                this.controlToSlider(this.fromSlider, this.toSlider);
+              }}
+              part="histogram-to-slider"
+            />
           </div>
-          <div class="label-wrapper">
-            <div class="label">{this.histogram[this.minIndex].label}</div>
-            <div class="label">{this.histogram[this.maxIndex].label}</div>
+        </div>
+        <div class="label-wrapper" part="histogram-label-wrapper">
+          <div class="label" part="histogram-label">
+            {this.histogram[this.minIndex].label}
+          </div>
+          <div class="label" part="histogram-label">
+            {this.histogram[this.maxIndex].label}
           </div>
         </div>
       </Host>
