@@ -54,7 +54,7 @@
 }
 
 .filters-main-button {
-  padding: var(--spacing-100) 18px;
+  padding: var(--spacing-100);
   color: var(--color-text-helper);
   background: none;
 }
@@ -72,10 +72,7 @@
   flex-direction: row;
   overflow-x: auto;
   scrollbar-width: thin;
-
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  padding-bottom: 6px;
 }
 
 .sub-filters-wrapper {
@@ -84,7 +81,7 @@
 }
 
 .selected-filters-wrapper {
-  margin-top: 16px;
+  margin-top: 10px;
   gap: var(--spacing-100);
   flex-wrap: wrap;
 }
@@ -107,12 +104,21 @@
   .selected-filters-wrapper {
     flex-wrap: unset;
     overflow-x: auto;
+    padding-bottom: 0;
   }
-}
 
-.sub-filters-wrapper::-webkit-scrollbar,
-.selected-filters-wrapper::-webkit-scrollbar {
-  display: none;
+  .sub-filters-wrapper,
+  .selected-filters-wrapper {
+    margin-top: 16px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .sub-filters-wrapper::-webkit-scrollbar,
+  .selected-filters-wrapper::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .filters-sub-button {

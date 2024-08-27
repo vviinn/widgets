@@ -177,7 +177,7 @@ search-filters::part(show-more-filters):hover {
 }
 
 search-filters::part(filter active) {
-  background: var(--color-primary, var(--color-primary-system));
+  background: var(--color-primary, var(--button-bg-color-primary));
   color: white;
 }
 
