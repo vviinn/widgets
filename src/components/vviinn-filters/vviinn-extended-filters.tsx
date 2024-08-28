@@ -43,7 +43,6 @@ import { components } from "../../interfaces/generated";
  * @slot vviinn-extended-filters-apply - Title of Apply Button.
  * @slot vviinn-extended-filters-reset - Title of Reset Button.
  *
- * @part extended-filters - Wrapper itself.
  * @part extended-filters-button - Button to open the modal.
  * @part extended-filters-modal - Modal itself.
  * @part extended-filters-modal-wrapper - Wrapper for the modal.

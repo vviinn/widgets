@@ -185,6 +185,10 @@ search-filters::part(filter active) {
   display: none;
 }
 
+.results-page vviinn-text-search {
+  width: calc(100% + 24px);
+}
+
 vviinn-preloader {
   --preloader-size: 24px;
   display: flex;
@@ -205,6 +209,10 @@ vviinn-preloader {
 
   vviinn-overlayed-modal.first-screen::part(secondary-action) {
     visibility: visible;
+  }
+
+  .results-page vviinn-text-search {
+    width: auto;
   }
 
   .start-page.active {
