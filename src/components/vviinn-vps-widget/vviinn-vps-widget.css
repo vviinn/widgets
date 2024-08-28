@@ -134,7 +134,7 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   min-width: 100%;
 }
 
-.results-page .source-wrapper.text-search-wrapper {
+.source-wrapper.text-search-wrapper {
   padding: 24px 24px 0 24px;
 }
 
@@ -234,10 +234,6 @@ vviinn-preloader {
   .source-wrapper.image-wrapper .filters-wrapper {
     padding-left: 24px;
     min-width: 100%;
-  }
-
-  .image {
-    margin-bottom: 8px;
   }
 
   .results-page {

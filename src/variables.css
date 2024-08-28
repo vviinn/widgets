@@ -72,6 +72,7 @@
 
   --product-card-widget-min-width: 130px;
   --product-card-results-min-width: 250px;
+  --image-set-mode-min-size: 155px;
 
   /* Filters */
   --filter-blur-none: 0px;

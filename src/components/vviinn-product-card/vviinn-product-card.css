@@ -1,12 +1,21 @@
-:host {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  gap: 8px;
-  height: 100%;
+@import "../../variables.css";
 
-  --min-image-size-set-mode: 155px;
+:host {
+  position: relative;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  font-family: var(--font-family-base);
+  font-weight: var(--font-weight-400);
+  line-height: var(--line-height-body);
+  color: var(--color-text-primary);
+  font-style: normal;
+  gap: var(--spacing-100);
+}
+
+:host(.set-mode) {
+  align-items: flex-start;
 }
 
 .price-container {
@@ -14,21 +23,13 @@
   flex-direction: column;
 }
 
-.price-sale,
-.price-regular {
-  font-style: normal;
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 24px;
-  color: #161616;
+:host(.set-mode) .price-container {
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .price-outdated {
-  font-style: normal;
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 24px;
-  color: #757575;
+  color: var(--color-text-helper);
   text-decoration: line-through;
 }
 
@@ -60,12 +61,8 @@
   -webkit-line-clamp: 2;
   overflow-wrap: anywhere;
   text-overflow: ellipsis;
-  color: #161616;
+  color: var(--color-text-primary);
   display: -webkit-box;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 24px;
   overflow: hidden;
 }
 
@@ -99,20 +96,15 @@ picture::before {
   position: absolute;
   top: 8px;
   right: 8px;
-  padding: 6px;
   width: 32px;
   height: 32px;
   z-index: 1;
-  background-color: rgba(127, 127, 127, 0.4);
-  backdrop-filter: blur(2px);
+  background: var(--button-bg-color-frosted);
+  backdrop-filter: blur(calc(var(--filter-blur-150) / 2));
+  padding: var(--spacing-50);
   border: none;
   color: white;
   cursor: pointer;
-}
-
-.update-button svg {
-  width: 20px;
-  height: 20px;
 }
 
 .update-button::after {
@@ -133,8 +125,9 @@ picture::before {
 }
 
 .basket-button {
-  font-size: 16px;
-  padding: 10px 12px;
+  padding: var(--spacing-100);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-500);
   box-sizing: border-box;
   border: none;
   cursor: pointer;
@@ -201,22 +194,14 @@ picture::before {
   display: none;
 }
 
-:host(.set-mode) {
-  line-height: 20px;
-  align-items: flex-start;
-  height: auto;
-}
-
 :host(.set-mode) .basket-button {
   border: none;
   background-color: #f4f4f4;
-  font-weight: 500;
-  color: #525252;
 }
 
-:host(.set-mode) .basket-button-container {
+.basket-button-container {
   display: flex;
-  gap: 8px;
+  gap: var(--spacing-75);
   align-items: center;
   box-sizing: border-box;
   justify-content: center;
@@ -230,17 +215,13 @@ picture::before {
   background-color: rgb(234, 234, 234);
 }
 
-:host(.set-mode) .title {
-  font-weight: 400;
-}
-
 :host(.set-mode) .image {
   width: var(--vviinn-set-mode-image-width, 100%);
   height: auto;
   border: none;
   aspect-ratio: 1;
-  min-width: var(--min-image-size-set-mode);
-  min-height: var(--min-image-size-set-mode);
+  min-width: var(--image-set-mode-min-size);
+  min-height: var(--image-set-mode-min-size);
 }
 
 :host(.set-mode.product-card--source) {
@@ -289,11 +270,6 @@ picture::before {
   display: none;
 }
 
-:host(.set-mode) .price-container {
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-
 :host(.set-mode) .price-amount {
   margin-right: 12px;
 }
@@ -320,7 +296,6 @@ picture::before {
   position: absolute;
   left: 0;
   top: 13px;
-  line-height: 20px;
   padding: 2px 4px;
   border-radius: 0px 4px 4px 0px;
   color: white;
