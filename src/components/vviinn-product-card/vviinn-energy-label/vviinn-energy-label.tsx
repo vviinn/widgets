@@ -8,10 +8,15 @@ import { getEnergyLabel } from "./icons";
   shadow: true,
 })
 export class VviinnEnergyLabel {
-  @Prop() energyEfficiencyClass: EnergyEfficiencyClass;
-  @Prop() minEnergyEfficiencyClass: EnergyEfficiencyClass;
-  @Prop() maxEnergyEfficiencyClass: EnergyEfficiencyClass;
-  @Prop() productType: string;
+  @Prop() energyEfficiencyClass: EnergyEfficiencyClass = "A";
+  @Prop() minEnergyEfficiencyClass: EnergyEfficiencyClass = "A";
+  @Prop() maxEnergyEfficiencyClass: EnergyEfficiencyClass = "G";
+  @Prop() productType: string = "Moebel";
+  @Prop() labelLink?: string = null;
+  @Prop() documentationLink?: string = "#";
+
+  /** @internal */
+  @Prop() productClickHandler: (e: MouseEvent) => void;
 
   private energyLabelIcon: SVGElement | null = null;
 
@@ -23,6 +28,13 @@ export class VviinnEnergyLabel {
     );
   }
 
+  private labelClickHandler = (e: MouseEvent) => {
+    if (this.labelLink) {
+      e.preventDefault();
+      window.open(this.labelLink, "_blank", "noopener noreferrer");
+    } else this.productClickHandler(e);
+  };
+
   render() {
     return (
       <Host
@@ -32,8 +44,28 @@ export class VviinnEnergyLabel {
         }}
       >
         <div class="container">
-          {this.energyLabelIcon}
-          <span class="product-type">{this.productType}</span>
+          <a
+            class="label-link"
+            href={this.labelLink}
+            onClick={this.labelClickHandler}
+          >
+            {this.energyLabelIcon}
+          </a>
+          <div class="info-container">
+            {this.productType && (
+              <span class="product-type">{this.productType}</span>
+            )}
+            {this.documentationLink && (
+              <a
+                class="energy-efficiency-certificate"
+                href={this.documentationLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Documentation
+              </a>
+            )}
+          </div>
         </div>
       </Host>
     );

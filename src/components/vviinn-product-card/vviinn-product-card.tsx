@@ -248,26 +248,28 @@ export class VviinnProductCard {
     }
   };
 
+  private productClickHandler(event: MouseEvent) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    this.vviinnProductClick.emit({
+      ...this.productData,
+      clickEvent: event,
+    });
+
+    pipe(
+      getAnalyticsModule,
+      O.match(
+        () => null,
+        (analytics) => analytics.sendClick(this.getProduct())
+      )
+    );
+  }
+
   private addLinksEventListeners() {
     const links = this.el.shadowRoot.querySelectorAll("a");
 
     links.forEach((link) => {
-      link.addEventListener("click", (event) => {
-        event.preventDefault();
-        event.stopImmediatePropagation();
-        this.vviinnProductClick.emit({
-          ...this.productData,
-          clickEvent: event,
-        });
-
-        pipe(
-          getAnalyticsModule,
-          O.match(
-            () => null,
-            (analytics) => analytics.sendClick(this.getProduct())
-          )
-        );
-      });
+      link.addEventListener("click", this.productClickHandler.bind(this));
 
       link.addEventListener("auxclick", () => {
         this.vviinnAuxClick.emit({
@@ -332,6 +334,7 @@ export class VviinnProductCard {
               minEnergyEfficiencyClass={this.minEnergyEfficiencyClass}
               maxEnergyEfficiencyClass={this.maxEnergyEfficiencyClass}
               productType={this.productType}
+              productClickHandler={this.productClickHandler.bind(this)}
             ></vviinn-energy-label>
 
             <Price
