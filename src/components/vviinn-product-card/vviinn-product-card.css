@@ -142,7 +142,7 @@ picture::before {
 .basket-button-grid {
   width: 100%;
   background-color: unset;
-  border: 1px solid #dddddd;
+  border: 1px solid var(--color-border-02);
 }
 
 .basket-button-continuity {
@@ -161,8 +161,7 @@ picture::before {
 }
 
 .basket-button-grid:hover {
-  /* TODO: */
-  background-color: #f7f7f7;
+  background-color: var(--button-bg-color-ghost-hover);
 }
 
 :host(.dimmed) picture::after {
@@ -201,7 +200,12 @@ picture::before {
   display: none;
 }
 
-.basket-button-container {
+.basket-button-wrapper {
+  padding-top: var(--spacing-50);
+  width: 100%;
+}
+
+.basket-button-content {
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -257,11 +261,11 @@ picture::before {
 
 :host(.set-mode) .basket-button.pressed {
   background: transparent;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--color-border-02);
 }
 
 :host(.set-mode) .basket-button.pressed .discount-percentage {
-  padding-right: 5px;
+  padding-right: var(--spacing-50);
 }
 
 :host(.set-mode) .basket-button--hidden {
@@ -292,8 +296,8 @@ picture::before {
 
 .discount-label {
   position: absolute;
-  left: 0;
-  top: 13px;
+  left: var(--spacing-none);
+  top: var(--spacing-150);
   padding: var(--spacing-25) var(--spacing-50);
   border-radius: var(--border-radius-none) var(--border-radius-50)
     var(--border-radius-50) var(--border-radius-none);
