@@ -6,18 +6,18 @@ import { Meta, Story } from '@storybook/blocks';
 
 In mobile app development, a `WebView` is an essential component that allows you to display web content within your native `Android` or `iOS` app. Therefore, in this section we want to show you how to integrate `Vviinn Widgets` as a web component in a mobile app.
 
-If you are interested to learn more about the `WebView` component, you can check the official documentation for [Android](https://developer.android.com/reference/android/webkit/WebView) and [iOS](https://developer.apple.com/documentation/webkit/wkwebview). Also, if you are developing mobile apps with Cross-Platform development technologies, there are some popular libraries like [React Native WebView](https://www.npmjs.com/package/react-native-webview), [Flutter WebView](https://pub.dev/packages/webview_flutter), [Ionic WebView](https://ionicframework.com/docs/core-concepts/webview), and others, that you can use based on your technology stack.
+If you are interested to learn more about the `WebView` component, you can check the official documentation for [Android](https://developer.android.com/reference/android/webkit/WebView) and [iOS](https://developer.apple.com/documentation/webkit/wkwebview). If you are also developing mobile apps with Cross-Platform development technologies, there are some popular libraries like [React Native WebView](https://www.npmjs.com/package/react-native-webview), [Flutter WebView](https://pub.dev/packages/webview_flutter), [Ionic WebView](https://ionicframework.com/docs/core-concepts/webview) and others that you can use based on your technology stack.
 
 ## Integration
 
-The first step of integrating `Vviinn Widgets` is to create some HTML files and locate them in an HTTPS server. If you want to know how to integrate `Vviinn Widgets` as a web component in a web page, you can check [Frameworkless integration](?path=/docs/installation-frameworkless--docs) page.
+The first step of integrating `Vviinn Widgets` is to create some HTML files and locate them in an HTTPS server. If you want to know how to integrate `Vviinn Widgets` as a web component in a web page, you can check the [Frameworkless integration](?path=/docs/installation-frameworkless--docs) page.
 
-Now you have a URL which when you open it in a browser shows `Vviinn Widgets` there. Recommendation widgets can be passed (as HTML) to `WebViews` on fly. Search widget requires HTTPS to be able to show the camera, so in this case we highly recommend hosting the HTML file on a server.
+Now you have a URL which when opened in a browser shows `Vviinn Widgets`. Recommendation widgets can be passed (as HTML) to `WebViews` on fly. Search widget requires HTTPS to be able to show the camera, so in this case we highly recommend hosting the HTML file on a server.
 
 After that, you need to integrate the `WebView` component into your mobile app. Here are some requirements that you need to consider:
 
 - Enable Javascript in the `WebView` component.
-- Set JavaScript mode to unrestricted
+- Set JavaScript mode to unrestricted.
 - Add listeners for the `Vviinn Widgets` events in the `WebView` component. You can see the list of events on the [Events](?path=/docs/getting-started-events--docs) page.
 - Load the `WebView` with the URL or pass the HTML to it.
 - Give Camera permission to the app.
@@ -47,7 +47,7 @@ On iOS, you need to add the following properties in your `Info.plist` file to be
 ### Flutter Integration Example
 Here is an example of how you can do this in `Flutter`:
 
-```dart
+```js 
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -129,6 +129,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
 In this example, we also asked for microphone permission, but only the camera permission is required.
 
-Also, we used 2 packages `webview_flutter` and `permission_handler` to be able to use WebView and ask for camera permission. However, you can use any package which suits your needs.
+We also used 2 packages, `webview_flutter` and `permission_handler` to be able to use WebView and ask for camera permission. However, you can use any package which suits your needs.
 
-To redirect to the product details page in your mobile app you need to listen to the `vviinnProductClick` event and based on the `product ID` redirect to the product details page. To prevent the default redirection, you should set the `product-details-redirect` property to `false` in your widget component.
+To redirect to the product details page that you have in your mobile app you need to listen to the `vviinnProductClick` event and based on the `product ID` redirect to the product details page. To prevent the default redirection, you should set the `product-details-redirect` property to `false` in your widget component.
