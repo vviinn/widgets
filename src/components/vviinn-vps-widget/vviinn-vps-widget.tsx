@@ -16,7 +16,7 @@ import { v4 as uuidv4 } from "uuid";
 import i18next from "i18next";
 
 import { version } from "../../../package.json";
-import { makeTextSearchRequest, searchState } from "../../store/search.store";
+import { searchState } from "../../store/search.store";
 import { state } from "../../store/store";
 import { slotChangeListener } from "../customized-slots";
 import { createTrackingApi } from "../../openApi";
@@ -48,7 +48,6 @@ import { CameraActionIcon, UploadActionIcon } from "../vviinn-icons";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 import { videoStreamSettings } from "../../video/settings";
 import { Recommendation } from "../../interfaces/recommendation";
-import { RequestDynamicFilterItem } from "../../interfaces/search";
 import { checkDeviceType } from "../../helpers";
 import { UploadSource, VisualSearchMode } from "../../widget/types";
 
@@ -151,11 +150,6 @@ export class VviinnVpsWidget {
   /** @internal */
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
-
-  /** @internal */
-  @Event() vviinnTextSearchFilterSelected: EventEmitter<
-    RequestDynamicFilterItem[]
-  >;
 
   /** Event emitted on widget load */
   @Event({ bubbles: true })
@@ -411,13 +405,6 @@ export class VviinnVpsWidget {
       ...rest,
     });
     this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
-  }
-
-  @Listen("vviinnTextSearchFilterSelected")
-  trackTextSearchFilterSelected({
-    detail,
-  }: CustomEvent<RequestDynamicFilterItem[]>) {
-    makeTextSearchRequest(this.searchQuery, this.token, detail);
   }
 
   connectedCallback() {
@@ -737,13 +724,14 @@ export class VviinnVpsWidget {
                       hidden: this.showAspectRatioError,
                     }}
                   >
-                    <div class="filters">
-                      {searchState.textSearchFilters.map((filter) => (
-                        <search-filters
-                          textSearchFiltersGroup={filter}
-                          basicEventData={this.getBasicEventData()}
-                        />
-                      ))}
+                    <div class="vviinn-filters-container">
+                      <vviinn-filters
+                        filters={searchState.textSearchFilters}
+                        showInWidget={true}
+                      ></vviinn-filters>
+                      <vviinn-selected-filters
+                        showInWidget={true}
+                      ></vviinn-selected-filters>
                     </div>
                   </div>
                 </div>
