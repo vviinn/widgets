@@ -1,0 +1,77 @@
+import { Meta, Story } from '@storybook/blocks';
+
+import "../../components/tabs/styles.css";
+import {clickHandlers} from "../../components"
+import "../../styles/filters-search-bar.css";
+
+<Meta title="Components/Product List" />
+
+# Product List
+
+## Examples
+
+<div id="text-search">
+    <div className="tab tab-reverse">
+        <h3>Text Search</h3>
+        <button className="tablinks" onClick={(e)=> {clickHandlers(e, 'Code_2', 'text-search')}}>Code</button>
+        <button className="tablinks active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'text-search')}}>Preview</button>
+    </div>
+    <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
+        <div className="tabcontent-preview">
+            <vviinn-results 
+                token="STORYBOOK_TOKEN" 
+                image-resolution-width="500" 
+                currency-sign="€" 
+                locale="en-US" 
+                results-count="9"
+                text-search-query="Chair"
+            ></vviinn-results>
+        </div>
+    </div>
+    <div id="Code_2" className="tabcontent">
+```html
+<vviinn-results 
+    token="TOKEN" 
+    image-resolution-width="500" 
+    currency-sign="€" 
+    locale="en-US" 
+    results-count="9"
+    text-search-query="Chair"
+></vviinn-results>
+```
+    </div>
+</div>
+
+<div id="static-filters">
+    <div className="tab tab-reverse">
+        <h3>Filter Column</h3>
+        <button className="tablinks" onClick={(e)=> {clickHandlers(e, 'Code_1', 'static-filters')}}>Code</button>
+        <button className="tablinks active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'static-filters')}}>Preview</button>
+    </div>
+    <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
+        <div className="tabcontent-preview">
+            <vviinn-results 
+                token="STORYBOOK_TOKEN" 
+                image-resolution-width="500" 
+                currency-sign="€" 
+                locale="en-US" 
+                results-count="9"
+                filter-column="product_type" 
+                filter-value="Möbel > Schränke &amp; Regale" 
+            ></vviinn-results>
+        </div>
+    </div>
+    <div id="Code_1" className="tabcontent">
+```html
+<vviinn-results 
+    token="TOKEN" 
+    image-resolution-width="500" 
+    currency-sign="€" 
+    locale="en-US" 
+    results-count="9"
+    filter-column="product_type" 
+    filter-value="Möbel > Schränke &amp; Regale" 
+></vviinn-results>
+```
+    </div>
+</div>

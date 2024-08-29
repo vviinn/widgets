@@ -1,5 +1,5 @@
 export default {
-  title: "Playground/Search/Button",
+  title: "Playground/Search Modal",
   component: "vviinn-vps-button",
   parameters: {
     viewport: {
@@ -38,10 +38,10 @@ const Template = (args) => `
   text-search-show="${args.textSearchShow}"
 ></vviinn-vps-button>`;
 
-export const Modal = Template.bind({});
-Modal.storyName = "Modal";
+export const Default = Template.bind({});
+Default.storyName = "Search Modal";
 
-Modal.args = {
+Default.args = {
   token: process.env.STORYBOOK_TOKEN,
   apiPath: process.env.STORYBOOK_API_PATH,
   campaignId: "",
@@ -53,21 +53,5 @@ Modal.args = {
   currencySign: "€",
   addStyle: true,
   imageResolutionWidth: 250,
-  textSearchShow: false,
-};
-
-export const Upload = Template.bind({});
-
-Upload.args = {
-  token: process.env.STORYBOOK_TOKEN,
-  apiPath: process.env.STORYBOOK_API_PATH,
-  campaignId: "",
-  excluded: "",
-  mode: "upload",
-  productDetailsNewTab: true,
-  productDetailsRedirect: true,
-  locale: "en-US",
-  currencySign: "€",
-  addStyle: true,
-  imageResolutionWidth: 250,
+  textSearchShow: true,
 };

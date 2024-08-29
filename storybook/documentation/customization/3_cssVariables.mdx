@@ -1,0 +1,23 @@
+import { Meta, Story, Canvas } from "@storybook/blocks";
+
+<Meta title="Customization/CSS Variables" />
+
+# CSS Variables
+
+Style with [CSS Custom Properties](https://developer.mozilla.org/en-US/docs/Web/CSS/--*)
+
+## Using CSS Custom Properties
+
+You can customize `vviinn-vps-button` and `vviinn-vps-widget` with these properties:
+
+* \--color-primary *used on the main action button, slider bullets, selected detected object or filter, and some other parts*
+* \--color-primary-hover *used on the main action button when hovering*
+* \--color-icons *used in svg icons fill*
+
+```css
+html {
+  --color-primary: #0f62fe;
+  --color-primary-hover: lightblue;
+  --color-icons: rgba(255, 0, 0, 0.5);
+}
+```

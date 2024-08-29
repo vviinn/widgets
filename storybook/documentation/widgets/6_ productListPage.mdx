@@ -1,0 +1,49 @@
+import { Meta, Story } from '@storybook/blocks';
+
+import "../../components/tabs/styles.css";
+import {clickHandlers} from "../../components"
+import "../../styles/filters-search-bar.css";
+
+<Meta title="Widgets/Product List Page" />
+
+# Product List Page
+
+## Examples
+
+<div id="text-search">
+    <div className="tab tab-reverse">
+        <h3>Product List with Filters</h3>
+        <button className="tablinks" onClick={(e)=> {clickHandlers(e, 'Code_2', 'text-search')}}>Code</button>
+        <button className="tablinks active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'text-search')}}>Preview</button>
+    </div>
+    <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
+        <div className="tabcontent-preview">
+            <vviinn-extended-filters></vviinn-extended-filters>
+            <vviinn-filters></vviinn-filters>
+
+            <vviinn-results 
+                token="STORYBOOK_TOKEN" 
+                image-resolution-width="500" 
+                currency-sign="€" 
+                locale="en-US" 
+                results-count="9"
+                text-search-query="Chair"
+            ></vviinn-results>
+        </div>
+    </div>
+    <div id="Code_2" className="tabcontent">
+```html
+<vviinn-extended-filters></vviinn-extended-filters>
+<vviinn-filters></vviinn-filters>
+
+<vviinn-results 
+    token="TOKEN" 
+    image-resolution-width="500" 
+    currency-sign="€" 
+    locale="en-US" 
+    results-count="9"
+    text-search-query="Chair"
+></vviinn-results>
+```
+    </div>
+</div>

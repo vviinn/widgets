@@ -1,5 +1,5 @@
-import { argTypes } from "./args";
-import { productDecorator } from "./decorators";
+import { argTypes } from "../../src/components/vviinn-product-card/stories/args";
+import { productDecorator } from "../../src/components/vviinn-product-card/stories/decorators";
 
 export default {
   title: "Playground/Product Card",

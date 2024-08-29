@@ -19,7 +19,7 @@ const textSearchDecorator = (story) => `
   `;
 
 export default {
-  title: "Playground/Search",
+  title: "Playground/Search Bar",
   component: "vviinn-text-search",
   decorators: [textSearchDecorator],
 };
@@ -43,7 +43,7 @@ const Template = (args) => `
 
 export const TextSearch = Template.bind({});
 
-TextSearch.storyName = "Text Search";
+TextSearch.storyName = "Search Bar";
 
 TextSearch.args = {
   token: process.env.STORYBOOK_TOKEN,

@@ -1,4 +1,4 @@
-export const filters = [
+export const filters = JSON.stringify([
   {
     column: "color_confirmed",
     label: "Color",
@@ -279,4 +279,4 @@ export const filters = [
       },
     ],
   },
-];
+]);

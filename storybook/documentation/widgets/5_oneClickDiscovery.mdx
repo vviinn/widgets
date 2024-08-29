@@ -1,0 +1,94 @@
+import { Meta, Story } from '@storybook/blocks';
+import "../../components/tabs/styles.css";
+import {clickHandlers} from "../../components";
+import "../../styles/product-feed.css";
+
+<Meta title="Widgets/One-click Discovery" />
+
+# One-click Discovery
+
+## Examples
+
+<div id="one-click">
+    <div className="tab tab-reverse">
+        <button className="tablinks" onClick={(e)=> {clickHandlers(e, 'Code_1', 'one-click')}}>Code</button>
+        <button className="tablinks active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'one-click')}}>Preview</button>
+    </div>
+    <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
+        <div className="tabcontent-preview">
+            <div class="collection">
+                <div class="product">
+                    <a class="product__image" href="#"></a>
+                    <div class="product__name">
+                        <a href="#">Product Name</a>
+                    </div>
+                    <div class="product__price">
+                        $10.00 
+
+                        <vviinn-vpr-button 
+                            token="STORYBOOK_TOKEN" 
+                            product-id="4114460310" 
+                            mode="grid" 
+                            block-title=""
+                        ></vviinn-vpr-button> 
+                    </div>
+                </div>
+                <div class="product">
+                    <a class="product__image" href="#"></a>
+                    <div class="product__name">
+                        <a href="#">Product Name</a>
+                    </div>
+                    <div class="product__price">
+                        $10.00  
+                        <vviinn-vpr-button 
+                            token="STORYBOOK_TOKEN" 
+                            product-id="4114060306" 
+                            mode="grid" 
+                            block-title=""
+                        ></vviinn-vpr-button> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="Code_1" className="tabcontent">
+```html
+<div class="collection">
+    <div class="product">
+        <a class="product__image" href="#"></a>
+        <div class="product__name">
+            <a href="#">Product Name</a>
+        </div>
+        <div class="product__price">
+            $10.00 
+            <vviinn-vpr-button 
+                token="TOKEN" 
+                product-id="PRODUCT_ID" 
+                mode="grid" 
+                block-title=""
+            ></vviinn-vpr-button> 
+        </div>
+    </div>
+    <div class="product">
+        <a class="product__image" href="#"></a>
+        <div class="product__name">
+            <a href="#">Product Name</a>
+        </div>
+        <div class="product__price">
+            $10.00  
+            <vviinn-vpr-button 
+                token="TOKEN" 
+                product-id="PRODUCT_ID" 
+                mode="grid" 
+                block-title=""
+            ></vviinn-vpr-button> 
+        </div>
+    </div>
+</div>
+```
+    </div>
+</div>
+
+
+
+

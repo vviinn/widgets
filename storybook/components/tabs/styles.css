@@ -65,3 +65,15 @@
   border: 1px solid #ccc;
   padding: 10px;
 }
+
+.tabcontent-preview::after {
+  clear: both;
+  content: "";
+  display: block;
+}
+
+.tabcontent-flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}

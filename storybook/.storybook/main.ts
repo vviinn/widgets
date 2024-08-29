@@ -3,7 +3,7 @@ import { resolve } from "path";
 
 const config: StorybookConfig = {
   stories: [
-    "../../src/components/**/*.stories.@(js|jsx|ts|tsx)",
+    "../stories/*.stories.@(js|jsx|ts|tsx)",
     "../documentation/**/*.mdx",
   ],
   addons: [
