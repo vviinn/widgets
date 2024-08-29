@@ -37,7 +37,6 @@ import { checkFileWithExtention, resizeFileTo } from "./file-processing";
 import { imageFromFileTask } from "../Image/fromFile";
 import {
   ProductListingPageRequest,
-  RequestDynamicFilterItem,
   ResponseFilterItem,
   SearchIdResponse,
   TextSearchRequest,
@@ -266,9 +265,9 @@ export const uploadFileFromWidget = (
 };
 
 export const makeTextSearchRequest = async (
-  query: string,
   token: string,
-  dynamicFilters?: RequestDynamicFilterItem[]
+  query: string,
+  dynamicFilters?: RequestDynamicFilters
 ) => {
   state.searchType = "text";
   state.loading = true;
@@ -304,26 +303,18 @@ export const makeTextSearchRequest = async (
   )();
 };
 
-export const makeSearchIdRequest = async (token: string, searchId: string) =>
-  await pipe(
-    makeAuthorizedRequest(token),
-    TE.fromEither,
-    TE.chainW(linkRequest(createLinkfromHref(searchId))),
-    TE.map((response: ValueObject<SearchIdResponse>) => response.value)
-  )();
-
 export const makeSearchQueryRequest = async (
   token: string,
   query: string,
-  resultsCount?: number,
-  filters?: RequestDynamicFilters
+  dynamicFilters?: RequestDynamicFilters,
+  resultsCount?: number
 ) => {
   const body: TextSearchRequest = {
     query,
     ...(resultsCount ? { resultsCount } : {}),
-    ...(filters
+    ...(dynamicFilters
       ? {
-          dynamicFilters: filters,
+          dynamicFilters,
         }
       : {}),
   };
@@ -335,6 +326,14 @@ export const makeSearchQueryRequest = async (
     TE.chain(textSearchSessionClient)
   )();
 };
+
+export const makeSearchIdRequest = async (token: string, searchId: string) =>
+  await pipe(
+    makeAuthorizedRequest(token),
+    TE.fromEither,
+    TE.chainW(linkRequest(createLinkfromHref(searchId))),
+    TE.map((response: ValueObject<SearchIdResponse>) => response.value)
+  )();
 
 export const makeProductListingPageRequest = async (
   token: string,

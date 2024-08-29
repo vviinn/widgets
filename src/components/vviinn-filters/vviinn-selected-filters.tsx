@@ -6,6 +6,7 @@ import {
   Event,
   EventEmitter,
   Element,
+  Prop,
 } from "@stencil/core";
 import {
   DynamicFilters,
@@ -26,7 +27,6 @@ import {
 } from "../../recommendation/events";
 
 /**
- * @part selected-filters - Wrapper itself.
  * @part selected-filters-list - List of selected filters.
 
  * @part filters-sub-button - Sub filter button.
@@ -39,6 +39,9 @@ import {
 })
 export class VviinnSelectedFilters {
   @Element() el: HTMLElement;
+
+  /** @internal */
+  @Prop() showInWidget: boolean = false;
 
   @State() filters: DynamicFilters = [];
   @State() requestFilters: RequestDynamicFilters = [];
@@ -127,7 +130,11 @@ export class VviinnSelectedFilters {
     });
 
     return (
-      <Host>
+      <Host
+        class={{
+          "show-in-widget": this.showInWidget,
+        }}
+      >
         {selectedButtons.length > 0 && (
           <ul class="selected-filters-wrapper" part="selected-filters-list">
             {selectedButtons}

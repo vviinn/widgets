@@ -30,7 +30,6 @@ import {
 import { components } from "../../interfaces/generated";
 
 /**
- * @part filters - Wrapper itself.
  * @part filters-wrapper - Wrapper for the main filters.
  * @part filters-list - List of main filters.
  * @part filters-main-button - Main filter button.
@@ -60,6 +59,8 @@ export class VviinnFilters {
   @Prop({ mutable: true }) filters: DynamicFilters = [];
   /** @internal */
   @Prop() filtersString: string = "";
+  /** @internal */
+  @Prop() showInWidget: boolean = false;
 
   @State() selectedFilter: DynamicFilter;
   @State() requestFilters: RequestDynamicFilters = [];
@@ -181,7 +182,11 @@ export class VviinnFilters {
     if (filters.length === 0) return <Host></Host>;
 
     return (
-      <Host>
+      <Host
+        class={{
+          "show-in-widget": this.showInWidget,
+        }}
+      >
         <div class="main-filters-wrapper" part="filters-wrapper">
           <ul class="main-filters-list" part="filters-list">
             {filters.map((filter) => {
