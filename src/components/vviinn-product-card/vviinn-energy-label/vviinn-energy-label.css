@@ -34,7 +34,10 @@
   cursor: pointer;
 }
 
-.label-link svg {
+.label-link img {
+  display: inline-block;
+  height: 40px;
+  width: auto;
   flex-shrink: 0;
 }
 
@@ -55,6 +58,7 @@
 }
 
 .energy-efficiency-certificate {
+  cursor: pointer;
   text-decoration: none;
   color: var(--color-text-primary);
 }

@@ -42,7 +42,7 @@ import { BasketIcon, CheckCircleIcon, UpdateIcon } from "../vviinn-icons";
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
 import { generateRandomNumber } from "../../utils/number";
 import {
-  EnergyEfficiencyClass,
+  EnergyCertification,
   Recommendation,
 } from "../../interfaces/recommendation";
 
@@ -95,8 +95,8 @@ export class VviinnProductCard {
   @Prop() mode?: CarouselMode;
   @Prop() basketButtonShow: boolean;
   @Prop() updateButtonLocation: UpdateButtonLocation;
-  @Prop() energyEfficiencyClass: EnergyEfficiencyClass;
   @Prop() priceLabel: string;
+  @Prop() energyCertifications: EnergyCertification[] = [];
 
   /** @internal */
   @Prop() productId: string;
@@ -116,10 +116,6 @@ export class VviinnProductCard {
   @Prop() updatingAllCards: boolean;
   /** @internal */
   @Prop() defaultAnimationInterval: number;
-  /** @internal */
-  @Prop() minEnergyEfficiencyClass: EnergyEfficiencyClass;
-  /** @internal */
-  @Prop() maxEnergyEfficiencyClass: EnergyEfficiencyClass;
   /** @internal */
   @Prop() appliedDiscountPercentage?: number;
   /** @internal */
@@ -330,13 +326,12 @@ export class VviinnProductCard {
               {this.brand}
             </span>
 
-            <vviinn-energy-label
-              energyEfficiencyClass={this.energyEfficiencyClass}
-              minEnergyEfficiencyClass={this.minEnergyEfficiencyClass}
-              maxEnergyEfficiencyClass={this.maxEnergyEfficiencyClass}
-              productType={this.productType}
-              productClickHandler={this.productClickHandler.bind(this)}
-            ></vviinn-energy-label>
+            {this.energyCertifications.map((energyCertification) => (
+              <vviinn-energy-label
+                energyCertification={energyCertification}
+                productClickHandler={this.productClickHandler.bind(this)}
+              ></vviinn-energy-label>
+            ))}
 
             <Price
               prefix={this.pricePrefix}

@@ -1,6 +1,8 @@
 import { Component, Host, Prop, h } from "@stencil/core";
-import { EnergyEfficiencyClass } from "../../../interfaces/recommendation";
-import { getEnergyLabel } from "./icons";
+import {
+  EnergyCertification,
+  EnergyCertificationClassIconDirection,
+} from "../../../interfaces/recommendation";
 
 @Component({
   tag: "vviinn-energy-label",
@@ -8,25 +10,12 @@ import { getEnergyLabel } from "./icons";
   shadow: true,
 })
 export class VviinnEnergyLabel {
-  @Prop() energyEfficiencyClass: EnergyEfficiencyClass = "A";
-  @Prop() minEnergyEfficiencyClass: EnergyEfficiencyClass = "A";
-  @Prop() maxEnergyEfficiencyClass: EnergyEfficiencyClass = "G";
-  @Prop() productType: string = "Moebel";
   @Prop() labelLink?: string = null;
-  @Prop() documentationLink?: string = "#";
+  @Prop() energyCertification?: EnergyCertification;
+  @Prop() classIconDirection: EnergyCertificationClassIconDirection = "right";
 
   /** @internal */
   @Prop() productClickHandler: (e: MouseEvent) => void;
-
-  private energyLabelIcon: SVGElement | null = null;
-
-  connectedCallback() {
-    this.energyLabelIcon = getEnergyLabel(
-      this.energyEfficiencyClass,
-      this.minEnergyEfficiencyClass,
-      this.maxEnergyEfficiencyClass
-    );
-  }
 
   private labelClickHandler = (e: MouseEvent) => {
     if (this.labelLink) {
@@ -40,7 +29,10 @@ export class VviinnEnergyLabel {
       <Host
         part="energy-label"
         class={{
-          hidden: !this.energyLabelIcon,
+          hidden:
+            !this.energyCertification?.classIconUrls &&
+            !this.energyCertification?.productType &&
+            !this.energyCertification?.classDataSheetUrl,
         }}
       >
         <div class="container">
@@ -49,16 +41,28 @@ export class VviinnEnergyLabel {
             href={this.labelLink}
             onClick={this.labelClickHandler}
           >
-            {this.energyLabelIcon}
-          </a>
-          <div class="info-container">
-            {this.productType && (
-              <span class="product-type">{this.productType}</span>
+            {!!this.energyCertification?.classIconUrls && (
+              <img
+                src={
+                  this.energyCertification.classIconUrls[
+                    this.classIconDirection
+                  ]
+                }
+              />
             )}
-            {this.documentationLink && (
+          </a>
+
+          <div class="info-container">
+            {this.energyCertification?.productType && (
+              <span class="product-type">
+                {this.energyCertification.productType}
+                Machine
+              </span>
+            )}
+            {this.energyCertification?.classDataSheetUrl && (
               <a
                 class="energy-efficiency-certificate"
-                href={this.documentationLink}
+                href={this.energyCertification.classDataSheetUrl}
                 target="_blank"
                 rel="noopener noreferrer"
               >

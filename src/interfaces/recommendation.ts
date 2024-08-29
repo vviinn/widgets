@@ -24,6 +24,7 @@ export interface Interfaces {
   RequestDynamicFilters: components["schemas"]["request-dynamic-filters"];
 
   EnergyEfficiencyClass: components["schemas"]["energy-efficiency-class"];
+  EnergyCertification: components["schemas"]["energy-certification"];
 }
 
 export type SimilarProductsRequest = Interfaces["SimilarProductsRequest"];
@@ -32,3 +33,6 @@ export type RequestStaticFilters = Interfaces["RequestStaticFilters"];
 export type Recommendation = Interfaces["Recommendation"];
 
 export type EnergyEfficiencyClass = Interfaces["EnergyEfficiencyClass"];
+export type EnergyCertification = Interfaces["EnergyCertification"];
+export type EnergyCertificationClassIconDirection =
+  keyof Interfaces["EnergyCertification"]["classIconUrls"];
