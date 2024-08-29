@@ -67,6 +67,7 @@ import {
   DynamicFilters,
 } from "../../campaign/VPRCampaignService";
 import { CrossSellingResponse } from "../../campaign/VCSCampaignService";
+import { calculatePriceLabel } from "../vviinn-product-card/render-helpers";
 
 export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
 
@@ -80,6 +81,7 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @part image-link - Anchor element around product image. Rendered only if "deeplink" property is filled.
  * @part deeplink - Anchor element around product title. Rendered only if "deeplink" property is filled.
  * @part price-amount-sale - Numeric part of the price.
+ * @part price-label - Label for the price.
  * @part price-amount-outdated - Numeric part of the price.
  * @part price-amount-regular - Numeric part of the price.
  * @part price-container - Block of prices.
@@ -729,6 +731,7 @@ export class VviinnVprWidget implements ComponentInterface {
         currency={this.currencySign}
         pricePrefix={this.pricePrefix}
         locale={this.locale}
+        priceLabel={calculatePriceLabel(recommendation)}
       />
     );
   }
