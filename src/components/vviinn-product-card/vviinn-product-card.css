@@ -32,6 +32,9 @@
   text-decoration: line-through;
 }
 
+.price-label {
+  margin-right: 5px;
+}
 .product-type {
   word-wrap: anywhere;
 }

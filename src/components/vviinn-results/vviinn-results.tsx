@@ -55,6 +55,7 @@ import {
   createResultVpsEventByType,
 } from "../../tracking";
 import { RequestDynamicFilters } from "../../campaign/VPRCampaignService";
+import { calculatePriceLabel } from "../vviinn-product-card/render-helpers";
 
 /**
  * @part product-card - Product Card itself.
@@ -453,6 +454,7 @@ export class VviinnResults {
         widgetVersion={version}
         currency={this.currencySign}
         locale={this.locale}
+        priceLabel={calculatePriceLabel(p)}
       />
     ));
   }
