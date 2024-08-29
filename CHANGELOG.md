@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.80.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.80.0...v2.80.1) (2024-08-29)
+
+
+### Bug Fixes
+
+* Update storybook content and fixed dart code highlighting ([bc1a279](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/bc1a2796937c42ce4051a65495745475b497ab46))
+
 ## [2.80.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.79.2...v2.80.0) (2024-08-28)
 
 
