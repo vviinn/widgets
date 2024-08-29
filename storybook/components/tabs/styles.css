@@ -1,0 +1,67 @@
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  position: relative;
+  margin-top: 20px !important;
+}
+.tab h3 {
+  float: left;
+  margin: 0;
+  padding-top: 15px !important;
+}
+.tab::after {
+  content: "";
+  display: block;
+  height: 1px;
+  background-color: #f0f0f0;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background: none;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+.tab.tab-reverse button {
+  float: right;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.tab.tab-reverse::after {
+  display: none;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  border-bottom: 1px solid #ccc;
+  position: relative;
+  z-index: 2;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  border-top: none;
+  padding-top: 10px;
+}
+
+.tabcontent .docblock-source {
+  margin: 0 !important;
+}
+
+.tabcontent-preview {
+  background: #ffffff;
+  border: 1px solid #ccc;
+  padding: 10px;
+}

@@ -1,5 +1,5 @@
 export default {
-  title: "Widgets/Search/Main",
+  title: "Playground/Search/Main",
   component: "vviinn-vps-widget",
   parameters: {
     viewport: {

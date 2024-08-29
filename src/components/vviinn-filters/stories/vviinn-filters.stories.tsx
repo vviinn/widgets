@@ -3,7 +3,7 @@ import { filtersDecorator } from "./decorators";
 import { filters } from "./constants";
 
 export default {
-  title: "Elements/Filters",
+  title: "Playground/Filters",
   component: "vviinn-filters",
   decorators: [filtersDecorator],
   argTypes,

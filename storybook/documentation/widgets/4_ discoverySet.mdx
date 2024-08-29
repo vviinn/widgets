@@ -1,0 +1,62 @@
+import { Meta, Story } from '@storybook/blocks';
+
+import "../../components/tabs/styles.css";
+import {clickHandlers} from "../../components"
+
+<Meta title="Widgets/Discovery Set" />
+
+# Discovery Set
+
+## Examples
+
+<div id="cross-selling">
+    <div className="tab tab-reverse">
+        <h3>Cross-Selling</h3>
+        <button className="tablinks" onClick={(e)=> {clickHandlers(e, 'Code_1', 'cross-selling')}}>Code</button>
+        <button className="tablinks active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'cross-selling')}}>Preview</button>
+    </div>
+    <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
+        <div className="tabcontent-preview">
+            <vviinn-vpr-widget token="STORYBOOK_TOKEN" product-id="105870136716" mode="set" campaign-type="VCS">
+            </vviinn-vpr-widget>
+        </div>
+    </div>
+    <div id="Code_1" className="tabcontent">
+```html
+    <vviinn-vpr-widget 
+    token="TOKEN" 
+    product-id="PRODUCT_ID"
+    mode="set"
+    campaign-type="VCS"
+></vviinn-vpr-widget>
+```
+    </div>
+</div>
+
+<div id="cross-selling-modal">
+    <div className="tab tab-reverse">
+        <h3>Modal</h3>
+        <button className="tablinks" onClick={(e)=> {clickHandlers(e, 'Code_2', 'cross-selling-modal')}}>Code</button>
+        <button className="tablinks active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'cross-selling-modal')}}>Preview</button>
+    </div>
+    <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
+        <div className="tabcontent-preview">
+            <vviinn-vpr-button token="STORYBOOK_TOKEN" product-id="105870136716" mode="set" campaign-type="VCS">
+            </vviinn-vpr-button>
+        </div>
+    </div>
+    <div id="Code_2" className="tabcontent">
+```html
+    <vviinn-vpr-button 
+    token="TOKEN" 
+    product-id="PRODUCT_ID"
+    mode="set"
+    campaign-type="VCS"
+></vviinn-vpr-button>
+```
+    </div>
+</div>
+
+
+
+

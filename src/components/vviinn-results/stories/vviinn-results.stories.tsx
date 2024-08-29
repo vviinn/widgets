@@ -2,7 +2,7 @@ import { generalArgs } from "./generalArgs";
 import { ResultsTemplate } from "./ResultsTemplate";
 
 export default {
-  title: "Elements/Product Listing",
+  title: "Playground/Product Listing",
   component: "vviinn-results",
 };
 

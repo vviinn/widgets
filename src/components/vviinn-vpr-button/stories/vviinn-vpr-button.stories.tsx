@@ -14,7 +14,7 @@ const centerDecorator = (story) => `
   `;
 
 export default {
-  title: "Widgets/Recommendation/Button",
+  title: "Playground/Recommendation/Button",
   component: "vviinn-vpr-button",
   decorators: [centerDecorator],
   argTypes,

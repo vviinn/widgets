@@ -19,7 +19,7 @@ const textSearchDecorator = (story) => `
   `;
 
 export default {
-  title: "Widgets/Search",
+  title: "Playground/Search",
   component: "vviinn-text-search",
   decorators: [textSearchDecorator],
 };

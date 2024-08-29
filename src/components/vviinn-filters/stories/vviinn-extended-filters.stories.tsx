@@ -3,7 +3,7 @@ import { extendedFiltersDecorator } from "./decorators";
 import { filters } from "./constants";
 
 export default {
-  title: "Elements/Filters",
+  title: "Playground/Filters",
   component: "vviinn-extended-filters",
   decorators: [extendedFiltersDecorator],
   argTypes,

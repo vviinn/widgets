@@ -2,7 +2,7 @@ import { argTypes } from "./args";
 import { productDecorator } from "./decorators";
 
 export default {
-  title: "Elements/Product Card",
+  title: "Playground/Product Card",
   component: "vviinn-product-card",
   decorators: [productDecorator],
   parameters: {

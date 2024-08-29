@@ -1,0 +1,83 @@
+import { Meta, Story } from '@storybook/blocks';
+
+import "../../components/tabs/styles.css";
+import {clickHandlers} from "../../components"
+
+<Meta title="Widgets/Discovery Slider" />
+
+# Discovery Slider
+
+## Examples
+
+<div id="similar-products">
+    <div className="tab tab-reverse">
+        <h3>Similar Products</h3>
+        <button className="tablinks" onClick={(e)=> {clickHandlers(e, 'Code_1', 'similar-products')}}>Code</button>
+        <button className="tablinks active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'similar-products')}}>Preview</button>
+    </div>
+    <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
+        <div className="tabcontent-preview">
+            <vviinn-vpr-widget token="STORYBOOK_TOKEN" product-id="4114460310" mode="grid" block-title="">
+            </vviinn-vpr-widget>
+        </div>
+    </div>
+    <div id="Code_1" className="tabcontent">
+```html
+    <vviinn-vpr-widget 
+    token="TOKEN" 
+    product-id="PRODUCT_ID"
+    mode="grid"
+    block-title=""
+></vviinn-vpr-widget>
+```
+    </div>
+</div>
+
+<div id="fluid">
+    <div className="tab tab-reverse">
+        <h3>Fluid</h3>
+        <button className="tablinks" onClick={(e)=> {clickHandlers(e, 'Code_3', 'fluid')}}>Code</button>
+        <button className="tablinks active" onClick={(e)=> {clickHandlers(e, 'Preview_3', 'fluid')}}>Preview</button>
+    </div>
+    <div id="Preview_3" className="tabcontent" style={{display:"block"}}>
+        <div className="tabcontent-preview">
+            <vviinn-vpr-widget token="STORYBOOK_TOKEN" product-id="4114460310" block-title="">
+            </vviinn-vpr-widget>
+        </div>
+    </div>
+    <div id="Code_3" className="tabcontent">
+```html
+    <vviinn-vpr-widget 
+    token="TOKEN" 
+    product-id="PRODUCT_ID"
+    block-title=""
+></vviinn-vpr-widget>
+```
+    </div>
+</div>
+
+<div id="similar-products-button">
+    <div className="tab tab-reverse">
+        <h3>Modal</h3>
+        <button className="tablinks" onClick={(e)=> {clickHandlers(e, 'Code_2', 'similar-products-button')}}>Code</button>
+        <button className="tablinks active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'similar-products-button')}}>Preview</button>
+    </div>
+    <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
+        <div className="tabcontent-preview">
+            <vviinn-vpr-button token="STORYBOOK_TOKEN" product-id="4114460310">
+            </vviinn-vpr-button>
+        </div>
+    </div>
+    <div id="Code_2" className="tabcontent">
+```html
+    <vviinn-vpr-button 
+    token="TOKEN" 
+    product-id="PRODUCT_ID"
+></vviinn-vpr-button>
+```
+    </div>
+</div>
+
+
+
+
