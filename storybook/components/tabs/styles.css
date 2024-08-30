@@ -9,6 +9,11 @@
   margin: 0;
   padding-top: 15px !important;
 }
+@media (max-width: 640px) {
+  .tab h3 {
+    padding-top: 0 !important;
+  }
+}
 .tab::after {
   content: "";
   display: block;
@@ -31,6 +36,12 @@
   padding: 14px 16px;
   transition: 0.3s;
   font-size: 17px;
+}
+@media (max-width: 640px) {
+  .tab button {
+    padding: 8px;
+    font-size: 10px;
+  }
 }
 
 .tab.tab-reverse button {
@@ -76,4 +87,8 @@
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
+}
+
+.tab-sub-title {
+  font-size: 10px !important;
 }

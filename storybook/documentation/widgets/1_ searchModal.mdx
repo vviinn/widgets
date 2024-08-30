@@ -17,6 +17,7 @@ The Search Modal is a full-screen overlay that allows users to search for produc
         <button className="tablinks" onClick={(e)=> {clickHandlers(e, 'Code_1', 'full')}}>Code</button>
         <button className="tablinks active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'full')}}>Preview</button>
     </div>
+    <div className='tab-sub-title'>Search with Image, Text, and Camera</div>
     <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
             <vviinn-vps-button token="STORYBOOK_TOKEN" text-search-show="true">
@@ -40,7 +41,7 @@ The Search Modal is a full-screen overlay that allows users to search for produc
         <button className="tablinks" onClick={(e)=> {clickHandlers(e, 'Code_2', 'image')}}>Code</button>
         <button className="tablinks active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'image')}}>Preview</button>
     </div>
-
+    <div className='tab-sub-title'>Search with Image, and Camera</div>
     <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
             <vviinn-vps-button token="STORYBOOK_TOKEN">

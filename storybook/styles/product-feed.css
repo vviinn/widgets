@@ -8,6 +8,11 @@
   margin: 60px auto;
   max-width: 800px;
 }
+@media (max-width: 640px) {
+  .collection {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 
 .product__image {
   background-color: #e5e5e5;
