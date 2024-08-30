@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.82.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.81.0...v2.82.0) (2024-08-30)
+
+
+### Features
+
+* Update energy labels structure ([9799555](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/97995559396dfb453d85a3da6b3e7861e806c0ef))
+
+## [2.81.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.80.1...v2.81.0) (2024-08-29)
+
+
+### Features
+
+* developed price labels ([a89d295](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/a89d29550e88be0f0f7d0b70d266e75ee0e80dbe))
+
+### [2.80.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.80.0...v2.80.1) (2024-08-29)
+
+
+### Bug Fixes
+
+* Update storybook content and fixed dart code highlighting ([bc1a279](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/bc1a2796937c42ce4051a65495745475b497ab46))
+
 ## [2.80.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.79.2...v2.80.0) (2024-08-28)
 
 

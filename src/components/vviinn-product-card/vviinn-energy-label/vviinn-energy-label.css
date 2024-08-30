@@ -1,7 +1,7 @@
 @import "../../../variables.css";
 
 :host {
-  display: block;
+  display: flex;
   line-height: 0px;
 }
 
@@ -11,28 +11,54 @@
 
 .container {
   display: flex;
+  flex-direction: row;
   align-items: center;
   max-width: 100%;
-  gap: 8px;
+  gap: var(--spacing-75);
 }
 
-svg {
+.info-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-400);
+  line-height: var(--line-height-body);
+  letter-spacing: var(--letter-spacing-body);
+  font-style: normal;
+}
+
+.class-label-link {
+  cursor: pointer;
+}
+
+.class-label-icon {
+  display: inline-block;
+  height: 40px;
+  width: auto;
   flex-shrink: 0;
 }
 
-.product-type {
+.product-type,
+.data-sheet-link {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
   overflow-wrap: anywhere;
   overflow: hidden;
   text-overflow: ellipsis;
-  line-height: 1.5;
+  text-decoration: none;
+  color: var(--color-text-primary);
+}
 
-  color: #8d8d8d;
-  font-size: var(--font-size-body);
-  font-style: normal;
-  font-weight: var(--font-weight-400);
-  line-height: var(--line-height-body);
-  letter-spacing: var(--letter-spacing-body);
+.product-type {
+  color: var(--color-text-helper);
+}
+
+.data-sheet-link {
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--color-text-primary);
 }

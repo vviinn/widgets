@@ -1,6 +1,19 @@
-import { Component, Host, Prop, h } from "@stencil/core";
-import { EnergyEfficiencyClass } from "../../../interfaces/recommendation";
-import { getEnergyLabel } from "./icons";
+import { Component, Host, Prop, h, Element } from "@stencil/core";
+import i18next from "i18next";
+import {
+  EnergyCertification,
+  EnergyClassIconDirection,
+} from "../../../interfaces/recommendation";
+import { slotChangeListener } from "../../customized-slots";
+
+/**
+ * @part energy-label-container - Energy label container.
+ * @part energy-label-icon - Icon with an energy class.
+ * @part energy-label-product-type - Product type.
+ * @part energy-label-data-sheet-link - Data sheet link.
+ *
+ * @slot energy-label-data-sheet-text - Data sheet link's text.
+ */
 
 @Component({
   tag: "vviinn-energy-label",
@@ -8,32 +21,70 @@ import { getEnergyLabel } from "./icons";
   shadow: true,
 })
 export class VviinnEnergyLabel {
-  @Prop() energyEfficiencyClass: EnergyEfficiencyClass;
-  @Prop() minEnergyEfficiencyClass: EnergyEfficiencyClass;
-  @Prop() maxEnergyEfficiencyClass: EnergyEfficiencyClass;
-  @Prop() productType: string;
+  @Element() el: HTMLElement;
+  @Prop() energyCertification: EnergyCertification;
+  @Prop() iconDirection: EnergyClassIconDirection = "right";
 
-  private energyLabelIcon: SVGElement | null = null;
+  /** @internal */
+  @Prop() productClickHandler: (e: MouseEvent) => void;
 
-  connectedCallback() {
-    this.energyLabelIcon = getEnergyLabel(
-      this.energyEfficiencyClass,
-      this.minEnergyEfficiencyClass,
-      this.maxEnergyEfficiencyClass
-    );
+  componentWillLoad() {
+    slotChangeListener(this, this.el);
   }
+
+  private labelClickHandler = (e: MouseEvent) => {
+    if (this.energyCertification?.classLabelUrl) {
+      e.preventDefault();
+      window.open(
+        this.energyCertification.classLabelUrl,
+        "_blank",
+        "noopener noreferrer"
+      );
+    } else this.productClickHandler(e);
+  };
 
   render() {
     return (
       <Host
-        part="energy-label"
         class={{
-          hidden: !this.energyLabelIcon,
+          hidden:
+            !this.energyCertification?.classIconUrls &&
+            !this.energyCertification?.productType &&
+            !this.energyCertification?.classDataSheetUrl,
         }}
+        exportparts="energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
       >
-        <div class="container">
-          {this.energyLabelIcon}
-          <span class="product-type">{this.productType}</span>
+        <div class="container" part="energy-label-container">
+          {!!this.energyCertification?.classIconUrls && (
+            <a class="class-label-link" onClick={this.labelClickHandler}>
+              <img
+                class="class-label-icon"
+                part="energy-label-icon"
+                src={this.energyCertification.classIconUrls[this.iconDirection]}
+              />
+            </a>
+          )}
+
+          <div class="info-container">
+            {this.energyCertification?.productType && (
+              <span class="product-type" part="energy-label-product-type">
+                {this.energyCertification.productType}
+              </span>
+            )}
+            {this.energyCertification?.classDataSheetUrl && (
+              <a
+                class="data-sheet-link"
+                part="energy-label-data-sheet-link"
+                href={this.energyCertification.classDataSheetUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span slot="energy-label-data-sheet-text">
+                  {i18next.t("energyLabel.dataSheetText")}
+                </span>
+              </a>
+            )}
+          </div>
         </div>
       </Host>
     );

@@ -38,6 +38,7 @@ const Template = (args) => `
   <vviinn-selected-filters></vviinn-selected-filters>
   <vviinn-results 
     token="${args.token}"
+    api-path="${args.apiPath}"
   ></vviinn-results>
 `;
 

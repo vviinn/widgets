@@ -42,7 +42,7 @@ import { BasketIcon, CheckCircleIcon, UpdateIcon } from "../vviinn-icons";
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
 import { generateRandomNumber } from "../../utils/number";
 import {
-  EnergyEfficiencyClass,
+  EnergyCertification,
   Recommendation,
 } from "../../interfaces/recommendation";
 
@@ -65,12 +65,17 @@ import {
  * @part update-button-item - Update button in Product Card (Set mode).
  * @part discount-label - Discount label in Product Card (Set mode).
  * @part discount-percentage - Discount percentage inside the Add to Basket button (Set mode).
+ * @part energy-label-container - Energy label container.
+ * @part energy-label-icon - Icon with an energy class.
+ * @part energy-label-product-type - Product type.
+ * @part energy-label-data-sheet-link - Data sheet link.
  *
  * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
  * @slot vviinn-basket-button-icon - Icon of Add to Basket button.
  * @slot vviinn-basket-button-text-pressed - Text of pressed Add to Basket button (Set mode).
  * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button (Set mode).
+ * @slot energy-label-data-sheet-text - Data sheet link's text.
  */
 @Component({
   tag: "vviinn-product-card",
@@ -95,7 +100,8 @@ export class VviinnProductCard {
   @Prop() mode?: CarouselMode;
   @Prop() basketButtonShow: boolean;
   @Prop() updateButtonLocation: UpdateButtonLocation;
-  @Prop() energyEfficiencyClass: EnergyEfficiencyClass;
+  @Prop() priceLabel: string;
+  @Prop() energyCertifications?: EnergyCertification[];
 
   /** @internal */
   @Prop() productId: string;
@@ -115,10 +121,6 @@ export class VviinnProductCard {
   @Prop() updatingAllCards: boolean;
   /** @internal */
   @Prop() defaultAnimationInterval: number;
-  /** @internal */
-  @Prop() minEnergyEfficiencyClass: EnergyEfficiencyClass;
-  /** @internal */
-  @Prop() maxEnergyEfficiencyClass: EnergyEfficiencyClass;
   /** @internal */
   @Prop() appliedDiscountPercentage?: number;
   /** @internal */
@@ -248,26 +250,28 @@ export class VviinnProductCard {
     }
   };
 
+  private productClickHandler(event: MouseEvent) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    this.vviinnProductClick.emit({
+      ...this.productData,
+      clickEvent: event,
+    });
+
+    pipe(
+      getAnalyticsModule,
+      O.match(
+        () => null,
+        (analytics) => analytics.sendClick(this.getProduct())
+      )
+    );
+  }
+
   private addLinksEventListeners() {
     const links = this.el.shadowRoot.querySelectorAll("a");
 
     links.forEach((link) => {
-      link.addEventListener("click", (event) => {
-        event.preventDefault();
-        event.stopImmediatePropagation();
-        this.vviinnProductClick.emit({
-          ...this.productData,
-          clickEvent: event,
-        });
-
-        pipe(
-          getAnalyticsModule,
-          O.match(
-            () => null,
-            (analytics) => analytics.sendClick(this.getProduct())
-          )
-        );
-      });
+      link.addEventListener("click", this.productClickHandler.bind(this));
 
       link.addEventListener("auxclick", () => {
         this.vviinnAuxClick.emit({
@@ -305,7 +309,7 @@ export class VviinnProductCard {
           animated: this.isTransitioning,
           "set-mode": this.isSetMode,
         }}
-        exportparts="brand, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, discount-label, discount-percentage, title, basket-button, update-button-item, energy-label"
+        exportparts="brand,price-label, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, discount-label, discount-percentage, title, basket-button, update-button-item, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
       >
         <Linked deeplink={this.deeplink} part="image-link">
           {this.renderImage()}
@@ -327,12 +331,13 @@ export class VviinnProductCard {
               {this.brand}
             </span>
 
-            <vviinn-energy-label
-              energyEfficiencyClass={this.energyEfficiencyClass}
-              minEnergyEfficiencyClass={this.minEnergyEfficiencyClass}
-              maxEnergyEfficiencyClass={this.maxEnergyEfficiencyClass}
-              productType={this.productType}
-            ></vviinn-energy-label>
+            {this.energyCertifications?.length &&
+              this.energyCertifications.map((energyCertification) => (
+                <vviinn-energy-label
+                  energyCertification={energyCertification}
+                  productClickHandler={this.productClickHandler.bind(this)}
+                ></vviinn-energy-label>
+              ))}
 
             <Price
               prefix={this.pricePrefix}
@@ -340,7 +345,9 @@ export class VviinnProductCard {
               price={this.price}
               salePrice={this.salePrice}
               locale={this.locale}
+              priceLabel={this.priceLabel}
             />
+
             {this.isSetMode &&
               !this.appliedDiscountPercentage &&
               this.currentDiscountPercentage && (

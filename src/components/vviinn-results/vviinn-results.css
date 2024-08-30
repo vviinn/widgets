@@ -50,6 +50,11 @@
   padding: 0;
 }
 
+/* TODO: check this: */
+/* vviinn-product-card {
+  width: 100%;
+} */
+
 .nothing-found {
   display: grid;
   grid-gap: 64px;
