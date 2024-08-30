@@ -34,5 +34,5 @@ export type Recommendation = Interfaces["Recommendation"];
 
 export type EnergyEfficiencyClass = Interfaces["EnergyEfficiencyClass"];
 export type EnergyCertification = Interfaces["EnergyCertification"];
-export type EnergyCertificationClassIconDirection =
+export type EnergyClassIconDirection =
   keyof Interfaces["EnergyCertification"]["classIconUrls"];

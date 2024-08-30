@@ -118,6 +118,10 @@ h2 {
   justify-content: center;
 }
 
+:host(.grid) vviinn-product-card {
+  align-items: center;
+}
+
 :host(.grid) vviinn-product-card::part(image) {
   min-width: 100%;
 }

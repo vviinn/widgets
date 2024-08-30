@@ -664,6 +664,7 @@ export class VviinnVpsWidget {
                           showInWidget={true}
                           searchQuery={this.searchQuery}
                           apiPath={this.apiPath}
+                          locale={this.locale}
                         />
                       )}
                     </Fragment>
@@ -716,6 +717,7 @@ export class VviinnVpsWidget {
                     showInWidget={true}
                     searchQuery={this.searchQuery}
                     apiPath={this.apiPath}
+                    locale={this.locale}
                   />
 
                   <div

@@ -2,7 +2,7 @@ import { Component, Host, Prop, h, Element } from "@stencil/core";
 import i18next from "i18next";
 import {
   EnergyCertification,
-  EnergyCertificationClassIconDirection,
+  EnergyClassIconDirection,
 } from "../../../interfaces/recommendation";
 import { slotChangeListener } from "../../customized-slots";
 
@@ -22,8 +22,8 @@ import { slotChangeListener } from "../../customized-slots";
 })
 export class VviinnEnergyLabel {
   @Element() el: HTMLElement;
-  @Prop() energyCertification?: EnergyCertification;
-  @Prop() iconDirection: EnergyCertificationClassIconDirection = "right";
+  @Prop() energyCertification: EnergyCertification;
+  @Prop() iconDirection: EnergyClassIconDirection = "right";
 
   /** @internal */
   @Prop() productClickHandler: (e: MouseEvent) => void;
@@ -55,19 +55,15 @@ export class VviinnEnergyLabel {
         exportparts="energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
       >
         <div class="container" part="energy-label-container">
-          <a
-            class="class-label-link"
-            href={this.energyCertification?.classLabelUrl}
-            onClick={this.labelClickHandler}
-          >
-            {!!this.energyCertification?.classIconUrls && (
+          {!!this.energyCertification?.classIconUrls && (
+            <a class="class-label-link" onClick={this.labelClickHandler}>
               <img
                 class="class-label-icon"
                 part="energy-label-icon"
                 src={this.energyCertification.classIconUrls[this.iconDirection]}
               />
-            )}
-          </a>
+            </a>
+          )}
 
           <div class="info-container">
             {this.energyCertification?.productType && (

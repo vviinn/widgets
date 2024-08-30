@@ -101,7 +101,7 @@ export class VviinnProductCard {
   @Prop() basketButtonShow: boolean;
   @Prop() updateButtonLocation: UpdateButtonLocation;
   @Prop() priceLabel: string;
-  @Prop() energyCertifications: EnergyCertification[] = [];
+  @Prop() energyCertifications?: EnergyCertification[];
 
   /** @internal */
   @Prop() productId: string;
@@ -331,12 +331,13 @@ export class VviinnProductCard {
               {this.brand}
             </span>
 
-            {this.energyCertifications.map((energyCertification) => (
-              <vviinn-energy-label
-                energyCertification={energyCertification}
-                productClickHandler={this.productClickHandler.bind(this)}
-              ></vviinn-energy-label>
-            ))}
+            {this.energyCertifications?.length &&
+              this.energyCertifications.map((energyCertification) => (
+                <vviinn-energy-label
+                  energyCertification={energyCertification}
+                  productClickHandler={this.productClickHandler.bind(this)}
+                ></vviinn-energy-label>
+              ))}
 
             <Price
               prefix={this.pricePrefix}

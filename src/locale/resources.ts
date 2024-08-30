@@ -51,7 +51,7 @@ export const resources: Resource = {
         },
       },
       energyLabel: {
-        dataSheetText: "Dokumentation",
+        dataSheetText: "Produktdatenblatt",
       },
     },
   },
@@ -100,7 +100,7 @@ export const resources: Resource = {
         },
       },
       energyLabel: {
-        dataSheetText: "Documentation",
+        dataSheetText: "Product Data Sheet",
       },
     },
   },
