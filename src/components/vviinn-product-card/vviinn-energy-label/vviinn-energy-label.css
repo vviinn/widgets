@@ -30,11 +30,11 @@
   font-style: normal;
 }
 
-.label-link {
+.class-label-link {
   cursor: pointer;
 }
 
-.label-link img {
+.class-label-icon {
   display: inline-block;
   height: 40px;
   width: auto;
@@ -42,7 +42,7 @@
 }
 
 .product-type,
-.energy-efficiency-certificate {
+.data-sheet-link {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
@@ -57,7 +57,7 @@
   color: var(--color-text-helper);
 }
 
-.energy-efficiency-certificate {
+.data-sheet-link {
   cursor: pointer;
   text-decoration: none;
   color: var(--color-text-primary);

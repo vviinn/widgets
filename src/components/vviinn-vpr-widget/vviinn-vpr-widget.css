@@ -132,6 +132,7 @@ h2 {
 }
 
 :host(.grid) vviinn-product-card::part(price-container) {
+  text-align: center;
   align-self: center;
 }
 
@@ -142,4 +143,8 @@ h2 {
   text-align: left;
   max-width: unset;
   align-self: start;
+}
+
+:host(.continuity) vviinn-product-card {
+  align-items: flex-start;
 }
