@@ -717,9 +717,7 @@ export class VviinnVprWidget implements ComponentInterface {
         imageRatio={this.imageRatio}
         price={recommendation.price.actual}
         salePrice={recommendation.price.sale}
-        energyEfficiencyClass={recommendation.energyEfficiencyClass}
-        minEnergyEfficiencyClass={recommendation.minEnergyEfficiencyClass}
-        maxEnergyEfficiencyClass={recommendation.maxEnergyEfficiencyClass}
+        energyCertifications={recommendation.energyCertifications}
         responsive={this.isGridMode}
         basketButtonShow={this.addToBasketShow}
         mode={this.mode}
