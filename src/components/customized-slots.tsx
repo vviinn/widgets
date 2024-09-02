@@ -1,5 +1,7 @@
 import { h } from "@stencil/core";
 
+const generalSlotsNames: string[] = ["energy-label-data-sheet-text"];
+
 const vprSlotsNames: string[] = [
   "vviinn-recommendations-title",
   "vviinn-recommendations-subtitle",
@@ -34,10 +36,10 @@ const renderNamedSlot = (name: string) => <slot name={name} />;
 export const SlotSkeleton = (renderType: string) => {
   return (
     renderType === "vps"
-      ? [...vpsSlotsNames, ...filtersSlotsNames]
+      ? [...generalSlotsNames, ...vpsSlotsNames, ...filtersSlotsNames]
       : renderType === "filters"
       ? filtersSlotsNames
-      : [...vprSlotsNames, ...filtersSlotsNames]
+      : [...generalSlotsNames, ...vprSlotsNames, ...filtersSlotsNames]
   ).map(renderNamedSlot);
 };
 
@@ -111,6 +113,7 @@ export const slotChangeListener = (component: any, element: HTMLElement) => {
           "VVIINN-MODAL",
           "VVIINN-TEXT-SEARCH",
           "VVIINN-EXTENDED-FILTERS",
+          "VVIINN-ENERGY-LABEL",
         ].includes(elementTagName);
 
         const elementsAreDifferent = element !== detail.element;

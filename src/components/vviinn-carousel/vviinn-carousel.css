@@ -110,10 +110,6 @@
   min-width: 100%;
 }
 
-vviinn-product-card::part(price-container) {
-  text-align: center;
-}
-
 @media (max-width: 480px) {
   .items-group {
     grid-template-columns: repeat(2, 1fr);

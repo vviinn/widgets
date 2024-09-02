@@ -2,6 +2,7 @@ import { pipe } from "fp-ts/lib/function";
 import * as E from "fp-ts/lib/Either";
 import { FunctionalComponent, h } from "@stencil/core";
 import { PlusIcon } from "../vviinn-icons";
+import { Recommendation } from "../../interfaces/recommendation";
 
 const FIT_EXPR = /fit\/\d+\//;
 
@@ -68,7 +69,15 @@ const FormattedPrice: FunctionalComponent<PriceElementProps> = (props) => {
 
 type PriceProps = PriceElementProps & {
   salePrice: number;
+  priceLabel: string;
 };
+
+export const calculatePriceLabel = (recommendation: Recommendation) =>
+  (recommendation.custom_label_0 ?? "") +
+  (recommendation.custom_label_1 ?? "") +
+  (recommendation.custom_label_2 ?? "") +
+  (recommendation.custom_label_3 ?? "") +
+  (recommendation.custom_label_4 ?? "");
 
 export const Price: FunctionalComponent<PriceProps> = (props) => {
   return (
@@ -84,14 +93,21 @@ export const Price: FunctionalComponent<PriceProps> = (props) => {
               priceType="sale"
             />
           </span>,
-          <span class="price-outdated" part="price-outdated">
-            <FormattedPrice
-              prefix={props.prefix}
-              currency={props.currency}
-              price={props.price}
-              locale={props.locale}
-              priceType="outdated"
-            />
+          <span>
+            {props.priceLabel && (
+              <span part="price-label" class="price-label">
+                {props.priceLabel}
+              </span>
+            )}
+            <span class="price-outdated" part="price-outdated">
+              <FormattedPrice
+                prefix={props.prefix}
+                currency={props.currency}
+                price={props.price}
+                locale={props.locale}
+                priceType="outdated"
+              />
+            </span>
           </span>,
         ]
       ) : (

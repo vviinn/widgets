@@ -50,6 +50,9 @@ export const resources: Resource = {
           resetFilters: "Filter zurücksetzen",
         },
       },
+      energyLabel: {
+        dataSheetText: "Produktdatenblatt",
+      },
     },
   },
   en: {
@@ -95,6 +98,9 @@ export const resources: Resource = {
           apply: "Apply",
           resetFilters: "Reset Filters",
         },
+      },
+      energyLabel: {
+        dataSheetText: "Product Data Sheet",
       },
     },
   },

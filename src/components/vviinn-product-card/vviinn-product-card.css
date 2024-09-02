@@ -1,5 +1,4 @@
 :host {
-  align-items: center;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -32,6 +31,9 @@
   text-decoration: line-through;
 }
 
+.price-label {
+  margin-right: 5px;
+}
 .product-type {
   word-wrap: anywhere;
 }

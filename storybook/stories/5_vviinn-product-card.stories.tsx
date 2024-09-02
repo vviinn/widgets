@@ -41,6 +41,7 @@ const Template = (args) => {
       locale="${args.locale}"
       currency="${args.currency}"
       image-ratio="${args.imageRatio}"
+      price-label="${args.priceLabel}"
     >
       <span slot="vviinn-basket-button-text">Add to basket</span>
     </vviinn-product-card>`;
@@ -70,4 +71,5 @@ Default.args = {
   pricePrefix: "",
   basketButtonShow: true,
   updateButtonLocation: "onItem",
+  priceLabel: "",
 };
