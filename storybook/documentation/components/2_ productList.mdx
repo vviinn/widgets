@@ -16,6 +16,7 @@ import "../../styles/filters-search-bar.css";
         <button className="tablinks" onClick={(e)=> {clickHandlers(e, 'Code_2', 'text-search')}}>Code</button>
         <button className="tablinks active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'text-search')}}>Preview</button>
     </div>
+    <div className="tab-sub-title">Text search for "Chair"</div>
     <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
             <vviinn-results 
@@ -48,6 +49,8 @@ import "../../styles/filters-search-bar.css";
         <button className="tablinks" onClick={(e)=> {clickHandlers(e, 'Code_1', 'static-filters')}}>Code</button>
         <button className="tablinks active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'static-filters')}}>Preview</button>
     </div>
+        <div className="tab-sub-title">Filter by "product_type" for "Möbel > Schränke &amp; Regale"</div>
+
     <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
             <vviinn-results 
