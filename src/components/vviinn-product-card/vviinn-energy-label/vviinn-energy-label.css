@@ -23,10 +23,10 @@
   display: flex;
   justify-content: center;
   flex-direction: column;
-  font-size: var(--font-size-body);
+  font-size: var(--font-size-caption);
   font-weight: var(--font-weight-400);
-  line-height: var(--line-height-body);
-  letter-spacing: var(--letter-spacing-body);
+  line-height: var(--line-height-caption);
+  letter-spacing: var(--letter-spacing-caption);
   font-style: normal;
 }
 
@@ -36,7 +36,7 @@
 
 .class-label-icon {
   display: inline-block;
-  height: 40px;
+  height: 32px;
   width: auto;
   flex-shrink: 0;
 }
