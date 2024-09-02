@@ -331,7 +331,7 @@ export class VviinnProductCard {
               {this.brand}
             </span>
 
-            {this.energyCertifications?.length &&
+            {this.energyCertifications?.length > 0 &&
               this.energyCertifications.map((energyCertification) => (
                 <vviinn-energy-label
                   energyCertification={energyCertification}

@@ -4,7 +4,6 @@
   position: relative;
   height: fit-content;
   display: flex;
-  align-items: center;
   flex-direction: column;
   font-family: var(--font-family-base);
   font-weight: var(--font-weight-400);
