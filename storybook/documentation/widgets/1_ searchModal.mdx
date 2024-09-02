@@ -7,7 +7,7 @@ import {clickHandlers} from "../../components"
 
 # Search Modal 
 
-The Search Modal is a full-screen overlay that allows users to search for products using text or images. It can be opened by clicking the search icon in the header of the Text Search widget.
+The Search Modal is a full-screen overlay that allows users to search for products using text (Text mode) or already existing images (Image mode) or capture new image for search with a device camera (Camera mode, will ask for permission to use camera if not granted yet). It can be opened by clicking the search icon in the header of the Text Search widget.
 
 ## Examples
 
@@ -64,6 +64,7 @@ The Search Modal is a full-screen overlay that allows users to search for produc
         <button className="tablinks" onClick={(e)=> {clickHandlers(e, 'Code_3', 'upload-mode')}}>Code</button>
         <button className="tablinks active" onClick={(e)=> {clickHandlers(e, 'Preview_3', 'upload-mode')}}>Preview</button>
     </div>
+       <div className='tab-sub-title'>Directly opens image upload for Image mode</div>
 
     <div id="Preview_3" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
@@ -88,6 +89,7 @@ The Search Modal is a full-screen overlay that allows users to search for produc
         <button className="tablinks" onClick={(e)=> {clickHandlers(e, 'Code_4', 'camera-mode')}}>Code</button>
         <button className="tablinks active" onClick={(e)=> {clickHandlers(e, 'Preview_4', 'camera-mode')}}>Preview</button>
     </div>
+       <div className='tab-sub-title'>Search with Camera</div>
 
     <div id="Preview_4" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
