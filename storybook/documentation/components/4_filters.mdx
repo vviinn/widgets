@@ -15,9 +15,9 @@ import {filters} from "./constants";
   <div className="tab tab-reverse">
       <h3>Preview</h3>
 
-      <button className="tablinks" onClick={(e)=> {clickHandlers(e, 'Details_1', 'preview')}}>Technical Details</button>
-      <button className="tablinks" onClick={(e)=> {clickHandlers(e, 'Code_1', 'preview')}}>Code</button>
-      <button className="tablinks active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'preview')}}>Preview</button>
+      <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Details_1', 'preview')}}>Technical Details</button>
+      <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'preview')}}>Code</button>
+      <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'preview')}}>Preview</button>
   </div>
 
   <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
@@ -39,11 +39,11 @@ import {filters} from "./constants";
 
 <div id="extended">
   <div className="tab tab-reverse">
-      <h3>Extended</h3>
+      <h3>Extended View</h3>
 
-      <button className="tablinks" onClick={(e)=> {clickHandlers(e, 'Details_2', 'extended')}}>Technical Details</button>
-      <button className="tablinks" onClick={(e)=> {clickHandlers(e, 'Code_2', 'extended')}}>Code</button>
-      <button className="tablinks active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'extended')}}>Preview</button>
+      <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Details_2', 'extended')}}>Technical Details</button>
+      <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'extended')}}>Code</button>
+      <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'extended')}}>Preview</button>
   </div>
 
   <div id="Preview_2" className="tabcontent" style={{display:"block"}}>

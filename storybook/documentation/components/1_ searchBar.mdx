@@ -10,9 +10,9 @@ import "../../styles/filters-search-bar.css";
 
 <div id="full-search-bar">
     <div className="tab tab-reverse">
-        <h3>Full</h3>
-        <button className="tablinks" onClick={(e)=> {clickHandlers(e, 'Code_1', 'full-search-bar')}}>Code</button>
-        <button className="tablinks active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'full-search-bar')}}>Preview</button>
+        <h3>Text or Image Search</h3>
+        <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'full-search-bar')}}>Code</button>
+        <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'full-search-bar')}}>Preview</button>
     </div>
     <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
@@ -31,9 +31,9 @@ import "../../styles/filters-search-bar.css";
 
 <div id="static-filters">
     <div className="tab tab-reverse">
-        <h3>Text Only</h3>
-        <button className="tablinks" onClick={(e)=> {clickHandlers(e, 'Code_2', 'static-filters')}}>Code</button>
-        <button className="tablinks active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'static-filters')}}>Preview</button>
+        <h3>Text Search</h3>
+        <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'static-filters')}}>Code</button>
+        <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'static-filters')}}>Preview</button>
     </div>
     <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">

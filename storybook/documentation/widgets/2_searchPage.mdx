@@ -8,7 +8,7 @@ import {clickHandlers} from "../../components"
 
 # Search Page
 
-Using `Vviinn Widgets` as separate components allows for greater control over the layout of the widgets and supports a wider range of use cases. For example, you can combine `Text Search` and `Visual Search` functionality while refining results with filters, and display them on the same page or even on different pages entirely.
+Using `Vviinn Widgets` as separate components allows for greater control over the layout of the widgets and supports a wider range of use cases. For example, you can combine `Text Search` and `Visual Search` functionality while refining results with filters, and display them on the same page or even on different pages.
 
 ## Examples
 
@@ -16,9 +16,9 @@ Using `Vviinn Widgets` as separate components allows for greater control over th
   <div className="tab tab-reverse">
       <h3>Basic Example</h3>
 
-      <button className="tablinks" onClick={(e)=> {clickHandlers(e, 'Details_1', 'basic')}}>Technical Details</button>
-      <button className="tablinks" onClick={(e)=> {clickHandlers(e, 'Code_1', 'basic')}}>Code</button>
-      <button className="tablinks active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'basic')}}>Preview</button>
+      <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Details_1', 'basic')}}>Technical Details</button>
+      <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'basic')}}>Code</button>
+      <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'basic')}}>Preview</button>
   </div>
 
   <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
@@ -67,8 +67,8 @@ To see the filter columns, enable Filters in the Interface Controls section insi
   <div className="tab tab-reverse">
       <h3>Using Results on a Different Page Example</h3>
 
-      <button className="tablinks" onClick={(e)=> {clickHandlers(e, 'Details_2', 'different')}}>Technical Details</button>
-      <button className="tablinks" onClick={(e)=> {clickHandlers(e, 'Code_2', 'different')}}>Code</button>
+      <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Details_2', 'different')}}>Technical Details</button>
+      <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Code_2', 'different')}}>Code</button>
   </div>
 
   <div id="Code_2" className="tabcontent" style={{display:"block"}}>
@@ -112,7 +112,7 @@ Here is a list of the available components:
 
 ## Integration
 
-To integrate the components into your project, install the `vviinn-widgets` package using one of the methods mentioned in this section, such as [Frameworkless](?path=/docs/installation-frameworkless--docs) or [React](?path=/docs/installation-react--docs). Ensure you install at least version [2.76.1](https://www.npmjs.com/package/vviinn-widgets/v/2.76.1) of the package to use the components. However, using the latest version is recommended.
+To integrate the components into your project, install the `vviinn-widgets` package using one of the methods mentioned in the [Installation](?path=/docs/getting-started-installation--docs) section. Ensure you install at least version [2.76.1](https://www.npmjs.com/package/vviinn-widgets/v/2.76.1) of the package to use the components. However, using the latest version is recommended.
 
 
 ## Summary

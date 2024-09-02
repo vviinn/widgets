@@ -1,19 +1,22 @@
-/* Style the tab */
 .tab {
   overflow: hidden;
   position: relative;
   margin-top: 20px !important;
+  margin-bottom: 16px !important;
 }
+
 .tab h3 {
   float: left;
   margin: 0;
   padding-top: 15px !important;
 }
+
 @media (max-width: 640px) {
   .tab h3 {
     padding-top: 0 !important;
   }
 }
+
 .tab::after {
   content: "";
   display: block;
@@ -26,21 +29,25 @@
   z-index: 1;
 }
 
-/* Style the buttons inside the tab */
-.tab button {
+.tablink {
   background: none;
   float: left;
   border: none;
   outline: none;
   cursor: pointer;
   padding: 14px 16px;
-  transition: 0.3s;
-  font-size: 17px;
+  font-size: 16px;
 }
+
+.tablink--sm {
+  padding: 8px 10px;
+  font-size: 14px;
+}
+
 @media (max-width: 640px) {
-  .tab button {
+  .tablink {
     padding: 8px;
-    font-size: 10px;
+    font-size: 12px;
   }
 }
 
@@ -53,14 +60,13 @@
   display: none;
 }
 
-/* Create an active/current tablink class */
-.tab button.active {
-  border-bottom: 1px solid #ccc;
+.tablink.active,
+.tablink:hover {
+  border-bottom: 1px solid #ccc !important;
   position: relative;
   z-index: 2;
 }
 
-/* Style the tab content */
 .tabcontent {
   display: none;
   border-top: none;
@@ -90,5 +96,5 @@
 }
 
 .tab-sub-title {
-  font-size: 10px !important;
+  font-size: 14px !important;
 }
