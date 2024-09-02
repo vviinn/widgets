@@ -22,7 +22,7 @@ Since `Vviinn Widgets` are developed as as web components, there will be differe
 ## Install using CDN
 
 Paste scripts to the `head` section of your page.<br />
-You don't need to include a script tag with `nomodule` attribute if you don't need to support browsers without JavaScript modules feature.
+Script with `nomodule` attribute is needed only for supporting browsers without JavaScript modules feature.
 
 ```html
 <script
@@ -81,7 +81,7 @@ document.append(component);
 
 ## Install using NPM
 
-If you want to use widgets as ES6 modules you should install them from [NPM](https://www.npmjs.com/package/vviinn-widgets).
+To use widgets as ES6 modules you should install them from [NPM](https://www.npmjs.com/package/vviinn-widgets).
 
 `npm i STORYBOOK_NPM_PACKAGE_NAME`
 
@@ -98,7 +98,7 @@ After that, you can use both Recommendation or Search Widgets in an HTML templat
 <div id="React" className="tabcontent">
 # React
 
-With an application built using the `create-react-app` script, the easiest way to include the component library is to call `defineCustomElements()` from the `index.js` file. So that you know, in this scenario applyPolyfills is needed if you are targeting Edge or IE11.
+With an application built using the `create-react-app` script, the easiest way to include the component library is to call `defineCustomElements()` from the `index.js` file. If you are targeting Edge or IE11 in this scenario applyPolyfills is needed.
 
 ## JavaScript Example
 
