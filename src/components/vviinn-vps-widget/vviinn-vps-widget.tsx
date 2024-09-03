@@ -191,6 +191,14 @@ export class VviinnVpsWidget {
     searchState.resultViewed = false;
   }
 
+  private replaceSlotsContent() {
+    const slots = this.el.querySelectorAll("[slot]");
+    this.globalSlotsChanged.emit({
+      slots: Array.from(slots),
+      element: this.el,
+    });
+  }
+
   private stopStreamTracks() {
     this.stream?.getTracks().forEach((track) => {
       track.stop();
@@ -303,11 +311,7 @@ export class VviinnVpsWidget {
   }
 
   componentDidLoad() {
-    const slots = this.el.querySelectorAll("[slot]");
-    this.globalSlotsChanged.emit({
-      slots: Array.from(slots),
-      element: this.el,
-    });
+    this.replaceSlotsContent();
   }
 
   setTrackingDeactivated = (result: EventConfirmation) => {
@@ -755,6 +759,9 @@ export class VviinnVpsWidget {
                   showAspectRatioError={this.showAspectRatioError}
                   trackingDeactivated={this.trackingDeactivated}
                   resetState={this.resetState.bind(this)}
+                  replaceSlotsContentInWidget={this.replaceSlotsContent.bind(
+                    this
+                  )}
                   textSearchQuery={this.searchQuery}
                 />
               )}

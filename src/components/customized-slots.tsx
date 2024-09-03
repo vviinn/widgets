@@ -1,7 +1,5 @@
 import { h } from "@stencil/core";
 
-const generalSlotsNames: string[] = ["energy-label-data-sheet-text"];
-
 const vprSlotsNames: string[] = [
   "vviinn-recommendations-title",
   "vviinn-recommendations-subtitle",
@@ -31,15 +29,17 @@ const filtersSlotsNames: string[] = [
   "vviinn-extended-filters-reset",
 ];
 
+const productCardSlotsNames: string[] = ["vviinn-energy-label-data-sheet-text"];
+
 const renderNamedSlot = (name: string) => <slot name={name} />;
 
 export const SlotSkeleton = (renderType: string) => {
   return (
     renderType === "vps"
-      ? [...generalSlotsNames, ...vpsSlotsNames, ...filtersSlotsNames]
+      ? [...vpsSlotsNames, ...filtersSlotsNames, ...productCardSlotsNames]
       : renderType === "filters"
       ? filtersSlotsNames
-      : [...generalSlotsNames, ...vprSlotsNames, ...filtersSlotsNames]
+      : [...vprSlotsNames, ...filtersSlotsNames, ...productCardSlotsNames]
   ).map(renderNamedSlot);
 };
 
@@ -113,8 +113,9 @@ export const slotChangeListener = (component: any, element: HTMLElement) => {
           "VVIINN-MODAL",
           "VVIINN-TEXT-SEARCH",
           "VVIINN-EXTENDED-FILTERS",
-          "VVIINN-ENERGY-LABEL",
         ].includes(elementTagName);
+
+        const productCardChildrenTags = ["VVIINN-ENERGY-LABEL"];
 
         const elementsAreDifferent = element !== detail.element;
 
@@ -161,14 +162,22 @@ export const slotChangeListener = (component: any, element: HTMLElement) => {
         const elementIsNotRelatedToCurrentDetailElement =
           isNotChildOfCurrentDetailElement || isNotChildOfCurrentSearchButton;
 
-        if (elementsAreDifferent && elementIsNotRelatedToCurrentDetailElement) {
+        const elementIsNotChildOfProductCard =
+          !productCardChildrenTags.includes(elementTagName);
+
+        if (
+          elementsAreDifferent &&
+          elementIsNotRelatedToCurrentDetailElement &&
+          elementIsNotChildOfProductCard
+        ) {
           return;
         }
 
         const slotsToReplace: Map<HTMLSlotElement, HTMLElement> = getSlots(
           element
         ).reduce(getContentToReplace(detail.slots), new Map());
-
+        if (elementTagName === "VVIINN-ENERGY-LABEL") {
+        }
         slotsToReplace.forEach(replaceSlotContent);
       },
       true

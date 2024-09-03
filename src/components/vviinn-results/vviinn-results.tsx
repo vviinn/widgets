@@ -56,6 +56,9 @@ import {
 } from "../../tracking";
 import { RequestDynamicFilters } from "../../campaign/VPRCampaignService";
 import { calculatePriceLabel } from "../vviinn-product-card/render-helpers";
+import i18next from "i18next";
+import { resources } from "../../locale";
+import { slotChangeListener } from "../customized-slots";
 
 /**
  * @part product-card - Product Card itself.
@@ -153,17 +156,111 @@ export class VviinnResults {
   @Prop({ mutable: true }) trackingDeactivated?: boolean = false;
   /** @internal */
   @Prop() resetState?: () => void;
+  /** @internal */
+  @Prop() replaceSlotsContentInWidget?: () => void;
 
   @State() recommendations: Recommendation[] = [];
   @State() innerTextSearchQuery: string;
+  @State() slotsReplaced: boolean;
+
+  /** @internal */
+  @Event({ bubbles: true, composed: true })
+  globalSlotsChanged: EventEmitter<any>;
+
+  private replaceSlotsContent() {
+    const slots = this.el.querySelectorAll("[slot]");
+    this.globalSlotsChanged.emit({
+      slots: Array.from(slots),
+      element: this.el,
+    });
+  }
+
+  async componentWillLoad() {
+    slotChangeListener(this, this.el);
+
+    if (!this.showInWidget) {
+      await i18next.init({
+        lng: this.locale,
+        fallbackLng: "en",
+        resources,
+      });
+    }
+  }
+
+  componentDidRender() {
+    this.showInWidget
+      ? this.replaceSlotsContentInWidget()
+      : this.replaceSlotsContent();
+  }
 
   private trackingApi: DefaultApi;
+
+  private getResultsBySearchId = async (searchId: string) => {
+    if (!searchId || this.showInWidget) return;
+    state.apiPath = this.apiPath; //FIXME: #36877
+    pipe(
+      await makeSearchIdRequest(this.token, searchId),
+      E.getOrElse(() => []),
+      (results: SearchIdResponse) => {
+        this.recommendations = results;
+      }
+    );
+  };
+
+  private async getResultsByTextQuery(
+    query?: string,
+    filters?: RequestDynamicFilters
+  ) {
+    if (!query) return;
+    state.apiPath = this.apiPath; //FIXME: #36877
+
+    if (this.showInWidget) {
+      return pipe(
+        await makeTextSearchRequest(this.token, query, filters),
+        E.getOrElse(() => null),
+        (response: TextSearchResponse) => response
+      );
+    } else {
+      return pipe(
+        await makeSearchQueryRequest(
+          this.token,
+          query,
+          filters,
+          this.resultsCount
+        ),
+        E.getOrElse(() => null),
+        (response: TextSearchResponse) => {
+          this.recommendations = response?.data?.products ?? [];
+          this.vviinnFilters.emit(response?.data?.interactions.dynamicFilters);
+        }
+      );
+    }
+  }
+
+  private async getResultsByCategory() {
+    if (!this.filterColumn || !this.filterValue || this.showInWidget) return;
+    state.apiPath = this.apiPath; //FIXME: #36877
+
+    pipe(
+      await makeProductListingPageRequest(
+        this.token,
+        this.filterColumn,
+        this.filterValue,
+        this.resultsCount
+      ),
+      E.getOrElse(() => null),
+      (response: ProductListingPageResponse) => {
+        this.recommendations = response?.data?.products ?? [];
+      }
+    );
+  }
 
   private searchIdReceivedHandler = ({ detail }: SearchIdEvent) => {
     this.getResultsBySearchId(detail.searchId);
   };
 
   private textSearchStartedHandler = ({ detail }: TextSearchEvent) => {
+    if (this.showInWidget) return;
     this.getResultsByTextQuery(detail.query);
     this.innerTextSearchQuery = detail.query;
   };
@@ -198,8 +295,8 @@ export class VviinnResults {
     );
 
     this.getResultsBySearchId(this.searchId);
-    this.getResultsByTextQuery(this.textSearchQuery);
     this.getResultsByCategory();
+    !this.showInWidget && this.getResultsByTextQuery(this.textSearchQuery);
   }
 
   disconnectedCallback() {
@@ -221,6 +318,7 @@ export class VviinnResults {
 
   @Watch("textSearchQuery")
   watchTextSearchQuery(newQuery: string) {
+    if (this.showInWidget) return;
     this.getResultsByTextQuery(newQuery);
   }
 
@@ -283,66 +381,6 @@ export class VviinnResults {
         .trackEvent(productClickEvent)
         .then(this.setTrackingDeactivated);
     }
-  }
-
-  private getResultsBySearchId = async (searchId: string) => {
-    if (!searchId) return;
-    state.apiPath = this.apiPath; //FIXME: #36877
-    pipe(
-      await makeSearchIdRequest(this.token, searchId),
-      E.getOrElse(() => []),
-      (results: SearchIdResponse) => {
-        this.recommendations = results;
-      }
-    );
-  };
-
-  private async getResultsByTextQuery(
-    query?: string,
-    filters?: RequestDynamicFilters
-  ) {
-    if (!query) return;
-    state.apiPath = this.apiPath; //FIXME: #36877
-
-    if (this.showInWidget) {
-      pipe(
-        await makeTextSearchRequest(this.token, query, filters),
-        E.getOrElse(() => null),
-        (response: TextSearchResponse) => response
-      );
-    }
-
-    pipe(
-      await makeSearchQueryRequest(
-        this.token,
-        query,
-        filters,
-        this.resultsCount
-      ),
-      E.getOrElse(() => null),
-      (response: TextSearchResponse) => {
-        this.recommendations = response?.data?.products ?? [];
-        this.vviinnFilters.emit(response?.data?.interactions.dynamicFilters);
-      }
-    );
-  }
-
-  private async getResultsByCategory() {
-    if (!this.filterColumn || !this.filterValue) return;
-    state.apiPath = this.apiPath; //FIXME: #36877
-
-    pipe(
-      await makeProductListingPageRequest(
-        this.token,
-        this.filterColumn,
-        this.filterValue,
-        this.resultsCount
-      ),
-      E.getOrElse(() => null),
-      (response: ProductListingPageResponse) => {
-        this.recommendations = response?.data?.products ?? [];
-      }
-    );
   }
 
   private setTrackingDeactivated = (result: EventConfirmation) => {
@@ -422,7 +460,11 @@ export class VviinnResults {
     };
   };
 
-  private renderResults(results: Recommendation[]) {
+  private renderResults() {
+    const results = this.showInWidget
+      ? searchState.results
+      : this.recommendations;
+
     if (results.length === 0) return null;
     if (!searchState.resultLoaded) {
       this.vviinnResultLoad.emit(this.getBasicEventData());
@@ -496,9 +538,7 @@ export class VviinnResults {
             products: true,
           }}
         >
-          {this.renderResults(
-            this.showInWidget ? searchState.results : this.recommendations
-          )}
+          {this.renderResults()}
         </div>
       </Host>
     );

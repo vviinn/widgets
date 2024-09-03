@@ -12,7 +12,7 @@ import { slotChangeListener } from "../../customized-slots";
  * @part energy-label-product-type - Product type.
  * @part energy-label-data-sheet-link - Data sheet link.
  *
- * @slot energy-label-data-sheet-text - Data sheet link's text.
+ * @slot vviinn-energy-label-data-sheet-text - Data sheet link's text.
  */
 
 @Component({
@@ -22,7 +22,10 @@ import { slotChangeListener } from "../../customized-slots";
 })
 export class VviinnEnergyLabel {
   @Element() el: HTMLElement;
-  @Prop() energyCertification: EnergyCertification;
+  @Prop() classLabelUrl?: EnergyCertification["classLabelUrl"];
+  @Prop() classIconUrls?: EnergyCertification["classIconUrls"];
+  @Prop() productType?: EnergyCertification["productType"];
+  @Prop() classDataSheetUrl?: EnergyCertification["classDataSheetUrl"];
   @Prop() iconDirection: EnergyClassIconDirection = "right";
 
   /** @internal */
@@ -33,13 +36,9 @@ export class VviinnEnergyLabel {
   }
 
   private labelClickHandler = (e: MouseEvent) => {
-    if (this.energyCertification?.classLabelUrl) {
+    if (this.classLabelUrl) {
       e.preventDefault();
-      window.open(
-        this.energyCertification.classLabelUrl,
-        "_blank",
-        "noopener noreferrer"
-      );
+      window.open(this.classLabelUrl, "_blank", "noopener noreferrer");
     } else this.productClickHandler(e);
   };
 
@@ -48,40 +47,38 @@ export class VviinnEnergyLabel {
       <Host
         class={{
           hidden:
-            !this.energyCertification?.classIconUrls &&
-            !this.energyCertification?.productType &&
-            !this.energyCertification?.classDataSheetUrl,
+            !this.classIconUrls && !this.productType && !this.classDataSheetUrl,
         }}
         exportparts="energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
       >
         <div class="container" part="energy-label-container">
-          {!!this.energyCertification?.classIconUrls && (
+          {!!this.classIconUrls && (
             <a class="class-label-link" onClick={this.labelClickHandler}>
               <img
                 class="class-label-icon"
                 part="energy-label-icon"
-                src={this.energyCertification.classIconUrls[this.iconDirection]}
+                src={this.classIconUrls[this.iconDirection]}
               />
             </a>
           )}
 
           <div class="info-container">
-            {this.energyCertification?.productType && (
+            {this.productType && (
               <span class="product-type" part="energy-label-product-type">
-                {this.energyCertification.productType}
+                {this.productType}
               </span>
             )}
-            {this.energyCertification?.classDataSheetUrl && (
+            {this.classDataSheetUrl && (
               <a
                 class="data-sheet-link"
                 part="energy-label-data-sheet-link"
-                href={this.energyCertification.classDataSheetUrl}
+                href={this.classDataSheetUrl}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <span slot="energy-label-data-sheet-text">
+                <slot name="vviinn-energy-label-data-sheet-text">
                   {i18next.t("energyLabel.dataSheetText")}
-                </span>
+                </slot>
               </a>
             )}
           </div>
