@@ -176,8 +176,7 @@ export const slotChangeListener = (component: any, element: HTMLElement) => {
         const slotsToReplace: Map<HTMLSlotElement, HTMLElement> = getSlots(
           element
         ).reduce(getContentToReplace(detail.slots), new Map());
-        if (elementTagName === "VVIINN-ENERGY-LABEL") {
-        }
+
         slotsToReplace.forEach(replaceSlotContent);
       },
       true
