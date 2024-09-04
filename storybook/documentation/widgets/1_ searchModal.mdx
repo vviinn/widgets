@@ -2,6 +2,7 @@ import { Meta, Story } from '@storybook/blocks';
 
 import "../../components/tabs/styles.css";
 import {clickHandlers} from "../../components"
+import { vviinnToken } from "../../helpers";
 
 <Meta title="Widgets/Search Modal" />
 
@@ -24,7 +25,7 @@ The `Search Modal` is a full-screen overlay that allows:
     <div className='tab-sub-title'>Search with Image and Camera</div>
     <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
-            <vviinn-vps-button token="STORYBOOK_TOKEN">
+            <vviinn-vps-button token={vviinnToken}>
             </vviinn-vps-button>
         </div>
     </div>
@@ -46,7 +47,7 @@ The `Search Modal` is a full-screen overlay that allows:
     <div className='tab-sub-title'>Search with Image, Text, and Camera</div>
     <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
-            <vviinn-vps-button token="STORYBOOK_TOKEN" text-search-show="true">
+            <vviinn-vps-button token={vviinnToken} text-search-show="true">
             </vviinn-vps-button>
         </div>
     </div>
@@ -71,7 +72,7 @@ The `Search Modal` is a full-screen overlay that allows:
 
     <div id="Preview_3" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
-            <vviinn-vps-button token="STORYBOOK_TOKEN" mode="upload">
+            <vviinn-vps-button token={vviinnToken} mode="upload">
             </vviinn-vps-button>
         </div>
     </div>
@@ -96,7 +97,7 @@ The `Search Modal` is a full-screen overlay that allows:
 
     <div id="Preview_4" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
-            <vviinn-vps-button token="STORYBOOK_TOKEN" mode="camera">
+            <vviinn-vps-button token={vviinnToken} mode="camera">
             </vviinn-vps-button>
         </div>
     </div>

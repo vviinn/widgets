@@ -2,7 +2,8 @@ import { Meta, Story } from '@storybook/blocks';
 
 import "../../styles/filters-search-bar.css";
 import "../../components/tabs/styles.css";
-import {clickHandlers} from "../../components"
+import { clickHandlers } from "../../components"
+import { vviinnToken } from "../../helpers";
 
 <Meta title="Widgets/Search Page" />
 
@@ -26,8 +27,8 @@ Using `Vviinn Widgets` as separate components allows for greater control over th
         <vviinn-extended-filters></vviinn-extended-filters>
         <vviinn-filters></vviinn-filters>
         
-        <vviinn-text-search token="STORYBOOK_TOKEN" mode="textAndImage"></vviinn-text-search>
-        <vviinn-results token="STORYBOOK_TOKEN"></vviinn-results>
+        <vviinn-text-search token={vviinnToken} mode="textAndImage"></vviinn-text-search>
+        <vviinn-results token={vviinnToken}></vviinn-results>
       </div>
   </div>
 
