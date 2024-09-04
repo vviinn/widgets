@@ -1,0 +1,202 @@
+import { Meta } from "@storybook/blocks";
+import './events.css'
+
+<Meta title="Events/Product" />
+
+# Product Events
+
+Every Vviinn Widget has some events that users can work on and listen to these events with `document.addEventListener()`.
+
+<table width="100%" className="events-table">
+  <thead>
+    <tr><th>Name</th><th>Description</th><th>Available on</th><th>Props</th></tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>vviinnProductLoad</td><td>The event is valid for all products that are received by the component after a successful search request.</td>
+
+      <td>
+        <ul>
+          <li>Recommendation (Button, Widget)</li>
+          <li>Search (Button, Widget)</li>
+        </ul>
+      </td>
+
+      <td>
+        <ul>
+          <li>campaignTypeId</li>
+          <li>campaignTypeName</li>
+          <li>widgetId</li>
+          <li>productId</li>
+          <li>productName</li>
+          <li>productType</li>
+          <li>productRank</li>
+          <li>widgetType</li>
+          <li>widgetVersion</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td>vviinnProductView</td><td>Triggered once for each product within one session when the product card's image appears in the browser's viewport.</td>
+
+      <td>
+        <ul>
+          <li>Recommendation (Button, Widget)</li>
+          <li>Search (Button, Widget)</li>
+        </ul>
+      </td>
+
+      <td>
+        <ul>
+          <li>campaignTypeId</li>
+          <li>campaignTypeName</li>
+          <li>widgetId</li>
+          <li>productId</li>
+          <li>productName</li>
+          <li>productType</li>
+          <li>productRank</li>
+          <li>widgetType</li>
+          <li>widgetVersion</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td>vviinnProductClick</td><td>Triggered when the user clicks on the product link.</td>
+
+      <td>
+        <ul>
+          <li>Recommendation (Button, Widget)</li>
+          <li>Search (Button, Widget)</li>
+        </ul>
+      </td>
+
+      <td>
+        <ul>
+          <li>campaignTypeId</li>
+          <li>campaignTypeName</li>
+          <li>widgetId</li>
+          <li>productId</li>
+          <li>productName</li>
+          <li>productType</li>
+          <li>productRank</li>
+          <li>widgetType</li>
+          <li>widgetVersion</li>
+          <li>clickEvent</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td>vviinnResultLoad</td><td>Triggered after at least one result is loaded.</td>
+
+      <td>
+        <ul>
+          <li>Recommendation (Button, Widget)</li>
+          <li>Search (Button, Widget)</li>
+        </ul>
+      </td>
+
+      <td>
+        <ul>
+          <li>campaignTypeId</li>
+          <li>campaignTypeName</li>
+          <li>widgetId</li>
+          <li>widgetType</li>
+          <li>widgetVersion</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td>vviinnResultView</td><td>The event is related to `vviinnProductView`. It is triggered only once per each Product AI request. Also, `VviinnResultView` is triggered when the user changes any filter, changes crop area, or clicks on objects while using Product AI Search.</td>
+
+      <td>
+        <ul>
+          <li>Recommendation (Button, Widget)</li>
+          <li>Search (Button, Widget)</li>
+        </ul>
+      </td>
+
+      <td>
+        <ul>
+          <li>campaignTypeId</li>
+          <li>campaignTypeName</li>
+          <li>widgetId</li>
+          <li>widgetType</li>
+          <li>widgetVersion</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td>vviinnNoResult</td><td>Triggered when an error has occurred after the Product AI recommendation, search request or because of an image’s wrong format uploaded to the Product AI search.</td>
+
+      <td>
+        <ul>
+          <li>Recommendation (Button, Widget)</li>
+          <li>Search (Button, Widget)</li>
+        </ul>
+      </td>
+
+      <td>
+        <ul>
+          <li>campaignTypeId</li>
+          <li>campaignTypeName</li>
+          <li>widgetId</li>
+          <li>widgetType</li>
+          <li>widgetVersion</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td>vviinnAddToBasket</td><td>Triggered when the user clicks on the "Add to Basket" button. The button can be shown by passing `add-to-basket-show` property.</td>
+
+      <td>
+        <ul>
+          <li>Recommendation (Button, Widget)</li>
+        </ul>
+      </td>
+
+      <td>
+        <ul>
+          <li>campaignTypeId</li>
+          <li>campaignTypeName</li>
+          <li>widgetId</li>
+          <li>productId</li>
+          <li>productName</li>
+          <li>productType</li>
+          <li>productRank</li>
+          <li>widgetType</li>
+          <li>widgetVersion</li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+## Listen to Events. Examples
+
+```javascript
+document.addEventListener("vviinnProductLoad", ({ detail }) => {
+  console.log(detail);
+});
+
+// Output:
+{
+    "productId": "123456",
+    "productRank": 0,
+    "productName": "Couchtisch Rolf Benz 8770",
+    "productType": "Table",
+    "widgetType": "VPR",
+    "campaignTypeId": "VPR",
+    "campaignTypeName": "Similar Products",
+    "widgetId": "vpr-widget-1",
+    "widgetVersion": "2.1.0"
+}
+// ... and other loaded products
+```

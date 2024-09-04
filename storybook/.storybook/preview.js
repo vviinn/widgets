@@ -35,11 +35,14 @@ export const parameters = {
     storySort: {
       order: [
         "Vviinn Widgets",
-        "Installation",
         "Getting Started",
-        "Styling and Customization",
         "Widgets",
-        "Elements",
+        "Components",
+        "Installation",
+        "Customization",
+        "Events",
+        "Playground",
+        "Changelog",
       ],
     },
   },

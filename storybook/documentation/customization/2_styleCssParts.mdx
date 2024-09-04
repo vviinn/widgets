@@ -1,0 +1,37 @@
+import { Meta, Story, Canvas } from "@storybook/blocks";
+
+<Meta title="Customization/Style CSS Parts" />
+
+# Style CSS Parts
+
+Style with CSS [Shadow Parts](https://developer.mozilla.org/en-US/docs/Web/CSS/::part)
+
+## Using Shadow Parts
+
+Almost every component you can use exports some Shadow Parts. Use `component-name::part(part-name)` to add CSS rules to any exported part.
+For example, to style the title of product cards in `vviinn-vpr-widget` and to hide the price you can use this CSS snippet:
+
+```css
+vviinn-vpr-widget::part(title) {
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+vviinn-vpr-widget::part(price-container) {
+  display: none;
+}
+```
+
+Let's style `vviinn-vps-button` using the same approach:
+
+```css
+vviinn-vps-button::part(price-regular) {
+  text-decoration: underline;
+  font-weight: bold;
+}
+```
+
+Shadow Parts are listed in Widgets section of this documentation.
+It could be *image, title, price-regular, price-sale*, and others.
+
+For example, [check](?path=/story/playground-discovery--grid) the list of available Shadow Parts for `vviinn-vpr-widget` component at the bottom of Controls tab.

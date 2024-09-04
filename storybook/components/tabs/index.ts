@@ -1,0 +1,1 @@
+export { clickHandlers } from "./clickHandlers";

@@ -1,6 +1,6 @@
 export default {
-  title: "Widgets/VPS",
-  component: "vviinn-vps-widget"
+  title: "Playground/VPS",
+  component: "vviinn-vps-widget",
 };
 
 const Template = () => "<vviinn-vps-widget></vviinn-vps-widget>";
@@ -8,7 +8,8 @@ const Template = () => "<vviinn-vps-widget></vviinn-vps-widget>";
 export const Default = Template.bind({});
 Default.storyName = "Modal window";
 
-Default.decorators = [(Story) => `
+Default.decorators = [
+  (Story) => `
 <style>
 .sb-show-main.sb-main-padded {
   padding: unset;
@@ -47,4 +48,5 @@ function showModal () {
   modal.active = true;
 }
 </script>
-`];
+`,
+];
