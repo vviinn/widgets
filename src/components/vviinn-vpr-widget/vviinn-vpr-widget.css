@@ -13,11 +13,6 @@
   visibility: hidden;
 }
 
-:host(.grid) vviinn-product-card::part(image) {
-  border: 1px solid #dddddd;
-  width: 100%;
-}
-
 :host(.set) vviinn-carousel {
   overflow-x: auto;
 }
@@ -84,12 +79,6 @@ h2 {
   margin: 0;
 }
 
-vviinn-product-card::part(price-container) {
-  align-self: flex-start;
-  text-align: left;
-  display: flex;
-}
-
 .results {
   display: grid;
   grid-gap: 1rem;
@@ -114,39 +103,4 @@ h2 {
 
 :host(.grid) h2 {
   justify-content: center;
-}
-
-:host(.grid) vviinn-product-card {
-  align-items: center;
-}
-
-:host(.grid) vviinn-product-card::part(image) {
-  min-width: 100%;
-}
-
-:host(.grid) vviinn-product-card::part(image-link) {
-  width: 100%;
-}
-
-:host(.grid) vviinn-product-card::part(title),
-:host(.grid) vviinn-product-card::part(brand) {
-  text-align: center;
-}
-
-:host(.grid) vviinn-product-card::part(price-container) {
-  text-align: center;
-  align-self: center;
-}
-
-:host(.continuity) vviinn-product-card::part(title),
-:host(.continuity) vviinn-product-card::part(brand),
-:host(.continuity) vviinn-product-card::part(deeplink),
-:host(.continuity) vviinn-product-card::part(energy-label) {
-  text-align: left;
-  max-width: unset;
-  align-self: start;
-}
-
-:host(.continuity) vviinn-product-card {
-  align-items: flex-start;
 }

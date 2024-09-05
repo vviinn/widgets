@@ -1,10 +1,28 @@
 @import "../../variables.css";
 
+:host(.set-mode),
+:host(.continuity-mode),
+:host(.results-widget) {
+  --product-card-content-align-default: flex-start;
+}
+
+:host(.grid-mode) {
+  --product-card-content-align-default: center;
+}
+
 :host {
   position: relative;
   height: fit-content;
   display: flex;
   flex-direction: column;
+  align-items: var(
+    --product-card-content-align,
+    var(--product-card-content-align-default)
+  );
+  text-align: var(
+    --product-card-content-align,
+    var(--product-card-content-align-default)
+  );
   font-family: var(--font-family-base);
   font-weight: var(--font-weight-400);
   font-size: var(--font-size-body);
@@ -14,18 +32,9 @@
   gap: var(--spacing-100);
 }
 
-:host(.set-mode) {
-  align-items: flex-start;
-}
-
 .price-container {
   display: flex;
   flex-direction: column;
-}
-
-:host(.set-mode) .price-container {
-  flex-direction: row;
-  flex-wrap: wrap;
 }
 
 .price-outdated {
@@ -155,11 +164,6 @@ picture::before {
   align-self: start;
 }
 
-:host(.set-mode) .basket-button {
-  background-color: var(--button-bg-color-secondary);
-  border: none;
-}
-
 .basket-button-continuity:hover,
 :host(.set-mode) .basket-button:hover {
   background-color: var(--button-bg-color-secondary-hover);
@@ -217,8 +221,18 @@ picture::before {
   gap: var(--spacing-75);
 }
 
-:host(.set-mode:not(.animated)) .basket-button {
-  margin-top: auto;
+:host(.grid-mode) .image {
+  border: 1px solid #dddddd;
+  width: 100%;
+  min-width: 100%;
+}
+
+:host(.grid-mode) .image-link {
+  width: 100%;
+}
+
+:host(.results-widget) .image {
+  border: 1px solid #eaeaea;
 }
 
 :host(.set-mode) .image {
@@ -255,12 +269,22 @@ picture::before {
   border-radius: 50%;
 }
 
-@media (max-width: 768px) {
-  :host(.set-mode) picture .plus-icon {
-    padding: var(--spacing-100);
-    top: calc(50% - var(--spacing-300));
-    right: calc(-1 * var(--spacing-300));
-  }
+:host(.set-mode) .basket-button {
+  background-color: var(--button-bg-color-secondary);
+  border: none;
+}
+
+:host(.set-mode:not(.animated)) .basket-button {
+  margin-top: auto;
+}
+
+:host(.set-mode) .price-container {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: var(
+    --product-card-content-align,
+    var(--product-card-content-align-default)
+  );
 }
 
 :host(.set-mode) .basket-button.pressed {
@@ -283,6 +307,14 @@ picture::before {
 @media (max-width: 1080px) {
   :host(.set-mode) .price-amount {
     margin-right: var(--spacing-100);
+  }
+}
+
+@media (max-width: 768px) {
+  :host(.set-mode) picture .plus-icon {
+    padding: var(--spacing-100);
+    top: calc(50% - var(--spacing-300));
+    right: calc(-1 * var(--spacing-300));
   }
 }
 

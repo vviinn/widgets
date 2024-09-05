@@ -127,6 +127,8 @@ export class VviinnProductCard {
   @Prop() currentDiscountPercentage?: number;
   /** @internal */
   @Prop() isSourceProduct: boolean = false;
+  /** @internal */
+  @Prop() isResultsWidget: boolean = false;
 
   @State() isTransitioning: boolean = false;
   @State() basketButonPressed: boolean = false;
@@ -308,6 +310,9 @@ export class VviinnProductCard {
           dimmed: this.dimmedBackground,
           animated: this.isTransitioning,
           "set-mode": this.isSetMode,
+          "grid-mode": this.isGridMode,
+          "continuity-mode": this.isContinuityMode,
+          "results-widget": this.isResultsWidget,
         }}
         exportparts="brand,price-label, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, discount-label, discount-percentage, title, basket-button, update-button-item, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
       >
