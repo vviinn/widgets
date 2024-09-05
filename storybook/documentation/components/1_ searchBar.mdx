@@ -1,0 +1,50 @@
+import { Meta, Story } from '@storybook/blocks';
+
+import "../../components/tabs/styles.css";
+import {clickHandlers} from "../../components"
+import "../../styles/filters-search-bar.css";
+
+<Meta title="Components/Search Bar" />
+
+# Search Bar
+
+<div id="full-search-bar">
+    <div className="tab tab-reverse">
+        <h3>Text or Image Search</h3>
+        <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'full-search-bar')}}>Code</button>
+        <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'full-search-bar')}}>Preview</button>
+    </div>
+    <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
+        <div className="tabcontent-preview">
+            <vviinn-text-search token="STORYBOOK_TOKEN" mode="textAndImage"></vviinn-text-search>
+        </div>
+    </div>
+    <div id="Code_1" className="tabcontent">
+```html
+<vviinn-text-search 
+    token="TOKEN" 
+    mode="textAndImage"
+></vviinn-text-search>
+```
+    </div>
+</div>
+
+<div id="static-filters">
+    <div className="tab tab-reverse">
+        <h3>Text Search</h3>
+        <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'static-filters')}}>Code</button>
+        <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'static-filters')}}>Preview</button>
+    </div>
+    <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
+        <div className="tabcontent-preview">
+            <vviinn-text-search token="STORYBOOK_TOKEN"></vviinn-text-search>
+        </div>
+    </div>
+    <div id="Code_2" className="tabcontent">
+```html
+<vviinn-text-search 
+    token="TOKEN"
+></vviinn-text-search>
+```
+    </div>
+</div>

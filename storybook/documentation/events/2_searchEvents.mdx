@@ -1,0 +1,114 @@
+import { Meta } from "@storybook/blocks";
+import './events.css'
+
+<Meta title="Events/Search" />
+
+# Search Events
+
+Every Vviinn Widget has some events that users can work on and listen to these events with `document.addEventListener()`.
+
+<table width="100%" className="events-table">
+  <thead>
+    <tr><th>Name</th><th>Description</th><th>Available on</th><th>Props</th></tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>vviinnImageUpload</td><td>Triggered after the image upload button is clicked.</td>
+
+      <td>
+        <ul>
+          <li>Search (Button, Widget)</li>
+        </ul>
+      </td>
+
+      <td>
+        <ul>
+          <li>campaignTypeId</li>
+          <li>campaignTypeName</li>
+          <li>widgetId</li>
+          <li>widgetType</li>
+          <li>widgetVersion</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td>vviinnImageCrop</td><td>Triggered after an image is cropped.</td>
+
+      <td>
+        <ul>
+          <li>Search (Button, Widget)</li>
+        </ul>
+      </td>
+
+      <td>
+        <ul>
+          <li>campaignTypeId</li>
+          <li>campaignTypeName</li>
+          <li>widgetId</li>
+          <li>widgetType</li>
+          <li>widgetVersion</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td>vviinnSelectObject</td><td>Triggered after an object is selected.</td>
+
+      <td>
+        <ul>
+          <li>Search (Button, Widget)</li>
+        </ul>
+      </td>
+
+      <td>
+        <ul>
+          <li>campaignTypeId</li>
+          <li>campaignTypeName</li>
+          <li>detectedObject</li>
+          <li>widgetId</li>
+          <li>widgetType</li>
+          <li>widgetVersion</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td>vviinnSelectFilter</td><td>Triggered after a filter is selected.</td>
+
+      <td>
+        <ul>
+          <li>Search (Button, Widget)</li>
+        </ul>
+      </td>
+
+      <td>
+        <ul>
+          <li>action</li>
+          <li>campaignTypeId</li>
+          <li>campaignTypeName</li>
+          <li>filterName</li>
+          <li>widgetId</li>
+          <li>widgetType</li>
+          <li>widgetVersion</li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+## Listen to Events. Examples
+
+```javascript
+document.addEventListener("vviinnImageUpload", ({ detail }) => {
+  console.log(detail);
+});
+
+// Output:
+{
+}
+// ... and other loaded products
+```

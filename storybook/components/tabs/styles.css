@@ -1,0 +1,106 @@
+.tab {
+  overflow: hidden;
+  position: relative;
+  margin-top: 20px !important;
+  margin-bottom: 16px !important;
+}
+
+.tab.overflow-auto {
+  overflow: auto;
+  display: flex;
+  scrollbar-width: thin;
+}
+
+.tab h3 {
+  float: left;
+  margin: 0;
+  padding-right: 20px;
+}
+
+@media (max-width: 640px) {
+  .tab h3 {
+    padding-top: 0 !important;
+  }
+}
+
+.tab::after {
+  content: "";
+  display: block;
+  height: 1px;
+  background-color: #f0f0f0;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
+
+.tablink {
+  background: none;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  font-size: 16px;
+}
+
+.tablink--sm {
+  padding: 8px 10px;
+  font-size: 14px;
+}
+
+@media (max-width: 640px) {
+  .tablink {
+    padding: 8px;
+    font-size: 12px;
+  }
+}
+
+.tab.tab-reverse button {
+  float: right;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.tab.tab-reverse::after {
+  display: none;
+}
+
+.tablink.active,
+.tablink:hover {
+  border-bottom: 1px solid #ccc !important;
+  position: relative;
+  z-index: 2;
+}
+
+.tabcontent {
+  display: none;
+  border-top: none;
+  padding-top: 10px;
+}
+
+.tabcontent .docblock-source {
+  margin: 0 !important;
+}
+
+.tabcontent-preview {
+  background: #ffffff;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.tabcontent-preview::after {
+  clear: both;
+  content: "";
+  display: block;
+}
+
+.tabcontent-flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.tab-sub-title {
+  font-size: 14px !important;
+}

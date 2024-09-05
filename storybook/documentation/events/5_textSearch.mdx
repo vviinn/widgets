@@ -1,0 +1,65 @@
+import { Meta } from "@storybook/blocks";
+import './events.css'
+
+<Meta title="Events/Text Search" />
+
+# Text Search Events
+
+Every Vviinn Widget has some events that users can work on and listen to these events with `document.addEventListener()`.
+
+Text Search events are essential to connect `vviinn-text-search` and `vviinn-results` components.
+
+<table width="100%" className="events-table">
+  <thead>
+    <tr><th>Name</th><th>Description</th><th>Available on</th><th>Props</th></tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>vviinnTextSearchStarted</td><td>Triggered when a text search was initiated.</td>
+
+      <td>
+        <ul>
+          <li>Text Search</li>
+        </ul>
+      </td>
+
+      <td>
+        <ul>
+          <li>query</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td>vviinnSearchIdReceived</td><td>Triggered when an image search ID was received.</td>
+
+      <td>
+        <ul>
+          <li>Text Search</li>
+        </ul>
+      </td>
+
+      <td>
+        <ul>
+          <li>searchId</li>
+        </ul>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+## Listen to Events. Examples
+
+```javascript
+document.addEventListener("vviinnTextSearchStarted", ({ detail }) => {
+  console.log(detail);
+});
+
+// Output:
+{
+    
+}
+// ... and other loaded products
+```

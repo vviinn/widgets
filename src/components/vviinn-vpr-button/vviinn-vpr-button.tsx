@@ -8,7 +8,7 @@ import {
   Element,
 } from "@stencil/core";
 import { version } from "../../../package.json";
-import { VisualSearchIcon } from "../vviinn-icons";
+import { SimilarProductsIcon, CrossSellingIcon } from "../vviinn-icons";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 import { CampaignName } from "../../campaign/Campaign";
 import {
@@ -168,7 +168,11 @@ export class VviinnVprButton {
       >
         <vviinn-button addStyle={this.addStyle} part="vviinn-button">
           <slot>
-            <VisualSearchIcon />
+            {this.campaignType === "VCS" ? (
+              <CrossSellingIcon />
+            ) : (
+              <SimilarProductsIcon />
+            )}
           </slot>
         </vviinn-button>
       </Host>
