@@ -153,6 +153,10 @@ export class VviinnVpsButton {
   }
 
   componentDidLoad() {
+    this.replaceSlotsContent();
+  }
+
+  private replaceSlotsContent() {
     const slots = this.el.querySelectorAll("[slot]");
     this.globalSlotsChanged.emit({
       slots: Array.from(slots),
@@ -206,6 +210,7 @@ export class VviinnVpsButton {
           imageResolutionWidth={this.imageResolutionWidth}
           exampleImageSource={this.exampleImageSource}
           textSearchShow={this.textSearchShow}
+          replaceSlotsContentInButton={this.replaceSlotsContent.bind(this)}
         />
       </Host>
     );

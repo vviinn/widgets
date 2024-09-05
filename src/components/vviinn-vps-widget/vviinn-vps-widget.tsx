@@ -133,6 +133,8 @@ export class VviinnVpsWidget {
   @Prop() mode: VisualSearchMode = "modal";
   /** @internal */
   @Prop() resetVpsButton: () => void;
+  /** @internal */
+  @Prop() replaceSlotsContentInButton?: () => void;
 
   @State() slidePosition: number = 0;
   @State() width: number = 0;
@@ -762,6 +764,7 @@ export class VviinnVpsWidget {
                   replaceSlotsContentInWidget={this.replaceSlotsContent.bind(
                     this
                   )}
+                  replaceSlotsContentInButton={this.replaceSlotsContentInButton}
                   textSearchQuery={this.searchQuery}
                 />
               )}

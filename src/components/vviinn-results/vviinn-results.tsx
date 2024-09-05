@@ -158,6 +158,8 @@ export class VviinnResults {
   @Prop() resetState?: () => void;
   /** @internal */
   @Prop() replaceSlotsContentInWidget?: () => void;
+  /** @internal */
+  @Prop() replaceSlotsContentInButton?: () => void;
 
   @State() recommendations: Recommendation[] = [];
   @State() innerTextSearchQuery: string;
@@ -188,7 +190,9 @@ export class VviinnResults {
   }
 
   componentDidRender() {
-    this.showInWidget
+    !!this.replaceSlotsContentInButton
+      ? this.replaceSlotsContentInButton()
+      : this.showInWidget
       ? this.replaceSlotsContentInWidget()
       : this.replaceSlotsContent();
   }
