@@ -13,8 +13,8 @@ Since `Vviinn Widgets` are developed as [Web Components](https://developer.mozil
   <button className="tablink" onClick={(e)=> {clickHandlers(e, 'React', 'main')}}>React</button>
   <button className="tablink" onClick={(e)=> {clickHandlers(e, 'Angular', 'main')}}>Angular</button>
   <button className="tablink" onClick={(e)=> {clickHandlers(e, 'Vue', 'main')}}>Vue</button>
-  <button className="tablink" onClick={(e)=> {clickHandlers(e, 'WebView', 'main')}}>Mobile&nbsp;App</button>
   <button className="tablink" onClick={(e)=> {clickHandlers(e, 'Nuxt', 'main')}}>Nuxt</button>
+  <button className="tablink" onClick={(e)=> {clickHandlers(e, 'WebView', 'main')}}>Mobile&nbsp;App</button>
 </div>
 
 <div id="Frameworkless" className="tabcontent" style={{display:"block"}}>
@@ -573,7 +573,49 @@ In this way, you need to add Vviinn scripts to the `head` section to be able to 
 
 ## Install using NPM
 
-## Warning
+To use widgets as a module you should install Vviinn Widgets from [NPM](https://www.npmjs.com/package/vviinn-widgets).
+
+Then create a `client component` in Nuxt and import the Vviinn Widgets as shown below:
+
+```javascript
+<script>
+const loader = await import('vviinn-widgets/dist/loader')
+
+loader.applyPolyfills().then(() => {
+  loader.defineCustomElements()
+})
+</script>
+
+<template>
+  <div>
+    <vviinn-vps-button 
+      token="YOUR_TOKEN"
+    ></vviinn-vps-button> 
+  </div>
+</template>
+```
+
+And the last step is to use this client component.
+
+## Fix [Vue warn]: Failed to resolve component: vviinn-...
+
+In order to fix "Failed to resolve component" warning, you need to add the following code to the `nuxt.config.js` file:
+
+```javascript
+export default defineNuxtConfig({
+  ...,
+  vue: {  
+    compilerOptions: {
+      isCustomElement:  (tag) => {
+        return tag.startsWith('vviinn-')
+      },
+    },
+  },
+  ...
+})
+```
+
+Note: This document has been prepared based on Nuxt v3.13.
 
 </div>
 
