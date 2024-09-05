@@ -61,7 +61,7 @@
 
 .title {
   display: -webkit-box;
-  max-width: 300px;
+  max-width: var(--product-card-set-mode-max-width);
   color: var(--color-text-primary);
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -232,6 +232,7 @@ picture::before {
 
 :host(.set-mode.product-card--source) {
   height: fit-content;
+  max-width: var(--source-card-set-mode-max-width);
   flex-grow: 1;
 }
 :host(.set-mode.product-card--source) .image {
