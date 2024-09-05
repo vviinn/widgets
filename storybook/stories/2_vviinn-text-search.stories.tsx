@@ -1,3 +1,5 @@
+import { vviinnToken } from "../helpers";
+
 const textSearchDecorator = (story) => `
     <style>
       vviinn-filters {
@@ -47,7 +49,7 @@ export const TextSearch = Template.bind({});
 TextSearch.storyName = "Search Bar";
 
 TextSearch.args = {
-  token: process.env.STORYBOOK_TOKEN,
+  token: vviinnToken,
   apiPath: process.env.STORYBOOK_API_PATH,
   searchQuery: "",
   mode: "textAndImage",

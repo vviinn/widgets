@@ -3,6 +3,7 @@ import { Meta, Story } from '@storybook/blocks';
 import "../../components/tabs/styles.css";
 import {clickHandlers} from "../../components"
 import "../../styles/filters-search-bar.css";
+import { vviinnToken } from "../../helpers";
 
 <Meta title="Components/Search Bar" />
 
@@ -16,7 +17,7 @@ import "../../styles/filters-search-bar.css";
     </div>
     <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
-            <vviinn-text-search token="STORYBOOK_TOKEN" mode="textAndImage"></vviinn-text-search>
+            <vviinn-text-search token={vviinnToken} mode="textAndImage"></vviinn-text-search>
         </div>
     </div>
     <div id="Code_1" className="tabcontent">
@@ -37,7 +38,7 @@ import "../../styles/filters-search-bar.css";
     </div>
     <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
-            <vviinn-text-search token="STORYBOOK_TOKEN"></vviinn-text-search>
+            <vviinn-text-search token={vviinnToken}></vviinn-text-search>
         </div>
     </div>
     <div id="Code_2" className="tabcontent">

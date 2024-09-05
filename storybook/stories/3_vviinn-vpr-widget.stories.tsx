@@ -1,4 +1,5 @@
 import { argTypes } from "../../src/components/vviinn-vpr-widget/stories/args";
+import { vviinnToken, productIdSimilarProducts } from "../helpers";
 
 export default {
   title: "Playground/Discovery",
@@ -48,9 +49,9 @@ const Template = (args) => `
 export const Grid = Template.bind({});
 Grid.storyName = "Discovery";
 Grid.args = {
-  token: process.env.STORYBOOK_TOKEN,
+  token: vviinnToken,
   apiPath: process.env.STORYBOOK_API_PATH,
-  productId: "4114460310",
+  productId: productIdSimilarProducts,
   campaignType: "VPR",
   campaigns: "",
   color: "",

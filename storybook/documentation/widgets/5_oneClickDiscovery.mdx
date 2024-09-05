@@ -2,6 +2,7 @@ import { Meta, Story } from '@storybook/blocks';
 import "../../components/tabs/styles.css";
 import {clickHandlers} from "../../components";
 import "../../styles/product-feed.css";
+import { vviinnToken, productIdCrossSelling, productIdSimilarProducts } from "../../helpers";
 
 <Meta title="Widgets/One-click Discovery" />
 
@@ -26,8 +27,8 @@ import "../../styles/product-feed.css";
                         $10.00 
 
                         <vviinn-vpr-button 
-                            token="STORYBOOK_TOKEN" 
-                            product-id="4114460310" 
+                            token={vviinnToken}
+                            product-id={productIdCrossSelling}
                             mode="grid" 
                             block-title=""
                         ></vviinn-vpr-button> 
@@ -41,8 +42,8 @@ import "../../styles/product-feed.css";
                     <div className="product__price">
                         $10.00  
                         <vviinn-vpr-button 
-                            token="STORYBOOK_TOKEN" 
-                            product-id="4114060306" 
+                            token={vviinnToken}
+                            product-id={productIdSimilarProducts} 
                             mode="grid" 
                             block-title=""
                         ></vviinn-vpr-button> 
