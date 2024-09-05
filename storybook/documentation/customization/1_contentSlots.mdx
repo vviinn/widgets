@@ -1,5 +1,6 @@
 import { Meta, Story, Canvas } from "@storybook/blocks";
 import './customization.css'
+import { vviinnToken } from "../../helpers";
 
 <Meta title="Customization/Content Slots" />
 
@@ -73,7 +74,7 @@ Let's customize `vviinn-teaser-text` and replace it with the custom text. It's i
 
 Here is our button with the custom icon. If we click on it, we will also see the customized `vviinn-teaser-text`.
 
-<vviinn-vps-button token="STORYBOOK_TOKEN" locale="en-US">
+<vviinn-vps-button token={vviinnToken} locale="en-US">
   <svg width="22" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path fillRule="evenodd" clipRule="evenodd" d="M16.567 3H19A3.01 3.01 0 0 1 22 6v7.69h-2V6c0-.55-.451-1-1.001-1h-3.502l-2.03-3H8.543L6.603 5H3.001c-.55 0-1 .45-1 1v11c0 .55.45 1 1 1h5.933v2H3.001A3.01 3.01 0 0 1 0 17V6c0-1.65 1.35-3 3.001-3h2.522l1.94-3h7.074l2.03 3Zm-5.562 3c1.28 0 2.561.48 3.542 1.46h-.01a4.992 4.992 0 0 1 .64 6.29l3.051 3.05-1.41 1.41-3.052-3.05c-.84.55-1.8.83-2.76.83-1.282 0-2.562-.48-3.543-1.46a5.002 5.002 0 0 1 0-7.07A5.026 5.026 0 0 1 11.005 6Zm-2.771 5a2.763 2.763 0 0 0 2.771 2.77A2.763 2.763 0 0 0 13.776 11a2.763 2.763 0 0 0-2.771-2.77A2.763 2.763 0 0 0 8.234 11Z" fill="#008080" />
   </svg>
@@ -89,7 +90,7 @@ Anything we put between the opening and closing tags without the `slot` attribut
 </vviinn-vps-button>
 ```
 
-<vviinn-vps-button token="STORYBOOK_TOKEN" locale="en-US">
+<vviinn-vps-button token={vviinnToken} locale="en-US">
   <span>I'm looking like text, but try to click!</span>
 </vviinn-vps-button>
 
