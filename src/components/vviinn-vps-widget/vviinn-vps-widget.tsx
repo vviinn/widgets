@@ -64,6 +64,7 @@ const CAMERA_START_DELAY = 500;
  * @slot vviinn-text-search-icon - Icon of text search block.
  * @slot vviinn-privacy-badge-text - Text content of privacy notification block.
  * @slot vviinn-image-search-modal-title - Image search modal title.
+ * @slot vviinn-energy-label-data-sheet-text - Text of the data sheet link for the energy label.
  *
  * @part close-button - Close Button in the modal's header.
  * @part secondary-action - Back Button in the modal's header.

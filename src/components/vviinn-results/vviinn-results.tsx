@@ -76,6 +76,8 @@ import { slotChangeListener } from "../customized-slots";
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
  * @part price-prefix - Block rendered before each price element (for ex. "from").
  * @part title - Title inside Product Card.
+ *
+ * @slot vviinn-energy-label-data-sheet-text - Text of the data sheet link for the energy label.
  */
 @Component({
   tag: "vviinn-results",

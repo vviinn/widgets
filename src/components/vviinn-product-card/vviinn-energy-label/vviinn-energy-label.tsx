@@ -12,7 +12,7 @@ import { slotChangeListener } from "../../customized-slots";
  * @part energy-label-product-type - Product type.
  * @part energy-label-data-sheet-link - Data sheet link.
  *
- * @slot vviinn-energy-label-data-sheet-text - Data sheet link's text.
+ * @slot vviinn-energy-label-data-sheet-text - Text of the data sheet link for the energy label.
  */
 
 @Component({
