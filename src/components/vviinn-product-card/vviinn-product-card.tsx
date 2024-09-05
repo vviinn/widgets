@@ -317,7 +317,7 @@ export class VviinnProductCard {
 
         {this.isTransitioning ? (
           <Fragment>
-            <vviinn-skeleton height={20} />
+            <vviinn-skeleton height={40} />
             <vviinn-skeleton height={20} halfWidth={true} />
           </Fragment>
         ) : (
@@ -361,7 +361,7 @@ export class VviinnProductCard {
 
         {(this.basketButtonShow || this.isSetMode) && (
           <Fragment>
-            {this.isTransitioning && <vviinn-skeleton height={44} />}
+            {this.isTransitioning && <vviinn-skeleton height={40} />}
             <div class="basket-button-wrapper">
               <button
                 class={{
