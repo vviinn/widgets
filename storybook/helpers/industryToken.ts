@@ -14,7 +14,7 @@ const data = {
     token:
       "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjIwNywianRpIjoiMmU0OTY3OTgtYzk3NC00ODQ3LTkyYWItOTBkMTEyZGY5MTY2Iiwic2NvcGVzIjpbInZwciIsInZwcyIsInZwYyJdfQ.bH8WQkR3jBuDZ92F3WObgcKplh14ODZeiBCf5JDOJfucU75u4XaZOQrmsOaw1ouZbO9cW40sKw9ZICaP4Soi00AHrWPBGjuzZ0Yx17vwGFUtHgK5Zi9DAhd3R3PcRnbo7UIvUtANTGcExd5TQnrA07DtV99KThoQEYB2I8R8HXv46j-Abo2kHovd6fGwYC6FYT1QpXEsVa8QNZtcrB0yU1rK6da8aR5Nh3zYECIUL0ysdhRmOQxR_3zBUVrXJYB15vvOH4TjAG6jSMcvaLwzmmTzH9_A9kVLsP27cFK5YYoAx7_w0eBMhQv3yEaHrVXuMXQe2gFjvCat441_DvZWyg",
     productIdSimilarProducts: "2588009-1",
-    productIdCrossSelling: "2588283-1",
+    productIdCrossSelling: "4165669-1",
     textSearchQuery: "taschen",
     filterValue: "Beauty > Düfte",
   },
