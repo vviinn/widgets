@@ -1,5 +1,7 @@
+import { vviinnToken } from "../../../../storybook/helpers";
+
 export const generalArgs = {
-  token: process.env.STORYBOOK_TOKEN,
+  token: vviinnToken,
   apiPath: process.env.STORYBOOK_API_PATH,
   resultsCount: 12,
   imageResolutionWidth: 500,

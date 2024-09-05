@@ -1,3 +1,5 @@
+import { vviinnToken } from "../helpers";
+
 export default {
   title: "Playground/Search Modal",
   component: "vviinn-vps-button",
@@ -42,7 +44,7 @@ export const Default = Template.bind({});
 Default.storyName = "Search Modal";
 
 Default.args = {
-  token: process.env.STORYBOOK_TOKEN,
+  token: vviinnToken,
   apiPath: process.env.STORYBOOK_API_PATH,
   campaignId: "",
   excluded: "",

@@ -3,6 +3,7 @@ import { Meta, Story } from '@storybook/blocks';
 import "../../components/tabs/styles.css";
 import {clickHandlers} from "../../components"
 import "../../styles/filters-search-bar.css";
+import { vviinnToken, textSearchQuery } from "../../helpers";
 
 <Meta title="Widgets/Product List Page" />
 
@@ -21,12 +22,12 @@ import "../../styles/filters-search-bar.css";
             <vviinn-filters></vviinn-filters>
 
             <vviinn-results 
-                token="STORYBOOK_TOKEN" 
+                token={vviinnToken}
                 image-resolution-width="500" 
                 currency-sign="€" 
                 locale="en-US" 
                 results-count="9"
-                text-search-query="Chair"
+                text-search-query={textSearchQuery}
             ></vviinn-results>
         </div>
     </div>
