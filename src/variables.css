@@ -144,6 +144,8 @@
   --chip-bg-color-outline-hover: #f4f4f4;
   --chip-bg-color-outline-active: #eaeaea;
 
+  --label-bg-color-accent: #ff3944;
+
   /* DARK MODE SUPPORT
   @media (prefers-color-scheme: dark) {
     --color-bg-base: #161616;

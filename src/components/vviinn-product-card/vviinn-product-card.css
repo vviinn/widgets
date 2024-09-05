@@ -4,10 +4,12 @@
 :host(.continuity-mode),
 :host(.results-widget) {
   --product-card-content-align-default: flex-start;
+  --product-card-text-align-default: left;
 }
 
 :host(.grid-mode) {
   --product-card-content-align-default: center;
+  --product-card-text-align-default: center;
 }
 
 :host {
@@ -20,8 +22,8 @@
     var(--product-card-content-align-default)
   );
   text-align: var(
-    --product-card-content-align,
-    var(--product-card-content-align-default)
+    --product-card-text-align,
+    var(--product-card-text-align-default)
   );
   font-family: var(--font-family-base);
   font-weight: var(--font-weight-400);
@@ -77,6 +79,14 @@
   overflow-wrap: anywhere;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.title,
+.brand {
+  text-align: var(
+    --product-card-text-align,
+    var(--product-card-text-align-default)
+  );
 }
 
 .deeplink {
@@ -211,6 +221,11 @@ picture::before {
 
 .basket-button-wrapper {
   width: 100%;
+  display: flex;
+  justify-content: var(
+    --product-card-content-align,
+    var(--product-card-content-align-default)
+  );
 }
 
 .basket-button-content {
@@ -338,7 +353,13 @@ picture::before {
   border-radius: var(--border-radius-none) var(--border-radius-50)
     var(--border-radius-50) var(--border-radius-none);
   color: var(--color-text-on-color);
-  /* TODO: Add variable for the color*/
-  background-color: #ff3944;
+  background-color: var(--label-bg-color-accent);
   letter-spacing: var(--letter-spacing-label);
+}
+
+vviinn-energy-label {
+  justify-content: var(
+    --product-card-content-align,
+    var(--product-card-content-align-default)
+  );
 }
