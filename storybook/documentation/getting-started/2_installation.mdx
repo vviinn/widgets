@@ -553,10 +553,23 @@ To redirect to the product details page that you have in your mobile app you nee
 <div id="Nuxt" className="tabcontent">
 # Nuxt
 
+In this section you can find how to use the Vviinn Widgets in your Nuxt app.
+
 ## Install using CDN
 
-In this way you can use the Vviinn Widgets in your Nuxt app. First, you need to add the script to the `head` section of your `nuxt.config.js` file.
+In this way, you need to add Vviinn scripts to the `head` section to be able to use Vviinn Widgets as shown below:
 
+```javascript
+<template>
+  <div>
+    <vviinn-vps-widget
+      token="YOUR_TOKEN"
+    ></vviinn-vps-widget>
+
+    <Script src="https://cdn.jsdelivr.net/npm/vviinn-widgets/www/build/vviinn-widgets.esm.j" type="module"></Script>
+  </div>
+</template>
+```
 
 ## Install using NPM
 
