@@ -24,3 +24,5 @@ export { StarsIcon } from "./icons/StarsIcon";
 export { CheckFilterIcon } from "./icons/CheckFilterIcon";
 export { CloseFilterIcon } from "./icons/CloseFilterIcon";
 export { SquareFilterIcon } from "./icons/SquareFilterIcon";
+export { SimilarProductsIcon } from "./icons/SimilarProductsIcon";
+export { CrossSellingIcon } from "./icons/CrossSellingIcon";

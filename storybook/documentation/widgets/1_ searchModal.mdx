@@ -1,0 +1,114 @@
+import { Meta, Story } from '@storybook/blocks';
+
+import "../../components/tabs/styles.css";
+import {clickHandlers} from "../../components"
+
+<Meta title="Widgets/Search Modal" />
+
+# Search Modal 
+
+The `Search Modal` is a full-screen overlay that allows:
+ - Search for products via already existing images (default behavior).
+ - Text Search with the "text-search-show" property set to "true".
+ - Use Upload Mode to directly open the image upload by clicking the button.
+ - Use Camera Mode for capturing new images for search with a device's camera, which will ask for permission to use the camera if it's not granted yet. 
+
+## Examples
+
+<div id="image">
+    <div className="tab tab-reverse">
+        <h3>Image Search (default)</h3>
+        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'image')}}>Code</button>
+        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'image')}}>Preview</button>
+    </div>
+    <div className='tab-sub-title'>Search with Image and Camera</div>
+    <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
+        <div className="tabcontent-preview">
+            <vviinn-vps-button token="STORYBOOK_TOKEN">
+            </vviinn-vps-button>
+        </div>
+    </div>
+    <div id="Code_2" className="tabcontent">
+```html
+    <vviinn-vps-button 
+    token="TOKEN" 
+></vviinn-vps-button>
+```
+    </div>
+</div>
+
+<div id="full">
+    <div className="tab tab-reverse">
+        <h3>Full Search</h3>
+        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'full')}}>Code</button>
+        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'full')}}>Preview</button>
+    </div>
+    <div className='tab-sub-title'>Search with Image, Text, and Camera</div>
+    <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
+        <div className="tabcontent-preview">
+            <vviinn-vps-button token="STORYBOOK_TOKEN" text-search-show="true">
+            </vviinn-vps-button>
+        </div>
+    </div>
+    <div id="Code_1" className="tabcontent">
+```html
+    <vviinn-vps-button 
+    token="TOKEN" 
+    text-search-show="true"
+></vviinn-vps-button>
+```
+    </div>
+</div>
+
+<div id="upload-mode">
+    <div className="tab tab-reverse">
+        <h3>Upload Mode</h3>
+
+        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_3', 'upload-mode')}}>Code</button>
+        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_3', 'upload-mode')}}>Preview</button>
+    </div>
+       <div className='tab-sub-title'>Directly opens image upload for Image Search</div>
+
+    <div id="Preview_3" className="tabcontent" style={{display:"block"}}>
+        <div className="tabcontent-preview">
+            <vviinn-vps-button token="STORYBOOK_TOKEN" mode="upload">
+            </vviinn-vps-button>
+        </div>
+    </div>
+    <div id="Code_3" className="tabcontent">
+```html
+    <vviinn-vps-button 
+    token="TOKEN" 
+    mode="upload"
+></vviinn-vps-button>
+```
+    </div>
+</div>
+
+<div id="camera-mode">
+    <div className="tab tab-reverse">
+        <h3>Camera Mode</h3>
+
+        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_4', 'camera-mode')}}>Code</button>
+        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_4', 'camera-mode')}}>Preview</button>
+    </div>
+       <div className='tab-sub-title'>Search with Camera</div>
+
+    <div id="Preview_4" className="tabcontent" style={{display:"block"}}>
+        <div className="tabcontent-preview">
+            <vviinn-vps-button token="STORYBOOK_TOKEN" mode="camera">
+            </vviinn-vps-button>
+        </div>
+    </div>
+    <div id="Code_4" className="tabcontent">
+```html
+    <vviinn-vps-button 
+    token="TOKEN" 
+    mode="camera"
+></vviinn-vps-button>
+```
+    </div>
+</div>
+
+
+

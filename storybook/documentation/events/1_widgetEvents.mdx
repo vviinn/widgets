@@ -1,0 +1,93 @@
+import { Meta } from "@storybook/blocks";
+import './events.css'
+
+<Meta title="Events/Widget" />
+
+# Widget Events
+
+Every Vviinn Widget has some events that users can work on and listen to these events with `document.addEventListener()`.
+
+<table width="100%" className="events-table">
+  <thead>
+    <tr><th>Name</th><th>Description</th><th>Available on</th><th>Props</th></tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>vviinnWidgetLoad</td><td>Triggered when the widget is loaded and initialized. For `vviinn-vpr-button` (Product AI recommendation) it triggers in the background when the button is rendered. For `vviinn-vps-button` (Product AI search) it triggers after initializing, but only after clicking the button.</td>
+
+      <td>
+        <ul>
+          <li>Recommendation (Button, Widget)</li>
+          <li>Search (Button, Widget)</li>
+        </ul>
+      </td>
+
+      <td>
+        <ul>
+          <li>campaignTypeId</li>
+          <li>campaignTypeName</li>
+          <li>widgetId</li>
+          <li>widgetType</li>
+          <li>widgetVersion</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td>vviinnWidgetOpen</td><td>Triggered by clicking on the widget button, right after opening the modal.</td>
+
+      <td>
+        <ul>
+          <li>Recommendation Button</li>
+          <li>Search Button</li>
+        </ul>
+      </td>
+
+      <td>
+        <ul>
+          <li>campaignTypeId</li>
+          <li>campaignTypeName</li>
+          <li>widgetId</li>
+          <li>widgetType</li>
+          <li>widgetVersion</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td>vviinnWidgetClose</td><td>Triggered by closing the widget.</td>
+
+      <td>
+        <ul>
+          <li>Recommendation Button</li>
+          <li>Search (Button, Widget)</li>
+        </ul>
+      </td>
+
+      <td>
+        <ul>
+          <li>campaignTypeId</li>
+          <li>campaignTypeName</li>
+          <li>widgetId</li>
+          <li>widgetType</li>
+          <li>widgetVersion</li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+## Listen to Events. Examples
+
+```javascript
+document.addEventListener("vviinnWidgetLoad", ({ detail }) => {
+  console.log(detail);
+});
+
+// Output:
+{
+    
+}
+// ... and other loaded products
+```

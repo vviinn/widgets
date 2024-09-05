@@ -1,0 +1,55 @@
+import { Meta, Story } from '@storybook/blocks';
+
+import "../../components/tabs/styles.css";
+import {clickHandlers} from "../../components"
+import "../../styles/filters-search-bar.css";
+
+<Meta title="Components/Product Card" />
+
+# Product Card
+
+## Examples
+
+<div id="product-catd-main">
+    <div className="tab tab-reverse">
+        
+        <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'product-catd-main')}}>Code</button>
+        <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'product-catd-main')}}>Preview</button>
+    </div>
+    <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
+        <div className="tabcontent-preview">
+            <vviinn-product-card 
+                product-title="Couchtisch Rolf Benz 8770 Ronald Schmitt" 
+                brand="Ronald Schmitt" 
+                product-type="Couchtische" 
+                price="3629" 
+                sale-price="1653" 
+                price-prefix="" 
+                image="https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg" 
+                image-width="240" 
+                responsive="false" 
+                image-ratio="1" 
+                basket-button-show="false" locale="de-DE" currency="€" style={{width:"240px"}}>
+        </vviinn-product-card>
+        </div>
+    </div>
+    <div id="Code_2" className="tabcontent">
+```html
+<vviinn-product-card 
+    product-title="Couchtisch Rolf Benz 8770 Ronald Schmitt" 
+    brand="Ronald Schmitt" 
+    product-type="Couchtische" 
+    price="3629" 
+    sale-price="1653" 
+    price-prefix="" 
+    image="https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg" 
+    image-width="240" 
+    responsive="false" 
+    image-ratio="1" 
+    basket-button-show="false" 
+    locale="de-DE" 
+    currency="€">
+</vviinn-product-card>
+```
+    </div>
+</div>

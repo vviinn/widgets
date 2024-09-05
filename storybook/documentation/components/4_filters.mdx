@@ -1,0 +1,65 @@
+import { Meta, Story } from '@storybook/blocks';
+
+import "../../styles/filters-search-bar.css";
+import "../../components/tabs/styles.css";
+import {clickHandlers} from "../../components";
+import {filters} from "./constants";
+
+<Meta title="Components/Filters" />
+
+# Filters
+
+## Examples
+
+<div id="preview">
+  <div className="tab tab-reverse">
+      <h3>Preview</h3>
+
+      <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Details_1', 'preview')}}>Technical Details</button>
+      <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'preview')}}>Code</button>
+      <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'preview')}}>Preview</button>
+  </div>
+
+  <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
+      <div className="tabcontent-preview">
+        <vviinn-filters filters-string={filters}></vviinn-filters>
+      </div>
+  </div>
+
+  <div id="Code_1" className="tabcontent">
+```html
+<vviinn-filters></vviinn-filters>
+```
+  </div>
+
+  <div id="Details_1" className="tabcontent">
+    In order to see the results, you need to use this component in combination with other components like Product List.
+  </div>
+</div>
+
+<div id="extended">
+  <div className="tab tab-reverse">
+      <h3>Extended View</h3>
+
+      <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Details_2', 'extended')}}>Technical Details</button>
+      <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'extended')}}>Code</button>
+      <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'extended')}}>Preview</button>
+  </div>
+
+  <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
+      <div className="tabcontent-preview">
+        <vviinn-extended-filters filters-string={filters}></vviinn-extended-filters>
+      </div>
+  </div>
+
+  <div id="Code_2" className="tabcontent">
+```html
+<vviinn-extended-filters></vviinn-extended-filters>
+```
+  </div>
+
+  <div id="Details_2" className="tabcontent">
+    In order to see the results, you need to use this component in combination with other components like Product List.
+  </div>
+</div>
+
