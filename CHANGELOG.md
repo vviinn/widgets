@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.85.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.84.1...v2.85.0) (2024-09-05)
+
+
+### Features
+
+* Added industry selector to the storybook ([3d58a21](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/3d58a21e8512bed75f34d94d73d62b962e41b180))
+
 ### [2.84.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.84.0...v2.84.1) (2024-09-05)
 
 
