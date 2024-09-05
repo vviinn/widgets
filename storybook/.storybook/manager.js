@@ -19,7 +19,7 @@ window.addEventListener("load", () => {
     const array = [
       { value: "home-living", text: "Home & living" },
       { value: "fashion", text: "Fashion" },
-      { value: "manufacturer-spare-parts", text: "Manufacturer & Spare Parts" },
+      /*{ value: "manufacturer-spare-parts", text: "Manufacturer & Spare Parts" },*/
     ];
 
     const selectList = document.createElement("select");

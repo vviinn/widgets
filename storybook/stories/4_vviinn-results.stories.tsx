@@ -11,6 +11,6 @@ export const StaticFilters = ResultsTemplate.bind({});
 StaticFilters.storyName = "Product List";
 StaticFilters.args = {
   filterColumn: "product_type",
-  filterValue: filterValue,
+  filterValue,
   ...generalArgs,
 };
