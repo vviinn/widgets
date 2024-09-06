@@ -453,6 +453,7 @@ export class VviinnResults {
         currency={this.currencySign}
         locale={this.locale}
         priceLabel={calculatePriceLabel(p)}
+        isResultsWidget={true}
       />
     ));
   }

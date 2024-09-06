@@ -1,6 +1,10 @@
 :host {
   /**
    * @prop --vviinn-carousel-columns: A number of items in grid mode.
+   * @prop --product-card-content-align: Set the alignment of the content inside the product card's flex container.
+   * @prop --product-card-text-align: Set the alignment of the text inside the product card.
+   * @prop --product-card-image-border: Set the border of the product card image.
+   * @prop --product-card-image-bg-color: Set the background color of the product card image.
    */
 
   display: grid;
@@ -11,11 +15,6 @@
 :host(:not(.loaded)) {
   position: absolute;
   visibility: hidden;
-}
-
-:host(.grid) vviinn-product-card::part(image) {
-  border: 1px solid #dddddd;
-  width: 100%;
 }
 
 :host(.set) vviinn-carousel {
@@ -78,18 +77,10 @@
 
 .update-button svg {
   color: #6f6f6f;
-  width: 24px;
-  height: 24px;
 }
 
 h2 {
   margin: 0;
-}
-
-vviinn-product-card::part(price-container) {
-  align-self: flex-start;
-  text-align: left;
-  display: flex;
 }
 
 .results {
@@ -116,39 +107,4 @@ h2 {
 
 :host(.grid) h2 {
   justify-content: center;
-}
-
-:host(.grid) vviinn-product-card {
-  align-items: center;
-}
-
-:host(.grid) vviinn-product-card::part(image) {
-  min-width: 100%;
-}
-
-:host(.grid) vviinn-product-card::part(image-link) {
-  width: 100%;
-}
-
-:host(.grid) vviinn-product-card::part(title),
-:host(.grid) vviinn-product-card::part(brand) {
-  text-align: center;
-}
-
-:host(.grid) vviinn-product-card::part(price-container) {
-  text-align: center;
-  align-self: center;
-}
-
-:host(.continuity) vviinn-product-card::part(title),
-:host(.continuity) vviinn-product-card::part(brand),
-:host(.continuity) vviinn-product-card::part(deeplink),
-:host(.continuity) vviinn-product-card::part(energy-label) {
-  text-align: left;
-  max-width: unset;
-  align-self: start;
-}
-
-:host(.continuity) vviinn-product-card {
-  align-items: flex-start;
 }

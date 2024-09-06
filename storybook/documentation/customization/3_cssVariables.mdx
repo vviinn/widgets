@@ -14,10 +14,25 @@ You can customize `vviinn-vps-button` and `vviinn-vps-widget` with these propert
 * \--color-primary-hover *used on the main action button when hovering*
 * \--color-icons *used in svg icons fill*
 
+All widgets, which using product cards, you can customize with these properties:
+
+* \--product-card-content-align *used on the product card content alignment*
+* \--product-card-text-align *used on the product card text alignment*
+* \--product-card-image-border *used on the product card image border*
+* \--product-card-image-bg-color *used on the product card background*
+
+With the `--product-card-width` variable you can customize product card width for widgets using the product card's grid, like `vviinn-vps-widget`, `vviinn-vps-button`, and `vviinn-results`.
+
+
 ```css
 html {
   --color-primary: #0f62fe;
   --color-primary-hover: lightblue;
   --color-icons: rgba(255, 0, 0, 0.5);
+  --product-card-content-align: flex-start;
+  --product-card-text-align: left;
+  --product-card-image-border: 1px solid #ccc;
+  --product-card-image-bg-color: #f9f9f9;
+  --product-card-width: 400px;
 }
 ```

@@ -72,6 +72,9 @@
 
   --product-card-widget-min-width: 130px;
   --product-card-results-min-width: 250px;
+  --image-set-mode-min-size: 155px;
+  --product-card-set-mode-max-width: 300px;
+  --source-card-set-mode-max-width: 500px;
 
   /* Filters */
   --filter-blur-none: 0px;
@@ -140,6 +143,8 @@
   --chip-bg-color-subtle-active: #e0e0e0;
   --chip-bg-color-outline-hover: #f4f4f4;
   --chip-bg-color-outline-active: #eaeaea;
+
+  --label-bg-color-accent: #ff3944;
 
   /* DARK MODE SUPPORT
   @media (prefers-color-scheme: dark) {
