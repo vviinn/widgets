@@ -12,13 +12,6 @@ export default {
 };
 
 const Template = (args) => {
-  const getEfficiencyClasses = (standard) =>
-    standard === "2017/1369 (updated)"
-      ? { minEnergyEfficiencyClass: "A", maxEnergyEfficiencyClass: "G" }
-      : { minEnergyEfficiencyClass: "A+++", maxEnergyEfficiencyClass: "D" };
-
-  const efficiencyClasses = getEfficiencyClasses(args.energyEfficiencyStandard);
-
   return `
     <vviinn-product-card
       product-title="${args.productTitle}"
@@ -32,15 +25,16 @@ const Template = (args) => {
       image-width="${args.imageWidth}"
       responsive="${args.responsive}"
       image-ratio="${args.imageRatio}"
-      energy-efficiency-class="${args.energyEfficiencyClass}"
-      min-energy-efficiency-class="${efficiencyClasses.minEnergyEfficiencyClass}"
-      max-energy-efficiency-class="${efficiencyClasses.maxEnergyEfficiencyClass}"
       update-button-location="${args.updateButtonLocation}"
       basket-button-show="${args.basketButtonShow}"
       locale="${args.locale}"
       currency="${args.currency}"
       image-ratio="${args.imageRatio}"
       price-label="${args.priceLabel}"
+      product-card-content-align="${args.productCardContentAlign}"
+      product-card-text-align="${args.productCardTextAlign}"
+      product-card-image-border="${args.productCardImageBorder}"
+      product-card-image-bg-color="${args.productCardImageBgColor}"
     >
       <span slot="vviinn-basket-button-text">Add to basket</span>
     </vviinn-product-card>`;
@@ -53,8 +47,6 @@ Default.storyName = "Product Card";
 Default.args = {
   productTitle: "Couchtisch Rolf Benz 8770 Ronald Schmitt",
   productType: "Couchtische",
-  energyEfficiencyStandard: "2017/1369 (updated)",
-  energyEfficiencyClass: "A",
   mode: "continuity",
   imageWidth: 240,
   brand: "Ronald Schmitt",
@@ -70,4 +62,8 @@ Default.args = {
   basketButtonShow: true,
   updateButtonLocation: "onItem",
   priceLabel: "",
+  productCardContentAlign: "flex-start",
+  productCardTextAlign: "left",
+  productCardImageBorder: "none",
+  productCardImageBgColor: "#f4f4f4",
 };

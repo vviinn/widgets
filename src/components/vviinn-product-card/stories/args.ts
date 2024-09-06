@@ -16,11 +16,28 @@ export const argTypes = {
       default: 0,
     },
   },
-  energyEfficiencyStandard: {
-    options: ["2017/1369", "2017/1369 (updated)"],
+  productCardContentAlign: {
+    options: ["flex-start", "center", "flex-end"],
     control: {
       type: "select",
-      default: "2017/1369 (updated)",
+    },
+  },
+  productCardTextAlign: {
+    options: ["left", "center", "right"],
+    control: {
+      type: "select",
+    },
+  },
+  productCardImageBorder: {
+    options: ["none", "1px solid #e0e0e0"],
+    control: {
+      type: "select",
+    },
+  },
+  productCardImageBgColor: {
+    options: ["transparent", "#f4f4f4"],
+    control: {
+      type: "select",
     },
   },
 };
