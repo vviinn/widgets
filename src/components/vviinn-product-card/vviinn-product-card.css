@@ -1,15 +1,31 @@
 @import "../../variables.css";
 
-:host(.set-mode),
-:host(.continuity-mode),
-:host(.results-widget) {
-  --product-card-content-align-default: flex-start;
-  --product-card-text-align-default: left;
-}
-
 :host(.grid-mode) {
   --product-card-content-align-default: center;
   --product-card-text-align-default: center;
+  --product-card-image-border-default: 1px solid var(--color-border-02);
+  --product-card-image-bg-color-default: unset;
+}
+
+:host(.continuity-mode) {
+  --product-card-content-align-default: flex-start;
+  --product-card-text-align-default: left;
+  --product-card-image-border-default: var(--surface-bg-color-01);
+  --product-card-image-bg-color-default: var(--surface-bg-color-01);
+}
+
+:host(.set-mode) {
+  --product-card-content-align-default: flex-start;
+  --product-card-text-align-default: left;
+  --product-card-image-border-default: none;
+  --product-card-image-bg-color-default: var(--surface-bg-color-01);
+}
+
+:host(.results-widget) {
+  --product-card-content-align-default: flex-start;
+  --product-card-text-align-default: left;
+  --product-card-image-border-default: 1px solid var(--color-border-02);
+  --product-card-image-bg-color-default: unset;
 }
 
 :host {
@@ -183,7 +199,7 @@ picture::before {
   background-color: var(--button-bg-color-ghost-hover);
 }
 
-:host(.dimmed) picture::after {
+picture::after {
   box-sizing: border-box;
   display: block;
   position: absolute;
@@ -191,7 +207,10 @@ picture::before {
   height: 100%;
   top: 0;
   left: 0;
-  background-color: var(--surface-bg-color-01);
+  background-color: var(
+    --product-card-image-bg-color,
+    var(--product-card-image-bg-color-default)
+  );
   mix-blend-mode: multiply;
   content: "";
 }
@@ -236,10 +255,12 @@ picture::before {
   gap: var(--spacing-75);
 }
 
-:host(.grid-mode) .image {
-  border: 1px solid #dddddd;
-  width: 100%;
-  min-width: 100%;
+:host(.grid-mode) .image,
+:host(.continuity-mode) .image {
+  border: var(
+    --product-card-image-border,
+    var(--product-card-image-border-default)
+  );
 }
 
 :host(.grid-mode) .image-link {
@@ -247,7 +268,10 @@ picture::before {
 }
 
 :host(.results-widget) .image {
-  border: 1px solid #eaeaea;
+  border: var(
+    --product-card-image-border,
+    var(--product-card-image-border-default)
+  );
 }
 
 :host(.set-mode) .image {
@@ -255,7 +279,10 @@ picture::before {
   height: auto;
   min-width: var(--image-set-mode-min-size);
   min-height: var(--image-set-mode-min-size);
-  border: none;
+  border: var(
+    --product-card-image-border,
+    var(--product-card-image-border-default)
+  );
   aspect-ratio: 1;
 }
 
