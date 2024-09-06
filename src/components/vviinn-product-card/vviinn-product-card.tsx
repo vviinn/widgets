@@ -335,15 +335,6 @@ export class VviinnProductCard {
               {this.brand}
             </span>
 
-<<<<<<< HEAD
-            {this.energyCertifications?.length > 0 &&
-              this.energyCertifications.map((energyCertification) => (
-                <vviinn-energy-label
-                  energyCertification={energyCertification}
-                  productClickHandler={this.productClickHandler.bind(this)}
-                ></vviinn-energy-label>
-              ))}
-=======
             {(this?.energyCertifications ?? []).map((energyCertification) => (
               <vviinn-energy-label
                 classLabelUrl={energyCertification?.classLabelUrl}
@@ -353,7 +344,6 @@ export class VviinnProductCard {
                 productClickHandler={this.productClickHandler.bind(this)}
               ></vviinn-energy-label>
             ))}
->>>>>>> bugfix/37048-fix-energy-label-slot
 
             <Price
               prefix={this.pricePrefix}
