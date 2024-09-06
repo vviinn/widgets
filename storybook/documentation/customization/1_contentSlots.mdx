@@ -1,6 +1,10 @@
 import { Meta, Story, Canvas } from "@storybook/blocks";
 import './customization.css'
-import { vviinnToken } from "../../helpers";
+import { vviinnToken, productIdSimilarProducts, productIdCrossSelling } from "../../helpers";
+
+import "../../components/tabs/styles.css";
+import { clickHandlers } from "../../components"
+import { filters } from "../components/constants";
 
 <Meta title="Customization/Content Slots" />
 
@@ -9,21 +13,212 @@ import { vviinnToken } from "../../helpers";
 There is a possibility to not only style widgets using CSS APIs but also
 customize some content using [slots](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_templates_and_slots#adding_flexibility_with_slots).
 
-## Recommendation
+- [Discovery Slider](#slider)
+- [Discovery Set](#set)
+- [Search Modal](#search-modal)
+- [Filters](#filters)
 
-Here are slots that could be used for Recommendation Button (`vviinn-vpr-button`):
+## Discovery
+
+Here are slots that could be used for [Discovery Slider](?path=/docs/widgets-discovery-slider--docs) and [Discovery Set](?path=/docs/widgets-discovery-set--docs) widgets (`vviinn-vpr-button`, `vviinn-vpr-widget`):
+
+### Slider
 
 * vviinn-recommendations-title - *Recommendations title text*
-* vviinn-recommendations-subtitle - *Recommendations subtitle text (Set mode)*
-* vviinn-update-button-text - *Text of Update Button on the top (Set mode)*
-* vviinn-update-button-iComponentsext - *Text of Add to Basket button*
-* vviinn-basket-button-icon - *Icon of Add to Basket button (Set mode)*
-* vviinn-basket-button-text-pressed - *Text of pressed Add to Basket button (Set mode)*
-* vviinn-basket-button-icon-pressed - *Icon of pressed Add to Basket button (Set mode)*
+* vviinn-basket-button-text - *Text of Add to Basket button*
 
-## Search
+<div id="discovery-slider-example">
+    <div className="tab tab-reverse">
+        <h3>Discovery Grid and Fluid</h3>
+        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'discovery-slider-example')}}>Code</button>
+        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'discovery-slider-example')}}>Preview</button>
+    </div>
+    <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
+        <div className="tabcontent-preview">
+            <vviinn-vpr-widget token={vviinnToken} product-id={productIdSimilarProducts} mode="grid" block-title="" add-to-basket-show="true">
+              <span slot="vviinn-recommendations-title">Custom Title</span>
+              <span slot="vviinn-basket-button-text">Custom Add to Basket</span>
+            </vviinn-vpr-widget>
+        </div>
+    </div>
+    <div id="Code_1" className="tabcontent">
+```html
+<style>
+  vviinn-vpr-widget [slot] {
+    visibility: hidden;
+    position: absolute;
+  }
+</style>
 
-Slots that could be used in Search Widget and Search Button (`vviinn-vps-widget` and `vviinn-vps-button`):
+<vviinn-vpr-widget 
+    token="TOKEN" 
+    product-id="PRODUCT_ID"
+    mode="grid"
+    block-title=""
+    add-to-basket-show="true"
+>
+    <span slot="vviinn-recommendations-title">Custom Title</span>
+    <span slot="vviinn-basket-button-text">Custom Add to Basket</span>
+</vviinn-vpr-widget>
+```
+    </div>
+</div>
+
+<div id="discovery-slider-modal-example">
+    <div className="tab tab-reverse">
+        <h3>Discovery Modal</h3>
+        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'discovery-slider-modal-example')}}>Code</button>
+        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'discovery-slider-modal-example')}}>Preview</button>
+    </div>
+    <div className='tab-sub-title'>Changing icon of Discovery Slider button </div>
+    <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
+        <div className="tabcontent-preview">
+            <vviinn-vpr-button token={vviinnToken} product-id={productIdSimilarProducts} mode="grid" block-title="" add-to-basket-show="true">
+              <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5 2C3.35 2 2 3.35 2 5v2H0V5c0-2.76 2.24-5 5-5h2v2H5Zm5 3c1.28 0 2.56.48 3.54 1.46h-.01a4.994 4.994 0 0 1 .64 6.29l3.05 3.05-1.41 1.41-3.05-3.05c-.84.55-1.8.83-2.76.83a4.98 4.98 0 0 1-3.54-1.46 5.003 5.003 0 0 1 0-7.07C7.44 5.49 8.72 5 10 5Zm-2.77 5c0 .74.29 1.44.81 1.96s1.22.81 1.96.81 1.44-.29 1.96-.81.81-1.22.81-1.96-.29-1.44-.81-1.96-1.22-.81-1.96-.81-1.44.29-1.96.81-.81 1.22-.81 1.96ZM2 15v-2H0v2c0 2.76 2.24 5 5 5h2v-2H5c-1.65 0-3-1.35-3-3ZM13 0h2c2.76 0 5 2.24 5 5v2h-2V5c0-1.65-1.35-3-3-3h-2V0Z" fill="#161616"></path></svg>
+              <span slot="vviinn-recommendations-title">Custom Title</span>
+              <span slot="vviinn-basket-button-text">Custom Add to Basket</span>
+            </vviinn-vpr-button>
+        </div>
+    </div>
+    <div id="Code_2" className="tabcontent">
+```html
+<style>
+  vviinn-vpr-button [slot] {
+    visibility: hidden;
+    position: absolute;
+  }
+</style>
+
+<vviinn-vpr-button 
+    token="TOKEN" 
+    product-id="PRODUCT_ID"
+    mode="grid"
+    block-title=""
+    add-to-basket-show="true"
+>
+    <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5 2C3.35 2 2 3.35 2 5v2H0V5c0-2.76 2.24-5 5-5h2v2H5Zm5 3c1.28 0 2.56.48 3.54 1.46h-.01a4.994 4.994 0 0 1 .64 6.29l3.05 3.05-1.41 1.41-3.05-3.05c-.84.55-1.8.83-2.76.83a4.98 4.98 0 0 1-3.54-1.46 5.003 5.003 0 0 1 0-7.07C7.44 5.49 8.72 5 10 5Zm-2.77 5c0 .74.29 1.44.81 1.96s1.22.81 1.96.81 1.44-.29 1.96-.81.81-1.22.81-1.96-.29-1.44-.81-1.96-1.22-.81-1.96-.81-1.44.29-1.96.81-.81 1.22-.81 1.96ZM2 15v-2H0v2c0 2.76 2.24 5 5 5h2v-2H5c-1.65 0-3-1.35-3-3ZM13 0h2c2.76 0 5 2.24 5 5v2h-2V5c0-1.65-1.35-3-3-3h-2V0Z" fill="#161616"></path></svg>
+    <span slot="vviinn-recommendations-title">Custom Title</span>
+    <span slot="vviinn-basket-button-text">Custom Add to Basket</span>
+</vviinn-vpr-button>
+```
+    </div>
+</div>
+
+
+### Set
+
+* vviinn-recommendations-title - *Recommendations title text*
+* vviinn-recommendations-subtitle - *Recommendations subtitle text*
+
+* vviinn-basket-button-text - *Text of Add to Basket button*
+* vviinn-update-button-text - *Text of Update Button on the top*
+* vviinn-basket-button-icon - *Icon of Add to Basket button*
+* vviinn-basket-button-text-pressed - *Text of pressed Add to Basket button*
+* vviinn-basket-button-icon-pressed - *Icon of pressed Add to Basket button*
+* vviinn-update-button-icon - *Icon of Update Button*
+
+<div id="discovery-set-example">
+    <div className="tab tab-reverse">
+        <h3>Discovery Set</h3>
+        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_3', 'discovery-set-example')}}>Code</button>
+        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_3', 'discovery-set-example')}}>Preview</button>
+    </div>
+    <div id="Preview_3" className="tabcontent" style={{display:"block"}}>
+        <div className="tabcontent-preview">
+            <vviinn-vpr-widget token={vviinnToken} product-id={productIdCrossSelling} mode="set" campaign-type="VCS">
+              <span slot="vviinn-recommendations-title">Custom Title</span>
+              <span slot="vviinn-recommendations-subtitle">Custom Sub Title</span>
+              <span slot="vviinn-basket-button-text">Custom Add to Basket</span>
+              <span slot="vviinn-update-button-text">Custom Update</span>
+              <span slot="vviinn-basket-button-icon">IB</span>
+              <span slot="vviinn-basket-button-text-pressed">Button Pressed</span>
+              <span slot="vviinn-basket-button-icon-pressed">IP</span>
+              <span slot="vviinn-update-button-icon">I</span>
+            </vviinn-vpr-widget>
+        </div>
+    </div>
+    <div id="Code_3" className="tabcontent">
+```html
+<style>
+  vviinn-vpr-widget [slot] {
+    visibility: hidden;
+    position: absolute;
+  }
+</style>
+
+<vviinn-vpr-widget 
+    token="TOKEN" 
+    product-id="PRODUCT_ID"
+    mode="set"
+    campaign-type="VCS"
+>
+    <span slot="vviinn-recommendations-title">Custom Title</span>
+    <span slot="vviinn-recommendations-subtitle">Custom Sub Title</span>
+    <span slot="vviinn-basket-button-text">Custom Add to Basket</span>
+    <span slot="vviinn-update-button-text">Custom Update</span>
+    <span slot="vviinn-basket-button-icon">IC</span>
+    <span slot="vviinn-basket-button-text-pressed">Button Pressed</span>
+    <span slot="vviinn-basket-button-icon-pressed">IP</span>
+    <span slot="vviinn-update-button-icon">I</span>
+</vviinn-vpr-widget>
+```
+    </div>
+</div>
+
+<div id="discovery-set-modal-example">
+    <div className="tab tab-reverse">
+        <h3>Discovery Set Modal</h3>
+        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_4', 'discovery-set-modal-example')}}>Code</button>
+        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_4', 'discovery-set-modal-example')}}>Preview</button>
+    </div>
+    <div className='tab-sub-title'>Changing icon of Discovery Set button </div>
+    <div id="Preview_4" className="tabcontent" style={{display:"block"}}>
+        <div className="tabcontent-preview">
+            <vviinn-vpr-button token={vviinnToken} product-id={productIdCrossSelling} mode="set" campaign-type="VCS">
+              <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5 2C3.35 2 2 3.35 2 5v2H0V5c0-2.76 2.24-5 5-5h2v2H5Zm5 3c1.28 0 2.56.48 3.54 1.46h-.01a4.994 4.994 0 0 1 .64 6.29l3.05 3.05-1.41 1.41-3.05-3.05c-.84.55-1.8.83-2.76.83a4.98 4.98 0 0 1-3.54-1.46 5.003 5.003 0 0 1 0-7.07C7.44 5.49 8.72 5 10 5Zm-2.77 5c0 .74.29 1.44.81 1.96s1.22.81 1.96.81 1.44-.29 1.96-.81.81-1.22.81-1.96-.29-1.44-.81-1.96-1.22-.81-1.96-.81-1.44.29-1.96.81-.81 1.22-.81 1.96ZM2 15v-2H0v2c0 2.76 2.24 5 5 5h2v-2H5c-1.65 0-3-1.35-3-3ZM13 0h2c2.76 0 5 2.24 5 5v2h-2V5c0-1.65-1.35-3-3-3h-2V0Z" fill="#161616"></path></svg>
+              <span slot="vviinn-recommendations-title">Custom Title</span>
+              <span slot="vviinn-recommendations-subtitle">Custom Sub Title</span>
+              <span slot="vviinn-basket-button-text">Custom Add to Basket</span>
+              <span slot="vviinn-update-button-text">Custom Update</span>
+              <span slot="vviinn-basket-button-icon">IB</span>
+              <span slot="vviinn-basket-button-text-pressed">Button Pressed</span>
+              <span slot="vviinn-basket-button-icon-pressed">IP</span>
+              <span slot="vviinn-update-button-icon">I</span>
+            </vviinn-vpr-button>
+        </div>
+    </div>
+    <div id="Code_4" className="tabcontent">
+```html
+<style>
+  vviinn-vpr-button [slot] {
+    visibility: hidden;
+    position: absolute;
+  }
+</style>
+
+<vviinn-vpr-button 
+    token="TOKEN" 
+    product-id="PRODUCT_ID"
+    mode="set"
+    campaign-type="VCS"
+>
+    <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5 2C3.35 2 2 3.35 2 5v2H0V5c0-2.76 2.24-5 5-5h2v2H5Zm5 3c1.28 0 2.56.48 3.54 1.46h-.01a4.994 4.994 0 0 1 .64 6.29l3.05 3.05-1.41 1.41-3.05-3.05c-.84.55-1.8.83-2.76.83a4.98 4.98 0 0 1-3.54-1.46 5.003 5.003 0 0 1 0-7.07C7.44 5.49 8.72 5 10 5Zm-2.77 5c0 .74.29 1.44.81 1.96s1.22.81 1.96.81 1.44-.29 1.96-.81.81-1.22.81-1.96-.29-1.44-.81-1.96-1.22-.81-1.96-.81-1.44.29-1.96.81-.81 1.22-.81 1.96ZM2 15v-2H0v2c0 2.76 2.24 5 5 5h2v-2H5c-1.65 0-3-1.35-3-3ZM13 0h2c2.76 0 5 2.24 5 5v2h-2V5c0-1.65-1.35-3-3-3h-2V0Z" fill="#161616"></path></svg>
+    <span slot="vviinn-recommendations-title">Custom Title</span>
+    <span slot="vviinn-recommendations-subtitle">Custom Sub Title</span>
+    <span slot="vviinn-basket-button-text">Custom Add to Basket</span>
+    <span slot="vviinn-update-button-text">Custom Update</span>
+    <span slot="vviinn-basket-button-icon">IC</span>
+    <span slot="vviinn-basket-button-text-pressed">Button Pressed</span>
+    <span slot="vviinn-basket-button-icon-pressed">IP</span>
+    <span slot="vviinn-update-button-icon">I</span>
+</vviinn-vpr-button>
+```
+    </div>
+</div>
+
+## Search Modal
+
+Slots that could be used in [Search Modal](?path=/docs/widgets-search-modal--docs) (`vviinn-vps-widget` and `vviinn-vps-button`):
 
 * vviinn-teaser-text – *Text on widget's main screen*
 * vviinn-image-upload-button-text – *Title of Upload Button*
@@ -31,10 +226,58 @@ Slots that could be used in Search Widget and Search Button (`vviinn-vps-widget`
 * vviinn-camera-button-text-start - *Title of Start Camera button (for Desktop)*
 * vviinn-camera-button-text-stop - *Title of Stop Camera button (for Desktop)*
 * vviinn-camera-icon - *Icon of Camera Button*
-* vviinn-camera-capture-text - *Text above the Camera Capture button*
 * vviinn-text-search-icon - *Icon of text search block*
 * vviinn-privacy-badge-text – *Text content of privacy notification block*
 * vviinn-image-search-modal-title – *Image search modal title*
+
+<div id="search-modal-example">
+    <div className="tab tab-reverse">
+        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_5', 'search-modal-example')}}>Code</button>
+        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_5', 'search-modal-example')}}>Preview</button>
+    </div>
+    
+    <div id="Preview_5" className="tabcontent" style={{display:"block"}}>
+        <div className="tabcontent-preview">
+            <vviinn-vps-button token={vviinnToken} text-search-show="true">
+              <svg width="22" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M16.567 3H19A3.01 3.01 0 0 1 22 6v7.69h-2V6c0-.55-.451-1-1.001-1h-3.502l-2.03-3H8.543L6.603 5H3.001c-.55 0-1 .45-1 1v11c0 .55.45 1 1 1h5.933v2H3.001A3.01 3.01 0 0 1 0 17V6c0-1.65 1.35-3 3.001-3h2.522l1.94-3h7.074l2.03 3Zm-5.562 3c1.28 0 2.561.48 3.542 1.46h-.01a4.992 4.992 0 0 1 .64 6.29l3.051 3.05-1.41 1.41-3.052-3.05c-.84.55-1.8.83-2.76.83-1.282 0-2.562-.48-3.543-1.46a5.002 5.002 0 0 1 0-7.07A5.026 5.026 0 0 1 11.005 6Zm-2.771 5a2.763 2.763 0 0 0 2.771 2.77A2.763 2.763 0 0 0 13.776 11a2.763 2.763 0 0 0-2.771-2.77A2.763 2.763 0 0 0 8.234 11Z"
+                  fill="#008080"
+                />
+              </svg>
+              <span slot="vviinn-teaser-text">Custom Text</span>
+              <span slot="vviinn-image-upload-button-text">Custom Button Text</span>
+            </vviinn-vps-button>
+        </div>
+    </div>
+    <div id="Code_5" className="tabcontent">
+```html
+<style>
+  vviinn-vps-button [slot] {
+    visibility: hidden;
+    position: absolute;
+  }
+</style>
+<vviinn-vps-button 
+    token="TOKEN" 
+    text-search-show="true"
+>
+  <svg width="22" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      fill-rule="evenodd"
+      clip-rule="evenodd"
+      d="M16.567 3H19A3.01 3.01 0 0 1 22 6v7.69h-2V6c0-.55-.451-1-1.001-1h-3.502l-2.03-3H8.543L6.603 5H3.001c-.55 0-1 .45-1 1v11c0 .55.45 1 1 1h5.933v2H3.001A3.01 3.01 0 0 1 0 17V6c0-1.65 1.35-3 3.001-3h2.522l1.94-3h7.074l2.03 3Zm-5.562 3c1.28 0 2.561.48 3.542 1.46h-.01a4.992 4.992 0 0 1 .64 6.29l3.051 3.05-1.41 1.41-3.052-3.05c-.84.55-1.8.83-2.76.83-1.282 0-2.562-.48-3.543-1.46a5.002 5.002 0 0 1 0-7.07A5.026 5.026 0 0 1 11.005 6Zm-2.771 5a2.763 2.763 0 0 0 2.771 2.77A2.763 2.763 0 0 0 13.776 11a2.763 2.763 0 0 0-2.771-2.77A2.763 2.763 0 0 0 8.234 11Z"
+      fill="#008080"
+    />
+  </svg>
+  <span slot="vviinn-teaser-text">Custom Text</span>
+  <span slot="vviinn-image-upload-button-text">Custom Button Text</span>
+</vviinn-vps-button>
+```
+    </div>
+</div>
 
 ## Filters
 
@@ -44,62 +287,34 @@ Slots that could be used in Extended Filters Widget (`vviinn-extended-filters`):
 * vviinn-extended-filters-apply – *Title of Apply Button*
 * vviinn-extended-filters-reset - *Title of Reset Button*
 
-## Customization example of vviinn-vps-button
-
-Let's customize `vviinn-teaser-text` and replace it with the custom text. It's important to note that when we use any named slots inside `vviinn-vps-button` we also need to provide an icon to "default" slot.
-
+<div id="filters-example">
+    <div className="tab tab-reverse">
+        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_6', 'filters-example')}}>Code</button>
+        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_6', 'filters-example')}}>Preview</button>
+    </div>
+    
+    <div id="Preview_6" className="tabcontent" style={{display:"block"}}>
+        <div className="tabcontent-preview">
+          <vviinn-extended-filters filters-string={filters}>
+            <span slot="vviinn-extended-filters-title">Custom Title</span>
+            <span slot="vviinn-extended-filters-apply">Custom Apply</span>
+            <span slot="vviinn-extended-filters-reset">Custom Reset</span>
+          </vviinn-extended-filters>
+        </div>
+    </div>
+    <div id="Code_6" className="tabcontent">
 ```html
-<vviinn-vps-button token="YOUR_TOKEN">
-  <style>
-    /* We need to hide slots on the page, to not show them outside the widget */
-    vviinn-vps-button [slot] {
-      visibility: hidden;
-      position: absolute;
-    }
-  </style>
-  <!-- svg will be added to "default" slot because it hasn't slot attribute -->
-  <svg width="22" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
-      d="M16.567 3H19A3.01 3.01 0 0 1 22 6v7.69h-2V6c0-.55-.451-1-1.001-1h-3.502l-2.03-3H8.543L6.603 5H3.001c-.55 0-1 .45-1 1v11c0 .55.45 1 1 1h5.933v2H3.001A3.01 3.01 0 0 1 0 17V6c0-1.65 1.35-3 3.001-3h2.522l1.94-3h7.074l2.03 3Zm-5.562 3c1.28 0 2.561.48 3.542 1.46h-.01a4.992 4.992 0 0 1 .64 6.29l3.051 3.05-1.41 1.41-3.052-3.05c-.84.55-1.8.83-2.76.83-1.282 0-2.562-.48-3.543-1.46a5.002 5.002 0 0 1 0-7.07A5.026 5.026 0 0 1 11.005 6Zm-2.771 5a2.763 2.763 0 0 0 2.771 2.77A2.763 2.763 0 0 0 13.776 11a2.763 2.763 0 0 0-2.771-2.77A2.763 2.763 0 0 0 8.234 11Z"
-      fill="#008080"
-    />
-  </svg>
-  
-  <!-- Our named slot -->
-  <h3 slot="vviinn-teaser-text">Your custom text</h3>
-</vviinn-vps-button>
+<style>
+  vviinn-extended-filters [slot] {
+    visibility: hidden;
+    position: absolute;
+  }
+</style>
+<vviinn-extended-filters>
+  <span slot="vviinn-extended-filters-title">Custom Title</span>
+  <span slot="vviinn-extended-filters-apply">Custom Apply</span>
+  <span slot="vviinn-extended-filters-reset">Custom Reset</span>
+</vviinn-extended-filters>
 ```
-
-Here is our button with the custom icon. If we click on it, we will also see the customized `vviinn-teaser-text`.
-
-<vviinn-vps-button token={vviinnToken} locale="en-US">
-  <svg width="22" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path fillRule="evenodd" clipRule="evenodd" d="M16.567 3H19A3.01 3.01 0 0 1 22 6v7.69h-2V6c0-.55-.451-1-1.001-1h-3.502l-2.03-3H8.543L6.603 5H3.001c-.55 0-1 .45-1 1v11c0 .55.45 1 1 1h5.933v2H3.001A3.01 3.01 0 0 1 0 17V6c0-1.65 1.35-3 3.001-3h2.522l1.94-3h7.074l2.03 3Zm-5.562 3c1.28 0 2.561.48 3.542 1.46h-.01a4.992 4.992 0 0 1 .64 6.29l3.051 3.05-1.41 1.41-3.052-3.05c-.84.55-1.8.83-2.76.83-1.282 0-2.562-.48-3.543-1.46a5.002 5.002 0 0 1 0-7.07A5.026 5.026 0 0 1 11.005 6Zm-2.771 5a2.763 2.763 0 0 0 2.771 2.77A2.763 2.763 0 0 0 13.776 11a2.763 2.763 0 0 0-2.771-2.77A2.763 2.763 0 0 0 8.234 11Z" fill="#008080" />
-  </svg>
-
-  <h3 slot="vviinn-teaser-text">Your custom text</h3>
-</vviinn-vps-button>
-
-Anything we put between the opening and closing tags without the `slot` attribute will be placed inside the "default" slot. The slot has no restrictions for any element type. It could be an `<svg>` like in the example above or any HTML will be valid.
-
-```html
-<vviinn-vps-button token="YOUR_TOKEN" >
-  <span>I'm looking like text, but try to click!</span>
-</vviinn-vps-button>
-```
-
-<vviinn-vps-button token={vviinnToken} locale="en-US">
-  <span>I'm looking like text, but try to click!</span>
-</vviinn-vps-button>
-
-## Images customization example
-
-In general, you can use any valid HTML or SVG content inside slots, but for example, with images, you should use a special component that will fire search events:
-
-```html
-<vviinn-example-image src="URL" slot="vviinn-example-image"></vviinn-example-image>
-```
-
-For now, the image should be stored in Vviinn CDN. If you need help, please contact your Vviinn representative.
+    </div>
+</div>
