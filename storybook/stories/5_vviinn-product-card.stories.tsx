@@ -37,7 +37,6 @@ const Template = (args) => {
       max-energy-efficiency-class="${efficiencyClasses.maxEnergyEfficiencyClass}"
       update-button-location="${args.updateButtonLocation}"
       basket-button-show="${args.basketButtonShow}"
-      dimmed-background="${args.dimmedBackground}"
       locale="${args.locale}"
       currency="${args.currency}"
       image-ratio="${args.imageRatio}"
@@ -58,7 +57,6 @@ Default.args = {
   energyEfficiencyClass: "A",
   mode: "continuity",
   imageWidth: 240,
-  dimmedBackground: true,
   brand: "Ronald Schmitt",
   locale: "de-DE",
   currency: "€",

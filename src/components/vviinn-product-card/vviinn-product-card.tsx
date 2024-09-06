@@ -96,7 +96,6 @@ export class VviinnProductCard {
   @Prop() productType: string | undefined;
   @Prop() salePrice: number | undefined;
   @Prop() responsive: boolean = false;
-  @Prop() dimmedBackground: boolean = false;
   @Prop() mode?: CarouselMode;
   @Prop() basketButtonShow: boolean;
   @Prop() updateButtonLocation: UpdateButtonLocation;
@@ -307,7 +306,6 @@ export class VviinnProductCard {
       <Host
         part="product-card"
         class={{
-          dimmed: this.dimmedBackground,
           animated: this.isTransitioning,
           "set-mode": this.isSetMode,
           "grid-mode": this.isGridMode,
