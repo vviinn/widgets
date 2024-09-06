@@ -108,6 +108,7 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @slot vviinn-basket-button-icon - Text of Add to Basket icon (Set mode).
  * @slot vviinn-basket-button-text-pressed - Text of pressed Add to Basket button (Set mode).
  * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button (Set mode).
+ * @slot vviinn-energy-label-data-sheet-text - Text of the data sheet link for the energy label.
  */
 
 @Component({

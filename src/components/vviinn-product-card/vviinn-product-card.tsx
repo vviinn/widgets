@@ -241,6 +241,7 @@ export class VviinnProductCard {
   }
 
   private intersectionCallback = (data: IntersectionObserverEntry[]) => {
+    if (!data.length) return;
     if (data.some((entry) => entry.isIntersecting)) {
       pipe(
         getAnalyticsModule,
@@ -334,6 +335,7 @@ export class VviinnProductCard {
               {this.brand}
             </span>
 
+<<<<<<< HEAD
             {this.energyCertifications?.length > 0 &&
               this.energyCertifications.map((energyCertification) => (
                 <vviinn-energy-label
@@ -341,6 +343,17 @@ export class VviinnProductCard {
                   productClickHandler={this.productClickHandler.bind(this)}
                 ></vviinn-energy-label>
               ))}
+=======
+            {(this?.energyCertifications ?? []).map((energyCertification) => (
+              <vviinn-energy-label
+                classLabelUrl={energyCertification?.classLabelUrl}
+                classIconUrls={energyCertification?.classIconUrls}
+                classDataSheetUrl={energyCertification?.classDataSheetUrl}
+                productType={energyCertification?.productType}
+                productClickHandler={this.productClickHandler.bind(this)}
+              ></vviinn-energy-label>
+            ))}
+>>>>>>> bugfix/37048-fix-energy-label-slot
 
             <Price
               prefix={this.pricePrefix}
