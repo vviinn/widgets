@@ -241,6 +241,7 @@ export class VviinnProductCard {
   }
 
   private intersectionCallback = (data: IntersectionObserverEntry[]) => {
+    if (!data.length) return;
     if (data.some((entry) => entry.isIntersecting)) {
       pipe(
         getAnalyticsModule,
@@ -334,13 +335,15 @@ export class VviinnProductCard {
               {this.brand}
             </span>
 
-            {this.energyCertifications?.length > 0 &&
-              this.energyCertifications.map((energyCertification) => (
-                <vviinn-energy-label
-                  energyCertification={energyCertification}
-                  productClickHandler={this.productClickHandler.bind(this)}
-                ></vviinn-energy-label>
-              ))}
+            {(this?.energyCertifications ?? []).map((energyCertification) => (
+              <vviinn-energy-label
+                classLabelUrl={energyCertification?.classLabelUrl}
+                classIconUrls={energyCertification?.classIconUrls}
+                classDataSheetUrl={energyCertification?.classDataSheetUrl}
+                productType={energyCertification?.productType}
+                productClickHandler={this.productClickHandler.bind(this)}
+              ></vviinn-energy-label>
+            ))}
 
             <Price
               prefix={this.pricePrefix}
