@@ -6,6 +6,7 @@ import { readFileSync } from "fs";
 import path from "path";
 
 export const config: Config = {
+  extras: { enableImportInjection: true },
   namespace: "vviinn-widgets",
   taskQueue: "async",
   outputTargets: [
