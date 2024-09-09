@@ -1,14 +1,8 @@
-export const productDecorator = (story) => `
+export const productDecorator = (story, { args }) => `
 <style>
 html, body, #root, #root-inner {
   width: 100%;
   height: 100%;
-}
-
-#root-inner {
-  display: grid;
-  align-items: center;
-  justify-items: center;
 }
 
 .product-wrapper {
@@ -16,7 +10,10 @@ html, body, #root, #root-inner {
 }
 
 vviinn-product-card {
-  align-items: start;
+  --product-card-content-align: ${args.productCardContentAlign};
+  --product-card-text-align: ${args.productCardTextAlign};
+  --product-card-image-border: ${args.productCardImageBorder};
+  --product-card-image-bg-color: ${args.productCardImageBgColor};
 }
 
 </style>
