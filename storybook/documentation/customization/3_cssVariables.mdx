@@ -1,38 +1,107 @@
 import { Meta, Story, Canvas } from "@storybook/blocks";
 
+import "./variables.css";
+
+import { vviinnToken, productIdSimilarProducts, productIdCrossSelling } from "../../helpers";
+import "../../components/tabs/styles.css";
+import { clickHandlers } from "../../components"
+
 <Meta title="Customization/CSS Variables" />
 
 # CSS Variables
 
-Style with [CSS Custom Properties](https://developer.mozilla.org/en-US/docs/Web/CSS/--*)
+Apply css style generally with [CSS Custom Properties (CSS Variables)](https://developer.mozilla.org/en-US/docs/Web/CSS/--*) for all or specific Vviinn widgets.
 
-## Using CSS Custom Properties
+## CSS Custom Properties (CSS Variables)
 
-You can customize `vviinn-vps-button` and `vviinn-vps-widget` with these properties:
+### Search Modal
 
 * \--color-primary *used on the main action button, slider bullets, selected detected object or filter, and some other parts*
 * \--color-primary-hover *used on the main action button when hovering*
 * \--color-icons *used in svg icons fill*
 
-All widgets, which using product cards, you can customize with these properties:
+### Product Card
 
 * \--product-card-content-align *used on the product card content alignment*
 * \--product-card-text-align *used on the product card text alignment*
 * \--product-card-image-border *used on the product card image border*
 * \--product-card-image-bg-color *used on the product card background*
 
-With the `--product-card-width` variable you can customize product card width for widgets using the product card's grid, like `vviinn-vps-widget`, `vviinn-vps-button`, and `vviinn-results`.
+Note: in all widgets that use product card(like `vviinn-vps-widget`, `vviinn-vps-button`, and `vviinn-results`.), can be customized with these variables.
 
 
+## Applying CSS Variables to Widgets
+
+Apply the CSS variables to the all `Vviinn Widgets` of the page by using the `html` selector as shown in the following example:
 ```css
 html {
+  ...
   --color-primary: #0f62fe;
-  --color-primary-hover: lightblue;
-  --color-icons: rgba(255, 0, 0, 0.5);
-  --product-card-content-align: flex-start;
-  --product-card-text-align: left;
-  --product-card-image-border: 1px solid #ccc;
-  --product-card-image-bg-color: #f9f9f9;
-  --product-card-width: 400px;
+  ...
 }
 ```
+
+If you want to apply the variables to a specific widget, you can use the widget name as a selector as shown in the following example:
+```css
+vviinn-vps-button {
+  ...
+  --color-primary: #0f62fe;
+  ...
+}
+```
+
+## Examples
+
+<div id="change-primary-color">
+    <div className="tab tab-reverse">
+        <h3>Primary Color</h3>
+        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'change-primary-color')}}>Code</button>
+        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'change-primary-color')}}>Preview</button>
+    </div>
+    
+    <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
+        <div className="tabcontent-preview">
+            <vviinn-vps-button id="vviinn-vps-primary-colors" token={vviinnToken}></vviinn-vps-button>
+        </div>
+    </div>
+    <div id="Code_1" className="tabcontent">
+```html
+<style>
+    vviinn-vps-button {
+      --color-primary: red;
+    }
+</style>
+<vviinn-vps-button 
+    token="TOKEN" 
+></vviinn-vps-button>
+```
+    </div>
+</div>
+
+<div id="product-card-image-border">
+    <div className="tab tab-reverse">
+        <h3>Product Card Image Border</h3>
+        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'product-card-image-border')}}>Code</button>
+        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'product-card-image-border')}}>Preview</button>
+    </div>
+    <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
+        <div className="tabcontent-preview">
+            <vviinn-vpr-widget id="vviinn-vpr-image-border" token={vviinnToken} product-id={productIdCrossSelling}>
+            </vviinn-vpr-widget>
+        </div>
+    </div>
+    <div id="Code_2" className="tabcontent">
+```html
+<style>
+  vviinn-vpr-widget {
+    --product-card-image-border: 1px solid red;
+  }
+</style>
+
+<vviinn-vpr-widget 
+    token="TOKEN" 
+    product-id="PRODUCT_ID"
+></vviinn-vpr-widget>
+```
+    </div>
+</div>
