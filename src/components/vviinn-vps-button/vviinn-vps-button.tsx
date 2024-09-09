@@ -10,7 +10,12 @@ import {
   EventEmitter,
 } from "@stencil/core";
 import { version } from "../../../package.json";
-import { CameraIcon } from "../vviinn-icons";
+import {
+  SearchModalCameraIcon,
+  SearchModalUploadIcon,
+  SearchModalFullSearchIcon,
+  SearchModalImageSearchIcon,
+} from "../vviinn-icons";
 import { SlotSkeleton } from "../customized-slots";
 import {
   BasicEventData,
@@ -184,7 +189,15 @@ export class VviinnVpsButton {
           part="vviinn-button"
         >
           <slot>
-            <CameraIcon />
+            {this.mode === "camera" ? (
+              <SearchModalCameraIcon />
+            ) : this.mode === "upload" ? (
+              <SearchModalUploadIcon />
+            ) : this.textSearchShow ? (
+              <SearchModalFullSearchIcon />
+            ) : (
+              <SearchModalImageSearchIcon />
+            )}
           </slot>
         </vviinn-button>
 
