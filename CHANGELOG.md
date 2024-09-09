@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.87.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.86.0...v2.87.0) (2024-09-09)
+
+
+### Features
+
+* Adding Nuxt documentation ([1436f7e](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/1436f7eecfb28821121ba86c3c0b09b7ea118bc8))
+
 ## [2.86.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.85.2...v2.86.0) (2024-09-09)
 
 
