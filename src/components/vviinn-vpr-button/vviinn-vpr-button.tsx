@@ -115,8 +115,6 @@ export class VviinnVprButton {
   @Prop() modalScrollbar: boolean = false;
   /** Position of the modal */
   @Prop() position: "bottom" | "right" = "bottom";
-  /** Image for showing in the modal's header */
-  @Prop() sourceImage: string | null = null;
   /** Add default styles to the button */
   @Prop() addStyle: boolean = true;
 
@@ -186,7 +184,6 @@ export class VviinnVprButton {
     sidebar.productId = this.productId;
     sidebar.token = this.token;
     sidebar.position = this.position;
-    sidebar.sourceImage = this.sourceImage;
     sidebar.widgetScrollbar = this.modalScrollbar;
     sidebar.campaigns = this.campaigns;
     sidebar.campaignType = this.campaignType;
