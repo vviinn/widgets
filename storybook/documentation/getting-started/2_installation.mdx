@@ -13,6 +13,7 @@ Since `Vviinn Widgets` are developed as [Web Components](https://developer.mozil
   <button className="tablink" onClick={(e)=> {clickHandlers(e, 'React', 'main')}}>React</button>
   <button className="tablink" onClick={(e)=> {clickHandlers(e, 'Angular', 'main')}}>Angular</button>
   <button className="tablink" onClick={(e)=> {clickHandlers(e, 'Vue', 'main')}}>Vue</button>
+  <button className="tablink" onClick={(e)=> {clickHandlers(e, 'Nuxt', 'main')}}>Nuxt</button>
   <button className="tablink" onClick={(e)=> {clickHandlers(e, 'WebView', 'main')}}>Mobile&nbsp;App</button>
 </div>
 
@@ -548,4 +549,74 @@ We also used 2 packages, `webview_flutter` and `permission_handler` to be able t
 
 To redirect to the product details page that you have in your mobile app you need to listen to the `vviinnProductClick` event and based on the `product ID` redirect to the product details page. To prevent the default redirection, you should set the `product-details-redirect` property to `false` in your widget component.
 </div>
+
+<div id="Nuxt" className="tabcontent">
+# Nuxt
+
+In this section, you can learn how to use the Vviinn Widgets in your Nuxt app.
+
+## Install using CDN
+
+Using this way, you need to add Vviinn scripts to the `head` section to be able to use Vviinn Widgets as shown below:
+
+```javascript
+<template>
+  <div>
+    <vviinn-vps-widget
+      token="YOUR_TOKEN"
+    ></vviinn-vps-widget>
+
+    <Script src="https://cdn.jsdelivr.net/npm/vviinn-widgets/www/build/vviinn-widgets.esm.j" type="module"></Script>
+  </div>
+</template>
+```
+
+## Install using NPM
+
+To use widgets as a module you should install Vviinn Widgets from [NPM](https://www.npmjs.com/package/vviinn-widgets).
+
+Then create a `client component` in Nuxt and import the Vviinn Widgets as shown below:
+
+```javascript
+<script>
+const loader = await import('vviinn-widgets/dist/loader')
+
+loader.applyPolyfills().then(() => {
+  loader.defineCustomElements()
+})
+</script>
+
+<template>
+  <div>
+    <vviinn-vps-button 
+      token="YOUR_TOKEN"
+    ></vviinn-vps-button> 
+  </div>
+</template>
+```
+
+The final step will be to use this client component.
+
+## Fix [Vue warn]: Failed to resolve component: vviinn-...
+
+To fix the "Failed to resolve component" warning, you need to add the following code to the `nuxt.config.js` file:
+
+```javascript
+export default defineNuxtConfig({
+  ...,
+  vue: {  
+    compilerOptions: {
+      isCustomElement:  (tag) => {
+        return tag.startsWith('vviinn-')
+      },
+    },
+  },
+  ...
+})
+```
+
+Note: This document has been prepared based on Nuxt v3.13.
+
+</div>
+
 </div>
