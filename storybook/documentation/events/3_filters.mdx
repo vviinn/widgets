@@ -56,21 +56,23 @@ Events related to the filters  are mainly for internal usage inside Vviinn compo
 ## Listen to Events. Examples
 
 ```javascript
-document.addEventListener("vviinnFilters", ({ detail }) => {
+document.addEventListener("vviinnFiltersChanged", ({ detail }) => {
   console.log(detail);
 });
 
 // Output:
 {
-    "productId": "123456",
-    "productRank": 0,
-    "productName": "Couchtisch Rolf Benz 8770",
-    "productType": "Table",
-    "widgetType": "VPR",
-    "campaignTypeId": "VPR",
-    "campaignTypeName": "Similar Products",
-    "widgetId": "vpr-widget-1",
-    "widgetVersion": "2.1.0"
+  "filters": [
+      {
+          "column": "color",
+          "values": [
+              "beige > #c7b3a8"
+          ]
+      }
+  ],
+  "el": {
+      "s-p": []
+  }
 }
 // ... and other loaded products
 ```
