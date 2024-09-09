@@ -10,7 +10,7 @@ import { filters } from "../components/constants";
 
 # Content Slots
 
-You can use [Slots](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_templates_and_slots#adding_flexibility_with_slots) in order to change and customize the contents of following Vviinn widgets:
+You can use [Slots](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_templates_and_slots#adding_flexibility_with_slots) to change and customize the contents of the following `Vviinn Widgets`:
 
 - [Discovery Slider](#slider)
 - [Discovery Set](#set)
@@ -19,9 +19,9 @@ You can use [Slots](https://developer.mozilla.org/en-US/docs/Web/Web_Components/
 
 ## Discovery
 
-Here are slots that could be used for [Discovery Slider](?path=/docs/widgets-discovery-slider--docs) and [Discovery Set](?path=/docs/widgets-discovery-set--docs) widgets (`vviinn-vpr-button`, `vviinn-vpr-widget`):
+Here are slots that could be used for [Discovery Slider](?path=/docs/widgets-discovery-slider--docs), [Discovery Set](?path=/docs/widgets-discovery-set--docs) and [One-click Discovery](?path=/docs/widgets-one-click-discovery--docs) widgets.
 
-### Slider
+### Discovery Slider Slots:
 
 * vviinn-recommendations-title - *Recommendations title text*
 * vviinn-basket-button-text - *Text of Add to Basket button*
@@ -29,7 +29,6 @@ Here are slots that could be used for [Discovery Slider](?path=/docs/widgets-dis
 
 <div id="discovery-slider-example">
     <div className="tab tab-reverse">
-        <h3>Discovery Grid and Fluid</h3>
         <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'discovery-slider-example')}}>Code</button>
         <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'discovery-slider-example')}}>Preview</button>
     </div>
@@ -66,11 +65,11 @@ Here are slots that could be used for [Discovery Slider](?path=/docs/widgets-dis
 
 <div id="discovery-slider-modal-example">
     <div className="tab tab-reverse">
-        <h3>Discovery Modal</h3>
+        <h3>One-click Discovery Slider Slots</h3>
         <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'discovery-slider-modal-example')}}>Code</button>
         <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'discovery-slider-modal-example')}}>Preview</button>
     </div>
-    <div className='tab-sub-title'>Changing icon of Discovery Slider button </div>
+    <div className='tab-sub-title'>In addition to Discovery Slider slots, an icon of the One-click Discovery button could be changed.</div>
     <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
             <vviinn-vpr-button token={vviinnToken} product-id={productIdSimilarProducts} mode="grid" block-title="" add-to-basket-show="true">
@@ -105,7 +104,7 @@ Here are slots that could be used for [Discovery Slider](?path=/docs/widgets-dis
 </div>
 
 
-### Set
+### Discovery Set Slots:
 
 * vviinn-recommendations-title - *Recommendations title text*
 * vviinn-recommendations-subtitle - *Recommendations subtitle text*
@@ -120,7 +119,6 @@ Here are slots that could be used for [Discovery Slider](?path=/docs/widgets-dis
 
 <div id="discovery-set-example">
     <div className="tab tab-reverse">
-        <h3>Discovery Set</h3>
         <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_3', 'discovery-set-example')}}>Code</button>
         <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_3', 'discovery-set-example')}}>Preview</button>
     </div>
@@ -168,11 +166,11 @@ Here are slots that could be used for [Discovery Slider](?path=/docs/widgets-dis
 
 <div id="discovery-set-modal-example">
     <div className="tab tab-reverse">
-        <h3>Discovery Set Modal</h3>
+        <h3>One-click Discovery Set Slots</h3>
         <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_4', 'discovery-set-modal-example')}}>Code</button>
         <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_4', 'discovery-set-modal-example')}}>Preview</button>
     </div>
-    <div className='tab-sub-title'>Changing icon of Discovery Set button </div>
+    <div className='tab-sub-title'>In addition to Discovery Set slots, an icon of the One-click Discovery button could also be changed.</div>
     <div id="Preview_4" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
             <vviinn-vpr-button token={vviinnToken} product-id={productIdCrossSelling} mode="set" campaign-type="VCS">
@@ -219,15 +217,17 @@ Here are slots that could be used for [Discovery Slider](?path=/docs/widgets-dis
 
 ## Search Modal
 
-Slots that could be used in [Search Modal](?path=/docs/widgets-search-modal--docs) (`vviinn-vps-widget` and `vviinn-vps-button`):
+Slots that could be used for [Search Modal](?path=/docs/widgets-search-modal--docs) widget.
 
-* vviinn-teaser-text – *Text on widget's main screen*
+### Search Modal Slots:
+
+* vviinn-teaser-text – *Text on the widget's main screen*
 * vviinn-image-upload-button-text – *Title of Upload Button*
 * vviinn-image-upload-icon - *Icon of Upload Button*
 * vviinn-camera-button-text-start - *Title of Start Camera button (for Desktop)*
 * vviinn-camera-button-text-stop - *Title of Stop Camera button (for Desktop)*
 * vviinn-camera-icon - *Icon of Camera Button*
-* vviinn-text-search-icon - *Icon of text search block*
+* vviinn-text-search-icon - *Icon of the text search block*
 * vviinn-privacy-badge-text – *Text content of privacy notification block*
 * vviinn-image-search-modal-title – *Image search modal title*
 * vviinn-energy-label-data-sheet-text - *Text of the data sheet link for the energy label*
@@ -283,7 +283,9 @@ Slots that could be used in [Search Modal](?path=/docs/widgets-search-modal--doc
 
 ## Filters
 
-Slots that could be used in Extended Filters Widget (`vviinn-extended-filters`):
+Slots that could be used for [Extended Filters](?path=/docs/components-filters--docs) component.
+
+### Filters Slots:
 
 * vviinn-extended-filters-title – *Text on widget's header*
 * vviinn-extended-filters-apply – *Title of Apply Button*
