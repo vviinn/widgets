@@ -64,6 +64,7 @@ const CAMERA_START_DELAY = 500;
  * @slot vviinn-text-search-icon - Icon of text search block.
  * @slot vviinn-privacy-badge-text - Text content of privacy notification block.
  * @slot vviinn-image-search-modal-title - Image search modal title.
+ * @slot vviinn-energy-label-data-sheet-text - Text of the data sheet link for the energy label.
  *
  * @part close-button - Close Button in the modal's header.
  * @part secondary-action - Back Button in the modal's header.
@@ -133,6 +134,8 @@ export class VviinnVpsWidget {
   @Prop() mode: VisualSearchMode = "modal";
   /** @internal */
   @Prop() resetVpsButton: () => void;
+  /** @internal */
+  @Prop() replaceSlotsContentInButton?: () => void;
 
   @State() slidePosition: number = 0;
   @State() width: number = 0;
@@ -189,6 +192,14 @@ export class VviinnVpsWidget {
   private initResultEvents() {
     searchState.resultLoaded = false;
     searchState.resultViewed = false;
+  }
+
+  private replaceSlotsContent() {
+    const slots = this.el.querySelectorAll("[slot]");
+    this.globalSlotsChanged.emit({
+      slots: Array.from(slots),
+      element: this.el,
+    });
   }
 
   private stopStreamTracks() {
@@ -303,11 +314,7 @@ export class VviinnVpsWidget {
   }
 
   componentDidLoad() {
-    const slots = this.el.querySelectorAll("[slot]");
-    this.globalSlotsChanged.emit({
-      slots: Array.from(slots),
-      element: this.el,
-    });
+    this.replaceSlotsContent();
   }
 
   setTrackingDeactivated = (result: EventConfirmation) => {
@@ -755,6 +762,10 @@ export class VviinnVpsWidget {
                   showAspectRatioError={this.showAspectRatioError}
                   trackingDeactivated={this.trackingDeactivated}
                   resetState={this.resetState.bind(this)}
+                  replaceSlotsContentInWidget={this.replaceSlotsContent.bind(
+                    this
+                  )}
+                  replaceSlotsContentInButton={this.replaceSlotsContentInButton}
                   textSearchQuery={this.searchQuery}
                 />
               )}
