@@ -107,6 +107,7 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @slot vviinn-basket-button-icon - Text of Add to Basket icon (Set mode).
  * @slot vviinn-basket-button-text-pressed - Text of pressed Add to Basket button (Set mode).
  * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button (Set mode).
+ * @slot vviinn-energy-label-data-sheet-text - Text of the data sheet link for the energy label.
  */
 
 @Component({
@@ -236,7 +237,6 @@ export class VviinnVprWidget implements ComponentInterface {
   private resultViewed: boolean = false;
   private isSetMode: boolean;
   private isGridMode: boolean;
-  private isContinuityMode: boolean;
   private requestDynamicFilters: RequestDynamicFilters = [];
   trackingApi: DefaultApi;
   uiSessionId: string;
@@ -338,7 +338,6 @@ export class VviinnVprWidget implements ComponentInterface {
     this.trackWidgetEvent("load");
     this.isSetMode = this.mode === "set";
     this.isGridMode = this.mode === "grid";
-    this.isContinuityMode = this.mode === "continuity";
     if (this.isSetMode && this.setModeDiscounts.length) {
       this.setModeDiscountsArray = this.setModeDiscounts
         .split(",")
@@ -721,7 +720,6 @@ export class VviinnVprWidget implements ComponentInterface {
         responsive={this.isGridMode}
         basketButtonShow={this.addToBasketShow}
         mode={this.mode}
-        dimmedBackground={this.useDimmedBackgroundInCard()}
         campaignTypeId={this.campaignType}
         index={index}
         widgetElementId={this.id}
@@ -732,10 +730,6 @@ export class VviinnVprWidget implements ComponentInterface {
         priceLabel={calculatePriceLabel(recommendation)}
       />
     );
-  }
-
-  private useDimmedBackgroundInCard(): boolean {
-    return this.isContinuityMode || this.isSetMode || !this.useCarousel;
   }
 
   private renderResults() {

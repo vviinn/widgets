@@ -10,6 +10,9 @@ import { vviinnToken, productIdCrossSelling, productIdSimilarProducts } from "..
 
 ## Examples
 
+One-click discovery allows you to display products with a single click inside the modal.
+Here are 3 examples, using different modes: `continuity` (default), `grid`, and `set`:
+
 <div id="one-click">
     <div className="tab tab-reverse">
         <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'one-click')}}>Code</button>
@@ -29,7 +32,7 @@ import { vviinnToken, productIdCrossSelling, productIdSimilarProducts } from "..
                         <vviinn-vpr-button 
                             token={vviinnToken}
                             product-id={productIdCrossSelling}
-                            mode="grid" 
+                            mode="continuity" 
                             block-title=""
                         ></vviinn-vpr-button> 
                     </div>
@@ -45,6 +48,21 @@ import { vviinnToken, productIdCrossSelling, productIdSimilarProducts } from "..
                             token={vviinnToken}
                             product-id={productIdSimilarProducts} 
                             mode="grid" 
+                            block-title=""
+                        ></vviinn-vpr-button> 
+                    </div>
+                </div>
+                        <div className="product">
+                    <a className="product__image" href="#"></a>
+                    <div className="product__name">
+                        <a href="#">Product Name</a>
+                    </div>
+                    <div className="product__price">
+                        $10.00  
+                        <vviinn-vpr-button 
+                            token={vviinnToken}
+                            product-id={productIdSimilarProducts} 
+                            mode="set" 
                             block-title=""
                         ></vviinn-vpr-button> 
                     </div>
@@ -65,7 +83,7 @@ import { vviinnToken, productIdCrossSelling, productIdSimilarProducts } from "..
             <vviinn-vpr-button 
                 token="TOKEN" 
                 product-id="PRODUCT_ID" 
-                mode="grid" 
+                mode="continuity" 
                 block-title=""
             ></vviinn-vpr-button> 
         </div>
@@ -81,6 +99,21 @@ import { vviinnToken, productIdCrossSelling, productIdSimilarProducts } from "..
                 token="TOKEN" 
                 product-id="PRODUCT_ID" 
                 mode="grid" 
+                block-title=""
+            ></vviinn-vpr-button> 
+        </div>
+    </div>
+        <div class="product">
+        <a class="product__image" href="#"></a>
+        <div class="product__name">
+            <a href="#">Product Name</a>
+        </div>
+        <div class="product__price">
+            $10.00  
+            <vviinn-vpr-button 
+                token="TOKEN" 
+                product-id="PRODUCT_ID" 
+                mode="set" 
                 block-title=""
             ></vviinn-vpr-button> 
         </div>

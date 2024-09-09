@@ -448,7 +448,6 @@ export class VviinnCarousel {
         price={recommendation.price.actual}
         salePrice={salePrice}
         responsive={this.isGridMode}
-        dimmedBackground={this.isContinuityMode || this.isSetMode}
         campaignTypeId={this.campaignTypeId}
         index={rank}
         widgetElementId={this.widgetElementId}
@@ -544,7 +543,6 @@ export class VviinnCarousel {
               price={this.sourceProduct.price.actual}
               imageRatio={1}
               imageWidth={300}
-              dimmedBackground={true}
               isSourceProduct={true}
               currency={this.currencySign}
               pricePrefix={this.pricePrefix}

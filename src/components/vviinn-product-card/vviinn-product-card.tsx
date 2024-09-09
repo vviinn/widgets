@@ -96,7 +96,6 @@ export class VviinnProductCard {
   @Prop() productType: string | undefined;
   @Prop() salePrice: number | undefined;
   @Prop() responsive: boolean = false;
-  @Prop() dimmedBackground: boolean = false;
   @Prop() mode?: CarouselMode;
   @Prop() basketButtonShow: boolean;
   @Prop() updateButtonLocation: UpdateButtonLocation;
@@ -127,6 +126,8 @@ export class VviinnProductCard {
   @Prop() currentDiscountPercentage?: number;
   /** @internal */
   @Prop() isSourceProduct: boolean = false;
+  /** @internal */
+  @Prop() isResultsWidget: boolean = false;
 
   @State() isTransitioning: boolean = false;
   @State() basketButonPressed: boolean = false;
@@ -240,6 +241,7 @@ export class VviinnProductCard {
   }
 
   private intersectionCallback = (data: IntersectionObserverEntry[]) => {
+    if (!data.length) return;
     if (data.some((entry) => entry.isIntersecting)) {
       pipe(
         getAnalyticsModule,
@@ -305,9 +307,11 @@ export class VviinnProductCard {
       <Host
         part="product-card"
         class={{
-          dimmed: this.dimmedBackground,
           animated: this.isTransitioning,
           "set-mode": this.isSetMode,
+          "grid-mode": this.isGridMode,
+          "continuity-mode": this.isContinuityMode,
+          "results-widget": this.isResultsWidget,
         }}
         exportparts="brand,price-label, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, discount-label, discount-percentage, title, basket-button, update-button-item, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
       >
@@ -317,7 +321,7 @@ export class VviinnProductCard {
 
         {this.isTransitioning ? (
           <Fragment>
-            <vviinn-skeleton height={20} />
+            <vviinn-skeleton height={40} />
             <vviinn-skeleton height={20} halfWidth={true} />
           </Fragment>
         ) : (
@@ -331,13 +335,15 @@ export class VviinnProductCard {
               {this.brand}
             </span>
 
-            {this.energyCertifications?.length &&
-              this.energyCertifications.map((energyCertification) => (
-                <vviinn-energy-label
-                  energyCertification={energyCertification}
-                  productClickHandler={this.productClickHandler.bind(this)}
-                ></vviinn-energy-label>
-              ))}
+            {(this?.energyCertifications ?? []).map((energyCertification) => (
+              <vviinn-energy-label
+                classLabelUrl={energyCertification?.classLabelUrl}
+                classIconUrls={energyCertification?.classIconUrls}
+                classDataSheetUrl={energyCertification?.classDataSheetUrl}
+                productType={energyCertification?.productType}
+                productClickHandler={this.productClickHandler.bind(this)}
+              ></vviinn-energy-label>
+            ))}
 
             <Price
               prefix={this.pricePrefix}
@@ -361,71 +367,81 @@ export class VviinnProductCard {
 
         {(this.basketButtonShow || this.isSetMode) && (
           <Fragment>
-            {this.isTransitioning && <vviinn-skeleton height={44} />}
+            {this.isTransitioning && <vviinn-skeleton height={40} />}
+            <div class="basket-button-wrapper">
+              <button
+                class={{
+                  "basket-button": true,
+                  "basket-button--hidden": this.isTransitioning,
+                  "basket-button-grid": this.isGridMode || this.isSetMode,
+                  "basket-button-continuity ": this.isContinuityMode,
+                  pressed: this.basketButonPressed,
+                }}
+                part="basket-button"
+                onClick={() => {
+                  this.vviinnAddToBasket.emit({
+                    ...this.productData,
+                    discount: this.currentDiscountPercentage,
+                  });
+                  this.basketButonPressed = true;
+                }}
+              >
+                {this.isSetMode ? (
+                  <Fragment>
+                    {!this.basketButonPressed && (
+                      <div class="basket-button-content" key="set-not-pressed">
+                        <span class="basket-button-icon-container">
+                          <slot name="vviinn-basket-button-icon">
+                            <BasketIcon />
+                          </slot>
+                        </span>
+                        <span>
+                          <slot name="vviinn-basket-button-text">
+                            {i18next.t("setMode.basketButtonText")}
+                          </slot>
+                        </span>
+                      </div>
+                    )}
 
-            <button
-              class={{
-                "basket-button": true,
-                "basket-button--hidden": this.isTransitioning,
-                "basket-button-grid": this.isGridMode || this.isSetMode,
-                "basket-button-continuity ": this.isContinuityMode,
-                pressed: this.basketButonPressed,
-              }}
-              part="basket-button"
-              onClick={() => {
-                this.vviinnAddToBasket.emit({
-                  ...this.productData,
-                  discount: this.currentDiscountPercentage,
-                });
-                this.basketButonPressed = true;
-              }}
-            >
-              {this.isSetMode ? (
-                <Fragment>
-                  {!this.basketButonPressed && (
-                    <div key="set-not-pressed" class="basket-button-container">
-                      <span class="basket-button-icon-container">
-                        <slot name="vviinn-basket-button-icon">
-                          <BasketIcon />
-                        </slot>
-                      </span>
-                      <span>
-                        <slot name="vviinn-basket-button-text">
-                          {i18next.t("setMode.basketButtonText")}
-                        </slot>
-                      </span>
-                    </div>
-                  )}
-
-                  {this.basketButonPressed && (
-                    <div key="set-pressed" class="basket-button-container">
-                      <span class="basket-button-icon-container">
-                        <slot name="vviinn-basket-button-icon-pressed">
-                          <CheckCircleIcon />
-                        </slot>
-                      </span>
-                      <span>
-                        {this.appliedDiscountPercentage && (
-                          <span
-                            class="discount-percentage"
-                            part="discount-percentage"
-                          >
-                            {this.appliedDiscountPercentage}%
-                          </span>
-                        )}
-                        <slot name="vviinn-basket-button-text-pressed">
-                          {i18next.t("setMode.appliedDiscountText")}
-                        </slot>
-                      </span>
-                    </div>
-                  )}
-                </Fragment>
-              ) : (
-                <slot name="vviinn-basket-button-text">
-                  {i18next.t("basketButtonText")}
-                </slot>
-              )}
-            </button>
+                    {this.basketButonPressed && (
+                      <div key="set-pressed" class="basket-button-content">
+                        <span class="basket-button-icon-container">
+                          <slot name="vviinn-basket-button-icon-pressed">
+                            <CheckCircleIcon />
+                          </slot>
+                        </span>
+                        <span>
+                          {this.appliedDiscountPercentage && (
+                            <span
+                              class="discount-percentage"
+                              part="discount-percentage"
+                            >
+                              {this.appliedDiscountPercentage}%
+                            </span>
+                          )}
+                          <slot name="vviinn-basket-button-text-pressed">
+                            {i18next.t("setMode.appliedDiscountText")}
+                          </slot>
+                        </span>
+                      </div>
+                    )}
+                  </Fragment>
+                ) : (
+                  <div key="not-pressed" class="basket-button-content">
+                    <span class="basket-button-icon-container">
+                      <slot name="vviinn-basket-button-icon">
+                        <BasketIcon />
+                      </slot>
+                    </span>
+                    <span>
+                      <slot name="vviinn-basket-button-text">
+                        {i18next.t("basketButtonText")}
+                      </slot>
+                    </span>
+                  </div>
+                )}
+              </button>
+            </div>
           </Fragment>
         )}
 
