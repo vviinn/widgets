@@ -40,4 +40,19 @@ export const argTypes = {
       type: "select",
     },
   },
+  energyCertifications: {
+    table: {
+      disable: true,
+    },
+  },
+  energyCertificationsString: {
+    table: {
+      disable: true,
+    },
+  },
+  showInStorybook: {
+    table: {
+      disable: true,
+    },
+  },
 };

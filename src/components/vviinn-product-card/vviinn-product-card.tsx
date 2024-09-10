@@ -45,6 +45,7 @@ import {
   EnergyCertification,
   Recommendation,
 } from "../../interfaces/recommendation";
+import { resources } from "../../locale/resources";
 
 /**
  * @part brand - product brand.
@@ -96,11 +97,11 @@ export class VviinnProductCard {
   @Prop() productType: string | undefined;
   @Prop() salePrice: number | undefined;
   @Prop() responsive: boolean = false;
-  @Prop() mode?: CarouselMode;
+  @Prop() mode?: CarouselMode = "continuity";
   @Prop() basketButtonShow: boolean;
   @Prop() updateButtonLocation: UpdateButtonLocation;
   @Prop() priceLabel: string;
-  @Prop() energyCertifications?: EnergyCertification[];
+  @Prop({ mutable: true }) energyCertifications?: EnergyCertification[];
 
   /** @internal */
   @Prop() productId: string;
@@ -128,6 +129,10 @@ export class VviinnProductCard {
   @Prop() isSourceProduct: boolean = false;
   /** @internal */
   @Prop() isResultsWidget: boolean = false;
+  /** @internal */
+  @Prop() energyCertificationsString: string = "";
+  /** @internal */
+  @Prop() showInStorybook: boolean = false;
 
   @State() isTransitioning: boolean = false;
   @State() basketButonPressed: boolean = false;
@@ -170,6 +175,15 @@ export class VviinnProductCard {
     this.isSetMode = this.mode === "set";
     this.isGridMode = this.mode === "grid";
     this.isContinuityMode = this.mode === "continuity";
+
+    if (this.showInStorybook) {
+      this.parseEnergyCertificationsString();
+      i18next.init({
+        lng: this.locale,
+        fallbackLng: "en",
+        resources,
+      });
+    }
   }
 
   componentWillLoad() {
@@ -218,6 +232,18 @@ export class VviinnProductCard {
   @Watch("productId")
   productIdWatcher() {
     this.productData = this.getProductData();
+  }
+
+  private parseEnergyCertificationsString() {
+    if (this.energyCertificationsString === "") return;
+
+    try {
+      this.energyCertifications = JSON.parse(
+        this.energyCertificationsString
+      ) as EnergyCertification[];
+    } catch (e) {
+      console.error("Invalid filters string", e);
+    }
   }
 
   private getWidgetType() {

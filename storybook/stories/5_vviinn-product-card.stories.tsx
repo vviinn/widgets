@@ -1,5 +1,6 @@
 import { argTypes } from "../../src/components/vviinn-product-card/stories/args";
 import { productDecorator } from "../../src/components/vviinn-product-card/stories/decorators";
+import { energyCertificationsString } from "../documentation/components/constants";
 
 export default {
   title: "Playground/Product Card",
@@ -35,9 +36,9 @@ const Template = (args) => {
       product-card-text-align="${args.productCardTextAlign}"
       product-card-image-border="${args.productCardImageBorder}"
       product-card-image-bg-color="${args.productCardImageBgColor}"
-    >
-      <span slot="vviinn-basket-button-text">Add to basket</span>
-    </vviinn-product-card>`;
+      energy-certifications-string='${args.energyCertificationsString}'
+      show-in-storybook="${args.showInStorybook}"
+    ></vviinn-product-card>`;
 };
 
 export const Default = Template.bind({});
@@ -50,7 +51,7 @@ Default.args = {
   mode: "continuity",
   imageWidth: 240,
   brand: "Ronald Schmitt",
-  locale: "de-DE",
+  locale: "en-US",
   currency: "€",
   image:
     "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg",
@@ -66,4 +67,6 @@ Default.args = {
   productCardTextAlign: "left",
   productCardImageBorder: "none",
   productCardImageBgColor: "#f4f4f4",
+  showInStorybook: true,
+  energyCertificationsString,
 };
