@@ -15,6 +15,7 @@ import { BasicEventData } from "../../../recommendation/events";
 import { CampaignName } from "../../../campaign/Campaign";
 import { Locale } from "../../../locale";
 import { UpdateButtonLocation } from "../../vviinn-vpr-widget/vviinn-vpr-widget";
+import { searchState } from "../../../store/search.store";
 
 type SidebarState = "idle" | "open" | "closed";
 type ClickEvent = Event & { clientX: number; clientY: number };
@@ -31,7 +32,6 @@ export class RecommendationsSidebar {
   @Prop() token: string;
   @Prop() productId: string;
   @Prop() position: "bottom" | "right" = "bottom";
-  @Prop() sourceImage: string | null = null;
   @Prop() widgetScrollbar: boolean = false;
   @Prop() mode: CarouselMode = "continuity";
   /** comma-separated list of campaign-ids */
@@ -146,7 +146,7 @@ export class RecommendationsSidebar {
             class={{ "contains-source-img": this.isSourceImageValid() }}
             part="sidebar-header"
           >
-            {this.isSourceImageValid() ? this.renderSourceImage() : null}
+            {this.renderSourceImage()}
             <span class="title" part="title">
               {this.sidebarTitle}
             </span>
@@ -199,14 +199,20 @@ export class RecommendationsSidebar {
   }
 
   private renderSourceImage(): HTMLImageElement {
+    const sourceImageSrc =
+      searchState?.sourceProduct?.image?.thumbnail ??
+      searchState?.sourceProduct?.image?.original ??
+      null;
+
+    if (!sourceImageSrc) return null;
+
     return (
-      <img class="source-image" part="source-image" src={this.sourceImage} />
+      <img class="source-image" part="source-image" src={sourceImageSrc} />
     );
   }
 
-  private isSourceImageValid(): boolean {
-    return this.sourceImage?.length > 0;
-  }
+  private isSourceImageValid = (): boolean =>
+    !!searchState?.sourceProduct?.image;
 
   private handleAnimationEnd({ animationName }: AnimationEvent): void {
     const isClosingAnimation = animationName.includes("slideOut");
