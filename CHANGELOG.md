@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.89.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.89.0...v2.89.1) (2024-09-10)
+
+
+### Bug Fixes
+
+* Fix product details redirection for Search Widget ([b19aa2a](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/b19aa2a64d98ea14c1019b1a5d7989503de1e421))
+
 ## [2.89.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.88.0...v2.89.0) (2024-09-10)
 
 
