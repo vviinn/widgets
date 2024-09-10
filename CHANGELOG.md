@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.88.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.87.1...v2.88.0) (2024-09-10)
+
+
+### Features
+
+* documentation of events section ([8b77b4f](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/8b77b4fe9f25d538a3011f290876d49309f9aea0))
+* update customization section documentation ([7292c90](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/7292c90da2b304068a8d70cac1de0eea61908baa))
+
 ### [2.87.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.87.0...v2.87.1) (2024-09-09)
 
 
