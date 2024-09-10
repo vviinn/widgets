@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.90.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.89.1...v2.90.0) (2024-09-10)
+
+
+### Features
+
+* use related icons in search modal ([10b544b](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/10b544ba4bff95397e67b55afcea730e376b806e))
+
 ### [2.89.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.89.0...v2.89.1) (2024-09-10)
 
 
