@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.89.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.88.0...v2.89.0) (2024-09-10)
+
+
+### Features
+
+* Show source image in One-Click Discovery button ([ff5ed93](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/ff5ed9325e506ea78b7088cfaca473a7ca52d089))
+
 ## [2.88.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.87.1...v2.88.0) (2024-09-10)
 
 
