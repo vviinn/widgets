@@ -579,10 +579,10 @@ Then create a `client component` in Nuxt and import the Vviinn Widgets as shown 
 
 ```javascript
 <script>
-const loader = await import('vviinn-widgets/dist/loader')
+import {applyPolyfills, defineCustomElements } from 'vviinn-widgets/dist/loader';
 
-loader.applyPolyfills().then(() => {
-  loader.defineCustomElements()
+applyPolyfills().then(() => {
+  defineCustomElements()
 })
 </script>
 

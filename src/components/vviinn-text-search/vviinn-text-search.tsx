@@ -22,7 +22,7 @@ import { TextSearchMode } from "../../widget/types";
 
 /**
  * @part text-search-input - Text search input.
- * @slot vviinn-text-search-icon - Icon of text search block.
+ * @slot vviinn-text-search-icon - Icon of the text search block.
  */
 @Component({
   tag: "vviinn-text-search",
