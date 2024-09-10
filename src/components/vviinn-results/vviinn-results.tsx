@@ -411,7 +411,9 @@ export class VviinnResults {
   private findProductById(
     id: Recommendation["productId"]
   ): Recommendation | undefined {
-    return this.recommendations.find((r) => r.productId === id);
+    return (
+      this.recommendations.length ? this.recommendations : searchState.results
+    ).find((r) => r.productId === id);
   }
 
   private handleOpenLink(deeplink: string, event: MouseEvent) {
