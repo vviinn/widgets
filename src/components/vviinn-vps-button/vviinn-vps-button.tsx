@@ -24,7 +24,7 @@ import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 import { VisualSearchMode } from "../../widget/types";
 
 /**
- * @slot vviinn-teaser-text - Text on widget's main screen.
+ * @slot vviinn-teaser-text - Text on the widget's main screen.
  * @slot vviinn-image-upload-button-text - Title of Upload Button.
  * @slot vviinn-image-upload-icon - Icon of Upload Button.
  * @slot vviinn-camera-button-text-start - Title of Start Camera button.
@@ -32,7 +32,7 @@ import { VisualSearchMode } from "../../widget/types";
  * @slot vviinn-camera-icon - Icon of Camera Button.
  * @slot vviinn-privacy-badge-text - Text content of privacy notification block.
  * @slot vviinn-image-search-modal-title - Image search modal title.
- * @slot vviinn-text-search-icon - Icon of text search block.
+ * @slot vviinn-text-search-icon - Icon of the text search block.
  * @slot vviinn-energy-label-data-sheet-text - Text of the data sheet link for the energy label.
  *
  * @part close-button - Close Button in the modal's header.

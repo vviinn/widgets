@@ -1,37 +1,112 @@
 import { Meta, Story, Canvas } from "@storybook/blocks";
 
+import "./parts.css";
+import { vviinnToken, productIdSimilarProducts, productIdCrossSelling } from "../../helpers";
+
+import "../../components/tabs/styles.css";
+import { clickHandlers } from "../../components"
+
 <Meta title="Customization/Style CSS Parts" />
 
 # Style CSS Parts
 
-Style with CSS [Shadow Parts](https://developer.mozilla.org/en-US/docs/Web/CSS/::part)
+To style elements of `Vviinn Widgets` with CSS you can use [Shadow Parts](https://developer.mozilla.org/en-US/docs/Web/CSS/::part). 
 
-## Using Shadow Parts
+## List of Shadow Parts 
 
-Almost every component you can use exports some Shadow Parts. Use `component-name::part(part-name)` to add CSS rules to any exported part.
-For example, to style the title of product cards in `vviinn-vpr-widget` and to hide the price you can use this CSS snippet:
+Each component has its own set of Shadow Parts. You can see a list of each in the Playground section of this documentation.
+For example, [check](?path=/story/playground-discovery--grid) the list of available Shadow Parts for Discovery Slider at the bottom of the Controls tab (right sidebar).
 
-```css
-vviinn-vpr-widget::part(title) {
-  text-decoration: underline;
-  font-weight: bold;
-}
+## Examples
 
-vviinn-vpr-widget::part(price-container) {
-  display: none;
-}
+<div id="discovery-slider-example">
+    <div className="tab tab-reverse">
+        <h3>Discovery Slider</h3>
+        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'discovery-slider-example')}}>Code</button>
+        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'discovery-slider-example')}}>Preview</button>
+    </div>
+    <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
+        <div className="tabcontent-preview">
+            <vviinn-vpr-widget id="vviinn-discovery-slider" token={vviinnToken} product-id={productIdSimilarProducts} mode="grid" block-title="" add-to-basket-show="true">
+            </vviinn-vpr-widget>
+        </div>
+    </div>
+    <div id="Code_1" className="tabcontent">
+```html
+<style>
+  vviinn-vpr-widget::part(title) {
+    color: red;
+    font-weight: bold;
+  }
+</style>
+
+<vviinn-vpr-widget 
+    token="TOKEN" 
+    product-id="PRODUCT_ID"
+    mode="grid"
+    block-title=""
+    add-to-basket-show="true"
+>
+</vviinn-vpr-widget>
 ```
+    </div>
+</div>
 
-Let's style `vviinn-vps-button` using the same approach:
+<div id="discovery-set-example">
+    <div className="tab tab-reverse">
+        <h3>Discovery Set</h3>
+        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_3', 'discovery-set-example')}}>Code</button>
+        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_3', 'discovery-set-example')}}>Preview</button>
+    </div>
+    <div id="Preview_3" className="tabcontent" style={{display:"block"}}>
+        <div className="tabcontent-preview">
+            <vviinn-vpr-widget id="vviinn-discovery-set" token={vviinnToken} product-id={productIdCrossSelling} mode="set" campaign-type="VCS">
+            </vviinn-vpr-widget>
+        </div>
+    </div>
+    <div id="Code_3" className="tabcontent">
+```html
+<style>
+  vviinn-vpr-widget::part(recommendations-title) {
+    color: red;
+    font-weight: bold;
+  }
+</style>
 
-```css
-vviinn-vps-button::part(price-regular) {
-  text-decoration: underline;
-  font-weight: bold;
-}
+<vviinn-vpr-widget 
+    token="TOKEN" 
+    product-id="PRODUCT_ID"
+    mode="set"
+    campaign-type="VCS"
+></vviinn-vpr-widget>
 ```
+    </div>
+</div>
 
-Shadow Parts are listed in Widgets section of this documentation.
-It could be *image, title, price-regular, price-sale*, and others.
-
-For example, [check](?path=/story/playground-discovery--grid) the list of available Shadow Parts for `vviinn-vpr-widget` component at the bottom of Controls tab.
+<div id="search-modal-example">
+    <div className="tab tab-reverse">
+        <h3>Search Modal</h3>
+        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_5', 'search-modal-example')}}>Code</button>
+        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_5', 'search-modal-example')}}>Preview</button>
+    </div>
+    
+    <div id="Preview_5" className="tabcontent" style={{display:"block"}}>
+        <div className="tabcontent-preview">
+            <vviinn-vps-button token={vviinnToken} text-search-show="true"></vviinn-vps-button>
+        </div>
+    </div>
+    <div id="Code_5" className="tabcontent">
+```html
+<style>
+  vviinn-vps-button::part(upload-photo_button) {
+    color: red;
+    font-weight: bold;
+  }
+</style>
+<vviinn-vps-button 
+    token="TOKEN" 
+    text-search-show="true"
+></vviinn-vps-button>
+```
+    </div>
+</div>
