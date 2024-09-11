@@ -78,6 +78,11 @@
 .sub-filters-wrapper {
   gap: var(--spacing-100);
   margin-top: 16px;
+  margin: 16px -2px 0;
+}
+
+.sub-filters-wrapper > li {
+  padding: 2px;
 }
 
 .selected-filters-wrapper {
@@ -165,7 +170,7 @@
   cursor: pointer;
 }
 
-.filters-modal {
+.filters-modal.filters-modal-button {
   display: none;
 
   position: fixed;
@@ -178,11 +183,20 @@
   z-index: 98;
 }
 
+.filters-modal.filters-modal-preview {
+  display: block;
+}
+
 .filters-modal.open {
   display: block;
 }
 
 .filters-modal-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.filters-modal.filters-modal-button .filters-modal-wrapper {
   position: fixed;
   top: 0;
   bottom: 0;
@@ -191,12 +205,10 @@
   background-color: #ffffff;
   z-index: 99;
   border-radius: 32px 0px 0px 32px;
-  display: flex;
-  flex-direction: column;
 }
 
 @media (max-width: 768px) {
-  .filters-modal-wrapper {
+  .filters-modal.filters-modal-button .filters-modal-wrapper {
     width: 100%;
     top: 20%;
     border-radius: 32px 32px 0px 0px;
@@ -251,7 +263,7 @@
 
 .filters-modal-sub-list {
   display: none;
-  margin: 0 -4px;
+  margin: 0 -6px;
 }
 .filters-modal-sub-list > li {
   display: inline-block;
@@ -270,14 +282,19 @@
 
 .filters-modal-sub-list > li {
   margin-top: 10px;
+  padding: 2px;
 }
 
-.filters-modal-close {
+.filters-modal.filters-modal-button .filters-modal-close {
   position: absolute;
   right: 0;
   top: 15px;
   cursor: pointer;
   background: none;
+}
+
+.filters-modal.filters-modal-preview .filters-modal-close {
+  display: none;
 }
 
 .filters-more-modal-button {

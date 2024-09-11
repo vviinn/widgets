@@ -82,6 +82,7 @@ export class VviinnExtendedFilters {
   @Prop() filtersString: string = "";
   /** The locale for currency formatting and text localization */
   @Prop() locale: Locale = "de-DE";
+  @Prop() mode: "button" | "preview" = "button";
 
   @State() requestFilters: RequestDynamicFilters = [];
   @State() showMore: boolean = false;
@@ -238,7 +239,7 @@ export class VviinnExtendedFilters {
       <Host>
         {SlotSkeleton("filters")}
 
-        {this.filters.length > 0 && (
+        {this.filters.length > 0 && this.mode === "button" && (
           <button
             class="filters-more-button"
             onClick={() => (this.showMore = true)}
@@ -249,7 +250,9 @@ export class VviinnExtendedFilters {
         )}
 
         <div
-          class={`filters-modal ${this.showMore ? "open" : ""}`}
+          class={`filters-modal filters-modal-${this.mode} ${
+            this.showMore ? "open" : ""
+          }`}
           part="extended-filters-modal"
         >
           <div

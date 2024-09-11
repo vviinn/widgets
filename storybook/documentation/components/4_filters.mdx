@@ -39,7 +39,7 @@ import {filters} from "./constants";
 
 <div id="extended">
   <div className="tab tab-reverse">
-      <h3>Extended View</h3>
+      <h3>Extended Modal</h3>
 
       <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Details_2', 'extended')}}>Technical Details</button>
       <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'extended')}}>Code</button>
@@ -59,6 +59,32 @@ import {filters} from "./constants";
   </div>
 
   <div id="Details_2" className="tabcontent">
+    In order to see the results, you need to use this component in combination with other components like Product List.
+  </div>
+</div>
+
+<div id="extended-preview">
+  <div className="tab tab-reverse">
+      <h3>Extended Preview</h3>
+
+      <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Details_3', 'extended-preview')}}>Technical Details</button>
+      <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_3', 'extended-preview')}}>Code</button>
+      <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_3', 'extended-preview')}}>Preview</button>
+  </div>
+
+  <div id="Preview_3" className="tabcontent" style={{display:"block"}}>
+      <div className="tabcontent-preview">
+        <vviinn-extended-filters filters-string={filters} mode="preview"></vviinn-extended-filters>
+      </div>
+  </div>
+
+  <div id="Code_3" className="tabcontent">
+```html
+<vviinn-extended-filters mode="preview"></vviinn-extended-filters>
+```
+  </div>
+
+  <div id="Details_3" className="tabcontent">
     In order to see the results, you need to use this component in combination with other components like Product List.
   </div>
 </div>
