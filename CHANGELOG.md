@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.92.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.91.0...v2.92.0) (2024-09-11)
+
+
+### Features
+
+* changed icon of one-click dicovery set ([1001ead](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/1001ead623475ae7b5fa60f1a879e3e4be4009d3))
+
 ## [2.91.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.90.0...v2.91.0) (2024-09-11)
 
 
