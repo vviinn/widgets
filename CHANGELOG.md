@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.93.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.92.0...v2.93.0) (2024-09-11)
+
+
+### Features
+
+* Added preview mode to vviinn-extended-filters ([b20d673](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/b20d6733dac1ce089539f3d4a8cfcc5b6ea0ab96))
+
 ## [2.92.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.91.0...v2.92.0) (2024-09-11)
 
 
