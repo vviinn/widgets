@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.91.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.90.0...v2.91.0) (2024-09-11)
+
+
+### Features
+
+* changed icon of one-click discovery on slider mode ([0c30e73](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/0c30e73450cddb547aa4b482b111d030e93f9713))
+
 ## [2.90.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.89.1...v2.90.0) (2024-09-10)
 
 
