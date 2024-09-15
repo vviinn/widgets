@@ -1,0 +1,5 @@
+vviinn-vpr-button::part(price-label),
+vviinn-vpr-widget::part(price-label),
+vviinn-recommendations-sidebar::part(price-label) {
+  display: none;
+}
