@@ -42,6 +42,7 @@ import { BasketIcon, CheckCircleIcon, UpdateIcon } from "../vviinn-icons";
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
 import { generateRandomNumber } from "../../utils/number";
 import {
+  BasePrice,
   EnergyCertification,
   Recommendation,
 } from "../../interfaces/recommendation";
@@ -91,10 +92,12 @@ export class VviinnProductCard {
   @Prop() imageWidth: number = 200;
   @Prop() locale: string | undefined = undefined;
   @Prop() price: number | undefined;
+  @Prop() basePrice: BasePrice | null;
   @Prop() pricePrefix: string | undefined = undefined;
   @Prop() productTitle: string;
   @Prop() productType: string | undefined;
   @Prop() salePrice: number | undefined;
+  @Prop() saleBasePrice: BasePrice | null;
   @Prop() responsive: boolean = false;
   @Prop() mode?: CarouselMode;
   @Prop() basketButtonShow: boolean;
@@ -349,7 +352,9 @@ export class VviinnProductCard {
               prefix={this.pricePrefix}
               currency={this.currency}
               price={this.price}
+              basePrice={this.basePrice}
               salePrice={this.salePrice}
+              saleBasePrice={this.saleBasePrice}
               locale={this.locale}
               priceLabel={this.priceLabel}
             />

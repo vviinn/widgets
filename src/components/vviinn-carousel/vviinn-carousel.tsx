@@ -541,6 +541,7 @@ export class VviinnCarousel {
               productTitle={this.sourceProduct.title}
               image={this.sourceProduct.image.thumbnail}
               price={this.sourceProduct.price.actual}
+              basePrice={this.sourceProduct.basePrice.actual}
               imageRatio={1}
               imageWidth={300}
               isSourceProduct={true}

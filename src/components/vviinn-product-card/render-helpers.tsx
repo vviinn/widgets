@@ -2,11 +2,11 @@ import { pipe } from "fp-ts/lib/function";
 import * as E from "fp-ts/lib/Either";
 import { FunctionalComponent, h } from "@stencil/core";
 import { PlusIcon } from "../vviinn-icons";
-import { Recommendation } from "../../interfaces/recommendation";
+import { BasePrice, Recommendation } from "../../interfaces/recommendation";
 
 const FIT_EXPR = /fit\/\d+\//;
 
-export const containsFit = (url: string): E.Either<string, string> => {
+const containsFit = (url: string): E.Either<string, string> => {
   return pipe(
     url.match(FIT_EXPR),
     E.fromNullable(url),
@@ -14,7 +14,7 @@ export const containsFit = (url: string): E.Either<string, string> => {
   );
 };
 
-export const processWidth = (url: string, size: number): string => {
+const processWidth = (url: string, size: number): string => {
   return pipe(
     containsFit(url),
     E.map((url) => url.replace(FIT_EXPR, `fit/${size}/`)),
@@ -31,6 +31,11 @@ export const Linked = (props, child) =>
     child
   );
 
+const getFormattedPrice = (price: number, locale: string) =>
+  new Intl.NumberFormat(locale, {
+    minimumFractionDigits: 2,
+  }).format(price);
+
 type PriceElementProps = {
   readonly locale: string;
   readonly price: number;
@@ -39,13 +44,16 @@ type PriceElementProps = {
   readonly priceType?: "sale" | "outdated" | "regular";
 };
 
-const FormattedPrice: FunctionalComponent<PriceElementProps> = (props) => {
-  const locale = props.locale;
-  const priceType = props.priceType;
+type BasePriceElementProps = {
+  readonly locale: string;
+  readonly currency: string;
+  readonly basePrice: BasePrice;
+  readonly priceType?: "sale" | "regular";
+};
 
-  const formattedPrice = new Intl.NumberFormat(locale, {
-    minimumFractionDigits: 2,
-  }).format(props.price);
+const FormattedPrice: FunctionalComponent<PriceElementProps> = (props) => {
+  const priceType = props.priceType;
+  const formattedPrice = getFormattedPrice(props.price, props.locale);
 
   const prefixElement = props.prefix ? (
     <span part="price-prefix">{props.prefix + " "}</span>
@@ -67,8 +75,31 @@ const FormattedPrice: FunctionalComponent<PriceElementProps> = (props) => {
   );
 };
 
+const FormattedBasePrice: FunctionalComponent<BasePriceElementProps> = ({
+  currency,
+  basePrice,
+  priceType,
+  locale,
+}) => {
+  const formattedPrice = getFormattedPrice(basePrice.price, locale);
+
+  return (
+    <span
+      class="price-amount price-amount--base"
+      part={`base-price-amount${priceType ? "-" + priceType : ""}`}
+    >
+      {formattedPrice}
+      {currency.length > 0 && <span part="currency">&nbsp;{currency}</span>}/
+      {basePrice.quantity > 1 && basePrice.quantity}
+      {basePrice.measure}
+    </span>
+  );
+};
+
 type PriceProps = PriceElementProps & {
+  basePrice: BasePrice;
   salePrice: number;
+  saleBasePrice: BasePrice;
   priceLabel: string;
 };
 
@@ -84,15 +115,6 @@ export const Price: FunctionalComponent<PriceProps> = (props) => {
     <span class="price-container" part="price-container">
       {props.salePrice ? (
         [
-          <span class="price-sale" part="price-sale">
-            <FormattedPrice
-              prefix={props.prefix}
-              currency={props.currency}
-              price={props.salePrice}
-              locale={props.locale}
-              priceType="sale"
-            />
-          </span>,
           <span>
             {props.priceLabel && (
               <span part="price-label" class="price-label">
@@ -107,7 +129,32 @@ export const Price: FunctionalComponent<PriceProps> = (props) => {
                 locale={props.locale}
                 priceType="outdated"
               />
+              {props.saleBasePrice && (
+                <FormattedBasePrice
+                  currency={props.currency}
+                  basePrice={props.basePrice}
+                  locale={props.locale}
+                  priceType="sale"
+                />
+              )}
             </span>
+          </span>,
+          <span class="price-sale" part="price-sale">
+            <FormattedPrice
+              prefix={props.prefix}
+              currency={props.currency}
+              price={props.salePrice}
+              locale={props.locale}
+              priceType="sale"
+            />
+            {props.saleBasePrice && (
+              <FormattedBasePrice
+                currency={props.currency}
+                basePrice={props.basePrice}
+                locale={props.locale}
+                priceType="sale"
+              />
+            )}
           </span>,
         ]
       ) : (
@@ -119,6 +166,15 @@ export const Price: FunctionalComponent<PriceProps> = (props) => {
             locale={props.locale}
             priceType="regular"
           />
+
+          {props.basePrice && (
+            <FormattedBasePrice
+              currency={props.currency}
+              basePrice={props.basePrice}
+              locale={props.locale}
+              priceType="regular"
+            />
+          )}
         </span>
       )}
     </span>

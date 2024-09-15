@@ -490,7 +490,9 @@ export class VviinnResults {
         brand={p.brand}
         deeplink={p.deeplink}
         price={p.price.actual}
+        basePrice={p.basePrice.actual}
         salePrice={p.price.sale}
+        saleBasePrice={p.basePrice.sale}
         responsive={true}
         imageWidth={this.imageResolutionWidth}
         image={p.image.thumbnail ?? p.image.original}
