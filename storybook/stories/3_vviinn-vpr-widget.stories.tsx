@@ -6,11 +6,6 @@ export default {
   component: "vviinn-vpr-widget",
   argTypes: {
     ...argTypes,
-    mode: {
-      table: {
-        disable: true,
-      },
-    },
   },
 };
 
