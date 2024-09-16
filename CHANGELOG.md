@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.94.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.93.0...v2.94.0) (2024-09-16)
+
+
+### Features
+
+* Show energe label in Storybook's Product Card ([d1285c0](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/d1285c068f61e6b8cdbd29a233f2b1dd1064dff2))
+
 ## [2.93.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.92.0...v2.93.0) (2024-09-11)
 
 
