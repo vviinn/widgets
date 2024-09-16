@@ -37,7 +37,6 @@ const Template = (args) => {
       product-card-image-border="${args.productCardImageBorder}"
       product-card-image-bg-color="${args.productCardImageBgColor}"
       energy-certifications-string='${args.energyCertificationsString}'
-      show-in-storybook="${args.showInStorybook}"
     ></vviinn-product-card>`;
 };
 

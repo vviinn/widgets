@@ -131,8 +131,6 @@ export class VviinnProductCard {
   @Prop() isResultsWidget: boolean = false;
   /** @internal */
   @Prop() energyCertificationsString: string = "";
-  /** @internal */
-  @Prop() showInStorybook: boolean = false;
 
   @State() isTransitioning: boolean = false;
   @State() basketButonPressed: boolean = false;
@@ -176,7 +174,7 @@ export class VviinnProductCard {
     this.isGridMode = this.mode === "grid";
     this.isContinuityMode = this.mode === "continuity";
 
-    if (this.showInStorybook) {
+    if (this.energyCertificationsString.length > 0) {
       this.parseEnergyCertificationsString();
       i18next.init({
         lng: this.locale,
