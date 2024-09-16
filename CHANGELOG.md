@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.94.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.94.0...v2.94.1) (2024-09-16)
+
+
+### Bug Fixes
+
+* Hide source product when not enough recommendations for set mode ([60619d1](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/60619d1b1289c84946e343f8d04cda6d3dc8d505))
+
 ## [2.94.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.93.0...v2.94.0) (2024-09-16)
 
 
