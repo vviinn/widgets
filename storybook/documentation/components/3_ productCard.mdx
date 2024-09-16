@@ -2,6 +2,7 @@ import { Meta, Story } from '@storybook/blocks';
 
 import "../../components/tabs/styles.css";
 import {clickHandlers} from "../../components"
+import {energyCertificationsString} from "./constants";
 import "../../styles/filters-search-bar.css";
 
 <Meta title="Components/Product Card" />
@@ -10,11 +11,11 @@ import "../../styles/filters-search-bar.css";
 
 ## Examples
 
-<div id="product-catd-main">
+<div id="product-card-main">
     <div className="tab tab-reverse">
         
-        <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'product-catd-main')}}>Code</button>
-        <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'product-catd-main')}}>Preview</button>
+        <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'product-card-main')}}>Code</button>
+        <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'product-card-main')}}>Preview</button>
     </div>
     <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
@@ -22,6 +23,7 @@ import "../../styles/filters-search-bar.css";
                 product-title="Couchtisch Rolf Benz 8770 Ronald Schmitt" 
                 brand="Ronald Schmitt" 
                 product-type="Couchtische" 
+                locale="en-US"
                 price="3629" 
                 sale-price="1653" 
                 price-prefix="" 
@@ -29,7 +31,8 @@ import "../../styles/filters-search-bar.css";
                 image-width="240" 
                 responsive="false" 
                 image-ratio="1" 
-                basket-button-show="false" locale="de-DE" currency="€" style={{width:"240px"}}>
+                basket-button-show="true" currency="€" style={{width:"240px"}}
+                energy-certifications-string={energyCertificationsString}>
         </vviinn-product-card>
         </div>
     </div>
@@ -46,9 +49,10 @@ import "../../styles/filters-search-bar.css";
     image-width="240" 
     responsive="false" 
     image-ratio="1" 
-    basket-button-show="false" 
-    locale="de-DE" 
-    currency="€">
+    basket-button-show="true" 
+    locale="en-US"
+    currency="€"
+    energy-certifications-string='[{"certificationClass":"B","classIconUrls":{"left":"https://cdn.vviinn.com/assets/certification/energy/AtoG/left/B.svg","right":"https://cdn.vviinn.com/assets/certification/energy/AtoG/right/B.svg"},"classRange":{"min":"A","max":"G"},"classLabelUrl":"https://energy-efficient-products.ec.europa.eu/sites/default/files/styles/embed_medium_2x/public/2024-04/sample-energy-label-with-numbers-new.png?itok=x7puJdbG","classDataSheetUrl":"https://www.roller.de/medias/sys_master/datasheets/datasheets/h7a/hc5/11687118700574/1328023300-P01.pdf","productType":"Product Type"}]'>
 </vviinn-product-card>
 ```
     </div>
