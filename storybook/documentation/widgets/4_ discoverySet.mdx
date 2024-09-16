@@ -4,6 +4,8 @@ import "../../components/tabs/styles.css";
 import {clickHandlers} from "../../components"
 import { vviinnToken, productIdCrossSelling } from "../../helpers";
 
+import "./styles.css";
+
 <Meta title="Widgets/Discovery Set" />
 
 # Discovery Set
@@ -36,7 +38,7 @@ import { vviinnToken, productIdCrossSelling } from "../../helpers";
 
 <div id="cross-selling-modal">
     <div className="tab tab-reverse">
-        <h3>Discovery Set Modal Button</h3>
+        <h3>One-click Discovery</h3>
         <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'cross-selling-modal')}}>Code</button>
         <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'cross-selling-modal')}}>Preview</button>
     </div>
