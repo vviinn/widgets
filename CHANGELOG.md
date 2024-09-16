@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.95.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.94.1...v2.95.0) (2024-09-16)
+
+
+### Features
+
+* added mode to discovery and locale to all stories examples ([b87c2d9](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/b87c2d95a5a7dc9628a39ea72bf7eb8f5e1d8437))
+
 ### [2.94.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.94.0...v2.94.1) (2024-09-16)
 
 
