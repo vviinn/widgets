@@ -534,7 +534,7 @@ export class VviinnCarousel {
               <ChevronIcon />
             </button>
           )}
-          {this.isSetMode && (
+          {this.isSetMode && this.crossSellingRecommendations.length > 0 && (
             <vviinn-product-card
               part="product-part"
               class="set-mode product-card--source"
