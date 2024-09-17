@@ -75,6 +75,7 @@ import { slotChangeListener } from "../customized-slots";
  * @part price-regular - Block for a price if no sale price is presented.
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
  * @part price-prefix - Block rendered before each price element (for ex. "from").
+ * @part price-label - string part of price.
  * @part title - Title inside Product Card.
  *
  * @slot vviinn-energy-label-data-sheet-text - Text of the data sheet link for the energy label.
@@ -515,7 +516,7 @@ export class VviinnResults {
         class={{
           "show-in-widget": this.showInWidget,
         }}
-        exportparts="brand, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, product-card"
+        exportparts="brand, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, product-card, price-label"
       >
         <div
           class={{
