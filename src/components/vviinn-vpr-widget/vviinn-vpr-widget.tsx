@@ -687,7 +687,9 @@ export class VviinnVprWidget implements ComponentInterface {
           {this.recommendations.length > 0 &&
             (this.useCarousel ? this.renderCarousel() : this.renderResults())}
 
-          {(this.recommendations.length === 0 || this.hasErrorOnLoad) &&
+          {(this.recommendations.length === 0 ||
+            (this.recommendations.length < 4 && this.isSetMode) ||
+            this.hasErrorOnLoad) &&
             !searchState.loading && (
               <p class="no-result-text">
                 {this.noResultText.length

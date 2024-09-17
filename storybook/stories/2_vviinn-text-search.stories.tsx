@@ -27,7 +27,7 @@ export default {
 };
 
 const Template = (args) => `
-  <vviinn-extended-filters></vviinn-extended-filters>
+  <vviinn-extended-filters locale="${args.locale}"></vviinn-extended-filters>
   <vviinn-filters></vviinn-filters>
   <vviinn-text-search 
     token="${args.token}"
@@ -41,6 +41,7 @@ const Template = (args) => `
   <vviinn-results 
     token="${args.token}"
     api-path="${args.apiPath}"
+    locale="${args.locale}"
   ></vviinn-results>
 `;
 

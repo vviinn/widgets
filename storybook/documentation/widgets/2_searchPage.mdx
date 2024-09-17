@@ -24,11 +24,11 @@ Using `Vviinn Widgets` as separate components allows for greater control over th
 
   <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
       <div className="tabcontent-preview">
-        <vviinn-extended-filters></vviinn-extended-filters>
+        <vviinn-extended-filters locale="en-US"></vviinn-extended-filters>
         <vviinn-filters></vviinn-filters>
         
-        <vviinn-text-search token={vviinnToken} mode="textAndImage"></vviinn-text-search>
-        <vviinn-results token={vviinnToken}></vviinn-results>
+        <vviinn-text-search token={vviinnToken} mode="textAndImage" locale="en-US"></vviinn-text-search>
+        <vviinn-results token={vviinnToken} locale="en-US"></vviinn-results>
       </div>
   </div>
 
@@ -43,11 +43,11 @@ vviinn-text-search {
 }
 </style>
 
-<vviinn-extended-filters></vviinn-extended-filters>
-<vviinn-filters></vviinn-filters>
+<vviinn-extended-filters locale="en-US"></vviinn-extended-filters>
+<vviinn-filters locale="en-US"></vviinn-filters>
 
-<vviinn-text-search token="YOUR_TOKEN" mode="textAndImage"></vviinn-text-search>
-<vviinn-results token="YOUR_TOKEN"></vviinn-results>
+<vviinn-text-search token="YOUR_TOKEN" mode="textAndImage" locale="en-US"></vviinn-text-search>
+<vviinn-results token="YOUR_TOKEN" locale="en-US"></vviinn-results>
 ```
 </div>
 <div id="Details_1" className="tabcontent">
@@ -87,15 +87,16 @@ To see the filter columns, enable Filters in the Interface Controls section insi
 <vviinn-text-search
   token="YOUR_TOKEN"
   mode="textAndImage"
+  locale="en-US"
 ></vviinn-text-search>
 
 <!-- Page 2 -->
 <script>
   // Get query or searchId from URL
 </script>
-<vviinn-filters></vviinn-filters>
-<vviinn-extended-filters></vviinn-extended-filters>
-<vviinn-results token="YOUR_TOKEN" text-search-query="YOUR_QUERY"></vviinn-results>
+<vviinn-filters locale="en-US"></vviinn-filters>
+<vviinn-extended-filters locale="en-US"></vviinn-extended-filters>
+<vviinn-results token="YOUR_TOKEN" text-search-query="YOUR_QUERY" locale="en-US"></vviinn-results>
 ```
 </div>
 <div id="Details_2" className="tabcontent">

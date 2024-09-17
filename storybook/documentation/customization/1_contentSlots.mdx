@@ -240,7 +240,7 @@ Slots that could be used for [Search Modal](?path=/docs/widgets-search-modal--do
     
     <div id="Preview_5" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
-            <vviinn-vps-button token={vviinnToken} text-search-show="true">
+            <vviinn-vps-button token={vviinnToken} text-search-show="true" locale="en-US">
               <svg width="22" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   fill-rule="evenodd"
@@ -265,6 +265,7 @@ Slots that could be used for [Search Modal](?path=/docs/widgets-search-modal--do
 <vviinn-vps-button 
     token="TOKEN" 
     text-search-show="true"
+    locale="en-US"
 >
   <svg width="22" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
@@ -299,7 +300,7 @@ Slots that could be used for [Extended Filters](?path=/docs/components-filters--
     
     <div id="Preview_6" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
-          <vviinn-extended-filters filters-string={filters}>
+          <vviinn-extended-filters filters-string={filters} locale="en-US">
             <span slot="vviinn-extended-filters-title">Custom Title</span>
             <span slot="vviinn-extended-filters-apply">Custom Apply</span>
             <span slot="vviinn-extended-filters-reset">Custom Reset</span>
@@ -312,6 +313,7 @@ Slots that could be used for [Extended Filters](?path=/docs/components-filters--
   vviinn-extended-filters [slot] {
     visibility: hidden;
     position: absolute;
+    locale="en-US"
   }
 </style>
 <vviinn-extended-filters>
