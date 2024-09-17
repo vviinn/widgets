@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.95.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.95.0...v2.95.1) (2024-09-17)
+
+
+### Bug Fixes
+
+* Added price-label part to the visual search and results components ([99c432d](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/99c432df562a3ac111cdc9167c0bb1784f39a168))
+
 ## [2.95.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.94.1...v2.95.0) (2024-09-16)
 
 
