@@ -80,6 +80,7 @@ const CAMERA_START_DELAY = 500;
  * @part image-link - Anchor element around product image. Rendered only if "deeplink" property is filled.
  * @part price-amount-sale - Numeric part of the price.
  * @part price-amount-outdated - Numeric part of the price.
+ * @part price-label - string part of price.
  * @part price-amount-regular - Numeric part of the price.
  * @part price-container - Block of prices.
  * @part price-outdated - Block for outdated price. Rendered when the product contains the sale price.
@@ -599,7 +600,7 @@ export class VviinnVpsWidget {
 
   render() {
     return (
-      <Host exportparts="brand, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, product-card, upload-photo_button, show-files_button, start-camera_button, text-search-input, close-button, secondary-action, close-button">
+      <Host exportparts="brand, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, product-card, upload-photo_button, show-files_button, start-camera_button, text-search-input, close-button, secondary-action, close-button, price-label">
         {!this.showingInButton && SlotSkeleton("vps")}
 
         <vviinn-overlayed-modal

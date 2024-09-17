@@ -36,6 +36,7 @@ import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
  * @part price-regular - Block for a price if no sale price is presented.
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
  * @part price-prefix - Block rendered before each price element (for ex. "from").
+ * @part price-label - string part of price.
  * @part carousel-button - Button for carousel navigation.
  * @part recommendations-grid - For internal usage only!
  * @part recommendations-title - Title of the recommendations grid.
