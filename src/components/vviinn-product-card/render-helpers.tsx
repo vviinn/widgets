@@ -36,19 +36,21 @@ const getFormattedPrice = (price: number, locale: string) =>
     minimumFractionDigits: 2,
   }).format(price);
 
+type PriceType = "sale" | "outdated" | "regular";
+
 type PriceElementProps = {
   readonly locale: string;
   readonly price: number;
   readonly prefix: string;
   readonly currency: string;
-  readonly priceType?: "sale" | "outdated" | "regular";
+  readonly priceType?: PriceType;
 };
 
 type BasePriceElementProps = {
   readonly locale: string;
   readonly currency: string;
-  readonly basePrice: BasePrice;
-  readonly priceType?: "sale" | "regular";
+  readonly basePrice: BasePrice | null;
+  readonly priceType?: PriceType;
 };
 
 const FormattedPrice: FunctionalComponent<PriceElementProps> = (props) => {
@@ -81,12 +83,13 @@ const FormattedBasePrice: FunctionalComponent<BasePriceElementProps> = ({
   priceType,
   locale,
 }) => {
+  if (!basePrice?.price) return null;
   const formattedPrice = getFormattedPrice(basePrice.price, locale);
 
   return (
     <span
       class="price-amount price-amount--base"
-      part={`base-price-amount${priceType ? "-" + priceType : ""}`}
+      part={`price-amount-base${priceType ? "-" + priceType : ""}`}
     >
       {formattedPrice}
       {currency.length > 0 && <span part="currency">&nbsp;{currency}</span>}/
@@ -99,7 +102,7 @@ const FormattedBasePrice: FunctionalComponent<BasePriceElementProps> = ({
 type PriceProps = PriceElementProps & {
   basePrice: BasePrice;
   salePrice: number;
-  saleBasePrice: BasePrice;
+  baseSalePrice: BasePrice;
   priceLabel: string;
 };
 
@@ -115,7 +118,7 @@ export const Price: FunctionalComponent<PriceProps> = (props) => {
     <span class="price-container" part="price-container">
       {props.salePrice ? (
         [
-          <span>
+          <span class="price-outdated-container">
             {props.priceLabel && (
               <span part="price-label" class="price-label">
                 {props.priceLabel}
@@ -129,16 +132,15 @@ export const Price: FunctionalComponent<PriceProps> = (props) => {
                 locale={props.locale}
                 priceType="outdated"
               />
-              {props.saleBasePrice && (
-                <FormattedBasePrice
-                  currency={props.currency}
-                  basePrice={props.basePrice}
-                  locale={props.locale}
-                  priceType="sale"
-                />
-              )}
+              <FormattedBasePrice
+                currency={props.currency}
+                basePrice={props.basePrice}
+                locale={props.locale}
+                priceType="outdated"
+              />
             </span>
           </span>,
+
           <span class="price-sale" part="price-sale">
             <FormattedPrice
               prefix={props.prefix}
@@ -147,14 +149,12 @@ export const Price: FunctionalComponent<PriceProps> = (props) => {
               locale={props.locale}
               priceType="sale"
             />
-            {props.saleBasePrice && (
-              <FormattedBasePrice
-                currency={props.currency}
-                basePrice={props.basePrice}
-                locale={props.locale}
-                priceType="sale"
-              />
-            )}
+            <FormattedBasePrice
+              currency={props.currency}
+              basePrice={props.baseSalePrice}
+              locale={props.locale}
+              priceType="sale"
+            />
           </span>,
         ]
       ) : (
@@ -167,14 +167,12 @@ export const Price: FunctionalComponent<PriceProps> = (props) => {
             priceType="regular"
           />
 
-          {props.basePrice && (
-            <FormattedBasePrice
-              currency={props.currency}
-              basePrice={props.basePrice}
-              locale={props.locale}
-              priceType="regular"
-            />
-          )}
+          <FormattedBasePrice
+            currency={props.currency}
+            basePrice={props.basePrice}
+            locale={props.locale}
+            priceType="regular"
+          />
         </span>
       )}
     </span>

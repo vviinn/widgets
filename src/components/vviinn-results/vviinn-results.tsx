@@ -492,7 +492,7 @@ export class VviinnResults {
         price={p.price.actual}
         basePrice={p.basePrice.actual}
         salePrice={p.price.sale}
-        saleBasePrice={p.basePrice.sale}
+        baseSalePrice={p.basePrice.sale}
         responsive={true}
         imageWidth={this.imageResolutionWidth}
         image={p.image.thumbnail ?? p.image.original}

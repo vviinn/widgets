@@ -93,12 +93,12 @@ export class VviinnProductCard {
   @Prop() imageWidth: number = 200;
   @Prop() locale: string | undefined = undefined;
   @Prop() price: number | undefined;
-  @Prop() basePrice: BasePrice | null;
+  @Prop() basePrice: BasePrice | string | null;
   @Prop() pricePrefix: string | undefined = undefined;
   @Prop() productTitle: string;
   @Prop() productType: string | undefined;
   @Prop() salePrice: number | undefined;
-  @Prop() saleBasePrice: BasePrice | null;
+  @Prop() baseSalePrice: BasePrice | string | null;
   @Prop() responsive: boolean = false;
   @Prop() mode?: CarouselMode = "continuity";
   @Prop() basketButtonShow: boolean;
@@ -314,6 +314,16 @@ export class VviinnProductCard {
     return searchState.results.find((r) => r.productId === this.productId);
   }
 
+  private parseBasePrice(
+    basePrice: BasePrice | string | null
+  ): BasePrice | null {
+    if (!basePrice) return null;
+    if (typeof basePrice === "string") {
+      return JSON.parse(basePrice) as BasePrice;
+    }
+    return basePrice;
+  }
+
   private renderImage() {
     const props: ImageProps = {
       width: this.imageWidth,
@@ -376,9 +386,9 @@ export class VviinnProductCard {
               prefix={this.pricePrefix}
               currency={this.currency}
               price={this.price}
-              basePrice={this.basePrice}
+              basePrice={this.parseBasePrice(this.basePrice)}
               salePrice={this.salePrice}
-              saleBasePrice={this.saleBasePrice}
+              baseSalePrice={this.parseBasePrice(this.baseSalePrice)}
               locale={this.locale}
               priceLabel={this.priceLabel}
             />

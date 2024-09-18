@@ -720,7 +720,7 @@ export class VviinnVprWidget implements ComponentInterface {
         price={recommendation.price.actual}
         basePrice={recommendation.basePrice.actual}
         salePrice={recommendation.price.sale}
-        saleBasePrice={recommendation.basePrice.sale}
+        baseSalePrice={recommendation.basePrice.sale}
         energyCertifications={recommendation.energyCertifications}
         responsive={this.isGridMode}
         basketButtonShow={this.addToBasketShow}

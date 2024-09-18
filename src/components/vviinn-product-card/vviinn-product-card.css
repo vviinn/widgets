@@ -63,6 +63,12 @@
   align-items: baseline;
 }
 
+.price-outdated-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
 .price-outdated {
   color: var(--color-text-helper);
   text-decoration: line-through;
