@@ -62,26 +62,28 @@ export class VviinnEnergyLabel {
             </a>
           )}
 
-          <div class="info-container">
-            {this.productType && (
-              <span class="product-type" part="energy-label-product-type">
-                {this.productType}
-              </span>
-            )}
-            {this.classDataSheetUrl && (
-              <a
-                class="data-sheet-link"
-                part="energy-label-data-sheet-link"
-                href={this.classDataSheetUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <slot name="vviinn-energy-label-data-sheet-text">
-                  {i18next.t("energyLabel.dataSheetText")}
-                </slot>
-              </a>
-            )}
-          </div>
+          {(this.productType || this.classDataSheetUrl) && (
+            <div class="info-container">
+              {this.productType && (
+                <span class="product-type" part="energy-label-product-type">
+                  {this.productType}
+                </span>
+              )}
+              {this.classDataSheetUrl && (
+                <a
+                  class="data-sheet-link"
+                  part="energy-label-data-sheet-link"
+                  href={this.classDataSheetUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <slot name="vviinn-energy-label-data-sheet-text">
+                    {i18next.t("energyLabel.dataSheetText")}
+                  </slot>
+                </a>
+              )}
+            </div>
+          )}
         </div>
       </Host>
     );
