@@ -56,7 +56,6 @@ import { resources } from "../../locale/resources";
  * @part price-amount-sale - numeric part of price.
  * @part price-amount-outdated - numeric part of price.
  * @part price-amount-regular - numeric part of price.
- * @part price-label - string part of price.
  * @part price-container - block contains all prices.
  * @part price-outdated - renders inside price-container when "sale-price" property filled. Contains regular price.
  * @part price-regular - renders inside price-container when "sale-price" property is empty.
@@ -71,6 +70,13 @@ import { resources } from "../../locale/resources";
  * @part energy-label-icon - Icon with an energy class.
  * @part energy-label-product-type - Product type.
  * @part energy-label-data-sheet-link - Data sheet link.
+ *
+ * @part price-label - string part of price.
+ * @part price-label-0 - string part of price with index 0.
+ * @part price-label-1 - string part of price with index 1.
+ * @part price-label-2 - string part of price with index 2.
+ * @part price-label-3 - string part of price with index 3.
+ * @part price-label-4 - string part of price with index 4.
  *
  * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
@@ -338,7 +344,7 @@ export class VviinnProductCard {
           "continuity-mode": this.isContinuityMode,
           "results-widget": this.isResultsWidget,
         }}
-        exportparts="brand, price-label, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, discount-label, discount-percentage, title, basket-button, update-button-item, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
+        exportparts="brand, price-label, price-label-0, price-label-1, price-label-2, price-label-3, price-label-4, currency, deeplink, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, discount-label, discount-percentage, title, basket-button, update-button-item, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
       >
         <Linked deeplink={this.deeplink} part="image-link">
           {this.renderImage()}
