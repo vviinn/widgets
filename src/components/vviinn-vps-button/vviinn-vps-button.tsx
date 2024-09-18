@@ -57,6 +57,7 @@ import { VisualSearchMode } from "../../widget/types";
  * @part price-amount-regular - Numeric part of the price.
  * @part price-container - Block of prices.
  * @part price-outdated - Block for outdated price. Rendered when the product contains the sale price.
+ * @part price-label - string part of price.
  * @part price-regular - Block for a price if no sale price is presented.
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
  * @part price-prefix - Block rendered before each price element (for ex. "from").
