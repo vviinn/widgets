@@ -78,10 +78,13 @@ const CAMERA_START_DELAY = 500;
  * @part deeplink - Anchor element around troduct title. Rendered only if "deeplink" property is filled.
  * @part image - Product Card image.
  * @part image-link - Anchor element around product image. Rendered only if "deeplink" property is filled.
+ * @part price-amount-regular - Numeric part of the price.
  * @part price-amount-sale - Numeric part of the price.
  * @part price-amount-outdated - Numeric part of the price.
+ * @part price-amount-base-sale - sale base price.
+ * @part price-amount-base-outdated - outdated base price.
+ * @part price-amount-base-regular - regular base price.
  * @part price-label - string part of price.
- * @part price-amount-regular - Numeric part of the price.
  * @part price-container - Block of prices.
  * @part price-outdated - Block for outdated price. Rendered when the product contains the sale price.
  * @part price-regular - Block for a price if no sale price is presented.
@@ -600,7 +603,7 @@ export class VviinnVpsWidget {
 
   render() {
     return (
-      <Host exportparts="brand, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, title, product-card, upload-photo_button, show-files_button, start-camera_button, text-search-input, close-button, secondary-action, close-button, price-label">
+      <Host exportparts="brand, deeplink, currency, image, image-link, price-amount-regular, price-amount-sale, price-amount-outdated, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-container, price-outdated, price-regular, price-sale, price-prefix, title, product-card, upload-photo_button, show-files_button, start-camera_button, text-search-input, close-button, secondary-action, close-button, price-label">
         {!this.showingInButton && SlotSkeleton("vps")}
 
         <vviinn-overlayed-modal

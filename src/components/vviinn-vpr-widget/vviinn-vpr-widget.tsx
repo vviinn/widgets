@@ -80,10 +80,13 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @part image - Product Card image.
  * @part image-link - Anchor element around product image. Rendered only if "deeplink" property is filled.
  * @part deeplink - Anchor element around product title. Rendered only if "deeplink" property is filled.
- * @part price-amount-sale - Numeric part of the price.
- * @part price-label - Label for the price.
- * @part price-amount-outdated - Numeric part of the price.
  * @part price-amount-regular - Numeric part of the price.
+ * @part price-amount-sale - Numeric part of the price.
+ * @part price-amount-outdated - Numeric part of the price.
+ * @part price-amount-base-sale - sale base price.
+ * @part price-amount-base-outdated - outdated base price.
+ * @part price-amount-base-regular - regular base price.
+ * @part price-label - Label for the price.
  * @part price-container - Block of prices.
  * @part price-outdated - Block for outdated price. Rendered when the product contains the sale price.
  * @part price-regular - Block for a price if no sale price is presented.
