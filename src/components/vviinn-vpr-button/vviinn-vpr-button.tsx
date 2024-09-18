@@ -36,7 +36,6 @@ import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
  * @part price-regular - Block for a price if no sale price is presented.
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
  * @part price-prefix - Block rendered before each price element (for ex. "from").
- * @part price-label - string part of price.
  * @part carousel-button - Button for carousel navigation.
  * @part recommendations-grid - For internal usage only!
  * @part recommendations-title - Title of the recommendations grid.
@@ -44,6 +43,13 @@ import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
  * @part basket-button - Add to Basket button.
  * @part update-button-top - Update Button on the top (Set mode).
  * @part update-button-item - Update Button inside the Product Card (Set mode).
+ *
+ * @part price-label - string part of price.
+ * @part price-label-0 - string part of price with index 0.
+ * @part price-label-1 - string part of price with index 1.
+ * @part price-label-2 - string part of price with index 2.
+ * @part price-label-3 - string part of price with index 3.
+ * @part price-label-4 - string part of price with index 4.
  *
  * @slot vviinn-recommendations-title - Recommendations title text.
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
