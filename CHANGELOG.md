@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.95.3](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.95.2...v2.95.3) (2024-09-18)
+
+
+### Bug Fixes
+
+* Fix energy label parts for Search Widget ([6f2acfb](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/6f2acfb0e887ad19a70f5538cd5735f03d2af2c6))
+
 ### [2.95.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.95.1...v2.95.2) (2024-09-18)
 
 
