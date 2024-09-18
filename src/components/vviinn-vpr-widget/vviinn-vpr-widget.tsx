@@ -81,7 +81,6 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @part image-link - Anchor element around product image. Rendered only if "deeplink" property is filled.
  * @part deeplink - Anchor element around product title. Rendered only if "deeplink" property is filled.
  * @part price-amount-sale - Numeric part of the price.
- * @part price-label - Label for the price.
  * @part price-amount-outdated - Numeric part of the price.
  * @part price-amount-regular - Numeric part of the price.
  * @part price-container - Block of prices.
@@ -102,6 +101,13 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @part update-button-item - Update Button inside the Product Card (Set mode).
  * @part discount-label - Discount label in Product Card (Set mode).
  * @part discount-percentage - Discount percentage inside the Add to Basket button (Set mode).
+ *
+ * @part price-label - string part of price.
+ * @part price-label-0 - string part of price with index 0.
+ * @part price-label-1 - string part of price with index 1.
+ * @part price-label-2 - string part of price with index 2.
+ * @part price-label-3 - string part of price with index 3.
+ * @part price-label-4 - string part of price with index 4.
  *
  * @slot vviinn-recommendations-title - Recommendations title text.
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
