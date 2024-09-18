@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.95.4](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.95.3...v2.95.4) (2024-09-18)
+
+
+### Bug Fixes
+
+* removed additional log ([9dcfef5](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/9dcfef5d5b7710a61209547a70310e412947d258))
+
 ### [2.95.3](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.95.2...v2.95.3) (2024-09-18)
 
 
