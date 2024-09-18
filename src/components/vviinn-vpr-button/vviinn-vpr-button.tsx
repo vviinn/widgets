@@ -42,6 +42,10 @@ import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
  * @part recommendations-title - Title of the recommendations grid.
  * @part recommendations-subtitle - Subtitle of the recommendations grid.
  * @part basket-button - Add to Basket button.
+ * @part energy-label-container - Energy label container.
+ * @part energy-label-icon - Icon with an energy class.
+ * @part energy-label-product-type - Product type.
+ * @part energy-label-data-sheet-link - Data sheet link.
  * @part update-button-top - Update Button on the top (Set mode).
  * @part update-button-item - Update Button inside the Product Card (Set mode).
  *

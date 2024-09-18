@@ -65,6 +65,10 @@ import { VisualSearchMode } from "../../widget/types";
  * @part text-search-input - Text search input.
  * @part button - Clickable button element.
  * @part vviinn-button - Button element container.
+ * @part energy-label-container - Energy label container.
+ * @part energy-label-icon - Icon with an energy class.
+ * @part energy-label-product-type - Product type.
+ * @part energy-label-data-sheet-link - Data sheet link.
  */
 @Component({
   tag: "vviinn-vps-button",
