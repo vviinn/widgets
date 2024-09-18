@@ -81,7 +81,6 @@ export const calculatePriceLabel = ({
   custom_label_4,
 }: Recommendation) => {
   const renderLabel = (label: string, index: number) => {
-    console.log(label, index);
     if (!label) return "";
 
     const partClass = `price-label-${index}`;
