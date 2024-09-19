@@ -35,6 +35,7 @@ export const Linked = (props, child) =>
 const getFormattedPrice = (price: number, locale: string) =>
   new Intl.NumberFormat(locale, {
     minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   }).format(price);
 
 type PriceType = "sale" | "outdated" | "regular";
