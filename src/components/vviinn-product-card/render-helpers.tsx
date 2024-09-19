@@ -65,7 +65,6 @@ const FormattedPrice: FunctionalComponent<PriceElementProps> = (props) => {
 
   const currencyElement = props.currency ? (
     <span part="currency" class="currency">
-      {" "}
       {props.currency}
     </span>
   ) : null;
@@ -99,7 +98,6 @@ const FormattedBasePrice: FunctionalComponent<BasePriceElementProps> = ({
       {formattedPrice}
       {currency?.length > 0 && (
         <span part="currency" class="currency">
-          {" "}
           {currency}
         </span>
       )}

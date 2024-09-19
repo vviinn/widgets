@@ -120,6 +120,10 @@
   display: none;
 }
 
+.currency {
+  padding-left: var(--spacing-50);
+}
+
 .title {
   display: -webkit-box;
   max-width: var(--product-card-set-mode-max-width);
