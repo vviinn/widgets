@@ -80,12 +80,12 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @part image - Product Card image.
  * @part image-link - Anchor element around product image. Rendered only if "deeplink" property is filled.
  * @part deeplink - Anchor element around product title. Rendered only if "deeplink" property is filled.
- * @part price-amount-regular - Numeric part of the price.
  * @part price-amount-sale - Numeric part of the price.
  * @part price-amount-outdated - Numeric part of the price.
- * @part price-amount-base-sale - sale base price.
- * @part price-amount-base-outdated - outdated base price.
- * @part price-amount-base-regular - regular base price.
+ * @part price-amount-regular - Numeric part of the price.
+ * @part price-amount-base-sale - Numeric part of the base price.
+ * @part price-amount-base-outdated - Numeric part of the base price.
+ * @part price-amount-base-regular - Numeric part of the base price.
  * @part price-label - Label for the price.
  * @part price-container - Block of prices.
  * @part price-outdated - Block for outdated price. Rendered when the product contains the sale price.
@@ -97,10 +97,21 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @part recommendations-title - Title of the recommendations grid.
  * @part recommendations-subtitle - Subtitle of the recommendations grid.
  * @part basket-button - Add to Basket button.
+ * @part energy-label-container - Energy label container.
+ * @part energy-label-icon - Icon with an energy class.
+ * @part energy-label-product-type - Product type.
+ * @part energy-label-data-sheet-link - Data sheet link.
  * @part update-button-top - Update Button on the top (Set mode).
  * @part update-button-item - Update Button inside the Product Card (Set mode).
  * @part discount-label - Discount label in Product Card (Set mode).
  * @part discount-percentage - Discount percentage inside the Add to Basket button (Set mode).
+ *
+ * @part price-label - string part of price.
+ * @part price-label-0 - string part of price with index 0.
+ * @part price-label-1 - string part of price with index 1.
+ * @part price-label-2 - string part of price with index 2.
+ * @part price-label-3 - string part of price with index 3.
+ * @part price-label-4 - string part of price with index 4.
  *
  * @slot vviinn-recommendations-title - Recommendations title text.
  * @slot vviinn-basket-button-text - Text of Add to Basket button.

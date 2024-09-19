@@ -55,12 +55,11 @@ import { VisualSearchMode } from "../../widget/types";
  * @part price-amount-regular - Numeric part of the price.
  * @part price-amount-sale - Numeric part of the price.
  * @part price-amount-outdated - Numeric part of the price.
- * @part price-amount-base-sale - sale base price.
- * @part price-amount-base-outdated - outdated base price.
- * @part price-amount-base-regular - regular base price.
+ * @part price-amount-base-sale - Numeric part of the base price.
+ * @part price-amount-base-outdated - Numeric part of the base price.
+ * @part price-amount-base-regular - Numeric part of the base price.
  * @part price-container - Block of prices.
  * @part price-outdated - Block for outdated price. Rendered when the product contains the sale price.
- * @part price-label - string part of price.
  * @part price-regular - Block for a price if no sale price is presented.
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
  * @part price-prefix - Block rendered before each price element (for ex. "from").
@@ -68,6 +67,16 @@ import { VisualSearchMode } from "../../widget/types";
  * @part text-search-input - Text search input.
  * @part button - Clickable button element.
  * @part vviinn-button - Button element container.
+ * @part price-label - string part of price.
+ * @part price-label-0 - string part of price with index 0.
+ * @part price-label-1 - string part of price with index 1.
+ * @part price-label-2 - string part of price with index 2.
+ * @part price-label-3 - string part of price with index 3.
+ * @part price-label-4 - string part of price with index 4.
+ * @part energy-label-container - Energy label container.
+ * @part energy-label-icon - Icon with an energy class.
+ * @part energy-label-product-type - Product type.
+ * @part energy-label-data-sheet-link - Data sheet link.
  */
 @Component({
   tag: "vviinn-vps-button",

@@ -1,7 +1,7 @@
 @import "../../../variables.css";
 
 :host {
-  display: flex;
+  display: contents;
   line-height: 0px;
 }
 

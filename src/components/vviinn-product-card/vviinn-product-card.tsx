@@ -49,23 +49,22 @@ import {
 import { resources } from "../../locale/resources";
 
 /**
- * @part brand - product brand.
- * @part currency - currency sign. Renders after price-amount.
- * @part deeplink - anchor element for title. Rendered only if "deeplink" property is filled.
- * @part image - product image.
- * @part image-link - anchor element for image. Rendered only if "deeplink" property filled.
- * @part price-amount-regular - numeric part of price.
- * @part price-amount-sale - numeric part of price.
- * @part price-amount-outdated - numeric part of price.
- * @part price-amount-base-sale - sale base price.
- * @part price-amount-base-outdated - outdated base price.
- * @part price-amount-base-regular - regular base price.
- * @part price-label - string part of price.
- * @part price-container - block contains all prices.
- * @part price-outdated - renders inside price-container when "sale-price" property filled. Contains regular price.
- * @part price-regular - renders inside price-container when "sale-price" property is empty.
- * @part price-sale - renders inside price-container when "sale-price" property filled. Contains sale price.
- * @part price-prefix - renders before price-amount. Can be set with "price-prefix" property or inherited from parent component.
+ * @part brand - Product brand.
+ * @part currency - Currency sign. Renders after price-amount.
+ * @part deeplink - Anchor element for title. Rendered only if "deeplink" property is filled.
+ * @part image - Product image.
+ * @part image-link - Anchor element for image. Rendered only if "deeplink" property filled.
+ * @part price-amount-regular - Numeric part of the price.
+ * @part price-amount-sale - Numeric part of the price.
+ * @part price-amount-outdated - Numeric part of the price.
+ * @part price-amount-base-sale - Numeric part of the base price.
+ * @part price-amount-base-outdated - Numeric part of the base price.
+ * @part price-amount-base-regular - Numeric part of the base price.
+ * @part price-container - Block contains all prices.
+ * @part price-outdated - Renders inside price-container when "sale-price" property filled. Contains regular price.
+ * @part price-regular - Renders inside price-container when "sale-price" property is empty.
+ * @part price-sale - Renders inside price-container when "sale-price" property filled. Contains sale price.
+ * @part price-prefix - Renders before price-amount. Can be set with "price-prefix" property or inherited from parent component.
  * @part title - Product title
  * @part basket-button - Add to Basket button.
  * @part update-button-item - Update button in Product Card (Set mode).
@@ -75,6 +74,12 @@ import { resources } from "../../locale/resources";
  * @part energy-label-icon - Icon with an energy class.
  * @part energy-label-product-type - Product type.
  * @part energy-label-data-sheet-link - Data sheet link.
+ * @part price-label - String part of the price.
+ * @part price-label-0 - String part of the price with index 0.
+ * @part price-label-1 - String part of the price with index 1.
+ * @part price-label-2 - String part of the price with index 2.
+ * @part price-label-3 - String part of the price with index 3.
+ * @part price-label-4 - String part of the price with index 4.
  *
  * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
@@ -354,7 +359,7 @@ export class VviinnProductCard {
           "continuity-mode": this.isContinuityMode,
           "results-widget": this.isResultsWidget,
         }}
-        exportparts="brand, price-label, currency, deeplink, image, image-link, price-amount-regular, price-amount-sale, price-amount-outdated, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-container, price-outdated, price-regular, price-sale, price-prefix, discount-label, discount-percentage, title, basket-button, update-button-item, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
+        exportparts="brand, price-label, price-label-0, price-label-1, price-label-2, price-label-3, price-label-4, currency, deeplink, image, image-link,  price-amount-regular, price-amount-sale, price-amount-outdated, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated price-container, price-outdated, price-regular, price-sale, price-prefix, discount-label, discount-percentage, title, basket-button, update-button-item, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
       >
         <Linked deeplink={this.deeplink} part="image-link">
           {this.renderImage()}

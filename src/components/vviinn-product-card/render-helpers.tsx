@@ -3,6 +3,7 @@ import * as E from "fp-ts/lib/Either";
 import { FunctionalComponent, h } from "@stencil/core";
 import { PlusIcon } from "../vviinn-icons";
 import { BasePrice, Recommendation } from "../../interfaces/recommendation";
+import { Fragment } from "@stencil/core";
 
 const FIT_EXPR = /fit\/\d+\//;
 
@@ -106,16 +107,45 @@ type PriceProps = PriceElementProps & {
   priceLabel: string;
 };
 
-export const calculatePriceLabel = (recommendation: Recommendation) =>
-  (recommendation.custom_label_0 ?? "") +
-  (recommendation.custom_label_1 ?? "") +
-  (recommendation.custom_label_2 ?? "") +
-  (recommendation.custom_label_3 ?? "") +
-  (recommendation.custom_label_4 ?? "");
+export const calculatePriceLabel = ({
+  custom_label_0,
+  custom_label_1,
+  custom_label_2,
+  custom_label_3,
+  custom_label_4,
+}: Recommendation) => {
+  const renderLabel = (label: string, index: number) => {
+    if (!label) return "";
+
+    const partClass = `price-label-${index}`;
+
+    return (
+      <span part={partClass} class={partClass}>
+        {label}
+      </span>
+    );
+  };
+
+  return (
+    <Fragment>
+      {renderLabel(custom_label_0, 0)}
+      {renderLabel(custom_label_1, 1)}
+      {renderLabel(custom_label_2, 2)}
+      {renderLabel(custom_label_3, 3)}
+      {renderLabel(custom_label_4, 4)}
+    </Fragment>
+  );
+};
 
 export const Price: FunctionalComponent<PriceProps> = (props) => {
   return (
     <span class="price-container" part="price-container">
+      {props.priceLabel && (
+        <span part="price-label" class="price-label">
+          {props.priceLabel}
+        </span>
+      )}
+
       {props.salePrice ? (
         [
           <span class="price-outdated-container">
