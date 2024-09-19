@@ -74,17 +74,13 @@
   text-decoration: line-through;
 }
 .price-label > span {
-  margin-right: 5px;
+  margin-right: var(--spacing-50);
 }
 
 .price-amount--base {
   margin-left: var(--spacing-100);
   color: var(--color-text-helper);
   font-size: var(--font-size-caption);
-}
-
-.price-label > span:last-child {
-  margin-right: 0;
 }
 
 .product-type {
