@@ -141,29 +141,28 @@ export const calculatePriceLabel = ({
 export const Price: FunctionalComponent<PriceProps> = (props) => {
   return (
     <span class="price-container" part="price-container">
+      {props.priceLabel && (
+        <span part="price-label" class="price-label">
+          {props.priceLabel}
+        </span>
+      )}
+
       {props.salePrice ? (
         [
-          <span class="price-outdated-container">
-            {props.priceLabel && (
-              <span part="price-label" class="price-label">
-                {props.priceLabel}
-              </span>
-            )}
-            <span class="price-outdated" part="price-outdated">
-              <FormattedPrice
-                prefix={props.prefix}
-                currency={props.currency}
-                price={props.price}
-                locale={props.locale}
-                priceType="outdated"
-              />
-              <FormattedBasePrice
-                currency={props.currency}
-                basePrice={props.basePrice}
-                locale={props.locale}
-                priceType="outdated"
-              />
-            </span>
+          <span class="price-outdated" part="price-outdated">
+            <FormattedPrice
+              prefix={props.prefix}
+              currency={props.currency}
+              price={props.price}
+              locale={props.locale}
+              priceType="outdated"
+            />
+            <FormattedBasePrice
+              currency={props.currency}
+              basePrice={props.basePrice}
+              locale={props.locale}
+              priceType="outdated"
+            />
           </span>,
 
           <span class="price-sale" part="price-sale">
