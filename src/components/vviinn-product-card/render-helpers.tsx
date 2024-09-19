@@ -51,7 +51,7 @@ type PriceElementProps = {
 type BasePriceElementProps = {
   readonly locale: string;
   readonly currency: string;
-  readonly basePrice: BasePrice | null;
+  readonly basePrice?: BasePrice | null;
   readonly priceType?: PriceType;
 };
 
@@ -94,9 +94,9 @@ const FormattedBasePrice: FunctionalComponent<BasePriceElementProps> = ({
       part={`price-amount-base${priceType ? "-" + priceType : ""}`}
     >
       {formattedPrice}
-      {currency.length > 0 && <span part="currency">&nbsp;{currency}</span>}/
-      {basePrice.quantity > 1 && basePrice.quantity}
-      {basePrice.measure}
+      {currency?.length > 0 && <span part="currency">&nbsp;{currency}</span>}/
+      {basePrice?.quantity > 1 && basePrice?.quantity}
+      {basePrice?.measure}
     </span>
   );
 };

@@ -732,9 +732,9 @@ export class VviinnVprWidget implements ComponentInterface {
         imageWidth={this.imageWidth}
         imageRatio={this.imageRatio}
         price={recommendation.price.actual}
-        basePrice={recommendation.basePrice.actual}
         salePrice={recommendation.price.sale}
-        baseSalePrice={recommendation.basePrice.sale}
+        basePrice={recommendation.basePrice?.actual}
+        baseSalePrice={recommendation.basePrice?.sale}
         energyCertifications={recommendation.energyCertifications}
         responsive={this.isGridMode}
         basketButtonShow={this.addToBasketShow}

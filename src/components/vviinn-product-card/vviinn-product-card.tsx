@@ -102,7 +102,7 @@ export class VviinnProductCard {
   @Prop() imageWidth: number = 200;
   @Prop() locale: string | undefined = undefined;
   @Prop() price: number | undefined;
-  @Prop() basePrice: BasePrice | string | null;
+  @Prop() basePrice?: BasePrice | string | null;
   @Prop() pricePrefix: string | undefined = undefined;
   @Prop() productTitle: string;
   @Prop() productType: string | undefined;
@@ -324,7 +324,7 @@ export class VviinnProductCard {
   }
 
   private parseBasePrice(
-    basePrice: BasePrice | string | null
+    basePrice?: BasePrice | string | null
   ): BasePrice | null {
     if (!basePrice) return null;
     if (typeof basePrice === "string") {
