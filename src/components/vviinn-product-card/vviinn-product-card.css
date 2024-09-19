@@ -60,16 +60,15 @@
 .price-container {
   display: flex;
   flex-direction: column;
-  align-items: var(
-    --product-card-content-align,
-    var(--product-card-content-align-default)
-  );
 }
 
-.price-outdated-container,
 .price-outdated,
 .price-sale,
 .price-regular {
+  justify-content: var(
+    --product-card-content-align,
+    var(--product-card-content-align-default)
+  );
   display: flex;
   flex-wrap: wrap;
 }
@@ -79,17 +78,21 @@
   text-decoration: line-through;
 }
 
+.price-amount,
+.price-label > span,
+.currency {
+  white-space: nowrap;
+}
+
 .price-label > span {
   margin-right: var(--spacing-75);
 }
 
 .price-amount {
-  white-space: nowrap;
   margin-right: var(--spacing-100);
 }
 
 .price-amount--base {
-  white-space: nowrap;
   color: var(--color-text-helper);
   font-size: var(--font-size-caption);
 }

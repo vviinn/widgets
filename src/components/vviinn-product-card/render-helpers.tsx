@@ -64,7 +64,10 @@ const FormattedPrice: FunctionalComponent<PriceElementProps> = (props) => {
   ) : null;
 
   const currencyElement = props.currency ? (
-    <span part="currency">&nbsp;{props.currency}</span>
+    <span part="currency" class="currency">
+      {" "}
+      {props.currency}
+    </span>
   ) : null;
 
   return (
@@ -94,11 +97,26 @@ const FormattedBasePrice: FunctionalComponent<BasePriceElementProps> = ({
       part={`price-amount-base${priceType ? "-" + priceType : ""}`}
     >
       {formattedPrice}
-      {currency?.length > 0 && <span part="currency">&nbsp;{currency}</span>}/
-      {basePrice?.quantity > 1 && basePrice?.quantity}
+      {currency?.length > 0 && (
+        <span part="currency" class="currency">
+          {" "}
+          {currency}
+        </span>
+      )}
+      /{basePrice?.quantity > 1 && basePrice?.quantity}
       {basePrice?.measure}
     </span>
   );
+};
+
+export const parseBasePrice = (
+  basePrice?: BasePrice | string | null
+): BasePrice | null => {
+  if (!basePrice) return null;
+  if (typeof basePrice === "string") {
+    return JSON.parse(basePrice) as BasePrice;
+  }
+  return basePrice;
 };
 
 type PriceProps = PriceElementProps & {

@@ -23,6 +23,7 @@ import {
   Price,
   ResponsiveImage,
   Image,
+  parseBasePrice,
 } from "./render-helpers";
 import {
   CrossSellingClickEvent,
@@ -323,16 +324,6 @@ export class VviinnProductCard {
     return searchState.results.find((r) => r.productId === this.productId);
   }
 
-  private parseBasePrice(
-    basePrice?: BasePrice | string | null
-  ): BasePrice | null {
-    if (!basePrice) return null;
-    if (typeof basePrice === "string") {
-      return JSON.parse(basePrice) as BasePrice;
-    }
-    return basePrice;
-  }
-
   private renderImage() {
     const props: ImageProps = {
       width: this.imageWidth,
@@ -395,9 +386,9 @@ export class VviinnProductCard {
               prefix={this.pricePrefix}
               currency={this.currency}
               price={this.price}
-              basePrice={this.parseBasePrice(this.basePrice)}
+              basePrice={parseBasePrice(this.basePrice)}
               salePrice={this.salePrice}
-              baseSalePrice={this.parseBasePrice(this.baseSalePrice)}
+              baseSalePrice={parseBasePrice(this.baseSalePrice)}
               locale={this.locale}
               priceLabel={this.priceLabel}
             />
