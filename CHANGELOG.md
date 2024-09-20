@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.96.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.95.4...v2.96.0) (2024-09-20)
+
+
+### Features
+
+* Show Base Price in Product Card ([6439766](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/6439766a74c169e2f4560dfc47e6a1320ba14ac6))
+
 ### [2.95.4](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.95.3...v2.95.4) (2024-09-18)
 
 
