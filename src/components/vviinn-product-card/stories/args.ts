@@ -50,9 +50,14 @@ export const argTypes = {
       disable: true,
     },
   },
-  showInStorybook: {
-    table: {
-      disable: true,
+  basePrice: {
+    control: {
+      type: "object",
+    },
+  },
+  baseSalePrice: {
+    control: {
+      type: "object",
     },
   },
 };

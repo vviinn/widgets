@@ -447,6 +447,8 @@ export class VviinnCarousel {
         imageRatio={this.imageRatio}
         price={recommendation.price.actual}
         salePrice={salePrice}
+        basePrice={recommendation.basePrice?.actual}
+        baseSalePrice={recommendation.basePrice?.sale}
         responsive={this.isGridMode}
         campaignTypeId={this.campaignTypeId}
         index={rank}
@@ -541,6 +543,9 @@ export class VviinnCarousel {
               productTitle={this.sourceProduct.title}
               image={this.sourceProduct.image.thumbnail}
               price={this.sourceProduct.price.actual}
+              salePrice={this.sourceProduct.price.sale}
+              basePrice={this.sourceProduct.basePrice?.actual}
+              baseSalePrice={this.sourceProduct.basePrice?.sale}
               imageRatio={1}
               imageWidth={300}
               isSourceProduct={true}
