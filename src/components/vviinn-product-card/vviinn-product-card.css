@@ -60,6 +60,7 @@
 .price-container {
   display: flex;
   flex-direction: column;
+  gap: var(--spacing-75);
 }
 
 .price-outdated,
@@ -70,6 +71,7 @@
     var(--product-card-content-align-default)
   );
   display: flex;
+  gap: var(--spacing-100);
   flex-wrap: wrap;
 }
 
@@ -86,10 +88,6 @@
 
 .price-label > span {
   margin-right: var(--spacing-75);
-}
-
-.price-amount {
-  margin-right: var(--spacing-100);
 }
 
 .price-amount--base {
@@ -378,16 +376,6 @@ picture::after {
 
 :host(.set-mode) .basket-button--hidden {
   display: none;
-}
-
-:host(.set-mode) .price-amount {
-  margin-right: var(--spacing-150);
-}
-
-@media (max-width: 1080px) {
-  :host(.set-mode) .price-amount {
-    margin-right: var(--spacing-100);
-  }
 }
 
 @media (max-width: 768px) {
