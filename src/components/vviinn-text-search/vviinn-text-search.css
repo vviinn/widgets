@@ -4,6 +4,10 @@
   display: block;
   position: relative;
   width: 100%;
+
+  /**
+   * @prop --font-family: Set the font family of the text search.
+   */
 }
 
 .text-search-input {
@@ -15,7 +19,7 @@
   font-style: normal;
   font-weight: 400;
   border-radius: 8px;
-  font-family: var(--font-family-base);
+  font-family: var(--font-family, var(--font-family-base));
   border: 1px solid var(--color-border-02);
   transition: border-color 0.2s;
   outline: none;

@@ -34,6 +34,7 @@
    * @prop --product-card-text-align: Set the alignment of the text inside the product card.
    * @prop --product-card-image-border: Set the border of the product card image.
    * @prop --product-card-image-bg-color: Set the background color of the product card image.
+   * @prop --font-family: Set the font family of the product card.
    */
 
   position: relative;
@@ -48,7 +49,7 @@
     --product-card-text-align,
     var(--product-card-text-align-default)
   );
-  font-family: var(--font-family-base);
+  font-family: var(--font-family, var(--font-family-base));
   font-weight: var(--font-weight-400);
   font-size: var(--font-size-body);
   line-height: var(--line-height-body);

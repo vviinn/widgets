@@ -3,7 +3,7 @@
 :host {
   color: #525252;
   font-size: 12px;
-  font-family: var(--font-family-base);
+  font-family: var(--font-family, var(--font-family-base));
   line-height: 16px;
   text-align: center;
   margin-top: 24px;

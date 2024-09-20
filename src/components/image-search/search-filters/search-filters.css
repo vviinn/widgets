@@ -23,7 +23,7 @@
   transition-property: background;
   transition-duration: 0.5s;
   transition-timing-function: ease-in-out;
-  font-family: var(--font-family-base);
+  font-family: var(--font-family, var(--font-family-base));
   user-select: none;
   padding: 10px 12px;
 }
