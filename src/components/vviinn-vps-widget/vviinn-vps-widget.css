@@ -71,7 +71,6 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
 }
 
 .action-button {
-  font-family: inherit;
   display: grid;
   border: none;
   cursor: pointer;
@@ -80,6 +79,7 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   font-size: 16px;
   height: 48px;
   justify-items: center;
+  font-family: var(--font-family-base);
   transition: background 0.1s ease-in-out;
   color: #525252;
   background-color: #f4f4f4;
@@ -112,6 +112,7 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   align-items: center;
   justify-items: start;
   justify-content: center;
+  font-family: var(--font-family-base);
   grid-template-columns: max-content auto;
   grid-gap: 8px;
 }

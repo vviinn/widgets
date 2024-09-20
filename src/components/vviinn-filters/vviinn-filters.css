@@ -2,7 +2,6 @@
 
 :host {
   display: block;
-
   font-family: var(--font-family-base);
   font-style: normal;
 }
@@ -34,6 +33,7 @@
 .filters-main-button,
 .filters-modal-close,
 .filters-sub-button-selected {
+  font-family: var(--font-family-base);
   cursor: pointer;
   border: none;
 }
@@ -310,6 +310,7 @@
   border-radius: var(--border-radius-100);
   background: var(--surface-bg-color-01);
 
+  font-family: var(--font-family-base);
   color: var(--color-text-primary);
 }
 .filters-more-modal-button.active {
@@ -336,6 +337,11 @@
   z-index: 10;
   background: #ffffff;
   border-radius: 0px 0px 0px 32px;
+}
+
+.filters-modal-apply,
+.filters-modal-reset {
+  font-family: var(--font-family-base);
 }
 
 .filters-modal-apply {

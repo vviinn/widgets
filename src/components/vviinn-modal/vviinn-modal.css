@@ -12,6 +12,7 @@
 }
 
 .head {
+  font-family: var(--font-family-base);
   position: absolute;
   width: 100%;
   box-sizing: border-box;
