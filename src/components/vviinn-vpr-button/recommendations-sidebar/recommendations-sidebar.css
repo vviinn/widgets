@@ -36,8 +36,8 @@
 header {
   position: relative;
   text-align: center;
-  padding: 32px;
-  padding-top: 48px;
+  padding: var(--spacing-300);
+  padding-top: 0px;
 }
 
 header.contains-source-img {
@@ -59,7 +59,7 @@ img.source-image {
 }
 
 main {
-  padding: 0 24px;
+  padding: 0 var(--spacing-300);
   min-height: 100px;
 }
 
@@ -70,6 +70,7 @@ main {
 .sidebar {
   background: white;
   box-sizing: border-box;
+  padding-top: var(--spacing-300);
   display: flex;
   flex-direction: column;
   max-height: 100vh;
@@ -116,7 +117,7 @@ main {
 :host(.right) vviinn-vpr-widget::part(recommendations-grid) {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-gap: 24px;
+  grid-gap: var(--spacing-300);
 }
 
 :host(.right) vviinn-vpr-widget {
@@ -125,22 +126,22 @@ main {
 
 .title {
   font-style: normal;
-  font-weight: 500;
-  font-size: 28px;
+  font-weight: var(--font-weight-600);
+  font-size: var(--font-size-title);
   line-height: 40px;
   text-align: center;
   color: #000000;
 }
 
 .close-sidebar {
+  position: absolute;
   background: transparent;
   border: none;
   cursor: pointer;
   margin: 0;
   padding: 0;
-  position: absolute;
-  right: 24px;
-  top: 24px;
+  top: 0;
+  right: var(--spacing-300);
 }
 
 @keyframes slideInFromBottom {
