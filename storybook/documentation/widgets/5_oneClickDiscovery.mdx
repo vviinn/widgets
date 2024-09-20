@@ -54,7 +54,56 @@ Here are 3 examples, using different modes: `continuity` (default), `grid`, and 
                         ></vviinn-vpr-button> 
                     </div>
                 </div>
-                        <div className="product">
+                <div className="product">
+                    <a className="product__image" href="#"></a>
+                    <div className="product__name">
+                        <a href="#">Product Name</a>
+                    </div>
+                    <div className="product__price">
+                        $10.00  
+                        <vviinn-vpr-button 
+                            token={vviinnToken}
+                            product-id={productIdSimilarProducts} 
+                            mode="set" 
+                            block-title=""
+                            locale="en-US"
+                        ></vviinn-vpr-button> 
+                    </div>
+                </div>
+                <div className="product">
+                    <a className="product__image" href="#"></a>
+                    <div className="product__name">
+                        <a href="#">Product Name</a>
+                    </div>
+                    <div className="product__price">
+                        $10.00 
+
+                        <vviinn-vpr-button 
+                            token={vviinnToken}
+                            product-id={productIdCrossSelling}
+                            mode="continuity" 
+                            block-title=""
+                            locale="en-US"
+                        ></vviinn-vpr-button> 
+                    </div>
+                </div>
+                <div className="product">
+                    <a className="product__image" href="#"></a>
+                    <div className="product__name">
+                        <a href="#">Product Name</a>
+                    </div>
+                    <div className="product__price">
+                        $10.00  
+                        <vviinn-vpr-button 
+                            token={vviinnToken}
+                            product-id={productIdSimilarProducts} 
+                            mode="grid" 
+                            block-title=""
+                            locale="en-US"
+                        ></vviinn-vpr-button> 
+                    </div>
+                </div>
+                <div className="product">
                     <a className="product__image" href="#"></a>
                     <div className="product__name">
                         <a href="#">Product Name</a>
@@ -108,7 +157,55 @@ Here are 3 examples, using different modes: `continuity` (default), `grid`, and 
             ></vviinn-vpr-button> 
         </div>
     </div>
-        <div class="product">
+    <div class="product">
+        <a class="product__image" href="#"></a>
+        <div class="product__name">
+            <a href="#">Product Name</a>
+        </div>
+        <div class="product__price">
+            $10.00  
+            <vviinn-vpr-button 
+                token="TOKEN" 
+                product-id="PRODUCT_ID" 
+                mode="set" 
+                block-title=""
+                locale="en-US"
+            ></vviinn-vpr-button> 
+        </div>
+    </div>
+    <div class="product">
+        <a class="product__image" href="#"></a>
+        <div class="product__name">
+            <a href="#">Product Name</a>
+        </div>
+        <div class="product__price">
+            $10.00 
+            <vviinn-vpr-button 
+                token="TOKEN" 
+                product-id="PRODUCT_ID" 
+                mode="continuity" 
+                block-title=""
+                locale="en-US"
+            ></vviinn-vpr-button> 
+        </div>
+    </div>
+    <div class="product">
+        <a class="product__image" href="#"></a>
+        <div class="product__name">
+            <a href="#">Product Name</a>
+        </div>
+        <div class="product__price">
+            $10.00  
+            <vviinn-vpr-button 
+                token="TOKEN" 
+                product-id="PRODUCT_ID" 
+                mode="grid" 
+                block-title=""
+                locale="en-US"
+            ></vviinn-vpr-button> 
+        </div>
+    </div>
+    <div class="product">
         <a class="product__image" href="#"></a>
         <div class="product__name">
             <a href="#">Product Name</a>

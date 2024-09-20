@@ -1,6 +1,6 @@
 vviinn-vpr-widget#vviinn-discovery-slider::part(title),
 vviinn-vpr-widget#vviinn-discovery-set::part(recommendations-title),
-vviinn-vps-button::part(upload-photo_button) {
+vviinn-vps-button#vviinn-vps-button-customization::part(upload-photo_button) {
   color: red;
   font-weight: bold;
 }
