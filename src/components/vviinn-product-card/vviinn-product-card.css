@@ -207,6 +207,7 @@ picture::before {
   padding: var(--spacing-100);
   font-size: var(--font-size-label);
   font-weight: var(--font-weight-500);
+  font-family: var(--font-family, var(--font-family-base));
   cursor: pointer;
 }
 

@@ -4,6 +4,10 @@
   display: block;
   font-family: var(--font-family, var(--font-family-base));
   font-style: normal;
+
+  /**
+   * @prop --font-family: Set the font family of the filters.
+   */
 }
 
 :host(.show-in-widget) {
