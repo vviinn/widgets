@@ -58,10 +58,15 @@
   cursor: unset;
 }
 
-vviinn-image-selector {
+vviinn-image-selector,
+vviinn-vps-button {
   position: absolute;
   right: 60px;
-  top: 14px;
+  top: calc(50% - 12px);
+}
+
+vviinn-vps-button::part(button) {
+  display: contents;
 }
 
 vviinn-preloader {

@@ -27,7 +27,7 @@ Using `Vviinn Widgets` as separate components allows for greater control over th
         <vviinn-extended-filters locale="en-US"></vviinn-extended-filters>
         <vviinn-filters></vviinn-filters>
         
-        <vviinn-text-search token={vviinnToken} mode="textAndImage" locale="en-US"></vviinn-text-search>
+        <vviinn-text-search token={vviinnToken} mode="textAndUpload" locale="en-US"></vviinn-text-search>
         <vviinn-results token={vviinnToken} locale="en-US"></vviinn-results>
       </div>
   </div>
@@ -46,7 +46,7 @@ vviinn-text-search {
 <vviinn-extended-filters locale="en-US"></vviinn-extended-filters>
 <vviinn-filters locale="en-US"></vviinn-filters>
 
-<vviinn-text-search token="YOUR_TOKEN" mode="textAndImage" locale="en-US"></vviinn-text-search>
+<vviinn-text-search token="YOUR_TOKEN" mode="textAndUpload" locale="en-US"></vviinn-text-search>
 <vviinn-results token="YOUR_TOKEN" locale="en-US"></vviinn-results>
 ```
 </div>
@@ -54,7 +54,7 @@ vviinn-text-search {
 In this basic example, we use `vviinn-text-search`, `vviinn-results`, and two variations of the filter component. Let's take a closer look at the attributes we are using in this example: 
 
 - The `token` attribute is required for all components (except filters) and is used to authenticate your requests.
-- The `textAndImage` mode enables image search functionality.
+- The `textAndUpload` mode enables image search functionality.
 
 Other properties you can use are detailed on the components' pages.
 
@@ -86,7 +86,7 @@ To see the filter columns, enable Filters in the Interface Controls section insi
 </script>
 <vviinn-text-search
   token="YOUR_TOKEN"
-  mode="textAndImage"
+  mode="textAndUpload"
   locale="en-US"
 ></vviinn-text-search>
 
