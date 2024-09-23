@@ -55,6 +55,10 @@ export class VviinnTextSearch {
   /** @internal */
   @Prop() apiPath?: string = "https://api.vviinn.com";
 
+  /** @internal */
+  @Event({ bubbles: true, composed: true })
+  globalSlotsChanged: EventEmitter<any>;
+
   async componentWillLoad() {
     await i18next.init({
       lng: this.locale,
@@ -62,6 +66,18 @@ export class VviinnTextSearch {
       resources,
     });
     slotChangeListener(this, this.el);
+  }
+
+  componentDidLoad() {
+    this.replaceSlotsContent();
+  }
+
+  private replaceSlotsContent() {
+    const slots = this.el.querySelectorAll("[slot]");
+    this.globalSlotsChanged.emit({
+      slots: Array.from(slots),
+      element: this.el,
+    });
   }
 
   @Listen("vviinnImageUploadFinished")
@@ -145,6 +161,7 @@ export class VviinnTextSearch {
           <vviinn-vps-button
             token={this.token}
             apiPath={this.apiPath}
+            locale={this.locale}
           ></vviinn-vps-button>
         )}
       </Host>

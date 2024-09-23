@@ -193,7 +193,11 @@ export class VviinnVpsButton {
 
   render() {
     return (
-      <Host tabindex="0" role="button">
+      <Host
+        tabindex="0"
+        role="button"
+        exportparts="brand, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-container, price-outdated, price-regular, price-sale, price-prefix, title, product-card, upload-photo_button, show-files_button, start-camera_button, text-search-input, close-button, secondary-action, close-button, price-label, price-label-0, price-label-1, price-label-2, price-label-3, price-label-4, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
+      >
         <vviinn-button
           onClick={() => {
             this.handleClick();
