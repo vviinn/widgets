@@ -37,6 +37,7 @@ import { vviinnToken } from "../../helpers";
         <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'static-filters')}}>Code</button>
         <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'static-filters')}}>Preview</button>
     </div>
+    <div className="tab-sub-title">For customizing the Search Modal content inside the Text Search component, you can use slots and parts from [Search Modal](?path=/story/playground-search-modal--default).</div>
     <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
             <vviinn-text-search token={vviinnToken} locale="en-US" mode="textAndModal"></vviinn-text-search>
