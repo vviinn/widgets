@@ -26,11 +26,11 @@ Using `Vviinn Widgets` as separate components allows for greater control over th
 
   <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
       <div className="tabcontent-preview">
-        <div class="search-page-wrapper">
-          <div class="search-page-wrapper-filters">
+        <div className="search-page-wrapper">
+          <div className="search-page-wrapper-filters">
             <vviinn-extended-filters locale="en-US" mode="preview"></vviinn-extended-filters>
           </div>
-          <div class="search-page-wrapper-result">
+          <div className="search-page-wrapper-result">
             <vviinn-text-search token={vviinnToken} locale="en-US">
               <vviinn-vps-button
               token={vviinnToken} locale="en-US"
@@ -39,7 +39,7 @@ Using `Vviinn Widgets` as separate components allows for greater control over th
               </vviinn-vps-button>
             </vviinn-text-search>
             
-            <div class="search-page-wrapper-result-filters">
+            <div className="search-page-wrapper-result-filters">
               <vviinn-extended-filters locale="en-US"></vviinn-extended-filters>
 
               <vviinn-selected-filters></vviinn-selected-filters>
