@@ -4,6 +4,8 @@ import "../../components/tabs/styles.css";
 import {clickHandlers} from "../../components"
 import "../../styles/filters-search-bar.css";
 import { vviinnToken, textSearchQuery } from "../../helpers";
+import "../../styles/search-page.css";
+import "./styles.css";
 
 <Meta title="Widgets/Product List Page" />
 
@@ -18,33 +20,105 @@ import { vviinnToken, textSearchQuery } from "../../helpers";
     </div>
     <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
-            <vviinn-extended-filters></vviinn-extended-filters>
-            <vviinn-filters></vviinn-filters>
+            <div class="search-page-wrapper">
+                <div class="search-page-wrapper-filters">
+                    <vviinn-extended-filters locale="en-US" mode="preview"></vviinn-extended-filters>
+                </div>
+                <div class="search-page-wrapper-result">
+                    <div class="search-page-wrapper-result-filters">
+                        <vviinn-extended-filters locale="en-US"></vviinn-extended-filters>
 
-            <vviinn-results 
-                token={vviinnToken}
-                image-resolution-width="500" 
-                currency-sign="€" 
-                locale="en-US" 
-                results-count="9"
-                text-search-query={textSearchQuery}
-            ></vviinn-results>
+                        <vviinn-selected-filters></vviinn-selected-filters>
+                    </div>
+
+                    <vviinn-results 
+                        token={vviinnToken}
+                        image-resolution-width="500" 
+                        currency-sign="€" 
+                        locale="en-US" 
+                        results-count="9"
+                        text-search-query={textSearchQuery}
+                    ></vviinn-results>
+                </div>
+            </div>
         </div>
     </div>
     <div id="Code_2" className="tabcontent">
 ```html
-<vviinn-extended-filters></vviinn-extended-filters>
-<vviinn-filters></vviinn-filters>
+<style>
+vviinn-text-search {
+  margin: 10px 0;
+}
 
-<vviinn-results 
-    token="TOKEN" 
-    image-resolution-width="500" 
-    currency-sign="€" 
-    locale="en-US" 
-    results-count="9"
-    text-search-query="Chair"
-    locale="en-US"
-></vviinn-results>
+.search-page-wrapper {
+  display: flex;
+  gap: 20px;
+}
+
+.search-page-wrapper-filters {
+  flex: none;
+  width: 250px;
+}
+@media screen and (max-width: 768px) {
+  .search-page-wrapper-filters {
+    display: none;
+  }
+}
+
+.search-page-wrapper-result {
+  flex: 1;
+}
+
+.search-page-wrapper-result-filters {
+  margin: 10px 0 !important;
+  overflow-x: auto;
+}
+
+.search-page-wrapper-result-filters
+  vviinn-selected-filters::part(selected-filters-list) {
+  margin-top: 0;
+}
+
+.search-page-wrapper-result-filters vviinn-extended-filters {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .search-page-wrapper-result-filters vviinn-extended-filters {
+    display: block;
+  }
+  .search-page-wrapper-result-filters vviinn-selected-filters {
+    margin-top: 10px;
+  }
+  .search-page-wrapper-result-filters
+    vviinn-selected-filters::part(selected-filters-list) {
+    flex-wrap: wrap;
+  }
+}
+</style>
+
+<div class="search-page-wrapper">
+    <div class="search-page-wrapper-filters">
+        
+        <vviinn-extended-filters locale="en-US" mode="preview"></vviinn-extended-filters>
+    </div>
+    <div class="search-page-wrapper-result">
+        <div class="search-page-wrapper-result-filters">
+            <vviinn-extended-filters locale="en-US"></vviinn-extended-filters>
+
+            <vviinn-selected-filters></vviinn-selected-filters>
+        </div>
+
+        <vviinn-results 
+            token="TOKEN"
+            image-resolution-width="500" 
+            currency-sign="€" 
+            locale="en-US" 
+            results-count="9"
+            text-search-query={textSearchQuery}
+        ></vviinn-results>
+    </div>
+</div>
 ```
     </div>
 </div>

@@ -1,6 +1,7 @@
 import { generalArgs } from "../../src/components/vviinn-results/stories/generalArgs";
 import { ResultsTemplate } from "../../src/components/vviinn-results/stories/ResultsTemplate";
 import { filterValue } from "../helpers";
+import "../documentation/widgets/styles.css";
 
 export default {
   title: "Playground/Product List",

@@ -5,3 +5,7 @@ vviinn-results::part(price-label),
 vviinn-recommendations-sidebar::part(price-label) {
   display: none;
 }
+
+vviinn-vpr-widget#discovery-set-vviinn-vpr-widget::part(title) {
+  min-height: 40px;
+}

@@ -1,6 +1,15 @@
 vviinn-vpr-widget#vviinn-discovery-slider::part(title),
 vviinn-vpr-widget#vviinn-discovery-set::part(recommendations-title),
 vviinn-vps-button#vviinn-vps-button-customization::part(upload-photo_button) {
-  color: red;
+  color: #ffffff;
   font-weight: bold;
+  background: #000000;
+}
+
+vviinn-vpr-widget#vviinn-discovery-set::part(discount-label) {
+  background: #000000;
+}
+
+vviinn-vpr-widget#vviinn-discovery-set::part(title) {
+  min-height: 40px;
 }
