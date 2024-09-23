@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.97.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.97.1...v2.97.2) (2024-09-23)
+
+
+### Bug Fixes
+
+* changed product list layout in storybook ([af432a1](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/af432a1077270da94a7bb1ad31760d265cbbe536))
+* storybook improvement ([613961b](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/613961bdcf365f9efec65f0d25d99b6748149f55))
+
 ### [2.97.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.97.0...v2.97.1) (2024-09-23)
 
 
