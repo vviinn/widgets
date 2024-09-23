@@ -1,4 +1,4 @@
-export const filters = JSON.stringify([
+export const filtersList = [
   {
     column: "color_confirmed",
     label: "Color",
@@ -274,6 +274,69 @@ export const filters = JSON.stringify([
       {
         value: "Y2VsZWJyYXRlPkhvY2h6ZWl0c2VpbmxhZHVuZ2Vu",
         label: "Hochzeitseinladungen",
+        active: true,
+        selected: false,
+      },
+    ],
+  },
+];
+
+export const filters = JSON.stringify(filtersList);
+
+export const extendedFilters = JSON.stringify([
+  ...filtersList,
+  {
+    column: "availability",
+    label: "Availability",
+    isPrimary: false,
+    values: [
+      {
+        value: "in_stock",
+        label: "In Stock",
+        active: true,
+        selected: false,
+      },
+      {
+        value: "out_of_stock",
+        label: "Out of Stock",
+        active: true,
+        selected: false,
+      },
+    ],
+  },
+  {
+    column: "brand",
+    label: "Brand",
+    isPrimary: true,
+    values: [
+      {
+        value: "Adidas",
+        label: "Adidas",
+        active: true,
+        selected: false,
+      },
+      {
+        value: "Nike",
+        label: "Nike",
+        active: true,
+        selected: false,
+      },
+    ],
+  },
+  {
+    column: "size",
+    label: "Size",
+    isPrimary: true,
+    values: [
+      {
+        value: "X",
+        label: "X",
+        active: true,
+        selected: false,
+      },
+      {
+        value: "XS",
+        label: "XS",
         active: true,
         selected: false,
       },

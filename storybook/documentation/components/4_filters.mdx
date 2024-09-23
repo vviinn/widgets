@@ -3,7 +3,7 @@ import { Meta, Story } from '@storybook/blocks';
 import "../../styles/filters-search-bar.css";
 import "../../components/tabs/styles.css";
 import {clickHandlers} from "../../components";
-import {filters} from "./constants";
+import {filters, extendedFilters} from "./constants";
 
 <Meta title="Components/Filters" />
 
@@ -13,7 +13,7 @@ import {filters} from "./constants";
 
 <div id="preview">
   <div className="tab tab-reverse">
-      <h3>Preview</h3>
+      <h3>Primary</h3>
 
       <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Details_1', 'preview')}}>Technical Details</button>
       <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'preview')}}>Code</button>
@@ -39,7 +39,7 @@ import {filters} from "./constants";
 
 <div id="extended">
   <div className="tab tab-reverse">
-      <h3>Extended Modal</h3>
+      <h3>Modal</h3>
 
       <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Details_2', 'extended')}}>Technical Details</button>
       <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'extended')}}>Code</button>
@@ -48,7 +48,7 @@ import {filters} from "./constants";
 
   <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
       <div className="tabcontent-preview">
-        <vviinn-extended-filters filters-string={filters} locale="en-US"></vviinn-extended-filters>
+        <vviinn-extended-filters filters-string={extendedFilters} locale="en-US"></vviinn-extended-filters>
       </div>
   </div>
 
@@ -65,7 +65,7 @@ import {filters} from "./constants";
 
 <div id="extended-preview">
   <div className="tab tab-reverse">
-      <h3>Extended Preview</h3>
+      <h3>Extended</h3>
 
       <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Details_3', 'extended-preview')}}>Technical Details</button>
       <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_3', 'extended-preview')}}>Code</button>
@@ -74,7 +74,7 @@ import {filters} from "./constants";
 
   <div id="Preview_3" className="tabcontent" style={{display:"block"}}>
       <div className="tabcontent-preview">
-        <vviinn-extended-filters filters-string={filters} mode="preview" locale="en-US"></vviinn-extended-filters>
+        <vviinn-extended-filters filters-string={extendedFilters} mode="preview" locale="en-US"></vviinn-extended-filters>
       </div>
   </div>
 

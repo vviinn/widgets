@@ -1,6 +1,7 @@
 import { argTypes } from "../../src/components/vviinn-product-card/stories/args";
 import { productDecorator } from "../../src/components/vviinn-product-card/stories/decorators";
 import { energyCertificationsString } from "../documentation/components/constants";
+import "../documentation/widgets/styles.css";
 
 export default {
   title: "Playground/Product Card",

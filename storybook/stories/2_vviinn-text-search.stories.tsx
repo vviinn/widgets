@@ -1,22 +1,8 @@
 import { vviinnToken } from "../helpers";
+import "../documentation/widgets/styles.css";
+import "../styles/search-page.css";
 
 const textSearchDecorator = (story) => `
-    <style>
-      vviinn-filters {
-        margin: 12px 0;
-      }
-      vviinn-selected-filters{
-        margin: 12px 0;
-      }
-      vviinn-extended-filters {
-        width: fit-content;
-        margin-left: auto;
-      }
-
-      vviinn-results {
-        margin: 20px 0;
-      }
-    </style>
       ${story()}
   `;
 
@@ -27,22 +13,32 @@ export default {
 };
 
 const Template = (args) => `
-  <vviinn-extended-filters locale="${args.locale}"></vviinn-extended-filters>
-  <vviinn-filters></vviinn-filters>
-  <vviinn-text-search 
-    token="${args.token}"
-    api-path="${args.apiPath}"
-    search-query="${args.searchQuery}"
-    mode="${args.mode}"
-    locale="${args.locale}"
-    show-in-widget="${args.showInWidget}"
-  ></vviinn-text-search>
-  <vviinn-selected-filters></vviinn-selected-filters>
-  <vviinn-results 
-    token="${args.token}"
-    api-path="${args.apiPath}"
-    locale="${args.locale}"
-  ></vviinn-results>
+<div class="search-page-wrapper">
+  <div class="search-page-wrapper-filters">
+    <vviinn-extended-filters locale="${args.locale}" mode="preview"></vviinn-extended-filters>
+  </div>
+  <div class="search-page-wrapper-result">
+    <vviinn-text-search 
+      token="${args.token}"
+      api-path="${args.apiPath}"
+      search-query="${args.searchQuery}"
+      mode="${args.mode}"
+      locale="${args.locale}"
+      show-in-widget="${args.showInWidget}"
+    ></vviinn-text-search>
+
+    <div class="search-page-wrapper-result-filters">
+      <vviinn-extended-filters locale="${args.locale}"></vviinn-extended-filters>
+      <vviinn-selected-filters></vviinn-selected-filters>
+    </div>
+
+    <vviinn-results 
+      token="${args.token}"
+      api-path="${args.apiPath}"
+      locale="${args.locale}"
+    ></vviinn-results>
+  </div>
+</div>  
 `;
 
 export const TextSearch = Template.bind({});

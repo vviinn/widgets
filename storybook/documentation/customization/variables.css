@@ -1,7 +1,7 @@
 vviinn-vps-button#vviinn-vps-primary-colors {
-  --color-primary: red;
+  --color-primary: #ca4930;
 }
 
 vviinn-vpr-widget#vviinn-vpr-image-border {
-  --product-card-image-border: 1px solid red;
+  --product-card-image-border: 1px solid #ca4930;
 }
