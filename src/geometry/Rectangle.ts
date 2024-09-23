@@ -9,6 +9,8 @@ import { RectangleAlt } from "./RectangleAlt";
 
 export type Rectangle = Point & Sized;
 
+export type ClickEvent = Event & { clientX: number; clientY: number };
+
 export const move = (origin: Rectangle, position: Point): Rectangle => {
   const originPosition = fromRectangle(origin);
   const newPosition = pointSumSemigroup.concat(originPosition, position);
@@ -97,4 +99,17 @@ export const center = (r: Rectangle): Point => {
     x: r.x + r.width * 0.5,
     y: r.y + r.height * 0.5,
   };
+};
+
+export const isClickedInRectBound = (
+  event: ClickEvent,
+  rect: DOMRect
+): boolean => {
+  const { clientX, clientY } = event;
+
+  const inLeftBound = clientX >= rect.left;
+  const inRightBound = clientX <= rect.right;
+  const inTopBound = clientY >= rect.top;
+  const inBottomBound = clientY <= rect.bottom;
+  return inLeftBound && inRightBound && inTopBound && inBottomBound;
 };

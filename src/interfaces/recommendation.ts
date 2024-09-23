@@ -25,6 +25,8 @@ export interface Interfaces {
 
   EnergyEfficiencyClass: components["schemas"]["energy-efficiency-class"];
   EnergyCertification: components["schemas"]["energy-certification"];
+
+  BasePrice: components["schemas"]["basePrice"];
 }
 
 export type SimilarProductsRequest = Interfaces["SimilarProductsRequest"];
@@ -36,3 +38,5 @@ export type EnergyEfficiencyClass = Interfaces["EnergyEfficiencyClass"];
 export type EnergyCertification = Interfaces["EnergyCertification"];
 export type EnergyClassIconDirection =
   keyof Interfaces["EnergyCertification"]["classIconUrls"];
+
+export type BasePrice = Interfaces["BasePrice"];

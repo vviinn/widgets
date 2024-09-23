@@ -34,6 +34,7 @@
    * @prop --product-card-text-align: Set the alignment of the text inside the product card.
    * @prop --product-card-image-border: Set the border of the product card image.
    * @prop --product-card-image-bg-color: Set the background color of the product card image.
+   * @prop --font-family: Set the font family of the product card.
    */
 
   position: relative;
@@ -48,7 +49,7 @@
     --product-card-text-align,
     var(--product-card-text-align-default)
   );
-  font-family: var(--font-family-base);
+  font-family: var(--font-family, var(--font-family-base));
   font-weight: var(--font-weight-400);
   font-size: var(--font-size-body);
   line-height: var(--line-height-body);
@@ -60,18 +61,41 @@
 .price-container {
   display: flex;
   flex-direction: column;
+  gap: var(--spacing-75);
+}
+
+.price-outdated,
+.price-sale,
+.price-regular {
+  justify-content: var(
+    --product-card-content-align,
+    var(--product-card-content-align-default)
+  );
+  display: flex;
+  gap: var(--spacing-100);
+  flex-wrap: wrap;
 }
 
 .price-outdated {
   color: var(--color-text-helper);
   text-decoration: line-through;
 }
+
+.price-amount,
+.price-label > span,
+.currency {
+  white-space: nowrap;
+}
+
 .price-label > span {
-  margin-right: 5px;
+  margin-right: var(--spacing-75);
 }
-.price-label > span:last-child {
-  margin-right: 0;
+
+.price-amount--base {
+  color: var(--color-text-helper);
+  font-size: var(--font-size-caption);
 }
+
 .product-type {
   word-wrap: anywhere;
 }
@@ -93,6 +117,10 @@
 
 .brand {
   display: none;
+}
+
+.currency {
+  padding-left: var(--spacing-50);
 }
 
 .title {
@@ -178,7 +206,8 @@ picture::before {
   border: none;
   padding: var(--spacing-100);
   font-size: var(--font-size-label);
-  font-weight: var(--font-weight-500);
+  font-weight: var(--font-weight-400);
+  font-family: var(--font-family, var(--font-family-base));
   cursor: pointer;
 }
 
@@ -349,16 +378,6 @@ picture::after {
 
 :host(.set-mode) .basket-button--hidden {
   display: none;
-}
-
-:host(.set-mode) .price-amount {
-  margin-right: var(--spacing-150);
-}
-
-@media (max-width: 1080px) {
-  :host(.set-mode) .price-amount {
-    margin-right: var(--spacing-100);
-  }
 }
 
 @media (max-width: 768px) {
