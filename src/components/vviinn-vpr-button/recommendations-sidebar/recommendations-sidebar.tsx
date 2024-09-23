@@ -16,9 +16,9 @@ import { CampaignName } from "../../../campaign/Campaign";
 import { Locale } from "../../../locale";
 import { UpdateButtonLocation } from "../../vviinn-vpr-widget/vviinn-vpr-widget";
 import { searchState } from "../../../store/search.store";
+import { ClickEvent, isClickedInRectBound } from "../../../geometry/Rectangle";
 
 type SidebarState = "idle" | "open" | "closed";
-type ClickEvent = Event & { clientX: number; clientY: number };
 
 @Component({
   tag: "vviinn-recommendations-sidebar",
@@ -93,18 +93,11 @@ export class RecommendationsSidebar {
 
   @Listen("click", { target: "body" })
   bodyClickListener(event: ClickEvent) {
-    const { clientX, clientY } = event;
     const sidebarRect = this.getSidebarRectangle();
 
     if (!sidebarRect) return;
 
-    const inLeftBound = clientX >= sidebarRect.left;
-    const inRightBound = clientX <= sidebarRect.right;
-    const inTopBound = clientY >= sidebarRect.top;
-    const inBottomBound = clientY <= sidebarRect.bottom;
-    const inBound = inLeftBound && inRightBound && inTopBound && inBottomBound;
-
-    if (!inBound) {
+    if (!isClickedInRectBound(event, sidebarRect)) {
       this.state = "closed";
     }
   }
