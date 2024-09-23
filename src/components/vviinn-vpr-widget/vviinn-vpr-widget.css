@@ -1,3 +1,5 @@
+@import "../../variables.css";
+
 :host {
   /**
    * @prop --vviinn-carousel-columns: A number of items in grid mode.
@@ -5,10 +7,11 @@
    * @prop --product-card-text-align: Set the alignment of the text inside the product card.
    * @prop --product-card-image-border: Set the border of the product card image.
    * @prop --product-card-image-bg-color: Set the background color of the product card image.
+   * @prop --font-family: Set the font family of the widget.
    */
 
   display: grid;
-  grid-gap: 1rem;
+  grid-gap: var(--spacing-200);
   width: 100%;
 }
 
@@ -17,12 +20,17 @@
   visibility: hidden;
 }
 
-:host(.set) vviinn-carousel {
-  overflow-x: auto;
+:host(.set) {
+  grid-gap: var(--spacing-300);
 }
 
 :host(.set) vviinn-carousel {
+  overflow-x: auto;
   scrollbar-width: thin;
+}
+
+:host(.grid) h2 {
+  justify-content: center;
 }
 
 .filters-header {
@@ -59,10 +67,27 @@
   line-height: 20px;
 }
 
+.widget-header h2,
+.widget-header h3 {
+  margin: 0;
+  font-family: var(--font-family, var(--font-family-base));
+}
+
+.widget-header h2 {
+  font-weight: var(--font-weight-600);
+  line-height: var(--line-height-title);
+}
+
+.widget-header h3 {
+  line-height: var(--line-height-body);
+  margin-top: var(--spacing-100);
+}
+
 .update-button {
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: var(--font-family, var(--font-family-base));
   color: #525252;
   gap: 8px;
   padding: 8px 10px;
@@ -77,10 +102,6 @@
 
 .update-button svg {
   color: #6f6f6f;
-}
-
-h2 {
-  margin: 0;
 }
 
 .results {
@@ -99,12 +120,4 @@ h2 {
   z-index: -1;
   height: 0;
   width: 0;
-}
-
-h2 {
-  margin: 0;
-}
-
-:host(.grid) h2 {
-  justify-content: center;
 }

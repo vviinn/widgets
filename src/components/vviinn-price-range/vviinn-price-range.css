@@ -4,7 +4,7 @@
   display: block;
   max-width: 400px;
 
-  font-family: var(--font-family-base);
+  font-family: var(--font-family, var(--font-family-base));
 }
 
 .histogram {
