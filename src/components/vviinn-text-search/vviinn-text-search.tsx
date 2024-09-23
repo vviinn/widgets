@@ -66,7 +66,7 @@ export class VviinnTextSearch {
 
   @Listen("vviinnImageUploadFinished")
   imageUploadFinished({ detail }: SearchIdEvent) {
-    if (!this.showInWidget) {
+    if (!this.showInWidget && this.mode === "textAndUpload") {
       this.vviinnSearchIdReceived.emit({ searchId: detail.searchId });
     }
   }
