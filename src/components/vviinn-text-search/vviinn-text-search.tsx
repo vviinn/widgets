@@ -23,6 +23,7 @@ import { TextSearchMode } from "../../widget/types";
 /**
  * @part text-search-input - Text search input.
  * @slot vviinn-text-search-icon - Icon of the text search block.
+ * @slot vviinn-text-search-actions - Additional actions for the text search block, e.g., a button to open the Search Modal.
  */
 @Component({
   tag: "vviinn-text-search",
@@ -55,10 +56,6 @@ export class VviinnTextSearch {
   /** @internal */
   @Prop() apiPath?: string = "https://api.vviinn.com";
 
-  /** @internal */
-  @Event({ bubbles: true, composed: true })
-  globalSlotsChanged: EventEmitter<any>;
-
   async componentWillLoad() {
     await i18next.init({
       lng: this.locale,
@@ -66,18 +63,6 @@ export class VviinnTextSearch {
       resources,
     });
     slotChangeListener(this, this.el);
-  }
-
-  componentDidLoad() {
-    this.replaceSlotsContent();
-  }
-
-  private replaceSlotsContent() {
-    const slots = this.el.querySelectorAll("[slot]");
-    this.globalSlotsChanged.emit({
-      slots: Array.from(slots),
-      element: this.el,
-    });
   }
 
   @Listen("vviinnImageUploadFinished")
@@ -145,7 +130,7 @@ export class VviinnTextSearch {
           )}
         </button>
 
-        {this.mode === "textAndUpload" && (
+        {this.mode === "textAndUpload" ? (
           <vviinn-image-selector
             token={this.token}
             apiPath={this.apiPath}
@@ -155,14 +140,8 @@ export class VviinnTextSearch {
               <SearchModalUploadIcon />
             </span>
           </vviinn-image-selector>
-        )}
-
-        {this.mode === "textAndModal" && (
-          <vviinn-vps-button
-            token={this.token}
-            apiPath={this.apiPath}
-            locale={this.locale}
-          ></vviinn-vps-button>
+        ) : (
+          <slot name="vviinn-text-search-actions"></slot>
         )}
       </Host>
     );

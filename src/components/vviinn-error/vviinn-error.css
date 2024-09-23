@@ -1,3 +1,5 @@
+@import "../../variables.css";
+
 :host {
   width: 280px;
   background: #f4f4f4;
@@ -9,6 +11,7 @@
   justify-items: center;
   align-self: center;
   justify-self: center;
+  font-family: var(--font-family, var(--font-family-base));
 }
 
 ::slotted(svg) {
@@ -37,6 +40,7 @@
   padding: var(--spacing-100);
   font-size: var(--font-size-body);
   color: var(--color-text-inverse);
+  font-family: var(--font-family, var(--font-family-base));
 }
 
 ::slotted(button:hover) {

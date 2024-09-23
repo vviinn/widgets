@@ -49,7 +49,7 @@ TextSearch.args = {
   token: vviinnToken,
   apiPath: process.env.STORYBOOK_API_PATH,
   searchQuery: "",
-  mode: "textAndModal",
+  mode: "textAndUpload",
   locale: "en-US",
   showInWidget: false,
 };

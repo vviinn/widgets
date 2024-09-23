@@ -64,14 +64,10 @@
 }
 
 vviinn-image-selector,
-vviinn-vps-button {
+::slotted([slot="vviinn-text-search-actions"]) {
   position: absolute;
   right: 60px;
   top: calc(50% - 12px);
-}
-
-vviinn-vps-button::part(button) {
-  display: contents;
 }
 
 vviinn-preloader {
