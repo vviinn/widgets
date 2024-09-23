@@ -1,0 +1,49 @@
+vviinn-text-search {
+  margin: 10px 0;
+}
+
+.search-page-wrapper {
+  display: flex;
+  gap: 20px;
+}
+
+.search-page-wrapper-filters {
+  flex: none;
+  width: 250px;
+}
+@media screen and (max-width: 768px) {
+  .search-page-wrapper-filters {
+    display: none;
+  }
+}
+
+.search-page-wrapper-result {
+  flex: 1;
+}
+
+.search-page-wrapper-result-filters {
+  margin: 10px 0 !important;
+  overflow-x: auto;
+}
+
+.search-page-wrapper-result-filters
+  vviinn-selected-filters::part(selected-filters-list) {
+  margin-top: 0;
+}
+
+.search-page-wrapper-result-filters vviinn-extended-filters {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .search-page-wrapper-result-filters vviinn-extended-filters {
+    display: block;
+  }
+  .search-page-wrapper-result-filters vviinn-selected-filters {
+    margin-top: 10px;
+  }
+  .search-page-wrapper-result-filters
+    vviinn-selected-filters::part(selected-filters-list) {
+    flex-wrap: wrap;
+  }
+}

@@ -5,3 +5,7 @@ vviinn-extended-filters [slot] {
   visibility: hidden;
   position: absolute;
 }
+
+#discovery-set-example vviinn-vpr-widget::part(title) {
+  min-height: 40px;
+}

@@ -1,5 +1,6 @@
 import { argTypes } from "../../src/components/vviinn-vpr-widget/stories/args";
 import { vviinnToken, productIdSimilarProducts } from "../helpers";
+import "../documentation/widgets/styles.css";
 
 export default {
   title: "Playground/Discovery",
