@@ -6,6 +6,7 @@ import {
   Event,
   EventEmitter,
   Element,
+  State,
 } from "@stencil/core";
 import { version } from "../../../package.json";
 import { SimilarProductsIcon, CrossSellingIcon } from "../vviinn-icons";
@@ -136,6 +137,9 @@ export class VviinnVprButton {
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
 
+  /** ID of an HTML element that you want to attach the sidebar  */
+  @Prop() appendSidebarTo: string;
+
   /** Event emitted on widget load */
   @Event() vviinnWidgetLoad: EventEmitter<BasicEventData>;
 
@@ -166,8 +170,21 @@ export class VviinnVprButton {
   /** Add to Basket button clicked */
   @Event() vviinnAddToBasket: EventEmitter<BasicEventData>;
 
+  @State() targetAppendSidebarTo: HTMLElement;
+
+  componentWillLoad() {
+    if (!this.appendSidebarTo) return;
+
+    this.targetAppendSidebarTo = document.getElementById(this.appendSidebarTo);
+  }
+
   private sidebar: HTMLVviinnRecommendationsSidebarElement | null = null;
   private sidebarCloseListener: () => void = () => {
+    if (this.targetAppendSidebarTo) {
+      this.targetAppendSidebarTo.removeChild(this.sidebar);
+      return;
+    }
+
     document.body.removeChild(this.sidebar);
   };
 
@@ -229,11 +246,20 @@ export class VviinnVprButton {
     this.sidebar = sidebar;
 
     sidebar.addEventListener("vviinnWidgetClose", this.sidebarCloseListener);
+
+    if (this.targetAppendSidebarTo) {
+      this.sidebar.showInCustomContainer = true;
+      this.targetAppendSidebarTo.append(this.sidebar);
+
+      return;
+    }
+
     document.body.append(this.sidebar);
   }
 
   disconnectedCallback() {
     if (!this.sidebar) return;
+
     this.sidebar.removeEventListener(
       "vviinnWidgetClose",
       this.sidebarCloseListener
