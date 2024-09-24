@@ -50,6 +50,7 @@ import { resources } from "../../locale/resources";
 
 /**
  * @part brand - Product brand.
+ * @part product-type - Product type.
  * @part currency - Currency sign. Renders after price-amount.
  * @part deeplink - Anchor element for title. Rendered only if "deeplink" property is filled.
  * @part image - Product image.
@@ -341,7 +342,7 @@ export class VviinnProductCard {
         class={{
           animated: this.isTransitioning,
         }}
-        exportparts="brand, price-label, price-label-0, price-label-1, price-label-2, price-label-3, price-label-4, currency, deeplink, image, image-link,  price-amount-regular, price-amount-sale, price-amount-outdated, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-container, price-outdated, price-regular, price-sale, price-prefix, discount-label, discount-percentage, title, basket-button, update-button-item, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
+        exportparts="brand, product-type, price-label, price-label-0, price-label-1, price-label-2, price-label-3, price-label-4, currency, deeplink, image, image-link,  price-amount-regular, price-amount-sale, price-amount-outdated, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-container, price-outdated, price-regular, price-sale, price-prefix, discount-label, discount-percentage, title, basket-button, update-button-item, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
       >
         <Linked deeplink={this.deeplink} part="image-link">
           {this.renderImage()}
@@ -359,9 +360,18 @@ export class VviinnProductCard {
                 {this.productTitle}
               </span>
             </Linked>
-            <span class="brand" part="brand">
-              {this.brand}
-            </span>
+
+            {this.brand?.length > 0 && (
+              <span class="brand" part="brand">
+                {this.brand}
+              </span>
+            )}
+
+            {this.productType?.length > 0 && (
+              <span class="product-type" part="product-type">
+                {this.productType}
+              </span>
+            )}
 
             {(this?.energyCertifications ?? []).map((energyCertification) => (
               <vviinn-energy-label

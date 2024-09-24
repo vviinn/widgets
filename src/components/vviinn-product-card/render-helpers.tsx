@@ -124,32 +124,30 @@ type PriceProps = PriceElementProps & {
   priceLabel: string;
 };
 
-export const calculatePriceLabel = ({
-  custom_label_0,
-  custom_label_1,
-  custom_label_2,
-  custom_label_3,
-  custom_label_4,
-}: Recommendation) => {
-  const renderLabel = (label: string, index: number) => {
-    if (!label) return "";
+const priceLabelsKeys = [
+  "custom_label_0",
+  "custom_label_1",
+  "custom_label_2",
+  "custom_label_3",
+  "custom_label_4",
+];
 
+export const calculatePriceLabel = (recommendation: Recommendation) => {
+  const renderLabel = (label: string, index: number) => {
     const partClass = `price-label-${index}`;
 
-    return (
+    return label ? (
       <span part={partClass} class={partClass}>
         {label}
       </span>
-    );
+    ) : null;
   };
 
   return (
     <Fragment>
-      {renderLabel(custom_label_0, 0)}
-      {renderLabel(custom_label_1, 1)}
-      {renderLabel(custom_label_2, 2)}
-      {renderLabel(custom_label_3, 3)}
-      {renderLabel(custom_label_4, 4)}
+      {priceLabelsKeys.map((key, index) =>
+        renderLabel(recommendation[key], index)
+      )}
     </Fragment>
   );
 };

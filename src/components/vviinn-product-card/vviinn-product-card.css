@@ -58,6 +58,10 @@
   text-decoration: line-through;
 }
 
+.price-label {
+  display: none;
+}
+
 .price-amount,
 .price-label > span,
 .currency {
@@ -94,10 +98,6 @@
 .image.responsive {
   width: 100%;
   height: auto;
-}
-
-.brand {
-  display: none;
 }
 
 .currency {

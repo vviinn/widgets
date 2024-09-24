@@ -48,6 +48,7 @@ import { VisualSearchMode } from "../../widget/types";
  * @part start-camera_button - Start Camera Button.
  * @part product-card - Product Card itself.
  * @part brand - Brand inside Product Card.
+ * @part product-type - Product Type inside Product Card.
  * @part currency - Currency related to price.
  * @part deeplink - Anchor element around troduct title. Rendered only if "deeplink" property is filled.
  * @part image - Product Card image.
