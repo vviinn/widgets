@@ -19,6 +19,7 @@
 }
 
 .raw-open-button {
+  display: contents;
   background: none;
   border: none;
   cursor: pointer;

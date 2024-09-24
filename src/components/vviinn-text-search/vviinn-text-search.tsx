@@ -9,7 +9,7 @@ import {
   Listen,
 } from "@stencil/core";
 import { makeTextSearchRequest, searchState } from "../../store/search.store";
-import { CameraIcon, TextSearchIcon } from "../vviinn-icons";
+import { SearchModalUploadIcon, TextSearchIcon } from "../vviinn-icons";
 import { slotChangeListener } from "../customized-slots";
 import {
   SearchIdEvent,
@@ -23,6 +23,7 @@ import { TextSearchMode } from "../../widget/types";
 /**
  * @part text-search-input - Text search input.
  * @slot vviinn-text-search-icon - Icon of the text search block.
+ * @slot vviinn-text-search-actions - Additional actions for the text search block, e.g., a button to open the Search Modal.
  */
 @Component({
   tag: "vviinn-text-search",
@@ -66,7 +67,7 @@ export class VviinnTextSearch {
 
   @Listen("vviinnImageUploadFinished")
   imageUploadFinished({ detail }: SearchIdEvent) {
-    if (!this.showInWidget) {
+    if (!this.showInWidget && this.mode === "textAndUpload") {
       this.vviinnSearchIdReceived.emit({ searchId: detail.searchId });
     }
   }
@@ -104,7 +105,7 @@ export class VviinnTextSearch {
         <input
           class={{
             "text-search-input": true,
-            "text-search-input--with-icon": this.mode === "textAndImage",
+            "text-search-input--with-icon": this.mode === "textAndUpload",
           }}
           part="text-search-input"
           type="text"
@@ -129,16 +130,18 @@ export class VviinnTextSearch {
           )}
         </button>
 
-        {this.mode === "textAndImage" && (
+        {this.mode === "textAndUpload" ? (
           <vviinn-image-selector
             token={this.token}
             apiPath={this.apiPath}
             showInTextSearch={true}
           >
             <span slot="upload-button-text">
-              <CameraIcon />
+              <SearchModalUploadIcon />
             </span>
           </vviinn-image-selector>
+        ) : (
+          <slot name="vviinn-text-search-actions"></slot>
         )}
       </Host>
     );

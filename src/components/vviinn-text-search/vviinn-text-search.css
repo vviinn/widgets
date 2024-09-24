@@ -63,10 +63,11 @@
   cursor: unset;
 }
 
-vviinn-image-selector {
+vviinn-image-selector,
+::slotted([slot="vviinn-text-search-actions"]) {
   position: absolute;
   right: 60px;
-  top: 14px;
+  top: calc(50% - 12px);
 }
 
 vviinn-preloader {
