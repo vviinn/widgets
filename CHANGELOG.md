@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.98.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.97.2...v2.98.0) (2024-09-24)
+
+
+### Features
+
+* Add textAndModal mode for vviinn-text-search ([fb0ffe4](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/fb0ffe4439dc9f1d37f491804b50d49fb339d4e0))
+
 ### [2.97.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.97.1...v2.97.2) (2024-09-23)
 
 
