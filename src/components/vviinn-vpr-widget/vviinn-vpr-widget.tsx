@@ -738,7 +738,6 @@ export class VviinnVprWidget implements ComponentInterface {
         energyCertifications={recommendation.energyCertifications}
         responsive={this.isGridMode}
         basketButtonShow={this.addToBasketShow}
-        mode={this.mode}
         campaignTypeId={this.campaignType}
         index={index}
         widgetElementId={this.id}

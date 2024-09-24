@@ -17,7 +17,6 @@ const Template = (args) => {
   return `
     <vviinn-product-card
       product-title="${args.productTitle}"
-      mode="${args.mode}"
       brand="${args.brand}"
       product-type="${args.productType}"
       price="${args.price}"
@@ -50,7 +49,6 @@ Default.storyName = "Product Card";
 Default.args = {
   productTitle: "Couchtisch Rolf Benz 8770 Ronald Schmitt",
   productType: "Couchtische",
-  mode: "continuity",
   imageWidth: 240,
   brand: "Ronald Schmitt",
   locale: "en-US",

@@ -37,7 +37,6 @@ import {
   WidgetType,
   campaignTypeNames,
 } from "../../campaign/Campaign";
-import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 import { slotChangeListener } from "../customized-slots";
 import { BasketIcon, CheckCircleIcon, UpdateIcon } from "../vviinn-icons";
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
@@ -110,7 +109,6 @@ export class VviinnProductCard {
   @Prop() salePrice: number | undefined;
   @Prop() baseSalePrice: BasePrice | string | null;
   @Prop() responsive: boolean = false;
-  @Prop() mode?: CarouselMode = "continuity";
   @Prop() basketButtonShow: boolean;
   @Prop() updateButtonLocation: UpdateButtonLocation;
   @Prop() priceLabel: string;
@@ -183,9 +181,6 @@ export class VviinnProductCard {
 
   connectedCallback() {
     this.productData = this.getProductData();
-    this.isSetMode = this.mode === "set";
-    this.isGridMode = this.mode === "grid";
-    this.isContinuityMode = this.mode === "continuity";
 
     if (this.energyCertificationsString.length > 0) {
       this.parseEnergyCertificationsString();
@@ -345,10 +340,6 @@ export class VviinnProductCard {
         part="product-card"
         class={{
           animated: this.isTransitioning,
-          "set-mode": this.isSetMode,
-          "grid-mode": this.isGridMode,
-          "continuity-mode": this.isContinuityMode,
-          "results-widget": this.isResultsWidget,
         }}
         exportparts="brand, price-label, price-label-0, price-label-1, price-label-2, price-label-3, price-label-4, currency, deeplink, image, image-link,  price-amount-regular, price-amount-sale, price-amount-outdated, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-container, price-outdated, price-regular, price-sale, price-prefix, discount-label, discount-percentage, title, basket-button, update-button-item, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
       >

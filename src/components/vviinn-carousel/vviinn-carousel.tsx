@@ -455,7 +455,6 @@ export class VviinnCarousel {
         widgetElementId={this.widgetElementId}
         widgetVersion={this.widgetVersion}
         basketButtonShow={this.addToBasketShow}
-        mode={this.mode}
         data-id={recommendation.productId}
         energyCertifications={recommendation.energyCertifications}
         updatingAllCards={this.updatingAllCards}

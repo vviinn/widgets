@@ -29,6 +29,13 @@
   scrollbar-width: thin;
 }
 
+:host(.set) vviinn-product-card::part(image) {
+  width: var(--vviinn-set-mode-image-width, 100%);
+  height: auto;
+  min-width: var(--image-set-mode-min-size);
+  min-height: var(--image-set-mode-min-size);
+}
+
 :host(.grid) h2 {
   justify-content: center;
 }
