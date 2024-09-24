@@ -15,11 +15,13 @@ import { vviinnToken } from "../../helpers";
         <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'full-search-bar')}}>Code</button>
         <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'full-search-bar')}}>Preview</button>
     </div>
+
     <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
             <vviinn-text-search token={vviinnToken} mode="textAndUpload" locale="en-US"></vviinn-text-search>
         </div>
     </div>
+
     <div id="Code_1" className="tabcontent">
 ```html
 <vviinn-text-search 
@@ -31,13 +33,15 @@ import { vviinnToken } from "../../helpers";
     </div>
 </div>
 
-<div id="static-filters">
+<div id="search-modal">
     <div className="tab tab-reverse">
         <h3>Text Search with Search Modal</h3>
-        <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'static-filters')}}>Code</button>
-        <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'static-filters')}}>Preview</button>
+        <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'search-modal')}}>Code</button>
+        <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'search-modal')}}>Preview</button>
     </div>
-    <div className="tab-sub-title">Passing the [Search Modal](?path=/story/playground-search-modal--default) component as a slot and showing it inside the Search Bar.</div>
+
+    <div className="tab-sub-title">Passing the [Search Modal](?path=/story/playground-search-modal--default) component as a slot and assessing it from the Search Bar.</div>
+
     <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
       <div className="tabcontent-preview">
         <vviinn-text-search token={vviinnToken} locale="en-US">
@@ -49,7 +53,8 @@ import { vviinnToken } from "../../helpers";
         </vviinn-text-search>
       </div>
     </div>
-    <div id="Code_2" className="tabcontent">
+    
+   <div id="Code_2" className="tabcontent">
 ```html
 <vviinn-text-search token={vviinnToken} locale="en-US">
     <vviinn-vps-button token={vviinnToken} locale="en-US" slot="vviinn-text-search-actions">
@@ -63,15 +68,17 @@ import { vviinnToken } from "../../helpers";
 <div id="static-filters">
     <div className="tab tab-reverse">
         <h3>Text Search</h3>
-        <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'static-filters')}}>Code</button>
-        <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'static-filters')}}>Preview</button>
+        <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_3', 'static-filters')}}>Code</button>
+        <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_3', 'static-filters')}}>Preview</button>
     </div>
-    <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
+
+    <div id="Preview_3" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
             <vviinn-text-search token={vviinnToken} locale="en-US"></vviinn-text-search>
         </div>
     </div>
-    <div id="Code_2" className="tabcontent">
+
+    <div id="Code_3" className="tabcontent">
 ```html
 <vviinn-text-search 
     token="TOKEN"
