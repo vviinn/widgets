@@ -2,6 +2,47 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.98.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.97.2...v2.98.0) (2024-09-24)
+
+
+### Features
+
+* Add textAndModal mode for vviinn-text-search ([fb0ffe4](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/fb0ffe4439dc9f1d37f491804b50d49fb339d4e0))
+
+### [2.97.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.97.1...v2.97.2) (2024-09-23)
+
+
+### Bug Fixes
+
+* changed product list layout in storybook ([af432a1](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/af432a1077270da94a7bb1ad31760d265cbbe536))
+* storybook improvement ([613961b](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/613961bdcf365f9efec65f0d25d99b6748149f55))
+
+### [2.97.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.97.0...v2.97.1) (2024-09-23)
+
+
+### Bug Fixes
+
+* Unblock scroll when switching between stories ([b8d0c24](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/b8d0c2439629a6503cdf0d0abbb5f24a3575d92d))
+
+## [2.97.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.96.0...v2.97.0) (2024-09-23)
+
+
+### Features
+
+* Add a variable for customizing font-family ([9918882](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/991888267e3515755202e30ab1c2015dda6ca1ca))
+
+
+### Bug Fixes
+
+* Unify font-family for widgets ([6428d8b](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/6428d8b44863f5178d1804e88c58a7765257f684))
+
+## [2.96.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.95.4...v2.96.0) (2024-09-20)
+
+
+### Features
+
+* Show Base Price in Product Card ([6439766](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/6439766a74c169e2f4560dfc47e6a1320ba14ac6))
+
 ### [2.95.4](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.95.3...v2.95.4) (2024-09-18)
 
 

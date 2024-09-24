@@ -1,6 +1,7 @@
 import { argTypes } from "../../src/components/vviinn-product-card/stories/args";
 import { productDecorator } from "../../src/components/vviinn-product-card/stories/decorators";
 import { energyCertificationsString } from "../documentation/components/constants";
+import "../documentation/widgets/styles.css";
 
 export default {
   title: "Playground/Product Card",
@@ -20,7 +21,9 @@ const Template = (args) => {
       brand="${args.brand}"
       product-type="${args.productType}"
       price="${args.price}"
+      base-price='${JSON.stringify(args.basePrice)}'
       sale-price="${args.salePrice}"
+      base-sale-price='${JSON.stringify(args.baseSalePrice)}'
       price-prefix="${args.pricePrefix}"
       image="${args.image}"
       image-width="${args.imageWidth}"
@@ -57,7 +60,9 @@ Default.args = {
   responsive: false,
   imageRatio: 1,
   price: 3629,
+  basePrice: { price: 10, quantity: 1, measure: "cm²" },
   salePrice: 1653,
+  baseSalePrice: { price: 5, quantity: 1, measure: "cm²" },
   pricePrefix: "",
   basketButtonShow: true,
   updateButtonLocation: "onItem",
@@ -66,6 +71,5 @@ Default.args = {
   productCardTextAlign: "left",
   productCardImageBorder: "none",
   productCardImageBgColor: "#f4f4f4",
-  showInStorybook: true,
   energyCertificationsString,
 };

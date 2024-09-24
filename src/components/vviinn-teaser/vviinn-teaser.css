@@ -1,3 +1,5 @@
+@import "../../variables.css";
+
 :host {
   align-items: center;
   display: grid;
@@ -6,6 +8,7 @@
 }
 
 .vviinn-teaser-text {
+  font-family: var(--font-family, var(--font-family-base));
   font-size: 22px;
   font-weight: 600;
   line-height: 28px;

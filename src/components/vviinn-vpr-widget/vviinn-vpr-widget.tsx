@@ -83,6 +83,10 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @part price-amount-sale - Numeric part of the price.
  * @part price-amount-outdated - Numeric part of the price.
  * @part price-amount-regular - Numeric part of the price.
+ * @part price-amount-base-sale - Numeric part of the base price.
+ * @part price-amount-base-outdated - Numeric part of the base price.
+ * @part price-amount-base-regular - Numeric part of the base price.
+ * @part price-label - Label for the price.
  * @part price-container - Block of prices.
  * @part price-outdated - Block for outdated price. Rendered when the product contains the sale price.
  * @part price-regular - Block for a price if no sale price is presented.
@@ -729,6 +733,8 @@ export class VviinnVprWidget implements ComponentInterface {
         imageRatio={this.imageRatio}
         price={recommendation.price.actual}
         salePrice={recommendation.price.sale}
+        basePrice={recommendation.basePrice?.actual}
+        baseSalePrice={recommendation.basePrice?.sale}
         energyCertifications={recommendation.energyCertifications}
         responsive={this.isGridMode}
         basketButtonShow={this.addToBasketShow}

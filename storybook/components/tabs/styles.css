@@ -1,8 +1,8 @@
 .tab {
   overflow: hidden;
   position: relative;
-  margin-top: 20px !important;
-  margin-bottom: 16px !important;
+  margin-top: 24px !important;
+  margin-bottom: 6px !important;
 }
 
 .tab.overflow-auto {

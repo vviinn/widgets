@@ -67,9 +67,12 @@ import { slotChangeListener } from "../customized-slots";
  * @part deeplink - Anchor element around troduct title. Rendered only if "deeplink" property is filled.
  * @part image - Product Card image.
  * @part image-link - Anchor element around product image. Rendered only if "deeplink" property is filled.
+ * @part price-amount-regular - Numeric part of the price.
  * @part price-amount-sale - Numeric part of the price.
  * @part price-amount-outdated - Numeric part of the price.
- * @part price-amount-regular - Numeric part of the price.
+ * @part price-amount-base-sale - Numeric part of the base price.
+ * @part price-amount-base-outdated - Numeric part of the base price.
+ * @part price-amount-base-regular - Numeric part of the base price.
  * @part price-container - Block of prices.
  * @part price-outdated - Block for outdated price. Rendered when the product contains the sale price.
  * @part price-regular - Block for a price if no sale price is presented.
@@ -502,6 +505,8 @@ export class VviinnResults {
         deeplink={p.deeplink}
         price={p.price.actual}
         salePrice={p.price.sale}
+        basePrice={p.basePrice?.actual}
+        baseSalePrice={p.basePrice?.sale}
         responsive={true}
         imageWidth={this.imageResolutionWidth}
         image={p.image.thumbnail ?? p.image.original}
@@ -526,7 +531,7 @@ export class VviinnResults {
         class={{
           "show-in-widget": this.showInWidget,
         }}
-        exportparts="title, product-card, brand, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-container, price-outdated, price-regular, price-sale, price-prefix, price-label, price-label-0, price-label-1, price-label-2, price-label-3, price-label-4, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
+        exportparts="title, product-card, brand, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-container, price-outdated, price-regular, price-sale, price-prefix, price-label, price-label-0, price-label-1, price-label-2, price-label-3, price-label-4, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
       >
         <div
           class={{

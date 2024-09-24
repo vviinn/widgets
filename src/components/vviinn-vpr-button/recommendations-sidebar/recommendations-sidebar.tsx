@@ -16,9 +16,9 @@ import { CampaignName } from "../../../campaign/Campaign";
 import { Locale } from "../../../locale";
 import { UpdateButtonLocation } from "../../vviinn-vpr-widget/vviinn-vpr-widget";
 import { searchState } from "../../../store/search.store";
+import { ClickEvent, isClickedInRectBound } from "../../../geometry/Rectangle";
 
 type SidebarState = "idle" | "open" | "closed";
-type ClickEvent = Event & { clientX: number; clientY: number };
 
 @Component({
   tag: "vviinn-recommendations-sidebar",
@@ -93,18 +93,11 @@ export class RecommendationsSidebar {
 
   @Listen("click", { target: "body" })
   bodyClickListener(event: ClickEvent) {
-    const { clientX, clientY } = event;
     const sidebarRect = this.getSidebarRectangle();
 
     if (!sidebarRect) return;
 
-    const inLeftBound = clientX >= sidebarRect.left;
-    const inRightBound = clientX <= sidebarRect.right;
-    const inTopBound = clientY >= sidebarRect.top;
-    const inBottomBound = clientY <= sidebarRect.bottom;
-    const inBound = inLeftBound && inRightBound && inTopBound && inBottomBound;
-
-    if (!inBound) {
+    if (!isClickedInRectBound(event, sidebarRect)) {
       this.state = "closed";
     }
   }
@@ -142,24 +135,27 @@ export class RecommendationsSidebar {
           part="body"
           onAnimationEnd={(e) => this.handleAnimationEnd(e)}
         >
-          <header
-            class={{ "contains-source-img": this.isSourceImageValid() }}
-            part="sidebar-header"
-          >
-            {this.renderSourceImage()}
-            <span class="title" part="title">
-              {this.sidebarTitle}
-            </span>
-            <button
-              class="close-sidebar"
-              onClick={() => (this.state = "closed")}
+          {this.mode !== "set" && (
+            <header
+              class={{ "contains-source-img": this.isSourceImageValid() }}
+              part="sidebar-header"
             >
-              <CrossIcon />
-            </button>
-          </header>
+              {this.renderSourceImage()}
+              <span class="title" part="title">
+                {this.sidebarTitle}
+              </span>
+              <button
+                class="close-sidebar"
+                onClick={() => (this.state = "closed")}
+              >
+                <CrossIcon />
+              </button>
+            </header>
+          )}
+
           <main part="sidebar-content">
             <vviinn-vpr-widget
-              exportparts="brand, currency, deeplink, image, image-link, price-amount, price-container, price-prefix, price-outdated, price-regular, price-sale, price-label, price-label-0, price-label-1, price-label-2, price-label-3, price-label-4, title: product-title, carousel-button, product-card, items-group, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
+              exportparts="brand, currency, deeplink, image, image-link, price-amount, price-container, price-prefix, price-outdated, price-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-sale, price-label, price-label-0, price-label-1, price-label-2, price-label-3, price-label-4, title: product-title, carousel-button, product-card, items-group, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
               token={this.token}
               productId={this.productId}
               imageWidth={this.imageWidth}

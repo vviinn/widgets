@@ -1,4 +1,5 @@
 import { vviinnToken } from "../helpers";
+import "../documentation/widgets/styles.css";
 
 export default {
   title: "Playground/Search Modal",
