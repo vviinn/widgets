@@ -81,6 +81,7 @@ import { resources } from "../../locale/resources";
  * @part price-label-2 - String part of the price with index 2.
  * @part price-label-3 - String part of the price with index 3.
  * @part price-label-4 - String part of the price with index 4.
+ * @part product-card-actions - Style actions wrapper.
  *
  * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
@@ -88,6 +89,8 @@ import { resources } from "../../locale/resources";
  * @slot vviinn-basket-button-text-pressed - Text of pressed Add to Basket button (Set mode).
  * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button (Set mode).
  * @slot energy-label-data-sheet-text - Data sheet link's text.
+ * @slot vviinn-actions - Add acction buttons like One-click discovery to this slot.
+ *
  */
 @Component({
   tag: "vviinn-product-card",
