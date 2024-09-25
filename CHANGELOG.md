@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.98.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.98.0...v2.98.1) (2024-09-25)
+
+
+### Bug Fixes
+
+* Change default mode for Search Bar ([9173c24](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/9173c24ff7c8073811cdcb66665e330f1da0a5fa))
+
 ## [2.98.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.97.2...v2.98.0) (2024-09-24)
 
 
