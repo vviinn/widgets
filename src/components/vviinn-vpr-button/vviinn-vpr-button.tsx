@@ -249,6 +249,7 @@ export class VviinnVprButton {
 
     if (this.targetAppendSidebarTo) {
       this.sidebar.showInCustomContainer = true;
+      this.targetAppendSidebarTo.innerHTML = "";
       this.targetAppendSidebarTo.append(this.sidebar);
 
       return;
