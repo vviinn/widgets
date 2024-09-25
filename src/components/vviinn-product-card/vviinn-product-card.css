@@ -418,3 +418,12 @@ vviinn-energy-label {
     var(--product-card-content-align-default)
   );
 }
+
+.actions {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
