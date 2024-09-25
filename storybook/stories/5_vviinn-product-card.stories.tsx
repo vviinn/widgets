@@ -30,6 +30,7 @@ const Template = (args) => {
       image-ratio="${args.imageRatio}"
       update-button-location="${args.updateButtonLocation}"
       basket-button-show="${args.basketButtonShow}"
+      set-mode="${args.setMode}"
       locale="${args.locale}"
       currency="${args.currency}"
       image-ratio="${args.imageRatio}"
@@ -65,6 +66,7 @@ Default.args = {
   priceLabel: "UVP",
   basketButtonShow: true,
   updateButtonLocation: "onItem",
+  setMode: false,
   productCardContentAlign: "flex-start",
   productCardTextAlign: "left",
   productCardImageBorder: "none",

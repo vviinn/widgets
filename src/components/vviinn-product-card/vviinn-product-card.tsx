@@ -107,6 +107,7 @@ export class VviinnProductCard {
   @Prop() pricePrefix: string | undefined = undefined;
   @Prop() productTitle: string;
   @Prop() productType: string | undefined;
+  @Prop() setMode: boolean = false;
   @Prop() salePrice: number | undefined;
   @Prop() baseSalePrice: BasePrice | string | null;
   @Prop() responsive: boolean = false;
@@ -176,9 +177,6 @@ export class VviinnProductCard {
   private productData: ProductCardEventData | null = null;
   private imageElement?: HTMLImageElement;
   private intersectionObserver: IntersectionObserver;
-  private isSetMode: boolean;
-  private isGridMode: boolean;
-  private isContinuityMode: boolean;
 
   connectedCallback() {
     this.productData = this.getProductData();
@@ -392,7 +390,7 @@ export class VviinnProductCard {
               priceLabel={this.priceLabel}
             />
 
-            {this.isSetMode &&
+            {this.setMode &&
               !this.appliedDiscountPercentage &&
               this.currentDiscountPercentage && (
                 <div
@@ -403,7 +401,7 @@ export class VviinnProductCard {
           </Fragment>
         )}
 
-        {(this.basketButtonShow || this.isSetMode) && (
+        {(this.basketButtonShow || this.setMode) && !this.isSourceProduct && (
           <Fragment>
             {this.isTransitioning && <vviinn-skeleton height={40} />}
             <div class="basket-button-wrapper">
@@ -411,8 +409,6 @@ export class VviinnProductCard {
                 class={{
                   "basket-button": true,
                   "basket-button--hidden": this.isTransitioning,
-                  "basket-button-grid": this.isGridMode || this.isSetMode,
-                  "basket-button-continuity ": this.isContinuityMode,
                   pressed: this.basketButonPressed,
                 }}
                 part="basket-button"
@@ -424,7 +420,7 @@ export class VviinnProductCard {
                   this.basketButonPressed = true;
                 }}
               >
-                {this.isSetMode ? (
+                {this.setMode ? (
                   <Fragment>
                     {!this.basketButonPressed && (
                       <div class="basket-button-content" key="set-not-pressed">
@@ -467,9 +463,15 @@ export class VviinnProductCard {
                 ) : (
                   <div key="not-pressed" class="basket-button-content">
                     <span class="basket-button-icon-container">
-                      <slot name="vviinn-basket-button-icon">
-                        <BasketIcon />
-                      </slot>
+                      {this.basketButonPressed ? (
+                        <slot name="vviinn-basket-button-icon-pressed">
+                          <CheckCircleIcon />
+                        </slot>
+                      ) : (
+                        <slot name="vviinn-basket-button-icon">
+                          <BasketIcon />
+                        </slot>
+                      )}
                     </span>
                     <span>
                       <slot name="vviinn-basket-button-text">
@@ -483,7 +485,7 @@ export class VviinnProductCard {
           </Fragment>
         )}
 
-        {this.isSetMode && !this.basketButonPressed && (
+        {this.setMode && !this.basketButonPressed && (
           <button
             class={{
               "update-button": true,

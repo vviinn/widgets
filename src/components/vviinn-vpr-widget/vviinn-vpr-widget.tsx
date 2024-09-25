@@ -745,6 +745,7 @@ export class VviinnVprWidget implements ComponentInterface {
         widgetVersion={version}
         currency={this.currencySign}
         pricePrefix={this.pricePrefix}
+        setMode={this.isSetMode}
         locale={this.locale}
         priceLabel={calculatePriceLabel(recommendation)}
       />
