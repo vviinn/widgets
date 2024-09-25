@@ -375,11 +375,9 @@ export class VviinnProductCard {
 
             {(this?.energyCertifications ?? []).map((energyCertification) => (
               <vviinn-energy-label
-                classLabelUrl={energyCertification?.classLabelUrl}
                 classIconUrls={energyCertification?.classIconUrls}
                 classDataSheetUrl={energyCertification?.classDataSheetUrl}
                 productType={energyCertification?.productType}
-                productClickHandler={this.productClickHandler.bind(this)}
               ></vviinn-energy-label>
             ))}
 
