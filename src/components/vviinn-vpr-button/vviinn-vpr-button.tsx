@@ -89,7 +89,7 @@ export class VviinnVprButton {
   /** Excluded filter. Example: "brand:Nike;custom_label_0:summer" */
   @Prop() excluded: string = "";
   /** Campaign type */
-  @Prop() campaignType: CampaignName = "VPR";
+  @Prop() campaignType: CampaignName = this.mode === "set" ? "VCS" : "VPR";
   /** The locale for currency formatting and text localization */
   @Prop() locale: Locale = "de-DE";
   /** Accepts any hex color code */
