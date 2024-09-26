@@ -147,6 +147,8 @@ export class VviinnResults {
   @Prop() productDetailsNewTab?: boolean = false;
   /** Toggle for redirection to PDP on product's click */
   @Prop() productDetailsRedirect?: boolean = true;
+  /** Show or hide Add to Basket buttons */
+  @Prop() addToBasketShow: boolean = false;
   /** Query for performing text search */
   @Prop() textSearchQuery?: string;
   /** Column for performing Product Listing Page request */
@@ -520,6 +522,7 @@ export class VviinnResults {
         currency={this.currencySign}
         locale={this.locale}
         priceLabel={calculatePriceLabel(p)}
+        addToBasketShow={this.addToBasketShow}
         isResultsWidget={true}
       />
     ));

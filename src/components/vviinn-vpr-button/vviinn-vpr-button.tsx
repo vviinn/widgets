@@ -114,7 +114,7 @@ export class VviinnVprButton {
   @Prop() productDetailsNewTab: boolean = false;
   /** Toggle for redirection to PDP on product's click */
   @Prop() productDetailsRedirect: boolean = true;
-  /** Show or hide Add to Basket button */
+  /** Show or hide Add to Basket buttons */
   @Prop() addToBasketShow: boolean = false;
   /** Show filters on top */
   @Prop() showFilters: boolean = false;

@@ -53,7 +53,7 @@ export class RecommendationsSidebar {
   @Prop() productDetailsNewTab: boolean;
   /** Toggle for redirection to PDP on product's click */
   @Prop() productDetailsRedirect: boolean;
-  /** Show or hide Add to Basket button */
+  /** Show or hide Add to Basket buttons */
   @Prop() addToBasketShow: boolean = false;
   @Prop() showFilters: boolean = false;
   @Prop() setModeDiscounts: string;

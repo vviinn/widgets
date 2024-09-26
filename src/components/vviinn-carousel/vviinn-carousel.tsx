@@ -454,7 +454,7 @@ export class VviinnCarousel {
         campaignTypeId={this.campaignTypeId}
         widgetElementId={this.widgetElementId}
         widgetVersion={this.widgetVersion}
-        basketButtonShow={this.addToBasketShow}
+        addToBasketShow={this.addToBasketShow}
         data-id={recommendation.productId}
         energyCertifications={recommendation.energyCertifications}
         updatingAllCards={this.updatingAllCards}

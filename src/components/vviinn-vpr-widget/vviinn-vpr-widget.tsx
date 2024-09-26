@@ -169,7 +169,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() productDetailsNewTab: boolean = false;
   /** Toggle for redirection to PDP on product's click */
   @Prop() productDetailsRedirect: boolean = true;
-  /** Show or hide Add to Basket button */
+  /** Show or hide Add to Basket buttons */
   @Prop() addToBasketShow: boolean = false;
   /** Show filters on top */
   @Prop() showFilters: boolean = false;
@@ -738,7 +738,7 @@ export class VviinnVprWidget implements ComponentInterface {
         baseSalePrice={recommendation.basePrice?.sale}
         energyCertifications={recommendation.energyCertifications}
         responsive={this.isGridMode}
-        basketButtonShow={this.addToBasketShow}
+        addToBasketShow={this.addToBasketShow}
         campaignTypeId={this.campaignType}
         index={index}
         widgetElementId={this.id}

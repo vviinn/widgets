@@ -111,7 +111,7 @@ export class VviinnProductCard {
   @Prop() salePrice: number | undefined;
   @Prop() baseSalePrice: BasePrice | string | null;
   @Prop() responsive: boolean = false;
-  @Prop() basketButtonShow: boolean;
+  @Prop() addToBasketShow: boolean;
   @Prop() updateButtonLocation: UpdateButtonLocation;
   @Prop() priceLabel: string;
   @Prop({ mutable: true }) energyCertifications?: EnergyCertification[];
@@ -185,7 +185,7 @@ export class VviinnProductCard {
     this.updateButtonLocation !== "onTop";
 
   private isShowBasketButton = () =>
-    !this.isSourceProduct && (this.basketButtonShow || this.setMode);
+    !this.isSourceProduct && (this.addToBasketShow || this.setMode);
 
   connectedCallback() {
     this.productData = this.getProductData();

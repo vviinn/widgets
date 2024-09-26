@@ -29,7 +29,7 @@ const Template = (args) => {
       responsive="${args.responsive}"
       image-ratio="${args.imageRatio}"
       update-button-location="${args.updateButtonLocation}"
-      basket-button-show="${args.basketButtonShow}"
+      add-to-basket-show="${args.addToBasketShow}"
       set-mode="${args.setMode}"
       locale="${args.locale}"
       currency="${args.currency}"
@@ -64,7 +64,7 @@ Default.args = {
   baseSalePrice: { price: 5, quantity: 1, measure: "cm²" },
   pricePrefix: "",
   priceLabel: "UVP",
-  basketButtonShow: true,
+  addToBasketShow: true,
   setMode: false,
   updateButtonLocation: "onItem",
   productCardContentAlign: "flex-start",

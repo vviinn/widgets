@@ -133,6 +133,8 @@ export class VviinnVpsWidget {
   @Prop() exampleImageSource: string = DEFAULT_EXAMPLE_IMAGE;
   /** Show the text search */
   @Prop() textSearchShow: boolean = false;
+  /** Show or hide Add to Basket buttons */
+  @Prop() addToBasketShow: boolean = false;
 
   /** @internal */
   @Prop() apiPath: string = "https://api.vviinn.com";
@@ -773,6 +775,7 @@ export class VviinnVpsWidget {
                   locale={this.locale}
                   productDetailsNewTab={this.productDetailsNewTab}
                   productDetailsRedirect={this.productDetailsRedirect}
+                  addToBasketShow={this.addToBasketShow}
                   showAspectRatioError={this.showAspectRatioError}
                   trackingDeactivated={this.trackingDeactivated}
                   resetState={this.resetState.bind(this)}
