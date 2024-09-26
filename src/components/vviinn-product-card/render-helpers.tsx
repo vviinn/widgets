@@ -33,10 +33,12 @@ export const Linked = (props, child) =>
   );
 
 const getFormattedPrice = (price: number, locale: string) =>
-  new Intl.NumberFormat(locale, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(price);
+  price
+    ? new Intl.NumberFormat(locale, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(price)
+    : null;
 
 type PriceType = "sale" | "outdated" | "regular";
 
@@ -133,15 +135,12 @@ const priceLabelsKeys = [
 ];
 
 export const calculatePriceLabel = (recommendation: Recommendation) => {
-  const renderLabel = (label: string, index: number) => {
-    const partClass = `price-label-${index}`;
-
-    return label ? (
-      <span part={partClass} class={partClass}>
+  const renderLabel = (label: string, index: number) =>
+    label ? (
+      <span part={`price-label-${index}`} class={`price-label-${index}`}>
         {label}
       </span>
     ) : null;
-  };
 
   return (
     <Fragment>
