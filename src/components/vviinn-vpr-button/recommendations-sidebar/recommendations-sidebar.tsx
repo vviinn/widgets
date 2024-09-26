@@ -60,6 +60,8 @@ export class RecommendationsSidebar {
   @Prop() updateButtonLocation: UpdateButtonLocation;
 
   /** @internal */
+  @Prop() showInCustomContainer: boolean = false;
+  /** @internal */
   @Prop() buttonChildren: HTMLCollection;
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
@@ -106,6 +108,7 @@ export class RecommendationsSidebar {
     return {
       [this.position]: true,
       [this.state]: true,
+      "no-fixed": this.showInCustomContainer,
     };
   }
 

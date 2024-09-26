@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.99.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.98.1...v2.99.0) (2024-09-26)
+
+
+### Features
+
+* Added an ability to vviinn-vpr-button to load the sidebar to custom container ([04a3364](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/04a3364e8b91c4eeb0a0a53f09f021de27a0a6eb))
+
 ### [2.98.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.98.0...v2.98.1) (2024-09-25)
 
 
