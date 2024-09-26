@@ -40,6 +40,7 @@ const Template = (args) => {
       product-card-image-border="${args.productCardImageBorder}"
       product-card-image-bg-color="${args.productCardImageBgColor}"
       energy-certifications-string='${args.energyCertificationsString}'
+      is-standalone="true"
     ></vviinn-product-card>`;
 };
 

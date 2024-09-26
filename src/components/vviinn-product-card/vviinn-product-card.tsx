@@ -144,6 +144,8 @@ export class VviinnProductCard {
   @Prop() isResultsWidget: boolean = false;
   /** @internal */
   @Prop() energyCertificationsString: string = "";
+  /** @internal */
+  @Prop() isStandalone: boolean = false;
 
   @State() isTransitioning: boolean = false;
   @State() basketButonPressed: boolean = false;
@@ -190,13 +192,15 @@ export class VviinnProductCard {
   connectedCallback() {
     this.productData = this.getProductData();
 
-    if (this.energyCertificationsString.length > 0) {
-      this.parseEnergyCertificationsString();
+    this.isStandalone &&
       i18next.init({
         lng: this.locale,
         fallbackLng: "en",
         resources,
       });
+
+    if (this.energyCertificationsString.length > 0) {
+      this.parseEnergyCertificationsString();
     }
   }
 
