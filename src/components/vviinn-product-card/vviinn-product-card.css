@@ -419,10 +419,13 @@ vviinn-energy-label {
   );
 }
 
-.actions {
+.product-card-actions {
   position: absolute;
   right: 8px;
   top: 8px;
+}
+
+::slotted([slot="vviinn-product-card-actions"]) {
   display: flex;
   flex-direction: column;
   gap: 8px;

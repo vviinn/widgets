@@ -432,6 +432,7 @@ export class VviinnResults {
 
   private handleOpenLink(deeplink: string, event: MouseEvent) {
     if (!this.productDetailsRedirect) return;
+
     if (this.productDetailsNewTab || event.ctrlKey || event.metaKey) {
       let newTab = window.open();
       if (newTab) {

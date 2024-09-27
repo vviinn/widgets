@@ -89,7 +89,7 @@ import { resources } from "../../locale/resources";
  * @slot vviinn-basket-button-text-pressed - Text of pressed Add to Basket button (Set mode).
  * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button (Set mode).
  * @slot energy-label-data-sheet-text - Data sheet link's text.
- * @slot vviinn-actions - Add acction buttons like One-click discovery to this slot.
+ * @slot vviinn-product-card-actions - Add action buttons like One-click discovery to this slot.
  *
  */
 @Component({
@@ -358,11 +358,11 @@ export class VviinnProductCard {
       >
         <Linked deeplink={this.deeplink} part="image-link">
           {this.renderImage()}
-        </Linked>
 
-        <div class="actions" part="product-card-actions">
-          <slot name="vviinn-actions"></slot>
-        </div>
+          <div class="product-card-actions" part="product-card-actions">
+            <slot name="vviinn-product-card-actions"></slot>
+          </div>
+        </Linked>
 
         {this.isTransitioning ? (
           <Fragment>
