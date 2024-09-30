@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.100.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.99.0...v2.100.0) (2024-09-30)
+
+
+### Features
+
+* Unify Product Card styles ([fa42474](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/fa4247475c22093ff2089223be31274b48eb407c))
+
 ## [2.99.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.98.1...v2.99.0) (2024-09-26)
 
 
