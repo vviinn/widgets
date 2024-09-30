@@ -33,10 +33,12 @@ export const Linked = (props, child) =>
   );
 
 const getFormattedPrice = (price: number, locale: string) =>
-  new Intl.NumberFormat(locale, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(price);
+  price
+    ? new Intl.NumberFormat(locale, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(price)
+    : null;
 
 type PriceType = "sale" | "outdated" | "regular";
 
@@ -124,32 +126,27 @@ type PriceProps = PriceElementProps & {
   priceLabel: string;
 };
 
-export const calculatePriceLabel = ({
-  custom_label_0,
-  custom_label_1,
-  custom_label_2,
-  custom_label_3,
-  custom_label_4,
-}: Recommendation) => {
-  const renderLabel = (label: string, index: number) => {
-    if (!label) return "";
+const priceLabelsKeys = [
+  "custom_label_0",
+  "custom_label_1",
+  "custom_label_2",
+  "custom_label_3",
+  "custom_label_4",
+];
 
-    const partClass = `price-label-${index}`;
-
-    return (
-      <span part={partClass} class={partClass}>
+export const calculatePriceLabel = (recommendation: Recommendation) => {
+  const renderLabel = (label: string, index: number) =>
+    label ? (
+      <span part={`price-label-${index}`} class={`price-label-${index}`}>
         {label}
       </span>
-    );
-  };
+    ) : null;
 
   return (
     <Fragment>
-      {renderLabel(custom_label_0, 0)}
-      {renderLabel(custom_label_1, 1)}
-      {renderLabel(custom_label_2, 2)}
-      {renderLabel(custom_label_3, 3)}
-      {renderLabel(custom_label_4, 4)}
+      {priceLabelsKeys.map((key, index) =>
+        renderLabel(recommendation[key], index)
+      )}
     </Fragment>
   );
 };

@@ -1,41 +1,20 @@
 @import "../../variables.css";
 
-:host(.grid-mode) {
-  --product-card-content-align-default: center;
-  --product-card-text-align-default: center;
-  --product-card-image-border-default: 1px solid var(--color-border-02);
-  --product-card-image-bg-color-default: unset;
-}
-
-:host(.continuity-mode) {
-  --product-card-content-align-default: flex-start;
-  --product-card-text-align-default: left;
-  --product-card-image-border-default: var(--surface-bg-color-01);
-  --product-card-image-bg-color-default: var(--surface-bg-color-01);
-}
-
-:host(.set-mode) {
-  --product-card-content-align-default: flex-start;
-  --product-card-text-align-default: left;
-  --product-card-image-border-default: none;
-  --product-card-image-bg-color-default: var(--surface-bg-color-01);
-}
-
-:host(.results-widget) {
-  --product-card-content-align-default: flex-start;
-  --product-card-text-align-default: left;
-  --product-card-image-border-default: 1px solid var(--color-border-02);
-  --product-card-image-bg-color-default: unset;
-}
-
 :host {
   /**
    * @prop --product-card-content-align: Set the alignment of the content inside the product card's flex container.
    * @prop --product-card-text-align: Set the alignment of the text inside the product card.
    * @prop --product-card-image-border: Set the border of the product card image.
    * @prop --product-card-image-bg-color: Set the background color of the product card image.
+   * @prop --basket-button-bg-color-pressed: Set the background color of the pressed Basket Button.
    * @prop --font-family: Set the font family of the product card.
    */
+
+  --product-card-content-align-default: flex-start;
+  --product-card-text-align-default: left;
+  --product-card-image-border-default: none;
+  --product-card-image-bg-color-default: var(--surface-bg-color-01);
+  --basket-button-bg-color-pressed-default: var(--button-bg-color-positive);
 
   position: relative;
   height: fit-content;
@@ -81,6 +60,10 @@
   text-decoration: line-through;
 }
 
+.price-label {
+  display: none;
+}
+
 .price-amount,
 .price-label > span,
 .currency {
@@ -105,18 +88,18 @@
   display: grid;
   align-content: center;
   object-position: 50% 50%;
+  aspect-ratio: 1;
   object-fit: contain;
   text-align: center;
+  border: var(
+    --product-card-image-border,
+    var(--product-card-image-border-default)
+  );
 }
 
 .image.responsive {
   width: 100%;
   height: auto;
-  aspect-ratio: 1;
-}
-
-.brand {
-  display: none;
 }
 
 .currency {
@@ -197,13 +180,10 @@ picture::before {
   background-color: var(--button-bg-color-frosted-hover);
 }
 
-.update-button.hidden {
-  display: none;
-}
-
 .basket-button {
   box-sizing: border-box;
   border: none;
+  width: 100%;
   padding: var(--spacing-100);
   font-size: var(--font-size-label);
   font-weight: var(--font-weight-400);
@@ -217,24 +197,8 @@ picture::before {
   justify-content: center;
 }
 
-.basket-button-grid {
-  width: 100%;
-  background-color: unset;
-  border: 1px solid var(--color-border-02);
-}
-
-.basket-button-continuity {
-  background-color: var(--button-bg-color-secondary);
-  align-self: start;
-}
-
-.basket-button-continuity:hover,
-:host(.set-mode) .basket-button:hover {
+.basket-button:hover {
   background-color: var(--button-bg-color-secondary-hover);
-}
-
-.basket-button-grid:hover {
-  background-color: var(--button-bg-color-ghost-hover);
 }
 
 picture::after {
@@ -293,49 +257,18 @@ picture::after {
   gap: var(--spacing-75);
 }
 
-:host(.grid-mode) .image,
-:host(.continuity-mode) .image {
-  border: var(
-    --product-card-image-border,
-    var(--product-card-image-border-default)
-  );
-}
-
-:host(.grid-mode) .image-link {
-  width: 100%;
-}
-
-:host(.results-widget) .image {
-  border: var(
-    --product-card-image-border,
-    var(--product-card-image-border-default)
-  );
-}
-
-:host(.set-mode) .image {
-  width: var(--vviinn-set-mode-image-width, 100%);
-  height: auto;
-  min-width: var(--image-set-mode-min-size);
-  min-height: var(--image-set-mode-min-size);
-  border: var(
-    --product-card-image-border,
-    var(--product-card-image-border-default)
-  );
-  aspect-ratio: 1;
-}
-
-:host(.set-mode.product-card--source) {
+product-card--source {
   height: fit-content;
   max-width: var(--source-card-set-mode-max-width);
   flex-grow: 1;
 }
-:host(.set-mode.product-card--source) .image {
+.product-card--source .image {
   width: 100%;
   height: 100%;
   aspect-ratio: 1;
 }
 
-:host(.set-mode) picture .plus-icon {
+picture .plus-icon {
   position: absolute;
   width: 32px;
   height: 32px;
@@ -349,39 +282,19 @@ picture::after {
   border-radius: 50%;
 }
 
-:host(.set-mode) .basket-button {
-  background-color: var(--button-bg-color-secondary);
-  border: none;
-}
-
-:host(.set-mode:not(.animated)) .basket-button {
-  margin-top: auto;
-}
-
-:host(.set-mode) .price-container {
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: var(
-    --product-card-content-align,
-    var(--product-card-content-align-default)
+.basket-button.pressed {
+  background-color: var(
+    --basket-button-bg-color-pressed,
+    var(--basket-button-bg-color-pressed-default)
   );
 }
 
-:host(.set-mode) .basket-button.pressed {
-  background: transparent;
-  border: 1px solid var(--color-border-02);
-}
-
-:host(.set-mode) .basket-button.pressed .discount-percentage {
+.basket-button.pressed .discount-percentage {
   padding-right: var(--spacing-50);
 }
 
-:host(.set-mode) .basket-button--hidden {
-  display: none;
-}
-
 @media (max-width: 768px) {
-  :host(.set-mode) picture .plus-icon {
+  picture .plus-icon {
     padding: var(--spacing-100);
     top: calc(50% - var(--spacing-300));
     right: calc(-1 * var(--spacing-300));
@@ -417,4 +330,8 @@ vviinn-energy-label {
     --product-card-content-align,
     var(--product-card-content-align-default)
   );
+}
+
+.hidden {
+  display: none;
 }
