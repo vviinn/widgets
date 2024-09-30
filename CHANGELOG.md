@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.101.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.101.0...v2.101.1) (2024-09-30)
+
+
+### Bug Fixes
+
+* One-click Discovery Set widget uses cross-selling request by default ([24e2b50](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/24e2b5094a551bda5bee263f31a2a9cbac511219))
+
 ## [2.101.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.100.0...v2.101.0) (2024-09-30)
 
 
