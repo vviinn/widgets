@@ -31,7 +31,7 @@ Using `Vviinn Widgets` as separate components allows for greater control over th
             <vviinn-extended-filters locale="en-US" mode="preview"></vviinn-extended-filters>
           </div>
           <div className="search-page-wrapper-result">
-            <vviinn-text-search token={vviinnToken} locale="en-US">
+            <vviinn-text-search token={vviinnToken} locale="en-US" search-query="chair">
               <vviinn-vps-button
               token={vviinnToken} locale="en-US"
               slot="vviinn-text-search-actions">
@@ -45,7 +45,7 @@ Using `Vviinn Widgets` as separate components allows for greater control over th
               <vviinn-selected-filters></vviinn-selected-filters>
             </div>
 
-            <vviinn-results text-search-query="chair" token={vviinnToken} locale="en-US" ></vviinn-results>
+            <vviinn-results token={vviinnToken} locale="en-US" ></vviinn-results>
           </div>
         </div>
       </div>
@@ -117,7 +117,7 @@ vviinn-text-search {
       <vviinn-selected-filters></vviinn-selected-filters>
     </div>
 
-<vviinn-text-search token={vviinnToken} locale="en-US">
+<vviinn-text-search token={vviinnToken} locale="en-US" search-query="chair">
   <vviinn-vps-button
   token={vviinnToken} locale="en-US"
   slot="vviinn-text-search-actions">
@@ -125,7 +125,7 @@ vviinn-text-search {
   </vviinn-vps-button>
 </vviinn-text-search>
 <vviinn-results token="YOUR_TOKEN" locale="en-US"></vviinn-results>
-    <vviinn-results text-search-query="chair" token={vviinnToken} locale="en-US" ></vviinn-results>
+    <vviinn-results token={vviinnToken} locale="en-US" ></vviinn-results>
   </div>
 </div>
 ```
