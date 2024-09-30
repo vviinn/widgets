@@ -436,6 +436,7 @@ export class VviinnCarousel {
 
     return (
       <vviinn-product-card
+        index={rank}
         part="product-part"
         productId={recommendation.productId}
         productTitle={recommendation.title}
@@ -451,11 +452,9 @@ export class VviinnCarousel {
         baseSalePrice={recommendation.basePrice?.sale}
         responsive={this.isGridMode}
         campaignTypeId={this.campaignTypeId}
-        index={rank}
         widgetElementId={this.widgetElementId}
         widgetVersion={this.widgetVersion}
-        basketButtonShow={this.addToBasketShow}
-        mode={this.mode}
+        addToBasketShow={this.addToBasketShow}
         data-id={recommendation.productId}
         energyCertifications={recommendation.energyCertifications}
         updatingAllCards={this.updatingAllCards}
@@ -466,6 +465,7 @@ export class VviinnCarousel {
         currency={this.currencySign}
         pricePrefix={this.pricePrefix}
         locale={this.locale}
+        setMode={this.isSetMode}
         priceLabel={calculatePriceLabel(recommendation)}
       />
     );
@@ -551,6 +551,7 @@ export class VviinnCarousel {
               isSourceProduct={true}
               currency={this.currencySign}
               pricePrefix={this.pricePrefix}
+              setMode={this.isSetMode}
               locale={this.locale}
             />
           )}

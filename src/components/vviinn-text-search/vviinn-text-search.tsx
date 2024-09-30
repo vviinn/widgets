@@ -65,6 +65,15 @@ export class VviinnTextSearch {
     slotChangeListener(this, this.el);
   }
 
+  async componentDidLoad() {
+    if (this.showInWidget) return;
+
+    this.searchQuery?.length > 0 &&
+      this.vviinnTextSearchStarted.emit({
+        query: this.searchQuery,
+      });
+  }
+
   @Listen("vviinnImageUploadFinished")
   imageUploadFinished({ detail }: SearchIdEvent) {
     if (!this.showInWidget && this.mode === "textAndUpload") {

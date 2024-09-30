@@ -138,6 +138,7 @@ main {
   font-style: normal;
   font-weight: var(--font-weight-600);
   font-size: var(--font-size-title);
+  font-family: var(--font-family, var(--font-family-base));
   line-height: 40px;
   text-align: center;
   color: #000000;

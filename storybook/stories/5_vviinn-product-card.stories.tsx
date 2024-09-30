@@ -17,7 +17,6 @@ const Template = (args) => {
   return `
     <vviinn-product-card
       product-title="${args.productTitle}"
-      mode="${args.mode}"
       brand="${args.brand}"
       product-type="${args.productType}"
       price="${args.price}"
@@ -30,7 +29,8 @@ const Template = (args) => {
       responsive="${args.responsive}"
       image-ratio="${args.imageRatio}"
       update-button-location="${args.updateButtonLocation}"
-      basket-button-show="${args.basketButtonShow}"
+      add-to-basket-show="${args.addToBasketShow}"
+      set-mode="${args.setMode}"
       locale="${args.locale}"
       currency="${args.currency}"
       image-ratio="${args.imageRatio}"
@@ -40,6 +40,7 @@ const Template = (args) => {
       product-card-image-border="${args.productCardImageBorder}"
       product-card-image-bg-color="${args.productCardImageBgColor}"
       energy-certifications-string='${args.energyCertificationsString}'
+      is-standalone="true"
     ></vviinn-product-card>`;
 };
 
@@ -50,23 +51,23 @@ Default.storyName = "Product Card";
 Default.args = {
   productTitle: "Couchtisch Rolf Benz 8770 Ronald Schmitt",
   productType: "Couchtische",
-  mode: "continuity",
-  imageWidth: 240,
   brand: "Ronald Schmitt",
   locale: "en-US",
   currency: "€",
   image:
     "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg",
   responsive: false,
+  imageWidth: 240,
   imageRatio: 1,
   price: 3629,
   basePrice: { price: 10, quantity: 1, measure: "cm²" },
   salePrice: 1653,
   baseSalePrice: { price: 5, quantity: 1, measure: "cm²" },
   pricePrefix: "",
-  basketButtonShow: true,
+  priceLabel: "UVP",
+  addToBasketShow: true,
+  setMode: false,
   updateButtonLocation: "onItem",
-  priceLabel: "",
   productCardContentAlign: "flex-start",
   productCardTextAlign: "left",
   productCardImageBorder: "none",

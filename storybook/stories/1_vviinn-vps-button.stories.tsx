@@ -39,6 +39,7 @@ const Template = (args) => `
   api-path="${args.apiPath}"
   image-resolution-width="${args.imageResolutionWidth}"
   text-search-show="${args.textSearchShow}"
+  add-to-basket-show="${args.addToBasketShow}"
 ></vviinn-vps-button>`;
 
 export const Default = Template.bind({});
@@ -57,4 +58,5 @@ Default.args = {
   addStyle: true,
   imageResolutionWidth: 250,
   textSearchShow: true,
+  addToBasketShow: false,
 };

@@ -31,10 +31,6 @@
   font-style: normal;
 }
 
-.class-label-link {
-  cursor: pointer;
-}
-
 .class-label-icon {
   display: inline-block;
   height: 32px;
@@ -59,6 +55,7 @@
 }
 
 .data-sheet-link {
+  display: none;
   cursor: pointer;
   text-decoration: none;
   color: var(--color-text-primary);

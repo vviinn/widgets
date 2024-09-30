@@ -37,7 +37,6 @@ import {
   WidgetType,
   campaignTypeNames,
 } from "../../campaign/Campaign";
-import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 import { slotChangeListener } from "../customized-slots";
 import { BasketIcon, CheckCircleIcon, UpdateIcon } from "../vviinn-icons";
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
@@ -51,6 +50,7 @@ import { resources } from "../../locale/resources";
 
 /**
  * @part brand - Product brand.
+ * @part product-type - Product type.
  * @part currency - Currency sign. Renders after price-amount.
  * @part deeplink - Anchor element for title. Rendered only if "deeplink" property is filled.
  * @part image - Product image.
@@ -111,11 +111,11 @@ export class VviinnProductCard {
   @Prop() pricePrefix: string | undefined = undefined;
   @Prop() productTitle: string;
   @Prop() productType: string | undefined;
+  @Prop() setMode: boolean = false;
   @Prop() salePrice: number | undefined;
   @Prop() baseSalePrice: BasePrice | string | null;
   @Prop() responsive: boolean = false;
-  @Prop() mode?: CarouselMode = "continuity";
-  @Prop() basketButtonShow: boolean;
+  @Prop() addToBasketShow: boolean;
   @Prop() updateButtonLocation: UpdateButtonLocation;
   @Prop() priceLabel: string;
   @Prop({ mutable: true }) energyCertifications?: EnergyCertification[];
@@ -148,6 +148,8 @@ export class VviinnProductCard {
   @Prop() isResultsWidget: boolean = false;
   /** @internal */
   @Prop() energyCertificationsString: string = "";
+  /** @internal */
+  @Prop() isStandalone: boolean = false;
 
   @State() isTransitioning: boolean = false;
   @State() basketButonPressed: boolean = false;
@@ -181,23 +183,28 @@ export class VviinnProductCard {
   private productData: ProductCardEventData | null = null;
   private imageElement?: HTMLImageElement;
   private intersectionObserver: IntersectionObserver;
-  private isSetMode: boolean;
-  private isGridMode: boolean;
-  private isContinuityMode: boolean;
+
+  private isShowUpdateButton = () =>
+    this.setMode &&
+    !this.isSourceProduct &&
+    !this.basketButonPressed &&
+    this.updateButtonLocation !== "onTop";
+
+  private isShowBasketButton = () =>
+    !this.isSourceProduct && (this.addToBasketShow || this.setMode);
 
   connectedCallback() {
     this.productData = this.getProductData();
-    this.isSetMode = this.mode === "set";
-    this.isGridMode = this.mode === "grid";
-    this.isContinuityMode = this.mode === "continuity";
 
-    if (this.energyCertificationsString.length > 0) {
-      this.parseEnergyCertificationsString();
+    this.isStandalone &&
       i18next.init({
         lng: this.locale,
         fallbackLng: "en",
         resources,
       });
+
+    if (this.energyCertificationsString.length > 0) {
+      this.parseEnergyCertificationsString();
     }
   }
 
@@ -293,6 +300,14 @@ export class VviinnProductCard {
     }
   };
 
+  private basketButtonClickHandler() {
+    this.vviinnAddToBasket.emit({
+      ...this.productData,
+      discount: this.currentDiscountPercentage,
+    });
+    this.basketButonPressed = true;
+  }
+
   private productClickHandler(event: MouseEvent) {
     event.preventDefault();
     event.stopImmediatePropagation();
@@ -349,12 +364,8 @@ export class VviinnProductCard {
         part="product-card"
         class={{
           animated: this.isTransitioning,
-          "set-mode": this.isSetMode,
-          "grid-mode": this.isGridMode,
-          "continuity-mode": this.isContinuityMode,
-          "results-widget": this.isResultsWidget,
         }}
-        exportparts="brand, price-label, price-label-0, price-label-1, price-label-2, price-label-3, price-label-4, currency, deeplink, image, image-link,  price-amount-regular, price-amount-sale, price-amount-outdated, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-container, price-outdated, price-regular, price-sale, price-prefix, discount-label, discount-percentage, title, basket-button, update-button-item, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link, product-card-actions"
+        exportparts="brand, product-type, price-label, price-label-0, price-label-1, price-label-2, price-label-3, price-label-4, currency, deeplink, image, image-link,  price-amount-regular, price-amount-sale, price-amount-outdated, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-container, price-outdated, price-regular, price-sale, price-prefix, discount-label, discount-percentage, title, basket-button, update-button-item, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link product-card-actions"
       >
         <Linked deeplink={this.deeplink} part="image-link">
           {this.renderImage()}
@@ -376,17 +387,24 @@ export class VviinnProductCard {
                 {this.productTitle}
               </span>
             </Linked>
-            <span class="brand" part="brand">
-              {this.brand}
-            </span>
+
+            {this.brand?.length > 0 && (
+              <span class="brand" part="brand">
+                {this.brand}
+              </span>
+            )}
+
+            {this.productType?.length > 0 && (
+              <span class="product-type" part="product-type">
+                {this.productType}
+              </span>
+            )}
 
             {(this?.energyCertifications ?? []).map((energyCertification) => (
               <vviinn-energy-label
-                classLabelUrl={energyCertification?.classLabelUrl}
                 classIconUrls={energyCertification?.classIconUrls}
                 classDataSheetUrl={energyCertification?.classDataSheetUrl}
                 productType={energyCertification?.productType}
-                productClickHandler={this.productClickHandler.bind(this)}
               ></vviinn-energy-label>
             ))}
 
@@ -401,7 +419,7 @@ export class VviinnProductCard {
               priceLabel={this.priceLabel}
             />
 
-            {this.isSetMode &&
+            {this.setMode &&
               !this.appliedDiscountPercentage &&
               this.currentDiscountPercentage && (
                 <div
@@ -412,105 +430,104 @@ export class VviinnProductCard {
           </Fragment>
         )}
 
-        {(this.basketButtonShow || this.isSetMode) && (
-          <Fragment>
-            {this.isTransitioning && <vviinn-skeleton height={40} />}
-            <div class="basket-button-wrapper">
-              <button
-                class={{
-                  "basket-button": true,
-                  "basket-button--hidden": this.isTransitioning,
-                  "basket-button-grid": this.isGridMode || this.isSetMode,
-                  "basket-button-continuity ": this.isContinuityMode,
-                  pressed: this.basketButonPressed,
-                }}
-                part="basket-button"
-                onClick={() => {
-                  this.vviinnAddToBasket.emit({
-                    ...this.productData,
-                    discount: this.currentDiscountPercentage,
-                  });
-                  this.basketButonPressed = true;
-                }}
-              >
-                {this.isSetMode ? (
-                  <Fragment>
-                    {!this.basketButonPressed && (
-                      <div class="basket-button-content" key="set-not-pressed">
-                        <span class="basket-button-icon-container">
-                          <slot name="vviinn-basket-button-icon">
-                            <BasketIcon />
-                          </slot>
-                        </span>
-                        <span>
-                          <slot name="vviinn-basket-button-text">
-                            {i18next.t("setMode.basketButtonText")}
-                          </slot>
-                        </span>
-                      </div>
-                    )}
+        <vviinn-skeleton
+          height={40}
+          class={{
+            hidden: !this.isTransitioning,
+          }}
+        />
 
-                    {this.basketButonPressed && (
-                      <div key="set-pressed" class="basket-button-content">
-                        <span class="basket-button-icon-container">
-                          <slot name="vviinn-basket-button-icon-pressed">
-                            <CheckCircleIcon />
-                          </slot>
-                        </span>
-                        <span>
-                          {this.appliedDiscountPercentage && (
-                            <span
-                              class="discount-percentage"
-                              part="discount-percentage"
-                            >
-                              {this.appliedDiscountPercentage}%
-                            </span>
-                          )}
-                          <slot name="vviinn-basket-button-text-pressed">
-                            {i18next.t("setMode.appliedDiscountText")}
-                          </slot>
-                        </span>
-                      </div>
-                    )}
-                  </Fragment>
-                ) : (
-                  <div key="not-pressed" class="basket-button-content">
-                    <span class="basket-button-icon-container">
-                      <slot name="vviinn-basket-button-icon">
-                        <BasketIcon />
-                      </slot>
-                    </span>
-                    <span>
-                      <slot name="vviinn-basket-button-text">
-                        {i18next.t("basketButtonText")}
-                      </slot>
-                    </span>
-                  </div>
-                )}
-              </button>
-            </div>
-          </Fragment>
-        )}
-
-        {this.isSetMode && !this.basketButonPressed && (
+        <div
+          class={{
+            "basket-button-wrapper": true,
+            hidden: !this.isShowBasketButton(),
+          }}
+        >
           <button
             class={{
-              "update-button": true,
-              hidden: this.updateButtonLocation === "onTop",
+              "basket-button": true,
+              hidden: this.isTransitioning,
+              pressed: this.basketButonPressed,
             }}
-            part="update-button-item"
-            onClick={() => {
-              this.vviinnCrossSellingClick.emit({
-                animationInterval: generateRandomNumber(800, 1400),
-                productData: this.productData,
-              });
-            }}
+            part="basket-button"
+            onClick={this.basketButtonClickHandler.bind(this)}
           >
-            <slot name="vviinn-update-button-icon">
-              <UpdateIcon />
-            </slot>
+            <div
+              class={{
+                "basket-button-content": true,
+                hidden: this.basketButonPressed,
+              }}
+              key="not-pressed"
+            >
+              <span class="basket-button-icon-container">
+                <slot name="vviinn-basket-button-icon">
+                  <BasketIcon />
+                </slot>
+              </span>
+              <span>
+                {this.setMode ? (
+                  <slot name="vviinn-basket-button-text" key="button-text-set">
+                    {i18next.t("setMode.basketButtonText")}
+                  </slot>
+                ) : (
+                  <slot
+                    name="vviinn-basket-button-text"
+                    key="button-text-default"
+                  >
+                    {i18next.t("basketButtonText")}
+                  </slot>
+                )}
+              </span>
+            </div>
+
+            <div
+              key="pressed"
+              class={{
+                "basket-button-content": true,
+                hidden: !this.basketButonPressed,
+              }}
+            >
+              <span class="basket-button-icon-container">
+                <slot name="vviinn-basket-button-icon-pressed">
+                  <CheckCircleIcon />
+                </slot>
+              </span>
+              <span>
+                <span
+                  class="discount-percentage"
+                  part="discount-percentage"
+                  hidden={!(this.setMode && this.appliedDiscountPercentage)}
+                >
+                  {this.appliedDiscountPercentage}%
+                </span>
+
+                <slot name="vviinn-basket-button-text-pressed">
+                  {this.setMode
+                    ? i18next.t("setMode.basketButtonPressedText")
+                    : i18next.t("basketButtonPressedText")}
+                </slot>
+              </span>
+            </div>
           </button>
-        )}
+        </div>
+
+        <button
+          class={{
+            "update-button": true,
+            hidden: !this.isShowUpdateButton(),
+          }}
+          part="update-button-item"
+          onClick={() => {
+            this.vviinnCrossSellingClick.emit({
+              animationInterval: generateRandomNumber(800, 1400),
+              productData: this.productData,
+            });
+          }}
+        >
+          <slot name="vviinn-update-button-icon">
+            <UpdateIcon />
+          </slot>
+        </button>
       </Host>
     );
   }
