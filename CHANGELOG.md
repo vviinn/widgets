@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.101.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.100.0...v2.101.0) (2024-09-30)
+
+
+### Features
+
+* Default search query for Search Bar ([5d33d6a](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/5d33d6a5086c73e006f3334ab309eb36ce158bec))
+
 ## [2.100.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.99.0...v2.100.0) (2024-09-30)
 
 
