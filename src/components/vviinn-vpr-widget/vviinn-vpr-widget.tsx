@@ -76,6 +76,7 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @part product-part - Will be deprecated. Use "product-card" instead.
  * @part title - Title inside Product Card.
  * @part brand - Brand inside Product Card.
+ * @part product-type - Product Type inside Product Card.
  * @part currency - Currency related to price.
  * @part image - Product Card image.
  * @part image-link - Anchor element around product image. Rendered only if "deeplink" property is filled.
@@ -168,7 +169,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() productDetailsNewTab: boolean = false;
   /** Toggle for redirection to PDP on product's click */
   @Prop() productDetailsRedirect: boolean = true;
-  /** Show or hide Add to Basket button */
+  /** Show or hide Add to Basket buttons */
   @Prop() addToBasketShow: boolean = false;
   /** Show filters on top */
   @Prop() showFilters: boolean = false;
@@ -737,14 +738,14 @@ export class VviinnVprWidget implements ComponentInterface {
         baseSalePrice={recommendation.basePrice?.sale}
         energyCertifications={recommendation.energyCertifications}
         responsive={this.isGridMode}
-        basketButtonShow={this.addToBasketShow}
-        mode={this.mode}
+        addToBasketShow={this.addToBasketShow}
         campaignTypeId={this.campaignType}
         index={index}
         widgetElementId={this.id}
         widgetVersion={version}
         currency={this.currencySign}
         pricePrefix={this.pricePrefix}
+        setMode={this.isSetMode}
         locale={this.locale}
         priceLabel={calculatePriceLabel(recommendation)}
       />

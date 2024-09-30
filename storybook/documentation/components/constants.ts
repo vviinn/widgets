@@ -356,8 +356,6 @@ export const energyCertificationsString = JSON.stringify([
       min: "A",
       max: "G",
     },
-    classLabelUrl:
-      "https://energy-efficient-products.ec.europa.eu/sites/default/files/styles/embed_medium_2x/public/2024-04/sample-energy-label-with-numbers-new.png?itok=x7puJdbG",
     classDataSheetUrl:
       "https://www.roller.de/medias/sys_master/datasheets/datasheets/h7a/hc5/11687118700574/1328023300-P01.pdf",
     productType: "Product Type",

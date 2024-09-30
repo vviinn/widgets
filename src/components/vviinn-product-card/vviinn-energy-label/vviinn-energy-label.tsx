@@ -22,25 +22,14 @@ import { slotChangeListener } from "../../customized-slots";
 })
 export class VviinnEnergyLabel {
   @Element() el: HTMLElement;
-  @Prop() classLabelUrl?: EnergyCertification["classLabelUrl"];
   @Prop() classIconUrls?: EnergyCertification["classIconUrls"];
   @Prop() productType?: EnergyCertification["productType"];
   @Prop() classDataSheetUrl?: EnergyCertification["classDataSheetUrl"];
   @Prop() iconDirection: EnergyClassIconDirection = "right";
 
-  /** @internal */
-  @Prop() productClickHandler: (e: MouseEvent) => void;
-
   componentWillLoad() {
     slotChangeListener(this, this.el);
   }
-
-  private labelClickHandler = (e: MouseEvent) => {
-    if (this.classLabelUrl) {
-      e.preventDefault();
-      window.open(this.classLabelUrl, "_blank", "noopener noreferrer");
-    } else this.productClickHandler(e);
-  };
 
   render() {
     return (
@@ -53,13 +42,11 @@ export class VviinnEnergyLabel {
       >
         <div class="container" part="energy-label-container">
           {!!this.classIconUrls && (
-            <a class="class-label-link" onClick={this.labelClickHandler}>
-              <img
-                class="class-label-icon"
-                part="energy-label-icon"
-                src={this.classIconUrls[this.iconDirection]}
-              />
-            </a>
+            <img
+              class="class-label-icon"
+              part="energy-label-icon"
+              src={this.classIconUrls[this.iconDirection]}
+            />
           )}
 
           {(this.productType || this.classDataSheetUrl) && (

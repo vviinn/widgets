@@ -16,6 +16,10 @@ vviinn-product-card {
   --product-card-image-bg-color: ${args.productCardImageBgColor};
 }
 
+vviinn-product-card::part(price-label) {
+  display: flex;
+}
+
 </style>
 <div class="product-wrapper">
   ${story()}

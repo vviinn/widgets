@@ -9,6 +9,7 @@ export const generalArgs = {
   locale: "en-US",
   productDetailsRedirect: true,
   productDetailsNewTab: false,
+  addToBasketShow: false,
   showInWidget: false,
   uiSessionId: "",
   searchId: "",
