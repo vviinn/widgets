@@ -92,11 +92,11 @@ export class VviinnFilters {
 
   private handleSubFilterSelection(
     filterValue: DynamicFilterValue,
-    seletedFilter: DynamicFilter
+    selectedFilter: DynamicFilter
   ) {
     this.requestFilters = subFilterSelection(
       this.requestFilters,
-      seletedFilter,
+      selectedFilter,
       filterValue
     );
 
