@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.102.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.101.1...v2.102.0) (2024-10-01)
+
+
+### Features
+
+* adding actions slot to product card ([522ffeb](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/522ffeb6203c0d9c04ef060abf1f2b83f9a7490b))
+
 ### [2.101.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.101.0...v2.101.1) (2024-09-30)
 
 
