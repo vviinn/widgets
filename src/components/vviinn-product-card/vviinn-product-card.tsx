@@ -81,6 +81,7 @@ import { resources } from "../../locale/resources";
  * @part price-label-2 - String part of the price with index 2.
  * @part price-label-3 - String part of the price with index 3.
  * @part price-label-4 - String part of the price with index 4.
+ * @part product-card-actions - Style actions wrapper.
  *
  * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
@@ -88,6 +89,8 @@ import { resources } from "../../locale/resources";
  * @slot vviinn-basket-button-text-pressed - Text of pressed Add to Basket button (Set mode).
  * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button (Set mode).
  * @slot energy-label-data-sheet-text - Data sheet link's text.
+ * @slot vviinn-product-card-actions - Add action buttons like One-click discovery to this slot.
+ *
  */
 @Component({
   tag: "vviinn-product-card",
@@ -96,6 +99,7 @@ import { resources } from "../../locale/resources";
 })
 export class VviinnProductCard {
   @Element() el: HTMLElement;
+
   @Prop() brand: string | undefined;
   @Prop() currency: string | undefined = undefined;
   @Prop() image: string | undefined;
@@ -361,10 +365,14 @@ export class VviinnProductCard {
         class={{
           animated: this.isTransitioning,
         }}
-        exportparts="brand, product-type, price-label, price-label-0, price-label-1, price-label-2, price-label-3, price-label-4, currency, deeplink, image, image-link,  price-amount-regular, price-amount-sale, price-amount-outdated, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-container, price-outdated, price-regular, price-sale, price-prefix, discount-label, discount-percentage, title, basket-button, update-button-item, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
+        exportparts="brand, product-type, price-label, price-label-0, price-label-1, price-label-2, price-label-3, price-label-4, currency, deeplink, image, image-link,  price-amount-regular, price-amount-sale, price-amount-outdated, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-container, price-outdated, price-regular, price-sale, price-prefix, discount-label, discount-percentage, title, basket-button, update-button-item, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link product-card-actions"
       >
         <Linked deeplink={this.deeplink} part="image-link">
           {this.renderImage()}
+
+          <div class="product-card-actions" part="product-card-actions">
+            <slot name="vviinn-product-card-actions"></slot>
+          </div>
         </Linked>
 
         {this.isTransitioning ? (
