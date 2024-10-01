@@ -104,3 +104,27 @@
 .tab-sub-title {
   font-size: 14px !important;
 }
+
+#product-card-append vviinn-product-card::part(price-label),
+#product-card-main vviinn-product-card::part(price-label) {
+  display: flex;
+}
+
+#product-card-minimalistic vviinn-product-card::part(brand),
+#product-card-customized vviinn-product-card::part(brand),
+#product-card-minimalistic vviinn-product-card::part(product-type),
+#product-card-customized vviinn-product-card::part(product-type) {
+  display: none;
+}
+
+#product-card-customized vviinn-product-card {
+  --product-card-content-align: center;
+  --product-card-text-align: center;
+  --basket-button-bg-color-pressed: #fdeee6;
+  --product-card-image-bg-color: transparent;
+  --product-card-image-border: 2px solid #fdeee6;
+}
+
+#product-card-customized vviinn-product-card::part(title) {
+  font-weight: 500;
+}
