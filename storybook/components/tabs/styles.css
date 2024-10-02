@@ -105,7 +105,6 @@
   font-size: 14px !important;
 }
 
-#product-card-append vviinn-product-card::part(price-label),
 #product-card-main vviinn-product-card::part(price-label) {
   display: flex;
 }
