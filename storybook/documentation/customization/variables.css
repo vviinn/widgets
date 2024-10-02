@@ -1,7 +1,12 @@
 vviinn-vps-button#vviinn-vps-primary-colors {
-  --color-primary: #ca4930;
+  --color-primary: #0089c7;
+  --color-primary-hover: #027db5;
 }
 
-vviinn-vpr-widget#vviinn-vpr-image-border {
-  --product-card-image-border: 1px solid #ca4930;
+vviinn-vpr-widget#vviinn-vpr-customization {
+  --product-card-content-align: center;
+  --product-card-text-align: center;
+  --basket-button-bg-color-pressed: beige;
+  --product-card-image-bg-color: transparent;
+  --product-card-image-border: 1px solid gray;
 }

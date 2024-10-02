@@ -14,7 +14,7 @@ import { vviinnToken, productIdSimilarProducts } from "../../helpers";
 
 <div id="product-card-main">
     <div className="tab tab-reverse">
-        <h3>Full Content View (with Modal One-click Discovery)</h3>
+        <h3>Full Content View with One-click Discovery modal</h3>
         <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'product-card-main')}}>Code</button>
         <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'product-card-main')}}>Preview</button>
     </div>
@@ -93,7 +93,7 @@ import { vviinnToken, productIdSimilarProducts } from "../../helpers";
 
 <div id="product-card-append">
     <div className="tab tab-reverse">
-        <h3>Full Content View (with Appended One-click Discovery)</h3>
+        <h3>Full Content View with appended One-click Discovery</h3>
         <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'product-card-append')}}>Code</button>
         <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'product-card-append')}}>Preview</button>
     </div>
@@ -167,7 +167,7 @@ import { vviinnToken, productIdSimilarProducts } from "../../helpers";
 
 <div id="product-card-minimalistic">
     <div className="tab tab-reverse">
-        <h3>Minimalistic View (with Hidden Content)</h3>
+        <h3>Minimalistic View (with hidden content)</h3>
         <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_3', 'product-card-minimalistic')}}>Code</button>
         <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_3', 'product-card-minimalistic')}}>Preview</button>
     </div>
@@ -195,7 +195,9 @@ import { vviinnToken, productIdSimilarProducts } from "../../helpers";
 ```html
 <style>
     vviinn-product-card::part(brand),
-    vviinn-product-card::part(product-type) {
+    vviinn-product-card::part(product-type),
+    vviinn-product-card::part(price-amount-base-sale),
+    vviinn-product-card::part(price-outdated) {
         display: none;
     }
 </style>
@@ -208,75 +210,6 @@ import { vviinnToken, productIdSimilarProducts } from "../../helpers";
     sale-price="1653" 
     base-sale-price='{"price":5,"quantity":1,"measure":"cm²"}'
     image="https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg" 
-    image-width="240"
-    currency="€"
-    is-standalone="true">
-</vviinn-product-card>
-```
-    </div>
-</div>
-
-<div id="product-card-customized">
-    <div className="tab tab-reverse">
-        <h3>Minimalistic Customized View (with Basket Button and Hidden Content)</h3>
-        <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_4', 'product-card-customized')}}>Code</button>
-        <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_4', 'product-card-customized')}}>Preview</button>
-    </div>
-    <div id="Preview_4" className="tabcontent" style={{display:"block"}}>
-        <div className="tabcontent-preview">
-            <vviinn-product-card 
-                product-title="Couchtisch Rolf Benz 8770 Ronald Schmitt" 
-                brand="Ronald Schmitt" 
-                product-type="Couchtische" 
-                locale="en-US"
-                price="3629" 
-                sale-price="1653" 
-                base-sale-price='{"price":5,"quantity":1,"measure":"cm²"}'
-                image="https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg"
-                deeplink="#"
-                add-to-basket-show="true"
-                image-width="240"
-                currency="€" 
-                style={{width:"240px"}}
-                is-standalone="true">
-            </vviinn-product-card>
-        </div>
-    </div>
-
-    <div id="Code_4" className="tabcontent">
-```html
-<style>
-    vviinn-product-card {
-        --product-card-content-align: center;
-        --product-card-text-align: center;
-        --basket-button-bg-color-pressed: #fdeee6;
-        --product-card-image-bg-color: transparent;
-        --product-card-image-border: 2px solid #fdeee6;
-    }
-
-    vviinn-product-card::part(brand),
-    vviinn-product-card::part(product-type) {
-        display: none;
-    }
-
-    vviinn-product-card::part(title) {
-        font-weight: 500;
-    }
-
-     vviinn-product-card::part(price-container) {
-        flex-direction: row;
-    }
-</style>
-<vviinn-product-card 
-    product-title="Couchtisch Rolf Benz 8770 Ronald Schmitt" 
-    brand="Ronald Schmitt" 
-    product-type="Couchtische" 
-    locale="en-US"
-    price="3629" 
-    sale-price="1653" 
-    base-sale-price='{"price":5,"quantity":1,"measure":"cm²"}'
-    image="https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg" 
-    add-to-basket-show="true"
     image-width="240"
     currency="€"
     is-standalone="true">
