@@ -47,7 +47,7 @@ export type SelectFilterEventData = {
   widgetVersion: string;
   action: FilterAction;
   kind: FilterKind;
-  filterName?: string;
+  category?: string;
 };
 
 export type ProductCardEventData = {

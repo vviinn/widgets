@@ -24,6 +24,7 @@ import {
 } from "./helpers";
 import { Histogram } from "../vviinn-price-range/vviinn-price-range";
 import {
+  SelectFilterEventData,
   ChangedFiltersEventData,
   DynamicFiltersEventData,
 } from "../../recommendation/events";
@@ -71,6 +72,8 @@ export class VviinnFilters {
   /** The filters received */
   @Event({ bubbles: true })
   vviinnFilters: EventEmitter<DynamicFiltersEventData>;
+
+  @Event() vviinnFilterTriggered: EventEmitter<SelectFilterEventData>;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
