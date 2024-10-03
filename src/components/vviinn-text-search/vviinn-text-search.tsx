@@ -7,6 +7,7 @@ import {
   Event,
   EventEmitter,
   Listen,
+  State,
 } from "@stencil/core";
 import { makeTextSearchRequest, searchState } from "../../store/search.store";
 import { SearchModalUploadIcon, TextSearchIcon } from "../vviinn-icons";
@@ -40,7 +41,11 @@ export class VviinnTextSearch {
 
   /** A text search response was received (used internally by vviinn-vps-widget) */
   /** @internal */
-  @Event() vviinnTextSearchFinished: EventEmitter<TextSearchEventData>;
+  @Event() widgetTextSearchFinished: EventEmitter<TextSearchEventData>;
+
+  /** A text search response was received by vviinn-results (used internally for showing preloader) */
+  /** @internal */
+  @Event() resultsTextSearchFinished: EventEmitter;
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
@@ -56,6 +61,27 @@ export class VviinnTextSearch {
   /** @internal */
   @Prop() apiPath?: string = "https://api.vviinn.com";
 
+  @State() isLoading = false;
+
+  private isShowPreloader = () =>
+    this.showInWidget
+      ? searchState.loading && searchState.searchType === "text"
+      : this.isLoading;
+
+  connectedCallback() {
+    document.addEventListener(
+      "resultsTextSearchFinished",
+      this.resultsTextSearchFinishedHandler
+    );
+  }
+
+  disconnectedCallback() {
+    document.removeEventListener(
+      "resultsTextSearchFinished",
+      this.resultsTextSearchFinishedHandler
+    );
+  }
+
   async componentWillLoad() {
     await i18next.init({
       lng: this.locale,
@@ -68,10 +94,13 @@ export class VviinnTextSearch {
   async componentDidLoad() {
     if (this.showInWidget) return;
 
-    this.searchQuery?.length > 0 &&
+    if (this.searchQuery?.length > 0) {
+      this.isLoading = true;
+
       this.vviinnTextSearchStarted.emit({
         query: this.searchQuery,
       });
+    }
   }
 
   @Listen("vviinnImageUploadFinished")
@@ -94,13 +123,16 @@ export class VviinnTextSearch {
 
     if (this.showInWidget) {
       await makeTextSearchRequest(this.token, this.searchQuery);
-      this.vviinnTextSearchFinished.emit({ query: this.searchQuery });
+      this.widgetTextSearchFinished.emit({ query: this.searchQuery });
     } else {
+      this.isLoading = true;
       this.vviinnTextSearchStarted.emit({
         query: this.searchQuery,
       });
     }
   }
+
+  private resultsTextSearchFinishedHandler = () => (this.isLoading = false);
 
   private handleKeyPress(event: KeyboardEvent) {
     if (event.key === "Enter") {
@@ -128,9 +160,7 @@ export class VviinnTextSearch {
           onClick={() => this.handleTextSearch()}
           disabled={searchState.loading}
         >
-          {searchState.loading &&
-          searchState.searchType === "text" &&
-          this.showInWidget ? (
+          {this.isShowPreloader() ? (
             <vviinn-preloader />
           ) : (
             <slot name="vviinn-text-search-icon">

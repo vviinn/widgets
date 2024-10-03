@@ -130,6 +130,9 @@ export class VviinnResults {
   /** Dynamic filters are received from the API. */
   /** @internal */
   @Event() vviinnFilters: EventEmitter<DynamicFiltersEventData>;
+  /** A text search response was received by vviinn-results (used internally for showing preloader) */
+  /** @internal */
+  @Event() resultsTextSearchFinished: EventEmitter;
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
@@ -282,10 +285,11 @@ export class VviinnResults {
     this.getResultsBySearchId(detail.searchId);
   };
 
-  private textSearchStartedHandler = ({ detail }: TextSearchEvent) => {
+  private textSearchStartedHandler = async ({ detail }: TextSearchEvent) => {
     if (this.showInWidget) return;
-    this.getResultsByTextQuery(detail.query);
     this.innerTextSearchQuery = detail.query;
+    await this.getResultsByTextQuery(detail.query);
+    this.resultsTextSearchFinished.emit();
   };
 
   private filtersChangedHandler = ({ detail }: ChangedFiltersEvent) => {

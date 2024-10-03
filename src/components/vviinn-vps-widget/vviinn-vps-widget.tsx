@@ -363,7 +363,7 @@ export class VviinnVpsWidget {
     }
   }
 
-  @Listen("vviinnTextSearchFinished") textSearchFinishedHandler({
+  @Listen("widgetTextSearchFinished") textSearchFinishedHandler({
     detail,
   }: TextSearchEvent) {
     this.searchQuery = detail.query;
