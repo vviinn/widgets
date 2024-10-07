@@ -92,6 +92,12 @@ export type ChangedFiltersEventData = {
 
 export type DynamicFiltersEventData = DynamicFilter[];
 
+export type DynamicFilterTrackingData = {
+  action: FilterAction;
+  kind: FilterKind;
+  category?: string;
+};
+
 export type SearchIdEvent = CustomEvent<SearchIdEventData>;
 export type TextSearchEvent = CustomEvent<TextSearchEventData>;
 export type DynamicFiltersEvent = CustomEvent<DynamicFiltersEventData>;
