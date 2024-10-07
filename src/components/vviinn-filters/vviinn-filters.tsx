@@ -24,9 +24,9 @@ import {
 } from "./helpers";
 import { Histogram } from "../vviinn-price-range/vviinn-price-range";
 import {
-  SelectFilterEventData,
   ChangedFiltersEventData,
   DynamicFiltersEventData,
+  DynamicFilterTrackingData,
 } from "../../recommendation/events";
 import { components } from "../../interfaces/generated";
 
@@ -73,7 +73,7 @@ export class VviinnFilters {
   @Event({ bubbles: true })
   vviinnFilters: EventEmitter<DynamicFiltersEventData>;
 
-  @Event() vviinnFilterTriggered: EventEmitter<SelectFilterEventData>;
+  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -97,11 +97,20 @@ export class VviinnFilters {
     filterValue: DynamicFilterValue,
     selectedFilter: DynamicFilter
   ) {
+    const previousFiltersLength = this.requestFilters.length;
     this.requestFilters = subFilterSelection(
       this.requestFilters,
       selectedFilter,
       filterValue
     );
+    const newFiltersLength = this.requestFilters.length;
+    const isNewFilterSelected = newFiltersLength - previousFiltersLength >= 0;
+
+    this.vviinnFilterTriggered.emit({
+      category: selectedFilter.column,
+      action: isNewFilterSelected ? "select" : "deselect",
+      kind: "category",
+    });
 
     emitRequestFiltersMore(
       [...this.requestFilters],
