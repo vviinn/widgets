@@ -104,3 +104,19 @@ products.hidden {
     grid-gap: 24px 10px;
   }
 }
+
+.vviinn-results-product-card-actions vviinn-vpr-button {
+  display: flex;
+  padding: var(--spacing-50);
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-50);
+  border-radius: var(--border-radius-100, 8px);
+  background: var(--button-bg-color-frosted, rgba(111, 111, 111, 0.4));
+  backdrop-filter: blur(calc(var(--filter-blur-150, 12px) / 2));
+}
+.vviinn-results-product-card-actions vviinn-vpr-button::part(vviinn-button) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

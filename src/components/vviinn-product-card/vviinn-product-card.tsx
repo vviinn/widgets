@@ -367,13 +367,14 @@ export class VviinnProductCard {
         }}
         exportparts="brand, product-type, price-label, price-label-0, price-label-1, price-label-2, price-label-3, price-label-4, currency, deeplink, image, image-link,  price-amount-regular, price-amount-sale, price-amount-outdated, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-container, price-outdated, price-regular, price-sale, price-prefix, discount-label, discount-percentage, title, basket-button, update-button-item, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link product-card-actions"
       >
-        <Linked deeplink={this.deeplink} part="image-link">
-          {this.renderImage()}
-
+        <div class="image-wrapper">
+          <Linked deeplink={this.deeplink} part="image-link">
+            {this.renderImage()}
+          </Linked>
           <div class="product-card-actions" part="product-card-actions">
             <slot name="vviinn-product-card-actions"></slot>
           </div>
-        </Linked>
+        </div>
 
         {this.isTransitioning ? (
           <Fragment>
