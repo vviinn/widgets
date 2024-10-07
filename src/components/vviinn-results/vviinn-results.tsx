@@ -16,6 +16,7 @@ import { v4 as uuidv4 } from "uuid";
 import {
   DefaultApi,
   EventConfirmation,
+  FilterEvent,
   ResultLoadEvent,
   ResultViewEvent,
 } from "vviinn-tracking-client-ts";
@@ -40,6 +41,7 @@ import {
   ChangedFiltersEvent,
   ChangedFiltersEventData,
   DynamicFiltersEventData,
+  DynamicFilterTrackingData,
   ProductCardEvent,
   ProductCardEventData,
   ProductEvent,
@@ -51,6 +53,7 @@ import {
   TextSearchEventData,
 } from "../../recommendation/events";
 import {
+  createFilterEvent,
   createProductVpsEventByType,
   createResultVpsEventByType,
 } from "../../tracking";
@@ -295,6 +298,24 @@ export class VviinnResults {
     );
   };
 
+  private filtersTriggeredHandler = ({
+    detail,
+  }: CustomEvent<DynamicFilterTrackingData>) => {
+    const { action, kind, category } = detail;
+    if (this.trackingDeactivated) return;
+    const { campaignTypeId, ...rest } = this.getBasicEventData();
+
+    const filterEvent: FilterEvent = createFilterEvent({
+      session_id: this.uiSessionId,
+      typ: "filter_event",
+      kind: kind ?? "category",
+      action: action,
+      ...rest,
+      category: category,
+    });
+    this.trackingApi.trackEvent(filterEvent).then(this.setTrackingDeactivated);
+  };
+
   connectedCallback() {
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
 
@@ -317,6 +338,11 @@ export class VviinnResults {
       this.filtersChangedHandler
     );
 
+    document.addEventListener(
+      "vviinnFilterTriggered",
+      this.filtersTriggeredHandler
+    );
+
     this.getResultsBySearchId(this.searchId);
     this.getResultsByCategory();
     !this.showInWidget && this.getResultsByTextQuery(this.textSearchQuery);
@@ -336,6 +362,11 @@ export class VviinnResults {
     document.removeEventListener(
       "vviinnFiltersChanged",
       this.filtersChangedHandler
+    );
+
+    document.removeEventListener(
+      "vviinnFilterTriggered",
+      this.filtersTriggeredHandler
     );
   }
 
