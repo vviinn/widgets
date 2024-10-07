@@ -35,6 +35,7 @@ import { Histogram } from "../vviinn-price-range/vviinn-price-range";
 import {
   ChangedFiltersEventData,
   DynamicFiltersEventData,
+  DynamicFilterTrackingData,
 } from "../../recommendation/events";
 import { components } from "../../interfaces/generated";
 
@@ -99,6 +100,8 @@ export class VviinnExtendedFilters {
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
 
+  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
+
   private replaceSlotsContent() {
     const slots = this.el.querySelectorAll("[slot]");
     this.globalSlotsChanged.emit({
@@ -123,13 +126,22 @@ export class VviinnExtendedFilters {
 
   private handleSubFilterSelection(
     filterValue: DynamicFilterValue,
-    seletedFilter: DynamicFilter
+    selectedFilter: DynamicFilter
   ) {
+    const previousFiltersLength = this.requestFilters.length;
     this.requestFilters = subFilterSelection(
       this.requestFilters,
-      seletedFilter,
+      selectedFilter,
       filterValue
     );
+    const newFiltersLength = this.requestFilters.length;
+    const isNewFilterSelected = newFiltersLength - previousFiltersLength >= 0;
+
+    this.vviinnFilterTriggered.emit({
+      category: selectedFilter.column,
+      action: isNewFilterSelected ? "select" : "deselect",
+      kind: "category",
+    });
 
     emitRequestFiltersMore(
       [...this.requestFilters],

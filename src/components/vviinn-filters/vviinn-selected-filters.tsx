@@ -24,6 +24,7 @@ import {
 import {
   ChangedFiltersEventData,
   DynamicFiltersEventData,
+  DynamicFilterTrackingData,
 } from "../../recommendation/events";
 
 /**
@@ -53,15 +54,26 @@ export class VviinnSelectedFilters {
   @Event({ bubbles: true })
   vviinnFilters: EventEmitter<DynamicFiltersEventData>;
 
+  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
+
   private handleSubFilterSelection(
     filterValue: DynamicFilterValue,
-    seletedFilter: DynamicFilter
+    selectedFilter: DynamicFilter
   ) {
+    const previousFiltersLength = this.requestFilters.length;
     this.requestFilters = subFilterSelection(
       this.requestFilters,
-      seletedFilter,
+      selectedFilter,
       filterValue
     );
+    const newFiltersLength = this.requestFilters.length;
+    const isNewFilterSelected = newFiltersLength - previousFiltersLength >= 0;
+
+    this.vviinnFilterTriggered.emit({
+      category: selectedFilter.column,
+      action: isNewFilterSelected ? "select" : "deselect",
+      kind: "category",
+    });
 
     emitRequestFiltersMore(
       [...this.requestFilters],
