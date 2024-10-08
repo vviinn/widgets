@@ -111,8 +111,8 @@ products.hidden {
   justify-content: center;
   align-items: center;
   gap: var(--spacing-50);
-  border-radius: var(--border-radius-100, 8px);
-  background: var(--button-bg-color-frosted, rgba(111, 111, 111, 0.4));
+  border-radius: var(--border-radius-100);
+  background: var(--button-bg-color-frosted);
   backdrop-filter: blur(calc(var(--filter-blur-150, 12px) / 2));
 }
 .vviinn-results-product-card-actions vviinn-vpr-button::part(vviinn-button) {
