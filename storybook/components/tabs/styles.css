@@ -76,7 +76,7 @@
 .tabcontent {
   display: none;
   border-top: none;
-  padding-top: 10px;
+  padding-top: 12px;
 }
 
 .tabcontent .docblock-source {
