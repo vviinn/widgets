@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.104.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.103.0...v2.104.0) (2024-10-08)
+
+
+### Features
+
+* Loading state for Search Bar ([e413aa9](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/e413aa9b41102071dce3206e7a718f62dec53a53))
+
 ## [2.103.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.102.0...v2.103.0) (2024-10-08)
 
 
