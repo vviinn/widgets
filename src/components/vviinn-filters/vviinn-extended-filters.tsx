@@ -83,6 +83,8 @@ export class VviinnExtendedFilters {
   /** The locale for currency formatting and text localization */
   @Prop() locale: Locale = "de-DE";
   @Prop() mode: "button" | "preview" = "button";
+  /** The currency sign is displayed after the price */
+  @Prop() currencySign?: string = "€";
 
   @State() requestFilters: RequestDynamicFilters = [];
   @State() showMore: boolean = false;
@@ -330,6 +332,7 @@ export class VviinnExtendedFilters {
                           )?.values[0] ??
                             {}) as components["schemas"]["interval"]
                         }
+                        currencySign={this.currencySign}
                       />
                     ) : (
                       <ul
