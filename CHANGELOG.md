@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.103.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.102.0...v2.103.0) (2024-10-08)
+
+
+### Features
+
+* Add Product Card examples to the Storybook ([9ba8b41](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/9ba8b411ee8d6be0ea0972c267c6fc6c1cbbd352))
+
 ## [2.102.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.101.1...v2.102.0) (2024-10-01)
 
 
