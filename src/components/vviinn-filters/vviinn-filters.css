@@ -352,6 +352,7 @@
   cursor: pointer;
   width: 100%;
   border: none;
+  margin-bottom: 20px;
 
   display: flex;
   padding: var(--spacing-150);
@@ -384,7 +385,6 @@
   display: block;
   text-align: center;
   width: 100%;
-  margin-top: 20px;
 
   color: var(--color-text-secondary);
   text-align: center;
