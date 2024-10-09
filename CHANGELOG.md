@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.107.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.106.0...v2.107.0) (2024-10-09)
+
+
+### Features
+
+* Added currency sign to price-range and showing the actual values ([2673f7d](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/2673f7d5876c4f3af20aad4dad3c393e6c27b314))
+
 ## [2.106.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.105.0...v2.106.0) (2024-10-09)
 
 
