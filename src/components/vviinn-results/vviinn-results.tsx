@@ -309,9 +309,9 @@ export class VviinnResults {
       session_id: this.uiSessionId,
       typ: "filter_event",
       kind: kind ?? "category",
-      action: action,
+      action,
+      category,
       ...rest,
-      category: category,
     });
     this.trackingApi.trackEvent(filterEvent).then(this.setTrackingDeactivated);
   };
