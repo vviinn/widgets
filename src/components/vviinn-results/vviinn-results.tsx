@@ -163,6 +163,8 @@ export class VviinnResults {
 
   /** True when we use vviinn-results inside the widget */
   @Prop() showInWidget?: boolean = false;
+  /** Show or hide the One-click Discovery */
+  @Prop() showOneClickDiscovery = false;
 
   /** @internal */
   @Prop() apiPath?: string = "https://api.vviinn.com";
@@ -530,7 +532,20 @@ export class VviinnResults {
         priceLabel={calculatePriceLabel(p)}
         addToBasketShow={this.addToBasketShow}
         isResultsWidget={true}
-      />
+      >
+        {this.showOneClickDiscovery && (
+          <div
+            slot="vviinn-product-card-actions"
+            class="vviinn-results-product-card-actions"
+          >
+            <vviinn-vpr-button
+              token={this.token}
+              product-id={p.productId}
+              add-style="false"
+            ></vviinn-vpr-button>
+          </div>
+        )}
+      </vviinn-product-card>
     ));
   }
 

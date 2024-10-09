@@ -335,7 +335,7 @@ vviinn-energy-label {
 .product-card-actions {
   position: absolute;
   right: 8px;
-  top: 8px;
+  bottom: 8px;
 }
 
 ::slotted([slot="vviinn-product-card-actions"]) {
@@ -346,4 +346,8 @@ vviinn-energy-label {
 
 .hidden {
   display: none;
+}
+
+.image-wrapper {
+  position: relative;
 }
