@@ -40,12 +40,16 @@ export class VviinnImageSelector {
   @Prop() token?: string;
   @Prop() apiPath?: string;
   @Prop() showInTextSearch? = false;
+  @Prop() uploadStartedHandler?: () => void;
 
   private fileInput: HTMLInputElement;
 
   private async handleInputChange(event: Event) {
     this.vviinnImageUpload.emit(this.basicEventData);
     const input = event.target as HTMLInputElement;
+
+    this.uploadStartedHandler && this.uploadStartedHandler();
+
     const processingResult = await processSelectedFile(
       input.files[0],
       this.showInTextSearch,

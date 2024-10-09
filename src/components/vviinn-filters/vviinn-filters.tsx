@@ -62,6 +62,8 @@ export class VviinnFilters {
   @Prop() filtersString: string = "";
   /** @internal */
   @Prop() showInWidget: boolean = false;
+  /** The currency sign is displayed after the price */
+  @Prop() currencySign?: string = "€";
 
   @State() selectedFilter: DynamicFilter;
   @State() requestFilters: RequestDynamicFilters = [];
@@ -229,6 +231,7 @@ export class VviinnFilters {
                   (this.requestFilters.find(({ column }) => column === "price")
                     ?.values[0] ?? {}) as components["schemas"]["interval"]
                 }
+                currencySign={this.currencySign}
               />
             ) : (
               <ul class="sub-filters-wrapper" part="filters-footer-list">

@@ -133,6 +133,9 @@ export class VviinnResults {
   /** Dynamic filters are received from the API. */
   /** @internal */
   @Event() vviinnFilters: EventEmitter<DynamicFiltersEventData>;
+  /** A search response was received by vviinn-results (used internally for showing preloader) */
+  /** @internal */
+  @Event() resultsSearchFinished: EventEmitter;
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
@@ -163,6 +166,8 @@ export class VviinnResults {
 
   /** True when we use vviinn-results inside the widget */
   @Prop() showInWidget?: boolean = false;
+  /** Show or hide the One-click Discovery */
+  @Prop() showOneClickDiscovery = false;
 
   /** @internal */
   @Prop() apiPath?: string = "https://api.vviinn.com";
@@ -224,13 +229,14 @@ export class VviinnResults {
   private getResultsBySearchId = async (searchId: string) => {
     if (!searchId || this.showInWidget) return;
     state.apiPath = this.apiPath; //FIXME: #36877
-    pipe(
+    await pipe(
       await makeSearchIdRequest(this.token, searchId),
       E.getOrElse(() => []),
       (results: SearchIdResponse) => {
         this.recommendations = results;
       }
     );
+    this.resultsSearchFinished.emit();
   };
 
   private async getResultsByTextQuery(
@@ -285,10 +291,11 @@ export class VviinnResults {
     this.getResultsBySearchId(detail.searchId);
   };
 
-  private textSearchStartedHandler = ({ detail }: TextSearchEvent) => {
+  private textSearchStartedHandler = async ({ detail }: TextSearchEvent) => {
     if (this.showInWidget) return;
-    this.getResultsByTextQuery(detail.query);
     this.innerTextSearchQuery = detail.query;
+    await this.getResultsByTextQuery(detail.query);
+    this.resultsSearchFinished.emit();
   };
 
   private filtersChangedHandler = ({ detail }: ChangedFiltersEvent) => {
@@ -556,7 +563,20 @@ export class VviinnResults {
         priceLabel={calculatePriceLabel(p)}
         addToBasketShow={this.addToBasketShow}
         isResultsWidget={true}
-      />
+      >
+        {this.showOneClickDiscovery && (
+          <div
+            slot="vviinn-product-card-actions"
+            class="vviinn-results-product-card-actions"
+          >
+            <vviinn-vpr-button
+              token={this.token}
+              product-id={p.productId}
+              add-style="false"
+            ></vviinn-vpr-button>
+          </div>
+        )}
+      </vviinn-product-card>
     ));
   }
 

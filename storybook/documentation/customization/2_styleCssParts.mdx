@@ -37,8 +37,9 @@ For example, [check](?path=/story/playground-discovery--grid) the list of availa
 ```html
 <style>
   vviinn-vpr-widget::part(title) {
-    color: red;
     font-weight: bold;
+    color: #ffffff;
+    background: #000000;
   }
 </style>
 
@@ -58,21 +59,27 @@ For example, [check](?path=/story/playground-discovery--grid) the list of availa
 <div id="discovery-set-example">
     <div className="tab tab-reverse">
         <h3>Discovery Set</h3>
-        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_3', 'discovery-set-example')}}>Code</button>
-        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_3', 'discovery-set-example')}}>Preview</button>
+        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'discovery-set-example')}}>Code</button>
+        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'discovery-set-example')}}>Preview</button>
     </div>
-    <div id="Preview_3" className="tabcontent" style={{display:"block"}}>
+    <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
             <vviinn-vpr-widget id="vviinn-discovery-set" token={vviinnToken} product-id={productIdCrossSelling} mode="set" campaign-type="VCS" locale="en-US">
             </vviinn-vpr-widget>
         </div>
     </div>
-    <div id="Code_3" className="tabcontent">
+    <div id="Code_2" className="tabcontent">
 ```html
 <style>
   vviinn-vpr-widget::part(recommendations-title) {
-    color: red;
     font-weight: bold;
+    color: #ffffff;
+    background: #000000;
+  }
+
+  vviinn-vpr-widget::part(discount-label) {
+    font-weight: bold;
+    background: #000000;
   }
 </style>
 
@@ -90,21 +97,22 @@ For example, [check](?path=/story/playground-discovery--grid) the list of availa
 <div id="search-modal-example">
     <div className="tab tab-reverse">
         <h3>Search Modal</h3>
-        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_5', 'search-modal-example')}}>Code</button>
-        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_5', 'search-modal-example')}}>Preview</button>
+        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_3', 'search-modal-example')}}>Code</button>
+        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_3', 'search-modal-example')}}>Preview</button>
     </div>
     
-    <div id="Preview_5" className="tabcontent" style={{display:"block"}}>
+    <div id="Preview_3" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
             <vviinn-vps-button id="vviinn-vps-button-customization" token={vviinnToken} text-search-show="true" locale="en-US"></vviinn-vps-button>
         </div>
     </div>
-    <div id="Code_5" className="tabcontent">
+    <div id="Code_3" className="tabcontent">
 ```html
 <style>
   vviinn-vps-button::part(upload-photo_button) {
-    color: red;
-    font-weight: bold;
+    background: unset;
+    border: 1px solid #000000;
+    color: #000000;
   }
 </style>
 <vviinn-vps-button 
