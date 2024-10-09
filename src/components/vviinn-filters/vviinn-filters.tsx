@@ -17,10 +17,8 @@ import {
 } from "../../campaign/VPRCampaignService";
 import {
   getFilterOptions,
-  subFilterSelection,
   RenderButton,
   showActiveOnSubButton,
-  emitRequestFiltersMore,
 } from "./helpers";
 import { Histogram } from "../vviinn-price-range/vviinn-price-range";
 import {
@@ -29,6 +27,7 @@ import {
   DynamicFilterTrackingData,
 } from "../../recommendation/events";
 import { components } from "../../interfaces/generated";
+import { triggerFilter } from "./helpers/triggerFilter";
 
 /**
  * @part filters-wrapper - Wrapper for the main filters.
@@ -99,23 +98,11 @@ export class VviinnFilters {
     filterValue: DynamicFilterValue,
     selectedFilter: DynamicFilter
   ) {
-    const previousFiltersLength = this.requestFilters.length;
-    this.requestFilters = subFilterSelection(
-      this.requestFilters,
+    this.requestFilters = triggerFilter(
+      filterValue,
       selectedFilter,
-      filterValue
-    );
-    const newFiltersLength = this.requestFilters.length;
-    const isNewFilterSelected = newFiltersLength - previousFiltersLength >= 0;
-
-    this.vviinnFilterTriggered.emit({
-      category: selectedFilter.column,
-      action: isNewFilterSelected ? "select" : "deselect",
-      kind: "category",
-    });
-
-    emitRequestFiltersMore(
-      [...this.requestFilters],
+      this.requestFilters,
+      this.vviinnFilterTriggered,
       this.el,
       this.vviinnFiltersChanged
     );

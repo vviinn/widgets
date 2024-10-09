@@ -24,11 +24,7 @@ import {
   SquareFilterIcon,
   CheckFilterIcon,
 } from "../vviinn-icons";
-import {
-  getFilterOptions,
-  subFilterSelection,
-  emitRequestFiltersMore,
-} from "./helpers";
+import { getFilterOptions, emitRequestFiltersMore } from "./helpers";
 import { Locale, resources } from "../../locale";
 
 import { SlotSkeleton, slotChangeListener } from "../customized-slots";
@@ -40,6 +36,7 @@ import {
 } from "../../recommendation/events";
 import { components } from "../../interfaces/generated";
 import { ClickEvent, isClickedInRectBound } from "../../geometry/Rectangle";
+import { triggerFilter } from "./helpers/triggerFilter";
 
 /**
  * @slot vviinn-extended-filters-title - Text on widget's header.
@@ -132,23 +129,11 @@ export class VviinnExtendedFilters {
     filterValue: DynamicFilterValue,
     selectedFilter: DynamicFilter
   ) {
-    const previousFiltersLength = this.requestFilters.length;
-    this.requestFilters = subFilterSelection(
-      this.requestFilters,
+    this.requestFilters = triggerFilter(
+      filterValue,
       selectedFilter,
-      filterValue
-    );
-    const newFiltersLength = this.requestFilters.length;
-    const isNewFilterSelected = newFiltersLength - previousFiltersLength >= 0;
-
-    this.vviinnFilterTriggered.emit({
-      category: selectedFilter.column,
-      action: isNewFilterSelected ? "select" : "deselect",
-      kind: "category",
-    });
-
-    emitRequestFiltersMore(
-      [...this.requestFilters],
+      this.requestFilters,
+      this.vviinnFilterTriggered,
       this.el,
       this.vviinnFiltersChanged
     );
