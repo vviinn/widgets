@@ -28,6 +28,7 @@ export class VviinnButton {
     filterValue: components["schemas"]["interval-filter-value-item"]
   ) => void;
   @Prop() selectedInterval?: components["schemas"]["interval"];
+  @Prop() currencySign: string;
 
   @State() minIndex: number = 0;
   @State() maxIndex: number;
@@ -174,10 +175,12 @@ export class VviinnButton {
         </div>
         <div class="label-wrapper" part="histogram-label-wrapper">
           <div class="label" part="histogram-label">
-            {this.histogram[this.minIndex].label}
+            {this.histogram[this.minIndex].value.interval.start}
+            <span class="histogram-currency">{this.currencySign}</span>
           </div>
           <div class="label" part="histogram-label">
-            {this.histogram[this.maxIndex].label}
+            {this.histogram[this.maxIndex].value.interval.start}
+            <span class="histogram-currency">{this.currencySign}</span>
           </div>
         </div>
       </Host>
