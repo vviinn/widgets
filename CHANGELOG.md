@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.105.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.104.0...v2.105.0) (2024-10-09)
+
+
+### Features
+
+* add one-click discovery to vviinn-results ([f8e2834](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/f8e2834c669f5403169605f6979032ee08ee8475))
+
 ## [2.104.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.103.0...v2.104.0) (2024-10-08)
 
 
