@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.106.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.105.0...v2.106.0) (2024-10-09)
+
+
+### Features
+
+* closing extended modal in button mode when click outside ([8907d04](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/8907d04a625e1dc9d1b5f34617f3ccb6e4cfc437))
+
 ## [2.105.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.104.0...v2.105.0) (2024-10-09)
 
 
