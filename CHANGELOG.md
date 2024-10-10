@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.108.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.107.0...v2.108.0) (2024-10-10)
+
+
+### Features
+
+* dynamic filter trigger events now as a helper function ([48d2cc9](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/48d2cc9aa4ed05643dfbc46391bbcac96a077534))
+
 ## [2.107.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.106.0...v2.107.0) (2024-10-09)
 
 

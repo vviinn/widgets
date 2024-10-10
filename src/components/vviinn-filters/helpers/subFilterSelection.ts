@@ -3,6 +3,7 @@ import {
   DynamicFilterValue,
   RequestDynamicFilters,
 } from "../../../campaign/VPRCampaignService";
+import { FilterAction } from "vviinn-tracking-client-ts";
 
 type ValueRequest = string & { start?: number; end?: number };
 
@@ -14,6 +15,8 @@ export const subFilterSelection = (
   const value = filterValue.interval ?? filterValue.value ?? filterValue;
   const index = filters.findIndex(({ column }) => column === selectedColumn);
   const valueIndex = filters[index]?.values.findIndex((val) => val === value);
+  const action: FilterAction =
+    valueIndex == -1 || index == -1 ? "select" : "deselect";
 
   const pushObject =
     index === -1 || selectedColumn === "price"
@@ -37,5 +40,5 @@ export const subFilterSelection = (
     }
   }
 
-  return filters;
+  return { filters, action };
 };
