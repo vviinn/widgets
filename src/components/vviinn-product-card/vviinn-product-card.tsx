@@ -430,14 +430,14 @@ export class VviinnProductCard {
             </Fragment>
           )}
 
+          {renderCustomLabels(this.customLabels.split(","))}
+
           <vviinn-skeleton
             height={40}
             class={{
               hidden: !this.isTransitioning,
             }}
           />
-
-          {renderCustomLabels(this.customLabels.split(","))}
         </div>
 
         <div

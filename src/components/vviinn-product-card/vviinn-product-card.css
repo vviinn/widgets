@@ -51,8 +51,13 @@
 }
 
 .content-wrapper {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1fr;
+  align-items: var(
+    --product-card-content-align,
+    var(--product-card-content-align-default)
+  );
   gap: var(--spacing-50);
 }
 
