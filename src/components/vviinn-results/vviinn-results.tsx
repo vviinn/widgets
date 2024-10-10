@@ -264,7 +264,7 @@ export class VviinnResults {
     }
   }
 
-  private async getResultsByCategory() {
+  private async getResultsByCategory(dynamicFilters?: RequestDynamicFilters) {
     if (!this.filterColumn || !this.filterValue || this.showInWidget) return;
     state.apiPath = this.apiPath; //FIXME: #36877
 
@@ -273,11 +273,13 @@ export class VviinnResults {
         this.token,
         this.filterColumn,
         this.filterValue,
-        this.resultsCount
+        this.resultsCount,
+        dynamicFilters
       ),
       E.getOrElse(() => null),
       (response: ProductListingPageResponse) => {
         this.recommendations = response?.data?.products ?? [];
+        this.vviinnFilters.emit(response?.interactions.dynamicFilters);
       }
     );
   }
@@ -294,10 +296,14 @@ export class VviinnResults {
   };
 
   private filtersChangedHandler = ({ detail }: ChangedFiltersEvent) => {
-    this.getResultsByTextQuery(
-      this.textSearchQuery ?? this.innerTextSearchQuery,
-      detail.filters
-    );
+    if (this.filterColumn && this.filterValue) {
+      this.getResultsByCategory(detail.filters);
+    } else {
+      this.getResultsByTextQuery(
+        this.textSearchQuery ?? this.innerTextSearchQuery,
+        detail.filters
+      );
+    }
   };
 
   connectedCallback() {
