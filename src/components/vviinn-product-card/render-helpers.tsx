@@ -123,7 +123,6 @@ type PriceProps = PriceElementProps & {
   basePrice: BasePrice;
   salePrice: number;
   baseSalePrice: BasePrice;
-  priceLabel: string;
 };
 
 const priceLabelsKeys = [
@@ -153,13 +152,7 @@ export const calculatePriceLabel = (recommendation: Recommendation) => {
 
 export const Price: FunctionalComponent<PriceProps> = (props) => {
   return (
-    <span class="price-container" part="price-container">
-      {props.priceLabel && (
-        <span part="price-label" class="price-label">
-          {props.priceLabel}
-        </span>
-      )}
-
+    <Fragment>
       {props.salePrice ? (
         [
           <span class="price-outdated" part="price-outdated">
@@ -212,7 +205,7 @@ export const Price: FunctionalComponent<PriceProps> = (props) => {
           />
         </span>
       )}
-    </span>
+    </Fragment>
   );
 };
 

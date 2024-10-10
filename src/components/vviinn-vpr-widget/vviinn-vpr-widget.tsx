@@ -88,7 +88,6 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @part price-amount-base-outdated - Numeric part of the base price.
  * @part price-amount-base-regular - Numeric part of the base price.
  * @part price-label - Label for the price.
- * @part price-container - Block of prices.
  * @part price-outdated - Block for outdated price. Rendered when the product contains the sale price.
  * @part price-regular - Block for a price if no sale price is presented.
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.

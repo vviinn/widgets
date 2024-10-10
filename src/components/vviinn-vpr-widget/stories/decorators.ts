@@ -9,7 +9,9 @@ export const gridDecorator = (story) => `
   @media (max-width: 860px) {
     vviinn-product-card::part(title),
     vviinn-product-card::part(brand),
-    vviinn-product-card::part(price-container),
+    vviinn-product-card::part(price-outdated),
+    vviinn-product-card::part(price-regular),
+    vviinn-product-card::part(price-sale),
     vviinn-product-card::part(energy-label) {
       font-size: 14px;
     }

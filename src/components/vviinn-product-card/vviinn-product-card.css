@@ -37,10 +37,23 @@
   gap: var(--spacing-100);
 }
 
-.price-container {
+.image-wrapper {
+  position: relative;
+}
+
+.basket-button-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: var(
+    --product-card-content-align,
+    var(--product-card-content-align-default)
+  );
+}
+
+.content-wrapper {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-75);
+  gap: var(--spacing-50);
 }
 
 .price-outdated,
@@ -60,9 +73,10 @@
   text-decoration: line-through;
 }
 
-.price-label {
+/* FIXME: This is a temporary fix to hide the price label. This should before creating PR */
+/* .price-label {
   display: none;
-}
+} */
 
 .price-amount,
 .price-label > span,
@@ -240,15 +254,6 @@ picture::after {
   display: none;
 }
 
-.basket-button-wrapper {
-  width: 100%;
-  display: flex;
-  justify-content: var(
-    --product-card-content-align,
-    var(--product-card-content-align-default)
-  );
-}
-
 .basket-button-content {
   box-sizing: border-box;
   display: flex;
@@ -346,8 +351,4 @@ vviinn-energy-label {
 
 .hidden {
   display: none;
-}
-
-.image-wrapper {
-  position: relative;
 }

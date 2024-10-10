@@ -77,7 +77,6 @@ import { slotChangeListener } from "../customized-slots";
  * @part price-amount-base-sale - Numeric part of the base price.
  * @part price-amount-base-outdated - Numeric part of the base price.
  * @part price-amount-base-regular - Numeric part of the base price.
- * @part price-container - Block of prices.
  * @part price-outdated - Block for outdated price. Rendered when the product contains the sale price.
  * @part price-regular - Block for a price if no sale price is presented.
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
@@ -587,7 +586,7 @@ export class VviinnResults {
         class={{
           "show-in-widget": this.showInWidget,
         }}
-        exportparts="title, product-card, brand, product-type, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-container, price-outdated, price-regular, price-sale, price-prefix, price-label, price-label-0, price-label-1, price-label-2, price-label-3, price-label-4, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
+        exportparts="title, product-card, brand, product-type, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-outdated, price-regular, price-sale, price-prefix, price-label, price-label-0, price-label-1, price-label-2, price-label-3, price-label-4, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
       >
         <div
           class={{
