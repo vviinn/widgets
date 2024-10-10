@@ -1,4 +1,4 @@
-#product-card-main vviinn-product-card::part(price-label) {
+#product-card-main vviinn-product-card::part(custom-label) {
   display: flex;
 }
 

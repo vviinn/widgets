@@ -31,7 +31,7 @@ import { vviinnToken, productIdSimilarProducts } from "../../helpers";
                 sale-price="1653" 
                 base-sale-price='{"price":5,"quantity":1,"measure":"cm²"}'
                 price-prefix=""
-                price-label="UVP"
+                custom-labels="UVP"
                 image="https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg" 
                 deeplink="#"
                 image-width="240" 
@@ -53,8 +53,8 @@ import { vviinnToken, productIdSimilarProducts } from "../../helpers";
     <div id="Code_1" className="tabcontent">
 ```html
 <style>
-    vviinn-product-card::part(price-label) {
-        display: flex;
+    vviinn-product-card::part(custom-label) {
+        display: block;
     }
 </style>
 <vviinn-product-card 
@@ -65,7 +65,7 @@ import { vviinnToken, productIdSimilarProducts } from "../../helpers";
     base-price='{"price":10,"quantity":1,"measure":"cm²"}'
     sale-price="1653" 
     base-sale-price='{"price":5,"quantity":1,"measure":"cm²"}'
-    price-label="UVP"
+    custom-labels="UVP"
     image="https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg" 
     image-width="240" 
     add-to-basket-show="true" 

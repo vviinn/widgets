@@ -73,18 +73,18 @@
   text-decoration: line-through;
 }
 
-/* FIXME: This is a temporary fix to hide the price label. This should before creating PR */
-/* .price-label {
+.custom-label {
+  font-weight: var(--font-weight-600);
   display: none;
-} */
+}
 
 .price-amount,
-.price-label > span,
+.custom-label > span,
 .currency {
   white-space: nowrap;
 }
 
-.price-label > span {
+.custom-label > span {
   margin-right: var(--spacing-75);
 }
 

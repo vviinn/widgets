@@ -2,6 +2,7 @@ import {
   CrossSellingRequest,
   SimilarProductsRequest,
   RequestStaticFilters,
+  Recommendation,
 } from "../interfaces/recommendation";
 import { RequestDynamicFilters } from "../campaign/VPRCampaignService";
 
@@ -50,4 +51,24 @@ export const getRecommendationsBody = ({
     ...(campaigns.length ? { campaigns: parseCampaigns(campaigns) } : {}),
     ...(Object.keys(staticFilters).length ? { staticFilters } : {}),
   };
+};
+
+export const getCustomLabels = (recommendation: Recommendation) => {
+  const {
+    custom_label_0,
+    custom_label_1,
+    custom_label_2,
+    custom_label_3,
+    custom_label_4,
+  } = recommendation;
+
+  return [
+    custom_label_0,
+    custom_label_1,
+    custom_label_2,
+    custom_label_3,
+    custom_label_4,
+  ]
+    .filter((label) => label)
+    .join(",");
 };

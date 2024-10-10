@@ -60,14 +60,13 @@ import {
 import { resources } from "../../locale";
 import { Locale } from "../../locale";
 import { UpdateIcon } from "../vviinn-icons";
-import { getRecommendationsBody } from "../../recommendation";
+import { getCustomLabels, getRecommendationsBody } from "../../recommendation";
 import {
   RequestDynamicFilters,
   SimilarProductsResponse,
   DynamicFilters,
 } from "../../campaign/VPRCampaignService";
 import { CrossSellingResponse } from "../../campaign/VCSCampaignService";
-import { calculatePriceLabel } from "../vviinn-product-card/render-helpers";
 
 export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
 
@@ -87,7 +86,6 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @part price-amount-base-sale - Numeric part of the base price.
  * @part price-amount-base-outdated - Numeric part of the base price.
  * @part price-amount-base-regular - Numeric part of the base price.
- * @part price-label - Label for the price.
  * @part price-outdated - Block for outdated price. Rendered when the product contains the sale price.
  * @part price-regular - Block for a price if no sale price is presented.
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
@@ -106,12 +104,11 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @part discount-label - Discount label in Product Card (Set mode).
  * @part discount-percentage - Discount percentage inside the Add to Basket button (Set mode).
  *
- * @part price-label - string part of price.
- * @part price-label-0 - string part of price with index 0.
- * @part price-label-1 - string part of price with index 1.
- * @part price-label-2 - string part of price with index 2.
- * @part price-label-3 - string part of price with index 3.
- * @part price-label-4 - string part of price with index 4.
+ * @part custom-label-0 - custom label with index 0.
+ * @part custom-label-1 - custom label with index 1.
+ * @part custom-label-2 - custom label with index 2.
+ * @part custom-label-3 - custom label with index 3.
+ * @part custom-label-4 - custom label with index 4.
  *
  * @slot vviinn-recommendations-title - Recommendations title text.
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
@@ -746,7 +743,7 @@ export class VviinnVprWidget implements ComponentInterface {
         pricePrefix={this.pricePrefix}
         setMode={this.isSetMode}
         locale={this.locale}
-        priceLabel={calculatePriceLabel(recommendation)}
+        customLabels={getCustomLabels(recommendation)}
       />
     );
   }

@@ -91,12 +91,11 @@ const CAMERA_START_DELAY = 500;
  * @part price-prefix - Block rendered before each price element (for ex. "from").
  * @part title - Title inside Product Card.
  * @part text-search-input - Text search input.
- * @part price-label - string part of price.
- * @part price-label-0 - string part of price with index 0.
- * @part price-label-1 - string part of price with index 1.
- * @part price-label-2 - string part of price with index 2.
- * @part price-label-3 - string part of price with index 3.
- * @part price-label-4 - string part of price with index 4.
+ * @part custom-label-0 - custom label with index 0.
+ * @part custom-label-1 - custom label with index 1.
+ * @part custom-label-2 - custom label with index 2.
+ * @part custom-label-3 - custom label with index 3.
+ * @part custom-label-4 - custom label with index 4.
  * @part energy-label-container - Energy label container.
  * @part energy-label-icon - Icon with an energy class.
  * @part energy-label-product-type - Product type.
@@ -614,7 +613,7 @@ export class VviinnVpsWidget {
 
   render() {
     return (
-      <Host exportparts="brand, product-type, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-outdated, price-regular, price-sale, price-prefix, title, product-card, upload-photo_button, show-files_button, start-camera_button, text-search-input, close-button, secondary-action, close-button, price-label, price-label-0, price-label-1, price-label-2, price-label-3, price-label-4, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link">
+      <Host exportparts="brand, product-type, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-outdated, price-regular, price-sale, price-prefix, title, product-card, upload-photo_button, show-files_button, start-camera_button, text-search-input, close-button, secondary-action, close-button, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link">
         {!this.showingInButton && SlotSkeleton("vps")}
 
         <vviinn-overlayed-modal

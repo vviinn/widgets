@@ -58,10 +58,10 @@ import {
   createResultVpsEventByType,
 } from "../../tracking";
 import { RequestDynamicFilters } from "../../campaign/VPRCampaignService";
-import { calculatePriceLabel } from "../vviinn-product-card/render-helpers";
 import i18next from "i18next";
 import { resources } from "../../locale";
 import { slotChangeListener } from "../customized-slots";
+import { getCustomLabels } from "../../recommendation";
 
 /**
  * @part product-card - Product Card itself.
@@ -87,12 +87,11 @@ import { slotChangeListener } from "../customized-slots";
  * @part energy-label-product-type - Product type.
  * @part energy-label-data-sheet-link - Data sheet link.
  *
- * @part price-label - string part of price.
- * @part price-label-0 - string part of price with index 0.
- * @part price-label-1 - string part of price with index 1.
- * @part price-label-2 - string part of price with index 2.
- * @part price-label-3 - string part of price with index 3.
- * @part price-label-4 - string part of price with index 4.
+ * @part custom-label-0 - custom label with index 0.
+ * @part custom-label-1 - custom label with index 1.
+ * @part custom-label-2 - custom label with index 2.
+ * @part custom-label-3 - custom label with index 3.
+ * @part custom-label-4 - custom label with index 4.
  *
  * @slot vviinn-energy-label-data-sheet-text - Text of the data sheet link for the energy label.
  */
@@ -559,7 +558,7 @@ export class VviinnResults {
         widgetVersion={version}
         currency={this.currencySign}
         locale={this.locale}
-        priceLabel={calculatePriceLabel(p)}
+        customLabels={getCustomLabels(p)}
         addToBasketShow={this.addToBasketShow}
         isResultsWidget={true}
       >
@@ -586,7 +585,7 @@ export class VviinnResults {
         class={{
           "show-in-widget": this.showInWidget,
         }}
-        exportparts="title, product-card, brand, product-type, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-outdated, price-regular, price-sale, price-prefix, price-label, price-label-0, price-label-1, price-label-2, price-label-3, price-label-4, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
+        exportparts="title, product-card, brand, product-type, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-outdated, price-regular, price-sale, price-prefix, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
       >
         <div
           class={{

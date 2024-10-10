@@ -2,7 +2,7 @@ import { pipe } from "fp-ts/lib/function";
 import * as E from "fp-ts/lib/Either";
 import { FunctionalComponent, h } from "@stencil/core";
 import { PlusIcon } from "../vviinn-icons";
-import { BasePrice, Recommendation } from "../../interfaces/recommendation";
+import { BasePrice } from "../../interfaces/recommendation";
 import { Fragment } from "@stencil/core";
 
 const FIT_EXPR = /fit\/\d+\//;
@@ -125,27 +125,17 @@ type PriceProps = PriceElementProps & {
   baseSalePrice: BasePrice;
 };
 
-const priceLabelsKeys = [
-  "custom_label_0",
-  "custom_label_1",
-  "custom_label_2",
-  "custom_label_3",
-  "custom_label_4",
-];
-
-export const calculatePriceLabel = (recommendation: Recommendation) => {
+export const renderCustomLabels = (labels: string[]) => {
   const renderLabel = (label: string, index: number) =>
     label ? (
-      <span part={`price-label-${index}`} class={`price-label-${index}`}>
+      <span part={`custom-label-${index}`} class="custom-label">
         {label}
       </span>
     ) : null;
 
   return (
     <Fragment>
-      {priceLabelsKeys.map((key, index) =>
-        renderLabel(recommendation[key], index)
-      )}
+      {labels.map((label, index) => renderLabel(label, index))}
     </Fragment>
   );
 };
