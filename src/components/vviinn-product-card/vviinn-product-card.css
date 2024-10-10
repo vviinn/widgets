@@ -150,9 +150,10 @@
 }
 
 picture {
-  position: relative;
-  margin-bottom: var(--spacing-50);
+  display: block;
   width: 100%;
+  height: 100%;
+  position: relative;
 }
 
 picture::before {
@@ -203,17 +204,18 @@ picture::before {
   font-size: var(--font-size-label);
   font-weight: var(--font-weight-600);
   font-family: var(--font-family, var(--font-family-base));
+  background-color: var(--button-bg-color-secondary);
   cursor: pointer;
+}
+
+.basket-button:hover {
+  background-color: var(--button-bg-color-secondary-hover);
 }
 
 .basket-button-icon-container {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-}
-
-.basket-button:hover {
-  background-color: var(--button-bg-color-secondary-hover);
 }
 
 picture::after {
