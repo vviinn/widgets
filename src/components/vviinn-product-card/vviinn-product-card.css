@@ -37,11 +37,11 @@
   gap: var(--spacing-100);
 }
 
-.image-wrapper {
+.image-container {
   position: relative;
 }
 
-.basket-button-wrapper {
+.basket-button-container {
   width: 100%;
   display: flex;
   justify-content: var(
@@ -50,7 +50,7 @@
   );
 }
 
-.content-wrapper {
+.content-container {
   display: grid;
   width: 100%;
   grid-template-columns: 1fr;

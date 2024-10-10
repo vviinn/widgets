@@ -50,6 +50,9 @@ import {
 import { resources } from "../../locale/resources";
 
 /**
+ * @part image-container - Product Card's image container.
+ * @part content-container - Product Card's content container.
+ * @part basket-button-container - Product Card's basket button container.
  * @part brand - Product brand.
  * @part product-type - Product type.
  * @part currency - Currency sign. Renders after price-amount.
@@ -364,9 +367,9 @@ export class VviinnProductCard {
         class={{
           animated: this.isTransitioning,
         }}
-        exportparts="brand, product-type, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, currency, deeplink, image, image-link,  price-amount-regular, price-amount-sale, price-amount-outdated, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-outdated, price-regular, price-sale, price-prefix, discount-label, discount-percentage, title, basket-button, update-button-item, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link product-card-actions"
+        exportparts="image-container, content-container, basket-button-container, brand, product-type, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, currency, deeplink, image, image-link,  price-amount-regular, price-amount-sale, price-amount-outdated, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-outdated, price-regular, price-sale, price-prefix, discount-label, discount-percentage, title, basket-button, update-button-item, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link product-card-actions"
       >
-        <div class="image-wrapper">
+        <div class="image-container" part="image-container">
           <Linked deeplink={this.deeplink} part="image-link">
             {this.renderImage()}
           </Linked>
@@ -375,7 +378,7 @@ export class VviinnProductCard {
           </div>
         </div>
 
-        <div class="content-wrapper">
+        <div class="content-container" part="content-container">
           {this.isTransitioning ? (
             <Fragment>
               <vviinn-skeleton height={40} />
@@ -442,9 +445,10 @@ export class VviinnProductCard {
 
         <div
           class={{
-            "basket-button-wrapper": true,
+            "basket-button-container": true,
             hidden: !this.isShowBasketButton(),
           }}
+          part="basket-button-container"
         >
           <button
             class={{
