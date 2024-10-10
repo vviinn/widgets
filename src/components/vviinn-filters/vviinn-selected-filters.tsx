@@ -15,16 +15,16 @@ import {
   RequestDynamicFilters,
 } from "../../campaign/VPRCampaignService";
 import {
-  subFilterSelection,
   GetFilterOptions,
   RenderButton,
   showActiveOnSubButton,
-  emitRequestFiltersMore,
 } from "./helpers";
 import {
   ChangedFiltersEventData,
   DynamicFiltersEventData,
+  DynamicFilterTrackingData,
 } from "../../recommendation/events";
+import { triggerFilter } from "./helpers/triggerFilter";
 
 /**
  * @part selected-filters-list - List of selected filters.
@@ -53,18 +53,17 @@ export class VviinnSelectedFilters {
   @Event({ bubbles: true })
   vviinnFilters: EventEmitter<DynamicFiltersEventData>;
 
+  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
+
   private handleSubFilterSelection(
     filterValue: DynamicFilterValue,
-    seletedFilter: DynamicFilter
+    selectedFilter: DynamicFilter
   ) {
-    this.requestFilters = subFilterSelection(
+    this.requestFilters = triggerFilter(
+      filterValue,
+      selectedFilter,
       this.requestFilters,
-      seletedFilter,
-      filterValue
-    );
-
-    emitRequestFiltersMore(
-      [...this.requestFilters],
+      this.vviinnFilterTriggered,
       this.el,
       this.vviinnFiltersChanged
     );

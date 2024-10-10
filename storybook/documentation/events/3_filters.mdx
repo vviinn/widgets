@@ -1,5 +1,5 @@
 import { Meta } from "@storybook/blocks";
-import './events.css'
+import "./events.css";
 
 <Meta title="Events/Filters" />
 
@@ -7,7 +7,7 @@ import './events.css'
 
 Every Vviinn Widget has some events that users can work on and listen to these events with `document.addEventListener()`.
 
-Events related to the filters  are mainly for internal usage inside Vviinn components, but if you need them you can also listen and send data to these components as well.
+Events related to the filters are mainly for internal usage inside Vviinn components, but if you need them you can also listen and send data to these components as well.
 
 <table width="100%" className="events-table">
   <thead>
@@ -49,7 +49,26 @@ Events related to the filters  are mainly for internal usage inside Vviinn compo
       </td>
     </tr>
 
-    
+    <tr>
+          <td>vviinnFilterTriggered</td><td>If tracking is permitted send the triggered filter and action (activated/deactivated).</td>
+
+          <td>
+            <ul>
+              <li>vviinn-filters</li>
+              <li>vviinn-extended-filters</li>
+               <li>vviinn-selected-filters</li>
+            </ul>
+          </td>
+
+          <td>
+            <ul>
+              <li>action</li>
+              <li>kind</li>
+              <li>category</li>
+            </ul>
+          </td>
+        </tr>
+
   </tbody>
 </table>
 
