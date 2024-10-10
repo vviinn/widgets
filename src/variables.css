@@ -2,6 +2,8 @@
   /* New Styles */
   --font-family-base: Inter, system-ui, sans-serif;
   --font-family-mono: monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 
   --font-size-title: 24px;
   --font-size-headline: 18px;

@@ -123,6 +123,7 @@
 .title {
   display: -webkit-box;
   max-width: var(--product-card-set-mode-max-width);
+  font-weight: var(--font-weight-600);
   color: var(--color-text-primary);
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -200,7 +201,7 @@ picture::before {
   width: 100%;
   padding: var(--spacing-100);
   font-size: var(--font-size-label);
-  font-weight: var(--font-weight-400);
+  font-weight: var(--font-weight-600);
   font-family: var(--font-family, var(--font-family-base));
   cursor: pointer;
 }
