@@ -8,6 +8,7 @@ import {
   EventEmitter,
   Element,
   Watch,
+  Listen,
 } from "@stencil/core";
 import i18next from "i18next";
 
@@ -37,6 +38,7 @@ import {
   DynamicFiltersEventData,
 } from "../../recommendation/events";
 import { components } from "../../interfaces/generated";
+import { ClickEvent, isClickedInRectBound } from "../../geometry/Rectangle";
 
 /**
  * @slot vviinn-extended-filters-title - Text on widget's header.
@@ -83,6 +85,8 @@ export class VviinnExtendedFilters {
   /** The locale for currency formatting and text localization */
   @Prop() locale: Locale = "de-DE";
   @Prop() mode: "button" | "preview" = "button";
+  /** The currency sign is displayed after the price */
+  @Prop() currencySign?: string = "€";
 
   @State() requestFilters: RequestDynamicFilters = [];
   @State() showMore: boolean = false;
@@ -234,6 +238,29 @@ export class VviinnExtendedFilters {
     }
   };
 
+  private getAsideElement(): HTMLElement {
+    return this.el.shadowRoot.querySelector("aside");
+  }
+
+  private getSidebarRectangle(): DOMRect {
+    return this.getAsideElement()?.getBoundingClientRect();
+  }
+
+  @Listen("click", { target: "body" })
+  bodyClickListener(event: ClickEvent) {
+    if (this.mode !== "button") return;
+
+    const sidebarRect = this.getSidebarRectangle();
+
+    if (!sidebarRect || sidebarRect.width === 0 || sidebarRect.height === 0) {
+      return;
+    }
+
+    if (!isClickedInRectBound(event, sidebarRect)) {
+      this.showMore = false;
+    }
+  }
+
   render() {
     return (
       <Host>
@@ -255,7 +282,7 @@ export class VviinnExtendedFilters {
           }`}
           part="extended-filters-modal"
         >
-          <div
+          <aside
             class="filters-modal-wrapper"
             part="extended-filters-modal-wrapper"
           >
@@ -330,6 +357,7 @@ export class VviinnExtendedFilters {
                           )?.values[0] ??
                             {}) as components["schemas"]["interval"]
                         }
+                        currencySign={this.currencySign}
                       />
                     ) : (
                       <ul
@@ -388,16 +416,18 @@ export class VviinnExtendedFilters {
             </ul>
 
             <div class="filters-modal-actions" part="extended-filters-actions">
-              <button
-                class="filters-modal-apply"
-                onClick={() => (this.showMore = false)}
-                disabled={this.requestFilters.length === 0}
-                part="extended-filters-apply"
-              >
-                <slot name="vviinn-extended-filters-apply">
-                  {i18next.t("filters.modal.apply")}
-                </slot>
-              </button>
+              {this.mode === "button" && (
+                <button
+                  class="filters-modal-apply"
+                  onClick={() => (this.showMore = false)}
+                  disabled={this.requestFilters.length === 0}
+                  part="extended-filters-apply"
+                >
+                  <slot name="vviinn-extended-filters-apply">
+                    {i18next.t("filters.modal.apply")}
+                  </slot>
+                </button>
+              )}
 
               <button
                 class="filters-modal-reset"
@@ -409,7 +439,7 @@ export class VviinnExtendedFilters {
                 </slot>
               </button>
             </div>
-          </div>
+          </aside>
         </div>
       </Host>
     );

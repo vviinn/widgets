@@ -110,4 +110,6 @@
   font-weight: var(--font-weight-500);
   line-height: var(--line-height-label);
   letter-spacing: var(--letter-spacing-label);
+
+  gap: 3px;
 }
