@@ -339,7 +339,8 @@ export const makeProductListingPageRequest = async (
   token: string,
   column: string,
   value: string,
-  resultsCount?: number
+  resultsCount?: number,
+  dynamicFilters?: RequestDynamicFilters
 ) => {
   const requestValue =
     column === "product_type" || column === "google_product_category"
@@ -361,6 +362,11 @@ export const makeProductListingPageRequest = async (
         },
       ],
     },
+    ...(dynamicFilters
+      ? {
+          dynamicFilters,
+        }
+      : {}),
   };
 
   return pipe(
