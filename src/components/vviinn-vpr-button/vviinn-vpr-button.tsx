@@ -140,6 +140,8 @@ export class VviinnVprButton {
   /** ID of an HTML element that you want to attach the sidebar  */
   @Prop() appendSidebarTo: string;
 
+  @Prop() appendSidebarToElement: HTMLElement;
+
   /** Event emitted on widget load */
   @Event() vviinnWidgetLoad: EventEmitter<BasicEventData>;
 
@@ -173,9 +175,13 @@ export class VviinnVprButton {
   @State() targetAppendSidebarTo: HTMLElement;
 
   componentWillLoad() {
-    if (!this.appendSidebarTo) return;
-
-    this.targetAppendSidebarTo = document.getElementById(this.appendSidebarTo);
+    if (this.appendSidebarToElement) {
+      this.targetAppendSidebarTo = this.appendSidebarToElement;
+    } else if (this.appendSidebarTo) {
+      this.targetAppendSidebarTo = document.getElementById(
+        this.appendSidebarTo
+      );
+    }
   }
 
   private sidebar: HTMLVviinnRecommendationsSidebarElement | null = null;

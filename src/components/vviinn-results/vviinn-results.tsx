@@ -168,6 +168,8 @@ export class VviinnResults {
   @Prop() showInWidget?: boolean = false;
   /** Show or hide the One-click Discovery */
   @Prop() showOneClickDiscovery = false;
+  /** Discovery mode */
+  @Prop() oneClickDiscoveryMode: "modal" | "append" = "modal";
 
   /** @internal */
   @Prop() apiPath?: string = "https://api.vviinn.com";
@@ -191,6 +193,7 @@ export class VviinnResults {
   @State() recommendations: Recommendation[] = [];
   @State() innerTextSearchQuery: string;
   @State() slotsReplaced: boolean;
+  @State() oneClickDiscoveryAppendIndex: number;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -569,6 +572,7 @@ export class VviinnResults {
         priceLabel={calculatePriceLabel(p)}
         addToBasketShow={this.addToBasketShow}
         isResultsWidget={true}
+        style={{ order: i.toString() }}
       >
         {this.showOneClickDiscovery && (
           <div
@@ -576,9 +580,29 @@ export class VviinnResults {
             class="vviinn-results-product-card-actions"
           >
             <vviinn-vpr-button
+              onClick={() => {
+                const containerComputerStyle = window.getComputedStyle(
+                  this.el.shadowRoot.getElementById("vviinn-results-products")
+                );
+                const nCols = containerComputerStyle
+                  .getPropertyValue("grid-template-columns")
+                  .replace(" 0px", "")
+                  .split(" ").length;
+
+                this.oneClickDiscoveryAppendIndex =
+                  i + (nCols - ((i % nCols) + 1));
+              }}
               token={this.token}
               product-id={p.productId}
               add-style="false"
+              append-sidebar-to={
+                this.oneClickDiscoveryMode === "append"
+                  ? "oneclick-discovery-append"
+                  : undefined
+              }
+              appendSidebarToElement={this.el.shadowRoot.getElementById(
+                "oneclick-discovery-append"
+              )}
             ></vviinn-vpr-button>
           </div>
         )}
@@ -624,8 +648,17 @@ export class VviinnResults {
                 searchState.results.length === 0),
             products: true,
           }}
+          id="vviinn-results-products"
         >
           {this.renderResults()}
+          <div
+            id="oneclick-discovery-append"
+            style={{
+              order: (
+                this.oneClickDiscoveryAppendIndex ?? this.recommendations.length
+              ).toString(),
+            }}
+          ></div>
         </div>
       </Host>
     );
