@@ -14,11 +14,15 @@
   flex-direction: row;
   max-width: 100%;
   gap: var(--spacing-75);
+  justify-content: var(
+    --product-card-content-align,
+    var(--product-card-content-align-default)
+  );
   align-items: center;
 }
 
 .info-container {
-  width: 100%;
+  width: fit-content;
   height: 100%;
   display: flex;
   justify-content: center;

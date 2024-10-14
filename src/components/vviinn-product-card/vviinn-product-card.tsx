@@ -24,6 +24,7 @@ import {
   ResponsiveImage,
   Image,
   parseBasePrice,
+  renderCustomLabels,
 } from "./render-helpers";
 import {
   CrossSellingClickEvent,
@@ -49,6 +50,9 @@ import {
 import { resources } from "../../locale/resources";
 
 /**
+ * @part image-container - Product Card's image container.
+ * @part content-container - Product Card's content container.
+ * @part basket-button-container - Product Card's basket button container.
  * @part brand - Product brand.
  * @part product-type - Product type.
  * @part currency - Currency sign. Renders after price-amount.
@@ -61,10 +65,9 @@ import { resources } from "../../locale/resources";
  * @part price-amount-base-sale - Numeric part of the base price.
  * @part price-amount-base-outdated - Numeric part of the base price.
  * @part price-amount-base-regular - Numeric part of the base price.
- * @part price-container - Block contains all prices.
- * @part price-outdated - Renders inside price-container when "sale-price" property filled. Contains regular price.
- * @part price-regular - Renders inside price-container when "sale-price" property is empty.
- * @part price-sale - Renders inside price-container when "sale-price" property filled. Contains sale price.
+ * @part price-outdated - Renders when "sale-price" property filled. Contains regular price.
+ * @part price-regular - Renders when "sale-price" property is empty.
+ * @part price-sale - Renders when "sale-price" property filled. Contains sale price.
  * @part price-prefix - Renders before price-amount. Can be set with "price-prefix" property or inherited from parent component.
  * @part title - Product title
  * @part basket-button - Add to Basket button.
@@ -75,12 +78,11 @@ import { resources } from "../../locale/resources";
  * @part energy-label-icon - Icon with an energy class.
  * @part energy-label-product-type - Product type.
  * @part energy-label-data-sheet-link - Data sheet link.
- * @part price-label - String part of the price.
- * @part price-label-0 - String part of the price with index 0.
- * @part price-label-1 - String part of the price with index 1.
- * @part price-label-2 - String part of the price with index 2.
- * @part price-label-3 - String part of the price with index 3.
- * @part price-label-4 - String part of the price with index 4.
+ * @part custom-label-0 - String part of the price with index 0.
+ * @part custom-label-1 - String part of the price with index 1.
+ * @part custom-label-2 - String part of the price with index 2.
+ * @part custom-label-3 - String part of the price with index 3.
+ * @part custom-label-4 - String part of the price with index 4.
  * @part product-card-actions - Style actions wrapper.
  *
  * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
@@ -117,7 +119,7 @@ export class VviinnProductCard {
   @Prop() responsive: boolean = false;
   @Prop() addToBasketShow: boolean;
   @Prop() updateButtonLocation: UpdateButtonLocation;
-  @Prop() priceLabel: string;
+  @Prop() customLabels: string = "";
   @Prop({ mutable: true }) energyCertifications?: EnergyCertification[];
 
   /** @internal */
@@ -365,9 +367,9 @@ export class VviinnProductCard {
         class={{
           animated: this.isTransitioning,
         }}
-        exportparts="brand, product-type, price-label, price-label-0, price-label-1, price-label-2, price-label-3, price-label-4, currency, deeplink, image, image-link,  price-amount-regular, price-amount-sale, price-amount-outdated, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-container, price-outdated, price-regular, price-sale, price-prefix, discount-label, discount-percentage, title, basket-button, update-button-item, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link product-card-actions"
+        exportparts="image-container, content-container, basket-button-container, brand, product-type, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, currency, deeplink, image, image-link,  price-amount-regular, price-amount-sale, price-amount-outdated, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-outdated, price-regular, price-sale, price-prefix, discount-label, discount-percentage, title, basket-button, update-button-item, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link product-card-actions"
       >
-        <div class="image-wrapper">
+        <div class="image-container" part="image-container">
           <Linked deeplink={this.deeplink} part="image-link">
             {this.renderImage()}
           </Linked>
@@ -376,73 +378,77 @@ export class VviinnProductCard {
           </div>
         </div>
 
-        {this.isTransitioning ? (
-          <Fragment>
-            <vviinn-skeleton height={40} />
-            <vviinn-skeleton height={20} halfWidth={true} />
-          </Fragment>
-        ) : (
-          <Fragment>
-            <Linked deeplink={this.deeplink} part="deeplink">
-              <span class="title" part="title">
-                {this.productTitle}
-              </span>
-            </Linked>
+        <div class="content-container" part="content-container">
+          {this.isTransitioning ? (
+            <Fragment>
+              <vviinn-skeleton height={40} />
+              <vviinn-skeleton height={20} halfWidth={true} />
+            </Fragment>
+          ) : (
+            <Fragment>
+              <Linked deeplink={this.deeplink} part="deeplink">
+                <span class="title" part="title">
+                  {this.productTitle}
+                </span>
+              </Linked>
 
-            {this.brand?.length > 0 && (
-              <span class="brand" part="brand">
-                {this.brand}
-              </span>
-            )}
-
-            {this.productType?.length > 0 && (
-              <span class="product-type" part="product-type">
-                {this.productType}
-              </span>
-            )}
-
-            {(this?.energyCertifications ?? []).map((energyCertification) => (
-              <vviinn-energy-label
-                classIconUrls={energyCertification?.classIconUrls}
-                classDataSheetUrl={energyCertification?.classDataSheetUrl}
-                productType={energyCertification?.productType}
-              ></vviinn-energy-label>
-            ))}
-
-            <Price
-              prefix={this.pricePrefix}
-              currency={this.currency}
-              price={this.price}
-              basePrice={parseBasePrice(this.basePrice)}
-              salePrice={this.salePrice}
-              baseSalePrice={parseBasePrice(this.baseSalePrice)}
-              locale={this.locale}
-              priceLabel={this.priceLabel}
-            />
-
-            {this.setMode &&
-              !this.appliedDiscountPercentage &&
-              this.currentDiscountPercentage && (
-                <div
-                  class="discount-label"
-                  part="discount-label"
-                >{`-${this.currentDiscountPercentage}%`}</div>
+              {this.brand?.length > 0 && (
+                <span class="brand" part="brand">
+                  {this.brand}
+                </span>
               )}
-          </Fragment>
-        )}
 
-        <vviinn-skeleton
-          height={40}
-          class={{
-            hidden: !this.isTransitioning,
-          }}
-        />
+              {this.productType?.length > 0 && (
+                <span class="product-type" part="product-type">
+                  {this.productType}
+                </span>
+              )}
+
+              {(this?.energyCertifications ?? []).map((energyCertification) => (
+                <vviinn-energy-label
+                  classIconUrls={energyCertification?.classIconUrls}
+                  classDataSheetUrl={energyCertification?.classDataSheetUrl}
+                  productType={energyCertification?.productType}
+                ></vviinn-energy-label>
+              ))}
+
+              <Price
+                prefix={this.pricePrefix}
+                currency={this.currency}
+                price={this.price}
+                basePrice={parseBasePrice(this.basePrice)}
+                salePrice={this.salePrice}
+                baseSalePrice={parseBasePrice(this.baseSalePrice)}
+                locale={this.locale}
+              />
+
+              {this.setMode &&
+                !this.appliedDiscountPercentage &&
+                this.currentDiscountPercentage && (
+                  <div
+                    class="discount-label"
+                    part="discount-label"
+                  >{`-${this.currentDiscountPercentage}%`}</div>
+                )}
+            </Fragment>
+          )}
+
+          {renderCustomLabels(this.customLabels.split(","))}
+
+          <vviinn-skeleton
+            height={40}
+            class={{
+              hidden: !this.isTransitioning,
+            }}
+          />
+        </div>
 
         <div
           class={{
-            "basket-button-wrapper": true,
+            "basket-button-container": true,
             hidden: !this.isShowBasketButton(),
           }}
+          part="basket-button-container"
         >
           <button
             class={{

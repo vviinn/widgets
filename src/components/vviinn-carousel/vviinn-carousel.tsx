@@ -31,7 +31,7 @@ import {
 import { calculateDiscount } from "../../utils/number";
 import { searchState } from "../../store/search.store";
 import { Locale } from "../../locale";
-import { calculatePriceLabel } from "../vviinn-product-card/render-helpers";
+import { getCustomLabels } from "../../recommendation";
 
 type MoveDirection = "left" | "right";
 export type CarouselMode = "grid" | "continuity" | "set";
@@ -466,7 +466,7 @@ export class VviinnCarousel {
         pricePrefix={this.pricePrefix}
         locale={this.locale}
         setMode={this.isSetMode}
-        priceLabel={calculatePriceLabel(recommendation)}
+        customLabels={getCustomLabels(recommendation)}
       />
     );
   }
