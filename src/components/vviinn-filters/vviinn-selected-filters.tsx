@@ -21,6 +21,7 @@ import {
 } from "./helpers";
 import {
   ChangedFiltersEventData,
+  DynamicFiltersEvent,
   DynamicFiltersEventData,
   DynamicFilterTrackingData,
 } from "../../recommendation/events";
@@ -69,9 +70,7 @@ export class VviinnSelectedFilters {
     );
   }
 
-  private handleSetFilters = ({
-    detail,
-  }: CustomEvent<DynamicFiltersEventData>) => {
+  private handleSetFilters = ({ detail }: DynamicFiltersEvent) => {
     this.filters = detail;
   };
 
