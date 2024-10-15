@@ -37,10 +37,28 @@
   gap: var(--spacing-100);
 }
 
-.price-container {
+.image-container {
+  position: relative;
+}
+
+.basket-button-container {
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  gap: var(--spacing-75);
+  justify-content: var(
+    --product-card-content-align,
+    var(--product-card-content-align-default)
+  );
+}
+
+.content-container {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1fr;
+  align-items: var(
+    --product-card-content-align,
+    var(--product-card-content-align-default)
+  );
+  gap: var(--spacing-50);
 }
 
 .price-outdated,
@@ -60,17 +78,18 @@
   text-decoration: line-through;
 }
 
-.price-label {
+.custom-label {
+  font-weight: var(--font-weight-600);
   display: none;
 }
 
 .price-amount,
-.price-label > span,
+.custom-label > span,
 .currency {
   white-space: nowrap;
 }
 
-.price-label > span {
+.custom-label > span {
   margin-right: var(--spacing-75);
 }
 
@@ -109,6 +128,7 @@
 .title {
   display: -webkit-box;
   max-width: var(--product-card-set-mode-max-width);
+  font-weight: var(--font-weight-600);
   color: var(--color-text-primary);
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -135,9 +155,10 @@
 }
 
 picture {
-  position: relative;
-  margin-bottom: var(--spacing-50);
+  display: block;
   width: 100%;
+  height: 100%;
+  position: relative;
 }
 
 picture::before {
@@ -186,19 +207,20 @@ picture::before {
   width: 100%;
   padding: var(--spacing-100);
   font-size: var(--font-size-label);
-  font-weight: var(--font-weight-400);
+  font-weight: var(--font-weight-600);
   font-family: var(--font-family, var(--font-family-base));
+  background-color: var(--button-bg-color-secondary);
   cursor: pointer;
+}
+
+.basket-button:hover {
+  background-color: var(--button-bg-color-secondary-hover);
 }
 
 .basket-button-icon-container {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-}
-
-.basket-button:hover {
-  background-color: var(--button-bg-color-secondary-hover);
 }
 
 picture::after {
@@ -238,15 +260,6 @@ picture::after {
 
 :host(.animated) .update-button {
   display: none;
-}
-
-.basket-button-wrapper {
-  width: 100%;
-  display: flex;
-  justify-content: var(
-    --product-card-content-align,
-    var(--product-card-content-align-default)
-  );
 }
 
 .basket-button-content {
@@ -346,8 +359,4 @@ vviinn-energy-label {
 
 .hidden {
   display: none;
-}
-
-.image-wrapper {
-  position: relative;
 }

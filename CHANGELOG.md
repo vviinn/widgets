@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.110.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.109.0...v2.110.0) (2024-10-14)
+
+
+### Features
+
+* Product Card's layout changes ([ff4119c](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/ff4119c2077c2b7bd7ad1f82a11c0ba4c8cfc2df))
+
 ## [2.109.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.108.0...v2.109.0) (2024-10-11)
 
 

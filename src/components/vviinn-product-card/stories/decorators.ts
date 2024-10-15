@@ -16,8 +16,8 @@ vviinn-product-card {
   --product-card-image-bg-color: ${args.productCardImageBgColor};
 }
 
-vviinn-product-card::part(price-label) {
-  display: flex;
+vviinn-product-card::part(custom-label-0), vviinn-product-card::part(custom-label-1), vviinn-product-card::part(custom-label-2), vviinn-product-card::part(custom-label-3), vviinn-product-card::part(custom-label-4) {
+  display: block;
 }
 
 </style>

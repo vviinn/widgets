@@ -1,19 +1,13 @@
-#product-card-main vviinn-product-card::part(price-label) {
+#product-card-main vviinn-product-card::part(custom-label) {
   display: flex;
 }
 
 #product-card-minimalistic vviinn-product-card::part(brand),
-#product-card-minimalistic vviinn-product-card::part(product-type),
-#product-card-customized vviinn-product-card::part(brand),
-#product-card-customized vviinn-product-card::part(product-type) {
+#product-card-minimalistic vviinn-product-card::part(product-type) {
   display: none;
 }
 
 #product-card-minimalistic vviinn-product-card::part(price-amount-base-sale),
 #product-card-minimalistic vviinn-product-card::part(price-outdated) {
   display: none;
-}
-
-#product-card-customized vviinn-product-card::part(title) {
-  font-weight: 500;
 }

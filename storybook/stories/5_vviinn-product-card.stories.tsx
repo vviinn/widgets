@@ -34,7 +34,7 @@ const Template = (args) => {
       locale="${args.locale}"
       currency="${args.currency}"
       image-ratio="${args.imageRatio}"
-      price-label="${args.priceLabel}"
+      custom-labels="${args.customLabels}"
       product-card-content-align="${args.productCardContentAlign}"
       product-card-text-align="${args.productCardTextAlign}"
       product-card-image-border="${args.productCardImageBorder}"
@@ -64,7 +64,7 @@ Default.args = {
   salePrice: 1653,
   baseSalePrice: { price: 5, quantity: 1, measure: "cm²" },
   pricePrefix: "",
-  priceLabel: "UVP",
+  customLabels: "UVP",
   addToBasketShow: true,
   setMode: false,
   updateButtonLocation: "onItem",
