@@ -167,10 +167,8 @@ export class VviinnResults {
 
   /** True when we use vviinn-results inside the widget */
   @Prop() showInWidget?: boolean = false;
-  /** Show or hide the One-click Discovery */
-  @Prop() showOneClickDiscovery = false;
-  /** Discovery mode */
-  @Prop() oneClickDiscoveryMode: "modal" | "append" = "modal";
+  /** Discovery Mode */
+  @Prop() oneClickDiscoveryMode: undefined | "modal" | "append";
 
   /** @internal */
   @Prop() apiPath?: string = "https://api.vviinn.com";
@@ -546,6 +544,9 @@ export class VviinnResults {
       searchState.resultLoaded = true;
     }
 
+    const isOneClickDiscoveryAppendMode =
+      this.oneClickDiscoveryMode === "append";
+
     return results.map((p, i) => (
       <vviinn-product-card
         key={p.productId}
@@ -575,13 +576,15 @@ export class VviinnResults {
         isResultsWidget={true}
         style={{ order: i.toString() }}
       >
-        {this.showOneClickDiscovery && (
+        {this.oneClickDiscoveryMode && (
           <div
             slot="vviinn-product-card-actions"
             class="vviinn-results-product-card-actions"
           >
             <vviinn-vpr-button
               onClick={() => {
+                if (!isOneClickDiscoveryAppendMode) return;
+
                 const containerComputerStyle = window.getComputedStyle(
                   this.el.shadowRoot.getElementById("vviinn-results-products")
                 );
@@ -594,16 +597,20 @@ export class VviinnResults {
                   i + (nCols - ((i % nCols) + 1));
               }}
               token={this.token}
-              product-id={p.productId}
-              add-style="false"
-              append-sidebar-to={
-                this.oneClickDiscoveryMode === "append"
+              productId={p.productId}
+              addStyle={false}
+              appendSidebarTo={
+                isOneClickDiscoveryAppendMode
                   ? "oneclick-discovery-append"
                   : undefined
               }
-              appendSidebarToElement={this.el.shadowRoot.getElementById(
-                "oneclick-discovery-append"
-              )}
+              appendSidebarToElement={
+                isOneClickDiscoveryAppendMode
+                  ? this.el.shadowRoot.getElementById(
+                      "oneclick-discovery-append"
+                    )
+                  : undefined
+              }
             ></vviinn-vpr-button>
           </div>
         )}
@@ -656,7 +663,8 @@ export class VviinnResults {
             id="oneclick-discovery-append"
             style={{
               order: (
-                this.oneClickDiscoveryAppendIndex ?? this.recommendations.length
+                this.oneClickDiscoveryAppendIndex ??
+                (this.recommendations.length || searchState.results.length)
               ).toString(),
             }}
           ></div>

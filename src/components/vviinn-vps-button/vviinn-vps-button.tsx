@@ -110,6 +110,8 @@ export class VviinnVpsButton {
   @Prop() textSearchShow: boolean = false;
   /** Show or hide Add to Basket buttons */
   @Prop() addToBasketShow: boolean = false;
+  /** Show or hide the One-click Discovery */
+  @Prop() showOneClickDiscovery = false;
 
   /** @internal */
   @Prop() apiPath: string | undefined;
@@ -240,6 +242,7 @@ export class VviinnVpsButton {
           textSearchShow={this.textSearchShow}
           addToBasketShow={this.addToBasketShow}
           replaceSlotsContentInButton={this.replaceSlotsContent.bind(this)}
+          showOneClickDiscovery={this.showOneClickDiscovery}
         />
       </Host>
     );

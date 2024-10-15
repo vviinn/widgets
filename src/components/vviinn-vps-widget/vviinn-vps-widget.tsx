@@ -136,6 +136,8 @@ export class VviinnVpsWidget {
   @Prop() textSearchShow: boolean = false;
   /** Show or hide Add to Basket buttons */
   @Prop() addToBasketShow: boolean = false;
+  /** Show or hide the One-click Discovery */
+  @Prop() showOneClickDiscovery = false;
 
   /** @internal */
   @Prop() apiPath: string = "https://api.vviinn.com";
