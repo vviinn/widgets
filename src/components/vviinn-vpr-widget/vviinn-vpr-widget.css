@@ -118,6 +118,7 @@
 }
 
 .no-result-text {
+  font-family: var(--font-family, var(--font-family-base));
   font-size: 20px;
 }
 

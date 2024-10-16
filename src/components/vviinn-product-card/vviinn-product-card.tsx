@@ -120,6 +120,7 @@ export class VviinnProductCard {
   @Prop() addToBasketShow: boolean;
   @Prop() updateButtonLocation: UpdateButtonLocation;
   @Prop() customLabels: string = "";
+  @Prop() addPriceContainer?: boolean = false;
   @Prop({ mutable: true }) energyCertifications?: EnergyCertification[];
 
   /** @internal */
@@ -367,7 +368,7 @@ export class VviinnProductCard {
         class={{
           animated: this.isTransitioning,
         }}
-        exportparts="image-container, content-container, basket-button-container, brand, product-type, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, currency, deeplink, image, image-link,  price-amount-regular, price-amount-sale, price-amount-outdated, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-outdated, price-regular, price-sale, price-prefix, discount-label, discount-percentage, title, basket-button, update-button-item, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link product-card-actions"
+        exportparts="image-container, content-container, basket-button-container, brand, product-type, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, currency, deeplink, image, image-link, price-container, price-amount-regular, price-amount-sale, price-amount-outdated, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-outdated, price-regular, price-sale, price-prefix, discount-label, discount-percentage, title, basket-button, update-button-item, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link product-card-actions"
       >
         <div class="image-container" part="image-container">
           <Linked deeplink={this.deeplink} part="image-link">
@@ -420,6 +421,7 @@ export class VviinnProductCard {
                 salePrice={this.salePrice}
                 baseSalePrice={parseBasePrice(this.baseSalePrice)}
                 locale={this.locale}
+                showInContainer={this.addPriceContainer}
               />
 
               {this.setMode &&
