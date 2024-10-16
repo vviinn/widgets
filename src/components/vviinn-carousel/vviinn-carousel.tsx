@@ -73,6 +73,7 @@ export class VviinnCarousel {
   @Prop() replaceSlotsContent: () => void;
   @Prop() setModeDiscountsArray: number[];
   @Prop() imageRatio: number;
+  @Prop() addPriceContainer?: boolean = false;
 
   @Prop() currencySign: string;
   @Prop() pricePrefix: string = "";
@@ -467,6 +468,7 @@ export class VviinnCarousel {
         locale={this.locale}
         setMode={this.isSetMode}
         customLabels={getCustomLabels(recommendation)}
+        addPriceContainer={this.addPriceContainer}
       />
     );
   }
@@ -546,6 +548,7 @@ export class VviinnCarousel {
               salePrice={this.sourceProduct.price.sale}
               basePrice={this.sourceProduct.basePrice?.actual}
               baseSalePrice={this.sourceProduct.basePrice?.sale}
+              addPriceContainer={this.addPriceContainer}
               imageRatio={1}
               imageWidth={300}
               isSourceProduct={true}

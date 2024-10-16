@@ -164,6 +164,8 @@ export class VviinnResults {
   @Prop() filterValue?: string;
   /** Number of results displayed for text search and product listing page (less or equal to the value, set in the campaign) */
   @Prop() resultsCount?: number;
+  /** Wrap the Product Card's price values in the container. */
+  @Prop() addPriceContainer?: boolean = false;
 
   /** True when we use vviinn-results inside the widget */
   @Prop() showInWidget?: boolean = false;
@@ -569,6 +571,7 @@ export class VviinnResults {
         locale={this.locale}
         customLabels={getCustomLabels(p)}
         addToBasketShow={this.addToBasketShow}
+        addPriceContainer={this.addPriceContainer}
         isResultsWidget={true}
       >
         {this.showOneClickDiscovery && (
@@ -594,7 +597,7 @@ export class VviinnResults {
         class={{
           "show-in-widget": this.showInWidget,
         }}
-        exportparts="image-container, content-container, basket-button-container, title, product-card, brand, product-type, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-outdated, price-regular, price-sale, price-prefix, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
+        exportparts="image-container, content-container, basket-button-container, title, product-card, brand, product-type, deeplink, currency, image, image-link, price-container, price-amount-sale, price-amount-outdated, price-amount-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-outdated, price-regular, price-sale, price-prefix, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
       >
         <div
           class={{

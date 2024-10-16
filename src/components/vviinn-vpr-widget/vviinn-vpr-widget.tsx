@@ -175,6 +175,8 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() setModeDiscounts: string = this.mode === "set" ? "5, 10, 15" : "";
   /** Location of Update button for Set mode */
   @Prop() updateButtonLocation: UpdateButtonLocation = "topAndItem";
+  /** Wrap the Product Card's price values in the container. */
+  @Prop() addPriceContainer?: boolean = false;
 
   /** Widget’s title (change it to fit your locale) */
   @Prop() blockTitle: string = "Recommended products";
@@ -733,6 +735,7 @@ export class VviinnVprWidget implements ComponentInterface {
         basePrice={recommendation.basePrice?.actual}
         baseSalePrice={recommendation.basePrice?.sale}
         energyCertifications={recommendation.energyCertifications}
+        addPriceContainer={this.addPriceContainer}
         responsive={this.isGridMode}
         addToBasketShow={this.addToBasketShow}
         campaignTypeId={this.campaignType}
@@ -768,6 +771,7 @@ export class VviinnVprWidget implements ComponentInterface {
         widgetVersion={version}
         gridArrowsDynamic={this.gridArrowsDynamic}
         addToBasketShow={this.addToBasketShow}
+        addPriceContainer={this.addPriceContainer}
         updatingAllCards={this.updatingAllCards}
         updateButtonLocation={this.updateButtonLocation}
         replaceSlotsContent={this.replaceSlotsContent.bind(this)}
