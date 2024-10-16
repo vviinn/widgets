@@ -117,6 +117,8 @@ export class VviinnVprButton {
   @Prop() addToBasketShow: boolean = false;
   /** Show filters on top */
   @Prop() showFilters: boolean = false;
+  /** Wrap the Product Card's price values in the container. */
+  @Prop() addPriceContainer?: boolean = false;
 
   /** List of discounts for Set mode. Example: "5, 10, 15, 20" (could be less than 4 numbers) */
   @Prop() setModeDiscounts: string = this.mode === "set" ? "5, 10, 15" : "";
@@ -246,6 +248,7 @@ export class VviinnVprButton {
     sidebar.imageRatio = this.imageRatio;
     sidebar.setModeDiscounts = this.setModeDiscounts;
     sidebar.updateButtonLocation = this.updateButtonLocation;
+    sidebar.addPriceContainer = this.addPriceContainer;
 
     this.sidebar = sidebar;
 
