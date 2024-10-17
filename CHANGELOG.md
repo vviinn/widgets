@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.113.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.112.2...v2.113.0) (2024-10-17)
+
+
+### Features
+
+* Added one-click-discovery-mode ([6fadecc](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/6fadeccaecf8fb66e3c0c5f3d5626699bbc2e9c4))
+
 ### [2.112.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.112.1...v2.112.2) (2024-10-17)
 
 
