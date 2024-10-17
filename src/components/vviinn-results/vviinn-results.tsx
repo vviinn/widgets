@@ -333,6 +333,10 @@ export class VviinnResults {
     this.trackingApi.trackEvent(filterEvent).then(this.setTrackingDeactivated);
   };
 
+  private widgetCloseHandler = () => {
+    this.oneClickDiscoveryAppendIndex = undefined;
+  };
+
   connectedCallback() {
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
 
@@ -360,6 +364,8 @@ export class VviinnResults {
       this.filtersTriggeredHandler
     );
 
+    document.addEventListener("vviinnWidgetClose", this.widgetCloseHandler);
+
     this.getResultsBySearchId(this.searchId);
     this.getResultsByCategory();
     !this.showInWidget && this.getResultsByTextQuery(this.textSearchQuery);
@@ -385,6 +391,8 @@ export class VviinnResults {
       "vviinnFilterTriggered",
       this.filtersTriggeredHandler
     );
+
+    document.removeEventListener("vviinnWidgetClose", this.widgetCloseHandler);
   }
 
   @Watch("textSearchQuery")
@@ -549,6 +557,21 @@ export class VviinnResults {
     const isOneClickDiscoveryAppendMode =
       this.oneClickDiscoveryMode === "append";
 
+    const oneClickDiscoveryHandler = (index: number) => {
+      if (!isOneClickDiscoveryAppendMode) return;
+
+      const containerComputerStyle = window.getComputedStyle(
+        this.el.shadowRoot.getElementById("vviinn-results-products")
+      );
+      const nCols = containerComputerStyle
+        .getPropertyValue("grid-template-columns")
+        .replace(" 0px", "")
+        .split(" ").length;
+
+      this.oneClickDiscoveryAppendIndex =
+        index + (nCols - ((index % nCols) + 1));
+    };
+
     return results.map((p, i) => (
       <vviinn-product-card
         key={p.productId}
@@ -585,32 +608,19 @@ export class VviinnResults {
             class="vviinn-results-product-card-actions"
           >
             <vviinn-vpr-button
-              onClick={() => {
-                if (!isOneClickDiscoveryAppendMode) return;
-
-                const containerComputerStyle = window.getComputedStyle(
-                  this.el.shadowRoot.getElementById("vviinn-results-products")
-                );
-                const nCols = containerComputerStyle
-                  .getPropertyValue("grid-template-columns")
-                  .replace(" 0px", "")
-                  .split(" ").length;
-
-                this.oneClickDiscoveryAppendIndex =
-                  i + (nCols - ((i % nCols) + 1));
-              }}
+              onClick={() => oneClickDiscoveryHandler(i)}
               token={this.token}
               productId={p.productId}
               addStyle={false}
               appendSidebarTo={
                 isOneClickDiscoveryAppendMode
-                  ? "oneclick-discovery-append"
+                  ? "one-click-discovery-append"
                   : undefined
               }
               appendSidebarToElement={
                 isOneClickDiscoveryAppendMode
                   ? this.el.shadowRoot.getElementById(
-                      "oneclick-discovery-append"
+                      "one-click-discovery-append"
                     )
                   : undefined
               }
@@ -663,7 +673,7 @@ export class VviinnResults {
         >
           {this.renderResults()}
           <div
-            id="oneclick-discovery-append"
+            id="one-click-discovery-append"
             style={{
               order: (
                 this.oneClickDiscoveryAppendIndex ??

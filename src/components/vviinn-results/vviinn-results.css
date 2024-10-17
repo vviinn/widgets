@@ -121,7 +121,7 @@ products.hidden {
   align-items: center;
 }
 
-#oneclick-discovery-append {
+#one-click-discovery-append {
   width: 100%;
   grid-column: 1 / -1;
 }
