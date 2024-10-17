@@ -29,6 +29,7 @@ import "../widgets/styles.css";
                 locale="en-US" 
                 results-count="9"
                 text-search-query={textSearchQuery}
+                one-click-discovery-mode="append"
             ></vviinn-results>
         </div>
     </div>
@@ -41,6 +42,7 @@ import "../widgets/styles.css";
     locale="en-US" 
     results-count="9"
     text-search-query="Chair"
+    one-click-discovery-mode="append"
 ></vviinn-results>
 ```
     </div>
@@ -63,7 +65,8 @@ import "../widgets/styles.css";
                 locale="en-US" 
                 results-count="9"
                 filter-column="product_type" 
-                filter-value={filterValue} 
+                filter-value={filterValue}
+                one-click-discovery-mode="modal" 
             ></vviinn-results>
         </div>
     </div>
@@ -77,6 +80,7 @@ import "../widgets/styles.css";
     results-count="9"
     filter-column="product_type" 
     filter-value="Möbel > Schränke &amp; Regale" 
+    one-click-discovery-mode="modal" 
 ></vviinn-results>
 ```
     </div>

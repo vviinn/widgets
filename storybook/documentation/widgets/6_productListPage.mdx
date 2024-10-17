@@ -32,12 +32,13 @@ import "./styles.css";
                     </div>
 
                     <vviinn-results 
-                        token={vviinnToken}
-                        image-resolution-width="500" 
-                        currency-sign="€" 
-                        locale="en-US" 
-                        results-count="9"
-                        text-search-query={textSearchQuery}
+                      token={vviinnToken}
+                      image-resolution-width="500" 
+                      currency-sign="€" 
+                      locale="en-US" 
+                      results-count="9"
+                      text-search-query={textSearchQuery}
+                      one-click-discovery-mode="append"
                     ></vviinn-results>
                 </div>
             </div>
@@ -108,7 +109,6 @@ vviinn-text-search {
 
 <div class="search-page-wrapper">
     <div class="search-page-wrapper-filters">
-        
         <vviinn-extended-filters locale="en-US" mode="preview"></vviinn-extended-filters>
     </div>
     <div class="search-page-wrapper-result">
@@ -119,12 +119,13 @@ vviinn-text-search {
         </div>
 
         <vviinn-results 
-            token="TOKEN"
-            image-resolution-width="500" 
-            currency-sign="€" 
-            locale="en-US" 
-            results-count="9"
-            text-search-query="Chair"
+          token="TOKEN"
+          image-resolution-width="500" 
+          currency-sign="€" 
+          locale="en-US" 
+          results-count="9"
+          text-search-query="Chair"
+          one-click-discovery-mode="append"
         ></vviinn-results>
     </div>
 </div>

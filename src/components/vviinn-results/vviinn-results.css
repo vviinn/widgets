@@ -121,6 +121,11 @@ products.hidden {
   align-items: center;
 }
 
+#one-click-discovery-append {
+  width: 100%;
+  grid-column: 1 / -1;
+}
+
 @media screen and (max-width: 768px) {
   :host {
     --product-card-width: 155px;
