@@ -2,28 +2,29 @@
   display: block;
 }
 
+:host button {
+  border: none;
+  cursor: pointer;
+  color: inherit;
+}
+
 .open-button {
   align-items: center;
   background: rgba(255, 255, 255, 0.8);
   border-radius: 50%;
-  border: none;
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
   box-sizing: border-box;
-  cursor: pointer;
   display: grid;
   height: 40px;
   justify-items: center;
   padding: 0;
   width: 40px;
   transition: all 0.25s ease-in-out;
-  color: inherit;
 }
 
 .raw-open-button {
   display: contents;
   background: none;
-  border: none;
-  cursor: pointer;
 }
 
 .open-button:hover {
