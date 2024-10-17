@@ -40,6 +40,7 @@ const Template = (args) => {
       product-card-image-border="${args.productCardImageBorder}"
       product-card-image-bg-color="${args.productCardImageBgColor}"
       energy-certifications-string='${args.energyCertificationsString}'
+      add-price-container='${args.addPriceContainer}'
       is-standalone="true"
     ></vviinn-product-card>`;
 };
@@ -72,5 +73,6 @@ Default.args = {
   productCardTextAlign: "left",
   productCardImageBorder: "none",
   productCardImageBgColor: "#f4f4f4",
+  addPriceContainer: false,
   energyCertificationsString,
 };

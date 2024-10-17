@@ -14,4 +14,5 @@ export const generalArgs = {
   uiSessionId: "",
   searchId: "",
   oneClickDiscoveryMode: "modal",
+  addPriceContainer: false,
 };

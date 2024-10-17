@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.112.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.112.1...v2.112.2) (2024-10-17)
+
+
+### Bug Fixes
+
+* Now add-price-container is configured via Storybook ([3ae1f91](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/3ae1f9163d5f60f3de0fff730bbfe6c06894dd80))
+
+### [2.112.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.112.0...v2.112.1) (2024-10-17)
+
+
+### Bug Fixes
+
+* vviinn-filters improvements ([efa723a](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/efa723a02577fd12db92c1a71d66c06c46819af0))
+
 ## [2.112.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.111.0...v2.112.0) (2024-10-16)
 
 

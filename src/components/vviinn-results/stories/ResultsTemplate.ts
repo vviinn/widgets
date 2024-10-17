@@ -16,6 +16,7 @@ export const ResultsTemplate = (args) => {
     textSearchQuery,
     addToBasketShow,
     oneClickDiscoveryMode,
+    addPriceContainer,
   } = args;
 
   const filterAttributes =
@@ -54,6 +55,7 @@ export const ResultsTemplate = (args) => {
     results-count="${resultsCount}"
     add-to-basket-show="${addToBasketShow}"
     one-click-discovery-mode="${oneClickDiscoveryMode}"
+    add-price-container="${addPriceContainer}"
   ></vviinn-results>
   </div>
 </div>`;
