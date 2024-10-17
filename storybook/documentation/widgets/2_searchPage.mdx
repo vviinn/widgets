@@ -45,7 +45,7 @@ Using `Vviinn Widgets` as separate components allows for greater control over th
               <vviinn-selected-filters></vviinn-selected-filters>
             </div>
 
-            <vviinn-results token={vviinnToken} locale="en-US" ></vviinn-results>
+            <vviinn-results token={vviinnToken} locale="en-US"></vviinn-results>
           </div>
         </div>
       </div>
@@ -101,6 +101,16 @@ vviinn-text-search {
   .search-page-wrapper-result-filters
     vviinn-selected-filters::part(selected-filters-list) {
     flex-wrap: wrap;
+  }
+}
+
+.search-page-wrapper-result vviinn-results {
+  --product-card-width: 215px;
+}
+
+@media screen and (max-width: 768px) {
+  .search-page-wrapper-result vviinn-results {
+    --product-card-width: 155px;
   }
 }
 </style>
