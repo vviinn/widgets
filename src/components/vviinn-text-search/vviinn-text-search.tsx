@@ -13,6 +13,7 @@ import { makeTextSearchRequest, searchState } from "../../store/search.store";
 import { SearchModalUploadIcon, TextSearchIcon } from "../vviinn-icons";
 import { slotChangeListener } from "../customized-slots";
 import {
+  DynamicFiltersEventData,
   SearchIdEvent,
   SearchIdEventData,
   TextSearchEventData,
@@ -38,6 +39,9 @@ export class VviinnTextSearch {
   @Event() vviinnTextSearchStarted: EventEmitter<TextSearchEventData>;
   /** An image search ID was received (used by vviinn-results component) */
   @Event() vviinnSearchIdReceived: EventEmitter<SearchIdEventData>;
+  /** The filters received */
+  @Event({ bubbles: true })
+  vviinnFilters: EventEmitter<DynamicFiltersEventData>;
 
   /** A text search response was received (used internally by vviinn-vps-widget) */
   /** @internal */
@@ -46,6 +50,11 @@ export class VviinnTextSearch {
   /** A search response was received by vviinn-results (used internally for showing preloader) */
   /** @internal */
   @Event() resultsSearchFinished: EventEmitter;
+
+  /** Selected filters should be resetted */
+  /** @internal */
+  @Event({ bubbles: true })
+  vviinnSelectedFiltersReset: EventEmitter;
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
@@ -126,6 +135,8 @@ export class VviinnTextSearch {
 
     if (this.showInWidget) {
       await makeTextSearchRequest(this.token, this.searchQuery);
+      this.vviinnFilters.emit(searchState.dynamicFilters);
+      this.vviinnSelectedFiltersReset.emit();
       this.widgetTextSearchFinished.emit({ query: this.searchQuery });
     } else {
       this.searchStartedHandler();

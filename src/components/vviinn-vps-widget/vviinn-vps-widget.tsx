@@ -576,7 +576,7 @@ export class VviinnVpsWidget {
     searchState.searchArea = O.none;
     searchState.results = [];
     searchState.filters = [];
-    searchState.textSearchFilters = [];
+    searchState.dynamicFilters = [];
     searchState.detectedObjects = [];
     searchState.rectangleSearchForm = undefined;
     searchState.loading = false;
@@ -754,12 +754,9 @@ export class VviinnVpsWidget {
                   >
                     <div class="vviinn-filters-container">
                       <vviinn-filters
-                        filters={searchState.textSearchFilters}
+                        filters={searchState.dynamicFilters}
                         showInWidget={true}
                       ></vviinn-filters>
-                      <vviinn-selected-filters
-                        showInWidget={true}
-                      ></vviinn-selected-filters>
                     </div>
                   </div>
                 </div>

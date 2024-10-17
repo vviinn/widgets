@@ -18,17 +18,18 @@ export const RenderButton = (
   const hexCode = value.hexCode;
 
   return (
-    <li
-      onClick={() =>
-        active ? handleSubFilterSelection(value, selectedFilter) : null
-      }
-    >
+    <li>
       <button
         class={`filters-sub-button${isSelected ? "-selected" : ""} ${
           hexCode ? "filters-sub-button-color" : ""
         } ${isSelected ? "active" : ""}`}
         style={{ backgroundColor: hexCode }}
-        disabled={!active}
+        onClick={() => {
+          active || isSelected
+            ? handleSubFilterSelection(value, selectedFilter)
+            : null;
+        }}
+        disabled={!(active || isSelected)}
         part="filters-sub-button"
       >
         <span>

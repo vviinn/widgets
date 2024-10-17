@@ -80,6 +80,11 @@ export class VviinnFilters {
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
 
+  /** Selected filters should be resetted */
+  /** @internal */
+  @Event({ bubbles: true })
+  vviinnSelectedFiltersReset: EventEmitter;
+
   private handleMainFilterSelection(filter: DynamicFilter) {
     this.selectedFilter = filter;
   }
@@ -146,6 +151,10 @@ export class VviinnFilters {
     }
   };
 
+  private handleSelectedFiltersReset = () => {
+    this.requestFilters = [];
+  };
+
   @Watch("filtersString")
   filtersStringWatcher() {
     if (this.filtersString === "") return;
@@ -163,6 +172,10 @@ export class VviinnFilters {
       "vviinnFiltersChanged",
       this.handleFiltersChanged
     );
+    document.addEventListener(
+      "vviinnSelectedFiltersReset",
+      this.handleSelectedFiltersReset
+    );
 
     this.filtersStringWatcher();
   }
@@ -172,6 +185,10 @@ export class VviinnFilters {
     document.removeEventListener(
       "vviinnFiltersChanged",
       this.handleFiltersChanged
+    );
+    document.removeEventListener(
+      "vviinnSelectedFiltersReset",
+      this.handleSelectedFiltersReset
     );
   }
 
