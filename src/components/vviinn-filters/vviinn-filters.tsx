@@ -123,6 +123,7 @@ export class VviinnFilters {
     detail,
   }: CustomEvent<DynamicFiltersEventData>) => {
     this.filters = detail;
+    if (!this.filters?.length) return;
 
     if (this.selectedFilter) {
       this.selectedFilter = this.filters.find(
@@ -193,6 +194,7 @@ export class VviinnFilters {
   }
 
   render() {
+    if (!this.filters) return <Host></Host>;
     const { column } = this.selectedFilter ?? {};
     const selectedFilterOptions = getFilterOptions(this.selectedFilter);
     const filters = this.filters.filter((filter) => filter.isPrimary);

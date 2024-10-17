@@ -301,7 +301,7 @@ export class VviinnExtendedFilters {
             </div>
 
             <ul class="filters-modal-list" part="extended-filters-list">
-              {this.filters.map((mainFilter) => {
+              {(this.filters ?? []).map((mainFilter) => {
                 const mainColumn = mainFilter.column;
                 const filterOptions = getFilterOptions(mainFilter);
                 const requestFilter = this.requestFilters.find(

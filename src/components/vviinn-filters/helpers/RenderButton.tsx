@@ -41,9 +41,9 @@ export const RenderButton = (
               <SquareFilterIcon />
             )
           ) : null}
+          {isSelected && showClose && <CloseFilterIcon />}
         </span>
       </button>
-      {isSelected && showClose && <CloseFilterIcon />}
     </li>
   );
 };

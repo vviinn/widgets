@@ -396,7 +396,7 @@
   letter-spacing: var(--letter-spacing-label);
 }
 
-.selected-filters-wrapper > li {
+.selected-filters-wrapper > li .filters-sub-button-selected {
   border-radius: var(--border-radius-100);
   background: var(--surface-bg-color-inverse);
   display: flex;
@@ -405,6 +405,7 @@
   cursor: pointer;
   padding: var(--spacing-100);
 }
+
 .filters-sub-button-selected {
   display: flex;
   align-items: center;
@@ -421,10 +422,6 @@
   letter-spacing: var(--letter-spacing-body);
 
   padding: var(--spacing-100);
-}
-
-.selected-filters-wrapper > li .filters-sub-button-selected {
-  padding: 0;
 }
 
 .filters-sub-button-color {
