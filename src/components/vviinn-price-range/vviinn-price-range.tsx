@@ -3,6 +3,8 @@ import { components } from "../../interfaces/generated";
 
 export type Histogram = components["schemas"]["interval-filter-values"][];
 
+const MIN_BAR_HEIGHT = 3;
+
 /**
  * @part histogram - Wrapper itself.
  * @part histogram-bar - Bar of the histogram.
@@ -48,6 +50,11 @@ export class VviinnButton {
   }
 
   componentWillLoad() {
+    this.updatingSelectedInterval();
+  }
+
+  @Watch("selectedInterval")
+  updatingSelectedInterval() {
     this.maxIndex = this.histogram.length - 1;
 
     const maxValueofFrequency = Math.max(
@@ -56,13 +63,8 @@ export class VviinnButton {
       })
     );
 
-    this.scalingFactor = 1 / maxValueofFrequency;
+    this.scalingFactor = 100 / maxValueofFrequency;
 
-    this.updatingSelectedInterval();
-  }
-
-  @Watch("selectedInterval")
-  updatingSelectedInterval() {
     if (this.selectedInterval.start !== undefined) {
       this.minIndex = this.histogram.findIndex(
         ({ value }) => value.interval.start === this.selectedInterval.start
@@ -102,8 +104,8 @@ export class VviinnButton {
   private sendBackValue() {
     this.priceChangeHandler({
       interval: {
-        start: this.histogram[this.minIndex].value.interval.start,
-        end: this.histogram[this.maxIndex].value.interval.end,
+        start: this.histogram[this.minIndex]?.value?.interval?.start,
+        end: this.histogram[this.maxIndex]?.value?.interval?.end,
       },
     });
   }
@@ -118,7 +120,7 @@ export class VviinnButton {
   }
 
   private calculateBarHeight(frequency: number) {
-    return frequency * this.scalingFactor * 100;
+    return frequency * this.scalingFactor;
   }
 
   render() {
@@ -128,6 +130,7 @@ export class VviinnButton {
       <Host exportparts="histogram, histogram-bar, histogram-range-container, histogram-sliders-control, histogram-from-slider, histogram-to-slider, histogram-label-wrapper, histogram-label">
         <div class="histogram" part="histogram">
           {this.histogram.map((item, index) => {
+            const barHeight = this.calculateBarHeight(item.value.frequency);
             return (
               <div
                 class={`histogram-bar ${
@@ -136,7 +139,11 @@ export class VviinnButton {
                     : ""
                 }`}
                 style={{
-                  height: `${this.calculateBarHeight(item.value.frequency)}%`,
+                  height: `${
+                    barHeight && barHeight < MIN_BAR_HEIGHT
+                      ? MIN_BAR_HEIGHT
+                      : barHeight
+                  }%`,
                 }}
                 part="histogram-bar"
               ></div>
@@ -175,11 +182,11 @@ export class VviinnButton {
         </div>
         <div class="label-wrapper" part="histogram-label-wrapper">
           <div class="label" part="histogram-label">
-            {this.histogram[this.minIndex].value.interval.start}
+            {this.histogram[this.minIndex]?.value?.interval?.start}
             <span class="histogram-currency">{this.currencySign}</span>
           </div>
           <div class="label" part="histogram-label">
-            {this.histogram[this.maxIndex].value.interval.start}
+            {this.histogram[this.maxIndex]?.value?.interval?.start}
             <span class="histogram-currency">{this.currencySign}</span>
           </div>
         </div>

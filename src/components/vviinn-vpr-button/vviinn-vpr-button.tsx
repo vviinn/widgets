@@ -117,6 +117,8 @@ export class VviinnVprButton {
   @Prop() addToBasketShow: boolean = false;
   /** Show filters on top */
   @Prop() showFilters: boolean = false;
+  /** Wrap the Product Card's price values in the container. */
+  @Prop() addPriceContainer?: boolean = false;
 
   /** List of discounts for Set mode. Example: "5, 10, 15, 20" (could be less than 4 numbers) */
   @Prop() setModeDiscounts: string = this.mode === "set" ? "5, 10, 15" : "";
@@ -137,6 +139,8 @@ export class VviinnVprButton {
 
   /** ID of an HTML element that you want to attach the sidebar  */
   @Prop() appendSidebarTo: string;
+
+  @Prop() appendSidebarToElement: HTMLElement;
 
   /** Event emitted on widget load */
   @Event() vviinnWidgetLoad: EventEmitter<BasicEventData>;
@@ -171,9 +175,13 @@ export class VviinnVprButton {
   @State() targetAppendSidebarTo: HTMLElement;
 
   componentWillLoad() {
-    if (!this.appendSidebarTo) return;
-
-    this.targetAppendSidebarTo = document.getElementById(this.appendSidebarTo);
+    if (this.appendSidebarToElement) {
+      this.targetAppendSidebarTo = this.appendSidebarToElement;
+    } else if (this.appendSidebarTo) {
+      this.targetAppendSidebarTo = document.getElementById(
+        this.appendSidebarTo
+      );
+    }
   }
 
   private sidebar: HTMLVviinnRecommendationsSidebarElement | null = null;
@@ -240,6 +248,7 @@ export class VviinnVprButton {
     sidebar.imageRatio = this.imageRatio;
     sidebar.setModeDiscounts = this.setModeDiscounts;
     sidebar.updateButtonLocation = this.updateButtonLocation;
+    sidebar.addPriceContainer = this.addPriceContainer;
 
     this.sidebar = sidebar;
 

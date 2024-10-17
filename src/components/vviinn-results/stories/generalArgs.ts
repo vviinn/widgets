@@ -13,5 +13,6 @@ export const generalArgs = {
   showInWidget: false,
   uiSessionId: "",
   searchId: "",
-  showOneClickDiscovery: true,
+  oneClickDiscoveryMode: "modal",
+  addPriceContainer: false,
 };

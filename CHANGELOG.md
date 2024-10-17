@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.113.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.112.2...v2.113.0) (2024-10-17)
+
+
+### Features
+
+* Added one-click-discovery-mode ([6fadecc](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/6fadeccaecf8fb66e3c0c5f3d5626699bbc2e9c4))
+
+### [2.112.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.112.1...v2.112.2) (2024-10-17)
+
+
+### Bug Fixes
+
+* Now add-price-container is configured via Storybook ([3ae1f91](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/3ae1f9163d5f60f3de0fff730bbfe6c06894dd80))
+
+### [2.112.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.112.0...v2.112.1) (2024-10-17)
+
+
+### Bug Fixes
+
+* vviinn-filters improvements ([efa723a](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/efa723a02577fd12db92c1a71d66c06c46819af0))
+
+## [2.112.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.111.0...v2.112.0) (2024-10-16)
+
+
+### Features
+
+* Fixed some designing cases on storybook ([29e571b](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/29e571be37b5ec8aa69551d86efd7e5d09468827))
+
+## [2.111.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.110.0...v2.111.0) (2024-10-16)
+
+
+### Features
+
+* add-price-container property for Widgets ([8568f28](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/8568f2860081779119859ce4f57dc3688eadca01))
+
 ## [2.110.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.109.0...v2.110.0) (2024-10-14)
 
 

@@ -15,7 +15,8 @@ export const ResultsTemplate = (args) => {
     filterValue,
     textSearchQuery,
     addToBasketShow,
-    showOneClickDiscovery,
+    oneClickDiscoveryMode,
+    addPriceContainer,
   } = args;
 
   const filterAttributes =
@@ -53,7 +54,8 @@ export const ResultsTemplate = (args) => {
     ui-session-id="${uiSessionId}"
     results-count="${resultsCount}"
     add-to-basket-show="${addToBasketShow}"
-    show-one-click-discovery="${showOneClickDiscovery}"
+    one-click-discovery-mode="${oneClickDiscoveryMode}"
+    add-price-container="${addPriceContainer}"
   ></vviinn-results>
   </div>
 </div>`;
