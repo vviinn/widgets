@@ -11,3 +11,28 @@
 #product-card-minimalistic vviinn-product-card::part(price-outdated) {
   display: none;
 }
+
+#product-card-main vviinn-vpr-button,
+#product-card-append vviinn-vpr-button {
+  display: flex;
+  padding: var(--spacing-50);
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-50);
+  border-radius: var(--border-radius-100);
+  background: var(--button-bg-color-frosted);
+  backdrop-filter: blur(calc(var(--filter-blur-150, 12px) / 2));
+}
+
+#product-card-main vviinn-vpr-button:hover,
+#product-card-append vviinn-vpr-button:hover {
+  background: var(--button-bg-color-frosted-hover);
+}
+
+#product-card-main vviinn-vpr-button::part(vviinn-button),
+#product-card-append vviinn-vpr-button::part(vviinn-button) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-icon-inverse);
+}
