@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.114.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.113.0...v2.114.0) (2024-10-18)
+
+
+### Features
+
+* Allow color customization of One-click discovery icon ([7b8de58](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/7b8de580f7963130f068020d09db6afbad7fb92f))
+
 ## [2.113.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.112.2...v2.113.0) (2024-10-17)
 
 
