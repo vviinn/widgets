@@ -60,14 +60,13 @@ import {
 import { resources } from "../../locale";
 import { Locale } from "../../locale";
 import { UpdateIcon } from "../vviinn-icons";
-import { getRecommendationsBody } from "../../recommendation";
+import { getCustomLabels, getRecommendationsBody } from "../../recommendation";
 import {
   RequestDynamicFilters,
   SimilarProductsResponse,
   DynamicFilters,
 } from "../../campaign/VPRCampaignService";
 import { CrossSellingResponse } from "../../campaign/VCSCampaignService";
-import { calculatePriceLabel } from "../vviinn-product-card/render-helpers";
 
 export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
 
@@ -76,6 +75,7 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @part product-part - Will be deprecated. Use "product-card" instead.
  * @part title - Title inside Product Card.
  * @part brand - Brand inside Product Card.
+ * @part product-type - Product Type inside Product Card.
  * @part currency - Currency related to price.
  * @part image - Product Card image.
  * @part image-link - Anchor element around product image. Rendered only if "deeplink" property is filled.
@@ -86,8 +86,6 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @part price-amount-base-sale - Numeric part of the base price.
  * @part price-amount-base-outdated - Numeric part of the base price.
  * @part price-amount-base-regular - Numeric part of the base price.
- * @part price-label - Label for the price.
- * @part price-container - Block of prices.
  * @part price-outdated - Block for outdated price. Rendered when the product contains the sale price.
  * @part price-regular - Block for a price if no sale price is presented.
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
@@ -106,12 +104,11 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @part discount-label - Discount label in Product Card (Set mode).
  * @part discount-percentage - Discount percentage inside the Add to Basket button (Set mode).
  *
- * @part price-label - string part of price.
- * @part price-label-0 - string part of price with index 0.
- * @part price-label-1 - string part of price with index 1.
- * @part price-label-2 - string part of price with index 2.
- * @part price-label-3 - string part of price with index 3.
- * @part price-label-4 - string part of price with index 4.
+ * @part custom-label-0 - custom label with index 0.
+ * @part custom-label-1 - custom label with index 1.
+ * @part custom-label-2 - custom label with index 2.
+ * @part custom-label-3 - custom label with index 3.
+ * @part custom-label-4 - custom label with index 4.
  *
  * @slot vviinn-recommendations-title - Recommendations title text.
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
@@ -168,7 +165,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() productDetailsNewTab: boolean = false;
   /** Toggle for redirection to PDP on product's click */
   @Prop() productDetailsRedirect: boolean = true;
-  /** Show or hide Add to Basket button */
+  /** Show or hide Add to Basket buttons */
   @Prop() addToBasketShow: boolean = false;
   /** Show filters on top */
   @Prop() showFilters: boolean = false;
@@ -178,6 +175,8 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() setModeDiscounts: string = this.mode === "set" ? "5, 10, 15" : "";
   /** Location of Update button for Set mode */
   @Prop() updateButtonLocation: UpdateButtonLocation = "topAndItem";
+  /** Wrap the Product Card's price values in the container. */
+  @Prop() addPriceContainer?: boolean = false;
 
   /** Widget’s title (change it to fit your locale) */
   @Prop() blockTitle: string = "Recommended products";
@@ -736,17 +735,18 @@ export class VviinnVprWidget implements ComponentInterface {
         basePrice={recommendation.basePrice?.actual}
         baseSalePrice={recommendation.basePrice?.sale}
         energyCertifications={recommendation.energyCertifications}
+        addPriceContainer={this.addPriceContainer}
         responsive={this.isGridMode}
-        basketButtonShow={this.addToBasketShow}
-        mode={this.mode}
+        addToBasketShow={this.addToBasketShow}
         campaignTypeId={this.campaignType}
         index={index}
         widgetElementId={this.id}
         widgetVersion={version}
         currency={this.currencySign}
         pricePrefix={this.pricePrefix}
+        setMode={this.isSetMode}
         locale={this.locale}
-        priceLabel={calculatePriceLabel(recommendation)}
+        customLabels={getCustomLabels(recommendation)}
       />
     );
   }
@@ -771,6 +771,7 @@ export class VviinnVprWidget implements ComponentInterface {
         widgetVersion={version}
         gridArrowsDynamic={this.gridArrowsDynamic}
         addToBasketShow={this.addToBasketShow}
+        addPriceContainer={this.addPriceContainer}
         updatingAllCards={this.updatingAllCards}
         updateButtonLocation={this.updateButtonLocation}
         replaceSlotsContent={this.replaceSlotsContent.bind(this)}

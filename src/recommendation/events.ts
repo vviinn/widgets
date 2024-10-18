@@ -47,7 +47,7 @@ export type SelectFilterEventData = {
   widgetVersion: string;
   action: FilterAction;
   kind: FilterKind;
-  filterName?: string;
+  category?: string;
 };
 
 export type ProductCardEventData = {
@@ -91,6 +91,12 @@ export type ChangedFiltersEventData = {
 };
 
 export type DynamicFiltersEventData = DynamicFilter[];
+
+export type DynamicFilterTrackingData = {
+  action: FilterAction;
+  kind: FilterKind;
+  category?: string;
+};
 
 export type SearchIdEvent = CustomEvent<SearchIdEventData>;
 export type TextSearchEvent = CustomEvent<TextSearchEventData>;

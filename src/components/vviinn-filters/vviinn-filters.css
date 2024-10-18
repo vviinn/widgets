@@ -109,6 +109,10 @@
 }
 
 @media (max-width: 768px) {
+  :host(.show-in-widget) {
+    padding-right: 24px;
+  }
+
   .sub-filters-wrapper,
   .selected-filters-wrapper {
     flex-wrap: unset;
@@ -127,6 +131,12 @@
   .sub-filters-wrapper::-webkit-scrollbar,
   .selected-filters-wrapper::-webkit-scrollbar {
     display: none;
+  }
+
+  .filters-modal.filters-modal-button .filters-modal-wrapper {
+    width: 100%;
+    top: 20%;
+    border-radius: 32px 32px 0px 0px;
   }
 }
 
@@ -176,7 +186,6 @@
 
 .filters-modal.filters-modal-button {
   display: none;
-
   position: fixed;
   top: 0;
   bottom: 0;
@@ -209,14 +218,6 @@
   background-color: #ffffff;
   z-index: 99;
   border-radius: 32px 0px 0px 32px;
-}
-
-@media (max-width: 768px) {
-  .filters-modal.filters-modal-button .filters-modal-wrapper {
-    width: 100%;
-    top: 20%;
-    border-radius: 32px 32px 0px 0px;
-  }
 }
 
 .filters-modal-header {
@@ -352,6 +353,7 @@
   cursor: pointer;
   width: 100%;
   border: none;
+  margin-bottom: 20px;
 
   display: flex;
   padding: var(--spacing-150);
@@ -384,7 +386,6 @@
   display: block;
   text-align: center;
   width: 100%;
-  margin-top: 20px;
 
   color: var(--color-text-secondary);
   text-align: center;
@@ -395,7 +396,7 @@
   letter-spacing: var(--letter-spacing-label);
 }
 
-.selected-filters-wrapper > li {
+.selected-filters-wrapper > li .filters-sub-button-selected {
   border-radius: var(--border-radius-100);
   background: var(--surface-bg-color-inverse);
   display: flex;
@@ -404,6 +405,7 @@
   cursor: pointer;
   padding: var(--spacing-100);
 }
+
 .filters-sub-button-selected {
   display: flex;
   align-items: center;
@@ -420,10 +422,6 @@
   letter-spacing: var(--letter-spacing-body);
 
   padding: var(--spacing-100);
-}
-
-.selected-filters-wrapper > li .filters-sub-button-selected {
-  padding: 0;
 }
 
 .filters-sub-button-color {

@@ -1,12 +1,18 @@
 vviinn-vpr-widget#vviinn-discovery-slider::part(title),
-vviinn-vpr-widget#vviinn-discovery-set::part(recommendations-title),
-vviinn-vps-button#vviinn-vps-button-customization::part(upload-photo_button) {
-  color: #ffffff;
+vviinn-vpr-widget#vviinn-discovery-set::part(recommendations-title) {
   font-weight: bold;
+  color: #ffffff;
   background: #000000;
 }
 
+vviinn-vps-button#vviinn-vps-button-customization::part(upload-photo_button) {
+  background: unset;
+  border: 1px solid #000000;
+  color: #000000;
+}
+
 vviinn-vpr-widget#vviinn-discovery-set::part(discount-label) {
+  font-weight: bold;
   background: #000000;
 }
 

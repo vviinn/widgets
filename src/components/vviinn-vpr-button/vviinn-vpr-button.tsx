@@ -6,6 +6,7 @@ import {
   Event,
   EventEmitter,
   Element,
+  State,
 } from "@stencil/core";
 import { version } from "../../../package.json";
 import { SimilarProductsIcon, CrossSellingIcon } from "../vviinn-icons";
@@ -24,6 +25,7 @@ import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
  * @part product-part - Will be deprecated. Use "product-card" instead.
  * @part title - Title inside Product Card.
  * @part brand - Brand inside Product Card.
+ * @part product-type - Product Type inside Product Card.
  * @part currency - Currency related to price.
  * @part image - Product Card image.
  * @part image-link - Anchor element around product image. Rendered only if "deeplink" property is filled.
@@ -34,7 +36,6 @@ import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
  * @part price-amount-base-sale - Numeric part of the base price.
  * @part price-amount-base-outdated - Numeric part of the base price.
  * @part price-amount-base-regular - Numeric part of the base price.
- * @part price-container - Block of prices.
  * @part price-outdated - Block for outdated price. Rendered when the product contains the sale price.
  * @part price-regular - Block for a price if no sale price is presented.
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
@@ -51,12 +52,11 @@ import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
  * @part update-button-top - Update Button on the top (Set mode).
  * @part update-button-item - Update Button inside the Product Card (Set mode).
  *
- * @part price-label - string part of price.
- * @part price-label-0 - string part of price with index 0.
- * @part price-label-1 - string part of price with index 1.
- * @part price-label-2 - string part of price with index 2.
- * @part price-label-3 - string part of price with index 3.
- * @part price-label-4 - string part of price with index 4.
+ * @part custom-label-0 - custom label with index 0.
+ * @part custom-label-1 - custom label with index 1.
+ * @part custom-label-2 - custom label with index 2.
+ * @part custom-label-3 - custom label with index 3.
+ * @part custom-label-4 - custom label with index 4.
  *
  * @slot vviinn-recommendations-title - Recommendations title text.
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
@@ -88,7 +88,7 @@ export class VviinnVprButton {
   /** Excluded filter. Example: "brand:Nike;custom_label_0:summer" */
   @Prop() excluded: string = "";
   /** Campaign type */
-  @Prop() campaignType: CampaignName = "VPR";
+  @Prop() campaignType: CampaignName = this.mode === "set" ? "VCS" : "VPR";
   /** The locale for currency formatting and text localization */
   @Prop() locale: Locale = "de-DE";
   /** Accepts any hex color code */
@@ -113,10 +113,12 @@ export class VviinnVprButton {
   @Prop() productDetailsNewTab: boolean = false;
   /** Toggle for redirection to PDP on product's click */
   @Prop() productDetailsRedirect: boolean = true;
-  /** Show or hide Add to Basket button */
+  /** Show or hide Add to Basket buttons */
   @Prop() addToBasketShow: boolean = false;
   /** Show filters on top */
   @Prop() showFilters: boolean = false;
+  /** Wrap the Product Card's price values in the container. */
+  @Prop() addPriceContainer?: boolean = false;
 
   /** List of discounts for Set mode. Example: "5, 10, 15, 20" (could be less than 4 numbers) */
   @Prop() setModeDiscounts: string = this.mode === "set" ? "5, 10, 15" : "";
@@ -124,8 +126,7 @@ export class VviinnVprButton {
   @Prop() updateButtonLocation: UpdateButtonLocation = "topAndItem";
 
   /** Sidebar title (change it to fit your locale) */
-  @Prop() sidebarTitle: string =
-    this.mode === "set" ? "" : "Visually similar products";
+  @Prop() sidebarTitle: string = this.mode === "set" ? "" : "Similar products";
   /** Show or hide the scrollbar */
   @Prop() modalScrollbar: boolean = false;
   /** Position of the modal */
@@ -135,6 +136,11 @@ export class VviinnVprButton {
 
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
+
+  /** ID of an HTML element that you want to attach the sidebar  */
+  @Prop() appendSidebarTo: string;
+
+  @Prop() appendSidebarToElement: HTMLElement;
 
   /** Event emitted on widget load */
   @Event() vviinnWidgetLoad: EventEmitter<BasicEventData>;
@@ -166,8 +172,25 @@ export class VviinnVprButton {
   /** Add to Basket button clicked */
   @Event() vviinnAddToBasket: EventEmitter<BasicEventData>;
 
+  @State() targetAppendSidebarTo: HTMLElement;
+
+  componentWillLoad() {
+    if (this.appendSidebarToElement) {
+      this.targetAppendSidebarTo = this.appendSidebarToElement;
+    } else if (this.appendSidebarTo) {
+      this.targetAppendSidebarTo = document.getElementById(
+        this.appendSidebarTo
+      );
+    }
+  }
+
   private sidebar: HTMLVviinnRecommendationsSidebarElement | null = null;
   private sidebarCloseListener: () => void = () => {
+    if (this.targetAppendSidebarTo) {
+      this.targetAppendSidebarTo.removeChild(this.sidebar);
+      return;
+    }
+
     document.body.removeChild(this.sidebar);
   };
 
@@ -225,15 +248,26 @@ export class VviinnVprButton {
     sidebar.imageRatio = this.imageRatio;
     sidebar.setModeDiscounts = this.setModeDiscounts;
     sidebar.updateButtonLocation = this.updateButtonLocation;
+    sidebar.addPriceContainer = this.addPriceContainer;
 
     this.sidebar = sidebar;
 
     sidebar.addEventListener("vviinnWidgetClose", this.sidebarCloseListener);
+
+    if (this.targetAppendSidebarTo) {
+      this.sidebar.showInCustomContainer = true;
+      this.targetAppendSidebarTo.innerHTML = "";
+      this.targetAppendSidebarTo.append(this.sidebar);
+
+      return;
+    }
+
     document.body.append(this.sidebar);
   }
 
   disconnectedCallback() {
     if (!this.sidebar) return;
+
     this.sidebar.removeEventListener(
       "vviinnWidgetClose",
       this.sidebarCloseListener

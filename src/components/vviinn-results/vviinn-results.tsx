@@ -16,6 +16,7 @@ import { v4 as uuidv4 } from "uuid";
 import {
   DefaultApi,
   EventConfirmation,
+  FilterEvent,
   ResultLoadEvent,
   ResultViewEvent,
 } from "vviinn-tracking-client-ts";
@@ -40,6 +41,7 @@ import {
   ChangedFiltersEvent,
   ChangedFiltersEventData,
   DynamicFiltersEventData,
+  DynamicFilterTrackingData,
   ProductCardEvent,
   ProductCardEventData,
   ProductEvent,
@@ -51,18 +53,23 @@ import {
   TextSearchEventData,
 } from "../../recommendation/events";
 import {
+  createFilterEvent,
   createProductVpsEventByType,
   createResultVpsEventByType,
 } from "../../tracking";
 import { RequestDynamicFilters } from "../../campaign/VPRCampaignService";
-import { calculatePriceLabel } from "../vviinn-product-card/render-helpers";
 import i18next from "i18next";
 import { resources } from "../../locale";
 import { slotChangeListener } from "../customized-slots";
+import { getCustomLabels } from "../../recommendation";
 
 /**
  * @part product-card - Product Card itself.
+ * @part image-container - Product Card's image container.
+ * @part content-container - Product Card's content container.
+ * @part basket-button-container - Product Card's basket button container.
  * @part brand - Brand inside Product Card.
+ * @part product-type - Product Type inside Product Card.
  * @part currency - Currency related to price.
  * @part deeplink - Anchor element around troduct title. Rendered only if "deeplink" property is filled.
  * @part image - Product Card image.
@@ -73,7 +80,6 @@ import { slotChangeListener } from "../customized-slots";
  * @part price-amount-base-sale - Numeric part of the base price.
  * @part price-amount-base-outdated - Numeric part of the base price.
  * @part price-amount-base-regular - Numeric part of the base price.
- * @part price-container - Block of prices.
  * @part price-outdated - Block for outdated price. Rendered when the product contains the sale price.
  * @part price-regular - Block for a price if no sale price is presented.
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
@@ -84,12 +90,11 @@ import { slotChangeListener } from "../customized-slots";
  * @part energy-label-product-type - Product type.
  * @part energy-label-data-sheet-link - Data sheet link.
  *
- * @part price-label - string part of price.
- * @part price-label-0 - string part of price with index 0.
- * @part price-label-1 - string part of price with index 1.
- * @part price-label-2 - string part of price with index 2.
- * @part price-label-3 - string part of price with index 3.
- * @part price-label-4 - string part of price with index 4.
+ * @part custom-label-0 - custom label with index 0.
+ * @part custom-label-1 - custom label with index 1.
+ * @part custom-label-2 - custom label with index 2.
+ * @part custom-label-3 - custom label with index 3.
+ * @part custom-label-4 - custom label with index 4.
  *
  * @slot vviinn-energy-label-data-sheet-text - Text of the data sheet link for the energy label.
  */
@@ -129,6 +134,9 @@ export class VviinnResults {
   /** Dynamic filters are received from the API. */
   /** @internal */
   @Event() vviinnFilters: EventEmitter<DynamicFiltersEventData>;
+  /** A search response was received by vviinn-results (used internally for showing preloader) */
+  /** @internal */
+  @Event() resultsSearchFinished: EventEmitter;
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
@@ -146,6 +154,8 @@ export class VviinnResults {
   @Prop() productDetailsNewTab?: boolean = false;
   /** Toggle for redirection to PDP on product's click */
   @Prop() productDetailsRedirect?: boolean = true;
+  /** Show or hide Add to Basket buttons */
+  @Prop() addToBasketShow: boolean = false;
   /** Query for performing text search */
   @Prop() textSearchQuery?: string;
   /** Column for performing Product Listing Page request */
@@ -154,9 +164,13 @@ export class VviinnResults {
   @Prop() filterValue?: string;
   /** Number of results displayed for text search and product listing page (less or equal to the value, set in the campaign) */
   @Prop() resultsCount?: number;
+  /** Wrap the Product Card's price values in the container. */
+  @Prop() addPriceContainer?: boolean = false;
 
   /** True when we use vviinn-results inside the widget */
   @Prop() showInWidget?: boolean = false;
+  /** Discovery Mode */
+  @Prop() oneClickDiscoveryMode: undefined | "modal" | "append";
 
   /** @internal */
   @Prop() apiPath?: string = "https://api.vviinn.com";
@@ -180,6 +194,7 @@ export class VviinnResults {
   @State() recommendations: Recommendation[] = [];
   @State() innerTextSearchQuery: string;
   @State() slotsReplaced: boolean;
+  @State() oneClickDiscoveryAppendIndex: number;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -218,13 +233,14 @@ export class VviinnResults {
   private getResultsBySearchId = async (searchId: string) => {
     if (!searchId || this.showInWidget) return;
     state.apiPath = this.apiPath; //FIXME: #36877
-    pipe(
+    await pipe(
       await makeSearchIdRequest(this.token, searchId),
       E.getOrElse(() => []),
       (results: SearchIdResponse) => {
         this.recommendations = results;
       }
     );
+    this.resultsSearchFinished.emit();
   };
 
   private async getResultsByTextQuery(
@@ -257,7 +273,7 @@ export class VviinnResults {
     }
   }
 
-  private async getResultsByCategory() {
+  private async getResultsByCategory(dynamicFilters?: RequestDynamicFilters) {
     if (!this.filterColumn || !this.filterValue || this.showInWidget) return;
     state.apiPath = this.apiPath; //FIXME: #36877
 
@@ -266,11 +282,13 @@ export class VviinnResults {
         this.token,
         this.filterColumn,
         this.filterValue,
-        this.resultsCount
+        this.resultsCount,
+        dynamicFilters
       ),
       E.getOrElse(() => null),
       (response: ProductListingPageResponse) => {
         this.recommendations = response?.data?.products ?? [];
+        this.vviinnFilters.emit(response?.interactions.dynamicFilters);
       }
     );
   }
@@ -279,17 +297,44 @@ export class VviinnResults {
     this.getResultsBySearchId(detail.searchId);
   };
 
-  private textSearchStartedHandler = ({ detail }: TextSearchEvent) => {
+  private textSearchStartedHandler = async ({ detail }: TextSearchEvent) => {
     if (this.showInWidget) return;
-    this.getResultsByTextQuery(detail.query);
     this.innerTextSearchQuery = detail.query;
+    await this.getResultsByTextQuery(detail.query);
+    this.resultsSearchFinished.emit();
   };
 
   private filtersChangedHandler = ({ detail }: ChangedFiltersEvent) => {
-    this.getResultsByTextQuery(
-      this.textSearchQuery ?? this.innerTextSearchQuery,
-      detail.filters
-    );
+    if (this.filterColumn && this.filterValue) {
+      this.getResultsByCategory(detail.filters);
+    } else {
+      this.getResultsByTextQuery(
+        this.textSearchQuery ?? this.innerTextSearchQuery,
+        detail.filters
+      );
+    }
+  };
+
+  private filtersTriggeredHandler = ({
+    detail,
+  }: CustomEvent<DynamicFilterTrackingData>) => {
+    const { action, kind, category } = detail;
+    if (this.trackingDeactivated) return;
+    const { campaignTypeId, ...rest } = this.getBasicEventData();
+
+    const filterEvent: FilterEvent = createFilterEvent({
+      session_id: this.uiSessionId,
+      typ: "filter_event",
+      kind: kind ?? "category",
+      action,
+      category,
+      ...rest,
+    });
+    this.trackingApi.trackEvent(filterEvent).then(this.setTrackingDeactivated);
+  };
+
+  private widgetCloseHandler = () => {
+    this.oneClickDiscoveryAppendIndex = undefined;
   };
 
   connectedCallback() {
@@ -314,6 +359,13 @@ export class VviinnResults {
       this.filtersChangedHandler
     );
 
+    document.addEventListener(
+      "vviinnFilterTriggered",
+      this.filtersTriggeredHandler
+    );
+
+    document.addEventListener("vviinnWidgetClose", this.widgetCloseHandler);
+
     this.getResultsBySearchId(this.searchId);
     this.getResultsByCategory();
     !this.showInWidget && this.getResultsByTextQuery(this.textSearchQuery);
@@ -334,6 +386,13 @@ export class VviinnResults {
       "vviinnFiltersChanged",
       this.filtersChangedHandler
     );
+
+    document.removeEventListener(
+      "vviinnFilterTriggered",
+      this.filtersTriggeredHandler
+    );
+
+    document.removeEventListener("vviinnWidgetClose", this.widgetCloseHandler);
   }
 
   @Watch("textSearchQuery")
@@ -432,6 +491,7 @@ export class VviinnResults {
 
   private handleOpenLink(deeplink: string, event: MouseEvent) {
     if (!this.productDetailsRedirect) return;
+
     if (this.productDetailsNewTab || event.ctrlKey || event.metaKey) {
       let newTab = window.open();
       if (newTab) {
@@ -494,6 +554,24 @@ export class VviinnResults {
       searchState.resultLoaded = true;
     }
 
+    const isOneClickDiscoveryAppendMode =
+      this.oneClickDiscoveryMode === "append";
+
+    const oneClickDiscoveryHandler = (index: number) => {
+      if (!isOneClickDiscoveryAppendMode) return;
+
+      const containerComputerStyle = window.getComputedStyle(
+        this.el.shadowRoot.getElementById("vviinn-results-products")
+      );
+      const nCols = containerComputerStyle
+        .getPropertyValue("grid-template-columns")
+        .replace(" 0px", "")
+        .split(" ").length;
+
+      this.oneClickDiscoveryAppendIndex =
+        index + (nCols - ((index % nCols) + 1));
+    };
+
     return results.map((p, i) => (
       <vviinn-product-card
         key={p.productId}
@@ -518,9 +596,38 @@ export class VviinnResults {
         widgetVersion={version}
         currency={this.currencySign}
         locale={this.locale}
-        priceLabel={calculatePriceLabel(p)}
+        customLabels={getCustomLabels(p)}
+        addToBasketShow={this.addToBasketShow}
+        addPriceContainer={this.addPriceContainer}
         isResultsWidget={true}
-      />
+        style={{ order: i.toString() }}
+      >
+        {this.oneClickDiscoveryMode && (
+          <div
+            slot="vviinn-product-card-actions"
+            class="vviinn-results-product-card-actions"
+          >
+            <vviinn-vpr-button
+              onClick={() => oneClickDiscoveryHandler(i)}
+              token={this.token}
+              productId={p.productId}
+              addStyle={false}
+              appendSidebarTo={
+                isOneClickDiscoveryAppendMode
+                  ? "one-click-discovery-append"
+                  : undefined
+              }
+              appendSidebarToElement={
+                isOneClickDiscoveryAppendMode
+                  ? this.el.shadowRoot.getElementById(
+                      "one-click-discovery-append"
+                    )
+                  : undefined
+              }
+            ></vviinn-vpr-button>
+          </div>
+        )}
+      </vviinn-product-card>
     ));
   }
 
@@ -531,7 +638,7 @@ export class VviinnResults {
         class={{
           "show-in-widget": this.showInWidget,
         }}
-        exportparts="title, product-card, brand, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-container, price-outdated, price-regular, price-sale, price-prefix, price-label, price-label-0, price-label-1, price-label-2, price-label-3, price-label-4, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
+        exportparts="image-container, content-container, basket-button-container, title, product-card, brand, product-type, deeplink, currency, image, image-link, price-container, price-amount-sale, price-amount-outdated, price-amount-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-outdated, price-regular, price-sale, price-prefix, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
       >
         <div
           class={{
@@ -562,8 +669,18 @@ export class VviinnResults {
                 searchState.results.length === 0),
             products: true,
           }}
+          id="vviinn-results-products"
         >
           {this.renderResults()}
+          <div
+            id="one-click-discovery-append"
+            style={{
+              order: (
+                this.oneClickDiscoveryAppendIndex ??
+                (this.recommendations.length || searchState.results.length)
+              ).toString(),
+            }}
+          ></div>
         </div>
       </Host>
     );

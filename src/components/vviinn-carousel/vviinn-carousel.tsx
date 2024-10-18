@@ -31,7 +31,7 @@ import {
 import { calculateDiscount } from "../../utils/number";
 import { searchState } from "../../store/search.store";
 import { Locale } from "../../locale";
-import { calculatePriceLabel } from "../vviinn-product-card/render-helpers";
+import { getCustomLabels } from "../../recommendation";
 
 type MoveDirection = "left" | "right";
 export type CarouselMode = "grid" | "continuity" | "set";
@@ -73,6 +73,7 @@ export class VviinnCarousel {
   @Prop() replaceSlotsContent: () => void;
   @Prop() setModeDiscountsArray: number[];
   @Prop() imageRatio: number;
+  @Prop() addPriceContainer?: boolean = false;
 
   @Prop() currencySign: string;
   @Prop() pricePrefix: string = "";
@@ -436,6 +437,7 @@ export class VviinnCarousel {
 
     return (
       <vviinn-product-card
+        index={rank}
         part="product-part"
         productId={recommendation.productId}
         productTitle={recommendation.title}
@@ -451,11 +453,9 @@ export class VviinnCarousel {
         baseSalePrice={recommendation.basePrice?.sale}
         responsive={this.isGridMode}
         campaignTypeId={this.campaignTypeId}
-        index={rank}
         widgetElementId={this.widgetElementId}
         widgetVersion={this.widgetVersion}
-        basketButtonShow={this.addToBasketShow}
-        mode={this.mode}
+        addToBasketShow={this.addToBasketShow}
         data-id={recommendation.productId}
         energyCertifications={recommendation.energyCertifications}
         updatingAllCards={this.updatingAllCards}
@@ -466,7 +466,9 @@ export class VviinnCarousel {
         currency={this.currencySign}
         pricePrefix={this.pricePrefix}
         locale={this.locale}
-        priceLabel={calculatePriceLabel(recommendation)}
+        setMode={this.isSetMode}
+        customLabels={getCustomLabels(recommendation)}
+        addPriceContainer={this.addPriceContainer}
       />
     );
   }
@@ -546,11 +548,13 @@ export class VviinnCarousel {
               salePrice={this.sourceProduct.price.sale}
               basePrice={this.sourceProduct.basePrice?.actual}
               baseSalePrice={this.sourceProduct.basePrice?.sale}
+              addPriceContainer={this.addPriceContainer}
               imageRatio={1}
               imageWidth={300}
               isSourceProduct={true}
               currency={this.currencySign}
               pricePrefix={this.pricePrefix}
+              setMode={this.isSetMode}
               locale={this.locale}
             />
           )}

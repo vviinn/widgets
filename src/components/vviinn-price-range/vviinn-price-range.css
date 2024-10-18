@@ -3,7 +3,7 @@
 :host {
   display: block;
   max-width: 400px;
-
+  margin-top: var(--spacing-200);
   font-family: var(--font-family, var(--font-family-base));
 }
 
@@ -86,6 +86,7 @@
 .range_container #fromSlider {
   height: 0;
   z-index: 1;
+  transform: translateY(1px);
 }
 
 .label-wrapper {
@@ -110,4 +111,6 @@
   font-weight: var(--font-weight-500);
   line-height: var(--line-height-label);
   letter-spacing: var(--letter-spacing-label);
+
+  gap: 3px;
 }

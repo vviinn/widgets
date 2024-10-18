@@ -2,7 +2,7 @@ import { pipe } from "fp-ts/lib/function";
 import * as E from "fp-ts/lib/Either";
 import { FunctionalComponent, h } from "@stencil/core";
 import { PlusIcon } from "../vviinn-icons";
-import { BasePrice, Recommendation } from "../../interfaces/recommendation";
+import { BasePrice } from "../../interfaces/recommendation";
 import { Fragment } from "@stencil/core";
 
 const FIT_EXPR = /fit\/\d+\//;
@@ -33,10 +33,12 @@ export const Linked = (props, child) =>
   );
 
 const getFormattedPrice = (price: number, locale: string) =>
-  new Intl.NumberFormat(locale, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(price);
+  price
+    ? new Intl.NumberFormat(locale, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(price)
+    : null;
 
 type PriceType = "sale" | "outdated" | "regular";
 
@@ -121,101 +123,85 @@ type PriceProps = PriceElementProps & {
   basePrice: BasePrice;
   salePrice: number;
   baseSalePrice: BasePrice;
-  priceLabel: string;
+  showInContainer?: boolean;
 };
 
-export const calculatePriceLabel = ({
-  custom_label_0,
-  custom_label_1,
-  custom_label_2,
-  custom_label_3,
-  custom_label_4,
-}: Recommendation) => {
-  const renderLabel = (label: string, index: number) => {
-    if (!label) return "";
-
-    const partClass = `price-label-${index}`;
-
-    return (
-      <span part={partClass} class={partClass}>
+export const renderCustomLabels = (labels: string[]) => {
+  const renderLabel = (label: string, index: number) =>
+    label ? (
+      <span part={`custom-label-${index}`} class="custom-label">
         {label}
       </span>
-    );
-  };
+    ) : null;
 
   return (
     <Fragment>
-      {renderLabel(custom_label_0, 0)}
-      {renderLabel(custom_label_1, 1)}
-      {renderLabel(custom_label_2, 2)}
-      {renderLabel(custom_label_3, 3)}
-      {renderLabel(custom_label_4, 4)}
+      {labels.map((label, index) => renderLabel(label, index))}
     </Fragment>
   );
 };
 
 export const Price: FunctionalComponent<PriceProps> = (props) => {
-  return (
-    <span class="price-container" part="price-container">
-      {props.priceLabel && (
-        <span part="price-label" class="price-label">
-          {props.priceLabel}
-        </span>
-      )}
-
-      {props.salePrice ? (
-        [
-          <span class="price-outdated" part="price-outdated">
-            <FormattedPrice
-              prefix={props.prefix}
-              currency={props.currency}
-              price={props.price}
-              locale={props.locale}
-              priceType="outdated"
-            />
-            <FormattedBasePrice
-              currency={props.currency}
-              basePrice={props.basePrice}
-              locale={props.locale}
-              priceType="outdated"
-            />
-          </span>,
-
-          <span class="price-sale" part="price-sale">
-            <FormattedPrice
-              prefix={props.prefix}
-              currency={props.currency}
-              price={props.salePrice}
-              locale={props.locale}
-              priceType="sale"
-            />
-            <FormattedBasePrice
-              currency={props.currency}
-              basePrice={props.baseSalePrice}
-              locale={props.locale}
-              priceType="sale"
-            />
-          </span>,
-        ]
-      ) : (
-        <span class="price-regular" part="price-regular">
+  const renderPrice = () =>
+    props.salePrice ? (
+      [
+        <span class="price-outdated" part="price-outdated">
           <FormattedPrice
             prefix={props.prefix}
             currency={props.currency}
             price={props.price}
             locale={props.locale}
-            priceType="regular"
+            priceType="outdated"
           />
-
           <FormattedBasePrice
             currency={props.currency}
             basePrice={props.basePrice}
             locale={props.locale}
-            priceType="regular"
+            priceType="outdated"
           />
-        </span>
-      )}
-    </span>
+        </span>,
+
+        <span class="price-sale" part="price-sale">
+          <FormattedPrice
+            prefix={props.prefix}
+            currency={props.currency}
+            price={props.salePrice}
+            locale={props.locale}
+            priceType="sale"
+          />
+          <FormattedBasePrice
+            currency={props.currency}
+            basePrice={props.baseSalePrice}
+            locale={props.locale}
+            priceType="sale"
+          />
+        </span>,
+      ]
+    ) : (
+      <span class="price-regular" part="price-regular">
+        <FormattedPrice
+          prefix={props.prefix}
+          currency={props.currency}
+          price={props.price}
+          locale={props.locale}
+          priceType="regular"
+        />
+
+        <FormattedBasePrice
+          currency={props.currency}
+          basePrice={props.basePrice}
+          locale={props.locale}
+          priceType="regular"
+        />
+      </span>
+    );
+
+  return props.showInContainer ? (
+    <div class="price-container" part="price-container">
+      {renderPrice()}
+    </div>
+  ) : (
+    renderPrice()
   );
 };
 

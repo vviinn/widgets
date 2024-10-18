@@ -41,7 +41,10 @@ import {
   SearchIdResponse,
   TextSearchRequest,
 } from "../interfaces/search";
-import { RequestDynamicFilters } from "../campaign/VPRCampaignService";
+import {
+  DynamicFilter,
+  RequestDynamicFilters,
+} from "../campaign/VPRCampaignService";
 import { setBodyAndHeaders } from "../network/utils";
 import { encodeToBase64UTF8 } from "../utils/string";
 
@@ -71,7 +74,7 @@ type SearchStore = {
   resultViewed: boolean;
   sourceProduct: Recommendation | null;
   filters: SearchSessionFilter[];
-  textSearchFilters: ResponseFilterItem[];
+  dynamicFilters: DynamicFilter[];
   resetCategoryLink?: Link;
   activeIonLink?: Link;
   selectedCropper?: number;
@@ -98,7 +101,7 @@ const { state, onChange } = createStore<SearchStore>({
   results: [],
   sourceProduct: null,
   filters: [],
-  textSearchFilters: [],
+  dynamicFilters: [],
   detectedObjects: [],
   objectDetectionInProgress: false,
   resultLoaded: false,
@@ -289,7 +292,7 @@ export const makeTextSearchRequest = async (
     TE.chain((request) => textSearchSessionClient(request)),
     TE.map((sessionResponse) => {
       state.results = sessionResponse?.data?.products ?? [];
-      state.textSearchFilters =
+      state.dynamicFilters =
         (sessionResponse?.data?.interactions
           ?.dynamicFilters as ResponseFilterItem[]) ?? [];
       state.loading = false;
@@ -339,7 +342,8 @@ export const makeProductListingPageRequest = async (
   token: string,
   column: string,
   value: string,
-  resultsCount?: number
+  resultsCount?: number,
+  dynamicFilters?: RequestDynamicFilters
 ) => {
   const requestValue =
     column === "product_type" || column === "google_product_category"
@@ -361,6 +365,11 @@ export const makeProductListingPageRequest = async (
         },
       ],
     },
+    ...(dynamicFilters
+      ? {
+          dynamicFilters,
+        }
+      : {}),
   };
 
   return pipe(

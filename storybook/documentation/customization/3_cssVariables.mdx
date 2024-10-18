@@ -30,6 +30,7 @@ Apply CSS style generally to [CSS Custom Properties (CSS Variables)](https://dev
 * \--product-card-text-align *used on the product card text alignment*
 * \--product-card-image-border *used on the product card image border*
 * \--product-card-image-bg-color *used on the product card background*
+* \--basket-button-bg-color-pressed *used on the pressed basket button background*
 
 Note: all widgets that use product cards (like `vviinn-vps-widget`, `vviinn-vps-button`, and `vviinn-results`), could be customized with these variables.
 
@@ -40,7 +41,7 @@ Apply the CSS variables to all `Vviinn Widgets` of the pages by using the `html`
 ```css
 html {
   ...
-  --color-primary: #0f62fe;
+  --color-primary: #078688;
   ...
 }
 ```
@@ -49,7 +50,7 @@ If you want to apply the variables to a specific widget, you can use the widget 
 ```css
 vviinn-vps-button {
   ...
-  --color-primary: #0f62fe;
+  --color-primary: #078688;
   ...
 }
 ```
@@ -58,7 +59,7 @@ vviinn-vps-button {
 
 <div id="change-primary-color">
     <div className="tab tab-reverse">
-        <h3>Primary Color</h3>
+        <h3>Search Modal Primary Color</h3>
         <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'change-primary-color')}}>Code</button>
         <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'change-primary-color')}}>Preview</button>
     </div>
@@ -72,7 +73,8 @@ vviinn-vps-button {
 ```html
 <style>
     vviinn-vps-button {
-      --color-primary: red;
+        --color-primary:  #078688;
+        --color-primary-hover: #056b67;
     }
 </style>
 <vviinn-vps-button 
@@ -83,15 +85,15 @@ vviinn-vps-button {
     </div>
 </div>
 
-<div id="product-card-image-border">
+<div id="product-cards-customization">
     <div className="tab tab-reverse">
-        <h3>Product Card Image Border</h3>
-        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'product-card-image-border')}}>Code</button>
-        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'product-card-image-border')}}>Preview</button>
+        <h3>Product Cards Customization</h3>
+        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'product-cards-customization')}}>Code</button>
+        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'product-cards-customization')}}>Preview</button>
     </div>
     <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
-            <vviinn-vpr-widget id="vviinn-vpr-image-border" token={vviinnToken} product-id={productIdCrossSelling} locale="en-US">
+            <vviinn-vpr-widget id="vviinn-vpr-customization" token={vviinnToken} product-id={productIdCrossSelling} locale="en-US" add-to-basket-show="true" mode="grid">
             </vviinn-vpr-widget>
         </div>
     </div>
@@ -99,7 +101,11 @@ vviinn-vps-button {
 ```html
 <style>
   vviinn-vpr-widget {
-    --product-card-image-border: 1px solid red;
+    --product-card-content-align: center;
+    --product-card-text-align: center;
+    --basket-button-bg-color-pressed: beige;
+    --product-card-image-bg-color: transparent;
+    --product-card-image-border: 1px solid lightgray;
   }
 </style>
 
@@ -107,6 +113,8 @@ vviinn-vps-button {
     token="TOKEN" 
     product-id="PRODUCT_ID"
     locale="en-US"
+    mode="grid"
+    add-to-basket-show="true"
 ></vviinn-vpr-widget>
 ```
     </div>

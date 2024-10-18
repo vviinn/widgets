@@ -2,6 +2,146 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.114.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.113.0...v2.114.0) (2024-10-18)
+
+
+### Features
+
+* Allow color customization of One-click discovery icon ([7b8de58](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/7b8de580f7963130f068020d09db6afbad7fb92f))
+
+## [2.113.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.112.2...v2.113.0) (2024-10-17)
+
+
+### Features
+
+* Added one-click-discovery-mode ([6fadecc](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/6fadeccaecf8fb66e3c0c5f3d5626699bbc2e9c4))
+
+### [2.112.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.112.1...v2.112.2) (2024-10-17)
+
+
+### Bug Fixes
+
+* Now add-price-container is configured via Storybook ([3ae1f91](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/3ae1f9163d5f60f3de0fff730bbfe6c06894dd80))
+
+### [2.112.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.112.0...v2.112.1) (2024-10-17)
+
+
+### Bug Fixes
+
+* vviinn-filters improvements ([efa723a](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/efa723a02577fd12db92c1a71d66c06c46819af0))
+
+## [2.112.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.111.0...v2.112.0) (2024-10-16)
+
+
+### Features
+
+* Fixed some designing cases on storybook ([29e571b](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/29e571be37b5ec8aa69551d86efd7e5d09468827))
+
+## [2.111.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.110.0...v2.111.0) (2024-10-16)
+
+
+### Features
+
+* add-price-container property for Widgets ([8568f28](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/8568f2860081779119859ce4f57dc3688eadca01))
+
+## [2.110.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.109.0...v2.110.0) (2024-10-14)
+
+
+### Features
+
+* Product Card's layout changes ([ff4119c](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/ff4119c2077c2b7bd7ad1f82a11c0ba4c8cfc2df))
+
+## [2.109.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.108.0...v2.109.0) (2024-10-11)
+
+
+### Features
+
+* Accept filters for product-listing-page endpoint ([28c69c0](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/28c69c0d519d5a2038424d056426add90f982527))
+
+## [2.108.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.107.0...v2.108.0) (2024-10-10)
+
+
+### Features
+
+* dynamic filter trigger events now as a helper function ([48d2cc9](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/48d2cc9aa4ed05643dfbc46391bbcac96a077534))
+
+## [2.107.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.106.0...v2.107.0) (2024-10-09)
+
+
+### Features
+
+* Added currency sign to price-range and showing the actual values ([2673f7d](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/2673f7d5876c4f3af20aad4dad3c393e6c27b314))
+
+## [2.106.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.105.0...v2.106.0) (2024-10-09)
+
+
+### Features
+
+* closing extended modal in button mode when click outside ([8907d04](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/8907d04a625e1dc9d1b5f34617f3ccb6e4cfc437))
+
+## [2.105.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.104.0...v2.105.0) (2024-10-09)
+
+
+### Features
+
+* add one-click discovery to vviinn-results ([f8e2834](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/f8e2834c669f5403169605f6979032ee08ee8475))
+
+## [2.104.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.103.0...v2.104.0) (2024-10-08)
+
+
+### Features
+
+* Loading state for Search Bar ([e413aa9](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/e413aa9b41102071dce3206e7a718f62dec53a53))
+
+## [2.103.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.102.0...v2.103.0) (2024-10-08)
+
+
+### Features
+
+* Add Product Card examples to the Storybook ([9ba8b41](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/9ba8b411ee8d6be0ea0972c267c6fc6c1cbbd352))
+
+## [2.102.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.101.1...v2.102.0) (2024-10-01)
+
+
+### Features
+
+* adding actions slot to product card ([522ffeb](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/522ffeb6203c0d9c04ef060abf1f2b83f9a7490b))
+
+### [2.101.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.101.0...v2.101.1) (2024-09-30)
+
+
+### Bug Fixes
+
+* One-click Discovery Set widget uses cross-selling request by default ([24e2b50](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/24e2b5094a551bda5bee263f31a2a9cbac511219))
+
+## [2.101.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.100.0...v2.101.0) (2024-09-30)
+
+
+### Features
+
+* Default search query for Search Bar ([5d33d6a](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/5d33d6a5086c73e006f3334ab309eb36ce158bec))
+
+## [2.100.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.99.0...v2.100.0) (2024-09-30)
+
+
+### Features
+
+* Unify Product Card styles ([fa42474](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/fa4247475c22093ff2089223be31274b48eb407c))
+
+## [2.99.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.98.1...v2.99.0) (2024-09-26)
+
+
+### Features
+
+* Added an ability to vviinn-vpr-button to load the sidebar to custom container ([04a3364](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/04a3364e8b91c4eeb0a0a53f09f021de27a0a6eb))
+
+### [2.98.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.98.0...v2.98.1) (2024-09-25)
+
+
+### Bug Fixes
+
+* Change default mode for Search Bar ([9173c24](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/9173c24ff7c8073811cdcb66665e330f1da0a5fa))
+
 ## [2.98.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.97.2...v2.98.0) (2024-09-24)
 
 

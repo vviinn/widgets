@@ -48,6 +48,7 @@ import { VisualSearchMode } from "../../widget/types";
  * @part start-camera_button - Start Camera Button.
  * @part product-card - Product Card itself.
  * @part brand - Brand inside Product Card.
+ * @part product-type - Product Type inside Product Card.
  * @part currency - Currency related to price.
  * @part deeplink - Anchor element around troduct title. Rendered only if "deeplink" property is filled.
  * @part image - Product Card image.
@@ -58,7 +59,6 @@ import { VisualSearchMode } from "../../widget/types";
  * @part price-amount-base-sale - Numeric part of the base price.
  * @part price-amount-base-outdated - Numeric part of the base price.
  * @part price-amount-base-regular - Numeric part of the base price.
- * @part price-container - Block of prices.
  * @part price-outdated - Block for outdated price. Rendered when the product contains the sale price.
  * @part price-regular - Block for a price if no sale price is presented.
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
@@ -67,12 +67,11 @@ import { VisualSearchMode } from "../../widget/types";
  * @part text-search-input - Text search input.
  * @part button - Clickable button element.
  * @part vviinn-button - Button element container.
- * @part price-label - string part of price.
- * @part price-label-0 - string part of price with index 0.
- * @part price-label-1 - string part of price with index 1.
- * @part price-label-2 - string part of price with index 2.
- * @part price-label-3 - string part of price with index 3.
- * @part price-label-4 - string part of price with index 4.
+ * @part custom-label-0 - custom label with index 0.
+ * @part custom-label-1 - custom label with index 1.
+ * @part custom-label-2 - custom label with index 2.
+ * @part custom-label-3 - custom label with index 3.
+ * @part custom-label-4 - custom label with index 4.
  * @part energy-label-container - Energy label container.
  * @part energy-label-icon - Icon with an energy class.
  * @part energy-label-product-type - Product type.
@@ -109,6 +108,12 @@ export class VviinnVpsButton {
   @Prop() exampleImageSource: string = DEFAULT_EXAMPLE_IMAGE;
   /** Show the text search */
   @Prop() textSearchShow: boolean = false;
+  /** Show or hide Add to Basket buttons */
+  @Prop() addToBasketShow: boolean = false;
+  /** Show or hide the One-click Discovery */
+  @Prop() showOneClickDiscovery = false;
+  /** Wrap the Product Card's price values in the container. */
+  @Prop() addPriceContainer?: boolean = false;
 
   /** @internal */
   @Prop() apiPath: string | undefined;
@@ -237,7 +242,10 @@ export class VviinnVpsButton {
           imageResolutionWidth={this.imageResolutionWidth}
           exampleImageSource={this.exampleImageSource}
           textSearchShow={this.textSearchShow}
+          addToBasketShow={this.addToBasketShow}
+          addPriceContainer={this.addPriceContainer}
           replaceSlotsContentInButton={this.replaceSlotsContent.bind(this)}
+          showOneClickDiscovery={this.showOneClickDiscovery}
         />
       </Host>
     );

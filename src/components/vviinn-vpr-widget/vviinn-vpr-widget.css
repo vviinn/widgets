@@ -7,6 +7,7 @@
    * @prop --product-card-text-align: Set the alignment of the text inside the product card.
    * @prop --product-card-image-border: Set the border of the product card image.
    * @prop --product-card-image-bg-color: Set the background color of the product card image.
+   * @prop --basket-button-bg-color-pressed: Set the background color of the pressed Basket Button.
    * @prop --font-family: Set the font family of the widget.
    */
 
@@ -27,6 +28,13 @@
 :host(.set) vviinn-carousel {
   overflow-x: auto;
   scrollbar-width: thin;
+}
+
+:host(.set) vviinn-product-card::part(image) {
+  width: var(--vviinn-set-mode-image-width, 100%);
+  height: auto;
+  min-width: var(--image-set-mode-min-size);
+  min-height: var(--image-set-mode-min-size);
 }
 
 :host(.grid) h2 {
@@ -110,6 +118,7 @@
 }
 
 .no-result-text {
+  font-family: var(--font-family, var(--font-family-base));
   font-size: 20px;
 }
 

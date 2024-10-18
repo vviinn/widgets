@@ -7,11 +7,13 @@ import {
   Event,
   EventEmitter,
   Listen,
+  State,
 } from "@stencil/core";
 import { makeTextSearchRequest, searchState } from "../../store/search.store";
 import { SearchModalUploadIcon, TextSearchIcon } from "../vviinn-icons";
 import { slotChangeListener } from "../customized-slots";
 import {
+  DynamicFiltersEventData,
   SearchIdEvent,
   SearchIdEventData,
   TextSearchEventData,
@@ -37,10 +39,22 @@ export class VviinnTextSearch {
   @Event() vviinnTextSearchStarted: EventEmitter<TextSearchEventData>;
   /** An image search ID was received (used by vviinn-results component) */
   @Event() vviinnSearchIdReceived: EventEmitter<SearchIdEventData>;
+  /** The filters received */
+  @Event({ bubbles: true })
+  vviinnFilters: EventEmitter<DynamicFiltersEventData>;
 
   /** A text search response was received (used internally by vviinn-vps-widget) */
   /** @internal */
-  @Event() vviinnTextSearchFinished: EventEmitter<TextSearchEventData>;
+  @Event() widgetTextSearchFinished: EventEmitter<TextSearchEventData>;
+
+  /** A search response was received by vviinn-results (used internally for showing preloader) */
+  /** @internal */
+  @Event() resultsSearchFinished: EventEmitter;
+
+  /** Selected filters should be resetted */
+  /** @internal */
+  @Event({ bubbles: true })
+  vviinnSelectedFiltersReset: EventEmitter;
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
@@ -56,6 +70,30 @@ export class VviinnTextSearch {
   /** @internal */
   @Prop() apiPath?: string = "https://api.vviinn.com";
 
+  @State() isLoading = false;
+
+  private isShowPreloader = () =>
+    this.showInWidget
+      ? searchState.loading && searchState.searchType === "text"
+      : this.isLoading;
+
+  private searchStartedHandler = () => (this.isLoading = true);
+  private searchFinishedHandler = () => (this.isLoading = false);
+
+  connectedCallback() {
+    document.addEventListener(
+      "resultsSearchFinished",
+      this.searchFinishedHandler
+    );
+  }
+
+  disconnectedCallback() {
+    document.removeEventListener(
+      "resultsSearchFinished",
+      this.searchFinishedHandler
+    );
+  }
+
   async componentWillLoad() {
     await i18next.init({
       lng: this.locale,
@@ -65,9 +103,21 @@ export class VviinnTextSearch {
     slotChangeListener(this, this.el);
   }
 
+  async componentDidLoad() {
+    if (this.showInWidget) return;
+
+    if (this.searchQuery?.length > 0) {
+      this.searchStartedHandler();
+      this.vviinnTextSearchStarted.emit({
+        query: this.searchQuery,
+      });
+    }
+  }
+
   @Listen("vviinnImageUploadFinished")
   imageUploadFinished({ detail }: SearchIdEvent) {
     if (!this.showInWidget && this.mode === "textAndUpload") {
+      this.searchStartedHandler();
       this.vviinnSearchIdReceived.emit({ searchId: detail.searchId });
     }
   }
@@ -85,8 +135,11 @@ export class VviinnTextSearch {
 
     if (this.showInWidget) {
       await makeTextSearchRequest(this.token, this.searchQuery);
-      this.vviinnTextSearchFinished.emit({ query: this.searchQuery });
+      this.vviinnFilters.emit(searchState.dynamicFilters);
+      this.vviinnSelectedFiltersReset.emit();
+      this.widgetTextSearchFinished.emit({ query: this.searchQuery });
     } else {
+      this.searchStartedHandler();
       this.vviinnTextSearchStarted.emit({
         query: this.searchQuery,
       });
@@ -119,9 +172,7 @@ export class VviinnTextSearch {
           onClick={() => this.handleTextSearch()}
           disabled={searchState.loading}
         >
-          {searchState.loading &&
-          searchState.searchType === "text" &&
-          this.showInWidget ? (
+          {this.isShowPreloader() ? (
             <vviinn-preloader />
           ) : (
             <slot name="vviinn-text-search-icon">
@@ -135,6 +186,7 @@ export class VviinnTextSearch {
             token={this.token}
             apiPath={this.apiPath}
             showInTextSearch={true}
+            uploadStartedHandler={this.searchStartedHandler.bind(this)}
           >
             <span slot="upload-button-text">
               <SearchModalUploadIcon />

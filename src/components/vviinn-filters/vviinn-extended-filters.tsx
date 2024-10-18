@@ -8,6 +8,7 @@ import {
   EventEmitter,
   Element,
   Watch,
+  Listen,
 } from "@stencil/core";
 import i18next from "i18next";
 
@@ -23,11 +24,7 @@ import {
   SquareFilterIcon,
   CheckFilterIcon,
 } from "../vviinn-icons";
-import {
-  getFilterOptions,
-  subFilterSelection,
-  emitRequestFiltersMore,
-} from "./helpers";
+import { getFilterOptions, emitRequestFiltersMore } from "./helpers";
 import { Locale, resources } from "../../locale";
 
 import { SlotSkeleton, slotChangeListener } from "../customized-slots";
@@ -35,8 +32,11 @@ import { Histogram } from "../vviinn-price-range/vviinn-price-range";
 import {
   ChangedFiltersEventData,
   DynamicFiltersEventData,
+  DynamicFilterTrackingData,
 } from "../../recommendation/events";
 import { components } from "../../interfaces/generated";
+import { ClickEvent, isClickedInRectBound } from "../../geometry/Rectangle";
+import { triggerFilter } from "./helpers/triggerFilter";
 
 /**
  * @slot vviinn-extended-filters-title - Text on widget's header.
@@ -83,6 +83,8 @@ export class VviinnExtendedFilters {
   /** The locale for currency formatting and text localization */
   @Prop() locale: Locale = "de-DE";
   @Prop() mode: "button" | "preview" = "button";
+  /** The currency sign is displayed after the price */
+  @Prop() currencySign?: string = "€";
 
   @State() requestFilters: RequestDynamicFilters = [];
   @State() showMore: boolean = false;
@@ -98,6 +100,8 @@ export class VviinnExtendedFilters {
   /** @internal */
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
+
+  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
 
   private replaceSlotsContent() {
     const slots = this.el.querySelectorAll("[slot]");
@@ -123,16 +127,13 @@ export class VviinnExtendedFilters {
 
   private handleSubFilterSelection(
     filterValue: DynamicFilterValue,
-    seletedFilter: DynamicFilter
+    selectedFilter: DynamicFilter
   ) {
-    this.requestFilters = subFilterSelection(
+    this.requestFilters = triggerFilter(
+      filterValue,
+      selectedFilter,
       this.requestFilters,
-      seletedFilter,
-      filterValue
-    );
-
-    emitRequestFiltersMore(
-      [...this.requestFilters],
+      this.vviinnFilterTriggered,
       this.el,
       this.vviinnFiltersChanged
     );
@@ -223,16 +224,39 @@ export class VviinnExtendedFilters {
   private priceChangeHandler = (filterValue: DynamicFilterValue) => {
     if (this.timer) clearTimeout(this.timer);
 
-    const seletedFilter = this.filters.find(
+    const selectedFilter = this.filters.find(
       (filter) => filter.column === "price"
     );
 
-    if (seletedFilter) {
+    if (selectedFilter) {
       this.timer = setTimeout(() => {
-        this.handleSubFilterSelection(filterValue, seletedFilter);
+        this.handleSubFilterSelection(filterValue, selectedFilter);
       }, 200);
     }
   };
+
+  private getAsideElement(): HTMLElement {
+    return this.el.shadowRoot.querySelector("aside");
+  }
+
+  private getSidebarRectangle(): DOMRect {
+    return this.getAsideElement()?.getBoundingClientRect();
+  }
+
+  @Listen("click", { target: "body" })
+  bodyClickListener(event: ClickEvent) {
+    if (this.mode !== "button") return;
+
+    const sidebarRect = this.getSidebarRectangle();
+
+    if (!sidebarRect || sidebarRect.width === 0 || sidebarRect.height === 0) {
+      return;
+    }
+
+    if (!isClickedInRectBound(event, sidebarRect)) {
+      this.showMore = false;
+    }
+  }
 
   render() {
     return (
@@ -255,7 +279,7 @@ export class VviinnExtendedFilters {
           }`}
           part="extended-filters-modal"
         >
-          <div
+          <aside
             class="filters-modal-wrapper"
             part="extended-filters-modal-wrapper"
           >
@@ -277,7 +301,7 @@ export class VviinnExtendedFilters {
             </div>
 
             <ul class="filters-modal-list" part="extended-filters-list">
-              {this.filters.map((mainFilter) => {
+              {(this.filters ?? []).map((mainFilter) => {
                 const mainColumn = mainFilter.column;
                 const filterOptions = getFilterOptions(mainFilter);
                 const requestFilter = this.requestFilters.find(
@@ -330,6 +354,7 @@ export class VviinnExtendedFilters {
                           )?.values[0] ??
                             {}) as components["schemas"]["interval"]
                         }
+                        currencySign={this.currencySign}
                       />
                     ) : (
                       <ul
@@ -388,16 +413,18 @@ export class VviinnExtendedFilters {
             </ul>
 
             <div class="filters-modal-actions" part="extended-filters-actions">
-              <button
-                class="filters-modal-apply"
-                onClick={() => (this.showMore = false)}
-                disabled={this.requestFilters.length === 0}
-                part="extended-filters-apply"
-              >
-                <slot name="vviinn-extended-filters-apply">
-                  {i18next.t("filters.modal.apply")}
-                </slot>
-              </button>
+              {this.mode === "button" && (
+                <button
+                  class="filters-modal-apply"
+                  onClick={() => (this.showMore = false)}
+                  disabled={this.requestFilters.length === 0}
+                  part="extended-filters-apply"
+                >
+                  <slot name="vviinn-extended-filters-apply">
+                    {i18next.t("filters.modal.apply")}
+                  </slot>
+                </button>
+              )}
 
               <button
                 class="filters-modal-reset"
@@ -409,7 +436,7 @@ export class VviinnExtendedFilters {
                 </slot>
               </button>
             </div>
-          </div>
+          </aside>
         </div>
       </Host>
     );

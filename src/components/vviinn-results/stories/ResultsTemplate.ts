@@ -14,6 +14,9 @@ export const ResultsTemplate = (args) => {
     filterColumn,
     filterValue,
     textSearchQuery,
+    addToBasketShow,
+    oneClickDiscoveryMode,
+    addPriceContainer,
   } = args;
 
   const filterAttributes =
@@ -25,7 +28,18 @@ export const ResultsTemplate = (args) => {
     ? `text-search-query="${textSearchQuery}"`
     : "";
 
-  return `<vviinn-results
+  return `
+  <div class="search-page-wrapper">
+  <div class="search-page-wrapper-filters">
+    <vviinn-extended-filters locale="${args.locale}" mode="preview"></vviinn-extended-filters>
+  </div>
+  <div class="search-page-wrapper-result">
+    <div class="search-page-wrapper-result-filters">
+      <vviinn-extended-filters locale="${args.locale}"></vviinn-extended-filters>
+      <vviinn-selected-filters></vviinn-selected-filters>
+    </div>
+
+    <vviinn-results
     token="${token}"
     api-path="${apiPath}"
     search-id="${searchId}"
@@ -39,5 +53,10 @@ export const ResultsTemplate = (args) => {
     ${filterAttributes}
     ui-session-id="${uiSessionId}"
     results-count="${resultsCount}"
-  ></vviinn-results>`;
+    add-to-basket-show="${addToBasketShow}"
+    one-click-discovery-mode="${oneClickDiscoveryMode}"
+    add-price-container="${addPriceContainer}"
+  ></vviinn-results>
+  </div>
+</div>`;
 };
