@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - develop
-      - master
+      - main
 
 jobs:
   generate-version-develop:
@@ -93,9 +93,9 @@ jobs:
           git commit -m "[skip ci] update widget's version in storybook"
           git push origin develop
 
-  build-app-master:
+  build-app-main:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v4
       - name: Setup Node.js
