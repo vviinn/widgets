@@ -26,6 +26,11 @@ jobs:
       - run: npm run test
       - run: npm run build_interfaces
       - run: npm run build
+      - name: Upload Node Modules
+        uses: actions/upload-artifact@v4
+        with:
+          name: node-modules
+          path: node_modules/
 
   generate-version-develop:
     runs-on: ubuntu-latest
@@ -33,6 +38,10 @@ jobs:
     needs: build-app-develop
     steps:
       - uses: actions/checkout@v4
+      - name: Download Node Modules
+        uses: actions/download-artifact@v4
+        with:
+          name: node-modules
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
