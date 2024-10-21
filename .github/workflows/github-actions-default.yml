@@ -7,7 +7,7 @@ on:
       - master
 
 jobs:
-  build-app-develop:
+  generate-version-develop:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/develop'
     steps:
@@ -26,27 +26,6 @@ jobs:
       - run: npm run test
       - run: npm run build_interfaces
       - run: npm run build
-      - name: Upload Node Modules
-        uses: actions/upload-artifact@v4
-        with:
-          name: node-modules
-          path: node_modules/
-
-  generate-version-develop:
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/develop'
-    needs: build-app-develop
-    steps:
-      - uses: actions/checkout@v4
-      - name: Download Node Modules
-        uses: actions/download-artifact@v4
-        with:
-          name: node-modules
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "18.20.4"
-          cache: "npm"
       - run: npm run release.ci
       - run: git push --follow-tags origin develop
       - run: npm run update_storybook_changelog
