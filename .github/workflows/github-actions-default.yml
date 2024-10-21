@@ -31,6 +31,7 @@ jobs:
       - run: npm run test
       - run: npm run build_interfaces
       - run: npm run build
+      - run: npm run release.ci -- --dry-run
       - run: npm run release.ci
       - run: git push --follow-tags origin develop
       - run: npm run update_storybook_changelog
