@@ -30,6 +30,7 @@ jobs:
   generate-version-develop:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/develop'
+    needs: build-app-develop
     steps:
       - uses: actions/checkout@v4
       - name: Setup Node.js
@@ -48,6 +49,7 @@ jobs:
   release-beta:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/develop'
+    needs: generate-version-develop
     steps:
       - uses: actions/checkout@v4
       - name: Setup Node.js
@@ -74,6 +76,7 @@ jobs:
   update-widget-version-storybook:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/develop'
+    needs: release-beta
     steps:
       - uses: actions/checkout@v4
       - name: Setup Node.js
