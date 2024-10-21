@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.114.10](https://github.com/vviinn/widgets/compare/v2.114.9...v2.114.10) (2024-10-21)
+
+
+### Bug Fixes
+
+* use 'main' branch in github-actions ([0c377aa](https://github.com/vviinn/widgets/commit/0c377aaa932ce20e0bd655f23349bc120ff3fffb))
+
 ### [2.114.9](https://github.com/vviinn/widgets/compare/v2.114.8...v2.114.9) (2024-10-21)
 
 
