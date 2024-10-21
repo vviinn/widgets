@@ -12,7 +12,7 @@ fs.readFile("./CHANGELOG.md", "utf8", (err, data) => {
     const titleSplit = release.split(" ");
 
     if (index === 1) {
-      release = release.replace(". See [standard-version]", "");
+      release = release.replace(". See [commit-and-tag-version]", "");
     }
 
     if (
