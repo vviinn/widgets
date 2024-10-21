@@ -1,6 +1,29 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
+
+### [2.114.9](https://github.com/vviinn/widgets/compare/v2.114.8...v2.114.9) (2024-10-21)
+
+
+### Bug Fixes
+
+* Changelog generation ([b440dc4](https://github.com/vviinn/widgets/commit/b440dc4e9e942b123c73eb4825a8a464a49a1875))
+
+### 2.114.8 (2024-10-21)
+
+### 2.114.7 (2024-10-21)
+
+## 2.114.6 (2024-10-21)
+
+## 2.114.5 (2024-10-21)
+
+## 2.114.4 (2024-10-21)
+
+## 2.114.3 (2024-10-21)
+
+### 2.114.2 (2024-10-21)
+
+### 2.114.1 (2024-10-21)
 
 ## [2.114.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.113.0...v2.114.0) (2024-10-18)
 

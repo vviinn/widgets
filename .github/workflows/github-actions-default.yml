@@ -1,0 +1,114 @@
+name: Node.js CI Pipeline
+
+on:
+  push:
+    branches:
+      - develop
+      - master
+
+jobs:
+  generate-version-develop:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    if: github.ref == 'refs/heads/develop'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18.20.4"
+          cache: "npm"
+      - name: Create .env file
+        run: |
+          touch .env
+          echo "OPENAPI_URL=https://docs.stage.vviinn.com/openapi.yaml" >> .env
+          echo "RECOMMENDATIONS_URL=https://api.stage.vviinn.com/product/" >> .env
+      - run: npm install
+      - run: npm run test
+      - run: npm run build_interfaces
+      - run: npm run build
+      - run: npm run release.ci
+      - run: git push --follow-tags origin develop
+      - run: npm run update_storybook_changelog
+      - run: |
+          git add ./storybook/documentation/change-log/2_changelog.mdx
+          git commit -m '[skip ci] update storybook changelog'
+          git push origin develop
+
+  release-beta:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'
+    needs: generate-version-develop
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18.20.4"
+          cache: "npm"
+      - run: git pull
+      - name: Create .env file
+        run: |
+          touch .env
+          echo "OPENAPI_URL=https://docs.vviinn.com/openapi.yaml" >> .env
+          echo "RECOMMENDATIONS_URL=https://api.vviinn.com/product/" >> .env
+          echo "API_PATH=https://api.vviinn.com" >> .env
+      - run: npm install
+      - run: npm run test
+      - run: npm run build_interfaces
+      - run: npm run build
+      - name: Publish to NPM registry with beta tag
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+          npm publish --tag beta
+
+  update-widget-version-storybook:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    if: github.ref == 'refs/heads/develop'
+    needs: release-beta
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18.20.4"
+          cache: "npm"
+      - run: git pull
+      - run: npm run update_storybook_widget_version
+      - run: |
+          git add ./storybook/package.json
+          git commit -m "[skip ci] update widget's version in storybook"
+          git push origin develop
+
+  build-app-master:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18.20.4"
+          cache: "npm"
+      - name: Create .env file
+        run: |
+          touch .env
+          echo "OPENAPI_URL=https://docs.vviinn.com/openapi.yaml" >> .env
+          echo "RECOMMENDATIONS_URL=https://api.vviinn.com/product/" >> .env
+      - run: npm install
+      - run: npm run test
+      - run: npm run build_interfaces
+      - run: npm run build
