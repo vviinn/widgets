@@ -298,7 +298,6 @@ export class VviinnResults {
   };
 
   private textSearchStartedHandler = async ({ detail }: TextSearchEvent) => {
-    if (this.showInWidget) return;
     this.innerTextSearchQuery = detail.query;
     await this.getResultsByTextQuery(detail.query);
     this.resultsSearchFinished.emit();
