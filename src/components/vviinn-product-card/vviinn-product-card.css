@@ -61,6 +61,17 @@
   gap: var(--spacing-50);
 }
 
+.price-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-50);
+  flex-wrap: wrap;
+  justify-content: var(
+    --product-card-content-align,
+    var(--product-card-content-align-default)
+  );
+}
+
 .price-outdated,
 .price-sale,
 .price-regular {

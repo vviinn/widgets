@@ -115,8 +115,25 @@ products.hidden {
   background: var(--button-bg-color-frosted);
   backdrop-filter: blur(calc(var(--filter-blur-150, 12px) / 2));
 }
+
+.vviinn-results-product-card-actions vviinn-vpr-button:hover {
+  background: var(--button-bg-color-frosted-hover);
+}
+
 .vviinn-results-product-card-actions vviinn-vpr-button::part(vviinn-button) {
   display: flex;
   justify-content: center;
   align-items: center;
+  color: var(--color-icon-inverse);
+}
+
+#one-click-discovery-append {
+  width: 100%;
+  grid-column: 1 / -1;
+}
+
+@media screen and (max-width: 768px) {
+  :host {
+    --product-card-width: 155px;
+  }
 }

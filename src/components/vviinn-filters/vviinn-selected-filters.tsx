@@ -102,6 +102,7 @@ export class VviinnSelectedFilters {
 
   render() {
     let selectedButtons = [];
+    if (!this.filters?.length) return;
     this.filters.forEach((filter) => {
       if (!("values" in filter)) return;
 

@@ -164,11 +164,13 @@ export class VviinnResults {
   @Prop() filterValue?: string;
   /** Number of results displayed for text search and product listing page (less or equal to the value, set in the campaign) */
   @Prop() resultsCount?: number;
+  /** Wrap the Product Card's price values in the container. */
+  @Prop() addPriceContainer?: boolean = false;
 
   /** True when we use vviinn-results inside the widget */
   @Prop() showInWidget?: boolean = false;
-  /** Show or hide the One-click Discovery */
-  @Prop() showOneClickDiscovery = false;
+  /** Discovery Mode */
+  @Prop() oneClickDiscoveryMode: undefined | "modal" | "append";
 
   /** @internal */
   @Prop() apiPath?: string = "https://api.vviinn.com";
@@ -192,6 +194,7 @@ export class VviinnResults {
   @State() recommendations: Recommendation[] = [];
   @State() innerTextSearchQuery: string;
   @State() slotsReplaced: boolean;
+  @State() oneClickDiscoveryAppendIndex: number;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -329,6 +332,10 @@ export class VviinnResults {
     this.trackingApi.trackEvent(filterEvent).then(this.setTrackingDeactivated);
   };
 
+  private widgetCloseHandler = () => {
+    this.oneClickDiscoveryAppendIndex = undefined;
+  };
+
   connectedCallback() {
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
 
@@ -356,6 +363,8 @@ export class VviinnResults {
       this.filtersTriggeredHandler
     );
 
+    document.addEventListener("vviinnWidgetClose", this.widgetCloseHandler);
+
     this.getResultsBySearchId(this.searchId);
     this.getResultsByCategory();
     !this.showInWidget && this.getResultsByTextQuery(this.textSearchQuery);
@@ -381,6 +390,8 @@ export class VviinnResults {
       "vviinnFilterTriggered",
       this.filtersTriggeredHandler
     );
+
+    document.removeEventListener("vviinnWidgetClose", this.widgetCloseHandler);
   }
 
   @Watch("textSearchQuery")
@@ -542,6 +553,24 @@ export class VviinnResults {
       searchState.resultLoaded = true;
     }
 
+    const isOneClickDiscoveryAppendMode =
+      this.oneClickDiscoveryMode === "append";
+
+    const oneClickDiscoveryHandler = (index: number) => {
+      if (!isOneClickDiscoveryAppendMode) return;
+
+      const containerComputerStyle = window.getComputedStyle(
+        this.el.shadowRoot.getElementById("vviinn-results-products")
+      );
+      const nCols = containerComputerStyle
+        .getPropertyValue("grid-template-columns")
+        .replace(" 0px", "")
+        .split(" ").length;
+
+      this.oneClickDiscoveryAppendIndex =
+        index + (nCols - ((index % nCols) + 1));
+    };
+
     return results.map((p, i) => (
       <vviinn-product-card
         key={p.productId}
@@ -568,17 +597,32 @@ export class VviinnResults {
         locale={this.locale}
         customLabels={getCustomLabels(p)}
         addToBasketShow={this.addToBasketShow}
+        addPriceContainer={this.addPriceContainer}
         isResultsWidget={true}
+        style={{ order: i.toString() }}
       >
-        {this.showOneClickDiscovery && (
+        {this.oneClickDiscoveryMode && (
           <div
             slot="vviinn-product-card-actions"
             class="vviinn-results-product-card-actions"
           >
             <vviinn-vpr-button
+              onClick={() => oneClickDiscoveryHandler(i)}
               token={this.token}
-              product-id={p.productId}
-              add-style="false"
+              productId={p.productId}
+              addStyle={false}
+              appendSidebarTo={
+                isOneClickDiscoveryAppendMode
+                  ? "one-click-discovery-append"
+                  : undefined
+              }
+              appendSidebarToElement={
+                isOneClickDiscoveryAppendMode
+                  ? this.el.shadowRoot.getElementById(
+                      "one-click-discovery-append"
+                    )
+                  : undefined
+              }
             ></vviinn-vpr-button>
           </div>
         )}
@@ -593,7 +637,7 @@ export class VviinnResults {
         class={{
           "show-in-widget": this.showInWidget,
         }}
-        exportparts="image-container, content-container, basket-button-container, title, product-card, brand, product-type, deeplink, currency, image, image-link, price-amount-sale, price-amount-outdated, price-amount-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-outdated, price-regular, price-sale, price-prefix, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
+        exportparts="image-container, content-container, basket-button-container, title, product-card, brand, product-type, deeplink, currency, image, image-link, price-container, price-amount-sale, price-amount-outdated, price-amount-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-outdated, price-regular, price-sale, price-prefix, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
       >
         <div
           class={{
@@ -624,8 +668,18 @@ export class VviinnResults {
                 searchState.results.length === 0),
             products: true,
           }}
+          id="vviinn-results-products"
         >
           {this.renderResults()}
+          <div
+            id="one-click-discovery-append"
+            style={{
+              order: (
+                this.oneClickDiscoveryAppendIndex ??
+                (this.recommendations.length || searchState.results.length)
+              ).toString(),
+            }}
+          ></div>
         </div>
       </Host>
     );

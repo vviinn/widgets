@@ -1,6 +1,78 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
+
+### [2.114.10](https://github.com/vviinn/widgets/compare/v2.114.9...v2.114.10) (2024-10-21)
+
+
+### Bug Fixes
+
+* use 'main' branch in github-actions ([0c377aa](https://github.com/vviinn/widgets/commit/0c377aaa932ce20e0bd655f23349bc120ff3fffb))
+
+### [2.114.9](https://github.com/vviinn/widgets/compare/v2.114.8...v2.114.9) (2024-10-21)
+
+
+### Bug Fixes
+
+* Changelog generation ([b440dc4](https://github.com/vviinn/widgets/commit/b440dc4e9e942b123c73eb4825a8a464a49a1875))
+
+### 2.114.8 (2024-10-21)
+
+### 2.114.7 (2024-10-21)
+
+## 2.114.6 (2024-10-21)
+
+## 2.114.5 (2024-10-21)
+
+## 2.114.4 (2024-10-21)
+
+## 2.114.3 (2024-10-21)
+
+### 2.114.2 (2024-10-21)
+
+### 2.114.1 (2024-10-21)
+
+## [2.114.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.113.0...v2.114.0) (2024-10-18)
+
+
+### Features
+
+* Allow color customization of One-click discovery icon ([7b8de58](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/7b8de580f7963130f068020d09db6afbad7fb92f))
+
+## [2.113.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.112.2...v2.113.0) (2024-10-17)
+
+
+### Features
+
+* Added one-click-discovery-mode ([6fadecc](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/6fadeccaecf8fb66e3c0c5f3d5626699bbc2e9c4))
+
+### [2.112.2](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.112.1...v2.112.2) (2024-10-17)
+
+
+### Bug Fixes
+
+* Now add-price-container is configured via Storybook ([3ae1f91](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/3ae1f9163d5f60f3de0fff730bbfe6c06894dd80))
+
+### [2.112.1](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.112.0...v2.112.1) (2024-10-17)
+
+
+### Bug Fixes
+
+* vviinn-filters improvements ([efa723a](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/efa723a02577fd12db92c1a71d66c06c46819af0))
+
+## [2.112.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.111.0...v2.112.0) (2024-10-16)
+
+
+### Features
+
+* Fixed some designing cases on storybook ([29e571b](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/29e571be37b5ec8aa69551d86efd7e5d09468827))
+
+## [2.111.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.110.0...v2.111.0) (2024-10-16)
+
+
+### Features
+
+* add-price-container property for Widgets ([8568f28](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/8568f2860081779119859ce4f57dc3688eadca01))
 
 ## [2.110.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.109.0...v2.110.0) (2024-10-14)
 
