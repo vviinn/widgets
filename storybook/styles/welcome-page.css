@@ -1,32 +1,33 @@
-.sbdocs {
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-}
-
 h1 {
   line-height: 40px;
 }
 
-.sbdocs h3 {
+.welcome-section {
+  margin-bottom: 40px;
+}
+
+.welcome-section h3 {
   font-size: 18px;
 }
 
-p {
+.welcome-section p,
+.welcome-section h1,
+.welcome-section h2,
+.welcome-section h3 {
   margin: 0;
   padding: 0;
 }
 
-.sbdocs ul {
+.welcome-section ul {
   margin: 0 0 0 2px;
   padding-left: 20px;
 }
 
-.sbdocs ul li {
+.welcome-section ul li {
   margin: 0;
 }
 
-ul li::marker {
+.welcome-section ul li::marker {
   font-size: 18px;
   font-weight: bold;
 }
@@ -36,20 +37,12 @@ ul li::marker {
   flex-direction: column;
 }
 
-.gap24 {
-  gap: 24px;
-}
-
 .gap20 {
   gap: 20px;
 }
 
 .gap16 {
   gap: 16px;
-}
-
-.gap12 {
-  gap: 12px;
 }
 
 .gap8 {
@@ -67,14 +60,6 @@ ul li {
   border: none;
 }
 
-.sbdocs p,
-.sbdocs h1,
-.sbdocs h2,
-.sbdocs h3 {
-  margin: 0;
-  padding: 0;
-}
-
 .card-wrapper {
   display: flex;
   gap: 24px;
@@ -83,32 +68,13 @@ ul li {
 }
 
 .image-card {
-  flex-grow: 1;
-}
-
-.image-card .image-wrapper {
-  padding: 12px 0;
-  background-color: #f5f5e8;
-  border-radius: 16px;
-  display: flex;
-  justify-content: center;
-}
-
-.image-wrapper img {
-  height: 216px;
-  margin: auto 0;
-}
-
-.card-wrapper {
-  display: flex;
-  gap: 24px;
-  flex-direction: row;
-}
-
-.image-card {
   display: flex;
   gap: 16px;
   flex-direction: column;
+}
+
+.image-card img {
+  border-radius: 16px;
 }
 
 .info-card {
