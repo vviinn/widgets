@@ -24,7 +24,7 @@ const MIN_BAR_HEIGHT = 3;
 export class VviinnButton {
   @Element() el: HTMLElement;
 
-  @Prop() histogram: Histogram = [];
+  @Prop({ mutable: true }) histogram: Histogram = [];
   @Prop() addStyle: boolean = true;
   @Prop() priceChangeHandler: (
     filterValue: components["schemas"]["interval-filter-value-item"]
@@ -88,7 +88,6 @@ export class VviinnButton {
     if (from > to) {
       fromSlider.value = to;
     }
-    this.sendBackValue();
   }
 
   private controlToSlider(fromSlider, toSlider) {
@@ -99,7 +98,6 @@ export class VviinnButton {
     } else {
       toSlider.value = from;
     }
-    this.sendBackValue();
   }
 
   private sendBackValue() {
@@ -164,6 +162,7 @@ export class VviinnButton {
                 this.minIndex = parseInt((e.target as HTMLInputElement).value);
                 this.controlFromSlider(this.fromSlider, this.toSlider);
               }}
+              onChange={() => this.sendBackValue()}
               part="histogram-from-slider"
             />
             <input
@@ -177,6 +176,7 @@ export class VviinnButton {
                 this.maxIndex = parseInt((e.target as HTMLInputElement).value);
                 this.controlToSlider(this.fromSlider, this.toSlider);
               }}
+              onChange={() => this.sendBackValue()}
               part="histogram-to-slider"
             />
           </div>
