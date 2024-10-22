@@ -55,6 +55,7 @@ export class VviinnButton {
 
   @Watch("selectedInterval")
   updatingSelectedInterval() {
+    this.histogram = this.histogram.filter((item) => item.value.frequency > 0);
     this.maxIndex = this.histogram.length - 1;
 
     const maxValueofFrequency = Math.max(
