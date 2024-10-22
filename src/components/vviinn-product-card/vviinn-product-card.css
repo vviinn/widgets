@@ -136,24 +136,26 @@
   padding-left: var(--spacing-50);
 }
 
-.title {
+.brand,
+.title,
+.product-type {
   display: -webkit-box;
   max-width: var(--product-card-set-mode-max-width);
-  font-weight: var(--font-weight-600);
-  color: var(--color-text-primary);
+  text-align: var(
+    --product-card-text-align,
+    var(--product-card-text-align-default)
+  );
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 1;
   overflow-wrap: anywhere;
   text-overflow: ellipsis;
   overflow: hidden;
 }
 
-.title,
-.brand {
-  text-align: var(
-    --product-card-text-align,
-    var(--product-card-text-align-default)
-  );
+.title {
+  font-weight: var(--font-weight-600);
+  color: var(--color-text-primary);
+  -webkit-line-clamp: 2;
 }
 
 .deeplink {
