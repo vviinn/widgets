@@ -637,7 +637,7 @@ export class VviinnVpsWidget {
           }
           exportparts="secondary-action, title, close-button"
         >
-          <vviinn-slider showBullets={false} position={this.slidePosition}>
+          <vviinn-slider position={this.slidePosition}>
             <vviinn-slide
               class={{
                 "start-page": true,
