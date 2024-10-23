@@ -69,9 +69,6 @@ export class VviinnTextSearch {
 
   /** @internal */
   @Prop() apiPath?: string = "https://api.vviinn.com";
-  /** Location inside the Search Widget */
-  /** @internal */
-  @Prop() location?: "startSlide" | "resultsSlide";
 
   @State() isLoading = false;
 
@@ -136,7 +133,7 @@ export class VviinnTextSearch {
   private async handleTextSearch() {
     if (!this.searchQuery) return;
 
-    if (this.showInWidget && this.location === "startSlide") {
+    if (this.showInWidget) {
       await makeTextSearchRequest(this.token, this.searchQuery);
       this.vviinnFilters.emit(searchState.dynamicFilters);
       this.vviinnSelectedFiltersReset.emit();

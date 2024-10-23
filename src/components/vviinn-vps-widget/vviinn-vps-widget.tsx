@@ -229,11 +229,11 @@ export class VviinnVpsWidget {
     });
   }
 
-  private isStartSlide() {
+  private isOnboardingSlide() {
     return this.slidePosition === 0;
   }
 
-  private isResultsSlide() {
+  private isResultSlide() {
     return this.slidePosition === 1;
   }
 
@@ -624,8 +624,8 @@ export class VviinnVpsWidget {
         {!this.showingInButton && SlotSkeleton("vps")}
 
         <vviinn-overlayed-modal
-          class={{ "first-screen": this.isStartSlide() }}
-          isFirstScreen={this.isStartSlide()}
+          class={{ "first-screen": this.isOnboardingSlide() }}
+          isFirstScreen={this.isOnboardingSlide()}
           active={this.active}
           resetState={this.resetState.bind(this)}
           onVviinnWidgetClose={() => this.handleModalClose()}
@@ -633,7 +633,7 @@ export class VviinnVpsWidget {
           widgetVersion={version}
           hideBackButton={
             (this.mode === "upload" && this.showingInButton) ||
-            (!this.cameraEnabled && this.isStartSlide())
+            (!this.cameraEnabled && this.isOnboardingSlide())
           }
           exportparts="secondary-action, title, close-button"
         >
@@ -693,7 +693,6 @@ export class VviinnVpsWidget {
                           searchQuery={this.searchQuery}
                           apiPath={this.apiPath}
                           locale={this.locale}
-                          location="startSlide"
                         />
                       )}
                     </Fragment>
@@ -711,10 +710,10 @@ export class VviinnVpsWidget {
             <vviinn-slide
               class={{
                 "results-page": true,
-                active: this.isResultsSlide(),
+                active: this.isResultSlide(),
               }}
             >
-              {this.isResultsSlide() && searchState.searchType === "image" && (
+              {this.isResultSlide() && searchState.searchType === "image" && (
                 <div class="source-wrapper image-wrapper">
                   <vviinn-image-view
                     basicEventData={this.getBasicEventData()}
@@ -739,7 +738,7 @@ export class VviinnVpsWidget {
                 </div>
               )}
 
-              {this.isResultsSlide() && searchState.searchType === "text" && (
+              {this.isResultSlide() && searchState.searchType === "text" && (
                 <div class="source-wrapper text-search-wrapper">
                   <vviinn-text-search
                     token={this.token}
@@ -747,7 +746,6 @@ export class VviinnVpsWidget {
                     searchQuery={this.searchQuery}
                     apiPath={this.apiPath}
                     locale={this.locale}
-                    location="resultsSlide"
                   />
 
                   <div
@@ -766,7 +764,7 @@ export class VviinnVpsWidget {
                 </div>
               )}
 
-              {this.isResultsSlide() && (
+              {this.isResultSlide() && (
                 <vviinn-results
                   token={this.token}
                   uiSessionId={this.uiSessionId}
