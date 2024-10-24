@@ -6,7 +6,7 @@ import "../tabs/styles.css";
 import "../../styles/filters-search-bar.css";
 import "../../styles/product-card.css";
 
-<div id="product-card-main">
+<div id={props.cardData.name}>
   <div className="tab tab-reverse">
     <h3>{props.cardData.header}</h3>
     <button
@@ -29,27 +29,28 @@ import "../../styles/product-card.css";
   >
     <div className="tabcontent-preview">
       <vviinn-product-card {...props.cardData.productData}>
-        <div slot="vviinn-product-card-actions">
-          <vviinn-vpr-button
-            token={vviinnToken}
-            product-id={productIdSimilarProducts}
-            mode="grid"
-            block-title=""
-            locale="en-US"
-            add-style="false"
-          ></vviinn-vpr-button>
-        </div>
+          {props.cardData.buttonData&&<div slot="vviinn-product-card-actions">
+              <vviinn-vpr-button
+                  token={vviinnToken}
+                  product-id={productIdSimilarProducts}
+                  mode="grid"
+                  block-title=""
+                  locale="en-US"
+                  add-style="false"
+              ></vviinn-vpr-button>
+          </div>}
       </vviinn-product-card>
+      {props.cardData.buttonData?.append && (
+        <div id="product-card-append-container"></div>
+      )}
     </div>
   </div>
   <div id={props.cardData.codeId} className="tabcontent">
     <Source
       language="html"
       format={false}
-      code={
-        `${props.cardData.code}
-  `
-    }
+      code={`${props.cardData.code}
+  `}
     />
     <div />
   </div>

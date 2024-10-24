@@ -1,6 +1,10 @@
 const cardDataSeparator = "\n    ";
+const cardAppendContainer = `
+<div id="product-card-append-container"></div>`;
 
-const discoveryButtonCode = `
+const discoveryButtonCode = (append = false) => {
+  console.log(append, "in buttonCode");
+  const buttonTemplate = `
     <div slot="vviinn-product-card-actions">
         <vviinn-vpr-button
             token="TOKEN"
@@ -12,31 +16,48 @@ const discoveryButtonCode = `
         ></vviinn-vpr-button>
     </div>
 `;
+  if (append) {
+    const bracketCloseIndex =
+      buttonTemplate.indexOf("></vviinn-vpr-button>") - 1;
+    return `${buttonTemplate.slice(
+      0,
+      bracketCloseIndex
+    )}     append-sidebar-to="product-card-append-container"\n        ${buttonTemplate.slice(
+      bracketCloseIndex
+    )}`;
+  }
+  console.log("out of if");
+  return buttonTemplate;
+};
 
 const cardParamsToCode = (productData) => {
   return Object.entries(productData)
     .filter(([key, value]) => typeof value !== "object")
     .map(([key, value]) => {
       if (value === "") return "";
-      console.log(key, value.toString().indexOf('"'));
-      const stringifiedValue = value.toString().indexOf('"')
-        ? `'${value}'`
-        : `"${value}"`;
+      const stringifiedValue =
+        value.toString().indexOf('"') >= 0 ? `'${value}'` : `"${value}"`;
       return `${cardDataSeparator}${key}=${stringifiedValue}`;
     })
     .join("");
 };
 
-const cardFromData = (productText) => {
-  const productCardBasic = `<vviinn-product-card>${discoveryButtonCode}</vviinn-product-card>`;
+const cardCodeFromData = (productData, buttonParams) => {
+  console.log(buttonParams?.append);
+  const productText = cardParamsToCode(productData);
+  const productCardBasic = `<vviinn-product-card>${
+    buttonParams ? discoveryButtonCode(buttonParams?.append) : "\n"
+  }</vviinn-product-card>${buttonParams?.append ? cardAppendContainer : ""}`;
   const firstBracketIndex = productCardBasic.indexOf(">");
   return `${productCardBasic.slice(
     0,
     firstBracketIndex
-  )}${productText} ${productCardBasic.slice(firstBracketIndex)}`;
+  )}${productText}${productCardBasic.slice(firstBracketIndex)}`;
 };
 
 export const cardCredentials = (cardData) => {
+  console.log(cardData?.buttonParams, cardData?.buttonParams?.append);
+  const codeCardStyle = cardData.style ? `${cardData.style}\n` : "";
   const uniqueId = cardData.uniqueId;
   return {
     name: `product-card-${uniqueId}`,
@@ -44,8 +65,9 @@ export const cardCredentials = (cardData) => {
     previewId: `Preview_${uniqueId}`,
     style: "",
     ...cardData,
-    code: `${cardData.style ?? ""}${cardFromData(
-      cardParamsToCode(cardData.productData)
+    code: `${codeCardStyle}${cardCodeFromData(
+      cardData.productData,
+      cardData?.buttonParams
     )}`,
   };
 };
