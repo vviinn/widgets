@@ -61,9 +61,10 @@ ul li {
 }
 
 .card-wrapper {
-  display: flex;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
   gap: 24px;
-  flex-direction: row;
   width: 100%;
 }
 
@@ -71,10 +72,12 @@ ul li {
   display: flex;
   gap: 16px;
   flex-direction: column;
+  flex-grow: 1;
 }
 
 .image-card img {
   border-radius: 16px;
+  width: 100%;
 }
 
 .info-card {
