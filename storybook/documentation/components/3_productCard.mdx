@@ -6,7 +6,12 @@ import "../../styles/product-card.css";
 
 import Card from "../../components/productCard/card.mdx";
 import { cardCredentials } from "../../components/productCard/cardCredentials";
-import {appendCard, mainCard, minimalisticCard, setCard} from "../../components/productCard/constants";
+import {
+  appendCard,
+  mainCard,
+  minimalisticCard,
+  setCard,
+} from "../../components/productCard/constants";
 
 <Meta title="Components/Product Card" />
 
@@ -14,25 +19,10 @@ import {appendCard, mainCard, minimalisticCard, setCard} from "../../components/
 
 ## Examples
 
-<Card
-  cardData={cardCredentials(
-      mainCard
-  )}
-/>
+<Card cardData={cardCredentials(mainCard)} />
 
-<Card
-    cardData={cardCredentials(
-        appendCard
-    )}
-/>
+<Card cardData={cardCredentials(appendCard)} />
 
-<Card     cardData={cardCredentials(
-    setCard
-)}
-/>
+<Card cardData={cardCredentials(setCard)} />
 
-
-<Card     cardData={cardCredentials(
-    minimalisticCard
-)}
-/>
+<Card cardData={cardCredentials(minimalisticCard)} />

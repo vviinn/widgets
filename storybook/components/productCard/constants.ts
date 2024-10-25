@@ -1,5 +1,3 @@
-import { energyCertificationsString } from "../../documentation/components/constants";
-
 const commonParams = {
   locale: "en-US",
   deeplink: "#",
@@ -28,7 +26,7 @@ export const mainCard = {
   },
   style: `
 <style>
-    vviinn-product-card::part(custom-label) {
+    vviinn-product-card::part(custom-label-0) {
         display: block;
     }
 </style>`,
