@@ -37,10 +37,11 @@ import "../../styles/product-card.css";
                   block-title=""
                   locale="en-US"
                   add-style="false"
+                  append-sidebar-to={props.cardData.buttonParams?.append ? "product-card-append-container":undefined}
               ></vviinn-vpr-button>
           </div>}
       </vviinn-product-card>
-      {props.cardData.buttonData?.append && (
+      {props.cardData.buttonParams?.append && (
         <div id="product-card-append-container"></div>
       )}
     </div>
