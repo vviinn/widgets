@@ -3,7 +3,7 @@ h1 {
 }
 
 .welcome-section {
-  margin-bottom: 40px;
+  margin-bottom: 32px;
 }
 
 .welcome-section h3 {
@@ -52,7 +52,6 @@ h1 {
 .welcome-section p,
 .card-wrapper p,
 ul li {
-  font-size: 16px;
   line-height: 24px;
 }
 
