@@ -94,3 +94,17 @@ ul li {
   color: #e5583c;
   font-weight: bold;
 }
+
+@media screen and (max-width: 768px) {
+  .card-wrapper {
+    grid-auto-columns: unset;
+    grid-auto-flow: unset;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .card-wrapper {
+    grid-template-columns: 1fr;
+  }
+}
