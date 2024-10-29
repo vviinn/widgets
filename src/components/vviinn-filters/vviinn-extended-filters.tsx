@@ -31,6 +31,7 @@ import { SlotSkeleton, slotChangeListener } from "../customized-slots";
 import { Histogram } from "../vviinn-price-range/vviinn-price-range";
 import {
   ChangedFiltersEventData,
+  DynamicFiltersEvent,
   DynamicFiltersEventData,
   DynamicFilterTrackingData,
 } from "../../recommendation/events";
@@ -169,9 +170,7 @@ export class VviinnExtendedFilters {
     }
   }
 
-  private handleSetFilters = ({
-    detail,
-  }: CustomEvent<DynamicFiltersEventData>) => {
+  private handleSetFilters = ({ detail }: DynamicFiltersEvent) => {
     this.filters = detail;
   };
 
