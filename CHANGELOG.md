@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.115.0](https://github.com/vviinn/widgets/compare/v2.114.13...v2.115.0) (2024-10-29)
+
+
+### Features
+
+* new layout of storybook welcome page ([9c26bb0](https://github.com/vviinn/widgets/commit/9c26bb04e76b7e0905c5d4337ae84924df66d966))
+
 ### [2.114.13](https://github.com/vviinn/widgets/compare/v2.114.12...v2.114.13) (2024-10-29)
 
 
