@@ -49,6 +49,10 @@ h1 {
   gap: 8px;
 }
 
+.grow1 {
+  flex-grow: 1;
+}
+
 .welcome-section p,
 .card-wrapper p,
 ul li {
