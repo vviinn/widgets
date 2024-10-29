@@ -218,19 +218,13 @@ export class VviinnExtendedFilters {
     this.showMore = false;
   }
 
-  timer: NodeJS.Timeout = null;
-
   private priceChangeHandler = (filterValue: DynamicFilterValue) => {
-    if (this.timer) clearTimeout(this.timer);
-
     const selectedFilter = this.filters.find(
       (filter) => filter.column === "price"
     );
 
     if (selectedFilter) {
-      this.timer = setTimeout(() => {
-        this.handleSubFilterSelection(filterValue, selectedFilter);
-      }, 200);
+      this.handleSubFilterSelection(filterValue, selectedFilter);
     }
   };
 
