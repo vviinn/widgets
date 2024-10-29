@@ -36,18 +36,8 @@ export class VviinnButton {
   @State() maxIndex: number;
   @State() scalingFactor: number;
 
-  fromSlider: HTMLElement;
-  toSlider: HTMLElement;
-
-  private getParsed(currentFrom: HTMLElement, currentTo: HTMLElement) {
-    const from = parseInt((currentFrom as HTMLInputElement).value, 10);
-    const to = parseInt((currentTo as HTMLInputElement).value, 10);
-    return [from, to];
-  }
-
-  componentDidLoad() {
-    this.setToggleAccessible(this.toSlider);
-  }
+  fromSlider: HTMLInputElement;
+  toSlider: HTMLInputElement;
 
   componentWillLoad() {
     this.updatingSelectedInterval();
@@ -83,21 +73,28 @@ export class VviinnButton {
     }
   }
 
-  private controlFromSlider(fromSlider, toSlider) {
-    const [from, to] = this.getParsed(fromSlider, toSlider);
-    if (from > to) {
-      fromSlider.value = to;
+  private controlFromSlider(e: InputEvent) {
+    const fromValue = parseInt((e.target as HTMLInputElement).value);
+
+    if (fromValue >= this.maxIndex) {
+      this.minIndex = this.maxIndex - 1; // Set it just below max index
+    } else {
+      this.minIndex = fromValue;
     }
+
+    (e.target as HTMLInputElement).value = String(this.minIndex);
   }
 
-  private controlToSlider(fromSlider, toSlider) {
-    const [from, to] = this.getParsed(fromSlider, toSlider);
-    this.setToggleAccessible(toSlider);
-    if (from <= to) {
-      toSlider.value = to;
+  private controlToSlider(e: InputEvent) {
+    const toValue = parseInt((e.target as HTMLInputElement).value);
+
+    if (toValue <= this.minIndex) {
+      this.maxIndex = this.minIndex + 1;
     } else {
-      toSlider.value = from;
+      this.maxIndex = toValue;
     }
+
+    (e.target as HTMLInputElement).value = String(this.maxIndex);
   }
 
   private sendBackValue() {
@@ -108,16 +105,6 @@ export class VviinnButton {
       },
     });
   }
-
-  private setToggleAccessible(currentTarget) {
-    const toSlider = this.toSlider;
-    if (Number(currentTarget.value) <= 0) {
-      toSlider.style.zIndex = "2";
-    } else {
-      toSlider.style.zIndex = "0";
-    }
-  }
-
   private calculateBarHeight(frequency: number) {
     return frequency * this.scalingFactor;
   }
@@ -152,29 +139,27 @@ export class VviinnButton {
         <div class="range_container" part="histogram-range-container">
           <div class="sliders_control" part="histogram-sliders-control">
             <input
-              ref={(el) => (this.fromSlider = el as HTMLElement)}
+              ref={(el) => (this.fromSlider = el as HTMLInputElement)}
               id="fromSlider"
               type="range"
               min="0"
               max={histogramSize}
               value={this.minIndex}
-              onInput={(e: Event) => {
-                this.minIndex = parseInt((e.target as HTMLInputElement).value);
-                this.controlFromSlider(this.fromSlider, this.toSlider);
+              onInput={(e: InputEvent) => {
+                this.controlFromSlider(e);
               }}
               onChange={() => this.sendBackValue()}
               part="histogram-from-slider"
             />
             <input
-              ref={(el) => (this.toSlider = el as HTMLElement)}
+              ref={(el) => (this.toSlider = el as HTMLInputElement)}
               id="toSlider"
               type="range"
               min="0"
               max={histogramSize}
               value={this.maxIndex}
-              onInput={(e: Event) => {
-                this.maxIndex = parseInt((e.target as HTMLInputElement).value);
-                this.controlToSlider(this.fromSlider, this.toSlider);
+              onInput={(e: InputEvent) => {
+                this.controlToSlider(e);
               }}
               onChange={() => this.sendBackValue()}
               part="histogram-to-slider"
