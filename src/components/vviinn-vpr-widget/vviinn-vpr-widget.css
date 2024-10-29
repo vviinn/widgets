@@ -37,6 +37,11 @@
   min-height: var(--image-set-mode-min-size);
 }
 
+:host(.set) vviinn-product-card.product-card--source::part(image) {
+  width: 100%;
+  height: auto;
+}
+
 :host(.grid) h2 {
   justify-content: center;
 }
