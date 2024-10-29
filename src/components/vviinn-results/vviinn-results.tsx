@@ -319,16 +319,15 @@ export class VviinnResults {
   private filtersTriggeredHandler = ({
     detail,
   }: CustomEvent<DynamicFilterTrackingData>) => {
-    const { action, kind, category } = detail;
+    const { action, kind } = detail;
     if (this.trackingDeactivated) return;
     const { campaignTypeId, ...rest } = this.getBasicEventData();
 
     const filterEvent: FilterEvent = createFilterEvent({
       session_id: this.uiSessionId,
       typ: "filter_event",
-      kind: kind ?? "category",
+      kind,
       action,
-      category,
       ...rest,
     });
     this.trackingApi.trackEvent(filterEvent).then(this.setTrackingDeactivated);

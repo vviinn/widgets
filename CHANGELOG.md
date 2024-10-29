@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.114.13](https://github.com/vviinn/widgets/compare/v2.114.12...v2.114.13) (2024-10-29)
+
+
+### Bug Fixes
+
+* New scheme for tracking dynamic filters select/deselect ([89e31d2](https://github.com/vviinn/widgets/commit/89e31d2f3121f0c265ee3b9f2aa0506a7143959e))
+
 ### [2.114.12](https://github.com/vviinn/widgets/compare/v2.114.11...v2.114.12) (2024-10-29)
 
 
