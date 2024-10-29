@@ -1,6 +1,64 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
+
+### [2.114.13](https://github.com/vviinn/widgets/compare/v2.114.12...v2.114.13) (2024-10-29)
+
+
+### Bug Fixes
+
+* New scheme for tracking dynamic filters select/deselect ([89e31d2](https://github.com/vviinn/widgets/commit/89e31d2f3121f0c265ee3b9f2aa0506a7143959e))
+
+### [2.114.12](https://github.com/vviinn/widgets/compare/v2.114.11...v2.114.12) (2024-10-29)
+
+
+### Bug Fixes
+
+* Minor Set Widget's layout fix ([bd845b1](https://github.com/vviinn/widgets/commit/bd845b1ca32c7cd7fe16b575fafe8fbf74d883d9))
+
+### [2.114.11](https://github.com/vviinn/widgets/compare/v2.114.10...v2.114.11) (2024-10-28)
+
+
+### Bug Fixes
+
+* Set widget layout fixes. Adding image-picture part for styling. ([c82ae85](https://github.com/vviinn/widgets/commit/c82ae854eaab30ab73f6d00c7929f6c030688e10))
+
+### [2.114.10](https://github.com/vviinn/widgets/compare/v2.114.9...v2.114.10) (2024-10-21)
+
+
+### Bug Fixes
+
+* use 'main' branch in github-actions ([0c377aa](https://github.com/vviinn/widgets/commit/0c377aaa932ce20e0bd655f23349bc120ff3fffb))
+
+### [2.114.9](https://github.com/vviinn/widgets/compare/v2.114.8...v2.114.9) (2024-10-21)
+
+
+### Bug Fixes
+
+* Changelog generation ([b440dc4](https://github.com/vviinn/widgets/commit/b440dc4e9e942b123c73eb4825a8a464a49a1875))
+
+### 2.114.8 (2024-10-21)
+
+### 2.114.7 (2024-10-21)
+
+## 2.114.6 (2024-10-21)
+
+## 2.114.5 (2024-10-21)
+
+## 2.114.4 (2024-10-21)
+
+## 2.114.3 (2024-10-21)
+
+### 2.114.2 (2024-10-21)
+
+### 2.114.1 (2024-10-21)
+
+## [2.114.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.113.0...v2.114.0) (2024-10-18)
+
+
+### Features
+
+* Allow color customization of One-click discovery icon ([7b8de58](http://bitbucket.org/mediaopt/vpr_webcomponent/commit/7b8de580f7963130f068020d09db6afbad7fb92f))
 
 ## [2.113.0](http://bitbucket.org/mediaopt/vpr_webcomponent/compare/v2.112.2...v2.113.0) (2024-10-17)
 
