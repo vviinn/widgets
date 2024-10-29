@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.114.12](https://github.com/vviinn/widgets/compare/v2.114.11...v2.114.12) (2024-10-29)
+
+
+### Bug Fixes
+
+* Minor Set Widget's layout fix ([bd845b1](https://github.com/vviinn/widgets/commit/bd845b1ca32c7cd7fe16b575fafe8fbf74d883d9))
+
 ### [2.114.11](https://github.com/vviinn/widgets/compare/v2.114.10...v2.114.11) (2024-10-28)
 
 
