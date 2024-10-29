@@ -216,7 +216,7 @@ export type ImageProps = {
 };
 
 export const Image = (props: ImageProps, onLoadEnd = () => undefined) => (
-  <picture>
+  <picture part="image-picture">
     <img
       loading={props.lazy ? "lazy" : "eager"}
       part="image"
@@ -236,7 +236,7 @@ export const ResponsiveImage = (
   props: ImageProps,
   onLoadEnd = () => undefined
 ) => (
-  <picture>
+  <picture part="image-picture">
     <img
       loading={props.lazy ? "lazy" : "eager"}
       part="image"

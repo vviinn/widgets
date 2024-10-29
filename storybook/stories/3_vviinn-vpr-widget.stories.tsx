@@ -57,7 +57,7 @@ Grid.args = {
   blockTitle: "Recommended products",
   productDetailsNewTab: false,
   productDetailsRedirect: true,
-  imageWidth: 420,
+  imageWidth: 300,
   imageRatio: 1,
   locale: "en-US",
   currencySign: "€",
