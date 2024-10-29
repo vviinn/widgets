@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.115.1](https://github.com/vviinn/widgets/compare/v2.115.0...v2.115.1) (2024-10-29)
+
+
+### Bug Fixes
+
+* Price range improvements: optimizing fetching, removing empty histogram columns ([f46e7b4](https://github.com/vviinn/widgets/commit/f46e7b4e78ea5fc803364738a13339dde0dbd0a5))
+* Price range improvements: slider UX ([36638c6](https://github.com/vviinn/widgets/commit/36638c61eb906864ec4fc6ebc078cdf833428d22))
+
 ## [2.115.0](https://github.com/vviinn/widgets/compare/v2.114.13...v2.115.0) (2024-10-29)
 
 
