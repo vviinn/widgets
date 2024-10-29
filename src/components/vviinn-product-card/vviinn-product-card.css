@@ -39,6 +39,8 @@
 
 .image-container {
   position: relative;
+  height: 100%;
+  width: 100%;
 }
 
 .basket-button-container {
@@ -220,6 +222,7 @@ picture::before {
   font-size: var(--font-size-label);
   font-weight: var(--font-weight-600);
   font-family: var(--font-family, var(--font-family-base));
+  color: var(--color-text-primary);
   background-color: var(--button-bg-color-secondary);
   cursor: pointer;
 }
@@ -281,14 +284,11 @@ picture::after {
   gap: var(--spacing-75);
 }
 
-product-card--source {
-  height: fit-content;
-  max-width: var(--source-card-set-mode-max-width);
+:host(.product-card--source) {
   flex-grow: 1;
 }
-.product-card--source .image {
-  width: 100%;
-  height: 100%;
+
+:host(.product-card--source) picture {
   aspect-ratio: 1;
 }
 

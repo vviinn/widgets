@@ -34,7 +34,7 @@ export const parameters = {
   options: {
     storySort: {
       order: [
-        "Vviinn Widgets",
+        "Welcome to vviinn widgets",
         "Getting Started",
         "Widgets",
         "Components",

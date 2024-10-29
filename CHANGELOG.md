@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.115.0](https://github.com/vviinn/widgets/compare/v2.114.13...v2.115.0) (2024-10-29)
+
+
+### Features
+
+* new layout of storybook welcome page ([9c26bb0](https://github.com/vviinn/widgets/commit/9c26bb04e76b7e0905c5d4337ae84924df66d966))
+
+### [2.114.13](https://github.com/vviinn/widgets/compare/v2.114.12...v2.114.13) (2024-10-29)
+
+
+### Bug Fixes
+
+* New scheme for tracking dynamic filters select/deselect ([89e31d2](https://github.com/vviinn/widgets/commit/89e31d2f3121f0c265ee3b9f2aa0506a7143959e))
+
+### [2.114.12](https://github.com/vviinn/widgets/compare/v2.114.11...v2.114.12) (2024-10-29)
+
+
+### Bug Fixes
+
+* Minor Set Widget's layout fix ([bd845b1](https://github.com/vviinn/widgets/commit/bd845b1ca32c7cd7fe16b575fafe8fbf74d883d9))
+
+### [2.114.11](https://github.com/vviinn/widgets/compare/v2.114.10...v2.114.11) (2024-10-28)
+
+
+### Bug Fixes
+
+* Set widget layout fixes. Adding image-picture part for styling. ([c82ae85](https://github.com/vviinn/widgets/commit/c82ae854eaab30ab73f6d00c7929f6c030688e10))
+
 ### [2.114.10](https://github.com/vviinn/widgets/compare/v2.114.9...v2.114.10) (2024-10-21)
 
 

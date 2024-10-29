@@ -160,7 +160,7 @@ export class RecommendationsSidebar {
 
           <main part="sidebar-content">
             <vviinn-vpr-widget
-              exportparts="image-container, content-container, basket-button-container,brand, product-type, currency, deeplink, image, image-link, price-container, price-amount, price-prefix, price-outdated, price-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-sale, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, title: product-title, carousel-button, product-card, items-group, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
+              exportparts="image-container, content-container, basket-button-container,brand, product-type, currency, deeplink, image, image-link, image-picture, price-container, price-amount, price-prefix, price-outdated, price-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-sale, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, title: product-title, carousel-button, product-card, items-group, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
               token={this.token}
               productId={this.productId}
               imageWidth={this.imageWidth}

@@ -79,6 +79,7 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @part currency - Currency related to price.
  * @part image - Product Card image.
  * @part image-link - Anchor element around product image. Rendered only if "deeplink" property is filled.
+ * @part image-picture - Picture element for image.
  * @part deeplink - Anchor element around product title. Rendered only if "deeplink" property is filled.
  * @part price-amount-sale - Numeric part of the price.
  * @part price-amount-outdated - Numeric part of the price.
