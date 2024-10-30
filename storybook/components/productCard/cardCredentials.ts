@@ -21,7 +21,7 @@ const discoveryButtonCode = (append = false) => {
     return `${buttonTemplate.slice(
       0,
       bracketCloseIndex
-    )}     append-sidebar-to="product-card-append-container"\n        ${buttonTemplate.slice(
+    )}     append-sidebar-to="product-card-append-container"${cardDataSeparator}    ${buttonTemplate.slice(
       bracketCloseIndex
     )}`;
   }
