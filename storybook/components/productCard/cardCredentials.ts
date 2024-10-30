@@ -3,7 +3,6 @@ const cardAppendContainer = `
 <div id="product-card-append-container"></div>`;
 
 const discoveryButtonCode = (append = false) => {
-  console.log(append, "in buttonCode");
   const buttonTemplate = `
     <div slot="vviinn-product-card-actions">
         <vviinn-vpr-button
@@ -26,7 +25,6 @@ const discoveryButtonCode = (append = false) => {
       bracketCloseIndex
     )}`;
   }
-  console.log("out of if");
   return buttonTemplate;
 };
 
@@ -43,7 +41,6 @@ const cardParamsToCode = (productData) => {
 };
 
 const cardCodeFromData = (productData, buttonParams) => {
-  console.log(buttonParams?.append);
   const productText = cardParamsToCode(productData);
   const productCardBasic = `<vviinn-product-card>${
     buttonParams ? discoveryButtonCode(buttonParams?.append) : "\n"
@@ -56,7 +53,6 @@ const cardCodeFromData = (productData, buttonParams) => {
 };
 
 export const cardCredentials = (cardData) => {
-  console.log(cardData?.buttonParams, cardData?.buttonParams?.append);
   const codeCardStyle = cardData.style ? `${cardData.style}\n` : "";
   const uniqueId = cardData.uniqueId;
   return {

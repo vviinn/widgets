@@ -1,5 +1,4 @@
 export const clickHandlers = (evt, cityName, mainId) => {
-  console.log(evt, cityName, mainId);
   var i, tabcontent, tablink;
   tabcontent = document
     .getElementById(mainId)
