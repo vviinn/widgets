@@ -53,6 +53,7 @@ import { VisualSearchMode } from "../../widget/types";
  * @part deeplink - Anchor element around troduct title. Rendered only if "deeplink" property is filled.
  * @part image - Product Card image.
  * @part image-link - Anchor element around product image. Rendered only if "deeplink" property is filled.
+ * @part image-picture - Picture element for image.
  * @part price-amount-regular - Numeric part of the price.
  * @part price-amount-sale - Numeric part of the price.
  * @part price-amount-outdated - Numeric part of the price.

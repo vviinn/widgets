@@ -82,6 +82,7 @@ const CAMERA_START_DELAY = 500;
  * @part deeplink - Anchor element around troduct title. Rendered only if "deeplink" property is filled.
  * @part image - Product Card image.
  * @part image-link - Anchor element around product image. Rendered only if "deeplink" property is filled.
+ * @part image-picture - Picture element for image.
  * @part price-amount-regular - Numeric part of the price.
  * @part price-amount-sale - Numeric part of the price.
  * @part price-amount-outdated - Numeric part of the price.
@@ -620,7 +621,7 @@ export class VviinnVpsWidget {
 
   render() {
     return (
-      <Host exportparts="image-container, content-container, basket-button-container,brand, product-type, deeplink, currency, image, image-link, price-container, price-amount-sale, price-amount-outdated, price-amount-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-outdated, price-regular, price-sale, price-prefix, title, product-card, upload-photo_button, show-files_button, start-camera_button, text-search-input, close-button, secondary-action, close-button, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link">
+      <Host exportparts="image-container, content-container, basket-button-container,brand, product-type, deeplink, currency, image, image-link, image-picture, price-container, price-amount-sale, price-amount-outdated, price-amount-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-outdated, price-regular, price-sale, price-prefix, title, product-card, upload-photo_button, show-files_button, start-camera_button, text-search-input, close-button, secondary-action, close-button, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link">
         {!this.showingInButton && SlotSkeleton("vps")}
 
         <vviinn-overlayed-modal
@@ -637,7 +638,7 @@ export class VviinnVpsWidget {
           }
           exportparts="secondary-action, title, close-button"
         >
-          <vviinn-slider showBullets={false} position={this.slidePosition}>
+          <vviinn-slider position={this.slidePosition}>
             <vviinn-slide
               class={{
                 "start-page": true,

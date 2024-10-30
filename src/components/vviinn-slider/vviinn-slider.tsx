@@ -1,10 +1,5 @@
 import { Component, Host, h, Element, State, Prop, Watch } from "@stencil/core";
-import { range } from "fp-ts/lib/NonEmptyArray";
-import { pipe } from "fp-ts/lib/function";
 import * as O from "fp-ts/lib/Option";
-import * as N from "fp-ts/number";
-import { sequenceToOption } from "../../utils/option/option";
-import { Arrow } from "./arrow";
 
 @Component({
   tag: "vviinn-slider",
@@ -19,9 +14,7 @@ export class VviinnSlider {
   @State() swipeStartPosition: O.Option<number> = O.none;
   @State() isRTL: boolean = false;
 
-  @Prop() showBullets: boolean = true;
   @Prop({ reflect: true }) position: number = 0;
-  @Prop() showArrows: boolean = false;
 
   @Watch("position")
   positionWatchHandler(newValue: number) {
@@ -54,141 +47,18 @@ export class VviinnSlider {
     items[index].classList.add("active");
   }
 
-  private goToSlide(index: number) {
-    this.internalPosition = index;
-    this.el.style.setProperty("--position", `${index}`);
-    this.setActiveCssClassToSlide(index);
-  }
-
-  private renderBullets() {
-    return this.showBullets ? (
-      <div class="controls">
-        {range(0, this.elementsCount - 1).map((i) => (
-          <div
-            class={{
-              bullet: true,
-              active: i == Math.abs(this.internalPosition) % this.elementsCount,
-            }}
-            onClick={() => this.goToSlide(i)}
-          ></div>
-        ))}
-      </div>
-    ) : null;
-  }
-
-  private nextSlide() {
-    this.internalPosition++;
-
-    this.renderSlidePosition();
-  }
-
-  private prevSlide() {
-    const nextPostion = this.internalPosition - 1;
-
-    this.internalPosition =
-      nextPostion > -1 ? nextPostion : this.elementsCount - 1;
-
-    this.renderSlidePosition();
-  }
-
-  private renderSlidePosition() {
-    const position = this.internalPosition % this.elementsCount;
-
-    requestAnimationFrame(() => {
-      this.el.style.setProperty(
-        "--position",
-        `${this.calculatePosition(position)}`
-      );
-    });
-  }
-
   private calculatePosition(position: number) {
     return this.isRTL ? position * -1 : position;
-  }
-
-  private handleKeyDown(event: KeyboardEvent) {
-    if (event.key !== "Space" && event.key !== "Enter") return;
-    const target = event.target as HTMLElement;
-    const direction = target.className.includes("prev") ? "prev" : "next";
-
-    switch (direction) {
-      case "prev":
-        this.prevSlide();
-        break;
-      case "next":
-        this.nextSlide();
-        break;
-    }
-  }
-
-  private handleTouchStart(event: TouchEvent) {
-    if (!this.showBullets) return;
-
-    this.swipeStartPosition = pipe(
-      event.touches[0],
-      O.fromNullable,
-      O.map((t: Touch) => t.clientX)
-    );
-  }
-
-  private handleTouchEnd(event: TouchEvent) {
-    if (!this.showBullets) return;
-
-    const swipeEndPosition = pipe(
-      event.changedTouches[0],
-      O.fromNullable,
-      O.map((t: Touch) => t.clientX)
-    );
-
-    pipe(
-      sequenceToOption(this.swipeStartPosition, swipeEndPosition),
-      O.map(([start, end]) => N.Ord.compare(start, end)),
-      O.map((swipeDirection) => {
-        switch (swipeDirection) {
-          case 1:
-            return this.nextSlide();
-          case -1:
-            return this.prevSlide();
-        }
-      })
-    );
   }
 
   render() {
     return (
       <Host>
         <div class="items-wrapper">
-          <div
-            class="items"
-            onTouchStart={(e: TouchEvent) => this.handleTouchStart(e)}
-            onTouchEnd={(e: TouchEvent) => this.handleTouchEnd(e)}
-          >
+          <div class="items">
             <slot></slot>
           </div>
         </div>
-        {this.showArrows
-          ? [
-              <Arrow
-                kind="prev"
-                onClick={() =>
-                  this.isRTL ? this.nextSlide() : this.prevSlide()
-                }
-                onKeyDown={(ev) => this.handleKeyDown(ev)}
-                tabindex={1}
-                disabled={false}
-              />,
-              <Arrow
-                kind="next"
-                onClick={() =>
-                  this.isRTL ? this.prevSlide() : this.nextSlide()
-                }
-                onKeyDown={(ev) => this.handleKeyDown(ev)}
-                tabindex={0}
-                disabled={false}
-              />,
-            ]
-          : null}
-        {this.renderBullets()}
       </Host>
     );
   }

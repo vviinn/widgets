@@ -15,6 +15,7 @@ const config: StorybookConfig = {
   core: {
     disableTelemetry: true,
   },
+  staticDirs: ["../public"],
   webpackFinal: async (config) => {
     if (config && config.module && config.module.rules) {
       config.module.rules = [

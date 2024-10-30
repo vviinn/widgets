@@ -89,14 +89,8 @@ export class VviinnFilters {
     this.selectedFilter = filter;
   }
 
-  timer: NodeJS.Timeout = null;
-
   private priceChangeHandler = (filterValue: DynamicFilterValue) => {
-    if (this.timer) clearTimeout(this.timer);
-
-    this.timer = setTimeout(() => {
-      this.handleSubFilterSelection(filterValue, this.selectedFilter);
-    }, 200);
+    this.handleSubFilterSelection(filterValue, this.selectedFilter);
   };
 
   private handleSubFilterSelection(
