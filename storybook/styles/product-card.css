@@ -1,5 +1,5 @@
-#product-card-main vviinn-product-card::part(custom-label) {
-  display: flex;
+#product-card-main vviinn-product-card::part(custom-label-0) {
+  display: block;
 }
 
 #product-card-minimalistic vviinn-product-card::part(brand),

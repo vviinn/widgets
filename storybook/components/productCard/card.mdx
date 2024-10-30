@@ -1,0 +1,58 @@
+import { productIdSimilarProducts, vviinnToken } from "../../helpers";
+import { clickHandlers } from "../index";
+import { Source } from "@storybook/blocks";
+
+import "../tabs/styles.css";
+import "../../styles/filters-search-bar.css";
+import "../../styles/product-card.css";
+
+<div id={props.cardData.name}>
+  <div className="tab tab-reverse">
+    <h3>{props.cardData.header}</h3>
+    <button
+      className="tablink tablink--sm"
+      onClick={(e) => {
+        clickHandlers(e, props.cardData.codeId, props.cardData.name);
+      }}
+    >Code</button>
+    <button
+      className="tablink tablink--sm active"
+      onClick={(e) => {
+        clickHandlers(e, props.cardData.previewId, props.cardData.name);
+      }}
+    >Preview</button>
+  </div>
+  <div
+    id={props.cardData.previewId}
+    className="tabcontent"
+    style={{ display: "block" }}
+  >
+    <div className="tabcontent-preview">
+      <vviinn-product-card {...props.cardData.productData}>
+          {props.cardData.buttonParams&&<div slot="vviinn-product-card-actions">
+              <vviinn-vpr-button
+                  token={vviinnToken}
+                  product-id={productIdSimilarProducts}
+                  mode="grid"
+                  block-title=""
+                  locale="en-US"
+                  add-style="false"
+                  append-sidebar-to={props.cardData.buttonParams?.append ? "product-card-append-container":undefined}
+              ></vviinn-vpr-button>
+          </div>}
+      </vviinn-product-card>
+      {props.cardData.buttonParams?.append && (
+        <div id="product-card-append-container"></div>
+      )}
+    </div>
+  </div>
+  <div id={props.cardData.codeId} className="tabcontent">
+    <Source
+      language="html"
+      format={false}
+      code={`${props.cardData.code}
+  `}
+    />
+    <div />
+  </div>
+</div>
