@@ -755,12 +755,15 @@ export class VviinnVpsWidget {
                       hidden: this.showAspectRatioError,
                     }}
                   >
-                    <div class="vviinn-filters-container">
-                      <vviinn-filters
-                        filters={searchState.dynamicFilters}
-                        showInWidget={true}
-                      ></vviinn-filters>
-                    </div>
+                    <vviinn-filters
+                      filters={searchState.dynamicFilters}
+                      showInWidget={true}
+                    ></vviinn-filters>
+
+                    <vviinn-extended-filters
+                      filters={searchState.dynamicFilters}
+                      mode="preview"
+                    ></vviinn-extended-filters>
                   </div>
                 </div>
               )}

@@ -139,6 +139,9 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   display: grid;
   grid-template-rows: min-content 1fr;
   min-width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
 }
 
 .source-wrapper.text-search-wrapper {
@@ -150,6 +153,28 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   overflow-x: auto;
   transform: translateX(-24px);
   min-width: calc(100% + 48px);
+  scrollbar-width: thin;
+  scrollbar-gutter: stable;
+  -ms-overflow-style: none;
+}
+
+@supports (scrollbar-color: auto) {
+  .filters-wrapper {
+    scrollbar-color: transparent transparent;
+  }
+  .filters-wrapper:hover {
+    scrollbar-color: initial;
+  }
+}
+
+vviinn-filters {
+  display: none;
+}
+
+vviinn-extended-filters {
+  display: block;
+  position: absolute;
+  width: 100%;
 }
 
 search-filters span {
@@ -249,6 +274,14 @@ vviinn-preloader {
   .source-wrapper.image-wrapper .filters-wrapper {
     padding-left: 24px;
     min-width: 100%;
+  }
+
+  vviinn-filters {
+    display: block;
+  }
+
+  vviinn-extended-filters {
+    display: none;
   }
 
   .results-page {
