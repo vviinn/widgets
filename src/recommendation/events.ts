@@ -114,6 +114,12 @@ export type DynamicFiltersEventData = DynamicFilter[];
 export type DynamicFilterTrackingData = {
   action: FilterAction;
   kind: string;
+  campaignTypeName?:
+    | "Similar Products"
+    | "Visual Search"
+    | "Cross-Selling"
+    | "Text Product Search";
+  widget?: "VPR" | "VPS" | "VCS" | "TPS";
 };
 
 export type SearchIdEvent = CustomEvent<SearchIdEventData>;
