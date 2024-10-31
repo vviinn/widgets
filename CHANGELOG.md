@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.116.0](https://github.com/vviinn/widgets/compare/v2.115.1...v2.116.0) (2024-10-30)
+
+
+### Features
+
+* changed product card examples to cover relevant industries and reasonable item properties ([2c7af4e](https://github.com/vviinn/widgets/commit/2c7af4e42ba2cce6bd64ef1ecd57f0cdf08bb583))
+
 ### [2.115.1](https://github.com/vviinn/widgets/compare/v2.115.0...v2.115.1) (2024-10-29)
 
 
