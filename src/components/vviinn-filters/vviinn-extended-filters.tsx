@@ -86,6 +86,8 @@ export class VviinnExtendedFilters {
   @Prop() mode: "button" | "preview" = "button";
   /** The currency sign is displayed after the price */
   @Prop() currencySign?: string = "€";
+  /** The currency sign is displayed after the price */
+  @Prop() showHeader?: boolean = true;
 
   @State() requestFilters: RequestDynamicFilters = [];
   @State() showMore: boolean = false;
@@ -276,22 +278,24 @@ export class VviinnExtendedFilters {
             class="filters-modal-wrapper"
             part="extended-filters-modal-wrapper"
           >
-            <div class="filters-modal-header" part="extended-filters-header">
-              <slot name="vviinn-extended-filters-title">
-                <span>{i18next.t("filters.modal.title")}</span>
-              </slot>
+            {this.showHeader && (
+              <div class="filters-modal-header" part="extended-filters-header">
+                <slot name="vviinn-extended-filters-title">
+                  <span>{i18next.t("filters.modal.title")}</span>
+                </slot>
 
-              <button
-                class="filters-modal-close"
-                onClick={() => {
-                  this.showMore = false;
-                  this.requestFilters = [];
-                }}
-                part="extended-filters-modal-close"
-              >
-                <NewCloseIcon />
-              </button>
-            </div>
+                <button
+                  class="filters-modal-close"
+                  onClick={() => {
+                    this.showMore = false;
+                    this.requestFilters = [];
+                  }}
+                  part="extended-filters-modal-close"
+                >
+                  <NewCloseIcon />
+                </button>
+              </div>
+            )}
 
             <ul class="filters-modal-list" part="extended-filters-list">
               {(this.filters ?? []).map((mainFilter) => {
@@ -326,15 +330,15 @@ export class VviinnExtendedFilters {
                         part="extended-filters-main-button"
                       >
                         {mainFilter.label}
+                        {addedOptions.length > 0 && (
+                          <div
+                            class="filters-modal-main-button-added-options"
+                            part="extended-filters-selected-wrapper"
+                          >
+                            {addedOptions}
+                          </div>
+                        )}
                       </button>
-                      {addedOptions.length > 0 && (
-                        <div
-                          class="filters-modal-main-button-added-options"
-                          part="extended-filters-selected-wrapper"
-                        >
-                          {addedOptions}
-                        </div>
-                      )}
                     </div>
                     {mainColumn === "price" &&
                     this.selectedMoreOptions.includes(mainFilter.column) ? (
