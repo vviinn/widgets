@@ -18,7 +18,7 @@ window.addEventListener("load", () => {
 
     if (storybookExplorerMenu) {
       const array = [
-        { value: "home-living", text: "Home & living" },
+        { value: "home-living", text: "Home & Living" },
         { value: "fashion", text: "Fashion & Accessories" },
         /*{ value: "manufacturer-spare-parts", text: "Manufacturer & Spare Parts" },*/
       ];

@@ -638,7 +638,7 @@ export class VviinnVpsWidget {
           }
           exportparts="secondary-action, title, close-button"
         >
-          <vviinn-slider showBullets={false} position={this.slidePosition}>
+          <vviinn-slider position={this.slidePosition}>
             <vviinn-slide
               class={{
                 "start-page": true,
@@ -755,12 +755,16 @@ export class VviinnVpsWidget {
                       hidden: this.showAspectRatioError,
                     }}
                   >
-                    <div class="vviinn-filters-container">
-                      <vviinn-filters
-                        filters={searchState.dynamicFilters}
-                        showInWidget={true}
-                      ></vviinn-filters>
-                    </div>
+                    <vviinn-filters
+                      filters={searchState.dynamicFilters}
+                      showInWidget={true}
+                    ></vviinn-filters>
+
+                    <vviinn-extended-filters
+                      filters={searchState.dynamicFilters}
+                      mode="preview"
+                      showHeader={false}
+                    ></vviinn-extended-filters>
                   </div>
                 </div>
               )}
