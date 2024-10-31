@@ -24,7 +24,7 @@ const MIN_BAR_HEIGHT = 3;
 export class VviinnButton {
   @Element() el: HTMLElement;
 
-  @Prop({ mutable: true }) histogram: Histogram = [];
+  @Prop() histogram: Histogram = [];
   @Prop() addStyle: boolean = true;
   @Prop() priceChangeHandler: (
     filterValue: components["schemas"]["interval-filter-value-item"]
@@ -45,7 +45,6 @@ export class VviinnButton {
 
   @Watch("selectedInterval")
   updatingSelectedInterval() {
-    this.histogram = this.histogram.filter((item) => item.value.frequency > 0);
     this.maxIndex = this.histogram.length - 1;
 
     const maxValueofFrequency = Math.max(
