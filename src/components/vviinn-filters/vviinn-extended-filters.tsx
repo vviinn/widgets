@@ -339,71 +339,72 @@ export class VviinnExtendedFilters {
                           </div>
                         )}
                       </button>
-                    </div>
-                    {mainColumn === "price" &&
-                    this.selectedMoreOptions.includes(mainFilter.column) ? (
-                      <vviinn-price-range
-                        histogram={filterOptions as Histogram}
-                        priceChangeHandler={this.priceChangeHandler}
-                        selectedInterval={
-                          (this.requestFilters.find(
-                            ({ column }) => column === "price"
-                          )?.values[0] ??
-                            {}) as components["schemas"]["interval"]
-                        }
-                        currencySign={this.currencySign}
-                      />
-                    ) : (
-                      <ul
-                        class={`filters-modal-sub-list ${
-                          mainColumn === "color_confirmed"
-                            ? "filters-modal-sub-list-inline"
-                            : ""
-                        } ${
-                          this.selectedMoreOptions.includes(mainFilter.column)
-                            ? "open"
-                            : ""
-                        }`}
-                        part="extended-filters-sub-list"
-                      >
-                        {filterOptions &&
-                          filterOptions.map(({ value, label, active }) => {
-                            const hexCode = value.hexCode;
-                            const selected = this.showActiveOnModalSubButton(
-                              this.requestFilters,
-                              value
-                            );
 
-                            return (
-                              <li part="extended-filters-sub-row">
-                                <button
-                                  onClick={() =>
-                                    this.handleSubFilterSelection(
-                                      value,
-                                      mainFilter
-                                    )
-                                  }
-                                  class={`filters-more-modal-button ${
-                                    hexCode ? "filters-sub-button-color" : ""
-                                  } ${selected ? "active" : ""}`}
-                                  style={{ backgroundColor: hexCode }}
-                                  disabled={!active}
-                                  part="extended-filters-option-button"
-                                >
-                                  <span>
-                                    <span>{label}</span>
-                                    {selected ? (
-                                      <CheckFilterIcon />
-                                    ) : (
-                                      <SquareFilterIcon />
-                                    )}
-                                  </span>
-                                </button>
-                              </li>
-                            );
-                          })}
-                      </ul>
-                    )}
+                      {mainColumn === "price" &&
+                      this.selectedMoreOptions.includes(mainFilter.column) ? (
+                        <vviinn-price-range
+                          histogram={filterOptions as Histogram}
+                          priceChangeHandler={this.priceChangeHandler}
+                          selectedInterval={
+                            (this.requestFilters.find(
+                              ({ column }) => column === "price"
+                            )?.values[0] ??
+                              {}) as components["schemas"]["interval"]
+                          }
+                          currencySign={this.currencySign}
+                        />
+                      ) : (
+                        <ul
+                          class={`filters-modal-sub-list ${
+                            mainColumn === "color_confirmed"
+                              ? "filters-modal-sub-list-inline"
+                              : ""
+                          } ${
+                            this.selectedMoreOptions.includes(mainFilter.column)
+                              ? "open"
+                              : ""
+                          }`}
+                          part="extended-filters-sub-list"
+                        >
+                          {filterOptions &&
+                            filterOptions.map(({ value, label, active }) => {
+                              const hexCode = value.hexCode;
+                              const selected = this.showActiveOnModalSubButton(
+                                this.requestFilters,
+                                value
+                              );
+
+                              return (
+                                <li part="extended-filters-sub-row">
+                                  <button
+                                    onClick={() =>
+                                      this.handleSubFilterSelection(
+                                        value,
+                                        mainFilter
+                                      )
+                                    }
+                                    class={`filters-more-modal-button ${
+                                      hexCode ? "filters-sub-button-color" : ""
+                                    } ${selected ? "active" : ""}`}
+                                    style={{ backgroundColor: hexCode }}
+                                    disabled={!active}
+                                    part="extended-filters-option-button"
+                                  >
+                                    <span>
+                                      <span>{label}</span>
+                                      {selected ? (
+                                        <CheckFilterIcon />
+                                      ) : (
+                                        <SquareFilterIcon />
+                                      )}
+                                    </span>
+                                  </button>
+                                </li>
+                              );
+                            })}
+                        </ul>
+                      )}
+                    </div>
                   </li>
                 );
               })}
