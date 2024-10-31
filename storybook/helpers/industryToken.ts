@@ -9,6 +9,8 @@ const data = {
     productIdCrossSelling: "105870136716",
     textSearchQuery: "Chair",
     filterValue: "Möbel > Schränke & Regale",
+    description:
+      "company: 'vviinn', site: 'vviinn.com/widgets.vviinn.com site 83'",
   },
   fashion: {
     token:
@@ -17,6 +19,7 @@ const data = {
     productIdCrossSelling: "4165669-1",
     textSearchQuery: "taschen",
     filterValue: "Beauty > Düfte",
+    description: "company: 'Vviinn Demo Company', site: 'Fashion Women 64K'",
   },
   "manufacturer-spare-parts": {
     token:

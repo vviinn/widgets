@@ -31,6 +31,7 @@ import { SlotSkeleton, slotChangeListener } from "../customized-slots";
 import { Histogram } from "../vviinn-price-range/vviinn-price-range";
 import {
   ChangedFiltersEventData,
+  DynamicFiltersEvent,
   DynamicFiltersEventData,
   DynamicFilterTrackingData,
 } from "../../recommendation/events";
@@ -169,9 +170,7 @@ export class VviinnExtendedFilters {
     }
   }
 
-  private handleSetFilters = ({
-    detail,
-  }: CustomEvent<DynamicFiltersEventData>) => {
+  private handleSetFilters = ({ detail }: DynamicFiltersEvent) => {
     this.filters = detail;
   };
 
@@ -219,19 +218,13 @@ export class VviinnExtendedFilters {
     this.showMore = false;
   }
 
-  timer: NodeJS.Timeout = null;
-
   private priceChangeHandler = (filterValue: DynamicFilterValue) => {
-    if (this.timer) clearTimeout(this.timer);
-
     const selectedFilter = this.filters.find(
       (filter) => filter.column === "price"
     );
 
     if (selectedFilter) {
-      this.timer = setTimeout(() => {
-        this.handleSubFilterSelection(filterValue, selectedFilter);
-      }, 200);
+      this.handleSubFilterSelection(filterValue, selectedFilter);
     }
   };
 
