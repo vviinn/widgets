@@ -196,6 +196,7 @@ export class VviinnResults {
   @State() innerTextSearchQuery: string;
   @State() slotsReplaced: boolean;
   @State() oneClickDiscoveryAppendIndex: number;
+  @State() isTextSearch: boolean = false;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -319,6 +320,7 @@ export class VviinnResults {
   private filtersTriggeredHandler = ({
     detail,
   }: CustomEvent<DynamicFilterTrackingData>) => {
+    this.isTextSearch = detail.campaignTypeName === "Text Product Search";
     if (this.trackingDeactivated) return;
     const { campaignTypeId, ...rest } = this.getBasicEventData();
 
@@ -531,10 +533,12 @@ export class VviinnResults {
   }
 
   private getBasicEventData = (): BasicEventData => {
+    const activeCampaign = this.isTextSearch ? "TPS" : "VPS";
     return {
+      // widgetType: activeCampaign,
       widgetType: "VPS",
-      campaignTypeId: "VPS",
-      campaignTypeName: campaignTypeNames["VPS"],
+      campaignTypeId: activeCampaign,
+      campaignTypeName: campaignTypeNames[activeCampaign],
       widgetId: this.widgetElementId,
       widgetVersion: version,
     };
