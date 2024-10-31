@@ -1,5 +1,5 @@
 export type CampaignName = "VPR" | "VCS";
-export type WidgetType = "VPR" | "VPS";
+export type WidgetType = "VPR" | "VPS" | "VCS" | "TPS";
 export type CampaignTypeId = "VPR" | "VPS" | "VCS" | "TPS";
 
 export type CampaignTypeTitle =

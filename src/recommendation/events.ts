@@ -66,7 +66,7 @@ export type SelectFilterEventData = {
 };
 
 export type ProductCardEventData = {
-  widgetType: "VPR" | "VPS";
+  widgetType: "VPR" | "VPS" | "VCS" | "TPS";
   campaignTypeId: "VPR" | "VPS" | "VCS" | "TPS";
   campaignTypeName:
     | "Similar Products"

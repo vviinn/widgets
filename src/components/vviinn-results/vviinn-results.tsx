@@ -320,6 +320,7 @@ export class VviinnResults {
   private filtersTriggeredHandler = ({
     detail,
   }: CustomEvent<DynamicFilterTrackingData>) => {
+    console.log("filtersTriggeredHandler", detail);
     this.isTextSearch = detail.campaignTypeName === "Text Product Search";
     if (this.trackingDeactivated) return;
     const { campaignTypeId, ...rest } = this.getBasicEventData();
@@ -534,6 +535,7 @@ export class VviinnResults {
 
   private getBasicEventData = (): BasicEventData => {
     const activeCampaign = this.isTextSearch ? "TPS" : "VPS";
+    console.log("activeCampaign", activeCampaign);
     return {
       // widgetType: activeCampaign,
       widgetType: "VPS",
