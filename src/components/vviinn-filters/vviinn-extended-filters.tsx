@@ -86,6 +86,8 @@ export class VviinnExtendedFilters {
   @Prop() mode: "button" | "preview" = "button";
   /** The currency sign is displayed after the price */
   @Prop() currencySign?: string = "€";
+  /** The currency sign is displayed after the price */
+  @Prop() showHeader?: boolean = true;
 
   @State() requestFilters: RequestDynamicFilters = [];
   @State() showMore: boolean = false;
@@ -276,22 +278,24 @@ export class VviinnExtendedFilters {
             class="filters-modal-wrapper"
             part="extended-filters-modal-wrapper"
           >
-            <div class="filters-modal-header" part="extended-filters-header">
-              <slot name="vviinn-extended-filters-title">
-                <span>{i18next.t("filters.modal.title")}</span>
-              </slot>
+            {this.showHeader && (
+              <div class="filters-modal-header" part="extended-filters-header">
+                <slot name="vviinn-extended-filters-title">
+                  <span>{i18next.t("filters.modal.title")}</span>
+                </slot>
 
-              <button
-                class="filters-modal-close"
-                onClick={() => {
-                  this.showMore = false;
-                  this.requestFilters = [];
-                }}
-                part="extended-filters-modal-close"
-              >
-                <NewCloseIcon />
-              </button>
-            </div>
+                <button
+                  class="filters-modal-close"
+                  onClick={() => {
+                    this.showMore = false;
+                    this.requestFilters = [];
+                  }}
+                  part="extended-filters-modal-close"
+                >
+                  <NewCloseIcon />
+                </button>
+              </div>
+            )}
 
             <ul class="filters-modal-list" part="extended-filters-list">
               {(this.filters ?? []).map((mainFilter) => {
@@ -326,80 +330,83 @@ export class VviinnExtendedFilters {
                         part="extended-filters-main-button"
                       >
                         {mainFilter.label}
+                        {addedOptions.length > 0 && (
+                          <div
+                            class="filters-modal-main-button-added-options"
+                            part="extended-filters-selected-wrapper"
+                          >
+                            {addedOptions}
+                          </div>
+                        )}
                       </button>
-                      {addedOptions.length > 0 && (
-                        <div
-                          class="filters-modal-main-button-added-options"
-                          part="extended-filters-selected-wrapper"
+
+                      {mainColumn === "price" &&
+                      this.selectedMoreOptions.includes(mainFilter.column) ? (
+                        <vviinn-price-range
+                          histogram={(filterOptions as Histogram).filter(
+                            (item) => item.value.frequency > 0
+                          )}
+                          priceChangeHandler={this.priceChangeHandler}
+                          selectedInterval={
+                            (this.requestFilters.find(
+                              ({ column }) => column === "price"
+                            )?.values[0] ??
+                              {}) as components["schemas"]["interval"]
+                          }
+                          currencySign={this.currencySign}
+                        />
+                      ) : (
+                        <ul
+                          class={`filters-modal-sub-list ${
+                            mainColumn === "color_confirmed"
+                              ? "filters-modal-sub-list-inline"
+                              : ""
+                          } ${
+                            this.selectedMoreOptions.includes(mainFilter.column)
+                              ? "open"
+                              : ""
+                          }`}
+                          part="extended-filters-sub-list"
                         >
-                          {addedOptions}
-                        </div>
+                          {filterOptions &&
+                            filterOptions.map(({ value, label, active }) => {
+                              const hexCode = value.hexCode;
+                              const selected = this.showActiveOnModalSubButton(
+                                this.requestFilters,
+                                value
+                              );
+
+                              return (
+                                <li part="extended-filters-sub-row">
+                                  <button
+                                    onClick={() =>
+                                      this.handleSubFilterSelection(
+                                        value,
+                                        mainFilter
+                                      )
+                                    }
+                                    class={`filters-more-modal-button ${
+                                      hexCode ? "filters-sub-button-color" : ""
+                                    } ${selected ? "active" : ""}`}
+                                    style={{ backgroundColor: hexCode }}
+                                    disabled={!active}
+                                    part="extended-filters-option-button"
+                                  >
+                                    <span>
+                                      <span>{label}</span>
+                                      {selected ? (
+                                        <CheckFilterIcon />
+                                      ) : (
+                                        <SquareFilterIcon />
+                                      )}
+                                    </span>
+                                  </button>
+                                </li>
+                              );
+                            })}
+                        </ul>
                       )}
                     </div>
-                    {mainColumn === "price" &&
-                    this.selectedMoreOptions.includes(mainFilter.column) ? (
-                      <vviinn-price-range
-                        histogram={filterOptions as Histogram}
-                        priceChangeHandler={this.priceChangeHandler}
-                        selectedInterval={
-                          (this.requestFilters.find(
-                            ({ column }) => column === "price"
-                          )?.values[0] ??
-                            {}) as components["schemas"]["interval"]
-                        }
-                        currencySign={this.currencySign}
-                      />
-                    ) : (
-                      <ul
-                        class={`filters-modal-sub-list ${
-                          mainColumn === "color_confirmed"
-                            ? "filters-modal-sub-list-inline"
-                            : ""
-                        } ${
-                          this.selectedMoreOptions.includes(mainFilter.column)
-                            ? "open"
-                            : ""
-                        }`}
-                        part="extended-filters-sub-list"
-                      >
-                        {filterOptions &&
-                          filterOptions.map(({ value, label, active }) => {
-                            const hexCode = value.hexCode;
-                            const selected = this.showActiveOnModalSubButton(
-                              this.requestFilters,
-                              value
-                            );
-
-                            return (
-                              <li part="extended-filters-sub-row">
-                                <button
-                                  onClick={() =>
-                                    this.handleSubFilterSelection(
-                                      value,
-                                      mainFilter
-                                    )
-                                  }
-                                  class={`filters-more-modal-button ${
-                                    hexCode ? "filters-sub-button-color" : ""
-                                  } ${selected ? "active" : ""}`}
-                                  style={{ backgroundColor: hexCode }}
-                                  disabled={!active}
-                                  part="extended-filters-option-button"
-                                >
-                                  <span>
-                                    <span>{label}</span>
-                                    {selected ? (
-                                      <CheckFilterIcon />
-                                    ) : (
-                                      <SquareFilterIcon />
-                                    )}
-                                  </span>
-                                </button>
-                              </li>
-                            );
-                          })}
-                      </ul>
-                    )}
                   </li>
                 );
               })}
