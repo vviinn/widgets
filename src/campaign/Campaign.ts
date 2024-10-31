@@ -1,18 +1,18 @@
 export type CampaignName = "VPR" | "VCS";
 export type WidgetType = "VPR" | "VPS";
-export type CampaignTypeId = "VPR" | "VPS" | "VCS" | "TSC";
+export type CampaignTypeId = "VPR" | "VPS" | "VCS" | "TPS";
 
 export type CampaignTypeTitle =
   | "Similar Products"
   | "Visual Search"
   | "Cross-Selling"
-  | "Text Search Campaign";
+  | "Text Product Search";
 
 export const campaignTypeNames: Record<CampaignTypeId, CampaignTypeTitle> = {
   VPR: "Similar Products",
   VPS: "Visual Search",
   VCS: "Cross-Selling",
-  TSC: "Text Search Campaign",
+  TPS: "Text Product Search",
 };
 
 export interface VPR {

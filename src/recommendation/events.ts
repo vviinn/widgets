@@ -15,24 +15,24 @@ import {
 
 export type BasicEventData = {
   widgetType: "VPR" | "VPS";
-  campaignTypeId: "VPR" | "VPS" | "VCS" | "TSC";
+  campaignTypeId: "VPR" | "VPS" | "VCS" | "TPS";
   campaignTypeName:
     | "Similar Products"
     | "Visual Search"
     | "Cross-Selling"
-    | "Text Search Campaign";
+    | "Text Product Search";
   widgetId: string;
   widgetVersion: string;
 };
 
 export type NoResultEventData = {
   widgetType: "VPR" | "VPS";
-  campaignTypeId: "VPR" | "VPS" | "VCS" | "TSC";
+  campaignTypeId: "VPR" | "VPS" | "VCS" | "TPS";
   campaignTypeName:
     | "Similar Products"
     | "Visual Search"
     | "Cross-Selling"
-    | "Text Search Campaign";
+    | "Text Product Search";
   widgetId: string;
   widgetVersion: string;
   reason: ErrorKind;
@@ -40,12 +40,12 @@ export type NoResultEventData = {
 
 export type SelectObjectEventData = {
   widgetType: "VPR" | "VPS";
-  campaignTypeId: "VPR" | "VPS" | "VCS" | "TSC";
+  campaignTypeId: "VPR" | "VPS" | "VCS" | "TPS";
   campaignTypeName:
     | "Similar Products"
     | "Visual Search"
     | "Cross-Selling"
-    | "Text Search Campaign";
+    | "Text Product Search";
   widgetId: string;
   widgetVersion: string;
   detectedObject: ValueObject<DetectedObject>;
@@ -53,12 +53,12 @@ export type SelectObjectEventData = {
 
 export type SelectFilterEventData = {
   widgetType: "VPR" | "VPS";
-  campaignTypeId: "VPR" | "VPS" | "VCS" | "TSC";
+  campaignTypeId: "VPR" | "VPS" | "VCS" | "TPS";
   campaignTypeName:
     | "Similar Products"
     | "Visual Search"
     | "Cross-Selling"
-    | "Text Search Campaign";
+    | "Text Product Search";
   widgetId: string;
   widgetVersion: string;
   action: FilterAction;
@@ -67,12 +67,12 @@ export type SelectFilterEventData = {
 
 export type ProductCardEventData = {
   widgetType: "VPR" | "VPS";
-  campaignTypeId: "VPR" | "VPS" | "VCS" | "TSC";
+  campaignTypeId: "VPR" | "VPS" | "VCS" | "TPS";
   campaignTypeName:
     | "Similar Products"
     | "Visual Search"
     | "Cross-Selling"
-    | "Text Search Campaign";
+    | "Text Product Search";
   widgetId: string;
   widgetVersion: string;
   productId: string;
