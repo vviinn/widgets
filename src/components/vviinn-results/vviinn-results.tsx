@@ -302,6 +302,7 @@ export class VviinnResults {
   private textSearchStartedHandler = async ({ detail }: TextSearchEvent) => {
     if (this.showInWidget) return;
     this.innerTextSearchQuery = detail.query;
+    this.isTextSearch = true;
     await this.getResultsByTextQuery(detail.query);
     this.resultsSearchFinished.emit();
   };
@@ -309,6 +310,7 @@ export class VviinnResults {
   private filtersChangedHandler = ({ detail }: ChangedFiltersEvent) => {
     if (this.filterColumn && this.filterValue) {
       this.getResultsByCategory(detail.filters);
+      this.isTextSearch = false;
     } else {
       this.getResultsByTextQuery(
         this.textSearchQuery ?? this.innerTextSearchQuery,
@@ -405,8 +407,12 @@ export class VviinnResults {
   @Listen("vviinnProductLoad")
   trackProductLoad({ detail }: ProductCardEvent) {
     const productLoadEvent = this.getProductTrackEvent(detail, "load");
+    console.log("productLoadEvent", this.isTextSearch, productLoadEvent);
     if (!productLoadEvent) return;
-
+    if (this.isTextSearch) {
+      productLoadEvent.campaign_type_name = "Text Product Search";
+      productLoadEvent.widget = "TPS";
+    }
     this.trackingApi
       .trackEvent(productLoadEvent)
       .then(this.setTrackingDeactivated);
@@ -422,6 +428,10 @@ export class VviinnResults {
 
     const productViewEvent = this.getProductTrackEvent(detail, "view");
     if (!productViewEvent) return;
+    if (this.isTextSearch) {
+      productViewEvent.campaign_type_name = "Text Product Search";
+      productViewEvent.widget = "TPS";
+    }
 
     this.trackingApi
       .trackEvent(productViewEvent)
@@ -471,6 +481,7 @@ export class VviinnResults {
 
   private trackResultEvent(type: ResultEventType) {
     if (this.trackingDeactivated) return;
+    console.log(this.isTextSearch);
     const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
 
     let resultEvent: ResultViewEvent | ResultLoadEvent =
@@ -537,8 +548,7 @@ export class VviinnResults {
     const activeCampaign = this.isTextSearch ? "TPS" : "VPS";
     console.log("activeCampaign", activeCampaign);
     return {
-      // widgetType: activeCampaign,
-      widgetType: "VPS",
+      widgetType: activeCampaign,
       campaignTypeId: activeCampaign,
       campaignTypeName: campaignTypeNames[activeCampaign],
       widgetId: this.widgetElementId,
