@@ -1,6 +1,5 @@
 import {
   FilterAction,
-  FilterKind,
   ProductClickEvent,
   ProductLoadEvent,
   ProductViewEvent,
@@ -14,7 +13,7 @@ import {
 } from "../campaign/VPRCampaignService";
 
 export type BasicEventData = {
-  widgetType: "VPR" | "VPS";
+  widgetType: "VPR" | "VPS" | "VCS" | "TPS";
   campaignTypeId: "VPR" | "VPS" | "VCS" | "TPS";
   campaignTypeName:
     | "Similar Products"
@@ -26,7 +25,7 @@ export type BasicEventData = {
 };
 
 export type NoResultEventData = {
-  widgetType: "VPR" | "VPS";
+  widgetType: "VPR" | "VPS" | "VCS" | "TPS";
   campaignTypeId: "VPR" | "VPS" | "VCS" | "TPS";
   campaignTypeName:
     | "Similar Products"
@@ -39,7 +38,7 @@ export type NoResultEventData = {
 };
 
 export type SelectObjectEventData = {
-  widgetType: "VPR" | "VPS";
+  widgetType: "VPR" | "VPS" | "VCS" | "TPS";
   campaignTypeId: "VPR" | "VPS" | "VCS" | "TPS";
   campaignTypeName:
     | "Similar Products"
@@ -52,7 +51,7 @@ export type SelectObjectEventData = {
 };
 
 export type SelectFilterEventData = {
-  widgetType: "VPR" | "VPS";
+  widgetType: "VPR" | "VPS" | "VCS" | "TPS";
   campaignTypeId: "VPR" | "VPS" | "VCS" | "TPS";
   campaignTypeName:
     | "Similar Products"
@@ -62,7 +61,7 @@ export type SelectFilterEventData = {
   widgetId: string;
   widgetVersion: string;
   action: FilterAction;
-  kind: FilterKind;
+  kind: string;
 };
 
 export type ProductCardEventData = {
