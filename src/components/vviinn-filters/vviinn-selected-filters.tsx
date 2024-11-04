@@ -50,6 +50,11 @@ export class VviinnSelectedFilters {
   @Event({ bubbles: true })
   vviinnFilters: EventEmitter<DynamicFiltersEventData>;
 
+  /** Selected filters should be resetted */
+  /** @internal */
+  @Event({ bubbles: true })
+  vviinnSelectedFiltersReset: EventEmitter;
+
   @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
 
   private handleSubFilterSelection(
@@ -80,11 +85,20 @@ export class VviinnSelectedFilters {
     this.requestFilters = filters;
   };
 
+  private handleSelectedFiltersReset = () => {
+    this.requestFilters = [];
+  };
+
   connectedCallback() {
     document.addEventListener("vviinnFilters", this.handleSetFilters);
     document.addEventListener(
       "vviinnFiltersChanged",
       this.handleFiltersChanged
+    );
+
+    document.addEventListener(
+      "vviinnSelectedFiltersReset",
+      this.handleSelectedFiltersReset
     );
   }
 
@@ -93,6 +107,11 @@ export class VviinnSelectedFilters {
     document.removeEventListener(
       "vviinnFiltersChanged",
       this.handleFiltersChanged
+    );
+
+    document.removeEventListener(
+      "vviinnSelectedFiltersReset",
+      this.handleSelectedFiltersReset
     );
   }
 

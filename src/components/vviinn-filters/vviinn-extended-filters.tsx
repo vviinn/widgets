@@ -104,6 +104,11 @@ export class VviinnExtendedFilters {
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
 
+  /** Selected filters should be resetted */
+  /** @internal */
+  @Event({ bubbles: true })
+  vviinnSelectedFiltersReset: EventEmitter;
+
   @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
 
   private replaceSlotsContent() {
@@ -113,6 +118,15 @@ export class VviinnExtendedFilters {
       element: this.el,
     });
   }
+
+  private getSelectedPriceInterval = () =>
+    (this.requestFilters.find(({ column }) => column === "price")?.values[0] ??
+      {}) as components["schemas"]["interval"];
+
+  private handleSelectedFiltersReset = () => {
+    this.requestFilters = [];
+    this.selectedMoreOptions = [];
+  };
 
   componentDidRender() {
     this.replaceSlotsContent();
@@ -203,6 +217,11 @@ export class VviinnExtendedFilters {
       "vviinnFiltersChanged",
       this.handleFiltersChanged
     );
+    document.addEventListener(
+      "vviinnSelectedFiltersReset",
+      this.handleSelectedFiltersReset
+    );
+
     this.filtersStringWatcher();
   }
 
@@ -211,6 +230,10 @@ export class VviinnExtendedFilters {
     document.addEventListener(
       "vviinnFiltersChanged",
       this.handleFiltersChanged
+    );
+    document.addEventListener(
+      "vviinnSelectedFiltersReset",
+      this.handleSelectedFiltersReset
     );
   }
 
@@ -347,12 +370,7 @@ export class VviinnExtendedFilters {
                             (item) => item.value.frequency > 0
                           )}
                           priceChangeHandler={this.priceChangeHandler}
-                          selectedInterval={
-                            (this.requestFilters.find(
-                              ({ column }) => column === "price"
-                            )?.values[0] ??
-                              {}) as components["schemas"]["interval"]
-                          }
+                          selectedInterval={this.getSelectedPriceInterval()}
                           currencySign={this.currencySign}
                         />
                       ) : (

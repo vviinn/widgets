@@ -64,7 +64,7 @@ export class VviinnFilters {
   /** The currency sign is displayed after the price */
   @Prop() currencySign?: string = "€";
 
-  @State() selectedFilter: DynamicFilter;
+  @State() selectedFilter?: DynamicFilter;
   @State() requestFilters: RequestDynamicFilters = [];
 
   /** The filter's state changes */
@@ -85,9 +85,18 @@ export class VviinnFilters {
   @Event({ bubbles: true })
   vviinnSelectedFiltersReset: EventEmitter;
 
+  private getSelectedPriceInterval = () =>
+    (this.requestFilters.find(({ column }) => column === "price")?.values[0] ??
+      {}) as components["schemas"]["interval"];
+
   private handleMainFilterSelection(filter: DynamicFilter) {
     this.selectedFilter = filter;
   }
+
+  private handleSelectedFiltersReset = () => {
+    this.requestFilters = [];
+    this.selectedFilter = undefined;
+  };
 
   private priceChangeHandler = (filterValue: DynamicFilterValue) => {
     this.handleSubFilterSelection(filterValue, this.selectedFilter);
@@ -144,10 +153,6 @@ export class VviinnFilters {
         (f) => f.column === filters[0].column
       );
     }
-  };
-
-  private handleSelectedFiltersReset = () => {
-    this.requestFilters = [];
   };
 
   @Watch("filtersString")
@@ -229,10 +234,7 @@ export class VviinnFilters {
                   (item) => item.value.frequency > 0
                 )}
                 priceChangeHandler={this.priceChangeHandler}
-                selectedInterval={
-                  (this.requestFilters.find(({ column }) => column === "price")
-                    ?.values[0] ?? {}) as components["schemas"]["interval"]
-                }
+                selectedInterval={this.getSelectedPriceInterval()}
                 currencySign={this.currencySign}
               />
             ) : (

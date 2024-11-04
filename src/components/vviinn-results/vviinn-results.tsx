@@ -201,6 +201,11 @@ export class VviinnResults {
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
 
+  /** Selected filters should be resetted */
+  /** @internal */
+  @Event({ bubbles: true })
+  vviinnSelectedFiltersReset: EventEmitter;
+
   private replaceSlotsContent() {
     const slots = this.el.querySelectorAll("[slot]");
     this.globalSlotsChanged.emit({
@@ -303,6 +308,7 @@ export class VviinnResults {
     this.innerTextSearchQuery = detail.query;
     await this.getResultsByTextQuery(detail.query);
     this.resultsSearchFinished.emit();
+    this.vviinnSelectedFiltersReset.emit();
   };
 
   private filtersChangedHandler = ({ detail }: ChangedFiltersEvent) => {
