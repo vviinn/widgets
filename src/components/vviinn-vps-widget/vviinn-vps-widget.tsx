@@ -348,7 +348,6 @@ export class VviinnVpsWidget {
 
   getBasicEventData = (): BasicEventData => {
     const activeCampaign = this.isTextSearch ? "TPS" : "VPS";
-    console.log("activeCampaign", activeCampaign);
     return {
       widgetType: activeCampaign,
       campaignTypeId: activeCampaign,
