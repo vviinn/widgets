@@ -54,8 +54,8 @@ import {
 } from "../../recommendation/events";
 import {
   createFilterEvent,
-  createProductVpsEventByType,
   createResultVpsEventByType,
+  createProductWidgetEventByType,
 } from "../../tracking";
 import { RequestDynamicFilters } from "../../campaign/VPRCampaignService";
 import i18next from "i18next";
@@ -409,10 +409,6 @@ export class VviinnResults {
     const productLoadEvent = this.getProductTrackEvent(detail, "load");
     console.log("productLoadEvent", this.isTextSearch, productLoadEvent);
     if (!productLoadEvent) return;
-    if (this.isTextSearch) {
-      productLoadEvent.campaign_type_name = "Text Product Search";
-      productLoadEvent.widget = "TPS";
-    }
     this.trackingApi
       .trackEvent(productLoadEvent)
       .then(this.setTrackingDeactivated);
@@ -428,10 +424,6 @@ export class VviinnResults {
 
     const productViewEvent = this.getProductTrackEvent(detail, "view");
     if (!productViewEvent) return;
-    if (this.isTextSearch) {
-      productViewEvent.campaign_type_name = "Text Product Search";
-      productViewEvent.widget = "TPS";
-    }
 
     this.trackingApi
       .trackEvent(productViewEvent)
@@ -481,7 +473,6 @@ export class VviinnResults {
 
   private trackResultEvent(type: ResultEventType) {
     if (this.trackingDeactivated) return;
-    console.log(this.isTextSearch);
     const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
 
     let resultEvent: ResultViewEvent | ResultLoadEvent =
@@ -538,8 +529,10 @@ export class VviinnResults {
       ...rest,
     };
 
-    const productEvent: ProductEvent =
-      createProductVpsEventByType(eventType)(eventBody);
+    const productEvent: ProductEvent = createProductWidgetEventByType(
+      widgetType === "VCS" ? "VPC" : widgetType,
+      eventType
+    )(eventBody);
 
     return productEvent;
   }
@@ -560,6 +553,8 @@ export class VviinnResults {
     const results = this.showInWidget
       ? searchState.results
       : this.recommendations;
+
+    const widgetData = this.getBasicEventData();
 
     if (results.length === 0) return null;
     if (!searchState.resultLoaded) {
@@ -604,7 +599,7 @@ export class VviinnResults {
         image={p.image.thumbnail ?? p.image.original}
         energyCertifications={p.energyCertifications}
         part="product-card"
-        campaignTypeId="VPS"
+        campaignTypeId={widgetData.campaignTypeId}
         widgetElementId={this.widgetElementId}
         buttonElementId={this.buttonElementId}
         widgetVersion={version}
