@@ -138,8 +138,6 @@ export class VviinnTextSearch {
     this.vviinnFilterTriggered.emit({
       kind: this.searchQuery,
       action: "select",
-      campaignTypeName: "Text Product Search",
-      widget: "TPS",
     });
     if (this.showInWidget) {
       await makeTextSearchRequest(this.token, this.searchQuery);
