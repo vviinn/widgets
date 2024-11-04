@@ -3,6 +3,7 @@ import {
   ProductClickEvent,
   ProductLoadEvent,
   ProductViewEvent,
+  Widget,
 } from "vviinn-tracking-client-ts";
 import { ValueObject } from "../network/ion/ValueObject";
 import { DetectedObject } from "../searchSession/searchSession";
@@ -22,6 +23,7 @@ export type BasicEventData = {
     | "Text Product Search";
   widgetId: string;
   widgetVersion: string;
+  widget?: Widget;
 };
 
 export type NoResultEventData = {
@@ -118,7 +120,7 @@ export type DynamicFilterTrackingData = {
     | "Visual Search"
     | "Cross-Selling"
     | "Text Product Search";
-  widget?: "VPR" | "VPS" | "VCS" | "TPS";
+  widget?: Widget;
 };
 
 export type SearchIdEvent = CustomEvent<SearchIdEventData>;
