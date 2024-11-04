@@ -196,7 +196,7 @@ export class VviinnResults {
   @State() innerTextSearchQuery: string;
   @State() slotsReplaced: boolean;
   @State() oneClickDiscoveryAppendIndex: number;
-  @State() isTextSearch: boolean = false;
+  @State() isTextSearch: boolean = this.textSearchQuery?.length > 0;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -302,7 +302,6 @@ export class VviinnResults {
   private textSearchStartedHandler = async ({ detail }: TextSearchEvent) => {
     if (this.showInWidget) return;
     this.innerTextSearchQuery = detail.query;
-    this.isTextSearch = true;
     await this.getResultsByTextQuery(detail.query);
     this.resultsSearchFinished.emit();
   };
@@ -310,7 +309,6 @@ export class VviinnResults {
   private filtersChangedHandler = ({ detail }: ChangedFiltersEvent) => {
     if (this.filterColumn && this.filterValue) {
       this.getResultsByCategory(detail.filters);
-      this.isTextSearch = false;
     } else {
       this.getResultsByTextQuery(
         this.textSearchQuery ?? this.innerTextSearchQuery,
@@ -322,8 +320,6 @@ export class VviinnResults {
   private filtersTriggeredHandler = ({
     detail,
   }: CustomEvent<DynamicFilterTrackingData>) => {
-    console.log("filtersTriggeredHandler", detail);
-    this.isTextSearch = detail.campaignTypeName === "Text Product Search";
     if (this.trackingDeactivated) return;
     const { campaignTypeId, ...rest } = this.getBasicEventData();
 
@@ -407,7 +403,6 @@ export class VviinnResults {
   @Listen("vviinnProductLoad")
   trackProductLoad({ detail }: ProductCardEvent) {
     const productLoadEvent = this.getProductTrackEvent(detail, "load");
-    console.log("productLoadEvent", this.isTextSearch, productLoadEvent);
     if (!productLoadEvent) return;
     this.trackingApi
       .trackEvent(productLoadEvent)
@@ -539,13 +534,13 @@ export class VviinnResults {
 
   private getBasicEventData = (): BasicEventData => {
     const activeCampaign = this.isTextSearch ? "TPS" : "VPS";
-    console.log("activeCampaign", activeCampaign);
     return {
       widgetType: activeCampaign,
       campaignTypeId: activeCampaign,
       campaignTypeName: campaignTypeNames[activeCampaign],
       widgetId: this.widgetElementId,
       widgetVersion: version,
+      widget: this.isTextSearch ? "TPS" : undefined,
     };
   };
 
