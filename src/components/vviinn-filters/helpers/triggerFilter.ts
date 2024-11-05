@@ -40,7 +40,6 @@ export const triggerFilter = (
 };
 
 export const triggerResetFilters = (
-  filters: RequestDynamicFilters,
   vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>,
   vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>,
   el: HTMLElement,
@@ -52,10 +51,8 @@ export const triggerResetFilters = (
   });
 
   vviinnFiltersChanged.emit({
-    filters,
+    filters: [],
     el,
     triggeredByVpsWidget,
   });
-
-  return filters;
 };

@@ -243,13 +243,13 @@ export class VviinnExtendedFilters {
 
   private resetModal() {
     triggerResetFilters(
-      this.requestFilters,
       this.vviinnFilterTriggered,
       this.vviinnFiltersChanged,
       this.el,
       this.showInWidget
     );
 
+    this.selectedMoreOptions = [];
     this.requestFilters = [];
     this.showMore = false;
   }
