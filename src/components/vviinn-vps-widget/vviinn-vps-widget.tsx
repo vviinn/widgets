@@ -764,6 +764,7 @@ export class VviinnVpsWidget {
                       filters={searchState.dynamicFilters}
                       mode="preview"
                       showHeader={false}
+                      showInWidget={true}
                     ></vviinn-extended-filters>
                   </div>
                 </div>

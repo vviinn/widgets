@@ -1,5 +1,4 @@
 import { subFilterSelection } from "./subFilterSelection";
-import { emitRequestFiltersMore } from "./emitRequestFiltersMore";
 import {
   DynamicFilter,
   DynamicFilterValue,
@@ -16,8 +15,9 @@ export const triggerFilter = (
   selectedFilter: DynamicFilter,
   requestFilters: RequestDynamicFilters,
   vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>,
+  vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>,
   el: HTMLElement,
-  vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>
+  triggeredByVpsWidget?: boolean
 ) => {
   const { filters, action } = subFilterSelection(
     requestFilters,
@@ -29,7 +29,33 @@ export const triggerFilter = (
     kind: selectedFilter.column,
     action,
   });
-  emitRequestFiltersMore([...filters], el, vviinnFiltersChanged);
+
+  vviinnFiltersChanged.emit({
+    filters,
+    el,
+    triggeredByVpsWidget,
+  });
+
+  return filters;
+};
+
+export const triggerResetFilters = (
+  filters: RequestDynamicFilters,
+  vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>,
+  vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>,
+  el: HTMLElement,
+  triggeredByVpsWidget?: boolean
+) => {
+  vviinnFilterTriggered.emit({
+    kind: "reset",
+    action: "deselect",
+  });
+
+  vviinnFiltersChanged.emit({
+    filters,
+    el,
+    triggeredByVpsWidget,
+  });
 
   return filters;
 };

@@ -66,8 +66,9 @@ export class VviinnSelectedFilters {
       selectedFilter,
       this.requestFilters,
       this.vviinnFilterTriggered,
+      this.vviinnFiltersChanged,
       this.el,
-      this.vviinnFiltersChanged
+      this.showInWidget
     );
   }
 

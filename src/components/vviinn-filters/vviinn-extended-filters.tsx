@@ -24,7 +24,7 @@ import {
   SquareFilterIcon,
   CheckFilterIcon,
 } from "../vviinn-icons";
-import { getFilterOptions, emitRequestFiltersMore } from "./helpers";
+import { getFilterOptions } from "./helpers";
 import { Locale, resources } from "../../locale";
 
 import { SlotSkeleton, slotChangeListener } from "../customized-slots";
@@ -37,7 +37,7 @@ import {
 } from "../../recommendation/events";
 import { components } from "../../interfaces/generated";
 import { ClickEvent, isClickedInRectBound } from "../../geometry/Rectangle";
-import { triggerFilter } from "./helpers/triggerFilter";
+import { triggerFilter, triggerResetFilters } from "./helpers/triggerFilter";
 
 /**
  * @slot vviinn-extended-filters-title - Text on widget's header.
@@ -79,8 +79,6 @@ export class VviinnExtendedFilters {
   @Element() el: HTMLElement;
 
   @Prop({ mutable: true }) filters: DynamicFilters = [];
-  /** @internal */
-  @Prop() filtersString: string = "";
   /** The locale for currency formatting and text localization */
   @Prop() locale: Locale = "de-DE";
   @Prop() mode: "button" | "preview" = "button";
@@ -88,6 +86,11 @@ export class VviinnExtendedFilters {
   @Prop() currencySign?: string = "€";
   /** The currency sign is displayed after the price */
   @Prop() showHeader?: boolean = true;
+
+  /** @internal */
+  @Prop() filtersString: string = "";
+  /** @internal */
+  @Prop() showInWidget: boolean = false;
 
   @State() requestFilters: RequestDynamicFilters = [];
   @State() showMore: boolean = false;
@@ -151,8 +154,9 @@ export class VviinnExtendedFilters {
       selectedFilter,
       this.requestFilters,
       this.vviinnFilterTriggered,
+      this.vviinnFiltersChanged,
       this.el,
-      this.vviinnFiltersChanged
+      this.showInWidget
     );
   }
 
@@ -238,7 +242,14 @@ export class VviinnExtendedFilters {
   }
 
   private resetModal() {
-    emitRequestFiltersMore([], this.el, this.vviinnFiltersChanged);
+    triggerResetFilters(
+      this.requestFilters,
+      this.vviinnFilterTriggered,
+      this.vviinnFiltersChanged,
+      this.el,
+      this.showInWidget
+    );
+
     this.requestFilters = [];
     this.showMore = false;
   }

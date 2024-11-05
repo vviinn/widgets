@@ -236,6 +236,9 @@ export class VviinnResults {
 
   private trackingApi: DefaultApi;
 
+  private getRecommendations = () =>
+    this.showInWidget ? searchState.results : this.recommendations;
+
   private getResultsBySearchId = async (searchId: string) => {
     if (!searchId || this.showInWidget) return;
     state.apiPath = this.apiPath; //FIXME: #36877
@@ -249,34 +252,37 @@ export class VviinnResults {
     this.resultsSearchFinished.emit();
   };
 
-  private async getResultsByTextQuery(
+  private async getVpsResults(query?: string, filters?: RequestDynamicFilters) {
+    if (!query) return;
+    state.apiPath = this.apiPath; //FIXME: #36877
+
+    return pipe(
+      await makeTextSearchRequest(this.token, query, filters),
+      E.getOrElse(() => null),
+      (response: TextSearchResponse) => response
+    );
+  }
+
+  private async getTextSearchResults(
     query?: string,
     filters?: RequestDynamicFilters
   ) {
     if (!query) return;
     state.apiPath = this.apiPath; //FIXME: #36877
 
-    if (this.showInWidget) {
-      return pipe(
-        await makeTextSearchRequest(this.token, query, filters),
-        E.getOrElse(() => null),
-        (response: TextSearchResponse) => response
-      );
-    } else {
-      return pipe(
-        await makeSearchQueryRequest(
-          this.token,
-          query,
-          filters,
-          this.resultsCount
-        ),
-        E.getOrElse(() => null),
-        (response: TextSearchResponse) => {
-          this.recommendations = response?.data?.products ?? [];
-          this.vviinnFilters.emit(response?.data?.interactions.dynamicFilters);
-        }
-      );
-    }
+    return pipe(
+      await makeSearchQueryRequest(
+        this.token,
+        query,
+        filters,
+        this.resultsCount
+      ),
+      E.getOrElse(() => null),
+      (response: TextSearchResponse) => {
+        this.recommendations = response?.data?.products ?? [];
+        this.vviinnFilters.emit(response?.data?.interactions.dynamicFilters);
+      }
+    );
   }
 
   private async getResultsByCategory(dynamicFilters?: RequestDynamicFilters) {
@@ -304,18 +310,31 @@ export class VviinnResults {
   };
 
   private textSearchStartedHandler = async ({ detail }: TextSearchEvent) => {
-    if (this.showInWidget) return;
     this.innerTextSearchQuery = detail.query;
-    await this.getResultsByTextQuery(detail.query);
+    await this.getTextSearchResults(detail.query);
     this.resultsSearchFinished.emit();
     this.vviinnSelectedFiltersReset.emit();
   };
 
   private filtersChangedHandler = ({ detail }: ChangedFiltersEvent) => {
+    const { filters, triggeredByVpsWidget } = detail;
+
+    // FIXME: remove console.log
+    console.log(detail);
+
     if (this.filterColumn && this.filterValue) {
       this.getResultsByCategory(detail.filters);
+      return;
+    }
+
+    if (this.showInWidget && triggeredByVpsWidget) {
+      // FIXME: remove console.log
+      console.log("Filters changed in the widget");
+      this.getVpsResults(this.textSearchQuery, filters);
     } else {
-      this.getResultsByTextQuery(
+      // FIXME: remove console.log
+      console.log("Filters changed in the results");
+      this.getTextSearchResults(
         this.textSearchQuery ?? this.innerTextSearchQuery,
         detail.filters
       );
@@ -374,7 +393,7 @@ export class VviinnResults {
 
     this.getResultsBySearchId(this.searchId);
     this.getResultsByCategory();
-    !this.showInWidget && this.getResultsByTextQuery(this.textSearchQuery);
+    this.getTextSearchResults(this.textSearchQuery);
   }
 
   disconnectedCallback() {
@@ -403,8 +422,7 @@ export class VviinnResults {
 
   @Watch("textSearchQuery")
   watchTextSearchQuery(newQuery: string) {
-    if (this.showInWidget) return;
-    this.getResultsByTextQuery(newQuery);
+    this.getTextSearchResults(newQuery);
   }
 
   @Listen("vviinnProductLoad")
@@ -490,9 +508,7 @@ export class VviinnResults {
   private findProductById(
     id: Recommendation["productId"]
   ): Recommendation | undefined {
-    return (
-      this.recommendations.length ? this.recommendations : searchState.results
-    ).find((r) => r.productId === id);
+    return this.getRecommendations().find((r) => r.productId === id);
   }
 
   private handleOpenLink(deeplink: string, event: MouseEvent) {
@@ -549,9 +565,7 @@ export class VviinnResults {
   };
 
   private renderResults() {
-    const results = this.showInWidget
-      ? searchState.results
-      : this.recommendations;
+    const results = this.getRecommendations();
 
     if (results.length === 0) return null;
     if (!searchState.resultLoaded) {
