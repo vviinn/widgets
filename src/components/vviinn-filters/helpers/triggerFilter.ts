@@ -29,7 +29,6 @@ export const triggerFilter = (
     kind: selectedFilter.column,
     action,
   });
-  vviinnFiltersChanged.emit({ filters, el });
   emitRequestFiltersMore([...filters], el, vviinnFiltersChanged);
 
   return filters;
