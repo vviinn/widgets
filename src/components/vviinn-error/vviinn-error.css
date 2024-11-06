@@ -1,12 +1,14 @@
 @import "../../variables.css";
 
 :host {
-  width: 280px;
+  width: 100%;
   background: #f4f4f4;
   border-radius: 8px;
   display: grid;
   grid-gap: 20px;
   padding: 24px;
+  box-sizing: border-box;
+  max-width: 440px;
   text-align: center;
   justify-items: center;
   align-self: center;
@@ -45,10 +47,4 @@
 
 ::slotted(button:hover) {
   background: var(--button-bg-color-primary-hover);
-}
-
-@media (max-width: 480px) {
-  :host {
-    width: 260px;
-  }
 }
