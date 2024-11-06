@@ -62,9 +62,9 @@ import { Locale } from "../../locale";
 import { UpdateIcon } from "../vviinn-icons";
 import { getCustomLabels, getRecommendationsBody } from "../../recommendation";
 import {
-  RequestDynamicFilters,
+  RequestDynamicFilterItem,
   SimilarProductsResponse,
-  DynamicFilters,
+  ResponseDynamicFilterItem,
 } from "../../campaign/VPRCampaignService";
 import { CrossSellingResponse } from "../../campaign/VCSCampaignService";
 
@@ -198,7 +198,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() opened?: boolean;
 
   @State() recommendations: Recommendation[] = [];
-  @State() dynamicFilters: DynamicFilters = [];
+  @State() dynamicFilters: ResponseDynamicFilterItem[] = [];
   @State() sourceProduct: Recommendation | null = null;
   @State() trackingDeactivated: boolean = false;
   @State() hasErrorOnLoad: boolean = false;
@@ -252,7 +252,7 @@ export class VviinnVprWidget implements ComponentInterface {
   private resultViewed: boolean = false;
   private isSetMode: boolean;
   private isGridMode: boolean;
-  private requestDynamicFilters: RequestDynamicFilters = [];
+  private requestDynamicFilters: RequestDynamicFilterItem[] = [];
   trackingApi: DefaultApi;
   uiSessionId: string;
 
@@ -594,7 +594,8 @@ export class VviinnVprWidget implements ComponentInterface {
   }: SimilarProductsResponse | CrossSellingResponse) {
     this.vviinnResultLoad.emit(this.getBasicEventData());
     this.trackResultEvent("load");
-    this.dynamicFilters = interactions.dynamicFilters as DynamicFilters;
+    this.dynamicFilters =
+      interactions.dynamicFilters as ResponseDynamicFilterItem[];
     const { products, sourceProduct } = data;
     this.recommendations = products;
     this.sourceProduct = sourceProduct;

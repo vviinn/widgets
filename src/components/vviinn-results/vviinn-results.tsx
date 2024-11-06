@@ -57,7 +57,7 @@ import {
   createProductVpsEventByType,
   createResultVpsEventByType,
 } from "../../tracking";
-import { RequestDynamicFilters } from "../../campaign/VPRCampaignService";
+import { RequestDynamicFilterItem } from "../../campaign/VPRCampaignService";
 import i18next from "i18next";
 import { resources } from "../../locale";
 import { slotChangeListener } from "../customized-slots";
@@ -252,7 +252,10 @@ export class VviinnResults {
     this.resultsSearchFinished.emit();
   };
 
-  private async getVpsResults(query?: string, filters?: RequestDynamicFilters) {
+  private async getVpsResults(
+    query?: string,
+    filters?: RequestDynamicFilterItem[]
+  ) {
     if (!query) return;
     state.apiPath = this.apiPath; //FIXME: #36877
 
@@ -265,7 +268,7 @@ export class VviinnResults {
 
   private async getTextSearchResults(
     query?: string,
-    filters?: RequestDynamicFilters
+    filters?: RequestDynamicFilterItem[]
   ) {
     if (!query) return;
     state.apiPath = this.apiPath; //FIXME: #36877
@@ -285,7 +288,9 @@ export class VviinnResults {
     );
   }
 
-  private async getResultsByCategory(dynamicFilters?: RequestDynamicFilters) {
+  private async getResultsByCategory(
+    dynamicFilters?: RequestDynamicFilterItem[]
+  ) {
     if (!this.filterColumn || !this.filterValue || this.showInWidget) return;
     state.apiPath = this.apiPath; //FIXME: #36877
 
@@ -319,22 +324,22 @@ export class VviinnResults {
   private filtersChangedHandler = ({ detail }: ChangedFiltersEvent) => {
     const { filters, triggeredByVpsWidget } = detail;
 
-    // FIXME: remove console.log
-    console.log(detail);
-
     if (this.filterColumn && this.filterValue) {
-      this.getResultsByCategory(detail.filters);
-      return;
+      return this.getResultsByCategory(detail.filters);
     }
 
-    if (this.showInWidget && triggeredByVpsWidget) {
+    const isWidgetEvent = this.showInWidget && triggeredByVpsWidget;
+
+    if (isWidgetEvent) {
       // FIXME: remove console.log
       console.log("Filters changed in the widget");
-      this.getVpsResults(this.textSearchQuery, filters);
-    } else {
+      return this.getVpsResults(this.textSearchQuery, filters);
+    }
+
+    if (!isWidgetEvent) {
       // FIXME: remove console.log
       console.log("Filters changed in the results");
-      this.getTextSearchResults(
+      return this.getTextSearchResults(
         this.textSearchQuery ?? this.innerTextSearchQuery,
         detail.filters
       );

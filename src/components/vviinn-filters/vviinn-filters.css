@@ -32,6 +32,14 @@
   display: inline-flex;
 }
 
+vviinn-price-range {
+  max-width: 400px;
+}
+
+:host(.show-in-widget) vviinn-price-range {
+  max-width: unset;
+}
+
 .filters-modal-main-button,
 .filters-sub-button,
 .filters-main-button,

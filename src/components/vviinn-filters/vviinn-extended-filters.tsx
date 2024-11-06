@@ -13,10 +13,9 @@ import {
 import i18next from "i18next";
 
 import {
-  DynamicFilters,
-  DynamicFilter,
+  ResponseDynamicFilterItem,
   DynamicFilterValue,
-  RequestDynamicFilters,
+  RequestDynamicFilterItem,
 } from "../../campaign/VPRCampaignService";
 import {
   FiltersIcon,
@@ -78,7 +77,7 @@ import { triggerFilter, triggerResetFilters } from "./helpers/triggerFilter";
 export class VviinnExtendedFilters {
   @Element() el: HTMLElement;
 
-  @Prop({ mutable: true }) filters: DynamicFilters = [];
+  @Prop({ mutable: true }) filters: ResponseDynamicFilterItem[] = [];
   /** The locale for currency formatting and text localization */
   @Prop() locale: Locale = "de-DE";
   @Prop() mode: "button" | "preview" = "button";
@@ -92,7 +91,8 @@ export class VviinnExtendedFilters {
   /** @internal */
   @Prop() showInWidget: boolean = false;
 
-  @State() requestFilters: RequestDynamicFilters = [];
+  @State() innerFilters: ResponseDynamicFilterItem[] = [];
+  @State() requestFilters: RequestDynamicFilterItem[] = [];
   @State() showMore: boolean = false;
   @State() selectedMoreOptions: string[] = [];
 
@@ -122,6 +122,9 @@ export class VviinnExtendedFilters {
     });
   }
 
+  private getFilters = () =>
+    this.showInWidget ? this.filters : this.innerFilters;
+
   private getSelectedPriceInterval = () =>
     (this.requestFilters.find(({ column }) => column === "price")?.values[0] ??
       {}) as components["schemas"]["interval"];
@@ -147,7 +150,7 @@ export class VviinnExtendedFilters {
 
   private handleSubFilterSelection(
     filterValue: DynamicFilterValue,
-    selectedFilter: DynamicFilter
+    selectedFilter: ResponseDynamicFilterItem
   ) {
     this.requestFilters = triggerFilter(
       filterValue,
@@ -161,7 +164,7 @@ export class VviinnExtendedFilters {
   }
 
   private showActiveOnModalSubButton(
-    requestFilters: RequestDynamicFilters,
+    requestFilters: RequestDynamicFilterItem[],
     filterValue: DynamicFilterValue
   ) {
     let className = false;
@@ -191,7 +194,7 @@ export class VviinnExtendedFilters {
   }
 
   private handleSetFilters = ({ detail }: DynamicFiltersEvent) => {
-    this.filters = detail;
+    this.innerFilters = detail;
   };
 
   private handleFiltersChanged = ({
@@ -209,7 +212,9 @@ export class VviinnExtendedFilters {
     if (this.filtersString === "") return;
 
     try {
-      this.filters = JSON.parse(this.filtersString) as DynamicFilters;
+      this.filters = JSON.parse(
+        this.filtersString
+      ) as ResponseDynamicFilterItem[];
     } catch (e) {
       console.error("Invalid filters string", e);
     }
@@ -255,7 +260,7 @@ export class VviinnExtendedFilters {
   }
 
   private priceChangeHandler = (filterValue: DynamicFilterValue) => {
-    const selectedFilter = this.filters.find(
+    const selectedFilter = this.getFilters().find(
       (filter) => filter.column === "price"
     );
 
@@ -292,7 +297,7 @@ export class VviinnExtendedFilters {
       <Host>
         {SlotSkeleton("filters")}
 
-        {this.filters.length > 0 && this.mode === "button" && (
+        {this.getFilters().length > 0 && this.mode === "button" && (
           <button
             class="filters-more-button"
             onClick={() => (this.showMore = true)}
@@ -332,7 +337,7 @@ export class VviinnExtendedFilters {
             )}
 
             <ul class="filters-modal-list" part="extended-filters-list">
-              {(this.filters ?? []).map((mainFilter) => {
+              {(this.getFilters() ?? []).map((mainFilter) => {
                 const mainColumn = mainFilter.column;
                 const filterOptions = getFilterOptions(mainFilter);
                 const requestFilter = this.requestFilters.find(

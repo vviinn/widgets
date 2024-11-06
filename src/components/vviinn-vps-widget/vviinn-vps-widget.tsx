@@ -765,6 +765,7 @@ export class VviinnVpsWidget {
                       mode="preview"
                       showHeader={false}
                       showInWidget={true}
+                      locale={this.locale}
                     ></vviinn-extended-filters>
                   </div>
                 </div>

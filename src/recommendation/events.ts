@@ -9,8 +9,8 @@ import { ValueObject } from "../network/ion/ValueObject";
 import { DetectedObject } from "../searchSession/searchSession";
 import { ErrorKind } from "../error";
 import {
-  DynamicFilter,
-  RequestDynamicFilters,
+  ResponseDynamicFilterItem,
+  RequestDynamicFilterItem,
 } from "../campaign/VPRCampaignService";
 
 export type BasicEventData = {
@@ -85,12 +85,12 @@ export type TextSearchEventData = {
 };
 
 export type ChangedFiltersEventData = {
-  filters: RequestDynamicFilters;
+  filters: RequestDynamicFilterItem[];
   el: HTMLElement;
   triggeredByVpsWidget?: boolean;
 };
 
-export type DynamicFiltersEventData = DynamicFilter[];
+export type DynamicFiltersEventData = ResponseDynamicFilterItem[];
 
 export type DynamicFilterTrackingData = {
   action: FilterAction;

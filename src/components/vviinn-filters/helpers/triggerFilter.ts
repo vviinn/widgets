@@ -1,8 +1,8 @@
 import { subFilterSelection } from "./subFilterSelection";
 import {
-  DynamicFilter,
+  ResponseDynamicFilterItem,
   DynamicFilterValue,
-  RequestDynamicFilters,
+  RequestDynamicFilterItem,
 } from "../../../campaign/VPRCampaignService";
 import { EventEmitter } from "@stencil/core";
 import {
@@ -12,8 +12,8 @@ import {
 
 export const triggerFilter = (
   filterValue: DynamicFilterValue,
-  selectedFilter: DynamicFilter,
-  requestFilters: RequestDynamicFilters,
+  selectedFilter: ResponseDynamicFilterItem,
+  requestFilters: RequestDynamicFilterItem[],
   vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>,
   vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>,
   el: HTMLElement,

@@ -9,10 +9,9 @@ import {
   Prop,
 } from "@stencil/core";
 import {
-  DynamicFilters,
-  DynamicFilter,
+  ResponseDynamicFilterItem,
   DynamicFilterValue,
-  RequestDynamicFilters,
+  RequestDynamicFilterItem,
 } from "../../campaign/VPRCampaignService";
 import { FilterOptions, RenderButton, showActiveOnSubButton } from "./helpers";
 import {
@@ -40,8 +39,8 @@ export class VviinnSelectedFilters {
   /** @internal */
   @Prop() showInWidget: boolean = false;
 
-  @State() filters: DynamicFilters = [];
-  @State() requestFilters: RequestDynamicFilters = [];
+  @State() filters: ResponseDynamicFilterItem[] = [];
+  @State() requestFilters: RequestDynamicFilterItem[] = [];
 
   /** The filter's state changes */
   @Event({ bubbles: true })
@@ -59,7 +58,7 @@ export class VviinnSelectedFilters {
 
   private handleSubFilterSelection(
     filterValue: DynamicFilterValue,
-    selectedFilter: DynamicFilter
+    selectedFilter: ResponseDynamicFilterItem
   ) {
     this.requestFilters = triggerFilter(
       filterValue,
