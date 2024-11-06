@@ -109,32 +109,31 @@ export class VviinnResults {
 
   /** Recommended product renders on the page */
   @Event() vviinnProductLoad: EventEmitter<ProductCardEventData>;
-
   /** Recommended product appears in the viewport */
   @Event() vviinnProductView: EventEmitter<ProductCardEventData>;
-
   /** Click on the product’s link */
   @Event() vviinnProductClick: EventEmitter<ProductCardEventData>;
-
   /** The search result renders on the page */
   @Event() vviinnResultLoad: EventEmitter<BasicEventData>;
-
   /** The search result appears in the viewport */
   @Event() vviinnResultView: EventEmitter<BasicEventData>;
+
+  /** The 'searchId' is received for performing a Visual Search */
+  /** @internal */
+  @Event() vviinnSearchIdReceived: EventEmitter<SearchIdEventData>;
+
+  /** The 'query' is received for performing a Text Search */
+  /** @internal */
+  @Event() vviinnTextSearchStarted: EventEmitter<TextSearchEventData>;
 
   /** The filter's state changes */
   /** @internal */
   @Event({ bubbles: true })
   vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
-  /** The 'searchId' is received for performing a Visual Search */
-  /** @internal */
-  @Event() vviinnSearchIdReceived: EventEmitter<SearchIdEventData>;
-  /** The 'query' is received for performing a Text Search */
-  /** @internal */
-  @Event() vviinnTextSearchStarted: EventEmitter<TextSearchEventData>;
   /** Dynamic filters are received from the API. */
   /** @internal */
   @Event() vviinnFiltersReceived: EventEmitter<DynamicFiltersEventData>;
+
   /** A search response was received by vviinn-results (used internally for showing preloader) */
   /** @internal */
   @Event() resultsSearchFinished: EventEmitter;
@@ -330,17 +329,14 @@ export class VviinnResults {
       return this.getResultsByCategory(detail.filters);
     }
 
+    if (!this.showInWidget && triggeredByVpsWidget) return;
     const isWidgetEvent = this.showInWidget && triggeredByVpsWidget;
 
     if (isWidgetEvent) {
-      // FIXME: remove console.log
-      console.log("Filters changed in the widget");
       return this.getVpsResults(this.textSearchQuery, filters);
     }
 
     if (!isWidgetEvent) {
-      // FIXME: remove console.log
-      console.log("Filters changed in the results");
       return this.getTextSearchResults(
         this.textSearchQuery ?? this.innerTextSearchQuery,
         detail.filters
