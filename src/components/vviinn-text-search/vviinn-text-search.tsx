@@ -41,7 +41,7 @@ export class VviinnTextSearch {
   @Event() vviinnSearchIdReceived: EventEmitter<SearchIdEventData>;
   /** The filters received */
   @Event({ bubbles: true })
-  vviinnFilters: EventEmitter<DynamicFiltersEventData>;
+  vviinnFiltersReceived: EventEmitter<DynamicFiltersEventData>;
 
   /** A text search response was received (used internally by vviinn-vps-widget) */
   /** @internal */
@@ -135,7 +135,7 @@ export class VviinnTextSearch {
 
     if (this.showInWidget) {
       await makeTextSearchRequest(this.token, this.searchQuery);
-      this.vviinnFilters.emit(searchState.dynamicFilters);
+      this.vviinnFiltersReceived.emit(searchState.dynamicFilters);
       this.vviinnSelectedFiltersReset.emit();
       this.widgetTextSearchFinished.emit({ query: this.searchQuery });
     } else {

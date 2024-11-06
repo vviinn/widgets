@@ -134,7 +134,7 @@ export class VviinnResults {
   @Event() vviinnTextSearchStarted: EventEmitter<TextSearchEventData>;
   /** Dynamic filters are received from the API. */
   /** @internal */
-  @Event() vviinnFilters: EventEmitter<DynamicFiltersEventData>;
+  @Event() vviinnFiltersReceived: EventEmitter<DynamicFiltersEventData>;
   /** A search response was received by vviinn-results (used internally for showing preloader) */
   /** @internal */
   @Event() resultsSearchFinished: EventEmitter;
@@ -283,7 +283,9 @@ export class VviinnResults {
       E.getOrElse(() => null),
       (response: TextSearchResponse) => {
         this.recommendations = response?.data?.products ?? [];
-        this.vviinnFilters.emit(response?.data?.interactions.dynamicFilters);
+        this.vviinnFiltersReceived.emit(
+          response?.data?.interactions.dynamicFilters
+        );
       }
     );
   }
@@ -305,7 +307,7 @@ export class VviinnResults {
       E.getOrElse(() => null),
       (response: ProductListingPageResponse) => {
         this.recommendations = response?.data?.products ?? [];
-        this.vviinnFilters.emit(response?.interactions.dynamicFilters);
+        this.vviinnFiltersReceived.emit(response?.interactions.dynamicFilters);
       }
     );
   }

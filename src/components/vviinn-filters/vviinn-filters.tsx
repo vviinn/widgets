@@ -72,7 +72,7 @@ export class VviinnFilters {
   vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
   /** The filters received */
   @Event({ bubbles: true })
-  vviinnFilters: EventEmitter<DynamicFiltersEventData>;
+  vviinnFiltersReceived: EventEmitter<DynamicFiltersEventData>;
 
   @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
 
@@ -173,7 +173,7 @@ export class VviinnFilters {
   }
 
   connectedCallback() {
-    document.addEventListener("vviinnFilters", this.handleSetFilters);
+    document.addEventListener("vviinnFiltersReceived", this.handleSetFilters);
     document.addEventListener(
       "vviinnFiltersChanged",
       this.handleFiltersChanged
@@ -187,7 +187,10 @@ export class VviinnFilters {
   }
 
   disconnectedCallback() {
-    document.removeEventListener("vviinnFilters", this.handleSetFilters);
+    document.removeEventListener(
+      "vviinnFiltersReceived",
+      this.handleSetFilters
+    );
     document.removeEventListener(
       "vviinnFiltersChanged",
       this.handleFiltersChanged
