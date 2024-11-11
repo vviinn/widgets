@@ -357,11 +357,7 @@ export class VviinnExtendedFilters {
                         />
                       ) : (
                         <ul
-                          class={`filters-modal-sub-list ${
-                            mainColumn === "color_confirmed"
-                              ? "filters-modal-sub-list-inline"
-                              : ""
-                          } ${
+                          class={`filters-modal-sub-list  ${
                             this.selectedMoreOptions.includes(mainFilter.column)
                               ? "open"
                               : ""
@@ -371,6 +367,7 @@ export class VviinnExtendedFilters {
                           {filterOptions &&
                             filterOptions.map(({ value, label, active }) => {
                               const hexCode = value.hexCode;
+                              const hasHexCodeLength = hexCode?.length > 0;
                               const selected = this.showActiveOnModalSubButton(
                                 this.requestFilters,
                                 value
@@ -386,12 +383,19 @@ export class VviinnExtendedFilters {
                                       )
                                     }
                                     class={`filters-more-modal-button ${
-                                      hexCode ? "filters-sub-button-color" : ""
+                                      hasHexCodeLength
+                                        ? "filters-sub-button-color"
+                                        : ""
                                     } ${selected ? "active" : ""}`}
-                                    style={{ backgroundColor: hexCode }}
                                     disabled={!active}
                                     part="extended-filters-option-button"
                                   >
+                                    {hasHexCodeLength && (
+                                      <div
+                                        class="filters-sub-button-color-dot"
+                                        style={{ backgroundColor: hexCode }}
+                                      ></div>
+                                    )}
                                     <span>
                                       <span>{label}</span>
                                       {selected ? (
