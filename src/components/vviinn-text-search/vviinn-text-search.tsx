@@ -51,11 +51,6 @@ export class VviinnTextSearch {
   /** @internal */
   @Event() resultsSearchFinished: EventEmitter;
 
-  /** Selected filters should be resetted */
-  /** @internal */
-  @Event({ bubbles: true })
-  vviinnSelectedFiltersReset: EventEmitter;
-
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
   /** The locale for currency formatting and text localization */
@@ -77,21 +72,15 @@ export class VviinnTextSearch {
       ? searchState.loading && searchState.searchType === "text"
       : this.isLoading;
 
-  private searchStartedHandler = () => (this.isLoading = true);
-  private searchFinishedHandler = () => (this.isLoading = false);
+  private showLoader = () => (this.isLoading = true);
+  private hideLoader = () => (this.isLoading = false);
 
   connectedCallback() {
-    document.addEventListener(
-      "resultsSearchFinished",
-      this.searchFinishedHandler
-    );
+    document.addEventListener("resultsSearchFinished", this.hideLoader);
   }
 
   disconnectedCallback() {
-    document.removeEventListener(
-      "resultsSearchFinished",
-      this.searchFinishedHandler
-    );
+    document.removeEventListener("resultsSearchFinished", this.hideLoader);
   }
 
   async componentWillLoad() {
@@ -107,7 +96,7 @@ export class VviinnTextSearch {
     if (this.showInWidget) return;
 
     if (this.searchQuery?.length > 0) {
-      this.searchStartedHandler();
+      this.showLoader();
       this.vviinnTextSearchStarted.emit({
         query: this.searchQuery,
       });
@@ -117,7 +106,7 @@ export class VviinnTextSearch {
   @Listen("vviinnImageUploadFinished")
   imageUploadFinished({ detail }: SearchIdEvent) {
     if (!this.showInWidget && this.mode === "textAndUpload") {
-      this.searchStartedHandler();
+      this.showLoader();
       this.vviinnSearchIdReceived.emit({ searchId: detail.searchId });
     }
   }
@@ -135,11 +124,9 @@ export class VviinnTextSearch {
 
     if (this.showInWidget) {
       await makeTextSearchRequest(this.token, this.searchQuery);
-      this.vviinnFiltersReceived.emit(searchState.dynamicFilters);
-      this.vviinnSelectedFiltersReset.emit();
       this.widgetTextSearchFinished.emit({ query: this.searchQuery });
     } else {
-      this.searchStartedHandler();
+      this.showLoader();
       this.vviinnTextSearchStarted.emit({
         query: this.searchQuery,
       });
@@ -186,7 +173,7 @@ export class VviinnTextSearch {
             token={this.token}
             apiPath={this.apiPath}
             showInTextSearch={true}
-            uploadStartedHandler={this.searchStartedHandler.bind(this)}
+            uploadStartedHandler={this.showLoader.bind(this)}
           >
             <span slot="upload-button-text">
               <SearchModalUploadIcon />

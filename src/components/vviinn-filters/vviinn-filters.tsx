@@ -101,6 +101,10 @@ export class VviinnFilters {
     this.selectedFilter = undefined;
   };
 
+  private skipFiltersChanges = (isTriggeredByVpsWidget: boolean) =>
+    (isTriggeredByVpsWidget && !this.showInWidget) ||
+    (!isTriggeredByVpsWidget && this.showInWidget);
+
   private priceChangeHandler = (filterValue: DynamicFilterValue) => {
     this.handleSubFilterSelection(filterValue, this.selectedFilter);
   };
@@ -129,6 +133,8 @@ export class VviinnFilters {
   private handleSetFilters = ({
     detail,
   }: CustomEvent<DynamicFiltersEventData>) => {
+    if (this.showInWidget) return;
+
     this.innerFilters = detail;
     if (!this.innerFilters?.length) return;
 
@@ -146,9 +152,13 @@ export class VviinnFilters {
   private handleFiltersChanged = ({
     detail,
   }: CustomEvent<ChangedFiltersEventData>) => {
-    const { filters, el: senderElement } = detail;
+    const { filters, el: senderElement, isTriggeredByVpsWidget } = detail;
 
-    if (senderElement === this.el) return;
+    if (
+      senderElement === this.el ||
+      this.skipFiltersChanges(isTriggeredByVpsWidget)
+    )
+      return;
 
     this.requestFilters = filters;
 

@@ -130,6 +130,7 @@ export class VviinnResults {
   /** @internal */
   @Event({ bubbles: true })
   vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
+
   /** Dynamic filters are received from the API. */
   /** @internal */
   @Event() vviinnFiltersReceived: EventEmitter<DynamicFiltersEventData>;
@@ -238,6 +239,10 @@ export class VviinnResults {
   private getRecommendations = () =>
     this.showInWidget ? searchState.results : this.recommendations;
 
+  private skipFiltersChanges = (isTriggeredByVpsWidget: boolean) =>
+    (isTriggeredByVpsWidget && !this.showInWidget) ||
+    (!isTriggeredByVpsWidget && this.showInWidget);
+
   private getResultsBySearchId = async (searchId: string) => {
     if (!searchId || this.showInWidget) return;
     state.apiPath = this.apiPath; //FIXME: #36877
@@ -317,30 +322,25 @@ export class VviinnResults {
 
   private textSearchStartedHandler = async ({ detail }: TextSearchEvent) => {
     this.innerTextSearchQuery = detail.query;
-    await this.getTextSearchResults(detail.query);
+    await this.getTextSearchResults(this.innerTextSearchQuery);
     this.resultsSearchFinished.emit();
     this.vviinnSelectedFiltersReset.emit();
   };
 
   private filtersChangedHandler = ({ detail }: ChangedFiltersEvent) => {
-    const { filters, triggeredByVpsWidget } = detail;
+    const { filters, isTriggeredByVpsWidget } = detail;
 
     if (this.filterColumn && this.filterValue) {
-      return this.getResultsByCategory(detail.filters);
+      return this.getResultsByCategory(filters);
     }
 
-    if (!this.showInWidget && triggeredByVpsWidget) return;
-    const isWidgetEvent = this.showInWidget && triggeredByVpsWidget;
+    if (this.skipFiltersChanges(isTriggeredByVpsWidget)) return;
+    const isVpsWidgetEvent = this.showInWidget && isTriggeredByVpsWidget;
 
-    if (isWidgetEvent) {
+    if (isVpsWidgetEvent) {
       return this.getVpsResults(this.textSearchQuery, filters);
-    }
-
-    if (!isWidgetEvent) {
-      return this.getTextSearchResults(
-        this.textSearchQuery ?? this.innerTextSearchQuery,
-        detail.filters
-      );
+    } else {
+      return this.getTextSearchResults(this.innerTextSearchQuery, filters);
     }
   };
 
@@ -396,7 +396,11 @@ export class VviinnResults {
 
     this.getResultsBySearchId(this.searchId);
     this.getResultsByCategory();
-    this.getTextSearchResults(this.textSearchQuery);
+
+    if (!this.showInWidget) {
+      this.innerTextSearchQuery = this.textSearchQuery;
+      this.getTextSearchResults(this.innerTextSearchQuery);
+    }
   }
 
   disconnectedCallback() {

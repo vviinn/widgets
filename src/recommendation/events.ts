@@ -87,7 +87,7 @@ export type TextSearchEventData = {
 export type ChangedFiltersEventData = {
   filters: RequestDynamicFilterItem[];
   el: HTMLElement;
-  triggeredByVpsWidget?: boolean;
+  isTriggeredByVpsWidget?: boolean;
 };
 
 export type DynamicFiltersEventData = ResponseDynamicFilterItem[];

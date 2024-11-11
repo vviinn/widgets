@@ -134,6 +134,10 @@ export class VviinnExtendedFilters {
     this.selectedMoreOptions = [];
   };
 
+  private skipFiltersChanges = (isTriggeredByVpsWidget: boolean) =>
+    (isTriggeredByVpsWidget && !this.showInWidget) ||
+    (!isTriggeredByVpsWidget && this.showInWidget);
+
   componentDidRender() {
     this.replaceSlotsContent();
   }
@@ -194,15 +198,20 @@ export class VviinnExtendedFilters {
   }
 
   private handleSetFilters = ({ detail }: DynamicFiltersEvent) => {
+    if (this.showInWidget) return;
     this.innerFilters = detail;
   };
 
   private handleFiltersChanged = ({
     detail,
   }: CustomEvent<ChangedFiltersEventData>) => {
-    const { filters, el: senderElement } = detail;
+    const { filters, el: senderElement, isTriggeredByVpsWidget } = detail;
 
-    if (senderElement === this.el) return;
+    if (
+      senderElement === this.el ||
+      this.skipFiltersChanges(isTriggeredByVpsWidget)
+    )
+      return;
 
     this.requestFilters = filters;
   };
