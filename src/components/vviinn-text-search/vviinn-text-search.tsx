@@ -90,12 +90,8 @@ export class VviinnTextSearch {
       resources,
     });
     slotChangeListener(this, this.el);
-  }
 
-  async componentDidLoad() {
-    if (this.showInWidget) return;
-
-    if (this.searchQuery?.length > 0) {
+    if (!this.showInWidget && this.searchQuery?.length > 0) {
       this.showLoader();
       this.vviinnTextSearchStarted.emit({
         query: this.searchQuery,

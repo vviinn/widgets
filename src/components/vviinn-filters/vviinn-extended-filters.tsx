@@ -304,7 +304,7 @@ export class VviinnExtendedFilters {
       <Host>
         {SlotSkeleton("filters")}
 
-        {this.getFilters().length > 0 && this.mode === "button" && (
+        {this.getFilters()?.length > 0 && this.mode === "button" && (
           <button
             class="filters-more-button"
             onClick={() => (this.showMore = true)}

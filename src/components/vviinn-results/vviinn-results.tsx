@@ -429,6 +429,7 @@ export class VviinnResults {
 
   @Watch("textSearchQuery")
   watchTextSearchQuery(newQuery: string) {
+    if (this.showInWidget) return;
     this.getTextSearchResults(newQuery);
   }
 

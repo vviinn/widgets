@@ -212,7 +212,7 @@ export class VviinnFilters {
   }
 
   render() {
-    if (!this.getFilters().length) return <Host></Host>;
+    if (!this.getFilters()?.length) return <Host></Host>;
     const { column } = this.selectedFilter ?? {};
     const filterOptions = getFilterOptions(this.selectedFilter);
     const filters = this.getFilters().filter((filter) => filter.isPrimary);
