@@ -36,3 +36,17 @@
   align-items: center;
   color: var(--color-icon-inverse);
 }
+
+#product-card-customized-label vviinn-product-card::part(title) {
+  order: 1;
+}
+#product-card-customized-label vviinn-product-card::part(custom-label-0) {
+  order: 2;
+  display: block;
+}
+#product-card-customized-label vviinn-product-card::part(price-outdated) {
+  order: 3;
+}
+#product-card-customized-label vviinn-product-card::part(price-sale) {
+  order: 4;
+}
