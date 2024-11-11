@@ -90,6 +90,10 @@ export type ChangedFiltersEventData = {
   isTriggeredByVpsWidget?: boolean;
 };
 
+export type ResetSelectedFiltersEventData = {
+  isTriggeredByVpsWidget: boolean;
+};
+
 export type DynamicFiltersEventData = ResponseDynamicFilterItem[];
 
 export type DynamicFilterTrackingData = {
@@ -101,5 +105,7 @@ export type SearchIdEvent = CustomEvent<SearchIdEventData>;
 export type TextSearchEvent = CustomEvent<TextSearchEventData>;
 export type DynamicFiltersEvent = CustomEvent<DynamicFiltersEventData>;
 export type ChangedFiltersEvent = CustomEvent<ChangedFiltersEventData>;
+export type ResetSelectedFiltersEvent =
+  CustomEvent<ResetSelectedFiltersEventData>;
 export type ProductCardEvent = CustomEvent<ProductCardEventData>;
 export type CrossSellingClickEvent = CustomEvent<CrossSellingClickEventData>;

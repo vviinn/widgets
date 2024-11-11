@@ -46,6 +46,7 @@ import {
   ProductCardEventData,
   ProductEvent,
   ProductEventType,
+  ResetSelectedFiltersEventData,
   ResultEventType,
   SearchIdEvent,
   SearchIdEventData,
@@ -204,7 +205,7 @@ export class VviinnResults {
   /** Selected filters should be resetted */
   /** @internal */
   @Event({ bubbles: true })
-  vviinnSelectedFiltersReset: EventEmitter;
+  vviinnSelectedFiltersReset: EventEmitter<ResetSelectedFiltersEventData>;
 
   private replaceSlotsContent() {
     const slots = this.el.querySelectorAll("[slot]");
@@ -324,14 +325,17 @@ export class VviinnResults {
     this.innerTextSearchQuery = detail.query;
     await this.getTextSearchResults(this.innerTextSearchQuery);
     this.resultsSearchFinished.emit();
-    this.vviinnSelectedFiltersReset.emit();
+    this.vviinnSelectedFiltersReset.emit({
+      isTriggeredByVpsWidget: false,
+    });
   };
 
-  private filtersChangedHandler = ({ detail }: ChangedFiltersEvent) => {
+  private filtersChangedHandler = async ({ detail }: ChangedFiltersEvent) => {
     const { filters, isTriggeredByVpsWidget } = detail;
 
     if (this.filterColumn && this.filterValue) {
-      return this.getResultsByCategory(filters);
+      this.getResultsByCategory(filters);
+      return;
     }
 
     if (this.skipFiltersChanges(isTriggeredByVpsWidget)) return;

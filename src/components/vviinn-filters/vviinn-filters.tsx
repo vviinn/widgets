@@ -24,6 +24,7 @@ import {
   ChangedFiltersEventData,
   DynamicFiltersEventData,
   DynamicFilterTrackingData,
+  ResetSelectedFiltersEventData,
 } from "../../recommendation/events";
 import { components } from "../../interfaces/generated";
 import { triggerFilter } from "./helpers/triggerFilter";
@@ -83,7 +84,7 @@ export class VviinnFilters {
   /** Selected filters should be resetted */
   /** @internal */
   @Event({ bubbles: true })
-  vviinnSelectedFiltersReset: EventEmitter;
+  vviinnSelectedFiltersReset: EventEmitter<ResetSelectedFiltersEventData>;
 
   private getSelectedPriceInterval = () =>
     (this.requestFilters.find(({ column }) => column === "price")?.values[0] ??
@@ -96,7 +97,10 @@ export class VviinnFilters {
   private getFilters = () =>
     this.showInWidget ? this.filters : this.innerFilters;
 
-  private handleSelectedFiltersReset = () => {
+  private handleSelectedFiltersReset = ({
+    detail,
+  }: CustomEvent<ResetSelectedFiltersEventData>) => {
+    if (this.skipFiltersChanges(detail.isTriggeredByVpsWidget)) return;
     this.requestFilters = [];
     this.selectedFilter = undefined;
   };

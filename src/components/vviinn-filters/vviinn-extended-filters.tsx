@@ -33,6 +33,7 @@ import {
   DynamicFiltersEvent,
   DynamicFiltersEventData,
   DynamicFilterTrackingData,
+  ResetSelectedFiltersEventData,
 } from "../../recommendation/events";
 import { components } from "../../interfaces/generated";
 import { ClickEvent, isClickedInRectBound } from "../../geometry/Rectangle";
@@ -110,7 +111,7 @@ export class VviinnExtendedFilters {
   /** Selected filters should be resetted */
   /** @internal */
   @Event({ bubbles: true })
-  vviinnSelectedFiltersReset: EventEmitter;
+  vviinnSelectedFiltersReset: EventEmitter<ResetSelectedFiltersEventData>;
 
   @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
 
@@ -129,7 +130,10 @@ export class VviinnExtendedFilters {
     (this.requestFilters.find(({ column }) => column === "price")?.values[0] ??
       {}) as components["schemas"]["interval"];
 
-  private handleSelectedFiltersReset = () => {
+  private handleSelectedFiltersReset = ({
+    detail,
+  }: CustomEvent<ResetSelectedFiltersEventData>) => {
+    if (this.skipFiltersChanges(detail.isTriggeredByVpsWidget)) return;
     this.requestFilters = [];
     this.selectedMoreOptions = [];
   };

@@ -14,6 +14,7 @@ import { SearchModalUploadIcon, TextSearchIcon } from "../vviinn-icons";
 import { slotChangeListener } from "../customized-slots";
 import {
   DynamicFiltersEventData,
+  ResetSelectedFiltersEventData,
   SearchIdEvent,
   SearchIdEventData,
   TextSearchEventData,
@@ -50,6 +51,11 @@ export class VviinnTextSearch {
   /** A search response was received by vviinn-results (used internally for showing preloader) */
   /** @internal */
   @Event() resultsSearchFinished: EventEmitter;
+
+  /** Selected filters should be resetted */
+  /** @internal */
+  @Event({ bubbles: true })
+  vviinnSelectedFiltersReset: EventEmitter<ResetSelectedFiltersEventData>;
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
@@ -121,6 +127,7 @@ export class VviinnTextSearch {
     if (this.showInWidget) {
       await makeTextSearchRequest(this.token, this.searchQuery);
       this.widgetTextSearchFinished.emit({ query: this.searchQuery });
+      this.vviinnSelectedFiltersReset.emit({ isTriggeredByVpsWidget: true });
     } else {
       this.showLoader();
       this.vviinnTextSearchStarted.emit({

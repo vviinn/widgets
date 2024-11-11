@@ -19,6 +19,7 @@ import {
   DynamicFiltersEvent,
   DynamicFiltersEventData,
   DynamicFilterTrackingData,
+  ResetSelectedFiltersEventData,
 } from "../../recommendation/events";
 import { triggerFilter } from "./helpers/triggerFilter";
 
@@ -52,7 +53,7 @@ export class VviinnSelectedFilters {
   /** Selected filters should be resetted */
   /** @internal */
   @Event({ bubbles: true })
-  vviinnSelectedFiltersReset: EventEmitter;
+  vviinnSelectedFiltersReset: EventEmitter<ResetSelectedFiltersEventData>;
 
   @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
 
@@ -94,7 +95,10 @@ export class VviinnSelectedFilters {
     this.requestFilters = filters;
   };
 
-  private handleSelectedFiltersReset = () => {
+  private handleSelectedFiltersReset = ({
+    detail,
+  }: CustomEvent<ResetSelectedFiltersEventData>) => {
+    if (this.skipFiltersChanges(detail.isTriggeredByVpsWidget)) return;
     this.requestFilters = [];
   };
 
