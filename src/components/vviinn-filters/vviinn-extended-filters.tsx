@@ -367,6 +367,7 @@ export class VviinnExtendedFilters {
                           {filterOptions &&
                             filterOptions.map(({ value, label, active }) => {
                               const hexCode = value.hexCode;
+                              const hasHexCodeLength = hexCode?.length > 0;
                               const selected = this.showActiveOnModalSubButton(
                                 this.requestFilters,
                                 value
@@ -382,14 +383,14 @@ export class VviinnExtendedFilters {
                                       )
                                     }
                                     class={`filters-more-modal-button ${
-                                      hexCode?.length > 0
+                                      hasHexCodeLength
                                         ? "filters-sub-button-color"
                                         : ""
                                     } ${selected ? "active" : ""}`}
                                     disabled={!active}
                                     part="extended-filters-option-button"
                                   >
-                                    {hexCode?.length > 0 && (
+                                    {hasHexCodeLength && (
                                       <div
                                         class="filters-sub-button-color-dot"
                                         style={{ backgroundColor: hexCode }}
