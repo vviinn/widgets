@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.118.1](https://github.com/vviinn/widgets/compare/v2.118.0...v2.118.1) (2024-11-11)
+
+
+### Bug Fixes
+
+* Align extended and color filters styles ([6c968ac](https://github.com/vviinn/widgets/commit/6c968acb1c655836276966144761b08f5535737a))
+
 ## [2.118.0](https://github.com/vviinn/widgets/compare/v2.117.0...v2.118.0) (2024-11-11)
 
 
