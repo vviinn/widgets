@@ -333,12 +333,13 @@ export class VviinnResults {
   private filtersChangedHandler = async ({ detail }: ChangedFiltersEvent) => {
     const { filters, isTriggeredByVpsWidget } = detail;
 
+    if (this.skipFiltersChanges(isTriggeredByVpsWidget)) return;
+
     if (this.filterColumn && this.filterValue) {
       this.getResultsByCategory(filters);
       return;
     }
 
-    if (this.skipFiltersChanges(isTriggeredByVpsWidget)) return;
     const isVpsWidgetEvent = this.showInWidget && isTriggeredByVpsWidget;
 
     if (isVpsWidgetEvent) {
