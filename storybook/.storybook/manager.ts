@@ -13,7 +13,6 @@ addons.setConfig({
 const appendIndustrySelect = () => {
   const explorerMenu = document.getElementById("storybook-explorer-menu");
 
-  // Helper function to create the select element
   const createSelect = () => {
     const array = [
       { value: "home-living", text: "Home & Living" },
@@ -42,7 +41,6 @@ const appendIndustrySelect = () => {
     return selectList;
   };
 
-  // Append the selector to the given container if it doesn't already exist
   const appendToMenu = (menu) => {
     if (menu && !menu.querySelector("#vviinn-industries")) {
       const selectList = createSelect();
