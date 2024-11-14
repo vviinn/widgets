@@ -120,12 +120,6 @@ export type DynamicFiltersEventData = ResponseDynamicFilterItem[];
 export type DynamicFilterTrackingData = {
   action: FilterAction;
   kind: string;
-  campaignTypeName?:
-    | "Similar Products"
-    | "Visual Search"
-    | "Cross-Selling"
-    | "Text Product Search";
-  widget?: Widget;
 };
 
 export type SearchIdEvent = CustomEvent<SearchIdEventData>;
