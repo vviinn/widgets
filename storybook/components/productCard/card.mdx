@@ -1,4 +1,4 @@
-import { productIdSimilarProducts, vviinnToken } from "../../helpers";
+import { vviinnToken } from "../../helpers";
 import { clickHandlers } from "../index";
 import { Source } from "@storybook/blocks";
 
@@ -35,7 +35,7 @@ import "../../styles/product-card.css";
             <vviinn-vpr-button
               token={vviinnToken}
               product-id={
-                props.cardData.productData.id ?? productIdSimilarProducts
+                props.cardData.productData.id
               }
               mode="grid"
               block-title=""

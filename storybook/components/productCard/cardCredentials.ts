@@ -1,3 +1,6 @@
+import { cardDataByType, productDataByIndustryAndType } from "./constants";
+import { vviinnIndustry } from "../../helpers";
+
 const cardDataSeparator = "\n    ";
 const cardAppendContainer = `
 <div id="product-card-append-container"></div>`;
