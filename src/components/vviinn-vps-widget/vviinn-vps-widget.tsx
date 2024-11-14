@@ -598,6 +598,7 @@ export class VviinnVpsWidget {
     this.cameraButtonClicked = false;
     this.cameraInitializing = false;
     this.setShowAspectRatioError(false);
+    this.isTextSearch = false;
   }
 
   private haveErrors(): boolean {

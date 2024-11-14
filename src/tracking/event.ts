@@ -5,7 +5,7 @@ export const createTrackingEvent =
   (widget: WidgetEventType) =>
   <T extends Event>(eventData: any): T => {
     return {
-      ...widget,
       ...eventData,
+      ...widget,
     };
   };
