@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.118.3](https://github.com/vviinn/widgets/compare/v2.118.2...v2.118.3) (2024-11-14)
+
+
+### Bug Fixes
+
+* Unify filter buttons across the components ([fff968c](https://github.com/vviinn/widgets/commit/fff968ce7dd1e71ff054472040f3c753784d654e))
+
+### [2.118.2](https://github.com/vviinn/widgets/compare/v2.118.1...v2.118.2) (2024-11-14)
+
+
+### Bug Fixes
+
+* Show Industry Select on mobile in the Storybook ([daae741](https://github.com/vviinn/widgets/commit/daae7419b480362c328d30e6ba62c09f581646d3))
+
+### [2.118.1](https://github.com/vviinn/widgets/compare/v2.118.0...v2.118.1) (2024-11-11)
+
+
+### Bug Fixes
+
+* Align extended and color filters styles ([6c968ac](https://github.com/vviinn/widgets/commit/6c968acb1c655836276966144761b08f5535737a))
+
+## [2.118.0](https://github.com/vviinn/widgets/compare/v2.117.0...v2.118.0) (2024-11-11)
+
+
+### Features
+
+* Show in Storybook how to style custom labels ([6a6e0c7](https://github.com/vviinn/widgets/commit/6a6e0c791cfcf18056b093d1c7ae12159df51bd5))
+
 ## [2.117.0](https://github.com/vviinn/widgets/compare/v2.116.0...v2.117.0) (2024-10-31)
 
 

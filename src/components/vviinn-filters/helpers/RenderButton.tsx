@@ -16,22 +16,24 @@ export const RenderButton = (
   showClose = false
 ) => {
   const hexCode = value.hexCode;
+  const hasHexCodeLength = hexCode?.length > 0;
 
   return (
-    <li>
+    <li part="extended-filters-sub-row">
       <button
-        class={`filters-sub-button${isSelected ? "-selected" : ""} ${
-          hexCode ? "filters-sub-button-color" : ""
+        onClick={() => handleSubFilterSelection(value, selectedFilter)}
+        class={`filters-more-modal-button ${
+          hasHexCodeLength ? "filters-sub-button-color" : ""
         } ${isSelected ? "active" : ""}`}
-        style={{ backgroundColor: hexCode }}
-        onClick={() => {
-          active || isSelected
-            ? handleSubFilterSelection(value, selectedFilter)
-            : null;
-        }}
-        disabled={!(active || isSelected)}
-        part="filters-sub-button"
+        disabled={!active}
+        part="extended-filters-option-button"
       >
+        {hasHexCodeLength && (
+          <div
+            class="filters-sub-button-color-dot"
+            style={{ backgroundColor: hexCode }}
+          ></div>
+        )}
         <span>
           <span>{label}</span>
           {!showClose ? (

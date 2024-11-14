@@ -18,13 +18,12 @@ import {
   DynamicFilterValue,
   RequestDynamicFilters,
 } from "../../campaign/VPRCampaignService";
+import { FiltersIcon, NewCloseIcon } from "../vviinn-icons";
 import {
-  FiltersIcon,
-  NewCloseIcon,
-  SquareFilterIcon,
-  CheckFilterIcon,
-} from "../vviinn-icons";
-import { getFilterOptions, emitRequestFiltersMore } from "./helpers";
+  getFilterOptions,
+  emitRequestFiltersMore,
+  RenderButton,
+} from "./helpers";
 import { Locale, resources } from "../../locale";
 
 import { SlotSkeleton, slotChangeListener } from "../customized-slots";
@@ -357,51 +356,27 @@ export class VviinnExtendedFilters {
                         />
                       ) : (
                         <ul
-                          class={`filters-modal-sub-list ${
-                            mainColumn === "color_confirmed"
-                              ? "filters-modal-sub-list-inline"
-                              : ""
-                          } ${
+                          class={`filters-modal-sub-list  ${
                             this.selectedMoreOptions.includes(mainFilter.column)
                               ? "open"
                               : ""
                           }`}
                           part="extended-filters-sub-list"
                         >
-                          {filterOptions &&
+                          {!!filterOptions &&
                             filterOptions.map(({ value, label, active }) => {
-                              const hexCode = value.hexCode;
                               const selected = this.showActiveOnModalSubButton(
                                 this.requestFilters,
                                 value
                               );
 
-                              return (
-                                <li part="extended-filters-sub-row">
-                                  <button
-                                    onClick={() =>
-                                      this.handleSubFilterSelection(
-                                        value,
-                                        mainFilter
-                                      )
-                                    }
-                                    class={`filters-more-modal-button ${
-                                      hexCode ? "filters-sub-button-color" : ""
-                                    } ${selected ? "active" : ""}`}
-                                    style={{ backgroundColor: hexCode }}
-                                    disabled={!active}
-                                    part="extended-filters-option-button"
-                                  >
-                                    <span>
-                                      <span>{label}</span>
-                                      {selected ? (
-                                        <CheckFilterIcon />
-                                      ) : (
-                                        <SquareFilterIcon />
-                                      )}
-                                    </span>
-                                  </button>
-                                </li>
+                              return RenderButton(
+                                this.handleSubFilterSelection.bind(this),
+                                value,
+                                label,
+                                active,
+                                mainFilter,
+                                selected
                               );
                             })}
                         </ul>
