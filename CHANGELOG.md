@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.118.3](https://github.com/vviinn/widgets/compare/v2.118.2...v2.118.3) (2024-11-14)
+
+
+### Bug Fixes
+
+* Unify filter buttons across the components ([fff968c](https://github.com/vviinn/widgets/commit/fff968ce7dd1e71ff054472040f3c753784d654e))
+
 ### [2.118.2](https://github.com/vviinn/widgets/compare/v2.118.1...v2.118.2) (2024-11-14)
 
 
