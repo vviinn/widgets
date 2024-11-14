@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.119.0](https://github.com/vviinn/widgets/compare/v2.118.3...v2.119.0) (2024-11-14)
+
+
+### Features
+
+* send text search tracking ([ee32fba](https://github.com/vviinn/widgets/commit/ee32fba18f6bf2f96b36d6f99ef98237d915f14b))
+
 ### [2.118.3](https://github.com/vviinn/widgets/compare/v2.118.2...v2.118.3) (2024-11-14)
 
 

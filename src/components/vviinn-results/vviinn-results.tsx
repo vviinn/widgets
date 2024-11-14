@@ -55,8 +55,8 @@ import {
 } from "../../recommendation/events";
 import {
   createFilterEvent,
-  createProductVpsEventByType,
   createResultVpsEventByType,
+  createProductWidgetEventByType,
 } from "../../tracking";
 import { RequestDynamicFilterItem } from "../../campaign/VPRCampaignService";
 import i18next from "i18next";
@@ -197,6 +197,7 @@ export class VviinnResults {
   @State() innerTextSearchQuery: string;
   @State() slotsReplaced: boolean;
   @State() oneClickDiscoveryAppendIndex: number;
+  @State() isTextSearch: boolean = this.textSearchQuery?.length > 0;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -352,16 +353,14 @@ export class VviinnResults {
   private filtersTriggeredHandler = ({
     detail,
   }: CustomEvent<DynamicFilterTrackingData>) => {
-    const { action, kind } = detail;
     if (this.trackingDeactivated) return;
     const { campaignTypeId, ...rest } = this.getBasicEventData();
 
     const filterEvent: FilterEvent = createFilterEvent({
       session_id: this.uiSessionId,
       typ: "filter_event",
-      kind,
-      action,
       ...rest,
+      ...detail,
     });
     this.trackingApi.trackEvent(filterEvent).then(this.setTrackingDeactivated);
   };
@@ -442,7 +441,6 @@ export class VviinnResults {
   trackProductLoad({ detail }: ProductCardEvent) {
     const productLoadEvent = this.getProductTrackEvent(detail, "load");
     if (!productLoadEvent) return;
-
     this.trackingApi
       .trackEvent(productLoadEvent)
       .then(this.setTrackingDeactivated);
@@ -561,24 +559,30 @@ export class VviinnResults {
       ...rest,
     };
 
-    const productEvent: ProductEvent =
-      createProductVpsEventByType(eventType)(eventBody);
+    const productEvent: ProductEvent = createProductWidgetEventByType(
+      widgetType === "VCS" ? "VPC" : widgetType,
+      eventType
+    )(eventBody);
 
     return productEvent;
   }
 
   private getBasicEventData = (): BasicEventData => {
+    const activeCampaign = this.isTextSearch ? "TPS" : "VPS";
     return {
-      widgetType: "VPS",
-      campaignTypeId: "VPS",
-      campaignTypeName: campaignTypeNames["VPS"],
+      widgetType: activeCampaign,
+      campaignTypeId: activeCampaign,
+      campaignTypeName: campaignTypeNames[activeCampaign],
       widgetId: this.widgetElementId,
       widgetVersion: version,
+      widget: this.isTextSearch ? "TPS" : undefined,
     };
   };
 
   private renderResults() {
     const results = this.getRecommendations();
+
+    const widgetData = this.getBasicEventData();
 
     if (results.length === 0) return null;
     if (!searchState.resultLoaded) {
@@ -623,7 +627,7 @@ export class VviinnResults {
         image={p.image.thumbnail ?? p.image.original}
         energyCertifications={p.energyCertifications}
         part="product-card"
-        campaignTypeId="VPS"
+        campaignTypeId={widgetData.campaignTypeId}
         widgetElementId={this.widgetElementId}
         buttonElementId={this.buttonElementId}
         widgetVersion={version}

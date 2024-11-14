@@ -210,6 +210,7 @@ export class VviinnVpsWidget {
   private isDesktop: boolean = false;
   private videoTrack: MediaStreamTrack | null = null;
   private widgetElementId: string;
+  private isTextSearch: boolean = false;
 
   private initResultEvents() {
     searchState.resultLoaded = false;
@@ -346,10 +347,11 @@ export class VviinnVpsWidget {
   };
 
   getBasicEventData = (): BasicEventData => {
+    const activeCampaign = this.isTextSearch ? "TPS" : "VPS";
     return {
-      widgetType: "VPS",
-      campaignTypeId: "VPS",
-      campaignTypeName: campaignTypeNames["VPS"],
+      widgetType: activeCampaign,
+      campaignTypeId: activeCampaign,
+      campaignTypeName: campaignTypeNames[activeCampaign],
       widgetId: this.buttonElementId ?? this.widgetElementId,
       widgetVersion: version,
     };
@@ -372,6 +374,7 @@ export class VviinnVpsWidget {
   @Listen("widgetTextSearchFinished") textSearchFinishedHandler({
     detail,
   }: TextSearchEvent) {
+    this.isTextSearch = true;
     this.searchQuery = detail.query;
     this.slidePosition = 1;
   }
@@ -595,6 +598,7 @@ export class VviinnVpsWidget {
     this.cameraButtonClicked = false;
     this.cameraInitializing = false;
     this.setShowAspectRatioError(false);
+    this.isTextSearch = false;
   }
 
   private haveErrors(): boolean {

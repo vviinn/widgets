@@ -1,9 +1,9 @@
 import {
   FilterAction,
-  FilterKind,
   ProductClickEvent,
   ProductLoadEvent,
   ProductViewEvent,
+  Widget,
 } from "vviinn-tracking-client-ts";
 import { ValueObject } from "../network/ion/ValueObject";
 import { DetectedObject } from "../searchSession/searchSession";
@@ -14,45 +14,66 @@ import {
 } from "../campaign/VPRCampaignService";
 
 export type BasicEventData = {
-  widgetType: "VPR" | "VPS";
-  campaignTypeId: "VPR" | "VPS" | "VCS";
-  campaignTypeName: "Similar Products" | "Visual Search" | "Cross-Selling";
+  widgetType: "VPR" | "VPS" | "VCS" | "TPS";
+  campaignTypeId: "VPR" | "VPS" | "VCS" | "TPS";
+  campaignTypeName:
+    | "Similar Products"
+    | "Visual Search"
+    | "Cross-Selling"
+    | "Text Product Search";
   widgetId: string;
   widgetVersion: string;
+  widget?: Widget;
 };
 
 export type NoResultEventData = {
-  widgetType: "VPR" | "VPS";
-  campaignTypeId: "VPR" | "VPS" | "VCS";
-  campaignTypeName: "Similar Products" | "Visual Search" | "Cross-Selling";
+  widgetType: "VPR" | "VPS" | "VCS" | "TPS";
+  campaignTypeId: "VPR" | "VPS" | "VCS" | "TPS";
+  campaignTypeName:
+    | "Similar Products"
+    | "Visual Search"
+    | "Cross-Selling"
+    | "Text Product Search";
   widgetId: string;
   widgetVersion: string;
   reason: ErrorKind;
 };
 
 export type SelectObjectEventData = {
-  widgetType: "VPR" | "VPS";
-  campaignTypeId: "VPR" | "VPS" | "VCS";
-  campaignTypeName: "Similar Products" | "Visual Search" | "Cross-Selling";
+  widgetType: "VPR" | "VPS" | "VCS" | "TPS";
+  campaignTypeId: "VPR" | "VPS" | "VCS" | "TPS";
+  campaignTypeName:
+    | "Similar Products"
+    | "Visual Search"
+    | "Cross-Selling"
+    | "Text Product Search";
   widgetId: string;
   widgetVersion: string;
   detectedObject: ValueObject<DetectedObject>;
 };
 
 export type SelectFilterEventData = {
-  widgetType: "VPR" | "VPS";
-  campaignTypeId: "VPR" | "VPS" | "VCS";
-  campaignTypeName: "Similar Products" | "Visual Search" | "Cross-Selling";
+  widgetType: "VPR" | "VPS" | "VCS" | "TPS";
+  campaignTypeId: "VPR" | "VPS" | "VCS" | "TPS";
+  campaignTypeName:
+    | "Similar Products"
+    | "Visual Search"
+    | "Cross-Selling"
+    | "Text Product Search";
   widgetId: string;
   widgetVersion: string;
   action: FilterAction;
-  kind: FilterKind;
+  kind: string;
 };
 
 export type ProductCardEventData = {
-  widgetType: "VPR" | "VPS";
-  campaignTypeId: "VPR" | "VPS" | "VCS";
-  campaignTypeName: "Similar Products" | "Visual Search" | "Cross-Selling";
+  widgetType: "VPR" | "VPS" | "VCS" | "TPS";
+  campaignTypeId: "VPR" | "VPS" | "VCS" | "TPS";
+  campaignTypeName:
+    | "Similar Products"
+    | "Visual Search"
+    | "Cross-Selling"
+    | "Text Product Search";
   widgetId: string;
   widgetVersion: string;
   productId: string;
@@ -99,6 +120,12 @@ export type DynamicFiltersEventData = ResponseDynamicFilterItem[];
 export type DynamicFilterTrackingData = {
   action: FilterAction;
   kind: string;
+  campaignTypeName?:
+    | "Similar Products"
+    | "Visual Search"
+    | "Cross-Selling"
+    | "Text Product Search";
+  widget?: Widget;
 };
 
 export type SearchIdEvent = CustomEvent<SearchIdEventData>;
