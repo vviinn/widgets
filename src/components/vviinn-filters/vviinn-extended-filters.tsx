@@ -17,13 +17,8 @@ import {
   DynamicFilterValue,
   RequestDynamicFilterItem,
 } from "../../campaign/VPRCampaignService";
-import {
-  FiltersIcon,
-  NewCloseIcon,
-  SquareFilterIcon,
-  CheckFilterIcon,
-} from "../vviinn-icons";
-import { getFilterOptions } from "./helpers";
+import { FiltersIcon, NewCloseIcon } from "../vviinn-icons";
+import { getFilterOptions, RenderButton } from "./helpers";
 import { Locale, resources } from "../../locale";
 
 import { SlotSkeleton, slotChangeListener } from "../customized-slots";
@@ -409,48 +404,20 @@ export class VviinnExtendedFilters {
                           }`}
                           part="extended-filters-sub-list"
                         >
-                          {filterOptions &&
+                          {!!filterOptions &&
                             filterOptions.map(({ value, label, active }) => {
-                              const hexCode = value.hexCode;
-                              const hasHexCodeLength = hexCode?.length > 0;
                               const selected = this.showActiveOnModalSubButton(
                                 this.requestFilters,
                                 value
                               );
 
-                              return (
-                                <li part="extended-filters-sub-row">
-                                  <button
-                                    onClick={() =>
-                                      this.handleSubFilterSelection(
-                                        value,
-                                        mainFilter
-                                      )
-                                    }
-                                    class={`filters-more-modal-button ${
-                                      hasHexCodeLength
-                                        ? "filters-sub-button-color"
-                                        : ""
-                                    } ${selected ? "active" : ""}`}
-                                    disabled={!active}
-                                    part="extended-filters-option-button"
-                                  >
-                                    {hasHexCodeLength && (
-                                      <div
-                                        class="filters-sub-button-color-dot"
-                                        style={{ backgroundColor: hexCode }}
-                                      ></div>
-                                    )}
-                                    <span>
-                                      <span>{label}</span>
-                                      {selected ? (
-                                        <CheckFilterIcon />
-                                      ) : (
-                                        <SquareFilterIcon />
-                                      )}
-                                    </span>
-                                  </button>
-                                </li>
+                              return RenderButton(
+                                this.handleSubFilterSelection.bind(this),
+                                value,
+                                label,
+                                active,
+                                mainFilter,
+                                selected
                               );
                             })}
                         </ul>
