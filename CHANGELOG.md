@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.118.2](https://github.com/vviinn/widgets/compare/v2.118.1...v2.118.2) (2024-11-14)
+
+
+### Bug Fixes
+
+* Show Industry Select on mobile in the Storybook ([daae741](https://github.com/vviinn/widgets/commit/daae7419b480362c328d30e6ba62c09f581646d3))
+
 ### [2.118.1](https://github.com/vviinn/widgets/compare/v2.118.0...v2.118.1) (2024-11-11)
 
 
