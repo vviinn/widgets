@@ -6,31 +6,60 @@ const commonParams = {
   "image-width": "240",
 };
 
-export const mainCard = {
-  uniqueId: "main",
-  header: "Full Content View with One-click Discovery modal",
-  productData: {
-    "product-title": "Papier-Fototapete - bunt - 184x254 cm",
-    brand: "HAPPINESS",
-    "product-type": "Fototapete",
-    price: "59.96",
-    "base-price": '{"price":11.77,"quantity":1,"measure":"m²"}',
-    "sale-price": "54.99",
-    "base-sale-price": '{"price":10.79,"quantity":1,"measure":"m²"}',
-    "price-prefix": "",
-    "custom-labels": "UVP",
-    image:
-      "https://images.roller.de/product/papier-fototapete-happiness-bunt-184x254-cm/2566049700?ts=1696944156000&format=webp&size=1170x0",
-    "add-to-basket-show": "true",
-    ...commonParams,
+const cardDataByIndustryAndType = {
+  fashion: {
+    mainCard: {
+      productData: {
+        id: "4130004-1",
+        "product-title": "Magic Energy 100 ml  Damen",
+        brand: "Charlotte Tilbury ",
+        "product-type": " Eau de Parfum",
+        price: "150.00",
+        "base-price": '{"price":1500.00,"quantity":1,"measure":"l"}',
+        "sale-price": "149.99",
+        "base-sale-price": '{"price":1499.00,"quantity":1,"measure":"l"}',
+        image:
+          "https://www.fashionhype.com/uploads/tx_amproductfeeds/produktbilder/4130004.jpg",
+      },
+    },
   },
-  style: `
+  "home-living": {
+    mainCard: {
+      productData: {
+        id: "266152528616",
+        "product-title": "Papier-Fototapete - bunt - 184x254 cm",
+        brand: "HAPPINESS",
+        "product-type": "Fototapete",
+        price: "59.96",
+        "base-price": '{"price":11.77,"quantity":1,"measure":"m²"}',
+        "sale-price": "54.99",
+        "base-sale-price": '{"price":10.79,"quantity":1,"measure":"m²"}',
+        image:
+          "https://images.roller.de/product/papier-fototapete-happiness-bunt-184x254-cm/2566049700?ts=1696944156000&format=webp&size=1170x0",
+      },
+    },
+  },
+};
+
+export const mainCard = (industry) => {
+  return {
+    uniqueId: "main",
+    header: "Full Content View with One-click Discovery modal",
+    productData: {
+      ...cardDataByIndustryAndType[industry].mainCard.productData,
+      "price-prefix": "",
+      "custom-labels": "UVP",
+      "add-to-basket-show": "true",
+      ...commonParams,
+    },
+    style: `
 <style>
     vviinn-product-card::part(custom-label-0) {
         display: block;
     }
 </style>`,
-  buttonParams: {},
+    buttonParams: {},
+  };
 };
 
 export const appendCard = {

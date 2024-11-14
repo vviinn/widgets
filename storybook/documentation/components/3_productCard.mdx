@@ -12,6 +12,7 @@ import {
   minimalisticCard,
   setCard,
 } from "../../components/productCard/constants";
+import {vviinnIndustry} from "../../helpers";
 
 <Meta title="Components/Product Card" />
 
@@ -19,7 +20,7 @@ import {
 
 ## Examples
 
-<Card cardData={cardCredentials(mainCard)} />
+<Card cardData={cardCredentials(mainCard(vviinnIndustry))} />
 
 <Card cardData={cardCredentials(appendCard)} />
 
