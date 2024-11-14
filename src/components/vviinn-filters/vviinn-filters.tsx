@@ -190,7 +190,7 @@ export class VviinnFilters {
   render() {
     if (!this.filters) return <Host></Host>;
     const { column } = this.selectedFilter ?? {};
-    const selectedFilterOptions = getFilterOptions(this.selectedFilter);
+    const filterOptions = getFilterOptions(this.selectedFilter);
     const filters = this.filters.filter((filter) => filter.isPrimary);
 
     if (filters.length === 0) return <Host></Host>;
@@ -221,11 +221,13 @@ export class VviinnFilters {
           </ul>
         </div>
 
-        {this.selectedFilter !== undefined && (
+        {!!this.selectedFilter && (
           <div class="filters-footer" part="filters-footer">
             {column === "price" ? (
               <vviinn-price-range
-                histogram={selectedFilterOptions as Histogram}
+                histogram={(filterOptions as Histogram).filter(
+                  (item) => item.value.frequency > 0
+                )}
                 priceChangeHandler={this.priceChangeHandler}
                 selectedInterval={
                   (this.requestFilters.find(({ column }) => column === "price")
@@ -235,8 +237,8 @@ export class VviinnFilters {
               />
             ) : (
               <ul class="sub-filters-wrapper" part="filters-footer-list">
-                {selectedFilterOptions &&
-                  selectedFilterOptions.map(({ value, label, active }) => {
+                {!!filterOptions &&
+                  filterOptions.map(({ value, label, active }) => {
                     const isSelected = showActiveOnSubButton(
                       this.requestFilters,
                       value,

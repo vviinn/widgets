@@ -14,11 +14,7 @@ import {
   DynamicFilterValue,
   RequestDynamicFilters,
 } from "../../campaign/VPRCampaignService";
-import {
-  GetFilterOptions,
-  RenderButton,
-  showActiveOnSubButton,
-} from "./helpers";
+import { FilterOptions, RenderButton, showActiveOnSubButton } from "./helpers";
 import {
   ChangedFiltersEventData,
   DynamicFiltersEvent,
@@ -106,26 +102,24 @@ export class VviinnSelectedFilters {
     this.filters.forEach((filter) => {
       if (!("values" in filter)) return;
 
-      (filter.values as GetFilterOptions).forEach(
-        ({ value, label, active }) => {
-          if (
-            showActiveOnSubButton(this.requestFilters, value, filter) &&
-            active
-          ) {
-            selectedButtons.push(
-              RenderButton(
-                this.handleSubFilterSelection.bind(this),
-                value,
-                label,
-                active,
-                filter,
-                true,
-                true
-              )
-            );
-          }
+      (filter.values as FilterOptions).forEach(({ value, label, active }) => {
+        if (
+          showActiveOnSubButton(this.requestFilters, value, filter) &&
+          active
+        ) {
+          selectedButtons.push(
+            RenderButton(
+              this.handleSubFilterSelection.bind(this),
+              value,
+              label,
+              active,
+              filter,
+              true,
+              true
+            )
+          );
         }
-      );
+      });
     });
 
     return (
