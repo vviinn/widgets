@@ -52,7 +52,12 @@ const cardCodeFromData = (productData, buttonParams) => {
   )}${productText}${productCardBasic.slice(firstBracketIndex)}`;
 };
 
-export const cardCredentials = (cardData) => {
+export const cardCredentials = (cardType) => {
+  const cardData = cardDataByType[cardType];
+  cardData.productData = {
+    ...cardData.productData,
+    ...productDataByIndustryAndType[vviinnIndustry][cardType],
+  };
   const codeCardStyle = cardData.style ? `${cardData.style}\n` : "";
   const uniqueId = cardData.uniqueId;
   return {
