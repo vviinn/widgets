@@ -44,6 +44,7 @@ import {
   CheckCircleIcon,
   UpdateIcon,
   FavoriteIcon,
+  FavoriteIconPressed,
 } from "../vviinn-icons";
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
 import { generateRandomNumber } from "../../utils/number";
@@ -420,7 +421,7 @@ export class VviinnProductCard {
                 }}
               >
                 <slot name="vviinn-favorite-icon-pressed">
-                  <FavoriteIcon />
+                  <FavoriteIconPressed />
                 </slot>
               </div>
             </button>
