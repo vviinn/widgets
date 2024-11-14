@@ -216,12 +216,11 @@ export class VviinnFilters {
   }
 
   render() {
-    if (!this.getFilters()?.length) return <Host></Host>;
+    const filters = this.getFilters().filter((filter) => filter.isPrimary);
+    if (!filters?.length) return <Host></Host>;
+
     const { column } = this.selectedFilter ?? {};
     const filterOptions = getFilterOptions(this.selectedFilter);
-    const filters = this.getFilters().filter((filter) => filter.isPrimary);
-
-    if (filters.length === 0) return <Host></Host>;
 
     return (
       <Host

@@ -299,11 +299,13 @@ export class VviinnExtendedFilters {
   }
 
   render() {
+    const filters = this.getFilters();
+
     return (
       <Host>
         {SlotSkeleton("filters")}
 
-        {this.getFilters()?.length > 0 && this.mode === "button" && (
+        {filters?.length > 0 && this.mode === "button" && (
           <button
             class="filters-more-button"
             onClick={() => (this.showMore = true)}
@@ -343,7 +345,7 @@ export class VviinnExtendedFilters {
             )}
 
             <ul class="filters-modal-list" part="extended-filters-list">
-              {(this.getFilters() ?? []).map((mainFilter) => {
+              {(filters ?? []).map((mainFilter) => {
                 const mainColumn = mainFilter.column;
                 const filterOptions = getFilterOptions(mainFilter);
                 const requestFilter = this.requestFilters.find(
