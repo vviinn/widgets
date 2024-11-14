@@ -41,6 +41,7 @@ const Template = (args) => {
       product-card-image-bg-color="${args.productCardImageBgColor}"
       energy-certifications-string='${args.energyCertificationsString}'
       add-price-container='${args.addPriceContainer}'
+      favorite-show="${args.favoriteShow}"
       is-standalone="true"
     ></vviinn-product-card>`;
 };
@@ -75,4 +76,5 @@ Default.args = {
   productCardImageBgColor: "#f4f4f4",
   addPriceContainer: false,
   energyCertificationsString,
+  favoriteShow: false,
 };

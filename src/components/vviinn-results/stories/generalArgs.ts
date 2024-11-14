@@ -15,4 +15,5 @@ export const generalArgs = {
   searchId: "",
   oneClickDiscoveryMode: "modal",
   addPriceContainer: false,
+  favoriteShow: false,
 };

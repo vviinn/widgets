@@ -69,7 +69,8 @@ import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
  * @slot vviinn-basket-button-text-pressed - Text of pressed Add to Basket button (Set mode).
  * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button (Set mode).
  * @slot vviinn-energy-label-data-sheet-text - Text of the data sheet link for the energy label.
- * @slot vviinn-favourite-icon - Icon of Favourite button.
+ * @slot vviinn-favorite-icon - Icon of Favorite button.
+ * @slot vviinn-favorite-icon-pressed - Icon of pressed Favorite button.
  */
 
 @Component({
@@ -142,8 +143,8 @@ export class VviinnVprButton {
   /** ID of an HTML element that you want to attach the sidebar  */
   @Prop() appendSidebarTo: string;
 
-  /** Show or hide Favourite button */
-  @Prop() favouriteShow: boolean = false;
+  /** Show or hide Favorite button */
+  @Prop() favoriteShow: boolean = false;
 
   @Prop() appendSidebarToElement: HTMLElement;
 
@@ -254,7 +255,7 @@ export class VviinnVprButton {
     sidebar.setModeDiscounts = this.setModeDiscounts;
     sidebar.updateButtonLocation = this.updateButtonLocation;
     sidebar.addPriceContainer = this.addPriceContainer;
-    sidebar.favouriteShow = this.favouriteShow;
+    sidebar.favoriteShow = this.favoriteShow;
 
     this.sidebar = sidebar;
 

@@ -60,7 +60,7 @@ export class RecommendationsSidebar {
   @Prop() showFilters: boolean = false;
   @Prop() setModeDiscounts: string;
   @Prop() updateButtonLocation: UpdateButtonLocation;
-  @Prop() favouriteShow: boolean = false;
+  @Prop() favoriteShow: boolean = false;
 
   /** @internal */
   @Prop() showInCustomContainer: boolean = false;
@@ -194,7 +194,7 @@ export class RecommendationsSidebar {
               setModeDiscounts={this.setModeDiscounts}
               updateButtonLocation={this.updateButtonLocation}
               addPriceContainer={this.addPriceContainer}
-              favouriteShow={this.favouriteShow}
+              favoriteShow={this.favoriteShow}
             />
           </main>
         </aside>

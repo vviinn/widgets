@@ -22,6 +22,7 @@ export const mainCard = {
     image:
       "https://images.roller.de/product/papier-fototapete-happiness-bunt-184x254-cm/2566049700?ts=1696944156000&format=webp&size=1170x0",
     "add-to-basket-show": "true",
+    "favorite-show": "true",
     ...commonParams,
   },
   style: `

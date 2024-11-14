@@ -99,7 +99,8 @@ import { resources } from "../../locale/resources";
  * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button (Set mode).
  * @slot energy-label-data-sheet-text - Data sheet link's text.
  * @slot vviinn-product-card-actions - Add action buttons like One-click discovery to this slot.
- * @slot vviinn-favourite-icon - Icon of Favourite button.
+ * @slot vviinn-favorite-icon - Icon of Favorite button.
+ * @slot vviinn-favorite-icon-pressed - Icon of pressed Favorite button.
  *
  */
 @Component({
@@ -126,7 +127,7 @@ export class VviinnProductCard {
   @Prop() baseSalePrice: BasePrice | string | null;
   @Prop() responsive: boolean = false;
   @Prop() addToBasketShow: boolean;
-  @Prop() favouriteShow: boolean;
+  @Prop() favoriteShow: boolean;
   @Prop() updateButtonLocation: UpdateButtonLocation;
   @Prop() customLabels: string = "";
   @Prop() addPriceContainer?: boolean = false;
@@ -165,6 +166,7 @@ export class VviinnProductCard {
 
   @State() isTransitioning: boolean = false;
   @State() basketButonPressed: boolean = false;
+  @State() favoriteButonPressed: boolean = false;
 
   /** Event emitted once when the recommendation is rendered on the page */
   @Event({ bubbles: true })
@@ -178,9 +180,9 @@ export class VviinnProductCard {
   /** User clicks on Add to Basket button */
   @Event({ bubbles: true })
   vviinnAddToBasket: EventEmitter<ProductCardEventData>;
-  /** User clicks on Favourite button */
+  /** User clicks on Favorite button */
   @Event({ bubbles: true })
-  vviinnFavourite: EventEmitter<ProductCardEventData>;
+  vviinnFavorite: EventEmitter<ProductCardEventData>;
 
   /** @internal */
   @Event({ bubbles: true })
@@ -323,10 +325,11 @@ export class VviinnProductCard {
     this.basketButonPressed = true;
   }
 
-  private favouriteButtonClickHandler() {
-    this.vviinnFavourite.emit({
+  private favoriteButtonClickHandler() {
+    this.vviinnFavorite.emit({
       ...this.productData,
     });
+    this.favoriteButonPressed = !this.favoriteButonPressed;
   }
 
   private productClickHandler(event: MouseEvent) {
@@ -395,14 +398,31 @@ export class VviinnProductCard {
           <div class="product-card-top-actions" part="product-card-top-actions">
             <button
               class={{
-                hidden: !this.favouriteShow,
+                hidden: !this.favoriteShow,
               }}
-              part="favourite-button"
-              onClick={this.favouriteButtonClickHandler.bind(this)}
+              part="favorite-button"
+              onClick={this.favoriteButtonClickHandler.bind(this)}
             >
-              <slot name="vviinn-favourite-icon">
-                <FavoriteIcon />
-              </slot>
+              <div
+                key="favorite-not-pressed"
+                class={{
+                  hidden: this.favoriteButonPressed,
+                }}
+              >
+                <slot name="vviinn-favorite-icon">
+                  <FavoriteIcon />
+                </slot>
+              </div>
+              <div
+                key="favorite-pressed"
+                class={{
+                  hidden: !this.favoriteButonPressed,
+                }}
+              >
+                <slot name="vviinn-favorite-icon-pressed">
+                  <FavoriteIcon />
+                </slot>
+              </div>
             </button>
           </div>
           <div class="product-card-actions" part="product-card-actions">

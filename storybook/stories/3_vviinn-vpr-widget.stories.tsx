@@ -39,6 +39,7 @@ const Template = (args) => `
       show-extended-filters="${args.showExtendedFilters}"
       set-mode-discounts="${args.setModeDiscounts}"
       add-price-container="${args.addPriceContainer}"
+      favorite-show="${args.favoriteShow}"
     >
     </vviinn-vpr-widget>
 `;
@@ -71,4 +72,5 @@ Grid.args = {
   showFilters: false,
   showExtendedFilters: false,
   addPriceContainer: false,
+  favoriteShow: false,
 };

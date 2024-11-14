@@ -74,7 +74,7 @@ export class VviinnCarousel {
   @Prop() setModeDiscountsArray: number[];
   @Prop() imageRatio: number;
   @Prop() addPriceContainer?: boolean = false;
-  @Prop() favouriteShow: boolean;
+  @Prop() favoriteShow: boolean;
   @Prop() currencySign: string;
   @Prop() pricePrefix: string = "";
   @Prop() locale: Locale;
@@ -469,7 +469,7 @@ export class VviinnCarousel {
         setMode={this.isSetMode}
         customLabels={getCustomLabels(recommendation)}
         addPriceContainer={this.addPriceContainer}
-        favouriteShow={this.favouriteShow}
+        favoriteShow={this.favoriteShow}
       />
     );
   }
@@ -557,7 +557,7 @@ export class VviinnCarousel {
               pricePrefix={this.pricePrefix}
               setMode={this.isSetMode}
               locale={this.locale}
-              favouriteShow={this.favouriteShow}
+              favoriteShow={this.favoriteShow}
             />
           )}
 
