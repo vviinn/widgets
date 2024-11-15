@@ -287,9 +287,7 @@ export class VviinnProductCard {
   }
 
   private getWidgetType() {
-    return this.campaignTypeId === "VPR" || this.campaignTypeId === "VCS"
-      ? ("VPR" as WidgetType)
-      : ("VPS" as WidgetType);
+    return this.campaignTypeId as WidgetType;
   }
 
   private getProductData(): ProductCardEventData {

@@ -16,7 +16,6 @@ import {
   SelectFilterEventData,
 } from "../../../recommendation/events";
 import { parseFilters } from "../../../filters/parseFilters";
-import { FilterKind } from "vviinn-tracking-client-ts";
 
 const FILTERS_COUNT: number = 4;
 
@@ -41,10 +40,10 @@ export class SearchFilters {
   private isCategoriesFilterType(): boolean {
     return this.filterType === "categories";
   }
-  private getFilterKind(): FilterKind {
+  private getFilterKind(): string {
     return this.isCategoriesFilterType()
       ? "category"
-      : (this.filterType as FilterKind);
+      : (this.filterType as string);
   }
 
   private handleFilterSelection(filter: Link): void {
