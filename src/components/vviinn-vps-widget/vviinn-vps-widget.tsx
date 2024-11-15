@@ -50,7 +50,11 @@ import { videoStreamSettings } from "../../video/settings";
 import { Recommendation } from "../../interfaces/recommendation";
 import { checkDeviceType } from "../../helpers";
 import { UploadSource, VisualSearchMode } from "../../widget/types";
-import { extendedFiltersParts, filtersParts } from "../../cssParts";
+import {
+  extendedFiltersParts,
+  filtersParts,
+  searchWidgetFilterParts,
+} from "../../cssParts";
 
 const CAMERA_START_DELAY = 500;
 
@@ -627,7 +631,9 @@ export class VviinnVpsWidget {
 
   render() {
     return (
-      <Host exportparts="image-container, content-container, basket-button-container,brand, product-type, deeplink, currency, image, image-link, image-picture, price-container, price-amount-sale, price-amount-outdated, price-amount-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-outdated, price-regular, price-sale, price-prefix, title, product-card, upload-photo_button, show-files_button, start-camera_button, text-search-input, close-button, secondary-action, close-button, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link">
+      <Host
+        exportparts={`image-container, content-container, basket-button-container,brand, product-type, deeplink, currency, image, image-link, image-picture, price-container, price-amount-sale, price-amount-outdated, price-amount-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-outdated, price-regular, price-sale, price-prefix, title, product-card, upload-photo_button, show-files_button, start-camera_button, text-search-input, text-search-button, close-button, secondary-action, close-button, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link ${searchWidgetFilterParts}`}
+      >
         {!this.showingInButton && SlotSkeleton("vps")}
 
         <vviinn-overlayed-modal

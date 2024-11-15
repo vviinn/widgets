@@ -23,7 +23,7 @@ export const extendedFiltersPartsList = [
   "extended-filters-reset",
 ];
 
-export const filterPartsList = [
+export const filtersPartsList = [
   "filters-wrapper",
   "filters-list",
   "filters-main-button",
