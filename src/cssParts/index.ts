@@ -26,6 +26,8 @@ export const selectedFiltersParts = makeExportPartsString(
   generalFiltersPartsList
 );
 
+export const priceRangeParts = makeExportPartsString(histogramPartsList);
+
 export const searchWidgetFilterParts = makeExportPartsString(
   extendedFiltersPartsList,
   filtersPartsList,
