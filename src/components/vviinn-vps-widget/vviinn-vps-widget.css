@@ -278,6 +278,7 @@ vviinn-preloader {
 
   vviinn-filters {
     display: block;
+    overflow: hidden;
   }
 
   vviinn-extended-filters {

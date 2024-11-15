@@ -106,7 +106,7 @@
   transform: translateX(-24px);
   padding-left: var(--spacing-300);
   padding-right: var(--spacing-300);
-  width: calc(100% + 12px);
+  width: 100%;
 }
 
 @media (max-width: 768px) {
@@ -324,6 +324,7 @@
   gap: var(--spacing-25);
 }
 .filters-more-modal-button > span > span {
+  white-space: nowrap;
   padding: var(--spacing-25);
 }
 .filters-more-modal-button:disabled {
