@@ -383,6 +383,7 @@ vviinn-energy-label {
 
   color: var(--color-icon-inverse);
   cursor: pointer;
+  line-height: 0px;
 }
 
 .product-card-top-actions button:hover {
