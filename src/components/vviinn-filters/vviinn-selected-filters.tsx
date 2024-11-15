@@ -25,8 +25,12 @@ import { triggerFilter } from "./helpers/triggerFilter";
 
 /**
  * @part selected-filters-list - List of selected filters.
-
- * @part filters-sub-button - Sub filter button.
+ 
+ * @part filters-sub-row - Row of the sub filters.
+ * @part filters-option-button - Button of the sub filter.
+ * @part filters-option-color-dot - Color Dot of the sub filter.
+ * @part filters-option-text - Text of the sub filter.
+ * @part filters-option-icon-wrapper - Icon Wrapper of the sub filter.
  */
 
 @Component({

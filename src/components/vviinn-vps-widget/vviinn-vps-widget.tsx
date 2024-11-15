@@ -50,7 +50,7 @@ import { videoStreamSettings } from "../../video/settings";
 import { Recommendation } from "../../interfaces/recommendation";
 import { checkDeviceType } from "../../helpers";
 import { UploadSource, VisualSearchMode } from "../../widget/types";
-import { extendedFiltersParts } from "../../cssParts";
+import { extendedFiltersParts, filtersParts } from "../../cssParts";
 
 const CAMERA_START_DELAY = 500;
 
@@ -764,6 +764,7 @@ export class VviinnVpsWidget {
                     <vviinn-filters
                       filters={searchState.dynamicFilters}
                       showInWidget={true}
+                      exportparts={filtersParts}
                     ></vviinn-filters>
 
                     <vviinn-extended-filters

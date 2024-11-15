@@ -2,6 +2,8 @@ import {
   extendedFiltersPartsList,
   filterPartsList,
   histogramPartsList,
+  generalFiltersPartsList,
+  selectedFiltersPartsList,
 } from "./filters";
 
 const makeExportPartsString = (...args: string[][]): string =>
@@ -9,5 +11,17 @@ const makeExportPartsString = (...args: string[][]): string =>
 
 export const extendedFiltersParts = makeExportPartsString(
   extendedFiltersPartsList,
-  histogramPartsList
+  histogramPartsList,
+  generalFiltersPartsList
+);
+
+export const filtersParts = makeExportPartsString(
+  filterPartsList,
+  histogramPartsList,
+  generalFiltersPartsList
+);
+
+export const selectedFiltersParts = makeExportPartsString(
+  selectedFiltersPartsList,
+  generalFiltersPartsList
 );

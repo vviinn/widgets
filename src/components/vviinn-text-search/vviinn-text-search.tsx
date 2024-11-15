@@ -25,6 +25,7 @@ import { TextSearchMode } from "../../widget/types";
 
 /**
  * @part text-search-input - Text search input.
+ * @part text-search-button - Text search input's search button.
  * @slot vviinn-text-search-icon - Icon of the text search block.
  * @slot vviinn-text-search-actions - Additional actions for the text search block, e.g., a button to open the Search Modal.
  */
@@ -160,7 +161,7 @@ export class VviinnTextSearch {
 
   render() {
     return (
-      <Host exportparts="text-search-input">
+      <Host exportparts="text-search-input, text-search-button">
         <input
           class={{
             "text-search-input": true,
@@ -175,6 +176,7 @@ export class VviinnTextSearch {
         />
         <button
           class="text-search-button"
+          part="text-search-button"
           onClick={() => this.handleTextSearch()}
           disabled={searchState.loading}
         >

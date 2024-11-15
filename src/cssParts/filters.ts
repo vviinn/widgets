@@ -1,3 +1,11 @@
+export const generalFiltersPartsList = [
+  "filters-sub-row",
+  "filters-option-button",
+  "filters-option-color-dot",
+  "filters-option-text",
+  "filters-option-icon-wrapper",
+];
+
 export const extendedFiltersPartsList = [
   "extended-filters-button",
   "extended-filters-modal",
@@ -10,10 +18,6 @@ export const extendedFiltersPartsList = [
   "extended-filters-main-button",
   "extended-filters-selected-wrapper",
   "extended-filters-sub-list",
-  "extended-filters-sub-row",
-  "extended-filters-option-button",
-  "extended-filters-option-color-dot",
-  "extended-filters-option-icon-wrapper",
   "extended-filters-actions",
   "extended-filters-apply",
   "extended-filters-reset",
@@ -27,6 +31,8 @@ export const filterPartsList = [
   "filters-footer-list",
   "filters-sub-button",
 ];
+
+export const selectedFiltersPartsList = ["selected-filters-list"];
 
 export const histogramPartsList = [
   "histogram",
