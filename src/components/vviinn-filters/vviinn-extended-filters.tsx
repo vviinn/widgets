@@ -56,6 +56,7 @@ import { triggerFilter } from "./helpers/triggerFilter";
  * @part extended-filters-sub-list - List of sub filters.
  * @part extended-filters-sub-row - Row of the sub filters.
  * @part extended-filters-option-button - Button for the sub filter.
+ * @part extended-filters-option-color-dot - Color Dot for the sub filter.
  * @part extended-filters-actions - Wrapper for the actions.
  * @part extended-filters-apply - Apply button.
  * @part extended-filters-reset - Reset button.

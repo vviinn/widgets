@@ -80,6 +80,7 @@
 }
 
 .sub-filters-wrapper {
+  align-items: center;
   gap: var(--spacing-100);
   margin-top: 16px;
   margin: 16px -2px 0;
@@ -272,6 +273,7 @@
 
 .filters-modal-sub-list.open {
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
   gap: 8px;
   padding-bottom: var(--spacing-150);

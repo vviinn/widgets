@@ -32,17 +32,20 @@ export const RenderButton = (
           <div
             class="filters-sub-button-color-dot"
             style={{ backgroundColor: hexCode }}
+            part="extended-filters-option-color-dot"
           ></div>
         )}
         <span>
-          <span>{label}</span>
-          {!showClose ? (
-            isSelected ? (
-              <CheckFilterIcon />
-            ) : (
-              <SquareFilterIcon />
-            )
-          ) : null}
+          <span part="extended-filters-option-text">{label}</span>
+          <div part="extended-filters-option-icon-wrapper">
+            {!showClose ? (
+              isSelected ? (
+                <CheckFilterIcon />
+              ) : (
+                <SquareFilterIcon />
+              )
+            ) : null}
+          </div>
           {isSelected && showClose && <CloseFilterIcon />}
         </span>
       </button>

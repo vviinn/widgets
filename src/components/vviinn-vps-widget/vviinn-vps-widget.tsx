@@ -50,6 +50,7 @@ import { videoStreamSettings } from "../../video/settings";
 import { Recommendation } from "../../interfaces/recommendation";
 import { checkDeviceType } from "../../helpers";
 import { UploadSource, VisualSearchMode } from "../../widget/types";
+import { extendedFiltersParts } from "../../cssParts";
 
 const CAMERA_START_DELAY = 500;
 
@@ -105,6 +106,7 @@ const CAMERA_START_DELAY = 500;
  * @part energy-label-product-type - Product type.
  * @part energy-label-data-sheet-link - Data sheet link.
  */
+
 @Component({
   tag: "vviinn-vps-widget",
   styleUrl: "vviinn-vps-widget.css",
@@ -768,6 +770,7 @@ export class VviinnVpsWidget {
                       filters={searchState.dynamicFilters}
                       mode="preview"
                       showHeader={false}
+                      exportparts={extendedFiltersParts}
                     ></vviinn-extended-filters>
                   </div>
                 </div>

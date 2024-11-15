@@ -35,7 +35,6 @@ import { triggerFilter } from "./helpers/triggerFilter";
  * @part filters-main-button - Main filter button.
  * @part filters-footer - Wrapper for the sub filters.
  * @part filters-footer-list - List of sub filters.
-
  * @part filters-sub-button - Sub filter button.
  
  * @part histogram - Wrapper itself.
