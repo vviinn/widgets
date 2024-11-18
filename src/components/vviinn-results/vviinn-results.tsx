@@ -158,6 +158,8 @@ export class VviinnResults {
   @Prop() productDetailsRedirect?: boolean = true;
   /** Show or hide Add to Basket buttons */
   @Prop() addToBasketShow: boolean = false;
+  /** Show or hide Favorite button */
+  @Prop() favoriteShow: boolean = false;
   /** Query for performing text search */
   @Prop() textSearchQuery?: string;
   /** Column for performing Product Listing Page request */
@@ -635,6 +637,7 @@ export class VviinnResults {
         locale={this.locale}
         customLabels={getCustomLabels(p)}
         addToBasketShow={this.addToBasketShow}
+        favoriteShow={this.favoriteShow}
         addPriceContainer={this.addPriceContainer}
         isResultsWidget={true}
         style={{ order: i.toString() }}

@@ -56,6 +56,7 @@ export const ResultsTemplate = (args) => {
     add-to-basket-show="${addToBasketShow}"
     one-click-discovery-mode="${oneClickDiscoveryMode}"
     add-price-container="${addPriceContainer}"
+    favorite-show="${args.favoriteShow}"
   ></vviinn-results>
   </div>
 </div>`;

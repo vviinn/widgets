@@ -137,6 +137,8 @@ export class VviinnVpsWidget {
   @Prop() textSearchShow: boolean = false;
   /** Show or hide Add to Basket buttons */
   @Prop() addToBasketShow: boolean = false;
+  /** Show or hide Favorite button */
+  @Prop() favoriteShow: boolean = false;
   /** Show or hide the One-click Discovery */
   @Prop() showOneClickDiscovery = false;
   /** Wrap the Product Card's price values in the container. */
@@ -785,6 +787,7 @@ export class VviinnVpsWidget {
                   productDetailsNewTab={this.productDetailsNewTab}
                   productDetailsRedirect={this.productDetailsRedirect}
                   addToBasketShow={this.addToBasketShow}
+                  favoriteShow={this.favoriteShow}
                   showAspectRatioError={this.showAspectRatioError}
                   trackingDeactivated={this.trackingDeactivated}
                   resetState={this.resetState.bind(this)}

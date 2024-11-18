@@ -39,7 +39,13 @@ import {
   campaignTypeNames,
 } from "../../campaign/Campaign";
 import { slotChangeListener } from "../customized-slots";
-import { BasketIcon, CheckCircleIcon, UpdateIcon } from "../vviinn-icons";
+import {
+  BasketIcon,
+  CheckCircleIcon,
+  UpdateIcon,
+  FavoriteIcon,
+  FavoriteIconPressed,
+} from "../vviinn-icons";
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
 import { generateRandomNumber } from "../../utils/number";
 import {
@@ -85,6 +91,7 @@ import { resources } from "../../locale/resources";
  * @part custom-label-3 - String part of the price with index 3.
  * @part custom-label-4 - String part of the price with index 4.
  * @part product-card-actions - Style actions wrapper.
+ * @part product-card-top-actions - Style top actions wrapper.
  *
  * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
@@ -93,6 +100,8 @@ import { resources } from "../../locale/resources";
  * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button (Set mode).
  * @slot energy-label-data-sheet-text - Data sheet link's text.
  * @slot vviinn-product-card-actions - Add action buttons like One-click discovery to this slot.
+ * @slot vviinn-favorite-icon - Icon of Favorite button.
+ * @slot vviinn-favorite-icon-pressed - Icon of pressed Favorite button.
  *
  */
 @Component({
@@ -119,6 +128,7 @@ export class VviinnProductCard {
   @Prop() baseSalePrice: BasePrice | string | null;
   @Prop() responsive: boolean = false;
   @Prop() addToBasketShow: boolean;
+  @Prop() favoriteShow: boolean;
   @Prop() updateButtonLocation: UpdateButtonLocation;
   @Prop() customLabels: string = "";
   @Prop() addPriceContainer?: boolean = false;
@@ -157,6 +167,7 @@ export class VviinnProductCard {
 
   @State() isTransitioning: boolean = false;
   @State() basketButonPressed: boolean = false;
+  @State() favoriteButonPressed: boolean = false;
 
   /** Event emitted once when the recommendation is rendered on the page */
   @Event({ bubbles: true })
@@ -170,6 +181,9 @@ export class VviinnProductCard {
   /** User clicks on Add to Basket button */
   @Event({ bubbles: true })
   vviinnAddToBasket: EventEmitter<ProductCardEventData>;
+  /** User clicks on Favorite button */
+  @Event({ bubbles: true })
+  vviinnFavorite: EventEmitter<ProductCardEventData>;
 
   /** @internal */
   @Event({ bubbles: true })
@@ -310,6 +324,13 @@ export class VviinnProductCard {
     this.basketButonPressed = true;
   }
 
+  private favoriteButtonClickHandler() {
+    this.vviinnFavorite.emit({
+      ...this.productData,
+    });
+    this.favoriteButonPressed = !this.favoriteButonPressed;
+  }
+
   private productClickHandler(event: MouseEvent) {
     event.preventDefault();
     event.stopImmediatePropagation();
@@ -367,12 +388,42 @@ export class VviinnProductCard {
         class={{
           animated: this.isTransitioning,
         }}
-        exportparts="image-container, content-container, basket-button-container, brand, product-type, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, currency, deeplink, image, image-link, image-picture, price-container, price-amount-regular, price-amount-sale, price-amount-outdated, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-outdated, price-regular, price-sale, price-prefix, discount-label, discount-percentage, title, basket-button, update-button-item, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link product-card-actions"
+        exportparts="image-container, content-container, basket-button-container, brand, product-type, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, currency, deeplink, image, image-link, image-picture, price-container, price-amount-regular, price-amount-sale, price-amount-outdated, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-outdated, price-regular, price-sale, price-prefix, discount-label, discount-percentage, title, basket-button, update-button-item, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link, product-card-actions, product-card-top-actions"
       >
         <div class="image-container" part="image-container">
           <Linked deeplink={this.deeplink} part="image-link">
             {this.renderImage()}
           </Linked>
+          <div class="product-card-top-actions" part="product-card-top-actions">
+            <button
+              class={{
+                hidden: !this.favoriteShow,
+              }}
+              part="favorite-button"
+              onClick={this.favoriteButtonClickHandler.bind(this)}
+            >
+              <div
+                key="favorite-not-pressed"
+                class={{
+                  hidden: this.favoriteButonPressed,
+                }}
+              >
+                <slot name="vviinn-favorite-icon">
+                  <FavoriteIcon />
+                </slot>
+              </div>
+              <div
+                key="favorite-pressed"
+                class={{
+                  hidden: !this.favoriteButonPressed,
+                }}
+              >
+                <slot name="vviinn-favorite-icon-pressed">
+                  <FavoriteIconPressed />
+                </slot>
+              </div>
+            </button>
+          </div>
           <div class="product-card-actions" part="product-card-actions">
             <slot name="vviinn-product-card-actions"></slot>
           </div>
