@@ -50,6 +50,11 @@ import { videoStreamSettings } from "../../video/settings";
 import { Recommendation } from "../../interfaces/recommendation";
 import { checkDeviceType } from "../../helpers";
 import { UploadSource, VisualSearchMode } from "../../widget/types";
+import {
+  extendedFiltersParts,
+  filtersParts,
+  searchWidgetFilterParts,
+} from "../../cssParts";
 
 const CAMERA_START_DELAY = 500;
 
@@ -105,6 +110,7 @@ const CAMERA_START_DELAY = 500;
  * @part energy-label-product-type - Product type.
  * @part energy-label-data-sheet-link - Data sheet link.
  */
+
 @Component({
   tag: "vviinn-vps-widget",
   styleUrl: "vviinn-vps-widget.css",
@@ -137,6 +143,8 @@ export class VviinnVpsWidget {
   @Prop() textSearchShow: boolean = false;
   /** Show or hide Add to Basket buttons */
   @Prop() addToBasketShow: boolean = false;
+  /** Show or hide Favorite button */
+  @Prop() favoriteShow: boolean = false;
   /** Show or hide the One-click Discovery */
   @Prop() showOneClickDiscovery = false;
   /** Wrap the Product Card's price values in the container. */
@@ -625,7 +633,9 @@ export class VviinnVpsWidget {
 
   render() {
     return (
-      <Host exportparts="image-container, content-container, basket-button-container,brand, product-type, deeplink, currency, image, image-link, image-picture, price-container, price-amount-sale, price-amount-outdated, price-amount-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-outdated, price-regular, price-sale, price-prefix, title, product-card, upload-photo_button, show-files_button, start-camera_button, text-search-input, close-button, secondary-action, close-button, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link">
+      <Host
+        exportparts={`image-container, content-container, basket-button-container,brand, product-type, deeplink, currency, image, image-link, image-picture, price-container, price-amount-sale, price-amount-outdated, price-amount-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-outdated, price-regular, price-sale, price-prefix, title, product-card, upload-photo_button, show-files_button, start-camera_button, text-search-input, text-search-button, close-button, secondary-action, close-button, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link ${searchWidgetFilterParts}`}
+      >
         {!this.showingInButton && SlotSkeleton("vps")}
 
         <vviinn-overlayed-modal
@@ -668,22 +678,18 @@ export class VviinnVpsWidget {
                 id="start-page_block"
               >
                 <div class="start-page_main-content">
-                  <div
-                    class={{
-                      "start-page_errors-block": true,
-                      hidden:
-                        !this.wrongImageFormat && !searchState.serverError,
-                    }}
-                  >
-                    <vviinn-wrong-format
-                      class={{ hidden: !this.wrongImageFormat }}
-                      handler={() => this.resetState()}
-                    />
-                    <vviinn-server-error
-                      class={{ hidden: !searchState.serverError }}
-                      handler={() => this.resetState()}
-                    />
-                  </div>
+                  {(this.wrongImageFormat || searchState.serverError) && (
+                    <div class="start-page_errors-block">
+                      <vviinn-wrong-format
+                        class={{ hidden: !this.wrongImageFormat }}
+                        handler={() => this.resetState()}
+                      />
+                      <vviinn-server-error
+                        class={{ hidden: !searchState.serverError }}
+                        handler={() => this.resetState()}
+                      />
+                    </div>
+                  )}
 
                   {!this.haveErrors() && (
                     <Fragment>
@@ -762,12 +768,16 @@ export class VviinnVpsWidget {
                     <vviinn-filters
                       filters={searchState.dynamicFilters}
                       showInWidget={true}
+                      exportparts={filtersParts}
                     ></vviinn-filters>
 
                     <vviinn-extended-filters
                       filters={searchState.dynamicFilters}
                       mode="preview"
                       showHeader={false}
+                      exportparts={extendedFiltersParts}
+                      showInWidget={true}
+                      locale={this.locale}
                     ></vviinn-extended-filters>
                   </div>
                 </div>
@@ -787,6 +797,7 @@ export class VviinnVpsWidget {
                   productDetailsNewTab={this.productDetailsNewTab}
                   productDetailsRedirect={this.productDetailsRedirect}
                   addToBasketShow={this.addToBasketShow}
+                  favoriteShow={this.favoriteShow}
                   showAspectRatioError={this.showAspectRatioError}
                   trackingDeactivated={this.trackingDeactivated}
                   resetState={this.resetState.bind(this)}

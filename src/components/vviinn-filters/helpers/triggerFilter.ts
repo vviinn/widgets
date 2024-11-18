@@ -1,9 +1,8 @@
 import { subFilterSelection } from "./subFilterSelection";
-import { emitRequestFiltersMore } from "./emitRequestFiltersMore";
 import {
-  DynamicFilter,
+  ResponseDynamicFilterItem,
   DynamicFilterValue,
-  RequestDynamicFilters,
+  RequestDynamicFilterItem,
 } from "../../../campaign/VPRCampaignService";
 import { EventEmitter } from "@stencil/core";
 import {
@@ -13,11 +12,12 @@ import {
 
 export const triggerFilter = (
   filterValue: DynamicFilterValue,
-  selectedFilter: DynamicFilter,
-  requestFilters: RequestDynamicFilters,
+  selectedFilter: ResponseDynamicFilterItem,
+  requestFilters: RequestDynamicFilterItem[],
   vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>,
+  vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>,
   el: HTMLElement,
-  vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>
+  isTriggeredByVpsWidget?: boolean
 ) => {
   const { filters, action } = subFilterSelection(
     requestFilters,
@@ -29,8 +29,29 @@ export const triggerFilter = (
     kind: selectedFilter.column,
     action,
   });
-  vviinnFiltersChanged.emit({ filters, el });
-  emitRequestFiltersMore([...filters], el, vviinnFiltersChanged);
+
+  vviinnFiltersChanged.emit({
+    filters,
+    el,
+    isTriggeredByVpsWidget,
+  });
 
   return filters;
+};
+
+export const triggerResetFilters = (
+  vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>,
+  el: HTMLElement,
+  isTriggeredByVpsWidget?: boolean
+) => {
+  // TODO: #37391 Implement the reset logic
+  // vviinnFilterTriggered.emit({
+  //   action: "reset",
+  // });
+
+  vviinnFiltersChanged.emit({
+    filters: [],
+    el,
+    isTriggeredByVpsWidget,
+  });
 };

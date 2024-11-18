@@ -54,15 +54,6 @@
   padding: 0;
 }
 
-.nothing-found {
-  display: grid;
-  grid-gap: 64px;
-  justify-self: center;
-  padding-top: 64px;
-  padding-bottom: 16px;
-  position: absolute;
-}
-
 .hidden {
   visibility: hidden;
   height: 1px;

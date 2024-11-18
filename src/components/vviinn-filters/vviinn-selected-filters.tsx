@@ -9,10 +9,9 @@ import {
   Prop,
 } from "@stencil/core";
 import {
-  DynamicFilters,
-  DynamicFilter,
+  ResponseDynamicFilterItem,
   DynamicFilterValue,
-  RequestDynamicFilters,
+  RequestDynamicFilterItem,
 } from "../../campaign/VPRCampaignService";
 import { FilterOptions, RenderButton, showActiveOnSubButton } from "./helpers";
 import {
@@ -20,13 +19,18 @@ import {
   DynamicFiltersEvent,
   DynamicFiltersEventData,
   DynamicFilterTrackingData,
+  ResetSelectedFiltersEventData,
 } from "../../recommendation/events";
 import { triggerFilter } from "./helpers/triggerFilter";
 
 /**
  * @part selected-filters-list - List of selected filters.
-
- * @part filters-sub-button - Sub filter button.
+ 
+ * @part filters-sub-row - Row of the sub filters.
+ * @part filters-option-button - Button of the sub filter.
+ * @part filters-option-color-dot - Color Dot of the sub filter.
+ * @part filters-option-text - Text of the sub filter.
+ * @part filters-option-icon-wrapper - Icon Wrapper of the sub filter.
  */
 
 @Component({
@@ -40,59 +44,94 @@ export class VviinnSelectedFilters {
   /** @internal */
   @Prop() showInWidget: boolean = false;
 
-  @State() filters: DynamicFilters = [];
-  @State() requestFilters: RequestDynamicFilters = [];
+  @State() filters: ResponseDynamicFilterItem[] = [];
+  @State() requestFilters: RequestDynamicFilterItem[] = [];
 
   /** The filter's state changes */
   @Event({ bubbles: true })
   vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
   /** The filters received */
   @Event({ bubbles: true })
-  vviinnFilters: EventEmitter<DynamicFiltersEventData>;
+  vviinnFiltersReceived: EventEmitter<DynamicFiltersEventData>;
+
+  /** Selected filters should be resetted */
+  /** @internal */
+  @Event({ bubbles: true })
+  vviinnSelectedFiltersReset: EventEmitter<ResetSelectedFiltersEventData>;
 
   @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
 
   private handleSubFilterSelection(
     filterValue: DynamicFilterValue,
-    selectedFilter: DynamicFilter
+    selectedFilter: ResponseDynamicFilterItem
   ) {
     this.requestFilters = triggerFilter(
       filterValue,
       selectedFilter,
       this.requestFilters,
       this.vviinnFilterTriggered,
+      this.vviinnFiltersChanged,
       this.el,
-      this.vviinnFiltersChanged
+      this.showInWidget
     );
   }
 
   private handleSetFilters = ({ detail }: DynamicFiltersEvent) => {
+    if (this.showInWidget) return;
     this.filters = detail;
   };
+
+  private skipFiltersChanges = (isTriggeredByVpsWidget: boolean) =>
+    (isTriggeredByVpsWidget && !this.showInWidget) ||
+    (!isTriggeredByVpsWidget && this.showInWidget);
 
   private handleFiltersChanged = ({
     detail,
   }: CustomEvent<ChangedFiltersEventData>) => {
-    const { filters, el: senderElement } = detail;
+    const { filters, el: senderElement, isTriggeredByVpsWidget } = detail;
 
-    if (senderElement === this.el) return;
+    if (
+      senderElement === this.el ||
+      this.skipFiltersChanges(isTriggeredByVpsWidget)
+    )
+      return;
 
     this.requestFilters = filters;
   };
 
+  private handleSelectedFiltersReset = ({
+    detail,
+  }: CustomEvent<ResetSelectedFiltersEventData>) => {
+    if (this.skipFiltersChanges(detail.isTriggeredByVpsWidget)) return;
+    this.requestFilters = [];
+  };
+
   connectedCallback() {
-    document.addEventListener("vviinnFilters", this.handleSetFilters);
+    document.addEventListener("vviinnFiltersReceived", this.handleSetFilters);
     document.addEventListener(
       "vviinnFiltersChanged",
       this.handleFiltersChanged
     );
+
+    document.addEventListener(
+      "vviinnSelectedFiltersReset",
+      this.handleSelectedFiltersReset
+    );
   }
 
   disconnectedCallback() {
-    document.removeEventListener("vviinnFilters", this.handleSetFilters);
+    document.removeEventListener(
+      "vviinnFiltersReceived",
+      this.handleSetFilters
+    );
     document.removeEventListener(
       "vviinnFiltersChanged",
       this.handleFiltersChanged
+    );
+
+    document.removeEventListener(
+      "vviinnSelectedFiltersReset",
+      this.handleSelectedFiltersReset
     );
   }
 

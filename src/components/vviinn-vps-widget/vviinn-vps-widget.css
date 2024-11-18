@@ -5,6 +5,7 @@
     * @prop --color-primary: Set the color of Search Button and bullets in Onboarding Block.
     * @prop --color-primary-hover: Set the color of Search Button and bullets in Onboarding Block on mouse hover.
     * @prop --color-icons: Set fill color of SVG icons in Onboarding Block.
+    * @prop --modal-border-radius: Set the border radius of the modal.
     * @prop --product-card-width: Minimum width of product card inside the grid.
     * @prop --product-card-content-align: Set the alignment of the content inside the product card's flex container.
     * @prop --product-card-text-align: Set the alignment of the text inside the product card.
@@ -278,6 +279,7 @@ vviinn-preloader {
 
   vviinn-filters {
     display: block;
+    overflow: hidden;
   }
 
   vviinn-extended-filters {

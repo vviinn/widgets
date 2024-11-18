@@ -9,6 +9,8 @@ const vprSlotsNames: string[] = [
   "vviinn-basket-button-icon",
   "vviinn-basket-button-text-pressed",
   "vviinn-basket-button-icon-pressed",
+  "vviinn-favorite-icon",
+  "vviinn-favorite-icon-pressed",
 ];
 
 const vpsSlotsNames: string[] = [

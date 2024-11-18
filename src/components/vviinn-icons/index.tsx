@@ -26,3 +26,5 @@ export { SearchModalCameraIcon } from "./icons/SearchModalCameraIcon";
 export { SearchModalUploadIcon } from "./icons/SearchModalUploadIcon";
 export { SearchModalFullSearchIcon } from "./icons/SearchModalFullSearchIcon";
 export { SearchModalImageSearchIcon } from "./icons/SearchModalImageSearchIcon";
+export { FavoriteIcon } from "./icons/FavoriteIcon";
+export { FavoriteIconPressed } from "./icons/FavoriteIconPressed";

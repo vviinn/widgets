@@ -42,8 +42,8 @@ import {
   TextSearchRequest,
 } from "../interfaces/search";
 import {
-  DynamicFilter,
-  RequestDynamicFilters,
+  ResponseDynamicFilterItem,
+  RequestDynamicFilterItem,
 } from "../campaign/VPRCampaignService";
 import { setBodyAndHeaders } from "../network/utils";
 import { encodeToBase64UTF8 } from "../utils/string";
@@ -74,7 +74,7 @@ type SearchStore = {
   resultViewed: boolean;
   sourceProduct: Recommendation | null;
   filters: SearchSessionFilter[];
-  dynamicFilters: DynamicFilter[];
+  dynamicFilters: ResponseDynamicFilterItem[];
   resetCategoryLink?: Link;
   activeIonLink?: Link;
   selectedCropper?: number;
@@ -270,7 +270,7 @@ export const uploadFileFromWidget = (
 export const makeTextSearchRequest = async (
   token: string,
   query: string,
-  dynamicFilters?: RequestDynamicFilters
+  dynamicFilters?: RequestDynamicFilterItem[]
 ) => {
   state.searchType = "text";
   state.loading = true;
@@ -309,7 +309,7 @@ export const makeTextSearchRequest = async (
 export const makeSearchQueryRequest = async (
   token: string,
   query: string,
-  dynamicFilters?: RequestDynamicFilters,
+  dynamicFilters?: RequestDynamicFilterItem[],
   resultsCount?: number
 ) => {
   const body: TextSearchRequest = {
@@ -343,7 +343,7 @@ export const makeProductListingPageRequest = async (
   column: string,
   value: string,
   resultsCount?: number,
-  dynamicFilters?: RequestDynamicFilters
+  dynamicFilters?: RequestDynamicFilterItem[]
 ) => {
   const requestValue =
     column === "product_type" || column === "google_product_category"

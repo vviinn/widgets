@@ -2,7 +2,7 @@
 
 :host {
   background: white;
-  border-radius: 24px;
+  border-radius: var(--modal-border-radius, var(--border-radius-300));
   box-sizing: border-box;
   display: grid;
   grid-template-rows: min-content auto;

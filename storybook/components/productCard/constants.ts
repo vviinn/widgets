@@ -17,7 +17,7 @@ export const productDataByIndustryAndType = {
       "base-price": '{"price":1500.00,"quantity":1,"measure":"l"}',
       "sale-price": "149.99",
       "base-sale-price": '{"price":1499.00,"quantity":1,"measure":"l"}',
-      image:
+        image:
         "https://www.fashionhype.com/uploads/tx_amproductfeeds/produktbilder/4130004.jpg",
     },
     appendCard: {
@@ -69,6 +69,7 @@ export const productDataByIndustryAndType = {
       brand: "FISCHER & HONSEL",
       price: "199.0",
       "sale-price": "165.3",
+        "add-to-basket-show": "true",
       image:
         "https://cdn.vviinn.com/image/0/fit/400/0/ce/0/Z3M6Ly92dmlpbm4tY2F0YWxvZy1pbWFnZXMtcHJvZHVjdGlvbi9tZWRpYS5vc3Rlcm1hbm4uZGUveDAtTk5feE1wcG8tTDJKcGJHUXhMekExTnpFMU1UTXVhbkJuLmpwZw==",
       "energy-certifications-string":
@@ -101,6 +102,7 @@ export const cardDataByType = {
       "price-prefix": "",
       "custom-labels": "UVP",
       "add-to-basket-show": "true",
+        "favorite-show": "true",
       ...commonParams,
     },
     style: `

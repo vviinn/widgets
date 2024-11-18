@@ -62,9 +62,9 @@ import { Locale } from "../../locale";
 import { UpdateIcon } from "../vviinn-icons";
 import { getCustomLabels, getRecommendationsBody } from "../../recommendation";
 import {
-  RequestDynamicFilters,
+  RequestDynamicFilterItem,
   SimilarProductsResponse,
-  DynamicFilters,
+  ResponseDynamicFilterItem,
 } from "../../campaign/VPRCampaignService";
 import { CrossSellingResponse } from "../../campaign/VCSCampaignService";
 
@@ -121,6 +121,8 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @slot vviinn-basket-button-text-pressed - Text of pressed Add to Basket button (Set mode).
  * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button (Set mode).
  * @slot vviinn-energy-label-data-sheet-text - Text of the data sheet link for the energy label.
+ * @slot vviinn-favorite-icon - Icon of Favorite button.
+ * @slot vviinn-favorite-icon-pressed - Icon of pressed Favorite button.
  */
 
 @Component({
@@ -178,6 +180,8 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() updateButtonLocation: UpdateButtonLocation = "topAndItem";
   /** Wrap the Product Card's price values in the container. */
   @Prop() addPriceContainer?: boolean = false;
+  /** Show or hide Favorite button */
+  @Prop() favoriteShow: boolean = false;
 
   /** Widget’s title (change it to fit your locale) */
   @Prop() blockTitle: string = "Recommended products";
@@ -198,7 +202,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() opened?: boolean;
 
   @State() recommendations: Recommendation[] = [];
-  @State() dynamicFilters: DynamicFilters = [];
+  @State() dynamicFilters: ResponseDynamicFilterItem[] = [];
   @State() sourceProduct: Recommendation | null = null;
   @State() trackingDeactivated: boolean = false;
   @State() hasErrorOnLoad: boolean = false;
@@ -252,7 +256,7 @@ export class VviinnVprWidget implements ComponentInterface {
   private resultViewed: boolean = false;
   private isSetMode: boolean;
   private isGridMode: boolean;
-  private requestDynamicFilters: RequestDynamicFilters = [];
+  private requestDynamicFilters: RequestDynamicFilterItem[] = [];
   trackingApi: DefaultApi;
   uiSessionId: string;
 
@@ -594,7 +598,8 @@ export class VviinnVprWidget implements ComponentInterface {
   }: SimilarProductsResponse | CrossSellingResponse) {
     this.vviinnResultLoad.emit(this.getBasicEventData());
     this.trackResultEvent("load");
-    this.dynamicFilters = interactions.dynamicFilters as DynamicFilters;
+    this.dynamicFilters =
+      interactions.dynamicFilters as ResponseDynamicFilterItem[];
     const { products, sourceProduct } = data;
     this.recommendations = products;
     this.sourceProduct = sourceProduct;
@@ -748,6 +753,7 @@ export class VviinnVprWidget implements ComponentInterface {
         setMode={this.isSetMode}
         locale={this.locale}
         customLabels={getCustomLabels(recommendation)}
+        favoriteShow={this.favoriteShow}
       />
     );
   }
@@ -781,6 +787,7 @@ export class VviinnVprWidget implements ComponentInterface {
         pricePrefix={this.pricePrefix}
         locale={this.locale}
         imageRatio={this.imageRatio}
+        favoriteShow={this.favoriteShow}
       ></vviinn-carousel>
     );
   }

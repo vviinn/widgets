@@ -1,13 +1,13 @@
 import {
-  DynamicFilter,
+  ResponseDynamicFilterItem,
   DynamicFilterValue,
-  RequestDynamicFilters,
+  RequestDynamicFilterItem,
 } from "../../../campaign/VPRCampaignService";
 
 export const showActiveOnSubButton = (
-  requestFilters: RequestDynamicFilters,
+  requestFilters: RequestDynamicFilterItem[],
   filterValue: DynamicFilterValue,
-  selectedFilter: DynamicFilter
+  selectedFilter: ResponseDynamicFilterItem
 ) => {
   if (!selectedFilter || !requestFilters) return false;
 

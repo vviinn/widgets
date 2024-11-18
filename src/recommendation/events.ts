@@ -9,8 +9,8 @@ import { ValueObject } from "../network/ion/ValueObject";
 import { DetectedObject } from "../searchSession/searchSession";
 import { ErrorKind } from "../error";
 import {
-  DynamicFilter,
-  RequestDynamicFilters,
+  ResponseDynamicFilterItem,
+  RequestDynamicFilterItem,
 } from "../campaign/VPRCampaignService";
 
 export type BasicEventData = {
@@ -106,26 +106,27 @@ export type TextSearchEventData = {
 };
 
 export type ChangedFiltersEventData = {
-  filters: RequestDynamicFilters;
+  filters: RequestDynamicFilterItem[];
   el: HTMLElement;
+  isTriggeredByVpsWidget?: boolean;
 };
 
-export type DynamicFiltersEventData = DynamicFilter[];
+export type ResetSelectedFiltersEventData = {
+  isTriggeredByVpsWidget: boolean;
+};
+
+export type DynamicFiltersEventData = ResponseDynamicFilterItem[];
 
 export type DynamicFilterTrackingData = {
   action: FilterAction;
   kind: string;
-  campaignTypeName?:
-    | "Similar Products"
-    | "Visual Search"
-    | "Cross-Selling"
-    | "Text Product Search";
-  widget?: Widget;
 };
 
 export type SearchIdEvent = CustomEvent<SearchIdEventData>;
 export type TextSearchEvent = CustomEvent<TextSearchEventData>;
 export type DynamicFiltersEvent = CustomEvent<DynamicFiltersEventData>;
 export type ChangedFiltersEvent = CustomEvent<ChangedFiltersEventData>;
+export type ResetSelectedFiltersEvent =
+  CustomEvent<ResetSelectedFiltersEventData>;
 export type ProductCardEvent = CustomEvent<ProductCardEventData>;
 export type CrossSellingClickEvent = CustomEvent<CrossSellingClickEventData>;
