@@ -17,7 +17,7 @@ export const productDataByIndustryAndType = {
       "base-price": '{"price":1500.00,"quantity":1,"measure":"l"}',
       "sale-price": "149.99",
       "base-sale-price": '{"price":1499.00,"quantity":1,"measure":"l"}',
-        image:
+      image:
         "https://www.fashionhype.com/uploads/tx_amproductfeeds/produktbilder/4130004.jpg",
     },
     appendCard: {
@@ -69,7 +69,7 @@ export const productDataByIndustryAndType = {
       brand: "FISCHER & HONSEL",
       price: "199.0",
       "sale-price": "165.3",
-        "add-to-basket-show": "true",
+      "add-to-basket-show": "true",
       image:
         "https://cdn.vviinn.com/image/0/fit/400/0/ce/0/Z3M6Ly92dmlpbm4tY2F0YWxvZy1pbWFnZXMtcHJvZHVjdGlvbi9tZWRpYS5vc3Rlcm1hbm4uZGUveDAtTk5feE1wcG8tTDJKcGJHUXhMekExTnpFMU1UTXVhbkJuLmpwZw==",
       "energy-certifications-string":
@@ -102,7 +102,7 @@ export const cardDataByType = {
       "price-prefix": "",
       "custom-labels": "UVP",
       "add-to-basket-show": "true",
-        "favorite-show": "true",
+      "favorite-show": "true",
       ...commonParams,
     },
     style: `
@@ -149,23 +149,21 @@ export const cardDataByType = {
   }
 </style>`,
   },
-};
-
-export const customizedLabelCard = {
-  uniqueId: "customized-label",
-  header: "Product Card: Styling Custom Label and Changing Order",
-  info: "Custom labels are hidden by default, so we should rewrite the display property to show them. The code example also demonstrates how to change the order of the elements. In this case, we should set an 'order' property for each displayed part of the Product Card.",
-  productData: {
-    "product-title": "Couchtisch Rolf Benz 8770 Ronald Schmitt",
-    price: "3629",
-    "sale-price": "1653",
-    image:
-      "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg",
-    "is-standalone": "true",
-    "custom-labels": "UVP, SALE",
-    ...commonParams,
-  },
-  style: `
+  customizedLabelCard: {
+    uniqueId: "customized-label",
+    header: "Product Card: Styling Custom Label and Changing Order",
+    info: "Custom labels are hidden by default, so we should rewrite the display property to show them. The code example also demonstrates how to change the order of the elements. In this case, we should set an 'order' property for each displayed part of the Product Card.",
+    productData: {
+      "product-title": "Couchtisch Rolf Benz 8770 Ronald Schmitt",
+      price: "3629",
+      "sale-price": "1653",
+      image:
+        "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg",
+      "is-standalone": "true",
+      "custom-labels": "UVP, SALE",
+      ...commonParams,
+    },
+    style: `
 <style>
   vviinn-product-card::part(title) {
     order: 1;
@@ -184,4 +182,5 @@ export const customizedLabelCard = {
     order: 4;
   }
 </style>`,
+  },
 };
