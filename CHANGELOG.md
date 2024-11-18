@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.121.0](https://github.com/vviinn/widgets/compare/v2.120.0...v2.121.0) (2024-11-18)
+
+
+### Features
+
+* added favourite button support ([5c853f2](https://github.com/vviinn/widgets/commit/5c853f2a3349104b44cb198f0c8d1f526c849bce))
+
 ## [2.120.0](https://github.com/vviinn/widgets/compare/v2.119.0...v2.120.0) (2024-11-18)
 
 
