@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.121.1](https://github.com/vviinn/widgets/compare/v2.121.0...v2.121.1) (2024-11-18)
+
+
+### Bug Fixes
+
+* Adjust max range value for price filter ([de89bc4](https://github.com/vviinn/widgets/commit/de89bc4789bb70d8fab3846024986f69ee8d87c4))
+
 ## [2.121.0](https://github.com/vviinn/widgets/compare/v2.120.0...v2.121.0) (2024-11-18)
 
 
