@@ -88,6 +88,7 @@ vviinn-price-range {
 }
 
 .sub-filters-wrapper {
+  align-items: center;
   gap: var(--spacing-100);
   margin-top: 16px;
   margin: 16px -2px 0;
@@ -113,7 +114,7 @@ vviinn-price-range {
   transform: translateX(-24px);
   padding-left: var(--spacing-300);
   padding-right: var(--spacing-300);
-  width: calc(100% + 12px);
+  width: 100%;
 }
 
 @media (max-width: 768px) {
@@ -280,6 +281,7 @@ vviinn-price-range {
 
 .filters-modal-sub-list.open {
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
   gap: 8px;
   padding-bottom: var(--spacing-150);
@@ -330,6 +332,7 @@ vviinn-price-range {
   gap: var(--spacing-25);
 }
 .filters-more-modal-button > span > span {
+  white-space: nowrap;
   padding: var(--spacing-25);
 }
 .filters-more-modal-button:disabled {
