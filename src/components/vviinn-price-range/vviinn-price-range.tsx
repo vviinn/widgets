@@ -171,7 +171,7 @@ export class VviinnButton {
             <span class="histogram-currency">{this.currencySign}</span>
           </div>
           <div class="label" part="histogram-label">
-            {this.histogram[this.maxIndex]?.value?.interval?.start}
+            {this.histogram[this.maxIndex]?.value?.interval?.end}
             <span class="histogram-currency">{this.currencySign}</span>
           </div>
         </div>
