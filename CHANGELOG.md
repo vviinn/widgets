@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.123.0](https://github.com/vviinn/widgets/compare/v2.122.0...v2.123.0) (2024-11-18)
+
+
+### Features
+
+* changed product card in storybook to show recommendations for relevant products ([3694bd0](https://github.com/vviinn/widgets/commit/3694bd02a17d8bebdf05189a70fe3c92aef8e74a))
+
 ## [2.122.0](https://github.com/vviinn/widgets/compare/v2.121.1...v2.122.0) (2024-11-18)
 
 
