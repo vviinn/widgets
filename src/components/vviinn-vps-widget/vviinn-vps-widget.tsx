@@ -668,22 +668,18 @@ export class VviinnVpsWidget {
                 id="start-page_block"
               >
                 <div class="start-page_main-content">
-                  <div
-                    class={{
-                      "start-page_errors-block": true,
-                      hidden:
-                        !this.wrongImageFormat && !searchState.serverError,
-                    }}
-                  >
-                    <vviinn-wrong-format
-                      class={{ hidden: !this.wrongImageFormat }}
-                      handler={() => this.resetState()}
-                    />
-                    <vviinn-server-error
-                      class={{ hidden: !searchState.serverError }}
-                      handler={() => this.resetState()}
-                    />
-                  </div>
+                  {(this.wrongImageFormat || searchState.serverError) && (
+                    <div class="start-page_errors-block">
+                      <vviinn-wrong-format
+                        class={{ hidden: !this.wrongImageFormat }}
+                        handler={() => this.resetState()}
+                      />
+                      <vviinn-server-error
+                        class={{ hidden: !searchState.serverError }}
+                        handler={() => this.resetState()}
+                      />
+                    </div>
+                  )}
 
                   {!this.haveErrors() && (
                     <Fragment>
@@ -768,6 +764,8 @@ export class VviinnVpsWidget {
                       filters={searchState.dynamicFilters}
                       mode="preview"
                       showHeader={false}
+                      showInWidget={true}
+                      locale={this.locale}
                     ></vviinn-extended-filters>
                   </div>
                 </div>

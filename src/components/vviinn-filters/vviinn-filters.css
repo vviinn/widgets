@@ -32,6 +32,14 @@
   display: inline-flex;
 }
 
+vviinn-price-range {
+  max-width: 400px;
+}
+
+:host(.show-in-widget) vviinn-price-range {
+  max-width: unset;
+}
+
 .filters-modal-main-button,
 .filters-sub-button,
 .filters-main-button,
@@ -244,11 +252,11 @@
   margin: var(--spacing-50) 0 0 var(--spacing-300);
   flex: 1;
   overflow-y: auto;
-  padding-bottom: var(--spacing-250);
-  padding-right: var(--spacing-200);
 }
-
-.filters-modal-main-button-wrapper {
+.filters-modal-list > li {
+  padding-right: var(--spacing-300);
+}
+.filters-modal-list > li:not(:last-child) .filters-modal-main-button-wrapper {
   border-bottom: 1px solid var(--color-border-01);
 }
 
