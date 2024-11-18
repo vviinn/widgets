@@ -1,10 +1,8 @@
-import { Meta, Story, Canvas } from "@storybook/blocks";
+import { Meta} from "@storybook/blocks";
 import "../../styles/product-card.css";
 import Card from "../../components/productCard/card.mdx";
 import { cardCredentials } from "../../components/productCard/cardCredentials";
-import {
-  customizedLabelCard
-} from "../../components/productCard/constants";
+
 
 import "./parts.css";
 import { vviinnToken, productIdSimilarProducts, productIdCrossSelling } from "../../helpers";
@@ -130,4 +128,4 @@ For example, [check](?path=/story/playground-discovery--grid) the list of availa
     </div>
 </div>
 
-<Card cardData={cardCredentials(customizedLabelCard)} />
+<Card cardData={cardCredentials("customizedLabelCard")} />

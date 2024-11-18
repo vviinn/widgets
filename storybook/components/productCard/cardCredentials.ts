@@ -1,3 +1,6 @@
+import { cardDataByType, productDataByIndustryAndType } from "./constants";
+import { vviinnIndustry } from "../../helpers";
+
 const cardDataSeparator = "\n    ";
 const cardAppendContainer = `
 <div id="product-card-append-container"></div>`;
@@ -52,7 +55,12 @@ const cardCodeFromData = (productData, buttonParams) => {
   )}${productText}${productCardBasic.slice(firstBracketIndex)}`;
 };
 
-export const cardCredentials = (cardData) => {
+export const cardCredentials = (cardType) => {
+  const cardData = cardDataByType[cardType];
+  cardData.productData = {
+    ...cardData.productData,
+    ...productDataByIndustryAndType[vviinnIndustry][cardType],
+  };
   const codeCardStyle = cardData.style ? `${cardData.style}\n` : "";
   const uniqueId = cardData.uniqueId;
   return {

@@ -1,4 +1,4 @@
-import { productIdSimilarProducts, vviinnToken } from "../../helpers";
+import { vviinnToken } from "../../helpers";
 import { clickHandlers } from "../index";
 import { Source } from "@storybook/blocks";
 
@@ -30,17 +30,25 @@ import "../../styles/product-card.css";
   >
     <div className="tabcontent-preview">
       <vviinn-product-card {...props.cardData.productData}>
-          {props.cardData.buttonParams&&<div slot="vviinn-product-card-actions">
-              <vviinn-vpr-button
-                  token={vviinnToken}
-                  product-id={productIdSimilarProducts}
-                  mode="grid"
-                  block-title=""
-                  locale="en-US"
-                  add-style="false"
-                  append-sidebar-to={props.cardData.buttonParams?.append ? "product-card-append-container":undefined}
-              ></vviinn-vpr-button>
-          </div>}
+        {props.cardData.buttonParams && (
+          <div slot="vviinn-product-card-actions">
+            <vviinn-vpr-button
+              token={vviinnToken}
+              product-id={
+                props.cardData.productData.id
+              }
+              mode="grid"
+              block-title=""
+              locale="en-US"
+              add-style="false"
+              append-sidebar-to={
+                props.cardData.buttonParams?.append
+                  ? "product-card-append-container"
+                  : undefined
+              }
+            ></vviinn-vpr-button>
+          </div>
+        )}
       </vviinn-product-card>
       {props.cardData.buttonParams?.append && (
         <div id="product-card-append-container"></div>
