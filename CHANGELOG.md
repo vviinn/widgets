@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.122.0](https://github.com/vviinn/widgets/compare/v2.121.1...v2.122.0) (2024-11-18)
+
+
+### Features
+
+* Add --modal-border-radius variable for Search Widget ([dc075d4](https://github.com/vviinn/widgets/commit/dc075d4b53cdeea6fae15c95fe09df19a416cf27))
+
+
+### Bug Fixes
+
+* Filters CSS parts support ([68effd5](https://github.com/vviinn/widgets/commit/68effd58e855fbf195fbe197008e830c885dbb89))
+
 ### [2.121.1](https://github.com/vviinn/widgets/compare/v2.121.0...v2.121.1) (2024-11-18)
 
 
