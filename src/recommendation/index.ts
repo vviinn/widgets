@@ -4,14 +4,14 @@ import {
   RequestStaticFilters,
   Recommendation,
 } from "../interfaces/recommendation";
-import { RequestDynamicFilters } from "../campaign/VPRCampaignService";
+import { RequestDynamicFilterItem } from "../campaign/VPRCampaignService";
 
 type GetRecommendationsBodyProps = {
   productId: string;
   color?: string;
   excluded?: string;
   campaigns?: string;
-  dynamicFilters?: RequestDynamicFilters;
+  dynamicFilters?: RequestDynamicFilterItem[];
 };
 
 const parseExcluded = (excluded: string) =>

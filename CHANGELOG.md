@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.120.0](https://github.com/vviinn/widgets/compare/v2.119.0...v2.120.0) (2024-11-18)
+
+
+### Features
+
+* Reset selected filters after the new text search ([231e48c](https://github.com/vviinn/widgets/commit/231e48c2a5af04b87152a323397efbe08d398d41))
+
+
+### Bug Fixes
+
+* Fix the state conflict of the Search Widget with Results on one page. ([3eef949](https://github.com/vviinn/widgets/commit/3eef949ea459703fcf7a46ddf006f43df949e8f2))
+* Remove an extra vviinnFiltersChanged event triggering ([e57dd21](https://github.com/vviinn/widgets/commit/e57dd2189a8c2dfa1af62eba002127512efecd18))
+* Show errors for text search ([98e7b0f](https://github.com/vviinn/widgets/commit/98e7b0f9ddb14b9e769290c360f00d32905c45eb))
+
 ## [2.119.0](https://github.com/vviinn/widgets/compare/v2.118.3...v2.119.0) (2024-11-14)
 
 

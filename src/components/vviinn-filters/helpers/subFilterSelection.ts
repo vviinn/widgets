@@ -1,15 +1,15 @@
 import {
-  DynamicFilter,
+  ResponseDynamicFilterItem,
   DynamicFilterValue,
-  RequestDynamicFilters,
+  RequestDynamicFilterItem,
 } from "../../../campaign/VPRCampaignService";
 import { FilterAction } from "vviinn-tracking-client-ts";
 
 type ValueRequest = string & { start?: number; end?: number };
 
 export const subFilterSelection = (
-  filters: RequestDynamicFilters,
-  { column: selectedColumn }: DynamicFilter,
+  filters: RequestDynamicFilterItem[],
+  { column: selectedColumn }: ResponseDynamicFilterItem,
   filterValue: DynamicFilterValue
 ) => {
   const value = filterValue.interval ?? filterValue.value ?? filterValue;

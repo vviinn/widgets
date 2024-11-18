@@ -10,10 +10,9 @@ import {
   Watch,
 } from "@stencil/core";
 import {
-  DynamicFilters,
-  DynamicFilter,
+  ResponseDynamicFilterItem,
   DynamicFilterValue,
-  RequestDynamicFilters,
+  RequestDynamicFilterItem,
 } from "../../campaign/VPRCampaignService";
 import {
   getFilterOptions,
@@ -25,6 +24,7 @@ import {
   ChangedFiltersEventData,
   DynamicFiltersEventData,
   DynamicFilterTrackingData,
+  ResetSelectedFiltersEventData,
 } from "../../recommendation/events";
 import { components } from "../../interfaces/generated";
 import { triggerFilter } from "./helpers/triggerFilter";
@@ -60,7 +60,7 @@ import { triggerFilter } from "./helpers/triggerFilter";
 export class VviinnFilters {
   @Element() el: HTMLElement;
 
-  @Prop({ mutable: true }) filters: DynamicFilters = [];
+  @Prop({ mutable: true }) filters: ResponseDynamicFilterItem[] = [];
   /** @internal */
   @Prop() filtersString: string = "";
   /** @internal */
@@ -68,15 +68,16 @@ export class VviinnFilters {
   /** The currency sign is displayed after the price */
   @Prop() currencySign?: string = "€";
 
-  @State() selectedFilter: DynamicFilter;
-  @State() requestFilters: RequestDynamicFilters = [];
+  @State() innerFilters: ResponseDynamicFilterItem[] = [];
+  @State() selectedFilter?: ResponseDynamicFilterItem;
+  @State() requestFilters: RequestDynamicFilterItem[] = [];
 
   /** The filter's state changes */
   @Event({ bubbles: true })
   vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
   /** The filters received */
   @Event({ bubbles: true })
-  vviinnFilters: EventEmitter<DynamicFiltersEventData>;
+  vviinnFiltersReceived: EventEmitter<DynamicFiltersEventData>;
 
   @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
 
@@ -87,11 +88,30 @@ export class VviinnFilters {
   /** Selected filters should be resetted */
   /** @internal */
   @Event({ bubbles: true })
-  vviinnSelectedFiltersReset: EventEmitter;
+  vviinnSelectedFiltersReset: EventEmitter<ResetSelectedFiltersEventData>;
 
-  private handleMainFilterSelection(filter: DynamicFilter) {
+  private getSelectedPriceInterval = () =>
+    (this.requestFilters.find(({ column }) => column === "price")?.values[0] ??
+      {}) as components["schemas"]["interval"];
+
+  private handleMainFilterSelection(filter: ResponseDynamicFilterItem) {
     this.selectedFilter = filter;
   }
+
+  private getFilters = () =>
+    this.showInWidget ? this.filters : this.innerFilters;
+
+  private handleSelectedFiltersReset = ({
+    detail,
+  }: CustomEvent<ResetSelectedFiltersEventData>) => {
+    if (this.skipFiltersChanges(detail.isTriggeredByVpsWidget)) return;
+    this.requestFilters = [];
+    this.selectedFilter = undefined;
+  };
+
+  private skipFiltersChanges = (isTriggeredByVpsWidget: boolean) =>
+    (isTriggeredByVpsWidget && !this.showInWidget) ||
+    (!isTriggeredByVpsWidget && this.showInWidget);
 
   private priceChangeHandler = (filterValue: DynamicFilterValue) => {
     this.handleSubFilterSelection(filterValue, this.selectedFilter);
@@ -99,19 +119,20 @@ export class VviinnFilters {
 
   private handleSubFilterSelection(
     filterValue: DynamicFilterValue,
-    selectedFilter: DynamicFilter
+    selectedFilter: ResponseDynamicFilterItem
   ) {
     this.requestFilters = triggerFilter(
       filterValue,
       selectedFilter,
       this.requestFilters,
       this.vviinnFilterTriggered,
+      this.vviinnFiltersChanged,
       this.el,
-      this.vviinnFiltersChanged
+      this.showInWidget
     );
   }
 
-  private showActiveOnMainButton({ column }: DynamicFilter) {
+  private showActiveOnMainButton({ column }: ResponseDynamicFilterItem) {
     if (!this.selectedFilter) return "";
 
     return this.selectedFilter.column === column ? "active" : "";
@@ -120,11 +141,13 @@ export class VviinnFilters {
   private handleSetFilters = ({
     detail,
   }: CustomEvent<DynamicFiltersEventData>) => {
-    this.filters = detail;
-    if (!this.filters?.length) return;
+    if (this.showInWidget) return;
+
+    this.innerFilters = detail;
+    if (!this.innerFilters?.length) return;
 
     if (this.selectedFilter) {
-      this.selectedFilter = this.filters.find(
+      this.selectedFilter = this.innerFilters.find(
         (f) => f.column === this.selectedFilter.column
       );
     }
@@ -137,21 +160,21 @@ export class VviinnFilters {
   private handleFiltersChanged = ({
     detail,
   }: CustomEvent<ChangedFiltersEventData>) => {
-    const { filters, el: senderElement } = detail;
+    const { filters, el: senderElement, isTriggeredByVpsWidget } = detail;
 
-    if (senderElement === this.el) return;
+    if (
+      senderElement === this.el ||
+      this.skipFiltersChanges(isTriggeredByVpsWidget)
+    )
+      return;
 
     this.requestFilters = filters;
 
     if (!this.selectedFilter) {
-      this.selectedFilter = this.filters.find(
+      this.selectedFilter = this.getFilters().find(
         (f) => f.column === filters[0].column
       );
     }
-  };
-
-  private handleSelectedFiltersReset = () => {
-    this.requestFilters = [];
   };
 
   @Watch("filtersString")
@@ -159,14 +182,16 @@ export class VviinnFilters {
     if (this.filtersString === "") return;
 
     try {
-      this.filters = JSON.parse(this.filtersString) as DynamicFilters;
+      this.innerFilters = JSON.parse(
+        this.filtersString
+      ) as ResponseDynamicFilterItem[];
     } catch (e) {
       console.error("Invalid filters string", e);
     }
   }
 
   connectedCallback() {
-    document.addEventListener("vviinnFilters", this.handleSetFilters);
+    document.addEventListener("vviinnFiltersReceived", this.handleSetFilters);
     document.addEventListener(
       "vviinnFiltersChanged",
       this.handleFiltersChanged
@@ -180,7 +205,10 @@ export class VviinnFilters {
   }
 
   disconnectedCallback() {
-    document.removeEventListener("vviinnFilters", this.handleSetFilters);
+    document.removeEventListener(
+      "vviinnFiltersReceived",
+      this.handleSetFilters
+    );
     document.removeEventListener(
       "vviinnFiltersChanged",
       this.handleFiltersChanged
@@ -192,12 +220,11 @@ export class VviinnFilters {
   }
 
   render() {
-    if (!this.filters) return <Host></Host>;
+    const filters = this.getFilters().filter((filter) => filter.isPrimary);
+    if (!filters?.length) return <Host></Host>;
+
     const { column } = this.selectedFilter ?? {};
     const filterOptions = getFilterOptions(this.selectedFilter);
-    const filters = this.filters.filter((filter) => filter.isPrimary);
-
-    if (filters.length === 0) return <Host></Host>;
 
     return (
       <Host
@@ -233,10 +260,7 @@ export class VviinnFilters {
                   (item) => item.value.frequency > 0
                 )}
                 priceChangeHandler={this.priceChangeHandler}
-                selectedInterval={
-                  (this.requestFilters.find(({ column }) => column === "price")
-                    ?.values[0] ?? {}) as components["schemas"]["interval"]
-                }
+                selectedInterval={this.getSelectedPriceInterval()}
                 currencySign={this.currencySign}
               />
             ) : (
