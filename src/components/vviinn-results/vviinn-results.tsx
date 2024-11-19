@@ -98,7 +98,13 @@ import { getCustomLabels } from "../../recommendation";
  * @part custom-label-3 - custom label with index 3.
  * @part custom-label-4 - custom label with index 4.
  *
- * @slot vviinn-energy-label-data-sheet-text - Text of the data sheet link for the energy label.
+ * @slot vviinn-results-vpr-slot - Discovery main slot to change one click Discovery icon
+ * @slot vviinn-favorite-icon - Icon of Favorite button.
+ * @slot vviinn-favorite-icon-pressed - Icon of pressed Favorite button.
+ * @slot vviinn-basket-button-text - Text of Add to Basket button.
+ * @slot vviinn-basket-button-icon - Text of Add to Basket icon.
+ * @slot vviinn-basket-button-text-pressed - Text of pressed Add to Basket button.
+ * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button.
  */
 @Component({
   tag: "vviinn-results",
@@ -200,6 +206,7 @@ export class VviinnResults {
   @State() slotsReplaced: boolean;
   @State() oneClickDiscoveryAppendIndex: number;
   @State() isTextSearch: boolean = this.textSearchQuery?.length > 0;
+  @State() vprSlot: boolean = false;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -228,6 +235,8 @@ export class VviinnResults {
         resources,
       });
     }
+
+    this.vprSlot = !!this.el.querySelector('[slot="vviinn-results-vpr-slot"]');
   }
 
   componentDidRender() {
@@ -239,6 +248,16 @@ export class VviinnResults {
   }
 
   private trackingApi: DefaultApi;
+
+  private checkSlotContent = (name: string) =>
+    !!this.el.querySelector(`[slot="${name}"]`);
+
+  private renderSlotContent = (name: string) =>
+    this.checkSlotContent(name) && (
+      <span slot={name}>
+        <slot name={name} />
+      </span>
+    );
 
   private getRecommendations = () =>
     this.showInWidget ? searchState.results : this.recommendations;
@@ -611,6 +630,15 @@ export class VviinnResults {
         index + (nCols - ((index % nCols) + 1));
     };
 
+    const productCardSlots = [
+      "vviinn-basket-button-icon",
+      "vviinn-basket-button-text",
+      "vviinn-basket-button-icon-pressed",
+      "vviinn-basket-button-text-pressed",
+      "vviinn-favorite-icon",
+      "vviinn-favorite-icon-pressed",
+    ];
+
     return results.map((p, i) => (
       <vviinn-product-card
         key={p.productId}
@@ -664,7 +692,18 @@ export class VviinnResults {
                     )
                   : undefined
               }
-            ></vviinn-vpr-button>
+              addToBasketShow={this.addToBasketShow}
+              locale={this.locale}
+              favoriteShow={this.favoriteShow}
+            >
+              {this.checkSlotContent("vviinn-results-vpr-slot") && (
+                <slot name="vviinn-results-vpr-slot" />
+              )}
+
+              {productCardSlots.map((slotName) =>
+                this.renderSlotContent(slotName)
+              )}
+            </vviinn-vpr-button>
           </div>
         )}
       </vviinn-product-card>
