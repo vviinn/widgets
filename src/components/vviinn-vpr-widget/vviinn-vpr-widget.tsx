@@ -249,6 +249,8 @@ export class VviinnVprWidget implements ComponentInterface {
   /** @internal */
   @Event({ bubbles: true })
   vviinnWidgetClose: EventEmitter<BasicEventData>;
+  /** @internal */
+  @Event() sourceProductReceived: EventEmitter<Recommendation>;
 
   private productIds: string[];
   private productImageLoadedSubject = new Subject();
@@ -603,6 +605,8 @@ export class VviinnVprWidget implements ComponentInterface {
     const { products, sourceProduct } = data;
     this.recommendations = products;
     this.sourceProduct = sourceProduct;
+
+    this.sourceProductReceived.emit(sourceProduct);
 
     this.productIds = this.recommendations.map((r) => r.productId);
 
