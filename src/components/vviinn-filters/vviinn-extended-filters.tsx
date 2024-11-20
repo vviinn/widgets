@@ -159,32 +159,37 @@ export class VviinnExtendedFilters {
     slotChangeListener(this, this.el);
   }
 
-  private initializeDisplayedOptions(filterId: string) {
-    if (!this.displayedOptionsCount.has(filterId)) {
-      this.displayedOptionsCount.set(filterId, FILTER_OPTIONS_INITIAL_COUNT);
+  private initializeDisplayedOptions(filterColumn: string) {
+    if (!this.displayedOptionsCount.has(filterColumn)) {
+      this.displayedOptionsCount.set(
+        filterColumn,
+        FILTER_OPTIONS_INITIAL_COUNT
+      );
     }
   }
 
-  private showMoreOptions(filterId: string, totalOptions: number) {
+  private showMoreOptions(filterColumn: string, totalOptions: number) {
     const currentCount =
-      this.displayedOptionsCount.get(filterId) || FILTER_OPTIONS_INITIAL_COUNT;
+      this.displayedOptionsCount.get(filterColumn) ||
+      FILTER_OPTIONS_INITIAL_COUNT;
     const newCount = Math.min(
       currentCount + FILTER_OPTIONS_INITIAL_COUNT,
       totalOptions
     );
     this.displayedOptionsCount = new Map(this.displayedOptionsCount);
-    this.displayedOptionsCount.set(filterId, newCount);
+    this.displayedOptionsCount.set(filterColumn, newCount);
   }
 
   private renderFilterOptions(
     filter: ResponseDynamicFilterItem,
     filterOptions: FilterOptions
   ) {
-    const { column } = filter;
-    this.initializeDisplayedOptions(column);
+    const { column: filterColumn } = filter;
+    this.initializeDisplayedOptions(filterColumn);
 
     const displayedCount =
-      this.displayedOptionsCount.get(column) || FILTER_OPTIONS_INITIAL_COUNT;
+      this.displayedOptionsCount.get(filterColumn) ||
+      FILTER_OPTIONS_INITIAL_COUNT;
 
     return (
       <Fragment>
@@ -207,7 +212,9 @@ export class VviinnExtendedFilters {
           })}
         {displayedCount < filterOptions.length && (
           <button
-            onClick={() => this.showMoreOptions(column, filterOptions.length)}
+            onClick={() =>
+              this.showMoreOptions(filterColumn, filterOptions.length)
+            }
             class="filters-more-modal-button"
             part="filters-option-button"
           >
