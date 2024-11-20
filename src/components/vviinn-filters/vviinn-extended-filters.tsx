@@ -209,6 +209,7 @@ export class VviinnExtendedFilters {
           <button
             onClick={() => this.showMoreOptions(column, filterOptions.length)}
             class="filters-more-modal-button"
+            part="filters-option-button"
           >
             <ChevronIconSmall />
           </button>
