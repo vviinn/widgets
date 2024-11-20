@@ -60,8 +60,11 @@ vviinn-vps-button {
 <div id="change-primary-color">
     <div className="tab tab-reverse">
         <h3>Search Modal Primary Color</h3>
-        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'change-primary-color')}}>Code</button>
-        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'change-primary-color')}}>Preview</button>
+
+        <div className="tablink-group">
+            <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'change-primary-color')}}>Code</button>
+            <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'change-primary-color')}}>Preview</button>
+        </div>
     </div>
     
     <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
@@ -88,8 +91,10 @@ vviinn-vps-button {
 <div id="product-cards-customization">
     <div className="tab tab-reverse">
         <h3>Product Cards Customization</h3>
-        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'product-cards-customization')}}>Code</button>
-        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'product-cards-customization')}}>Preview</button>
+        <div className="tablink-group">
+            <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'product-cards-customization')}}>Code</button>
+            <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'product-cards-customization')}}>Preview</button>
+        </div>
     </div>
     <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">

@@ -48,20 +48,9 @@
   font-size: 16px;
 }
 
-.tablink-group {
-  float: left;
-}
-
 .tablink--sm {
   padding: 8px 10px;
   font-size: 14px;
-}
-
-@media (max-width: 640px) {
-  .tablink {
-    padding: 8px;
-    font-size: 12px;
-  }
 }
 
 .tab.tab-reverse button {
