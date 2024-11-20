@@ -4,6 +4,7 @@ export { CameraActionIcon } from "./icons/CameraActionIcon";
 export { CameraIcon } from "./icons/CameraIcon";
 export { CheckCircleIcon } from "./icons/CheckCircleIcon";
 export { ChevronIcon } from "./icons/ChevronIcon";
+export { ChevronIconSmall } from "./icons/ChevronIconSmall";
 export { CrossIcon } from "./icons/CrossIcon";
 export { MinusIcon } from "./icons/MinusIcon";
 export { PlusIcon } from "./icons/PlusIcon";

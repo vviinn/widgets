@@ -9,6 +9,7 @@ import {
   Element,
   Watch,
   Listen,
+  Fragment,
 } from "@stencil/core";
 import i18next from "i18next";
 
@@ -17,8 +18,8 @@ import {
   DynamicFilterValue,
   RequestDynamicFilterItem,
 } from "../../campaign/VPRCampaignService";
-import { FiltersIcon, NewCloseIcon } from "../vviinn-icons";
-import { getFilterOptions, RenderButton } from "./helpers";
+import { ChevronIconSmall, FiltersIcon, NewCloseIcon } from "../vviinn-icons";
+import { FilterOptions, getFilterOptions, RenderButton } from "./helpers";
 import { Locale, resources } from "../../locale";
 
 import { SlotSkeleton, slotChangeListener } from "../customized-slots";
@@ -69,6 +70,8 @@ import { triggerFilter, triggerResetFilters } from "./helpers/triggerFilter";
  * @part histogram-label-wrapper - Wrapper for the labels.
  * @part histogram-label - Label for the histogram.
  */
+
+const FILTER_OPTIONS_INITIAL_COUNT = 5;
 @Component({
   tag: "vviinn-extended-filters",
   styleUrl: "vviinn-filters.css",
@@ -95,6 +98,7 @@ export class VviinnExtendedFilters {
   @State() requestFilters: RequestDynamicFilterItem[] = [];
   @State() showMore: boolean = false;
   @State() selectedMoreOptions: string[] = [];
+  @State() displayedOptionsCount: Map<string, number> = new Map();
 
   /** The filter's state changes */
   @Event({ bubbles: true })
@@ -153,6 +157,64 @@ export class VviinnExtendedFilters {
     });
 
     slotChangeListener(this, this.el);
+  }
+
+  private initializeDisplayedOptions(filterId: string) {
+    if (!this.displayedOptionsCount.has(filterId)) {
+      this.displayedOptionsCount.set(filterId, FILTER_OPTIONS_INITIAL_COUNT);
+    }
+  }
+
+  private showMoreOptions(filterId: string, totalOptions: number) {
+    const currentCount =
+      this.displayedOptionsCount.get(filterId) || FILTER_OPTIONS_INITIAL_COUNT;
+    const newCount = Math.min(
+      currentCount + FILTER_OPTIONS_INITIAL_COUNT,
+      totalOptions
+    );
+    this.displayedOptionsCount = new Map(this.displayedOptionsCount);
+    this.displayedOptionsCount.set(filterId, newCount);
+  }
+
+  private renderFilterOptions(
+    filter: ResponseDynamicFilterItem,
+    filterOptions: FilterOptions
+  ) {
+    const { column } = filter;
+    this.initializeDisplayedOptions(column);
+
+    const displayedCount =
+      this.displayedOptionsCount.get(column) || FILTER_OPTIONS_INITIAL_COUNT;
+
+    return (
+      <Fragment>
+        {filterOptions
+          .slice(0, displayedCount)
+          .map(({ value, label, active }) => {
+            const selected = this.showActiveOnModalSubButton(
+              this.requestFilters,
+              value
+            );
+
+            return RenderButton(
+              this.handleSubFilterSelection.bind(this),
+              value,
+              label,
+              active,
+              filter,
+              selected
+            );
+          })}
+        {displayedCount < filterOptions.length && (
+          <button
+            onClick={() => this.showMoreOptions(column, filterOptions.length)}
+            class="filters-more-modal-button"
+          >
+            <ChevronIconSmall />
+          </button>
+        )}
+      </Fragment>
+    );
   }
 
   private handleSubFilterSelection(
@@ -352,6 +414,7 @@ export class VviinnExtendedFilters {
               {(filters ?? []).map((mainFilter) => {
                 const mainColumn = mainFilter.column;
                 const filterOptions = getFilterOptions(mainFilter);
+
                 const requestFilter = this.requestFilters.find(
                   ({ column }) => column === mainColumn
                 );
@@ -410,22 +473,7 @@ export class VviinnExtendedFilters {
                           }`}
                           part="extended-filters-sub-list"
                         >
-                          {!!filterOptions &&
-                            filterOptions.map(({ value, label, active }) => {
-                              const selected = this.showActiveOnModalSubButton(
-                                this.requestFilters,
-                                value
-                              );
-
-                              return RenderButton(
-                                this.handleSubFilterSelection.bind(this),
-                                value,
-                                label,
-                                active,
-                                mainFilter,
-                                selected
-                              );
-                            })}
+                          {this.renderFilterOptions(mainFilter, filterOptions)}
                         </ul>
                       )}
                     </div>
