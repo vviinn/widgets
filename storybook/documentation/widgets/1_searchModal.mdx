@@ -20,8 +20,10 @@ The `Search Modal` is a full-screen overlay that allows:
 <div id="image">
     <div className="tab tab-reverse">
         <h3>Image Search (default)</h3>
-        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'image')}}>Code</button>
-        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'image')}}>Preview</button>
+        <div className="tablink-group">
+            <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'image')}}>Code</button>
+            <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'image')}}>Preview</button>
+        </div>
     </div>
     <div className='tab-sub-title'>Search with Image and Camera</div>
     <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
@@ -43,8 +45,10 @@ The `Search Modal` is a full-screen overlay that allows:
 <div id="full">
     <div className="tab tab-reverse">
         <h3>Full Search</h3>
-        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'full')}}>Code</button>
-        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'full')}}>Preview</button>
+        <div className="tablink-group">
+            <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'full')}}>Code</button>
+            <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'full')}}>Preview</button>
+        </div>
     </div>
     <div className='tab-sub-title'>Search with Image, Text, and Camera</div>
     <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
@@ -67,9 +71,10 @@ The `Search Modal` is a full-screen overlay that allows:
 <div id="upload-mode">
     <div className="tab tab-reverse">
         <h3>Upload Mode</h3>
-
-        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_3', 'upload-mode')}}>Code</button>
-        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_3', 'upload-mode')}}>Preview</button>
+        <div className="tablink-group">
+            <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_3', 'upload-mode')}}>Code</button>
+            <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_3', 'upload-mode')}}>Preview</button>
+        </div>
     </div>
        <div className='tab-sub-title'>Directly opens image upload for Image Search</div>
 
@@ -94,8 +99,10 @@ The `Search Modal` is a full-screen overlay that allows:
     <div className="tab tab-reverse">
         <h3>Camera Mode</h3>
 
-        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_4', 'camera-mode')}}>Code</button>
-        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_4', 'camera-mode')}}>Preview</button>
+        <div className="tablink-group">
+            <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_4', 'camera-mode')}}>Code</button>
+            <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_4', 'camera-mode')}}>Preview</button>
+        </div>
     </div>
        <div className='tab-sub-title'>Search with Camera</div>
 

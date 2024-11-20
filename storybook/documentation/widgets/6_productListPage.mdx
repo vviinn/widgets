@@ -15,8 +15,10 @@ import "./styles.css";
 
 <div id="text-search">
     <div className="tab tab-reverse">
-        <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'text-search')}}>Code</button>
-        <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'text-search')}}>Preview</button>
+        <div className="tablink-group">
+          <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'text-search')}}>Code</button>
+          <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'text-search')}}>Preview</button>
+        </div>
     </div>
     <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
