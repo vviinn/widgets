@@ -13,7 +13,7 @@ import {
   RequestDynamicFilterItem,
 } from "../campaign/VPRCampaignService";
 
-export type BasicEventData = {
+type CommonEventData = {
   widgetType: "VPR" | "VPS" | "VCS" | "TPS";
   campaignTypeId: "VPR" | "VPS" | "VCS" | "TPS";
   campaignTypeName:
@@ -23,7 +23,10 @@ export type BasicEventData = {
     | "Text Product Search";
   widgetId: string;
   widgetVersion: string;
-  widget?: Widget;
+};
+
+export type BasicEventData = { widget?: Widget } & {
+  [K in keyof CommonEventData]: CommonEventData[K];
 };
 
 export type NoResultEventData = {
