@@ -49,7 +49,7 @@ import {
   EnergyCertification,
   Recommendation,
 } from "../../interfaces/recommendation";
-import { resources } from "../../locale/resources";
+import { resources } from "../../locale";
 
 /**
  * @part image-container - Product Card's image container.
