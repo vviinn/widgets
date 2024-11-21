@@ -13,7 +13,7 @@ import {
   RequestDynamicFilterItem,
 } from "../campaign/VPRCampaignService";
 
-type CommonEventData = {
+export type CommonEventData = {
   widgetType: "VPR" | "VPS" | "VCS" | "TPS";
   campaignTypeId: "VPR" | "VPS" | "VCS" | "TPS";
   campaignTypeName:
