@@ -2,7 +2,11 @@
   overflow: hidden;
   position: relative;
   margin-top: 32px !important;
-  margin-bottom: 6px !important;
+  margin-bottom: 24px !important;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .tab.overflow-auto {
@@ -37,7 +41,6 @@
 
 .tablink {
   background: none;
-  float: left;
   border: none;
   outline: none;
   cursor: pointer;
@@ -48,13 +51,6 @@
 .tablink--sm {
   padding: 8px 10px;
   font-size: 14px;
-}
-
-@media (max-width: 640px) {
-  .tablink {
-    padding: 8px;
-    font-size: 12px;
-  }
 }
 
 .tab.tab-reverse button {
@@ -76,17 +72,10 @@
 .tabcontent {
   display: none;
   border-top: none;
-  padding-top: 12px;
 }
 
 .tabcontent .docblock-source {
   margin: 0 !important;
-}
-
-.tabcontent-preview {
-  background: #ffffff;
-  border: 1px solid #ccc;
-  padding: 10px;
 }
 
 .tabcontent-preview::after {
@@ -103,4 +92,5 @@
 
 .tab-sub-title {
   font-size: 14px !important;
+  padding-bottom: 12px;
 }

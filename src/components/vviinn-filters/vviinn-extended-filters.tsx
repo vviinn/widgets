@@ -224,7 +224,7 @@ export class VviinnExtendedFilters {
     if (this.filtersString === "") return;
 
     try {
-      this.filters = JSON.parse(
+      this.innerFilters = JSON.parse(
         this.filtersString
       ) as ResponseDynamicFilterItem[];
     } catch (e) {
