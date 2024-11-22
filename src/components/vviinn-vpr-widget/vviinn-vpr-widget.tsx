@@ -24,7 +24,6 @@ import { createBearAuthedHeader } from "./token-helpers";
 import { state } from "../../store/store";
 import { CampaignName, campaignTypeNames } from "../../campaign/Campaign";
 import { getRecommendationsService } from "../../campaign/CampaignService";
-import { searchState } from "../../store/search.store";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 import { Recommendation } from "../../interfaces/recommendation";
 import { SlotSkeleton, slotChangeListener } from "../customized-slots";
@@ -204,6 +203,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @State() recommendations: Recommendation[] = [];
   @State() dynamicFilters: ResponseDynamicFilterItem[] = [];
   @State() sourceProduct: Recommendation | null = null;
+  @State() recommendationsLoading: boolean = false;
   @State() trackingDeactivated: boolean = false;
   @State() hasErrorOnLoad: boolean = false;
   @State() updatingAllCards: boolean = false;
@@ -249,6 +249,8 @@ export class VviinnVprWidget implements ComponentInterface {
   /** @internal */
   @Event({ bubbles: true })
   vviinnWidgetClose: EventEmitter<BasicEventData>;
+  /** @internal */
+  @Event() sourceProductReceived: EventEmitter<Recommendation>;
 
   private productIds: string[];
   private productImageLoadedSubject = new Subject();
@@ -548,7 +550,7 @@ export class VviinnVprWidget implements ComponentInterface {
 
   private async getRecommendations() {
     if (this.productId === undefined || this.token === undefined) return;
-    searchState.loading = true;
+    this.recommendationsLoading = true;
     const campaignType =
       this.campaignType.length > 0 ? this.campaignType : "VPR";
 
@@ -578,11 +580,11 @@ export class VviinnVprWidget implements ComponentInterface {
           this.handleError(error);
           this.vviinnNoResult.emit(this.getBasicEventData());
           this.vviinnRecommendationsLoaded.emit();
-          searchState.loading = false;
+          this.recommendationsLoading = false;
         },
         (data) => {
           this.handleRecommendationsSuccess(data);
-          searchState.loading = false;
+          this.recommendationsLoading = false;
         }
       )
     );
@@ -603,8 +605,8 @@ export class VviinnVprWidget implements ComponentInterface {
     const { products, sourceProduct } = data;
     this.recommendations = products;
     this.sourceProduct = sourceProduct;
-    searchState.results = this.recommendations;
-    searchState.sourceProduct = this.sourceProduct;
+
+    this.sourceProductReceived.emit(sourceProduct);
 
     this.productIds = this.recommendations.map((r) => r.productId);
 
@@ -709,7 +711,7 @@ export class VviinnVprWidget implements ComponentInterface {
           {(this.recommendations.length === 0 ||
             (this.recommendations.length < 4 && this.isSetMode) ||
             this.hasErrorOnLoad) &&
-            !searchState.loading && (
+            !this.recommendationsLoading && (
               <p class="no-result-text">
                 {this.noResultText.length
                   ? this.noResultText
@@ -774,6 +776,7 @@ export class VviinnVprWidget implements ComponentInterface {
         imageWidth={this.imageWidth}
         showScroll={this.showScroll}
         recommendations={this.recommendations}
+        sourceProduct={this.sourceProduct}
         widgetElementId={this.id}
         widgetVersion={version}
         gridArrowsDynamic={this.gridArrowsDynamic}

@@ -7,6 +7,7 @@ import {
   EventEmitter,
   Element,
   State,
+  Watch,
 } from "@stencil/core";
 import { version } from "../../../package.json";
 import { SimilarProductsIcon, CrossSellingIcon } from "../vviinn-icons";
@@ -190,6 +191,13 @@ export class VviinnVprButton {
     }
   }
 
+  @Watch("appendSidebarToElement")
+  appendSidebarToElementWatcher() {
+    if (this.appendSidebarToElement) {
+      this.targetAppendSidebarTo = this.appendSidebarToElement;
+    }
+  }
+
   private sidebar: HTMLVviinnRecommendationsSidebarElement | null = null;
   private sidebarCloseListener: () => void = () => {
     if (this.targetAppendSidebarTo) {
@@ -204,7 +212,13 @@ export class VviinnVprButton {
     return (
       <Host
         onClick={(): void => {
-          this.handleClick();
+          if (this.appendSidebarTo && !this.targetAppendSidebarTo) {
+            setTimeout(() => {
+              this.handleClick();
+            }, 250);
+          } else {
+            this.handleClick();
+          }
         }}
         role="button"
         tabindex="0"

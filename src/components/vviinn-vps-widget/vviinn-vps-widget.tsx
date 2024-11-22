@@ -146,7 +146,7 @@ export class VviinnVpsWidget {
   /** Show or hide Favorite button */
   @Prop() favoriteShow: boolean = false;
   /** Show or hide the One-click Discovery */
-  @Prop() showOneClickDiscovery = false;
+  @Prop() oneClickDiscoveryShow = false;
   /** Wrap the Product Card's price values in the container. */
   @Prop() addPriceContainer?: boolean = false;
 
@@ -807,6 +807,9 @@ export class VviinnVpsWidget {
                   replaceSlotsContentInButton={this.replaceSlotsContentInButton}
                   textSearchQuery={this.searchQuery}
                   addPriceContainer={this.addPriceContainer}
+                  oneClickDiscoveryMode={
+                    this.oneClickDiscoveryShow ? "append" : undefined
+                  }
                 />
               )}
             </vviinn-slide>
