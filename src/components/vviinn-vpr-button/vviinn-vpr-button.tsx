@@ -7,6 +7,7 @@ import {
   EventEmitter,
   Element,
   State,
+  Watch,
 } from "@stencil/core";
 import { version } from "../../../package.json";
 import { SimilarProductsIcon, CrossSellingIcon } from "../vviinn-icons";
@@ -60,17 +61,17 @@ import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
  * @part custom-label-4 - custom label with index 4.
  *
  * @slot vviinn-recommendations-title - Recommendations title text.
+ * @slot vviinn-favorite-icon - Icon of Favorite button.
+ * @slot vviinn-favorite-icon-pressed - Icon of pressed Favorite button.
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
+ * @slot vviinn-basket-button-icon - Text of Add to Basket icon.
+ * @slot vviinn-basket-button-text-pressed - Text of pressed Add to Basket button.
+ * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button.
+ * @slot vviinn-energy-label-data-sheet-text - Text of the data sheet link for the energy label.
  *
  * @slot vviinn-recommendations-subtitle - Recommendations subtitle text (Set mode).
  * @slot vviinn-update-button-text - Text of Update Button on the top (Set mode).
  * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
- * @slot vviinn-basket-button-icon - Text of Add to Basket icon (Set mode).
- * @slot vviinn-basket-button-text-pressed - Text of pressed Add to Basket button (Set mode).
- * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button (Set mode).
- * @slot vviinn-energy-label-data-sheet-text - Text of the data sheet link for the energy label.
- * @slot vviinn-favorite-icon - Icon of Favorite button.
- * @slot vviinn-favorite-icon-pressed - Icon of pressed Favorite button.
  */
 
 @Component({
@@ -190,6 +191,13 @@ export class VviinnVprButton {
     }
   }
 
+  @Watch("appendSidebarToElement")
+  appendSidebarToElementWatcher() {
+    if (this.appendSidebarToElement) {
+      this.targetAppendSidebarTo = this.appendSidebarToElement;
+    }
+  }
+
   private sidebar: HTMLVviinnRecommendationsSidebarElement | null = null;
   private sidebarCloseListener: () => void = () => {
     if (this.targetAppendSidebarTo) {
@@ -204,7 +212,13 @@ export class VviinnVprButton {
     return (
       <Host
         onClick={(): void => {
-          this.handleClick();
+          if (this.appendSidebarTo && !this.targetAppendSidebarTo) {
+            setTimeout(() => {
+              this.handleClick();
+            }, 250);
+          } else {
+            this.handleClick();
+          }
         }}
         role="button"
         tabindex="0"

@@ -15,8 +15,8 @@ import { BasicEventData } from "../../../recommendation/events";
 import { CampaignName } from "../../../campaign/Campaign";
 import { Locale } from "../../../locale";
 import { UpdateButtonLocation } from "../../vviinn-vpr-widget/vviinn-vpr-widget";
-import { searchState } from "../../../store/search.store";
 import { ClickEvent, isClickedInRectBound } from "../../../geometry/Rectangle";
+import { Recommendation } from "../../../components";
 
 type SidebarState = "idle" | "open" | "closed";
 
@@ -76,6 +76,7 @@ export class RecommendationsSidebar {
   @Prop() showingInButton: boolean;
 
   @State() state: SidebarState = "idle";
+  @State() sourceProduct?: Recommendation;
 
   @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
 
@@ -105,6 +106,11 @@ export class RecommendationsSidebar {
     if (!isClickedInRectBound(event, sidebarRect)) {
       this.state = "closed";
     }
+  }
+
+  @Listen("sourceProductReceived")
+  sourceProductReceived(event: CustomEvent<Recommendation>) {
+    this.sourceProduct = event.detail;
   }
 
   private getClassMap() {
@@ -204,8 +210,8 @@ export class RecommendationsSidebar {
 
   private renderSourceImage(): HTMLImageElement {
     const sourceImageSrc =
-      searchState?.sourceProduct?.image?.thumbnail ??
-      searchState?.sourceProduct?.image?.original ??
+      this.sourceProduct?.image?.thumbnail ??
+      this.sourceProduct?.image?.original ??
       null;
 
     if (!sourceImageSrc) return null;
@@ -215,8 +221,7 @@ export class RecommendationsSidebar {
     );
   }
 
-  private isSourceImageValid = (): boolean =>
-    !!searchState?.sourceProduct?.image;
+  private isSourceImageValid = (): boolean => !!this.sourceProduct?.image;
 
   private handleAnimationEnd({ animationName }: AnimationEvent): void {
     const isClosingAnimation = animationName.includes("slideOut");
