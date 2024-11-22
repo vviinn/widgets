@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.124.1](https://github.com/vviinn/widgets/compare/v2.124.0...v2.124.1) (2024-11-22)
+
+
+### Bug Fixes
+
+* Use internal state for Discovery Widget ([417b777](https://github.com/vviinn/widgets/commit/417b7774b2287439b25c86dabda524948078e329))
+
+## [2.124.0](https://github.com/vviinn/widgets/compare/v2.123.0...v2.124.0) (2024-11-21)
+
+
+### Features
+
+* Added slots support for Discovery components in the Product List component ([3ef1421](https://github.com/vviinn/widgets/commit/3ef1421feb153647ded25adb475e3d68cf73a9a1))
+
 ## [2.123.0](https://github.com/vviinn/widgets/compare/v2.122.0...v2.123.0) (2024-11-18)
 
 
