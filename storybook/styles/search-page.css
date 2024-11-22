@@ -9,7 +9,7 @@ vviinn-text-search {
 
 .search-page-wrapper-filters {
   flex: none;
-  width: 250px;
+  width: 320px;
 }
 @media screen and (max-width: 768px) {
   .search-page-wrapper-filters {

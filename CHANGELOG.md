@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.126.0](https://github.com/vviinn/widgets/compare/v2.125.0...v2.126.0) (2024-11-22)
+
+
+### Features
+
+* Add a show-more button for an extended-filters options ([9662cce](https://github.com/vviinn/widgets/commit/9662cce0b0037e64316fd322e59ab04993a276cd))
+
+## [2.125.0](https://github.com/vviinn/widgets/compare/v2.124.1...v2.125.0) (2024-11-22)
+
+
+### Features
+
+* Change the modal button's styles with an add-style='true' prop ([acb8ef5](https://github.com/vviinn/widgets/commit/acb8ef5ff74e2bfed02c691e7ad3cdd797ba8006))
+
+
+### Bug Fixes
+
+* Storybook fixes and layout improvements ([7de6391](https://github.com/vviinn/widgets/commit/7de6391d2d96010d1d584ae5eb5557034145b612))
+
 ### [2.124.1](https://github.com/vviinn/widgets/compare/v2.124.0...v2.124.1) (2024-11-22)
 
 

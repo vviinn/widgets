@@ -656,39 +656,41 @@ export class VviinnVprWidget implements ComponentInterface {
           {SlotSkeleton("vpr")}
 
           <style>{state.fallbackStyles}</style>
-          <div class="widget-header">
-            <div>
-              <h2 part="recommendations-title">
-                <slot name="vviinn-recommendations-title">
-                  {this.isSetMode
-                    ? i18next.t("setMode.widgetTitle")
-                    : this.blockTitle}
-                </slot>
-              </h2>
-              {this.isSetMode && (
-                <h3 part="recommendations-subtitle">
-                  <slot name="vviinn-recommendations-subtitle">
-                    {i18next.t("setMode.widgetSubtitle")}
+          {(this.isSetMode || this.blockTitle.length > 0) && (
+            <div class="widget-header">
+              <div>
+                <h2 part="recommendations-title">
+                  <slot name="vviinn-recommendations-title">
+                    {this.isSetMode
+                      ? i18next.t("setMode.widgetTitle")
+                      : this.blockTitle}
                   </slot>
-                </h3>
-              )}
-            </div>
+                </h2>
+                {this.isSetMode && (
+                  <h3 part="recommendations-subtitle">
+                    <slot name="vviinn-recommendations-subtitle">
+                      {i18next.t("setMode.widgetSubtitle")}
+                    </slot>
+                  </h3>
+                )}
+              </div>
 
-            {this.isSetMode && this.updateButtonLocation !== "onItem" ? (
-              <button
-                class="update-button"
-                part="update-button-top"
-                onClick={() => (this.updatingAllCards = true)}
-              >
-                <slot name="vviinn-update-button-icon">
-                  <UpdateIcon />
-                </slot>
-                <slot name="vviinn-update-button-text">
-                  <span>{i18next.t("setMode.updateButtonText")}</span>
-                </slot>
-              </button>
-            ) : null}
-          </div>
+              {this.isSetMode && this.updateButtonLocation !== "onItem" ? (
+                <button
+                  class="update-button"
+                  part="update-button-top"
+                  onClick={() => (this.updatingAllCards = true)}
+                >
+                  <slot name="vviinn-update-button-icon">
+                    <UpdateIcon />
+                  </slot>
+                  <slot name="vviinn-update-button-text">
+                    <span>{i18next.t("setMode.updateButtonText")}</span>
+                  </slot>
+                </button>
+              ) : null}
+            </div>
+          )}
 
           {(this.showFilters || this.showExtendedFilters) && (
             <div class="filters-header ">

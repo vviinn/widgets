@@ -111,7 +111,7 @@ export class VviinnTextSearch {
 
   @Listen("vviinnImageUploadFinished")
   imageUploadFinished({ detail }: SearchIdEvent) {
-    if (!this.showInWidget && this.mode === "textAndUpload") {
+    if (!this.showInWidget && this.mode === "upload") {
       this.showLoader();
       this.vviinnSearchIdReceived.emit({ searchId: detail.searchId });
     }
@@ -155,7 +155,7 @@ export class VviinnTextSearch {
         <input
           class={{
             "text-search-input": true,
-            "text-search-input--with-icon": this.mode === "textAndUpload",
+            "text-search-input--with-icon": this.mode === "upload",
           }}
           part="text-search-input"
           type="text"
@@ -179,7 +179,7 @@ export class VviinnTextSearch {
           )}
         </button>
 
-        {this.mode === "textAndUpload" ? (
+        {this.mode === "upload" ? (
           <vviinn-image-selector
             token={this.token}
             apiPath={this.apiPath}

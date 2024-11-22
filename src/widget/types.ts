@@ -1,4 +1,4 @@
 export type VisualSearchMode = "modal" | "upload" | "camera";
 export type UploadSource = "uploadPhoto" | "startCamera";
 
-export type TextSearchMode = "text" | "textAndUpload";
+export type TextSearchMode = "text" | "upload";
