@@ -287,6 +287,10 @@ vviinn-price-range {
   padding-bottom: var(--spacing-150);
 }
 
+.filters-modal-sub-list > li {
+  display: contents;
+}
+
 .filters-modal.filters-modal-button .filters-modal-close {
   position: absolute;
   right: 0;
