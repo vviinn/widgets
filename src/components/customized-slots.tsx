@@ -5,12 +5,6 @@ const vprSlotsNames: string[] = [
   "vviinn-recommendations-subtitle",
   "vviinn-update-button-text",
   "vviinn-update-button-icon",
-  "vviinn-basket-button-text",
-  "vviinn-basket-button-icon",
-  "vviinn-basket-button-text-pressed",
-  "vviinn-basket-button-icon-pressed",
-  "vviinn-favorite-icon",
-  "vviinn-favorite-icon-pressed",
 ];
 
 const vpsSlotsNames: string[] = [
@@ -31,7 +25,15 @@ const filtersSlotsNames: string[] = [
   "vviinn-extended-filters-reset",
 ];
 
-const productCardSlotsNames: string[] = ["vviinn-energy-label-data-sheet-text"];
+export const productCardSlotsNames: string[] = [
+  "vviinn-basket-button-icon",
+  "vviinn-basket-button-text",
+  "vviinn-basket-button-icon-pressed",
+  "vviinn-basket-button-text-pressed",
+  "vviinn-favorite-icon",
+  "vviinn-favorite-icon-pressed",
+  "vviinn-energy-label-data-sheet-text",
+];
 
 const renderNamedSlot = (name: string) => <slot name={name} />;
 

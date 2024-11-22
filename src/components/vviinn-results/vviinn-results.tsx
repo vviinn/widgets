@@ -61,7 +61,7 @@ import {
 import { RequestDynamicFilterItem } from "../../campaign/VPRCampaignService";
 import i18next from "i18next";
 import { resources } from "../../locale";
-import { slotChangeListener } from "../customized-slots";
+import { productCardSlotsNames, slotChangeListener } from "../customized-slots";
 import { getCustomLabels } from "../../recommendation";
 
 /**
@@ -630,15 +630,6 @@ export class VviinnResults {
         index + (nCols - ((index % nCols) + 1));
     };
 
-    const productCardSlots = [
-      "vviinn-basket-button-icon",
-      "vviinn-basket-button-text",
-      "vviinn-basket-button-icon-pressed",
-      "vviinn-basket-button-text-pressed",
-      "vviinn-favorite-icon",
-      "vviinn-favorite-icon-pressed",
-    ];
-
     return results.map((p, i) => (
       <vviinn-product-card
         key={p.productId}
@@ -700,7 +691,7 @@ export class VviinnResults {
                 <slot name="vviinn-results-vpr-slot" />
               )}
 
-              {productCardSlots.map((slotName) =>
+              {productCardSlotsNames.map((slotName) =>
                 this.renderSlotContent(slotName)
               )}
             </vviinn-vpr-button>
