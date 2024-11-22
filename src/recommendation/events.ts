@@ -119,7 +119,7 @@ export type DynamicFiltersEventData = ResponseDynamicFilterItem[];
 
 export type DynamicFilterTrackingData = {
   action: FilterAction;
-  kind: string;
+  kind?: string;
 };
 
 export type SearchIdEvent = CustomEvent<SearchIdEventData>;
