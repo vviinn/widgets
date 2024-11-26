@@ -33,11 +33,7 @@ import {
 } from "../../recommendation/events";
 
 import styles from "./vviinn-product-card.css";
-import {
-  CampaignTypeId,
-  WidgetType,
-  campaignTypeNames,
-} from "../../campaign/Campaign";
+import { CampaignTypeId, campaignTypeNames } from "../../campaign/Campaign";
 import { slotChangeListener } from "../customized-slots";
 import {
   BasketIcon,
@@ -53,7 +49,7 @@ import {
   EnergyCertification,
   Recommendation,
 } from "../../interfaces/recommendation";
-import { resources } from "../../locale/resources";
+import { resources } from "../../locale";
 
 /**
  * @part image-container - Product Card's image container.
@@ -287,7 +283,7 @@ export class VviinnProductCard {
   }
 
   private getWidgetType() {
-    return this.campaignTypeId as WidgetType;
+    return this.campaignTypeId as CampaignTypeId;
   }
 
   private getProductData(): ProductCardEventData {

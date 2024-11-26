@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.128.0](https://github.com/vviinn/widgets/compare/v2.127.0...v2.128.0) (2024-11-26)
+
+
+### Features
+
+* Track reset filters event ([97c013e](https://github.com/vviinn/widgets/commit/97c013e0c643b531444ce0bc36accbb2c7994900))
+
+## [2.127.0](https://github.com/vviinn/widgets/compare/v2.126.1...v2.127.0) (2024-11-26)
+
+
+### Features
+
+* removed some repetitive type definitions ([e21a291](https://github.com/vviinn/widgets/commit/e21a2910fcf4fb12bfe5506776690ab8c2d264c8))
+
+### [2.126.1](https://github.com/vviinn/widgets/compare/v2.126.0...v2.126.1) (2024-11-25)
+
 ## [2.126.0](https://github.com/vviinn/widgets/compare/v2.125.0...v2.126.0) (2024-11-22)
 
 

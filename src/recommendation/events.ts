@@ -13,7 +13,7 @@ import {
   RequestDynamicFilterItem,
 } from "../campaign/VPRCampaignService";
 
-export type BasicEventData = {
+export type CommonEventData = {
   widgetType: "VPR" | "VPS" | "VCS" | "TPS";
   campaignTypeId: "VPR" | "VPS" | "VCS" | "TPS";
   campaignTypeName:
@@ -23,65 +23,40 @@ export type BasicEventData = {
     | "Text Product Search";
   widgetId: string;
   widgetVersion: string;
-  widget?: Widget;
+};
+
+export type BasicEventData = { widget?: Widget } & {
+  [K in keyof CommonEventData]: CommonEventData[K];
 };
 
 export type NoResultEventData = {
-  widgetType: "VPR" | "VPS" | "VCS" | "TPS";
-  campaignTypeId: "VPR" | "VPS" | "VCS" | "TPS";
-  campaignTypeName:
-    | "Similar Products"
-    | "Visual Search"
-    | "Cross-Selling"
-    | "Text Product Search";
-  widgetId: string;
-  widgetVersion: string;
   reason: ErrorKind;
+} & {
+  [K in keyof CommonEventData]: CommonEventData[K];
 };
 
 export type SelectObjectEventData = {
-  widgetType: "VPR" | "VPS" | "VCS" | "TPS";
-  campaignTypeId: "VPR" | "VPS" | "VCS" | "TPS";
-  campaignTypeName:
-    | "Similar Products"
-    | "Visual Search"
-    | "Cross-Selling"
-    | "Text Product Search";
-  widgetId: string;
-  widgetVersion: string;
   detectedObject: ValueObject<DetectedObject>;
+} & {
+  [K in keyof CommonEventData]: CommonEventData[K];
 };
 
 export type SelectFilterEventData = {
-  widgetType: "VPR" | "VPS" | "VCS" | "TPS";
-  campaignTypeId: "VPR" | "VPS" | "VCS" | "TPS";
-  campaignTypeName:
-    | "Similar Products"
-    | "Visual Search"
-    | "Cross-Selling"
-    | "Text Product Search";
-  widgetId: string;
-  widgetVersion: string;
   action: FilterAction;
   kind: string;
+} & {
+  [K in keyof CommonEventData]: CommonEventData[K];
 };
 
 export type ProductCardEventData = {
-  widgetType: "VPR" | "VPS" | "VCS" | "TPS";
-  campaignTypeId: "VPR" | "VPS" | "VCS" | "TPS";
-  campaignTypeName:
-    | "Similar Products"
-    | "Visual Search"
-    | "Cross-Selling"
-    | "Text Product Search";
-  widgetId: string;
-  widgetVersion: string;
   productId: string;
   productRank: number;
   productName: string;
   productType: string;
   clickEvent?: MouseEvent;
   discount?: number;
+} & {
+  [K in keyof CommonEventData]: CommonEventData[K];
 };
 
 export type CrossSellingClickEventData = {
@@ -119,7 +94,7 @@ export type DynamicFiltersEventData = ResponseDynamicFilterItem[];
 
 export type DynamicFilterTrackingData = {
   action: FilterAction;
-  kind: string;
+  kind?: string;
 };
 
 export type SearchIdEvent = CustomEvent<SearchIdEventData>;
