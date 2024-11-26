@@ -40,14 +40,14 @@ export const triggerFilter = (
 };
 
 export const triggerResetFilters = (
+  vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>,
   vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>,
   el: HTMLElement,
   isTriggeredByVpsWidget?: boolean
 ) => {
-  // TODO: #37391 Implement the reset logic
-  // vviinnFilterTriggered.emit({
-  //   action: "reset",
-  // });
+  vviinnFilterTriggered.emit({
+    action: "reset",
+  });
 
   vviinnFiltersChanged.emit({
     filters: [],
