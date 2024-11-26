@@ -9,6 +9,7 @@ import {
   Listen,
   State,
 } from "@stencil/core";
+
 import { makeTextSearchRequest, searchState } from "../../store/search.store";
 import { SearchModalUploadIcon, TextSearchIcon } from "../vviinn-icons";
 import { slotChangeListener } from "../customized-slots";
@@ -85,6 +86,10 @@ export class VviinnTextSearch {
   private showLoader = () => (this.isLoading = true);
   private hideLoader = () => (this.isLoading = false);
 
+  private speechRecognition =
+    (window as any).SpeechRecognition ||
+    (window as any).webkitSpeechRecognition;
+
   connectedCallback() {
     document.addEventListener("resultsSearchFinished", this.hideLoader);
   }
@@ -125,6 +130,26 @@ export class VviinnTextSearch {
     this.searchQuery = query;
   };
 
+  private async handleSpeech() {
+    const recognition = new this.speechRecognition();
+    recognition.lang = this.locale;
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+    recognition.continuous = false;
+
+    recognition.onspeechend = () => {
+      recognition.stop();
+    };
+
+    recognition.onresult = (event) => {
+      const speechResult = event.results[0][0].transcript;
+      this.setSearchQuery(speechResult);
+      this.handleTextSearch();
+    };
+
+    recognition.start();
+  }
+
   private async handleTextSearch() {
     if (!this.searchQuery) return;
     this.vviinnFilterTriggered.emit({
@@ -164,6 +189,11 @@ export class VviinnTextSearch {
           onInput={(event) => this.handleInputChange(event)}
           onKeyUp={(event) => this.handleKeyPress(event as KeyboardEvent)}
         />
+        {this.speechRecognition && (
+          <button class="speech-button" onClick={() => this.handleSpeech()}>
+            Speech
+          </button>
+        )}
         <button
           class="text-search-button"
           part="text-search-button"
