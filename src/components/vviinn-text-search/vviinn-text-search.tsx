@@ -79,6 +79,8 @@ export class VviinnTextSearch {
 
   @State() isLoading = false;
 
+  @State() isRecording = false;
+
   private isShowPreloader = () =>
     this.showInWidget
       ? searchState.loading && searchState.searchType === "text"
@@ -86,6 +88,10 @@ export class VviinnTextSearch {
 
   private showLoader = () => (this.isLoading = true);
   private hideLoader = () => (this.isLoading = false);
+
+  private isShowRecording = () => this.isRecording;
+  private showRecording = () => (this.isRecording = true);
+  private hideRecording = () => (this.isRecording = false);
 
   private speechRecognition =
     (window as any).SpeechRecognition ||
@@ -132,14 +138,18 @@ export class VviinnTextSearch {
   };
 
   private async handleSpeech() {
+    this.showRecording();
     const recognition = new this.speechRecognition();
     recognition.lang = this.locale;
+    //recognition.lang = "uk-UA";
+
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
     recognition.continuous = false;
 
     recognition.onspeechend = () => {
       recognition.stop();
+      this.hideRecording();
     };
 
     recognition.onresult = (event) => {
@@ -147,7 +157,6 @@ export class VviinnTextSearch {
       this.setSearchQuery(speechResult);
       this.handleTextSearch();
     };
-
     recognition.start();
   }
 
@@ -184,7 +193,7 @@ export class VviinnTextSearch {
             part="speech-button"
             onClick={() => this.handleSpeech()}
           >
-            <MicIcon />
+            {this.isShowRecording() ? "R" : <MicIcon />}
           </button>
         )}
         <input
