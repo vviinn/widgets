@@ -13,7 +13,7 @@
 .text-search-input {
   width: 100%;
   height: 48px;
-  padding: 0 62px 0 16px;
+  padding: 0 80px 0 16px;
   font-size: 16px;
   box-sizing: border-box;
   font-style: normal;
@@ -27,7 +27,7 @@
 }
 
 .text-search-input--with-icon {
-  padding-right: 96px;
+  padding-right: 120px;
 }
 
 .text-search-input::placeholder {
@@ -39,7 +39,8 @@
   border-color: #8d8d8d;
 }
 
-.text-search-button, .speech-button {
+.text-search-button,
+.speech-button {
   border: none;
   border-radius: 0 7px 7px 0;
   width: 46px;
@@ -47,15 +48,22 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f4f4f4;
+
   transition: background-color 0.2s;
   cursor: pointer;
 }
 
 .text-search-button {
   position: absolute;
-  right: 1px;
   top: 1px;
+  right: 1px;
+  background-color: #f4f4f4;
+}
+
+.speech-button {
+  position: absolute;
+  right: 46px;
+  background-color: transparent;
 }
 
 .text-search-button:not(:disabled):hover {
@@ -69,7 +77,7 @@
 vviinn-image-selector,
 ::slotted([slot="vviinn-text-search-actions"]) {
   position: absolute;
-  right: 60px;
+  right: 100px;
   top: calc(50% - 12px);
 }
 
