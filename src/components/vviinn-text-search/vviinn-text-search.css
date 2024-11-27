@@ -39,10 +39,7 @@
   border-color: #8d8d8d;
 }
 
-.text-search-button {
-  position: absolute;
-  right: 1px;
-  top: 1px;
+.text-search-button, .speech-button {
   border: none;
   border-radius: 0 7px 7px 0;
   width: 46px;
@@ -53,6 +50,12 @@
   background-color: #f4f4f4;
   transition: background-color 0.2s;
   cursor: pointer;
+}
+
+.text-search-button {
+  position: absolute;
+  right: 1px;
+  top: 1px;
 }
 
 .text-search-button:not(:disabled):hover {

@@ -24,6 +24,7 @@ import {
 import i18next from "i18next";
 import { Locale, resources } from "../../locale";
 import { TextSearchMode } from "../../widget/types";
+import { MicIcon } from "../vviinn-icons/icons/MicIcon";
 
 /**
  * @part text-search-input - Text search input.
@@ -176,7 +177,16 @@ export class VviinnTextSearch {
 
   render() {
     return (
-      <Host exportparts="text-search-input, text-search-button">
+      <Host exportparts="text-search-input, text-search-button, speech-button">
+        {this.speechRecognition && (
+          <button
+            class="speech-button"
+            part="speech-button"
+            onClick={() => this.handleSpeech()}
+          >
+            <MicIcon />
+          </button>
+        )}
         <input
           class={{
             "text-search-input": true,
@@ -189,11 +199,6 @@ export class VviinnTextSearch {
           onInput={(event) => this.handleInputChange(event)}
           onKeyUp={(event) => this.handleKeyPress(event as KeyboardEvent)}
         />
-        {this.speechRecognition && (
-          <button class="speech-button" onClick={() => this.handleSpeech()}>
-            Speech
-          </button>
-        )}
         <button
           class="text-search-button"
           part="text-search-button"
