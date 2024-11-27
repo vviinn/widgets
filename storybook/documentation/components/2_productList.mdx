@@ -53,8 +53,10 @@ import "../widgets/styles.css";
 <div id="static-filters">
     <div className="tab tab-reverse">
         <h3>Filter Column</h3>
-        <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'static-filters')}}>Code</button>
-        <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'static-filters')}}>Preview</button>
+            <div className="tablink-group">
+            <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'static-filters')}}>Code</button>
+            <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'static-filters')}}>Preview</button>
+        </div>
     </div>
         <div className="tab-sub-title">Filter by "product_type" for "{filterValue}"</div>
 
