@@ -97,7 +97,7 @@ export const productDataByIndustryAndType = {
 export const cardDataByType = {
   mainCard: {
     uniqueId: "main",
-    header: "Full Content View with One-click Discovery modal",
+    header: "Full Content View with Modal One-click Discovery",
     productData: {
       "price-prefix": "",
       "custom-labels": "UVP",
@@ -115,7 +115,7 @@ export const cardDataByType = {
   },
   appendCard: {
     uniqueId: "append",
-    header: "Partial Content View with appended One-click Discovery",
+    header: "Partial Content View with Appended One-click Discovery",
     productData: {
       "add-to-basket-show": "true",
       "is-standalone": "true",
@@ -125,7 +125,7 @@ export const cardDataByType = {
   },
   setCard: {
     uniqueId: "set",
-    header: "Partial Content Set Mode View",
+    header: "Partial Content View (Set Mode)",
     productData: {
       "set-mode": "true",
       "add-to-basket-show": "true",
@@ -135,7 +135,7 @@ export const cardDataByType = {
   },
   minimalisticCard: {
     uniqueId: "minimalistic",
-    header: "Minimalistic View (with hidden content)",
+    header: "Minimalistic View with Manually Hidden Content",
     productData: {
       "is-standalone": "true",
       ...commonParams,
