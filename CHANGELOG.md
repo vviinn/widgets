@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.129.0](https://github.com/vviinn/widgets/compare/v2.128.0...v2.129.0) (2024-11-28)
+
+
+### Features
+
+* Update storybook documentation ([8e8dddf](https://github.com/vviinn/widgets/commit/8e8dddf88f2f157d6fd7b855d00233d64f47a855))
+
 ## [2.128.0](https://github.com/vviinn/widgets/compare/v2.127.0...v2.128.0) (2024-11-26)
 
 
