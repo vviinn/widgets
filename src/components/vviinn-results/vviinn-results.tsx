@@ -389,6 +389,7 @@ export class VviinnResults {
 
   private widgetCloseHandler = () => {
     this.oneClickDiscoveryAppendIndex = undefined;
+    this.oneClickDiscoverySelectedIndex = undefined;
   };
 
   connectedCallback() {

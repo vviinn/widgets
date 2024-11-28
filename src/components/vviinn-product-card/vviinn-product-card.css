@@ -407,7 +407,7 @@ vviinn-energy-label {
   height: 0;
   border: 10px solid transparent;
   border-top: 0;
-  border-bottom: 15px solid var(--button-bg-color-secondary);
+  border-bottom: 15px solid var(--color-border-02);
 }
 
 .hidden {
