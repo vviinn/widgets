@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.130.0](https://github.com/vviinn/widgets/compare/v2.129.0...v2.130.0) (2024-11-28)
+
+
+### Features
+
+* Rework of One-click discovery Storybook's page ([76036fe](https://github.com/vviinn/widgets/commit/76036fe301294b06a23b85c6f85c2a16072e3356))
+
 ## [2.129.0](https://github.com/vviinn/widgets/compare/v2.128.0...v2.129.0) (2024-11-28)
 
 
