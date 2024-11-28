@@ -1,14 +1,15 @@
 import { Meta, Story } from '@storybook/blocks';
 import "../../components/tabs/styles.css";
+import "../../styles/product-feed.css";
 import { clickHandlers } from "../../components";
-import { vviinnToken, textSearchQuery } from "../../helpers";
+import { vviinnToken, textSearchQuery, productIdCrossSelling, productIdSimilarProducts } from "../../helpers";
 import "./styles.css";
 
 <Meta title="Widgets/One-click Discovery" />
 
 # One-click Discovery
 
-One-click discovery allows you to display products with a single click inside the modal or in appended mode inside the grid. Here are examples using the `vviinn-results` component.
+One-click discovery allows you to display products with a single click inside the modal or in appended mode inside the grid. Here are examples using the `vviinn-results` component or separately.
 
 <div id="one-click-modal">
     <div className="tab tab-reverse">
@@ -18,6 +19,7 @@ One-click discovery allows you to display products with a single click inside th
             <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'one-click-modal')}}>Preview</button>
         </div>
     </div>
+    <div className="tab-sub-title">One-click Discovery's `modal` mode, showing in `vviinn-results` for the "{textSearchQuery}" query.</div>
     <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
             <vviinn-results 
@@ -25,7 +27,7 @@ One-click discovery allows you to display products with a single click inside th
                 image-resolution-width="500" 
                 currency-sign="€" 
                 locale="en-US" 
-                results-count="3"
+                results-count="6"
                 text-search-query={textSearchQuery}
                 one-click-discovery-mode="modal"
             ></vviinn-results>
@@ -38,7 +40,7 @@ One-click discovery allows you to display products with a single click inside th
     image-resolution-width="500" 
     currency-sign="€" 
     locale="en-US" 
-    results-count="9"
+    results-count="6"
     text-search-query="EXAMPLE_QUERY"
     one-click-discovery-mode="modal"
 ></vviinn-results>
@@ -55,6 +57,7 @@ One-click discovery allows you to display products with a single click inside th
             <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'one-click-append')}}>Preview</button>
         </div>
     </div>
+    <div className="tab-sub-title">One-click Discovery's `append` mode, showing in `vviinn-results` for the "{textSearchQuery}" query.</div>
     <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
             <vviinn-results 
@@ -62,7 +65,7 @@ One-click discovery allows you to display products with a single click inside th
                 image-resolution-width="500" 
                 currency-sign="€" 
                 locale="en-US" 
-                results-count="9"
+                results-count="12"
                 text-search-query={textSearchQuery}
                 one-click-discovery-mode="append"
             ></vviinn-results>
@@ -75,10 +78,131 @@ One-click discovery allows you to display products with a single click inside th
     image-resolution-width="500" 
     currency-sign="€" 
     locale="en-US" 
-    results-count="9"
+    results-count="12"
     text-search-query="EXAMPLE_QUERY"
     one-click-discovery-mode="append"
 ></vviinn-results>
+```
+    </div>
+</div>
+
+<div id="one-click-itself">
+    <div className="tab tab-reverse">
+        <h3>One-click Discovery Itself</h3>
+        <div className="tablink-group">
+            <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_3', 'one-click-itself')}}>Code</button>
+            <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_3', 'one-click-itself')}}>Preview</button>
+        </div>
+    </div>
+    <div className="tab-sub-title">Integrating the One-click Discovery modal into an example grid using `continuity` (default), `grid`, and `set` modes.</div>
+    <div id="Preview_3" className="tabcontent" style={{display:"block"}}>
+        <div className="tabcontent-preview">
+            <div className="collection">
+                <div className="product">
+                    <a className="product__image" href="#"></a>
+                    <div className="product__name">
+                        <a href="#">Product Name</a>
+                    </div>
+                    <div className="product__price">
+                        $10.00 
+
+                        <vviinn-vpr-button 
+                            token={vviinnToken}
+                            product-id={productIdCrossSelling}
+                            mode="continuity" 
+                            block-title=""
+                            locale="en-US"
+                            
+                        ></vviinn-vpr-button> 
+                    </div>
+                </div>
+                <div className="product">
+                    <a className="product__image" href="#"></a>
+                    <div className="product__name">
+                        <a href="#">Product Name</a>
+                    </div>
+                    <div className="product__price">
+                        $10.00  
+                        <vviinn-vpr-button 
+                            token={vviinnToken}
+                            product-id={productIdSimilarProducts} 
+                            mode="grid" 
+                            block-title=""
+                            locale="en-US"
+                        ></vviinn-vpr-button> 
+                    </div>
+                </div>
+                <div className="product">
+                    <a className="product__image" href="#"></a>
+                    <div className="product__name">
+                        <a href="#">Product Name</a>
+                    </div>
+                    <div className="product__price">
+                        $10.00  
+                        <vviinn-vpr-button 
+                            token={vviinnToken}
+                            product-id={productIdSimilarProducts} 
+                            mode="set" 
+                            block-title=""
+                            locale="en-US"
+                        ></vviinn-vpr-button> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="Code_3" className="tabcontent">
+```html
+<div class="collection">
+    <div class="product">
+        <a class="product__image" href="#"></a>
+        <div class="product__name">
+            <a href="#">Product Name</a>
+        </div>
+        <div class="product__price">
+            $10.00 
+            <vviinn-vpr-button 
+                token="TOKEN" 
+                product-id="PRODUCT_ID" 
+                mode="continuity" 
+                block-title=""
+                locale="en-US"
+            ></vviinn-vpr-button> 
+        </div>
+    </div>
+    <div class="product">
+        <a class="product__image" href="#"></a>
+        <div class="product__name">
+            <a href="#">Product Name</a>
+        </div>
+        <div class="product__price">
+            $10.00  
+            <vviinn-vpr-button 
+                token="TOKEN" 
+                product-id="PRODUCT_ID" 
+                mode="grid" 
+                block-title=""
+                locale="en-US"
+            ></vviinn-vpr-button> 
+        </div>
+    </div>
+    <div class="product">
+        <a class="product__image" href="#"></a>
+        <div class="product__name">
+            <a href="#">Product Name</a>
+        </div>
+        <div class="product__price">
+            $10.00  
+            <vviinn-vpr-button 
+                token="TOKEN" 
+                product-id="PRODUCT_ID" 
+                mode="set" 
+                block-title=""
+                locale="en-US"
+            ></vviinn-vpr-button> 
+        </div>
+    </div>
+</div>
 ```
     </div>
 </div>
