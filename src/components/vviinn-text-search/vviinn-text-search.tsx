@@ -25,6 +25,7 @@ import i18next from "i18next";
 import { Locale, resources } from "../../locale";
 import { TextSearchMode } from "../../widget/types";
 import { MicIcon } from "../vviinn-icons/icons/MicIcon";
+import { initializeRecognition } from "./initializeRecognition";
 
 /**
  * @part text-search-input - Text search input.
@@ -93,9 +94,14 @@ export class VviinnTextSearch {
   private showRecording = () => (this.isRecording = true);
   private hideRecording = () => (this.isRecording = false);
 
-  private speechRecognition =
-    (window as any).SpeechRecognition ||
-    (window as any).webkitSpeechRecognition;
+  private recognition = initializeRecognition(
+    this.locale,
+    this.hideRecording,
+    (speechResult) => {
+      this.setSearchQuery(speechResult);
+      this.handleTextSearch();
+    }
+  );
 
   connectedCallback() {
     document.addEventListener("resultsSearchFinished", this.hideLoader);
@@ -138,26 +144,13 @@ export class VviinnTextSearch {
   };
 
   private async handleSpeech() {
-    this.showRecording();
-    const recognition = new this.speechRecognition();
-    recognition.lang = this.locale;
-    //recognition.lang = "uk-UA";
-
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-    recognition.continuous = false;
-
-    recognition.onspeechend = () => {
-      recognition.stop();
+    if (this.isRecording) {
+      this.recognition.stop();
       this.hideRecording();
-    };
-
-    recognition.onresult = (event) => {
-      const speechResult = event.results[0][0].transcript;
-      this.setSearchQuery(speechResult);
-      this.handleTextSearch();
-    };
-    recognition.start();
+    } else {
+      this.showRecording();
+      this.recognition.start();
+    }
   }
 
   private async handleTextSearch() {
@@ -187,7 +180,7 @@ export class VviinnTextSearch {
   render() {
     return (
       <Host exportparts="text-search-input, text-search-button, speech-button">
-        {this.speechRecognition && (
+        {this.recognition && (
           <button
             class="speech-button"
             part="speech-button"
