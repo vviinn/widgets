@@ -26,6 +26,7 @@ import { Locale, resources } from "../../locale";
 import { TextSearchMode } from "../../widget/types";
 import { MicIcon } from "../vviinn-icons/icons/MicIcon";
 import { initializeRecognition } from "./initializeRecognition";
+import { StopIcon } from "../vviinn-icons/icons/StopIcon";
 
 /**
  * @part text-search-input - Text search input.
@@ -186,7 +187,7 @@ export class VviinnTextSearch {
             part="speech-button"
             onClick={() => this.handleSpeech()}
           >
-            {this.isShowRecording() ? "R" : <MicIcon />}
+            {this.isShowRecording() ? <StopIcon /> : <MicIcon />}
           </button>
         )}
         <input
