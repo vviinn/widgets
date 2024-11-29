@@ -10,7 +10,7 @@
    */
 }
 
-:host(.show-in-widget) {
+:host(.show-in-widget.preview-filters) {
   padding-left: 24px;
 }
 
@@ -104,49 +104,17 @@ vviinn-price-range {
   flex-wrap: wrap;
 }
 
-:host(.show-in-widget) .selected-filters-wrapper {
+:host(.show-in-widget.preview-filters) .selected-filters-wrapper {
   flex-wrap: unset;
   overflow-x: auto;
 }
 
-:host(.show-in-widget) .sub-filters-wrapper,
-:host(.show-in-widget) .selected-filters-wrapper {
+:host(.show-in-widget.preview-filters) .sub-filters-wrapper,
+:host(.show-in-widget.preview-filters) .selected-filters-wrapper {
   transform: translateX(-24px);
   padding-left: var(--spacing-300);
   padding-right: var(--spacing-300);
   width: 100%;
-}
-
-@media (max-width: 768px) {
-  :host(.show-in-widget) {
-    padding-right: var(--spacing-300);
-  }
-
-  .sub-filters-wrapper,
-  .selected-filters-wrapper {
-    flex-wrap: unset;
-    overflow-x: auto;
-    padding-bottom: 0;
-  }
-
-  .sub-filters-wrapper,
-  .selected-filters-wrapper {
-    margin-top: 16px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-
-  .sub-filters-wrapper::-webkit-scrollbar,
-  .selected-filters-wrapper::-webkit-scrollbar {
-    display: none;
-  }
-
-  .filters-modal.filters-modal-button .filters-modal-wrapper {
-    width: 100%;
-    top: 20%;
-    border-radius: 32px 32px 0px 0px;
-  }
 }
 
 .filters-sub-button {
@@ -493,4 +461,50 @@ vviinn-price-range {
 
 .filters-modal-main-button-added-options > span:last-child::after {
   content: "";
+}
+
+@media (max-width: 768px) {
+  :host(.show-in-widget.preview-filters) {
+    padding-right: var(--spacing-300);
+  }
+
+  .sub-filters-wrapper,
+  .selected-filters-wrapper {
+    flex-wrap: unset;
+    overflow-x: auto;
+    padding-bottom: 0;
+  }
+
+  .sub-filters-wrapper,
+  .selected-filters-wrapper {
+    margin-top: 16px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .sub-filters-wrapper::-webkit-scrollbar,
+  .selected-filters-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filters-modal.filters-modal-button .filters-modal-wrapper {
+    width: 100%;
+    top: 20%;
+    border-radius: 32px 32px 0px 0px;
+  }
+
+  :host(.show-in-widget.button-extended-filters) .filters-modal {
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    /* TODO: */
+  }
+
+  :host(.show-in-widget.button-extended-filters) .filters-modal-wrapper {
+    width: 100%;
+    height: 100%;
+    /* TODO: */
+  }
 }

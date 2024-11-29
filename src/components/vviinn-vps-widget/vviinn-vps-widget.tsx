@@ -766,12 +766,14 @@ export class VviinnVpsWidget {
                     }}
                   >
                     <vviinn-filters
+                      class="preview-filters"
                       filters={searchState.dynamicFilters}
                       showInWidget={true}
                       exportparts={filtersParts}
                     ></vviinn-filters>
 
                     <vviinn-extended-filters
+                      class="preview-extended-filters"
                       filters={searchState.dynamicFilters}
                       mode="preview"
                       showHeader={false}
@@ -779,6 +781,15 @@ export class VviinnVpsWidget {
                       showInWidget={true}
                       locale={this.locale}
                     ></vviinn-extended-filters>
+
+                    {/* <vviinn-extended-filters
+                      class="button-extended-filters"
+                      filters={searchState.dynamicFilters}
+                      mode="button"
+                      exportparts={extendedFiltersParts}
+                      showInWidget={true}
+                      locale={this.locale}
+                    ></vviinn-extended-filters> */}
                   </div>
                 </div>
               )}

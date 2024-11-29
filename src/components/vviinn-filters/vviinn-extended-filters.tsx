@@ -381,7 +381,11 @@ export class VviinnExtendedFilters {
     const filters = this.getFilters();
 
     return (
-      <Host>
+      <Host
+        class={{
+          "show-in-widget": this.showInWidget,
+        }}
+      >
         {SlotSkeleton("filters")}
 
         {filters?.length > 0 && this.mode === "button" && (
