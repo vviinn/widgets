@@ -27,6 +27,7 @@ export const resources: Resource = {
       teaserText: "Finde Produkte auf \n einem Foto",
       imageSearchModalTitle: "AI Search",
       textSearchPlaceholder: "mit Text suchen",
+      speechRecognitionPlaceholder: "Aufnahme...",
       emptyResultsBlock: {
         title: "Leider nichts gefunden",
         button: "Neues Bild hochladen",
@@ -77,6 +78,7 @@ export const resources: Resource = {
       teaserText: "Find Product by Photo",
       imageSearchModalTitle: "AI Search",
       textSearchPlaceholder: "Search by text",
+      speechRecognitionPlaceholder: "Listening...",
       emptyResultsBlock: {
         title: "Sorry, nothing found",
         button: "Upload another image",

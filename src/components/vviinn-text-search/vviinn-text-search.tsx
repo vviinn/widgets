@@ -26,7 +26,7 @@ import { Locale, resources } from "../../locale";
 import { TextSearchMode } from "../../widget/types";
 import { MicIcon } from "../vviinn-icons/icons/MicIcon";
 import { initializeRecognition } from "./initializeRecognition";
-import { StopIcon } from "../vviinn-icons/icons/StopIcon";
+import { RecordingIcon } from "../vviinn-icons/icons/RecordingIcon";
 
 /**
  * @part text-search-input - Text search input.
@@ -189,7 +189,11 @@ export class VviinnTextSearch {
           }}
           part="text-search-input"
           type="text"
-          placeholder={i18next.t("textSearchPlaceholder")}
+          placeholder={i18next.t(
+            this.isShowRecording()
+              ? "speechRecognitionPlaceholder"
+              : "textSearchPlaceholder"
+          )}
           value={this.searchQuery}
           onInput={(event) => this.handleInputChange(event)}
           onKeyUp={(event) => this.handleKeyPress(event as KeyboardEvent)}
@@ -216,7 +220,7 @@ export class VviinnTextSearch {
               part="speech-button"
               onClick={() => this.handleSpeech()}
             >
-              {this.isShowRecording() ? <StopIcon /> : <MicIcon />}
+              {this.isShowRecording() ? <RecordingIcon /> : <MicIcon />}
             </button>
           )}
           <button
