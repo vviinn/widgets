@@ -14,7 +14,7 @@
     * @prop --basket-button-bg-color-pressed: Set the background color of the pressed Basket Button.
     * @prop --font-family: Set the font family of the widget.
   */
-
+  position: relative;
   display: block;
 }
 
@@ -155,7 +155,6 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   transform: translateX(-24px);
   min-width: calc(100% + 48px);
   scrollbar-width: thin;
-  scrollbar-gutter: stable;
   -ms-overflow-style: none;
 }
 
@@ -168,7 +167,8 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   }
 }
 
-vviinn-filters {
+vviinn-filters,
+vviinn-extended-filters.modal-extended-filters {
   display: none;
 }
 
@@ -178,7 +178,7 @@ vviinn-extended-filters.preview-extended-filters {
   width: 100%;
 }
 
-vviinn-extended-filters.button-extended-filters {
+.extended-filters-button {
   display: none;
 }
 
@@ -281,7 +281,8 @@ vviinn-preloader {
     min-width: 100%;
   }
 
-  vviinn-filters {
+  vviinn-filters,
+  vviinn-extended-filters.modal-extended-filters {
     display: block;
     overflow: hidden;
   }
@@ -290,10 +291,10 @@ vviinn-preloader {
     display: none;
   }
 
-  vviinn-extended-filters.button-extended-filters {
+  .extended-filters-button {
     display: block;
     position: absolute;
-    right: var(--spacing-150);
+    right: var(--spacing-300);
     top: 0;
   }
 

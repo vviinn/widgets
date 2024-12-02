@@ -69,6 +69,7 @@ vviinn-price-range {
   padding: var(--spacing-100);
   color: var(--color-text-helper);
   background: none;
+  transition: background 0.15s, color 0.15s;
 }
 
 .filters-main-button.active,
@@ -156,12 +157,18 @@ vviinn-price-range {
   border-radius: var(--border-radius-100);
 
   align-items: flex-start;
-  background: var(--button-bg-color-secondary);
+  background-color: var(--button-bg-color-secondary);
+  transition: background-color 0.1s;
   border: none;
   cursor: pointer;
 }
 
-.filters-modal.filters-modal-button {
+.filters-more-button:hover {
+  background-color: var(--button-bg-color-secondary-hover);
+}
+
+.filters-modal.filters-modal-button,
+.filters-modal.filters-modal-modal {
   display: none;
   position: fixed;
   top: 0;
@@ -169,8 +176,8 @@ vviinn-price-range {
   right: 0;
   left: 0;
 
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 98;
+  background: #ffffff;
+  z-index: 99999;
 }
 
 .filters-modal.filters-modal-preview {
@@ -186,14 +193,14 @@ vviinn-price-range {
   flex-direction: column;
 }
 
-.filters-modal.filters-modal-button .filters-modal-wrapper {
+.filters-modal.filters-modal-button .filters-modal-wrapper,
+.filters-modal.filters-modal-button .filters-modal-modal {
   position: fixed;
   top: 0;
   bottom: 0;
   right: 0;
   width: 420px;
-  background-color: #ffffff;
-  z-index: 99;
+  z-index: 99999;
   border-radius: var(--border-radius-400) var(--border-radius-none)
     var(--border-radius-none) var(--border-radius-400);
 }
@@ -259,7 +266,8 @@ vviinn-price-range {
   display: contents;
 }
 
-.filters-modal.filters-modal-button .filters-modal-close {
+.filters-modal.filters-modal-button .filters-modal-close,
+.filters-modal.filters-modal-modal .filters-modal-close {
   position: absolute;
   right: 0;
   top: var(--spacing-200);
@@ -282,7 +290,8 @@ vviinn-price-range {
   gap: var(--spacing-25);
 
   border-radius: var(--border-radius-100);
-  background: var(--surface-bg-color-01);
+  background-color: var(--surface-bg-color-01);
+  transition: background-color 0.1s;
 
   font-family: var(--font-family, var(--font-family-base));
   font-size: var(--font-size-label);
@@ -290,7 +299,7 @@ vviinn-price-range {
 }
 
 .filters-more-modal-button:hover {
-  background: var(--surface-bg-color-01-hover);
+  background-color: var(--surface-bg-color-01-hover);
 }
 
 .filters-more-modal-button.active {
@@ -316,7 +325,6 @@ vviinn-price-range {
   border-top: 1px solid var(--color-border-01);
   padding: var(--spacing-125);
   z-index: 10;
-  background: #ffffff;
   border-radius: 0px 0px 0px 32px;
 }
 
@@ -494,17 +502,15 @@ vviinn-price-range {
     border-radius: 32px 32px 0px 0px;
   }
 
-  :host(.show-in-widget.button-extended-filters) .filters-modal {
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    /* TODO: */
-  }
-
-  :host(.show-in-widget.button-extended-filters) .filters-modal-wrapper {
+  .filters-modal.filters-modal-modal {
+    position: fixed;
+    border-radius: 32px 32px 0px 0px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     width: 100%;
-    height: 100%;
-    /* TODO: */
+    height: 65%;
+    overflow-y: auto;
+    scrolbar-width: thin;
+    top: unset;
+    bottom: 0;
   }
 }
