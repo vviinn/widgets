@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.131.0](https://github.com/vviinn/widgets/compare/v2.130.0...v2.131.0) (2024-12-02)
+
+
+### Features
+
+* Added grid view to append mode of one-click discovery ([a8458f6](https://github.com/vviinn/widgets/commit/a8458f6a608660ffadf27e34cd0421e2a1690282))
+
 ## [2.130.0](https://github.com/vviinn/widgets/compare/v2.129.0...v2.130.0) (2024-11-28)
 
 
