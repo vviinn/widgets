@@ -125,7 +125,7 @@ main {
   max-width: 480px;
 }
 
-:host(.right) vviinn-vpr-widget::part(recommendations-grid) {
+:host(.right) vviinn-vpr-widget::part(recommendations-results) {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-gap: var(--spacing-300);
