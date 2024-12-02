@@ -230,6 +230,7 @@ export class VviinnImageView {
         <div class="container">
           <div class="image-container">
             {this.renderImage()}
+
             {searchState.detectedObjects.map((o) =>
               this.renderDetectedObject(o)
             )}

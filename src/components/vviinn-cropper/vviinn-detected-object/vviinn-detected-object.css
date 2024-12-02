@@ -1,0 +1,54 @@
+@import "../../../variables.css";
+
+:host {
+  display: block;
+  position: absolute;
+  left: calc(var(--x-position));
+  top: calc(var(--y-position));
+  z-index: 2;
+}
+
+:host::before,
+:host::after {
+  content: "";
+  cursor: pointer;
+  position: absolute;
+  height: var(--size);
+  width: var(--size);
+  left: calc(-1 * var(--size) / 2);
+  top: calc(-1 * var(--size) / 2);
+}
+
+:host::before {
+  --size: 36px;
+  border-radius: 50%;
+  z-index: 0;
+  background: rgba(0, 0, 0, 0.16);
+  backdrop-filter: blur(4px);
+  transition: transform 0.07s ease-in-out;
+}
+
+:host::after {
+  --size: 13px;
+  border-radius: 50%;
+  z-index: 1;
+  background: white;
+  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.15);
+  transition: transform 0.07s ease-in-out;
+}
+
+:host(.active)::before {
+  transform: scale(0.88);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+:host(.active)::after {
+  transform: scale(0.67);
+}
+
+@media (min-width: 768px) {
+  :host(:not(.active):hover)::before {
+    transform: scale(1.08);
+    background: rgba(0, 0, 0, 0.32);
+  }
+}
