@@ -822,15 +822,16 @@ export class VviinnVpsWidget {
               )}
             </vviinn-slide>
           </vviinn-slider>
+
+          <vviinn-extended-filters
+            class="modal-extended-filters"
+            filters={searchState.dynamicFilters}
+            mode="modal"
+            exportparts={extendedFiltersParts}
+            showInWidget={true}
+            locale={this.locale}
+          />
         </vviinn-overlayed-modal>
-        <vviinn-extended-filters
-          class="modal-extended-filters"
-          filters={searchState.dynamicFilters}
-          mode="modal"
-          exportparts={extendedFiltersParts}
-          showInWidget={true}
-          locale={this.locale}
-        />
       </Host>
     );
   }

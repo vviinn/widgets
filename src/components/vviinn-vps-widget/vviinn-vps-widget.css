@@ -14,7 +14,6 @@
     * @prop --basket-button-bg-color-pressed: Set the background color of the pressed Basket Button.
     * @prop --font-family: Set the font family of the widget.
   */
-  position: relative;
   display: block;
 }
 

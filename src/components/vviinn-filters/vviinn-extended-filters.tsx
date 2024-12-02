@@ -188,9 +188,7 @@ export class VviinnExtendedFilters {
   private renderModal(filters: ResponseDynamicFilterItem[]) {
     return (
       <div
-        class={`filters-modal filters-modal-${this.mode} ${
-          this.showMore ? "open" : ""
-        }`}
+        class={`filters-modal ${this.mode} ${this.showMore ? "open" : ""}`}
         part="extended-filters-modal"
       >
         <aside
