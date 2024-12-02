@@ -59,6 +59,7 @@ img.source-image {
   border-radius: 50%;
   padding: 6px;
   border: 1px solid var(--color-border-02);
+  object-fit: contain;
 }
 
 :host(.right) header {
@@ -124,7 +125,7 @@ main {
   max-width: 480px;
 }
 
-:host(.right) vviinn-vpr-widget::part(recommendations-grid) {
+:host(.right) vviinn-vpr-widget::part(recommendations-results) {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-gap: var(--spacing-300);

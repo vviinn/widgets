@@ -205,6 +205,7 @@ export class VviinnResults {
   @State() innerTextSearchQuery: string;
   @State() slotsReplaced: boolean;
   @State() oneClickDiscoveryAppendIndex: number;
+  @State() oneClickDiscoverySelectedIndex: number;
   @State() isTextSearch: boolean = this.textSearchQuery?.length > 0;
   @State() vprSlot: boolean = false;
 
@@ -388,6 +389,7 @@ export class VviinnResults {
 
   private widgetCloseHandler = () => {
     this.oneClickDiscoveryAppendIndex = undefined;
+    this.oneClickDiscoverySelectedIndex = undefined;
   };
 
   connectedCallback() {
@@ -628,6 +630,8 @@ export class VviinnResults {
 
       this.oneClickDiscoveryAppendIndex =
         index + (nCols - ((index % nCols) + 1));
+
+      this.oneClickDiscoverySelectedIndex = index;
     };
 
     const productCardSlots = [
@@ -669,6 +673,7 @@ export class VviinnResults {
         addPriceContainer={this.addPriceContainer}
         isResultsWidget={true}
         style={{ order: i.toString() }}
+        showFooterArrow={this.oneClickDiscoverySelectedIndex === i}
       >
         {this.oneClickDiscoveryMode && (
           <div

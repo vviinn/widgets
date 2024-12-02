@@ -43,7 +43,7 @@ import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
  * @part price-prefix - Block rendered before each price element (for ex. "from").
  * @part carousel-button - Button for carousel navigation.
- * @part recommendations-grid - For internal usage only!
+ * @part recommendations-results - For internal usage only!
  * @part recommendations-title - Title of the recommendations grid.
  * @part recommendations-subtitle - Subtitle of the recommendations grid.
  * @part basket-button - Add to Basket button.
@@ -247,7 +247,6 @@ export class VviinnVprButton {
     sidebar.campaignType = this.campaignType;
     sidebar.color = this.color;
     sidebar.locale = this.locale;
-    sidebar.mode = this.position === "right" ? "grid" : this.mode;
     sidebar.imageWidth = this.imageWidth;
     sidebar.currencySign = this.currencySign;
     sidebar.pricePrefix = this.pricePrefix;
@@ -270,6 +269,14 @@ export class VviinnVprButton {
     sidebar.updateButtonLocation = this.updateButtonLocation;
     sidebar.addPriceContainer = this.addPriceContainer;
     sidebar.favoriteShow = this.favoriteShow;
+
+    if (this.targetAppendSidebarTo) {
+      sidebar.mode = "grid";
+      sidebar.useCarousel = false;
+    } else {
+      sidebar.mode = this.position === "right" ? "grid" : this.mode;
+      sidebar.useCarousel = this.position === "bottom";
+    }
 
     this.sidebar = sidebar;
 

@@ -135,7 +135,7 @@ export class VviinnFilters {
   private showActiveOnMainButton({ column }: ResponseDynamicFilterItem) {
     if (!this.selectedFilter) return "";
 
-    return this.selectedFilter.column === column ? "active" : "";
+    return this.selectedFilter?.column === column ? "active" : "";
   }
 
   private handleSetFilters = ({
@@ -148,7 +148,7 @@ export class VviinnFilters {
 
     if (this.selectedFilter) {
       this.selectedFilter = this.innerFilters.find(
-        (f) => f.column === this.selectedFilter.column
+        (f) => f?.column === this.selectedFilter?.column
       );
     }
 
@@ -172,7 +172,7 @@ export class VviinnFilters {
 
     if (!this.selectedFilter) {
       this.selectedFilter = this.getFilters().find(
-        (f) => f.column === filters[0].column
+        (f) => f?.column === filters[0]?.column
       );
     }
   };

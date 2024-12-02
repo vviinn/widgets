@@ -1,4 +1,5 @@
 import { Component, Host, h, Prop, Event, EventEmitter } from "@stencil/core";
+import { BasicEventData } from "../../recommendation/events";
 
 @Component({
   tag: "vviinn-overlayed-modal",
@@ -17,7 +18,7 @@ export class VviinnOverlayedModal {
   /** @internal */
   @Prop() isFirstScreen: boolean;
 
-  @Event() vviinnWidgetClose: EventEmitter<void>;
+  @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
 
   render() {
     return (
