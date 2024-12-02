@@ -7,30 +7,25 @@
   border: 1px solid var(--color-border-02);
   border-radius: 8px;
   transition: border-color 0.2s;
+  overflow: hidden;
+  gap: 8px;
   /**
    * @prop --font-family: Set the font family of the text search.
    */
 }
 
 .text-search-input {
-  width: 100%;
-  height: 48px;
-  padding: 0 0 0 16px;
+  height: 46px;
+  padding-left: 16px;
   font-size: 16px;
   box-sizing: border-box;
   font-style: normal;
   font-weight: 400;
-  border-radius: 8px;
   font-family: var(--font-family, var(--font-family-base));
   border: none;
   outline: none;
   overflow: hidden;
   flex-grow: 2;
-}
-
-.text-buttons-wrapper {
-  display: flex;
-  max-width: fit-content;
 }
 
 .text-search-input::placeholder {
@@ -45,13 +40,12 @@
 .text-search-button,
 .speech-button {
   border: none;
-  border-radius: 0 7px 7px 0;
   width: 46px;
+  min-width: 46px;
   height: 46px;
   display: flex;
   justify-content: center;
   align-items: center;
-
   transition: background-color 0.2s;
   cursor: pointer;
 }

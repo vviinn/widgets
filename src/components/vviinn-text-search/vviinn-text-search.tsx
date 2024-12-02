@@ -182,11 +182,7 @@ export class VviinnTextSearch {
     return (
       <Host exportparts="text-search-input, text-search-button, speech-button">
         <input
-          class={{
-            "text-search-input": true,
-            "text-search-input--with-icon": this.mode === "upload",
-            "text-search-input--with-recording": !!this.recognition,
-          }}
+          class="text-search-input"
           part="text-search-input"
           type="text"
           placeholder={i18next.t(
@@ -198,46 +194,43 @@ export class VviinnTextSearch {
           onInput={(event) => this.handleInputChange(event)}
           onKeyUp={(event) => this.handleKeyPress(event as KeyboardEvent)}
         />
-
-        <div class="text-buttons-wrapper">
-          {this.mode === "upload" ? (
-            <vviinn-image-selector
-              token={this.token}
-              apiPath={this.apiPath}
-              showInTextSearch={true}
-              uploadStartedHandler={this.showLoader.bind(this)}
-            >
-              <span slot="upload-button-text">
-                <SearchModalUploadIcon />
-              </span>
-            </vviinn-image-selector>
-          ) : (
-            <slot name="vviinn-text-search-actions"></slot>
-          )}
-          {this.recognition && (
-            <button
-              class="speech-button"
-              part="speech-button"
-              onClick={() => this.handleSpeech()}
-            >
-              {this.isShowRecording() ? <RecordingIcon /> : <MicIcon />}
-            </button>
-          )}
-          <button
-            class="text-search-button"
-            part="text-search-button"
-            onClick={() => this.handleTextSearch()}
-            disabled={searchState.loading}
+        {this.mode === "upload" ? (
+          <vviinn-image-selector
+            token={this.token}
+            apiPath={this.apiPath}
+            showInTextSearch={true}
+            uploadStartedHandler={this.showLoader.bind(this)}
           >
-            {this.isShowPreloader() ? (
-              <vviinn-preloader />
-            ) : (
-              <slot name="vviinn-text-search-icon">
-                <TextSearchIcon />
-              </slot>
-            )}
+            <span slot="upload-button-text">
+              <SearchModalUploadIcon />
+            </span>
+          </vviinn-image-selector>
+        ) : (
+          <slot name="vviinn-text-search-actions"></slot>
+        )}
+        {this.recognition && (
+          <button
+            class="speech-button"
+            part="speech-button"
+            onClick={() => this.handleSpeech()}
+          >
+            {this.isShowRecording() ? <RecordingIcon /> : <MicIcon />}
           </button>
-        </div>
+        )}
+        <button
+          class="text-search-button"
+          part="text-search-button"
+          onClick={() => this.handleTextSearch()}
+          disabled={searchState.loading}
+        >
+          {this.isShowPreloader() ? (
+            <vviinn-preloader />
+          ) : (
+            <slot name="vviinn-text-search-icon">
+              <TextSearchIcon />
+            </slot>
+          )}
+        </button>
       </Host>
     );
   }
