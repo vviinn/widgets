@@ -312,11 +312,13 @@ export const makeSearchQueryRequest = async (
   token: string,
   query: string,
   dynamicFilters?: RequestDynamicFilterItem[],
-  resultsCount?: number
+  resultsCount?: number,
+  requestId?: string
 ) => {
   const body: TextSearchRequest = {
     query,
     ...(resultsCount ? { resultsCount } : {}),
+    ...(requestId ? { requestId } : {}),
     ...(dynamicFilters
       ? {
           dynamicFilters,

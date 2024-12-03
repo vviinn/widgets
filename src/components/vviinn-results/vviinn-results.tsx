@@ -205,6 +205,7 @@ export class VviinnResults {
 
   @State() recommendations: Recommendation[] = [];
   @State() innerTextSearchQuery: string;
+  @State() innerTextSearchRequestId: string;
   @State() slotsReplaced: boolean;
   @State() oneClickDiscoveryAppendIndex: number;
   @State() oneClickDiscoverySelectedIndex: number;
@@ -301,7 +302,8 @@ export class VviinnResults {
 
   private async getTextSearchResults(
     query?: string,
-    filters?: RequestDynamicFilterItem[]
+    filters?: RequestDynamicFilterItem[],
+    requestId?: string
   ) {
     if (!query) return;
     state.apiPath = this.apiPath; //FIXME: #36877
@@ -311,7 +313,8 @@ export class VviinnResults {
         this.token,
         query,
         filters,
-        this.resultsCount
+        this.resultsCount,
+        requestId
       ),
       E.getOrElse(() => null),
       (response: TextSearchResponse) => {
@@ -319,6 +322,7 @@ export class VviinnResults {
         this.vviinnFiltersReceived.emit(
           response?.data?.interactions.dynamicFilters
         );
+        return response;
       }
     );
   }
@@ -351,7 +355,12 @@ export class VviinnResults {
 
   private textSearchStartedHandler = async ({ detail }: TextSearchEvent) => {
     this.innerTextSearchQuery = detail.query;
-    await this.getTextSearchResults(this.innerTextSearchQuery);
+
+    const { requestId } = await this.getTextSearchResults(
+      this.innerTextSearchQuery
+    );
+    this.innerTextSearchRequestId = requestId;
+
     this.resultsSearchFinished.emit();
     this.vviinnSelectedFiltersReset.emit({
       isTriggeredByVpsWidget: false,
@@ -373,7 +382,11 @@ export class VviinnResults {
     if (isVpsWidgetEvent) {
       return this.getVpsResults(filters);
     } else {
-      return this.getTextSearchResults(this.innerTextSearchQuery, filters);
+      return this.getTextSearchResults(
+        this.innerTextSearchQuery,
+        filters,
+        this.innerTextSearchRequestId
+      );
     }
   };
 
