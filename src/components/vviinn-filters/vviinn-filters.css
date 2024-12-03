@@ -224,9 +224,13 @@ vviinn-price-range {
   gap: 5px;
 }
 
+.filters-modal-main {
+  overflow-y: auto;
+  scrolbar-width: thin;
+}
+
 .filters-modal-list {
   margin: var(--spacing-50) 0 0 var(--spacing-300);
-  overflow-y: auto;
 }
 .filters-modal-list > li {
   padding-right: var(--spacing-300);
@@ -325,7 +329,6 @@ vviinn-price-range {
 }
 
 .filters-modal-actions {
-  margin-top: auto;
   border-top: 1px solid var(--color-border-01);
   padding: var(--spacing-125);
   z-index: 10;
@@ -515,12 +518,14 @@ vviinn-price-range {
     width: 100%;
     height: calc(100% - 64px);
     bottom: 0;
-    overflow-y: auto;
-    scrolbar-width: thin;
     transform: translateY(-64px);
   }
 
   .filters-modal.modal .filters-modal-header {
     font-size: var(--font-size-body-large);
+  }
+
+  .filters-modal.modal .filters-modal-main {
+    padding-bottom: 120px;
   }
 }

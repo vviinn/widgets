@@ -13,6 +13,7 @@ export const extendedFiltersPartsList = [
   "extended-filters-header",
   "extended-filters-modal-close",
   "extended-filters-list",
+  "extended-filters-main",
   "extended-filters-row",
   "extended-filters-row-wrapper",
   "extended-filters-main-button",
