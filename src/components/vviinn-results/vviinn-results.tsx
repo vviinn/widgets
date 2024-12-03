@@ -168,6 +168,8 @@ export class VviinnResults {
   @Prop() favoriteShow: boolean = false;
   /** Query for performing text search */
   @Prop() textSearchQuery?: string;
+  /** ID for performing text search */
+  @Prop() textSearchRequestId?: string;
   /** Column for performing Product Listing Page request */
   @Prop() filterColumn?: string = "product_type";
   /** Value for performing Product Listing Page request */
@@ -280,15 +282,18 @@ export class VviinnResults {
     this.resultsSearchFinished.emit();
   };
 
-  private async getVpsResults(
-    query?: string,
-    filters?: RequestDynamicFilterItem[]
-  ) {
-    if (!query) return;
+  private async getVpsResults(filters?: RequestDynamicFilterItem[]) {
+    if (!this.textSearchQuery) return;
+
     state.apiPath = this.apiPath; //FIXME: #36877
 
     return pipe(
-      await makeTextSearchRequest(this.token, query, filters),
+      await makeTextSearchRequest(
+        this.token,
+        this.textSearchQuery,
+        filters,
+        this.textSearchRequestId
+      ),
       E.getOrElse(() => null),
       (response: TextSearchResponse) => response
     );
@@ -366,7 +371,7 @@ export class VviinnResults {
     const isVpsWidgetEvent = this.showInWidget && isTriggeredByVpsWidget;
 
     if (isVpsWidgetEvent) {
-      return this.getVpsResults(this.textSearchQuery, filters);
+      return this.getVpsResults(filters);
     } else {
       return this.getTextSearchResults(this.innerTextSearchQuery, filters);
     }

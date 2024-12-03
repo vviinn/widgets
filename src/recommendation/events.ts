@@ -78,6 +78,7 @@ export type SearchIdEventData = {
 
 export type TextSearchEventData = {
   query: string;
+  requestId?: string;
 };
 
 export type ChangedFiltersEventData = {
