@@ -1,5 +1,6 @@
 import { Component, Host, h, Prop, Event, EventEmitter } from "@stencil/core";
 import { FiltersIcon } from "../vviinn-icons";
+import { ExtendedFiltersButtonClickedEventData } from "../../recommendation/events";
 
 /**
  *
@@ -12,10 +13,11 @@ import { FiltersIcon } from "../vviinn-icons";
 })
 export class VviinnExtendedFiltersButton {
   @Prop() handleClick: () => void;
+  @Prop() showInWidget?: boolean = false;
 
   /** The filters received */
   @Event({ bubbles: true })
-  extendedFiltersButtonClicked: EventEmitter;
+  vviinnExtendedFiltersButtonClicked: EventEmitter<ExtendedFiltersButtonClickedEventData>;
 
   render() {
     return (
@@ -23,7 +25,9 @@ export class VviinnExtendedFiltersButton {
         <button
           class="filters-more-button"
           onClick={() => {
-            this.extendedFiltersButtonClicked.emit();
+            this.vviinnExtendedFiltersButtonClicked.emit({
+              isTriggeredByVpsWidget: this.showInWidget,
+            });
           }}
           part="extended-filters-button"
         >

@@ -783,9 +783,9 @@ export class VviinnVpsWidget {
                     />
 
                     <vviinn-extended-filters-button
-                      handleClick={() => {}}
                       class="extended-filters-button"
                       exportparts="extended-filters-button"
+                      showInWidget={true}
                     />
                   </div>
                 </div>

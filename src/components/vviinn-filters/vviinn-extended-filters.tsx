@@ -29,6 +29,8 @@ import {
   DynamicFiltersEvent,
   DynamicFiltersEventData,
   DynamicFilterTrackingData,
+  ExtendedFiltersButtonClickedEvent,
+  ExtendedFiltersButtonClickedEventData,
   ResetSelectedFiltersEventData,
 } from "../../recommendation/events";
 import { components } from "../../interfaces/generated";
@@ -108,6 +110,8 @@ export class VviinnExtendedFilters {
   @Event({ bubbles: true })
   vviinnFiltersReceived: EventEmitter<DynamicFiltersEventData>;
 
+  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
+
   /** @internal */
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
@@ -117,11 +121,9 @@ export class VviinnExtendedFilters {
   @Event({ bubbles: true })
   vviinnSelectedFiltersReset: EventEmitter<ResetSelectedFiltersEventData>;
 
-  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
-
-  private handleExtendedFiltersButtonClicked = () => {
-    this.showMore = !this.showMore;
-  };
+  /** @internal */
+  @Event({ bubbles: true })
+  vviinnExtendedFiltersButtonClicked: EventEmitter<ExtendedFiltersButtonClickedEventData>;
 
   private replaceSlotsContent() {
     const slots = this.el.querySelectorAll("[slot]");
@@ -149,6 +151,16 @@ export class VviinnExtendedFilters {
   private skipFiltersChanges = (isTriggeredByVpsWidget: boolean) =>
     (isTriggeredByVpsWidget && !this.showInWidget) ||
     (!isTriggeredByVpsWidget && this.showInWidget);
+
+  private handleExtendedFiltersButtonClicked = ({
+    detail,
+  }: ExtendedFiltersButtonClickedEvent) => {
+    const { isTriggeredByVpsWidget } = detail;
+
+    if (!this.skipFiltersChanges(isTriggeredByVpsWidget)) {
+      this.showMore = true;
+    }
+  };
 
   componentDidRender() {
     this.replaceSlotsContent();
@@ -446,7 +458,7 @@ export class VviinnExtendedFilters {
       this.handleSelectedFiltersReset
     );
     document.addEventListener(
-      "extendedFiltersButtonClicked",
+      "vviinnExtendedFiltersButtonClicked",
       this.handleExtendedFiltersButtonClicked
     );
 
@@ -467,7 +479,7 @@ export class VviinnExtendedFilters {
       this.handleSelectedFiltersReset
     );
     document.removeEventListener(
-      "extendedFiltersButtonClicked",
+      "vviinnExtendedFiltersButtonClicked",
       this.handleExtendedFiltersButtonClicked
     );
   }
