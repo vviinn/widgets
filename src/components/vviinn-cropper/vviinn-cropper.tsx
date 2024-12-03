@@ -8,6 +8,7 @@ import {
   EventEmitter,
   Element,
   Listen,
+  Watch,
 } from "@stencil/core";
 import Cropper from "cropperjs";
 import styles from "./vviinn-cropper.css";
@@ -26,6 +27,8 @@ import {
   MIN_IMAGE_SIDE_FOR_CROPPER,
   cropperOptions,
 } from "./constants";
+import { searchState } from "../../store/search.store";
+import * as O from "fp-ts/lib/Option";
 
 @Component({
   tag: "vviinn-cropper",
@@ -35,13 +38,14 @@ import {
 export class VviinnCropper {
   @Element() el: HTMLElement;
 
-  @Prop() basicEventData: BasicEventData;
+  @Prop() basicEventDataString: string;
+  @Prop() detectedObjectsString: string;
   @Prop() url: string;
   @Prop() width: number;
   @Prop() height: number;
-  /** @internal */
-  @Prop() detectedObjects: ValueObject<DetectedObject>[];
 
+  @State() detectedObjects: ValueObject<DetectedObject>[];
+  @State() basicEventData: BasicEventData;
   @State() cropper: Cropper = null;
 
   @Event() vviinnImageCrop: EventEmitter<BasicEventData>;
@@ -52,6 +56,37 @@ export class VviinnCropper {
 
   disconnectedCallback() {
     if (this.cropper) this.cropper.destroy();
+  }
+
+  connectedCallback() {
+    this.stringParser(true, true);
+  }
+
+  @Watch("basicEventDataString")
+  basicEventDataStringWatcher() {
+    this.stringParser(true);
+  }
+
+  @Watch("detectedObjectsString")
+  detectedObjectsStringWatcher() {
+    this.stringParser(false, true);
+  }
+
+  stringParser(
+    TriggerBasicEventData?: boolean,
+    TriggerDetectedObjects?: boolean
+  ) {
+    if (this.basicEventDataString && TriggerBasicEventData) {
+      this.basicEventData = JSON.parse(
+        this.basicEventDataString
+      ) as BasicEventData;
+    }
+    if (this.detectedObjectsString && TriggerDetectedObjects) {
+      this.detectedObjects = JSON.parse(
+        this.detectedObjectsString
+      ) as ValueObject<DetectedObject>[];
+      console.log("top", this.detectedObjects);
+    }
   }
 
   @Listen("vviinnSelectObject")
@@ -100,6 +135,8 @@ export class VviinnCropper {
       };
 
       this.vviinnCropperLoadImage.emit({ imageBounds, searchArea });
+      searchState.imageBounds = O.some(imageBounds);
+      searchState.searchArea = O.some(searchArea);
 
       if (
         width / height < SUPPORTED_ASPECT_RATIO ||
@@ -145,7 +182,10 @@ export class VviinnCropper {
   render() {
     return (
       <Host>
-        <div class="image-container">
+        <div
+          class="image-container"
+          style={{ width: `${this.width.toString()}px`, overflow: "hidden" }}
+        >
           <img
             decoding="async"
             width={this.width}
@@ -155,7 +195,8 @@ export class VviinnCropper {
             onLoad={() => this.loadImage()}
           />
 
-          {this.detectedObjects.map((o) => this.renderDetectedObject(o))}
+          {this.detectedObjects &&
+            this.detectedObjects.map((o) => this.renderDetectedObject(o))}
         </div>
       </Host>
     );

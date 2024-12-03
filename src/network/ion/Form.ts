@@ -64,8 +64,10 @@ export type Form = Valueable<FormField[]> & Link & FormType;
 export const requestFromForm = (
   form: Form,
   data: Object
-): E.Either<string, [string, RequestInit]> =>
-  pipe(
+): E.Either<string, [string, RequestInit]> => {
+  if (!form?.value) return E.left("Form value is empty");
+
+  return pipe(
     checkFormFields(form.value, data),
     E.map((checkedData) =>
       form.rel.includes("query-form")
@@ -73,6 +75,7 @@ export const requestFromForm = (
         : transformSendForm(form, checkedData)
     )
   );
+};
 
 const transformGetForm = (form: Form, data: Object): [string, RequestInit] => {
   const params = new URLSearchParams(Object.entries(data));
@@ -92,29 +95,27 @@ const transformSendForm = (form: Form, data: Object): [string, RequestInit] => [
   },
 ];
 
-export const formRequest = <T>(form: Form, data: Object = {}) => (
-  payload: RequestInit
-) =>
-  pipe(
-    sequenceToEither(
-      getApiPath(),
-      pipe(
-        requestFromForm(form, data),
-        E.mapLeft(
-          (error: string): BasicError<string> => {
+export const formRequest =
+  <T>(form: Form, data: Object = {}) =>
+  (payload: RequestInit) =>
+    pipe(
+      sequenceToEither(
+        getApiPath(),
+        pipe(
+          requestFromForm(form, data),
+          E.mapLeft((error: string): BasicError<string> => {
             return { kind: "app", inner: error };
-          }
+          })
         )
-      )
-    ),
-    TE.fromEither,
-    TE.chainW((initialData) => {
-      const apiPath = initialData[0];
-      const [formUrl, initObject] = initialData[1];
+      ),
+      TE.fromEither,
+      TE.chainW((initialData) => {
+        const apiPath = initialData[0];
+        const [formUrl, initObject] = initialData[1];
 
-      return makeRequest<ValueObject<T>>(
-        formUrl,
-        initObject
-      )([apiPath, payload]);
-    })
-  );
+        return makeRequest<ValueObject<T>>(
+          formUrl,
+          initObject
+        )([apiPath, payload]);
+      })
+    );

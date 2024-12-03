@@ -124,8 +124,8 @@ export class VviinnImageView {
             width={this.width}
             height={this.height}
             url={this.url}
-            detectedObjects={searchState.detectedObjects}
-            basicEventData={this.basicEventData}
+            detectedObjectsString={JSON.stringify(searchState.detectedObjects)}
+            basicEventDataString={JSON.stringify(this.basicEventData)}
           />
 
           {(searchState.loading || searchState.objectDetectionInProgress) &&
