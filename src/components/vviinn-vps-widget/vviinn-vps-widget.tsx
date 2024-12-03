@@ -643,7 +643,9 @@ export class VviinnVpsWidget {
           isFirstScreen={this.isOnboardingSlide()}
           active={this.active}
           resetState={this.resetState.bind(this)}
-          onVviinnWidgetClose={() => this.handleModalClose()}
+          onVviinnWidgetClose={({ detail }: CustomEvent<BasicEventData>) => {
+            if (detail.campaignTypeId !== "VPR") this.handleModalClose();
+          }}
           buttonElementId={this.buttonElementId ?? this.widgetElementId}
           widgetVersion={version}
           hideBackButton={

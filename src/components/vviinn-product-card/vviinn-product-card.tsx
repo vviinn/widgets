@@ -160,6 +160,8 @@ export class VviinnProductCard {
   @Prop() energyCertificationsString: string = "";
   /** @internal */
   @Prop() isStandalone: boolean = false;
+  /** @internal */
+  @Prop() showFooterArrow: boolean = false;
 
   @State() isTransitioning: boolean = false;
   @State() basketButonPressed: boolean = false;
@@ -583,6 +585,8 @@ export class VviinnProductCard {
             <UpdateIcon />
           </slot>
         </button>
+
+        {this.showFooterArrow && <div class="footer-arrow"></div>}
       </Host>
     );
   }

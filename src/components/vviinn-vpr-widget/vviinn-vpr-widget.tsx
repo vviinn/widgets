@@ -91,7 +91,7 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
  * @part price-prefix - Block rendered before each price element (for ex. "from").
  * @part carousel-button - Button for carousel navigation.
- * @part recommendations-grid - For internal usage only!
+ * @part recommendations-results - For internal usage only!
  * @part recommendations-title - Title of the recommendations grid.
  * @part recommendations-subtitle - Subtitle of the recommendations grid.
  * @part basket-button - Add to Basket button.
@@ -124,6 +124,8 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
  */
 
+export type Mode = "pure-grid" | CarouselMode;
+
 @Component({
   tag: "vviinn-vpr-widget",
   styleUrl: "vviinn-vpr-widget.css",
@@ -136,7 +138,7 @@ export class VviinnVprWidget implements ComponentInterface {
   /** ID of product you need recommendations for (required) */
   @Prop() productId: string;
   /** Switch between carousel modes */
-  @Prop() mode: CarouselMode = "continuity";
+  @Prop() mode: Mode = "continuity";
   /** Comma-separated list of campaign IDs */
   @Prop() campaigns: string = "";
   /** Excluded filter. Example: "brand:Nike;custom_label_0:summer" */
@@ -764,7 +766,10 @@ export class VviinnVprWidget implements ComponentInterface {
 
   private renderResults() {
     return (
-      <div class="recommendations-grid" part="recommendations-grid">
+      <div
+        class={`recommendations-results recommendations-${this.mode}`}
+        part="recommendations-results"
+      >
         {this.recommendations.map((r, i) => this.renderRecommendation(r, i))}
       </div>
     );
@@ -773,7 +778,7 @@ export class VviinnVprWidget implements ComponentInterface {
   private renderCarousel(): HTMLVviinnCarouselElement {
     return (
       <vviinn-carousel
-        mode={this.mode}
+        mode={this.mode as CarouselMode}
         campaignTypeId={this.campaignType}
         imageWidth={this.imageWidth}
         showScroll={this.showScroll}
