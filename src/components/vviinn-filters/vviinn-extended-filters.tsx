@@ -217,7 +217,6 @@ export class VviinnExtendedFilters {
                 class="filters-modal-close"
                 onClick={() => {
                   this.showMore = false;
-                  this.requestFilters = [];
                 }}
                 part="extended-filters-modal-close"
               >
