@@ -9,21 +9,17 @@ import {
   Element,
   Watch,
   Listen,
+  Fragment,
 } from "@stencil/core";
 import i18next from "i18next";
 
 import {
-  DynamicFilters,
-  DynamicFilter,
+  ResponseDynamicFilterItem,
   DynamicFilterValue,
-  RequestDynamicFilters,
+  RequestDynamicFilterItem,
 } from "../../campaign/VPRCampaignService";
-import { FiltersIcon, NewCloseIcon } from "../vviinn-icons";
-import {
-  getFilterOptions,
-  emitRequestFiltersMore,
-  RenderButton,
-} from "./helpers";
+import { ChevronIconSmall, NewCloseIcon } from "../vviinn-icons";
+import { FilterOptions, getFilterOptions, RenderButton } from "./helpers";
 import { Locale, resources } from "../../locale";
 
 import { SlotSkeleton, slotChangeListener } from "../customized-slots";
@@ -33,32 +29,39 @@ import {
   DynamicFiltersEvent,
   DynamicFiltersEventData,
   DynamicFilterTrackingData,
+  ExtendedFiltersButtonClickedEvent,
+  ExtendedFiltersButtonClickedEventData,
+  ResetSelectedFiltersEventData,
 } from "../../recommendation/events";
 import { components } from "../../interfaces/generated";
 import { ClickEvent, isClickedInRectBound } from "../../geometry/Rectangle";
-import { triggerFilter } from "./helpers/triggerFilter";
+import { triggerFilter, triggerResetFilters } from "./helpers/triggerFilter";
 
 /**
  * @slot vviinn-extended-filters-title - Text on widget's header.
  * @slot vviinn-extended-filters-apply - Title of Apply Button.
  * @slot vviinn-extended-filters-reset - Title of Reset Button.
  *
- * @part extended-filters-button - Button to open the modal.
  * @part extended-filters-modal - Modal itself.
  * @part extended-filters-modal-wrapper - Wrapper for the modal.
  * @part extended-filters-header - Header of the modal.
  * @part extended-filters-modal-close - Close button of the modal.
+ * @part extended-filters-main - Wrapper for the main modal content.
  * @part extended-filters-list - List of filters.
  * @part extended-filters-row - Row of the filters.
  * @part extended-filters-row-wrapper - Wrapper for the row.
  * @part extended-filters-main-button - Main button of the row.
  * @part extended-filters-selected-wrapper - Wrapper for the selected options.
  * @part extended-filters-sub-list - List of sub filters.
- * @part extended-filters-sub-row - Row of the sub filters.
- * @part extended-filters-option-button - Button for the sub filter.
  * @part extended-filters-actions - Wrapper for the actions.
  * @part extended-filters-apply - Apply button.
  * @part extended-filters-reset - Reset button.
+ *
+ * @part filters-sub-row - Row of the sub filters.
+ * @part filters-option-button - Button of the sub filter.
+ * @part filters-option-color-dot - Color Dot of the sub filter.
+ * @part filters-option-text - Text of the sub filter.
+ * @part filters-option-icon-wrapper - Icon Wrapper of the sub filter.
  *
  * @part histogram - Wrapper itself.
  * @part histogram-bar - Bar of the histogram.
@@ -69,6 +72,8 @@ import { triggerFilter } from "./helpers/triggerFilter";
  * @part histogram-label-wrapper - Wrapper for the labels.
  * @part histogram-label - Label for the histogram.
  */
+
+const FILTER_OPTIONS_INITIAL_COUNT = 5;
 @Component({
   tag: "vviinn-extended-filters",
   styleUrl: "vviinn-filters.css",
@@ -77,33 +82,49 @@ import { triggerFilter } from "./helpers/triggerFilter";
 export class VviinnExtendedFilters {
   @Element() el: HTMLElement;
 
-  @Prop({ mutable: true }) filters: DynamicFilters = [];
-  /** @internal */
-  @Prop() filtersString: string = "";
+  @Prop({ mutable: true }) filters: ResponseDynamicFilterItem[] = [];
   /** The locale for currency formatting and text localization */
   @Prop() locale: Locale = "de-DE";
-  @Prop() mode: "button" | "preview" = "button";
+  @Prop() mode: "button" | "preview" | "modal" = "button";
   /** The currency sign is displayed after the price */
   @Prop() currencySign?: string = "€";
   /** The currency sign is displayed after the price */
   @Prop() showHeader?: boolean = true;
 
-  @State() requestFilters: RequestDynamicFilters = [];
+  /** @internal */
+  @Prop() filtersString: string = "";
+  /** @internal */
+  @Prop() showInWidget: boolean = false;
+  /** @internal */
+  @Prop() widgetElement?: HTMLVviinnVpsWidgetElement;
+
+  @State() innerFilters: ResponseDynamicFilterItem[] = [];
+  @State() requestFilters: RequestDynamicFilterItem[] = [];
   @State() showMore: boolean = false;
   @State() selectedMoreOptions: string[] = [];
+  @State() displayedOptionsCount: Map<string, number> = new Map();
 
   /** The filter's state changes */
   @Event({ bubbles: true })
   vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
   /** The filters received */
   @Event({ bubbles: true })
-  vviinnFilters: EventEmitter<DynamicFiltersEventData>;
+  vviinnFiltersReceived: EventEmitter<DynamicFiltersEventData>;
+
+  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
 
-  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
+  /** Selected filters should be resetted */
+  /** @internal */
+  @Event({ bubbles: true })
+  vviinnSelectedFiltersReset: EventEmitter<ResetSelectedFiltersEventData>;
+
+  /** @internal */
+  @Event({ bubbles: true })
+  vviinnExtendedFiltersButtonClicked: EventEmitter<ExtendedFiltersButtonClickedEventData>;
 
   private replaceSlotsContent() {
     const slots = this.el.querySelectorAll("[slot]");
@@ -112,6 +133,35 @@ export class VviinnExtendedFilters {
       element: this.el,
     });
   }
+
+  private getFilters = () =>
+    this.showInWidget ? this.filters : this.innerFilters;
+
+  private getSelectedPriceInterval = () =>
+    (this.requestFilters.find(({ column }) => column === "price")?.values[0] ??
+      {}) as components["schemas"]["interval"];
+
+  private handleSelectedFiltersReset = ({
+    detail,
+  }: CustomEvent<ResetSelectedFiltersEventData>) => {
+    if (this.skipFiltersChanges(detail.isTriggeredByVpsWidget)) return;
+    this.requestFilters = [];
+    this.selectedMoreOptions = [];
+  };
+
+  private skipFiltersChanges = (isTriggeredByVpsWidget: boolean) =>
+    (isTriggeredByVpsWidget && !this.showInWidget) ||
+    (!isTriggeredByVpsWidget && this.showInWidget);
+
+  private handleExtendedFiltersButtonClicked = ({
+    detail,
+  }: ExtendedFiltersButtonClickedEvent) => {
+    const { isTriggeredByVpsWidget } = detail;
+
+    if (!this.skipFiltersChanges(isTriggeredByVpsWidget)) {
+      this.showMore = true;
+    }
+  };
 
   componentDidRender() {
     this.replaceSlotsContent();
@@ -127,179 +177,60 @@ export class VviinnExtendedFilters {
     slotChangeListener(this, this.el);
   }
 
-  private handleSubFilterSelection(
-    filterValue: DynamicFilterValue,
-    selectedFilter: DynamicFilter
-  ) {
-    this.requestFilters = triggerFilter(
-      filterValue,
-      selectedFilter,
-      this.requestFilters,
-      this.vviinnFilterTriggered,
-      this.el,
-      this.vviinnFiltersChanged
-    );
-  }
-
-  private showActiveOnModalSubButton(
-    requestFilters: RequestDynamicFilters,
-    filterValue: DynamicFilterValue
-  ) {
-    let className = false;
-    requestFilters.forEach((filter) => {
-      if (
-        filter.values.some(
-          (value) =>
-            value === filterValue ||
-            value === filterValue.interval ||
-            value === filterValue.value
-        )
-      ) {
-        className = true;
-      }
-    });
-    return className;
-  }
-
-  private handleMoreOptionsMainClick(column: string) {
-    if (this.selectedMoreOptions.includes(column)) {
-      this.selectedMoreOptions = this.selectedMoreOptions.filter(
-        (option) => option !== column
+  private initializeDisplayedOptions(filterColumn: string) {
+    if (!this.displayedOptionsCount.has(filterColumn)) {
+      this.displayedOptionsCount.set(
+        filterColumn,
+        FILTER_OPTIONS_INITIAL_COUNT
       );
-    } else {
-      this.selectedMoreOptions = [...this.selectedMoreOptions, column];
     }
   }
 
-  private handleSetFilters = ({ detail }: DynamicFiltersEvent) => {
-    this.filters = detail;
-  };
-
-  private handleFiltersChanged = ({
-    detail,
-  }: CustomEvent<ChangedFiltersEventData>) => {
-    const { filters, el: senderElement } = detail;
-
-    if (senderElement === this.el) return;
-
-    this.requestFilters = filters;
-  };
-
-  @Watch("filtersString")
-  filtersStringWatcher() {
-    if (this.filtersString === "") return;
-
-    try {
-      this.filters = JSON.parse(this.filtersString) as DynamicFilters;
-    } catch (e) {
-      console.error("Invalid filters string", e);
-    }
-  }
-
-  connectedCallback() {
-    document.addEventListener("vviinnFilters", this.handleSetFilters);
-    document.addEventListener(
-      "vviinnFiltersChanged",
-      this.handleFiltersChanged
+  private showMoreOptions(filterColumn: string, totalOptions: number) {
+    const currentCount =
+      this.displayedOptionsCount.get(filterColumn) ||
+      FILTER_OPTIONS_INITIAL_COUNT;
+    const newCount = Math.min(
+      currentCount + FILTER_OPTIONS_INITIAL_COUNT,
+      totalOptions
     );
-    this.filtersStringWatcher();
+    this.displayedOptionsCount = new Map(this.displayedOptionsCount);
+    this.displayedOptionsCount.set(filterColumn, newCount);
   }
 
-  disconnectedCallback() {
-    document.removeEventListener("vviinnFilters", this.handleSetFilters);
-    document.addEventListener(
-      "vviinnFiltersChanged",
-      this.handleFiltersChanged
-    );
-  }
-
-  private resetModal() {
-    emitRequestFiltersMore([], this.el, this.vviinnFiltersChanged);
-    this.requestFilters = [];
-    this.showMore = false;
-  }
-
-  private priceChangeHandler = (filterValue: DynamicFilterValue) => {
-    const selectedFilter = this.filters.find(
-      (filter) => filter.column === "price"
-    );
-
-    if (selectedFilter) {
-      this.handleSubFilterSelection(filterValue, selectedFilter);
-    }
-  };
-
-  private getAsideElement(): HTMLElement {
-    return this.el.shadowRoot.querySelector("aside");
-  }
-
-  private getSidebarRectangle(): DOMRect {
-    return this.getAsideElement()?.getBoundingClientRect();
-  }
-
-  @Listen("click", { target: "body" })
-  bodyClickListener(event: ClickEvent) {
-    if (this.mode !== "button") return;
-
-    const sidebarRect = this.getSidebarRectangle();
-
-    if (!sidebarRect || sidebarRect.width === 0 || sidebarRect.height === 0) {
-      return;
-    }
-
-    if (!isClickedInRectBound(event, sidebarRect)) {
-      this.showMore = false;
-    }
-  }
-
-  render() {
+  private renderModal(filters: ResponseDynamicFilterItem[]) {
     return (
-      <Host>
-        {SlotSkeleton("filters")}
-
-        {this.filters.length > 0 && this.mode === "button" && (
-          <button
-            class="filters-more-button"
-            onClick={() => (this.showMore = true)}
-            part="extended-filters-button"
-          >
-            <FiltersIcon />
-          </button>
-        )}
-
-        <div
-          class={`filters-modal filters-modal-${this.mode} ${
-            this.showMore ? "open" : ""
-          }`}
-          part="extended-filters-modal"
+      <div
+        class={`filters-modal ${this.mode} ${this.showMore ? "open" : ""}`}
+        part="extended-filters-modal"
+      >
+        <aside
+          class="filters-modal-wrapper"
+          part="extended-filters-modal-wrapper"
         >
-          <aside
-            class="filters-modal-wrapper"
-            part="extended-filters-modal-wrapper"
-          >
-            {this.showHeader && (
-              <div class="filters-modal-header" part="extended-filters-header">
-                <slot name="vviinn-extended-filters-title">
-                  <span>{i18next.t("filters.modal.title")}</span>
-                </slot>
+          {this.showHeader && (
+            <div class="filters-modal-header" part="extended-filters-header">
+              <slot name="vviinn-extended-filters-title">
+                <span>{i18next.t("filters.modal.title")}</span>
+              </slot>
 
-                <button
-                  class="filters-modal-close"
-                  onClick={() => {
-                    this.showMore = false;
-                    this.requestFilters = [];
-                  }}
-                  part="extended-filters-modal-close"
-                >
-                  <NewCloseIcon />
-                </button>
-              </div>
-            )}
-
+              <button
+                class="filters-modal-close"
+                onClick={() => {
+                  this.showMore = false;
+                }}
+                part="extended-filters-modal-close"
+              >
+                <NewCloseIcon />
+              </button>
+            </div>
+          )}
+          <div class="filters-modal-main" part="extended-filters-main">
             <ul class="filters-modal-list" part="extended-filters-list">
-              {(this.filters ?? []).map((mainFilter) => {
+              {(filters ?? []).map((mainFilter) => {
                 const mainColumn = mainFilter.column;
                 const filterOptions = getFilterOptions(mainFilter);
+
                 const requestFilter = this.requestFilters.find(
                   ({ column }) => column === mainColumn
                 );
@@ -346,12 +277,7 @@ export class VviinnExtendedFilters {
                             (item) => item.value.frequency > 0
                           )}
                           priceChangeHandler={this.priceChangeHandler}
-                          selectedInterval={
-                            (this.requestFilters.find(
-                              ({ column }) => column === "price"
-                            )?.values[0] ??
-                              {}) as components["schemas"]["interval"]
-                          }
+                          selectedInterval={this.getSelectedPriceInterval()}
                           currencySign={this.currencySign}
                         />
                       ) : (
@@ -363,22 +289,7 @@ export class VviinnExtendedFilters {
                           }`}
                           part="extended-filters-sub-list"
                         >
-                          {!!filterOptions &&
-                            filterOptions.map(({ value, label, active }) => {
-                              const selected = this.showActiveOnModalSubButton(
-                                this.requestFilters,
-                                value
-                              );
-
-                              return RenderButton(
-                                this.handleSubFilterSelection.bind(this),
-                                value,
-                                label,
-                                active,
-                                mainFilter,
-                                selected
-                              );
-                            })}
+                          {this.renderFilterOptions(mainFilter, filterOptions)}
                         </ul>
                       )}
                     </div>
@@ -411,8 +322,233 @@ export class VviinnExtendedFilters {
                 </slot>
               </button>
             </div>
-          </aside>
-        </div>
+          </div>
+        </aside>
+      </div>
+    );
+  }
+
+  private renderFilterOptions(
+    filter: ResponseDynamicFilterItem,
+    filterOptions: FilterOptions
+  ) {
+    const { column: filterColumn } = filter;
+    this.initializeDisplayedOptions(filterColumn);
+
+    const displayedCount =
+      this.displayedOptionsCount.get(filterColumn) ||
+      FILTER_OPTIONS_INITIAL_COUNT;
+
+    return (
+      <Fragment>
+        {filterOptions
+          .slice(0, displayedCount)
+          .map(({ value, label, active }) => {
+            const selected = this.showActiveOnModalSubButton(
+              this.requestFilters,
+              value
+            );
+
+            return RenderButton(
+              this.handleSubFilterSelection.bind(this),
+              value,
+              label,
+              active,
+              filter,
+              selected
+            );
+          })}
+        {displayedCount < filterOptions.length && (
+          <button
+            onClick={() =>
+              this.showMoreOptions(filterColumn, filterOptions.length)
+            }
+            class="filters-more-modal-button"
+            part="filters-option-button"
+          >
+            <ChevronIconSmall />
+          </button>
+        )}
+      </Fragment>
+    );
+  }
+
+  private handleSubFilterSelection(
+    filterValue: DynamicFilterValue,
+    selectedFilter: ResponseDynamicFilterItem
+  ) {
+    this.requestFilters = triggerFilter(
+      filterValue,
+      selectedFilter,
+      this.requestFilters,
+      this.vviinnFilterTriggered,
+      this.vviinnFiltersChanged,
+      this.el,
+      this.showInWidget
+    );
+  }
+
+  private showActiveOnModalSubButton(
+    requestFilters: RequestDynamicFilterItem[],
+    filterValue: DynamicFilterValue
+  ) {
+    let className = false;
+    requestFilters.forEach((filter) => {
+      if (
+        filter.values.some(
+          (value) =>
+            value === filterValue ||
+            value === filterValue.interval ||
+            value === filterValue.value
+        )
+      ) {
+        className = true;
+      }
+    });
+    return className;
+  }
+
+  private handleMoreOptionsMainClick(column: string) {
+    if (this.selectedMoreOptions.includes(column)) {
+      this.selectedMoreOptions = this.selectedMoreOptions.filter(
+        (option) => option !== column
+      );
+    } else {
+      this.selectedMoreOptions = [...this.selectedMoreOptions, column];
+    }
+  }
+
+  private handleSetFilters = ({ detail }: DynamicFiltersEvent) => {
+    if (this.showInWidget) return;
+    this.innerFilters = detail;
+  };
+
+  private handleFiltersChanged = ({
+    detail,
+  }: CustomEvent<ChangedFiltersEventData>) => {
+    const { filters, el: senderElement, isTriggeredByVpsWidget } = detail;
+
+    if (
+      senderElement === this.el ||
+      this.skipFiltersChanges(isTriggeredByVpsWidget)
+    )
+      return;
+
+    this.requestFilters = filters;
+  };
+
+  @Watch("filtersString")
+  filtersStringWatcher() {
+    if (this.filtersString === "") return;
+
+    try {
+      this.innerFilters = JSON.parse(
+        this.filtersString
+      ) as ResponseDynamicFilterItem[];
+    } catch (e) {
+      console.error("Invalid filters string", e);
+    }
+  }
+
+  connectedCallback() {
+    document.addEventListener("vviinnFiltersReceived", this.handleSetFilters);
+    document.addEventListener(
+      "vviinnFiltersChanged",
+      this.handleFiltersChanged
+    );
+    document.addEventListener(
+      "vviinnSelectedFiltersReset",
+      this.handleSelectedFiltersReset
+    );
+    document.addEventListener(
+      "vviinnExtendedFiltersButtonClicked",
+      this.handleExtendedFiltersButtonClicked
+    );
+
+    this.filtersStringWatcher();
+  }
+
+  disconnectedCallback() {
+    document.removeEventListener(
+      "vviinnFiltersReceived",
+      this.handleSetFilters
+    );
+    document.addEventListener(
+      "vviinnFiltersChanged",
+      this.handleFiltersChanged
+    );
+    document.addEventListener(
+      "vviinnSelectedFiltersReset",
+      this.handleSelectedFiltersReset
+    );
+    document.removeEventListener(
+      "vviinnExtendedFiltersButtonClicked",
+      this.handleExtendedFiltersButtonClicked
+    );
+  }
+
+  private resetModal() {
+    triggerResetFilters(
+      this.vviinnFilterTriggered,
+      this.vviinnFiltersChanged,
+      this.el,
+      this.showInWidget
+    );
+
+    this.selectedMoreOptions = [];
+    this.requestFilters = [];
+    this.showMore = false;
+  }
+
+  private priceChangeHandler = (filterValue: DynamicFilterValue) => {
+    const selectedFilter = this.getFilters().find(
+      (filter) => filter.column === "price"
+    );
+
+    if (selectedFilter) {
+      this.handleSubFilterSelection(filterValue, selectedFilter);
+    }
+  };
+
+  private getAsideElement(): HTMLElement {
+    return this.el.shadowRoot.querySelector("aside");
+  }
+
+  private getSidebarRectangle(): DOMRect {
+    return this.getAsideElement()?.getBoundingClientRect();
+  }
+
+  @Listen("click", { target: "body" })
+  bodyClickListener(event: ClickEvent) {
+    if (this.mode !== "button") return;
+
+    const sidebarRect = this.getSidebarRectangle();
+
+    if (!sidebarRect || sidebarRect.width === 0 || sidebarRect.height === 0) {
+      return;
+    }
+
+    if (!isClickedInRectBound(event, sidebarRect)) {
+      this.showMore = false;
+    }
+  }
+
+  render() {
+    const filters = this.getFilters();
+
+    return (
+      <Host
+        class={{
+          "show-in-widget": this.showInWidget,
+        }}
+      >
+        {SlotSkeleton("filters")}
+
+        {filters?.length > 0 && this.mode === "button" && (
+          <vviinn-extended-filters-button />
+        )}
+
+        {this.renderModal(filters)}
       </Host>
     );
   }

@@ -29,7 +29,6 @@ import {
   SET_MODE_IMAGE_WIDTH,
 } from "./constants";
 import { calculateDiscount } from "../../utils/number";
-import { searchState } from "../../store/search.store";
 import { Locale } from "../../locale";
 import { getCustomLabels } from "../../recommendation";
 
@@ -66,6 +65,7 @@ export class VviinnCarousel {
   @Prop() widgetElementId?: string;
   @Prop() gridArrowsDynamic: boolean;
   @Prop({ mutable: true }) recommendations: Recommendation[] = [];
+  @Prop() sourceProduct: Recommendation;
   @Prop() widgetVersion: string;
   @Prop() addToBasketShow: boolean;
   @Prop() updatingAllCards: boolean;
@@ -74,7 +74,7 @@ export class VviinnCarousel {
   @Prop() setModeDiscountsArray: number[];
   @Prop() imageRatio: number;
   @Prop() addPriceContainer?: boolean = false;
-
+  @Prop() favoriteShow: boolean;
   @Prop() currencySign: string;
   @Prop() pricePrefix: string = "";
   @Prop() locale: Locale;
@@ -95,7 +95,6 @@ export class VviinnCarousel {
   private isGridMode: boolean;
   private isContinuityMode: boolean;
   private defaultAnimationInterval: number = 2000;
-  private sourceProduct?: Recommendation;
   private setModeMaxDiscount: number | null = null;
 
   private getProductData(recommendation, productRank): ProductCardEventData {
@@ -182,7 +181,6 @@ export class VviinnCarousel {
 
     if (this.isSetMode) {
       window.addEventListener("resize", this.handleWindowResize);
-      this.sourceProduct = searchState.sourceProduct;
       this.setModeDiscount = this.setModeDiscountsArray[0];
       this.setModeMaxDiscount =
         this.setModeDiscountsArray[this.setModeDiscountsArray.length - 1];
@@ -469,6 +467,7 @@ export class VviinnCarousel {
         setMode={this.isSetMode}
         customLabels={getCustomLabels(recommendation)}
         addPriceContainer={this.addPriceContainer}
+        favoriteShow={this.favoriteShow}
       />
     );
   }
@@ -556,6 +555,7 @@ export class VviinnCarousel {
               pricePrefix={this.pricePrefix}
               setMode={this.isSetMode}
               locale={this.locale}
+              favoriteShow={this.favoriteShow}
             />
           )}
 

@@ -7,6 +7,7 @@ import {
   EventEmitter,
   Element,
   State,
+  Watch,
 } from "@stencil/core";
 import { version } from "../../../package.json";
 import { SimilarProductsIcon, CrossSellingIcon } from "../vviinn-icons";
@@ -42,7 +43,7 @@ import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
  * @part price-prefix - Block rendered before each price element (for ex. "from").
  * @part carousel-button - Button for carousel navigation.
- * @part recommendations-grid - For internal usage only!
+ * @part recommendations-results - For internal usage only!
  * @part recommendations-title - Title of the recommendations grid.
  * @part recommendations-subtitle - Subtitle of the recommendations grid.
  * @part basket-button - Add to Basket button.
@@ -60,15 +61,17 @@ import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
  * @part custom-label-4 - custom label with index 4.
  *
  * @slot vviinn-recommendations-title - Recommendations title text.
+ * @slot vviinn-favorite-icon - Icon of Favorite button.
+ * @slot vviinn-favorite-icon-pressed - Icon of pressed Favorite button.
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
+ * @slot vviinn-basket-button-icon - Text of Add to Basket icon.
+ * @slot vviinn-basket-button-text-pressed - Text of pressed Add to Basket button.
+ * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button.
+ * @slot vviinn-energy-label-data-sheet-text - Text of the data sheet link for the energy label.
  *
  * @slot vviinn-recommendations-subtitle - Recommendations subtitle text (Set mode).
  * @slot vviinn-update-button-text - Text of Update Button on the top (Set mode).
  * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
- * @slot vviinn-basket-button-icon - Text of Add to Basket icon (Set mode).
- * @slot vviinn-basket-button-text-pressed - Text of pressed Add to Basket button (Set mode).
- * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button (Set mode).
- * @slot vviinn-energy-label-data-sheet-text - Text of the data sheet link for the energy label.
  */
 
 @Component({
@@ -141,6 +144,9 @@ export class VviinnVprButton {
   /** ID of an HTML element that you want to attach the sidebar  */
   @Prop() appendSidebarTo: string;
 
+  /** Show or hide Favorite button */
+  @Prop() favoriteShow: boolean = false;
+
   @Prop() appendSidebarToElement: HTMLElement;
 
   /** Event emitted on widget load */
@@ -185,6 +191,13 @@ export class VviinnVprButton {
     }
   }
 
+  @Watch("appendSidebarToElement")
+  appendSidebarToElementWatcher() {
+    if (this.appendSidebarToElement) {
+      this.targetAppendSidebarTo = this.appendSidebarToElement;
+    }
+  }
+
   private sidebar: HTMLVviinnRecommendationsSidebarElement | null = null;
   private sidebarCloseListener: () => void = () => {
     if (this.targetAppendSidebarTo) {
@@ -199,7 +212,13 @@ export class VviinnVprButton {
     return (
       <Host
         onClick={(): void => {
-          this.handleClick();
+          if (this.appendSidebarTo && !this.targetAppendSidebarTo) {
+            setTimeout(() => {
+              this.handleClick();
+            }, 250);
+          } else {
+            this.handleClick();
+          }
         }}
         role="button"
         tabindex="0"
@@ -228,7 +247,6 @@ export class VviinnVprButton {
     sidebar.campaignType = this.campaignType;
     sidebar.color = this.color;
     sidebar.locale = this.locale;
-    sidebar.mode = this.position === "right" ? "grid" : this.mode;
     sidebar.imageWidth = this.imageWidth;
     sidebar.currencySign = this.currencySign;
     sidebar.pricePrefix = this.pricePrefix;
@@ -250,6 +268,15 @@ export class VviinnVprButton {
     sidebar.setModeDiscounts = this.setModeDiscounts;
     sidebar.updateButtonLocation = this.updateButtonLocation;
     sidebar.addPriceContainer = this.addPriceContainer;
+    sidebar.favoriteShow = this.favoriteShow;
+
+    if (this.targetAppendSidebarTo) {
+      sidebar.mode = "grid";
+      sidebar.useCarousel = false;
+    } else {
+      sidebar.mode = this.position === "right" ? "grid" : this.mode;
+      sidebar.useCarousel = this.position === "bottom";
+    }
 
     this.sidebar = sidebar;
 

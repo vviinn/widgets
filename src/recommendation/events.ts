@@ -1,66 +1,62 @@
 import {
   FilterAction,
-  FilterKind,
   ProductClickEvent,
   ProductLoadEvent,
   ProductViewEvent,
+  Widget,
 } from "vviinn-tracking-client-ts";
 import { ValueObject } from "../network/ion/ValueObject";
 import { DetectedObject } from "../searchSession/searchSession";
 import { ErrorKind } from "../error";
 import {
-  DynamicFilter,
-  RequestDynamicFilters,
+  ResponseDynamicFilterItem,
+  RequestDynamicFilterItem,
 } from "../campaign/VPRCampaignService";
 
-export type BasicEventData = {
-  widgetType: "VPR" | "VPS";
-  campaignTypeId: "VPR" | "VPS" | "VCS";
-  campaignTypeName: "Similar Products" | "Visual Search" | "Cross-Selling";
+export type CommonEventData = {
+  widgetType: "VPR" | "VPS" | "VCS" | "TPS";
+  campaignTypeId: "VPR" | "VPS" | "VCS" | "TPS";
+  campaignTypeName:
+    | "Similar Products"
+    | "Visual Search"
+    | "Cross-Selling"
+    | "Text Product Search";
   widgetId: string;
   widgetVersion: string;
+};
+
+export type BasicEventData = { widget?: Widget } & {
+  [K in keyof CommonEventData]: CommonEventData[K];
 };
 
 export type NoResultEventData = {
-  widgetType: "VPR" | "VPS";
-  campaignTypeId: "VPR" | "VPS" | "VCS";
-  campaignTypeName: "Similar Products" | "Visual Search" | "Cross-Selling";
-  widgetId: string;
-  widgetVersion: string;
   reason: ErrorKind;
+} & {
+  [K in keyof CommonEventData]: CommonEventData[K];
 };
 
 export type SelectObjectEventData = {
-  widgetType: "VPR" | "VPS";
-  campaignTypeId: "VPR" | "VPS" | "VCS";
-  campaignTypeName: "Similar Products" | "Visual Search" | "Cross-Selling";
-  widgetId: string;
-  widgetVersion: string;
   detectedObject: ValueObject<DetectedObject>;
+} & {
+  [K in keyof CommonEventData]: CommonEventData[K];
 };
 
 export type SelectFilterEventData = {
-  widgetType: "VPR" | "VPS";
-  campaignTypeId: "VPR" | "VPS" | "VCS";
-  campaignTypeName: "Similar Products" | "Visual Search" | "Cross-Selling";
-  widgetId: string;
-  widgetVersion: string;
   action: FilterAction;
-  kind: FilterKind;
+  kind: string;
+} & {
+  [K in keyof CommonEventData]: CommonEventData[K];
 };
 
 export type ProductCardEventData = {
-  widgetType: "VPR" | "VPS";
-  campaignTypeId: "VPR" | "VPS" | "VCS";
-  campaignTypeName: "Similar Products" | "Visual Search" | "Cross-Selling";
-  widgetId: string;
-  widgetVersion: string;
   productId: string;
   productRank: number;
   productName: string;
   productType: string;
   clickEvent?: MouseEvent;
   discount?: number;
+} & {
+  [K in keyof CommonEventData]: CommonEventData[K];
 };
 
 export type CrossSellingClickEventData = {
@@ -82,23 +78,37 @@ export type SearchIdEventData = {
 
 export type TextSearchEventData = {
   query: string;
+  requestId?: string;
 };
 
 export type ChangedFiltersEventData = {
-  filters: RequestDynamicFilters;
+  filters: RequestDynamicFilterItem[];
   el: HTMLElement;
+  isTriggeredByVpsWidget?: boolean;
 };
 
-export type DynamicFiltersEventData = DynamicFilter[];
+export type ResetSelectedFiltersEventData = {
+  isTriggeredByVpsWidget: boolean;
+};
+
+export type ExtendedFiltersButtonClickedEventData = {
+  isTriggeredByVpsWidget: boolean;
+};
+
+export type DynamicFiltersEventData = ResponseDynamicFilterItem[];
 
 export type DynamicFilterTrackingData = {
   action: FilterAction;
-  kind: string;
+  kind?: string;
 };
 
 export type SearchIdEvent = CustomEvent<SearchIdEventData>;
 export type TextSearchEvent = CustomEvent<TextSearchEventData>;
 export type DynamicFiltersEvent = CustomEvent<DynamicFiltersEventData>;
 export type ChangedFiltersEvent = CustomEvent<ChangedFiltersEventData>;
+export type ResetSelectedFiltersEvent =
+  CustomEvent<ResetSelectedFiltersEventData>;
 export type ProductCardEvent = CustomEvent<ProductCardEventData>;
 export type CrossSellingClickEvent = CustomEvent<CrossSellingClickEventData>;
+export type ExtendedFiltersButtonClickedEvent =
+  CustomEvent<ExtendedFiltersButtonClickedEventData>;

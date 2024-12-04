@@ -14,6 +14,8 @@ import { SearchModalUploadIcon, TextSearchIcon } from "../vviinn-icons";
 import { slotChangeListener } from "../customized-slots";
 import {
   DynamicFiltersEventData,
+  ResetSelectedFiltersEventData,
+  DynamicFilterTrackingData,
   SearchIdEvent,
   SearchIdEventData,
   TextSearchEventData,
@@ -21,9 +23,13 @@ import {
 import i18next from "i18next";
 import { Locale, resources } from "../../locale";
 import { TextSearchMode } from "../../widget/types";
+import { TextSearchResponse } from "../../interfaces/search";
+import * as E from "fp-ts/Either";
+import { pipe } from "fp-ts/lib/function";
 
 /**
  * @part text-search-input - Text search input.
+ * @part text-search-button - Text search input's search button.
  * @slot vviinn-text-search-icon - Icon of the text search block.
  * @slot vviinn-text-search-actions - Additional actions for the text search block, e.g., a button to open the Search Modal.
  */
@@ -41,7 +47,7 @@ export class VviinnTextSearch {
   @Event() vviinnSearchIdReceived: EventEmitter<SearchIdEventData>;
   /** The filters received */
   @Event({ bubbles: true })
-  vviinnFilters: EventEmitter<DynamicFiltersEventData>;
+  vviinnFiltersReceived: EventEmitter<DynamicFiltersEventData>;
 
   /** A text search response was received (used internally by vviinn-vps-widget) */
   /** @internal */
@@ -51,10 +57,12 @@ export class VviinnTextSearch {
   /** @internal */
   @Event() resultsSearchFinished: EventEmitter;
 
+  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
+
   /** Selected filters should be resetted */
   /** @internal */
   @Event({ bubbles: true })
-  vviinnSelectedFiltersReset: EventEmitter;
+  vviinnSelectedFiltersReset: EventEmitter<ResetSelectedFiltersEventData>;
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
@@ -77,21 +85,15 @@ export class VviinnTextSearch {
       ? searchState.loading && searchState.searchType === "text"
       : this.isLoading;
 
-  private searchStartedHandler = () => (this.isLoading = true);
-  private searchFinishedHandler = () => (this.isLoading = false);
+  private showLoader = () => (this.isLoading = true);
+  private hideLoader = () => (this.isLoading = false);
 
   connectedCallback() {
-    document.addEventListener(
-      "resultsSearchFinished",
-      this.searchFinishedHandler
-    );
+    document.addEventListener("resultsSearchFinished", this.hideLoader);
   }
 
   disconnectedCallback() {
-    document.removeEventListener(
-      "resultsSearchFinished",
-      this.searchFinishedHandler
-    );
+    document.removeEventListener("resultsSearchFinished", this.hideLoader);
   }
 
   async componentWillLoad() {
@@ -101,13 +103,9 @@ export class VviinnTextSearch {
       resources,
     });
     slotChangeListener(this, this.el);
-  }
 
-  async componentDidLoad() {
-    if (this.showInWidget) return;
-
-    if (this.searchQuery?.length > 0) {
-      this.searchStartedHandler();
+    if (!this.showInWidget && this.searchQuery?.length > 0) {
+      this.showLoader();
       this.vviinnTextSearchStarted.emit({
         query: this.searchQuery,
       });
@@ -116,8 +114,8 @@ export class VviinnTextSearch {
 
   @Listen("vviinnImageUploadFinished")
   imageUploadFinished({ detail }: SearchIdEvent) {
-    if (!this.showInWidget && this.mode === "textAndUpload") {
-      this.searchStartedHandler();
+    if (!this.showInWidget && this.mode === "upload") {
+      this.showLoader();
       this.vviinnSearchIdReceived.emit({ searchId: detail.searchId });
     }
   }
@@ -132,14 +130,25 @@ export class VviinnTextSearch {
 
   private async handleTextSearch() {
     if (!this.searchQuery) return;
-
+    this.vviinnFilterTriggered.emit({
+      kind: this.searchQuery,
+      action: "select",
+    });
     if (this.showInWidget) {
-      await makeTextSearchRequest(this.token, this.searchQuery);
-      this.vviinnFilters.emit(searchState.dynamicFilters);
-      this.vviinnSelectedFiltersReset.emit();
-      this.widgetTextSearchFinished.emit({ query: this.searchQuery });
+      const { requestId } = pipe(
+        await makeTextSearchRequest(this.token, this.searchQuery),
+        E.getOrElse(() => null),
+        (response: TextSearchResponse) => response
+      );
+
+      this.widgetTextSearchFinished.emit({
+        query: this.searchQuery,
+        requestId,
+      });
+
+      this.vviinnSelectedFiltersReset.emit({ isTriggeredByVpsWidget: true });
     } else {
-      this.searchStartedHandler();
+      this.showLoader();
       this.vviinnTextSearchStarted.emit({
         query: this.searchQuery,
       });
@@ -154,11 +163,11 @@ export class VviinnTextSearch {
 
   render() {
     return (
-      <Host exportparts="text-search-input">
+      <Host exportparts="text-search-input, text-search-button">
         <input
           class={{
             "text-search-input": true,
-            "text-search-input--with-icon": this.mode === "textAndUpload",
+            "text-search-input--with-icon": this.mode === "upload",
           }}
           part="text-search-input"
           type="text"
@@ -169,6 +178,7 @@ export class VviinnTextSearch {
         />
         <button
           class="text-search-button"
+          part="text-search-button"
           onClick={() => this.handleTextSearch()}
           disabled={searchState.loading}
         >
@@ -181,12 +191,12 @@ export class VviinnTextSearch {
           )}
         </button>
 
-        {this.mode === "textAndUpload" ? (
+        {this.mode === "upload" ? (
           <vviinn-image-selector
             token={this.token}
             apiPath={this.apiPath}
             showInTextSearch={true}
-            uploadStartedHandler={this.searchStartedHandler.bind(this)}
+            uploadStartedHandler={this.showLoader.bind(this)}
           >
             <span slot="upload-button-text">
               <SearchModalUploadIcon />

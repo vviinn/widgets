@@ -24,6 +24,12 @@ import {
   vpcResultView,
   vpsResultView,
 } from "./result";
+import { Widget } from "vviinn-tracking-client-ts";
+import {
+  PRODUCT_CLICK_EVENT_TYPE,
+  PRODUCT_LOAD_EVENT_TYPE,
+  PRODUCT_VIEW_EVENT_TYPE,
+} from "./models";
 
 export const createProductVprEventByType = (type: ProductEventType) => {
   switch (type) {
@@ -82,6 +88,29 @@ export const createResultVpsEventByType = (type: ResultEventType) => {
       return createTrackingEvent(vpsResultLoad);
     case "view":
       return createTrackingEvent(vpsResultView);
+  }
+};
+
+export const createProductWidgetEventByType = (
+  widget: Widget,
+  type: ProductEventType
+) => {
+  switch (type) {
+    case "load":
+      return createTrackingEvent({
+        widget,
+        typ: PRODUCT_LOAD_EVENT_TYPE,
+      });
+    case "view":
+      return createTrackingEvent({
+        widget,
+        typ: PRODUCT_VIEW_EVENT_TYPE,
+      });
+    case "click":
+      return createTrackingEvent({
+        widget,
+        typ: PRODUCT_CLICK_EVENT_TYPE,
+      });
   }
 };
 

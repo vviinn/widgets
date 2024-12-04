@@ -1,0 +1,77 @@
+import { Meta } from "@storybook/blocks";
+import './events.css'
+
+<Meta title="Events/Cropper" />
+
+# Cropper Events
+
+Every Vviinn Widget has some events that users can work on and listen to these events with `document.addEventListener()`.
+
+Cropper events are essential to connect `vviinn-results` component.
+
+<table width="100%" className="events-table">
+  <thead>
+    <tr><th>Name</th><th>Description</th><th>Props</th></tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>vviinnCropperLoadImage</td><td>Triggered when the image load in cropper.</td>
+
+      <td>
+        <ul>
+          <li>imageBounds</li>
+          <li>searchArea</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td>vviinnCropperAspectRatioError</td><td>Triggered when an aspect ratio error happens.</td>
+
+      <td>
+        <ul>
+          <li>true</li>
+          <li>false</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td>vviinnCropperHidePreloader</td><td>Triggered when the cropper is ready and we can hide the loader.</td>
+
+      <td>
+        <ul>
+          <li>true</li>
+          <li>false</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td>vviinnCropperCropEnd</td><td>Triggered when the cropper ends and you can send `Rectangular Search Request` again.</td>
+
+      <td>
+        <ul>
+          <li>searchArea</li>
+        </ul>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+## Listen to Events. Examples
+
+```javascript
+document.addEventListener("vviinnCropperLoadImage", ({ detail }) => {
+  console.log(detail);
+});
+
+// Output:
+{
+  "imageBounds": {...}
+  "searchArea": {...}
+}
+// ... and other loaded products
+```

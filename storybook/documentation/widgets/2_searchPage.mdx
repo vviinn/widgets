@@ -19,9 +19,11 @@ Using `Vviinn Widgets` as separate components allows for greater control over th
   <div className="tab tab-reverse">
       <h3>Basic Example</h3>
 
-      <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Details_1', 'basic')}}>Technical Details</button>
-      <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'basic')}}>Code</button>
-      <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'basic')}}>Preview</button>
+      <div className="tablink-group">
+        <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Details_1', 'basic')}}>Technical Details</button>
+        <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'basic')}}>Code</button>
+        <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'basic')}}>Preview</button>
+      </div>
   </div>
 
   <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
@@ -145,7 +147,7 @@ vviinn-text-search {
 In this basic example, we use `vviinn-text-search`, `vviinn-results`, and two variations of the filter component. Let's take a closer look at the attributes we are using in this example: 
 
 - The `token` attribute is required for all components (except filters) and is used to authenticate your requests.
-- The `textAndUpload` mode enables image search functionality.
+- The `upload` mode enables image search functionality.
 
 Other properties you can use are detailed on the components' pages.
 
@@ -157,8 +159,10 @@ To see the filter columns, enable Filters in the Interface Controls section insi
   <div className="tab tab-reverse">
       <h3>Using Results on a Different Page Example</h3>
 
-      <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Details_2', 'different')}}>Technical Details</button>
-      <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Code_2', 'different')}}>Code</button>
+      <div className="tablink-group">
+        <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Details_2', 'different')}}>Technical Details</button>
+        <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Code_2', 'different')}}>Code</button>
+      </div>
   </div>
 
   <div id="Code_2" className="tabcontent" style={{display:"block"}}>
@@ -175,7 +179,7 @@ To see the filter columns, enable Filters in the Interface Controls section insi
 </script>
 <vviinn-text-search
   token="YOUR_TOKEN"
-  mode="textAndUpload"
+  mode="upload"
   locale="en-US"
 ></vviinn-text-search>
 

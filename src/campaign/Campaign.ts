@@ -1,16 +1,16 @@
+import { CommonEventData } from "../recommendation/events";
+
 export type CampaignName = "VPR" | "VCS";
-export type WidgetType = "VPR" | "VPS";
-export type CampaignTypeId = "VPR" | "VPS" | "VCS";
 
-export type CampaignTypeTitle =
-  | "Similar Products"
-  | "Visual Search"
-  | "Cross-Selling";
+export type CampaignTypeId = CommonEventData["campaignTypeId"];
 
-export const campaignTypeNames: Record<CampaignTypeId, CampaignTypeTitle> = {
+type CampaignTypeName = CommonEventData["campaignTypeName"];
+
+export const campaignTypeNames: Record<CampaignTypeId, CampaignTypeName> = {
   VPR: "Similar Products",
   VPS: "Visual Search",
   VCS: "Cross-Selling",
+  TPS: "Text Product Search",
 };
 
 export interface VPR {

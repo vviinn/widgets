@@ -1,6 +1,6 @@
 {
   "name": "vviinn-widgets",
-  "version": "2.118.3",
+  "version": "2.134.0",
   "description": "vviinn web components",
   "main": "./dist/index.cjs.js",
   "module": "./dist/index.js",
@@ -52,7 +52,7 @@
     "tslib": "^1.14.1",
     "typescript": "^4.6.3",
     "uuid": "^8.3.2",
-    "vviinn-tracking-client-ts": "^1.7.1",
+    "vviinn-tracking-client-ts": "^1.7.4",
     "whatwg-fetch": "^3.6.2"
   },
   "devDependencies": {

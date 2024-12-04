@@ -50,6 +50,11 @@ import { videoStreamSettings } from "../../video/settings";
 import { Recommendation } from "../../interfaces/recommendation";
 import { checkDeviceType } from "../../helpers";
 import { UploadSource, VisualSearchMode } from "../../widget/types";
+import {
+  extendedFiltersParts,
+  filtersParts,
+  searchWidgetFilterParts,
+} from "../../cssParts";
 
 const CAMERA_START_DELAY = 500;
 
@@ -105,13 +110,14 @@ const CAMERA_START_DELAY = 500;
  * @part energy-label-product-type - Product type.
  * @part energy-label-data-sheet-link - Data sheet link.
  */
+
 @Component({
   tag: "vviinn-vps-widget",
   styleUrl: "vviinn-vps-widget.css",
   shadow: true,
 })
 export class VviinnVpsWidget {
-  @Element() el: HTMLElement;
+  @Element() el: HTMLVviinnVpsWidgetElement;
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string | undefined;
@@ -137,8 +143,10 @@ export class VviinnVpsWidget {
   @Prop() textSearchShow: boolean = false;
   /** Show or hide Add to Basket buttons */
   @Prop() addToBasketShow: boolean = false;
+  /** Show or hide Favorite button */
+  @Prop() favoriteShow: boolean = false;
   /** Show or hide the One-click Discovery */
-  @Prop() showOneClickDiscovery = false;
+  @Prop() oneClickDiscoveryShow = false;
   /** Wrap the Product Card's price values in the container. */
   @Prop() addPriceContainer?: boolean = false;
 
@@ -171,6 +179,7 @@ export class VviinnVpsWidget {
   @State() showAspectRatioError = false;
   @State() products: Recommendation[] = [];
   @State() searchQuery: string = "";
+  @State() requestId: string = "";
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -210,6 +219,7 @@ export class VviinnVpsWidget {
   private isDesktop: boolean = false;
   private videoTrack: MediaStreamTrack | null = null;
   private widgetElementId: string;
+  private isTextSearch: boolean = false;
 
   private initResultEvents() {
     searchState.resultLoaded = false;
@@ -346,10 +356,11 @@ export class VviinnVpsWidget {
   };
 
   getBasicEventData = (): BasicEventData => {
+    const activeCampaign = this.isTextSearch ? "TPS" : "VPS";
     return {
-      widgetType: "VPS",
-      campaignTypeId: "VPS",
-      campaignTypeName: campaignTypeNames["VPS"],
+      widgetType: activeCampaign,
+      campaignTypeId: activeCampaign,
+      campaignTypeName: campaignTypeNames[activeCampaign],
       widgetId: this.buttonElementId ?? this.widgetElementId,
       widgetVersion: version,
     };
@@ -369,10 +380,11 @@ export class VviinnVpsWidget {
     }
   }
 
-  @Listen("widgetTextSearchFinished") textSearchFinishedHandler({
-    detail,
-  }: TextSearchEvent) {
+  @Listen("widgetTextSearchFinished")
+  textSearchFinishedHandler({ detail }: TextSearchEvent) {
+    this.isTextSearch = true;
     this.searchQuery = detail.query;
+    this.requestId = detail.requestId;
     this.slidePosition = 1;
   }
 
@@ -595,6 +607,7 @@ export class VviinnVpsWidget {
     this.cameraButtonClicked = false;
     this.cameraInitializing = false;
     this.setShowAspectRatioError(false);
+    this.isTextSearch = false;
   }
 
   private haveErrors(): boolean {
@@ -621,7 +634,9 @@ export class VviinnVpsWidget {
 
   render() {
     return (
-      <Host exportparts="image-container, content-container, basket-button-container,brand, product-type, deeplink, currency, image, image-link, image-picture, price-container, price-amount-sale, price-amount-outdated, price-amount-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-outdated, price-regular, price-sale, price-prefix, title, product-card, upload-photo_button, show-files_button, start-camera_button, text-search-input, close-button, secondary-action, close-button, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link">
+      <Host
+        exportparts={`image-container, content-container, basket-button-container,brand, product-type, deeplink, currency, image, image-link, image-picture, price-container, price-amount-sale, price-amount-outdated, price-amount-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-outdated, price-regular, price-sale, price-prefix, title, product-card, upload-photo_button, show-files_button, start-camera_button, text-search-input, text-search-button, close-button, secondary-action, close-button, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link ${searchWidgetFilterParts}`}
+      >
         {!this.showingInButton && SlotSkeleton("vps")}
 
         <vviinn-overlayed-modal
@@ -629,7 +644,9 @@ export class VviinnVpsWidget {
           isFirstScreen={this.isOnboardingSlide()}
           active={this.active}
           resetState={this.resetState.bind(this)}
-          onVviinnWidgetClose={() => this.handleModalClose()}
+          onVviinnWidgetClose={({ detail }: CustomEvent<BasicEventData>) => {
+            if (detail.campaignTypeId !== "VPR") this.handleModalClose();
+          }}
           buttonElementId={this.buttonElementId ?? this.widgetElementId}
           widgetVersion={version}
           hideBackButton={
@@ -664,22 +681,18 @@ export class VviinnVpsWidget {
                 id="start-page_block"
               >
                 <div class="start-page_main-content">
-                  <div
-                    class={{
-                      "start-page_errors-block": true,
-                      hidden:
-                        !this.wrongImageFormat && !searchState.serverError,
-                    }}
-                  >
-                    <vviinn-wrong-format
-                      class={{ hidden: !this.wrongImageFormat }}
-                      handler={() => this.resetState()}
-                    />
-                    <vviinn-server-error
-                      class={{ hidden: !searchState.serverError }}
-                      handler={() => this.resetState()}
-                    />
-                  </div>
+                  {(this.wrongImageFormat || searchState.serverError) && (
+                    <div class="start-page_errors-block">
+                      <vviinn-wrong-format
+                        class={{ hidden: !this.wrongImageFormat }}
+                        handler={() => this.resetState()}
+                      />
+                      <vviinn-server-error
+                        class={{ hidden: !searchState.serverError }}
+                        handler={() => this.resetState()}
+                      />
+                    </div>
+                  )}
 
                   {!this.haveErrors() && (
                     <Fragment>
@@ -756,15 +769,27 @@ export class VviinnVpsWidget {
                     }}
                   >
                     <vviinn-filters
+                      class="preview-filters"
                       filters={searchState.dynamicFilters}
                       showInWidget={true}
-                    ></vviinn-filters>
+                      exportparts={filtersParts}
+                    />
 
                     <vviinn-extended-filters
+                      class="preview-extended-filters"
                       filters={searchState.dynamicFilters}
                       mode="preview"
                       showHeader={false}
-                    ></vviinn-extended-filters>
+                      exportparts={extendedFiltersParts}
+                      showInWidget={true}
+                      locale={this.locale}
+                    />
+
+                    <vviinn-extended-filters-button
+                      class="extended-filters-button"
+                      exportparts="extended-filters-button"
+                      showInWidget={true}
+                    />
                   </div>
                 </div>
               )}
@@ -783,6 +808,7 @@ export class VviinnVpsWidget {
                   productDetailsNewTab={this.productDetailsNewTab}
                   productDetailsRedirect={this.productDetailsRedirect}
                   addToBasketShow={this.addToBasketShow}
+                  favoriteShow={this.favoriteShow}
                   showAspectRatioError={this.showAspectRatioError}
                   trackingDeactivated={this.trackingDeactivated}
                   resetState={this.resetState.bind(this)}
@@ -791,11 +817,24 @@ export class VviinnVpsWidget {
                   )}
                   replaceSlotsContentInButton={this.replaceSlotsContentInButton}
                   textSearchQuery={this.searchQuery}
+                  textSearchRequestId={this.requestId}
                   addPriceContainer={this.addPriceContainer}
+                  oneClickDiscoveryMode={
+                    this.oneClickDiscoveryShow ? "append" : undefined
+                  }
                 />
               )}
             </vviinn-slide>
           </vviinn-slider>
+
+          <vviinn-extended-filters
+            class="modal-extended-filters"
+            filters={searchState.dynamicFilters}
+            mode="modal"
+            exportparts={extendedFiltersParts}
+            showInWidget={true}
+            locale={this.locale}
+          />
         </vviinn-overlayed-modal>
       </Host>
     );

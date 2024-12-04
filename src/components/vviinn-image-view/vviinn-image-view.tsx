@@ -1,14 +1,4 @@
-import {
-  Component,
-  Host,
-  h,
-  Prop,
-  State,
-  Event,
-  EventEmitter,
-  Element,
-  Listen,
-} from "@stencil/core";
+import { Component, Host, h, Prop, State, Element } from "@stencil/core";
 import { pipe } from "fp-ts/lib/function";
 import * as O from "fp-ts/lib/Option";
 import Cropper from "cropperjs";
@@ -17,46 +7,13 @@ import {
   searchState,
   makeRectangularSearchRequest,
 } from "../../store/search.store";
-import { ValueObject } from "../../network/ion/ValueObject";
-import { DetectedObject } from "../../searchSession/searchSession";
 import { sequenceToOption } from "../../utils/option/option";
-import { fromImage } from "../../geometry/Rectangle";
 import { dimensionsFromImage, scaleByLargestSide } from "../../Image/sizing";
 import styles from "./vviinn-image-view.css";
-import {
-  BasicEventData,
-  SelectObjectEventData,
-} from "../../recommendation/events";
+import { BasicEventData } from "../../recommendation/events";
+import { LoadImageEventData, SearchArea } from "../vviinn-cropper/types";
 
-const INITIAL_CROP_AREA = 0.9;
-const INITIAL_CROP_AREA_OFFSET = 1 - INITIAL_CROP_AREA;
-const MIN_SEARCH_AREA_SIZE = 82;
-const MIN_IMAGE_SIDE_FOR_CROPPER = 90;
-const SUPPORTED_ASPECT_RATIO = 0.1;
 const DEFAULT_IMAGE_SIZE = 288;
-
-type CropBoxData = {
-  left: number;
-  top: number;
-  width: number;
-  height: number;
-};
-
-const cropperOptions: Cropper.Options = {
-  autoCropArea: INITIAL_CROP_AREA,
-  minCropBoxHeight: MIN_SEARCH_AREA_SIZE,
-  minCropBoxWidth: MIN_SEARCH_AREA_SIZE,
-  minContainerWidth: MIN_IMAGE_SIDE_FOR_CROPPER,
-  minContainerHeight: MIN_IMAGE_SIDE_FOR_CROPPER,
-  movable: false,
-  zoomable: false,
-  rotatable: false,
-  scalable: false,
-  zoomOnTouch: false,
-  zoomOnWheel: false,
-  toggleDragModeOnDblclick: false,
-  viewMode: 1,
-};
 
 const getImageSizes = (i: HTMLImageElement): [number, number] => {
   const dimensions = dimensionsFromImage(i);
@@ -65,30 +22,6 @@ const getImageSizes = (i: HTMLImageElement): [number, number] => {
 
   const sizes = newDimensions.map((d) => d.size);
   return [sizes[0], sizes[1]];
-};
-
-const ValidateCropBoxData = (cropBoxData: CropBoxData) => {
-  const { width, height, left, top } = cropBoxData;
-  const minSize = MIN_SEARCH_AREA_SIZE;
-  let result = {
-    width,
-    height,
-    left,
-    top,
-  };
-
-  if (width < minSize) {
-    result.width = minSize;
-    const deltaX = minSize - width;
-    result.left = left - deltaX / 2;
-  }
-  if (height < minSize) {
-    result.height = minSize;
-    const deltaY = minSize - height;
-    result.top = top - deltaY / 2;
-  }
-
-  return result;
 };
 
 @Component({
@@ -103,122 +36,81 @@ export class VviinnImageView {
   @Prop() setShowAspectRatioError: (isError: boolean) => void;
   @Prop() showAspectRatioError: boolean;
 
+  @State() url: string;
+  @State() width: number;
+  @State() height: number;
   @State() cropper: Cropper = null;
   @State() hidePreloader = false;
 
-  @Event() vviinnImageCrop: EventEmitter<BasicEventData>;
-
-  disconnectedCallback() {
-    if (this.cropper) this.cropper.destroy();
+  componentWillRender() {
+    this.renderImage();
   }
 
-  @Listen("vviinnSelectObject")
-  selectDetectedObject({ detail }: CustomEvent<SelectObjectEventData>) {
-    const { top, left, width, height } = detail.detectedObject.value.rectangle;
-    const data = this.cropper.getImageData();
-
-    const cropBoxData = {
-      left: left * data.width,
-      top: top * data.height,
-      width: width * data.width,
-      height: height * data.height,
-    };
-
-    this.cropper.setCropBoxData(ValidateCropBoxData(cropBoxData));
-  }
-
-  private getCropboxData() {
-    const { left, top, width, height } = this.cropper.getCropBoxData();
-    return {
-      x: left,
-      y: top,
-      width,
-      height,
-    };
-  }
-
-  private loadImage() {
-    const imageElement = this.el.shadowRoot.querySelector("img");
-
-    if (imageElement) {
-      let data = {};
-      if (this.cropper) {
-        data = this.cropper.getData(true);
-        this.cropper.destroy();
-      }
-
-      const imageBounds = fromImage(imageElement);
-      const { x, y, width, height } = imageBounds;
-
-      const searchArea = {
-        x,
-        y,
-        width: width - width * INITIAL_CROP_AREA_OFFSET,
-        height: height - height * INITIAL_CROP_AREA_OFFSET,
-      };
-
-      searchState.imageBounds = O.some(imageBounds);
-      searchState.searchArea = O.some(searchArea);
-
-      if (
-        width / height < SUPPORTED_ASPECT_RATIO ||
-        height / width < SUPPORTED_ASPECT_RATIO
-      ) {
-        this.setShowAspectRatioError(true);
-        this.el.classList.add("bordered");
-        return;
-      }
-
-      if (
-        width < MIN_IMAGE_SIDE_FOR_CROPPER ||
-        height < MIN_IMAGE_SIDE_FOR_CROPPER
-      ) {
-        this.el.classList.add("bordered");
-        this.hidePreloader = true;
-        return;
-      }
-
-      this.cropper = new Cropper(imageElement, {
-        ...cropperOptions,
-        cropend: this.cropEnd,
-        data,
-      });
-    }
-  }
-
-  private cropEnd = () => {
-    searchState.searchArea = O.some(this.getCropboxData());
-    makeRectangularSearchRequest();
-    searchState.detectedObject = undefined;
-    this.vviinnImageCrop.emit(this.basicEventData);
-  };
-
-  private renderDetectedObject(
-    object: ValueObject<DetectedObject>
-  ): HTMLElement {
-    return (
-      <vviinn-detected-object
-        detectedObject={object}
-        basicEventData={this.basicEventData}
-      />
+  connectedCallback() {
+    document.addEventListener(
+      "vviinnCropperLoadImage",
+      this.vviinnCropperLoadImage
+    );
+    document.addEventListener(
+      "vviinnCropperAspectRatioError",
+      this.vviinnCropperAspectRatioError
+    );
+    document.addEventListener(
+      "vviinnCropperHidePreloader",
+      this.vviinnCropperHidePreloader
+    );
+    document.addEventListener(
+      "vviinnCropperCropEnd",
+      this.vviinnCropperCropEnd
     );
   }
 
-  private renderImage(): HTMLImageElement | null {
+  disconnectedCallback() {
+    document.removeEventListener(
+      "vviinnCropperLoadImage",
+      this.vviinnCropperLoadImage
+    );
+    document.removeEventListener(
+      "vviinnCropperAspectRatioError",
+      this.vviinnCropperAspectRatioError
+    );
+    document.removeEventListener(
+      "vviinnCropperHidePreloader",
+      this.vviinnCropperHidePreloader
+    );
+    document.removeEventListener(
+      "vviinnCropperCropEnd",
+      this.vviinnCropperCropEnd
+    );
+  }
+
+  vviinnCropperLoadImage({ detail }: CustomEvent<LoadImageEventData>) {
+    searchState.imageBounds = O.some(detail.imageBounds);
+    searchState.searchArea = O.some(detail.searchArea);
+  }
+  vviinnCropperCropEnd({ detail }: CustomEvent<SearchArea>) {
+    searchState.searchArea = O.some(detail);
+    makeRectangularSearchRequest();
+    searchState.detectedObject = undefined;
+  }
+  vviinnCropperAspectRatioError({ detail }: CustomEvent<boolean>) {
+    this.setShowAspectRatioError(detail);
+    this.el.classList.add("bordered");
+  }
+  vviinnCropperHidePreloader({ detail }: CustomEvent<boolean>) {
+    this.el.classList.add("bordered");
+    this.hidePreloader = detail;
+  }
+
+  private renderImage(): null {
     return pipe(
       sequenceToOption(searchState.imageUrl, searchState.image),
       O.map(([url, refImage]) => {
         const [width, height] = getImageSizes(refImage);
-        return (
-          <img
-            decoding="async"
-            width={width}
-            height={height}
-            src={url}
-            draggable={false}
-            onLoad={() => this.loadImage()}
-          />
-        );
+
+        this.width = width;
+        this.height = height;
+        this.url = url;
       }),
       O.getOrElse(() => null)
     );
@@ -228,12 +120,13 @@ export class VviinnImageView {
     return (
       <Host>
         <div class="container">
-          <div class="image-container">
-            {this.renderImage()}
-            {searchState.detectedObjects.map((o) =>
-              this.renderDetectedObject(o)
-            )}
-          </div>
+          <vviinn-cropper
+            width={this.width}
+            height={this.height}
+            url={this.url}
+            detectedObjectsString={JSON.stringify(searchState.detectedObjects)}
+            basicEventDataString={JSON.stringify(this.basicEventData)}
+          />
 
           {(searchState.loading || searchState.objectDetectionInProgress) &&
           !this.showAspectRatioError &&

@@ -15,8 +15,8 @@ import { BasicEventData } from "../../../recommendation/events";
 import { CampaignName } from "../../../campaign/Campaign";
 import { Locale } from "../../../locale";
 import { UpdateButtonLocation } from "../../vviinn-vpr-widget/vviinn-vpr-widget";
-import { searchState } from "../../../store/search.store";
 import { ClickEvent, isClickedInRectBound } from "../../../geometry/Rectangle";
+import { Recommendation } from "../../../components";
 
 type SidebarState = "idle" | "open" | "closed";
 
@@ -60,6 +60,8 @@ export class RecommendationsSidebar {
   @Prop() showFilters: boolean = false;
   @Prop() setModeDiscounts: string;
   @Prop() updateButtonLocation: UpdateButtonLocation;
+  @Prop() favoriteShow: boolean = false;
+  @Prop() useCarousel: boolean = true;
 
   /** @internal */
   @Prop() showInCustomContainer: boolean = false;
@@ -75,6 +77,7 @@ export class RecommendationsSidebar {
   @Prop() showingInButton: boolean;
 
   @State() state: SidebarState = "idle";
+  @State() sourceProduct?: Recommendation;
 
   @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
 
@@ -106,6 +109,11 @@ export class RecommendationsSidebar {
     }
   }
 
+  @Listen("sourceProductReceived")
+  sourceProductReceived(event: CustomEvent<Recommendation>) {
+    this.sourceProduct = event.detail;
+  }
+
   private getClassMap() {
     return {
       [this.position]: true,
@@ -134,7 +142,7 @@ export class RecommendationsSidebar {
 
   render(): any {
     return (
-      <Host class={this.getClassMap()}>
+      <Host class={this.getClassMap()} exportparts="body">
         <aside
           class="sidebar"
           part="body"
@@ -160,7 +168,7 @@ export class RecommendationsSidebar {
 
           <main part="sidebar-content">
             <vviinn-vpr-widget
-              exportparts="image-container, content-container, basket-button-container,brand, product-type, currency, deeplink, image, image-link, image-picture, price-container, price-amount, price-prefix, price-outdated, price-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-sale, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, title: product-title, carousel-button, product-card, items-group, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
+              exportparts="image-container, content-container, basket-button-container,brand, product-type, currency, deeplink, image, image-link, image-picture, price-container, price-amount, price-prefix, price-outdated, price-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-sale, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, title: product-title, carousel-button, product-card, items-group, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link, product-card-top-actions"
               token={this.token}
               productId={this.productId}
               imageWidth={this.imageWidth}
@@ -168,7 +176,7 @@ export class RecommendationsSidebar {
               blockTitle=""
               mode={this.mode}
               campaign-type={this.campaignType}
-              useCarousel={this.position === "bottom"}
+              useCarousel={this.useCarousel}
               onVviinnRecommendationsLoaded={() => (this.state = "open")}
               showScroll={this.widgetScrollbar}
               campaigns={this.campaigns}
@@ -193,6 +201,7 @@ export class RecommendationsSidebar {
               setModeDiscounts={this.setModeDiscounts}
               updateButtonLocation={this.updateButtonLocation}
               addPriceContainer={this.addPriceContainer}
+              favoriteShow={this.favoriteShow}
             />
           </main>
         </aside>
@@ -202,8 +211,8 @@ export class RecommendationsSidebar {
 
   private renderSourceImage(): HTMLImageElement {
     const sourceImageSrc =
-      searchState?.sourceProduct?.image?.thumbnail ??
-      searchState?.sourceProduct?.image?.original ??
+      this.sourceProduct?.image?.thumbnail ??
+      this.sourceProduct?.image?.original ??
       null;
 
     if (!sourceImageSrc) return null;
@@ -213,8 +222,7 @@ export class RecommendationsSidebar {
     );
   }
 
-  private isSourceImageValid = (): boolean =>
-    !!searchState?.sourceProduct?.image;
+  private isSourceImageValid = (): boolean => !!this.sourceProduct?.image;
 
   private handleAnimationEnd({ animationName }: AnimationEvent): void {
     const isClosingAnimation = animationName.includes("slideOut");

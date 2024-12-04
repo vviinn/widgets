@@ -10,13 +10,12 @@ import "./styles.css";
 
 # Discovery Set
 
-## Examples
-
 <div id="cross-selling">
     <div className="tab tab-reverse">
-        <h3>Discovery Set</h3>
-        <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'cross-selling')}}>Code</button>
-        <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'cross-selling')}}>Preview</button>
+        <div className="tablink-group">
+            <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'cross-selling')}}>Code</button>
+            <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'cross-selling')}}>Preview</button>
+        </div>
     </div>
     <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
@@ -33,31 +32,6 @@ import "./styles.css";
     campaign-type="VCS"
     locale="en-US"
 ></vviinn-vpr-widget>
-```
-    </div>
-</div>
-
-<div id="cross-selling-modal">
-    <div className="tab tab-reverse">
-        <h3>One-click Discovery</h3>
-        <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'cross-selling-modal')}}>Code</button>
-        <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'cross-selling-modal')}}>Preview</button>
-    </div>
-    <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
-        <div className="tabcontent-preview">
-            <vviinn-vpr-button token={vviinnToken} product-id={productIdCrossSelling} mode="set" campaign-type="VCS" locale="en-US">
-            </vviinn-vpr-button>
-        </div>
-    </div>
-    <div id="Code_2" className="tabcontent">
-```html
-<vviinn-vpr-button 
-    token="TOKEN" 
-    product-id="PRODUCT_ID"
-    mode="set"
-    campaign-type="VCS"
-    locale="en-US"
-></vviinn-vpr-button>
 ```
     </div>
 </div>

@@ -41,6 +41,8 @@ const Template = (args) => `
   text-search-show="${args.textSearchShow}"
   add-to-basket-show="${args.addToBasketShow}"
   add-price-container="${args.addPriceContainer}"
+  favorite-show="${args.favoriteShow}"
+  one-click-discovery-show="${args.oneClickDiscoveryShow}"
 ></vviinn-vps-button>`;
 
 export const Default = Template.bind({});
@@ -61,4 +63,6 @@ Default.args = {
   textSearchShow: true,
   addToBasketShow: false,
   addPriceContainer: false,
+  favoriteShow: false,
+  oneClickDiscoveryShow: true,
 };

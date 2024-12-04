@@ -24,7 +24,6 @@ import { createBearAuthedHeader } from "./token-helpers";
 import { state } from "../../store/store";
 import { CampaignName, campaignTypeNames } from "../../campaign/Campaign";
 import { getRecommendationsService } from "../../campaign/CampaignService";
-import { searchState } from "../../store/search.store";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
 import { Recommendation } from "../../interfaces/recommendation";
 import { SlotSkeleton, slotChangeListener } from "../customized-slots";
@@ -62,9 +61,9 @@ import { Locale } from "../../locale";
 import { UpdateIcon } from "../vviinn-icons";
 import { getCustomLabels, getRecommendationsBody } from "../../recommendation";
 import {
-  RequestDynamicFilters,
+  RequestDynamicFilterItem,
   SimilarProductsResponse,
-  DynamicFilters,
+  ResponseDynamicFilterItem,
 } from "../../campaign/VPRCampaignService";
 import { CrossSellingResponse } from "../../campaign/VCSCampaignService";
 
@@ -92,7 +91,7 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
  * @part price-prefix - Block rendered before each price element (for ex. "from").
  * @part carousel-button - Button for carousel navigation.
- * @part recommendations-grid - For internal usage only!
+ * @part recommendations-results - For internal usage only!
  * @part recommendations-title - Title of the recommendations grid.
  * @part recommendations-subtitle - Subtitle of the recommendations grid.
  * @part basket-button - Add to Basket button.
@@ -112,16 +111,20 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @part custom-label-4 - custom label with index 4.
  *
  * @slot vviinn-recommendations-title - Recommendations title text.
+ * @slot vviinn-favorite-icon - Icon of Favorite button.
+ * @slot vviinn-favorite-icon-pressed - Icon of pressed Favorite button.
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
+ * @slot vviinn-basket-button-icon - Text of Add to Basket icon.
+ * @slot vviinn-basket-button-text-pressed - Text of pressed Add to Basket button.
+ * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button.
+ * @slot vviinn-energy-label-data-sheet-text - Text of the data sheet link for the energy label.
  *
  * @slot vviinn-recommendations-subtitle - Recommendations subtitle text (Set mode).
  * @slot vviinn-update-button-text - Text of Update Button on the top (Set mode).
  * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
- * @slot vviinn-basket-button-icon - Text of Add to Basket icon (Set mode).
- * @slot vviinn-basket-button-text-pressed - Text of pressed Add to Basket button (Set mode).
- * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button (Set mode).
- * @slot vviinn-energy-label-data-sheet-text - Text of the data sheet link for the energy label.
  */
+
+export type Mode = "pure-grid" | CarouselMode;
 
 @Component({
   tag: "vviinn-vpr-widget",
@@ -135,7 +138,7 @@ export class VviinnVprWidget implements ComponentInterface {
   /** ID of product you need recommendations for (required) */
   @Prop() productId: string;
   /** Switch between carousel modes */
-  @Prop() mode: CarouselMode = "continuity";
+  @Prop() mode: Mode = "continuity";
   /** Comma-separated list of campaign IDs */
   @Prop() campaigns: string = "";
   /** Excluded filter. Example: "brand:Nike;custom_label_0:summer" */
@@ -178,6 +181,8 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() updateButtonLocation: UpdateButtonLocation = "topAndItem";
   /** Wrap the Product Card's price values in the container. */
   @Prop() addPriceContainer?: boolean = false;
+  /** Show or hide Favorite button */
+  @Prop() favoriteShow: boolean = false;
 
   /** Widget’s title (change it to fit your locale) */
   @Prop() blockTitle: string = "Recommended products";
@@ -198,8 +203,9 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() opened?: boolean;
 
   @State() recommendations: Recommendation[] = [];
-  @State() dynamicFilters: DynamicFilters = [];
+  @State() dynamicFilters: ResponseDynamicFilterItem[] = [];
   @State() sourceProduct: Recommendation | null = null;
+  @State() recommendationsLoading: boolean = false;
   @State() trackingDeactivated: boolean = false;
   @State() hasErrorOnLoad: boolean = false;
   @State() updatingAllCards: boolean = false;
@@ -245,6 +251,8 @@ export class VviinnVprWidget implements ComponentInterface {
   /** @internal */
   @Event({ bubbles: true })
   vviinnWidgetClose: EventEmitter<BasicEventData>;
+  /** @internal */
+  @Event() sourceProductReceived: EventEmitter<Recommendation>;
 
   private productIds: string[];
   private productImageLoadedSubject = new Subject();
@@ -252,7 +260,7 @@ export class VviinnVprWidget implements ComponentInterface {
   private resultViewed: boolean = false;
   private isSetMode: boolean;
   private isGridMode: boolean;
-  private requestDynamicFilters: RequestDynamicFilters = [];
+  private requestDynamicFilters: RequestDynamicFilterItem[] = [];
   trackingApi: DefaultApi;
   uiSessionId: string;
 
@@ -544,7 +552,7 @@ export class VviinnVprWidget implements ComponentInterface {
 
   private async getRecommendations() {
     if (this.productId === undefined || this.token === undefined) return;
-    searchState.loading = true;
+    this.recommendationsLoading = true;
     const campaignType =
       this.campaignType.length > 0 ? this.campaignType : "VPR";
 
@@ -574,11 +582,11 @@ export class VviinnVprWidget implements ComponentInterface {
           this.handleError(error);
           this.vviinnNoResult.emit(this.getBasicEventData());
           this.vviinnRecommendationsLoaded.emit();
-          searchState.loading = false;
+          this.recommendationsLoading = false;
         },
         (data) => {
           this.handleRecommendationsSuccess(data);
-          searchState.loading = false;
+          this.recommendationsLoading = false;
         }
       )
     );
@@ -594,12 +602,13 @@ export class VviinnVprWidget implements ComponentInterface {
   }: SimilarProductsResponse | CrossSellingResponse) {
     this.vviinnResultLoad.emit(this.getBasicEventData());
     this.trackResultEvent("load");
-    this.dynamicFilters = interactions.dynamicFilters as DynamicFilters;
+    this.dynamicFilters =
+      interactions.dynamicFilters as ResponseDynamicFilterItem[];
     const { products, sourceProduct } = data;
     this.recommendations = products;
     this.sourceProduct = sourceProduct;
-    searchState.results = this.recommendations;
-    searchState.sourceProduct = this.sourceProduct;
+
+    this.sourceProductReceived.emit(sourceProduct);
 
     this.productIds = this.recommendations.map((r) => r.productId);
 
@@ -649,39 +658,41 @@ export class VviinnVprWidget implements ComponentInterface {
           {SlotSkeleton("vpr")}
 
           <style>{state.fallbackStyles}</style>
-          <div class="widget-header">
-            <div>
-              <h2 part="recommendations-title">
-                <slot name="vviinn-recommendations-title">
-                  {this.isSetMode
-                    ? i18next.t("setMode.widgetTitle")
-                    : this.blockTitle}
-                </slot>
-              </h2>
-              {this.isSetMode && (
-                <h3 part="recommendations-subtitle">
-                  <slot name="vviinn-recommendations-subtitle">
-                    {i18next.t("setMode.widgetSubtitle")}
+          {(this.isSetMode || this.blockTitle.length > 0) && (
+            <div class="widget-header">
+              <div>
+                <h2 part="recommendations-title">
+                  <slot name="vviinn-recommendations-title">
+                    {this.isSetMode
+                      ? i18next.t("setMode.widgetTitle")
+                      : this.blockTitle}
                   </slot>
-                </h3>
-              )}
-            </div>
+                </h2>
+                {this.isSetMode && (
+                  <h3 part="recommendations-subtitle">
+                    <slot name="vviinn-recommendations-subtitle">
+                      {i18next.t("setMode.widgetSubtitle")}
+                    </slot>
+                  </h3>
+                )}
+              </div>
 
-            {this.isSetMode && this.updateButtonLocation !== "onItem" ? (
-              <button
-                class="update-button"
-                part="update-button-top"
-                onClick={() => (this.updatingAllCards = true)}
-              >
-                <slot name="vviinn-update-button-icon">
-                  <UpdateIcon />
-                </slot>
-                <slot name="vviinn-update-button-text">
-                  <span>{i18next.t("setMode.updateButtonText")}</span>
-                </slot>
-              </button>
-            ) : null}
-          </div>
+              {this.isSetMode && this.updateButtonLocation !== "onItem" ? (
+                <button
+                  class="update-button"
+                  part="update-button-top"
+                  onClick={() => (this.updatingAllCards = true)}
+                >
+                  <slot name="vviinn-update-button-icon">
+                    <UpdateIcon />
+                  </slot>
+                  <slot name="vviinn-update-button-text">
+                    <span>{i18next.t("setMode.updateButtonText")}</span>
+                  </slot>
+                </button>
+              ) : null}
+            </div>
+          )}
 
           {(this.showFilters || this.showExtendedFilters) && (
             <div class="filters-header ">
@@ -704,7 +715,7 @@ export class VviinnVprWidget implements ComponentInterface {
           {(this.recommendations.length === 0 ||
             (this.recommendations.length < 4 && this.isSetMode) ||
             this.hasErrorOnLoad) &&
-            !searchState.loading && (
+            !this.recommendationsLoading && (
               <p class="no-result-text">
                 {this.noResultText.length
                   ? this.noResultText
@@ -748,13 +759,17 @@ export class VviinnVprWidget implements ComponentInterface {
         setMode={this.isSetMode}
         locale={this.locale}
         customLabels={getCustomLabels(recommendation)}
+        favoriteShow={this.favoriteShow}
       />
     );
   }
 
   private renderResults() {
     return (
-      <div class="recommendations-grid" part="recommendations-grid">
+      <div
+        class={`recommendations-results recommendations-${this.mode}`}
+        part="recommendations-results"
+      >
         {this.recommendations.map((r, i) => this.renderRecommendation(r, i))}
       </div>
     );
@@ -763,11 +778,12 @@ export class VviinnVprWidget implements ComponentInterface {
   private renderCarousel(): HTMLVviinnCarouselElement {
     return (
       <vviinn-carousel
-        mode={this.mode}
+        mode={this.mode as CarouselMode}
         campaignTypeId={this.campaignType}
         imageWidth={this.imageWidth}
         showScroll={this.showScroll}
         recommendations={this.recommendations}
+        sourceProduct={this.sourceProduct}
         widgetElementId={this.id}
         widgetVersion={version}
         gridArrowsDynamic={this.gridArrowsDynamic}
@@ -781,6 +797,7 @@ export class VviinnVprWidget implements ComponentInterface {
         pricePrefix={this.pricePrefix}
         locale={this.locale}
         imageRatio={this.imageRatio}
+        favoriteShow={this.favoriteShow}
       ></vviinn-carousel>
     );
   }

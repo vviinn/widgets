@@ -1,10 +1,8 @@
-import { Meta, Story, Canvas } from "@storybook/blocks";
+import { Meta} from "@storybook/blocks";
 import "../../styles/product-card.css";
 import Card from "../../components/productCard/card.mdx";
 import { cardCredentials } from "../../components/productCard/cardCredentials";
-import {
-  customizedLabelCard
-} from "../../components/productCard/constants";
+
 
 import "./parts.css";
 import { vviinnToken, productIdSimilarProducts, productIdCrossSelling } from "../../helpers";
@@ -30,8 +28,10 @@ For example, [check](?path=/story/playground-discovery--grid) the list of availa
 <div id="discovery-slider-example">
     <div className="tab tab-reverse">
         <h3>Discovery Slider: Styling Product Card's Title</h3>
-        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'discovery-slider-example')}}>Code</button>
-        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'discovery-slider-example')}}>Preview</button>
+        <div className="tablink-group">
+            <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'discovery-slider-example')}}>Code</button>
+            <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'discovery-slider-example')}}>Preview</button>
+        </div>
     </div>
     <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
@@ -65,8 +65,10 @@ For example, [check](?path=/story/playground-discovery--grid) the list of availa
 <div id="discovery-set-example">
     <div className="tab tab-reverse">
         <h3>Discovery Set: Styling Widget's Title and Discount Label</h3>
-        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'discovery-set-example')}}>Code</button>
-        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'discovery-set-example')}}>Preview</button>
+        <div className="tablink-group">
+            <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'discovery-set-example')}}>Code</button>
+            <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'discovery-set-example')}}>Preview</button>
+        </div>
     </div>
     <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
@@ -103,13 +105,16 @@ For example, [check](?path=/story/playground-discovery--grid) the list of availa
 <div id="search-modal-example">
     <div className="tab tab-reverse">
         <h3>Search Modal: Styling Upload Photo Button</h3>
-        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_3', 'search-modal-example')}}>Code</button>
-        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_3', 'search-modal-example')}}>Preview</button>
+        <div className="tablink-group">
+            <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_3', 'search-modal-example')}}>Code</button>
+            <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_3', 'search-modal-example')}}>Preview</button>
+        </div>
+
     </div>
     
     <div id="Preview_3" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
-            <vviinn-vps-button id="vviinn-vps-button-customization" token={vviinnToken} text-search-show="true" locale="en-US"></vviinn-vps-button>
+            <vviinn-vps-button id="vviinn-vps-button-customization" token={vviinnToken} text-search-show="true" locale="en-US" add-style="true"></vviinn-vps-button>
         </div>
     </div>
     <div id="Code_3" className="tabcontent">
@@ -130,4 +135,4 @@ For example, [check](?path=/story/playground-discovery--grid) the list of availa
     </div>
 </div>
 
-<Card cardData={cardCredentials(customizedLabelCard)} />
+<Card cardData={cardCredentials("customizedLabelCard")} />

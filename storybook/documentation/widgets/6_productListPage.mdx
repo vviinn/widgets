@@ -11,12 +11,12 @@ import "./styles.css";
 
 # Product List Page
 
-## Examples
-
 <div id="text-search">
     <div className="tab tab-reverse">
-        <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'text-search')}}>Code</button>
-        <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'text-search')}}>Preview</button>
+        <div className="tablink-group">
+          <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'text-search')}}>Code</button>
+          <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'text-search')}}>Preview</button>
+        </div>
     </div>
     <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
@@ -124,7 +124,7 @@ vviinn-text-search {
           currency-sign="€" 
           locale="en-US" 
           results-count="9"
-          text-search-query="Chair"
+          text-search-query="EXAMPLE_QUERY"
           one-click-discovery-mode="append"
         ></vviinn-results>
     </div>

@@ -54,13 +54,8 @@
   padding: 0;
 }
 
-.nothing-found {
-  display: grid;
-  grid-gap: 64px;
-  justify-self: center;
-  padding-top: 64px;
-  padding-bottom: 16px;
-  position: absolute;
+:host(.show-in-widget)::part(product-card) {
+  min-height: 297px;
 }
 
 .hidden {
@@ -136,4 +131,26 @@ products.hidden {
   :host {
     --product-card-width: 155px;
   }
+}
+
+vviinn-recommendations-sidebar::part(body) {
+  background-color: var(--color-border-02);
+  margin-top: -17px;
+}
+
+vviinn-recommendations-sidebar::part(source-image) {
+  display: none;
+}
+
+vviinn-recommendations-sidebar::part(sidebar-header) {
+  justify-items: left;
+  text-align: left;
+}
+
+vviinn-recommendations-sidebar::part(sidebar-content) {
+  min-height: 470px;
+  padding: 0;
+}
+vviinn-recommendations-sidebar {
+  --product-card-width: 200px;
 }

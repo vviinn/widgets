@@ -2,6 +2,151 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.134.0](https://github.com/vviinn/widgets/compare/v2.133.0...v2.134.0) (2024-12-04)
+
+
+### Features
+
+* developed an independent component for Vviinn cropper ([9ef4580](https://github.com/vviinn/widgets/commit/9ef4580f4dd91f0e2d55713f9453b0b8b653e2ae))
+
+## [2.133.0](https://github.com/vviinn/widgets/compare/v2.132.0...v2.133.0) (2024-12-04)
+
+
+### Features
+
+* Use requestId for optimized text search ([4fb1505](https://github.com/vviinn/widgets/commit/4fb150537e571a935e167560c291188ff99d6de6))
+
+## [2.132.0](https://github.com/vviinn/widgets/compare/v2.131.0...v2.132.0) (2024-12-04)
+
+
+### Features
+
+* Show Extended Filters Button in the Search Widget ([f372610](https://github.com/vviinn/widgets/commit/f3726106fc005ec37a999c81ecc12bf6b2c695a6))
+
+## [2.131.0](https://github.com/vviinn/widgets/compare/v2.130.0...v2.131.0) (2024-12-02)
+
+
+### Features
+
+* Added grid view to append mode of one-click discovery ([a8458f6](https://github.com/vviinn/widgets/commit/a8458f6a608660ffadf27e34cd0421e2a1690282))
+
+## [2.130.0](https://github.com/vviinn/widgets/compare/v2.129.0...v2.130.0) (2024-11-28)
+
+
+### Features
+
+* Rework of One-click discovery Storybook's page ([76036fe](https://github.com/vviinn/widgets/commit/76036fe301294b06a23b85c6f85c2a16072e3356))
+
+## [2.129.0](https://github.com/vviinn/widgets/compare/v2.128.0...v2.129.0) (2024-11-28)
+
+
+### Features
+
+* Update storybook documentation ([8e8dddf](https://github.com/vviinn/widgets/commit/8e8dddf88f2f157d6fd7b855d00233d64f47a855))
+
+## [2.128.0](https://github.com/vviinn/widgets/compare/v2.127.0...v2.128.0) (2024-11-26)
+
+
+### Features
+
+* Track reset filters event ([97c013e](https://github.com/vviinn/widgets/commit/97c013e0c643b531444ce0bc36accbb2c7994900))
+
+## [2.127.0](https://github.com/vviinn/widgets/compare/v2.126.1...v2.127.0) (2024-11-26)
+
+
+### Features
+
+* removed some repetitive type definitions ([e21a291](https://github.com/vviinn/widgets/commit/e21a2910fcf4fb12bfe5506776690ab8c2d264c8))
+
+### [2.126.1](https://github.com/vviinn/widgets/compare/v2.126.0...v2.126.1) (2024-11-25)
+
+## [2.126.0](https://github.com/vviinn/widgets/compare/v2.125.0...v2.126.0) (2024-11-22)
+
+
+### Features
+
+* Add a show-more button for an extended-filters options ([9662cce](https://github.com/vviinn/widgets/commit/9662cce0b0037e64316fd322e59ab04993a276cd))
+
+## [2.125.0](https://github.com/vviinn/widgets/compare/v2.124.1...v2.125.0) (2024-11-22)
+
+
+### Features
+
+* Change the modal button's styles with an add-style='true' prop ([acb8ef5](https://github.com/vviinn/widgets/commit/acb8ef5ff74e2bfed02c691e7ad3cdd797ba8006))
+
+
+### Bug Fixes
+
+* Storybook fixes and layout improvements ([7de6391](https://github.com/vviinn/widgets/commit/7de6391d2d96010d1d584ae5eb5557034145b612))
+
+### [2.124.1](https://github.com/vviinn/widgets/compare/v2.124.0...v2.124.1) (2024-11-22)
+
+
+### Bug Fixes
+
+* Use internal state for Discovery Widget ([417b777](https://github.com/vviinn/widgets/commit/417b7774b2287439b25c86dabda524948078e329))
+
+## [2.124.0](https://github.com/vviinn/widgets/compare/v2.123.0...v2.124.0) (2024-11-21)
+
+
+### Features
+
+* Added slots support for Discovery components in the Product List component ([3ef1421](https://github.com/vviinn/widgets/commit/3ef1421feb153647ded25adb475e3d68cf73a9a1))
+
+## [2.123.0](https://github.com/vviinn/widgets/compare/v2.122.0...v2.123.0) (2024-11-18)
+
+
+### Features
+
+* changed product card in storybook to show recommendations for relevant products ([3694bd0](https://github.com/vviinn/widgets/commit/3694bd02a17d8bebdf05189a70fe3c92aef8e74a))
+
+## [2.122.0](https://github.com/vviinn/widgets/compare/v2.121.1...v2.122.0) (2024-11-18)
+
+
+### Features
+
+* Add --modal-border-radius variable for Search Widget ([dc075d4](https://github.com/vviinn/widgets/commit/dc075d4b53cdeea6fae15c95fe09df19a416cf27))
+
+
+### Bug Fixes
+
+* Filters CSS parts support ([68effd5](https://github.com/vviinn/widgets/commit/68effd58e855fbf195fbe197008e830c885dbb89))
+
+### [2.121.1](https://github.com/vviinn/widgets/compare/v2.121.0...v2.121.1) (2024-11-18)
+
+
+### Bug Fixes
+
+* Adjust max range value for price filter ([de89bc4](https://github.com/vviinn/widgets/commit/de89bc4789bb70d8fab3846024986f69ee8d87c4))
+
+## [2.121.0](https://github.com/vviinn/widgets/compare/v2.120.0...v2.121.0) (2024-11-18)
+
+
+### Features
+
+* added favourite button support ([5c853f2](https://github.com/vviinn/widgets/commit/5c853f2a3349104b44cb198f0c8d1f526c849bce))
+
+## [2.120.0](https://github.com/vviinn/widgets/compare/v2.119.0...v2.120.0) (2024-11-18)
+
+
+### Features
+
+* Reset selected filters after the new text search ([231e48c](https://github.com/vviinn/widgets/commit/231e48c2a5af04b87152a323397efbe08d398d41))
+
+
+### Bug Fixes
+
+* Fix the state conflict of the Search Widget with Results on one page. ([3eef949](https://github.com/vviinn/widgets/commit/3eef949ea459703fcf7a46ddf006f43df949e8f2))
+* Remove an extra vviinnFiltersChanged event triggering ([e57dd21](https://github.com/vviinn/widgets/commit/e57dd2189a8c2dfa1af62eba002127512efecd18))
+* Show errors for text search ([98e7b0f](https://github.com/vviinn/widgets/commit/98e7b0f9ddb14b9e769290c360f00d32905c45eb))
+
+## [2.119.0](https://github.com/vviinn/widgets/compare/v2.118.3...v2.119.0) (2024-11-14)
+
+
+### Features
+
+* send text search tracking ([ee32fba](https://github.com/vviinn/widgets/commit/ee32fba18f6bf2f96b36d6f99ef98237d915f14b))
+
 ### [2.118.3](https://github.com/vviinn/widgets/compare/v2.118.2...v2.118.3) (2024-11-14)
 
 

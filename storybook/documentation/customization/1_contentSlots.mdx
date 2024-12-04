@@ -18,6 +18,7 @@ You can use [Slots](https://developer.mozilla.org/en-US/docs/Web/Web_Components/
 - [Discovery Set](#set)
 - [Search Modal](#search-modal)
 - [Filters](#filters)
+- [Product List](#product-list)
 
 ## Discovery
 
@@ -28,11 +29,19 @@ Here are slots that could be used for [Discovery Slider](?path=/docs/widgets-dis
 * vviinn-recommendations-title - *Recommendations title text*
 * vviinn-basket-button-text - *Text of Add to Basket button*
 * vviinn-energy-label-data-sheet-text - *Text of the data sheet link for the energy label*
+* vviinn-basket-button-text - *Text of Add to Basket button*
+* vviinn-basket-button-icon - *Icon of Add to Basket button*
+* vviinn-basket-button-text-pressed - *Text of pressed Add to Basket button*
+* vviinn-basket-button-icon-pressed - *Icon of pressed Add to Basket button*
+* vviinn-favorite-icon - *Icon of Favorite button*
+* vviinn-favorite-icon-pressed - *Icon of pressed Favorite button*
 
 <div id="discovery-slider-example">
     <div className="tab tab-reverse">
-        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'discovery-slider-example')}}>Code</button>
-        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'discovery-slider-example')}}>Preview</button>
+        <div className="tablink-group">
+          <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'discovery-slider-example')}}>Code</button>
+          <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'discovery-slider-example')}}>Preview</button>
+        </div>
     </div>
     <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
@@ -68,8 +77,10 @@ Here are slots that could be used for [Discovery Slider](?path=/docs/widgets-dis
 <div id="discovery-slider-modal-example">
     <div className="tab tab-reverse">
         <h3>One-click Discovery Slider Slots</h3>
-        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'discovery-slider-modal-example')}}>Code</button>
-        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'discovery-slider-modal-example')}}>Preview</button>
+        <div className="tablink-group">
+          <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'discovery-slider-modal-example')}}>Code</button>
+          <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'discovery-slider-modal-example')}}>Preview</button>
+        </div>
     </div>
     <div className='tab-sub-title'>In addition to Discovery Slider slots, an icon of the One-click Discovery button could be changed.</div>
     <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
@@ -118,18 +129,22 @@ Here are slots that could be used for [Discovery Slider](?path=/docs/widgets-dis
 * vviinn-recommendations-title - *Recommendations title text*
 * vviinn-recommendations-subtitle - *Recommendations subtitle text*
 * vviinn-energy-label-data-sheet-text - *Text of the data sheet link for the energy label*
-
 * vviinn-basket-button-text - *Text of Add to Basket button*
-* vviinn-update-button-text - *Text of Update Button on the top*
 * vviinn-basket-button-icon - *Icon of Add to Basket button*
 * vviinn-basket-button-text-pressed - *Text of pressed Add to Basket button*
 * vviinn-basket-button-icon-pressed - *Icon of pressed Add to Basket button*
+* vviinn-favorite-icon - *Icon of Favorite button*
+* vviinn-favorite-icon-pressed - *Icon of pressed Favorite button*
+
+* vviinn-update-button-text - *Text of Update Button on the top*
 * vviinn-update-button-icon - *Icon of Update Button*
 
 <div id="discovery-set-example">
     <div className="tab tab-reverse">
-        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_3', 'discovery-set-example')}}>Code</button>
-        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_3', 'discovery-set-example')}}>Preview</button>
+        <div className="tablink-group">
+          <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_3', 'discovery-set-example')}}>Code</button>
+          <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_3', 'discovery-set-example')}}>Preview</button>
+        </div>
     </div>
     <div id="Preview_3" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
@@ -194,8 +209,10 @@ Here are slots that could be used for [Discovery Slider](?path=/docs/widgets-dis
 <div id="discovery-set-modal-example">
     <div className="tab tab-reverse">
         <h3>One-click Discovery Set Slots</h3>
-        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_4', 'discovery-set-modal-example')}}>Code</button>
-        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_4', 'discovery-set-modal-example')}}>Preview</button>
+        <div className="tablink-group">
+          <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_4', 'discovery-set-modal-example')}}>Code</button>
+          <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_4', 'discovery-set-modal-example')}}>Preview</button>
+        </div>
     </div>
     <div className='tab-sub-title'>In addition to Discovery Set slots, an icon of the One-click Discovery button could also be changed.</div>
     <div id="Preview_4" className="tabcontent" style={{display:"block"}}>
@@ -263,13 +280,15 @@ Slots that could be used for [Search Modal](?path=/docs/widgets-search-modal--do
 
 <div id="search-modal-example">
     <div className="tab tab-reverse">
-        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_5', 'search-modal-example')}}>Code</button>
-        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_5', 'search-modal-example')}}>Preview</button>
+        <div className="tablink-group">
+          <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_5', 'search-modal-example')}}>Code</button>
+          <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_5', 'search-modal-example')}}>Preview</button>
+        </div>
     </div>
     
     <div id="Preview_5" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
-            <vviinn-vps-button token={vviinnToken} text-search-show="true" locale="en-US">
+            <vviinn-vps-button token={vviinnToken} text-search-show="true" locale="en-US" add-style="true">
               <svg width="22" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   fillRule="evenodd"
@@ -323,8 +342,10 @@ Slots that could be used for [Extended Filters](?path=/docs/components-filters--
 
 <div id="filters-example">
     <div className="tab tab-reverse">
-        <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_6', 'filters-example')}}>Code</button>
-        <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_6', 'filters-example')}}>Preview</button>
+        <div className="tablink-group">
+          <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_6', 'filters-example')}}>Code</button>
+          <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_6', 'filters-example')}}>Preview</button>
+        </div>
     </div>
     
     <div id="Preview_6" className="tabcontent" style={{display:"block"}}>
@@ -353,3 +374,19 @@ Slots that could be used for [Extended Filters](?path=/docs/components-filters--
 ```
     </div>
 </div>
+
+## Product List
+
+Slots that could be used for [Product List](?path=/docs/components-product-list--docs) component.
+
+### Product List Slots:
+
+These slots will be used when you set oneClickDiscoveryMode to "true" in the [Product List](?path=/docs/components-product-list--docs) component. 
+
+ * vviinn-results-vpr-slot - *Discovery main slot to change one click Discovery icon.*
+ * vviinn-favorite-icon - *Icon of Favorite button.*
+ * vviinn-favorite-icon-pressed - *Icon of pressed Favorite button.*
+ * vviinn-basket-button-text - *Text of Add to Basket button.*
+ * vviinn-basket-button-icon - *Text of Add to Basket icon.*
+ * vviinn-basket-button-text-pressed - *Text of pressed Add to Basket button.*
+ * vviinn-basket-button-icon-pressed - *Icon of pressed Add to Basket button.*

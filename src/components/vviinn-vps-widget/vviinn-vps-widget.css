@@ -5,6 +5,7 @@
     * @prop --color-primary: Set the color of Search Button and bullets in Onboarding Block.
     * @prop --color-primary-hover: Set the color of Search Button and bullets in Onboarding Block on mouse hover.
     * @prop --color-icons: Set fill color of SVG icons in Onboarding Block.
+    * @prop --modal-border-radius: Set the border radius of the modal.
     * @prop --product-card-width: Minimum width of product card inside the grid.
     * @prop --product-card-content-align: Set the alignment of the content inside the product card's flex container.
     * @prop --product-card-text-align: Set the alignment of the text inside the product card.
@@ -13,7 +14,6 @@
     * @prop --basket-button-bg-color-pressed: Set the background color of the pressed Basket Button.
     * @prop --font-family: Set the font family of the widget.
   */
-
   display: block;
 }
 
@@ -47,7 +47,7 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
 }
 
 #start-page_block vviinn-text-search {
-  margin-top: 12px;
+  margin-top: var(--spacing-150);
 }
 
 .start-page_main-content {
@@ -62,13 +62,13 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 12px;
+  gap: var(--spacing-150);
 }
 
 .buttons-group {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--spacing-150);
   margin-top: 24px;
 }
 
@@ -154,7 +154,6 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   transform: translateX(-24px);
   min-width: calc(100% + 48px);
   scrollbar-width: thin;
-  scrollbar-gutter: stable;
   -ms-overflow-style: none;
 }
 
@@ -167,14 +166,19 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   }
 }
 
-vviinn-filters {
+vviinn-filters,
+vviinn-extended-filters.modal-extended-filters {
   display: none;
 }
 
-vviinn-extended-filters {
+vviinn-extended-filters.preview-extended-filters {
   display: block;
   position: absolute;
   width: 100%;
+}
+
+.extended-filters-button {
+  display: none;
 }
 
 search-filters span {
@@ -276,12 +280,21 @@ vviinn-preloader {
     min-width: 100%;
   }
 
-  vviinn-filters {
+  vviinn-filters,
+  vviinn-extended-filters.modal-extended-filters {
     display: block;
+    overflow: hidden;
   }
 
-  vviinn-extended-filters {
+  vviinn-extended-filters.preview-extended-filters {
     display: none;
+  }
+
+  .extended-filters-button {
+    display: block;
+    position: absolute;
+    right: var(--spacing-300);
+    top: 0;
   }
 
   .results-page {

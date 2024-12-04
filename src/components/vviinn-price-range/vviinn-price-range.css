@@ -50,7 +50,7 @@
   height: 1px;
   width: 100%;
   position: absolute;
-  background: var(--color-border-01);
+  background: var(--color-border-02);
   pointer-events: none;
 }
 
@@ -60,8 +60,9 @@
   width: var(--thumb-size);
   height: var(--thumb-size);
   background-color: var(--color-bg-base);
+  box-shadow: unset;
   border-radius: 50%;
-  border: 1px solid var(--color-border-02);
+  border: 1px solid var(--color-border-03);
   cursor: pointer;
 }
 
@@ -71,6 +72,7 @@
   width: var(--thumb-size);
   height: var(--thumb-size);
   background-color: var(--color-bg-base);
+  box-shadow: unset;
   border-radius: 50%;
   border: 1px solid var(--color-border-02);
   cursor: pointer;
