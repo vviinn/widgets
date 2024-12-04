@@ -179,7 +179,7 @@ export class VviinnVpsWidget {
   @State() showAspectRatioError = false;
   @State() products: Recommendation[] = [];
   @State() searchQuery: string = "";
-  @State() openFiltersModal: boolean = false;
+  @State() requestId: string = "";
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -384,6 +384,7 @@ export class VviinnVpsWidget {
   textSearchFinishedHandler({ detail }: TextSearchEvent) {
     this.isTextSearch = true;
     this.searchQuery = detail.query;
+    this.requestId = detail.requestId;
     this.slidePosition = 1;
   }
 
@@ -816,6 +817,7 @@ export class VviinnVpsWidget {
                   )}
                   replaceSlotsContentInButton={this.replaceSlotsContentInButton}
                   textSearchQuery={this.searchQuery}
+                  textSearchRequestId={this.requestId}
                   addPriceContainer={this.addPriceContainer}
                   oneClickDiscoveryMode={
                     this.oneClickDiscoveryShow ? "append" : undefined

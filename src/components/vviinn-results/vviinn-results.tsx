@@ -168,6 +168,8 @@ export class VviinnResults {
   @Prop() favoriteShow: boolean = false;
   /** Query for performing text search */
   @Prop() textSearchQuery?: string;
+  /** ID for performing text search */
+  @Prop() textSearchRequestId?: string;
   /** Column for performing Product Listing Page request */
   @Prop() filterColumn?: string = "product_type";
   /** Value for performing Product Listing Page request */
@@ -203,6 +205,7 @@ export class VviinnResults {
 
   @State() recommendations: Recommendation[] = [];
   @State() innerTextSearchQuery: string;
+  @State() innerTextSearchRequestId: string;
   @State() slotsReplaced: boolean;
   @State() oneClickDiscoveryAppendIndex: number;
   @State() oneClickDiscoverySelectedIndex: number;
@@ -280,15 +283,18 @@ export class VviinnResults {
     this.resultsSearchFinished.emit();
   };
 
-  private async getVpsResults(
-    query?: string,
-    filters?: RequestDynamicFilterItem[]
-  ) {
-    if (!query) return;
+  private async getVpsResults(filters?: RequestDynamicFilterItem[]) {
+    if (!this.textSearchQuery) return;
+
     state.apiPath = this.apiPath; //FIXME: #36877
 
     return pipe(
-      await makeTextSearchRequest(this.token, query, filters),
+      await makeTextSearchRequest(
+        this.token,
+        this.textSearchQuery,
+        filters,
+        this.textSearchRequestId
+      ),
       E.getOrElse(() => null),
       (response: TextSearchResponse) => response
     );
@@ -296,7 +302,8 @@ export class VviinnResults {
 
   private async getTextSearchResults(
     query?: string,
-    filters?: RequestDynamicFilterItem[]
+    filters?: RequestDynamicFilterItem[],
+    requestId?: string
   ) {
     if (!query) return;
     state.apiPath = this.apiPath; //FIXME: #36877
@@ -306,7 +313,8 @@ export class VviinnResults {
         this.token,
         query,
         filters,
-        this.resultsCount
+        this.resultsCount,
+        requestId
       ),
       E.getOrElse(() => null),
       (response: TextSearchResponse) => {
@@ -314,6 +322,7 @@ export class VviinnResults {
         this.vviinnFiltersReceived.emit(
           response?.data?.interactions.dynamicFilters
         );
+        return response;
       }
     );
   }
@@ -346,7 +355,12 @@ export class VviinnResults {
 
   private textSearchStartedHandler = async ({ detail }: TextSearchEvent) => {
     this.innerTextSearchQuery = detail.query;
-    await this.getTextSearchResults(this.innerTextSearchQuery);
+
+    const { requestId } = await this.getTextSearchResults(
+      this.innerTextSearchQuery
+    );
+    this.innerTextSearchRequestId = requestId;
+
     this.resultsSearchFinished.emit();
     this.vviinnSelectedFiltersReset.emit({
       isTriggeredByVpsWidget: false,
@@ -366,9 +380,13 @@ export class VviinnResults {
     const isVpsWidgetEvent = this.showInWidget && isTriggeredByVpsWidget;
 
     if (isVpsWidgetEvent) {
-      return this.getVpsResults(this.textSearchQuery, filters);
+      return this.getVpsResults(filters);
     } else {
-      return this.getTextSearchResults(this.innerTextSearchQuery, filters);
+      return this.getTextSearchResults(
+        this.innerTextSearchQuery,
+        filters,
+        this.innerTextSearchRequestId
+      );
     }
   };
 

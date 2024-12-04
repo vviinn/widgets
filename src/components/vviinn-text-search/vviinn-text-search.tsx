@@ -23,6 +23,9 @@ import {
 import i18next from "i18next";
 import { Locale, resources } from "../../locale";
 import { TextSearchMode } from "../../widget/types";
+import { TextSearchResponse } from "../../interfaces/search";
+import * as E from "fp-ts/Either";
+import { pipe } from "fp-ts/lib/function";
 
 /**
  * @part text-search-input - Text search input.
@@ -132,8 +135,17 @@ export class VviinnTextSearch {
       action: "select",
     });
     if (this.showInWidget) {
-      await makeTextSearchRequest(this.token, this.searchQuery);
-      this.widgetTextSearchFinished.emit({ query: this.searchQuery });
+      const { requestId } = pipe(
+        await makeTextSearchRequest(this.token, this.searchQuery),
+        E.getOrElse(() => null),
+        (response: TextSearchResponse) => response
+      );
+
+      this.widgetTextSearchFinished.emit({
+        query: this.searchQuery,
+        requestId,
+      });
+
       this.vviinnSelectedFiltersReset.emit({ isTriggeredByVpsWidget: true });
     } else {
       this.showLoader();
