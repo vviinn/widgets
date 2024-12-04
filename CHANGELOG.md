@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.132.0](https://github.com/vviinn/widgets/compare/v2.131.0...v2.132.0) (2024-12-04)
+
+
+### Features
+
+* Show Extended Filters Button in the Search Widget ([f372610](https://github.com/vviinn/widgets/commit/f3726106fc005ec37a999c81ecc12bf6b2c695a6))
+
 ## [2.131.0](https://github.com/vviinn/widgets/compare/v2.130.0...v2.131.0) (2024-12-02)
 
 
