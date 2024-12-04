@@ -85,7 +85,6 @@ export class VviinnCropper {
       this.detectedObjects = JSON.parse(
         this.detectedObjectsString
       ) as ValueObject<DetectedObject>[];
-      console.log("top", this.detectedObjects);
     }
   }
 
