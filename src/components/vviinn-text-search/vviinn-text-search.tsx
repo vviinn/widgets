@@ -32,6 +32,7 @@ import { RecordingIcon } from "../vviinn-icons/icons/RecordingIcon";
  * @part text-search-input - Text search input.
  * @part text-search-button - Text search input's search button.
  * @slot vviinn-text-search-icon - Icon of the text search block.
+ * @part speech-button - Speech recognition button.
  * @slot vviinn-text-search-actions - Additional actions for the text search block, e.g., a button to open the Search Modal.
  */
 @Component({
