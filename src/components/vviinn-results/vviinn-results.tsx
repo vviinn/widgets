@@ -394,6 +394,7 @@ export class VviinnResults {
     detail,
   }: CustomEvent<DynamicFilterTrackingData>) => {
     if (this.trackingDeactivated) return;
+    this.isTextSearch = detail.customTrigger === "TPS";
     const { campaignTypeId, ...rest } = this.getBasicEventData();
 
     const filterEvent: FilterEvent = createFilterEvent({
@@ -632,6 +633,7 @@ export class VviinnResults {
     if (results.length === 0) return null;
     if (!searchState.resultLoaded) {
       this.vviinnResultLoad.emit(this.getBasicEventData());
+      console.log(this.getBasicEventData());
       this.trackResultEvent("load");
       searchState.resultLoaded = true;
     }
