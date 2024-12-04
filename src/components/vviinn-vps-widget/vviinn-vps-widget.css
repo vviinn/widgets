@@ -22,7 +22,7 @@
   height: 1px;
 }
 
-vviinn-overlayed-modal.first-screen::part(title),
+vviinn-overlayed-modal.first-screen::part(results-title),
 vviinn-overlayed-modal.first-screen::part(secondary-action) {
   visibility: hidden;
 }

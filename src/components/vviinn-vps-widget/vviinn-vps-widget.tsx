@@ -53,6 +53,9 @@ import { UploadSource, VisualSearchMode } from "../../widget/types";
 import {
   extendedFiltersParts,
   filtersParts,
+  modalParts,
+  productCardParts,
+  searchBarParts,
   searchWidgetFilterParts,
 } from "../../cssParts";
 
@@ -73,9 +76,8 @@ const CAMERA_START_DELAY = 500;
  *
  * @part close-button - Close Button in the modal's header.
  * @part secondary-action - Back Button in the modal's header.
- * @part title - Modal window title.
+ * @part results-title - Title on the results page.
  * @part upload-photo_button - Upload Photo Button.
- * @part show-files_button - Show Files Button.
  * @part start-camera_button - Start Camera Button.
  * @part product-card - Product Card itself.
  * @part image-container - Product Card's image container.
@@ -635,7 +637,7 @@ export class VviinnVpsWidget {
   render() {
     return (
       <Host
-        exportparts={`image-container, content-container, basket-button-container,brand, product-type, deeplink, currency, image, image-link, image-picture, price-container, price-amount-sale, price-amount-outdated, price-amount-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-outdated, price-regular, price-sale, price-prefix, title, product-card, upload-photo_button, show-files_button, start-camera_button, text-search-input, text-search-button, close-button, secondary-action, close-button, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link ${searchWidgetFilterParts}`}
+        exportparts={`upload-photo_button, start-camera_button, ${modalParts} ${productCardParts} ${searchBarParts} ${searchWidgetFilterParts}`}
       >
         {!this.showingInButton && SlotSkeleton("vps")}
 
@@ -653,7 +655,7 @@ export class VviinnVpsWidget {
             (this.mode === "upload" && this.showingInButton) ||
             (!this.cameraEnabled && this.isOnboardingSlide())
           }
-          exportparts="secondary-action, title, close-button"
+          exportparts={modalParts}
         >
           <vviinn-slider position={this.slidePosition}>
             <vviinn-slide

@@ -6,6 +6,13 @@ import {
   selectedFiltersPartsList,
 } from "./filters";
 
+import {
+  productCardGeneralPartsList,
+  energyLabelPartsList,
+  customLabelPartsList,
+  pricePartsList,
+} from "./product";
+
 const makeExportPartsString = (...args: string[][]): string =>
   args.flat().join(", ");
 
@@ -28,9 +35,34 @@ export const selectedFiltersParts = makeExportPartsString(
 
 export const priceRangeParts = makeExportPartsString(histogramPartsList);
 
+export const energyLabelParts = makeExportPartsString(energyLabelPartsList);
+
+export const productCardParts = makeExportPartsString(
+  productCardGeneralPartsList,
+  pricePartsList,
+  customLabelPartsList,
+  energyLabelPartsList
+);
+
 export const searchWidgetFilterParts = makeExportPartsString(
   extendedFiltersPartsList,
   filtersPartsList,
   histogramPartsList,
   generalFiltersPartsList
 );
+
+export const searchBarParts = makeExportPartsString([
+  "text-search-input",
+  "text-search-button",
+]);
+
+export const carouselParts = makeExportPartsString([
+  "items-group",
+  "carousel-button",
+]);
+
+export const modalParts = makeExportPartsString([
+  "results-title",
+  "close-button",
+  "secondary-action",
+]);
