@@ -9,7 +9,6 @@ import {
   Listen,
   State,
 } from "@stencil/core";
-
 import { makeTextSearchRequest, searchState } from "../../store/search.store";
 import { SearchModalUploadIcon, TextSearchIcon } from "../vviinn-icons";
 import { slotChangeListener } from "../customized-slots";
@@ -24,6 +23,9 @@ import {
 import i18next from "i18next";
 import { Locale, resources } from "../../locale";
 import { TextSearchMode } from "../../widget/types";
+import { TextSearchResponse } from "../../interfaces/search";
+import * as E from "fp-ts/Either";
+import { pipe } from "fp-ts/lib/function";
 import { MicIcon } from "../vviinn-icons/icons/MicIcon";
 import { initializeRecognition } from "./initializeRecognition";
 import { RecordingIcon } from "../vviinn-icons/icons/RecordingIcon";
@@ -162,8 +164,17 @@ export class VviinnTextSearch {
       action: "select",
     });
     if (this.showInWidget) {
-      await makeTextSearchRequest(this.token, this.searchQuery);
-      this.widgetTextSearchFinished.emit({ query: this.searchQuery });
+      const { requestId } = pipe(
+        await makeTextSearchRequest(this.token, this.searchQuery),
+        E.getOrElse(() => null),
+        (response: TextSearchResponse) => response
+      );
+
+      this.widgetTextSearchFinished.emit({
+        query: this.searchQuery,
+        requestId,
+      });
+
       this.vviinnSelectedFiltersReset.emit({ isTriggeredByVpsWidget: true });
     } else {
       this.showLoader();
