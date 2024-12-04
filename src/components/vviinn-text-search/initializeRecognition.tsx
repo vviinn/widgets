@@ -4,7 +4,7 @@ import { permitSpeechRecognition } from "./permitSpeechRecognition";
 export const initializeRecognition = (
   locale: Locale,
   onEnd: () => {},
-  onRecognized = (speechResult: string) => {}
+  onRecognized: (speechResult: string) => void
 ) => {
   const speechRecognition = permitSpeechRecognition();
   if (!speechRecognition) return;
