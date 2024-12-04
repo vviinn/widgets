@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.133.0](https://github.com/vviinn/widgets/compare/v2.132.0...v2.133.0) (2024-12-04)
+
+
+### Features
+
+* Use requestId for optimized text search ([4fb1505](https://github.com/vviinn/widgets/commit/4fb150537e571a935e167560c291188ff99d6de6))
+
+## [2.132.0](https://github.com/vviinn/widgets/compare/v2.131.0...v2.132.0) (2024-12-04)
+
+
+### Features
+
+* Show Extended Filters Button in the Search Widget ([f372610](https://github.com/vviinn/widgets/commit/f3726106fc005ec37a999c81ecc12bf6b2c695a6))
+
+## [2.131.0](https://github.com/vviinn/widgets/compare/v2.130.0...v2.131.0) (2024-12-02)
+
+
+### Features
+
+* Added grid view to append mode of one-click discovery ([a8458f6](https://github.com/vviinn/widgets/commit/a8458f6a608660ffadf27e34cd0421e2a1690282))
+
 ## [2.130.0](https://github.com/vviinn/widgets/compare/v2.129.0...v2.130.0) (2024-11-28)
 
 

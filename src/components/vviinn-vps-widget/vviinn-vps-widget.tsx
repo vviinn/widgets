@@ -117,7 +117,7 @@ const CAMERA_START_DELAY = 500;
   shadow: true,
 })
 export class VviinnVpsWidget {
-  @Element() el: HTMLElement;
+  @Element() el: HTMLVviinnVpsWidgetElement;
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string | undefined;
@@ -179,6 +179,7 @@ export class VviinnVpsWidget {
   @State() showAspectRatioError = false;
   @State() products: Recommendation[] = [];
   @State() searchQuery: string = "";
+  @State() requestId: string = "";
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -379,11 +380,11 @@ export class VviinnVpsWidget {
     }
   }
 
-  @Listen("widgetTextSearchFinished") textSearchFinishedHandler({
-    detail,
-  }: TextSearchEvent) {
+  @Listen("widgetTextSearchFinished")
+  textSearchFinishedHandler({ detail }: TextSearchEvent) {
     this.isTextSearch = true;
     this.searchQuery = detail.query;
+    this.requestId = detail.requestId;
     this.slidePosition = 1;
   }
 
@@ -643,7 +644,9 @@ export class VviinnVpsWidget {
           isFirstScreen={this.isOnboardingSlide()}
           active={this.active}
           resetState={this.resetState.bind(this)}
-          onVviinnWidgetClose={() => this.handleModalClose()}
+          onVviinnWidgetClose={({ detail }: CustomEvent<BasicEventData>) => {
+            if (detail.campaignTypeId !== "VPR") this.handleModalClose();
+          }}
           buttonElementId={this.buttonElementId ?? this.widgetElementId}
           widgetVersion={version}
           hideBackButton={
@@ -766,19 +769,27 @@ export class VviinnVpsWidget {
                     }}
                   >
                     <vviinn-filters
+                      class="preview-filters"
                       filters={searchState.dynamicFilters}
                       showInWidget={true}
                       exportparts={filtersParts}
-                    ></vviinn-filters>
+                    />
 
                     <vviinn-extended-filters
+                      class="preview-extended-filters"
                       filters={searchState.dynamicFilters}
                       mode="preview"
                       showHeader={false}
                       exportparts={extendedFiltersParts}
                       showInWidget={true}
                       locale={this.locale}
-                    ></vviinn-extended-filters>
+                    />
+
+                    <vviinn-extended-filters-button
+                      class="extended-filters-button"
+                      exportparts="extended-filters-button"
+                      showInWidget={true}
+                    />
                   </div>
                 </div>
               )}
@@ -806,6 +817,7 @@ export class VviinnVpsWidget {
                   )}
                   replaceSlotsContentInButton={this.replaceSlotsContentInButton}
                   textSearchQuery={this.searchQuery}
+                  textSearchRequestId={this.requestId}
                   addPriceContainer={this.addPriceContainer}
                   oneClickDiscoveryMode={
                     this.oneClickDiscoveryShow ? "append" : undefined
@@ -814,6 +826,15 @@ export class VviinnVpsWidget {
               )}
             </vviinn-slide>
           </vviinn-slider>
+
+          <vviinn-extended-filters
+            class="modal-extended-filters"
+            filters={searchState.dynamicFilters}
+            mode="modal"
+            exportparts={extendedFiltersParts}
+            showInWidget={true}
+            locale={this.locale}
+          />
         </vviinn-overlayed-modal>
       </Host>
     );

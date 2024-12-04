@@ -61,6 +61,7 @@ export class RecommendationsSidebar {
   @Prop() setModeDiscounts: string;
   @Prop() updateButtonLocation: UpdateButtonLocation;
   @Prop() favoriteShow: boolean = false;
+  @Prop() useCarousel: boolean = true;
 
   /** @internal */
   @Prop() showInCustomContainer: boolean = false;
@@ -141,7 +142,7 @@ export class RecommendationsSidebar {
 
   render(): any {
     return (
-      <Host class={this.getClassMap()}>
+      <Host class={this.getClassMap()} exportparts="body">
         <aside
           class="sidebar"
           part="body"
@@ -175,7 +176,7 @@ export class RecommendationsSidebar {
               blockTitle=""
               mode={this.mode}
               campaign-type={this.campaignType}
-              useCarousel={this.position === "bottom"}
+              useCarousel={this.useCarousel}
               onVviinnRecommendationsLoaded={() => (this.state = "open")}
               showScroll={this.widgetScrollbar}
               campaigns={this.campaigns}

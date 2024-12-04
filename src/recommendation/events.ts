@@ -78,6 +78,7 @@ export type SearchIdEventData = {
 
 export type TextSearchEventData = {
   query: string;
+  requestId?: string;
 };
 
 export type ChangedFiltersEventData = {
@@ -87,6 +88,10 @@ export type ChangedFiltersEventData = {
 };
 
 export type ResetSelectedFiltersEventData = {
+  isTriggeredByVpsWidget: boolean;
+};
+
+export type ExtendedFiltersButtonClickedEventData = {
   isTriggeredByVpsWidget: boolean;
 };
 
@@ -105,3 +110,5 @@ export type ResetSelectedFiltersEvent =
   CustomEvent<ResetSelectedFiltersEventData>;
 export type ProductCardEvent = CustomEvent<ProductCardEventData>;
 export type CrossSellingClickEvent = CustomEvent<CrossSellingClickEventData>;
+export type ExtendedFiltersButtonClickedEvent =
+  CustomEvent<ExtendedFiltersButtonClickedEventData>;

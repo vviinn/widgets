@@ -270,7 +270,8 @@ export const uploadFileFromWidget = (
 export const makeTextSearchRequest = async (
   token: string,
   query: string,
-  dynamicFilters?: RequestDynamicFilterItem[]
+  dynamicFilters?: RequestDynamicFilterItem[],
+  requestId?: string
 ) => {
   state.searchType = "text";
   state.loading = true;
@@ -283,6 +284,7 @@ export const makeTextSearchRequest = async (
         }
       : {}),
     ...(state.campaignId.length ? { campaign: state.campaignId } : {}),
+    requestId,
   };
 
   return pipe(
@@ -310,11 +312,13 @@ export const makeSearchQueryRequest = async (
   token: string,
   query: string,
   dynamicFilters?: RequestDynamicFilterItem[],
-  resultsCount?: number
+  resultsCount?: number,
+  requestId?: string
 ) => {
   const body: TextSearchRequest = {
     query,
     ...(resultsCount ? { resultsCount } : {}),
+    ...(requestId ? { requestId } : {}),
     ...(dynamicFilters
       ? {
           dynamicFilters,
