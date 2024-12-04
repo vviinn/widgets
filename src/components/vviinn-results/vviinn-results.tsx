@@ -633,7 +633,6 @@ export class VviinnResults {
     if (results.length === 0) return null;
     if (!searchState.resultLoaded) {
       this.vviinnResultLoad.emit(this.getBasicEventData());
-      console.log(this.getBasicEventData());
       this.trackResultEvent("load");
       searchState.resultLoaded = true;
     }
