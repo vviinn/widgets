@@ -100,6 +100,7 @@ export type DynamicFiltersEventData = ResponseDynamicFilterItem[];
 export type DynamicFilterTrackingData = {
   action: FilterAction;
   kind?: string;
+  customTrigger?: Widget;
 };
 
 export type SearchIdEvent = CustomEvent<SearchIdEventData>;

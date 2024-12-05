@@ -133,6 +133,7 @@ export class VviinnTextSearch {
     this.vviinnFilterTriggered.emit({
       kind: this.searchQuery,
       action: "select",
+      customTrigger: "TPS",
     });
     if (this.showInWidget) {
       const { requestId } = pipe(

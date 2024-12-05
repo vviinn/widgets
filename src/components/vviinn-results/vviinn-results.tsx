@@ -55,8 +55,8 @@ import {
 } from "../../recommendation/events";
 import {
   createFilterEvent,
-  createResultVpsEventByType,
   createProductWidgetEventByType,
+  createResultEventByType,
 } from "../../tracking";
 import { RequestDynamicFilterItem } from "../../campaign/VPRCampaignService";
 import i18next from "i18next";
@@ -394,6 +394,7 @@ export class VviinnResults {
     detail,
   }: CustomEvent<DynamicFilterTrackingData>) => {
     if (this.trackingDeactivated) return;
+    this.isTextSearch = detail.customTrigger === "TPS";
     const { campaignTypeId, ...rest } = this.getBasicEventData();
 
     const filterEvent: FilterEvent = createFilterEvent({
@@ -546,10 +547,14 @@ export class VviinnResults {
 
   private trackResultEvent(type: ResultEventType) {
     if (this.trackingDeactivated) return;
-    const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
+    const { campaignTypeId, widgetType, widget, ...rest } =
+      this.getBasicEventData();
 
     let resultEvent: ResultViewEvent | ResultLoadEvent =
-      createResultVpsEventByType(type)({
+      createResultEventByType(
+        type,
+        widget ?? "VPS"
+      )({
         session_id: this.uiSessionId,
         ...rest,
       });
