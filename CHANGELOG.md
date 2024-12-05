@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.134.0](https://github.com/vviinn/widgets/compare/v2.133.0...v2.134.0) (2024-12-04)
+
+
+### Features
+
+* developed an independent component for Vviinn cropper ([9ef4580](https://github.com/vviinn/widgets/commit/9ef4580f4dd91f0e2d55713f9453b0b8b653e2ae))
+
 ## [2.133.0](https://github.com/vviinn/widgets/compare/v2.132.0...v2.133.0) (2024-12-04)
 
 

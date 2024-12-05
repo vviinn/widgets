@@ -1,0 +1,42 @@
+import { Meta, Story } from '@storybook/blocks';
+
+import "../../components/tabs/styles.css";
+import {clickHandlers} from "../../components";
+
+<Meta title="Components/Cropper" />
+
+# Cropper
+
+Call [Object Detection](https://docs.vviinn.com/#tag/services/operation/DetectObjectsOfImageInExistingSession) endpoint to get list of `Detected Objects` and pass them as `detected-objects-string` to `vviinn-cropper`.
+
+<div id="preview">
+  <div className="tab tab-reverse">
+      <div className="tablink-group">
+        <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'preview')}}>Code</button>
+        <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'preview')}}>Preview</button>
+      </div>
+  </div>
+
+  <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
+      <div className="tabcontent-preview">
+        <vviinn-cropper
+          basic-event-data-string='{"widgetType":"VPS","campaignTypeId":"VPS","campaignTypeName":"Visual Search","widgetId":"","widgetVersion":"2.131.0"}'
+          detected-objects-string='[{"value":{"classId":96,"class":"Chair","score":98,"rectangle":{"left":0.12358226627111435,"top":0.25867345929145813,"width":0.6543737053871155,"height":0.6931518316268921}},"links":{"rectangle":{"method":"GET","href":"/search/session/674ef5744ce528-88930337?left=0.12358226627111&top=0.25867345929146&width=0.65437370538712&height=0.69315183162689"}}},{"value":{"classId":365,"class":"Picture frame","score":98,"rectangle":{"left":0.15887707471847534,"top":0,"width":0.43178221583366394,"height":0.2065306007862091}},"links":{"rectangle":{"method":"GET","href":"/search/session/674ef5744ce528-88930337?left=0.15887707471848&top=0&width=0.43178221583366&height=0.20653060078621"}}}]'
+          width="203.32799999999997"
+          height="288"
+          url="/images/cropper-chair.jpg"
+        ></vviinn-cropper>
+      </div>
+  </div>
+
+  <div id="Code_1" className="tabcontent">
+```html
+<vviinn-cropper
+  basic-event-data-string='{"widgetType":"VPS","campaignTypeId":"VPS","campaignTypeName":"Visual Search","widgetId":"","widgetVersion":"2.131.0"}'
+  detected-objects-string='[{"value":{"classId":96,"class":"Chair","score":98,"rectangle":{"left":0.12358226627111435,"top":0.25867345929145813,"width":0.6543737053871155,"height":0.6931518316268921}},"links":{"rectangle":{"method":"GET","href":"/search/session/674ef5744ce528-88930337?left=0.12358226627111&top=0.25867345929146&width=0.65437370538712&height=0.69315183162689"}}},{"value":{"classId":365,"class":"Picture frame","score":98,"rectangle":{"left":0.15887707471847534,"top":0,"width":0.43178221583366394,"height":0.2065306007862091}},"links":{"rectangle":{"method":"GET","href":"/search/session/674ef5744ce528-88930337?left=0.15887707471848&top=0&width=0.43178221583366&height=0.20653060078621"}}}]'
+  width="203.32799999999997"
+  height="288"
+  url="BASE_64_DATA or IMAGE_URL"></vviinn-cropper>
+```
+  </div>
+</div>
