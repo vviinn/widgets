@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.135.0](https://github.com/vviinn/widgets/compare/v2.134.0...v2.135.0) (2024-12-05)
+
+
+### Features
+
+* refactored results to support custom widget result event instead of vps only ([431df01](https://github.com/vviinn/widgets/commit/431df017593b673dbc86ab0b65097b102b5c0b83))
+
 ## [2.134.0](https://github.com/vviinn/widgets/compare/v2.133.0...v2.134.0) (2024-12-04)
 
 
