@@ -169,7 +169,7 @@ export class RecommendationsSidebar {
 
           <main part="sidebar-content">
             <vviinn-vpr-widget
-              exportparts={`${carouselParts} ${productCardParts}`}
+              exportparts={`${carouselParts}, ${productCardParts}`}
               token={this.token}
               productId={this.productId}
               imageWidth={this.imageWidth}

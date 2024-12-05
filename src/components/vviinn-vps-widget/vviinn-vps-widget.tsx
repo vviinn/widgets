@@ -56,6 +56,7 @@ import {
   modalParts,
   productCardParts,
   searchBarParts,
+  searchWidgetButtonParts,
   searchWidgetFilterParts,
 } from "../../cssParts";
 
@@ -637,7 +638,7 @@ export class VviinnVpsWidget {
   render() {
     return (
       <Host
-        exportparts={`upload-photo_button, start-camera_button, ${modalParts} ${productCardParts} ${searchBarParts} ${searchWidgetFilterParts}`}
+        exportparts={`${modalParts}, ${productCardParts}, ${searchBarParts}, ${searchWidgetFilterParts}, ${searchWidgetButtonParts}`}
       >
         {!this.showingInButton && SlotSkeleton("vps")}
 

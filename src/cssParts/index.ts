@@ -51,6 +51,11 @@ export const searchWidgetFilterParts = makeExportPartsString(
   generalFiltersPartsList
 );
 
+export const searchWidgetButtonParts = makeExportPartsString([
+  "upload-photo_button",
+  "start-camera_button",
+]);
+
 export const searchBarParts = makeExportPartsString([
   "text-search-input",
   "text-search-button",
