@@ -26,6 +26,7 @@ import {
   CAROUSEL_WIDTH_CSS_VAR,
   COLUMNS_NUMBER_CSS_VAR,
   CONTENT_GROUP_CSS_CLASS,
+  DEFAULT_COLUMNS_NUMBER,
   SET_MODE_IMAGE_WIDTH,
 } from "./constants";
 import { calculateDiscount } from "../../utils/number";
@@ -78,6 +79,7 @@ export class VviinnCarousel {
   @Prop() currencySign: string;
   @Prop() pricePrefix: string = "";
   @Prop() locale: Locale;
+  @Prop() setItemsAmount?: number;
 
   /** Event emitted once when the recommendation is rendered on the page */
   @Event({ bubbles: true })
@@ -176,8 +178,7 @@ export class VviinnCarousel {
     this.isSetMode = this.mode === "set";
     this.isGridMode = this.mode === "grid";
     this.isContinuityMode = this.mode === "continuity";
-
-    const columnsNumber = this.getColumnsNumber();
+    this.columns = this.getColumnsNumber();
 
     if (this.isSetMode) {
       window.addEventListener("resize", this.handleWindowResize);
@@ -185,10 +186,10 @@ export class VviinnCarousel {
       this.setModeMaxDiscount =
         this.setModeDiscountsArray[this.setModeDiscountsArray.length - 1];
     }
-    if (this.isSetMode && this.recommendations.length >= columnsNumber) {
+    if (this.isSetMode && this.recommendations.length >= this.columns) {
       this.crossSellingRecommendations = this.recommendations.slice(
         0,
-        columnsNumber
+        this.columns
       );
     }
   }
@@ -204,7 +205,6 @@ export class VviinnCarousel {
 
   componentDidLoad() {
     this.setWidth();
-    this.columns = this.getColumnsNumber();
     const slot = this.el.querySelector(".content");
 
     this.mutationObserver.observe(slot, { subtree: true, childList: true });
@@ -365,10 +365,17 @@ export class VviinnCarousel {
   }
 
   private getColumnsNumber(): number {
+    if (this.setItemsAmount && this.isSetMode) {
+      return this.setItemsAmount;
+    }
+
     const styleSheet = getComputedStyle(this.el);
     const columnsInCss = styleSheet.getPropertyValue(COLUMNS_NUMBER_CSS_VAR);
     const columnsNumber = parseInt(columnsInCss);
-    return columnsNumber && !isNaN(columnsNumber) ? columnsNumber : 4;
+
+    return columnsNumber && !isNaN(columnsNumber)
+      ? columnsNumber
+      : DEFAULT_COLUMNS_NUMBER;
   }
 
   private getContentGroups(): HTMLElement[] {

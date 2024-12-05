@@ -59,6 +59,7 @@ export class RecommendationsSidebar {
   @Prop() addPriceContainer?: boolean = false;
   @Prop() showFilters: boolean = false;
   @Prop() setModeDiscounts: string;
+  @Prop() setItemsAmount?: number;
   @Prop() updateButtonLocation: UpdateButtonLocation;
   @Prop() favoriteShow: boolean = false;
   @Prop() useCarousel: boolean = true;
@@ -140,7 +141,7 @@ export class RecommendationsSidebar {
     });
   }
 
-  render(): any {
+  render() {
     return (
       <Host class={this.getClassMap()} exportparts="body">
         <aside
@@ -173,6 +174,7 @@ export class RecommendationsSidebar {
               productId={this.productId}
               imageWidth={this.imageWidth}
               imageRatio={this.imageRatio}
+              setItemsAmount={this.setItemsAmount}
               blockTitle=""
               mode={this.mode}
               campaign-type={this.campaignType}
