@@ -44,7 +44,12 @@
   scrollbar-color: #fff0 #fff0;
 }
 
-@supports (scrollbar-color: auto) {
+content. .content:not(.show-scrollbar)::-webkit-scrollbar,
+.content.grid::-webkit-scrollbar {
+  opacity: 0;
+}
+
+@supports (scrollbar-color: unset) {
   .content.continuity,
   :host(.set) {
     scrollbar-color: transparent transparent;
@@ -53,11 +58,6 @@
   :host(.set:hover) {
     scrollbar-color: initial;
   }
-}
-
-content. .content:not(.show-scrollbar)::-webkit-scrollbar,
-.content.grid::-webkit-scrollbar {
-  opacity: 0;
 }
 
 .content.left > * {
