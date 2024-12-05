@@ -71,7 +71,6 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
 
 /**
  * @part product-card - Product Card itself.
- * @part product-part - Will be deprecated. Use "product-card" instead.
  * @part title - Title inside Product Card.
  * @part brand - Brand inside Product Card.
  * @part product-type - Product Type inside Product Card.
@@ -733,7 +732,6 @@ export class VviinnVprWidget implements ComponentInterface {
   ): HTMLVviinnProductCardElement {
     return (
       <vviinn-product-card
-        part="product-part"
         productId={recommendation.productId}
         productTitle={recommendation.title}
         productType={recommendation.productType}
