@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.136.0](https://github.com/vviinn/widgets/compare/v2.135.0...v2.136.0) (2024-12-05)
+
+
+### Features
+
+* Show scrollbars on hover in Discovery widgets ([d7edf15](https://github.com/vviinn/widgets/commit/d7edf15974c146c1c502f4e38e527427253a871a))
+
 ## [2.135.0](https://github.com/vviinn/widgets/compare/v2.134.0...v2.135.0) (2024-12-05)
 
 
