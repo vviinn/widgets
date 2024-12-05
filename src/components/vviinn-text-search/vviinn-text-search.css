@@ -1,17 +1,28 @@
 @import "../../variables.css";
 
 :host {
-  display: flex;
+
+  display: block;
   position: relative;
   width: 100%;
+
+  /**
+   * @prop --font-family: Set the font family of the text search.
+   */
+}
+
+.text-search-container {
+  display: flex;
+  width: 100%;
+  height: 46px;
   border: 1px solid var(--color-border-02);
   border-radius: 8px;
   transition: border-color 0.2s;
   overflow: hidden;
-  gap: 8px;
-  /**
-   * @prop --font-family: Set the font family of the text search.
-   */
+}
+
+.text-search-container:focus-within {
+  border-color: #8d8d8d;;
 }
 
 .text-search-input {
@@ -68,7 +79,7 @@
 
 vviinn-image-selector,
 ::slotted([slot="vviinn-text-search-actions"]) {
-  margin: auto 0;
+  margin: auto 8px;
 }
 
 vviinn-preloader {

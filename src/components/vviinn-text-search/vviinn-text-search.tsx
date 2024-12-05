@@ -31,6 +31,7 @@ import { initializeRecognition } from "./initializeRecognition";
 import { RecordingIcon } from "../vviinn-icons/icons/RecordingIcon";
 
 /**
+ * @part text-search-container - Container for the text search block.
  * @part text-search-input - Text search input.
  * @part text-search-button - Text search input's search button.
  * @slot vviinn-text-search-icon - Icon of the text search block.
@@ -192,57 +193,59 @@ export class VviinnTextSearch {
 
   render() {
     return (
-      <Host exportparts="text-search-input, text-search-button, speech-button">
-        <input
-          class="text-search-input"
-          part="text-search-input"
-          type="text"
-          placeholder={i18next.t(
-            this.isShowRecording()
-              ? "speechRecognitionPlaceholder"
-              : "textSearchPlaceholder"
-          )}
-          value={this.searchQuery}
-          onInput={(event) => this.handleInputChange(event)}
-          onKeyUp={(event) => this.handleKeyPress(event as KeyboardEvent)}
-        />
-        {this.mode === "upload" ? (
-          <vviinn-image-selector
-            token={this.token}
-            apiPath={this.apiPath}
-            showInTextSearch={true}
-            uploadStartedHandler={this.showLoader.bind(this)}
-          >
-            <span slot="upload-button-text">
-              <SearchModalUploadIcon />
-            </span>
-          </vviinn-image-selector>
-        ) : (
-          <slot name="vviinn-text-search-actions"></slot>
-        )}
-        {this.recognition && (
-          <button
-            class="speech-button"
-            part="speech-button"
-            onClick={() => this.handleSpeech()}
-          >
-            {this.isShowRecording() ? <RecordingIcon /> : <MicIcon />}
-          </button>
-        )}
-        <button
-          class="text-search-button"
-          part="text-search-button"
-          onClick={() => this.handleTextSearch()}
-          disabled={searchState.loading}
-        >
-          {this.isShowPreloader() ? (
-            <vviinn-preloader />
+      <Host exportparts="text-search-input, text-search-button, speech-button, text-search-container">
+        <div class="text-search-container" part="text-search-container">
+          <input
+            class="text-search-input"
+            part="text-search-input"
+            type="text"
+            placeholder={i18next.t(
+              this.isShowRecording()
+                ? "speechRecognitionPlaceholder"
+                : "textSearchPlaceholder"
+            )}
+            value={this.searchQuery}
+            onInput={(event) => this.handleInputChange(event)}
+            onKeyUp={(event) => this.handleKeyPress(event as KeyboardEvent)}
+          />
+          {this.mode === "upload" ? (
+            <vviinn-image-selector
+              token={this.token}
+              apiPath={this.apiPath}
+              showInTextSearch={true}
+              uploadStartedHandler={this.showLoader.bind(this)}
+            >
+              <span slot="upload-button-text">
+                <SearchModalUploadIcon />
+              </span>
+            </vviinn-image-selector>
           ) : (
-            <slot name="vviinn-text-search-icon">
-              <TextSearchIcon />
-            </slot>
+            <slot name="vviinn-text-search-actions"></slot>
           )}
-        </button>
+          {this.recognition && (
+            <button
+              class="speech-button"
+              part="speech-button"
+              onClick={() => this.handleSpeech()}
+            >
+              {this.isShowRecording() ? <RecordingIcon /> : <MicIcon />}
+            </button>
+          )}
+          <button
+            class="text-search-button"
+            part="text-search-button"
+            onClick={() => this.handleTextSearch()}
+            disabled={searchState.loading}
+          >
+            {this.isShowPreloader() ? (
+              <vviinn-preloader />
+            ) : (
+              <slot name="vviinn-text-search-icon">
+                <TextSearchIcon />
+              </slot>
+            )}
+          </button>
+        </div>
       </Host>
     );
   }
