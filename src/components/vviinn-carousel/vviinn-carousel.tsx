@@ -436,7 +436,6 @@ export class VviinnCarousel {
     return (
       <vviinn-product-card
         index={rank}
-        part="product-part"
         productId={recommendation.productId}
         productTitle={recommendation.title}
         productType={recommendation.productType}
@@ -529,7 +528,6 @@ export class VviinnCarousel {
         <div class={{ body: true, ...this.getClassMap() }}>
           {this.isSetMode && this.crossSellingRecommendations.length > 0 && (
             <vviinn-product-card
-              part="product-part"
               class="set-mode product-card--source"
               productTitle={this.sourceProduct.title}
               image={this.sourceProduct.image.thumbnail}

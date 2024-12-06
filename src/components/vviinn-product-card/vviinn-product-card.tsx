@@ -50,6 +50,7 @@ import {
   Recommendation,
 } from "../../interfaces/recommendation";
 import { resources } from "../../locale";
+import { productCardParts } from "../../cssParts";
 
 /**
  * @part image-container - Product Card's image container.
@@ -386,7 +387,7 @@ export class VviinnProductCard {
         class={{
           animated: this.isTransitioning,
         }}
-        exportparts="image-container, content-container, basket-button-container, brand, product-type, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, currency, deeplink, image, image-link, image-picture, price-container, price-amount-regular, price-amount-sale, price-amount-outdated, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-outdated, price-regular, price-sale, price-prefix, discount-label, discount-percentage, title, basket-button, update-button-item, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link, product-card-actions, product-card-top-actions"
+        exportparts={productCardParts}
       >
         <div class="image-container" part="image-container">
           <Linked deeplink={this.deeplink} part="image-link">

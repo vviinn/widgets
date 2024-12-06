@@ -17,6 +17,7 @@ import { Locale } from "../../../locale";
 import { UpdateButtonLocation } from "../../vviinn-vpr-widget/vviinn-vpr-widget";
 import { ClickEvent, isClickedInRectBound } from "../../../geometry/Rectangle";
 import { Recommendation } from "../../../components";
+import { carouselParts, productCardParts } from "../../../cssParts";
 
 type SidebarState = "idle" | "open" | "closed";
 
@@ -154,7 +155,7 @@ export class RecommendationsSidebar {
               part="sidebar-header"
             >
               {this.renderSourceImage()}
-              <span class="title" part="title">
+              <span class="title" part="recommendations-title">
                 {this.sidebarTitle}
               </span>
               <button
@@ -168,7 +169,7 @@ export class RecommendationsSidebar {
 
           <main part="sidebar-content">
             <vviinn-vpr-widget
-              exportparts="image-container, content-container, basket-button-container,brand, product-type, currency, deeplink, image, image-link, image-picture, price-container, price-amount, price-prefix, price-outdated, price-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-sale, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, title: product-title, carousel-button, product-card, items-group, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link, product-card-top-actions"
+              exportparts={`${carouselParts}, ${productCardParts}`}
               token={this.token}
               productId={this.productId}
               imageWidth={this.imageWidth}
