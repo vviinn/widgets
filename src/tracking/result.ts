@@ -24,21 +24,4 @@ const vpcResultView: WidgetEventType = {
   typ: RESULT_VIEW_EVENT_TYPE,
 };
 
-const vpsResultLoad: WidgetEventType = {
-  widget: "VPS",
-  typ: RESULT_LOAD_EVENT_TYPE,
-};
-
-const vpsResultView: WidgetEventType = {
-  widget: "VPS",
-  typ: RESULT_VIEW_EVENT_TYPE,
-};
-
-export {
-  vprResultLoad,
-  vprResultView,
-  vpcResultLoad,
-  vpcResultView,
-  vpsResultLoad,
-  vpsResultView,
-};
+export { vprResultLoad, vprResultView, vpcResultLoad, vpcResultView };

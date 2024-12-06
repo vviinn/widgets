@@ -23,7 +23,6 @@ import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
  * @part button - Clickable button element.
  * @part vviinn-button - Button element container.
  * @part product-card - Product Card itself.
- * @part product-part - Will be deprecated. Use "product-card" instead.
  * @part title - Title inside Product Card.
  * @part brand - Brand inside Product Card.
  * @part product-type - Product Type inside Product Card.

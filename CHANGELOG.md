@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.136.1](https://github.com/vviinn/widgets/compare/v2.136.0...v2.136.1) (2024-12-06)
+
+
+### Bug Fixes
+
+* Refactor CSS parts and improve consistency ([2e16a62](https://github.com/vviinn/widgets/commit/2e16a62d2a74a24c961659a0c2093eb539ae5e38))
+* Remove deprecated CSS part 'product-part' ([ebafaee](https://github.com/vviinn/widgets/commit/ebafaeed59e42ba2a025b3d83ddb1a55ce60ac78))
+
+## [2.136.0](https://github.com/vviinn/widgets/compare/v2.135.0...v2.136.0) (2024-12-05)
+
+
+### Features
+
+* Show scrollbars on hover in Discovery widgets ([d7edf15](https://github.com/vviinn/widgets/commit/d7edf15974c146c1c502f4e38e527427253a871a))
+
+## [2.135.0](https://github.com/vviinn/widgets/compare/v2.134.0...v2.135.0) (2024-12-05)
+
+
+### Features
+
+* refactored results to support custom widget result event instead of vps only ([431df01](https://github.com/vviinn/widgets/commit/431df017593b673dbc86ab0b65097b102b5c0b83))
+
 ## [2.134.0](https://github.com/vviinn/widgets/compare/v2.133.0...v2.134.0) (2024-12-04)
 
 
