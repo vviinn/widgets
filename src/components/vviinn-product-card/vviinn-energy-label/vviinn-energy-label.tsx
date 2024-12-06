@@ -5,6 +5,7 @@ import {
   EnergyClassIconDirection,
 } from "../../../interfaces/recommendation";
 import { slotChangeListener } from "../../customized-slots";
+import { energyLabelParts } from "../../../cssParts";
 
 /**
  * @part energy-label-container - Energy label container.
@@ -38,7 +39,7 @@ export class VviinnEnergyLabel {
           hidden:
             !this.classIconUrls && !this.productType && !this.classDataSheetUrl,
         }}
-        exportparts="energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
+        exportparts={energyLabelParts}
       >
         <div class="container" part="energy-label-container">
           {!!this.classIconUrls && (

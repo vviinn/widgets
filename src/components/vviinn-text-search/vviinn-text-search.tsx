@@ -26,9 +26,7 @@ import { TextSearchMode } from "../../widget/types";
 import { TextSearchResponse } from "../../interfaces/search";
 import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/lib/function";
-import { MicIcon } from "../vviinn-icons/icons/MicIcon";
-import { initializeRecognition } from "./initializeRecognition";
-import { RecordingIcon } from "../vviinn-icons/icons/RecordingIcon";
+import { searchBarParts } from "../../cssParts";
 
 /**
  * @part text-search-container - Container for the text search block.
@@ -84,8 +82,6 @@ export class VviinnTextSearch {
   @Prop() apiPath?: string = "https://api.vviinn.com";
 
   @State() isLoading = false;
-
-  @State() isRecording = false;
 
   private isShowPreloader = () =>
     this.showInWidget
@@ -163,6 +159,7 @@ export class VviinnTextSearch {
     this.vviinnFilterTriggered.emit({
       kind: this.searchQuery,
       action: "select",
+      customTrigger: "TPS",
     });
     if (this.showInWidget) {
       const { requestId } = pipe(
@@ -193,7 +190,7 @@ export class VviinnTextSearch {
 
   render() {
     return (
-      <Host exportparts="text-search-input, text-search-button, speech-button, text-search-container">
+      <Host exportparts={searchBarParts}>
         <div class="text-search-container" part="text-search-container">
           <input
             class="text-search-input"

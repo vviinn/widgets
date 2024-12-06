@@ -28,16 +28,6 @@
   background: #161616;
 }
 
-.content:not(.show-scrollbar),
-.content.grid {
-  scrollbar-color: #fff0 #fff0;
-}
-
-.content:not(.show-scrollbar)::-webkit-scrollbar,
-.content.grid::-webkit-scrollbar {
-  opacity: 0;
-}
-
 .content {
   display: flex;
   flex-direction: row;
@@ -46,6 +36,28 @@
   overflow-x: auto;
   flex-grow: 1;
   padding-bottom: 16px;
+  scrollbar-width: thin;
+}
+
+.content:not(.show-scrollbar),
+.content.grid {
+  scrollbar-color: #fff0 #fff0;
+}
+
+content. .content:not(.show-scrollbar)::-webkit-scrollbar,
+.content.grid::-webkit-scrollbar {
+  opacity: 0;
+}
+
+@supports (scrollbar-color: unset) {
+  .content.continuity,
+  :host(.set) {
+    scrollbar-color: transparent transparent;
+  }
+  .content.continuity:hover,
+  :host(.set:hover) {
+    scrollbar-color: initial;
+  }
 }
 
 .content.left > * {

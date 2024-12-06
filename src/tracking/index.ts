@@ -19,16 +19,16 @@ import { vpcWidget, vprWidget, vpsWidget } from "./widget";
 import {
   vprResultLoad,
   vpcResultLoad,
-  vpsResultLoad,
   vprResultView,
   vpcResultView,
-  vpsResultView,
 } from "./result";
 import { Widget } from "vviinn-tracking-client-ts";
 import {
   PRODUCT_CLICK_EVENT_TYPE,
   PRODUCT_LOAD_EVENT_TYPE,
   PRODUCT_VIEW_EVENT_TYPE,
+  RESULT_LOAD_EVENT_TYPE,
+  RESULT_VIEW_EVENT_TYPE,
 } from "./models";
 
 export const createProductVprEventByType = (type: ProductEventType) => {
@@ -82,13 +82,15 @@ export const createResultVpcEventByType = (type: ResultEventType) => {
   }
 };
 
-export const createResultVpsEventByType = (type: ResultEventType) => {
-  switch (type) {
-    case "load":
-      return createTrackingEvent(vpsResultLoad);
-    case "view":
-      return createTrackingEvent(vpsResultView);
-  }
+export const createResultEventByType = (
+  type: ResultEventType,
+  widget: Widget
+) => {
+  const typ = type === "load" ? RESULT_LOAD_EVENT_TYPE : RESULT_VIEW_EVENT_TYPE;
+  return createTrackingEvent({
+    widget,
+    typ,
+  });
 };
 
 export const createProductWidgetEventByType = (
