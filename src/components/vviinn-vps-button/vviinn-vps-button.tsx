@@ -42,9 +42,8 @@ import { VisualSearchMode } from "../../widget/types";
  *
  * @part close-button - Close Button in the modal's header.
  * @part secondary-action - Back Button in the modal's header.
- * @part title - Modal window title.
+ * @part results-title - Title on the results page.
  * @part upload-photo_button - Upload Photo Button.
- * @part show-files_button - Show Files Button.
  * @part start-camera_button - Start Camera Button.
  * @part product-card - Product Card itself.
  * @part brand - Brand inside Product Card.

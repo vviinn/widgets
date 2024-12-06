@@ -436,7 +436,6 @@ export class VviinnCarousel {
     return (
       <vviinn-product-card
         index={rank}
-        part="product-part"
         productId={recommendation.productId}
         productTitle={recommendation.title}
         productType={recommendation.productType}
@@ -527,19 +526,8 @@ export class VviinnCarousel {
     return (
       <Host class={this.getClassMap()}>
         <div class={{ body: true, ...this.getClassMap() }}>
-          {!this.isSetMode && (
-            <button
-              class="prev"
-              onClick={() => this.handleCarouselButtonClick("left")}
-              part="carousel-button"
-              disabled={this.gridArrowsDynamic && this.isFirstGroup()}
-            >
-              <ChevronIcon />
-            </button>
-          )}
           {this.isSetMode && this.crossSellingRecommendations.length > 0 && (
             <vviinn-product-card
-              part="product-part"
               class="set-mode product-card--source"
               productTitle={this.sourceProduct.title}
               image={this.sourceProduct.image.thumbnail}
@@ -560,19 +548,28 @@ export class VviinnCarousel {
           )}
 
           <div class={this.getContentClassMap()}>
+            {!this.isSetMode && (
+              <button
+                class="prev"
+                onClick={() => this.handleCarouselButtonClick("left")}
+                part="carousel-button"
+                disabled={this.gridArrowsDynamic && this.isFirstGroup()}
+              >
+                <ChevronIcon />
+              </button>
+            )}
             {this.renderRecommendations()}
+            {!this.isSetMode && (
+              <button
+                class="next"
+                onClick={() => this.handleCarouselButtonClick("right")}
+                part="carousel-button"
+                disabled={this.gridArrowsDynamic && this.isLastGroup()}
+              >
+                <ChevronIcon />
+              </button>
+            )}
           </div>
-
-          {!this.isSetMode && (
-            <button
-              class="next"
-              onClick={() => this.handleCarouselButtonClick("right")}
-              part="carousel-button"
-              disabled={this.gridArrowsDynamic && this.isLastGroup()}
-            >
-              <ChevronIcon />
-            </button>
-          )}
         </div>
         {this.showBullets() && (
           <div class="bullets">{this.renderBullets()}</div>

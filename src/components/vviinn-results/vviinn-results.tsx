@@ -55,14 +55,15 @@ import {
 } from "../../recommendation/events";
 import {
   createFilterEvent,
-  createResultVpsEventByType,
   createProductWidgetEventByType,
+  createResultEventByType,
 } from "../../tracking";
 import { RequestDynamicFilterItem } from "../../campaign/VPRCampaignService";
 import i18next from "i18next";
 import { resources } from "../../locale";
 import { productCardSlotsNames, slotChangeListener } from "../customized-slots";
 import { getCustomLabels } from "../../recommendation";
+import { productCardParts } from "../../cssParts";
 
 /**
  * @part product-card - Product Card itself.
@@ -394,6 +395,7 @@ export class VviinnResults {
     detail,
   }: CustomEvent<DynamicFilterTrackingData>) => {
     if (this.trackingDeactivated) return;
+    this.isTextSearch = detail.customTrigger === "TPS";
     const { campaignTypeId, ...rest } = this.getBasicEventData();
 
     const filterEvent: FilterEvent = createFilterEvent({
@@ -546,10 +548,14 @@ export class VviinnResults {
 
   private trackResultEvent(type: ResultEventType) {
     if (this.trackingDeactivated) return;
-    const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
+    const { campaignTypeId, widgetType, widget, ...rest } =
+      this.getBasicEventData();
 
     let resultEvent: ResultViewEvent | ResultLoadEvent =
-      createResultVpsEventByType(type)({
+      createResultEventByType(
+        type,
+        widget ?? "VPS"
+      )({
         session_id: this.uiSessionId,
         ...rest,
       });
@@ -731,7 +737,7 @@ export class VviinnResults {
         class={{
           "show-in-widget": this.showInWidget,
         }}
-        exportparts="image-container, content-container, basket-button-container, title, product-card, brand, product-type, deeplink, currency, image, image-link, image-picture, price-container, price-amount-sale, price-amount-outdated, price-amount-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-outdated, price-regular, price-sale, price-prefix, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link"
+        exportparts={productCardParts}
       >
         <div class="nothing-found">
           {this.getRecommendations()?.length === 0 && this.showInWidget && (

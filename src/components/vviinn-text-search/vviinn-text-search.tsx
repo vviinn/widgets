@@ -26,6 +26,7 @@ import { TextSearchMode } from "../../widget/types";
 import { TextSearchResponse } from "../../interfaces/search";
 import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/lib/function";
+import { searchBarParts } from "../../cssParts";
 
 /**
  * @part text-search-input - Text search input.
@@ -133,6 +134,7 @@ export class VviinnTextSearch {
     this.vviinnFilterTriggered.emit({
       kind: this.searchQuery,
       action: "select",
+      customTrigger: "TPS",
     });
     if (this.showInWidget) {
       const { requestId } = pipe(
@@ -163,7 +165,7 @@ export class VviinnTextSearch {
 
   render() {
     return (
-      <Host exportparts="text-search-input, text-search-button">
+      <Host exportparts={searchBarParts}>
         <input
           class={{
             "text-search-input": true,
