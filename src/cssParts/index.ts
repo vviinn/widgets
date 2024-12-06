@@ -59,6 +59,8 @@ export const searchWidgetButtonParts = makeExportPartsString([
 export const searchBarParts = makeExportPartsString([
   "text-search-input",
   "text-search-button",
+  "speech-button",
+  "text-search-container",
 ]);
 
 export const carouselParts = makeExportPartsString([

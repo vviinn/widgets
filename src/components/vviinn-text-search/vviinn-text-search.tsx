@@ -27,6 +27,9 @@ import { TextSearchResponse } from "../../interfaces/search";
 import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/lib/function";
 import { searchBarParts } from "../../cssParts";
+import { RecordingIcon } from "../vviinn-icons/icons/RecordingIcon";
+import { MicIcon } from "../vviinn-icons/icons/MicIcon";
+import { initializeRecognition } from "./initializeRecognition";
 
 /**
  * @part text-search-container - Container for the text search block.
@@ -82,6 +85,8 @@ export class VviinnTextSearch {
   @Prop() apiPath?: string = "https://api.vviinn.com";
 
   @State() isLoading = false;
+
+  @State() isRecording = false;
 
   private isShowPreloader = () =>
     this.showInWidget
