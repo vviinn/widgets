@@ -43,6 +43,7 @@ const Template = (args) => `
   add-price-container="${args.addPriceContainer}"
   favorite-show="${args.favoriteShow}"
   one-click-discovery-show="${args.oneClickDiscoveryShow}"
+  one-click-discovery-campaigns="${args.oneClickDiscoveryCampaigns}"
 ></vviinn-vps-button>`;
 
 export const Default = Template.bind({});
@@ -65,4 +66,5 @@ Default.args = {
   addPriceContainer: false,
   favoriteShow: false,
   oneClickDiscoveryShow: true,
+  oneClickDiscoveryCampaigns: "",
 };
