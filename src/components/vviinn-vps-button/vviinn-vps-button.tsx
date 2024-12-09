@@ -114,6 +114,8 @@ export class VviinnVpsButton {
   @Prop() favoriteShow: boolean = false;
   /** Show or hide the One-click Discovery */
   @Prop() oneClickDiscoveryShow = false;
+  /** Comma-separated list of campaign IDs */
+  @Prop() oneClickDiscoveryCampaigns: string = "";
   /** Wrap the Product Card's price values in the container. */
   @Prop() addPriceContainer?: boolean = false;
 
@@ -248,6 +250,7 @@ export class VviinnVpsButton {
           addPriceContainer={this.addPriceContainer}
           replaceSlotsContentInButton={this.replaceSlotsContent.bind(this)}
           oneClickDiscoveryShow={this.oneClickDiscoveryShow}
+          oneClickDiscoveryCampaigns={this.oneClickDiscoveryCampaigns}
           favoriteShow={this.favoriteShow}
         />
       </Host>
