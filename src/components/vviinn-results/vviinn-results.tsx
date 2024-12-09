@@ -211,7 +211,7 @@ export class VviinnResults {
   @State() oneClickDiscoveryAppendIndex: number;
   @State() oneClickDiscoverySelectedIndex: number;
   @State() isTextSearch: boolean = this.textSearchQuery?.length > 0;
-  @State() vprSlot: boolean = false;
+  @State() isVprSlot: boolean = false;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -230,6 +230,14 @@ export class VviinnResults {
     });
   }
 
+  private replaceComponentSlots = () => {
+    !!this.replaceSlotsContentInButton
+      ? this.replaceSlotsContentInButton()
+      : this.showInWidget
+      ? this.replaceSlotsContentInWidget()
+      : this.replaceSlotsContent();
+  };
+
   async componentWillLoad() {
     slotChangeListener(this, this.el);
 
@@ -241,15 +249,13 @@ export class VviinnResults {
       });
     }
 
-    this.vprSlot = !!this.el.querySelector('[slot="vviinn-results-vpr-slot"]');
+    this.isVprSlot = !!this.el.querySelector(
+      '[slot="vviinn-results-vpr-slot"]'
+    );
   }
 
   componentDidRender() {
-    !!this.replaceSlotsContentInButton
-      ? this.replaceSlotsContentInButton()
-      : this.showInWidget
-      ? this.replaceSlotsContentInWidget()
-      : this.replaceSlotsContent();
+    this.replaceComponentSlots();
   }
 
   private trackingApi: DefaultApi;
