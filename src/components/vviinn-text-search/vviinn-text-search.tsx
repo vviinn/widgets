@@ -27,7 +27,6 @@ import { TextSearchResponse } from "../../interfaces/search";
 import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/lib/function";
 import { searchBarParts } from "../../cssParts";
-import { RecordingIcon } from "../vviinn-icons/icons/RecordingIcon";
 import { MicIcon } from "../vviinn-icons/icons/MicIcon";
 import { initializeRecognition } from "./initializeRecognition";
 
@@ -230,7 +229,10 @@ export class VviinnTextSearch {
               part="speech-button"
               onClick={() => this.handleSpeech()}
             >
-              {this.isShowRecording() ? <RecordingIcon /> : <MicIcon />}
+              <MicIcon />
+              {this.isShowRecording() && (
+                <span class="recording-indicator"></span>
+              )}
             </button>
           )}
           <button

@@ -1,7 +1,6 @@
 @import "../../variables.css";
 
 :host {
-
   display: block;
   position: relative;
   width: 100%;
@@ -22,7 +21,7 @@
 }
 
 .text-search-container:focus-within {
-  border-color: #8d8d8d;;
+  border-color: #8d8d8d;
 }
 
 .text-search-input {
@@ -68,6 +67,30 @@
 
 .speech-button {
   background-color: transparent;
+  position: relative;
+}
+
+@keyframes recordingSpeech {
+  0% {
+    background-color: #ff0000;
+    scale: 1;
+  }
+  100% {
+    background-color: #ff8888;
+    scale: 1.5;
+  }
+}
+
+.recording-indicator {
+  border-radius: 50%;
+  width: 8px;
+  height: 8px;
+
+  left: 24px;
+  top: 24px;
+  background-color: #ff0000;
+  position: absolute;
+  animation: recordingSpeech 1s infinite alternate ease-in-out;
 }
 
 .text-search-button:not(:disabled):hover {
