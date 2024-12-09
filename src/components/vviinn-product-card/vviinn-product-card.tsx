@@ -95,7 +95,7 @@ import { productCardParts } from "../../cssParts";
  * @slot vviinn-basket-button-icon - Icon of Add to Basket button.
  * @slot vviinn-basket-button-text-pressed - Text of pressed Add to Basket button (Set mode).
  * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button (Set mode).
- * @slot energy-label-data-sheet-text - Data sheet link's text.
+ * @slot vviinn-energy-label-data-sheet-text - Data sheet link's text.
  * @slot vviinn-product-card-actions - Add action buttons like One-click discovery to this slot.
  * @slot vviinn-favorite-icon - Icon of Favorite button.
  * @slot vviinn-favorite-icon-pressed - Icon of pressed Favorite button.
