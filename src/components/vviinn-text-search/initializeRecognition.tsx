@@ -15,6 +15,14 @@ export const initializeRecognition = (
   recognition.continuous = false;
   recognition.lang = locale;
 
+  recognition.onstart = () => {
+    setTimeout(() => {
+      {
+        recognition.stop();
+      }
+    }, 10000);
+  };
+
   recognition.onspeechend = () => {
     recognition.stop();
     onEnd();
