@@ -1,10 +1,11 @@
 import { h } from "@stencil/core";
+import { Icon } from "../types";
 
-export const UpdateIcon = () => (
+export const UpdateIcon = ({ width = 24, height = 24 }: Icon) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
+    width={width}
+    height={height}
     viewBox="0 0 24 24"
     fill="none"
   >

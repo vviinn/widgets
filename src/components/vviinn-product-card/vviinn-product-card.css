@@ -195,12 +195,20 @@ picture::before {
   top: var(--spacing-100);
   right: var(--spacing-100);
   z-index: 1;
+  border: none;
+  cursor: pointer;
+  background: none;
+}
+
+.update-button > div {
   background-color: var(--button-bg-color-frosted);
   color: var(--color-icon-on-color);
   backdrop-filter: blur(calc(var(--filter-blur-150) / 2));
   padding: var(--spacing-50);
-  border: none;
-  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .update-button::after {
@@ -212,7 +220,7 @@ picture::before {
   content: "";
 }
 
-.update-button:hover {
+.update-button > div:hover {
   background-color: var(--button-bg-color-frosted-hover);
 }
 
@@ -373,20 +381,28 @@ vviinn-energy-label {
 .product-card-top-actions button {
   border: none;
   display: flex;
-  padding: var(--spacing-50);
   justify-content: center;
   align-items: center;
   gap: var(--spacing-50);
-  border-radius: var(--border-radius-100);
-  background: var(--button-bg-color-frosted);
-  backdrop-filter: blur(calc(var(--filter-blur-150, 12px) / 2));
 
   color: var(--color-icon-inverse);
   cursor: pointer;
   line-height: 0px;
+
+  background: none;
+
+  width: 32px;
+  height: 32px;
 }
 
-.product-card-top-actions button:hover {
+.product-card-top-actions button > div {
+  padding: var(--spacing-50);
+  border-radius: var(--border-radius-100);
+  background: var(--button-bg-color-frosted);
+  backdrop-filter: blur(calc(var(--filter-blur-150, 12px) / 2));
+}
+
+.product-card-top-actions button > div:hover {
   background: var(--button-bg-color-frosted-hover);
 }
 
