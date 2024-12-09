@@ -33,6 +33,11 @@ export const productCardSlotsNames: string[] = [
   "vviinn-favorite-icon",
   "vviinn-favorite-icon-pressed",
   "vviinn-energy-label-data-sheet-text",
+  "vviinn-custom-label-0",
+  "vviinn-custom-label-1",
+  "vviinn-custom-label-2",
+  "vviinn-custom-label-3",
+  "vviinn-custom-label-4",
 ];
 
 const renderNamedSlot = (name: string) => <slot name={name} />;

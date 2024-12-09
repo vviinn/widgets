@@ -82,11 +82,11 @@ import { productCardParts } from "../../cssParts";
  * @part energy-label-icon - Icon with an energy class.
  * @part energy-label-product-type - Product type.
  * @part energy-label-data-sheet-link - Data sheet link.
- * @part custom-label-0 - String part of the price with index 0.
- * @part custom-label-1 - String part of the price with index 1.
- * @part custom-label-2 - String part of the price with index 2.
- * @part custom-label-3 - String part of the price with index 3.
- * @part custom-label-4 - String part of the price with index 4.
+ * @part custom-label-0 - Custom label with index 0.
+ * @part custom-label-1 - Custom label with index 1.
+ * @part custom-label-2 - Custom label with index 2.
+ * @part custom-label-3 - Custom label with index 3.
+ * @part custom-label-4 - Custom label with index 4.
  * @part product-card-actions - Style actions wrapper.
  * @part product-card-top-actions - Style top actions wrapper.
  *
@@ -99,6 +99,11 @@ import { productCardParts } from "../../cssParts";
  * @slot vviinn-product-card-actions - Add action buttons like One-click discovery to this slot.
  * @slot vviinn-favorite-icon - Icon of Favorite button.
  * @slot vviinn-favorite-icon-pressed - Icon of pressed Favorite button.
+ * @slot vviinn-custom-label-0 - Custom label with index 0.
+ * @slot vviinn-custom-label-1 - Custom label with index 1.
+ * @slot vviinn-custom-label-2 - Custom label with index 2.
+ * @slot vviinn-custom-label-3 - Custom label with index 3.
+ * @slot vviinn-custom-label-4 - Custom label with index 4.
  *
  */
 @Component({
