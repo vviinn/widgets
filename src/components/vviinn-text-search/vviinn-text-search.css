@@ -96,10 +96,22 @@
   animation: recordingSpeech 1s infinite alternate ease-in-out;
 }
 
+@keyframes fade-out {
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    display: none;
+  }
+}
+
 .speech-tooltip {
   position: absolute;
   right: 0;
   top: 100%;
+  background: #f4f4f4;
+  animation: fade-out 5s forwards;
 }
 
 .text-search-button:not(:disabled):hover {

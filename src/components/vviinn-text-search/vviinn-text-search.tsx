@@ -165,6 +165,9 @@ export class VviinnTextSearch {
       setTimeout(() => {
         if (!this.isRecording) {
           this.setTooltip(speechTooltip());
+          setTimeout(() => {
+            this.setTooltip("");
+          }, 5000);
         }
       }, 1000);
     }
