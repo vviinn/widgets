@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.138.0](https://github.com/vviinn/widgets/compare/v2.137.0...v2.138.0) (2024-12-10)
+
+
+### Features
+
+* set-items-amount property for Discovery set widgets ([41a0d87](https://github.com/vviinn/widgets/commit/41a0d878d71115962664851cc2ff12c8e66c4d41))
+
+## [2.137.0](https://github.com/vviinn/widgets/compare/v2.136.1...v2.137.0) (2024-12-09)
+
+
+### Features
+
+* prototype speech recognition ([6f77c6d](https://github.com/vviinn/widgets/commit/6f77c6d0ecb9c67ed43fcb92343e714eb7ad3cbd))
+
 ### [2.136.1](https://github.com/vviinn/widgets/compare/v2.136.0...v2.136.1) (2024-12-06)
 
 
