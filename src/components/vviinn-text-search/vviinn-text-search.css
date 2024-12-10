@@ -24,14 +24,18 @@
   border-color: #8d8d8d;
 }
 
-.text-search-input {
-  height: 46px;
-  padding-left: 16px;
+.text-search-input,
+.speech-tooltip {
   font-size: 16px;
-  box-sizing: border-box;
   font-style: normal;
   font-weight: 400;
   font-family: var(--font-family, var(--font-family-base));
+}
+
+.text-search-input {
+  height: 46px;
+  padding-left: 16px;
+  box-sizing: border-box;
   border: none;
   outline: none;
   overflow: hidden;
@@ -85,12 +89,17 @@
   border-radius: 50%;
   width: 8px;
   height: 8px;
-
   left: 24px;
   top: 24px;
   background-color: #ff0000;
   position: absolute;
   animation: recordingSpeech 1s infinite alternate ease-in-out;
+}
+
+.speech-tooltip {
+  position: absolute;
+  right: 0;
+  top: 100%;
 }
 
 .text-search-button:not(:disabled):hover {

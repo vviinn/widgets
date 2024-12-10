@@ -12,10 +12,13 @@ export const permitSpeechRecognition = () => {
     winNav.userAgent.indexOf("Edg") > -1,
   ];
   if (forbiddenBrowserRules.some((rule) => rule === true)) return;
-  const permittedBrowserRules = [
+  const isChrome =
     typeof winNav.userAgentData !== "undefined"
       ? winNav.userAgentData.brands[0].brand === "Google Chrome"
-      : vendorName === "Google Inc.",
+      : vendorName === "Google Inc.";
+  const permittedBrowserRules = [
+    isChrome,
+    winNav.userAgent.indexOf("Safari") > -1 && !isChrome,
   ];
   if (permittedBrowserRules.some((rule) => rule === true)) {
     return speechRecognition;

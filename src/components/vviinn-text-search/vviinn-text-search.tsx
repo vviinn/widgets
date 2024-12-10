@@ -108,6 +108,9 @@ export class VviinnTextSearch {
     }
   );
 
+  private speechTooltip =
+    this.recognition && "Please enable Siri to use this feature";
+
   connectedCallback() {
     document.addEventListener("resultsSearchFinished", this.hideLoader);
   }
@@ -250,6 +253,9 @@ export class VviinnTextSearch {
             )}
           </button>
         </div>
+        {this.speechTooltip && (
+          <span class="speech-tooltip">{this.speechTooltip}</span>
+        )}
       </Host>
     );
   }
