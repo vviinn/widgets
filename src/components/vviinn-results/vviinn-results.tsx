@@ -184,6 +184,8 @@ export class VviinnResults {
   @Prop() showInWidget?: boolean = false;
   /** Discovery Mode */
   @Prop() oneClickDiscoveryMode: undefined | "modal" | "append";
+  /** Comma-separated list of campaign IDs */
+  @Prop() oneClickDiscoveryCampaigns: string = "";
 
   /** @internal */
   @Prop() apiPath?: string = "https://api.vviinn.com";
@@ -724,6 +726,7 @@ export class VviinnResults {
               addToBasketShow={this.addToBasketShow}
               locale={this.locale}
               favoriteShow={this.favoriteShow}
+              campaigns={this.oneClickDiscoveryCampaigns}
             >
               {this.checkSlotContent("vviinn-results-vpr-slot") && (
                 <slot name="vviinn-results-vpr-slot" />

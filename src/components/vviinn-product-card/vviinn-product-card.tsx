@@ -408,7 +408,7 @@ export class VviinnProductCard {
                 }}
               >
                 <slot name="vviinn-favorite-icon">
-                  <FavoriteIcon />
+                  <FavoriteIcon width={14} height={14} />
                 </slot>
               </div>
               <div
@@ -418,7 +418,7 @@ export class VviinnProductCard {
                 }}
               >
                 <slot name="vviinn-favorite-icon-pressed">
-                  <FavoriteIconPressed />
+                  <FavoriteIconPressed width={14} height={14} />
                 </slot>
               </div>
             </button>
@@ -582,9 +582,11 @@ export class VviinnProductCard {
             });
           }}
         >
-          <slot name="vviinn-update-button-icon">
-            <UpdateIcon />
-          </slot>
+          <div>
+            <slot name="vviinn-update-button-icon">
+              <UpdateIcon width={14} height={14} />
+            </slot>
+          </div>
         </button>
 
         {this.showFooterArrow && <div class="footer-arrow"></div>}
