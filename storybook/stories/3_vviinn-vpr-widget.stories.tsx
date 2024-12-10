@@ -23,6 +23,7 @@ const Template = (args) => `
       token="${args.token}"
       mode="${args.mode}"
       image-width="${args.imageWidth}"
+      set-items-amount="${args.setItemsAmount}"
       campaign-type="${args.campaignType}"
       campaigns="${args.campaigns}"
       product-details-new-tab="${args.productDetailsNewTab}"
@@ -60,6 +61,7 @@ Grid.args = {
   productDetailsRedirect: true,
   imageWidth: 300,
   imageRatio: 1,
+  setItemsAmount: 4,
   locale: "en-US",
   currencySign: "€",
   pricePrefix: "",
