@@ -29,6 +29,7 @@ import { pipe } from "fp-ts/lib/function";
 import { searchBarParts } from "../../cssParts";
 import { MicIcon } from "../vviinn-icons/icons/MicIcon";
 import { initializeRecognition } from "./initializeRecognition";
+import { speechTooltip } from "./speechTooltip";
 
 /**
  * @part text-search-container - Container for the text search block.
@@ -87,6 +88,8 @@ export class VviinnTextSearch {
 
   @State() isRecording = false;
 
+  @State() tooltip = "";
+
   private isShowPreloader = () =>
     this.showInWidget
       ? searchState.loading && searchState.searchType === "text"
@@ -99,17 +102,19 @@ export class VviinnTextSearch {
   private showRecording = () => (this.isRecording = true);
   private hideRecording = () => (this.isRecording = false);
 
+  private setTooltip = (tooltip: string) => {
+    this.tooltip = tooltip;
+  };
+
   private recognition = initializeRecognition(
     this.locale,
+    this.showRecording,
     this.hideRecording,
     (speechResult) => {
       this.setSearchQuery(speechResult);
       this.handleTextSearch();
     }
   );
-
-  private speechTooltip =
-    this.recognition && "Please enable Siri to use this feature";
 
   connectedCallback() {
     document.addEventListener("resultsSearchFinished", this.hideLoader);
@@ -156,8 +161,12 @@ export class VviinnTextSearch {
       this.recognition.stop();
       this.hideRecording();
     } else {
-      this.showRecording();
       this.recognition.start();
+      setTimeout(() => {
+        if (!this.isRecording) {
+          this.setTooltip(speechTooltip());
+        }
+      }, 1000);
     }
   }
 
@@ -253,9 +262,7 @@ export class VviinnTextSearch {
             )}
           </button>
         </div>
-        {this.speechTooltip && (
-          <span class="speech-tooltip">{this.speechTooltip}</span>
-        )}
+        {this.tooltip && <span class="speech-tooltip">{this.tooltip}</span>}
       </Host>
     );
   }

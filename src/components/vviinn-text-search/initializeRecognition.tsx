@@ -3,6 +3,7 @@ import { permitSpeechRecognition } from "./permitSpeechRecognition";
 
 export const initializeRecognition = (
   locale: Locale,
+  onStart: () => {},
   onEnd: () => {},
   onRecognized: (speechResult: string) => void
 ) => {
@@ -16,6 +17,7 @@ export const initializeRecognition = (
   recognition.lang = locale;
 
   recognition.onstart = () => {
+    onStart();
     setTimeout(() => {
       {
         recognition.stop();
