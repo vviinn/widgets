@@ -157,6 +157,8 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() imageWidth: number = 300;
   /** The ratio of each recommended product image */
   @Prop() imageRatio: number = 1;
+  /** Items amount in set mode grid */
+  @Prop() setItemsAmount?: number;
   /** Optional for custom CSS. It will overwrite all other settings */
   @Prop() cssUrl: string | null = null;
   /** The currency sign is displayed after the price */
@@ -624,7 +626,8 @@ export class VviinnVprWidget implements ComponentInterface {
 
       if (this.isSetMode) {
         const setModeProductsLoaded =
-          this.productIds.length === this.recommendations.length - 4;
+          this.productIds.length ===
+          this.recommendations.length - this.setItemsAmount;
 
         if (setModeProductsLoaded) this.vviinnRecommendationsLoaded.emit();
       }
@@ -717,7 +720,8 @@ export class VviinnVprWidget implements ComponentInterface {
             (this.useCarousel ? this.renderCarousel() : this.renderResults())}
 
           {(this.recommendations.length === 0 ||
-            (this.recommendations.length < 4 && this.isSetMode) ||
+            (this.recommendations.length < this.setItemsAmount &&
+              this.isSetMode) ||
             this.hasErrorOnLoad) &&
             !this.recommendationsLoading && (
               <p class="no-result-text">
@@ -801,6 +805,7 @@ export class VviinnVprWidget implements ComponentInterface {
         locale={this.locale}
         imageRatio={this.imageRatio}
         favoriteShow={this.favoriteShow}
+        setItemsAmount={this.setItemsAmount}
       ></vviinn-carousel>
     );
   }
