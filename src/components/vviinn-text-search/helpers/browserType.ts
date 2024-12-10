@@ -1,4 +1,4 @@
-export const isBrowser = () => {
+export const browserType = () => {
   const uncastedWindow = window as any;
   const winNav = window.navigator as any;
   const vendorName = winNav.vendor;

@@ -28,8 +28,7 @@ import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/lib/function";
 import { searchBarParts } from "../../cssParts";
 import { MicIcon } from "../vviinn-icons/icons/MicIcon";
-import { initializeRecognition } from "./initializeRecognition";
-import { speechTooltip } from "./speechTooltip";
+import { initializeRecognition, speechTooltip } from "./helpers";
 
 /**
  * @part text-search-container - Container for the text search block.

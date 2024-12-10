@@ -1,4 +1,4 @@
-import { isBrowser } from "./isBrowser";
+import { browserType } from "./browserType";
 
 export const permitSpeechRecognition = () => {
   const uncastedWindow = window as any;
@@ -6,7 +6,7 @@ export const permitSpeechRecognition = () => {
     uncastedWindow.SpeechRecognition || uncastedWindow.webkitSpeechRecognition;
   if (!speechRecognition) return;
 
-  const { forbiddenBrowser, isChrome, isSafari } = isBrowser();
+  const { forbiddenBrowser, isChrome, isSafari } = browserType();
   if (forbiddenBrowser) return;
   if (isChrome || isSafari) {
     return speechRecognition;
