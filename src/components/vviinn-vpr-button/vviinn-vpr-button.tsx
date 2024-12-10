@@ -100,6 +100,8 @@ export class VviinnVprButton {
   @Prop() imageWidth: number = 300;
   /** The ratio of each recommended product image */
   @Prop() imageRatio: number = 1;
+  /** Items amount in set mode grid */
+  @Prop() setItemsAmount?: number;
   /** Optional for custom CSS. It will overwrite all other settings */
   @Prop() cssUrl: string | null = null;
   /**  The currency sign is displayed after the price */
@@ -274,6 +276,7 @@ export class VviinnVprButton {
     sidebar.showFilters = this.showFilters;
     sidebar.cssUrl = this.cssUrl;
     sidebar.imageRatio = this.imageRatio;
+    sidebar.setItemsAmount = this.setItemsAmount;
     sidebar.setModeDiscounts = this.setModeDiscounts;
     sidebar.updateButtonLocation = this.updateButtonLocation;
     sidebar.addPriceContainer = this.addPriceContainer;
