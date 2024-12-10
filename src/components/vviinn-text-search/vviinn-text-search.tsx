@@ -265,7 +265,7 @@ export class VviinnTextSearch {
             )}
           </button>
         </div>
-        {this.tooltip && <span class="speech-tooltip">{this.tooltip}</span>}
+        {this.tooltip && <p class="speech-tooltip">{this.tooltip}</p>}
       </Host>
     );
   }
