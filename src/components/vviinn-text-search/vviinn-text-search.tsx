@@ -87,7 +87,7 @@ export class VviinnTextSearch {
 
   @State() isRecording = false;
 
-  @State() tooltip = "";
+  @State() showTooltip = false;
 
   private isShowPreloader = () =>
     this.showInWidget
@@ -101,9 +101,11 @@ export class VviinnTextSearch {
   private showRecording = () => (this.isRecording = true);
   private hideRecording = () => (this.isRecording = false);
 
-  private setTooltip = (tooltip: string) => {
-    this.tooltip = tooltip;
+  private setShowTooltip = (show: boolean) => {
+    this.showTooltip = show;
   };
+
+  private tooltipText = speechTooltip();
 
   private recognition = initializeRecognition(
     this.locale,
@@ -163,9 +165,9 @@ export class VviinnTextSearch {
       this.recognition.start();
       setTimeout(() => {
         if (!this.isRecording) {
-          this.setTooltip(speechTooltip());
+          this.setShowTooltip(true);
           setTimeout(() => {
-            this.setTooltip("");
+            this.setShowTooltip(false);
           }, 5000);
         }
       }, 1000);
@@ -264,7 +266,7 @@ export class VviinnTextSearch {
             )}
           </button>
         </div>
-        {this.tooltip && <p class="speech-tooltip">{this.tooltip}</p>}
+        {this.showTooltip && <p class="speech-tooltip">{this.tooltipText}</p>}
       </Host>
     );
   }
