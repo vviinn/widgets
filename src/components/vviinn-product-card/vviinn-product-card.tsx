@@ -163,10 +163,6 @@ export class VviinnProductCard {
   @Prop() isStandalone: boolean = false;
   /** @internal */
   @Prop() showFooterArrow: boolean = false;
-  /** @internal */
-  @Prop() iconWidth: number;
-  /** @internal */
-  @Prop() iconHeight: number;
 
   @State() isTransitioning: boolean = false;
   @State() basketButonPressed: boolean = false;

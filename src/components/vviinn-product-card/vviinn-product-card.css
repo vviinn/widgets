@@ -220,7 +220,7 @@ picture::before {
   content: "";
 }
 
-.update-button > div:hover {
+.update-button:hover > div {
   background-color: var(--button-bg-color-frosted-hover);
 }
 
@@ -369,13 +369,13 @@ vviinn-energy-label {
 .product-card-actions,
 .product-card-top-actions {
   position: absolute;
-  right: 8px;
+  right: 3px;
 }
 .product-card-top-actions {
-  top: 8px;
+  top: 3px;
 }
 .product-card-actions {
-  bottom: 8px;
+  bottom: 3px;
 }
 
 .product-card-top-actions button {
@@ -402,7 +402,7 @@ vviinn-energy-label {
   backdrop-filter: blur(calc(var(--filter-blur-150, 12px) / 2));
 }
 
-.product-card-top-actions button > div:hover {
+.product-card-top-actions button:hover > div {
   background: var(--button-bg-color-frosted-hover);
 }
 

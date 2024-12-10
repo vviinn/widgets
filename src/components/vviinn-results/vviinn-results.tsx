@@ -726,8 +726,6 @@ export class VviinnResults {
               addToBasketShow={this.addToBasketShow}
               locale={this.locale}
               favoriteShow={this.favoriteShow}
-              iconHeight={14}
-              iconWidth={14}
               campaigns={this.oneClickDiscoveryCampaigns}
             >
               {this.checkSlotContent("vviinn-results-vpr-slot") && (

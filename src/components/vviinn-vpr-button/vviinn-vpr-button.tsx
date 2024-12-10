@@ -149,10 +149,6 @@ export class VviinnVprButton {
 
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
-  /** @internal */
-  @Prop() iconWidth: number;
-  /** @internal */
-  @Prop() iconHeight: number;
 
   /** Event emitted on widget load */
   @Event() vviinnWidgetLoad: EventEmitter<BasicEventData>;
@@ -231,15 +227,9 @@ export class VviinnVprButton {
         <vviinn-button addStyle={this.addStyle} part="vviinn-button">
           <slot>
             {this.campaignType === "VCS" ? (
-              <CrossSellingIcon
-                width={this.iconWidth}
-                height={this.iconHeight}
-              />
+              <CrossSellingIcon width={14} height={14} />
             ) : (
-              <SimilarProductsIcon
-                width={this.iconWidth}
-                height={this.iconHeight}
-              />
+              <SimilarProductsIcon width={14} height={14} />
             )}
           </slot>
         </vviinn-button>
