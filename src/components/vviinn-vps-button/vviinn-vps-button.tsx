@@ -187,12 +187,19 @@ export class VviinnVpsButton {
     this.replaceSlotsContent();
   }
 
-  private replaceSlotsContent() {
+  private replaceSlotsContent(childrenElement?: HTMLElement) {
     const slots = this.el.querySelectorAll("[slot]");
     this.globalSlotsChanged.emit({
       slots: Array.from(slots),
       element: this.el,
     });
+
+    if (childrenElement) {
+      this.globalSlotsChanged.emit({
+        slots: Array.from(slots),
+        element: childrenElement,
+      });
+    }
   }
 
   private handleClick() {

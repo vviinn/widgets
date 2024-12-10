@@ -18,7 +18,7 @@ import i18next from "i18next";
 import { version } from "../../../package.json";
 import { searchState } from "../../store/search.store";
 import { state } from "../../store/store";
-import { slotChangeListener } from "../customized-slots";
+import { slotChangeListener, SlotSkeleton } from "../customized-slots";
 import { createTrackingApi } from "../../openApi";
 import {
   DefaultApi,
@@ -39,7 +39,6 @@ import {
   NoResultEventData,
   TextSearchEvent,
 } from "../../recommendation/events";
-import { SlotSkeleton } from "../customized-slots";
 import { campaignTypeNames } from "../../campaign/Campaign";
 import { parseExcludedToParams } from "../../utils/collections/collectionsUtils";
 import { resources } from "../../locale";
@@ -234,12 +233,19 @@ export class VviinnVpsWidget {
     searchState.resultViewed = false;
   }
 
-  private replaceSlotsContent() {
+  private replaceSlotsContent(childrenElement?: HTMLElement) {
     const slots = this.el.querySelectorAll("[slot]");
     this.globalSlotsChanged.emit({
       slots: Array.from(slots),
       element: this.el,
     });
+
+    if (childrenElement) {
+      this.globalSlotsChanged.emit({
+        slots: Array.from(slots),
+        element: childrenElement,
+      });
+    }
   }
 
   private stopStreamTracks() {

@@ -112,6 +112,11 @@ import { productCardParts } from "../../cssParts";
  * @slot vviinn-custom-label-3 - Custom label with index 3.
  * @slot vviinn-custom-label-4 - Custom label with index 4.
  */
+
+export type ReplaceSlotsContentInParent = (
+  childrenElement?: HTMLElement
+) => void;
+
 @Component({
   tag: "vviinn-results",
   styleUrl: "vviinn-results.css",
@@ -205,9 +210,9 @@ export class VviinnResults {
   /** @internal */
   @Prop() resetState?: () => void;
   /** @internal */
-  @Prop() replaceSlotsContentInWidget?: () => void;
+  @Prop() replaceSlotsContentInWidget?: ReplaceSlotsContentInParent;
   /** @internal */
-  @Prop() replaceSlotsContentInButton?: () => void;
+  @Prop() replaceSlotsContentInButton?: ReplaceSlotsContentInParent;
 
   @State() recommendations: Recommendation[] = [];
   @State() innerTextSearchQuery: string;
@@ -235,14 +240,6 @@ export class VviinnResults {
     });
   }
 
-  private replaceComponentSlots = () => {
-    !!this.replaceSlotsContentInButton
-      ? this.replaceSlotsContentInButton()
-      : this.showInWidget
-      ? this.replaceSlotsContentInWidget()
-      : this.replaceSlotsContent();
-  };
-
   async componentWillLoad() {
     slotChangeListener(this, this.el);
 
@@ -260,7 +257,11 @@ export class VviinnResults {
   }
 
   componentDidRender() {
-    this.replaceComponentSlots();
+    !!this.replaceSlotsContentInButton
+      ? this.replaceSlotsContentInButton(this.el)
+      : this.showInWidget
+      ? this.replaceSlotsContentInWidget(this.el)
+      : this.replaceSlotsContent();
   }
 
   private trackingApi: DefaultApi;
