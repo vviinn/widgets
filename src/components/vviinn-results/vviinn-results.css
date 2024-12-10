@@ -134,8 +134,10 @@ products.hidden {
 }
 
 vviinn-recommendations-sidebar::part(body) {
-  background-color: var(--color-border-02);
-  margin-top: -17px;
+  border: 1px solid var(--color-border-02);
+  border-left: none;
+  border-right: none;
+  margin-top: -9px;
 }
 
 vviinn-recommendations-sidebar::part(source-image) {
