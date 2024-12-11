@@ -195,12 +195,20 @@ picture::before {
   top: var(--spacing-100);
   right: var(--spacing-100);
   z-index: 1;
+  border: none;
+  cursor: pointer;
+  background: none;
+}
+
+.update-button > div {
   background-color: var(--button-bg-color-frosted);
   color: var(--color-icon-on-color);
   backdrop-filter: blur(calc(var(--filter-blur-150) / 2));
   padding: var(--spacing-50);
-  border: none;
-  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .update-button::after {
@@ -212,7 +220,7 @@ picture::before {
   content: "";
 }
 
-.update-button:hover {
+.update-button:hover > div {
   background-color: var(--button-bg-color-frosted-hover);
 }
 
@@ -361,32 +369,40 @@ vviinn-energy-label {
 .product-card-actions,
 .product-card-top-actions {
   position: absolute;
-  right: 8px;
+  right: 3px;
 }
 .product-card-top-actions {
-  top: 8px;
+  top: 3px;
 }
 .product-card-actions {
-  bottom: 8px;
+  bottom: 3px;
 }
 
 .product-card-top-actions button {
   border: none;
   display: flex;
-  padding: var(--spacing-50);
   justify-content: center;
   align-items: center;
   gap: var(--spacing-50);
-  border-radius: var(--border-radius-100);
-  background: var(--button-bg-color-frosted);
-  backdrop-filter: blur(calc(var(--filter-blur-150, 12px) / 2));
 
   color: var(--color-icon-inverse);
   cursor: pointer;
   line-height: 0px;
+
+  background: none;
+
+  width: 32px;
+  height: 32px;
 }
 
-.product-card-top-actions button:hover {
+.product-card-top-actions button > div {
+  padding: var(--spacing-50);
+  border-radius: var(--border-radius-100);
+  background: var(--button-bg-color-frosted);
+  backdrop-filter: blur(calc(var(--filter-blur-150, 12px) / 2));
+}
+
+.product-card-top-actions button:hover > div {
   background: var(--button-bg-color-frosted-hover);
 }
 
@@ -399,15 +415,27 @@ vviinn-energy-label {
 
 .footer-arrow {
   position: absolute;
-  bottom: -15px;
+  bottom: -35px;
   left: 50%;
-  transform: translate(-50%, 0);
+  transform: translate(-50%, 0) rotate(90deg);
 
   width: 0;
   height: 0;
-  border: 10px solid transparent;
-  border-top: 0;
-  border-bottom: 15px solid var(--color-border-02);
+  border-top: 22px solid transparent;
+  border-bottom: 22px solid transparent;
+  border-right: 22px solid var(--color-border-02);
+  z-index: 99;
+}
+.footer-arrow::after {
+  content: "";
+  width: 0;
+  height: 0;
+  border-top: 21px solid transparent;
+  border-bottom: 21px solid transparent;
+  border-right: 21px solid #ffffff;
+  position: absolute;
+  top: -21px;
+  left: 1px;
 }
 
 .hidden {

@@ -66,6 +66,7 @@ export const searchBarParts = makeExportPartsString([
 export const carouselParts = makeExportPartsString([
   "items-group",
   "carousel-button",
+  "recommendations-results",
 ]);
 
 export const modalParts = makeExportPartsString([

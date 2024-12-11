@@ -143,13 +143,16 @@
   box-sizing: border-box;
   display: grid;
   grid-gap: 32px 16px;
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(
-      var(--product-card-width, var(--product-card-results-min-width)),
-      1fr
-    )
-  );
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   justify-items: center;
-  padding: 24px;
+  padding-bottom: var(--spacing-300);
+}
+
+@media (max-width: 768px) {
+  .recommendations-results.recommendations-grid {
+    width: unset;
+    grid-gap: 32px 16px;
+    justify-content: center;
+    grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+  }
 }
