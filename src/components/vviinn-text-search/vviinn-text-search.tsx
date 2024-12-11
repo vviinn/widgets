@@ -218,7 +218,7 @@ export class VviinnTextSearch {
             type="text"
             placeholder={i18next.t(
               this.isShowRecording()
-                ? "speechRecognitionPlaceholder"
+                ? "speechRecognition.placeholder"
                 : "textSearchPlaceholder"
             )}
             value={this.searchQuery}
@@ -266,7 +266,9 @@ export class VviinnTextSearch {
             )}
           </button>
         </div>
-        {this.showTooltip && <p class="speech-tooltip">{this.tooltipText}</p>}
+        {this.showTooltip && (
+          <p class="speech-tooltip">{i18next.t(this.tooltipText)}</p>
+        )}
       </Host>
     );
   }

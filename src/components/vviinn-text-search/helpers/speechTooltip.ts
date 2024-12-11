@@ -2,6 +2,6 @@ import { browserType } from "./browserType";
 
 export const speechTooltip = () => {
   const { isSafari } = browserType();
-  if (isSafari) return "Please enable Siri";
-  return "Please enable microphone";
+  if (isSafari) return "speechRecognition.tooltip.siri";
+  return "speechRecognition.tooltip.general";
 };
