@@ -144,7 +144,7 @@ export class RecommendationsSidebar {
 
   render() {
     return (
-      <Host class={this.getClassMap()} exportparts="body">
+      <Host class={this.getClassMap()} exportparts="body, close-sidebar">
         <aside
           class="sidebar"
           part="body"
@@ -162,6 +162,7 @@ export class RecommendationsSidebar {
               <button
                 class="close-sidebar"
                 onClick={() => (this.state = "closed")}
+                part="close-sidebar"
               >
                 <CrossIcon />
               </button>
