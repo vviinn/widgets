@@ -415,15 +415,27 @@ vviinn-energy-label {
 
 .footer-arrow {
   position: absolute;
-  bottom: -15px;
+  bottom: -35px;
   left: 50%;
-  transform: translate(-50%, 0);
+  transform: translate(-50%, 0) rotate(90deg);
 
   width: 0;
   height: 0;
-  border: 10px solid transparent;
-  border-top: 0;
-  border-bottom: 15px solid var(--color-border-02);
+  border-top: 22px solid transparent;
+  border-bottom: 22px solid transparent;
+  border-right: 22px solid var(--color-border-02);
+  z-index: 99;
+}
+.footer-arrow::after {
+  content: "";
+  width: 0;
+  height: 0;
+  border-top: 21px solid transparent;
+  border-bottom: 21px solid transparent;
+  border-right: 21px solid #ffffff;
+  position: absolute;
+  top: -21px;
+  left: 1px;
 }
 
 .hidden {
