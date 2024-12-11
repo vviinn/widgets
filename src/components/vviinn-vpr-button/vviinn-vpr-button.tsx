@@ -274,7 +274,7 @@ export class VviinnVprButton {
 
     if (this.targetAppendSidebarTo) {
       sidebar.mode = "grid";
-      sidebar.useCarousel = false;
+      sidebar.useCarousel = this.mode === "continuity";
     } else {
       sidebar.mode = this.position === "right" ? "grid" : this.mode;
       sidebar.useCarousel = this.position === "bottom";

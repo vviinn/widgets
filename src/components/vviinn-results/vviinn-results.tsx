@@ -183,7 +183,11 @@ export class VviinnResults {
   /** True when we use vviinn-results inside the widget */
   @Prop() showInWidget?: boolean = false;
   /** Discovery Mode */
-  @Prop() oneClickDiscoveryMode: undefined | "modal" | "append";
+  @Prop() oneClickDiscoveryMode:
+    | undefined
+    | "modal"
+    | "append"
+    | "append-slider";
   /** Comma-separated list of campaign IDs */
   @Prop() oneClickDiscoveryCampaigns: string = "";
 
@@ -641,7 +645,8 @@ export class VviinnResults {
     }
 
     const isOneClickDiscoveryAppendMode =
-      this.oneClickDiscoveryMode === "append";
+      this.oneClickDiscoveryMode === "append" ||
+      this.oneClickDiscoveryMode === "append-slider";
 
     const oneClickDiscoveryHandler = (index: number) => {
       if (!isOneClickDiscoveryAppendMode) return;
@@ -668,6 +673,13 @@ export class VviinnResults {
       "vviinn-favorite-icon",
       "vviinn-favorite-icon-pressed",
     ];
+
+    console.log(
+      isOneClickDiscoveryAppendMode ? "one-click-discovery-append" : undefined,
+      isOneClickDiscoveryAppendMode
+        ? this.el.shadowRoot.getElementById("one-click-discovery-append")
+        : undefined
+    );
 
     return results.map((p, i) => (
       <vviinn-product-card
@@ -711,6 +723,11 @@ export class VviinnResults {
               token={this.token}
               productId={p.productId}
               addStyle={false}
+              mode={
+                this.oneClickDiscoveryMode === "append-slider"
+                  ? "continuity"
+                  : undefined
+              }
               appendSidebarTo={
                 isOneClickDiscoveryAppendMode
                   ? "one-click-discovery-append"
