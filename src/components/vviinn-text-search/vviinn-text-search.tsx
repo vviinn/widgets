@@ -29,6 +29,7 @@ import { pipe } from "fp-ts/lib/function";
 import { searchBarParts } from "../../cssParts";
 import { MicIcon } from "../vviinn-icons/icons/MicIcon";
 import { initializeRecognition, speechTooltip } from "./helpers";
+import Timeout = NodeJS.Timeout;
 
 /**
  * @part text-search-container - Container for the text search block.
@@ -105,6 +106,8 @@ export class VviinnTextSearch {
     this.showTooltip = show;
   };
 
+  private activeTimeouts: Timeout[] = [];
+
   private tooltipText = speechTooltip();
 
   private recognition = initializeRecognition(
@@ -123,6 +126,7 @@ export class VviinnTextSearch {
 
   disconnectedCallback() {
     document.removeEventListener("resultsSearchFinished", this.hideLoader);
+    this.activeTimeouts.forEach(clearTimeout);
   }
 
   async componentWillLoad() {
@@ -163,14 +167,16 @@ export class VviinnTextSearch {
       this.hideRecording();
     } else {
       this.recognition.start();
-      setTimeout(() => {
+      const shouldShowTooltip = setTimeout(() => {
         if (!this.isRecording) {
           this.setShowTooltip(true);
-          setTimeout(() => {
+          const shouldHideTooltip = setTimeout(() => {
             this.setShowTooltip(false);
           }, 5000);
+          this.activeTimeouts.push(shouldHideTooltip);
         }
       }, 1000);
+      this.activeTimeouts.push(shouldShowTooltip);
     }
   }
 
