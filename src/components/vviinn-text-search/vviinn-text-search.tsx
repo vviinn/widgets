@@ -115,6 +115,7 @@ export class VviinnTextSearch {
     this.locale,
     () => {
       this.showRecording();
+      this.setShowTooltip(false);
       clearTimeout(this.triggerTooltipStart);
     },
     this.hideRecording,
@@ -169,6 +170,7 @@ export class VviinnTextSearch {
     if (this.isRecording) {
       this.recognition.stop();
       this.hideRecording();
+      this.setShowTooltip(false);
     } else {
       this.recognition.start();
       this.setSearchQuery("");
