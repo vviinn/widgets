@@ -836,9 +836,7 @@ export class VviinnVpsWidget {
                   oneClickDiscoveryMode={
                     this.oneClickDiscoveryShow ? "append" : undefined
                   }
-                >
-                  {this.oneClickDiscoveryShow && SlotSkeleton("results")}
-                </vviinn-results>
+                />
               )}
             </vviinn-slide>
           </vviinn-slider>

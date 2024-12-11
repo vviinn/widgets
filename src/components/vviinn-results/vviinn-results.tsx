@@ -270,15 +270,11 @@ export class VviinnResults {
 
   private trackingApi: DefaultApi;
 
-  private checkSlotContent = (name: string) =>
-    !!this.el.querySelector(`[slot="${name}"]`);
-
-  private renderSlotContent = (name: string) =>
-    this.checkSlotContent(name) && (
-      <span slot={name}>
-        <slot name={name} />
-      </span>
-    );
+  private renderSlotContent = (name: string) => (
+    <span slot={name}>
+      <slot name={name} />
+    </span>
+  );
 
   private getRecommendations = () =>
     this.showInWidget ? searchState.results : this.recommendations;
