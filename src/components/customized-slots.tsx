@@ -40,25 +40,28 @@ export const productCardSlotsNames: string[] = [
   "vviinn-custom-label-4",
 ];
 
-export const resultsSlotsNames: string[] = ["vviinn-results-vpr-slot"];
-
 const renderNamedSlot = (name: string) => <slot name={name} />;
 
-type RenderType = "vps" | "vpr" | "filters" | "results" | "card";
+type RenderType =
+  | "search"
+  | "discovery"
+  | "one-click-discovery"
+  | "filters"
+  | "card";
 
 const getSlotsNamesList = (renderType: RenderType) => {
   switch (renderType) {
-    case "vps": {
+    case "search": {
       return [...vpsSlotsNames, ...filtersSlotsNames, ...productCardSlotsNames];
     }
-    case "vpr": {
+    case "discovery": {
       return [...vprSlotsNames, ...filtersSlotsNames, ...productCardSlotsNames];
+    }
+    case "one-click-discovery": {
+      return ["vviinn-results-vpr-slot"];
     }
     case "filters": {
       return filtersSlotsNames;
-    }
-    case "results": {
-      return resultsSlotsNames;
     }
     case "card": {
       return productCardSlotsNames;

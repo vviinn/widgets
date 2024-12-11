@@ -662,7 +662,7 @@ export class VviinnVprWidget implements ComponentInterface {
         <Fragment>
           {this.renderExternalCSS()}
 
-          {SlotSkeleton("vpr")}
+          {SlotSkeleton("discovery")}
 
           <style>{state.fallbackStyles}</style>
           {(this.isSetMode || this.blockTitle.length > 0) && (

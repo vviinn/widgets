@@ -225,7 +225,6 @@ export class VviinnResults {
   @State() oneClickDiscoveryAppendIndex: number;
   @State() oneClickDiscoverySelectedIndex: number;
   @State() isTextSearch: boolean = this.textSearchQuery?.length > 0;
-  @State() isVprSlot: boolean = false;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -254,10 +253,6 @@ export class VviinnResults {
         resources,
       });
     }
-
-    this.isVprSlot = !!this.el.querySelector(
-      '[slot="vviinn-results-vpr-slot"]'
-    );
   }
 
   componentDidRender() {
@@ -728,7 +723,7 @@ export class VviinnResults {
               locale={this.locale}
               favoriteShow={this.favoriteShow}
             >
-              {SlotSkeleton("results")}
+              {SlotSkeleton("one-click-discovery")}
               {productCardSlotsNames.map((slotName) =>
                 this.renderSlotContent(slotName)
               )}

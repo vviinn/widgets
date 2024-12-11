@@ -233,7 +233,7 @@ export class VviinnVpsButton {
           </slot>
         </vviinn-button>
 
-        {SlotSkeleton("vps")}
+        {SlotSkeleton("search")}
 
         <vviinn-vps-widget
           mode={this.mode}

@@ -651,7 +651,7 @@ export class VviinnVpsWidget {
       <Host
         exportparts={`${modalParts}, ${productCardParts}, ${searchBarParts}, ${searchWidgetFilterParts}, ${searchWidgetButtonParts}`}
       >
-        {!this.showingInButton && SlotSkeleton("vps")}
+        {!this.showingInButton && SlotSkeleton("search")}
 
         <vviinn-overlayed-modal
           class={{ "first-screen": this.isOnboardingSlide() }}
