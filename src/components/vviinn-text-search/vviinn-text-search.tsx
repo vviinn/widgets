@@ -267,7 +267,9 @@ export class VviinnTextSearch {
           </button>
         </div>
         {this.showTooltip && (
-          <p class="speech-tooltip">{i18next.t(this.tooltipText)}</p>
+          <p class="text-search-tooltip" part="text-search-tooltip">
+            {i18next.t(this.tooltipText)}
+          </p>
         )}
       </Host>
     );
