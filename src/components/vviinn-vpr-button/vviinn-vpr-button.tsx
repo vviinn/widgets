@@ -139,9 +139,6 @@ export class VviinnVprButton {
   /** Add default styles to the button */
   @Prop() addStyle: boolean = true;
 
-  /** @internal */
-  @Prop() apiPath: string | undefined = "https://api.vviinn.com";
-
   /** ID of an HTML element that you want to attach the sidebar  */
   @Prop() appendSidebarTo: string;
 
@@ -149,6 +146,9 @@ export class VviinnVprButton {
   @Prop() favoriteShow: boolean = false;
 
   @Prop() appendSidebarToElement: HTMLElement;
+
+  /** @internal */
+  @Prop() apiPath: string | undefined = "https://api.vviinn.com";
 
   /** Event emitted on widget load */
   @Event() vviinnWidgetLoad: EventEmitter<BasicEventData>;
@@ -227,9 +227,9 @@ export class VviinnVprButton {
         <vviinn-button addStyle={this.addStyle} part="vviinn-button">
           <slot>
             {this.campaignType === "VCS" ? (
-              <CrossSellingIcon />
+              <CrossSellingIcon width={14} height={14} />
             ) : (
-              <SimilarProductsIcon />
+              <SimilarProductsIcon width={14} height={14} />
             )}
           </slot>
         </vviinn-button>

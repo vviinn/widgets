@@ -57,6 +57,7 @@ export const ResultsTemplate = (args) => {
     one-click-discovery-mode="${oneClickDiscoveryMode}"
     add-price-container="${addPriceContainer}"
     favorite-show="${args.favoriteShow}"
+    one-click-discovery-campaigns="${args.oneClickDiscoveryCampaigns}"
   ></vviinn-results>
   </div>
 </div>`;

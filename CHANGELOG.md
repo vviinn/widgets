@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.139.0](https://github.com/vviinn/widgets/compare/v2.138.0...v2.139.0) (2024-12-10)
+
+
+### Features
+
+* added one-click-discovery-campaigns to search modal and product list page ([f040771](https://github.com/vviinn/widgets/commit/f0407718d3305a403df15deb846d0ee0836027c1))
+* made product-card icons smaller but we the same clickable area ([492b0d3](https://github.com/vviinn/widgets/commit/492b0d3dd2d2f65bdeb9dbb59f012da7d7bb3df2))
+
 ## [2.138.0](https://github.com/vviinn/widgets/compare/v2.137.0...v2.138.0) (2024-12-10)
 
 
