@@ -171,6 +171,7 @@ export class VviinnTextSearch {
       this.hideRecording();
     } else {
       this.recognition.start();
+      this.setSearchQuery("");
       this.triggerTooltipStart = setTimeout(() => {
         if (!this.isRecording) {
           this.setShowTooltip(true);
