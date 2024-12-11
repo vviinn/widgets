@@ -145,6 +145,11 @@ vviinn-recommendations-sidebar::part(body) {
   margin-top: -9px;
   max-height: unset;
 }
+@media screen and (max-width: 768px) {
+  vviinn-recommendations-sidebar::part(body) {
+    margin-top: -1px;
+  }
+}
 
 vviinn-recommendations-sidebar::part(close-sidebar) {
   top: 11px;
