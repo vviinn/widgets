@@ -106,13 +106,17 @@ export class VviinnTextSearch {
     this.showTooltip = show;
   };
 
-  private activeTimeouts: Timeout[] = [];
+  private triggerTooltipStart: Timeout;
+  private triggerTooltipEnd: Timeout;
 
   private tooltipText = speechTooltip();
 
   private recognition = initializeRecognition(
     this.locale,
-    this.showRecording,
+    () => {
+      this.showRecording();
+      clearTimeout(this.triggerTooltipStart);
+    },
     this.hideRecording,
     (speechResult) => {
       this.setSearchQuery(speechResult);
@@ -126,7 +130,8 @@ export class VviinnTextSearch {
 
   disconnectedCallback() {
     document.removeEventListener("resultsSearchFinished", this.hideLoader);
-    this.activeTimeouts.forEach(clearTimeout);
+    clearTimeout(this.triggerTooltipStart);
+    clearTimeout(this.triggerTooltipEnd);
   }
 
   async componentWillLoad() {
@@ -136,7 +141,6 @@ export class VviinnTextSearch {
       resources,
     });
     slotChangeListener(this, this.el);
-
     if (!this.showInWidget && this.searchQuery?.length > 0) {
       this.showLoader();
       this.vviinnTextSearchStarted.emit({
@@ -167,16 +171,14 @@ export class VviinnTextSearch {
       this.hideRecording();
     } else {
       this.recognition.start();
-      const shouldShowTooltip = setTimeout(() => {
+      this.triggerTooltipStart = setTimeout(() => {
         if (!this.isRecording) {
           this.setShowTooltip(true);
-          const shouldHideTooltip = setTimeout(() => {
+          this.triggerTooltipEnd = setTimeout(() => {
             this.setShowTooltip(false);
           }, 5000);
-          this.activeTimeouts.push(shouldHideTooltip);
         }
       }, 1000);
-      this.activeTimeouts.push(shouldShowTooltip);
     }
   }
 

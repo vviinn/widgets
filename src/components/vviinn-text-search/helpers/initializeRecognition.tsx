@@ -1,9 +1,10 @@
 import { Locale } from "../../../locale";
 import { permitSpeechRecognition } from "./permitSpeechRecognition";
+import Timeout = NodeJS.Timeout;
 
 export const initializeRecognition = (
   locale: Locale,
-  onStart: () => {},
+  onStart: () => void,
   onEnd: () => {},
   onRecognized: (speechResult: string) => void
 ) => {
@@ -16,9 +17,11 @@ export const initializeRecognition = (
   recognition.continuous = false;
   recognition.lang = locale;
 
+  let recognitionTimeout: Timeout;
+
   recognition.onstart = () => {
     onStart();
-    setTimeout(() => {
+    recognitionTimeout = setTimeout(() => {
       {
         recognition.stop();
       }
@@ -28,6 +31,7 @@ export const initializeRecognition = (
   recognition.onspeechend = () => {
     recognition.stop();
     onEnd();
+    clearTimeout(recognitionTimeout);
   };
 
   recognition.onend = onEnd;
