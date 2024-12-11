@@ -40,17 +40,34 @@ export const productCardSlotsNames: string[] = [
   "vviinn-custom-label-4",
 ];
 
+export const resultsSlotsNames: string[] = ["vviinn-results-vpr-slot"];
+
 const renderNamedSlot = (name: string) => <slot name={name} />;
 
-export const SlotSkeleton = (renderType: string) => {
-  return (
-    renderType === "vps"
-      ? [...vpsSlotsNames, ...filtersSlotsNames, ...productCardSlotsNames]
-      : renderType === "filters"
-      ? filtersSlotsNames
-      : [...vprSlotsNames, ...filtersSlotsNames, ...productCardSlotsNames]
-  ).map(renderNamedSlot);
+type RenderType = "vps" | "vpr" | "filters" | "results" | "card";
+
+const getSlotsNamesList = (renderType: RenderType) => {
+  switch (renderType) {
+    case "vps": {
+      return [...vpsSlotsNames, ...filtersSlotsNames, ...productCardSlotsNames];
+    }
+    case "vpr": {
+      return [...vprSlotsNames, ...filtersSlotsNames, ...productCardSlotsNames];
+    }
+    case "filters": {
+      return filtersSlotsNames;
+    }
+    case "results": {
+      return resultsSlotsNames;
+    }
+    case "card": {
+      return productCardSlotsNames;
+    }
+  }
 };
+
+export const SlotSkeleton = (renderType: RenderType) =>
+  getSlotsNamesList(renderType).map(renderNamedSlot);
 
 const getSlots = (element: HTMLElement): HTMLSlotElement[] =>
   Array.from(element.shadowRoot.querySelectorAll("slot"));

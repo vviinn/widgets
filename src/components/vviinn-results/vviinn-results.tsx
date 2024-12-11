@@ -61,7 +61,11 @@ import {
 import { RequestDynamicFilterItem } from "../../campaign/VPRCampaignService";
 import i18next from "i18next";
 import { resources } from "../../locale";
-import { productCardSlotsNames, slotChangeListener } from "../customized-slots";
+import {
+  productCardSlotsNames,
+  slotChangeListener,
+  SlotSkeleton,
+} from "../customized-slots";
 import { getCustomLabels } from "../../recommendation";
 import { productCardParts } from "../../cssParts";
 
@@ -702,7 +706,7 @@ export class VviinnResults {
         style={{ order: i.toString() }}
         showFooterArrow={this.oneClickDiscoverySelectedIndex === i}
       >
-        {this.oneClickDiscoveryMode && (
+        {!!this.oneClickDiscoveryMode && (
           <div
             slot="vviinn-product-card-actions"
             class="vviinn-results-product-card-actions"
@@ -728,10 +732,7 @@ export class VviinnResults {
               locale={this.locale}
               favoriteShow={this.favoriteShow}
             >
-              {this.checkSlotContent("vviinn-results-vpr-slot") && (
-                <slot name="vviinn-results-vpr-slot" />
-              )}
-
+              {SlotSkeleton("results")}
               {productCardSlotsNames.map((slotName) =>
                 this.renderSlotContent(slotName)
               )}
