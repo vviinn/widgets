@@ -27,7 +27,6 @@ import {
   COLUMNS_NUMBER_CSS_VAR,
   CONTENT_GROUP_CSS_CLASS,
   DEFAULT_COLUMNS_NUMBER,
-  EXTRA_COLUMNS_NUMBER_CSS_VAR,
   SET_MODE_IMAGE_WIDTH,
 } from "./constants";
 import { calculateDiscount } from "../../utils/number";
@@ -374,13 +373,9 @@ export class VviinnCarousel {
     const styleSheet = getComputedStyle(this.el);
     const columnsInCss = styleSheet.getPropertyValue(COLUMNS_NUMBER_CSS_VAR);
     const columnsNumber = parseInt(columnsInCss);
-    const extraColumns =
-      (this.appended &&
-        parseInt(styleSheet.getPropertyValue(EXTRA_COLUMNS_NUMBER_CSS_VAR))) ??
-      0;
 
     return columnsNumber && !isNaN(columnsNumber)
-      ? columnsNumber + extraColumns
+      ? columnsNumber
       : DEFAULT_COLUMNS_NUMBER;
   }
 

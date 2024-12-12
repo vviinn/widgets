@@ -1,6 +1,5 @@
 :host {
   --vviinn-carousel-columns-internal: var(--vviinn-carousel-columns, 4);
-  --vviinn-carousel-extra-columns: 0;
 }
 
 .body {
@@ -131,16 +130,6 @@ content. .content:not(.show-scrollbar)::-webkit-scrollbar,
 
 .items-group.appended > * {
   background-color: white;
-}
-
-.items-group.appended {
-  grid-template-columns: repeat(
-    calc(
-      var(--vviinn-carousel-columns-internal) +
-        var(--vviinn-carousel-extra-columns)
-    ),
-    1fr
-  );
 }
 
 @media (max-width: 480px) {
