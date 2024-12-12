@@ -31,6 +31,7 @@ import {
 })
 export class VviinnDetectedObject {
   @Prop() detectedObject: ValueObject<DetectedObject>;
+  @Prop() selectedDetectedObject: ValueObject<DetectedObject>;
   @Prop() basicEventData: BasicEventData;
 
   @Event({ bubbles: true })
@@ -60,7 +61,7 @@ export class VviinnDetectedObject {
         const transformedRect = fromAlt(rectangle);
         const scaledRect = scaleWithSized(bounds)(transformedRect);
 
-        searchState.detectedObject = this.detectedObject;
+        this.selectedDetectedObject = this.detectedObject;
         searchState.searchArea = O.some(scaledRect);
       })
     );
@@ -73,11 +74,10 @@ export class VviinnDetectedObject {
   }
 
   private isActive(): boolean {
-    if (!this.detectedObject) return false;
-    if (!searchState.detectedObject) return false;
+    if (!this.detectedObject || !this.selectedDetectedObject) return false;
 
     const thisObject = foldValueObject(this.detectedObject);
-    const savedObject = foldValueObject(searchState.detectedObject);
+    const savedObject = foldValueObject(this.selectedDetectedObject);
 
     return detectedObjectEq.equals(thisObject, savedObject);
   }

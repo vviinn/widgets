@@ -106,6 +106,7 @@ export class VviinnCropper {
 
   @Listen("vviinnSelectObject")
   selectDetectedObject({ detail }: CustomEvent<SelectObjectEventData>) {
+    this.selectedDetectedObject = detail.detectedObject;
     const { top, left, width, height } = detail.detectedObject.value.rectangle;
     const data = this.cropper.getImageData();
 
@@ -194,6 +195,7 @@ export class VviinnCropper {
   private cropEnd = () => {
     const cropboxData = this.getCropboxData();
     this.vviinnCropperCropEnd.emit(cropboxData);
+    this.selectedDetectedObject = undefined;
     this.vviinnImageCrop.emit(this.basicEventData);
   };
 
@@ -220,6 +222,7 @@ export class VviinnCropper {
             ).map((object) => (
               <vviinn-detected-object
                 detectedObject={object}
+                selectedDetectedObject={this.selectedDetectedObject}
                 basicEventData={this.basicEventData}
               />
             ))}

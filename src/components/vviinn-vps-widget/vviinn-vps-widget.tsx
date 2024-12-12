@@ -520,7 +520,6 @@ export class VviinnVpsWidget {
   private handleCropperCropEnd({ detail }: CustomEvent<SearchArea>) {
     searchState.searchArea = O.some(detail);
     makeRectangularSearchRequest();
-    searchState.detectedObject = undefined;
   }
 
   private trackWidgetEvent(action: WidgetAction) {

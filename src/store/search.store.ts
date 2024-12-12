@@ -80,7 +80,6 @@ type SearchStore = {
   selectedCropper?: number;
   rectangleSearchForm?: Form;
   detectedObjects: ValueObject<DetectedObject>[];
-  detectedObject?: ValueObject<DetectedObject>;
   objectDetectionInProgress: boolean;
   imageWidth: number;
   searchType?: SearchType;
