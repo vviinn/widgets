@@ -13,13 +13,13 @@ import {
 import Cropper from "cropperjs";
 import styles from "./vviinn-cropper.css";
 import { ValueObject } from "../../network/ion/ValueObject";
-import { fromImage } from "../../geometry/Rectangle";
+import { fromImage, Rectangle } from "../../geometry/Rectangle";
 import { DetectedObject } from "../../searchSession/searchSession";
 import {
   BasicEventData,
   SelectObjectEventData,
 } from "../../recommendation/events";
-import { SearchArea, LoadImageEventData } from "./types";
+import { LoadImageEventData } from "./types";
 import { ValidateCropBoxData } from "./helpers";
 import {
   INITIAL_CROP_AREA_OFFSET,
@@ -27,7 +27,10 @@ import {
   MIN_IMAGE_SIDE_FOR_CROPPER,
   cropperOptions,
 } from "./constants";
-import { searchState } from "../../store/search.store";
+import {
+  makeRectangularSearchRequest,
+  searchState,
+} from "../../store/search.store";
 import * as O from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/function";
 import { sequenceToOption } from "../../utils/option/option";
@@ -60,10 +63,12 @@ export class VviinnCropper {
   @State() cropper: Cropper = null;
   @State() hidePreloader = false;
   @State() selectedDetectedObject: ValueObject<DetectedObject>;
+  @State() imageBounds: Rectangle | null;
+  @State() searchArea: Rectangle | null;
 
   @Event() vviinnImageCrop: EventEmitter<BasicEventData>;
   @Event() vviinnCropperLoadImage: EventEmitter<LoadImageEventData>;
-  @Event() vviinnCropperCropEnd: EventEmitter<SearchArea>;
+  @Event() vviinnCropperCropEnd: EventEmitter<Rectangle>;
   @Event() vviinnCropperAspectRatioError: EventEmitter<boolean>;
 
   connectedCallback() {
@@ -120,7 +125,7 @@ export class VviinnCropper {
     this.cropper.setCropBoxData(ValidateCropBoxData(cropBoxData));
   }
 
-  private getCropboxData(): SearchArea {
+  private getCropboxData(): Rectangle {
     const { left, top, width, height } = this.cropper.getCropBoxData();
     return {
       x: left,
@@ -165,8 +170,8 @@ export class VviinnCropper {
       };
 
       this.vviinnCropperLoadImage.emit({ imageBounds, searchArea });
-      searchState.imageBounds = O.some(imageBounds);
-      searchState.searchArea = O.some(searchArea);
+      this.imageBounds = imageBounds;
+      this.searchArea = searchArea;
 
       if (
         width / height < SUPPORTED_ASPECT_RATIO ||
@@ -194,7 +199,10 @@ export class VviinnCropper {
 
   private cropEnd = () => {
     const cropboxData = this.getCropboxData();
+
     this.vviinnCropperCropEnd.emit(cropboxData);
+    this.searchArea = cropboxData;
+    makeRectangularSearchRequest(this.searchArea, this.imageBounds);
     this.selectedDetectedObject = undefined;
     this.vviinnImageCrop.emit(this.basicEventData);
   };
@@ -224,6 +232,8 @@ export class VviinnCropper {
                 detectedObject={object}
                 selectedDetectedObject={this.selectedDetectedObject}
                 basicEventData={this.basicEventData}
+                imageBounds={this.imageBounds}
+                searchArea={this.searchArea}
               />
             ))}
           </div>
