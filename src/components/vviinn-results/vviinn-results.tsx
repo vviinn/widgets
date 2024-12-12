@@ -674,13 +674,6 @@ export class VviinnResults {
       "vviinn-favorite-icon-pressed",
     ];
 
-    console.log(
-      isOneClickDiscoveryAppendMode ? "one-click-discovery-append" : undefined,
-      isOneClickDiscoveryAppendMode
-        ? this.el.shadowRoot.getElementById("one-click-discovery-append")
-        : undefined
-    );
-
     return results.map((p, i) => (
       <vviinn-product-card
         key={p.productId}
