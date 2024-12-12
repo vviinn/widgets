@@ -717,9 +717,7 @@ export class VviinnResults {
               productId={p.productId}
               addStyle={false}
               mode={
-                this.oneClickDiscoveryMode === "append-slider"
-                  ? "continuity"
-                  : undefined
+                this.oneClickDiscoveryMode === "append" ? "grid" : undefined
               }
               appendSidebarTo={
                 isOneClickDiscoveryAppendMode
