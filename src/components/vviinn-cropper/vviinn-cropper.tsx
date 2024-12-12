@@ -29,6 +29,11 @@ import {
 } from "./constants";
 import { searchState } from "../../store/search.store";
 import * as O from "fp-ts/lib/Option";
+import { pipe } from "fp-ts/lib/function";
+import { sequenceToOption } from "../../utils/option/option";
+import { getImageSizes } from "../../Image/sizing";
+
+const DEFAULT_IMAGE_SIZE = 288;
 
 @Component({
   tag: "vviinn-cropper",
@@ -38,25 +43,28 @@ import * as O from "fp-ts/lib/Option";
 export class VviinnCropper {
   @Element() el: HTMLElement;
 
-  @Prop() basicEventDataString: string;
-  @Prop() detectedObjectsString: string;
-  @Prop() url: string;
-  @Prop() width: number;
-  @Prop() height: number;
+  @Prop() basicEventDataString?: string;
+  @Prop() detectedObjectsString?: string;
 
-  @State() detectedObjects: ValueObject<DetectedObject>[];
-  @State() basicEventData: BasicEventData;
+  @Prop({ mutable: true }) basicEventData: BasicEventData;
+  @Prop({ mutable: true }) url: string;
+  @Prop({ mutable: true }) width: number;
+  @Prop({ mutable: true }) height?: number;
+
+  /** @internal */
+  @Prop() showAspectRatioError: boolean;
+  /** @internal */
+  @Prop() showInWidget: boolean = false;
+
+  @State() detectedObjects: ValueObject<DetectedObject>[] = [];
   @State() cropper: Cropper = null;
+  @State() hidePreloader = false;
+  @State() selectedDetectedObject: ValueObject<DetectedObject>;
 
   @Event() vviinnImageCrop: EventEmitter<BasicEventData>;
   @Event() vviinnCropperLoadImage: EventEmitter<LoadImageEventData>;
   @Event() vviinnCropperCropEnd: EventEmitter<SearchArea>;
   @Event() vviinnCropperAspectRatioError: EventEmitter<boolean>;
-  @Event() vviinnCropperHidePreloader: EventEmitter<boolean>;
-
-  disconnectedCallback() {
-    if (this.cropper) this.cropper.destroy();
-  }
 
   connectedCallback() {
     this.stringParser(true, true);
@@ -88,6 +96,14 @@ export class VviinnCropper {
     }
   }
 
+  disconnectedCallback() {
+    if (this.cropper) this.cropper.destroy();
+  }
+
+  componentWillRender() {
+    this.renderImage();
+  }
+
   @Listen("vviinnSelectObject")
   selectDetectedObject({ detail }: CustomEvent<SelectObjectEventData>) {
     const { top, left, width, height } = detail.detectedObject.value.rectangle;
@@ -111,6 +127,20 @@ export class VviinnCropper {
       width,
       height,
     };
+  }
+
+  private renderImage(): null {
+    return pipe(
+      sequenceToOption(searchState.imageUrl, searchState.image),
+      O.map(([url, refImage]) => {
+        const [width, height] = getImageSizes(refImage, DEFAULT_IMAGE_SIZE);
+
+        this.width = width;
+        this.height = height;
+        this.url = url;
+      }),
+      O.getOrElse(() => null)
+    );
   }
 
   private loadImage() {
@@ -149,7 +179,7 @@ export class VviinnCropper {
         width < MIN_IMAGE_SIDE_FOR_CROPPER ||
         height < MIN_IMAGE_SIDE_FOR_CROPPER
       ) {
-        this.vviinnCropperHidePreloader.emit(true);
+        this.hidePreloader = true;
         return;
       }
 
@@ -167,35 +197,41 @@ export class VviinnCropper {
     this.vviinnImageCrop.emit(this.basicEventData);
   };
 
-  private renderDetectedObject(
-    object: ValueObject<DetectedObject>
-  ): HTMLElement {
-    return (
-      <vviinn-detected-object
-        detectedObject={object}
-        basicEventData={this.basicEventData}
-      />
-    );
-  }
-
   render() {
     return (
       <Host>
-        <div
-          class="image-container"
-          style={{ width: `${this.width.toString()}px`, overflow: "hidden" }}
-        >
-          <img
-            decoding="async"
-            width={this.width}
-            height={this.height}
-            src={this.url}
-            draggable={false}
-            onLoad={() => this.loadImage()}
-          />
+        <div class="container">
+          <div
+            class="image-container"
+            style={{ width: `${this.width.toString()}px`, overflow: "hidden" }}
+          >
+            <img
+              decoding="async"
+              width={this.width}
+              height={this.height}
+              src={this.url}
+              draggable={false}
+              onLoad={() => this.loadImage()}
+            />
 
-          {this.detectedObjects &&
-            this.detectedObjects.map((o) => this.renderDetectedObject(o))}
+            {(this.showInWidget
+              ? searchState.detectedObjects
+              : this.detectedObjects
+            ).map((object) => (
+              <vviinn-detected-object
+                detectedObject={object}
+                basicEventData={this.basicEventData}
+              />
+            ))}
+          </div>
+
+          {(searchState.loading || searchState.objectDetectionInProgress) &&
+          !this.showAspectRatioError &&
+          !this.hidePreloader ? (
+            <div class="image-preloader">
+              <vviinn-preloader />
+            </div>
+          ) : null}
         </div>
       </Host>
     );

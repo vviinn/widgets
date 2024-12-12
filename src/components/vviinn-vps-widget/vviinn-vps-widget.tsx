@@ -16,7 +16,10 @@ import { v4 as uuidv4 } from "uuid";
 import i18next from "i18next";
 
 import { version } from "../../../package.json";
-import { searchState } from "../../store/search.store";
+import {
+  makeRectangularSearchRequest,
+  searchState,
+} from "../../store/search.store";
 import { state } from "../../store/store";
 import { slotChangeListener } from "../customized-slots";
 import { createTrackingApi } from "../../openApi";
@@ -59,6 +62,7 @@ import {
   searchWidgetButtonParts,
   searchWidgetFilterParts,
 } from "../../cssParts";
+import { LoadImageEventData, SearchArea } from "../vviinn-cropper/types";
 
 const CAMERA_START_DELAY = 500;
 
@@ -473,6 +477,50 @@ export class VviinnVpsWidget {
     this.uiSessionId = uuidv4();
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
     this.widgetElementId = this.el.id;
+
+    document.addEventListener(
+      "vviinnCropperAspectRatioError",
+      this.handleAspectRatioError
+    );
+    document.addEventListener(
+      "vviinnCropperLoadImage",
+      this.handleCropperLoadImage
+    );
+    document.addEventListener(
+      "vviinnCropperCropEnd",
+      this.handleCropperCropEnd
+    );
+  }
+
+  disconnectedCallback() {
+    document.removeEventListener(
+      "vviinnCropperAspectRatioError",
+      this.handleAspectRatioError
+    );
+    document.addEventListener(
+      "vviinnCropperLoadImage",
+      this.handleCropperLoadImage
+    );
+    document.addEventListener(
+      "vviinnCropperCropEnd",
+      this.handleCropperCropEnd
+    );
+  }
+
+  private handleAspectRatioError = ({ detail }: CustomEvent<boolean>) => {
+    this.setShowAspectRatioError(detail);
+    this.el.classList.add("bordered");
+  };
+
+  private handleCropperLoadImage({ detail }: CustomEvent<LoadImageEventData>) {
+    searchState.imageBounds = O.some(detail.imageBounds);
+    searchState.searchArea = O.some(detail.searchArea);
+  }
+
+  private handleCropperCropEnd({ detail }: CustomEvent<SearchArea>) {
+    searchState.searchArea = O.some(detail);
+    makeRectangularSearchRequest();
+    searchState.detectedObject = undefined;
   }
 
   private trackWidgetEvent(action: WidgetAction) {
@@ -734,10 +782,10 @@ export class VviinnVpsWidget {
             >
               {this.isResultSlide() && searchState.searchType === "image" && (
                 <div class="source-wrapper image-wrapper">
-                  <vviinn-image-view
+                  <vviinn-cropper
                     basicEventData={this.getBasicEventData()}
-                    setShowAspectRatioError={this.setShowAspectRatioError}
                     showAspectRatioError={this.showAspectRatioError}
+                    showInWidget={true}
                   />
                   <div
                     class={{
