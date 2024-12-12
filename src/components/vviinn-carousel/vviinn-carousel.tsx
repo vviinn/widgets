@@ -443,19 +443,30 @@ export class VviinnCarousel {
     return (
       <vviinn-product-card
         index={rank}
+        data-id={recommendation.productId}
         productId={recommendation.productId}
         productTitle={recommendation.title}
         productType={recommendation.productType}
         deeplink={recommendation.deeplink}
         image={recommendation.image.thumbnail}
         brand={recommendation.brand}
-        imageWidth={this.imageWidth}
-        imageRatio={this.imageRatio}
         price={recommendation.price.actual}
-        salePrice={salePrice}
         basePrice={recommendation.basePrice?.actual}
         baseSalePrice={recommendation.basePrice?.sale}
+        energyCertifications={recommendation.energyCertifications}
+        customLabels={getCustomLabels(recommendation)}
+        imageWidth={this.imageWidth}
+        imageRatio={this.imageRatio}
         responsive={this.isGridMode}
+        addToBasketShow={this.addToBasketShow}
+        setMode={this.isSetMode}
+        addPriceContainer={this.addPriceContainer}
+        favoriteShow={this.favoriteShow}
+        salePrice={salePrice}
+        appliedDiscountPercentage={appliedDiscount}
+        currentDiscountPercentage={this.setModeDiscount}
+        currency={this.currencySign}
+        pricePrefix={this.pricePrefix}
         campaignTypeId={this.campaignTypeId}
         widgetElementId={this.widgetElementId}
         widgetVersion={this.widgetVersion}
