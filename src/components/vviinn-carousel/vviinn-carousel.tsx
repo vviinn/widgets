@@ -464,8 +464,7 @@ export class VviinnCarousel {
         customLabels={getCustomLabels(recommendation)}
         imageWidth={this.imageWidth}
         imageRatio={this.imageRatio}
-        //responsive={this.isGridMode}
-        responsive={true}
+        responsive={this.isGridMode}
         addToBasketShow={this.addToBasketShow}
         setMode={this.isSetMode}
         addPriceContainer={this.addPriceContainer}
