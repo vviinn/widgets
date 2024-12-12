@@ -368,7 +368,7 @@ export class VviinnCarousel {
 
   private getColumnsNumber(): number {
     if (this.setItemsAmount && this.isSetMode) {
-      if (this.isSetMode) return this.setItemsAmount;
+      return this.setItemsAmount;
     }
 
     const styleSheet = getComputedStyle(this.el);
@@ -519,7 +519,6 @@ export class VviinnCarousel {
   private renderGrid() {
     const recommendations = this.renderRecommendationsElements();
     const grouppedContent = chunksOf(this.getColumnsNumber())(recommendations);
-    //const grouppedContent = chunksOf(8)(recommendations);
     return this.renderRecommendationGroups(grouppedContent);
   }
 

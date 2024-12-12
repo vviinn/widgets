@@ -713,7 +713,6 @@ export class VviinnVprWidget implements ComponentInterface {
 
           {this.recommendations.length > 0 &&
             (this.useCarousel ? this.renderCarousel() : this.renderResults())}
-          {/*{this.recommendations.length > 0 && this.renderCarousel()}*/}
 
           {(this.recommendations.length === 0 ||
             (this.recommendations.length < this.setItemsAmount &&
