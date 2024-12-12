@@ -1,5 +1,6 @@
 :host {
   --vviinn-carousel-columns-internal: var(--vviinn-carousel-columns, 4);
+  --vviinn-carousel-extra-columns: 2;
 }
 
 .body {
@@ -7,6 +8,12 @@
   position: relative;
   width: var(--vviinn-carousel-content-width);
   flex-direction: column;
+}
+
+.body.appended {
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 12px 12px 0 12px;
+  box-sizing: border-box;
 }
 
 .bullets {
@@ -120,6 +127,20 @@ content. .content:not(.show-scrollbar)::-webkit-scrollbar,
   grid-gap: 16px;
   grid-template-columns: repeat(var(--vviinn-carousel-columns-internal), 1fr);
   min-width: 100%;
+}
+
+.items-group.appended > * {
+  background-color: white;
+}
+
+.items-group.appended {
+  grid-template-columns: repeat(
+    calc(
+      var(--vviinn-carousel-columns-internal) +
+        var(--vviinn-carousel-extra-columns)
+    ),
+    1fr
+  );
 }
 
 @media (max-width: 480px) {

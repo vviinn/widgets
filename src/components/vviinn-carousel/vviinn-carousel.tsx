@@ -27,6 +27,7 @@ import {
   COLUMNS_NUMBER_CSS_VAR,
   CONTENT_GROUP_CSS_CLASS,
   DEFAULT_COLUMNS_NUMBER,
+  EXTRA_COLUMNS_NUMBER_CSS_VAR,
   SET_MODE_IMAGE_WIDTH,
 } from "./constants";
 import { calculateDiscount } from "../../utils/number";
@@ -80,6 +81,7 @@ export class VviinnCarousel {
   @Prop() pricePrefix: string = "";
   @Prop() locale: Locale;
   @Prop() setItemsAmount?: number;
+  @Prop() appended = false;
 
   /** Event emitted once when the recommendation is rendered on the page */
   @Event({ bubbles: true })
@@ -366,15 +368,19 @@ export class VviinnCarousel {
 
   private getColumnsNumber(): number {
     if (this.setItemsAmount && this.isSetMode) {
-      return this.setItemsAmount;
+      if (this.isSetMode) return this.setItemsAmount;
     }
 
     const styleSheet = getComputedStyle(this.el);
     const columnsInCss = styleSheet.getPropertyValue(COLUMNS_NUMBER_CSS_VAR);
     const columnsNumber = parseInt(columnsInCss);
+    const extraColumns =
+      (this.appended &&
+        parseInt(styleSheet.getPropertyValue(EXTRA_COLUMNS_NUMBER_CSS_VAR))) ??
+      0;
 
     return columnsNumber && !isNaN(columnsNumber)
-      ? columnsNumber
+      ? columnsNumber + extraColumns
       : DEFAULT_COLUMNS_NUMBER;
   }
 
@@ -421,6 +427,7 @@ export class VviinnCarousel {
     return {
       [this.mode]: true,
       "show-scrollbar": this.showScrollbar(),
+      appended: this.appended,
     };
   }
 
@@ -457,7 +464,8 @@ export class VviinnCarousel {
         customLabels={getCustomLabels(recommendation)}
         imageWidth={this.imageWidth}
         imageRatio={this.imageRatio}
-        responsive={this.isGridMode}
+        //responsive={this.isGridMode}
+        responsive={true}
         addToBasketShow={this.addToBasketShow}
         setMode={this.isSetMode}
         addPriceContainer={this.addPriceContainer}
@@ -470,28 +478,20 @@ export class VviinnCarousel {
         campaignTypeId={this.campaignTypeId}
         widgetElementId={this.widgetElementId}
         widgetVersion={this.widgetVersion}
-        addToBasketShow={this.addToBasketShow}
-        data-id={recommendation.productId}
-        energyCertifications={recommendation.energyCertifications}
         updatingAllCards={this.updatingAllCards}
         defaultAnimationInterval={this.defaultAnimationInterval}
         updateButtonLocation={this.updateButtonLocation}
-        appliedDiscountPercentage={appliedDiscount}
-        currentDiscountPercentage={this.setModeDiscount}
-        currency={this.currencySign}
-        pricePrefix={this.pricePrefix}
         locale={this.locale}
-        setMode={this.isSetMode}
-        customLabels={getCustomLabels(recommendation)}
-        addPriceContainer={this.addPriceContainer}
-        favoriteShow={this.favoriteShow}
       />
     );
   }
 
   private renderRecommendationGroup(elements: HTMLVviinnProductCardElement[]) {
     return (
-      <div class={CONTENT_GROUP_CSS_CLASS} part="items-group">
+      <div
+        class={`${CONTENT_GROUP_CSS_CLASS} ${this.appended ? " appended" : ""}`}
+        part="items-group"
+      >
         {...elements}
       </div>
     );
@@ -519,6 +519,7 @@ export class VviinnCarousel {
   private renderGrid() {
     const recommendations = this.renderRecommendationsElements();
     const grouppedContent = chunksOf(this.getColumnsNumber())(recommendations);
+    //const grouppedContent = chunksOf(8)(recommendations);
     return this.renderRecommendationGroups(grouppedContent);
   }
 

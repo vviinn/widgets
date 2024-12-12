@@ -744,6 +744,9 @@ export class VviinnResults {
               locale={this.locale}
               favoriteShow={this.favoriteShow}
               campaigns={this.oneClickDiscoveryCampaigns}
+              setItemsAmount={
+                this.oneClickDiscoveryMode === "append-slider" ? 6 : undefined
+              }
             >
               {this.checkSlotContent("vviinn-results-vpr-slot") && (
                 <slot name="vviinn-results-vpr-slot" />
