@@ -1,6 +1,6 @@
 :host {
   --vviinn-carousel-columns-internal: var(--vviinn-carousel-columns, 4);
-  --vviinn-carousel-extra-columns: 2;
+  --vviinn-carousel-extra-columns: 0;
 }
 
 .body {

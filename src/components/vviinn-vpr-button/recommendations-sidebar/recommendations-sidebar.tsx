@@ -64,6 +64,7 @@ export class RecommendationsSidebar {
   @Prop() updateButtonLocation: UpdateButtonLocation;
   @Prop() favoriteShow: boolean = false;
   @Prop() useCarousel: boolean = true;
+  @Prop() appended = false;
 
   /** @internal */
   @Prop() showInCustomContainer: boolean = false;
@@ -206,6 +207,7 @@ export class RecommendationsSidebar {
               updateButtonLocation={this.updateButtonLocation}
               addPriceContainer={this.addPriceContainer}
               favoriteShow={this.favoriteShow}
+              appended={this.appended}
             />
           </main>
         </aside>
