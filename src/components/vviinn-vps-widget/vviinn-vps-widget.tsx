@@ -828,9 +828,8 @@ export class VviinnVpsWidget {
                   textSearchRequestId={this.requestId}
                   addPriceContainer={this.addPriceContainer}
                   oneClickDiscoveryMode={
-                    this.oneClickDiscoveryMode ?? this.oneClickDiscoveryShow
-                      ? "append"
-                      : undefined
+                    this.oneClickDiscoveryMode ??
+                    (this.oneClickDiscoveryShow ? "append" : undefined)
                   }
                   oneClickDiscoveryCampaigns={this.oneClickDiscoveryCampaigns}
                 />
