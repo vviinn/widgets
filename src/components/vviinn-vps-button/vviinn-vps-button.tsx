@@ -119,6 +119,9 @@ export class VviinnVpsButton {
   /** Wrap the Product Card's price values in the container. */
   @Prop() addPriceContainer?: boolean = false;
 
+  /** Discovery Mode */
+  @Prop() oneClickDiscoveryMode: undefined | "append" | "append-slider";
+
   /** @internal */
   @Prop() apiPath: string | undefined;
 
@@ -250,6 +253,7 @@ export class VviinnVpsButton {
           addPriceContainer={this.addPriceContainer}
           replaceSlotsContentInButton={this.replaceSlotsContent.bind(this)}
           oneClickDiscoveryShow={this.oneClickDiscoveryShow}
+          oneClickDiscoveryMode={this.oneClickDiscoveryMode}
           oneClickDiscoveryCampaigns={this.oneClickDiscoveryCampaigns}
           favoriteShow={this.favoriteShow}
         />

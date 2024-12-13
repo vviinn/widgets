@@ -155,6 +155,9 @@ export class VviinnVpsWidget {
   /** Wrap the Product Card's price values in the container. */
   @Prop() addPriceContainer?: boolean = false;
 
+  /** Discovery Mode */
+  @Prop() oneClickDiscoveryMode: undefined | "append" | "append-slider";
+
   /** @internal */
   @Prop() apiPath: string = "https://api.vviinn.com";
   /** Set true when showing the widget in button */
@@ -825,7 +828,9 @@ export class VviinnVpsWidget {
                   textSearchRequestId={this.requestId}
                   addPriceContainer={this.addPriceContainer}
                   oneClickDiscoveryMode={
-                    this.oneClickDiscoveryShow ? "append" : undefined
+                    this.oneClickDiscoveryMode ?? this.oneClickDiscoveryShow
+                      ? "append"
+                      : undefined
                   }
                   oneClickDiscoveryCampaigns={this.oneClickDiscoveryCampaigns}
                 />
