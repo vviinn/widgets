@@ -89,7 +89,7 @@ content. .content:not(.show-scrollbar)::-webkit-scrollbar,
   align-items: center;
   background-color: white;
   border: none;
-  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   fill: #525252;
   cursor: pointer;
   display: grid;
