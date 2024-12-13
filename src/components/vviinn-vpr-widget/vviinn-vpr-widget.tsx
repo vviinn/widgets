@@ -803,6 +803,7 @@ export class VviinnVprWidget implements ComponentInterface {
         imageRatio={this.imageRatio}
         favoriteShow={this.favoriteShow}
         setItemsAmount={this.setItemsAmount}
+        appended={this.appended}
       ></vviinn-carousel>
     );
   }

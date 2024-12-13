@@ -122,8 +122,14 @@ content. .content:not(.show-scrollbar)::-webkit-scrollbar,
   min-width: 100%;
 }
 
-.items-group.appended > * {
-  background-color: white;
+.items-group.appended {
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(
+      var(--product-card-width, var(--product-card-widget-min-width)),
+      1fr
+    )
+  );
 }
 
 @media (max-width: 480px) {

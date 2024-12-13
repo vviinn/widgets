@@ -80,6 +80,7 @@ export class VviinnCarousel {
   @Prop() pricePrefix: string = "";
   @Prop() locale: Locale;
   @Prop() setItemsAmount?: number;
+  @Prop() appended = false;
 
   /** Event emitted once when the recommendation is rendered on the page */
   @Event({ bubbles: true })
@@ -365,9 +366,7 @@ export class VviinnCarousel {
   }
 
   private getColumnsNumber(): number {
-    if (this.setItemsAmount && this.isSetMode) {
-      return this.setItemsAmount;
-    }
+    if (this.setItemsAmount) return this.setItemsAmount;
 
     const styleSheet = getComputedStyle(this.el);
     const columnsInCss = styleSheet.getPropertyValue(COLUMNS_NUMBER_CSS_VAR);
@@ -421,6 +420,7 @@ export class VviinnCarousel {
     return {
       [this.mode]: true,
       "show-scrollbar": this.showScrollbar(),
+      appended: this.appended,
     };
   }
 
@@ -480,7 +480,10 @@ export class VviinnCarousel {
 
   private renderRecommendationGroup(elements: HTMLVviinnProductCardElement[]) {
     return (
-      <div class={CONTENT_GROUP_CSS_CLASS} part="items-group">
+      <div
+        class={`${CONTENT_GROUP_CSS_CLASS} ${this.appended ? " appended" : ""}`}
+        part="items-group"
+      >
         {...elements}
       </div>
     );
