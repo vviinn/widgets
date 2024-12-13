@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.140.0](https://github.com/vviinn/widgets/compare/v2.139.0...v2.140.0) (2024-12-11)
+
+
+### Features
+
+* styled oneclick discovery in the vviinn result and search modal ([1a7d9ec](https://github.com/vviinn/widgets/commit/1a7d9ec90f724267f91fd35277e2d514155e20a1))
+
 ## [2.139.0](https://github.com/vviinn/widgets/compare/v2.138.0...v2.139.0) (2024-12-10)
 
 
