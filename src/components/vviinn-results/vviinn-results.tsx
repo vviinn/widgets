@@ -61,13 +61,10 @@ import {
 import { RequestDynamicFilterItem } from "../../campaign/VPRCampaignService";
 import i18next from "i18next";
 import { resources } from "../../locale";
-import {
-  productCardSlotsNames,
-  slotChangeListener,
-  SlotSkeleton,
-} from "../customized-slots";
+import { productCardSlotsNames, slotChangeListener } from "../customized-slots";
 import { getCustomLabels } from "../../recommendation";
 import { productCardParts } from "../../cssParts";
+import { hasSlotContent } from "../../dom";
 
 /**
  * @part product-card - Product Card itself.
@@ -103,7 +100,7 @@ import { productCardParts } from "../../cssParts";
  * @part custom-label-3 - Custom label with index 3.
  * @part custom-label-4 - Custom label with index 4.
  *
- * @slot vviinn-results-vpr-slot - Discovery main slot to change one click Discovery icon
+ * @slot vviinn-results-vpr-icon - One-click Discovery icon.
  * @slot vviinn-favorite-icon - Icon of Favorite button.
  * @slot vviinn-favorite-icon-pressed - Icon of pressed Favorite button.
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
@@ -219,6 +216,8 @@ export class VviinnResults {
   @Prop() replaceSlotsContentInWidget?: ReplaceSlotsContentInParent;
   /** @internal */
   @Prop() replaceSlotsContentInButton?: ReplaceSlotsContentInParent;
+  /** @internal */
+  @Prop() hasVprIconSlot?: boolean = false;
 
   @State() recommendations: Recommendation[] = [];
   @State() innerTextSearchQuery: string;
@@ -244,6 +243,12 @@ export class VviinnResults {
       element: this.el,
     });
   }
+
+  private renderVprIconSlot = () =>
+    hasSlotContent(this.el, "vviinn-results-vpr-icon") ||
+    this.hasVprIconSlot ? (
+      <slot name="vviinn-results-vpr-icon" />
+    ) : null;
 
   async componentWillLoad() {
     slotChangeListener(this, this.el);
@@ -726,7 +731,7 @@ export class VviinnResults {
               favoriteShow={this.favoriteShow}
               campaigns={this.oneClickDiscoveryCampaigns}
             >
-              {SlotSkeleton("one-click-discovery")}
+              {this.renderVprIconSlot()}
               {productCardSlotsNames.map((slotName) =>
                 this.renderSlotContent(slotName)
               )}

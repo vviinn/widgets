@@ -58,6 +58,7 @@ import {
   searchWidgetButtonParts,
   searchWidgetFilterParts,
 } from "../../cssParts";
+import { hasSlotContent } from "../../dom";
 
 const CAMERA_START_DELAY = 500;
 
@@ -79,6 +80,7 @@ const CAMERA_START_DELAY = 500;
  * @slot vviinn-custom-label-3 - Custom label with index 3.
  * @slot vviinn-custom-label-4 - Custom label with index 4.
  *
+ * @slot vviinn-results-vpr-icon - One-click Discovery icon.
  * @part close-button - Close Button in the modal's header.
  * @part secondary-action - Back Button in the modal's header.
  * @part results-title - Title on the results page.
@@ -175,6 +177,8 @@ export class VviinnVpsWidget {
   @Prop() resetVpsButton: () => void;
   /** @internal */
   @Prop() replaceSlotsContentInButton?: () => void;
+  /** @internal */
+  @Prop({ mutable: true }) hasVprIconSlot: boolean = false;
 
   @State() slidePosition: number = 0;
   @State() width: number = 0;
@@ -356,6 +360,11 @@ export class VviinnVpsWidget {
       fallbackLng: "en",
       resources,
     });
+
+    if (hasSlotContent(this.el, "vviinn-results-vpr-icon")) {
+      this.hasVprIconSlot = true;
+    }
+
     slotChangeListener(this, this.el);
     this.vviinnWidgetLoad.emit(this.getBasicEventData());
     this.trackWidgetEvent("load");
@@ -839,6 +848,7 @@ export class VviinnVpsWidget {
                     this.oneClickDiscoveryShow ? "append" : undefined
                   }
                   oneClickDiscoveryCampaigns={this.oneClickDiscoveryCampaigns}
+                  hasVprIconSlot={this.hasVprIconSlot}
                 />
               )}
             </vviinn-slide>

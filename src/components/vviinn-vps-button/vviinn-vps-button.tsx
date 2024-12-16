@@ -27,6 +27,7 @@ import { campaignTypeNames } from "../../campaign/Campaign";
 import { Locale } from "../../locale";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 import { VisualSearchMode } from "../../widget/types";
+import { hasSlotContent } from "../../dom";
 
 /**
  * @slot vviinn-teaser-text - Text on the widget's main screen.
@@ -39,6 +40,7 @@ import { VisualSearchMode } from "../../widget/types";
  * @slot vviinn-image-search-modal-title - Image search modal title.
  * @slot vviinn-text-search-icon - Icon of the text search block.
  * @slot vviinn-energy-label-data-sheet-text - Text of the data sheet link for the energy label.
+ * @slot vviinn-results-vpr-icon - One-click Discovery icon
  * @slot vviinn-custom-label-0 - Custom label with index 0.
  * @slot vviinn-custom-label-1 - Custom label with index 1.
  * @slot vviinn-custom-label-2 - Custom label with index 2.
@@ -170,6 +172,8 @@ export class VviinnVpsButton {
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
 
+  private hasVprIconSlot: boolean = false;
+
   getBasicEventData = (): BasicEventData => {
     return {
       widgetType: "VPS",
@@ -183,6 +187,12 @@ export class VviinnVpsButton {
   @Listen("vviinnWidgetClose")
   handleModalClosed() {
     this.buttonPressed = false;
+  }
+
+  componentWillLoad() {
+    if (hasSlotContent(this.el, "vviinn-results-vpr-icon")) {
+      this.hasVprIconSlot = true;
+    }
   }
 
   componentDidLoad() {
@@ -264,6 +274,7 @@ export class VviinnVpsButton {
           oneClickDiscoveryShow={this.oneClickDiscoveryShow}
           oneClickDiscoveryCampaigns={this.oneClickDiscoveryCampaigns}
           favoriteShow={this.favoriteShow}
+          hasVprIconSlot={this.hasVprIconSlot}
         />
       </Host>
     );

@@ -42,12 +42,7 @@ export const productCardSlotsNames: string[] = [
 
 const renderNamedSlot = (name: string) => <slot name={name} />;
 
-type RenderType =
-  | "search"
-  | "discovery"
-  | "one-click-discovery"
-  | "filters"
-  | "card";
+type RenderType = "search" | "discovery" | "filters" | "card";
 
 const getSlotsNamesList = (renderType: RenderType) => {
   switch (renderType) {
@@ -56,9 +51,6 @@ const getSlotsNamesList = (renderType: RenderType) => {
     }
     case "discovery": {
       return [...vprSlotsNames, ...filtersSlotsNames, ...productCardSlotsNames];
-    }
-    case "one-click-discovery": {
-      return ["vviinn-results-vpr-slot"];
     }
     case "filters": {
       return filtersSlotsNames;
