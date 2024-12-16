@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.141.0](https://github.com/vviinn/widgets/compare/v2.140.0...v2.141.0) (2024-12-16)
+
+
+### Features
+
+* updated speech to text according to new requirements ([f0a65b2](https://github.com/vviinn/widgets/commit/f0a65b2b42e66c779ea82e0560f21f3fefb4185b))
+
 ## [2.140.0](https://github.com/vviinn/widgets/compare/v2.139.0...v2.140.0) (2024-12-11)
 
 

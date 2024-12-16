@@ -60,6 +60,7 @@ export const searchBarParts = makeExportPartsString([
   "text-search-input",
   "text-search-button",
   "speech-button",
+  "text-search-tooltip",
   "text-search-container",
 ]);
 

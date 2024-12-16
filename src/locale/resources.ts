@@ -27,7 +27,13 @@ export const resources: Resource = {
       teaserText: "Finde Produkte auf \n einem Foto",
       imageSearchModalTitle: "AI Search",
       textSearchPlaceholder: "mit Text suchen",
-      speechRecognitionPlaceholder: "Aufnahme...",
+      speechRecognition: {
+        placeholder: "Aufnahme...",
+        tooltip: {
+          general: "Bitte Mikrofon aktivieren",
+          siri: "Bitte aktivieren Siri",
+        },
+      },
       emptyResultsBlock: {
         title: "Leider nichts gefunden",
         button: "Neues Bild hochladen",
@@ -78,7 +84,13 @@ export const resources: Resource = {
       teaserText: "Find Product by Photo",
       imageSearchModalTitle: "AI Search",
       textSearchPlaceholder: "Search by text",
-      speechRecognitionPlaceholder: "Listening...",
+      speechRecognition: {
+        placeholder: "Listening...",
+        tooltip: {
+          general: "Please enable microphone",
+          siri: "Please enable Siri",
+        },
+      },
       emptyResultsBlock: {
         title: "Sorry, nothing found",
         button: "Upload another image",
