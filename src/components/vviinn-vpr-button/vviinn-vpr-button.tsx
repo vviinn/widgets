@@ -150,6 +150,8 @@ export class VviinnVprButton {
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
 
+  @Prop() showInWidget: boolean = false;
+
   /** Event emitted on widget load */
   @Event() vviinnWidgetLoad: EventEmitter<BasicEventData>;
 
@@ -271,6 +273,7 @@ export class VviinnVprButton {
     sidebar.updateButtonLocation = this.updateButtonLocation;
     sidebar.addPriceContainer = this.addPriceContainer;
     sidebar.favoriteShow = this.favoriteShow;
+    sidebar.showInWidget = this.showInWidget;
 
     if (this.targetAppendSidebarTo) {
       sidebar.mode = "grid";

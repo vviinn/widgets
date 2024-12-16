@@ -81,6 +81,7 @@ export class VviinnCarousel {
   @Prop() locale: Locale;
   @Prop() setItemsAmount?: number;
   @Prop() appended = false;
+  @Prop() showInWidget: boolean = false;
 
   /** Event emitted once when the recommendation is rendered on the page */
   @Event({ bubbles: true })
@@ -101,6 +102,7 @@ export class VviinnCarousel {
   private setModeMaxDiscount: number | null = null;
 
   private getProductData(recommendation, productRank): ProductCardEventData {
+    console.log(this.appended, this.showInWidget);
     return {
       productId: recommendation.productId,
       productRank,
@@ -421,6 +423,7 @@ export class VviinnCarousel {
       [this.mode]: true,
       "show-scrollbar": this.showScrollbar(),
       appended: this.appended,
+      inWidget: this.showInWidget,
     };
   }
 
@@ -481,7 +484,9 @@ export class VviinnCarousel {
   private renderRecommendationGroup(elements: HTMLVviinnProductCardElement[]) {
     return (
       <div
-        class={`${CONTENT_GROUP_CSS_CLASS} ${this.appended ? " appended" : ""}`}
+        class={`${CONTENT_GROUP_CSS_CLASS} ${this.appended ? " appended" : ""}${
+          this.showInWidget ? " inWidget" : ""
+        }`}
         part="items-group"
       >
         {...elements}

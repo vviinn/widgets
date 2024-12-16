@@ -126,9 +126,16 @@ content. .content:not(.show-scrollbar)::-webkit-scrollbar,
   grid-template-columns: repeat(
     auto-fill,
     minmax(
-      var(--product-card-width, var(--product-card-widget-min-width)),
+      var(--product-card-width, var(--product-card-results-min-width)),
       1fr
     )
+  );
+}
+
+.items-group.appended.inWidget {
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(var(--product-card-width, var(--product-card-widget-min-width)), 1fr)
   );
 }
 

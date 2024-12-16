@@ -735,6 +735,7 @@ export class VviinnResults {
               locale={this.locale}
               favoriteShow={this.favoriteShow}
               campaigns={this.oneClickDiscoveryCampaigns}
+              showInWidget={this.showInWidget}
             >
               {this.checkSlotContent("vviinn-results-vpr-slot") && (
                 <slot name="vviinn-results-vpr-slot" />

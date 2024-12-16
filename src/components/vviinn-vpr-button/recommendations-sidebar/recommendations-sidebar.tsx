@@ -65,6 +65,7 @@ export class RecommendationsSidebar {
   @Prop() favoriteShow: boolean = false;
   @Prop() useCarousel: boolean = true;
   @Prop() appended = false;
+  @Prop() showInWidget: boolean = false;
 
   /** @internal */
   @Prop() showInCustomContainer: boolean = false;
@@ -208,6 +209,7 @@ export class RecommendationsSidebar {
               addPriceContainer={this.addPriceContainer}
               favoriteShow={this.favoriteShow}
               appended={this.appended}
+              showInWidget={this.showInWidget}
             />
           </main>
         </aside>
