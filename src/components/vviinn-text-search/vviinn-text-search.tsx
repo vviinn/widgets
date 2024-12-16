@@ -27,9 +27,9 @@ import { TextSearchResponse } from "../../interfaces/search";
 import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/lib/function";
 import { searchBarParts } from "../../cssParts";
-import { RecordingIcon } from "../vviinn-icons/icons/RecordingIcon";
 import { MicIcon } from "../vviinn-icons/icons/MicIcon";
-import { initializeRecognition } from "./initializeRecognition";
+import { initializeRecognition, speechTooltip } from "./helpers";
+import Timeout = NodeJS.Timeout;
 
 /**
  * @part text-search-container - Container for the text search block.
@@ -88,6 +88,8 @@ export class VviinnTextSearch {
 
   @State() isRecording = false;
 
+  @State() showTooltip = false;
+
   private isShowPreloader = () =>
     this.showInWidget
       ? searchState.loading && searchState.searchType === "text"
@@ -100,8 +102,22 @@ export class VviinnTextSearch {
   private showRecording = () => (this.isRecording = true);
   private hideRecording = () => (this.isRecording = false);
 
+  private setShowTooltip = (show: boolean) => {
+    this.showTooltip = show;
+  };
+
+  private triggerTooltipStart: Timeout;
+  private triggerTooltipEnd: Timeout;
+
+  private tooltipText = speechTooltip();
+
   private recognition = initializeRecognition(
     this.locale,
+    () => {
+      this.showRecording();
+      this.setShowTooltip(false);
+      clearTimeout(this.triggerTooltipStart);
+    },
     this.hideRecording,
     (speechResult) => {
       this.setSearchQuery(speechResult);
@@ -115,6 +131,8 @@ export class VviinnTextSearch {
 
   disconnectedCallback() {
     document.removeEventListener("resultsSearchFinished", this.hideLoader);
+    clearTimeout(this.triggerTooltipStart);
+    clearTimeout(this.triggerTooltipEnd);
   }
 
   async componentWillLoad() {
@@ -124,7 +142,6 @@ export class VviinnTextSearch {
       resources,
     });
     slotChangeListener(this, this.el);
-
     if (!this.showInWidget && this.searchQuery?.length > 0) {
       this.showLoader();
       this.vviinnTextSearchStarted.emit({
@@ -153,9 +170,18 @@ export class VviinnTextSearch {
     if (this.isRecording) {
       this.recognition.stop();
       this.hideRecording();
+      this.setShowTooltip(false);
     } else {
-      this.showRecording();
       this.recognition.start();
+      this.setSearchQuery("");
+      this.triggerTooltipStart = setTimeout(() => {
+        if (!this.isRecording) {
+          this.setShowTooltip(true);
+          this.triggerTooltipEnd = setTimeout(() => {
+            this.setShowTooltip(false);
+          }, 5000);
+        }
+      }, 1000);
     }
   }
 
@@ -203,7 +229,7 @@ export class VviinnTextSearch {
             type="text"
             placeholder={i18next.t(
               this.isShowRecording()
-                ? "speechRecognitionPlaceholder"
+                ? "speechRecognition.placeholder"
                 : "textSearchPlaceholder"
             )}
             value={this.searchQuery}
@@ -230,7 +256,10 @@ export class VviinnTextSearch {
               part="speech-button"
               onClick={() => this.handleSpeech()}
             >
-              {this.isShowRecording() ? <RecordingIcon /> : <MicIcon />}
+              <MicIcon />
+              {this.isShowRecording() && (
+                <span class="recording-indicator"></span>
+              )}
             </button>
           )}
           <button
@@ -248,6 +277,11 @@ export class VviinnTextSearch {
             )}
           </button>
         </div>
+        {this.showTooltip && (
+          <p class="text-search-tooltip" part="text-search-tooltip">
+            {i18next.t(this.tooltipText)}
+          </p>
+        )}
       </Host>
     );
   }
