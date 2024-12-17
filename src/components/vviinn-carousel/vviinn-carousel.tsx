@@ -369,15 +369,13 @@ export class VviinnCarousel {
   private getColumnsNumber(): number {
     if (this.setItemsAmount) return this.setItemsAmount;
     const styleSheet = getComputedStyle(this.el);
-    if (this.appended) {
+    const imagesContainer = this.el.querySelector(".items-group.appended");
+    if (this.appended && imagesContainer) {
       const totalWidth = this.el.getBoundingClientRect().width;
-      const imagesContainer = this.el.querySelector(".items-group.appended");
-      if (imagesContainer) {
-        const imageContainer = imagesContainer.children[0];
-        const imageWidth = imageContainer.getBoundingClientRect().width;
-        const gridColumns = Math.floor(totalWidth / imageWidth);
-        if (gridColumns) return gridColumns;
-      }
+      const imageContainer = imagesContainer.children[0];
+      const imageWidth = imageContainer.getBoundingClientRect().width;
+      const gridColumns = Math.floor(totalWidth / imageWidth);
+      if (gridColumns) return gridColumns;
     }
 
     const columnsInCss = styleSheet.getPropertyValue(COLUMNS_NUMBER_CSS_VAR);
