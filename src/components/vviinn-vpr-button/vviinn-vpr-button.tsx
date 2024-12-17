@@ -152,10 +152,10 @@ export class VviinnVprButton {
 
   @Prop() appendSidebarToElement: HTMLElement;
 
+  @Prop() showInWidget: boolean = false;
+
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
-
-  @Prop() showInWidget: boolean = false;
 
   /** Event emitted on widget load */
   @Event() vviinnWidgetLoad: EventEmitter<BasicEventData>;

@@ -127,7 +127,7 @@ export class VviinnVpsButton {
   @Prop() addPriceContainer?: boolean = false;
 
   /** Discovery Mode */
-  @Prop() oneClickDiscoveryMode: undefined | "append" | "append-slider";
+  @Prop() oneClickDiscoveryMode?: "append-grid" | "append-slider";
 
   /** @internal */
   @Prop() apiPath: string | undefined;

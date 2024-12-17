@@ -162,7 +162,7 @@ export class VviinnVpsWidget {
   @Prop() addPriceContainer?: boolean = false;
 
   /** Discovery Mode */
-  @Prop() oneClickDiscoveryMode: undefined | "append" | "append-slider";
+  @Prop() oneClickDiscoveryMode?: "append-grid" | "append-slider";
 
   /** @internal */
   @Prop() apiPath: string = "https://api.vviinn.com";
@@ -849,7 +849,7 @@ export class VviinnVpsWidget {
                   addPriceContainer={this.addPriceContainer}
                   oneClickDiscoveryMode={
                     this.oneClickDiscoveryMode ??
-                    (this.oneClickDiscoveryShow ? "append" : undefined)
+                    (this.oneClickDiscoveryShow ? "append-grid" : undefined)
                   }
                   oneClickDiscoveryCampaigns={this.oneClickDiscoveryCampaigns}
                   hasVprIconSlot={this.hasVprIconSlot}

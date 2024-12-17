@@ -194,10 +194,9 @@ export class VviinnResults {
   /** True when we use vviinn-results inside the widget */
   @Prop() showInWidget?: boolean = false;
   /** Discovery Mode */
-  @Prop() oneClickDiscoveryMode:
-    | undefined
+  @Prop() oneClickDiscoveryMode?:
     | "modal"
-    | "append"
+    | "append-grid"
     | "append-slider";
   /** Comma-separated list of campaign IDs */
   @Prop() oneClickDiscoveryCampaigns: string = "";
@@ -657,7 +656,7 @@ export class VviinnResults {
     }
 
     const isOneClickDiscoveryAppendMode =
-      this.oneClickDiscoveryMode === "append" ||
+      this.oneClickDiscoveryMode === "append-grid" ||
       this.oneClickDiscoveryMode === "append-slider";
 
     const oneClickDiscoveryHandler = (index: number) => {
@@ -720,7 +719,7 @@ export class VviinnResults {
               productId={p.productId}
               addStyle={false}
               mode={
-                this.oneClickDiscoveryMode === "append" ? "grid" : undefined
+                this.oneClickDiscoveryMode === "append-grid" ? "grid" : undefined
               }
               appendSidebarTo={
                 isOneClickDiscoveryAppendMode
