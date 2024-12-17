@@ -1,7 +1,6 @@
 @import "../../variables.css";
 
 :host {
-
   display: block;
   position: relative;
   width: 100%;
@@ -19,25 +18,30 @@
   border-radius: 8px;
   transition: border-color 0.2s;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .text-search-container:focus-within {
-  border-color: #8d8d8d;;
+  border-color: #8d8d8d;
+}
+
+.text-search-input,
+.text-search-tooltip {
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  font-family: var(--font-family, var(--font-family-base));
 }
 
 .text-search-input {
   height: 46px;
   padding-left: 16px;
-  font-size: 16px;
   box-sizing: border-box;
-  font-style: normal;
-  font-weight: 400;
-  font-family: var(--font-family, var(--font-family-base));
   border: none;
   outline: none;
   overflow: hidden;
   flex-grow: 2;
-  min-width: 150px;
+  width: 150px;
 }
 
 .text-search-input::placeholder {
@@ -68,6 +72,58 @@
 
 .speech-button {
   background-color: transparent;
+  position: relative;
+}
+
+@keyframes recordingSpeech {
+  0% {
+    background-color: #ff0000;
+    scale: 1;
+  }
+  100% {
+    background-color: #ff8888;
+    scale: 1.5;
+  }
+}
+
+.recording-indicator {
+  border-radius: 50%;
+  width: 8px;
+  height: 8px;
+  left: 24px;
+  top: 24px;
+  background-color: #ff0000;
+  position: absolute;
+  animation: recordingSpeech 1s infinite alternate ease-in-out;
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    display: none;
+  }
+}
+
+.text-search-tooltip {
+  position: absolute;
+  right: 0;
+  top: 80%;
+  background: #f4f4f4;
+  animation: fade-out 5s forwards;
+  width: fit-content;
+  padding: 24px;
+  border-radius: 8px;
+  border: 1px solid #8d8d8d;
+  box-sizing: border-box;
 }
 
 .text-search-button:not(:disabled):hover {

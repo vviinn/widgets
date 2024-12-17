@@ -61,9 +61,10 @@ import {
 import { RequestDynamicFilterItem } from "../../campaign/VPRCampaignService";
 import i18next from "i18next";
 import { resources } from "../../locale";
-import { slotChangeListener } from "../customized-slots";
+import { productCardSlotsNames, slotChangeListener } from "../customized-slots";
 import { getCustomLabels } from "../../recommendation";
 import { productCardParts } from "../../cssParts";
+import { hasSlotContent } from "../../dom";
 
 /**
  * @part product-card - Product Card itself.
@@ -93,20 +94,30 @@ import { productCardParts } from "../../cssParts";
  * @part energy-label-product-type - Product type.
  * @part energy-label-data-sheet-link - Data sheet link.
  *
- * @part custom-label-0 - custom label with index 0.
- * @part custom-label-1 - custom label with index 1.
- * @part custom-label-2 - custom label with index 2.
- * @part custom-label-3 - custom label with index 3.
- * @part custom-label-4 - custom label with index 4.
+ * @part custom-label-0 - Custom label with index 0.
+ * @part custom-label-1 - Custom label with index 1.
+ * @part custom-label-2 - Custom label with index 2.
+ * @part custom-label-3 - Custom label with index 3.
+ * @part custom-label-4 - Custom label with index 4.
  *
- * @slot vviinn-results-vpr-slot - Discovery main slot to change one click Discovery icon
+ * @slot vviinn-results-vpr-icon - One-click Discovery icon.
  * @slot vviinn-favorite-icon - Icon of Favorite button.
  * @slot vviinn-favorite-icon-pressed - Icon of pressed Favorite button.
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
  * @slot vviinn-basket-button-icon - Text of Add to Basket icon.
  * @slot vviinn-basket-button-text-pressed - Text of pressed Add to Basket button.
  * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button.
+ * @slot vviinn-custom-label-0 - Custom label with index 0.
+ * @slot vviinn-custom-label-1 - Custom label with index 1.
+ * @slot vviinn-custom-label-2 - Custom label with index 2.
+ * @slot vviinn-custom-label-3 - Custom label with index 3.
+ * @slot vviinn-custom-label-4 - Custom label with index 4.
  */
+
+export type ReplaceSlotsContentInParent = (
+  childrenElement?: HTMLElement
+) => void;
+
 @Component({
   tag: "vviinn-results",
   styleUrl: "vviinn-results.css",
@@ -202,9 +213,11 @@ export class VviinnResults {
   /** @internal */
   @Prop() resetState?: () => void;
   /** @internal */
-  @Prop() replaceSlotsContentInWidget?: () => void;
+  @Prop() replaceSlotsContentInWidget?: ReplaceSlotsContentInParent;
   /** @internal */
-  @Prop() replaceSlotsContentInButton?: () => void;
+  @Prop() replaceSlotsContentInButton?: ReplaceSlotsContentInParent;
+  /** @internal */
+  @Prop() hasVprIconSlot?: boolean = false;
 
   @State() recommendations: Recommendation[] = [];
   @State() innerTextSearchQuery: string;
@@ -213,7 +226,6 @@ export class VviinnResults {
   @State() oneClickDiscoveryAppendIndex: number;
   @State() oneClickDiscoverySelectedIndex: number;
   @State() isTextSearch: boolean = this.textSearchQuery?.length > 0;
-  @State() vprSlot: boolean = false;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -232,6 +244,12 @@ export class VviinnResults {
     });
   }
 
+  private renderVprIconSlot = () =>
+    hasSlotContent(this.el, "vviinn-results-vpr-icon") ||
+    this.hasVprIconSlot ? (
+      <slot name="vviinn-results-vpr-icon" />
+    ) : null;
+
   async componentWillLoad() {
     slotChangeListener(this, this.el);
 
@@ -242,29 +260,23 @@ export class VviinnResults {
         resources,
       });
     }
-
-    this.vprSlot = !!this.el.querySelector('[slot="vviinn-results-vpr-slot"]');
   }
 
   componentDidRender() {
     !!this.replaceSlotsContentInButton
-      ? this.replaceSlotsContentInButton()
+      ? this.replaceSlotsContentInButton(this.el)
       : this.showInWidget
-      ? this.replaceSlotsContentInWidget()
+      ? this.replaceSlotsContentInWidget(this.el)
       : this.replaceSlotsContent();
   }
 
   private trackingApi: DefaultApi;
 
-  private checkSlotContent = (name: string) =>
-    !!this.el.querySelector(`[slot="${name}"]`);
-
-  private renderSlotContent = (name: string) =>
-    this.checkSlotContent(name) && (
-      <span slot={name}>
-        <slot name={name} />
-      </span>
-    );
+  private renderSlotContent = (name: string) => (
+    <span slot={name}>
+      <slot name={name} />
+    </span>
+  );
 
   private getRecommendations = () =>
     this.showInWidget ? searchState.results : this.recommendations;
@@ -660,15 +672,6 @@ export class VviinnResults {
       this.oneClickDiscoverySelectedIndex = index;
     };
 
-    const productCardSlots = [
-      "vviinn-basket-button-icon",
-      "vviinn-basket-button-text",
-      "vviinn-basket-button-icon-pressed",
-      "vviinn-basket-button-text-pressed",
-      "vviinn-favorite-icon",
-      "vviinn-favorite-icon-pressed",
-    ];
-
     return results.map((p, i) => (
       <vviinn-product-card
         key={p.productId}
@@ -701,7 +704,7 @@ export class VviinnResults {
         style={{ order: i.toString() }}
         showFooterArrow={this.oneClickDiscoverySelectedIndex === i}
       >
-        {this.oneClickDiscoveryMode && (
+        {!!this.oneClickDiscoveryMode && (
           <div
             slot="vviinn-product-card-actions"
             class="vviinn-results-product-card-actions"
@@ -728,11 +731,8 @@ export class VviinnResults {
               favoriteShow={this.favoriteShow}
               campaigns={this.oneClickDiscoveryCampaigns}
             >
-              {this.checkSlotContent("vviinn-results-vpr-slot") && (
-                <slot name="vviinn-results-vpr-slot" />
-              )}
-
-              {productCardSlots.map((slotName) =>
+              {this.renderVprIconSlot()}
+              {productCardSlotsNames.map((slotName) =>
                 this.renderSlotContent(slotName)
               )}
             </vviinn-vpr-button>
