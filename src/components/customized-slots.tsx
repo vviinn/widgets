@@ -5,12 +5,6 @@ const vprSlotsNames: string[] = [
   "vviinn-recommendations-subtitle",
   "vviinn-update-button-text",
   "vviinn-update-button-icon",
-  "vviinn-basket-button-text",
-  "vviinn-basket-button-icon",
-  "vviinn-basket-button-text-pressed",
-  "vviinn-basket-button-icon-pressed",
-  "vviinn-favorite-icon",
-  "vviinn-favorite-icon-pressed",
 ];
 
 const vpsSlotsNames: string[] = [
@@ -31,19 +25,44 @@ const filtersSlotsNames: string[] = [
   "vviinn-extended-filters-reset",
 ];
 
-const productCardSlotsNames: string[] = ["vviinn-energy-label-data-sheet-text"];
+export const productCardSlotsNames: string[] = [
+  "vviinn-basket-button-icon",
+  "vviinn-basket-button-text",
+  "vviinn-basket-button-icon-pressed",
+  "vviinn-basket-button-text-pressed",
+  "vviinn-favorite-icon",
+  "vviinn-favorite-icon-pressed",
+  "vviinn-energy-label-data-sheet-text",
+  "vviinn-custom-label-0",
+  "vviinn-custom-label-1",
+  "vviinn-custom-label-2",
+  "vviinn-custom-label-3",
+  "vviinn-custom-label-4",
+];
 
 const renderNamedSlot = (name: string) => <slot name={name} />;
 
-export const SlotSkeleton = (renderType: string) => {
-  return (
-    renderType === "vps"
-      ? [...vpsSlotsNames, ...filtersSlotsNames, ...productCardSlotsNames]
-      : renderType === "filters"
-      ? filtersSlotsNames
-      : [...vprSlotsNames, ...filtersSlotsNames, ...productCardSlotsNames]
-  ).map(renderNamedSlot);
+type RenderType = "search" | "discovery" | "filters" | "card";
+
+const getSlotsNamesList = (renderType: RenderType) => {
+  switch (renderType) {
+    case "search": {
+      return [...vpsSlotsNames, ...filtersSlotsNames, ...productCardSlotsNames];
+    }
+    case "discovery": {
+      return [...vprSlotsNames, ...filtersSlotsNames, ...productCardSlotsNames];
+    }
+    case "filters": {
+      return filtersSlotsNames;
+    }
+    case "card": {
+      return productCardSlotsNames;
+    }
+  }
 };
+
+export const SlotSkeleton = (renderType: RenderType) =>
+  getSlotsNamesList(renderType).map(renderNamedSlot);
 
 const getSlots = (element: HTMLElement): HTMLSlotElement[] =>
   Array.from(element.shadowRoot.querySelectorAll("slot"));
