@@ -58,6 +58,7 @@ import {
   searchWidgetButtonParts,
   searchWidgetFilterParts,
 } from "../../cssParts";
+import { findSlotElements } from "../../dom";
 
 const CAMERA_START_DELAY = 500;
 
@@ -360,7 +361,7 @@ export class VviinnVpsWidget {
       resources,
     });
 
-    this.slots = Array.from(this.el.querySelectorAll("[slot]"));
+    this.slots = findSlotElements(this.el);
 
     slotChangeListener(this, this.el);
     this.vviinnWidgetLoad.emit(this.getBasicEventData());

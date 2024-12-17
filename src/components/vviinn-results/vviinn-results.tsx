@@ -62,13 +62,13 @@ import { RequestDynamicFilterItem } from "../../campaign/VPRCampaignService";
 import i18next from "i18next";
 import { resources } from "../../locale";
 import {
-  productCardSlotsNames,
+  productCardSlotNames,
   slotChangeListener,
   vprIconSlotName,
 } from "../customized-slots";
 import { getCustomLabels } from "../../recommendation";
 import { productCardParts } from "../../cssParts";
-import { getSlotsNames, hasSlotContent } from "../../dom";
+import { findSlotElements, getSlotNames } from "../../dom";
 
 /**
  * @part product-card - Product Card itself.
@@ -232,7 +232,8 @@ export class VviinnResults {
   @State() isTextSearch: boolean = this.textSearchQuery?.length > 0;
 
   private trackingApi: DefaultApi;
-  private parentSlotsNames?: string[] = [];
+  private passedSlotNames?: string[] = [];
+  private slots?: HTMLSlotElement[] = [];
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -244,18 +245,17 @@ export class VviinnResults {
   vviinnSelectedFiltersReset: EventEmitter<ResetSelectedFiltersEventData>;
 
   private replaceSlotsContent() {
-    const slots = this.el.querySelectorAll("[slot]");
     this.globalSlotsChanged.emit({
-      slots: Array.from(slots),
+      slots: this.slots,
       element: this.el,
     });
   }
 
   private isSlotPassedToComponent = (name: string) =>
-    this.parentSlotsNames.includes(name) || hasSlotContent(this.el, name);
+    this.passedSlotNames.includes(name);
 
   private renderProductCardSlots = () => {
-    return productCardSlotsNames
+    return productCardSlotNames
       .filter(this.isSlotPassedToComponent)
       .map((name) => (
         <span slot={name}>
@@ -271,7 +271,8 @@ export class VviinnResults {
 
   async componentWillLoad() {
     slotChangeListener(this, this.el);
-    this.parentSlotsNames = getSlotsNames(this.parentSlots);
+    this.slots = findSlotElements(this.el);
+    this.passedSlotNames = getSlotNames([...this.parentSlots, ...this.slots]);
 
     if (!this.showInWidget) {
       await i18next.init({
@@ -753,6 +754,7 @@ export class VviinnResults {
   }
 
   render() {
+    console.log(this.passedSlotNames);
     return (
       <Host
         id="results-block"

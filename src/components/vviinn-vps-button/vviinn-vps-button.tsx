@@ -27,6 +27,7 @@ import { campaignTypeNames } from "../../campaign/Campaign";
 import { Locale } from "../../locale";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 import { VisualSearchMode } from "../../widget/types";
+import { findSlotElements } from "../../dom";
 
 /**
  * @slot vviinn-teaser-text - Text on the widget's main screen.
@@ -189,7 +190,7 @@ export class VviinnVpsButton {
   }
 
   componentWillLoad() {
-    this.slots = Array.from(this.el.querySelectorAll("[slot]"));
+    this.slots = findSlotElements(this.el);
   }
 
   componentDidLoad() {
