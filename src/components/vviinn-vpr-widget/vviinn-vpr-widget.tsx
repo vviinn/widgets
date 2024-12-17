@@ -103,11 +103,11 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @part discount-label - Discount label in Product Card (Set mode).
  * @part discount-percentage - Discount percentage inside the Add to Basket button (Set mode).
  *
- * @part custom-label-0 - custom label with index 0.
- * @part custom-label-1 - custom label with index 1.
- * @part custom-label-2 - custom label with index 2.
- * @part custom-label-3 - custom label with index 3.
- * @part custom-label-4 - custom label with index 4.
+ * @part custom-label-0 - Custom label with index 0.
+ * @part custom-label-1 - Custom label with index 1.
+ * @part custom-label-2 - Custom label with index 2.
+ * @part custom-label-3 - Custom label with index 3.
+ * @part custom-label-4 - Custom label with index 4.
  *
  * @slot vviinn-recommendations-title - Recommendations title text.
  * @slot vviinn-favorite-icon - Icon of Favorite button.
@@ -121,6 +121,11 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @slot vviinn-recommendations-subtitle - Recommendations subtitle text (Set mode).
  * @slot vviinn-update-button-text - Text of Update Button on the top (Set mode).
  * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
+ * @slot vviinn-custom-label-0 - Custom label with index 0.
+ * @slot vviinn-custom-label-1 - Custom label with index 1.
+ * @slot vviinn-custom-label-2 - Custom label with index 2.
+ * @slot vviinn-custom-label-3 - Custom label with index 3.
+ * @slot vviinn-custom-label-4 - Custom label with index 4.
  */
 
 export type Mode = "pure-grid" | CarouselMode;
@@ -657,7 +662,7 @@ export class VviinnVprWidget implements ComponentInterface {
         <Fragment>
           {this.renderExternalCSS()}
 
-          {SlotSkeleton("vpr")}
+          {SlotSkeleton("discovery")}
 
           <style>{state.fallbackStyles}</style>
           {(this.isSetMode || this.blockTitle.length > 0) && (
