@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.142.0](https://github.com/vviinn/widgets/compare/v2.141.0...v2.142.0) (2024-12-17)
+
+
+### Features
+
+* Slots support for custom labels ([df522a0](https://github.com/vviinn/widgets/commit/df522a0c61b3fabc68f7d593913f53aafa1a5841))
+
+
+### Bug Fixes
+
+* Product Card slots in Search Widget ([2b0fee8](https://github.com/vviinn/widgets/commit/2b0fee85ce0f73f152760505e0a9954e5405ed59))
+
 ## [2.141.0](https://github.com/vviinn/widgets/compare/v2.140.0...v2.141.0) (2024-12-16)
 
 
