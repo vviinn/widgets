@@ -40,6 +40,8 @@ export const productCardSlotsNames: string[] = [
   "vviinn-custom-label-4",
 ];
 
+export const vprIconSlotName = "vviinn-results-vpr-icon";
+
 const renderNamedSlot = (name: string) => <slot name={name} />;
 
 type RenderType = "search" | "discovery" | "filters" | "card";
