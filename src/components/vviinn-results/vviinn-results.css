@@ -23,6 +23,10 @@
   width: 100%;
 }
 
+:host::part(product-card) {
+  height: 100%;
+}
+
 .products {
   width: 100%;
   align-content: center;
