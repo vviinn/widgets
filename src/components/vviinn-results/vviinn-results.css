@@ -179,3 +179,8 @@ vviinn-recommendations-sidebar::part(sidebar-content) {
   min-height: 470px;
   padding: 0;
 }
+
+
+vviinn-recommendations-sidebar::part(sidebar-content).appended {
+  min-height: unset;
+}
