@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.142.1](https://github.com/vviinn/widgets/compare/v2.142.0...v2.142.1) (2024-12-18)
+
+
+### Bug Fixes
+
+* Slots issues in vviinn-results ([858b5db](https://github.com/vviinn/widgets/commit/858b5db4ab56293e69bfe4d185442929bab7fd4f))
+
 ## [2.142.0](https://github.com/vviinn/widgets/compare/v2.141.0...v2.142.0) (2024-12-17)
 
 

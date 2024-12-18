@@ -66,6 +66,10 @@
   cursor: pointer;
 }
 
+.upload-button-text {
+  display: contents;
+}
+
 .text-search-button {
   background-color: #f4f4f4;
 }
