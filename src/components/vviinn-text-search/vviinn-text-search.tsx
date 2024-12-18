@@ -243,7 +243,7 @@ export class VviinnTextSearch {
               showInTextSearch={true}
               uploadStartedHandler={this.showLoader.bind(this)}
             >
-              <span slot="upload-button-text">
+              <span slot="upload-button-text" class="upload-button-text">
                 <SearchModalUploadIcon />
               </span>
             </vviinn-image-selector>

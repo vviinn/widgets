@@ -27,7 +27,7 @@ import { campaignTypeNames } from "../../campaign/Campaign";
 import { Locale } from "../../locale";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 import { VisualSearchMode } from "../../widget/types";
-import { hasSlotContent } from "../../dom";
+import { findSlotElements } from "../../dom";
 
 /**
  * @slot vviinn-teaser-text - Text on the widget's main screen.
@@ -175,7 +175,7 @@ export class VviinnVpsButton {
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
 
-  private hasVprIconSlot: boolean = false;
+  private slots?: HTMLSlotElement[] = [];
 
   getBasicEventData = (): BasicEventData => {
     return {
@@ -193,9 +193,7 @@ export class VviinnVpsButton {
   }
 
   componentWillLoad() {
-    if (hasSlotContent(this.el, "vviinn-results-vpr-icon")) {
-      this.hasVprIconSlot = true;
-    }
+    this.slots = findSlotElements(this.el);
   }
 
   componentDidLoad() {
@@ -203,15 +201,14 @@ export class VviinnVpsButton {
   }
 
   private replaceSlotsContent(childrenElement?: HTMLElement) {
-    const slots = this.el.querySelectorAll("[slot]");
     this.globalSlotsChanged.emit({
-      slots: Array.from(slots),
+      slots: Array.from(this.slots),
       element: this.el,
     });
 
     if (childrenElement) {
       this.globalSlotsChanged.emit({
-        slots: Array.from(slots),
+        slots: Array.from(this.slots),
         element: childrenElement,
       });
     }
@@ -278,7 +275,7 @@ export class VviinnVpsButton {
           oneClickDiscoveryMode={this.oneClickDiscoveryMode}
           oneClickDiscoveryCampaigns={this.oneClickDiscoveryCampaigns}
           favoriteShow={this.favoriteShow}
-          hasVprIconSlot={this.hasVprIconSlot}
+          parentSlots={this.slots}
         />
       </Host>
     );
