@@ -15,7 +15,9 @@ export default {
 const Template = (args) => `
 <div class="search-page-wrapper">
   <div class="search-page-wrapper-filters">
-    <vviinn-extended-filters locale="${args.locale}" mode="preview"></vviinn-extended-filters>
+    <vviinn-extended-filters locale="${
+      args.locale
+    }" mode="preview"></vviinn-extended-filters>
   </div>
   <div class="search-page-wrapper-result">
     <vviinn-text-search 
@@ -25,13 +27,18 @@ const Template = (args) => `
       mode="${args.mode}"
       locale="${args.locale}"
       show-in-widget="${args.showInWidget}"
-      one-click-discovery-mode="append"
+      one-click-discovery-mode="append-grid"
     >
-      ${args.mode === "text" && `<vviinn-vps-button slot="vviinn-text-search-actions" locale="${args.locale}" token="${args.token}" one-click-discovery-show="true"></vviinn-vps-button>`}  
+      ${
+        args.mode === "text" &&
+        `<vviinn-vps-button slot="vviinn-text-search-actions" locale="${args.locale}" token="${args.token}" one-click-discovery-show="true"></vviinn-vps-button>`
+      }  
     </vviinn-text-search>
 
     <div class="search-page-wrapper-result-filters">
-      <vviinn-extended-filters locale="${args.locale}"></vviinn-extended-filters>
+      <vviinn-extended-filters locale="${
+        args.locale
+      }"></vviinn-extended-filters>
       <vviinn-selected-filters></vviinn-selected-filters>
     </div>
 
@@ -39,7 +46,7 @@ const Template = (args) => `
       token="${args.token}"
       api-path="${args.apiPath}"
       locale="${args.locale}"
-      one-click-discovery-mode="append"
+      one-click-discovery-mode="append-grid"
     ></vviinn-results>
   </div>
 </div>  
