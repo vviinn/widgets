@@ -225,7 +225,7 @@ export class VviinnCropper {
 
   render() {
     return (
-      <Host>
+      <Host class={this.showInWidget ? "show-in-widget" : ""}>
         <div class="container">
           <div
             class="image-container"

@@ -1,8 +1,11 @@
 :host {
-  min-height: 160px;
   display: flex;
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.32);
+}
+
+:host(.show-in-widget) {
+  min-height: 160px;
 }
 
 :host(.bordered) {
