@@ -57,9 +57,3 @@ vviinn-text-search {
     --product-card-width: 155px;
   }
 }
-
-@media screen and (max-width: 768px) {
-  vviinn-results::part(product-card) {
-    min-height: 290px;
-  }
-}
