@@ -23,6 +23,10 @@
   width: 100%;
 }
 
+:host::part(product-card) {
+  height: 100%;
+}
+
 .products {
   width: 100%;
   align-content: center;
@@ -52,10 +56,6 @@
 :host(:not(.show-in-widget)) .products {
   position: static;
   padding: 0;
-}
-
-:host(.show-in-widget)::part(product-card) {
-  min-height: 297px;
 }
 
 .hidden {

@@ -58,7 +58,7 @@ import {
   searchWidgetButtonParts,
   searchWidgetFilterParts,
 } from "../../cssParts";
-import { hasSlotContent } from "../../dom";
+import { findSlotElements } from "../../dom";
 
 const CAMERA_START_DELAY = 500;
 
@@ -178,7 +178,7 @@ export class VviinnVpsWidget {
   /** @internal */
   @Prop() replaceSlotsContentInButton?: () => void;
   /** @internal */
-  @Prop({ mutable: true }) hasVprIconSlot: boolean = false;
+  @Prop() parentSlots?: HTMLSlotElement[] = [];
 
   @State() slidePosition: number = 0;
   @State() width: number = 0;
@@ -233,6 +233,7 @@ export class VviinnVpsWidget {
   private videoTrack: MediaStreamTrack | null = null;
   private widgetElementId: string;
   private isTextSearch: boolean = false;
+  private slots: HTMLSlotElement[] = [];
 
   private initResultEvents() {
     searchState.resultLoaded = false;
@@ -240,15 +241,14 @@ export class VviinnVpsWidget {
   }
 
   private replaceSlotsContent(childrenElement?: HTMLElement) {
-    const slots = this.el.querySelectorAll("[slot]");
     this.globalSlotsChanged.emit({
-      slots: Array.from(slots),
+      slots: this.slots,
       element: this.el,
     });
 
     if (childrenElement) {
       this.globalSlotsChanged.emit({
-        slots: Array.from(slots),
+        slots: this.slots,
         element: childrenElement,
       });
     }
@@ -361,9 +361,7 @@ export class VviinnVpsWidget {
       resources,
     });
 
-    if (hasSlotContent(this.el, "vviinn-results-vpr-icon")) {
-      this.hasVprIconSlot = true;
-    }
+    this.slots = findSlotElements(this.el);
 
     slotChangeListener(this, this.el);
     this.vviinnWidgetLoad.emit(this.getBasicEventData());
@@ -848,7 +846,7 @@ export class VviinnVpsWidget {
                     this.oneClickDiscoveryShow ? "append" : undefined
                   }
                   oneClickDiscoveryCampaigns={this.oneClickDiscoveryCampaigns}
-                  hasVprIconSlot={this.hasVprIconSlot}
+                  parentSlots={[...this.parentSlots, ...this.slots]}
                 />
               )}
             </vviinn-slide>

@@ -1,13 +1,13 @@
 import { h } from "@stencil/core";
 
-const vprSlotsNames: string[] = [
+const vprSlotNames: string[] = [
   "vviinn-recommendations-title",
   "vviinn-recommendations-subtitle",
   "vviinn-update-button-text",
   "vviinn-update-button-icon",
 ];
 
-const vpsSlotsNames: string[] = [
+const vpsSlotNames: string[] = [
   "vviinn-teaser-text",
   "vviinn-image-upload-button-text",
   "vviinn-image-upload-icon",
@@ -19,13 +19,13 @@ const vpsSlotsNames: string[] = [
   "vviinn-image-search-modal-title",
 ];
 
-const filtersSlotsNames: string[] = [
+const filtersSlotNames: string[] = [
   "vviinn-extended-filters-title",
   "vviinn-extended-filters-apply",
   "vviinn-extended-filters-reset",
 ];
 
-export const productCardSlotsNames: string[] = [
+export const productCardSlotNames: string[] = [
   "vviinn-basket-button-icon",
   "vviinn-basket-button-text",
   "vviinn-basket-button-icon-pressed",
@@ -40,29 +40,31 @@ export const productCardSlotsNames: string[] = [
   "vviinn-custom-label-4",
 ];
 
+export const vprIconSlotName = "vviinn-results-vpr-icon";
+
 const renderNamedSlot = (name: string) => <slot name={name} />;
 
 type RenderType = "search" | "discovery" | "filters" | "card";
 
-const getSlotsNamesList = (renderType: RenderType) => {
+const getSlotNamesList = (renderType: RenderType) => {
   switch (renderType) {
     case "search": {
-      return [...vpsSlotsNames, ...filtersSlotsNames, ...productCardSlotsNames];
+      return [...vpsSlotNames, ...filtersSlotNames, ...productCardSlotNames];
     }
     case "discovery": {
-      return [...vprSlotsNames, ...filtersSlotsNames, ...productCardSlotsNames];
+      return [...vprSlotNames, ...filtersSlotNames, ...productCardSlotNames];
     }
     case "filters": {
-      return filtersSlotsNames;
+      return filtersSlotNames;
     }
     case "card": {
-      return productCardSlotsNames;
+      return productCardSlotNames;
     }
   }
 };
 
 export const SlotSkeleton = (renderType: RenderType) =>
-  getSlotsNamesList(renderType).map(renderNamedSlot);
+  getSlotNamesList(renderType).map(renderNamedSlot);
 
 const getSlots = (element: HTMLElement): HTMLSlotElement[] =>
   Array.from(element.shadowRoot.querySelectorAll("slot"));

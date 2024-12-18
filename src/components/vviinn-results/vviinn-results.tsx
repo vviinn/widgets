@@ -61,10 +61,14 @@ import {
 import { RequestDynamicFilterItem } from "../../campaign/VPRCampaignService";
 import i18next from "i18next";
 import { resources } from "../../locale";
-import { productCardSlotsNames, slotChangeListener } from "../customized-slots";
+import {
+  productCardSlotNames,
+  slotChangeListener,
+  vprIconSlotName,
+} from "../customized-slots";
 import { getCustomLabels } from "../../recommendation";
 import { productCardParts } from "../../cssParts";
-import { hasSlotContent } from "../../dom";
+import { findSlotElements, getSlotNames } from "../../dom";
 
 /**
  * @part product-card - Product Card itself.
@@ -217,7 +221,7 @@ export class VviinnResults {
   /** @internal */
   @Prop() replaceSlotsContentInButton?: ReplaceSlotsContentInParent;
   /** @internal */
-  @Prop() hasVprIconSlot?: boolean = false;
+  @Prop() parentSlots?: HTMLSlotElement[] = [];
 
   @State() recommendations: Recommendation[] = [];
   @State() innerTextSearchQuery: string;
@@ -226,6 +230,10 @@ export class VviinnResults {
   @State() oneClickDiscoveryAppendIndex: number;
   @State() oneClickDiscoverySelectedIndex: number;
   @State() isTextSearch: boolean = this.textSearchQuery?.length > 0;
+
+  private trackingApi: DefaultApi;
+  private passedSlotNames?: string[] = [];
+  private slots?: HTMLSlotElement[] = [];
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -237,21 +245,34 @@ export class VviinnResults {
   vviinnSelectedFiltersReset: EventEmitter<ResetSelectedFiltersEventData>;
 
   private replaceSlotsContent() {
-    const slots = this.el.querySelectorAll("[slot]");
     this.globalSlotsChanged.emit({
-      slots: Array.from(slots),
+      slots: this.slots,
       element: this.el,
     });
   }
 
+  private isSlotPassedToComponent = (name: string) =>
+    this.passedSlotNames.includes(name);
+
+  private renderProductCardSlots = () => {
+    return productCardSlotNames
+      .filter(this.isSlotPassedToComponent)
+      .map((name) => (
+        <span slot={name}>
+          <slot name={name} />
+        </span>
+      ));
+  };
+
   private renderVprIconSlot = () =>
-    hasSlotContent(this.el, "vviinn-results-vpr-icon") ||
-    this.hasVprIconSlot ? (
-      <slot name="vviinn-results-vpr-icon" />
+    this.isSlotPassedToComponent(vprIconSlotName) ? (
+      <slot name={vprIconSlotName} />
     ) : null;
 
   async componentWillLoad() {
     slotChangeListener(this, this.el);
+    this.slots = findSlotElements(this.el);
+    this.passedSlotNames = getSlotNames([...this.parentSlots, ...this.slots]);
 
     if (!this.showInWidget) {
       await i18next.init({
@@ -269,14 +290,6 @@ export class VviinnResults {
       ? this.replaceSlotsContentInWidget(this.el)
       : this.replaceSlotsContent();
   }
-
-  private trackingApi: DefaultApi;
-
-  private renderSlotContent = (name: string) => (
-    <span slot={name}>
-      <slot name={name} />
-    </span>
-  );
 
   private getRecommendations = () =>
     this.showInWidget ? searchState.results : this.recommendations;
@@ -731,10 +744,8 @@ export class VviinnResults {
               favoriteShow={this.favoriteShow}
               campaigns={this.oneClickDiscoveryCampaigns}
             >
+              {this.renderProductCardSlots()}
               {this.renderVprIconSlot()}
-              {productCardSlotsNames.map((slotName) =>
-                this.renderSlotContent(slotName)
-              )}
             </vviinn-vpr-button>
           </div>
         )}
