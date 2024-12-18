@@ -58,22 +58,21 @@ export class VviinnDetectedObject {
   }
 
   private selectDetectedObject() {
-    pipe(
+    const scaledRect = pipe(
       O.fromNullable(this.imageBounds),
       O.map((bounds) => {
         const rectangle = foldValueObject(this.detectedObject).rectangle;
         const transformedRect = fromAlt(rectangle);
-        const scaledRect = scaleWithSized(bounds)(transformedRect);
-
-        this.selectedDetectedObject = this.detectedObject;
-        this.searchArea = scaledRect;
-      })
+        return scaleWithSized(bounds)(transformedRect);
+      }),
+      O.toNullable
     );
 
     makeRectangularSearchRequest(this.searchArea, this.imageBounds);
     this.vviinnSelectObject.emit({
       ...this.basicEventData,
       detectedObject: this.detectedObject,
+      searchArea: scaledRect,
     });
   }
 

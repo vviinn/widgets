@@ -65,6 +65,7 @@ export class VviinnCropper {
   @State() selectedDetectedObject: ValueObject<DetectedObject>;
   @State() imageBounds: Rectangle | null;
   @State() searchArea: Rectangle | null;
+  @State() imageElement: HTMLImageElement;
 
   @Event() vviinnImageCrop: EventEmitter<BasicEventData>;
   @Event() vviinnCropperLoadImage: EventEmitter<LoadImageEventData>;
@@ -112,6 +113,7 @@ export class VviinnCropper {
   @Listen("vviinnSelectObject")
   selectDetectedObject({ detail }: CustomEvent<SelectObjectEventData>) {
     this.selectedDetectedObject = detail.detectedObject;
+    this.searchArea = detail.searchArea;
     const { top, left, width, height } = detail.detectedObject.value.rectangle;
     const data = this.cropper.getImageData();
 
@@ -121,7 +123,6 @@ export class VviinnCropper {
       width: width * data.width,
       height: height * data.height,
     };
-
     this.cropper.setCropBoxData(ValidateCropBoxData(cropBoxData));
   }
 
@@ -135,31 +136,41 @@ export class VviinnCropper {
     };
   }
 
-  private renderImage(): null {
+  private renderImage() {
+    if (!this.showInWidget && !this.imageElement) return;
+
+    const imageUrl = this.showInWidget
+      ? searchState.imageUrl
+      : O.some(this.url);
+
+    const imageElement = this.showInWidget
+      ? searchState.image
+      : O.some(this.imageElement);
+
     return pipe(
-      sequenceToOption(searchState.imageUrl, searchState.image),
+      sequenceToOption(imageUrl, imageElement),
       O.map(([url, refImage]) => {
         const [width, height] = getImageSizes(refImage, DEFAULT_IMAGE_SIZE);
 
-        this.width = width;
-        this.height = height;
-        this.url = url;
+        if (this.showInWidget) {
+          this.width = width;
+          this.height = height;
+          this.url = url;
+        }
       }),
       O.getOrElse(() => null)
     );
   }
 
   private loadImage() {
-    const imageElement = this.el.shadowRoot.querySelector("img");
-
-    if (imageElement) {
+    this.imageElement = this.el.shadowRoot.querySelector("img");
+    if (this.imageElement) {
       let data = {};
       if (this.cropper) {
         data = this.cropper.getData(true);
         this.cropper.destroy();
       }
-
-      const imageBounds = fromImage(imageElement);
+      const imageBounds = fromImage(this.imageElement);
       const { x, y, width, height } = imageBounds;
 
       const searchArea = {
@@ -188,8 +199,7 @@ export class VviinnCropper {
         this.hidePreloader = true;
         return;
       }
-
-      this.cropper = new Cropper(imageElement, {
+      this.cropper = new Cropper(this.imageElement, {
         ...cropperOptions,
         cropend: this.cropEnd,
         data,
