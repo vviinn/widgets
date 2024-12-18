@@ -108,6 +108,10 @@ export class VviinnCropper {
 
   componentWillRender() {
     this.renderImage();
+    //FIXME: #37535
+    if (!this.showInWidget) {
+      this.hidePreloader = true;
+    }
   }
 
   @Listen("vviinnSelectObject")
@@ -134,32 +138,6 @@ export class VviinnCropper {
       width,
       height,
     };
-  }
-
-  private renderImage() {
-    if (!this.showInWidget && !this.imageElement) return;
-
-    const imageUrl = this.showInWidget
-      ? searchState.imageUrl
-      : O.some(this.url);
-
-    const imageElement = this.showInWidget
-      ? searchState.image
-      : O.some(this.imageElement);
-
-    return pipe(
-      sequenceToOption(imageUrl, imageElement),
-      O.map(([url, refImage]) => {
-        const [width, height] = getImageSizes(refImage, DEFAULT_IMAGE_SIZE);
-
-        if (this.showInWidget) {
-          this.width = width;
-          this.height = height;
-          this.url = url;
-        }
-      }),
-      O.getOrElse(() => null)
-    );
   }
 
   private loadImage() {
@@ -207,6 +185,29 @@ export class VviinnCropper {
     }
   }
 
+  private renderImage() {
+    //FIXME: #37535
+    if (!this.showInWidget) return;
+    const imageUrl = this.showInWidget
+      ? searchState.imageUrl
+      : O.some(this.url);
+
+    const imageElement = this.showInWidget
+      ? searchState.image
+      : O.some(this.imageElement);
+
+    return pipe(
+      sequenceToOption(imageUrl, imageElement),
+      O.map(([url, refImage]) => {
+        const [width, height] = getImageSizes(refImage, DEFAULT_IMAGE_SIZE);
+        this.width = width;
+        this.height = height;
+        this.url = url;
+      }),
+      O.getOrElse(() => null)
+    );
+  }
+
   private cropEnd = () => {
     const cropboxData = this.getCropboxData();
 
@@ -216,6 +217,11 @@ export class VviinnCropper {
     this.selectedDetectedObject = undefined;
     this.vviinnImageCrop.emit(this.basicEventData);
   };
+
+  private showPreloader = () =>
+    (searchState.loading || searchState.objectDetectionInProgress) &&
+    !this.showAspectRatioError &&
+    !this.hidePreloader;
 
   render() {
     return (
@@ -248,9 +254,7 @@ export class VviinnCropper {
             ))}
           </div>
 
-          {(searchState.loading || searchState.objectDetectionInProgress) &&
-          !this.showAspectRatioError &&
-          !this.hidePreloader ? (
+          {this.showPreloader() ? (
             <div class="image-preloader">
               <vviinn-preloader />
             </div>
