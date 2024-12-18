@@ -754,7 +754,6 @@ export class VviinnResults {
   }
 
   render() {
-    console.log(this.passedSlotNames);
     return (
       <Host
         id="results-block"
