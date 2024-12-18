@@ -58,10 +58,6 @@
   padding: 0;
 }
 
-:host(.show-in-widget)::part(product-card) {
-  min-height: 297px;
-}
-
 .hidden {
   visibility: hidden;
   height: 1px;
