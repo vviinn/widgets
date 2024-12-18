@@ -788,7 +788,7 @@ export class VviinnVprWidget implements ComponentInterface {
   private renderCarousel(): HTMLVviinnCarouselElement {
     return (
       <vviinn-carousel
-        mode={this.mode as CarouselMode}
+        mode={this.appended ? "grid" : (this.mode as CarouselMode)}
         campaignTypeId={this.campaignType}
         imageWidth={this.imageWidth}
         showScroll={this.showScroll}

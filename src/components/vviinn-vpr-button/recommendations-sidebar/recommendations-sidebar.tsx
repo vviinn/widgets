@@ -182,7 +182,7 @@ export class RecommendationsSidebar {
               blockTitle=""
               mode={this.mode}
               campaign-type={this.campaignType}
-              useCarousel={this.useCarousel}
+              useCarousel={this.appended ?? this.useCarousel}
               onVviinnRecommendationsLoaded={() => (this.state = "open")}
               showScroll={this.widgetScrollbar}
               campaigns={this.campaigns}
