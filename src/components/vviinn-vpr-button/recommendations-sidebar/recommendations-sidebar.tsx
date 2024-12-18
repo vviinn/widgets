@@ -171,7 +171,7 @@ export class RecommendationsSidebar {
             </header>
           )}
 
-          <main part="sidebar-content" class={{ appended: this.appended }}>
+          <main part="sidebar-content">
             <vviinn-vpr-widget
               exportparts={`${carouselParts}, ${productCardParts}`}
               token={this.token}
