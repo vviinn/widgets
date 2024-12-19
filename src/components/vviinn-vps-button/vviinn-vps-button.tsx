@@ -121,6 +121,8 @@ export class VviinnVpsButton {
   @Prop() favoriteShow: boolean = false;
   /** Show or hide the One-click Discovery */
   @Prop() oneClickDiscoveryShow = false;
+  /** style for one-click discovery (appended only) */
+  @Prop() oneClickDiscoveryMode?: "append-grid" | "append-slider";
   /** Comma-separated list of campaign IDs */
   @Prop() oneClickDiscoveryCampaigns: string = "";
   /** Wrap the Product Card's price values in the container. */
@@ -268,7 +270,10 @@ export class VviinnVpsButton {
           addToBasketShow={this.addToBasketShow}
           addPriceContainer={this.addPriceContainer}
           replaceSlotsContentInButton={this.replaceSlotsContent.bind(this)}
-          oneClickDiscoveryShow={this.oneClickDiscoveryShow}
+          oneClickDiscoveryShow={
+            !!this.oneClickDiscoveryMode ?? this.oneClickDiscoveryShow
+          }
+          oneClickDiscoveryMode={this.oneClickDiscoveryMode}
           oneClickDiscoveryCampaigns={this.oneClickDiscoveryCampaigns}
           favoriteShow={this.favoriteShow}
           parentSlots={this.slots}

@@ -157,6 +157,7 @@ export class VviinnVpsWidget {
   /** Show or hide the One-click Discovery */
   @Prop() oneClickDiscoveryShow = false;
   /** Comma-separated list of campaign IDs */
+  @Prop() oneClickDiscoveryMode?: "append-grid" | "append-slider";
   @Prop() oneClickDiscoveryCampaigns: string = "";
   /** Wrap the Product Card's price values in the container. */
   @Prop() addPriceContainer?: boolean = false;
@@ -370,6 +371,7 @@ export class VviinnVpsWidget {
 
   componentDidLoad() {
     this.replaceSlotsContent();
+    console.log(this.oneClickDiscoveryMode);
   }
 
   setTrackingDeactivated = (result: EventConfirmation) => {
@@ -843,7 +845,8 @@ export class VviinnVpsWidget {
                   textSearchRequestId={this.requestId}
                   addPriceContainer={this.addPriceContainer}
                   oneClickDiscoveryMode={
-                    this.oneClickDiscoveryShow ? "append" : undefined
+                    this.oneClickDiscoveryMode ??
+                    (this.oneClickDiscoveryShow ? "append-grid" : undefined)
                   }
                   oneClickDiscoveryCampaigns={this.oneClickDiscoveryCampaigns}
                   parentSlots={[...this.parentSlots, ...this.slots]}

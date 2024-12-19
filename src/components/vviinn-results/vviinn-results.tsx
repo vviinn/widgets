@@ -198,7 +198,12 @@ export class VviinnResults {
   /** True when we use vviinn-results inside the widget */
   @Prop() showInWidget?: boolean = false;
   /** Discovery Mode */
-  @Prop() oneClickDiscoveryMode: undefined | "modal" | "append";
+  @Prop() oneClickDiscoveryMode:
+    | undefined
+    | "modal"
+    | "append"
+    | "append-grid"
+    | "append-slider";
   /** Comma-separated list of campaign IDs */
   @Prop() oneClickDiscoveryCampaigns: string = "";
 
@@ -666,7 +671,8 @@ export class VviinnResults {
     }
 
     const isOneClickDiscoveryAppendMode =
-      this.oneClickDiscoveryMode === "append";
+      this.oneClickDiscoveryMode === "append-grid" ||
+      this.oneClickDiscoveryMode === "append-slider";
 
     const oneClickDiscoveryHandler = (index: number) => {
       if (!isOneClickDiscoveryAppendMode) return;
@@ -738,6 +744,11 @@ export class VviinnResults {
                       "one-click-discovery-append"
                     )
                   : undefined
+              }
+              oneClickDiscoveryMode={
+                this.oneClickDiscoveryMode === "append"
+                  ? "append-grid"
+                  : this.oneClickDiscoveryMode
               }
               addToBasketShow={this.addToBasketShow}
               locale={this.locale}

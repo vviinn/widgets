@@ -152,6 +152,8 @@ export class VviinnVprButton {
 
   @Prop() appendSidebarToElement: HTMLElement;
 
+  @Prop() oneClickDiscoveryMode?: "modal" | "append-grid" | "append-slider";
+
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";
 
@@ -277,9 +279,11 @@ export class VviinnVprButton {
     sidebar.addPriceContainer = this.addPriceContainer;
     sidebar.favoriteShow = this.favoriteShow;
 
+    console.log(this.targetAppendSidebarTo, this.oneClickDiscoveryMode);
+
     if (this.targetAppendSidebarTo) {
       sidebar.mode = "grid";
-      sidebar.useCarousel = false;
+      sidebar.useCarousel = this.oneClickDiscoveryMode === "append-slider";
     } else {
       sidebar.mode = this.position === "right" ? "grid" : this.mode;
       sidebar.useCarousel = this.position === "bottom";
