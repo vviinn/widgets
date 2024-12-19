@@ -271,7 +271,7 @@ export class VviinnVpsButton {
           addPriceContainer={this.addPriceContainer}
           replaceSlotsContentInButton={this.replaceSlotsContent.bind(this)}
           oneClickDiscoveryShow={
-            !!this.oneClickDiscoveryMode ?? this.oneClickDiscoveryShow
+            this.oneClickDiscoveryShow ?? !!this.oneClickDiscoveryMode
           }
           oneClickDiscoveryMode={this.oneClickDiscoveryMode}
           oneClickDiscoveryCampaigns={this.oneClickDiscoveryCampaigns}
