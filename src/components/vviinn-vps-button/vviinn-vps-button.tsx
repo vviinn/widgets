@@ -119,9 +119,9 @@ export class VviinnVpsButton {
   @Prop() addToBasketShow: boolean = false;
   /** Show or hide Favorite button */
   @Prop() favoriteShow: boolean = false;
-  /** Show or hide the One-click Discovery */
+  /** Show or hide the One-click Discovery, will be deprecated, use oneClickDiscoveryMode instead */
   @Prop() oneClickDiscoveryShow = false;
-  /** style for one-click discovery (appended only) */
+  /** One click Discovery mode, restricted to append only (no modal supported for this component)*/
   @Prop() oneClickDiscoveryMode?: "append-grid" | "append-slider";
   /** Comma-separated list of campaign IDs */
   @Prop() oneClickDiscoveryCampaigns: string = "";

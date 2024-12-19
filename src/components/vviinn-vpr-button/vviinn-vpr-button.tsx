@@ -152,7 +152,12 @@ export class VviinnVprButton {
 
   @Prop() appendSidebarToElement: HTMLElement;
 
-  @Prop() oneClickDiscoveryMode?: "modal" | "append-grid" | "append-slider";
+  /** One click Discovery mode, value append will be deprecated, use append-grid instead*/
+  @Prop() oneClickDiscoveryMode?:
+    | "modal"
+    | "append"
+    | "append-grid"
+    | "append-slider";
 
   /** @internal */
   @Prop() apiPath: string | undefined = "https://api.vviinn.com";

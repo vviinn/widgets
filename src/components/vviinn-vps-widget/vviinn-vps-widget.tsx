@@ -154,10 +154,11 @@ export class VviinnVpsWidget {
   @Prop() addToBasketShow: boolean = false;
   /** Show or hide Favorite button */
   @Prop() favoriteShow: boolean = false;
-  /** Show or hide the One-click Discovery */
+  /** Show or hide the One-click Discovery, will be deprecated, use oneClickDiscoveryMode instead */
   @Prop() oneClickDiscoveryShow = false;
-  /** Comma-separated list of campaign IDs */
+  /** One click Discovery mode, restricted to append only (no modal supported for this component)*/
   @Prop() oneClickDiscoveryMode?: "append-grid" | "append-slider";
+  /** Comma-separated list of campaign IDs */
   @Prop() oneClickDiscoveryCampaigns: string = "";
   /** Wrap the Product Card's price values in the container. */
   @Prop() addPriceContainer?: boolean = false;

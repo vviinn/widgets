@@ -197,7 +197,7 @@ export class VviinnResults {
 
   /** True when we use vviinn-results inside the widget */
   @Prop() showInWidget?: boolean = false;
-  /** Discovery Mode */
+  /** One-click Discovery Mode, value append will be deprecated, use append-grid instead */
   @Prop() oneClickDiscoveryMode?:
     | "modal"
     | "append"
@@ -670,8 +670,7 @@ export class VviinnResults {
     }
 
     const isOneClickDiscoveryAppendMode =
-      this.oneClickDiscoveryMode === "append-grid" ||
-      this.oneClickDiscoveryMode === "append-slider";
+      this.oneClickDiscoveryMode.startsWith("append");
 
     const oneClickDiscoveryHandler = (index: number) => {
       if (!isOneClickDiscoveryAppendMode) return;
