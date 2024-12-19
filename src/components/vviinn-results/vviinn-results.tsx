@@ -670,7 +670,7 @@ export class VviinnResults {
     }
 
     const isOneClickDiscoveryAppendMode =
-      this.oneClickDiscoveryMode.startsWith("append");
+      this.oneClickDiscoveryMode?.startsWith("append");
 
     const oneClickDiscoveryHandler = (index: number) => {
       if (!isOneClickDiscoveryAppendMode) return;
