@@ -365,11 +365,17 @@ export class VviinnCarousel {
   }
 
   private getColumnsNumber(): number {
-    if (this.setItemsAmount && this.isSetMode) {
-      return this.setItemsAmount;
+    if (this.setItemsAmount && this.isSetMode) return this.setItemsAmount;
+    const styleSheet = getComputedStyle(this.el);
+    const imagesContainer = this.el.querySelector(".items-group");
+    if (imagesContainer) {
+      const totalWidth = this.el.getBoundingClientRect().width;
+      const imageContainer = imagesContainer.children[0];
+      const imageWidth = imageContainer.getBoundingClientRect().width;
+      const gridColumns = Math.floor(totalWidth / imageWidth);
+      if (gridColumns) return gridColumns;
     }
 
-    const styleSheet = getComputedStyle(this.el);
     const columnsInCss = styleSheet.getPropertyValue(COLUMNS_NUMBER_CSS_VAR);
     const columnsNumber = parseInt(columnsInCss);
 
