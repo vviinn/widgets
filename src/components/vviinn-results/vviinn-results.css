@@ -140,11 +140,8 @@ products.hidden {
 }
 
 :host(.show-in-widget)
-  vviinn-recommendations-sidebar::part(recommendations-results) {
-  grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
-}
-
-:host(.show-in-widget)  vviinn-recommendations-sidebar::part(items-group) {
+  vviinn-recommendations-sidebar::part(recommendations-results),
+vviinn-recommendations-sidebar::part(items-group) {
   grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
 }
 

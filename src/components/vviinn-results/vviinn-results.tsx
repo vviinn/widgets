@@ -198,8 +198,7 @@ export class VviinnResults {
   /** True when we use vviinn-results inside the widget */
   @Prop() showInWidget?: boolean = false;
   /** Discovery Mode */
-  @Prop() oneClickDiscoveryMode:
-    | undefined
+  @Prop() oneClickDiscoveryMode?:
     | "modal"
     | "append"
     | "append-grid"
