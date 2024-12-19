@@ -80,15 +80,12 @@ type SearchStore = {
   selectedCropper?: number;
   rectangleSearchForm?: Form;
   detectedObjects: ValueObject<DetectedObject>[];
-  detectedObject?: ValueObject<DetectedObject>;
   objectDetectionInProgress: boolean;
   imageWidth: number;
   searchType?: SearchType;
 
   image: O.Option<HTMLImageElement>;
   imageUrl: O.Option<string>;
-  imageBounds: O.Option<Rectangle>;
-  searchArea: O.Option<Rectangle>;
 
   serverError: boolean;
   loading: boolean;
@@ -111,8 +108,6 @@ const { state, onChange } = createStore<SearchStore>({
 
   image: O.none,
   imageUrl: O.none,
-  imageBounds: O.none,
-  searchArea: O.none,
 
   serverError: false,
   loading: false,
@@ -178,10 +173,13 @@ export const uploadHiResFile = async (
   )();
 };
 
-export const makeRectangularSearchRequest = async () => {
+export const makeRectangularSearchRequest = async (
+  searchArea: Rectangle | null,
+  imageBounds: Rectangle | null
+) => {
   state.loading = true;
   pipe(
-    sequenceToOption(state.imageBounds, state.searchArea),
+    sequenceToOption(O.fromNullable(imageBounds), O.fromNullable(searchArea)),
     O.map(async ([bounds, searchArea]) => {
       const scaled = divideOnSized(bounds)(searchArea);
       const searchRectangle = {

@@ -7,14 +7,7 @@ export type CropBoxData = {
   height: number;
 };
 
-export type SearchArea = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-};
-
 export type LoadImageEventData = {
   imageBounds: Rectangle;
-  searchArea: SearchArea;
+  searchArea: Rectangle;
 };

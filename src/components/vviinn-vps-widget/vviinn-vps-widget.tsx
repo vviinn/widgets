@@ -491,7 +491,24 @@ export class VviinnVpsWidget {
     this.uiSessionId = uuidv4();
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
     this.widgetElementId = this.el.id;
+
+    document.addEventListener(
+      "vviinnCropperAspectRatioError",
+      this.handleAspectRatioError
+    );
   }
+
+  disconnectedCallback() {
+    document.removeEventListener(
+      "vviinnCropperAspectRatioError",
+      this.handleAspectRatioError
+    );
+  }
+
+  private handleAspectRatioError = ({ detail }: CustomEvent<boolean>) => {
+    this.setShowAspectRatioError(detail);
+    this.el.classList.add("bordered");
+  };
 
   private trackWidgetEvent(action: WidgetAction) {
     if (this.trackingDeactivated) return;
@@ -610,8 +627,6 @@ export class VviinnVpsWidget {
     searchState.activeIonLink = undefined;
     searchState.image = O.none;
     searchState.imageUrl = O.none;
-    searchState.imageBounds = O.none;
-    searchState.searchArea = O.none;
     searchState.results = [];
     searchState.filters = [];
     searchState.dynamicFilters = [];
@@ -752,10 +767,10 @@ export class VviinnVpsWidget {
             >
               {this.isResultSlide() && searchState.searchType === "image" && (
                 <div class="source-wrapper image-wrapper">
-                  <vviinn-image-view
+                  <vviinn-cropper
                     basicEventData={this.getBasicEventData()}
-                    setShowAspectRatioError={this.setShowAspectRatioError}
                     showAspectRatioError={this.showAspectRatioError}
+                    showInWidget={true}
                   />
                   <div
                     class={{

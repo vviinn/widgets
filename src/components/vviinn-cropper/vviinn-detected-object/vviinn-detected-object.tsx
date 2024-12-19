@@ -14,11 +14,13 @@ import {
   DetectedObject,
   detectedObjectEq,
 } from "../../../searchSession/searchSession";
-import { fromAlt, scaleWithSized, center } from "../../../geometry/Rectangle";
 import {
-  searchState,
-  makeRectangularSearchRequest,
-} from "../../../store/search.store";
+  fromAlt,
+  scaleWithSized,
+  center,
+  Rectangle,
+} from "../../../geometry/Rectangle";
+import { makeRectangularSearchRequest } from "../../../store/search.store";
 import {
   BasicEventData,
   SelectObjectEventData,
@@ -31,14 +33,17 @@ import {
 })
 export class VviinnDetectedObject {
   @Prop() detectedObject: ValueObject<DetectedObject>;
+  @Prop() selectedDetectedObject: ValueObject<DetectedObject>;
   @Prop() basicEventData: BasicEventData;
+  @Prop() imageBounds: Rectangle | null;
+  @Prop() searchArea: Rectangle | null;
 
   @Event({ bubbles: true })
   vviinnSelectObject: EventEmitter<SelectObjectEventData>;
 
   private getObjectPosition(): [string, string] {
     return pipe(
-      searchState.imageBounds,
+      O.fromNullable(this.imageBounds),
       O.map((bounds) => {
         const objectRectangle = fromAlt(
           foldValueObject(this.detectedObject).rectangle
@@ -53,31 +58,29 @@ export class VviinnDetectedObject {
   }
 
   private selectDetectedObject() {
-    pipe(
-      searchState.imageBounds,
+    const scaledRect = pipe(
+      O.fromNullable(this.imageBounds),
       O.map((bounds) => {
         const rectangle = foldValueObject(this.detectedObject).rectangle;
         const transformedRect = fromAlt(rectangle);
-        const scaledRect = scaleWithSized(bounds)(transformedRect);
-
-        searchState.detectedObject = this.detectedObject;
-        searchState.searchArea = O.some(scaledRect);
-      })
+        return scaleWithSized(bounds)(transformedRect);
+      }),
+      O.toNullable
     );
 
-    makeRectangularSearchRequest();
+    makeRectangularSearchRequest(this.searchArea, this.imageBounds);
     this.vviinnSelectObject.emit({
       ...this.basicEventData,
       detectedObject: this.detectedObject,
+      searchArea: scaledRect,
     });
   }
 
   private isActive(): boolean {
-    if (!this.detectedObject) return false;
-    if (!searchState.detectedObject) return false;
+    if (!this.detectedObject || !this.selectedDetectedObject) return false;
 
     const thisObject = foldValueObject(this.detectedObject);
-    const savedObject = foldValueObject(searchState.detectedObject);
+    const savedObject = foldValueObject(this.selectedDetectedObject);
 
     return detectedObjectEq.equals(thisObject, savedObject);
   }
