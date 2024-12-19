@@ -139,7 +139,7 @@ products.hidden {
   }
 }
 
-:host(.matching-discovery):not(.show-in-widget)
+:host(.matching-discovery)
   vviinn-recommendations-sidebar::part(items-group) {
   grid-template-columns: repeat(
     auto-fill,
@@ -152,7 +152,7 @@ products.hidden {
 
 :host(.show-in-widget)
   vviinn-recommendations-sidebar::part(recommendations-results),
-vviinn-recommendations-sidebar::part(items-group) {
+:host(.show-in-widget) vviinn-recommendations-sidebar::part(items-group) {
   grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
 }
 
