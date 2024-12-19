@@ -769,6 +769,7 @@ export class VviinnResults {
         id="results-block"
         class={{
           "show-in-widget": this.showInWidget,
+          "matching-discovery": this.oneClickDiscoveryMode === "append-slider",
         }}
         exportparts={productCardParts}
       >
