@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.142.3](https://github.com/vviinn/widgets/compare/v2.142.2...v2.142.3) (2024-12-19)
+
+
+### Bug Fixes
+
+* update slider step so that images don't look cropped ([3c9bd19](https://github.com/vviinn/widgets/commit/3c9bd196e47601a79f17d1482ad16a8d47effe0a))
+
+### [2.142.2](https://github.com/vviinn/widgets/compare/v2.142.1...v2.142.2) (2024-12-19)
+
+
+### Bug Fixes
+
+* Cropper component's refactoring ([8d5ecad](https://github.com/vviinn/widgets/commit/8d5ecad17aa6ac8364d1a3dc6bf91e349186aac1))
+
 ### [2.142.1](https://github.com/vviinn/widgets/compare/v2.142.0...v2.142.1) (2024-12-18)
 
 

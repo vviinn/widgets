@@ -12,6 +12,7 @@ import {
   ResponseDynamicFilterItem,
   RequestDynamicFilterItem,
 } from "../campaign/VPRCampaignService";
+import { Rectangle } from "../geometry/Rectangle";
 
 export type CommonEventData = {
   widgetType: "VPR" | "VPS" | "VCS" | "TPS";
@@ -37,6 +38,7 @@ export type NoResultEventData = {
 
 export type SelectObjectEventData = {
   detectedObject: ValueObject<DetectedObject>;
+  searchArea: Rectangle;
 } & {
   [K in keyof CommonEventData]: CommonEventData[K];
 };

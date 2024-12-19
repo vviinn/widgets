@@ -296,7 +296,8 @@ export class VviinnCarousel {
   }
 
   private calculateMoveStep() {
-    const contentWidths = this.getContent().map(
+    const imageGroups = this.getContent().filter((el) => !el.matches("button"));
+    const contentWidths = imageGroups.map(
       (el) => el.getBoundingClientRect().width
     );
     const sum = contentWidths.reduce((acc, val) => acc + val, 0);
@@ -307,7 +308,6 @@ export class VviinnCarousel {
       (contentGapString) => parseInt(contentGapString.split("px")[0]),
       (contentGap) => (isNaN(contentGap) ? 0 : contentGap)
     );
-
     return sum / contentWidths.length + contentGap;
   }
 
