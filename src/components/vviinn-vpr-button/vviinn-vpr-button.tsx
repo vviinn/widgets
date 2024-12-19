@@ -279,8 +279,6 @@ export class VviinnVprButton {
     sidebar.addPriceContainer = this.addPriceContainer;
     sidebar.favoriteShow = this.favoriteShow;
 
-    console.log(this.targetAppendSidebarTo, this.oneClickDiscoveryMode);
-
     if (this.targetAppendSidebarTo) {
       sidebar.mode = "grid";
       sidebar.useCarousel = this.oneClickDiscoveryMode === "append-slider";

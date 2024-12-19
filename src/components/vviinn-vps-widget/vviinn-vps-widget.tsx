@@ -371,7 +371,6 @@ export class VviinnVpsWidget {
 
   componentDidLoad() {
     this.replaceSlotsContent();
-    console.log(this.oneClickDiscoveryMode);
   }
 
   setTrackingDeactivated = (result: EventConfirmation) => {
