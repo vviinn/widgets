@@ -102,6 +102,9 @@ export type DynamicFiltersEventData = ResponseDynamicFilterItem[];
 export type DynamicFilterTrackingData = {
   action: FilterAction;
   kind?: string;
+};
+
+export type DynamicFilterInternalData = DynamicFilterTrackingData & {
   customTrigger?: Widget;
 };
 

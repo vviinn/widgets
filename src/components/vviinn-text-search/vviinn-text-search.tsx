@@ -15,10 +15,10 @@ import { slotChangeListener } from "../customized-slots";
 import {
   DynamicFiltersEventData,
   ResetSelectedFiltersEventData,
-  DynamicFilterTrackingData,
   SearchIdEvent,
   SearchIdEventData,
   TextSearchEventData,
+  DynamicFilterInternalData,
 } from "../../recommendation/events";
 import i18next from "i18next";
 import { Locale, resources } from "../../locale";
@@ -63,7 +63,7 @@ export class VviinnTextSearch {
   /** @internal */
   @Event() resultsSearchFinished: EventEmitter;
 
-  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
+  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterInternalData>;
 
   /** Selected filters should be resetted */
   /** @internal */
@@ -204,7 +204,7 @@ export class VviinnTextSearch {
         requestId,
       });
 
-      this.vviinnSelectedFiltersReset.emit({ isTriggeredByVpsWidget: true });
+      this.vviinnSelectedFiltersReset.emit({ isTriggeredByVpsWidget: false });
     } else {
       this.showLoader();
       this.vviinnTextSearchStarted.emit({

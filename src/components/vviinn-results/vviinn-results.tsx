@@ -19,6 +19,7 @@ import {
   FilterEvent,
   ResultLoadEvent,
   ResultViewEvent,
+  Widget,
 } from "vviinn-tracking-client-ts";
 import { version } from "../../../package.json";
 import {
@@ -40,8 +41,8 @@ import {
 import {
   ChangedFiltersEvent,
   ChangedFiltersEventData,
+  DynamicFilterInternalData,
   DynamicFiltersEventData,
-  DynamicFilterTrackingData,
   ProductCardEvent,
   ProductCardEventData,
   ProductEvent,
@@ -420,16 +421,19 @@ export class VviinnResults {
 
   private filtersTriggeredHandler = ({
     detail,
-  }: CustomEvent<DynamicFilterTrackingData>) => {
+  }: CustomEvent<DynamicFilterInternalData>) => {
     if (this.trackingDeactivated) return;
-    this.isTextSearch = detail.customTrigger === "TPS";
-    const { campaignTypeId, ...rest } = this.getBasicEventData();
+    const { action, kind, customTrigger } = detail;
+    console.log("filtersTriggeredHandler", detail);
+    if (customTrigger) this.isTextSearch = customTrigger === "TPS";
+    const { campaignTypeId, ...rest } = this.getBasicEventData(customTrigger);
 
     const filterEvent: FilterEvent = createFilterEvent({
       session_id: this.uiSessionId,
       typ: "filter_event",
+      action,
+      kind,
       ...rest,
-      ...detail,
     });
     this.trackingApi.trackEvent(filterEvent).then(this.setTrackingDeactivated);
   };
@@ -641,15 +645,16 @@ export class VviinnResults {
     return productEvent;
   }
 
-  private getBasicEventData = (): BasicEventData => {
-    const activeCampaign = this.isTextSearch ? "TPS" : "VPS";
+  private getBasicEventData = (customTrigger?: Widget): BasicEventData => {
+    const textSearchCriteria = this.isTextSearch || customTrigger === "TPS";
+    const activeCampaign = textSearchCriteria ? "TPS" : "VPS";
     return {
       widgetType: activeCampaign,
       campaignTypeId: activeCampaign,
       campaignTypeName: campaignTypeNames[activeCampaign],
       widgetId: this.widgetElementId,
       widgetVersion: version,
-      widget: this.isTextSearch ? "TPS" : undefined,
+      widget: textSearchCriteria ? "TPS" : undefined,
     };
   };
 
