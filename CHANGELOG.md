@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.142.4](https://github.com/vviinn/widgets/compare/v2.142.3...v2.142.4) (2024-12-20)
+
+
+### Bug Fixes
+
+* Selecting detected object issue ([ca08f3f](https://github.com/vviinn/widgets/commit/ca08f3ff4d2b3bde90f1fcf850dd21af197ff465))
+
 ### [2.142.3](https://github.com/vviinn/widgets/compare/v2.142.2...v2.142.3) (2024-12-19)
 
 
