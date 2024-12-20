@@ -135,6 +135,13 @@ export class VviinnTextSearch {
     clearTimeout(this.triggerTooltipEnd);
   }
 
+  private trackTextSearch = () =>
+    this.vviinnFilterTriggered.emit({
+      kind: this.searchQuery,
+      action: "select",
+      customTrigger: "TPS",
+    });
+
   async componentWillLoad() {
     await i18next.init({
       lng: this.locale,
@@ -147,6 +154,7 @@ export class VviinnTextSearch {
       this.vviinnTextSearchStarted.emit({
         query: this.searchQuery,
       });
+      this.trackTextSearch();
     }
   }
 
@@ -187,11 +195,7 @@ export class VviinnTextSearch {
 
   private async handleTextSearch() {
     if (!this.searchQuery) return;
-    this.vviinnFilterTriggered.emit({
-      kind: this.searchQuery,
-      action: "select",
-      customTrigger: "TPS",
-    });
+    this.trackTextSearch();
     if (this.showInWidget) {
       const { requestId } = pipe(
         await makeTextSearchRequest(this.token, this.searchQuery),
