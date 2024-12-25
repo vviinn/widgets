@@ -54,6 +54,8 @@ export class VviinnTextSearch {
   /** The filters received */
   @Event({ bubbles: true })
   vviinnFiltersReceived: EventEmitter<DynamicFiltersEventData>;
+  /** A filter was triggered */
+  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
 
   /** A text search response was received (used internally by vviinn-vps-widget) */
   /** @internal */
@@ -62,8 +64,6 @@ export class VviinnTextSearch {
   /** A search response was received by vviinn-results (used internally for showing preloader) */
   /** @internal */
   @Event() resultsSearchFinished: EventEmitter;
-
-  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
 
   /** Selected filters should be resetted */
   /** @internal */

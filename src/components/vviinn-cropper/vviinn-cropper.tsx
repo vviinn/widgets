@@ -35,6 +35,8 @@ import * as O from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/function";
 import { sequenceToOption } from "../../utils/option/option";
 import { getImageSizes } from "../../Image/sizing";
+import { SearchIdResponse } from "../../interfaces/search";
+import { fromFile } from "../../Image/fromFile";
 
 const DEFAULT_IMAGE_SIZE = 288;
 
@@ -71,9 +73,27 @@ export class VviinnCropper {
   @Event() vviinnCropperLoadImage: EventEmitter<LoadImageEventData>;
   @Event() vviinnCropperCropEnd: EventEmitter<Rectangle>;
   @Event() vviinnCropperAspectRatioError: EventEmitter<boolean>;
+  @Event() imageSearchFinished: EventEmitter<SearchIdResponse>;
+
+  /** @internal */
+  @Event() vviinnImageUploadStarted: EventEmitter<File>;
 
   connectedCallback() {
     this.stringParser(true, true);
+
+    document.addEventListener(
+      "vviinnImageUploadStarted",
+      this.imageUploadStartedHandler
+    );
+  }
+
+  disconnectedCallback() {
+    if (this.cropper) this.cropper.destroy();
+
+    document.removeEventListener(
+      "vviinnImageUploadStarted",
+      this.imageUploadStartedHandler
+    );
   }
 
   @Watch("basicEventDataString")
@@ -102,13 +122,8 @@ export class VviinnCropper {
     }
   }
 
-  disconnectedCallback() {
-    if (this.cropper) this.cropper.destroy();
-  }
-
   componentWillRender() {
     this.renderImage();
-    //FIXME: #37535
     if (!this.showInWidget) {
       this.hidePreloader = true;
     }
@@ -129,6 +144,13 @@ export class VviinnCropper {
     };
     this.cropper.setCropBoxData(ValidateCropBoxData(cropBoxData));
   }
+
+  private imageUploadStartedHandler = ({ detail }: CustomEvent<File>) => {
+    fromFile(detail).then((image) => {
+      this.imageElement = image;
+      this.renderImage();
+    });
+  };
 
   private getCropboxData(): Rectangle {
     const { left, top, width, height } = this.cropper.getCropBoxData();
@@ -186,23 +208,18 @@ export class VviinnCropper {
   }
 
   private renderImage() {
-    //FIXME: #37535
-    if (!this.showInWidget) return;
-    const imageUrl = this.showInWidget
-      ? searchState.imageUrl
-      : O.some(this.url);
-
     const imageElement = this.showInWidget
       ? searchState.image
       : O.some(this.imageElement);
 
     return pipe(
-      sequenceToOption(imageUrl, imageElement),
-      O.map(([url, refImage]) => {
+      sequenceToOption(imageElement),
+      O.map(([refImage]) => {
+        if (!refImage) return null;
         const [width, height] = getImageSizes(refImage, DEFAULT_IMAGE_SIZE);
         this.width = width;
         this.height = height;
-        this.url = url;
+        this.url = refImage.src;
       }),
       O.getOrElse(() => null)
     );

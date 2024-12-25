@@ -301,11 +301,11 @@ export class VviinnResults {
   private getResultsBySearchId = async (searchId: string) => {
     if (!searchId || this.showInWidget) return;
     state.apiPath = this.apiPath; //FIXME: #36877
-    await pipe(
+    pipe(
       await makeSearchIdRequest(this.token, searchId),
-      E.getOrElse(() => []),
-      (results: SearchIdResponse) => {
-        this.recommendations = results;
+      E.getOrElse(() => null),
+      (response: SearchIdResponse) => {
+        this.recommendations = response.value;
       }
     );
     this.resultsSearchFinished.emit();

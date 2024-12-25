@@ -38,7 +38,6 @@ import { imageFromFileTask } from "../Image/fromFile";
 import {
   ProductListingPageRequest,
   ResponseFilterItem,
-  SearchIdResponse,
   TextSearchRequest,
 } from "../interfaces/search";
 import {
@@ -336,8 +335,7 @@ export const makeSearchIdRequest = async (token: string, searchId: string) =>
   await pipe(
     makeAuthorizedRequest(token),
     TE.fromEither,
-    TE.chainW(linkRequest(createLinkfromHref(searchId))),
-    TE.map((response: ValueObject<SearchIdResponse>) => response.value)
+    TE.chainW(linkRequest(createLinkfromHref(searchId)))
   )();
 
 export const makeProductListingPageRequest = async (

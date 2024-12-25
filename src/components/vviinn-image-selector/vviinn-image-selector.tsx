@@ -30,6 +30,8 @@ export class VviinnImageSelector {
   @Event() vviinnNoResult: EventEmitter<NoResultEventData>;
 
   /** @internal */
+  @Event() vviinnImageUploadStarted: EventEmitter<File>;
+  /** @internal */
   @Event() vviinnImageUploadFinished: EventEmitter<SearchIdEventData>;
 
   @Prop() basicEventData: BasicEventData;
@@ -49,6 +51,8 @@ export class VviinnImageSelector {
     const input = event.target as HTMLInputElement;
 
     this.uploadStartedHandler && this.uploadStartedHandler();
+
+    this.showInTextSearch && this.vviinnImageUploadStarted.emit(input.files[0]);
 
     const processingResult = await processSelectedFile(
       input.files[0],

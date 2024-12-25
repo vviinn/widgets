@@ -10,7 +10,7 @@ export const browserType = () => {
   const forbiddenBrowser = forbiddenBrowserRules.some((rule) => rule === true);
   const isChrome =
     typeof winNav.userAgentData !== "undefined"
-      ? winNav.userAgentData.brands[0].brand === "Google Chrome"
+      ? winNav.userAgentData.brands[0]?.brand === "Google Chrome"
       : vendorName === "Google Inc.";
   const isSafari = winNav.userAgent.indexOf("Safari") > -1 && !isChrome;
 
