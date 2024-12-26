@@ -30,7 +30,7 @@ import {
   getTokenWithBody,
   processBearerToken,
 } from "../utils/token/tokenUtils";
-import { BasicError } from "../error";
+import { BasicError, detectObjectsError } from "../error";
 import { sequenceToEither } from "../utils/either";
 import { imageFormFromFile } from "../Image/form";
 import { checkFileWithExtention, resizeFileTo } from "./file-processing";
@@ -136,14 +136,9 @@ const makeLinkRequest = <T>(
 const detectObjects = async (data: SearchSession) => {
   state.objectDetectionInProgress = true;
 
-  const error: BasicError<string> = {
-    kind: "server",
-    inner: "Can not get a link for objects detection",
-  };
-
   await pipe(
     getLink(data, "detectedObjects"),
-    TE.fromOption(() => error),
+    TE.fromOption(() => detectObjectsError),
     TE.chain(makeLinkRequest),
     TE.map(
       (objects: ValueObject<ValueObject<DetectedObject>[]>) =>

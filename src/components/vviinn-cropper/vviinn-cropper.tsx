@@ -67,7 +67,7 @@ export class VviinnCropper {
   @State() selectedDetectedObject: ValueObject<DetectedObject>;
   @State() imageBounds: Rectangle | null;
   @State() searchArea: Rectangle | null;
-  @State() imageElement: HTMLImageElement;
+  @State() imageElement?: HTMLImageElement;
 
   @Event() vviinnImageCrop: EventEmitter<BasicEventData>;
   @Event() vviinnCropperLoadImage: EventEmitter<LoadImageEventData>;
@@ -270,11 +270,11 @@ export class VviinnCropper {
             ))}
           </div>
 
-          {this.showPreloader() ? (
+          {this.showPreloader() && (
             <div class="image-preloader">
               <vviinn-preloader />
             </div>
-          ) : null}
+          )}
         </div>
       </Host>
     );
