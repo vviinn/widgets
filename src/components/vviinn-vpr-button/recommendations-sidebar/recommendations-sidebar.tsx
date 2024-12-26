@@ -70,7 +70,7 @@ export class RecommendationsSidebar {
   /** @internal */
   @Prop() buttonChildren: HTMLCollection;
   /** @internal */
-  @Prop() apiPath: string | undefined = "https://api.vviinn.com";
+  @Prop() apiPath?: string = "https://api.vviinn.com";
   /** @internal */
   @Prop() buttonElementId?: string;
   /** @internal */

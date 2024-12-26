@@ -300,7 +300,6 @@ export class VviinnResults {
 
   private getResultsBySearchId = async (searchId: string) => {
     if (!searchId || this.showInWidget) return;
-    state.apiPath = this.apiPath; //FIXME: #36877
     pipe(
       await makeSearchIdRequest(this.token, searchId),
       E.getOrElse(() => null),
@@ -441,6 +440,7 @@ export class VviinnResults {
 
   connectedCallback() {
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
+    state.apiPath = this.apiPath; //FIXME: #36877
 
     if (!this.uiSessionId) {
       this.uiSessionId = uuidv4();

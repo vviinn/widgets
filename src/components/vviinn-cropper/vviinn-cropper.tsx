@@ -12,6 +12,7 @@ import {
 } from "@stencil/core";
 import Cropper from "cropperjs";
 import styles from "./vviinn-cropper.css";
+import { state } from "../../store/store";
 import { ValueObject } from "../../network/ion/ValueObject";
 import { fromImage, Rectangle } from "../../geometry/Rectangle";
 import { DetectedObject } from "../../searchSession/searchSession";
@@ -52,6 +53,7 @@ export class VviinnCropper {
 
   @Prop() basicEventDataString?: string;
   @Prop() detectedObjectsString?: string;
+  @Prop() apiPath?: string = "https://api.vviinn.com";
 
   @Prop({ mutable: true }) basicEventData: BasicEventData;
   @Prop({ mutable: true }) url: string;
@@ -82,6 +84,7 @@ export class VviinnCropper {
 
   connectedCallback() {
     this.stringParser(true, true);
+    state.apiPath = this.apiPath;
 
     document.addEventListener(
       "vviinnImageUploadStarted",

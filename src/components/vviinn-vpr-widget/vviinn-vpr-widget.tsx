@@ -196,7 +196,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() showScroll = true;
 
   /** @internal */
-  @Prop() apiPath: string | undefined = "https://api.vviinn.com";
+  @Prop() apiPath?: string = "https://api.vviinn.com";
   /** @internal */
   @Prop() useCarousel: boolean = true;
   /** @internal */

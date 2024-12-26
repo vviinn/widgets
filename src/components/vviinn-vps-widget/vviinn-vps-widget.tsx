@@ -162,7 +162,7 @@ export class VviinnVpsWidget {
   @Prop() addPriceContainer?: boolean = false;
 
   /** @internal */
-  @Prop() apiPath: string = "https://api.vviinn.com";
+  @Prop() apiPath?: string = "https://api.vviinn.com";
   /** Set true when showing the widget in button */
   /** @internal */
   @Prop() showingInButton?: boolean = false;
