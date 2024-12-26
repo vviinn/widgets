@@ -401,13 +401,7 @@ const setSelectedImage =
   };
 
 export const processSelectedFile =
-  (store: SearchStoreName) =>
-  async (
-    file: File,
-    fromTextSearch: boolean = false,
-    token?: string,
-    apiPath?: string
-  ) => {
+  (store: SearchStoreName) => async (file: File) => {
     const originFile = checkFileWithExtention(file);
 
     const fileResizer = resizeFileTo(RESIZED_IMAGE_WIDTH);
@@ -416,12 +410,6 @@ export const processSelectedFile =
       TE.fromEither,
       TE.chainTaskK(fileResizer)
     );
-
-    if (fromTextSearch)
-      return await pipe(
-        resizeFileTask,
-        TE.chain(() => uploadFileFromTextSearch(file, token, apiPath))
-      )();
 
     const session = await pipe(
       resizeFileTask,

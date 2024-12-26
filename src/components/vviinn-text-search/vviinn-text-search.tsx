@@ -9,7 +9,11 @@ import {
   Listen,
   State,
 } from "@stencil/core";
-import { makeTextSearchRequest, searchState } from "../../store/search.store";
+import {
+  makeTextSearchRequest,
+  searchState,
+  componentsState,
+} from "../../store/search.store";
 import { SearchModalUploadIcon, TextSearchIcon } from "../vviinn-icons";
 import { slotChangeListener } from "../customized-slots";
 import {
@@ -126,6 +130,7 @@ export class VviinnTextSearch {
   );
 
   connectedCallback() {
+    if (this.token) componentsState.token = this.token;
     document.addEventListener("resultsSearchFinished", this.hideLoader);
   }
 
@@ -238,7 +243,6 @@ export class VviinnTextSearch {
           />
           {this.mode === "upload" ? (
             <vviinn-image-selector
-              token={this.token}
               apiPath={this.apiPath}
               showInTextSearch={true}
               uploadStartedHandler={this.showLoader.bind(this)}

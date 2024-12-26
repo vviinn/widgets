@@ -56,7 +56,7 @@ export class VviinnImageSelector {
 
     const processingResult = await processSelectedFile(
       this.showInTextSearch ? "components" : "widget"
-    )(input.files[0], this.showInTextSearch, this.token, this.apiPath);
+    )(input.files[0]);
 
     pipe(
       processingResult,

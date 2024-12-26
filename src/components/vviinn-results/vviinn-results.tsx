@@ -27,6 +27,7 @@ import {
   makeSearchQueryRequest,
   makeTextSearchRequest,
   searchState,
+  componentsState,
 } from "../../store/search.store";
 import { state } from "../../store/store";
 import { createTrackingApi } from "../../openApi";
@@ -441,6 +442,7 @@ export class VviinnResults {
   connectedCallback() {
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
     state.apiPath = this.apiPath; //FIXME: #36877
+    if (this.token) componentsState.token = this.token;
 
     if (!this.uiSessionId) {
       this.uiSessionId = uuidv4();
