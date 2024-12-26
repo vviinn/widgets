@@ -30,6 +30,8 @@ import {
 import {
   makeRectangularSearchRequest,
   searchState,
+  componentsState,
+  SearchStoreName,
 } from "../../store/search.store";
 import * as O from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/function";
@@ -145,6 +147,11 @@ export class VviinnCropper {
     this.cropper.setCropBoxData(ValidateCropBoxData(cropBoxData));
   }
 
+  private getStoreName = (): SearchStoreName =>
+    this.showInWidget ? "widget" : "components";
+
+  private getState = () => (this.showInWidget ? searchState : componentsState);
+
   private imageUploadStartedHandler = ({ detail }: CustomEvent<File>) => {
     fromFile(detail).then((image) => {
       this.imageElement = image;
@@ -209,7 +216,7 @@ export class VviinnCropper {
 
   private renderImage() {
     const imageElement = this.showInWidget
-      ? searchState.image
+      ? this.getState().image
       : O.some(this.imageElement);
 
     return pipe(
@@ -230,15 +237,23 @@ export class VviinnCropper {
 
     this.vviinnCropperCropEnd.emit(cropboxData);
     this.searchArea = cropboxData;
-    makeRectangularSearchRequest(this.searchArea, this.imageBounds);
+    makeRectangularSearchRequest(
+      this.getStoreName(),
+      this.searchArea,
+      this.imageBounds
+    );
     this.selectedDetectedObject = undefined;
     this.vviinnImageCrop.emit(this.basicEventData);
   };
 
-  private showPreloader = () =>
-    (searchState.loading || searchState.objectDetectionInProgress) &&
-    !this.showAspectRatioError &&
-    !this.hidePreloader;
+  private showPreloader = () => {
+    const state = this.getState();
+    return (
+      (state.loading || state.objectDetectionInProgress) &&
+      !this.showAspectRatioError &&
+      !this.hidePreloader
+    );
+  };
 
   render() {
     return (
@@ -257,15 +272,13 @@ export class VviinnCropper {
               onLoad={() => this.loadImage()}
             />
 
-            {(this.showInWidget
-              ? searchState.detectedObjects
-              : this.detectedObjects
-            ).map((object) => (
+            {this.getState().detectedObjects.map((object) => (
               <vviinn-detected-object
                 detectedObject={object}
                 selectedDetectedObject={this.selectedDetectedObject}
                 basicEventData={this.basicEventData}
                 imageBounds={this.imageBounds}
+                showInWidget={this.showInWidget}
               />
             ))}
           </div>
