@@ -26,7 +26,6 @@ import { SlotSkeleton, slotChangeListener } from "../customized-slots";
 import { Histogram } from "../vviinn-price-range/vviinn-price-range";
 import {
   ChangedFiltersEventData,
-  DynamicFiltersEventData,
   DynamicFilterTrackingData,
   ExtendedFiltersButtonClickedEvent,
   ExtendedFiltersButtonClickedEventData,

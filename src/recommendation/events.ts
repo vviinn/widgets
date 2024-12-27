@@ -8,10 +8,7 @@ import {
 import { ValueObject } from "../network/ion/ValueObject";
 import { DetectedObject } from "../searchSession/searchSession";
 import { ErrorKind } from "../error";
-import {
-  ResponseDynamicFilterItem,
-  RequestDynamicFilterItem,
-} from "../campaign/VPRCampaignService";
+import { RequestDynamicFilterItem } from "../campaign/VPRCampaignService";
 import { Rectangle } from "../geometry/Rectangle";
 
 export type CommonEventData = {
@@ -97,8 +94,6 @@ export type ExtendedFiltersButtonClickedEventData = {
   isTriggeredByVpsWidget: boolean;
 };
 
-export type DynamicFiltersEventData = ResponseDynamicFilterItem[];
-
 export type DynamicFilterTrackingData = {
   action: FilterAction;
   kind?: string;
@@ -107,7 +102,6 @@ export type DynamicFilterTrackingData = {
 
 export type SearchIdEvent = CustomEvent<SearchIdEventData>;
 export type TextSearchEvent = CustomEvent<TextSearchEventData>;
-export type DynamicFiltersEvent = CustomEvent<DynamicFiltersEventData>;
 export type ChangedFiltersEvent = CustomEvent<ChangedFiltersEventData>;
 export type ResetSelectedFiltersEvent =
   CustomEvent<ResetSelectedFiltersEventData>;

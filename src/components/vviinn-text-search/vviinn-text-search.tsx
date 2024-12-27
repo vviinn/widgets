@@ -18,7 +18,6 @@ import {
 import { SearchModalUploadIcon, TextSearchIcon } from "../vviinn-icons";
 import { slotChangeListener } from "../customized-slots";
 import {
-  DynamicFiltersEventData,
   ResetSelectedFiltersEventData,
   DynamicFilterTrackingData,
   SearchIdEvent,
