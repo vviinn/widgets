@@ -565,7 +565,7 @@ export class VviinnVpsWidget {
             this.handleStartCameraClick();
           }}
         >
-          <vviinn-preloader class={{ hidden: !isLoading }} />
+          {isLoading && <vviinn-preloader />}
 
           <span class={{ "action-button-content": true, hidden: isLoading }}>
             <slot name="vviinn-camera-icon">

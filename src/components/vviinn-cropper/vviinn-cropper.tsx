@@ -67,7 +67,6 @@ export class VviinnCropper {
 
   @State() detectedObjects: ValueObject<DetectedObject>[] = [];
   @State() cropper: Cropper = null;
-  @State() hidePreloader = false;
   @State() selectedDetectedObject: ValueObject<DetectedObject>;
   @State() imageBounds: Rectangle | null;
   @State() searchArea: Rectangle | null;
@@ -183,7 +182,6 @@ export class VviinnCropper {
         width < MIN_IMAGE_SIDE_FOR_CROPPER ||
         height < MIN_IMAGE_SIDE_FOR_CROPPER
       ) {
-        this.hidePreloader = true;
         return;
       }
       this.cropper = new Cropper(this.imageElement, {
@@ -225,8 +223,7 @@ export class VviinnCropper {
   private showPreloader = () => {
     return (
       (this.state.loading || this.state.objectDetectionInProgress) &&
-      !this.showAspectRatioError &&
-      !this.hidePreloader
+      !this.showAspectRatioError
     );
   };
 
