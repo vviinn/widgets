@@ -353,6 +353,10 @@ const setSelectedImage =
 
 export const processSelectedFile =
   (store: SearchStoreName) => async (file: File) => {
+    const state = useStore(store);
+    state.image = O.none;
+    state.detectedObjects = [];
+
     const originFile = checkFileWithExtention(file);
 
     const fileResizer = resizeFileTo(RESIZED_IMAGE_WIDTH);

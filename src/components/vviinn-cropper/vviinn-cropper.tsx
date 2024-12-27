@@ -82,6 +82,11 @@ export class VviinnCropper {
   private storeName?: SearchStoreName;
 
   connectedCallback() {
+    document.addEventListener(
+      "vviinnImageUpload",
+      this.imageUploadStartedHandler
+    );
+
     this.stringParser(true, true);
     state.apiPath = this.apiPath;
     this.state = this.showInWidget ? searchState : componentsState;
@@ -89,6 +94,11 @@ export class VviinnCropper {
   }
 
   disconnectedCallback() {
+    document.removeEventListener(
+      "vviinnImageUpload",
+      this.imageUploadStartedHandler
+    );
+
     if (this.cropper) this.cropper.destroy();
   }
 
@@ -137,6 +147,13 @@ export class VviinnCropper {
     };
     this.cropper.setCropBoxData(ValidateCropBoxData(cropBoxData));
   }
+
+  private imageUploadStartedHandler = () => {
+    if (this.cropper) {
+      this.cropper.destroy();
+      this.cropper = null;
+    }
+  };
 
   private getCropboxData(): Rectangle {
     const { left, top, width, height } = this.cropper.getCropBoxData();
