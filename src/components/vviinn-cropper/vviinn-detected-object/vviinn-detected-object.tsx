@@ -44,8 +44,11 @@ export class VviinnDetectedObject {
   @Event({ bubbles: true })
   vviinnSelectObject: EventEmitter<SelectObjectEventData>;
 
-  private getStoreName = (): SearchStoreName =>
-    this.showInWidget ? "widget" : "components";
+  private storeName?: SearchStoreName;
+
+  connectedCallback() {
+    this.storeName = this.showInWidget ? "widget" : "components";
+  }
 
   private getObjectPosition(): [string, string] {
     return pipe(
@@ -74,11 +77,7 @@ export class VviinnDetectedObject {
       O.toNullable
     );
 
-    makeRectangularSearchRequest(
-      this.getStoreName(),
-      scaledRect,
-      this.imageBounds
-    );
+    makeRectangularSearchRequest(this.storeName, scaledRect, this.imageBounds);
     this.vviinnSelectObject.emit({
       ...this.basicEventData,
       detectedObject: this.detectedObject,

@@ -65,7 +65,7 @@ const makeAuthorizedRequest = (
 
 export type SearchStoreName = "widget" | "components";
 
-type SearchStore = {
+export type SearchStore = {
   token?: string;
   campaignId?: string;
   excluded?: string;
@@ -78,7 +78,6 @@ type SearchStore = {
   dynamicFilters: ResponseDynamicFilterItem[];
   resetCategoryLink?: Link;
   activeIonLink?: Link;
-  selectedCropper?: number;
   rectangleSearchForm?: Form;
   detectedObjects: ValueObject<DetectedObject>[];
   objectDetectionInProgress: boolean;
@@ -277,17 +276,19 @@ export const uploadFileFromWidget =
   };
 
 export const makeTextSearchRequest = async (
-  token: string,
+  store: SearchStoreName,
   query: string,
   dynamicFilters?: RequestDynamicFilterItem[],
-  requestId?: string
+  requestId?: string,
+  resultsCount?: number
 ) => {
-  const state = useStore("widget");
+  const state = useStore(store);
   state.searchType = "text";
   state.loading = true;
 
   const body: TextSearchRequest = {
     query,
+    ...(resultsCount ? { resultsCount } : {}),
     ...(dynamicFilters
       ? {
           dynamicFilters,
@@ -298,7 +299,7 @@ export const makeTextSearchRequest = async (
   };
 
   return pipe(
-    getTokenWithBody<TextSearchRequest>(token, body),
+    getTokenWithBody<TextSearchRequest>(state.token, body),
     setBodyAndHeaders,
     TE.fromEither,
     TE.chain((request) => textSearchSessionClient(request)),
@@ -318,46 +319,22 @@ export const makeTextSearchRequest = async (
   )();
 };
 
-export const makeSearchQueryRequest = async (
-  token: string,
-  query: string,
-  dynamicFilters?: RequestDynamicFilterItem[],
-  resultsCount?: number,
-  requestId?: string
-) => {
-  const body: TextSearchRequest = {
-    query,
-    ...(resultsCount ? { resultsCount } : {}),
-    ...(requestId ? { requestId } : {}),
-    ...(dynamicFilters
-      ? {
-          dynamicFilters,
-        }
-      : {}),
-  };
-
-  return pipe(
-    getTokenWithBody<TextSearchRequest>(token, body),
-    setBodyAndHeaders,
+export const makeSearchIdRequest = async (token: string, searchId: string) => {
+  return await pipe(
+    makeAuthorizedRequest(token),
     TE.fromEither,
-    TE.chain(textSearchSessionClient)
+    TE.chainW(linkRequest(createLinkfromHref(searchId))),
+    TE.map(updateState("components"))
   )();
 };
 
-export const makeSearchIdRequest = async (token: string, searchId: string) =>
-  await pipe(
-    makeAuthorizedRequest(token),
-    TE.fromEither,
-    TE.chainW(linkRequest(createLinkfromHref(searchId)))
-  )();
-
 export const makeProductListingPageRequest = async (
-  token: string,
   column: string,
   value: string,
   resultsCount?: number,
   dynamicFilters?: RequestDynamicFilterItem[]
 ) => {
+  const state = useStore("components");
   const requestValue =
     column === "product_type" || column === "google_product_category"
       ? pipe(
@@ -385,11 +362,18 @@ export const makeProductListingPageRequest = async (
       : {}),
   };
 
-  return pipe(
-    getTokenWithBody<ProductListingPageRequest>(token, body),
+  pipe(
+    getTokenWithBody<ProductListingPageRequest>(state.token, body),
     setBodyAndHeaders,
     TE.fromEither,
-    TE.chain(productListingPageSessionClient)
+    TE.chainW(productListingPageSessionClient),
+    TE.map((sessionResponse) => {
+      state.results = sessionResponse?.data?.products ?? [];
+      state.dynamicFilters =
+        (sessionResponse?.interactions
+          ?.dynamicFilters as ResponseFilterItem[]) ?? [];
+      state.loading = false;
+    })
   )();
 };
 

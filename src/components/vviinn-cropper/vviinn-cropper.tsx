@@ -32,6 +32,7 @@ import {
   makeRectangularSearchRequest,
   searchState,
   componentsState,
+  SearchStore,
   SearchStoreName,
 } from "../../store/search.store";
 import * as O from "fp-ts/lib/Option";
@@ -82,9 +83,14 @@ export class VviinnCropper {
   /** @internal */
   @Event() vviinnImageUploadStarted: EventEmitter<File>;
 
+  private state?: SearchStore;
+  private storeName?: SearchStoreName;
+
   connectedCallback() {
     this.stringParser(true, true);
     state.apiPath = this.apiPath;
+    this.state = this.showInWidget ? searchState : componentsState;
+    this.storeName = this.showInWidget ? "widget" : "components";
 
     document.addEventListener(
       "vviinnImageUploadStarted",
@@ -129,9 +135,6 @@ export class VviinnCropper {
 
   componentWillRender() {
     this.renderImage();
-    if (!this.showInWidget) {
-      this.hidePreloader = true;
-    }
   }
 
   @Listen("vviinnSelectObject")
@@ -149,11 +152,6 @@ export class VviinnCropper {
     };
     this.cropper.setCropBoxData(ValidateCropBoxData(cropBoxData));
   }
-
-  private getStoreName = (): SearchStoreName =>
-    this.showInWidget ? "widget" : "components";
-
-  private getState = () => (this.showInWidget ? searchState : componentsState);
 
   private imageUploadStartedHandler = ({ detail }: CustomEvent<File>) => {
     fromFile(detail).then((image) => {
@@ -218,12 +216,8 @@ export class VviinnCropper {
   }
 
   private renderImage() {
-    const imageElement = this.showInWidget
-      ? this.getState().image
-      : O.some(this.imageElement);
-
     return pipe(
-      sequenceToOption(imageElement),
+      sequenceToOption(this.state.image),
       O.map(([refImage]) => {
         if (!refImage) return null;
         const [width, height] = getImageSizes(refImage, DEFAULT_IMAGE_SIZE);
@@ -241,7 +235,7 @@ export class VviinnCropper {
     this.vviinnCropperCropEnd.emit(cropboxData);
     this.searchArea = cropboxData;
     makeRectangularSearchRequest(
-      this.getStoreName(),
+      this.storeName,
       this.searchArea,
       this.imageBounds
     );
@@ -250,9 +244,8 @@ export class VviinnCropper {
   };
 
   private showPreloader = () => {
-    const state = this.getState();
     return (
-      (state.loading || state.objectDetectionInProgress) &&
+      (this.state.loading || this.state.objectDetectionInProgress) &&
       !this.showAspectRatioError &&
       !this.hidePreloader
     );
@@ -275,7 +268,7 @@ export class VviinnCropper {
               onLoad={() => this.loadImage()}
             />
 
-            {this.getState().detectedObjects.map((object) => (
+            {this.state.detectedObjects.map((object) => (
               <vviinn-detected-object
                 detectedObject={object}
                 selectedDetectedObject={this.selectedDetectedObject}

@@ -13,6 +13,7 @@ import {
   makeTextSearchRequest,
   searchState,
   componentsState,
+  SearchStoreName,
 } from "../../store/search.store";
 import { SearchModalUploadIcon, TextSearchIcon } from "../vviinn-icons";
 import { slotChangeListener } from "../customized-slots";
@@ -110,6 +111,8 @@ export class VviinnTextSearch {
     this.showTooltip = show;
   };
 
+  private storeName?: SearchStoreName;
+
   private triggerTooltipStart: Timeout;
   private triggerTooltipEnd: Timeout;
 
@@ -131,6 +134,8 @@ export class VviinnTextSearch {
 
   connectedCallback() {
     if (this.token) componentsState.token = this.token;
+    this.storeName = this.showInWidget ? "widget" : "components";
+
     document.addEventListener("resultsSearchFinished", this.hideLoader);
   }
 
@@ -199,7 +204,7 @@ export class VviinnTextSearch {
     });
     if (this.showInWidget) {
       const { requestId } = pipe(
-        await makeTextSearchRequest(this.token, this.searchQuery),
+        await makeTextSearchRequest(this.storeName, this.searchQuery),
         E.getOrElse(() => null),
         (response: TextSearchResponse) => response
       );
