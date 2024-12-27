@@ -51,7 +51,6 @@ const DEFAULT_IMAGE_SIZE = 288;
 export class VviinnCropper {
   @Element() el: HTMLElement;
 
-  @Prop() basicEventDataString?: string;
   @Prop() detectedObjectsString?: string;
   @Prop() apiPath?: string = "https://api.vviinn.com";
 
@@ -87,7 +86,7 @@ export class VviinnCropper {
       this.imageUploadStartedHandler
     );
 
-    this.stringParser(true, true);
+    this.stringParser(true);
     state.apiPath = this.apiPath;
     this.state = this.showInWidget ? searchState : componentsState;
     this.storeName = this.showInWidget ? "widget" : "components";
@@ -102,25 +101,12 @@ export class VviinnCropper {
     if (this.cropper) this.cropper.destroy();
   }
 
-  @Watch("basicEventDataString")
-  basicEventDataStringWatcher() {
+  @Watch("detectedObjectsString")
+  detectedObjectsStringWatcher() {
     this.stringParser(true);
   }
 
-  @Watch("detectedObjectsString")
-  detectedObjectsStringWatcher() {
-    this.stringParser(false, true);
-  }
-
-  stringParser(
-    TriggerBasicEventData?: boolean,
-    TriggerDetectedObjects?: boolean
-  ) {
-    if (this.basicEventDataString && TriggerBasicEventData) {
-      this.basicEventData = JSON.parse(
-        this.basicEventDataString
-      ) as BasicEventData;
-    }
+  stringParser(TriggerDetectedObjects?: boolean) {
     if (this.detectedObjectsString && TriggerDetectedObjects) {
       this.detectedObjects = JSON.parse(
         this.detectedObjectsString
@@ -147,6 +133,11 @@ export class VviinnCropper {
     };
     this.cropper.setCropBoxData(ValidateCropBoxData(cropBoxData));
   }
+
+  private getDetectedObjects = () =>
+    this.detectedObjects.length
+      ? this.detectedObjects
+      : this.state.detectedObjects;
 
   private imageUploadStartedHandler = () => {
     if (this.cropper) {
@@ -237,12 +228,9 @@ export class VviinnCropper {
     this.vviinnImageCrop.emit(this.basicEventData);
   };
 
-  private showPreloader = () => {
-    return (
-      (this.state.loading || this.state.objectDetectionInProgress) &&
-      !this.showAspectRatioError
-    );
-  };
+  private showPreloader = () =>
+    (this.state.loading || this.state.objectDetectionInProgress) &&
+    !this.showAspectRatioError;
 
   render() {
     return (
@@ -261,7 +249,7 @@ export class VviinnCropper {
               onLoad={() => this.loadImage()}
             />
 
-            {this.state.detectedObjects.map((object) => (
+            {this.getDetectedObjects().map((object) => (
               <vviinn-detected-object
                 detectedObject={object}
                 selectedDetectedObject={this.selectedDetectedObject}
