@@ -245,7 +245,7 @@ export class VviinnTextSearch {
           {this.mode === "upload" ? (
             <vviinn-image-selector
               apiPath={this.apiPath}
-              showInTextSearch={true}
+              showInWidget={this.showInWidget}
               uploadStartedHandler={this.showLoader.bind(this)}
             >
               <span slot="upload-button-text" class="upload-button-text">

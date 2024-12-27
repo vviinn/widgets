@@ -40,7 +40,6 @@ import { pipe } from "fp-ts/lib/function";
 import { sequenceToOption } from "../../utils/option/option";
 import { getImageSizes } from "../../Image/sizing";
 import { SearchIdResponse } from "../../interfaces/search";
-import { fromFile } from "../../Image/fromFile";
 
 const DEFAULT_IMAGE_SIZE = 288;
 
@@ -80,9 +79,6 @@ export class VviinnCropper {
   @Event() vviinnCropperAspectRatioError: EventEmitter<boolean>;
   @Event() imageSearchFinished: EventEmitter<SearchIdResponse>;
 
-  /** @internal */
-  @Event() vviinnImageUploadStarted: EventEmitter<File>;
-
   private state?: SearchStore;
   private storeName?: SearchStoreName;
 
@@ -91,20 +87,10 @@ export class VviinnCropper {
     state.apiPath = this.apiPath;
     this.state = this.showInWidget ? searchState : componentsState;
     this.storeName = this.showInWidget ? "widget" : "components";
-
-    document.addEventListener(
-      "vviinnImageUploadStarted",
-      this.imageUploadStartedHandler
-    );
   }
 
   disconnectedCallback() {
     if (this.cropper) this.cropper.destroy();
-
-    document.removeEventListener(
-      "vviinnImageUploadStarted",
-      this.imageUploadStartedHandler
-    );
   }
 
   @Watch("basicEventDataString")
@@ -152,13 +138,6 @@ export class VviinnCropper {
     };
     this.cropper.setCropBoxData(ValidateCropBoxData(cropBoxData));
   }
-
-  private imageUploadStartedHandler = ({ detail }: CustomEvent<File>) => {
-    fromFile(detail).then((image) => {
-      this.imageElement = image;
-      this.renderImage();
-    });
-  };
 
   private getCropboxData(): Rectangle {
     const { left, top, width, height } = this.cropper.getCropBoxData();

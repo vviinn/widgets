@@ -78,10 +78,15 @@ export class VviinnModal {
 
   private renderImage(): HTMLImageElement | null {
     return pipe(
-      sequenceToOption(searchState.imageUrl, searchState.image),
-      O.map(([url]) => {
+      sequenceToOption(searchState.image),
+      O.map(([imageElement]) => {
         const image = (
-          <img width="28" height="28" src={url} class="title-image" />
+          <img
+            width="28"
+            height="28"
+            src={imageElement.src}
+            class="title-image"
+          />
         );
         return image;
       }),

@@ -81,11 +81,9 @@ export type SearchStore = {
   rectangleSearchForm?: Form;
   detectedObjects: ValueObject<DetectedObject>[];
   objectDetectionInProgress: boolean;
-  imageWidth: number;
   searchType?: SearchType;
-
+  imageWidth: number;
   image: O.Option<HTMLImageElement>;
-  imageUrl: O.Option<string>;
 
   serverError: boolean;
   loading: boolean;
@@ -103,11 +101,8 @@ const storeDefaults: SearchStore = {
   objectDetectionInProgress: false,
   resultLoaded: false,
   resultViewed: false,
-
   imageWidth: RESIZED_IMAGE_WIDTH,
-
   image: O.none,
-  imageUrl: O.none,
 
   serverError: false,
   loading: false,
@@ -208,34 +203,7 @@ export const makeRectangularSearchRequest = async (
   );
 };
 
-export const uploadFileFromTextSearch = (
-  file: File,
-  token: string,
-  apiPath: string
-) => {
-  const fileForm = imageFormFromFile(file);
-
-  const tokenWithFile = sequenceToEither(
-    processBearerToken(token),
-    E.right(fileForm)
-  );
-
-  return pipe(
-    tokenWithFile,
-    E.map(
-      ([headers, body]): RequestInit => ({
-        headers,
-        body,
-      })
-    ),
-    TE.fromEither,
-    TE.chain((request) =>
-      imageSearchSessionClient(request, null, null, apiPath)
-    )
-  );
-};
-
-export const uploadFileFromWidget =
+export const uploadFile =
   (store: SearchStoreName) =>
   (file: File): TE.TaskEither<BasicError<string | Response>, SearchSession> => {
     const state = useStore(store);
@@ -381,7 +349,6 @@ const setSelectedImage =
   (store: SearchStoreName) => (image: HTMLImageElement) => {
     const state = useStore(store);
     state.image = O.some(image);
-    state.imageUrl = O.some(image.src);
   };
 
 export const processSelectedFile =
@@ -395,16 +362,13 @@ export const processSelectedFile =
       TE.chainTaskK(fileResizer)
     );
 
-    const session = await pipe(
-      resizeFileTask,
-      TE.chain(uploadFileFromWidget(store))
-    )();
-
     await pipe(
       resizeFileTask,
       TE.chainTaskK(imageFromFileTask),
       TE.map(setSelectedImage(store))
     )();
+
+    const session = await pipe(resizeFileTask, TE.chain(uploadFile(store)))();
 
     const hiResFileResizer = resizeFileTo(HI_RES_RESIZED_IMAGE_WIDTH);
     const resizeHiResFileTask = pipe(

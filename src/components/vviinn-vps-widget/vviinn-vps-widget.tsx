@@ -591,6 +591,7 @@ export class VviinnVpsWidget {
         onVviinnImageUpload={() => {
           this.handleVviinnImageUpload("uploadPhoto");
         }}
+        showInWidget={true}
         onVviinnNoResult={({ detail }) => this.handleVviinnNoResult(detail)}
         resetVpsButton={this.resetVpsButton}
         basicEventData={this.getBasicEventData()}
@@ -626,7 +627,6 @@ export class VviinnVpsWidget {
     searchState.resetCategoryLink = undefined;
     searchState.activeIonLink = undefined;
     searchState.image = O.none;
-    searchState.imageUrl = O.none;
     searchState.results = [];
     searchState.filters = [];
     searchState.dynamicFilters = [];

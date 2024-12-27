@@ -30,8 +30,6 @@ export class VviinnImageSelector {
   @Event() vviinnNoResult: EventEmitter<NoResultEventData>;
 
   /** @internal */
-  @Event() vviinnImageUploadStarted: EventEmitter<File>;
-  /** @internal */
   @Event() vviinnImageUploadFinished: EventEmitter<SearchIdEventData>;
 
   @Prop() basicEventData: BasicEventData;
@@ -41,7 +39,7 @@ export class VviinnImageSelector {
   @Prop() resetVpsButton: () => void;
   @Prop() token?: string;
   @Prop() apiPath?: string;
-  @Prop() showInTextSearch? = false;
+  @Prop() showInWidget?: boolean;
   @Prop() uploadStartedHandler?: () => void;
 
   private fileInput: HTMLInputElement;
@@ -52,10 +50,8 @@ export class VviinnImageSelector {
 
     this.uploadStartedHandler && this.uploadStartedHandler();
 
-    this.showInTextSearch && this.vviinnImageUploadStarted.emit(input.files[0]);
-
     const processingResult = await processSelectedFile(
-      this.showInTextSearch ? "components" : "widget"
+      this.showInWidget ? "widget" : "components"
     )(input.files[0]);
 
     pipe(
