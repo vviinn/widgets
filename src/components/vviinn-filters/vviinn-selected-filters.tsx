@@ -16,12 +16,15 @@ import {
 import { FilterOptions, RenderButton, showActiveOnSubButton } from "./helpers";
 import {
   ChangedFiltersEventData,
-  DynamicFiltersEvent,
-  DynamicFiltersEventData,
   DynamicFilterTrackingData,
   ResetSelectedFiltersEventData,
 } from "../../recommendation/events";
 import { triggerFilter } from "./helpers/triggerFilter";
+import {
+  componentsState,
+  searchState,
+  SearchStore,
+} from "../../store/search.store";
 
 /**
  * @part selected-filters-list - List of selected filters.
@@ -50,9 +53,6 @@ export class VviinnSelectedFilters {
   /** The filter's state changes */
   @Event({ bubbles: true })
   vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
-  /** The filters received */
-  @Event({ bubbles: true })
-  vviinnFiltersReceived: EventEmitter<DynamicFiltersEventData>;
 
   /** Selected filters should be resetted */
   /** @internal */
@@ -60,6 +60,8 @@ export class VviinnSelectedFilters {
   vviinnSelectedFiltersReset: EventEmitter<ResetSelectedFiltersEventData>;
 
   @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
+
+  private state?: SearchStore;
 
   private handleSubFilterSelection(
     filterValue: DynamicFilterValue,
@@ -75,11 +77,6 @@ export class VviinnSelectedFilters {
       this.showInWidget
     );
   }
-
-  private handleSetFilters = ({ detail }: DynamicFiltersEvent) => {
-    if (this.showInWidget) return;
-    this.filters = detail;
-  };
 
   private skipFiltersChanges = (isTriggeredByVpsWidget: boolean) =>
     (isTriggeredByVpsWidget && !this.showInWidget) ||
@@ -107,12 +104,12 @@ export class VviinnSelectedFilters {
   };
 
   connectedCallback() {
-    document.addEventListener("vviinnFiltersReceived", this.handleSetFilters);
+    this.state = this.showInWidget ? searchState : componentsState;
+
     document.addEventListener(
       "vviinnFiltersChanged",
       this.handleFiltersChanged
     );
-
     document.addEventListener(
       "vviinnSelectedFiltersReset",
       this.handleSelectedFiltersReset
@@ -121,14 +118,9 @@ export class VviinnSelectedFilters {
 
   disconnectedCallback() {
     document.removeEventListener(
-      "vviinnFiltersReceived",
-      this.handleSetFilters
-    );
-    document.removeEventListener(
       "vviinnFiltersChanged",
       this.handleFiltersChanged
     );
-
     document.removeEventListener(
       "vviinnSelectedFiltersReset",
       this.handleSelectedFiltersReset
@@ -136,16 +128,16 @@ export class VviinnSelectedFilters {
   }
 
   render() {
+    const filters = this.state.dynamicFilters;
+    if (!filters?.length) return;
+
     let selectedButtons = [];
-    if (!this.filters?.length) return;
-    this.filters.forEach((filter) => {
+
+    filters.forEach((filter) => {
       if (!("values" in filter)) return;
 
       (filter.values as FilterOptions).forEach(({ value, label, active }) => {
-        if (
-          showActiveOnSubButton(this.requestFilters, value, filter) &&
-          active
-        ) {
+        if (showActiveOnSubButton(this.requestFilters, value, filter)) {
           selectedButtons.push(
             RenderButton(
               this.handleSubFilterSelection.bind(this),

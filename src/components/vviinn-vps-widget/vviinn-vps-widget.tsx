@@ -808,14 +808,12 @@ export class VviinnVpsWidget {
                   >
                     <vviinn-filters
                       class="preview-filters"
-                      filters={searchState.dynamicFilters}
                       showInWidget={true}
                       exportparts={filtersParts}
                     />
 
                     <vviinn-extended-filters
                       class="preview-extended-filters"
-                      filters={searchState.dynamicFilters}
                       mode="preview"
                       showHeader={false}
                       exportparts={extendedFiltersParts}
@@ -869,7 +867,6 @@ export class VviinnVpsWidget {
 
           <vviinn-extended-filters
             class="modal-extended-filters"
-            filters={searchState.dynamicFilters}
             mode="modal"
             exportparts={extendedFiltersParts}
             showInWidget={true}

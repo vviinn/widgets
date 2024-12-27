@@ -56,9 +56,6 @@ export class VviinnTextSearch {
   @Event() vviinnTextSearchStarted: EventEmitter<TextSearchEventData>;
   /** An image search ID was received (used by vviinn-results component) */
   @Event() vviinnSearchIdReceived: EventEmitter<SearchIdEventData>;
-  /** The filters received */
-  @Event({ bubbles: true })
-  vviinnFiltersReceived: EventEmitter<DynamicFiltersEventData>;
   /** A filter was triggered */
   @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
 
