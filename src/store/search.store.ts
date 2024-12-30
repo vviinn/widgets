@@ -127,17 +127,17 @@ const updateState =
     state.loading = false;
   };
 
-const makeLinkRequest = <T>(
-  link: Link
-): TE.TaskEither<BasicError<Response | string>, ValueObject<T>> => {
-  const state = useStore("widget");
-
-  return pipe(
-    makeAuthorizedRequest(state.token),
-    TE.fromEither,
-    TE.chainW(linkRequest<T>(link))
-  );
-};
+const makeLinkRequest =
+  (token: string) =>
+  <T>(
+    link: Link
+  ): TE.TaskEither<BasicError<Response | string>, ValueObject<T>> => {
+    return pipe(
+      makeAuthorizedRequest(token),
+      TE.fromEither,
+      TE.chainW(linkRequest<T>(link))
+    );
+  };
 
 const detectObjects =
   (store: SearchStoreName) => async (data: SearchSession) => {
@@ -147,7 +147,7 @@ const detectObjects =
     await pipe(
       getLink(data, "detectedObjects"),
       TE.fromOption(() => detectObjectsError),
-      TE.chain(makeLinkRequest),
+      TE.chain(makeLinkRequest(state.token)),
       TE.map(
         (objects: ValueObject<ValueObject<DetectedObject>[]>) =>
           (state.detectedObjects = foldValueObject(objects))
