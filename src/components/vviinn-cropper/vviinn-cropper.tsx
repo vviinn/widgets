@@ -230,11 +230,17 @@ export class VviinnCropper {
 
   private showPreloader = () =>
     (this.state.loading || this.state.objectDetectionInProgress) &&
+    this.state.searchType === "image" &&
     !this.showAspectRatioError;
 
   render() {
     return (
-      <Host class={this.showInWidget ? "show-in-widget" : ""}>
+      <Host
+        class={{
+          "show-in-widget": this.showInWidget,
+          active: !!this.imageElement,
+        }}
+      >
         <div class="container">
           <div
             class="image-container"

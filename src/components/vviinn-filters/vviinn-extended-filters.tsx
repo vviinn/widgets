@@ -300,30 +300,35 @@ export class VviinnExtendedFilters {
               })}
             </ul>
 
-            <div class="filters-modal-actions" part="extended-filters-actions">
-              {this.mode === "button" && (
+            {filters?.length > 0 && (
+              <div
+                class="filters-modal-actions"
+                part="extended-filters-actions"
+              >
+                {this.mode === "button" && (
+                  <button
+                    class="filters-modal-apply"
+                    onClick={() => (this.showMore = false)}
+                    disabled={this.requestFilters.length === 0}
+                    part="extended-filters-apply"
+                  >
+                    <slot name="vviinn-extended-filters-apply">
+                      {i18next.t("filters.modal.apply")}
+                    </slot>
+                  </button>
+                )}
+
                 <button
-                  class="filters-modal-apply"
-                  onClick={() => (this.showMore = false)}
-                  disabled={this.requestFilters.length === 0}
-                  part="extended-filters-apply"
+                  class="filters-modal-reset"
+                  onClick={() => this.resetModal()}
+                  part="extended-filters-reset"
                 >
-                  <slot name="vviinn-extended-filters-apply">
-                    {i18next.t("filters.modal.apply")}
+                  <slot name="vviinn-extended-filters-reset">
+                    {i18next.t("filters.modal.resetFilters")}
                   </slot>
                 </button>
-              )}
-
-              <button
-                class="filters-modal-reset"
-                onClick={() => this.resetModal()}
-                part="extended-filters-reset"
-              >
-                <slot name="vviinn-extended-filters-reset">
-                  {i18next.t("filters.modal.resetFilters")}
-                </slot>
-              </button>
-            </div>
+              </div>
+            )}
           </div>
         </aside>
       </div>
