@@ -300,7 +300,8 @@ export const makeProductListingPageRequest = async (
   column: string,
   value: string,
   resultsCount?: number,
-  dynamicFilters?: RequestDynamicFilterItem[]
+  dynamicFilters?: RequestDynamicFilterItem[],
+  skipStateUpdate?: boolean
 ) => {
   const state = useStore("components");
   const requestValue =
@@ -330,12 +331,13 @@ export const makeProductListingPageRequest = async (
       : {}),
   };
 
-  pipe(
+  return await pipe(
     getTokenWithBody<ProductListingPageRequest>(state.token, body),
     setBodyAndHeaders,
     TE.fromEither,
     TE.chainW(productListingPageSessionClient),
     TE.map((sessionResponse) => {
+      if (skipStateUpdate) return sessionResponse;
       state.results = sessionResponse?.data?.products ?? [];
       state.dynamicFilters =
         (sessionResponse?.interactions

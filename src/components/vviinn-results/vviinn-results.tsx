@@ -215,6 +215,9 @@ export class VviinnResults {
   @Prop() replaceSlotsContentInButton?: ReplaceSlotsContentInParent;
   /** @internal */
   @Prop() parentSlots?: HTMLSlotElement[] = [];
+  /** Works for product-listing-page request */
+  /** @internal */
+  @Prop() useInnerState?: boolean = false;
 
   @State() innerTextSearchQuery: string;
   @State() innerTextSearchRequestId: string;
@@ -222,6 +225,7 @@ export class VviinnResults {
   @State() oneClickDiscoveryAppendIndex: number;
   @State() oneClickDiscoverySelectedIndex: number;
   @State() isTextSearch: boolean = this.textSearchQuery?.length > 0;
+  @State() innerResults: Recommendation[] = [];
 
   private trackingApi: DefaultApi;
   private passedSlotNames?: string[] = [];
@@ -237,6 +241,10 @@ export class VviinnResults {
   /** @internal */
   @Event({ bubbles: true })
   vviinnSelectedFiltersReset: EventEmitter<ResetSelectedFiltersEventData>;
+
+  private getResults() {
+    return (this.useInnerState ? this.innerResults : this.state.results) ?? [];
+  }
 
   private replaceSlotsContent() {
     this.globalSlotsChanged.emit({
@@ -335,11 +343,18 @@ export class VviinnResults {
     if (!this.filterColumn || !this.filterValue || this.showInWidget) return;
     state.apiPath = this.apiPath; //FIXME: #36877
 
-    await makeProductListingPageRequest(
-      this.filterColumn,
-      this.filterValue,
-      this.resultsCount,
-      dynamicFilters
+    pipe(
+      await makeProductListingPageRequest(
+        this.filterColumn,
+        this.filterValue,
+        this.resultsCount,
+        dynamicFilters,
+        this.useInnerState
+      ),
+      E.getOrElse(() => null),
+      (response: TextSearchResponse) => {
+        if (this.useInnerState) this.innerResults = response.data.products;
+      }
     );
   }
 
@@ -564,7 +579,7 @@ export class VviinnResults {
   private findProductById(
     id: Recommendation["productId"]
   ): Recommendation | undefined {
-    return this.state.results.find((r) => r.productId === id);
+    return this.getResults().find((r) => r.productId === id);
   }
 
   private handleOpenLink(deeplink: string, event: MouseEvent) {
@@ -627,7 +642,6 @@ export class VviinnResults {
   private renderResults() {
     const widgetData = this.getBasicEventData();
 
-    if (this.state.results.length === 0) return null;
     if (!this.state.resultLoaded) {
       this.vviinnResultLoad.emit(this.getBasicEventData());
       this.trackResultEvent("load");
@@ -654,7 +668,7 @@ export class VviinnResults {
       this.oneClickDiscoverySelectedIndex = index;
     };
 
-    return this.state.results.map((p, i) => (
+    return this.getResults().map((p, i) => (
       <vviinn-product-card
         key={p.productId}
         index={i}
@@ -723,6 +737,7 @@ export class VviinnResults {
   }
 
   render() {
+    const resultsLength = this.getResults().length;
     return (
       <Host
         id="results-block"
@@ -732,7 +747,7 @@ export class VviinnResults {
         exportparts={productCardParts}
       >
         <div class="nothing-found">
-          {this.state.results.length === 0 && this.showInWidget && (
+          {resultsLength === 0 && this.showInWidget && (
             <vviinn-empty-results handler={() => this?.resetState()} />
           )}
 
@@ -743,8 +758,7 @@ export class VviinnResults {
 
         <div
           class={{
-            hidden:
-              this.showAspectRatioError || this.state.results.length === 0,
+            hidden: this.showAspectRatioError || resultsLength === 0,
             products: true,
           }}
           id="vviinn-results-products"
@@ -754,7 +768,7 @@ export class VviinnResults {
             id="one-click-discovery-append"
             style={{
               order: (
-                this.oneClickDiscoveryAppendIndex ?? this.state.results.length
+                this.oneClickDiscoveryAppendIndex ?? resultsLength
               ).toString(),
             }}
           ></div>
