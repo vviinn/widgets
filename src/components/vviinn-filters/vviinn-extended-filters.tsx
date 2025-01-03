@@ -26,8 +26,6 @@ import { SlotSkeleton, slotChangeListener } from "../customized-slots";
 import { Histogram } from "../vviinn-price-range/vviinn-price-range";
 import {
   ChangedFiltersEventData,
-  DynamicFiltersEvent,
-  DynamicFiltersEventData,
   DynamicFilterTrackingData,
   ExtendedFiltersButtonClickedEvent,
   ExtendedFiltersButtonClickedEventData,
@@ -36,6 +34,11 @@ import {
 import { components } from "../../interfaces/generated";
 import { ClickEvent, isClickedInRectBound } from "../../geometry/Rectangle";
 import { triggerFilter, triggerResetFilters } from "./helpers/triggerFilter";
+import {
+  componentsState,
+  searchState,
+  SearchStore,
+} from "../../store/search.store";
 
 /**
  * @slot vviinn-extended-filters-title - Text on widget's header.
@@ -73,7 +76,7 @@ import { triggerFilter, triggerResetFilters } from "./helpers/triggerFilter";
  * @part histogram-label - Label for the histogram.
  */
 
-const FILTER_OPTIONS_INITIAL_COUNT = 5;
+const FILTER_OPTIONS_INITIAL_COUNT = 8;
 @Component({
   tag: "vviinn-extended-filters",
   styleUrl: "vviinn-filters.css",
@@ -107,9 +110,6 @@ export class VviinnExtendedFilters {
   /** The filter's state changes */
   @Event({ bubbles: true })
   vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
-  /** The filters received */
-  @Event({ bubbles: true })
-  vviinnFiltersReceived: EventEmitter<DynamicFiltersEventData>;
 
   @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
 
@@ -126,6 +126,11 @@ export class VviinnExtendedFilters {
   @Event({ bubbles: true })
   vviinnExtendedFiltersButtonClicked: EventEmitter<ExtendedFiltersButtonClickedEventData>;
 
+  private state?: SearchStore;
+
+  private getFilters = () =>
+    this.innerFilters.length ? this.innerFilters : this.state.dynamicFilters;
+
   private replaceSlotsContent() {
     const slots = this.el.querySelectorAll("[slot]");
     this.globalSlotsChanged.emit({
@@ -133,9 +138,6 @@ export class VviinnExtendedFilters {
       element: this.el,
     });
   }
-
-  private getFilters = () =>
-    this.showInWidget ? this.filters : this.innerFilters;
 
   private getSelectedPriceInterval = () =>
     (this.requestFilters.find(({ column }) => column === "price")?.values[0] ??
@@ -298,30 +300,35 @@ export class VviinnExtendedFilters {
               })}
             </ul>
 
-            <div class="filters-modal-actions" part="extended-filters-actions">
-              {this.mode === "button" && (
+            {filters?.length > 0 && (
+              <div
+                class="filters-modal-actions"
+                part="extended-filters-actions"
+              >
+                {this.mode === "button" && (
+                  <button
+                    class="filters-modal-apply"
+                    onClick={() => (this.showMore = false)}
+                    disabled={this.requestFilters.length === 0}
+                    part="extended-filters-apply"
+                  >
+                    <slot name="vviinn-extended-filters-apply">
+                      {i18next.t("filters.modal.apply")}
+                    </slot>
+                  </button>
+                )}
+
                 <button
-                  class="filters-modal-apply"
-                  onClick={() => (this.showMore = false)}
-                  disabled={this.requestFilters.length === 0}
-                  part="extended-filters-apply"
+                  class="filters-modal-reset"
+                  onClick={() => this.resetModal()}
+                  part="extended-filters-reset"
                 >
-                  <slot name="vviinn-extended-filters-apply">
-                    {i18next.t("filters.modal.apply")}
+                  <slot name="vviinn-extended-filters-reset">
+                    {i18next.t("filters.modal.resetFilters")}
                   </slot>
                 </button>
-              )}
-
-              <button
-                class="filters-modal-reset"
-                onClick={() => this.resetModal()}
-                part="extended-filters-reset"
-              >
-                <slot name="vviinn-extended-filters-reset">
-                  {i18next.t("filters.modal.resetFilters")}
-                </slot>
-              </button>
-            </div>
+              </div>
+            )}
           </div>
         </aside>
       </div>
@@ -418,11 +425,6 @@ export class VviinnExtendedFilters {
     }
   }
 
-  private handleSetFilters = ({ detail }: DynamicFiltersEvent) => {
-    if (this.showInWidget) return;
-    this.innerFilters = detail;
-  };
-
   private handleFiltersChanged = ({
     detail,
   }: CustomEvent<ChangedFiltersEventData>) => {
@@ -451,7 +453,8 @@ export class VviinnExtendedFilters {
   }
 
   connectedCallback() {
-    document.addEventListener("vviinnFiltersReceived", this.handleSetFilters);
+    this.state = this.showInWidget ? searchState : componentsState;
+
     document.addEventListener(
       "vviinnFiltersChanged",
       this.handleFiltersChanged
@@ -469,10 +472,6 @@ export class VviinnExtendedFilters {
   }
 
   disconnectedCallback() {
-    document.removeEventListener(
-      "vviinnFiltersReceived",
-      this.handleSetFilters
-    );
     document.addEventListener(
       "vviinnFiltersChanged",
       this.handleFiltersChanged

@@ -154,15 +154,17 @@ export class VviinnVpsWidget {
   @Prop() addToBasketShow: boolean = false;
   /** Show or hide Favorite button */
   @Prop() favoriteShow: boolean = false;
-  /** Show or hide the One-click Discovery */
+  /** Show or hide the One-click Discovery, will be deprecated, use oneClickDiscoveryMode instead */
   @Prop() oneClickDiscoveryShow = false;
+  /** One click Discovery mode, restricted to append only (no modal supported for this component)*/
+  @Prop() oneClickDiscoveryMode?: "append-grid" | "append-slider";
   /** Comma-separated list of campaign IDs */
   @Prop() oneClickDiscoveryCampaigns: string = "";
   /** Wrap the Product Card's price values in the container. */
   @Prop() addPriceContainer?: boolean = false;
 
   /** @internal */
-  @Prop() apiPath: string = "https://api.vviinn.com";
+  @Prop() apiPath?: string = "https://api.vviinn.com";
   /** Set true when showing the widget in button */
   /** @internal */
   @Prop() showingInButton?: boolean = false;
@@ -565,7 +567,7 @@ export class VviinnVpsWidget {
             this.handleStartCameraClick();
           }}
         >
-          <vviinn-preloader class={{ hidden: !isLoading }} />
+          {isLoading && <vviinn-preloader />}
 
           <span class={{ "action-button-content": true, hidden: isLoading }}>
             <slot name="vviinn-camera-icon">
@@ -591,6 +593,7 @@ export class VviinnVpsWidget {
         onVviinnImageUpload={() => {
           this.handleVviinnImageUpload("uploadPhoto");
         }}
+        showInWidget={true}
         onVviinnNoResult={({ detail }) => this.handleVviinnNoResult(detail)}
         resetVpsButton={this.resetVpsButton}
         basicEventData={this.getBasicEventData()}
@@ -626,7 +629,6 @@ export class VviinnVpsWidget {
     searchState.resetCategoryLink = undefined;
     searchState.activeIonLink = undefined;
     searchState.image = O.none;
-    searchState.imageUrl = O.none;
     searchState.results = [];
     searchState.filters = [];
     searchState.dynamicFilters = [];
@@ -808,14 +810,12 @@ export class VviinnVpsWidget {
                   >
                     <vviinn-filters
                       class="preview-filters"
-                      filters={searchState.dynamicFilters}
                       showInWidget={true}
                       exportparts={filtersParts}
                     />
 
                     <vviinn-extended-filters
                       class="preview-extended-filters"
-                      filters={searchState.dynamicFilters}
                       mode="preview"
                       showHeader={false}
                       exportparts={extendedFiltersParts}
@@ -858,7 +858,8 @@ export class VviinnVpsWidget {
                   textSearchRequestId={this.requestId}
                   addPriceContainer={this.addPriceContainer}
                   oneClickDiscoveryMode={
-                    this.oneClickDiscoveryShow ? "append" : undefined
+                    this.oneClickDiscoveryMode ??
+                    (this.oneClickDiscoveryShow ? "append-grid" : undefined)
                   }
                   oneClickDiscoveryCampaigns={this.oneClickDiscoveryCampaigns}
                   parentSlots={[...this.parentSlots, ...this.slots]}
@@ -869,7 +870,6 @@ export class VviinnVpsWidget {
 
           <vviinn-extended-filters
             class="modal-extended-filters"
-            filters={searchState.dynamicFilters}
             mode="modal"
             exportparts={extendedFiltersParts}
             showInWidget={true}

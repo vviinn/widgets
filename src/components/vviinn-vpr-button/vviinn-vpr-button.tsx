@@ -152,8 +152,11 @@ export class VviinnVprButton {
 
   @Prop() appendSidebarToElement: HTMLElement;
 
+  /** One click Discovery mode*/
+  @Prop() oneClickDiscoveryMode?: "modal" | "append-grid" | "append-slider";
+
   /** @internal */
-  @Prop() apiPath: string | undefined = "https://api.vviinn.com";
+  @Prop() apiPath?: string = "https://api.vviinn.com";
 
   /** Event emitted on widget load */
   @Event() vviinnWidgetLoad: EventEmitter<BasicEventData>;
@@ -279,7 +282,7 @@ export class VviinnVprButton {
 
     if (this.targetAppendSidebarTo) {
       sidebar.mode = "grid";
-      sidebar.useCarousel = false;
+      sidebar.useCarousel = this.oneClickDiscoveryMode === "append-slider";
     } else {
       sidebar.mode = this.position === "right" ? "grid" : this.mode;
       sidebar.useCarousel = this.position === "bottom";

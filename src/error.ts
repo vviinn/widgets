@@ -23,3 +23,8 @@ export const emptyApiPathError: BasicError<string> = {
   kind: "client",
   inner: "Api path empty or missing",
 };
+
+export const detectObjectsError: BasicError<string> = {
+  kind: "server",
+  inner: "Can not get a link for objects detection",
+};

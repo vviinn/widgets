@@ -139,8 +139,20 @@ products.hidden {
   }
 }
 
+:host(.matching-discovery)
+  vviinn-recommendations-sidebar::part(items-group) {
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(
+      var(--product-card-width, var(--product-card-results-min-width)),
+      1fr
+    )
+  );
+}
+
 :host(.show-in-widget)
-  vviinn-recommendations-sidebar::part(recommendations-results) {
+  vviinn-recommendations-sidebar::part(recommendations-results),
+:host(.show-in-widget) vviinn-recommendations-sidebar::part(items-group) {
   grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
 }
 
@@ -178,4 +190,10 @@ vviinn-recommendations-sidebar::part(sidebar-header) {
 vviinn-recommendations-sidebar::part(sidebar-content) {
   min-height: 470px;
   padding: 0;
+}
+
+:host(.show-in-widget) vviinn-recommendations-sidebar::part(sidebar-content),
+:host(.matching-discovery)
+  vviinn-recommendations-sidebar::part(sidebar-content) {
+  min-height: unset;
 }

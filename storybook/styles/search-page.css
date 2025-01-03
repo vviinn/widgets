@@ -2,17 +2,30 @@ vviinn-text-search {
   margin: 10px 0;
 }
 
+vviinn-cropper.active {
+  margin: 10px 0;
+}
+
 .search-page-wrapper {
   display: flex;
   gap: 20px;
 }
 
-.search-page-wrapper-filters {
+.search-page-wrapper-aside {
   flex: none;
   width: 320px;
 }
 @media screen and (max-width: 768px) {
-  .search-page-wrapper-filters {
+  .search-page-wrapper {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .search-page-wrapper-aside {
+    width: 100%;
+  }
+
+  vviinn-extended-filters {
     display: none;
   }
 }

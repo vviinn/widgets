@@ -39,7 +39,7 @@ export class VviinnImageSelector {
   @Prop() resetVpsButton: () => void;
   @Prop() token?: string;
   @Prop() apiPath?: string;
-  @Prop() showInTextSearch? = false;
+  @Prop() showInWidget?: boolean;
   @Prop() uploadStartedHandler?: () => void;
 
   private fileInput: HTMLInputElement;
@@ -51,11 +51,8 @@ export class VviinnImageSelector {
     this.uploadStartedHandler && this.uploadStartedHandler();
 
     const processingResult = await processSelectedFile(
-      input.files[0],
-      this.showInTextSearch,
-      this.token,
-      this.apiPath
-    );
+      this.showInWidget ? "widget" : "components"
+    )(input.files[0]);
 
     pipe(
       processingResult,
