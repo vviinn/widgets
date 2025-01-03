@@ -26,7 +26,7 @@ const Template = (args) => `
       mode="${args.mode}"
       locale="${args.locale}"
       show-in-widget="${args.showInWidget}"
-      one-click-discovery-mode="append"
+      one-click-discovery-mode="append-grid"
     >
       ${args.mode === "text" && `<vviinn-vps-button slot="vviinn-text-search-actions" locale="${args.locale}" token="${args.token}" one-click-discovery-show="true"></vviinn-vps-button>`}  
     </vviinn-text-search>
@@ -40,7 +40,7 @@ const Template = (args) => `
       token="${args.token}"
       api-path="${args.apiPath}"
       locale="${args.locale}"
-      one-click-discovery-mode="append"
+      one-click-discovery-mode="append-grid"
     ></vviinn-results>
   </div>
 </div>  

@@ -190,8 +190,8 @@ export class VviinnResults {
 
   /** True when we use vviinn-results inside the widget */
   @Prop() showInWidget?: boolean = false;
-  /** Discovery Mode */
-  @Prop() oneClickDiscoveryMode: undefined | "modal" | "append";
+  /** One-click Discovery Mode */
+  @Prop() oneClickDiscoveryMode?: "modal" | "append-grid" | "append-slider";
   /** Comma-separated list of campaign IDs */
   @Prop() oneClickDiscoveryCampaigns: string = "";
 
@@ -649,7 +649,7 @@ export class VviinnResults {
     }
 
     const isOneClickDiscoveryAppendMode =
-      this.oneClickDiscoveryMode === "append";
+      this.oneClickDiscoveryMode?.startsWith("append");
 
     const oneClickDiscoveryHandler = (index: number) => {
       if (!isOneClickDiscoveryAppendMode) return;
@@ -722,6 +722,7 @@ export class VviinnResults {
                     )
                   : undefined
               }
+              oneClickDiscoveryMode={this.oneClickDiscoveryMode}
               addToBasketShow={this.addToBasketShow}
               locale={this.locale}
               favoriteShow={this.favoriteShow}
@@ -743,6 +744,7 @@ export class VviinnResults {
         id="results-block"
         class={{
           "show-in-widget": this.showInWidget,
+          "matching-discovery": this.oneClickDiscoveryMode === "append-slider",
         }}
         exportparts={productCardParts}
       >
