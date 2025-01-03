@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.144.0](https://github.com/vviinn/widgets/compare/v2.143.0...v2.144.0) (2025-01-03)
+
+
+### Features
+
+* allow slider mode in recommendations ([a5fcbe9](https://github.com/vviinn/widgets/commit/a5fcbe9af43e1a1ea6262816e917c46b5068e81c))
+
 ## [2.143.0](https://github.com/vviinn/widgets/compare/v2.142.4...v2.143.0) (2025-01-03)
 
 
