@@ -249,7 +249,6 @@ export class VviinnCropper {
                 selectedDetectedObject={this.selectedDetectedObject}
                 basicEventData={this.basicEventData}
                 imageBounds={this.imageBounds}
-                searchArea={this.searchArea}
               />
             ))}
           </div>

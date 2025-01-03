@@ -36,7 +36,6 @@ export class VviinnDetectedObject {
   @Prop() selectedDetectedObject: ValueObject<DetectedObject>;
   @Prop() basicEventData: BasicEventData;
   @Prop() imageBounds: Rectangle | null;
-  @Prop() searchArea: Rectangle | null;
 
   @Event({ bubbles: true })
   vviinnSelectObject: EventEmitter<SelectObjectEventData>;
@@ -68,7 +67,7 @@ export class VviinnDetectedObject {
       O.toNullable
     );
 
-    makeRectangularSearchRequest(this.searchArea, this.imageBounds);
+    makeRectangularSearchRequest(scaledRect, this.imageBounds);
     this.vviinnSelectObject.emit({
       ...this.basicEventData,
       detectedObject: this.detectedObject,
