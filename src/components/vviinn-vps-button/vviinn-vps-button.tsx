@@ -127,7 +127,7 @@ export class VviinnVpsButton {
   @Prop() addPriceContainer?: boolean = false;
 
   /** @internal */
-  @Prop() apiPath: string | undefined;
+  @Prop() apiPath?: string = "https://api.vviinn.com";
 
   @State() buttonPressed: boolean = false;
 

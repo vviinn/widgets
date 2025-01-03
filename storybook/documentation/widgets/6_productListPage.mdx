@@ -21,7 +21,7 @@ import "./styles.css";
     <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
             <div className="search-page-wrapper">
-                <div className="search-page-wrapper-filters">
+                <div className="search-page-wrapper-aside">
                     <vviinn-extended-filters locale="en-US" mode="preview"></vviinn-extended-filters>
                 </div>
                 <div className="search-page-wrapper-result">
@@ -56,12 +56,12 @@ vviinn-text-search {
   gap: 20px;
 }
 
-.search-page-wrapper-filters {
+.search-page-wrapper-aside {
   flex: none;
   width: 250px;
 }
 @media screen and (max-width: 768px) {
-  .search-page-wrapper-filters {
+  .search-page-wrapper-aside {
     display: none;
   }
 }
@@ -108,7 +108,7 @@ vviinn-text-search {
 </style>
 
 <div class="search-page-wrapper">
-    <div class="search-page-wrapper-filters">
+    <div class="search-page-wrapper-aside">
         <vviinn-extended-filters locale="en-US" mode="preview"></vviinn-extended-filters>
     </div>
     <div class="search-page-wrapper-result">

@@ -162,7 +162,7 @@ export class VviinnVpsWidget {
   @Prop() addPriceContainer?: boolean = false;
 
   /** @internal */
-  @Prop() apiPath: string = "https://api.vviinn.com";
+  @Prop() apiPath?: string = "https://api.vviinn.com";
   /** Set true when showing the widget in button */
   /** @internal */
   @Prop() showingInButton?: boolean = false;
@@ -565,7 +565,7 @@ export class VviinnVpsWidget {
             this.handleStartCameraClick();
           }}
         >
-          <vviinn-preloader class={{ hidden: !isLoading }} />
+          {isLoading && <vviinn-preloader />}
 
           <span class={{ "action-button-content": true, hidden: isLoading }}>
             <slot name="vviinn-camera-icon">
@@ -591,6 +591,7 @@ export class VviinnVpsWidget {
         onVviinnImageUpload={() => {
           this.handleVviinnImageUpload("uploadPhoto");
         }}
+        showInWidget={true}
         onVviinnNoResult={({ detail }) => this.handleVviinnNoResult(detail)}
         resetVpsButton={this.resetVpsButton}
         basicEventData={this.getBasicEventData()}
@@ -626,7 +627,6 @@ export class VviinnVpsWidget {
     searchState.resetCategoryLink = undefined;
     searchState.activeIonLink = undefined;
     searchState.image = O.none;
-    searchState.imageUrl = O.none;
     searchState.results = [];
     searchState.filters = [];
     searchState.dynamicFilters = [];
@@ -808,14 +808,12 @@ export class VviinnVpsWidget {
                   >
                     <vviinn-filters
                       class="preview-filters"
-                      filters={searchState.dynamicFilters}
                       showInWidget={true}
                       exportparts={filtersParts}
                     />
 
                     <vviinn-extended-filters
                       class="preview-extended-filters"
-                      filters={searchState.dynamicFilters}
                       mode="preview"
                       showHeader={false}
                       exportparts={extendedFiltersParts}
@@ -869,7 +867,6 @@ export class VviinnVpsWidget {
 
           <vviinn-extended-filters
             class="modal-extended-filters"
-            filters={searchState.dynamicFilters}
             mode="modal"
             exportparts={extendedFiltersParts}
             showInWidget={true}

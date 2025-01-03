@@ -20,7 +20,10 @@ import {
   center,
   Rectangle,
 } from "../../../geometry/Rectangle";
-import { makeRectangularSearchRequest } from "../../../store/search.store";
+import {
+  makeRectangularSearchRequest,
+  SearchStoreName,
+} from "../../../store/search.store";
 import {
   BasicEventData,
   SelectObjectEventData,
@@ -36,9 +39,16 @@ export class VviinnDetectedObject {
   @Prop() selectedDetectedObject: ValueObject<DetectedObject>;
   @Prop() basicEventData: BasicEventData;
   @Prop() imageBounds: Rectangle | null;
+  @Prop() showInWidget: boolean;
 
   @Event({ bubbles: true })
   vviinnSelectObject: EventEmitter<SelectObjectEventData>;
+
+  private storeName?: SearchStoreName;
+
+  connectedCallback() {
+    this.storeName = this.showInWidget ? "widget" : "components";
+  }
 
   private getObjectPosition(): [string, string] {
     return pipe(
@@ -67,7 +77,7 @@ export class VviinnDetectedObject {
       O.toNullable
     );
 
-    makeRectangularSearchRequest(scaledRect, this.imageBounds);
+    makeRectangularSearchRequest(this.storeName, scaledRect, this.imageBounds);
     this.vviinnSelectObject.emit({
       ...this.basicEventData,
       detectedObject: this.detectedObject,

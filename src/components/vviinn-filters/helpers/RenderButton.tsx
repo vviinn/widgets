@@ -25,7 +25,7 @@ export const RenderButton = (
         class={`filters-more-modal-button ${
           hasHexCodeLength ? "filters-sub-button-color" : ""
         } ${isSelected ? "active" : ""}`}
-        disabled={!active}
+        disabled={!active && !isSelected}
         part="filters-option-button"
       >
         {hasHexCodeLength && (

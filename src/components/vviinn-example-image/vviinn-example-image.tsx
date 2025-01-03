@@ -177,7 +177,7 @@ export class VviinnExampleImage {
     file = await toFile(dataURI);
 
     pipe(
-      await processSelectedFile(file),
+      await processSelectedFile("widget")(file),
       E.match(
         () => this.vviinnNoResult.emit(this.basicEventData),
         () => this.vviinnImageUploadFinished.emit()
