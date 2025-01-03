@@ -6,15 +6,11 @@
   border: var(--preloader-width) solid currentColor;
   border-radius: 50%;
   border-top-color: transparent;
-  display: none;
+  display: flex;
   outline: 0;
   width: var(--preloader-size);
   height: var(--preloader-size);
   box-sizing: border-box;
-}
-
-:host(.active) {
-  display: flex;
 }
 
 @keyframes rotate {

@@ -24,23 +24,20 @@ import { version } from "../../../package.json";
 import {
   makeProductListingPageRequest,
   makeSearchIdRequest,
-  makeSearchQueryRequest,
   makeTextSearchRequest,
   searchState,
+  componentsState,
+  SearchStore,
+  SearchStoreName,
 } from "../../store/search.store";
 import { state } from "../../store/store";
 import { createTrackingApi } from "../../openApi";
 import { BasicEventData, Locale, Recommendation } from "../../components";
 import { campaignTypeNames } from "../../campaign/Campaign";
-import {
-  ProductListingPageResponse,
-  SearchIdResponse,
-  TextSearchResponse,
-} from "../../interfaces/search";
+import { TextSearchResponse } from "../../interfaces/search";
 import {
   ChangedFiltersEvent,
   ChangedFiltersEventData,
-  DynamicFiltersEventData,
   DynamicFilterTrackingData,
   ProductCardEvent,
   ProductCardEventData,
@@ -154,10 +151,6 @@ export class VviinnResults {
   @Event({ bubbles: true })
   vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
 
-  /** Dynamic filters are received from the API. */
-  /** @internal */
-  @Event() vviinnFiltersReceived: EventEmitter<DynamicFiltersEventData>;
-
   /** A search response was received by vviinn-results (used internally for showing preloader) */
   /** @internal */
   @Event() resultsSearchFinished: EventEmitter;
@@ -222,18 +215,23 @@ export class VviinnResults {
   @Prop() replaceSlotsContentInButton?: ReplaceSlotsContentInParent;
   /** @internal */
   @Prop() parentSlots?: HTMLSlotElement[] = [];
+  /** Works for product-listing-page request */
+  /** @internal */
+  @Prop() useInnerState?: boolean = false;
 
-  @State() recommendations: Recommendation[] = [];
   @State() innerTextSearchQuery: string;
   @State() innerTextSearchRequestId: string;
   @State() slotsReplaced: boolean;
   @State() oneClickDiscoveryAppendIndex: number;
   @State() oneClickDiscoverySelectedIndex: number;
   @State() isTextSearch: boolean = this.textSearchQuery?.length > 0;
+  @State() innerResults: Recommendation[] = [];
 
   private trackingApi: DefaultApi;
   private passedSlotNames?: string[] = [];
   private slots?: HTMLSlotElement[] = [];
+  private state?: SearchStore;
+  private storeName?: SearchStoreName;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -243,6 +241,10 @@ export class VviinnResults {
   /** @internal */
   @Event({ bubbles: true })
   vviinnSelectedFiltersReset: EventEmitter<ResetSelectedFiltersEventData>;
+
+  private getResults() {
+    return (this.useInnerState ? this.innerResults : this.state.results) ?? [];
+  }
 
   private replaceSlotsContent() {
     this.globalSlotsChanged.emit({
@@ -291,23 +293,13 @@ export class VviinnResults {
       : this.replaceSlotsContent();
   }
 
-  private getRecommendations = () =>
-    this.showInWidget ? searchState.results : this.recommendations;
-
   private skipFiltersChanges = (isTriggeredByVpsWidget: boolean) =>
     (isTriggeredByVpsWidget && !this.showInWidget) ||
     (!isTriggeredByVpsWidget && this.showInWidget);
 
   private getResultsBySearchId = async (searchId: string) => {
-    if (!searchId || this.showInWidget) return;
-    state.apiPath = this.apiPath; //FIXME: #36877
-    await pipe(
-      await makeSearchIdRequest(this.token, searchId),
-      E.getOrElse(() => []),
-      (results: SearchIdResponse) => {
-        this.recommendations = results;
-      }
-    );
+    if (!searchId) return;
+    await makeSearchIdRequest(this.token, searchId);
     this.resultsSearchFinished.emit();
   };
 
@@ -316,15 +308,11 @@ export class VviinnResults {
 
     state.apiPath = this.apiPath; //FIXME: #36877
 
-    return pipe(
-      await makeTextSearchRequest(
-        this.token,
-        this.textSearchQuery,
-        filters,
-        this.textSearchRequestId
-      ),
-      E.getOrElse(() => null),
-      (response: TextSearchResponse) => response
+    await makeTextSearchRequest(
+      this.storeName,
+      this.textSearchQuery,
+      filters,
+      this.textSearchRequestId
     );
   }
 
@@ -337,21 +325,15 @@ export class VviinnResults {
     state.apiPath = this.apiPath; //FIXME: #36877
 
     return pipe(
-      await makeSearchQueryRequest(
-        this.token,
+      await makeTextSearchRequest(
+        this.storeName,
         query,
         filters,
-        this.resultsCount,
-        requestId
+        requestId,
+        this.resultsCount
       ),
       E.getOrElse(() => null),
-      (response: TextSearchResponse) => {
-        this.recommendations = response?.data?.products ?? [];
-        this.vviinnFiltersReceived.emit(
-          response?.data?.interactions.dynamicFilters
-        );
-        return response;
-      }
+      (response: TextSearchResponse) => response
     );
   }
 
@@ -363,16 +345,15 @@ export class VviinnResults {
 
     pipe(
       await makeProductListingPageRequest(
-        this.token,
         this.filterColumn,
         this.filterValue,
         this.resultsCount,
-        dynamicFilters
+        dynamicFilters,
+        this.useInnerState
       ),
       E.getOrElse(() => null),
-      (response: ProductListingPageResponse) => {
-        this.recommendations = response?.data?.products ?? [];
-        this.vviinnFiltersReceived.emit(response?.interactions.dynamicFilters);
+      (response: TextSearchResponse) => {
+        if (this.useInnerState) this.innerResults = response.data.products;
       }
     );
   }
@@ -440,7 +421,12 @@ export class VviinnResults {
   };
 
   connectedCallback() {
+    state.apiPath = this.apiPath; //FIXME: #36877
+
+    if (this.token) componentsState.token = this.token;
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
+    this.state = this.showInWidget ? searchState : componentsState;
+    this.storeName = this.showInWidget ? "widget" : "components";
 
     if (!this.uiSessionId) {
       this.uiSessionId = uuidv4();
@@ -518,10 +504,10 @@ export class VviinnResults {
 
   @Listen("vviinnProductView")
   trackProductView({ detail }: ProductCardEvent) {
-    if (!searchState.resultViewed) {
+    if (!this.state.resultViewed) {
       this.vviinnResultView.emit(this.getBasicEventData());
       this.trackResultEvent("view");
-      searchState.resultViewed = true;
+      this.state.resultViewed = true;
     }
 
     const productViewEvent = this.getProductTrackEvent(detail, "view");
@@ -593,7 +579,7 @@ export class VviinnResults {
   private findProductById(
     id: Recommendation["productId"]
   ): Recommendation | undefined {
-    return this.getRecommendations().find((r) => r.productId === id);
+    return this.getResults().find((r) => r.productId === id);
   }
 
   private handleOpenLink(deeplink: string, event: MouseEvent) {
@@ -654,15 +640,12 @@ export class VviinnResults {
   };
 
   private renderResults() {
-    const results = this.getRecommendations();
-
     const widgetData = this.getBasicEventData();
 
-    if (results.length === 0) return null;
-    if (!searchState.resultLoaded) {
+    if (!this.state.resultLoaded) {
       this.vviinnResultLoad.emit(this.getBasicEventData());
       this.trackResultEvent("load");
-      searchState.resultLoaded = true;
+      this.state.resultLoaded = true;
     }
 
     const isOneClickDiscoveryAppendMode =
@@ -685,7 +668,7 @@ export class VviinnResults {
       this.oneClickDiscoverySelectedIndex = index;
     };
 
-    return results.map((p, i) => (
+    return this.getResults().map((p, i) => (
       <vviinn-product-card
         key={p.productId}
         index={i}
@@ -755,6 +738,7 @@ export class VviinnResults {
   }
 
   render() {
+    const resultsLength = this.getResults().length;
     return (
       <Host
         id="results-block"
@@ -765,7 +749,7 @@ export class VviinnResults {
         exportparts={productCardParts}
       >
         <div class="nothing-found">
-          {this.getRecommendations()?.length === 0 && this.showInWidget && (
+          {resultsLength === 0 && this.showInWidget && (
             <vviinn-empty-results handler={() => this?.resetState()} />
           )}
 
@@ -776,10 +760,7 @@ export class VviinnResults {
 
         <div
           class={{
-            hidden:
-              this.showAspectRatioError ||
-              (this.recommendations.length === 0 &&
-                searchState.results.length === 0),
+            hidden: this.showAspectRatioError || resultsLength === 0,
             products: true,
           }}
           id="vviinn-results-products"
@@ -789,8 +770,7 @@ export class VviinnResults {
             id="one-click-discovery-append"
             style={{
               order: (
-                this.oneClickDiscoveryAppendIndex ??
-                (this.recommendations.length || searchState.results.length)
+                this.oneClickDiscoveryAppendIndex ?? resultsLength
               ).toString(),
             }}
           ></div>

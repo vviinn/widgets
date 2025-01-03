@@ -9,11 +9,15 @@ import {
   Listen,
   State,
 } from "@stencil/core";
-import { makeTextSearchRequest, searchState } from "../../store/search.store";
+import {
+  makeTextSearchRequest,
+  searchState,
+  componentsState,
+  SearchStoreName,
+} from "../../store/search.store";
 import { SearchModalUploadIcon, TextSearchIcon } from "../vviinn-icons";
 import { slotChangeListener } from "../customized-slots";
 import {
-  DynamicFiltersEventData,
   ResetSelectedFiltersEventData,
   DynamicFilterTrackingData,
   SearchIdEvent,
@@ -51,9 +55,8 @@ export class VviinnTextSearch {
   @Event() vviinnTextSearchStarted: EventEmitter<TextSearchEventData>;
   /** An image search ID was received (used by vviinn-results component) */
   @Event() vviinnSearchIdReceived: EventEmitter<SearchIdEventData>;
-  /** The filters received */
-  @Event({ bubbles: true })
-  vviinnFiltersReceived: EventEmitter<DynamicFiltersEventData>;
+  /** A filter was triggered */
+  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
 
   /** A text search response was received (used internally by vviinn-vps-widget) */
   /** @internal */
@@ -62,8 +65,6 @@ export class VviinnTextSearch {
   /** A search response was received by vviinn-results (used internally for showing preloader) */
   /** @internal */
   @Event() resultsSearchFinished: EventEmitter;
-
-  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
 
   /** Selected filters should be resetted */
   /** @internal */
@@ -106,6 +107,8 @@ export class VviinnTextSearch {
     this.showTooltip = show;
   };
 
+  private storeName?: SearchStoreName;
+
   private triggerTooltipStart: Timeout;
   private triggerTooltipEnd: Timeout;
 
@@ -126,6 +129,9 @@ export class VviinnTextSearch {
   );
 
   connectedCallback() {
+    if (this.token) componentsState.token = this.token;
+    this.storeName = this.showInWidget ? "widget" : "components";
+
     document.addEventListener("resultsSearchFinished", this.hideLoader);
   }
 
@@ -194,7 +200,7 @@ export class VviinnTextSearch {
     });
     if (this.showInWidget) {
       const { requestId } = pipe(
-        await makeTextSearchRequest(this.token, this.searchQuery),
+        await makeTextSearchRequest(this.storeName, this.searchQuery),
         E.getOrElse(() => null),
         (response: TextSearchResponse) => response
       );
@@ -238,9 +244,8 @@ export class VviinnTextSearch {
           />
           {this.mode === "upload" ? (
             <vviinn-image-selector
-              token={this.token}
               apiPath={this.apiPath}
-              showInTextSearch={true}
+              showInWidget={this.showInWidget}
               uploadStartedHandler={this.showLoader.bind(this)}
             >
               <span slot="upload-button-text" class="upload-button-text">

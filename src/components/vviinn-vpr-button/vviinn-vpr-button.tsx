@@ -156,7 +156,7 @@ export class VviinnVprButton {
   @Prop() oneClickDiscoveryMode?: "modal" | "append-grid" | "append-slider";
 
   /** @internal */
-  @Prop() apiPath: string | undefined = "https://api.vviinn.com";
+  @Prop() apiPath?: string = "https://api.vviinn.com";
 
   /** Event emitted on widget load */
   @Event() vviinnWidgetLoad: EventEmitter<BasicEventData>;
