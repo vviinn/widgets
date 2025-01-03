@@ -197,12 +197,8 @@ export class VviinnResults {
 
   /** True when we use vviinn-results inside the widget */
   @Prop() showInWidget?: boolean = false;
-  /** One-click Discovery Mode, value append will be deprecated, use append-grid instead */
-  @Prop() oneClickDiscoveryMode?:
-    | "modal"
-    | "append"
-    | "append-grid"
-    | "append-slider";
+  /** One-click Discovery Mode */
+  @Prop() oneClickDiscoveryMode?: "modal" | "append-grid" | "append-slider";
   /** Comma-separated list of campaign IDs */
   @Prop() oneClickDiscoveryCampaigns: string = "";
 
@@ -743,11 +739,7 @@ export class VviinnResults {
                     )
                   : undefined
               }
-              oneClickDiscoveryMode={
-                this.oneClickDiscoveryMode === "append"
-                  ? "append-grid"
-                  : this.oneClickDiscoveryMode
-              }
+              oneClickDiscoveryMode={this.oneClickDiscoveryMode}
               addToBasketShow={this.addToBasketShow}
               locale={this.locale}
               favoriteShow={this.favoriteShow}
