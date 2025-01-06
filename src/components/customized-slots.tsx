@@ -33,6 +33,7 @@ export const productCardSlotNames: string[] = [
   "vviinn-favorite-icon",
   "vviinn-favorite-icon-pressed",
   "vviinn-energy-label-data-sheet-text",
+  "vviinn-product-card-actions",
   "vviinn-custom-label-0",
   "vviinn-custom-label-1",
   "vviinn-custom-label-2",
