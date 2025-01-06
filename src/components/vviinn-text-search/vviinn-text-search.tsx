@@ -76,7 +76,7 @@ export class VviinnTextSearch {
   /** The locale for currency formatting and text localization */
   @Prop() locale: Locale = "de-DE";
   /** Default text search or text search with an image upload button */
-  @Prop() mode: TextSearchMode = "text";
+  @Prop() mode: TextSearchMode = "basic";
   /** True, when used inside the widget */
   @Prop() showInWidget?: boolean = false;
   /** Query for the text search passed from widget */
@@ -242,7 +242,8 @@ export class VviinnTextSearch {
             onInput={(event) => this.handleInputChange(event)}
             onKeyUp={(event) => this.handleKeyPress(event as KeyboardEvent)}
           />
-          {this.mode === "upload" ? (
+
+          {this.mode === "upload" && (
             <vviinn-image-selector
               apiPath={this.apiPath}
               showInWidget={this.showInWidget}
@@ -252,9 +253,16 @@ export class VviinnTextSearch {
                 <SearchModalUploadIcon />
               </span>
             </vviinn-image-selector>
-          ) : (
+          )}
+
+          {this.mode === "extended" && (
+            <vviinn-vps-button token={this.token} add-style="false" />
+          )}
+
+          {this.mode === "basic" && (
             <slot name="vviinn-text-search-actions"></slot>
           )}
+
           {this.recognition && (
             <button
               class="speech-button"
