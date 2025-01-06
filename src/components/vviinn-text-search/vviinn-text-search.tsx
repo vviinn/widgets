@@ -56,7 +56,7 @@ export class VviinnTextSearch {
   /** An image search ID was received (used by vviinn-results component) */
   @Event() vviinnSearchIdReceived: EventEmitter<SearchIdEventData>;
   /** A filter was triggered */
-  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
+  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterInternalData>;
 
   /** A text search response was received (used internally by vviinn-vps-widget) */
   /** @internal */
@@ -65,8 +65,6 @@ export class VviinnTextSearch {
   /** A search response was received by vviinn-results (used internally for showing preloader) */
   /** @internal */
   @Event() resultsSearchFinished: EventEmitter;
-
-  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterInternalData>;
 
   /** Selected filters should be resetted */
   /** @internal */

@@ -19,6 +19,7 @@ import {
   FilterEvent,
   ResultLoadEvent,
   ResultViewEvent,
+  Widget,
 } from "vviinn-tracking-client-ts";
 import { version } from "../../../package.json";
 import {
