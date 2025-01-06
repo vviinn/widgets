@@ -224,7 +224,7 @@ export class VviinnResults {
   @State() slotsReplaced: boolean;
   @State() oneClickDiscoveryAppendIndex: number;
   @State() oneClickDiscoverySelectedIndex: number;
-  @State() isTextSearch: boolean = this.textSearchQuery?.length > 0;
+  @State() isTextSearch: boolean = false;
   @State() innerResults: Recommendation[] = [];
 
   private trackingApi: DefaultApi;
@@ -323,6 +323,7 @@ export class VviinnResults {
   ) {
     if (!query) return;
     state.apiPath = this.apiPath; //FIXME: #36877
+    this.setTextSearch(true);
 
     return pipe(
       await makeTextSearchRequest(
@@ -364,6 +365,7 @@ export class VviinnResults {
 
   private textSearchStartedHandler = async ({ detail }: TextSearchEvent) => {
     this.innerTextSearchQuery = detail.query;
+    this.setTextSearch(true);
 
     const { requestId } = await this.getTextSearchResults(
       this.innerTextSearchQuery
@@ -405,6 +407,7 @@ export class VviinnResults {
     if (this.trackingDeactivated) return;
     const { action, kind, customTrigger } = detail;
     if (customTrigger) this.isTextSearch = customTrigger === "TPS";
+    if (customTrigger) this.setTextSearch(true);
     const { campaignTypeId, ...rest } = this.getBasicEventData(customTrigger);
 
     const filterEvent: FilterEvent = createFilterEvent({
@@ -417,9 +420,14 @@ export class VviinnResults {
     this.trackingApi.trackEvent(filterEvent).then(this.setTrackingDeactivated);
   };
 
+  private uploadTriggeredHandler = () => {
+    this.setTextSearch(false);
+  };
+
   private widgetCloseHandler = () => {
     this.oneClickDiscoveryAppendIndex = undefined;
     this.oneClickDiscoverySelectedIndex = undefined;
+    this.setTextSearch(false);
   };
 
   connectedCallback() {
@@ -453,6 +461,8 @@ export class VviinnResults {
       "vviinnFilterTriggered",
       this.filtersTriggeredHandler
     );
+
+    document.addEventListener("vviinnImageUpload", this.uploadTriggeredHandler);
 
     document.addEventListener("vviinnWidgetClose", this.widgetCloseHandler);
 
