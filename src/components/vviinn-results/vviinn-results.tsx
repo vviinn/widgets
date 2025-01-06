@@ -233,6 +233,9 @@ export class VviinnResults {
   private slots?: HTMLSlotElement[] = [];
   private state?: SearchStore;
   private storeName?: SearchStoreName;
+  private setTextSearch = (isTriggeredByText: boolean) => {
+    this.isTextSearch = isTriggeredByText;
+  };
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
