@@ -225,7 +225,7 @@ export class VviinnResults {
   @State() slotsReplaced: boolean;
   @State() oneClickDiscoveryAppendIndex: number;
   @State() oneClickDiscoverySelectedIndex: number;
-  @State() isTextSearch: boolean = false;
+  @State() isTextSearch: boolean = !!this.textSearchQuery?.length;
   @State() innerResults: Recommendation[] = [];
 
   private trackingApi: DefaultApi;
