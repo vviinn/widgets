@@ -14,7 +14,7 @@ export const productCardGeneralPartsList = [
   "basket-button-container",
   "update-button-item",
   "product-card-actions",
-  "product-card-top-actions",
+  "product-card-actions-top",
   "discount-label",
   "discount-percentage",
 ];
