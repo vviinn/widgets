@@ -410,7 +410,6 @@ export class VviinnResults {
   }: CustomEvent<DynamicFilterInternalData>) => {
     if (this.trackingDeactivated) return;
     const { action, kind, customTrigger } = detail;
-    if (customTrigger) this.isTextSearch = customTrigger === "TPS";
     if (customTrigger) this.setTextSearch(true);
     const { campaignTypeId, ...rest } = this.getBasicEventData(customTrigger);
 
@@ -431,7 +430,6 @@ export class VviinnResults {
   private widgetCloseHandler = () => {
     this.oneClickDiscoveryAppendIndex = undefined;
     this.oneClickDiscoverySelectedIndex = undefined;
-    this.setTextSearch(false);
   };
 
   connectedCallback() {
