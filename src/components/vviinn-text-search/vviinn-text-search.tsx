@@ -246,8 +246,7 @@ export class VviinnTextSearch {
           {this.mode === "upload" && (
             <vviinn-image-selector
               apiPath={this.apiPath}
-              showInWidget={this.showInWidget}
-              uploadStartedHandler={this.showLoader.bind(this)}
+              storeName={this.storeName}
             >
               <span slot="upload-button-text" class="upload-button-text">
                 <SearchModalUploadIcon />
@@ -256,7 +255,11 @@ export class VviinnTextSearch {
           )}
 
           {this.mode === "extended" && (
-            <vviinn-vps-button token={this.token} add-style="false" />
+            <vviinn-vps-button
+              token={this.token}
+              addStyle={false}
+              useComponentsStore={true}
+            />
           )}
 
           {this.mode === "basic" && (

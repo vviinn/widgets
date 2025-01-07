@@ -130,6 +130,8 @@ export class VviinnVpsButton {
 
   /** @internal */
   @Prop() apiPath?: string = "https://api.vviinn.com";
+  /** @internal */
+  @Prop() useComponentsStore?: boolean = false;
 
   @State() buttonPressed: boolean = false;
 
@@ -276,6 +278,7 @@ export class VviinnVpsButton {
           oneClickDiscoveryMode={this.oneClickDiscoveryMode}
           oneClickDiscoveryCampaigns={this.oneClickDiscoveryCampaigns}
           favoriteShow={this.favoriteShow}
+          useComponentsStore={this.useComponentsStore}
           parentSlots={this.slots}
         />
       </Host>

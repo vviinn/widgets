@@ -9,7 +9,7 @@ import {
 } from "@stencil/core";
 import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/lib/function";
-import { processSelectedFile } from "../../store/search.store";
+import { processSelectedFile, SearchStoreName } from "../../store/search.store";
 import {
   BasicEventData,
   NoResultEventData,
@@ -39,8 +39,7 @@ export class VviinnImageSelector {
   @Prop() resetVpsButton: () => void;
   @Prop() token?: string;
   @Prop() apiPath?: string;
-  @Prop() showInWidget?: boolean;
-  @Prop() uploadStartedHandler?: () => void;
+  @Prop() storeName: SearchStoreName;
 
   private fileInput: HTMLInputElement;
 
@@ -48,11 +47,9 @@ export class VviinnImageSelector {
     this.vviinnImageUpload.emit(this.basicEventData);
     const input = event.target as HTMLInputElement;
 
-    this.uploadStartedHandler && this.uploadStartedHandler();
-
-    const processingResult = await processSelectedFile(
-      this.showInWidget ? "widget" : "components"
-    )(input.files[0]);
+    const processingResult = await processSelectedFile(this.storeName)(
+      input.files[0]
+    );
 
     pipe(
       processingResult,
