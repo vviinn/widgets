@@ -88,7 +88,7 @@ import { productCardParts } from "../../cssParts";
  * @part custom-label-3 - Custom label with index 3.
  * @part custom-label-4 - Custom label with index 4.
  * @part product-card-actions - Style actions wrapper.
- * @part product-card-top-actions - Style top actions wrapper.
+ * @part product-card-actions-top - Style top actions wrapper.
  *
  * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
@@ -398,7 +398,7 @@ export class VviinnProductCard {
           <Linked deeplink={this.deeplink} part="image-link">
             {this.renderImage()}
           </Linked>
-          <div class="product-card-top-actions" part="product-card-top-actions">
+          <div class="product-card-actions-top" part="product-card-actions-top">
             <button
               class={{
                 hidden: !this.favoriteShow,
@@ -424,6 +424,26 @@ export class VviinnProductCard {
               >
                 <slot name="vviinn-favorite-icon-pressed">
                   <FavoriteIconPressed width={14} height={14} />
+                </slot>
+              </div>
+            </button>
+
+            <button
+              class={{
+                "update-button": true,
+                hidden: !this.isShowUpdateButton(),
+              }}
+              part="update-button-item"
+              onClick={() => {
+                this.vviinnCrossSellingClick.emit({
+                  animationInterval: generateRandomNumber(800, 1400),
+                  productData: this.productData,
+                });
+              }}
+            >
+              <div>
+                <slot name="vviinn-update-button-icon">
+                  <UpdateIcon width={14} height={14} />
                 </slot>
               </div>
             </button>
@@ -486,10 +506,10 @@ export class VviinnProductCard {
                     part="discount-label"
                   >{`-${this.currentDiscountPercentage}%`}</div>
                 )}
+
+              {renderCustomLabels(this.customLabels.split(","))}
             </Fragment>
           )}
-
-          {renderCustomLabels(this.customLabels.split(","))}
 
           <vviinn-skeleton
             height={40}
@@ -573,26 +593,6 @@ export class VviinnProductCard {
             </div>
           </button>
         </div>
-
-        <button
-          class={{
-            "update-button": true,
-            hidden: !this.isShowUpdateButton(),
-          }}
-          part="update-button-item"
-          onClick={() => {
-            this.vviinnCrossSellingClick.emit({
-              animationInterval: generateRandomNumber(800, 1400),
-              productData: this.productData,
-            });
-          }}
-        >
-          <div>
-            <slot name="vviinn-update-button-icon">
-              <UpdateIcon width={14} height={14} />
-            </slot>
-          </div>
-        </button>
 
         {this.showFooterArrow && <div class="footer-arrow"></div>}
       </Host>

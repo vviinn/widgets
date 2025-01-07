@@ -9,3 +9,8 @@ vviinn-extended-filters [slot] {
 #discovery-set-example vviinn-vpr-widget::part(title) {
   min-height: 40px;
 }
+
+#discovery-set-example vviinn-vpr-widget::part(update-button-item) {
+  width: 28px;
+  height: 28px;
+}

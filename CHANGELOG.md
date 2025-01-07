@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.144.1](https://github.com/vviinn/widgets/compare/v2.144.0...v2.144.1) (2025-01-06)
+
+
+### Bug Fixes
+
+* Styles refactoring of product card's actions buttons ([7b7ca25](https://github.com/vviinn/widgets/commit/7b7ca256d26b632755b678793779f2fc46fdbd43))
+
 ## [2.144.0](https://github.com/vviinn/widgets/compare/v2.143.0...v2.144.0) (2025-01-03)
 
 
