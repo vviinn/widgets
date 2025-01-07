@@ -214,7 +214,7 @@ export class VviinnTextSearch {
         requestId,
       });
 
-      this.vviinnSelectedFiltersReset.emit({ isTriggeredByVpsWidget: false });
+      this.vviinnSelectedFiltersReset.emit({ isTriggeredByVpsWidget: true });
     } else {
       this.showLoader();
       this.vviinnTextSearchStarted.emit({
