@@ -9,20 +9,16 @@ Every Vviinn Widget has some events that users can work on and listen to these e
 
 Text Search events are essential to connect `vviinn-text-search` and `vviinn-results` components.
 
+All these events are available on Text Search.
+
 <table width="100%" className="events-table">
   <thead>
-    <tr><th>Name</th><th>Description</th><th>Available on</th><th>Props</th></tr>
+    <tr><th>Name</th><th>Description</th><th>Props</th></tr>
   </thead>
 
   <tbody>
     <tr>
       <td>vviinnTextSearchStarted</td><td>Triggered when a text search was initiated.</td>
-
-      <td>
-        <ul>
-          <li>Text Search</li>
-        </ul>
-      </td>
 
       <td>
         <ul>
@@ -33,12 +29,6 @@ Text Search events are essential to connect `vviinn-text-search` and `vviinn-res
 
     <tr>
       <td>vviinnSearchIdReceived</td><td>Triggered when an image search ID was received.</td>
-
-      <td>
-        <ul>
-          <li>Text Search</li>
-        </ul>
-      </td>
 
       <td>
         <ul>
@@ -61,5 +51,4 @@ document.addEventListener("vviinnTextSearchStarted", ({ detail }) => {
 {
   "query": "kitchen"
 }
-// ... and other loaded products
 ```
