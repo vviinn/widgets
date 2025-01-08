@@ -12,7 +12,6 @@ import {
 import { version } from "../../../package.json";
 import {
   SearchModalCameraIcon,
-  SearchModalUploadIcon,
   SearchModalFullSearchIcon,
   SearchModalImageSearchIcon,
 } from "../vviinn-icons";
@@ -236,8 +235,6 @@ export class VviinnVpsButton {
           <slot>
             {this.mode === "camera" ? (
               <SearchModalCameraIcon />
-            ) : this.mode === "upload" ? (
-              <SearchModalUploadIcon />
             ) : this.textSearchShow ? (
               <SearchModalFullSearchIcon />
             ) : (

@@ -15,7 +15,7 @@ import {
   componentsState,
   SearchStoreName,
 } from "../../store/search.store";
-import { SearchModalUploadIcon, TextSearchIcon } from "../vviinn-icons";
+import { TextSearchIcon } from "../vviinn-icons";
 import { slotChangeListener } from "../customized-slots";
 import {
   ResetSelectedFiltersEventData,
@@ -26,7 +26,7 @@ import {
 } from "../../recommendation/events";
 import i18next from "i18next";
 import { Locale, resources } from "../../locale";
-import { TextSearchMode } from "../../widget/types";
+import { SearchBarMode } from "../../widget/types";
 import { TextSearchResponse } from "../../interfaces/search";
 import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/lib/function";
@@ -76,7 +76,7 @@ export class VviinnTextSearch {
   /** The locale for currency formatting and text localization */
   @Prop() locale: Locale = "de-DE";
   /** Default text search or text search with an image upload button */
-  @Prop() mode: TextSearchMode = "basic";
+  @Prop() mode: SearchBarMode = "basic";
   /** True, when used inside the widget */
   @Prop() showInWidget?: boolean = false;
   /** Query for the text search passed from widget */
@@ -158,7 +158,7 @@ export class VviinnTextSearch {
 
   @Listen("vviinnImageUploadFinished")
   imageUploadFinished({ detail }: SearchIdEvent) {
-    if (!this.showInWidget && this.mode === "upload") {
+    if (!this.showInWidget) {
       this.showLoader();
       this.vviinnSearchIdReceived.emit({ searchId: detail.searchId });
     }
@@ -242,17 +242,6 @@ export class VviinnTextSearch {
             onInput={(event) => this.handleInputChange(event)}
             onKeyUp={(event) => this.handleKeyPress(event as KeyboardEvent)}
           />
-
-          {this.mode === "upload" && (
-            <vviinn-image-selector
-              apiPath={this.apiPath}
-              storeName={this.storeName}
-            >
-              <span slot="upload-button-text" class="upload-button-text">
-                <SearchModalUploadIcon />
-              </span>
-            </vviinn-image-selector>
-          )}
 
           {this.mode === "extended" && (
             <vviinn-vps-button
