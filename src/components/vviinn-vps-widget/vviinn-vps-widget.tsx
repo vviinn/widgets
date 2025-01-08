@@ -190,18 +190,20 @@ export class VviinnVpsWidget {
   @Prop() useComponentsStore?: boolean = false;
 
   @State() slidePosition: number = 0;
-  @State() width: number = 0;
-  @State() wrongImageFormat: boolean = false;
-  @State() trackingDeactivated: boolean = false;
-  @State() stream: MediaStream | null = null;
-  @State() cameraInitializing: boolean = false;
-  @State() cameraEnabled: boolean = false;
-  @State() cameraButtonClicked: boolean = false;
   @State() uploadSource: UploadSource;
-  @State() showAspectRatioError = false;
+  @State() width: number = 0;
+  @State() stream: MediaStream | null = null;
   @State() products: Recommendation[] = [];
   @State() searchQuery: string = "";
   @State() requestId: string = "";
+
+  @State() isCameraInitializing: boolean = false;
+  @State() isCameraEnabled: boolean = false;
+  @State() isCameraButtonClicked: boolean = false;
+
+  @State() showAspectRatioError = false;
+  @State() wrongImageFormat: boolean = false;
+  @State() trackingDeactivated: boolean = false;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -339,10 +341,10 @@ export class VviinnVpsWidget {
       this.resetState();
       return;
     }
-    this.cameraInitializing = true;
+    this.isCameraInitializing = true;
 
     setTimeout(async () => {
-      this.cameraButtonClicked = true;
+      this.isCameraButtonClicked = true;
       try {
         const videoStream = await navigator.mediaDevices.getUserMedia({
           video: videoStreamSettings,
@@ -356,7 +358,7 @@ export class VviinnVpsWidget {
         // TODO: Show error in the UI
         console.log("Error accessing camera: ", error.message);
         this.resetState();
-        this.cameraInitializing = false;
+        this.isCameraInitializing = false;
       }
     }, CAMERA_START_DELAY);
   };
@@ -432,8 +434,8 @@ export class VviinnVpsWidget {
 
   @Listen("vviinnCameraEnabled")
   trackCameraEnabled({ detail: isEnabled }: CustomEvent<boolean>) {
-    this.cameraEnabled = isEnabled;
-    this.cameraInitializing = false;
+    this.isCameraEnabled = isEnabled;
+    this.isCameraInitializing = false;
   }
 
   @Listen("vviinnImageCrop")
@@ -554,7 +556,9 @@ export class VviinnVpsWidget {
 
   private handleImageSelection() {
     if (this.useComponentsStore) {
-      return this.resetVpsButton && this.resetVpsButton();
+      this.resetVpsButton && this.resetVpsButton();
+      this.resetState();
+      return;
     }
 
     this.slidePosition = 1;
@@ -571,7 +575,7 @@ export class VviinnVpsWidget {
       (this.state.loading &&
         this.state.searchType === "image" &&
         this.uploadSource === "startCamera") ||
-      this.cameraInitializing;
+      this.isCameraInitializing;
 
     const buttons = [
       this.cameraAvailable && (
@@ -588,12 +592,12 @@ export class VviinnVpsWidget {
             <slot name="vviinn-camera-icon">
               <CameraActionIcon />
             </slot>
-            <span class={{ hidden: !this.cameraEnabled }}>
+            <span class={{ hidden: !this.isCameraEnabled }}>
               <slot name="vviinn-camera-button-text-stop">
                 {i18next.t("cameraButtonTextStop")}
               </slot>
             </span>
-            <span class={{ hidden: this.cameraEnabled }}>
+            <span class={{ hidden: this.isCameraEnabled }}>
               <slot name="vviinn-camera-button-text-start">
                 {i18next.t("cameraButtonTextStart")}
               </slot>
@@ -637,10 +641,25 @@ export class VviinnVpsWidget {
     return this.isDesktop ? buttons.reverse() : buttons;
   }
 
+  private resetInnerState = () => {
+    this.searchQuery = "";
+    this.wrongImageFormat = false;
+    this.resetScroll("results-block");
+    this.stopStreamTracks();
+    this.initResultEvents();
+    this.stream = null;
+    this.isCameraEnabled = false;
+    this.isCameraButtonClicked = false;
+    this.isCameraInitializing = false;
+    this.setShowAspectRatioError(false);
+    this.isTextSearch = false;
+    this.resetScroll("start-page_block");
+  };
+
   private resetState() {
+    this.resetInnerState();
     if (this.useComponentsStore) return;
 
-    this.resetScroll("start-page_block");
     this.slidePosition = 0;
     this.state.resetCategoryLink = undefined;
     this.state.activeIonLink = undefined;
@@ -653,18 +672,6 @@ export class VviinnVpsWidget {
     this.state.loading = false;
     this.state.serverError = false;
     this.state.searchType = undefined;
-
-    this.searchQuery = "";
-    this.wrongImageFormat = false;
-    this.resetScroll("results-block");
-    this.stopStreamTracks();
-    this.initResultEvents();
-    this.stream = null;
-    this.cameraEnabled = false;
-    this.cameraButtonClicked = false;
-    this.cameraInitializing = false;
-    this.setShowAspectRatioError(false);
-    this.isTextSearch = false;
   }
 
   private haveErrors(): boolean {
@@ -708,7 +715,7 @@ export class VviinnVpsWidget {
           widgetVersion={version}
           hideBackButton={
             (this.mode === "upload" && this.showingInButton) ||
-            (!this.cameraEnabled && this.isOnboardingSlide())
+            (!this.isCameraEnabled && this.isOnboardingSlide())
           }
           exportparts={modalParts}
         >
@@ -716,10 +723,10 @@ export class VviinnVpsWidget {
             <vviinn-slide
               class={{
                 "start-page": true,
-                "camera-enabled": this.cameraEnabled,
+                "camera-enabled": this.isCameraEnabled,
               }}
             >
-              <vviinn-example-image
+              <vviinn-camera
                 onVviinnImageUploadFinished={
                   this.handleVviinnImageUploadFinished
                 }
@@ -728,8 +735,9 @@ export class VviinnVpsWidget {
                 }}
                 basicEventData={this.getBasicEventData()}
                 srcObject={this.stream}
-                cameraButtonClicked={this.cameraButtonClicked}
+                cameraButtonClicked={this.isCameraButtonClicked}
                 exampleImageSource={this.exampleImageSource}
+                useComponentsStore={this.useComponentsStore}
               />
               <div
                 class={{
