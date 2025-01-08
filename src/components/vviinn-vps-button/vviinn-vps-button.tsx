@@ -9,7 +9,6 @@ import {
   Event,
   EventEmitter,
 } from "@stencil/core";
-import { version } from "../../../package.json";
 import {
   SearchModalCameraIcon,
   SearchModalUploadIcon,
@@ -24,7 +23,6 @@ import {
   SelectFilterEventData,
   SelectObjectEventData,
 } from "../../recommendation/events";
-import { campaignTypeNames } from "../../campaign/Campaign";
 import { Locale } from "../../locale";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 import { VisualSearchMode } from "../../widget/types";
@@ -176,16 +174,6 @@ export class VviinnVpsButton {
   globalSlotsChanged: EventEmitter<any>;
 
   private slots?: HTMLSlotElement[] = [];
-
-  getBasicEventData = (): BasicEventData => {
-    return {
-      widgetType: "VPS",
-      campaignTypeId: "VPS",
-      campaignTypeName: campaignTypeNames["VPS"],
-      widgetId: this.el.id,
-      widgetVersion: version,
-    };
-  };
 
   @Listen("vviinnWidgetClose")
   handleModalClosed() {
