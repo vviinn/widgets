@@ -90,6 +90,7 @@ export class VviinnCropper {
     state.apiPath = this.apiPath;
     this.state = this.showInWidget ? searchState : componentsState;
     this.storeName = this.showInWidget ? "widget" : "components";
+    componentsState.image = O.none;
   }
 
   disconnectedCallback() {
@@ -99,6 +100,7 @@ export class VviinnCropper {
     );
 
     if (this.cropper) this.cropper.destroy();
+    componentsState.image = O.none;
   }
 
   @Watch("detectedObjectsString")
