@@ -255,18 +255,19 @@ export class VviinnTextSearch {
             <slot name="vviinn-text-search-actions"></slot>
           )}
 
-          {this.recognition && (
-            <button
-              class="speech-button"
-              part="speech-button"
-              onClick={() => this.handleSpeech()}
-            >
-              <MicIcon />
-              {this.isShowRecording() && (
-                <span class="recording-indicator"></span>
-              )}
-            </button>
-          )}
+          {(this.mode === "extended" || this.showInWidget) &&
+            this.recognition && (
+              <button
+                class="speech-button"
+                part="speech-button"
+                onClick={() => this.handleSpeech()}
+              >
+                <MicIcon />
+                {this.isShowRecording() && (
+                  <span class="recording-indicator"></span>
+                )}
+              </button>
+            )}
           <button
             class="text-search-button"
             part="text-search-button"
