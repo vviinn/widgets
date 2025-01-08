@@ -19,6 +19,7 @@ import {
 import { SlotSkeleton } from "../customized-slots";
 import {
   BasicEventData,
+  ImageUploadEventData,
   ProductCardEventData,
   SelectFilterEventData,
   SelectObjectEventData,
@@ -143,7 +144,7 @@ export class VviinnVpsButton {
   @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
 
   /** The image upload has started */
-  @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
+  @Event() vviinnImageUpload: EventEmitter<ImageUploadEventData>;
 
   /** The recommendation renders on the page */
   @Event() vviinnProductLoad: EventEmitter<ProductCardEventData>;

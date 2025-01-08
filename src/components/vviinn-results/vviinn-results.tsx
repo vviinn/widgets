@@ -33,7 +33,12 @@ import {
 } from "../../store/search.store";
 import { state } from "../../store/store";
 import { createTrackingApi } from "../../openApi";
-import { BasicEventData, Locale, Recommendation } from "../../components";
+import {
+  BasicEventData,
+  ImageUploadEventData,
+  Locale,
+  Recommendation,
+} from "../../components";
 import { campaignTypeNames } from "../../campaign/Campaign";
 import { TextSearchResponse } from "../../interfaces/search";
 import {
@@ -233,8 +238,12 @@ export class VviinnResults {
   private slots?: HTMLSlotElement[] = [];
   private state?: SearchStore;
   private storeName?: SearchStoreName;
-  private setTextSearch = (isTriggeredByText: boolean) => {
-    this.isTextSearch = isTriggeredByText;
+  private setTextSearch = (
+    isTriggeredByText: boolean,
+    isTriggeredInWidget = false
+  ) => {
+    if (this.showInWidget === !!isTriggeredInWidget)
+      this.isTextSearch = isTriggeredByText;
   };
 
   /** @internal */
@@ -369,7 +378,7 @@ export class VviinnResults {
 
   private textSearchStartedHandler = async ({ detail }: TextSearchEvent) => {
     this.innerTextSearchQuery = detail.query;
-    this.setTextSearch(true);
+    this.setTextSearch(true, detail.triggeredInWidget);
 
     const { requestId } = await this.getTextSearchResults(
       this.innerTextSearchQuery
@@ -378,7 +387,7 @@ export class VviinnResults {
 
     this.resultsSearchFinished.emit();
     this.vviinnSelectedFiltersReset.emit({
-      isTriggeredByVpsWidget: false,
+      isTriggeredByVpsWidget: this.showInWidget,
     });
   };
 
@@ -409,9 +418,9 @@ export class VviinnResults {
     detail,
   }: CustomEvent<DynamicFilterInternalData>) => {
     if (this.trackingDeactivated) return;
-    const { action, kind, customTrigger } = detail;
-    if (customTrigger) this.setTextSearch(true);
+    const { action, kind, customTrigger, triggeredInWidget } = detail;
     const { campaignTypeId, ...rest } = this.getBasicEventData(customTrigger);
+    if (customTrigger) this.setTextSearch(true, triggeredInWidget);
 
     const filterEvent: FilterEvent = createFilterEvent({
       session_id: this.uiSessionId,
@@ -423,8 +432,10 @@ export class VviinnResults {
     this.trackingApi.trackEvent(filterEvent).then(this.setTrackingDeactivated);
   };
 
-  private uploadTriggeredHandler = () => {
-    this.setTextSearch(false);
+  private uploadTriggeredHandler = ({
+    detail,
+  }: CustomEvent<ImageUploadEventData>) => {
+    this.setTextSearch(false, detail.triggeredInWidget);
   };
 
   private widgetCloseHandler = () => {

@@ -38,6 +38,7 @@ import {
   SelectObjectEventData,
   NoResultEventData,
   TextSearchEvent,
+  ImageUploadEventData,
 } from "../../recommendation/events";
 import { campaignTypeNames } from "../../campaign/Campaign";
 import { parseExcludedToParams } from "../../utils/collections/collectionsUtils";
@@ -221,7 +222,7 @@ export class VviinnVpsWidget {
   @Event() vviinnSelectFilter: EventEmitter<SelectFilterEventData>;
 
   /** The image upload has started */
-  @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
+  @Event() vviinnImageUpload: EventEmitter<ImageUploadEventData>;
 
   /** Wrong image format, that isn’t .jpg, .jpeg, png, or the request failed */
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;

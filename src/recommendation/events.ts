@@ -27,6 +27,10 @@ export type BasicEventData = { widget?: Widget } & {
   [K in keyof CommonEventData]: CommonEventData[K];
 };
 
+export type ImageUploadEventData = { triggeredInWidget?: boolean } & {
+  [K in keyof BasicEventData]: BasicEventData[K];
+};
+
 export type NoResultEventData = {
   reason: ErrorKind;
 } & {
@@ -78,6 +82,7 @@ export type SearchIdEventData = {
 export type TextSearchEventData = {
   query: string;
   requestId?: string;
+  triggeredInWidget?: boolean;
 };
 
 export type ChangedFiltersEventData = {
@@ -97,6 +102,7 @@ export type ExtendedFiltersButtonClickedEventData = {
 export type DynamicFilterTrackingData = {
   action: FilterAction;
   kind?: string;
+  triggeredInWidget?: boolean;
 };
 
 export type DynamicFilterInternalData = DynamicFilterTrackingData & {
