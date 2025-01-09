@@ -14,6 +14,7 @@ import {
   searchState,
   componentsState,
   SearchStoreName,
+  SearchStore,
 } from "../../store/search.store";
 import { TextSearchIcon } from "../vviinn-icons";
 import { slotChangeListener } from "../customized-slots";
@@ -75,7 +76,7 @@ export class VviinnTextSearch {
   @Prop() token: string;
   /** The locale for currency formatting and text localization */
   @Prop() locale: Locale = "de-DE";
-  /** Default text search or text search with an image upload button */
+  /** Basic or extended text search with search modal and speech recognition */
   @Prop() mode: SearchBarMode = "basic";
   /** True, when used inside the widget */
   @Prop() showInWidget?: boolean = false;
@@ -92,9 +93,7 @@ export class VviinnTextSearch {
   @State() showTooltip = false;
 
   private isShowPreloader = () =>
-    this.showInWidget
-      ? searchState.loading && searchState.searchType === "text"
-      : this.isLoading;
+    this.state.loading && this.state.searchType === "text";
 
   private showLoader = () => (this.isLoading = true);
   private hideLoader = () => (this.isLoading = false);
@@ -107,6 +106,7 @@ export class VviinnTextSearch {
     this.showTooltip = show;
   };
 
+  private state?: SearchStore;
   private storeName?: SearchStoreName;
 
   private triggerTooltipStart: Timeout;
@@ -129,8 +129,9 @@ export class VviinnTextSearch {
   );
 
   connectedCallback() {
-    if (this.token) componentsState.token = this.token;
     this.storeName = this.showInWidget ? "widget" : "components";
+    this.state = this.showInWidget ? searchState : componentsState;
+    if (this.token) this.state.token = this.token;
 
     document.addEventListener("resultsSearchFinished", this.hideLoader);
   }
@@ -272,7 +273,7 @@ export class VviinnTextSearch {
             class="text-search-button"
             part="text-search-button"
             onClick={() => this.handleTextSearch()}
-            disabled={searchState.loading}
+            disabled={this.state.loading}
           >
             {this.isShowPreloader() ? (
               <vviinn-preloader />

@@ -13,7 +13,7 @@
 .text-search-container {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--spacing-50);
   width: 100%;
   height: 46px;
   border: 1px solid var(--color-border-02);
@@ -36,7 +36,7 @@
 }
 
 .text-search-input {
-  height: 46px;
+  height: 100%;
   padding-left: 16px;
   box-sizing: border-box;
   border: none;
@@ -55,9 +55,13 @@
   border-color: #8d8d8d;
 }
 
+vviinn-vps-button {
+  height: 100%;
+}
+
 .text-search-button,
 .speech-button,
-vviinn-vps-button {
+vviinn-vps-button::part(vviinn-button) {
   border: none;
   height: 100%;
   display: flex;
@@ -67,8 +71,13 @@ vviinn-vps-button {
   cursor: pointer;
 }
 
+.speech-button,
+vviinn-vps-button::part(vviinn-button) {
+  padding: 0 8px;
+}
+
 .text-search-button {
-  width: 46px;
+  width: 44px;
 }
 
 .upload-button-text {
