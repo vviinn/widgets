@@ -74,8 +74,10 @@ export class VviinnCropper {
   @Event() vviinnImageCrop: EventEmitter<BasicEventData>;
   @Event() vviinnCropperLoadImage: EventEmitter<LoadImageEventData>;
   @Event() vviinnCropperCropEnd: EventEmitter<Rectangle>;
-  @Event() vviinnCropperAspectRatioError: EventEmitter<boolean>;
   @Event() imageSearchFinished: EventEmitter<SearchIdResponse>;
+
+  /** @internal */
+  @Event() vviinnCropperAspectRatioError: EventEmitter<boolean>;
 
   private state?: SearchStore;
   private storeName?: SearchStoreName;
