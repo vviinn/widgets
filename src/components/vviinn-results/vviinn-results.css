@@ -81,7 +81,7 @@ products.hidden {
     position: static;
     padding: 0;
     width: unset;
-    grid-gap: 32px 16px;
+    grid-gap: 24px 16px;
     justify-content: center;
   }
 
@@ -139,8 +139,7 @@ products.hidden {
   }
 }
 
-:host(.matching-discovery)
-  vviinn-recommendations-sidebar::part(items-group) {
+:host(.matching-discovery) vviinn-recommendations-sidebar::part(items-group) {
   grid-template-columns: repeat(
     auto-fill,
     minmax(
