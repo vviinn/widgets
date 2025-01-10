@@ -146,7 +146,7 @@ export class VviinnTextSearch {
       kind: this.searchQuery,
       action: "select",
       customTrigger: "TPS",
-      triggeredInWidget: this.showInWidget,
+      isTriggeredByVpsWidget: this.showInWidget,
     });
 
   async componentWillLoad() {
@@ -160,7 +160,7 @@ export class VviinnTextSearch {
       this.showLoader();
       this.vviinnTextSearchStarted.emit({
         query: this.searchQuery,
-        triggeredInWidget: this.showInWidget,
+        isTriggeredByVpsWidget: this.showInWidget,
       });
       this.trackTextSearch();
     }

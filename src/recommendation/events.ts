@@ -27,7 +27,7 @@ export type BasicEventData = { widget?: Widget } & {
   [K in keyof CommonEventData]: CommonEventData[K];
 };
 
-export type ImageUploadEventData = { triggeredInWidget?: boolean } & {
+export type ImageUploadEventData = { isTriggeredByVpsWidget?: boolean } & {
   [K in keyof BasicEventData]: BasicEventData[K];
 };
 
@@ -82,7 +82,7 @@ export type SearchIdEventData = {
 export type TextSearchEventData = {
   query: string;
   requestId?: string;
-  triggeredInWidget?: boolean;
+  isTriggeredByVpsWidget?: boolean;
 };
 
 export type ChangedFiltersEventData = {
@@ -102,7 +102,7 @@ export type ExtendedFiltersButtonClickedEventData = {
 export type DynamicFilterTrackingData = {
   action: FilterAction;
   kind?: string;
-  triggeredInWidget?: boolean;
+  isTriggeredByVpsWidget?: boolean;
 };
 
 export type DynamicFilterInternalData = DynamicFilterTrackingData & {

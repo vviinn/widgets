@@ -240,9 +240,9 @@ export class VviinnResults {
   private storeName?: SearchStoreName;
   private setTextSearch = (
     isTriggeredByText: boolean,
-    isTriggeredInWidget = false
+    isTriggeredByVpsWidget = false
   ) => {
-    if (this.showInWidget === !!isTriggeredInWidget)
+    if (this.showInWidget === !!isTriggeredByVpsWidget)
       this.isTextSearch = isTriggeredByText;
   };
 
@@ -378,7 +378,7 @@ export class VviinnResults {
 
   private textSearchStartedHandler = async ({ detail }: TextSearchEvent) => {
     this.innerTextSearchQuery = detail.query;
-    this.setTextSearch(true, detail.triggeredInWidget);
+    this.setTextSearch(true, detail.isTriggeredByVpsWidget);
 
     const { requestId } = await this.getTextSearchResults(
       this.innerTextSearchQuery
@@ -418,9 +418,9 @@ export class VviinnResults {
     detail,
   }: CustomEvent<DynamicFilterInternalData>) => {
     if (this.trackingDeactivated) return;
-    const { action, kind, customTrigger, triggeredInWidget } = detail;
+    const { action, kind, customTrigger, isTriggeredByVpsWidget } = detail;
     const { campaignTypeId, ...rest } = this.getBasicEventData(customTrigger);
-    if (customTrigger) this.setTextSearch(true, triggeredInWidget);
+    if (customTrigger) this.setTextSearch(true, isTriggeredByVpsWidget);
 
     const filterEvent: FilterEvent = createFilterEvent({
       session_id: this.uiSessionId,
@@ -435,7 +435,7 @@ export class VviinnResults {
   private uploadTriggeredHandler = ({
     detail,
   }: CustomEvent<ImageUploadEventData>) => {
-    this.setTextSearch(false, detail.triggeredInWidget);
+    this.setTextSearch(false, detail.isTriggeredByVpsWidget);
   };
 
   private widgetCloseHandler = () => {
