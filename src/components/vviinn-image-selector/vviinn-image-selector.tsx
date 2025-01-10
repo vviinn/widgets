@@ -47,7 +47,7 @@ export class VviinnImageSelector {
   private async handleInputChange(event: Event) {
     this.vviinnImageUpload.emit({
       ...this.basicEventData,
-      isTriggeredByVpsWidget: !!this.showInWidget,
+      isTriggeredByVpsWidget: this.storeName === "widget",
     });
     const input = event.target as HTMLInputElement;
 
