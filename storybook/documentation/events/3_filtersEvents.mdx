@@ -27,13 +27,15 @@ Events related to the filters are mainly for internal usage inside Vviinn compon
 
       <td>
         <ul>
-          <li>Selected Filters</li>
+          <li>filters</li>
+          <li>el</li>
+          <li>isTriggeredByVpsWidget</li>
         </ul>
       </td>
     </tr>
 
     <tr>
-          <td>vviinnFilterTriggered</td><td>If tracking is permitted send the triggered filter kind and action (activated/deactivated).</td>
+          <td>vviinnFilterTriggered</td><td>If tracking is permitted send the triggered filter kind and action ("select" | "deselect" | "reset").</td>
 
           <td>
             <ul>
@@ -74,6 +76,7 @@ document.addEventListener("vviinnFiltersChanged", ({ detail }) => {
   ],
   "el": {
       "s-p": []
-  }
+  },
+  "isTriggeredByVpsWidget": false
 }
 ```

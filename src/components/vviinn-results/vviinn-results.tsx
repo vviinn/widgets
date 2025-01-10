@@ -30,6 +30,7 @@ import {
   componentsState,
   SearchStore,
   SearchStoreName,
+  resetStore,
 } from "../../store/search.store";
 import { state } from "../../store/store";
 import { createTrackingApi } from "../../openApi";
@@ -444,6 +445,7 @@ export class VviinnResults {
   };
 
   connectedCallback() {
+    resetStore("components");
     state.apiPath = this.apiPath; //FIXME: #36877
 
     if (this.token) componentsState.token = this.token;
@@ -489,6 +491,8 @@ export class VviinnResults {
   }
 
   disconnectedCallback() {
+    resetStore("components");
+
     document.removeEventListener(
       "vviinnSearchIdReceived",
       this.searchIdReceivedHandler
