@@ -132,7 +132,7 @@ export const slotChangeListener = (component: any, element: HTMLElement) => {
         const isElementChildTag = [
           "VVIINN-PRODUCT-CARD",
           "VVIINN-TEASER",
-          "VVIINN-EXAMPLE-IMAGE",
+          "VVIINN-CAMERA",
           "VVIINN-PRIVACY-BADGE",
           "VVIINN-MODAL",
           "VVIINN-TEXT-SEARCH",
