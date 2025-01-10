@@ -727,6 +727,7 @@ export class VviinnResults {
               locale={this.locale}
               favoriteShow={this.favoriteShow}
               campaigns={this.oneClickDiscoveryCampaigns}
+              showInWidget={this.showInWidget}
             >
               {this.renderProductCardSlots()}
               {this.renderVprIconSlot()}
