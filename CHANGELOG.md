@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.145.0](https://github.com/vviinn/widgets/compare/v2.144.2...v2.145.0) (2025-01-10)
+
+
+### Features
+
+* Camera uploading for Search Bar's extended mode ([b76e300](https://github.com/vviinn/widgets/commit/b76e300c2823c7e6af58d30991d98e38986aaf75))
+* Change the teaser text of Search Modal ([c5af5d8](https://github.com/vviinn/widgets/commit/c5af5d8e90e86f37bf751970b9784dd288958723))
+* Components supports image uploading from Search Modal ([e89e2c1](https://github.com/vviinn/widgets/commit/e89e2c132480bcb249a8de629d7ccb915989b7a2))
+* Refactor Search Bar modes, delete 'upload' mode ([599556b](https://github.com/vviinn/widgets/commit/599556b7380f749e907706cf3a14ad6a4d4c6e15))
+
 ### [2.144.2](https://github.com/vviinn/widgets/compare/v2.144.1...v2.144.2) (2025-01-10)
 
 
