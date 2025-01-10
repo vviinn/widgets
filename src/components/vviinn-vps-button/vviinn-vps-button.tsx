@@ -187,8 +187,10 @@ export class VviinnVpsButton {
   };
 
   @Listen("vviinnWidgetClose")
-  handleModalClosed() {
-    this.buttonPressed = false;
+  handleModalClosed({ detail }: CustomEvent<BasicEventData>) {
+    if (detail.widgetType === "VPS") {
+      this.buttonPressed = false;
+    }
   }
 
   componentWillLoad() {

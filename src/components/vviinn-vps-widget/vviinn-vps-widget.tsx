@@ -668,10 +668,6 @@ export class VviinnVpsWidget {
     this.trackWidgetEvent("close");
   }
 
-  LinkText = ({ href, children }) => {
-    return <a href={href || ""}>{children}</a>;
-  };
-
   render() {
     return (
       <Host
