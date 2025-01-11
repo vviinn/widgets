@@ -28,8 +28,8 @@ type ZoomCapabilities = {
 };
 
 @Component({
-  tag: "vviinn-example-image",
-  styleUrl: "vviinn-example-image.css",
+  tag: "vviinn-camera",
+  styleUrl: "vviinn-camera.css",
   shadow: true,
 })
 export class VviinnExampleImage {
@@ -40,6 +40,7 @@ export class VviinnExampleImage {
   @Prop() basicEventData: BasicEventData;
   @Prop() srcObject: MediaStream;
   @Prop() cameraButtonClicked: boolean = false;
+  @Prop() useComponentsStore: boolean = false;
 
   @State() selected: boolean = false;
   @State() videoInitialized: boolean = false;
@@ -177,10 +178,15 @@ export class VviinnExampleImage {
     file = await toFile(dataURI);
 
     pipe(
-      await processSelectedFile("widget")(file),
+      await processSelectedFile(
+        this.useComponentsStore ? "components" : "widget"
+      )(file),
       E.match(
         () => this.vviinnNoResult.emit(this.basicEventData),
-        () => this.vviinnImageUploadFinished.emit()
+        ({ links }) =>
+          this.vviinnImageUploadFinished.emit({
+            searchId: links.self.href,
+          })
       )
     );
 

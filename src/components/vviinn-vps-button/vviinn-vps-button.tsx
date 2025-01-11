@@ -12,7 +12,6 @@ import {
 import { version } from "../../../package.json";
 import {
   SearchModalCameraIcon,
-  SearchModalUploadIcon,
   SearchModalFullSearchIcon,
   SearchModalImageSearchIcon,
 } from "../vviinn-icons";
@@ -133,6 +132,8 @@ export class VviinnVpsButton {
 
   /** @internal */
   @Prop() apiPath?: string = "https://api.vviinn.com";
+  /** @internal */
+  @Prop() useComponentsStore?: boolean = false;
 
   @State() buttonPressed: boolean = false;
 
@@ -190,8 +191,10 @@ export class VviinnVpsButton {
   };
 
   @Listen("vviinnWidgetClose")
-  handleModalClosed() {
-    this.buttonPressed = false;
+  handleModalClosed({ detail }: CustomEvent<BasicEventData>) {
+    if (detail.widgetType === "VPS") {
+      this.buttonPressed = false;
+    }
   }
 
   componentWillLoad() {
@@ -237,8 +240,6 @@ export class VviinnVpsButton {
           <slot>
             {this.mode === "camera" ? (
               <SearchModalCameraIcon />
-            ) : this.mode === "upload" ? (
-              <SearchModalUploadIcon />
             ) : this.textSearchShow ? (
               <SearchModalFullSearchIcon />
             ) : (
@@ -279,6 +280,7 @@ export class VviinnVpsButton {
           oneClickDiscoveryMode={this.oneClickDiscoveryMode}
           oneClickDiscoveryCampaigns={this.oneClickDiscoveryCampaigns}
           favoriteShow={this.favoriteShow}
+          useComponentsStore={this.useComponentsStore}
           parentSlots={this.slots}
         />
       </Host>
