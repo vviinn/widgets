@@ -66,6 +66,7 @@ import {
 import { getCustomLabels } from "../../recommendation";
 import { productCardParts } from "../../cssParts";
 import { findSlotElements, getSlotNames } from "../../dom";
+import { OneClickDiscoveryResultsMode } from "../../widget/types";
 
 /**
  * @part product-card - Product Card itself.
@@ -191,7 +192,7 @@ export class VviinnResults {
   /** True when we use vviinn-results inside the widget */
   @Prop() showInWidget?: boolean = false;
   /** One-click Discovery Mode */
-  @Prop() oneClickDiscoveryMode?: "modal" | "append-grid" | "append-slider";
+  @Prop() oneClickDiscoveryMode?: OneClickDiscoveryResultsMode;
   /** Comma-separated list of campaign IDs */
   @Prop() oneClickDiscoveryCampaigns: string = "";
 
