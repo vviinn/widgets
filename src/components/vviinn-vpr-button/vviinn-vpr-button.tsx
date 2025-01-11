@@ -106,7 +106,7 @@ export class VviinnVprButton {
   /** The ratio of each recommended product image */
   @Prop() imageRatio: number = 1;
   /** Items amount in set mode grid */
-  @Prop() setItemsAmount?: number;
+  @Prop() setItemsAmount?: number = 4;
   /** Optional for custom CSS. It will overwrite all other settings */
   @Prop() cssUrl: string | null = null;
   /**  The currency sign is displayed after the price */
