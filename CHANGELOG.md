@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.145.2](https://github.com/vviinn/widgets/compare/v2.145.1...v2.145.2) (2025-01-11)
+
+
+### Bug Fixes
+
+* Storybook update to 8.4.7 ([26d8925](https://github.com/vviinn/widgets/commit/26d8925dc5b9afe7bb47f26f75357b6cb0d95490))
+
 ### [2.145.1](https://github.com/vviinn/widgets/compare/v2.145.0...v2.145.1) (2025-01-11)
 
 
