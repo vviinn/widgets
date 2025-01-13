@@ -27,13 +27,15 @@ steps:
     args:
       - '-c'
       - |
+        echo "Cleaning node_modules..."
+        rm -rf node_modules
         if [ "$_ENVIRONMENT" = "stage" ]
         then
           cp -r /widgets .
           npm pkg set dependencies.vviinn-widgets="./widgets"
         fi
         echo "Commit Hash: $(git rev-parse HEAD)"
-        npm install --omit=dev
+        npm install --production=false
         npm run build-storybook
     volumes:
       - name: 'widgets_local_build'
