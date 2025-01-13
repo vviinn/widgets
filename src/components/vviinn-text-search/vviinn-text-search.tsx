@@ -14,8 +14,9 @@ import {
   searchState,
   componentsState,
   SearchStoreName,
+  SearchStore,
 } from "../../store/search.store";
-import { SearchModalUploadIcon, TextSearchIcon } from "../vviinn-icons";
+import { TextSearchIcon } from "../vviinn-icons";
 import { slotChangeListener } from "../customized-slots";
 import {
   ResetSelectedFiltersEventData,
@@ -26,7 +27,7 @@ import {
 } from "../../recommendation/events";
 import i18next from "i18next";
 import { Locale, resources } from "../../locale";
-import { TextSearchMode } from "../../widget/types";
+import { SearchBarMode } from "../../widget/types";
 import { TextSearchResponse } from "../../interfaces/search";
 import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/lib/function";
@@ -75,8 +76,8 @@ export class VviinnTextSearch {
   @Prop() token: string;
   /** The locale for currency formatting and text localization */
   @Prop() locale: Locale = "de-DE";
-  /** Default text search or text search with an image upload button */
-  @Prop() mode: TextSearchMode = "text";
+  /** Basic or extended text search with search modal and speech recognition */
+  @Prop() mode: SearchBarMode = "basic";
   /** True, when used inside the widget */
   @Prop() showInWidget?: boolean = false;
   /** Query for the text search passed from widget */
@@ -92,9 +93,7 @@ export class VviinnTextSearch {
   @State() showTooltip = false;
 
   private isShowPreloader = () =>
-    this.showInWidget
-      ? searchState.loading && searchState.searchType === "text"
-      : this.isLoading;
+    this.state.loading && this.state.searchType === "text";
 
   private showLoader = () => (this.isLoading = true);
   private hideLoader = () => (this.isLoading = false);
@@ -107,6 +106,7 @@ export class VviinnTextSearch {
     this.showTooltip = show;
   };
 
+  private state?: SearchStore;
   private storeName?: SearchStoreName;
 
   private triggerTooltipStart: Timeout;
@@ -129,8 +129,9 @@ export class VviinnTextSearch {
   );
 
   connectedCallback() {
-    if (this.token) componentsState.token = this.token;
     this.storeName = this.showInWidget ? "widget" : "components";
+    this.state = this.showInWidget ? searchState : componentsState;
+    if (this.token) this.state.token = this.token;
 
     document.addEventListener("resultsSearchFinished", this.hideLoader);
   }
@@ -158,7 +159,7 @@ export class VviinnTextSearch {
 
   @Listen("vviinnImageUploadFinished")
   imageUploadFinished({ detail }: SearchIdEvent) {
-    if (!this.showInWidget && this.mode === "upload") {
+    if (!this.showInWidget) {
       this.showLoader();
       this.vviinnSearchIdReceived.emit({ searchId: detail.searchId });
     }
@@ -242,36 +243,37 @@ export class VviinnTextSearch {
             onInput={(event) => this.handleInputChange(event)}
             onKeyUp={(event) => this.handleKeyPress(event as KeyboardEvent)}
           />
-          {this.mode === "upload" ? (
-            <vviinn-image-selector
-              apiPath={this.apiPath}
-              showInWidget={this.showInWidget}
-              uploadStartedHandler={this.showLoader.bind(this)}
-            >
-              <span slot="upload-button-text" class="upload-button-text">
-                <SearchModalUploadIcon />
-              </span>
-            </vviinn-image-selector>
-          ) : (
+
+          {this.mode === "extended" && (
+            <vviinn-vps-button
+              token={this.token}
+              addStyle={false}
+              useComponentsStore={true}
+            />
+          )}
+
+          {this.mode === "basic" && (
             <slot name="vviinn-text-search-actions"></slot>
           )}
-          {this.recognition && (
-            <button
-              class="speech-button"
-              part="speech-button"
-              onClick={() => this.handleSpeech()}
-            >
-              <MicIcon />
-              {this.isShowRecording() && (
-                <span class="recording-indicator"></span>
-              )}
-            </button>
-          )}
+
+          {(this.mode === "extended" || this.showInWidget) &&
+            this.recognition && (
+              <button
+                class="speech-button"
+                part="speech-button"
+                onClick={() => this.handleSpeech()}
+              >
+                <MicIcon />
+                {this.isShowRecording() && (
+                  <span class="recording-indicator"></span>
+                )}
+              </button>
+            )}
           <button
             class="text-search-button"
             part="text-search-button"
             onClick={() => this.handleTextSearch()}
-            disabled={searchState.loading}
+            disabled={this.state.loading}
           >
             {this.isShowPreloader() ? (
               <vviinn-preloader />

@@ -2,6 +2,51 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.145.5](https://github.com/vviinn/widgets/compare/v2.145.4...v2.145.5) (2025-01-13)
+
+
+### Bug Fixes
+
+* Cloudbuild pipeline improvements ([cb282c4](https://github.com/vviinn/widgets/commit/cb282c43183bbec289ea9d5059597fef896bdda4))
+
+### [2.145.4](https://github.com/vviinn/widgets/compare/v2.145.3...v2.145.4) (2025-01-13)
+
+
+### Bug Fixes
+
+* Clear node_modules for Storybook before installing it in Cloud and echoing commit hash in the console ([e2071e2](https://github.com/vviinn/widgets/commit/e2071e2d6f3a2787c7365a8ad6bfcc2df3f63502))
+
+### [2.145.3](https://github.com/vviinn/widgets/compare/v2.145.2...v2.145.3) (2025-01-13)
+
+
+### Bug Fixes
+
+* Add fixed esbuild version 0.24.0 for dependencies ([5bedc76](https://github.com/vviinn/widgets/commit/5bedc76f557ddc52d46656de4e8196150a0e2f1e))
+
+### [2.145.2](https://github.com/vviinn/widgets/compare/v2.145.1...v2.145.2) (2025-01-11)
+
+
+### Bug Fixes
+
+* Storybook update to 8.4.7 ([26d8925](https://github.com/vviinn/widgets/commit/26d8925dc5b9afe7bb47f26f75357b6cb0d95490))
+
+### [2.145.1](https://github.com/vviinn/widgets/compare/v2.145.0...v2.145.1) (2025-01-11)
+
+
+### Bug Fixes
+
+* Storybook audit fix and added @babel/preset-env plugin ([0a4a5a9](https://github.com/vviinn/widgets/commit/0a4a5a99431fc549bcd6c1ab9028ab8810acda5e))
+
+## [2.145.0](https://github.com/vviinn/widgets/compare/v2.144.2...v2.145.0) (2025-01-10)
+
+
+### Features
+
+* Camera uploading for Search Bar's extended mode ([b76e300](https://github.com/vviinn/widgets/commit/b76e300c2823c7e6af58d30991d98e38986aaf75))
+* Change the teaser text of Search Modal ([c5af5d8](https://github.com/vviinn/widgets/commit/c5af5d8e90e86f37bf751970b9784dd288958723))
+* Components supports image uploading from Search Modal ([e89e2c1](https://github.com/vviinn/widgets/commit/e89e2c132480bcb249a8de629d7ccb915989b7a2))
+* Refactor Search Bar modes, delete 'upload' mode ([599556b](https://github.com/vviinn/widgets/commit/599556b7380f749e907706cf3a14ad6a4d4c6e15))
+
 ### [2.144.2](https://github.com/vviinn/widgets/compare/v2.144.1...v2.144.2) (2025-01-10)
 
 

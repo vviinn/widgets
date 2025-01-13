@@ -116,6 +116,11 @@ export { searchState, componentsState };
 const useStore = (store: SearchStoreName) =>
   store === "widget" ? searchState : componentsState;
 
+export const resetStore = (store: SearchStoreName) => {
+  const state = useStore(store);
+  Object.assign(state, storeDefaults);
+};
+
 const updateState =
   (store: SearchStoreName) => async (response: SearchSession) => {
     const state = useStore(store);
