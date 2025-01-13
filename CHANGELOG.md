@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.145.4](https://github.com/vviinn/widgets/compare/v2.145.3...v2.145.4) (2025-01-13)
+
+
+### Bug Fixes
+
+* Clear node_modules for Storybook before installing it in Cloud and echoing commit hash in the console ([e2071e2](https://github.com/vviinn/widgets/commit/e2071e2d6f3a2787c7365a8ad6bfcc2df3f63502))
+
 ### [2.145.3](https://github.com/vviinn/widgets/compare/v2.145.2...v2.145.3) (2025-01-13)
 
 
