@@ -1,7 +1,6 @@
-import { StorybookConfig } from "@storybook/web-components-webpack5";
 import { resolve } from "path";
 
-const config: StorybookConfig = {
+const config = {
   stories: [
     "../stories/*.stories.@(js|jsx|ts|tsx)",
     "../documentation/**/*.mdx",
