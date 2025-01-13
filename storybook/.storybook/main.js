@@ -1,7 +1,6 @@
-import { StorybookConfig } from "@storybook/web-components-webpack5";
 import { resolve } from "path";
 
-const config: StorybookConfig = {
+const config = {
   stories: [
     "../stories/*.stories.@(js|jsx|ts|tsx)",
     "../documentation/**/*.mdx",
@@ -11,7 +10,7 @@ const config: StorybookConfig = {
     "@storybook/addon-essentials",
     "@storybook/addon-webpack5-compiler-babel",
     "../addons/docs-rendered/register.ts",
-    "@storybook/addon-mdx-gfm"
+    "@storybook/addon-mdx-gfm",
   ],
   core: {
     disableTelemetry: true,

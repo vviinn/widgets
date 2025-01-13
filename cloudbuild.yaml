@@ -35,7 +35,7 @@ steps:
           npm pkg set dependencies.vviinn-widgets="./widgets"
         fi
         echo "Commit Hash: $(git rev-parse HEAD)"
-        npm install --omit=dev
+        npm install --production=false
         npm run build-storybook
     volumes:
       - name: 'widgets_local_build'
