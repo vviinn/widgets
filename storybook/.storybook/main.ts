@@ -11,7 +11,7 @@ const config: StorybookConfig = {
     "@storybook/addon-essentials",
     "@storybook/addon-webpack5-compiler-babel",
     "../addons/docs-rendered/register.ts",
-    "@storybook/addon-mdx-gfm"
+    "@storybook/addon-mdx-gfm",
   ],
   core: {
     disableTelemetry: true,
