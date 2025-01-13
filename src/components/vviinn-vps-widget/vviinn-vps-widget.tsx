@@ -53,7 +53,11 @@ import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 import { videoStreamSettings } from "../../video/settings";
 import { Recommendation } from "../../interfaces/recommendation";
 import { checkDeviceType } from "../../helpers";
-import { UploadSource, VisualSearchMode } from "../../widget/types";
+import {
+  OneClickDiscoveryAppendMode,
+  UploadSource,
+  VisualSearchMode,
+} from "../../widget/types";
 import {
   extendedFiltersParts,
   filtersParts,
@@ -162,7 +166,7 @@ export class VviinnVpsWidget {
   /** Show or hide the One-click Discovery, will be deprecated, use oneClickDiscoveryMode instead */
   @Prop() oneClickDiscoveryShow = false;
   /** One click Discovery mode, restricted to append only (no modal supported for this component)*/
-  @Prop() oneClickDiscoveryMode?: "append-grid" | "append-slider";
+  @Prop() oneClickDiscoveryMode?: OneClickDiscoveryAppendMode;
   /** Comma-separated list of campaign IDs */
   @Prop() oneClickDiscoveryCampaigns: string = "";
   /** Wrap the Product Card's price values in the container. */

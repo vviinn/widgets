@@ -80,7 +80,7 @@ export class RecommendationsSidebar {
   /** @internal */
   @Prop() showInModal: boolean = false;
 
-  @State() state: SidebarState = "idle";
+  @State() sidebarState: SidebarState = "idle";
   @State() sourceProduct?: Recommendation;
 
   @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
@@ -108,8 +108,8 @@ export class RecommendationsSidebar {
 
     if (!sidebarRect) return;
 
-    if (this.showInModal && !isClickedInRectBound(event, sidebarRect)) {
-      this.state = "closed";
+    if ((this.showInModal && !isClickedInRectBound(event, sidebarRect)) {
+      this.sidebarState = "closed";
     }
   }
 
@@ -121,7 +121,7 @@ export class RecommendationsSidebar {
   private getClassMap() {
     return {
       [this.position]: true,
-      [this.state]: true,
+      [this.sidebarState]: true,
       "no-fixed": this.showInCustomContainer,
     };
   }
@@ -163,7 +163,7 @@ export class RecommendationsSidebar {
               </span>
               <button
                 class="close-sidebar"
-                onClick={() => (this.state = "closed")}
+                onClick={() => (this.sidebarState = "closed")}
                 part="close-sidebar"
               >
                 <CrossIcon />
@@ -183,7 +183,7 @@ export class RecommendationsSidebar {
               mode={this.mode}
               campaign-type={this.campaignType}
               useCarousel={this.useCarousel}
-              onVviinnRecommendationsLoaded={() => (this.state = "open")}
+              onVviinnRecommendationsLoaded={() => (this.sidebarState = "open")}
               showScroll={this.widgetScrollbar}
               campaigns={this.campaigns}
               color={this.color}
@@ -199,8 +199,8 @@ export class RecommendationsSidebar {
               excluded={this.excluded}
               productDetailsNewTab={this.productDetailsNewTab}
               productDetailsRedirect={this.productDetailsRedirect}
-              closed={this.state === "closed"}
-              opened={this.state === "open"}
+              closed={this.sidebarState === "closed"}
+              opened={this.sidebarState === "open"}
               addToBasketShow={this.addToBasketShow}
               cssUrl={this.cssUrl}
               showFilters={this.showFilters}

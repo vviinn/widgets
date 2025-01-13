@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.145.8](https://github.com/vviinn/widgets/compare/v2.145.7...v2.145.8) (2025-01-13)
+
+
+### Bug Fixes
+
+* Add a standalone mode for One-click discovery to show a large icon ([ea09c4b](https://github.com/vviinn/widgets/commit/ea09c4b8f6ab344ef2d9d7395ea992cc0ae4fa13))
+* Fix arrow styles in appended One-click discovery ([6243bfe](https://github.com/vviinn/widgets/commit/6243bfea6699a39f8d43396d39a107887160b4d1))
+* One-click discovery modal behavior ([0eb266d](https://github.com/vviinn/widgets/commit/0eb266d1759a0e5bf5693a3c02f2d9495f5ea48b))
+* Synchronize appended grid layout with vviinn-results ([b754357](https://github.com/vviinn/widgets/commit/b754357afdbdb63dfc6e8fdcdc06ab8f1fd1a58a))
+
 ### [2.145.7](https://github.com/vviinn/widgets/compare/v2.145.6...v2.145.7) (2025-01-13)
 
 
