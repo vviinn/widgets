@@ -27,8 +27,6 @@ steps:
     args:
       - '-c'
       - |
-        echo "Cleaning node_modules..."
-        rm -rf node_modules
         if [ "$_ENVIRONMENT" = "stage" ]
         then
           cp -r /widgets .
