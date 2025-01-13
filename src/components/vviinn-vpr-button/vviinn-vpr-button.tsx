@@ -19,6 +19,7 @@ import {
 } from "../../recommendation/events";
 import { Locale } from "../../locale";
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
+import { OneClickDiscoveryMode } from "../../widget/types";
 /**
  * @part button - Clickable button element.
  * @part vviinn-button - Button element container.
@@ -106,7 +107,7 @@ export class VviinnVprButton {
   /** The ratio of each recommended product image */
   @Prop() imageRatio: number = 1;
   /** Items amount in set mode grid */
-  @Prop() setItemsAmount?: number;
+  @Prop() setItemsAmount?: number = 4;
   /** Optional for custom CSS. It will overwrite all other settings */
   @Prop() cssUrl: string | null = null;
   /**  The currency sign is displayed after the price */
@@ -153,7 +154,7 @@ export class VviinnVprButton {
   @Prop() appendSidebarToElement: HTMLElement;
 
   /** One click Discovery mode*/
-  @Prop() oneClickDiscoveryMode?: "modal" | "append-grid" | "append-slider";
+  @Prop() oneClickDiscoveryMode?: OneClickDiscoveryMode = "standalone";
 
   /** @internal */
   @Prop() apiPath?: string = "https://api.vviinn.com";
@@ -189,6 +190,12 @@ export class VviinnVprButton {
   @Event() vviinnAddToBasket: EventEmitter<BasicEventData>;
 
   @State() targetAppendSidebarTo: HTMLElement;
+
+  private iconSideSize?: number;
+
+  connectedCallback() {
+    this.iconSideSize = this.oneClickDiscoveryMode === "standalone" ? 24 : 14;
+  }
 
   componentWillLoad() {
     if (this.appendSidebarToElement) {
@@ -235,9 +242,15 @@ export class VviinnVprButton {
         <vviinn-button addStyle={this.addStyle} part="vviinn-button">
           <slot>
             {this.campaignType === "VCS" ? (
-              <CrossSellingIcon width={14} height={14} />
+              <CrossSellingIcon
+                width={this.iconSideSize}
+                height={this.iconSideSize}
+              />
             ) : (
-              <SimilarProductsIcon width={14} height={14} />
+              <SimilarProductsIcon
+                width={this.iconSideSize}
+                height={this.iconSideSize}
+              />
             )}
           </slot>
         </vviinn-button>

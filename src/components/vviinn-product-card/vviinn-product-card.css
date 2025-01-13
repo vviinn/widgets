@@ -398,13 +398,13 @@ vviinn-energy-label {
 
 .footer-arrow {
   position: absolute;
-  bottom: -35px;
+  bottom: -34.5px;
   left: 50%;
   transform: translate(-50%, 0) rotate(90deg);
 
   width: 0;
   height: 0;
-  border-top: 22px solid transparent;
+  border-top: 22.5px solid transparent;
   border-bottom: 22px solid transparent;
   border-right: 22px solid var(--color-border-02);
   z-index: 99;
@@ -413,9 +413,9 @@ vviinn-energy-label {
   content: "";
   width: 0;
   height: 0;
-  border-top: 21px solid transparent;
+  border-top: 21.5px solid transparent;
   border-bottom: 21px solid transparent;
-  border-right: 21px solid #ffffff;
+  border-right: 21.5px solid #ffffff;
   position: absolute;
   top: -21px;
   left: 1px;

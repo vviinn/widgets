@@ -25,7 +25,10 @@ import {
 import { campaignTypeNames } from "../../campaign/Campaign";
 import { Locale } from "../../locale";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
-import { VisualSearchMode } from "../../widget/types";
+import {
+  OneClickDiscoveryAppendMode,
+  VisualSearchMode,
+} from "../../widget/types";
 import { findSlotElements } from "../../dom";
 
 /**
@@ -121,7 +124,7 @@ export class VviinnVpsButton {
   /** Show or hide the One-click Discovery, will be deprecated, use oneClickDiscoveryMode instead */
   @Prop() oneClickDiscoveryShow = false;
   /** One click Discovery mode, restricted to append only (no modal supported for this component)*/
-  @Prop() oneClickDiscoveryMode?: "append-grid" | "append-slider";
+  @Prop() oneClickDiscoveryMode?: OneClickDiscoveryAppendMode;
   /** Comma-separated list of campaign IDs */
   @Prop() oneClickDiscoveryCampaigns: string = "";
   /** Wrap the Product Card's price values in the container. */

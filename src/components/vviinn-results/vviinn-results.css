@@ -81,7 +81,7 @@ products.hidden {
     position: static;
     padding: 0;
     width: unset;
-    grid-gap: 32px 16px;
+    grid-gap: 24px 16px;
     justify-content: center;
   }
 
