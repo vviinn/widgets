@@ -78,7 +78,7 @@ export class RecommendationsSidebar {
   /** @internal */
   @Prop() showingInButton: boolean;
   /** @internal */
-  @Prop() showInWidget: boolean = false;
+  @Prop() showInModal: boolean = false;
 
   @State() state: SidebarState = "idle";
   @State() sourceProduct?: Recommendation;
@@ -108,7 +108,7 @@ export class RecommendationsSidebar {
 
     if (!sidebarRect) return;
 
-    if (!this.showInWidget && !isClickedInRectBound(event, sidebarRect)) {
+    if (this.showInModal && !isClickedInRectBound(event, sidebarRect)) {
       this.state = "closed";
     }
   }
