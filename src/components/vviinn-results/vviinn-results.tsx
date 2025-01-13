@@ -422,13 +422,14 @@ export class VviinnResults {
   };
 
   connectedCallback() {
-    resetStore("components");
+    if (!this.showInWidget) resetStore("components");
+    this.state = this.showInWidget ? searchState : componentsState;
+    this.storeName = this.showInWidget ? "widget" : "components";
+
     state.apiPath = this.apiPath; //FIXME: #36877
 
     if (this.token) componentsState.token = this.token;
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
-    this.state = this.showInWidget ? searchState : componentsState;
-    this.storeName = this.showInWidget ? "widget" : "components";
 
     if (!this.uiSessionId) {
       this.uiSessionId = uuidv4();
@@ -466,7 +467,7 @@ export class VviinnResults {
   }
 
   disconnectedCallback() {
-    resetStore("components");
+    resetStore(this.storeName);
 
     document.removeEventListener(
       "vviinnSearchIdReceived",
