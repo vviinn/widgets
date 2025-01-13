@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.145.3](https://github.com/vviinn/widgets/compare/v2.145.2...v2.145.3) (2025-01-13)
+
+
+### Bug Fixes
+
+* Add fixed esbuild version 0.24.0 for dependencies ([5bedc76](https://github.com/vviinn/widgets/commit/5bedc76f557ddc52d46656de4e8196150a0e2f1e))
+
 ### [2.145.2](https://github.com/vviinn/widgets/compare/v2.145.1...v2.145.2) (2025-01-11)
 
 
