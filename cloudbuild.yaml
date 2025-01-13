@@ -1,8 +1,12 @@
 steps:
   - id: 'install_widgets'
     name: node
-    entrypoint: npm
-    args: ['install']
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        rm -rf node_modules/
+        npm install
     dir: '/workspace'
   - id: 'build_widgets'
     name: node
@@ -23,11 +27,14 @@ steps:
     args:
       - '-c'
       - |
+        echo "Cleaning node_modules..."
+        rm -rf node_modules
         if [ "$_ENVIRONMENT" = "stage" ]
         then
           cp -r /widgets .
           npm pkg set dependencies.vviinn-widgets="./widgets"
         fi
+        echo "Commit Hash: $(git rev-parse HEAD)"
         npm install --production=false
         npm run build-storybook
     volumes:

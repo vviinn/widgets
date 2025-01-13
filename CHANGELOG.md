@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.145.6](https://github.com/vviinn/widgets/compare/v2.145.5...v2.145.6) (2025-01-13)
+
+
+### Bug Fixes
+
+* Fix Storybook's build in Google Cloud ([7d2429f](https://github.com/vviinn/widgets/commit/7d2429facc8e3859c3b9b10305a912eee58f875a))
+
+### [2.145.5](https://github.com/vviinn/widgets/compare/v2.145.4...v2.145.5) (2025-01-13)
+
+
+### Bug Fixes
+
+* Cloudbuild pipeline improvements ([cb282c4](https://github.com/vviinn/widgets/commit/cb282c43183bbec289ea9d5059597fef896bdda4))
+
+### [2.145.4](https://github.com/vviinn/widgets/compare/v2.145.3...v2.145.4) (2025-01-13)
+
+
+### Bug Fixes
+
+* Clear node_modules for Storybook before installing it in Cloud and echoing commit hash in the console ([e2071e2](https://github.com/vviinn/widgets/commit/e2071e2d6f3a2787c7365a8ad6bfcc2df3f63502))
+
+### [2.145.3](https://github.com/vviinn/widgets/compare/v2.145.2...v2.145.3) (2025-01-13)
+
+
+### Bug Fixes
+
+* Add fixed esbuild version 0.24.0 for dependencies ([5bedc76](https://github.com/vviinn/widgets/commit/5bedc76f557ddc52d46656de4e8196150a0e2f1e))
+
 ### [2.145.2](https://github.com/vviinn/widgets/compare/v2.145.1...v2.145.2) (2025-01-11)
 
 
