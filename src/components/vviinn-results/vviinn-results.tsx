@@ -417,8 +417,10 @@ export class VviinnResults {
   };
 
   private widgetCloseHandler = () => {
-    this.oneClickDiscoveryAppendIndex = undefined;
-    this.oneClickDiscoverySelectedIndex = undefined;
+    if (this.showInWidget) {
+      this.oneClickDiscoveryAppendIndex = undefined;
+      this.oneClickDiscoverySelectedIndex = undefined;
+    }
   };
 
   connectedCallback() {
