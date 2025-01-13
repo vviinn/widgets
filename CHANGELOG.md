@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.145.5](https://github.com/vviinn/widgets/compare/v2.145.4...v2.145.5) (2025-01-13)
+
+
+### Bug Fixes
+
+* Cloudbuild pipeline improvements ([cb282c4](https://github.com/vviinn/widgets/commit/cb282c43183bbec289ea9d5059597fef896bdda4))
+
 ### [2.145.4](https://github.com/vviinn/widgets/compare/v2.145.3...v2.145.4) (2025-01-13)
 
 
