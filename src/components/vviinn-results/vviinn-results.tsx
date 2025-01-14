@@ -210,7 +210,7 @@ export class VviinnResults {
   @Prop() buttonElementId?: string;
   /** Element Id, passed from vps-widget */
   /** @internal */
-  @Prop() widgetElementId?: string;
+  @Prop({ mutable: true }) widgetElementId?: string;
   /** @internal */
   @Prop() showAspectRatioError?: boolean;
   /** @internal */
@@ -458,6 +458,7 @@ export class VviinnResults {
     if (!this.showInWidget) resetStore("components");
     this.state = this.showInWidget ? searchState : componentsState;
     this.storeName = this.showInWidget ? "widget" : "components";
+    if (this.el.id) this.widgetElementId = this.el.id;
 
     state.apiPath = this.apiPath; //FIXME: #36877
 
