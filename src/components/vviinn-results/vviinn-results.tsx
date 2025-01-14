@@ -800,7 +800,7 @@ export class VviinnResults {
           }}
           id="vviinn-results-products"
         >
-          {this.renderResults()}
+          {resultsLength > 0 && this.renderResults()}
           <div
             id="one-click-discovery-append"
             style={{
