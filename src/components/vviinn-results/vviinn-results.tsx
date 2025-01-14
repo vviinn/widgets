@@ -248,6 +248,11 @@ export class VviinnResults {
       this.isTextSearch = isTriggeredByText;
   };
 
+  private initResultEvents = () => {
+    this.state.resultLoaded = false;
+    this.state.resultViewed = false;
+  };
+
   /** @internal */
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
@@ -422,7 +427,9 @@ export class VviinnResults {
     if (this.trackingDeactivated) return;
     const { action, kind, customTrigger, isTriggeredByVpsWidget } = detail;
     const { campaignTypeId, ...rest } = this.getBasicEventData(customTrigger);
+
     if (customTrigger) this.setTextSearch(true, isTriggeredByVpsWidget);
+    this.initResultEvents();
 
     const filterEvent: FilterEvent = createFilterEvent({
       session_id: this.uiSessionId,

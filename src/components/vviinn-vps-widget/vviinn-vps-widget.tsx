@@ -444,7 +444,7 @@ export class VviinnVpsWidget {
   }
 
   @Listen("vviinnImageCrop")
-  trachSearchAreaChanges() {
+  cropAreaChanges() {
     this.initResultEvents();
     if (this.trackingDeactivated) return;
     const { campaignTypeId, ...rest } = this.getBasicEventData();
