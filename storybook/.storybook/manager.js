@@ -21,8 +21,8 @@ const appendIndustrySelect = () => {
     ];
 
     const selectList = document.createElement("select");
-    selectList.onchange = (e: Event) => {
-      const target = e.target as HTMLSelectElement;
+    selectList.onchange = (e) => {
+      const target = e.target;
       localStorage.setItem("vviinn-industries", target.value);
       location.reload();
     };
