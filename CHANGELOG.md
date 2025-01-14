@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.145.10](https://github.com/vviinn/widgets/compare/v2.145.9...v2.145.10) (2025-01-14)
+
+
+### Bug Fixes
+
+* if text search is active send tracking events as text search ([a21a6c2](https://github.com/vviinn/widgets/commit/a21a6c25892dc3f140957c5bbac9896b14b6c3d5))
+
 ### [2.145.9](https://github.com/vviinn/widgets/compare/v2.145.8...v2.145.9) (2025-01-14)
 
 
