@@ -243,7 +243,7 @@ export class VviinnVpsWidget {
   private overflow: string;
   private uiSessionId: string;
   private trackingApi: DefaultApi;
-  private imageSource: SearchImageSource | null = null;
+  private imageSource: SearchImageSource = "upload";
   private cameraAvailable: boolean = false;
   private isDesktop: boolean = false;
   private videoTrack: MediaStreamTrack | null = null;
