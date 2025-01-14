@@ -39,6 +39,7 @@ import Timeout = NodeJS.Timeout;
 /**
  * @part text-search-container - Container for the text search block.
  * @part text-search-input - Text search input.
+ * @part text-search-tooltip - Text search tooltip.
  * @part text-search-button - Text search input's search button.
  * @slot vviinn-text-search-icon - Icon of the text search block.
  * @part speech-button - Speech recognition button.
@@ -255,6 +256,7 @@ export class VviinnTextSearch {
           {this.mode === "extended" && (
             <vviinn-vps-button
               token={this.token}
+              locale={this.locale}
               addStyle={false}
               useComponentsStore={true}
             />

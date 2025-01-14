@@ -73,6 +73,7 @@ import {
 import { getCustomLabels } from "../../recommendation";
 import { productCardParts } from "../../cssParts";
 import { findSlotElements, getSlotNames } from "../../dom";
+import { OneClickDiscoveryResultsMode } from "../../widget/types";
 
 /**
  * @part product-card - Product Card itself.
@@ -198,7 +199,7 @@ export class VviinnResults {
   /** True when we use vviinn-results inside the widget */
   @Prop() showInWidget?: boolean = false;
   /** One-click Discovery Mode */
-  @Prop() oneClickDiscoveryMode?: "modal" | "append-grid" | "append-slider";
+  @Prop() oneClickDiscoveryMode?: OneClickDiscoveryResultsMode;
   /** Comma-separated list of campaign IDs */
   @Prop() oneClickDiscoveryCampaigns: string = "";
 
@@ -440,18 +441,21 @@ export class VviinnResults {
   };
 
   private widgetCloseHandler = () => {
-    this.oneClickDiscoveryAppendIndex = undefined;
-    this.oneClickDiscoverySelectedIndex = undefined;
+    if (this.showInWidget) {
+      this.oneClickDiscoveryAppendIndex = undefined;
+      this.oneClickDiscoverySelectedIndex = undefined;
+    }
   };
 
   connectedCallback() {
-    resetStore("components");
+    if (!this.showInWidget) resetStore("components");
+    this.state = this.showInWidget ? searchState : componentsState;
+    this.storeName = this.showInWidget ? "widget" : "components";
+
     state.apiPath = this.apiPath; //FIXME: #36877
 
     if (this.token) componentsState.token = this.token;
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
-    this.state = this.showInWidget ? searchState : componentsState;
-    this.storeName = this.showInWidget ? "widget" : "components";
 
     if (!this.uiSessionId) {
       this.uiSessionId = uuidv4();
@@ -491,7 +495,7 @@ export class VviinnResults {
   }
 
   disconnectedCallback() {
-    resetStore("components");
+    resetStore(this.storeName);
 
     document.removeEventListener(
       "vviinnSearchIdReceived",
@@ -757,6 +761,7 @@ export class VviinnResults {
               locale={this.locale}
               favoriteShow={this.favoriteShow}
               campaigns={this.oneClickDiscoveryCampaigns}
+              showInWidget={this.showInWidget}
             >
               {this.renderProductCardSlots()}
               {this.renderVprIconSlot()}
