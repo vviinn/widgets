@@ -108,7 +108,7 @@ export class RecommendationsSidebar {
 
     if (!sidebarRect) return;
 
-    if ((this.showInModal && !isClickedInRectBound(event, sidebarRect)) {
+    if (this.showInModal && !isClickedInRectBound(event, sidebarRect)) {
       this.sidebarState = "closed";
     }
   }
