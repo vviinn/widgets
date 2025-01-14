@@ -424,7 +424,12 @@ export class VviinnResults {
   private filtersTriggeredHandler = ({
     detail,
   }: CustomEvent<DynamicFilterInternalData>) => {
-    if (this.trackingDeactivated) return;
+    if (
+      this.trackingDeactivated ||
+      this.skipFiltersChanges(detail.isTriggeredByVpsWidget)
+    )
+      return;
+
     const { action, kind, customTrigger, isTriggeredByVpsWidget } = detail;
     const { campaignTypeId, ...rest } = this.getBasicEventData(customTrigger);
 
