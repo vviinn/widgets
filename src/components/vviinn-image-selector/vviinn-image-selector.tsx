@@ -12,6 +12,7 @@ import { pipe } from "fp-ts/lib/function";
 import { processSelectedFile, SearchStoreName } from "../../store/search.store";
 import {
   BasicEventData,
+  ImageUploadEventData,
   NoResultEventData,
   SearchIdEventData,
 } from "../../recommendation/events";
@@ -25,7 +26,7 @@ import {
   shadow: true,
 })
 export class VviinnImageSelector {
-  @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
+  @Event() vviinnImageUpload: EventEmitter<ImageUploadEventData>;
   /** Wrong image format, that isn’t .jpg, .jpeg, png */
   @Event() vviinnNoResult: EventEmitter<NoResultEventData>;
 
@@ -44,7 +45,10 @@ export class VviinnImageSelector {
   private fileInput: HTMLInputElement;
 
   private async handleInputChange(event: Event) {
-    this.vviinnImageUpload.emit(this.basicEventData);
+    this.vviinnImageUpload.emit({
+      ...this.basicEventData,
+      isTriggeredByVpsWidget: this.storeName === "widget",
+    });
     const input = event.target as HTMLInputElement;
 
     const processingResult = await processSelectedFile(this.storeName)(

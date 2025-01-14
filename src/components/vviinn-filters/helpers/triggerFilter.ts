@@ -28,6 +28,7 @@ export const triggerFilter = (
   vviinnFilterTriggered.emit({
     kind: selectedFilter.column,
     action,
+    isTriggeredByVpsWidget,
   });
 
   vviinnFiltersChanged.emit({
@@ -47,6 +48,7 @@ export const triggerResetFilters = (
 ) => {
   vviinnFilterTriggered.emit({
     action: "reset",
+    isTriggeredByVpsWidget,
   });
 
   vviinnFiltersChanged.emit({

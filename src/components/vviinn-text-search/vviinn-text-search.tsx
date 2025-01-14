@@ -20,10 +20,10 @@ import { TextSearchIcon } from "../vviinn-icons";
 import { slotChangeListener } from "../customized-slots";
 import {
   ResetSelectedFiltersEventData,
-  DynamicFilterTrackingData,
   SearchIdEvent,
   SearchIdEventData,
   TextSearchEventData,
+  DynamicFilterInternalData,
 } from "../../recommendation/events";
 import i18next from "i18next";
 import { Locale, resources } from "../../locale";
@@ -58,7 +58,7 @@ export class VviinnTextSearch {
   /** An image search ID was received (used by vviinn-results component) */
   @Event() vviinnSearchIdReceived: EventEmitter<SearchIdEventData>;
   /** A filter was triggered */
-  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
+  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterInternalData>;
 
   /** A text search response was received (used internally by vviinn-vps-widget) */
   /** @internal */
@@ -143,6 +143,14 @@ export class VviinnTextSearch {
     clearTimeout(this.triggerTooltipEnd);
   }
 
+  private trackTextSearch = () =>
+    this.vviinnFilterTriggered.emit({
+      kind: this.searchQuery,
+      action: "select",
+      customTrigger: "TPS",
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
+
   async componentWillLoad() {
     await i18next.init({
       lng: this.locale,
@@ -154,7 +162,9 @@ export class VviinnTextSearch {
       this.showLoader();
       this.vviinnTextSearchStarted.emit({
         query: this.searchQuery,
+        isTriggeredByVpsWidget: this.showInWidget,
       });
+      this.trackTextSearch();
     }
   }
 
@@ -195,11 +205,7 @@ export class VviinnTextSearch {
 
   private async handleTextSearch() {
     if (!this.searchQuery) return;
-    this.vviinnFilterTriggered.emit({
-      kind: this.searchQuery,
-      action: "select",
-      customTrigger: "TPS",
-    });
+    this.trackTextSearch();
     if (this.showInWidget) {
       const { requestId } = pipe(
         await makeTextSearchRequest(this.storeName, this.searchQuery),
@@ -212,7 +218,9 @@ export class VviinnTextSearch {
         requestId,
       });
 
-      this.vviinnSelectedFiltersReset.emit({ isTriggeredByVpsWidget: true });
+      this.vviinnSelectedFiltersReset.emit({
+        isTriggeredByVpsWidget: this.showInWidget,
+      });
     } else {
       this.showLoader();
       this.vviinnTextSearchStarted.emit({

@@ -9,7 +9,6 @@ import {
   Event,
   EventEmitter,
 } from "@stencil/core";
-import { version } from "../../../package.json";
 import {
   SearchModalCameraIcon,
   SearchModalFullSearchIcon,
@@ -18,11 +17,11 @@ import {
 import { SlotSkeleton } from "../customized-slots";
 import {
   BasicEventData,
+  ImageUploadEventData,
   ProductCardEventData,
   SelectFilterEventData,
   SelectObjectEventData,
 } from "../../recommendation/events";
-import { campaignTypeNames } from "../../campaign/Campaign";
 import { Locale } from "../../locale";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 import {
@@ -147,7 +146,7 @@ export class VviinnVpsButton {
   @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
 
   /** The image upload has started */
-  @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
+  @Event() vviinnImageUpload: EventEmitter<ImageUploadEventData>;
 
   /** The recommendation renders on the page */
   @Event() vviinnProductLoad: EventEmitter<ProductCardEventData>;
@@ -179,16 +178,6 @@ export class VviinnVpsButton {
   globalSlotsChanged: EventEmitter<any>;
 
   private slots?: HTMLSlotElement[] = [];
-
-  getBasicEventData = (): BasicEventData => {
-    return {
-      widgetType: "VPS",
-      campaignTypeId: "VPS",
-      campaignTypeName: campaignTypeNames["VPS"],
-      widgetId: this.el.id,
-      widgetVersion: version,
-    };
-  };
 
   @Listen("vviinnWidgetClose")
   handleModalClosed({ detail }: CustomEvent<BasicEventData>) {

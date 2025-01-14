@@ -19,6 +19,7 @@ import {
   FilterEvent,
   ResultLoadEvent,
   ResultViewEvent,
+  Widget,
 } from "vviinn-tracking-client-ts";
 import { version } from "../../../package.json";
 import {
@@ -33,13 +34,18 @@ import {
 } from "../../store/search.store";
 import { state } from "../../store/store";
 import { createTrackingApi } from "../../openApi";
-import { BasicEventData, Locale, Recommendation } from "../../components";
+import {
+  BasicEventData,
+  ImageUploadEventData,
+  Locale,
+  Recommendation,
+} from "../../components";
 import { campaignTypeNames } from "../../campaign/Campaign";
 import { TextSearchResponse } from "../../interfaces/search";
 import {
   ChangedFiltersEvent,
   ChangedFiltersEventData,
-  DynamicFilterTrackingData,
+  DynamicFilterInternalData,
   ProductCardEvent,
   ProductCardEventData,
   ProductEvent,
@@ -204,7 +210,7 @@ export class VviinnResults {
   @Prop() buttonElementId?: string;
   /** Element Id, passed from vps-widget */
   /** @internal */
-  @Prop() widgetElementId?: string;
+  @Prop({ mutable: true }) widgetElementId?: string;
   /** @internal */
   @Prop() showAspectRatioError?: boolean;
   /** @internal */
@@ -226,7 +232,7 @@ export class VviinnResults {
   @State() slotsReplaced: boolean;
   @State() oneClickDiscoveryAppendIndex: number;
   @State() oneClickDiscoverySelectedIndex: number;
-  @State() isTextSearch: boolean = this.textSearchQuery?.length > 0;
+  @State() isTextSearch: boolean = !!this.textSearchQuery?.length;
   @State() innerResults: Recommendation[] = [];
 
   private trackingApi: DefaultApi;
@@ -234,6 +240,18 @@ export class VviinnResults {
   private slots?: HTMLSlotElement[] = [];
   private state?: SearchStore;
   private storeName?: SearchStoreName;
+  private setTextSearch = (
+    isTriggeredByText: boolean,
+    isTriggeredByVpsWidget = false
+  ) => {
+    if (this.showInWidget === !!isTriggeredByVpsWidget)
+      this.isTextSearch = isTriggeredByText;
+  };
+
+  private initResultEvents = () => {
+    this.state.resultLoaded = false;
+    this.state.resultViewed = false;
+  };
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -325,6 +343,7 @@ export class VviinnResults {
   ) {
     if (!query) return;
     state.apiPath = this.apiPath; //FIXME: #36877
+    this.setTextSearch(true);
 
     return pipe(
       await makeTextSearchRequest(
@@ -366,6 +385,7 @@ export class VviinnResults {
 
   private textSearchStartedHandler = async ({ detail }: TextSearchEvent) => {
     this.innerTextSearchQuery = detail.query;
+    this.setTextSearch(true, detail.isTriggeredByVpsWidget);
 
     const { requestId } = await this.getTextSearchResults(
       this.innerTextSearchQuery
@@ -374,7 +394,7 @@ export class VviinnResults {
 
     this.resultsSearchFinished.emit();
     this.vviinnSelectedFiltersReset.emit({
-      isTriggeredByVpsWidget: false,
+      isTriggeredByVpsWidget: this.showInWidget,
     });
   };
 
@@ -403,18 +423,33 @@ export class VviinnResults {
 
   private filtersTriggeredHandler = ({
     detail,
-  }: CustomEvent<DynamicFilterTrackingData>) => {
-    if (this.trackingDeactivated) return;
-    this.isTextSearch = detail.customTrigger === "TPS";
-    const { campaignTypeId, ...rest } = this.getBasicEventData();
+  }: CustomEvent<DynamicFilterInternalData>) => {
+    if (
+      this.trackingDeactivated ||
+      this.skipFiltersChanges(detail.isTriggeredByVpsWidget)
+    )
+      return;
+
+    const { action, kind, customTrigger, isTriggeredByVpsWidget } = detail;
+    const { campaignTypeId, ...rest } = this.getBasicEventData(customTrigger);
+
+    if (customTrigger) this.setTextSearch(true, isTriggeredByVpsWidget);
+    this.initResultEvents();
 
     const filterEvent: FilterEvent = createFilterEvent({
       session_id: this.uiSessionId,
       typ: "filter_event",
+      action,
+      kind,
       ...rest,
-      ...detail,
     });
     this.trackingApi.trackEvent(filterEvent).then(this.setTrackingDeactivated);
+  };
+
+  private uploadTriggeredHandler = ({
+    detail,
+  }: CustomEvent<ImageUploadEventData>) => {
+    this.setTextSearch(false, detail.isTriggeredByVpsWidget);
   };
 
   private widgetCloseHandler = () => {
@@ -428,6 +463,7 @@ export class VviinnResults {
     if (!this.showInWidget) resetStore("components");
     this.state = this.showInWidget ? searchState : componentsState;
     this.storeName = this.showInWidget ? "widget" : "components";
+    if (this.el.id) this.widgetElementId = this.el.id;
 
     state.apiPath = this.apiPath; //FIXME: #36877
 
@@ -457,6 +493,8 @@ export class VviinnResults {
       "vviinnFilterTriggered",
       this.filtersTriggeredHandler
     );
+
+    document.addEventListener("vviinnImageUpload", this.uploadTriggeredHandler);
 
     document.addEventListener("vviinnWidgetClose", this.widgetCloseHandler);
 
@@ -635,15 +673,16 @@ export class VviinnResults {
     return productEvent;
   }
 
-  private getBasicEventData = (): BasicEventData => {
-    const activeCampaign = this.isTextSearch ? "TPS" : "VPS";
+  private getBasicEventData = (customTrigger?: Widget): BasicEventData => {
+    const textSearchCriteria = this.isTextSearch || customTrigger === "TPS";
+    const activeCampaign = textSearchCriteria ? "TPS" : "VPS";
     return {
       widgetType: activeCampaign,
       campaignTypeId: activeCampaign,
       campaignTypeName: campaignTypeNames[activeCampaign],
       widgetId: this.widgetElementId,
       widgetVersion: version,
-      widget: this.isTextSearch ? "TPS" : undefined,
+      widget: textSearchCriteria ? "TPS" : undefined,
     };
   };
 
@@ -774,7 +813,7 @@ export class VviinnResults {
           }}
           id="vviinn-results-products"
         >
-          {this.renderResults()}
+          {resultsLength > 0 && this.renderResults()}
           <div
             id="one-click-discovery-append"
             style={{
