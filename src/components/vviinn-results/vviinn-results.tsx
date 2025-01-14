@@ -418,8 +418,10 @@ export class VviinnResults {
   };
 
   private widgetCloseHandler = () => {
-    this.oneClickDiscoveryAppendIndex = undefined;
-    this.oneClickDiscoverySelectedIndex = undefined;
+    if (this.showInWidget) {
+      this.oneClickDiscoveryAppendIndex = undefined;
+      this.oneClickDiscoverySelectedIndex = undefined;
+    }
   };
 
   connectedCallback() {
@@ -733,6 +735,7 @@ export class VviinnResults {
               locale={this.locale}
               favoriteShow={this.favoriteShow}
               campaigns={this.oneClickDiscoveryCampaigns}
+              showInWidget={this.showInWidget}
             >
               {this.renderProductCardSlots()}
               {this.renderVprIconSlot()}
