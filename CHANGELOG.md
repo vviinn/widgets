@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.145.11](https://github.com/vviinn/widgets/compare/v2.145.10...v2.145.11) (2025-01-14)
+
+
+### Bug Fixes
+
+* Storybooks issues after fixing cloud build ([796dae0](https://github.com/vviinn/widgets/commit/796dae040c32a1981589d4d5bfcc8ffb58f5a4b8))
+
 ### [2.145.10](https://github.com/vviinn/widgets/compare/v2.145.9...v2.145.10) (2025-01-14)
 
 
