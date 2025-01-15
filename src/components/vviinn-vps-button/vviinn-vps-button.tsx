@@ -9,24 +9,26 @@ import {
   Event,
   EventEmitter,
 } from "@stencil/core";
-import { version } from "../../../package.json";
 import {
   SearchModalCameraIcon,
-  SearchModalUploadIcon,
   SearchModalFullSearchIcon,
   SearchModalImageSearchIcon,
 } from "../vviinn-icons";
 import { SlotSkeleton } from "../customized-slots";
 import {
   BasicEventData,
+  ImageUploadEventData,
   ProductCardEventData,
   SelectFilterEventData,
   SelectObjectEventData,
 } from "../../recommendation/events";
-import { campaignTypeNames } from "../../campaign/Campaign";
 import { Locale } from "../../locale";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
-import { VisualSearchMode } from "../../widget/types";
+import {
+  OneClickDiscoveryAppendMode,
+  VisualSearchMode,
+} from "../../widget/types";
+import { findSlotElements } from "../../dom";
 
 /**
  * @slot vviinn-teaser-text - Text on the widget's main screen.
@@ -39,12 +41,17 @@ import { VisualSearchMode } from "../../widget/types";
  * @slot vviinn-image-search-modal-title - Image search modal title.
  * @slot vviinn-text-search-icon - Icon of the text search block.
  * @slot vviinn-energy-label-data-sheet-text - Text of the data sheet link for the energy label.
+ * @slot vviinn-results-vpr-icon - One-click Discovery icon
+ * @slot vviinn-custom-label-0 - Custom label with index 0.
+ * @slot vviinn-custom-label-1 - Custom label with index 1.
+ * @slot vviinn-custom-label-2 - Custom label with index 2.
+ * @slot vviinn-custom-label-3 - Custom label with index 3.
+ * @slot vviinn-custom-label-4 - Custom label with index 4.
  *
  * @part close-button - Close Button in the modal's header.
  * @part secondary-action - Back Button in the modal's header.
- * @part title - Modal window title.
+ * @part results-title - Title on the results page.
  * @part upload-photo_button - Upload Photo Button.
- * @part show-files_button - Show Files Button.
  * @part start-camera_button - Start Camera Button.
  * @part product-card - Product Card itself.
  * @part brand - Brand inside Product Card.
@@ -68,11 +75,11 @@ import { VisualSearchMode } from "../../widget/types";
  * @part text-search-input - Text search input.
  * @part button - Clickable button element.
  * @part vviinn-button - Button element container.
- * @part custom-label-0 - custom label with index 0.
- * @part custom-label-1 - custom label with index 1.
- * @part custom-label-2 - custom label with index 2.
- * @part custom-label-3 - custom label with index 3.
- * @part custom-label-4 - custom label with index 4.
+ * @part custom-label-0 - Custom label with index 0.
+ * @part custom-label-1 - Custom label with index 1.
+ * @part custom-label-2 - Custom label with index 2.
+ * @part custom-label-3 - Custom label with index 3.
+ * @part custom-label-4 - Custom label with index 4.
  * @part energy-label-container - Energy label container.
  * @part energy-label-icon - Icon with an energy class.
  * @part energy-label-product-type - Product type.
@@ -113,13 +120,19 @@ export class VviinnVpsButton {
   @Prop() addToBasketShow: boolean = false;
   /** Show or hide Favorite button */
   @Prop() favoriteShow: boolean = false;
-  /** Show or hide the One-click Discovery */
+  /** Show or hide the One-click Discovery, will be deprecated, use oneClickDiscoveryMode instead */
   @Prop() oneClickDiscoveryShow = false;
+  /** One click Discovery mode, restricted to append only (no modal supported for this component)*/
+  @Prop() oneClickDiscoveryMode?: OneClickDiscoveryAppendMode;
+  /** Comma-separated list of campaign IDs */
+  @Prop() oneClickDiscoveryCampaigns: string = "";
   /** Wrap the Product Card's price values in the container. */
   @Prop() addPriceContainer?: boolean = false;
 
   /** @internal */
-  @Prop() apiPath: string | undefined;
+  @Prop() apiPath?: string = "https://api.vviinn.com";
+  /** @internal */
+  @Prop() useComponentsStore?: boolean = false;
 
   @State() buttonPressed: boolean = false;
 
@@ -133,7 +146,7 @@ export class VviinnVpsButton {
   @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
 
   /** The image upload has started */
-  @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
+  @Event() vviinnImageUpload: EventEmitter<ImageUploadEventData>;
 
   /** The recommendation renders on the page */
   @Event() vviinnProductLoad: EventEmitter<ProductCardEventData>;
@@ -164,31 +177,35 @@ export class VviinnVpsButton {
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
 
-  getBasicEventData = (): BasicEventData => {
-    return {
-      widgetType: "VPS",
-      campaignTypeId: "VPS",
-      campaignTypeName: campaignTypeNames["VPS"],
-      widgetId: this.el.id,
-      widgetVersion: version,
-    };
-  };
+  private slots?: HTMLSlotElement[] = [];
 
   @Listen("vviinnWidgetClose")
-  handleModalClosed() {
-    this.buttonPressed = false;
+  handleModalClosed({ detail }: CustomEvent<BasicEventData>) {
+    if (detail.widgetType === "VPS") {
+      this.buttonPressed = false;
+    }
+  }
+
+  componentWillLoad() {
+    this.slots = findSlotElements(this.el);
   }
 
   componentDidLoad() {
     this.replaceSlotsContent();
   }
 
-  private replaceSlotsContent() {
-    const slots = this.el.querySelectorAll("[slot]");
+  private replaceSlotsContent(childrenElement?: HTMLElement) {
     this.globalSlotsChanged.emit({
-      slots: Array.from(slots),
+      slots: Array.from(this.slots),
       element: this.el,
     });
+
+    if (childrenElement) {
+      this.globalSlotsChanged.emit({
+        slots: Array.from(this.slots),
+        element: childrenElement,
+      });
+    }
   }
 
   private handleClick() {
@@ -212,8 +229,6 @@ export class VviinnVpsButton {
           <slot>
             {this.mode === "camera" ? (
               <SearchModalCameraIcon />
-            ) : this.mode === "upload" ? (
-              <SearchModalUploadIcon />
             ) : this.textSearchShow ? (
               <SearchModalFullSearchIcon />
             ) : (
@@ -222,7 +237,7 @@ export class VviinnVpsButton {
           </slot>
         </vviinn-button>
 
-        {SlotSkeleton("vps")}
+        {SlotSkeleton("search")}
 
         <vviinn-vps-widget
           mode={this.mode}
@@ -248,8 +263,14 @@ export class VviinnVpsButton {
           addToBasketShow={this.addToBasketShow}
           addPriceContainer={this.addPriceContainer}
           replaceSlotsContentInButton={this.replaceSlotsContent.bind(this)}
-          oneClickDiscoveryShow={this.oneClickDiscoveryShow}
+          oneClickDiscoveryShow={
+            this.oneClickDiscoveryShow ?? !!this.oneClickDiscoveryMode
+          }
+          oneClickDiscoveryMode={this.oneClickDiscoveryMode}
+          oneClickDiscoveryCampaigns={this.oneClickDiscoveryCampaigns}
           favoriteShow={this.favoriteShow}
+          useComponentsStore={this.useComponentsStore}
+          parentSlots={this.slots}
         />
       </Host>
     );

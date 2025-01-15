@@ -14,7 +14,8 @@ export default {
 
 const Template = (args) => `
 <div class="search-page-wrapper">
-  <div class="search-page-wrapper-filters">
+  <div class="search-page-wrapper-aside">
+    <vviinn-cropper width=300></vviinn-cropper> 
     <vviinn-extended-filters locale="${args.locale}" mode="preview"></vviinn-extended-filters>
   </div>
   <div class="search-page-wrapper-result">
@@ -25,9 +26,8 @@ const Template = (args) => `
       mode="${args.mode}"
       locale="${args.locale}"
       show-in-widget="${args.showInWidget}"
-      one-click-discovery-mode="append"
+      one-click-discovery-mode="append-grid"
     >
-      ${args.mode === "text" && `<vviinn-vps-button slot="vviinn-text-search-actions" locale="${args.locale}" token="${args.token}" one-click-discovery-show="true"></vviinn-vps-button>`}  
     </vviinn-text-search>
 
     <div class="search-page-wrapper-result-filters">
@@ -39,7 +39,7 @@ const Template = (args) => `
       token="${args.token}"
       api-path="${args.apiPath}"
       locale="${args.locale}"
-      one-click-discovery-mode="append"
+      one-click-discovery-mode="append-grid"
     ></vviinn-results>
   </div>
 </div>  
@@ -53,7 +53,7 @@ TextSearch.args = {
   token: vviinnToken,
   apiPath: process.env.STORYBOOK_API_PATH,
   searchQuery: "",
-  mode: "text",
+  mode: "extended",
   locale: "en-US",
   showInWidget: false,
 };

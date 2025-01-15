@@ -1,19 +1,13 @@
 import { h } from "@stencil/core";
 
-const vprSlotsNames: string[] = [
+const vprSlotNames: string[] = [
   "vviinn-recommendations-title",
   "vviinn-recommendations-subtitle",
   "vviinn-update-button-text",
   "vviinn-update-button-icon",
-  "vviinn-basket-button-text",
-  "vviinn-basket-button-icon",
-  "vviinn-basket-button-text-pressed",
-  "vviinn-basket-button-icon-pressed",
-  "vviinn-favorite-icon",
-  "vviinn-favorite-icon-pressed",
 ];
 
-const vpsSlotsNames: string[] = [
+const vpsSlotNames: string[] = [
   "vviinn-teaser-text",
   "vviinn-image-upload-button-text",
   "vviinn-image-upload-icon",
@@ -25,25 +19,53 @@ const vpsSlotsNames: string[] = [
   "vviinn-image-search-modal-title",
 ];
 
-const filtersSlotsNames: string[] = [
+const filtersSlotNames: string[] = [
   "vviinn-extended-filters-title",
   "vviinn-extended-filters-apply",
   "vviinn-extended-filters-reset",
 ];
 
-const productCardSlotsNames: string[] = ["vviinn-energy-label-data-sheet-text"];
+export const productCardSlotNames: string[] = [
+  "vviinn-basket-button-icon",
+  "vviinn-basket-button-text",
+  "vviinn-basket-button-icon-pressed",
+  "vviinn-basket-button-text-pressed",
+  "vviinn-favorite-icon",
+  "vviinn-favorite-icon-pressed",
+  "vviinn-energy-label-data-sheet-text",
+  "vviinn-product-card-actions",
+  "vviinn-custom-label-0",
+  "vviinn-custom-label-1",
+  "vviinn-custom-label-2",
+  "vviinn-custom-label-3",
+  "vviinn-custom-label-4",
+];
+
+export const vprIconSlotName = "vviinn-results-vpr-icon";
 
 const renderNamedSlot = (name: string) => <slot name={name} />;
 
-export const SlotSkeleton = (renderType: string) => {
-  return (
-    renderType === "vps"
-      ? [...vpsSlotsNames, ...filtersSlotsNames, ...productCardSlotsNames]
-      : renderType === "filters"
-      ? filtersSlotsNames
-      : [...vprSlotsNames, ...filtersSlotsNames, ...productCardSlotsNames]
-  ).map(renderNamedSlot);
+type RenderType = "search" | "discovery" | "filters" | "card";
+
+const getSlotNamesList = (renderType: RenderType) => {
+  switch (renderType) {
+    case "search": {
+      return [...vpsSlotNames, ...filtersSlotNames, ...productCardSlotNames];
+    }
+    case "discovery": {
+      return [...vprSlotNames, ...filtersSlotNames, ...productCardSlotNames];
+    }
+    case "filters": {
+      return filtersSlotNames;
+    }
+    case "card": {
+      return productCardSlotNames;
+    }
+  }
 };
+
+export const SlotSkeleton = (renderType: RenderType) =>
+  getSlotNamesList(renderType).map(renderNamedSlot);
 
 const getSlots = (element: HTMLElement): HTMLSlotElement[] =>
   Array.from(element.shadowRoot.querySelectorAll("slot"));
@@ -110,7 +132,7 @@ export const slotChangeListener = (component: any, element: HTMLElement) => {
         const isElementChildTag = [
           "VVIINN-PRODUCT-CARD",
           "VVIINN-TEASER",
-          "VVIINN-EXAMPLE-IMAGE",
+          "VVIINN-CAMERA",
           "VVIINN-PRIVACY-BADGE",
           "VVIINN-MODAL",
           "VVIINN-TEXT-SEARCH",

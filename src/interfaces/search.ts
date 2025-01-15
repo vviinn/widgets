@@ -1,4 +1,3 @@
-import { Recommendation } from "../components";
 import { components } from "./generated";
 
 export interface SearchInterfaces {
@@ -8,6 +7,7 @@ export interface SearchInterfaces {
   ResponseFilterItem: components["schemas"]["response-categorical-filter-item"];
   ProductListingPageRequest: components["schemas"]["product-listing-page-request"];
   ProductListingPageResponse: components["schemas"]["product-listing-page-response"];
+  SearchIdResponse: components["schemas"]["ion-visual-product-search"];
 }
 
 export type TextSearchRequest = SearchInterfaces["TextSearchRequest"];
@@ -19,7 +19,7 @@ export type ProductListingPageRequest =
 export type ProductListingPageResponse =
   SearchInterfaces["ProductListingPageResponse"];
 
-export type SearchIdResponse = Recommendation[];
+export type SearchIdResponse = SearchInterfaces["SearchIdResponse"];
 
 export type RequestDynamicFilterItem =
   SearchInterfaces["RequestDynamicFilterItem"];

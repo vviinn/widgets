@@ -16,23 +16,6 @@ Events related to the filters are mainly for internal usage inside Vviinn compon
 
   <tbody>
     <tr>
-      <td>vviinnFiltersReceived</td><td>Catch list of filters inside the Vviinn filter components and show them.</td>
-
-      <td>
-        <ul>
-          <li>vviinn-filters</li>
-          <li>vviinn-extended-filters</li>
-        </ul>
-      </td>
-
-      <td>
-        <ul>
-          <li>Response Filters</li>
-        </ul>
-      </td>
-    </tr>
-
-    <tr>
       <td>vviinnFiltersChanged</td><td>Send back the selected filters from Vviinn fillters components.</td>
 
       <td>
@@ -44,13 +27,15 @@ Events related to the filters are mainly for internal usage inside Vviinn compon
 
       <td>
         <ul>
-          <li>Selected Filters</li>
+          <li>filters</li>
+          <li>el</li>
+          <li>isTriggeredByVpsWidget</li>
         </ul>
       </td>
     </tr>
 
     <tr>
-          <td>vviinnFilterTriggered</td><td>If tracking is permitted send the triggered filter kind and action (activated/deactivated).</td>
+          <td>vviinnFilterTriggered</td><td>If tracking is permitted send the triggered filter kind and action ("select" | "deselect" | "reset").</td>
 
           <td>
             <ul>
@@ -64,6 +49,7 @@ Events related to the filters are mainly for internal usage inside Vviinn compon
             <ul>
               <li>action</li>
               <li>kind</li>
+              <li>isTriggeredByVpsWidget</li>
             </ul>
           </td>
         </tr>
@@ -90,7 +76,7 @@ document.addEventListener("vviinnFiltersChanged", ({ detail }) => {
   ],
   "el": {
       "s-p": []
-  }
+  },
+  "isTriggeredByVpsWidget": false
 }
-// ... and other loaded products
 ```

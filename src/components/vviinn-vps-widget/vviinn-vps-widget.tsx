@@ -16,9 +16,14 @@ import { v4 as uuidv4 } from "uuid";
 import i18next from "i18next";
 
 import { version } from "../../../package.json";
-import { searchState } from "../../store/search.store";
+import {
+  searchState,
+  componentsState,
+  SearchStore,
+  SearchStoreName,
+} from "../../store/search.store";
 import { state } from "../../store/store";
-import { slotChangeListener } from "../customized-slots";
+import { slotChangeListener, SlotSkeleton } from "../customized-slots";
 import { createTrackingApi } from "../../openApi";
 import {
   DefaultApi,
@@ -38,8 +43,8 @@ import {
   SelectObjectEventData,
   NoResultEventData,
   TextSearchEvent,
+  ImageUploadEventData,
 } from "../../recommendation/events";
-import { SlotSkeleton } from "../customized-slots";
 import { campaignTypeNames } from "../../campaign/Campaign";
 import { parseExcludedToParams } from "../../utils/collections/collectionsUtils";
 import { resources } from "../../locale";
@@ -49,12 +54,21 @@ import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 import { videoStreamSettings } from "../../video/settings";
 import { Recommendation } from "../../interfaces/recommendation";
 import { checkDeviceType } from "../../helpers";
-import { UploadSource, VisualSearchMode } from "../../widget/types";
+import {
+  OneClickDiscoveryAppendMode,
+  UploadSource,
+  VisualSearchMode,
+} from "../../widget/types";
 import {
   extendedFiltersParts,
   filtersParts,
+  modalParts,
+  productCardParts,
+  searchBarParts,
+  searchWidgetButtonParts,
   searchWidgetFilterParts,
 } from "../../cssParts";
+import { findSlotElements } from "../../dom";
 
 const CAMERA_START_DELAY = 500;
 
@@ -70,12 +84,17 @@ const CAMERA_START_DELAY = 500;
  * @slot vviinn-privacy-badge-text - Text content of privacy notification block.
  * @slot vviinn-image-search-modal-title - Image search modal title.
  * @slot vviinn-energy-label-data-sheet-text - Text of the data sheet link for the energy label.
+ * @slot vviinn-custom-label-0 - Custom label with index 0.
+ * @slot vviinn-custom-label-1 - Custom label with index 1.
+ * @slot vviinn-custom-label-2 - Custom label with index 2.
+ * @slot vviinn-custom-label-3 - Custom label with index 3.
+ * @slot vviinn-custom-label-4 - Custom label with index 4.
  *
+ * @slot vviinn-results-vpr-icon - One-click Discovery icon.
  * @part close-button - Close Button in the modal's header.
  * @part secondary-action - Back Button in the modal's header.
- * @part title - Modal window title.
+ * @part results-title - Title on the results page.
  * @part upload-photo_button - Upload Photo Button.
- * @part show-files_button - Show Files Button.
  * @part start-camera_button - Start Camera Button.
  * @part product-card - Product Card itself.
  * @part image-container - Product Card's image container.
@@ -100,11 +119,11 @@ const CAMERA_START_DELAY = 500;
  * @part price-prefix - Block rendered before each price element (for ex. "from").
  * @part title - Title inside Product Card.
  * @part text-search-input - Text search input.
- * @part custom-label-0 - custom label with index 0.
- * @part custom-label-1 - custom label with index 1.
- * @part custom-label-2 - custom label with index 2.
- * @part custom-label-3 - custom label with index 3.
- * @part custom-label-4 - custom label with index 4.
+ * @part custom-label-0 - Custom label with index 0.
+ * @part custom-label-1 - Custom label with index 1.
+ * @part custom-label-2 - Custom label with index 2.
+ * @part custom-label-3 - Custom label with index 3.
+ * @part custom-label-4 - Custom label with index 4.
  * @part energy-label-container - Energy label container.
  * @part energy-label-icon - Icon with an energy class.
  * @part energy-label-product-type - Product type.
@@ -145,13 +164,17 @@ export class VviinnVpsWidget {
   @Prop() addToBasketShow: boolean = false;
   /** Show or hide Favorite button */
   @Prop() favoriteShow: boolean = false;
-  /** Show or hide the One-click Discovery */
+  /** Show or hide the One-click Discovery, will be deprecated, use oneClickDiscoveryMode instead */
   @Prop() oneClickDiscoveryShow = false;
+  /** One click Discovery mode, restricted to append only (no modal supported for this component)*/
+  @Prop() oneClickDiscoveryMode?: OneClickDiscoveryAppendMode;
+  /** Comma-separated list of campaign IDs */
+  @Prop() oneClickDiscoveryCampaigns: string = "";
   /** Wrap the Product Card's price values in the container. */
   @Prop() addPriceContainer?: boolean = false;
 
   /** @internal */
-  @Prop() apiPath: string = "https://api.vviinn.com";
+  @Prop() apiPath?: string = "https://api.vviinn.com";
   /** Set true when showing the widget in button */
   /** @internal */
   @Prop() showingInButton?: boolean = false;
@@ -166,20 +189,26 @@ export class VviinnVpsWidget {
   @Prop() resetVpsButton: () => void;
   /** @internal */
   @Prop() replaceSlotsContentInButton?: () => void;
+  /** @internal */
+  @Prop() parentSlots?: HTMLSlotElement[] = [];
+  /** @internal */
+  @Prop() useComponentsStore?: boolean = false;
 
   @State() slidePosition: number = 0;
-  @State() width: number = 0;
-  @State() wrongImageFormat: boolean = false;
-  @State() trackingDeactivated: boolean = false;
-  @State() stream: MediaStream | null = null;
-  @State() cameraInitializing: boolean = false;
-  @State() cameraEnabled: boolean = false;
-  @State() cameraButtonClicked: boolean = false;
   @State() uploadSource: UploadSource;
-  @State() showAspectRatioError = false;
+  @State() width: number = 0;
+  @State() stream: MediaStream | null = null;
   @State() products: Recommendation[] = [];
   @State() searchQuery: string = "";
   @State() requestId: string = "";
+
+  @State() isCameraInitializing: boolean = false;
+  @State() isCameraEnabled: boolean = false;
+  @State() isCameraButtonClicked: boolean = false;
+
+  @State() showAspectRatioError = false;
+  @State() wrongImageFormat: boolean = false;
+  @State() trackingDeactivated: boolean = false;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -206,7 +235,7 @@ export class VviinnVpsWidget {
   @Event() vviinnSelectFilter: EventEmitter<SelectFilterEventData>;
 
   /** The image upload has started */
-  @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
+  @Event() vviinnImageUpload: EventEmitter<ImageUploadEventData>;
 
   /** Wrong image format, that isn’t .jpg, .jpeg, png, or the request failed */
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
@@ -214,24 +243,33 @@ export class VviinnVpsWidget {
   private overflow: string;
   private uiSessionId: string;
   private trackingApi: DefaultApi;
-  private imageSource: SearchImageSource | null = null;
+  private imageSource: SearchImageSource = "upload";
   private cameraAvailable: boolean = false;
   private isDesktop: boolean = false;
   private videoTrack: MediaStreamTrack | null = null;
   private widgetElementId: string;
   private isTextSearch: boolean = false;
+  private slots: HTMLSlotElement[] = [];
+  private state?: SearchStore;
+  private storeName?: SearchStoreName;
 
   private initResultEvents() {
-    searchState.resultLoaded = false;
-    searchState.resultViewed = false;
+    this.state.resultLoaded = false;
+    this.state.resultViewed = false;
   }
 
-  private replaceSlotsContent() {
-    const slots = this.el.querySelectorAll("[slot]");
+  private replaceSlotsContent(childrenElement?: HTMLElement) {
     this.globalSlotsChanged.emit({
-      slots: Array.from(slots),
+      slots: this.slots,
       element: this.el,
     });
+
+    if (childrenElement) {
+      this.globalSlotsChanged.emit({
+        slots: this.slots,
+        element: childrenElement,
+      });
+    }
   }
 
   private stopStreamTracks() {
@@ -308,10 +346,10 @@ export class VviinnVpsWidget {
       this.resetState();
       return;
     }
-    this.cameraInitializing = true;
+    this.isCameraInitializing = true;
 
     setTimeout(async () => {
-      this.cameraButtonClicked = true;
+      this.isCameraButtonClicked = true;
       try {
         const videoStream = await navigator.mediaDevices.getUserMedia({
           video: videoStreamSettings,
@@ -325,7 +363,7 @@ export class VviinnVpsWidget {
         // TODO: Show error in the UI
         console.log("Error accessing camera: ", error.message);
         this.resetState();
-        this.cameraInitializing = false;
+        this.isCameraInitializing = false;
       }
     }, CAMERA_START_DELAY);
   };
@@ -340,6 +378,9 @@ export class VviinnVpsWidget {
       fallbackLng: "en",
       resources,
     });
+
+    this.slots = findSlotElements(this.el);
+
     slotChangeListener(this, this.el);
     this.vviinnWidgetLoad.emit(this.getBasicEventData());
     this.trackWidgetEvent("load");
@@ -389,21 +430,21 @@ export class VviinnVpsWidget {
   }
 
   @Listen("vviinnResultLoad") resultLoadHandler() {
-    searchState.resultLoaded = true;
+    this.state.resultLoaded = true;
   }
 
   @Listen("vviinnResultView") resultViewHandler() {
-    searchState.resultViewed = true;
+    this.state.resultViewed = true;
   }
 
   @Listen("vviinnCameraEnabled")
   trackCameraEnabled({ detail: isEnabled }: CustomEvent<boolean>) {
-    this.cameraEnabled = isEnabled;
-    this.cameraInitializing = false;
+    this.isCameraEnabled = isEnabled;
+    this.isCameraInitializing = false;
   }
 
   @Listen("vviinnImageCrop")
-  trachSearchAreaChanges() {
+  cropAreaChanges() {
     this.initResultEvents();
     if (this.trackingDeactivated) return;
     const { campaignTypeId, ...rest } = this.getBasicEventData();
@@ -450,6 +491,9 @@ export class VviinnVpsWidget {
 
   connectedCallback() {
     this.isDesktop = checkDeviceType() === "desktop";
+    this.storeName = this.useComponentsStore ? "components" : "widget";
+    this.state = this.useComponentsStore ? componentsState : searchState;
+
     state.apiPath = this.apiPath;
     state.currencySign = this.currencySign;
     state.locale = this.locale;
@@ -461,14 +505,31 @@ export class VviinnVpsWidget {
       this.excluded = parseExcludedToParams(this.excluded);
     }
 
-    searchState.token = this.token;
-    searchState.campaignId = this.campaignId;
-    searchState.excluded = this.excluded;
+    this.state.token = this.token;
+    this.state.campaignId = this.campaignId;
+    this.state.excluded = this.excluded;
 
     this.uiSessionId = uuidv4();
     this.trackingApi = createTrackingApi(this.apiPath, this.token);
     this.widgetElementId = this.el.id;
+
+    document.addEventListener(
+      "vviinnCropperAspectRatioError",
+      this.handleAspectRatioError
+    );
   }
+
+  disconnectedCallback() {
+    document.removeEventListener(
+      "vviinnCropperAspectRatioError",
+      this.handleAspectRatioError
+    );
+  }
+
+  private handleAspectRatioError = ({ detail }: CustomEvent<boolean>) => {
+    this.setShowAspectRatioError(detail);
+    this.el.classList.add("bordered");
+  };
 
   private trackWidgetEvent(action: WidgetAction) {
     if (this.trackingDeactivated) return;
@@ -499,7 +560,12 @@ export class VviinnVpsWidget {
   }
 
   private handleImageSelection() {
-    this.imageSource = "upload";
+    if (this.useComponentsStore) {
+      this.resetVpsButton && this.resetVpsButton();
+      this.resetState();
+      return;
+    }
+
     this.slidePosition = 1;
     const root = this.el.shadowRoot.querySelector("vviinn-overlayed-modal");
     const overlay = root.shadowRoot.querySelector("vviinn-overlay");
@@ -511,10 +577,10 @@ export class VviinnVpsWidget {
 
   private renderButtons() {
     const isLoading =
-      (searchState.loading &&
-        searchState.searchType === "image" &&
+      (this.state.loading &&
+        this.state.searchType === "image" &&
         this.uploadSource === "startCamera") ||
-      this.cameraInitializing;
+      this.isCameraInitializing;
 
     const buttons = [
       this.cameraAvailable && (
@@ -525,18 +591,18 @@ export class VviinnVpsWidget {
             this.handleStartCameraClick();
           }}
         >
-          <vviinn-preloader class={{ hidden: !isLoading }} />
+          {isLoading && <vviinn-preloader />}
 
           <span class={{ "action-button-content": true, hidden: isLoading }}>
             <slot name="vviinn-camera-icon">
               <CameraActionIcon />
             </slot>
-            <span class={{ hidden: !this.cameraEnabled }}>
+            <span class={{ hidden: !this.isCameraEnabled }}>
               <slot name="vviinn-camera-button-text-stop">
                 {i18next.t("cameraButtonTextStop")}
               </slot>
             </span>
-            <span class={{ hidden: this.cameraEnabled }}>
+            <span class={{ hidden: this.isCameraEnabled }}>
               <slot name="vviinn-camera-button-text-start">
                 {i18next.t("cameraButtonTextStart")}
               </slot>
@@ -551,6 +617,7 @@ export class VviinnVpsWidget {
         onVviinnImageUpload={() => {
           this.handleVviinnImageUpload("uploadPhoto");
         }}
+        storeName={this.storeName}
         onVviinnNoResult={({ detail }) => this.handleVviinnNoResult(detail)}
         resetVpsButton={this.resetVpsButton}
         basicEventData={this.getBasicEventData()}
@@ -559,8 +626,8 @@ export class VviinnVpsWidget {
           this.buttonPressed && this.showingInButton && this.mode === "upload"
         }
         loading={
-          searchState.loading &&
-          searchState.searchType === "image" &&
+          this.state.loading &&
+          this.state.searchType === "image" &&
           this.uploadSource === "uploadPhoto"
         }
       >
@@ -579,39 +646,41 @@ export class VviinnVpsWidget {
     return this.isDesktop ? buttons.reverse() : buttons;
   }
 
-  private resetState() {
-    this.resetScroll("start-page_block");
-
-    this.slidePosition = 0;
-    searchState.resetCategoryLink = undefined;
-    searchState.activeIonLink = undefined;
-    searchState.image = O.none;
-    searchState.imageUrl = O.none;
-    searchState.imageBounds = O.none;
-    searchState.searchArea = O.none;
-    searchState.results = [];
-    searchState.filters = [];
-    searchState.dynamicFilters = [];
-    searchState.detectedObjects = [];
-    searchState.rectangleSearchForm = undefined;
-    searchState.loading = false;
-    searchState.serverError = false;
-    searchState.searchType = undefined;
+  private resetInnerState = () => {
     this.searchQuery = "";
     this.wrongImageFormat = false;
     this.resetScroll("results-block");
     this.stopStreamTracks();
     this.initResultEvents();
     this.stream = null;
-    this.cameraEnabled = false;
-    this.cameraButtonClicked = false;
-    this.cameraInitializing = false;
+    this.isCameraEnabled = false;
+    this.isCameraButtonClicked = false;
+    this.isCameraInitializing = false;
     this.setShowAspectRatioError(false);
     this.isTextSearch = false;
+    this.resetScroll("start-page_block");
+  };
+
+  private resetState() {
+    this.resetInnerState();
+    if (this.useComponentsStore) return;
+
+    this.slidePosition = 0;
+    this.state.resetCategoryLink = undefined;
+    this.state.activeIonLink = undefined;
+    this.state.image = O.none;
+    this.state.results = [];
+    this.state.filters = [];
+    this.state.dynamicFilters = [];
+    this.state.detectedObjects = [];
+    this.state.rectangleSearchForm = undefined;
+    this.state.loading = false;
+    this.state.serverError = false;
+    this.state.searchType = undefined;
   }
 
   private haveErrors(): boolean {
-    return this.wrongImageFormat || searchState.serverError;
+    return this.wrongImageFormat || this.state.serverError;
   }
 
   private resetScroll(elementId: string, behavior: ScrollBehavior = "auto") {
@@ -628,16 +697,12 @@ export class VviinnVpsWidget {
     this.trackWidgetEvent("close");
   }
 
-  LinkText = ({ href, children }) => {
-    return <a href={href || ""}>{children}</a>;
-  };
-
   render() {
     return (
       <Host
-        exportparts={`image-container, content-container, basket-button-container,brand, product-type, deeplink, currency, image, image-link, image-picture, price-container, price-amount-sale, price-amount-outdated, price-amount-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-outdated, price-regular, price-sale, price-prefix, title, product-card, upload-photo_button, show-files_button, start-camera_button, text-search-input, text-search-button, close-button, secondary-action, close-button, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link ${searchWidgetFilterParts}`}
+        exportparts={`${modalParts}, ${productCardParts}, ${searchBarParts}, ${searchWidgetFilterParts}, ${searchWidgetButtonParts}`}
       >
-        {!this.showingInButton && SlotSkeleton("vps")}
+        {!this.showingInButton && SlotSkeleton("search")}
 
         <vviinn-overlayed-modal
           class={{ "first-screen": this.isOnboardingSlide() }}
@@ -651,18 +716,18 @@ export class VviinnVpsWidget {
           widgetVersion={version}
           hideBackButton={
             (this.mode === "upload" && this.showingInButton) ||
-            (!this.cameraEnabled && this.isOnboardingSlide())
+            (!this.isCameraEnabled && this.isOnboardingSlide())
           }
-          exportparts="secondary-action, title, close-button"
+          exportparts={modalParts}
         >
           <vviinn-slider position={this.slidePosition}>
             <vviinn-slide
               class={{
                 "start-page": true,
-                "camera-enabled": this.cameraEnabled,
+                "camera-enabled": this.isCameraEnabled,
               }}
             >
-              <vviinn-example-image
+              <vviinn-camera
                 onVviinnImageUploadFinished={
                   this.handleVviinnImageUploadFinished
                 }
@@ -671,8 +736,9 @@ export class VviinnVpsWidget {
                 }}
                 basicEventData={this.getBasicEventData()}
                 srcObject={this.stream}
-                cameraButtonClicked={this.cameraButtonClicked}
+                cameraButtonClicked={this.isCameraButtonClicked}
                 exampleImageSource={this.exampleImageSource}
+                useComponentsStore={this.useComponentsStore}
               />
               <div
                 class={{
@@ -681,14 +747,14 @@ export class VviinnVpsWidget {
                 id="start-page_block"
               >
                 <div class="start-page_main-content">
-                  {(this.wrongImageFormat || searchState.serverError) && (
+                  {(this.wrongImageFormat || this.state.serverError) && (
                     <div class="start-page_errors-block">
                       <vviinn-wrong-format
                         class={{ hidden: !this.wrongImageFormat }}
                         handler={() => this.resetState()}
                       />
                       <vviinn-server-error
-                        class={{ hidden: !searchState.serverError }}
+                        class={{ hidden: !this.state.serverError }}
                         handler={() => this.resetState()}
                       />
                     </div>
@@ -727,12 +793,12 @@ export class VviinnVpsWidget {
                 active: this.isResultSlide(),
               }}
             >
-              {this.isResultSlide() && searchState.searchType === "image" && (
+              {this.isResultSlide() && this.state.searchType === "image" && (
                 <div class="source-wrapper image-wrapper">
-                  <vviinn-image-view
+                  <vviinn-cropper
                     basicEventData={this.getBasicEventData()}
-                    setShowAspectRatioError={this.setShowAspectRatioError}
                     showAspectRatioError={this.showAspectRatioError}
+                    showInWidget={true}
                   />
                   <div
                     class={{
@@ -741,7 +807,7 @@ export class VviinnVpsWidget {
                     }}
                   >
                     <div class="filters">
-                      {searchState.filters.map((filter) => (
+                      {this.state.filters.map((filter) => (
                         <search-filters
                           filter={filter}
                           basicEventData={this.getBasicEventData()}
@@ -752,7 +818,7 @@ export class VviinnVpsWidget {
                 </div>
               )}
 
-              {this.isResultSlide() && searchState.searchType === "text" && (
+              {this.isResultSlide() && this.state.searchType === "text" && (
                 <div class="source-wrapper text-search-wrapper">
                   <vviinn-text-search
                     token={this.token}
@@ -770,14 +836,12 @@ export class VviinnVpsWidget {
                   >
                     <vviinn-filters
                       class="preview-filters"
-                      filters={searchState.dynamicFilters}
                       showInWidget={true}
                       exportparts={filtersParts}
                     />
 
                     <vviinn-extended-filters
                       class="preview-extended-filters"
-                      filters={searchState.dynamicFilters}
                       mode="preview"
                       showHeader={false}
                       exportparts={extendedFiltersParts}
@@ -820,8 +884,11 @@ export class VviinnVpsWidget {
                   textSearchRequestId={this.requestId}
                   addPriceContainer={this.addPriceContainer}
                   oneClickDiscoveryMode={
-                    this.oneClickDiscoveryShow ? "append" : undefined
+                    this.oneClickDiscoveryMode ??
+                    (this.oneClickDiscoveryShow ? "append-grid" : undefined)
                   }
+                  oneClickDiscoveryCampaigns={this.oneClickDiscoveryCampaigns}
+                  parentSlots={[...this.parentSlots, ...this.slots]}
                 />
               )}
             </vviinn-slide>
@@ -829,7 +896,6 @@ export class VviinnVpsWidget {
 
           <vviinn-extended-filters
             class="modal-extended-filters"
-            filters={searchState.dynamicFilters}
             mode="modal"
             exportparts={extendedFiltersParts}
             showInWidget={true}

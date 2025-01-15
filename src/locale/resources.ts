@@ -24,9 +24,16 @@ export const resources: Resource = {
       cameraButtonTextStart: "Kamera starten",
       cameraButtonTextStop: "Kamera stoppen",
       privacyBadgeText: `Durch das Hochladen eines Bildes willigst Du in die Verarbeitung durch unseren Partner ${VVIINN_LINK} ein. Das Bild wird nach einer Stunde Inaktivität gelöscht.`,
-      teaserText: "Finde Produkte auf \n einem Foto",
+      teaserText: "Finde Dein Produkt",
       imageSearchModalTitle: "AI Search",
       textSearchPlaceholder: "mit Text suchen",
+      speechRecognition: {
+        placeholder: "Aufnahme...",
+        tooltip: {
+          general: "Bitte Mikrofon aktivieren",
+          siri: "Bitte aktivieren Siri",
+        },
+      },
       emptyResultsBlock: {
         title: "Leider nichts gefunden",
         button: "Neues Bild hochladen",
@@ -74,9 +81,16 @@ export const resources: Resource = {
       cameraButtonTextStart: "Start Camera",
       cameraButtonTextStop: "Stop Camera",
       privacyBadgeText: `By uploading a picture you agree to the processing by our partner ${VVIINN_LINK}. The image will be deleted after one hour of inactivity.`,
-      teaserText: "Find Product by Photo",
+      teaserText: "Find Your Product",
       imageSearchModalTitle: "AI Search",
       textSearchPlaceholder: "Search by text",
+      speechRecognition: {
+        placeholder: "Listening...",
+        tooltip: {
+          general: "Please enable microphone",
+          siri: "Please enable Siri",
+        },
+      },
       emptyResultsBlock: {
         title: "Sorry, nothing found",
         button: "Upload another image",

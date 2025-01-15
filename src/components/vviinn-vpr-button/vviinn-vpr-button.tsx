@@ -19,11 +19,11 @@ import {
 } from "../../recommendation/events";
 import { Locale } from "../../locale";
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
+import { OneClickDiscoveryMode } from "../../widget/types";
 /**
  * @part button - Clickable button element.
  * @part vviinn-button - Button element container.
  * @part product-card - Product Card itself.
- * @part product-part - Will be deprecated. Use "product-card" instead.
  * @part title - Title inside Product Card.
  * @part brand - Brand inside Product Card.
  * @part product-type - Product Type inside Product Card.
@@ -54,11 +54,11 @@ import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
  * @part update-button-top - Update Button on the top (Set mode).
  * @part update-button-item - Update Button inside the Product Card (Set mode).
  *
- * @part custom-label-0 - custom label with index 0.
- * @part custom-label-1 - custom label with index 1.
- * @part custom-label-2 - custom label with index 2.
- * @part custom-label-3 - custom label with index 3.
- * @part custom-label-4 - custom label with index 4.
+ * @part custom-label-0 - Custom label with index 0.
+ * @part custom-label-1 - Custom label with index 1.
+ * @part custom-label-2 - Custom label with index 2.
+ * @part custom-label-3 - Custom label with index 3.
+ * @part custom-label-4 - Custom label with index 4.
  *
  * @slot vviinn-recommendations-title - Recommendations title text.
  * @slot vviinn-favorite-icon - Icon of Favorite button.
@@ -72,6 +72,11 @@ import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
  * @slot vviinn-recommendations-subtitle - Recommendations subtitle text (Set mode).
  * @slot vviinn-update-button-text - Text of Update Button on the top (Set mode).
  * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
+ * @slot vviinn-custom-label-0 - Custom label with index 0.
+ * @slot vviinn-custom-label-1 - Custom label with index 1.
+ * @slot vviinn-custom-label-2 - Custom label with index 2.
+ * @slot vviinn-custom-label-3 - Custom label with index 3.
+ * @slot vviinn-custom-label-4 - Custom label with index 4.
  */
 
 @Component({
@@ -101,6 +106,8 @@ export class VviinnVprButton {
   @Prop() imageWidth: number = 300;
   /** The ratio of each recommended product image */
   @Prop() imageRatio: number = 1;
+  /** Items amount in set mode grid */
+  @Prop() setItemsAmount?: number = 4;
   /** Optional for custom CSS. It will overwrite all other settings */
   @Prop() cssUrl: string | null = null;
   /**  The currency sign is displayed after the price */
@@ -138,9 +145,6 @@ export class VviinnVprButton {
   /** Add default styles to the button */
   @Prop() addStyle: boolean = true;
 
-  /** @internal */
-  @Prop() apiPath: string | undefined = "https://api.vviinn.com";
-
   /** ID of an HTML element that you want to attach the sidebar  */
   @Prop() appendSidebarTo: string;
 
@@ -148,6 +152,15 @@ export class VviinnVprButton {
   @Prop() favoriteShow: boolean = false;
 
   @Prop() appendSidebarToElement: HTMLElement;
+
+  /** One click Discovery mode*/
+  @Prop() oneClickDiscoveryMode?: OneClickDiscoveryMode = "standalone";
+
+  /** @internal */
+  @Prop() apiPath?: string = "https://api.vviinn.com";
+
+  /** @internal */
+  @Prop() showInWidget: boolean = false;
 
   /** Event emitted on widget load */
   @Event() vviinnWidgetLoad: EventEmitter<BasicEventData>;
@@ -180,6 +193,12 @@ export class VviinnVprButton {
   @Event() vviinnAddToBasket: EventEmitter<BasicEventData>;
 
   @State() targetAppendSidebarTo: HTMLElement;
+
+  private iconSideSize?: number;
+
+  connectedCallback() {
+    this.iconSideSize = this.oneClickDiscoveryMode === "standalone" ? 24 : 14;
+  }
 
   componentWillLoad() {
     if (this.appendSidebarToElement) {
@@ -226,9 +245,15 @@ export class VviinnVprButton {
         <vviinn-button addStyle={this.addStyle} part="vviinn-button">
           <slot>
             {this.campaignType === "VCS" ? (
-              <CrossSellingIcon />
+              <CrossSellingIcon
+                width={this.iconSideSize}
+                height={this.iconSideSize}
+              />
             ) : (
-              <SimilarProductsIcon />
+              <SimilarProductsIcon
+                width={this.iconSideSize}
+                height={this.iconSideSize}
+              />
             )}
           </slot>
         </vviinn-button>
@@ -265,14 +290,16 @@ export class VviinnVprButton {
     sidebar.showFilters = this.showFilters;
     sidebar.cssUrl = this.cssUrl;
     sidebar.imageRatio = this.imageRatio;
+    sidebar.setItemsAmount = this.setItemsAmount;
     sidebar.setModeDiscounts = this.setModeDiscounts;
     sidebar.updateButtonLocation = this.updateButtonLocation;
     sidebar.addPriceContainer = this.addPriceContainer;
     sidebar.favoriteShow = this.favoriteShow;
+    sidebar.showInModal = this.oneClickDiscoveryMode === "modal";
 
     if (this.targetAppendSidebarTo) {
       sidebar.mode = "grid";
-      sidebar.useCarousel = false;
+      sidebar.useCarousel = this.oneClickDiscoveryMode === "append-slider";
     } else {
       sidebar.mode = this.position === "right" ? "grid" : this.mode;
       sidebar.useCarousel = this.position === "bottom";

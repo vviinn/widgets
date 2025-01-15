@@ -9,7 +9,7 @@ import "./styles.css";
 
 # One-click Discovery
 
-One-click discovery allows you to display products with a single click inside the modal or in appended mode inside the grid. Here are examples using the `vviinn-results` component or separately.
+One-click discovery allows you to display products with a single click inside the modal or in appended mode. Here are examples using the `vviinn-results` component or separately.
 
 <div id="one-click-modal">
     <div className="tab tab-reverse">
@@ -49,15 +49,15 @@ One-click discovery allows you to display products with a single click inside th
 </div>
 
 
-<div id="one-click-append">
+<div id="one-click-append-grid">
     <div className="tab tab-reverse">
-        <h3>One-click Discovery Appended</h3>
+        <h3>One-click Discovery Appended Grid</h3>
         <div className="tablink-group">
-            <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'one-click-append')}}>Code</button>
-            <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'one-click-append')}}>Preview</button>
+            <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'one-click-append-grid')}}>Code</button>
+            <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'one-click-append-grid')}}>Preview</button>
         </div>
     </div>
-    <div className="tab-sub-title">One-click Discovery's `append` mode, showing in `vviinn-results` for the "{textSearchQuery}" query.</div>
+    <div className="tab-sub-title">One-click Discovery's `append-grid` mode, showing in `vviinn-results` for the "{textSearchQuery}" query.</div>
     <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
             <vviinn-results 
@@ -65,9 +65,9 @@ One-click discovery allows you to display products with a single click inside th
                 image-resolution-width="500" 
                 currency-sign="€" 
                 locale="en-US" 
-                results-count="12"
+                results-count="6"
                 text-search-query={textSearchQuery}
-                one-click-discovery-mode="append"
+                one-click-discovery-mode="append-grid"
             ></vviinn-results>
         </div>
     </div>
@@ -78,11 +78,48 @@ One-click discovery allows you to display products with a single click inside th
     image-resolution-width="500" 
     currency-sign="€" 
     locale="en-US" 
-    results-count="12"
+    results-count="6"
     text-search-query="EXAMPLE_QUERY"
-    one-click-discovery-mode="append"
+    one-click-discovery-mode="append-grid"
 ></vviinn-results>
 ```
+    </div>
+</div>
+
+<div id="one-click-append-slider">
+    <div className="tab tab-reverse">
+        <h3>One-click Discovery Appended Slider</h3>
+        <div className="tablink-group">
+            <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_3', 'one-click-append-slider')}}>Code</button>
+            <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_3', 'one-click-append-slider')}}>Preview</button>
+        </div>
+    </div>
+    <div className="tab-sub-title">One-click Discovery's `append-slider` mode, showing in `vviinn-results` for the "{textSearchQuery}" query.</div>
+    <div id="Preview_3" className="tabcontent" style={{display:"block"}}>
+        <div className="tabcontent-preview">
+            <vviinn-results
+                token={vviinnToken}
+                image-resolution-width="500"
+                currency-sign="€"
+                locale="en-US"
+                results-count="6"
+                text-search-query={textSearchQuery}
+                one-click-discovery-mode="append-slider"
+            ></vviinn-results>
+        </div>
+    </div>
+    <div id="Code_3" className="tabcontent">
+        ```html
+        <vviinn-results
+            token="TOKEN"
+            image-resolution-width="500"
+            currency-sign="€"
+            locale="en-US"
+            results-count="6"
+            text-search-query="EXAMPLE_QUERY"
+            one-click-discovery-mode="append-slider"
+        ></vviinn-results>
+        ```
     </div>
 </div>
 
@@ -90,8 +127,8 @@ One-click discovery allows you to display products with a single click inside th
     <div className="tab tab-reverse">
         <h3>One-click Discovery Itself</h3>
         <div className="tablink-group">
-            <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_3', 'one-click-itself')}}>Code</button>
-            <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_3', 'one-click-itself')}}>Preview</button>
+            <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_4', 'one-click-itself')}}>Code</button>
+            <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_4', 'one-click-itself')}}>Preview</button>
         </div>
     </div>
     <div className="tab-sub-title">Integrating the One-click Discovery modal into an example grid using `continuity` (default), `grid`, and `set` modes.</div>
@@ -151,7 +188,7 @@ One-click discovery allows you to display products with a single click inside th
             </div>
         </div>
     </div>
-    <div id="Code_3" className="tabcontent">
+    <div id="Code_4" className="tabcontent">
 ```html
 <div class="collection">
     <div class="product">

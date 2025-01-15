@@ -39,7 +39,6 @@
 
 .image-container {
   position: relative;
-  height: 100%;
   width: 100%;
 }
 
@@ -188,21 +187,62 @@ picture::before {
   opacity: 0;
 }
 
-.update-button {
+.product-card-actions,
+.product-card-actions-top {
+  line-height: 0px;
   position: absolute;
-  width: 32px;
-  height: 32px;
-  top: var(--spacing-100);
-  right: var(--spacing-100);
+  right: var(--spacing-75);
+}
+
+.product-card-actions-top {
+  top: var(--spacing-75);
+}
+
+.product-card-actions {
+  bottom: var(--spacing-75);
+}
+
+::slotted([slot="vviinn-product-card-actions"]),
+.product-card-actions-top,
+.product-card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.product-card-actions-top button,
+.product-card-actions button,
+vviinn-vpr-button::part(button),
+.update-button {
+  width: 24px;
+  height: 24px;
+  line-height: 0px;
   z-index: 1;
+  border: none;
+  cursor: pointer;
+  background: none;
+
   background-color: var(--button-bg-color-frosted);
   color: var(--color-icon-on-color);
   backdrop-filter: blur(calc(var(--filter-blur-150) / 2));
+  border-radius: var(--border-radius-100);
   padding: var(--spacing-50);
-  border: none;
-  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
+.product-card-actions-top button:hover,
+.product-card-actions button:hover,
+.product-card-actions vviinn-vpr-button::part(button):hover,
+.update-button:hover {
+  background-color: var(--button-bg-color-frosted-hover);
+}
+
+.product-card-actions-top button::after,
+.product-card-actions button::after,
+.product-card-actions vviinn-vpr-button::part(button)::after,
 .update-button::after {
   position: absolute;
   width: calc(100% + var(--spacing-100));
@@ -210,10 +250,7 @@ picture::before {
   top: calc(-1 * var(--spacing-50));
   right: calc(-1 * var(--spacing-50));
   content: "";
-}
-
-.update-button:hover {
-  background-color: var(--button-bg-color-frosted-hover);
+  cursor: pointer;
 }
 
 .basket-button {
@@ -274,7 +311,8 @@ picture::after {
   background-color: transparent;
 }
 
-:host(.animated) .update-button {
+:host(.animated) .product-card-actions,
+:host(.animated) .product-card-actions-top {
   display: none;
 }
 
@@ -358,56 +396,29 @@ vviinn-energy-label {
   );
 }
 
-.product-card-actions,
-.product-card-top-actions {
-  position: absolute;
-  right: 8px;
-}
-.product-card-top-actions {
-  top: 8px;
-}
-.product-card-actions {
-  bottom: 8px;
-}
-
-.product-card-top-actions button {
-  border: none;
-  display: flex;
-  padding: var(--spacing-50);
-  justify-content: center;
-  align-items: center;
-  gap: var(--spacing-50);
-  border-radius: var(--border-radius-100);
-  background: var(--button-bg-color-frosted);
-  backdrop-filter: blur(calc(var(--filter-blur-150, 12px) / 2));
-
-  color: var(--color-icon-inverse);
-  cursor: pointer;
-  line-height: 0px;
-}
-
-.product-card-top-actions button:hover {
-  background: var(--button-bg-color-frosted-hover);
-}
-
-::slotted([slot="vviinn-product-card-actions"]),
-.product-card-top-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
 .footer-arrow {
   position: absolute;
-  bottom: -15px;
+  bottom: -34.5px;
   left: 50%;
-  transform: translate(-50%, 0);
+  transform: translate(-50%, 0) rotate(90deg);
 
   width: 0;
   height: 0;
-  border: 10px solid transparent;
-  border-top: 0;
-  border-bottom: 15px solid var(--color-border-02);
+  border-top: 22.5px solid transparent;
+  border-bottom: 22px solid transparent;
+  border-right: 22px solid var(--color-border-02);
+  z-index: 99;
+}
+.footer-arrow::after {
+  content: "";
+  width: 0;
+  height: 0;
+  border-top: 21.5px solid transparent;
+  border-bottom: 21px solid transparent;
+  border-right: 21.5px solid #ffffff;
+  position: absolute;
+  top: -21px;
+  left: 1px;
 }
 
 .hidden {

@@ -8,10 +8,8 @@ import {
 import { ValueObject } from "../network/ion/ValueObject";
 import { DetectedObject } from "../searchSession/searchSession";
 import { ErrorKind } from "../error";
-import {
-  ResponseDynamicFilterItem,
-  RequestDynamicFilterItem,
-} from "../campaign/VPRCampaignService";
+import { RequestDynamicFilterItem } from "../campaign/VPRCampaignService";
+import { Rectangle } from "../geometry/Rectangle";
 
 export type CommonEventData = {
   widgetType: "VPR" | "VPS" | "VCS" | "TPS";
@@ -29,6 +27,10 @@ export type BasicEventData = { widget?: Widget } & {
   [K in keyof CommonEventData]: CommonEventData[K];
 };
 
+export type ImageUploadEventData = { isTriggeredByVpsWidget?: boolean } & {
+  [K in keyof BasicEventData]: BasicEventData[K];
+};
+
 export type NoResultEventData = {
   reason: ErrorKind;
 } & {
@@ -37,6 +39,7 @@ export type NoResultEventData = {
 
 export type SelectObjectEventData = {
   detectedObject: ValueObject<DetectedObject>;
+  searchArea: Rectangle;
 } & {
   [K in keyof CommonEventData]: CommonEventData[K];
 };
@@ -79,6 +82,7 @@ export type SearchIdEventData = {
 export type TextSearchEventData = {
   query: string;
   requestId?: string;
+  isTriggeredByVpsWidget?: boolean;
 };
 
 export type ChangedFiltersEventData = {
@@ -95,16 +99,18 @@ export type ExtendedFiltersButtonClickedEventData = {
   isTriggeredByVpsWidget: boolean;
 };
 
-export type DynamicFiltersEventData = ResponseDynamicFilterItem[];
-
 export type DynamicFilterTrackingData = {
   action: FilterAction;
   kind?: string;
+  isTriggeredByVpsWidget?: boolean;
+};
+
+export type DynamicFilterInternalData = DynamicFilterTrackingData & {
+  customTrigger?: Widget;
 };
 
 export type SearchIdEvent = CustomEvent<SearchIdEventData>;
 export type TextSearchEvent = CustomEvent<TextSearchEventData>;
-export type DynamicFiltersEvent = CustomEvent<DynamicFiltersEventData>;
 export type ChangedFiltersEvent = CustomEvent<ChangedFiltersEventData>;
 export type ResetSelectedFiltersEvent =
   CustomEvent<ResetSelectedFiltersEventData>;

@@ -130,7 +130,7 @@ export const renderCustomLabels = (labels: string[]) => {
   const renderLabel = (label: string, index: number) =>
     label ? (
       <span part={`custom-label-${index}`} class="custom-label">
-        {label}
+        <slot name={`vviinn-custom-label-${index}`}>{label}</slot>
       </span>
     ) : null;
 

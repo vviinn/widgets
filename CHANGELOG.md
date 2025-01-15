@@ -2,6 +2,222 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.145.11](https://github.com/vviinn/widgets/compare/v2.145.10...v2.145.11) (2025-01-14)
+
+
+### Bug Fixes
+
+* Storybooks issues after fixing cloud build ([796dae0](https://github.com/vviinn/widgets/commit/796dae040c32a1981589d4d5bfcc8ffb58f5a4b8))
+
+### [2.145.10](https://github.com/vviinn/widgets/compare/v2.145.9...v2.145.10) (2025-01-14)
+
+
+### Bug Fixes
+
+* if text search is active send tracking events as text search ([a21a6c2](https://github.com/vviinn/widgets/commit/a21a6c25892dc3f140957c5bbac9896b14b6c3d5))
+
+### [2.145.9](https://github.com/vviinn/widgets/compare/v2.145.8...v2.145.9) (2025-01-14)
+
+
+### Bug Fixes
+
+* determine if recommendations are shown inside search widget ([5b68dae](https://github.com/vviinn/widgets/commit/5b68dae91b682a6daaa6bd0c1ff2f7e9920acf9e))
+
+### [2.145.8](https://github.com/vviinn/widgets/compare/v2.145.7...v2.145.8) (2025-01-13)
+
+
+### Bug Fixes
+
+* Add a standalone mode for One-click discovery to show a large icon ([ea09c4b](https://github.com/vviinn/widgets/commit/ea09c4b8f6ab344ef2d9d7395ea992cc0ae4fa13))
+* Fix arrow styles in appended One-click discovery ([6243bfe](https://github.com/vviinn/widgets/commit/6243bfea6699a39f8d43396d39a107887160b4d1))
+* One-click discovery modal behavior ([0eb266d](https://github.com/vviinn/widgets/commit/0eb266d1759a0e5bf5693a3c02f2d9495f5ea48b))
+* Synchronize appended grid layout with vviinn-results ([b754357](https://github.com/vviinn/widgets/commit/b754357afdbdb63dfc6e8fdcdc06ab8f1fd1a58a))
+
+### [2.145.7](https://github.com/vviinn/widgets/compare/v2.145.6...v2.145.7) (2025-01-13)
+
+
+### Bug Fixes
+
+* only reset components store on component callback ([aedf50b](https://github.com/vviinn/widgets/commit/aedf50b57359d168b0d76bd230c54405a9bd51b9))
+
+### [2.145.6](https://github.com/vviinn/widgets/compare/v2.145.5...v2.145.6) (2025-01-13)
+
+
+### Bug Fixes
+
+* Fix Storybook's build in Google Cloud ([7d2429f](https://github.com/vviinn/widgets/commit/7d2429facc8e3859c3b9b10305a912eee58f875a))
+
+### [2.145.5](https://github.com/vviinn/widgets/compare/v2.145.4...v2.145.5) (2025-01-13)
+
+
+### Bug Fixes
+
+* Cloudbuild pipeline improvements ([cb282c4](https://github.com/vviinn/widgets/commit/cb282c43183bbec289ea9d5059597fef896bdda4))
+
+### [2.145.4](https://github.com/vviinn/widgets/compare/v2.145.3...v2.145.4) (2025-01-13)
+
+
+### Bug Fixes
+
+* Clear node_modules for Storybook before installing it in Cloud and echoing commit hash in the console ([e2071e2](https://github.com/vviinn/widgets/commit/e2071e2d6f3a2787c7365a8ad6bfcc2df3f63502))
+
+### [2.145.3](https://github.com/vviinn/widgets/compare/v2.145.2...v2.145.3) (2025-01-13)
+
+
+### Bug Fixes
+
+* Add fixed esbuild version 0.24.0 for dependencies ([5bedc76](https://github.com/vviinn/widgets/commit/5bedc76f557ddc52d46656de4e8196150a0e2f1e))
+
+### [2.145.2](https://github.com/vviinn/widgets/compare/v2.145.1...v2.145.2) (2025-01-11)
+
+
+### Bug Fixes
+
+* Storybook update to 8.4.7 ([26d8925](https://github.com/vviinn/widgets/commit/26d8925dc5b9afe7bb47f26f75357b6cb0d95490))
+
+### [2.145.1](https://github.com/vviinn/widgets/compare/v2.145.0...v2.145.1) (2025-01-11)
+
+
+### Bug Fixes
+
+* Storybook audit fix and added @babel/preset-env plugin ([0a4a5a9](https://github.com/vviinn/widgets/commit/0a4a5a99431fc549bcd6c1ab9028ab8810acda5e))
+
+## [2.145.0](https://github.com/vviinn/widgets/compare/v2.144.2...v2.145.0) (2025-01-10)
+
+
+### Features
+
+* Camera uploading for Search Bar's extended mode ([b76e300](https://github.com/vviinn/widgets/commit/b76e300c2823c7e6af58d30991d98e38986aaf75))
+* Change the teaser text of Search Modal ([c5af5d8](https://github.com/vviinn/widgets/commit/c5af5d8e90e86f37bf751970b9784dd288958723))
+* Components supports image uploading from Search Modal ([e89e2c1](https://github.com/vviinn/widgets/commit/e89e2c132480bcb249a8de629d7ccb915989b7a2))
+* Refactor Search Bar modes, delete 'upload' mode ([599556b](https://github.com/vviinn/widgets/commit/599556b7380f749e907706cf3a14ad6a4d4c6e15))
+
+### [2.144.2](https://github.com/vviinn/widgets/compare/v2.144.1...v2.144.2) (2025-01-10)
+
+
+### Bug Fixes
+
+* don't close search widget if close event was emitted by recommendation ([ea763e6](https://github.com/vviinn/widgets/commit/ea763e6e8c5121d4bd3fa9f9f505d2f78d30cff5))
+
+### [2.144.1](https://github.com/vviinn/widgets/compare/v2.144.0...v2.144.1) (2025-01-06)
+
+
+### Bug Fixes
+
+* Styles refactoring of product card's actions buttons ([7b7ca25](https://github.com/vviinn/widgets/commit/7b7ca256d26b632755b678793779f2fc46fdbd43))
+
+## [2.144.0](https://github.com/vviinn/widgets/compare/v2.143.0...v2.144.0) (2025-01-03)
+
+
+### Features
+
+* allow slider mode in recommendations ([a5fcbe9](https://github.com/vviinn/widgets/commit/a5fcbe9af43e1a1ea6262816e917c46b5068e81c))
+
+## [2.143.0](https://github.com/vviinn/widgets/compare/v2.142.4...v2.143.0) (2025-01-03)
+
+
+### Features
+
+* Cropper integration with Search Bar and Results components ([31bd189](https://github.com/vviinn/widgets/commit/31bd189b87b5502bcf2ad3f190935c40e6759ec2))
+
+### [2.142.4](https://github.com/vviinn/widgets/compare/v2.142.3...v2.142.4) (2024-12-20)
+
+
+### Bug Fixes
+
+* Selecting detected object issue ([ca08f3f](https://github.com/vviinn/widgets/commit/ca08f3ff4d2b3bde90f1fcf850dd21af197ff465))
+
+### [2.142.3](https://github.com/vviinn/widgets/compare/v2.142.2...v2.142.3) (2024-12-19)
+
+
+### Bug Fixes
+
+* update slider step so that images don't look cropped ([3c9bd19](https://github.com/vviinn/widgets/commit/3c9bd196e47601a79f17d1482ad16a8d47effe0a))
+
+### [2.142.2](https://github.com/vviinn/widgets/compare/v2.142.1...v2.142.2) (2024-12-19)
+
+
+### Bug Fixes
+
+* Cropper component's refactoring ([8d5ecad](https://github.com/vviinn/widgets/commit/8d5ecad17aa6ac8364d1a3dc6bf91e349186aac1))
+
+### [2.142.1](https://github.com/vviinn/widgets/compare/v2.142.0...v2.142.1) (2024-12-18)
+
+
+### Bug Fixes
+
+* Slots issues in vviinn-results ([858b5db](https://github.com/vviinn/widgets/commit/858b5db4ab56293e69bfe4d185442929bab7fd4f))
+
+## [2.142.0](https://github.com/vviinn/widgets/compare/v2.141.0...v2.142.0) (2024-12-17)
+
+
+### Features
+
+* Slots support for custom labels ([df522a0](https://github.com/vviinn/widgets/commit/df522a0c61b3fabc68f7d593913f53aafa1a5841))
+
+
+### Bug Fixes
+
+* Product Card slots in Search Widget ([2b0fee8](https://github.com/vviinn/widgets/commit/2b0fee85ce0f73f152760505e0a9954e5405ed59))
+
+## [2.141.0](https://github.com/vviinn/widgets/compare/v2.140.0...v2.141.0) (2024-12-16)
+
+
+### Features
+
+* updated speech to text according to new requirements ([f0a65b2](https://github.com/vviinn/widgets/commit/f0a65b2b42e66c779ea82e0560f21f3fefb4185b))
+
+## [2.140.0](https://github.com/vviinn/widgets/compare/v2.139.0...v2.140.0) (2024-12-11)
+
+
+### Features
+
+* styled oneclick discovery in the vviinn result and search modal ([1a7d9ec](https://github.com/vviinn/widgets/commit/1a7d9ec90f724267f91fd35277e2d514155e20a1))
+
+## [2.139.0](https://github.com/vviinn/widgets/compare/v2.138.0...v2.139.0) (2024-12-10)
+
+
+### Features
+
+* added one-click-discovery-campaigns to search modal and product list page ([f040771](https://github.com/vviinn/widgets/commit/f0407718d3305a403df15deb846d0ee0836027c1))
+* made product-card icons smaller but we the same clickable area ([492b0d3](https://github.com/vviinn/widgets/commit/492b0d3dd2d2f65bdeb9dbb59f012da7d7bb3df2))
+
+## [2.138.0](https://github.com/vviinn/widgets/compare/v2.137.0...v2.138.0) (2024-12-10)
+
+
+### Features
+
+* set-items-amount property for Discovery set widgets ([41a0d87](https://github.com/vviinn/widgets/commit/41a0d878d71115962664851cc2ff12c8e66c4d41))
+
+## [2.137.0](https://github.com/vviinn/widgets/compare/v2.136.1...v2.137.0) (2024-12-09)
+
+
+### Features
+
+* prototype speech recognition ([6f77c6d](https://github.com/vviinn/widgets/commit/6f77c6d0ecb9c67ed43fcb92343e714eb7ad3cbd))
+
+### [2.136.1](https://github.com/vviinn/widgets/compare/v2.136.0...v2.136.1) (2024-12-06)
+
+
+### Bug Fixes
+
+* Refactor CSS parts and improve consistency ([2e16a62](https://github.com/vviinn/widgets/commit/2e16a62d2a74a24c961659a0c2093eb539ae5e38))
+* Remove deprecated CSS part 'product-part' ([ebafaee](https://github.com/vviinn/widgets/commit/ebafaeed59e42ba2a025b3d83ddb1a55ce60ac78))
+
+## [2.136.0](https://github.com/vviinn/widgets/compare/v2.135.0...v2.136.0) (2024-12-05)
+
+
+### Features
+
+* Show scrollbars on hover in Discovery widgets ([d7edf15](https://github.com/vviinn/widgets/commit/d7edf15974c146c1c502f4e38e527427253a871a))
+
+## [2.135.0](https://github.com/vviinn/widgets/compare/v2.134.0...v2.135.0) (2024-12-05)
+
+
+### Features
+
+* refactored results to support custom widget result event instead of vps only ([431df01](https://github.com/vviinn/widgets/commit/431df017593b673dbc86ab0b65097b102b5c0b83))
+
 ## [2.134.0](https://github.com/vviinn/widgets/compare/v2.133.0...v2.134.0) (2024-12-04)
 
 

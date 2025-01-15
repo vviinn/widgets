@@ -46,26 +46,38 @@ const getDimentionsRatio = (sortedDimensions: ImageDimensions): number => {
 
 export const scaleByLargestSide =
   (toSize: number) =>
-    (dimensions: ImageDimensions): ImageDimensions => {
-      const sortedDimensions = sortDimentionsBySize(dimensions);
-      const ratio = getDimentionsRatio(sortedDimensions);
+  (dimensions: ImageDimensions): ImageDimensions => {
+    const sortedDimensions = sortDimentionsBySize(dimensions);
+    const ratio = getDimentionsRatio(sortedDimensions);
 
-      const newSmallestSide: ImageDimension = {
-        ...sortedDimensions[0],
-        size: toSize * ratio,
-      };
-
-      const newLargestSide: ImageDimension = {
-        ...sortedDimensions[1],
-        size: toSize,
-      };
-
-      return sortDimentionsByKind([newLargestSide, newSmallestSide]);
+    const newSmallestSide: ImageDimension = {
+      ...sortedDimensions[0],
+      size: toSize * ratio,
     };
+
+    const newLargestSide: ImageDimension = {
+      ...sortedDimensions[1],
+      size: toSize,
+    };
+
+    return sortDimentionsByKind([newLargestSide, newSmallestSide]);
+  };
 
 export const dimensionsFromImage = (
   image: HTMLImageElement
 ): ImageDimensions => {
   const { naturalWidth, naturalHeight } = image;
   return [makeWidth(naturalWidth), makeHeight(naturalHeight)];
+};
+
+export const getImageSizes = (
+  i: HTMLImageElement,
+  defaultImageSize
+): [number, number] => {
+  const dimensions = dimensionsFromImage(i);
+  const resize = scaleByLargestSide(defaultImageSize);
+  const newDimensions = resize(dimensions);
+
+  const sizes = newDimensions.map((d) => d.size);
+  return [sizes[0], sizes[1]];
 };

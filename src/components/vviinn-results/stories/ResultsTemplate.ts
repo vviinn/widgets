@@ -30,7 +30,7 @@ export const ResultsTemplate = (args) => {
 
   return `
   <div class="search-page-wrapper">
-  <div class="search-page-wrapper-filters">
+  <div class="search-page-wrapper-aside">
     <vviinn-extended-filters locale="${args.locale}" mode="preview"></vviinn-extended-filters>
   </div>
   <div class="search-page-wrapper-result">
@@ -57,6 +57,7 @@ export const ResultsTemplate = (args) => {
     one-click-discovery-mode="${oneClickDiscoveryMode}"
     add-price-container="${addPriceContainer}"
     favorite-show="${args.favoriteShow}"
+    one-click-discovery-campaigns="${args.oneClickDiscoveryCampaigns}"
   ></vviinn-results>
   </div>
 </div>`;

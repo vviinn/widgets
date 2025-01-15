@@ -9,9 +9,10 @@ import {
 } from "@stencil/core";
 import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/lib/function";
-import { processSelectedFile } from "../../store/search.store";
+import { processSelectedFile, SearchStoreName } from "../../store/search.store";
 import {
   BasicEventData,
+  ImageUploadEventData,
   NoResultEventData,
   SearchIdEventData,
 } from "../../recommendation/events";
@@ -25,7 +26,7 @@ import {
   shadow: true,
 })
 export class VviinnImageSelector {
-  @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
+  @Event() vviinnImageUpload: EventEmitter<ImageUploadEventData>;
   /** Wrong image format, that isn’t .jpg, .jpeg, png */
   @Event() vviinnNoResult: EventEmitter<NoResultEventData>;
 
@@ -39,22 +40,19 @@ export class VviinnImageSelector {
   @Prop() resetVpsButton: () => void;
   @Prop() token?: string;
   @Prop() apiPath?: string;
-  @Prop() showInTextSearch? = false;
-  @Prop() uploadStartedHandler?: () => void;
+  @Prop() storeName: SearchStoreName;
 
   private fileInput: HTMLInputElement;
 
   private async handleInputChange(event: Event) {
-    this.vviinnImageUpload.emit(this.basicEventData);
+    this.vviinnImageUpload.emit({
+      ...this.basicEventData,
+      isTriggeredByVpsWidget: this.storeName === "widget",
+    });
     const input = event.target as HTMLInputElement;
 
-    this.uploadStartedHandler && this.uploadStartedHandler();
-
-    const processingResult = await processSelectedFile(
-      input.files[0],
-      this.showInTextSearch,
-      this.token,
-      this.apiPath
+    const processingResult = await processSelectedFile(this.storeName)(
+      input.files[0]
     );
 
     pipe(

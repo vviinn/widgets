@@ -7,9 +7,18 @@ import './events.css'
 
 Every Vviinn Widget has some events that users can work on and listen to these events with `document.addEventListener()`.
 
+The following props are available for each event:
+
+- campaignTypeId
+- campaignTypeName
+- widgetId
+- widgetType
+- widgetVersion
+
+
 <table width="100%" className="events-table">
   <thead>
-    <tr><th>Name</th><th>Description</th><th>Available on</th><th>Props</th></tr>
+    <tr><th>Name</th><th>Description</th><th>Available on</th></tr>
   </thead>
 
   <tbody>
@@ -20,16 +29,6 @@ Every Vviinn Widget has some events that users can work on and listen to these e
         <ul>
           <li>Recommendation (Button, Widget)</li>
           <li>Search (Button, Widget)</li>
-        </ul>
-      </td>
-
-      <td>
-        <ul>
-          <li>campaignTypeId</li>
-          <li>campaignTypeName</li>
-          <li>widgetId</li>
-          <li>widgetType</li>
-          <li>widgetVersion</li>
         </ul>
       </td>
     </tr>
@@ -43,16 +42,6 @@ Every Vviinn Widget has some events that users can work on and listen to these e
           <li>Search Button</li>
         </ul>
       </td>
-
-      <td>
-        <ul>
-          <li>campaignTypeId</li>
-          <li>campaignTypeName</li>
-          <li>widgetId</li>
-          <li>widgetType</li>
-          <li>widgetVersion</li>
-        </ul>
-      </td>
     </tr>
 
     <tr>
@@ -62,16 +51,6 @@ Every Vviinn Widget has some events that users can work on and listen to these e
         <ul>
           <li>Recommendation Button</li>
           <li>Search (Button, Widget)</li>
-        </ul>
-      </td>
-
-      <td>
-        <ul>
-          <li>campaignTypeId</li>
-          <li>campaignTypeName</li>
-          <li>widgetId</li>
-          <li>widgetType</li>
-          <li>widgetVersion</li>
         </ul>
       </td>
     </tr>
@@ -102,5 +81,4 @@ document.addEventListener("vviinnWidgetLoad", ({ detail }) => {
     "widgetVersion": "2.87.0"
 }
 
-// ... and other loaded products
 ```

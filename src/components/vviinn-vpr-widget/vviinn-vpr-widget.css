@@ -150,6 +150,14 @@
       1fr
     )
   );
-  justify-items: center;
-  padding: 24px;
+  padding-bottom: var(--spacing-300);
+}
+
+@media (max-width: 768px) {
+  .recommendations-results.recommendations-grid {
+    width: unset;
+    grid-gap: 24px 16px;
+    justify-content: center;
+    grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+  }
 }

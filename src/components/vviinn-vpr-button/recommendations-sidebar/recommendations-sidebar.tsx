@@ -17,6 +17,7 @@ import { Locale } from "../../../locale";
 import { UpdateButtonLocation } from "../../vviinn-vpr-widget/vviinn-vpr-widget";
 import { ClickEvent, isClickedInRectBound } from "../../../geometry/Rectangle";
 import { Recommendation } from "../../../components";
+import { carouselParts, productCardParts } from "../../../cssParts";
 
 type SidebarState = "idle" | "open" | "closed";
 
@@ -59,6 +60,7 @@ export class RecommendationsSidebar {
   @Prop() addPriceContainer?: boolean = false;
   @Prop() showFilters: boolean = false;
   @Prop() setModeDiscounts: string;
+  @Prop() setItemsAmount?: number;
   @Prop() updateButtonLocation: UpdateButtonLocation;
   @Prop() favoriteShow: boolean = false;
   @Prop() useCarousel: boolean = true;
@@ -68,15 +70,17 @@ export class RecommendationsSidebar {
   /** @internal */
   @Prop() buttonChildren: HTMLCollection;
   /** @internal */
-  @Prop() apiPath: string | undefined = "https://api.vviinn.com";
+  @Prop() apiPath?: string = "https://api.vviinn.com";
   /** @internal */
   @Prop() buttonElementId?: string;
   /** @internal */
   @Prop() widgetVersion: string;
   /** @internal */
   @Prop() showingInButton: boolean;
+  /** @internal */
+  @Prop() showInModal: boolean = false;
 
-  @State() state: SidebarState = "idle";
+  @State() sidebarState: SidebarState = "idle";
   @State() sourceProduct?: Recommendation;
 
   @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
@@ -104,8 +108,8 @@ export class RecommendationsSidebar {
 
     if (!sidebarRect) return;
 
-    if (!isClickedInRectBound(event, sidebarRect)) {
-      this.state = "closed";
+    if (this.showInModal && !isClickedInRectBound(event, sidebarRect)) {
+      this.sidebarState = "closed";
     }
   }
 
@@ -117,7 +121,7 @@ export class RecommendationsSidebar {
   private getClassMap() {
     return {
       [this.position]: true,
-      [this.state]: true,
+      [this.sidebarState]: true,
       "no-fixed": this.showInCustomContainer,
     };
   }
@@ -140,9 +144,9 @@ export class RecommendationsSidebar {
     });
   }
 
-  render(): any {
+  render() {
     return (
-      <Host class={this.getClassMap()} exportparts="body">
+      <Host class={this.getClassMap()} exportparts="body, close-sidebar">
         <aside
           class="sidebar"
           part="body"
@@ -154,12 +158,13 @@ export class RecommendationsSidebar {
               part="sidebar-header"
             >
               {this.renderSourceImage()}
-              <span class="title" part="title">
+              <span class="title" part="recommendations-title">
                 {this.sidebarTitle}
               </span>
               <button
                 class="close-sidebar"
-                onClick={() => (this.state = "closed")}
+                onClick={() => (this.sidebarState = "closed")}
+                part="close-sidebar"
               >
                 <CrossIcon />
               </button>
@@ -168,16 +173,17 @@ export class RecommendationsSidebar {
 
           <main part="sidebar-content">
             <vviinn-vpr-widget
-              exportparts="image-container, content-container, basket-button-container,brand, product-type, currency, deeplink, image, image-link, image-picture, price-container, price-amount, price-prefix, price-outdated, price-regular, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-sale, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, title: product-title, carousel-button, product-card, items-group, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link, product-card-top-actions"
+              exportparts={`${carouselParts}, ${productCardParts}`}
               token={this.token}
               productId={this.productId}
               imageWidth={this.imageWidth}
               imageRatio={this.imageRatio}
+              setItemsAmount={this.setItemsAmount}
               blockTitle=""
               mode={this.mode}
               campaign-type={this.campaignType}
               useCarousel={this.useCarousel}
-              onVviinnRecommendationsLoaded={() => (this.state = "open")}
+              onVviinnRecommendationsLoaded={() => (this.sidebarState = "open")}
               showScroll={this.widgetScrollbar}
               campaigns={this.campaigns}
               color={this.color}
@@ -193,8 +199,8 @@ export class RecommendationsSidebar {
               excluded={this.excluded}
               productDetailsNewTab={this.productDetailsNewTab}
               productDetailsRedirect={this.productDetailsRedirect}
-              closed={this.state === "closed"}
-              opened={this.state === "open"}
+              closed={this.sidebarState === "closed"}
+              opened={this.sidebarState === "open"}
               addToBasketShow={this.addToBasketShow}
               cssUrl={this.cssUrl}
               showFilters={this.showFilters}

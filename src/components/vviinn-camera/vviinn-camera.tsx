@@ -13,7 +13,10 @@ import { pipe } from "fp-ts/lib/function";
 import { toFile } from "../../Image/toFile";
 import { processSelectedFile } from "../../store/search.store";
 import * as E from "fp-ts/lib/Either";
-import { BasicEventData } from "../../recommendation/events";
+import {
+  BasicEventData,
+  ImageUploadEventData,
+} from "../../recommendation/events";
 import { slotChangeListener } from "../customized-slots";
 import {
   MinusIcon,
@@ -28,8 +31,8 @@ type ZoomCapabilities = {
 };
 
 @Component({
-  tag: "vviinn-example-image",
-  styleUrl: "vviinn-example-image.css",
+  tag: "vviinn-camera",
+  styleUrl: "vviinn-camera.css",
   shadow: true,
 })
 export class VviinnExampleImage {
@@ -40,12 +43,13 @@ export class VviinnExampleImage {
   @Prop() basicEventData: BasicEventData;
   @Prop() srcObject: MediaStream;
   @Prop() cameraButtonClicked: boolean = false;
+  @Prop() useComponentsStore: boolean = false;
 
   @State() selected: boolean = false;
   @State() videoInitialized: boolean = false;
   @State() zoomCapabilities: ZoomCapabilities | null = null;
 
-  @Event() vviinnImageUpload: EventEmitter<BasicEventData>;
+  @Event() vviinnImageUpload: EventEmitter<ImageUploadEventData>;
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
   /** @internal */
   @Event() vviinnImageUploadFinished: EventEmitter;
@@ -177,10 +181,15 @@ export class VviinnExampleImage {
     file = await toFile(dataURI);
 
     pipe(
-      await processSelectedFile(file),
+      await processSelectedFile(
+        this.useComponentsStore ? "components" : "widget"
+      )(file),
       E.match(
         () => this.vviinnNoResult.emit(this.basicEventData),
-        () => this.vviinnImageUploadFinished.emit()
+        ({ links }) =>
+          this.vviinnImageUploadFinished.emit({
+            searchId: links.self.href,
+          })
       )
     );
 

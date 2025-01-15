@@ -26,6 +26,7 @@ import {
   CAROUSEL_WIDTH_CSS_VAR,
   COLUMNS_NUMBER_CSS_VAR,
   CONTENT_GROUP_CSS_CLASS,
+  DEFAULT_COLUMNS_NUMBER,
   SET_MODE_IMAGE_WIDTH,
 } from "./constants";
 import { calculateDiscount } from "../../utils/number";
@@ -78,6 +79,7 @@ export class VviinnCarousel {
   @Prop() currencySign: string;
   @Prop() pricePrefix: string = "";
   @Prop() locale: Locale;
+  @Prop() setItemsAmount?: number;
 
   /** Event emitted once when the recommendation is rendered on the page */
   @Event({ bubbles: true })
@@ -176,8 +178,7 @@ export class VviinnCarousel {
     this.isSetMode = this.mode === "set";
     this.isGridMode = this.mode === "grid";
     this.isContinuityMode = this.mode === "continuity";
-
-    const columnsNumber = this.getColumnsNumber();
+    this.columns = this.getColumnsNumber();
 
     if (this.isSetMode) {
       window.addEventListener("resize", this.handleWindowResize);
@@ -185,10 +186,10 @@ export class VviinnCarousel {
       this.setModeMaxDiscount =
         this.setModeDiscountsArray[this.setModeDiscountsArray.length - 1];
     }
-    if (this.isSetMode && this.recommendations.length >= columnsNumber) {
+    if (this.isSetMode && this.recommendations.length >= this.columns) {
       this.crossSellingRecommendations = this.recommendations.slice(
         0,
-        columnsNumber
+        this.columns
       );
     }
   }
@@ -204,7 +205,6 @@ export class VviinnCarousel {
 
   componentDidLoad() {
     this.setWidth();
-    this.columns = this.getColumnsNumber();
     const slot = this.el.querySelector(".content");
 
     this.mutationObserver.observe(slot, { subtree: true, childList: true });
@@ -296,7 +296,8 @@ export class VviinnCarousel {
   }
 
   private calculateMoveStep() {
-    const contentWidths = this.getContent().map(
+    const imageGroups = this.getContent().filter((el) => !el.matches("button"));
+    const contentWidths = imageGroups.map(
       (el) => el.getBoundingClientRect().width
     );
     const sum = contentWidths.reduce((acc, val) => acc + val, 0);
@@ -307,7 +308,6 @@ export class VviinnCarousel {
       (contentGapString) => parseInt(contentGapString.split("px")[0]),
       (contentGap) => (isNaN(contentGap) ? 0 : contentGap)
     );
-
     return sum / contentWidths.length + contentGap;
   }
 
@@ -365,10 +365,23 @@ export class VviinnCarousel {
   }
 
   private getColumnsNumber(): number {
+    if (this.setItemsAmount && this.isSetMode) return this.setItemsAmount;
     const styleSheet = getComputedStyle(this.el);
+    const imagesContainer = this.el.querySelector(".items-group");
+    if (imagesContainer) {
+      const totalWidth = this.el.getBoundingClientRect().width;
+      const imageContainer = imagesContainer.children[0];
+      const imageWidth = imageContainer.getBoundingClientRect().width;
+      const gridColumns = Math.floor(totalWidth / imageWidth);
+      if (gridColumns) return gridColumns;
+    }
+
     const columnsInCss = styleSheet.getPropertyValue(COLUMNS_NUMBER_CSS_VAR);
     const columnsNumber = parseInt(columnsInCss);
-    return columnsNumber && !isNaN(columnsNumber) ? columnsNumber : 4;
+
+    return columnsNumber && !isNaN(columnsNumber)
+      ? columnsNumber
+      : DEFAULT_COLUMNS_NUMBER;
   }
 
   private getContentGroups(): HTMLElement[] {
@@ -436,7 +449,6 @@ export class VviinnCarousel {
     return (
       <vviinn-product-card
         index={rank}
-        part="product-part"
         productId={recommendation.productId}
         productTitle={recommendation.title}
         productType={recommendation.productType}
@@ -527,19 +539,8 @@ export class VviinnCarousel {
     return (
       <Host class={this.getClassMap()}>
         <div class={{ body: true, ...this.getClassMap() }}>
-          {!this.isSetMode && (
-            <button
-              class="prev"
-              onClick={() => this.handleCarouselButtonClick("left")}
-              part="carousel-button"
-              disabled={this.gridArrowsDynamic && this.isFirstGroup()}
-            >
-              <ChevronIcon />
-            </button>
-          )}
           {this.isSetMode && this.crossSellingRecommendations.length > 0 && (
             <vviinn-product-card
-              part="product-part"
               class="set-mode product-card--source"
               productTitle={this.sourceProduct.title}
               image={this.sourceProduct.image.thumbnail}
@@ -560,19 +561,28 @@ export class VviinnCarousel {
           )}
 
           <div class={this.getContentClassMap()}>
+            {!this.isSetMode && (
+              <button
+                class="prev"
+                onClick={() => this.handleCarouselButtonClick("left")}
+                part="carousel-button"
+                disabled={this.gridArrowsDynamic && this.isFirstGroup()}
+              >
+                <ChevronIcon />
+              </button>
+            )}
             {this.renderRecommendations()}
+            {!this.isSetMode && (
+              <button
+                class="next"
+                onClick={() => this.handleCarouselButtonClick("right")}
+                part="carousel-button"
+                disabled={this.gridArrowsDynamic && this.isLastGroup()}
+              >
+                <ChevronIcon />
+              </button>
+            )}
           </div>
-
-          {!this.isSetMode && (
-            <button
-              class="next"
-              onClick={() => this.handleCarouselButtonClick("right")}
-              part="carousel-button"
-              disabled={this.gridArrowsDynamic && this.isLastGroup()}
-            >
-              <ChevronIcon />
-            </button>
-          )}
         </div>
         {this.showBullets() && (
           <div class="bullets">{this.renderBullets()}</div>

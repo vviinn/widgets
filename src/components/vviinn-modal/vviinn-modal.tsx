@@ -18,6 +18,7 @@ import * as O from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/function";
 import { sequenceToOption } from "../../utils/option/option";
 import { SecondaryActionIcon } from "../vviinn-icons/";
+import { modalParts } from "../../cssParts";
 
 @Component({
   tag: "vviinn-modal",
@@ -77,10 +78,15 @@ export class VviinnModal {
 
   private renderImage(): HTMLImageElement | null {
     return pipe(
-      sequenceToOption(searchState.imageUrl, searchState.image),
-      O.map(([url]) => {
+      sequenceToOption(searchState.image),
+      O.map(([imageElement]) => {
         const image = (
-          <img width="28" height="28" src={url} class="title-image" />
+          <img
+            width="28"
+            height="28"
+            src={imageElement.src}
+            class="title-image"
+          />
         );
         return image;
       }),
@@ -91,7 +97,7 @@ export class VviinnModal {
   render() {
     return (
       <Host
-        exportparts="secondary-action, title, close-button"
+        exportparts={modalParts}
         class={{ closed: !this.active, "first-screen": this.isFirstScreen }}
         onAnimationEnd={(ev: AnimationEvent) => this.handleAnimationEnd(ev)}
       >
@@ -107,7 +113,7 @@ export class VviinnModal {
               <SecondaryActionIcon />
             </button>
           )}
-          <div class="title" part="title">
+          <div class="title" part="results-title">
             {this.renderImage()}
             <slot name="vviinn-image-search-modal-title">
               {i18next.t("imageSearchModalTitle")}

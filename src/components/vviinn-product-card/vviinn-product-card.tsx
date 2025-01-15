@@ -50,6 +50,7 @@ import {
   Recommendation,
 } from "../../interfaces/recommendation";
 import { resources } from "../../locale";
+import { productCardParts } from "../../cssParts";
 
 /**
  * @part image-container - Product Card's image container.
@@ -81,23 +82,28 @@ import { resources } from "../../locale";
  * @part energy-label-icon - Icon with an energy class.
  * @part energy-label-product-type - Product type.
  * @part energy-label-data-sheet-link - Data sheet link.
- * @part custom-label-0 - String part of the price with index 0.
- * @part custom-label-1 - String part of the price with index 1.
- * @part custom-label-2 - String part of the price with index 2.
- * @part custom-label-3 - String part of the price with index 3.
- * @part custom-label-4 - String part of the price with index 4.
+ * @part custom-label-0 - Custom label with index 0.
+ * @part custom-label-1 - Custom label with index 1.
+ * @part custom-label-2 - Custom label with index 2.
+ * @part custom-label-3 - Custom label with index 3.
+ * @part custom-label-4 - Custom label with index 4.
  * @part product-card-actions - Style actions wrapper.
- * @part product-card-top-actions - Style top actions wrapper.
+ * @part product-card-actions-top - Style top actions wrapper.
  *
  * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
  * @slot vviinn-basket-button-icon - Icon of Add to Basket button.
  * @slot vviinn-basket-button-text-pressed - Text of pressed Add to Basket button (Set mode).
  * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button (Set mode).
- * @slot energy-label-data-sheet-text - Data sheet link's text.
+ * @slot vviinn-energy-label-data-sheet-text - Data sheet link's text.
  * @slot vviinn-product-card-actions - Add action buttons like One-click discovery to this slot.
  * @slot vviinn-favorite-icon - Icon of Favorite button.
  * @slot vviinn-favorite-icon-pressed - Icon of pressed Favorite button.
+ * @slot vviinn-custom-label-0 - Custom label with index 0.
+ * @slot vviinn-custom-label-1 - Custom label with index 1.
+ * @slot vviinn-custom-label-2 - Custom label with index 2.
+ * @slot vviinn-custom-label-3 - Custom label with index 3.
+ * @slot vviinn-custom-label-4 - Custom label with index 4.
  *
  */
 @Component({
@@ -386,13 +392,13 @@ export class VviinnProductCard {
         class={{
           animated: this.isTransitioning,
         }}
-        exportparts="image-container, content-container, basket-button-container, brand, product-type, custom-label-0, custom-label-1, custom-label-2, custom-label-3, custom-label-4, currency, deeplink, image, image-link, image-picture, price-container, price-amount-regular, price-amount-sale, price-amount-outdated, price-amount-base-regular, price-amount-base-sale, price-amount-base-outdated, price-outdated, price-regular, price-sale, price-prefix, discount-label, discount-percentage, title, basket-button, update-button-item, energy-label-container, energy-label-icon, energy-label-product-type, energy-label-data-sheet-link, product-card-actions, product-card-top-actions"
+        exportparts={productCardParts}
       >
         <div class="image-container" part="image-container">
           <Linked deeplink={this.deeplink} part="image-link">
             {this.renderImage()}
           </Linked>
-          <div class="product-card-top-actions" part="product-card-top-actions">
+          <div class="product-card-actions-top" part="product-card-actions-top">
             <button
               class={{
                 hidden: !this.favoriteShow,
@@ -407,7 +413,7 @@ export class VviinnProductCard {
                 }}
               >
                 <slot name="vviinn-favorite-icon">
-                  <FavoriteIcon />
+                  <FavoriteIcon width={14} height={14} />
                 </slot>
               </div>
               <div
@@ -417,7 +423,27 @@ export class VviinnProductCard {
                 }}
               >
                 <slot name="vviinn-favorite-icon-pressed">
-                  <FavoriteIconPressed />
+                  <FavoriteIconPressed width={14} height={14} />
+                </slot>
+              </div>
+            </button>
+
+            <button
+              class={{
+                "update-button": true,
+                hidden: !this.isShowUpdateButton(),
+              }}
+              part="update-button-item"
+              onClick={() => {
+                this.vviinnCrossSellingClick.emit({
+                  animationInterval: generateRandomNumber(800, 1400),
+                  productData: this.productData,
+                });
+              }}
+            >
+              <div>
+                <slot name="vviinn-update-button-icon">
+                  <UpdateIcon width={14} height={14} />
                 </slot>
               </div>
             </button>
@@ -480,10 +506,10 @@ export class VviinnProductCard {
                     part="discount-label"
                   >{`-${this.currentDiscountPercentage}%`}</div>
                 )}
+
+              {renderCustomLabels(this.customLabels.split(","))}
             </Fragment>
           )}
-
-          {renderCustomLabels(this.customLabels.split(","))}
 
           <vviinn-skeleton
             height={40}
@@ -567,24 +593,6 @@ export class VviinnProductCard {
             </div>
           </button>
         </div>
-
-        <button
-          class={{
-            "update-button": true,
-            hidden: !this.isShowUpdateButton(),
-          }}
-          part="update-button-item"
-          onClick={() => {
-            this.vviinnCrossSellingClick.emit({
-              animationInterval: generateRandomNumber(800, 1400),
-              productData: this.productData,
-            });
-          }}
-        >
-          <slot name="vviinn-update-button-icon">
-            <UpdateIcon />
-          </slot>
-        </button>
 
         {this.showFooterArrow && <div class="footer-arrow"></div>}
       </Host>

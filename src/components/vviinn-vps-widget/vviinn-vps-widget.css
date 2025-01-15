@@ -22,7 +22,7 @@
   height: 1px;
 }
 
-vviinn-overlayed-modal.first-screen::part(title),
+vviinn-overlayed-modal.first-screen::part(results-title),
 vviinn-overlayed-modal.first-screen::part(secondary-action) {
   visibility: hidden;
 }
@@ -157,7 +157,7 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   -ms-overflow-style: none;
 }
 
-@supports (scrollbar-color: auto) {
+@supports (scrollbar-color: unset) {
   .filters-wrapper {
     scrollbar-color: transparent transparent;
   }
