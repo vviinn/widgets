@@ -6,15 +6,25 @@ import {
   SquareFilterIcon,
 } from "../../vviinn-icons";
 
-export const RenderButton = (
+type RenderButtonProps = {
+  handleSubFilterSelection: (value: any, selectedFilter: any) => void;
+  value: any;
+  label: string;
+  active: boolean;
+  selectedFilter: any;
+  isSelected?: boolean;
+  showClose?: boolean;
+};
+
+export const RenderButton = ({
   handleSubFilterSelection,
   value,
   label,
   active,
   selectedFilter,
   isSelected = false,
-  showClose = false
-) => {
+  showClose = false,
+}: RenderButtonProps) => {
   const hexCode = value.hexCode;
   const hasHexCodeLength = hexCode?.length > 0;
 

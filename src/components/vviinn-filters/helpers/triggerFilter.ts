@@ -10,15 +10,28 @@ import {
   DynamicFilterTrackingData,
 } from "../../../recommendation/events";
 
-export const triggerFilter = (
-  filterValue: DynamicFilterValue,
-  selectedFilter: ResponseDynamicFilterItem,
-  requestFilters: RequestDynamicFilterItem[],
-  vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>,
-  vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>,
-  el: HTMLElement,
-  isTriggeredByVpsWidget?: boolean
-) => {
+type TriggerResetFiltersParams = {
+  vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
+  vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
+  el: HTMLElement;
+  isTriggeredByVpsWidget?: boolean;
+};
+
+type TriggerFilterParams = TriggerResetFiltersParams & {
+  filterValue: DynamicFilterValue;
+  selectedFilter: ResponseDynamicFilterItem;
+  requestFilters: RequestDynamicFilterItem[];
+};
+
+export const triggerFilter = ({
+  filterValue,
+  selectedFilter,
+  requestFilters,
+  vviinnFilterTriggered,
+  vviinnFiltersChanged,
+  el,
+  isTriggeredByVpsWidget,
+}: TriggerFilterParams) => {
   const { filters, action } = subFilterSelection(
     requestFilters,
     selectedFilter,
@@ -40,12 +53,12 @@ export const triggerFilter = (
   return filters;
 };
 
-export const triggerResetFilters = (
-  vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>,
-  vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>,
-  el: HTMLElement,
-  isTriggeredByVpsWidget?: boolean
-) => {
+export const triggerResetFilters = ({
+  vviinnFilterTriggered,
+  vviinnFiltersChanged,
+  el,
+  isTriggeredByVpsWidget,
+}: TriggerResetFiltersParams) => {
   vviinnFilterTriggered.emit({
     action: "reset",
     isTriggeredByVpsWidget,

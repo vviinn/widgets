@@ -421,7 +421,7 @@ export class VviinnResults {
     }
   };
 
-  private filtersTriggeredHandler = ({
+  private filterTriggeredHandler = ({
     detail,
   }: CustomEvent<DynamicFilterInternalData>) => {
     if (
@@ -491,7 +491,7 @@ export class VviinnResults {
 
     document.addEventListener(
       "vviinnFilterTriggered",
-      this.filtersTriggeredHandler
+      this.filterTriggeredHandler
     );
 
     document.addEventListener("vviinnImageUpload", this.uploadTriggeredHandler);
@@ -527,7 +527,7 @@ export class VviinnResults {
 
     document.removeEventListener(
       "vviinnFilterTriggered",
-      this.filtersTriggeredHandler
+      this.filterTriggeredHandler
     );
 
     document.removeEventListener("vviinnWidgetClose", this.widgetCloseHandler);

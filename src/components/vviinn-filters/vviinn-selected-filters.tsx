@@ -16,6 +16,7 @@ import {
 import { FilterOptions, RenderButton, showActiveOnSubButton } from "./helpers";
 import {
   ChangedFiltersEventData,
+  DynamicFilterInternalData,
   DynamicFilterTrackingData,
   ResetSelectedFiltersEventData,
 } from "../../recommendation/events";
@@ -67,20 +68,28 @@ export class VviinnSelectedFilters {
     filterValue: DynamicFilterValue,
     selectedFilter: ResponseDynamicFilterItem
   ) {
-    this.requestFilters = triggerFilter(
+    this.requestFilters = triggerFilter({
       filterValue,
       selectedFilter,
-      this.requestFilters,
-      this.vviinnFilterTriggered,
-      this.vviinnFiltersChanged,
-      this.el,
-      this.showInWidget
-    );
+      requestFilters: this.requestFilters,
+      vviinnFilterTriggered: this.vviinnFilterTriggered,
+      vviinnFiltersChanged: this.vviinnFiltersChanged,
+      el: this.el,
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
   }
 
   private skipFiltersChanges = (isTriggeredByVpsWidget: boolean) =>
     (isTriggeredByVpsWidget && !this.showInWidget) ||
     (!isTriggeredByVpsWidget && this.showInWidget);
+
+  private handleFilterTriggered = ({
+    detail,
+  }: CustomEvent<DynamicFilterInternalData>) => {
+    if (detail.customTrigger === "TPS") {
+      // TODO: "Implement custom filters trigger";
+    }
+  };
 
   private handleFiltersChanged = ({
     detail,
@@ -111,6 +120,10 @@ export class VviinnSelectedFilters {
       this.handleFiltersChanged
     );
     document.addEventListener(
+      "vviinnFilterTriggered",
+      this.handleFilterTriggered
+    );
+    document.addEventListener(
       "vviinnSelectedFiltersReset",
       this.handleSelectedFiltersReset
     );
@@ -119,6 +132,10 @@ export class VviinnSelectedFilters {
   disconnectedCallback() {
     document.removeEventListener(
       "vviinnFiltersChanged",
+      this.handleFiltersChanged
+    );
+    document.removeEventListener(
+      "vviinnFilterTriggered",
       this.handleFiltersChanged
     );
     document.removeEventListener(
@@ -139,15 +156,16 @@ export class VviinnSelectedFilters {
       (filter.values as FilterOptions).forEach(({ value, label, active }) => {
         if (showActiveOnSubButton(this.requestFilters, value, filter)) {
           selectedButtons.push(
-            RenderButton(
-              this.handleSubFilterSelection.bind(this),
+            RenderButton({
+              handleSubFilterSelection:
+                this.handleSubFilterSelection.bind(this),
+              selectedFilter: filter,
               value,
               label,
               active,
-              filter,
-              true,
-              true
-            )
+              isSelected: true,
+              showClose: true,
+            })
           );
         }
       });

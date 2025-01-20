@@ -351,19 +351,20 @@ export class VviinnExtendedFilters {
         {filterOptions
           .slice(0, displayedCount)
           .map(({ value, label, active }) => {
-            const selected = this.showActiveOnModalSubButton(
+            const isSelected = this.showActiveOnModalSubButton(
               this.requestFilters,
               value
             );
 
-            return RenderButton(
-              this.handleSubFilterSelection.bind(this),
+            return RenderButton({
+              handleSubFilterSelection:
+                this.handleSubFilterSelection.bind(this),
+              selectedFilter: filter,
               value,
               label,
               active,
-              filter,
-              selected
-            );
+              isSelected,
+            });
           })}
         {displayedCount < filterOptions.length && (
           <button
@@ -384,15 +385,15 @@ export class VviinnExtendedFilters {
     filterValue: DynamicFilterValue,
     selectedFilter: ResponseDynamicFilterItem
   ) {
-    this.requestFilters = triggerFilter(
+    this.requestFilters = triggerFilter({
       filterValue,
       selectedFilter,
-      this.requestFilters,
-      this.vviinnFilterTriggered,
-      this.vviinnFiltersChanged,
-      this.el,
-      this.showInWidget
-    );
+      requestFilters: this.requestFilters,
+      vviinnFilterTriggered: this.vviinnFilterTriggered,
+      vviinnFiltersChanged: this.vviinnFiltersChanged,
+      el: this.el,
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
   }
 
   private showActiveOnModalSubButton(
@@ -487,12 +488,12 @@ export class VviinnExtendedFilters {
   }
 
   private resetModal() {
-    triggerResetFilters(
-      this.vviinnFilterTriggered,
-      this.vviinnFiltersChanged,
-      this.el,
-      this.showInWidget
-    );
+    triggerResetFilters({
+      vviinnFilterTriggered: this.vviinnFilterTriggered,
+      vviinnFiltersChanged: this.vviinnFiltersChanged,
+      el: this.el,
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
 
     this.selectedMoreOptions = [];
     this.requestFilters = [];

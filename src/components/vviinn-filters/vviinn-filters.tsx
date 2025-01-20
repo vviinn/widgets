@@ -124,15 +124,15 @@ export class VviinnFilters {
     filterValue: DynamicFilterValue,
     selectedFilter: ResponseDynamicFilterItem
   ) {
-    this.requestFilters = triggerFilter(
+    this.requestFilters = triggerFilter({
       filterValue,
       selectedFilter,
-      this.requestFilters,
-      this.vviinnFilterTriggered,
-      this.vviinnFiltersChanged,
-      this.el,
-      this.showInWidget
-    );
+      requestFilters: this.requestFilters,
+      vviinnFilterTriggered: this.vviinnFilterTriggered,
+      vviinnFiltersChanged: this.vviinnFiltersChanged,
+      el: this.el,
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
   }
 
   private showActiveOnMainButton({ column }: ResponseDynamicFilterItem) {
@@ -253,14 +253,15 @@ export class VviinnFilters {
                       this.selectedFilter
                     );
 
-                    return RenderButton(
-                      this.handleSubFilterSelection.bind(this),
+                    return RenderButton({
+                      handleSubFilterSelection:
+                        this.handleSubFilterSelection.bind(this),
+                      selectedFilter: this.selectedFilter,
                       value,
                       label,
                       active,
-                      this.selectedFilter,
-                      isSelected
-                    );
+                      isSelected,
+                    });
                   })}
               </ul>
             )}
