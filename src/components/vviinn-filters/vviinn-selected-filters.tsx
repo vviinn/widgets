@@ -23,7 +23,6 @@ import {
 import {
   ChangedFiltersEventData,
   DynamicFilterInternalData,
-  DynamicFilterTrackingData,
   ResetSelectedFiltersEventData,
 } from "../../recommendation/events";
 import { triggerFilter } from "./helpers/triggerFilter";
@@ -68,7 +67,7 @@ export class VviinnSelectedFilters {
   @Event({ bubbles: true })
   vviinnSelectedFiltersReset: EventEmitter<ResetSelectedFiltersEventData>;
 
-  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
+  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterInternalData>;
 
   private state?: SearchStore;
 
@@ -191,7 +190,20 @@ export class VviinnSelectedFilters {
               RenderCustomButton({
                 label: this.textSearchCustomFilter,
                 buttonType: "text",
+                onButtonClick: () => {
+                  this.textSearchCustomFilter = null;
+                  this.vviinnFilterTriggered.emit({
+                    kind: "",
+                    action: "deselect",
+                    customTrigger: "TPS",
+                    isTriggeredByVpsWidget: this.showInWidget,
+                  });
+                  this.vviinnSelectedFiltersReset.emit({
+                    isTriggeredByVpsWidget: this.showInWidget,
+                  });
+                },
               })}
+
             {this.selectedFilterButtons}
           </ul>
         )}
