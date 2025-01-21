@@ -259,6 +259,7 @@ export class VviinnTextSearch {
               locale={this.locale}
               addStyle={false}
               useComponentsStore={true}
+              apiPath={this.apiPath}
             />
           )}
 
