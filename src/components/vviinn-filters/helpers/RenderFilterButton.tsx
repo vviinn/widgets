@@ -1,22 +1,29 @@
-import { h } from "@stencil/core";
+import { h, JSX } from "@stencil/core";
 
 import {
   CheckFilterIcon,
   CloseFilterIcon,
   SquareFilterIcon,
 } from "../../vviinn-icons";
+import {
+  DynamicFilterValue,
+  ResponseDynamicFilterItem,
+} from "../../../campaign/VPRCampaignService";
 
 type RenderButtonProps = {
-  handleSubFilterSelection: (value: any, selectedFilter: any) => void;
-  value: any;
+  handleSubFilterSelection: (
+    filterValue: DynamicFilterValue,
+    selectedFilter: ResponseDynamicFilterItem
+  ) => void;
+  value: DynamicFilterValue;
   label: string;
   active: boolean;
-  selectedFilter: any;
+  selectedFilter: ResponseDynamicFilterItem;
   isSelected?: boolean;
   showClose?: boolean;
 };
 
-export const RenderButton = ({
+export const RenderFilterButton = ({
   handleSubFilterSelection,
   value,
   label,
@@ -24,8 +31,8 @@ export const RenderButton = ({
   selectedFilter,
   isSelected = false,
   showClose = false,
-}: RenderButtonProps) => {
-  const hexCode = value.hexCode;
+}: RenderButtonProps): JSX.Element => {
+  const hexCode = value?.hexCode;
   const hasHexCodeLength = hexCode?.length > 0;
 
   return (

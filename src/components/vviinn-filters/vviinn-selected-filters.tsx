@@ -7,13 +7,19 @@ import {
   EventEmitter,
   Element,
   Prop,
+  JSX,
 } from "@stencil/core";
 import {
   ResponseDynamicFilterItem,
   DynamicFilterValue,
   RequestDynamicFilterItem,
 } from "../../campaign/VPRCampaignService";
-import { FilterOptions, RenderButton, showActiveOnSubButton } from "./helpers";
+import {
+  FilterOptions,
+  RenderCustomButton,
+  RenderFilterButton,
+  showActiveOnSubButton,
+} from "./helpers";
 import {
   ChangedFiltersEventData,
   DynamicFilterInternalData,
@@ -50,6 +56,8 @@ export class VviinnSelectedFilters {
 
   @State() filters: ResponseDynamicFilterItem[] = [];
   @State() requestFilters: RequestDynamicFilterItem[] = [];
+  @State() selectedFilterButtons: JSX.Element[] = [];
+  @State() textSearchCustomFilter: string | null = null;
 
   /** The filter's state changes */
   @Event({ bubbles: true })
@@ -87,7 +95,7 @@ export class VviinnSelectedFilters {
     detail,
   }: CustomEvent<DynamicFilterInternalData>) => {
     if (detail.customTrigger === "TPS") {
-      // TODO: "Implement custom filters trigger";
+      this.textSearchCustomFilter = detail.kind;
     }
   };
 
@@ -136,7 +144,7 @@ export class VviinnSelectedFilters {
     );
     document.removeEventListener(
       "vviinnFilterTriggered",
-      this.handleFiltersChanged
+      this.handleFilterTriggered
     );
     document.removeEventListener(
       "vviinnSelectedFiltersReset",
@@ -144,19 +152,16 @@ export class VviinnSelectedFilters {
     );
   }
 
-  render() {
-    const filters = this.state.dynamicFilters;
-    if (!filters?.length) return;
-
-    let selectedButtons = [];
+  componentWillRender() {
+    this.selectedFilterButtons = [];
+    const filters = this.state?.dynamicFilters || [];
 
     filters.forEach((filter) => {
       if (!("values" in filter)) return;
-
       (filter.values as FilterOptions).forEach(({ value, label, active }) => {
         if (showActiveOnSubButton(this.requestFilters, value, filter)) {
-          selectedButtons.push(
-            RenderButton({
+          this.selectedFilterButtons.push(
+            RenderFilterButton({
               handleSubFilterSelection:
                 this.handleSubFilterSelection.bind(this),
               selectedFilter: filter,
@@ -170,16 +175,24 @@ export class VviinnSelectedFilters {
         }
       });
     });
+  }
 
+  render() {
     return (
       <Host
         class={{
           "show-in-widget": this.showInWidget,
         }}
       >
-        {selectedButtons.length > 0 && (
+        {(this.selectedFilterButtons.length > 0 ||
+          this.textSearchCustomFilter) && (
           <ul class="selected-filters-wrapper" part="selected-filters-list">
-            {selectedButtons}
+            {this.textSearchCustomFilter &&
+              RenderCustomButton({
+                label: this.textSearchCustomFilter,
+                buttonType: "text",
+              })}
+            {this.selectedFilterButtons}
           </ul>
         )}
       </Host>

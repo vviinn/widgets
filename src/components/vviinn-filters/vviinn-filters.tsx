@@ -16,7 +16,7 @@ import {
 } from "../../campaign/VPRCampaignService";
 import {
   getFilterOptions,
-  RenderButton,
+  RenderFilterButton,
   showActiveOnSubButton,
 } from "./helpers";
 import { Histogram } from "../vviinn-price-range/vviinn-price-range";
@@ -253,7 +253,7 @@ export class VviinnFilters {
                       this.selectedFilter
                     );
 
-                    return RenderButton({
+                    return RenderFilterButton({
                       handleSubFilterSelection:
                         this.handleSubFilterSelection.bind(this),
                       selectedFilter: this.selectedFilter,

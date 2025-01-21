@@ -19,7 +19,7 @@ import {
   RequestDynamicFilterItem,
 } from "../../campaign/VPRCampaignService";
 import { ChevronIconSmall, NewCloseIcon } from "../vviinn-icons";
-import { FilterOptions, getFilterOptions, RenderButton } from "./helpers";
+import { FilterOptions, getFilterOptions, RenderFilterButton } from "./helpers";
 import { Locale, resources } from "../../locale";
 
 import { SlotSkeleton, slotChangeListener } from "../customized-slots";
@@ -356,7 +356,7 @@ export class VviinnExtendedFilters {
               value
             );
 
-            return RenderButton({
+            return RenderFilterButton({
               handleSubFilterSelection:
                 this.handleSubFilterSelection.bind(this),
               selectedFilter: filter,
