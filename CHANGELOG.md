@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.145.12](https://github.com/vviinn/widgets/compare/v2.145.11...v2.145.12) (2025-01-21)
+
+
+### Bug Fixes
+
+* pass api path from text search to search modal ([24414a2](https://github.com/vviinn/widgets/commit/24414a20de0fa7be8136af74fa44c51218965c44))
+
 ### [2.145.11](https://github.com/vviinn/widgets/compare/v2.145.10...v2.145.11) (2025-01-14)
 
 
