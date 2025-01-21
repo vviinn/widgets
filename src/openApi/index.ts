@@ -18,7 +18,7 @@ export const isProductionPath = (apiPath: string): boolean =>
 
 // TODO find way to utilize this function when we will use several openApi clients
 export const createBearerAuth = (
-  token: string | PromiseLike<string>
+  token: string | PromiseLike<string>,
 ): AuthMethodsConfiguration => {
   const provider: TokenProvider = {
     getToken: () => {
@@ -37,7 +37,7 @@ export const createBearerAuth = (
 
 export const createTrackingApi = (
   apiPath: string,
-  token: string | PromiseLike<string>
+  token: string | PromiseLike<string>,
 ) => {
   const baseServer = getTrackingServerByApiPath(apiPath);
   const authMethods = createBearerAuth(token);

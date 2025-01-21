@@ -19,18 +19,18 @@ const makeExportPartsString = (...args: string[][]): string =>
 export const extendedFiltersParts = makeExportPartsString(
   extendedFiltersPartsList,
   histogramPartsList,
-  generalFiltersPartsList
+  generalFiltersPartsList,
 );
 
 export const filtersParts = makeExportPartsString(
   filtersPartsList,
   histogramPartsList,
-  generalFiltersPartsList
+  generalFiltersPartsList,
 );
 
 export const selectedFiltersParts = makeExportPartsString(
   selectedFiltersPartsList,
-  generalFiltersPartsList
+  generalFiltersPartsList,
 );
 
 export const priceRangeParts = makeExportPartsString(histogramPartsList);
@@ -41,14 +41,14 @@ export const productCardParts = makeExportPartsString(
   productCardGeneralPartsList,
   pricePartsList,
   customLabelPartsList,
-  energyLabelPartsList
+  energyLabelPartsList,
 );
 
 export const searchWidgetFilterParts = makeExportPartsString(
   extendedFiltersPartsList,
   filtersPartsList,
   histogramPartsList,
-  generalFiltersPartsList
+  generalFiltersPartsList,
 );
 
 export const searchWidgetButtonParts = makeExportPartsString([

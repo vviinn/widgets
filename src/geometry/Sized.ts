@@ -13,5 +13,5 @@ export const sizedDivSemigroup = getStructSemigroup<Sized>({
 });
 
 export const ordSized: Ord.Ord<Sized> = Ord.contramap<number, Sized>(
-  (s) => s.width * s.height
+  (s) => s.width * s.height,
 )(Ord.ordNumber);

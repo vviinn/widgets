@@ -67,7 +67,7 @@ export class VviinnModal {
           widgetVersion: this.widgetVersion,
         });
       },
-      this.slider ? 500 : 0
+      this.slider ? 500 : 0,
     );
   }
 
@@ -90,7 +90,7 @@ export class VviinnModal {
         );
         return image;
       }),
-      O.getOrElse(() => null)
+      O.getOrElse(() => null),
     );
   }
 

@@ -17,12 +17,12 @@ export const triggerFilter = (
   vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>,
   vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>,
   el: HTMLElement,
-  isTriggeredByVpsWidget?: boolean
+  isTriggeredByVpsWidget?: boolean,
 ) => {
   const { filters, action } = subFilterSelection(
     requestFilters,
     selectedFilter,
-    filterValue
+    filterValue,
   );
 
   vviinnFilterTriggered.emit({
@@ -44,7 +44,7 @@ export const triggerResetFilters = (
   vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>,
   vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>,
   el: HTMLElement,
-  isTriggeredByVpsWidget?: boolean
+  isTriggeredByVpsWidget?: boolean,
 ) => {
   vviinnFilterTriggered.emit({
     action: "reset",

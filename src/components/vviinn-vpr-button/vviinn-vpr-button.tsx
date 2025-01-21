@@ -205,7 +205,7 @@ export class VviinnVprButton {
       this.targetAppendSidebarTo = this.appendSidebarToElement;
     } else if (this.appendSidebarTo) {
       this.targetAppendSidebarTo = document.getElementById(
-        this.appendSidebarTo
+        this.appendSidebarTo,
       );
     }
   }
@@ -325,7 +325,7 @@ export class VviinnVprButton {
 
     this.sidebar.removeEventListener(
       "vviinnWidgetClose",
-      this.sidebarCloseListener
+      this.sidebarCloseListener,
     );
   }
 }

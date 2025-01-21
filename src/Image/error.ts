@@ -12,15 +12,15 @@ const unsupportedFileTypeError: BasicError<string> = {
 };
 
 export const checkImageType = (
-  file: File
+  file: File,
 ): Either<BasicError<string>, File> => {
   const fileType = file.type.split("/")[1];
   const supportedFileType = findFirstMap((supportedType: string) =>
-    supportedType === fileType ? some(file) : none
+    supportedType === fileType ? some(file) : none,
   )(SUPPORTED_FILE_TYPES);
 
   return pipe(
     supportedFileType,
-    fromOption(() => unsupportedFileTypeError)
+    fromOption(() => unsupportedFileTypeError),
   );
 };

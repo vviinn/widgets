@@ -122,7 +122,7 @@ export class VviinnFilters {
 
   private handleSubFilterSelection(
     filterValue: DynamicFilterValue,
-    selectedFilter: ResponseDynamicFilterItem
+    selectedFilter: ResponseDynamicFilterItem,
   ) {
     this.requestFilters = triggerFilter(
       filterValue,
@@ -131,7 +131,7 @@ export class VviinnFilters {
       this.vviinnFilterTriggered,
       this.vviinnFiltersChanged,
       this.el,
-      this.showInWidget
+      this.showInWidget,
     );
   }
 
@@ -156,7 +156,7 @@ export class VviinnFilters {
 
     if (!this.selectedFilter) {
       this.selectedFilter = this.getFilters().find(
-        (f) => f?.column === filters[0]?.column
+        (f) => f?.column === filters[0]?.column,
       );
     }
   };
@@ -167,7 +167,7 @@ export class VviinnFilters {
 
     try {
       this.innerFilters = JSON.parse(
-        this.filtersString
+        this.filtersString,
       ) as ResponseDynamicFilterItem[];
     } catch (e) {
       console.error("Invalid filters string", e);
@@ -179,11 +179,11 @@ export class VviinnFilters {
 
     document.addEventListener(
       "vviinnFiltersChanged",
-      this.handleFiltersChanged
+      this.handleFiltersChanged,
     );
     document.addEventListener(
       "vviinnSelectedFiltersReset",
-      this.handleSelectedFiltersReset
+      this.handleSelectedFiltersReset,
     );
 
     this.filtersStringWatcher();
@@ -192,11 +192,11 @@ export class VviinnFilters {
   disconnectedCallback() {
     document.removeEventListener(
       "vviinnFiltersChanged",
-      this.handleFiltersChanged
+      this.handleFiltersChanged,
     );
     document.removeEventListener(
       "vviinnSelectedFiltersReset",
-      this.handleSelectedFiltersReset
+      this.handleSelectedFiltersReset,
     );
   }
 
@@ -219,7 +219,7 @@ export class VviinnFilters {
                 <li>
                   <button
                     class={`filters-main-button ${this.showActiveOnMainButton(
-                      filter
+                      filter,
                     )}`}
                     onClick={() => this.handleMainFilterSelection(filter)}
                     part="filters-main-button"
@@ -237,7 +237,7 @@ export class VviinnFilters {
             {column === "price" ? (
               <vviinn-price-range
                 histogram={(filterOptions as Histogram).filter(
-                  (item) => item.value.frequency > 0
+                  (item) => item.value.frequency > 0,
                 )}
                 priceChangeHandler={this.priceChangeHandler}
                 selectedInterval={this.getSelectedPriceInterval()}
@@ -250,7 +250,7 @@ export class VviinnFilters {
                     const isSelected = showActiveOnSubButton(
                       this.requestFilters,
                       value,
-                      this.selectedFilter
+                      this.selectedFilter,
                     );
 
                     return RenderButton(
@@ -259,7 +259,7 @@ export class VviinnFilters {
                       label,
                       active,
                       this.selectedFilter,
-                      isSelected
+                      isSelected,
                     );
                   })}
               </ul>

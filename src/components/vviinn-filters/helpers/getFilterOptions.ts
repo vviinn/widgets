@@ -7,11 +7,11 @@ export type FilterOptions =
   | components["schemas"]["interval-filter-values"][];
 
 export const getFilterOptions = (
-  filter: ResponseDynamicFilterItem
+  filter: ResponseDynamicFilterItem,
 ): FilterOptions => {
   return filter && "values" in filter
     ? filter.values
     : filter && "histogram" in filter
-    ? filter.histogram
-    : [];
+      ? filter.histogram
+      : [];
 };

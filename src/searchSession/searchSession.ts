@@ -30,7 +30,7 @@ export interface SearchSessionFilter {
 }
 
 export const readFilters = (
-  filters: SearchSessionFilters
+  filters: SearchSessionFilters,
 ): SearchSessionFilter[] =>
   Object.entries(filters).map(([name, filters]) => {
     return { name, filters };
@@ -80,7 +80,7 @@ export const imageSearchSessionClient = (
   initialData: RequestInit,
   campaignId: string | null,
   excludedFilters: string | null,
-  apiPath?: string
+  apiPath?: string,
 ): TE.TaskEither<BasicError<Response | string>, SearchSession> => {
   const searchUrl = "search/session";
   const requestUrl = pipe(
@@ -100,44 +100,44 @@ export const imageSearchSessionClient = (
         const queryString = arrayToQueryString(params);
 
         return `${searchUrl}${queryString}`;
-      }
-    )
+      },
+    ),
   );
 
   const apiPathOrError = apiPath
     ? pipe(
         O.fromNullable(apiPath),
-        E.fromOption(() => emptyApiPathError)
+        E.fromOption(() => emptyApiPathError),
       )
     : getApiPath();
 
   return pipe(
     sequenceToEither(apiPathOrError, createInitPostRequest),
     TE.fromEither,
-    TE.chainW(makeRequest<SearchSession>(requestUrl, initialData))
+    TE.chainW(makeRequest<SearchSession>(requestUrl, initialData)),
   );
 };
 
 export const textSearchSessionClient = (
-  initialData: RequestInit
+  initialData: RequestInit,
 ): TE.TaskEither<BasicError<Response | string>, TextSearchResponse> => {
   const requestUrl = "text-search";
 
   return pipe(
     sequenceToEither(getApiPath(), createInitPostRequest),
     TE.fromEither,
-    TE.chainW(makeRequest<TextSearchResponse>(requestUrl, initialData))
+    TE.chainW(makeRequest<TextSearchResponse>(requestUrl, initialData)),
   );
 };
 
 export const productListingPageSessionClient = (
-  initialData: RequestInit
+  initialData: RequestInit,
 ): TE.TaskEither<BasicError<Response | string>, ProductListingPageResponse> => {
   const requestUrl = "product-listing-page";
 
   return pipe(
     sequenceToEither(getApiPath(), createInitPostRequest),
     TE.fromEither,
-    TE.chainW(makeRequest<ProductListingPageResponse>(requestUrl, initialData))
+    TE.chainW(makeRequest<ProductListingPageResponse>(requestUrl, initialData)),
   );
 };

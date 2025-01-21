@@ -85,7 +85,7 @@ export class VviinnCropper {
   connectedCallback() {
     document.addEventListener(
       "vviinnImageUpload",
-      this.imageUploadStartedHandler
+      this.imageUploadStartedHandler,
     );
 
     this.stringParser(true);
@@ -98,7 +98,7 @@ export class VviinnCropper {
   disconnectedCallback() {
     document.removeEventListener(
       "vviinnImageUpload",
-      this.imageUploadStartedHandler
+      this.imageUploadStartedHandler,
     );
 
     if (this.cropper) this.cropper.destroy();
@@ -113,7 +113,7 @@ export class VviinnCropper {
   stringParser(TriggerDetectedObjects?: boolean) {
     if (this.detectedObjectsString && TriggerDetectedObjects) {
       this.detectedObjects = JSON.parse(
-        this.detectedObjectsString
+        this.detectedObjectsString,
       ) as ValueObject<DetectedObject>[];
     }
   }
@@ -214,7 +214,7 @@ export class VviinnCropper {
         this.height = height;
         this.url = refImage.src;
       }),
-      O.getOrElse(() => null)
+      O.getOrElse(() => null),
     );
   }
 
@@ -226,7 +226,7 @@ export class VviinnCropper {
     makeRectangularSearchRequest(
       this.storeName,
       this.searchArea,
-      this.imageBounds
+      this.imageBounds,
     );
     this.selectedDetectedObject = undefined;
     this.vviinnImageCrop.emit(this.basicEventData);

@@ -13,7 +13,7 @@ export const RenderButton = (
   active,
   selectedFilter,
   isSelected = false,
-  showClose = false
+  showClose = false,
 ) => {
   const hexCode = value.hexCode;
   const hasHexCodeLength = hexCode?.length > 0;

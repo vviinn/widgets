@@ -7,12 +7,12 @@ import {
 export const showActiveOnSubButton = (
   requestFilters: RequestDynamicFilterItem[],
   filterValue: DynamicFilterValue,
-  selectedFilter: ResponseDynamicFilterItem
+  selectedFilter: ResponseDynamicFilterItem,
 ) => {
   if (!selectedFilter || !requestFilters) return false;
 
   const mainFilter = requestFilters.find(
-    ({ column }) => column === selectedFilter.column
+    ({ column }) => column === selectedFilter.column,
   );
 
   if (!mainFilter) return false;
@@ -21,7 +21,7 @@ export const showActiveOnSubButton = (
     (value) =>
       value === filterValue ||
       value === filterValue.interval ||
-      value === filterValue.value
+      value === filterValue.value,
   )
     ? true
     : false;

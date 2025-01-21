@@ -84,7 +84,7 @@ export const createResultVpcEventByType = (type: ResultEventType) => {
 
 export const createResultEventByType = (
   type: ResultEventType,
-  widget: Widget
+  widget: Widget,
 ) => {
   const typ = type === "load" ? RESULT_LOAD_EVENT_TYPE : RESULT_VIEW_EVENT_TYPE;
   return createTrackingEvent({
@@ -95,7 +95,7 @@ export const createResultEventByType = (
 
 export const createProductWidgetEventByType = (
   widget: Widget,
-  type: ProductEventType
+  type: ProductEventType,
 ) => {
   switch (type) {
     case "load":
