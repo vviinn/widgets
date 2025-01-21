@@ -73,7 +73,7 @@ export class VviinnSelectedFilters {
 
   private handleSubFilterSelection(
     filterValue: DynamicFilterValue,
-    selectedFilter: ResponseDynamicFilterItem
+    selectedFilter: ResponseDynamicFilterItem,
   ) {
     this.requestFilters = triggerFilter({
       filterValue,
@@ -124,30 +124,30 @@ export class VviinnSelectedFilters {
 
     document.addEventListener(
       "vviinnFiltersChanged",
-      this.handleFiltersChanged
+      this.handleFiltersChanged,
     );
     document.addEventListener(
       "vviinnFilterTriggered",
-      this.handleFilterTriggered
+      this.handleFilterTriggered,
     );
     document.addEventListener(
       "vviinnSelectedFiltersReset",
-      this.handleSelectedFiltersReset
+      this.handleSelectedFiltersReset,
     );
   }
 
   disconnectedCallback() {
     document.removeEventListener(
       "vviinnFiltersChanged",
-      this.handleFiltersChanged
+      this.handleFiltersChanged,
     );
     document.removeEventListener(
       "vviinnFilterTriggered",
-      this.handleFilterTriggered
+      this.handleFilterTriggered,
     );
     document.removeEventListener(
       "vviinnSelectedFiltersReset",
-      this.handleSelectedFiltersReset
+      this.handleSelectedFiltersReset,
     );
   }
 
@@ -169,7 +169,7 @@ export class VviinnSelectedFilters {
               active,
               isSelected: true,
               showClose: true,
-            })
+            }),
           );
         }
       });

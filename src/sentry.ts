@@ -8,11 +8,11 @@ const getExeptionStackFrames = (exeption: Exception): StackFrame[] =>
 
 const filterStackFrameByFilename =
   (query: string) =>
-    (frame: StackFrame): boolean => {
-      const filename = frame?.filename;
+  (frame: StackFrame): boolean => {
+    const filename = frame?.filename;
 
-      return filename ? filename.includes(query) : false;
-    };
+    return filename ? filename.includes(query) : false;
+  };
 
 const isInternalStackFrame = filterStackFrameByFilename("vviinn");
 

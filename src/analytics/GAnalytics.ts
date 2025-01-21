@@ -14,7 +14,7 @@ export class GAnalytics implements ProductAnalytics {
       category: product.productType ?? "",
       list: "VI VPR View",
       price: Math.min(
-        ...[product.price.actual, product.price.sale ?? Infinity]
+        ...[product.price.actual, product.price.sale ?? Infinity],
       ),
     };
   }
@@ -32,7 +32,7 @@ export class GAnalytics implements ProductAnalytics {
       brand: product.brand ?? "",
       category: product.productType ?? "",
       price: Math.min(
-        ...[product.price.actual, product.price.sale ?? Infinity]
+        ...[product.price.actual, product.price.sale ?? Infinity],
       ),
     });
 

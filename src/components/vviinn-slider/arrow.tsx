@@ -12,7 +12,7 @@ type ArrowProp = {
 };
 
 const getStyleMap = (
-  data: Partial<ArrowProp>
+  data: Partial<ArrowProp>,
 ): { [className: string]: boolean } => {
   return {
     "arrow-wrapper": true,

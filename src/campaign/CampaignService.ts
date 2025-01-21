@@ -8,6 +8,6 @@ export const getRecommendationsService = (campaignType: C.CampaignName) =>
     C.fromString(campaignType),
     C.fold(
       () => getVPRRecommendations,
-      () => getVCSRecommendations
-    )
+      () => getVCSRecommendations,
+    ),
   );

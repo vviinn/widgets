@@ -51,7 +51,7 @@ const RESIZED_IMAGE_WIDTH = 500;
 const HI_RES_RESIZED_IMAGE_WIDTH = 1024;
 
 const makeAuthorizedRequest = (
-  token: string
+  token: string,
 ): E.Either<BasicError<string>, RequestInit> =>
   pipe(
     token,
@@ -60,7 +60,7 @@ const makeAuthorizedRequest = (
       return {
         headers,
       };
-    })
+    }),
   );
 
 export type SearchStoreName = "widget" | "components";
@@ -135,12 +135,12 @@ const updateState =
 const makeLinkRequest =
   (token: string) =>
   <T>(
-    link: Link
+    link: Link,
   ): TE.TaskEither<BasicError<Response | string>, ValueObject<T>> => {
     return pipe(
       makeAuthorizedRequest(token),
       TE.fromEither,
-      TE.chainW(linkRequest<T>(link))
+      TE.chainW(linkRequest<T>(link)),
     );
   };
 
@@ -155,8 +155,8 @@ const detectObjects =
       TE.chain(makeLinkRequest(state.token)),
       TE.map(
         (objects: ValueObject<ValueObject<DetectedObject>[]>) =>
-          (state.detectedObjects = foldValueObject(objects))
-      )
+          (state.detectedObjects = foldValueObject(objects)),
+      ),
     )();
 
     state.objectDetectionInProgress = false;
@@ -176,14 +176,14 @@ export const uploadHiResFile =
     await pipe(
       makeAuthorizedRequest(state.token),
       TE.fromEither,
-      TE.chainW(formRequest<void>(form, formPayload))
+      TE.chainW(formRequest<void>(form, formPayload)),
     )();
   };
 
 export const makeRectangularSearchRequest = async (
   store: SearchStoreName,
   searchArea: Rectangle | null,
-  imageBounds: Rectangle | null
+  imageBounds: Rectangle | null,
 ) => {
   const state = useStore(store);
   state.loading = true;
@@ -202,9 +202,9 @@ export const makeRectangularSearchRequest = async (
         makeAuthorizedRequest(state.token),
         TE.fromEither,
         TE.chainW(formRequest(state.rectangleSearchForm, searchRectangle)),
-        TE.map(updateState(store))
+        TE.map(updateState(store)),
       )();
-    })
+    }),
   );
 };
 
@@ -219,7 +219,7 @@ export const uploadFile =
 
     const tokenWithFile = sequenceToEither(
       processBearerToken(state.token),
-      E.right(fileForm)
+      E.right(fileForm),
     );
 
     return pipe(
@@ -228,11 +228,11 @@ export const uploadFile =
         ([headers, body]): RequestInit => ({
           headers,
           body,
-        })
+        }),
       ),
       TE.fromEither,
       TE.chain((request) =>
-        imageSearchSessionClient(request, state.campaignId, state.excluded)
+        imageSearchSessionClient(request, state.campaignId, state.excluded),
       ),
       TE.map((sessionResponse) => {
         updateState(store)(sessionResponse);
@@ -244,7 +244,7 @@ export const uploadFile =
         state.serverError = true;
         state.loading = false;
         return error;
-      })
+      }),
     );
   };
 
@@ -253,7 +253,7 @@ export const makeTextSearchRequest = async (
   query: string,
   dynamicFilters?: RequestDynamicFilterItem[],
   requestId?: string,
-  resultsCount?: number
+  resultsCount?: number,
 ) => {
   const state = useStore(store);
   state.searchType = "text";
@@ -288,7 +288,7 @@ export const makeTextSearchRequest = async (
       state.serverError = true;
       state.loading = false;
       return error;
-    })
+    }),
   )();
 };
 
@@ -297,7 +297,7 @@ export const makeSearchIdRequest = async (token: string, searchId: string) => {
     makeAuthorizedRequest(token),
     TE.fromEither,
     TE.chainW(linkRequest(createLinkfromHref(searchId))),
-    TE.map(updateState("components"))
+    TE.map(updateState("components")),
   )();
 };
 
@@ -306,7 +306,7 @@ export const makeProductListingPageRequest = async (
   value: string,
   resultsCount?: number,
   dynamicFilters?: RequestDynamicFilterItem[],
-  skipStateUpdate?: boolean
+  skipStateUpdate?: boolean,
 ) => {
   const state = useStore("components");
   const requestValue =
@@ -315,7 +315,7 @@ export const makeProductListingPageRequest = async (
           value,
           (string) => string.split(" > ").join(">"),
           encodeToBase64UTF8,
-          (base64String) => base64String.split("=")[0]
+          (base64String) => base64String.split("=")[0],
         )
       : value;
 
@@ -348,7 +348,7 @@ export const makeProductListingPageRequest = async (
         (sessionResponse?.interactions
           ?.dynamicFilters as ResponseFilterItem[]) ?? [];
       state.loading = false;
-    })
+    }),
   )();
 };
 
@@ -370,13 +370,13 @@ export const processSelectedFile =
     const resizeFileTask = pipe(
       originFile,
       TE.fromEither,
-      TE.chainTaskK(fileResizer)
+      TE.chainTaskK(fileResizer),
     );
 
     await pipe(
       resizeFileTask,
       TE.chainTaskK(imageFromFileTask),
-      TE.map(setSelectedImage(store))
+      TE.map(setSelectedImage(store)),
     )();
 
     const session = await pipe(resizeFileTask, TE.chain(uploadFile(store)))();
@@ -385,7 +385,7 @@ export const processSelectedFile =
     const resizeHiResFileTask = pipe(
       originFile,
       TE.fromEither,
-      TE.chainTaskK(hiResFileResizer)
+      TE.chainTaskK(hiResFileResizer),
     );
 
     const resizedHiResFile = await resizeHiResFileTask();
@@ -393,8 +393,8 @@ export const processSelectedFile =
     pipe(
       sequenceToEither(session, resizedHiResFile),
       E.map(([sessionObject, file]) =>
-        uploadHiResFile(store)(sessionObject, file)
-      )
+        uploadHiResFile(store)(sessionObject, file),
+      ),
     );
 
     return session;
@@ -416,7 +416,7 @@ onChangeWidgetState("activeIonLink", async (newLink: Link) => {
         kind: "network error",
         inner: error,
       };
-    })
+    }),
   )();
 });
 

@@ -126,7 +126,7 @@ export class VviinnTextSearch {
     (speechResult) => {
       this.setSearchQuery(speechResult);
       this.handleTextSearch();
-    }
+    },
   );
 
   connectedCallback() {
@@ -228,7 +228,7 @@ export class VviinnTextSearch {
       const { requestId } = pipe(
         await makeTextSearchRequest(this.storeName, this.searchQuery),
         E.getOrElse(() => null),
-        (response: TextSearchResponse) => response
+        (response: TextSearchResponse) => response,
       );
 
       this.widgetTextSearchFinished.emit({
@@ -264,7 +264,7 @@ export class VviinnTextSearch {
             placeholder={i18next.t(
               this.isShowRecording()
                 ? "speechRecognition.placeholder"
-                : "textSearchPlaceholder"
+                : "textSearchPlaceholder",
             )}
             value={this.searchQuery}
             onInput={(event) => this.handleInputChange(event)}
@@ -277,6 +277,7 @@ export class VviinnTextSearch {
               locale={this.locale}
               addStyle={false}
               useComponentsStore={true}
+              apiPath={this.apiPath}
             />
           )}
 

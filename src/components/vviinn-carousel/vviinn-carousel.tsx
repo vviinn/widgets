@@ -90,7 +90,7 @@ export class VviinnCarousel {
 
   private columns: number = 0;
   private resizeObserver: ResizeObserver = new ResizeObserver(() =>
-    this.handleResize()
+    this.handleResize(),
   );
 
   private isSetMode: boolean;
@@ -114,7 +114,7 @@ export class VviinnCarousel {
   }
 
   private mutationObserver = new MutationObserver(() =>
-    this.cloneSlottedContent()
+    this.cloneSlottedContent(),
   );
 
   private handleWindowResize = () => this.setImageWidthSetMode("100%");
@@ -128,10 +128,10 @@ export class VviinnCarousel {
   private updateCard = (
     productId: string,
     step: number,
-    animationInterval: number
+    animationInterval: number,
   ) => {
     let clickedProduct = this.crossSellingRecommendations.find(
-      (item) => item.productId === productId
+      (item) => item.productId === productId,
     );
     const crossSellingIndex =
       this.crossSellingRecommendations.indexOf(clickedProduct);
@@ -145,7 +145,7 @@ export class VviinnCarousel {
 
       const productData = this.getProductData(
         newRecommendation,
-        recommendationIndex + step
+        recommendationIndex + step,
       );
       this.vviinnProductLoad.emit(productData);
 
@@ -189,7 +189,7 @@ export class VviinnCarousel {
     if (this.isSetMode && this.recommendations.length >= this.columns) {
       this.crossSellingRecommendations = this.recommendations.slice(
         0,
-        this.columns
+        this.columns,
       );
     }
   }
@@ -238,8 +238,8 @@ export class VviinnCarousel {
   private getItemWidthFromDocument(): number {
     return parseInt(
       getComputedStyle(document.body).getPropertyValue(
-        CAROUSEL_IMAGE_WIDTH_CSS_VAR
-      )
+        CAROUSEL_IMAGE_WIDTH_CSS_VAR,
+      ),
     );
   }
 
@@ -298,7 +298,7 @@ export class VviinnCarousel {
   private calculateMoveStep() {
     const imageGroups = this.getContent().filter((el) => !el.matches("button"));
     const contentWidths = imageGroups.map(
-      (el) => el.getBoundingClientRect().width
+      (el) => el.getBoundingClientRect().width,
     );
     const sum = contentWidths.reduce((acc, val) => acc + val, 0);
 
@@ -306,7 +306,7 @@ export class VviinnCarousel {
       window.getComputedStyle(this.getContentNode()),
       (computedStyle) => computedStyle.getPropertyValue("gap"),
       (contentGapString) => parseInt(contentGapString.split("px")[0]),
-      (contentGap) => (isNaN(contentGap) ? 0 : contentGap)
+      (contentGap) => (isNaN(contentGap) ? 0 : contentGap),
     );
     return sum / contentWidths.length + contentGap;
   }
@@ -432,14 +432,14 @@ export class VviinnCarousel {
 
   private renderRecommendation(
     recommendation: Recommendation,
-    rank: number
+    rank: number,
   ): HTMLVviinnProductCardElement {
     const appliedDiscount =
       this.setModeAppliedDiscounts[recommendation.productId];
 
     const setModeDiscount = calculateDiscount(
       recommendation.price?.actual,
-      appliedDiscount ?? this.setModeDiscount
+      appliedDiscount ?? this.setModeDiscount,
     );
 
     const salePrice = this.isSetMode
@@ -493,7 +493,7 @@ export class VviinnCarousel {
   }
 
   private renderRecommendationGroups(
-    elements: HTMLVviinnProductCardElement[][]
+    elements: HTMLVviinnProductCardElement[][],
   ) {
     return elements.map((el) => this.renderRecommendationGroup(el));
   }
@@ -519,7 +519,7 @@ export class VviinnCarousel {
 
   private renderBullets() {
     const numberOfBullets = Math.ceil(
-      this.recommendations.length / this.getColumnsNumber()
+      this.recommendations.length / this.getColumnsNumber(),
     );
 
     const bulletsArray = Array.from(Array(numberOfBullets).keys());

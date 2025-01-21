@@ -28,7 +28,7 @@ export class VviinnButton {
   @Prop() histogram: Histogram = [];
   @Prop() addStyle: boolean = true;
   @Prop() priceChangeHandler: (
-    filterValue: components["schemas"]["interval-filter-value-item"]
+    filterValue: components["schemas"]["interval-filter-value-item"],
   ) => void;
   @Prop() selectedInterval?: components["schemas"]["interval"];
   @Prop() currencySign: string;
@@ -51,14 +51,14 @@ export class VviinnButton {
     const maxValueofFrequency = Math.max(
       ...this.histogram.map(({ value }) => {
         return value.frequency;
-      })
+      }),
     );
 
     this.scalingFactor = 100 / maxValueofFrequency;
 
     if (this.selectedInterval.start !== undefined) {
       this.minIndex = this.histogram.findIndex(
-        ({ value }) => value.interval.start === this.selectedInterval.start
+        ({ value }) => value.interval.start === this.selectedInterval.start,
       );
     } else {
       this.minIndex = 0;
@@ -66,7 +66,7 @@ export class VviinnButton {
 
     if (this.selectedInterval.end) {
       this.maxIndex = this.histogram.findIndex(
-        (item) => item.value.interval.end === this.selectedInterval.end
+        (item) => item.value.interval.end === this.selectedInterval.end,
       );
     } else {
       this.maxIndex = this.histogram.length - 1;

@@ -21,7 +21,7 @@ export class VviinnSlider {
     this.internalPosition = newValue;
     this.el.style.setProperty(
       "--position",
-      `${this.calculatePosition(newValue)}`
+      `${this.calculatePosition(newValue)}`,
     );
     this.setActiveCssClassToSlide(newValue);
   }

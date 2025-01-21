@@ -11,7 +11,7 @@ const containsFit = (url: string): E.Either<string, string> => {
   return pipe(
     url.match(FIT_EXPR),
     E.fromNullable(url),
-    E.map(() => url)
+    E.map(() => url),
   );
 };
 
@@ -19,7 +19,7 @@ const processWidth = (url: string, size: number): string => {
   return pipe(
     containsFit(url),
     E.map((url) => url.replace(FIT_EXPR, `fit/${size}/`)),
-    E.getOrElse(() => url)
+    E.getOrElse(() => url),
   );
 };
 
@@ -110,7 +110,7 @@ const FormattedBasePrice: FunctionalComponent<BasePriceElementProps> = ({
 };
 
 export const parseBasePrice = (
-  basePrice?: BasePrice | string | null
+  basePrice?: BasePrice | string | null,
 ): BasePrice | null => {
   if (!basePrice) return null;
   if (typeof basePrice === "string") {
@@ -234,7 +234,7 @@ export const Image = (props: ImageProps, onLoadEnd = () => undefined) => (
 
 export const ResponsiveImage = (
   props: ImageProps,
-  onLoadEnd = () => undefined
+  onLoadEnd = () => undefined,
 ) => (
   <picture part="image-picture">
     <img

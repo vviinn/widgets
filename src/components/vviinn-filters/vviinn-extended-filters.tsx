@@ -183,7 +183,7 @@ export class VviinnExtendedFilters {
     if (!this.displayedOptionsCount.has(filterColumn)) {
       this.displayedOptionsCount.set(
         filterColumn,
-        FILTER_OPTIONS_INITIAL_COUNT
+        FILTER_OPTIONS_INITIAL_COUNT,
       );
     }
   }
@@ -194,7 +194,7 @@ export class VviinnExtendedFilters {
       FILTER_OPTIONS_INITIAL_COUNT;
     const newCount = Math.min(
       currentCount + FILTER_OPTIONS_INITIAL_COUNT,
-      totalOptions
+      totalOptions,
     );
     this.displayedOptionsCount = new Map(this.displayedOptionsCount);
     this.displayedOptionsCount.set(filterColumn, newCount);
@@ -234,16 +234,16 @@ export class VviinnExtendedFilters {
                 const filterOptions = getFilterOptions(mainFilter);
 
                 const requestFilter = this.requestFilters.find(
-                  ({ column }) => column === mainColumn
+                  ({ column }) => column === mainColumn,
                 );
                 const addedOptions = [];
                 requestFilter?.values?.forEach((value) => {
                   const index = filterOptions.findIndex(
-                    (f) => f.value.value === value || f.value === value
+                    (f) => f.value.value === value || f.value === value,
                   );
                   if (index > -1) {
                     addedOptions.push(
-                      <span>{filterOptions[index].label}</span>
+                      <span>{filterOptions[index].label}</span>,
                     );
                   }
                 });
@@ -276,7 +276,7 @@ export class VviinnExtendedFilters {
                       this.selectedMoreOptions.includes(mainFilter.column) ? (
                         <vviinn-price-range
                           histogram={(filterOptions as Histogram).filter(
-                            (item) => item.value.frequency > 0
+                            (item) => item.value.frequency > 0,
                           )}
                           priceChangeHandler={this.priceChangeHandler}
                           selectedInterval={this.getSelectedPriceInterval()}
@@ -337,7 +337,7 @@ export class VviinnExtendedFilters {
 
   private renderFilterOptions(
     filter: ResponseDynamicFilterItem,
-    filterOptions: FilterOptions
+    filterOptions: FilterOptions,
   ) {
     const { column: filterColumn } = filter;
     this.initializeDisplayedOptions(filterColumn);
@@ -353,7 +353,7 @@ export class VviinnExtendedFilters {
           .map(({ value, label, active }) => {
             const isSelected = this.showActiveOnModalSubButton(
               this.requestFilters,
-              value
+              value,
             );
 
             return RenderFilterButton({
@@ -383,7 +383,7 @@ export class VviinnExtendedFilters {
 
   private handleSubFilterSelection(
     filterValue: DynamicFilterValue,
-    selectedFilter: ResponseDynamicFilterItem
+    selectedFilter: ResponseDynamicFilterItem,
   ) {
     this.requestFilters = triggerFilter({
       filterValue,
@@ -398,7 +398,7 @@ export class VviinnExtendedFilters {
 
   private showActiveOnModalSubButton(
     requestFilters: RequestDynamicFilterItem[],
-    filterValue: DynamicFilterValue
+    filterValue: DynamicFilterValue,
   ) {
     let className = false;
     requestFilters.forEach((filter) => {
@@ -407,7 +407,7 @@ export class VviinnExtendedFilters {
           (value) =>
             value === filterValue ||
             value === filterValue.interval ||
-            value === filterValue.value
+            value === filterValue.value,
         )
       ) {
         className = true;
@@ -419,7 +419,7 @@ export class VviinnExtendedFilters {
   private handleMoreOptionsMainClick(column: string) {
     if (this.selectedMoreOptions.includes(column)) {
       this.selectedMoreOptions = this.selectedMoreOptions.filter(
-        (option) => option !== column
+        (option) => option !== column,
       );
     } else {
       this.selectedMoreOptions = [...this.selectedMoreOptions, column];
@@ -446,7 +446,7 @@ export class VviinnExtendedFilters {
 
     try {
       this.innerFilters = JSON.parse(
-        this.filtersString
+        this.filtersString,
       ) as ResponseDynamicFilterItem[];
     } catch (e) {
       console.error("Invalid filters string", e);
@@ -458,15 +458,15 @@ export class VviinnExtendedFilters {
 
     document.addEventListener(
       "vviinnFiltersChanged",
-      this.handleFiltersChanged
+      this.handleFiltersChanged,
     );
     document.addEventListener(
       "vviinnSelectedFiltersReset",
-      this.handleSelectedFiltersReset
+      this.handleSelectedFiltersReset,
     );
     document.addEventListener(
       "vviinnExtendedFiltersButtonClicked",
-      this.handleExtendedFiltersButtonClicked
+      this.handleExtendedFiltersButtonClicked,
     );
 
     this.filtersStringWatcher();
@@ -475,15 +475,15 @@ export class VviinnExtendedFilters {
   disconnectedCallback() {
     document.addEventListener(
       "vviinnFiltersChanged",
-      this.handleFiltersChanged
+      this.handleFiltersChanged,
     );
     document.addEventListener(
       "vviinnSelectedFiltersReset",
-      this.handleSelectedFiltersReset
+      this.handleSelectedFiltersReset,
     );
     document.removeEventListener(
       "vviinnExtendedFiltersButtonClicked",
-      this.handleExtendedFiltersButtonClicked
+      this.handleExtendedFiltersButtonClicked,
     );
   }
 
@@ -502,7 +502,7 @@ export class VviinnExtendedFilters {
 
   private priceChangeHandler = (filterValue: DynamicFilterValue) => {
     const selectedFilter = this.getFilters().find(
-      (filter) => filter.column === "price"
+      (filter) => filter.column === "price",
     );
 
     if (selectedFilter) {

@@ -44,7 +44,7 @@ type FormField = Partial<FormMemberObject>;
 
 export const checkFormFields = (
   f: FormField[],
-  data: Object
+  data: Object,
 ): E.Either<string, Object> => {
   const fields = f.map((x) => x.name) as string[];
   const keys = Object.keys(data);
@@ -63,7 +63,7 @@ export type Form = Valueable<FormField[]> & Link & FormType;
 
 export const requestFromForm = (
   form: Form,
-  data: Object
+  data: Object,
 ): E.Either<string, [string, RequestInit]> => {
   if (!form?.value) return E.left("Form value is empty");
 
@@ -72,8 +72,8 @@ export const requestFromForm = (
     E.map((checkedData) =>
       form.rel.includes("query-form")
         ? transformGetForm(form, checkedData)
-        : transformSendForm(form, checkedData)
-    )
+        : transformSendForm(form, checkedData),
+    ),
   );
 };
 
@@ -105,8 +105,8 @@ export const formRequest =
           requestFromForm(form, data),
           E.mapLeft((error: string): BasicError<string> => {
             return { kind: "app", inner: error };
-          })
-        )
+          }),
+        ),
       ),
       TE.fromEither,
       TE.chainW((initialData) => {
@@ -115,7 +115,7 @@ export const formRequest =
 
         return makeRequest<ValueObject<T>>(
           formUrl,
-          initObject
+          initObject,
         )([apiPath, payload]);
-      })
+      }),
     );

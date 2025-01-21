@@ -13,7 +13,7 @@ import {
 type RenderButtonProps = {
   handleSubFilterSelection: (
     filterValue: DynamicFilterValue,
-    selectedFilter: ResponseDynamicFilterItem
+    selectedFilter: ResponseDynamicFilterItem,
   ) => void;
   value: DynamicFilterValue;
   label: string;

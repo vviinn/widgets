@@ -13,9 +13,9 @@ export const getApiPath: IO<E.Either<BasicError<string>, string>> = () =>
   pipe(
     O.getFirstMonoid<string>().concat(
       O.fromNullable(state.apiPath),
-      O.fromNullable(`${process.env.API_PATH}`)
+      O.fromNullable(`${process.env.API_PATH}`),
     ),
-    E.fromOption(() => emptyApiPathError)
+    E.fromOption(() => emptyApiPathError),
   );
 
 const headersSemigroupSum: S.Semigroup<Headers> = {
@@ -36,7 +36,7 @@ export const mergeInitRequests = S.struct<RequestInit>({
 
       return pipe(
         method,
-        O.getOrElse(() => "GET")
+        O.getOrElse(() => "GET"),
       );
     },
   },
@@ -54,11 +54,11 @@ export const createBasicRequest = (method: RequestMethod): RequestInit => {
 };
 
 export const createRequestFromMethod = (
-  method: RequestMethod
+  method: RequestMethod,
 ): E.Either<any, RequestInit> => E.right(createBasicRequest(method));
 
 export const createInitPostRequest: E.Either<any, RequestInit> = E.right(
-  createBasicRequest("POST")
+  createBasicRequest("POST"),
 );
 
 export const setBodyAndHeaders = E.map(([headers, body]): RequestInit => {

@@ -14,7 +14,7 @@ export const checkFileWithExtention = (file: File) =>
     file,
     O.fromNullable,
     E.fromOption(() => fileDoesntExistError),
-    E.chain(checkImageType)
+    E.chain(checkImageType),
   );
 
 const optionalResize = (image: HTMLImageElement, size: number) =>
@@ -25,5 +25,5 @@ export const resizeFileTo = (size: number) => (file: File) =>
     file,
     imageFromFileTask,
     T.map((image) => optionalResize(image, size)),
-    T.chain(convertB64toFileTask)
+    T.chain(convertB64toFileTask),
   );

@@ -52,7 +52,7 @@ export class VviinnImageSelector {
     const input = event.target as HTMLInputElement;
 
     const processingResult = await processSelectedFile(this.storeName)(
-      input.files[0]
+      input.files[0],
     );
 
     pipe(
@@ -66,8 +66,8 @@ export class VviinnImageSelector {
         },
         ({ links }) => {
           this.vviinnImageUploadFinished.emit({ searchId: links.self.href });
-        }
-      )
+        },
+      ),
     );
 
     input.value = null;

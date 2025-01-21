@@ -65,7 +65,7 @@ export class VviinnModal {
           widgetVersion: this.widgetVersion,
         });
       },
-      this.slider ? 500 : 0
+      this.slider ? 500 : 0,
     );
   }
 

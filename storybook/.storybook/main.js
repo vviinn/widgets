@@ -30,7 +30,7 @@ const config = {
     }
     if (config && config.entry && Array.isArray(config.entry)) {
       config.entry = config.entry.filter(
-        (singleEntry) => !singleEntry.includes("/webpack-hot-middleware/")
+        (singleEntry) => !singleEntry.includes("/webpack-hot-middleware/"),
       );
     }
     return config;

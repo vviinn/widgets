@@ -27,7 +27,7 @@ const makeHeight = (size: number): ImageDimension => {
 type ImageDimensions = ImageDimension[];
 
 const ordBySize: Ord<ImageDimension> = contramap((s: ImageDimension) => s.size)(
-  OrdNumber
+  OrdNumber,
 );
 const ordByKind: Ord<ImageDimension> = {
   equals: (x, y) => x.kind === y.kind,
@@ -64,7 +64,7 @@ export const scaleByLargestSide =
   };
 
 export const dimensionsFromImage = (
-  image: HTMLImageElement
+  image: HTMLImageElement,
 ): ImageDimensions => {
   const { naturalWidth, naturalHeight } = image;
   return [makeWidth(naturalWidth), makeHeight(naturalHeight)];
@@ -72,7 +72,7 @@ export const dimensionsFromImage = (
 
 export const getImageSizes = (
   i: HTMLImageElement,
-  defaultImageSize
+  defaultImageSize,
 ): [number, number] => {
   const dimensions = dimensionsFromImage(i);
   const resize = scaleByLargestSide(defaultImageSize);

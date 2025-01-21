@@ -35,7 +35,7 @@ export const triggerFilter = ({
   const { filters, action } = subFilterSelection(
     requestFilters,
     selectedFilter,
-    filterValue
+    filterValue,
   );
 
   vviinnFilterTriggered.emit({
