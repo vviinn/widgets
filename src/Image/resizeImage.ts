@@ -7,7 +7,7 @@ import {
 
 const createCanvasWithContext = (): [
   HTMLCanvasElement,
-  CanvasRenderingContext2D
+  CanvasRenderingContext2D,
 ] => {
   const canvas = document.createElement("canvas");
   const contenx = canvas.getContext("2d");
@@ -32,12 +32,12 @@ export const resizeImage = (width: number, i: HTMLImageElement): string => {
   const [destinationCanvas, destinationContext] = createCanvasWithContext();
   const imageDimensions = dimensionsFromImage(i);
   const [destinationWidth, destinationHeight] = scale(imageDimensions).map(
-    (d: ImageDimension) => d.size
+    (d: ImageDimension) => d.size,
   );
 
   const destinationImageData = new ImageData(
     destinationWidth,
-    destinationHeight
+    destinationHeight,
   );
 
   const originImageData = imageDataFromImage(i);

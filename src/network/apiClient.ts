@@ -10,10 +10,10 @@ const sequenceToEither = sequenceT(E.Apply);
 
 export const apiPost = <TResponse>(
   path: string,
-  data: RequestInit = {}
+  data: RequestInit = {},
 ): TE.TaskEither<BasicError<Response | string>, TResponse> =>
   pipe(
     sequenceToEither(getApiPath(), createInitPostRequest),
     TE.fromEither,
-    TE.chainW(makeRequest<TResponse>(path, data))
+    TE.chainW(makeRequest<TResponse>(path, data)),
   );

@@ -13,7 +13,7 @@ export class GtagAnalytics implements ProductAnalytics {
           category: product.productType ?? "",
           list_name: "VI VPR View",
           price: Math.min(
-            ...[product.price.actual, product.price.sale ?? Infinity]
+            ...[product.price.actual, product.price.sale ?? Infinity],
           ),
         },
       ],
@@ -33,7 +33,7 @@ export class GtagAnalytics implements ProductAnalytics {
           category: product.productType ?? "",
           list_name: "VI VPR View",
           price: Math.min(
-            ...[product.price.actual, product.price.sale ?? Infinity]
+            ...[product.price.actual, product.price.sale ?? Infinity],
           ),
         },
       ],

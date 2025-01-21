@@ -12,7 +12,7 @@ const main = async () => {
     text = text.replace(
       ` &
           components["examples"]["rectangle"]`,
-      ""
+      "",
     );
 
     result.write(text);

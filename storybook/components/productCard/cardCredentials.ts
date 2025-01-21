@@ -24,9 +24,9 @@ const discoveryButtonCode = (append = false) => {
       buttonTemplate.indexOf("></vviinn-vpr-button>") - 1;
     return `${buttonTemplate.slice(
       0,
-      bracketCloseIndex
+      bracketCloseIndex,
     )}     append-sidebar-to="product-card-append-container"${cardDataSeparator}    ${buttonTemplate.slice(
-      bracketCloseIndex
+      bracketCloseIndex,
     )}`;
   }
   return buttonTemplate;
@@ -52,7 +52,7 @@ const cardCodeFromData = (productData, buttonParams) => {
   const firstBracketIndex = productCardBasic.indexOf(">");
   return `${productCardBasic.slice(
     0,
-    firstBracketIndex
+    firstBracketIndex,
   )}${productText}${productCardBasic.slice(firstBracketIndex)}`;
 };
 
@@ -72,7 +72,7 @@ export const cardCredentials = (cardType) => {
     ...cardData,
     code: `${codeCardStyle}${cardCodeFromData(
       cardData.productData,
-      cardData?.buttonParams
+      cardData?.buttonParams,
     )}`,
   };
 };

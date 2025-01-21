@@ -55,14 +55,14 @@ export class VviinnDetectedObject {
       O.fromNullable(this.imageBounds),
       O.map((bounds) => {
         const objectRectangle = fromAlt(
-          foldValueObject(this.detectedObject).rectangle
+          foldValueObject(this.detectedObject).rectangle,
         );
 
         const { x, y } = pipe(objectRectangle, scaleWithSized(bounds), center);
 
         return [`${x}px`, `${y}px`];
       }),
-      O.getOrElse(() => ["0", "0"])
+      O.getOrElse(() => ["0", "0"]),
     );
   }
 
@@ -74,7 +74,7 @@ export class VviinnDetectedObject {
         const transformedRect = fromAlt(rectangle);
         return scaleWithSized(bounds)(transformedRect);
       }),
-      O.toNullable
+      O.toNullable,
     );
 
     makeRectangularSearchRequest(this.storeName, scaledRect, this.imageBounds);

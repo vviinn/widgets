@@ -9,18 +9,16 @@ import { Monoid } from "fp-ts/lib/Monoid";
 const getGtagAnalytics = () =>
   pipe(
     fromNullable(window.gtag),
-    map(() => new GtagAnalytics())
+    map(() => new GtagAnalytics()),
   );
 
 const getCommonAnalytics = () =>
   pipe(
     fromNullable(window.ga),
-    map(() => new GAnalytics())
+    map(() => new GAnalytics()),
   );
 
 const analyticsMonoid: Monoid<Option<ProductAnalytics>> = getMonoid(first());
 
-export const getAnalyticsModule: Option<ProductAnalytics> = analyticsMonoid.concat(
-  getGtagAnalytics(),
-  getCommonAnalytics()
-);
+export const getAnalyticsModule: Option<ProductAnalytics> =
+  analyticsMonoid.concat(getGtagAnalytics(), getCommonAnalytics());

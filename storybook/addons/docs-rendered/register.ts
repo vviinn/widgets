@@ -4,7 +4,7 @@ import { DOCS_RENDERED } from "@storybook/core-events";
 addons.register("docs-rendered", (api) => {
   api.on(DOCS_RENDERED, () => {
     const storybookPreviewIframeElement = document.querySelector(
-      "#storybook-preview-iframe"
+      "#storybook-preview-iframe",
     ) as HTMLIFrameElement;
 
     const storybookBodyContainer =

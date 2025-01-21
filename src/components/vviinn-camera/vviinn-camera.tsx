@@ -65,7 +65,7 @@ export class VviinnExampleImage {
 
   componentDidLoad() {
     this.videoElement = this.el.shadowRoot.getElementById(
-      "camera-preview"
+      "camera-preview",
     ) as HTMLVideoElement;
   }
 
@@ -107,7 +107,7 @@ export class VviinnExampleImage {
 
   private createPlaceholderImageCanvas() {
     const imgPlaceholder = this.el.shadowRoot.getElementById(
-      "captured-image-placeholder"
+      "captured-image-placeholder",
     ) as HTMLImageElement;
 
     const video = this.videoElement;
@@ -146,7 +146,7 @@ export class VviinnExampleImage {
 
     const cropDimension = Math.min(
       photoFrameRect.width * videoCoefficientWidth,
-      photoFrameRect.height * videoCoefficientHeight
+      photoFrameRect.height * videoCoefficientHeight,
     );
 
     canvas.width = cropDimension;
@@ -174,7 +174,7 @@ export class VviinnExampleImage {
       0,
       0,
       canvas.width,
-      canvas.height
+      canvas.height,
     );
 
     const dataURI = canvas.toDataURL("image/jpeg");
@@ -182,15 +182,15 @@ export class VviinnExampleImage {
 
     pipe(
       await processSelectedFile(
-        this.useComponentsStore ? "components" : "widget"
+        this.useComponentsStore ? "components" : "widget",
       )(file),
       E.match(
         () => this.vviinnNoResult.emit(this.basicEventData),
         ({ links }) =>
           this.vviinnImageUploadFinished.emit({
             searchId: links.self.href,
-          })
-      )
+          }),
+      ),
     );
 
     this.selected = false;

@@ -89,7 +89,7 @@ const getContentToReplace =
   (targets: HTMLElement[]) =>
   (
     acc: Map<HTMLSlotElement, HTMLElement>,
-    content: HTMLSlotElement
+    content: HTMLSlotElement,
   ): Map<HTMLSlotElement, HTMLElement> => {
     const replaceCandidate = targets.find(elementContainSlot(content));
 
@@ -102,7 +102,7 @@ const getContentToReplace =
 
 const replaceSlotContent = (
   content: HTMLSlotElement,
-  target: HTMLElement
+  target: HTMLElement,
 ): void => {
   target.innerHTML = content.outerHTML;
 };
@@ -198,12 +198,12 @@ export const slotChangeListener = (component: any, element: HTMLElement) => {
         }
 
         const slotsToReplace: Map<HTMLSlotElement, HTMLElement> = getSlots(
-          element
+          element,
         ).reduce(getContentToReplace(detail.slots), new Map());
 
         slotsToReplace.forEach(replaceSlotContent);
       },
-      true
+      true,
     );
   };
 

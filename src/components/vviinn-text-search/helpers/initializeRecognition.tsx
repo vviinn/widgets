@@ -6,7 +6,7 @@ export const initializeRecognition = (
   locale: Locale,
   onStart: () => void,
   onEnd: () => {},
-  onRecognized: (speechResult: string) => void
+  onRecognized: (speechResult: string) => void,
 ) => {
   const speechRecognition = permitSpeechRecognition();
   if (!speechRecognition) return;

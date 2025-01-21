@@ -4,7 +4,7 @@ export const checkDeviceType = () => {
     return "tablet";
   } else if (
     /Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(
-      ua
+      ua,
     )
   ) {
     return "mobile";

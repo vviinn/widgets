@@ -515,14 +515,14 @@ export class VviinnVpsWidget {
 
     document.addEventListener(
       "vviinnCropperAspectRatioError",
-      this.handleAspectRatioError
+      this.handleAspectRatioError,
     );
   }
 
   disconnectedCallback() {
     document.removeEventListener(
       "vviinnCropperAspectRatioError",
-      this.handleAspectRatioError
+      this.handleAspectRatioError,
     );
   }
 
@@ -877,7 +877,7 @@ export class VviinnVpsWidget {
                   trackingDeactivated={this.trackingDeactivated}
                   resetState={this.resetState.bind(this)}
                   replaceSlotsContentInWidget={this.replaceSlotsContent.bind(
-                    this
+                    this,
                   )}
                   replaceSlotsContentInButton={this.replaceSlotsContentInButton}
                   textSearchQuery={this.searchQuery}

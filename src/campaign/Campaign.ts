@@ -28,7 +28,7 @@ export type Campaign = VPR | VCS;
 
 export function fold<A, B>(
   onVPR: () => A,
-  onVCS: () => B
+  onVCS: () => B,
 ): (c: Campaign) => A | B {
   return (c) => (isVPR(c) ? onVPR() : onVCS());
 }
