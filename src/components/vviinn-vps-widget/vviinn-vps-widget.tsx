@@ -155,7 +155,7 @@ export class VviinnVpsWidget {
   /** Toggle for redirection to PDP on product's click */
   @Prop() productDetailsRedirect: boolean = true;
   /** Resolution width of an image in the product card */
-  @Prop() imageResolutionWidth: number = 250;
+  @Prop() imageResolutionWidth: number = 320;
   /** Example image source */
   @Prop() exampleImageSource: string = DEFAULT_EXAMPLE_IMAGE;
   /** Show the text search */
