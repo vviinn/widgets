@@ -21,9 +21,6 @@ export const convertB64toFileTask =
         lastModified: Date.now(),
       });
 
-      //  FIXME: Remove logs
-      console.log(file.size);
-
       resolve(file);
     });
   };

@@ -32,16 +32,6 @@ export const resizeImage = (side: number, i: HTMLImageElement): string => {
     (d: ImageDimension) => d.size,
   );
 
-  //  FIXME: Remove logs
-  console.log(
-    "side",
-    side,
-    "destinationWidth",
-    destinationWidth,
-    "destinationHeight",
-    destinationHeight,
-  );
-
   const destinationImageData = new ImageData(
     destinationWidth,
     destinationHeight,
@@ -56,5 +46,5 @@ export const resizeImage = (side: number, i: HTMLImageElement): string => {
 
   destinationContext.putImageData(destinationImageData, 0, 0);
 
-  return destinationCanvas.toDataURL("image/jpeg");
+  return destinationCanvas.toDataURL("image/jpeg", 0.7);
 };
