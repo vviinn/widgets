@@ -29,6 +29,7 @@ import {
   VisualSearchMode,
 } from "../../widget/types";
 import { findSlotElements } from "../../dom";
+import { SEARCH_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
 
 /**
  * @slot vviinn-teaser-text - Text on the widget's main screen.
@@ -111,7 +112,7 @@ export class VviinnVpsButton {
   /** Toggle for redirection to PDP on product's click */
   @Prop() productDetailsRedirect: boolean = true;
   /** Resolution width of an image in the product card */
-  @Prop() imageResolutionWidth: number = 320;
+  @Prop() imageResolutionWidth: number = SEARCH_WIDGET_IMAGE_RESOLUTION_WIDTH;
   /** Example image source */
   @Prop() exampleImageSource: string = DEFAULT_EXAMPLE_IMAGE;
   /** Show the text search */
