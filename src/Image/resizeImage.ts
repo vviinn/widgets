@@ -1,9 +1,5 @@
 import { lanczos } from "@rgba-image/lanczos";
-import {
-  dimensionsFromImage,
-  ImageDimension,
-  scaleByLargestSide,
-} from "./sizing";
+import { dimensionsFromImage, ImageDimension, scaleBySide } from "./sizing";
 
 const createCanvasWithContext = (): [
   HTMLCanvasElement,
@@ -27,8 +23,9 @@ const imageDataFromImage = (image: HTMLImageElement): ImageData => {
   return context.getImageData(0, 0, naturalWidth, naturalHeight);
 };
 
-export const resizeImage = (width: number, i: HTMLImageElement): string => {
-  const scale = scaleByLargestSide(width);
+export const resizeImage = (side: number, i: HTMLImageElement): string => {
+  const scale = scaleBySide(side, "smallest");
+
   const [destinationCanvas, destinationContext] = createCanvasWithContext();
   const imageDimensions = dimensionsFromImage(i);
   const [destinationWidth, destinationHeight] = scale(imageDimensions).map(
@@ -49,5 +46,5 @@ export const resizeImage = (width: number, i: HTMLImageElement): string => {
 
   destinationContext.putImageData(destinationImageData, 0, 0);
 
-  return destinationCanvas.toDataURL();
+  return destinationCanvas.toDataURL("image/jpeg", 0.7);
 };

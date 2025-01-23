@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.146.0](https://github.com/vviinn/widgets/compare/v2.145.13...v2.146.0) (2025-01-23)
+
+
+### Features
+
+* Image resizing logic changes and optimizations, using jpeg format. ([cdc52af](https://github.com/vviinn/widgets/commit/cdc52af475a39823d05d2c5bf35e5c4986949739))
+
 ### [2.145.13](https://github.com/vviinn/widgets/compare/v2.145.12...v2.145.13) (2025-01-21)
 
 ### [2.145.12](https://github.com/vviinn/widgets/compare/v2.145.11...v2.145.12) (2025-01-21)

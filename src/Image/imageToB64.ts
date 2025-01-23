@@ -8,5 +8,5 @@ export const imageToB64 = (i: HTMLImageElement): string => {
 
   ctx.drawImage(i, 0, 0, naturalWidth, naturalHeight);
 
-  return canvas.toDataURL();
+  return canvas.toDataURL("image/jpeg");
 };

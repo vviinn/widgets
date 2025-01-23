@@ -69,6 +69,7 @@ import {
   searchWidgetFilterParts,
 } from "../../cssParts";
 import { findSlotElements } from "../../dom";
+import { SEARCH_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
 
 const CAMERA_START_DELAY = 500;
 
@@ -155,7 +156,7 @@ export class VviinnVpsWidget {
   /** Toggle for redirection to PDP on product's click */
   @Prop() productDetailsRedirect: boolean = true;
   /** Resolution width of an image in the product card */
-  @Prop() imageResolutionWidth: number = 250;
+  @Prop() imageResolutionWidth: number = SEARCH_WIDGET_IMAGE_RESOLUTION_WIDTH;
   /** Example image source */
   @Prop() exampleImageSource: string = DEFAULT_EXAMPLE_IMAGE;
   /** Show the text search */
@@ -798,6 +799,7 @@ export class VviinnVpsWidget {
                   <vviinn-cropper
                     basicEventData={this.getBasicEventData()}
                     showAspectRatioError={this.showAspectRatioError}
+                    apiPath={this.apiPath}
                     showInWidget={true}
                   />
                   <div
