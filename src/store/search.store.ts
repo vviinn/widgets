@@ -47,8 +47,8 @@ import {
 import { setBodyAndHeaders } from "../network/utils";
 import { encodeToBase64UTF8 } from "../utils/string";
 
-const RESIZED_IMAGE_WIDTH = 500;
-const HI_RES_RESIZED_IMAGE_WIDTH = 1024;
+const IMAGE_SMALLEST_SIDE_TO_RESIZE = 800;
+const HI_RES_IMAGE_SMALLEST_SIDE_TO_RESIZE = 2000;
 
 const makeAuthorizedRequest = (
   token: string,
@@ -82,7 +82,6 @@ export type SearchStore = {
   detectedObjects: ValueObject<DetectedObject>[];
   objectDetectionInProgress: boolean;
   searchType?: SearchType;
-  imageWidth: number;
   image: O.Option<HTMLImageElement>;
 
   serverError: boolean;
@@ -101,7 +100,6 @@ const storeDefaults: SearchStore = {
   objectDetectionInProgress: false,
   resultLoaded: false,
   resultViewed: false,
-  imageWidth: RESIZED_IMAGE_WIDTH,
   image: O.none,
 
   serverError: false,
@@ -366,7 +364,7 @@ export const processSelectedFile =
 
     const originFile = checkFileWithExtention(file);
 
-    const fileResizer = resizeFileTo(RESIZED_IMAGE_WIDTH);
+    const fileResizer = resizeFileTo(IMAGE_SMALLEST_SIDE_TO_RESIZE);
     const resizeFileTask = pipe(
       originFile,
       TE.fromEither,
@@ -381,7 +379,7 @@ export const processSelectedFile =
 
     const session = await pipe(resizeFileTask, TE.chain(uploadFile(store)))();
 
-    const hiResFileResizer = resizeFileTo(HI_RES_RESIZED_IMAGE_WIDTH);
+    const hiResFileResizer = resizeFileTo(HI_RES_IMAGE_SMALLEST_SIDE_TO_RESIZE);
     const resizeHiResFileTask = pipe(
       originFile,
       TE.fromEither,

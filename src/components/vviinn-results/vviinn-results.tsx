@@ -74,6 +74,7 @@ import { getCustomLabels } from "../../recommendation";
 import { productCardParts } from "../../cssParts";
 import { findSlotElements, getSlotNames } from "../../dom";
 import { OneClickDiscoveryResultsMode } from "../../widget/types";
+import { RESULTS_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
 
 /**
  * @part product-card - Product Card itself.
@@ -170,7 +171,7 @@ export class VviinnResults {
   /** uiSessionId from vps-widget */
   @Prop({ mutable: true }) uiSessionId?: string;
   /** Resolution width of an image in the product card */
-  @Prop() imageResolutionWidth?: number = 500;
+  @Prop() imageResolutionWidth?: number = RESULTS_WIDGET_IMAGE_RESOLUTION_WIDTH;
   /** The currency sign is displayed after the price */
   @Prop() currencySign?: string = "€";
   /** The locale for currency formatting and text localization */
