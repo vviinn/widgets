@@ -6,7 +6,7 @@ export type BasicError<T> = {
 };
 
 export const basicErrorFromResponse = (
-  error: Response
+  error: Response,
 ): BasicError<Response> => {
   return {
     kind: "server",

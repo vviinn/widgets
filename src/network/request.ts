@@ -6,15 +6,15 @@ import { BasicError, basicErrorFromResponse } from "../error";
 
 const safeRequest = (
   url: string | Request,
-  request: RequestInit = { method: "GET" }
+  request: RequestInit = { method: "GET" },
 ): TE.TaskEither<Response, Response> =>
   TE.tryCatch(
     () => fetch(url, request),
-    (failedResponse: Response) => failedResponse
+    (failedResponse: Response) => failedResponse,
   );
 
 const processResponce = (
-  response: Response
+  response: Response,
 ): TE.TaskEither<Response, Response> =>
   response.status >= 200 && response.status < 300
     ? TE.right(response)
@@ -27,12 +27,12 @@ function getJson<I>(x: Response): TE.TaskEither<Response, I> {
 
 export const request = <I>(
   url: string | Request,
-  request: RequestInit = {}
+  request: RequestInit = {},
 ): TE.TaskEither<Response, I> =>
   pipe(
     safeRequest(url, request),
     TE.chain(processResponce),
-    TE.chain((x) => getJson<I>(x))
+    TE.chain((x) => getJson<I>(x)),
   );
 
 const initRequestSemigroup = mergeInitRequests;
@@ -48,6 +48,6 @@ export const makeRequest =
 
     return pipe(
       request<T>(url.toString(), fullOptions),
-      TE.mapLeft(basicErrorFromResponse)
+      TE.mapLeft(basicErrorFromResponse),
     );
   };

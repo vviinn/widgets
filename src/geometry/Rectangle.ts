@@ -51,7 +51,7 @@ export const getScaleRange = (source: Rectangle, target: Rectangle): Point => {
 export const scaleSelection = (
   source: Rectangle,
   sourceSelection: Rectangle,
-  target: Rectangle
+  target: Rectangle,
 ): Rectangle => {
   const sourcePosition = fromRectangle(source);
   const scale = getScaleRange(source, target);
@@ -103,7 +103,7 @@ export const center = (r: Rectangle): Point => {
 
 export const isClickedInRectBound = (
   event: ClickEvent,
-  rect: DOMRect
+  rect: DOMRect,
 ): boolean => {
   const { clientX, clientY } = event;
 

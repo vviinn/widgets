@@ -4,7 +4,7 @@ const path = require("path");
 const packageJsonPath = path.resolve(__dirname, "../package.json");
 const storybookPackageJsonPath = path.resolve(
   __dirname,
-  "../storybook/package.json"
+  "../storybook/package.json",
 );
 
 const packageJson = require(packageJsonPath);
@@ -23,11 +23,11 @@ function updatePackageVersion() {
 
   fs.writeFileSync(
     storybookPackageJsonPath,
-    JSON.stringify(packageJsonStorybook, null, 2)
+    JSON.stringify(packageJsonStorybook, null, 2),
   );
 
   console.log(
-    `Version of "${packageName}" updated to "${widgetVersion}" in Storybok's package.json.`
+    `Version of "${packageName}" updated to "${widgetVersion}" in Storybok's package.json.`,
   );
 }
 

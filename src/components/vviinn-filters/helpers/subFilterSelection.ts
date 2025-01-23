@@ -10,7 +10,7 @@ type ValueRequest = string & { start?: number; end?: number };
 export const subFilterSelection = (
   filters: RequestDynamicFilterItem[],
   { column: selectedColumn }: ResponseDynamicFilterItem,
-  filterValue: DynamicFilterValue
+  filterValue: DynamicFilterValue,
 ) => {
   const value = filterValue.interval ?? filterValue.value ?? filterValue;
   const index = filters.findIndex(({ column }) => column === selectedColumn);

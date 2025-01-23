@@ -295,7 +295,7 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   private findProductById(
-    id: Recommendation["productId"]
+    id: Recommendation["productId"],
   ): Recommendation | undefined {
     return this.recommendations.find((r) => r.productId === id);
   }
@@ -526,7 +526,7 @@ export class VviinnVprWidget implements ComponentInterface {
 
   private getProductTrackEvent(
     detail: ProductCardEventData,
-    eventType: ProductEventType
+    eventType: ProductEventType,
   ): ProductEvent | null {
     if (this.trackingDeactivated) return null;
 
@@ -576,7 +576,7 @@ export class VviinnVprWidget implements ComponentInterface {
       TE.of(getRecommendationsService(campaignType)),
       TE.ap(TE.of(body)),
       TE.ap(TE.of(headers)),
-      TE.flatten
+      TE.flatten,
     );
 
     const runRequest = await request();
@@ -593,8 +593,8 @@ export class VviinnVprWidget implements ComponentInterface {
         (data) => {
           this.handleRecommendationsSuccess(data);
           this.recommendationsLoading = false;
-        }
-      )
+        },
+      ),
     );
   }
 
@@ -737,7 +737,7 @@ export class VviinnVprWidget implements ComponentInterface {
 
   private renderRecommendation(
     recommendation: Recommendation,
-    index: number
+    index: number,
   ): HTMLVviinnProductCardElement {
     return (
       <vviinn-product-card

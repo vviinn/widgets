@@ -21,12 +21,12 @@ export type Link = {
 
 export const getLink = (
   item: ValueObject<unknown>,
-  path: string
+  path: string,
 ): O.Option<Link> =>
   pipe(
     item.links,
     O.fromNullable,
-    O.chain((linksObject) => O.fromNullable(linksObject[path]))
+    O.chain((linksObject) => O.fromNullable(linksObject[path])),
   );
 
 export const createLinkfromHref = (href: string): Link => ({
@@ -37,7 +37,7 @@ export const extractHrefValue = (link: O.Option<Link>): string =>
   pipe(
     link,
     O.map((l) => l.href),
-    O.getOrElse(() => null)
+    O.getOrElse(() => null),
   );
 
 export const linkRequest =
@@ -46,5 +46,5 @@ export const linkRequest =
     pipe(
       sequenceToEither(getApiPath(), createRequestFromMethod(link.method)),
       TE.fromEither,
-      TE.chainW(makeRequest<ValueObject<T>>(link.href, data))
+      TE.chainW(makeRequest<ValueObject<T>>(link.href, data)),
     );

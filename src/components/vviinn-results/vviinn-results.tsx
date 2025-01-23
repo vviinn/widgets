@@ -74,6 +74,7 @@ import { getCustomLabels } from "../../recommendation";
 import { productCardParts } from "../../cssParts";
 import { findSlotElements, getSlotNames } from "../../dom";
 import { OneClickDiscoveryResultsMode } from "../../widget/types";
+import { RESULTS_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
 
 /**
  * @part product-card - Product Card itself.
@@ -124,7 +125,7 @@ import { OneClickDiscoveryResultsMode } from "../../widget/types";
  */
 
 export type ReplaceSlotsContentInParent = (
-  childrenElement?: HTMLElement
+  childrenElement?: HTMLElement,
 ) => void;
 
 @Component({
@@ -170,7 +171,7 @@ export class VviinnResults {
   /** uiSessionId from vps-widget */
   @Prop({ mutable: true }) uiSessionId?: string;
   /** Resolution width of an image in the product card */
-  @Prop() imageResolutionWidth?: number = 500;
+  @Prop() imageResolutionWidth?: number = RESULTS_WIDGET_IMAGE_RESOLUTION_WIDTH;
   /** The currency sign is displayed after the price */
   @Prop() currencySign?: string = "€";
   /** The locale for currency formatting and text localization */
@@ -242,7 +243,7 @@ export class VviinnResults {
   private storeName?: SearchStoreName;
   private setTextSearch = (
     isTriggeredByText: boolean,
-    isTriggeredByVpsWidget = false
+    isTriggeredByVpsWidget = false,
   ) => {
     if (this.showInWidget === !!isTriggeredByVpsWidget)
       this.isTextSearch = isTriggeredByText;
@@ -309,8 +310,8 @@ export class VviinnResults {
     !!this.replaceSlotsContentInButton
       ? this.replaceSlotsContentInButton(this.el)
       : this.showInWidget
-      ? this.replaceSlotsContentInWidget(this.el)
-      : this.replaceSlotsContent();
+        ? this.replaceSlotsContentInWidget(this.el)
+        : this.replaceSlotsContent();
   }
 
   private skipFiltersChanges = (isTriggeredByVpsWidget: boolean) =>
@@ -332,14 +333,14 @@ export class VviinnResults {
       this.storeName,
       this.textSearchQuery,
       filters,
-      this.textSearchRequestId
+      this.textSearchRequestId,
     );
   }
 
   private async getTextSearchResults(
     query?: string,
     filters?: RequestDynamicFilterItem[],
-    requestId?: string
+    requestId?: string,
   ) {
     if (!query) return;
     state.apiPath = this.apiPath; //FIXME: #36877
@@ -351,15 +352,15 @@ export class VviinnResults {
         query,
         filters,
         requestId,
-        this.resultsCount
+        this.resultsCount,
       ),
       E.getOrElse(() => null),
-      (response: TextSearchResponse) => response
+      (response: TextSearchResponse) => response,
     );
   }
 
   private async getResultsByCategory(
-    dynamicFilters?: RequestDynamicFilterItem[]
+    dynamicFilters?: RequestDynamicFilterItem[],
   ) {
     if (!this.filterColumn || !this.filterValue || this.showInWidget) return;
     state.apiPath = this.apiPath; //FIXME: #36877
@@ -370,12 +371,12 @@ export class VviinnResults {
         this.filterValue,
         this.resultsCount,
         dynamicFilters,
-        this.useInnerState
+        this.useInnerState,
       ),
       E.getOrElse(() => null),
       (response: TextSearchResponse) => {
         if (this.useInnerState) this.innerResults = response.data.products;
-      }
+      },
     );
   }
 
@@ -388,7 +389,7 @@ export class VviinnResults {
     this.setTextSearch(true, detail.isTriggeredByVpsWidget);
 
     const { requestId } = await this.getTextSearchResults(
-      this.innerTextSearchQuery
+      this.innerTextSearchQuery,
     );
     this.innerTextSearchRequestId = requestId;
 
@@ -416,7 +417,7 @@ export class VviinnResults {
       return this.getTextSearchResults(
         this.innerTextSearchQuery,
         filters,
-        this.innerTextSearchRequestId
+        this.innerTextSearchRequestId,
       );
     }
   };
@@ -476,22 +477,22 @@ export class VviinnResults {
 
     document.addEventListener(
       "vviinnSearchIdReceived",
-      this.searchIdReceivedHandler
+      this.searchIdReceivedHandler,
     );
 
     document.addEventListener(
       "vviinnTextSearchStarted",
-      this.textSearchStartedHandler
+      this.textSearchStartedHandler,
     );
 
     document.addEventListener(
       "vviinnFiltersChanged",
-      this.filtersChangedHandler
+      this.filtersChangedHandler,
     );
 
     document.addEventListener(
       "vviinnFilterTriggered",
-      this.filtersTriggeredHandler
+      this.filtersTriggeredHandler,
     );
 
     document.addEventListener("vviinnImageUpload", this.uploadTriggeredHandler);
@@ -512,22 +513,22 @@ export class VviinnResults {
 
     document.removeEventListener(
       "vviinnSearchIdReceived",
-      this.searchIdReceivedHandler
+      this.searchIdReceivedHandler,
     );
 
     document.removeEventListener(
       "vviinnTextSearchStarted",
-      this.textSearchStartedHandler
+      this.textSearchStartedHandler,
     );
 
     document.removeEventListener(
       "vviinnFiltersChanged",
-      this.filtersChangedHandler
+      this.filtersChangedHandler,
     );
 
     document.removeEventListener(
       "vviinnFilterTriggered",
-      this.filtersTriggeredHandler
+      this.filtersTriggeredHandler,
     );
 
     document.removeEventListener("vviinnWidgetClose", this.widgetCloseHandler);
@@ -613,7 +614,7 @@ export class VviinnResults {
     let resultEvent: ResultViewEvent | ResultLoadEvent =
       createResultEventByType(
         type,
-        widget ?? "VPS"
+        widget ?? "VPS",
       )({
         session_id: this.uiSessionId,
         ...rest,
@@ -623,7 +624,7 @@ export class VviinnResults {
   }
 
   private findProductById(
-    id: Recommendation["productId"]
+    id: Recommendation["productId"],
   ): Recommendation | undefined {
     return this.getResults().find((r) => r.productId === id);
   }
@@ -645,7 +646,7 @@ export class VviinnResults {
 
   private getProductTrackEvent(
     detail: ProductCardEventData,
-    eventType: ProductEventType
+    eventType: ProductEventType,
   ): ProductEvent | null {
     if (this.trackingDeactivated) return null;
 
@@ -667,7 +668,7 @@ export class VviinnResults {
 
     const productEvent: ProductEvent = createProductWidgetEventByType(
       widgetType === "VCS" ? "VPC" : widgetType,
-      eventType
+      eventType,
     )(eventBody);
 
     return productEvent;
@@ -702,7 +703,7 @@ export class VviinnResults {
       if (!isOneClickDiscoveryAppendMode) return;
 
       const containerComputerStyle = window.getComputedStyle(
-        this.el.shadowRoot.getElementById("vviinn-results-products")
+        this.el.shadowRoot.getElementById("vviinn-results-products"),
       );
       const nCols = containerComputerStyle
         .getPropertyValue("grid-template-columns")
@@ -765,7 +766,7 @@ export class VviinnResults {
               appendSidebarToElement={
                 isOneClickDiscoveryAppendMode
                   ? this.el.shadowRoot.getElementById(
-                      "one-click-discovery-append"
+                      "one-click-discovery-append",
                     )
                   : undefined
               }

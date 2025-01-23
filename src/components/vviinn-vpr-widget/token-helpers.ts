@@ -17,5 +17,5 @@ const createFetchAuthOptions = (x: Headers): RequestInit => {
 export const createBearAuthedHeader = flow(
   createBearerString,
   createAuthedHeader,
-  createFetchAuthOptions
+  createFetchAuthOptions,
 );

@@ -239,7 +239,7 @@ export class VviinnProductCard {
 
     this.intersectionObserver = new IntersectionObserver(
       this.intersectionCallback.bind(this.imageElement),
-      { threshold: 1.0 }
+      { threshold: 1.0 },
     );
     this.intersectionObserver.observe(this.imageElement);
 
@@ -283,7 +283,7 @@ export class VviinnProductCard {
 
     try {
       this.energyCertifications = JSON.parse(
-        this.energyCertificationsString
+        this.energyCertificationsString,
       ) as EnergyCertification[];
     } catch (e) {
       console.error("Invalid filters string", e);
@@ -313,7 +313,7 @@ export class VviinnProductCard {
     if (data.some((entry) => entry.isIntersecting)) {
       pipe(
         getAnalyticsModule,
-        O.map((analytics) => analytics.sendImpression(this.getProduct()))
+        O.map((analytics) => analytics.sendImpression(this.getProduct())),
       );
       this.vviinnProductView.emit(this.productData);
       this.intersectionObserver.disconnect();
@@ -347,8 +347,8 @@ export class VviinnProductCard {
       getAnalyticsModule,
       O.match(
         () => null,
-        (analytics) => analytics.sendClick(this.getProduct())
-      )
+        (analytics) => analytics.sendClick(this.getProduct()),
+      ),
     );
   }
 

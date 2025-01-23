@@ -1,6 +1,6 @@
 {
   "name": "vviinn-widgets",
-  "version": "2.145.11",
+  "version": "2.146.0",
   "description": "vviinn web components",
   "main": "./dist/index.cjs.js",
   "module": "./dist/index.js",
@@ -37,6 +37,7 @@
     "@rgba-image/lanczos": "^0.1.1",
     "@sentry/browser": "^6.15.0",
     "@sentry/tracing": "^6.15.0",
+    "@types/dom-speech-recognition": "^0.0.4",
     "@types/google.analytics": "0.0.41",
     "@types/gtag.js": "0.0.4",
     "@types/node": "^14.14.22",
@@ -53,8 +54,7 @@
     "typescript": "^4.6.3",
     "uuid": "^8.3.2",
     "vviinn-tracking-client-ts": "^1.7.4",
-    "whatwg-fetch": "^3.6.2",
-    "@types/dom-speech-recognition": "^0.0.4"
+    "whatwg-fetch": "^3.6.2"
   },
   "devDependencies": {
     "@babel/core": "^7.16.12",
@@ -67,6 +67,7 @@
     "jest": "^27.0.3",
     "jest-cli": "^27.4.5",
     "jest-config": "^27.0.3",
+    "prettier": "3.4.2",
     "puppeteer": "^22.14.0",
     "rollup-plugin-dotenv": "^0.5.0",
     "storybook-addon-designs": "^6.2.1",

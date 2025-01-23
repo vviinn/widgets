@@ -48,7 +48,7 @@ export const config: Config = {
             cert: readFileSync(path.join(__dirname, "localhost.pem"), "utf8"),
             key: readFileSync(
               path.join(__dirname, "localhost-key.pem"),
-              "utf8"
+              "utf8",
             ),
           },
         }

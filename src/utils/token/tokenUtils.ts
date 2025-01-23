@@ -10,16 +10,16 @@ export const createBearerHeaders = (token: string): Headers =>
   });
 
 export const checkToken = (
-  token: string
+  token: string,
 ): E.Either<BasicError<string>, string> =>
   pipe(
     token,
     existAndNotEmpty,
-    E.mapLeft(() => invalidTokenError)
+    E.mapLeft(() => invalidTokenError),
   );
 
 export const processBearerToken = (
-  token: string
+  token: string,
 ): E.Either<BasicError<string>, Headers> =>
   pipe(token, checkToken, E.map(createBearerHeaders));
 
