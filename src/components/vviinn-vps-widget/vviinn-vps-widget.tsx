@@ -799,6 +799,7 @@ export class VviinnVpsWidget {
                   <vviinn-cropper
                     basicEventData={this.getBasicEventData()}
                     showAspectRatioError={this.showAspectRatioError}
+                    apiPath={this.apiPath}
                     showInWidget={true}
                   />
                   <div
