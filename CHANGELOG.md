@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.146.1](https://github.com/vviinn/widgets/compare/v2.146.0...v2.146.1) (2025-01-24)
+
+
+### Bug Fixes
+
+* Fix reseting campaignId on new Image Search ([3743705](https://github.com/vviinn/widgets/commit/3743705f3242960643a29fb8380ad63f3bac785e))
+
 ## [2.146.0](https://github.com/vviinn/widgets/compare/v2.145.13...v2.146.0) (2025-01-23)
 
 
