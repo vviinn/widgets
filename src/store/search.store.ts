@@ -116,7 +116,11 @@ const useStore = (store: SearchStoreName) =>
 
 export const resetStore = (store: SearchStoreName) => {
   const state = useStore(store);
-  Object.assign(state, storeDefaults);
+  Object.assign(state, {
+    ...storeDefaults,
+    campaignId: state.campaignId,
+    excluded: state.excluded,
+  });
 };
 
 const updateState =
