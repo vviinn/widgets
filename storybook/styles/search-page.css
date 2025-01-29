@@ -39,11 +39,6 @@ vviinn-cropper.active {
   overflow-x: auto;
 }
 
-.search-page-wrapper-result-filters
-  vviinn-selected-filters::part(selected-filters-list) {
-  margin-top: 0;
-}
-
 .search-page-wrapper-result-filters vviinn-extended-filters {
   display: none;
 }
