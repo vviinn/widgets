@@ -400,7 +400,7 @@ export class VviinnExtendedFilters {
     requestFilters: RequestDynamicFilterItem[],
     filterValue: DynamicFilterValue,
   ) {
-    let className = false;
+    let active = false;
     requestFilters.forEach((filter) => {
       if (
         filter.values.some(
@@ -410,10 +410,10 @@ export class VviinnExtendedFilters {
             value === filterValue.value,
         )
       ) {
-        className = true;
+        active = true;
       }
     });
-    return className;
+    return active;
   }
 
   private handleMoreOptionsMainClick(column: string) {

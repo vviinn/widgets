@@ -31,6 +31,7 @@ import {
   searchState,
   SearchStore,
 } from "../../store/search.store";
+import { ResponseDynamicFilterIntervalItem } from "../../interfaces/recommendation";
 
 /**
  * @part selected-filters-list - List of selected filters.
@@ -50,13 +51,16 @@ import {
 export class VviinnSelectedFilters {
   @Element() el: HTMLElement;
 
+  /** The currency sign is displayed after the price */
+  @Prop() currencySign?: string = "€";
+
   /** @internal */
   @Prop() showInWidget: boolean = false;
 
-  @State() filters: ResponseDynamicFilterItem[] = [];
   @State() requestFilters: RequestDynamicFilterItem[] = [];
   @State() selectedFilterButtons: JSX.Element[] = [];
   @State() textSearchCustomFilter: string | null = null;
+  @State() priceCustomFilter: string | null = null;
 
   /** The filter's state changes */
   @Event({ bubbles: true })
@@ -86,6 +90,11 @@ export class VviinnSelectedFilters {
     });
   }
 
+  private getPriceFilter = () =>
+    this.state.dynamicFilters.find(
+      (filter) => filter.column === "price",
+    ) as ResponseDynamicFilterIntervalItem;
+
   private skipFiltersChanges = (isTriggeredByVpsWidget: boolean) =>
     (isTriggeredByVpsWidget && !this.showInWidget) ||
     (!isTriggeredByVpsWidget && this.showInWidget);
@@ -93,8 +102,23 @@ export class VviinnSelectedFilters {
   private handleFilterTriggered = ({
     detail,
   }: CustomEvent<DynamicFilterInternalData>) => {
+    if (this.skipFiltersChanges(detail.isTriggeredByVpsWidget)) return;
+
     if (detail.customTrigger === "TPS") {
       this.textSearchCustomFilter = detail.kind;
+    }
+
+    if (detail.kind === "price" && detail.action === "select") {
+      const priceFilter = this.getPriceFilter();
+
+      const { start: rangeStart, end: rangeEnd } = priceFilter.full;
+      const { start, end } = detail.value.interval;
+
+      if (start !== rangeStart || end !== rangeEnd) {
+        this.priceCustomFilter = `${start} ${this.currencySign} – ${end} ${this.currencySign}`;
+      } else {
+        this.priceCustomFilter = null;
+      }
     }
   };
 
@@ -117,6 +141,29 @@ export class VviinnSelectedFilters {
   }: CustomEvent<ResetSelectedFiltersEventData>) => {
     if (this.skipFiltersChanges(detail.isTriggeredByVpsWidget)) return;
     this.requestFilters = [];
+  };
+
+  private handlePriceButtonClick = () => {
+    this.priceCustomFilter = null;
+
+    const priceFilter = this.getPriceFilter();
+    this.handleSubFilterSelection(
+      priceFilter.full as DynamicFilterValue,
+      priceFilter,
+    );
+  };
+
+  private handleTextButtonClick = () => {
+    this.textSearchCustomFilter = null;
+    this.vviinnFilterTriggered.emit({
+      kind: "",
+      action: "deselect",
+      customTrigger: "TPS",
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
+    this.vviinnSelectedFiltersReset.emit({
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
   };
 
   connectedCallback() {
@@ -190,18 +237,14 @@ export class VviinnSelectedFilters {
               RenderCustomButton({
                 label: this.textSearchCustomFilter,
                 buttonType: "text",
-                onButtonClick: () => {
-                  this.textSearchCustomFilter = null;
-                  this.vviinnFilterTriggered.emit({
-                    kind: "",
-                    action: "deselect",
-                    customTrigger: "TPS",
-                    isTriggeredByVpsWidget: this.showInWidget,
-                  });
-                  this.vviinnSelectedFiltersReset.emit({
-                    isTriggeredByVpsWidget: this.showInWidget,
-                  });
-                },
+                onClick: this.handleTextButtonClick.bind(this),
+              })}
+
+            {this.priceCustomFilter &&
+              RenderCustomButton({
+                label: this.priceCustomFilter,
+                buttonType: "text",
+                onClick: this.handlePriceButtonClick.bind(this),
               })}
 
             {this.selectedFilterButtons}

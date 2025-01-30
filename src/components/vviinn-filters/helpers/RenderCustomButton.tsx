@@ -3,20 +3,20 @@ import { CloseFilterIcon } from "../../vviinn-icons";
 
 type RenderCustomButtonProps = {
   buttonType: "image" | "text";
-  onButtonClick: () => void;
+  onClick: () => void;
   label?: string;
 };
 
 export const RenderCustomButton = ({
   buttonType,
   label,
-  onButtonClick,
+  onClick,
 }: RenderCustomButtonProps): JSX.Element => {
   return (
     buttonType === "text" && (
       <li part="filters-sub-row">
         <button
-          onClick={onButtonClick}
+          onClick={onClick}
           class={`filters-more-modal-button  active`}
           part="filters-option-button"
         >

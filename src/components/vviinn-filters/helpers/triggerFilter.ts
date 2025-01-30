@@ -42,6 +42,7 @@ export const triggerFilter = ({
     kind: selectedFilter.column,
     action,
     isTriggeredByVpsWidget,
+    value: filterValue,
   });
 
   vviinnFiltersChanged.emit({

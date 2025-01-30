@@ -8,7 +8,10 @@ import {
 import { ValueObject } from "../network/ion/ValueObject";
 import { DetectedObject } from "../searchSession/searchSession";
 import { ErrorKind } from "../error";
-import { RequestDynamicFilterItem } from "../campaign/VPRCampaignService";
+import {
+  DynamicFilterValue,
+  RequestDynamicFilterItem,
+} from "../campaign/VPRCampaignService";
 import { Rectangle } from "../geometry/Rectangle";
 
 export type CommonEventData = {
@@ -101,6 +104,7 @@ export type ExtendedFiltersButtonClickedEventData = {
 
 export type DynamicFilterTrackingData = {
   action: FilterAction;
+  value?: DynamicFilterValue;
   kind?: string;
   isTriggeredByVpsWidget?: boolean;
 };
