@@ -52,19 +52,17 @@ export const RenderFilterButton = ({
             part="filters-option-color-dot"
           ></div>
         )}
-        <span>
-          <span part="filters-option-text">{label}</span>
-          <div part="filters-option-icon-wrapper">
-            {!showClose ? (
-              isSelected ? (
-                <CheckFilterIcon />
-              ) : (
-                <SquareFilterIcon />
-              )
-            ) : null}
-          </div>
-          {isSelected && showClose && <CloseFilterIcon />}
-        </span>
+        <span part="filters-option-text">{label}</span>
+        <div part="filters-option-icon-wrapper">
+          {!showClose ? (
+            isSelected ? (
+              <CheckFilterIcon />
+            ) : (
+              <SquareFilterIcon />
+            )
+          ) : null}
+        </div>
+        {isSelected && showClose && <CloseFilterIcon />}
       </button>
     </li>
   );

@@ -293,7 +293,7 @@ vviinn-price-range {
   cursor: pointer;
 
   display: flex;
-  padding: var(--spacing-100);
+  padding: var(--spacing-75);
   align-items: center;
   gap: var(--spacing-25);
 
@@ -314,13 +314,8 @@ vviinn-price-range {
   background: var(--surface-bg-color-inverse);
   color: var(--color-text-inverse);
 }
+
 .filters-more-modal-button > span {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-25);
-}
-.filters-more-modal-button > span > span {
   white-space: nowrap;
   padding: var(--spacing-25);
 }
