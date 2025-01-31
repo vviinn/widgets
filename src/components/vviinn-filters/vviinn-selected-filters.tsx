@@ -260,7 +260,7 @@ export class VviinnSelectedFilters {
             {this.priceCustomFilter &&
               RenderCustomButton({
                 label: this.priceCustomFilter,
-                buttonType: "text",
+                buttonType: "price",
                 onClick: this.handlePriceButtonClick.bind(this),
               })}
 
