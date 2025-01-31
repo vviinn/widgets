@@ -28,8 +28,10 @@ import {
 import { triggerFilter } from "./helpers/triggerFilter";
 import {
   componentsState,
+  resetStore,
   searchState,
   SearchStore,
+  SearchStoreName,
 } from "../../store/search.store";
 import { ResponseDynamicFilterIntervalItem } from "../../interfaces/recommendation";
 
@@ -74,6 +76,7 @@ export class VviinnSelectedFilters {
   @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterInternalData>;
 
   private state?: SearchStore;
+  private storeName?: SearchStoreName;
 
   private handleSubFilterSelection(
     filterValue: DynamicFilterValue,
@@ -143,6 +146,23 @@ export class VviinnSelectedFilters {
     this.requestFilters = [];
   };
 
+  private resetState = () => {
+    this.vviinnFilterTriggered.emit({
+      kind: "",
+      action: "deselect",
+      customTrigger: "TPS",
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
+
+    this.textSearchCustomFilter = null;
+    this.vviinnSelectedFiltersReset.emit({
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
+    resetStore(this.storeName);
+  };
+
+  private searchIdReceivedHandler = () => this.resetState();
+
   private handlePriceButtonClick = () => {
     this.priceCustomFilter = null;
 
@@ -153,21 +173,9 @@ export class VviinnSelectedFilters {
     );
   };
 
-  private handleTextButtonClick = () => {
-    this.textSearchCustomFilter = null;
-    this.vviinnFilterTriggered.emit({
-      kind: "",
-      action: "deselect",
-      customTrigger: "TPS",
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
-    this.vviinnSelectedFiltersReset.emit({
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
-  };
-
   connectedCallback() {
     this.state = this.showInWidget ? searchState : componentsState;
+    this.storeName = this.showInWidget ? "widget" : "components";
 
     document.addEventListener(
       "vviinnFiltersChanged",
@@ -180,6 +188,10 @@ export class VviinnSelectedFilters {
     document.addEventListener(
       "vviinnSelectedFiltersReset",
       this.handleSelectedFiltersReset,
+    );
+    document.addEventListener(
+      "vviinnSearchIdReceived",
+      this.searchIdReceivedHandler,
     );
   }
 
@@ -195,6 +207,10 @@ export class VviinnSelectedFilters {
     document.removeEventListener(
       "vviinnSelectedFiltersReset",
       this.handleSelectedFiltersReset,
+    );
+    document.removeEventListener(
+      "vviinnSearchIdReceived",
+      this.searchIdReceivedHandler,
     );
   }
 
@@ -237,7 +253,7 @@ export class VviinnSelectedFilters {
               RenderCustomButton({
                 label: this.textSearchCustomFilter,
                 buttonType: "text",
-                onClick: this.handleTextButtonClick.bind(this),
+                onClick: this.resetState.bind(this),
               })}
 
             {this.priceCustomFilter &&

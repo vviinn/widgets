@@ -212,7 +212,7 @@ export class VviinnFilters {
           "show-in-widget": this.showInWidget,
         }}
       >
-        <div class="main-filters-wrapper" part="filters-wrapper">
+        {filters?.length > 0 && (
           <ul class="main-filters-list" part="filters-list">
             {filters.map((filter) => {
               return (
@@ -230,7 +230,7 @@ export class VviinnFilters {
               );
             })}
           </ul>
-        </div>
+        )}
 
         {!!this.selectedFilter && (
           <div class="filters-footer" part="filters-footer">

@@ -382,6 +382,7 @@ export class VviinnResults {
   }
 
   private searchIdReceivedHandler = ({ detail }: SearchIdEvent) => {
+    resetStore(this.storeName);
     this.getResultsBySearchId(detail.searchId);
   };
 
