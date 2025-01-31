@@ -155,6 +155,7 @@ export class VviinnSelectedFilters {
     });
 
     this.textSearchCustomFilter = null;
+    this.priceCustomFilter = null;
     this.vviinnSelectedFiltersReset.emit({
       isTriggeredByVpsWidget: this.showInWidget,
     });
