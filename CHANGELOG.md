@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.146.2](https://github.com/vviinn/widgets/compare/v2.146.1...v2.146.2) (2025-02-03)
+
+
+### Bug Fixes
+
+* Show Cropper on the Search Page and fix documentation ([634f4bd](https://github.com/vviinn/widgets/commit/634f4bdd861077a9d121cabcc029440ae28edc0b))
+
 ### [2.146.1](https://github.com/vviinn/widgets/compare/v2.146.0...v2.146.1) (2025-01-24)
 
 
