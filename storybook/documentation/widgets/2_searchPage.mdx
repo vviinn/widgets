@@ -30,6 +30,7 @@ Using `Vviinn Widgets` as separate components allows for greater control over th
       <div className="tabcontent-preview">
         <div className="search-page-wrapper">
           <div className="search-page-wrapper-aside">
+            <vviinn-cropper width="300"></vviinn-cropper>
             <vviinn-extended-filters locale="en-US" mode="preview"></vviinn-extended-filters>
           </div>
           <div className="search-page-wrapper-result">
@@ -42,7 +43,7 @@ Using `Vviinn Widgets` as separate components allows for greater control over th
               <vviinn-selected-filters></vviinn-selected-filters>
             </div>
 
-            <vviinn-results token={vviinnToken} locale="en-US" one-click-discovery-mode="append"></vviinn-results>
+            <vviinn-results results-count="12" token={vviinnToken} locale="en-US" one-click-discovery-mode="append"></vviinn-results>
           </div>
         </div>
       </div>
@@ -113,21 +114,20 @@ vviinn-text-search {
 </style>
 <div class="search-page-wrapper">
   <div class="search-page-wrapper-aside">
+    <vviinn-cropper width="300"></vviinn-cropper>
     <vviinn-extended-filters locale="en-US" mode="preview"></vviinn-extended-filters>
   </div>
   <div class="search-page-wrapper-result">
-    <vviinn-text-search token="TOKEN" locale="en-US"></vviinn-text-search>
+    <vviinn-text-search token="TOKEN" locale="en-US" search-query="chair" mode="extended">
+    </vviinn-text-search>
     
     <div class="search-page-wrapper-result-filters">
       <vviinn-extended-filters locale="en-US"></vviinn-extended-filters>
 
       <vviinn-selected-filters></vviinn-selected-filters>
     </div>
-
-    <vviinn-text-search token="TOKEN" locale="en-US" search-query="chair" mode="extended">
-    </vviinn-text-search>
     
-    <vviinn-results token="TOKEN" locale="en-US" one-click-discovery-mode="append"></vviinn-results>
+    <vviinn-results results-count="12" token="TOKEN" locale="en-US" one-click-discovery-mode="append"></vviinn-results>
   </div>
 </div>
 ```
@@ -137,6 +137,7 @@ In this basic example, we use `vviinn-text-search`, `vviinn-results`, and two va
 
 - The `token` attribute is required for all components (except filters) and is used to authenticate your requests.
 - The `extended` mode enables image search functionality.
+- The `results-count` property defines the number of results that will be fetched. It cannot exceed the number set in the Campaign settings.
 
 Other properties you can use are detailed on the components' pages.
 
@@ -159,11 +160,11 @@ To see the filter columns, enable Filters in the Interface Controls section insi
 <!-- Page 1 -->
 <script>
   document.addEventListener("vviinnTextSearchStarted", ({ detail }) => {
-    // Redirection logic, using detail.query
+     // Redirection logic, using detail.query (text search)
   });
 
   document.addEventListener("vviinnSearchIdReceived", ({ detail }) => {
-    // Redirection logic, using detail.searchId
+    // Redirection logic, using detail.searchId (image search)
   });
 </script>
 <vviinn-text-search
@@ -178,7 +179,26 @@ To see the filter columns, enable Filters in the Interface Controls section insi
 </script>
 <vviinn-filters locale="en-US"></vviinn-filters>
 <vviinn-extended-filters locale="en-US"></vviinn-extended-filters>
-<vviinn-results token="YOUR_TOKEN" text-search-query="YOUR_QUERY" locale="en-US"></vviinn-results>
+
+<!-- Text Search example: -->
+<vviinn-text-search 
+  token="YOUR_TOKEN"
+  mode="extended"
+  locale="en-US"
+  search-query="RECEIVED_QUERY"
+></vviinn-text-search>
+
+<vviinn-results token="YOUR_TOKEN" locale="en-US"></vviinn-results>
+
+<!-- Image Search example: -->
+<vviinn-text-search 
+  token="YOUR_TOKEN"
+  mode="extended"
+  locale="en-US"
+></vviinn-text-search>
+
+<vviinn-results token="YOUR_TOKEN" search-id="RECEIVED_SEARCH_ID" locale="en-US"></vviinn-results>
+
 ```
 </div>
 <div id="Details_2" className="tabcontent">
