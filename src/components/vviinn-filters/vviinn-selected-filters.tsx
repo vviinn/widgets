@@ -248,7 +248,8 @@ export class VviinnSelectedFilters {
         }}
       >
         {(this.selectedFilterButtons.length > 0 ||
-          this.textSearchCustomFilter) && (
+          this.textSearchCustomFilter ||
+          this.priceCustomFilter) && (
           <ul class="selected-filters-wrapper" part="selected-filters-list">
             {this.textSearchCustomFilter &&
               RenderCustomButton({

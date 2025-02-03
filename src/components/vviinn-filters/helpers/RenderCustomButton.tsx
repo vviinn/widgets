@@ -17,7 +17,7 @@ export const RenderCustomButton = ({
     <li part="filters-sub-row">
       <button
         onClick={onClick}
-        class={`filters-more-modal-button  active`}
+        class={`filters-more-modal-button active`}
         part="filters-option-button"
       >
         {buttonType === "text" && <TextIcon />}
