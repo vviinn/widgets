@@ -207,20 +207,22 @@ export class VviinnTextSearch {
     if (!this.searchQuery) return;
     this.trackTextSearch();
     if (this.showInWidget) {
-      const { requestId } = pipe(
+      const response = pipe(
         await makeTextSearchRequest(this.storeName, this.searchQuery),
         E.getOrElse(() => null),
         (response: TextSearchResponse) => response,
       );
 
-      this.widgetTextSearchFinished.emit({
-        query: this.searchQuery,
-        requestId,
-      });
+      if (response) {
+        this.widgetTextSearchFinished.emit({
+          query: this.searchQuery,
+          requestId: response.requestId,
+        });
 
-      this.vviinnSelectedFiltersReset.emit({
-        isTriggeredByVpsWidget: this.showInWidget,
-      });
+        this.vviinnSelectedFiltersReset.emit({
+          isTriggeredByVpsWidget: this.showInWidget,
+        });
+      }
     } else {
       this.showLoader();
       this.vviinnTextSearchStarted.emit({
