@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.148.0](https://github.com/vviinn/widgets/compare/v2.147.1...v2.148.0) (2025-02-04)
+
+
+### Features
+
+* Make zoom feature more accurate ([317595a](https://github.com/vviinn/widgets/commit/317595a669a6a5913f2378c60f4684326df6a661))
+
 ### [2.147.1](https://github.com/vviinn/widgets/compare/v2.147.0...v2.147.1) (2025-02-04)
 
 
