@@ -90,12 +90,13 @@ export class VviinnExampleImage {
     const currentSettings = this.videoTrack.getSettings() as any;
     const currentZoom = currentSettings.zoom ?? min;
 
-    const step = (max - min) / 3;
+    const step = (max - min) / 5;
     const roundedStep = Math.round(step * 10) / 10;
 
     let newZoom: number;
     newZoom =
       action === "in" ? currentZoom + roundedStep : currentZoom - roundedStep;
+    newZoom = action === "in" && currentZoom < 1 ? 1 : newZoom;
 
     if (newZoom < min) newZoom = min;
     if (newZoom > max) newZoom = max;
