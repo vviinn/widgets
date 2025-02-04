@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.147.0](https://github.com/vviinn/widgets/compare/v2.146.2...v2.147.0) (2025-02-04)
+
+
+### Features
+
+* Make filters styles cleaner, remove default padding ([58023be](https://github.com/vviinn/widgets/commit/58023be0afcdf729f4fdb21eab00fe34fe767ee4))
+* Show selected price filter ([139e68e](https://github.com/vviinn/widgets/commit/139e68eaf0abf0f2b2d03cd6e4f4f053a5a1afe1))
+
 ### [2.146.2](https://github.com/vviinn/widgets/compare/v2.146.1...v2.146.2) (2025-02-03)
 
 
