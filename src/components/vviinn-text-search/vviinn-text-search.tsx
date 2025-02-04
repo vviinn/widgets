@@ -135,13 +135,31 @@ export class VviinnTextSearch {
     if (this.token) this.state.token = this.token;
 
     document.addEventListener("resultsSearchFinished", this.hideLoader);
+    document.addEventListener(
+      "vviinnFilterTriggered",
+      this.filterTriggeredHandler
+    );
   }
 
   disconnectedCallback() {
     document.removeEventListener("resultsSearchFinished", this.hideLoader);
+    document.removeEventListener(
+      "vviinnFilterTriggered",
+      this.filterTriggeredHandler
+    );
+
     clearTimeout(this.triggerTooltipStart);
     clearTimeout(this.triggerTooltipEnd);
   }
+
+  private filterTriggeredHandler = ({
+    detail,
+  }: CustomEvent<DynamicFilterInternalData>) => {
+    const { action, customTrigger } = detail;
+    if (action === "deselect" && customTrigger === "TPS") {
+      this.searchQuery = "";
+    }
+  };
 
   private trackTextSearch = () =>
     this.vviinnFilterTriggered.emit({
@@ -207,20 +225,22 @@ export class VviinnTextSearch {
     if (!this.searchQuery) return;
     this.trackTextSearch();
     if (this.showInWidget) {
-      const { requestId } = pipe(
+      const response = pipe(
         await makeTextSearchRequest(this.storeName, this.searchQuery),
         E.getOrElse(() => null),
         (response: TextSearchResponse) => response,
       );
 
-      this.widgetTextSearchFinished.emit({
-        query: this.searchQuery,
-        requestId,
-      });
+      if (response) {
+        this.widgetTextSearchFinished.emit({
+          query: this.searchQuery,
+          requestId: response.requestId,
+        });
 
-      this.vviinnSelectedFiltersReset.emit({
-        isTriggeredByVpsWidget: this.showInWidget,
-      });
+        this.vviinnSelectedFiltersReset.emit({
+          isTriggeredByVpsWidget: this.showInWidget,
+        });
+      }
     } else {
       this.showLoader();
       this.vviinnTextSearchStarted.emit({

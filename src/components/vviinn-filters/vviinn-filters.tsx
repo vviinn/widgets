@@ -16,7 +16,7 @@ import {
 } from "../../campaign/VPRCampaignService";
 import {
   getFilterOptions,
-  RenderButton,
+  RenderFilterButton,
   showActiveOnSubButton,
 } from "./helpers";
 import { Histogram } from "../vviinn-price-range/vviinn-price-range";
@@ -124,15 +124,15 @@ export class VviinnFilters {
     filterValue: DynamicFilterValue,
     selectedFilter: ResponseDynamicFilterItem,
   ) {
-    this.requestFilters = triggerFilter(
+    this.requestFilters = triggerFilter({
       filterValue,
       selectedFilter,
-      this.requestFilters,
-      this.vviinnFilterTriggered,
-      this.vviinnFiltersChanged,
-      this.el,
-      this.showInWidget,
-    );
+      requestFilters: this.requestFilters,
+      vviinnFilterTriggered: this.vviinnFilterTriggered,
+      vviinnFiltersChanged: this.vviinnFiltersChanged,
+      el: this.el,
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
   }
 
   private showActiveOnMainButton({ column }: ResponseDynamicFilterItem) {
@@ -212,7 +212,7 @@ export class VviinnFilters {
           "show-in-widget": this.showInWidget,
         }}
       >
-        <div class="main-filters-wrapper" part="filters-wrapper">
+        {filters?.length > 0 && (
           <ul class="main-filters-list" part="filters-list">
             {filters.map((filter) => {
               return (
@@ -230,7 +230,7 @@ export class VviinnFilters {
               );
             })}
           </ul>
-        </div>
+        )}
 
         {!!this.selectedFilter && (
           <div class="filters-footer" part="filters-footer">
@@ -253,14 +253,15 @@ export class VviinnFilters {
                       this.selectedFilter,
                     );
 
-                    return RenderButton(
-                      this.handleSubFilterSelection.bind(this),
+                    return RenderFilterButton({
+                      handleSubFilterSelection:
+                        this.handleSubFilterSelection.bind(this),
+                      selectedFilter: this.selectedFilter,
                       value,
                       label,
                       active,
-                      this.selectedFilter,
                       isSelected,
-                    );
+                    });
                   })}
               </ul>
             )}

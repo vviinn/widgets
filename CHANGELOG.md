@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.148.0](https://github.com/vviinn/widgets/compare/v2.147.1...v2.148.0) (2025-02-04)
+
+
+### Features
+
+* Make zoom feature more accurate ([317595a](https://github.com/vviinn/widgets/commit/317595a669a6a5913f2378c60f4684326df6a661))
+
+### [2.147.1](https://github.com/vviinn/widgets/compare/v2.147.0...v2.147.1) (2025-02-04)
+
+
+### Bug Fixes
+
+* Fix console error on unprocessable text search request ([54b3a5d](https://github.com/vviinn/widgets/commit/54b3a5d12a6ebef5bf4e421acf122d27733073de))
+
+## [2.147.0](https://github.com/vviinn/widgets/compare/v2.146.2...v2.147.0) (2025-02-04)
+
+
+### Features
+
+* Make filters styles cleaner, remove default padding ([58023be](https://github.com/vviinn/widgets/commit/58023be0afcdf729f4fdb21eab00fe34fe767ee4))
+* Show selected price filter ([139e68e](https://github.com/vviinn/widgets/commit/139e68eaf0abf0f2b2d03cd6e4f4f053a5a1afe1))
+
+### [2.146.2](https://github.com/vviinn/widgets/compare/v2.146.1...v2.146.2) (2025-02-03)
+
+
+### Bug Fixes
+
+* Show Cropper on the Search Page and fix documentation ([634f4bd](https://github.com/vviinn/widgets/commit/634f4bdd861077a9d121cabcc029440ae28edc0b))
+
 ### [2.146.1](https://github.com/vviinn/widgets/compare/v2.146.0...v2.146.1) (2025-01-24)
 
 

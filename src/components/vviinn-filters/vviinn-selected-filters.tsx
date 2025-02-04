@@ -7,24 +7,33 @@ import {
   EventEmitter,
   Element,
   Prop,
+  JSX,
 } from "@stencil/core";
 import {
   ResponseDynamicFilterItem,
   DynamicFilterValue,
   RequestDynamicFilterItem,
 } from "../../campaign/VPRCampaignService";
-import { FilterOptions, RenderButton, showActiveOnSubButton } from "./helpers";
+import {
+  FilterOptions,
+  RenderCustomButton,
+  RenderFilterButton,
+  showActiveOnSubButton,
+} from "./helpers";
 import {
   ChangedFiltersEventData,
-  DynamicFilterTrackingData,
+  DynamicFilterInternalData,
   ResetSelectedFiltersEventData,
 } from "../../recommendation/events";
 import { triggerFilter } from "./helpers/triggerFilter";
 import {
   componentsState,
+  resetStore,
   searchState,
   SearchStore,
+  SearchStoreName,
 } from "../../store/search.store";
+import { ResponseDynamicFilterIntervalItem } from "../../interfaces/recommendation";
 
 /**
  * @part selected-filters-list - List of selected filters.
@@ -44,11 +53,16 @@ import {
 export class VviinnSelectedFilters {
   @Element() el: HTMLElement;
 
+  /** The currency sign is displayed after the price */
+  @Prop() currencySign?: string = "€";
+
   /** @internal */
   @Prop() showInWidget: boolean = false;
 
-  @State() filters: ResponseDynamicFilterItem[] = [];
   @State() requestFilters: RequestDynamicFilterItem[] = [];
+  @State() selectedFilterButtons: JSX.Element[] = [];
+  @State() textSearchCustomFilter: string | null = null;
+  @State() priceCustomFilter: string | null = null;
 
   /** The filter's state changes */
   @Event({ bubbles: true })
@@ -59,28 +73,57 @@ export class VviinnSelectedFilters {
   @Event({ bubbles: true })
   vviinnSelectedFiltersReset: EventEmitter<ResetSelectedFiltersEventData>;
 
-  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
+  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterInternalData>;
 
   private state?: SearchStore;
+  private storeName?: SearchStoreName;
 
   private handleSubFilterSelection(
     filterValue: DynamicFilterValue,
     selectedFilter: ResponseDynamicFilterItem,
   ) {
-    this.requestFilters = triggerFilter(
+    this.requestFilters = triggerFilter({
       filterValue,
       selectedFilter,
-      this.requestFilters,
-      this.vviinnFilterTriggered,
-      this.vviinnFiltersChanged,
-      this.el,
-      this.showInWidget,
-    );
+      requestFilters: this.requestFilters,
+      vviinnFilterTriggered: this.vviinnFilterTriggered,
+      vviinnFiltersChanged: this.vviinnFiltersChanged,
+      el: this.el,
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
   }
+
+  private getPriceFilter = () =>
+    this.state.dynamicFilters.find(
+      (filter) => filter.column === "price",
+    ) as ResponseDynamicFilterIntervalItem;
 
   private skipFiltersChanges = (isTriggeredByVpsWidget: boolean) =>
     (isTriggeredByVpsWidget && !this.showInWidget) ||
     (!isTriggeredByVpsWidget && this.showInWidget);
+
+  private handleFilterTriggered = ({
+    detail,
+  }: CustomEvent<DynamicFilterInternalData>) => {
+    if (this.skipFiltersChanges(detail.isTriggeredByVpsWidget)) return;
+
+    if (detail.customTrigger === "TPS") {
+      this.textSearchCustomFilter = detail.kind;
+    }
+
+    if (detail.kind === "price" && detail.action === "select") {
+      const priceFilter = this.getPriceFilter();
+
+      const { start: rangeStart, end: rangeEnd } = priceFilter.full;
+      const { start, end } = detail.value.interval;
+
+      if (start !== rangeStart || end !== rangeEnd) {
+        this.priceCustomFilter = `${start} ${this.currencySign} – ${end} ${this.currencySign}`;
+      } else {
+        this.priceCustomFilter = null;
+      }
+    }
+  };
 
   private handleFiltersChanged = ({
     detail,
@@ -103,16 +146,53 @@ export class VviinnSelectedFilters {
     this.requestFilters = [];
   };
 
+  private resetState = () => {
+    this.vviinnFilterTriggered.emit({
+      kind: "",
+      action: "deselect",
+      customTrigger: "TPS",
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
+
+    this.textSearchCustomFilter = null;
+    this.priceCustomFilter = null;
+    this.vviinnSelectedFiltersReset.emit({
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
+    resetStore(this.storeName);
+  };
+
+  private searchIdReceivedHandler = () => this.resetState();
+
+  private handlePriceButtonClick = () => {
+    this.priceCustomFilter = null;
+
+    const priceFilter = this.getPriceFilter();
+    this.handleSubFilterSelection(
+      priceFilter.full as DynamicFilterValue,
+      priceFilter,
+    );
+  };
+
   connectedCallback() {
     this.state = this.showInWidget ? searchState : componentsState;
+    this.storeName = this.showInWidget ? "widget" : "components";
 
     document.addEventListener(
       "vviinnFiltersChanged",
       this.handleFiltersChanged,
     );
     document.addEventListener(
+      "vviinnFilterTriggered",
+      this.handleFilterTriggered,
+    );
+    document.addEventListener(
       "vviinnSelectedFiltersReset",
       this.handleSelectedFiltersReset,
+    );
+    document.addEventListener(
+      "vviinnSearchIdReceived",
+      this.searchIdReceivedHandler,
     );
   }
 
@@ -122,46 +202,70 @@ export class VviinnSelectedFilters {
       this.handleFiltersChanged,
     );
     document.removeEventListener(
+      "vviinnFilterTriggered",
+      this.handleFilterTriggered,
+    );
+    document.removeEventListener(
       "vviinnSelectedFiltersReset",
       this.handleSelectedFiltersReset,
     );
+    document.removeEventListener(
+      "vviinnSearchIdReceived",
+      this.searchIdReceivedHandler,
+    );
   }
 
-  render() {
-    const filters = this.state.dynamicFilters;
-    if (!filters?.length) return;
-
-    let selectedButtons = [];
+  componentWillRender() {
+    this.selectedFilterButtons = [];
+    const filters = this.state?.dynamicFilters || [];
 
     filters.forEach((filter) => {
       if (!("values" in filter)) return;
-
       (filter.values as FilterOptions).forEach(({ value, label, active }) => {
         if (showActiveOnSubButton(this.requestFilters, value, filter)) {
-          selectedButtons.push(
-            RenderButton(
-              this.handleSubFilterSelection.bind(this),
+          this.selectedFilterButtons.push(
+            RenderFilterButton({
+              handleSubFilterSelection:
+                this.handleSubFilterSelection.bind(this),
+              selectedFilter: filter,
               value,
               label,
               active,
-              filter,
-              true,
-              true,
-            ),
+              isSelected: true,
+              showClose: true,
+            }),
           );
         }
       });
     });
+  }
 
+  render() {
     return (
       <Host
         class={{
           "show-in-widget": this.showInWidget,
         }}
       >
-        {selectedButtons.length > 0 && (
+        {(this.selectedFilterButtons.length > 0 ||
+          this.textSearchCustomFilter ||
+          this.priceCustomFilter) && (
           <ul class="selected-filters-wrapper" part="selected-filters-list">
-            {selectedButtons}
+            {this.textSearchCustomFilter &&
+              RenderCustomButton({
+                label: this.textSearchCustomFilter,
+                buttonType: "text",
+                onClick: this.resetState.bind(this),
+              })}
+
+            {this.priceCustomFilter &&
+              RenderCustomButton({
+                label: this.priceCustomFilter,
+                buttonType: "price",
+                onClick: this.handlePriceButtonClick.bind(this),
+              })}
+
+            {this.selectedFilterButtons}
           </ul>
         )}
       </Host>
