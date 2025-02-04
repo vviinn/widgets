@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.147.1](https://github.com/vviinn/widgets/compare/v2.147.0...v2.147.1) (2025-02-04)
+
+
+### Bug Fixes
+
+* Fix console error on unprocessable text search request ([54b3a5d](https://github.com/vviinn/widgets/commit/54b3a5d12a6ebef5bf4e421acf122d27733073de))
+
 ## [2.147.0](https://github.com/vviinn/widgets/compare/v2.146.2...v2.147.0) (2025-02-04)
 
 
