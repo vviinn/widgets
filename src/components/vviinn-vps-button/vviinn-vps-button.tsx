@@ -147,7 +147,7 @@ export class VviinnVpsButton {
   @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
 
   /** The image upload has started */
-  @Event() vviinnImageUpload: EventEmitter<ImageUploadEventData>;
+  @Event() vviinnImageUploadStarted: EventEmitter<ImageUploadEventData>;
 
   /** The recommendation renders on the page */
   @Event() vviinnProductLoad: EventEmitter<ProductCardEventData>;

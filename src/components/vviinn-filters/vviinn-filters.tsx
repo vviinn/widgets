@@ -107,12 +107,12 @@ export class VviinnFilters {
   private handleSelectedFiltersReset = ({
     detail,
   }: CustomEvent<ResetSelectedFiltersEventData>) => {
-    if (this.skipFiltersChanges(detail.isTriggeredByVpsWidget)) return;
+    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.requestFilters = [];
     this.selectedFilter = undefined;
   };
 
-  private skipFiltersChanges = (isTriggeredByVpsWidget: boolean) =>
+  private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
     (isTriggeredByVpsWidget && !this.showInWidget) ||
     (!isTriggeredByVpsWidget && this.showInWidget);
 
@@ -148,7 +148,7 @@ export class VviinnFilters {
 
     if (
       senderElement === this.el ||
-      this.skipFiltersChanges(isTriggeredByVpsWidget)
+      this.skipStateChanges(isTriggeredByVpsWidget)
     )
       return;
 

@@ -358,6 +358,7 @@ const setSelectedImage =
   (store: SearchStoreName) => (image: HTMLImageElement) => {
     const state = useStore(store);
     state.image = O.some(image);
+    // console.log(O.some(image));
   };
 
 export const processSelectedFile =

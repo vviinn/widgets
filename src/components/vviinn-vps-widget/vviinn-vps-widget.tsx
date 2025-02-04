@@ -236,7 +236,7 @@ export class VviinnVpsWidget {
   @Event() vviinnSelectFilter: EventEmitter<SelectFilterEventData>;
 
   /** The image upload has started */
-  @Event() vviinnImageUpload: EventEmitter<ImageUploadEventData>;
+  @Event() vviinnImageUploadStarted: EventEmitter<ImageUploadEventData>;
 
   /** Wrong image format, that isn’t .jpg, .jpeg, png, or the request failed */
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
@@ -615,7 +615,7 @@ export class VviinnVpsWidget {
         class="action-button"
         onClick={() => (this.uploadSource = "uploadPhoto")}
         onVviinnImageUploadFinished={this.handleVviinnImageUploadFinished}
-        onVviinnImageUpload={() => {
+        onVviinnImageUploadStarted={() => {
           this.handleVviinnImageUpload("uploadPhoto");
         }}
         storeName={this.storeName}
@@ -732,7 +732,7 @@ export class VviinnVpsWidget {
                 onVviinnImageUploadFinished={
                   this.handleVviinnImageUploadFinished
                 }
-                onVviinnImageUpload={() => {
+                onVviinnImageUploadStarted={() => {
                   this.handleVviinnImageUpload("startCamera");
                 }}
                 basicEventData={this.getBasicEventData()}

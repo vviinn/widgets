@@ -146,10 +146,8 @@ export class VviinnResults {
   @Event() vviinnResultLoad: EventEmitter<BasicEventData>;
   /** The search result appears in the viewport */
   @Event() vviinnResultView: EventEmitter<BasicEventData>;
-
   /** The 'searchId' is received for performing a Visual Search */
-  /** @internal */
-  @Event() vviinnSearchIdReceived: EventEmitter<SearchIdEventData>;
+  @Event() vviinnImageUploadFinished: EventEmitter<SearchIdEventData>;
 
   /** The 'query' is received for performing a Text Search */
   /** @internal */
@@ -315,7 +313,7 @@ export class VviinnResults {
         : this.replaceSlotsContent();
   }
 
-  private skipFiltersChanges = (isTriggeredByVpsWidget: boolean) =>
+  private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
     (isTriggeredByVpsWidget && !this.showInWidget) ||
     (!isTriggeredByVpsWidget && this.showInWidget);
 
@@ -381,7 +379,8 @@ export class VviinnResults {
     );
   }
 
-  private searchIdReceivedHandler = ({ detail }: SearchIdEvent) => {
+  private imageUploadFinishedHandler = ({ detail }: SearchIdEvent) => {
+    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     resetStore(this.storeName);
     this.getResultsBySearchId(detail.searchId);
   };
@@ -404,7 +403,7 @@ export class VviinnResults {
   private filtersChangedHandler = async ({ detail }: ChangedFiltersEvent) => {
     const { filters, isTriggeredByVpsWidget } = detail;
 
-    if (this.skipFiltersChanges(isTriggeredByVpsWidget)) return;
+    if (this.skipStateChanges(isTriggeredByVpsWidget)) return;
 
     if (this.filterColumn && this.filterValue) {
       this.getResultsByCategory(filters);
@@ -429,7 +428,7 @@ export class VviinnResults {
   }: CustomEvent<DynamicFilterInternalData>) => {
     if (
       this.trackingDeactivated ||
-      this.skipFiltersChanges(detail.isTriggeredByVpsWidget)
+      this.skipStateChanges(detail.isTriggeredByVpsWidget)
     )
       return;
 
@@ -478,8 +477,8 @@ export class VviinnResults {
     }
 
     document.addEventListener(
-      "vviinnSearchIdReceived",
-      this.searchIdReceivedHandler,
+      "vviinnImageUploadFinished",
+      this.imageUploadFinishedHandler,
     );
 
     document.addEventListener(
@@ -497,7 +496,10 @@ export class VviinnResults {
       this.filterTriggeredHandler,
     );
 
-    document.addEventListener("vviinnImageUpload", this.uploadTriggeredHandler);
+    document.addEventListener(
+      "vviinnImageUploadStarted",
+      this.uploadTriggeredHandler,
+    );
 
     document.addEventListener("vviinnWidgetClose", this.widgetCloseHandler);
 
@@ -514,8 +516,8 @@ export class VviinnResults {
     resetStore(this.storeName);
 
     document.removeEventListener(
-      "vviinnSearchIdReceived",
-      this.searchIdReceivedHandler,
+      "vviinnImageUploadFinished",
+      this.imageUploadFinishedHandler,
     );
 
     document.removeEventListener(

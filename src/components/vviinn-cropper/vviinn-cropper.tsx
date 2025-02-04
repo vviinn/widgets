@@ -39,7 +39,6 @@ import * as O from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/function";
 import { sequenceToOption } from "../../utils/option/option";
 import { getImageSizes } from "../../Image/sizing";
-import { SearchIdResponse } from "../../interfaces/search";
 
 const DEFAULT_IMAGE_SIZE = 288;
 
@@ -53,6 +52,7 @@ export class VviinnCropper {
 
   @Prop() detectedObjectsString?: string;
   @Prop() apiPath?: string = "https://api.vviinn.com";
+  @Prop() keepImage?: boolean = false;
 
   @Prop({ mutable: true }) basicEventData: BasicEventData;
   @Prop({ mutable: true }) url: string;
@@ -74,7 +74,6 @@ export class VviinnCropper {
   @Event() vviinnImageCrop: EventEmitter<BasicEventData>;
   @Event() vviinnCropperLoadImage: EventEmitter<LoadImageEventData>;
   @Event() vviinnCropperCropEnd: EventEmitter<Rectangle>;
-  @Event() imageSearchFinished: EventEmitter<SearchIdResponse>;
 
   /** @internal */
   @Event() vviinnCropperAspectRatioError: EventEmitter<boolean>;
@@ -84,21 +83,36 @@ export class VviinnCropper {
 
   connectedCallback() {
     document.addEventListener(
-      "vviinnImageUpload",
+      "vviinnImageUploadStarted",
       this.imageUploadStartedHandler,
+    );
+    document.addEventListener(
+      "vviinnImageUploadFinished",
+      this.imageUploadFinishedHandler,
     );
 
     this.stringParser(true);
     state.apiPath = this.apiPath;
     this.state = this.showInWidget ? searchState : componentsState;
     this.storeName = this.showInWidget ? "widget" : "components";
+
     componentsState.image = O.none;
+
+    const cropperImageSrc = localStorage.getItem("cropperImageSrc");
+    if (this.storeName === "components" && cropperImageSrc) {
+      this.imageElement = document.createElement("img");
+      this.imageElement.src = cropperImageSrc;
+    }
   }
 
   disconnectedCallback() {
     document.removeEventListener(
-      "vviinnImageUpload",
+      "vviinnImageUploadStarted",
       this.imageUploadStartedHandler,
+    );
+    document.removeEventListener(
+      "vviinnImageUploadFinished",
+      this.imageUploadFinishedHandler,
     );
 
     if (this.cropper) this.cropper.destroy();
@@ -109,6 +123,14 @@ export class VviinnCropper {
   detectedObjectsStringWatcher() {
     this.stringParser(true);
   }
+
+  private imageUploadFinishedHandler = () => {
+    const image = O.getOrElse(() => null)(this.state.image);
+    // console.log("image", image);
+    if (image) {
+      localStorage.setItem("cropperImageSrc", image.src);
+    }
+  };
 
   stringParser(TriggerDetectedObjects?: boolean) {
     if (this.detectedObjectsString && TriggerDetectedObjects) {
