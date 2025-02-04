@@ -20,6 +20,8 @@ export interface Interfaces {
     | components["schemas"]["response-categorical-filter-item"]
     | components["schemas"]["response-interval-filter-item"];
 
+  ResponseDynamicFilterIntervalItem: components["schemas"]["response-interval-filter-item"];
+
   DynamicFilterValue: components["schemas"]["interval-filter-value-item"] &
     components["schemas"]["full-color-filter-response"];
 
@@ -33,6 +35,9 @@ export type SimilarProductsRequest = Interfaces["SimilarProductsRequest"];
 export type CrossSellingRequest = Interfaces["CrossSellingRequest"];
 export type RequestStaticFilters = Interfaces["RequestStaticFilters"];
 export type Recommendation = Interfaces["Recommendation"];
+
+export type ResponseDynamicFilterIntervalItem =
+  Interfaces["ResponseDynamicFilterIntervalItem"];
 
 export type EnergyEfficiencyClass = Interfaces["EnergyEfficiencyClass"];
 export type EnergyCertification = Interfaces["EnergyCertification"];

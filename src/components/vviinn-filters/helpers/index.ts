@@ -1,5 +1,6 @@
 export { getFilterOptions } from "./getFilterOptions";
 export { subFilterSelection } from "./subFilterSelection";
 export { FilterOptions } from "./getFilterOptions";
-export { RenderButton } from "./RenderButton";
+export { RenderFilterButton } from "./RenderFilterButton";
+export { RenderCustomButton } from "./RenderCustomButton";
 export { showActiveOnSubButton } from "./showActiveOnSubButton";

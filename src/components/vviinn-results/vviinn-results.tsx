@@ -186,8 +186,6 @@ export class VviinnResults {
   @Prop() favoriteShow: boolean = false;
   /** Query for performing text search */
   @Prop() textSearchQuery?: string;
-  /** ID for performing text search */
-  @Prop() textSearchRequestId?: string;
   /** Column for performing Product Listing Page request */
   @Prop() filterColumn?: string = "product_type";
   /** Value for performing Product Listing Page request */
@@ -227,6 +225,9 @@ export class VviinnResults {
   /** Works for product-listing-page request */
   /** @internal */
   @Prop() useInnerState?: boolean = false;
+  /** ID for performing text search */
+  /** @internal */
+  @Prop() textSearchRequestId?: string;
 
   @State() innerTextSearchQuery: string;
   @State() innerTextSearchRequestId: string;
@@ -381,6 +382,7 @@ export class VviinnResults {
   }
 
   private searchIdReceivedHandler = ({ detail }: SearchIdEvent) => {
+    resetStore(this.storeName);
     this.getResultsBySearchId(detail.searchId);
   };
 
@@ -422,7 +424,7 @@ export class VviinnResults {
     }
   };
 
-  private filtersTriggeredHandler = ({
+  private filterTriggeredHandler = ({
     detail,
   }: CustomEvent<DynamicFilterInternalData>) => {
     if (
@@ -492,7 +494,7 @@ export class VviinnResults {
 
     document.addEventListener(
       "vviinnFilterTriggered",
-      this.filtersTriggeredHandler,
+      this.filterTriggeredHandler,
     );
 
     document.addEventListener("vviinnImageUpload", this.uploadTriggeredHandler);
@@ -528,7 +530,7 @@ export class VviinnResults {
 
     document.removeEventListener(
       "vviinnFilterTriggered",
-      this.filtersTriggeredHandler,
+      this.filterTriggeredHandler,
     );
 
     document.removeEventListener("vviinnWidgetClose", this.widgetCloseHandler);

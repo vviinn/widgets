@@ -4,6 +4,7 @@
   display: block;
   font-family: var(--font-family, var(--font-family-base));
   font-style: normal;
+  display: contents;
 
   /**
    * @prop --font-family: Set the font family of the filters.
@@ -88,7 +89,6 @@ vviinn-price-range {
   flex-direction: row;
   overflow-x: auto;
   scrollbar-width: thin;
-  padding-bottom: 6px;
 }
 
 .sub-filters-wrapper {
@@ -103,7 +103,6 @@ vviinn-price-range {
 }
 
 .selected-filters-wrapper {
-  margin-top: var(--spacing-125);
   gap: var(--spacing-100);
   flex-wrap: wrap;
 }
@@ -294,7 +293,7 @@ vviinn-price-range {
   cursor: pointer;
 
   display: flex;
-  padding: var(--spacing-100);
+  padding: var(--spacing-75);
   align-items: center;
   gap: var(--spacing-25);
 
@@ -315,13 +314,8 @@ vviinn-price-range {
   background: var(--surface-bg-color-inverse);
   color: var(--color-text-inverse);
 }
+
 .filters-more-modal-button > span {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-25);
-}
-.filters-more-modal-button > span > span {
   white-space: nowrap;
   padding: var(--spacing-25);
 }

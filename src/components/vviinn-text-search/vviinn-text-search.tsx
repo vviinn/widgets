@@ -135,13 +135,31 @@ export class VviinnTextSearch {
     if (this.token) this.state.token = this.token;
 
     document.addEventListener("resultsSearchFinished", this.hideLoader);
+    document.addEventListener(
+      "vviinnFilterTriggered",
+      this.filterTriggeredHandler
+    );
   }
 
   disconnectedCallback() {
     document.removeEventListener("resultsSearchFinished", this.hideLoader);
+    document.removeEventListener(
+      "vviinnFilterTriggered",
+      this.filterTriggeredHandler
+    );
+
     clearTimeout(this.triggerTooltipStart);
     clearTimeout(this.triggerTooltipEnd);
   }
+
+  private filterTriggeredHandler = ({
+    detail,
+  }: CustomEvent<DynamicFilterInternalData>) => {
+    const { action, customTrigger } = detail;
+    if (action === "deselect" && customTrigger === "TPS") {
+      this.searchQuery = "";
+    }
+  };
 
   private trackTextSearch = () =>
     this.vviinnFilterTriggered.emit({

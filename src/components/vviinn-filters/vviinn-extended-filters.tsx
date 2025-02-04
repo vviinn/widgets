@@ -19,7 +19,7 @@ import {
   RequestDynamicFilterItem,
 } from "../../campaign/VPRCampaignService";
 import { ChevronIconSmall, NewCloseIcon } from "../vviinn-icons";
-import { FilterOptions, getFilterOptions, RenderButton } from "./helpers";
+import { FilterOptions, getFilterOptions, RenderFilterButton } from "./helpers";
 import { Locale, resources } from "../../locale";
 
 import { SlotSkeleton, slotChangeListener } from "../customized-slots";
@@ -351,19 +351,20 @@ export class VviinnExtendedFilters {
         {filterOptions
           .slice(0, displayedCount)
           .map(({ value, label, active }) => {
-            const selected = this.showActiveOnModalSubButton(
+            const isSelected = this.showActiveOnModalSubButton(
               this.requestFilters,
               value,
             );
 
-            return RenderButton(
-              this.handleSubFilterSelection.bind(this),
+            return RenderFilterButton({
+              handleSubFilterSelection:
+                this.handleSubFilterSelection.bind(this),
+              selectedFilter: filter,
               value,
               label,
               active,
-              filter,
-              selected,
-            );
+              isSelected,
+            });
           })}
         {displayedCount < filterOptions.length && (
           <button
@@ -384,22 +385,22 @@ export class VviinnExtendedFilters {
     filterValue: DynamicFilterValue,
     selectedFilter: ResponseDynamicFilterItem,
   ) {
-    this.requestFilters = triggerFilter(
+    this.requestFilters = triggerFilter({
       filterValue,
       selectedFilter,
-      this.requestFilters,
-      this.vviinnFilterTriggered,
-      this.vviinnFiltersChanged,
-      this.el,
-      this.showInWidget,
-    );
+      requestFilters: this.requestFilters,
+      vviinnFilterTriggered: this.vviinnFilterTriggered,
+      vviinnFiltersChanged: this.vviinnFiltersChanged,
+      el: this.el,
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
   }
 
   private showActiveOnModalSubButton(
     requestFilters: RequestDynamicFilterItem[],
     filterValue: DynamicFilterValue,
   ) {
-    let className = false;
+    let active = false;
     requestFilters.forEach((filter) => {
       if (
         filter.values.some(
@@ -409,10 +410,10 @@ export class VviinnExtendedFilters {
             value === filterValue.value,
         )
       ) {
-        className = true;
+        active = true;
       }
     });
-    return className;
+    return active;
   }
 
   private handleMoreOptionsMainClick(column: string) {
@@ -487,12 +488,12 @@ export class VviinnExtendedFilters {
   }
 
   private resetModal() {
-    triggerResetFilters(
-      this.vviinnFilterTriggered,
-      this.vviinnFiltersChanged,
-      this.el,
-      this.showInWidget,
-    );
+    triggerResetFilters({
+      vviinnFilterTriggered: this.vviinnFilterTriggered,
+      vviinnFiltersChanged: this.vviinnFiltersChanged,
+      el: this.el,
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
 
     this.selectedMoreOptions = [];
     this.requestFilters = [];

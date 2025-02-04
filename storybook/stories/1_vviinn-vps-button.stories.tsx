@@ -4,11 +4,6 @@ import "../documentation/widgets/styles.css";
 export default {
   title: "Playground/Search Modal",
   component: "vviinn-vps-button",
-  parameters: {
-    viewport: {
-      defaultViewport: "mobile2",
-    },
-  },
   decorators: [
     (story) => `
     <div style="display: grid;
