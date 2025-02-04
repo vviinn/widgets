@@ -381,7 +381,9 @@ export class VviinnResults {
 
   private imageUploadFinishedHandler = ({ detail }: SearchIdEvent) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
-    resetStore(this.storeName);
+    // TODO: Check if we can remove this
+    // console.log("reset store results");
+    // resetStore(this.storeName);
     this.getResultsBySearchId(detail.searchId);
   };
 

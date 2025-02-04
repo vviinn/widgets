@@ -18,6 +18,7 @@ import { fromImage, Rectangle } from "../../geometry/Rectangle";
 import { DetectedObject } from "../../searchSession/searchSession";
 import {
   BasicEventData,
+  SearchIdEvent,
   SelectObjectEventData,
 } from "../../recommendation/events";
 import { LoadImageEventData } from "./types";
@@ -124,9 +125,14 @@ export class VviinnCropper {
     this.stringParser(true);
   }
 
+  private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
+    (isTriggeredByVpsWidget && !this.showInWidget) ||
+    (!isTriggeredByVpsWidget && this.showInWidget);
+
   private imageUploadFinishedHandler = () => {
     const image = O.getOrElse(() => null)(this.state.image);
-    // console.log("image", image);
+    // FIXME: remove console.log
+    console.log("image", image);
     if (image) {
       localStorage.setItem("cropperImageSrc", image.src);
     }
@@ -165,8 +171,8 @@ export class VviinnCropper {
       ? this.detectedObjects
       : this.state.detectedObjects;
 
-  private imageUploadStartedHandler = () => {
-    if (this.cropper) {
+  private imageUploadStartedHandler = ({ detail }: SearchIdEvent) => {
+    if (this.cropper && !this.skipStateChanges(detail.isTriggeredByVpsWidget)) {
       this.cropper.destroy();
       this.cropper = null;
     }

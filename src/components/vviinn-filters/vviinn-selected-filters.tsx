@@ -163,7 +163,7 @@ export class VviinnSelectedFilters {
     resetStore(this.storeName);
   };
 
-  private imageUploadFinishedHandler = ({ detail }: SearchIdEvent) => {
+  private imageUploadStartedHandler = ({ detail }: SearchIdEvent) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.resetState();
   };
@@ -195,8 +195,8 @@ export class VviinnSelectedFilters {
       this.handleSelectedFiltersReset,
     );
     document.addEventListener(
-      "vviinnImageUploadFinished",
-      this.imageUploadFinishedHandler,
+      "vviinnImageUploadStarted",
+      this.imageUploadStartedHandler,
     );
   }
 
@@ -214,8 +214,8 @@ export class VviinnSelectedFilters {
       this.handleSelectedFiltersReset,
     );
     document.removeEventListener(
-      "vviinnImageUploadFinished",
-      this.imageUploadFinishedHandler,
+      "vviinnImageUploadStarted",
+      this.imageUploadStartedHandler,
     );
   }
 
