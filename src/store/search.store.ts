@@ -123,9 +123,10 @@ export const resetStore = (store: SearchStoreName) => {
   });
 };
 
-const updateState =
+const updateImageSearchState =
   (store: SearchStoreName) => async (response: SearchSession) => {
     const state = useStore(store);
+    state.detectedObjects = response.detectedObjects;
     state.selfSearchId = pipe(getLink(response, "self"), extractHrefValue);
     state.results = response.value;
     state.filters = readFilters(foldValueObject(response.filters));
@@ -204,7 +205,7 @@ export const makeRectangularSearchRequest = async (
         makeAuthorizedRequest(state.token),
         TE.fromEither,
         TE.chainW(formRequest(state.rectangleSearchForm, searchRectangle)),
-        TE.map(updateState(store)),
+        TE.map(updateImageSearchState(store)),
       )();
     }),
   );
@@ -237,7 +238,7 @@ export const uploadFile =
         imageSearchSessionClient(request, state.campaignId, state.excluded),
       ),
       TE.map((sessionResponse) => {
-        updateState(store)(sessionResponse);
+        updateImageSearchState(store)(sessionResponse);
         detectObjects(store)(sessionResponse);
         state.loading = false;
         return sessionResponse;
@@ -299,7 +300,7 @@ export const makeSearchIdRequest = async (token: string, searchId: string) => {
     makeAuthorizedRequest(token),
     TE.fromEither,
     TE.chainW(linkRequest(createLinkfromHref(searchId))),
-    TE.map(updateState("components")),
+    TE.map(updateImageSearchState("components")),
   )();
 };
 
@@ -413,7 +414,7 @@ onChangeWidgetState("activeIonLink", async (newLink: Link) => {
     makeAuthorizedRequest(state.token),
     TE.fromEither,
     TE.chainW(linkRequest(link)),
-    TE.map(updateState("widget")),
+    TE.map(updateImageSearchState("widget")),
     TE.mapLeft((error) => {
       return {
         kind: "network error",

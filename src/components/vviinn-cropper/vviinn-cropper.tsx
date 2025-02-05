@@ -53,7 +53,7 @@ export class VviinnCropper {
 
   @Prop() detectedObjectsString?: string;
   @Prop() apiPath?: string = "https://api.vviinn.com";
-  @Prop() keepImage?: boolean = false;
+  @Prop() saveImageMode?: "once" | "always" | "never" = "never";
 
   @Prop({ mutable: true }) basicEventData: BasicEventData;
   @Prop({ mutable: true }) url: string;
@@ -96,14 +96,11 @@ export class VviinnCropper {
     state.apiPath = this.apiPath;
     this.state = this.showInWidget ? searchState : componentsState;
     this.storeName = this.showInWidget ? "widget" : "components";
+    this.initPreloadedImage();
+  }
 
-    componentsState.image = O.none;
-
-    const cropperImageSrc = localStorage.getItem("cropperImageSrc");
-    if (this.storeName === "components" && cropperImageSrc) {
-      this.imageElement = document.createElement("img");
-      this.imageElement.src = cropperImageSrc;
-    }
+  componentWillRender() {
+    this.renderImage();
   }
 
   disconnectedCallback() {
@@ -125,15 +122,34 @@ export class VviinnCropper {
     this.stringParser(true);
   }
 
+  private initPreloadedImage = () => {
+    this.state.image = O.none;
+
+    if (this.saveImageMode === "never") return;
+
+    const cropperImageSrc = localStorage.getItem("cropperImageSrc");
+    if (!cropperImageSrc) return;
+
+    const image = document.createElement("img");
+    image.src = cropperImageSrc;
+    this.state.image = O.some(image);
+
+    // FIXME: remove log
+    console.log("Image loaded from local storage");
+    this.saveImageMode === "once" && localStorage.removeItem("cropperImageSrc");
+  };
+
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
     (isTriggeredByVpsWidget && !this.showInWidget) ||
     (!isTriggeredByVpsWidget && this.showInWidget);
 
   private imageUploadFinishedHandler = () => {
+    if (this.saveImageMode === "never") return;
+
     const image = O.getOrElse(() => null)(this.state.image);
-    // FIXME: remove console.log
-    console.log("image", image);
     if (image) {
+      // FIXME: remove log
+      console.log("Saving image to local storage");
       localStorage.setItem("cropperImageSrc", image.src);
     }
   };
@@ -144,10 +160,6 @@ export class VviinnCropper {
         this.detectedObjectsString,
       ) as ValueObject<DetectedObject>[];
     }
-  }
-
-  componentWillRender() {
-    this.renderImage();
   }
 
   @Listen("vviinnSelectObject")
@@ -233,6 +245,8 @@ export class VviinnCropper {
   }
 
   private renderImage() {
+    // FIXME: remove log
+    console.log("Rendering image");
     return pipe(
       sequenceToOption(this.state.image),
       O.map(([refImage]) => {

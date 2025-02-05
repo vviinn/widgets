@@ -379,23 +379,18 @@ export class VviinnResults {
     );
   }
 
-  private imageUploadFinishedHandler = ({ detail }: SearchIdEvent) => {
-    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
-    // TODO: Check if we can remove this
-    // console.log("reset store results");
-    // resetStore(this.storeName);
+  private imageUploadFinishedHandler = ({ detail }: SearchIdEvent) =>
+    !this.skipStateChanges(detail.isTriggeredByVpsWidget) &&
     this.getResultsBySearchId(detail.searchId);
-  };
 
   private textSearchStartedHandler = async ({ detail }: TextSearchEvent) => {
     this.innerTextSearchQuery = detail.query;
     this.setTextSearch(true, detail.isTriggeredByVpsWidget);
 
-    const { requestId } = await this.getTextSearchResults(
-      this.innerTextSearchQuery,
-    );
-    this.innerTextSearchRequestId = requestId;
+    const response = await this.getTextSearchResults(this.innerTextSearchQuery);
+    if (!response) return;
 
+    this.innerTextSearchRequestId = response.requestId;
     this.resultsSearchFinished.emit();
     this.vviinnSelectedFiltersReset.emit({
       isTriggeredByVpsWidget: this.showInWidget,
