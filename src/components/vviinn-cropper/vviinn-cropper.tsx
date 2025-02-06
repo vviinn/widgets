@@ -180,8 +180,7 @@ export class VviinnCropper {
 
   private imageUploadStartedHandler = ({ detail }: SearchIdEvent) => {
     if (this.cropper && !this.skipStateChanges(detail.isTriggeredByVpsWidget)) {
-      this.cropper.destroy();
-      this.cropper = null;
+      this.cropper.replace(this.imageElement.src);
     }
   };
 
@@ -234,6 +233,7 @@ export class VviinnCropper {
       this.cropper = new Cropper(this.imageElement, {
         ...cropperOptions,
         cropend: this.cropEnd,
+        ready: () => this.cropper.reset(),
         data,
       });
     }
