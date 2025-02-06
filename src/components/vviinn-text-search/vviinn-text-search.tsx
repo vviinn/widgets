@@ -237,6 +237,7 @@ export class VviinnTextSearch {
       this.showLoader();
       this.vviinnTextSearchStarted.emit({
         query: this.searchQuery,
+        isTriggeredByVpsWidget: this.showInWidget,
       });
     }
   }

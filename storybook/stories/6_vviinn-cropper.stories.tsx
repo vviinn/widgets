@@ -15,20 +15,21 @@ const Template = (args) => `
       detected-objects-string='${args.detectedObjectsString}'
       api-path="${args.apiPath}"
       save-image-mode="${args.saveImageMode}"
-      url="${args.url}">
-    </vviinn-cropper>
+      url="${args.url}"
+    ></vviinn-cropper>
 
     <vviinn-text-search 
       token="${vviinnToken}"
       api-path="${args.apiPath}"
       mode="extended"
-    >
-    </vviinn-text-search>
+      locale="en-US"
+    ></vviinn-text-search>
 
     <vviinn-results 
       token="${vviinnToken}"
       api-path="${args.apiPath}"
       one-click-discovery-mode="append-grid"
+      locale="en-US"
     ></vviinn-results>
   </div>
 </div>  

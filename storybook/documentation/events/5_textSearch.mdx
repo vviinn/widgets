@@ -23,6 +23,7 @@ All these events are available on Text Search.
       <td>
         <ul>
           <li>query</li>
+          <li>isTriggeredByVpsWidget</li>
         </ul>
       </td>
     </tr>
@@ -33,6 +34,7 @@ All these events are available on Text Search.
       <td>
         <ul>
           <li>searchId</li>
+          <li>isTriggeredByVpsWidget</li>
         </ul>
       </td>
     </tr>
@@ -49,6 +51,7 @@ document.addEventListener("vviinnTextSearchStarted", ({ detail }) => {
 
 // Output:
 {
-  "query": "kitchen"
+  "query": "kitchen",
+  "isTriggeredByVpsWidget": false
 }
 ```
