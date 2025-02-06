@@ -51,15 +51,17 @@ const DEFAULT_IMAGE_SIZE = 288;
 export class VviinnCropper {
   @Element() el: HTMLElement;
 
-  @Prop() detectedObjectsString?: string;
   @Prop() apiPath?: string = "https://api.vviinn.com";
   @Prop() saveImageMode?: "once" | "always" | "never" = "never";
 
-  @Prop({ mutable: true }) basicEventData: BasicEventData;
+  @Prop({ mutable: true }) detectedObjectsString?: string;
   @Prop({ mutable: true }) url: string;
   @Prop({ mutable: true }) width: number;
-  @Prop({ mutable: true }) height?: number;
 
+  /** @internal */
+  @Prop({ mutable: true }) height?: number;
+  /** @internal */
+  @Prop({ mutable: true }) basicEventData: BasicEventData;
   /** @internal */
   @Prop() showAspectRatioError: boolean;
   /** @internal */
