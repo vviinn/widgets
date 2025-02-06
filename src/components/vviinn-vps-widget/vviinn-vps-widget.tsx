@@ -197,7 +197,6 @@ export class VviinnVpsWidget {
 
   @State() slidePosition: number = 0;
   @State() uploadSource: UploadSource;
-  @State() width: number = 0;
   @State() stream: MediaStream | null = null;
   @State() products: Recommendation[] = [];
   @State() searchQuery: string = "";

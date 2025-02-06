@@ -459,7 +459,6 @@ export class VviinnResults {
   };
 
   connectedCallback() {
-    if (!this.showInWidget) resetStore("components");
     this.state = this.showInWidget ? searchState : componentsState;
     this.storeName = this.showInWidget ? "widget" : "components";
     if (this.el.id) this.widgetElementId = this.el.id;

@@ -123,9 +123,8 @@ export class VviinnCropper {
   }
 
   private initPreloadedImage = () => {
-    this.state.image = O.none;
-
     if (this.saveImageMode === "never") return;
+    this.state.image = O.none;
 
     const cropperImageSrc = localStorage.getItem("cropperImageSrc");
     if (!cropperImageSrc) return;
@@ -134,8 +133,6 @@ export class VviinnCropper {
     image.src = cropperImageSrc;
     this.state.image = O.some(image);
 
-    // FIXME: remove log
-    console.log("Image loaded from local storage");
     this.saveImageMode === "once" && localStorage.removeItem("cropperImageSrc");
   };
 
@@ -146,12 +143,8 @@ export class VviinnCropper {
   private imageUploadFinishedHandler = () => {
     if (this.saveImageMode === "never") return;
 
-    const image = O.getOrElse(() => null)(this.state.image);
-    if (image) {
-      // FIXME: remove log
-      console.log("Saving image to local storage");
-      localStorage.setItem("cropperImageSrc", image.src);
-    }
+    const image: HTMLImageElement = O.getOrElse(() => null)(this.state.image);
+    if (image) localStorage.setItem("cropperImageSrc", image.src);
   };
 
   stringParser(TriggerDetectedObjects?: boolean) {
@@ -245,9 +238,7 @@ export class VviinnCropper {
   }
 
   private renderImage() {
-    // FIXME: remove log
-    console.log("Rendering image");
-    return pipe(
+    pipe(
       sequenceToOption(this.state.image),
       O.map(([refImage]) => {
         if (!refImage) return null;

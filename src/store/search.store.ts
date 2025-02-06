@@ -56,11 +56,9 @@ const makeAuthorizedRequest = (
   pipe(
     token,
     processBearerToken,
-    E.map((headers: Headers) => {
-      return {
-        headers,
-      };
-    }),
+    E.map((headers: Headers) => ({
+      headers,
+    })),
   );
 
 export type SearchStoreName = "widget" | "components";
@@ -359,7 +357,6 @@ const setSelectedImage =
   (store: SearchStoreName) => (image: HTMLImageElement) => {
     const state = useStore(store);
     state.image = O.some(image);
-    // console.log(O.some(image));
   };
 
 export const processSelectedFile =
