@@ -16,6 +16,7 @@ import * as E from "fp-ts/lib/Either";
 import {
   BasicEventData,
   ImageUploadEventData,
+  SearchIdEventData,
 } from "../../recommendation/events";
 import { slotChangeListener } from "../customized-slots";
 import {
@@ -49,10 +50,10 @@ export class VviinnExampleImage {
   @State() videoInitialized: boolean = false;
   @State() zoomCapabilities: ZoomCapabilities | null = null;
 
-  @Event() vviinnImageUpload: EventEmitter<ImageUploadEventData>;
+  @Event() vviinnImageUploadStarted: EventEmitter<ImageUploadEventData>;
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
-  /** @internal */
-  @Event() vviinnImageUploadFinished: EventEmitter;
+  @Event() vviinnImageUploadFinished: EventEmitter<SearchIdEventData>;
+
   /** @internal */
   @Event() vviinnCameraEnabled: EventEmitter;
 
@@ -127,7 +128,7 @@ export class VviinnExampleImage {
 
   private async selectImage() {
     if (!this.srcObject) return;
-    this.vviinnImageUpload.emit(this.basicEventData);
+    this.vviinnImageUploadStarted.emit(this.basicEventData);
     let file: File;
 
     const photoFrame = this.el.shadowRoot.getElementById("photo-frame");
@@ -186,10 +187,13 @@ export class VviinnExampleImage {
         this.useComponentsStore ? "components" : "widget",
       )(file),
       E.match(
-        () => this.vviinnNoResult.emit(this.basicEventData),
+        () => {
+          this.vviinnNoResult.emit(this.basicEventData);
+        },
         ({ links }) =>
           this.vviinnImageUploadFinished.emit({
             searchId: links.self.href,
+            isTriggeredByVpsWidget: !this.useComponentsStore,
           }),
       ),
     );
