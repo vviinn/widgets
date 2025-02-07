@@ -6,7 +6,6 @@ import {
   Element,
   Event,
   EventEmitter,
-  Listen,
   State,
 } from "@stencil/core";
 import {
@@ -20,7 +19,6 @@ import { TextSearchIcon } from "../vviinn-icons";
 import { slotChangeListener } from "../customized-slots";
 import {
   ResetSelectedFiltersEventData,
-  SearchIdEvent,
   SearchIdEventData,
   TextSearchEventData,
   DynamicFilterInternalData,
@@ -53,12 +51,14 @@ import Timeout = NodeJS.Timeout;
 export class VviinnTextSearch {
   @Element() el: HTMLElement;
 
-  /** A text search was initiated (used by vviinn-results component) */
-  @Event() vviinnTextSearchStarted: EventEmitter<TextSearchEventData>;
   /** An image search ID was received (used by vviinn-results component) */
-  @Event() vviinnSearchIdReceived: EventEmitter<SearchIdEventData>;
+  @Event() vviinnImageUploadFinished: EventEmitter<SearchIdEventData>;
   /** A filter was triggered */
   @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterInternalData>;
+
+  /** A text search was initiated (used by vviinn-results component) */
+  /** @internal */
+  @Event() vviinnTextSearchStarted: EventEmitter<TextSearchEventData>;
 
   /** A text search response was received (used internally by vviinn-vps-widget) */
   /** @internal */
@@ -137,7 +137,7 @@ export class VviinnTextSearch {
     document.addEventListener("resultsSearchFinished", this.hideLoader);
     document.addEventListener(
       "vviinnFilterTriggered",
-      this.filterTriggeredHandler
+      this.filterTriggeredHandler,
     );
   }
 
@@ -145,7 +145,7 @@ export class VviinnTextSearch {
     document.removeEventListener("resultsSearchFinished", this.hideLoader);
     document.removeEventListener(
       "vviinnFilterTriggered",
-      this.filterTriggeredHandler
+      this.filterTriggeredHandler,
     );
 
     clearTimeout(this.triggerTooltipStart);
@@ -183,14 +183,6 @@ export class VviinnTextSearch {
         isTriggeredByVpsWidget: this.showInWidget,
       });
       this.trackTextSearch();
-    }
-  }
-
-  @Listen("vviinnImageUploadFinished")
-  imageUploadFinished({ detail }: SearchIdEvent) {
-    if (!this.showInWidget) {
-      this.showLoader();
-      this.vviinnSearchIdReceived.emit({ searchId: detail.searchId });
     }
   }
 
@@ -245,6 +237,7 @@ export class VviinnTextSearch {
       this.showLoader();
       this.vviinnTextSearchStarted.emit({
         query: this.searchQuery,
+        isTriggeredByVpsWidget: this.showInWidget,
       });
     }
   }

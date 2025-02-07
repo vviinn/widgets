@@ -24,6 +24,7 @@ import {
   ChangedFiltersEventData,
   DynamicFilterInternalData,
   ResetSelectedFiltersEventData,
+  SearchIdEvent,
 } from "../../recommendation/events";
 import { triggerFilter } from "./helpers/triggerFilter";
 import {
@@ -98,14 +99,14 @@ export class VviinnSelectedFilters {
       (filter) => filter.column === "price",
     ) as ResponseDynamicFilterIntervalItem;
 
-  private skipFiltersChanges = (isTriggeredByVpsWidget: boolean) =>
+  private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
     (isTriggeredByVpsWidget && !this.showInWidget) ||
     (!isTriggeredByVpsWidget && this.showInWidget);
 
   private handleFilterTriggered = ({
     detail,
   }: CustomEvent<DynamicFilterInternalData>) => {
-    if (this.skipFiltersChanges(detail.isTriggeredByVpsWidget)) return;
+    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
 
     if (detail.customTrigger === "TPS") {
       this.textSearchCustomFilter = detail.kind;
@@ -132,7 +133,7 @@ export class VviinnSelectedFilters {
 
     if (
       senderElement === this.el ||
-      this.skipFiltersChanges(isTriggeredByVpsWidget)
+      this.skipStateChanges(isTriggeredByVpsWidget)
     )
       return;
 
@@ -142,7 +143,7 @@ export class VviinnSelectedFilters {
   private handleSelectedFiltersReset = ({
     detail,
   }: CustomEvent<ResetSelectedFiltersEventData>) => {
-    if (this.skipFiltersChanges(detail.isTriggeredByVpsWidget)) return;
+    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.requestFilters = [];
   };
 
@@ -162,7 +163,10 @@ export class VviinnSelectedFilters {
     resetStore(this.storeName);
   };
 
-  private searchIdReceivedHandler = () => this.resetState();
+  private imageUploadStartedHandler = ({ detail }: SearchIdEvent) => {
+    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
+    this.resetState();
+  };
 
   private handlePriceButtonClick = () => {
     this.priceCustomFilter = null;
@@ -191,8 +195,8 @@ export class VviinnSelectedFilters {
       this.handleSelectedFiltersReset,
     );
     document.addEventListener(
-      "vviinnSearchIdReceived",
-      this.searchIdReceivedHandler,
+      "vviinnImageUploadStarted",
+      this.imageUploadStartedHandler,
     );
   }
 
@@ -210,8 +214,8 @@ export class VviinnSelectedFilters {
       this.handleSelectedFiltersReset,
     );
     document.removeEventListener(
-      "vviinnSearchIdReceived",
-      this.searchIdReceivedHandler,
+      "vviinnImageUploadStarted",
+      this.imageUploadStartedHandler,
     );
   }
 

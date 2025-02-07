@@ -79,6 +79,7 @@ export type ProductEvent =
   | ProductViewEvent;
 
 export type SearchIdEventData = {
+  isTriggeredByVpsWidget: boolean;
   searchId: string;
 };
 

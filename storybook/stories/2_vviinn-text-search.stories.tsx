@@ -26,7 +26,6 @@ const Template = (args) => `
       mode="${args.mode}"
       locale="${args.locale}"
       show-in-widget="${args.showInWidget}"
-      one-click-discovery-mode="append-grid"
     >
     </vviinn-text-search>
 

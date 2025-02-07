@@ -24,7 +24,7 @@ Some events have additional props, summarized it table below.
 
   <tbody>
     <tr>
-      <td>vviinnImageUpload</td><td>Triggered after the image upload button is clicked.</td>
+      <td>vviinnImageUploadStarted</td><td>Triggered after the image upload button is clicked.</td>
 
       <td>
         <ul>
@@ -66,7 +66,7 @@ Some events have additional props, summarized it table below.
 ## Listen to Events. Examples
 
 ```javascript
-document.addEventListener("vviinnImageUpload", ({ detail }) => {
+document.addEventListener("vviinnImageUploadStarted", ({ detail }) => {
   console.log(detail);
 });
 
