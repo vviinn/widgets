@@ -165,6 +165,14 @@ export class VviinnExtendedFilters {
     }
   };
 
+  @Watch("showMore")
+  showMoreWatcher(modalOpen) {
+    this.vviinnFilterTriggered.emit({
+      action: modalOpen ? "open" : "close",
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
+  }
+
   componentDidRender() {
     this.replaceSlotsContent();
   }
@@ -464,10 +472,11 @@ export class VviinnExtendedFilters {
       "vviinnSelectedFiltersReset",
       this.handleSelectedFiltersReset,
     );
-    document.addEventListener(
-      "vviinnExtendedFiltersButtonClicked",
-      this.handleExtendedFiltersButtonClicked,
-    );
+    this.mode !== "preview" &&
+      document.addEventListener(
+        "vviinnExtendedFiltersButtonClicked",
+        this.handleExtendedFiltersButtonClicked,
+      );
 
     this.filtersStringWatcher();
   }
@@ -481,10 +490,11 @@ export class VviinnExtendedFilters {
       "vviinnSelectedFiltersReset",
       this.handleSelectedFiltersReset,
     );
-    document.removeEventListener(
-      "vviinnExtendedFiltersButtonClicked",
-      this.handleExtendedFiltersButtonClicked,
-    );
+    this.mode !== "preview" &&
+      document.removeEventListener(
+        "vviinnExtendedFiltersButtonClicked",
+        this.handleExtendedFiltersButtonClicked,
+      );
   }
 
   private resetModal() {

@@ -436,7 +436,9 @@ export class VviinnResults {
     const { campaignTypeId, ...rest } = this.getBasicEventData(customTrigger);
 
     if (customTrigger) this.setTextSearch(true, isTriggeredByVpsWidget);
-    this.initResultEvents();
+
+    if (action === "select" || action === "deselect" || action === "reset")
+      this.initResultEvents();
 
     const filterEvent: FilterEvent = createFilterEvent({
       session_id: this.uiSessionId,
@@ -445,6 +447,7 @@ export class VviinnResults {
       kind,
       ...rest,
     });
+
     this.trackingApi.trackEvent(filterEvent).then(this.setTrackingDeactivated);
   };
 

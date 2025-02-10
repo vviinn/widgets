@@ -451,8 +451,14 @@ export class VviinnVprWidget implements ComponentInterface {
 
   @Listen("vviinnAddToBasket")
   async trackAddToBasket({ detail }: ProductCardEvent) {
-    const { productRank, productId, campaignTypeId, widgetType, ...rest } =
-      detail;
+    const {
+      productRank,
+      productId,
+      campaignTypeId,
+      widgetType,
+      discount,
+      ...rest
+    } = detail;
     let addToBasketEvent: WidgetEvent;
 
     const eventBody = {
