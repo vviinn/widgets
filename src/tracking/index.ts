@@ -13,6 +13,8 @@ import {
   vpsProductClick,
   vpsProductView,
   vpsProductLoad,
+  vpsAddToBasket,
+  tpsAddToBasket,
 } from "./product";
 import { searchEvent } from "./search";
 import { vpcWidget, vprWidget, vpsWidget } from "./widget";
@@ -125,3 +127,5 @@ export const createFilterEvent = createTrackingEvent(filterEvent);
 
 export const createAddToBasketVprEvent = createTrackingEvent(vprAddToBasket);
 export const createAddToBasketVpcEvent = createTrackingEvent(vpcAddToBasket);
+export const createAddToBasketVpsEvent = createTrackingEvent(vpsAddToBasket);
+export const createAddToBasketTpsEvent = createTrackingEvent(tpsAddToBasket);

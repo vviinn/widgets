@@ -251,6 +251,7 @@ export class VviinnProductCard {
     const { animationInterval } = detail;
     this.isTransitioning = true;
     this.basketButonPressed = false;
+    this.favoriteButonPressed = false;
 
     const animationTimer = setTimeout(() => {
       this.isTransitioning = false;

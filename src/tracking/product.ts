@@ -51,6 +51,16 @@ const vpsProductClick: WidgetEventType = {
   typ: PRODUCT_CLICK_EVENT_TYPE,
 };
 
+const vpsAddToBasket: WidgetEventType = {
+  widget: "VPS",
+  typ: ADD_TO_BASKET_EVENT_TYPE,
+};
+
+const tpsAddToBasket: WidgetEventType = {
+  widget: "TPS",
+  typ: ADD_TO_BASKET_EVENT_TYPE,
+};
+
 const vprAddToBasket: WidgetEventType = {
   widget: "VPR",
   typ: ADD_TO_BASKET_EVENT_TYPE,
@@ -73,4 +83,6 @@ export {
   vpsProductClick,
   vpsProductView,
   vpsProductLoad,
+  vpsAddToBasket,
+  tpsAddToBasket,
 };

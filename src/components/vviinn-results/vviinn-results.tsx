@@ -14,6 +14,7 @@ import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/lib/function";
 import { v4 as uuidv4 } from "uuid";
 import {
+  AddToBasketEvent,
   DefaultApi,
   EventConfirmation,
   FilterEvent,
@@ -60,7 +61,9 @@ import {
 import {
   createFilterEvent,
   createProductWidgetEventByType,
+  createAddToBasketVpsEvent,
   createResultEventByType,
+  createAddToBasketTpsEvent,
 } from "../../tracking";
 import { RequestDynamicFilterItem } from "../../campaign/VPRCampaignService";
 import i18next from "i18next";
@@ -600,6 +603,21 @@ export class VviinnResults {
     }
   }
 
+  @Listen("vviinnAddToBasket")
+  trackAddToBasket({ detail }: ProductCardEvent) {
+    if (this.trackingDeactivated) return;
+    delete detail.discount;
+
+    const eventBody = this.productCardEventDataToEventBody(detail);
+    const addToBasketEvent: AddToBasketEvent = this.isTextSearch
+      ? createAddToBasketTpsEvent(eventBody)
+      : createAddToBasketVpsEvent(eventBody);
+
+    this.trackingApi
+      .trackEvent(addToBasketEvent)
+      .then(this.setTrackingDeactivated);
+  }
+
   private setTrackingDeactivated = (result: EventConfirmation) => {
     if (result.status === "rejected") {
       this.trackingDeactivated = true;
@@ -644,12 +662,9 @@ export class VviinnResults {
     }
   }
 
-  private getProductTrackEvent(
-    detail: ProductCardEventData,
-    eventType: ProductEventType,
-  ): ProductEvent | null {
-    if (this.trackingDeactivated) return null;
-
+  private productCardEventDataToEventBody = (
+    eventData: ProductCardEventData,
+  ) => {
     const {
       productRank,
       productId,
@@ -657,17 +672,26 @@ export class VviinnResults {
       widgetType,
       clickEvent,
       ...rest
-    } = detail;
+    } = eventData;
 
-    const eventBody = {
+    return {
       session_id: this.uiSessionId,
       rank: productRank,
       product: productId,
       ...rest,
     };
+  };
+
+  private getProductTrackEvent(
+    detail: ProductCardEventData,
+    eventType: ProductEventType,
+  ): ProductEvent | null {
+    if (this.trackingDeactivated) return null;
+
+    const eventBody = this.productCardEventDataToEventBody(detail);
 
     const productEvent: ProductEvent = createProductWidgetEventByType(
-      widgetType === "VCS" ? "VPC" : widgetType,
+      detail.widgetType === "VCS" ? "VPC" : detail.widgetType,
       eventType,
     )(eventBody);
 
