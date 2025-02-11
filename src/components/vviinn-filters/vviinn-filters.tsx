@@ -102,6 +102,11 @@ export class VviinnFilters {
 
   private handleMainFilterSelection(filter: ResponseDynamicFilterItem) {
     this.selectedFilter = filter;
+    this.vviinnFilterTriggered.emit({
+      action: "show",
+      kind: filter.column,
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
   }
 
   private handleSelectedFiltersReset = ({
@@ -137,7 +142,6 @@ export class VviinnFilters {
 
   private showActiveOnMainButton({ column }: ResponseDynamicFilterItem) {
     if (!this.selectedFilter) return "";
-
     return this.selectedFilter?.column === column ? "active" : "";
   }
 

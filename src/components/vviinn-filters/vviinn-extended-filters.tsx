@@ -430,6 +430,11 @@ export class VviinnExtendedFilters {
         (option) => option !== column,
       );
     } else {
+      this.vviinnFilterTriggered.emit({
+        action: "show",
+        kind: column,
+        isTriggeredByVpsWidget: this.showInWidget,
+      });
       this.selectedMoreOptions = [...this.selectedMoreOptions, column];
     }
   }
