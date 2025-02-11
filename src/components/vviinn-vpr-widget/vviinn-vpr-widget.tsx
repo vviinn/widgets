@@ -464,7 +464,6 @@ export class VviinnVprWidget implements ComponentInterface {
       discount,
       ...rest
     } = detail;
-    let addToBasketEvent: WidgetEvent;
 
     const eventBody = {
       session_id: this.uiSessionId,
@@ -473,11 +472,10 @@ export class VviinnVprWidget implements ComponentInterface {
       ...rest,
     };
 
-    if (this.campaignType === "VCS") {
-      addToBasketEvent = createAddToBasketVpcEvent(eventBody);
-    } else if (this.campaignType === "VPR") {
-      addToBasketEvent = createAddToBasketVprEvent(eventBody);
-    }
+    const addToBasketEvent: WidgetEvent =
+      this.campaignType === "VCS"
+        ? createAddToBasketVpcEvent(eventBody)
+        : createAddToBasketVprEvent(eventBody);
 
     this.trackingApi
       .trackEvent(addToBasketEvent)
@@ -500,18 +498,16 @@ export class VviinnVprWidget implements ComponentInterface {
     if (this.trackingDeactivated) return;
     const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
 
-    let widgetEvent: WidgetEvent;
     const eventBody = {
       action,
       session_id: this.uiSessionId,
       ...rest,
     };
 
-    if (this.campaignType === "VCS") {
-      widgetEvent = createWidgetVpcEvent(eventBody);
-    } else if (this.campaignType === "VPR") {
-      widgetEvent = createWidgetVprEvent(eventBody);
-    }
+    const widgetEvent: WidgetEvent =
+      this.campaignType === "VCS"
+        ? createWidgetVpcEvent(eventBody)
+        : createWidgetVprEvent(eventBody);
 
     this.trackingApi.trackEvent(widgetEvent).then(this.setTrackingDeactivated);
   }
@@ -520,17 +516,15 @@ export class VviinnVprWidget implements ComponentInterface {
     if (this.trackingDeactivated) return;
     const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
 
-    let resultEvent: ResultViewEvent | ResultLoadEvent;
     const eventBody = {
       session_id: this.uiSessionId,
       ...rest,
     };
 
-    if (this.campaignType === "VCS") {
-      resultEvent = createResultVpcEventByType(type)(eventBody);
-    } else if (this.campaignType === "VPR") {
-      resultEvent = createResultVprEventByType(type)(eventBody);
-    }
+    const resultEvent: ResultViewEvent | ResultLoadEvent =
+      this.campaignType === "VCS"
+        ? createResultVpcEventByType(type)(eventBody)
+        : createResultVprEventByType(type)(eventBody);
 
     this.trackingApi.trackEvent(resultEvent).then(this.setTrackingDeactivated);
   }
@@ -550,7 +544,6 @@ export class VviinnVprWidget implements ComponentInterface {
       ...rest
     } = detail;
 
-    let productEvent: ProductEvent;
     const eventBody = {
       session_id: this.uiSessionId,
       rank: productRank,
@@ -558,11 +551,12 @@ export class VviinnVprWidget implements ComponentInterface {
       ...rest,
     };
 
-    if (campaignTypeId === "VCS") {
-      productEvent = createProductVpcEventByType(eventType)(eventBody);
-    } else if (campaignTypeId === "VPR") {
-      productEvent = createProductVprEventByType(eventType)(eventBody);
-    }
+    if (!campaignTypeId) return null;
+
+    const productEvent: ProductEvent =
+      campaignTypeId === "VCS"
+        ? createProductVpcEventByType(eventType)(eventBody)
+        : createProductVprEventByType(eventType)(eventBody);
 
     return productEvent;
   }
