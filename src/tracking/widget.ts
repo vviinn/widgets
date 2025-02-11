@@ -15,4 +15,9 @@ const vpsWidget: WidgetEventType = {
   typ: WIDGET_EVENT_TYPE,
 };
 
-export { vprWidget, vpsWidget, vpcWidget };
+const tpsWidget: WidgetEventType = {
+  widget: "TPS",
+  typ: WIDGET_EVENT_TYPE,
+};
+
+export { vprWidget, vpsWidget, vpcWidget, tpsWidget };

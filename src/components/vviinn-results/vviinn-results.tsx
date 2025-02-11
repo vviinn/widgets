@@ -21,6 +21,7 @@ import {
   ResultLoadEvent,
   ResultViewEvent,
   Widget,
+  WidgetEvent,
 } from "vviinn-tracking-client-ts";
 import { version } from "../../../package.json";
 import {
@@ -64,6 +65,7 @@ import {
   createAddToBasketVpsEvent,
   createResultEventByType,
   createAddToBasketTpsEvent,
+  createWidgetTpsEvent,
 } from "../../tracking";
 import { RequestDynamicFilterItem } from "../../campaign/VPRCampaignService";
 import i18next from "i18next";
@@ -390,6 +392,14 @@ export class VviinnResults {
     this.innerTextSearchQuery = detail.query;
     this.setTextSearch(true, detail.isTriggeredByVpsWidget);
 
+    const { campaignTypeId, ...rest } = this.getBasicEventData();
+    const textSearchStartedEvent: WidgetEvent = createWidgetTpsEvent({
+      action: "search",
+      session_id: this.uiSessionId,
+      ...rest,
+    });
+    this.trackingApi.trackEvent(textSearchStartedEvent);
+
     const response = await this.getTextSearchResults(this.innerTextSearchQuery);
     if (!response) return;
 
@@ -426,12 +436,7 @@ export class VviinnResults {
   private filterTriggeredHandler = ({
     detail,
   }: CustomEvent<DynamicFilterInternalData>) => {
-    if (
-      this.trackingDeactivated ||
-      this.skipStateChanges(detail.isTriggeredByVpsWidget)
-    )
-      return;
-
+    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     const { action, kind, customTrigger, isTriggeredByVpsWidget } = detail;
     const { campaignTypeId, ...rest } = this.getBasicEventData(customTrigger);
 
@@ -443,6 +448,7 @@ export class VviinnResults {
       return;
     }
 
+    if (this.trackingDeactivated) return;
     const filterEvent: FilterEvent = createFilterEvent({
       session_id: this.uiSessionId,
       typ: "filter_event",
@@ -707,11 +713,16 @@ export class VviinnResults {
   private getBasicEventData = (customTrigger?: Widget): BasicEventData => {
     const textSearchCriteria = this.isTextSearch || customTrigger === "TPS";
     const activeCampaign = textSearchCriteria ? "TPS" : "VPS";
+    const widgetId = this.widgetElementId;
     return {
       widgetType: activeCampaign,
       campaignTypeId: activeCampaign,
       campaignTypeName: campaignTypeNames[activeCampaign],
-      widgetId: this.widgetElementId,
+      ...(widgetId
+        ? {
+            widgetId,
+          }
+        : {}),
       widgetVersion: version,
       widget: textSearchCriteria ? "TPS" : undefined,
     };

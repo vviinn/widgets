@@ -271,11 +271,16 @@ export class VviinnVprWidget implements ComponentInterface {
   uiSessionId: string;
 
   private getBasicEventData(): BasicEventData {
+    const widgetId = this.id;
     return {
       widgetType: "VPR",
       campaignTypeId: this.campaignType,
       campaignTypeName: campaignTypeNames[this.campaignType],
-      widgetId: this.id,
+      ...(widgetId
+        ? {
+            widgetId,
+          }
+        : {}),
       widgetVersion: version,
     };
   }

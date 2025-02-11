@@ -22,7 +22,7 @@ export type CommonEventData = {
     | "Visual Search"
     | "Cross-Selling"
     | "Text Product Search";
-  widgetId: string;
+  widgetId?: string;
   widgetVersion: string;
 };
 

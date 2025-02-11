@@ -398,11 +398,16 @@ export class VviinnVpsWidget {
 
   getBasicEventData = (): BasicEventData => {
     const activeCampaign = this.isTextSearch ? "TPS" : "VPS";
+    const widgetId = this.buttonElementId ?? this.widgetElementId;
     return {
       widgetType: activeCampaign,
       campaignTypeId: activeCampaign,
       campaignTypeName: campaignTypeNames[activeCampaign],
-      widgetId: this.buttonElementId ?? this.widgetElementId,
+      ...(widgetId
+        ? {
+            widgetId,
+          }
+        : {}),
       widgetVersion: version,
     };
   };

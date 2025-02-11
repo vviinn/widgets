@@ -17,7 +17,7 @@ import {
   tpsAddToBasket,
 } from "./product";
 import { searchEvent } from "./search";
-import { vpcWidget, vprWidget, vpsWidget } from "./widget";
+import { tpsWidget, vpcWidget, vprWidget, vpsWidget } from "./widget";
 import {
   vprResultLoad,
   vpcResultLoad,
@@ -121,6 +121,7 @@ export const createProductWidgetEventByType = (
 export const createWidgetVprEvent = createTrackingEvent(vprWidget);
 export const createWidgetVpsEvent = createTrackingEvent(vpsWidget);
 export const createWidgetVpcEvent = createTrackingEvent(vpcWidget);
+export const createWidgetTpsEvent = createTrackingEvent(tpsWidget);
 
 export const createSearchEvent = createTrackingEvent(searchEvent);
 export const createFilterEvent = createTrackingEvent(filterEvent);
