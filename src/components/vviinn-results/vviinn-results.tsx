@@ -450,7 +450,6 @@ export class VviinnResults {
       return;
     }
 
-    if (this.trackingDeactivated) return;
     const filterEvent: FilterEvent = createFilterEvent({
       session_id: this.uiSessionId,
       typ: "filter_event",
@@ -619,7 +618,6 @@ export class VviinnResults {
 
   @Listen("vviinnAddToBasket")
   trackAddToBasket({ detail }: ProductCardEvent) {
-    if (this.trackingDeactivated) return;
     delete detail.discount;
 
     const eventBody = this.productCardEventDataToEventBody(detail);
@@ -651,7 +649,6 @@ export class VviinnResults {
   }
 
   private trackResultEvent(type: ResultEventType) {
-    if (this.trackingDeactivated) return;
     const { campaignTypeId, widgetType, widget, ...rest } =
       this.getBasicEventData();
 

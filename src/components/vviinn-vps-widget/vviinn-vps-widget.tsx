@@ -451,7 +451,7 @@ export class VviinnVpsWidget {
   @Listen("vviinnImageCrop")
   cropAreaChanges() {
     this.initResultEvents();
-    if (this.trackingDeactivated) return;
+
     const { campaignTypeId, ...rest } = this.getBasicEventData();
 
     const searchEvent: WidgetEvent = createSearchEvent({
@@ -466,7 +466,7 @@ export class VviinnVpsWidget {
   @Listen("vviinnSelectObject")
   trackDetectedObject() {
     this.initResultEvents();
-    if (this.trackingDeactivated) return;
+
     const { campaignTypeId, ...rest } = this.getBasicEventData();
 
     const searchEvent: WidgetEvent = createSearchEvent({
@@ -481,7 +481,7 @@ export class VviinnVpsWidget {
   @Listen("vviinnSelectFilter")
   trackFilterSelected({ detail }: CustomEvent<SelectFilterEventData>) {
     this.initResultEvents();
-    if (this.trackingDeactivated) return;
+
     const { campaignTypeId, ...rest } = this.getBasicEventData();
 
     const searchEvent: WidgetEvent = createFilterEvent({
@@ -537,8 +537,6 @@ export class VviinnVpsWidget {
   };
 
   private trackWidgetEvent(action: WidgetAction) {
-    if (this.trackingDeactivated) return;
-
     const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
 
     const eventBody = {
@@ -552,7 +550,6 @@ export class VviinnVpsWidget {
   }
 
   private trackInitialSearch() {
-    if (this.trackingDeactivated) return;
     const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
 
     const searchEvent: WidgetEvent = createSearchEvent({
