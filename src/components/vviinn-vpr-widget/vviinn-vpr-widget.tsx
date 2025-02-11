@@ -275,7 +275,6 @@ export class VviinnVprWidget implements ComponentInterface {
   private getBasicEventData(): BasicEventData {
     const widgetId = this.id;
     return {
-      widgetType: "VPR",
       campaignTypeId: this.campaignType,
       campaignTypeName: campaignTypeNames[this.campaignType],
       ...(widgetId
@@ -328,7 +327,7 @@ export class VviinnVprWidget implements ComponentInterface {
       productRank,
       productId,
       campaignTypeId,
-      widgetType,
+
       discount,
       ...rest
     } = eventData;
@@ -517,7 +516,7 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   private trackWidgetEvent(action: WidgetAction) {
-    const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
+    const { campaignTypeId, ...rest } = this.getBasicEventData();
 
     const eventBody = {
       action,
@@ -534,7 +533,7 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   private trackResultEvent(type: ResultEventType) {
-    const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
+    const { campaignTypeId, ...rest } = this.getBasicEventData();
 
     const eventBody = {
       session_id: this.uiSessionId,

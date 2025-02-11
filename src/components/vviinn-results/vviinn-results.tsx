@@ -649,8 +649,7 @@ export class VviinnResults {
   }
 
   private trackResultEvent(type: ResultEventType) {
-    const { campaignTypeId, widgetType, widget, ...rest } =
-      this.getBasicEventData();
+    const { campaignTypeId, widget, ...rest } = this.getBasicEventData();
 
     let resultEvent: ResultViewEvent | ResultLoadEvent =
       createResultEventByType(
@@ -688,14 +687,8 @@ export class VviinnResults {
   private productCardEventDataToEventBody = (
     eventData: ProductCardEventData,
   ) => {
-    const {
-      productRank,
-      productId,
-      campaignTypeId,
-      widgetType,
-      clickEvent,
-      ...rest
-    } = eventData;
+    const { productRank, productId, campaignTypeId, clickEvent, ...rest } =
+      eventData;
 
     return {
       session_id: this.uiSessionId,
@@ -714,7 +707,7 @@ export class VviinnResults {
     const eventBody = this.productCardEventDataToEventBody(detail);
 
     const productEvent: ProductEvent = createProductWidgetEventByType(
-      detail.widgetType === "VCS" ? "VPC" : detail.widgetType,
+      detail.campaignTypeId === "VCS" ? "VPC" : detail.campaignTypeId,
       eventType,
     )(eventBody);
 
@@ -726,7 +719,6 @@ export class VviinnResults {
     const activeCampaign = textSearchCriteria ? "TPS" : "VPS";
     const widgetId = this.widgetElementId;
     return {
-      widgetType: activeCampaign,
       campaignTypeId: activeCampaign,
       campaignTypeName: campaignTypeNames[activeCampaign],
       ...(widgetId

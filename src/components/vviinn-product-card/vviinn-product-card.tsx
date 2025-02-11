@@ -291,17 +291,12 @@ export class VviinnProductCard {
     }
   }
 
-  private getWidgetType() {
-    return this.campaignTypeId as CampaignTypeId;
-  }
-
   private getProductData(): ProductCardEventData {
     return {
       productId: this.productId,
       productRank: this.index,
       productName: this.productTitle,
       productType: this.productType,
-      widgetType: this.getWidgetType(),
       campaignTypeId: this.campaignTypeId,
       campaignTypeName: campaignTypeNames[this.campaignTypeId],
       widgetId: this.buttonElementId ?? this.widgetElementId,

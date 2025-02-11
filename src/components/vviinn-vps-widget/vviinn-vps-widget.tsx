@@ -400,7 +400,6 @@ export class VviinnVpsWidget {
     const activeCampaign = this.isTextSearch ? "TPS" : "VPS";
     const widgetId = this.buttonElementId ?? this.widgetElementId;
     return {
-      widgetType: activeCampaign,
       campaignTypeId: activeCampaign,
       campaignTypeName: campaignTypeNames[activeCampaign],
       ...(widgetId
@@ -537,7 +536,7 @@ export class VviinnVpsWidget {
   };
 
   private trackWidgetEvent(action: WidgetAction) {
-    const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
+    const { campaignTypeId, ...rest } = this.getBasicEventData();
 
     const eventBody = {
       action,
@@ -550,7 +549,7 @@ export class VviinnVpsWidget {
   }
 
   private trackInitialSearch() {
-    const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
+    const { campaignTypeId, ...rest } = this.getBasicEventData();
 
     const searchEvent: WidgetEvent = createSearchEvent({
       session_id: this.uiSessionId,

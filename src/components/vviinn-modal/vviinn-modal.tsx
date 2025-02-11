@@ -58,7 +58,6 @@ export class VviinnModal {
     setTimeout(
       () => {
         this.vviinnWidgetClose.emit({
-          widgetType: "VPS",
           campaignTypeId: "VPS",
           campaignTypeName: campaignTypeNames["VPS"],
           widgetId: this.buttonElementId,

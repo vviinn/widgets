@@ -105,7 +105,6 @@ export class VviinnCarousel {
       productRank,
       productName: recommendation.productTitle,
       productType: recommendation.productType,
-      widgetType: "VPR",
       campaignTypeId: this.campaignTypeId,
       campaignTypeName: campaignTypeNames[this.campaignTypeId],
       widgetId: this.widgetElementId,

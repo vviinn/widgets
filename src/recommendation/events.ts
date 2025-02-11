@@ -15,7 +15,6 @@ import {
 import { Rectangle } from "../geometry/Rectangle";
 
 export type CommonEventData = {
-  widgetType: "VPR" | "VPS" | "VCS" | "TPS";
   campaignTypeId: "VPR" | "VPS" | "VCS" | "TPS";
   campaignTypeName:
     | "Similar Products"
