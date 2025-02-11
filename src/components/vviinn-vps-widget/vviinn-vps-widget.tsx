@@ -47,7 +47,7 @@ import {
 } from "../../recommendation/events";
 import { campaignTypeNames } from "../../campaign/Campaign";
 import {
-  addIfDefined,
+  addIfNotEmpty,
   parseExcludedToParams,
 } from "../../utils/collections/collectionsUtils";
 import { resources } from "../../locale";
@@ -405,7 +405,10 @@ export class VviinnVpsWidget {
       campaignTypeId: activeCampaign,
       campaignTypeName: campaignTypeNames[activeCampaign],
       widgetVersion: version,
-      ...addIfDefined("widgetId", this.buttonElementId ?? this.widgetElementId),
+      ...addIfNotEmpty(
+        "widgetId",
+        this.buttonElementId ?? this.widgetElementId,
+      ),
     };
   };
 

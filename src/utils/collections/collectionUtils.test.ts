@@ -9,6 +9,10 @@ describe("addIfDefined", () => {
     expect(addIfDefined("key", undefined)).toEqual({});
   });
 
+  it("should return object with key and value if value is empty string", () => {
+    expect(addIfDefined("key", "")).toEqual({ key: "" });
+  });
+
   it("should return object with key and value if value is not null or undefined", () => {
     expect(addIfDefined("key", "value")).toEqual({ key: "value" });
   });
@@ -25,6 +29,10 @@ describe("addIfNotEmpty", () => {
 
   it("should return empty object if value is undefined", () => {
     expect(addIfNotEmpty("key", undefined)).toEqual({});
+  });
+
+  it("should return empty if value is empty string", () => {
+    expect(addIfNotEmpty("key", "")).toEqual({});
   });
 
   it("should return empty object if value is empty array", () => {

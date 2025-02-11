@@ -11,7 +11,7 @@ All these events are available on Discovery (Button, Widget), and Search (Butto
 
 - campaignTypeId
 - campaignTypeName
-- widgetId
+- widgetId (if exists)
 - widgetVersion
 
 Some events have additional props, summarized it table below.
@@ -124,7 +124,7 @@ document.addEventListener("vviinnProductLoad", ({ detail }) => {
     "productType": "Table",
     "campaignTypeId": "VPR",
     "campaignTypeName": "Similar Products",
-    "widgetId": "vpr-widget-1",
+    "widgetId": "my-recommendation-widget",
     "widgetVersion": "2.1.0"
 }
 // ... and other loaded products

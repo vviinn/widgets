@@ -11,7 +11,7 @@ The following props are available for each event:
 
 - campaignTypeId
 - campaignTypeName
-- widgetId
+- widgetId (if exists)
 - widgetVersion
 
 
@@ -67,14 +67,13 @@ document.addEventListener("vviinnWidgetLoad", ({ detail }) => {
 {
   "campaignTypeId": "VPS",
   "campaignTypeName": "Visual Search",
-  "widgetId": "",
+  "widgetId": "my-search-widget",
   "widgetVersion": "2.85.0"
 }
 // Output: One-click Discovery
 {
     "campaignTypeId": "VPR",
     "campaignTypeName": "Similar Products",
-    "widgetId": "",
     "widgetVersion": "2.87.0"
 }
 

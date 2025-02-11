@@ -17,7 +17,7 @@ import { SecondaryActionIcon } from "../vviinn-icons/";
 import { modalParts } from "../../cssParts";
 import { searchState } from "../../store/search.store";
 import { renderImage } from "../../Image/renderImage";
-import { addIfDefined } from "../../utils/collections/collectionsUtils";
+import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
 
 @Component({
   tag: "vviinn-modal",
@@ -62,7 +62,7 @@ export class VviinnModal {
           campaignTypeId: "VPS",
           campaignTypeName: campaignTypeNames["VPS"],
           widgetVersion: this.widgetVersion,
-          ...addIfDefined("widgetId", this.buttonElementId),
+          ...addIfNotEmpty("widgetId", this.buttonElementId),
         });
       },
       this.slider ? 500 : 0,

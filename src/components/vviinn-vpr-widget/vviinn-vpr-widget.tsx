@@ -68,7 +68,7 @@ import {
   ResponseDynamicFilterItem,
 } from "../../campaign/VPRCampaignService";
 import { CrossSellingResponse } from "../../campaign/VCSCampaignService";
-import { addIfDefined } from "../../utils/collections/collectionsUtils";
+import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
 
 export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
 
@@ -278,7 +278,7 @@ export class VviinnVprWidget implements ComponentInterface {
       campaignTypeId: this.campaignType,
       campaignTypeName: campaignTypeNames[this.campaignType],
       widgetVersion: version,
-      ...addIfDefined("widgetId", this.id),
+      ...addIfNotEmpty("widgetId", this.id),
     };
   }
 

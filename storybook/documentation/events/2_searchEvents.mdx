@@ -11,7 +11,7 @@ All these events are available on Search (Button, Widget), and the following pr
 
 - campaignTypeId
 - campaignTypeName
-- widgetId
+- widgetId (if exists)
 - widgetVersion
 
 Some events have additional props, summarized it table below.
@@ -73,7 +73,7 @@ document.addEventListener("vviinnImageUploadStarted", ({ detail }) => {
 {
   "campaignTypeId": "VPS",
   "campaignTypeName": "Visual Search",
-  "widgetId": "",
+  "widgetId": "my-search-widget",
   "widgetVersion": "2.87.0",
   "isTriggeredByVpsWidget": true
 }

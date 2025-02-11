@@ -82,7 +82,7 @@ import { productCardParts } from "../../cssParts";
 import { findSlotElements, getSlotNames } from "../../dom";
 import { OneClickDiscoveryResultsMode } from "../../widget/types";
 import { RESULTS_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
-import { addIfDefined } from "../../utils/collections/collectionsUtils";
+import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
 
 /**
  * @part product-card - Product Card itself.
@@ -723,7 +723,7 @@ export class VviinnResults {
       campaignTypeName: campaignTypeNames[activeCampaign],
       widgetVersion: version,
       widget: textSearchCriteria ? "TPS" : undefined,
-      ...addIfDefined("widgetId", this.widgetElementId),
+      ...addIfNotEmpty("widgetId", this.widgetElementId),
     };
   };
 
