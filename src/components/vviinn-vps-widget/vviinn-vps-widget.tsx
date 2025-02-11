@@ -34,7 +34,7 @@ import {
 } from "vviinn-tracking-client-ts";
 import {
   createWidgetVpsEvent,
-  createFilterEvent,
+  createFilterVpsEvent,
   createSearchEvent,
 } from "../../tracking";
 import {
@@ -479,12 +479,13 @@ export class VviinnVpsWidget {
   }
 
   @Listen("vviinnSelectFilter")
-  trackFilterSelected({ detail }: CustomEvent<SelectFilterEventData>) {
+  trackImageSearchFilterSelected({
+    detail,
+  }: CustomEvent<SelectFilterEventData>) {
     this.initResultEvents();
-
     const { campaignTypeId, ...rest } = this.getBasicEventData();
 
-    const searchEvent: WidgetEvent = createFilterEvent({
+    const searchEvent: WidgetEvent = createFilterVpsEvent({
       session_id: this.uiSessionId,
       source: this.imageSource,
       kind: detail.kind,

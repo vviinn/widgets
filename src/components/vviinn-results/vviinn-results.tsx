@@ -60,7 +60,8 @@ import {
   TextSearchEventData,
 } from "../../recommendation/events";
 import {
-  createFilterEvent,
+  createFilterVpsEvent,
+  createFilterTpsEvent,
   createProductWidgetEventByType,
   createAddToBasketVpsEvent,
   createResultEventByType,
@@ -451,13 +452,17 @@ export class VviinnResults {
       return;
     }
 
-    const filterEvent: FilterEvent = createFilterEvent({
+    const eventBody = {
       session_id: this.uiSessionId,
       typ: "filter_event",
       action,
       kind,
       ...rest,
-    });
+    };
+
+    const filterEvent: FilterEvent = this.isTextSearch
+      ? createFilterTpsEvent(eventBody)
+      : createFilterVpsEvent(eventBody);
 
     this.trackingApi.trackEvent(filterEvent).then(this.setTrackingDeactivated);
   };
@@ -650,12 +655,12 @@ export class VviinnResults {
   }
 
   private trackResultEvent(type: ResultEventType) {
-    const { campaignTypeId, widget, ...rest } = this.getBasicEventData();
+    const { campaignTypeId, ...rest } = this.getBasicEventData();
 
     let resultEvent: ResultViewEvent | ResultLoadEvent =
       createResultEventByType(
         type,
-        widget ?? "VPS",
+        campaignTypeId as Widget,
       )({
         session_id: this.uiSessionId,
         ...rest,
@@ -722,7 +727,7 @@ export class VviinnResults {
       campaignTypeId: activeCampaign,
       campaignTypeName: campaignTypeNames[activeCampaign],
       widgetVersion: version,
-      widget: textSearchCriteria ? "TPS" : undefined,
+      widget: activeCampaign,
       ...addIfNotEmpty("widgetId", this.widgetElementId),
     };
   };

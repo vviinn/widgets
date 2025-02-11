@@ -1,6 +1,6 @@
 import { ProductEventType, ResultEventType } from "../recommendation/events";
 import { createTrackingEvent } from "./event";
-import { filterEvent } from "./filter";
+import { tpsFilterEvent, vpsFilterEvent } from "./filter";
 import {
   vprProductLoad,
   vpcProductLoad,
@@ -128,7 +128,9 @@ export const createWidgetVpcEvent = createTrackingEvent(vpcWidget);
 export const createWidgetTpsEvent = createTrackingEvent(tpsWidget);
 
 export const createSearchEvent = createTrackingEvent(searchEvent);
-export const createFilterEvent = createTrackingEvent(filterEvent);
+
+export const createFilterVpsEvent = createTrackingEvent(vpsFilterEvent);
+export const createFilterTpsEvent = createTrackingEvent(tpsFilterEvent);
 
 export const createAddToBasketVprEvent = createTrackingEvent(vprAddToBasket);
 export const createAddToBasketVpcEvent = createTrackingEvent(vpcAddToBasket);
