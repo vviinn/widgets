@@ -66,6 +66,8 @@ import {
   createResultEventByType,
   createAddToBasketTpsEvent,
   createWidgetTpsEvent,
+  createAddToWishlistVpsEvent,
+  createAddToWishlistTpsEvent,
 } from "../../tracking";
 import { RequestDynamicFilterItem } from "../../campaign/VPRCampaignService";
 import i18next from "i18next";
@@ -635,6 +637,18 @@ export class VviinnResults {
       this.trackingDeactivated = true;
     }
   };
+
+  @Listen("vviinnAddToFavorite")
+  trackAddToFavorite({ detail }: ProductCardEvent) {
+    const eventBody = this.productCardEventDataToEventBody(detail);
+    const addToWishlistEvent: ProductEvent = this.isTextSearch
+      ? createAddToWishlistTpsEvent(eventBody)
+      : createAddToWishlistVpsEvent(eventBody);
+
+    this.trackingApi
+      .trackEvent(addToWishlistEvent)
+      .then(this.setTrackingDeactivated);
+  }
 
   private trackResultEvent(type: ResultEventType) {
     if (this.trackingDeactivated) return;
