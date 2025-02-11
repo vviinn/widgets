@@ -778,6 +778,8 @@ export class VviinnVpsWidget {
                           searchQuery={this.searchQuery}
                           apiPath={this.apiPath}
                           locale={this.locale}
+                          uiSessionId={this.uiSessionId}
+                          basicEventData={this.getBasicEventData()}
                         />
                       )}
                     </Fragment>
@@ -832,6 +834,8 @@ export class VviinnVpsWidget {
                     searchQuery={this.searchQuery}
                     apiPath={this.apiPath}
                     locale={this.locale}
+                    uiSessionId={this.uiSessionId}
+                    basicEventData={this.getBasicEventData()}
                   />
 
                   <div
