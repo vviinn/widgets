@@ -51,6 +51,7 @@ import {
 } from "../../interfaces/recommendation";
 import { resources } from "../../locale";
 import { productCardParts } from "../../cssParts";
+import { addIfDefined } from "../../utils/collections/collectionsUtils";
 
 /**
  * @part image-container - Product Card's image container.
@@ -299,8 +300,8 @@ export class VviinnProductCard {
       productType: this.productType,
       campaignTypeId: this.campaignTypeId,
       campaignTypeName: campaignTypeNames[this.campaignTypeId],
-      widgetId: this.buttonElementId ?? this.widgetElementId,
       widgetVersion: this.widgetVersion,
+      ...addIfDefined("widgetId", this.buttonElementId ?? this.widgetElementId),
     };
   }
 

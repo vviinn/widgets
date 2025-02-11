@@ -32,6 +32,7 @@ import {
 import { calculateDiscount } from "../../utils/number";
 import { Locale } from "../../locale";
 import { getCustomLabels } from "../../recommendation";
+import { addIfDefined } from "../../utils/collections/collectionsUtils";
 
 type MoveDirection = "left" | "right";
 export type CarouselMode = "grid" | "continuity" | "set";
@@ -107,8 +108,8 @@ export class VviinnCarousel {
       productType: recommendation.productType,
       campaignTypeId: this.campaignTypeId,
       campaignTypeName: campaignTypeNames[this.campaignTypeId],
-      widgetId: this.widgetElementId,
       widgetVersion: this.widgetVersion,
+      ...addIfDefined("widgetId", this.widgetElementId),
     };
   }
 

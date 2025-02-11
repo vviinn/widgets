@@ -46,7 +46,10 @@ import {
   ImageUploadEventData,
 } from "../../recommendation/events";
 import { campaignTypeNames } from "../../campaign/Campaign";
-import { parseExcludedToParams } from "../../utils/collections/collectionsUtils";
+import {
+  addIfDefined,
+  parseExcludedToParams,
+} from "../../utils/collections/collectionsUtils";
 import { resources } from "../../locale";
 import { Locale } from "../../locale";
 import { CameraActionIcon, UploadActionIcon } from "../vviinn-icons";
@@ -398,16 +401,11 @@ export class VviinnVpsWidget {
 
   getBasicEventData = (): BasicEventData => {
     const activeCampaign = this.isTextSearch ? "TPS" : "VPS";
-    const widgetId = this.buttonElementId ?? this.widgetElementId;
     return {
       campaignTypeId: activeCampaign,
       campaignTypeName: campaignTypeNames[activeCampaign],
-      ...(widgetId
-        ? {
-            widgetId,
-          }
-        : {}),
       widgetVersion: version,
+      ...addIfDefined("widgetId", this.buttonElementId ?? this.widgetElementId),
     };
   };
 

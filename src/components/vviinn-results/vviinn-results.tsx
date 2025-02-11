@@ -82,6 +82,7 @@ import { productCardParts } from "../../cssParts";
 import { findSlotElements, getSlotNames } from "../../dom";
 import { OneClickDiscoveryResultsMode } from "../../widget/types";
 import { RESULTS_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
+import { addIfDefined } from "../../utils/collections/collectionsUtils";
 
 /**
  * @part product-card - Product Card itself.
@@ -717,17 +718,12 @@ export class VviinnResults {
   private getBasicEventData = (customTrigger?: Widget): BasicEventData => {
     const textSearchCriteria = this.isTextSearch || customTrigger === "TPS";
     const activeCampaign = textSearchCriteria ? "TPS" : "VPS";
-    const widgetId = this.widgetElementId;
     return {
       campaignTypeId: activeCampaign,
       campaignTypeName: campaignTypeNames[activeCampaign],
-      ...(widgetId
-        ? {
-            widgetId,
-          }
-        : {}),
       widgetVersion: version,
       widget: textSearchCriteria ? "TPS" : undefined,
+      ...addIfDefined("widgetId", this.widgetElementId),
     };
   };
 

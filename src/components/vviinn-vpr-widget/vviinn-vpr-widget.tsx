@@ -68,6 +68,7 @@ import {
   ResponseDynamicFilterItem,
 } from "../../campaign/VPRCampaignService";
 import { CrossSellingResponse } from "../../campaign/VCSCampaignService";
+import { addIfDefined } from "../../utils/collections/collectionsUtils";
 
 export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
 
@@ -273,16 +274,11 @@ export class VviinnVprWidget implements ComponentInterface {
   uiSessionId: string;
 
   private getBasicEventData(): BasicEventData {
-    const widgetId = this.id;
     return {
       campaignTypeId: this.campaignType,
       campaignTypeName: campaignTypeNames[this.campaignType],
-      ...(widgetId
-        ? {
-            widgetId,
-          }
-        : {}),
       widgetVersion: version,
+      ...addIfDefined("widgetId", this.id),
     };
   }
 
