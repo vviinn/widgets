@@ -15,6 +15,10 @@ import {
   vpsProductLoad,
   vpsAddToBasket,
   tpsAddToBasket,
+  vprAddToWishlist,
+  vpcAddToWishlist,
+  vpsAddToWishlist,
+  tpsAddToWishlist,
 } from "./product";
 import { searchEvent } from "./search";
 import { tpsWidget, vpcWidget, vprWidget, vpsWidget } from "./widget";
@@ -130,3 +134,12 @@ export const createAddToBasketVprEvent = createTrackingEvent(vprAddToBasket);
 export const createAddToBasketVpcEvent = createTrackingEvent(vpcAddToBasket);
 export const createAddToBasketVpsEvent = createTrackingEvent(vpsAddToBasket);
 export const createAddToBasketTpsEvent = createTrackingEvent(tpsAddToBasket);
+
+export const createAddToWishlistVprEvent =
+  createTrackingEvent(vprAddToWishlist);
+export const createAddToWishlistVpcEvent =
+  createTrackingEvent(vpcAddToWishlist);
+export const createAddToWishlistVpsEvent =
+  createTrackingEvent(vpsAddToWishlist);
+export const createAddToWishlistTpsEvent =
+  createTrackingEvent(tpsAddToWishlist);

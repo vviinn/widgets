@@ -3,6 +3,7 @@ import {
   PRODUCT_CLICK_EVENT_TYPE,
   PRODUCT_LOAD_EVENT_TYPE,
   ADD_TO_BASKET_EVENT_TYPE,
+  ADD_TO_WISHLIST_EVENT_TYPE,
   WidgetEventType,
 } from "./models";
 
@@ -71,18 +72,42 @@ const vpcAddToBasket: WidgetEventType = {
   typ: ADD_TO_BASKET_EVENT_TYPE,
 };
 
+const vpsAddToWishlist: WidgetEventType = {
+  widget: "VPS",
+  typ: ADD_TO_WISHLIST_EVENT_TYPE,
+};
+
+const tpsAddToWishlist: WidgetEventType = {
+  widget: "TPS",
+  typ: ADD_TO_WISHLIST_EVENT_TYPE,
+};
+
+const vprAddToWishlist: WidgetEventType = {
+  widget: "VPR",
+  typ: ADD_TO_WISHLIST_EVENT_TYPE,
+};
+
+const vpcAddToWishlist: WidgetEventType = {
+  widget: "VPC",
+  typ: ADD_TO_WISHLIST_EVENT_TYPE,
+};
+
 export {
   vprProductLoad,
   vprProductView,
   vprProductClick,
   vprAddToBasket,
+  vprAddToWishlist,
   vpcProductLoad,
   vpcProductView,
   vpcProductClick,
   vpcAddToBasket,
+  vpcAddToWishlist,
   vpsProductClick,
   vpsProductView,
   vpsProductLoad,
   vpsAddToBasket,
+  vpsAddToWishlist,
   tpsAddToBasket,
+  tpsAddToWishlist,
 };

@@ -53,6 +53,8 @@ import {
   createProductVprEventByType,
   createAddToBasketVpcEvent,
   createAddToBasketVprEvent,
+  createAddToWishlistVpcEvent,
+  createAddToWishlistVprEvent,
   createResultVpcEventByType,
   createResultVprEventByType,
 } from "../../tracking";
@@ -319,6 +321,26 @@ export class VviinnVprWidget implements ComponentInterface {
     });
   }
 
+  private productCardEventDataToEventBody = (
+    eventData: ProductCardEventData,
+  ) => {
+    const {
+      productRank,
+      productId,
+      campaignTypeId,
+      widgetType,
+      discount,
+      ...rest
+    } = eventData;
+
+    return {
+      session_id: this.uiSessionId,
+      rank: productRank,
+      product: productId,
+      ...rest,
+    };
+  };
+
   @Watch("productId")
   handleProductIdChange() {
     this.getRecommendations();
@@ -456,21 +478,7 @@ export class VviinnVprWidget implements ComponentInterface {
 
   @Listen("vviinnAddToBasket")
   async trackAddToBasket({ detail }: ProductCardEvent) {
-    const {
-      productRank,
-      productId,
-      campaignTypeId,
-      widgetType,
-      discount,
-      ...rest
-    } = detail;
-
-    const eventBody = {
-      session_id: this.uiSessionId,
-      rank: productRank,
-      product: productId,
-      ...rest,
-    };
+    const eventBody = this.productCardEventDataToEventBody(detail);
 
     const addToBasketEvent: WidgetEvent =
       this.campaignType === "VCS"
@@ -479,6 +487,20 @@ export class VviinnVprWidget implements ComponentInterface {
 
     this.trackingApi
       .trackEvent(addToBasketEvent)
+      .then(this.setTrackingDeactivated);
+  }
+
+  @Listen("vviinnAddToFavorite")
+  async trackAddToWishlist({ detail }: ProductCardEvent) {
+    const eventBody = this.productCardEventDataToEventBody(detail);
+
+    const addToWishlistEvent: WidgetEvent =
+      this.campaignType === "VCS"
+        ? createAddToWishlistVpcEvent(eventBody)
+        : createAddToWishlistVprEvent(eventBody);
+
+    this.trackingApi
+      .trackEvent(addToWishlistEvent)
       .then(this.setTrackingDeactivated);
   }
 
@@ -535,26 +557,12 @@ export class VviinnVprWidget implements ComponentInterface {
   ): ProductEvent | null {
     if (this.trackingDeactivated) return null;
 
-    const {
-      productRank,
-      productId,
-      campaignTypeId,
-      widgetType,
-      clickEvent,
-      ...rest
-    } = detail;
+    const eventBody = this.productCardEventDataToEventBody(detail);
 
-    const eventBody = {
-      session_id: this.uiSessionId,
-      rank: productRank,
-      product: productId,
-      ...rest,
-    };
-
-    if (!campaignTypeId) return null;
+    if (!detail.campaignTypeId) return null;
 
     const productEvent: ProductEvent =
-      campaignTypeId === "VCS"
+      detail.campaignTypeId === "VCS"
         ? createProductVpcEventByType(eventType)(eventBody)
         : createProductVprEventByType(eventType)(eventBody);
 

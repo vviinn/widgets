@@ -187,7 +187,7 @@ export class VviinnProductCard {
   vviinnAddToBasket: EventEmitter<ProductCardEventData>;
   /** User clicks on Favorite button */
   @Event({ bubbles: true })
-  vviinnFavorite: EventEmitter<ProductCardEventData>;
+  vviinnAddToFavorite: EventEmitter<ProductCardEventData>;
 
   /** @internal */
   @Event({ bubbles: true })
@@ -330,7 +330,7 @@ export class VviinnProductCard {
   }
 
   private favoriteButtonClickHandler() {
-    this.vviinnFavorite.emit({
+    this.vviinnAddToFavorite.emit({
       ...this.productData,
     });
     this.favoriteButonPressed = !this.favoriteButonPressed;
@@ -402,7 +402,7 @@ export class VviinnProductCard {
           <div class="product-card-actions-top" part="product-card-actions-top">
             <button
               class={{
-                hidden: !this.favoriteShow,
+                hidden: !this.favoriteShow || this.isSourceProduct,
               }}
               part="favorite-button"
               onClick={this.favoriteButtonClickHandler.bind(this)}
