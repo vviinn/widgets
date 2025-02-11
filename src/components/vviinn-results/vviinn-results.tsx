@@ -435,10 +435,13 @@ export class VviinnResults {
     const { action, kind, customTrigger, isTriggeredByVpsWidget } = detail;
     const { campaignTypeId, ...rest } = this.getBasicEventData(customTrigger);
 
-    if (customTrigger) this.setTextSearch(true, isTriggeredByVpsWidget);
-
     if (action === "select" || action === "deselect" || action === "reset")
       this.initResultEvents();
+
+    if (customTrigger === "TPS") {
+      this.setTextSearch(true, isTriggeredByVpsWidget);
+      return;
+    }
 
     const filterEvent: FilterEvent = createFilterEvent({
       session_id: this.uiSessionId,

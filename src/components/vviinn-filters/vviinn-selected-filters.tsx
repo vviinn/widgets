@@ -26,7 +26,7 @@ import {
   ResetSelectedFiltersEventData,
   SearchIdEvent,
 } from "../../recommendation/events";
-import { triggerFilter } from "./helpers/triggerFilter";
+import { triggerFilter, triggerResetFilters } from "./helpers/triggerFilter";
 import {
   componentsState,
   resetStore,
@@ -157,9 +157,17 @@ export class VviinnSelectedFilters {
 
     this.textSearchCustomFilter = null;
     this.priceCustomFilter = null;
+
+    triggerResetFilters({
+      vviinnFilterTriggered: this.vviinnFilterTriggered,
+      isTriggeredByVpsWidget: this.showInWidget,
+      el: this.el,
+    });
+
     this.vviinnSelectedFiltersReset.emit({
       isTriggeredByVpsWidget: this.showInWidget,
     });
+
     resetStore(this.storeName);
   };
 
