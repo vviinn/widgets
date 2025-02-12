@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.150.0](https://github.com/vviinn/widgets/compare/v2.149.0...v2.150.0) (2025-02-12)
+
+
+### Features
+
+* Send new tracking events: Add to favorite, Text search started, and additional Filter events ([36a0808](https://github.com/vviinn/widgets/commit/36a0808550cb0bbdbf5fe359eda8badbadb9e9ee))
+
 ## [2.149.0](https://github.com/vviinn/widgets/compare/v2.148.0...v2.149.0) (2025-02-07)
 
 
