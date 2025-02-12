@@ -399,8 +399,8 @@ export class VviinnVpsWidget {
     }
   };
 
-  getBasicEventData = (): BasicEventData => {
-    const activeCampaign = this.isTextSearch ? "TPS" : "VPS";
+  getBasicEventData = (isTextSearch?: boolean): BasicEventData => {
+    const activeCampaign = this.isTextSearch || isTextSearch ? "TPS" : "VPS";
     return {
       campaignTypeId: activeCampaign,
       campaignTypeName: campaignTypeNames[activeCampaign],
@@ -778,7 +778,7 @@ export class VviinnVpsWidget {
                           apiPath={this.apiPath}
                           locale={this.locale}
                           uiSessionId={this.uiSessionId}
-                          basicEventData={this.getBasicEventData()}
+                          basicEventData={this.getBasicEventData(true)}
                         />
                       )}
                     </Fragment>
@@ -834,7 +834,7 @@ export class VviinnVpsWidget {
                     apiPath={this.apiPath}
                     locale={this.locale}
                     uiSessionId={this.uiSessionId}
-                    basicEventData={this.getBasicEventData()}
+                    basicEventData={this.getBasicEventData(true)}
                   />
 
                   <div
