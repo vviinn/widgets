@@ -35,6 +35,7 @@ import {
   SearchStoreName,
 } from "../../store/search.store";
 import { ResponseDynamicFilterIntervalItem } from "../../interfaces/recommendation";
+import { isIntervalFilter } from "../../filters";
 
 /**
  * @part selected-filters-list - List of selected filters.
@@ -95,8 +96,8 @@ export class VviinnSelectedFilters {
   }
 
   private getPriceFilter = () =>
-    this.state.dynamicFilters.find(
-      (filter) => filter.column === "price",
+    this.state.dynamicFilters.find((filter) =>
+      isIntervalFilter(filter.column),
     ) as ResponseDynamicFilterIntervalItem;
 
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
@@ -112,7 +113,7 @@ export class VviinnSelectedFilters {
       this.textSearchCustomFilter = detail.kind;
     }
 
-    if (detail.kind === "price" && detail.action === "select") {
+    if (isIntervalFilter(detail.kind) && detail.action === "select") {
       const priceFilter = this.getPriceFilter();
 
       const { start: rangeStart, end: rangeEnd } = priceFilter.full;
