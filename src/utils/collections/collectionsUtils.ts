@@ -21,3 +21,17 @@ export const parseExcludedToParams = (value: string) =>
     .split(";")
     .map((value) => (value ? `excluded[]=${value}` : ""))
     .join("&");
+
+export const addIfDefined = <T>(
+  key: string,
+  value: T | null | undefined,
+): Partial<Record<string, T>> =>
+  value !== null && value !== undefined ? { [key]: value } : {};
+
+export const addIfNotEmpty = <T extends { length: number } | object>(
+  key: string,
+  value: T | null | undefined,
+): Partial<Record<string, T>> =>
+  value && (Array.isArray(value) ? value.length : Object.keys(value).length)
+    ? { [key]: value }
+    : {};

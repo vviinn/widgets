@@ -1,86 +1,18 @@
 import { ProductEventType, ResultEventType } from "../recommendation/events";
 import { createTrackingEvent } from "./event";
-import { filterEvent } from "./filter";
-import {
-  vprProductLoad,
-  vpcProductLoad,
-  vprProductClick,
-  vpcProductClick,
-  vprProductView,
-  vpcProductView,
-  vprAddToBasket,
-  vpcAddToBasket,
-  vpsProductClick,
-  vpsProductView,
-  vpsProductLoad,
-} from "./product";
-import { searchEvent } from "./search";
-import { vpcWidget, vprWidget, vpsWidget } from "./widget";
-import {
-  vprResultLoad,
-  vpcResultLoad,
-  vprResultView,
-  vpcResultView,
-} from "./result";
 import { Widget } from "vviinn-tracking-client-ts";
 import {
+  ADD_TO_BASKET_EVENT_TYPE,
+  ADD_TO_WISHLIST_EVENT_TYPE,
+  FILTER_EVENT_TYPE,
+  SEARCH_EVENT_TYPE,
   PRODUCT_CLICK_EVENT_TYPE,
   PRODUCT_LOAD_EVENT_TYPE,
   PRODUCT_VIEW_EVENT_TYPE,
   RESULT_LOAD_EVENT_TYPE,
   RESULT_VIEW_EVENT_TYPE,
+  WIDGET_EVENT_TYPE,
 } from "./models";
-
-export const createProductVprEventByType = (type: ProductEventType) => {
-  switch (type) {
-    case "load":
-      return createTrackingEvent(vprProductLoad);
-    case "view":
-      return createTrackingEvent(vprProductView);
-    case "click":
-      return createTrackingEvent(vprProductClick);
-  }
-};
-
-export const createProductVpcEventByType = (type: ProductEventType) => {
-  switch (type) {
-    case "load":
-      return createTrackingEvent(vpcProductLoad);
-    case "view":
-      return createTrackingEvent(vpcProductView);
-    case "click":
-      return createTrackingEvent(vpcProductClick);
-  }
-};
-
-export const createProductVpsEventByType = (type: ProductEventType) => {
-  switch (type) {
-    case "load":
-      return createTrackingEvent(vpsProductLoad);
-    case "view":
-      return createTrackingEvent(vpsProductView);
-    case "click":
-      return createTrackingEvent(vpsProductClick);
-  }
-};
-
-export const createResultVprEventByType = (type: ResultEventType) => {
-  switch (type) {
-    case "load":
-      return createTrackingEvent(vprResultLoad);
-    case "view":
-      return createTrackingEvent(vprResultView);
-  }
-};
-
-export const createResultVpcEventByType = (type: ResultEventType) => {
-  switch (type) {
-    case "load":
-      return createTrackingEvent(vpcResultLoad);
-    case "view":
-      return createTrackingEvent(vpcResultView);
-  }
-};
 
 export const createResultEventByType = (
   type: ResultEventType,
@@ -93,35 +25,48 @@ export const createResultEventByType = (
   });
 };
 
-export const createProductWidgetEventByType = (
-  widget: Widget,
+export const createProductEventByType = (
   type: ProductEventType,
+  widget: Widget,
 ) => {
-  switch (type) {
-    case "load":
-      return createTrackingEvent({
-        widget,
-        typ: PRODUCT_LOAD_EVENT_TYPE,
-      });
-    case "view":
-      return createTrackingEvent({
-        widget,
-        typ: PRODUCT_VIEW_EVENT_TYPE,
-      });
-    case "click":
-      return createTrackingEvent({
-        widget,
-        typ: PRODUCT_CLICK_EVENT_TYPE,
-      });
-  }
+  const typ =
+    type === "load"
+      ? PRODUCT_LOAD_EVENT_TYPE
+      : type === "view"
+        ? PRODUCT_VIEW_EVENT_TYPE
+        : PRODUCT_CLICK_EVENT_TYPE;
+
+  return createTrackingEvent({
+    widget,
+    typ,
+  });
 };
 
-export const createWidgetVprEvent = createTrackingEvent(vprWidget);
-export const createWidgetVpsEvent = createTrackingEvent(vpsWidget);
-export const createWidgetVpcEvent = createTrackingEvent(vpcWidget);
+export const createAddToBasketEvent = (widget: Widget) =>
+  createTrackingEvent({
+    widget,
+    typ: ADD_TO_BASKET_EVENT_TYPE,
+  });
 
-export const createSearchEvent = createTrackingEvent(searchEvent);
-export const createFilterEvent = createTrackingEvent(filterEvent);
+export const createAddToWishlistEvent = (widget: Widget) =>
+  createTrackingEvent({
+    widget,
+    typ: ADD_TO_WISHLIST_EVENT_TYPE,
+  });
 
-export const createAddToBasketVprEvent = createTrackingEvent(vprAddToBasket);
-export const createAddToBasketVpcEvent = createTrackingEvent(vpcAddToBasket);
+export const createFilterEvent = (widget: Widget) =>
+  createTrackingEvent({
+    widget,
+    typ: FILTER_EVENT_TYPE,
+  });
+
+export const createWidgetEvent = (widget: Widget) =>
+  createTrackingEvent({
+    widget,
+    typ: WIDGET_EVENT_TYPE,
+  });
+
+export const createImageSearchEvent = createTrackingEvent({
+  widget: "VPS",
+  typ: SEARCH_EVENT_TYPE,
+});

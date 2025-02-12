@@ -33,9 +33,9 @@ import {
   WidgetEvent,
 } from "vviinn-tracking-client-ts";
 import {
-  createWidgetVpsEvent,
+  createWidgetEvent,
   createFilterEvent,
-  createSearchEvent,
+  createImageSearchEvent,
 } from "../../tracking";
 import {
   BasicEventData,
@@ -46,7 +46,10 @@ import {
   ImageUploadEventData,
 } from "../../recommendation/events";
 import { campaignTypeNames } from "../../campaign/Campaign";
-import { parseExcludedToParams } from "../../utils/collections/collectionsUtils";
+import {
+  addIfNotEmpty,
+  parseExcludedToParams,
+} from "../../utils/collections/collectionsUtils";
 import { resources } from "../../locale";
 import { Locale } from "../../locale";
 import { CameraActionIcon, UploadActionIcon } from "../vviinn-icons";
@@ -396,14 +399,16 @@ export class VviinnVpsWidget {
     }
   };
 
-  getBasicEventData = (): BasicEventData => {
-    const activeCampaign = this.isTextSearch ? "TPS" : "VPS";
+  getBasicEventData = (isTextSearch?: boolean): BasicEventData => {
+    const activeCampaign = this.isTextSearch || isTextSearch ? "TPS" : "VPS";
     return {
-      widgetType: activeCampaign,
       campaignTypeId: activeCampaign,
       campaignTypeName: campaignTypeNames[activeCampaign],
-      widgetId: this.buttonElementId ?? this.widgetElementId,
       widgetVersion: version,
+      ...addIfNotEmpty(
+        "widgetId",
+        this.buttonElementId ?? this.widgetElementId,
+      ),
     };
   };
 
@@ -446,10 +451,10 @@ export class VviinnVpsWidget {
   @Listen("vviinnImageCrop")
   cropAreaChanges() {
     this.initResultEvents();
-    if (this.trackingDeactivated) return;
+
     const { campaignTypeId, ...rest } = this.getBasicEventData();
 
-    const searchEvent: WidgetEvent = createSearchEvent({
+    const searchEvent: WidgetEvent = createImageSearchEvent({
       session_id: this.uiSessionId,
       source: this.imageSource,
       search_area: "manual-selection",
@@ -461,10 +466,10 @@ export class VviinnVpsWidget {
   @Listen("vviinnSelectObject")
   trackDetectedObject() {
     this.initResultEvents();
-    if (this.trackingDeactivated) return;
+
     const { campaignTypeId, ...rest } = this.getBasicEventData();
 
-    const searchEvent: WidgetEvent = createSearchEvent({
+    const searchEvent: WidgetEvent = createImageSearchEvent({
       session_id: this.uiSessionId,
       source: this.imageSource,
       search_area: "attention-point",
@@ -474,12 +479,13 @@ export class VviinnVpsWidget {
   }
 
   @Listen("vviinnSelectFilter")
-  trackFilterSelected({ detail }: CustomEvent<SelectFilterEventData>) {
+  trackImageSearchFilterSelected({
+    detail,
+  }: CustomEvent<SelectFilterEventData>) {
     this.initResultEvents();
-    if (this.trackingDeactivated) return;
     const { campaignTypeId, ...rest } = this.getBasicEventData();
 
-    const searchEvent: WidgetEvent = createFilterEvent({
+    const searchEvent: WidgetEvent = createFilterEvent("VPS")({
       session_id: this.uiSessionId,
       source: this.imageSource,
       kind: detail.kind,
@@ -532,25 +538,21 @@ export class VviinnVpsWidget {
   };
 
   private trackWidgetEvent(action: WidgetAction) {
-    if (this.trackingDeactivated) return;
-
-    const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
+    const { campaignTypeId, ...rest } = this.getBasicEventData();
 
     const eventBody = {
       action,
       session_id: this.uiSessionId,
       ...rest,
     };
-
-    const widgetEvent: WidgetEvent = createWidgetVpsEvent(eventBody);
+    const widgetEvent: WidgetEvent = createWidgetEvent("VPS")(eventBody);
     this.trackingApi.trackEvent(widgetEvent).then(this.setTrackingDeactivated);
   }
 
   private trackInitialSearch() {
-    if (this.trackingDeactivated) return;
-    const { campaignTypeId, widgetType, ...rest } = this.getBasicEventData();
+    const { campaignTypeId, ...rest } = this.getBasicEventData();
 
-    const searchEvent: WidgetEvent = createSearchEvent({
+    const searchEvent: WidgetEvent = createImageSearchEvent({
       session_id: this.uiSessionId,
       search_area: "full",
       source: "upload",
@@ -773,6 +775,8 @@ export class VviinnVpsWidget {
                           searchQuery={this.searchQuery}
                           apiPath={this.apiPath}
                           locale={this.locale}
+                          uiSessionId={this.uiSessionId}
+                          basicEventData={this.getBasicEventData(true)}
                         />
                       )}
                     </Fragment>
@@ -827,6 +831,8 @@ export class VviinnVpsWidget {
                     searchQuery={this.searchQuery}
                     apiPath={this.apiPath}
                     locale={this.locale}
+                    uiSessionId={this.uiSessionId}
+                    basicEventData={this.getBasicEventData(true)}
                   />
 
                   <div

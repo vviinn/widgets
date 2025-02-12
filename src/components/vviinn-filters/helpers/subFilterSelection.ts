@@ -4,6 +4,7 @@ import {
   RequestDynamicFilterItem,
 } from "../../../campaign/VPRCampaignService";
 import { FilterAction } from "vviinn-tracking-client-ts";
+import { isIntervalFilter } from "../../../filters";
 
 type ValueRequest = string & { start?: number; end?: number };
 
@@ -19,7 +20,7 @@ export const subFilterSelection = (
     valueIndex == -1 || index == -1 ? "select" : "deselect";
 
   const pushObject =
-    index === -1 || selectedColumn === "price"
+    index === -1 || isIntervalFilter(selectedColumn)
       ? { column: selectedColumn, values: [] }
       : filters[index];
 

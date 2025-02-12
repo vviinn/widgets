@@ -9,6 +9,7 @@ const SEARCH_EVENT_TYPE = "search_event";
 const WIDGET_EVENT_TYPE = "widget_event";
 const RESULT_LOAD_EVENT_TYPE = "result_load_event";
 const RESULT_VIEW_EVENT_TYPE = "result_view_event";
+const ADD_TO_WISHLIST_EVENT_TYPE = "add_to_wishlist_event";
 
 export {
   PRODUCT_LOAD_EVENT_TYPE,
@@ -20,6 +21,7 @@ export {
   WIDGET_EVENT_TYPE,
   RESULT_LOAD_EVENT_TYPE,
   RESULT_VIEW_EVENT_TYPE,
+  ADD_TO_WISHLIST_EVENT_TYPE,
 };
 
 export type WidgetEvents =
@@ -30,6 +32,7 @@ export type WidgetEvents =
   | "search_event"
   | "widget_event"
   | "add_to_basket_event"
+  | "add_to_wishlist_event"
   | "result_load_event"
   | "result_view_event";
 

@@ -15,6 +15,7 @@ import {
   SearchStoreName,
   SearchStore,
 } from "../../store/search.store";
+import { createTrackingApi } from "../../openApi";
 import { TextSearchIcon } from "../vviinn-icons";
 import { slotChangeListener } from "../customized-slots";
 import {
@@ -22,6 +23,7 @@ import {
   SearchIdEventData,
   TextSearchEventData,
   DynamicFilterInternalData,
+  BasicEventData,
 } from "../../recommendation/events";
 import i18next from "i18next";
 import { Locale, resources } from "../../locale";
@@ -33,6 +35,8 @@ import { searchBarParts } from "../../cssParts";
 import { MicIcon } from "../vviinn-icons/icons/MicIcon";
 import { initializeRecognition, speechTooltip } from "./helpers";
 import Timeout = NodeJS.Timeout;
+import { DefaultApi, WidgetEvent } from "vviinn-tracking-client-ts";
+import { createWidgetEvent } from "../../tracking";
 
 /**
  * @part text-search-container - Container for the text search block.
@@ -86,6 +90,12 @@ export class VviinnTextSearch {
 
   /** @internal */
   @Prop() apiPath?: string = "https://api.vviinn.com";
+  /** uiSessionId from vps-widget */
+  /** @internal */
+  @Prop() uiSessionId?: string;
+  /** basicEventData from vps-widget */
+  /** @internal */
+  @Prop() basicEventData: BasicEventData;
 
   @State() isLoading = false;
 
@@ -107,6 +117,7 @@ export class VviinnTextSearch {
     this.showTooltip = show;
   };
 
+  private trackingApi?: DefaultApi;
   private state?: SearchStore;
   private storeName?: SearchStoreName;
 
@@ -133,6 +144,9 @@ export class VviinnTextSearch {
     this.storeName = this.showInWidget ? "widget" : "components";
     this.state = this.showInWidget ? searchState : componentsState;
     if (this.token) this.state.token = this.token;
+    this.trackingApi = this.showInWidget
+      ? createTrackingApi(this.apiPath, this.token)
+      : null;
 
     document.addEventListener("resultsSearchFinished", this.hideLoader);
     document.addEventListener(
@@ -217,6 +231,16 @@ export class VviinnTextSearch {
     if (!this.searchQuery) return;
     this.trackTextSearch();
     if (this.showInWidget) {
+      if (this.basicEventData && this.uiSessionId) {
+        const { campaignTypeId, ...rest } = this.basicEventData;
+        const textSearchStartedEvent: WidgetEvent = createWidgetEvent("TPS")({
+          action: "search",
+          session_id: this.uiSessionId,
+          ...rest,
+        });
+        this.trackingApi.trackEvent(textSearchStartedEvent);
+      }
+
       const response = pipe(
         await makeTextSearchRequest(this.storeName, this.searchQuery),
         E.getOrElse(() => null),

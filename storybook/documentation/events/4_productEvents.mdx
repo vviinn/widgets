@@ -11,8 +11,7 @@ All these events are available on Discovery (Button, Widget), and Search (Butto
 
 - campaignTypeId
 - campaignTypeName
-- widgetId
-- widgetType
+- widgetId (if exists)
 - widgetVersion
 
 Some events have additional props, summarized it table below.
@@ -95,7 +94,7 @@ Some events have additional props, summarized it table below.
     </tr>
 
     <tr>
-      <td>vviinnFavorite</td><td>Triggered when the user clicks on the "Favorite" button. The button can be shown by passing `favorite-show` property.</td>
+      <td>vviinnAddToFavorite</td><td>Triggered when the user clicks on the "Favorite" button. The button can be shown by passing `favorite-show` property.</td>
       
       <td>
         <ul>
@@ -123,10 +122,9 @@ document.addEventListener("vviinnProductLoad", ({ detail }) => {
     "productRank": 0,
     "productName": "Couchtisch Rolf Benz 8770",
     "productType": "Table",
-    "widgetType": "VPR",
     "campaignTypeId": "VPR",
     "campaignTypeName": "Similar Products",
-    "widgetId": "vpr-widget-1",
+    "widgetId": "my-recommendation-widget",
     "widgetVersion": "2.1.0"
 }
 // ... and other loaded products

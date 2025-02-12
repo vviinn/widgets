@@ -32,6 +32,7 @@ import {
   searchState,
   SearchStore,
 } from "../../store/search.store";
+import { isIntervalFilter } from "../../filters";
 
 /**
  * @part filters-wrapper - Wrapper for the main filters.
@@ -97,11 +98,16 @@ export class VviinnFilters {
     this.innerFilters.length ? this.innerFilters : this.state.dynamicFilters;
 
   private getSelectedPriceInterval = () =>
-    (this.requestFilters.find(({ column }) => column === "price")?.values[0] ??
-      {}) as components["schemas"]["interval"];
+    (this.requestFilters.find(({ column }) => isIntervalFilter(column))
+      ?.values[0] ?? {}) as components["schemas"]["interval"];
 
   private handleMainFilterSelection(filter: ResponseDynamicFilterItem) {
     this.selectedFilter = filter;
+    this.vviinnFilterTriggered.emit({
+      action: "show",
+      kind: filter.column,
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
   }
 
   private handleSelectedFiltersReset = ({
@@ -137,7 +143,6 @@ export class VviinnFilters {
 
   private showActiveOnMainButton({ column }: ResponseDynamicFilterItem) {
     if (!this.selectedFilter) return "";
-
     return this.selectedFilter?.column === column ? "active" : "";
   }
 
@@ -234,7 +239,7 @@ export class VviinnFilters {
 
         {!!this.selectedFilter && (
           <div class="filters-footer" part="filters-footer">
-            {column === "price" ? (
+            {isIntervalFilter(column) ? (
               <vviinn-price-range
                 histogram={(filterOptions as Histogram).filter(
                   (item) => item.value.frequency > 0,

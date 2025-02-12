@@ -5,6 +5,7 @@ import {
   Recommendation,
 } from "../interfaces/recommendation";
 import { RequestDynamicFilterItem } from "../campaign/VPRCampaignService";
+import { addIfNotEmpty } from "../utils/collections/collectionsUtils";
 
 type GetRecommendationsBodyProps = {
   productId: string;
@@ -14,22 +15,26 @@ type GetRecommendationsBodyProps = {
   dynamicFilters?: RequestDynamicFilterItem[];
 };
 
-const parseExcluded = (excluded: string) =>
-  excluded.split(";").map((item) => {
+const parseExcluded = (excluded: string) => {
+  if (!excluded.length) return "";
+  return excluded.split(";").map((item) => {
     const [column, values] = item.split(":");
     return {
       column,
       values: [values],
     };
   });
+};
 
-const parseCampaigns = (campaigns: string) =>
+const parseCampaigns = (campaigns: string) => {
+  if (!campaigns.length) return "";
   campaigns.split(",").map((value) => {
     const trimmedValue = value.trim();
     return !isNaN(parseInt(trimmedValue))
       ? parseInt(trimmedValue)
       : trimmedValue;
   });
+};
 
 export const getRecommendationsBody = ({
   productId,
@@ -41,15 +46,14 @@ export const getRecommendationsBody = ({
   | SimilarProductsRequest
   | CrossSellingRequest => {
   const staticFilters: RequestStaticFilters = {
-    ...(color.length ? { color } : {}),
-    ...(excluded.length ? { excluded: parseExcluded(excluded) } : {}),
+    ...addIfNotEmpty("color", color),
+    ...addIfNotEmpty("excluded", parseExcluded(excluded)),
   };
-
   return {
     productId,
-    ...(dynamicFilters.length ? { dynamicFilters } : {}),
-    ...(campaigns.length ? { campaigns: parseCampaigns(campaigns) } : {}),
-    ...(Object.keys(staticFilters).length ? { staticFilters } : {}),
+    ...addIfNotEmpty("dynamicFilters", dynamicFilters),
+    ...addIfNotEmpty("campaigns", parseCampaigns(campaigns)),
+    ...addIfNotEmpty("staticFilters", staticFilters),
   };
 };
 

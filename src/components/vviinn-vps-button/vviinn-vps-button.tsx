@@ -182,7 +182,7 @@ export class VviinnVpsButton {
 
   @Listen("vviinnWidgetClose")
   handleModalClosed({ detail }: CustomEvent<BasicEventData>) {
-    if (detail.widgetType === "VPS") {
+    if (detail.campaignTypeId === "VPS") {
       this.buttonPressed = false;
     }
   }

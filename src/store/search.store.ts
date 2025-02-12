@@ -46,6 +46,10 @@ import {
 } from "../campaign/VPRCampaignService";
 import { setBodyAndHeaders } from "../network/utils";
 import { encodeToBase64UTF8 } from "../utils/string";
+import {
+  addIfDefined,
+  addIfNotEmpty,
+} from "../utils/collections/collectionsUtils";
 
 const IMAGE_SMALLEST_SIDE_TO_RESIZE = 800;
 const HI_RES_IMAGE_SMALLEST_SIDE_TO_RESIZE = 2000;
@@ -262,14 +266,10 @@ export const makeTextSearchRequest = async (
 
   const body: TextSearchRequest = {
     query,
-    ...(resultsCount ? { resultsCount } : {}),
-    ...(dynamicFilters
-      ? {
-          dynamicFilters,
-        }
-      : {}),
-    ...(state.campaignId.length ? { campaign: state.campaignId } : {}),
     requestId,
+    ...addIfDefined("resultsCount", resultsCount),
+    ...addIfDefined("dynamicFilters", dynamicFilters),
+    ...addIfNotEmpty("campaign", state.campaignId),
   };
 
   return pipe(
@@ -321,7 +321,6 @@ export const makeProductListingPageRequest = async (
       : value;
 
   const body: ProductListingPageRequest = {
-    ...(resultsCount ? { resultsCount } : {}),
     staticFilters: {
       included: [
         {
@@ -330,11 +329,8 @@ export const makeProductListingPageRequest = async (
         },
       ],
     },
-    ...(dynamicFilters
-      ? {
-          dynamicFilters,
-        }
-      : {}),
+    ...addIfDefined("resultsCount", resultsCount),
+    ...addIfDefined("dynamicFilters", dynamicFilters),
   };
 
   return await pipe(

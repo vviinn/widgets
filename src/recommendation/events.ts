@@ -15,14 +15,13 @@ import {
 import { Rectangle } from "../geometry/Rectangle";
 
 export type CommonEventData = {
-  widgetType: "VPR" | "VPS" | "VCS" | "TPS";
   campaignTypeId: "VPR" | "VPS" | "VCS" | "TPS";
   campaignTypeName:
     | "Similar Products"
     | "Visual Search"
     | "Cross-Selling"
     | "Text Product Search";
-  widgetId: string;
+  widgetId?: string;
   widgetVersion: string;
 };
 
