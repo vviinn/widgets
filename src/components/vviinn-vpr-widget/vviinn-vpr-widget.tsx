@@ -47,16 +47,11 @@ import {
   ChangedFiltersEventData,
 } from "../../recommendation/events";
 import {
-  createWidgetVprEvent,
-  createWidgetVpcEvent,
-  createProductVpcEventByType,
-  createProductVprEventByType,
-  createAddToBasketVpcEvent,
-  createAddToBasketVprEvent,
-  createAddToWishlistVpcEvent,
-  createAddToWishlistVprEvent,
-  createResultVpcEventByType,
-  createResultVprEventByType,
+  createWidgetEvent,
+  createResultEventByType,
+  createProductEventByType,
+  createAddToBasketEvent,
+  createAddToWishlistEvent,
 } from "../../tracking";
 import { resources } from "../../locale";
 import { Locale } from "../../locale";
@@ -475,10 +470,9 @@ export class VviinnVprWidget implements ComponentInterface {
   async trackAddToBasket({ detail }: ProductCardEvent) {
     const eventBody = this.productCardEventDataToEventBody(detail);
 
-    const addToBasketEvent: WidgetEvent =
-      this.campaignType === "VCS"
-        ? createAddToBasketVpcEvent(eventBody)
-        : createAddToBasketVprEvent(eventBody);
+    const addToBasketEvent: WidgetEvent = createAddToBasketEvent(
+      detail.campaignTypeId === "VCS" ? "VPC" : detail.campaignTypeId,
+    )(eventBody);
 
     this.trackingApi
       .trackEvent(addToBasketEvent)
@@ -489,10 +483,9 @@ export class VviinnVprWidget implements ComponentInterface {
   async trackAddToWishlist({ detail }: ProductCardEvent) {
     const eventBody = this.productCardEventDataToEventBody(detail);
 
-    const addToWishlistEvent: WidgetEvent =
-      this.campaignType === "VCS"
-        ? createAddToWishlistVpcEvent(eventBody)
-        : createAddToWishlistVprEvent(eventBody);
+    const addToWishlistEvent: WidgetEvent = createAddToWishlistEvent(
+      this.campaignType === "VCS" ? "VPC" : "VPR",
+    )(eventBody);
 
     this.trackingApi
       .trackEvent(addToWishlistEvent)
@@ -520,10 +513,9 @@ export class VviinnVprWidget implements ComponentInterface {
       ...rest,
     };
 
-    const widgetEvent: WidgetEvent =
-      this.campaignType === "VCS"
-        ? createWidgetVpcEvent(eventBody)
-        : createWidgetVprEvent(eventBody);
+    const widgetEvent: WidgetEvent = createWidgetEvent(
+      this.campaignType === "VCS" ? "VPC" : "VPR",
+    )(eventBody);
 
     this.trackingApi.trackEvent(widgetEvent).then(this.setTrackingDeactivated);
   }
@@ -537,9 +529,10 @@ export class VviinnVprWidget implements ComponentInterface {
     };
 
     const resultEvent: ResultViewEvent | ResultLoadEvent =
-      this.campaignType === "VCS"
-        ? createResultVpcEventByType(type)(eventBody)
-        : createResultVprEventByType(type)(eventBody);
+      createResultEventByType(
+        type,
+        this.campaignType === "VCS" ? "VPC" : "VPR",
+      )(eventBody);
 
     this.trackingApi.trackEvent(resultEvent).then(this.setTrackingDeactivated);
   }
@@ -554,10 +547,10 @@ export class VviinnVprWidget implements ComponentInterface {
 
     if (!detail.campaignTypeId) return null;
 
-    const productEvent: ProductEvent =
-      detail.campaignTypeId === "VCS"
-        ? createProductVpcEventByType(eventType)(eventBody)
-        : createProductVprEventByType(eventType)(eventBody);
+    const productEvent: ProductEvent = createProductEventByType(
+      eventType,
+      detail.campaignTypeId === "VCS" ? "VPC" : "VPR",
+    )(eventBody);
 
     return productEvent;
   }

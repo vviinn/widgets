@@ -33,9 +33,9 @@ import {
   WidgetEvent,
 } from "vviinn-tracking-client-ts";
 import {
-  createWidgetVpsEvent,
-  createFilterVpsEvent,
-  createSearchEvent,
+  createWidgetEvent,
+  createFilterEvent,
+  createImageSearchEvent,
 } from "../../tracking";
 import {
   BasicEventData,
@@ -454,7 +454,7 @@ export class VviinnVpsWidget {
 
     const { campaignTypeId, ...rest } = this.getBasicEventData();
 
-    const searchEvent: WidgetEvent = createSearchEvent({
+    const searchEvent: WidgetEvent = createImageSearchEvent({
       session_id: this.uiSessionId,
       source: this.imageSource,
       search_area: "manual-selection",
@@ -469,7 +469,7 @@ export class VviinnVpsWidget {
 
     const { campaignTypeId, ...rest } = this.getBasicEventData();
 
-    const searchEvent: WidgetEvent = createSearchEvent({
+    const searchEvent: WidgetEvent = createImageSearchEvent({
       session_id: this.uiSessionId,
       source: this.imageSource,
       search_area: "attention-point",
@@ -485,7 +485,7 @@ export class VviinnVpsWidget {
     this.initResultEvents();
     const { campaignTypeId, ...rest } = this.getBasicEventData();
 
-    const searchEvent: WidgetEvent = createFilterVpsEvent({
+    const searchEvent: WidgetEvent = createFilterEvent("VPS")({
       session_id: this.uiSessionId,
       source: this.imageSource,
       kind: detail.kind,
@@ -546,14 +546,15 @@ export class VviinnVpsWidget {
       ...rest,
     };
 
-    const widgetEvent: WidgetEvent = createWidgetVpsEvent(eventBody);
+    // TODO:
+    const widgetEvent: WidgetEvent = createWidgetEvent("VPS")(eventBody);
     this.trackingApi.trackEvent(widgetEvent).then(this.setTrackingDeactivated);
   }
 
   private trackInitialSearch() {
     const { campaignTypeId, ...rest } = this.getBasicEventData();
 
-    const searchEvent: WidgetEvent = createSearchEvent({
+    const searchEvent: WidgetEvent = createImageSearchEvent({
       session_id: this.uiSessionId,
       search_area: "full",
       source: "upload",

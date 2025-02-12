@@ -36,7 +36,7 @@ import { MicIcon } from "../vviinn-icons/icons/MicIcon";
 import { initializeRecognition, speechTooltip } from "./helpers";
 import Timeout = NodeJS.Timeout;
 import { DefaultApi, WidgetEvent } from "vviinn-tracking-client-ts";
-import { createWidgetTpsEvent } from "../../tracking";
+import { createWidgetEvent } from "../../tracking";
 
 /**
  * @part text-search-container - Container for the text search block.
@@ -233,7 +233,7 @@ export class VviinnTextSearch {
     if (this.showInWidget) {
       if (this.basicEventData && this.uiSessionId) {
         const { campaignTypeId, ...rest } = this.basicEventData;
-        const textSearchStartedEvent: WidgetEvent = createWidgetTpsEvent({
+        const textSearchStartedEvent: WidgetEvent = createWidgetEvent("TPS")({
           action: "search",
           session_id: this.uiSessionId,
           ...rest,

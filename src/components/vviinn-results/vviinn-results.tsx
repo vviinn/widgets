@@ -60,15 +60,12 @@ import {
   TextSearchEventData,
 } from "../../recommendation/events";
 import {
-  createFilterVpsEvent,
-  createFilterTpsEvent,
-  createProductWidgetEventByType,
-  createAddToBasketVpsEvent,
+  createFilterEvent,
+  createProductEventByType,
   createResultEventByType,
-  createAddToBasketTpsEvent,
-  createWidgetTpsEvent,
-  createAddToWishlistVpsEvent,
-  createAddToWishlistTpsEvent,
+  createAddToBasketEvent,
+  createWidgetEvent,
+  createAddToWishlistEvent,
 } from "../../tracking";
 import { RequestDynamicFilterItem } from "../../campaign/VPRCampaignService";
 import i18next from "i18next";
@@ -397,7 +394,7 @@ export class VviinnResults {
     this.setTextSearch(true, detail.isTriggeredByVpsWidget);
 
     const { campaignTypeId, ...rest } = this.getBasicEventData();
-    const textSearchStartedEvent: WidgetEvent = createWidgetTpsEvent({
+    const textSearchStartedEvent: WidgetEvent = createWidgetEvent("TPS")({
       action: "search",
       session_id: this.uiSessionId,
       ...rest,
@@ -460,9 +457,9 @@ export class VviinnResults {
       ...rest,
     };
 
-    const filterEvent: FilterEvent = this.isTextSearch
-      ? createFilterTpsEvent(eventBody)
-      : createFilterVpsEvent(eventBody);
+    const filterEvent: FilterEvent = createFilterEvent(
+      this.isTextSearch ? "TPS" : "VPS",
+    )(eventBody);
 
     this.trackingApi.trackEvent(filterEvent).then(this.setTrackingDeactivated);
   };
@@ -627,9 +624,9 @@ export class VviinnResults {
     delete detail.discount;
 
     const eventBody = this.productCardEventDataToEventBody(detail);
-    const addToBasketEvent: AddToBasketEvent = this.isTextSearch
-      ? createAddToBasketTpsEvent(eventBody)
-      : createAddToBasketVpsEvent(eventBody);
+    const addToBasketEvent: AddToBasketEvent = createAddToBasketEvent(
+      this.isTextSearch ? "TPS" : "VPS",
+    )(eventBody);
 
     this.trackingApi
       .trackEvent(addToBasketEvent)
@@ -645,9 +642,9 @@ export class VviinnResults {
   @Listen("vviinnAddToFavorite")
   trackAddToFavorite({ detail }: ProductCardEvent) {
     const eventBody = this.productCardEventDataToEventBody(detail);
-    const addToWishlistEvent: ProductEvent = this.isTextSearch
-      ? createAddToWishlistTpsEvent(eventBody)
-      : createAddToWishlistVpsEvent(eventBody);
+    const addToWishlistEvent: ProductEvent = createAddToWishlistEvent(
+      this.isTextSearch ? "TPS" : "VPS",
+    )(eventBody);
 
     this.trackingApi
       .trackEvent(addToWishlistEvent)
@@ -712,9 +709,9 @@ export class VviinnResults {
 
     const eventBody = this.productCardEventDataToEventBody(detail);
 
-    const productEvent: ProductEvent = createProductWidgetEventByType(
-      detail.campaignTypeId === "VCS" ? "VPC" : detail.campaignTypeId,
+    const productEvent: ProductEvent = createProductEventByType(
       eventType,
+      detail.campaignTypeId === "VCS" ? "VPC" : detail.campaignTypeId,
     )(eventBody);
 
     return productEvent;
