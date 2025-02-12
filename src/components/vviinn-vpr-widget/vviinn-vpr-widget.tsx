@@ -314,14 +314,8 @@ export class VviinnVprWidget implements ComponentInterface {
   private productCardEventDataToEventBody = (
     eventData: ProductCardEventData,
   ) => {
-    const {
-      productRank,
-      productId,
-      campaignTypeId,
-
-      discount,
-      ...rest
-    } = eventData;
+    const { productRank, productId, campaignTypeId, discount, ...rest } =
+      eventData;
 
     return {
       session_id: this.uiSessionId,

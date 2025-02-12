@@ -545,8 +545,6 @@ export class VviinnVpsWidget {
       session_id: this.uiSessionId,
       ...rest,
     };
-
-    // TODO:
     const widgetEvent: WidgetEvent = createWidgetEvent("VPS")(eventBody);
     this.trackingApi.trackEvent(widgetEvent).then(this.setTrackingDeactivated);
   }
