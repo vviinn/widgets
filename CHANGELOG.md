@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.150.1](https://github.com/vviinn/widgets/compare/v2.150.0...v2.150.1) (2025-02-13)
+
+
+### Bug Fixes
+
+* Show close button for One-click discovery Set ([449529f](https://github.com/vviinn/widgets/commit/449529f6a6764e774423301b8ff0fd962702283c))
+
+## [2.150.0](https://github.com/vviinn/widgets/compare/v2.149.0...v2.150.0) (2025-02-12)
+
+
+### Features
+
+* Send new tracking events: Add to favorite, Text search started, and additional Filter events ([36a0808](https://github.com/vviinn/widgets/commit/36a0808550cb0bbdbf5fe359eda8badbadb9e9ee))
+
+## [2.149.0](https://github.com/vviinn/widgets/compare/v2.148.0...v2.149.0) (2025-02-07)
+
+
+### Features
+
+* Add Storybook's playground for Cropper ([fc0618c](https://github.com/vviinn/widgets/commit/fc0618c58774d8b4ebbe7536dbed760f646ad83d))
+* Save Image modes for Cropper ([fbe64d6](https://github.com/vviinn/widgets/commit/fbe64d620ac3270b4f425d7c374131b0f7429cea))
+
+
+### Bug Fixes
+
+* Cropper issue after uploading the same image ([f6cfd54](https://github.com/vviinn/widgets/commit/f6cfd542b9c7b6c3dbc06c956d9425d623f9710d))
+* use vviinnImageUploadFinished event instead of vviinnSearchIdReceived ([8ae8337](https://github.com/vviinn/widgets/commit/8ae8337ffa18bc8931a6ccf80fdfc795421cf105))
+
 ## [2.148.0](https://github.com/vviinn/widgets/compare/v2.147.1...v2.148.0) (2025-02-04)
 
 

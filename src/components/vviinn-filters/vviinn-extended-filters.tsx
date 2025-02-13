@@ -39,6 +39,7 @@ import {
   searchState,
   SearchStore,
 } from "../../store/search.store";
+import { isIntervalFilter } from "../../filters";
 
 /**
  * @slot vviinn-extended-filters-title - Text on widget's header.
@@ -140,18 +141,18 @@ export class VviinnExtendedFilters {
   }
 
   private getSelectedPriceInterval = () =>
-    (this.requestFilters.find(({ column }) => column === "price")?.values[0] ??
-      {}) as components["schemas"]["interval"];
+    (this.requestFilters.find(({ column }) => isIntervalFilter(column))
+      ?.values[0] ?? {}) as components["schemas"]["interval"];
 
   private handleSelectedFiltersReset = ({
     detail,
   }: CustomEvent<ResetSelectedFiltersEventData>) => {
-    if (this.skipFiltersChanges(detail.isTriggeredByVpsWidget)) return;
+    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.requestFilters = [];
     this.selectedMoreOptions = [];
   };
 
-  private skipFiltersChanges = (isTriggeredByVpsWidget: boolean) =>
+  private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
     (isTriggeredByVpsWidget && !this.showInWidget) ||
     (!isTriggeredByVpsWidget && this.showInWidget);
 
@@ -160,10 +161,18 @@ export class VviinnExtendedFilters {
   }: ExtendedFiltersButtonClickedEvent) => {
     const { isTriggeredByVpsWidget } = detail;
 
-    if (!this.skipFiltersChanges(isTriggeredByVpsWidget)) {
+    if (!this.skipStateChanges(isTriggeredByVpsWidget)) {
       this.showMore = true;
     }
   };
+
+  @Watch("showMore")
+  showMoreWatcher(modalOpen) {
+    this.vviinnFilterTriggered.emit({
+      action: modalOpen ? "open" : "close",
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
+  }
 
   componentDidRender() {
     this.replaceSlotsContent();
@@ -272,7 +281,7 @@ export class VviinnExtendedFilters {
                         )}
                       </button>
 
-                      {mainColumn === "price" &&
+                      {isIntervalFilter(mainColumn) &&
                       this.selectedMoreOptions.includes(mainFilter.column) ? (
                         <vviinn-price-range
                           histogram={(filterOptions as Histogram).filter(
@@ -422,6 +431,11 @@ export class VviinnExtendedFilters {
         (option) => option !== column,
       );
     } else {
+      this.vviinnFilterTriggered.emit({
+        action: "show",
+        kind: column,
+        isTriggeredByVpsWidget: this.showInWidget,
+      });
       this.selectedMoreOptions = [...this.selectedMoreOptions, column];
     }
   }
@@ -433,7 +447,7 @@ export class VviinnExtendedFilters {
 
     if (
       senderElement === this.el ||
-      this.skipFiltersChanges(isTriggeredByVpsWidget)
+      this.skipStateChanges(isTriggeredByVpsWidget)
     )
       return;
 
@@ -464,10 +478,11 @@ export class VviinnExtendedFilters {
       "vviinnSelectedFiltersReset",
       this.handleSelectedFiltersReset,
     );
-    document.addEventListener(
-      "vviinnExtendedFiltersButtonClicked",
-      this.handleExtendedFiltersButtonClicked,
-    );
+    this.mode !== "preview" &&
+      document.addEventListener(
+        "vviinnExtendedFiltersButtonClicked",
+        this.handleExtendedFiltersButtonClicked,
+      );
 
     this.filtersStringWatcher();
   }
@@ -481,10 +496,11 @@ export class VviinnExtendedFilters {
       "vviinnSelectedFiltersReset",
       this.handleSelectedFiltersReset,
     );
-    document.removeEventListener(
-      "vviinnExtendedFiltersButtonClicked",
-      this.handleExtendedFiltersButtonClicked,
-    );
+    this.mode !== "preview" &&
+      document.removeEventListener(
+        "vviinnExtendedFiltersButtonClicked",
+        this.handleExtendedFiltersButtonClicked,
+      );
   }
 
   private resetModal() {
@@ -501,8 +517,8 @@ export class VviinnExtendedFilters {
   }
 
   private priceChangeHandler = (filterValue: DynamicFilterValue) => {
-    const selectedFilter = this.getFilters().find(
-      (filter) => filter.column === "price",
+    const selectedFilter = this.getFilters().find((filter) =>
+      isIntervalFilter(filter.column),
     );
 
     if (selectedFilter) {

@@ -361,3 +361,9 @@ export const energyCertificationsString = JSON.stringify([
     productType: "Product Type",
   },
 ]);
+
+export const imageURLExample =
+  "https://cdn.vviinn.com/assets/merchant/default/cropper-chair-example.jpg";
+
+export const detectedObjectsStringExample =
+  '[{"value":{"classId":96,"class":"Chair","score":98,"rectangle":{"left":0.12358226627111435,"top":0.25867345929145813,"width":0.6543737053871155,"height":0.6931518316268921}},"links":{"rectangle":{"method":"GET","href":"/search/session/674ef5744ce528-88930337?left=0.12358226627111&top=0.25867345929146&width=0.65437370538712&height=0.69315183162689"}}},{"value":{"classId":365,"class":"Picture frame","score":98,"rectangle":{"left":0.15887707471847534,"top":0,"width":0.43178221583366394,"height":0.2065306007862091}},"links":{"rectangle":{"method":"GET","href":"/search/session/674ef5744ce528-88930337?left=0.15887707471848&top=0&width=0.43178221583366&height=0.20653060078621"}}}]';

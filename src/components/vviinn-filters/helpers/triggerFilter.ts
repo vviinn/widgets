@@ -11,10 +11,10 @@ import {
 } from "../../../recommendation/events";
 
 type TriggerResetFiltersParams = {
-  vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
-  vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
   el: HTMLElement;
-  isTriggeredByVpsWidget?: boolean;
+  isTriggeredByVpsWidget: boolean;
+  vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
+  vviinnFiltersChanged?: EventEmitter<ChangedFiltersEventData>;
 };
 
 type TriggerFilterParams = TriggerResetFiltersParams & {
@@ -65,9 +65,10 @@ export const triggerResetFilters = ({
     isTriggeredByVpsWidget,
   });
 
-  vviinnFiltersChanged.emit({
-    filters: [],
-    el,
-    isTriggeredByVpsWidget,
-  });
+  vviinnFiltersChanged &&
+    vviinnFiltersChanged.emit({
+      filters: [],
+      el,
+      isTriggeredByVpsWidget,
+    });
 };

@@ -8,6 +8,7 @@ import {
   Element,
   Event,
   EventEmitter,
+  Fragment,
 } from "@stencil/core";
 import { CrossIcon } from "../../vviinn-icons";
 import { CarouselMode } from "../../vviinn-carousel/vviinn-carousel";
@@ -152,24 +153,26 @@ export class RecommendationsSidebar {
           part="body"
           onAnimationEnd={(e) => this.handleAnimationEnd(e)}
         >
-          {this.mode !== "set" && (
-            <header
-              class={{ "contains-source-img": this.isSourceImageValid() }}
-              part="sidebar-header"
+          <header
+            class={{ "contains-source-img": this.isSourceImageValid() }}
+            part="sidebar-header"
+          >
+            {this.mode !== "set" && (
+              <Fragment>
+                {this.renderSourceImage()}
+                <span class="title" part="recommendations-title">
+                  {this.sidebarTitle}
+                </span>
+              </Fragment>
+            )}
+            <button
+              class="close-sidebar"
+              onClick={() => (this.sidebarState = "closed")}
+              part="close-sidebar"
             >
-              {this.renderSourceImage()}
-              <span class="title" part="recommendations-title">
-                {this.sidebarTitle}
-              </span>
-              <button
-                class="close-sidebar"
-                onClick={() => (this.sidebarState = "closed")}
-                part="close-sidebar"
-              >
-                <CrossIcon />
-              </button>
-            </header>
-          )}
+              <CrossIcon />
+            </button>
+          </header>
 
           <main part="sidebar-content">
             <vviinn-vpr-widget

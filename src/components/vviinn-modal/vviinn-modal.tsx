@@ -17,6 +17,7 @@ import { SecondaryActionIcon } from "../vviinn-icons/";
 import { modalParts } from "../../cssParts";
 import { searchState } from "../../store/search.store";
 import { renderImage } from "../../Image/renderImage";
+import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
 
 @Component({
   tag: "vviinn-modal",
@@ -58,11 +59,10 @@ export class VviinnModal {
     setTimeout(
       () => {
         this.vviinnWidgetClose.emit({
-          widgetType: "VPS",
           campaignTypeId: "VPS",
           campaignTypeName: campaignTypeNames["VPS"],
-          widgetId: this.buttonElementId,
           widgetVersion: this.widgetVersion,
+          ...addIfNotEmpty("widgetId", this.buttonElementId),
         });
       },
       this.slider ? 500 : 0,

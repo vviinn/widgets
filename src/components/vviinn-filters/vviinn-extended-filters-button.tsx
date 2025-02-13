@@ -15,7 +15,6 @@ export class VviinnExtendedFiltersButton {
   @Prop() handleClick: () => void;
   @Prop() showInWidget?: boolean = false;
 
-  /** The filters received */
   @Event({ bubbles: true })
   vviinnExtendedFiltersButtonClicked: EventEmitter<ExtendedFiltersButtonClickedEventData>;
 

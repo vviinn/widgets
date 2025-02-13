@@ -68,7 +68,6 @@ img.source-image {
 
 main {
   padding: 0 var(--spacing-300);
-  min-height: 100px;
 }
 
 :host(.right) main {

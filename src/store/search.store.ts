@@ -46,6 +46,10 @@ import {
 } from "../campaign/VPRCampaignService";
 import { setBodyAndHeaders } from "../network/utils";
 import { encodeToBase64UTF8 } from "../utils/string";
+import {
+  addIfDefined,
+  addIfNotEmpty,
+} from "../utils/collections/collectionsUtils";
 
 const IMAGE_SMALLEST_SIDE_TO_RESIZE = 800;
 const HI_RES_IMAGE_SMALLEST_SIDE_TO_RESIZE = 2000;
@@ -56,11 +60,9 @@ const makeAuthorizedRequest = (
   pipe(
     token,
     processBearerToken,
-    E.map((headers: Headers) => {
-      return {
-        headers,
-      };
-    }),
+    E.map((headers: Headers) => ({
+      headers,
+    })),
   );
 
 export type SearchStoreName = "widget" | "components";
@@ -123,9 +125,10 @@ export const resetStore = (store: SearchStoreName) => {
   });
 };
 
-const updateState =
+const updateImageSearchState =
   (store: SearchStoreName) => async (response: SearchSession) => {
     const state = useStore(store);
+    state.detectedObjects = response.detectedObjects;
     state.selfSearchId = pipe(getLink(response, "self"), extractHrefValue);
     state.results = response.value;
     state.filters = readFilters(foldValueObject(response.filters));
@@ -204,7 +207,7 @@ export const makeRectangularSearchRequest = async (
         makeAuthorizedRequest(state.token),
         TE.fromEither,
         TE.chainW(formRequest(state.rectangleSearchForm, searchRectangle)),
-        TE.map(updateState(store)),
+        TE.map(updateImageSearchState(store)),
       )();
     }),
   );
@@ -237,7 +240,7 @@ export const uploadFile =
         imageSearchSessionClient(request, state.campaignId, state.excluded),
       ),
       TE.map((sessionResponse) => {
-        updateState(store)(sessionResponse);
+        updateImageSearchState(store)(sessionResponse);
         detectObjects(store)(sessionResponse);
         state.loading = false;
         return sessionResponse;
@@ -263,14 +266,10 @@ export const makeTextSearchRequest = async (
 
   const body: TextSearchRequest = {
     query,
-    ...(resultsCount ? { resultsCount } : {}),
-    ...(dynamicFilters
-      ? {
-          dynamicFilters,
-        }
-      : {}),
-    ...(state.campaignId.length ? { campaign: state.campaignId } : {}),
     requestId,
+    ...addIfDefined("resultsCount", resultsCount),
+    ...addIfDefined("dynamicFilters", dynamicFilters),
+    ...addIfNotEmpty("campaign", state.campaignId),
   };
 
   return pipe(
@@ -299,7 +298,7 @@ export const makeSearchIdRequest = async (token: string, searchId: string) => {
     makeAuthorizedRequest(token),
     TE.fromEither,
     TE.chainW(linkRequest(createLinkfromHref(searchId))),
-    TE.map(updateState("components")),
+    TE.map(updateImageSearchState("components")),
   )();
 };
 
@@ -322,7 +321,6 @@ export const makeProductListingPageRequest = async (
       : value;
 
   const body: ProductListingPageRequest = {
-    ...(resultsCount ? { resultsCount } : {}),
     staticFilters: {
       included: [
         {
@@ -331,11 +329,8 @@ export const makeProductListingPageRequest = async (
         },
       ],
     },
-    ...(dynamicFilters
-      ? {
-          dynamicFilters,
-        }
-      : {}),
+    ...addIfDefined("resultsCount", resultsCount),
+    ...addIfDefined("dynamicFilters", dynamicFilters),
   };
 
   return await pipe(
@@ -412,7 +407,7 @@ onChangeWidgetState("activeIonLink", async (newLink: Link) => {
     makeAuthorizedRequest(state.token),
     TE.fromEither,
     TE.chainW(linkRequest(link)),
-    TE.map(updateState("widget")),
+    TE.map(updateImageSearchState("widget")),
     TE.mapLeft((error) => {
       return {
         kind: "network error",

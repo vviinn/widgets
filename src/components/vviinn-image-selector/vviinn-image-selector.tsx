@@ -26,11 +26,9 @@ import {
   shadow: true,
 })
 export class VviinnImageSelector {
-  @Event() vviinnImageUpload: EventEmitter<ImageUploadEventData>;
+  @Event() vviinnImageUploadStarted: EventEmitter<ImageUploadEventData>;
   /** Wrong image format, that isn’t .jpg, .jpeg, png */
   @Event() vviinnNoResult: EventEmitter<NoResultEventData>;
-
-  /** @internal */
   @Event() vviinnImageUploadFinished: EventEmitter<SearchIdEventData>;
 
   @Prop() basicEventData: BasicEventData;
@@ -45,7 +43,7 @@ export class VviinnImageSelector {
   private fileInput: HTMLInputElement;
 
   private async handleInputChange(event: Event) {
-    this.vviinnImageUpload.emit({
+    this.vviinnImageUploadStarted.emit({
       ...this.basicEventData,
       isTriggeredByVpsWidget: this.storeName === "widget",
     });
@@ -65,7 +63,10 @@ export class VviinnImageSelector {
           });
         },
         ({ links }) => {
-          this.vviinnImageUploadFinished.emit({ searchId: links.self.href });
+          this.vviinnImageUploadFinished.emit({
+            searchId: links.self.href,
+            isTriggeredByVpsWidget: this.storeName === "widget",
+          });
         },
       ),
     );

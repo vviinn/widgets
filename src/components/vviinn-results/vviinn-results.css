@@ -167,21 +167,13 @@ vviinn-recommendations-sidebar::part(source-image) {
 
 vviinn-recommendations-sidebar::part(sidebar-header) {
   padding: 0;
+  min-height: 40px;
   margin-bottom: 24px;
-}
-
-vviinn-recommendations-sidebar::part(sidebar-header) {
+  align-items: center;
   justify-items: left;
   text-align: left;
 }
 
 vviinn-recommendations-sidebar::part(sidebar-content) {
-  min-height: 470px;
   padding: 0;
-}
-
-:host(.show-in-widget) vviinn-recommendations-sidebar::part(sidebar-content),
-:host(.matching-discovery)
-  vviinn-recommendations-sidebar::part(sidebar-content) {
-  min-height: unset;
 }

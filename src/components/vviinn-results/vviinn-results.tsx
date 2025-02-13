@@ -14,12 +14,14 @@ import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/lib/function";
 import { v4 as uuidv4 } from "uuid";
 import {
+  AddToBasketEvent,
   DefaultApi,
   EventConfirmation,
   FilterEvent,
   ResultLoadEvent,
   ResultViewEvent,
   Widget,
+  WidgetEvent,
 } from "vviinn-tracking-client-ts";
 import { version } from "../../../package.json";
 import {
@@ -59,8 +61,11 @@ import {
 } from "../../recommendation/events";
 import {
   createFilterEvent,
-  createProductWidgetEventByType,
+  createProductEventByType,
   createResultEventByType,
+  createAddToBasketEvent,
+  createWidgetEvent,
+  createAddToWishlistEvent,
 } from "../../tracking";
 import { RequestDynamicFilterItem } from "../../campaign/VPRCampaignService";
 import i18next from "i18next";
@@ -75,6 +80,7 @@ import { productCardParts } from "../../cssParts";
 import { findSlotElements, getSlotNames } from "../../dom";
 import { OneClickDiscoveryResultsMode } from "../../widget/types";
 import { RESULTS_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
+import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
 
 /**
  * @part product-card - Product Card itself.
@@ -146,10 +152,8 @@ export class VviinnResults {
   @Event() vviinnResultLoad: EventEmitter<BasicEventData>;
   /** The search result appears in the viewport */
   @Event() vviinnResultView: EventEmitter<BasicEventData>;
-
   /** The 'searchId' is received for performing a Visual Search */
-  /** @internal */
-  @Event() vviinnSearchIdReceived: EventEmitter<SearchIdEventData>;
+  @Event() vviinnImageUploadFinished: EventEmitter<SearchIdEventData>;
 
   /** The 'query' is received for performing a Text Search */
   /** @internal */
@@ -315,7 +319,7 @@ export class VviinnResults {
         : this.replaceSlotsContent();
   }
 
-  private skipFiltersChanges = (isTriggeredByVpsWidget: boolean) =>
+  private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
     (isTriggeredByVpsWidget && !this.showInWidget) ||
     (!isTriggeredByVpsWidget && this.showInWidget);
 
@@ -381,20 +385,26 @@ export class VviinnResults {
     );
   }
 
-  private searchIdReceivedHandler = ({ detail }: SearchIdEvent) => {
-    resetStore(this.storeName);
+  private imageUploadFinishedHandler = ({ detail }: SearchIdEvent) =>
+    !this.skipStateChanges(detail.isTriggeredByVpsWidget) &&
     this.getResultsBySearchId(detail.searchId);
-  };
 
   private textSearchStartedHandler = async ({ detail }: TextSearchEvent) => {
     this.innerTextSearchQuery = detail.query;
     this.setTextSearch(true, detail.isTriggeredByVpsWidget);
 
-    const { requestId } = await this.getTextSearchResults(
-      this.innerTextSearchQuery,
-    );
-    this.innerTextSearchRequestId = requestId;
+    const { campaignTypeId, ...rest } = this.getBasicEventData();
+    const textSearchStartedEvent: WidgetEvent = createWidgetEvent("TPS")({
+      action: "search",
+      session_id: this.uiSessionId,
+      ...rest,
+    });
+    this.trackingApi.trackEvent(textSearchStartedEvent);
 
+    const response = await this.getTextSearchResults(this.innerTextSearchQuery);
+    if (!response) return;
+
+    this.innerTextSearchRequestId = response.requestId;
     this.resultsSearchFinished.emit();
     this.vviinnSelectedFiltersReset.emit({
       isTriggeredByVpsWidget: this.showInWidget,
@@ -404,7 +414,7 @@ export class VviinnResults {
   private filtersChangedHandler = async ({ detail }: ChangedFiltersEvent) => {
     const { filters, isTriggeredByVpsWidget } = detail;
 
-    if (this.skipFiltersChanges(isTriggeredByVpsWidget)) return;
+    if (this.skipStateChanges(isTriggeredByVpsWidget)) return;
 
     if (this.filterColumn && this.filterValue) {
       this.getResultsByCategory(filters);
@@ -427,25 +437,30 @@ export class VviinnResults {
   private filterTriggeredHandler = ({
     detail,
   }: CustomEvent<DynamicFilterInternalData>) => {
-    if (
-      this.trackingDeactivated ||
-      this.skipFiltersChanges(detail.isTriggeredByVpsWidget)
-    )
-      return;
-
+    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     const { action, kind, customTrigger, isTriggeredByVpsWidget } = detail;
     const { campaignTypeId, ...rest } = this.getBasicEventData(customTrigger);
 
-    if (customTrigger) this.setTextSearch(true, isTriggeredByVpsWidget);
-    this.initResultEvents();
+    if (action === "select" || action === "deselect" || action === "reset")
+      this.initResultEvents();
 
-    const filterEvent: FilterEvent = createFilterEvent({
+    if (customTrigger === "TPS") {
+      this.setTextSearch(true, isTriggeredByVpsWidget);
+      return;
+    }
+
+    const eventBody = {
       session_id: this.uiSessionId,
       typ: "filter_event",
       action,
       kind,
       ...rest,
-    });
+    };
+
+    const filterEvent: FilterEvent = createFilterEvent(
+      this.isTextSearch ? "TPS" : "VPS",
+    )(eventBody);
+
     this.trackingApi.trackEvent(filterEvent).then(this.setTrackingDeactivated);
   };
 
@@ -456,14 +471,11 @@ export class VviinnResults {
   };
 
   private widgetCloseHandler = () => {
-    if (this.showInWidget) {
-      this.oneClickDiscoveryAppendIndex = undefined;
-      this.oneClickDiscoverySelectedIndex = undefined;
-    }
+    this.oneClickDiscoveryAppendIndex = undefined;
+    this.oneClickDiscoverySelectedIndex = undefined;
   };
 
   connectedCallback() {
-    if (!this.showInWidget) resetStore("components");
     this.state = this.showInWidget ? searchState : componentsState;
     this.storeName = this.showInWidget ? "widget" : "components";
     if (this.el.id) this.widgetElementId = this.el.id;
@@ -478,8 +490,8 @@ export class VviinnResults {
     }
 
     document.addEventListener(
-      "vviinnSearchIdReceived",
-      this.searchIdReceivedHandler,
+      "vviinnImageUploadFinished",
+      this.imageUploadFinishedHandler,
     );
 
     document.addEventListener(
@@ -497,7 +509,10 @@ export class VviinnResults {
       this.filterTriggeredHandler,
     );
 
-    document.addEventListener("vviinnImageUpload", this.uploadTriggeredHandler);
+    document.addEventListener(
+      "vviinnImageUploadStarted",
+      this.uploadTriggeredHandler,
+    );
 
     document.addEventListener("vviinnWidgetClose", this.widgetCloseHandler);
 
@@ -514,8 +529,8 @@ export class VviinnResults {
     resetStore(this.storeName);
 
     document.removeEventListener(
-      "vviinnSearchIdReceived",
-      this.searchIdReceivedHandler,
+      "vviinnImageUploadFinished",
+      this.imageUploadFinishedHandler,
     );
 
     document.removeEventListener(
@@ -602,21 +617,45 @@ export class VviinnResults {
     }
   }
 
+  @Listen("vviinnAddToBasket")
+  trackAddToBasket({ detail }: ProductCardEvent) {
+    delete detail.discount;
+
+    const eventBody = this.productCardEventDataToEventBody(detail);
+    const addToBasketEvent: AddToBasketEvent = createAddToBasketEvent(
+      this.isTextSearch ? "TPS" : "VPS",
+    )(eventBody);
+
+    this.trackingApi
+      .trackEvent(addToBasketEvent)
+      .then(this.setTrackingDeactivated);
+  }
+
   private setTrackingDeactivated = (result: EventConfirmation) => {
     if (result.status === "rejected") {
       this.trackingDeactivated = true;
     }
   };
 
+  @Listen("vviinnAddToFavorite")
+  trackAddToFavorite({ detail }: ProductCardEvent) {
+    const eventBody = this.productCardEventDataToEventBody(detail);
+    const addToWishlistEvent: ProductEvent = createAddToWishlistEvent(
+      this.isTextSearch ? "TPS" : "VPS",
+    )(eventBody);
+
+    this.trackingApi
+      .trackEvent(addToWishlistEvent)
+      .then(this.setTrackingDeactivated);
+  }
+
   private trackResultEvent(type: ResultEventType) {
-    if (this.trackingDeactivated) return;
-    const { campaignTypeId, widgetType, widget, ...rest } =
-      this.getBasicEventData();
+    const { campaignTypeId, ...rest } = this.getBasicEventData();
 
     let resultEvent: ResultViewEvent | ResultLoadEvent =
       createResultEventByType(
         type,
-        widget ?? "VPS",
+        campaignTypeId as Widget,
       )({
         session_id: this.uiSessionId,
         ...rest,
@@ -646,31 +685,31 @@ export class VviinnResults {
     }
   }
 
+  private productCardEventDataToEventBody = (
+    eventData: ProductCardEventData,
+  ) => {
+    const { productRank, productId, campaignTypeId, clickEvent, ...rest } =
+      eventData;
+
+    return {
+      session_id: this.uiSessionId,
+      rank: productRank,
+      product: productId,
+      ...rest,
+    };
+  };
+
   private getProductTrackEvent(
     detail: ProductCardEventData,
     eventType: ProductEventType,
   ): ProductEvent | null {
     if (this.trackingDeactivated) return null;
 
-    const {
-      productRank,
-      productId,
-      campaignTypeId,
-      widgetType,
-      clickEvent,
-      ...rest
-    } = detail;
+    const eventBody = this.productCardEventDataToEventBody(detail);
 
-    const eventBody = {
-      session_id: this.uiSessionId,
-      rank: productRank,
-      product: productId,
-      ...rest,
-    };
-
-    const productEvent: ProductEvent = createProductWidgetEventByType(
-      widgetType === "VCS" ? "VPC" : widgetType,
+    const productEvent: ProductEvent = createProductEventByType(
       eventType,
+      detail.campaignTypeId === "VCS" ? "VPC" : detail.campaignTypeId,
     )(eventBody);
 
     return productEvent;
@@ -680,12 +719,11 @@ export class VviinnResults {
     const textSearchCriteria = this.isTextSearch || customTrigger === "TPS";
     const activeCampaign = textSearchCriteria ? "TPS" : "VPS";
     return {
-      widgetType: activeCampaign,
       campaignTypeId: activeCampaign,
       campaignTypeName: campaignTypeNames[activeCampaign],
-      widgetId: this.widgetElementId,
       widgetVersion: version,
-      widget: textSearchCriteria ? "TPS" : undefined,
+      widget: activeCampaign,
+      ...addIfNotEmpty("widgetId", this.widgetElementId),
     };
   };
 
@@ -757,9 +795,11 @@ export class VviinnResults {
           >
             <vviinn-vpr-button
               onClick={() => oneClickDiscoveryHandler(i)}
+              apiPath={this.apiPath}
               token={this.token}
               productId={p.productId}
               addStyle={false}
+              sidebarTitle=""
               appendSidebarTo={
                 isOneClickDiscoveryAppendMode
                   ? "one-click-discovery-append"

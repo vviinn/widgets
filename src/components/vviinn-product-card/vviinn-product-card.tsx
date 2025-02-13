@@ -51,6 +51,7 @@ import {
 } from "../../interfaces/recommendation";
 import { resources } from "../../locale";
 import { productCardParts } from "../../cssParts";
+import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
 
 /**
  * @part image-container - Product Card's image container.
@@ -187,7 +188,7 @@ export class VviinnProductCard {
   vviinnAddToBasket: EventEmitter<ProductCardEventData>;
   /** User clicks on Favorite button */
   @Event({ bubbles: true })
-  vviinnFavorite: EventEmitter<ProductCardEventData>;
+  vviinnAddToFavorite: EventEmitter<ProductCardEventData>;
 
   /** @internal */
   @Event({ bubbles: true })
@@ -251,6 +252,7 @@ export class VviinnProductCard {
     const { animationInterval } = detail;
     this.isTransitioning = true;
     this.basketButonPressed = false;
+    this.favoriteButonPressed = false;
 
     const animationTimer = setTimeout(() => {
       this.isTransitioning = false;
@@ -290,21 +292,19 @@ export class VviinnProductCard {
     }
   }
 
-  private getWidgetType() {
-    return this.campaignTypeId as CampaignTypeId;
-  }
-
   private getProductData(): ProductCardEventData {
     return {
       productId: this.productId,
       productRank: this.index,
       productName: this.productTitle,
       productType: this.productType,
-      widgetType: this.getWidgetType(),
       campaignTypeId: this.campaignTypeId,
       campaignTypeName: campaignTypeNames[this.campaignTypeId],
-      widgetId: this.buttonElementId ?? this.widgetElementId,
       widgetVersion: this.widgetVersion,
+      ...addIfNotEmpty(
+        "widgetId",
+        this.buttonElementId ?? this.widgetElementId,
+      ),
     };
   }
 
@@ -329,7 +329,7 @@ export class VviinnProductCard {
   }
 
   private favoriteButtonClickHandler() {
-    this.vviinnFavorite.emit({
+    this.vviinnAddToFavorite.emit({
       ...this.productData,
     });
     this.favoriteButonPressed = !this.favoriteButonPressed;
@@ -401,7 +401,7 @@ export class VviinnProductCard {
           <div class="product-card-actions-top" part="product-card-actions-top">
             <button
               class={{
-                hidden: !this.favoriteShow,
+                hidden: !this.favoriteShow || this.isSourceProduct,
               }}
               part="favorite-button"
               onClick={this.favoriteButtonClickHandler.bind(this)}
