@@ -126,6 +126,7 @@
 .no-result-text {
   font-family: var(--font-family, var(--font-family-base));
   font-size: 20px;
+  padding-right: 12px;
 }
 
 .visually-hidden {

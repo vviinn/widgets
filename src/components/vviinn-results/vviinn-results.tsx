@@ -471,10 +471,8 @@ export class VviinnResults {
   };
 
   private widgetCloseHandler = () => {
-    if (this.showInWidget) {
-      this.oneClickDiscoveryAppendIndex = undefined;
-      this.oneClickDiscoverySelectedIndex = undefined;
-    }
+    this.oneClickDiscoveryAppendIndex = undefined;
+    this.oneClickDiscoverySelectedIndex = undefined;
   };
 
   connectedCallback() {
@@ -797,9 +795,11 @@ export class VviinnResults {
           >
             <vviinn-vpr-button
               onClick={() => oneClickDiscoveryHandler(i)}
+              apiPath={this.apiPath}
               token={this.token}
               productId={p.productId}
               addStyle={false}
+              sidebarTitle=""
               appendSidebarTo={
                 isOneClickDiscoveryAppendMode
                   ? "one-click-discovery-append"
