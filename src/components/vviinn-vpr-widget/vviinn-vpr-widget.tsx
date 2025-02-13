@@ -717,11 +717,11 @@ export class VviinnVprWidget implements ComponentInterface {
               this.isSetMode) ||
             this.hasErrorOnLoad) &&
             !this.recommendationsLoading && (
-              <p class="no-result-text">
+              <div class="no-result-text">
                 {this.noResultText.length
                   ? this.noResultText
                   : i18next.t("noResultText")}
-              </p>
+              </div>
             )}
         </Fragment>
       </Host>
