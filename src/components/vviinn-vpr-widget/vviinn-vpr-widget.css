@@ -99,6 +99,7 @@
 .update-button {
   display: flex;
   align-items: center;
+  align-self: flex-end;
   justify-content: center;
   font-family: var(--font-family, var(--font-family-base));
   color: #525252;
