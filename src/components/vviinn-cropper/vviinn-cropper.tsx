@@ -171,6 +171,11 @@ export class VviinnCropper {
       height: height * data.height,
     };
     this.cropper.setCropBoxData(ValidateCropBoxData(cropBoxData));
+    makeRectangularSearchRequest(
+      this.storeName,
+      this.searchArea,
+      this.imageBounds,
+    );
   }
 
   private getDetectedObjects = () =>
