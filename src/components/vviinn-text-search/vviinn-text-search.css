@@ -42,6 +42,7 @@
   border: none;
   outline: none;
   overflow: hidden;
+  text-overflow: ellipsis;
   flex-grow: 2;
   width: 150px;
 }
