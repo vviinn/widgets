@@ -6,6 +6,12 @@ import { clickHandlers } from "../../components"
 
 # Installation
 
+For releases, we use [Semantic Versioning](https://docs.npmjs.com/about-semantic-versioning) and tags. You can find all available versions and tags on the [npm page](https://www.npmjs.com/package/vviinn-widgets?activeTab=versions). In further sections, **VERSION** will be a placeholder for the version number or tag.
+ 
+* **latest** tag is used by default and contains the latest stable version.
+* **beta** tag can contain pre-released features.
+* **2.148.0** is an example of the exact version.
+
 Since `Vviinn Widgets` are developed as [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components), there will be different installation steps depending on your environment.
 <div id="main">
 <div className="tab overflow-auto">
@@ -24,6 +30,10 @@ Since `Vviinn Widgets` are developed as [Web Components](https://developer.mozil
 
 Paste scripts to the `head` section of your page.<br />
 Script with `nomodule` attribute is needed only for supporting browsers without JavaScript modules feature.
+
+
+<script type="module" src="https://cdn.jsdelivr.net/npm/vviinn-widgets@VERSION/www/build/vviinn-widgets.esm.js"></script>
+<script nomodule src="https://cdn.jsdelivr.net/npm/vviinn-widgets@VERSION/www/build/vviinn-widgets.js"></script>
 
 ```html
 <script
@@ -84,7 +94,7 @@ document.append(component);
 
 To use widgets as ES6 modules you should install them from [NPM](https://www.npmjs.com/package/vviinn-widgets).
 
-`npm i STORYBOOK_NPM_PACKAGE_NAME`
+`npm install vviinn-widgets@VERSION`
 
 And then add it to your JavaScript code:
 
