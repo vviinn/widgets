@@ -56,7 +56,7 @@ export class VviinnCropper {
 
   @Prop({ mutable: true }) detectedObjectsString?: string;
   @Prop({ mutable: true }) url: string;
-  @Prop({ mutable: true }) width: number;
+  @Prop({ mutable: true }) width: number = DEFAULT_IMAGE_SIZE;
 
   /** @internal */
   @Prop({ mutable: true }) height?: number;
@@ -249,9 +249,12 @@ export class VviinnCropper {
       sequenceToOption(this.state.image),
       O.map(([refImage]) => {
         if (!refImage) return null;
-        const [width, height] = getImageSizes(refImage, DEFAULT_IMAGE_SIZE);
-        this.width = width;
-        this.height = height;
+
+        if (this.showInWidget) {
+          const [width, height] = getImageSizes(refImage, DEFAULT_IMAGE_SIZE);
+          this.width = width;
+          this.height = height;
+        }
         this.url = refImage.src;
       }),
       O.getOrElse(() => null),
