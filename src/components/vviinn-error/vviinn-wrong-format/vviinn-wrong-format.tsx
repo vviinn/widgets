@@ -4,6 +4,7 @@ import { WarningIcon } from "../../vviinn-icons";
 
 @Component({
   tag: "vviinn-wrong-format",
+  styleUrl: "vviinn-wrong-format.css",
   shadow: true,
 })
 export class VviinnWrongFormat {
