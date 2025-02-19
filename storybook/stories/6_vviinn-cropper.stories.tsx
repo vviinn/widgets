@@ -17,7 +17,7 @@ const Template = (args) => `
       save-image-mode="${args.saveImageMode}"
       url="${args.url}"></vviinn-cropper> 
       
-    <vviinn-extended-filters mode="preview"></vviinn-extended-filters>
+    <vviinn-extended-filters mode="preview" locale="en-US"></vviinn-extended-filters>
   </div>
   <div class="search-page-wrapper-result">
     <vviinn-text-search 
@@ -26,11 +26,12 @@ const Template = (args) => `
       mode="extended"
       show-in-widget="${args.showInWidget}"
       placeholder="Upload an image to see the cropper"
+      locale="en-US"
     >
     </vviinn-text-search>
 
     <div class="search-page-wrapper-result-filters">
-      <vviinn-extended-filters></vviinn-extended-filters>
+      <vviinn-extended-filters locale="en-US"></vviinn-extended-filters>
       <vviinn-selected-filters></vviinn-selected-filters>
     </div>
 
@@ -38,6 +39,7 @@ const Template = (args) => `
       token="${args.token}"
       api-path="${args.apiPath}"
       one-click-discovery-mode="append-grid"
+      locale="en-US"
     ></vviinn-results>
   </div>
 </div>`;
@@ -50,6 +52,6 @@ Default.args = {
   apiPath: process.env.STORYBOOK_API_PATH,
   saveImageMode: "never",
   url: "",
-  width: 300,
+  width: 288,
   detectedObjectsString: "",
 };

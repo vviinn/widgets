@@ -56,7 +56,7 @@ export class VviinnCropper {
 
   @Prop({ mutable: true }) detectedObjectsString?: string;
   @Prop({ mutable: true }) url: string;
-  @Prop({ mutable: true }) width: number = DEFAULT_IMAGE_SIZE;
+  @Prop({ mutable: true }) width: number = 288;
 
   /** @internal */
   @Prop({ mutable: true }) height?: number;
