@@ -1,21 +1,20 @@
 import { pipe } from "fp-ts/lib/function";
 import { ValueObject } from "../network/ion/ValueObject";
 import { Link } from "../network/ion/Link";
-import { Form } from "../network/ion/Form";
 import { makeRequest } from "../network/request";
 import { createInitPostRequest, getApiPath } from "../network/utils";
-import { Recommendation } from "../interfaces/recommendation";
 import * as TE from "fp-ts/TaskEither";
 import * as E from "fp-ts/Either";
 import * as O from "fp-ts/Option";
-import { RectangleAlt } from "../geometry/RectangleAlt";
 import { Eq } from "fp-ts/lib/Eq";
 import { BasicError, emptyApiPathError } from "../error";
 import { sequenceToEither } from "../utils/either";
 import { arrayToQueryString } from "../utils/collections/collectionsUtils";
 import {
   ProductListingPageResponse,
+  Rectangle,
   TextSearchResponse,
+  VisualSearchResponse,
 } from "../interfaces/search";
 
 export type SearchType = "text" | "image";
@@ -29,60 +28,23 @@ export interface SearchSessionFilter {
   filters: Link[];
 }
 
-export const readFilters = (
-  filters: SearchSessionFilters,
-): SearchSessionFilter[] =>
-  Object.entries(filters).map(([name, filters]) => {
-    return { name, filters };
-  });
-
-type HasFilters = {
-  readonly filters: ValueObject<SearchSessionFilters>;
+export const detectedObjectEq: Eq<Rectangle> = {
+  equals: (x: Rectangle, y: Rectangle) =>
+    x.left === y.left &&
+    x.top === y.top &&
+    x.height === y.height &&
+    x.width === y.width,
 };
 
-export type DetectedObject = {
-  class: string;
-  score: number;
-  rectangle: RectangleAlt;
-};
+export type ObjectsDetectedEvent = CustomEvent<ValueObject<Rectangle>[]>;
 
-export const detectedObjectEq: Eq<DetectedObject> = {
-  equals: (x: DetectedObject, y: DetectedObject) =>
-    x.class === y.class &&
-    x.score === y.score &&
-    x.rectangle.left === y.rectangle.left &&
-    x.rectangle.top === y.rectangle.top &&
-    x.rectangle.height === y.rectangle.height &&
-    x.rectangle.width === y.rectangle.width,
-};
-
-type ContainsDetectedObjects = {
-  readonly detectedObjects: ValueObject<DetectedObject>[];
-};
-
-type ContainsRectangleSearch = {
-  readonly searchArea: Form;
-};
-
-type ContainsHiresImageUpload = {
-  readonly uploadHighResolutionImage: Form;
-};
-
-export type SearchSession = ValueObject<Recommendation[]> &
-  HasFilters &
-  Partial<ContainsDetectedObjects> &
-  ContainsRectangleSearch &
-  ContainsHiresImageUpload;
-
-export type ObjectsDetectedEvent = CustomEvent<ValueObject<DetectedObject>[]>;
-
-export const imageSearchSessionClient = (
+export const visualSearchSessionClient = (
   initialData: RequestInit,
   campaignId: string | null,
   excludedFilters: string | null,
   apiPath?: string,
-): TE.TaskEither<BasicError<Response | string>, SearchSession> => {
-  const searchUrl = "search/session";
+): TE.TaskEither<BasicError<Response | string>, VisualSearchResponse> => {
+  const searchUrl = "visual-search";
   const requestUrl = pipe(
     O.fromNullable(campaignId),
     O.fold(
@@ -114,7 +76,7 @@ export const imageSearchSessionClient = (
   return pipe(
     sequenceToEither(apiPathOrError, createInitPostRequest),
     TE.fromEither,
-    TE.chainW(makeRequest<SearchSession>(requestUrl, initialData)),
+    TE.chainW(makeRequest<VisualSearchResponse>(requestUrl, initialData)),
   );
 };
 

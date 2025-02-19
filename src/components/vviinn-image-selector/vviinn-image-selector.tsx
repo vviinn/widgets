@@ -62,9 +62,9 @@ export class VviinnImageSelector {
             reason: kind,
           });
         },
-        ({ links }) => {
+        (response) => {
           this.vviinnImageUploadFinished.emit({
-            searchId: links.self.href,
+            searchId: response.requestId,
             isTriggeredByVpsWidget: this.storeName === "widget",
           });
         },

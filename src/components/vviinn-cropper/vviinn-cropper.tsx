@@ -14,8 +14,7 @@ import Cropper from "cropperjs";
 import styles from "./vviinn-cropper.css";
 import { state } from "../../store/store";
 import { ValueObject } from "../../network/ion/ValueObject";
-import { fromImage, Rectangle } from "../../geometry/Rectangle";
-import { DetectedObject } from "../../searchSession/searchSession";
+import { fromImage } from "../../geometry/Rectangle";
 import {
   BasicEventData,
   SearchIdEvent,
@@ -40,6 +39,7 @@ import * as O from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/function";
 import { sequenceToOption } from "../../utils/option/option";
 import { getImageSizes } from "../../Image/sizing";
+import { Rectangle } from "../../interfaces/search";
 
 const DEFAULT_IMAGE_SIZE = 288;
 
@@ -67,9 +67,9 @@ export class VviinnCropper {
   /** @internal */
   @Prop() showInWidget: boolean = false;
 
-  @State() detectedObjects: ValueObject<DetectedObject>[] = [];
+  @State() detectedObjects: ValueObject<Rectangle>[] = [];
   @State() cropper: Cropper = null;
-  @State() selectedDetectedObject: ValueObject<DetectedObject>;
+  @State() selectedDetectedObject: ValueObject<Rectangle>;
   @State() imageBounds: Rectangle | null;
   @State() searchArea: Rectangle | null;
   @State() imageElement?: HTMLImageElement;
@@ -153,7 +153,7 @@ export class VviinnCropper {
     if (this.detectedObjectsString && TriggerDetectedObjects) {
       this.detectedObjects = JSON.parse(
         this.detectedObjectsString,
-      ) as ValueObject<DetectedObject>[];
+      ) as ValueObject<Rectangle>[];
     }
   }
 
@@ -161,7 +161,7 @@ export class VviinnCropper {
   selectDetectedObject({ detail }: CustomEvent<SelectObjectEventData>) {
     this.selectedDetectedObject = detail.detectedObject;
     this.searchArea = detail.searchArea;
-    const { top, left, width, height } = detail.detectedObject.value.rectangle;
+    const { top, left, width, height } = detail.detectedObject.value;
     const data = this.cropper.getImageData();
 
     const cropBoxData = {
@@ -171,6 +171,11 @@ export class VviinnCropper {
       height: height * data.height,
     };
     this.cropper.setCropBoxData(ValidateCropBoxData(cropBoxData));
+    makeRectangularSearchRequest(
+      this.storeName,
+      this.searchArea,
+      this.imageBounds,
+    );
   }
 
   private getDetectedObjects = () =>
@@ -187,8 +192,8 @@ export class VviinnCropper {
   private getCropboxData(): Rectangle {
     const { left, top, width, height } = this.cropper.getCropBoxData();
     return {
-      x: left,
-      y: top,
+      left,
+      top,
       width,
       height,
     };
@@ -203,11 +208,11 @@ export class VviinnCropper {
         this.cropper.destroy();
       }
       const imageBounds = fromImage(this.imageElement);
-      const { x, y, width, height } = imageBounds;
+      const { left, top, width, height } = imageBounds;
 
       const searchArea = {
-        x,
-        y,
+        left,
+        top,
         width: width - width * INITIAL_CROP_AREA_OFFSET,
         height: height - height * INITIAL_CROP_AREA_OFFSET,
       };

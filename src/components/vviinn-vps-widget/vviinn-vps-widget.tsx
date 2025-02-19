@@ -665,19 +665,16 @@ export class VviinnVpsWidget {
 
   private resetState() {
     this.resetInnerState();
-    if (this.useComponentsStore) return;
-
     this.slidePosition = 0;
-    this.state.resetCategoryLink = undefined;
-    this.state.activeIonLink = undefined;
-    this.state.image = O.none;
-    this.state.results = [];
-    this.state.filters = [];
-    this.state.dynamicFilters = [];
-    this.state.detectedObjects = [];
-    this.state.rectangleSearchForm = undefined;
     this.state.loading = false;
     this.state.serverError = false;
+
+    if (this.useComponentsStore) return;
+
+    this.state.image = O.none;
+    this.state.results = [];
+    this.state.dynamicFilters = [];
+    this.state.detectedObjects = [];
     this.state.searchType = undefined;
   }
 
@@ -812,12 +809,9 @@ export class VviinnVpsWidget {
                     }}
                   >
                     <div class="filters">
-                      {this.state.filters.map((filter) => (
-                        <search-filters
-                          filter={filter}
-                          basicEventData={this.getBasicEventData()}
-                        />
-                      ))}
+                      <vviinn-filters
+                        filters={this.state.dynamicFilters}
+                      ></vviinn-filters>
                     </div>
                   </div>
                 </div>

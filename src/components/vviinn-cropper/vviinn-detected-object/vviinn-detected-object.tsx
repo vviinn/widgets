@@ -10,24 +10,15 @@ import {
 import { pipe } from "fp-ts/lib/function";
 import * as O from "fp-ts/lib/Option";
 import { ValueObject, foldValueObject } from "../../../network/ion/ValueObject";
-import {
-  DetectedObject,
-  detectedObjectEq,
-} from "../../../searchSession/searchSession";
-import {
-  fromAlt,
-  scaleWithSized,
-  center,
-  Rectangle,
-} from "../../../geometry/Rectangle";
-import {
-  makeRectangularSearchRequest,
-  SearchStoreName,
-} from "../../../store/search.store";
+import { detectedObjectEq } from "../../../searchSession/searchSession";
+import { scaleWithSized, center } from "../../../geometry/Rectangle";
+
 import {
   BasicEventData,
   SelectObjectEventData,
 } from "../../../recommendation/events";
+import { Rectangle } from "../../../interfaces/search";
+import { Sized } from "../../../geometry/Sized";
 
 @Component({
   tag: "vviinn-detected-object",
@@ -35,8 +26,8 @@ import {
   shadow: true,
 })
 export class VviinnDetectedObject {
-  @Prop() detectedObject: ValueObject<DetectedObject>;
-  @Prop() selectedDetectedObject: ValueObject<DetectedObject>;
+  @Prop() detectedObject: ValueObject<Rectangle>;
+  @Prop() selectedDetectedObject: ValueObject<Rectangle>;
   @Prop() basicEventData: BasicEventData;
   @Prop() imageBounds: Rectangle | null;
   @Prop() showInWidget: boolean;
@@ -44,23 +35,19 @@ export class VviinnDetectedObject {
   @Event({ bubbles: true })
   vviinnSelectObject: EventEmitter<SelectObjectEventData>;
 
-  private storeName?: SearchStoreName;
-
-  connectedCallback() {
-    this.storeName = this.showInWidget ? "widget" : "components";
-  }
-
   private getObjectPosition(): [string, string] {
     return pipe(
       O.fromNullable(this.imageBounds),
       O.map((bounds) => {
-        const objectRectangle = fromAlt(
-          foldValueObject(this.detectedObject).rectangle,
+        const objectRectangle = foldValueObject(this.detectedObject);
+        //FIXME: check type casting
+        const { left, top } = pipe(
+          objectRectangle,
+          scaleWithSized(bounds as Sized),
+          center,
         );
 
-        const { x, y } = pipe(objectRectangle, scaleWithSized(bounds), center);
-
-        return [`${x}px`, `${y}px`];
+        return [`${left}px`, `${top}px`];
       }),
       O.getOrElse(() => ["0", "0"]),
     );
@@ -70,14 +57,12 @@ export class VviinnDetectedObject {
     const scaledRect = pipe(
       O.fromNullable(this.imageBounds),
       O.map((bounds) => {
-        const rectangle = foldValueObject(this.detectedObject).rectangle;
-        const transformedRect = fromAlt(rectangle);
-        return scaleWithSized(bounds)(transformedRect);
+        const rectangle = foldValueObject(this.detectedObject);
+        //FIXME: check type casting
+        return scaleWithSized(bounds as Sized)(rectangle);
       }),
       O.toNullable,
     );
-
-    makeRectangularSearchRequest(this.storeName, scaledRect, this.imageBounds);
     this.vviinnSelectObject.emit({
       ...this.basicEventData,
       detectedObject: this.detectedObject,

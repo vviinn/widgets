@@ -325,7 +325,7 @@ export class VviinnResults {
 
   private getResultsBySearchId = async (searchId: string) => {
     if (!searchId) return;
-    await makeSearchIdRequest(this.token, searchId);
+    await makeSearchIdRequest(this.storeName, searchId);
     this.resultsSearchFinished.emit();
   };
 

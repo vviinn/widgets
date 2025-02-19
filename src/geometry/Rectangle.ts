@@ -5,9 +5,7 @@ import {
   pointProductSemigroup,
 } from "./Point";
 import { Sized, sizedDivSemigroup } from "./Sized";
-import { RectangleAlt } from "./RectangleAlt";
-
-export type Rectangle = Point & Sized;
+import { Rectangle } from "../interfaces/search";
 
 export type ClickEvent = Event & { clientX: number; clientY: number };
 
@@ -24,8 +22,8 @@ export const move = (origin: Rectangle, position: Point): Rectangle => {
 
 export const fromImage = (image: HTMLImageElement): Rectangle => {
   return {
-    x: 0,
-    y: 0,
+    left: 0,
+    top: 0,
     width: image.width,
     height: image.height,
   };
@@ -33,18 +31,22 @@ export const fromImage = (image: HTMLImageElement): Rectangle => {
 
 export const fromNaturalImage = (image: HTMLImageElement): Rectangle => {
   return {
-    x: 0,
-    y: 0,
+    left: 0,
+    top: 0,
     width: image.naturalWidth,
     height: image.naturalHeight,
   };
 };
 
 export const getScaleRange = (source: Rectangle, target: Rectangle): Point => {
-  const difference = sizedDivSemigroup.concat(target, source);
+  //FIXME: check type casting
+  const difference = sizedDivSemigroup.concat(
+    target as Point & Sized,
+    source as Point & Sized,
+  );
   return {
-    x: difference.width,
-    y: difference.height,
+    left: difference.width,
+    top: difference.height,
   };
 };
 
@@ -59,16 +61,8 @@ export const scaleSelection = (
 
   return {
     ...newPosition,
-    width: sourceSelection.width * scale.x,
-    height: sourceSelection.height * scale.y,
-  };
-};
-
-export const fromAlt = (r: RectangleAlt): Rectangle => {
-  return {
-    x: r.left,
-    y: r.top,
-    ...r,
+    width: sourceSelection.width * scale.left,
+    height: sourceSelection.height * scale.top,
   };
 };
 
@@ -76,8 +70,8 @@ export const scaleWithSized =
   (s: Sized) =>
   (r: Rectangle): Rectangle => {
     return {
-      x: r.x * s.width,
-      y: r.y * s.height,
+      left: r.left * s.width,
+      top: r.top * s.height,
       width: r.width * s.width,
       height: r.height * s.height,
     };
@@ -87,8 +81,8 @@ export const divideOnSized =
   (s: Sized) =>
   (r: Rectangle): Rectangle => {
     return {
-      x: r.x / s.width,
-      y: r.y / s.height,
+      left: r.left / s.width,
+      top: r.top / s.height,
       width: r.width / s.width,
       height: r.height / s.height,
     };
@@ -96,8 +90,8 @@ export const divideOnSized =
 
 export const center = (r: Rectangle): Point => {
   return {
-    x: r.x + r.width * 0.5,
-    y: r.y + r.height * 0.5,
+    left: r.left + r.width * 0.5,
+    top: r.top + r.height * 0.5,
   };
 };
 

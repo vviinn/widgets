@@ -1,4 +1,4 @@
-import { Rectangle } from "./Rectangle";
+import { Rectangle } from "../interfaces/search";
 import { getClipValue } from "./Clip";
 
 it("should return proper clip css string with Rectangular type", async () => {
@@ -8,8 +8,8 @@ it("should return proper clip css string with Rectangular type", async () => {
   };
 
   const selection: Rectangle = {
-    x: 10,
-    y: 0,
+    left: 10,
+    top: 0,
     width: 10,
     height: 10,
   };

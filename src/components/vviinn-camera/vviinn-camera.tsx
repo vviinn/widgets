@@ -190,9 +190,9 @@ export class VviinnExampleImage {
         () => {
           this.vviinnNoResult.emit(this.basicEventData);
         },
-        ({ links }) =>
+        (response) =>
           this.vviinnImageUploadFinished.emit({
-            searchId: links.self.href,
+            searchId: response.requestId,
             isTriggeredByVpsWidget: !this.useComponentsStore,
           }),
       ),

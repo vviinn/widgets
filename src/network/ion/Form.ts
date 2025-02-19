@@ -1,13 +1,7 @@
 import * as E from "fp-ts/Either";
-import * as TE from "fp-ts/TaskEither";
 import { pipe } from "fp-ts/lib/function";
 import { Valueable } from "./ValueObject";
 import { Link } from "./Link";
-import { ValueObject } from "./ValueObject";
-import { getApiPath } from "../utils";
-import { makeRequest } from "../request";
-import { sequenceToEither } from "../../utils/either";
-import { BasicError } from "../../error";
 
 type FormRelation = "form" | "edit-form" | "create-form" | "query-form";
 
@@ -94,28 +88,3 @@ const transformSendForm = (form: Form, data: Object): [string, RequestInit] => [
     }),
   },
 ];
-
-export const formRequest =
-  <T>(form: Form, data: Object = {}) =>
-  (payload: RequestInit) =>
-    pipe(
-      sequenceToEither(
-        getApiPath(),
-        pipe(
-          requestFromForm(form, data),
-          E.mapLeft((error: string): BasicError<string> => {
-            return { kind: "app", inner: error };
-          }),
-        ),
-      ),
-      TE.fromEither,
-      TE.chainW((initialData) => {
-        const apiPath = initialData[0];
-        const [formUrl, initObject] = initialData[1];
-
-        return makeRequest<ValueObject<T>>(
-          formUrl,
-          initObject,
-        )([apiPath, payload]);
-      }),
-    );

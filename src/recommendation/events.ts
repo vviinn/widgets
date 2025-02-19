@@ -6,13 +6,12 @@ import {
   Widget,
 } from "vviinn-tracking-client-ts";
 import { ValueObject } from "../network/ion/ValueObject";
-import { DetectedObject } from "../searchSession/searchSession";
 import { ErrorKind } from "../error";
 import {
   DynamicFilterValue,
   RequestDynamicFilterItem,
 } from "../campaign/VPRCampaignService";
-import { Rectangle } from "../geometry/Rectangle";
+import { Rectangle } from "../interfaces/search";
 
 export type CommonEventData = {
   campaignTypeId: "VPR" | "VPS" | "VCS" | "TPS";
@@ -40,7 +39,7 @@ export type NoResultEventData = {
 };
 
 export type SelectObjectEventData = {
-  detectedObject: ValueObject<DetectedObject>;
+  detectedObject: ValueObject<Rectangle>;
   searchArea: Rectangle;
 } & {
   [K in keyof CommonEventData]: CommonEventData[K];
