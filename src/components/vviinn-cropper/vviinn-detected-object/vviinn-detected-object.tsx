@@ -12,7 +12,6 @@ import * as O from "fp-ts/lib/Option";
 import { ValueObject, foldValueObject } from "../../../network/ion/ValueObject";
 import { detectedObjectEq } from "../../../searchSession/searchSession";
 import { scaleWithSized, center } from "../../../geometry/Rectangle";
-
 import {
   BasicEventData,
   SelectObjectEventData,
@@ -63,6 +62,7 @@ export class VviinnDetectedObject {
       }),
       O.toNullable,
     );
+
     this.vviinnSelectObject.emit({
       ...this.basicEventData,
       detectedObject: this.detectedObject,
