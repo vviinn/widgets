@@ -794,43 +794,30 @@ export class VviinnVpsWidget {
                 active: this.isResultSlide(),
               }}
             >
-              {this.isResultSlide() && this.state.searchType === "image" && (
-                <div class="source-wrapper image-wrapper">
-                  <vviinn-cropper
-                    basicEventData={this.getBasicEventData()}
-                    showAspectRatioError={this.showAspectRatioError}
-                    apiPath={this.apiPath}
-                    showInWidget={true}
-                  />
-                  <div
-                    class={{
-                      "filters-wrapper": true,
-                      hidden: this.showAspectRatioError,
-                    }}
-                  >
-                    <div class="filters">
-                      <vviinn-filters
-                        class="preview-filters"
-                        filters={this.state.dynamicFilters}
-                        showInWidget={true}
-                      ></vviinn-filters>
-                    </div>
-                  </div>
-                </div>
-              )}
+              {this.isResultSlide() && (
+                <div
+                  class={`source-wrapper ${this.state.searchType === "text" ? "text-search-wrapper" : "image-wrapper"}`}
+                >
+                  {this.state.searchType === "text" && (
+                    <vviinn-text-search
+                      token={this.token}
+                      showInWidget={true}
+                      searchQuery={this.searchQuery}
+                      apiPath={this.apiPath}
+                      locale={this.locale}
+                      uiSessionId={this.uiSessionId}
+                      basicEventData={this.getBasicEventData(true)}
+                    />
+                  )}
 
-              {this.isResultSlide() && this.state.searchType === "text" && (
-                <div class="source-wrapper text-search-wrapper">
-                  {/* TODO:  */}
-                  <vviinn-text-search
-                    token={this.token}
-                    showInWidget={true}
-                    searchQuery={this.searchQuery}
-                    apiPath={this.apiPath}
-                    locale={this.locale}
-                    uiSessionId={this.uiSessionId}
-                    basicEventData={this.getBasicEventData(true)}
-                  />
+                  {this.state.searchType === "image" && (
+                    <vviinn-cropper
+                      basicEventData={this.getBasicEventData()}
+                      showAspectRatioError={this.showAspectRatioError}
+                      apiPath={this.apiPath}
+                      showInWidget={true}
+                    />
+                  )}
 
                   <div
                     class={{

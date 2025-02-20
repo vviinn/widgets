@@ -166,6 +166,7 @@ export const makeRectangularSearchRequest = async (
   imageBounds: Rectangle | null,
 ) => {
   const state = useStore(store);
+  state.searchType = "image";
   state.loading = true;
   //FIXME: check type casting
   const scaled = divideOnSized(imageBounds as Sized)(searchArea);

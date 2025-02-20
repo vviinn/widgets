@@ -11,10 +11,6 @@
    */
 }
 
-:host(.show-in-widget.preview-filters) {
-  padding-left: 24px;
-}
-
 .filters-modal-list,
 .sub-filters-wrapper,
 .main-filters-list,
@@ -94,7 +90,6 @@ vviinn-price-range {
 .sub-filters-wrapper {
   align-items: center;
   gap: var(--spacing-100);
-  margin-top: 16px;
   margin: 16px -2px 0;
 }
 
@@ -475,10 +470,6 @@ vviinn-price-range {
 }
 
 @media (max-width: 768px) {
-  :host(.show-in-widget.preview-filters) {
-    padding-right: var(--spacing-300);
-  }
-
   .sub-filters-wrapper,
   .selected-filters-wrapper {
     flex-wrap: unset;
