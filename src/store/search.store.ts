@@ -9,7 +9,6 @@ import {
   SearchType,
   productListingPageSessionClient,
 } from "../searchSession/searchSession";
-import { Link } from "../network/ion/Link";
 
 import { getTokenWithBody } from "../utils/token/tokenUtils";
 import { checkFileWithExtention, resizeFileTo } from "./file-processing";
@@ -51,7 +50,6 @@ export type SearchStore = {
   resultViewed: boolean;
   sourceProduct: Recommendation | null;
   dynamicFilters: ResponseDynamicFilterItem[];
-  activeIonLink?: Link;
   detectedObjects: Rectangle[];
   objectDetectionInProgress: boolean;
   searchType?: SearchType;
@@ -107,29 +105,11 @@ const updateImageSearchState =
     state.loading = false;
   };
 
-export const makeRectangularSearchRequest = async (
+const processVisualSearch = (
   store: SearchStoreName,
-  searchArea: Rectangle | null,
-  imageBounds: Rectangle | null,
+  body: VisualSearchRequest,
 ) => {
   const state = useStore(store);
-  state.loading = true;
-  //FIXME: check type casting
-  const scaled = divideOnSized(imageBounds as Sized)(searchArea);
-
-  const searchRectangle = {
-    width: scaled.width,
-    height: scaled.height,
-    left: scaled.left,
-    top: scaled.top,
-  };
-
-  const body: VisualSearchRequest = {
-    requestId: state.selfSearchId,
-    query: {
-      searchArea: searchRectangle,
-    },
-  };
 
   return pipe(
     getTokenWithBody<VisualSearchRequest>(state.token, body),
@@ -148,7 +128,7 @@ export const makeRectangularSearchRequest = async (
       state.loading = false;
       return error;
     }),
-  )();
+  );
 };
 
 export const uploadFile =
@@ -178,32 +158,50 @@ export const uploadFile =
           inner: error,
         }),
       ),
-      TE.chain((body) =>
-        pipe(
-          getTokenWithBody<VisualSearchRequest>(state.token, body),
-          setBodyAndHeaders,
-          TE.fromEither,
-          TE.chain((request) =>
-            visualSearchSessionClient(
-              request,
-              state.campaignId,
-              state.excluded,
-            ),
-          ),
-          TE.map((sessionResponse) => {
-            updateImageSearchState(store)(sessionResponse);
-            state.loading = false;
-            return sessionResponse;
-          }),
-          TE.mapLeft((error) => {
-            state.serverError = true;
-            state.loading = false;
-            return error;
-          }),
-        ),
-      ),
+      TE.chain((body) => processVisualSearch(store, body)),
     );
   };
+
+export const makeRectangularSearchRequest = async (
+  store: SearchStoreName,
+  searchArea: Rectangle | null,
+  imageBounds: Rectangle | null,
+) => {
+  const state = useStore(store);
+  state.loading = true;
+  //FIXME: check type casting
+  const scaled = divideOnSized(imageBounds as Sized)(searchArea);
+
+  const searchRectangle = {
+    width: scaled.width,
+    height: scaled.height,
+    left: scaled.left,
+    top: scaled.top,
+  };
+
+  const body: VisualSearchRequest = {
+    requestId: state.selfSearchId,
+    query: {
+      searchArea: searchRectangle,
+    },
+  };
+  return processVisualSearch(store, body)();
+};
+
+export const makeSearchIdRequest = async (
+  store: SearchStoreName,
+  searchId: string,
+) => {
+  const state = useStore(store);
+  state.searchType = "image";
+  state.loading = true;
+
+  const body: VisualSearchRequest = {
+    requestId: searchId,
+    query: {},
+  };
+  return processVisualSearch(store, body);
+};
 
 export const makeTextSearchRequest = async (
   store: SearchStoreName,
@@ -243,39 +241,6 @@ export const makeTextSearchRequest = async (
       return error;
     }),
   )();
-};
-
-export const makeSearchIdRequest = async (
-  store: SearchStoreName,
-  searchId: string,
-) => {
-  const state = useStore(store);
-  state.searchType = "image";
-  state.loading = true;
-
-  const body: VisualSearchRequest = {
-    requestId: searchId,
-    query: {},
-  };
-
-  return pipe(
-    getTokenWithBody<VisualSearchRequest>(state.token, body),
-    setBodyAndHeaders,
-    TE.fromEither,
-    TE.chain((request) =>
-      visualSearchSessionClient(request, state.campaignId, state.excluded),
-    ),
-    TE.map((sessionResponse) => {
-      updateImageSearchState(store)(sessionResponse);
-      state.loading = false;
-      return sessionResponse;
-    }),
-    TE.mapLeft((error) => {
-      state.serverError = true;
-      state.loading = false;
-      return error;
-    }),
-  );
 };
 
 export const makeProductListingPageRequest = async (

@@ -1,6 +1,5 @@
 import { pipe } from "fp-ts/lib/function";
 import { ValueObject } from "../network/ion/ValueObject";
-import { Link } from "../network/ion/Link";
 import { makeRequest } from "../network/request";
 import { createInitPostRequest, getApiPath } from "../network/utils";
 import * as TE from "fp-ts/TaskEither";
@@ -18,15 +17,6 @@ import {
 } from "../interfaces/search";
 
 export type SearchType = "text" | "image";
-
-export interface SearchSessionFilters {
-  readonly [key: string]: Link[];
-}
-
-export interface SearchSessionFilter {
-  name: string;
-  filters: Link[];
-}
 
 export const detectedObjectEq: Eq<Rectangle> = {
   equals: (x: Rectangle, y: Rectangle) =>
