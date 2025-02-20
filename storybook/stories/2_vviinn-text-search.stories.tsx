@@ -15,7 +15,7 @@ export default {
 const Template = (args) => `
 <div class="search-page-wrapper">
   <div class="search-page-wrapper-aside">
-    <vviinn-cropper width=300></vviinn-cropper> 
+    <vviinn-cropper></vviinn-cropper> 
     <vviinn-extended-filters locale="${args.locale}" mode="preview"></vviinn-extended-filters>
   </div>
   <div class="search-page-wrapper-result">
@@ -25,7 +25,7 @@ const Template = (args) => `
       search-query="${args.searchQuery}"
       mode="${args.mode}"
       locale="${args.locale}"
-      show-in-widget="${args.showInWidget}"
+      placeholder="${args.placeholder}"
     >
     </vviinn-text-search>
 
@@ -52,9 +52,9 @@ TextSearch.args = {
   token: vviinnToken,
   apiPath: process.env.STORYBOOK_API_PATH,
   searchQuery: "",
+  placeholder: "",
   mode: "extended",
   locale: "en-US",
-  showInWidget: false,
 };
 
 TextSearch.parameters = {

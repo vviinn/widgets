@@ -56,7 +56,7 @@ export class VviinnCropper {
 
   @Prop({ mutable: true }) detectedObjectsString?: string;
   @Prop({ mutable: true }) url: string;
-  @Prop({ mutable: true }) width: number;
+  @Prop({ mutable: true }) width: number = 288;
 
   /** @internal */
   @Prop({ mutable: true }) height?: number;
@@ -171,6 +171,11 @@ export class VviinnCropper {
       height: height * data.height,
     };
     this.cropper.setCropBoxData(ValidateCropBoxData(cropBoxData));
+    makeRectangularSearchRequest(
+      this.storeName,
+      this.searchArea,
+      this.imageBounds,
+    );
   }
 
   private getDetectedObjects = () =>
@@ -244,9 +249,12 @@ export class VviinnCropper {
       sequenceToOption(this.state.image),
       O.map(([refImage]) => {
         if (!refImage) return null;
-        const [width, height] = getImageSizes(refImage, DEFAULT_IMAGE_SIZE);
-        this.width = width;
-        this.height = height;
+
+        if (this.showInWidget) {
+          const [width, height] = getImageSizes(refImage, DEFAULT_IMAGE_SIZE);
+          this.width = width;
+          this.height = height;
+        }
         this.url = refImage.src;
       }),
       O.getOrElse(() => null),

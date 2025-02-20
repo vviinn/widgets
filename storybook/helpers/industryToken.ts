@@ -9,8 +9,7 @@ const data = {
     productIdCrossSelling: "105870136716",
     textSearchQuery: "Chair",
     filterValue: "Möbel > Schränke & Regale",
-    description:
-      "company: 'vviinn', site: 'vviinn.com/widgets.vviinn.com site 83'",
+    description: "company: 'vviinn', site: 'widgets.vviinn.com'",
   },
   fashion: {
     token:

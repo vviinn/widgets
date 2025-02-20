@@ -37,7 +37,7 @@ jobs:
       - run: git push --follow-tags origin develop
       - run: npm run update_storybook_changelog
       - run: |
-          git add ./storybook/documentation/change-log/2_changelog.mdx
+          git add ./storybook/documentation/change-log/1_changelog.mdx
           git commit -m '[skip ci] update storybook changelog'
           git push origin develop
 
