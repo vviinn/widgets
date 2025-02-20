@@ -150,6 +150,7 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
 }
 
 .filters-wrapper {
+  display: contents;
   margin-top: 24px;
   overflow-x: auto;
   transform: translateX(-24px);

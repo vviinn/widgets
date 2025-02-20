@@ -51,7 +51,6 @@ export type SearchStore = {
   sourceProduct: Recommendation | null;
   dynamicFilters: ResponseDynamicFilterItem[];
   detectedObjects: Rectangle[];
-  objectDetectionInProgress: boolean;
   searchType?: SearchType;
   image: O.Option<HTMLImageElement>;
 
@@ -67,7 +66,6 @@ const storeDefaults: SearchStore = {
   sourceProduct: null,
   dynamicFilters: [],
   detectedObjects: [],
-  objectDetectionInProgress: false,
   resultLoaded: false,
   resultViewed: false,
   image: O.none,
@@ -200,7 +198,7 @@ export const makeSearchIdRequest = async (
     requestId: searchId,
     query: {},
   };
-  return processVisualSearch(store, body);
+  return processVisualSearch(store, body)();
 };
 
 export const makeTextSearchRequest = async (

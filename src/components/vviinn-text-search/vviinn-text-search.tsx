@@ -97,17 +97,14 @@ export class VviinnTextSearch {
   /** @internal */
   @Prop() basicEventData: BasicEventData;
 
+  // TODO: Use loading from the store
   @State() isLoading = false;
 
   @State() isRecording = false;
 
   @State() showTooltip = false;
 
-  private isShowPreloader = () =>
-    this.state.loading && this.state.searchType === "text";
-
-  private showLoader = () => (this.isLoading = true);
-  private hideLoader = () => (this.isLoading = false);
+  private isShowPreloader = () => this.state.loading;
 
   private isShowRecording = () => this.isRecording;
   private showRecording = () => (this.isRecording = true);
@@ -148,7 +145,7 @@ export class VviinnTextSearch {
       ? createTrackingApi(this.apiPath, this.token)
       : null;
 
-    document.addEventListener("resultsSearchFinished", this.hideLoader);
+    // document.addEventListener("resultsSearchFinished", this.hideLoader);
     document.addEventListener(
       "vviinnFilterTriggered",
       this.filterTriggeredHandler,
@@ -156,7 +153,7 @@ export class VviinnTextSearch {
   }
 
   disconnectedCallback() {
-    document.removeEventListener("resultsSearchFinished", this.hideLoader);
+    // document.removeEventListener("resultsSearchFinished", this.hideLoader);
     document.removeEventListener(
       "vviinnFilterTriggered",
       this.filterTriggeredHandler,
@@ -191,7 +188,7 @@ export class VviinnTextSearch {
     });
     slotChangeListener(this, this.el);
     if (!this.showInWidget && this.searchQuery?.length > 0) {
-      this.showLoader();
+      // this.showLoader();
       this.vviinnTextSearchStarted.emit({
         query: this.searchQuery,
         isTriggeredByVpsWidget: this.showInWidget,
@@ -258,7 +255,7 @@ export class VviinnTextSearch {
         });
       }
     } else {
-      this.showLoader();
+      // this.showLoader();
       this.vviinnTextSearchStarted.emit({
         query: this.searchQuery,
         isTriggeredByVpsWidget: this.showInWidget,

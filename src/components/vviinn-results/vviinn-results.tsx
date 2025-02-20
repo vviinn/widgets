@@ -54,8 +54,6 @@ import {
   ProductEventType,
   ResetSelectedFiltersEventData,
   ResultEventType,
-  SearchIdEvent,
-  SearchIdEventData,
   TextSearchEvent,
   TextSearchEventData,
 } from "../../recommendation/events";
@@ -152,8 +150,6 @@ export class VviinnResults {
   @Event() vviinnResultLoad: EventEmitter<BasicEventData>;
   /** The search result appears in the viewport */
   @Event() vviinnResultView: EventEmitter<BasicEventData>;
-  /** The 'searchId' is received for performing a Visual Search */
-  @Event() vviinnImageUploadFinished: EventEmitter<SearchIdEventData>;
 
   /** The 'query' is received for performing a Text Search */
   /** @internal */
@@ -326,7 +322,6 @@ export class VviinnResults {
   private getResultsBySearchId = async (searchId: string) => {
     if (!searchId) return;
     await makeSearchIdRequest(this.storeName, searchId);
-    this.resultsSearchFinished.emit();
   };
 
   private async getVpsResults(filters?: RequestDynamicFilterItem[]) {
@@ -384,10 +379,6 @@ export class VviinnResults {
       },
     );
   }
-
-  private imageUploadFinishedHandler = ({ detail }: SearchIdEvent) =>
-    !this.skipStateChanges(detail.isTriggeredByVpsWidget) &&
-    this.getResultsBySearchId(detail.searchId);
 
   private textSearchStartedHandler = async ({ detail }: TextSearchEvent) => {
     this.innerTextSearchQuery = detail.query;
@@ -490,11 +481,6 @@ export class VviinnResults {
     }
 
     document.addEventListener(
-      "vviinnImageUploadFinished",
-      this.imageUploadFinishedHandler,
-    );
-
-    document.addEventListener(
       "vviinnTextSearchStarted",
       this.textSearchStartedHandler,
     );
@@ -527,11 +513,6 @@ export class VviinnResults {
 
   disconnectedCallback() {
     resetStore(this.storeName);
-
-    document.removeEventListener(
-      "vviinnImageUploadFinished",
-      this.imageUploadFinishedHandler,
-    );
 
     document.removeEventListener(
       "vviinnTextSearchStarted",
