@@ -810,7 +810,9 @@ export class VviinnVpsWidget {
                   >
                     <div class="filters">
                       <vviinn-filters
+                        class="preview-filters"
                         filters={this.state.dynamicFilters}
+                        showInWidget={true}
                       ></vviinn-filters>
                     </div>
                   </div>
@@ -819,6 +821,7 @@ export class VviinnVpsWidget {
 
               {this.isResultSlide() && this.state.searchType === "text" && (
                 <div class="source-wrapper text-search-wrapper">
+                  {/* TODO:  */}
                   <vviinn-text-search
                     token={this.token}
                     showInWidget={true}
