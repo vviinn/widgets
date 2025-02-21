@@ -103,6 +103,7 @@ vviinn-price-range {
 }
 
 .selected-filters-wrapper {
+  align-items: center;
   gap: var(--spacing-100);
   flex-wrap: wrap;
 }
