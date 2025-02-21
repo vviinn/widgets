@@ -83,11 +83,14 @@ export class VviinnTextSearch {
   @Prop() locale: Locale = "de-DE";
   /** Basic or extended text search with search modal and speech recognition */
   @Prop() mode: SearchBarMode = "basic";
-  /** True, when used inside the widget */
-  @Prop() showInWidget?: boolean = false;
   /** Query for the text search passed from widget */
   @Prop({ mutable: true }) searchQuery?: string;
+  /** Custom placeholder for the text search input */
+  @Prop() placeholder?: string = "";
 
+  /** True, when used inside the widget */
+  /** @internal */
+  @Prop() showInWidget?: boolean = false;
   /** @internal */
   @Prop() apiPath?: string = "https://api.vviinn.com";
   /** uiSessionId from vps-widget */
@@ -125,6 +128,12 @@ export class VviinnTextSearch {
   private triggerTooltipEnd: Timeout;
 
   private tooltipText = speechTooltip();
+  private getPlaceholderText = () =>
+    this.isShowRecording()
+      ? i18next.t("speechRecognition.placeholder")
+      : this.placeholder.length
+        ? this.placeholder
+        : i18next.t("textSearchPlaceholder");
 
   private recognition = initializeRecognition(
     this.locale,
@@ -280,11 +289,7 @@ export class VviinnTextSearch {
             class="text-search-input"
             part="text-search-input"
             type="text"
-            placeholder={i18next.t(
-              this.isShowRecording()
-                ? "speechRecognition.placeholder"
-                : "textSearchPlaceholder",
-            )}
+            placeholder={this.getPlaceholderText()}
             value={this.searchQuery}
             onInput={(event) => this.handleInputChange(event)}
             onKeyUp={(event) => this.handleKeyPress(event as KeyboardEvent)}
