@@ -9,7 +9,7 @@ export default {
 
 const Template = (args) => `
 <div class="search-page-wrapper">
-  <div class="search-page-wrapper-aside">
+  <div class="search-page-wrapper-aside cropper-page">
     <vviinn-cropper
       width="${args.width}"
       detected-objects-string='${args.detectedObjectsString}'
