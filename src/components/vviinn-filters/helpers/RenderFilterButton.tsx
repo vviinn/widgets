@@ -1,9 +1,9 @@
 import { h, JSX } from "@stencil/core";
 
 import {
-  CheckFilterIcon,
-  CloseFilterIcon,
-  SquareFilterIcon,
+  FilterIconCheck,
+  FilterIconClose,
+  FilterIconSquare,
 } from "../../vviinn-icons";
 import {
   DynamicFilterValue,
@@ -53,16 +53,19 @@ export const RenderFilterButton = ({
           ></div>
         )}
         <span part="filters-option-text">{label}</span>
-        <div part="filters-option-icon-wrapper">
+        <div
+          part="filters-option-icon-wrapper"
+          class="filters-option-icon-wrapper"
+        >
           {!showClose ? (
             isSelected ? (
-              <CheckFilterIcon />
+              <FilterIconCheck />
             ) : (
-              <SquareFilterIcon />
+              <FilterIconSquare />
             )
           ) : null}
         </div>
-        {isSelected && showClose && <CloseFilterIcon />}
+        {isSelected && showClose && <FilterIconClose />}
       </button>
     </li>
   );

@@ -322,14 +322,24 @@ export const processSelectedFile =
     )();
 
     const hiResFileResizer = resizeFileTo(HI_RES_IMAGE_SMALLEST_SIDE_TO_RESIZE);
-    const resizeHiResFileTask = pipe(
+    const hiResFileTask = pipe(
       originFile,
       TE.fromEither,
       TE.chainTaskK(hiResFileResizer),
     );
 
-    pipe(
-      resizeHiResFileTask,
+    const hiResFileResult = await hiResFileTask();
+
+    if (store === "components") {
+      await pipe(
+        TE.fromEither(hiResFileResult),
+        TE.chainTaskK(imageFromFileTask),
+        TE.map(setSelectedImage(store)),
+      )();
+    }
+
+    await pipe(
+      TE.fromEither(hiResFileResult),
       TE.chain(uploadFile(store, "highResolutionImage", state.selfSearchId)),
     )();
 

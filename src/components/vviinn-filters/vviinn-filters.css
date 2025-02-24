@@ -98,6 +98,7 @@ vviinn-price-range {
 }
 
 .selected-filters-wrapper {
+  align-items: center;
   gap: var(--spacing-100);
   flex-wrap: wrap;
 }
@@ -291,7 +292,7 @@ vviinn-price-range {
   display: flex;
   padding: var(--spacing-75);
   align-items: center;
-  gap: var(--spacing-25);
+  gap: var(--spacing-50);
 
   border-radius: var(--border-radius-100);
   background-color: var(--surface-bg-color-01);
@@ -437,6 +438,10 @@ vviinn-price-range {
   width: 24px;
   height: 24px;
   border: none;
+}
+
+.filters-option-icon-wrapper {
+  display: contents;
 }
 
 .filters-sub-button-color > span {
