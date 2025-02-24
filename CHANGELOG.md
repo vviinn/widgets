@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.152.0](https://github.com/vviinn/widgets/compare/v2.151.1...v2.152.0) (2025-02-24)
+
+
+### Features
+
+* Use hi-res resized mage to show in Cropper component ([343824d](https://github.com/vviinn/widgets/commit/343824dd40154d1c1663e41ab2233027e091839e))
+
 ### [2.151.1](https://github.com/vviinn/widgets/compare/v2.151.0...v2.151.1) (2025-02-24)
 
 
