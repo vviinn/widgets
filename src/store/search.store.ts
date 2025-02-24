@@ -379,16 +379,23 @@ export const processSelectedFile =
     const session = await pipe(resizeFileTask, TE.chain(uploadFile(store)))();
 
     const hiResFileResizer = resizeFileTo(HI_RES_IMAGE_SMALLEST_SIDE_TO_RESIZE);
-    const resizeHiResFileTask = pipe(
+    const hiResFileTask = pipe(
       originFile,
       TE.fromEither,
       TE.chainTaskK(hiResFileResizer),
     );
 
-    const resizedHiResFile = await resizeHiResFileTask();
+    if (store === "components") {
+      await pipe(
+        hiResFileTask,
+        TE.chainTaskK(imageFromFileTask),
+        TE.map(setSelectedImage(store)),
+      )();
+    }
 
+    const hiResFileResult = await hiResFileTask();
     pipe(
-      sequenceToEither(session, resizedHiResFile),
+      sequenceToEither(session, hiResFileResult),
       E.map(([sessionObject, file]) =>
         uploadHiResFile(store)(sessionObject, file),
       ),
