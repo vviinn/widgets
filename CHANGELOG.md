@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.151.1](https://github.com/vviinn/widgets/compare/v2.151.0...v2.151.1) (2025-02-24)
+
+
+### Bug Fixes
+
+* Fix filter buttons alignment ([9ae1a16](https://github.com/vviinn/widgets/commit/9ae1a166b1a6c430b118653d40370b9e50bf1ec5))
+
 ## [2.151.0](https://github.com/vviinn/widgets/compare/v2.150.1...v2.151.0) (2025-02-20)
 
 
