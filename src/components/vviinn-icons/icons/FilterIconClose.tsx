@@ -1,6 +1,6 @@
 import { h } from "@stencil/core";
 
-export const CloseFilterIcon = () => (
+export const FilterIconClose = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="24"

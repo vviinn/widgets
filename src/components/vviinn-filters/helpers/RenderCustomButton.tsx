@@ -1,5 +1,5 @@
 import { h, JSX } from "@stencil/core";
-import { CloseFilterIcon } from "../../vviinn-icons";
+import { FilterIconClose } from "../../vviinn-icons";
 import { TextIcon } from "../../vviinn-icons/icons/TextIcon";
 
 type RenderCustomButtonProps = {
@@ -22,7 +22,7 @@ export const RenderCustomButton = ({
       >
         {buttonType === "text" && <TextIcon />}
         <span part="filters-option-text">{label}</span>
-        <CloseFilterIcon />
+        <FilterIconClose />
       </button>
     </li>
   );

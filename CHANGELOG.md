@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.152.0](https://github.com/vviinn/widgets/compare/v2.151.1...v2.152.0) (2025-02-24)
+
+
+### Features
+
+* Use hi-res resized mage to show in Cropper component ([343824d](https://github.com/vviinn/widgets/commit/343824dd40154d1c1663e41ab2233027e091839e))
+
+### [2.151.1](https://github.com/vviinn/widgets/compare/v2.151.0...v2.151.1) (2025-02-24)
+
+
+### Bug Fixes
+
+* Fix filter buttons alignment ([9ae1a16](https://github.com/vviinn/widgets/commit/9ae1a166b1a6c430b118653d40370b9e50bf1ec5))
+
+## [2.151.0](https://github.com/vviinn/widgets/compare/v2.150.1...v2.151.0) (2025-02-20)
+
+
+### Features
+
+* Add placeholder prop for Search Bar ([73c0b0f](https://github.com/vviinn/widgets/commit/73c0b0ff6b04ea61c350ff6b332e6fa82b77d5ce))
+* Fix the layout of Cropper Playground and remove the default image ([1b40a44](https://github.com/vviinn/widgets/commit/1b40a4410abf360222f4809b391f096f81952440))
+* Update documentation and clarify the widgets installation process ([ae59003](https://github.com/vviinn/widgets/commit/ae5900311307331bcef932a4c262035461a08ac2))
+
+
+### Bug Fixes
+
+* Fix cropper width property for components, add default value 288 ([d6f9605](https://github.com/vviinn/widgets/commit/d6f9605182e70358e498d5d31a65306187a23b68))
+
 ### [2.150.1](https://github.com/vviinn/widgets/compare/v2.150.0...v2.150.1) (2025-02-13)
 
 

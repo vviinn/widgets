@@ -199,13 +199,14 @@ export class VviinnResults {
   /** Wrap the Product Card's price values in the container. */
   @Prop() addPriceContainer?: boolean = false;
 
-  /** True when we use vviinn-results inside the widget */
-  @Prop() showInWidget?: boolean = false;
   /** One-click Discovery Mode */
   @Prop() oneClickDiscoveryMode?: OneClickDiscoveryResultsMode;
   /** Comma-separated list of campaign IDs */
   @Prop() oneClickDiscoveryCampaigns: string = "";
 
+  /** True when we use vviinn-results inside the widget */
+  /** @internal */
+  @Prop() showInWidget?: boolean = false;
   /** @internal */
   @Prop() apiPath?: string = "https://api.vviinn.com";
   /** Element Id, passed from vps-button */

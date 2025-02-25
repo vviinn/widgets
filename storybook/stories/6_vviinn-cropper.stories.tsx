@@ -1,4 +1,3 @@
-import { imageURLExample } from "../documentation/components/constants";
 import "../documentation/widgets/styles.css";
 import "../styles/search-page.css";
 import { vviinnToken } from "../helpers";
@@ -10,38 +9,49 @@ export default {
 
 const Template = (args) => `
 <div class="search-page-wrapper">
+  <div class="search-page-wrapper-aside cropper-page">
     <vviinn-cropper
       width="${args.width}"
       detected-objects-string='${args.detectedObjectsString}'
       api-path="${args.apiPath}"
       save-image-mode="${args.saveImageMode}"
-      url="${args.url}"
-    ></vviinn-cropper>
-
+      url="${args.url}"></vviinn-cropper> 
+      
+    <vviinn-extended-filters mode="preview" locale="en-US"></vviinn-extended-filters>
+  </div>
+  <div class="search-page-wrapper-result">
     <vviinn-text-search 
-      token="${vviinnToken}"
+      token="${args.token}"
       api-path="${args.apiPath}"
       mode="extended"
+      show-in-widget="${args.showInWidget}"
+      placeholder="Upload an image to see the cropper"
       locale="en-US"
-    ></vviinn-text-search>
+    >
+    </vviinn-text-search>
+
+    <div class="search-page-wrapper-result-filters">
+      <vviinn-extended-filters locale="en-US"></vviinn-extended-filters>
+      <vviinn-selected-filters></vviinn-selected-filters>
+    </div>
 
     <vviinn-results 
-      token="${vviinnToken}"
+      token="${args.token}"
       api-path="${args.apiPath}"
       one-click-discovery-mode="append-grid"
       locale="en-US"
     ></vviinn-results>
   </div>
-</div>  
-`;
+</div>`;
 
 export const Default = Template.bind({});
 Default.storyName = "Cropper";
 
 Default.args = {
+  token: vviinnToken,
   apiPath: process.env.STORYBOOK_API_PATH,
   saveImageMode: "never",
-  url: imageURLExample,
-  width: 300,
+  url: "",
+  width: 288,
   detectedObjectsString: "",
 };
