@@ -24,7 +24,6 @@ const Template = (args) => `
       token="${args.token}"
       api-path="${args.apiPath}"
       mode="extended"
-      show-in-widget="${args.showInWidget}"
       placeholder="Upload an image to see the cropper"
       locale="en-US"
     >

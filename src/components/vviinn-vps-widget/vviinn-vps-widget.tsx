@@ -869,6 +869,7 @@ export class VviinnVpsWidget {
                   imageResolutionWidth={this.imageResolutionWidth}
                   currency-sign={this.currencySign}
                   locale={this.locale}
+                  pricePrefix={this.pricePrefix}
                   productDetailsNewTab={this.productDetailsNewTab}
                   productDetailsRedirect={this.productDetailsRedirect}
                   addToBasketShow={this.addToBasketShow}

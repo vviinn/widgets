@@ -1,6 +1,5 @@
-import { generalArgs } from "../../src/components/vviinn-results/stories/generalArgs";
 import { ResultsTemplate } from "../../src/components/vviinn-results/stories/ResultsTemplate";
-import { filterValue } from "../helpers";
+import { filterValue, vviinnToken } from "../helpers";
 import "../styles/search-page.css";
 import "../documentation/widgets/styles.css";
 
@@ -14,5 +13,20 @@ ProductList.storyName = "Product List";
 ProductList.args = {
   filterColumn: "product_type",
   filterValue,
-  ...generalArgs,
+  token: vviinnToken,
+  apiPath: process.env.STORYBOOK_API_PATH,
+  resultsCount: 12,
+  imageResolutionWidth: 500,
+  currencySign: "€",
+  pricePrefix: "",
+  locale: "en-US",
+  productDetailsRedirect: true,
+  productDetailsNewTab: false,
+  addToBasketShow: false,
+  uiSessionId: "",
+  searchId: "",
+  oneClickDiscoveryMode: "modal",
+  addPriceContainer: false,
+  favoriteShow: false,
+  oneClickDiscoveryCampaigns: "",
 };
