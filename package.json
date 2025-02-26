@@ -35,7 +35,7 @@
   "license": "MIT",
   "dependencies": {
     "@rgba-image/lanczos": "^0.1.1",
-    "@sentry/browser": "^6.15.0",
+    "@sentry/browser": "^9.1.0",
     "@sentry/tracing": "^6.15.0",
     "@types/dom-speech-recognition": "^0.0.4",
     "@types/google.analytics": "0.0.41",
@@ -63,6 +63,7 @@
     "@stencil/store": "^2.0.8",
     "@types/jest": "^27.0.3",
     "@types/uuid": "^8.3.4",
+    "autoprefixer": "^10.4.20",
     "babel-loader": "^9.1.2",
     "jest": "^27.0.3",
     "jest-cli": "^27.4.5",
@@ -71,7 +72,6 @@
     "puppeteer": "^22.14.0",
     "rollup-plugin-dotenv": "^0.5.0",
     "storybook-addon-designs": "^6.2.1",
-    "vite-plugin-replace": "^0.1.1",
     "yocto-queue": "^1.0.0"
   }
 }
