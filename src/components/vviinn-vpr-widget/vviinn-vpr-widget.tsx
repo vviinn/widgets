@@ -21,7 +21,7 @@ import * as E from "fp-ts/lib/Either";
 import { version } from "../../../package.json";
 
 import { createBearAuthedHeader } from "./token-helpers";
-import { state } from "../../store/store";
+import { state, trackEvent, updateGlobalState } from "../../store/store";
 import { CampaignName, campaignTypeNames } from "../../campaign/Campaign";
 import { getRecommendationsService } from "../../campaign/CampaignService";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
@@ -29,21 +29,17 @@ import { Recommendation } from "../../interfaces/recommendation";
 import { SlotSkeleton, slotChangeListener } from "../customized-slots";
 
 import {
-  DefaultApi,
-  EventConfirmation,
   ResultLoadEvent,
   ResultViewEvent,
   WidgetAction,
   WidgetEvent,
 } from "vviinn-tracking-client-ts";
-import { createTrackingApi } from "../../openApi";
 import {
   ProductCardEvent,
   BasicEventData,
   ProductCardEventData,
   ProductEventType,
   ProductEvent,
-  ResultEvent,
   ResultEventType,
   ChangedFiltersEventData,
 } from "../../recommendation/events";
@@ -211,7 +207,6 @@ export class VviinnVprWidget implements ComponentInterface {
   @State() dynamicFilters: ResponseDynamicFilterItem[] = [];
   @State() sourceProduct: Recommendation | null = null;
   @State() recommendationsLoading: boolean = false;
-  @State() useTracking: boolean = true;
   @State() hasErrorOnLoad: boolean = false;
   @State() updatingAllCards: boolean = false;
   @State() updatedCardsAmount: number = 0;
@@ -266,7 +261,6 @@ export class VviinnVprWidget implements ComponentInterface {
   private isSetMode: boolean;
   private isGridMode: boolean;
   private requestDynamicFilters: RequestDynamicFilterItem[] = [];
-  trackingApi: DefaultApi;
   uiSessionId: string;
 
   private getBasicEventData(): BasicEventData {
@@ -297,12 +291,6 @@ export class VviinnVprWidget implements ComponentInterface {
   ): Recommendation | undefined {
     return this.recommendations.find((r) => r.productId === id);
   }
-
-  deactivateTrackingOnRejected = (result: EventConfirmation) => {
-    if (result.status === "rejected") {
-      this.useTracking = false;
-    }
-  };
 
   private replaceSlotsContent() {
     const slots = this.el.querySelectorAll("[slot]");
@@ -343,7 +331,7 @@ export class VviinnVprWidget implements ComponentInterface {
 
   @Watch("apiPath")
   handleApiPathChange(newPath: string) {
-    state.apiPath = newPath;
+    updateGlobalState({ apiPath: newPath });
     this.getRecommendations();
   }
 
@@ -367,13 +355,15 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   connectedCallback() {
-    state.apiPath = this.apiPath;
-    state.pricePrefix = this.pricePrefix;
-    state.currencySign = this.currencySign;
-    state.locale = this.locale;
+    updateGlobalState({
+      token: this.token,
+      apiPath: this.apiPath,
+      pricePrefix: this.pricePrefix,
+      currencySign: this.currencySign,
+      locale: this.locale,
+    });
     this.id = this.buttonElementId ?? this.el.id;
     this.uiSessionId = uuidv4();
-    this.trackingApi = createTrackingApi(this.apiPath, this.token);
     this.getRecommendations();
     this.vviinnWidgetLoad.emit(this.getBasicEventData());
     this.trackWidgetEvent("load");
@@ -384,19 +374,6 @@ export class VviinnVprWidget implements ComponentInterface {
         .split(",")
         .map((d) => parseInt(d.trim()))
         .filter((d) => !isNaN(d));
-    }
-  }
-
-  private async trackEvent(
-    event: WidgetEvent | ProductEvent | ResultEvent,
-  ): Promise<void> {
-    if (!this.useTracking) return;
-
-    try {
-      const result = await this.trackingApi.trackEvent(event);
-      return this.deactivateTrackingOnRejected(result);
-    } catch (error) {
-      console.error("Tracking event error:", error);
     }
   }
 
@@ -414,9 +391,7 @@ export class VviinnVprWidget implements ComponentInterface {
   trackProductLoad({ detail }: ProductCardEvent) {
     this.productImageLoadedSubject.next(detail.productId);
     const productLoadEvent = this.getProductTrackEvent(detail, "load");
-    if (!productLoadEvent) return;
-
-    this.trackEvent(productLoadEvent);
+    trackEvent(productLoadEvent);
   }
 
   @Listen("vviinnProductView")
@@ -430,7 +405,7 @@ export class VviinnVprWidget implements ComponentInterface {
     const productViewEvent = this.getProductTrackEvent(detail, "view");
     if (!productViewEvent) return;
 
-    this.trackEvent(productViewEvent);
+    trackEvent(productViewEvent);
   }
 
   @Listen("vviinnProductClick")
@@ -442,7 +417,7 @@ export class VviinnVprWidget implements ComponentInterface {
 
     const productClickEvent = this.getProductTrackEvent(detail, "click");
 
-    await this.trackEvent(productClickEvent).finally(() => {
+    await trackEvent(productClickEvent).finally(() => {
       this.handleOpenLink(product.deeplink, clickEvent);
     });
   }
@@ -456,7 +431,7 @@ export class VviinnVprWidget implements ComponentInterface {
 
     const productClickEvent = this.getProductTrackEvent(detail, "click");
 
-    await this.trackEvent(productClickEvent);
+    await trackEvent(productClickEvent);
   }
 
   @Listen("vviinnAddToBasket")
@@ -467,7 +442,7 @@ export class VviinnVprWidget implements ComponentInterface {
       detail.campaignTypeId === "VCS" ? "VPC" : detail.campaignTypeId,
     )(eventBody);
 
-    this.trackEvent(addToBasketEvent);
+    trackEvent(addToBasketEvent);
   }
 
   @Listen("vviinnAddToFavorite")
@@ -478,7 +453,7 @@ export class VviinnVprWidget implements ComponentInterface {
       this.campaignType === "VCS" ? "VPC" : "VPR",
     )(eventBody);
 
-    this.trackEvent(addToWishlistEvent);
+    trackEvent(addToWishlistEvent);
   }
 
   @Listen("vviinnUpdatingAllCardsFinished")
@@ -506,7 +481,7 @@ export class VviinnVprWidget implements ComponentInterface {
       this.campaignType === "VCS" ? "VPC" : "VPR",
     )(eventBody);
 
-    this.trackEvent(widgetEvent);
+    trackEvent(widgetEvent);
   }
 
   private trackResultEvent(type: ResultEventType) {
@@ -523,14 +498,14 @@ export class VviinnVprWidget implements ComponentInterface {
         this.campaignType === "VCS" ? "VPC" : "VPR",
       )(eventBody);
 
-    this.trackEvent(resultEvent);
+    trackEvent(resultEvent);
   }
 
   private getProductTrackEvent(
     detail: ProductCardEventData,
     eventType: ProductEventType,
   ): ProductEvent | null {
-    if (!this.useTracking) return null;
+    if (!state.trackingEnabled) return null;
 
     const eventBody = this.productCardEventDataToEventBody(detail);
 

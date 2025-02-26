@@ -12,7 +12,7 @@ import {
 } from "@stencil/core";
 import Cropper from "cropperjs";
 import styles from "./vviinn-cropper.css";
-import { state } from "../../store/store";
+import { updateGlobalState } from "../../store/store";
 import { ValueObject } from "../../network/ion/ValueObject";
 import { fromImage, Rectangle } from "../../geometry/Rectangle";
 import { DetectedObject } from "../../searchSession/searchSession";
@@ -94,8 +94,9 @@ export class VviinnCropper {
       this.imageUploadFinishedHandler,
     );
 
+    updateGlobalState({ apiPath: this.apiPath });
+
     this.stringParser(true);
-    state.apiPath = this.apiPath;
     this.state = this.showInWidget ? searchState : componentsState;
     this.storeName = this.showInWidget ? "widget" : "components";
     this.initPreloadedImage();

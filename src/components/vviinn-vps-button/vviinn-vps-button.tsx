@@ -99,6 +99,8 @@ export class VviinnVpsButton {
   @Prop() currencySign: string = "€";
   /** The locale for currency formatting and text localization */
   @Prop() locale: Locale = "de-DE";
+  /** Prefix is displayed before the price */
+  @Prop() pricePrefix: string = "";
   /** Campaign ID applied for visual search */
   @Prop() campaignId: string = "";
   /** Add style to the button */
@@ -246,6 +248,7 @@ export class VviinnVpsButton {
           token={this.token}
           locale={this.locale}
           apiPath={this.apiPath}
+          pricePrefix={this.pricePrefix}
           campaignId={this.campaignId}
           showingInButton={true}
           buttonPressed={this.buttonPressed}

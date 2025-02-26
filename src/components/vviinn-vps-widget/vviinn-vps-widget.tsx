@@ -22,12 +22,9 @@ import {
   SearchStore,
   SearchStoreName,
 } from "../../store/search.store";
-import { state } from "../../store/store";
+import { trackEvent, updateGlobalState } from "../../store/store";
 import { slotChangeListener, SlotSkeleton } from "../customized-slots";
-import { createTrackingApi } from "../../openApi";
 import {
-  DefaultApi,
-  EventConfirmation,
   SearchImageSource,
   WidgetAction,
   WidgetEvent,
@@ -143,11 +140,13 @@ export class VviinnVpsWidget {
   @Element() el: HTMLVviinnVpsWidgetElement;
 
   /** Vviinn customer’s token (required) */
-  @Prop() token: string | undefined;
+  @Prop() token: string;
   /** Toggle the widget's modal showing */
   @Prop({ mutable: true }) active: boolean = true;
   /**  The currency sign is displayed after the price */
   @Prop() currencySign: string = "€";
+  /** Prefix is displayed before the price */
+  @Prop() pricePrefix: string = "";
   /** The locale for currency formatting and text localization */
   @Prop() locale: Locale = "de-DE";
   /** Campaign ID applied for visual search */
@@ -211,7 +210,6 @@ export class VviinnVpsWidget {
 
   @State() showAspectRatioError = false;
   @State() wrongImageFormat: boolean = false;
-  @State() trackingDeactivated: boolean = false;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -245,7 +243,6 @@ export class VviinnVpsWidget {
 
   private overflow: string;
   private uiSessionId: string;
-  private trackingApi: DefaultApi;
   private imageSource: SearchImageSource = "upload";
   private cameraAvailable: boolean = false;
   private isDesktop: boolean = false;
@@ -393,12 +390,6 @@ export class VviinnVpsWidget {
     this.replaceSlotsContent();
   }
 
-  setTrackingDeactivated = (result: EventConfirmation) => {
-    if (result.status === "rejected") {
-      this.trackingDeactivated = true;
-    }
-  };
-
   getBasicEventData = (isTextSearch?: boolean): BasicEventData => {
     const activeCampaign = this.isTextSearch || isTextSearch ? "TPS" : "VPS";
     return {
@@ -460,7 +451,7 @@ export class VviinnVpsWidget {
       search_area: "manual-selection",
       ...rest,
     });
-    this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
+    trackEvent(searchEvent);
   }
 
   @Listen("vviinnSelectObject")
@@ -475,7 +466,7 @@ export class VviinnVpsWidget {
       search_area: "attention-point",
       ...rest,
     });
-    this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
+    trackEvent(searchEvent);
   }
 
   @Listen("vviinnSelectFilter")
@@ -492,7 +483,7 @@ export class VviinnVpsWidget {
       action: detail.action,
       ...rest,
     });
-    this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
+    trackEvent(searchEvent);
   }
 
   connectedCallback() {
@@ -500,9 +491,13 @@ export class VviinnVpsWidget {
     this.storeName = this.useComponentsStore ? "components" : "widget";
     this.state = this.useComponentsStore ? componentsState : searchState;
 
-    state.apiPath = this.apiPath;
-    state.currencySign = this.currencySign;
-    state.locale = this.locale;
+    updateGlobalState({
+      token: this.token,
+      apiPath: this.apiPath,
+      locale: this.locale,
+      currencySign: this.currencySign,
+      pricePrefix: this.pricePrefix,
+    });
 
     this.cameraAvailable =
       !!navigator.mediaDevices && !!navigator.mediaDevices.getUserMedia;
@@ -511,12 +506,10 @@ export class VviinnVpsWidget {
       this.excluded = parseExcludedToParams(this.excluded);
     }
 
-    this.state.token = this.token;
     this.state.campaignId = this.campaignId;
     this.state.excluded = this.excluded;
 
     this.uiSessionId = uuidv4();
-    this.trackingApi = createTrackingApi(this.apiPath, this.token);
     this.widgetElementId = this.el.id;
 
     document.addEventListener(
@@ -546,7 +539,7 @@ export class VviinnVpsWidget {
       ...rest,
     };
     const widgetEvent: WidgetEvent = createWidgetEvent("VPS")(eventBody);
-    this.trackingApi.trackEvent(widgetEvent).then(this.setTrackingDeactivated);
+    trackEvent(widgetEvent);
   }
 
   private trackInitialSearch() {
@@ -558,7 +551,7 @@ export class VviinnVpsWidget {
       source: "upload",
       ...rest,
     });
-    this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
+    trackEvent(searchEvent);
   }
 
   private handleImageSelection() {
@@ -881,7 +874,6 @@ export class VviinnVpsWidget {
                   addToBasketShow={this.addToBasketShow}
                   favoriteShow={this.favoriteShow}
                   showAspectRatioError={this.showAspectRatioError}
-                  trackingDeactivated={this.trackingDeactivated}
                   resetState={this.resetState.bind(this)}
                   replaceSlotsContentInWidget={this.replaceSlotsContent.bind(
                     this,

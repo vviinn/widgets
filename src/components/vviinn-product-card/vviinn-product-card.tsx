@@ -123,7 +123,7 @@ export class VviinnProductCard {
   @Prop() locale: string | undefined = undefined;
   @Prop() price: number | undefined;
   @Prop() basePrice?: BasePrice | string | null;
-  @Prop() pricePrefix: string | undefined = undefined;
+  @Prop() pricePrefix: string = "";
   @Prop() productTitle: string;
   @Prop() productType: string | undefined;
   @Prop() setMode: boolean = false;

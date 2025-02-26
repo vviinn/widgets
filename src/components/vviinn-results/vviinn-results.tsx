@@ -15,8 +15,6 @@ import { pipe } from "fp-ts/lib/function";
 import { v4 as uuidv4 } from "uuid";
 import {
   AddToBasketEvent,
-  DefaultApi,
-  EventConfirmation,
   FilterEvent,
   ResultLoadEvent,
   ResultViewEvent,
@@ -34,8 +32,7 @@ import {
   SearchStoreName,
   resetStore,
 } from "../../store/search.store";
-import { state } from "../../store/store";
-import { createTrackingApi } from "../../openApi";
+import { state, trackEvent, updateGlobalState } from "../../store/store";
 import {
   BasicEventData,
   ImageUploadEventData,
@@ -180,6 +177,8 @@ export class VviinnResults {
   @Prop() currencySign?: string = "€";
   /** The locale for currency formatting and text localization */
   @Prop() locale?: Locale = "de-DE";
+  /** Prefix is displayed before the price */
+  @Prop() pricePrefix: string = "";
   /** Toggle for opening product link in new tab or not */
   @Prop() productDetailsNewTab?: boolean = false;
   /** Toggle for redirection to PDP on product's click */
@@ -218,8 +217,6 @@ export class VviinnResults {
   /** @internal */
   @Prop() showAspectRatioError?: boolean;
   /** @internal */
-  @Prop({ mutable: true }) trackingDeactivated?: boolean = false;
-  /** @internal */
   @Prop() resetState?: () => void;
   /** @internal */
   @Prop() replaceSlotsContentInWidget?: ReplaceSlotsContentInParent;
@@ -242,7 +239,6 @@ export class VviinnResults {
   @State() isTextSearch: boolean = !!this.textSearchQuery?.length;
   @State() innerResults: Recommendation[] = [];
 
-  private trackingApi: DefaultApi;
   private passedSlotNames?: string[] = [];
   private slots?: HTMLSlotElement[] = [];
   private state?: SearchStore;
@@ -333,8 +329,6 @@ export class VviinnResults {
   private async getVpsResults(filters?: RequestDynamicFilterItem[]) {
     if (!this.textSearchQuery) return;
 
-    state.apiPath = this.apiPath; //FIXME: #36877
-
     await makeTextSearchRequest(
       this.storeName,
       this.textSearchQuery,
@@ -349,7 +343,6 @@ export class VviinnResults {
     requestId?: string,
   ) {
     if (!query) return;
-    state.apiPath = this.apiPath; //FIXME: #36877
     this.setTextSearch(true);
 
     return pipe(
@@ -369,7 +362,6 @@ export class VviinnResults {
     dynamicFilters?: RequestDynamicFilterItem[],
   ) {
     if (!this.filterColumn || !this.filterValue || this.showInWidget) return;
-    state.apiPath = this.apiPath; //FIXME: #36877
 
     pipe(
       await makeProductListingPageRequest(
@@ -400,7 +392,7 @@ export class VviinnResults {
       session_id: this.uiSessionId,
       ...rest,
     });
-    this.trackingApi.trackEvent(textSearchStartedEvent);
+    trackEvent(textSearchStartedEvent);
 
     const response = await this.getTextSearchResults(this.innerTextSearchQuery);
     if (!response) return;
@@ -462,7 +454,7 @@ export class VviinnResults {
       this.isTextSearch ? "TPS" : "VPS",
     )(eventBody);
 
-    this.trackingApi.trackEvent(filterEvent).then(this.setTrackingDeactivated);
+    trackEvent(filterEvent);
   };
 
   private uploadTriggeredHandler = ({
@@ -481,10 +473,13 @@ export class VviinnResults {
     this.storeName = this.showInWidget ? "widget" : "components";
     if (this.el.id) this.widgetElementId = this.el.id;
 
-    state.apiPath = this.apiPath; //FIXME: #36877
-
-    if (this.token) componentsState.token = this.token;
-    this.trackingApi = createTrackingApi(this.apiPath, this.token);
+    updateGlobalState({
+      apiPath: this.apiPath,
+      token: this.token,
+      locale: this.locale,
+      currencySign: this.currencySign,
+      pricePrefix: this.pricePrefix,
+    });
 
     if (!this.uiSessionId) {
       this.uiSessionId = uuidv4();
@@ -561,10 +556,7 @@ export class VviinnResults {
   @Listen("vviinnProductLoad")
   trackProductLoad({ detail }: ProductCardEvent) {
     const productLoadEvent = this.getProductTrackEvent(detail, "load");
-    if (!productLoadEvent) return;
-    this.trackingApi
-      .trackEvent(productLoadEvent)
-      .then(this.setTrackingDeactivated);
+    trackEvent(productLoadEvent);
   }
 
   @Listen("vviinnProductView")
@@ -576,11 +568,7 @@ export class VviinnResults {
     }
 
     const productViewEvent = this.getProductTrackEvent(detail, "view");
-    if (!productViewEvent) return;
-
-    this.trackingApi
-      .trackEvent(productViewEvent)
-      .then(this.setTrackingDeactivated);
+    trackEvent(productViewEvent);
   }
 
   @Listen("vviinnProductClick")
@@ -591,16 +579,9 @@ export class VviinnResults {
     const product = this.findProductById(productId);
     if (!product || !product.deeplink) return;
 
-    if (!this.trackingDeactivated) {
-      await this.trackingApi
-        .trackEvent(productClickEvent)
-        .then(this.setTrackingDeactivated)
-        .finally(() => {
-          this.handleOpenLink(product.deeplink, clickEvent);
-        });
-    } else {
+    await trackEvent(productClickEvent).finally(() => {
       this.handleOpenLink(product.deeplink, clickEvent);
-    }
+    });
   }
 
   @Listen("vviinnAuxClick")
@@ -611,11 +592,7 @@ export class VviinnResults {
     const product = this.findProductById(productId);
     if (!product || !product.deeplink) return;
 
-    if (!this.trackingDeactivated) {
-      await this.trackingApi
-        .trackEvent(productClickEvent)
-        .then(this.setTrackingDeactivated);
-    }
+    await trackEvent(productClickEvent);
   }
 
   @Listen("vviinnAddToBasket")
@@ -627,16 +604,8 @@ export class VviinnResults {
       this.isTextSearch ? "TPS" : "VPS",
     )(eventBody);
 
-    this.trackingApi
-      .trackEvent(addToBasketEvent)
-      .then(this.setTrackingDeactivated);
+    trackEvent(addToBasketEvent);
   }
-
-  private setTrackingDeactivated = (result: EventConfirmation) => {
-    if (result.status === "rejected") {
-      this.trackingDeactivated = true;
-    }
-  };
 
   @Listen("vviinnAddToFavorite")
   trackAddToFavorite({ detail }: ProductCardEvent) {
@@ -645,9 +614,7 @@ export class VviinnResults {
       this.isTextSearch ? "TPS" : "VPS",
     )(eventBody);
 
-    this.trackingApi
-      .trackEvent(addToWishlistEvent)
-      .then(this.setTrackingDeactivated);
+    trackEvent(addToWishlistEvent);
   }
 
   private trackResultEvent(type: ResultEventType) {
@@ -662,7 +629,7 @@ export class VviinnResults {
         ...rest,
       });
 
-    this.trackingApi.trackEvent(resultEvent).then(this.setTrackingDeactivated);
+    trackEvent(resultEvent);
   }
 
   private findProductById(
@@ -704,7 +671,7 @@ export class VviinnResults {
     detail: ProductCardEventData,
     eventType: ProductEventType,
   ): ProductEvent | null {
-    if (this.trackingDeactivated) return null;
+    if (!state.trackingEnabled) return null;
 
     const eventBody = this.productCardEventDataToEventBody(detail);
 
@@ -774,6 +741,7 @@ export class VviinnResults {
         imageWidth={this.imageResolutionWidth}
         image={p.image.thumbnail ?? p.image.original}
         energyCertifications={p.energyCertifications}
+        pricePrefix={this.pricePrefix}
         part="product-card"
         campaignTypeId={widgetData.campaignTypeId}
         widgetElementId={this.widgetElementId}
@@ -816,6 +784,7 @@ export class VviinnResults {
               oneClickDiscoveryMode={this.oneClickDiscoveryMode}
               addToBasketShow={this.addToBasketShow}
               locale={this.locale}
+              pricePrefix={this.pricePrefix}
               favoriteShow={this.favoriteShow}
               campaigns={this.oneClickDiscoveryCampaigns}
               showInWidget={this.showInWidget}

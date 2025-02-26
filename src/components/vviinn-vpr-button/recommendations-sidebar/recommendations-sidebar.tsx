@@ -45,7 +45,7 @@ export class RecommendationsSidebar {
   @Prop() imageRatio: number;
   @Prop() cssUrl: string | null;
   @Prop() currencySign: string = "€";
-  @Prop() pricePrefix: string;
+  @Prop() pricePrefix: string = "";
   @Prop() noResultText: string;
   @Prop() noResultShow: boolean;
   /** Hiding disabled arrows in the carousel if true */
