@@ -15,7 +15,6 @@ import {
   SearchStoreName,
   SearchStore,
 } from "../../store/search.store";
-import { createTrackingApi } from "../../openApi";
 import { TextSearchIcon } from "../vviinn-icons";
 import { slotChangeListener } from "../customized-slots";
 import {
@@ -37,6 +36,7 @@ import { initializeRecognition, speechTooltip } from "./helpers";
 import Timeout = NodeJS.Timeout;
 import { DefaultApi, WidgetEvent } from "vviinn-tracking-client-ts";
 import { createWidgetEvent } from "../../tracking";
+import { updateGlobalState } from "../../store/store";
 
 /**
  * @part text-search-container - Container for the text search block.
@@ -152,10 +152,12 @@ export class VviinnTextSearch {
   connectedCallback() {
     this.storeName = this.showInWidget ? "widget" : "components";
     this.state = this.showInWidget ? searchState : componentsState;
-    if (this.token) this.state.token = this.token;
-    this.trackingApi = this.showInWidget
-      ? createTrackingApi(this.apiPath, this.token)
-      : null;
+
+    updateGlobalState({
+      apiPath: this.apiPath,
+      token: this.token,
+      locale: this.locale,
+    });
 
     document.addEventListener("resultsSearchFinished", this.hideLoader);
     document.addEventListener(
