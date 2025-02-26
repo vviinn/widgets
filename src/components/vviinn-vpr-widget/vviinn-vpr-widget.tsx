@@ -43,6 +43,7 @@ import {
   ProductCardEventData,
   ProductEventType,
   ProductEvent,
+  ResultEvent,
   ResultEventType,
   ChangedFiltersEventData,
 } from "../../recommendation/events";
@@ -386,6 +387,19 @@ export class VviinnVprWidget implements ComponentInterface {
     }
   }
 
+  private async trackEvent(
+    event: WidgetEvent | ProductEvent | ResultEvent,
+  ): Promise<void> {
+    if (this.trackingDeactivated) return;
+
+    try {
+      const result = await this.trackingApi.trackEvent(event);
+      return this.setTrackingDeactivated(result);
+    } catch (error) {
+      console.error("Tracking event error:", error);
+    }
+  }
+
   async componentWillLoad() {
     await i18next.init({
       lng: this.locale,
@@ -402,9 +416,7 @@ export class VviinnVprWidget implements ComponentInterface {
     const productLoadEvent = this.getProductTrackEvent(detail, "load");
     if (!productLoadEvent) return;
 
-    this.trackingApi
-      .trackEvent(productLoadEvent)
-      .then(this.setTrackingDeactivated);
+    this.trackEvent(productLoadEvent);
   }
 
   @Listen("vviinnProductView")
@@ -418,9 +430,7 @@ export class VviinnVprWidget implements ComponentInterface {
     const productViewEvent = this.getProductTrackEvent(detail, "view");
     if (!productViewEvent) return;
 
-    this.trackingApi
-      .trackEvent(productViewEvent)
-      .then(this.setTrackingDeactivated);
+    this.trackEvent(productViewEvent);
   }
 
   @Listen("vviinnProductClick")
@@ -432,16 +442,9 @@ export class VviinnVprWidget implements ComponentInterface {
 
     const productClickEvent = this.getProductTrackEvent(detail, "click");
 
-    if (!this.trackingDeactivated) {
-      await this.trackingApi
-        .trackEvent(productClickEvent)
-        .then(this.setTrackingDeactivated)
-        .finally(() => {
-          this.handleOpenLink(product.deeplink, clickEvent);
-        });
-    } else {
+    await this.trackEvent(productClickEvent).finally(() => {
       this.handleOpenLink(product.deeplink, clickEvent);
-    }
+    });
   }
 
   @Listen("vviinnAuxClick")
@@ -453,11 +456,7 @@ export class VviinnVprWidget implements ComponentInterface {
 
     const productClickEvent = this.getProductTrackEvent(detail, "click");
 
-    if (!this.trackingDeactivated) {
-      await this.trackingApi
-        .trackEvent(productClickEvent)
-        .then(this.setTrackingDeactivated);
-    }
+    await this.trackEvent(productClickEvent);
   }
 
   @Listen("vviinnAddToBasket")
@@ -468,9 +467,7 @@ export class VviinnVprWidget implements ComponentInterface {
       detail.campaignTypeId === "VCS" ? "VPC" : detail.campaignTypeId,
     )(eventBody);
 
-    this.trackingApi
-      .trackEvent(addToBasketEvent)
-      .then(this.setTrackingDeactivated);
+    this.trackEvent(addToBasketEvent);
   }
 
   @Listen("vviinnAddToFavorite")
@@ -481,9 +478,7 @@ export class VviinnVprWidget implements ComponentInterface {
       this.campaignType === "VCS" ? "VPC" : "VPR",
     )(eventBody);
 
-    this.trackingApi
-      .trackEvent(addToWishlistEvent)
-      .then(this.setTrackingDeactivated);
+    this.trackEvent(addToWishlistEvent);
   }
 
   @Listen("vviinnUpdatingAllCardsFinished")
@@ -511,7 +506,7 @@ export class VviinnVprWidget implements ComponentInterface {
       this.campaignType === "VCS" ? "VPC" : "VPR",
     )(eventBody);
 
-    this.trackingApi.trackEvent(widgetEvent).then(this.setTrackingDeactivated);
+    this.trackEvent(widgetEvent);
   }
 
   private trackResultEvent(type: ResultEventType) {
@@ -528,7 +523,7 @@ export class VviinnVprWidget implements ComponentInterface {
         this.campaignType === "VCS" ? "VPC" : "VPR",
       )(eventBody);
 
-    this.trackingApi.trackEvent(resultEvent).then(this.setTrackingDeactivated);
+    this.trackEvent(resultEvent);
   }
 
   private getProductTrackEvent(
