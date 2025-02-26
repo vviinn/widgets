@@ -211,7 +211,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @State() dynamicFilters: ResponseDynamicFilterItem[] = [];
   @State() sourceProduct: Recommendation | null = null;
   @State() recommendationsLoading: boolean = false;
-  @State() trackingDeactivated: boolean = false;
+  @State() useTracking: boolean = true;
   @State() hasErrorOnLoad: boolean = false;
   @State() updatingAllCards: boolean = false;
   @State() updatedCardsAmount: number = 0;
@@ -298,9 +298,9 @@ export class VviinnVprWidget implements ComponentInterface {
     return this.recommendations.find((r) => r.productId === id);
   }
 
-  setTrackingDeactivated = (result: EventConfirmation) => {
+  deactivateTrackingOnRejected = (result: EventConfirmation) => {
     if (result.status === "rejected") {
-      this.trackingDeactivated = true;
+      this.useTracking = false;
     }
   };
 
@@ -390,11 +390,11 @@ export class VviinnVprWidget implements ComponentInterface {
   private async trackEvent(
     event: WidgetEvent | ProductEvent | ResultEvent,
   ): Promise<void> {
-    if (this.trackingDeactivated) return;
+    if (!this.useTracking) return;
 
     try {
       const result = await this.trackingApi.trackEvent(event);
-      return this.setTrackingDeactivated(result);
+      return this.deactivateTrackingOnRejected(result);
     } catch (error) {
       console.error("Tracking event error:", error);
     }
@@ -530,7 +530,7 @@ export class VviinnVprWidget implements ComponentInterface {
     detail: ProductCardEventData,
     eventType: ProductEventType,
   ): ProductEvent | null {
-    if (this.trackingDeactivated) return null;
+    if (!this.useTracking) return null;
 
     const eventBody = this.productCardEventDataToEventBody(detail);
 
