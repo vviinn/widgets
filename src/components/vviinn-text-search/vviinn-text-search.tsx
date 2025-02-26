@@ -34,9 +34,9 @@ import { searchBarParts } from "../../cssParts";
 import { MicIcon } from "../vviinn-icons/icons/MicIcon";
 import { initializeRecognition, speechTooltip } from "./helpers";
 import Timeout = NodeJS.Timeout;
-import { DefaultApi, WidgetEvent } from "vviinn-tracking-client-ts";
+import { WidgetEvent } from "vviinn-tracking-client-ts";
 import { createWidgetEvent } from "../../tracking";
-import { updateGlobalState } from "../../store/store";
+import { trackEvent, updateGlobalState } from "../../store/store";
 
 /**
  * @part text-search-container - Container for the text search block.
@@ -120,7 +120,6 @@ export class VviinnTextSearch {
     this.showTooltip = show;
   };
 
-  private trackingApi?: DefaultApi;
   private state?: SearchStore;
   private storeName?: SearchStoreName;
 
@@ -249,7 +248,7 @@ export class VviinnTextSearch {
           session_id: this.uiSessionId,
           ...rest,
         });
-        this.trackingApi.trackEvent(textSearchStartedEvent);
+        trackEvent(textSearchStartedEvent);
       }
 
       const response = pipe(
