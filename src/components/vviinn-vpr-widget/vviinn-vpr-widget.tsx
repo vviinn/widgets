@@ -188,8 +188,8 @@ export class VviinnVprWidget implements ComponentInterface {
   /** Show or hide Favorite button */
   @Prop() favoriteShow: boolean = false;
 
-  /** Widget’s title (change it to fit your locale) */
-  @Prop() blockTitle: string = "Recommended products";
+  /** Widget’s title */
+  @Prop() blockTitle: string;
   /** Show or hide the widget's scrollbar */
   @Prop() showScroll = true;
 
@@ -658,14 +658,14 @@ export class VviinnVprWidget implements ComponentInterface {
           {SlotSkeleton("discovery")}
 
           <style>{state.fallbackStyles}</style>
-          {(this.isSetMode || this.blockTitle.length > 0) && (
+          {(this.isSetMode || this.blockTitle?.length !== 0) && (
             <div class="widget-header">
               <div>
                 <h2 part="recommendations-title">
                   <slot name="vviinn-recommendations-title">
                     {this.isSetMode
                       ? i18next.t("setMode.widgetTitle")
-                      : this.blockTitle}
+                      : this.blockTitle || i18next.t("discoveryWidgetTitle")}
                   </slot>
                 </h2>
                 {this.isSetMode && (

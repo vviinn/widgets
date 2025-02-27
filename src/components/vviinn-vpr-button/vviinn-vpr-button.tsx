@@ -136,8 +136,8 @@ export class VviinnVprButton {
   /** Location of Update button for Set mode */
   @Prop() updateButtonLocation: UpdateButtonLocation = "topAndItem";
 
-  /** Sidebar title (change it to fit your locale) */
-  @Prop() sidebarTitle: string = this.mode === "set" ? "" : "Similar products";
+  /** Sidebar title */
+  @Prop() sidebarTitle: string;
   /** Show or hide the scrollbar */
   @Prop() modalScrollbar: boolean = false;
   /** Position of the modal */
