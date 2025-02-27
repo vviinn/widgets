@@ -36,7 +36,7 @@ import { initializeRecognition, speechTooltip } from "./helpers";
 import Timeout = NodeJS.Timeout;
 import { WidgetEvent } from "vviinn-tracking-client-ts";
 import { createWidgetEvent } from "../../tracking";
-import { trackEvent, updateGlobalState } from "../../store/store";
+import { trackEvent, updateGlobalState, globalState } from "../../store/store";
 
 /**
  * @part text-search-container - Container for the text search block.
@@ -92,7 +92,7 @@ export class VviinnTextSearch {
   /** @internal */
   @Prop() showInWidget?: boolean = false;
   /** @internal */
-  @Prop() apiPath?: string = "https://api.vviinn.com";
+  @Prop() apiPath?: string;
   /** uiSessionId from vps-widget */
   /** @internal */
   @Prop() uiSessionId?: string;
@@ -135,7 +135,7 @@ export class VviinnTextSearch {
         : i18next.t("textSearchPlaceholder");
 
   private recognition = initializeRecognition(
-    this.locale,
+    globalState.locale,
     () => {
       this.showRecording();
       this.setShowTooltip(false);
@@ -195,7 +195,7 @@ export class VviinnTextSearch {
 
   async componentWillLoad() {
     await i18next.init({
-      lng: this.locale,
+      lng: globalState.locale,
       fallbackLng: "en",
       resources,
     });
@@ -298,11 +298,11 @@ export class VviinnTextSearch {
 
           {this.mode === "extended" && (
             <vviinn-vps-button
-              token={this.token}
-              locale={this.locale}
+              token={globalState.token}
+              locale={globalState.locale}
+              apiPath={globalState.apiPath}
               addStyle={false}
               useComponentsStore={true}
-              apiPath={this.apiPath}
             />
           )}
 

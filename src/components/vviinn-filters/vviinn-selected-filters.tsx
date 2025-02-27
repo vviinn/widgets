@@ -34,6 +34,7 @@ import {
   SearchStore,
   SearchStoreName,
 } from "../../store/search.store";
+import { globalState } from "../../store/store";
 import { ResponseDynamicFilterIntervalItem } from "../../interfaces/recommendation";
 import { isIntervalFilter } from "../../filters";
 
@@ -54,9 +55,6 @@ import { isIntervalFilter } from "../../filters";
 })
 export class VviinnSelectedFilters {
   @Element() el: HTMLElement;
-
-  /** The currency sign is displayed after the price */
-  @Prop() currencySign?: string = "€";
 
   /** @internal */
   @Prop() showInWidget: boolean = false;
@@ -120,7 +118,7 @@ export class VviinnSelectedFilters {
       const { start, end } = detail.value.interval;
 
       if (start !== rangeStart || end !== rangeEnd) {
-        this.priceCustomFilter = `${start} ${this.currencySign} – ${end} ${this.currencySign}`;
+        this.priceCustomFilter = `${start} ${globalState.currencySign} – ${end} ${globalState.currencySign}`;
       } else {
         this.priceCustomFilter = null;
       }

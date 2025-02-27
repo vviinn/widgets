@@ -2,34 +2,32 @@ import { createStore } from "@stencil/store";
 import { DefaultApi, WidgetEvent } from "vviinn-tracking-client-ts";
 import { ProductEvent, ResultEvent } from "../recommendation/events";
 import { createTrackingApi } from "../openApi";
+import { Locale } from "../locale";
 
-type Store = {
+type GlobalStore = {
   token: string | null;
   apiPath: string | null;
-
-  locale: string;
+  locale: Locale;
   currencySign: string;
-  fallbackStyles: string;
   pricePrefix: string;
 
   trackingEnabled: boolean;
   trackingApi: DefaultApi | null;
 };
 
-const storeDefaults: Store = {
+const globalStoreDefaults: GlobalStore = {
   token: null,
-  apiPath: null,
-
-  locale: "en-US",
+  apiPath: "https://api.vviinn.com",
+  locale: "de-DE",
   currencySign: "€",
-  fallbackStyles: "",
   pricePrefix: "",
 
   trackingEnabled: true,
   trackingApi: null,
 };
 
-export const { state, onChange } = createStore(storeDefaults);
+const { state } = createStore(globalStoreDefaults);
+export const globalState = state;
 
 const initTrackingApi = (): void => {
   if (!state.trackingApi) {
@@ -37,21 +35,14 @@ const initTrackingApi = (): void => {
   }
 };
 
-export const updateGlobalState = ({
-  fallbackStyles,
-  pricePrefix,
-  currencySign,
-  apiPath,
-  token,
-  locale,
-}: Partial<Store>): void => {
-  if (!!token) state.token = token;
-  if (!!apiPath) state.apiPath = apiPath;
+export const updateGlobalState = (updates: Partial<GlobalStore>): void => {
+  console.log(updates);
 
-  if (locale?.length) state.locale = locale;
-  if (fallbackStyles?.length) state.fallbackStyles = fallbackStyles;
-  if (pricePrefix?.length) state.pricePrefix = pricePrefix;
-  if (currencySign?.length) state.currencySign = currencySign;
+  Object.entries(updates).forEach(([key, value]) => {
+    if (value !== undefined) {
+      (state as any)[key] = value;
+    }
+  });
 };
 
 export const trackEvent = async (

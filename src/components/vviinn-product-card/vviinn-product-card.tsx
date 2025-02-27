@@ -117,13 +117,13 @@ export class VviinnProductCard {
 
   @Prop() brand: string | undefined;
   @Prop() currency: string | undefined = undefined;
+  @Prop() locale: string | undefined = undefined;
+  @Prop() pricePrefix?: string;
   @Prop() image: string | undefined;
   @Prop() imageRatio: number = 1;
   @Prop() imageWidth: number = 200;
-  @Prop() locale: string | undefined = undefined;
   @Prop() price: number | undefined;
   @Prop() basePrice?: BasePrice | string | null;
-  @Prop() pricePrefix: string = "";
   @Prop() productTitle: string;
   @Prop() productType: string | undefined;
   @Prop() setMode: boolean = false;
@@ -490,11 +490,11 @@ export class VviinnProductCard {
               <Price
                 prefix={this.pricePrefix}
                 currency={this.currency}
+                locale={this.locale}
                 price={this.price}
                 basePrice={parseBasePrice(this.basePrice)}
                 salePrice={this.salePrice}
                 baseSalePrice={parseBasePrice(this.baseSalePrice)}
-                locale={this.locale}
                 showInContainer={this.addPriceContainer}
               />
 

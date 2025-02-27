@@ -22,7 +22,7 @@ import {
   SearchStore,
   SearchStoreName,
 } from "../../store/search.store";
-import { trackEvent, updateGlobalState } from "../../store/store";
+import { trackEvent, updateGlobalState, globalState } from "../../store/store";
 import { slotChangeListener, SlotSkeleton } from "../customized-slots";
 import {
   SearchImageSource,
@@ -144,11 +144,11 @@ export class VviinnVpsWidget {
   /** Toggle the widget's modal showing */
   @Prop({ mutable: true }) active: boolean = true;
   /**  The currency sign is displayed after the price */
-  @Prop() currencySign: string = "€";
+  @Prop() currencySign?: string;
   /** Prefix is displayed before the price */
-  @Prop() pricePrefix: string = "";
+  @Prop() pricePrefix?: string;
   /** The locale for currency formatting and text localization */
-  @Prop() locale: Locale = "de-DE";
+  @Prop() locale?: Locale;
   /** Campaign ID applied for visual search */
   @Prop() campaignId: string = "";
   /** Excluded filter. Example: "brand:Nike;custom_label_0:summer" */
@@ -177,7 +177,7 @@ export class VviinnVpsWidget {
   @Prop() addPriceContainer?: boolean = false;
 
   /** @internal */
-  @Prop() apiPath?: string = "https://api.vviinn.com";
+  @Prop() apiPath?: string;
   /** Set true when showing the widget in button */
   /** @internal */
   @Prop() showingInButton?: boolean = false;
@@ -374,7 +374,7 @@ export class VviinnVpsWidget {
 
   async componentWillLoad() {
     await i18next.init({
-      lng: this.locale,
+      lng: globalState.locale,
       fallbackLng: "en",
       resources,
     });
@@ -763,11 +763,11 @@ export class VviinnVpsWidget {
 
                       {this.textSearchShow && (
                         <vviinn-text-search
-                          token={this.token}
+                          token={globalState.token}
+                          apiPath={globalState.apiPath}
+                          locale={globalState.locale}
                           showInWidget={true}
                           searchQuery={this.searchQuery}
-                          apiPath={this.apiPath}
-                          locale={this.locale}
                           uiSessionId={this.uiSessionId}
                           basicEventData={this.getBasicEventData(true)}
                         />
@@ -795,7 +795,7 @@ export class VviinnVpsWidget {
                   <vviinn-cropper
                     basicEventData={this.getBasicEventData()}
                     showAspectRatioError={this.showAspectRatioError}
-                    apiPath={this.apiPath}
+                    apiPath={globalState.apiPath}
                     showInWidget={true}
                   />
                   <div
@@ -819,11 +819,11 @@ export class VviinnVpsWidget {
               {this.isResultSlide() && this.state.searchType === "text" && (
                 <div class="source-wrapper text-search-wrapper">
                   <vviinn-text-search
-                    token={this.token}
+                    token={globalState.token}
+                    apiPath={globalState.apiPath}
+                    locale={globalState.locale}
                     showInWidget={true}
                     searchQuery={this.searchQuery}
-                    apiPath={this.apiPath}
-                    locale={this.locale}
                     uiSessionId={this.uiSessionId}
                     basicEventData={this.getBasicEventData(true)}
                   />
@@ -846,7 +846,6 @@ export class VviinnVpsWidget {
                       showHeader={false}
                       exportparts={extendedFiltersParts}
                       showInWidget={true}
-                      locale={this.locale}
                     />
 
                     <vviinn-extended-filters-button
@@ -860,16 +859,16 @@ export class VviinnVpsWidget {
 
               {this.isResultSlide() && (
                 <vviinn-results
-                  token={this.token}
+                  token={globalState.token}
+                  locale={globalState.locale}
+                  pricePrefix={globalState.pricePrefix}
+                  currency-sign={globalState.currencySign}
+                  apiPath={globalState.apiPath}
                   uiSessionId={this.uiSessionId}
-                  apiPath={this.apiPath}
                   widgetElementId={this.buttonElementId ?? this.widgetElementId}
                   showInWidget={true}
                   buttonElementId={this.buttonElementId}
                   imageResolutionWidth={this.imageResolutionWidth}
-                  currency-sign={this.currencySign}
-                  locale={this.locale}
-                  pricePrefix={this.pricePrefix}
                   productDetailsNewTab={this.productDetailsNewTab}
                   productDetailsRedirect={this.productDetailsRedirect}
                   addToBasketShow={this.addToBasketShow}
@@ -899,7 +898,6 @@ export class VviinnVpsWidget {
             mode="modal"
             exportparts={extendedFiltersParts}
             showInWidget={true}
-            locale={this.locale}
           />
         </vviinn-overlayed-modal>
       </Host>

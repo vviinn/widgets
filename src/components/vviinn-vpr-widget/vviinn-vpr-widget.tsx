@@ -21,7 +21,7 @@ import * as E from "fp-ts/lib/Either";
 import { version } from "../../../package.json";
 
 import { createBearAuthedHeader } from "./token-helpers";
-import { state, trackEvent, updateGlobalState } from "../../store/store";
+import { globalState, trackEvent, updateGlobalState } from "../../store/store";
 import { CampaignName, campaignTypeNames } from "../../campaign/Campaign";
 import { getRecommendationsService } from "../../campaign/CampaignService";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
@@ -157,9 +157,9 @@ export class VviinnVprWidget implements ComponentInterface {
   /** Optional for custom CSS. It will overwrite all other settings */
   @Prop() cssUrl: string | null = null;
   /** The currency sign is displayed after the price */
-  @Prop() currencySign: string = "€";
+  @Prop() currencySign?: string;
   /** Prefix is displayed before the price */
-  @Prop() pricePrefix: string = "";
+  @Prop() pricePrefix?: string;
   /** A custom message is displayed when no results */
   @Prop() noResultText: string = "";
   /** Showing a message (when true) or hiding the whole widget, when no results */
@@ -191,7 +191,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() showScroll = true;
 
   /** @internal */
-  @Prop() apiPath?: string = "https://api.vviinn.com";
+  @Prop() apiPath?: string;
   /** @internal */
   @Prop() useCarousel: boolean = true;
   /** @internal */
@@ -329,11 +329,11 @@ export class VviinnVprWidget implements ComponentInterface {
     this.getRecommendations();
   }
 
-  @Watch("apiPath")
-  handleApiPathChange(newPath: string) {
-    updateGlobalState({ apiPath: newPath });
-    this.getRecommendations();
-  }
+  // @Watch("apiPath")
+  // handleApiPathChange(newPath: string) {
+  //   updateGlobalState({ apiPath: newPath });
+  //   this.getRecommendations();
+  // }
 
   @Watch("opened")
   trackWidgetOpen() {
@@ -379,7 +379,7 @@ export class VviinnVprWidget implements ComponentInterface {
 
   async componentWillLoad() {
     await i18next.init({
-      lng: this.locale,
+      lng: globalState.locale,
       fallbackLng: "en",
       resources,
     });
@@ -505,7 +505,7 @@ export class VviinnVprWidget implements ComponentInterface {
     detail: ProductCardEventData,
     eventType: ProductEventType,
   ): ProductEvent | null {
-    if (!state.trackingEnabled) return null;
+    if (!globalState.trackingEnabled) return null;
 
     const eventBody = this.productCardEventDataToEventBody(detail);
 
@@ -520,12 +520,12 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   private async getRecommendations() {
-    if (this.productId === undefined || this.token === undefined) return;
+    if (this.productId === undefined || globalState.token === undefined) return;
     this.recommendationsLoading = true;
     const campaignType =
       this.campaignType.length > 0 ? this.campaignType : "VPR";
 
-    const headers = createBearAuthedHeader(this.token);
+    const headers = createBearAuthedHeader(globalState.token);
 
     const body = getRecommendationsBody({
       productId: this.productId,
@@ -627,7 +627,6 @@ export class VviinnVprWidget implements ComponentInterface {
 
           {SlotSkeleton("discovery")}
 
-          <style>{state.fallbackStyles}</style>
           {(this.isSetMode || this.blockTitle.length > 0) && (
             <div class="widget-header">
               <div>
@@ -673,7 +672,6 @@ export class VviinnVprWidget implements ComponentInterface {
               {this.showExtendedFilters && (
                 <vviinn-extended-filters
                   filters={this.dynamicFilters}
-                  locale={this.locale}
                 ></vviinn-extended-filters>
               )}
             </div>
@@ -704,6 +702,9 @@ export class VviinnVprWidget implements ComponentInterface {
   ): HTMLVviinnProductCardElement {
     return (
       <vviinn-product-card
+        currency={globalState.currencySign}
+        pricePrefix={globalState.pricePrefix}
+        locale={globalState.locale}
         productId={recommendation.productId}
         productTitle={recommendation.title}
         productType={recommendation.productType}
@@ -724,10 +725,7 @@ export class VviinnVprWidget implements ComponentInterface {
         index={index}
         widgetElementId={this.id}
         widgetVersion={version}
-        currency={this.currencySign}
-        pricePrefix={this.pricePrefix}
         setMode={this.isSetMode}
-        locale={this.locale}
         customLabels={getCustomLabels(recommendation)}
         favoriteShow={this.favoriteShow}
       />
@@ -748,6 +746,9 @@ export class VviinnVprWidget implements ComponentInterface {
   private renderCarousel(): HTMLVviinnCarouselElement {
     return (
       <vviinn-carousel
+        currencySign={globalState.currencySign}
+        pricePrefix={globalState.pricePrefix}
+        locale={globalState.locale}
         mode={this.mode as CarouselMode}
         campaignTypeId={this.campaignType}
         imageWidth={this.imageWidth}
@@ -763,9 +764,6 @@ export class VviinnVprWidget implements ComponentInterface {
         updateButtonLocation={this.updateButtonLocation}
         replaceSlotsContent={this.replaceSlotsContent.bind(this)}
         setModeDiscountsArray={this.setModeDiscountsArray}
-        currencySign={this.currencySign}
-        pricePrefix={this.pricePrefix}
-        locale={this.locale}
         imageRatio={this.imageRatio}
         favoriteShow={this.favoriteShow}
         setItemsAmount={this.setItemsAmount}

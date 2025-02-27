@@ -32,7 +32,7 @@ import {
   SearchStoreName,
   resetStore,
 } from "../../store/search.store";
-import { state, trackEvent, updateGlobalState } from "../../store/store";
+import { globalState, trackEvent, updateGlobalState } from "../../store/store";
 import {
   BasicEventData,
   ImageUploadEventData,
@@ -167,18 +167,18 @@ export class VviinnResults {
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
+  /** The currency sign is displayed after the price */
+  @Prop() currencySign?: string;
+  /** The locale for currency formatting and text localization */
+  @Prop() locale?: Locale;
+  /** Prefix is displayed before the price */
+  @Prop() pricePrefix?: string;
   /** Search ID for results request */
   @Prop() searchId?: string;
   /** uiSessionId from vps-widget */
   @Prop({ mutable: true }) uiSessionId?: string;
   /** Resolution width of an image in the product card */
   @Prop() imageResolutionWidth?: number = RESULTS_WIDGET_IMAGE_RESOLUTION_WIDTH;
-  /** The currency sign is displayed after the price */
-  @Prop() currencySign?: string = "€";
-  /** The locale for currency formatting and text localization */
-  @Prop() locale?: Locale = "de-DE";
-  /** Prefix is displayed before the price */
-  @Prop() pricePrefix: string = "";
   /** Toggle for opening product link in new tab or not */
   @Prop() productDetailsNewTab?: boolean = false;
   /** Toggle for redirection to PDP on product's click */
@@ -207,7 +207,7 @@ export class VviinnResults {
   /** @internal */
   @Prop() showInWidget?: boolean = false;
   /** @internal */
-  @Prop() apiPath?: string = "https://api.vviinn.com";
+  @Prop() apiPath?: string;
   /** Element Id, passed from vps-button */
   /** @internal */
   @Prop() buttonElementId?: string;
@@ -301,7 +301,7 @@ export class VviinnResults {
 
     if (!this.showInWidget) {
       await i18next.init({
-        lng: this.locale,
+        lng: globalState.locale,
         fallbackLng: "en",
         resources,
       });
@@ -322,7 +322,7 @@ export class VviinnResults {
 
   private getResultsBySearchId = async (searchId: string) => {
     if (!searchId) return;
-    await makeSearchIdRequest(this.token, searchId);
+    await makeSearchIdRequest(globalState.token, searchId);
     this.resultsSearchFinished.emit();
   };
 
@@ -671,7 +671,7 @@ export class VviinnResults {
     detail: ProductCardEventData,
     eventType: ProductEventType,
   ): ProductEvent | null {
-    if (!state.trackingEnabled) return null;
+    if (!globalState.trackingEnabled) return null;
 
     const eventBody = this.productCardEventDataToEventBody(detail);
 
@@ -726,6 +726,9 @@ export class VviinnResults {
 
     return this.getResults().map((p, i) => (
       <vviinn-product-card
+        pricePrefix={globalState.pricePrefix}
+        currency={globalState.currencySign}
+        locale={globalState.locale}
         key={p.productId}
         index={i}
         productTitle={p.title}
@@ -741,14 +744,11 @@ export class VviinnResults {
         imageWidth={this.imageResolutionWidth}
         image={p.image.thumbnail ?? p.image.original}
         energyCertifications={p.energyCertifications}
-        pricePrefix={this.pricePrefix}
         part="product-card"
         campaignTypeId={widgetData.campaignTypeId}
         widgetElementId={this.widgetElementId}
         buttonElementId={this.buttonElementId}
         widgetVersion={version}
-        currency={this.currencySign}
-        locale={this.locale}
         customLabels={getCustomLabels(p)}
         addToBasketShow={this.addToBasketShow}
         favoriteShow={this.favoriteShow}
@@ -764,8 +764,6 @@ export class VviinnResults {
           >
             <vviinn-vpr-button
               onClick={() => oneClickDiscoveryHandler(i)}
-              apiPath={this.apiPath}
-              token={this.token}
               productId={p.productId}
               addStyle={false}
               sidebarTitle=""
@@ -783,8 +781,6 @@ export class VviinnResults {
               }
               oneClickDiscoveryMode={this.oneClickDiscoveryMode}
               addToBasketShow={this.addToBasketShow}
-              locale={this.locale}
-              pricePrefix={this.pricePrefix}
               favoriteShow={this.favoriteShow}
               campaigns={this.oneClickDiscoveryCampaigns}
               showInWidget={this.showInWidget}

@@ -3,7 +3,7 @@ import * as O from "fp-ts/lib/Option";
 import * as E from "fp-ts/Either";
 import * as TE from "fp-ts/TaskEither";
 import { pipe } from "fp-ts/function";
-import { state as globalState } from "./store";
+import { globalState } from "./store";
 import { Recommendation } from "../interfaces/recommendation";
 import {
   readFilters,
