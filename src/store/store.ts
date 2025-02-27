@@ -36,8 +36,6 @@ const initTrackingApi = (): void => {
 };
 
 export const updateGlobalState = (updates: Partial<GlobalStore>): void => {
-  console.log(updates);
-
   Object.entries(updates).forEach(([key, value]) => {
     if (value !== undefined) {
       (state as any)[key] = value;
