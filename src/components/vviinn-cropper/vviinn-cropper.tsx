@@ -86,6 +86,12 @@ export class VviinnCropper {
   private storeName?: SearchStoreName;
 
   connectedCallback() {
+    updateGlobalState(this);
+    this.stringParser(true);
+    this.state = this.showInWidget ? searchState : componentsState;
+    this.storeName = this.showInWidget ? "widget" : "components";
+    this.initPreloadedImage();
+
     document.addEventListener(
       "vviinnImageUploadStarted",
       this.imageUploadStartedHandler,
@@ -94,13 +100,6 @@ export class VviinnCropper {
       "vviinnImageUploadFinished",
       this.imageUploadFinishedHandler,
     );
-
-    updateGlobalState({ apiPath: this.apiPath });
-
-    this.stringParser(true);
-    this.state = this.showInWidget ? searchState : componentsState;
-    this.storeName = this.showInWidget ? "widget" : "components";
-    this.initPreloadedImage();
   }
 
   componentWillRender() {

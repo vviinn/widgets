@@ -35,10 +35,28 @@ const initTrackingApi = (): void => {
   }
 };
 
-export const updateGlobalState = (updates: Partial<GlobalStore>): void => {
+interface ComponentWithGlobalConfig {
+  apiPath?: string;
+  locale?: Locale;
+  currencySign?: string;
+  pricePrefix?: string;
+  token?: string;
+}
+
+export const updateGlobalState = (
+  component: ComponentWithGlobalConfig,
+): void => {
+  const updates: Partial<GlobalStore> = {
+    apiPath: component?.apiPath,
+    locale: component?.locale,
+    currencySign: component?.currencySign,
+    pricePrefix: component?.pricePrefix,
+    token: component?.token,
+  };
+
   Object.entries(updates).forEach(([key, value]) => {
     if (value !== undefined) {
-      (state as any)[key] = value;
+      state[key] = value;
     }
   });
 };

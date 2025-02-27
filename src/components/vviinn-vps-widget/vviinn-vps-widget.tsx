@@ -487,18 +487,10 @@ export class VviinnVpsWidget {
   }
 
   connectedCallback() {
+    updateGlobalState(this);
     this.isDesktop = checkDeviceType() === "desktop";
     this.storeName = this.useComponentsStore ? "components" : "widget";
     this.state = this.useComponentsStore ? componentsState : searchState;
-
-    updateGlobalState({
-      token: this.token,
-      apiPath: this.apiPath,
-      locale: this.locale,
-      currencySign: this.currencySign,
-      pricePrefix: this.pricePrefix,
-    });
-
     this.cameraAvailable =
       !!navigator.mediaDevices && !!navigator.mediaDevices.getUserMedia;
 

@@ -145,7 +145,7 @@ export class VviinnVprWidget implements ComponentInterface {
   /** Campaign type */
   @Prop() campaignType: CampaignName = this.mode === "set" ? "VCS" : "VPR";
   /** The locale for currency formatting and text localization */
-  @Prop() locale: Locale = "de-DE";
+  @Prop() locale: Locale;
   /** Accepts any hex color code */
   @Prop() color: string = "";
   /** Width of each recommended product image */
@@ -349,13 +349,7 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   connectedCallback() {
-    updateGlobalState({
-      token: this.token,
-      apiPath: this.apiPath,
-      pricePrefix: this.pricePrefix,
-      currencySign: this.currencySign,
-      locale: this.locale,
-    });
+    updateGlobalState(this);
     this.id = this.buttonElementId ?? this.el.id;
     this.uiSessionId = uuidv4();
     this.getRecommendations();

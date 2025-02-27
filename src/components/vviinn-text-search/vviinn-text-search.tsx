@@ -80,7 +80,7 @@ export class VviinnTextSearch {
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
   /** The locale for currency formatting and text localization */
-  @Prop() locale: Locale = "de-DE";
+  @Prop() locale: Locale;
   /** Basic or extended text search with search modal and speech recognition */
   @Prop() mode: SearchBarMode = "basic";
   /** Query for the text search passed from widget */
@@ -149,14 +149,9 @@ export class VviinnTextSearch {
   );
 
   connectedCallback() {
+    updateGlobalState(this);
     this.storeName = this.showInWidget ? "widget" : "components";
     this.state = this.showInWidget ? searchState : componentsState;
-
-    updateGlobalState({
-      apiPath: this.apiPath,
-      token: this.token,
-      locale: this.locale,
-    });
 
     document.addEventListener("resultsSearchFinished", this.hideLoader);
     document.addEventListener(

@@ -469,17 +469,10 @@ export class VviinnResults {
   };
 
   connectedCallback() {
+    updateGlobalState(this);
     this.state = this.showInWidget ? searchState : componentsState;
     this.storeName = this.showInWidget ? "widget" : "components";
     if (this.el.id) this.widgetElementId = this.el.id;
-
-    updateGlobalState({
-      apiPath: this.apiPath,
-      token: this.token,
-      locale: this.locale,
-      currencySign: this.currencySign,
-      pricePrefix: this.pricePrefix,
-    });
 
     if (!this.uiSessionId) {
       this.uiSessionId = uuidv4();

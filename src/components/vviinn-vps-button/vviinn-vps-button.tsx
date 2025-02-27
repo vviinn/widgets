@@ -98,7 +98,7 @@ export class VviinnVpsButton {
   /**  The currency sign is displayed after the price */
   @Prop() currencySign?: string;
   /** The locale for currency formatting and text localization */
-  @Prop() locale: Locale = "de-DE";
+  @Prop() locale: Locale;
   /** Prefix is displayed before the price */
   @Prop() pricePrefix?: string;
   /** Campaign ID applied for visual search */
