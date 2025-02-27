@@ -126,14 +126,15 @@ export const resetStore = (store: SearchStoreName) => {
 };
 
 const updateImageSearchState =
-  (store: SearchStoreName) => async (response: SearchSession) => {
+  (store: SearchStoreName, isSessionRequest = false) =>
+  async (response: SearchSession) => {
     const state = useStore(store);
-    state.detectedObjects = response.detectedObjects;
     state.selfSearchId = pipe(getLink(response, "self"), extractHrefValue);
     state.results = response.value;
     state.filters = readFilters(foldValueObject(response.filters));
     state.rectangleSearchForm = response.searchArea;
     state.resetCategoryLink = response.links?.clearFilters;
+    if (!isSessionRequest) state.detectedObjects = response.detectedObjects;
     state.loading = false;
   };
 
@@ -246,7 +247,7 @@ export const uploadFile =
         pipe(
           detectObjects(store)(sessionResponse),
           TE.map(() => {
-            updateImageSearchState(store)(sessionResponse);
+            updateImageSearchState(store, true)(sessionResponse);
             state.loading = false;
             return sessionResponse;
           }),
