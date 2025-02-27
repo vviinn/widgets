@@ -35,7 +35,6 @@ export class RecommendationsSidebar {
   @Prop() locale: Locale;
   @Prop() currencySign: string;
   @Prop() pricePrefix: string;
-  @Prop() apiPath: string;
   @Prop() productId: string;
   @Prop() position: "bottom" | "right" = "bottom";
   @Prop() widgetScrollbar: boolean = false;
@@ -67,6 +66,8 @@ export class RecommendationsSidebar {
   @Prop() favoriteShow: boolean = false;
   @Prop() useCarousel: boolean = true;
 
+  /** @internal */
+  @Prop() apiPath: string;
   /** @internal */
   @Prop() showInCustomContainer: boolean = false;
   /** @internal */
