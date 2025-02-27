@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.152.2](https://github.com/vviinn/widgets/compare/v2.152.1...v2.152.2) (2025-02-27)
+
+
+### Bug Fixes
+
+* Fix detected objects reset possibility in components. Wait for the response of the detected objects before the searchId request. ([a383ccc](https://github.com/vviinn/widgets/commit/a383ccc2bc1b506cee92373ed4bbb522d721fd90))
+
 ### [2.152.1](https://github.com/vviinn/widgets/compare/v2.152.0...v2.152.1) (2025-02-26)
 
 
