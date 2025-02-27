@@ -126,14 +126,15 @@ export const resetStore = (store: SearchStoreName) => {
 };
 
 const updateImageSearchState =
-  (store: SearchStoreName) => async (response: SearchSession) => {
+  (store: SearchStoreName, isSessionRequest = false) =>
+  async (response: SearchSession) => {
     const state = useStore(store);
-    state.detectedObjects = response.detectedObjects;
     state.selfSearchId = pipe(getLink(response, "self"), extractHrefValue);
     state.results = response.value;
     state.filters = readFilters(foldValueObject(response.filters));
     state.rectangleSearchForm = response.searchArea;
     state.resetCategoryLink = response.links?.clearFilters;
+    if (!isSessionRequest) state.detectedObjects = response.detectedObjects;
     state.loading = false;
   };
 
@@ -150,21 +151,24 @@ const makeLinkRequest =
   };
 
 const detectObjects =
-  (store: SearchStoreName) => async (data: SearchSession) => {
+  (store: SearchStoreName) =>
+  (data: SearchSession): TE.TaskEither<BasicError<string | Response>, void> => {
     const state = useStore(store);
     state.objectDetectionInProgress = true;
 
-    await pipe(
+    return pipe(
       getLink(data, "detectedObjects"),
       TE.fromOption(() => detectObjectsError),
       TE.chain(makeLinkRequest(state.token)),
-      TE.map(
-        (objects: ValueObject<ValueObject<DetectedObject>[]>) =>
-          (state.detectedObjects = foldValueObject(objects)),
-      ),
-    )();
-
-    state.objectDetectionInProgress = false;
+      TE.map((objects: ValueObject<ValueObject<DetectedObject>[]>) => {
+        state.detectedObjects = foldValueObject(objects);
+        state.objectDetectionInProgress = false;
+      }),
+      TE.mapLeft((error) => {
+        state.objectDetectionInProgress = false;
+        return error;
+      }),
+    );
   };
 
 export const uploadHiResFile =
@@ -239,12 +243,16 @@ export const uploadFile =
       TE.chain((request) =>
         imageSearchSessionClient(request, state.campaignId, state.excluded),
       ),
-      TE.map((sessionResponse) => {
-        updateImageSearchState(store)(sessionResponse);
-        detectObjects(store)(sessionResponse);
-        state.loading = false;
-        return sessionResponse;
-      }),
+      TE.chain((sessionResponse) =>
+        pipe(
+          detectObjects(store)(sessionResponse),
+          TE.map(() => {
+            updateImageSearchState(store, true)(sessionResponse);
+            state.loading = false;
+            return sessionResponse;
+          }),
+        ),
+      ),
       TE.mapLeft((error) => {
         state.serverError = true;
         state.loading = false;

@@ -4,6 +4,7 @@ import { WarningIcon } from "../../vviinn-icons";
 
 @Component({
   tag: "vviinn-server-error",
+  styleUrl: "vviinn-server-error.css",
   shadow: true,
 })
 export class VviinnServerError {
