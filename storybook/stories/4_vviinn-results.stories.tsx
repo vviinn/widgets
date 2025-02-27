@@ -11,9 +11,9 @@ export default {
 export const ProductList = ResultsTemplate.bind({});
 ProductList.storyName = "Product List";
 ProductList.args = {
+  token: vviinnToken,
   filterColumn: "product_type",
   filterValue,
-  token: vviinnToken,
   apiPath: process.env.STORYBOOK_API_PATH,
   resultsCount: 12,
   imageResolutionWidth: 500,
