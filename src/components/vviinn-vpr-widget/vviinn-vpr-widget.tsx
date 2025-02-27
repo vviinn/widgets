@@ -329,12 +329,6 @@ export class VviinnVprWidget implements ComponentInterface {
     this.getRecommendations();
   }
 
-  // @Watch("apiPath")
-  // handleApiPathChange(newPath: string) {
-  //   updateGlobalState({ apiPath: newPath });
-  //   this.getRecommendations();
-  // }
-
   @Watch("opened")
   trackWidgetOpen() {
     if (!this.opened) return;
