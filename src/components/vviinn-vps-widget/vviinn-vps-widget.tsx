@@ -22,12 +22,9 @@ import {
   SearchStore,
   SearchStoreName,
 } from "../../store/search.store";
-import { state } from "../../store/store";
+import { trackEvent, updateGlobalState, globalState } from "../../store/store";
 import { slotChangeListener, SlotSkeleton } from "../customized-slots";
-import { createTrackingApi } from "../../openApi";
 import {
-  DefaultApi,
-  EventConfirmation,
   SearchImageSource,
   WidgetAction,
   WidgetEvent,
@@ -143,13 +140,15 @@ export class VviinnVpsWidget {
   @Element() el: HTMLVviinnVpsWidgetElement;
 
   /** Vviinn customer’s token (required) */
-  @Prop() token: string | undefined;
+  @Prop() token: string;
   /** Toggle the widget's modal showing */
   @Prop({ mutable: true }) active: boolean = true;
   /**  The currency sign is displayed after the price */
-  @Prop() currencySign: string = "€";
+  @Prop() currencySign?: string;
+  /** Prefix is displayed before the price */
+  @Prop() pricePrefix?: string;
   /** The locale for currency formatting and text localization */
-  @Prop() locale: Locale = "de-DE";
+  @Prop() locale?: Locale;
   /** Campaign ID applied for visual search */
   @Prop() campaignId: string = "";
   /** Excluded filter. Example: "brand:Nike;custom_label_0:summer" */
@@ -178,7 +177,7 @@ export class VviinnVpsWidget {
   @Prop() addPriceContainer?: boolean = false;
 
   /** @internal */
-  @Prop() apiPath?: string = "https://api.vviinn.com";
+  @Prop() apiPath?: string;
   /** Set true when showing the widget in button */
   /** @internal */
   @Prop() showingInButton?: boolean = false;
@@ -211,7 +210,6 @@ export class VviinnVpsWidget {
 
   @State() showAspectRatioError = false;
   @State() wrongImageFormat: boolean = false;
-  @State() trackingDeactivated: boolean = false;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -245,7 +243,6 @@ export class VviinnVpsWidget {
 
   private overflow: string;
   private uiSessionId: string;
-  private trackingApi: DefaultApi;
   private imageSource: SearchImageSource = "upload";
   private cameraAvailable: boolean = false;
   private isDesktop: boolean = false;
@@ -377,7 +374,7 @@ export class VviinnVpsWidget {
 
   async componentWillLoad() {
     await i18next.init({
-      lng: this.locale,
+      lng: globalState.locale,
       fallbackLng: "en",
       resources,
     });
@@ -392,12 +389,6 @@ export class VviinnVpsWidget {
   componentDidLoad() {
     this.replaceSlotsContent();
   }
-
-  setTrackingDeactivated = (result: EventConfirmation) => {
-    if (result.status === "rejected") {
-      this.trackingDeactivated = true;
-    }
-  };
 
   getBasicEventData = (isTextSearch?: boolean): BasicEventData => {
     const activeCampaign = this.isTextSearch || isTextSearch ? "TPS" : "VPS";
@@ -460,7 +451,7 @@ export class VviinnVpsWidget {
       search_area: "manual-selection",
       ...rest,
     });
-    this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
+    trackEvent(searchEvent);
   }
 
   @Listen("vviinnSelectObject")
@@ -475,7 +466,7 @@ export class VviinnVpsWidget {
       search_area: "attention-point",
       ...rest,
     });
-    this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
+    trackEvent(searchEvent);
   }
 
   @Listen("vviinnSelectFilter")
@@ -492,18 +483,14 @@ export class VviinnVpsWidget {
       action: detail.action,
       ...rest,
     });
-    this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
+    trackEvent(searchEvent);
   }
 
   connectedCallback() {
+    updateGlobalState(this);
     this.isDesktop = checkDeviceType() === "desktop";
     this.storeName = this.useComponentsStore ? "components" : "widget";
     this.state = this.useComponentsStore ? componentsState : searchState;
-
-    state.apiPath = this.apiPath;
-    state.currencySign = this.currencySign;
-    state.locale = this.locale;
-
     this.cameraAvailable =
       !!navigator.mediaDevices && !!navigator.mediaDevices.getUserMedia;
 
@@ -511,12 +498,10 @@ export class VviinnVpsWidget {
       this.excluded = parseExcludedToParams(this.excluded);
     }
 
-    this.state.token = this.token;
     this.state.campaignId = this.campaignId;
     this.state.excluded = this.excluded;
 
     this.uiSessionId = uuidv4();
-    this.trackingApi = createTrackingApi(this.apiPath, this.token);
     this.widgetElementId = this.el.id;
 
     document.addEventListener(
@@ -546,7 +531,7 @@ export class VviinnVpsWidget {
       ...rest,
     };
     const widgetEvent: WidgetEvent = createWidgetEvent("VPS")(eventBody);
-    this.trackingApi.trackEvent(widgetEvent).then(this.setTrackingDeactivated);
+    trackEvent(widgetEvent);
   }
 
   private trackInitialSearch() {
@@ -558,7 +543,7 @@ export class VviinnVpsWidget {
       source: "upload",
       ...rest,
     });
-    this.trackingApi.trackEvent(searchEvent).then(this.setTrackingDeactivated);
+    trackEvent(searchEvent);
   }
 
   private handleImageSelection() {
@@ -770,11 +755,11 @@ export class VviinnVpsWidget {
 
                       {this.textSearchShow && (
                         <vviinn-text-search
-                          token={this.token}
+                          token={globalState.token}
+                          apiPath={globalState.apiPath}
+                          locale={globalState.locale}
                           showInWidget={true}
                           searchQuery={this.searchQuery}
-                          apiPath={this.apiPath}
-                          locale={this.locale}
                           uiSessionId={this.uiSessionId}
                           basicEventData={this.getBasicEventData(true)}
                         />
@@ -802,7 +787,7 @@ export class VviinnVpsWidget {
                   <vviinn-cropper
                     basicEventData={this.getBasicEventData()}
                     showAspectRatioError={this.showAspectRatioError}
-                    apiPath={this.apiPath}
+                    apiPath={globalState.apiPath}
                     showInWidget={true}
                   />
                   <div
@@ -826,11 +811,11 @@ export class VviinnVpsWidget {
               {this.isResultSlide() && this.state.searchType === "text" && (
                 <div class="source-wrapper text-search-wrapper">
                   <vviinn-text-search
-                    token={this.token}
+                    token={globalState.token}
+                    apiPath={globalState.apiPath}
+                    locale={globalState.locale}
                     showInWidget={true}
                     searchQuery={this.searchQuery}
-                    apiPath={this.apiPath}
-                    locale={this.locale}
                     uiSessionId={this.uiSessionId}
                     basicEventData={this.getBasicEventData(true)}
                   />
@@ -853,7 +838,6 @@ export class VviinnVpsWidget {
                       showHeader={false}
                       exportparts={extendedFiltersParts}
                       showInWidget={true}
-                      locale={this.locale}
                     />
 
                     <vviinn-extended-filters-button
@@ -867,21 +851,21 @@ export class VviinnVpsWidget {
 
               {this.isResultSlide() && (
                 <vviinn-results
-                  token={this.token}
+                  token={globalState.token}
+                  locale={globalState.locale}
+                  pricePrefix={globalState.pricePrefix}
+                  currency-sign={globalState.currencySign}
+                  apiPath={globalState.apiPath}
                   uiSessionId={this.uiSessionId}
-                  apiPath={this.apiPath}
                   widgetElementId={this.buttonElementId ?? this.widgetElementId}
                   showInWidget={true}
                   buttonElementId={this.buttonElementId}
                   imageResolutionWidth={this.imageResolutionWidth}
-                  currency-sign={this.currencySign}
-                  locale={this.locale}
                   productDetailsNewTab={this.productDetailsNewTab}
                   productDetailsRedirect={this.productDetailsRedirect}
                   addToBasketShow={this.addToBasketShow}
                   favoriteShow={this.favoriteShow}
                   showAspectRatioError={this.showAspectRatioError}
-                  trackingDeactivated={this.trackingDeactivated}
                   resetState={this.resetState.bind(this)}
                   replaceSlotsContentInWidget={this.replaceSlotsContent.bind(
                     this,
@@ -906,7 +890,6 @@ export class VviinnVpsWidget {
             mode="modal"
             exportparts={extendedFiltersParts}
             showInWidget={true}
-            locale={this.locale}
           />
         </vviinn-overlayed-modal>
       </Host>

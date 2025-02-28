@@ -4,7 +4,7 @@ import { IO } from "fp-ts/IO";
 import { pipe } from "fp-ts/function";
 import * as S from "fp-ts/Semigroup";
 import * as String from "fp-ts/string";
-import { state } from "../store/store";
+import { globalState } from "../store/store";
 import { BasicError, emptyApiPathError } from "../error";
 
 const stringMonoid = O.getMonoid(String.Monoid);
@@ -12,7 +12,7 @@ const stringMonoid = O.getMonoid(String.Monoid);
 export const getApiPath: IO<E.Either<BasicError<string>, string>> = () =>
   pipe(
     O.getFirstMonoid<string>().concat(
-      O.fromNullable(state.apiPath),
+      O.fromNullable(globalState.apiPath),
       O.fromNullable(`${process.env.API_PATH}`),
     ),
     E.fromOption(() => emptyApiPathError),
