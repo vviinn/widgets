@@ -14,11 +14,12 @@ import { CrossIcon } from "../../vviinn-icons";
 import { CarouselMode } from "../../vviinn-carousel/vviinn-carousel";
 import { BasicEventData } from "../../../recommendation/events";
 import { CampaignName } from "../../../campaign/Campaign";
-import { Locale } from "../../../locale";
+import { Locale, resources } from "../../../locale";
 import { UpdateButtonLocation } from "../../vviinn-vpr-widget/vviinn-vpr-widget";
 import { ClickEvent, isClickedInRectBound } from "../../../geometry/Rectangle";
 import { Recommendation } from "../../../components";
 import { carouselParts, productCardParts } from "../../../cssParts";
+import i18next from "i18next";
 
 type SidebarState = "idle" | "open" | "closed";
 
@@ -135,6 +136,14 @@ export class RecommendationsSidebar {
     return this.getAsideElement()?.getBoundingClientRect();
   }
 
+  async componentWillLoad() {
+    await i18next.init({
+      lng: this.locale,
+      fallbackLng: "en",
+      resources,
+    });
+  }
+
   componentDidLoad() {
     const widgetElement = this.el.shadowRoot.querySelector("vviinn-vpr-widget");
     Array.from(this.buttonChildren).forEach((child) => {
@@ -160,9 +169,11 @@ export class RecommendationsSidebar {
             {this.mode !== "set" && (
               <Fragment>
                 {this.renderSourceImage()}
-                <span class="title" part="recommendations-title">
-                  {this.sidebarTitle}
-                </span>
+                {this.sidebarTitle?.length !== 0 && (
+                  <span class="title" part="recommendations-title">
+                    {this.sidebarTitle || i18next.t("discoveryWidgetTitle")}
+                  </span>
+                )}
               </Fragment>
             )}
             <button
