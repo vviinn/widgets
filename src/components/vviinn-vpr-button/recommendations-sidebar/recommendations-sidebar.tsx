@@ -33,6 +33,9 @@ export class RecommendationsSidebar {
 
   @Prop() sidebarTitle: string;
   @Prop() token: string;
+  @Prop() locale: Locale;
+  @Prop() currencySign: string;
+  @Prop() pricePrefix: string;
   @Prop() productId: string;
   @Prop() position: "bottom" | "right" = "bottom";
   @Prop() widgetScrollbar: boolean = false;
@@ -41,12 +44,9 @@ export class RecommendationsSidebar {
   @Prop() campaigns: string = "";
   @Prop() campaignType: CampaignName;
   @Prop() color: string;
-  @Prop() locale: Locale;
   @Prop() imageWidth: number = 300;
   @Prop() imageRatio: number;
   @Prop() cssUrl: string | null;
-  @Prop() currencySign: string = "€";
-  @Prop() pricePrefix: string;
   @Prop() noResultText: string;
   @Prop() noResultShow: boolean;
   /** Hiding disabled arrows in the carousel if true */
@@ -68,11 +68,11 @@ export class RecommendationsSidebar {
   @Prop() useCarousel: boolean = true;
 
   /** @internal */
+  @Prop() apiPath: string;
+  /** @internal */
   @Prop() showInCustomContainer: boolean = false;
   /** @internal */
   @Prop() buttonChildren: HTMLCollection;
-  /** @internal */
-  @Prop() apiPath?: string = "https://api.vviinn.com";
   /** @internal */
   @Prop() buttonElementId?: string;
   /** @internal */
@@ -187,9 +187,13 @@ export class RecommendationsSidebar {
 
           <main part="sidebar-content">
             <vviinn-vpr-widget
-              exportparts={`${carouselParts}, ${productCardParts}`}
               token={this.token}
+              currencySign={this.currencySign}
+              pricePrefix={this.pricePrefix}
+              apiPath={this.apiPath}
+              locale={this.locale}
               productId={this.productId}
+              exportparts={`${carouselParts}, ${productCardParts}`}
               imageWidth={this.imageWidth}
               imageRatio={this.imageRatio}
               setItemsAmount={this.setItemsAmount}
@@ -201,10 +205,6 @@ export class RecommendationsSidebar {
               showScroll={this.widgetScrollbar}
               campaigns={this.campaigns}
               color={this.color}
-              currencySign={this.currencySign}
-              pricePrefix={this.pricePrefix}
-              apiPath={this.apiPath}
-              locale={this.locale}
               buttonElementId={this.buttonElementId}
               noResultText={this.noResultText}
               noResultShow={this.noResultShow}

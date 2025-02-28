@@ -20,7 +20,7 @@ import {
 } from "../../campaign/VPRCampaignService";
 import { ChevronIconSmall, NewCloseIcon } from "../vviinn-icons";
 import { FilterOptions, getFilterOptions, RenderFilterButton } from "./helpers";
-import { Locale, resources } from "../../locale";
+import { resources } from "../../locale";
 
 import { SlotSkeleton, slotChangeListener } from "../customized-slots";
 import { Histogram } from "../vviinn-price-range/vviinn-price-range";
@@ -40,6 +40,7 @@ import {
   SearchStore,
 } from "../../store/search.store";
 import { isIntervalFilter } from "../../filters";
+import { globalState } from "../../store/store";
 
 /**
  * @slot vviinn-extended-filters-title - Text on widget's header.
@@ -87,12 +88,7 @@ export class VviinnExtendedFilters {
   @Element() el: HTMLElement;
 
   @Prop({ mutable: true }) filters: ResponseDynamicFilterItem[] = [];
-  /** The locale for currency formatting and text localization */
-  @Prop() locale: Locale = "de-DE";
   @Prop() mode: "button" | "preview" | "modal" = "button";
-  /** The currency sign is displayed after the price */
-  @Prop() currencySign?: string = "€";
-  /** The currency sign is displayed after the price */
   @Prop() showHeader?: boolean = true;
 
   /** @internal */
@@ -180,7 +176,7 @@ export class VviinnExtendedFilters {
 
   async componentWillLoad() {
     await i18next.init({
-      lng: this.locale,
+      lng: globalState.locale,
       fallbackLng: "en",
       resources,
     });
@@ -289,7 +285,6 @@ export class VviinnExtendedFilters {
                           )}
                           priceChangeHandler={this.priceChangeHandler}
                           selectedInterval={this.getSelectedPriceInterval()}
-                          currencySign={this.currencySign}
                         />
                       ) : (
                         <ul

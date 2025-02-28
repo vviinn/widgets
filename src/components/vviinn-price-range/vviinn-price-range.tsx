@@ -1,6 +1,7 @@
 import { Component, Host, h, Prop, Element, State, Watch } from "@stencil/core";
 import { components } from "../../interfaces/generated";
 import { priceRangeParts } from "../../cssParts";
+import { globalState } from "../../store/store";
 
 export type Histogram = components["schemas"]["interval-filter-values"][];
 
@@ -31,7 +32,6 @@ export class VviinnButton {
     filterValue: components["schemas"]["interval-filter-value-item"],
   ) => void;
   @Prop() selectedInterval?: components["schemas"]["interval"];
-  @Prop() currencySign: string;
 
   @State() minIndex: number = 0;
   @State() maxIndex: number;
@@ -111,7 +111,6 @@ export class VviinnButton {
 
   render() {
     const histogramSize = this.histogram.length - 1;
-
     return (
       <Host exportparts={priceRangeParts}>
         <div class="histogram" part="histogram">
@@ -169,11 +168,11 @@ export class VviinnButton {
         <div class="label-wrapper" part="histogram-label-wrapper">
           <div class="label" part="histogram-label">
             {this.histogram[this.minIndex]?.value?.interval?.start}
-            <span class="histogram-currency">{this.currencySign}</span>
+            <span class="histogram-currency">{globalState.currencySign}</span>
           </div>
           <div class="label" part="histogram-label">
             {this.histogram[this.maxIndex]?.value?.interval?.end}
-            <span class="histogram-currency">{this.currencySign}</span>
+            <span class="histogram-currency">{globalState.currencySign}</span>
           </div>
         </div>
       </Host>

@@ -27,6 +27,7 @@ const Template = (args) => `
   excluded="${args.excluded}"
   add-style="${args.addStyle}"
   currency-sign="${args.currencySign}"
+  price-prefix="${args.pricePrefix}"
   locale="${args.locale}"
   mode="${args.mode}"
   product-details-new-tab="${args.productDetailsNewTab}"
@@ -54,6 +55,7 @@ Default.args = {
   productDetailsRedirect: true,
   locale: "en-US",
   currencySign: "€",
+  pricePrefix: "",
   addStyle: true,
   imageResolutionWidth: 250,
   textSearchShow: true,

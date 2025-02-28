@@ -68,7 +68,6 @@ vviinn-vps-button::part(vviinn-button) {
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: background-color 0.2s;
   cursor: pointer;
 }
 
@@ -77,16 +76,14 @@ vviinn-vps-button::part(vviinn-button) {
   padding: 0 8px;
 }
 
-.text-search-button {
-  width: 44px;
-}
-
 .upload-button-text {
   display: contents;
 }
 
 .text-search-button {
   background-color: #f4f4f4;
+  transition: background-color 0.2s;
+  aspect-ratio: 1 / 1;
 }
 
 .speech-button {
