@@ -129,6 +129,16 @@ export class VviinnExtendedFilters {
   private getFilters = () =>
     this.innerFilters.length ? this.innerFilters : this.state.dynamicFilters;
 
+  private resetFiltersState() {
+    this.displayedOptionsCount = new Map();
+    this.requestFilters = [];
+    this.selectedMoreOptions = [];
+  }
+
+  private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
+    (isTriggeredByVpsWidget && !this.showInWidget) ||
+    (!isTriggeredByVpsWidget && this.showInWidget);
+
   private replaceSlotsContent() {
     const slots = this.el.querySelectorAll("[slot]");
     this.globalSlotsChanged.emit({
@@ -145,13 +155,19 @@ export class VviinnExtendedFilters {
     detail,
   }: CustomEvent<ResetSelectedFiltersEventData>) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
-    this.requestFilters = [];
-    this.selectedMoreOptions = [];
+    this.resetFiltersState();
   };
 
-  private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
-    (isTriggeredByVpsWidget && !this.showInWidget) ||
-    (!isTriggeredByVpsWidget && this.showInWidget);
+  private resetModal() {
+    triggerResetFilters({
+      vviinnFilterTriggered: this.vviinnFilterTriggered,
+      vviinnFiltersChanged: this.vviinnFiltersChanged,
+      el: this.el,
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
+    this.resetFiltersState();
+    this.showMore = false;
+  }
 
   private handleExtendedFiltersButtonClicked = ({
     detail,
@@ -423,10 +439,13 @@ export class VviinnExtendedFilters {
   }
 
   private handleMoreOptionsMainClick(column: string) {
-    if (this.selectedMoreOptions.includes(column)) {
+    const optionsVisible = this.selectedMoreOptions.includes(column);
+
+    if (optionsVisible) {
       this.selectedMoreOptions = this.selectedMoreOptions.filter(
         (option) => option !== column,
       );
+      this.displayedOptionsCount.delete(column);
     } else {
       this.vviinnFilterTriggered.emit({
         action: "show",
@@ -498,19 +517,6 @@ export class VviinnExtendedFilters {
         "vviinnExtendedFiltersButtonClicked",
         this.handleExtendedFiltersButtonClicked,
       );
-  }
-
-  private resetModal() {
-    triggerResetFilters({
-      vviinnFilterTriggered: this.vviinnFilterTriggered,
-      vviinnFiltersChanged: this.vviinnFiltersChanged,
-      el: this.el,
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
-
-    this.selectedMoreOptions = [];
-    this.requestFilters = [];
-    this.showMore = false;
   }
 
   private priceChangeHandler = (filterValue: DynamicFilterValue) => {
