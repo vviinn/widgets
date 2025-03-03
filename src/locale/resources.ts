@@ -9,6 +9,7 @@ export const resources: Resource = {
       noResultText: "Keine Ergebnisse! Versuche es bitte später erneut.",
       basketButtonText: "In den Warenkorb",
       basketButtonPressedText: "In den Warenkorb",
+      discoveryWidgetTitle: "Ähnliche Produkte",
       setMode: {
         widgetTitle: "Kaufen Sie ein Set und erhalten Sie Rabatt",
         widgetSubtitle:
@@ -68,6 +69,7 @@ export const resources: Resource = {
       noResultText: "No results! Please, try again later.",
       basketButtonText: "Add to Basket",
       basketButtonPressedText: "Add to Basket",
+      discoveryWidgetTitle: "Recommended products",
       setMode: {
         widgetTitle: "Buy a set to get discount",
         widgetSubtitle: "Save up to 15% for buying products from the list",

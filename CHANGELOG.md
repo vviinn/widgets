@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.152.4](https://github.com/vviinn/widgets/compare/v2.152.3...v2.152.4) (2025-02-28)
+
+
+### Bug Fixes
+
+* Add titles translations for Discovery and One-click discovery widgets ([116bb57](https://github.com/vviinn/widgets/commit/116bb57d1d62715c03f17ab6444028e7eb879cfd))
+
+### [2.152.3](https://github.com/vviinn/widgets/compare/v2.152.2...v2.152.3) (2025-02-28)
+
+### [2.152.2](https://github.com/vviinn/widgets/compare/v2.152.1...v2.152.2) (2025-02-27)
+
+
+### Bug Fixes
+
+* Fix detected objects reset possibility in components. Wait for the response of the detected objects before the searchId request. ([a383ccc](https://github.com/vviinn/widgets/commit/a383ccc2bc1b506cee92373ed4bbb522d721fd90))
+
+### [2.152.1](https://github.com/vviinn/widgets/compare/v2.152.0...v2.152.1) (2025-02-26)
+
+
+### Bug Fixes
+
+* Update dependencies, fix packages vulnerabilities ([d875de8](https://github.com/vviinn/widgets/commit/d875de82607fa5c4b5183a66b2dc4bbeb7ca31ca))
+
 ## [2.152.0](https://github.com/vviinn/widgets/compare/v2.151.1...v2.152.0) (2025-02-24)
 
 

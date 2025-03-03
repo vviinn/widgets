@@ -3,6 +3,8 @@ import {
   ProductClickEvent,
   ProductLoadEvent,
   ProductViewEvent,
+  ResultLoadEvent,
+  ResultViewEvent,
   Widget,
 } from "vviinn-tracking-client-ts";
 import { ValueObject } from "../network/ion/ValueObject";
@@ -75,6 +77,8 @@ export type ProductEvent =
   | ProductLoadEvent
   | ProductClickEvent
   | ProductViewEvent;
+
+export type ResultEvent = ResultLoadEvent | ResultViewEvent;
 
 export type SearchIdEventData = {
   isTriggeredByVpsWidget: boolean;

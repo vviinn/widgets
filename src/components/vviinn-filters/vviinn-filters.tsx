@@ -70,8 +70,6 @@ export class VviinnFilters {
   @Prop() filtersString: string = "";
   /** @internal */
   @Prop() showInWidget: boolean = false;
-  /** The currency sign is displayed after the price */
-  @Prop() currencySign?: string = "€";
 
   @State() innerFilters: ResponseDynamicFilterItem[] = [];
   @State() selectedFilter?: ResponseDynamicFilterItem;
@@ -246,7 +244,6 @@ export class VviinnFilters {
                 )}
                 priceChangeHandler={this.priceChangeHandler}
                 selectedInterval={this.getSelectedPriceInterval()}
-                currencySign={this.currencySign}
               />
             ) : (
               <ul class="sub-filters-wrapper" part="filters-footer-list">

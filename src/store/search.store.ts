@@ -2,6 +2,7 @@ import { createStore } from "@stencil/store";
 import * as O from "fp-ts/lib/Option";
 import * as TE from "fp-ts/TaskEither";
 import { pipe } from "fp-ts/function";
+import { globalState } from "./store";
 import { Recommendation } from "../interfaces/recommendation";
 import {
   visualSearchSessionClient,
@@ -110,7 +111,7 @@ const processVisualSearch = (
   const state = useStore(store);
 
   return pipe(
-    getTokenWithBody<VisualSearchRequest>(state.token, body),
+    getTokenWithBody<VisualSearchRequest>(globalState.token, body),
     setBodyAndHeaders,
     TE.fromEither,
     TE.chain((request) =>
@@ -222,7 +223,7 @@ export const makeTextSearchRequest = async (
   };
 
   return pipe(
-    getTokenWithBody<TextSearchRequest>(state.token, body),
+    getTokenWithBody<TextSearchRequest>(globalState.token, body),
     setBodyAndHeaders,
     TE.fromEither,
     TE.chain((request) => textSearchSessionClient(request)),
@@ -274,7 +275,7 @@ export const makeProductListingPageRequest = async (
   };
 
   return await pipe(
-    getTokenWithBody<ProductListingPageRequest>(state.token, body),
+    getTokenWithBody<ProductListingPageRequest>(globalState.token, body),
     setBodyAndHeaders,
     TE.fromEither,
     TE.chainW(productListingPageSessionClient),
@@ -338,11 +339,10 @@ export const processSelectedFile =
       )();
     }
 
-    await pipe(
+    pipe(
       TE.fromEither(hiResFileResult),
       TE.chain(uploadFile(store, "highResolutionImage", state.selfSearchId)),
     )();
-
     return session;
   };
 

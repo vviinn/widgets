@@ -8,7 +8,6 @@ export const ResultsTemplate = (args) => {
     locale,
     productDetailsRedirect,
     productDetailsNewTab,
-    showInWidget,
     uiSessionId,
     resultsCount,
     filterColumn,
@@ -17,6 +16,7 @@ export const ResultsTemplate = (args) => {
     addToBasketShow,
     oneClickDiscoveryMode,
     addPriceContainer,
+    pricePrefix,
   } = args;
 
   const filterAttributes =
@@ -46,9 +46,9 @@ export const ResultsTemplate = (args) => {
     image-resolution-width="${imageResolutionWidth}"
     currency-sign="${currencySign}"
     locale="${locale}"
+    price-prefix="${pricePrefix}"
     product-details-redirect="${productDetailsRedirect}"
     product-details-new-tab="${productDetailsNewTab}"
-    show-in-widget="${showInWidget}"
     ${searchQueryAttribute}
     ${filterAttributes}
     ui-session-id="${uiSessionId}"

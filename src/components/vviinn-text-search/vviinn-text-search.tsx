@@ -15,7 +15,6 @@ import {
   SearchStoreName,
   SearchStore,
 } from "../../store/search.store";
-import { createTrackingApi } from "../../openApi";
 import { TextSearchIcon } from "../vviinn-icons";
 import { slotChangeListener } from "../customized-slots";
 import {
@@ -35,8 +34,9 @@ import { searchBarParts } from "../../cssParts";
 import { MicIcon } from "../vviinn-icons/icons/MicIcon";
 import { initializeRecognition, speechTooltip } from "./helpers";
 import Timeout = NodeJS.Timeout;
-import { DefaultApi, WidgetEvent } from "vviinn-tracking-client-ts";
+import { WidgetEvent } from "vviinn-tracking-client-ts";
 import { createWidgetEvent } from "../../tracking";
+import { trackEvent, updateGlobalState, globalState } from "../../store/store";
 
 /**
  * @part text-search-container - Container for the text search block.
@@ -80,7 +80,7 @@ export class VviinnTextSearch {
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
   /** The locale for currency formatting and text localization */
-  @Prop() locale: Locale = "de-DE";
+  @Prop() locale: Locale;
   /** Basic or extended text search with search modal and speech recognition */
   @Prop() mode: SearchBarMode = "basic";
   /** Query for the text search passed from widget */
@@ -92,7 +92,7 @@ export class VviinnTextSearch {
   /** @internal */
   @Prop() showInWidget?: boolean = false;
   /** @internal */
-  @Prop() apiPath?: string = "https://api.vviinn.com";
+  @Prop() apiPath?: string;
   /** uiSessionId from vps-widget */
   /** @internal */
   @Prop() uiSessionId?: string;
@@ -117,7 +117,6 @@ export class VviinnTextSearch {
     this.showTooltip = show;
   };
 
-  private trackingApi?: DefaultApi;
   private state?: SearchStore;
   private storeName?: SearchStoreName;
 
@@ -133,7 +132,7 @@ export class VviinnTextSearch {
         : i18next.t("textSearchPlaceholder");
 
   private recognition = initializeRecognition(
-    this.locale,
+    globalState.locale,
     () => {
       this.showRecording();
       this.setShowTooltip(false);
@@ -147,12 +146,9 @@ export class VviinnTextSearch {
   );
 
   connectedCallback() {
+    updateGlobalState(this);
     this.storeName = this.showInWidget ? "widget" : "components";
     this.state = this.showInWidget ? searchState : componentsState;
-    if (this.token) this.state.token = this.token;
-    this.trackingApi = this.showInWidget
-      ? createTrackingApi(this.apiPath, this.token)
-      : null;
 
     // document.addEventListener("resultsSearchFinished", this.hideLoader);
     document.addEventListener(
@@ -191,7 +187,7 @@ export class VviinnTextSearch {
 
   async componentWillLoad() {
     await i18next.init({
-      lng: this.locale,
+      lng: globalState.locale,
       fallbackLng: "en",
       resources,
     });
@@ -244,7 +240,7 @@ export class VviinnTextSearch {
           session_id: this.uiSessionId,
           ...rest,
         });
-        this.trackingApi.trackEvent(textSearchStartedEvent);
+        trackEvent(textSearchStartedEvent);
       }
 
       const response = pipe(
@@ -294,11 +290,11 @@ export class VviinnTextSearch {
 
           {this.mode === "extended" && (
             <vviinn-vps-button
-              token={this.token}
-              locale={this.locale}
+              token={globalState.token}
+              locale={globalState.locale}
+              apiPath={globalState.apiPath}
               addStyle={false}
               useComponentsStore={true}
-              apiPath={this.apiPath}
             />
           )}
 
