@@ -256,7 +256,11 @@ export class VviinnExtendedFilters {
                 return (
                   <li part="extended-filters-row">
                     <div
-                      class="filters-modal-main-button-wrapper"
+                      class={`filters-modal-main-button-wrapper ${
+                        this.selectedMoreOptions.includes(mainFilter.column)
+                          ? "open"
+                          : ""
+                      }`}
                       part="extended-filters-row-wrapper"
                     >
                       <button
@@ -275,6 +279,7 @@ export class VviinnExtendedFilters {
                             {addedOptions}
                           </div>
                         )}
+                        <ChevronIconSmall />
                       </button>
 
                       {isIntervalFilter(mainColumn) &&
@@ -288,11 +293,7 @@ export class VviinnExtendedFilters {
                         />
                       ) : (
                         <ul
-                          class={`filters-modal-sub-list  ${
-                            this.selectedMoreOptions.includes(mainFilter.column)
-                              ? "open"
-                              : ""
-                          }`}
+                          class="filters-modal-sub-list"
                           part="extended-filters-sub-list"
                         >
                           {this.renderFilterOptions(mainFilter, filterOptions)}
