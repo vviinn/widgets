@@ -79,6 +79,7 @@ import { globalState } from "../../store/store";
  */
 
 const FILTER_OPTIONS_INITIAL_COUNT = 8;
+const FILTER_OPTIONS_STEP_COUNT = 5;
 @Component({
   tag: "vviinn-extended-filters",
   styleUrl: "vviinn-filters.css",
@@ -198,7 +199,7 @@ export class VviinnExtendedFilters {
       this.displayedOptionsCount.get(filterColumn) ||
       FILTER_OPTIONS_INITIAL_COUNT;
     const newCount = Math.min(
-      currentCount + FILTER_OPTIONS_INITIAL_COUNT,
+      currentCount + FILTER_OPTIONS_STEP_COUNT,
       totalOptions,
     );
     this.displayedOptionsCount = new Map(this.displayedOptionsCount);
