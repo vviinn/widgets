@@ -129,10 +129,14 @@ export class VviinnExtendedFilters {
   private getFilters = () =>
     this.innerFilters.length ? this.innerFilters : this.state.dynamicFilters;
 
-  private resetFiltersState() {
+  private resetOptionsInteractions() {
     this.displayedOptionsCount = new Map();
-    this.requestFilters = [];
     this.selectedMoreOptions = [];
+  }
+
+  private resetFiltersState() {
+    this.resetOptionsInteractions();
+    this.requestFilters = [];
   }
 
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
@@ -156,6 +160,11 @@ export class VviinnExtendedFilters {
   }: CustomEvent<ResetSelectedFiltersEventData>) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.resetFiltersState();
+  };
+
+  private handleCloseModal = () => {
+    this.showMore = false;
+    this.resetOptionsInteractions();
   };
 
   private resetModal() {
@@ -240,9 +249,7 @@ export class VviinnExtendedFilters {
 
               <button
                 class="filters-modal-close"
-                onClick={() => {
-                  this.showMore = false;
-                }}
+                onClick={this.handleCloseModal}
                 part="extended-filters-modal-close"
               >
                 <NewCloseIcon />
