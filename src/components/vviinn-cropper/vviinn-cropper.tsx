@@ -12,7 +12,7 @@ import {
 } from "@stencil/core";
 import Cropper from "cropperjs";
 import styles from "./vviinn-cropper.css";
-import { state } from "../../store/store";
+import { updateGlobalState } from "../../store/store";
 import { ValueObject } from "../../network/ion/ValueObject";
 import { fromImage, Rectangle } from "../../geometry/Rectangle";
 import { DetectedObject } from "../../searchSession/searchSession";
@@ -51,13 +51,14 @@ const DEFAULT_IMAGE_SIZE = 288;
 export class VviinnCropper {
   @Element() el: HTMLElement;
 
-  @Prop() apiPath?: string = "https://api.vviinn.com";
-  @Prop() saveImageMode?: "once" | "always" | "never" = "never";
-
+  /** Save to Local Storage mode for uploaded image */
+  @Prop() saveImageMode?: "once" | "always" | "never" = "once";
   @Prop({ mutable: true }) detectedObjectsString?: string;
   @Prop({ mutable: true }) url: string;
   @Prop({ mutable: true }) width: number = 288;
 
+  /** @internal */
+  @Prop() apiPath?: string;
   /** @internal */
   @Prop({ mutable: true }) height?: number;
   /** @internal */
@@ -85,6 +86,12 @@ export class VviinnCropper {
   private storeName?: SearchStoreName;
 
   connectedCallback() {
+    updateGlobalState(this);
+    this.stringParser(true);
+    this.state = this.showInWidget ? searchState : componentsState;
+    this.storeName = this.showInWidget ? "widget" : "components";
+    this.initPreloadedImage();
+
     document.addEventListener(
       "vviinnImageUploadStarted",
       this.imageUploadStartedHandler,
@@ -93,12 +100,6 @@ export class VviinnCropper {
       "vviinnImageUploadFinished",
       this.imageUploadFinishedHandler,
     );
-
-    this.stringParser(true);
-    state.apiPath = this.apiPath;
-    this.state = this.showInWidget ? searchState : componentsState;
-    this.storeName = this.showInWidget ? "widget" : "components";
-    this.initPreloadedImage();
   }
 
   componentWillRender() {

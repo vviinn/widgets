@@ -61,6 +61,9 @@ export class VviinnCarousel {
   } = {};
 
   @Prop() mode: CarouselMode = "continuity";
+  @Prop() currencySign: string;
+  @Prop() pricePrefix: string;
+  @Prop() locale: Locale;
   @Prop() imageWidth: number = 140;
   @Prop() showScroll: boolean = true;
   @Prop() campaignTypeId: CampaignTypeId;
@@ -77,9 +80,6 @@ export class VviinnCarousel {
   @Prop() imageRatio: number;
   @Prop() addPriceContainer?: boolean = false;
   @Prop() favoriteShow: boolean;
-  @Prop() currencySign: string;
-  @Prop() pricePrefix: string = "";
-  @Prop() locale: Locale;
   @Prop() setItemsAmount?: number;
 
   /** Event emitted once when the recommendation is rendered on the page */

@@ -9,7 +9,7 @@ export default {
 
 const Template = (args) => `
 <div class="search-page-wrapper">
-  <div class="search-page-wrapper-aside">
+  <div class="search-page-wrapper-aside cropper-page">
     <vviinn-cropper
       width="${args.width}"
       detected-objects-string='${args.detectedObjectsString}'
@@ -24,7 +24,6 @@ const Template = (args) => `
       token="${args.token}"
       api-path="${args.apiPath}"
       mode="extended"
-      show-in-widget="${args.showInWidget}"
       placeholder="Upload an image to see the cropper"
       locale="en-US"
     >
@@ -50,7 +49,7 @@ Default.storyName = "Cropper";
 Default.args = {
   token: vviinnToken,
   apiPath: process.env.STORYBOOK_API_PATH,
-  saveImageMode: "never",
+  saveImageMode: "once",
   url: "",
   width: 288,
   detectedObjectsString: "",

@@ -3,6 +3,7 @@ import * as O from "fp-ts/lib/Option";
 import * as E from "fp-ts/Either";
 import * as TE from "fp-ts/TaskEither";
 import { pipe } from "fp-ts/function";
+import { globalState } from "./store";
 import { Recommendation } from "../interfaces/recommendation";
 import {
   readFilters,
@@ -126,14 +127,15 @@ export const resetStore = (store: SearchStoreName) => {
 };
 
 const updateImageSearchState =
-  (store: SearchStoreName) => async (response: SearchSession) => {
+  (store: SearchStoreName, isSessionRequest = false) =>
+  async (response: SearchSession) => {
     const state = useStore(store);
-    state.detectedObjects = response.detectedObjects;
     state.selfSearchId = pipe(getLink(response, "self"), extractHrefValue);
     state.results = response.value;
     state.filters = readFilters(foldValueObject(response.filters));
     state.rectangleSearchForm = response.searchArea;
     state.resetCategoryLink = response.links?.clearFilters;
+    if (!isSessionRequest) state.detectedObjects = response.detectedObjects;
     state.loading = false;
   };
 
@@ -150,40 +152,43 @@ const makeLinkRequest =
   };
 
 const detectObjects =
-  (store: SearchStoreName) => async (data: SearchSession) => {
+  (store: SearchStoreName) =>
+  (data: SearchSession): TE.TaskEither<BasicError<string | Response>, void> => {
     const state = useStore(store);
     state.objectDetectionInProgress = true;
 
-    await pipe(
+    return pipe(
       getLink(data, "detectedObjects"),
       TE.fromOption(() => detectObjectsError),
-      TE.chain(makeLinkRequest(state.token)),
-      TE.map(
-        (objects: ValueObject<ValueObject<DetectedObject>[]>) =>
-          (state.detectedObjects = foldValueObject(objects)),
-      ),
-    )();
-
-    state.objectDetectionInProgress = false;
+      TE.chain(makeLinkRequest(globalState.token)),
+      TE.map((objects: ValueObject<ValueObject<DetectedObject>[]>) => {
+        state.detectedObjects = foldValueObject(objects);
+        state.objectDetectionInProgress = false;
+      }),
+      TE.mapLeft((error) => {
+        state.objectDetectionInProgress = false;
+        return error;
+      }),
+    );
   };
 
-export const uploadHiResFile =
-  (store: SearchStoreName) =>
-  async (sessionResponse: SearchSession, file: File) => {
-    const state = useStore(store);
-    const ionFile: F.IonFile = await F.fromFile(file);
-    const formPayload = {
-      image: ionFile,
-    };
-
-    const form = sessionResponse.uploadHighResolutionImage;
-
-    await pipe(
-      makeAuthorizedRequest(state.token),
-      TE.fromEither,
-      TE.chainW(formRequest<void>(form, formPayload)),
-    )();
+export const uploadHiResFile = async (
+  sessionResponse: SearchSession,
+  file: File,
+) => {
+  const ionFile: F.IonFile = await F.fromFile(file);
+  const formPayload = {
+    image: ionFile,
   };
+
+  const form = sessionResponse.uploadHighResolutionImage;
+
+  await pipe(
+    makeAuthorizedRequest(globalState.token),
+    TE.fromEither,
+    TE.chainW(formRequest<void>(form, formPayload)),
+  )();
+};
 
 export const makeRectangularSearchRequest = async (
   store: SearchStoreName,
@@ -204,7 +209,7 @@ export const makeRectangularSearchRequest = async (
       };
 
       return await pipe(
-        makeAuthorizedRequest(state.token),
+        makeAuthorizedRequest(globalState.token),
         TE.fromEither,
         TE.chainW(formRequest(state.rectangleSearchForm, searchRectangle)),
         TE.map(updateImageSearchState(store)),
@@ -223,7 +228,7 @@ export const uploadFile =
     const fileForm = imageFormFromFile(file);
 
     const tokenWithFile = sequenceToEither(
-      processBearerToken(state.token),
+      processBearerToken(globalState.token),
       E.right(fileForm),
     );
 
@@ -239,12 +244,16 @@ export const uploadFile =
       TE.chain((request) =>
         imageSearchSessionClient(request, state.campaignId, state.excluded),
       ),
-      TE.map((sessionResponse) => {
-        updateImageSearchState(store)(sessionResponse);
-        detectObjects(store)(sessionResponse);
-        state.loading = false;
-        return sessionResponse;
-      }),
+      TE.chain((sessionResponse) =>
+        pipe(
+          detectObjects(store)(sessionResponse),
+          TE.map(() => {
+            updateImageSearchState(store, true)(sessionResponse);
+            state.loading = false;
+            return sessionResponse;
+          }),
+        ),
+      ),
       TE.mapLeft((error) => {
         state.serverError = true;
         state.loading = false;
@@ -273,7 +282,7 @@ export const makeTextSearchRequest = async (
   };
 
   return pipe(
-    getTokenWithBody<TextSearchRequest>(state.token, body),
+    getTokenWithBody<TextSearchRequest>(globalState.token, body),
     setBodyAndHeaders,
     TE.fromEither,
     TE.chain((request) => textSearchSessionClient(request)),
@@ -334,7 +343,7 @@ export const makeProductListingPageRequest = async (
   };
 
   return await pipe(
-    getTokenWithBody<ProductListingPageRequest>(state.token, body),
+    getTokenWithBody<ProductListingPageRequest>(globalState.token, body),
     setBodyAndHeaders,
     TE.fromEither,
     TE.chainW(productListingPageSessionClient),
@@ -379,19 +388,24 @@ export const processSelectedFile =
     const session = await pipe(resizeFileTask, TE.chain(uploadFile(store)))();
 
     const hiResFileResizer = resizeFileTo(HI_RES_IMAGE_SMALLEST_SIDE_TO_RESIZE);
-    const resizeHiResFileTask = pipe(
+    const hiResFileTask = pipe(
       originFile,
       TE.fromEither,
       TE.chainTaskK(hiResFileResizer),
     );
 
-    const resizedHiResFile = await resizeHiResFileTask();
+    if (store === "components") {
+      await pipe(
+        hiResFileTask,
+        TE.chainTaskK(imageFromFileTask),
+        TE.map(setSelectedImage(store)),
+      )();
+    }
 
+    const hiResFileResult = await hiResFileTask();
     pipe(
-      sequenceToEither(session, resizedHiResFile),
-      E.map(([sessionObject, file]) =>
-        uploadHiResFile(store)(sessionObject, file),
-      ),
+      sequenceToEither(session, hiResFileResult),
+      E.map(([sessionObject, file]) => uploadHiResFile(sessionObject, file)),
     );
 
     return session;
@@ -404,7 +418,7 @@ onChangeWidgetState("activeIonLink", async (newLink: Link) => {
   state.loading = true;
 
   await pipe(
-    makeAuthorizedRequest(state.token),
+    makeAuthorizedRequest(globalState.token),
     TE.fromEither,
     TE.chainW(linkRequest(link)),
     TE.map(updateImageSearchState("widget")),

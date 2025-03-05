@@ -88,6 +88,12 @@ export class VviinnVprButton {
   @Element() el: HTMLElement;
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
+  /** The locale for currency formatting and text localization */
+  @Prop() locale: Locale;
+  /**  The currency sign is displayed after the price */
+  @Prop() currencySign?: string;
+  /** Prefix is displayed before the price */
+  @Prop() pricePrefix?: string;
   /** ID of product you need recommendations for (required) */
   @Prop() productId: string;
   /** Switch between carousel modes */
@@ -98,8 +104,6 @@ export class VviinnVprButton {
   @Prop() excluded: string = "";
   /** Campaign type */
   @Prop() campaignType: CampaignName = this.mode === "set" ? "VCS" : "VPR";
-  /** The locale for currency formatting and text localization */
-  @Prop() locale: Locale = "de-DE";
   /** Accepts any hex color code */
   @Prop() color: string = "";
   /** Width of each recommended product image */
@@ -110,10 +114,6 @@ export class VviinnVprButton {
   @Prop() setItemsAmount?: number = 4;
   /** Optional for custom CSS. It will overwrite all other settings */
   @Prop() cssUrl: string | null = null;
-  /**  The currency sign is displayed after the price */
-  @Prop() currencySign: string = "€";
-  /** Prefix is displayed before the price */
-  @Prop() pricePrefix: string = "";
   /** A custom message is displayed when no results */
   @Prop() noResultText: string = "";
   /** Showing a message (when true) or hiding the whole widget, when no results */
@@ -136,8 +136,8 @@ export class VviinnVprButton {
   /** Location of Update button for Set mode */
   @Prop() updateButtonLocation: UpdateButtonLocation = "topAndItem";
 
-  /** Sidebar title (change it to fit your locale) */
-  @Prop() sidebarTitle: string = this.mode === "set" ? "" : "Similar products";
+  /** Sidebar title */
+  @Prop() sidebarTitle: string;
   /** Show or hide the scrollbar */
   @Prop() modalScrollbar: boolean = false;
   /** Position of the modal */
@@ -157,7 +157,7 @@ export class VviinnVprButton {
   @Prop() oneClickDiscoveryMode?: OneClickDiscoveryMode = "standalone";
 
   /** @internal */
-  @Prop() apiPath?: string = "https://api.vviinn.com";
+  @Prop() apiPath?: string;
 
   /** @internal */
   @Prop() showInWidget: boolean = false;
@@ -263,19 +263,19 @@ export class VviinnVprButton {
 
   handleClick(): void {
     const sidebar = document.createElement("vviinn-recommendations-sidebar");
+    sidebar.token = this.token;
+    sidebar.locale = this.locale;
+    sidebar.currencySign = this.currencySign;
+    sidebar.pricePrefix = this.pricePrefix;
+    sidebar.apiPath = this.apiPath;
     sidebar.sidebarTitle = this.sidebarTitle;
     sidebar.productId = this.productId;
-    sidebar.token = this.token;
     sidebar.position = this.position;
     sidebar.widgetScrollbar = this.modalScrollbar;
     sidebar.campaigns = this.campaigns;
     sidebar.campaignType = this.campaignType;
     sidebar.color = this.color;
-    sidebar.locale = this.locale;
     sidebar.imageWidth = this.imageWidth;
-    sidebar.currencySign = this.currencySign;
-    sidebar.pricePrefix = this.pricePrefix;
-    sidebar.apiPath = this.apiPath;
     sidebar.buttonElementId = this.el.id;
     sidebar.noResultText = this.noResultText;
     sidebar.noResultShow = this.noResultShow;

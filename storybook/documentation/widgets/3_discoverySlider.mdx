@@ -64,31 +64,6 @@ import { vviinnToken, productIdSimilarProducts } from "../../helpers";
     </div>
 </div>
 
-<div id="similar-products-button">
-    <div className="tab tab-reverse">
-        <h3>One-click Discovery</h3>
-        <div className="tablink-group">
-            <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'similar-products-button')}}>Code</button>
-            <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'similar-products-button')}}>Preview</button>
-        </div>
-    </div>
-    <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
-        <div className="tabcontent-preview">
-            <vviinn-vpr-button token={vviinnToken} product-id={productIdSimilarProducts} locale="en-US">
-            </vviinn-vpr-button>
-        </div>
-    </div>
-    <div id="Code_2" className="tabcontent">
-```html
-<vviinn-vpr-button 
-    token="TOKEN" 
-    product-id="PRODUCT_ID"
-    locale="en-US"
-></vviinn-vpr-button>
-```
-    </div>
-</div>
-
 
 
 

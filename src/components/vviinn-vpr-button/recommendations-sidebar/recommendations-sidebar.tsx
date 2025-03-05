@@ -14,11 +14,12 @@ import { CrossIcon } from "../../vviinn-icons";
 import { CarouselMode } from "../../vviinn-carousel/vviinn-carousel";
 import { BasicEventData } from "../../../recommendation/events";
 import { CampaignName } from "../../../campaign/Campaign";
-import { Locale } from "../../../locale";
+import { Locale, resources } from "../../../locale";
 import { UpdateButtonLocation } from "../../vviinn-vpr-widget/vviinn-vpr-widget";
 import { ClickEvent, isClickedInRectBound } from "../../../geometry/Rectangle";
 import { Recommendation } from "../../../components";
 import { carouselParts, productCardParts } from "../../../cssParts";
+import i18next from "i18next";
 
 type SidebarState = "idle" | "open" | "closed";
 
@@ -32,6 +33,9 @@ export class RecommendationsSidebar {
 
   @Prop() sidebarTitle: string;
   @Prop() token: string;
+  @Prop() locale: Locale;
+  @Prop() currencySign: string;
+  @Prop() pricePrefix: string;
   @Prop() productId: string;
   @Prop() position: "bottom" | "right" = "bottom";
   @Prop() widgetScrollbar: boolean = false;
@@ -40,12 +44,9 @@ export class RecommendationsSidebar {
   @Prop() campaigns: string = "";
   @Prop() campaignType: CampaignName;
   @Prop() color: string;
-  @Prop() locale: Locale;
   @Prop() imageWidth: number = 300;
   @Prop() imageRatio: number;
   @Prop() cssUrl: string | null;
-  @Prop() currencySign: string = "€";
-  @Prop() pricePrefix: string;
   @Prop() noResultText: string;
   @Prop() noResultShow: boolean;
   /** Hiding disabled arrows in the carousel if true */
@@ -67,11 +68,11 @@ export class RecommendationsSidebar {
   @Prop() useCarousel: boolean = true;
 
   /** @internal */
+  @Prop() apiPath: string;
+  /** @internal */
   @Prop() showInCustomContainer: boolean = false;
   /** @internal */
   @Prop() buttonChildren: HTMLCollection;
-  /** @internal */
-  @Prop() apiPath?: string = "https://api.vviinn.com";
   /** @internal */
   @Prop() buttonElementId?: string;
   /** @internal */
@@ -135,6 +136,14 @@ export class RecommendationsSidebar {
     return this.getAsideElement()?.getBoundingClientRect();
   }
 
+  async componentWillLoad() {
+    await i18next.init({
+      lng: this.locale,
+      fallbackLng: "en",
+      resources,
+    });
+  }
+
   componentDidLoad() {
     const widgetElement = this.el.shadowRoot.querySelector("vviinn-vpr-widget");
     Array.from(this.buttonChildren).forEach((child) => {
@@ -160,9 +169,11 @@ export class RecommendationsSidebar {
             {this.mode !== "set" && (
               <Fragment>
                 {this.renderSourceImage()}
-                <span class="title" part="recommendations-title">
-                  {this.sidebarTitle}
-                </span>
+                {this.sidebarTitle?.length !== 0 && (
+                  <span class="title" part="recommendations-title">
+                    {this.sidebarTitle || i18next.t("discoveryWidgetTitle")}
+                  </span>
+                )}
               </Fragment>
             )}
             <button
@@ -176,9 +187,13 @@ export class RecommendationsSidebar {
 
           <main part="sidebar-content">
             <vviinn-vpr-widget
-              exportparts={`${carouselParts}, ${productCardParts}`}
               token={this.token}
+              currencySign={this.currencySign}
+              pricePrefix={this.pricePrefix}
+              apiPath={this.apiPath}
+              locale={this.locale}
               productId={this.productId}
+              exportparts={`${carouselParts}, ${productCardParts}`}
               imageWidth={this.imageWidth}
               imageRatio={this.imageRatio}
               setItemsAmount={this.setItemsAmount}
@@ -190,10 +205,6 @@ export class RecommendationsSidebar {
               showScroll={this.widgetScrollbar}
               campaigns={this.campaigns}
               color={this.color}
-              currencySign={this.currencySign}
-              pricePrefix={this.pricePrefix}
-              apiPath={this.apiPath}
-              locale={this.locale}
               buttonElementId={this.buttonElementId}
               noResultText={this.noResultText}
               noResultShow={this.noResultShow}

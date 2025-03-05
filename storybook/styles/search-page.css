@@ -15,6 +15,11 @@ vviinn-cropper.active {
   flex: none;
   width: 288px;
 }
+
+.search-page-wrapper-aside.cropper-page {
+  width: auto;
+}
+
 @media screen and (max-width: 768px) {
   .search-page-wrapper {
     flex-direction: column;

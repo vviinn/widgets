@@ -127,8 +127,7 @@
   line-height: var(--line-height-headline);
   font-family: var(--font-family, var(--font-family-base));
   font-size: var(--font-size-headline);
-  text-align: center;
-  padding: 0px 24px 48px 24px;
+  padding-bottom: 48px;
 }
 
 .visually-hidden {
