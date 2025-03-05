@@ -29,6 +29,7 @@ import { Locale, resources } from "../../locale";
 import { SearchBarMode } from "../../widget/types";
 import { TextSearchResponse } from "../../interfaces/search";
 import * as E from "fp-ts/Either";
+import * as O from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/function";
 import { searchBarParts } from "../../cssParts";
 import { MicIcon } from "../vviinn-icons/icons/MicIcon";
@@ -87,6 +88,8 @@ export class VviinnTextSearch {
   @Prop({ mutable: true }) searchQuery?: string;
   /** Custom placeholder for the text search input */
   @Prop() placeholder?: string = "";
+  /** Save to Local Storage mode for uploaded image */
+  @Prop() saveImageMode?: "once" | "always" | "never" = "once";
 
   /** True, when used inside the widget */
   /** @internal */
@@ -148,6 +151,13 @@ export class VviinnTextSearch {
     },
   );
 
+  private imageUploadFinishedHandler = () => {
+    if (this.saveImageMode === "never") return;
+
+    const image: HTMLImageElement = O.getOrElse(() => null)(this.state.image);
+    if (image) localStorage.setItem("cropperImageSrc", image.src);
+  };
+
   connectedCallback() {
     updateGlobalState(this);
     this.storeName = this.showInWidget ? "widget" : "components";
@@ -158,6 +168,10 @@ export class VviinnTextSearch {
       "vviinnFilterTriggered",
       this.filterTriggeredHandler,
     );
+    document.addEventListener(
+      "vviinnImageUploadFinished",
+      this.imageUploadFinishedHandler,
+    );
   }
 
   disconnectedCallback() {
@@ -165,6 +179,10 @@ export class VviinnTextSearch {
     document.removeEventListener(
       "vviinnFilterTriggered",
       this.filterTriggeredHandler,
+    );
+    document.removeEventListener(
+      "vviinnImageUploadFinished",
+      this.imageUploadFinishedHandler,
     );
 
     clearTimeout(this.triggerTooltipStart);
