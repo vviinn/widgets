@@ -759,6 +759,7 @@ export class VviinnVpsWidget {
                           searchQuery={this.searchQuery}
                           uiSessionId={this.uiSessionId}
                           basicEventData={this.getBasicEventData(true)}
+                          save-image-mode="never"
                         />
                       )}
                     </Fragment>
@@ -792,6 +793,7 @@ export class VviinnVpsWidget {
                       locale={this.locale}
                       uiSessionId={this.uiSessionId}
                       basicEventData={this.getBasicEventData(true)}
+                      save-image-mode="never"
                     />
                   )}
 
@@ -801,46 +803,9 @@ export class VviinnVpsWidget {
                       showAspectRatioError={this.showAspectRatioError}
                       apiPath={this.apiPath}
                       showInWidget={true}
+                      save-image-mode="never"
                     />
                   )}
-
-                  {/* {this.isResultSlide() && this.state.searchType === "image" && (
-                <div class="source-wrapper image-wrapper">
-                  <vviinn-cropper
-                    basicEventData={this.getBasicEventData()}
-                    showAspectRatioError={this.showAspectRatioError}
-                    apiPath={globalState.apiPath}
-                    showInWidget={true}
-                  />
-                  <div
-                    class={{
-                      "filters-wrapper": true,
-                      hidden: this.showAspectRatioError,
-                    }}
-                  >
-                    <div class="filters">
-                      {this.state.filters.map((filter) => (
-                        <search-filters
-                          filter={filter}
-                          basicEventData={this.getBasicEventData()}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {this.isResultSlide() && this.state.searchType === "text" && (
-                <div class="source-wrapper text-search-wrapper">
-                  <vviinn-text-search
-                    token={globalState.token}
-                    apiPath={globalState.apiPath}
-                    locale={globalState.locale}
-                    showInWidget={true}
-                    searchQuery={this.searchQuery}
-                    uiSessionId={this.uiSessionId}
-                    basicEventData={this.getBasicEventData(true)}
-                  /> */}
 
                   <div
                     class={{

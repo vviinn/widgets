@@ -51,8 +51,8 @@ const DEFAULT_IMAGE_SIZE = 288;
 export class VviinnCropper {
   @Element() el: HTMLElement;
 
-  @Prop() saveImageMode?: "once" | "always" | "never" = "never";
-
+  /** Save to Local Storage mode for uploaded image */
+  @Prop() saveImageMode?: "once" | "always" | "never" = "once";
   @Prop({ mutable: true }) detectedObjectsString?: string;
   @Prop({ mutable: true }) url: string;
   @Prop({ mutable: true }) width: number = 288;

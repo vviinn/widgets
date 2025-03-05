@@ -49,7 +49,7 @@ Default.storyName = "Cropper";
 Default.args = {
   token: vviinnToken,
   apiPath: process.env.STORYBOOK_API_PATH,
-  saveImageMode: "never",
+  saveImageMode: "once",
   url: "",
   width: 288,
   detectedObjectsString: "",
