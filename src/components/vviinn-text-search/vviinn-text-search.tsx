@@ -152,7 +152,7 @@ export class VviinnTextSearch {
   );
 
   private imageUploadFinishedHandler = () => {
-    if (this.saveImageMode === "never") return;
+    if (this.saveImageMode === "never" || this.mode !== "extended") return;
 
     const image: HTMLImageElement = O.getOrElse(() => null)(this.state.image);
     if (image) localStorage.setItem("cropperImageSrc", image.src);
