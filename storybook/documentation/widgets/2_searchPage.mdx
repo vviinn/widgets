@@ -132,9 +132,9 @@ In this basic example, we use `vviinn-text-search`, `vviinn-results`, and two va
 
 - The `token` attribute is required for all components (except filters) and is used to authenticate your requests.
 - The `extended` mode enables image search functionality.
-- The `results-count` property defines the number of results that will be fetched. It cannot exceed the number set in the Campaign settings.
+- The `results-count` attribute defines the number of results that will be fetched. It cannot exceed the number set in the Campaign settings.
 
-Other properties you can use are detailed on the components' pages.
+Other attributes you can use are detailed on the components' pages.
 
 To see the filter columns, enable Filters in the Interface Controls section inside the Text Search campaign via the [Panel](https://panel.vviinn.com). The Primary flag is responsible for showing filters in the vviinn-filters component.
 </div>
@@ -186,7 +186,7 @@ To see the filter columns, enable Filters in the Interface Controls section insi
 <vviinn-results token="YOUR_TOKEN" locale="en-US"></vviinn-results>
 
 <!-- Image Search example: -->
-<vviinn-cropper width="300" save-image-mode="once"></vviinn-cropper>
+<vviinn-cropper width="300"></vviinn-cropper>
 
 <vviinn-text-search 
   token="YOUR_TOKEN"
@@ -204,7 +204,7 @@ In this example, the `vviinn-text-search` component is on the first page, and th
 1. First, you should add event listeners to capture the `query` for a text search or `searchId` for a Visual Search. 
 2. Pass this data to the second page via URL and use it to get the results. 
     * For Text Search, use the `search-query` attribute to pass the query to the `vviinn-text-search` component. 
-    * For Visual Search, use the `search-id` attribute to pass the searchId to the `vviinn-results` component. To show an image, use the `vviinn-cropper` component and pass the `save-image-mode=once` property. This will allow the Cropper to reuse the uploaded image.
+    * For Visual Search, use the `search-id` attribute to pass the searchId to the `vviinn-results` component. To show an image, use the `vviinn-cropper` component. Default value of the attribute `save-image-mode=once` will allow the Cropper to reuse the uploaded image.
 </div>
 </div>
 
