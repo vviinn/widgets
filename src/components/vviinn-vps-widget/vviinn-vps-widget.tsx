@@ -762,6 +762,7 @@ export class VviinnVpsWidget {
                           searchQuery={this.searchQuery}
                           uiSessionId={this.uiSessionId}
                           basicEventData={this.getBasicEventData(true)}
+                          save-image-mode="never"
                         />
                       )}
                     </Fragment>
@@ -789,6 +790,7 @@ export class VviinnVpsWidget {
                     showAspectRatioError={this.showAspectRatioError}
                     apiPath={globalState.apiPath}
                     showInWidget={true}
+                    save-image-mode="never"
                   />
                   <div
                     class={{
@@ -818,6 +820,7 @@ export class VviinnVpsWidget {
                     searchQuery={this.searchQuery}
                     uiSessionId={this.uiSessionId}
                     basicEventData={this.getBasicEventData(true)}
+                    save-image-mode="never"
                   />
 
                   <div
