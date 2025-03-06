@@ -235,7 +235,7 @@ export class VviinnFilters {
           </ul>
         )}
 
-        {!!this.selectedFilter && (
+        {!!this.selectedFilter && this.selectedFilter.isPrimary && (
           <div class="filters-footer" part="filters-footer">
             {isIntervalFilter(column) ? (
               <vviinn-price-range
