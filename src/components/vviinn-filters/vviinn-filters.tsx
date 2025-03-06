@@ -22,7 +22,7 @@ import {
 import { Histogram } from "../vviinn-price-range/vviinn-price-range";
 import {
   ChangedFiltersEventData,
-  DynamicFilterTrackingData,
+  DynamicFilterInternalData,
   ResetSelectedFiltersEventData,
 } from "../../recommendation/events";
 import { components } from "../../interfaces/generated";
@@ -79,7 +79,7 @@ export class VviinnFilters {
   @Event({ bubbles: true })
   vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
 
-  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
+  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterInternalData>;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -144,6 +144,18 @@ export class VviinnFilters {
     return this.selectedFilter?.column === column ? "active" : "";
   }
 
+  private handleFilterTriggered = ({
+    detail,
+  }: CustomEvent<DynamicFilterInternalData>) => {
+    const { kind, isTriggeredByVpsWidget, action, customTrigger } = detail;
+    if (this.skipStateChanges(isTriggeredByVpsWidget) || !!customTrigger)
+      return;
+
+    if (action === "select") {
+      this.selectedFilter = this.getFilters().find((f) => f.column === kind);
+    }
+  };
+
   private handleFiltersChanged = ({
     detail,
   }: CustomEvent<ChangedFiltersEventData>) => {
@@ -188,6 +200,10 @@ export class VviinnFilters {
       "vviinnSelectedFiltersReset",
       this.handleSelectedFiltersReset,
     );
+    document.addEventListener(
+      "vviinnFilterTriggered",
+      this.handleFilterTriggered,
+    );
 
     this.filtersStringWatcher();
   }
@@ -200,6 +216,10 @@ export class VviinnFilters {
     document.removeEventListener(
       "vviinnSelectedFiltersReset",
       this.handleSelectedFiltersReset,
+    );
+    document.removeEventListener(
+      "vviinnFilterTriggered",
+      this.handleFilterTriggered,
     );
   }
 
