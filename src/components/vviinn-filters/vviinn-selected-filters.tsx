@@ -16,6 +16,7 @@ import {
 } from "../../campaign/VPRCampaignService";
 import {
   FilterOptions,
+  getPriceLabel,
   RenderCustomButton,
   RenderFilterButton,
   showActiveOnSubButton,
@@ -37,6 +38,7 @@ import {
 import { globalState } from "../../store/store";
 import { ResponseDynamicFilterIntervalItem } from "../../interfaces/recommendation";
 import { isIntervalFilter } from "../../filters";
+import { components } from "../../interfaces/generated";
 
 /**
  * @part selected-filters-list - List of selected filters.
@@ -118,16 +120,11 @@ export class VviinnSelectedFilters {
     }
 
     if (isIntervalFilter(detail.kind) && detail.action === "select") {
-      const priceFilter = this.getPriceFilter();
-
-      const { start: rangeStart, end: rangeEnd } = priceFilter.full;
-      const { start, end } = detail.value.interval;
-
-      if (start !== rangeStart || end !== rangeEnd) {
-        this.priceCustomFilter = `${start} ${globalState.currencySign} – ${end} ${globalState.currencySign}`;
-      } else {
-        this.priceCustomFilter = null;
-      }
+      this.priceCustomFilter = getPriceLabel(
+        this.getPriceFilter(),
+        detail.value.interval as components["schemas"]["interval"],
+        globalState.currencySign,
+      );
     }
   };
 

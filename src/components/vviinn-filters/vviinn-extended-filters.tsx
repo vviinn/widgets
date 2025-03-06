@@ -19,7 +19,12 @@ import {
   RequestDynamicFilterItem,
 } from "../../campaign/VPRCampaignService";
 import { ChevronIconSmall, NewCloseIcon } from "../vviinn-icons";
-import { FilterOptions, getFilterOptions, RenderFilterButton } from "./helpers";
+import {
+  FilterOptions,
+  getFilterOptions,
+  getPriceLabel,
+  RenderFilterButton,
+} from "./helpers";
 import { resources } from "../../locale";
 
 import { SlotSkeleton, slotChangeListener } from "../customized-slots";
@@ -41,6 +46,7 @@ import {
 } from "../../store/search.store";
 import { isIntervalFilter } from "../../filters";
 import { globalState } from "../../store/store";
+import { ResponseDynamicFilterIntervalItem } from "../../interfaces/recommendation";
 
 /**
  * @slot vviinn-extended-filters-title - Text on widget's header.
@@ -271,13 +277,27 @@ export class VviinnExtendedFilters {
                 );
                 const addedOptions = [];
                 requestFilter?.values?.forEach((value) => {
-                  const index = filterOptions.findIndex(
-                    (f) => f.value.value === value || f.value === value,
-                  );
-                  if (index > -1) {
-                    addedOptions.push(
-                      <span>{filterOptions[index].label}</span>,
+                  if (isIntervalFilter(mainColumn)) {
+                    const intervalFilter = filters.find(
+                      (filter) => filter.column === mainColumn,
+                    ) as ResponseDynamicFilterIntervalItem;
+
+                    const priceLabel = getPriceLabel(
+                      intervalFilter,
+                      value,
+                      globalState.currencySign,
                     );
+                    priceLabel && addedOptions.push(<span>{priceLabel}</span>);
+                  } else {
+                    const index = filterOptions.findIndex(
+                      (f) => (f.value.value ?? f.value) === value,
+                    );
+
+                    if (index > -1) {
+                      addedOptions.push(
+                        <span>{filterOptions[index].label}</span>,
+                      );
+                    }
                   }
                 });
 
