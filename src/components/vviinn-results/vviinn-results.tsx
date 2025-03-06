@@ -457,10 +457,16 @@ export class VviinnResults {
     trackEvent(filterEvent);
   };
 
-  private uploadTriggeredHandler = ({
+  private imageUploadStartedHandler = ({
     detail,
   }: CustomEvent<ImageUploadEventData>) => {
+    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
+
+    this.vviinnSelectedFiltersReset.emit({
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
     this.setTextSearch(false, detail.isTriggeredByVpsWidget);
+    resetStore(this.storeName);
   };
 
   private widgetCloseHandler = () => {
@@ -477,6 +483,11 @@ export class VviinnResults {
     if (!this.uiSessionId) {
       this.uiSessionId = uuidv4();
     }
+
+    document.addEventListener(
+      "vviinnImageUploadStarted",
+      this.imageUploadStartedHandler,
+    );
 
     document.addEventListener(
       "vviinnImageUploadFinished",
@@ -498,11 +509,6 @@ export class VviinnResults {
       this.filterTriggeredHandler,
     );
 
-    document.addEventListener(
-      "vviinnImageUploadStarted",
-      this.uploadTriggeredHandler,
-    );
-
     document.addEventListener("vviinnWidgetClose", this.widgetCloseHandler);
 
     this.getResultsBySearchId(this.searchId);
@@ -516,6 +522,11 @@ export class VviinnResults {
 
   disconnectedCallback() {
     resetStore(this.storeName);
+
+    document.removeEventListener(
+      "vviinnImageUploadStarted",
+      this.imageUploadStartedHandler,
+    );
 
     document.removeEventListener(
       "vviinnImageUploadFinished",

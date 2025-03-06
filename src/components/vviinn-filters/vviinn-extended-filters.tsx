@@ -174,6 +174,10 @@ export class VviinnExtendedFilters {
       el: this.el,
       isTriggeredByVpsWidget: this.showInWidget,
     });
+    this.vviinnSelectedFiltersReset.emit({
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
+
     this.resetFiltersState();
     this.showMore = false;
   }
@@ -349,7 +353,7 @@ export class VviinnExtendedFilters {
 
                 <button
                   class="filters-modal-reset"
-                  onClick={() => this.resetModal()}
+                  onClick={this.resetModal.bind(this)}
                   part="extended-filters-reset"
                 >
                   <slot name="vviinn-extended-filters-reset">
@@ -501,6 +505,7 @@ export class VviinnExtendedFilters {
       "vviinnSelectedFiltersReset",
       this.handleSelectedFiltersReset,
     );
+
     this.mode !== "preview" &&
       document.addEventListener(
         "vviinnExtendedFiltersButtonClicked",

@@ -102,6 +102,12 @@ export class VviinnSelectedFilters {
     (isTriggeredByVpsWidget && !this.showInWidget) ||
     (!isTriggeredByVpsWidget && this.showInWidget);
 
+  private resetInnerState = (resetTextSearchFilter: boolean = false) => {
+    this.requestFilters = [];
+    this.priceCustomFilter = null;
+    resetTextSearchFilter && (this.textSearchCustomFilter = null);
+  };
+
   private handleFilterTriggered = ({
     detail,
   }: CustomEvent<DynamicFilterInternalData>) => {
@@ -125,6 +131,11 @@ export class VviinnSelectedFilters {
     }
   };
 
+  private handleImageUploadStarted = ({ detail }: SearchIdEvent) => {
+    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
+    this.resetInnerState(true);
+  };
+
   private handleFiltersChanged = ({
     detail,
   }: CustomEvent<ChangedFiltersEventData>) => {
@@ -143,10 +154,12 @@ export class VviinnSelectedFilters {
     detail,
   }: CustomEvent<ResetSelectedFiltersEventData>) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
-    this.requestFilters = [];
+    this.resetInnerState();
   };
 
   private resetState = () => {
+    if (this.skipStateChanges(this.showInWidget)) return;
+
     this.vviinnFilterTriggered.emit({
       kind: "",
       action: "deselect",
@@ -154,8 +167,9 @@ export class VviinnSelectedFilters {
       isTriggeredByVpsWidget: this.showInWidget,
     });
 
-    this.textSearchCustomFilter = null;
-    this.priceCustomFilter = null;
+    this.vviinnSelectedFiltersReset.emit({
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
 
     triggerResetFilters({
       vviinnFilterTriggered: this.vviinnFilterTriggered,
@@ -163,16 +177,8 @@ export class VviinnSelectedFilters {
       el: this.el,
     });
 
-    this.vviinnSelectedFiltersReset.emit({
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
-
+    this.resetInnerState(true);
     resetStore(this.storeName);
-  };
-
-  private imageUploadStartedHandler = ({ detail }: SearchIdEvent) => {
-    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
-    this.resetState();
   };
 
   private handlePriceButtonClick = () => {
@@ -203,7 +209,7 @@ export class VviinnSelectedFilters {
     );
     document.addEventListener(
       "vviinnImageUploadStarted",
-      this.imageUploadStartedHandler,
+      this.handleImageUploadStarted,
     );
   }
 
@@ -222,7 +228,7 @@ export class VviinnSelectedFilters {
     );
     document.removeEventListener(
       "vviinnImageUploadStarted",
-      this.imageUploadStartedHandler,
+      this.handleImageUploadStarted,
     );
   }
 
