@@ -24,8 +24,8 @@ import {
 import {
   ChangedFiltersEventData,
   DynamicFilterInternalData,
-  ResetSelectedFiltersEventData,
   SearchIdEvent,
+  TriggerSourceEventData,
 } from "../../recommendation/events";
 import { triggerFilter, triggerResetFilters } from "./helpers/triggerFilter";
 import {
@@ -73,7 +73,7 @@ export class VviinnSelectedFilters {
   /** Selected filters should be resetted */
   /** @internal */
   @Event({ bubbles: true })
-  vviinnSelectedFiltersReset: EventEmitter<ResetSelectedFiltersEventData>;
+  vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
 
   @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterInternalData>;
 
@@ -149,9 +149,13 @@ export class VviinnSelectedFilters {
 
   private handleSelectedFiltersReset = ({
     detail,
-  }: CustomEvent<ResetSelectedFiltersEventData>) => {
+  }: CustomEvent<TriggerSourceEventData>) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.resetInnerState();
+  };
+
+  private handleImageCrop = () => {
+    this.textSearchCustomFilter = null;
   };
 
   private resetState = () => {
@@ -208,6 +212,7 @@ export class VviinnSelectedFilters {
       "vviinnImageUploadStarted",
       this.handleImageUploadStarted,
     );
+    document.addEventListener("vviinnImageCrop", this.handleImageCrop);
   }
 
   disconnectedCallback() {
@@ -227,6 +232,7 @@ export class VviinnSelectedFilters {
       "vviinnImageUploadStarted",
       this.handleImageUploadStarted,
     );
+    document.removeEventListener("vviinnImageCrop", this.handleImageCrop);
   }
 
   componentWillRender() {

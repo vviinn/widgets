@@ -23,7 +23,7 @@ import { Histogram } from "../vviinn-price-range/vviinn-price-range";
 import {
   ChangedFiltersEventData,
   DynamicFilterInternalData,
-  ResetSelectedFiltersEventData,
+  TriggerSourceEventData,
 } from "../../recommendation/events";
 import { components } from "../../interfaces/generated";
 import { triggerFilter } from "./helpers/triggerFilter";
@@ -88,7 +88,7 @@ export class VviinnFilters {
   /** Selected filters should be resetted */
   /** @internal */
   @Event({ bubbles: true })
-  vviinnSelectedFiltersReset: EventEmitter<ResetSelectedFiltersEventData>;
+  vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
 
   private state?: SearchStore;
 
@@ -110,7 +110,7 @@ export class VviinnFilters {
 
   private handleSelectedFiltersReset = ({
     detail,
-  }: CustomEvent<ResetSelectedFiltersEventData>) => {
+  }: CustomEvent<TriggerSourceEventData>) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.requestFilters = [];
     this.selectedFilter = undefined;

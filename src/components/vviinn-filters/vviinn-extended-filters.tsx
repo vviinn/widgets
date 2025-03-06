@@ -33,8 +33,7 @@ import {
   ChangedFiltersEventData,
   DynamicFilterTrackingData,
   ExtendedFiltersButtonClickedEvent,
-  ExtendedFiltersButtonClickedEventData,
-  ResetSelectedFiltersEventData,
+  TriggerSourceEventData,
 } from "../../recommendation/events";
 import { components } from "../../interfaces/generated";
 import { ClickEvent, isClickedInRectBound } from "../../geometry/Rectangle";
@@ -124,11 +123,11 @@ export class VviinnExtendedFilters {
   /** Selected filters should be resetted */
   /** @internal */
   @Event({ bubbles: true })
-  vviinnSelectedFiltersReset: EventEmitter<ResetSelectedFiltersEventData>;
+  vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
 
   /** @internal */
   @Event({ bubbles: true })
-  vviinnExtendedFiltersButtonClicked: EventEmitter<ExtendedFiltersButtonClickedEventData>;
+  vviinnExtendedFiltersButtonClicked: EventEmitter<TriggerSourceEventData>;
 
   private state?: SearchStore;
 
@@ -163,7 +162,7 @@ export class VviinnExtendedFilters {
 
   private handleSelectedFiltersReset = ({
     detail,
-  }: CustomEvent<ResetSelectedFiltersEventData>) => {
+  }: CustomEvent<TriggerSourceEventData>) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.resetFiltersState();
   };
