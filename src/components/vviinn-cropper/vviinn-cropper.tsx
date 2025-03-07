@@ -19,6 +19,7 @@ import {
   BasicEventData,
   SearchIdEvent,
   SelectObjectEventData,
+  TriggerSourceEventData,
 } from "../../recommendation/events";
 import { LoadImageEventData } from "./types";
 import { ValidateCropBoxData } from "./helpers";
@@ -75,7 +76,7 @@ export class VviinnCropper {
   @State() searchArea: Rectangle | null;
   @State() imageElement?: HTMLImageElement;
 
-  @Event() vviinnImageCrop: EventEmitter<BasicEventData>;
+  @Event() vviinnImageCrop: EventEmitter<TriggerSourceEventData>;
   @Event() vviinnCropperLoadImage: EventEmitter<LoadImageEventData>;
   @Event() vviinnCropperCropEnd: EventEmitter<Rectangle>;
 
@@ -172,6 +173,9 @@ export class VviinnCropper {
       height: height * data.height,
     };
     this.cropper.setCropBoxData(ValidateCropBoxData(cropBoxData));
+    this.vviinnImageCrop.emit({
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
     makeRectangularSearchRequest(
       this.storeName,
       this.searchArea,
@@ -273,7 +277,9 @@ export class VviinnCropper {
       this.imageBounds,
     );
     this.selectedDetectedObject = undefined;
-    this.vviinnImageCrop.emit(this.basicEventData);
+    this.vviinnImageCrop.emit({
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
   };
 
   private showPreloader = () =>

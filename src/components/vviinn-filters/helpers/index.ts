@@ -4,3 +4,4 @@ export { FilterOptions } from "./getFilterOptions";
 export { RenderFilterButton } from "./RenderFilterButton";
 export { RenderCustomButton } from "./RenderCustomButton";
 export { showActiveOnSubButton } from "./showActiveOnSubButton";
+export { getPriceLabel } from "./getPriceLabel";

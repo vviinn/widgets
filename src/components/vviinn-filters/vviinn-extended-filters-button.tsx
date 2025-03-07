@@ -1,6 +1,6 @@
 import { Component, Host, h, Prop, Event, EventEmitter } from "@stencil/core";
 import { FiltersIcon } from "../vviinn-icons";
-import { ExtendedFiltersButtonClickedEventData } from "../../recommendation/events";
+import { TriggerSourceEventData } from "../../recommendation/events";
 
 /**
  *
@@ -16,7 +16,7 @@ export class VviinnExtendedFiltersButton {
   @Prop() showInWidget?: boolean = false;
 
   @Event({ bubbles: true })
-  vviinnExtendedFiltersButtonClicked: EventEmitter<ExtendedFiltersButtonClickedEventData>;
+  vviinnExtendedFiltersButtonClicked: EventEmitter<TriggerSourceEventData>;
 
   render() {
     return (
