@@ -172,7 +172,7 @@ export class VviinnExtendedFilters {
     this.resetOptionsInteractions();
   };
 
-  private resetModal() {
+  private resetModal = () => {
     triggerResetFilters({
       vviinnFilterTriggered: this.vviinnFilterTriggered,
       vviinnFiltersChanged: this.vviinnFiltersChanged,
@@ -185,7 +185,7 @@ export class VviinnExtendedFilters {
 
     this.resetFiltersState();
     this.showMore = false;
-  }
+  };
 
   private handleExtendedFiltersButtonClicked = ({
     detail,
@@ -372,7 +372,7 @@ export class VviinnExtendedFilters {
 
                 <button
                   class="filters-modal-reset"
-                  onClick={this.resetModal.bind(this)}
+                  onClick={this.resetModal}
                   part="extended-filters-reset"
                 >
                   <slot name="vviinn-extended-filters-reset">
