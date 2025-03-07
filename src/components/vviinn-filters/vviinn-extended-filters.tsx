@@ -19,7 +19,12 @@ import {
   RequestDynamicFilterItem,
 } from "../../campaign/VPRCampaignService";
 import { ChevronIconSmall, NewCloseIcon } from "../vviinn-icons";
-import { FilterOptions, getFilterOptions, RenderFilterButton } from "./helpers";
+import {
+  FilterOptions,
+  getFilterOptions,
+  getPriceLabel,
+  RenderFilterButton,
+} from "./helpers";
 import { resources } from "../../locale";
 
 import { SlotSkeleton, slotChangeListener } from "../customized-slots";
@@ -28,8 +33,7 @@ import {
   ChangedFiltersEventData,
   DynamicFilterTrackingData,
   ExtendedFiltersButtonClickedEvent,
-  ExtendedFiltersButtonClickedEventData,
-  ResetSelectedFiltersEventData,
+  TriggerSourceEventData,
 } from "../../recommendation/events";
 import { components } from "../../interfaces/generated";
 import { ClickEvent, isClickedInRectBound } from "../../geometry/Rectangle";
@@ -41,6 +45,7 @@ import {
 } from "../../store/search.store";
 import { isIntervalFilter } from "../../filters";
 import { globalState } from "../../store/store";
+import { ResponseDynamicFilterIntervalItem } from "../../interfaces/recommendation";
 
 /**
  * @slot vviinn-extended-filters-title - Text on widget's header.
@@ -79,6 +84,7 @@ import { globalState } from "../../store/store";
  */
 
 const FILTER_OPTIONS_INITIAL_COUNT = 8;
+const FILTER_OPTIONS_STEP_COUNT = 5;
 @Component({
   tag: "vviinn-extended-filters",
   styleUrl: "vviinn-filters.css",
@@ -117,16 +123,30 @@ export class VviinnExtendedFilters {
   /** Selected filters should be resetted */
   /** @internal */
   @Event({ bubbles: true })
-  vviinnSelectedFiltersReset: EventEmitter<ResetSelectedFiltersEventData>;
+  vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
 
   /** @internal */
   @Event({ bubbles: true })
-  vviinnExtendedFiltersButtonClicked: EventEmitter<ExtendedFiltersButtonClickedEventData>;
+  vviinnExtendedFiltersButtonClicked: EventEmitter<TriggerSourceEventData>;
 
   private state?: SearchStore;
 
   private getFilters = () =>
     this.innerFilters.length ? this.innerFilters : this.state.dynamicFilters;
+
+  private resetOptionsInteractions() {
+    this.displayedOptionsCount = new Map();
+    this.selectedMoreOptions = [];
+  }
+
+  private resetFiltersState() {
+    this.resetOptionsInteractions();
+    this.requestFilters = [];
+  }
+
+  private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
+    (isTriggeredByVpsWidget && !this.showInWidget) ||
+    (!isTriggeredByVpsWidget && this.showInWidget);
 
   private replaceSlotsContent() {
     const slots = this.el.querySelectorAll("[slot]");
@@ -142,15 +162,30 @@ export class VviinnExtendedFilters {
 
   private handleSelectedFiltersReset = ({
     detail,
-  }: CustomEvent<ResetSelectedFiltersEventData>) => {
+  }: CustomEvent<TriggerSourceEventData>) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
-    this.requestFilters = [];
-    this.selectedMoreOptions = [];
+    this.resetFiltersState();
   };
 
-  private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
-    (isTriggeredByVpsWidget && !this.showInWidget) ||
-    (!isTriggeredByVpsWidget && this.showInWidget);
+  private handleCloseModal = () => {
+    this.showMore = false;
+    this.resetOptionsInteractions();
+  };
+
+  private resetModal = () => {
+    triggerResetFilters({
+      vviinnFilterTriggered: this.vviinnFilterTriggered,
+      vviinnFiltersChanged: this.vviinnFiltersChanged,
+      el: this.el,
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
+    this.vviinnSelectedFiltersReset.emit({
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
+
+    this.resetFiltersState();
+    this.showMore = false;
+  };
 
   private handleExtendedFiltersButtonClicked = ({
     detail,
@@ -198,7 +233,7 @@ export class VviinnExtendedFilters {
       this.displayedOptionsCount.get(filterColumn) ||
       FILTER_OPTIONS_INITIAL_COUNT;
     const newCount = Math.min(
-      currentCount + FILTER_OPTIONS_INITIAL_COUNT,
+      currentCount + FILTER_OPTIONS_STEP_COUNT,
       totalOptions,
     );
     this.displayedOptionsCount = new Map(this.displayedOptionsCount);
@@ -223,9 +258,7 @@ export class VviinnExtendedFilters {
 
               <button
                 class="filters-modal-close"
-                onClick={() => {
-                  this.showMore = false;
-                }}
+                onClick={this.handleCloseModal}
                 part="extended-filters-modal-close"
               >
                 <NewCloseIcon />
@@ -243,20 +276,38 @@ export class VviinnExtendedFilters {
                 );
                 const addedOptions = [];
                 requestFilter?.values?.forEach((value) => {
-                  const index = filterOptions.findIndex(
-                    (f) => f.value.value === value || f.value === value,
-                  );
-                  if (index > -1) {
-                    addedOptions.push(
-                      <span>{filterOptions[index].label}</span>,
+                  if (isIntervalFilter(mainColumn)) {
+                    const intervalFilter = filters.find(
+                      (filter) => filter.column === mainColumn,
+                    ) as ResponseDynamicFilterIntervalItem;
+
+                    const priceLabel = getPriceLabel(
+                      intervalFilter,
+                      value,
+                      globalState.currencySign,
                     );
+                    priceLabel && addedOptions.push(<span>{priceLabel}</span>);
+                  } else {
+                    const index = filterOptions.findIndex(
+                      (f) => (f.value.value ?? f.value) === value,
+                    );
+
+                    if (index > -1) {
+                      addedOptions.push(
+                        <span>{filterOptions[index].label}</span>,
+                      );
+                    }
                   }
                 });
 
                 return (
                   <li part="extended-filters-row">
                     <div
-                      class="filters-modal-main-button-wrapper"
+                      class={`filters-modal-main-button-wrapper ${
+                        this.selectedMoreOptions.includes(mainFilter.column)
+                          ? "open"
+                          : ""
+                      }`}
                       part="extended-filters-row-wrapper"
                     >
                       <button
@@ -275,6 +326,7 @@ export class VviinnExtendedFilters {
                             {addedOptions}
                           </div>
                         )}
+                        <ChevronIconSmall />
                       </button>
 
                       {isIntervalFilter(mainColumn) &&
@@ -288,11 +340,7 @@ export class VviinnExtendedFilters {
                         />
                       ) : (
                         <ul
-                          class={`filters-modal-sub-list  ${
-                            this.selectedMoreOptions.includes(mainFilter.column)
-                              ? "open"
-                              : ""
-                          }`}
+                          class="filters-modal-sub-list"
                           part="extended-filters-sub-list"
                         >
                           {this.renderFilterOptions(mainFilter, filterOptions)}
@@ -324,7 +372,7 @@ export class VviinnExtendedFilters {
 
                 <button
                   class="filters-modal-reset"
-                  onClick={() => this.resetModal()}
+                  onClick={this.resetModal}
                   part="extended-filters-reset"
                 >
                   <slot name="vviinn-extended-filters-reset">
@@ -421,10 +469,13 @@ export class VviinnExtendedFilters {
   }
 
   private handleMoreOptionsMainClick(column: string) {
-    if (this.selectedMoreOptions.includes(column)) {
+    const optionsVisible = this.selectedMoreOptions.includes(column);
+
+    if (optionsVisible) {
       this.selectedMoreOptions = this.selectedMoreOptions.filter(
         (option) => option !== column,
       );
+      this.displayedOptionsCount.delete(column);
     } else {
       this.vviinnFilterTriggered.emit({
         action: "show",
@@ -473,6 +524,7 @@ export class VviinnExtendedFilters {
       "vviinnSelectedFiltersReset",
       this.handleSelectedFiltersReset,
     );
+
     this.mode !== "preview" &&
       document.addEventListener(
         "vviinnExtendedFiltersButtonClicked",
@@ -496,19 +548,6 @@ export class VviinnExtendedFilters {
         "vviinnExtendedFiltersButtonClicked",
         this.handleExtendedFiltersButtonClicked,
       );
-  }
-
-  private resetModal() {
-    triggerResetFilters({
-      vviinnFilterTriggered: this.vviinnFilterTriggered,
-      vviinnFiltersChanged: this.vviinnFiltersChanged,
-      el: this.el,
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
-
-    this.selectedMoreOptions = [];
-    this.requestFilters = [];
-    this.showMore = false;
   }
 
   private priceChangeHandler = (filterValue: DynamicFilterValue) => {

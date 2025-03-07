@@ -242,6 +242,7 @@ vviinn-price-range {
 }
 
 .filters-modal-main-button {
+  position: relative;
   width: 100%;
   background: none;
   text-align: left;
@@ -255,11 +256,28 @@ vviinn-price-range {
   letter-spacing: var(--letter-spacing-label-large);
 }
 
+.filters-modal-main-button > svg {
+  position: absolute;
+  right: 0;
+  top: var(--spacing-200);
+  color: var(--color-icon-helper);
+  transform: rotate(90deg);
+}
+
+.filters-modal-main-button:hover > svg {
+  color: var(--color-icon-primary);
+  transition: color 0.2s;
+}
+
+.filters-modal-main-button-wrapper.open .filters-modal-main-button > svg {
+  transform: rotate(-90deg);
+}
+
 .filters-modal-sub-list {
   display: none;
 }
 
-.filters-modal-sub-list.open {
+.filters-modal-main-button-wrapper.open .filters-modal-sub-list {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -464,6 +482,7 @@ vviinn-price-range {
 .filters-modal-main-button-added-options {
   color: var(--color-text-secondary);
   text-overflow: ellipsis;
+  padding-right: var(--spacing-100);
 
   font-size: var(--font-size-body);
   font-weight: var(--font-weight-400);
