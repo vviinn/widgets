@@ -18,11 +18,11 @@ import {
 import { TextSearchIcon } from "../vviinn-icons";
 import { slotChangeListener } from "../customized-slots";
 import {
-  ResetSelectedFiltersEventData,
   SearchIdEventData,
   TextSearchEventData,
   DynamicFilterInternalData,
   BasicEventData,
+  TriggerSourceEventData,
 } from "../../recommendation/events";
 import i18next from "i18next";
 import { Locale, resources } from "../../locale";
@@ -76,7 +76,7 @@ export class VviinnTextSearch {
   /** Selected filters should be resetted */
   /** @internal */
   @Event({ bubbles: true })
-  vviinnSelectedFiltersReset: EventEmitter<ResetSelectedFiltersEventData>;
+  vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string;

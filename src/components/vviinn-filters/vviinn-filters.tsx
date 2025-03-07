@@ -22,8 +22,8 @@ import {
 import { Histogram } from "../vviinn-price-range/vviinn-price-range";
 import {
   ChangedFiltersEventData,
-  DynamicFilterTrackingData,
-  ResetSelectedFiltersEventData,
+  DynamicFilterInternalData,
+  TriggerSourceEventData,
 } from "../../recommendation/events";
 import { components } from "../../interfaces/generated";
 import { triggerFilter } from "./helpers/triggerFilter";
@@ -79,7 +79,7 @@ export class VviinnFilters {
   @Event({ bubbles: true })
   vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
 
-  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
+  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterInternalData>;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -88,7 +88,7 @@ export class VviinnFilters {
   /** Selected filters should be resetted */
   /** @internal */
   @Event({ bubbles: true })
-  vviinnSelectedFiltersReset: EventEmitter<ResetSelectedFiltersEventData>;
+  vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
 
   private state?: SearchStore;
 
@@ -110,7 +110,7 @@ export class VviinnFilters {
 
   private handleSelectedFiltersReset = ({
     detail,
-  }: CustomEvent<ResetSelectedFiltersEventData>) => {
+  }: CustomEvent<TriggerSourceEventData>) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.requestFilters = [];
     this.selectedFilter = undefined;
@@ -143,6 +143,18 @@ export class VviinnFilters {
     if (!this.selectedFilter) return "";
     return this.selectedFilter?.column === column ? "active" : "";
   }
+
+  private handleFilterTriggered = ({
+    detail,
+  }: CustomEvent<DynamicFilterInternalData>) => {
+    const { kind, isTriggeredByVpsWidget, action, customTrigger } = detail;
+    if (this.skipStateChanges(isTriggeredByVpsWidget) || !!customTrigger)
+      return;
+
+    if (action === "select") {
+      this.selectedFilter = this.getFilters().find((f) => f.column === kind);
+    }
+  };
 
   private handleFiltersChanged = ({
     detail,
@@ -188,6 +200,10 @@ export class VviinnFilters {
       "vviinnSelectedFiltersReset",
       this.handleSelectedFiltersReset,
     );
+    document.addEventListener(
+      "vviinnFilterTriggered",
+      this.handleFilterTriggered,
+    );
 
     this.filtersStringWatcher();
   }
@@ -200,6 +216,10 @@ export class VviinnFilters {
     document.removeEventListener(
       "vviinnSelectedFiltersReset",
       this.handleSelectedFiltersReset,
+    );
+    document.removeEventListener(
+      "vviinnFilterTriggered",
+      this.handleFilterTriggered,
     );
   }
 
@@ -235,7 +255,7 @@ export class VviinnFilters {
           </ul>
         )}
 
-        {!!this.selectedFilter && (
+        {!!this.selectedFilter && this.selectedFilter.isPrimary && (
           <div class="filters-footer" part="filters-footer">
             {isIntervalFilter(column) ? (
               <vviinn-price-range

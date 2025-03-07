@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.154.0](https://github.com/vviinn/widgets/compare/v2.153.0...v2.154.0) (2025-03-07)
+
+
+### Features
+
+* Price label for extended filters ([ceccf89](https://github.com/vviinn/widgets/commit/ceccf89b7b6a2f25f9e5f9d479029f4a70b30c3f))
+
+
+### Bug Fixes
+
+* Collapse filter options after closing the modal ([8ca2961](https://github.com/vviinn/widgets/commit/8ca296168cbf4717c54e1376e76761a86a037281))
+* Improve resetting filters ([0a18f5a](https://github.com/vviinn/widgets/commit/0a18f5add642a555577bdc8a934ceb5f9842114e))
+* Reset text search filters after cropper interactions ([315a10f](https://github.com/vviinn/widgets/commit/315a10f9f7a92356feb0c4cd1bf0f38df77354a3))
+* Reset the displayed filter amount after collapsing the group or a new search ([d146831](https://github.com/vviinn/widgets/commit/d1468319616c52d62893ffcd47ce15f78d1b5d37))
+
 ## [2.153.0](https://github.com/vviinn/widgets/compare/v2.152.4...v2.153.0) (2025-03-05)
 
 

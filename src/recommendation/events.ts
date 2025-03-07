@@ -35,6 +35,10 @@ export type ImageUploadEventData = { isTriggeredByVpsWidget?: boolean } & {
   [K in keyof BasicEventData]: BasicEventData[K];
 };
 
+export type TriggerSourceEventData = {
+  isTriggeredByVpsWidget: boolean;
+};
+
 export type NoResultEventData = {
   reason: ErrorKind;
 } & {
@@ -98,14 +102,6 @@ export type ChangedFiltersEventData = {
   isTriggeredByVpsWidget?: boolean;
 };
 
-export type ResetSelectedFiltersEventData = {
-  isTriggeredByVpsWidget: boolean;
-};
-
-export type ExtendedFiltersButtonClickedEventData = {
-  isTriggeredByVpsWidget: boolean;
-};
-
 export type DynamicFilterTrackingData = {
   action: FilterAction;
   value?: DynamicFilterValue;
@@ -120,9 +116,8 @@ export type DynamicFilterInternalData = DynamicFilterTrackingData & {
 export type SearchIdEvent = CustomEvent<SearchIdEventData>;
 export type TextSearchEvent = CustomEvent<TextSearchEventData>;
 export type ChangedFiltersEvent = CustomEvent<ChangedFiltersEventData>;
-export type ResetSelectedFiltersEvent =
-  CustomEvent<ResetSelectedFiltersEventData>;
+export type ResetSelectedFiltersEvent = CustomEvent<TriggerSourceEventData>;
 export type ProductCardEvent = CustomEvent<ProductCardEventData>;
 export type CrossSellingClickEvent = CustomEvent<CrossSellingClickEventData>;
 export type ExtendedFiltersButtonClickedEvent =
-  CustomEvent<ExtendedFiltersButtonClickedEventData>;
+  CustomEvent<TriggerSourceEventData>;
