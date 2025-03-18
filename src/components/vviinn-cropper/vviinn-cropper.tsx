@@ -141,8 +141,7 @@ export class VviinnCropper {
   };
 
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
-    (isTriggeredByVpsWidget && !this.showInWidget) ||
-    (!isTriggeredByVpsWidget && this.showInWidget);
+    this.showInWidget !== isTriggeredByVpsWidget;
 
   private imageUploadFinishedHandler = () => {
     if (this.saveImageMode === "never") return;

@@ -316,8 +316,7 @@ export class VviinnResults {
   }
 
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
-    (isTriggeredByVpsWidget && !this.showInWidget) ||
-    (!isTriggeredByVpsWidget && this.showInWidget);
+    this.showInWidget !== isTriggeredByVpsWidget;
 
   private getResultsBySearchId = async (searchId: string) => {
     if (!searchId) return;

@@ -101,8 +101,7 @@ export class VviinnSelectedFilters {
     ) as ResponseDynamicFilterIntervalItem;
 
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
-    (isTriggeredByVpsWidget && !this.showInWidget) ||
-    (!isTriggeredByVpsWidget && this.showInWidget);
+    this.showInWidget !== isTriggeredByVpsWidget;
 
   private resetInnerState = (resetTextSearchFilter: boolean = false) => {
     this.requestFilters = [];

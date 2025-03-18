@@ -143,8 +143,7 @@ export class VviinnExtendedFilters {
   }
 
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
-    (isTriggeredByVpsWidget && !this.showInWidget) ||
-    (!isTriggeredByVpsWidget && this.showInWidget);
+    this.showInWidget !== isTriggeredByVpsWidget;
 
   private replaceSlotsContent() {
     const slots = this.el.querySelectorAll("[slot]");

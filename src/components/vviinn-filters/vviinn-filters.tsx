@@ -115,8 +115,7 @@ export class VviinnFilters {
   };
 
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
-    (isTriggeredByVpsWidget && !this.showInWidget) ||
-    (!isTriggeredByVpsWidget && this.showInWidget);
+    this.showInWidget !== isTriggeredByVpsWidget;
 
   private priceChangeHandler = (filterValue: DynamicFilterValue) => {
     this.handleSubFilterSelection(filterValue, this.selectedFilter);
