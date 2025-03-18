@@ -148,7 +148,7 @@ export const uploadFile =
             [field]: await fileToB64(file),
           },
           objectDetection: {
-            include: field === "image" ? true : false,
+            include: field === "image",
           },
           ...addIfDefined("requestId", searchId),
         }),
@@ -161,44 +161,37 @@ export const uploadFile =
     );
   };
 
-export const makeRectangularSearchRequest = async (
+export const makeVisualSearchRequest = async (
   store: SearchStoreName,
-  searchArea: Rectangle | null,
-  imageBounds: Rectangle | null,
+  searchId?: string | null,
+  dynamicFilters?: RequestDynamicFilterItem[] | null,
+  searchArea?: Rectangle | null,
+  imageBounds?: Rectangle | null,
 ) => {
   const state = useStore(store);
   state.searchType = "image";
   state.loading = true;
-  //FIXME: check type casting
-  const scaled = divideOnSized(imageBounds as Sized)(searchArea);
 
-  const searchRectangle = {
-    width: scaled.width,
-    height: scaled.height,
-    left: scaled.left,
-    top: scaled.top,
-  };
+  let searchRectangle;
+
+  if (imageBounds) {
+    //FIXME: check type casting
+    const scaled = divideOnSized(imageBounds as Sized)(searchArea);
+
+    searchRectangle = {
+      width: scaled.width,
+      height: scaled.height,
+      left: scaled.left,
+      top: scaled.top,
+    };
+  }
 
   const body: VisualSearchRequest = {
-    requestId: state.selfSearchId,
+    requestId: searchId ?? state.selfSearchId,
+    ...addIfDefined("dynamicFilters", dynamicFilters),
     query: {
-      searchArea: searchRectangle,
+      ...addIfDefined("searchArea", searchRectangle),
     },
-  };
-  return processVisualSearch(store, body)();
-};
-
-export const makeSearchIdRequest = async (
-  store: SearchStoreName,
-  searchId: string,
-) => {
-  const state = useStore(store);
-  state.searchType = "image";
-  state.loading = true;
-
-  const body: VisualSearchRequest = {
-    requestId: searchId,
-    query: {},
   };
   return processVisualSearch(store, body)();
 };

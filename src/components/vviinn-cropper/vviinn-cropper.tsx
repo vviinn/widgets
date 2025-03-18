@@ -30,7 +30,7 @@ import {
   cropperOptions,
 } from "./constants";
 import {
-  makeRectangularSearchRequest,
+  makeVisualSearchRequest,
   searchState,
   componentsState,
   SearchStore,
@@ -175,8 +175,10 @@ export class VviinnCropper {
     this.vviinnImageCrop.emit({
       isTriggeredByVpsWidget: this.showInWidget,
     });
-    makeRectangularSearchRequest(
+    makeVisualSearchRequest(
       this.storeName,
+      null,
+      null,
       this.searchArea,
       this.imageBounds,
     );
@@ -270,8 +272,10 @@ export class VviinnCropper {
 
     this.vviinnCropperCropEnd.emit(cropboxData);
     this.searchArea = cropboxData;
-    makeRectangularSearchRequest(
+    makeVisualSearchRequest(
       this.storeName,
+      null,
+      null,
       this.searchArea,
       this.imageBounds,
     );

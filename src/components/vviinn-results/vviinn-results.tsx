@@ -24,7 +24,7 @@ import {
 import { version } from "../../../package.json";
 import {
   makeProductListingPageRequest,
-  makeSearchIdRequest,
+  makeVisualSearchRequest,
   makeTextSearchRequest,
   searchState,
   componentsState,
@@ -318,11 +318,6 @@ export class VviinnResults {
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
     this.showInWidget !== isTriggeredByVpsWidget;
 
-  private getResultsBySearchId = async (searchId: string) => {
-    if (!searchId) return;
-    await makeSearchIdRequest(this.storeName, searchId);
-  };
-
   private async getTextSearchResults(
     query?: string,
     filters?: RequestDynamicFilterItem[],
@@ -404,11 +399,15 @@ export class VviinnResults {
       return;
     }
 
-    this.getTextSearchResults(
-      this.innerTextSearchQuery,
-      filters,
-      this.innerTextSearchRequestId,
-    );
+    if (this.isTextSearch) {
+      this.getTextSearchResults(
+        this.innerTextSearchQuery,
+        filters,
+        this.innerTextSearchRequestId,
+      );
+    } else {
+      makeVisualSearchRequest(this.storeName, this.searchId, filters);
+    }
   };
 
   private filterTriggeredHandler = ({
@@ -508,7 +507,7 @@ export class VviinnResults {
     document.addEventListener("vviinnWidgetClose", this.widgetCloseHandler);
     document.addEventListener("vviinnResultsReceived", this.widgetCloseHandler);
 
-    this.getResultsBySearchId(this.searchId);
+    !!this.searchId && makeVisualSearchRequest(this.storeName, this.searchId);
     this.getResultsByCategory();
     this.innerTextSearchQuery = this.textSearchQuery;
 
