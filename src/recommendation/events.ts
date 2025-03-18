@@ -115,8 +115,7 @@ export type DynamicFilterInternalData = DynamicFilterTrackingData & {
 export type SearchIdEvent = CustomEvent<SearchIdEventData>;
 export type TextSearchEvent = CustomEvent<TextSearchEventData>;
 export type ChangedFiltersEvent = CustomEvent<ChangedFiltersEventData>;
-export type ResetSelectedFiltersEvent = CustomEvent<TriggerSourceEventData>;
+export type ResetSelectedFiltersEvent = TriggerSourceEvent;
 export type ProductCardEvent = CustomEvent<ProductCardEventData>;
 export type CrossSellingClickEvent = CustomEvent<CrossSellingClickEventData>;
-export type ExtendedFiltersButtonClickedEvent =
-  CustomEvent<TriggerSourceEventData>;
+export type TriggerSourceEvent = CustomEvent<TriggerSourceEventData>;

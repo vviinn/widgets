@@ -77,6 +77,9 @@ export class VviinnTextSearch {
   /** @internal */
   @Event({ bubbles: true })
   vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
+  /** Results received after an interaction */
+  /** @internal */
+  @Event() vviinnResultsReceived: EventEmitter<TriggerSourceEventData>;
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
@@ -211,7 +214,6 @@ export class VviinnTextSearch {
     });
     slotChangeListener(this, this.el);
     if (!this.showInWidget && this.searchQuery?.length > 0) {
-      // this.showLoader();
       this.vviinnTextSearchStarted.emit({
         query: this.searchQuery,
         isTriggeredByVpsWidget: this.showInWidget,
@@ -261,24 +263,30 @@ export class VviinnTextSearch {
       trackEvent(textSearchStartedEvent);
     }
 
-    this.vviinnTextSearchStarted.emit({
-      query: this.searchQuery,
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
+    if (this.showInWidget) {
+      const response = pipe(
+        await makeTextSearchRequest(this.storeName, this.searchQuery),
+        E.getOrElse(() => null),
+        (response: TextSearchResponse) => response,
+      );
 
-    const response = pipe(
-      await makeTextSearchRequest(this.storeName, this.searchQuery),
-      E.getOrElse(() => null),
-      (response: TextSearchResponse) => response,
-    );
+      if (response) {
+        this.vviinnResultsReceived.emit({
+          isTriggeredByVpsWidget: this.showInWidget,
+        });
 
-    if (response) {
-      this.widgetTextSearchFinished.emit({
+        this.widgetTextSearchFinished.emit({
+          query: this.searchQuery,
+          requestId: response.requestId,
+        });
+
+        this.vviinnSelectedFiltersReset.emit({
+          isTriggeredByVpsWidget: this.showInWidget,
+        });
+      }
+    } else {
+      this.vviinnTextSearchStarted.emit({
         query: this.searchQuery,
-        requestId: response.requestId,
-      });
-
-      this.vviinnSelectedFiltersReset.emit({
         isTriggeredByVpsWidget: this.showInWidget,
       });
     }

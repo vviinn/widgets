@@ -198,15 +198,6 @@ export class VviinnVprButton {
 
   connectedCallback() {
     this.iconSideSize = this.oneClickDiscoveryMode === "standalone" ? 24 : 14;
-
-    document.addEventListener(
-      "vviinnTextSearchStarted",
-      this.sidebarCloseListener,
-    );
-    document.addEventListener(
-      "vviinnImageUploadStarted",
-      this.sidebarCloseListener,
-    );
   }
 
   componentWillLoad() {
@@ -235,9 +226,6 @@ export class VviinnVprButton {
       this.targetAppendSidebarTo.removeChild(this.sidebar);
       return;
     }
-
-    document.body.contains(this.sidebar) &&
-      document.body.removeChild(this.sidebar);
   };
 
   render() {
@@ -320,7 +308,11 @@ export class VviinnVprButton {
 
     this.sidebar = sidebar;
 
-    sidebar.addEventListener("vviinnWidgetClose", this.sidebarCloseListener);
+    document.addEventListener(
+      "vviinnResultsReceived",
+      this.sidebarCloseListener,
+    );
+    document.addEventListener("vviinnWidgetClose", this.sidebarCloseListener);
 
     if (this.targetAppendSidebarTo) {
       this.sidebar.showInCustomContainer = true;
@@ -335,18 +327,14 @@ export class VviinnVprButton {
 
   disconnectedCallback() {
     if (this.sidebar) {
-      this.sidebar.removeEventListener(
+      document.removeEventListener(
         "vviinnWidgetClose",
         this.sidebarCloseListener,
       );
     }
 
     document.removeEventListener(
-      "vviinnTextSearchStarted",
-      this.sidebarCloseListener,
-    );
-    document.removeEventListener(
-      "vviinnImageUploadStarted",
+      "vviinnResultsReceived",
       this.sidebarCloseListener,
     );
   }

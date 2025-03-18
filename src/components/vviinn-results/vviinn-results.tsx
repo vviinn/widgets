@@ -52,6 +52,7 @@ import {
   ResultEventType,
   TextSearchEvent,
   TextSearchEventData,
+  TriggerSourceEvent,
   TriggerSourceEventData,
 } from "../../recommendation/events";
 import {
@@ -258,8 +259,10 @@ export class VviinnResults {
 
   /** Selected filters should be resetted */
   /** @internal */
-  @Event({ bubbles: true })
-  vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
+  @Event() vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
+  /** Results received after an interaction */
+  /** @internal */
+  @Event() vviinnResultsReceived: EventEmitter<TriggerSourceEventData>;
 
   private getResults() {
     return (this.useInnerState ? this.innerResults : this.state.results) ?? [];
@@ -321,17 +324,6 @@ export class VviinnResults {
     await makeSearchIdRequest(this.storeName, searchId);
   };
 
-  private async getVpsResults(filters?: RequestDynamicFilterItem[]) {
-    if (!this.textSearchQuery) return;
-
-    await makeTextSearchRequest(
-      this.storeName,
-      this.textSearchQuery,
-      filters,
-      this.textSearchRequestId,
-    );
-  }
-
   private async getTextSearchResults(
     query?: string,
     filters?: RequestDynamicFilterItem[],
@@ -349,7 +341,12 @@ export class VviinnResults {
         this.resultsCount,
       ),
       E.getOrElse(() => null),
-      (response: TextSearchResponse) => response,
+      (response: TextSearchResponse) => {
+        this.vviinnResultsReceived.emit({
+          isTriggeredByVpsWidget: this.showInWidget,
+        });
+        return response;
+      },
     );
   }
 
@@ -408,17 +405,11 @@ export class VviinnResults {
       return;
     }
 
-    const isVpsWidgetEvent = this.showInWidget && isTriggeredByVpsWidget;
-
-    if (isVpsWidgetEvent) {
-      return this.getVpsResults(filters);
-    } else {
-      return this.getTextSearchResults(
-        this.innerTextSearchQuery,
-        filters,
-        this.innerTextSearchRequestId,
-      );
-    }
+    this.getTextSearchResults(
+      this.innerTextSearchQuery,
+      filters,
+      this.innerTextSearchRequestId,
+    );
   };
 
   private filterTriggeredHandler = ({
@@ -463,9 +454,7 @@ export class VviinnResults {
     resetStore(this.storeName);
   };
 
-  private imageCropHandler = ({
-    detail,
-  }: CustomEvent<TriggerSourceEventData>) => {
+  private imageCropHandler = ({ detail }: TriggerSourceEvent) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
 
     if (this.isTextSearch) {
@@ -477,8 +466,11 @@ export class VviinnResults {
     }
   };
 
-  private widgetCloseHandler = ({ detail }: TextSearchEvent) => {
+  private widgetCloseHandler = ({
+    detail,
+  }: TextSearchEvent | TriggerSourceEvent) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
+
     this.oneClickDiscoveryAppendIndex = undefined;
     this.oneClickDiscoverySelectedIndex = undefined;
   };
@@ -515,18 +507,13 @@ export class VviinnResults {
 
     document.addEventListener("vviinnImageCrop", this.imageCropHandler);
     document.addEventListener("vviinnWidgetClose", this.widgetCloseHandler);
-    document.addEventListener(
-      "vviinnTextSearchStarted",
-      this.widgetCloseHandler,
-    );
+    document.addEventListener("vviinnResultsReceived", this.widgetCloseHandler);
 
     this.getResultsBySearchId(this.searchId);
     this.getResultsByCategory();
+    this.innerTextSearchQuery = this.textSearchQuery;
 
-    if (!this.showInWidget) {
-      this.innerTextSearchQuery = this.textSearchQuery;
-      this.getTextSearchResults(this.innerTextSearchQuery);
-    }
+    !this.showInWidget && this.getTextSearchResults(this.innerTextSearchQuery);
   }
 
   disconnectedCallback() {
@@ -555,7 +542,7 @@ export class VviinnResults {
     document.removeEventListener("vviinnImageCrop", this.imageCropHandler);
     document.removeEventListener("vviinnWidgetClose", this.widgetCloseHandler);
     document.removeEventListener(
-      "vviinnTextSearchStarted",
+      "vviinnResultsReceived",
       this.widgetCloseHandler,
     );
   }

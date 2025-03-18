@@ -25,6 +25,7 @@ import {
   ChangedFiltersEventData,
   DynamicFilterInternalData,
   SearchIdEvent,
+  TriggerSourceEvent,
   TriggerSourceEventData,
 } from "../../recommendation/events";
 import { triggerFilter, triggerResetFilters } from "./helpers/triggerFilter";
@@ -72,8 +73,7 @@ export class VviinnSelectedFilters {
 
   /** Selected filters should be resetted */
   /** @internal */
-  @Event({ bubbles: true })
-  vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
+  @Event() vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
 
   @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterInternalData>;
 
@@ -147,9 +147,7 @@ export class VviinnSelectedFilters {
     this.requestFilters = filters;
   };
 
-  private handleSelectedFiltersReset = ({
-    detail,
-  }: CustomEvent<TriggerSourceEventData>) => {
+  private handleSelectedFiltersReset = ({ detail }: TriggerSourceEvent) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.resetInnerState();
   };
