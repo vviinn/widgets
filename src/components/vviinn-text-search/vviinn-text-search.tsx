@@ -250,37 +250,35 @@ export class VviinnTextSearch {
   private async handleTextSearch() {
     if (!this.searchQuery) return;
     this.trackTextSearch();
-    if (this.showInWidget) {
-      if (this.basicEventData && this.uiSessionId) {
-        const { campaignTypeId, ...rest } = this.basicEventData;
-        const textSearchStartedEvent: WidgetEvent = createWidgetEvent("TPS")({
-          action: "search",
-          session_id: this.uiSessionId,
-          ...rest,
-        });
-        trackEvent(textSearchStartedEvent);
-      }
 
-      const response = pipe(
-        await makeTextSearchRequest(this.storeName, this.searchQuery),
-        E.getOrElse(() => null),
-        (response: TextSearchResponse) => response,
-      );
+    if (this.basicEventData && this.uiSessionId) {
+      const { campaignTypeId, ...rest } = this.basicEventData;
+      const textSearchStartedEvent: WidgetEvent = createWidgetEvent("TPS")({
+        action: "search",
+        session_id: this.uiSessionId,
+        ...rest,
+      });
+      trackEvent(textSearchStartedEvent);
+    }
 
-      if (response) {
-        this.widgetTextSearchFinished.emit({
-          query: this.searchQuery,
-          requestId: response.requestId,
-        });
+    this.vviinnTextSearchStarted.emit({
+      query: this.searchQuery,
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
 
-        this.vviinnSelectedFiltersReset.emit({
-          isTriggeredByVpsWidget: this.showInWidget,
-        });
-      }
-    } else {
-      // this.showLoader();
-      this.vviinnTextSearchStarted.emit({
+    const response = pipe(
+      await makeTextSearchRequest(this.storeName, this.searchQuery),
+      E.getOrElse(() => null),
+      (response: TextSearchResponse) => response,
+    );
+
+    if (response) {
+      this.widgetTextSearchFinished.emit({
         query: this.searchQuery,
+        requestId: response.requestId,
+      });
+
+      this.vviinnSelectedFiltersReset.emit({
         isTriggeredByVpsWidget: this.showInWidget,
       });
     }

@@ -374,8 +374,11 @@ export class VviinnResults {
   }
 
   private textSearchStartedHandler = async ({ detail }: TextSearchEvent) => {
+    const { isTriggeredByVpsWidget } = detail;
+    if (this.skipStateChanges(isTriggeredByVpsWidget)) return;
+
     this.innerTextSearchQuery = detail.query;
-    this.setTextSearch(true, detail.isTriggeredByVpsWidget);
+    this.setTextSearch(true, isTriggeredByVpsWidget);
 
     const { campaignTypeId, ...rest } = this.getBasicEventData();
     const textSearchStartedEvent: WidgetEvent = createWidgetEvent("TPS")({
@@ -474,7 +477,8 @@ export class VviinnResults {
     }
   };
 
-  private widgetCloseHandler = () => {
+  private widgetCloseHandler = ({ detail }: TextSearchEvent) => {
+    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.oneClickDiscoveryAppendIndex = undefined;
     this.oneClickDiscoverySelectedIndex = undefined;
   };
@@ -511,6 +515,10 @@ export class VviinnResults {
 
     document.addEventListener("vviinnImageCrop", this.imageCropHandler);
     document.addEventListener("vviinnWidgetClose", this.widgetCloseHandler);
+    document.addEventListener(
+      "vviinnTextSearchStarted",
+      this.widgetCloseHandler,
+    );
 
     this.getResultsBySearchId(this.searchId);
     this.getResultsByCategory();
@@ -546,6 +554,10 @@ export class VviinnResults {
 
     document.removeEventListener("vviinnImageCrop", this.imageCropHandler);
     document.removeEventListener("vviinnWidgetClose", this.widgetCloseHandler);
+    document.removeEventListener(
+      "vviinnTextSearchStarted",
+      this.widgetCloseHandler,
+    );
   }
 
   @Watch("textSearchQuery")
