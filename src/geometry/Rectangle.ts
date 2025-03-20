@@ -39,7 +39,6 @@ export const fromNaturalImage = (image: HTMLImageElement): Rectangle => {
 };
 
 export const getScaleRange = (source: Rectangle, target: Rectangle): Point => {
-  //FIXME: check type casting
   const difference = sizedDivSemigroup.concat(
     target as Point & Sized,
     source as Point & Sized,

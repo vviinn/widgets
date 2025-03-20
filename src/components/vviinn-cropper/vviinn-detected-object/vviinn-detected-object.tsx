@@ -17,7 +17,6 @@ import {
   SelectObjectEventData,
 } from "../../../recommendation/events";
 import { Rectangle } from "../../../interfaces/search";
-import { Sized } from "../../../geometry/Sized";
 
 @Component({
   tag: "vviinn-detected-object",
@@ -39,10 +38,10 @@ export class VviinnDetectedObject {
       O.fromNullable(this.imageBounds),
       O.map((bounds) => {
         const objectRectangle = foldValueObject(this.detectedObject);
-        //FIXME: check type casting
+
         const { left, top } = pipe(
           objectRectangle,
-          scaleWithSized(bounds as Sized),
+          scaleWithSized(bounds),
           center,
         );
 
@@ -57,8 +56,7 @@ export class VviinnDetectedObject {
       O.fromNullable(this.imageBounds),
       O.map((bounds) => {
         const rectangle = foldValueObject(this.detectedObject);
-        //FIXME: check type casting
-        return scaleWithSized(bounds as Sized)(rectangle);
+        return scaleWithSized(bounds)(rectangle);
       }),
       O.toNullable,
     );

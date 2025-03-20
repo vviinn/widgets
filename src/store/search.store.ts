@@ -38,7 +38,6 @@ import {
 } from "../utils/collections/collectionsUtils";
 import { fileToB64 } from "../network/ion/File";
 import { divideOnSized } from "../geometry/Rectangle";
-import { Sized } from "../geometry/Sized";
 
 const IMAGE_SMALLEST_SIDE_TO_RESIZE = 800;
 const HI_RES_IMAGE_SMALLEST_SIDE_TO_RESIZE = 2000;
@@ -179,8 +178,7 @@ export const makeVisualSearchRequest = async (
   let searchRectangle;
 
   if (imageBounds) {
-    //FIXME: check type casting
-    const scaled = divideOnSized(imageBounds as Sized)(searchArea);
+    const scaled = divideOnSized(imageBounds)(searchArea);
 
     searchRectangle = {
       width: scaled.width,
