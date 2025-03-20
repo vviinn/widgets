@@ -150,9 +150,15 @@ main {
   border: none;
   cursor: pointer;
   margin: 0;
-  padding: 0;
   top: 0;
-  right: var(--spacing-300);
+  color: var(--color-icon-secondary);
+  transition: color 0.1s ease-in-out;
+  padding: var(--spacing-100);
+  right: var(--spacing-200);
+}
+
+.close-sidebar:hover {
+  color: var(--color-icon-primary);
 }
 
 @keyframes slideInFromBottom {

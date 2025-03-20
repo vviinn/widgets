@@ -168,10 +168,6 @@ vviinn-recommendations-sidebar::part(body) {
   }
 }
 
-vviinn-recommendations-sidebar::part(close-sidebar) {
-  top: 11px;
-}
-
 vviinn-recommendations-sidebar::part(source-image) {
   display: none;
 }
