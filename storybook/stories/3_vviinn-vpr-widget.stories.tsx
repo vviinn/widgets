@@ -41,13 +41,12 @@ const Template = (args) => `
       set-mode-discounts="${args.setModeDiscounts}"
       add-price-container="${args.addPriceContainer}"
       favorite-show="${args.favoriteShow}"
-    >
-    </vviinn-vpr-widget>
+    ></vviinn-vpr-widget>
 `;
 
-export const Grid = Template.bind({});
-Grid.storyName = "Discovery";
-Grid.args = {
+export const Default = Template.bind({});
+Default.storyName = "Discovery";
+Default.args = {
   token: vviinnToken,
   apiPath: process.env.STORYBOOK_API_PATH,
   productId: productIdSimilarProducts,
@@ -69,6 +68,7 @@ Grid.args = {
   showScroll: false,
   noResultShow: true,
   noResultText: "",
+  updateButtonLocation: "topAndItem",
   gridArrowsDynamic: false,
   addToBasketShow: false,
   showFilters: false,

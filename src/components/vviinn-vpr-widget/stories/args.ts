@@ -58,9 +58,9 @@ const updateButtonLocation = {
   control: {
     type: "select",
     labels: {
-      onTop: "On Top",
-      onItem: "On Item",
-      topAndItem: "Top and item",
+      onTop: "onTop",
+      onItem: "onItem",
+      topAndItem: "topAndItem",
     },
   },
   required: false,

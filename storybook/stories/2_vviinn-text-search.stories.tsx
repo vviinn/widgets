@@ -45,11 +45,11 @@ const Template = (args) => `
 </div>  
 `;
 
-export const TextSearch = Template.bind({});
+export const Default = Template.bind({});
 
-TextSearch.storyName = "Search Bar";
+Default.storyName = "Search Bar";
 
-TextSearch.args = {
+Default.args = {
   token: vviinnToken,
   apiPath: process.env.STORYBOOK_API_PATH,
   searchQuery: "",
@@ -59,7 +59,7 @@ TextSearch.args = {
   locale: "en-US",
 };
 
-TextSearch.parameters = {
+Default.parameters = {
   design: {
     type: "figma",
     url: "https://www.figma.com/design/4xUlo6X4l7FHKcHkJRW4C4/Visual-Search-Widget?node-id=1370-226&t=iiWX4CdPIRXmBKQ3-0",

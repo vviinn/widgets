@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.155.0](https://github.com/vviinn/widgets/compare/v2.154.0...v2.155.0) (2025-03-20)
+
+
+### Features
+
+* Add One-click Discovery Playground ([d882a02](https://github.com/vviinn/widgets/commit/d882a02492774759531185761b6aa3db16543041))
+
 ## [2.154.0](https://github.com/vviinn/widgets/compare/v2.153.0...v2.154.0) (2025-03-07)
 
 

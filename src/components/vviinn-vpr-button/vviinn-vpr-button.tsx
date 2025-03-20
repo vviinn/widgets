@@ -145,15 +145,16 @@ export class VviinnVprButton {
   /** Add default styles to the button */
   @Prop() addStyle: boolean = true;
 
-  /** ID of an HTML element that you want to attach the sidebar  */
-  @Prop() appendSidebarTo: string;
-
   /** Show or hide Favorite button */
   @Prop() favoriteShow: boolean = false;
 
+  /** @internal */
   @Prop() appendSidebarToElement: HTMLElement;
-
+  /** ID of an HTML element that you want to attach the sidebar  */
+  /** @internal */
+  @Prop() appendSidebarTo: string;
   /** One click Discovery mode*/
+  /** @internal */
   @Prop() oneClickDiscoveryMode?: OneClickDiscoveryMode = "standalone";
 
   /** @internal */
