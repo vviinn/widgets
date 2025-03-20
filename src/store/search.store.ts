@@ -12,7 +12,11 @@ import {
 } from "../searchSession/searchSession";
 
 import { getTokenWithBody } from "../utils/token/tokenUtils";
-import { checkFileWithExtention, resizeFileTo } from "./file-processing";
+import {
+  checkFileWithExtention,
+  resizeFileTo,
+  shoudResize,
+} from "./file-processing";
 import { imageFromFileTask } from "../Image/fromFile";
 import {
   ProductListingPageRequest,
@@ -164,7 +168,7 @@ export const uploadFile =
 export const makeVisualSearchRequest = async (
   store: SearchStoreName,
   searchId?: string | null,
-  dynamicFilters?: RequestDynamicFilterItem[] | null,
+  dynamicFilters?: RequestDynamicFilterItem[],
   searchArea?: Rectangle | null,
   imageBounds?: Rectangle | null,
 ) => {
@@ -188,7 +192,7 @@ export const makeVisualSearchRequest = async (
 
   const body: VisualSearchRequest = {
     requestId: searchId ?? state.selfSearchId,
-    ...addIfDefined("dynamicFilters", dynamicFilters),
+    ...addIfNotEmpty("dynamicFilters", dynamicFilters),
     query: {
       ...addIfDefined("searchArea", searchRectangle),
     },
@@ -314,6 +318,12 @@ export const processSelectedFile =
       resizeFileTask,
       TE.chain(uploadFile(store, "image")),
     )();
+
+    const shouldResizeHiRes = shoudResize(
+      await imageFromFileTask(file)(),
+      HI_RES_IMAGE_SMALLEST_SIDE_TO_RESIZE,
+    );
+    if (!shouldResizeHiRes || !state.selfSearchId.length) return session;
 
     const hiResFileResizer = resizeFileTo(HI_RES_IMAGE_SMALLEST_SIDE_TO_RESIZE);
     const hiResFileTask = pipe(

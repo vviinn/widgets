@@ -17,10 +17,13 @@ export const checkFileWithExtention = (file: File) =>
     E.chain(checkImageType),
   );
 
-const optionalResize = (image: HTMLImageElement, size: number) => {
+export const shoudResize = (image: HTMLImageElement, size: number) => {
   const smallestSide = Math.min(image.naturalWidth, image.naturalHeight);
-  return smallestSide > size ? resizeImage(size, image) : imageToB64(image);
+  return smallestSide > size;
 };
+
+const optionalResize = (image: HTMLImageElement, size: number) =>
+  shoudResize(image, size) ? resizeImage(size, image) : imageToB64(image);
 
 export const resizeFileTo = (size: number) => (file: File) =>
   pipe(
