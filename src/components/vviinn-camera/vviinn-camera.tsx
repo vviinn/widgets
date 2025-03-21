@@ -11,7 +11,7 @@ import {
 } from "@stencil/core";
 import { pipe } from "fp-ts/lib/function";
 import { toFile } from "../../Image/toFile";
-import { processSelectedFile } from "../../store/search.store";
+import { makeUploadFileRequest } from "../../store/search.store";
 import * as E from "fp-ts/lib/Either";
 import {
   BasicEventData,
@@ -183,7 +183,7 @@ export class VviinnExampleImage {
     file = await toFile(dataURI);
 
     pipe(
-      await processSelectedFile(
+      await makeUploadFileRequest(
         this.useComponentsStore ? "components" : "widget",
       )(file),
       E.match(

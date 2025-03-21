@@ -9,7 +9,10 @@ import {
 } from "@stencil/core";
 import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/lib/function";
-import { processSelectedFile, SearchStoreName } from "../../store/search.store";
+import {
+  makeUploadFileRequest,
+  SearchStoreName,
+} from "../../store/search.store";
 import {
   BasicEventData,
   ImageUploadEventData,
@@ -49,7 +52,7 @@ export class VviinnImageSelector {
     });
     const input = event.target as HTMLInputElement;
 
-    const processingResult = await processSelectedFile(this.storeName)(
+    const processingResult = await makeUploadFileRequest(this.storeName)(
       input.files[0],
     );
 

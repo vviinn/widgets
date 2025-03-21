@@ -106,6 +106,12 @@ const updateImageSearchState =
     state.loading = false;
   };
 
+const setSelectedImage =
+  (store: SearchStoreName) => (image: HTMLImageElement) => {
+    const state = useStore(store);
+    state.image = O.some(image);
+  };
+
 const processVisualSearch = (
   store: SearchStoreName,
   body: VisualSearchRequest,
@@ -132,7 +138,7 @@ const processVisualSearch = (
   );
 };
 
-export const uploadFile =
+const uploadFile =
   (
     store: SearchStoreName,
     field: "image" | "highResolutionImage",
@@ -160,6 +166,68 @@ export const uploadFile =
         processVisualSearch(store, body, fetchDetectedObjects),
       ),
     );
+  };
+
+export const makeUploadFileRequest =
+  (store: SearchStoreName) => async (file: File) => {
+    const state = useStore(store);
+    state.image = O.none;
+    state.detectedObjects = [];
+    state.searchType = "image";
+    state.loading = true;
+
+    const originFile = checkFileWithExtention(file);
+
+    const fileResizer = resizeFileTo(IMAGE_SMALLEST_SIDE_TO_RESIZE);
+    const resizeFileTask = pipe(
+      originFile,
+      TE.fromEither,
+      TE.chainTaskK(fileResizer),
+    );
+
+    await pipe(
+      resizeFileTask,
+      TE.chainTaskK(imageFromFileTask),
+      TE.map(setSelectedImage(store)),
+    )();
+
+    const session = await pipe(
+      resizeFileTask,
+      TE.chain(uploadFile(store, "image")),
+    )();
+
+    if (!state.selfSearchId?.length) return session;
+
+    // const shouldResizeHiRes = shoudResize(
+    //   await imageFromFileTask(file)(),
+    //   HI_RES_IMAGE_SMALLEST_SIDE_TO_RESIZE,
+    // );
+    // if (!shouldResizeHiRes || !state.selfSearchId.length) return session;
+
+    const hiResFileResizer = resizeFileTo(HI_RES_IMAGE_SMALLEST_SIDE_TO_RESIZE);
+    const hiResFileTask = pipe(
+      originFile,
+      TE.fromEither,
+      TE.chainTaskK(hiResFileResizer),
+    );
+
+    const hiResFileResult = await hiResFileTask();
+
+    if (store === "components") {
+      await pipe(
+        TE.fromEither(hiResFileResult),
+        TE.chainTaskK(imageFromFileTask),
+        TE.map(setSelectedImage(store)),
+      )();
+    }
+
+    pipe(
+      TE.fromEither(hiResFileResult),
+      TE.chain(
+        uploadFile(store, "highResolutionImage", false, state.selfSearchId),
+      ),
+    )();
+    return session;
   };
 
 export const makeVisualSearchRequest = async (
@@ -282,74 +350,6 @@ export const makeProductListingPageRequest = async (
     }),
   )();
 };
-
-const setSelectedImage =
-  (store: SearchStoreName) => (image: HTMLImageElement) => {
-    const state = useStore(store);
-    state.image = O.some(image);
-  };
-
-export const processSelectedFile =
-  (store: SearchStoreName) => async (file: File) => {
-    const state = useStore(store);
-    state.image = O.none;
-    state.detectedObjects = [];
-    state.searchType = "image";
-    state.loading = true;
-
-    const originFile = checkFileWithExtention(file);
-
-    const fileResizer = resizeFileTo(IMAGE_SMALLEST_SIDE_TO_RESIZE);
-    const resizeFileTask = pipe(
-      originFile,
-      TE.fromEither,
-      TE.chainTaskK(fileResizer),
-    );
-
-    await pipe(
-      resizeFileTask,
-      TE.chainTaskK(imageFromFileTask),
-      TE.map(setSelectedImage(store)),
-    )();
-
-    const session = await pipe(
-      resizeFileTask,
-      TE.chain(uploadFile(store, "image")),
-    )();
-
-    if (!state.selfSearchId?.length) return session;
-
-    // const shouldResizeHiRes = shoudResize(
-    //   await imageFromFileTask(file)(),
-    //   HI_RES_IMAGE_SMALLEST_SIDE_TO_RESIZE,
-    // );
-    // if (!shouldResizeHiRes || !state.selfSearchId.length) return session;
-
-    const hiResFileResizer = resizeFileTo(HI_RES_IMAGE_SMALLEST_SIDE_TO_RESIZE);
-    const hiResFileTask = pipe(
-      originFile,
-      TE.fromEither,
-      TE.chainTaskK(hiResFileResizer),
-    );
-
-    const hiResFileResult = await hiResFileTask();
-
-    if (store === "components") {
-      await pipe(
-        TE.fromEither(hiResFileResult),
-        TE.chainTaskK(imageFromFileTask),
-        TE.map(setSelectedImage(store)),
-      )();
-    }
-
-    pipe(
-      TE.fromEither(hiResFileResult),
-      TE.chain(
-        uploadFile(store, "highResolutionImage", false, state.selfSearchId),
-      ),
-    )();
-    return session;
-  };
 
 onChangeWidgetState("serverError", () => {
   const state = useStore("widget");
