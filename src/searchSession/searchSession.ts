@@ -1,5 +1,4 @@
 import { pipe } from "fp-ts/lib/function";
-import { ValueObject } from "../network/ion/ValueObject";
 import { makeRequest } from "../network/request";
 import { createInitPostRequest, getApiPath } from "../network/utils";
 import * as TE from "fp-ts/TaskEither";
@@ -26,7 +25,7 @@ export const detectedObjectEq: Eq<Rectangle> = {
     x.width === y.width,
 };
 
-export type ObjectsDetectedEvent = CustomEvent<ValueObject<Rectangle>[]>;
+export type ObjectsDetectedEvent = CustomEvent<Rectangle[]>;
 
 export const visualSearchSessionClient = (
   initialData: RequestInit,

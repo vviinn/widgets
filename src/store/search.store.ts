@@ -32,8 +32,8 @@ import {
   addIfDefined,
   addIfNotEmpty,
 } from "../utils/collections/collectionsUtils";
-import { fileToB64 } from "../network/ion/File";
 import { divideOnSized } from "../geometry/Rectangle";
+import { fileToB64 } from "../file";
 
 const IMAGE_SMALLEST_SIDE_TO_RESIZE = 800;
 const HI_RES_IMAGE_SMALLEST_SIDE_TO_RESIZE = 2000;

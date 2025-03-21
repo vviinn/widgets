@@ -13,7 +13,6 @@ import {
 import Cropper from "cropperjs";
 import styles from "./vviinn-cropper.css";
 import { updateGlobalState } from "../../store/store";
-import { ValueObject } from "../../network/ion/ValueObject";
 import { fromImage } from "../../geometry/Rectangle";
 import {
   BasicEventData,
@@ -69,7 +68,7 @@ export class VviinnCropper {
   /** @internal */
   @Prop() showInWidget: boolean = false;
 
-  @State() detectedObjects: ValueObject<Rectangle>[] = [];
+  @State() detectedObjects: Rectangle[] = [];
   @State() cropper: Cropper = null;
   @State() selectedDetectedObject?: Rectangle;
   @State() imageBounds: Rectangle | null;
