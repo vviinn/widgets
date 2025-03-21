@@ -71,7 +71,7 @@ export class VviinnCropper {
 
   @State() detectedObjects: ValueObject<Rectangle>[] = [];
   @State() cropper: Cropper = null;
-  @State() selectedDetectedObject: ValueObject<Rectangle>;
+  @State() selectedDetectedObject?: Rectangle;
   @State() imageBounds: Rectangle | null;
   @State() searchArea: Rectangle | null;
   @State() imageElement?: HTMLImageElement;
@@ -152,9 +152,7 @@ export class VviinnCropper {
 
   stringParser(TriggerDetectedObjects?: boolean) {
     if (this.detectedObjectsString && TriggerDetectedObjects) {
-      this.detectedObjects = JSON.parse(
-        this.detectedObjectsString,
-      ) as ValueObject<Rectangle>[];
+      this.detectedObjects = JSON.parse(this.detectedObjectsString);
     }
   }
 
@@ -162,7 +160,7 @@ export class VviinnCropper {
   selectDetectedObject({ detail }: CustomEvent<SelectObjectEventData>) {
     this.selectedDetectedObject = detail.detectedObject;
     this.searchArea = detail.searchArea;
-    const { top, left, width, height } = detail.detectedObject.value;
+    const { top, left, width, height } = detail.detectedObject;
     const data = this.cropper.getImageData();
 
     const cropBoxData = {

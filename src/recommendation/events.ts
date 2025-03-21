@@ -7,7 +7,6 @@ import {
   ResultViewEvent,
   Widget,
 } from "vviinn-tracking-client-ts";
-import { ValueObject } from "../network/ion/ValueObject";
 import { ErrorKind } from "../error";
 import {
   DynamicFilterValue,
@@ -45,7 +44,7 @@ export type NoResultEventData = {
 };
 
 export type SelectObjectEventData = {
-  detectedObject: ValueObject<Rectangle>;
+  detectedObject: Rectangle;
   searchArea: Rectangle;
 } & {
   [K in keyof CommonEventData]: CommonEventData[K];

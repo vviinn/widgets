@@ -12,11 +12,7 @@ import {
 } from "../searchSession/searchSession";
 
 import { getTokenWithBody } from "../utils/token/tokenUtils";
-import {
-  checkFileWithExtention,
-  resizeFileTo,
-  shoudResize,
-} from "./file-processing";
+import { checkFileWithExtention, resizeFileTo } from "./file-processing";
 import { imageFromFileTask } from "../Image/fromFile";
 import {
   ProductListingPageRequest,
@@ -96,11 +92,14 @@ export const resetStore = (store: SearchStoreName) => {
 };
 
 const updateImageSearchState =
-  (store: SearchStoreName) => async (response: VisualSearchResponse) => {
+  (store: SearchStoreName, updateDetectedObjects) =>
+  async (response: VisualSearchResponse) => {
     const state = useStore(store);
-    state.detectedObjects = response.interactions.suggestedSearchAreas.map(
-      ({ rectangle }) => rectangle,
-    );
+    if (updateDetectedObjects)
+      state.detectedObjects = response.interactions.suggestedSearchAreas.map(
+        ({ rectangle }) => rectangle,
+      );
+
     state.selfSearchId = response.requestId;
     state.results = response.data.products;
     state.dynamicFilters = response.interactions.dynamicFilters;
@@ -110,6 +109,7 @@ const updateImageSearchState =
 const processVisualSearch = (
   store: SearchStoreName,
   body: VisualSearchRequest,
+  fetchDetectedObjects = true,
 ) => {
   const state = useStore(store);
 
@@ -121,7 +121,7 @@ const processVisualSearch = (
       visualSearchSessionClient(request, state.campaignId, state.excluded),
     ),
     TE.map((sessionResponse) => {
-      updateImageSearchState(store)(sessionResponse);
+      updateImageSearchState(store, fetchDetectedObjects)(sessionResponse);
       state.loading = false;
       return sessionResponse;
     }),
@@ -137,6 +137,7 @@ export const uploadFile =
   (
     store: SearchStoreName,
     field: "image" | "highResolutionImage",
+    fetchDetectedObjects: boolean = true,
     searchId?: string,
   ) =>
   (file: File) => {
@@ -148,7 +149,7 @@ export const uploadFile =
       TE.tryCatch(
         async () => ({
           query: {
-            [field]: await fileToB64(file),
+            [field]: (await fileToB64(file)).split(",")[1],
           },
           objectDetection: {
             include: field === "image",
@@ -160,7 +161,9 @@ export const uploadFile =
           inner: error,
         }),
       ),
-      TE.chain((body) => processVisualSearch(store, body)),
+      TE.chain((body) =>
+        processVisualSearch(store, body, fetchDetectedObjects),
+      ),
     );
   };
 
@@ -195,7 +198,7 @@ export const makeVisualSearchRequest = async (
       ...addIfDefined("searchArea", searchRectangle),
     },
   };
-  return processVisualSearch(store, body)();
+  return processVisualSearch(store, body, false)();
 };
 
 export const makeTextSearchRequest = async (
@@ -317,11 +320,13 @@ export const processSelectedFile =
       TE.chain(uploadFile(store, "image")),
     )();
 
-    const shouldResizeHiRes = shoudResize(
-      await imageFromFileTask(file)(),
-      HI_RES_IMAGE_SMALLEST_SIDE_TO_RESIZE,
-    );
-    if (!shouldResizeHiRes || !state.selfSearchId.length) return session;
+    if (!state.selfSearchId?.length) return session;
+
+    // const shouldResizeHiRes = shoudResize(
+    //   await imageFromFileTask(file)(),
+    //   HI_RES_IMAGE_SMALLEST_SIDE_TO_RESIZE,
+    // );
+    // if (!shouldResizeHiRes || !state.selfSearchId.length) return session;
 
     const hiResFileResizer = resizeFileTo(HI_RES_IMAGE_SMALLEST_SIDE_TO_RESIZE);
     const hiResFileTask = pipe(
@@ -342,7 +347,9 @@ export const processSelectedFile =
 
     pipe(
       TE.fromEither(hiResFileResult),
-      TE.chain(uploadFile(store, "highResolutionImage", state.selfSearchId)),
+      TE.chain(
+        uploadFile(store, "highResolutionImage", false, state.selfSearchId),
+      ),
     )();
     return session;
   };

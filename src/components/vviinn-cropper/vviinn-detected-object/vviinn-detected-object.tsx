@@ -9,7 +9,6 @@ import {
 } from "@stencil/core";
 import { pipe } from "fp-ts/lib/function";
 import * as O from "fp-ts/lib/Option";
-import { ValueObject, foldValueObject } from "../../../network/ion/ValueObject";
 import { detectedObjectEq } from "../../../searchSession/searchSession";
 import { scaleWithSized, center } from "../../../geometry/Rectangle";
 import {
@@ -24,8 +23,8 @@ import { Rectangle } from "../../../interfaces/search";
   shadow: true,
 })
 export class VviinnDetectedObject {
-  @Prop() detectedObject: ValueObject<Rectangle>;
-  @Prop() selectedDetectedObject: ValueObject<Rectangle>;
+  @Prop() detectedObject: Rectangle;
+  @Prop() selectedDetectedObject: Rectangle;
   @Prop() basicEventData: BasicEventData;
   @Prop() imageBounds: Rectangle | null;
   @Prop() showInWidget: boolean;
@@ -37,10 +36,8 @@ export class VviinnDetectedObject {
     return pipe(
       O.fromNullable(this.imageBounds),
       O.map((bounds) => {
-        const objectRectangle = foldValueObject(this.detectedObject);
-
         const { left, top } = pipe(
-          objectRectangle,
+          this.detectedObject,
           scaleWithSized(bounds),
           center,
         );
@@ -55,8 +52,7 @@ export class VviinnDetectedObject {
     const scaledRect = pipe(
       O.fromNullable(this.imageBounds),
       O.map((bounds) => {
-        const rectangle = foldValueObject(this.detectedObject);
-        return scaleWithSized(bounds)(rectangle);
+        return scaleWithSized(bounds)(this.detectedObject);
       }),
       O.toNullable,
     );
@@ -71,10 +67,10 @@ export class VviinnDetectedObject {
   private isActive(): boolean {
     if (!this.detectedObject || !this.selectedDetectedObject) return false;
 
-    const thisObject = foldValueObject(this.detectedObject);
-    const savedObject = foldValueObject(this.selectedDetectedObject);
-
-    return detectedObjectEq.equals(thisObject, savedObject);
+    return detectedObjectEq.equals(
+      this.detectedObject,
+      this.selectedDetectedObject,
+    );
   }
 
   @State() position: [string, string] = ["0", "0"];
