@@ -122,7 +122,6 @@ const processVisualSearch = (
     ),
     TE.map((sessionResponse) => {
       updateImageSearchState(store, fetchDetectedObjects)(sessionResponse);
-      state.loading = false;
       return sessionResponse;
     }),
     TE.mapLeft((error) => {
@@ -141,10 +140,6 @@ export const uploadFile =
     searchId?: string,
   ) =>
   (file: File) => {
-    const state = useStore(store);
-    state.searchType = "image";
-    state.loading = true;
-
     return pipe(
       TE.tryCatch(
         async () => ({
@@ -178,7 +173,7 @@ export const makeVisualSearchRequest = async (
   state.searchType = "image";
   state.loading = true;
 
-  let searchRectangle;
+  let searchRectangle: Rectangle;
 
   if (imageBounds) {
     const scaled = divideOnSized(imageBounds)(searchArea);
@@ -216,7 +211,7 @@ export const makeTextSearchRequest = async (
     query,
     requestId,
     ...addIfDefined("resultsCount", resultsCount),
-    ...addIfDefined("dynamicFilters", dynamicFilters),
+    ...addIfNotEmpty("dynamicFilters", dynamicFilters),
     ...addIfNotEmpty("campaign", state.campaignId),
   };
 
@@ -228,7 +223,7 @@ export const makeTextSearchRequest = async (
     TE.map((sessionResponse) => {
       state.results = sessionResponse?.data?.products ?? [];
       state.dynamicFilters =
-        (sessionResponse?.data?.interactions
+        (sessionResponse?.interactions
           ?.dynamicFilters as ResponseFilterItem[]) ?? [];
       state.loading = false;
       return sessionResponse;
@@ -299,6 +294,8 @@ export const processSelectedFile =
     const state = useStore(store);
     state.image = O.none;
     state.detectedObjects = [];
+    state.searchType = "image";
+    state.loading = true;
 
     const originFile = checkFileWithExtention(file);
 
@@ -354,7 +351,6 @@ export const processSelectedFile =
     return session;
   };
 
-// TODO: check if this is needed
 onChangeWidgetState("serverError", () => {
   const state = useStore("widget");
   state.loading = false;

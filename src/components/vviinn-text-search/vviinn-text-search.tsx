@@ -106,14 +106,11 @@ export class VviinnTextSearch {
   /** @internal */
   @Prop() basicEventData: BasicEventData;
 
-  // TODO: Use loading from the store
-  @State() isLoading = false;
-
   @State() isRecording = false;
-
   @State() showTooltip = false;
 
-  private isShowPreloader = () => this.state.loading;
+  private isShowPreloader = () =>
+    this.state.loading && this.state.searchType === "text";
 
   private isShowRecording = () => this.isRecording;
   private showRecording = () => (this.isRecording = true);
