@@ -1,8 +1,5 @@
-import { pipe } from "fp-ts/lib/function";
-import * as TE from "fp-ts/lib/TaskEither";
 import { resizeImage } from "../Image/resizeImage";
 import { imageToB64 } from "../Image/imageToB64";
-import { convertB64toFileTask } from "../Image/toFile";
 
 const IMAGE_SMALLEST_SIDE_TO_RESIZE = 800;
 const HI_RES_IMAGE_SMALLEST_SIDE_TO_RESIZE = 2000;
@@ -26,11 +23,3 @@ export const optionalResize = (
   shouldResize(image, imageType)
     ? resizeImage(imageProcessingConfig[imageType], image)
     : imageToB64(image);
-
-export const processImageToFile =
-  (imageType: ImageType) => (image: HTMLImageElement) =>
-    pipe(
-      TE.right(image),
-      TE.map((img) => optionalResize(img, imageType)),
-      TE.chainTaskK(convertB64toFileTask),
-    );
