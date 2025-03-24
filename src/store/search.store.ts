@@ -34,7 +34,7 @@ import {
 } from "../utils/collections/collectionsUtils";
 import { divideOnSized } from "../geometry/Rectangle";
 import { fileToB64 } from "../file";
-import { imageProcessingConfig, shouldResize } from "./image-processing";
+import { ImageSize, shouldResize } from "./image-processing";
 
 export type SearchStoreName = "widget" | "components";
 
@@ -171,18 +171,18 @@ const uploadFile =
     );
   };
 
-const uploadImage = (store: SearchStoreName, size: number) => (file: File) =>
-  pipe(
-    TE.fromEither(checkFileWithExtention(file)),
-    TE.chainTaskK(resizeFileTo(size)),
-    TE.chain((resizedFile) => updateImageState(store)(resizedFile)),
-    TE.chain(uploadFile(store, "image")),
-  );
+const uploadImage =
+  (store: SearchStoreName, imageSize: ImageSize) => (file: File) =>
+    pipe(
+      TE.fromEither(checkFileWithExtention(file)),
+      TE.chainTaskK(resizeFileTo(imageSize)),
+      TE.chain((resizedFile) => updateImageState(store)(resizedFile)),
+      TE.chain(uploadFile(store, "image")),
+    );
 
 export const makeUploadFileRequest =
   (store: SearchStoreName) => async (file: File) => {
     const state = useStore(store);
-    const { previewSize, hiResSize } = imageProcessingConfig;
 
     Object.assign(state, {
       image: null,
@@ -191,21 +191,21 @@ export const makeUploadFileRequest =
       loading: true,
     });
 
-    const session = await pipe(uploadImage(store, previewSize)(file))();
+    const session = await pipe(uploadImage(store, "preview")(file))();
     state.loading = false;
 
     if (!state.selfSearchId?.length) return session;
 
     const shouldProcessHiRes = await pipe(
       TE.fromTask(imageFromFileTask(file)),
-      TE.map((img) => shouldResize(img, hiResSize)),
+      TE.map((img) => shouldResize(img, "hiRes")),
       TE.getOrElse(() => T.of(false)),
     )();
 
     if (!shouldProcessHiRes) return session;
 
     pipe(
-      uploadImage(store, hiResSize)(file),
+      uploadImage(store, "hiRes")(file),
       TE.getOrElseW((error) => {
         console.error("Failed to upload hi-res image:", error);
         return T.of(session);

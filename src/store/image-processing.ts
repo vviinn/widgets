@@ -7,25 +7,30 @@ import { convertB64toFileTask } from "../Image/toFile";
 const IMAGE_SMALLEST_SIDE_TO_RESIZE = 800;
 const HI_RES_IMAGE_SMALLEST_SIDE_TO_RESIZE = 2000;
 
-interface ImageProcessingConfig {
-  previewSize: number;
-  hiResSize: number;
-}
+export type ImageSize = "preview" | "hiRes";
+export type ImageProcessingConfig = Record<ImageSize, number>;
 
 export const imageProcessingConfig: ImageProcessingConfig = {
-  previewSize: IMAGE_SMALLEST_SIDE_TO_RESIZE,
-  hiResSize: HI_RES_IMAGE_SMALLEST_SIDE_TO_RESIZE,
+  preview: IMAGE_SMALLEST_SIDE_TO_RESIZE,
+  hiRes: HI_RES_IMAGE_SMALLEST_SIDE_TO_RESIZE,
 };
 
-export const shouldResize = (image: HTMLImageElement, size: number) =>
-  Math.min(image.naturalWidth, image.naturalHeight) > size;
+export const shouldResize = (image: HTMLImageElement, imageSize: ImageSize) =>
+  Math.min(image.naturalWidth, image.naturalHeight) >
+  imageProcessingConfig[imageSize];
 
-export const optionalResize = (image: HTMLImageElement, size: number) =>
-  shouldResize(image, size) ? resizeImage(size, image) : imageToB64(image);
+export const optionalResize = (
+  image: HTMLImageElement,
+  imageSize: ImageSize,
+) =>
+  shouldResize(image, imageSize)
+    ? resizeImage(imageProcessingConfig[imageSize], image)
+    : imageToB64(image);
 
-export const processImageToFile = (size: number) => (image: HTMLImageElement) =>
-  pipe(
-    TE.right(image),
-    TE.map((img) => optionalResize(img, size)),
-    TE.chainTaskK(convertB64toFileTask),
-  );
+export const processImageToFile =
+  (imageSize: ImageSize) => (image: HTMLImageElement) =>
+    pipe(
+      TE.right(image),
+      TE.map((img) => optionalResize(img, imageSize)),
+      TE.chainTaskK(convertB64toFileTask),
+    );
