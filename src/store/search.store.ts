@@ -1,6 +1,6 @@
 import { createStore } from "@stencil/store";
-import * as O from "fp-ts/lib/Option";
 import * as TE from "fp-ts/TaskEither";
+import * as T from "fp-ts/Task";
 import { pipe } from "fp-ts/function";
 import { globalState } from "./store";
 import { Recommendation } from "../interfaces/recommendation";
@@ -34,9 +34,7 @@ import {
 } from "../utils/collections/collectionsUtils";
 import { divideOnSized } from "../geometry/Rectangle";
 import { fileToB64 } from "../file";
-
-const IMAGE_SMALLEST_SIDE_TO_RESIZE = 800;
-const HI_RES_IMAGE_SMALLEST_SIDE_TO_RESIZE = 2000;
+import { imageProcessingConfig, shouldResize } from "./image-processing";
 
 export type SearchStoreName = "widget" | "components";
 
@@ -52,7 +50,7 @@ export type SearchStore = {
   dynamicFilters: ResponseDynamicFilterItem[];
   detectedObjects: Rectangle[];
   searchType?: SearchType;
-  image: O.Option<HTMLImageElement>;
+  image?: HTMLImageElement | null;
 
   serverError: boolean;
   loading: boolean;
@@ -68,7 +66,7 @@ const storeDefaults: SearchStore = {
   detectedObjects: [],
   resultLoaded: false,
   resultViewed: false,
-  image: O.none,
+  image: null,
 
   serverError: false,
   loading: false,
@@ -91,7 +89,7 @@ export const resetStore = (store: SearchStoreName) => {
   });
 };
 
-const updateImageSearchState =
+const updateVisualSearchState =
   (store: SearchStoreName, updateDetectedObjects) =>
   async (response: VisualSearchResponse) => {
     const state = useStore(store);
@@ -106,11 +104,16 @@ const updateImageSearchState =
     state.loading = false;
   };
 
-const setSelectedImage =
-  (store: SearchStoreName) => (image: HTMLImageElement) => {
-    const state = useStore(store);
-    state.image = O.some(image);
-  };
+const updateImageState = (store: SearchStoreName) => (file: File) =>
+  pipe(
+    TE.fromTask(imageFromFileTask(file)),
+    TE.map((image) => {
+      const state = useStore(store);
+      state.image = image;
+      return image;
+    }),
+    TE.map(() => file),
+  );
 
 const processVisualSearch = (
   store: SearchStoreName,
@@ -127,7 +130,7 @@ const processVisualSearch = (
       visualSearchSessionClient(request, state.campaignId, state.excluded),
     ),
     TE.map((sessionResponse) => {
-      updateImageSearchState(store, fetchDetectedObjects)(sessionResponse);
+      updateVisualSearchState(store, fetchDetectedObjects)(sessionResponse);
       return sessionResponse;
     }),
     TE.mapLeft((error) => {
@@ -168,65 +171,47 @@ const uploadFile =
     );
   };
 
+const uploadImage = (store: SearchStoreName, size: number) => (file: File) =>
+  pipe(
+    TE.fromEither(checkFileWithExtention(file)),
+    TE.chainTaskK(resizeFileTo(size)),
+    TE.chain((resizedFile) => updateImageState(store)(resizedFile)),
+    TE.chain(uploadFile(store, "image")),
+  );
+
 export const makeUploadFileRequest =
   (store: SearchStoreName) => async (file: File) => {
     const state = useStore(store);
-    state.image = O.none;
-    state.detectedObjects = [];
-    state.searchType = "image";
-    state.loading = true;
+    const { previewSize, hiResSize } = imageProcessingConfig;
 
-    const originFile = checkFileWithExtention(file);
+    Object.assign(state, {
+      image: null,
+      detectedObjects: [],
+      searchType: "image",
+      loading: true,
+    });
 
-    const fileResizer = resizeFileTo(IMAGE_SMALLEST_SIDE_TO_RESIZE);
-    const resizeFileTask = pipe(
-      originFile,
-      TE.fromEither,
-      TE.chainTaskK(fileResizer),
-    );
-
-    await pipe(
-      resizeFileTask,
-      TE.chainTaskK(imageFromFileTask),
-      TE.map(setSelectedImage(store)),
-    )();
-
-    const session = await pipe(
-      resizeFileTask,
-      TE.chain(uploadFile(store, "image")),
-    )();
+    const session = await pipe(uploadImage(store, previewSize)(file))();
+    state.loading = false;
 
     if (!state.selfSearchId?.length) return session;
 
-    // const shouldResizeHiRes = shoudResize(
-    //   await imageFromFileTask(file)(),
-    //   HI_RES_IMAGE_SMALLEST_SIDE_TO_RESIZE,
-    // );
-    // if (!shouldResizeHiRes || !state.selfSearchId.length) return session;
+    const shouldProcessHiRes = await pipe(
+      TE.fromTask(imageFromFileTask(file)),
+      TE.map((img) => shouldResize(img, hiResSize)),
+      TE.getOrElse(() => T.of(false)),
+    )();
 
-    const hiResFileResizer = resizeFileTo(HI_RES_IMAGE_SMALLEST_SIDE_TO_RESIZE);
-    const hiResFileTask = pipe(
-      originFile,
-      TE.fromEither,
-      TE.chainTaskK(hiResFileResizer),
-    );
-
-    const hiResFileResult = await hiResFileTask();
-
-    if (store === "components") {
-      await pipe(
-        TE.fromEither(hiResFileResult),
-        TE.chainTaskK(imageFromFileTask),
-        TE.map(setSelectedImage(store)),
-      )();
-    }
+    if (!shouldProcessHiRes) return session;
 
     pipe(
-      TE.fromEither(hiResFileResult),
-      TE.chain(
-        uploadFile(store, "highResolutionImage", false, state.selfSearchId),
-      ),
+      uploadImage(store, hiResSize)(file),
+      TE.getOrElseW((error) => {
+        console.error("Failed to upload hi-res image:", error);
+        return T.of(session);
+      }),
     )();
+
     return session;
   };
 

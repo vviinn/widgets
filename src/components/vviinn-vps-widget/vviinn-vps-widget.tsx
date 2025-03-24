@@ -11,7 +11,6 @@ import {
   EventEmitter,
   Fragment,
 } from "@stencil/core";
-import * as O from "fp-ts/lib/Option";
 import { v4 as uuidv4 } from "uuid";
 import i18next from "i18next";
 
@@ -656,7 +655,7 @@ export class VviinnVpsWidget {
 
     if (this.useComponentsStore) return;
 
-    this.state.image = O.none;
+    this.state.image = null;
     this.state.results = [];
     this.state.dynamicFilters = [];
     this.state.detectedObjects = [];

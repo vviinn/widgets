@@ -29,7 +29,6 @@ import { Locale, resources } from "../../locale";
 import { SearchBarMode } from "../../widget/types";
 import { TextSearchResponse } from "../../interfaces/search";
 import * as E from "fp-ts/Either";
-import * as O from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/function";
 import { searchBarParts } from "../../cssParts";
 import { MicIcon } from "../vviinn-icons/icons/MicIcon";
@@ -151,7 +150,7 @@ export class VviinnTextSearch {
   private imageUploadFinishedHandler = () => {
     if (this.saveImageMode === "never" || this.mode !== "extended") return;
 
-    const image: HTMLImageElement = O.getOrElse(() => null)(this.state.image);
+    const image: HTMLImageElement = this.state.image;
     if (image) localStorage.setItem("cropperImageSrc", image.src);
   };
 

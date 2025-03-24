@@ -35,9 +35,6 @@ import {
   SearchStore,
   SearchStoreName,
 } from "../../store/search.store";
-import * as O from "fp-ts/lib/Option";
-import { pipe } from "fp-ts/lib/function";
-import { sequenceToOption } from "../../utils/option/option";
 import { getImageSizes } from "../../Image/sizing";
 import { Rectangle } from "../../interfaces/search";
 
@@ -117,7 +114,7 @@ export class VviinnCropper {
     );
 
     if (this.cropper) this.cropper.destroy();
-    componentsState.image = O.none;
+    componentsState.image = null;
   }
 
   @Watch("detectedObjectsString")
@@ -127,14 +124,14 @@ export class VviinnCropper {
 
   private initPreloadedImage = () => {
     if (this.saveImageMode === "never") return;
-    this.state.image = O.none;
+    this.state.image = null;
 
     const cropperImageSrc = localStorage.getItem("cropperImageSrc");
     if (!cropperImageSrc) return;
 
     const image = document.createElement("img");
     image.src = cropperImageSrc;
-    this.state.image = O.some(image);
+    this.state.image = image;
 
     this.saveImageMode === "once" && localStorage.removeItem("cropperImageSrc");
   };
@@ -145,8 +142,8 @@ export class VviinnCropper {
   private imageUploadFinishedHandler = () => {
     if (this.saveImageMode === "never") return;
 
-    const image: HTMLImageElement = O.getOrElse(() => null)(this.state.image);
-    if (image) localStorage.setItem("cropperImageSrc", image.src);
+    if (this.state.image)
+      localStorage.setItem("cropperImageSrc", this.state.image.src);
   };
 
   stringParser(TriggerDetectedObjects?: boolean) {
@@ -202,7 +199,7 @@ export class VviinnCropper {
     };
   }
 
-  private loadImage() {
+  private loadImage = () => {
     this.imageElement = this.el.shadowRoot.querySelector("img");
     if (this.imageElement) {
       let data = {};
@@ -245,23 +242,20 @@ export class VviinnCropper {
         data,
       });
     }
-  }
+  };
 
   private renderImage() {
-    pipe(
-      sequenceToOption(this.state.image),
-      O.map(([refImage]) => {
-        if (!refImage) return null;
+    if (!this.state.image) return null;
 
-        if (this.showInWidget) {
-          const [width, height] = getImageSizes(refImage, DEFAULT_IMAGE_SIZE);
-          this.width = width;
-          this.height = height;
-        }
-        this.url = refImage.src;
-      }),
-      O.getOrElse(() => null),
-    );
+    if (this.showInWidget) {
+      const [width, height] = getImageSizes(
+        this.state.image,
+        DEFAULT_IMAGE_SIZE,
+      );
+      this.width = width;
+      this.height = height;
+    }
+    this.url = this.state.image.src;
   }
 
   private cropEnd = () => {
@@ -306,7 +300,7 @@ export class VviinnCropper {
               height={this.height}
               src={this.url}
               draggable={false}
-              onLoad={() => this.loadImage()}
+              onLoad={this.loadImage}
             />
 
             {this.getDetectedObjects().map((object) => (

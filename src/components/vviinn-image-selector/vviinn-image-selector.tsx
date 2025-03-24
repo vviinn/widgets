@@ -19,6 +19,8 @@ import {
   NoResultEventData,
   SearchIdEventData,
 } from "../../recommendation/events";
+import { BasicError } from "../../error";
+import { VisualSearchResponse } from "../../interfaces/search";
 
 /**
  * @part button -  button look and feel
@@ -52,9 +54,10 @@ export class VviinnImageSelector {
     });
     const input = event.target as HTMLInputElement;
 
-    const processingResult = await makeUploadFileRequest(this.storeName)(
-      input.files[0],
-    );
+    const processingResult: E.Either<
+      BasicError<string | Response>,
+      VisualSearchResponse
+    > = await makeUploadFileRequest(this.storeName)(input.files[0]);
 
     pipe(
       processingResult,
