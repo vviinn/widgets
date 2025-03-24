@@ -115,8 +115,8 @@ export class VviinnCropper {
       this.imageUploadFinishedHandler,
     );
 
-    this.disposeStoreListener && this.disposeStoreListener();
-    if (this.cropper) this.cropper.destroy();
+    this.disposeStoreListener?.();
+    this.cropper?.destroy?.();
     componentsState.image = null;
   }
 

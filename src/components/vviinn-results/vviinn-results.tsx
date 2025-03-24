@@ -26,11 +26,10 @@ import {
   makeProductListingPageRequest,
   makeVisualSearchRequest,
   makeTextSearchRequest,
-  searchState,
-  componentsState,
   SearchStore,
   SearchStoreName,
   resetStore,
+  useSearchStore,
 } from "../../store/search.store";
 import { globalState, trackEvent, updateGlobalState } from "../../store/store";
 import {
@@ -240,6 +239,7 @@ export class VviinnResults {
   private slots?: HTMLSlotElement[] = [];
   private state?: SearchStore;
   private storeName?: SearchStoreName;
+  private disposeStoreListener?: () => void;
   private setTextSearch = (
     isTriggeredByText: boolean,
     isTriggeredByVpsWidget = false,
@@ -260,9 +260,6 @@ export class VviinnResults {
   /** Selected filters should be resetted */
   /** @internal */
   @Event() vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
-  /** Results received after an interaction */
-  /** @internal */
-  @Event() vviinnResultsReceived: EventEmitter<TriggerSourceEventData>;
 
   private getResults() {
     return (this.useInnerState ? this.innerResults : this.state.results) ?? [];
@@ -292,6 +289,11 @@ export class VviinnResults {
     this.isSlotPassedToComponent(vprIconSlotName) ? (
       <slot name={vprIconSlotName} />
     ) : null;
+
+  private resetDiscoveryAppendIndexes = () => {
+    this.oneClickDiscoveryAppendIndex = undefined;
+    this.oneClickDiscoverySelectedIndex = undefined;
+  };
 
   async componentWillLoad() {
     slotChangeListener(this, this.el);
@@ -335,12 +337,6 @@ export class VviinnResults {
         this.resultsCount,
       ),
       E.getOrElse(() => null),
-      (response: TextSearchResponse) => {
-        this.vviinnResultsReceived.emit({
-          isTriggeredByVpsWidget: this.showInWidget,
-        });
-        return response;
-      },
     );
   }
 
@@ -468,15 +464,19 @@ export class VviinnResults {
     detail,
   }: TextSearchEvent | TriggerSourceEvent) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
-
-    this.oneClickDiscoveryAppendIndex = undefined;
-    this.oneClickDiscoverySelectedIndex = undefined;
+    this.resetDiscoveryAppendIndexes();
   };
 
   connectedCallback() {
     updateGlobalState(this);
-    this.state = this.showInWidget ? searchState : componentsState;
-    this.storeName = this.showInWidget ? "widget" : "components";
+    const { state, storeName, onChange } = useSearchStore(this.showInWidget);
+    this.state = state;
+    this.storeName = storeName;
+
+    this.disposeStoreListener = onChange("loading", (loading) => {
+      if (loading) this.resetDiscoveryAppendIndexes();
+    });
+
     if (this.el.id) this.widgetElementId = this.el.id;
 
     if (!this.uiSessionId) {
@@ -505,7 +505,6 @@ export class VviinnResults {
 
     document.addEventListener("vviinnImageCrop", this.imageCropHandler);
     document.addEventListener("vviinnWidgetClose", this.widgetCloseHandler);
-    document.addEventListener("vviinnResultsReceived", this.widgetCloseHandler);
 
     !!this.searchId && makeVisualSearchRequest(this.storeName, this.searchId);
     this.getResultsByCategory();
@@ -539,10 +538,7 @@ export class VviinnResults {
 
     document.removeEventListener("vviinnImageCrop", this.imageCropHandler);
     document.removeEventListener("vviinnWidgetClose", this.widgetCloseHandler);
-    document.removeEventListener(
-      "vviinnResultsReceived",
-      this.widgetCloseHandler,
-    );
+    this.disposeStoreListener?.();
   }
 
   @Watch("textSearchQuery")

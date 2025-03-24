@@ -76,9 +76,6 @@ export class VviinnTextSearch {
   /** @internal */
   @Event({ bubbles: true })
   vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
-  /** Results received after an interaction */
-  /** @internal */
-  @Event() vviinnResultsReceived: EventEmitter<TriggerSourceEventData>;
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
@@ -267,10 +264,6 @@ export class VviinnTextSearch {
       );
 
       if (response) {
-        this.vviinnResultsReceived.emit({
-          isTriggeredByVpsWidget: this.showInWidget,
-        });
-
         this.widgetTextSearchFinished.emit({
           query: this.searchQuery,
           requestId: response.requestId,

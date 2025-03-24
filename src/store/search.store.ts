@@ -350,8 +350,8 @@ export const useSearchStore = (
   state: SearchStore;
   onChange: OnChangeHandler<SearchStore>;
   storeName: SearchStoreName;
-} => {
-  return showInWidget
+} =>
+  showInWidget
     ? {
         state: searchState,
         onChange: onChangeWidgetState,
@@ -362,7 +362,6 @@ export const useSearchStore = (
         onChange: onChangeComponentsState,
         storeName: "components",
       };
-};
 
 export {
   onChangeComponentsState,

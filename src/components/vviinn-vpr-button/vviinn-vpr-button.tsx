@@ -20,6 +20,7 @@ import {
 import { Locale } from "../../locale";
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
 import { OneClickDiscoveryMode } from "../../widget/types";
+import { useSearchStore } from "../../store/search.store";
 /**
  * @part button - Clickable button element.
  * @part vviinn-button - Button element container.
@@ -196,9 +197,14 @@ export class VviinnVprButton {
   @State() targetAppendSidebarTo: HTMLElement;
 
   private iconSideSize?: number;
+  private disposeStoreListener?: () => void;
 
   connectedCallback() {
     this.iconSideSize = this.oneClickDiscoveryMode === "standalone" ? 24 : 14;
+    const { onChange } = useSearchStore(this.showInWidget);
+    this.disposeStoreListener = onChange("loading", (loading) => {
+      loading && this.sidebarCloseListener();
+    });
   }
 
   componentWillLoad() {
@@ -306,13 +312,8 @@ export class VviinnVprButton {
       sidebar.mode = this.position === "right" ? "grid" : this.mode;
       sidebar.useCarousel = this.position === "bottom";
     }
-
     this.sidebar = sidebar;
 
-    document.addEventListener(
-      "vviinnResultsReceived",
-      this.sidebarCloseListener,
-    );
     document.addEventListener("vviinnWidgetClose", this.sidebarCloseListener);
 
     if (this.targetAppendSidebarTo) {
@@ -334,9 +335,6 @@ export class VviinnVprButton {
       );
     }
 
-    document.removeEventListener(
-      "vviinnResultsReceived",
-      this.sidebarCloseListener,
-    );
+    this.disposeStoreListener?.();
   }
 }
