@@ -34,7 +34,7 @@ import {
 } from "../utils/collections/collectionsUtils";
 import { divideOnSized } from "../geometry/Rectangle";
 import { fileToB64 } from "../file";
-import { ImageSize, shouldResize } from "./image-processing";
+import { ImageType, shouldResize } from "./image-processing";
 
 export type SearchStoreName = "widget" | "components";
 
@@ -90,7 +90,7 @@ export const resetStore = (store: SearchStoreName) => {
 };
 
 const updateVisualSearchState =
-  (store: SearchStoreName, updateDetectedObjects) =>
+  (store: SearchStoreName, updateDetectedObjects: boolean) =>
   async (response: VisualSearchResponse) => {
     const state = useStore(store);
     if (updateDetectedObjects)
@@ -141,43 +141,40 @@ const processVisualSearch = (
   );
 };
 
-const uploadFile =
+const uploadImageFile =
   (
     store: SearchStoreName,
-    field: "image" | "highResolutionImage",
+    imageType: ImageType = "image",
     fetchDetectedObjects: boolean = true,
     searchId?: string,
   ) =>
-  (file: File) => {
-    return pipe(
-      TE.tryCatch(
-        async () => ({
-          query: {
-            [field]: (await fileToB64(file)).split(",")[1],
-          },
-          objectDetection: {
-            include: field === "image",
-          },
-          ...addIfDefined("requestId", searchId),
-        }),
-        (error) => ({
-          kind: "network error",
-          inner: error,
-        }),
-      ),
-      TE.chain((body) =>
-        processVisualSearch(store, body, fetchDetectedObjects),
-      ),
-    );
-  };
-
-const uploadImage =
-  (store: SearchStoreName, imageSize: ImageSize) => (file: File) =>
+  (file: File) =>
     pipe(
       TE.fromEither(checkFileWithExtention(file)),
-      TE.chainTaskK(resizeFileTo(imageSize)),
+      TE.chainTaskK(resizeFileTo(imageType)),
       TE.chain((resizedFile) => updateImageState(store)(resizedFile)),
-      TE.chain(uploadFile(store, "image")),
+      TE.chain((resizedFile) =>
+        pipe(
+          TE.tryCatch(
+            async () => ({
+              query: {
+                [imageType]: (await fileToB64(resizedFile)).split(",")[1],
+              },
+              objectDetection: {
+                include: imageType === "image",
+              },
+              ...addIfDefined("requestId", searchId),
+            }),
+            (error) => ({
+              kind: "network error",
+              inner: error,
+            }),
+          ),
+          TE.chain((body) =>
+            processVisualSearch(store, body, fetchDetectedObjects),
+          ),
+        ),
+      ),
     );
 
 export const makeUploadFileRequest =
@@ -191,21 +188,26 @@ export const makeUploadFileRequest =
       loading: true,
     });
 
-    const session = await pipe(uploadImage(store, "preview")(file))();
+    const session = await pipe(uploadImageFile(store, "image")(file))();
     state.loading = false;
 
     if (!state.selfSearchId?.length) return session;
 
     const shouldProcessHiRes = await pipe(
       TE.fromTask(imageFromFileTask(file)),
-      TE.map((img) => shouldResize(img, "hiRes")),
+      TE.map((img) => shouldResize(img, "highResolutionImage")),
       TE.getOrElse(() => T.of(false)),
     )();
 
     if (!shouldProcessHiRes) return session;
 
     pipe(
-      uploadImage(store, "hiRes")(file),
+      uploadImageFile(
+        store,
+        "highResolutionImage",
+        false,
+        state.selfSearchId,
+      )(file),
       TE.getOrElseW((error) => {
         console.error("Failed to upload hi-res image:", error);
         return T.of(session);

@@ -6,7 +6,7 @@ import { pipe } from "fp-ts/lib/function";
 import { fileDoesntExistError } from "../file";
 import { imageFromFileTask } from "../Image/fromFile";
 import { convertB64toFileTask } from "../Image/toFile";
-import { ImageSize, optionalResize } from "./image-processing";
+import { ImageType, optionalResize } from "./image-processing";
 
 export const checkFileWithExtention = (file: File) =>
   pipe(
@@ -15,10 +15,10 @@ export const checkFileWithExtention = (file: File) =>
     E.chain(checkImageType),
   );
 
-export const resizeFileTo = (imageSize: ImageSize) => (file: File) =>
+export const resizeFileTo = (imageType: ImageType) => (file: File) =>
   pipe(
     file,
     imageFromFileTask,
-    T.map((image) => optionalResize(image, imageSize)),
+    T.map((image) => optionalResize(image, imageType)),
     T.chain(convertB64toFileTask),
   );
