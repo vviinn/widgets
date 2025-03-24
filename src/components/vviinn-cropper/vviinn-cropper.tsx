@@ -23,22 +23,21 @@ import {
 import { LoadImageEventData } from "./types";
 import { ValidateCropBoxData } from "./helpers";
 import {
+  cropperOptions,
   INITIAL_CROP_AREA_OFFSET,
   SUPPORTED_ASPECT_RATIO,
   MIN_IMAGE_SIDE_FOR_CROPPER,
-  cropperOptions,
+  DEFAULT_IMAGE_SIZE,
 } from "./constants";
 import {
   makeVisualSearchRequest,
-  searchState,
   componentsState,
   SearchStore,
   SearchStoreName,
+  useSearchStore,
 } from "../../store/search.store";
 import { getImageSizes } from "../../Image/sizing";
 import { Rectangle } from "../../interfaces/search";
-
-const DEFAULT_IMAGE_SIZE = 288;
 
 @Component({
   tag: "vviinn-cropper",
@@ -81,12 +80,19 @@ export class VviinnCropper {
 
   private state?: SearchStore;
   private storeName?: SearchStoreName;
+  private disposeStoreListener?: () => void;
 
   connectedCallback() {
     updateGlobalState(this);
     this.stringParser(true);
-    this.state = this.showInWidget ? searchState : componentsState;
-    this.storeName = this.showInWidget ? "widget" : "components";
+
+    const { state, storeName, onChange } = useSearchStore(this.showInWidget);
+    this.state = state;
+    this.storeName = storeName;
+    this.disposeStoreListener = onChange("image", (newImage) =>
+      this.renderImage(newImage),
+    );
+
     this.initPreloadedImage();
 
     document.addEventListener(
@@ -99,10 +105,6 @@ export class VviinnCropper {
     );
   }
 
-  componentWillRender() {
-    this.renderImage();
-  }
-
   disconnectedCallback() {
     document.removeEventListener(
       "vviinnImageUploadStarted",
@@ -113,6 +115,7 @@ export class VviinnCropper {
       this.imageUploadFinishedHandler,
     );
 
+    this.disposeStoreListener && this.disposeStoreListener();
     if (this.cropper) this.cropper.destroy();
     componentsState.image = null;
   }
@@ -123,6 +126,16 @@ export class VviinnCropper {
   }
 
   private initPreloadedImage = () => {
+    if (this.showInWidget) {
+      const [width, height] = getImageSizes(
+        this.state.image,
+        DEFAULT_IMAGE_SIZE,
+      );
+      this.width = width;
+      this.height = height;
+      this.renderImage(this.state.image);
+    }
+
     if (this.saveImageMode === "never") return;
     this.state.image = null;
 
@@ -140,10 +153,9 @@ export class VviinnCropper {
     this.showInWidget !== isTriggeredByVpsWidget;
 
   private imageUploadFinishedHandler = () => {
-    if (this.saveImageMode === "never") return;
-
-    if (this.state.image)
+    if (this.state.image && this.saveImageMode !== "never") {
       localStorage.setItem("cropperImageSrc", this.state.image.src);
+    }
   };
 
   stringParser(TriggerDetectedObjects?: boolean) {
@@ -244,18 +256,10 @@ export class VviinnCropper {
     }
   };
 
-  private renderImage() {
-    if (!this.state.image) return null;
-
-    if (this.showInWidget) {
-      const [width, height] = getImageSizes(
-        this.state.image,
-        DEFAULT_IMAGE_SIZE,
-      );
-      this.width = width;
-      this.height = height;
+  private renderImage(newImage?: HTMLImageElement) {
+    if (newImage) {
+      this.url = newImage.src;
     }
-    this.url = this.state.image.src;
   }
 
   private cropEnd = () => {

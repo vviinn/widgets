@@ -35,6 +35,7 @@ import {
 import { divideOnSized } from "../geometry/Rectangle";
 import { fileToB64 } from "../file";
 import { ImageType, shouldResize } from "./image-processing";
+import { OnChangeHandler } from "@stencil/store/dist/types";
 
 export type SearchStoreName = "widget" | "components";
 
@@ -74,8 +75,8 @@ const storeDefaults: SearchStore = {
 
 const { state: searchState, onChange: onChangeWidgetState } =
   createStore<SearchStore>(storeDefaults);
-const { state: componentsState } = createStore<SearchStore>(storeDefaults);
-export { searchState, componentsState };
+const { state: componentsState, onChange: onChangeComponentsState } =
+  createStore<SearchStore>(storeDefaults);
 
 const useStore = (store: SearchStoreName) =>
   store === "widget" ? searchState : componentsState;
@@ -342,3 +343,30 @@ onChangeWidgetState("serverError", () => {
   const state = useStore("widget");
   state.loading = false;
 });
+
+export const useSearchStore = (
+  showInWidget: boolean,
+): {
+  state: SearchStore;
+  onChange: OnChangeHandler<SearchStore>;
+  storeName: SearchStoreName;
+} => {
+  return showInWidget
+    ? {
+        state: searchState,
+        onChange: onChangeWidgetState,
+        storeName: "widget",
+      }
+    : {
+        state: componentsState,
+        onChange: onChangeComponentsState,
+        storeName: "components",
+      };
+};
+
+export {
+  onChangeComponentsState,
+  onChangeWidgetState,
+  searchState,
+  componentsState,
+};
