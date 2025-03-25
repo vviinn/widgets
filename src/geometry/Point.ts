@@ -1,45 +1,45 @@
 import { semigroupSum, semigroupProduct, struct } from "fp-ts/Semigroup";
 import { ClientEvent } from "../utils/event/Events";
 import { semigroupDiff } from "../utils/semigroup/semigroupDiff";
-import { Rectangle } from "./Rectangle";
+import { Rectangle } from "../interfaces/search";
 
 export type Point = {
-  readonly x: number;
-  readonly y: number;
+  readonly left: number;
+  readonly top: number;
 };
 
-export const fromRectangle = ({ x, y }: Rectangle): Point => {
+export const fromRectangle = ({ left, top }: Rectangle): Point => {
   return {
-    x,
-    y,
+    left,
+    top,
   };
 };
 
 export const fromMouseEvent = ({ clientX, clientY }: ClientEvent): Point => {
   return {
-    x: clientX,
-    y: clientY,
+    left: clientX,
+    top: clientY,
   };
 };
 
 export const fromTouchEvent = ({ touches }: TouchEvent): Point => {
   return {
-    x: touches[0].clientX,
-    y: touches[0].clientY,
+    left: touches[0].clientX,
+    top: touches[0].clientY,
   };
 };
 
 export const pointDiffSemigroup = struct<Point>({
-  x: semigroupDiff,
-  y: semigroupDiff,
+  left: semigroupDiff,
+  top: semigroupDiff,
 });
 
 export const pointSumSemigroup = struct<Point>({
-  x: semigroupSum,
-  y: semigroupSum,
+  left: semigroupSum,
+  top: semigroupSum,
 });
 
 export const pointProductSemigroup = struct<Point>({
-  x: semigroupProduct,
-  y: semigroupProduct,
+  left: semigroupProduct,
+  top: semigroupProduct,
 });

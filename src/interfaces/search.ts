@@ -1,17 +1,24 @@
 import { components } from "./generated";
 
 export interface SearchInterfaces {
+  VisualSearchRequest: components["schemas"]["visual-search-request"];
+  VisualSearchResponse: components["schemas"]["visual-search-response"];
   TextSearchRequest: components["schemas"]["text-search-request"];
   TextSearchResponse: components["schemas"]["text-search-response"];
-  RequestDynamicFilterItem: components["schemas"]["request-dynamic-filter-item"];
-  ResponseFilterItem: components["schemas"]["response-categorical-filter-item"];
   ProductListingPageRequest: components["schemas"]["product-listing-page-request"];
   ProductListingPageResponse: components["schemas"]["product-listing-page-response"];
+  RequestDynamicFilterItem: components["schemas"]["request-dynamic-filter-item"];
+  ResponseFilterItem: components["schemas"]["response-categorical-filter-item"];
   SearchIdResponse: components["schemas"]["ion-visual-product-search"];
+
+  Rectangle: components["schemas"]["rectangle"];
 }
 
 export type TextSearchRequest = SearchInterfaces["TextSearchRequest"];
 export type TextSearchResponse = SearchInterfaces["TextSearchResponse"];
+
+export type VisualSearchRequest = SearchInterfaces["VisualSearchRequest"];
+export type VisualSearchResponse = SearchInterfaces["VisualSearchResponse"];
 
 export type ProductListingPageRequest =
   SearchInterfaces["ProductListingPageRequest"];
@@ -24,3 +31,5 @@ export type SearchIdResponse = SearchInterfaces["SearchIdResponse"];
 export type RequestDynamicFilterItem =
   SearchInterfaces["RequestDynamicFilterItem"];
 export type ResponseFilterItem = SearchInterfaces["ResponseFilterItem"];
+
+export type Rectangle = SearchInterfaces["Rectangle"];

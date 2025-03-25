@@ -5,27 +5,20 @@ import { checkImageType } from "../Image/error";
 import { pipe } from "fp-ts/lib/function";
 import { fileDoesntExistError } from "../file";
 import { imageFromFileTask } from "../Image/fromFile";
-import { resizeImage } from "../Image/resizeImage";
 import { convertB64toFileTask } from "../Image/toFile";
-import { imageToB64 } from "../Image/imageToB64";
+import { ImageType, optionalResize } from "./image-processing";
 
 export const checkFileWithExtention = (file: File) =>
   pipe(
-    file,
-    O.fromNullable,
+    O.fromNullable(file),
     E.fromOption(() => fileDoesntExistError),
     E.chain(checkImageType),
   );
 
-const optionalResize = (image: HTMLImageElement, size: number) => {
-  const smallestSide = Math.min(image.naturalWidth, image.naturalHeight);
-  return smallestSide > size ? resizeImage(size, image) : imageToB64(image);
-};
-
-export const resizeFileTo = (size: number) => (file: File) =>
+export const resizeFileTo = (imageType: ImageType) => (file: File) =>
   pipe(
     file,
     imageFromFileTask,
-    T.map((image) => optionalResize(image, size)),
+    T.map((image) => optionalResize(image, imageType)),
     T.chain(convertB64toFileTask),
   );
