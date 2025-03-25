@@ -68,10 +68,6 @@ export class VviinnTextSearch {
   /** @internal */
   @Event() widgetTextSearchFinished: EventEmitter<TextSearchEventData>;
 
-  /** A search response was received by vviinn-results (used internally for showing preloader) */
-  /** @internal */
-  @Event() resultsSearchFinished: EventEmitter;
-
   /** Selected filters should be resetted */
   /** @internal */
   @Event({ bubbles: true })
@@ -156,7 +152,6 @@ export class VviinnTextSearch {
     this.storeName = this.showInWidget ? "widget" : "components";
     this.state = this.showInWidget ? searchState : componentsState;
 
-    // document.addEventListener("resultsSearchFinished", this.hideLoader);
     document.addEventListener(
       "vviinnFilterTriggered",
       this.filterTriggeredHandler,
@@ -168,7 +163,6 @@ export class VviinnTextSearch {
   }
 
   disconnectedCallback() {
-    // document.removeEventListener("resultsSearchFinished", this.hideLoader);
     document.removeEventListener(
       "vviinnFilterTriggered",
       this.filterTriggeredHandler,

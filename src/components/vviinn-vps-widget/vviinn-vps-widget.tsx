@@ -783,7 +783,7 @@ export class VviinnVpsWidget {
                 <div
                   class={`source-wrapper ${this.state.searchType === "text" ? "text-search-wrapper" : "image-wrapper"}`}
                 >
-                  {this.state.searchType === "text" && (
+                  {this.state.searchType === "text" ? (
                     <vviinn-text-search
                       token={this.token}
                       showInWidget={true}
@@ -794,9 +794,7 @@ export class VviinnVpsWidget {
                       basicEventData={this.getBasicEventData(true)}
                       save-image-mode="never"
                     />
-                  )}
-
-                  {this.state.searchType === "image" && (
+                  ) : (
                     <vviinn-cropper
                       basicEventData={this.getBasicEventData()}
                       showAspectRatioError={this.showAspectRatioError}

@@ -157,10 +157,6 @@ export class VviinnResults {
   @Event({ bubbles: true })
   vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
 
-  /** A search response was received by vviinn-results (used internally for showing preloader) */
-  /** @internal */
-  @Event() resultsSearchFinished: EventEmitter;
-
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
   /** The currency sign is displayed after the price */
@@ -379,7 +375,6 @@ export class VviinnResults {
     if (!response) return;
 
     this.innerTextSearchRequestId = response.requestId;
-    this.resultsSearchFinished.emit();
     this.vviinnSelectedFiltersReset.emit({
       isTriggeredByVpsWidget: this.showInWidget,
     });
