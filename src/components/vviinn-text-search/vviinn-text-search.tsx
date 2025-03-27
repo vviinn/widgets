@@ -302,6 +302,7 @@ export class VviinnTextSearch {
               apiPath={globalState.apiPath}
               addStyle={false}
               useComponentsStore={true}
+              exportparts="vviinn-button"
             />
           )}
 
