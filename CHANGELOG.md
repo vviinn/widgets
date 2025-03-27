@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.156.1](https://github.com/vviinn/widgets/compare/v2.156.0...v2.156.1) (2025-03-27)
+
+
+### Bug Fixes
+
+* Fix one-click discovery grid behavior for two-rows view ([19eecb6](https://github.com/vviinn/widgets/commit/19eecb671c3bf0f5f1b3f457d8621441fcee8ae0))
+
 ## [2.156.0](https://github.com/vviinn/widgets/compare/v2.155.0...v2.156.0) (2025-03-25)
 
 
