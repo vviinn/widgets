@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.156.2](https://github.com/vviinn/widgets/compare/v2.156.1...v2.156.2) (2025-03-27)
+
+
+### Bug Fixes
+
+* Fix an error when there is no image link for a product ([caf4a34](https://github.com/vviinn/widgets/commit/caf4a34d8dbbcb09f18236f5b891aea94896fb14))
+
 ### [2.156.1](https://github.com/vviinn/widgets/compare/v2.156.0...v2.156.1) (2025-03-27)
 
 
