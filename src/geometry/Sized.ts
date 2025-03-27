@@ -3,8 +3,8 @@ import { getStructSemigroup } from "fp-ts/Semigroup";
 import * as Ord from "fp-ts/Ord";
 
 export type Sized = {
-  readonly width: number;
-  readonly height: number;
+  readonly width?: number;
+  readonly height?: number;
 };
 
 export const sizedDivSemigroup = getStructSemigroup<Sized>({

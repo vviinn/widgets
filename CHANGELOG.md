@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.156.2](https://github.com/vviinn/widgets/compare/v2.156.1...v2.156.2) (2025-03-27)
+
+
+### Bug Fixes
+
+* Fix an error when there is no image link for a product ([caf4a34](https://github.com/vviinn/widgets/commit/caf4a34d8dbbcb09f18236f5b891aea94896fb14))
+
+### [2.156.1](https://github.com/vviinn/widgets/compare/v2.156.0...v2.156.1) (2025-03-27)
+
+
+### Bug Fixes
+
+* Fix one-click discovery grid behavior for two-rows view ([19eecb6](https://github.com/vviinn/widgets/commit/19eecb671c3bf0f5f1b3f457d8621441fcee8ae0))
+
+## [2.156.0](https://github.com/vviinn/widgets/compare/v2.155.0...v2.156.0) (2025-03-25)
+
+
+### Features
+
+* Use new visual-search endpoint with dynamic filters ([4f916c9](https://github.com/vviinn/widgets/commit/4f916c9f08bb500056ee5f08d535360063b5024d))
+
 ## [2.155.0](https://github.com/vviinn/widgets/compare/v2.154.0...v2.155.0) (2025-03-20)
 
 

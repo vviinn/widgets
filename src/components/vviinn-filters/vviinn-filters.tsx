@@ -23,6 +23,7 @@ import { Histogram } from "../vviinn-price-range/vviinn-price-range";
 import {
   ChangedFiltersEventData,
   DynamicFilterInternalData,
+  TriggerSourceEvent,
   TriggerSourceEventData,
 } from "../../recommendation/events";
 import { components } from "../../interfaces/generated";
@@ -87,8 +88,7 @@ export class VviinnFilters {
 
   /** Selected filters should be resetted */
   /** @internal */
-  @Event({ bubbles: true })
-  vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
+  @Event() vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
 
   private state?: SearchStore;
 
@@ -108,17 +108,14 @@ export class VviinnFilters {
     });
   }
 
-  private handleSelectedFiltersReset = ({
-    detail,
-  }: CustomEvent<TriggerSourceEventData>) => {
+  private handleSelectedFiltersReset = ({ detail }: TriggerSourceEvent) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.requestFilters = [];
     this.selectedFilter = undefined;
   };
 
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
-    (isTriggeredByVpsWidget && !this.showInWidget) ||
-    (!isTriggeredByVpsWidget && this.showInWidget);
+    this.showInWidget !== isTriggeredByVpsWidget;
 
   private priceChangeHandler = (filterValue: DynamicFilterValue) => {
     this.handleSubFilterSelection(filterValue, this.selectedFilter);

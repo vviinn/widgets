@@ -32,7 +32,7 @@ import { Histogram } from "../vviinn-price-range/vviinn-price-range";
 import {
   ChangedFiltersEventData,
   DynamicFilterTrackingData,
-  ExtendedFiltersButtonClickedEvent,
+  TriggerSourceEvent,
   TriggerSourceEventData,
 } from "../../recommendation/events";
 import { components } from "../../interfaces/generated";
@@ -122,11 +122,9 @@ export class VviinnExtendedFilters {
 
   /** Selected filters should be resetted */
   /** @internal */
-  @Event({ bubbles: true })
-  vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
-
+  @Event() vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
   /** @internal */
-  @Event({ bubbles: true })
+  @Event()
   vviinnExtendedFiltersButtonClicked: EventEmitter<TriggerSourceEventData>;
 
   private state?: SearchStore;
@@ -145,8 +143,7 @@ export class VviinnExtendedFilters {
   }
 
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
-    (isTriggeredByVpsWidget && !this.showInWidget) ||
-    (!isTriggeredByVpsWidget && this.showInWidget);
+    this.showInWidget !== isTriggeredByVpsWidget;
 
   private replaceSlotsContent() {
     const slots = this.el.querySelectorAll("[slot]");
@@ -160,9 +157,7 @@ export class VviinnExtendedFilters {
     (this.requestFilters.find(({ column }) => isIntervalFilter(column))
       ?.values[0] ?? {}) as components["schemas"]["interval"];
 
-  private handleSelectedFiltersReset = ({
-    detail,
-  }: CustomEvent<TriggerSourceEventData>) => {
+  private handleSelectedFiltersReset = ({ detail }: TriggerSourceEvent) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.resetFiltersState();
   };
@@ -189,7 +184,7 @@ export class VviinnExtendedFilters {
 
   private handleExtendedFiltersButtonClicked = ({
     detail,
-  }: ExtendedFiltersButtonClickedEvent) => {
+  }: TriggerSourceEvent) => {
     const { isTriggeredByVpsWidget } = detail;
 
     if (!this.skipStateChanges(isTriggeredByVpsWidget)) {

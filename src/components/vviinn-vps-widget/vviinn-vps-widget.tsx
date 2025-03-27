@@ -11,7 +11,6 @@ import {
   EventEmitter,
   Fragment,
 } from "@stencil/core";
-import * as O from "fp-ts/lib/Option";
 import { v4 as uuidv4 } from "uuid";
 import i18next from "i18next";
 
@@ -650,19 +649,16 @@ export class VviinnVpsWidget {
 
   private resetState() {
     this.resetInnerState();
-    if (this.useComponentsStore) return;
-
     this.slidePosition = 0;
-    this.state.resetCategoryLink = undefined;
-    this.state.activeIonLink = undefined;
-    this.state.image = O.none;
-    this.state.results = [];
-    this.state.filters = [];
-    this.state.dynamicFilters = [];
-    this.state.detectedObjects = [];
-    this.state.rectangleSearchForm = undefined;
     this.state.loading = false;
     this.state.serverError = false;
+
+    if (this.useComponentsStore) return;
+
+    this.state.image = null;
+    this.state.results = [];
+    this.state.dynamicFilters = [];
+    this.state.detectedObjects = [];
     this.state.searchType = undefined;
   }
 
@@ -783,45 +779,30 @@ export class VviinnVpsWidget {
                 active: this.isResultSlide(),
               }}
             >
-              {this.isResultSlide() && this.state.searchType === "image" && (
-                <div class="source-wrapper image-wrapper">
-                  <vviinn-cropper
-                    basicEventData={this.getBasicEventData()}
-                    showAspectRatioError={this.showAspectRatioError}
-                    apiPath={globalState.apiPath}
-                    showInWidget={true}
-                    save-image-mode="never"
-                  />
-                  <div
-                    class={{
-                      "filters-wrapper": true,
-                      hidden: this.showAspectRatioError,
-                    }}
-                  >
-                    <div class="filters">
-                      {this.state.filters.map((filter) => (
-                        <search-filters
-                          filter={filter}
-                          basicEventData={this.getBasicEventData()}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {this.isResultSlide() && this.state.searchType === "text" && (
-                <div class="source-wrapper text-search-wrapper">
-                  <vviinn-text-search
-                    token={globalState.token}
-                    apiPath={globalState.apiPath}
-                    locale={globalState.locale}
-                    showInWidget={true}
-                    searchQuery={this.searchQuery}
-                    uiSessionId={this.uiSessionId}
-                    basicEventData={this.getBasicEventData(true)}
-                    save-image-mode="never"
-                  />
+              {this.isResultSlide() && (
+                <div
+                  class={`source-wrapper ${this.state.searchType === "text" ? "text-search-wrapper" : "image-wrapper"}`}
+                >
+                  {this.state.searchType === "text" ? (
+                    <vviinn-text-search
+                      token={this.token}
+                      showInWidget={true}
+                      searchQuery={this.searchQuery}
+                      apiPath={this.apiPath}
+                      locale={this.locale}
+                      uiSessionId={this.uiSessionId}
+                      basicEventData={this.getBasicEventData(true)}
+                      save-image-mode="never"
+                    />
+                  ) : (
+                    <vviinn-cropper
+                      basicEventData={this.getBasicEventData()}
+                      showAspectRatioError={this.showAspectRatioError}
+                      apiPath={this.apiPath}
+                      showInWidget={true}
+                      save-image-mode="never"
+                    />
+                  )}
 
                   <div
                     class={{
