@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.156.3](https://github.com/vviinn/widgets/compare/v2.156.2...v2.156.3) (2025-03-27)
+
+
+### Bug Fixes
+
+* Add exportparts for vviinn-button in Search Bar ([e648f59](https://github.com/vviinn/widgets/commit/e648f599adb325cec07a1ac4bd07c4eaa301ea40))
+
 ### [2.156.2](https://github.com/vviinn/widgets/compare/v2.156.1...v2.156.2) (2025-03-27)
 
 
