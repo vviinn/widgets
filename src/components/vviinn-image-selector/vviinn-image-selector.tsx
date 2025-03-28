@@ -9,13 +9,18 @@ import {
 } from "@stencil/core";
 import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/lib/function";
-import { processSelectedFile, SearchStoreName } from "../../store/search.store";
+import {
+  makeUploadFileRequest,
+  SearchStoreName,
+} from "../../store/search.store";
 import {
   BasicEventData,
   ImageUploadEventData,
   NoResultEventData,
   SearchIdEventData,
 } from "../../recommendation/events";
+import { BasicError } from "../../error";
+import { VisualSearchResponse } from "../../interfaces/search";
 
 /**
  * @part button -  button look and feel
@@ -49,9 +54,10 @@ export class VviinnImageSelector {
     });
     const input = event.target as HTMLInputElement;
 
-    const processingResult = await processSelectedFile(this.storeName)(
-      input.files[0],
-    );
+    const processingResult: E.Either<
+      BasicError<string | Response>,
+      VisualSearchResponse
+    > = await makeUploadFileRequest(this.storeName)(input.files[0]);
 
     pipe(
       processingResult,
@@ -62,9 +68,9 @@ export class VviinnImageSelector {
             reason: kind,
           });
         },
-        ({ links }) => {
+        (response) => {
           this.vviinnImageUploadFinished.emit({
-            searchId: links.self.href,
+            searchId: response.requestId,
             isTriggeredByVpsWidget: this.storeName === "widget",
           });
         },

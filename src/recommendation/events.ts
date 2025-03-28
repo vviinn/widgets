@@ -7,14 +7,12 @@ import {
   ResultViewEvent,
   Widget,
 } from "vviinn-tracking-client-ts";
-import { ValueObject } from "../network/ion/ValueObject";
-import { DetectedObject } from "../searchSession/searchSession";
 import { ErrorKind } from "../error";
 import {
   DynamicFilterValue,
   RequestDynamicFilterItem,
 } from "../campaign/VPRCampaignService";
-import { Rectangle } from "../geometry/Rectangle";
+import { Rectangle } from "../interfaces/search";
 
 export type CommonEventData = {
   campaignTypeId: "VPR" | "VPS" | "VCS" | "TPS";
@@ -35,6 +33,10 @@ export type ImageUploadEventData = { isTriggeredByVpsWidget?: boolean } & {
   [K in keyof BasicEventData]: BasicEventData[K];
 };
 
+export type TriggerSourceEventData = {
+  isTriggeredByVpsWidget: boolean;
+};
+
 export type NoResultEventData = {
   reason: ErrorKind;
 } & {
@@ -42,7 +44,7 @@ export type NoResultEventData = {
 };
 
 export type SelectObjectEventData = {
-  detectedObject: ValueObject<DetectedObject>;
+  detectedObject: Rectangle;
   searchArea: Rectangle;
 } & {
   [K in keyof CommonEventData]: CommonEventData[K];
@@ -98,14 +100,6 @@ export type ChangedFiltersEventData = {
   isTriggeredByVpsWidget?: boolean;
 };
 
-export type ResetSelectedFiltersEventData = {
-  isTriggeredByVpsWidget: boolean;
-};
-
-export type ExtendedFiltersButtonClickedEventData = {
-  isTriggeredByVpsWidget: boolean;
-};
-
 export type DynamicFilterTrackingData = {
   action: FilterAction;
   value?: DynamicFilterValue;
@@ -120,9 +114,7 @@ export type DynamicFilterInternalData = DynamicFilterTrackingData & {
 export type SearchIdEvent = CustomEvent<SearchIdEventData>;
 export type TextSearchEvent = CustomEvent<TextSearchEventData>;
 export type ChangedFiltersEvent = CustomEvent<ChangedFiltersEventData>;
-export type ResetSelectedFiltersEvent =
-  CustomEvent<ResetSelectedFiltersEventData>;
+export type ResetSelectedFiltersEvent = TriggerSourceEvent;
 export type ProductCardEvent = CustomEvent<ProductCardEventData>;
 export type CrossSellingClickEvent = CustomEvent<CrossSellingClickEventData>;
-export type ExtendedFiltersButtonClickedEvent =
-  CustomEvent<ExtendedFiltersButtonClickedEventData>;
+export type TriggerSourceEvent = CustomEvent<TriggerSourceEventData>;

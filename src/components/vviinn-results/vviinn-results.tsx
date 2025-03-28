@@ -24,13 +24,12 @@ import {
 import { version } from "../../../package.json";
 import {
   makeProductListingPageRequest,
-  makeSearchIdRequest,
+  makeVisualSearchRequest,
   makeTextSearchRequest,
-  searchState,
-  componentsState,
   SearchStore,
   SearchStoreName,
   resetStore,
+  useSearchStore,
 } from "../../store/search.store";
 import { globalState, trackEvent, updateGlobalState } from "../../store/store";
 import {
@@ -49,12 +48,11 @@ import {
   ProductCardEventData,
   ProductEvent,
   ProductEventType,
-  ResetSelectedFiltersEventData,
   ResultEventType,
-  SearchIdEvent,
-  SearchIdEventData,
   TextSearchEvent,
   TextSearchEventData,
+  TriggerSourceEvent,
+  TriggerSourceEventData,
 } from "../../recommendation/events";
 import {
   createFilterEvent,
@@ -149,8 +147,6 @@ export class VviinnResults {
   @Event() vviinnResultLoad: EventEmitter<BasicEventData>;
   /** The search result appears in the viewport */
   @Event() vviinnResultView: EventEmitter<BasicEventData>;
-  /** The 'searchId' is received for performing a Visual Search */
-  @Event() vviinnImageUploadFinished: EventEmitter<SearchIdEventData>;
 
   /** The 'query' is received for performing a Text Search */
   /** @internal */
@@ -160,10 +156,6 @@ export class VviinnResults {
   /** @internal */
   @Event({ bubbles: true })
   vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
-
-  /** A search response was received by vviinn-results (used internally for showing preloader) */
-  /** @internal */
-  @Event() resultsSearchFinished: EventEmitter;
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
@@ -243,6 +235,7 @@ export class VviinnResults {
   private slots?: HTMLSlotElement[] = [];
   private state?: SearchStore;
   private storeName?: SearchStoreName;
+  private disposeStoreListener?: () => void;
   private setTextSearch = (
     isTriggeredByText: boolean,
     isTriggeredByVpsWidget = false,
@@ -262,8 +255,7 @@ export class VviinnResults {
 
   /** Selected filters should be resetted */
   /** @internal */
-  @Event({ bubbles: true })
-  vviinnSelectedFiltersReset: EventEmitter<ResetSelectedFiltersEventData>;
+  @Event() vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
 
   private getResults() {
     return (this.useInnerState ? this.innerResults : this.state.results) ?? [];
@@ -294,6 +286,11 @@ export class VviinnResults {
       <slot name={vprIconSlotName} />
     ) : null;
 
+  private resetDiscoveryAppendIndexes = () => {
+    this.oneClickDiscoveryAppendIndex = undefined;
+    this.oneClickDiscoverySelectedIndex = undefined;
+  };
+
   async componentWillLoad() {
     slotChangeListener(this, this.el);
     this.slots = findSlotElements(this.el);
@@ -317,25 +314,7 @@ export class VviinnResults {
   }
 
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
-    (isTriggeredByVpsWidget && !this.showInWidget) ||
-    (!isTriggeredByVpsWidget && this.showInWidget);
-
-  private getResultsBySearchId = async (searchId: string) => {
-    if (!searchId) return;
-    await makeSearchIdRequest(globalState.token, searchId);
-    this.resultsSearchFinished.emit();
-  };
-
-  private async getVpsResults(filters?: RequestDynamicFilterItem[]) {
-    if (!this.textSearchQuery) return;
-
-    await makeTextSearchRequest(
-      this.storeName,
-      this.textSearchQuery,
-      filters,
-      this.textSearchRequestId,
-    );
-  }
+    this.showInWidget !== isTriggeredByVpsWidget;
 
   private async getTextSearchResults(
     query?: string,
@@ -354,7 +333,6 @@ export class VviinnResults {
         this.resultsCount,
       ),
       E.getOrElse(() => null),
-      (response: TextSearchResponse) => response,
     );
   }
 
@@ -378,13 +356,12 @@ export class VviinnResults {
     );
   }
 
-  private imageUploadFinishedHandler = ({ detail }: SearchIdEvent) =>
-    !this.skipStateChanges(detail.isTriggeredByVpsWidget) &&
-    this.getResultsBySearchId(detail.searchId);
-
   private textSearchStartedHandler = async ({ detail }: TextSearchEvent) => {
+    const { isTriggeredByVpsWidget } = detail;
+    if (this.skipStateChanges(isTriggeredByVpsWidget)) return;
+
     this.innerTextSearchQuery = detail.query;
-    this.setTextSearch(true, detail.isTriggeredByVpsWidget);
+    this.setTextSearch(true, isTriggeredByVpsWidget);
 
     const { campaignTypeId, ...rest } = this.getBasicEventData();
     const textSearchStartedEvent: WidgetEvent = createWidgetEvent("TPS")({
@@ -398,7 +375,6 @@ export class VviinnResults {
     if (!response) return;
 
     this.innerTextSearchRequestId = response.requestId;
-    this.resultsSearchFinished.emit();
     this.vviinnSelectedFiltersReset.emit({
       isTriggeredByVpsWidget: this.showInWidget,
     });
@@ -414,16 +390,14 @@ export class VviinnResults {
       return;
     }
 
-    const isVpsWidgetEvent = this.showInWidget && isTriggeredByVpsWidget;
-
-    if (isVpsWidgetEvent) {
-      return this.getVpsResults(filters);
-    } else {
-      return this.getTextSearchResults(
+    if (this.isTextSearch) {
+      this.getTextSearchResults(
         this.innerTextSearchQuery,
         filters,
         this.innerTextSearchRequestId,
       );
+    } else {
+      makeVisualSearchRequest(this.storeName, this.searchId, filters);
     }
   };
 
@@ -457,21 +431,47 @@ export class VviinnResults {
     trackEvent(filterEvent);
   };
 
-  private uploadTriggeredHandler = ({
+  private imageUploadStartedHandler = ({
     detail,
   }: CustomEvent<ImageUploadEventData>) => {
+    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
+
+    this.vviinnSelectedFiltersReset.emit({
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
     this.setTextSearch(false, detail.isTriggeredByVpsWidget);
+    resetStore(this.storeName);
   };
 
-  private widgetCloseHandler = () => {
-    this.oneClickDiscoveryAppendIndex = undefined;
-    this.oneClickDiscoverySelectedIndex = undefined;
+  private imageCropHandler = ({ detail }: TriggerSourceEvent) => {
+    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
+
+    if (this.isTextSearch) {
+      this.setTextSearch(false, detail.isTriggeredByVpsWidget);
+      this.vviinnSelectedFiltersReset.emit({
+        isTriggeredByVpsWidget: this.showInWidget,
+      });
+      this.state.dynamicFilters = [];
+    }
+  };
+
+  private widgetCloseHandler = ({
+    detail,
+  }: TextSearchEvent | TriggerSourceEvent) => {
+    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
+    this.resetDiscoveryAppendIndexes();
   };
 
   connectedCallback() {
     updateGlobalState(this);
-    this.state = this.showInWidget ? searchState : componentsState;
-    this.storeName = this.showInWidget ? "widget" : "components";
+    const { state, storeName, onChange } = useSearchStore(this.showInWidget);
+    this.state = state;
+    this.storeName = storeName;
+
+    this.disposeStoreListener = onChange("loading", (loading) => {
+      if (loading) this.resetDiscoveryAppendIndexes();
+    });
+
     if (this.el.id) this.widgetElementId = this.el.id;
 
     if (!this.uiSessionId) {
@@ -479,8 +479,8 @@ export class VviinnResults {
     }
 
     document.addEventListener(
-      "vviinnImageUploadFinished",
-      this.imageUploadFinishedHandler,
+      "vviinnImageUploadStarted",
+      this.imageUploadStartedHandler,
     );
 
     document.addEventListener(
@@ -498,28 +498,22 @@ export class VviinnResults {
       this.filterTriggeredHandler,
     );
 
-    document.addEventListener(
-      "vviinnImageUploadStarted",
-      this.uploadTriggeredHandler,
-    );
-
+    document.addEventListener("vviinnImageCrop", this.imageCropHandler);
     document.addEventListener("vviinnWidgetClose", this.widgetCloseHandler);
 
-    this.getResultsBySearchId(this.searchId);
+    !!this.searchId && makeVisualSearchRequest(this.storeName, this.searchId);
     this.getResultsByCategory();
+    this.innerTextSearchQuery = this.textSearchQuery;
 
-    if (!this.showInWidget) {
-      this.innerTextSearchQuery = this.textSearchQuery;
-      this.getTextSearchResults(this.innerTextSearchQuery);
-    }
+    !this.showInWidget && this.getTextSearchResults(this.innerTextSearchQuery);
   }
 
   disconnectedCallback() {
     resetStore(this.storeName);
 
     document.removeEventListener(
-      "vviinnImageUploadFinished",
-      this.imageUploadFinishedHandler,
+      "vviinnImageUploadStarted",
+      this.imageUploadStartedHandler,
     );
 
     document.removeEventListener(
@@ -537,7 +531,9 @@ export class VviinnResults {
       this.filterTriggeredHandler,
     );
 
+    document.removeEventListener("vviinnImageCrop", this.imageCropHandler);
     document.removeEventListener("vviinnWidgetClose", this.widgetCloseHandler);
+    this.disposeStoreListener?.();
   }
 
   @Watch("textSearchQuery")

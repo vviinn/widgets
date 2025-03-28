@@ -18,18 +18,17 @@ import {
 import { TextSearchIcon } from "../vviinn-icons";
 import { slotChangeListener } from "../customized-slots";
 import {
-  ResetSelectedFiltersEventData,
   SearchIdEventData,
   TextSearchEventData,
   DynamicFilterInternalData,
   BasicEventData,
+  TriggerSourceEventData,
 } from "../../recommendation/events";
 import i18next from "i18next";
 import { Locale, resources } from "../../locale";
 import { SearchBarMode } from "../../widget/types";
 import { TextSearchResponse } from "../../interfaces/search";
 import * as E from "fp-ts/Either";
-import * as O from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/function";
 import { searchBarParts } from "../../cssParts";
 import { MicIcon } from "../vviinn-icons/icons/MicIcon";
@@ -69,14 +68,10 @@ export class VviinnTextSearch {
   /** @internal */
   @Event() widgetTextSearchFinished: EventEmitter<TextSearchEventData>;
 
-  /** A search response was received by vviinn-results (used internally for showing preloader) */
-  /** @internal */
-  @Event() resultsSearchFinished: EventEmitter;
-
   /** Selected filters should be resetted */
   /** @internal */
   @Event({ bubbles: true })
-  vviinnSelectedFiltersReset: EventEmitter<ResetSelectedFiltersEventData>;
+  vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
@@ -103,17 +98,11 @@ export class VviinnTextSearch {
   /** @internal */
   @Prop() basicEventData: BasicEventData;
 
-  @State() isLoading = false;
-
   @State() isRecording = false;
-
   @State() showTooltip = false;
 
   private isShowPreloader = () =>
     this.state.loading && this.state.searchType === "text";
-
-  private showLoader = () => (this.isLoading = true);
-  private hideLoader = () => (this.isLoading = false);
 
   private isShowRecording = () => this.isRecording;
   private showRecording = () => (this.isRecording = true);
@@ -154,7 +143,7 @@ export class VviinnTextSearch {
   private imageUploadFinishedHandler = () => {
     if (this.saveImageMode === "never" || this.mode !== "extended") return;
 
-    const image: HTMLImageElement = O.getOrElse(() => null)(this.state.image);
+    const image: HTMLImageElement = this.state.image;
     if (image) localStorage.setItem("cropperImageSrc", image.src);
   };
 
@@ -163,7 +152,6 @@ export class VviinnTextSearch {
     this.storeName = this.showInWidget ? "widget" : "components";
     this.state = this.showInWidget ? searchState : componentsState;
 
-    document.addEventListener("resultsSearchFinished", this.hideLoader);
     document.addEventListener(
       "vviinnFilterTriggered",
       this.filterTriggeredHandler,
@@ -175,7 +163,6 @@ export class VviinnTextSearch {
   }
 
   disconnectedCallback() {
-    document.removeEventListener("resultsSearchFinished", this.hideLoader);
     document.removeEventListener(
       "vviinnFilterTriggered",
       this.filterTriggeredHandler,
@@ -214,7 +201,6 @@ export class VviinnTextSearch {
     });
     slotChangeListener(this, this.el);
     if (!this.showInWidget && this.searchQuery?.length > 0) {
-      this.showLoader();
       this.vviinnTextSearchStarted.emit({
         query: this.searchQuery,
         isTriggeredByVpsWidget: this.showInWidget,
@@ -253,17 +239,18 @@ export class VviinnTextSearch {
   private async handleTextSearch() {
     if (!this.searchQuery) return;
     this.trackTextSearch();
-    if (this.showInWidget) {
-      if (this.basicEventData && this.uiSessionId) {
-        const { campaignTypeId, ...rest } = this.basicEventData;
-        const textSearchStartedEvent: WidgetEvent = createWidgetEvent("TPS")({
-          action: "search",
-          session_id: this.uiSessionId,
-          ...rest,
-        });
-        trackEvent(textSearchStartedEvent);
-      }
 
+    if (this.basicEventData && this.uiSessionId) {
+      const { campaignTypeId, ...rest } = this.basicEventData;
+      const textSearchStartedEvent: WidgetEvent = createWidgetEvent("TPS")({
+        action: "search",
+        session_id: this.uiSessionId,
+        ...rest,
+      });
+      trackEvent(textSearchStartedEvent);
+    }
+
+    if (this.showInWidget) {
       const response = pipe(
         await makeTextSearchRequest(this.storeName, this.searchQuery),
         E.getOrElse(() => null),
@@ -281,7 +268,6 @@ export class VviinnTextSearch {
         });
       }
     } else {
-      this.showLoader();
       this.vviinnTextSearchStarted.emit({
         query: this.searchQuery,
         isTriggeredByVpsWidget: this.showInWidget,
@@ -316,6 +302,7 @@ export class VviinnTextSearch {
               apiPath={globalState.apiPath}
               addStyle={false}
               useComponentsStore={true}
+              exportparts="vviinn-button"
             />
           )}
 

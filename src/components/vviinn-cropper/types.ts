@@ -1,4 +1,4 @@
-import { Rectangle } from "../../geometry/Rectangle";
+import { Rectangle } from "../../interfaces/search";
 
 export type CropBoxData = {
   left: number;

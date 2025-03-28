@@ -2,6 +2,56 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.156.3](https://github.com/vviinn/widgets/compare/v2.156.2...v2.156.3) (2025-03-27)
+
+
+### Bug Fixes
+
+* Add exportparts for vviinn-button in Search Bar ([e648f59](https://github.com/vviinn/widgets/commit/e648f599adb325cec07a1ac4bd07c4eaa301ea40))
+
+### [2.156.2](https://github.com/vviinn/widgets/compare/v2.156.1...v2.156.2) (2025-03-27)
+
+
+### Bug Fixes
+
+* Fix an error when there is no image link for a product ([caf4a34](https://github.com/vviinn/widgets/commit/caf4a34d8dbbcb09f18236f5b891aea94896fb14))
+
+### [2.156.1](https://github.com/vviinn/widgets/compare/v2.156.0...v2.156.1) (2025-03-27)
+
+
+### Bug Fixes
+
+* Fix one-click discovery grid behavior for two-rows view ([19eecb6](https://github.com/vviinn/widgets/commit/19eecb671c3bf0f5f1b3f457d8621441fcee8ae0))
+
+## [2.156.0](https://github.com/vviinn/widgets/compare/v2.155.0...v2.156.0) (2025-03-25)
+
+
+### Features
+
+* Use new visual-search endpoint with dynamic filters ([4f916c9](https://github.com/vviinn/widgets/commit/4f916c9f08bb500056ee5f08d535360063b5024d))
+
+## [2.155.0](https://github.com/vviinn/widgets/compare/v2.154.0...v2.155.0) (2025-03-20)
+
+
+### Features
+
+* Add One-click Discovery Playground ([d882a02](https://github.com/vviinn/widgets/commit/d882a02492774759531185761b6aa3db16543041))
+
+## [2.154.0](https://github.com/vviinn/widgets/compare/v2.153.0...v2.154.0) (2025-03-07)
+
+
+### Features
+
+* Price label for extended filters ([ceccf89](https://github.com/vviinn/widgets/commit/ceccf89b7b6a2f25f9e5f9d479029f4a70b30c3f))
+
+
+### Bug Fixes
+
+* Collapse filter options after closing the modal ([8ca2961](https://github.com/vviinn/widgets/commit/8ca296168cbf4717c54e1376e76761a86a037281))
+* Improve resetting filters ([0a18f5a](https://github.com/vviinn/widgets/commit/0a18f5add642a555577bdc8a934ceb5f9842114e))
+* Reset text search filters after cropper interactions ([315a10f](https://github.com/vviinn/widgets/commit/315a10f9f7a92356feb0c4cd1bf0f38df77354a3))
+* Reset the displayed filter amount after collapsing the group or a new search ([d146831](https://github.com/vviinn/widgets/commit/d1468319616c52d62893ffcd47ce15f78d1b5d37))
+
 ## [2.153.0](https://github.com/vviinn/widgets/compare/v2.152.4...v2.153.0) (2025-03-05)
 
 

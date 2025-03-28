@@ -20,6 +20,7 @@ import {
 import { Locale } from "../../locale";
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
 import { OneClickDiscoveryMode } from "../../widget/types";
+import { useSearchStore } from "../../store/search.store";
 /**
  * @part button - Clickable button element.
  * @part vviinn-button - Button element container.
@@ -145,15 +146,16 @@ export class VviinnVprButton {
   /** Add default styles to the button */
   @Prop() addStyle: boolean = true;
 
-  /** ID of an HTML element that you want to attach the sidebar  */
-  @Prop() appendSidebarTo: string;
-
   /** Show or hide Favorite button */
   @Prop() favoriteShow: boolean = false;
 
+  /** @internal */
   @Prop() appendSidebarToElement: HTMLElement;
-
+  /** ID of an HTML element that you want to attach the sidebar  */
+  /** @internal */
+  @Prop() appendSidebarTo: string;
   /** One click Discovery mode*/
+  /** @internal */
   @Prop() oneClickDiscoveryMode?: OneClickDiscoveryMode = "standalone";
 
   /** @internal */
@@ -195,9 +197,14 @@ export class VviinnVprButton {
   @State() targetAppendSidebarTo: HTMLElement;
 
   private iconSideSize?: number;
+  private disposeStoreListener?: () => void;
 
   connectedCallback() {
     this.iconSideSize = this.oneClickDiscoveryMode === "standalone" ? 24 : 14;
+    const { onChange } = useSearchStore(this.showInWidget);
+    this.disposeStoreListener = onChange("loading", (loading) => {
+      loading && this.sidebarCloseListener();
+    });
   }
 
   componentWillLoad() {
@@ -218,13 +225,14 @@ export class VviinnVprButton {
   }
 
   private sidebar: HTMLVviinnRecommendationsSidebarElement | null = null;
-  private sidebarCloseListener: () => void = () => {
-    if (this.targetAppendSidebarTo) {
+
+  private sidebarCloseListener = () => {
+    if (!this.sidebar) return;
+
+    if (this.targetAppendSidebarTo?.contains(this.sidebar)) {
       this.targetAppendSidebarTo.removeChild(this.sidebar);
       return;
     }
-
-    document.body.removeChild(this.sidebar);
   };
 
   render() {
@@ -304,10 +312,9 @@ export class VviinnVprButton {
       sidebar.mode = this.position === "right" ? "grid" : this.mode;
       sidebar.useCarousel = this.position === "bottom";
     }
-
     this.sidebar = sidebar;
 
-    sidebar.addEventListener("vviinnWidgetClose", this.sidebarCloseListener);
+    document.addEventListener("vviinnWidgetClose", this.sidebarCloseListener);
 
     if (this.targetAppendSidebarTo) {
       this.sidebar.showInCustomContainer = true;
@@ -321,11 +328,13 @@ export class VviinnVprButton {
   }
 
   disconnectedCallback() {
-    if (!this.sidebar) return;
+    if (this.sidebar) {
+      document.removeEventListener(
+        "vviinnWidgetClose",
+        this.sidebarCloseListener,
+      );
+    }
 
-    this.sidebar.removeEventListener(
-      "vviinnWidgetClose",
-      this.sidebarCloseListener,
-    );
+    this.disposeStoreListener?.();
   }
 }

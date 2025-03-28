@@ -12,6 +12,7 @@
 }
 
 .head {
+  height: 64px;
   font-family: var(--font-family, var(--font-family-base));
   position: absolute;
   width: 100%;

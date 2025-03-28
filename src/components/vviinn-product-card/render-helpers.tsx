@@ -16,6 +16,7 @@ const containsFit = (url: string): E.Either<string, string> => {
 };
 
 const processWidth = (url: string, size: number): string => {
+  if (!url?.length) return "";
   return pipe(
     containsFit(url),
     E.map((url) => url.replace(FIT_EXPR, `fit/${size}/`)),

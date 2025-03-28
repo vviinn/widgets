@@ -125,44 +125,40 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
 }
 
 .results-page {
-  margin-top: 64px;
+  padding-top: 64px;
   display: grid;
   grid-template-columns: 336px auto;
+  height: 640px;
   box-sizing: border-box;
 }
 
 .results-page > * {
-  padding: 24px;
   box-sizing: border-box;
 }
 
 .source-wrapper {
   display: grid;
-  grid-template-rows: min-content 1fr;
-  min-width: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
   position: relative;
-}
-
-.source-wrapper.text-search-wrapper {
-  padding: 24px 24px 0 24px;
+  width: 100%;
+  max-width: 100%;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  grid-template-rows: min-content 1fr;
+  padding: 0 12px 12px 24px;
+  scrollbar-width: thin;
 }
 
 .filters-wrapper {
-  margin-top: 24px;
-  overflow-x: auto;
+  margin-top: 12px;
   transform: translateX(-24px);
-  min-width: calc(100% + 48px);
-  scrollbar-width: thin;
-  -ms-overflow-style: none;
+  min-width: calc(100% + 24px);
 }
 
 @supports (scrollbar-color: unset) {
-  .filters-wrapper {
+  .source-wrapper {
     scrollbar-color: transparent transparent;
   }
-  .filters-wrapper:hover {
+  .source-wrapper:hover {
     scrollbar-color: initial;
   }
 }
@@ -174,7 +170,6 @@ vviinn-extended-filters.modal-extended-filters {
 
 vviinn-extended-filters.preview-extended-filters {
   display: block;
-  position: absolute;
   width: 100%;
 }
 
@@ -222,10 +217,6 @@ search-filters::part(filter active) {
   display: none;
 }
 
-.results-page vviinn-text-search {
-  width: calc(100% + 24px);
-}
-
 vviinn-preloader {
   --preloader-size: 24px;
   display: flex;
@@ -249,7 +240,8 @@ vviinn-preloader {
   }
 
   .results-page vviinn-text-search {
-    width: auto;
+    width: calc(100% - 48px);
+    transform: translateX(24px);
   }
 
   .start-page.active {
@@ -262,7 +254,8 @@ vviinn-preloader {
   }
 
   .results-page {
-    margin-top: 0;
+    height: auto;
+    padding-top: 0;
   }
 
   .results-page > * {
@@ -271,14 +264,20 @@ vviinn-preloader {
   }
 
   .source-wrapper {
+    scrollbar-gutter: initial;
     grid-template-rows: min-content auto;
     width: 100%;
     padding: 0;
   }
 
-  .source-wrapper.image-wrapper .filters-wrapper {
+  .filters-wrapper {
+    margin-top: 24px;
     padding-left: 24px;
     min-width: 100%;
+  }
+
+  vviinn-filters {
+    padding: 0 24px;
   }
 
   vviinn-filters,
@@ -294,7 +293,7 @@ vviinn-preloader {
   .extended-filters-button {
     display: block;
     position: absolute;
-    right: var(--spacing-300);
+    right: 24px;
     top: 0;
   }
 

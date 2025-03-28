@@ -1,4 +1,4 @@
-import { Rectangle } from "./Rectangle";
+import { Rectangle } from "../interfaces/search";
 import { Sized } from "./Sized";
 
 interface Clip {
@@ -9,10 +9,10 @@ interface Clip {
 }
 
 const fromRectangle = (shape: Rectangle, target: Sized): Clip => {
-  const top = `${shape.y}px`;
-  const left = `${shape.x}px`;
-  const right = `${target.width - (shape.x + shape.width)}px`;
-  const bottom = `${target.height - (shape.y + shape.height)}px`;
+  const top = `${shape.top}px`;
+  const left = `${shape.left}px`;
+  const right = `${target.width - (shape.left + shape.width)}px`;
+  const bottom = `${target.height - (shape.top + shape.height)}px`;
 
   return {
     top,

@@ -221,18 +221,20 @@ export class VviinnCarousel {
   @Watch("updatingAllCards")
   updatingAllCardsWatcher() {
     if (!this.updatingAllCards) return;
-    const step = this.getColumnsNumber();
 
     this.crossSellingRecommendations.forEach((item) => {
-      this.updateCard(item.productId, step, this.defaultAnimationInterval);
+      this.updateCard(
+        item.productId,
+        this.columns,
+        this.defaultAnimationInterval,
+      );
     });
   }
 
   @Listen("vviinnCrossSellingClick")
   crossSellingClickListener({ detail }: CrossSellingClickEvent) {
-    const step = this.getColumnsNumber();
     const { animationInterval, productData } = detail;
-    this.updateCard(productData.productId, step, animationInterval);
+    this.updateCard(productData.productId, this.columns, animationInterval);
   }
 
   private getItemWidthFromDocument(): number {
@@ -288,11 +290,6 @@ export class VviinnCarousel {
   private handleResize() {
     this.setWidth();
     this.setItemWidth();
-
-    const newColumns = this.getColumnsNumber();
-    if (newColumns !== this.columns) {
-      this.columns = newColumns;
-    }
   }
 
   private calculateMoveStep() {
@@ -513,13 +510,13 @@ export class VviinnCarousel {
 
   private renderGrid() {
     const recommendations = this.renderRecommendationsElements();
-    const grouppedContent = chunksOf(this.getColumnsNumber())(recommendations);
+    const grouppedContent = chunksOf(this.columns)(recommendations);
     return this.renderRecommendationGroups(grouppedContent);
   }
 
   private renderBullets() {
     const numberOfBullets = Math.ceil(
-      this.recommendations.length / this.getColumnsNumber(),
+      this.recommendations.length / this.columns,
     );
 
     const bulletsArray = Array.from(Array(numberOfBullets).keys());

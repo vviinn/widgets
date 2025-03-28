@@ -8,9 +8,9 @@ export default {
   component: "vviinn-results",
 };
 
-export const ProductList = ResultsTemplate.bind({});
-ProductList.storyName = "Product List";
-ProductList.args = {
+export const Default = ResultsTemplate.bind({});
+Default.storyName = "Product List";
+Default.args = {
   token: vviinnToken,
   filterColumn: "product_type",
   filterValue,

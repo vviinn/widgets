@@ -39,7 +39,7 @@
   cursor: pointer;
   background: var(--color-primary, var(--button-bg-color-primary));
   border-radius: var(--border-radius-50);
-  padding: var(--spacing-100);
+  padding: var(--spacing-125);
   font-size: var(--font-size-body);
   color: var(--color-text-inverse);
   font-family: var(--font-family, var(--font-family-base));
