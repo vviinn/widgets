@@ -45,7 +45,7 @@ export class RecommendationsSidebar {
   @Prop() campaignType: CampaignName;
   @Prop() color: string;
   @Prop() imageWidth: number = 300;
-  @Prop() imageRatio: number;
+  @Prop() imageRatio: number = 1;
   @Prop() cssUrl: string | null;
   @Prop() noResultText: string;
   @Prop() noResultShow: boolean;
@@ -81,6 +81,8 @@ export class RecommendationsSidebar {
   @Prop() showingInButton: boolean;
   /** @internal */
   @Prop() showInModal: boolean = false;
+  /** @internal */
+  @Prop() isAppended: boolean = false;
 
   @State() sidebarState: SidebarState = "idle";
   @State() sourceProduct?: Recommendation;
@@ -222,6 +224,7 @@ export class RecommendationsSidebar {
               updateButtonLocation={this.updateButtonLocation}
               addPriceContainer={this.addPriceContainer}
               favoriteShow={this.favoriteShow}
+              isAppended={this.isAppended}
             />
           </main>
         </aside>

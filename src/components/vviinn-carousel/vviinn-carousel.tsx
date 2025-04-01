@@ -77,10 +77,12 @@ export class VviinnCarousel {
   @Prop() updateButtonLocation: UpdateButtonLocation;
   @Prop() replaceSlotsContent: () => void;
   @Prop() setModeDiscountsArray: number[];
-  @Prop() imageRatio: number;
+  @Prop() imageRatio: number = 1;
   @Prop() addPriceContainer?: boolean = false;
   @Prop() favoriteShow: boolean;
   @Prop() setItemsAmount?: number;
+  @Prop() isAppended?: boolean = false;
+  @Prop() loading?: boolean = false;
 
   /** Event emitted once when the recommendation is rendered on the page */
   @Event({ bubbles: true })
@@ -288,6 +290,13 @@ export class VviinnCarousel {
   }
 
   private handleResize() {
+    if (this.isAppended) {
+      const newColumns = this.getColumnsNumber();
+      if (newColumns !== this.columns) {
+        this.columns = newColumns;
+      }
+    }
+
     this.setWidth();
     this.setItemWidth();
   }
@@ -364,7 +373,9 @@ export class VviinnCarousel {
   private getColumnsNumber(): number {
     if (this.setItemsAmount && this.isSetMode) return this.setItemsAmount;
     const styleSheet = getComputedStyle(this.el);
-    const imagesContainer = this.el.querySelector(".items-group");
+    const imagesContainer = this.el.querySelector(
+      `.${CONTENT_GROUP_CSS_CLASS}`,
+    );
     if (imagesContainer) {
       const totalWidth = this.el.getBoundingClientRect().width;
       const imageContainer = imagesContainer.children[0];
@@ -413,11 +424,11 @@ export class VviinnCarousel {
   }
 
   private showBullets(): boolean {
-    return this.isGridMode && this.showScroll;
+    return !this.loading && this.isGridMode && this.showScroll;
   }
 
   private showScrollbar(): boolean {
-    return this.isContinuityMode && this.showScroll;
+    return !this.loading && this.isContinuityMode && this.showScroll;
   }
 
   private getClassMap() {
@@ -481,24 +492,16 @@ export class VviinnCarousel {
     );
   }
 
-  private renderRecommendationGroup(elements: HTMLVviinnProductCardElement[]) {
-    return (
-      <div class={CONTENT_GROUP_CSS_CLASS} part="items-group">
-        {...elements}
-      </div>
-    );
-  }
-
-  private renderRecommendationGroups(
-    elements: HTMLVviinnProductCardElement[][],
-  ) {
-    return elements.map((el) => this.renderRecommendationGroup(el));
-  }
-
   private renderRecommendations() {
     return this.isGridMode
       ? this.renderGrid()
       : this.renderRecommendationsElements();
+  }
+
+  private renderGrid() {
+    return this.loading
+      ? this.renderSkeletonContainer()
+      : this.renderSliderContent();
   }
 
   private renderRecommendationsElements(): HTMLVviinnProductCardElement[] {
@@ -508,11 +511,34 @@ export class VviinnCarousel {
     return recommendations.map((r, i) => this.renderRecommendation(r, i));
   }
 
-  private renderGrid() {
+  private renderSkeletonContainer() {
+    this.columns = this.getColumnsNumber();
+    return (
+      <div class={CONTENT_GROUP_CSS_CLASS} part="items-group">
+        {Array.from({ length: this.columns }).map((_, index) => (
+          <vviinn-product-card-skeleton
+            imageRatio={this.imageRatio}
+            key={`skeleton-${index}`}
+          />
+        ))}
+      </div>
+    );
+  }
+
+  private renderSliderContent() {
     const recommendations = this.renderRecommendationsElements();
     const grouppedContent = chunksOf(this.columns)(recommendations);
     return this.renderRecommendationGroups(grouppedContent);
   }
+
+  private renderRecommendationGroups = (
+    elements: HTMLVviinnProductCardElement[][],
+  ) =>
+    elements.map((element) => (
+      <div class={CONTENT_GROUP_CSS_CLASS} part="items-group">
+        {element}
+      </div>
+    ));
 
   private renderBullets() {
     const numberOfBullets = Math.ceil(
@@ -558,7 +584,7 @@ export class VviinnCarousel {
           )}
 
           <div class={this.getContentClassMap()}>
-            {!this.isSetMode && (
+            {!this.loading && !this.isSetMode && (
               <button
                 class="prev"
                 onClick={() => this.handleCarouselButtonClick("left")}
@@ -569,7 +595,7 @@ export class VviinnCarousel {
               </button>
             )}
             {this.renderRecommendations()}
-            {!this.isSetMode && (
+            {!this.loading && !this.isSetMode && (
               <button
                 class="next"
                 onClick={() => this.handleCarouselButtonClick("right")}

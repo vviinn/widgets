@@ -711,6 +711,16 @@ export class VviinnResults {
         index + (nCols - ((index % nCols) + 1));
 
       this.oneClickDiscoverySelectedIndex = index;
+
+      setTimeout(() => {
+        const container = this.el.shadowRoot.getElementById(
+          "one-click-discovery-append",
+        );
+        window.scrollTo({
+          top: container.offsetTop,
+          behavior: "smooth",
+        });
+      }, 100);
     };
 
     return this.getResults().map((p, i) => (

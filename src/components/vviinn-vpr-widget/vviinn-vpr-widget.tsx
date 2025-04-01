@@ -202,6 +202,8 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() closed?: boolean;
   /** @internal */
   @Prop() opened?: boolean;
+  /** @internal */
+  @Prop() isAppended?: boolean = false;
 
   @State() recommendations: Recommendation[] = [];
   @State() dynamicFilters: ResponseDynamicFilterItem[] = [];
@@ -530,10 +532,8 @@ export class VviinnVprWidget implements ComponentInterface {
       TE.flatten,
     );
 
-    const runRequest = await request();
-
     pipe(
-      runRequest,
+      await request(),
       E.fold(
         (error) => {
           this.handleError(error);
@@ -600,7 +600,6 @@ export class VviinnVprWidget implements ComponentInterface {
   render() {
     if (this.recommendations.length === 0 && this.noResultShow === false)
       return null;
-
     return (
       <Host
         class={{
@@ -665,8 +664,7 @@ export class VviinnVprWidget implements ComponentInterface {
             </div>
           )}
 
-          {this.recommendations.length > 0 &&
-            (this.useCarousel ? this.renderCarousel() : this.renderResults())}
+          {this.useCarousel ? this.renderCarousel() : this.renderResults()}
 
           {(this.recommendations.length === 0 ||
             (this.recommendations.length < this.setItemsAmount &&
@@ -755,6 +753,8 @@ export class VviinnVprWidget implements ComponentInterface {
         imageRatio={this.imageRatio}
         favoriteShow={this.favoriteShow}
         setItemsAmount={this.setItemsAmount}
+        loading={this.recommendationsLoading}
+        isAppended={this.isAppended}
       ></vviinn-carousel>
     );
   }

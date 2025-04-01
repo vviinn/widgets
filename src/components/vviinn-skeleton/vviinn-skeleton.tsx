@@ -10,6 +10,7 @@ export class VviinnSkeleton {
 
   @Prop() height: number;
   @Prop() halfWidth: boolean = false;
+  @Prop() aspectRatio?: number;
 
   render() {
     return (
@@ -19,8 +20,11 @@ export class VviinnSkeleton {
             "vviinn-skeleton": true,
           }}
           style={{
-            height: `${this.height.toString()}px`,
+            height: this.height ? `${this.height.toString()}px` : "100%",
             width: this.halfWidth ? "50%" : "100%",
+            "aspect-ratio": this.aspectRatio
+              ? `${this.aspectRatio}`
+              : undefined,
           }}
         ></div>
       </Host>

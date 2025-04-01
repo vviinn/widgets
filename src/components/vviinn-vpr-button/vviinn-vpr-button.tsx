@@ -304,6 +304,8 @@ export class VviinnVprButton {
     sidebar.addPriceContainer = this.addPriceContainer;
     sidebar.favoriteShow = this.favoriteShow;
     sidebar.showInModal = this.oneClickDiscoveryMode === "modal";
+    sidebar.isAppended =
+      !!this.targetAppendSidebarTo || !!this.appendSidebarToElement;
 
     if (this.targetAppendSidebarTo) {
       sidebar.mode = "grid";
