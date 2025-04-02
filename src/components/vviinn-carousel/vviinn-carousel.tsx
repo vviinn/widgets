@@ -9,6 +9,7 @@ import {
   Watch,
   Event,
   EventEmitter,
+  Fragment,
 } from "@stencil/core";
 import { chunksOf } from "fp-ts/lib/Array";
 import { pipe } from "fp-ts/lib/function";
@@ -371,25 +372,26 @@ export class VviinnCarousel {
   }
 
   private getColumnsNumber(): number {
-    if (this.setItemsAmount && this.isSetMode) return this.setItemsAmount;
     const styleSheet = getComputedStyle(this.el);
-    const imagesContainer = this.el.querySelector(
-      `.${CONTENT_GROUP_CSS_CLASS}`,
-    );
-    if (imagesContainer) {
-      const totalWidth = this.el.getBoundingClientRect().width;
-      const imageContainer = imagesContainer.children[0];
-      const imageWidth = imageContainer.getBoundingClientRect().width;
-      const gridColumns = Math.floor(totalWidth / imageWidth);
-      if (gridColumns) return gridColumns;
-    }
 
+    const cardWidthRaw =
+      styleSheet.getPropertyValue("--product-card-width") ||
+      styleSheet.getPropertyValue("--product-card-results-min-width");
+    const cardWidth = parseFloat(cardWidthRaw);
+    const containerWidth = this.el.getBoundingClientRect().width;
+
+    const gridColumns = Math.floor(containerWidth / cardWidth);
+    if (this.setItemsAmount && this.isSetMode) {
+      return Math.min(this.setItemsAmount, gridColumns);
+    }
     const columnsInCss = styleSheet.getPropertyValue(COLUMNS_NUMBER_CSS_VAR);
     const columnsNumber = parseInt(columnsInCss);
 
-    return columnsNumber && !isNaN(columnsNumber)
-      ? columnsNumber
-      : DEFAULT_COLUMNS_NUMBER;
+    return gridColumns > 0 && !isNaN(gridColumns)
+      ? gridColumns
+      : columnsNumber && !isNaN(columnsNumber)
+        ? columnsNumber
+        : DEFAULT_COLUMNS_NUMBER;
   }
 
   private getContentGroups(): HTMLElement[] {
@@ -429,6 +431,10 @@ export class VviinnCarousel {
 
   private showScrollbar(): boolean {
     return !this.loading && this.isContinuityMode && this.showScroll;
+  }
+
+  private showArrowButtons(): boolean {
+    return !this.loading && this.recommendations?.length && !this.isSetMode;
   }
 
   private getClassMap() {
@@ -512,10 +518,15 @@ export class VviinnCarousel {
   }
 
   private renderSkeletonContainer() {
-    this.columns = this.getColumnsNumber();
+    const columns = this.getColumnsNumber();
     return (
-      <div class={CONTENT_GROUP_CSS_CLASS} part="items-group">
-        {Array.from({ length: this.columns }).map((_, index) => (
+      <div
+        part={CONTENT_GROUP_CSS_CLASS}
+        class={{
+          [CONTENT_GROUP_CSS_CLASS]: true,
+        }}
+      >
+        {Array.from({ length: columns }).map((_, index) => (
           <vviinn-product-card-skeleton
             imageRatio={this.imageRatio}
             key={`skeleton-${index}`}
@@ -535,7 +546,7 @@ export class VviinnCarousel {
     elements: HTMLVviinnProductCardElement[][],
   ) =>
     elements.map((element) => (
-      <div class={CONTENT_GROUP_CSS_CLASS} part="items-group">
+      <div class={CONTENT_GROUP_CSS_CLASS} part={CONTENT_GROUP_CSS_CLASS}>
         {element}
       </div>
     ));
@@ -584,26 +595,28 @@ export class VviinnCarousel {
           )}
 
           <div class={this.getContentClassMap()}>
-            {!this.loading && !this.isSetMode && (
-              <button
-                class="prev"
-                onClick={() => this.handleCarouselButtonClick("left")}
-                part="carousel-button"
-                disabled={this.gridArrowsDynamic && this.isFirstGroup()}
-              >
-                <ChevronIcon />
-              </button>
-            )}
             {this.renderRecommendations()}
-            {!this.loading && !this.isSetMode && (
-              <button
-                class="next"
-                onClick={() => this.handleCarouselButtonClick("right")}
-                part="carousel-button"
-                disabled={this.gridArrowsDynamic && this.isLastGroup()}
-              >
-                <ChevronIcon />
-              </button>
+
+            {this.showArrowButtons() && (
+              <Fragment>
+                <button
+                  class="prev"
+                  onClick={() => this.handleCarouselButtonClick("left")}
+                  part="carousel-button"
+                  disabled={this.gridArrowsDynamic && this.isFirstGroup()}
+                >
+                  <ChevronIcon />
+                </button>
+
+                <button
+                  class="next"
+                  onClick={() => this.handleCarouselButtonClick("right")}
+                  part="carousel-button"
+                  disabled={this.gridArrowsDynamic && this.isLastGroup()}
+                >
+                  <ChevronIcon />
+                </button>
+              </Fragment>
             )}
           </div>
         </div>

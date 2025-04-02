@@ -37,6 +37,7 @@
   flex-grow: 1;
   padding-bottom: 16px;
   scrollbar-width: thin;
+  min-height: 360px;
 }
 
 .content:not(.show-scrollbar),

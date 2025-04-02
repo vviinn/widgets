@@ -21,11 +21,9 @@ export class VviinnProductCardSkeleton {
         <div style={{ "aspect-ratio": "1", width: "100%" }}>
           <vviinn-skeleton />
         </div>
-        <div class="content-container">
-          <vviinn-skeleton height={40} />
-          <vviinn-skeleton height={20} halfWidth={true} />
-          <vviinn-skeleton height={40} />
-        </div>
+        <vviinn-skeleton height={40} />
+        <vviinn-skeleton height={20} halfWidth={true} />
+        <vviinn-skeleton height={40} />
       </Host>
     );
   }

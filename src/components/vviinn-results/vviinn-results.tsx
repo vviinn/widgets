@@ -712,7 +712,7 @@ export class VviinnResults {
 
       this.oneClickDiscoverySelectedIndex = index;
 
-      setTimeout(() => {
+      requestAnimationFrame(() => {
         const container = this.el.shadowRoot.getElementById(
           "one-click-discovery-append",
         );
@@ -720,7 +720,7 @@ export class VviinnResults {
           top: container.offsetTop,
           behavior: "smooth",
         });
-      }, 100);
+      });
     };
 
     return this.getResults().map((p, i) => (
