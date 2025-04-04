@@ -127,9 +127,7 @@ const processVisualSearch = (
     getTokenWithBody<VisualSearchRequest>(globalState.token, body),
     setBodyAndHeaders,
     TE.fromEither,
-    TE.chain((request) =>
-      visualSearchSessionClient(request, state.campaignId, state.excluded),
-    ),
+    TE.chain((request) => visualSearchSessionClient(request)),
     TE.map((sessionResponse) => {
       updateVisualSearchState(store, fetchDetectedObjects)(sessionResponse);
       return sessionResponse;
@@ -149,8 +147,9 @@ const uploadImageFile =
     fetchDetectedObjects: boolean = true,
     searchId?: string,
   ) =>
-  (file: File) =>
-    pipe(
+  (file: File) => {
+    const state = useStore(store);
+    return pipe(
       TE.fromEither(checkFileWithExtention(file)),
       TE.chainTaskK(resizeFileTo(imageType)),
       TE.chain((resizedFile) => updateImageState(store)(resizedFile)),
@@ -165,6 +164,7 @@ const uploadImageFile =
                 include: imageType === "image",
               },
               ...addIfDefined("requestId", searchId),
+              ...addIfNotEmpty("campaign", state.campaignId),
             }),
             (error) => ({
               kind: "network error",
@@ -177,6 +177,7 @@ const uploadImageFile =
         ),
       ),
     );
+  };
 
 export const makeUploadFileRequest =
   (store: SearchStoreName) => async (file: File) => {
@@ -244,6 +245,7 @@ export const makeVisualSearchRequest = async (
 
   const body: VisualSearchRequest = {
     requestId: searchId ?? state.selfSearchId,
+    ...addIfNotEmpty("campaign", state.campaignId),
     ...addIfNotEmpty("dynamicFilters", dynamicFilters),
     query: {
       ...addIfDefined("searchArea", searchRectangle),
