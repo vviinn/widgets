@@ -385,15 +385,14 @@ export class VviinnResults {
       return;
     }
 
-    if (this.isTextSearch) {
-      this.state.requestFilters = filters;
+    this.state.requestFilters = filters;
 
+    if (this.isTextSearch) {
       this.getTextSearchResults(
         this.innerTextSearchQuery,
         this.innerTextSearchRequestId,
       );
     } else {
-      this.state.requestFilters = filters;
       makeVisualSearchRequest(this.storeName, this.searchId);
     }
   };
