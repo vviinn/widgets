@@ -44,7 +44,7 @@ import {
 import { campaignTypeNames } from "../../campaign/Campaign";
 import {
   addIfNotEmpty,
-  parseExcludedToParams,
+  parseStringToExcluded,
 } from "../../utils/collections/collectionsUtils";
 import { resources } from "../../locale";
 import { Locale } from "../../locale";
@@ -493,12 +493,8 @@ export class VviinnVpsWidget {
     this.cameraAvailable =
       !!navigator.mediaDevices && !!navigator.mediaDevices.getUserMedia;
 
-    if (this.excluded) {
-      this.excluded = parseExcludedToParams(this.excluded);
-    }
-
     this.state.campaignId = this.campaignId;
-    this.state.excluded = this.excluded;
+    this.state.excluded = parseStringToExcluded(this.excluded);
 
     this.uiSessionId = uuidv4();
     this.widgetElementId = this.el.id;
