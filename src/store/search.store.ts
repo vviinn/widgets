@@ -179,7 +179,7 @@ const uploadImageFile =
               objectDetection: {
                 include: imageType === "image",
               },
-              ...addIfDefined("staticFilters", {
+              ...addNestedIfNotEmpty("staticFilters", {
                 ...addIfNotEmpty("excluded", state.excluded),
               }),
               ...addIfDefined("requestId", searchId),
