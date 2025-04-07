@@ -150,7 +150,7 @@ export class VviinnVpsWidget {
   @Prop() locale?: Locale;
   /** Campaign ID applied for visual search */
   @Prop() campaignId: string = "";
-  /** Excluded filter. Example: "brand:Nike;custom_label_0:summer" */
+  /** Excluded filter. Example: "brand:Nike,Vans;custom_label_0:summer" */
   @Prop() excluded: string = "";
   /** Toggle for opening product link in new tab or not */
   @Prop() productDetailsNewTab: boolean = true;
