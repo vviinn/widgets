@@ -67,8 +67,6 @@ export class VviinnCropper {
   @State() detectedObjects: Rectangle[] = [];
   @State() cropper: Cropper = null;
   @State() selectedDetectedObject?: Rectangle;
-  @State() imageBounds: Rectangle | null;
-  @State() searchArea: Rectangle | null;
   @State() imageElement?: HTMLImageElement;
 
   @Event() vviinnImageCrop: EventEmitter<TriggerSourceEventData>;
@@ -167,7 +165,7 @@ export class VviinnCropper {
   @Listen("vviinnSelectObject")
   selectDetectedObject({ detail }: CustomEvent<SelectObjectEventData>) {
     this.selectedDetectedObject = detail.detectedObject;
-    this.searchArea = detail.searchArea;
+    this.state.searchArea = detail.searchArea;
     const { top, left, width, height } = detail.detectedObject;
     const data = this.cropper.getImageData();
 
@@ -181,13 +179,7 @@ export class VviinnCropper {
     this.vviinnImageCrop.emit({
       isTriggeredByVpsWidget: this.showInWidget,
     });
-    makeVisualSearchRequest(
-      this.storeName,
-      null,
-      null,
-      this.searchArea,
-      this.imageBounds,
-    );
+    makeVisualSearchRequest(this.storeName, null);
   }
 
   private getDetectedObjects = () =>
@@ -230,8 +222,8 @@ export class VviinnCropper {
       };
 
       this.vviinnCropperLoadImage.emit({ imageBounds, searchArea });
-      this.imageBounds = imageBounds;
-      this.searchArea = searchArea;
+      this.state.imageBounds = imageBounds;
+      this.state.searchArea = searchArea;
 
       if (
         width / height < SUPPORTED_ASPECT_RATIO ||
@@ -266,14 +258,8 @@ export class VviinnCropper {
     const cropboxData = this.getCropboxData();
 
     this.vviinnCropperCropEnd.emit(cropboxData);
-    this.searchArea = cropboxData;
-    makeVisualSearchRequest(
-      this.storeName,
-      null,
-      null,
-      this.searchArea,
-      this.imageBounds,
-    );
+    this.state.searchArea = cropboxData;
+    makeVisualSearchRequest(this.storeName, null);
     this.selectedDetectedObject = undefined;
     this.vviinnImageCrop.emit({
       isTriggeredByVpsWidget: this.showInWidget,
@@ -312,7 +298,7 @@ export class VviinnCropper {
                 detectedObject={object}
                 selectedDetectedObject={this.selectedDetectedObject}
                 basicEventData={this.basicEventData}
-                imageBounds={this.imageBounds}
+                imageBounds={this.state.imageBounds}
                 showInWidget={this.showInWidget}
               />
             ))}

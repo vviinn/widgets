@@ -316,11 +316,7 @@ export class VviinnResults {
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
     this.showInWidget !== isTriggeredByVpsWidget;
 
-  private async getTextSearchResults(
-    query?: string,
-    filters?: RequestDynamicFilterItem[],
-    requestId?: string,
-  ) {
+  private async getTextSearchResults(query?: string, requestId?: string) {
     if (!query) return;
     this.setTextSearch(true);
 
@@ -328,7 +324,6 @@ export class VviinnResults {
       await makeTextSearchRequest(
         this.storeName,
         query,
-        filters,
         requestId,
         this.resultsCount,
       ),
@@ -390,14 +385,15 @@ export class VviinnResults {
       return;
     }
 
+    this.state.requestFilters = filters;
+
     if (this.isTextSearch) {
       this.getTextSearchResults(
         this.innerTextSearchQuery,
-        filters,
         this.innerTextSearchRequestId,
       );
     } else {
-      makeVisualSearchRequest(this.storeName, this.searchId, filters);
+      makeVisualSearchRequest(this.storeName, this.searchId);
     }
   };
 

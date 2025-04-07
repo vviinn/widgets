@@ -101,7 +101,7 @@ export class VviinnVprButton {
   @Prop() mode: CarouselMode = "continuity";
   /** Comma-separated list of campaign IDs */
   @Prop() campaigns: string = "";
-  /** Excluded filter. Example: "brand:Nike;custom_label_0:summer" */
+  /** Excluded filter. Example: "brand:Nike,Vans;custom_label_0:summer" */
   @Prop() excluded: string = "";
   /** Campaign type */
   @Prop() campaignType: CampaignName = this.mode === "set" ? "VCS" : "VPR";

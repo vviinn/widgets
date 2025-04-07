@@ -1,4 +1,8 @@
-import { addIfDefined, addIfNotEmpty } from "./collectionsUtils";
+import {
+  addIfDefined,
+  addIfNotEmpty,
+  parseStringToExcluded,
+} from "./collectionsUtils";
 
 describe("addIfDefined", () => {
   test.each([
@@ -42,5 +46,26 @@ describe("addIfNotEmpty", () => {
     ],
   ])("should return correct result for %s", (_, key, value, expected) => {
     expect(addIfNotEmpty(key, value)).toEqual(expected);
+  });
+});
+
+describe("parseStringToExcluded", () => {
+  test.each([
+    ["empty string", "", []],
+    [
+      "string with one column",
+      "column1:value1,value2",
+      [{ column: "column1", values: ["value1", "value2"] }],
+    ],
+    [
+      "string with multiple columns",
+      "column1:value1,value2;column2:value3,value4",
+      [
+        { column: "column1", values: ["value1", "value2"] },
+        { column: "column2", values: ["value3", "value4"] },
+      ],
+    ],
+  ])("should parse %s correctly", (_, input, expected) => {
+    expect(parseStringToExcluded(input)).toEqual(expected);
   });
 });

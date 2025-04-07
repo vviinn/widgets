@@ -107,7 +107,7 @@ export class VviinnVpsButton {
   @Prop() addStyle: boolean = false;
   /** Show the onboarding step, start the camera on opening, or skip the onboarding and move to the direct image upload. */
   @Prop() mode: VisualSearchMode = "modal";
-  /** Excluded filter. Example: "brand:Nike;custom_label_0:summer" */
+  /** Excluded filter. Example: "brand:Nike,Vans;custom_label_0:summer" */
   @Prop() excluded: string = "";
   /** Toggle for opening product link in new tab or not */
   @Prop() productDetailsNewTab: boolean = true;

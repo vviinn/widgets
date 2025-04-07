@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.156.4](https://github.com/vviinn/widgets/compare/v2.156.3...v2.156.4) (2025-04-07)
+
+
+### Bug Fixes
+
+* Pass campaign-id to Visual Search request body ([6d2aebf](https://github.com/vviinn/widgets/commit/6d2aebf620c95673bdda66f3a7fa0d5b16c08ba4))
+
 ### [2.156.3](https://github.com/vviinn/widgets/compare/v2.156.2...v2.156.3) (2025-03-27)
 
 
