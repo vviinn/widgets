@@ -7,7 +7,6 @@ import * as O from "fp-ts/Option";
 import { Eq } from "fp-ts/lib/Eq";
 import { BasicError, emptyApiPathError } from "../error";
 import { sequenceToEither } from "../utils/either";
-import { arrayToQueryString } from "../utils/collections/collectionsUtils";
 import {
   ProductListingPageResponse,
   Rectangle,
@@ -29,31 +28,9 @@ export type ObjectsDetectedEvent = CustomEvent<Rectangle[]>;
 
 export const visualSearchSessionClient = (
   initialData: RequestInit,
-  campaignId: string | null,
-  excludedFilters: string | null,
   apiPath?: string,
 ): TE.TaskEither<BasicError<Response | string>, VisualSearchResponse> => {
-  const searchUrl = "visual-search";
-  const requestUrl = pipe(
-    O.fromNullable(campaignId),
-    O.fold(
-      () => {
-        const params: string[] = [];
-        if (excludedFilters) params.push(excludedFilters);
-        const queryString = arrayToQueryString(params);
-
-        return `${searchUrl}${queryString}`;
-      },
-      (campaignId) => {
-        const params: string[] = [];
-        if (campaignId) params.push(`campaign-id=${campaignId}`);
-        if (excludedFilters) params.push(excludedFilters);
-        const queryString = arrayToQueryString(params);
-
-        return `${searchUrl}${queryString}`;
-      },
-    ),
-  );
+  const requestUrl = "visual-search";
 
   const apiPathOrError = apiPath
     ? pipe(

@@ -5,7 +5,10 @@ import {
   Recommendation,
 } from "../interfaces/recommendation";
 import { RequestDynamicFilterItem } from "../campaign/VPRCampaignService";
-import { addIfNotEmpty } from "../utils/collections/collectionsUtils";
+import {
+  addIfNotEmpty,
+  parseStringToExcluded,
+} from "../utils/collections/collectionsUtils";
 
 type GetRecommendationsBodyProps = {
   productId: string;
@@ -13,17 +16,6 @@ type GetRecommendationsBodyProps = {
   excluded?: string;
   campaigns?: string;
   dynamicFilters?: RequestDynamicFilterItem[];
-};
-
-const parseExcluded = (excluded: string) => {
-  if (!excluded.length) return "";
-  return excluded.split(";").map((item) => {
-    const [column, values] = item.split(":");
-    return {
-      column,
-      values: [values],
-    };
-  });
 };
 
 const parseCampaigns = (campaigns: string) => {
@@ -47,7 +39,7 @@ export const getRecommendationsBody = ({
   | CrossSellingRequest => {
   const staticFilters: RequestStaticFilters = {
     ...addIfNotEmpty("color", color),
-    ...addIfNotEmpty("excluded", parseExcluded(excluded)),
+    ...addIfNotEmpty("excluded", parseStringToExcluded(excluded)),
   };
   return {
     productId,
