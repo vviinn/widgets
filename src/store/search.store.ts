@@ -3,7 +3,10 @@ import * as TE from "fp-ts/TaskEither";
 import * as T from "fp-ts/Task";
 import { pipe } from "fp-ts/function";
 import { globalState } from "./store";
-import { Recommendation } from "../interfaces/recommendation";
+import {
+  Recommendation,
+  RequestStaticFilters,
+} from "../interfaces/recommendation";
 import {
   visualSearchSessionClient,
   textSearchSessionClient,
@@ -31,6 +34,7 @@ import { encodeToBase64UTF8 } from "../utils/string";
 import {
   addIfDefined,
   addIfNotEmpty,
+  addNestedIfNotEmpty,
 } from "../utils/collections/collectionsUtils";
 import { divideOnSized } from "../geometry/Rectangle";
 import { fileToB64 } from "../file";
@@ -41,33 +45,45 @@ export type SearchStoreName = "widget" | "components";
 
 export type SearchStore = {
   token?: string;
-  campaignId?: string;
-  excluded?: string;
+  excluded?: RequestStaticFilters["excluded"] | null;
+  campaignId: string;
+
   selfSearchId: string | null;
-  results: Recommendation[];
+  searchType?: SearchType | null;
   resultLoaded: boolean;
   resultViewed: boolean;
+  image?: HTMLImageElement | null;
+  imageBounds?: Rectangle | null;
+  searchArea?: Rectangle | null;
+  requestFilters: RequestDynamicFilterItem[];
+
+  results: Recommendation[];
   sourceProduct: Recommendation | null;
   dynamicFilters: ResponseDynamicFilterItem[];
   detectedObjects: Rectangle[];
-  searchType?: SearchType;
-  image?: HTMLImageElement | null;
 
   serverError: boolean;
   loading: boolean;
 };
 
 const storeDefaults: SearchStore = {
+  token: null,
+  excluded: null,
   campaignId: "",
-  excluded: "",
+
   selfSearchId: null,
+  searchType: null,
+  resultLoaded: false,
+  resultViewed: false,
+  image: null,
+  imageBounds: null,
+  searchArea: null,
+  requestFilters: [],
+
   results: [],
   sourceProduct: null,
   dynamicFilters: [],
   detectedObjects: [],
-  resultLoaded: false,
-  resultViewed: false,
-  image: null,
 
   serverError: false,
   loading: false,
@@ -127,9 +143,7 @@ const processVisualSearch = (
     getTokenWithBody<VisualSearchRequest>(globalState.token, body),
     setBodyAndHeaders,
     TE.fromEither,
-    TE.chain((request) =>
-      visualSearchSessionClient(request, state.campaignId, state.excluded),
-    ),
+    TE.chain((request) => visualSearchSessionClient(request)),
     TE.map((sessionResponse) => {
       updateVisualSearchState(store, fetchDetectedObjects)(sessionResponse);
       return sessionResponse;
@@ -149,8 +163,9 @@ const uploadImageFile =
     fetchDetectedObjects: boolean = true,
     searchId?: string,
   ) =>
-  (file: File) =>
-    pipe(
+  (file: File) => {
+    const state = useStore(store);
+    return pipe(
       TE.fromEither(checkFileWithExtention(file)),
       TE.chainTaskK(resizeFileTo(imageType)),
       TE.chain((resizedFile) => updateImageState(store)(resizedFile)),
@@ -164,7 +179,11 @@ const uploadImageFile =
               objectDetection: {
                 include: imageType === "image",
               },
+              ...addNestedIfNotEmpty("staticFilters", {
+                ...addIfNotEmpty("excluded", state.excluded),
+              }),
               ...addIfDefined("requestId", searchId),
+              ...addIfNotEmpty("campaign", state.campaignId),
             }),
             (error) => ({
               kind: "network error",
@@ -177,6 +196,7 @@ const uploadImageFile =
         ),
       ),
     );
+  };
 
 export const makeUploadFileRequest =
   (store: SearchStoreName) => async (file: File) => {
@@ -221,33 +241,31 @@ export const makeUploadFileRequest =
 export const makeVisualSearchRequest = async (
   store: SearchStoreName,
   searchId?: string | null,
-  dynamicFilters?: RequestDynamicFilterItem[],
-  searchArea?: Rectangle | null,
-  imageBounds?: Rectangle | null,
 ) => {
   const state = useStore(store);
   state.searchType = "image";
   state.loading = true;
 
   let searchRectangle: Rectangle;
+  const scaled = divideOnSized(state.imageBounds)(state.searchArea);
 
-  if (imageBounds) {
-    const scaled = divideOnSized(imageBounds)(searchArea);
-
-    searchRectangle = {
-      width: scaled.width,
-      height: scaled.height,
-      left: scaled.left,
-      top: scaled.top,
-    };
-  }
+  searchRectangle = {
+    width: scaled.width,
+    height: scaled.height,
+    left: scaled.left,
+    top: scaled.top,
+  };
 
   const body: VisualSearchRequest = {
     requestId: searchId ?? state.selfSearchId,
-    ...addIfNotEmpty("dynamicFilters", dynamicFilters),
+    ...addIfNotEmpty("campaign", state.campaignId),
+    ...addIfNotEmpty("dynamicFilters", state.requestFilters),
     query: {
       ...addIfDefined("searchArea", searchRectangle),
     },
+    ...addNestedIfNotEmpty("staticFilters", {
+      ...addIfNotEmpty("excluded", state.excluded),
+    }),
   };
   return processVisualSearch(store, body, false)();
 };
@@ -255,7 +273,6 @@ export const makeVisualSearchRequest = async (
 export const makeTextSearchRequest = async (
   store: SearchStoreName,
   query: string,
-  dynamicFilters?: RequestDynamicFilterItem[],
   requestId?: string,
   resultsCount?: number,
 ) => {
@@ -267,8 +284,10 @@ export const makeTextSearchRequest = async (
     query,
     requestId,
     ...addIfDefined("resultsCount", resultsCount),
-    ...addIfNotEmpty("dynamicFilters", dynamicFilters),
-    ...addIfNotEmpty("campaign", state.campaignId),
+    ...addIfNotEmpty("dynamicFilters", state.requestFilters),
+    ...addNestedIfNotEmpty("staticFilters", {
+      ...addIfNotEmpty("excluded", state.excluded),
+    }),
   };
 
   return pipe(
