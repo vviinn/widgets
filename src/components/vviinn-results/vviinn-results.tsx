@@ -709,11 +709,13 @@ export class VviinnResults {
       this.oneClickDiscoverySelectedIndex = index;
 
       requestAnimationFrame(() => {
-        const container = this.el.shadowRoot.getElementById(
+        const appendedContainer = this.el.shadowRoot.getElementById(
           "one-click-discovery-append",
         );
-        window.scrollTo({
-          top: container.offsetTop,
+        const scrollableContainer = this.showInWidget ? this.el : window;
+
+        scrollableContainer.scrollTo({
+          top: appendedContainer.offsetTop,
           behavior: "smooth",
         });
       });

@@ -84,6 +84,8 @@ export class VviinnCarousel {
   @Prop() setItemsAmount?: number;
   @Prop() isAppended?: boolean = false;
   @Prop() loading?: boolean = false;
+  @Prop() hasErrorOnLoad?: boolean = false;
+  @Prop() showInWidget: boolean = false;
 
   /** Event emitted once when the recommendation is rendered on the page */
   @Event({ bubbles: true })
@@ -284,6 +286,8 @@ export class VviinnCarousel {
   private getContentClassMap() {
     return {
       content: true,
+      "append-slider": this.isAppended,
+      error: this.hasErrorOnLoad,
       [this.moveDirection]: true,
       [this.mode]: true,
       "show-scrollbar": this.isSetMode ? false : this.showScroll,
@@ -291,11 +295,9 @@ export class VviinnCarousel {
   }
 
   private handleResize() {
-    if (this.isAppended) {
-      const newColumns = this.getColumnsNumber();
-      if (newColumns !== this.columns) {
-        this.columns = newColumns;
-      }
+    const newColumns = this.getColumnsNumber();
+    if (newColumns !== this.columns) {
+      this.columns = newColumns;
     }
 
     this.setWidth();
@@ -372,22 +374,25 @@ export class VviinnCarousel {
   }
 
   private getColumnsNumber(): number {
+    if (this.setItemsAmount && this.isSetMode) {
+      return this.setItemsAmount;
+    }
+
     const styleSheet = getComputedStyle(this.el);
 
-    const cardWidthRaw =
-      styleSheet.getPropertyValue("--product-card-width") ||
-      styleSheet.getPropertyValue("--product-card-results-min-width");
+    const cardWidthRaw = this.showInWidget
+      ? styleSheet.getPropertyValue("--product-card-widget-min-width")
+      : styleSheet.getPropertyValue("--product-card-width") ||
+        styleSheet.getPropertyValue("--product-card-results-min-width");
+
     const cardWidth = parseFloat(cardWidthRaw);
     const containerWidth = this.el.getBoundingClientRect().width;
 
     const gridColumns = Math.floor(containerWidth / cardWidth);
-    if (this.setItemsAmount && this.isSetMode) {
-      return Math.min(this.setItemsAmount, gridColumns);
-    }
     const columnsInCss = styleSheet.getPropertyValue(COLUMNS_NUMBER_CSS_VAR);
     const columnsNumber = parseInt(columnsInCss);
 
-    return gridColumns > 0 && !isNaN(gridColumns)
+    return gridColumns > 0 && !isNaN(gridColumns) && this.isAppended
       ? gridColumns
       : columnsNumber && !isNaN(columnsNumber)
         ? columnsNumber
@@ -434,7 +439,7 @@ export class VviinnCarousel {
   }
 
   private showArrowButtons(): boolean {
-    return !this.loading && this.recommendations?.length && !this.isSetMode;
+    return !this.loading && !!this.recommendations?.length && !this.isSetMode;
   }
 
   private getClassMap() {

@@ -204,6 +204,8 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() opened?: boolean;
   /** @internal */
   @Prop() isAppended?: boolean = false;
+  /** @internal */
+  @Prop() showInWidget: boolean = false;
 
   @State() recommendations: Recommendation[] = [];
   @State() dynamicFilters: ResponseDynamicFilterItem[] = [];
@@ -755,6 +757,8 @@ export class VviinnVprWidget implements ComponentInterface {
         setItemsAmount={this.setItemsAmount}
         loading={this.recommendationsLoading}
         isAppended={this.isAppended}
+        hasErrorOnLoad={this.hasErrorOnLoad}
+        showInWidget={this.showInWidget}
       ></vviinn-carousel>
     );
   }

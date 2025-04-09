@@ -306,6 +306,7 @@ export class VviinnVprButton {
     sidebar.showInModal = this.oneClickDiscoveryMode === "modal";
     sidebar.isAppended =
       !!this.targetAppendSidebarTo || !!this.appendSidebarToElement;
+    sidebar.showInWidget = this.showInWidget;
 
     if (this.targetAppendSidebarTo) {
       sidebar.mode = "grid";

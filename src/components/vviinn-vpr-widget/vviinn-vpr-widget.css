@@ -33,8 +33,8 @@
 :host(.set) vviinn-product-card::part(image) {
   width: var(--vviinn-set-mode-image-width, 100%);
   height: auto;
-  min-width: var(--image-set-mode-min-size);
-  min-height: var(--image-set-mode-min-size);
+  min-width: var(--image-set-mode-min-width);
+  aspect-ratio: 1 / 1;
 }
 
 :host(.set) vviinn-product-card.product-card--source::part(image) {
