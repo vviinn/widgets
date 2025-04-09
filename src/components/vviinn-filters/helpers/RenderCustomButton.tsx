@@ -23,10 +23,23 @@ export const RenderCustomButton = ({
         part="filters-option-button"
       >
         {buttonType === "image" && (
-          <img class="buton-image" width="24" height="24" src={imageSrc} />
+          <img
+            class="buton-image"
+            part="filters-option-image"
+            width="24"
+            height="24"
+            src={imageSrc}
+          />
         )}
         {buttonType === "text" && <TextIcon />}
-        <span part="filters-option-text">{label}</span>
+
+        <span part="filters-option-text">
+          {buttonType === "image" && (
+            <slot name="vviinn-image-filter-text">{label}</slot>
+          )}
+
+          {buttonType === "text" && label}
+        </span>
         <FilterIconClose />
       </button>
     </li>

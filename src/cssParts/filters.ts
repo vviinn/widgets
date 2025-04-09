@@ -1,6 +1,7 @@
 export const generalFiltersPartsList = [
   "filters-sub-row",
   "filters-option-button",
+  "filters-option-image",
   "filters-option-color-dot",
   "filters-option-text",
   "filters-option-icon-wrapper",

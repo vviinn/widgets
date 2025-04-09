@@ -40,12 +40,14 @@ import { globalState } from "../../store/store";
 import { ResponseDynamicFilterIntervalItem } from "../../interfaces/recommendation";
 import { isIntervalFilter } from "../../filters";
 import { components } from "../../interfaces/generated";
+import i18next from "i18next";
 
 /**
  * @part selected-filters-list - List of selected filters.
  
  * @part filters-sub-row - Row of the sub filters.
  * @part filters-option-button - Button of the sub filter.
+ * @part filters-option-image - Image of the sub filter.
  * @part filters-option-color-dot - Color Dot of the sub filter.
  * @part filters-option-text - Text of the sub filter.
  * @part filters-option-icon-wrapper - Icon Wrapper of the sub filter.
@@ -320,7 +322,7 @@ export class VviinnSelectedFilters {
 
             {this.imageSrc?.length > 0 &&
               RenderCustomButton({
-                label: "Image",
+                label: i18next.t("filters.imageFilterText"),
                 buttonType: "image",
                 imageSrc: this.imageSrc,
                 onClick: this.handleImageButtonClick,

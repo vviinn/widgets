@@ -23,6 +23,7 @@ const filtersSlotNames: string[] = [
   "vviinn-extended-filters-title",
   "vviinn-extended-filters-apply",
   "vviinn-extended-filters-reset",
+  "vviinn-image-filter-text",
 ];
 
 export const productCardSlotNames: string[] = [

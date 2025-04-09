@@ -69,6 +69,7 @@ import { ResponseDynamicFilterIntervalItem } from "../../interfaces/recommendati
  *
  * @part filters-sub-row - Row of the sub filters.
  * @part filters-option-button - Button of the sub filter.
+ * @part filters-option-image - Image of the sub filter.
  * @part filters-option-color-dot - Color Dot of the sub filter.
  * @part filters-option-text - Text of the sub filter.
  * @part filters-option-icon-wrapper - Icon Wrapper of the sub filter.
