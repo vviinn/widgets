@@ -71,14 +71,13 @@ export class VviinnSelectedFilters {
   /** The filter's state changes */
   @Event({ bubbles: true })
   vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
+  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterInternalData>;
 
   /** Selected filters should be resetted */
   /** @internal */
   @Event() vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
   /** @internal */
   @Event() vviinnResetCropperState: EventEmitter;
-
-  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterInternalData>;
 
   private state?: SearchStore;
   private storeName?: SearchStoreName;

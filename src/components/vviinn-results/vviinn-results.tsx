@@ -157,6 +157,10 @@ export class VviinnResults {
   @Event({ bubbles: true })
   vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
 
+  /** Cropper state should be resetted */
+  /** @internal */
+  @Event() vviinnResetCropperState: EventEmitter;
+
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
   /** The currency sign is displayed after the price */
@@ -355,6 +359,12 @@ export class VviinnResults {
     const { isTriggeredByVpsWidget } = detail;
     if (this.skipStateChanges(isTriggeredByVpsWidget)) return;
 
+    resetStore(this.storeName);
+    this.vviinnResetCropperState.emit();
+    this.vviinnSelectedFiltersReset.emit({
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
+
     this.innerTextSearchQuery = detail.query;
     this.setTextSearch(true, isTriggeredByVpsWidget);
 
@@ -367,12 +377,7 @@ export class VviinnResults {
     trackEvent(textSearchStartedEvent);
 
     const response = await this.getTextSearchResults(this.innerTextSearchQuery);
-    if (!response) return;
-
-    this.innerTextSearchRequestId = response.requestId;
-    this.vviinnSelectedFiltersReset.emit({
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
+    if (response) this.innerTextSearchRequestId = response.requestId;
   };
 
   private filtersChangedHandler = async ({ detail }: ChangedFiltersEvent) => {

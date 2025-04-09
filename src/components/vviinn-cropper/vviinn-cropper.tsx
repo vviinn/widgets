@@ -105,7 +105,7 @@ export class VviinnCropper {
     );
     document.addEventListener(
       "vviinnResetCropperState",
-      this.resetCropperStateHandler,
+      this.resetStateHandler,
     );
   }
 
@@ -120,7 +120,7 @@ export class VviinnCropper {
     );
     document.removeEventListener(
       "vviinnResetCropperState",
-      this.resetCropperStateHandler,
+      this.resetStateHandler,
     );
 
     this.disposeStoreListener?.();
@@ -157,17 +157,13 @@ export class VviinnCropper {
     this.saveImageMode === "once" && localStorage.removeItem("cropperImageSrc");
   };
 
-  private resetCropperStateHandler = () => {
-    this.cropper?.destroy();
-    this.cropper = null;
+  private resetStateHandler = () => {
     this.detectedObjects = [];
     this.selectedDetectedObject = null;
     localStorage.removeItem("cropperImageSrc");
-
-    if (this.imageElement && this.imageElement.parentNode) {
-      this.imageElement.parentNode.removeChild(this.imageElement);
-      this.imageElement = null;
-    }
+    this.imageElement?.setAttribute("src", "");
+    this.imageElement = null;
+    this.cropper?.destroy();
   };
 
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
@@ -211,7 +207,11 @@ export class VviinnCropper {
       : this.state.detectedObjects;
 
   private imageUploadStartedHandler = ({ detail }: SearchIdEvent) => {
-    if (this.cropper && !this.skipStateChanges(detail.isTriggeredByVpsWidget)) {
+    if (
+      this.cropper &&
+      this.imageElement?.src &&
+      !this.skipStateChanges(detail.isTriggeredByVpsWidget)
+    ) {
       this.cropper.replace(this.imageElement.src);
     }
   };
