@@ -66,7 +66,7 @@ export class VviinnCropper {
 
   @State() detectedObjects: Rectangle[] = [];
   @State() cropper: Cropper = null;
-  @State() selectedDetectedObject?: Rectangle;
+  @State() selectedDetectedObject?: Rectangle | null = null;
   @State() imageElement?: HTMLImageElement;
 
   @Event() vviinnImageCrop: EventEmitter<TriggerSourceEventData>;
@@ -75,6 +75,8 @@ export class VviinnCropper {
 
   /** @internal */
   @Event() vviinnCropperAspectRatioError: EventEmitter<boolean>;
+  /** @internal */
+  @Event() vviinnResetCropperState: EventEmitter;
 
   private state?: SearchStore;
   private storeName?: SearchStoreName;
@@ -101,6 +103,10 @@ export class VviinnCropper {
       "vviinnImageUploadFinished",
       this.imageUploadFinishedHandler,
     );
+    document.addEventListener(
+      "vviinnResetCropperState",
+      this.resetCropperStateHandler,
+    );
   }
 
   disconnectedCallback() {
@@ -111,6 +117,10 @@ export class VviinnCropper {
     document.removeEventListener(
       "vviinnImageUploadFinished",
       this.imageUploadFinishedHandler,
+    );
+    document.removeEventListener(
+      "vviinnResetCropperState",
+      this.resetCropperStateHandler,
     );
 
     this.disposeStoreListener?.();
@@ -145,6 +155,19 @@ export class VviinnCropper {
     this.state.image = image;
 
     this.saveImageMode === "once" && localStorage.removeItem("cropperImageSrc");
+  };
+
+  private resetCropperStateHandler = () => {
+    this.cropper?.destroy();
+    this.cropper = null;
+    this.detectedObjects = [];
+    this.selectedDetectedObject = null;
+    localStorage.removeItem("cropperImageSrc");
+
+    if (this.imageElement && this.imageElement.parentNode) {
+      this.imageElement.parentNode.removeChild(this.imageElement);
+      this.imageElement = null;
+    }
   };
 
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
@@ -260,7 +283,7 @@ export class VviinnCropper {
     this.vviinnCropperCropEnd.emit(cropboxData);
     this.state.searchArea = cropboxData;
     makeVisualSearchRequest(this.storeName, null);
-    this.selectedDetectedObject = undefined;
+    this.selectedDetectedObject = null;
     this.vviinnImageCrop.emit({
       isTriggeredByVpsWidget: this.showInWidget,
     });

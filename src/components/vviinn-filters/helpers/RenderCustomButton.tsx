@@ -6,12 +6,14 @@ type RenderCustomButtonProps = {
   buttonType: "image" | "text" | "price";
   onClick: () => void;
   label?: string;
+  imageSrc?: string;
 };
 
 export const RenderCustomButton = ({
   buttonType,
   label,
   onClick,
+  imageSrc,
 }: RenderCustomButtonProps): JSX.Element => {
   return (
     <li part="filters-sub-row">
@@ -20,6 +22,9 @@ export const RenderCustomButton = ({
         class={`filters-more-modal-button active`}
         part="filters-option-button"
       >
+        {buttonType === "image" && (
+          <img class="buton-image" width="24" height="24" src={imageSrc} />
+        )}
         {buttonType === "text" && <TextIcon />}
         <span part="filters-option-text">{label}</span>
         <FilterIconClose />

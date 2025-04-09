@@ -83,8 +83,6 @@ export class VviinnTextSearch {
   @Prop({ mutable: true }) searchQuery?: string;
   /** Custom placeholder for the text search input */
   @Prop() placeholder?: string = "";
-  /** Save to Local Storage mode for uploaded image */
-  @Prop() saveImageMode?: "once" | "always" | "never" = "once";
 
   /** True, when used inside the widget */
   /** @internal */
@@ -141,10 +139,7 @@ export class VviinnTextSearch {
   );
 
   private imageUploadFinishedHandler = () => {
-    if (this.saveImageMode === "never" || this.mode !== "extended") return;
-
-    const image: HTMLImageElement = this.state.image;
-    if (image) localStorage.setItem("cropperImageSrc", image.src);
+    this.searchQuery = "";
   };
 
   connectedCallback() {

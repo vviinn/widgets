@@ -65,6 +65,7 @@ export class VviinnSelectedFilters {
   @State() requestFilters: RequestDynamicFilterItem[] = [];
   @State() selectedFilterButtons: JSX.Element[] = [];
   @State() textSearchCustomFilter: string | null = null;
+  @State() imageSrc: string | null = null;
   @State() priceCustomFilter: string | null = null;
 
   /** The filter's state changes */
@@ -74,16 +75,18 @@ export class VviinnSelectedFilters {
   /** Selected filters should be resetted */
   /** @internal */
   @Event() vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
+  /** @internal */
+  @Event() vviinnResetCropperState: EventEmitter;
 
   @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterInternalData>;
 
   private state?: SearchStore;
   private storeName?: SearchStoreName;
 
-  private handleSubFilterSelection(
+  private handleSubFilterSelection = (
     filterValue: DynamicFilterValue,
     selectedFilter: ResponseDynamicFilterItem,
-  ) {
+  ) => {
     this.requestFilters = triggerFilter({
       filterValue,
       selectedFilter,
@@ -93,7 +96,7 @@ export class VviinnSelectedFilters {
       el: this.el,
       isTriggeredByVpsWidget: this.showInWidget,
     });
-  }
+  };
 
   private getPriceFilter = () =>
     this.state.dynamicFilters.find((filter) =>
@@ -103,10 +106,14 @@ export class VviinnSelectedFilters {
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
     this.showInWidget !== isTriggeredByVpsWidget;
 
-  private resetInnerState = (resetTextSearchFilter: boolean = false) => {
+  private resetInnerState = (
+    resetTextSearchFilter: boolean = false,
+    resetImageFilter: boolean = false,
+  ) => {
     this.requestFilters = [];
     this.priceCustomFilter = null;
     resetTextSearchFilter && (this.textSearchCustomFilter = null);
+    resetImageFilter && (this.imageSrc = null);
   };
 
   private handleFilterTriggered = ({
@@ -115,6 +122,7 @@ export class VviinnSelectedFilters {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
 
     if (detail.customTrigger === "TPS") {
+      this.resetInnerState(true, true);
       this.textSearchCustomFilter = detail.kind;
     }
 
@@ -130,6 +138,10 @@ export class VviinnSelectedFilters {
   private handleImageUploadStarted = ({ detail }: SearchIdEvent) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.resetInnerState(true);
+  };
+
+  private handleImageUploadFinished = () => {
+    this.getUploadedImageSrc();
   };
 
   private handleFiltersChanged = ({
@@ -155,6 +167,13 @@ export class VviinnSelectedFilters {
     this.textSearchCustomFilter = null;
   };
 
+  private getUploadedImageSrc = () => {
+    const imageSrc =
+      this.state?.image?.src || localStorage.getItem("cropperImageSrc");
+    if (!imageSrc?.length) return null;
+    this.imageSrc = imageSrc;
+  };
+
   private resetState = () => {
     if (this.skipStateChanges(this.showInWidget)) return;
 
@@ -175,7 +194,7 @@ export class VviinnSelectedFilters {
       el: this.el,
     });
 
-    this.resetInnerState(true);
+    this.resetInnerState(true, true);
     resetStore(this.storeName);
   };
 
@@ -187,6 +206,11 @@ export class VviinnSelectedFilters {
       priceFilter.full as DynamicFilterValue,
       priceFilter,
     );
+  };
+
+  private handleImageButtonClick = () => {
+    this.resetState();
+    this.vviinnResetCropperState.emit();
   };
 
   connectedCallback() {
@@ -209,7 +233,16 @@ export class VviinnSelectedFilters {
       "vviinnImageUploadStarted",
       this.handleImageUploadStarted,
     );
+    document.addEventListener(
+      "vviinnImageUploadFinished",
+      this.handleImageUploadFinished,
+    );
+
     document.addEventListener("vviinnImageCrop", this.handleImageCrop);
+  }
+
+  componentWillLoad() {
+    this.getUploadedImageSrc();
   }
 
   disconnectedCallback() {
@@ -229,6 +262,10 @@ export class VviinnSelectedFilters {
       "vviinnImageUploadStarted",
       this.handleImageUploadStarted,
     );
+    document.removeEventListener(
+      "vviinnImageUploadFinished",
+      this.handleImageUploadFinished,
+    );
     document.removeEventListener("vviinnImageCrop", this.handleImageCrop);
   }
 
@@ -242,8 +279,7 @@ export class VviinnSelectedFilters {
         if (showActiveOnSubButton(this.requestFilters, value, filter)) {
           this.selectedFilterButtons.push(
             RenderFilterButton({
-              handleSubFilterSelection:
-                this.handleSubFilterSelection.bind(this),
+              handleSubFilterSelection: this.handleSubFilterSelection,
               selectedFilter: filter,
               value,
               label,
@@ -264,7 +300,8 @@ export class VviinnSelectedFilters {
           "show-in-widget": this.showInWidget,
         }}
       >
-        {(this.selectedFilterButtons.length > 0 ||
+        {(this.selectedFilterButtons ||
+          this.imageSrc ||
           this.textSearchCustomFilter ||
           this.priceCustomFilter) && (
           <ul class="selected-filters-wrapper" part="selected-filters-list">
@@ -272,14 +309,22 @@ export class VviinnSelectedFilters {
               RenderCustomButton({
                 label: this.textSearchCustomFilter,
                 buttonType: "text",
-                onClick: this.resetState.bind(this),
+                onClick: this.resetState,
               })}
 
             {this.priceCustomFilter &&
               RenderCustomButton({
                 label: this.priceCustomFilter,
                 buttonType: "price",
-                onClick: this.handlePriceButtonClick.bind(this),
+                onClick: this.handlePriceButtonClick,
+              })}
+
+            {this.imageSrc?.length > 0 &&
+              RenderCustomButton({
+                label: "Image",
+                buttonType: "image",
+                imageSrc: this.imageSrc,
+                onClick: this.handleImageButtonClick,
               })}
 
             {this.selectedFilterButtons}
