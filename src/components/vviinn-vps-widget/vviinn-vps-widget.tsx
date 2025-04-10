@@ -777,9 +777,7 @@ export class VviinnVpsWidget {
               }}
             >
               {this.isResultSlide() && (
-                <div
-                  class={`source-wrapper ${this.state.searchType === "text" ? "text-search-wrapper" : "image-wrapper"}`}
-                >
+                <div class="source-wrapper">
                   {this.state.searchType === "text" ? (
                     <vviinn-text-search
                       token={this.token}
