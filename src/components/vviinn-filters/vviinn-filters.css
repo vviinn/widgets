@@ -421,6 +421,10 @@ vviinn-price-range {
   padding: var(--spacing-100);
 }
 
+.selected-filters-wrapper > li.hidden {
+  display: none;
+}
+
 .filters-sub-button-selected {
   display: flex;
   align-items: center;

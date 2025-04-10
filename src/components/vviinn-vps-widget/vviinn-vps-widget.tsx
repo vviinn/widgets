@@ -654,6 +654,7 @@ export class VviinnVpsWidget {
     this.state.image = null;
     this.state.results = [];
     this.state.dynamicFilters = [];
+    this.state.requestFilters = [];
     this.state.detectedObjects = [];
     this.state.searchType = undefined;
   }

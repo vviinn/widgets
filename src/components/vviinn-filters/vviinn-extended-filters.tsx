@@ -120,7 +120,6 @@ export class VviinnExtendedFilters {
   /** @internal */
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
-
   /** Selected filters should be resetted */
   /** @internal */
   @Event() vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
@@ -130,6 +129,9 @@ export class VviinnExtendedFilters {
 
   private state?: SearchStore;
 
+  private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
+    this.showInWidget !== isTriggeredByVpsWidget;
+
   private getFilters = () =>
     this.innerFilters.length ? this.innerFilters : this.state.dynamicFilters;
 
@@ -138,13 +140,18 @@ export class VviinnExtendedFilters {
     this.selectedMoreOptions = [];
   }
 
-  private resetFiltersState() {
-    this.resetOptionsInteractions();
+  private handleSelectedFiltersReset = ({ detail }: TriggerSourceEvent) => {
+    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.requestFilters = [];
-  }
+    this.innerFilters = [];
+    this.showMore = false;
+    this.resetOptionsInteractions();
+  };
 
-  private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
-    this.showInWidget !== isTriggeredByVpsWidget;
+  private handleCloseModal = () => {
+    this.showMore = false;
+    this.resetOptionsInteractions();
+  };
 
   private replaceSlotsContent() {
     const slots = this.el.querySelectorAll("[slot]");
@@ -158,16 +165,6 @@ export class VviinnExtendedFilters {
     (this.requestFilters.find(({ column }) => isIntervalFilter(column))
       ?.values[0] ?? {}) as components["schemas"]["interval"];
 
-  private handleSelectedFiltersReset = ({ detail }: TriggerSourceEvent) => {
-    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
-    this.resetFiltersState();
-  };
-
-  private handleCloseModal = () => {
-    this.showMore = false;
-    this.resetOptionsInteractions();
-  };
-
   private resetModal = () => {
     triggerResetFilters({
       vviinnFilterTriggered: this.vviinnFilterTriggered,
@@ -179,8 +176,7 @@ export class VviinnExtendedFilters {
       isTriggeredByVpsWidget: this.showInWidget,
     });
 
-    this.resetFiltersState();
-    this.showMore = false;
+    this.handleCloseModal();
   };
 
   private handleExtendedFiltersButtonClicked = ({

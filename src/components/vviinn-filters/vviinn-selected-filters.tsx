@@ -79,7 +79,12 @@ export class VviinnSelectedFilters {
   /** @internal */
   @Event() vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
   /** @internal */
-  @Event() vviinnResetCropperState: EventEmitter;
+  @Event() vviinnResetCropperState: EventEmitter<TriggerSourceEventData>;
+  /** @internal */
+  @Event() vviinnResetCropArea: EventEmitter<TriggerSourceEventData>;
+  /** @internal */
+  @Event({ bubbles: true, composed: true })
+  globalSlotsChanged: EventEmitter<any>;
 
   private state?: SearchStore;
   private storeName?: SearchStoreName;
@@ -99,6 +104,14 @@ export class VviinnSelectedFilters {
     });
   };
 
+  private replaceSlotsContent() {
+    const slots = this.el.querySelectorAll("[slot]");
+    this.globalSlotsChanged.emit({
+      slots: Array.from(slots),
+      element: this.el,
+    });
+  }
+
   private getPriceFilter = () =>
     this.state.dynamicFilters.find((filter) =>
       isIntervalFilter(filter.column),
@@ -112,6 +125,7 @@ export class VviinnSelectedFilters {
     resetImageFilter: boolean = false,
   ) => {
     this.requestFilters = [];
+    this.selectedFilterButtons = [];
     this.priceCustomFilter = null;
     resetTextSearchFilter && (this.textSearchCustomFilter = null);
     resetImageFilter && (this.imageSrc = null);
@@ -211,7 +225,15 @@ export class VviinnSelectedFilters {
 
   private handleImageButtonClick = () => {
     this.resetState();
-    this.vviinnResetCropperState.emit();
+    this.vviinnResetCropperState.emit({
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
+  };
+
+  private handleCropButtonClick = () => {
+    this.vviinnResetCropArea.emit({
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
   };
 
   connectedCallback() {
@@ -238,12 +260,15 @@ export class VviinnSelectedFilters {
       "vviinnImageUploadFinished",
       this.handleImageUploadFinished,
     );
-
     document.addEventListener("vviinnImageCrop", this.handleImageCrop);
   }
 
   componentWillLoad() {
     this.getUploadedImageSrc();
+  }
+
+  componentDidRender() {
+    this.replaceSlotsContent();
   }
 
   disconnectedCallback() {
@@ -301,36 +326,39 @@ export class VviinnSelectedFilters {
           "show-in-widget": this.showInWidget,
         }}
       >
-        {(this.selectedFilterButtons ||
-          this.imageSrc ||
-          this.textSearchCustomFilter ||
-          this.priceCustomFilter) && (
-          <ul class="selected-filters-wrapper" part="selected-filters-list">
-            {this.textSearchCustomFilter &&
-              RenderCustomButton({
-                label: this.textSearchCustomFilter,
-                buttonType: "text",
-                onClick: this.resetState,
-              })}
+        <ul class="selected-filters-wrapper" part="selected-filters-list">
+          {RenderCustomButton({
+            label: this.textSearchCustomFilter,
+            buttonType: "text",
+            onClick: this.resetState,
+            hidden: !this.textSearchCustomFilter?.length,
+          })}
 
-            {this.priceCustomFilter &&
-              RenderCustomButton({
-                label: this.priceCustomFilter,
-                buttonType: "price",
-                onClick: this.handlePriceButtonClick,
-              })}
+          {RenderCustomButton({
+            label: i18next.t("filters.imageFilterText"),
+            buttonType: "image",
+            imageSrc: this.imageSrc,
+            onClick: this.handleImageButtonClick,
+            hidden: !this.imageSrc?.length,
+          })}
 
-            {this.imageSrc?.length > 0 &&
-              RenderCustomButton({
-                label: i18next.t("filters.imageFilterText"),
-                buttonType: "image",
-                imageSrc: this.imageSrc,
-                onClick: this.handleImageButtonClick,
-              })}
+          {RenderCustomButton({
+            label: i18next.t("filters.cropFilterText"),
+            buttonType: "crop",
+            imageSrc: this.state.croppedImageUrl,
+            onClick: this.handleCropButtonClick,
+            hidden: !this.state.searchArea,
+          })}
 
-            {this.selectedFilterButtons}
-          </ul>
-        )}
+          {RenderCustomButton({
+            label: this.priceCustomFilter,
+            buttonType: "price",
+            onClick: this.handlePriceButtonClick,
+            hidden: !this.priceCustomFilter,
+          })}
+
+          {this.selectedFilterButtons}
+        </ul>
       </Host>
     );
   }

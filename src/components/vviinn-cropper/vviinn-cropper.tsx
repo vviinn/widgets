@@ -24,7 +24,6 @@ import { LoadImageEventData } from "./types";
 import { ValidateCropBoxData } from "./helpers";
 import {
   cropperOptions,
-  INITIAL_CROP_AREA_OFFSET,
   SUPPORTED_ASPECT_RATIO,
   MIN_IMAGE_SIDE_FOR_CROPPER,
   DEFAULT_IMAGE_SIZE,
@@ -76,7 +75,11 @@ export class VviinnCropper {
   /** @internal */
   @Event() vviinnCropperAspectRatioError: EventEmitter<boolean>;
   /** @internal */
-  @Event() vviinnResetCropperState: EventEmitter;
+  @Event() vviinnResetCropperState: EventEmitter<TriggerSourceEventData>;
+  /** @internal */
+  @Event() vviinnResetCropArea: EventEmitter<TriggerSourceEventData>;
+  /** @internal */
+  @Event() vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
 
   private state?: SearchStore;
   private storeName?: SearchStoreName;
@@ -107,6 +110,7 @@ export class VviinnCropper {
       "vviinnResetCropperState",
       this.resetStateHandler,
     );
+    document.addEventListener("vviinnResetCropArea", this.resetCropAreaHandler);
   }
 
   disconnectedCallback() {
@@ -121,6 +125,10 @@ export class VviinnCropper {
     document.removeEventListener(
       "vviinnResetCropperState",
       this.resetStateHandler,
+    );
+    document.removeEventListener(
+      "vviinnResetCropArea",
+      this.resetCropAreaHandler,
     );
 
     this.disposeStoreListener?.();
@@ -157,13 +165,31 @@ export class VviinnCropper {
     this.saveImageMode === "once" && localStorage.removeItem("cropperImageSrc");
   };
 
-  private resetStateHandler = () => {
+  private resetStateHandler = ({
+    detail,
+  }: CustomEvent<TriggerSourceEventData>) => {
+    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
+
     this.detectedObjects = [];
     this.selectedDetectedObject = null;
     localStorage.removeItem("cropperImageSrc");
     this.imageElement?.setAttribute("src", "");
     this.imageElement = null;
     this.cropper?.destroy();
+  };
+
+  private resetCropAreaHandler = ({
+    detail,
+  }: CustomEvent<TriggerSourceEventData>) => {
+    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
+    this.cropper?.reset();
+    this.state.searchArea = null;
+    this.state.croppedImageUrl = null;
+    this.selectedDetectedObject = null;
+    this.vviinnImageCrop.emit({
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
+    makeVisualSearchRequest(this.storeName, null);
   };
 
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
@@ -186,19 +212,36 @@ export class VviinnCropper {
     this.selectedDetectedObject = detail.detectedObject;
     this.state.searchArea = detail.searchArea;
     const { top, left, width, height } = detail.detectedObject;
-    const data = this.cropper.getImageData();
 
-    const cropBoxData = {
-      left: left * data.width,
-      top: top * data.height,
-      width: width * data.width,
-      height: height * data.height,
-    };
-    this.cropper.setCropBoxData(ValidateCropBoxData(cropBoxData));
-    this.vviinnImageCrop.emit({
+    if (this.cropper) {
+      const data = this.cropper.getImageData();
+
+      const cropBoxData = {
+        left: left * data.width,
+        top: top * data.height,
+        width: width * data.width,
+        height: height * data.height,
+      };
+      this.cropper.setCropBoxData(ValidateCropBoxData(cropBoxData));
+      this.vviinnImageCrop.emit({
+        isTriggeredByVpsWidget: this.showInWidget,
+      });
+    }
+
+    makeVisualSearchRequest(this.storeName, null);
+  }
+
+  @Listen("vviinnImageCrop")
+  imageCropHandler({ detail }: CustomEvent<TriggerSourceEventData>) {
+    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
+    if (this.cropper)
+      this.state.croppedImageUrl = this.cropper
+        .getCroppedCanvas?.()
+        .toDataURL?.();
+
+    this.vviinnSelectedFiltersReset.emit({
       isTriggeredByVpsWidget: this.showInWidget,
     });
-    makeVisualSearchRequest(this.storeName, null);
   }
 
   private getDetectedObjects = () =>
@@ -235,18 +278,12 @@ export class VviinnCropper {
         this.cropper.destroy();
       }
       const imageBounds = fromImage(this.imageElement);
-      const { left, top, width, height } = imageBounds;
+      const { width, height } = imageBounds;
 
-      const searchArea = {
-        left,
-        top,
-        width: width - width * INITIAL_CROP_AREA_OFFSET,
-        height: height - height * INITIAL_CROP_AREA_OFFSET,
-      };
-
-      this.vviinnCropperLoadImage.emit({ imageBounds, searchArea });
+      this.vviinnCropperLoadImage.emit({
+        imageBounds,
+      });
       this.state.imageBounds = imageBounds;
-      this.state.searchArea = searchArea;
 
       if (
         width / height < SUPPORTED_ASPECT_RATIO ||
@@ -282,11 +319,12 @@ export class VviinnCropper {
 
     this.vviinnCropperCropEnd.emit(cropboxData);
     this.state.searchArea = cropboxData;
-    makeVisualSearchRequest(this.storeName, null);
     this.selectedDetectedObject = null;
+
     this.vviinnImageCrop.emit({
       isTriggeredByVpsWidget: this.showInWidget,
     });
+    makeVisualSearchRequest(this.storeName, null);
   };
 
   private showPreloader = () =>

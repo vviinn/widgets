@@ -9,5 +9,5 @@ export type CropBoxData = {
 
 export type LoadImageEventData = {
   imageBounds: Rectangle;
-  searchArea: Rectangle;
+  searchArea?: Rectangle;
 };

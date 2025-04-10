@@ -159,7 +159,7 @@ export class VviinnResults {
 
   /** Cropper state should be resetted */
   /** @internal */
-  @Event() vviinnResetCropperState: EventEmitter;
+  @Event() vviinnResetCropperState: EventEmitter<TriggerSourceEventData>;
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
@@ -359,8 +359,10 @@ export class VviinnResults {
     const { isTriggeredByVpsWidget } = detail;
     if (this.skipStateChanges(isTriggeredByVpsWidget)) return;
 
-    resetStore(this.storeName);
-    this.vviinnResetCropperState.emit();
+    resetStore(this.storeName, "appStateOnly");
+    this.vviinnResetCropperState.emit({
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
     this.vviinnSelectedFiltersReset.emit({
       isTriggeredByVpsWidget: this.showInWidget,
     });
@@ -441,19 +443,18 @@ export class VviinnResults {
       isTriggeredByVpsWidget: this.showInWidget,
     });
     this.setTextSearch(false, detail.isTriggeredByVpsWidget);
-    resetStore(this.storeName);
+    resetStore(this.storeName, "appStateOnly");
   };
 
   private imageCropHandler = ({ detail }: TriggerSourceEvent) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
-
-    if (this.isTextSearch) {
+    if (this.isTextSearch)
       this.setTextSearch(false, detail.isTriggeredByVpsWidget);
-      this.vviinnSelectedFiltersReset.emit({
-        isTriggeredByVpsWidget: this.showInWidget,
-      });
-      this.state.dynamicFilters = [];
-    }
+
+    this.vviinnSelectedFiltersReset.emit({
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
+    this.state.requestFilters = [];
   };
 
   private widgetCloseHandler = ({
@@ -510,7 +511,7 @@ export class VviinnResults {
   }
 
   disconnectedCallback() {
-    resetStore(this.storeName);
+    resetStore(this.storeName, "all");
 
     document.removeEventListener(
       "vviinnImageUploadStarted",
