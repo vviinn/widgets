@@ -17,9 +17,9 @@ import {
 import {
   FilterOptions,
   getPriceLabel,
+  isSubFilterActive,
   RenderCustomButton,
   RenderFilterButton,
-  showActiveOnSubButton,
 } from "./helpers";
 import {
   ChangedFiltersEventData,
@@ -302,7 +302,7 @@ export class VviinnSelectedFilters {
     filters.forEach((filter) => {
       if (!("values" in filter)) return;
       (filter.values as FilterOptions).forEach(({ value, label, active }) => {
-        if (showActiveOnSubButton(this.requestFilters, value, filter)) {
+        if (isSubFilterActive(this.requestFilters, value, filter)) {
           this.selectedFilterButtons.push(
             RenderFilterButton({
               handleSubFilterSelection: this.handleSubFilterSelection,

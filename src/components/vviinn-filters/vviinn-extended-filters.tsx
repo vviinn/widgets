@@ -23,6 +23,7 @@ import {
   FilterOptions,
   getFilterOptions,
   getPriceLabel,
+  isSubFilterActive,
   RenderFilterButton,
 } from "./helpers";
 import { resources } from "../../locale";
@@ -395,9 +396,10 @@ export class VviinnExtendedFilters {
         {filterOptions
           .slice(0, displayedCount)
           .map(({ value, label, active }) => {
-            const isSelected = this.showActiveOnModalSubButton(
+            const isSelected = isSubFilterActive(
               this.requestFilters,
               value,
+              filter,
             );
 
             return RenderFilterButton({
@@ -438,26 +440,6 @@ export class VviinnExtendedFilters {
       el: this.el,
       isTriggeredByVpsWidget: this.showInWidget,
     });
-  }
-
-  private showActiveOnModalSubButton(
-    requestFilters: RequestDynamicFilterItem[],
-    filterValue: DynamicFilterValue,
-  ) {
-    let active = false;
-    requestFilters.forEach((filter) => {
-      if (
-        filter.values.some(
-          (value) =>
-            value === filterValue ||
-            value === filterValue.interval ||
-            value === filterValue.value,
-        )
-      ) {
-        active = true;
-      }
-    });
-    return active;
   }
 
   private handleMoreOptionsMainClick(column: string) {
