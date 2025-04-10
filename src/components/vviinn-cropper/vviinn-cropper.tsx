@@ -21,7 +21,7 @@ import {
   TriggerSourceEventData,
 } from "../../recommendation/events";
 import { LoadImageEventData } from "./types";
-import { ValidateCropBoxData } from "./helpers";
+import { ValidateCropBoxData } from "./helpers/validateCropBoxData";
 import {
   cropperOptions,
   SUPPORTED_ASPECT_RATIO,
@@ -37,6 +37,7 @@ import {
 } from "../../store/search.store";
 import { getImageSizes } from "../../Image/sizing";
 import { Rectangle } from "../../interfaces/search";
+import { isCropBoxDataSame } from "./helpers/isCropBoxDataSame";
 
 @Component({
   tag: "vviinn-cropper",
@@ -84,6 +85,7 @@ export class VviinnCropper {
   private state?: SearchStore;
   private storeName?: SearchStoreName;
   private disposeStoreListener?: () => void;
+  private startEndCropBoxData?: Rectangle;
 
   connectedCallback() {
     updateGlobalState(this);
@@ -301,6 +303,7 @@ export class VviinnCropper {
       }
       this.cropper = new Cropper(this.imageElement, {
         ...cropperOptions,
+        cropstart: this.cropStart,
         cropend: this.cropEnd,
         ready: () => this.cropper.reset(),
         data,
@@ -314,8 +317,13 @@ export class VviinnCropper {
     }
   }
 
+  private cropStart = () => {
+    this.startEndCropBoxData = this.getCropboxData();
+  };
+
   private cropEnd = () => {
     const cropboxData = this.getCropboxData();
+    if (isCropBoxDataSame(this.startEndCropBoxData, cropboxData)) return;
 
     this.vviinnCropperCropEnd.emit(cropboxData);
     this.state.searchArea = cropboxData;
