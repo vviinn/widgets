@@ -27,7 +27,6 @@ export const RenderCustomButton = ({
         {(buttonType === "image" || buttonType === "crop") &&
           !!imageSrc?.length && (
             <img
-              class="buton-image"
               part="filters-option-image"
               width="24"
               height="24"
