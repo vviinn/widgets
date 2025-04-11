@@ -2,7 +2,7 @@ import { Meta, Story, Canvas } from "@storybook/blocks";
 
 import "./variables.css";
 
-import { vviinnToken, productIdSimilarProducts, productIdCrossSelling } from "../../helpers";
+import { vviinnToken, productIdSimilarProducts } from "../../helpers";
 import "../../components/tabs/styles.css";
 import { clickHandlers } from "../../components"
 
@@ -98,7 +98,7 @@ vviinn-vps-button {
     </div>
     <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
-            <vviinn-vpr-widget id="vviinn-vpr-customization" token={vviinnToken} product-id={productIdCrossSelling} locale="en-US" add-to-basket-show="true" mode="grid">
+            <vviinn-vpr-widget id="vviinn-vpr-customization" token={vviinnToken} product-id={productIdSimilarProducts} locale="en-US" add-to-basket-show="true" mode="grid">
             </vviinn-vpr-widget>
         </div>
     </div>
