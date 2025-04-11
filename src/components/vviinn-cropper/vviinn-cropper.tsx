@@ -37,7 +37,7 @@ import {
 } from "../../store/search.store";
 import { getImageSizes } from "../../Image/sizing";
 import { Rectangle } from "../../interfaces/search";
-import { isCropBoxDataSame } from "./helpers/isCropBoxDataSame";
+import { isCropBoxDataSimilar } from "./helpers/isCropBoxDataSimilar";
 
 @Component({
   tag: "vviinn-cropper",
@@ -323,7 +323,7 @@ export class VviinnCropper {
 
   private cropEnd = () => {
     const cropboxData = this.getCropboxData();
-    if (isCropBoxDataSame(this.startEndCropBoxData, cropboxData)) return;
+    if (isCropBoxDataSimilar(this.startEndCropBoxData, cropboxData)) return;
 
     this.vviinnCropperCropEnd.emit(cropboxData);
     this.state.searchArea = cropboxData;
