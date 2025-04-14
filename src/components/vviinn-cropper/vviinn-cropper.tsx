@@ -216,14 +216,15 @@ export class VviinnCropper {
     const { top, left, width, height } = detail.detectedObject;
 
     if (this.cropper) {
-      const data = this.cropper.getImageData();
-
+      const { width: cropBoxWidth, height: cropBoxHeight } =
+        this.cropper.getImageData();
       const cropBoxData = {
-        left: left * data.width,
-        top: top * data.height,
-        width: width * data.width,
-        height: height * data.height,
+        left: left * cropBoxWidth,
+        top: top * cropBoxHeight,
+        width: width * cropBoxWidth,
+        height: height * cropBoxHeight,
       };
+
       this.cropper.setCropBoxData(ValidateCropBoxData(cropBoxData));
       this.vviinnImageCrop.emit({
         isTriggeredByVpsWidget: this.showInWidget,

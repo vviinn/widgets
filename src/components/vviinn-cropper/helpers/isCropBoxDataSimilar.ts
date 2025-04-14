@@ -3,7 +3,7 @@ import { Rectangle } from "../../../interfaces/search";
 export const isCropBoxDataSimilar = (
   cropBoxData1: Rectangle,
   cropBoxData2: Rectangle,
-  positionThreshold = 0.5,
+  positionPxThreshold = 0.5,
 ) => {
   const { left: x1, top: y1, width: w1, height: h1 } = cropBoxData1;
   const { left: x2, top: y2, width: w2, height: h2 } = cropBoxData2;
@@ -14,9 +14,9 @@ export const isCropBoxDataSimilar = (
   const sizeDiffHeight = Math.abs(h1 - h2);
 
   return (
-    positionDiffX <= positionThreshold &&
-    positionDiffY <= positionThreshold &&
-    sizeDiffWidth <= positionThreshold &&
-    sizeDiffHeight <= positionThreshold
+    positionDiffX <= positionPxThreshold &&
+    positionDiffY <= positionPxThreshold &&
+    sizeDiffWidth <= positionPxThreshold &&
+    sizeDiffHeight <= positionPxThreshold
   );
 };
