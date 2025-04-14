@@ -654,6 +654,7 @@ export class VviinnVpsWidget {
     this.state.image = null;
     this.state.results = [];
     this.state.dynamicFilters = [];
+    this.state.requestFilters = [];
     this.state.detectedObjects = [];
     this.state.searchType = undefined;
   }
@@ -776,9 +777,7 @@ export class VviinnVpsWidget {
               }}
             >
               {this.isResultSlide() && (
-                <div
-                  class={`source-wrapper ${this.state.searchType === "text" ? "text-search-wrapper" : "image-wrapper"}`}
-                >
+                <div class="source-wrapper">
                   {this.state.searchType === "text" ? (
                     <vviinn-text-search
                       token={this.token}

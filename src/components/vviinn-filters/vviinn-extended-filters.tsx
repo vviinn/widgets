@@ -23,6 +23,7 @@ import {
   FilterOptions,
   getFilterOptions,
   getPriceLabel,
+  isSubFilterActive,
   RenderFilterButton,
 } from "./helpers";
 import { resources } from "../../locale";
@@ -69,6 +70,7 @@ import { ResponseDynamicFilterIntervalItem } from "../../interfaces/recommendati
  *
  * @part filters-sub-row - Row of the sub filters.
  * @part filters-option-button - Button of the sub filter.
+ * @part filters-option-image - Image of the sub filter.
  * @part filters-option-color-dot - Color Dot of the sub filter.
  * @part filters-option-text - Text of the sub filter.
  * @part filters-option-icon-wrapper - Icon Wrapper of the sub filter.
@@ -119,7 +121,6 @@ export class VviinnExtendedFilters {
   /** @internal */
   @Event({ bubbles: true, composed: true })
   globalSlotsChanged: EventEmitter<any>;
-
   /** Selected filters should be resetted */
   /** @internal */
   @Event() vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
@@ -129,6 +130,9 @@ export class VviinnExtendedFilters {
 
   private state?: SearchStore;
 
+  private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
+    this.showInWidget !== isTriggeredByVpsWidget;
+
   private getFilters = () =>
     this.innerFilters.length ? this.innerFilters : this.state.dynamicFilters;
 
@@ -137,13 +141,18 @@ export class VviinnExtendedFilters {
     this.selectedMoreOptions = [];
   }
 
-  private resetFiltersState() {
-    this.resetOptionsInteractions();
+  private handleSelectedFiltersReset = ({ detail }: TriggerSourceEvent) => {
+    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.requestFilters = [];
-  }
+    this.innerFilters = [];
+    this.showMore = false;
+    this.resetOptionsInteractions();
+  };
 
-  private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
-    this.showInWidget !== isTriggeredByVpsWidget;
+  private handleCloseModal = () => {
+    this.showMore = false;
+    this.resetOptionsInteractions();
+  };
 
   private replaceSlotsContent() {
     const slots = this.el.querySelectorAll("[slot]");
@@ -157,16 +166,6 @@ export class VviinnExtendedFilters {
     (this.requestFilters.find(({ column }) => isIntervalFilter(column))
       ?.values[0] ?? {}) as components["schemas"]["interval"];
 
-  private handleSelectedFiltersReset = ({ detail }: TriggerSourceEvent) => {
-    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
-    this.resetFiltersState();
-  };
-
-  private handleCloseModal = () => {
-    this.showMore = false;
-    this.resetOptionsInteractions();
-  };
-
   private resetModal = () => {
     triggerResetFilters({
       vviinnFilterTriggered: this.vviinnFilterTriggered,
@@ -178,8 +177,7 @@ export class VviinnExtendedFilters {
       isTriggeredByVpsWidget: this.showInWidget,
     });
 
-    this.resetFiltersState();
-    this.showMore = false;
+    this.handleCloseModal();
   };
 
   private handleExtendedFiltersButtonClicked = ({
@@ -398,9 +396,10 @@ export class VviinnExtendedFilters {
         {filterOptions
           .slice(0, displayedCount)
           .map(({ value, label, active }) => {
-            const isSelected = this.showActiveOnModalSubButton(
+            const isSelected = isSubFilterActive(
               this.requestFilters,
               value,
+              filter,
             );
 
             return RenderFilterButton({
@@ -441,26 +440,6 @@ export class VviinnExtendedFilters {
       el: this.el,
       isTriggeredByVpsWidget: this.showInWidget,
     });
-  }
-
-  private showActiveOnModalSubButton(
-    requestFilters: RequestDynamicFilterItem[],
-    filterValue: DynamicFilterValue,
-  ) {
-    let active = false;
-    requestFilters.forEach((filter) => {
-      if (
-        filter.values.some(
-          (value) =>
-            value === filterValue ||
-            value === filterValue.interval ||
-            value === filterValue.value,
-        )
-      ) {
-        active = true;
-      }
-    });
-    return active;
   }
 
   private handleMoreOptionsMainClick(column: string) {
