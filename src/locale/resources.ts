@@ -58,6 +58,8 @@ export const resources: Resource = {
           apply: "Anwenden",
           resetFilters: "Filter zurücksetzen",
         },
+        imageFilterText: "Bild",
+        cropFilterText: "Bildausschnitt",
       },
       energyLabel: {
         dataSheetText: "Produktdatenblatt",
@@ -116,6 +118,8 @@ export const resources: Resource = {
           apply: "Apply",
           resetFilters: "Reset Filters",
         },
+        imageFilterText: "Image",
+        cropFilterText: "Crop",
       },
       energyLabel: {
         dataSheetText: "Product Data Sheet",

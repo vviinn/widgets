@@ -23,6 +23,8 @@ const filtersSlotNames: string[] = [
   "vviinn-extended-filters-title",
   "vviinn-extended-filters-apply",
   "vviinn-extended-filters-reset",
+  "vviinn-image-filter-text",
+  "vviinn-crop-filter-text",
 ];
 
 export const productCardSlotNames: string[] = [
@@ -137,6 +139,7 @@ export const slotChangeListener = (component: any, element: HTMLElement) => {
           "VVIINN-MODAL",
           "VVIINN-TEXT-SEARCH",
           "VVIINN-EXTENDED-FILTERS",
+          "VVIINN-SELECTED-FILTERS",
         ].includes(elementTagName);
 
         const productCardChildrenTags = ["VVIINN-ENERGY-LABEL"];
