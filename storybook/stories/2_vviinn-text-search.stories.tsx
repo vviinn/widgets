@@ -26,7 +26,6 @@ const Template = (args) => `
       mode="${args.mode}"
       locale="${args.locale}"
       placeholder="${args.placeholder}"
-      save-image-mode="${args.saveImageMode}"
     >
     </vviinn-text-search>
 
@@ -53,7 +52,6 @@ Default.args = {
   token: vviinnToken,
   apiPath: process.env.STORYBOOK_API_PATH,
   searchQuery: "",
-  saveImageMode: "once",
   placeholder: "",
   mode: "extended",
   locale: "en-US",

@@ -17,7 +17,7 @@ import {
 import {
   getFilterOptions,
   RenderFilterButton,
-  showActiveOnSubButton,
+  isSubFilterActive,
 } from "./helpers";
 import { Histogram } from "../vviinn-price-range/vviinn-price-range";
 import {
@@ -44,6 +44,7 @@ import { isIntervalFilter } from "../../filters";
  
  * @part filters-sub-row - Row of the sub filters.
  * @part filters-option-button - Button of the sub filter.
+ * @part filters-option-image - Image of the sub filter.
  * @part filters-option-color-dot - Color Dot of the sub filter.
  * @part filters-option-text - Text of the sub filter.
  * @part filters-option-icon-wrapper - Icon Wrapper of the sub filter.
@@ -266,7 +267,7 @@ export class VviinnFilters {
               <ul class="sub-filters-wrapper" part="filters-footer-list">
                 {!!filterOptions &&
                   filterOptions.map(({ value, label, active }) => {
-                    const isSelected = showActiveOnSubButton(
+                    const isSelected = isSubFilterActive(
                       this.requestFilters,
                       value,
                       this.selectedFilter,

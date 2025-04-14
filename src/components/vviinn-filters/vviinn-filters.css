@@ -339,6 +339,14 @@ vviinn-price-range {
   opacity: 0.5;
 }
 
+.filters-more-modal-button img {
+  box-sizing: border-box;
+  object-fit: cover;
+  object-position: center;
+  border-radius: var(--border-radius-full);
+  border: 1px solid var(--color-border-01);
+}
+
 .filters-modal-actions {
   border-top: 1px solid var(--color-border-01);
   padding: var(--spacing-125);
@@ -411,6 +419,10 @@ vviinn-price-range {
   justify-content: center;
   cursor: pointer;
   padding: var(--spacing-100);
+}
+
+.selected-filters-wrapper > li.hidden {
+  display: none;
 }
 
 .filters-sub-button-selected {

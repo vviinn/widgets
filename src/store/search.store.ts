@@ -43,11 +43,12 @@ import { OnChangeHandler } from "@stencil/store/dist/types";
 
 export type SearchStoreName = "widget" | "components";
 
-export type SearchStore = {
-  token?: string;
+type AppStateGlobalDefaults = {
   excluded?: RequestStaticFilters["excluded"] | null;
   campaignId: string;
+};
 
+type AppStateDefaults = {
   selfSearchId: string | null;
   searchType?: SearchType | null;
   resultLoaded: boolean;
@@ -55,22 +56,29 @@ export type SearchStore = {
   image?: HTMLImageElement | null;
   imageBounds?: Rectangle | null;
   searchArea?: Rectangle | null;
+  croppedImageUrl?: string | null;
   requestFilters: RequestDynamicFilterItem[];
+  loading: boolean;
+  serverError: boolean;
+};
 
+type ReceivedDataDefaults = {
   results: Recommendation[];
   sourceProduct: Recommendation | null;
   dynamicFilters: ResponseDynamicFilterItem[];
   detectedObjects: Rectangle[];
-
-  serverError: boolean;
-  loading: boolean;
 };
 
-const storeDefaults: SearchStore = {
-  token: null,
+export type SearchStore = AppStateGlobalDefaults &
+  AppStateDefaults &
+  ReceivedDataDefaults;
+
+const appStateGlobalDefaults: AppStateGlobalDefaults = {
   excluded: null,
   campaignId: "",
+};
 
+const appStateDefaults: AppStateDefaults = {
   selfSearchId: null,
   searchType: null,
   resultLoaded: false,
@@ -78,15 +86,23 @@ const storeDefaults: SearchStore = {
   image: null,
   imageBounds: null,
   searchArea: null,
+  croppedImageUrl: null,
   requestFilters: [],
+  serverError: false,
+  loading: false,
+};
 
+const receivedDataDefaults: ReceivedDataDefaults = {
   results: [],
   sourceProduct: null,
   dynamicFilters: [],
   detectedObjects: [],
+};
 
-  serverError: false,
-  loading: false,
+const storeDefaults: SearchStore = {
+  ...appStateGlobalDefaults,
+  ...appStateDefaults,
+  ...receivedDataDefaults,
 };
 
 const { state: searchState, onChange: onChangeWidgetState } =
@@ -97,13 +113,48 @@ const { state: componentsState, onChange: onChangeComponentsState } =
 const useStore = (store: SearchStoreName) =>
   store === "widget" ? searchState : componentsState;
 
-export const resetStore = (store: SearchStoreName) => {
+export type ResetMode =
+  | "appStateOnly"
+  | "appStateAndReceivedData"
+  | "all"
+  | "manual";
+
+export const resetStore = (
+  store: SearchStoreName,
+  mode: ResetMode = "appStateAndReceivedData",
+  excludedFields: (keyof SearchStore)[] = [],
+) => {
   const state = useStore(store);
-  Object.assign(state, {
-    ...storeDefaults,
-    campaignId: state.campaignId,
-    excluded: state.excluded,
-  });
+
+  let resetPayload: Partial<SearchStore> = {};
+
+  switch (mode) {
+    case "appStateOnly":
+      resetPayload = { ...appStateDefaults };
+      break;
+
+    case "appStateAndReceivedData":
+      resetPayload = {
+        ...appStateDefaults,
+        ...receivedDataDefaults,
+      };
+      break;
+
+    case "all":
+      resetPayload = { ...storeDefaults };
+      break;
+
+    case "manual":
+      for (const key of excludedFields) {
+        delete (state as any)[key];
+      }
+      return;
+  }
+
+  for (const key of excludedFields) {
+    delete resetPayload[key];
+  }
+  Object.assign(state, resetPayload);
 };
 
 const updateVisualSearchState =
@@ -246,15 +297,25 @@ export const makeVisualSearchRequest = async (
   state.searchType = "image";
   state.loading = true;
 
-  let searchRectangle: Rectangle;
-  const scaled = divideOnSized(state.imageBounds)(state.searchArea);
+  let searchRectangle: Rectangle | null = null;
 
-  searchRectangle = {
-    width: scaled.width,
-    height: scaled.height,
-    left: scaled.left,
-    top: scaled.top,
-  };
+  if (state.searchArea && state.imageBounds) {
+    const scaled = divideOnSized(state.imageBounds)(state.searchArea);
+
+    searchRectangle = {
+      width: scaled.width,
+      height: scaled.height,
+      left: scaled.left,
+      top: scaled.top,
+    };
+  } else if (state.image) {
+    searchRectangle = {
+      width: 1,
+      height: 1,
+      left: 0,
+      top: 0,
+    };
+  }
 
   const body: VisualSearchRequest = {
     requestId: searchId ?? state.selfSearchId,

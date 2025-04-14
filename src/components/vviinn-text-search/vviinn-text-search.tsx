@@ -23,6 +23,7 @@ import {
   DynamicFilterInternalData,
   BasicEventData,
   TriggerSourceEventData,
+  SearchIdEvent,
 } from "../../recommendation/events";
 import i18next from "i18next";
 import { Locale, resources } from "../../locale";
@@ -83,8 +84,6 @@ export class VviinnTextSearch {
   @Prop({ mutable: true }) searchQuery?: string;
   /** Custom placeholder for the text search input */
   @Prop() placeholder?: string = "";
-  /** Save to Local Storage mode for uploaded image */
-  @Prop() saveImageMode?: "once" | "always" | "never" = "once";
 
   /** True, when used inside the widget */
   /** @internal */
@@ -103,6 +102,9 @@ export class VviinnTextSearch {
 
   private isShowPreloader = () =>
     this.state.loading && this.state.searchType === "text";
+
+  private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
+    this.showInWidget !== isTriggeredByVpsWidget;
 
   private isShowRecording = () => this.isRecording;
   private showRecording = () => (this.isRecording = true);
@@ -140,11 +142,9 @@ export class VviinnTextSearch {
     },
   );
 
-  private imageUploadFinishedHandler = () => {
-    if (this.saveImageMode === "never" || this.mode !== "extended") return;
-
-    const image: HTMLImageElement = this.state.image;
-    if (image) localStorage.setItem("cropperImageSrc", image.src);
+  private imageUploadFinishedHandler = ({ detail }: SearchIdEvent) => {
+    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
+    this.searchQuery = "";
   };
 
   connectedCallback() {

@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.157.0](https://github.com/vviinn/widgets/compare/v2.156.4...v2.157.0) (2025-04-14)
+
+
+### Features
+
+* Crop handling for Selected Filters ([3d94a8e](https://github.com/vviinn/widgets/commit/3d94a8e4be1ffeb2e13915a942c21fb856f4dc27))
+* Selected filter for uploaded image ([f52b212](https://github.com/vviinn/widgets/commit/f52b2121a96d2a3124fa979ee2d643aa5bda1d3d))
+
 ### [2.156.4](https://github.com/vviinn/widgets/compare/v2.156.3...v2.156.4) (2025-04-07)
 
 

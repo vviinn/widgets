@@ -4,12 +4,12 @@ import {
   RequestDynamicFilterItem,
 } from "../../../campaign/VPRCampaignService";
 
-export const showActiveOnSubButton = (
+export const isSubFilterActive = (
   requestFilters: RequestDynamicFilterItem[],
   filterValue: DynamicFilterValue,
   selectedFilter: ResponseDynamicFilterItem,
-) => {
-  if (!selectedFilter || !requestFilters) return false;
+): boolean => {
+  if (!requestFilters || !selectedFilter) return false;
 
   const mainFilter = requestFilters.find(
     ({ column }) => column === selectedFilter.column,
@@ -22,7 +22,5 @@ export const showActiveOnSubButton = (
       value === filterValue ||
       value === filterValue.interval ||
       value === filterValue.value,
-  )
-    ? true
-    : false;
+  );
 };
