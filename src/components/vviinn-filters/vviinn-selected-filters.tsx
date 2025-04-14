@@ -178,7 +178,8 @@ export class VviinnSelectedFilters {
     this.resetInnerState();
   };
 
-  private handleImageCrop = () => {
+  private handleImageCrop = ({ detail }: TriggerSourceEvent) => {
+    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.textSearchCustomFilter = null;
   };
 

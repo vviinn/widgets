@@ -23,6 +23,7 @@ import {
   DynamicFilterInternalData,
   BasicEventData,
   TriggerSourceEventData,
+  SearchIdEvent,
 } from "../../recommendation/events";
 import i18next from "i18next";
 import { Locale, resources } from "../../locale";
@@ -102,6 +103,9 @@ export class VviinnTextSearch {
   private isShowPreloader = () =>
     this.state.loading && this.state.searchType === "text";
 
+  private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
+    this.showInWidget !== isTriggeredByVpsWidget;
+
   private isShowRecording = () => this.isRecording;
   private showRecording = () => (this.isRecording = true);
   private hideRecording = () => (this.isRecording = false);
@@ -138,7 +142,8 @@ export class VviinnTextSearch {
     },
   );
 
-  private imageUploadFinishedHandler = () => {
+  private imageUploadFinishedHandler = ({ detail }: SearchIdEvent) => {
+    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.searchQuery = "";
   };
 
