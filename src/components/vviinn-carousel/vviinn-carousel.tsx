@@ -24,11 +24,11 @@ import {
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
 import {
   CAROUSEL_IMAGE_WIDTH_CSS_VAR,
-  CAROUSEL_WIDTH_CSS_VAR,
-  COLUMNS_NUMBER_CSS_VAR,
+  CAROUSEL_CONTENT_WIDTH_CSS_VAR,
   CONTENT_GROUP_CSS_CLASS,
   DEFAULT_COLUMNS_NUMBER,
-  SET_MODE_IMAGE_WIDTH,
+  RESULTS_CALCULATED_COLUMNS_CSS_VAR,
+  SET_MODE_IMAGE_WIDTH_CSS_VAR,
 } from "./constants";
 import { calculateDiscount } from "../../utils/number";
 import { Locale } from "../../locale";
@@ -60,6 +60,7 @@ export class VviinnCarousel {
   @State() setModeAppliedDiscounts: {
     [key: Recommendation["productId"]]: number;
   } = {};
+  @State() columns: number = 0;
 
   @Prop() mode: CarouselMode = "continuity";
   @Prop() currencySign: string;
@@ -81,7 +82,7 @@ export class VviinnCarousel {
   @Prop() imageRatio: number = 1;
   @Prop() addPriceContainer?: boolean = false;
   @Prop() favoriteShow: boolean;
-  @Prop() setItemsAmount?: number;
+  @Prop() setItemsAmount?: number = 4;
   @Prop() isAppended?: boolean = false;
   @Prop() loading?: boolean = false;
   @Prop() hasErrorOnLoad?: boolean = false;
@@ -93,11 +94,10 @@ export class VviinnCarousel {
   /** Event emitted once when the recommendation appears in the viewport */
   @Event({ bubbles: true })
   vviinnProductView: EventEmitter<ProductCardEventData>;
-
-  private columns: number = 0;
-  private resizeObserver: ResizeObserver = new ResizeObserver(() =>
-    this.handleResize(),
-  );
+  private resizeObserver: ResizeObserver = new ResizeObserver(() => {
+    this.handleResize();
+    this.setImageWidthSetMode("100%");
+  });
 
   private isSetMode: boolean;
   private isGridMode: boolean;
@@ -121,8 +121,6 @@ export class VviinnCarousel {
   private mutationObserver = new MutationObserver(() =>
     this.cloneSlottedContent(),
   );
-
-  private handleWindowResize = () => this.setImageWidthSetMode("100%");
 
   private isLastGroup = () =>
     this.isGridMode &&
@@ -173,39 +171,25 @@ export class VviinnCarousel {
     }
   };
 
-  componentWillLoad() {
-    this.isRTL = document.dir === "rtl";
-  }
-
   connectedCallback() {
     this.setItemWidth();
 
     this.isSetMode = this.mode === "set";
     this.isGridMode = this.mode === "grid";
     this.isContinuityMode = this.mode === "continuity";
-    this.columns = this.getColumnsNumber();
-
-    if (this.isSetMode) {
-      window.addEventListener("resize", this.handleWindowResize);
-      this.setModeDiscount = this.setModeDiscountsArray[0];
-      this.setModeMaxDiscount =
-        this.setModeDiscountsArray[this.setModeDiscountsArray.length - 1];
-    }
-    if (this.isSetMode && this.recommendations.length >= this.columns) {
-      this.crossSellingRecommendations = this.recommendations.slice(
-        0,
-        this.columns,
-      );
-    }
   }
 
   disconnectedCallback() {
     this.resizeObserver.disconnect();
-    window.removeEventListener("resize", this.handleWindowResize);
   }
 
   componentDidUpdate() {
     this.replaceSlotsContent();
+  }
+
+  componentWillLoad() {
+    this.isRTL = document.dir === "rtl";
+    this.updateColumnsNumber();
   }
 
   componentDidLoad() {
@@ -220,6 +204,22 @@ export class VviinnCarousel {
       contentNode.addEventListener("scrollend", () => {
         this.activeContentGroup = this.getActiveGroupIndex();
       });
+    }
+  }
+
+  @Watch("recommendations")
+  recommendationsWatcher() {
+    if (this.isSetMode) {
+      this.setModeDiscount = this.setModeDiscountsArray[0];
+      this.setModeMaxDiscount =
+        this.setModeDiscountsArray[this.setModeDiscountsArray.length - 1];
+
+      if (this.recommendations.length >= this.columns) {
+        this.crossSellingRecommendations = this.recommendations.slice(
+          0,
+          this.columns,
+        );
+      }
     }
   }
 
@@ -251,7 +251,7 @@ export class VviinnCarousel {
   }
 
   @Listen("vviinnAddToBasket")
-  async trackAddToBasket({ detail }: ProductCardEvent) {
+  async setModeAddToBasketHandler({ detail }: ProductCardEvent) {
     if (!this.isSetMode) return;
 
     const { productId } = detail;
@@ -280,7 +280,7 @@ export class VviinnCarousel {
   }
 
   private setImageWidthSetMode(width: string) {
-    this.el.style.setProperty(SET_MODE_IMAGE_WIDTH, width);
+    this.el.style.setProperty(SET_MODE_IMAGE_WIDTH_CSS_VAR, width);
   }
 
   private getContentClassMap() {
@@ -295,11 +295,7 @@ export class VviinnCarousel {
   }
 
   private handleResize() {
-    const newColumns = this.getColumnsNumber();
-    if (newColumns !== this.columns) {
-      this.columns = newColumns;
-    }
-
+    this.updateColumnsNumber();
     this.setWidth();
     this.setItemWidth();
   }
@@ -336,7 +332,7 @@ export class VviinnCarousel {
       (parseInt(parentStyles["padding-right"]) +
         parseInt(parentStyles["padding-left"]));
 
-    this.el.style.setProperty(CAROUSEL_WIDTH_CSS_VAR, `${width}px`);
+    this.el.style.setProperty(CAROUSEL_CONTENT_WIDTH_CSS_VAR, `${width}px`);
   }
 
   getParent(): HTMLElement {
@@ -373,30 +369,21 @@ export class VviinnCarousel {
     return Array.from(children).map((c) => c as HTMLElement);
   }
 
-  private getColumnsNumber(): number {
-    if (this.setItemsAmount && this.isSetMode) {
-      return this.setItemsAmount;
+  private updateColumnsNumber(): number {
+    if (this.isSetMode) {
+      this.columns = this.setItemsAmount;
+      return;
     }
 
     const styleSheet = getComputedStyle(this.el);
-
-    const cardWidthRaw = this.showInWidget
-      ? styleSheet.getPropertyValue("--product-card-widget-min-width")
-      : styleSheet.getPropertyValue("--product-card-width") ||
-        styleSheet.getPropertyValue("--product-card-results-min-width");
-
-    const cardWidth = parseFloat(cardWidthRaw);
-    const containerWidth = this.el.getBoundingClientRect().width;
-
-    const gridColumns = Math.floor(containerWidth / cardWidth);
-    const columnsInCss = styleSheet.getPropertyValue(COLUMNS_NUMBER_CSS_VAR);
-    const columnsNumber = parseInt(columnsInCss);
-
-    return gridColumns > 0 && !isNaN(gridColumns) && this.isAppended
-      ? gridColumns
-      : columnsNumber && !isNaN(columnsNumber)
-        ? columnsNumber
-        : DEFAULT_COLUMNS_NUMBER;
+    const calculatedColumnsAmount = parseInt(
+      styleSheet.getPropertyValue(RESULTS_CALCULATED_COLUMNS_CSS_VAR),
+    );
+    if (!calculatedColumnsAmount || isNaN(calculatedColumnsAmount)) {
+      this.columns = DEFAULT_COLUMNS_NUMBER;
+    } else {
+      this.columns = calculatedColumnsAmount;
+    }
   }
 
   private getContentGroups(): HTMLElement[] {
@@ -523,7 +510,6 @@ export class VviinnCarousel {
   }
 
   private renderSkeletonContainer() {
-    const columns = this.getColumnsNumber();
     return (
       <div
         part={CONTENT_GROUP_CSS_CLASS}
@@ -531,7 +517,7 @@ export class VviinnCarousel {
           [CONTENT_GROUP_CSS_CLASS]: true,
         }}
       >
-        {Array.from({ length: columns }).map((_, index) => (
+        {Array.from({ length: this.columns }).map((_, index) => (
           <vviinn-product-card-skeleton
             imageRatio={this.imageRatio}
             key={`skeleton-${index}`}

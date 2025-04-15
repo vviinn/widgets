@@ -62,7 +62,7 @@ export class RecommendationsSidebar {
   @Prop() addPriceContainer?: boolean = false;
   @Prop() showFilters: boolean = false;
   @Prop() setModeDiscounts: string;
-  @Prop() setItemsAmount?: number;
+  @Prop() setItemsAmount?: number = 4;
   @Prop() updateButtonLocation: UpdateButtonLocation;
   @Prop() favoriteShow: boolean = false;
   @Prop() useCarousel: boolean = true;

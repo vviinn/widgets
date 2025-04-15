@@ -1,4 +1,7 @@
 :host {
+  /**
+      * @prop --product-card-calculated-height: Calculated height of Product Card.
+   */
   --vviinn-carousel-columns-internal: var(--vviinn-carousel-columns, 4);
 }
 
@@ -35,14 +38,19 @@
   overflow-y: hidden;
   overflow-x: auto;
   flex-grow: 1;
-  padding-bottom: 16px;
   scrollbar-width: thin;
 }
 
+:host(.continuity) .content {
+  padding-bottom: 16px;
+}
+
+:host(.grid) .content {
+  padding-bottom: 8px;
+}
+
 .content.append-slider {
-  min-height: calc(
-    var(--product-card-width, var(--product-card-results-min-width)) * 1.5
-  );
+  min-height: calc(var(--product-card-calculated-height) + 40px);
 }
 
 .content.error {

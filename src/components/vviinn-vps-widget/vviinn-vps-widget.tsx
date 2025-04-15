@@ -360,7 +360,7 @@ export class VviinnVpsWidget {
         this.uploadSource = "startCamera";
       } catch (error) {
         // TODO: Show error in the UI
-        console.log("Error accessing camera: ", error.message);
+        console.error("Error accessing camera: ", error.message);
         this.resetState();
         this.isCameraInitializing = false;
       }

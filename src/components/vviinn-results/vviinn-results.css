@@ -67,39 +67,6 @@ products.hidden {
   display: none;
 }
 
-@media (max-width: 768px) {
-  :host(.show-in-widget) {
-    align-content: start;
-    position: static;
-    overflow-y: unset;
-    width: 100%;
-    padding-top: 0;
-    margin-top: 24px;
-  }
-
-  .products {
-    position: static;
-    padding: 0;
-    width: unset;
-    grid-gap: 24px 16px;
-    justify-content: center;
-  }
-
-  .nothing-found {
-    position: static;
-    grid-gap: 64px;
-    padding: unset;
-    align-content: start;
-    width: unset;
-  }
-}
-
-@media (max-width: 380px) {
-  .products {
-    grid-gap: 24px 10px;
-  }
-}
-
 .vviinn-results-product-card-actions vviinn-vpr-button::part(button) {
   position: relative;
   display: flex;
@@ -133,28 +100,6 @@ products.hidden {
   grid-column: 1 / -1;
 }
 
-@media screen and (max-width: 768px) {
-  :host {
-    --product-card-width: 155px;
-  }
-}
-
-:host(.matching-discovery) vviinn-recommendations-sidebar::part(items-group) {
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(
-      var(--product-card-width, var(--product-card-results-min-width)),
-      1fr
-    )
-  );
-}
-
-:host(.show-in-widget)
-  vviinn-recommendations-sidebar::part(recommendations-results),
-:host(.show-in-widget) vviinn-recommendations-sidebar::part(items-group) {
-  grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
-}
-
 vviinn-recommendations-sidebar::part(body) {
   border: 1px solid var(--color-border-02);
   border-left: none;
@@ -183,4 +128,56 @@ vviinn-recommendations-sidebar::part(sidebar-header) {
 
 vviinn-recommendations-sidebar::part(sidebar-content) {
   padding: 0;
+}
+
+:host(.matching-discovery) vviinn-recommendations-sidebar::part(items-group) {
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(
+      var(--product-card-width, var(--product-card-results-min-width)),
+      1fr
+    )
+  );
+}
+
+:host(.show-in-widget)
+  vviinn-recommendations-sidebar::part(recommendations-results),
+:host(.show-in-widget) vviinn-recommendations-sidebar::part(items-group) {
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(var(--product-card-widget-min-width), 1fr)
+  );
+}
+
+@media (max-width: 768px) {
+  :host(.show-in-widget) {
+    align-content: start;
+    position: static;
+    overflow-y: unset;
+    width: 100%;
+    padding-top: 0;
+    margin-top: 24px;
+  }
+
+  .products {
+    position: static;
+    padding: 0;
+    width: unset;
+    row-gap: 24px;
+    justify-content: center;
+  }
+
+  .nothing-found {
+    position: static;
+    grid-gap: 64px;
+    padding: unset;
+    align-content: start;
+    width: unset;
+  }
+}
+
+@media (max-width: 380px) {
+  .products {
+    column-gap: 10px;
+  }
 }
