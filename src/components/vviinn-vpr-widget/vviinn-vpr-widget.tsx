@@ -42,6 +42,7 @@ import {
   ProductEvent,
   ResultEventType,
   ChangedFiltersEventData,
+  TriggerSourceEventData,
 } from "../../recommendation/events";
 import {
   createWidgetEvent,
@@ -256,6 +257,9 @@ export class VviinnVprWidget implements ComponentInterface {
   @Event({ bubbles: true })
   vviinnWidgetClose: EventEmitter<BasicEventData>;
   /** @internal */
+  @Event({ bubbles: true })
+  vviinnOneClickDiscoveryClosed: EventEmitter<TriggerSourceEventData>;
+  /** @internal */
   @Event() sourceProductReceived: EventEmitter<Recommendation>;
 
   private productIds: string[];
@@ -343,6 +347,9 @@ export class VviinnVprWidget implements ComponentInterface {
   @Watch("closed")
   trackWidgetClose() {
     if (!this.closed) return;
+    this.vviinnOneClickDiscoveryClosed.emit({
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
     this.vviinnWidgetClose.emit(this.getBasicEventData());
     this.trackWidgetEvent("close");
   }

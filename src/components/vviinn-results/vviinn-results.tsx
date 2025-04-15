@@ -498,9 +498,7 @@ export class VviinnResults {
     this.state.requestFilters = [];
   };
 
-  private widgetCloseHandler = ({
-    detail,
-  }: TextSearchEvent | TriggerSourceEvent) => {
+  private oneClickDiscoveryClosedHandler = ({ detail }: TriggerSourceEvent) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.resetDiscoveryAppendIndexes();
   };
@@ -542,7 +540,10 @@ export class VviinnResults {
     );
 
     document.addEventListener("vviinnImageCrop", this.imageCropHandler);
-    document.addEventListener("vviinnWidgetClose", this.widgetCloseHandler);
+    document.addEventListener(
+      "vviinnOneClickDiscoveryClosed",
+      this.oneClickDiscoveryClosedHandler,
+    );
 
     !!this.searchId && makeVisualSearchRequest(this.storeName, this.searchId);
     this.getResultsByCategory();
@@ -575,7 +576,10 @@ export class VviinnResults {
     );
 
     document.removeEventListener("vviinnImageCrop", this.imageCropHandler);
-    document.removeEventListener("vviinnWidgetClose", this.widgetCloseHandler);
+    document.removeEventListener(
+      "vviinnOneClickDiscoveryClosed",
+      this.oneClickDiscoveryClosedHandler,
+    );
     this.disposeStoreListener?.();
   }
 

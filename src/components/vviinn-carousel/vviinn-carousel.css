@@ -41,12 +41,9 @@
   scrollbar-width: thin;
 }
 
-:host(.continuity) .content {
-  padding-bottom: 16px;
-}
-
+:host(.continuity) .content,
 :host(.grid) .content {
-  padding-bottom: 8px;
+  padding-bottom: 16px;
 }
 
 .content.append-slider {
