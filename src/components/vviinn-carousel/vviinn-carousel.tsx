@@ -127,6 +127,8 @@ export class VviinnCarousel {
     this.activeContentGroup === this.getContentGroups().length - 1;
 
   private isFirstGroup = () => this.isGridMode && this.activeContentGroup === 0;
+  private isEmptyResults = () =>
+    this.hasErrorOnLoad || (this.recommendations.length === 0 && !this.loading);
 
   private updateCard = (
     productId: string,
@@ -286,11 +288,18 @@ export class VviinnCarousel {
   private getContentClassMap() {
     return {
       content: true,
-      "append-slider": this.isAppended,
-      error: this.hasErrorOnLoad,
       [this.moveDirection]: true,
       [this.mode]: true,
       "show-scrollbar": this.isSetMode ? false : this.showScroll,
+    };
+  }
+
+  private getBodyClassMap() {
+    return {
+      body: true,
+      "append-slider": this.isAppended,
+      loading: this.loading,
+      "empty-results": this.isEmptyResults(),
     };
   }
 
@@ -563,7 +572,7 @@ export class VviinnCarousel {
   render() {
     return (
       <Host class={this.getClassMap()}>
-        <div class={{ body: true, ...this.getClassMap() }}>
+        <div class={{ ...this.getClassMap(), ...this.getBodyClassMap() }}>
           {this.isSetMode && this.crossSellingRecommendations.length > 0 && (
             <vviinn-product-card
               class="set-mode product-card--source"

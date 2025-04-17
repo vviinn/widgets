@@ -148,6 +148,7 @@ export class RecommendationsSidebar {
     return {
       [this.position]: true,
       [this.sidebarState]: true,
+      "no-carousel": !this.useCarousel,
       "no-fixed": this.showInCustomContainer,
       appended: this.isAppended,
       loading: this.showLoadingClass,

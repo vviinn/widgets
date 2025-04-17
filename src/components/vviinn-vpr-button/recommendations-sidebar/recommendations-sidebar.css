@@ -26,7 +26,7 @@
   height: auto;
 }
 
-:host(.no-fixed.appended.loading) {
+:host(.no-fixed.no-carousel.appended.loading) {
   min-height: calc((var(--product-card-calculated-height) * 3) + 48px);
 }
 
