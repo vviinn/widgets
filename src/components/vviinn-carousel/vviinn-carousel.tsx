@@ -61,6 +61,7 @@ export class VviinnCarousel {
     [key: Recommendation["productId"]]: number;
   } = {};
   @State() columns: number = 0;
+  @State() showContent: boolean = false;
 
   @Prop() mode: CarouselMode = "continuity";
   @Prop() currencySign: string;
@@ -238,6 +239,17 @@ export class VviinnCarousel {
     });
   }
 
+  @Watch("loading")
+  onLoadingChange(newValue: boolean) {
+    if (!newValue) {
+      setTimeout(() => {
+        this.showContent = true;
+      }, 200);
+    } else {
+      this.showContent = false;
+    }
+  }
+
   @Listen("vviinnCrossSellingClick")
   crossSellingClickListener({ detail }: CrossSellingClickEvent) {
     const { animationInterval, productData } = detail;
@@ -298,7 +310,6 @@ export class VviinnCarousel {
     return {
       body: true,
       "append-slider": this.isAppended,
-      loading: this.loading,
       "empty-results": this.isEmptyResults(),
     };
   }
@@ -435,7 +446,9 @@ export class VviinnCarousel {
   }
 
   private showArrowButtons(): boolean {
-    return !this.loading && !!this.recommendations?.length && !this.isSetMode;
+    return (
+      this.showContent && !!this.recommendations?.length && !this.isSetMode
+    );
   }
 
   private getClassMap() {
@@ -506,7 +519,7 @@ export class VviinnCarousel {
   }
 
   private renderGrid() {
-    return this.loading
+    return this.loading || !this.showContent
       ? this.renderSkeletonContainer()
       : this.renderSliderContent();
   }

@@ -13,7 +13,7 @@
 }
 
 .body.append-slider {
-  min-height: calc(var(--product-card-calculated-height) + 20px);
+  min-height: calc(var(--product-card-calculated-height) + 16px);
 }
 
 .body.append-slider.empty-results {

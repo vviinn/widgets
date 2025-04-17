@@ -140,7 +140,7 @@ export class RecommendationsSidebar {
     } else {
       this.loadingClassTimeout = setTimeout(() => {
         this.showLoadingClass = false;
-      }, 600);
+      }, 500);
     }
   }
 

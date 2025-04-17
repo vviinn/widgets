@@ -157,7 +157,7 @@
 }
 
 @media (max-width: 768px) {
-  .recommendations-results.recommendations-grid {
+  :host(.show-in-widget) .recommendations-results.recommendations-grid {
     width: unset;
     grid-gap: 24px 16px;
     justify-content: center;

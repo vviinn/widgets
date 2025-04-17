@@ -715,6 +715,7 @@ export class VviinnVprWidget implements ComponentInterface {
           loaded: true,
           empty: this.recommendations.length == 0,
           [this.mode]: true,
+          "show-in-widget": this.showInWidget,
         }}
         aria-hidden="false"
       >
