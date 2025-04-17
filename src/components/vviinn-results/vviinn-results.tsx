@@ -583,6 +583,7 @@ export class VviinnResults {
       this.oneClickDiscoveryClosedHandler,
     );
     this.disposeStoreListener?.();
+    this.resizeObserver.disconnect();
   }
 
   @Watch("textSearchQuery")
