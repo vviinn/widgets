@@ -153,7 +153,7 @@ export class VviinnVprButton {
   @Prop() appendSidebarToElement: HTMLElement;
   /** ID of an HTML element that you want to attach the sidebar  */
   /** @internal */
-  @Prop() appendSidebarTo: string;
+  @Prop() appendSidebarToId: string;
   /** One click Discovery mode*/
   /** @internal */
   @Prop() oneClickDiscoveryMode?: OneClickDiscoveryMode = "standalone";
@@ -210,9 +210,9 @@ export class VviinnVprButton {
   componentWillLoad() {
     if (this.appendSidebarToElement) {
       this.targetAppendSidebarTo = this.appendSidebarToElement;
-    } else if (this.appendSidebarTo) {
+    } else if (this.appendSidebarToId) {
       this.targetAppendSidebarTo = document.getElementById(
-        this.appendSidebarTo,
+        this.appendSidebarToId,
       );
     }
   }
@@ -239,7 +239,7 @@ export class VviinnVprButton {
     return (
       <Host
         onClick={(): void => {
-          if (this.appendSidebarTo && !this.targetAppendSidebarTo) {
+          if (this.appendSidebarToId && !this.targetAppendSidebarTo) {
             setTimeout(() => {
               this.handleClick();
             }, 250);

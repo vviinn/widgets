@@ -14,10 +14,6 @@
   width: 100vw;
 }
 
-:host(.open) {
-  background: rgba(0, 0, 0, 0.2);
-}
-
 :host(.bottom) {
   flex-direction: column;
   justify-content: end;
@@ -28,6 +24,10 @@
   display: block;
   width: 100%;
   height: auto;
+}
+
+:host(.no-fixed.appended.loading) {
+  min-height: calc((var(--product-card-calculated-height) * 3) + 48px);
 }
 
 :host(.right) {

@@ -9,6 +9,7 @@ import {
   Event,
   EventEmitter,
   Fragment,
+  Watch,
 } from "@stencil/core";
 import { CrossIcon } from "../../vviinn-icons";
 import { CarouselMode } from "../../vviinn-carousel/vviinn-carousel";
@@ -87,6 +88,14 @@ export class RecommendationsSidebar {
 
   @State() sidebarState: SidebarState = "idle";
   @State() sourceProduct?: Recommendation;
+  @State() showLoadingClass = false;
+
+  @State() recommendationsLoading: boolean = false;
+
+  private setRecommendationsLoading = (loading: boolean) => {
+    this.recommendationsLoading = loading;
+  };
+  private loadingClassTimeout: ReturnType<typeof setTimeout>;
 
   @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
 
@@ -123,11 +132,25 @@ export class RecommendationsSidebar {
     this.sourceProduct = event.detail;
   }
 
+  @Watch("recommendationsLoading")
+  handleLoadingChange(loading: boolean) {
+    if (loading) {
+      this.showLoadingClass = true;
+      clearTimeout(this.loadingClassTimeout);
+    } else {
+      this.loadingClassTimeout = setTimeout(() => {
+        this.showLoadingClass = false;
+      }, 600);
+    }
+  }
+
   private getClassMap() {
     return {
       [this.position]: true,
       [this.sidebarState]: true,
       "no-fixed": this.showInCustomContainer,
+      appended: this.isAppended,
+      loading: this.showLoadingClass,
     };
   }
 
@@ -155,6 +178,10 @@ export class RecommendationsSidebar {
         widgetElement.appendChild(childClone);
       }
     });
+  }
+
+  disconnectedCallback() {
+    clearTimeout(this.loadingClassTimeout);
   }
 
   render() {
@@ -227,6 +254,8 @@ export class RecommendationsSidebar {
               favoriteShow={this.favoriteShow}
               isAppended={this.isAppended}
               showInWidget={this.showInWidget}
+              recommendationsLoading={this.recommendationsLoading}
+              setRecommendationsLoading={this.setRecommendationsLoading}
             />
           </main>
         </aside>

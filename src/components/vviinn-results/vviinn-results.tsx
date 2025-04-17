@@ -227,6 +227,8 @@ export class VviinnResults {
   /** ID for performing text search */
   /** @internal */
   @Prop() textSearchRequestId?: string;
+  /** @internal */
+  @Prop() scrollableModalBody?: HTMLElement;
 
   @State() innerTextSearchQuery: string;
   @State() innerTextSearchRequestId: string;
@@ -763,7 +765,12 @@ export class VviinnResults {
         const appendedContainer = this.el.shadowRoot.getElementById(
           "one-click-discovery-append",
         );
-        const scrollableContainer = this.showInWidget ? this.el : window;
+
+        const isMobile = window.matchMedia("(max-width: 768px)").matches;
+        const scrollableElement = isMobile ? this.scrollableModalBody : this.el;
+        const scrollableContainer = this.showInWidget
+          ? scrollableElement
+          : window;
 
         scrollableContainer.scrollTo({
           top: appendedContainer.offsetTop,
@@ -815,7 +822,7 @@ export class VviinnResults {
               productId={p.productId}
               addStyle={false}
               sidebarTitle=""
-              appendSidebarTo={
+              appendSidebarToId={
                 isOneClickDiscoveryAppendMode
                   ? "one-click-discovery-append"
                   : undefined

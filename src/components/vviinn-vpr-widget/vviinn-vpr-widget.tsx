@@ -62,6 +62,7 @@ import {
 } from "../../campaign/VPRCampaignService";
 import { CrossSellingResponse } from "../../campaign/VCSCampaignService";
 import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
+import { RESULTS_CALCULATED_COLUMNS_CSS_VAR } from "../vviinn-carousel/constants";
 
 export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
 
@@ -207,11 +208,14 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() isAppended?: boolean = false;
   /** @internal */
   @Prop() showInWidget: boolean = false;
+  /** @internal */
+  @Prop({ mutable: true }) recommendationsLoading?: boolean = false;
+  /** @internal */
+  @Prop() setRecommendationsLoading?: (loading: boolean) => void;
 
   @State() recommendations: Recommendation[] = [];
   @State() dynamicFilters: ResponseDynamicFilterItem[] = [];
   @State() sourceProduct: Recommendation | null = null;
-  @State() recommendationsLoading: boolean = false;
   @State() hasErrorOnLoad: boolean = false;
   @State() updatingAllCards: boolean = false;
   @State() updatedCardsAmount: number = 0;
@@ -270,6 +274,10 @@ export class VviinnVprWidget implements ComponentInterface {
   private isGridMode: boolean;
   private requestDynamicFilters: RequestDynamicFilterItem[] = [];
   uiSessionId: string;
+  private setLoading = (loading: boolean) => {
+    this.recommendationsLoading = loading;
+    this.setRecommendationsLoading?.(loading);
+  };
 
   private getBasicEventData(): BasicEventData {
     return {
@@ -520,7 +528,7 @@ export class VviinnVprWidget implements ComponentInterface {
 
   private async getRecommendations() {
     if (this.productId === undefined || globalState.token === undefined) return;
-    this.recommendationsLoading = true;
+    this.setLoading(true);
     const campaignType =
       this.campaignType.length > 0 ? this.campaignType : "VPR";
 
@@ -548,11 +556,11 @@ export class VviinnVprWidget implements ComponentInterface {
           this.handleError(error);
           this.vviinnNoResult.emit(this.getBasicEventData());
           this.vviinnRecommendationsLoaded.emit();
-          this.recommendationsLoading = false;
+          this.setLoading(false);
         },
         (data) => {
           this.handleRecommendationsSuccess(data);
-          this.recommendationsLoading = false;
+          this.setLoading(false);
         },
       ),
     );
@@ -603,6 +611,98 @@ export class VviinnVprWidget implements ComponentInterface {
       <link href={this.cssUrl} rel="stylesheet" />
     ) : (
       ""
+    );
+  }
+
+  private renderRecommendation(
+    recommendation: Recommendation,
+    index: number,
+  ): HTMLVviinnProductCardElement {
+    return (
+      <vviinn-product-card
+        currency={globalState.currencySign}
+        pricePrefix={globalState.pricePrefix}
+        locale={globalState.locale}
+        productId={recommendation.productId}
+        productTitle={recommendation.title}
+        productType={recommendation.productType}
+        deeplink={recommendation.deeplink}
+        image={recommendation.image.thumbnail}
+        brand={recommendation.brand}
+        imageWidth={this.imageWidth}
+        imageRatio={this.imageRatio}
+        price={recommendation.price.actual}
+        salePrice={recommendation.price.sale}
+        basePrice={recommendation.basePrice?.actual}
+        baseSalePrice={recommendation.basePrice?.sale}
+        energyCertifications={recommendation.energyCertifications}
+        addPriceContainer={this.addPriceContainer}
+        responsive={this.isGridMode}
+        addToBasketShow={this.addToBasketShow}
+        campaignTypeId={this.campaignType}
+        index={index}
+        widgetElementId={this.id}
+        widgetVersion={version}
+        setMode={this.isSetMode}
+        customLabels={getCustomLabels(recommendation)}
+        favoriteShow={this.favoriteShow}
+      />
+    );
+  }
+
+  private renderResults() {
+    const styleSheet = getComputedStyle(this.el);
+    const calculatedColumnsAmount = parseInt(
+      styleSheet.getPropertyValue(RESULTS_CALCULATED_COLUMNS_CSS_VAR),
+    );
+    return (
+      <div
+        class={`recommendations-results recommendations-${this.mode}`}
+        part="recommendations-results"
+      >
+        {this.recommendationsLoading
+          ? Array.from({ length: calculatedColumnsAmount * 3 }).map(
+              (_, index) => (
+                <vviinn-product-card-skeleton
+                  imageRatio={this.imageRatio}
+                  key={`skeleton-${index}`}
+                />
+              ),
+            )
+          : this.recommendations.map((r, i) => this.renderRecommendation(r, i))}
+      </div>
+    );
+  }
+
+  private renderCarousel(): HTMLVviinnCarouselElement {
+    return (
+      <vviinn-carousel
+        currencySign={globalState.currencySign}
+        pricePrefix={globalState.pricePrefix}
+        locale={globalState.locale}
+        mode={this.mode as CarouselMode}
+        campaignTypeId={this.campaignType}
+        imageWidth={this.imageWidth}
+        showScroll={this.showScroll}
+        recommendations={this.recommendations}
+        sourceProduct={this.sourceProduct}
+        widgetElementId={this.id}
+        widgetVersion={version}
+        gridArrowsDynamic={this.gridArrowsDynamic}
+        addToBasketShow={this.addToBasketShow}
+        addPriceContainer={this.addPriceContainer}
+        updatingAllCards={this.updatingAllCards}
+        updateButtonLocation={this.updateButtonLocation}
+        replaceSlotsContent={this.replaceSlotsContent.bind(this)}
+        setModeDiscountsArray={this.setModeDiscountsArray}
+        imageRatio={this.imageRatio}
+        favoriteShow={this.favoriteShow}
+        setItemsAmount={this.setItemsAmount}
+        loading={this.recommendationsLoading}
+        isAppended={this.isAppended}
+        hasErrorOnLoad={this.hasErrorOnLoad}
+        showInWidget={this.showInWidget}
+      ></vviinn-carousel>
     );
   }
 
@@ -688,85 +788,6 @@ export class VviinnVprWidget implements ComponentInterface {
             )}
         </Fragment>
       </Host>
-    );
-  }
-
-  private renderRecommendation(
-    recommendation: Recommendation,
-    index: number,
-  ): HTMLVviinnProductCardElement {
-    return (
-      <vviinn-product-card
-        currency={globalState.currencySign}
-        pricePrefix={globalState.pricePrefix}
-        locale={globalState.locale}
-        productId={recommendation.productId}
-        productTitle={recommendation.title}
-        productType={recommendation.productType}
-        deeplink={recommendation.deeplink}
-        image={recommendation.image.thumbnail}
-        brand={recommendation.brand}
-        imageWidth={this.imageWidth}
-        imageRatio={this.imageRatio}
-        price={recommendation.price.actual}
-        salePrice={recommendation.price.sale}
-        basePrice={recommendation.basePrice?.actual}
-        baseSalePrice={recommendation.basePrice?.sale}
-        energyCertifications={recommendation.energyCertifications}
-        addPriceContainer={this.addPriceContainer}
-        responsive={this.isGridMode}
-        addToBasketShow={this.addToBasketShow}
-        campaignTypeId={this.campaignType}
-        index={index}
-        widgetElementId={this.id}
-        widgetVersion={version}
-        setMode={this.isSetMode}
-        customLabels={getCustomLabels(recommendation)}
-        favoriteShow={this.favoriteShow}
-      />
-    );
-  }
-
-  private renderResults() {
-    return (
-      <div
-        class={`recommendations-results recommendations-${this.mode}`}
-        part="recommendations-results"
-      >
-        {this.recommendations.map((r, i) => this.renderRecommendation(r, i))}
-      </div>
-    );
-  }
-
-  private renderCarousel(): HTMLVviinnCarouselElement {
-    return (
-      <vviinn-carousel
-        currencySign={globalState.currencySign}
-        pricePrefix={globalState.pricePrefix}
-        locale={globalState.locale}
-        mode={this.mode as CarouselMode}
-        campaignTypeId={this.campaignType}
-        imageWidth={this.imageWidth}
-        showScroll={this.showScroll}
-        recommendations={this.recommendations}
-        sourceProduct={this.sourceProduct}
-        widgetElementId={this.id}
-        widgetVersion={version}
-        gridArrowsDynamic={this.gridArrowsDynamic}
-        addToBasketShow={this.addToBasketShow}
-        addPriceContainer={this.addPriceContainer}
-        updatingAllCards={this.updatingAllCards}
-        updateButtonLocation={this.updateButtonLocation}
-        replaceSlotsContent={this.replaceSlotsContent.bind(this)}
-        setModeDiscountsArray={this.setModeDiscountsArray}
-        imageRatio={this.imageRatio}
-        favoriteShow={this.favoriteShow}
-        setItemsAmount={this.setItemsAmount}
-        loading={this.recommendationsLoading}
-        isAppended={this.isAppended}
-        hasErrorOnLoad={this.hasErrorOnLoad}
-        showInWidget={this.showInWidget}
-      ></vviinn-carousel>
     );
   }
 }

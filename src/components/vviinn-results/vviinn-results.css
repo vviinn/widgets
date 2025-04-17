@@ -149,6 +149,12 @@ vviinn-recommendations-sidebar::part(sidebar-content) {
   );
 }
 
+@media screen and (max-width: 768px) {
+  :host {
+    --product-card-width: 155px;
+  }
+}
+
 @media (max-width: 768px) {
   :host(.show-in-widget) {
     align-content: start;

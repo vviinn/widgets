@@ -202,6 +202,7 @@ export class VviinnVpsWidget {
   @State() products: Recommendation[] = [];
   @State() searchQuery: string = "";
   @State() requestId: string = "";
+  @State() modalBody?: HTMLElement;
 
   @State() isCameraInitializing: boolean = false;
   @State() isCameraEnabled: boolean = false;
@@ -416,6 +417,18 @@ export class VviinnVpsWidget {
     }
   }
 
+  @Watch("slidePosition")
+  slidePositionWatcher() {
+    if (this.slidePosition === 1) {
+      const root = this.el.shadowRoot.querySelector("vviinn-overlayed-modal");
+      const overlay = root.shadowRoot.querySelector("vviinn-overlay");
+      const modal = overlay.querySelector("vviinn-modal");
+      this.modalBody = modal.shadowRoot.querySelector(".body");
+      this.modalBody.scrollTop = 0;
+      this.stopStreamTracks();
+    }
+  }
+
   @Listen("widgetTextSearchFinished")
   textSearchFinishedHandler({ detail }: TextSearchEvent) {
     this.isTextSearch = true;
@@ -547,14 +560,7 @@ export class VviinnVpsWidget {
       this.resetState();
       return;
     }
-
     this.slidePosition = 1;
-    const root = this.el.shadowRoot.querySelector("vviinn-overlayed-modal");
-    const overlay = root.shadowRoot.querySelector("vviinn-overlay");
-    const modal = overlay.querySelector("vviinn-modal");
-    const modalBody = modal.shadowRoot.querySelector(".body");
-    modalBody.scrollTop = 0;
-    this.stopStreamTracks();
   }
 
   private renderButtons() {
@@ -859,6 +865,7 @@ export class VviinnVpsWidget {
                   }
                   oneClickDiscoveryCampaigns={this.oneClickDiscoveryCampaigns}
                   parentSlots={[...this.parentSlots, ...this.slots]}
+                  scrollableModalBody={this.modalBody}
                 />
               )}
             </vviinn-slide>
