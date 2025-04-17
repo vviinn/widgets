@@ -1,4 +1,7 @@
 :host {
+  /**
+      * @prop --product-card-calculated-height: Calculated height of Product Card.
+   */
   --vviinn-carousel-columns-internal: var(--vviinn-carousel-columns, 4);
 }
 
@@ -7,6 +10,14 @@
   position: relative;
   width: var(--vviinn-carousel-content-width);
   flex-direction: column;
+}
+
+.body.append-slider {
+  min-height: calc(var(--product-card-calculated-height) + 16px);
+}
+
+.body.append-slider.empty-results {
+  min-height: unset;
 }
 
 .bullets {
@@ -35,8 +46,12 @@
   overflow-y: hidden;
   overflow-x: auto;
   flex-grow: 1;
-  padding-bottom: 16px;
   scrollbar-width: thin;
+}
+
+:host(.continuity) .content,
+:host(.grid) .content {
+  padding-bottom: 16px;
 }
 
 .content:not(.show-scrollbar),
@@ -122,12 +137,6 @@ content. .content:not(.show-scrollbar)::-webkit-scrollbar,
   min-width: 100%;
 }
 
-@media (max-width: 480px) {
-  .items-group {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
 .body.set {
   max-width: 100%;
   justify-content: space-between;
@@ -144,6 +153,12 @@ content. .content:not(.show-scrollbar)::-webkit-scrollbar,
 @media (max-width: 768px) {
   .body.set {
     gap: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .items-group {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 

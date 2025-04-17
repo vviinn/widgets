@@ -9,6 +9,7 @@ import {
   Event,
   EventEmitter,
   Fragment,
+  Watch,
 } from "@stencil/core";
 import { CrossIcon } from "../../vviinn-icons";
 import { CarouselMode } from "../../vviinn-carousel/vviinn-carousel";
@@ -45,7 +46,7 @@ export class RecommendationsSidebar {
   @Prop() campaignType: CampaignName;
   @Prop() color: string;
   @Prop() imageWidth: number = 300;
-  @Prop() imageRatio: number;
+  @Prop() imageRatio: number = 1;
   @Prop() cssUrl: string | null;
   @Prop() noResultText: string;
   @Prop() noResultShow: boolean;
@@ -62,10 +63,11 @@ export class RecommendationsSidebar {
   @Prop() addPriceContainer?: boolean = false;
   @Prop() showFilters: boolean = false;
   @Prop() setModeDiscounts: string;
-  @Prop() setItemsAmount?: number;
+  @Prop() setItemsAmount?: number = 4;
   @Prop() updateButtonLocation: UpdateButtonLocation;
   @Prop() favoriteShow: boolean = false;
   @Prop() useCarousel: boolean = true;
+  @Prop() showInWidget: boolean = false;
 
   /** @internal */
   @Prop() apiPath: string;
@@ -81,9 +83,19 @@ export class RecommendationsSidebar {
   @Prop() showingInButton: boolean;
   /** @internal */
   @Prop() showInModal: boolean = false;
+  /** @internal */
+  @Prop() isAppended: boolean = false;
 
   @State() sidebarState: SidebarState = "idle";
   @State() sourceProduct?: Recommendation;
+  @State() showLoadingClass = false;
+
+  @State() recommendationsLoading: boolean = false;
+
+  private setRecommendationsLoading = (loading: boolean) => {
+    this.recommendationsLoading = loading;
+  };
+  private loadingClassTimeout: ReturnType<typeof setTimeout>;
 
   @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
 
@@ -120,11 +132,26 @@ export class RecommendationsSidebar {
     this.sourceProduct = event.detail;
   }
 
+  @Watch("recommendationsLoading")
+  handleLoadingChange(loading: boolean) {
+    if (loading) {
+      this.showLoadingClass = true;
+      clearTimeout(this.loadingClassTimeout);
+    } else {
+      this.loadingClassTimeout = setTimeout(() => {
+        this.showLoadingClass = false;
+      }, 500);
+    }
+  }
+
   private getClassMap() {
     return {
       [this.position]: true,
       [this.sidebarState]: true,
+      "no-carousel": !this.useCarousel,
       "no-fixed": this.showInCustomContainer,
+      appended: this.isAppended,
+      loading: this.showLoadingClass,
     };
   }
 
@@ -152,6 +179,10 @@ export class RecommendationsSidebar {
         widgetElement.appendChild(childClone);
       }
     });
+  }
+
+  disconnectedCallback() {
+    clearTimeout(this.loadingClassTimeout);
   }
 
   render() {
@@ -222,6 +253,10 @@ export class RecommendationsSidebar {
               updateButtonLocation={this.updateButtonLocation}
               addPriceContainer={this.addPriceContainer}
               favoriteShow={this.favoriteShow}
+              isAppended={this.isAppended}
+              showInWidget={this.showInWidget}
+              recommendationsLoading={this.recommendationsLoading}
+              setRecommendationsLoading={this.setRecommendationsLoading}
             />
           </main>
         </aside>

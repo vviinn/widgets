@@ -76,6 +76,7 @@ import { findSlotElements, getSlotNames } from "../../dom";
 import { OneClickDiscoveryResultsMode } from "../../widget/types";
 import { RESULTS_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
 import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
+import { RESULTS_CALCULATED_COLUMNS_CSS_VAR } from "../vviinn-carousel/constants";
 
 /**
  * @part product-card - Product Card itself.
@@ -226,6 +227,8 @@ export class VviinnResults {
   /** ID for performing text search */
   /** @internal */
   @Prop() textSearchRequestId?: string;
+  /** @internal */
+  @Prop() scrollableModalBody?: HTMLElement;
 
   @State() innerTextSearchQuery: string;
   @State() innerTextSearchRequestId: string;
@@ -240,6 +243,10 @@ export class VviinnResults {
   private state?: SearchStore;
   private storeName?: SearchStoreName;
   private disposeStoreListener?: () => void;
+  private resizeObserver: ResizeObserver = new ResizeObserver(() => {
+    this.calculateColumns();
+    this.calculateCardHeight();
+  });
   private setTextSearch = (
     isTriggeredByText: boolean,
     isTriggeredByVpsWidget = false,
@@ -251,6 +258,36 @@ export class VviinnResults {
   private initResultEvents = () => {
     this.state.resultLoaded = false;
     this.state.resultViewed = false;
+  };
+
+  private calculateColumns = () => {
+    const container = this.el.shadowRoot?.querySelector(".products");
+    if (!container) return 0;
+
+    const cards = Array.from(container.querySelectorAll("vviinn-product-card"));
+    if (cards.length === 0) return 0;
+
+    const firstRowTop = cards[0].offsetTop;
+
+    const columns = cards.filter(
+      (card) => card.offsetTop === firstRowTop,
+    ).length;
+
+    this.el.style.setProperty(
+      RESULTS_CALCULATED_COLUMNS_CSS_VAR,
+      columns.toString(),
+    );
+  };
+
+  private calculateCardHeight = () => {
+    const firstCard = this.el.shadowRoot.querySelector("vviinn-product-card");
+    if (firstCard) {
+      const height = firstCard.getBoundingClientRect().height;
+      this.el.style.setProperty(
+        "--product-card-calculated-height",
+        `${height}px`,
+      );
+    }
   };
 
   /** @internal */
@@ -315,6 +352,12 @@ export class VviinnResults {
       : this.showInWidget
         ? this.replaceSlotsContentInWidget(this.el)
         : this.replaceSlotsContent();
+  }
+
+  componentDidLoad() {
+    this.resizeObserver.observe(this.el);
+    this.calculateColumns();
+    this.calculateCardHeight();
   }
 
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
@@ -457,9 +500,7 @@ export class VviinnResults {
     this.state.requestFilters = [];
   };
 
-  private widgetCloseHandler = ({
-    detail,
-  }: TextSearchEvent | TriggerSourceEvent) => {
+  private oneClickDiscoveryClosedHandler = ({ detail }: TriggerSourceEvent) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.resetDiscoveryAppendIndexes();
   };
@@ -501,7 +542,10 @@ export class VviinnResults {
     );
 
     document.addEventListener("vviinnImageCrop", this.imageCropHandler);
-    document.addEventListener("vviinnWidgetClose", this.widgetCloseHandler);
+    document.addEventListener(
+      "vviinnOneClickDiscoveryClosed",
+      this.oneClickDiscoveryClosedHandler,
+    );
 
     !!this.searchId && makeVisualSearchRequest(this.storeName, this.searchId);
     this.getResultsByCategory();
@@ -534,8 +578,12 @@ export class VviinnResults {
     );
 
     document.removeEventListener("vviinnImageCrop", this.imageCropHandler);
-    document.removeEventListener("vviinnWidgetClose", this.widgetCloseHandler);
+    document.removeEventListener(
+      "vviinnOneClickDiscoveryClosed",
+      this.oneClickDiscoveryClosedHandler,
+    );
     this.disposeStoreListener?.();
+    this.resizeObserver.disconnect();
   }
 
   @Watch("textSearchQuery")
@@ -713,6 +761,23 @@ export class VviinnResults {
         index + (nCols - ((index % nCols) + 1));
 
       this.oneClickDiscoverySelectedIndex = index;
+
+      requestAnimationFrame(() => {
+        const appendedContainer = this.el.shadowRoot.getElementById(
+          "one-click-discovery-append",
+        );
+
+        const isMobile = window.matchMedia("(max-width: 768px)").matches;
+        const scrollableElement = isMobile ? this.scrollableModalBody : this.el;
+        const scrollableContainer = this.showInWidget
+          ? scrollableElement
+          : window;
+
+        scrollableContainer.scrollTo({
+          top: appendedContainer.offsetTop,
+          behavior: "smooth",
+        });
+      });
     };
 
     return this.getResults().map((p, i) => (
@@ -758,7 +823,7 @@ export class VviinnResults {
               productId={p.productId}
               addStyle={false}
               sidebarTitle=""
-              appendSidebarTo={
+              appendSidebarToId={
                 isOneClickDiscoveryAppendMode
                   ? "one-click-discovery-append"
                   : undefined

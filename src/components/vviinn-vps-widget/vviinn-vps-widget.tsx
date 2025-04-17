@@ -202,6 +202,7 @@ export class VviinnVpsWidget {
   @State() products: Recommendation[] = [];
   @State() searchQuery: string = "";
   @State() requestId: string = "";
+  @State() modalBody?: HTMLElement;
 
   @State() isCameraInitializing: boolean = false;
   @State() isCameraEnabled: boolean = false;
@@ -360,7 +361,7 @@ export class VviinnVpsWidget {
         this.uploadSource = "startCamera";
       } catch (error) {
         // TODO: Show error in the UI
-        console.log("Error accessing camera: ", error.message);
+        console.error("Error accessing camera: ", error.message);
         this.resetState();
         this.isCameraInitializing = false;
       }
@@ -413,6 +414,18 @@ export class VviinnVpsWidget {
     } else {
       document.body.style.overflow = this.overflow;
       this.initResultEvents();
+    }
+  }
+
+  @Watch("slidePosition")
+  slidePositionWatcher() {
+    if (this.slidePosition === 1) {
+      const root = this.el.shadowRoot.querySelector("vviinn-overlayed-modal");
+      const overlay = root.shadowRoot.querySelector("vviinn-overlay");
+      const modal = overlay.querySelector("vviinn-modal");
+      this.modalBody = modal.shadowRoot.querySelector(".body");
+      this.modalBody.scrollTop = 0;
+      this.stopStreamTracks();
     }
   }
 
@@ -547,14 +560,7 @@ export class VviinnVpsWidget {
       this.resetState();
       return;
     }
-
     this.slidePosition = 1;
-    const root = this.el.shadowRoot.querySelector("vviinn-overlayed-modal");
-    const overlay = root.shadowRoot.querySelector("vviinn-overlay");
-    const modal = overlay.querySelector("vviinn-modal");
-    const modalBody = modal.shadowRoot.querySelector(".body");
-    modalBody.scrollTop = 0;
-    this.stopStreamTracks();
   }
 
   private renderButtons() {
@@ -859,6 +865,7 @@ export class VviinnVpsWidget {
                   }
                   oneClickDiscoveryCampaigns={this.oneClickDiscoveryCampaigns}
                   parentSlots={[...this.parentSlots, ...this.slots]}
+                  scrollableModalBody={this.modalBody}
                 />
               )}
             </vviinn-slide>
