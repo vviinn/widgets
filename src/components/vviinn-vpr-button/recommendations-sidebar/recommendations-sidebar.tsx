@@ -187,7 +187,10 @@ export class RecommendationsSidebar {
 
   render() {
     return (
-      <Host class={this.getClassMap()} exportparts="body, close-sidebar">
+      <Host
+        class={this.getClassMap()}
+        exportparts={`body, close-sidebar, ${carouselParts}, ${productCardParts}`}
+      >
         <aside
           class="sidebar"
           part="body"
