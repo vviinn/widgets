@@ -67,7 +67,6 @@ export class VviinnCropper {
   @State() detectedObjects: Rectangle[] = [];
   @State() cropper: Cropper = null;
   @State() selectedDetectedObject?: Rectangle | null = null;
-  @State() imageElement?: HTMLImageElement;
 
   @Event() vviinnImageCrop: EventEmitter<TriggerSourceEventData>;
   @Event() vviinnCropperLoadImage: EventEmitter<LoadImageEventData>;
@@ -175,8 +174,8 @@ export class VviinnCropper {
     this.detectedObjects = [];
     this.selectedDetectedObject = null;
     localStorage.removeItem("cropperImageSrc");
-    this.imageElement?.setAttribute("src", "");
-    this.imageElement = null;
+    this.state.image?.setAttribute("src", "");
+    this.state.image = null;
     this.cropper?.destroy();
   };
 
@@ -255,10 +254,10 @@ export class VviinnCropper {
   private imageUploadStartedHandler = ({ detail }: SearchIdEvent) => {
     if (
       this.cropper &&
-      this.imageElement?.src &&
+      this.state.image?.src &&
       !this.skipStateChanges(detail.isTriggeredByVpsWidget)
     ) {
-      this.cropper.replace(this.imageElement.src);
+      this.cropper.replace(this.state.image.src);
     }
   };
 
@@ -273,14 +272,14 @@ export class VviinnCropper {
   }
 
   private loadImage = () => {
-    this.imageElement = this.el.shadowRoot.querySelector("img");
-    if (this.imageElement) {
+    const renderedImageElement = this.el.shadowRoot.querySelector("img");
+    if (this.state.image) {
       let data = {};
       if (this.cropper) {
         data = this.cropper.getData(true);
         this.cropper.destroy();
       }
-      const imageBounds = fromImage(this.imageElement);
+      const imageBounds = fromImage(renderedImageElement);
       const { width, height } = imageBounds;
 
       this.vviinnCropperLoadImage.emit({
@@ -302,7 +301,7 @@ export class VviinnCropper {
       ) {
         return;
       }
-      this.cropper = new Cropper(this.imageElement, {
+      this.cropper = new Cropper(renderedImageElement, {
         ...cropperOptions,
         cropstart: this.cropStart,
         cropend: this.cropEnd,
@@ -342,11 +341,12 @@ export class VviinnCropper {
     !this.showAspectRatioError;
 
   render() {
+    if (!this.state.image) return null;
     return (
       <Host
         class={{
           "show-in-widget": this.showInWidget,
-          active: !!this.imageElement,
+          active: !!this.state.image,
         }}
       >
         <div class="container">
