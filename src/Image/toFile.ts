@@ -11,7 +11,7 @@ export const toFile = async (b64data: string): Promise<File> => {
 };
 
 export const convertB64toFileTask =
-  (b64data: string): Task<File> =>
+  (b64data: Promise<string>): Task<File> =>
   () => {
-    return new Promise(async (resolve, _) => resolve(toFile(b64data)));
+    return new Promise(async (resolve, _) => resolve(toFile(await b64data)));
   };

@@ -16,10 +16,10 @@ export const shouldResize = (image: HTMLImageElement, imageType: ImageType) =>
   Math.min(image.naturalWidth, image.naturalHeight) >
   imageProcessingConfig[imageType];
 
-export const optionalResize = (
+export const optionalResize = async (
   image: HTMLImageElement,
   imageType: ImageType,
 ) =>
   shouldResize(image, imageType)
     ? resizeImage(imageProcessingConfig[imageType], image)
-    : imageToB64(image);
+    : await imageToB64(image);

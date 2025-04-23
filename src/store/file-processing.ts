@@ -19,6 +19,6 @@ export const resizeFileTo = (imageType: ImageType) => (file: File) =>
   pipe(
     file,
     imageFromFileTask,
-    T.map((image) => optionalResize(image, imageType)),
+    T.map(async (image) => await optionalResize(image, imageType)),
     T.chain(convertB64toFileTask),
   );

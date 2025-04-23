@@ -179,8 +179,8 @@ export class VviinnExampleImage {
       canvas.height,
     );
 
-    const dataURI = canvas.toDataURL("image/jpeg");
-    file = await toFile(dataURI);
+    const dataURL = canvas.toDataURL("image/jpeg");
+    file = await toFile(dataURL);
 
     pipe(
       await makeUploadFileRequest(
