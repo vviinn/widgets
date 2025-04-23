@@ -75,7 +75,7 @@ export class VviinnCropper {
   /** @internal */
   @Event() vviinnCropperAspectRatioError: EventEmitter<boolean>;
   /** @internal */
-  @Event() vviinnResetCropperState: EventEmitter<TriggerSourceEventData>;
+  @Event() vviinnCropperResetState: EventEmitter<TriggerSourceEventData>;
   /** @internal */
   @Event() vviinnResetCropArea: EventEmitter<TriggerSourceEventData>;
   /** @internal */
@@ -108,7 +108,7 @@ export class VviinnCropper {
       this.imageUploadFinishedHandler,
     );
     document.addEventListener(
-      "vviinnResetCropperState",
+      "vviinnCropperResetState",
       this.resetStateHandler,
     );
     document.addEventListener("vviinnResetCropArea", this.resetCropAreaHandler);
@@ -124,7 +124,7 @@ export class VviinnCropper {
       this.imageUploadFinishedHandler,
     );
     document.removeEventListener(
-      "vviinnResetCropperState",
+      "vviinnCropperResetState",
       this.resetStateHandler,
     );
     document.removeEventListener(

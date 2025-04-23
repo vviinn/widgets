@@ -646,12 +646,12 @@ export class VviinnVpsWidget {
     this.isCameraInitializing = false;
     this.setShowAspectRatioError(false);
     this.isTextSearch = false;
+    this.slidePosition = 0;
     this.resetScroll("start-page_block");
   };
 
-  private resetState() {
+  private resetState = () => {
     this.resetInnerState();
-    this.slidePosition = 0;
     this.state.loading = false;
     this.state.serverError = false;
 
@@ -663,7 +663,7 @@ export class VviinnVpsWidget {
     this.state.requestFilters = [];
     this.state.detectedObjects = [];
     this.state.searchType = undefined;
-  }
+  };
 
   private haveErrors(): boolean {
     return this.wrongImageFormat || this.state.serverError;
@@ -694,7 +694,7 @@ export class VviinnVpsWidget {
           class={{ "first-screen": this.isOnboardingSlide() }}
           isFirstScreen={this.isOnboardingSlide()}
           active={this.active}
-          resetState={this.resetState.bind(this)}
+          resetState={this.resetState}
           onVviinnWidgetClose={({ detail }: CustomEvent<BasicEventData>) => {
             if (detail.campaignTypeId !== "VPR") this.handleModalClose();
           }}
@@ -851,7 +851,7 @@ export class VviinnVpsWidget {
                   addToBasketShow={this.addToBasketShow}
                   favoriteShow={this.favoriteShow}
                   showAspectRatioError={this.showAspectRatioError}
-                  resetState={this.resetState.bind(this)}
+                  resetState={this.resetState}
                   replaceSlotsContentInWidget={this.replaceSlotsContent.bind(
                     this,
                   )}
