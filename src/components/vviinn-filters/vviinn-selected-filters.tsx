@@ -41,6 +41,7 @@ import { ResponseDynamicFilterIntervalItem } from "../../interfaces/recommendati
 import { isIntervalFilter } from "../../filters";
 import { components } from "../../interfaces/generated";
 import i18next from "i18next";
+import { resources } from "../../locale";
 
 /**
  * @part selected-filters-list - List of selected filters.
@@ -79,7 +80,7 @@ export class VviinnSelectedFilters {
   /** @internal */
   @Event() vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
   /** @internal */
-  @Event() vviinnResetCropperState: EventEmitter<TriggerSourceEventData>;
+  @Event() vviinnCropperResetState: EventEmitter<TriggerSourceEventData>;
   /** @internal */
   @Event() vviinnResetCropArea: EventEmitter<TriggerSourceEventData>;
   /** @internal */
@@ -226,7 +227,7 @@ export class VviinnSelectedFilters {
 
   private handleImageButtonClick = () => {
     this.resetState();
-    this.vviinnResetCropperState.emit({
+    this.vviinnCropperResetState.emit({
       isTriggeredByVpsWidget: this.showInWidget,
     });
   };
@@ -264,8 +265,13 @@ export class VviinnSelectedFilters {
     document.addEventListener("vviinnImageCrop", this.handleImageCrop);
   }
 
-  componentWillLoad() {
+  async componentWillLoad() {
     this.getUploadedImageSrc();
+    await i18next.init({
+      lng: globalState.locale,
+      fallbackLng: "en",
+      resources,
+    });
   }
 
   componentDidRender() {

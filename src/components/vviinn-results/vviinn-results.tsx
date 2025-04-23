@@ -160,7 +160,7 @@ export class VviinnResults {
 
   /** Cropper state should be resetted */
   /** @internal */
-  @Event() vviinnResetCropperState: EventEmitter<TriggerSourceEventData>;
+  @Event() vviinnCropperResetState: EventEmitter<TriggerSourceEventData>;
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
@@ -365,7 +365,15 @@ export class VviinnResults {
 
   private async getTextSearchResults(query?: string, requestId?: string) {
     if (!query) return;
+
     this.setTextSearch(true);
+    resetStore(this.storeName, "appStateOnly");
+    this.vviinnCropperResetState.emit({
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
+    this.vviinnSelectedFiltersReset.emit({
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
 
     return pipe(
       await makeTextSearchRequest(
@@ -401,14 +409,6 @@ export class VviinnResults {
   private textSearchStartedHandler = async ({ detail }: TextSearchEvent) => {
     const { isTriggeredByVpsWidget } = detail;
     if (this.skipStateChanges(isTriggeredByVpsWidget)) return;
-
-    resetStore(this.storeName, "appStateOnly");
-    this.vviinnResetCropperState.emit({
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
-    this.vviinnSelectedFiltersReset.emit({
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
 
     this.innerTextSearchQuery = detail.query;
     this.setTextSearch(true, isTriggeredByVpsWidget);
