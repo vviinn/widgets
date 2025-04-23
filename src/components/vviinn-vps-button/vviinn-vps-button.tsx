@@ -126,7 +126,7 @@ export class VviinnVpsButton {
   /** Show or hide the One-click Discovery, will be deprecated, use oneClickDiscoveryMode instead */
   @Prop() oneClickDiscoveryShow = false;
   /** One click Discovery mode, restricted to append only (no modal supported for this component)*/
-  @Prop() oneClickDiscoveryMode?: OneClickDiscoveryAppendMode;
+  @Prop() oneClickDiscoveryMode?: OneClickDiscoveryAppendMode = "append-grid";
   /** Comma-separated list of campaign IDs */
   @Prop() oneClickDiscoveryCampaigns: string = "";
   /** Wrap the Product Card's price values in the container. */

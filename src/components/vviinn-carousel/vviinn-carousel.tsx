@@ -9,6 +9,7 @@ import {
   Watch,
   Event,
   EventEmitter,
+  Fragment,
 } from "@stencil/core";
 import { chunksOf } from "fp-ts/lib/Array";
 import { pipe } from "fp-ts/lib/function";
@@ -23,11 +24,11 @@ import {
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
 import {
   CAROUSEL_IMAGE_WIDTH_CSS_VAR,
-  CAROUSEL_WIDTH_CSS_VAR,
-  COLUMNS_NUMBER_CSS_VAR,
+  CAROUSEL_CONTENT_WIDTH_CSS_VAR,
   CONTENT_GROUP_CSS_CLASS,
   DEFAULT_COLUMNS_NUMBER,
-  SET_MODE_IMAGE_WIDTH,
+  RESULTS_CALCULATED_COLUMNS_CSS_VAR,
+  SET_MODE_IMAGE_WIDTH_CSS_VAR,
 } from "./constants";
 import { calculateDiscount } from "../../utils/number";
 import { Locale } from "../../locale";
@@ -59,6 +60,8 @@ export class VviinnCarousel {
   @State() setModeAppliedDiscounts: {
     [key: Recommendation["productId"]]: number;
   } = {};
+  @State() columns: number = 0;
+  @State() showContent: boolean = false;
 
   @Prop() mode: CarouselMode = "continuity";
   @Prop() currencySign: string;
@@ -77,10 +80,14 @@ export class VviinnCarousel {
   @Prop() updateButtonLocation: UpdateButtonLocation;
   @Prop() replaceSlotsContent: () => void;
   @Prop() setModeDiscountsArray: number[];
-  @Prop() imageRatio: number;
+  @Prop() imageRatio: number = 1;
   @Prop() addPriceContainer?: boolean = false;
   @Prop() favoriteShow: boolean;
-  @Prop() setItemsAmount?: number;
+  @Prop() setItemsAmount?: number = 4;
+  @Prop() isAppended?: boolean = false;
+  @Prop() loading?: boolean = false;
+  @Prop() hasErrorOnLoad?: boolean = false;
+  @Prop() showInWidget: boolean = false;
 
   /** Event emitted once when the recommendation is rendered on the page */
   @Event({ bubbles: true })
@@ -88,11 +95,10 @@ export class VviinnCarousel {
   /** Event emitted once when the recommendation appears in the viewport */
   @Event({ bubbles: true })
   vviinnProductView: EventEmitter<ProductCardEventData>;
-
-  private columns: number = 0;
-  private resizeObserver: ResizeObserver = new ResizeObserver(() =>
-    this.handleResize(),
-  );
+  private resizeObserver: ResizeObserver = new ResizeObserver(() => {
+    this.handleResize();
+    this.setImageWidthSetMode("100%");
+  });
 
   private isSetMode: boolean;
   private isGridMode: boolean;
@@ -117,13 +123,13 @@ export class VviinnCarousel {
     this.cloneSlottedContent(),
   );
 
-  private handleWindowResize = () => this.setImageWidthSetMode("100%");
-
   private isLastGroup = () =>
     this.isGridMode &&
     this.activeContentGroup === this.getContentGroups().length - 1;
 
   private isFirstGroup = () => this.isGridMode && this.activeContentGroup === 0;
+  private isEmptyResults = () =>
+    this.hasErrorOnLoad || (this.recommendations.length === 0 && !this.loading);
 
   private updateCard = (
     productId: string,
@@ -168,39 +174,25 @@ export class VviinnCarousel {
     }
   };
 
-  componentWillLoad() {
-    this.isRTL = document.dir === "rtl";
-  }
-
   connectedCallback() {
     this.setItemWidth();
 
     this.isSetMode = this.mode === "set";
     this.isGridMode = this.mode === "grid";
     this.isContinuityMode = this.mode === "continuity";
-    this.columns = this.getColumnsNumber();
-
-    if (this.isSetMode) {
-      window.addEventListener("resize", this.handleWindowResize);
-      this.setModeDiscount = this.setModeDiscountsArray[0];
-      this.setModeMaxDiscount =
-        this.setModeDiscountsArray[this.setModeDiscountsArray.length - 1];
-    }
-    if (this.isSetMode && this.recommendations.length >= this.columns) {
-      this.crossSellingRecommendations = this.recommendations.slice(
-        0,
-        this.columns,
-      );
-    }
   }
 
   disconnectedCallback() {
     this.resizeObserver.disconnect();
-    window.removeEventListener("resize", this.handleWindowResize);
   }
 
   componentDidUpdate() {
     this.replaceSlotsContent();
+  }
+
+  componentWillLoad() {
+    this.isRTL = document.dir === "rtl";
+    this.updateColumnsNumber();
   }
 
   componentDidLoad() {
@@ -218,6 +210,22 @@ export class VviinnCarousel {
     }
   }
 
+  @Watch("recommendations")
+  recommendationsWatcher() {
+    if (this.isSetMode) {
+      this.setModeDiscount = this.setModeDiscountsArray[0];
+      this.setModeMaxDiscount =
+        this.setModeDiscountsArray[this.setModeDiscountsArray.length - 1];
+
+      if (this.recommendations.length >= this.columns) {
+        this.crossSellingRecommendations = this.recommendations.slice(
+          0,
+          this.columns,
+        );
+      }
+    }
+  }
+
   @Watch("updatingAllCards")
   updatingAllCardsWatcher() {
     if (!this.updatingAllCards) return;
@@ -229,6 +237,17 @@ export class VviinnCarousel {
         this.defaultAnimationInterval,
       );
     });
+  }
+
+  @Watch("loading")
+  onLoadingChange(newValue: boolean) {
+    if (!newValue) {
+      setTimeout(() => {
+        this.showContent = true;
+      }, 200);
+    } else {
+      this.showContent = false;
+    }
   }
 
   @Listen("vviinnCrossSellingClick")
@@ -246,7 +265,7 @@ export class VviinnCarousel {
   }
 
   @Listen("vviinnAddToBasket")
-  async trackAddToBasket({ detail }: ProductCardEvent) {
+  async setModeAddToBasketHandler({ detail }: ProductCardEvent) {
     if (!this.isSetMode) return;
 
     const { productId } = detail;
@@ -275,7 +294,7 @@ export class VviinnCarousel {
   }
 
   private setImageWidthSetMode(width: string) {
-    this.el.style.setProperty(SET_MODE_IMAGE_WIDTH, width);
+    this.el.style.setProperty(SET_MODE_IMAGE_WIDTH_CSS_VAR, width);
   }
 
   private getContentClassMap() {
@@ -287,7 +306,16 @@ export class VviinnCarousel {
     };
   }
 
+  private getBodyClassMap() {
+    return {
+      body: true,
+      "append-slider": this.isAppended,
+      "empty-results": this.isEmptyResults(),
+    };
+  }
+
   private handleResize() {
+    this.updateColumnsNumber();
     this.setWidth();
     this.setItemWidth();
   }
@@ -324,7 +352,7 @@ export class VviinnCarousel {
       (parseInt(parentStyles["padding-right"]) +
         parseInt(parentStyles["padding-left"]));
 
-    this.el.style.setProperty(CAROUSEL_WIDTH_CSS_VAR, `${width}px`);
+    this.el.style.setProperty(CAROUSEL_CONTENT_WIDTH_CSS_VAR, `${width}px`);
   }
 
   getParent(): HTMLElement {
@@ -361,24 +389,21 @@ export class VviinnCarousel {
     return Array.from(children).map((c) => c as HTMLElement);
   }
 
-  private getColumnsNumber(): number {
-    if (this.setItemsAmount && this.isSetMode) return this.setItemsAmount;
-    const styleSheet = getComputedStyle(this.el);
-    const imagesContainer = this.el.querySelector(".items-group");
-    if (imagesContainer) {
-      const totalWidth = this.el.getBoundingClientRect().width;
-      const imageContainer = imagesContainer.children[0];
-      const imageWidth = imageContainer.getBoundingClientRect().width;
-      const gridColumns = Math.floor(totalWidth / imageWidth);
-      if (gridColumns) return gridColumns;
+  private updateColumnsNumber(): number {
+    if (this.isSetMode) {
+      this.columns = this.setItemsAmount;
+      return;
     }
 
-    const columnsInCss = styleSheet.getPropertyValue(COLUMNS_NUMBER_CSS_VAR);
-    const columnsNumber = parseInt(columnsInCss);
-
-    return columnsNumber && !isNaN(columnsNumber)
-      ? columnsNumber
-      : DEFAULT_COLUMNS_NUMBER;
+    const styleSheet = getComputedStyle(this.el);
+    const calculatedColumnsAmount = parseInt(
+      styleSheet.getPropertyValue(RESULTS_CALCULATED_COLUMNS_CSS_VAR),
+    );
+    if (!calculatedColumnsAmount || isNaN(calculatedColumnsAmount)) {
+      this.columns = DEFAULT_COLUMNS_NUMBER;
+    } else {
+      this.columns = calculatedColumnsAmount;
+    }
   }
 
   private getContentGroups(): HTMLElement[] {
@@ -413,11 +438,17 @@ export class VviinnCarousel {
   }
 
   private showBullets(): boolean {
-    return this.isGridMode && this.showScroll;
+    return !this.loading && this.isGridMode && this.showScroll;
   }
 
   private showScrollbar(): boolean {
-    return this.isContinuityMode && this.showScroll;
+    return !this.loading && this.isContinuityMode && this.showScroll;
+  }
+
+  private showArrowButtons(): boolean {
+    return (
+      this.showContent && !!this.recommendations?.length && !this.isSetMode
+    );
   }
 
   private getClassMap() {
@@ -481,24 +512,16 @@ export class VviinnCarousel {
     );
   }
 
-  private renderRecommendationGroup(elements: HTMLVviinnProductCardElement[]) {
-    return (
-      <div class={CONTENT_GROUP_CSS_CLASS} part="items-group">
-        {...elements}
-      </div>
-    );
-  }
-
-  private renderRecommendationGroups(
-    elements: HTMLVviinnProductCardElement[][],
-  ) {
-    return elements.map((el) => this.renderRecommendationGroup(el));
-  }
-
   private renderRecommendations() {
     return this.isGridMode
       ? this.renderGrid()
       : this.renderRecommendationsElements();
+  }
+
+  private renderGrid() {
+    return this.loading || !this.showContent
+      ? this.renderSkeletonContainer()
+      : this.renderSliderContent();
   }
 
   private renderRecommendationsElements(): HTMLVviinnProductCardElement[] {
@@ -508,11 +531,38 @@ export class VviinnCarousel {
     return recommendations.map((r, i) => this.renderRecommendation(r, i));
   }
 
-  private renderGrid() {
+  private renderSkeletonContainer() {
+    return (
+      <div
+        part={CONTENT_GROUP_CSS_CLASS}
+        class={{
+          [CONTENT_GROUP_CSS_CLASS]: true,
+        }}
+      >
+        {Array.from({ length: this.columns }).map((_, index) => (
+          <vviinn-product-card-skeleton
+            imageRatio={this.imageRatio}
+            key={`skeleton-${index}`}
+          />
+        ))}
+      </div>
+    );
+  }
+
+  private renderSliderContent() {
     const recommendations = this.renderRecommendationsElements();
     const grouppedContent = chunksOf(this.columns)(recommendations);
     return this.renderRecommendationGroups(grouppedContent);
   }
+
+  private renderRecommendationGroups = (
+    elements: HTMLVviinnProductCardElement[][],
+  ) =>
+    elements.map((element) => (
+      <div class={CONTENT_GROUP_CSS_CLASS} part={CONTENT_GROUP_CSS_CLASS}>
+        {element}
+      </div>
+    ));
 
   private renderBullets() {
     const numberOfBullets = Math.ceil(
@@ -535,7 +585,7 @@ export class VviinnCarousel {
   render() {
     return (
       <Host class={this.getClassMap()}>
-        <div class={{ body: true, ...this.getClassMap() }}>
+        <div class={{ ...this.getClassMap(), ...this.getBodyClassMap() }}>
           {this.isSetMode && this.crossSellingRecommendations.length > 0 && (
             <vviinn-product-card
               class="set-mode product-card--source"
@@ -558,26 +608,28 @@ export class VviinnCarousel {
           )}
 
           <div class={this.getContentClassMap()}>
-            {!this.isSetMode && (
-              <button
-                class="prev"
-                onClick={() => this.handleCarouselButtonClick("left")}
-                part="carousel-button"
-                disabled={this.gridArrowsDynamic && this.isFirstGroup()}
-              >
-                <ChevronIcon />
-              </button>
-            )}
             {this.renderRecommendations()}
-            {!this.isSetMode && (
-              <button
-                class="next"
-                onClick={() => this.handleCarouselButtonClick("right")}
-                part="carousel-button"
-                disabled={this.gridArrowsDynamic && this.isLastGroup()}
-              >
-                <ChevronIcon />
-              </button>
+
+            {this.showArrowButtons() && (
+              <Fragment>
+                <button
+                  class="prev"
+                  onClick={() => this.handleCarouselButtonClick("left")}
+                  part="carousel-button"
+                  disabled={this.gridArrowsDynamic && this.isFirstGroup()}
+                >
+                  <ChevronIcon />
+                </button>
+
+                <button
+                  class="next"
+                  onClick={() => this.handleCarouselButtonClick("right")}
+                  part="carousel-button"
+                  disabled={this.gridArrowsDynamic && this.isLastGroup()}
+                >
+                  <ChevronIcon />
+                </button>
+              </Fragment>
             )}
           </div>
         </div>

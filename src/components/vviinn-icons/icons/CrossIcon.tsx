@@ -10,7 +10,7 @@ export const CrossIcon = () => (
   >
     <path
       d="M16 1.4L14.6 0L8 6.6L1.4 0L0 1.4L6.6 8L0 14.6L1.4 16L8 9.4L14.6 16L16 14.6L9.4 8L16 1.4Z"
-      fill="#161616"
+      fill="currentColor"
     />
   </svg>
 );

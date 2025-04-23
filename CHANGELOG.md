@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.158.1](https://github.com/vviinn/widgets/compare/v2.158.0...v2.158.1) (2025-04-23)
+
+
+### Bug Fixes
+
+* Fix state handling, while switching between text and visual search, minor fixes ([696ce6d](https://github.com/vviinn/widgets/commit/696ce6d707211ff72e09ccdb173419d3a0f63fc8))
+
+## [2.158.0](https://github.com/vviinn/widgets/compare/v2.157.0...v2.158.0) (2025-04-17)
+
+
+### Features
+
+* One-click discovery animation in appended modes ([1bb68a1](https://github.com/vviinn/widgets/commit/1bb68a1f5f52acf3613627d11475468c72ee19ae))
+
 ## [2.157.0](https://github.com/vviinn/widgets/compare/v2.156.4...v2.157.0) (2025-04-14)
 
 
