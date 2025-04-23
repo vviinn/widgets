@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.158.1](https://github.com/vviinn/widgets/compare/v2.158.0...v2.158.1) (2025-04-23)
+
+
+### Bug Fixes
+
+* Fix state handling, while switching between text and visual search, minor fixes ([696ce6d](https://github.com/vviinn/widgets/commit/696ce6d707211ff72e09ccdb173419d3a0f63fc8))
+
 ## [2.158.0](https://github.com/vviinn/widgets/compare/v2.157.0...v2.158.0) (2025-04-17)
 
 
