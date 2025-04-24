@@ -49,7 +49,8 @@ type AppStateGlobalDefaults = {
 };
 
 type AppStateDefaults = {
-  selfSearchId: string | null;
+  visualSearchId: string | null;
+  textSearchId: string | null;
   searchType?: SearchType | null;
   resultLoaded: boolean;
   resultViewed: boolean;
@@ -79,7 +80,8 @@ const appStateGlobalDefaults: AppStateGlobalDefaults = {
 };
 
 const appStateDefaults: AppStateDefaults = {
-  selfSearchId: null,
+  visualSearchId: null,
+  textSearchId: null,
   searchType: null,
   resultLoaded: false,
   resultViewed: false,
@@ -166,7 +168,7 @@ const updateVisualSearchState =
     );
     if (detectedObjects.length > 0) state.detectedObjects = detectedObjects;
 
-    state.selfSearchId = response.requestId;
+    state.visualSearchId = response.requestId;
     state.results = response.data.products;
     state.dynamicFilters = response.interactions.dynamicFilters;
     state.loading = false;
@@ -255,7 +257,7 @@ export const makeUploadFileRequest =
     const session = await pipe(uploadImageFile(store, "image")(file))();
     state.loading = false;
 
-    if (!state.selfSearchId?.length) return session;
+    if (!state.visualSearchId?.length) return session;
 
     const shouldProcessHiRes = await pipe(
       TE.fromTask(imageFromFileTask(file)),
@@ -266,7 +268,7 @@ export const makeUploadFileRequest =
     if (!shouldProcessHiRes) return session;
 
     pipe(
-      uploadImageFile(store, "highResolutionImage", state.selfSearchId)(file),
+      uploadImageFile(store, "highResolutionImage", state.visualSearchId)(file),
       TE.getOrElseW((error) => {
         console.error("Failed to upload hi-res image:", error);
         return T.of(session);
@@ -307,7 +309,7 @@ export const makeVisualSearchRequest = async (
   }
 
   const body: VisualSearchRequest = {
-    requestId: searchId ?? state.selfSearchId,
+    requestId: searchId ?? state.visualSearchId,
     ...addIfNotEmpty("campaign", state.campaignId),
     ...addIfNotEmpty("dynamicFilters", state.requestFilters),
     query: {
@@ -326,7 +328,7 @@ export const makeVisualSearchRequest = async (
 export const makeTextSearchRequest = async (
   store: SearchStoreName,
   query: string,
-  requestId?: string,
+  requestId?: string | null,
   resultsCount?: number,
 ) => {
   const state = useStore(store);
@@ -335,7 +337,7 @@ export const makeTextSearchRequest = async (
 
   const body: TextSearchRequest = {
     query,
-    requestId,
+    ...addIfDefined("requestId", requestId),
     ...addIfDefined("resultsCount", resultsCount),
     ...addIfNotEmpty("dynamicFilters", state.requestFilters),
     ...addNestedIfNotEmpty("staticFilters", {

@@ -200,8 +200,7 @@ export class VviinnVpsWidget {
   @State() uploadSource: UploadSource;
   @State() stream: MediaStream | null = null;
   @State() products: Recommendation[] = [];
-  @State() searchQuery: string = "";
-  @State() requestId: string = "";
+  @State() textSearchQuery: string = "";
   @State() modalBody?: HTMLElement;
 
   @State() isCameraInitializing: boolean = false;
@@ -432,8 +431,8 @@ export class VviinnVpsWidget {
   @Listen("widgetTextSearchFinished")
   textSearchFinishedHandler({ detail }: TextSearchEvent) {
     this.isTextSearch = true;
-    this.searchQuery = detail.query;
-    this.requestId = detail.requestId;
+    this.textSearchQuery = detail.query;
+    this.state.textSearchId = detail.requestId;
     this.slidePosition = 1;
   }
 
@@ -635,7 +634,7 @@ export class VviinnVpsWidget {
   }
 
   private resetInnerState = () => {
-    this.searchQuery = "";
+    this.textSearchQuery = "";
     this.wrongImageFormat = false;
     this.resetScroll("results-block");
     this.stopStreamTracks();
@@ -758,7 +757,8 @@ export class VviinnVpsWidget {
                           apiPath={globalState.apiPath}
                           locale={globalState.locale}
                           showInWidget={true}
-                          searchQuery={this.searchQuery}
+                          showOnFirstScreen={true}
+                          searchQuery={this.textSearchQuery}
                           uiSessionId={this.uiSessionId}
                           basicEventData={this.getBasicEventData(true)}
                           save-image-mode="never"
@@ -788,7 +788,7 @@ export class VviinnVpsWidget {
                     <vviinn-text-search
                       token={this.token}
                       showInWidget={true}
-                      searchQuery={this.searchQuery}
+                      searchQuery={this.textSearchQuery}
                       apiPath={this.apiPath}
                       locale={this.locale}
                       uiSessionId={this.uiSessionId}
@@ -851,13 +851,12 @@ export class VviinnVpsWidget {
                   addToBasketShow={this.addToBasketShow}
                   favoriteShow={this.favoriteShow}
                   showAspectRatioError={this.showAspectRatioError}
-                  resetState={this.resetState}
+                  resetWidgetState={this.resetState}
                   replaceSlotsContentInWidget={this.replaceSlotsContent.bind(
                     this,
                   )}
                   replaceSlotsContentInButton={this.replaceSlotsContentInButton}
-                  textSearchQuery={this.searchQuery}
-                  textSearchRequestId={this.requestId}
+                  textSearchQuery={this.textSearchQuery}
                   addPriceContainer={this.addPriceContainer}
                   oneClickDiscoveryMode={
                     this.oneClickDiscoveryMode ??
