@@ -40,6 +40,7 @@ const Template = (args) => `
   favorite-show="${args.favoriteShow}"
   one-click-discovery-show="${args.oneClickDiscoveryShow}"
   one-click-discovery-campaigns="${args.oneClickDiscoveryCampaigns}"
+  one-click-discovery-mode="${args.oneClickDiscoveryMode}"
 ></vviinn-vps-button>`;
 
 export const Default = Template.bind({});
@@ -64,4 +65,5 @@ Default.args = {
   favoriteShow: false,
   oneClickDiscoveryShow: true,
   oneClickDiscoveryCampaigns: "",
+  oneClickDiscoveryMode: "append-grid",
 };

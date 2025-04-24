@@ -49,7 +49,8 @@ type AppStateGlobalDefaults = {
 };
 
 type AppStateDefaults = {
-  selfSearchId: string | null;
+  visualSearchId: string | null;
+  textSearchId: string | null;
   searchType?: SearchType | null;
   resultLoaded: boolean;
   resultViewed: boolean;
@@ -79,7 +80,8 @@ const appStateGlobalDefaults: AppStateGlobalDefaults = {
 };
 
 const appStateDefaults: AppStateDefaults = {
-  selfSearchId: null,
+  visualSearchId: null,
+  textSearchId: null,
   searchType: null,
   resultLoaded: false,
   resultViewed: false,
@@ -158,15 +160,15 @@ export const resetStore = (
 };
 
 const updateVisualSearchState =
-  (store: SearchStoreName, updateDetectedObjects: boolean) =>
-  async (response: VisualSearchResponse) => {
+  (store: SearchStoreName) => async (response: VisualSearchResponse) => {
     const state = useStore(store);
-    if (updateDetectedObjects)
-      state.detectedObjects = response.interactions.suggestedSearchAreas.map(
-        ({ rectangle }) => rectangle,
-      );
 
-    state.selfSearchId = response.requestId;
+    const detectedObjects = response.interactions.suggestedSearchAreas.map(
+      ({ rectangle }) => rectangle,
+    );
+    if (detectedObjects.length > 0) state.detectedObjects = detectedObjects;
+
+    state.visualSearchId = response.requestId;
     state.results = response.data.products;
     state.dynamicFilters = response.interactions.dynamicFilters;
     state.loading = false;
@@ -186,7 +188,6 @@ const updateImageState = (store: SearchStoreName) => (file: File) =>
 const processVisualSearch = (
   store: SearchStoreName,
   body: VisualSearchRequest,
-  fetchDetectedObjects = true,
 ) => {
   const state = useStore(store);
 
@@ -196,7 +197,7 @@ const processVisualSearch = (
     TE.fromEither,
     TE.chain((request) => visualSearchSessionClient(request)),
     TE.map((sessionResponse) => {
-      updateVisualSearchState(store, fetchDetectedObjects)(sessionResponse);
+      updateVisualSearchState(store)(sessionResponse);
       return sessionResponse;
     }),
     TE.mapLeft((error) => {
@@ -208,12 +209,7 @@ const processVisualSearch = (
 };
 
 const uploadImageFile =
-  (
-    store: SearchStoreName,
-    imageType: ImageType = "image",
-    fetchDetectedObjects: boolean = true,
-    searchId?: string,
-  ) =>
+  (store: SearchStoreName, imageType: ImageType = "image", searchId?: string) =>
   (file: File) => {
     const state = useStore(store);
     return pipe(
@@ -241,9 +237,7 @@ const uploadImageFile =
               inner: error,
             }),
           ),
-          TE.chain((body) =>
-            processVisualSearch(store, body, fetchDetectedObjects),
-          ),
+          TE.chain((body) => processVisualSearch(store, body)),
         ),
       ),
     );
@@ -263,7 +257,7 @@ export const makeUploadFileRequest =
     const session = await pipe(uploadImageFile(store, "image")(file))();
     state.loading = false;
 
-    if (!state.selfSearchId?.length) return session;
+    if (!state.visualSearchId?.length) return session;
 
     const shouldProcessHiRes = await pipe(
       TE.fromTask(imageFromFileTask(file)),
@@ -274,12 +268,7 @@ export const makeUploadFileRequest =
     if (!shouldProcessHiRes) return session;
 
     pipe(
-      uploadImageFile(
-        store,
-        "highResolutionImage",
-        false,
-        state.selfSearchId,
-      )(file),
+      uploadImageFile(store, "highResolutionImage", state.visualSearchId)(file),
       TE.getOrElseW((error) => {
         console.error("Failed to upload hi-res image:", error);
         return T.of(session);
@@ -298,6 +287,7 @@ export const makeVisualSearchRequest = async (
   state.loading = true;
 
   let searchRectangle: Rectangle | null = null;
+  let fetchDetectedObjects = false;
 
   if (state.searchArea && state.imageBounds) {
     const scaled = divideOnSized(state.imageBounds)(state.searchArea);
@@ -308,17 +298,18 @@ export const makeVisualSearchRequest = async (
       left: scaled.left,
       top: scaled.top,
     };
-  } else if (state.image) {
+  } else {
     searchRectangle = {
       width: 1,
       height: 1,
       left: 0,
       top: 0,
     };
+    fetchDetectedObjects = true;
   }
 
   const body: VisualSearchRequest = {
-    requestId: searchId ?? state.selfSearchId,
+    requestId: searchId ?? state.visualSearchId,
     ...addIfNotEmpty("campaign", state.campaignId),
     ...addIfNotEmpty("dynamicFilters", state.requestFilters),
     query: {
@@ -327,14 +318,17 @@ export const makeVisualSearchRequest = async (
     ...addNestedIfNotEmpty("staticFilters", {
       ...addIfNotEmpty("excluded", state.excluded),
     }),
+    objectDetection: {
+      include: fetchDetectedObjects,
+    },
   };
-  return processVisualSearch(store, body, false)();
+  return processVisualSearch(store, body)();
 };
 
 export const makeTextSearchRequest = async (
   store: SearchStoreName,
   query: string,
-  requestId?: string,
+  requestId?: string | null,
   resultsCount?: number,
 ) => {
   const state = useStore(store);
@@ -343,7 +337,7 @@ export const makeTextSearchRequest = async (
 
   const body: TextSearchRequest = {
     query,
-    requestId,
+    ...addIfDefined("requestId", requestId),
     ...addIfDefined("resultsCount", resultsCount),
     ...addIfNotEmpty("dynamicFilters", state.requestFilters),
     ...addNestedIfNotEmpty("staticFilters", {
@@ -358,6 +352,7 @@ export const makeTextSearchRequest = async (
     TE.chain((request) => textSearchSessionClient(request)),
     TE.map((sessionResponse) => {
       state.results = sessionResponse?.data?.products ?? [];
+      state.textSearchId = sessionResponse.requestId;
       state.dynamicFilters =
         (sessionResponse?.interactions
           ?.dynamicFilters as ResponseFilterItem[]) ?? [];

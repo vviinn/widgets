@@ -200,8 +200,8 @@ export class VviinnVpsWidget {
   @State() uploadSource: UploadSource;
   @State() stream: MediaStream | null = null;
   @State() products: Recommendation[] = [];
-  @State() searchQuery: string = "";
-  @State() requestId: string = "";
+  @State() textSearchQuery: string = "";
+  @State() modalBody?: HTMLElement;
 
   @State() isCameraInitializing: boolean = false;
   @State() isCameraEnabled: boolean = false;
@@ -360,7 +360,7 @@ export class VviinnVpsWidget {
         this.uploadSource = "startCamera";
       } catch (error) {
         // TODO: Show error in the UI
-        console.log("Error accessing camera: ", error.message);
+        console.error("Error accessing camera: ", error.message);
         this.resetState();
         this.isCameraInitializing = false;
       }
@@ -416,11 +416,22 @@ export class VviinnVpsWidget {
     }
   }
 
+  @Watch("slidePosition")
+  slidePositionWatcher() {
+    if (this.slidePosition === 1) {
+      const root = this.el.shadowRoot.querySelector("vviinn-overlayed-modal");
+      const overlay = root.shadowRoot.querySelector("vviinn-overlay");
+      const modal = overlay.querySelector("vviinn-modal");
+      this.modalBody = modal.shadowRoot.querySelector(".body");
+      this.modalBody.scrollTop = 0;
+      this.stopStreamTracks();
+    }
+  }
+
   @Listen("widgetTextSearchFinished")
   textSearchFinishedHandler({ detail }: TextSearchEvent) {
     this.isTextSearch = true;
-    this.searchQuery = detail.query;
-    this.requestId = detail.requestId;
+    this.textSearchQuery = detail.query;
     this.slidePosition = 1;
   }
 
@@ -547,14 +558,7 @@ export class VviinnVpsWidget {
       this.resetState();
       return;
     }
-
     this.slidePosition = 1;
-    const root = this.el.shadowRoot.querySelector("vviinn-overlayed-modal");
-    const overlay = root.shadowRoot.querySelector("vviinn-overlay");
-    const modal = overlay.querySelector("vviinn-modal");
-    const modalBody = modal.shadowRoot.querySelector(".body");
-    modalBody.scrollTop = 0;
-    this.stopStreamTracks();
   }
 
   private renderButtons() {
@@ -629,7 +633,7 @@ export class VviinnVpsWidget {
   }
 
   private resetInnerState = () => {
-    this.searchQuery = "";
+    this.textSearchQuery = "";
     this.wrongImageFormat = false;
     this.resetScroll("results-block");
     this.stopStreamTracks();
@@ -640,12 +644,12 @@ export class VviinnVpsWidget {
     this.isCameraInitializing = false;
     this.setShowAspectRatioError(false);
     this.isTextSearch = false;
+    this.slidePosition = 0;
     this.resetScroll("start-page_block");
   };
 
-  private resetState() {
+  private resetState = () => {
     this.resetInnerState();
-    this.slidePosition = 0;
     this.state.loading = false;
     this.state.serverError = false;
 
@@ -657,7 +661,7 @@ export class VviinnVpsWidget {
     this.state.requestFilters = [];
     this.state.detectedObjects = [];
     this.state.searchType = undefined;
-  }
+  };
 
   private haveErrors(): boolean {
     return this.wrongImageFormat || this.state.serverError;
@@ -688,7 +692,7 @@ export class VviinnVpsWidget {
           class={{ "first-screen": this.isOnboardingSlide() }}
           isFirstScreen={this.isOnboardingSlide()}
           active={this.active}
-          resetState={this.resetState.bind(this)}
+          resetState={this.resetState}
           onVviinnWidgetClose={({ detail }: CustomEvent<BasicEventData>) => {
             if (detail.campaignTypeId !== "VPR") this.handleModalClose();
           }}
@@ -752,7 +756,8 @@ export class VviinnVpsWidget {
                           apiPath={globalState.apiPath}
                           locale={globalState.locale}
                           showInWidget={true}
-                          searchQuery={this.searchQuery}
+                          showOnFirstScreen={true}
+                          searchQuery={this.textSearchQuery}
                           uiSessionId={this.uiSessionId}
                           basicEventData={this.getBasicEventData(true)}
                           save-image-mode="never"
@@ -782,7 +787,7 @@ export class VviinnVpsWidget {
                     <vviinn-text-search
                       token={this.token}
                       showInWidget={true}
-                      searchQuery={this.searchQuery}
+                      searchQuery={this.textSearchQuery}
                       apiPath={this.apiPath}
                       locale={this.locale}
                       uiSessionId={this.uiSessionId}
@@ -845,13 +850,12 @@ export class VviinnVpsWidget {
                   addToBasketShow={this.addToBasketShow}
                   favoriteShow={this.favoriteShow}
                   showAspectRatioError={this.showAspectRatioError}
-                  resetState={this.resetState.bind(this)}
+                  resetWidgetState={this.resetState}
                   replaceSlotsContentInWidget={this.replaceSlotsContent.bind(
                     this,
                   )}
                   replaceSlotsContentInButton={this.replaceSlotsContentInButton}
-                  textSearchQuery={this.searchQuery}
-                  textSearchRequestId={this.requestId}
+                  textSearchQuery={this.textSearchQuery}
                   addPriceContainer={this.addPriceContainer}
                   oneClickDiscoveryMode={
                     this.oneClickDiscoveryMode ??
@@ -859,6 +863,7 @@ export class VviinnVpsWidget {
                   }
                   oneClickDiscoveryCampaigns={this.oneClickDiscoveryCampaigns}
                   parentSlots={[...this.parentSlots, ...this.slots]}
+                  scrollableModalBody={this.modalBody}
                 />
               )}
             </vviinn-slide>

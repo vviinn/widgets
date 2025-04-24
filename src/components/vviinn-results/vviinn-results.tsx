@@ -76,6 +76,7 @@ import { findSlotElements, getSlotNames } from "../../dom";
 import { OneClickDiscoveryResultsMode } from "../../widget/types";
 import { RESULTS_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
 import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
+import { RESULTS_CALCULATED_COLUMNS_CSS_VAR } from "../vviinn-carousel/constants";
 
 /**
  * @part product-card - Product Card itself.
@@ -159,7 +160,7 @@ export class VviinnResults {
 
   /** Cropper state should be resetted */
   /** @internal */
-  @Event() vviinnResetCropperState: EventEmitter<TriggerSourceEventData>;
+  @Event() vviinnCropperResetState: EventEmitter<TriggerSourceEventData>;
 
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
@@ -213,7 +214,7 @@ export class VviinnResults {
   /** @internal */
   @Prop() showAspectRatioError?: boolean;
   /** @internal */
-  @Prop() resetState?: () => void;
+  @Prop() resetWidgetState?: () => void;
   /** @internal */
   @Prop() replaceSlotsContentInWidget?: ReplaceSlotsContentInParent;
   /** @internal */
@@ -223,12 +224,10 @@ export class VviinnResults {
   /** Works for product-listing-page request */
   /** @internal */
   @Prop() useInnerState?: boolean = false;
-  /** ID for performing text search */
   /** @internal */
-  @Prop() textSearchRequestId?: string;
+  @Prop() scrollableModalBody?: HTMLElement;
 
   @State() innerTextSearchQuery: string;
-  @State() innerTextSearchRequestId: string;
   @State() slotsReplaced: boolean;
   @State() oneClickDiscoveryAppendIndex: number;
   @State() oneClickDiscoverySelectedIndex: number;
@@ -240,6 +239,10 @@ export class VviinnResults {
   private state?: SearchStore;
   private storeName?: SearchStoreName;
   private disposeStoreListener?: () => void;
+  private resizeObserver: ResizeObserver = new ResizeObserver(() => {
+    this.calculateColumns();
+    this.calculateCardHeight();
+  });
   private setTextSearch = (
     isTriggeredByText: boolean,
     isTriggeredByVpsWidget = false,
@@ -251,6 +254,36 @@ export class VviinnResults {
   private initResultEvents = () => {
     this.state.resultLoaded = false;
     this.state.resultViewed = false;
+  };
+
+  private calculateColumns = () => {
+    const container = this.el.shadowRoot?.querySelector(".products");
+    if (!container) return 0;
+
+    const cards = Array.from(container.querySelectorAll("vviinn-product-card"));
+    if (cards.length === 0) return 0;
+
+    const firstRowTop = cards[0].offsetTop;
+
+    const columns = cards.filter(
+      (card) => card.offsetTop === firstRowTop,
+    ).length;
+
+    this.el.style.setProperty(
+      RESULTS_CALCULATED_COLUMNS_CSS_VAR,
+      columns.toString(),
+    );
+  };
+
+  private calculateCardHeight = () => {
+    const firstCard = this.el.shadowRoot.querySelector("vviinn-product-card");
+    if (firstCard) {
+      const height = firstCard.getBoundingClientRect().height;
+      this.el.style.setProperty(
+        "--product-card-calculated-height",
+        `${height}px`,
+      );
+    }
   };
 
   /** @internal */
@@ -317,17 +350,33 @@ export class VviinnResults {
         : this.replaceSlotsContent();
   }
 
+  componentDidLoad() {
+    this.resizeObserver.observe(this.el);
+    this.calculateColumns();
+    this.calculateCardHeight();
+  }
+
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
     this.showInWidget !== isTriggeredByVpsWidget;
 
-  private async getTextSearchResults(query?: string, requestId?: string) {
-    if (!query) return;
+  private async getTextSearchResults(requestId?: string) {
+    if (!this.innerTextSearchQuery) return;
     this.setTextSearch(true);
+
+    if (!requestId?.length) {
+      resetStore(this.storeName, "appStateOnly");
+      this.vviinnCropperResetState.emit({
+        isTriggeredByVpsWidget: this.showInWidget,
+      });
+      this.vviinnSelectedFiltersReset.emit({
+        isTriggeredByVpsWidget: this.showInWidget,
+      });
+    }
 
     return pipe(
       await makeTextSearchRequest(
         this.storeName,
-        query,
+        this.innerTextSearchQuery,
         requestId,
         this.resultsCount,
       ),
@@ -359,14 +408,6 @@ export class VviinnResults {
     const { isTriggeredByVpsWidget } = detail;
     if (this.skipStateChanges(isTriggeredByVpsWidget)) return;
 
-    resetStore(this.storeName, "appStateOnly");
-    this.vviinnResetCropperState.emit({
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
-    this.vviinnSelectedFiltersReset.emit({
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
-
     this.innerTextSearchQuery = detail.query;
     this.setTextSearch(true, isTriggeredByVpsWidget);
 
@@ -378,27 +419,21 @@ export class VviinnResults {
     });
     trackEvent(textSearchStartedEvent);
 
-    const response = await this.getTextSearchResults(this.innerTextSearchQuery);
-    if (response) this.innerTextSearchRequestId = response.requestId;
+    this.getTextSearchResults();
   };
 
   private filtersChangedHandler = async ({ detail }: ChangedFiltersEvent) => {
     const { filters, isTriggeredByVpsWidget } = detail;
-
     if (this.skipStateChanges(isTriggeredByVpsWidget)) return;
 
     if (this.filterColumn && this.filterValue) {
       this.getResultsByCategory(filters);
       return;
     }
-
     this.state.requestFilters = filters;
 
     if (this.isTextSearch) {
-      this.getTextSearchResults(
-        this.innerTextSearchQuery,
-        this.innerTextSearchRequestId,
-      );
+      this.getTextSearchResults(this.state.textSearchId);
     } else {
       makeVisualSearchRequest(this.storeName, this.searchId);
     }
@@ -457,9 +492,7 @@ export class VviinnResults {
     this.state.requestFilters = [];
   };
 
-  private widgetCloseHandler = ({
-    detail,
-  }: TextSearchEvent | TriggerSourceEvent) => {
+  private oneClickDiscoveryClosedHandler = ({ detail }: TriggerSourceEvent) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.resetDiscoveryAppendIndexes();
   };
@@ -501,13 +534,17 @@ export class VviinnResults {
     );
 
     document.addEventListener("vviinnImageCrop", this.imageCropHandler);
-    document.addEventListener("vviinnWidgetClose", this.widgetCloseHandler);
+    document.addEventListener(
+      "vviinnOneClickDiscoveryClosed",
+      this.oneClickDiscoveryClosedHandler,
+    );
 
     !!this.searchId && makeVisualSearchRequest(this.storeName, this.searchId);
-    this.getResultsByCategory();
-    this.innerTextSearchQuery = this.textSearchQuery;
 
-    !this.showInWidget && this.getTextSearchResults(this.innerTextSearchQuery);
+    this.getResultsByCategory();
+
+    this.innerTextSearchQuery = this.textSearchQuery;
+    !this.showInWidget && this.getTextSearchResults();
   }
 
   disconnectedCallback() {
@@ -534,14 +571,19 @@ export class VviinnResults {
     );
 
     document.removeEventListener("vviinnImageCrop", this.imageCropHandler);
-    document.removeEventListener("vviinnWidgetClose", this.widgetCloseHandler);
+    document.removeEventListener(
+      "vviinnOneClickDiscoveryClosed",
+      this.oneClickDiscoveryClosedHandler,
+    );
     this.disposeStoreListener?.();
+    this.resizeObserver.disconnect();
   }
 
   @Watch("textSearchQuery")
   watchTextSearchQuery(newQuery: string) {
     if (this.showInWidget) return;
-    this.getTextSearchResults(newQuery);
+    this.innerTextSearchQuery = newQuery;
+    this.getTextSearchResults();
   }
 
   @Listen("vviinnProductLoad")
@@ -713,6 +755,23 @@ export class VviinnResults {
         index + (nCols - ((index % nCols) + 1));
 
       this.oneClickDiscoverySelectedIndex = index;
+
+      requestAnimationFrame(() => {
+        const appendedContainer = this.el.shadowRoot.getElementById(
+          "one-click-discovery-append",
+        );
+
+        const isMobile = window.matchMedia("(max-width: 768px)").matches;
+        const scrollableElement = isMobile ? this.scrollableModalBody : this.el;
+        const scrollableContainer = this.showInWidget
+          ? scrollableElement
+          : window;
+
+        scrollableContainer.scrollTo({
+          top: appendedContainer.offsetTop,
+          behavior: "smooth",
+        });
+      });
     };
 
     return this.getResults().map((p, i) => (
@@ -758,7 +817,7 @@ export class VviinnResults {
               productId={p.productId}
               addStyle={false}
               sidebarTitle=""
-              appendSidebarTo={
+              appendSidebarToId={
                 isOneClickDiscoveryAppendMode
                   ? "one-click-discovery-append"
                   : undefined
@@ -798,11 +857,13 @@ export class VviinnResults {
       >
         <div class="nothing-found">
           {resultsLength === 0 && this.showInWidget && (
-            <vviinn-empty-results handler={() => this?.resetState()} />
+            <vviinn-empty-results handler={() => this?.resetWidgetState()} />
           )}
 
           {this.showAspectRatioError && this.showInWidget && (
-            <vviinn-wrong-aspect-ratio handler={() => this?.resetState()} />
+            <vviinn-wrong-aspect-ratio
+              handler={() => this?.resetWidgetState()}
+            />
           )}
         </div>
 

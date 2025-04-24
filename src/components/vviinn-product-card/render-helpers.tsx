@@ -226,6 +226,7 @@ export const Image = (props: ImageProps, onLoadEnd = () => undefined) => (
       height={props.height}
       src={processWidth(props.src, props.width)}
       alt={props.title}
+      title={props.title}
       ref={props.ref}
       onLoad={onLoadEnd}
     />
@@ -244,6 +245,7 @@ export const ResponsiveImage = (
       class="image responsive"
       src={processWidth(props.src, props.width)}
       alt={props.title}
+      title={props.title}
       ref={props.ref}
       onLoad={onLoadEnd}
     />

@@ -24,6 +24,7 @@
 }
 
 :host::part(product-card) {
+  width: 100%;
   height: 100%;
 }
 
@@ -67,40 +68,8 @@ products.hidden {
   display: none;
 }
 
-@media (max-width: 768px) {
-  :host(.show-in-widget) {
-    align-content: start;
-    position: static;
-    overflow-y: unset;
-    width: 100%;
-    padding-top: 0;
-    margin-top: 24px;
-  }
-
-  .products {
-    position: static;
-    padding: 0;
-    width: unset;
-    grid-gap: 24px 16px;
-    justify-content: center;
-  }
-
-  .nothing-found {
-    position: static;
-    grid-gap: 64px;
-    padding: unset;
-    align-content: start;
-    width: unset;
-  }
-}
-
-@media (max-width: 380px) {
-  .products {
-    grid-gap: 24px 10px;
-  }
-}
-
 .vviinn-results-product-card-actions vviinn-vpr-button::part(button) {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -113,6 +82,16 @@ products.hidden {
   backdrop-filter: blur(calc(var(--filter-blur-150, 12px) / 2));
 }
 
+.vviinn-results-product-card-actions vviinn-vpr-button::part(button)::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  transform: scale(1.55);
+}
+
 .vviinn-results-product-card-actions vviinn-vpr-button::part(button):hover {
   background: var(--button-bg-color-frosted-hover);
 }
@@ -120,28 +99,6 @@ products.hidden {
 #one-click-discovery-append {
   width: 100%;
   grid-column: 1 / -1;
-}
-
-@media screen and (max-width: 768px) {
-  :host {
-    --product-card-width: 155px;
-  }
-}
-
-:host(.matching-discovery) vviinn-recommendations-sidebar::part(items-group) {
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(
-      var(--product-card-width, var(--product-card-results-min-width)),
-      1fr
-    )
-  );
-}
-
-:host(.show-in-widget)
-  vviinn-recommendations-sidebar::part(recommendations-results),
-:host(.show-in-widget) vviinn-recommendations-sidebar::part(items-group) {
-  grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
 }
 
 vviinn-recommendations-sidebar::part(body) {
@@ -155,10 +112,6 @@ vviinn-recommendations-sidebar::part(body) {
   vviinn-recommendations-sidebar::part(body) {
     margin-top: -1px;
   }
-}
-
-vviinn-recommendations-sidebar::part(close-sidebar) {
-  top: 11px;
 }
 
 vviinn-recommendations-sidebar::part(source-image) {
@@ -176,4 +129,56 @@ vviinn-recommendations-sidebar::part(sidebar-header) {
 
 vviinn-recommendations-sidebar::part(sidebar-content) {
   padding: 0;
+}
+
+:host(.matching-discovery) vviinn-recommendations-sidebar::part(items-group) {
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(
+      var(--product-card-width, var(--product-card-results-min-width)),
+      1fr
+    )
+  );
+}
+
+:host(.show-in-widget)
+  vviinn-recommendations-sidebar::part(recommendations-results),
+:host(.show-in-widget) vviinn-recommendations-sidebar::part(items-group) {
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(var(--product-card-widget-min-width), 1fr)
+  );
+}
+
+@media (max-width: 768px) {
+  :host(.show-in-widget) {
+    align-content: start;
+    position: static;
+    overflow-y: unset;
+    width: 100%;
+    padding-top: 0;
+    margin-top: 24px;
+  }
+
+  .products {
+    position: static;
+    padding: 0;
+    width: unset;
+    row-gap: 24px;
+    justify-content: center;
+  }
+
+  .nothing-found {
+    position: static;
+    grid-gap: 64px;
+    padding: unset;
+    align-content: start;
+    width: unset;
+  }
+}
+
+@media (max-width: 380px) {
+  .products {
+    column-gap: 10px;
+  }
 }
