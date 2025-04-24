@@ -148,8 +148,14 @@ export class VviinnVpsWidget {
   @Prop() pricePrefix?: string;
   /** The locale for currency formatting and text localization */
   @Prop() locale?: Locale;
-  /** Campaign ID applied for visual search */
+  /** Campaign ID used for Visual Search (deprecated) */
   @Prop() campaignId: string = "";
+  /** Campaign ID used for Text Search */
+  @Prop() campaignIdTextSearch: string = "";
+  /** Campaign ID used for Visual Search */
+  @Prop() campaignIdVisualSearch: string = "";
+  /** Campaign ID used for One-click Discovery */
+  @Prop() campaignIdDiscovery: string = "";
   /** Excluded filter. Example: "brand:Nike,Vans;custom_label_0:summer" */
   @Prop() excluded: string = "";
   /** Toggle for opening product link in new tab or not */
@@ -505,6 +511,8 @@ export class VviinnVpsWidget {
       !!navigator.mediaDevices && !!navigator.mediaDevices.getUserMedia;
 
     this.state.campaignId = this.campaignId;
+    this.state.campaignIdTextSearch = this.campaignIdTextSearch;
+    this.state.campaignIdVisualSearch = this.campaignIdVisualSearch;
     this.state.excluded = parseStringToExcluded(this.excluded);
 
     this.uiSessionId = uuidv4();
@@ -840,6 +848,9 @@ export class VviinnVpsWidget {
                   pricePrefix={globalState.pricePrefix}
                   currency-sign={globalState.currencySign}
                   apiPath={globalState.apiPath}
+                  campaignIdTextSearch={this.campaignIdTextSearch}
+                  campaignIdVisualSearch={this.campaignIdVisualSearch}
+                  campaignIdDiscovery={this.campaignIdDiscovery}
                   uiSessionId={this.uiSessionId}
                   widgetElementId={this.buttonElementId ?? this.widgetElementId}
                   showInWidget={true}

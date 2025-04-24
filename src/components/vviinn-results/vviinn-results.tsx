@@ -168,6 +168,12 @@ export class VviinnResults {
   @Prop() currencySign?: string;
   /** The locale for currency formatting and text localization */
   @Prop() locale?: Locale;
+  /** Campaign ID used for Text Search */
+  @Prop() campaignIdTextSearch: string = "";
+  /** Campaign ID used for Visual Search */
+  @Prop() campaignIdVisualSearch: string = "";
+  /** Campaign ID used for One-click Discovery */
+  @Prop() campaignIdDiscovery: string = "";
   /** Prefix is displayed before the price */
   @Prop() pricePrefix?: string;
   /** Search ID for results request */
@@ -502,6 +508,8 @@ export class VviinnResults {
     const { state, storeName, onChange } = useSearchStore(this.showInWidget);
     this.state = state;
     this.storeName = storeName;
+    this.state.campaignIdTextSearch = this.campaignIdTextSearch;
+    this.state.campaignIdVisualSearch = this.campaignIdVisualSearch;
 
     this.disposeStoreListener = onChange("loading", (loading) => {
       if (loading) this.resetDiscoveryAppendIndexes();
