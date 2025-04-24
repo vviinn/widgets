@@ -432,7 +432,6 @@ export class VviinnVpsWidget {
   textSearchFinishedHandler({ detail }: TextSearchEvent) {
     this.isTextSearch = true;
     this.textSearchQuery = detail.query;
-    this.state.textSearchId = detail.requestId;
     this.slidePosition = 1;
   }
 

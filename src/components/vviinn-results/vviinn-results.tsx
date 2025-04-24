@@ -419,8 +419,7 @@ export class VviinnResults {
     });
     trackEvent(textSearchStartedEvent);
 
-    const response = await this.getTextSearchResults();
-    if (response) this.state.textSearchId = response.requestId;
+    this.getTextSearchResults();
   };
 
   private filtersChangedHandler = async ({ detail }: ChangedFiltersEvent) => {
@@ -541,9 +540,10 @@ export class VviinnResults {
     );
 
     !!this.searchId && makeVisualSearchRequest(this.storeName, this.searchId);
-    this.getResultsByCategory();
-    this.innerTextSearchQuery = this.textSearchQuery;
 
+    this.getResultsByCategory();
+
+    this.innerTextSearchQuery = this.textSearchQuery;
     !this.showInWidget && this.getTextSearchResults();
   }
 

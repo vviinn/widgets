@@ -352,6 +352,7 @@ export const makeTextSearchRequest = async (
     TE.chain((request) => textSearchSessionClient(request)),
     TE.map((sessionResponse) => {
       state.results = sessionResponse?.data?.products ?? [];
+      state.textSearchId = sessionResponse.requestId;
       state.dynamicFilters =
         (sessionResponse?.interactions
           ?.dynamicFilters as ResponseFilterItem[]) ?? [];
