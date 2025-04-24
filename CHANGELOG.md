@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.158.2](https://github.com/vviinn/widgets/compare/v2.158.1...v2.158.2) (2025-04-24)
+
+
+### Bug Fixes
+
+* Fix text search filter requests, refactoring ([2876c99](https://github.com/vviinn/widgets/commit/2876c9901da968dc14e869af92939d2dfeb1fcdb))
+
 ### [2.158.1](https://github.com/vviinn/widgets/compare/v2.158.0...v2.158.1) (2025-04-23)
 
 
