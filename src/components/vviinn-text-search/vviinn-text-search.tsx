@@ -35,9 +35,7 @@ import { searchBarParts } from "../../cssParts";
 import { MicIcon } from "../vviinn-icons/icons/MicIcon";
 import { initializeRecognition, speechTooltip } from "./helpers";
 import Timeout = NodeJS.Timeout;
-import { WidgetEvent } from "vviinn-tracking-client-ts";
-import { createWidgetEvent } from "../../tracking";
-import { trackEvent, updateGlobalState, globalState } from "../../store/store";
+import { updateGlobalState, globalState } from "../../store/store";
 
 /**
  * @part text-search-container - Container for the text search block.
@@ -87,7 +85,10 @@ export class VviinnTextSearch {
 
   /** True, when used inside the widget */
   /** @internal */
-  @Prop() showInWidget?: boolean = false;
+  @Prop() showInWidget: boolean = false;
+  /** Search Bar is showing on first widget's screen */
+  /** @internal */
+  @Prop() showOnFirstScreen: boolean = false;
   /** @internal */
   @Prop() apiPath?: string;
   /** uiSessionId from vps-widget */
@@ -240,17 +241,12 @@ export class VviinnTextSearch {
     if (!this.searchQuery) return;
     this.trackTextSearch();
 
-    if (this.basicEventData && this.uiSessionId) {
-      const { campaignTypeId, ...rest } = this.basicEventData;
-      const textSearchStartedEvent: WidgetEvent = createWidgetEvent("TPS")({
-        action: "search",
-        session_id: this.uiSessionId,
-        ...rest,
-      });
-      trackEvent(textSearchStartedEvent);
-    }
+    this.vviinnTextSearchStarted.emit({
+      query: this.searchQuery,
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
 
-    if (this.showInWidget) {
+    if (this.showInWidget && this.showOnFirstScreen) {
       const response = pipe(
         await makeTextSearchRequest(this.storeName, this.searchQuery),
         E.getOrElse(() => null),
@@ -267,11 +263,6 @@ export class VviinnTextSearch {
           isTriggeredByVpsWidget: this.showInWidget,
         });
       }
-    } else {
-      this.vviinnTextSearchStarted.emit({
-        query: this.searchQuery,
-        isTriggeredByVpsWidget: this.showInWidget,
-      });
     }
   }
 
