@@ -20,7 +20,7 @@
     "@babel/plugin-transform-typescript": "^7.21.3",
     "@babel/preset-env": "^7.26.0",
     "@pxtrn/storybook-addon-docs-stencil": "^6.4.1",
-    "@storybook/addon-actions": "^8.4.7",
+    "@storybook/addon-actions": "^8.6.12",
     "@storybook/addon-essentials": "^8.4.7",
     "@storybook/addon-links": "^8.4.7",
     "@storybook/addon-mdx-gfm": "^8.4.7",
@@ -45,6 +45,6 @@
   "dependencies": {
     "lit-html": "^2.7.2",
     "path": "^0.12.7",
-    "vviinn-widgets": "^2.158.2"
+    "vviinn-widgets": "^2.159.0"
   }
 }
