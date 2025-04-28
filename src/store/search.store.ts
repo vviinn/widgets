@@ -216,7 +216,6 @@ const uploadImageFile =
   (store: SearchStoreName, imageType: ImageType = "image", searchId?: string) =>
   (file: File) => {
     const state = useStore(store);
-    console.log(state.campaignIdVisualSearch, state.campaignId);
     return pipe(
       TE.fromEither(checkFileWithExtention(file)),
       TE.chainTaskK(resizeFileTo(imageType)),

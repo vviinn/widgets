@@ -16,10 +16,9 @@ import i18next from "i18next";
 
 import { version } from "../../../package.json";
 import {
-  searchState,
-  componentsState,
   SearchStore,
   SearchStoreName,
+  useSearchStore,
 } from "../../store/search.store";
 import { trackEvent, updateGlobalState, globalState } from "../../store/store";
 import { slotChangeListener, SlotSkeleton } from "../customized-slots";
@@ -505,8 +504,11 @@ export class VviinnVpsWidget {
   connectedCallback() {
     updateGlobalState(this);
     this.isDesktop = checkDeviceType() === "desktop";
-    this.storeName = this.useComponentsStore ? "components" : "widget";
-    this.state = this.useComponentsStore ? componentsState : searchState;
+
+    const { state, storeName } = useSearchStore(!this.useComponentsStore);
+    this.state = state;
+    this.storeName = storeName;
+
     this.cameraAvailable =
       !!navigator.mediaDevices && !!navigator.mediaDevices.getUserMedia;
 

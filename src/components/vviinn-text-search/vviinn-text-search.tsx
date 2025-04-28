@@ -10,10 +10,9 @@ import {
 } from "@stencil/core";
 import {
   makeTextSearchRequest,
-  searchState,
-  componentsState,
   SearchStoreName,
   SearchStore,
+  useSearchStore,
 } from "../../store/search.store";
 import { TextSearchIcon } from "../vviinn-icons";
 import { slotChangeListener } from "../customized-slots";
@@ -150,8 +149,9 @@ export class VviinnTextSearch {
 
   connectedCallback() {
     updateGlobalState(this);
-    this.storeName = this.showInWidget ? "widget" : "components";
-    this.state = this.showInWidget ? searchState : componentsState;
+    const { state, storeName } = useSearchStore(this.showInWidget);
+    this.state = state;
+    this.storeName = storeName;
 
     document.addEventListener(
       "vviinnFilterTriggered",

@@ -30,11 +30,10 @@ import {
 } from "../../recommendation/events";
 import { triggerFilter, triggerResetFilters } from "./helpers/triggerFilter";
 import {
-  componentsState,
   resetStore,
-  searchState,
   SearchStore,
   SearchStoreName,
+  useSearchStore,
 } from "../../store/search.store";
 import { globalState } from "../../store/store";
 import { ResponseDynamicFilterIntervalItem } from "../../interfaces/recommendation";
@@ -239,8 +238,9 @@ export class VviinnSelectedFilters {
   };
 
   connectedCallback() {
-    this.state = this.showInWidget ? searchState : componentsState;
-    this.storeName = this.showInWidget ? "widget" : "components";
+    const { state, storeName } = useSearchStore(this.showInWidget);
+    this.state = state;
+    this.storeName = storeName;
 
     document.addEventListener(
       "vviinnFiltersChanged",
