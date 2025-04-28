@@ -11,6 +11,7 @@ import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/lib/function";
 import {
   makeUploadFileRequest,
+  SearchStore,
   SearchStoreName,
 } from "../../store/search.store";
 import {
@@ -44,6 +45,7 @@ export class VviinnImageSelector {
   @Prop() token?: string;
   @Prop() apiPath?: string;
   @Prop() storeName: SearchStoreName;
+  @Prop() state: SearchStore;
 
   private fileInput: HTMLInputElement;
 
@@ -69,6 +71,9 @@ export class VviinnImageSelector {
           });
         },
         (response) => {
+          if (this.state.image)
+            localStorage.setItem("cropperImageSrc", this.state.image.src);
+
           this.vviinnImageUploadFinished.emit({
             searchId: response.requestId,
             isTriggeredByVpsWidget: this.storeName === "widget",

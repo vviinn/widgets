@@ -604,6 +604,7 @@ export class VviinnVpsWidget {
           this.handleVviinnImageUpload("uploadPhoto");
         }}
         storeName={this.storeName}
+        state={this.state}
         onVviinnNoResult={({ detail }) => this.handleVviinnNoResult(detail)}
         resetVpsButton={this.resetVpsButton}
         basicEventData={this.getBasicEventData()}
@@ -722,7 +723,8 @@ export class VviinnVpsWidget {
                 srcObject={this.stream}
                 cameraButtonClicked={this.isCameraButtonClicked}
                 exampleImageSource={this.exampleImageSource}
-                useComponentsStore={this.useComponentsStore}
+                storeName={this.storeName}
+                state={this.state}
               />
               <div
                 class={{

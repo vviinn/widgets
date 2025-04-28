@@ -11,7 +11,11 @@ import {
 } from "@stencil/core";
 import { pipe } from "fp-ts/lib/function";
 import { toFile } from "../../Image/toFile";
-import { makeUploadFileRequest } from "../../store/search.store";
+import {
+  makeUploadFileRequest,
+  SearchStore,
+  SearchStoreName,
+} from "../../store/search.store";
 import * as E from "fp-ts/lib/Either";
 import {
   BasicEventData,
@@ -44,7 +48,8 @@ export class VviinnExampleImage {
   @Prop() basicEventData: BasicEventData;
   @Prop() srcObject: MediaStream;
   @Prop() cameraButtonClicked: boolean = false;
-  @Prop() useComponentsStore: boolean = false;
+  @Prop() storeName: SearchStoreName;
+  @Prop() state: SearchStore;
 
   @State() selected: boolean = false;
   @State() videoInitialized: boolean = false;
@@ -183,18 +188,19 @@ export class VviinnExampleImage {
     file = await toFile(dataURI);
 
     pipe(
-      await makeUploadFileRequest(
-        this.useComponentsStore ? "components" : "widget",
-      )(file),
+      await makeUploadFileRequest(this.storeName)(file),
       E.match(
         () => {
           this.vviinnNoResult.emit(this.basicEventData);
         },
-        (response) =>
+        (response) => {
+          if (this.state.image)
+            localStorage.setItem("cropperImageSrc", this.state.image.src);
           this.vviinnImageUploadFinished.emit({
             searchId: response.requestId,
-            isTriggeredByVpsWidget: !this.useComponentsStore,
-          }),
+            isTriggeredByVpsWidget: this.storeName === "widget",
+          });
+        },
       ),
     );
 
