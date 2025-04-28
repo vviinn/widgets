@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.159.0](https://github.com/vviinn/widgets/compare/v2.158.2...v2.159.0) (2025-04-28)
+
+
+### Features
+
+* Add a helper Story to test search results on a different page ([04efcae](https://github.com/vviinn/widgets/commit/04efcaebd444b12b7c242f476b1f523484d18689))
+
 ### [2.158.2](https://github.com/vviinn/widgets/compare/v2.158.1...v2.158.2) (2025-04-24)
 
 
