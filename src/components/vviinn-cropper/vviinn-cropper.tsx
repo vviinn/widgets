@@ -325,7 +325,7 @@ export class VviinnCropper {
               decoding="async"
               width={this.width}
               height={this.height}
-              src={this.state.image.src}
+              src={this.state.image?.src}
               draggable={false}
               onLoad={this.loadImage}
             />
