@@ -22,6 +22,7 @@ import {
 } from "../../recommendation/events";
 import { BasicError } from "../../error";
 import { VisualSearchResponse } from "../../interfaces/search";
+import { setLocalStorageItems } from "../../localStorage";
 
 /**
  * @part button -  button look and feel
@@ -71,8 +72,10 @@ export class VviinnImageSelector {
           });
         },
         (response) => {
-          if (this.state.image)
-            localStorage.setItem("cropperImageSrc", this.state.image.src);
+          setLocalStorageItems(
+            this.state.image?.src,
+            this.state.detectedObjects,
+          );
 
           this.vviinnImageUploadFinished.emit({
             searchId: response.requestId,

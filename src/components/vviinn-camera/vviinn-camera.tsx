@@ -29,6 +29,7 @@ import {
   PlusIcon,
   RoundCameraIcon,
 } from "../vviinn-icons";
+import { setLocalStorageItems } from "../../localStorage";
 
 type ZoomCapabilities = {
   min: number;
@@ -194,8 +195,10 @@ export class VviinnExampleImage {
           this.vviinnNoResult.emit(this.basicEventData);
         },
         (response) => {
-          if (this.state.image)
-            localStorage.setItem("cropperImageSrc", this.state.image.src);
+          setLocalStorageItems(
+            this.state.image?.src,
+            this.state.detectedObjects,
+          );
           this.vviinnImageUploadFinished.emit({
             searchId: response.requestId,
             isTriggeredByVpsWidget: this.storeName === "widget",

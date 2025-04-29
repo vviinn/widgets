@@ -37,6 +37,7 @@ import {
 import { getImageSizes } from "../../Image/sizing";
 import { Rectangle } from "../../interfaces/search";
 import { isCropBoxDataSimilar } from "./helpers/isCropBoxDataSimilar";
+import { cleanLocalStorage, getLocalStorageItems } from "../../localStorage";
 
 @Component({
   tag: "vviinn-cropper",
@@ -140,14 +141,19 @@ export class VviinnCropper {
     if (this.saveImageMode === "never") return;
     this.state.image = null;
 
-    const cropperImageSrc = localStorage.getItem("cropperImageSrc");
-    if (!cropperImageSrc) return;
+    const {
+      imageSrc: localStorageImageSrc,
+      detectedObjects: localStorageDetectedObjects,
+    } = getLocalStorageItems();
+    if (!localStorageImageSrc) return;
 
     const image = document.createElement("img");
-    image.src = cropperImageSrc;
+    image.src = localStorageImageSrc;
     this.state.image = image;
+    if (this.state.detectedObjects?.length === 0)
+      this.state.detectedObjects = localStorageDetectedObjects;
 
-    this.saveImageMode === "once" && localStorage.removeItem("cropperImageSrc");
+    this.saveImageMode === "once" && cleanLocalStorage();
   };
 
   private resetStateHandler = ({
@@ -156,7 +162,7 @@ export class VviinnCropper {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
 
     this.selectedDetectedObject = null;
-    localStorage.removeItem("cropperImageSrc");
+    cleanLocalStorage();
     this.state.image?.setAttribute("src", "");
     this.state.detectedObjects = [];
     this.state.image = null;
@@ -182,7 +188,7 @@ export class VviinnCropper {
 
   private imageUploadFinishedHandler = () => {
     if (this.saveImageMode === "never") {
-      localStorage.removeItem("cropperImageSrc");
+      cleanLocalStorage();
     }
   };
 
