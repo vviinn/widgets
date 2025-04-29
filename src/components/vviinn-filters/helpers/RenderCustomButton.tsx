@@ -4,7 +4,7 @@ import { TextIcon } from "../../vviinn-icons/icons/TextIcon";
 
 type RenderCustomButtonProps = {
   buttonType: "image" | "text" | "price" | "crop";
-  onClick: () => void;
+  onClick?: () => void;
   label?: string;
   imageSrc?: string;
   hidden?: boolean;
@@ -17,11 +17,12 @@ export const RenderCustomButton = ({
   imageSrc,
   hidden,
 }: RenderCustomButtonProps): JSX.Element => {
+  const isClickable = !!onClick;
   return (
     <li part="filters-sub-row" class={{ hidden }}>
       <button
         onClick={onClick}
-        class={`filters-more-modal-button active`}
+        class={`filters-more-modal-button custom active ${isClickable && "clickable"}`}
         part="filters-option-button"
       >
         {(buttonType === "image" || buttonType === "crop") &&
@@ -45,7 +46,7 @@ export const RenderCustomButton = ({
           )}
           {(buttonType === "text" || buttonType === "price") && label}
         </span>
-        <FilterIconClose />
+        {isClickable && <FilterIconClose />}
       </button>
     </li>
   );
