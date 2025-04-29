@@ -22,7 +22,7 @@ export const RenderCustomButton = ({
     <li part="filters-sub-row" class={{ hidden }}>
       <button
         onClick={onClick}
-        class={`filters-more-modal-button custom active ${isClickable && "clickable"}`}
+        class={`filters-more-modal-button custom active ${isClickable ? "clickable" : ""}`}
         part="filters-option-button"
       >
         {(buttonType === "image" || buttonType === "crop") &&
