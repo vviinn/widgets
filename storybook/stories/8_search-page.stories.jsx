@@ -3,15 +3,9 @@ import { vviinnToken } from "../helpers";
 import "../documentation/widgets/styles.css";
 import "../styles/search-page.css";
 
-const currentEnv = process.env.STORYBOOK_ENV || 'local';
-
 export default {
   title: "Playground/Search Components",
-  parameters: {
-    ...(currentEnv === 'production' && { 
-      story: { disable: true }
-    }),
-  },
+  tags: ["!dev"],
   argTypes: {
     searchQuery: { control: "text" },
     searchId: { control: "text" },
@@ -186,4 +180,3 @@ export const ImageSearchResultsPage = (args) => {
 ImageSearchResultsPage.args = {
   searchId: "",
 };
-
