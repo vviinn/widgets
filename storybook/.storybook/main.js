@@ -1,5 +1,4 @@
-const path = require("path");
-const webpack = require("webpack");
+import { resolve } from "path";
 
 const config = {
   stories: [
@@ -23,7 +22,7 @@ const config = {
         {
           test: /\.mdx$/,
           use: {
-            loader: path.resolve("./stories.loader.ts"),
+            loader: resolve("./stories.loader.ts"),
           },
         },
         ...config.module.rules,
@@ -34,12 +33,6 @@ const config = {
         (singleEntry) => !singleEntry.includes("/webpack-hot-middleware/"),
       );
     }
-    config.plugins.push(
-      new webpack.DefinePlugin({
-        "process.env.ENV": JSON.stringify(process.env.ENV),
-      }),
-    );
-
     return config;
   },
   framework: {
