@@ -1,4 +1,5 @@
 import { resolve } from "path";
+import { DefinePlugin } from "webpack";
 
 const config = {
   stories: [
@@ -33,6 +34,12 @@ const config = {
         (singleEntry) => !singleEntry.includes("/webpack-hot-middleware/"),
       );
     }
+    config.plugins.push(
+      new DefinePlugin({
+        "process.env.ENV": JSON.stringify(process.env.ENV),
+      }),
+    );
+
     return config;
   },
   framework: {

@@ -40,6 +40,7 @@ import { isIntervalFilter } from "../../filters";
 import { components } from "../../interfaces/generated";
 import i18next from "i18next";
 import { resources } from "../../locale";
+import { getLocalStorageItems } from "../../localStorage";
 
 /**
  * @part selected-filters-list - List of selected filters.
@@ -153,7 +154,8 @@ export class VviinnSelectedFilters {
     this.resetInnerState(true);
   };
 
-  private handleImageUploadFinished = () => {
+  private handleImageUploadFinished = ({ detail }: SearchIdEvent) => {
+    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.getUploadedImageSrc();
   };
 
@@ -182,8 +184,8 @@ export class VviinnSelectedFilters {
   };
 
   private getUploadedImageSrc = () => {
-    const imageSrc =
-      this.state?.image?.src || localStorage.getItem("cropperImageSrc");
+    const { imageSrc: localStorageImageSrc } = getLocalStorageItems();
+    const imageSrc = this.state.image?.src || localStorageImageSrc;
     if (!imageSrc?.length) return null;
     this.imageSrc = imageSrc;
   };

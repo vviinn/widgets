@@ -12,10 +12,8 @@ const Template = (args) => `
   <div class="search-page-wrapper-aside cropper-page">
     <vviinn-cropper
       width="${args.width}"
-      detected-objects-string='${args.detectedObjectsString}'
       api-path="${args.apiPath}"
-      save-image-mode="${args.saveImageMode}"
-      url="${args.url}"></vviinn-cropper> 
+      save-image-mode="${args.saveImageMode}"></vviinn-cropper> 
       
     <vviinn-extended-filters mode="preview" locale="en-US"></vviinn-extended-filters>
   </div>
@@ -50,7 +48,5 @@ Default.args = {
   token: vviinnToken,
   apiPath: process.env.STORYBOOK_API_PATH,
   saveImageMode: "once",
-  url: "",
   width: 288,
-  detectedObjectsString: "",
 };
