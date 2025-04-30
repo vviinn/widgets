@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.160.0](https://github.com/vviinn/widgets/compare/v2.159.0...v2.160.0) (2025-04-30)
+
+
+### Features
+
+* Make custom Image and Text selected filters non-interactive ([4efbeb5](https://github.com/vviinn/widgets/commit/4efbeb5dca4dcb91ec38a3ca93e2550747ebbee7))
+
 ## [2.159.0](https://github.com/vviinn/widgets/compare/v2.158.2...v2.159.0) (2025-04-28)
 
 
