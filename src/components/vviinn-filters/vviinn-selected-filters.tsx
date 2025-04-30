@@ -28,13 +28,11 @@ import {
   TriggerSourceEvent,
   TriggerSourceEventData,
 } from "../../recommendation/events";
-import { triggerFilter, triggerResetFilters } from "./helpers/triggerFilter";
+import { triggerFilter } from "./helpers/triggerFilter";
 import {
   componentsState,
-  resetStore,
   searchState,
   SearchStore,
-  SearchStoreName,
 } from "../../store/search.store";
 import { globalState } from "../../store/store";
 import { ResponseDynamicFilterIntervalItem } from "../../interfaces/recommendation";
@@ -89,7 +87,6 @@ export class VviinnSelectedFilters {
   globalSlotsChanged: EventEmitter<any>;
 
   private state?: SearchStore;
-  private storeName?: SearchStoreName;
 
   private handleSubFilterSelection = (
     filterValue: DynamicFilterValue,
@@ -193,30 +190,6 @@ export class VviinnSelectedFilters {
     this.imageSrc = imageSrc;
   };
 
-  private resetState = () => {
-    if (this.skipStateChanges(this.showInWidget)) return;
-
-    this.vviinnFilterTriggered.emit({
-      kind: "",
-      action: "deselect",
-      customTrigger: "TPS",
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
-
-    this.vviinnSelectedFiltersReset.emit({
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
-
-    triggerResetFilters({
-      vviinnFilterTriggered: this.vviinnFilterTriggered,
-      isTriggeredByVpsWidget: this.showInWidget,
-      el: this.el,
-    });
-
-    this.resetInnerState(true, true);
-    resetStore(this.storeName);
-  };
-
   private handlePriceButtonClick = () => {
     this.priceCustomFilter = null;
 
@@ -227,13 +200,6 @@ export class VviinnSelectedFilters {
     );
   };
 
-  private handleImageButtonClick = () => {
-    this.resetState();
-    this.vviinnCropperResetState.emit({
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
-  };
-
   private handleCropButtonClick = () => {
     this.vviinnResetCropArea.emit({
       isTriggeredByVpsWidget: this.showInWidget,
@@ -242,7 +208,6 @@ export class VviinnSelectedFilters {
 
   connectedCallback() {
     this.state = this.showInWidget ? searchState : componentsState;
-    this.storeName = this.showInWidget ? "widget" : "components";
 
     document.addEventListener(
       "vviinnFiltersChanged",
@@ -339,7 +304,6 @@ export class VviinnSelectedFilters {
           {RenderCustomButton({
             label: this.textSearchCustomFilter,
             buttonType: "text",
-            onClick: this.resetState,
             hidden: !this.textSearchCustomFilter?.length,
           })}
 
@@ -347,7 +311,6 @@ export class VviinnSelectedFilters {
             label: i18next.t("filters.imageFilterText"),
             buttonType: "image",
             imageSrc: this.imageSrc,
-            onClick: this.handleImageButtonClick,
             hidden: !this.imageSrc?.length,
           })}
 
