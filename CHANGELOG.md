@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.160.4](https://github.com/vviinn/widgets/compare/v2.160.3...v2.160.4) (2025-04-30)
+
+
+### Bug Fixes
+
+* Add the products shadow part ([cb40f4b](https://github.com/vviinn/widgets/commit/cb40f4b41996abbc1ed45a6d829c61d899cc4bde))
+
+### [2.160.3](https://github.com/vviinn/widgets/compare/v2.160.2...v2.160.3) (2025-04-30)
+
+
+### Bug Fixes
+
+* Fix Storybook build 2 ([33eb1ac](https://github.com/vviinn/widgets/commit/33eb1ac07cb26dd140dd7b6f4178b888f452ba48))
+
+### [2.160.2](https://github.com/vviinn/widgets/compare/v2.160.1...v2.160.2) (2025-04-30)
+
+
+### Bug Fixes
+
+* Fix Storybook build ([33051f6](https://github.com/vviinn/widgets/commit/33051f6b3a748957e655a238a696d169c428c830))
+
+### [2.160.1](https://github.com/vviinn/widgets/compare/v2.160.0...v2.160.1) (2025-04-30)
+
+
+### Bug Fixes
+
+* Fix cropper when showing results on a new page ([2b10ac1](https://github.com/vviinn/widgets/commit/2b10ac1d9a7f7a7d12712977208bc1521130b025))
+
+## [2.160.0](https://github.com/vviinn/widgets/compare/v2.159.0...v2.160.0) (2025-04-30)
+
+
+### Features
+
+* Make custom Image and Text selected filters non-interactive ([4efbeb5](https://github.com/vviinn/widgets/commit/4efbeb5dca4dcb91ec38a3ca93e2550747ebbee7))
+
 ## [2.159.0](https://github.com/vviinn/widgets/compare/v2.158.2...v2.159.0) (2025-04-28)
 
 

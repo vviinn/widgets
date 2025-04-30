@@ -28,19 +28,15 @@ import {
   TriggerSourceEvent,
   TriggerSourceEventData,
 } from "../../recommendation/events";
-import { triggerFilter, triggerResetFilters } from "./helpers/triggerFilter";
-import {
-  resetStore,
-  SearchStore,
-  SearchStoreName,
-  useSearchStore,
-} from "../../store/search.store";
+import { triggerFilter } from "./helpers/triggerFilter";
+import { SearchStore, useSearchStore } from "../../store/search.store";
 import { globalState } from "../../store/store";
 import { ResponseDynamicFilterIntervalItem } from "../../interfaces/recommendation";
 import { isIntervalFilter } from "../../filters";
 import { components } from "../../interfaces/generated";
 import i18next from "i18next";
 import { resources } from "../../locale";
+import { getLocalStorageItems } from "../../localStorage";
 
 /**
  * @part selected-filters-list - List of selected filters.
@@ -87,7 +83,6 @@ export class VviinnSelectedFilters {
   globalSlotsChanged: EventEmitter<any>;
 
   private state?: SearchStore;
-  private storeName?: SearchStoreName;
 
   private handleSubFilterSelection = (
     filterValue: DynamicFilterValue,
@@ -155,7 +150,8 @@ export class VviinnSelectedFilters {
     this.resetInnerState(true);
   };
 
-  private handleImageUploadFinished = () => {
+  private handleImageUploadFinished = ({ detail }: SearchIdEvent) => {
+    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.getUploadedImageSrc();
   };
 
@@ -184,34 +180,10 @@ export class VviinnSelectedFilters {
   };
 
   private getUploadedImageSrc = () => {
-    const imageSrc =
-      this.state?.image?.src || localStorage.getItem("cropperImageSrc");
+    const { imageSrc: localStorageImageSrc } = getLocalStorageItems();
+    const imageSrc = this.state.image?.src || localStorageImageSrc;
     if (!imageSrc?.length) return null;
     this.imageSrc = imageSrc;
-  };
-
-  private resetState = () => {
-    if (this.skipStateChanges(this.showInWidget)) return;
-
-    this.vviinnFilterTriggered.emit({
-      kind: "",
-      action: "deselect",
-      customTrigger: "TPS",
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
-
-    this.vviinnSelectedFiltersReset.emit({
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
-
-    triggerResetFilters({
-      vviinnFilterTriggered: this.vviinnFilterTriggered,
-      isTriggeredByVpsWidget: this.showInWidget,
-      el: this.el,
-    });
-
-    this.resetInnerState(true, true);
-    resetStore(this.storeName);
   };
 
   private handlePriceButtonClick = () => {
@@ -224,13 +196,6 @@ export class VviinnSelectedFilters {
     );
   };
 
-  private handleImageButtonClick = () => {
-    this.resetState();
-    this.vviinnCropperResetState.emit({
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
-  };
-
   private handleCropButtonClick = () => {
     this.vviinnResetCropArea.emit({
       isTriggeredByVpsWidget: this.showInWidget,
@@ -238,9 +203,8 @@ export class VviinnSelectedFilters {
   };
 
   connectedCallback() {
-    const { state, storeName } = useSearchStore(this.showInWidget);
+    const { state } = useSearchStore(this.showInWidget);
     this.state = state;
-    this.storeName = storeName;
 
     document.addEventListener(
       "vviinnFiltersChanged",
@@ -337,7 +301,6 @@ export class VviinnSelectedFilters {
           {RenderCustomButton({
             label: this.textSearchCustomFilter,
             buttonType: "text",
-            onClick: this.resetState,
             hidden: !this.textSearchCustomFilter?.length,
           })}
 
@@ -345,7 +308,6 @@ export class VviinnSelectedFilters {
             label: i18next.t("filters.imageFilterText"),
             buttonType: "image",
             imageSrc: this.imageSrc,
-            onClick: this.handleImageButtonClick,
             hidden: !this.imageSrc?.length,
           })}
 
