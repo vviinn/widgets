@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.160.3](https://github.com/vviinn/widgets/compare/v2.160.2...v2.160.3) (2025-04-30)
+
+
+### Bug Fixes
+
+* Fix Storybook build 2 ([33eb1ac](https://github.com/vviinn/widgets/commit/33eb1ac07cb26dd140dd7b6f4178b888f452ba48))
+
 ### [2.160.2](https://github.com/vviinn/widgets/compare/v2.160.1...v2.160.2) (2025-04-30)
 
 
