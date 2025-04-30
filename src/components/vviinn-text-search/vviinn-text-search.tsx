@@ -292,7 +292,7 @@ export class VviinnTextSearch {
               locale={globalState.locale}
               apiPath={globalState.apiPath}
               addStyle={false}
-              useComponentsStore={true}
+              showInWidget={false}
               exportparts="vviinn-button"
             />
           )}

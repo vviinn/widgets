@@ -37,6 +37,8 @@ export const priceRangeParts = makeExportPartsString(histogramPartsList);
 
 export const energyLabelParts = makeExportPartsString(energyLabelPartsList);
 
+export const productCardsGridPart = "products";
+
 export const productCardParts = makeExportPartsString(
   productCardGeneralPartsList,
   pricePartsList,

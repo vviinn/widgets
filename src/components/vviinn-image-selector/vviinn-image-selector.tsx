@@ -11,6 +11,7 @@ import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/lib/function";
 import {
   makeUploadFileRequest,
+  SearchStore,
   SearchStoreName,
 } from "../../store/search.store";
 import {
@@ -21,6 +22,7 @@ import {
 } from "../../recommendation/events";
 import { BasicError } from "../../error";
 import { VisualSearchResponse } from "../../interfaces/search";
+import { setLocalStorageItems } from "../../localStorage";
 
 /**
  * @part button -  button look and feel
@@ -43,7 +45,9 @@ export class VviinnImageSelector {
   @Prop() resetVpsButton: () => void;
   @Prop() token?: string;
   @Prop() apiPath?: string;
+  @Prop() showInWidget: boolean;
   @Prop() storeName: SearchStoreName;
+  @Prop() state: SearchStore;
 
   private fileInput: HTMLInputElement;
 
@@ -69,6 +73,12 @@ export class VviinnImageSelector {
           });
         },
         (response) => {
+          if (!this.showInWidget)
+            setLocalStorageItems(
+              this.state.image?.src,
+              this.state.detectedObjects,
+            );
+
           this.vviinnImageUploadFinished.emit({
             searchId: response.requestId,
             isTriggeredByVpsWidget: this.storeName === "widget",

@@ -16,10 +16,9 @@ import i18next from "i18next";
 
 import { version } from "../../../package.json";
 import {
-  searchState,
-  componentsState,
   SearchStore,
   SearchStoreName,
+  useSearchStore,
 } from "../../store/search.store";
 import { trackEvent, updateGlobalState, globalState } from "../../store/store";
 import { slotChangeListener, SlotSkeleton } from "../customized-slots";
@@ -63,6 +62,7 @@ import {
   filtersParts,
   modalParts,
   productCardParts,
+  productCardsGridPart,
   searchBarParts,
   searchWidgetButtonParts,
   searchWidgetFilterParts,
@@ -194,7 +194,7 @@ export class VviinnVpsWidget {
   /** @internal */
   @Prop() parentSlots?: HTMLSlotElement[] = [];
   /** @internal */
-  @Prop() useComponentsStore?: boolean = false;
+  @Prop() showInWidget?: boolean = true;
 
   @State() slidePosition: number = 0;
   @State() uploadSource: UploadSource;
@@ -499,8 +499,9 @@ export class VviinnVpsWidget {
   connectedCallback() {
     updateGlobalState(this);
     this.isDesktop = checkDeviceType() === "desktop";
-    this.storeName = this.useComponentsStore ? "components" : "widget";
-    this.state = this.useComponentsStore ? componentsState : searchState;
+    const { state, storeName } = useSearchStore(this.showInWidget);
+    this.storeName = storeName;
+    this.state = state;
     this.cameraAvailable =
       !!navigator.mediaDevices && !!navigator.mediaDevices.getUserMedia;
 
@@ -553,12 +554,12 @@ export class VviinnVpsWidget {
   }
 
   private handleImageSelection() {
-    if (this.useComponentsStore) {
+    if (this.showInWidget) {
+      this.slidePosition = 1;
+    } else {
       this.resetVpsButton && this.resetVpsButton();
       this.resetState();
-      return;
     }
-    this.slidePosition = 1;
   }
 
   private renderButtons() {
@@ -604,6 +605,7 @@ export class VviinnVpsWidget {
           this.handleVviinnImageUpload("uploadPhoto");
         }}
         storeName={this.storeName}
+        state={this.state}
         onVviinnNoResult={({ detail }) => this.handleVviinnNoResult(detail)}
         resetVpsButton={this.resetVpsButton}
         basicEventData={this.getBasicEventData()}
@@ -611,6 +613,7 @@ export class VviinnVpsWidget {
         startUpload={
           this.buttonPressed && this.showingInButton && this.mode === "upload"
         }
+        showInWidget={this.showInWidget}
         loading={
           this.state.loading &&
           this.state.searchType === "image" &&
@@ -653,7 +656,7 @@ export class VviinnVpsWidget {
     this.state.loading = false;
     this.state.serverError = false;
 
-    if (this.useComponentsStore) return;
+    if (!this.showInWidget) return;
 
     this.state.image = null;
     this.state.results = [];
@@ -684,7 +687,7 @@ export class VviinnVpsWidget {
   render() {
     return (
       <Host
-        exportparts={`${modalParts}, ${productCardParts}, ${searchBarParts}, ${searchWidgetFilterParts}, ${searchWidgetButtonParts}`}
+        exportparts={`${modalParts}, ${productCardParts}, ${searchBarParts}, ${searchWidgetFilterParts}, ${searchWidgetButtonParts}, ${productCardsGridPart}`}
       >
         {!this.showingInButton && SlotSkeleton("search")}
 
@@ -722,7 +725,9 @@ export class VviinnVpsWidget {
                 srcObject={this.stream}
                 cameraButtonClicked={this.isCameraButtonClicked}
                 exampleImageSource={this.exampleImageSource}
-                useComponentsStore={this.useComponentsStore}
+                showInWidget={this.showInWidget}
+                storeName={this.storeName}
+                state={this.state}
               />
               <div
                 class={{
