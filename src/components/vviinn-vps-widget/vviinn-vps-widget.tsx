@@ -62,6 +62,7 @@ import {
   filtersParts,
   modalParts,
   productCardParts,
+  productCardsGridPart,
   searchBarParts,
   searchWidgetButtonParts,
   searchWidgetFilterParts,
@@ -686,7 +687,7 @@ export class VviinnVpsWidget {
   render() {
     return (
       <Host
-        exportparts={`${modalParts}, ${productCardParts}, ${searchBarParts}, ${searchWidgetFilterParts}, ${searchWidgetButtonParts}`}
+        exportparts={`${modalParts}, ${productCardParts}, ${searchBarParts}, ${searchWidgetFilterParts}, ${searchWidgetButtonParts}, ${productCardsGridPart}`}
       >
         {!this.showingInButton && SlotSkeleton("search")}
 
