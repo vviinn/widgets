@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.160.4](https://github.com/vviinn/widgets/compare/v2.160.3...v2.160.4) (2025-04-30)
+
+
+### Bug Fixes
+
+* Add the products shadow part ([cb40f4b](https://github.com/vviinn/widgets/commit/cb40f4b41996abbc1ed45a6d829c61d899cc4bde))
+
 ### [2.160.3](https://github.com/vviinn/widgets/compare/v2.160.2...v2.160.3) (2025-04-30)
 
 
