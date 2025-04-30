@@ -162,7 +162,6 @@ export class VviinnCropper {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
 
     this.selectedDetectedObject = null;
-    cleanLocalStorage();
     this.state.image?.setAttribute("src", "");
     this.state.detectedObjects = [];
     this.state.image = null;
@@ -186,8 +185,12 @@ export class VviinnCropper {
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
     this.showInWidget !== isTriggeredByVpsWidget;
 
-  private imageUploadFinishedHandler = () => {
-    if (this.saveImageMode === "never") {
+  private imageUploadFinishedHandler = ({ detail }: SearchIdEvent) => {
+    if (
+      this.saveImageMode === "never" &&
+      !this.showInWidget &&
+      !this.skipStateChanges(detail.isTriggeredByVpsWidget)
+    ) {
       cleanLocalStorage();
     }
   };
@@ -314,7 +317,6 @@ export class VviinnCropper {
     !this.showAspectRatioError;
 
   render() {
-    if (!this.state.image) return null;
     return (
       <Host
         class={{
@@ -336,7 +338,7 @@ export class VviinnCropper {
               onLoad={this.loadImage}
             />
 
-            {this.state.detectedObjects.map((object) => (
+            {this.state.detectedObjects?.map((object) => (
               <vviinn-detected-object
                 detectedObject={object}
                 selectedDetectedObject={this.selectedDetectedObject}

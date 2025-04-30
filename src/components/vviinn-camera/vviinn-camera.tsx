@@ -49,6 +49,7 @@ export class VviinnExampleImage {
   @Prop() basicEventData: BasicEventData;
   @Prop() srcObject: MediaStream;
   @Prop() cameraButtonClicked: boolean = false;
+  @Prop() showInWidget: boolean;
   @Prop() storeName: SearchStoreName;
   @Prop() state: SearchStore;
 
@@ -195,10 +196,11 @@ export class VviinnExampleImage {
           this.vviinnNoResult.emit(this.basicEventData);
         },
         (response) => {
-          setLocalStorageItems(
-            this.state.image?.src,
-            this.state.detectedObjects,
-          );
+          if (!this.showInWidget)
+            setLocalStorageItems(
+              this.state.image?.src,
+              this.state.detectedObjects,
+            );
           this.vviinnImageUploadFinished.emit({
             searchId: response.requestId,
             isTriggeredByVpsWidget: this.storeName === "widget",

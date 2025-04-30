@@ -45,6 +45,7 @@ export class VviinnImageSelector {
   @Prop() resetVpsButton: () => void;
   @Prop() token?: string;
   @Prop() apiPath?: string;
+  @Prop() showInWidget: boolean;
   @Prop() storeName: SearchStoreName;
   @Prop() state: SearchStore;
 
@@ -72,10 +73,11 @@ export class VviinnImageSelector {
           });
         },
         (response) => {
-          setLocalStorageItems(
-            this.state.image?.src,
-            this.state.detectedObjects,
-          );
+          if (!this.showInWidget)
+            setLocalStorageItems(
+              this.state.image?.src,
+              this.state.detectedObjects,
+            );
 
           this.vviinnImageUploadFinished.emit({
             searchId: response.requestId,
