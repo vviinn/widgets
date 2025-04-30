@@ -321,6 +321,10 @@ vviinn-price-range {
   color: var(--color-text-primary);
 }
 
+.filters-more-modal-button.custom:not(.clickable) {
+  cursor: default;
+}
+
 .filters-more-modal-button:hover {
   background-color: var(--surface-bg-color-01-hover);
 }
