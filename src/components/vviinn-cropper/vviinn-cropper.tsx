@@ -92,10 +92,6 @@ export class VviinnCropper {
     this.initPreloadedImage();
 
     document.addEventListener(
-      "vviinnImageUploadStarted",
-      this.imageUploadStartedHandler,
-    );
-    document.addEventListener(
       "vviinnImageUploadFinished",
       this.imageUploadFinishedHandler,
     );
@@ -107,10 +103,6 @@ export class VviinnCropper {
   }
 
   disconnectedCallback() {
-    document.removeEventListener(
-      "vviinnImageUploadStarted",
-      this.imageUploadStartedHandler,
-    );
     document.removeEventListener(
       "vviinnImageUploadFinished",
       this.imageUploadFinishedHandler,
@@ -150,9 +142,9 @@ export class VviinnCropper {
     const image = document.createElement("img");
     image.src = localStorageImageSrc;
     this.state.image = image;
+
     if (this.state.detectedObjects?.length === 0)
       this.state.detectedObjects = localStorageDetectedObjects;
-
     this.saveImageMode === "once" && cleanLocalStorage();
   };
 
@@ -166,6 +158,7 @@ export class VviinnCropper {
     this.state.detectedObjects = [];
     this.state.image = null;
     this.cropper?.destroy();
+    cleanLocalStorage();
   };
 
   private resetCropAreaHandler = ({
@@ -186,13 +179,12 @@ export class VviinnCropper {
     this.showInWidget !== isTriggeredByVpsWidget;
 
   private imageUploadFinishedHandler = ({ detail }: SearchIdEvent) => {
-    if (
-      this.saveImageMode === "never" &&
-      !this.showInWidget &&
-      !this.skipStateChanges(detail.isTriggeredByVpsWidget)
-    ) {
-      cleanLocalStorage();
-    }
+    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
+
+    if (this.saveImageMode === "never") cleanLocalStorage();
+
+    if (this.cropper && this.state.image?.src)
+      this.cropper.replace(this.state.image.src);
   };
 
   @Listen("vviinnSelectObject")
@@ -232,16 +224,6 @@ export class VviinnCropper {
       isTriggeredByVpsWidget: this.showInWidget,
     });
   }
-
-  private imageUploadStartedHandler = ({ detail }: SearchIdEvent) => {
-    if (
-      this.cropper &&
-      this.state.image?.src &&
-      !this.skipStateChanges(detail.isTriggeredByVpsWidget)
-    ) {
-      this.cropper.replace(this.state.image.src);
-    }
-  };
 
   private getCropboxData(): Rectangle {
     const { left, top, width, height } = this.cropper.getCropBoxData();

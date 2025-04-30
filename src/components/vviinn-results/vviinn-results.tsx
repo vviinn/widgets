@@ -184,7 +184,7 @@ export class VviinnResults {
   @Prop() addToBasketShow: boolean = false;
   /** Show or hide Favorite button */
   @Prop() favoriteShow: boolean = false;
-  /** Query for performing text search */
+  /** Query to perform a text search. It is recommended to use the search-query prop for vviinn-text-search when possible instead. */
   @Prop() textSearchQuery?: string;
   /** Column for performing Product Listing Page request */
   @Prop() filterColumn?: string = "product_type";
