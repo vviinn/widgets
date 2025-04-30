@@ -71,7 +71,7 @@ import {
   vprIconSlotName,
 } from "../customized-slots";
 import { getCustomLabels } from "../../recommendation";
-import { productCardParts } from "../../cssParts";
+import { productCardParts, productCardsGridPart } from "../../cssParts";
 import { findSlotElements, getSlotNames } from "../../dom";
 import { OneClickDiscoveryResultsMode } from "../../widget/types";
 import { RESULTS_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
@@ -853,7 +853,7 @@ export class VviinnResults {
           "show-in-widget": this.showInWidget,
           "matching-discovery": this.oneClickDiscoveryMode === "append-slider",
         }}
-        exportparts={productCardParts}
+        exportparts={`${productCardParts}, ${productCardsGridPart}`}
       >
         <div class="nothing-found">
           {resultsLength === 0 && this.showInWidget && (
@@ -872,6 +872,7 @@ export class VviinnResults {
             hidden: this.showAspectRatioError || resultsLength === 0,
             products: true,
           }}
+          part={productCardsGridPart}
           id="vviinn-results-products"
         >
           {resultsLength > 0 && this.renderResults()}
