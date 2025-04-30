@@ -162,6 +162,9 @@ export class VviinnResults {
   /** @internal */
   @Event() vviinnCropperResetState: EventEmitter<TriggerSourceEventData>;
 
+  /** @internal */
+  @Event() vviinnFilterTriggered: EventEmitter<DynamicFilterInternalData>;
+
   /** Vviinn customer’s token (required) */
   @Prop() token: string;
   /** The currency sign is displayed after the price */
@@ -372,6 +375,13 @@ export class VviinnResults {
         isTriggeredByVpsWidget: this.showInWidget,
       });
     }
+
+    this.vviinnFilterTriggered.emit({
+      kind: this.innerTextSearchQuery,
+      action: "select",
+      customTrigger: "TPS",
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
 
     return pipe(
       await makeTextSearchRequest(
