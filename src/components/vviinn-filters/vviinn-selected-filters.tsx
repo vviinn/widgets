@@ -157,7 +157,8 @@ export class VviinnSelectedFilters {
     this.resetInnerState(true);
   };
 
-  private handleImageUploadFinished = () => {
+  private handleImageUploadFinished = ({ detail }: SearchIdEvent) => {
+    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.getUploadedImageSrc();
   };
 
