@@ -1,5 +1,5 @@
-import { resolve } from "path";
-import { DefinePlugin } from "webpack";
+const path = require("path");
+const webpack = require("webpack");
 
 const config = {
   stories: [
@@ -23,7 +23,7 @@ const config = {
         {
           test: /\.mdx$/,
           use: {
-            loader: resolve("./stories.loader.ts"),
+            loader: path.resolve("./stories.loader.ts"),
           },
         },
         ...config.module.rules,
@@ -35,7 +35,7 @@ const config = {
       );
     }
     config.plugins.push(
-      new DefinePlugin({
+      new webpack.DefinePlugin({
         "process.env.ENV": JSON.stringify(process.env.ENV),
       }),
     );
