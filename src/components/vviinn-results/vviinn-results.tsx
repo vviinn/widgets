@@ -142,7 +142,7 @@ export class VviinnResults {
   @Event() vviinnProductLoad: EventEmitter<ProductCardEventData>;
   /** Recommended product appears in the viewport */
   @Event() vviinnProductView: EventEmitter<ProductCardEventData>;
-  /** Click on the product’s link */
+  /** Click on the product's link */
   @Event() vviinnProductClick: EventEmitter<ProductCardEventData>;
   /** The search result renders on the page */
   @Event() vviinnResultLoad: EventEmitter<BasicEventData>;
@@ -162,7 +162,7 @@ export class VviinnResults {
   /** @internal */
   @Event() vviinnCropperResetState: EventEmitter<TriggerSourceEventData>;
 
-  /** Vviinn customer’s token (required) */
+  /** Vviinn customer's token (required) */
   @Prop() token: string;
   /** The currency sign is displayed after the price */
   @Prop() currencySign?: string;
@@ -371,6 +371,10 @@ export class VviinnResults {
 
     if (!requestId?.length) {
       resetStore(this.storeName, "appStateOnly");
+
+      this.state.campaignIdTextSearch = this.campaignIdTextSearch;
+      this.state.campaignIdVisualSearch = this.campaignIdVisualSearch;
+
       this.vviinnCropperResetState.emit({
         isTriggeredByVpsWidget: this.showInWidget,
       });
@@ -485,6 +489,8 @@ export class VviinnResults {
     });
     this.setTextSearch(false, detail.isTriggeredByVpsWidget);
     resetStore(this.storeName, "appStateOnly");
+    this.state.campaignIdTextSearch = this.campaignIdTextSearch;
+    this.state.campaignIdVisualSearch = this.campaignIdVisualSearch;
   };
 
   private imageCropHandler = ({ detail }: TriggerSourceEvent) => {
@@ -508,8 +514,6 @@ export class VviinnResults {
     const { state, storeName, onChange } = useSearchStore(this.showInWidget);
     this.state = state;
     this.storeName = storeName;
-    this.state.campaignIdTextSearch = this.campaignIdTextSearch;
-    this.state.campaignIdVisualSearch = this.campaignIdVisualSearch;
 
     this.disposeStoreListener = onChange("loading", (loading) => {
       if (loading) this.resetDiscoveryAppendIndexes();
@@ -547,7 +551,7 @@ export class VviinnResults {
       this.oneClickDiscoveryClosedHandler,
     );
 
-    !!this.searchId && makeVisualSearchRequest(this.storeName, this.searchId);
+    if (!!this.searchId) makeVisualSearchRequest(this.storeName, this.searchId);
 
     this.getResultsByCategory();
 
