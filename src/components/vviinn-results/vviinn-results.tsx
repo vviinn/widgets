@@ -71,7 +71,7 @@ import {
   vprIconSlotName,
 } from "../customized-slots";
 import { getCustomLabels } from "../../recommendation";
-import { productCardParts } from "../../cssParts";
+import { productCardParts, productCardsGridPart } from "../../cssParts";
 import { findSlotElements, getSlotNames } from "../../dom";
 import { OneClickDiscoveryResultsMode } from "../../widget/types";
 import { RESULTS_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
@@ -184,7 +184,7 @@ export class VviinnResults {
   @Prop() addToBasketShow: boolean = false;
   /** Show or hide Favorite button */
   @Prop() favoriteShow: boolean = false;
-  /** Query for performing text search */
+  /** Query to perform a text search. It is recommended to use the search-query prop for vviinn-text-search instead, when using the Search Bar on the same page. */
   @Prop() textSearchQuery?: string;
   /** Column for performing Product Listing Page request */
   @Prop() filterColumn?: string = "product_type";
@@ -214,7 +214,7 @@ export class VviinnResults {
   /** @internal */
   @Prop() showAspectRatioError?: boolean;
   /** @internal */
-  @Prop() resetState?: () => void;
+  @Prop() resetWidgetState?: () => void;
   /** @internal */
   @Prop() replaceSlotsContentInWidget?: ReplaceSlotsContentInParent;
   /** @internal */
@@ -224,14 +224,10 @@ export class VviinnResults {
   /** Works for product-listing-page request */
   /** @internal */
   @Prop() useInnerState?: boolean = false;
-  /** ID for performing text search */
-  /** @internal */
-  @Prop() textSearchRequestId?: string;
   /** @internal */
   @Prop() scrollableModalBody?: HTMLElement;
 
   @State() innerTextSearchQuery: string;
-  @State() innerTextSearchRequestId: string;
   @State() slotsReplaced: boolean;
   @State() oneClickDiscoveryAppendIndex: number;
   @State() oneClickDiscoverySelectedIndex: number;
@@ -363,22 +359,24 @@ export class VviinnResults {
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
     this.showInWidget !== isTriggeredByVpsWidget;
 
-  private async getTextSearchResults(query?: string, requestId?: string) {
-    if (!query) return;
-
+  private async getTextSearchResults(requestId?: string) {
+    if (!this.innerTextSearchQuery) return;
     this.setTextSearch(true);
-    resetStore(this.storeName, "appStateOnly");
-    this.vviinnCropperResetState.emit({
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
-    this.vviinnSelectedFiltersReset.emit({
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
+
+    if (!requestId?.length) {
+      resetStore(this.storeName, "appStateOnly");
+      this.vviinnCropperResetState.emit({
+        isTriggeredByVpsWidget: this.showInWidget,
+      });
+      this.vviinnSelectedFiltersReset.emit({
+        isTriggeredByVpsWidget: this.showInWidget,
+      });
+    }
 
     return pipe(
       await makeTextSearchRequest(
         this.storeName,
-        query,
+        this.innerTextSearchQuery,
         requestId,
         this.resultsCount,
       ),
@@ -421,27 +419,21 @@ export class VviinnResults {
     });
     trackEvent(textSearchStartedEvent);
 
-    const response = await this.getTextSearchResults(this.innerTextSearchQuery);
-    if (response) this.innerTextSearchRequestId = response.requestId;
+    this.getTextSearchResults();
   };
 
   private filtersChangedHandler = async ({ detail }: ChangedFiltersEvent) => {
     const { filters, isTriggeredByVpsWidget } = detail;
-
     if (this.skipStateChanges(isTriggeredByVpsWidget)) return;
 
     if (this.filterColumn && this.filterValue) {
       this.getResultsByCategory(filters);
       return;
     }
-
     this.state.requestFilters = filters;
 
     if (this.isTextSearch) {
-      this.getTextSearchResults(
-        this.innerTextSearchQuery,
-        this.innerTextSearchRequestId,
-      );
+      this.getTextSearchResults(this.state.textSearchId);
     } else {
       makeVisualSearchRequest(this.storeName, this.searchId);
     }
@@ -548,10 +540,11 @@ export class VviinnResults {
     );
 
     !!this.searchId && makeVisualSearchRequest(this.storeName, this.searchId);
-    this.getResultsByCategory();
-    this.innerTextSearchQuery = this.textSearchQuery;
 
-    !this.showInWidget && this.getTextSearchResults(this.innerTextSearchQuery);
+    this.getResultsByCategory();
+
+    this.innerTextSearchQuery = this.textSearchQuery;
+    !this.showInWidget && this.getTextSearchResults();
   }
 
   disconnectedCallback() {
@@ -589,7 +582,8 @@ export class VviinnResults {
   @Watch("textSearchQuery")
   watchTextSearchQuery(newQuery: string) {
     if (this.showInWidget) return;
-    this.getTextSearchResults(newQuery);
+    this.innerTextSearchQuery = newQuery;
+    this.getTextSearchResults();
   }
 
   @Listen("vviinnProductLoad")
@@ -859,15 +853,17 @@ export class VviinnResults {
           "show-in-widget": this.showInWidget,
           "matching-discovery": this.oneClickDiscoveryMode === "append-slider",
         }}
-        exportparts={productCardParts}
+        exportparts={`${productCardParts}, ${productCardsGridPart}`}
       >
         <div class="nothing-found">
           {resultsLength === 0 && this.showInWidget && (
-            <vviinn-empty-results handler={() => this?.resetState()} />
+            <vviinn-empty-results handler={() => this?.resetWidgetState()} />
           )}
 
           {this.showAspectRatioError && this.showInWidget && (
-            <vviinn-wrong-aspect-ratio handler={() => this?.resetState()} />
+            <vviinn-wrong-aspect-ratio
+              handler={() => this?.resetWidgetState()}
+            />
           )}
         </div>
 
@@ -876,6 +872,7 @@ export class VviinnResults {
             hidden: this.showAspectRatioError || resultsLength === 0,
             products: true,
           }}
+          part={productCardsGridPart}
           id="vviinn-results-products"
         >
           {resultsLength > 0 && this.renderResults()}

@@ -8,7 +8,6 @@ import {
   EventEmitter,
   Element,
   Listen,
-  Watch,
 } from "@stencil/core";
 import Cropper from "cropperjs";
 import styles from "./vviinn-cropper.css";
@@ -38,6 +37,7 @@ import {
 import { getImageSizes } from "../../Image/sizing";
 import { Rectangle } from "../../interfaces/search";
 import { isCropBoxDataSimilar } from "./helpers/isCropBoxDataSimilar";
+import { cleanLocalStorage, getLocalStorageItems } from "../../localStorage";
 
 @Component({
   tag: "vviinn-cropper",
@@ -49,8 +49,6 @@ export class VviinnCropper {
 
   /** Save to Local Storage mode for uploaded image */
   @Prop() saveImageMode?: "once" | "always" | "never" = "once";
-  @Prop({ mutable: true }) detectedObjectsString?: string;
-  @Prop({ mutable: true }) url: string;
   @Prop({ mutable: true }) width: number = 288;
 
   /** @internal */
@@ -64,7 +62,6 @@ export class VviinnCropper {
   /** @internal */
   @Prop() showInWidget: boolean = false;
 
-  @State() detectedObjects: Rectangle[] = [];
   @State() cropper: Cropper = null;
   @State() selectedDetectedObject?: Rectangle | null = null;
 
@@ -83,26 +80,17 @@ export class VviinnCropper {
 
   private state?: SearchStore;
   private storeName?: SearchStoreName;
-  private disposeStoreListener?: () => void;
   private startEndCropBoxData?: Rectangle;
 
   connectedCallback() {
     updateGlobalState(this);
-    this.stringParser(true);
 
-    const { state, storeName, onChange } = useSearchStore(this.showInWidget);
+    const { state, storeName } = useSearchStore(this.showInWidget);
     this.state = state;
     this.storeName = storeName;
-    this.disposeStoreListener = onChange("image", (newImage) =>
-      this.renderImage(newImage),
-    );
 
     this.initPreloadedImage();
 
-    document.addEventListener(
-      "vviinnImageUploadStarted",
-      this.imageUploadStartedHandler,
-    );
     document.addEventListener(
       "vviinnImageUploadFinished",
       this.imageUploadFinishedHandler,
@@ -116,10 +104,6 @@ export class VviinnCropper {
 
   disconnectedCallback() {
     document.removeEventListener(
-      "vviinnImageUploadStarted",
-      this.imageUploadStartedHandler,
-    );
-    document.removeEventListener(
       "vviinnImageUploadFinished",
       this.imageUploadFinishedHandler,
     );
@@ -132,14 +116,8 @@ export class VviinnCropper {
       this.resetCropAreaHandler,
     );
 
-    this.disposeStoreListener?.();
     this.cropper?.destroy?.();
     componentsState.image = null;
-  }
-
-  @Watch("detectedObjectsString")
-  detectedObjectsStringWatcher() {
-    this.stringParser(true);
   }
 
   private initPreloadedImage = () => {
@@ -150,20 +128,24 @@ export class VviinnCropper {
       );
       this.width = width;
       this.height = height;
-      this.renderImage(this.state.image);
     }
 
     if (this.saveImageMode === "never") return;
     this.state.image = null;
 
-    const cropperImageSrc = localStorage.getItem("cropperImageSrc");
-    if (!cropperImageSrc) return;
+    const {
+      imageSrc: localStorageImageSrc,
+      detectedObjects: localStorageDetectedObjects,
+    } = getLocalStorageItems();
+    if (!localStorageImageSrc) return;
 
     const image = document.createElement("img");
-    image.src = cropperImageSrc;
+    image.src = localStorageImageSrc;
     this.state.image = image;
 
-    this.saveImageMode === "once" && localStorage.removeItem("cropperImageSrc");
+    if (this.state.detectedObjects?.length === 0)
+      this.state.detectedObjects = localStorageDetectedObjects;
+    this.saveImageMode === "once" && cleanLocalStorage();
   };
 
   private resetStateHandler = ({
@@ -171,12 +153,12 @@ export class VviinnCropper {
   }: CustomEvent<TriggerSourceEventData>) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
 
-    this.detectedObjects = [];
     this.selectedDetectedObject = null;
-    localStorage.removeItem("cropperImageSrc");
     this.state.image?.setAttribute("src", "");
+    this.state.detectedObjects = [];
     this.state.image = null;
     this.cropper?.destroy();
+    cleanLocalStorage();
   };
 
   private resetCropAreaHandler = ({
@@ -196,17 +178,14 @@ export class VviinnCropper {
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
     this.showInWidget !== isTriggeredByVpsWidget;
 
-  private imageUploadFinishedHandler = () => {
-    if (this.state.image && this.saveImageMode !== "never") {
-      localStorage.setItem("cropperImageSrc", this.state.image.src);
-    }
-  };
+  private imageUploadFinishedHandler = ({ detail }: SearchIdEvent) => {
+    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
 
-  stringParser(TriggerDetectedObjects?: boolean) {
-    if (this.detectedObjectsString && TriggerDetectedObjects) {
-      this.detectedObjects = JSON.parse(this.detectedObjectsString);
-    }
-  }
+    if (this.saveImageMode === "never") cleanLocalStorage();
+
+    if (this.cropper && this.state.image?.src)
+      this.cropper.replace(this.state.image.src);
+  };
 
   @Listen("vviinnSelectObject")
   selectDetectedObject({ detail }: CustomEvent<SelectObjectEventData>) {
@@ -245,21 +224,6 @@ export class VviinnCropper {
       isTriggeredByVpsWidget: this.showInWidget,
     });
   }
-
-  private getDetectedObjects = () =>
-    this.detectedObjects.length
-      ? this.detectedObjects
-      : this.state.detectedObjects;
-
-  private imageUploadStartedHandler = ({ detail }: SearchIdEvent) => {
-    if (
-      this.cropper &&
-      this.state.image?.src &&
-      !this.skipStateChanges(detail.isTriggeredByVpsWidget)
-    ) {
-      this.cropper.replace(this.state.image.src);
-    }
-  };
 
   private getCropboxData(): Rectangle {
     const { left, top, width, height } = this.cropper.getCropBoxData();
@@ -311,12 +275,6 @@ export class VviinnCropper {
     }
   };
 
-  private renderImage(newImage?: HTMLImageElement) {
-    if (newImage) {
-      this.url = newImage.src;
-    }
-  }
-
   private cropStart = () => {
     this.startEndCropBoxData = this.getCropboxData();
   };
@@ -341,7 +299,6 @@ export class VviinnCropper {
     !this.showAspectRatioError;
 
   render() {
-    if (!this.state.image) return null;
     return (
       <Host
         class={{
@@ -358,12 +315,12 @@ export class VviinnCropper {
               decoding="async"
               width={this.width}
               height={this.height}
-              src={this.url}
+              src={this.state.image?.src}
               draggable={false}
               onLoad={this.loadImage}
             />
 
-            {this.getDetectedObjects().map((object) => (
+            {this.state.detectedObjects?.map((object) => (
               <vviinn-detected-object
                 detectedObject={object}
                 selectedDetectedObject={this.selectedDetectedObject}

@@ -8,33 +8,4 @@ import {detectedObjectsStringExample, imageURLExample} from "./constants";
 
 # Cropper
 
-Call [Object Detection](https://docs.vviinn.com/#tag/services/operation/DetectObjectsOfImageInExistingSession) endpoint to get list of `Detected Objects` and pass them as `detected-objects-string` to `vviinn-cropper`.
-
-<div id="preview">
-  <div className="tab tab-reverse">
-      <div className="tablink-group">
-        <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'preview')}}>Code</button>
-        <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'preview')}}>Preview</button>
-      </div>
-  </div>
-
-  <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
-      <div className="tabcontent-preview">
-        <vviinn-cropper
-          detected-objects-string={detectedObjectsStringExample}
-          width="280"
-          url={imageURLExample}
-        ></vviinn-cropper>
-      </div>
-  </div>
-
-  <div id="Code_1" className="tabcontent">
-```html
-<vviinn-cropper
-  detected-objects-string="DETECTED_OBJECTS_STRING"
-  width="280"
-  url="BASE_64_DATA or IMAGE_URL"
-></vviinn-cropper>
-```
-  </div>
-</div>
+Cropper works in pairs with the Search Bar component. Its functionality can be checked in the [Cropper Playground](?path=/story/playground-cropper--default), and examples can be found on the [Search Page](?path=/docs/widgets-search-page--docs).
