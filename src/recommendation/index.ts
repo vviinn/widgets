@@ -18,15 +18,15 @@ type GetRecommendationsBodyProps = {
   dynamicFilters?: RequestDynamicFilterItem[];
 };
 
-const parseCampaigns = (campaigns: string) => {
-  if (!campaigns.length) return "";
-  campaigns.split(",").map((value) => {
-    const trimmedValue = value.trim();
-    return !isNaN(parseInt(trimmedValue))
-      ? parseInt(trimmedValue)
-      : trimmedValue;
-  });
-};
+const parseCampaigns = (campaigns: string) =>
+  !campaigns.length
+    ? ""
+    : campaigns.split(",").map((value) => {
+        const trimmedValue = value.trim();
+        return !isNaN(parseInt(trimmedValue))
+          ? parseInt(trimmedValue)
+          : trimmedValue;
+      });
 
 export const getRecommendationsBody = ({
   productId,

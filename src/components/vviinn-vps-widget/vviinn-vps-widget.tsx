@@ -154,8 +154,6 @@ export class VviinnVpsWidget {
   @Prop() campaignIdTextSearch: string = "";
   /** Campaign ID used for Visual Search */
   @Prop() campaignIdVisualSearch: string = "";
-  /** Campaign ID used for One-click Discovery */
-  @Prop() campaignIdDiscovery: string = "";
   /** Excluded filter. Example: "brand:Nike,Vans;custom_label_0:summer" */
   @Prop() excluded: string = "";
   /** Toggle for opening product link in new tab or not */
@@ -855,7 +853,6 @@ export class VviinnVpsWidget {
                   apiPath={globalState.apiPath}
                   campaignIdTextSearch={this.campaignIdTextSearch}
                   campaignIdVisualSearch={this.campaignIdVisualSearch}
-                  campaignIdDiscovery={this.campaignIdDiscovery}
                   uiSessionId={this.uiSessionId}
                   widgetElementId={this.buttonElementId ?? this.widgetElementId}
                   showInWidget={true}

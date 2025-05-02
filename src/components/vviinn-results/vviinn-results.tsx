@@ -172,8 +172,6 @@ export class VviinnResults {
   @Prop() campaignIdTextSearch: string = "";
   /** Campaign ID used for Visual Search */
   @Prop() campaignIdVisualSearch: string = "";
-  /** Campaign ID used for One-click Discovery */
-  @Prop() campaignIdDiscovery: string = "";
   /** Prefix is displayed before the price */
   @Prop() pricePrefix?: string;
   /** Search ID for results request */

@@ -107,8 +107,6 @@ export class VviinnVpsButton {
   @Prop() campaignIdTextSearch: string = "";
   /** Campaign ID used for Visual Search */
   @Prop() campaignIdVisualSearch: string = "";
-  /** Campaign ID used for One-click Discovery */
-  @Prop() campaignIdDiscovery: string = "";
   /** Add style to the button */
   @Prop() addStyle: boolean = false;
   /** Show the onboarding step, start the camera on opening, or skip the onboarding and move to the direct image upload. */
@@ -258,7 +256,6 @@ export class VviinnVpsButton {
           campaignId={this.campaignId}
           campaignIdTextSearch={this.campaignIdTextSearch}
           campaignIdVisualSearch={this.campaignIdVisualSearch}
-          campaignIdDiscovery={this.campaignIdDiscovery}
           showingInButton={true}
           buttonPressed={this.buttonPressed}
           resetVpsButton={this.resetButton.bind(this)}
