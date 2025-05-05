@@ -28,11 +28,7 @@ import {
 } from "../../recommendation/events";
 import { components } from "../../interfaces/generated";
 import { triggerFilter } from "./helpers/triggerFilter";
-import {
-  componentsState,
-  searchState,
-  SearchStore,
-} from "../../store/search.store";
+import { SearchStore, useSearchStore } from "../../store/search.store";
 import { isIntervalFilter } from "../../filters";
 
 /**
@@ -188,7 +184,8 @@ export class VviinnFilters {
   }
 
   connectedCallback() {
-    this.state = this.showInWidget ? searchState : componentsState;
+    const { state } = useSearchStore(this.showInWidget);
+    this.state = state;
 
     document.addEventListener(
       "vviinnFiltersChanged",

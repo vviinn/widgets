@@ -17,6 +17,9 @@ export const ResultsTemplate = (args) => {
     oneClickDiscoveryMode,
     addPriceContainer,
     pricePrefix,
+    campaignIdTextSearch,
+    campaignIdVisualSearch,
+    oneClickDiscoveryCampaigns,
   } = args;
 
   const filterAttributes =
@@ -57,7 +60,9 @@ export const ResultsTemplate = (args) => {
     one-click-discovery-mode="${oneClickDiscoveryMode}"
     add-price-container="${addPriceContainer}"
     favorite-show="${args.favoriteShow}"
-    one-click-discovery-campaigns="${args.oneClickDiscoveryCampaigns}"
+    one-click-discovery-campaigns="${oneClickDiscoveryCampaigns}"
+    campaign-id-text-search="${campaignIdTextSearch}"
+    campaign-id-visual-search="${campaignIdVisualSearch}"
   ></vviinn-results>
   </div>
 </div>`;
