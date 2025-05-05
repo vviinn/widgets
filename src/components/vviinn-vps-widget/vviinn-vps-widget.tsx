@@ -809,32 +809,34 @@ export class VviinnVpsWidget {
                     />
                   )}
 
-                  <div
-                    class={{
-                      "filters-wrapper": true,
-                      hidden: this.showAspectRatioError,
-                    }}
-                  >
-                    <vviinn-filters
-                      class="preview-filters"
-                      showInWidget={true}
-                      exportparts={filtersParts}
-                    />
+                  {this.state.dynamicFilters?.length > 0 && (
+                    <div
+                      class={{
+                        "filters-wrapper": true,
+                        hidden: this.showAspectRatioError,
+                      }}
+                    >
+                      <vviinn-filters
+                        class="preview-filters"
+                        showInWidget={true}
+                        exportparts={filtersParts}
+                      />
 
-                    <vviinn-extended-filters
-                      class="preview-extended-filters"
-                      mode="preview"
-                      showHeader={false}
-                      exportparts={extendedFiltersParts}
-                      showInWidget={true}
-                    />
+                      <vviinn-extended-filters
+                        class="preview-extended-filters"
+                        mode="preview"
+                        showHeader={false}
+                        exportparts={extendedFiltersParts}
+                        showInWidget={true}
+                      />
 
-                    <vviinn-extended-filters-button
-                      class="extended-filters-button"
-                      exportparts="extended-filters-button"
-                      showInWidget={true}
-                    />
-                  </div>
+                      <vviinn-extended-filters-button
+                        class="extended-filters-button"
+                        exportparts="extended-filters-button"
+                        showInWidget={true}
+                      />
+                    </div>
+                  )}
                 </div>
               )}
 
