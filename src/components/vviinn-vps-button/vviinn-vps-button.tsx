@@ -54,11 +54,12 @@ import { SEARCH_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
  * @part results-title - Title on the results page.
  * @part upload-photo_button - Upload Photo Button.
  * @part start-camera_button - Start Camera Button.
+ * @part products - Products container.
  * @part product-card - Product Card itself.
  * @part brand - Brand inside Product Card.
  * @part product-type - Product Type inside Product Card.
  * @part currency - Currency related to price.
- * @part deeplink - Anchor element around troduct title. Rendered only if "deeplink" property is filled.
+ * @part deeplink - Anchor element around product title. Rendered only if "deeplink" property is filled.
  * @part image - Product Card image.
  * @part image-link - Anchor element around product image. Rendered only if "deeplink" property is filled.
  * @part image-picture - Picture element for image.
@@ -101,8 +102,12 @@ export class VviinnVpsButton {
   @Prop() locale: Locale;
   /** Prefix is displayed before the price */
   @Prop() pricePrefix?: string;
-  /** Campaign ID applied for visual search */
+  /** Campaign ID used for Visual Search (deprecated) */
   @Prop() campaignId: string = "";
+  /** Campaign ID used for Text Search */
+  @Prop() campaignIdTextSearch: string = "";
+  /** Campaign ID used for Visual Search */
+  @Prop() campaignIdVisualSearch: string = "";
   /** Add style to the button */
   @Prop() addStyle: boolean = false;
   /** Show the onboarding step, start the camera on opening, or skip the onboarding and move to the direct image upload. */
@@ -250,6 +255,8 @@ export class VviinnVpsButton {
           apiPath={this.apiPath}
           pricePrefix={this.pricePrefix}
           campaignId={this.campaignId}
+          campaignIdTextSearch={this.campaignIdTextSearch}
+          campaignIdVisualSearch={this.campaignIdVisualSearch}
           showingInButton={true}
           buttonPressed={this.buttonPressed}
           resetVpsButton={this.resetButton.bind(this)}

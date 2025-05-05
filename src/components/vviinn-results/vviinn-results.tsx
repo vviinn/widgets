@@ -79,6 +79,7 @@ import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
 import { RESULTS_CALCULATED_COLUMNS_CSS_VAR } from "../vviinn-carousel/constants";
 
 /**
+ * @part products - Products container.
  * @part product-card - Product Card itself.
  * @part image-container - Product Card's image container.
  * @part content-container - Product Card's content container.
@@ -86,7 +87,7 @@ import { RESULTS_CALCULATED_COLUMNS_CSS_VAR } from "../vviinn-carousel/constants
  * @part brand - Brand inside Product Card.
  * @part product-type - Product Type inside Product Card.
  * @part currency - Currency related to price.
- * @part deeplink - Anchor element around troduct title. Rendered only if "deeplink" property is filled.
+ * @part deeplink - Anchor element around product title. Rendered only if "deeplink" property is filled.
  * @part image - Product Card image.
  * @part image-link - Anchor element around product image. Rendered only if "deeplink" property is filled.
  * @part image-picture - Picture element for image.
@@ -142,7 +143,7 @@ export class VviinnResults {
   @Event() vviinnProductLoad: EventEmitter<ProductCardEventData>;
   /** Recommended product appears in the viewport */
   @Event() vviinnProductView: EventEmitter<ProductCardEventData>;
-  /** Click on the product’s link */
+  /** Click on the product's link */
   @Event() vviinnProductClick: EventEmitter<ProductCardEventData>;
   /** The search result renders on the page */
   @Event() vviinnResultLoad: EventEmitter<BasicEventData>;
@@ -162,12 +163,16 @@ export class VviinnResults {
   /** @internal */
   @Event() vviinnCropperResetState: EventEmitter<TriggerSourceEventData>;
 
-  /** Vviinn customer’s token (required) */
+  /** Vviinn customer's token (required) */
   @Prop() token: string;
   /** The currency sign is displayed after the price */
   @Prop() currencySign?: string;
   /** The locale for currency formatting and text localization */
   @Prop() locale?: Locale;
+  /** Campaign ID used for Text Search */
+  @Prop() campaignIdTextSearch: string = "";
+  /** Campaign ID used for Visual Search */
+  @Prop() campaignIdVisualSearch: string = "";
   /** Prefix is displayed before the price */
   @Prop() pricePrefix?: string;
   /** Search ID for results request */
@@ -254,6 +259,11 @@ export class VviinnResults {
   private initResultEvents = () => {
     this.state.resultLoaded = false;
     this.state.resultViewed = false;
+  };
+
+  private updateCampaignIds = () => {
+    this.state.campaignIdTextSearch = this.campaignIdTextSearch;
+    this.state.campaignIdVisualSearch = this.campaignIdVisualSearch;
   };
 
   private calculateColumns = () => {
@@ -365,6 +375,8 @@ export class VviinnResults {
 
     if (!requestId?.length) {
       resetStore(this.storeName, "appStateOnly");
+      this.updateCampaignIds();
+
       this.vviinnCropperResetState.emit({
         isTriggeredByVpsWidget: this.showInWidget,
       });
@@ -479,6 +491,7 @@ export class VviinnResults {
     });
     this.setTextSearch(false, detail.isTriggeredByVpsWidget);
     resetStore(this.storeName, "appStateOnly");
+    this.updateCampaignIds();
   };
 
   private imageCropHandler = ({ detail }: TriggerSourceEvent) => {
@@ -539,7 +552,7 @@ export class VviinnResults {
       this.oneClickDiscoveryClosedHandler,
     );
 
-    !!this.searchId && makeVisualSearchRequest(this.storeName, this.searchId);
+    if (!!this.searchId) makeVisualSearchRequest(this.storeName, this.searchId);
 
     this.getResultsByCategory();
 

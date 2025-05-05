@@ -12,6 +12,9 @@ export const Default = ResultsTemplate.bind({});
 Default.storyName = "Product List";
 Default.args = {
   token: vviinnToken,
+  campaignIdTextSearch: "",
+  campaignIdVisualSearch: "",
+  oneClickDiscoveryCampaigns: "",
   filterColumn: "product_type",
   filterValue,
   apiPath: process.env.STORYBOOK_API_PATH,
@@ -28,5 +31,4 @@ Default.args = {
   oneClickDiscoveryMode: "modal",
   addPriceContainer: false,
   favoriteShow: false,
-  oneClickDiscoveryCampaigns: "",
 };
