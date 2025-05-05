@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.161.0](https://github.com/vviinn/widgets/compare/v2.160.4...v2.161.0) (2025-05-05)
+
+
+### Features
+
+* Campaign id props for text and visual search ([2ac340d](https://github.com/vviinn/widgets/commit/2ac340d13a517d7bcade781306e7b76abf6d07fd))
+
 ### [2.160.4](https://github.com/vviinn/widgets/compare/v2.160.3...v2.160.4) (2025-04-30)
 
 
