@@ -39,11 +39,7 @@ import {
 import { components } from "../../interfaces/generated";
 import { ClickEvent, isClickedInRectBound } from "../../geometry/Rectangle";
 import { triggerFilter, triggerResetFilters } from "./helpers/triggerFilter";
-import {
-  componentsState,
-  searchState,
-  SearchStore,
-} from "../../store/search.store";
+import { SearchStore, useSearchStore } from "../../store/search.store";
 import { isIntervalFilter } from "../../filters";
 import { globalState } from "../../store/store";
 import { ResponseDynamicFilterIntervalItem } from "../../interfaces/recommendation";
@@ -488,7 +484,8 @@ export class VviinnExtendedFilters {
   }
 
   connectedCallback() {
-    this.state = this.showInWidget ? searchState : componentsState;
+    const { state } = useSearchStore(this.showInWidget);
+    this.state = state;
 
     document.addEventListener(
       "vviinnFiltersChanged",

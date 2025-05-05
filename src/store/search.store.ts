@@ -44,20 +44,22 @@ import { OnChangeHandler } from "@stencil/store/dist/types";
 export type SearchStoreName = "widget" | "components";
 
 type AppStateGlobalDefaults = {
-  excluded?: RequestStaticFilters["excluded"] | null;
+  excluded: RequestStaticFilters["excluded"] | null;
   campaignId: string;
+  campaignIdTextSearch: string;
+  campaignIdVisualSearch: string;
 };
 
 type AppStateDefaults = {
   visualSearchId: string | null;
   textSearchId: string | null;
-  searchType?: SearchType | null;
+  searchType: SearchType | null;
   resultLoaded: boolean;
   resultViewed: boolean;
-  image?: HTMLImageElement | null;
-  imageBounds?: Rectangle | null;
-  searchArea?: Rectangle | null;
-  croppedImageUrl?: string | null;
+  image: HTMLImageElement | null;
+  imageBounds: Rectangle | null;
+  searchArea: Rectangle | null;
+  croppedImageUrl: string | null;
   requestFilters: RequestDynamicFilterItem[];
   loading: boolean;
   serverError: boolean;
@@ -77,6 +79,8 @@ export type SearchStore = AppStateGlobalDefaults &
 const appStateGlobalDefaults: AppStateGlobalDefaults = {
   excluded: null,
   campaignId: "",
+  campaignIdTextSearch: "",
+  campaignIdVisualSearch: "",
 };
 
 const appStateDefaults: AppStateDefaults = {
@@ -230,7 +234,10 @@ const uploadImageFile =
                 ...addIfNotEmpty("excluded", state.excluded),
               }),
               ...addIfDefined("requestId", searchId),
-              ...addIfNotEmpty("campaign", state.campaignId),
+              ...addIfNotEmpty(
+                "campaign",
+                state.campaignIdVisualSearch || state.campaignId,
+              ),
             }),
             (error) => ({
               kind: "network error",
@@ -310,7 +317,10 @@ export const makeVisualSearchRequest = async (
 
   const body: VisualSearchRequest = {
     requestId: searchId ?? state.visualSearchId,
-    ...addIfNotEmpty("campaign", state.campaignId),
+    ...addIfNotEmpty(
+      "campaign",
+      state.campaignIdVisualSearch || state.campaignId,
+    ),
     ...addIfNotEmpty("dynamicFilters", state.requestFilters),
     query: {
       ...addIfDefined("searchArea", searchRectangle),
@@ -340,6 +350,7 @@ export const makeTextSearchRequest = async (
     ...addIfDefined("requestId", requestId),
     ...addIfDefined("resultsCount", resultsCount),
     ...addIfNotEmpty("dynamicFilters", state.requestFilters),
+    ...addIfNotEmpty("campaign", state.campaignIdTextSearch),
     ...addNestedIfNotEmpty("staticFilters", {
       ...addIfNotEmpty("excluded", state.excluded),
     }),
