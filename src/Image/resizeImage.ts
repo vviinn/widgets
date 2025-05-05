@@ -1,50 +1,47 @@
 import { lanczos } from "@rgba-image/lanczos";
 import { dimensionsFromImage, ImageDimension, scaleBySide } from "./sizing";
+import { blobToBase64, canvasToBlob, drawImageToCanvas } from "./imageToB64";
 
-const createCanvasWithContext = (): [
-  HTMLCanvasElement,
-  CanvasRenderingContext2D,
-] => {
-  const canvas = document.createElement("canvas");
-  const contenx = canvas.getContext("2d");
-
-  return [canvas, contenx];
-};
-
-const imageDataFromImage = (image: HTMLImageElement): ImageData => {
-  const { naturalWidth, naturalHeight } = image;
-  const [canvas, context] = createCanvasWithContext();
-
-  canvas.width = naturalWidth;
-  canvas.height = naturalHeight;
-
-  context.drawImage(image, 0, 0);
-
-  return context.getImageData(0, 0, naturalWidth, naturalHeight);
-};
-
-export const resizeImage = (side: number, i: HTMLImageElement): string => {
+export const resizeImageToBlob = async (
+  side: number,
+  img: HTMLImageElement,
+  quality = 0.7,
+): Promise<Blob> => {
   const scale = scaleBySide(side, "smallest");
-
-  const [destinationCanvas, destinationContext] = createCanvasWithContext();
-  const imageDimensions = dimensionsFromImage(i);
-  const [destinationWidth, destinationHeight] = scale(imageDimensions).map(
+  const [canvas, ctx] = createCanvas();
+  const [destWidth, destHeight] = scale(dimensionsFromImage(img)).map(
     (d: ImageDimension) => d.size,
   );
 
-  const destinationImageData = new ImageData(
-    destinationWidth,
-    destinationHeight,
-  );
+  const originImageData = getImageData(img);
+  const destImageData = new ImageData(destWidth, destHeight);
 
-  const originImageData = imageDataFromImage(i);
+  canvas.width = destWidth;
+  canvas.height = destHeight;
 
-  destinationCanvas.width = destinationWidth;
-  destinationCanvas.height = destinationHeight;
+  lanczos(originImageData, destImageData);
+  ctx.putImageData(destImageData, 0, 0);
 
-  lanczos(originImageData, destinationImageData);
+  return canvasToBlob(canvas, quality);
+};
 
-  destinationContext.putImageData(destinationImageData, 0, 0);
+export const resizeImageToBase64 = async (
+  side: number,
+  img: HTMLImageElement,
+  quality = 0.7,
+): Promise<string> => {
+  const blob = await resizeImageToBlob(side, img, quality);
+  return blobToBase64(blob);
+};
 
-  return destinationCanvas.toDataURL("image/jpeg", 0.7);
+const createCanvas = (): [HTMLCanvasElement, CanvasRenderingContext2D] => {
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+  if (!context) throw new Error("Failed to get canvas context");
+  return [canvas, context];
+};
+
+const getImageData = (img: HTMLImageElement): ImageData => {
+  const [_, ctx] = drawImageToCanvas(img);
+  return ctx.getImageData(0, 0, img.naturalWidth, img.naturalHeight);
 };

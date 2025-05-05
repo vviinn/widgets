@@ -10,7 +10,6 @@ import {
   Element,
 } from "@stencil/core";
 import { pipe } from "fp-ts/lib/function";
-import { toFile } from "../../Image/toFile";
 import {
   makeUploadFileRequest,
   SearchStore,
@@ -29,7 +28,7 @@ import {
   PlusIcon,
   RoundCameraIcon,
 } from "../vviinn-icons";
-import { setLocalStorageItems } from "../../localStorage";
+import { blobToBase64, blobToFile, canvasToBlob } from "../../Image/imageToB64";
 
 type ZoomCapabilities = {
   min: number;
@@ -114,41 +113,54 @@ export class VviinnExampleImage {
     });
   };
 
-  private createPlaceholderImageCanvas() {
-    const imgPlaceholder = this.el.shadowRoot.getElementById(
+  private async createPlaceholderImageCanvas() {
+    const imgPlaceholder = this.el.shadowRoot?.getElementById(
       "captured-image-placeholder",
-    ) as HTMLImageElement;
-
+    ) as HTMLImageElement | null;
     const video = this.videoElement;
+
+    if (!video || !imgPlaceholder) return;
+
     const { videoWidth, videoHeight } = video;
     const canvas = document.createElement("canvas");
-
     canvas.width = videoWidth;
     canvas.height = videoHeight;
 
     const ctx = canvas.getContext("2d");
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    if (!ctx) return;
 
-    const dataURI = canvas.toDataURL("image/jpeg");
-    imgPlaceholder.src = dataURI;
+    ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
+
+    try {
+      const blob = await canvasToBlob(canvas, 0.7);
+      const base64 = await blobToBase64(blob);
+      imgPlaceholder.src = base64;
+    } catch (error) {
+      console.error("Failed to create image placeholder:", error);
+    }
   }
 
   private async selectImage() {
     if (!this.srcObject) return;
-    this.vviinnImageUploadStarted.emit(this.basicEventData);
-    let file: File;
 
-    const photoFrame = this.el.shadowRoot.getElementById("photo-frame");
+    this.vviinnImageUploadStarted.emit(this.basicEventData);
+
+    const photoFrame = this.el.shadowRoot?.getElementById("photo-frame");
     const video = this.videoElement;
+
+    if (!photoFrame || !video) return;
+
     const photoFrameRect = photoFrame.getBoundingClientRect();
     const videoRect = video.getBoundingClientRect();
-
     const { videoWidth, videoHeight } = video;
 
     const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
     this.selected = true;
-    this.videoElement.pause();
-    this.createPlaceholderImageCanvas();
+    video.pause();
+    this.createPlaceholderImageCanvas(); // async but fire-and-forget is okay here
 
     const videoCoefficientWidth = videoWidth / videoRect.width;
     const videoCoefficientHeight = videoHeight / videoRect.height;
@@ -173,7 +185,6 @@ export class VviinnExampleImage {
     const dx = dxFrame * videoCoefficientWidth;
     const dy = dyFrame * videoCoefficientHeight;
 
-    const ctx = canvas.getContext("2d");
     ctx.drawImage(
       video,
       dx,
@@ -186,28 +197,28 @@ export class VviinnExampleImage {
       canvas.height,
     );
 
-    const dataURL = canvas.toDataURL("image/jpeg");
-    file = await toFile(dataURL);
+    try {
+      const blob = await canvasToBlob(canvas, 0.85); // quality can be adjusted
+      const file = blobToFile(blob, "captured.jpg");
+      const responseEither = await makeUploadFileRequest(this.storeName)(file);
 
-    pipe(
-      await makeUploadFileRequest(this.storeName)(file),
-      E.match(
-        () => {
-          this.vviinnNoResult.emit(this.basicEventData);
-        },
-        (response) => {
-          if (!this.showInWidget)
-            setLocalStorageItems(
-              this.state.image?.src,
-              this.state.detectedObjects,
-            );
-          this.vviinnImageUploadFinished.emit({
-            searchId: response.requestId,
-            isTriggeredByVpsWidget: this.storeName === "widget",
-          });
-        },
-      ),
-    );
+      pipe(
+        responseEither,
+        E.match(
+          () => {
+            this.vviinnNoResult.emit(this.basicEventData);
+          },
+          (response) =>
+            this.vviinnImageUploadFinished.emit({
+              searchId: response.requestId,
+              isTriggeredByVpsWidget: this.showInWidget,
+            }),
+        ),
+      );
+    } catch (error) {
+      console.error("Failed to capture or upload image:", error);
+      this.vviinnNoResult.emit(this.basicEventData);
+    }
 
     this.selected = false;
     this.videoInitialized = false;

@@ -1,5 +1,5 @@
-import { resizeImage } from "../Image/resizeImage";
-import { imageToB64 } from "../Image/imageToB64";
+import { resizeImageToBase64 } from "../Image/resizeImage";
+import { imageToBase64 } from "../Image/imageToB64";
 
 const IMAGE_SMALLEST_SIDE_TO_RESIZE = 800;
 const HI_RES_IMAGE_SMALLEST_SIDE_TO_RESIZE = 2000;
@@ -21,5 +21,5 @@ export const optionalResize = async (
   imageType: ImageType,
 ) =>
   shouldResize(image, imageType)
-    ? resizeImage(imageProcessingConfig[imageType], image)
-    : await imageToB64(image);
+    ? await resizeImageToBase64(imageProcessingConfig[imageType], image)
+    : await imageToBase64(image);
