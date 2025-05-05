@@ -261,6 +261,11 @@ export class VviinnResults {
     this.state.resultViewed = false;
   };
 
+  private updateCampaignIds = () => {
+    this.state.campaignIdTextSearch = this.campaignIdTextSearch;
+    this.state.campaignIdVisualSearch = this.campaignIdVisualSearch;
+  };
+
   private calculateColumns = () => {
     const container = this.el.shadowRoot?.querySelector(".products");
     if (!container) return 0;
@@ -370,9 +375,7 @@ export class VviinnResults {
 
     if (!requestId?.length) {
       resetStore(this.storeName, "appStateOnly");
-
-      this.state.campaignIdTextSearch = this.campaignIdTextSearch;
-      this.state.campaignIdVisualSearch = this.campaignIdVisualSearch;
+      this.updateCampaignIds();
 
       this.vviinnCropperResetState.emit({
         isTriggeredByVpsWidget: this.showInWidget,
@@ -488,8 +491,7 @@ export class VviinnResults {
     });
     this.setTextSearch(false, detail.isTriggeredByVpsWidget);
     resetStore(this.storeName, "appStateOnly");
-    this.state.campaignIdTextSearch = this.campaignIdTextSearch;
-    this.state.campaignIdVisualSearch = this.campaignIdVisualSearch;
+    this.updateCampaignIds();
   };
 
   private imageCropHandler = ({ detail }: TriggerSourceEvent) => {

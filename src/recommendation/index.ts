@@ -18,9 +18,9 @@ type GetRecommendationsBodyProps = {
   dynamicFilters?: RequestDynamicFilterItem[];
 };
 
-const parseCampaigns = (campaigns: string) =>
+const parseCampaigns = (campaigns: string): (number | string)[] =>
   !campaigns.length
-    ? ""
+    ? []
     : campaigns.split(",").map((value) => {
         const trimmedValue = value.trim();
         return !isNaN(parseInt(trimmedValue))
