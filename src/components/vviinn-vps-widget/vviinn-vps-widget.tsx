@@ -96,6 +96,7 @@ const CAMERA_START_DELAY = 500;
  * @part results-title - Title on the results page.
  * @part upload-photo_button - Upload Photo Button.
  * @part start-camera_button - Start Camera Button.
+ * @part products - Products container.
  * @part product-card - Product Card itself.
  * @part image-container - Product Card's image container.
  * @part content-container - Product Card's content container.
@@ -103,7 +104,7 @@ const CAMERA_START_DELAY = 500;
  * @part brand - Brand inside Product Card.
  * @part product-type - Product Type inside Product Card.
  * @part currency - Currency related to price.
- * @part deeplink - Anchor element around troduct title. Rendered only if "deeplink" property is filled.
+ * @part deeplink - Anchor element around product title. Rendered only if "deeplink" property is filled.
  * @part image - Product Card image.
  * @part image-link - Anchor element around product image. Rendered only if "deeplink" property is filled.
  * @part image-picture - Picture element for image.
@@ -148,8 +149,12 @@ export class VviinnVpsWidget {
   @Prop() pricePrefix?: string;
   /** The locale for currency formatting and text localization */
   @Prop() locale?: Locale;
-  /** Campaign ID applied for visual search */
+  /** Campaign ID used for Visual Search (deprecated) */
   @Prop() campaignId: string = "";
+  /** Campaign ID used for Text Search */
+  @Prop() campaignIdTextSearch: string = "";
+  /** Campaign ID used for Visual Search */
+  @Prop() campaignIdVisualSearch: string = "";
   /** Excluded filter. Example: "brand:Nike,Vans;custom_label_0:summer" */
   @Prop() excluded: string = "";
   /** Toggle for opening product link in new tab or not */
@@ -506,6 +511,8 @@ export class VviinnVpsWidget {
       !!navigator.mediaDevices && !!navigator.mediaDevices.getUserMedia;
 
     this.state.campaignId = this.campaignId;
+    this.state.campaignIdTextSearch = this.campaignIdTextSearch;
+    this.state.campaignIdVisualSearch = this.campaignIdVisualSearch;
     this.state.excluded = parseStringToExcluded(this.excluded);
 
     this.uiSessionId = uuidv4();
@@ -847,6 +854,8 @@ export class VviinnVpsWidget {
                   pricePrefix={globalState.pricePrefix}
                   currency-sign={globalState.currencySign}
                   apiPath={globalState.apiPath}
+                  campaignIdTextSearch={this.campaignIdTextSearch}
+                  campaignIdVisualSearch={this.campaignIdVisualSearch}
                   uiSessionId={this.uiSessionId}
                   widgetElementId={this.buttonElementId ?? this.widgetElementId}
                   showInWidget={true}
