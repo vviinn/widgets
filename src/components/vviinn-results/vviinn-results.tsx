@@ -79,6 +79,7 @@ import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
 import { RESULTS_CALCULATED_COLUMNS_CSS_VAR } from "../vviinn-carousel/constants";
 
 /**
+ * @part products - Products container.
  * @part product-card - Product Card itself.
  * @part image-container - Product Card's image container.
  * @part content-container - Product Card's content container.
@@ -86,7 +87,7 @@ import { RESULTS_CALCULATED_COLUMNS_CSS_VAR } from "../vviinn-carousel/constants
  * @part brand - Brand inside Product Card.
  * @part product-type - Product Type inside Product Card.
  * @part currency - Currency related to price.
- * @part deeplink - Anchor element around troduct title. Rendered only if "deeplink" property is filled.
+ * @part deeplink - Anchor element around product title. Rendered only if "deeplink" property is filled.
  * @part image - Product Card image.
  * @part image-link - Anchor element around product image. Rendered only if "deeplink" property is filled.
  * @part image-picture - Picture element for image.

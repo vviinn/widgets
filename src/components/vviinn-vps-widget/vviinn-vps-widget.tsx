@@ -96,6 +96,7 @@ const CAMERA_START_DELAY = 500;
  * @part results-title - Title on the results page.
  * @part upload-photo_button - Upload Photo Button.
  * @part start-camera_button - Start Camera Button.
+ * @part products - Products container.
  * @part product-card - Product Card itself.
  * @part image-container - Product Card's image container.
  * @part content-container - Product Card's content container.
@@ -103,7 +104,7 @@ const CAMERA_START_DELAY = 500;
  * @part brand - Brand inside Product Card.
  * @part product-type - Product Type inside Product Card.
  * @part currency - Currency related to price.
- * @part deeplink - Anchor element around troduct title. Rendered only if "deeplink" property is filled.
+ * @part deeplink - Anchor element around product title. Rendered only if "deeplink" property is filled.
  * @part image - Product Card image.
  * @part image-link - Anchor element around product image. Rendered only if "deeplink" property is filled.
  * @part image-picture - Picture element for image.

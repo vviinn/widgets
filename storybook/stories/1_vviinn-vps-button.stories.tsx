@@ -23,6 +23,9 @@ export default {
 const Template = (args) => `
 <vviinn-vps-button
   token="${args.token}"
+  campaign-id-text-search="${args.campaignIdTextSearch}"
+  campaign-id-visual-search="${args.campaignIdVisualSearch}"
+  one-click-discovery-campaigns="${args.oneClickDiscoveryCampaigns}"
   campaign-id="${args.campaignId}"
   excluded="${args.excluded}"
   add-style="${args.addStyle}"
@@ -39,7 +42,6 @@ const Template = (args) => `
   add-price-container="${args.addPriceContainer}"
   favorite-show="${args.favoriteShow}"
   one-click-discovery-show="${args.oneClickDiscoveryShow}"
-  one-click-discovery-campaigns="${args.oneClickDiscoveryCampaigns}"
   one-click-discovery-mode="${args.oneClickDiscoveryMode}"
 ></vviinn-vps-button>`;
 
@@ -49,6 +51,9 @@ Default.storyName = "Search Modal";
 Default.args = {
   token: vviinnToken,
   apiPath: process.env.STORYBOOK_API_PATH,
+  campaignIdTextSearch: "",
+  campaignIdVisualSearch: "",
+  oneClickDiscoveryCampaigns: "",
   campaignId: "",
   excluded: "",
   mode: "modal",
@@ -64,6 +69,5 @@ Default.args = {
   addPriceContainer: false,
   favoriteShow: false,
   oneClickDiscoveryShow: true,
-  oneClickDiscoveryCampaigns: "",
   oneClickDiscoveryMode: "append-grid",
 };

@@ -8,7 +8,7 @@ import {
 
 let loader;
 let vviinnWidgets;
-let isLocalEnv = process.env.ENV === "local";
+let isLocalEnv = process.env.STORYBOOK_ENV === "local";
 
 (async () => {
   if (isLocalEnv) {
