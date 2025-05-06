@@ -64,6 +64,7 @@ import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
  * @part image - Product image.
  * @part image-link - Anchor element for image. Rendered only if "deeplink" property filled.
  * @part image-picture - Picture element for image.
+ * @part image-placeholder - Placeholder shown when no image is available.
  * @part price-amount-regular - Numeric part of the price.
  * @part price-amount-sale - Numeric part of the price.
  * @part price-amount-outdated - Numeric part of the price.
@@ -105,6 +106,7 @@ import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
  * @slot vviinn-custom-label-2 - Custom label with index 2.
  * @slot vviinn-custom-label-3 - Custom label with index 3.
  * @slot vviinn-custom-label-4 - Custom label with index 4.
+ * @slot vviinn-image-placeholder-icon - Icon or content for the image placeholder.
  *
  */
 @Component({

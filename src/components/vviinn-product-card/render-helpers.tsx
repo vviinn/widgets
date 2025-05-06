@@ -265,7 +265,9 @@ const ImageOrPlaceholder: FunctionalComponent<{
       part="image-placeholder"
       ref={props.ref}
     >
-      <ImagePlaceholderIcon />
+      <slot name="vviinn-image-placeholder-icon">
+        <ImagePlaceholderIcon />
+      </slot>
     </div>
   );
 };

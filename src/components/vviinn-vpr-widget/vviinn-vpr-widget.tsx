@@ -75,6 +75,7 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @part image - Product Card image.
  * @part image-link - Anchor element around product image. Rendered only if "deeplink" property is filled.
  * @part image-picture - Picture element for image.
+ * @part image-placeholder - Placeholder shown when no image is available.
  * @part deeplink - Anchor element around product title. Rendered only if "deeplink" property is filled.
  * @part price-amount-sale - Numeric part of the price.
  * @part price-amount-outdated - Numeric part of the price.
@@ -123,6 +124,7 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @slot vviinn-custom-label-2 - Custom label with index 2.
  * @slot vviinn-custom-label-3 - Custom label with index 3.
  * @slot vviinn-custom-label-4 - Custom label with index 4.
+ * @slot vviinn-image-placeholder-icon - Icon or content for the image placeholder.
  */
 
 export type Mode = "pure-grid" | CarouselMode;
@@ -134,7 +136,7 @@ export type Mode = "pure-grid" | CarouselMode;
 })
 export class VviinnVprWidget implements ComponentInterface {
   @Element() el: HTMLElement;
-  /** Vviinn customer’s token (required) */
+  /** Vviinn customer's token (required) */
   @Prop() token: string;
   /** ID of product you need recommendations for (required) */
   @Prop() productId: string;
@@ -187,7 +189,7 @@ export class VviinnVprWidget implements ComponentInterface {
   /** Show or hide Favorite button */
   @Prop() favoriteShow: boolean = false;
 
-  /** Widget’s title */
+  /** Widget's title */
   @Prop() blockTitle: string;
   /** Show or hide the widget's scrollbar */
   @Prop() showScroll = true;
@@ -231,7 +233,7 @@ export class VviinnVprWidget implements ComponentInterface {
   /** Recommended product appears in the viewport */
   @Event() vviinnProductView: EventEmitter<ProductCardEventData>;
 
-  /** Click on the product’s link */
+  /** Click on the product's link */
   @Event() vviinnProductClick: EventEmitter<ProductCardEventData>;
 
   /** The recommendation result renders on the page */
