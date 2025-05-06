@@ -269,8 +269,8 @@ export class RecommendationsSidebar {
 
   private renderSourceImage(): HTMLImageElement {
     const sourceImageSrc =
-      this.sourceProduct?.image?.thumbnail ??
-      this.sourceProduct?.image?.original ??
+      this.sourceProduct?.image?.original ||
+      this.sourceProduct?.image?.thumbnail ||
       null;
 
     if (!sourceImageSrc) return null;

@@ -376,7 +376,6 @@ export class VviinnProductCard {
       height: this.imageWidth * this.imageRatio,
       src: this.image,
       title: this.productTitle,
-      lazy: false,
       ref: (el) => {
         this.imageElement = el as HTMLImageElement;
       },

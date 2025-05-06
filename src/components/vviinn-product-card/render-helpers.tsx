@@ -1,9 +1,9 @@
 import { pipe } from "fp-ts/lib/function";
 import * as E from "fp-ts/lib/Either";
 import { FunctionalComponent, h } from "@stencil/core";
-import { PlusIcon } from "../vviinn-icons";
 import { BasePrice } from "../../interfaces/recommendation";
 import { Fragment } from "@stencil/core";
+import { ImagePlaceholderIcon, PlusIcon } from "../vviinn-icons";
 
 const FIT_EXPR = /fit\/\d+\//;
 
@@ -211,22 +211,74 @@ export type ImageProps = {
   height: number;
   title: string;
   src: string;
-  lazy: boolean;
   ref: (el: HTMLImageElement) => void;
   isSource?: boolean;
 };
 
+function getDimensionValues(value?: number | string) {
+  return {
+    num: typeof value === "number" ? value : undefined,
+    px:
+      value !== undefined
+        ? typeof value === "number"
+          ? `${value}px`
+          : value
+        : undefined,
+  };
+}
+
+const ImageOrPlaceholder: FunctionalComponent<{
+  src: string;
+  width?: number | string;
+  height?: number | string;
+  alt?: string;
+  title?: string;
+  className?: string;
+  ref?: (el: Element) => void;
+  onLoad?: () => void;
+}> = (props) => {
+  const hasImage = !!props.src;
+
+  const { num: widthNum, px: widthPx } = getDimensionValues(props.width);
+  const { num: heightNum, px: heightPx } = getDimensionValues(props.height);
+
+  return hasImage ? (
+    <img
+      src={props.src}
+      width={widthNum}
+      height={heightNum}
+      alt={props.alt}
+      title={props.title}
+      class={props.className}
+      ref={props.ref}
+      onLoad={props.onLoad}
+      loading="lazy"
+      part="image"
+    />
+  ) : (
+    <div
+      style={{
+        width: widthPx,
+        height: heightPx,
+      }}
+      class="image-placeholder"
+      part="image-placeholder"
+      ref={props.ref}
+    >
+      <ImagePlaceholderIcon />
+    </div>
+  );
+};
+
 export const Image = (props: ImageProps, onLoadEnd = () => undefined) => (
   <picture part="image-picture">
-    <img
-      loading={props.lazy ? "lazy" : "eager"}
-      part="image"
-      class="image"
+    <ImageOrPlaceholder
+      src={processWidth(props.src, props.width)}
       width={props.width}
       height={props.height}
-      src={processWidth(props.src, props.width)}
       alt={props.title}
       title={props.title}
+      className="image"
       ref={props.ref}
       onLoad={onLoadEnd}
     />
@@ -239,13 +291,11 @@ export const ResponsiveImage = (
   onLoadEnd = () => undefined,
 ) => (
   <picture part="image-picture">
-    <img
-      loading={props.lazy ? "lazy" : "eager"}
-      part="image"
-      class="image responsive"
+    <ImageOrPlaceholder
       src={processWidth(props.src, props.width)}
       alt={props.title}
       title={props.title}
+      className="image responsive"
       ref={props.ref}
       onLoad={onLoadEnd}
     />
