@@ -63,6 +63,10 @@ import {
 import { CrossSellingResponse } from "../../campaign/VCSCampaignService";
 import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
 import { RESULTS_CALCULATED_COLUMNS_CSS_VAR } from "../vviinn-carousel/constants";
+import {
+  DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH,
+  PRODUCT_CARD_IMAGE_WIDTH,
+} from "../../widget/constants";
 
 export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
 
@@ -152,8 +156,8 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() locale: Locale;
   /** Accepts any hex color code */
   @Prop() color: string = "";
-  /** Width of each recommended product image */
-  @Prop() imageWidth: number = 300;
+  /** Width of each recommended product image in Continuity mode */
+  @Prop() imageWidth: number = PRODUCT_CARD_IMAGE_WIDTH;
   /** The ratio of each recommended product image */
   @Prop() imageRatio: number = 1;
   /** Items amount in set mode grid */
@@ -630,6 +634,7 @@ export class VviinnVprWidget implements ComponentInterface {
         productType={recommendation.productType}
         deeplink={recommendation.deeplink}
         image={recommendation.image.thumbnail}
+        imageResolutionWidth={this.imageResolutionWidth}
         brand={recommendation.brand}
         imageWidth={this.imageWidth}
         imageRatio={this.imageRatio}
@@ -697,6 +702,7 @@ export class VviinnVprWidget implements ComponentInterface {
         updateButtonLocation={this.updateButtonLocation}
         replaceSlotsContent={this.replaceSlotsContent.bind(this)}
         setModeDiscountsArray={this.setModeDiscountsArray}
+        imageResolutionWidth={this.imageResolutionWidth}
         imageRatio={this.imageRatio}
         favoriteShow={this.favoriteShow}
         setItemsAmount={this.setItemsAmount}
@@ -707,6 +713,9 @@ export class VviinnVprWidget implements ComponentInterface {
       ></vviinn-carousel>
     );
   }
+
+  @Prop() imageResolutionWidth: number =
+    DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH;
 
   render() {
     if (this.recommendations.length === 0 && this.noResultShow === false)

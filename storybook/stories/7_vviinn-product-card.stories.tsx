@@ -59,7 +59,7 @@ Default.args = {
   image:
     "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg",
   responsive: false,
-  imageWidth: 240,
+  imageWidth: 300,
   imageRatio: 1,
   price: 3629,
   basePrice: { price: 10, quantity: 1, measure: "cm²" },

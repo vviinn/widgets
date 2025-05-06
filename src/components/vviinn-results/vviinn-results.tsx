@@ -807,7 +807,8 @@ export class VviinnResults {
         baseSalePrice={p.basePrice?.sale}
         responsive={true}
         imageWidth={this.imageResolutionWidth}
-        image={p.image.original || p.image.thumbnail}
+        imageResolutionWidth={this.imageResolutionWidth}
+        image={p.image.thumbnail || p.image.original}
         energyCertifications={p.energyCertifications}
         part="product-card"
         campaignTypeId={widgetData.campaignTypeId}

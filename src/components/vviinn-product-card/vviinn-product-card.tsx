@@ -52,6 +52,7 @@ import {
 import { resources } from "../../locale";
 import { productCardParts } from "../../cssParts";
 import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
+import { PRODUCT_CARD_IMAGE_WIDTH } from "../../widget/constants";
 
 /**
  * @part image-container - Product Card's image container.
@@ -123,7 +124,7 @@ export class VviinnProductCard {
   @Prop() pricePrefix?: string;
   @Prop() image: string | undefined;
   @Prop() imageRatio: number = 1;
-  @Prop() imageWidth: number = 200;
+  @Prop() imageWidth: number = PRODUCT_CARD_IMAGE_WIDTH;
   @Prop() price: number | undefined;
   @Prop() basePrice?: BasePrice | string | null;
   @Prop() productTitle: string;
@@ -171,6 +172,8 @@ export class VviinnProductCard {
   @Prop() isStandalone: boolean = false;
   /** @internal */
   @Prop() showFooterArrow: boolean = false;
+  /** @internal */
+  @Prop() imageResolutionWidth: number = 300;
 
   @State() isTransitioning: boolean = false;
   @State() basketButonPressed: boolean = false;
@@ -377,6 +380,7 @@ export class VviinnProductCard {
       width: this.imageWidth,
       height: this.imageWidth * this.imageRatio,
       src: this.image,
+      imageResolutionWidth: this.imageResolutionWidth,
       title: this.productTitle,
       ref: (el) => {
         this.imageElement = el as HTMLImageElement;

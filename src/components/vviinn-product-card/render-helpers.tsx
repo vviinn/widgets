@@ -213,6 +213,7 @@ export type ImageProps = {
   src: string;
   ref: (el: HTMLImageElement) => void;
   isSource?: boolean;
+  imageResolutionWidth?: number;
 };
 
 function getDimensionValues(value?: number | string) {
@@ -272,34 +273,49 @@ const ImageOrPlaceholder: FunctionalComponent<{
   );
 };
 
-export const Image = (props: ImageProps, onLoadEnd = () => undefined) => (
-  <picture part="image-picture">
-    <ImageOrPlaceholder
-      src={processWidth(props.src, props.width)}
-      width={props.width}
-      height={props.height}
-      alt={props.title}
-      title={props.title}
-      className="image"
-      ref={props.ref}
-      onLoad={onLoadEnd}
-    />
-    {props.isSource && <PlusIcon />}
-  </picture>
-);
+const getProcessedSrc = (
+  src: string,
+  imageResolutionWidth?: number,
+): string => {
+  return imageResolutionWidth ? processWidth(src, imageResolutionWidth) : src;
+};
+
+export const Image = (props: ImageProps, onLoadEnd = () => undefined) => {
+  const processedSrc = getProcessedSrc(props.src, props.imageResolutionWidth);
+
+  return (
+    <picture part="image-picture">
+      <ImageOrPlaceholder
+        src={processedSrc}
+        width={props.width}
+        height={props.height}
+        alt={props.title}
+        title={props.title}
+        className="image"
+        ref={props.ref}
+        onLoad={onLoadEnd}
+      />
+      {props.isSource && <PlusIcon />}
+    </picture>
+  );
+};
 
 export const ResponsiveImage = (
   props: ImageProps,
   onLoadEnd = () => undefined,
-) => (
-  <picture part="image-picture">
-    <ImageOrPlaceholder
-      src={processWidth(props.src, props.width)}
-      alt={props.title}
-      title={props.title}
-      className="image responsive"
-      ref={props.ref}
-      onLoad={onLoadEnd}
-    />
-  </picture>
-);
+) => {
+  const processedSrc = getProcessedSrc(props.src, props.imageResolutionWidth);
+
+  return (
+    <picture part="image-picture">
+      <ImageOrPlaceholder
+        src={processedSrc}
+        alt={props.title}
+        title={props.title}
+        className="image responsive"
+        ref={props.ref}
+        onLoad={onLoadEnd}
+      />
+    </picture>
+  );
+};

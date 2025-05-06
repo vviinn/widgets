@@ -21,6 +21,10 @@ import { ClickEvent, isClickedInRectBound } from "../../../geometry/Rectangle";
 import { Recommendation } from "../../../components";
 import { carouselParts, productCardParts } from "../../../cssParts";
 import i18next from "i18next";
+import {
+  DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH,
+  PRODUCT_CARD_IMAGE_WIDTH,
+} from "../../../widget/constants";
 
 type SidebarState = "idle" | "open" | "closed";
 
@@ -45,7 +49,7 @@ export class RecommendationsSidebar {
   @Prop() campaigns: string = "";
   @Prop() campaignType: CampaignName;
   @Prop() color: string;
-  @Prop() imageWidth: number = 300;
+  @Prop() imageWidth: number = PRODUCT_CARD_IMAGE_WIDTH;
   @Prop() imageRatio: number = 1;
   @Prop() cssUrl: string | null;
   @Prop() noResultText: string;
@@ -68,6 +72,8 @@ export class RecommendationsSidebar {
   @Prop() favoriteShow: boolean = false;
   @Prop() useCarousel: boolean = true;
   @Prop() showInWidget: boolean = false;
+  @Prop() imageResolutionWidth: number =
+    DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH;
 
   /** @internal */
   @Prop() apiPath: string;
@@ -260,6 +266,7 @@ export class RecommendationsSidebar {
               showInWidget={this.showInWidget}
               recommendationsLoading={this.recommendationsLoading}
               setRecommendationsLoading={this.setRecommendationsLoading}
+              imageResolutionWidth={this.imageResolutionWidth}
             />
           </main>
         </aside>
@@ -269,8 +276,8 @@ export class RecommendationsSidebar {
 
   private renderSourceImage(): HTMLImageElement {
     const sourceImageSrc =
-      this.sourceProduct?.image?.original ||
       this.sourceProduct?.image?.thumbnail ||
+      this.sourceProduct?.image?.original ||
       null;
 
     if (!sourceImageSrc) return null;
