@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.162.0](https://github.com/vviinn/widgets/compare/v2.161.1...v2.162.0) (2025-05-12)
+
+
+### Features
+
+* imageResolutionWidth for Discovery widgets ([3d8129b](https://github.com/vviinn/widgets/commit/3d8129b21829ccefd19781e9b5d2095057cfa755))
+* Show image placeholder for Product Card if no image source ([eed8750](https://github.com/vviinn/widgets/commit/eed8750f80bddc1d518710b5d5f100e42f073f86))
+
 ### [2.161.1](https://github.com/vviinn/widgets/compare/v2.161.0...v2.161.1) (2025-05-05)
 
 
