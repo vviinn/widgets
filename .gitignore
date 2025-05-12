@@ -17,3 +17,7 @@ storybook/storybook-static
 .DS_Store
 localhost-key.pem
 localhost.pem
+
+# Cursor-specific files and folders
+.cursor/
+.cursorignore

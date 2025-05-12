@@ -52,6 +52,7 @@ import {
 import { resources } from "../../locale";
 import { productCardParts } from "../../cssParts";
 import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
+import { PRODUCT_CARD_IMAGE_WIDTH } from "../../widget/constants";
 
 /**
  * @part image-container - Product Card's image container.
@@ -64,6 +65,7 @@ import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
  * @part image - Product image.
  * @part image-link - Anchor element for image. Rendered only if "deeplink" property filled.
  * @part image-picture - Picture element for image.
+ * @part image-placeholder - Placeholder shown when no image is available.
  * @part price-amount-regular - Numeric part of the price.
  * @part price-amount-sale - Numeric part of the price.
  * @part price-amount-outdated - Numeric part of the price.
@@ -105,6 +107,7 @@ import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
  * @slot vviinn-custom-label-2 - Custom label with index 2.
  * @slot vviinn-custom-label-3 - Custom label with index 3.
  * @slot vviinn-custom-label-4 - Custom label with index 4.
+ * @slot vviinn-image-placeholder-icon - Icon or content for the image placeholder.
  *
  */
 @Component({
@@ -121,7 +124,7 @@ export class VviinnProductCard {
   @Prop() pricePrefix?: string;
   @Prop() image: string | undefined;
   @Prop() imageRatio: number = 1;
-  @Prop() imageWidth: number = 200;
+  @Prop() imageWidth: number = PRODUCT_CARD_IMAGE_WIDTH;
   @Prop() price: number | undefined;
   @Prop() basePrice?: BasePrice | string | null;
   @Prop() productTitle: string;
@@ -169,6 +172,8 @@ export class VviinnProductCard {
   @Prop() isStandalone: boolean = false;
   /** @internal */
   @Prop() showFooterArrow: boolean = false;
+  /** @internal */
+  @Prop() imageResolutionWidth: number = 300;
 
   @State() isTransitioning: boolean = false;
   @State() basketButonPressed: boolean = false;
@@ -375,8 +380,8 @@ export class VviinnProductCard {
       width: this.imageWidth,
       height: this.imageWidth * this.imageRatio,
       src: this.image,
+      imageResolutionWidth: this.imageResolutionWidth,
       title: this.productTitle,
-      lazy: false,
       ref: (el) => {
         this.imageElement = el as HTMLImageElement;
       },

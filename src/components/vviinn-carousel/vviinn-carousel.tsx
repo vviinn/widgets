@@ -34,6 +34,10 @@ import { calculateDiscount } from "../../utils/number";
 import { Locale } from "../../locale";
 import { getCustomLabels } from "../../recommendation";
 import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
+import {
+  DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH,
+  PRODUCT_CARD_IMAGE_WIDTH,
+} from "../../widget/constants";
 
 type MoveDirection = "left" | "right";
 export type CarouselMode = "grid" | "continuity" | "set";
@@ -67,7 +71,7 @@ export class VviinnCarousel {
   @Prop() currencySign: string;
   @Prop() pricePrefix: string;
   @Prop() locale: Locale;
-  @Prop() imageWidth: number = 140;
+  @Prop() imageWidth: number = PRODUCT_CARD_IMAGE_WIDTH;
   @Prop() showScroll: boolean = true;
   @Prop() campaignTypeId: CampaignTypeId;
   @Prop() widgetElementId?: string;
@@ -88,6 +92,8 @@ export class VviinnCarousel {
   @Prop() loading?: boolean = false;
   @Prop() hasErrorOnLoad?: boolean = false;
   @Prop() showInWidget: boolean = false;
+  @Prop() imageResolutionWidth: number =
+    DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH;
 
   /** Event emitted once when the recommendation is rendered on the page */
   @Event({ bubbles: true })
@@ -485,6 +491,7 @@ export class VviinnCarousel {
         brand={recommendation.brand}
         imageWidth={this.imageWidth}
         imageRatio={this.imageRatio}
+        imageResolutionWidth={this.imageResolutionWidth}
         price={recommendation.price.actual}
         salePrice={salePrice}
         basePrice={recommendation.basePrice?.actual}
@@ -598,6 +605,7 @@ export class VviinnCarousel {
               addPriceContainer={this.addPriceContainer}
               imageRatio={1}
               imageWidth={300}
+              imageResolutionWidth={this.imageResolutionWidth}
               isSourceProduct={true}
               currency={this.currencySign}
               pricePrefix={this.pricePrefix}
