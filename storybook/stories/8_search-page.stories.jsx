@@ -113,6 +113,7 @@ export const TextSearchResultsPage = (args) => {
   template.className = "search-page-wrapper";
   template.innerHTML = `   
       <div class="search-page-wrapper-aside">
+        <vviinn-cropper></vviinn-cropper>
         <vviinn-extended-filters locale="${args.locale}" mode="preview"></vviinn-extended-filters>
       </div>
       
