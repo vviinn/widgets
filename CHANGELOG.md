@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.163.1](https://github.com/vviinn/widgets/compare/v2.163.0...v2.163.1) (2025-05-13)
+
+
+### Bug Fixes
+
+* remove query watching for Search Bar ([a3d029f](https://github.com/vviinn/widgets/commit/a3d029fa68fad9e5e6c23d69bfaf223cd2261d2a))
+
 ## [2.163.0](https://github.com/vviinn/widgets/compare/v2.162.0...v2.163.0) (2025-05-13)
 
 
