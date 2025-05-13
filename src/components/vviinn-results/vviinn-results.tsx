@@ -601,6 +601,12 @@ export class VviinnResults {
     this.getTextSearchResults();
   }
 
+  @Watch("searchId")
+  watchSearchId(newId: string) {
+    if (this.showInWidget) return;
+    if (newId) makeVisualSearchRequest(this.storeName, newId);
+  }
+
   @Listen("vviinnProductLoad")
   trackProductLoad({ detail }: ProductCardEvent) {
     const productLoadEvent = this.getProductTrackEvent(detail, "load");

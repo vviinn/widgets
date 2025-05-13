@@ -7,6 +7,7 @@ import {
   Event,
   EventEmitter,
   State,
+  Watch,
 } from "@stencil/core";
 import {
   makeTextSearchRequest,
@@ -161,6 +162,13 @@ export class VviinnTextSearch {
       "vviinnImageUploadFinished",
       this.imageUploadFinishedHandler,
     );
+  }
+
+  @Watch("searchQuery")
+  watchSearchQuery(newQuery: string) {
+    if (this.showInWidget) return;
+    this.searchQuery = newQuery;
+    this.handleTextSearch();
   }
 
   disconnectedCallback() {
