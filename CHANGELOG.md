@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.163.0](https://github.com/vviinn/widgets/compare/v2.162.0...v2.163.0) (2025-05-13)
+
+
+### Features
+
+* Watch and react to searchId and searchQuery changes in the components ([005dfbd](https://github.com/vviinn/widgets/commit/005dfbd334ec2bb80225fcd727aa1ea77a95671d))
+
 ## [2.162.0](https://github.com/vviinn/widgets/compare/v2.161.1...v2.162.0) (2025-05-12)
 
 
