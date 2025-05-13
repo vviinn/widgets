@@ -15,7 +15,7 @@ import "./styles.css";
       When you have already redirected to the results page and show initial results using the <code>searchId</code> or <code>query</code> parameter from your URL:
       <ul>
         <li>For other searches on the <b>SAME PAGE</b>, you don't need to pass any parameters, components will handle the new query or the new image upload. Passing parameters again could lead to unexpected results.</li>
-        <li>To support reloading or going back, e.g., from the Product Details page, you should update the URL preferred without refreshing the page.</li>
+        <li>To support reloading or going back, e.g., from the Product Details page, you should update the URL preferred without refreshing the page. If you don't use the SPA framework, you could use [pushState](https://developer.mozilla.org/en-US/docs/Web/API/History/pushState) or [replaceState](https://developer.mozilla.org/en-US/docs/Web/API/History/replaceState) browser history API methods.</li>
         <li>To support refreshing the page without losing the image, you could use the <code>save-image-mode=always</code> parameter for the <code>vviinn-cropper</code> component.</li>
       </ul>
     </li>
