@@ -97,6 +97,7 @@ export class RecommendationsSidebar {
   @State() showLoadingClass = false;
 
   @State() recommendationsLoading: boolean = false;
+  @State() hidden = false;
 
   private setRecommendationsLoading = (loading: boolean) => {
     this.recommendationsLoading = loading;
@@ -195,6 +196,7 @@ export class RecommendationsSidebar {
     return (
       <Host
         class={this.getClassMap()}
+        style={{ display: this.hidden ? "none" : undefined }}
         exportparts={`body, close-sidebar, ${carouselParts}, ${productCardParts}`}
       >
         <aside
@@ -241,7 +243,10 @@ export class RecommendationsSidebar {
               mode={this.mode}
               campaign-type={this.campaignType}
               useCarousel={this.useCarousel}
-              onVviinnRecommendationsLoaded={() => (this.sidebarState = "open")}
+              onVviinnRecommendationsLoaded={() => {
+                this.hidden = false;
+                this.sidebarState = "open";
+              }}
               showScroll={this.widgetScrollbar}
               campaigns={this.campaigns}
               color={this.color}
@@ -291,6 +296,8 @@ export class RecommendationsSidebar {
 
   private handleAnimationEnd({ animationName }: AnimationEvent): void {
     const isClosingAnimation = animationName.includes("slideOut");
-    if (!isClosingAnimation) return;
+    if (isClosingAnimation) {
+      this.hidden = true;
+    }
   }
 }
