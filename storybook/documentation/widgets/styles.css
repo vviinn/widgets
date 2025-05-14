@@ -9,3 +9,7 @@ vviinn-recommendations-sidebar::part(custom-label) {
 vviinn-vpr-widget#discovery-set-vviinn-vpr-widget::part(title) {
   min-height: 40px;
 }
+
+.best-practices-list ol > li {
+  margin-bottom: 1.5em; /* Adjust as needed */
+}
