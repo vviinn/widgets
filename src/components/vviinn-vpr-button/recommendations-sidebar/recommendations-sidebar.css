@@ -98,6 +98,11 @@ main {
   animation-fill-mode: forwards;
 }
 
+:host(.open) {
+  transition: background 0.3s ease-in-out;
+  background: rgba(0, 0, 0, 0.2);
+}
+
 :host(.bottom.open) .sidebar {
   animation-name: slideInFromBottom;
   animation-duration: 0.5s;
