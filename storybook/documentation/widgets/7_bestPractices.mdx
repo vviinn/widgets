@@ -9,14 +9,14 @@ import "./styles.css";
 <div className="best-practices-list">
   <ol>
     <li>
-      If you are performing a <b>TEXT SEARCH</b> and redirecting to display the results on another page, prefer using the <code>search-query</code> parameter and pass the query to the <code>vviinn-text-search</code> component, if it exists on the page.
+      If you are making a <b>TEXT SEARCH</b> and redirecting to show the results on another page, prefer to use the <code>search-query</code> parameter and pass a query to the <code>vviinn-text-search</code> component, if it exists on the page.
     </li>
     <li>
-      When you have already redirected to the results page and displayed the initial results using the <code>searchId</code> or <code>query</code> parameter from your URL:
+      When you have already redirected to the results page and show initial results using the <code>searchId</code> or <code>query</code> parameter from your URL:
       <ul>
-        <li>For later searches on the <b>SAME PAGE</b>, you don't need to pass any parameters; the components will handle the new query or image upload. Passing parameters again could lead to unexpected results.</li>
-        <li>To support reloading or navigating back (e.g., from the Product Details page), you should update the URL without refreshing the page. If you are not using an SPA framework, you can use the <a href="https://developer.mozilla.org/en-US/docs/Web/API/History/pushState">pushState</a> or <a href="https://developer.mozilla.org/en-US/docs/Web/API/History/replaceState">replaceState</a> methods from the browser history API.</li>
-        <li>To support refreshing the page without losing the image, you can use the <code>save-image-mode="always"</code> parameter for the <code>vviinn-cropper</code> component.</li>
+        <li>For other searches on the <b>SAME PAGE</b>, you don't need to pass any parameters, components will handle the new query or the new image upload. Passing parameters again could lead to unexpected results.</li>
+        <li>To support reloading or going back, e.g., from the Product Details page, you should update the URL preferred without refreshing the page. If you don't use the SPA framework, you could use [pushState](https://developer.mozilla.org/en-US/docs/Web/API/History/pushState) or [replaceState](https://developer.mozilla.org/en-US/docs/Web/API/History/replaceState) browser history API methods.</li>
+        <li>To support refreshing the page without losing the image, you could use the <code>save-image-mode=always</code> parameter for the <code>vviinn-cropper</code> component.</li>
       </ul>
     </li>
   </ol>
