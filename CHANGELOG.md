@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.164.2](https://github.com/vviinn/widgets/compare/v2.164.1...v2.164.2) (2025-05-14)
+
+
+### Bug Fixes
+
+* Improve Best Practices documentation ([b9c85d7](https://github.com/vviinn/widgets/commit/b9c85d7d638857064c86eba3c7afbda497e02a32))
+
 ### [2.164.1](https://github.com/vviinn/widgets/compare/v2.164.0...v2.164.1) (2025-05-14)
 
 
