@@ -9,6 +9,7 @@ export const productCardGeneralPartsList = [
   "image-container",
   "image-link",
   "image-picture",
+  "image-placeholder",
   "title",
   "basket-button",
   "basket-button-container",

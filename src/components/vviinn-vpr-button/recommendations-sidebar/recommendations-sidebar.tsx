@@ -21,6 +21,10 @@ import { ClickEvent, isClickedInRectBound } from "../../../geometry/Rectangle";
 import { Recommendation } from "../../../components";
 import { carouselParts, productCardParts } from "../../../cssParts";
 import i18next from "i18next";
+import {
+  DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH,
+  PRODUCT_CARD_IMAGE_WIDTH,
+} from "../../../widget/constants";
 
 type SidebarState = "idle" | "open" | "closed";
 
@@ -45,7 +49,7 @@ export class RecommendationsSidebar {
   @Prop() campaigns: string = "";
   @Prop() campaignType: CampaignName;
   @Prop() color: string;
-  @Prop() imageWidth: number = 300;
+  @Prop() imageWidth: number = PRODUCT_CARD_IMAGE_WIDTH;
   @Prop() imageRatio: number = 1;
   @Prop() cssUrl: string | null;
   @Prop() noResultText: string;
@@ -68,6 +72,8 @@ export class RecommendationsSidebar {
   @Prop() favoriteShow: boolean = false;
   @Prop() useCarousel: boolean = true;
   @Prop() showInWidget: boolean = false;
+  @Prop() imageResolutionWidth: number =
+    DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH;
 
   /** @internal */
   @Prop() apiPath: string;
@@ -91,6 +97,7 @@ export class RecommendationsSidebar {
   @State() showLoadingClass = false;
 
   @State() recommendationsLoading: boolean = false;
+  @State() hidden = false;
 
   private setRecommendationsLoading = (loading: boolean) => {
     this.recommendationsLoading = loading;
@@ -189,6 +196,7 @@ export class RecommendationsSidebar {
     return (
       <Host
         class={this.getClassMap()}
+        style={{ display: this.hidden ? "none" : undefined }}
         exportparts={`body, close-sidebar, ${carouselParts}, ${productCardParts}`}
       >
         <aside
@@ -235,7 +243,10 @@ export class RecommendationsSidebar {
               mode={this.mode}
               campaign-type={this.campaignType}
               useCarousel={this.useCarousel}
-              onVviinnRecommendationsLoaded={() => (this.sidebarState = "open")}
+              onVviinnRecommendationsLoaded={() => {
+                this.hidden = false;
+                this.sidebarState = "open";
+              }}
               showScroll={this.widgetScrollbar}
               campaigns={this.campaigns}
               color={this.color}
@@ -260,6 +271,7 @@ export class RecommendationsSidebar {
               showInWidget={this.showInWidget}
               recommendationsLoading={this.recommendationsLoading}
               setRecommendationsLoading={this.setRecommendationsLoading}
+              imageResolutionWidth={this.imageResolutionWidth}
             />
           </main>
         </aside>
@@ -269,8 +281,8 @@ export class RecommendationsSidebar {
 
   private renderSourceImage(): HTMLImageElement {
     const sourceImageSrc =
-      this.sourceProduct?.image?.thumbnail ??
-      this.sourceProduct?.image?.original ??
+      this.sourceProduct?.image?.thumbnail ||
+      this.sourceProduct?.image?.original ||
       null;
 
     if (!sourceImageSrc) return null;
@@ -284,6 +296,8 @@ export class RecommendationsSidebar {
 
   private handleAnimationEnd({ animationName }: AnimationEvent): void {
     const isClosingAnimation = animationName.includes("slideOut");
-    if (!isClosingAnimation) return;
+    if (isClosingAnimation) {
+      this.hidden = true;
+    }
   }
 }

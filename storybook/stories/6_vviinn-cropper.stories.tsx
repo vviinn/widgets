@@ -29,7 +29,7 @@ const Template = (args) => `
 
     <div class="search-page-wrapper-result-filters">
       <vviinn-extended-filters locale="en-US"></vviinn-extended-filters>
-      <vviinn-selected-filters></vviinn-selected-filters>
+      <vviinn-selected-filters locale="en-US"></vviinn-selected-filters>
     </div>
 
     <vviinn-results 

@@ -23,6 +23,7 @@ const Template = (args) => `
       token="${args.token}"
       mode="${args.mode}"
       image-width="${args.imageWidth}"
+      image-resolution-width="${args.imageResolutionWidth}"
       set-items-amount="${args.setItemsAmount}"
       campaign-type="${args.campaignType}"
       campaigns="${args.campaigns}"
@@ -59,6 +60,7 @@ Default.args = {
   productDetailsNewTab: false,
   productDetailsRedirect: true,
   imageWidth: 300,
+  imageResolutionWidth: 500,
   imageRatio: 1,
   setItemsAmount: 4,
   locale: "en-US",

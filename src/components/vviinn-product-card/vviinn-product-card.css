@@ -42,6 +42,16 @@
   width: 100%;
 }
 
+.image-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f0f0;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  height: auto;
+}
+
 .basket-button-container {
   width: 100%;
   display: flex;

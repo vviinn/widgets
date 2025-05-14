@@ -2,8 +2,8 @@ const commonParams = {
   locale: "en-US",
   deeplink: "#",
   currency: "€",
-  style: { width: "240px" },
-  "image-width": "240",
+  style: { width: "fit-content" },
+  "image-width": "300",
 };
 
 export const productDataByIndustryAndType = {

@@ -6,7 +6,7 @@ html, body, #root, #root-inner {
 }
 
 .product-wrapper {
-  width: 240px;
+  width: fit-content;
 }
 
 vviinn-product-card {

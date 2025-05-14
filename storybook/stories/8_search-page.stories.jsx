@@ -113,6 +113,7 @@ export const TextSearchResultsPage = (args) => {
   template.className = "search-page-wrapper";
   template.innerHTML = `   
       <div class="search-page-wrapper-aside">
+        <vviinn-cropper></vviinn-cropper>
         <vviinn-extended-filters locale="${args.locale}" mode="preview"></vviinn-extended-filters>
       </div>
       
@@ -125,8 +126,8 @@ export const TextSearchResultsPage = (args) => {
         </vviinn-text-search>
 
         <div class="search-page-wrapper-result-filters">
-          <vviinn-extended-filters locale="en-US""></vviinn-extended-filters>
-          <vviinn-selected-filters></vviinn-selected-filters>
+          <vviinn-extended-filters locale="en-US"></vviinn-extended-filters>
+          <vviinn-selected-filters locale="en-US"></vviinn-selected-filters>
         </div>
 
         <vviinn-results 
@@ -162,8 +163,8 @@ export const ImageSearchResultsPage = (args) => {
         </vviinn-text-search>
 
         <div class="search-page-wrapper-result-filters">
-          <vviinn-extended-filters locale="en-US""></vviinn-extended-filters>
-          <vviinn-selected-filters></vviinn-selected-filters>
+          <vviinn-extended-filters locale="en-US"></vviinn-extended-filters>
+          <vviinn-selected-filters locale="en-US"></vviinn-selected-filters>
         </div>
 
         <vviinn-results 

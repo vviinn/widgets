@@ -29,3 +29,4 @@ export { SearchModalFullSearchIcon } from "./icons/SearchModalFullSearchIcon";
 export { SearchModalImageSearchIcon } from "./icons/SearchModalImageSearchIcon";
 export { FavoriteIcon } from "./icons/FavoriteIcon";
 export { FavoriteIconPressed } from "./icons/FavoriteIconPressed";
+export { ImagePlaceholderIcon } from "./icons/ImagePlaceholder";

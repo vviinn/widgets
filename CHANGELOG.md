@@ -2,6 +2,49 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.164.2](https://github.com/vviinn/widgets/compare/v2.164.1...v2.164.2) (2025-05-14)
+
+
+### Bug Fixes
+
+* Improve Best Practices documentation ([b9c85d7](https://github.com/vviinn/widgets/commit/b9c85d7d638857064c86eba3c7afbda497e02a32))
+
+### [2.164.1](https://github.com/vviinn/widgets/compare/v2.164.0...v2.164.1) (2025-05-14)
+
+
+### Bug Fixes
+
+* Bugfix on One-click discovery modal close ([b95e1f3](https://github.com/vviinn/widgets/commit/b95e1f30f599749a5e3bcd6a46b0ef1c5812f6ce))
+
+## [2.164.0](https://github.com/vviinn/widgets/compare/v2.163.1...v2.164.0) (2025-05-14)
+
+
+### Features
+
+* Best Practices page in Storybook ([7d37213](https://github.com/vviinn/widgets/commit/7d372134007f361678a39b390e802adf20c92d2e))
+
+### [2.163.1](https://github.com/vviinn/widgets/compare/v2.163.0...v2.163.1) (2025-05-13)
+
+
+### Bug Fixes
+
+* remove query watching for Search Bar ([a3d029f](https://github.com/vviinn/widgets/commit/a3d029fa68fad9e5e6c23d69bfaf223cd2261d2a))
+
+## [2.163.0](https://github.com/vviinn/widgets/compare/v2.162.0...v2.163.0) (2025-05-13)
+
+
+### Features
+
+* Watch and react to searchId and searchQuery changes in the components ([005dfbd](https://github.com/vviinn/widgets/commit/005dfbd334ec2bb80225fcd727aa1ea77a95671d))
+
+## [2.162.0](https://github.com/vviinn/widgets/compare/v2.161.1...v2.162.0) (2025-05-12)
+
+
+### Features
+
+* imageResolutionWidth for Discovery widgets ([3d8129b](https://github.com/vviinn/widgets/commit/3d8129b21829ccefd19781e9b5d2095057cfa755))
+* Show image placeholder for Product Card if no image source ([eed8750](https://github.com/vviinn/widgets/commit/eed8750f80bddc1d518710b5d5f100e42f073f86))
+
 ### [2.161.1](https://github.com/vviinn/widgets/compare/v2.161.0...v2.161.1) (2025-05-05)
 
 

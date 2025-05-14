@@ -91,6 +91,7 @@ import { RESULTS_CALCULATED_COLUMNS_CSS_VAR } from "../vviinn-carousel/constants
  * @part image - Product Card image.
  * @part image-link - Anchor element around product image. Rendered only if "deeplink" property is filled.
  * @part image-picture - Picture element for image.
+ * @part image-placeholder - Placeholder shown when no image is available.
  * @part price-amount-regular - Numeric part of the price.
  * @part price-amount-sale - Numeric part of the price.
  * @part price-amount-outdated - Numeric part of the price.
@@ -125,6 +126,7 @@ import { RESULTS_CALCULATED_COLUMNS_CSS_VAR } from "../vviinn-carousel/constants
  * @slot vviinn-custom-label-2 - Custom label with index 2.
  * @slot vviinn-custom-label-3 - Custom label with index 3.
  * @slot vviinn-custom-label-4 - Custom label with index 4.
+ * @slot vviinn-image-placeholder-icon - Icon or content for the image placeholder.
  */
 
 export type ReplaceSlotsContentInParent = (
@@ -599,6 +601,12 @@ export class VviinnResults {
     this.getTextSearchResults();
   }
 
+  @Watch("searchId")
+  watchSearchId(newId: string) {
+    if (this.showInWidget) return;
+    if (newId) makeVisualSearchRequest(this.storeName, newId);
+  }
+
   @Listen("vviinnProductLoad")
   trackProductLoad({ detail }: ProductCardEvent) {
     const productLoadEvent = this.getProductTrackEvent(detail, "load");
@@ -805,7 +813,8 @@ export class VviinnResults {
         baseSalePrice={p.basePrice?.sale}
         responsive={true}
         imageWidth={this.imageResolutionWidth}
-        image={p.image.thumbnail ?? p.image.original}
+        imageResolutionWidth={this.imageResolutionWidth}
+        image={p.image.thumbnail || p.image.original}
         energyCertifications={p.energyCertifications}
         part="product-card"
         campaignTypeId={widgetData.campaignTypeId}

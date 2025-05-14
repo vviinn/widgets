@@ -41,6 +41,7 @@ export const productCardSlotNames: string[] = [
   "vviinn-custom-label-2",
   "vviinn-custom-label-3",
   "vviinn-custom-label-4",
+  "vviinn-image-placeholder-icon",
 ];
 
 export const vprIconSlotName = "vviinn-results-vpr-icon";

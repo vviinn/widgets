@@ -21,6 +21,10 @@ import { Locale } from "../../locale";
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
 import { OneClickDiscoveryMode } from "../../widget/types";
 import { useSearchStore } from "../../store/search.store";
+import {
+  DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH,
+  PRODUCT_CARD_IMAGE_WIDTH,
+} from "../../widget/constants";
 /**
  * @part button - Clickable button element.
  * @part vviinn-button - Button element container.
@@ -87,7 +91,7 @@ import { useSearchStore } from "../../store/search.store";
 })
 export class VviinnVprButton {
   @Element() el: HTMLElement;
-  /** Vviinn customer’s token (required) */
+  /** Vviinn customer's token (required) */
   @Prop() token: string;
   /** The locale for currency formatting and text localization */
   @Prop() locale: Locale;
@@ -107,8 +111,8 @@ export class VviinnVprButton {
   @Prop() campaignType: CampaignName = this.mode === "set" ? "VCS" : "VPR";
   /** Accepts any hex color code */
   @Prop() color: string = "";
-  /** Width of each recommended product image */
-  @Prop() imageWidth: number = 300;
+  /** Width of each recommended product image in Continuity mode */
+  @Prop() imageWidth: number = PRODUCT_CARD_IMAGE_WIDTH;
   /** The ratio of each recommended product image */
   @Prop() imageRatio: number = 1;
   /** Items amount in set mode grid */
@@ -176,7 +180,7 @@ export class VviinnVprButton {
   /** The recommendation renders on the page */
   @Event() vviinnProductLoad: EventEmitter<ProductCardEventData>;
 
-  /** Click on the product’s link */
+  /** Click on the product's link */
   @Event() vviinnProductClick: EventEmitter<ProductCardEventData>;
 
   /** The recommendation appears in the viewport */
@@ -193,6 +197,9 @@ export class VviinnVprButton {
 
   /** Add to Basket button clicked */
   @Event() vviinnAddToBasket: EventEmitter<BasicEventData>;
+
+  @Prop() imageResolutionWidth: number =
+    DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH;
 
   @State() targetAppendSidebarTo: HTMLElement;
 
