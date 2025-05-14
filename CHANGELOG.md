@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.164.1](https://github.com/vviinn/widgets/compare/v2.164.0...v2.164.1) (2025-05-14)
+
+
+### Bug Fixes
+
+* Bugfix on One-click discovery modal close ([b95e1f3](https://github.com/vviinn/widgets/commit/b95e1f30f599749a5e3bcd6a46b0ef1c5812f6ce))
+
 ## [2.164.0](https://github.com/vviinn/widgets/compare/v2.163.1...v2.164.0) (2025-05-14)
 
 
