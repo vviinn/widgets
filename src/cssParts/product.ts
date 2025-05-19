@@ -48,3 +48,12 @@ export const pricePartsList = [
   "price-amount-base-outdated",
   "price-prefix",
 ];
+
+export const contentCardPartsList = [
+  "content-card",
+  "image-container",
+  "content-container",
+  "content-label",
+  "content-text",
+  "content-link",
+];

@@ -1,9 +1,9 @@
 import { pipe } from "fp-ts/lib/function";
 import * as E from "fp-ts/lib/Either";
-import { FunctionalComponent, h } from "@stencil/core";
+import { FunctionalComponent, h, Fragment } from "@stencil/core";
 import { BasePrice } from "../../interfaces/recommendation";
-import { Fragment } from "@stencil/core";
 import { ImagePlaceholderIcon, PlusIcon } from "../vviinn-icons";
+import { getLastUrlPath } from "../../helpers/url/getLastUrlPath";
 
 const FIT_EXPR = /fit\/\d+\//;
 
@@ -280,7 +280,10 @@ const getProcessedSrc = (
   return imageResolutionWidth ? processWidth(src, imageResolutionWidth) : src;
 };
 
-export const Image = (props: ImageProps, onLoadEnd = () => undefined) => {
+export const Image = (
+  props: ImageProps,
+  onLoadEnd = () => undefined,
+): HTMLPictureElement => {
   const processedSrc = getProcessedSrc(props.src, props.imageResolutionWidth);
 
   return (
@@ -303,7 +306,7 @@ export const Image = (props: ImageProps, onLoadEnd = () => undefined) => {
 export const ResponsiveImage = (
   props: ImageProps,
   onLoadEnd = () => undefined,
-) => {
+): HTMLPictureElement => {
   const processedSrc = getProcessedSrc(props.src, props.imageResolutionWidth);
 
   return (
@@ -317,5 +320,59 @@ export const ResponsiveImage = (
         onLoad={onLoadEnd}
       />
     </picture>
+  );
+};
+
+export const renderImage = (imageProps: ImageProps, isResponsive: boolean) =>
+  isResponsive ? ResponsiveImage(imageProps) : Image(imageProps);
+
+export const renderFullHeighImage = (imageProps: ImageProps) => {
+  return (
+    <div
+      class="image-container image-container--full-height"
+      part="image-container"
+    >
+      {renderImage(imageProps, false)}
+    </div>
+  );
+};
+
+export const ContentCardContent = (
+  contentText: string,
+  contentLink: string,
+  imageProps: ImageProps,
+  labelText: string = "Content",
+) => {
+  return (
+    <Fragment>
+      <div
+        class="image-container image-container--content-card"
+        part="image-container"
+      >
+        {renderFullHeighImage(imageProps)}
+      </div>
+      <div
+        class="content-container content-container--content-card"
+        part="content-container"
+      >
+        <div class="content-label">{labelText}</div>
+        {contentText && (
+          <div class="content-text" part="content-text" title={contentText}>
+            {contentText}
+          </div>
+        )}
+        {contentLink && (
+          <a
+            class="content-link"
+            part="content-text"
+            href={contentLink}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {getLastUrlPath(contentLink)}
+          </a>
+        )}
+      </div>
+    </Fragment>
   );
 };
