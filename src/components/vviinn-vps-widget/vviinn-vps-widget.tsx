@@ -67,7 +67,7 @@ import {
   searchWidgetButtonParts,
   searchWidgetFilterParts,
 } from "../../cssParts";
-import { findSlotElements } from "../../dom";
+import { findSlotElements, addEventListenersWithSignal } from "../../dom";
 import { SEARCH_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
 
 const CAMERA_START_DELAY = 500;
@@ -139,7 +139,7 @@ const CAMERA_START_DELAY = 500;
 export class VviinnVpsWidget {
   @Element() el: HTMLVviinnVpsWidgetElement;
 
-  /** Vviinn customer’s token (required) */
+  /** Vviinn customer's token (required) */
   @Prop() token: string;
   /** Toggle the widget's modal showing */
   @Prop({ mutable: true }) active: boolean = true;
@@ -242,7 +242,7 @@ export class VviinnVpsWidget {
   /** The image upload has started */
   @Event() vviinnImageUploadStarted: EventEmitter<ImageUploadEventData>;
 
-  /** Wrong image format, that isn’t .jpg, .jpeg, png, or the request failed */
+  /** Wrong image format, that isn't .jpg, .jpeg, png, or the request failed */
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
   private overflow: string;
@@ -256,6 +256,7 @@ export class VviinnVpsWidget {
   private slots: HTMLSlotElement[] = [];
   private state?: SearchStore;
   private storeName?: SearchStoreName;
+  private eventAbortController?: AbortController;
 
   private initResultEvents() {
     this.state.resultLoaded = false;
@@ -518,9 +519,13 @@ export class VviinnVpsWidget {
     this.uiSessionId = uuidv4();
     this.widgetElementId = this.el.id;
 
-    document.addEventListener(
-      "vviinnCropperAspectRatioError",
-      this.handleAspectRatioError,
+    this.eventAbortController = new AbortController();
+    const { signal } = this.eventAbortController;
+
+    addEventListenersWithSignal(
+      document,
+      [["vviinnCropperAspectRatioError", this.handleAspectRatioError]],
+      signal,
     );
   }
 
@@ -529,6 +534,7 @@ export class VviinnVpsWidget {
       "vviinnCropperAspectRatioError",
       this.handleAspectRatioError,
     );
+    this.eventAbortController?.abort();
   }
 
   private handleAspectRatioError = ({ detail }: CustomEvent<boolean>) => {
