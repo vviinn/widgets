@@ -4,7 +4,7 @@ import { FunctionalComponent, h, Fragment } from "@stencil/core";
 import { BasePrice } from "../../interfaces/recommendation";
 import { ImagePlaceholderIcon, PlusIcon } from "../vviinn-icons";
 import { getLastUrlPath } from "../../helpers/url/getLastUrlPath";
-import { joinTruthy } from "../../utils/string";
+import { joinTruthy } from "../../utils/string/joinTruthy";
 
 const FIT_EXPR = /fit\/\d+\//;
 

@@ -30,7 +30,7 @@ import {
   RequestDynamicFilterItem,
 } from "../campaign/VPRCampaignService";
 import { setBodyAndHeaders } from "../network/utils";
-import { encodeToBase64UTF8 } from "../utils/string";
+import { encodeToBase64UTF8 } from "../utils/string/encodeToBase64UTF8";
 import {
   addIfDefined,
   addIfNotEmpty,
