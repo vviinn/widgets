@@ -1,12 +1,10 @@
-export const getLastUrlPath = (url?: string) => {
+export function getLastUrlPath(url?: string): string {
   if (!url) return "";
   try {
-    const u = new URL(url, "http://dummy");
-    return u.pathname.split("/").filter(Boolean).pop()
-      ? "/" + u.pathname.split("/").filter(Boolean).pop()
-      : u.pathname;
+    const parsed = new URL(url, "http://dummy");
+    const segments = parsed.pathname.split("/").filter(Boolean);
+    return segments.length ? `/${segments.pop()}` : url;
   } catch {
-    const parts = url.split("/").filter(Boolean);
-    return parts.length ? "/" + parts.pop() : url;
+    return url;
   }
-};
+}
