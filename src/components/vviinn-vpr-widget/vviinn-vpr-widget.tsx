@@ -285,6 +285,12 @@ export class VviinnVprWidget implements ComponentInterface {
     this.setRecommendationsLoading?.(loading);
   };
 
+  private showNoResultText = () =>
+    !this.recommendationsLoading &&
+    (this.recommendations.length === 0 ||
+      (this.recommendations.length < this.setItemsAmount && this.isSetMode) ||
+      this.hasErrorOnLoad);
+
   private getBasicEventData(): BasicEventData {
     return {
       campaignTypeId: this.campaignType,
@@ -566,6 +572,7 @@ export class VviinnVprWidget implements ComponentInterface {
         },
         (data) => {
           this.handleRecommendationsSuccess(data);
+          this.vviinnRecommendationsLoaded.emit();
           this.setLoading(false);
         },
       ),
@@ -720,6 +727,7 @@ export class VviinnVprWidget implements ComponentInterface {
   render() {
     if (this.recommendations.length === 0 && this.noResultShow === false)
       return null;
+
     return (
       <Host
         class={{
@@ -787,17 +795,13 @@ export class VviinnVprWidget implements ComponentInterface {
 
           {this.useCarousel ? this.renderCarousel() : this.renderResults()}
 
-          {(this.recommendations.length === 0 ||
-            (this.recommendations.length < this.setItemsAmount &&
-              this.isSetMode) ||
-            this.hasErrorOnLoad) &&
-            !this.recommendationsLoading && (
-              <div class="no-result-text">
-                {this.noResultText.length
-                  ? this.noResultText
-                  : i18next.t("noResultText")}
-              </div>
-            )}
+          {this.showNoResultText() && (
+            <div class="no-result-text">
+              {this.noResultText.length
+                ? this.noResultText
+                : i18next.t("noResultText")}
+            </div>
+          )}
         </Fragment>
       </Host>
     );
