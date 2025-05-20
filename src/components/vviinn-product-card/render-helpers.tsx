@@ -313,17 +313,17 @@ export const UniversalImage = ({
     ...additionalClasses,
   ]);
 
-  const parts = joinTruthy([
-    "image-picture",
-    isFullHeight && "content-card-image-picture",
-    ...additionalParts,
-  ]);
-
-  const imageParts = joinTruthy([
-    "image",
-    isFullHeight && "content-card-image",
-    ...additionalParts,
-  ]);
+  const computeParts = (base: string) =>
+    joinTruthy([
+      base,
+      isFullHeight &&
+        (base === "image-picture"
+          ? "content-card-image-picture"
+          : "content-card-image"),
+      ...additionalParts,
+    ]);
+  const parts = computeParts("image-picture");
+  const imageParts = computeParts("image");
 
   return (
     <picture part={parts}>
