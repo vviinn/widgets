@@ -51,8 +51,10 @@ export const pricePartsList = [
 
 export const contentCardPartsList = [
   "content-card",
-  "image-container",
-  "content-container",
+  "content-card-image-container",
+  "content-card-content-container",
+  "content-card-image-picture",
+  "content-card-image",
   "content-label",
   "content-text",
   "content-link",

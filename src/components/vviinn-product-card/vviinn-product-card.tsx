@@ -401,15 +401,22 @@ export class VviinnProductCard {
     if (this.isContentCard) {
       return (
         <Host
-          part="product-card"
+          part="product-card content-card"
           class="content-card"
           exportparts={contentCardParts}
         >
-          {ContentCardContent(
-            this.contentText,
-            this.contentLink,
-            this.imageProps,
-          )}
+          <div
+            class="image-container content-card-image-container"
+            part="image-container"
+          >
+            <Linked
+              deeplink={this.contentLink}
+              part="image-link content-image-link"
+            >
+              {renderImage(this.imageProps, this.responsive, true)}
+            </Linked>
+          </div>
+          {ContentCardContent(this.contentText, this.contentLink)}
         </Host>
       );
     }

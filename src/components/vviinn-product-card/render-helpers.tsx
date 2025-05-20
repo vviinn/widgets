@@ -235,6 +235,7 @@ const ImageOrPlaceholder: FunctionalComponent<{
   alt?: string;
   title?: string;
   className?: string;
+  part?: string;
   ref?: (el: Element) => void;
   onLoad?: () => void;
 }> = (props) => {
@@ -254,7 +255,7 @@ const ImageOrPlaceholder: FunctionalComponent<{
       ref={props.ref}
       onLoad={props.onLoad}
       loading="lazy"
-      part="image"
+      part={props.part}
     />
   ) : (
     <div
@@ -294,9 +295,30 @@ export const Image = (
         height={props.height}
         alt={props.title}
         title={props.title}
+        part="image"
         className="image"
         ref={props.ref}
         onLoad={onLoadEnd}
+      />
+      {props.isSource && <PlusIcon />}
+    </picture>
+  );
+};
+
+const FullHeightImage = (props: ImageProps, isResponsive) => {
+  const processedSrc = getProcessedSrc(props.src, props.imageResolutionWidth);
+
+  return (
+    <picture part="image-picture content-card-image-picture">
+      <ImageOrPlaceholder
+        src={processedSrc}
+        width={props.width}
+        height={props.height}
+        alt={props.title}
+        title={props.title}
+        part="image content-card-image"
+        className={`image content-card-image ${isResponsive ? "responsive" : ""}`}
+        ref={props.ref}
       />
       {props.isSource && <PlusIcon />}
     </picture>
@@ -323,56 +345,40 @@ export const ResponsiveImage = (
   );
 };
 
-export const renderImage = (imageProps: ImageProps, isResponsive: boolean) =>
-  isResponsive ? ResponsiveImage(imageProps) : Image(imageProps);
-
-export const renderFullHeighImage = (imageProps: ImageProps) => {
-  return (
-    <div
-      class="image-container image-container--full-height"
-      part="image-container"
-    >
-      {renderImage(imageProps, false)}
-    </div>
-  );
+export const renderImage = (
+  imageProps: ImageProps,
+  isResponsive: boolean,
+  isFullHeight: boolean = false,
+) => {
+  if (isFullHeight) {
+    return FullHeightImage(imageProps, isResponsive);
+  }
+  return isResponsive ? ResponsiveImage(imageProps) : Image(imageProps);
 };
 
 export const ContentCardContent = (
   contentText: string,
   contentLink: string,
-  imageProps: ImageProps,
   labelText: string = "Content",
 ) => {
   return (
-    <Fragment>
-      <div
-        class="image-container image-container--content-card"
-        part="image-container"
-      >
-        {renderFullHeighImage(imageProps)}
+    <div
+      class="content-container"
+      part="content-container content-card-content-container"
+    >
+      <div class="content-label" part="content-label">
+        {labelText}
       </div>
-      <div
-        class="content-container content-container--content-card"
-        part="content-container"
-      >
-        <div class="content-label">{labelText}</div>
-        {contentText && (
-          <div class="content-text" part="content-text" title={contentText}>
-            {contentText}
-          </div>
-        )}
-        {contentLink && (
-          <a
-            class="content-link"
-            part="content-text"
-            href={contentLink}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {getLastUrlPath(contentLink)}
-          </a>
-        )}
-      </div>
-    </Fragment>
+      {contentText && (
+        <div class="content-text" part="content-text" title={contentText}>
+          {contentText}
+        </div>
+      )}
+      {contentLink && (
+        <Linked deeplink={contentLink} class="content-link" part="content-link">
+          {getLastUrlPath(contentLink)}
+        </Linked>
+      )}
+    </div>
   );
 };
