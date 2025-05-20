@@ -4,6 +4,7 @@ import { FunctionalComponent, h, Fragment } from "@stencil/core";
 import { BasePrice } from "../../interfaces/recommendation";
 import { ImagePlaceholderIcon, PlusIcon } from "../vviinn-icons";
 import { getLastUrlPath } from "../../helpers/url/getLastUrlPath";
+import { joinTruthy } from "../../utils/string";
 
 const FIT_EXPR = /fit\/\d+\//;
 
@@ -281,66 +282,63 @@ const getProcessedSrc = (
   return imageResolutionWidth ? processWidth(src, imageResolutionWidth) : src;
 };
 
-export const Image = (
-  props: ImageProps,
+export interface UniversalImageProps extends ImageProps {
+  isResponsive?: boolean;
+  isFullHeight?: boolean;
+  additionalClasses?: string[];
+  additionalParts?: string[];
+  onLoadEnd?: () => void;
+}
+
+export const UniversalImage = ({
+  width,
+  height,
+  title,
+  src,
+  ref,
+  isSource,
+  imageResolutionWidth,
+  isResponsive = false,
+  isFullHeight = false,
+  additionalClasses = [],
+  additionalParts = [],
   onLoadEnd = () => undefined,
-): HTMLPictureElement => {
-  const processedSrc = getProcessedSrc(props.src, props.imageResolutionWidth);
+}: UniversalImageProps): HTMLPictureElement => {
+  const processedSrc = getProcessedSrc(src, imageResolutionWidth);
+
+  const classes = joinTruthy([
+    "image",
+    isResponsive && "responsive",
+    isFullHeight && "content-card-image",
+    ...additionalClasses,
+  ]);
+
+  const parts = joinTruthy([
+    "image-picture",
+    isFullHeight && "content-card-image-picture",
+    ...additionalParts,
+  ]);
+
+  const imageParts = joinTruthy([
+    "image",
+    isFullHeight && "content-card-image",
+    ...additionalParts,
+  ]);
 
   return (
-    <picture part="image-picture">
+    <picture part={parts}>
       <ImageOrPlaceholder
         src={processedSrc}
-        width={props.width}
-        height={props.height}
-        alt={props.title}
-        title={props.title}
-        part="image"
-        className="image"
-        ref={props.ref}
+        width={!isResponsive ? width : undefined}
+        height={!isResponsive ? height : undefined}
+        alt={title}
+        title={title}
+        part={imageParts}
+        className={classes}
+        ref={ref}
         onLoad={onLoadEnd}
       />
-      {props.isSource && <PlusIcon />}
-    </picture>
-  );
-};
-
-const FullHeightImage = (props: ImageProps, isResponsive) => {
-  const processedSrc = getProcessedSrc(props.src, props.imageResolutionWidth);
-
-  return (
-    <picture part="image-picture content-card-image-picture">
-      <ImageOrPlaceholder
-        src={processedSrc}
-        width={props.width}
-        height={props.height}
-        alt={props.title}
-        title={props.title}
-        part="image content-card-image"
-        className={`image content-card-image ${isResponsive ? "responsive" : ""}`}
-        ref={props.ref}
-      />
-      {props.isSource && <PlusIcon />}
-    </picture>
-  );
-};
-
-export const ResponsiveImage = (
-  props: ImageProps,
-  onLoadEnd = () => undefined,
-): HTMLPictureElement => {
-  const processedSrc = getProcessedSrc(props.src, props.imageResolutionWidth);
-
-  return (
-    <picture part="image-picture">
-      <ImageOrPlaceholder
-        src={processedSrc}
-        alt={props.title}
-        title={props.title}
-        className="image responsive"
-        ref={props.ref}
-        onLoad={onLoadEnd}
-      />
+      {isSource && <PlusIcon />}
     </picture>
   );
 };
@@ -350,10 +348,11 @@ export const renderImage = (
   isResponsive: boolean,
   isFullHeight: boolean = false,
 ) => {
-  if (isFullHeight) {
-    return FullHeightImage(imageProps, isResponsive);
-  }
-  return isResponsive ? ResponsiveImage(imageProps) : Image(imageProps);
+  return UniversalImage({
+    ...imageProps,
+    isResponsive,
+    isFullHeight,
+  });
 };
 
 export const ContentCardContent = (
