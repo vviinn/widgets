@@ -530,10 +530,6 @@ export class VviinnVpsWidget {
   }
 
   disconnectedCallback() {
-    document.removeEventListener(
-      "vviinnCropperAspectRatioError",
-      this.handleAspectRatioError,
-    );
     this.eventAbortController?.abort();
   }
 
