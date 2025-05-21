@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.165.0](https://github.com/vviinn/widgets/compare/v2.164.3...v2.165.0) (2025-05-21)
+
+
+### Features
+
+* Update Stencil to 4.31.0 and related libraries to the latest version ([806c780](https://github.com/vviinn/widgets/commit/806c7809f9f8acade6fbb9cddcb07337cd274355))
+
 ### [2.164.3](https://github.com/vviinn/widgets/compare/v2.164.2...v2.164.3) (2025-05-20)
 
 
