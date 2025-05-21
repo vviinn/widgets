@@ -3,6 +3,7 @@
 dist/
 www/
 loader/
+.stencil
 src/interfaces/generated.ts
 src/components.d.ts
 node_modules/
