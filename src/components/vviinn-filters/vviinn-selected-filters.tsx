@@ -308,7 +308,7 @@ export class VviinnSelectedFilters {
             label: i18next.t("filters.imageFilterText"),
             buttonType: "image",
             imageSrc: this.imageSrc,
-            hidden: !this.imageSrc?.length,
+            hidden: !this.imageSrc?.length || this.state.results.length === 0,
           })}
 
           {RenderCustomButton({
