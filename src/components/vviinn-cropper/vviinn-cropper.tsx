@@ -296,6 +296,7 @@ export class VviinnCropper {
   private showPreloader = () =>
     this.state.loading &&
     this.state.searchType === "image" &&
+    this.state.image &&
     !this.showAspectRatioError;
 
   render() {
