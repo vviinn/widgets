@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.166.0](https://github.com/vviinn/widgets/compare/v2.165.0...v2.166.0) (2025-05-21)
+
+
+### Features
+
+* Unify the style of the color filter item ([1c476c2](https://github.com/vviinn/widgets/commit/1c476c2118fb2a1a22ce3d333c42cdbf0719503f))
+
 ## [2.165.0](https://github.com/vviinn/widgets/compare/v2.164.3...v2.165.0) (2025-05-21)
 
 
