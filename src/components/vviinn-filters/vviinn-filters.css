@@ -447,28 +447,15 @@ vviinn-price-range {
   padding: var(--spacing-100);
 }
 
-.filters-sub-button-color {
-  width: 40px;
-  height: 40px;
-  border: var(--stroke-width-50) solid var(--color-border-01);
-  border-radius: var(--border-radius-full);
-  display: inline-block;
-  box-sizing: border-box;
-  position: relative;
-}
 .filters-sub-button-color-dot {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
+  box-sizing: border-box;
+  width: 24px;
+  height: 24px;
   border-radius: var(--border-radius-full);
+  border: var(--stroke-width-50) solid var(--color-border-01);
 }
-.filters-sub-button-color:disabled {
-  opacity: 0.25;
-}
-.selected-filters-wrapper
-  .filters-sub-button-selected.filters-sub-button-color {
+
+.selected-filters-wrapper .filters-sub-button-selected {
   width: 24px;
   height: 24px;
   border: none;
@@ -476,19 +463,6 @@ vviinn-price-range {
 
 .filters-option-icon-wrapper {
   display: contents;
-}
-
-.filters-sub-button-color > span {
-  display: none;
-}
-
-.filters-sub-button-color.active {
-  border: var(--stroke-width-75) solid var(--color-border-inverse-00);
-  background-color: white;
-}
-
-.filters-sub-button-color.active .filters-sub-button-color-dot {
-  transform: scale(0.75);
 }
 
 .filters-modal-main-button-added-options {
