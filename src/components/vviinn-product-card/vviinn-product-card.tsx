@@ -53,6 +53,7 @@ import { resources } from "../../locale";
 import { contentCardParts, productCardParts } from "../../cssParts";
 import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
 import { PRODUCT_CARD_IMAGE_WIDTH } from "../../widget/constants";
+import { addEventListenersWithSignal } from "../../dom";
 
 /**
  * @part image-container - Product Card's image container.
@@ -217,6 +218,7 @@ export class VviinnProductCard {
   private productData: ProductCardEventData | null = null;
   private imageElement?: HTMLImageElement;
   private intersectionObserver: IntersectionObserver;
+  private linkEventAbortController?: AbortController;
   private imageProps: ImageProps;
 
   private isShowUpdateButton = () =>
@@ -366,17 +368,31 @@ export class VviinnProductCard {
   }
 
   private addLinksEventListeners() {
+    this.linkEventAbortController = new AbortController();
+    const { signal } = this.linkEventAbortController;
     const links = this.el.shadowRoot.querySelectorAll("a");
 
     links.forEach((link) => {
-      link.addEventListener("click", this.productClickHandler.bind(this));
-
-      link.addEventListener("auxclick", () => {
+      const clickHandler = this.productClickHandler.bind(this);
+      const auxClickHandler = () => {
         this.vviinnAuxClick.emit({
           ...this.productData,
         });
-      });
+      };
+      addEventListenersWithSignal(
+        link,
+        [
+          ["click", clickHandler],
+          ["auxclick", auxClickHandler],
+        ],
+        signal,
+      );
     });
+  }
+
+  disconnectedCallback() {
+    this.linkEventAbortController?.abort();
+    this.intersectionObserver?.disconnect();
   }
 
   private getProduct(): Recommendation {

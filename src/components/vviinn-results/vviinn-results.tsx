@@ -72,7 +72,11 @@ import {
 } from "../customized-slots";
 import { getCustomLabels } from "../../recommendation";
 import { productCardParts, productCardsGridPart } from "../../cssParts";
-import { findSlotElements, getSlotNames } from "../../dom";
+import {
+  findSlotElements,
+  getSlotNames,
+  addEventListenersWithSignal,
+} from "../../dom";
 import { OneClickDiscoveryResultsMode } from "../../widget/types";
 import { RESULTS_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
 import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
@@ -340,6 +344,8 @@ export class VviinnResults {
     this.oneClickDiscoverySelectedIndex = undefined;
   };
 
+  private eventAbortController?: AbortController;
+
   async componentWillLoad() {
     slotChangeListener(this, this.el);
     this.slots = findSlotElements(this.el);
@@ -528,30 +534,20 @@ export class VviinnResults {
       this.uiSessionId = uuidv4();
     }
 
-    document.addEventListener(
-      "vviinnImageUploadStarted",
-      this.imageUploadStartedHandler,
-    );
+    this.eventAbortController = new AbortController();
+    const { signal } = this.eventAbortController;
 
-    document.addEventListener(
-      "vviinnTextSearchStarted",
-      this.textSearchStartedHandler,
-    );
-
-    document.addEventListener(
-      "vviinnFiltersChanged",
-      this.filtersChangedHandler,
-    );
-
-    document.addEventListener(
-      "vviinnFilterTriggered",
-      this.filterTriggeredHandler,
-    );
-
-    document.addEventListener("vviinnImageCrop", this.imageCropHandler);
-    document.addEventListener(
-      "vviinnOneClickDiscoveryClosed",
-      this.oneClickDiscoveryClosedHandler,
+    addEventListenersWithSignal(
+      document,
+      [
+        ["vviinnImageUploadStarted", this.imageUploadStartedHandler],
+        ["vviinnTextSearchStarted", this.textSearchStartedHandler],
+        ["vviinnFiltersChanged", this.filtersChangedHandler],
+        ["vviinnFilterTriggered", this.filterTriggeredHandler],
+        ["vviinnImageCrop", this.imageCropHandler],
+        ["vviinnOneClickDiscoveryClosed", this.oneClickDiscoveryClosedHandler],
+      ],
+      signal,
     );
 
     if (!!this.searchId) makeVisualSearchRequest(this.storeName, this.searchId);
@@ -564,32 +560,7 @@ export class VviinnResults {
 
   disconnectedCallback() {
     resetStore(this.storeName, "all");
-
-    document.removeEventListener(
-      "vviinnImageUploadStarted",
-      this.imageUploadStartedHandler,
-    );
-
-    document.removeEventListener(
-      "vviinnTextSearchStarted",
-      this.textSearchStartedHandler,
-    );
-
-    document.removeEventListener(
-      "vviinnFiltersChanged",
-      this.filtersChangedHandler,
-    );
-
-    document.removeEventListener(
-      "vviinnFilterTriggered",
-      this.filterTriggeredHandler,
-    );
-
-    document.removeEventListener("vviinnImageCrop", this.imageCropHandler);
-    document.removeEventListener(
-      "vviinnOneClickDiscoveryClosed",
-      this.oneClickDiscoveryClosedHandler,
-    );
+    this.eventAbortController?.abort();
     this.disposeStoreListener?.();
     this.resizeObserver.disconnect();
   }

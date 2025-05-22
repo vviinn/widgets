@@ -43,6 +43,7 @@ import { SearchStore, useSearchStore } from "../../store/search.store";
 import { isIntervalFilter } from "../../filters";
 import { globalState } from "../../store/store";
 import { ResponseDynamicFilterIntervalItem } from "../../interfaces/recommendation";
+import { addEventListenersWithSignal } from "../../dom";
 
 /**
  * @slot vviinn-extended-filters-title - Text on widget's header.
@@ -125,6 +126,7 @@ export class VviinnExtendedFilters {
   vviinnExtendedFiltersButtonClicked: EventEmitter<TriggerSourceEventData>;
 
   private state?: SearchStore;
+  private eventAbortController?: AbortController;
 
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
     this.showInWidget !== isTriggeredByVpsWidget;
@@ -487,38 +489,31 @@ export class VviinnExtendedFilters {
     const { state } = useSearchStore(this.showInWidget);
     this.state = state;
 
-    document.addEventListener(
-      "vviinnFiltersChanged",
-      this.handleFiltersChanged,
-    );
-    document.addEventListener(
-      "vviinnSelectedFiltersReset",
-      this.handleSelectedFiltersReset,
-    );
+    this.eventAbortController = new AbortController();
+    const { signal } = this.eventAbortController;
 
-    this.mode !== "preview" &&
-      document.addEventListener(
-        "vviinnExtendedFiltersButtonClicked",
-        this.handleExtendedFiltersButtonClicked,
-      );
+    addEventListenersWithSignal(
+      document,
+      [
+        ["vviinnFiltersChanged", this.handleFiltersChanged],
+        ["vviinnSelectedFiltersReset", this.handleSelectedFiltersReset],
+        ...(this.mode !== "preview"
+          ? [
+              [
+                "vviinnExtendedFiltersButtonClicked",
+                this.handleExtendedFiltersButtonClicked,
+              ] as [string, EventListenerOrEventListenerObject],
+            ]
+          : []),
+      ],
+      signal,
+    );
 
     this.filtersStringWatcher();
   }
 
   disconnectedCallback() {
-    document.addEventListener(
-      "vviinnFiltersChanged",
-      this.handleFiltersChanged,
-    );
-    document.addEventListener(
-      "vviinnSelectedFiltersReset",
-      this.handleSelectedFiltersReset,
-    );
-    this.mode !== "preview" &&
-      document.removeEventListener(
-        "vviinnExtendedFiltersButtonClicked",
-        this.handleExtendedFiltersButtonClicked,
-      );
+    this.eventAbortController?.abort();
   }
 
   private priceChangeHandler = (filterValue: DynamicFilterValue) => {
