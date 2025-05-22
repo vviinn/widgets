@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.167.0](https://github.com/vviinn/widgets/compare/v2.166.0...v2.167.0) (2025-05-22)
+
+
+### Features
+
+* Content Card layout ([acc29f0](https://github.com/vviinn/widgets/commit/acc29f047ece2d29d5a6d9a26fca6b10c7bb6f33))
+
+## [2.166.0](https://github.com/vviinn/widgets/compare/v2.165.0...v2.166.0) (2025-05-21)
+
+
+### Features
+
+* Unify the style of the color filter item ([1c476c2](https://github.com/vviinn/widgets/commit/1c476c2118fb2a1a22ce3d333c42cdbf0719503f))
+
+## [2.165.0](https://github.com/vviinn/widgets/compare/v2.164.3...v2.165.0) (2025-05-21)
+
+
+### Features
+
+* Update Stencil to 4.31.0 and related libraries to the latest version ([806c780](https://github.com/vviinn/widgets/commit/806c7809f9f8acade6fbb9cddcb07337cd274355))
+
 ### [2.164.3](https://github.com/vviinn/widgets/compare/v2.164.2...v2.164.3) (2025-05-20)
 
 

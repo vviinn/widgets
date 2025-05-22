@@ -16,7 +16,7 @@ import { campaignTypeNames } from "../../campaign/Campaign";
 import { SecondaryActionIcon } from "../vviinn-icons/";
 import { modalParts } from "../../cssParts";
 import { searchState } from "../../store/search.store";
-import { renderImage } from "../../Image/renderImage";
+import { renderTitleImage } from "../../Image/renderTitleImage";
 import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
 
 @Component({
@@ -94,7 +94,7 @@ export class VviinnModal {
             </button>
           )}
           <div class="title" part="results-title">
-            {renderImage(searchState.image)}
+            {renderTitleImage(searchState.image)}
             <slot name="vviinn-image-search-modal-title">
               {i18next.t("imageSearchModalTitle")}
             </slot>

@@ -21,10 +21,10 @@ import {
   ImageProps,
   Linked,
   Price,
-  ResponsiveImage,
-  Image,
   parseBasePrice,
   renderCustomLabels,
+  ContentCardContent,
+  renderImage,
 } from "./render-helpers";
 import {
   CrossSellingClickEvent,
@@ -50,7 +50,7 @@ import {
   Recommendation,
 } from "../../interfaces/recommendation";
 import { resources } from "../../locale";
-import { productCardParts } from "../../cssParts";
+import { contentCardParts, productCardParts } from "../../cssParts";
 import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
 import { PRODUCT_CARD_IMAGE_WIDTH } from "../../widget/constants";
 import { addEventListenersWithSignal } from "../../dom";
@@ -140,6 +140,12 @@ export class VviinnProductCard {
   @Prop() customLabels: string = "";
   @Prop() addPriceContainer?: boolean = false;
   @Prop({ mutable: true }) energyCertifications?: EnergyCertification[];
+  /** If true, renders the card in 'Content' mode (special layout) */
+  @Prop() isContentCard: boolean = false;
+  /** Content text for Content card mode */
+  @Prop() contentText?: string;
+  /** Content link for Content card mode */
+  @Prop() contentLink?: string;
 
   /** @internal */
   @Prop() productId: string;
@@ -213,6 +219,7 @@ export class VviinnProductCard {
   private imageElement?: HTMLImageElement;
   private intersectionObserver: IntersectionObserver;
   private linkEventAbortController?: AbortController;
+  private imageProps: ImageProps;
 
   private isShowUpdateButton = () =>
     this.setMode &&
@@ -225,6 +232,7 @@ export class VviinnProductCard {
 
   connectedCallback() {
     this.productData = this.getProductData();
+    this.imageProps = this.getImageProps();
 
     this.isStandalone &&
       i18next.init({
@@ -391,8 +399,8 @@ export class VviinnProductCard {
     return searchState.results.find((r) => r.productId === this.productId);
   }
 
-  private renderImage() {
-    const props: ImageProps = {
+  private getImageProps() {
+    return {
       width: this.imageWidth,
       height: this.imageWidth * this.imageRatio,
       src: this.image,
@@ -403,10 +411,32 @@ export class VviinnProductCard {
       },
       isSource: this.isSourceProduct,
     };
-    return this.responsive ? ResponsiveImage(props) : Image(props);
   }
 
   render() {
+    if (this.isContentCard) {
+      return (
+        <Host
+          part="product-card content-card"
+          class="content-card"
+          exportparts={contentCardParts}
+        >
+          <div
+            class="image-container content-card-image-container"
+            part="image-container"
+          >
+            <Linked
+              deeplink={this.contentLink}
+              part="image-link content-image-link"
+            >
+              {renderImage(this.imageProps, this.responsive, true)}
+            </Linked>
+          </div>
+          {ContentCardContent(this.contentText, this.contentLink)}
+        </Host>
+      );
+    }
+
     return (
       <Host
         part="product-card"
@@ -417,7 +447,7 @@ export class VviinnProductCard {
       >
         <div class="image-container" part="image-container">
           <Linked deeplink={this.deeplink} part="image-link">
-            {this.renderImage()}
+            {renderImage(this.imageProps, this.responsive)}
           </Linked>
           <div class="product-card-actions-top" part="product-card-actions-top">
             <button
