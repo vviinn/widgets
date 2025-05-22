@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.168.0](https://github.com/vviinn/widgets/compare/v2.167.0...v2.168.0) (2025-05-22)
+
+
+### Features
+
+* Refactor event listeners using AbortController ([c09e3e1](https://github.com/vviinn/widgets/commit/c09e3e1bd5800eaa0dc08620ad83651d866e8d96))
+
 ## [2.167.0](https://github.com/vviinn/widgets/compare/v2.166.0...v2.167.0) (2025-05-22)
 
 
