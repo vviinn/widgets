@@ -11,6 +11,7 @@ import {
   energyLabelPartsList,
   customLabelPartsList,
   pricePartsList,
+  contentCardPartsList,
 } from "./product";
 
 const makeExportPartsString = (...args: string[][]): string =>
@@ -45,6 +46,8 @@ export const productCardParts = makeExportPartsString(
   customLabelPartsList,
   energyLabelPartsList,
 );
+
+export const contentCardParts = makeExportPartsString(contentCardPartsList);
 
 export const searchWidgetFilterParts = makeExportPartsString(
   extendedFiltersPartsList,

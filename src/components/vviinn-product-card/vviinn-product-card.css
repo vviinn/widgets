@@ -406,6 +406,47 @@ vviinn-energy-label {
   );
 }
 
+:host(.content-card) {
+  height: auto;
+}
+
+.content-card-image-container {
+  height: 100%;
+}
+
+.content-card-image {
+  aspect-ratio: unset;
+  object-fit: cover;
+}
+
+.content-card-image.responsive {
+  min-width: 100%;
+  height: 100%;
+}
+
+.content-text,
+.content-link {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow-wrap: anywhere;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.content-text {
+  -webkit-line-clamp: 3;
+  font-size: var(--font-size-headline);
+  font-weight: var(--font-weight-600);
+  line-height: var(--line-height-headline);
+  letter-spacing: var(--letter-spacing-headline);
+}
+
+.content-link {
+  -webkit-line-clamp: 1;
+  color: var(--color-content-accent);
+  text-decoration: none;
+}
+
 .footer-arrow {
   position: absolute;
   bottom: -35px;
