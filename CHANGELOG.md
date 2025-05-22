@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.167.0](https://github.com/vviinn/widgets/compare/v2.166.0...v2.167.0) (2025-05-22)
+
+
+### Features
+
+* Content Card layout ([acc29f0](https://github.com/vviinn/widgets/commit/acc29f047ece2d29d5a6d9a26fca6b10c7bb6f33))
+
 ## [2.166.0](https://github.com/vviinn/widgets/compare/v2.165.0...v2.166.0) (2025-05-21)
 
 
