@@ -37,6 +37,7 @@ import { components } from "../../interfaces/generated";
 import i18next from "i18next";
 import { resources } from "../../locale";
 import { getLocalStorageItems } from "../../localStorage";
+import { addEventListenersWithSignal } from "../../dom";
 
 /**
  * @part selected-filters-list - List of selected filters.
@@ -83,6 +84,7 @@ export class VviinnSelectedFilters {
   globalSlotsChanged: EventEmitter<any>;
 
   private state?: SearchStore;
+  private eventAbortController?: AbortController;
 
   private handleSubFilterSelection = (
     filterValue: DynamicFilterValue,
@@ -206,27 +208,21 @@ export class VviinnSelectedFilters {
     const { state } = useSearchStore(this.showInWidget);
     this.state = state;
 
-    document.addEventListener(
-      "vviinnFiltersChanged",
-      this.handleFiltersChanged,
+    this.eventAbortController = new AbortController();
+    const { signal } = this.eventAbortController;
+
+    addEventListenersWithSignal(
+      document,
+      [
+        ["vviinnFiltersChanged", this.handleFiltersChanged],
+        ["vviinnFilterTriggered", this.handleFilterTriggered],
+        ["vviinnSelectedFiltersReset", this.handleSelectedFiltersReset],
+        ["vviinnImageUploadStarted", this.handleImageUploadStarted],
+        ["vviinnImageUploadFinished", this.handleImageUploadFinished],
+        ["vviinnImageCrop", this.handleImageCrop],
+      ],
+      signal,
     );
-    document.addEventListener(
-      "vviinnFilterTriggered",
-      this.handleFilterTriggered,
-    );
-    document.addEventListener(
-      "vviinnSelectedFiltersReset",
-      this.handleSelectedFiltersReset,
-    );
-    document.addEventListener(
-      "vviinnImageUploadStarted",
-      this.handleImageUploadStarted,
-    );
-    document.addEventListener(
-      "vviinnImageUploadFinished",
-      this.handleImageUploadFinished,
-    );
-    document.addEventListener("vviinnImageCrop", this.handleImageCrop);
   }
 
   async componentWillLoad() {
@@ -243,27 +239,7 @@ export class VviinnSelectedFilters {
   }
 
   disconnectedCallback() {
-    document.removeEventListener(
-      "vviinnFiltersChanged",
-      this.handleFiltersChanged,
-    );
-    document.removeEventListener(
-      "vviinnFilterTriggered",
-      this.handleFilterTriggered,
-    );
-    document.removeEventListener(
-      "vviinnSelectedFiltersReset",
-      this.handleSelectedFiltersReset,
-    );
-    document.removeEventListener(
-      "vviinnImageUploadStarted",
-      this.handleImageUploadStarted,
-    );
-    document.removeEventListener(
-      "vviinnImageUploadFinished",
-      this.handleImageUploadFinished,
-    );
-    document.removeEventListener("vviinnImageCrop", this.handleImageCrop);
+    this.eventAbortController?.abort();
   }
 
   componentWillRender() {

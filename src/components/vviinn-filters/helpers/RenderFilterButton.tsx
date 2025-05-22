@@ -52,7 +52,9 @@ export const RenderFilterButton = ({
             part="filters-option-color-dot"
           ></div>
         )}
-        <span part="filters-option-text">{label}</span>
+
+        {!hasHexCodeLength && <span part="filters-option-text">{label}</span>}
+
         <div
           part="filters-option-icon-wrapper"
           class="filters-option-icon-wrapper"

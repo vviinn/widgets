@@ -25,6 +25,7 @@ import {
   DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH,
   PRODUCT_CARD_IMAGE_WIDTH,
 } from "../../widget/constants";
+import { addEventListenersWithSignal } from "../../dom";
 /**
  * @part button - Clickable button element.
  * @part vviinn-button - Button element container.
@@ -205,6 +206,7 @@ export class VviinnVprButton {
 
   private iconSideSize?: number;
   private disposeStoreListener?: () => void;
+  private eventAbortController?: AbortController;
 
   connectedCallback() {
     this.iconSideSize = this.oneClickDiscoveryMode === "standalone" ? 24 : 14;
@@ -324,7 +326,13 @@ export class VviinnVprButton {
     }
     this.sidebar = sidebar;
 
-    document.addEventListener("vviinnWidgetClose", this.sidebarCloseListener);
+    this.eventAbortController = new AbortController();
+    const { signal } = this.eventAbortController;
+    addEventListenersWithSignal(
+      document,
+      [["vviinnWidgetClose", this.sidebarCloseListener]],
+      signal,
+    );
 
     if (this.targetAppendSidebarTo) {
       this.sidebar.showInCustomContainer = true;
@@ -338,13 +346,7 @@ export class VviinnVprButton {
   }
 
   disconnectedCallback() {
-    if (this.sidebar) {
-      document.removeEventListener(
-        "vviinnWidgetClose",
-        this.sidebarCloseListener,
-      );
-    }
-
+    this.eventAbortController?.abort();
     this.disposeStoreListener?.();
   }
 }

@@ -30,6 +30,7 @@ import { components } from "../../interfaces/generated";
 import { triggerFilter } from "./helpers/triggerFilter";
 import { SearchStore, useSearchStore } from "../../store/search.store";
 import { isIntervalFilter } from "../../filters";
+import { addEventListenersWithSignal } from "../../dom";
 
 /**
  * @part filters-wrapper - Wrapper for the main filters.
@@ -88,6 +89,7 @@ export class VviinnFilters {
   @Event() vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
 
   private state?: SearchStore;
+  private eventAbortController?: AbortController;
 
   private getFilters = () =>
     this.innerFilters.length ? this.innerFilters : this.state.dynamicFilters;
@@ -187,35 +189,24 @@ export class VviinnFilters {
     const { state } = useSearchStore(this.showInWidget);
     this.state = state;
 
-    document.addEventListener(
-      "vviinnFiltersChanged",
-      this.handleFiltersChanged,
-    );
-    document.addEventListener(
-      "vviinnSelectedFiltersReset",
-      this.handleSelectedFiltersReset,
-    );
-    document.addEventListener(
-      "vviinnFilterTriggered",
-      this.handleFilterTriggered,
+    this.eventAbortController = new AbortController();
+    const { signal } = this.eventAbortController;
+
+    addEventListenersWithSignal(
+      document,
+      [
+        ["vviinnFiltersChanged", this.handleFiltersChanged],
+        ["vviinnSelectedFiltersReset", this.handleSelectedFiltersReset],
+        ["vviinnFilterTriggered", this.handleFilterTriggered],
+      ],
+      signal,
     );
 
     this.filtersStringWatcher();
   }
 
   disconnectedCallback() {
-    document.removeEventListener(
-      "vviinnFiltersChanged",
-      this.handleFiltersChanged,
-    );
-    document.removeEventListener(
-      "vviinnSelectedFiltersReset",
-      this.handleSelectedFiltersReset,
-    );
-    document.removeEventListener(
-      "vviinnFilterTriggered",
-      this.handleFilterTriggered,
-    );
+    this.eventAbortController?.abort();
   }
 
   render() {
