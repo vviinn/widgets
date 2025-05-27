@@ -122,6 +122,7 @@ export class VviinnImageSelector {
           id="fileInput"
           class="visually-hidden"
           type="file"
+          tabindex="-1"
           accept={
             this.accept === "image" ? "image/*" : "application/octet-stream"
           }
