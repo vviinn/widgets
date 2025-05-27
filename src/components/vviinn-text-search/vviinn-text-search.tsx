@@ -304,6 +304,7 @@ export class VviinnTextSearch {
               <button
                 class="speech-button"
                 part="speech-button"
+                aria-label={i18next.t("a11y.speechButton")}
                 onClick={() => this.handleSpeech()}
               >
                 <MicIcon />

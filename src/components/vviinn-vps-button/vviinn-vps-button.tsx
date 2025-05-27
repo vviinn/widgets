@@ -30,6 +30,8 @@ import {
 } from "../../widget/types";
 import { findSlotElements } from "../../dom";
 import { SEARCH_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
+import i18next from "i18next";
+import { resources } from "../../locale";
 
 /**
  * @slot vviinn-teaser-text - Text on the widget's main screen.
@@ -194,7 +196,12 @@ export class VviinnVpsButton {
     }
   }
 
-  componentWillLoad() {
+  async componentWillLoad() {
+    await i18next.init({
+      lng: this.locale,
+      fallbackLng: "en",
+      resources,
+    });
     this.slots = findSlotElements(this.el);
   }
 
@@ -233,6 +240,13 @@ export class VviinnVpsButton {
           }}
           addStyle={this.addStyle}
           part="vviinn-button"
+          aria-label={
+            this.mode === "camera"
+              ? i18next.t("a11y.cameraSearchButton")
+              : this.textSearchShow
+                ? i18next.t("a11y.fullSearchButton")
+                : i18next.t("a11y.imageSearchButton")
+          }
         >
           <slot>
             {this.mode === "camera" ? (

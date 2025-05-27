@@ -64,6 +64,18 @@ export const resources: Resource = {
       energyLabel: {
         dataSheetText: "Produktdatenblatt",
       },
+      a11y: {
+        cameraExampleImage: "Beispielbild für die Kamerasuche",
+        capturedImage: "Aufgenommenes Bild von der Kamera",
+        closeButton: "Schließen",
+        speechButton: "Spracherkennung",
+        cameraSearchButton: "Kamera-Suche",
+        fullSearchButton: "Vollständige Suche",
+        imageSearchButton: "Bildsuche",
+        zoomIn: "Hineinzoomen",
+        zoomOut: "Herauszoomen",
+        takePicture: "Foto aufnehmen",
+      },
     },
   },
   en: {
@@ -123,6 +135,18 @@ export const resources: Resource = {
       },
       energyLabel: {
         dataSheetText: "Product Data Sheet",
+      },
+      a11y: {
+        cameraExampleImage: "Example image for camera search",
+        capturedImage: "Captured image from camera",
+        closeButton: "Close",
+        speechButton: "Speech recognition",
+        cameraSearchButton: "Camera search",
+        fullSearchButton: "Full search",
+        imageSearchButton: "Image search",
+        zoomIn: "Zoom in",
+        zoomOut: "Zoom out",
+        takePicture: "Take picture",
       },
     },
   },
