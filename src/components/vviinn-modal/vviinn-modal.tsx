@@ -7,6 +7,7 @@ import {
   EventEmitter,
   Prop,
   Element,
+  Watch,
 } from "@stencil/core";
 import i18next from "i18next";
 
@@ -42,11 +43,37 @@ export class VviinnModal {
 
   /** Close Button clicked and close animation ends */
   @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
-  /** @internal */
-  @Event({ bubbles: true })
+
+  @Watch("active")
+  handleActiveChange(newValue: boolean) {
+    if (newValue) {
+      document.addEventListener("keydown", this.handleEscapeKey);
+    } else {
+      document.removeEventListener("keydown", this.handleEscapeKey);
+    }
+  }
+
   componentWillLoad() {
     slotChangeListener(this, this.el);
   }
+
+  disconnectedCallback() {
+    document.removeEventListener("keydown", this.handleEscapeKey);
+  }
+
+  private handleEscapeKey = (event: KeyboardEvent) => {
+    if (event.key === "Escape" && this.active) {
+      event.preventDefault();
+      this.close();
+    }
+  };
+
+  private handleCloseButtonKeyDown = (event: KeyboardEvent) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      this.close();
+    }
+  };
 
   private resetTopScroll() {
     const element: HTMLElement = this.el.shadowRoot.querySelector(".body");
@@ -80,6 +107,9 @@ export class VviinnModal {
         exportparts={modalParts}
         class={{ closed: !this.active, "first-screen": this.isFirstScreen }}
         onAnimationEnd={(ev: AnimationEvent) => this.handleAnimationEnd(ev)}
+        role="dialog"
+        aria-modal={this.active ? "true" : "false"}
+        aria-hidden={this.active ? "false" : "true"}
       >
         <div class="head">
           {!this.hideBackButton && (
@@ -101,6 +131,7 @@ export class VviinnModal {
           </div>
           <button
             onClick={() => this.close()}
+            onKeyDown={this.handleCloseButtonKeyDown}
             class="close-button"
             part="close-button"
             aria-label={i18next.t("a11y.closeButton")}

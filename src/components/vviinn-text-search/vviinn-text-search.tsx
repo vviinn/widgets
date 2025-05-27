@@ -318,6 +318,7 @@ export class VviinnTextSearch {
             part="text-search-button"
             onClick={() => this.handleTextSearch()}
             disabled={this.state.loading}
+            aria-label={i18next.t("a11y.textSearchButton")}
           >
             {this.isShowPreloader() ? (
               <vviinn-preloader />

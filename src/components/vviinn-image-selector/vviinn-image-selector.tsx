@@ -34,7 +34,7 @@ import { setLocalStorageItems } from "../../localStorage";
 })
 export class VviinnImageSelector {
   @Event() vviinnImageUploadStarted: EventEmitter<ImageUploadEventData>;
-  /** Wrong image format, that isn’t .jpg, .jpeg, png */
+  /** Wrong image format, that isn't .jpg, .jpeg, png */
   @Event() vviinnNoResult: EventEmitter<NoResultEventData>;
   @Event() vviinnImageUploadFinished: EventEmitter<SearchIdEventData>;
 
@@ -104,7 +104,17 @@ export class VviinnImageSelector {
         {this.loading ? (
           <vviinn-preloader />
         ) : (
-          <label htmlFor="fileInput" part="button">
+          <label
+            htmlFor="fileInput"
+            part="button"
+            tabindex="0"
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                this.fileInput?.click();
+              }
+            }}
+          >
             <slot name="upload-button-text">Upload image</slot>
           </label>
         )}

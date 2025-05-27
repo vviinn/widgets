@@ -96,7 +96,7 @@ import { resources } from "../../locale";
 })
 export class VviinnVpsButton {
   @Element() el: HTMLElement;
-  /** Vviinn customer’s token (required) */
+  /** Vviinn customer's token (required) */
   @Prop() token: string;
   /**  The currency sign is displayed after the price */
   @Prop() currencySign?: string;
@@ -161,7 +161,7 @@ export class VviinnVpsButton {
   /** The recommendation renders on the page */
   @Event() vviinnProductLoad: EventEmitter<ProductCardEventData>;
 
-  /** Click on the product’s link */
+  /** Click on the product's link */
   @Event() vviinnProductClick: EventEmitter<ProductCardEventData>;
 
   /** The recommendation appears in the viewport */
@@ -173,7 +173,7 @@ export class VviinnVpsButton {
   /** The search result appears in the viewport */
   @Event() vviinnResultView: EventEmitter<BasicEventData>;
 
-  /** Wrong image format, that isn’t .jpg, .jpeg, png, or the request failed */
+  /** Wrong image format, that isn't .jpg, .jpeg, png, or the request failed */
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
   /** Crop area changes */
@@ -231,32 +231,47 @@ export class VviinnVpsButton {
     this.buttonPressed = false;
   }
 
+  private getButtonConfig() {
+    switch (this.mode) {
+      case "camera":
+        return {
+          ariaLabel: i18next.t("a11y.cameraModeSearchButton"),
+          buttonIcon: <SearchModalCameraIcon />,
+        };
+      case "modal":
+        if (this.textSearchShow) {
+          return {
+            ariaLabel: i18next.t("a11y.modalModeSearchButton"),
+            buttonIcon: <SearchModalFullSearchIcon />,
+          };
+        }
+      default:
+        return {
+          ariaLabel: i18next.t("a11y.uploadModeSearchButton"),
+          buttonIcon: <SearchModalImageSearchIcon />,
+        };
+    }
+  }
+
+  private handleHostKeyDown = (event: KeyboardEvent) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      this.handleClick();
+    }
+  };
+
   render() {
+    const { ariaLabel, buttonIcon } = this.getButtonConfig();
     return (
-      <Host tabindex="0" role="button">
-        <vviinn-button
-          onClick={() => {
-            this.handleClick();
-          }}
-          addStyle={this.addStyle}
-          part="vviinn-button"
-          aria-label={
-            this.mode === "camera"
-              ? i18next.t("a11y.cameraSearchButton")
-              : this.textSearchShow
-                ? i18next.t("a11y.fullSearchButton")
-                : i18next.t("a11y.imageSearchButton")
-          }
-        >
-          <slot>
-            {this.mode === "camera" ? (
-              <SearchModalCameraIcon />
-            ) : this.textSearchShow ? (
-              <SearchModalFullSearchIcon />
-            ) : (
-              <SearchModalImageSearchIcon />
-            )}
-          </slot>
+      <Host
+        tabindex="0"
+        role="button"
+        aria-label={ariaLabel}
+        onKeyDown={this.handleHostKeyDown}
+        onClick={() => this.handleClick()}
+      >
+        <vviinn-button addStyle={this.addStyle} part="vviinn-button">
+          <slot>{buttonIcon}</slot>
         </vviinn-button>
 
         {SlotSkeleton("search")}
