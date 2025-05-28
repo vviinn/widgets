@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.168.1](https://github.com/vviinn/widgets/compare/v2.168.0...v2.168.1) (2025-05-28)
+
+
+### Bug Fixes
+
+* Fix visual search filter request when passing an empty search-id parameter ([08e8a80](https://github.com/vviinn/widgets/commit/08e8a80196f89bb1bef3287c6f45097c081c2988))
+
 ## [2.168.0](https://github.com/vviinn/widgets/compare/v2.167.0...v2.168.0) (2025-05-22)
 
 
