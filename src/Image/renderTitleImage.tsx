@@ -1,6 +1,6 @@
 import { h } from "@stencil/core";
 
-export const renderImage = (
+export const renderTitleImage = (
   image: HTMLImageElement,
 ): HTMLImageElement | null =>
   image ? (

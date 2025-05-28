@@ -43,6 +43,9 @@ const Template = (args) => {
       add-price-container='${args.addPriceContainer}'
       favorite-show="${args.favoriteShow}"
       is-standalone="true"
+      is-content-card="${args.isContentCard}"
+      content-text="${args.contentText}"
+      content-link="${args.contentLink}"
     ></vviinn-product-card>`;
 };
 
@@ -77,4 +80,7 @@ Default.args = {
   addPriceContainer: false,
   energyCertificationsString,
   favoriteShow: false,
+  isContentCard: false,
+  contentText: "This is a content card text.",
+  contentLink: "https://example.com/content-link",
 };

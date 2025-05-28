@@ -38,6 +38,7 @@ import { getImageSizes } from "../../Image/sizing";
 import { Rectangle } from "../../interfaces/search";
 import { isCropBoxDataSimilar } from "./helpers/isCropBoxDataSimilar";
 import { cleanLocalStorage, getLocalStorageItems } from "../../localStorage";
+import { addEventListenersWithSignal } from "../../dom";
 
 @Component({
   tag: "vviinn-cropper",
@@ -81,6 +82,7 @@ export class VviinnCropper {
   private state?: SearchStore;
   private storeName?: SearchStoreName;
   private startEndCropBoxData?: Rectangle;
+  private eventAbortController?: AbortController;
 
   connectedCallback() {
     updateGlobalState(this);
@@ -91,31 +93,22 @@ export class VviinnCropper {
 
     this.initPreloadedImage();
 
-    document.addEventListener(
-      "vviinnImageUploadFinished",
-      this.imageUploadFinishedHandler,
+    this.eventAbortController = new AbortController();
+    const { signal } = this.eventAbortController;
+
+    addEventListenersWithSignal(
+      document,
+      [
+        ["vviinnImageUploadFinished", this.imageUploadFinishedHandler],
+        ["vviinnCropperResetState", this.resetStateHandler],
+        ["vviinnResetCropArea", this.resetCropAreaHandler],
+      ],
+      signal,
     );
-    document.addEventListener(
-      "vviinnCropperResetState",
-      this.resetStateHandler,
-    );
-    document.addEventListener("vviinnResetCropArea", this.resetCropAreaHandler);
   }
 
   disconnectedCallback() {
-    document.removeEventListener(
-      "vviinnImageUploadFinished",
-      this.imageUploadFinishedHandler,
-    );
-    document.removeEventListener(
-      "vviinnCropperResetState",
-      this.resetStateHandler,
-    );
-    document.removeEventListener(
-      "vviinnResetCropArea",
-      this.resetCropAreaHandler,
-    );
-
+    this.eventAbortController?.abort();
     this.cropper?.destroy?.();
     componentsState.image = null;
   }

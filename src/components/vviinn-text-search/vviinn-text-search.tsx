@@ -35,6 +35,7 @@ import { MicIcon } from "../vviinn-icons/icons/MicIcon";
 import { initializeRecognition, speechTooltip } from "./helpers";
 import Timeout = NodeJS.Timeout;
 import { updateGlobalState, globalState } from "../../store/store";
+import { addEventListenersWithSignal } from "../../dom";
 
 /**
  * @part text-search-container - Container for the text search block.
@@ -71,7 +72,7 @@ export class VviinnTextSearch {
   @Event({ bubbles: true })
   vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
 
-  /** Vviinn customer’s token (required) */
+  /** Vviinn customer's token (required) */
   @Prop() token: string;
   /** The locale for currency formatting and text localization */
   @Prop() locale: Locale;
@@ -147,32 +148,29 @@ export class VviinnTextSearch {
     this.searchQuery = "";
   };
 
+  private eventAbortController?: AbortController;
+
   connectedCallback() {
     updateGlobalState(this);
     const { state, storeName } = useSearchStore(this.showInWidget);
     this.state = state;
     this.storeName = storeName;
 
-    document.addEventListener(
-      "vviinnFilterTriggered",
-      this.filterTriggeredHandler,
-    );
-    document.addEventListener(
-      "vviinnImageUploadFinished",
-      this.imageUploadFinishedHandler,
+    this.eventAbortController = new AbortController();
+    const { signal } = this.eventAbortController;
+
+    addEventListenersWithSignal(
+      document,
+      [
+        ["vviinnFilterTriggered", this.filterTriggeredHandler],
+        ["vviinnImageUploadFinished", this.imageUploadFinishedHandler],
+      ],
+      signal,
     );
   }
 
   disconnectedCallback() {
-    document.removeEventListener(
-      "vviinnFilterTriggered",
-      this.filterTriggeredHandler,
-    );
-    document.removeEventListener(
-      "vviinnImageUploadFinished",
-      this.imageUploadFinishedHandler,
-    );
-
+    this.eventAbortController?.abort();
     clearTimeout(this.triggerTooltipStart);
     clearTimeout(this.triggerTooltipEnd);
   }

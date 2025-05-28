@@ -1,9 +1,10 @@
 import { pipe } from "fp-ts/lib/function";
 import * as E from "fp-ts/lib/Either";
-import { FunctionalComponent, h } from "@stencil/core";
+import { FunctionalComponent, h, Fragment } from "@stencil/core";
 import { BasePrice } from "../../interfaces/recommendation";
-import { Fragment } from "@stencil/core";
 import { ImagePlaceholderIcon, PlusIcon } from "../vviinn-icons";
+import { getLastUrlPath } from "../../helpers/url/getLastUrlPath";
+import { joinTruthy } from "../../utils/string/joinTruthy";
 
 const FIT_EXPR = /fit\/\d+\//;
 
@@ -235,6 +236,7 @@ const ImageOrPlaceholder: FunctionalComponent<{
   alt?: string;
   title?: string;
   className?: string;
+  part?: string;
   ref?: (el: Element) => void;
   onLoad?: () => void;
 }> = (props) => {
@@ -254,7 +256,7 @@ const ImageOrPlaceholder: FunctionalComponent<{
       ref={props.ref}
       onLoad={props.onLoad}
       loading="lazy"
-      part="image"
+      part={props.part}
     />
   ) : (
     <div
@@ -280,42 +282,102 @@ const getProcessedSrc = (
   return imageResolutionWidth ? processWidth(src, imageResolutionWidth) : src;
 };
 
-export const Image = (props: ImageProps, onLoadEnd = () => undefined) => {
-  const processedSrc = getProcessedSrc(props.src, props.imageResolutionWidth);
+export interface UniversalImageProps extends ImageProps {
+  isResponsive?: boolean;
+  isFullHeight?: boolean;
+  additionalClasses?: string[];
+  additionalParts?: string[];
+  onLoadEnd?: () => void;
+}
+
+export const UniversalImage = ({
+  width,
+  height,
+  title,
+  src,
+  ref,
+  isSource,
+  imageResolutionWidth,
+  isResponsive = false,
+  isFullHeight = false,
+  additionalClasses = [],
+  additionalParts = [],
+  onLoadEnd = () => undefined,
+}: UniversalImageProps): HTMLPictureElement => {
+  const processedSrc = getProcessedSrc(src, imageResolutionWidth);
+
+  const classes = joinTruthy([
+    "image",
+    isResponsive && "responsive",
+    isFullHeight && "content-card-image",
+    ...additionalClasses,
+  ]);
+
+  const computeParts = (base: string) =>
+    joinTruthy([
+      base,
+      isFullHeight &&
+        (base === "image-picture"
+          ? "content-card-image-picture"
+          : "content-card-image"),
+      ...additionalParts,
+    ]);
+  const parts = computeParts("image-picture");
+  const imageParts = computeParts("image");
 
   return (
-    <picture part="image-picture">
+    <picture part={parts}>
       <ImageOrPlaceholder
         src={processedSrc}
-        width={props.width}
-        height={props.height}
-        alt={props.title}
-        title={props.title}
-        className="image"
-        ref={props.ref}
+        width={!isResponsive ? width : undefined}
+        height={!isResponsive ? height : undefined}
+        alt={title}
+        title={title}
+        part={imageParts}
+        className={classes}
+        ref={ref}
         onLoad={onLoadEnd}
       />
-      {props.isSource && <PlusIcon />}
+      {isSource && <PlusIcon />}
     </picture>
   );
 };
 
-export const ResponsiveImage = (
-  props: ImageProps,
-  onLoadEnd = () => undefined,
+export const renderImage = (
+  imageProps: ImageProps,
+  isResponsive: boolean,
+  isFullHeight: boolean = false,
 ) => {
-  const processedSrc = getProcessedSrc(props.src, props.imageResolutionWidth);
+  return UniversalImage({
+    ...imageProps,
+    isResponsive,
+    isFullHeight,
+  });
+};
 
+export const ContentCardContent = (
+  contentText: string,
+  contentLink: string,
+  labelText: string = "Content",
+) => {
   return (
-    <picture part="image-picture">
-      <ImageOrPlaceholder
-        src={processedSrc}
-        alt={props.title}
-        title={props.title}
-        className="image responsive"
-        ref={props.ref}
-        onLoad={onLoadEnd}
-      />
-    </picture>
+    <div
+      class="content-container"
+      part="content-container content-card-content-container"
+    >
+      <div class="content-label" part="content-label">
+        {labelText}
+      </div>
+      {contentText && (
+        <div class="content-text" part="content-text" title={contentText}>
+          {contentText}
+        </div>
+      )}
+      {contentLink && (
+        <Linked deeplink={contentLink} class="content-link" part="content-link">
+          {getLastUrlPath(contentLink)}
+        </Linked>
+      )}
+    </div>
   );
 };
