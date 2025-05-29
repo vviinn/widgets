@@ -15,7 +15,7 @@ import { CrossIcon } from "../../vviinn-icons";
 import { CarouselMode } from "../../vviinn-carousel/vviinn-carousel";
 import { BasicEventData } from "../../../recommendation/events";
 import { CampaignName } from "../../../campaign/Campaign";
-import { Locale, resources } from "../../../locale";
+import { Locale } from "../../../locale";
 import { UpdateButtonLocation } from "../../vviinn-vpr-widget/vviinn-vpr-widget";
 import { ClickEvent, isClickedInRectBound } from "../../../geometry/Rectangle";
 import { Recommendation } from "../../../components";
@@ -25,7 +25,6 @@ import {
   DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH,
   PRODUCT_CARD_IMAGE_WIDTH,
 } from "../../../widget/constants";
-import { globalState } from "../../../store/store";
 
 type SidebarState = "idle" | "open" | "closed";
 
@@ -169,14 +168,6 @@ export class RecommendationsSidebar {
 
   private getSidebarRectangle(): DOMRect {
     return this.getAsideElement()?.getBoundingClientRect();
-  }
-
-  async componentWillLoad() {
-    await i18next.init({
-      lng: globalState.locale,
-      fallbackLng: "en",
-      resources,
-    });
   }
 
   componentDidLoad() {

@@ -31,8 +31,6 @@ import {
 } from "../vviinn-icons";
 import { setLocalStorageItems } from "../../localStorage";
 import i18next from "i18next";
-import { resources } from "../../locale";
-import { globalState } from "../../store/store";
 
 type ZoomCapabilities = {
   min: number;
@@ -71,11 +69,6 @@ export class VviinnExampleImage {
   private videoTrack: MediaStreamTrack | null = null;
 
   async componentWillLoad() {
-    await i18next.init({
-      lng: globalState.locale,
-      fallbackLng: "en",
-      resources,
-    });
     slotChangeListener(this, this.el);
   }
 
