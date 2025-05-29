@@ -455,7 +455,7 @@ export class VviinnResults {
     if (this.isTextSearch) {
       this.getTextSearchResults(this.state.textSearchId);
     } else {
-      makeVisualSearchRequest(this.storeName, this.searchId);
+      makeVisualSearchRequest(this.storeName, this.state.visualSearchId);
     }
   };
 
