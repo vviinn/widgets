@@ -109,7 +109,7 @@ export class VviinnModal {
         onAnimationEnd={(ev: AnimationEvent) => this.handleAnimationEnd(ev)}
         role="dialog"
         aria-modal={this.active ? "true" : "false"}
-        aria-hidden={this.active ? "false" : "true"}
+        inert={!this.active ? true : undefined}
       >
         <div class="head">
           {!this.hideBackButton && (

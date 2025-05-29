@@ -25,6 +25,7 @@ import {
   DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH,
   PRODUCT_CARD_IMAGE_WIDTH,
 } from "../../../widget/constants";
+import { globalState } from "../../../store/store";
 
 type SidebarState = "idle" | "open" | "closed";
 
@@ -172,7 +173,7 @@ export class RecommendationsSidebar {
 
   async componentWillLoad() {
     await i18next.init({
-      lng: this.locale,
+      lng: globalState.locale,
       fallbackLng: "en",
       resources,
     });

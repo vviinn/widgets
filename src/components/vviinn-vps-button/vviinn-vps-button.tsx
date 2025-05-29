@@ -32,6 +32,7 @@ import { findSlotElements } from "../../dom";
 import { SEARCH_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
 import i18next from "i18next";
 import { resources } from "../../locale";
+import { globalState, updateGlobalState } from "../../store/store";
 
 /**
  * @slot vviinn-teaser-text - Text on the widget's main screen.
@@ -196,9 +197,13 @@ export class VviinnVpsButton {
     }
   }
 
+  connectedCallback() {
+    updateGlobalState(this);
+  }
+
   async componentWillLoad() {
     await i18next.init({
-      lng: this.locale,
+      lng: globalState.locale,
       fallbackLng: "en",
       resources,
     });
@@ -223,13 +228,27 @@ export class VviinnVpsButton {
     }
   }
 
-  private handleClick() {
+  private handleActivation = () => {
     this.buttonPressed = true;
-  }
+  };
 
-  private resetButton() {
+  private resetButton = () => {
     this.buttonPressed = false;
-  }
+  };
+
+  private handleKeyDown = (event: KeyboardEvent) => {
+    const path = event.composedPath();
+    const isFromTextSearchInput = path.some((el) =>
+      (el as HTMLElement).classList?.contains("text-search-input"),
+    );
+
+    if (isFromTextSearchInput) return;
+
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      this.handleActivation();
+    }
+  };
 
   private getButtonConfig() {
     switch (this.mode) {
@@ -253,22 +272,15 @@ export class VviinnVpsButton {
     }
   }
 
-  private handleHostKeyDown = (event: KeyboardEvent) => {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      this.handleClick();
-    }
-  };
-
   render() {
     const { ariaLabel, buttonIcon } = this.getButtonConfig();
     return (
       <Host
-        tabindex="0"
         role="button"
+        tabindex="0"
         aria-label={ariaLabel}
-        onKeyDown={this.handleHostKeyDown}
-        onClick={() => this.handleClick()}
+        onClick={this.handleActivation}
+        onKeyDown={this.handleKeyDown}
       >
         <vviinn-button addStyle={this.addStyle} part="vviinn-button">
           <slot>{buttonIcon}</slot>
@@ -288,7 +300,7 @@ export class VviinnVpsButton {
           campaignIdVisualSearch={this.campaignIdVisualSearch}
           showingInButton={true}
           buttonPressed={this.buttonPressed}
-          resetVpsButton={this.resetButton.bind(this)}
+          resetVpsButton={this.resetButton}
           buttonElementId={this.el.id}
           active={
             this.buttonPressed &&
