@@ -64,7 +64,6 @@ import { addEventListenersWithSignal } from "../../dom";
 export class VviinnFilters {
   @Element() el: HTMLElement;
 
-  @Prop({ mutable: true }) filters: ResponseDynamicFilterItem[] = [];
   /** @internal */
   @Prop() filtersString: string = "";
   /** @internal */

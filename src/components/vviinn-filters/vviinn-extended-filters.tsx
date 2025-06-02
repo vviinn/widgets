@@ -92,7 +92,6 @@ const FILTER_OPTIONS_STEP_COUNT = 5;
 export class VviinnExtendedFilters {
   @Element() el: HTMLElement;
 
-  @Prop({ mutable: true }) filters: ResponseDynamicFilterItem[] = [];
   @Prop() mode: "button" | "preview" | "modal" = "button";
   @Prop() showHeader?: boolean = true;
 
