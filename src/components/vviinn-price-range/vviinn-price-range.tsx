@@ -23,7 +23,7 @@ const MIN_BAR_HEIGHT = 3;
   styleUrl: "vviinn-price-range.css",
   shadow: true,
 })
-export class VviinnButton {
+export class VviinnPriceRange {
   @Element() el: HTMLElement;
 
   @Prop() histogram: Histogram = [];
@@ -46,7 +46,9 @@ export class VviinnButton {
 
   @Watch("selectedInterval")
   updatingSelectedInterval() {
-    this.maxIndex = this.histogram.length - 1;
+    if (!this.histogram || this.histogram.length === 0) {
+      return;
+    }
 
     const maxValueofFrequency = Math.max(
       ...this.histogram.map(({ value }) => {
@@ -56,18 +58,21 @@ export class VviinnButton {
 
     this.scalingFactor = 100 / maxValueofFrequency;
 
-    if (this.selectedInterval.start !== undefined) {
-      this.minIndex = this.histogram.findIndex(
+    if (this.selectedInterval?.start !== undefined) {
+      const foundMinIndex = this.histogram.findIndex(
         ({ value }) => value.interval.start === this.selectedInterval.start,
       );
+      this.minIndex = foundMinIndex !== -1 ? foundMinIndex : 0;
     } else {
       this.minIndex = 0;
     }
 
-    if (this.selectedInterval.end) {
-      this.maxIndex = this.histogram.findIndex(
+    if (this.selectedInterval?.end !== undefined) {
+      const foundMaxIndex = this.histogram.findIndex(
         (item) => item.value.interval.end === this.selectedInterval.end,
       );
+      this.maxIndex =
+        foundMaxIndex !== -1 ? foundMaxIndex : this.histogram.length - 1;
     } else {
       this.maxIndex = this.histogram.length - 1;
     }
@@ -167,11 +172,11 @@ export class VviinnButton {
         </div>
         <div class="label-wrapper" part="histogram-label-wrapper">
           <div class="label" part="histogram-label">
-            {this.histogram[this.minIndex]?.value?.interval?.start}
+            {this.histogram[0]?.value?.interval?.start}
             <span class="histogram-currency">{globalState.currencySign}</span>
           </div>
           <div class="label" part="histogram-label">
-            {this.histogram[this.maxIndex]?.value?.interval?.end}
+            {this.histogram[this.histogram.length - 1]?.value?.interval?.end}
             <span class="histogram-currency">{globalState.currencySign}</span>
           </div>
         </div>

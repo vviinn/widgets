@@ -1,7 +1,6 @@
-export { getFilterOptions } from "./getFilterOptions";
-export { subFilterSelection } from "./subFilterSelection";
-export { FilterOptions } from "./getFilterOptions";
-export { RenderFilterButton } from "./RenderFilterButton";
-export { RenderCustomButton } from "./RenderCustomButton";
-export { isSubFilterActive } from "./isSubFilterActive";
+export { getFilterOptions, FilterOptions } from "./getFilterOptions";
 export { getPriceLabel } from "./getPriceLabel";
+export { getSelectedPriceInterval } from "./getSelectedPriceInterval";
+export { isSubFilterActive } from "./isSubFilterActive";
+export { RenderCustomButton } from "./RenderCustomButton";
+export { RenderFilterButton } from "./RenderFilterButton";

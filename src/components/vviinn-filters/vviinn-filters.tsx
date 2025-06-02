@@ -18,6 +18,7 @@ import {
   getFilterOptions,
   RenderFilterButton,
   isSubFilterActive,
+  getSelectedPriceInterval,
 } from "./helpers";
 import { Histogram } from "../vviinn-price-range/vviinn-price-range";
 import {
@@ -26,7 +27,6 @@ import {
   TriggerSourceEvent,
   TriggerSourceEventData,
 } from "../../recommendation/events";
-import { components } from "../../interfaces/generated";
 import { triggerFilter } from "./helpers/triggerFilter";
 import { SearchStore, useSearchStore } from "../../store/search.store";
 import { isIntervalFilter } from "../../filters";
@@ -93,10 +93,6 @@ export class VviinnFilters {
 
   private getFilters = () =>
     this.innerFilters.length ? this.innerFilters : this.state.dynamicFilters;
-
-  private getSelectedPriceInterval = () =>
-    (this.requestFilters.find(({ column }) => isIntervalFilter(column))
-      ?.values[0] ?? {}) as components["schemas"]["interval"];
 
   private handleMainFilterSelection(filter: ResponseDynamicFilterItem) {
     this.selectedFilter = filter;
@@ -249,7 +245,7 @@ export class VviinnFilters {
                   (item) => item.value.frequency > 0,
                 )}
                 priceChangeHandler={this.priceChangeHandler}
-                selectedInterval={this.getSelectedPriceInterval()}
+                selectedInterval={getSelectedPriceInterval(this.requestFilters)}
               />
             ) : (
               <ul class="sub-filters-wrapper" part="filters-footer-list">
