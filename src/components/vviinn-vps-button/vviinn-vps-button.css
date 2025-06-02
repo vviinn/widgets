@@ -13,6 +13,6 @@
     * @prop --font-family: Set the font family of the widget.
   */
 
-  display: block;
+  display: inline-block;
   line-height: 0;
 }

@@ -7,6 +7,7 @@ import {
   EventEmitter,
   Prop,
   Element,
+  Watch,
 } from "@stencil/core";
 import i18next from "i18next";
 
@@ -42,11 +43,37 @@ export class VviinnModal {
 
   /** Close Button clicked and close animation ends */
   @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
-  /** @internal */
-  @Event({ bubbles: true })
+
+  @Watch("active")
+  handleActiveChange(newValue: boolean) {
+    if (newValue) {
+      document.addEventListener("keydown", this.handleEscapeKey);
+    } else {
+      document.removeEventListener("keydown", this.handleEscapeKey);
+    }
+  }
+
   componentWillLoad() {
     slotChangeListener(this, this.el);
   }
+
+  disconnectedCallback() {
+    document.removeEventListener("keydown", this.handleEscapeKey);
+  }
+
+  private handleEscapeKey = (event: KeyboardEvent) => {
+    if (event.key === "Escape" && this.active) {
+      event.preventDefault();
+      this.close();
+    }
+  };
+
+  private handleCloseButtonKeyDown = (event: KeyboardEvent) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      this.close();
+    }
+  };
 
   private resetTopScroll() {
     const element: HTMLElement = this.el.shadowRoot.querySelector(".body");
@@ -80,6 +107,9 @@ export class VviinnModal {
         exportparts={modalParts}
         class={{ closed: !this.active, "first-screen": this.isFirstScreen }}
         onAnimationEnd={(ev: AnimationEvent) => this.handleAnimationEnd(ev)}
+        role="dialog"
+        aria-modal={this.active ? "true" : "false"}
+        inert={!this.active ? true : undefined}
       >
         <div class="head">
           {!this.hideBackButton && (
@@ -101,8 +131,10 @@ export class VviinnModal {
           </div>
           <button
             onClick={() => this.close()}
+            onKeyDown={this.handleCloseButtonKeyDown}
             class="close-button"
             part="close-button"
+            aria-label={i18next.t("a11y.closeButton")}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -110,6 +142,7 @@ export class VviinnModal {
               height="24"
               viewBox="0 0 24 24"
               fill="none"
+              aria-hidden="true"
             >
               <path
                 d="M12 13.3892L6.91958 18.4696C6.72248 18.6667 6.49095 18.7653 6.225 18.7653C5.95905 18.7653 5.72753 18.6667 5.53043 18.4696C5.33333 18.2725 5.23478 18.041 5.23478 17.775C5.23478 17.5091 5.33333 17.2776 5.53043 17.0805L10.6109 12L5.53043 6.9196C5.33333 6.7225 5.23478 6.49098 5.23478 6.22503C5.23478 5.95908 5.33333 5.72755 5.53043 5.53045C5.72753 5.33335 5.95905 5.2348 6.225 5.2348C6.49095 5.2348 6.72248 5.33335 6.91958 5.53045L12 10.6109L17.0804 5.53045C17.2775 5.33335 17.5091 5.2348 17.775 5.2348C18.041 5.2348 18.2725 5.33335 18.4696 5.53045C18.6667 5.72755 18.7652 5.95908 18.7652 6.22503C18.7652 6.49098 18.6667 6.7225 18.4696 6.9196L13.3892 12L18.4696 17.0805C18.6667 17.2776 18.7652 17.5091 18.7652 17.775C18.7652 18.041 18.6667 18.2725 18.4696 18.4696C18.2725 18.6667 18.041 18.7653 17.775 18.7653C17.5091 18.7653 17.2775 18.6667 17.0804 18.4696L12 13.3892Z"

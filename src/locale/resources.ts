@@ -1,7 +1,7 @@
 import { Resource } from "i18next";
 
 const VVIINN_LINK =
-  "<a href='https://www.vviinn.com/' target='_blank'>Vviinn</a>";
+  "<a href='https://www.vviinn.com/' target='_blank' rel='noopener noreferrer'>Vviinn</a>";
 
 export const resources: Resource = {
   de: {
@@ -64,6 +64,20 @@ export const resources: Resource = {
       energyLabel: {
         dataSheetText: "Produktdatenblatt",
       },
+      a11y: {
+        cameraExampleImage: "Beispielbild für die Kamerafunktion",
+        capturedImage: "Von der Kamera aufgenommenes Bild",
+        closeButton: "Fenster schließen",
+        speechButton: "Spracheingabe starten",
+        textSearchButton: "Textsuche starten",
+        cameraModeSearchButton: "KI-Suche mit Kamera starten",
+        modalModeSearchButton: "KI-Suche starten",
+        uploadModeSearchButton: "KI-Suche mit Bildupload starten",
+        zoomIn: "Vergrößern",
+        zoomOut: "Verkleinern",
+        takePicture: "Foto aufnehmen",
+        vviinnLink: "Vviinn-Website besuchen (öffnet in neuem Tab)",
+      },
     },
   },
   en: {
@@ -123,6 +137,20 @@ export const resources: Resource = {
       },
       energyLabel: {
         dataSheetText: "Product Data Sheet",
+      },
+      a11y: {
+        cameraExampleImage: "Example image for the camera function",
+        capturedImage: "Image captured by the camera",
+        closeButton: "Close window",
+        speechButton: "Start speech input",
+        textSearchButton: "Start text search",
+        cameraModeSearchButton: "Start AI search with camera",
+        modalModeSearchButton: "Start AI search",
+        uploadModeSearchButton: "Start AI search with image upload",
+        zoomIn: "Zoom in",
+        zoomOut: "Zoom out",
+        takePicture: "Take picture",
+        vviinnLink: "Visit Vviinn website (opens in new tab)",
       },
     },
   },

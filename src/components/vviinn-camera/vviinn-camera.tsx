@@ -30,6 +30,7 @@ import {
   RoundCameraIcon,
 } from "../vviinn-icons";
 import { setLocalStorageItems } from "../../localStorage";
+import i18next from "i18next";
 
 type ZoomCapabilities = {
   min: number;
@@ -67,7 +68,7 @@ export class VviinnExampleImage {
   private videoElement: HTMLVideoElement | null;
   private videoTrack: MediaStreamTrack | null = null;
 
-  componentWillLoad() {
+  async componentWillLoad() {
     slotChangeListener(this, this.el);
   }
 
@@ -252,14 +253,15 @@ export class VviinnExampleImage {
         ></video>
         <img
           src={this.exampleImageSource}
+          alt={i18next.t("a11y.cameraExampleImage")}
           width={this.width}
           height={this.height}
-          tabindex={1}
           class={{ hidden: this.videoInitialized || this.selected }}
         />
 
         <img
           id="captured-image-placeholder"
+          alt={i18next.t("a11y.capturedImage")}
           class={{ hidden: !this.selected }}
         />
 
@@ -275,17 +277,27 @@ export class VviinnExampleImage {
             <div
               class={{ "zoom-buttons": true, hidden: !this.zoomCapabilities }}
             >
-              <button onClick={() => this.onZoom("out")}>
+              <button
+                aria-label={i18next.t("a11y.zoomOut")}
+                onClick={() => this.onZoom("out")}
+              >
                 <MinusIcon />
               </button>
-              <button onClick={() => this.onZoom("in")}>
+              <button
+                aria-label={i18next.t("a11y.zoomIn")}
+                onClick={() => this.onZoom("in")}
+              >
                 <PlusIcon />
               </button>
             </div>
           </div>
 
           <div class="photo-button-container">
-            <button class="photo-button" onClick={() => this.selectImage()}>
+            <button
+              class="photo-button"
+              aria-label={i18next.t("a11y.takePicture")}
+              onClick={() => this.selectImage()}
+            >
               <RoundCameraIcon />
             </button>
           </div>

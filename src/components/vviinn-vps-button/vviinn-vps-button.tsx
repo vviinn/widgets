@@ -30,6 +30,9 @@ import {
 } from "../../widget/types";
 import { findSlotElements } from "../../dom";
 import { SEARCH_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
+import i18next from "i18next";
+import { resources } from "../../locale";
+import { globalState, updateGlobalState } from "../../store/store";
 
 /**
  * @slot vviinn-teaser-text - Text on the widget's main screen.
@@ -94,7 +97,7 @@ import { SEARCH_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
 })
 export class VviinnVpsButton {
   @Element() el: HTMLElement;
-  /** Vviinn customer’s token (required) */
+  /** Vviinn customer's token (required) */
   @Prop() token: string;
   /**  The currency sign is displayed after the price */
   @Prop() currencySign?: string;
@@ -159,7 +162,7 @@ export class VviinnVpsButton {
   /** The recommendation renders on the page */
   @Event() vviinnProductLoad: EventEmitter<ProductCardEventData>;
 
-  /** Click on the product’s link */
+  /** Click on the product's link */
   @Event() vviinnProductClick: EventEmitter<ProductCardEventData>;
 
   /** The recommendation appears in the viewport */
@@ -171,7 +174,7 @@ export class VviinnVpsButton {
   /** The search result appears in the viewport */
   @Event() vviinnResultView: EventEmitter<BasicEventData>;
 
-  /** Wrong image format, that isn’t .jpg, .jpeg, png, or the request failed */
+  /** Wrong image format, that isn't .jpg, .jpeg, png, or the request failed */
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
   /** Crop area changes */
@@ -194,7 +197,16 @@ export class VviinnVpsButton {
     }
   }
 
-  componentWillLoad() {
+  connectedCallback() {
+    updateGlobalState(this);
+  }
+
+  async componentWillLoad() {
+    await i18next.init({
+      lng: globalState.locale,
+      fallbackLng: "en",
+      resources,
+    });
     this.slots = findSlotElements(this.el);
   }
 
@@ -216,33 +228,62 @@ export class VviinnVpsButton {
     }
   }
 
-  private handleClick() {
+  private handleActivation = () => {
     this.buttonPressed = true;
-  }
+  };
 
-  private resetButton() {
+  private resetButton = () => {
     this.buttonPressed = false;
+  };
+
+  private handleKeyDown = (event: KeyboardEvent) => {
+    const path = event.composedPath();
+    const isFromTextSearchInput = path.some((el) =>
+      (el as HTMLElement).classList?.contains("text-search-input"),
+    );
+
+    if (isFromTextSearchInput) return;
+
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      this.handleActivation();
+    }
+  };
+
+  private getButtonConfig() {
+    switch (this.mode) {
+      case "camera":
+        return {
+          ariaLabel: i18next.t("a11y.cameraModeSearchButton"),
+          buttonIcon: <SearchModalCameraIcon />,
+        };
+      case "modal":
+        if (this.textSearchShow) {
+          return {
+            ariaLabel: i18next.t("a11y.modalModeSearchButton"),
+            buttonIcon: <SearchModalFullSearchIcon />,
+          };
+        }
+      default:
+        return {
+          ariaLabel: i18next.t("a11y.uploadModeSearchButton"),
+          buttonIcon: <SearchModalImageSearchIcon />,
+        };
+    }
   }
 
   render() {
+    const { ariaLabel, buttonIcon } = this.getButtonConfig();
     return (
-      <Host tabindex="0" role="button">
-        <vviinn-button
-          onClick={() => {
-            this.handleClick();
-          }}
-          addStyle={this.addStyle}
-          part="vviinn-button"
-        >
-          <slot>
-            {this.mode === "camera" ? (
-              <SearchModalCameraIcon />
-            ) : this.textSearchShow ? (
-              <SearchModalFullSearchIcon />
-            ) : (
-              <SearchModalImageSearchIcon />
-            )}
-          </slot>
+      <Host
+        role="button"
+        tabindex="0"
+        aria-label={ariaLabel}
+        onClick={this.handleActivation}
+        onKeyDown={this.handleKeyDown}
+      >
+        <vviinn-button addStyle={this.addStyle} part="vviinn-button">
+          <slot>{buttonIcon}</slot>
         </vviinn-button>
 
         {SlotSkeleton("search")}
@@ -259,7 +300,7 @@ export class VviinnVpsButton {
           campaignIdVisualSearch={this.campaignIdVisualSearch}
           showingInButton={true}
           buttonPressed={this.buttonPressed}
-          resetVpsButton={this.resetButton.bind(this)}
+          resetVpsButton={this.resetButton}
           buttonElementId={this.el.id}
           active={
             this.buttonPressed &&

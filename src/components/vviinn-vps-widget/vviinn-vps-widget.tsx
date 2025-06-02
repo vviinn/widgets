@@ -571,6 +571,13 @@ export class VviinnVpsWidget {
     }
   }
 
+  private handleButtonKeyDown = (event: KeyboardEvent, action: () => void) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      action();
+    }
+  };
+
   private renderButtons() {
     const isLoading =
       (this.state.loading &&
@@ -583,9 +590,10 @@ export class VviinnVpsWidget {
         <button
           class="action-button"
           part="start-camera_button"
-          onClick={() => {
-            this.handleStartCameraClick();
-          }}
+          onClick={this.handleStartCameraClick}
+          onKeyDown={(e) =>
+            this.handleButtonKeyDown(e, this.handleStartCameraClick)
+          }
         >
           {isLoading && <vviinn-preloader />}
 
@@ -609,6 +617,11 @@ export class VviinnVpsWidget {
       <vviinn-image-selector
         class="action-button"
         onClick={() => (this.uploadSource = "uploadPhoto")}
+        onKeyDown={(e) =>
+          this.handleButtonKeyDown(e, () => {
+            this.uploadSource = "uploadPhoto";
+          })
+        }
         onVviinnImageUploadFinished={this.handleVviinnImageUploadFinished}
         onVviinnImageUploadStarted={() => {
           this.handleVviinnImageUpload("uploadPhoto");
@@ -749,11 +762,11 @@ export class VviinnVpsWidget {
                     <div class="start-page_errors-block">
                       <vviinn-wrong-format
                         class={{ hidden: !this.wrongImageFormat }}
-                        handler={() => this.resetState()}
+                        handler={this.resetState}
                       />
                       <vviinn-server-error
                         class={{ hidden: !this.state.serverError }}
-                        handler={() => this.resetState()}
+                        handler={this.resetState}
                       />
                     </div>
                   )}
