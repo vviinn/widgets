@@ -256,7 +256,6 @@ export class VviinnExampleImage {
           alt={i18next.t("a11y.cameraExampleImage")}
           width={this.width}
           height={this.height}
-          tabindex={1}
           class={{ hidden: this.videoInitialized || this.selected }}
         />
 
