@@ -78,7 +78,7 @@ export class VviinnPriceRange {
     }
   }
 
-  private controlFromSlider(e: InputEvent) {
+  private controlFromSlider = (e: InputEvent) => {
     const fromValue = parseInt((e.target as HTMLInputElement).value);
 
     if (fromValue >= this.maxIndex) {
@@ -88,9 +88,9 @@ export class VviinnPriceRange {
     }
 
     (e.target as HTMLInputElement).value = String(this.minIndex);
-  }
+  };
 
-  private controlToSlider(e: InputEvent) {
+  private controlToSlider = (e: InputEvent) => {
     const toValue = parseInt((e.target as HTMLInputElement).value);
 
     if (toValue <= this.minIndex) {
@@ -100,27 +100,33 @@ export class VviinnPriceRange {
     }
 
     (e.target as HTMLInputElement).value = String(this.maxIndex);
-  }
+  };
 
-  private sendBackValue() {
+  private sendBackValue = () => {
     this.priceChangeHandler({
       interval: {
         start: this.histogram[this.minIndex]?.value?.interval?.start,
         end: this.histogram[this.maxIndex]?.value?.interval?.end,
       },
     });
-  }
+  };
   private calculateBarHeight(frequency: number) {
     return frequency * this.scalingFactor;
   }
 
   render() {
     const histogramSize = this.histogram.length - 1;
+    console.log(this.histogram);
     return (
       <Host exportparts={priceRangeParts}>
         <div class="histogram" part="histogram">
           {this.histogram.map((item, index) => {
             const barHeight = this.calculateBarHeight(item.value.frequency);
+            const heightInPercent =
+              barHeight && barHeight < MIN_BAR_HEIGHT
+                ? MIN_BAR_HEIGHT
+                : barHeight;
+
             const isActive =
               item.active && index >= this.minIndex && index <= this.maxIndex;
             return (
@@ -129,11 +135,7 @@ export class VviinnPriceRange {
                   !isActive ? "histogram-bar-inactive" : ""
                 }`}
                 style={{
-                  height: `${
-                    barHeight && barHeight < MIN_BAR_HEIGHT
-                      ? MIN_BAR_HEIGHT
-                      : barHeight
-                  }%`,
+                  height: `${heightInPercent}%`,
                 }}
                 part="histogram-bar"
               ></div>
@@ -143,29 +145,25 @@ export class VviinnPriceRange {
         <div class="range_container" part="histogram-range-container">
           <div class="sliders_control" part="histogram-sliders-control">
             <input
-              ref={(el) => (this.fromSlider = el as HTMLInputElement)}
+              ref={(el) => (this.fromSlider = el)}
               id="fromSlider"
               type="range"
               min="0"
               max={histogramSize}
               value={this.minIndex}
-              onInput={(e: InputEvent) => {
-                this.controlFromSlider(e);
-              }}
-              onChange={() => this.sendBackValue()}
+              onInput={this.controlFromSlider}
+              onChange={this.sendBackValue}
               part="histogram-from-slider"
             />
             <input
-              ref={(el) => (this.toSlider = el as HTMLInputElement)}
+              ref={(el) => (this.toSlider = el)}
               id="toSlider"
               type="range"
               min="0"
               max={histogramSize}
               value={this.maxIndex}
-              onInput={(e: InputEvent) => {
-                this.controlToSlider(e);
-              }}
-              onChange={() => this.sendBackValue()}
+              onInput={this.controlToSlider}
+              onChange={this.sendBackValue}
               part="histogram-to-slider"
             />
           </div>
