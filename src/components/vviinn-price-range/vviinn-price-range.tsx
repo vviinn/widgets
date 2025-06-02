@@ -121,12 +121,12 @@ export class VviinnPriceRange {
         <div class="histogram" part="histogram">
           {this.histogram.map((item, index) => {
             const barHeight = this.calculateBarHeight(item.value.frequency);
+            const isActive =
+              item.active && index >= this.minIndex && index <= this.maxIndex;
             return (
               <div
                 class={`histogram-bar ${
-                  index < this.minIndex || index > this.maxIndex
-                    ? "histogram-bar-inactive"
-                    : ""
+                  !isActive ? "histogram-bar-inactive" : ""
                 }`}
                 style={{
                   height: `${
@@ -172,11 +172,11 @@ export class VviinnPriceRange {
         </div>
         <div class="label-wrapper" part="histogram-label-wrapper">
           <div class="label" part="histogram-label">
-            {this.histogram[0]?.value?.interval?.start}
+            {this.histogram[this.minIndex]?.value?.interval?.start}
             <span class="histogram-currency">{globalState.currencySign}</span>
           </div>
           <div class="label" part="histogram-label">
-            {this.histogram[this.histogram.length - 1]?.value?.interval?.end}
+            {this.histogram[this.maxIndex]?.value?.interval?.end}
             <span class="histogram-currency">{globalState.currencySign}</span>
           </div>
         </div>
