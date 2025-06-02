@@ -7,6 +7,7 @@ export const RoundCameraIcon = () => (
     height="80"
     viewBox="0 0 80 80"
     fill="none"
+    aria-hidden="true"
   >
     <circle cx="40" cy="40" r="36" fill="white" />
     <circle

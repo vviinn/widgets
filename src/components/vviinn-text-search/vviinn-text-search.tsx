@@ -216,7 +216,7 @@ export class VviinnTextSearch {
     this.searchQuery = query;
   };
 
-  private async handleSpeech() {
+  private handleSpeech = async () => {
     if (this.isRecording) {
       this.recognition.stop();
       this.hideRecording();
@@ -233,9 +233,9 @@ export class VviinnTextSearch {
         }
       }, 1000);
     }
-  }
+  };
 
-  private async handleTextSearch() {
+  private handleTextSearch = async () => {
     if (!this.searchQuery) return;
     this.trackTextSearch();
 
@@ -262,13 +262,20 @@ export class VviinnTextSearch {
         });
       }
     }
-  }
+  };
 
   private handleKeyPress(event: KeyboardEvent) {
     if (event.key === "Enter") {
       this.handleTextSearch();
     }
   }
+
+  private handleButtonKeyDown = (event: KeyboardEvent, action: () => void) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      action();
+    }
+  };
 
   render() {
     return (
@@ -304,7 +311,11 @@ export class VviinnTextSearch {
               <button
                 class="speech-button"
                 part="speech-button"
-                onClick={() => this.handleSpeech()}
+                aria-label={i18next.t("a11y.speechButton")}
+                onClick={this.handleSpeech}
+                onKeyDown={(event) =>
+                  this.handleButtonKeyDown(event, this.handleSpeech)
+                }
               >
                 <MicIcon />
                 {this.isShowRecording() && (
@@ -315,8 +326,12 @@ export class VviinnTextSearch {
           <button
             class="text-search-button"
             part="text-search-button"
-            onClick={() => this.handleTextSearch()}
+            onClick={this.handleTextSearch}
+            onKeyDown={(event) =>
+              this.handleButtonKeyDown(event, this.handleTextSearch)
+            }
             disabled={this.state.loading}
+            aria-label={i18next.t("a11y.textSearchButton")}
           >
             {this.isShowPreloader() ? (
               <vviinn-preloader />
