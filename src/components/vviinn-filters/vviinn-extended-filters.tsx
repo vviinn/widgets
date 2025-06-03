@@ -25,6 +25,7 @@ import {
   getPriceLabel,
   isSubFilterActive,
   RenderFilterButton,
+  getSelectedPriceInterval,
 } from "./helpers";
 import { resources } from "../../locale";
 
@@ -36,7 +37,6 @@ import {
   TriggerSourceEvent,
   TriggerSourceEventData,
 } from "../../recommendation/events";
-import { components } from "../../interfaces/generated";
 import { ClickEvent, isClickedInRectBound } from "../../geometry/Rectangle";
 import { triggerFilter, triggerResetFilters } from "./helpers/triggerFilter";
 import { SearchStore, useSearchStore } from "../../store/search.store";
@@ -92,7 +92,6 @@ const FILTER_OPTIONS_STEP_COUNT = 5;
 export class VviinnExtendedFilters {
   @Element() el: HTMLElement;
 
-  @Prop({ mutable: true }) filters: ResponseDynamicFilterItem[] = [];
   @Prop() mode: "button" | "preview" | "modal" = "button";
   @Prop() showHeader?: boolean = true;
 
@@ -159,10 +158,6 @@ export class VviinnExtendedFilters {
       element: this.el,
     });
   }
-
-  private getSelectedPriceInterval = () =>
-    (this.requestFilters.find(({ column }) => isIntervalFilter(column))
-      ?.values[0] ?? {}) as components["schemas"]["interval"];
 
   private resetModal = () => {
     triggerResetFilters({
@@ -327,7 +322,9 @@ export class VviinnExtendedFilters {
                             (item) => item.value.frequency > 0,
                           )}
                           priceChangeHandler={this.priceChangeHandler}
-                          selectedInterval={this.getSelectedPriceInterval()}
+                          selectedInterval={getSelectedPriceInterval(
+                            this.requestFilters,
+                          )}
                         />
                       ) : (
                         <ul
