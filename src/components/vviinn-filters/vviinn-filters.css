@@ -203,7 +203,7 @@ vviinn-price-range {
 }
 
 .filters-modal-header {
-  height: 64px;
+  min-height: 64px;
   position: relative;
 
   color: var(--color-text-primary);
