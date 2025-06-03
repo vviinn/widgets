@@ -781,14 +781,10 @@ export class VviinnVprWidget implements ComponentInterface {
 
           {(this.showFilters || this.showExtendedFilters) && (
             <div class="filters-header ">
-              {this.showFilters && (
-                <vviinn-filters filters={this.dynamicFilters}></vviinn-filters>
-              )}
+              {this.showFilters && <vviinn-filters></vviinn-filters>}
 
               {this.showExtendedFilters && (
-                <vviinn-extended-filters
-                  filters={this.dynamicFilters}
-                ></vviinn-extended-filters>
+                <vviinn-extended-filters></vviinn-extended-filters>
               )}
             </div>
           )}

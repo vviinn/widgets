@@ -23,7 +23,7 @@ const MIN_BAR_HEIGHT = 3;
   styleUrl: "vviinn-price-range.css",
   shadow: true,
 })
-export class VviinnButton {
+export class VviinnPriceRange {
   @Element() el: HTMLElement;
 
   @Prop() histogram: Histogram = [];
@@ -46,7 +46,9 @@ export class VviinnButton {
 
   @Watch("selectedInterval")
   updatingSelectedInterval() {
-    this.maxIndex = this.histogram.length - 1;
+    if (!this.histogram || this.histogram.length === 0) {
+      return;
+    }
 
     const maxValueofFrequency = Math.max(
       ...this.histogram.map(({ value }) => {
@@ -56,24 +58,27 @@ export class VviinnButton {
 
     this.scalingFactor = 100 / maxValueofFrequency;
 
-    if (this.selectedInterval.start !== undefined) {
-      this.minIndex = this.histogram.findIndex(
+    if (this.selectedInterval?.start !== undefined) {
+      const foundMinIndex = this.histogram.findIndex(
         ({ value }) => value.interval.start === this.selectedInterval.start,
       );
+      this.minIndex = foundMinIndex !== -1 ? foundMinIndex : 0;
     } else {
       this.minIndex = 0;
     }
 
-    if (this.selectedInterval.end) {
-      this.maxIndex = this.histogram.findIndex(
+    if (this.selectedInterval?.end !== undefined) {
+      const foundMaxIndex = this.histogram.findIndex(
         (item) => item.value.interval.end === this.selectedInterval.end,
       );
+      this.maxIndex =
+        foundMaxIndex !== -1 ? foundMaxIndex : this.histogram.length - 1;
     } else {
       this.maxIndex = this.histogram.length - 1;
     }
   }
 
-  private controlFromSlider(e: InputEvent) {
+  private controlFromSlider = (e: InputEvent) => {
     const fromValue = parseInt((e.target as HTMLInputElement).value);
 
     if (fromValue >= this.maxIndex) {
@@ -83,9 +88,9 @@ export class VviinnButton {
     }
 
     (e.target as HTMLInputElement).value = String(this.minIndex);
-  }
+  };
 
-  private controlToSlider(e: InputEvent) {
+  private controlToSlider = (e: InputEvent) => {
     const toValue = parseInt((e.target as HTMLInputElement).value);
 
     if (toValue <= this.minIndex) {
@@ -95,40 +100,42 @@ export class VviinnButton {
     }
 
     (e.target as HTMLInputElement).value = String(this.maxIndex);
-  }
+  };
 
-  private sendBackValue() {
+  private sendBackValue = () => {
     this.priceChangeHandler({
       interval: {
         start: this.histogram[this.minIndex]?.value?.interval?.start,
         end: this.histogram[this.maxIndex]?.value?.interval?.end,
       },
     });
-  }
+  };
   private calculateBarHeight(frequency: number) {
     return frequency * this.scalingFactor;
   }
 
   render() {
     const histogramSize = this.histogram.length - 1;
+    console.log(this.histogram);
     return (
       <Host exportparts={priceRangeParts}>
         <div class="histogram" part="histogram">
           {this.histogram.map((item, index) => {
             const barHeight = this.calculateBarHeight(item.value.frequency);
+            const heightInPercent =
+              barHeight && barHeight < MIN_BAR_HEIGHT
+                ? MIN_BAR_HEIGHT
+                : barHeight;
+
+            const isActive =
+              item.active && index >= this.minIndex && index <= this.maxIndex;
             return (
               <div
                 class={`histogram-bar ${
-                  index < this.minIndex || index > this.maxIndex
-                    ? "histogram-bar-inactive"
-                    : ""
+                  !isActive ? "histogram-bar-inactive" : ""
                 }`}
                 style={{
-                  height: `${
-                    barHeight && barHeight < MIN_BAR_HEIGHT
-                      ? MIN_BAR_HEIGHT
-                      : barHeight
-                  }%`,
+                  height: `${heightInPercent}%`,
                 }}
                 part="histogram-bar"
               ></div>
@@ -138,29 +145,25 @@ export class VviinnButton {
         <div class="range_container" part="histogram-range-container">
           <div class="sliders_control" part="histogram-sliders-control">
             <input
-              ref={(el) => (this.fromSlider = el as HTMLInputElement)}
+              ref={(el) => (this.fromSlider = el)}
               id="fromSlider"
               type="range"
               min="0"
               max={histogramSize}
               value={this.minIndex}
-              onInput={(e: InputEvent) => {
-                this.controlFromSlider(e);
-              }}
-              onChange={() => this.sendBackValue()}
+              onInput={this.controlFromSlider}
+              onChange={this.sendBackValue}
               part="histogram-from-slider"
             />
             <input
-              ref={(el) => (this.toSlider = el as HTMLInputElement)}
+              ref={(el) => (this.toSlider = el)}
               id="toSlider"
               type="range"
               min="0"
               max={histogramSize}
               value={this.maxIndex}
-              onInput={(e: InputEvent) => {
-                this.controlToSlider(e);
-              }}
-              onChange={() => this.sendBackValue()}
+              onInput={this.controlToSlider}
+              onChange={this.sendBackValue}
               part="histogram-to-slider"
             />
           </div>
