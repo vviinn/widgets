@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.170.0](https://github.com/vviinn/widgets/compare/v2.169.0...v2.170.0) (2025-06-03)
+
+
+### Features
+
+* Distinguish inactive price intervals ([60a795e](https://github.com/vviinn/widgets/commit/60a795ead443866228cba992190246970612cfa4))
+
+
+### Bug Fixes
+
+* Stability of showing the range in the price filter ([77d0674](https://github.com/vviinn/widgets/commit/77d06747c325e3813cbb0c23cce29ae200c03f90))
+
 ## [2.169.0](https://github.com/vviinn/widgets/compare/v2.168.1...v2.169.0) (2025-06-02)
 
 
