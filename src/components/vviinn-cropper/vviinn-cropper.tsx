@@ -122,8 +122,8 @@ export class VviinnCropper {
       this.height = height;
     }
 
-    this.state.image = null;
     if (this.saveImageMode === "never") return;
+    this.state.image = null;
 
     const {
       imageSrc: localStorageImageSrc,
