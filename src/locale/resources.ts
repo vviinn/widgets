@@ -1,7 +1,7 @@
 import { Resource } from "i18next";
 
 const VVIINN_LINK =
-  "<a href='https://www.vviinn.com/' target='_blank' rel='noopener noreferrer'>Vviinn</a>";
+  "<a href='https://www.vviinn.com/' target='_blank' rel='noopener noreferrer'>vviinn</a>";
 
 export const resources: Resource = {
   de: {
