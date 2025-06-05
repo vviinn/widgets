@@ -45,6 +45,7 @@ import {
   addIfNotEmpty,
   parseStringToExcluded,
 } from "../../utils/collections/collectionsUtils";
+import { ErrorType } from "../vviinn-error";
 import { resources } from "../../locale";
 import { Locale } from "../../locale";
 import { CameraActionIcon, UploadActionIcon } from "../vviinn-icons";
@@ -691,6 +692,12 @@ export class VviinnVpsWidget {
     return this.wrongImageFormat || this.state.searchStatus === "error";
   }
 
+  private getCurrentErrorType(): ErrorType | null {
+    if (this.wrongImageFormat) return "wrong-format";
+    if (this.state.searchStatus === "error") return "server-error";
+    return null;
+  }
+
   private resetScroll(elementId: string, behavior: ScrollBehavior = "auto") {
     const element: HTMLElement = this.el.shadowRoot.getElementById(elementId);
     element?.scroll({ top: 0, left: 0, behavior });
@@ -760,20 +767,13 @@ export class VviinnVpsWidget {
                   {(this.wrongImageFormat ||
                     this.state.searchStatus === "error") && (
                     <div class="start-page_errors-block">
-                      <vviinn-error
-                        class={{ hidden: !this.wrongImageFormat }}
-                        errorType="wrong-format"
-                        handler={this.resetState}
-                        addBackground={this.showInWidget}
-                      />
-                      <vviinn-error
-                        class={{
-                          hidden: this.state.searchStatus !== "error",
-                        }}
-                        errorType="server-error"
-                        handler={this.resetState}
-                        addBackground={this.showInWidget}
-                      />
+                      {this.getCurrentErrorType() && (
+                        <vviinn-error
+                          errorType={this.getCurrentErrorType()}
+                          handler={this.resetState}
+                          addBackground={this.showInWidget}
+                        />
+                      )}
                     </div>
                   )}
 
