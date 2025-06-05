@@ -760,15 +760,17 @@ export class VviinnVpsWidget {
                   {(this.wrongImageFormat ||
                     this.state.searchStatus === "error") && (
                     <div class="start-page_errors-block">
-                      <vviinn-wrong-format
+                      <vviinn-error
                         class={{ hidden: !this.wrongImageFormat }}
+                        errorType="wrong-format"
                         handler={this.resetState}
                         addBackground={this.showInWidget}
                       />
-                      <vviinn-server-error
+                      <vviinn-error
                         class={{
                           hidden: this.state.searchStatus !== "error",
                         }}
+                        errorType="server-error"
                         handler={this.resetState}
                         addBackground={this.showInWidget}
                       />

@@ -1,6 +1,0 @@
-:host {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  padding-top: var(--spacing-400);
-}

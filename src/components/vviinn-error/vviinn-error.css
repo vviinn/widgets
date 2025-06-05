@@ -1,17 +1,7 @@
 @import "../../variables.css";
 
 :host {
-  width: 100%;
-  border-radius: 8px;
-  display: grid;
-  grid-gap: var(--spacing-150);
-  padding: var(--spacing-300);
-  box-sizing: border-box;
-  max-width: 356px;
-  text-align: center;
-  justify-items: center;
-  align-self: center;
-  justify-self: center;
+  display: block;
   font-family: var(--font-family, var(--font-family-base));
 }
 
@@ -19,11 +9,33 @@
   background: var(--surface-bg-color-01);
 }
 
+:host(.add-top-margin) {
+  margin-top: var(--spacing-400);
+}
+.error-content {
+  display: grid;
+  grid-gap: var(--spacing-150);
+  text-align: center;
+  justify-items: center;
+  width: 356px;
+  padding: var(--spacing-200);
+  max-width: calc(100vw - 2 * var(--spacing-300));
+  border-radius: var(--border-radius-200);
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+.error-content.add-background {
+  background: var(--surface-bg-color-01);
+}
+
+svg,
 ::slotted(svg) {
   display: grid;
   align-self: center;
 }
 
+h4,
 ::slotted(h4) {
   margin: unset;
   font-weight: var(--font-weight-600);
@@ -31,11 +43,13 @@
   line-height: var(--line-height-headline);
 }
 
+span,
 ::slotted(span) {
   font-size: 14px;
   line-height: 20px;
 }
 
+button,
 ::slotted(button) {
   appearance: none;
   border: none;
@@ -50,6 +64,7 @@
   font-family: var(--font-family, var(--font-family-base));
 }
 
+button:hover,
 ::slotted(button:hover) {
   background: var(--button-bg-color-primary-hover);
 }
