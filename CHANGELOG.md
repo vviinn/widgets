@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.170.2](https://github.com/vviinn/widgets/compare/v2.170.1...v2.170.2) (2025-06-05)
+
+
+### Bug Fixes
+
+* Show inactive bars of the price filter after receiving an updated histogram ([420cd03](https://github.com/vviinn/widgets/commit/420cd0341c894948785b025a60a9e0c5078dd473))
+
 ### [2.170.1](https://github.com/vviinn/widgets/compare/v2.170.0...v2.170.1) (2025-06-05)
 
 
