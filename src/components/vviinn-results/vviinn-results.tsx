@@ -524,8 +524,8 @@ export class VviinnResults {
     this.state = state;
     this.storeName = storeName;
 
-    this.disposeStoreListener = onChange("loading", (loading) => {
-      if (loading) this.resetDiscoveryAppendIndexes();
+    this.disposeStoreListener = onChange("searchStatus", (searchStatus) => {
+      if (searchStatus === "loading") this.resetDiscoveryAppendIndexes();
     });
 
     if (this.el.id) this.widgetElementId = this.el.id;
@@ -849,11 +849,11 @@ export class VviinnResults {
         exportparts={`${productCardParts}, ${productCardsGridPart}`}
       >
         <div class="nothing-found">
-          {resultsLength === 0 && this.showInWidget && (
+          {resultsLength === 0 && this.state.searchStatus === "success" && (
             <vviinn-empty-results handler={() => this?.resetWidgetState()} />
           )}
 
-          {this.showAspectRatioError && this.showInWidget && (
+          {this.showAspectRatioError && (
             <vviinn-wrong-aspect-ratio
               handler={() => this?.resetWidgetState()}
             />

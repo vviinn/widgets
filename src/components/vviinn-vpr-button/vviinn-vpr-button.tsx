@@ -211,8 +211,8 @@ export class VviinnVprButton {
   connectedCallback() {
     this.iconSideSize = this.oneClickDiscoveryMode === "standalone" ? 24 : 14;
     const { onChange } = useSearchStore(this.showInWidget);
-    this.disposeStoreListener = onChange("loading", (loading) => {
-      loading && this.sidebarCloseListener();
+    this.disposeStoreListener = onChange("searchStatus", (searchStatus) => {
+      searchStatus === "loading" && this.sidebarCloseListener();
     });
   }
 
