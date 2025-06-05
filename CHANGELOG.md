@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.170.2](https://github.com/vviinn/widgets/compare/v2.170.1...v2.170.2) (2025-06-05)
+
+
+### Bug Fixes
+
+* Show inactive bars of the price filter after receiving an updated histogram ([420cd03](https://github.com/vviinn/widgets/commit/420cd0341c894948785b025a60a9e0c5078dd473))
+
+### [2.170.1](https://github.com/vviinn/widgets/compare/v2.170.0...v2.170.1) (2025-06-05)
+
+
+### Bug Fixes
+
+* Hide the image selected filter when no results are shown ([e26c0a1](https://github.com/vviinn/widgets/commit/e26c0a1401f3817dff59957aa192acabca8e1478))
+
 ## [2.170.0](https://github.com/vviinn/widgets/compare/v2.169.0...v2.170.0) (2025-06-03)
 
 

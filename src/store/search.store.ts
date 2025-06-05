@@ -60,6 +60,7 @@ type AppStateDefaults = {
   imageBounds: Rectangle | null;
   searchArea: Rectangle | null;
   croppedImageUrl: string | null;
+  visualSearchStarted: boolean;
   requestFilters: RequestDynamicFilterItem[];
   loading: boolean;
   serverError: boolean;
@@ -93,6 +94,7 @@ const appStateDefaults: AppStateDefaults = {
   imageBounds: null,
   searchArea: null,
   croppedImageUrl: null,
+  visualSearchStarted: false,
   requestFilters: [],
   serverError: false,
   loading: false,
@@ -259,6 +261,7 @@ export const makeUploadFileRequest =
       detectedObjects: [],
       searchType: "image",
       loading: true,
+      visualSearchStarted: true,
     });
 
     const session = await pipe(uploadImageFile(store, "image")(file))();
@@ -292,6 +295,7 @@ export const makeVisualSearchRequest = async (
   const state = useStore(store);
   state.searchType = "image";
   state.loading = true;
+  state.visualSearchStarted = true;
 
   let searchRectangle: Rectangle | null = null;
   let fetchDetectedObjects = false;

@@ -116,7 +116,6 @@ export class VviinnPriceRange {
 
   render() {
     const histogramSize = this.histogram.length - 1;
-    console.log(this.histogram);
     return (
       <Host exportparts={priceRangeParts}>
         <div class="histogram" part="histogram">
