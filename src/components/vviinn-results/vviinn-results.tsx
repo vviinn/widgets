@@ -850,12 +850,16 @@ export class VviinnResults {
       >
         <div class="nothing-found">
           {resultsLength === 0 && this.state.searchStatus === "success" && (
-            <vviinn-empty-results handler={() => this?.resetWidgetState()} />
+            <vviinn-empty-results
+              handler={() => this?.resetWidgetState()}
+              addBackground={this.showInWidget}
+            />
           )}
 
           {this.showAspectRatioError && (
             <vviinn-wrong-aspect-ratio
               handler={() => this?.resetWidgetState()}
+              addBackground={this.showInWidget}
             />
           )}
         </div>

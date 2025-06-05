@@ -763,12 +763,14 @@ export class VviinnVpsWidget {
                       <vviinn-wrong-format
                         class={{ hidden: !this.wrongImageFormat }}
                         handler={this.resetState}
+                        addBackground={this.showInWidget}
                       />
                       <vviinn-server-error
                         class={{
                           hidden: this.state.searchStatus !== "error",
                         }}
                         handler={this.resetState}
+                        addBackground={this.showInWidget}
                       />
                     </div>
                   )}

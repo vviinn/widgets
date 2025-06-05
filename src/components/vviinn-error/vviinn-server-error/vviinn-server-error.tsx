@@ -9,11 +9,12 @@ import { WarningIcon } from "../../vviinn-icons";
 })
 export class VviinnServerError {
   @Prop() handler: VoidFunction;
+  @Prop() addBackground: boolean = true;
 
   render() {
     return (
       <Host>
-        <vviinn-error>
+        <vviinn-error addBackground={this.addBackground}>
           <WarningIcon />
           <h4 slot="title">{i18next.t("serverErrorBlock.title")}</h4>
           <button slot="action" onClick={this.handler}>

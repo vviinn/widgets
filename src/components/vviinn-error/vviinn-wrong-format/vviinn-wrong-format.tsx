@@ -9,11 +9,12 @@ import { WarningIcon } from "../../vviinn-icons";
 })
 export class VviinnWrongFormat {
   @Prop() handler: VoidFunction;
+  @Prop() addBackground: boolean = true;
 
   render() {
     return (
       <Host>
-        <vviinn-error>
+        <vviinn-error addBackground={this.addBackground}>
           <WarningIcon />
           <h4 slot="title">{i18next.t("wrongFormatBlock.title")}</h4>
           <span slot="text">{i18next.t("wrongFormatBlock.text")}</span>

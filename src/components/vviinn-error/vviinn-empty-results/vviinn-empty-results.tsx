@@ -11,11 +11,12 @@ import { searchState } from "../../../store/search.store";
 })
 export class VviinnEmptyResults {
   @Prop() handler: VoidFunction;
+  @Prop() addBackground: boolean = true;
 
   render() {
     return (
       <Host>
-        <vviinn-error>
+        <vviinn-error addBackground={this.addBackground}>
           <WarningIcon />
           <h4 slot="title">{i18next.t("emptyResultsBlock.title")}</h4>
           {searchState.searchType === "image" && (

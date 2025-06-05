@@ -2,18 +2,21 @@
 
 :host {
   width: 100%;
-  background: #f4f4f4;
   border-radius: 8px;
   display: grid;
-  grid-gap: 20px;
-  padding: 24px;
+  grid-gap: var(--spacing-150);
+  padding: var(--spacing-300);
   box-sizing: border-box;
-  max-width: 440px;
+  max-width: 356px;
   text-align: center;
   justify-items: center;
   align-self: center;
   justify-self: center;
   font-family: var(--font-family, var(--font-family-base));
+}
+
+:host(.add-background) {
+  background: var(--surface-bg-color-01);
 }
 
 ::slotted(svg) {
@@ -23,9 +26,9 @@
 
 ::slotted(h4) {
   margin: unset;
-  font-weight: 600;
-  font-size: 18px;
-  line-height: 24px;
+  font-weight: var(--font-weight-600);
+  font-size: var(--font-size-headline);
+  line-height: var(--line-height-headline);
 }
 
 ::slotted(span) {
@@ -37,9 +40,11 @@
   appearance: none;
   border: none;
   cursor: pointer;
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-500);
   background: var(--color-primary, var(--button-bg-color-primary));
-  border-radius: var(--border-radius-50);
-  padding: var(--spacing-125);
+  border-radius: var(--border-radius-100);
+  padding: var(--spacing-100);
   font-size: var(--font-size-body);
   color: var(--color-text-inverse);
   font-family: var(--font-family, var(--font-family-base));
