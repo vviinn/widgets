@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.170.1](https://github.com/vviinn/widgets/compare/v2.170.0...v2.170.1) (2025-06-05)
+
+
+### Bug Fixes
+
+* Hide the image selected filter when no results are shown ([e26c0a1](https://github.com/vviinn/widgets/commit/e26c0a1401f3817dff59957aa192acabca8e1478))
+
 ## [2.170.0](https://github.com/vviinn/widgets/compare/v2.169.0...v2.170.0) (2025-06-03)
 
 
