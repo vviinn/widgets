@@ -6,6 +6,7 @@ import { searchState } from "../../../store/search.store";
 
 @Component({
   tag: "vviinn-empty-results",
+  styleUrl: "vviinn-empty-results.css",
   shadow: true,
 })
 export class VviinnEmptyResults {

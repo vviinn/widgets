@@ -5,6 +5,7 @@ import { WarningIcon } from "../../vviinn-icons";
 
 @Component({
   tag: "vviinn-wrong-aspect-ratio",
+  styleUrl: "vviinn-wrong-aspect-ratio.css",
   shadow: true,
 })
 export class VviinnWrongAspectRatio {
