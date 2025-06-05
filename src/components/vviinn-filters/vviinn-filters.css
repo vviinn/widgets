@@ -30,12 +30,8 @@
 }
 
 vviinn-price-range {
-  max-width: 400px;
+  max-width: 500px;
   padding-bottom: var(--spacing-150);
-}
-
-:host(.show-in-widget) vviinn-price-range {
-  max-width: unset;
 }
 
 .filters-modal-main-button,
@@ -203,7 +199,7 @@ vviinn-price-range {
 }
 
 .filters-modal-header {
-  height: 64px;
+  min-height: 64px;
   position: relative;
 
   color: var(--color-text-primary);
@@ -529,5 +525,9 @@ vviinn-price-range {
 
   .filters-modal.modal .filters-modal-main {
     padding-bottom: 120px;
+  }
+
+  vviinn-price-range {
+    max-width: unset;
   }
 }

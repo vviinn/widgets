@@ -70,7 +70,7 @@ export class VviinnFilters {
   @Prop() showInWidget: boolean = false;
 
   @State() innerFilters: ResponseDynamicFilterItem[] = [];
-  @State() selectedFilter?: ResponseDynamicFilterItem;
+  @State() selectedFilterColumn?: string;
   @State() requestFilters: RequestDynamicFilterItem[] = [];
 
   /** The filter's state changes */
@@ -93,8 +93,14 @@ export class VviinnFilters {
   private getFilters = () =>
     this.innerFilters.length ? this.innerFilters : this.state.dynamicFilters;
 
+  private get selectedFilter(): ResponseDynamicFilterItem | undefined {
+    return this.getFilters().find(
+      (f) => f.column === this.selectedFilterColumn,
+    );
+  }
+
   private handleMainFilterSelection(filter: ResponseDynamicFilterItem) {
-    this.selectedFilter = filter;
+    this.selectedFilterColumn = filter.column;
     this.vviinnFilterTriggered.emit({
       action: "show",
       kind: filter.column,
@@ -105,7 +111,7 @@ export class VviinnFilters {
   private handleSelectedFiltersReset = ({ detail }: TriggerSourceEvent) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.requestFilters = [];
-    this.selectedFilter = undefined;
+    this.selectedFilterColumn = undefined;
   };
 
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
@@ -115,10 +121,10 @@ export class VviinnFilters {
     this.handleSubFilterSelection(filterValue, this.selectedFilter);
   };
 
-  private handleSubFilterSelection(
+  private handleSubFilterSelection = (
     filterValue: DynamicFilterValue,
     selectedFilter: ResponseDynamicFilterItem,
-  ) {
+  ) => {
     this.requestFilters = triggerFilter({
       filterValue,
       selectedFilter,
@@ -128,11 +134,11 @@ export class VviinnFilters {
       el: this.el,
       isTriggeredByVpsWidget: this.showInWidget,
     });
-  }
+  };
 
   private showActiveOnMainButton({ column }: ResponseDynamicFilterItem) {
-    if (!this.selectedFilter) return "";
-    return this.selectedFilter?.column === column ? "active" : "";
+    if (!this.selectedFilterColumn) return "";
+    return this.selectedFilterColumn === column ? "active" : "";
   }
 
   private handleFilterTriggered = ({
@@ -143,7 +149,9 @@ export class VviinnFilters {
       return;
 
     if (action === "select") {
-      this.selectedFilter = this.getFilters().find((f) => f.column === kind);
+      this.selectedFilterColumn = this.getFilters().find(
+        (f) => f.column === kind,
+      )?.column;
     }
   };
 
@@ -160,10 +168,10 @@ export class VviinnFilters {
 
     this.requestFilters = filters;
 
-    if (!this.selectedFilter) {
-      this.selectedFilter = this.getFilters().find(
+    if (!this.selectedFilterColumn) {
+      this.selectedFilterColumn = this.getFilters().find(
         (f) => f?.column === filters[0]?.column,
-      );
+      )?.column;
     }
   };
 
@@ -207,8 +215,9 @@ export class VviinnFilters {
   render() {
     const filters = this.getFilters().filter((filter) => filter.isPrimary);
 
-    const { column } = this.selectedFilter ?? {};
-    const filterOptions = getFilterOptions(this.selectedFilter);
+    const { selectedFilter, handleSubFilterSelection } = this;
+    const { column } = selectedFilter ?? {};
+    const filterOptions = getFilterOptions(selectedFilter);
 
     return (
       <Host
@@ -236,7 +245,7 @@ export class VviinnFilters {
           </ul>
         )}
 
-        {!!this.selectedFilter && this.selectedFilter.isPrimary && (
+        {!!selectedFilter && selectedFilter.isPrimary && (
           <div class="filters-footer" part="filters-footer">
             {isIntervalFilter(column) ? (
               <vviinn-price-range
@@ -253,13 +262,12 @@ export class VviinnFilters {
                     const isSelected = isSubFilterActive(
                       this.requestFilters,
                       value,
-                      this.selectedFilter,
+                      selectedFilter,
                     );
 
                     return RenderFilterButton({
-                      handleSubFilterSelection:
-                        this.handleSubFilterSelection.bind(this),
-                      selectedFilter: this.selectedFilter,
+                      handleSubFilterSelection,
+                      selectedFilter,
                       value,
                       label,
                       active,

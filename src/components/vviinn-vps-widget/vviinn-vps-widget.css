@@ -79,12 +79,13 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   cursor: pointer;
   align-items: center;
   border-radius: var(--border-radius-100);
+  font-weight: var(--font-weight-500);
   font-size: 16px;
   height: 48px;
   justify-items: center;
   font-family: var(--font-family, var(--font-family-base));
   transition: background 0.1s ease-in-out;
-  color: #525252;
+  color: var(--color-text-primary);
   background-color: #f4f4f4;
 }
 

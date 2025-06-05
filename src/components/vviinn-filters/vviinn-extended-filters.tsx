@@ -398,8 +398,7 @@ export class VviinnExtendedFilters {
             );
 
             return RenderFilterButton({
-              handleSubFilterSelection:
-                this.handleSubFilterSelection.bind(this),
+              handleSubFilterSelection: this.handleSubFilterSelection,
               selectedFilter: filter,
               value,
               label,
@@ -422,10 +421,10 @@ export class VviinnExtendedFilters {
     );
   }
 
-  private handleSubFilterSelection(
+  private handleSubFilterSelection = (
     filterValue: DynamicFilterValue,
     selectedFilter: ResponseDynamicFilterItem,
-  ) {
+  ) => {
     this.requestFilters = triggerFilter({
       filterValue,
       selectedFilter,
@@ -435,7 +434,7 @@ export class VviinnExtendedFilters {
       el: this.el,
       isTriggeredByVpsWidget: this.showInWidget,
     });
-  }
+  };
 
   private handleMoreOptionsMainClick(column: string) {
     const optionsVisible = this.selectedMoreOptions.includes(column);
