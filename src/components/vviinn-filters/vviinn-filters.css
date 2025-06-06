@@ -227,7 +227,10 @@ vviinn-price-range {
   line-height: var(--line-height-caption);
   letter-spacing: var(--letter-spacing-caption);
   text-align: center;
-  padding: var(--spacing-50) var(--spacing-100);
+  padding: var(--spacing-300) var(--spacing-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .filters-modal-main {
