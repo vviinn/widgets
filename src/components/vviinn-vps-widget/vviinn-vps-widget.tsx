@@ -771,7 +771,7 @@ export class VviinnVpsWidget {
                         <vviinn-error
                           errorType={this.getCurrentErrorType()}
                           handler={this.resetState}
-                          addBackground={this.showInWidget}
+                          hasBackground={this.showInWidget}
                         />
                       )}
                     </div>

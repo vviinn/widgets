@@ -2,13 +2,7 @@ import { Component, Host, Prop, h } from "@stencil/core";
 import i18next from "i18next";
 import { WarningIcon } from "../vviinn-icons";
 import { searchState } from "../../store/search.store";
-import {
-  ErrorType,
-  errorI18nKeys,
-  errorTypesWithTopMargin,
-  errorTypesWithText,
-  errorTypesAlwaysShowButton,
-} from "./index";
+import { ErrorType, errorTypeConfig } from "./index";
 
 @Component({
   tag: "vviinn-error",
@@ -16,31 +10,31 @@ import {
   shadow: true,
 })
 export class VviinnError {
-  @Prop() addBackground: boolean = true;
+  @Prop() hasBackground: boolean = true;
   @Prop() errorType?: ErrorType;
   @Prop() handler?: VoidFunction;
-  @Prop() addTopMargin: boolean = false;
+  @Prop() hasTopMargin: boolean = false;
 
   private getErrorContent() {
     if (!this.errorType) return null;
 
-    const i18nKey = errorI18nKeys[this.errorType];
+    const config = errorTypeConfig[this.errorType];
 
     return {
-      title: i18next.t(`${i18nKey}.title`),
-      text: errorTypesWithText.has(this.errorType)
-        ? i18next.t(`${i18nKey}.text`)
-        : null,
-      buttonText: this.shouldShowButton()
-        ? i18next.t(`${i18nKey}.button`)
+      title: i18next.t(`${config.i18nKey}.title`),
+      text: config.hasText ? i18next.t(`${config.i18nKey}.text`) : null,
+      buttonText: this.hasButton()
+        ? i18next.t(`${config.i18nKey}.button`)
         : null,
     };
   }
 
-  private shouldShowButton(): boolean {
+  private hasButton(): boolean {
     if (!this.errorType) return false;
 
-    if (errorTypesAlwaysShowButton.has(this.errorType)) return true;
+    const config = errorTypeConfig[this.errorType];
+
+    if (config.hasButton) return true;
 
     return (
       this.errorType === "empty-results" && searchState.searchType === "image"
@@ -50,13 +44,13 @@ export class VviinnError {
   render() {
     const content = this.getErrorContent();
     const needsTopMargin =
-      this.addTopMargin ||
-      (this.errorType && errorTypesWithTopMargin.has(this.errorType));
+      this.hasTopMargin ||
+      (this.errorType && errorTypeConfig[this.errorType]?.hasTopMargin);
 
     const hostClasses = { "add-top-margin": needsTopMargin };
     const contentClasses = {
       "error-content": true,
-      "add-background": this.addBackground,
+      "add-background": this.hasBackground,
     };
 
     const errorContent = this.errorType

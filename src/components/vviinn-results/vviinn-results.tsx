@@ -864,7 +864,7 @@ export class VviinnResults {
             <vviinn-error
               errorType={this.getCurrentErrorType()}
               handler={() => this?.resetWidgetState()}
-              addBackground={this.showInWidget}
+              hasBackground={this.showInWidget}
             />
           )}
         </div>
