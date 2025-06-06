@@ -49,11 +49,14 @@ import { addEventListenersWithSignal } from "../../dom";
  * @slot vviinn-extended-filters-title - Text on widget's header.
  * @slot vviinn-extended-filters-apply - Title of Apply Button.
  * @slot vviinn-extended-filters-reset - Title of Reset Button.
+ * @slot vviinn-extended-filters-no-filters - Message shown when no filters are available.
  *
  * @part extended-filters-modal - Modal itself.
  * @part extended-filters-modal-wrapper - Wrapper for the modal.
  * @part extended-filters-header - Header of the modal.
+ * @part extended-filters-title - Title heading (h2) of the modal.
  * @part extended-filters-modal-close - Close button of the modal.
+ * @part extended-filters-no-filters - No filters message container.
  * @part extended-filters-main - Wrapper for the main modal content.
  * @part extended-filters-list - List of filters.
  * @part extended-filters-row - Row of the filters.
@@ -238,9 +241,22 @@ export class VviinnExtendedFilters {
         >
           {this.showHeader && (
             <div class="filters-modal-header" part="extended-filters-header">
-              <slot name="vviinn-extended-filters-title">
-                <span>{i18next.t("filters.modal.title")}</span>
-              </slot>
+              <h2 class="filters-modal-title" part="extended-filters-title">
+                <slot name="vviinn-extended-filters-title">
+                  {i18next.t("filters.modal.title")}
+                </slot>
+              </h2>
+
+              {filters.length === 0 && (
+                <div
+                  class="filters-modal-no-filters-message"
+                  part="extended-filters-no-filters"
+                >
+                  <slot name="vviinn-extended-filters-no-filters">
+                    {i18next.t("filters.modal.noFiltersMessage")}
+                  </slot>
+                </div>
+              )}
 
               <button
                 class="filters-modal-close"
