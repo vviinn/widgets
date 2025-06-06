@@ -772,6 +772,7 @@ export class VviinnVpsWidget {
                           errorType={this.getCurrentErrorType()}
                           handler={this.resetState}
                           hasBackground={this.showInWidget}
+                          searchType={this.state.searchType}
                         />
                       )}
                     </div>

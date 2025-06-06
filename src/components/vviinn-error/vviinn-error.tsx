@@ -1,7 +1,6 @@
 import { Component, Host, Prop, h } from "@stencil/core";
 import i18next from "i18next";
 import { WarningIcon } from "../vviinn-icons";
-import { searchState } from "../../store/search.store";
 import { ErrorType, errorTypeConfig } from "./index";
 
 @Component({
@@ -14,6 +13,7 @@ export class VviinnError {
   @Prop() errorType?: ErrorType;
   @Prop() handler?: VoidFunction;
   @Prop() hasTopMargin: boolean = false;
+  @Prop() searchType?: string;
 
   private getErrorContent() {
     if (!this.errorType) return null;
@@ -36,9 +36,7 @@ export class VviinnError {
 
     if (config.hasButton) return true;
 
-    return (
-      this.errorType === "empty-results" && searchState.searchType === "image"
-    );
+    return this.errorType === "empty-results" && this.searchType === "image";
   }
 
   render() {

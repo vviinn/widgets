@@ -865,6 +865,7 @@ export class VviinnResults {
               errorType={this.getCurrentErrorType()}
               handler={() => this?.resetWidgetState()}
               hasBackground={this.showInWidget}
+              searchType={this.state.searchType}
             />
           )}
         </div>
