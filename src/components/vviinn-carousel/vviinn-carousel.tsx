@@ -537,7 +537,7 @@ export class VviinnCarousel {
         productTitle={recommendation.title}
         productType={recommendation.productType}
         deeplink={recommendation.deeplink}
-        image={recommendation.image.thumbnail}
+        image={recommendation.image.thumbnail || recommendation.image.original}
         brand={recommendation.brand}
         imageWidth={this.imageWidth}
         imageRatio={this.imageRatio}
@@ -673,7 +673,10 @@ export class VviinnCarousel {
             <vviinn-product-card
               class="set-mode product-card--source"
               productTitle={this.sourceProduct.title}
-              image={this.sourceProduct.image.thumbnail}
+              image={
+                this.sourceProduct.image.thumbnail ||
+                this.sourceProduct.image.original
+              }
               price={this.sourceProduct.price.actual}
               salePrice={this.sourceProduct.price.sale}
               basePrice={this.sourceProduct.basePrice?.actual}
