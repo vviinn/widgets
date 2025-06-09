@@ -148,7 +148,7 @@ export class VviinnCarousel {
     }
     const maxScrollLeft = contentNode.scrollWidth - contentNode.clientWidth;
     const step = this.getItemWidth() + this.getContentGap();
-    return step > 0 ? maxScrollLeft / step : 0;
+    return step > 0 ? Math.ceil(maxScrollLeft / step) : 0;
   }
 
   private isFirst(): boolean {
@@ -455,6 +455,7 @@ export class VviinnCarousel {
     let newIndex = this.currentScrollIndex + (action === "right" ? 1 : -1);
     newIndex = Math.max(0, Math.min(this.getMaxScrollIndex(), newIndex));
     this.currentScrollIndex = newIndex;
+
     if (this.isContinuityMode) {
       const maxScrollLeft =
         contentContainer.scrollWidth - contentContainer.clientWidth;
@@ -469,7 +470,6 @@ export class VviinnCarousel {
           behavior: "smooth",
         });
       });
-      this.currentScrollIndex = newIndex;
       return;
     }
     requestAnimationFrame(() => {
