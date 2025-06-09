@@ -29,6 +29,7 @@ import {
   DEFAULT_COLUMNS_NUMBER,
   RESULTS_CALCULATED_COLUMNS_CSS_VAR,
   SET_MODE_IMAGE_WIDTH_CSS_VAR,
+  SCROLL_POSITION_TOLERANCE,
 } from "./constants";
 import { calculateDiscount } from "../../utils/number";
 import { Locale } from "../../locale";
@@ -140,7 +141,14 @@ export class VviinnCarousel {
         Math.ceil(this.recommendations.length / this.columns) - 1,
       );
     }
-    return Math.max(0, this.recommendations.length - this.columns);
+
+    const contentNode = this.getContentNode();
+    if (!contentNode || contentNode.scrollWidth <= contentNode.clientWidth) {
+      return 0;
+    }
+    const maxScrollLeft = contentNode.scrollWidth - contentNode.clientWidth;
+    const step = this.getItemWidth() + this.getContentGap();
+    return step > 0 ? maxScrollLeft / step : 0;
   }
 
   private isFirst(): boolean {
@@ -370,15 +378,10 @@ export class VviinnCarousel {
         (el) => el.getBoundingClientRect().width,
       );
       const sum = contentWidths.reduce((acc, val) => acc + val, 0);
-      const contentGap = pipe(
-        window.getComputedStyle(this.getContentNode()),
-        (computedStyle) => computedStyle.getPropertyValue("gap"),
-        (contentGapString) => parseInt(contentGapString.split("px")[0]),
-        (contentGap) => (isNaN(contentGap) ? 0 : contentGap),
-      );
+      const contentGap = this.getContentGap();
       return sum / contentWidths.length + contentGap;
     }
-    return this.getItemWidth();
+    return this.getItemWidth() + this.getContentGap();
   }
 
   private getHostParent(): Element {
@@ -419,6 +422,15 @@ export class VviinnCarousel {
     return Array.from(children).map((c) => c as HTMLElement);
   }
 
+  private getContentGap(): number {
+    return pipe(
+      window.getComputedStyle(this.getContentNode()),
+      (computedStyle) => computedStyle.getPropertyValue("gap"),
+      (contentGapString) => parseInt(contentGapString.split("px")[0]),
+      (contentGap) => (isNaN(contentGap) ? 0 : contentGap),
+    );
+  }
+
   private updateColumnsNumber(): number {
     if (this.isSetMode) {
       this.columns = this.setItemsAmount;
@@ -443,6 +455,23 @@ export class VviinnCarousel {
     let newIndex = this.currentScrollIndex + (action === "right" ? 1 : -1);
     newIndex = Math.max(0, Math.min(this.getMaxScrollIndex(), newIndex));
     this.currentScrollIndex = newIndex;
+    if (this.isContinuityMode) {
+      const maxScrollLeft =
+        contentContainer.scrollWidth - contentContainer.clientWidth;
+      let targetScrollLeft = step * newIndex;
+      if (action === "right" && targetScrollLeft > maxScrollLeft - 2) {
+        targetScrollLeft = maxScrollLeft;
+      }
+      requestAnimationFrame(() => {
+        contentContainer.scrollTo({
+          top: 0,
+          left: targetScrollLeft,
+          behavior: "smooth",
+        });
+      });
+      this.currentScrollIndex = newIndex;
+      return;
+    }
     requestAnimationFrame(() => {
       contentContainer.scrollTo({
         top: 0,
@@ -622,8 +651,13 @@ export class VviinnCarousel {
       const step = this.calculateMoveStep();
       scrollIndex = Math.round(contentNode.scrollLeft / step);
     } else {
-      const itemWidth = this.getItemWidth();
-      scrollIndex = Math.round(contentNode.scrollLeft / itemWidth);
+      const maxScrollLeft = contentNode.scrollWidth - contentNode.clientWidth;
+      if (maxScrollLeft - contentNode.scrollLeft < SCROLL_POSITION_TOLERANCE) {
+        scrollIndex = this.getMaxScrollIndex();
+      } else {
+        const step = this.getItemWidth() + this.getContentGap();
+        scrollIndex = Math.round(contentNode.scrollLeft / step);
+      }
     }
     this.currentScrollIndex = Math.max(
       0,

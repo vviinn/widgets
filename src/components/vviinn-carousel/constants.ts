@@ -6,3 +6,5 @@ export const RESULTS_CALCULATED_COLUMNS_CSS_VAR =
 
 export const CONTENT_GROUP_CSS_CLASS = "items-group";
 export const DEFAULT_COLUMNS_NUMBER = 4;
+
+export const SCROLL_POSITION_TOLERANCE = 2;
