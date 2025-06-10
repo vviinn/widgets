@@ -110,10 +110,17 @@ content. .content:not(.show-scrollbar)::-webkit-scrollbar,
   z-index: 1;
   padding: 0;
   margin: 0;
+  transition: opacity 0.2s ease-in-out;
 }
 
 .next:disabled,
 .prev:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.next.grid-arrows-dynamic:disabled,
+.prev.grid-arrows-dynamic:disabled {
   display: none;
 }
 

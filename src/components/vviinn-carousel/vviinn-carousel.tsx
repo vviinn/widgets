@@ -29,6 +29,7 @@ import {
   DEFAULT_COLUMNS_NUMBER,
   RESULTS_CALCULATED_COLUMNS_CSS_VAR,
   SET_MODE_IMAGE_WIDTH_CSS_VAR,
+  SCROLL_POSITION_TOLERANCE,
 } from "./constants";
 import { calculateDiscount } from "../../utils/number";
 import { Locale } from "../../locale";
@@ -56,6 +57,7 @@ export class VviinnCarousel {
   @State() moveDirection: MoveDirection = "right";
   @State() contentGroups: HTMLElement[] = [];
   @State() activeContentGroup: number = 0;
+  @State() currentScrollIndex: number = 0;
   @State() isRTL: boolean = false;
   @State() crossSellingRecommendations: Recommendation[] = [];
 
@@ -111,6 +113,10 @@ export class VviinnCarousel {
   private isContinuityMode: boolean;
   private defaultAnimationInterval: number = 2000;
   private setModeMaxDiscount: number | null = null;
+  private contentGap: number;
+
+  private scrollHandler: EventListener | null = null;
+  private scrollEndHandler: EventListener | null = null;
 
   private getProductData(recommendation, productRank): ProductCardEventData {
     return {
@@ -129,13 +135,30 @@ export class VviinnCarousel {
     this.cloneSlottedContent(),
   );
 
-  private isLastGroup = () =>
-    this.isGridMode &&
-    this.activeContentGroup === this.getContentGroups().length - 1;
+  private getMaxScrollIndex(): number {
+    if (this.isGridMode) {
+      return Math.max(
+        0,
+        Math.ceil(this.recommendations.length / this.columns) - 1,
+      );
+    }
 
-  private isFirstGroup = () => this.isGridMode && this.activeContentGroup === 0;
-  private isEmptyResults = () =>
-    this.hasErrorOnLoad || (this.recommendations.length === 0 && !this.loading);
+    const contentNode = this.getContentNode();
+    if (!contentNode || contentNode.scrollWidth <= contentNode.clientWidth) {
+      return 0;
+    }
+    const maxScrollLeft = contentNode.scrollWidth - contentNode.clientWidth;
+    const step = this.getItemWidth() + this.contentGap;
+    return step > 0 ? Math.ceil(maxScrollLeft / step) : 0;
+  }
+
+  private isFirst(): boolean {
+    return this.currentScrollIndex === 0;
+  }
+
+  private isLast(): boolean {
+    return this.currentScrollIndex >= this.getMaxScrollIndex();
+  }
 
   private updateCard = (
     productId: string,
@@ -189,6 +212,15 @@ export class VviinnCarousel {
   }
 
   disconnectedCallback() {
+    const contentNode = this.getContentNode();
+    if (contentNode) {
+      if (this.scrollEndHandler) {
+        contentNode.removeEventListener("scrollend", this.scrollEndHandler);
+      }
+      if (this.scrollHandler) {
+        contentNode.removeEventListener("scroll", this.scrollHandler);
+      }
+    }
     this.resizeObserver.disconnect();
   }
 
@@ -204,15 +236,19 @@ export class VviinnCarousel {
   componentDidLoad() {
     this.setWidth();
     const slot = this.el.querySelector(".content");
-
     this.mutationObserver.observe(slot, { subtree: true, childList: true });
     this.resizeObserver.observe(this.getHostParent());
-
-    if (this.isGridMode) {
-      const contentNode = this.getContentNode();
-      contentNode.addEventListener("scrollend", () => {
-        this.activeContentGroup = this.getActiveGroupIndex();
-      });
+    this.updateContentGap();
+    const contentNode = this.getContentNode();
+    this.scrollEndHandler = () => {
+      this.updateCurrentScrollIndex(contentNode);
+    };
+    contentNode.addEventListener("scrollend", this.scrollEndHandler);
+    if (!this.isGridMode) {
+      this.scrollHandler = () => {
+        this.updateCurrentScrollIndex(contentNode);
+      };
+      contentNode.addEventListener("scroll", this.scrollHandler);
     }
   }
 
@@ -324,22 +360,30 @@ export class VviinnCarousel {
     this.updateColumnsNumber();
     this.setWidth();
     this.setItemWidth();
+    this.updateContentGap();
+  }
+
+  private getItemWidth(): number {
+    const contentNode = this.getContentNode();
+    const firstItem = contentNode?.children?.[0] as HTMLElement;
+    if (firstItem) {
+      return firstItem.getBoundingClientRect().width;
+    }
+    return this.imageWidth;
   }
 
   private calculateMoveStep() {
-    const imageGroups = this.getContent().filter((el) => !el.matches("button"));
-    const contentWidths = imageGroups.map(
-      (el) => el.getBoundingClientRect().width,
-    );
-    const sum = contentWidths.reduce((acc, val) => acc + val, 0);
-
-    const contentGap = pipe(
-      window.getComputedStyle(this.getContentNode()),
-      (computedStyle) => computedStyle.getPropertyValue("gap"),
-      (contentGapString) => parseInt(contentGapString.split("px")[0]),
-      (contentGap) => (isNaN(contentGap) ? 0 : contentGap),
-    );
-    return sum / contentWidths.length + contentGap;
+    if (this.isGridMode) {
+      const imageGroups = this.getContent().filter(
+        (el) => !el.matches("button"),
+      );
+      const contentWidths = imageGroups.map(
+        (el) => el.getBoundingClientRect().width,
+      );
+      const sum = contentWidths.reduce((acc, val) => acc + val, 0);
+      return sum / contentWidths.length + this.contentGap;
+    }
+    return this.getItemWidth() + this.contentGap;
   }
 
   private getHostParent(): Element {
@@ -371,21 +415,6 @@ export class VviinnCarousel {
     this.setWidth();
   }
 
-  private getActiveGroupIndex(): number {
-    const groups = this.getContentGroups();
-    const groupsPositions = groups.map((g) => g.getBoundingClientRect().left);
-
-    const indexedPositions = groupsPositions
-      .map((value: number, index: number) => [value, index])
-      .filter((x) => x[0] >= 0);
-
-    return indexedPositions.length > 0
-      ? this.isRTL
-        ? indexedPositions[indexedPositions.length - 1][1]
-        : indexedPositions[0][1]
-      : 0;
-  }
-
   private getContentNode(): HTMLElement {
     return this.el.querySelector(".content");
   }
@@ -393,6 +422,15 @@ export class VviinnCarousel {
   private getContent(): HTMLElement[] {
     const children = this.getContentNode().children;
     return Array.from(children).map((c) => c as HTMLElement);
+  }
+
+  private updateContentGap(): void {
+    this.contentGap = pipe(
+      window.getComputedStyle(this.getContentNode()),
+      (computedStyle) => computedStyle.getPropertyValue("gap"),
+      (contentGapString) => parseInt(contentGapString.split("px")[0]),
+      (contentGap) => (isNaN(contentGap) ? 0 : contentGap),
+    );
   }
 
   private updateColumnsNumber(): number {
@@ -412,20 +450,37 @@ export class VviinnCarousel {
     }
   }
 
-  private getContentGroups(): HTMLElement[] {
-    return Array.from(this.el.querySelectorAll(`.${CONTENT_GROUP_CSS_CLASS}`));
-  }
-
   private handleCarouselButtonClick(action: MoveDirection) {
     this.moveDirection = action;
     const contentContainer = this.getContentNode();
-    const { scrollLeft } = contentContainer;
     const step = this.calculateMoveStep();
+    let newIndex = this.currentScrollIndex + (action === "right" ? 1 : -1);
+    newIndex = Math.max(0, Math.min(this.getMaxScrollIndex(), newIndex));
+    this.currentScrollIndex = newIndex;
 
+    if (this.isContinuityMode) {
+      const maxScrollLeft =
+        contentContainer.scrollWidth - contentContainer.clientWidth;
+      let targetScrollLeft = step * newIndex;
+      if (
+        action === "right" &&
+        targetScrollLeft > maxScrollLeft - SCROLL_POSITION_TOLERANCE
+      ) {
+        targetScrollLeft = maxScrollLeft;
+      }
+      requestAnimationFrame(() => {
+        contentContainer.scrollTo({
+          top: 0,
+          left: targetScrollLeft,
+          behavior: "smooth",
+        });
+      });
+      return;
+    }
     requestAnimationFrame(() => {
       contentContainer.scrollTo({
         top: 0,
-        left: action === "right" ? scrollLeft + step : scrollLeft - step,
+        left: step * newIndex,
         behavior: "smooth",
       });
     });
@@ -433,7 +488,7 @@ export class VviinnCarousel {
 
   private scroll(index: number) {
     const contentContainer = this.getContentNode();
-
+    this.currentScrollIndex = index;
     requestAnimationFrame(() => {
       contentContainer.scrollTo({
         top: 0,
@@ -487,7 +542,7 @@ export class VviinnCarousel {
         productTitle={recommendation.title}
         productType={recommendation.productType}
         deeplink={recommendation.deeplink}
-        image={recommendation.image.thumbnail}
+        image={recommendation.image.thumbnail || recommendation.image.original}
         brand={recommendation.brand}
         imageWidth={this.imageWidth}
         imageRatio={this.imageRatio}
@@ -575,18 +630,44 @@ export class VviinnCarousel {
     const numberOfBullets = Math.ceil(
       this.recommendations.length / this.columns,
     );
-
     const bulletsArray = Array.from(Array(numberOfBullets).keys());
-
     return bulletsArray.map((index) => (
       <div
         class={{
           bullet: true,
-          active: this.activeContentGroup === index,
+          active: this.currentScrollIndex === index,
         }}
         onClick={() => this.scroll(index)}
       />
     ));
+  }
+
+  private isEmptyResults() {
+    return (
+      this.hasErrorOnLoad ||
+      (this.recommendations.length === 0 && !this.loading)
+    );
+  }
+
+  private updateCurrentScrollIndex(contentNode: HTMLElement) {
+    if (!contentNode) return;
+    let scrollIndex: number;
+    if (this.isGridMode) {
+      const step = this.calculateMoveStep();
+      scrollIndex = Math.round(contentNode.scrollLeft / step);
+    } else {
+      const maxScrollLeft = contentNode.scrollWidth - contentNode.clientWidth;
+      if (maxScrollLeft - contentNode.scrollLeft < SCROLL_POSITION_TOLERANCE) {
+        scrollIndex = this.getMaxScrollIndex();
+      } else {
+        const step = this.getItemWidth() + this.contentGap;
+        scrollIndex = Math.round(contentNode.scrollLeft / step);
+      }
+    }
+    this.currentScrollIndex = Math.max(
+      0,
+      Math.min(this.getMaxScrollIndex(), scrollIndex),
+    );
   }
 
   render() {
@@ -597,7 +678,10 @@ export class VviinnCarousel {
             <vviinn-product-card
               class="set-mode product-card--source"
               productTitle={this.sourceProduct.title}
-              image={this.sourceProduct.image.thumbnail}
+              image={
+                this.sourceProduct.image.thumbnail ||
+                this.sourceProduct.image.original
+              }
               price={this.sourceProduct.price.actual}
               salePrice={this.sourceProduct.price.sale}
               basePrice={this.sourceProduct.basePrice?.actual}
@@ -621,10 +705,14 @@ export class VviinnCarousel {
             {this.showArrowButtons() && (
               <Fragment>
                 <button
-                  class="prev"
+                  class={{
+                    prev: true,
+                    "grid-arrows-dynamic":
+                      this.gridArrowsDynamic && this.isGridMode,
+                  }}
                   onClick={() => this.handleCarouselButtonClick("left")}
                   part="carousel-button"
-                  disabled={this.gridArrowsDynamic && this.isFirstGroup()}
+                  disabled={this.isFirst()}
                 >
                   <ChevronIcon />
                 </button>
@@ -633,7 +721,7 @@ export class VviinnCarousel {
                   class="next"
                   onClick={() => this.handleCarouselButtonClick("right")}
                   part="carousel-button"
-                  disabled={this.gridArrowsDynamic && this.isLastGroup()}
+                  disabled={this.isLast()}
                 >
                   <ChevronIcon />
                 </button>
