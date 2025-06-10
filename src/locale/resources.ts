@@ -57,7 +57,8 @@ export const resources: Resource = {
           title: "Filter",
           apply: "Anwenden",
           resetFilters: "Filter zurücksetzen",
-          noFiltersMessage: "Suchen Sie, um die Filter zu sehen",
+          noFiltersMessage:
+            "Für die akuelle Suche sind keine Filter verfügbar.",
         },
         imageFilterText: "Bild",
         cropFilterText: "Bildausschnitt",
@@ -132,7 +133,7 @@ export const resources: Resource = {
           title: "Filters",
           apply: "Apply",
           resetFilters: "Reset Filters",
-          noFiltersMessage: "Search to see the filters",
+          noFiltersMessage: "No filters available for the current search.",
         },
         imageFilterText: "Image",
         cropFilterText: "Crop",
