@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.171.1](https://github.com/vviinn/widgets/compare/v2.171.0...v2.171.1) (2025-06-10)
+
+
+### Bug Fixes
+
+* Indicate and disable carousel buttons on the first and last elements ([0640ba8](https://github.com/vviinn/widgets/commit/0640ba8768005eb55ed6183f4e2600b7ffbad2d4))
+
 ## [2.171.0](https://github.com/vviinn/widgets/compare/v2.170.2...v2.171.0) (2025-06-10)
 
 
