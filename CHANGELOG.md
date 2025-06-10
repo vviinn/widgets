@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.171.2](https://github.com/vviinn/widgets/compare/v2.171.1...v2.171.2) (2025-06-10)
+
+
+### Bug Fixes
+
+* Improve translations for the no-filters state ([9ecd4e7](https://github.com/vviinn/widgets/commit/9ecd4e7f986a62c4044674ed2ac47c250e2019f0))
+
 ### [2.171.1](https://github.com/vviinn/widgets/compare/v2.171.0...v2.171.1) (2025-06-10)
 
 
