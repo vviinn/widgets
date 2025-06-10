@@ -102,7 +102,7 @@ export class VviinnTextSearch {
   @State() showTooltip = false;
 
   private isShowPreloader = () =>
-    this.state.loading && this.state.searchType === "text";
+    this.state.searchStatus === "loading" && this.state.searchType === "text";
 
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
     this.showInWidget !== isTriggeredByVpsWidget;
@@ -330,7 +330,7 @@ export class VviinnTextSearch {
             onKeyDown={(event) =>
               this.handleButtonKeyDown(event, this.handleTextSearch)
             }
-            disabled={this.state.loading}
+            disabled={this.state.searchStatus === "loading"}
             aria-label={i18next.t("a11y.textSearchButton")}
           >
             {this.isShowPreloader() ? (

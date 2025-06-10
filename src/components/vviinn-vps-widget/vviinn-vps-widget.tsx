@@ -45,6 +45,7 @@ import {
   addIfNotEmpty,
   parseStringToExcluded,
 } from "../../utils/collections/collectionsUtils";
+import { ErrorType } from "../vviinn-error";
 import { resources } from "../../locale";
 import { Locale } from "../../locale";
 import { CameraActionIcon, UploadActionIcon } from "../vviinn-icons";
@@ -580,7 +581,7 @@ export class VviinnVpsWidget {
 
   private renderButtons() {
     const isLoading =
-      (this.state.loading &&
+      (this.state.searchStatus === "loading" &&
         this.state.searchType === "image" &&
         this.uploadSource === "startCamera") ||
       this.isCameraInitializing;
@@ -637,7 +638,7 @@ export class VviinnVpsWidget {
         }
         showInWidget={this.showInWidget}
         loading={
-          this.state.loading &&
+          this.state.searchStatus === "loading" &&
           this.state.searchType === "image" &&
           this.uploadSource === "uploadPhoto"
         }
@@ -675,8 +676,7 @@ export class VviinnVpsWidget {
 
   private resetState = () => {
     this.resetInnerState();
-    this.state.loading = false;
-    this.state.serverError = false;
+    this.state.searchStatus = "idle";
 
     if (!this.showInWidget) return;
 
@@ -689,7 +689,13 @@ export class VviinnVpsWidget {
   };
 
   private haveErrors(): boolean {
-    return this.wrongImageFormat || this.state.serverError;
+    return this.wrongImageFormat || this.state.searchStatus === "error";
+  }
+
+  private getCurrentErrorType(): ErrorType | null {
+    if (this.wrongImageFormat) return "wrong-format";
+    if (this.state.searchStatus === "error") return "server-error";
+    return null;
   }
 
   private resetScroll(elementId: string, behavior: ScrollBehavior = "auto") {
@@ -758,16 +764,17 @@ export class VviinnVpsWidget {
                 id="start-page_block"
               >
                 <div class="start-page_main-content">
-                  {(this.wrongImageFormat || this.state.serverError) && (
+                  {(this.wrongImageFormat ||
+                    this.state.searchStatus === "error") && (
                     <div class="start-page_errors-block">
-                      <vviinn-wrong-format
-                        class={{ hidden: !this.wrongImageFormat }}
-                        handler={this.resetState}
-                      />
-                      <vviinn-server-error
-                        class={{ hidden: !this.state.serverError }}
-                        handler={this.resetState}
-                      />
+                      {this.getCurrentErrorType() && (
+                        <vviinn-error
+                          errorType={this.getCurrentErrorType()}
+                          handler={this.resetState}
+                          hasBackground={this.showInWidget}
+                          searchType={this.state.searchType}
+                        />
+                      )}
                     </div>
                   )}
 
