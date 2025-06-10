@@ -113,6 +113,7 @@ export class VviinnCarousel {
   private isContinuityMode: boolean;
   private defaultAnimationInterval: number = 2000;
   private setModeMaxDiscount: number | null = null;
+  private contentGap: number;
 
   private scrollHandler: EventListener | null = null;
   private scrollEndHandler: EventListener | null = null;
@@ -147,7 +148,7 @@ export class VviinnCarousel {
       return 0;
     }
     const maxScrollLeft = contentNode.scrollWidth - contentNode.clientWidth;
-    const step = this.getItemWidth() + this.getContentGap();
+    const step = this.getItemWidth() + this.contentGap;
     return step > 0 ? Math.ceil(maxScrollLeft / step) : 0;
   }
 
@@ -237,6 +238,7 @@ export class VviinnCarousel {
     const slot = this.el.querySelector(".content");
     this.mutationObserver.observe(slot, { subtree: true, childList: true });
     this.resizeObserver.observe(this.getHostParent());
+    this.updateContentGap();
     const contentNode = this.getContentNode();
     this.scrollEndHandler = () => {
       this.updateCurrentScrollIndex(contentNode);
@@ -358,6 +360,7 @@ export class VviinnCarousel {
     this.updateColumnsNumber();
     this.setWidth();
     this.setItemWidth();
+    this.updateContentGap();
   }
 
   private getItemWidth(): number {
@@ -378,10 +381,9 @@ export class VviinnCarousel {
         (el) => el.getBoundingClientRect().width,
       );
       const sum = contentWidths.reduce((acc, val) => acc + val, 0);
-      const contentGap = this.getContentGap();
-      return sum / contentWidths.length + contentGap;
+      return sum / contentWidths.length + this.contentGap;
     }
-    return this.getItemWidth() + this.getContentGap();
+    return this.getItemWidth() + this.contentGap;
   }
 
   private getHostParent(): Element {
@@ -422,8 +424,8 @@ export class VviinnCarousel {
     return Array.from(children).map((c) => c as HTMLElement);
   }
 
-  private getContentGap(): number {
-    return pipe(
+  private updateContentGap(): void {
+    this.contentGap = pipe(
       window.getComputedStyle(this.getContentNode()),
       (computedStyle) => computedStyle.getPropertyValue("gap"),
       (contentGapString) => parseInt(contentGapString.split("px")[0]),
@@ -460,7 +462,10 @@ export class VviinnCarousel {
       const maxScrollLeft =
         contentContainer.scrollWidth - contentContainer.clientWidth;
       let targetScrollLeft = step * newIndex;
-      if (action === "right" && targetScrollLeft > maxScrollLeft - 2) {
+      if (
+        action === "right" &&
+        targetScrollLeft > maxScrollLeft - SCROLL_POSITION_TOLERANCE
+      ) {
         targetScrollLeft = maxScrollLeft;
       }
       requestAnimationFrame(() => {
@@ -655,7 +660,7 @@ export class VviinnCarousel {
       if (maxScrollLeft - contentNode.scrollLeft < SCROLL_POSITION_TOLERANCE) {
         scrollIndex = this.getMaxScrollIndex();
       } else {
-        const step = this.getItemWidth() + this.getContentGap();
+        const step = this.getItemWidth() + this.contentGap;
         scrollIndex = Math.round(contentNode.scrollLeft / step);
       }
     }
