@@ -1,7 +1,7 @@
 import { Resource } from "i18next";
 
 const VVIINN_LINK =
-  "<a href='https://www.vviinn.com/' target='_blank' rel='noopener noreferrer'>Vviinn</a>";
+  "<a href='https://www.vviinn.com/' target='_blank' rel='noopener noreferrer'>vviinn</a>";
 
 export const resources: Resource = {
   de: {
@@ -57,6 +57,7 @@ export const resources: Resource = {
           title: "Filter",
           apply: "Anwenden",
           resetFilters: "Filter zurücksetzen",
+          noFiltersMessage: "Suchen Sie, um die Filter zu sehen",
         },
         imageFilterText: "Bild",
         cropFilterText: "Bildausschnitt",
@@ -131,6 +132,7 @@ export const resources: Resource = {
           title: "Filters",
           apply: "Apply",
           resetFilters: "Reset Filters",
+          noFiltersMessage: "Search to see the filters",
         },
         imageFilterText: "Image",
         cropFilterText: "Crop",
