@@ -7,6 +7,7 @@ export const SearchModalFullSearchIcon = () => (
     height="24"
     viewBox="0 0 24 24"
     fill="none"
+    aria-hidden="true"
   >
     <path
       d="M4 8C4 5.79 5.79 4 8 4H9V2H8C4.69 2 2 4.69 2 8V9H4V8Z"

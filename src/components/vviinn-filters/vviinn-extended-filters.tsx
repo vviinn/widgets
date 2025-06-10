@@ -25,6 +25,7 @@ import {
   getPriceLabel,
   isSubFilterActive,
   RenderFilterButton,
+  getSelectedPriceInterval,
 } from "./helpers";
 import { resources } from "../../locale";
 
@@ -36,7 +37,6 @@ import {
   TriggerSourceEvent,
   TriggerSourceEventData,
 } from "../../recommendation/events";
-import { components } from "../../interfaces/generated";
 import { ClickEvent, isClickedInRectBound } from "../../geometry/Rectangle";
 import { triggerFilter, triggerResetFilters } from "./helpers/triggerFilter";
 import { SearchStore, useSearchStore } from "../../store/search.store";
@@ -49,11 +49,14 @@ import { addEventListenersWithSignal } from "../../dom";
  * @slot vviinn-extended-filters-title - Text on widget's header.
  * @slot vviinn-extended-filters-apply - Title of Apply Button.
  * @slot vviinn-extended-filters-reset - Title of Reset Button.
+ * @slot vviinn-extended-filters-no-filters - Message shown when no filters are available.
  *
  * @part extended-filters-modal - Modal itself.
  * @part extended-filters-modal-wrapper - Wrapper for the modal.
  * @part extended-filters-header - Header of the modal.
+ * @part extended-filters-title - Title heading (h2) of the modal.
  * @part extended-filters-modal-close - Close button of the modal.
+ * @part extended-filters-no-filters - No filters message container.
  * @part extended-filters-main - Wrapper for the main modal content.
  * @part extended-filters-list - List of filters.
  * @part extended-filters-row - Row of the filters.
@@ -92,7 +95,6 @@ const FILTER_OPTIONS_STEP_COUNT = 5;
 export class VviinnExtendedFilters {
   @Element() el: HTMLElement;
 
-  @Prop({ mutable: true }) filters: ResponseDynamicFilterItem[] = [];
   @Prop() mode: "button" | "preview" | "modal" = "button";
   @Prop() showHeader?: boolean = true;
 
@@ -159,10 +161,6 @@ export class VviinnExtendedFilters {
       element: this.el,
     });
   }
-
-  private getSelectedPriceInterval = () =>
-    (this.requestFilters.find(({ column }) => isIntervalFilter(column))
-      ?.values[0] ?? {}) as components["schemas"]["interval"];
 
   private resetModal = () => {
     triggerResetFilters({
@@ -243,9 +241,11 @@ export class VviinnExtendedFilters {
         >
           {this.showHeader && (
             <div class="filters-modal-header" part="extended-filters-header">
-              <slot name="vviinn-extended-filters-title">
-                <span>{i18next.t("filters.modal.title")}</span>
-              </slot>
+              <h2 class="filters-modal-title" part="extended-filters-title">
+                <slot name="vviinn-extended-filters-title">
+                  {i18next.t("filters.modal.title")}
+                </slot>
+              </h2>
 
               <button
                 class="filters-modal-close"
@@ -257,91 +257,108 @@ export class VviinnExtendedFilters {
             </div>
           )}
           <div class="filters-modal-main" part="extended-filters-main">
-            <ul class="filters-modal-list" part="extended-filters-list">
-              {(filters ?? []).map((mainFilter) => {
-                const mainColumn = mainFilter.column;
-                const filterOptions = getFilterOptions(mainFilter);
+            {filters.length === 0 ? (
+              <div
+                class="filters-modal-no-filters-message"
+                part="extended-filters-no-filters"
+              >
+                <slot name="vviinn-extended-filters-no-filters">
+                  {i18next.t("filters.modal.noFiltersMessage")}
+                </slot>
+              </div>
+            ) : (
+              <ul class="filters-modal-list" part="extended-filters-list">
+                {(filters ?? []).map((mainFilter) => {
+                  const mainColumn = mainFilter.column;
+                  const filterOptions = getFilterOptions(mainFilter);
 
-                const requestFilter = this.requestFilters.find(
-                  ({ column }) => column === mainColumn,
-                );
-                const addedOptions = [];
-                requestFilter?.values?.forEach((value) => {
-                  if (isIntervalFilter(mainColumn)) {
-                    const intervalFilter = filters.find(
-                      (filter) => filter.column === mainColumn,
-                    ) as ResponseDynamicFilterIntervalItem;
+                  const requestFilter = this.requestFilters.find(
+                    ({ column }) => column === mainColumn,
+                  );
+                  const addedOptions = [];
+                  requestFilter?.values?.forEach((value) => {
+                    if (isIntervalFilter(mainColumn)) {
+                      const intervalFilter = filters.find(
+                        (filter) => filter.column === mainColumn,
+                      ) as ResponseDynamicFilterIntervalItem;
 
-                    const priceLabel = getPriceLabel(
-                      intervalFilter,
-                      value,
-                      globalState.currencySign,
-                    );
-                    priceLabel && addedOptions.push(<span>{priceLabel}</span>);
-                  } else {
-                    const index = filterOptions.findIndex(
-                      (f) => (f.value.value ?? f.value) === value,
-                    );
-
-                    if (index > -1) {
-                      addedOptions.push(
-                        <span>{filterOptions[index].label}</span>,
+                      const priceLabel = getPriceLabel(
+                        intervalFilter,
+                        value,
+                        globalState.currencySign,
                       );
+                      priceLabel &&
+                        addedOptions.push(<span>{priceLabel}</span>);
+                    } else {
+                      const index = filterOptions.findIndex(
+                        (f) => (f.value.value ?? f.value) === value,
+                      );
+
+                      if (index > -1) {
+                        addedOptions.push(
+                          <span>{filterOptions[index].label}</span>,
+                        );
+                      }
                     }
-                  }
-                });
+                  });
 
-                return (
-                  <li part="extended-filters-row">
-                    <div
-                      class={`filters-modal-main-button-wrapper ${
-                        this.selectedMoreOptions.includes(mainFilter.column)
-                          ? "open"
-                          : ""
-                      }`}
-                      part="extended-filters-row-wrapper"
-                    >
-                      <button
-                        onClick={() =>
-                          this.handleMoreOptionsMainClick(mainFilter.column)
-                        }
-                        class="filters-modal-main-button"
-                        part="extended-filters-main-button"
+                  return (
+                    <li part="extended-filters-row">
+                      <div
+                        class={`filters-modal-main-button-wrapper ${
+                          this.selectedMoreOptions.includes(mainFilter.column)
+                            ? "open"
+                            : ""
+                        }`}
+                        part="extended-filters-row-wrapper"
                       >
-                        {mainFilter.label}
-                        {addedOptions.length > 0 && (
-                          <div
-                            class="filters-modal-main-button-added-options"
-                            part="extended-filters-selected-wrapper"
-                          >
-                            {addedOptions}
-                          </div>
-                        )}
-                        <ChevronIconSmall />
-                      </button>
-
-                      {isIntervalFilter(mainColumn) &&
-                      this.selectedMoreOptions.includes(mainFilter.column) ? (
-                        <vviinn-price-range
-                          histogram={(filterOptions as Histogram).filter(
-                            (item) => item.value.frequency > 0,
-                          )}
-                          priceChangeHandler={this.priceChangeHandler}
-                          selectedInterval={this.getSelectedPriceInterval()}
-                        />
-                      ) : (
-                        <ul
-                          class="filters-modal-sub-list"
-                          part="extended-filters-sub-list"
+                        <button
+                          onClick={() =>
+                            this.handleMoreOptionsMainClick(mainFilter.column)
+                          }
+                          class="filters-modal-main-button"
+                          part="extended-filters-main-button"
                         >
-                          {this.renderFilterOptions(mainFilter, filterOptions)}
-                        </ul>
-                      )}
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
+                          {mainFilter.label}
+                          {addedOptions.length > 0 && (
+                            <div
+                              class="filters-modal-main-button-added-options"
+                              part="extended-filters-selected-wrapper"
+                            >
+                              {addedOptions}
+                            </div>
+                          )}
+                          <ChevronIconSmall />
+                        </button>
+
+                        {isIntervalFilter(mainColumn) &&
+                        this.selectedMoreOptions.includes(mainFilter.column) ? (
+                          <vviinn-price-range
+                            histogram={(filterOptions as Histogram).filter(
+                              (item) => item.value.frequency > 0,
+                            )}
+                            priceChangeHandler={this.priceChangeHandler}
+                            selectedInterval={getSelectedPriceInterval(
+                              this.requestFilters,
+                            )}
+                          />
+                        ) : (
+                          <ul
+                            class="filters-modal-sub-list"
+                            part="extended-filters-sub-list"
+                          >
+                            {this.renderFilterOptions(
+                              mainFilter,
+                              filterOptions,
+                            )}
+                          </ul>
+                        )}
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
 
             {filters?.length > 0 && (
               <div
@@ -401,8 +418,7 @@ export class VviinnExtendedFilters {
             );
 
             return RenderFilterButton({
-              handleSubFilterSelection:
-                this.handleSubFilterSelection.bind(this),
+              handleSubFilterSelection: this.handleSubFilterSelection,
               selectedFilter: filter,
               value,
               label,
@@ -425,10 +441,10 @@ export class VviinnExtendedFilters {
     );
   }
 
-  private handleSubFilterSelection(
+  private handleSubFilterSelection = (
     filterValue: DynamicFilterValue,
     selectedFilter: ResponseDynamicFilterItem,
-  ) {
+  ) => {
     this.requestFilters = triggerFilter({
       filterValue,
       selectedFilter,
@@ -438,7 +454,7 @@ export class VviinnExtendedFilters {
       el: this.el,
       isTriggeredByVpsWidget: this.showInWidget,
     });
-  }
+  };
 
   private handleMoreOptionsMainClick(column: string) {
     const optionsVisible = this.selectedMoreOptions.includes(column);

@@ -2,6 +2,60 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.171.2](https://github.com/vviinn/widgets/compare/v2.171.1...v2.171.2) (2025-06-10)
+
+
+### Bug Fixes
+
+* Improve translations for the no-filters state ([9ecd4e7](https://github.com/vviinn/widgets/commit/9ecd4e7f986a62c4044674ed2ac47c250e2019f0))
+
+### [2.171.1](https://github.com/vviinn/widgets/compare/v2.171.0...v2.171.1) (2025-06-10)
+
+
+### Bug Fixes
+
+* Indicate and disable carousel buttons on the first and last elements ([0640ba8](https://github.com/vviinn/widgets/commit/0640ba8768005eb55ed6183f4e2600b7ffbad2d4))
+
+## [2.171.0](https://github.com/vviinn/widgets/compare/v2.170.2...v2.171.0) (2025-06-10)
+
+
+### Features
+
+* Refactor search store to show an empty results infobox in the results widget ([dc95ae4](https://github.com/vviinn/widgets/commit/dc95ae430001a663da8fee0c2710f94918c7c65c))
+
+### [2.170.2](https://github.com/vviinn/widgets/compare/v2.170.1...v2.170.2) (2025-06-05)
+
+
+### Bug Fixes
+
+* Show inactive bars of the price filter after receiving an updated histogram ([420cd03](https://github.com/vviinn/widgets/commit/420cd0341c894948785b025a60a9e0c5078dd473))
+
+### [2.170.1](https://github.com/vviinn/widgets/compare/v2.170.0...v2.170.1) (2025-06-05)
+
+
+### Bug Fixes
+
+* Hide the image selected filter when no results are shown ([e26c0a1](https://github.com/vviinn/widgets/commit/e26c0a1401f3817dff59957aa192acabca8e1478))
+
+## [2.170.0](https://github.com/vviinn/widgets/compare/v2.169.0...v2.170.0) (2025-06-03)
+
+
+### Features
+
+* Distinguish inactive price intervals ([60a795e](https://github.com/vviinn/widgets/commit/60a795ead443866228cba992190246970612cfa4))
+
+
+### Bug Fixes
+
+* Stability of showing the range in the price filter ([77d0674](https://github.com/vviinn/widgets/commit/77d06747c325e3813cbb0c23cce29ae200c03f90))
+
+## [2.169.0](https://github.com/vviinn/widgets/compare/v2.168.1...v2.169.0) (2025-06-02)
+
+
+### Features
+
+* Improve accessibility of Search Widget ([a5eb01d](https://github.com/vviinn/widgets/commit/a5eb01dd4759364072b011f4ffabd080453444b3))
+
 ### [2.168.1](https://github.com/vviinn/widgets/compare/v2.168.0...v2.168.1) (2025-05-28)
 
 

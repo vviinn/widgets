@@ -38,6 +38,7 @@ import {
   Locale,
   Recommendation,
 } from "../../components";
+import { ErrorType } from "../vviinn-error";
 import { campaignTypeNames } from "../../campaign/Campaign";
 import { TextSearchResponse } from "../../interfaces/search";
 import {
@@ -524,8 +525,8 @@ export class VviinnResults {
     this.state = state;
     this.storeName = storeName;
 
-    this.disposeStoreListener = onChange("loading", (loading) => {
-      if (loading) this.resetDiscoveryAppendIndexes();
+    this.disposeStoreListener = onChange("searchStatus", (searchStatus) => {
+      if (searchStatus === "loading") this.resetDiscoveryAppendIndexes();
     });
 
     if (this.el.id) this.widgetElementId = this.el.id;
@@ -720,6 +721,16 @@ export class VviinnResults {
     };
   };
 
+  private getCurrentErrorType(): ErrorType | null {
+    const resultsLength = this.getResults().length;
+
+    if (this.showAspectRatioError) return "wrong-aspect-ratio";
+    if (resultsLength === 0 && this.state.searchStatus === "success")
+      return "empty-results";
+
+    return null;
+  }
+
   private renderResults() {
     const widgetData = this.getBasicEventData();
 
@@ -849,13 +860,12 @@ export class VviinnResults {
         exportparts={`${productCardParts}, ${productCardsGridPart}`}
       >
         <div class="nothing-found">
-          {resultsLength === 0 && this.showInWidget && (
-            <vviinn-empty-results handler={() => this?.resetWidgetState()} />
-          )}
-
-          {this.showAspectRatioError && this.showInWidget && (
-            <vviinn-wrong-aspect-ratio
+          {this.getCurrentErrorType() && (
+            <vviinn-error
+              errorType={this.getCurrentErrorType()}
               handler={() => this?.resetWidgetState()}
+              hasBackground={this.showInWidget}
+              searchType={this.state.searchType}
             />
           )}
         </div>

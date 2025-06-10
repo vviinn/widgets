@@ -42,6 +42,7 @@ import { ImageType, shouldResize } from "./image-processing";
 import { OnChangeHandler } from "@stencil/store/dist/types";
 
 export type SearchStoreName = "widget" | "components";
+export type SearchStatus = "idle" | "loading" | "success" | "error";
 
 type AppStateGlobalDefaults = {
   excluded: RequestStaticFilters["excluded"] | null;
@@ -54,15 +55,15 @@ type AppStateDefaults = {
   visualSearchId: string | null;
   textSearchId: string | null;
   searchType: SearchType | null;
+  searchStatus: SearchStatus;
   resultLoaded: boolean;
   resultViewed: boolean;
   image: HTMLImageElement | null;
   imageBounds: Rectangle | null;
   searchArea: Rectangle | null;
   croppedImageUrl: string | null;
+  visualSearchStarted: boolean;
   requestFilters: RequestDynamicFilterItem[];
-  loading: boolean;
-  serverError: boolean;
 };
 
 type ReceivedDataDefaults = {
@@ -87,15 +88,15 @@ const appStateDefaults: AppStateDefaults = {
   visualSearchId: null,
   textSearchId: null,
   searchType: null,
+  searchStatus: "idle",
   resultLoaded: false,
   resultViewed: false,
   image: null,
   imageBounds: null,
   searchArea: null,
   croppedImageUrl: null,
+  visualSearchStarted: false,
   requestFilters: [],
-  serverError: false,
-  loading: false,
 };
 
 const receivedDataDefaults: ReceivedDataDefaults = {
@@ -175,7 +176,7 @@ const updateVisualSearchState =
     state.visualSearchId = response.requestId;
     state.results = response.data.products;
     state.dynamicFilters = response.interactions.dynamicFilters;
-    state.loading = false;
+    state.searchStatus = "success";
   };
 
 const updateImageState = (store: SearchStoreName) => (file: File) =>
@@ -205,8 +206,7 @@ const processVisualSearch = (
       return sessionResponse;
     }),
     TE.mapLeft((error) => {
-      state.serverError = true;
-      state.loading = false;
+      state.searchStatus = "error";
       return error;
     }),
   );
@@ -258,11 +258,11 @@ export const makeUploadFileRequest =
       image: null,
       detectedObjects: [],
       searchType: "image",
-      loading: true,
+      searchStatus: "loading",
+      visualSearchStarted: true,
     });
 
     const session = await pipe(uploadImageFile(store, "image")(file))();
-    state.loading = false;
 
     if (!state.visualSearchId?.length) return session;
 
@@ -291,7 +291,8 @@ export const makeVisualSearchRequest = async (
 ) => {
   const state = useStore(store);
   state.searchType = "image";
-  state.loading = true;
+  state.searchStatus = "loading";
+  state.visualSearchStarted = true;
 
   let searchRectangle: Rectangle | null = null;
   let fetchDetectedObjects = false;
@@ -343,7 +344,7 @@ export const makeTextSearchRequest = async (
 ) => {
   const state = useStore(store);
   state.searchType = "text";
-  state.loading = true;
+  state.searchStatus = "loading";
 
   const body: TextSearchRequest = {
     query,
@@ -367,12 +368,11 @@ export const makeTextSearchRequest = async (
       state.dynamicFilters =
         (sessionResponse?.interactions
           ?.dynamicFilters as ResponseFilterItem[]) ?? [];
-      state.loading = false;
+      state.searchStatus = "success";
       return sessionResponse;
     }),
     TE.mapLeft((error) => {
-      state.serverError = true;
-      state.loading = false;
+      state.searchStatus = "error";
       return error;
     }),
   )();
@@ -420,15 +420,10 @@ export const makeProductListingPageRequest = async (
       state.dynamicFilters =
         (sessionResponse?.interactions
           ?.dynamicFilters as ResponseFilterItem[]) ?? [];
-      state.loading = false;
+      state.searchStatus = "success";
     }),
   )();
 };
-
-onChangeWidgetState("serverError", () => {
-  const state = useStore("widget");
-  state.loading = false;
-});
 
 export const useSearchStore = (
   showInWidget: boolean,

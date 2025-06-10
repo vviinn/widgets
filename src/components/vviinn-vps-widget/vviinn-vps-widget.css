@@ -78,13 +78,14 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   border: none;
   cursor: pointer;
   align-items: center;
-  border-radius: 8px;
+  border-radius: var(--border-radius-100);
+  font-weight: var(--font-weight-500);
   font-size: 16px;
   height: 48px;
   justify-items: center;
   font-family: var(--font-family, var(--font-family-base));
   transition: background 0.1s ease-in-out;
-  color: #525252;
+  color: var(--color-text-primary);
   background-color: #f4f4f4;
 }
 
@@ -184,7 +185,7 @@ search-filters span {
 
 search-filters::part(filter) {
   background: #f4f4f4;
-  border-radius: 8px;
+  border-radius: var(--border-radius-100);
   box-sizing: border-box;
   color: #161616;
   font-size: 14px;
@@ -200,7 +201,7 @@ search-filters::part(show-more-filters) {
   border: 1px solid #f4f4f4;
   min-width: 40px;
   height: 40px;
-  border-radius: 100px;
+  border-radius: var(--border-radius-full);
   box-sizing: border-box;
   color: #161616;
 }

@@ -29,7 +29,6 @@ import {
 } from "./constants";
 import {
   makeVisualSearchRequest,
-  componentsState,
   SearchStore,
   SearchStoreName,
   useSearchStore,
@@ -110,7 +109,7 @@ export class VviinnCropper {
   disconnectedCallback() {
     this.eventAbortController?.abort();
     this.cropper?.destroy?.();
-    componentsState.image = null;
+    this.state.image = null;
   }
 
   private initPreloadedImage = () => {
@@ -130,15 +129,17 @@ export class VviinnCropper {
       imageSrc: localStorageImageSrc,
       detectedObjects: localStorageDetectedObjects,
     } = getLocalStorageItems();
+
     if (!localStorageImageSrc) return;
 
     const image = document.createElement("img");
     image.src = localStorageImageSrc;
     this.state.image = image;
 
-    if (this.state.detectedObjects?.length === 0)
+    if (this.state.detectedObjects?.length === 0) {
       this.state.detectedObjects = localStorageDetectedObjects;
-    this.saveImageMode === "once" && cleanLocalStorage();
+    }
+    if (this.saveImageMode === "once") cleanLocalStorage();
   };
 
   private resetStateHandler = ({
@@ -287,8 +288,9 @@ export class VviinnCropper {
   };
 
   private showPreloader = () =>
-    this.state.loading &&
+    this.state.searchStatus === "loading" &&
     this.state.searchType === "image" &&
+    !!this.state.image &&
     !this.showAspectRatioError;
 
   render() {

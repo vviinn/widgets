@@ -1,50 +1,70 @@
 @import "../../variables.css";
 
 :host {
-  width: 100%;
-  background: #f4f4f4;
-  border-radius: 8px;
-  display: grid;
-  grid-gap: 20px;
-  padding: 24px;
-  box-sizing: border-box;
-  max-width: 440px;
-  text-align: center;
-  justify-items: center;
-  align-self: center;
-  justify-self: center;
+  display: block;
   font-family: var(--font-family, var(--font-family-base));
 }
 
+:host(.add-background) {
+  background: var(--surface-bg-color-01);
+}
+
+:host(.add-top-margin) {
+  margin-top: var(--spacing-400);
+}
+.error-content {
+  display: grid;
+  grid-gap: var(--spacing-150);
+  text-align: center;
+  justify-items: center;
+  width: 356px;
+  padding: var(--spacing-200);
+  max-width: calc(100vw - 2 * var(--spacing-300));
+  border-radius: var(--border-radius-200);
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+.error-content.add-background {
+  background: var(--surface-bg-color-01);
+}
+
+svg,
 ::slotted(svg) {
   display: grid;
   align-self: center;
 }
 
+h4,
 ::slotted(h4) {
   margin: unset;
-  font-weight: 600;
-  font-size: 18px;
-  line-height: 24px;
+  font-weight: var(--font-weight-600);
+  font-size: var(--font-size-headline);
+  line-height: var(--line-height-headline);
 }
 
+span,
 ::slotted(span) {
   font-size: 14px;
   line-height: 20px;
 }
 
+button,
 ::slotted(button) {
   appearance: none;
   border: none;
   cursor: pointer;
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-500);
   background: var(--color-primary, var(--button-bg-color-primary));
-  border-radius: var(--border-radius-50);
-  padding: var(--spacing-125);
+  border-radius: var(--border-radius-100);
+  padding: var(--spacing-100);
   font-size: var(--font-size-body);
   color: var(--color-text-inverse);
   font-family: var(--font-family, var(--font-family-base));
 }
 
+button:hover,
 ::slotted(button:hover) {
   background: var(--button-bg-color-primary-hover);
 }
