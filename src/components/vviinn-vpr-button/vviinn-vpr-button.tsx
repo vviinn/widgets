@@ -114,6 +114,9 @@ export class VviinnVprButton {
   @Prop() color: string = "";
   /** Width of each recommended product image in Continuity mode */
   @Prop() imageWidth: number = PRODUCT_CARD_IMAGE_WIDTH;
+  /** Resolution width of an image in the product card */
+  @Prop() imageResolutionWidth: number =
+    DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH;
   /** The ratio of each recommended product image */
   @Prop() imageRatio: number = 1;
   /** Items amount in set mode grid */
@@ -169,6 +172,9 @@ export class VviinnVprButton {
   /** @internal */
   @Prop() showInWidget: boolean = false;
 
+  /** @internal */
+  @Prop() uiSessionId?: string;
+
   /** Event emitted on widget load */
   @Event() vviinnWidgetLoad: EventEmitter<BasicEventData>;
 
@@ -198,9 +204,6 @@ export class VviinnVprButton {
 
   /** Add to Basket button clicked */
   @Event() vviinnAddToBasket: EventEmitter<BasicEventData>;
-
-  @Prop() imageResolutionWidth: number =
-    DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH;
 
   @State() targetAppendSidebarTo: HTMLElement;
 
@@ -316,6 +319,7 @@ export class VviinnVprButton {
     sidebar.isAppended =
       !!this.targetAppendSidebarTo || !!this.appendSidebarToElement;
     sidebar.showInWidget = this.showInWidget;
+    sidebar.uiSessionId = this.uiSessionId;
 
     if (this.targetAppendSidebarTo) {
       sidebar.mode = "grid";

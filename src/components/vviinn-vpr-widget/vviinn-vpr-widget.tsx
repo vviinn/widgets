@@ -158,6 +158,9 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() color: string = "";
   /** Width of each recommended product image in Continuity mode */
   @Prop() imageWidth: number = PRODUCT_CARD_IMAGE_WIDTH;
+  /** Resolution width of an image in the product card */
+  @Prop() imageResolutionWidth: number =
+    DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH;
   /** The ratio of each recommended product image */
   @Prop() imageRatio: number = 1;
   /** Items amount in set mode grid */
@@ -218,6 +221,8 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop({ mutable: true }) recommendationsLoading?: boolean = false;
   /** @internal */
   @Prop() setRecommendationsLoading?: (loading: boolean) => void;
+  /** @internal */
+  @Prop({ mutable: true }) uiSessionId?: string;
 
   @State() recommendations: Recommendation[] = [];
   @State() dynamicFilters: ResponseDynamicFilterItem[] = [];
@@ -279,7 +284,6 @@ export class VviinnVprWidget implements ComponentInterface {
   private isSetMode: boolean;
   private isGridMode: boolean;
   private requestDynamicFilters: RequestDynamicFilterItem[] = [];
-  uiSessionId: string;
   private setLoading = (loading: boolean) => {
     this.recommendationsLoading = loading;
     this.setRecommendationsLoading?.(loading);
@@ -382,7 +386,9 @@ export class VviinnVprWidget implements ComponentInterface {
   connectedCallback() {
     updateGlobalState(this);
     this.id = this.buttonElementId ?? this.el.id;
-    this.uiSessionId = uuidv4();
+    if (!this.uiSessionId) {
+      this.uiSessionId = uuidv4();
+    }
     this.getRecommendations();
     this.vviinnWidgetLoad.emit(this.getBasicEventData());
     this.trackWidgetEvent("load");
@@ -409,8 +415,10 @@ export class VviinnVprWidget implements ComponentInterface {
   @Listen("vviinnProductLoad")
   trackProductLoad({ detail }: ProductCardEvent) {
     this.productImageLoadedSubject.next(detail.productId);
-    const productLoadEvent = this.getProductTrackEvent(detail, "load");
-    trackEvent(productLoadEvent);
+    if (!this.isAppended) {
+      const productLoadEvent = this.getProductTrackEvent(detail, "load");
+      trackEvent(productLoadEvent);
+    }
   }
 
   @Listen("vviinnProductView")
@@ -421,10 +429,12 @@ export class VviinnVprWidget implements ComponentInterface {
       this.trackResultEvent("view");
     }
 
-    const productViewEvent = this.getProductTrackEvent(detail, "view");
-    if (!productViewEvent) return;
+    if (!this.isAppended) {
+      const productViewEvent = this.getProductTrackEvent(detail, "view");
+      if (!productViewEvent) return;
 
-    trackEvent(productViewEvent);
+      trackEvent(productViewEvent);
+    }
   }
 
   @Listen("vviinnProductClick")
@@ -434,11 +444,15 @@ export class VviinnVprWidget implements ComponentInterface {
     const product = this.findProductById(productId);
     if (!product || !product.deeplink) return;
 
-    const productClickEvent = this.getProductTrackEvent(detail, "click");
+    if (!this.isAppended) {
+      const productClickEvent = this.getProductTrackEvent(detail, "click");
 
-    await trackEvent(productClickEvent).finally(() => {
+      await trackEvent(productClickEvent).finally(() => {
+        this.handleOpenLink(product.deeplink, clickEvent);
+      });
+    } else {
       this.handleOpenLink(product.deeplink, clickEvent);
-    });
+    }
   }
 
   @Listen("vviinnAuxClick")
@@ -448,31 +462,37 @@ export class VviinnVprWidget implements ComponentInterface {
 
     if (!product || !product.deeplink) return;
 
-    const productClickEvent = this.getProductTrackEvent(detail, "click");
+    if (!this.isAppended) {
+      const productClickEvent = this.getProductTrackEvent(detail, "click");
 
-    await trackEvent(productClickEvent);
+      await trackEvent(productClickEvent);
+    }
   }
 
   @Listen("vviinnAddToBasket")
   async trackAddToBasket({ detail }: ProductCardEvent) {
-    const eventBody = this.productCardEventDataToEventBody(detail);
+    if (!this.isAppended) {
+      const eventBody = this.productCardEventDataToEventBody(detail);
 
-    const addToBasketEvent: WidgetEvent = createAddToBasketEvent(
-      detail.campaignTypeId === "VCS" ? "VPC" : detail.campaignTypeId,
-    )(eventBody);
+      const addToBasketEvent: WidgetEvent = createAddToBasketEvent(
+        detail.campaignTypeId === "VCS" ? "VPC" : detail.campaignTypeId,
+      )(eventBody);
 
-    trackEvent(addToBasketEvent);
+      trackEvent(addToBasketEvent);
+    }
   }
 
   @Listen("vviinnAddToFavorite")
   async trackAddToWishlist({ detail }: ProductCardEvent) {
-    const eventBody = this.productCardEventDataToEventBody(detail);
+    if (!this.isAppended) {
+      const eventBody = this.productCardEventDataToEventBody(detail);
 
-    const addToWishlistEvent: WidgetEvent = createAddToWishlistEvent(
-      this.campaignType === "VCS" ? "VPC" : "VPR",
-    )(eventBody);
+      const addToWishlistEvent: WidgetEvent = createAddToWishlistEvent(
+        this.campaignType === "VCS" ? "VPC" : "VPR",
+      )(eventBody);
 
-    trackEvent(addToWishlistEvent);
+      trackEvent(addToWishlistEvent);
+    }
   }
 
   @Listen("vviinnUpdatingAllCardsFinished")
@@ -720,9 +740,6 @@ export class VviinnVprWidget implements ComponentInterface {
       ></vviinn-carousel>
     );
   }
-
-  @Prop() imageResolutionWidth: number =
-    DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH;
 
   render() {
     if (this.recommendations.length === 0 && this.noResultShow === false)

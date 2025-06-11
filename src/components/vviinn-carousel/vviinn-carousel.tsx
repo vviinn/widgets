@@ -182,7 +182,9 @@ export class VviinnCarousel {
         newRecommendation,
         recommendationIndex + step,
       );
-      this.vviinnProductLoad.emit(productData);
+      if (this.isSetMode) {
+        this.vviinnProductLoad.emit(productData);
+      }
 
       this.crossSellingRecommendations = [...newCrossSellingRecommendations];
 
@@ -197,7 +199,9 @@ export class VviinnCarousel {
         if (recommendationIndex + step * 2 <= this.recommendations.length - 1) {
           button?.classList.remove("hidden");
         }
-        this.vviinnProductView.emit(productData);
+        if (this.isSetMode) {
+          this.vviinnProductView.emit(productData);
+        }
         clearTimeout(animationTimer);
       }, animationInterval);
     }
