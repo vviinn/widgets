@@ -17,6 +17,7 @@ import i18next from "i18next";
 import { version } from "../../../package.json";
 import {
   resetStore,
+  setTextSearchQuery,
   SearchStore,
   SearchStoreName,
   useSearchStore,
@@ -207,7 +208,6 @@ export class VviinnVpsWidget {
   @State() uploadSource: UploadSource;
   @State() stream: MediaStream | null = null;
   @State() products: Recommendation[] = [];
-  @State() textSearchQuery: string = "";
   @State() modalBody?: HTMLElement;
 
   @State() isCameraInitializing: boolean = false;
@@ -439,7 +439,7 @@ export class VviinnVpsWidget {
 
   @Listen("widgetTextSearchFinished")
   textSearchFinishedHandler({ detail }: TextSearchEvent) {
-    this.textSearchQuery = detail.query;
+    setTextSearchQuery(this.storeName, detail.query);
     this.slidePosition = 1;
   }
 
@@ -660,7 +660,7 @@ export class VviinnVpsWidget {
   }
 
   private resetInnerState = () => {
-    this.textSearchQuery = "";
+    setTextSearchQuery(this.storeName, null);
     this.wrongImageFormat = false;
     this.resetScroll("results-block");
     this.stopStreamTracks();
@@ -784,7 +784,6 @@ export class VviinnVpsWidget {
                           locale={globalState.locale}
                           showInWidget={true}
                           showOnFirstScreen={true}
-                          searchQuery={this.textSearchQuery}
                           uiSessionId={this.uiSessionId}
                           basicEventData={this.getBasicEventData(true)}
                           save-image-mode="never"
@@ -814,7 +813,6 @@ export class VviinnVpsWidget {
                     <vviinn-text-search
                       token={this.token}
                       showInWidget={true}
-                      searchQuery={this.textSearchQuery}
                       apiPath={this.apiPath}
                       locale={this.locale}
                       uiSessionId={this.uiSessionId}
@@ -886,7 +884,6 @@ export class VviinnVpsWidget {
                     this,
                   )}
                   replaceSlotsContentInButton={this.replaceSlotsContentInButton}
-                  textSearchQuery={this.textSearchQuery}
                   addPriceContainer={this.addPriceContainer}
                   oneClickDiscoveryMode={
                     this.oneClickDiscoveryMode ??

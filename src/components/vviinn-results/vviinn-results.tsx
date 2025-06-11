@@ -26,6 +26,7 @@ import {
   makeProductListingPageRequest,
   makeVisualSearchRequest,
   makeTextSearchRequest,
+  setTextSearchQuery,
   SearchStore,
   SearchStoreName,
   resetStore,
@@ -239,7 +240,6 @@ export class VviinnResults {
   /** @internal */
   @Prop() scrollableModalBody?: HTMLElement;
 
-  @State() innerTextSearchQuery: string;
   @State() slotsReplaced: boolean;
   @State() oneClickDiscoveryAppendIndex: number;
   @State() oneClickDiscoverySelectedIndex: number;
@@ -387,7 +387,9 @@ export class VviinnResults {
     this.showInWidget !== isTriggeredByVpsWidget;
 
   private async getTextSearchResults(requestId?: string) {
-    if (!this.innerTextSearchQuery) return;
+    if (!this.state.textSearchQuery) return;
+
+    const queryToUse = this.state.textSearchQuery;
 
     if (!requestId?.length) {
       resetStore(this.storeName, "appStateOnly");
@@ -404,7 +406,7 @@ export class VviinnResults {
     return pipe(
       await makeTextSearchRequest(
         this.storeName,
-        this.innerTextSearchQuery,
+        queryToUse,
         requestId,
         this.resultsCount,
       ),
@@ -436,7 +438,9 @@ export class VviinnResults {
     const { isTriggeredByVpsWidget } = detail;
     if (this.skipStateChanges(isTriggeredByVpsWidget)) return;
 
-    this.innerTextSearchQuery = detail.query;
+    if (!detail.query) return;
+
+    setTextSearchQuery(this.storeName, detail.query);
 
     const { campaignTypeId, ...rest } = this.getBasicEventData("TPS");
     const textSearchStartedEvent: WidgetEvent = createWidgetEvent("TPS")({
@@ -556,7 +560,9 @@ export class VviinnResults {
 
     this.getResultsByCategory();
 
-    this.innerTextSearchQuery = this.textSearchQuery;
+    if (this.textSearchQuery && !this.state.textSearchQuery) {
+      setTextSearchQuery(this.storeName, this.textSearchQuery);
+    }
     !this.showInWidget && this.getTextSearchResults();
   }
 
@@ -570,7 +576,7 @@ export class VviinnResults {
   @Watch("textSearchQuery")
   watchTextSearchQuery(newQuery: string) {
     if (this.showInWidget) return;
-    this.innerTextSearchQuery = newQuery;
+    setTextSearchQuery(this.storeName, newQuery);
     this.getTextSearchResults();
   }
 
