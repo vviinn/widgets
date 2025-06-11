@@ -415,10 +415,10 @@ export class VviinnVprWidget implements ComponentInterface {
   @Listen("vviinnProductLoad")
   trackProductLoad({ detail }: ProductCardEvent) {
     this.productImageLoadedSubject.next(detail.productId);
-    if (!this.isAppended) {
-      const productLoadEvent = this.getProductTrackEvent(detail, "load");
-      trackEvent(productLoadEvent);
-    }
+    if (this.isAppended) return;
+
+    const productLoadEvent = this.getProductTrackEvent(detail, "load");
+    productLoadEvent && trackEvent(productLoadEvent);
   }
 
   @Listen("vviinnProductView")
@@ -428,13 +428,10 @@ export class VviinnVprWidget implements ComponentInterface {
       this.vviinnResultView.emit(this.getBasicEventData());
       this.trackResultEvent("view");
     }
+    if (this.isAppended) return;
 
-    if (!this.isAppended) {
-      const productViewEvent = this.getProductTrackEvent(detail, "view");
-      if (!productViewEvent) return;
-
-      trackEvent(productViewEvent);
-    }
+    const productViewEvent = this.getProductTrackEvent(detail, "view");
+    productViewEvent && trackEvent(productViewEvent);
   }
 
   @Listen("vviinnProductClick")
@@ -459,40 +456,32 @@ export class VviinnVprWidget implements ComponentInterface {
   async trackAuxClick({ detail }: ProductCardEvent) {
     const { productId } = detail;
     const product = this.findProductById(productId);
+    if (!product || !product.deeplink || this.isAppended) return;
 
-    if (!product || !product.deeplink) return;
-
-    if (!this.isAppended) {
-      const productClickEvent = this.getProductTrackEvent(detail, "click");
-
-      await trackEvent(productClickEvent);
-    }
+    const productClickEvent = this.getProductTrackEvent(detail, "click");
+    productClickEvent && (await trackEvent(productClickEvent));
   }
 
   @Listen("vviinnAddToBasket")
   async trackAddToBasket({ detail }: ProductCardEvent) {
-    if (!this.isAppended) {
-      const eventBody = this.productCardEventDataToEventBody(detail);
+    if (this.isAppended) return;
 
-      const addToBasketEvent: WidgetEvent = createAddToBasketEvent(
-        detail.campaignTypeId === "VCS" ? "VPC" : detail.campaignTypeId,
-      )(eventBody);
-
-      trackEvent(addToBasketEvent);
-    }
+    const eventBody = this.productCardEventDataToEventBody(detail);
+    const addToBasketEvent: WidgetEvent = createAddToBasketEvent(
+      detail.campaignTypeId === "VCS" ? "VPC" : detail.campaignTypeId,
+    )(eventBody);
+    trackEvent(addToBasketEvent);
   }
 
   @Listen("vviinnAddToFavorite")
   async trackAddToWishlist({ detail }: ProductCardEvent) {
-    if (!this.isAppended) {
-      const eventBody = this.productCardEventDataToEventBody(detail);
+    if (this.isAppended) return;
 
-      const addToWishlistEvent: WidgetEvent = createAddToWishlistEvent(
-        this.campaignType === "VCS" ? "VPC" : "VPR",
-      )(eventBody);
-
-      trackEvent(addToWishlistEvent);
-    }
+    const eventBody = this.productCardEventDataToEventBody(detail);
+    const addToWishlistEvent: WidgetEvent = createAddToWishlistEvent(
+      this.campaignType === "VCS" ? "VPC" : "VPR",
+    )(eventBody);
+    trackEvent(addToWishlistEvent);
   }
 
   @Listen("vviinnUpdatingAllCardsFinished")
