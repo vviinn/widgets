@@ -243,7 +243,6 @@ export class VviinnResults {
   @State() slotsReplaced: boolean;
   @State() oneClickDiscoveryAppendIndex: number;
   @State() oneClickDiscoverySelectedIndex: number;
-  @State() isTextSearch: boolean = !!this.textSearchQuery?.length;
   @State() innerResults: Recommendation[] = [];
 
   private passedSlotNames?: string[] = [];
@@ -255,13 +254,6 @@ export class VviinnResults {
     this.calculateColumns();
     this.calculateCardHeight();
   });
-  private setTextSearch = (
-    isTriggeredByText: boolean,
-    isTriggeredByVpsWidget = false,
-  ) => {
-    if (this.showInWidget === !!isTriggeredByVpsWidget)
-      this.isTextSearch = isTriggeredByText;
-  };
 
   private initResultEvents = () => {
     this.state.resultLoaded = false;
@@ -347,6 +339,22 @@ export class VviinnResults {
 
   private eventAbortController?: AbortController;
 
+  private getCampaignType = () =>
+    this.state.searchType === "text" ? "TPS" : "VPS";
+
+  private isTextSearch = () => this.state.searchType === "text";
+
+  private createTrackingEventBody(detail: ProductCardEventData) {
+    const { productRank, productId, campaignTypeId, clickEvent, ...rest } =
+      detail;
+    return {
+      session_id: this.uiSessionId,
+      rank: productRank,
+      product: productId,
+      ...rest,
+    };
+  }
+
   async componentWillLoad() {
     slotChangeListener(this, this.el);
     this.slots = findSlotElements(this.el);
@@ -380,7 +388,6 @@ export class VviinnResults {
 
   private async getTextSearchResults(requestId?: string) {
     if (!this.innerTextSearchQuery) return;
-    this.setTextSearch(true);
 
     if (!requestId?.length) {
       resetStore(this.storeName, "appStateOnly");
@@ -430,14 +437,14 @@ export class VviinnResults {
     if (this.skipStateChanges(isTriggeredByVpsWidget)) return;
 
     this.innerTextSearchQuery = detail.query;
-    this.setTextSearch(true, isTriggeredByVpsWidget);
 
-    const { campaignTypeId, ...rest } = this.getBasicEventData();
+    const { campaignTypeId, ...rest } = this.getBasicEventData("TPS");
     const textSearchStartedEvent: WidgetEvent = createWidgetEvent("TPS")({
       action: "search",
       session_id: this.uiSessionId,
       ...rest,
     });
+
     trackEvent(textSearchStartedEvent);
 
     this.getTextSearchResults();
@@ -453,7 +460,7 @@ export class VviinnResults {
     }
     this.state.requestFilters = filters;
 
-    if (this.isTextSearch) {
+    if (this.isTextSearch()) {
       this.getTextSearchResults(this.state.textSearchId);
     } else {
       makeVisualSearchRequest(this.storeName, this.state.visualSearchId);
@@ -464,16 +471,13 @@ export class VviinnResults {
     detail,
   }: CustomEvent<DynamicFilterInternalData>) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
-    const { action, kind, customTrigger, isTriggeredByVpsWidget } = detail;
+    const { action, kind, customTrigger } = detail;
     const { campaignTypeId, ...rest } = this.getBasicEventData(customTrigger);
 
     if (action === "select" || action === "deselect" || action === "reset")
       this.initResultEvents();
 
-    if (customTrigger === "TPS") {
-      this.setTextSearch(true, isTriggeredByVpsWidget);
-      return;
-    }
+    if (customTrigger === "TPS") return;
 
     const eventBody = {
       session_id: this.uiSessionId,
@@ -483,9 +487,9 @@ export class VviinnResults {
       ...rest,
     };
 
-    const filterEvent: FilterEvent = createFilterEvent(
-      this.isTextSearch ? "TPS" : "VPS",
-    )(eventBody);
+    const filterEvent: FilterEvent = createFilterEvent(this.getCampaignType())(
+      eventBody,
+    );
 
     trackEvent(filterEvent);
   };
@@ -498,15 +502,12 @@ export class VviinnResults {
     this.vviinnSelectedFiltersReset.emit({
       isTriggeredByVpsWidget: this.showInWidget,
     });
-    this.setTextSearch(false, detail.isTriggeredByVpsWidget);
     resetStore(this.storeName, "appStateOnly");
     this.updateCampaignIds();
   };
 
   private imageCropHandler = ({ detail }: TriggerSourceEvent) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
-    if (this.isTextSearch)
-      this.setTextSearch(false, detail.isTriggeredByVpsWidget);
 
     this.vviinnSelectedFiltersReset.emit({
       isTriggeredByVpsWidget: this.showInWidget,
@@ -625,9 +626,9 @@ export class VviinnResults {
   trackAddToBasket({ detail }: ProductCardEvent) {
     delete detail.discount;
 
-    const eventBody = this.productCardEventDataToEventBody(detail);
+    const eventBody = this.createTrackingEventBody(detail);
     const addToBasketEvent: AddToBasketEvent = createAddToBasketEvent(
-      this.isTextSearch ? "TPS" : "VPS",
+      this.getCampaignType(),
     )(eventBody);
 
     trackEvent(addToBasketEvent);
@@ -635,9 +636,9 @@ export class VviinnResults {
 
   @Listen("vviinnAddToFavorite")
   trackAddToFavorite({ detail }: ProductCardEvent) {
-    const eventBody = this.productCardEventDataToEventBody(detail);
+    const eventBody = this.createTrackingEventBody(detail);
     const addToWishlistEvent: ProductEvent = createAddToWishlistEvent(
-      this.isTextSearch ? "TPS" : "VPS",
+      this.getCampaignType(),
     )(eventBody);
 
     trackEvent(addToWishlistEvent);
@@ -679,27 +680,13 @@ export class VviinnResults {
     }
   }
 
-  private productCardEventDataToEventBody = (
-    eventData: ProductCardEventData,
-  ) => {
-    const { productRank, productId, campaignTypeId, clickEvent, ...rest } =
-      eventData;
-
-    return {
-      session_id: this.uiSessionId,
-      rank: productRank,
-      product: productId,
-      ...rest,
-    };
-  };
-
   private getProductTrackEvent(
     detail: ProductCardEventData,
     eventType: ProductEventType,
   ): ProductEvent | null {
     if (!globalState.trackingEnabled) return null;
 
-    const eventBody = this.productCardEventDataToEventBody(detail);
+    const eventBody = this.createTrackingEventBody(detail);
 
     const productEvent: ProductEvent = createProductEventByType(
       eventType,
@@ -710,7 +697,7 @@ export class VviinnResults {
   }
 
   private getBasicEventData = (customTrigger?: Widget): BasicEventData => {
-    const textSearchCriteria = this.isTextSearch || customTrigger === "TPS";
+    const textSearchCriteria = this.isTextSearch() || customTrigger === "TPS";
     const activeCampaign = textSearchCriteria ? "TPS" : "VPS";
     return {
       campaignTypeId: activeCampaign,
