@@ -54,6 +54,7 @@ type AppStateGlobalDefaults = {
 type AppStateDefaults = {
   visualSearchId: string | null;
   textSearchId: string | null;
+  textSearchQuery: string | null;
   searchType: SearchType | null;
   searchStatus: SearchStatus;
   resultLoaded: boolean;
@@ -87,6 +88,7 @@ const appStateGlobalDefaults: AppStateGlobalDefaults = {
 const appStateDefaults: AppStateDefaults = {
   visualSearchId: null,
   textSearchId: null,
+  textSearchQuery: null,
   searchType: null,
   searchStatus: "idle",
   resultLoaded: false,
@@ -257,6 +259,7 @@ export const makeUploadFileRequest =
     Object.assign(state, {
       image: null,
       detectedObjects: [],
+      textSearchQuery: null,
       searchType: "image",
       searchStatus: "loading",
       visualSearchStarted: true,
@@ -290,6 +293,7 @@ export const makeVisualSearchRequest = async (
   searchId?: string | null,
 ) => {
   const state = useStore(store);
+  state.textSearchQuery = null;
   state.searchType = "image";
   state.searchStatus = "loading";
   state.visualSearchStarted = true;
@@ -336,6 +340,14 @@ export const makeVisualSearchRequest = async (
   return processVisualSearch(store, body)();
 };
 
+export const setTextSearchQuery = (
+  store: SearchStoreName,
+  query: string | null | undefined,
+) => {
+  const state = useStore(store);
+  state.textSearchQuery = query || null;
+};
+
 export const makeTextSearchRequest = async (
   store: SearchStoreName,
   query: string,
@@ -343,6 +355,7 @@ export const makeTextSearchRequest = async (
   resultsCount?: number,
 ) => {
   const state = useStore(store);
+  state.textSearchQuery = query;
   state.searchType = "text";
   state.searchStatus = "loading";
 
@@ -386,6 +399,8 @@ export const makeProductListingPageRequest = async (
   skipStateUpdate?: boolean,
 ) => {
   const state = useStore("components");
+  state.searchStatus = "loading";
+
   const requestValue =
     column === "product_type" || column === "google_product_category"
       ? pipe(
@@ -421,6 +436,11 @@ export const makeProductListingPageRequest = async (
         (sessionResponse?.interactions
           ?.dynamicFilters as ResponseFilterItem[]) ?? [];
       state.searchStatus = "success";
+      return sessionResponse;
+    }),
+    TE.mapLeft((error) => {
+      state.searchStatus = "error";
+      return error;
     }),
   )();
 };
