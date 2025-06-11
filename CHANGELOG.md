@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.172.0](https://github.com/vviinn/widgets/compare/v2.171.2...v2.172.0) (2025-06-11)
+
+
+### Features
+
+* Text search state refactoring ([f20b3d4](https://github.com/vviinn/widgets/commit/f20b3d4b1e4ab44a3d775cea06173dced9a41ab4))
+
 ### [2.171.2](https://github.com/vviinn/widgets/compare/v2.171.1...v2.171.2) (2025-06-10)
 
 
