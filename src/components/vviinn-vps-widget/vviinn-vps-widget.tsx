@@ -16,6 +16,8 @@ import i18next from "i18next";
 
 import { version } from "../../../package.json";
 import {
+  resetStore,
+  setTextSearchQuery,
   SearchStore,
   SearchStoreName,
   useSearchStore,
@@ -206,7 +208,6 @@ export class VviinnVpsWidget {
   @State() uploadSource: UploadSource;
   @State() stream: MediaStream | null = null;
   @State() products: Recommendation[] = [];
-  @State() textSearchQuery: string = "";
   @State() modalBody?: HTMLElement;
 
   @State() isCameraInitializing: boolean = false;
@@ -253,11 +254,12 @@ export class VviinnVpsWidget {
   private isDesktop: boolean = false;
   private videoTrack: MediaStreamTrack | null = null;
   private widgetElementId: string;
-  private isTextSearch: boolean = false;
   private slots: HTMLSlotElement[] = [];
   private state?: SearchStore;
   private storeName?: SearchStoreName;
   private eventAbortController?: AbortController;
+
+  private isTextSearch = () => this.state.searchType === "text";
 
   private initResultEvents() {
     this.state.resultLoaded = false;
@@ -397,7 +399,7 @@ export class VviinnVpsWidget {
   }
 
   getBasicEventData = (isTextSearch?: boolean): BasicEventData => {
-    const activeCampaign = this.isTextSearch || isTextSearch ? "TPS" : "VPS";
+    const activeCampaign = this.isTextSearch() || isTextSearch ? "TPS" : "VPS";
     return {
       campaignTypeId: activeCampaign,
       campaignTypeName: campaignTypeNames[activeCampaign],
@@ -437,8 +439,7 @@ export class VviinnVpsWidget {
 
   @Listen("widgetTextSearchFinished")
   textSearchFinishedHandler({ detail }: TextSearchEvent) {
-    this.isTextSearch = true;
-    this.textSearchQuery = detail.query;
+    setTextSearchQuery(this.storeName, detail.query);
     this.slidePosition = 1;
   }
 
@@ -659,7 +660,7 @@ export class VviinnVpsWidget {
   }
 
   private resetInnerState = () => {
-    this.textSearchQuery = "";
+    setTextSearchQuery(this.storeName, null);
     this.wrongImageFormat = false;
     this.resetScroll("results-block");
     this.stopStreamTracks();
@@ -669,23 +670,15 @@ export class VviinnVpsWidget {
     this.isCameraButtonClicked = false;
     this.isCameraInitializing = false;
     this.setShowAspectRatioError(false);
-    this.isTextSearch = false;
     this.slidePosition = 0;
     this.resetScroll("start-page_block");
   };
 
   private resetState = () => {
     this.resetInnerState();
-    this.state.searchStatus = "idle";
-
-    if (!this.showInWidget) return;
-
-    this.state.image = null;
-    this.state.results = [];
-    this.state.dynamicFilters = [];
-    this.state.requestFilters = [];
-    this.state.detectedObjects = [];
-    this.state.searchType = undefined;
+    if (this.showInWidget) {
+      resetStore(this.storeName, "appStateAndReceivedData");
+    }
   };
 
   private haveErrors(): boolean {
@@ -791,7 +784,6 @@ export class VviinnVpsWidget {
                           locale={globalState.locale}
                           showInWidget={true}
                           showOnFirstScreen={true}
-                          searchQuery={this.textSearchQuery}
                           uiSessionId={this.uiSessionId}
                           basicEventData={this.getBasicEventData(true)}
                           save-image-mode="never"
@@ -817,11 +809,10 @@ export class VviinnVpsWidget {
             >
               {this.isResultSlide() && (
                 <div class="source-wrapper">
-                  {this.state.searchType === "text" ? (
+                  {this.isTextSearch() ? (
                     <vviinn-text-search
                       token={this.token}
                       showInWidget={true}
-                      searchQuery={this.textSearchQuery}
                       apiPath={this.apiPath}
                       locale={this.locale}
                       uiSessionId={this.uiSessionId}
@@ -893,7 +884,6 @@ export class VviinnVpsWidget {
                     this,
                   )}
                   replaceSlotsContentInButton={this.replaceSlotsContentInButton}
-                  textSearchQuery={this.textSearchQuery}
                   addPriceContainer={this.addPriceContainer}
                   oneClickDiscoveryMode={
                     this.oneClickDiscoveryMode ??
