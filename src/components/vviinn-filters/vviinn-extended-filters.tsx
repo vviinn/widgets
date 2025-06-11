@@ -257,7 +257,7 @@ export class VviinnExtendedFilters {
             </div>
           )}
           <div class="filters-modal-main" part="extended-filters-main">
-            {filters.length === 0 ? (
+            {filters.length === 0 && this.state.searchStatus !== "loading" ? (
               <div
                 class="filters-modal-no-filters-message"
                 part="extended-filters-no-filters"
