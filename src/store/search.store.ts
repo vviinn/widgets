@@ -386,6 +386,8 @@ export const makeProductListingPageRequest = async (
   skipStateUpdate?: boolean,
 ) => {
   const state = useStore("components");
+  state.searchStatus = "loading";
+
   const requestValue =
     column === "product_type" || column === "google_product_category"
       ? pipe(
@@ -421,6 +423,11 @@ export const makeProductListingPageRequest = async (
         (sessionResponse?.interactions
           ?.dynamicFilters as ResponseFilterItem[]) ?? [];
       state.searchStatus = "success";
+      return sessionResponse;
+    }),
+    TE.mapLeft((error) => {
+      state.searchStatus = "error";
+      return error;
     }),
   )();
 };
