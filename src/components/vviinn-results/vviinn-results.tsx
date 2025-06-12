@@ -831,6 +831,7 @@ export class VviinnResults {
               favoriteShow={this.favoriteShow}
               campaigns={this.oneClickDiscoveryCampaigns}
               showInWidget={this.showInWidget}
+              uiSessionId={this.uiSessionId}
             >
               {this.renderProductCardSlots()}
               {this.renderVprIconSlot()}
