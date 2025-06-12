@@ -255,7 +255,7 @@ export class VviinnProductCard {
 
     this.intersectionObserver = new IntersectionObserver(
       this.intersectionCallback.bind(this.imageElement),
-      { threshold: 1.0 },
+      { threshold: 0.95 },
     );
     this.intersectionObserver.observe(this.imageElement);
 
