@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.172.1](https://github.com/vviinn/widgets/compare/v2.172.0...v2.172.1) (2025-06-12)
+
+
+### Bug Fixes
+
+* Extra tracking requests in the one-click discovery widgets ([34ddfbf](https://github.com/vviinn/widgets/commit/34ddfbf15e15f001d934dfd573a1f5a8013b7d62))
+
 ## [2.172.0](https://github.com/vviinn/widgets/compare/v2.171.2...v2.172.0) (2025-06-11)
 
 
