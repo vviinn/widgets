@@ -9,6 +9,8 @@ import {
   Element,
   Watch,
 } from "@stencil/core";
+import i18next from "i18next";
+import { announceToScreenReader } from "../../a11y";
 import {
   ResponseDynamicFilterItem,
   DynamicFilterValue,
@@ -89,6 +91,7 @@ export class VviinnFilters {
 
   private state?: SearchStore;
   private eventAbortController?: AbortController;
+  private filterAnnouncementRef?: HTMLElement;
 
   private getFilters = () =>
     this.innerFilters.length ? this.innerFilters : this.state.dynamicFilters;
@@ -106,7 +109,24 @@ export class VviinnFilters {
       kind: filter.column,
       isTriggeredByVpsWidget: this.showInWidget,
     });
+
+    this.announceFilterChange(
+      i18next.t("filters.a11y.filterExpanded", { label: filter.label }),
+    );
   }
+
+  private announceFilterChange(message: string) {
+    announceToScreenReader(this.filterAnnouncementRef, message);
+  }
+
+  private handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === "Escape" && this.selectedFilterColumn) {
+      this.selectedFilterColumn = undefined;
+      this.announceFilterChange(
+        i18next.t("filters.a11y.filterSelectionCleared"),
+      );
+    }
+  };
 
   private handleSelectedFiltersReset = ({ detail }: TriggerSourceEvent) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
@@ -224,29 +244,51 @@ export class VviinnFilters {
         class={{
           "show-in-widget": this.showInWidget,
         }}
+        onKeyDown={this.handleKeyDown}
       >
+        <div
+          ref={(el) => (this.filterAnnouncementRef = el)}
+          aria-live="polite"
+          class="sr-only"
+        ></div>
+
         {filters?.length > 0 && (
-          <ul class="main-filters-list" part="filters-list">
-            {filters.map((filter) => {
-              return (
-                <li>
-                  <button
-                    class={`filters-main-button ${this.showActiveOnMainButton(
-                      filter,
-                    )}`}
-                    onClick={() => this.handleMainFilterSelection(filter)}
-                    part="filters-main-button"
-                  >
-                    {filter.label}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
+          <nav aria-label={i18next.t("filters.a11y.productFilters")}>
+            <ul class="main-filters-list" part="filters-list">
+              {filters.map((filter) => {
+                const isExpanded = this.selectedFilterColumn === filter.column;
+
+                return (
+                  <li>
+                    <button
+                      class={`filters-main-button ${this.showActiveOnMainButton(
+                        filter,
+                      )}`}
+                      onClick={() => this.handleMainFilterSelection(filter)}
+                      part="filters-main-button"
+                      aria-expanded={isExpanded ? "true" : "false"}
+                      aria-label={i18next.t("filters.a11y.filterButton", {
+                        label: filter.label,
+                      })}
+                      type="button"
+                    >
+                      {filter.label}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
         )}
 
         {!!selectedFilter && selectedFilter.isPrimary && (
-          <div class="filters-footer" part="filters-footer">
+          <section
+            class="filters-footer"
+            part="filters-footer"
+            aria-label={i18next.t("filters.a11y.filterOptions", {
+              label: selectedFilter.label,
+            })}
+          >
             {isIntervalFilter(column) ? (
               <vviinn-price-range
                 histogram={(filterOptions as Histogram).filter(
@@ -276,7 +318,7 @@ export class VviinnFilters {
                   })}
               </ul>
             )}
-          </div>
+          </section>
         )}
       </Host>
     );

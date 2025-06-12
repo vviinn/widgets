@@ -1,4 +1,5 @@
 import { Component, Host, h, Prop, Event, EventEmitter } from "@stencil/core";
+import i18next from "i18next";
 import { FiltersIcon } from "../vviinn-icons";
 import { TriggerSourceEventData } from "../../recommendation/events";
 
@@ -18,17 +19,25 @@ export class VviinnExtendedFiltersButton {
   @Event({ bubbles: true })
   vviinnExtendedFiltersButtonClicked: EventEmitter<TriggerSourceEventData>;
 
+  private buttonElement?: HTMLButtonElement;
+
+  private handleButtonClick = () => {
+    this.vviinnExtendedFiltersButtonClicked.emit({
+      isTriggeredByVpsWidget: this.showInWidget,
+      triggerElement: this.buttonElement,
+    });
+  };
+
   render() {
     return (
       <Host exportparts="extended-filters-button">
         <button
+          ref={(el) => (this.buttonElement = el)}
           class="filters-more-button"
-          onClick={() => {
-            this.vviinnExtendedFiltersButtonClicked.emit({
-              isTriggeredByVpsWidget: this.showInWidget,
-            });
-          }}
+          onClick={this.handleButtonClick}
           part="extended-filters-button"
+          aria-label={i18next.t("filters.a11y.openFilters")}
+          type="button"
         >
           <FiltersIcon />
         </button>
