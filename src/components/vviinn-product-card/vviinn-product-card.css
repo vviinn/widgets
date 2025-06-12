@@ -96,7 +96,7 @@
 }
 
 .price-outdated {
-  color: var(--color-text-helper);
+  color: var(--color-text-secondary);
   text-decoration: line-through;
 }
 
@@ -116,7 +116,7 @@
 }
 
 .price-amount--base {
-  color: var(--color-text-helper);
+  color: var(--color-text-secondary);
   font-size: var(--font-size-caption);
 }
 

@@ -61,7 +61,7 @@ vviinn-price-range {
 
 .filters-main-button {
   padding: var(--spacing-100);
-  color: var(--color-text-helper);
+  color: var(--color-text-secondary);
   background: none;
   transition:
     background 0.15s,
