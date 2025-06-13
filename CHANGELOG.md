@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.172.2](https://github.com/vviinn/widgets/compare/v2.172.1...v2.172.2) (2025-06-13)
+
+
+### Bug Fixes
+
+* Visual Search layout on iOS after making a crop on the uploaded image ([93ba97a](https://github.com/vviinn/widgets/commit/93ba97a02a6d60153c9b7c05334201dd4509b98e))
+
+### [2.172.1](https://github.com/vviinn/widgets/compare/v2.172.0...v2.172.1) (2025-06-12)
+
+
+### Bug Fixes
+
+* Extra tracking requests in the one-click discovery widgets ([34ddfbf](https://github.com/vviinn/widgets/commit/34ddfbf15e15f001d934dfd573a1f5a8013b7d62))
+
+## [2.172.0](https://github.com/vviinn/widgets/compare/v2.171.2...v2.172.0) (2025-06-11)
+
+
+### Features
+
+* Text search state refactoring ([f20b3d4](https://github.com/vviinn/widgets/commit/f20b3d4b1e4ab44a3d775cea06173dced9a41ab4))
+
 ### [2.171.2](https://github.com/vviinn/widgets/compare/v2.171.1...v2.171.2) (2025-06-10)
 
 

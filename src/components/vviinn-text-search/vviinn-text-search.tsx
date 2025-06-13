@@ -10,6 +10,7 @@ import {
 } from "@stencil/core";
 import {
   makeTextSearchRequest,
+  setTextSearchQuery,
   SearchStoreName,
   SearchStore,
   useSearchStore,
@@ -22,7 +23,6 @@ import {
   DynamicFilterInternalData,
   BasicEventData,
   TriggerSourceEventData,
-  SearchIdEvent,
 } from "../../recommendation/events";
 import i18next from "i18next";
 import { Locale, resources } from "../../locale";
@@ -35,7 +35,6 @@ import { MicIcon } from "../vviinn-icons/icons/MicIcon";
 import { initializeRecognition, speechTooltip } from "./helpers";
 import Timeout = NodeJS.Timeout;
 import { updateGlobalState, globalState } from "../../store/store";
-import { addEventListenersWithSignal } from "../../dom";
 
 /**
  * @part text-search-container - Container for the text search block.
@@ -104,9 +103,6 @@ export class VviinnTextSearch {
   private isShowPreloader = () =>
     this.state.searchStatus === "loading" && this.state.searchType === "text";
 
-  private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
-    this.showInWidget !== isTriggeredByVpsWidget;
-
   private isShowRecording = () => this.isRecording;
   private showRecording = () => (this.isRecording = true);
   private hideRecording = () => (this.isRecording = false);
@@ -138,55 +134,26 @@ export class VviinnTextSearch {
     },
     this.hideRecording,
     (speechResult) => {
-      this.setSearchQuery(speechResult);
+      setTextSearchQuery(this.storeName, speechResult);
       this.handleTextSearch();
     },
   );
-
-  private imageUploadFinishedHandler = ({ detail }: SearchIdEvent) => {
-    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
-    this.searchQuery = "";
-  };
-
-  private eventAbortController?: AbortController;
 
   connectedCallback() {
     updateGlobalState(this);
     const { state, storeName } = useSearchStore(this.showInWidget);
     this.state = state;
     this.storeName = storeName;
-
-    this.eventAbortController = new AbortController();
-    const { signal } = this.eventAbortController;
-
-    addEventListenersWithSignal(
-      document,
-      [
-        ["vviinnFilterTriggered", this.filterTriggeredHandler],
-        ["vviinnImageUploadFinished", this.imageUploadFinishedHandler],
-      ],
-      signal,
-    );
   }
 
   disconnectedCallback() {
-    this.eventAbortController?.abort();
     clearTimeout(this.triggerTooltipStart);
     clearTimeout(this.triggerTooltipEnd);
   }
 
-  private filterTriggeredHandler = ({
-    detail,
-  }: CustomEvent<DynamicFilterInternalData>) => {
-    const { action, customTrigger } = detail;
-    if (action === "deselect" && customTrigger === "TPS") {
-      this.searchQuery = "";
-    }
-  };
-
   private trackTextSearch = () =>
     this.vviinnFilterTriggered.emit({
-      kind: this.searchQuery,
+      kind: this.state.textSearchQuery,
       action: "select",
       customTrigger: "TPS",
       isTriggeredByVpsWidget: this.showInWidget,
@@ -199,6 +166,11 @@ export class VviinnTextSearch {
       resources,
     });
     slotChangeListener(this, this.el);
+
+    if (this.searchQuery?.length > 0) {
+      setTextSearchQuery(this.storeName, this.searchQuery);
+    }
+
     if (!this.showInWidget && this.searchQuery?.length > 0) {
       this.vviinnTextSearchStarted.emit({
         query: this.searchQuery,
@@ -209,12 +181,9 @@ export class VviinnTextSearch {
   }
 
   handleInputChange(event: Event) {
-    this.setSearchQuery((event.target as HTMLInputElement).value);
+    const value = (event.target as HTMLInputElement).value;
+    setTextSearchQuery(this.storeName, value);
   }
-
-  private setSearchQuery = (query: string) => {
-    this.searchQuery = query;
-  };
 
   private handleSpeech = async () => {
     if (this.isRecording) {
@@ -223,7 +192,7 @@ export class VviinnTextSearch {
       this.setShowTooltip(false);
     } else {
       this.recognition.start();
-      this.setSearchQuery("");
+      setTextSearchQuery(this.storeName, null);
       this.triggerTooltipStart = setTimeout(() => {
         if (!this.isRecording) {
           this.setShowTooltip(true);
@@ -236,24 +205,26 @@ export class VviinnTextSearch {
   };
 
   private handleTextSearch = async () => {
-    if (!this.searchQuery) return;
+    const queryToUse = this.state.textSearchQuery;
+    if (!queryToUse) return;
+
     this.trackTextSearch();
 
     this.vviinnTextSearchStarted.emit({
-      query: this.searchQuery,
+      query: queryToUse,
       isTriggeredByVpsWidget: this.showInWidget,
     });
 
     if (this.showInWidget && this.showOnFirstScreen) {
       const response = pipe(
-        await makeTextSearchRequest(this.storeName, this.searchQuery),
+        await makeTextSearchRequest(this.storeName, queryToUse),
         E.getOrElse(() => null),
         (response: TextSearchResponse) => response,
       );
 
       if (response) {
         this.widgetTextSearchFinished.emit({
-          query: this.searchQuery,
+          query: queryToUse,
           requestId: response.requestId,
         });
 
@@ -286,7 +257,7 @@ export class VviinnTextSearch {
             part="text-search-input"
             type="text"
             placeholder={this.getPlaceholderText()}
-            value={this.searchQuery}
+            value={this.state.textSearchQuery || ""}
             onInput={(event) => this.handleInputChange(event)}
             onKeyUp={(event) => this.handleKeyPress(event as KeyboardEvent)}
           />

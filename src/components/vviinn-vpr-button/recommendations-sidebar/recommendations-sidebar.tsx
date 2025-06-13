@@ -91,6 +91,8 @@ export class RecommendationsSidebar {
   @Prop() showInModal: boolean = false;
   /** @internal */
   @Prop() isAppended: boolean = false;
+  /** @internal */
+  @Prop() uiSessionId?: string;
 
   @State() sidebarState: SidebarState = "idle";
   @State() sourceProduct?: Recommendation;
@@ -264,6 +266,7 @@ export class RecommendationsSidebar {
               recommendationsLoading={this.recommendationsLoading}
               setRecommendationsLoading={this.setRecommendationsLoading}
               imageResolutionWidth={this.imageResolutionWidth}
+              uiSessionId={this.uiSessionId}
             />
           </main>
         </aside>
