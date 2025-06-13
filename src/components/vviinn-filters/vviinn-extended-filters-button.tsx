@@ -36,7 +36,7 @@ export class VviinnExtendedFiltersButton {
           class="filters-more-button"
           onClick={this.handleButtonClick}
           part="extended-filters-button"
-          aria-label={i18next.t("filters.a11y.openFilters")}
+          aria-label={i18next.t("a11y.openFilters")}
           type="button"
         >
           <FiltersIcon />

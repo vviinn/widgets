@@ -103,7 +103,7 @@ export class VviinnSelectedFilters {
     });
 
     this.announceFilterChange(
-      i18next.t("filters.a11y.filterRemoved", { label: selectedFilter.label }),
+      i18next.t("a11y.filterRemoved", { label: selectedFilter.label }),
     );
   };
 
@@ -289,7 +289,7 @@ export class VviinnSelectedFilters {
           class="sr-only"
         ></div>
 
-        <section aria-label={i18next.t("filters.a11y.selectedFilters")}>
+        <section aria-label={i18next.t("a11y.selectedFilters")}>
           <ul class="selected-filters-wrapper" part="selected-filters-list">
             {RenderCustomButton({
               label: this.textSearchCustomFilter,

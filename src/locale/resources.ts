@@ -62,40 +62,54 @@ export const resources: Resource = {
         },
         imageFilterText: "Bild",
         cropFilterText: "Bildausschnitt",
-        a11y: {
-          productFilters: "Produktfilter",
-          selectedFilters: "Ausgewählte Filter",
-          openFilters: "Filter öffnen",
-          closeDialog: "Dialog schließen",
-          removeFilterLabel: "Filter entfernen: {{label}}",
-          filterExpanded: "{{label}} Filter erweitert",
-          filterSelectionCleared: "Filterauswahl gelöscht",
-          filterDialogOpened: "Filter-Dialog geöffnet",
-          filterDialogClosed: "Filter-Dialog geschlossen",
-          filterRemoved: "Filter entfernt: {{label}}",
-          filterOptions: "{{label}} Filteroptionen",
-          filterButton: "{{label}} Filter",
-          colorOption: "{{label}} Farbe",
-          showMoreOptions: "{{count}} weitere {{label}} Optionen anzeigen",
-        },
       },
       energyLabel: {
         dataSheetText: "Produktdatenblatt",
       },
-      a11y: {
-        cameraExampleImage: "Beispielbild für die Kamerafunktion",
-        capturedImage: "Von der Kamera aufgenommenes Bild",
-        closeButton: "Fenster schließen",
-        speechButton: "Spracheingabe starten",
-        textSearchButton: "Textsuche starten",
-        cameraModeSearchButton: "KI-Suche mit Kamera starten",
-        modalModeSearchButton: "KI-Suche starten",
-        uploadModeSearchButton: "KI-Suche mit Bildupload starten",
-        zoomIn: "Vergrößern",
-        zoomOut: "Verkleinern",
-        takePicture: "Foto aufnehmen",
-        vviinnLink: "Vviinn-Website besuchen (öffnet in neuem Tab)",
-      },
+    },
+    a11y: {
+      // General UI
+      closeButton: "Fenster schließen",
+
+      // Search & Input
+      speechButton: "Spracheingabe starten",
+      textSearchButton: "Textsuche starten",
+      cameraModeSearchButton: "KI-Suche mit Kamera starten",
+      modalModeSearchButton: "KI-Suche starten",
+      uploadModeSearchButton: "KI-Suche mit Bildupload starten",
+
+      // Camera & Images
+      cameraExampleImage: "Beispielbild für die Kamerafunktion",
+      capturedImage: "Von der Kamera aufgenommenes Bild",
+      zoomIn: "Vergrößern",
+      zoomOut: "Verkleinern",
+      takePicture: "Foto aufnehmen",
+      cropperImage:
+        "Hochgeladenes Bild zum Zuschneiden und für die visuelle Suche",
+
+      // Product Actions
+      addToFavorites: "Zu Favoriten hinzufügen",
+      removeFromFavorites: "Von Favoriten entfernen",
+      findSimilarProducts: "Ähnliche Produkte finden",
+
+      // Filters
+      productFilters: "Produktfilter",
+      selectedFilters: "Ausgewählte Filter",
+      openFilters: "Filter öffnen",
+      closeDialog: "Dialog schließen",
+      removeFilterLabel: "Filter entfernen: {{label}}",
+      filterExpanded: "{{label}} Filter erweitert",
+      filterSelectionCleared: "Filterauswahl gelöscht",
+      filterDialogOpened: "Filter-Dialog geöffnet",
+      filterDialogClosed: "Filter-Dialog geschlossen",
+      filterRemoved: "Filter entfernt: {{label}}",
+      filterOptions: "{{label}} Filteroptionen",
+      filterButton: "{{label}} Filter",
+      colorOption: "{{label}} Farbe",
+      showMoreOptions: "{{count}} weitere {{label}} Optionen anzeigen",
+
+      // External Links
+      vviinnLink: "Vviinn-Website besuchen (öffnet in neuem Tab)",
     },
   },
   en: {
@@ -153,40 +167,53 @@ export const resources: Resource = {
         },
         imageFilterText: "Image",
         cropFilterText: "Crop",
-        a11y: {
-          productFilters: "Product filters",
-          selectedFilters: "Selected filters",
-          openFilters: "Open filters",
-          closeDialog: "Close dialog",
-          removeFilterLabel: "Remove filter: {{label}}",
-          filterExpanded: "{{label}} filter expanded",
-          filterSelectionCleared: "Filter selection cleared",
-          filterDialogOpened: "Filter dialog opened",
-          filterDialogClosed: "Filter dialog closed",
-          filterRemoved: "Filter removed: {{label}}",
-          filterOptions: "{{label}} filter options",
-          filterButton: "{{label}} filter",
-          colorOption: "{{label}} color",
-          showMoreOptions: "Show {{count}} more {{label}} options",
-        },
       },
       energyLabel: {
         dataSheetText: "Product Data Sheet",
       },
-      a11y: {
-        cameraExampleImage: "Example image for the camera function",
-        capturedImage: "Image captured by the camera",
-        closeButton: "Close window",
-        speechButton: "Start speech input",
-        textSearchButton: "Start text search",
-        cameraModeSearchButton: "Start AI search with camera",
-        modalModeSearchButton: "Start AI search",
-        uploadModeSearchButton: "Start AI search with image upload",
-        zoomIn: "Zoom in",
-        zoomOut: "Zoom out",
-        takePicture: "Take picture",
-        vviinnLink: "Visit Vviinn website (opens in new tab)",
-      },
+    },
+    a11y: {
+      // General UI
+      closeButton: "Close window",
+
+      // Search & Input
+      speechButton: "Start speech input",
+      textSearchButton: "Start text search",
+      cameraModeSearchButton: "Start AI search with camera",
+      modalModeSearchButton: "Start AI search",
+      uploadModeSearchButton: "Start AI search with image upload",
+
+      // Camera & Images
+      cameraExampleImage: "Example image for the camera function",
+      capturedImage: "Image captured by the camera",
+      zoomIn: "Zoom in",
+      zoomOut: "Zoom out",
+      takePicture: "Take picture",
+      cropperImage: "Uploaded image for cropping and visual search",
+
+      // Product Actions
+      addToFavorites: "Add to favorites",
+      removeFromFavorites: "Remove from favorites",
+      findSimilarProducts: "Find similar products",
+
+      // Filters
+      productFilters: "Product filters",
+      selectedFilters: "Selected filters",
+      openFilters: "Open filters",
+      closeDialog: "Close dialog",
+      removeFilterLabel: "Remove filter: {{label}}",
+      filterExpanded: "{{label}} filter expanded",
+      filterSelectionCleared: "Filter selection cleared",
+      filterDialogOpened: "Filter dialog opened",
+      filterDialogClosed: "Filter dialog closed",
+      filterRemoved: "Filter removed: {{label}}",
+      filterOptions: "{{label}} filter options",
+      filterButton: "{{label}} filter",
+      colorOption: "{{label}} color",
+      showMoreOptions: "Show {{count}} more {{label}} options",
+
+      // External Links
+      vviinnLink: "Visit Vviinn website (opens in new tab)",
     },
   },
 };

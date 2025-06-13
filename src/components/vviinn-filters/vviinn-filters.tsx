@@ -111,7 +111,7 @@ export class VviinnFilters {
     });
 
     this.announceFilterChange(
-      i18next.t("filters.a11y.filterExpanded", { label: filter.label }),
+      i18next.t("a11y.filterExpanded", { label: filter.label }),
     );
   }
 
@@ -122,9 +122,7 @@ export class VviinnFilters {
   private handleKeyDown = (event: KeyboardEvent) => {
     if (event.key === "Escape" && this.selectedFilterColumn) {
       this.selectedFilterColumn = undefined;
-      this.announceFilterChange(
-        i18next.t("filters.a11y.filterSelectionCleared"),
-      );
+      this.announceFilterChange(i18next.t("a11y.filterSelectionCleared"));
     }
   };
 
@@ -253,7 +251,7 @@ export class VviinnFilters {
         ></div>
 
         {filters?.length > 0 && (
-          <nav aria-label={i18next.t("filters.a11y.productFilters")}>
+          <nav aria-label={i18next.t("a11y.productFilters")}>
             <ul class="main-filters-list" part="filters-list">
               {filters.map((filter) => {
                 const isExpanded = this.selectedFilterColumn === filter.column;
@@ -267,7 +265,7 @@ export class VviinnFilters {
                       onClick={() => this.handleMainFilterSelection(filter)}
                       part="filters-main-button"
                       aria-expanded={isExpanded ? "true" : "false"}
-                      aria-label={i18next.t("filters.a11y.filterButton", {
+                      aria-label={i18next.t("a11y.filterButton", {
                         label: filter.label,
                       })}
                       type="button"
@@ -285,7 +283,7 @@ export class VviinnFilters {
           <section
             class="filters-footer"
             part="filters-footer"
-            aria-label={i18next.t("filters.a11y.filterOptions", {
+            aria-label={i18next.t("a11y.filterOptions", {
               label: selectedFilter.label,
             })}
           >

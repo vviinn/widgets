@@ -9,6 +9,7 @@ import {
   State,
   Watch,
 } from "@stencil/core";
+import i18next from "i18next";
 import { version } from "../../../package.json";
 import { SimilarProductsIcon, CrossSellingIcon } from "../vviinn-icons";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
@@ -261,6 +262,7 @@ export class VviinnVprButton {
         }}
         role="button"
         tabindex="0"
+        aria-label={i18next.t("a11y.findSimilarProducts")}
       >
         <vviinn-button addStyle={this.addStyle} part="vviinn-button">
           <slot>

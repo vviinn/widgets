@@ -446,7 +446,7 @@ export class VviinnProductCard {
         exportparts={productCardParts}
       >
         <div class="image-container" part="image-container">
-          <Linked deeplink={this.deeplink} part="image-link">
+          <Linked deeplink={this.deeplink} part="image-link" tabindex={-1}>
             {renderImage(this.imageProps, this.responsive)}
           </Linked>
           <div class="product-card-actions-top" part="product-card-actions-top">
@@ -456,6 +456,11 @@ export class VviinnProductCard {
               }}
               part="favorite-button"
               onClick={this.favoriteButtonClickHandler.bind(this)}
+              aria-label={
+                this.favoriteButonPressed
+                  ? i18next.t("a11y.removeFromFavorites")
+                  : i18next.t("a11y.addToFavorites")
+              }
             >
               <div
                 key="favorite-not-pressed"
@@ -491,6 +496,7 @@ export class VviinnProductCard {
                   productData: this.productData,
                 });
               }}
+              aria-label={i18next.t("a11y.findSimilarProducts")}
             >
               <div>
                 <slot name="vviinn-update-button-icon">

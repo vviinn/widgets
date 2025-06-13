@@ -167,7 +167,7 @@ export class VviinnExtendedFilters {
   private handleCloseModal = () => {
     this.showMore = false;
     this.resetOptionsInteractions();
-    this.announceFilterChange(i18next.t("filters.a11y.filterDialogClosed"));
+    this.announceFilterChange(i18next.t("a11y.filterDialogClosed"));
     this.triggerElement?.focus();
   };
 
@@ -212,7 +212,7 @@ export class VviinnExtendedFilters {
     });
 
     if (modalOpen) {
-      this.announceFilterChange(i18next.t("filters.a11y.filterDialogOpened"));
+      this.announceFilterChange(i18next.t("a11y.filterDialogOpened"));
       setTimeout(() => this.modalContainerRef?.focus(), 0);
     }
   }
@@ -304,7 +304,7 @@ export class VviinnExtendedFilters {
                 class="filters-modal-close"
                 onClick={this.handleCloseModal}
                 part="extended-filters-modal-close"
-                aria-label={i18next.t("filters.a11y.closeDialog")}
+                aria-label={i18next.t("a11y.closeDialog")}
                 type="button"
               >
                 <NewCloseIcon />
@@ -493,7 +493,7 @@ export class VviinnExtendedFilters {
               class="filters-more-modal-button"
               part="filters-option-button"
               type="button"
-              aria-label={i18next.t("filters.a11y.showMoreOptions", {
+              aria-label={i18next.t("a11y.showMoreOptions", {
                 count: filterOptions.length - displayedCount,
                 label: filter.label,
               })}

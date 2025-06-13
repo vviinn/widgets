@@ -6,7 +6,7 @@ import i18next from "i18next";
  * @returns The aria-label string
  */
 export function getRemoveFilterAriaLabel(label: string): string {
-  return i18next.t("filters.a11y.removeFilterLabel", { label });
+  return i18next.t("a11y.removeFilterLabel", { label });
 }
 
 /**
@@ -15,5 +15,5 @@ export function getRemoveFilterAriaLabel(label: string): string {
  * @returns The aria-label string
  */
 export function getColorOptionAriaLabel(label: string): string {
-  return i18next.t("filters.a11y.colorOption", { label });
+  return i18next.t("a11y.colorOption", { label });
 }
