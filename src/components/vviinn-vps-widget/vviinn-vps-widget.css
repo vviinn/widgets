@@ -253,6 +253,7 @@ vviinn-preloader {
 
   .start-page:not(.active) {
     overflow: hidden;
+    height: 0;
   }
 
   .results-page {
