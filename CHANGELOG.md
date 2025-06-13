@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.172.2](https://github.com/vviinn/widgets/compare/v2.172.1...v2.172.2) (2025-06-13)
+
+
+### Bug Fixes
+
+* Visual Search layout on iOS after making a crop on the uploaded image ([93ba97a](https://github.com/vviinn/widgets/commit/93ba97a02a6d60153c9b7c05334201dd4509b98e))
+
 ### [2.172.1](https://github.com/vviinn/widgets/compare/v2.172.0...v2.172.1) (2025-06-12)
 
 
