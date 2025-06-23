@@ -38,6 +38,18 @@
 }
 
 .image-container {
+  order: 1; /* Сверху */
+}
+
+.content-container {
+  order: 2; /* В середине */
+}
+
+.basket-button-container {
+  order: 3; /* Снизу */
+}
+
+.image-container {
   position: relative;
   width: 100%;
 }
