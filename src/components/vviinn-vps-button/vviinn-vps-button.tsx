@@ -237,17 +237,7 @@ export class VviinnVpsButton {
   };
 
   private handleKeyDown = (event: KeyboardEvent) => {
-    const path = event.composedPath();
-    const isFromTextSearchInput = path.some((el) =>
-      (el as HTMLElement).classList?.contains("text-search-input"),
-    );
-
-    if (isFromTextSearchInput) return;
-
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      this.handleActivation();
-    }
+    if (event.key === "Enter" || event.key === " ") this.handleActivation();
   };
 
   private getButtonConfig() {
