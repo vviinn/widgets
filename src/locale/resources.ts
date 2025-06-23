@@ -87,7 +87,7 @@ export const resources: Resource = {
       cropperImage:
         "Hochgeladenes Bild zum Zuschneiden und für die visuelle Suche",
 
-      // Product Actions
+      // Product Card
       addToFavorites: "Zu Favoriten hinzufügen",
       removeFromFavorites: "Von Favoriten entfernen",
       findSimilarProducts: "Ähnliche Produkte finden",
@@ -191,7 +191,7 @@ export const resources: Resource = {
       takePicture: "Take picture",
       cropperImage: "Uploaded image for cropping and visual search",
 
-      // Product Actions
+      // Product Card
       addToFavorites: "Add to favorites",
       removeFromFavorites: "Remove from favorites",
       findSimilarProducts: "Find similar products",

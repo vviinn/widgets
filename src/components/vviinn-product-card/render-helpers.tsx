@@ -12,7 +12,6 @@ type LinkedProps = {
   deeplink: string;
   tabindex?: number;
   part?: string;
-  class?: string;
 };
 
 const containsFit = (url: string): E.Either<string, string> => {
@@ -35,7 +34,7 @@ const processWidth = (url: string, size: number): string => {
 export const Linked = (props: LinkedProps, child: JSX.Element) =>
   props.deeplink ? (
     <a
-      class={props.class}
+      class={props.part}
       part={props.part}
       href={props.deeplink}
       tabindex={props.tabindex}
@@ -386,7 +385,7 @@ export const ContentCardContent = (
         </div>
       )}
       {contentLink && (
-        <Linked deeplink={contentLink} class="content-link" part="content-link">
+        <Linked deeplink={contentLink} part="content-link">
           {getLastUrlPath(contentLink)}
         </Linked>
       )}
