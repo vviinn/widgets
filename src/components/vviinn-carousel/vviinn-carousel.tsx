@@ -717,7 +717,7 @@ export class VviinnCarousel {
                   onClick={() => this.handleCarouselButtonClick("left")}
                   part="carousel-button"
                   disabled={this.isFirst()}
-                  aria-label={"previous"}
+                  aria-label="previous"
                 >
                   <ChevronIcon />
                 </button>
@@ -727,7 +727,7 @@ export class VviinnCarousel {
                   onClick={() => this.handleCarouselButtonClick("right")}
                   part="carousel-button"
                   disabled={this.isLast()}
-                  aria-label={"next"}
+                  aria-label="next"
                 >
                   <ChevronIcon />
                 </button>
