@@ -146,7 +146,7 @@ export class VviinnExtendedFilters {
   }
 
   private announceFilterChange(message: string) {
-    announceToScreenReader(this.filterAnnouncementRef, message);
+    announceToScreenReader(message, this.filterAnnouncementRef);
   }
 
   private handleModalKeyDown = (event: KeyboardEvent) => {

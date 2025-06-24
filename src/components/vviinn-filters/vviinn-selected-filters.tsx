@@ -108,7 +108,7 @@ export class VviinnSelectedFilters {
   };
 
   private announceFilterChange(message: string) {
-    announceToScreenReader(this.filterAnnouncementRef, message);
+    announceToScreenReader(message, this.filterAnnouncementRef);
   }
 
   private replaceSlotsContent() {

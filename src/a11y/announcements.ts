@@ -4,8 +4,8 @@
  * @param message - The message to announce
  */
 export function announceToScreenReader(
-  element: HTMLElement | undefined,
   message: string,
+  element?: HTMLElement,
 ): void {
   if (element) {
     element.textContent = message;
