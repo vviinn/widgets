@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.172.3](https://github.com/vviinn/widgets/compare/v2.172.2...v2.172.3) (2025-06-24)
+
+
+### Bug Fixes
+
+* added accessible labels to carousel buttons ([dcd8d2a](https://github.com/vviinn/widgets/commit/dcd8d2af049266cc1ca5713aa37723f0156a2701))
+
 ### [2.172.2](https://github.com/vviinn/widgets/compare/v2.172.1...v2.172.2) (2025-06-13)
 
 
