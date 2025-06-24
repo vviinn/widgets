@@ -36,6 +36,7 @@ import { isIntervalFilter } from "../../filters";
 import { components } from "../../interfaces/generated";
 import i18next from "i18next";
 import { resources } from "../../locale";
+import { announceToScreenReader } from "../../a11y";
 import { getLocalStorageItems } from "../../localStorage";
 import { addEventListenersWithSignal } from "../../dom";
 
@@ -85,6 +86,7 @@ export class VviinnSelectedFilters {
 
   private state?: SearchStore;
   private eventAbortController?: AbortController;
+  private filterAnnouncementRef?: HTMLElement;
 
   private handleSubFilterSelection = (
     filterValue: DynamicFilterValue,
@@ -99,7 +101,15 @@ export class VviinnSelectedFilters {
       el: this.el,
       isTriggeredByVpsWidget: this.showInWidget,
     });
+
+    this.announceFilterChange(
+      i18next.t("a11y.filterRemoved", { label: selectedFilter.label }),
+    );
   };
+
+  private announceFilterChange(message: string) {
+    announceToScreenReader(message, this.filterAnnouncementRef);
+  }
 
   private replaceSlotsContent() {
     const slots = this.el.querySelectorAll("[slot]");
@@ -273,40 +283,48 @@ export class VviinnSelectedFilters {
           "show-in-widget": this.showInWidget,
         }}
       >
-        <ul class="selected-filters-wrapper" part="selected-filters-list">
-          {RenderCustomButton({
-            label: this.textSearchCustomFilter,
-            buttonType: "text",
-            hidden: !this.textSearchCustomFilter?.length,
-          })}
+        <div
+          ref={(el) => (this.filterAnnouncementRef = el)}
+          aria-live="polite"
+          class="sr-only"
+        ></div>
 
-          {RenderCustomButton({
-            label: i18next.t("filters.imageFilterText"),
-            buttonType: "image",
-            imageSrc: this.imageSrc,
-            hidden:
-              !this.imageSrc?.length ||
-              !this.state.visualSearchStarted ||
-              !this.state.image,
-          })}
+        <section aria-label={i18next.t("a11y.selectedFilters")}>
+          <ul class="selected-filters-wrapper" part="selected-filters-list">
+            {RenderCustomButton({
+              label: this.textSearchCustomFilter,
+              buttonType: "text",
+              hidden: !this.textSearchCustomFilter?.length,
+            })}
 
-          {RenderCustomButton({
-            label: i18next.t("filters.cropFilterText"),
-            buttonType: "crop",
-            imageSrc: this.state.croppedImageUrl,
-            onClick: this.handleCropButtonClick,
-            hidden: !this.state.searchArea,
-          })}
+            {RenderCustomButton({
+              label: i18next.t("filters.imageFilterText"),
+              buttonType: "image",
+              imageSrc: this.imageSrc,
+              hidden:
+                !this.imageSrc?.length ||
+                !this.state.visualSearchStarted ||
+                !this.state.image,
+            })}
 
-          {RenderCustomButton({
-            label: this.priceCustomFilter,
-            buttonType: "price",
-            onClick: this.handlePriceButtonClick,
-            hidden: !this.priceCustomFilter,
-          })}
+            {RenderCustomButton({
+              label: i18next.t("filters.cropFilterText"),
+              buttonType: "crop",
+              imageSrc: this.state.croppedImageUrl,
+              onClick: this.handleCropButtonClick,
+              hidden: !this.state.searchArea,
+            })}
 
-          {this.selectedFilterButtons}
-        </ul>
+            {RenderCustomButton({
+              label: this.priceCustomFilter,
+              buttonType: "price",
+              onClick: this.handlePriceButtonClick,
+              hidden: !this.priceCustomFilter,
+            })}
+
+            {this.selectedFilterButtons}
+          </ul>
+        </section>
       </Host>
     );
   }

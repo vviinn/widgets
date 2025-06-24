@@ -9,6 +9,7 @@ import {
   Element,
   Listen,
 } from "@stencil/core";
+import i18next from "i18next";
 import Cropper from "cropperjs";
 import styles from "./vviinn-cropper.css";
 import { updateGlobalState } from "../../store/store";
@@ -302,29 +303,35 @@ export class VviinnCropper {
         }}
       >
         <div class="container">
-          <div
-            class="image-container"
-            style={{ width: `${this.width.toString()}px`, overflow: "hidden" }}
-          >
-            <img
-              decoding="async"
-              width={this.width}
-              height={this.height}
-              src={this.state.image?.src}
-              draggable={false}
-              onLoad={this.loadImage}
-            />
-
-            {this.state.detectedObjects?.map((object) => (
-              <vviinn-detected-object
-                detectedObject={object}
-                selectedDetectedObject={this.selectedDetectedObject}
-                basicEventData={this.basicEventData}
-                imageBounds={this.state.imageBounds}
-                showInWidget={this.showInWidget}
+          {this.state.image && (
+            <div
+              class="image-container"
+              style={{
+                width: `${this.width.toString()}px`,
+                overflow: "hidden",
+              }}
+            >
+              <img
+                decoding="async"
+                width={this.width}
+                height={this.height}
+                src={this.state.image.src}
+                draggable={false}
+                onLoad={this.loadImage}
+                alt={i18next.t("a11y.cropperImage")}
               />
-            ))}
-          </div>
+
+              {this.state.detectedObjects?.map((object) => (
+                <vviinn-detected-object
+                  detectedObject={object}
+                  selectedDetectedObject={this.selectedDetectedObject}
+                  basicEventData={this.basicEventData}
+                  imageBounds={this.state.imageBounds}
+                  showInWidget={this.showInWidget}
+                />
+              ))}
+            </div>
+          )}
 
           {this.showPreloader() && (
             <div class="image-preloader">

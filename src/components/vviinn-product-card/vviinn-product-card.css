@@ -38,6 +38,18 @@
 }
 
 .image-container {
+  order: 1; /* Сверху */
+}
+
+.content-container {
+  order: 2; /* В середине */
+}
+
+.basket-button-container {
+  order: 3; /* Снизу */
+}
+
+.image-container {
   position: relative;
   width: 100%;
 }
@@ -96,7 +108,7 @@
 }
 
 .price-outdated {
-  color: var(--color-text-helper);
+  color: var(--color-text-secondary);
   text-decoration: line-through;
 }
 
@@ -116,7 +128,7 @@
 }
 
 .price-amount--base {
-  color: var(--color-text-helper);
+  color: var(--color-text-secondary);
   font-size: var(--font-size-caption);
 }
 

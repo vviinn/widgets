@@ -1,12 +1,18 @@
 import { pipe } from "fp-ts/lib/function";
 import * as E from "fp-ts/lib/Either";
-import { FunctionalComponent, h, Fragment } from "@stencil/core";
+import { FunctionalComponent, h, Fragment, JSX } from "@stencil/core";
 import { BasePrice } from "../../interfaces/recommendation";
 import { ImagePlaceholderIcon, PlusIcon } from "../vviinn-icons";
 import { getLastUrlPath } from "../../helpers/url/getLastUrlPath";
 import { joinTruthy } from "../../utils/string/joinTruthy";
 
 const FIT_EXPR = /fit\/\d+\//;
+
+type LinkedProps = {
+  deeplink: string;
+  tabindex?: number;
+  part?: string;
+};
 
 const containsFit = (url: string): E.Either<string, string> => {
   return pipe(
@@ -25,9 +31,14 @@ const processWidth = (url: string, size: number): string => {
   );
 };
 
-export const Linked = (props, child) =>
+export const Linked = (props: LinkedProps, child: JSX.Element) =>
   props.deeplink ? (
-    <a class={props.part} part={props.part} href={props.deeplink}>
+    <a
+      class={props.part}
+      part={props.part}
+      href={props.deeplink}
+      tabindex={props.tabindex}
+    >
       {child}
     </a>
   ) : (
@@ -374,7 +385,7 @@ export const ContentCardContent = (
         </div>
       )}
       {contentLink && (
-        <Linked deeplink={contentLink} class="content-link" part="content-link">
+        <Linked deeplink={contentLink} part="content-link">
           {getLastUrlPath(contentLink)}
         </Linked>
       )}

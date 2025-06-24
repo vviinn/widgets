@@ -35,6 +35,7 @@ export type ImageUploadEventData = { isTriggeredByVpsWidget?: boolean } & {
 
 export type TriggerSourceEventData = {
   isTriggeredByVpsWidget: boolean;
+  triggerElement?: HTMLElement;
 };
 
 export type NoResultEventData = {

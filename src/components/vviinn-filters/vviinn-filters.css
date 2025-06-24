@@ -61,7 +61,7 @@ vviinn-price-range {
 
 .filters-main-button {
   padding: var(--spacing-100);
-  color: var(--color-text-helper);
+  color: var(--color-text-secondary);
   background: none;
   transition:
     background 0.15s,
@@ -545,4 +545,16 @@ vviinn-price-range {
   vviinn-price-range {
     max-width: unset;
   }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

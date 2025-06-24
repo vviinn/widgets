@@ -1,4 +1,8 @@
 import { h, JSX } from "@stencil/core";
+import {
+  getRemoveFilterAriaLabel,
+  getColorOptionAriaLabel,
+} from "../../../a11y";
 
 import {
   FilterIconCheck,
@@ -34,6 +38,13 @@ export const RenderFilterButton = ({
 }: RenderButtonProps): JSX.Element => {
   const hexCode = value?.hexCode;
   const hasHexCodeLength = hexCode?.length > 0;
+  const isRemovable = isSelected && showClose;
+
+  const ariaLabel = isRemovable
+    ? getRemoveFilterAriaLabel(label)
+    : hasHexCodeLength
+      ? getColorOptionAriaLabel(label)
+      : undefined;
 
   return (
     <li part="filters-sub-row">
@@ -44,12 +55,16 @@ export const RenderFilterButton = ({
         } ${isSelected ? "active" : ""}`}
         disabled={!active && !isSelected}
         part="filters-option-button"
+        aria-pressed={!isRemovable && isSelected ? "true" : "false"}
+        {...(ariaLabel && { "aria-label": ariaLabel })}
+        type="button"
       >
         {hasHexCodeLength && (
           <div
             class="filters-sub-button-color-dot"
             style={{ backgroundColor: hexCode }}
             part="filters-option-color-dot"
+            aria-hidden="true"
           ></div>
         )}
 
@@ -58,6 +73,7 @@ export const RenderFilterButton = ({
         <div
           part="filters-option-icon-wrapper"
           class="filters-option-icon-wrapper"
+          aria-hidden="true"
         >
           {!showClose ? (
             isSelected ? (
@@ -67,7 +83,7 @@ export const RenderFilterButton = ({
             )
           ) : null}
         </div>
-        {isSelected && showClose && <FilterIconClose />}
+        {isRemovable && <FilterIconClose />}
       </button>
     </li>
   );
