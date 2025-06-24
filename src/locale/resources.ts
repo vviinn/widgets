@@ -35,6 +35,10 @@ export const resources: Resource = {
           siri: "Bitte aktivieren Siri",
         },
       },
+      buttons: {
+        next: "weitere Produkte anzeigen",
+        previous: "vorherige Produkte anzeigen",
+      },
       emptyResultsBlock: {
         title: "Leider nichts gefunden",
         button: "Neues Bild hochladen",
@@ -140,6 +144,10 @@ export const resources: Resource = {
           general: "Please enable microphone",
           siri: "Please enable Siri",
         },
+      },
+      buttons: {
+        next: "show next products",
+        previous: "show previous products",
       },
       emptyResultsBlock: {
         title: "Sorry, nothing found",
