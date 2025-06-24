@@ -206,6 +206,9 @@ export class VviinnVprButton {
   /** Add to Basket button clicked */
   @Event() vviinnAddToBasket: EventEmitter<BasicEventData>;
 
+  /** The VPR button is activated */
+  @Event() vviinnVprButtonActivated: EventEmitter<void>;
+
   @State() targetAppendSidebarTo: HTMLElement;
 
   private iconSideSize?: number;
@@ -249,6 +252,7 @@ export class VviinnVprButton {
   };
 
   private handleButtonClick = () => {
+    this.vviinnVprButtonActivated.emit();
     if (this.appendSidebarToId && !this.targetAppendSidebarTo) {
       setTimeout(() => {
         this.handleClick();
@@ -262,6 +266,7 @@ export class VviinnVprButton {
     return (
       <Host
         onClick={this.handleButtonClick}
+        onKeyDown={this.handleKeyDown}
         role="button"
         tabindex="0"
         aria-label={i18next.t("a11y.findSimilarProducts")}
@@ -284,6 +289,13 @@ export class VviinnVprButton {
       </Host>
     );
   }
+
+  private handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      this.handleButtonClick();
+    }
+  };
 
   handleClick(): void {
     const sidebar = document.createElement("vviinn-recommendations-sidebar");

@@ -810,7 +810,6 @@ export class VviinnResults {
             class="vviinn-results-product-card-actions"
           >
             <vviinn-vpr-button
-              onClick={() => oneClickDiscoveryHandler(i)}
               productId={p.productId}
               addStyle={false}
               sidebarTitle=""
@@ -832,6 +831,7 @@ export class VviinnResults {
               campaigns={this.oneClickDiscoveryCampaigns}
               showInWidget={this.showInWidget}
               uiSessionId={this.uiSessionId}
+              onVviinnVprButtonActivated={() => oneClickDiscoveryHandler(i)}
             >
               {this.renderProductCardSlots()}
               {this.renderVprIconSlot()}
