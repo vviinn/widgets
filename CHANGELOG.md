@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.173.0](https://github.com/vviinn/widgets/compare/v2.172.3...v2.173.0) (2025-06-24)
+
+
+### Features
+
+* Filters accessibility ([2f8f894](https://github.com/vviinn/widgets/commit/2f8f89482d5d56b4f28350b784d6a711cbbc85d3))
+
+
+### Bug Fixes
+
+* Align the secondary text color with the design to enhance accessibility ([64aaa95](https://github.com/vviinn/widgets/commit/64aaa95fa464ab4acb61ab2ae0fe578f086071f8))
+
 ### [2.172.3](https://github.com/vviinn/widgets/compare/v2.172.2...v2.172.3) (2025-06-24)
 
 
