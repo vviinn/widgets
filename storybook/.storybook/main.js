@@ -11,6 +11,7 @@ const config = {
     "@storybook/addon-webpack5-compiler-babel",
     "../addons/docs-rendered/register.ts",
     "@storybook/addon-mdx-gfm",
+    "@storybook/addon-a11y",
   ],
   core: {
     disableTelemetry: true,
