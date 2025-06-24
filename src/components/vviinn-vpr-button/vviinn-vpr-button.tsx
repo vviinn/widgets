@@ -248,18 +248,20 @@ export class VviinnVprButton {
     }
   };
 
+  private handleButtonClick = () => {
+    if (this.appendSidebarToId && !this.targetAppendSidebarTo) {
+      setTimeout(() => {
+        this.handleClick();
+      }, 250);
+    } else {
+      this.handleClick();
+    }
+  };
+
   render() {
     return (
       <Host
-        onClick={(): void => {
-          if (this.appendSidebarToId && !this.targetAppendSidebarTo) {
-            setTimeout(() => {
-              this.handleClick();
-            }, 250);
-          } else {
-            this.handleClick();
-          }
-        }}
+        onClick={this.handleButtonClick}
         role="button"
         tabindex="0"
         aria-label={i18next.t("a11y.findSimilarProducts")}
