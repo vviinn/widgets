@@ -1,5 +1,6 @@
 import { Component, Host, h, Element, State, Prop, Watch } from "@stencil/core";
 import * as O from "fp-ts/lib/Option";
+import { setElementInteractivity } from "../../dom";
 
 @Component({
   tag: "vviinn-slider",
@@ -43,7 +44,10 @@ export class VviinnSlider {
 
   private setActiveCssClassToSlide(index: number) {
     const items = this.el.querySelectorAll("vviinn-slide");
-    items.forEach((i) => i.classList.remove("active"));
+    items.forEach((item, i) => {
+      item.classList.remove("active");
+      setElementInteractivity(item, i === index);
+    });
     items[index].classList.add("active");
   }
 
