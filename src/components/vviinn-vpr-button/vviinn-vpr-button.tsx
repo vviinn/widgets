@@ -165,7 +165,7 @@ export class VviinnVprButton {
   @Prop() appendSidebarToId: string;
   /** One click Discovery mode*/
   /** @internal */
-  @Prop() oneClickDiscoveryMode?: OneClickDiscoveryMode = "standalone";
+  @Prop() oneClickDiscoveryMode?: OneClickDiscoveryMode = "modal";
 
   /** @internal */
   @Prop() apiPath?: string;
@@ -216,7 +216,7 @@ export class VviinnVprButton {
   private eventAbortController?: AbortController;
 
   connectedCallback() {
-    this.iconSideSize = this.oneClickDiscoveryMode === "standalone" ? 24 : 14;
+    this.iconSideSize = this.oneClickDiscoveryMode === "modal" ? 24 : 14;
     const { onChange } = useSearchStore(this.showInWidget);
     this.disposeStoreListener = onChange("searchStatus", (searchStatus) => {
       searchStatus === "loading" && this.sidebarCloseListener();
@@ -336,6 +336,7 @@ export class VviinnVprButton {
       !!this.targetAppendSidebarTo || !!this.appendSidebarToElement;
     sidebar.showInWidget = this.showInWidget;
     sidebar.uiSessionId = this.uiSessionId;
+    sidebar.triggerElement = this.el;
 
     if (this.targetAppendSidebarTo) {
       sidebar.mode = "grid";

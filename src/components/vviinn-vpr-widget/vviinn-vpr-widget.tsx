@@ -757,9 +757,10 @@ export class VviinnVprWidget implements ComponentInterface {
           "show-in-widget": this.showInWidget,
         }}
         role="region"
-        aria-label={i18next.t("a11y.recommendations")}
-        aria-hidden="false"
-        tabindex="-1"
+        aria-label={
+          !this.showingInButton ? i18next.t("a11y.recommendations") : undefined
+        }
+        aria-busy={this.recommendationsLoading ? "true" : "false"}
       >
         <Fragment>
           {this.renderExternalCSS()}

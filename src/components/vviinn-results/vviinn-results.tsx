@@ -79,7 +79,7 @@ import {
   getSlotNames,
   addEventListenersWithSignal,
 } from "../../dom";
-import { OneClickDiscoveryResultsMode } from "../../widget/types";
+import { OneClickDiscoveryMode } from "../../widget/types";
 import { RESULTS_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
 import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
 import { RESULTS_CALCULATED_COLUMNS_CSS_VAR } from "../vviinn-carousel/constants";
@@ -209,7 +209,7 @@ export class VviinnResults {
   @Prop() addPriceContainer?: boolean = false;
 
   /** One-click Discovery Mode */
-  @Prop() oneClickDiscoveryMode?: OneClickDiscoveryResultsMode;
+  @Prop() oneClickDiscoveryMode?: OneClickDiscoveryMode;
   /** Comma-separated list of campaign IDs */
   @Prop() oneClickDiscoveryCampaigns: string = "";
 
