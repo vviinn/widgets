@@ -275,7 +275,7 @@ export class VviinnVprWidget implements ComponentInterface {
   vviinnWidgetClose: EventEmitter<BasicEventData>;
   /** @internal */
   @Event({ bubbles: true })
-  vviinnOneClickDiscoveryClosed: EventEmitter<TriggerSourceEventData>;
+  vviinnOneClickDiscoveryAppendClosed: EventEmitter<TriggerSourceEventData>;
   /** @internal */
   @Event() sourceProductReceived: EventEmitter<Recommendation>;
 
@@ -396,7 +396,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @Watch("closed")
   trackWidgetClose() {
     if (!this.closed) return;
-    this.vviinnOneClickDiscoveryClosed.emit({
+    this.vviinnOneClickDiscoveryAppendClosed.emit({
       isTriggeredByVpsWidget: this.showInWidget,
     });
     this.vviinnWidgetClose.emit(this.getBasicEventData());
@@ -695,6 +695,7 @@ export class VviinnVprWidget implements ComponentInterface {
       <div
         class={`recommendations-results recommendations-${this.mode}`}
         part="recommendations-results"
+        aria-busy={this.recommendationsLoading ? "true" : "false"}
       >
         {this.recommendationsLoading
           ? Array.from({ length: calculatedColumnsAmount * 3 }).map(
@@ -755,7 +756,10 @@ export class VviinnVprWidget implements ComponentInterface {
           [this.mode]: true,
           "show-in-widget": this.showInWidget,
         }}
+        role="region"
+        aria-label={i18next.t("a11y.recommendations")}
         aria-hidden="false"
+        tabindex="-1"
       >
         <Fragment>
           {this.renderExternalCSS()}
@@ -811,7 +815,7 @@ export class VviinnVprWidget implements ComponentInterface {
           {this.useCarousel ? this.renderCarousel() : this.renderResults()}
 
           {this.showNoResultText() && (
-            <div class="no-result-text">
+            <div class="no-result-text" role="status">
               {this.noResultText.length
                 ? this.noResultText
                 : i18next.t("noResultText")}

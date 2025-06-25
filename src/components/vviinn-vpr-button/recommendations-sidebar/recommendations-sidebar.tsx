@@ -141,6 +141,17 @@ export class RecommendationsSidebar {
     this.sourceProduct = event.detail;
   }
 
+  @Listen("keydown", { target: "window" })
+  handleEscape(event: KeyboardEvent) {
+    if (
+      event.key === "Escape" &&
+      this.sidebarState === "open" &&
+      !this.isAppended
+    ) {
+      this.sidebarState = "closed";
+    }
+  }
+
   @Watch("recommendationsLoading")
   handleLoadingChange(loading: boolean) {
     if (loading) {

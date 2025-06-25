@@ -519,7 +519,9 @@ export class VviinnResults {
     this.state.requestFilters = [];
   };
 
-  private oneClickDiscoveryClosedHandler = ({ detail }: TriggerSourceEvent) => {
+  private oneClickDiscoveryAppendClosedHandler = ({
+    detail,
+  }: TriggerSourceEvent) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.resetDiscoveryAppendIndexes();
   };
@@ -551,7 +553,10 @@ export class VviinnResults {
         ["vviinnFiltersChanged", this.filtersChangedHandler],
         ["vviinnFilterTriggered", this.filterTriggeredHandler],
         ["vviinnImageCrop", this.imageCropHandler],
-        ["vviinnOneClickDiscoveryClosed", this.oneClickDiscoveryClosedHandler],
+        [
+          "vviinnOneClickDiscoveryAppendClosed",
+          this.oneClickDiscoveryAppendClosedHandler,
+        ],
       ],
       signal,
     );
