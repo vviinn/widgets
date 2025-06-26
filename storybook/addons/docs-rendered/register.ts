@@ -1,5 +1,5 @@
-import { addons } from "@storybook/addons";
-import { DOCS_RENDERED } from "@storybook/core-events";
+import { addons } from "storybook/manager-api";
+import { DOCS_RENDERED } from "storybook/internal/core-events";
 
 addons.register("docs-rendered", (api) => {
   api.on(DOCS_RENDERED, () => {

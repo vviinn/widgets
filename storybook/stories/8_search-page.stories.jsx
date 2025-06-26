@@ -1,4 +1,4 @@
-import { action } from "@storybook/addon-actions";
+import { action } from "storybook/actions";
 import { vviinnToken } from "../helpers";
 import "../documentation/widgets/styles.css";
 import "../styles/search-page.css";
