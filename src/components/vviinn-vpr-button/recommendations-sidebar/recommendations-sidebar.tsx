@@ -94,6 +94,9 @@ export class RecommendationsSidebar {
   /** @internal */
   @Prop() uiSessionId?: string;
 
+  /** @internal - Element that triggered the sidebar opening (for focus management) */
+  @Prop() triggerElement?: HTMLElement;
+
   @State() sidebarState: SidebarState = "idle";
   @State() sourceProduct?: Recommendation;
   @State() showLoadingClass = false;
@@ -141,6 +144,17 @@ export class RecommendationsSidebar {
     this.sourceProduct = event.detail;
   }
 
+  @Listen("keydown", { target: "window" })
+  handleEscape(event: KeyboardEvent) {
+    if (
+      event.key === "Escape" &&
+      this.sidebarState === "open" &&
+      !this.isAppended
+    ) {
+      this.sidebarState = "closed";
+    }
+  }
+
   @Watch("recommendationsLoading")
   handleLoadingChange(loading: boolean) {
     if (loading) {
@@ -150,6 +164,22 @@ export class RecommendationsSidebar {
       this.loadingClassTimeout = setTimeout(() => {
         this.showLoadingClass = false;
       }, 500);
+    }
+  }
+
+  @Watch("sidebarState")
+  handleSidebarStateChange(newState: SidebarState, oldState: SidebarState) {
+    if (newState === "open" && oldState !== "open") {
+      const aside = this.getAsideElement();
+      if (aside) {
+        aside.focus();
+      }
+    } else if (
+      newState === "closed" &&
+      oldState === "open" &&
+      this.triggerElement
+    ) {
+      this.triggerElement?.focus();
     }
   }
 
@@ -197,6 +227,12 @@ export class RecommendationsSidebar {
           class="sidebar"
           part="body"
           onAnimationEnd={(e) => this.handleAnimationEnd(e)}
+          role={this.showInModal ? "dialog" : undefined}
+          aria-modal={this.showInModal ? "true" : "false"}
+          aria-label={
+            this.showInModal ? i18next.t("a11y.recommendations") : undefined
+          }
+          tabindex="-1"
         >
           <header
             class={{ "contains-source-img": this.isSourceImageValid() }}
@@ -215,7 +251,14 @@ export class RecommendationsSidebar {
             <button
               class="close-sidebar"
               onClick={() => (this.sidebarState = "closed")}
+              onKeyDown={(event: KeyboardEvent) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  this.sidebarState = "closed";
+                }
+              }}
               part="close-sidebar"
+              aria-label={i18next.t("a11y.closeButton")}
             >
               <CrossIcon />
             </button>

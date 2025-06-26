@@ -445,65 +445,6 @@ export class VviinnProductCard {
         }}
         exportparts={productCardParts}
       >
-        <div class="image-container" part="image-container">
-          <Linked deeplink={this.deeplink} part="image-link">
-            {renderImage(this.imageProps, this.responsive)}
-          </Linked>
-          <div class="product-card-actions-top" part="product-card-actions-top">
-            <button
-              class={{
-                hidden: !this.favoriteShow || this.isSourceProduct,
-              }}
-              part="favorite-button"
-              onClick={this.favoriteButtonClickHandler.bind(this)}
-            >
-              <div
-                key="favorite-not-pressed"
-                class={{
-                  hidden: this.favoriteButonPressed,
-                }}
-              >
-                <slot name="vviinn-favorite-icon">
-                  <FavoriteIcon width={14} height={14} />
-                </slot>
-              </div>
-              <div
-                key="favorite-pressed"
-                class={{
-                  hidden: !this.favoriteButonPressed,
-                }}
-              >
-                <slot name="vviinn-favorite-icon-pressed">
-                  <FavoriteIconPressed width={14} height={14} />
-                </slot>
-              </div>
-            </button>
-
-            <button
-              class={{
-                "update-button": true,
-                hidden: !this.isShowUpdateButton(),
-              }}
-              part="update-button-item"
-              onClick={() => {
-                this.vviinnCrossSellingClick.emit({
-                  animationInterval: generateRandomNumber(800, 1400),
-                  productData: this.productData,
-                });
-              }}
-            >
-              <div>
-                <slot name="vviinn-update-button-icon">
-                  <UpdateIcon width={14} height={14} />
-                </slot>
-              </div>
-            </button>
-          </div>
-          <div class="product-card-actions" part="product-card-actions">
-            <slot name="vviinn-product-card-actions"></slot>
-          </div>
-        </div>
-
         <div class="content-container" part="content-container">
           {this.isTransitioning ? (
             <Fragment>
@@ -643,6 +584,71 @@ export class VviinnProductCard {
               </span>
             </div>
           </button>
+        </div>
+
+        <div class="image-container" part="image-container">
+          <Linked deeplink={this.deeplink} part="image-link" tabindex={-1}>
+            {renderImage(this.imageProps, this.responsive)}
+          </Linked>
+          <div class="product-card-actions-top" part="product-card-actions-top">
+            <button
+              class={{
+                hidden: !this.favoriteShow || this.isSourceProduct,
+              }}
+              part="favorite-button"
+              onClick={this.favoriteButtonClickHandler.bind(this)}
+              aria-label={
+                this.favoriteButonPressed
+                  ? i18next.t("a11y.removeFromFavorites")
+                  : i18next.t("a11y.addToFavorites")
+              }
+            >
+              <div
+                key="favorite-not-pressed"
+                class={{
+                  hidden: this.favoriteButonPressed,
+                }}
+              >
+                <slot name="vviinn-favorite-icon">
+                  <FavoriteIcon width={14} height={14} />
+                </slot>
+              </div>
+              <div
+                key="favorite-pressed"
+                class={{
+                  hidden: !this.favoriteButonPressed,
+                }}
+              >
+                <slot name="vviinn-favorite-icon-pressed">
+                  <FavoriteIconPressed width={14} height={14} />
+                </slot>
+              </div>
+            </button>
+
+            <button
+              class={{
+                "update-button": true,
+                hidden: !this.isShowUpdateButton(),
+              }}
+              part="update-button-item"
+              onClick={() => {
+                this.vviinnCrossSellingClick.emit({
+                  animationInterval: generateRandomNumber(800, 1400),
+                  productData: this.productData,
+                });
+              }}
+              aria-label={i18next.t("a11y.findSimilarProducts")}
+            >
+              <div>
+                <slot name="vviinn-update-button-icon">
+                  <UpdateIcon width={14} height={14} />
+                </slot>
+              </div>
+            </button>
+          </div>
+          <div class="product-card-actions" part="product-card-actions">
+            <slot name="vviinn-product-card-actions"></slot>
+          </div>
         </div>
 
         {this.showFooterArrow && <div class="footer-arrow"></div>}

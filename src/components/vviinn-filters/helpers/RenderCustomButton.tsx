@@ -1,4 +1,5 @@
 import { h, JSX } from "@stencil/core";
+import { getRemoveFilterAriaLabel } from "../../../a11y";
 import { FilterIconClose } from "../../vviinn-icons";
 import { TextIcon } from "../../vviinn-icons/icons/TextIcon";
 
@@ -18,12 +19,23 @@ export const RenderCustomButton = ({
   hidden,
 }: RenderCustomButtonProps): JSX.Element => {
   const isClickable = !!onClick;
+
+  const ariaLabel =
+    isClickable && label
+      ? getRemoveFilterAriaLabel(label)
+      : !label
+        ? buttonType
+        : undefined;
+
   return (
     <li part="filters-sub-row" class={{ hidden }}>
       <button
         onClick={onClick}
         class={`filters-more-modal-button custom active ${isClickable ? "clickable" : ""}`}
         part="filters-option-button"
+        {...(ariaLabel && { "aria-label": ariaLabel })}
+        type="button"
+        disabled={!isClickable && !label}
       >
         {(buttonType === "image" || buttonType === "crop") &&
           !!imageSrc?.length && (
@@ -32,6 +44,8 @@ export const RenderCustomButton = ({
               width="24"
               height="24"
               src={imageSrc}
+              alt=""
+              aria-hidden="true"
             />
           )}
 
