@@ -1,11 +1,15 @@
 export default function storyLoader(source) {
   let processed = source;
 
-  for (let key in process.env) {
-    if (key.includes("STORYBOOK")) {
-      processed = processed.replaceAll(key, process.env[key]);
+  const envVars = Object.fromEntries(
+    Object.entries(process.env).filter(([key]) => key.startsWith('STORYBOOK_'))
+  );
+
+  Object.entries(envVars).forEach(([key, value]) => {
+    if (value) {
+      processed = processed.replaceAll(key, value);
     }
-  }
+  });
 
   return processed;
 }
