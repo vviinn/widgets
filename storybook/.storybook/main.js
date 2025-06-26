@@ -1,4 +1,5 @@
 import { resolve } from "path";
+import { loadEnv } from "vite";
 
 /** @type { import('@storybook/web-components-vite').StorybookConfig } */
 const config = {
@@ -16,11 +17,17 @@ const config = {
     disableTelemetry: true,
   },
   staticDirs: ["../public"],
-  viteFinal: async (config) => {
-    // Define globals for Node.js compatibility
+  viteFinal: async (config, { configType }) => {
+    const env = loadEnv(configType, process.cwd(), ["STORYBOOK_"]);
+
+    config.envPrefix = ["VITE_", "STORYBOOK_"];
+
     config.define = {
       ...config.define,
-      "process.env": "import.meta.env",
+      "process.env.STORYBOOK_API_PATH": JSON.stringify(env.STORYBOOK_API_PATH),
+      "import.meta.env.STORYBOOK_ENV": JSON.stringify(
+        env.STORYBOOK_ENV || process.env.STORYBOOK_ENV || "local",
+      ),
       global: "globalThis",
     };
 
