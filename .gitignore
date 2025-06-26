@@ -12,12 +12,15 @@ docs.json
 docs.d.ts
 src/**/readme.md
 src/stories
-storybook/storybook-static
-!storybook/.env
 .vscode/
 .DS_Store
 localhost-key.pem
 localhost.pem
+
+storybook/storybook-static
+!storybook/.env
+debug-storybook.log
+storybook/output.log
 
 # Cursor-specific files and folders
 .cursor/

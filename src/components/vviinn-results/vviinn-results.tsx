@@ -817,6 +817,7 @@ export class VviinnResults {
             <vviinn-vpr-button
               productId={p.productId}
               addStyle={false}
+              isStandalone={false}
               sidebarTitle=""
               appendSidebarToId={
                 isOneClickDiscoveryAppendMode

@@ -1,5 +1,6 @@
 import { resolve } from "path";
 
+/** @type { import('@storybook/web-components-vite').StorybookConfig } */
 const config = {
   stories: [
     "../stories/*.stories.@(js|jsx|ts|tsx)",
@@ -7,36 +8,45 @@ const config = {
   ],
   addons: [
     "@storybook/addon-links",
-    "@storybook/addon-essentials",
-    "@storybook/addon-webpack5-compiler-babel",
     "../addons/docs-rendered/register.ts",
-    "@storybook/addon-mdx-gfm",
+    "@storybook/addon-a11y",
+    "@storybook/addon-docs",
   ],
   core: {
     disableTelemetry: true,
   },
   staticDirs: ["../public"],
-  webpackFinal: async (config) => {
-    if (config && config.module && config.module.rules) {
-      config.module.rules = [
-        {
-          test: /\.mdx$/,
-          use: {
-            loader: resolve("./stories.loader.ts"),
-          },
-        },
-        ...config.module.rules,
-      ];
-    }
-    if (config && config.entry && Array.isArray(config.entry)) {
-      config.entry = config.entry.filter(
-        (singleEntry) => !singleEntry.includes("/webpack-hot-middleware/"),
-      );
-    }
+  viteFinal: async (config) => {
+    // Define globals for Node.js compatibility
+    config.define = {
+      ...config.define,
+      "process.env": "import.meta.env",
+      global: "globalThis",
+    };
+
+    // Custom MDX loader handling for Vite
+    if (!config.plugins) config.plugins = [];
+
+    config.plugins.push({
+      name: "custom-mdx-loader",
+      load(id) {
+        if (id.endsWith(".mdx")) {
+          const fs = require("fs");
+          const path = require("path");
+
+          if (fs.existsSync(id)) {
+            // Use our custom loader for .mdx files
+            const loader = require(resolve("./stories.loader.ts"));
+            return loader.default(fs.readFileSync(id, "utf-8"));
+          }
+        }
+      },
+    });
+
     return config;
   },
   framework: {
-    name: "@storybook/web-components-webpack5",
+    name: "@storybook/web-components-vite",
     options: {},
   },
   docs: {},

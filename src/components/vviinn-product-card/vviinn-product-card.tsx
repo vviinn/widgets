@@ -490,15 +490,6 @@ export class VviinnProductCard {
                 showInContainer={this.addPriceContainer}
               />
 
-              {this.setMode &&
-                !this.appliedDiscountPercentage &&
-                this.currentDiscountPercentage && (
-                  <div
-                    class="discount-label"
-                    part="discount-label"
-                  >{`-${this.currentDiscountPercentage}%`}</div>
-                )}
-
               {renderCustomLabels(this.customLabels.split(","))}
             </Fragment>
           )}
@@ -590,6 +581,14 @@ export class VviinnProductCard {
           <Linked deeplink={this.deeplink} part="image-link" tabindex={-1}>
             {renderImage(this.imageProps, this.responsive)}
           </Linked>
+          {this.setMode &&
+            !this.appliedDiscountPercentage &&
+            this.currentDiscountPercentage && (
+              <div
+                class="discount-label"
+                part="discount-label"
+              >{`-${this.currentDiscountPercentage}%`}</div>
+            )}
           <div class="product-card-actions-top" part="product-card-actions-top">
             <button
               class={{

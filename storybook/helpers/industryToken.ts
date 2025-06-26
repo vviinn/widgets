@@ -31,9 +31,11 @@ const data = {
   },
 };
 
-export const vviinnToken = data[vviinnIndustry].token;
+const selectedIndustry = data[vviinnIndustry] || data["home-living"];
+
+export const vviinnToken = selectedIndustry.token;
 export const productIdSimilarProducts =
-  data[vviinnIndustry].productIdSimilarProducts;
-export const productIdCrossSelling = data[vviinnIndustry].productIdCrossSelling;
-export const textSearchQuery = data[vviinnIndustry].textSearchQuery;
-export const filterValue = data[vviinnIndustry].filterValue;
+  selectedIndustry.productIdSimilarProducts;
+export const productIdCrossSelling = selectedIndustry.productIdCrossSelling;
+export const textSearchQuery = selectedIndustry.textSearchQuery;
+export const filterValue = selectedIndustry.filterValue;

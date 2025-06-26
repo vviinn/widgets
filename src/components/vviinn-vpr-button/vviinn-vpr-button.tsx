@@ -140,6 +140,8 @@ export class VviinnVprButton {
   @Prop() showFilters: boolean = false;
   /** Wrap the Product Card's price values in the container. */
   @Prop() addPriceContainer?: boolean = false;
+  /** One click Discovery mode*/
+  @Prop() oneClickDiscoveryMode?: OneClickDiscoveryMode = "modal";
 
   /** List of discounts for Set mode. Example: "5, 10, 15, 20" (could be less than 4 numbers) */
   @Prop() setModeDiscounts: string = this.mode === "set" ? "5, 10, 15" : "";
@@ -163,9 +165,8 @@ export class VviinnVprButton {
   /** ID of an HTML element that you want to attach the sidebar  */
   /** @internal */
   @Prop() appendSidebarToId: string;
-  /** One click Discovery mode*/
   /** @internal */
-  @Prop() oneClickDiscoveryMode?: OneClickDiscoveryMode = "modal";
+  @Prop() isStandalone: boolean = true;
 
   /** @internal */
   @Prop() apiPath?: string;
@@ -216,7 +217,7 @@ export class VviinnVprButton {
   private eventAbortController?: AbortController;
 
   connectedCallback() {
-    this.iconSideSize = this.oneClickDiscoveryMode === "modal" ? 24 : 14;
+    this.iconSideSize = this.isStandalone ? 24 : 14;
     const { onChange } = useSearchStore(this.showInWidget);
     this.disposeStoreListener = onChange("searchStatus", (searchStatus) => {
       searchStatus === "loading" && this.sidebarCloseListener();

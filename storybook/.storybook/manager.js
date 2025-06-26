@@ -1,4 +1,4 @@
-import { addons } from "@storybook/manager-api";
+import { addons } from "storybook/manager-api";
 import vviinnTheme from "./vviinn-theme";
 import { vviinnIndustry } from "../helpers";
 
