@@ -691,13 +691,15 @@ export class VviinnVprWidget implements ComponentInterface {
     const calculatedColumnsAmount = parseInt(
       styleSheet.getPropertyValue(RESULTS_CALCULATED_COLUMNS_CSS_VAR),
     );
+    const isLoading = this.recommendationsLoading;
     return (
       <div
         class={`recommendations-results recommendations-${this.mode}`}
         part="recommendations-results"
-        aria-busy={this.recommendationsLoading ? "true" : "false"}
+        aria-busy={isLoading ? "true" : "false"}
+        aria-live={isLoading ? "polite" : "off"}
       >
-        {this.recommendationsLoading
+        {isLoading
           ? Array.from({ length: calculatedColumnsAmount * 3 }).map(
               (_, index) => (
                 <vviinn-product-card-skeleton
@@ -747,6 +749,7 @@ export class VviinnVprWidget implements ComponentInterface {
   render() {
     if (this.recommendations.length === 0 && this.noResultShow === false)
       return null;
+    const isLoading = this.recommendationsLoading;
 
     return (
       <Host
@@ -760,7 +763,8 @@ export class VviinnVprWidget implements ComponentInterface {
         aria-label={
           !this.showingInButton ? i18next.t("a11y.recommendations") : undefined
         }
-        aria-busy={this.recommendationsLoading ? "true" : "false"}
+        aria-busy={isLoading ? "true" : "false"}
+        aria-live={isLoading ? "polite" : "off"}
       >
         <Fragment>
           {this.renderExternalCSS()}
