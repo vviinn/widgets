@@ -5,11 +5,11 @@ export default function storyLoader(source) {
     Object.entries(process.env).filter(([key]) => key.startsWith('STORYBOOK_'))
   );
 
-  for (let key in envVars) {
-    if (envVars[key]) {
-      processed = processed.replaceAll(key, envVars[key]);
+  Object.entries(envVars).forEach(([key, value]) => {
+    if (value) {
+      processed = processed.replaceAll(key, value);
     }
-  }
+  });
 
   return processed;
 }
