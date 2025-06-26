@@ -111,6 +111,12 @@ export const resources: Resource = {
         colorOption: "{{label}} Farbe",
         showMoreOptions: "{{count}} weitere {{label}} Optionen anzeigen",
 
+        // Detected Objects
+        detectedObject: "Erkanntes Objekt auswählen",
+
+        // Discovery
+        recommendations: "Empfohlene Produkte",
+
         // External Links
         vviinnLink: "Vviinn-Website besuchen (öffnet in neuem Tab)",
       },
@@ -218,6 +224,12 @@ export const resources: Resource = {
         filterButton: "{{label}} filter",
         colorOption: "{{label}} color",
         showMoreOptions: "Show {{count}} more {{label}} options",
+
+        // Detected Objects
+        detectedObject: "Select detected object",
+
+        // Discovery Widget
+        recommendations: "Recommended products",
 
         // External Links
         vviinnLink: "Visit Vviinn website (opens in new tab)",
