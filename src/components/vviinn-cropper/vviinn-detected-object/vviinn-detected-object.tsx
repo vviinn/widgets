@@ -84,9 +84,6 @@ export class VviinnDetectedObject {
   @State() position: [string, string] = ["0", "0"];
   render() {
     const isActive = this.isActive();
-    const ariaLabel = isActive
-      ? i18next.t("a11y.detectedObjectSelected")
-      : i18next.t("a11y.detectedObject");
 
     return (
       <Host
@@ -100,7 +97,8 @@ export class VviinnDetectedObject {
       >
         <button
           class="detected-object-button"
-          aria-label={ariaLabel}
+          aria-label={i18next.t("a11y.detectedObject")}
+          aria-pressed={isActive}
           onClick={() => this.selectDetectedObject()}
           onKeyDown={this.handleKeyDown}
         ></button>

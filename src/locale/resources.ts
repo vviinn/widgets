@@ -113,7 +113,6 @@ export const resources: Resource = {
 
         // Detected Objects
         detectedObject: "Erkanntes Objekt auswählen",
-        detectedObjectSelected: "Erkanntes Objekt ausgewählt",
 
         // Discovery
         recommendations: "Empfohlene Produkte",
@@ -228,7 +227,6 @@ export const resources: Resource = {
 
         // Detected Objects
         detectedObject: "Select detected object",
-        detectedObjectSelected: "Detected object selected",
 
         // Discovery Widget
         recommendations: "Recommended products",
