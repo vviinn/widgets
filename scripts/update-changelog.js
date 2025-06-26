@@ -38,7 +38,7 @@ fs.readFile("./CHANGELOG.md", "utf8", (err, data) => {
 
   releasesFilter.unshift('<Meta title="Changelog/Changelog"></Meta>');
   releasesFilter.unshift(
-    'import { Meta, Story, Canvas } from "@storybook/addon-docs";',
+    'import { Meta, Story, Canvas } from "@storybook/addon-docs/blocks";',
   );
 
   fs.writeFile(
