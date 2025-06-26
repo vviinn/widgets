@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.175.1](https://github.com/vviinn/widgets/compare/v2.175.0...v2.175.1) (2025-06-26)
+
+
+### Bug Fixes
+
+* env variables for the Storybook ([46e5a6f](https://github.com/vviinn/widgets/commit/46e5a6f26c3affcc3a0dca8227eb86460f44e621))
+
 ## [2.175.0](https://github.com/vviinn/widgets/compare/v2.174.0...v2.175.0) (2025-06-26)
 
 
