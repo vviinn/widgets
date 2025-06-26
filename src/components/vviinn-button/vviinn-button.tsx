@@ -22,7 +22,6 @@ export class VviinnButton {
           class={this.addStyle ? "open-button" : "raw-open-button"}
           part="button"
           tabindex="-1"
-          aria-hidden="true"
         >
           <slot>
             <VisualSearchIcon />
