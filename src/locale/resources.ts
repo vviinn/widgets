@@ -111,6 +111,10 @@ export const resources: Resource = {
         colorOption: "{{label}} Farbe",
         showMoreOptions: "{{count}} weitere {{label}} Optionen anzeigen",
 
+        // Detected Objects
+        detectedObject: "Erkanntes Objekt auswählen",
+        detectedObjectSelected: "Erkanntes Objekt ausgewählt",
+
         // Discovery
         recommendations: "Empfohlene Produkte",
 
@@ -221,6 +225,10 @@ export const resources: Resource = {
         filterButton: "{{label}} filter",
         colorOption: "{{label}} color",
         showMoreOptions: "Show {{count}} more {{label}} options",
+
+        // Detected Objects
+        detectedObject: "Select detected object",
+        detectedObjectSelected: "Detected object selected",
 
         // Discovery Widget
         recommendations: "Recommended products",
