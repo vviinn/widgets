@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.175.0](https://github.com/vviinn/widgets/compare/v2.174.0...v2.175.0) (2025-06-26)
+
+
+### Features
+
+* added storybook a11y addon ([3db9781](https://github.com/vviinn/widgets/commit/3db9781baee7a6eec7e30d8c4866d54a434a641d))
+* Upgrade the Storybook to v9 ([7280303](https://github.com/vviinn/widgets/commit/7280303c3b31be6ebf93fb30da3aab82c4af5c87))
+
 ## [2.174.0](https://github.com/vviinn/widgets/compare/v2.173.0...v2.174.0) (2025-06-26)
 
 
