@@ -79,7 +79,7 @@ import {
   getSlotNames,
   addEventListenersWithSignal,
 } from "../../dom";
-import { OneClickDiscoveryResultsMode } from "../../widget/types";
+import { OneClickDiscoveryMode } from "../../widget/types";
 import { RESULTS_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
 import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
 import { RESULTS_CALCULATED_COLUMNS_CSS_VAR } from "../vviinn-carousel/constants";
@@ -209,7 +209,7 @@ export class VviinnResults {
   @Prop() addPriceContainer?: boolean = false;
 
   /** One-click Discovery Mode */
-  @Prop() oneClickDiscoveryMode?: OneClickDiscoveryResultsMode;
+  @Prop() oneClickDiscoveryMode?: OneClickDiscoveryMode;
   /** Comma-separated list of campaign IDs */
   @Prop() oneClickDiscoveryCampaigns: string = "";
 
@@ -519,7 +519,9 @@ export class VviinnResults {
     this.state.requestFilters = [];
   };
 
-  private oneClickDiscoveryClosedHandler = ({ detail }: TriggerSourceEvent) => {
+  private oneClickDiscoveryAppendClosedHandler = ({
+    detail,
+  }: TriggerSourceEvent) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.resetDiscoveryAppendIndexes();
   };
@@ -551,7 +553,10 @@ export class VviinnResults {
         ["vviinnFiltersChanged", this.filtersChangedHandler],
         ["vviinnFilterTriggered", this.filterTriggeredHandler],
         ["vviinnImageCrop", this.imageCropHandler],
-        ["vviinnOneClickDiscoveryClosed", this.oneClickDiscoveryClosedHandler],
+        [
+          "vviinnOneClickDiscoveryAppendClosed",
+          this.oneClickDiscoveryAppendClosedHandler,
+        ],
       ],
       signal,
     );
@@ -810,9 +815,9 @@ export class VviinnResults {
             class="vviinn-results-product-card-actions"
           >
             <vviinn-vpr-button
-              onClick={() => oneClickDiscoveryHandler(i)}
               productId={p.productId}
               addStyle={false}
+              isStandalone={false}
               sidebarTitle=""
               appendSidebarToId={
                 isOneClickDiscoveryAppendMode
@@ -832,6 +837,7 @@ export class VviinnResults {
               campaigns={this.oneClickDiscoveryCampaigns}
               showInWidget={this.showInWidget}
               uiSessionId={this.uiSessionId}
+              onVviinnVprButtonActivated={() => oneClickDiscoveryHandler(i)}
             >
               {this.renderProductCardSlots()}
               {this.renderVprIconSlot()}

@@ -11,11 +11,11 @@ const discoveryButtonCode = (append = false) => {
         <vviinn-vpr-button
             token="TOKEN"
             product-id="PRODUCT_ID"
-            one-click-discovery-mode="modal"
             mode="continuity"
             block-title=""
             locale="en-US"
             add-style="false"
+            is-standalone="false"
         ></vviinn-vpr-button>
     </div>
 `;

@@ -1,14 +1,13 @@
 import docJson from "../../docs.json";
-import { fn } from "@storybook/test";
 import {
   extractArgTypes,
   extractComponentDescription,
   setStencilDocJson,
-} from "@pxtrn/storybook-addon-docs-stencil";
+} from "@kurbar/storybook-addon-docs-stencil";
 
 let loader;
 let vviinnWidgets;
-let isLocalEnv = process.env.STORYBOOK_ENV === "local";
+let isLocalEnv = import.meta.env.STORYBOOK_ENV === "local";
 
 (async () => {
   if (isLocalEnv) {
@@ -22,10 +21,11 @@ let isLocalEnv = process.env.STORYBOOK_ENV === "local";
   }
 })();
 
-if (docJson) setStencilDocJson(docJson);
+// Set Stencil documentation for automatic prop documentation
+setStencilDocJson(docJson);
 
 export const parameters = {
-  actions: { onClick: fn() },
+  actions: { argTypesRegex: "^on[A-Z].*" },
   controls: { hideNoControlsWarning: true, expanded: true },
   docs: {
     extractArgTypes,

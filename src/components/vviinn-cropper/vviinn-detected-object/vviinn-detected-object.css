@@ -1,11 +1,30 @@
 @import "../../../variables.css";
 
 :host {
+  --button-size: 36px;
   display: block;
   position: absolute;
   left: calc(var(--x-position));
   top: calc(var(--y-position));
   z-index: 2;
+}
+
+.detected-object-button {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+
+  position: absolute;
+  left: calc(-1 * var(--button-size) / 2);
+  top: calc(-1 * var(--button-size) / 2);
+  width: var(--button-size);
+  height: var(--button-size);
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 3;
 }
 
 :host::before,
@@ -20,7 +39,7 @@
 }
 
 :host::before {
-  --size: 36px;
+  --size: var(--button-size);
   border-radius: 50%;
   z-index: 0;
   background: rgba(0, 0, 0, 0.16);

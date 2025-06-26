@@ -9,6 +9,7 @@ import {
 } from "@stencil/core";
 import { pipe } from "fp-ts/lib/function";
 import * as O from "fp-ts/lib/Option";
+import i18next from "i18next";
 import { detectedObjectEq } from "../../../searchSession/searchSession";
 import { scaleWithSized, center } from "../../../geometry/Rectangle";
 import {
@@ -64,6 +65,13 @@ export class VviinnDetectedObject {
     });
   }
 
+  private handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      this.selectDetectedObject();
+    }
+  };
+
   private isActive(): boolean {
     if (!this.detectedObject || !this.selectedDetectedObject) return false;
 
@@ -75,17 +83,26 @@ export class VviinnDetectedObject {
 
   @State() position: [string, string] = ["0", "0"];
   render() {
+    const isActive = this.isActive();
+
     return (
       <Host
         class={{
-          active: this.isActive(),
+          active: isActive,
         }}
-        onClick={() => this.selectDetectedObject()}
         style={{
           "--x-position": this.getObjectPosition()[0],
           "--y-position": this.getObjectPosition()[1],
         }}
-      ></Host>
+      >
+        <button
+          class="detected-object-button"
+          aria-label={i18next.t("a11y.detectedObject")}
+          aria-pressed={isActive}
+          onClick={() => this.selectDetectedObject()}
+          onKeyDown={this.handleKeyDown}
+        ></button>
+      </Host>
     );
   }
 }

@@ -2,6 +2,40 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.175.2](https://github.com/vviinn/widgets/compare/v2.175.1...v2.175.2) (2025-06-26)
+
+
+### Bug Fixes
+
+* Fix Storybook build ([a6bb149](https://github.com/vviinn/widgets/commit/a6bb149e9768106d557b02b4c053157315b0f4af))
+
+### [2.175.1](https://github.com/vviinn/widgets/compare/v2.175.0...v2.175.1) (2025-06-26)
+
+
+### Bug Fixes
+
+* env variables for the Storybook ([46e5a6f](https://github.com/vviinn/widgets/commit/46e5a6f26c3affcc3a0dca8227eb86460f44e621))
+
+## [2.175.0](https://github.com/vviinn/widgets/compare/v2.174.0...v2.175.0) (2025-06-26)
+
+
+### Features
+
+* added storybook a11y addon ([3db9781](https://github.com/vviinn/widgets/commit/3db9781baee7a6eec7e30d8c4866d54a434a641d))
+* Upgrade the Storybook to v9 ([7280303](https://github.com/vviinn/widgets/commit/7280303c3b31be6ebf93fb30da3aab82c4af5c87))
+
+## [2.174.0](https://github.com/vviinn/widgets/compare/v2.173.0...v2.174.0) (2025-06-26)
+
+
+### Features
+
+* One-click Discovery accessibility ([5a238a0](https://github.com/vviinn/widgets/commit/5a238a0d05190eff4c78186862b1b537079c4975))
+
+
+### Bug Fixes
+
+* One-click discovery asseccibility in the product grid ([3f22801](https://github.com/vviinn/widgets/commit/3f2280190832549f450d0ad4ade457a83077f2b2))
+
 ## [2.173.0](https://github.com/vviinn/widgets/compare/v2.172.3...v2.173.0) (2025-06-24)
 
 
