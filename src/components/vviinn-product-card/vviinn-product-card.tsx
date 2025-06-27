@@ -476,6 +476,8 @@ export class VviinnProductCard {
                   classIconUrls={energyCertification?.classIconUrls}
                   classDataSheetUrl={energyCertification?.classDataSheetUrl}
                   productType={energyCertification?.productType}
+                  certificationClass={energyCertification?.certificationClass}
+                  classRange={energyCertification?.classRange}
                 ></vviinn-energy-label>
               ))}
 

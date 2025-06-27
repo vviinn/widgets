@@ -69,6 +69,10 @@ export const resources: Resource = {
       },
       energyLabel: {
         dataSheetText: "Produktdatenblatt",
+        iconAlt: "Energieeffizienzklasse",
+        iconAltWithClass:
+          "Energieeffizienzklasse {{energyClass}} auf einer Skala von {{minClass}} bis {{maxClass}}",
+        iconAltWithClassOnly: "Energieeffizienzklasse {{energyClass}}",
       },
       a11y: {
         // General UI
@@ -184,6 +188,10 @@ export const resources: Resource = {
       },
       energyLabel: {
         dataSheetText: "Product Data Sheet",
+        iconAlt: "Energy efficiency class",
+        iconAltWithClass:
+          "Energy efficiency class {{energyClass}} on a scale from {{minClass}} to {{maxClass}}",
+        iconAltWithClassOnly: "Energy efficiency class {{energyClass}}",
       },
       a11y: {
         // General UI
