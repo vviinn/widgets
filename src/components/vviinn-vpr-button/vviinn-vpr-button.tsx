@@ -9,6 +9,7 @@ import {
   State,
   Watch,
 } from "@stencil/core";
+import i18next from "i18next";
 import { version } from "../../../package.json";
 import { SimilarProductsIcon, CrossSellingIcon } from "../vviinn-icons";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
@@ -139,6 +140,8 @@ export class VviinnVprButton {
   @Prop() showFilters: boolean = false;
   /** Wrap the Product Card's price values in the container. */
   @Prop() addPriceContainer?: boolean = false;
+  /** One click Discovery mode*/
+  @Prop() oneClickDiscoveryMode?: OneClickDiscoveryMode = "modal";
 
   /** List of discounts for Set mode. Example: "5, 10, 15, 20" (could be less than 4 numbers) */
   @Prop() setModeDiscounts: string = this.mode === "set" ? "5, 10, 15" : "";
@@ -162,9 +165,8 @@ export class VviinnVprButton {
   /** ID of an HTML element that you want to attach the sidebar  */
   /** @internal */
   @Prop() appendSidebarToId: string;
-  /** One click Discovery mode*/
   /** @internal */
-  @Prop() oneClickDiscoveryMode?: OneClickDiscoveryMode = "standalone";
+  @Prop() isStandalone: boolean = true;
 
   /** @internal */
   @Prop() apiPath?: string;
@@ -205,6 +207,9 @@ export class VviinnVprButton {
   /** Add to Basket button clicked */
   @Event() vviinnAddToBasket: EventEmitter<BasicEventData>;
 
+  /** The VPR button is activated */
+  @Event() vviinnVprButtonActivated: EventEmitter<void>;
+
   @State() targetAppendSidebarTo: HTMLElement;
 
   private iconSideSize?: number;
@@ -212,7 +217,7 @@ export class VviinnVprButton {
   private eventAbortController?: AbortController;
 
   connectedCallback() {
-    this.iconSideSize = this.oneClickDiscoveryMode === "standalone" ? 24 : 14;
+    this.iconSideSize = this.isStandalone ? 24 : 14;
     const { onChange } = useSearchStore(this.showInWidget);
     this.disposeStoreListener = onChange("searchStatus", (searchStatus) => {
       searchStatus === "loading" && this.sidebarCloseListener();
@@ -247,20 +252,33 @@ export class VviinnVprButton {
     }
   };
 
+  private handleButtonClick = () => {
+    this.vviinnVprButtonActivated.emit();
+    if (this.appendSidebarToId && !this.targetAppendSidebarTo) {
+      setTimeout(() => {
+        this.handleClick();
+      }, 250);
+    } else {
+      this.handleClick();
+    }
+  };
+
+  private getAriaLabel(): string {
+    try {
+      return i18next.t("a11y.findSimilarProducts") || "Find similar products";
+    } catch {
+      return "Find similar products";
+    }
+  }
+
   render() {
     return (
       <Host
-        onClick={(): void => {
-          if (this.appendSidebarToId && !this.targetAppendSidebarTo) {
-            setTimeout(() => {
-              this.handleClick();
-            }, 250);
-          } else {
-            this.handleClick();
-          }
-        }}
         role="button"
         tabindex="0"
+        aria-label={this.getAriaLabel()}
+        onClick={this.handleButtonClick}
+        onKeyDown={this.handleKeyDown}
       >
         <vviinn-button addStyle={this.addStyle} part="vviinn-button">
           <slot>
@@ -280,6 +298,13 @@ export class VviinnVprButton {
       </Host>
     );
   }
+
+  private handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      this.handleButtonClick();
+    }
+  };
 
   handleClick(): void {
     const sidebar = document.createElement("vviinn-recommendations-sidebar");
@@ -320,6 +345,7 @@ export class VviinnVprButton {
       !!this.targetAppendSidebarTo || !!this.appendSidebarToElement;
     sidebar.showInWidget = this.showInWidget;
     sidebar.uiSessionId = this.uiSessionId;
+    sidebar.triggerElement = this.el;
 
     if (this.targetAppendSidebarTo) {
       sidebar.mode = "grid";

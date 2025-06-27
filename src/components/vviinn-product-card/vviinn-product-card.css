@@ -38,6 +38,18 @@
 }
 
 .image-container {
+  order: 1;
+}
+
+.content-container {
+  order: 2;
+}
+
+.basket-button-container {
+  order: 3;
+}
+
+.image-container {
   position: relative;
   width: 100%;
 }
@@ -70,6 +82,7 @@
     var(--product-card-content-align-default)
   );
   gap: var(--spacing-50);
+  background-color: var(--surface-bg-color-02);
 }
 
 .price-container {
@@ -96,7 +109,7 @@
 }
 
 .price-outdated {
-  color: var(--color-text-helper);
+  color: var(--color-text-secondary);
   text-decoration: line-through;
 }
 
@@ -116,7 +129,7 @@
 }
 
 .price-amount--base {
-  color: var(--color-text-helper);
+  color: var(--color-text-secondary);
   font-size: var(--font-size-caption);
 }
 

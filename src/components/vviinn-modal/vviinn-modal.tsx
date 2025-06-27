@@ -109,6 +109,7 @@ export class VviinnModal {
         onAnimationEnd={(ev: AnimationEvent) => this.handleAnimationEnd(ev)}
         role="dialog"
         aria-modal={this.active ? "true" : "false"}
+        aria-label={i18next.t("imageSearchModalTitle")}
         inert={!this.active ? true : undefined}
       >
         <div class="head">
@@ -119,6 +120,7 @@ export class VviinnModal {
                 this.resetState();
                 this.resetTopScroll();
               }}
+              aria-label={i18next.t("a11y.backButton")}
             >
               <SecondaryActionIcon />
             </button>

@@ -275,7 +275,7 @@ export class VviinnVprWidget implements ComponentInterface {
   vviinnWidgetClose: EventEmitter<BasicEventData>;
   /** @internal */
   @Event({ bubbles: true })
-  vviinnOneClickDiscoveryClosed: EventEmitter<TriggerSourceEventData>;
+  vviinnOneClickDiscoveryAppendClosed: EventEmitter<TriggerSourceEventData>;
   /** @internal */
   @Event() sourceProductReceived: EventEmitter<Recommendation>;
 
@@ -396,7 +396,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @Watch("closed")
   trackWidgetClose() {
     if (!this.closed) return;
-    this.vviinnOneClickDiscoveryClosed.emit({
+    this.vviinnOneClickDiscoveryAppendClosed.emit({
       isTriggeredByVpsWidget: this.showInWidget,
     });
     this.vviinnWidgetClose.emit(this.getBasicEventData());
@@ -691,12 +691,15 @@ export class VviinnVprWidget implements ComponentInterface {
     const calculatedColumnsAmount = parseInt(
       styleSheet.getPropertyValue(RESULTS_CALCULATED_COLUMNS_CSS_VAR),
     );
+    const isLoading = this.recommendationsLoading;
     return (
       <div
         class={`recommendations-results recommendations-${this.mode}`}
         part="recommendations-results"
+        aria-busy={isLoading ? "true" : "false"}
+        aria-live={isLoading ? "polite" : "off"}
       >
-        {this.recommendationsLoading
+        {isLoading
           ? Array.from({ length: calculatedColumnsAmount * 3 }).map(
               (_, index) => (
                 <vviinn-product-card-skeleton
@@ -746,6 +749,7 @@ export class VviinnVprWidget implements ComponentInterface {
   render() {
     if (this.recommendations.length === 0 && this.noResultShow === false)
       return null;
+    const isLoading = this.recommendationsLoading;
 
     return (
       <Host
@@ -755,7 +759,12 @@ export class VviinnVprWidget implements ComponentInterface {
           [this.mode]: true,
           "show-in-widget": this.showInWidget,
         }}
-        aria-hidden="false"
+        role="region"
+        aria-label={
+          !this.showingInButton ? i18next.t("a11y.recommendations") : undefined
+        }
+        aria-busy={isLoading ? "true" : "false"}
+        aria-live={isLoading ? "polite" : "off"}
       >
         <Fragment>
           {this.renderExternalCSS()}
@@ -803,7 +812,9 @@ export class VviinnVprWidget implements ComponentInterface {
               {this.showFilters && <vviinn-filters></vviinn-filters>}
 
               {this.showExtendedFilters && (
-                <vviinn-extended-filters></vviinn-extended-filters>
+                <vviinn-extended-filters
+                  showingInButton={this.showingInButton}
+                ></vviinn-extended-filters>
               )}
             </div>
           )}
@@ -811,7 +822,7 @@ export class VviinnVprWidget implements ComponentInterface {
           {this.useCarousel ? this.renderCarousel() : this.renderResults()}
 
           {this.showNoResultText() && (
-            <div class="no-result-text">
+            <div class="no-result-text" role="status">
               {this.noResultText.length
                 ? this.noResultText
                 : i18next.t("noResultText")}

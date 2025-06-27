@@ -8,6 +8,7 @@ import {
   Element,
   Event,
   EventEmitter,
+  Watch,
 } from "@stencil/core";
 import {
   SearchModalCameraIcon,
@@ -197,6 +198,15 @@ export class VviinnVpsButton {
     }
   }
 
+  @Watch("buttonPressed")
+  buttonPressedWatcher(newValue: boolean, oldValue: boolean) {
+    if (oldValue === true && newValue === false) {
+      requestAnimationFrame(() => {
+        this.el.focus();
+      });
+    }
+  }
+
   connectedCallback() {
     updateGlobalState(this);
   }
@@ -237,17 +247,7 @@ export class VviinnVpsButton {
   };
 
   private handleKeyDown = (event: KeyboardEvent) => {
-    const path = event.composedPath();
-    const isFromTextSearchInput = path.some((el) =>
-      (el as HTMLElement).classList?.contains("text-search-input"),
-    );
-
-    if (isFromTextSearchInput) return;
-
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      this.handleActivation();
-    }
+    if (event.key === "Enter" || event.key === " ") this.handleActivation();
   };
 
   private getButtonConfig() {
@@ -276,11 +276,11 @@ export class VviinnVpsButton {
     const { ariaLabel, buttonIcon } = this.getButtonConfig();
     return (
       <Host
-        role="button"
-        tabindex="0"
-        aria-label={ariaLabel}
-        onClick={this.handleActivation}
-        onKeyDown={this.handleKeyDown}
+        role={this.buttonPressed ? undefined : "button"}
+        tabindex={this.buttonPressed ? undefined : "0"}
+        aria-label={this.buttonPressed ? undefined : ariaLabel}
+        onClick={this.buttonPressed ? undefined : this.handleActivation}
+        onKeyDown={this.buttonPressed ? undefined : this.handleKeyDown}
       >
         <vviinn-button addStyle={this.addStyle} part="vviinn-button">
           <slot>{buttonIcon}</slot>

@@ -19,3 +19,55 @@ export function addEventListenersWithSignal(
     target.addEventListener(type, handler, { signal });
   });
 }
+
+export function disableTabbing(element: Element): void {
+  const focusableElements = element.querySelectorAll(
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+  );
+
+  focusableElements.forEach((el) => {
+    const htmlEl = el as HTMLElement;
+    if (!htmlEl.hasAttribute("data-original-tabindex")) {
+      htmlEl.setAttribute("data-original-tabindex", htmlEl.tabIndex.toString());
+    }
+    htmlEl.tabIndex = -1;
+  });
+}
+
+export function enableTabbing(element: Element): void {
+  const focusableElements = element.querySelectorAll(
+    "[data-original-tabindex]",
+  );
+
+  focusableElements.forEach((el) => {
+    const htmlEl = el as HTMLElement;
+    const originalTabIndex = htmlEl.getAttribute("data-original-tabindex");
+
+    if (originalTabIndex === "0" || originalTabIndex === "") {
+      htmlEl.removeAttribute("tabindex");
+    } else {
+      htmlEl.tabIndex = parseInt(originalTabIndex, 10);
+    }
+    htmlEl.removeAttribute("data-original-tabindex");
+  });
+}
+
+export function setElementInteractivity(
+  element: Element,
+  interactive: boolean,
+): void {
+  if (interactive) {
+    element.removeAttribute("inert");
+    element.removeAttribute("aria-hidden");
+    enableTabbing(element);
+  } else {
+    const activeElement = document.activeElement;
+    if (activeElement && element.contains(activeElement)) {
+      (activeElement as HTMLElement).blur();
+    }
+
+    element.setAttribute("inert", "");
+    element.setAttribute("aria-hidden", "true");
+    disableTabbing(element);
+  }
+}

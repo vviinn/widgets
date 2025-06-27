@@ -1,6 +1,6 @@
 import { vviinnToken } from "../../helpers";
 import { clickHandlers } from "../index";
-import { Source } from "@storybook/blocks";
+import { Source } from "@storybook/addon-docs/blocks";
 
 import "../tabs/styles.css";
 import "../../styles/filters-search-bar.css";
@@ -41,7 +41,7 @@ import "../../styles/product-card.css";
               block-title=""
               locale="en-US"
               add-style="false"
-              one-click-discovery-mode="modal"
+              is-standalone="false"
               append-sidebar-to={
                 props.cardData.buttonParams?.append
                   ? "product-card-append-container"

@@ -13,6 +13,8 @@ import {
 } from "@stencil/core";
 import { chunksOf } from "fp-ts/lib/Array";
 import { pipe } from "fp-ts/lib/function";
+import i18next from "i18next";
+
 import { Recommendation } from "../../interfaces/recommendation";
 import { ChevronIcon } from "../vviinn-icons";
 import { CampaignTypeId, campaignTypeNames } from "../../campaign/Campaign";
@@ -717,6 +719,7 @@ export class VviinnCarousel {
                   onClick={() => this.handleCarouselButtonClick("left")}
                   part="carousel-button"
                   disabled={this.isFirst()}
+                  aria-label={i18next.t("buttons.previous")}
                 >
                   <ChevronIcon />
                 </button>
@@ -726,6 +729,7 @@ export class VviinnCarousel {
                   onClick={() => this.handleCarouselButtonClick("right")}
                   part="carousel-button"
                   disabled={this.isLast()}
+                  aria-label={i18next.t("buttons.next")}
                 >
                   <ChevronIcon />
                 </button>

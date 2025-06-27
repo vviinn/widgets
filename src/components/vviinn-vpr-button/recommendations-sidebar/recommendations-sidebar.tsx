@@ -94,6 +94,9 @@ export class RecommendationsSidebar {
   /** @internal */
   @Prop() uiSessionId?: string;
 
+  /** @internal - Element that triggered the sidebar opening (for focus management) */
+  @Prop() triggerElement?: HTMLElement;
+
   @State() sidebarState: SidebarState = "idle";
   @State() sourceProduct?: Recommendation;
   @State() showLoadingClass = false;
@@ -141,6 +144,17 @@ export class RecommendationsSidebar {
     this.sourceProduct = event.detail;
   }
 
+  @Listen("keydown", { target: "window" })
+  handleEscape(event: KeyboardEvent) {
+    if (
+      event.key === "Escape" &&
+      this.sidebarState === "open" &&
+      !this.isAppended
+    ) {
+      this.sidebarState = "closed";
+    }
+  }
+
   @Watch("recommendationsLoading")
   handleLoadingChange(loading: boolean) {
     if (loading) {
@@ -150,6 +164,24 @@ export class RecommendationsSidebar {
       this.loadingClassTimeout = setTimeout(() => {
         this.showLoadingClass = false;
       }, 500);
+    }
+  }
+
+  @Watch("sidebarState")
+  handleSidebarStateChange(newState: SidebarState, oldState: SidebarState) {
+    if (newState === "open" && oldState !== "open") {
+      setTimeout(() => {
+        const closeButton = this.el.shadowRoot.querySelector(
+          ".close-sidebar",
+        ) as HTMLElement;
+        closeButton?.focus();
+      }, 0);
+    } else if (
+      newState === "closed" &&
+      oldState === "open" &&
+      this.triggerElement
+    ) {
+      this.triggerElement?.focus();
     }
   }
 
@@ -165,7 +197,7 @@ export class RecommendationsSidebar {
   }
 
   private getAsideElement(): HTMLElement {
-    return this.el.shadowRoot.querySelector("aside");
+    return this.el.shadowRoot.querySelector(".sidebar");
   }
 
   private getSidebarRectangle(): DOMRect {
@@ -193,13 +225,19 @@ export class RecommendationsSidebar {
         style={{ display: this.hidden ? "none" : undefined }}
         exportparts={`body, close-sidebar, ${carouselParts}, ${productCardParts}`}
       >
-        <aside
+        <div
           class="sidebar"
           part="body"
           onAnimationEnd={(e) => this.handleAnimationEnd(e)}
+          role={this.showInModal ? "dialog" : "region"}
+          aria-modal={this.showInModal ? "true" : undefined}
+          aria-label={i18next.t("a11y.recommendations")}
         >
-          <header
-            class={{ "contains-source-img": this.isSourceImageValid() }}
+          <div
+            class={{
+              "sidebar-header": true,
+              "contains-source-img": this.isSourceImageValid(),
+            }}
             part="sidebar-header"
           >
             {this.mode !== "set" && (
@@ -215,13 +253,20 @@ export class RecommendationsSidebar {
             <button
               class="close-sidebar"
               onClick={() => (this.sidebarState = "closed")}
+              onKeyDown={(event: KeyboardEvent) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  this.sidebarState = "closed";
+                }
+              }}
               part="close-sidebar"
+              aria-label={i18next.t("a11y.closeButton")}
             >
               <CrossIcon />
             </button>
-          </header>
+          </div>
 
-          <main part="sidebar-content">
+          <div class="sidebar-content" part="sidebar-content">
             <vviinn-vpr-widget
               token={this.token}
               currencySign={this.currencySign}
@@ -268,8 +313,8 @@ export class RecommendationsSidebar {
               imageResolutionWidth={this.imageResolutionWidth}
               uiSessionId={this.uiSessionId}
             />
-          </main>
-        </aside>
+          </div>
+        </div>
       </Host>
     );
   }
@@ -283,7 +328,12 @@ export class RecommendationsSidebar {
     if (!sourceImageSrc) return null;
 
     return (
-      <img class="source-image" part="source-image" src={sourceImageSrc} />
+      <img
+        class="source-image"
+        part="source-image"
+        src={sourceImageSrc}
+        alt={i18next.t("a11y.sourceProductImage")}
+      />
     );
   }
 

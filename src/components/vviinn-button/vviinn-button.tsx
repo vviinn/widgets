@@ -18,16 +18,14 @@ export class VviinnButton {
   render() {
     return (
       <Host exportparts="button">
-        <button
+        <div
           class={this.addStyle ? "open-button" : "raw-open-button"}
           part="button"
-          tabindex="-1"
-          aria-hidden="true"
         >
           <slot>
             <VisualSearchIcon />
           </slot>
-        </button>
+        </div>
       </Host>
     );
   }

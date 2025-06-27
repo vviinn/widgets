@@ -35,6 +35,10 @@ export const resources: Resource = {
           siri: "Bitte aktivieren Siri",
         },
       },
+      buttons: {
+        next: "weitere Produkte anzeigen",
+        previous: "vorherige Produkte anzeigen",
+      },
       emptyResultsBlock: {
         title: "Leider nichts gefunden",
         button: "Neues Bild hochladen",
@@ -65,19 +69,66 @@ export const resources: Resource = {
       },
       energyLabel: {
         dataSheetText: "Produktdatenblatt",
+        iconAlt: "Energieeffizienzklasse",
+        iconAltWithClass:
+          "Energieeffizienzklasse {{energyClass}} auf einer Skala von {{minClass}} bis {{maxClass}}",
+        iconAltWithClassOnly: "Energieeffizienzklasse {{energyClass}}",
       },
       a11y: {
-        cameraExampleImage: "Beispielbild für die Kamerafunktion",
-        capturedImage: "Von der Kamera aufgenommenes Bild",
+        // General UI
         closeButton: "Fenster schließen",
+        backButton: "Zurück",
+
+        // Search & Input
         speechButton: "Spracheingabe starten",
         textSearchButton: "Textsuche starten",
         cameraModeSearchButton: "KI-Suche mit Kamera starten",
         modalModeSearchButton: "KI-Suche starten",
         uploadModeSearchButton: "KI-Suche mit Bildupload starten",
+
+        // Camera & Images
+        cameraExampleImage: "Beispielbild für die Kamerafunktion",
+        capturedImage: "Von der Kamera aufgenommenes Bild",
         zoomIn: "Vergrößern",
         zoomOut: "Verkleinern",
         takePicture: "Foto aufnehmen",
+        cropperImage:
+          "Hochgeladenes Bild zum Zuschneiden und für die visuelle Suche",
+        uploadedImage: "Hochgeladenes Bild für die visuelle Suche",
+
+        // Product Card
+        addToFavorites: "Zu Favoriten hinzufügen",
+        removeFromFavorites: "Von Favoriten entfernen",
+        findSimilarProducts: "Ähnliche Produkte finden",
+
+        // Filters
+        productFilters: "Produktfilter",
+        selectedFilters: "Ausgewählte Filter",
+        openFilters: "Filter öffnen",
+        closeDialog: "Dialog schließen",
+        removeFilterLabel: "Filter entfernen: {{label}}",
+        filterExpanded: "{{label}} Filter erweitert",
+        filterSelectionCleared: "Filterauswahl gelöscht",
+        filterDialogOpened: "Filter-Dialog geöffnet",
+        filterDialogClosed: "Filter-Dialog geschlossen",
+        filterRemoved: "Filter entfernt: {{label}}",
+        filterOptions: "{{label}} Filteroptionen",
+        filterButton: "{{label}} Filter",
+        colorOption: "{{label}} Farbe",
+        showMoreOptions: "{{count}} weitere {{label}} Optionen anzeigen",
+
+        // Detected Objects
+        detectedObject: "Erkanntes Objekt auswählen",
+
+        // Discovery
+        recommendations: "Empfohlene Produkte",
+        sourceProductImage: "Bild des ursprünglichen Produkts",
+
+        // Price Range
+        priceRangeMin: "Mindestpreis",
+        priceRangeMax: "Höchstpreis",
+
+        // External Links
         vviinnLink: "Vviinn-Website besuchen (öffnet in neuem Tab)",
       },
     },
@@ -111,6 +162,10 @@ export const resources: Resource = {
           siri: "Please enable Siri",
         },
       },
+      buttons: {
+        next: "show next products",
+        previous: "show previous products",
+      },
       emptyResultsBlock: {
         title: "Sorry, nothing found",
         button: "Upload another image",
@@ -140,19 +195,65 @@ export const resources: Resource = {
       },
       energyLabel: {
         dataSheetText: "Product Data Sheet",
+        iconAlt: "Energy efficiency class",
+        iconAltWithClass:
+          "Energy efficiency class {{energyClass}} on a scale from {{minClass}} to {{maxClass}}",
+        iconAltWithClassOnly: "Energy efficiency class {{energyClass}}",
       },
       a11y: {
-        cameraExampleImage: "Example image for the camera function",
-        capturedImage: "Image captured by the camera",
+        // General UI
         closeButton: "Close window",
+        backButton: "Go back",
+
+        // Search & Input
         speechButton: "Start speech input",
         textSearchButton: "Start text search",
         cameraModeSearchButton: "Start AI search with camera",
         modalModeSearchButton: "Start AI search",
         uploadModeSearchButton: "Start AI search with image upload",
+
+        // Camera & Images
+        cameraExampleImage: "Example image for the camera function",
+        capturedImage: "Image captured by the camera",
         zoomIn: "Zoom in",
         zoomOut: "Zoom out",
         takePicture: "Take picture",
+        cropperImage: "Uploaded image for cropping and visual search",
+        uploadedImage: "Uploaded image for visual search",
+
+        // Product Card
+        addToFavorites: "Add to favorites",
+        removeFromFavorites: "Remove from favorites",
+        findSimilarProducts: "Find similar products",
+
+        // Filters
+        productFilters: "Product filters",
+        selectedFilters: "Selected filters",
+        openFilters: "Open filters",
+        closeDialog: "Close dialog",
+        removeFilterLabel: "Remove filter: {{label}}",
+        filterExpanded: "{{label}} filter expanded",
+        filterSelectionCleared: "Filter selection cleared",
+        filterDialogOpened: "Filter dialog opened",
+        filterDialogClosed: "Filter dialog closed",
+        filterRemoved: "Filter removed: {{label}}",
+        filterOptions: "{{label}} filter options",
+        filterButton: "{{label}} filter",
+        colorOption: "{{label}} color",
+        showMoreOptions: "Show {{count}} more {{label}} options",
+
+        // Detected Objects
+        detectedObject: "Select detected object",
+
+        // Discovery Widget
+        recommendations: "Recommended products",
+        sourceProductImage: "Source product image",
+
+        // Price Range
+        priceRangeMin: "Minimum price",
+        priceRangeMax: "Maximum price",
+
+        // External Links
         vviinnLink: "Visit Vviinn website (opens in new tab)",
       },
     },

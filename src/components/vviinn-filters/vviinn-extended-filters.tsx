@@ -12,6 +12,7 @@ import {
   Fragment,
 } from "@stencil/core";
 import i18next from "i18next";
+import { announceToScreenReader } from "../../a11y";
 
 import {
   ResponseDynamicFilterItem,
@@ -103,6 +104,8 @@ export class VviinnExtendedFilters {
   /** @internal */
   @Prop() showInWidget: boolean = false;
   /** @internal */
+  @Prop() showingInButton: boolean = false;
+  /** @internal */
   @Prop() widgetElement?: HTMLVviinnVpsWidgetElement;
 
   @State() innerFilters: ResponseDynamicFilterItem[] = [];
@@ -127,8 +130,10 @@ export class VviinnExtendedFilters {
   @Event()
   vviinnExtendedFiltersButtonClicked: EventEmitter<TriggerSourceEventData>;
 
+  private triggerElement?: HTMLElement;
   private state?: SearchStore;
   private eventAbortController?: AbortController;
+  private filterAnnouncementRef?: HTMLElement;
 
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
     this.showInWidget !== isTriggeredByVpsWidget;
@@ -141,6 +146,17 @@ export class VviinnExtendedFilters {
     this.selectedMoreOptions = [];
   }
 
+  private announceFilterChange(message: string) {
+    announceToScreenReader(message, this.filterAnnouncementRef);
+  }
+
+  private handleModalKeyDown = (event: KeyboardEvent) => {
+    if (event.key === "Escape" && this.showMore) {
+      event.preventDefault();
+      this.handleCloseModal();
+    }
+  };
+
   private handleSelectedFiltersReset = ({ detail }: TriggerSourceEvent) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.requestFilters = [];
@@ -152,6 +168,8 @@ export class VviinnExtendedFilters {
   private handleCloseModal = () => {
     this.showMore = false;
     this.resetOptionsInteractions();
+    this.announceFilterChange(i18next.t("a11y.filterDialogClosed"));
+    this.triggerElement?.focus();
   };
 
   private replaceSlotsContent() {
@@ -179,9 +197,10 @@ export class VviinnExtendedFilters {
   private handleExtendedFiltersButtonClicked = ({
     detail,
   }: TriggerSourceEvent) => {
-    const { isTriggeredByVpsWidget } = detail;
+    const { isTriggeredByVpsWidget, triggerElement } = detail;
 
     if (!this.skipStateChanges(isTriggeredByVpsWidget)) {
+      this.triggerElement = triggerElement;
       this.showMore = true;
     }
   };
@@ -192,10 +211,41 @@ export class VviinnExtendedFilters {
       action: modalOpen ? "open" : "close",
       isTriggeredByVpsWidget: this.showInWidget,
     });
+
+    if (modalOpen) {
+      this.announceFilterChange(i18next.t("a11y.filterDialogOpened"));
+      setTimeout(() => {
+        const closeButton = this.el.shadowRoot.querySelector(
+          ".filters-modal-close",
+        ) as HTMLElement;
+        closeButton?.focus();
+      }, 0);
+    }
   }
 
   componentDidRender() {
     this.replaceSlotsContent();
+  }
+
+  componentWillRender() {
+    const filters = this.getFilters();
+    if (!filters.length) {
+      return;
+    }
+
+    const newMap = new Map(this.displayedOptionsCount);
+    let hasChanges = false;
+
+    filters.forEach(({ column }) => {
+      if (!newMap.has(column)) {
+        newMap.set(column, FILTER_OPTIONS_INITIAL_COUNT);
+        hasChanges = true;
+      }
+    });
+
+    if (hasChanges) {
+      this.displayedOptionsCount = newMap;
+    }
   }
 
   async componentWillLoad() {
@@ -234,6 +284,9 @@ export class VviinnExtendedFilters {
       <div
         class={`filters-modal ${this.mode} ${this.showMore ? "open" : ""}`}
         part="extended-filters-modal"
+        role="dialog"
+        aria-labelledby="filters-modal-title"
+        onKeyDown={this.handleModalKeyDown}
       >
         <aside
           class="filters-modal-wrapper"
@@ -241,7 +294,11 @@ export class VviinnExtendedFilters {
         >
           {this.showHeader && (
             <div class="filters-modal-header" part="extended-filters-header">
-              <h2 class="filters-modal-title" part="extended-filters-title">
+              <h2
+                id="filters-modal-title"
+                class="filters-modal-title"
+                part="extended-filters-title"
+              >
                 <slot name="vviinn-extended-filters-title">
                   {i18next.t("filters.modal.title")}
                 </slot>
@@ -251,11 +308,14 @@ export class VviinnExtendedFilters {
                 class="filters-modal-close"
                 onClick={this.handleCloseModal}
                 part="extended-filters-modal-close"
+                aria-label={i18next.t("a11y.closeDialog")}
+                type="button"
               >
                 <NewCloseIcon />
               </button>
             </div>
           )}
+
           <div class="filters-modal-main" part="extended-filters-main">
             {filters.length === 0 && this.state.searchStatus !== "loading" ? (
               <div
@@ -271,6 +331,9 @@ export class VviinnExtendedFilters {
                 {(filters ?? []).map((mainFilter) => {
                   const mainColumn = mainFilter.column;
                   const filterOptions = getFilterOptions(mainFilter);
+                  const isExpanded = this.selectedMoreOptions.includes(
+                    mainFilter.column,
+                  );
 
                   const requestFilter = this.requestFilters.find(
                     ({ column }) => column === mainColumn,
@@ -305,11 +368,7 @@ export class VviinnExtendedFilters {
                   return (
                     <li part="extended-filters-row">
                       <div
-                        class={`filters-modal-main-button-wrapper ${
-                          this.selectedMoreOptions.includes(mainFilter.column)
-                            ? "open"
-                            : ""
-                        }`}
+                        class={`filters-modal-main-button-wrapper ${isExpanded ? "open" : ""}`}
                         part="extended-filters-row-wrapper"
                       >
                         <button
@@ -318,8 +377,10 @@ export class VviinnExtendedFilters {
                           }
                           class="filters-modal-main-button"
                           part="extended-filters-main-button"
+                          aria-expanded={isExpanded ? "true" : "false"}
+                          type="button"
                         >
-                          {mainFilter.label}
+                          <span>{mainFilter.label}</span>
                           {addedOptions.length > 0 && (
                             <div
                               class="filters-modal-main-button-added-options"
@@ -331,8 +392,7 @@ export class VviinnExtendedFilters {
                           <ChevronIconSmall />
                         </button>
 
-                        {isIntervalFilter(mainColumn) &&
-                        this.selectedMoreOptions.includes(mainFilter.column) ? (
+                        {isIntervalFilter(mainColumn) && isExpanded ? (
                           <vviinn-price-range
                             histogram={(filterOptions as Histogram).filter(
                               (item) => item.value.frequency > 0,
@@ -371,6 +431,7 @@ export class VviinnExtendedFilters {
                     onClick={() => (this.showMore = false)}
                     disabled={this.requestFilters.length === 0}
                     part="extended-filters-apply"
+                    type="button"
                   >
                     <slot name="vviinn-extended-filters-apply">
                       {i18next.t("filters.modal.apply")}
@@ -382,6 +443,7 @@ export class VviinnExtendedFilters {
                   class="filters-modal-reset"
                   onClick={this.resetModal}
                   part="extended-filters-reset"
+                  type="button"
                 >
                   <slot name="vviinn-extended-filters-reset">
                     {i18next.t("filters.modal.resetFilters")}
@@ -427,15 +489,22 @@ export class VviinnExtendedFilters {
             });
           })}
         {displayedCount < filterOptions.length && (
-          <button
-            onClick={() =>
-              this.showMoreOptions(filterColumn, filterOptions.length)
-            }
-            class="filters-more-modal-button"
-            part="filters-option-button"
-          >
-            <ChevronIconSmall />
-          </button>
+          <li role="listitem">
+            <button
+              onClick={() =>
+                this.showMoreOptions(filterColumn, filterOptions.length)
+              }
+              class="filters-more-modal-button"
+              part="filters-option-button"
+              type="button"
+              aria-label={i18next.t("a11y.showMoreOptions", {
+                count: filterOptions.length - displayedCount,
+                label: filter.label,
+              })}
+            >
+              <ChevronIconSmall />
+            </button>
+          </li>
         )}
       </Fragment>
     );
@@ -547,22 +616,33 @@ export class VviinnExtendedFilters {
   }
 
   private getSidebarRectangle(): DOMRect {
-    return this.getAsideElement()?.getBoundingClientRect();
+    const asideElement = this.getAsideElement();
+    return asideElement.getBoundingClientRect();
   }
+
+  private isKeyboardClick = (event: ClickEvent): boolean =>
+    event.clientX === 0 && event.clientY === 0;
 
   @Listen("click", { target: "body" })
   bodyClickListener(event: ClickEvent) {
-    if (this.mode !== "button") return;
-
+    if (
+      this.mode === "preview" ||
+      !this.showMore ||
+      this.isKeyboardClick(event)
+    ) {
+      return;
+    }
     const sidebarRect = this.getSidebarRectangle();
-
-    if (!sidebarRect || sidebarRect.width === 0 || sidebarRect.height === 0) {
+    if (
+      !sidebarRect ||
+      sidebarRect.width === 0 ||
+      sidebarRect.height === 0 ||
+      isClickedInRectBound(event, sidebarRect)
+    ) {
       return;
     }
 
-    if (!isClickedInRectBound(event, sidebarRect)) {
-      this.showMore = false;
-    }
+    this.handleCloseModal();
   }
 
   render() {
@@ -574,6 +654,12 @@ export class VviinnExtendedFilters {
           "show-in-widget": this.showInWidget,
         }}
       >
+        <div
+          ref={(el) => (this.filterAnnouncementRef = el)}
+          aria-live="polite"
+          class="sr-only"
+        ></div>
+
         {SlotSkeleton("filters")}
 
         {filters?.length > 0 && this.mode === "button" && (
