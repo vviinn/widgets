@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.176.0](https://github.com/vviinn/widgets/compare/v2.175.2...v2.176.0) (2025-06-27)
+
+
+### Features
+
+* Accessibility improvements ([f65f914](https://github.com/vviinn/widgets/commit/f65f914bc3a6009b36624283a1804ed935991ded))
+
 ### [2.175.2](https://github.com/vviinn/widgets/compare/v2.175.1...v2.175.2) (2025-06-26)
 
 
