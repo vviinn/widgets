@@ -170,10 +170,12 @@ export class RecommendationsSidebar {
   @Watch("sidebarState")
   handleSidebarStateChange(newState: SidebarState, oldState: SidebarState) {
     if (newState === "open" && oldState !== "open") {
-      const aside = this.getAsideElement();
-      if (aside) {
-        aside.focus();
-      }
+      setTimeout(() => {
+        const closeButton = this.el.shadowRoot.querySelector(
+          ".close-sidebar",
+        ) as HTMLElement;
+        closeButton?.focus();
+      }, 0);
     } else if (
       newState === "closed" &&
       oldState === "open" &&
@@ -230,7 +232,6 @@ export class RecommendationsSidebar {
           role={this.showInModal ? "dialog" : "region"}
           aria-modal={this.showInModal ? "true" : undefined}
           aria-label={i18next.t("a11y.recommendations")}
-          tabindex="-1"
         >
           <div
             class={{

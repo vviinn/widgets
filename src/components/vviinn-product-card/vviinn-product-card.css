@@ -410,7 +410,6 @@ picture .plus-icon {
   color: var(--color-text-on-color);
   background-color: var(--label-bg-color-accent);
   letter-spacing: var(--letter-spacing-label);
-  z-index: 10;
 }
 
 vviinn-energy-label {

@@ -131,7 +131,6 @@ export class VviinnExtendedFilters {
   vviinnExtendedFiltersButtonClicked: EventEmitter<TriggerSourceEventData>;
 
   private triggerElement?: HTMLElement;
-  private modalContainerRef?: HTMLElement;
   private state?: SearchStore;
   private eventAbortController?: AbortController;
   private filterAnnouncementRef?: HTMLElement;
@@ -215,7 +214,12 @@ export class VviinnExtendedFilters {
 
     if (modalOpen) {
       this.announceFilterChange(i18next.t("a11y.filterDialogOpened"));
-      setTimeout(() => this.modalContainerRef?.focus(), 0);
+      setTimeout(() => {
+        const closeButton = this.el.shadowRoot.querySelector(
+          ".filters-modal-close",
+        ) as HTMLElement;
+        closeButton?.focus();
+      }, 0);
     }
   }
 
@@ -278,13 +282,11 @@ export class VviinnExtendedFilters {
   private renderModal(filters: ResponseDynamicFilterItem[]) {
     return (
       <div
-        ref={(el) => (this.modalContainerRef = el)}
         class={`filters-modal ${this.mode} ${this.showMore ? "open" : ""}`}
         part="extended-filters-modal"
         role="dialog"
         aria-labelledby="filters-modal-title"
         onKeyDown={this.handleModalKeyDown}
-        tabindex={this.showInWidget && this.showingInButton ? undefined : "-1"}
       >
         <aside
           class="filters-modal-wrapper"

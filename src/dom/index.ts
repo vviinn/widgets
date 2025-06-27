@@ -61,6 +61,11 @@ export function setElementInteractivity(
     element.removeAttribute("aria-hidden");
     enableTabbing(element);
   } else {
+    const focusedElement = element.querySelector(":focus") as HTMLElement;
+    if (focusedElement) {
+      focusedElement.blur();
+    }
+
     element.setAttribute("inert", "");
     element.setAttribute("aria-hidden", "true");
     disableTabbing(element);
