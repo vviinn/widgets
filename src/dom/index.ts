@@ -61,9 +61,9 @@ export function setElementInteractivity(
     element.removeAttribute("aria-hidden");
     enableTabbing(element);
   } else {
-    const focusedElement = element.querySelector(":focus") as HTMLElement;
-    if (focusedElement) {
-      focusedElement.blur();
+    const activeElement = document.activeElement;
+    if (activeElement && element.contains(activeElement)) {
+      (activeElement as HTMLElement).blur();
     }
 
     element.setAttribute("inert", "");
