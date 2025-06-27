@@ -195,7 +195,7 @@ export class RecommendationsSidebar {
   }
 
   private getAsideElement(): HTMLElement {
-    return this.el.shadowRoot.querySelector("aside");
+    return this.el.shadowRoot.querySelector(".sidebar");
   }
 
   private getSidebarRectangle(): DOMRect {
@@ -223,19 +223,20 @@ export class RecommendationsSidebar {
         style={{ display: this.hidden ? "none" : undefined }}
         exportparts={`body, close-sidebar, ${carouselParts}, ${productCardParts}`}
       >
-        <aside
+        <div
           class="sidebar"
           part="body"
           onAnimationEnd={(e) => this.handleAnimationEnd(e)}
-          role={this.showInModal ? "dialog" : undefined}
-          aria-modal={this.showInModal ? "true" : "false"}
-          aria-label={
-            this.showInModal ? i18next.t("a11y.recommendations") : undefined
-          }
+          role={this.showInModal ? "dialog" : "region"}
+          aria-modal={this.showInModal ? "true" : undefined}
+          aria-label={i18next.t("a11y.recommendations")}
           tabindex="-1"
         >
-          <header
-            class={{ "contains-source-img": this.isSourceImageValid() }}
+          <div
+            class={{
+              "sidebar-header": true,
+              "contains-source-img": this.isSourceImageValid(),
+            }}
             part="sidebar-header"
           >
             {this.mode !== "set" && (
@@ -262,9 +263,9 @@ export class RecommendationsSidebar {
             >
               <CrossIcon />
             </button>
-          </header>
+          </div>
 
-          <main part="sidebar-content">
+          <div class="sidebar-content" part="sidebar-content">
             <vviinn-vpr-widget
               token={this.token}
               currencySign={this.currencySign}
@@ -311,8 +312,8 @@ export class RecommendationsSidebar {
               imageResolutionWidth={this.imageResolutionWidth}
               uiSessionId={this.uiSessionId}
             />
-          </main>
-        </aside>
+          </div>
+        </div>
       </Host>
     );
   }
@@ -326,7 +327,12 @@ export class RecommendationsSidebar {
     if (!sourceImageSrc) return null;
 
     return (
-      <img class="source-image" part="source-image" src={sourceImageSrc} />
+      <img
+        class="source-image"
+        part="source-image"
+        src={sourceImageSrc}
+        alt={i18next.t("a11y.sourceProductImage")}
+      />
     );
   }
 

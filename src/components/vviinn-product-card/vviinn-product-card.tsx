@@ -580,7 +580,7 @@ export class VviinnProductCard {
         </div>
 
         <div class="image-container" part="image-container">
-          <Linked deeplink={this.deeplink} part="image-link" tabindex={-1}>
+          <Linked deeplink={this.deeplink} part="image-link">
             {renderImage(this.imageProps, this.responsive)}
           </Linked>
           {this.setMode &&

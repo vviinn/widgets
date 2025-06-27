@@ -40,14 +40,14 @@
   position: absolute;
 }
 
-header {
+.sidebar-header {
   position: relative;
   text-align: center;
   padding: var(--spacing-300);
   padding-top: 0px;
 }
 
-header.contains-source-img {
+.sidebar-header.contains-source-img {
   display: grid;
   justify-items: center;
   grid-gap: 12px;
@@ -62,15 +62,15 @@ img.source-image {
   object-fit: contain;
 }
 
-:host(.right) header {
+:host(.right) .sidebar-header {
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-main {
+.sidebar-content {
   padding: 0 var(--spacing-300);
 }
 
-:host(.right) main {
+:host(.right) .sidebar-content {
   overflow: auto;
 }
 

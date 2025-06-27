@@ -104,6 +104,8 @@ export class VviinnExtendedFilters {
   /** @internal */
   @Prop() showInWidget: boolean = false;
   /** @internal */
+  @Prop() showingInButton: boolean = false;
+  /** @internal */
   @Prop() widgetElement?: HTMLVviinnVpsWidgetElement;
 
   @State() innerFilters: ResponseDynamicFilterItem[] = [];
@@ -282,7 +284,7 @@ export class VviinnExtendedFilters {
         role="dialog"
         aria-labelledby="filters-modal-title"
         onKeyDown={this.handleModalKeyDown}
-        tabindex="-1"
+        tabindex={this.showInWidget && this.showingInButton ? undefined : "-1"}
       >
         <aside
           class="filters-modal-wrapper"

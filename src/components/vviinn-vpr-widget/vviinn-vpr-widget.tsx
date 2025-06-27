@@ -812,7 +812,9 @@ export class VviinnVprWidget implements ComponentInterface {
               {this.showFilters && <vviinn-filters></vviinn-filters>}
 
               {this.showExtendedFilters && (
-                <vviinn-extended-filters></vviinn-extended-filters>
+                <vviinn-extended-filters
+                  showingInButton={this.showingInButton}
+                ></vviinn-extended-filters>
               )}
             </div>
           )}
