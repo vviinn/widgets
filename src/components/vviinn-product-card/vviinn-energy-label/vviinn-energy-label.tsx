@@ -36,9 +36,9 @@ export class VviinnEnergyLabel {
 
   private getEnergyIconAltText(): string {
     if (
-      this.certificationClass &&
-      this.classRange?.min &&
-      this.classRange?.max
+      !!this.certificationClass &&
+      !!this.classRange?.min &&
+      !!this.classRange?.max
     ) {
       return i18next.t("energyLabel.iconAltWithClass", {
         energyClass: this.certificationClass,
@@ -47,7 +47,7 @@ export class VviinnEnergyLabel {
       });
     }
 
-    if (this.certificationClass) {
+    if (!!this.certificationClass) {
       return i18next.t("energyLabel.iconAltWithClassOnly", {
         energyClass: this.certificationClass,
       });
