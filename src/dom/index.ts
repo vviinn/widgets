@@ -66,8 +66,15 @@ export function setElementInteractivity(
       (activeElement as HTMLElement).blur();
     }
 
-    element.setAttribute("inert", "");
-    element.setAttribute("aria-hidden", "true");
-    disableTabbing(element);
+    const shadowActiveElements = element.querySelectorAll(":focus");
+    shadowActiveElements.forEach((focusedEl) => {
+      (focusedEl as HTMLElement).blur();
+    });
+
+    Promise.resolve().then(() => {
+      element.setAttribute("inert", "");
+      element.setAttribute("aria-hidden", "true");
+      disableTabbing(element);
+    });
   }
 }
