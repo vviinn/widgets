@@ -71,10 +71,10 @@ export function setElementInteractivity(
       (focusedEl as HTMLElement).blur();
     });
 
-    setTimeout(() => {
+    Promise.resolve().then(() => {
       element.setAttribute("inert", "");
       element.setAttribute("aria-hidden", "true");
       disableTabbing(element);
-    }, 0);
+    });
   }
 }
