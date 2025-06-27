@@ -476,6 +476,8 @@ export class VviinnProductCard {
                   classIconUrls={energyCertification?.classIconUrls}
                   classDataSheetUrl={energyCertification?.classDataSheetUrl}
                   productType={energyCertification?.productType}
+                  certificationClass={energyCertification?.certificationClass}
+                  classRange={energyCertification?.classRange}
                 ></vviinn-energy-label>
               ))}
 
@@ -578,7 +580,7 @@ export class VviinnProductCard {
         </div>
 
         <div class="image-container" part="image-container">
-          <Linked deeplink={this.deeplink} part="image-link" tabindex={-1}>
+          <Linked deeplink={this.deeplink} part="image-link">
             {renderImage(this.imageProps, this.responsive)}
           </Linked>
           {this.setMode &&

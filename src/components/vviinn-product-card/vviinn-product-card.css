@@ -38,15 +38,15 @@
 }
 
 .image-container {
-  order: 1; /* Сверху */
+  order: 1;
 }
 
 .content-container {
-  order: 2; /* В середине */
+  order: 2;
 }
 
 .basket-button-container {
-  order: 3; /* Снизу */
+  order: 3;
 }
 
 .image-container {
@@ -82,6 +82,7 @@
     var(--product-card-content-align-default)
   );
   gap: var(--spacing-50);
+  background-color: var(--surface-bg-color-02);
 }
 
 .price-container {
@@ -409,7 +410,6 @@ picture .plus-icon {
   color: var(--color-text-on-color);
   background-color: var(--label-bg-color-accent);
   letter-spacing: var(--letter-spacing-label);
-  z-index: 10;
 }
 
 vviinn-energy-label {

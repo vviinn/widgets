@@ -69,10 +69,15 @@ export const resources: Resource = {
       },
       energyLabel: {
         dataSheetText: "Produktdatenblatt",
+        iconAlt: "Energieeffizienzklasse",
+        iconAltWithClass:
+          "Energieeffizienzklasse {{energyClass}} auf einer Skala von {{minClass}} bis {{maxClass}}",
+        iconAltWithClassOnly: "Energieeffizienzklasse {{energyClass}}",
       },
       a11y: {
         // General UI
         closeButton: "Fenster schließen",
+        backButton: "Zurück",
 
         // Search & Input
         speechButton: "Spracheingabe starten",
@@ -89,6 +94,7 @@ export const resources: Resource = {
         takePicture: "Foto aufnehmen",
         cropperImage:
           "Hochgeladenes Bild zum Zuschneiden und für die visuelle Suche",
+        uploadedImage: "Hochgeladenes Bild für die visuelle Suche",
 
         // Product Card
         addToFavorites: "Zu Favoriten hinzufügen",
@@ -116,6 +122,11 @@ export const resources: Resource = {
 
         // Discovery
         recommendations: "Empfohlene Produkte",
+        sourceProductImage: "Bild des ursprünglichen Produkts",
+
+        // Price Range
+        priceRangeMin: "Mindestpreis",
+        priceRangeMax: "Höchstpreis",
 
         // External Links
         vviinnLink: "Vviinn-Website besuchen (öffnet in neuem Tab)",
@@ -184,10 +195,15 @@ export const resources: Resource = {
       },
       energyLabel: {
         dataSheetText: "Product Data Sheet",
+        iconAlt: "Energy efficiency class",
+        iconAltWithClass:
+          "Energy efficiency class {{energyClass}} on a scale from {{minClass}} to {{maxClass}}",
+        iconAltWithClassOnly: "Energy efficiency class {{energyClass}}",
       },
       a11y: {
         // General UI
         closeButton: "Close window",
+        backButton: "Go back",
 
         // Search & Input
         speechButton: "Start speech input",
@@ -203,6 +219,7 @@ export const resources: Resource = {
         zoomOut: "Zoom out",
         takePicture: "Take picture",
         cropperImage: "Uploaded image for cropping and visual search",
+        uploadedImage: "Uploaded image for visual search",
 
         // Product Card
         addToFavorites: "Add to favorites",
@@ -230,6 +247,11 @@ export const resources: Resource = {
 
         // Discovery Widget
         recommendations: "Recommended products",
+        sourceProductImage: "Source product image",
+
+        // Price Range
+        priceRangeMin: "Minimum price",
+        priceRangeMax: "Maximum price",
 
         // External Links
         vviinnLink: "Visit Vviinn website (opens in new tab)",
