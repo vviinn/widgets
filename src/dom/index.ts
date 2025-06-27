@@ -61,6 +61,11 @@ export function setElementInteractivity(
     element.removeAttribute("aria-hidden");
     enableTabbing(element);
   } else {
+    const activeElement = document.activeElement;
+    if (activeElement && element.contains(activeElement)) {
+      (activeElement as HTMLElement).blur();
+    }
+
     element.setAttribute("inert", "");
     element.setAttribute("aria-hidden", "true");
     disableTabbing(element);

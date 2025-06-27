@@ -1,4 +1,5 @@
 import { Component, Host, h, Prop, Element, State, Watch } from "@stencil/core";
+import i18next from "i18next";
 import { components } from "../../interfaces/generated";
 import { priceRangeParts } from "../../cssParts";
 import { globalState } from "../../store/store";
@@ -153,6 +154,7 @@ export class VviinnPriceRange {
               onInput={this.controlFromSlider}
               onChange={this.sendBackValue}
               part="histogram-from-slider"
+              aria-label={i18next.t("a11y.priceRangeMin")}
             />
             <input
               ref={(el) => (this.toSlider = el)}
@@ -164,6 +166,7 @@ export class VviinnPriceRange {
               onInput={this.controlToSlider}
               onChange={this.sendBackValue}
               part="histogram-to-slider"
+              aria-label={i18next.t("a11y.priceRangeMax")}
             />
           </div>
         </div>

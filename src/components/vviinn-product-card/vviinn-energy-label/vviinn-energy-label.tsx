@@ -27,9 +27,33 @@ export class VviinnEnergyLabel {
   @Prop() productType?: EnergyCertification["productType"];
   @Prop() classDataSheetUrl?: EnergyCertification["classDataSheetUrl"];
   @Prop() iconDirection: EnergyClassIconDirection = "right";
+  @Prop() certificationClass?: EnergyCertification["certificationClass"];
+  @Prop() classRange?: EnergyCertification["classRange"];
 
   componentWillLoad() {
     slotChangeListener(this, this.el);
+  }
+
+  private getEnergyIconAltText(): string {
+    if (
+      !!this.certificationClass &&
+      !!this.classRange?.min &&
+      !!this.classRange?.max
+    ) {
+      return i18next.t("energyLabel.iconAltWithClass", {
+        energyClass: this.certificationClass,
+        minClass: this.classRange.min,
+        maxClass: this.classRange.max,
+      });
+    }
+
+    if (!!this.certificationClass) {
+      return i18next.t("energyLabel.iconAltWithClassOnly", {
+        energyClass: this.certificationClass,
+      });
+    }
+
+    return i18next.t("energyLabel.iconAlt");
   }
 
   render() {
@@ -47,6 +71,7 @@ export class VviinnEnergyLabel {
               class="class-label-icon"
               part="energy-label-icon"
               src={this.classIconUrls[this.iconDirection]}
+              alt={this.getEnergyIconAltText()}
             />
           )}
 

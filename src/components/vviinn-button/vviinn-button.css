@@ -4,7 +4,7 @@
   display: block;
 }
 
-:host button {
+:host div {
   border: none;
   cursor: pointer;
   color: inherit;

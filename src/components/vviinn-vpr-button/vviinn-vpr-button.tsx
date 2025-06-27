@@ -263,14 +263,22 @@ export class VviinnVprButton {
     }
   };
 
+  private getAriaLabel(): string {
+    try {
+      return i18next.t("a11y.findSimilarProducts") || "Find similar products";
+    } catch {
+      return "Find similar products";
+    }
+  }
+
   render() {
     return (
       <Host
-        onClick={this.handleButtonClick}
-        onKeyDown={this.handleKeyDown}
         role="button"
         tabindex="0"
-        aria-label={i18next.t("a11y.findSimilarProducts")}
+        aria-label={this.getAriaLabel()}
+        onClick={this.handleButtonClick}
+        onKeyDown={this.handleKeyDown}
       >
         <vviinn-button addStyle={this.addStyle} part="vviinn-button">
           <slot>
