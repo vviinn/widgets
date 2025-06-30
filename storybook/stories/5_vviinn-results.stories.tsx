@@ -30,5 +30,5 @@ Default.args = {
   searchId: "",
   oneClickDiscoveryMode: "append-grid",
   addPriceContainer: false,
-  favoriteShow: false,
+  favoriteShow: true,
 };

@@ -79,7 +79,7 @@ Default.args = {
   productCardImageBgColor: "#f4f4f4",
   addPriceContainer: false,
   energyCertificationsString,
-  favoriteShow: false,
+  favoriteShow: true,
   isContentCard: false,
   contentText: "This is a content card text.",
   contentLink: "https://example.com/content-link",
