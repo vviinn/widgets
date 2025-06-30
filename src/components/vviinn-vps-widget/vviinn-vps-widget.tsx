@@ -174,10 +174,8 @@ export class VviinnVpsWidget {
   @Prop() addToBasketShow: boolean = false;
   /** Show or hide Favorite button */
   @Prop() favoriteShow: boolean = false;
-  /** Show or hide the One-click Discovery, will be deprecated, use oneClickDiscoveryMode instead */
-  @Prop() oneClickDiscoveryShow = false;
   /** One click Discovery mode, restricted to append only (no modal supported for this component)*/
-  @Prop() oneClickDiscoveryMode?: OneClickDiscoveryAppendMode;
+  @Prop() oneClickDiscoveryMode?: OneClickDiscoveryAppendMode = "append-grid";
   /** Comma-separated list of campaign IDs */
   @Prop() oneClickDiscoveryCampaigns: string = "";
   /** Wrap the Product Card's price values in the container. */
@@ -885,10 +883,7 @@ export class VviinnVpsWidget {
                   )}
                   replaceSlotsContentInButton={this.replaceSlotsContentInButton}
                   addPriceContainer={this.addPriceContainer}
-                  oneClickDiscoveryMode={
-                    this.oneClickDiscoveryMode ??
-                    (this.oneClickDiscoveryShow ? "append-grid" : undefined)
-                  }
+                  oneClickDiscoveryMode={this.oneClickDiscoveryMode}
                   oneClickDiscoveryCampaigns={this.oneClickDiscoveryCampaigns}
                   parentSlots={[...this.parentSlots, ...this.slots]}
                   scrollableModalBody={this.modalBody}
