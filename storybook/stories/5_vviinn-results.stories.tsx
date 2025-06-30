@@ -28,7 +28,7 @@ Default.args = {
   addToBasketShow: false,
   uiSessionId: "",
   searchId: "",
-  oneClickDiscoveryMode: "modal",
+  oneClickDiscoveryMode: "append-grid",
   addPriceContainer: false,
   favoriteShow: false,
 };

@@ -175,7 +175,7 @@ export class VviinnVpsWidget {
   /** Show or hide Favorite button */
   @Prop() favoriteShow: boolean = false;
   /** One click Discovery mode, restricted to append only (no modal supported for this component)*/
-  @Prop() oneClickDiscoveryMode?: OneClickDiscoveryAppendMode;
+  @Prop() oneClickDiscoveryMode?: OneClickDiscoveryAppendMode = "append-grid";
   /** Comma-separated list of campaign IDs */
   @Prop() oneClickDiscoveryCampaigns: string = "";
   /** Wrap the Product Card's price values in the container. */
