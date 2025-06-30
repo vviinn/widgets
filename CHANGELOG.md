@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.177.0](https://github.com/vviinn/widgets/compare/v2.176.1...v2.177.0) (2025-06-30)
+
+
+### Features
+
+* Remove deprecated one-click-discovery-show prop for the Search Widget ([4de3b49](https://github.com/vviinn/widgets/commit/4de3b49044ed789df033c415471e73cb7291651d))
+
 ### [2.176.1](https://github.com/vviinn/widgets/compare/v2.176.0...v2.176.1) (2025-06-27)
 
 
