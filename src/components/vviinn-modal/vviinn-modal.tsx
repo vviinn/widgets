@@ -19,6 +19,7 @@ import { modalParts } from "../../cssParts";
 import { searchState } from "../../store/search.store";
 import { renderTitleImage } from "../../Image/renderTitleImage";
 import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
+import { SIDEBAR_ANIMATION_DURATION } from "../../widget/constants";
 
 @Component({
   tag: "vviinn-modal",
@@ -92,7 +93,7 @@ export class VviinnModal {
           ...addIfNotEmpty("widgetId", this.buttonElementId),
         });
       },
-      this.slider ? 500 : 0,
+      this.slider ? SIDEBAR_ANIMATION_DURATION : 0,
     );
   }
 

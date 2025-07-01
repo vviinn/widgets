@@ -149,6 +149,9 @@
 
   --label-bg-color-accent: #ff3944;
 
+  /* Animation durations */
+  --sidebar-animation-duration: 0.5s;
+
   /* DARK MODE SUPPORT
   @media (prefers-color-scheme: dark) {
     --color-bg-base: #161616;

@@ -94,7 +94,7 @@ img.source-image {
 }
 :host(.bottom.closed) .sidebar {
   animation-name: slideOutFromBottom;
-  animation-duration: 0.5s;
+  animation-duration: var(--sidebar-animation-duration);
   animation-fill-mode: forwards;
 }
 
@@ -105,7 +105,7 @@ img.source-image {
 
 :host(.bottom.open) .sidebar {
   animation-name: slideInFromBottom;
-  animation-duration: 0.5s;
+  animation-duration: var(--sidebar-animation-duration);
   animation-fill-mode: forwards;
 }
 
@@ -115,13 +115,13 @@ img.source-image {
 
 :host(.right.closed) .sidebar {
   animation-name: slideOutFromRight;
-  animation-duration: 0.5s;
+  animation-duration: var(--sidebar-animation-duration);
   animation-fill-mode: forwards;
 }
 
 :host(.right.open) .sidebar {
   animation-name: slideInFromRight;
-  animation-duration: 0.5s;
+  animation-duration: var(--sidebar-animation-duration);
   animation-fill-mode: forwards;
 }
 
