@@ -59,7 +59,7 @@ Default.args = {
   mode: "grid",
   sidebarTitle: "Recommended products",
   addStyle: true,
-  productDetailsNewTab: false,
+  productDetailsNewTab: true,
   productDetailsRedirect: true,
   imageWidth: 300,
   imageResolutionWidth: 500,
