@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.177.1](https://github.com/vviinn/widgets/compare/v2.177.0...v2.177.1) (2025-07-02)
+
+
+### Bug Fixes
+
+* Close One-click discovery on switching Storybook pages ([eba7de7](https://github.com/vviinn/widgets/commit/eba7de7897024762d7edf86a0b8ffd8c6bcb2265))
+
 ## [2.177.0](https://github.com/vviinn/widgets/compare/v2.176.1...v2.177.0) (2025-06-30)
 
 
