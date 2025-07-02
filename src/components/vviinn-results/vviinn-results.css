@@ -9,6 +9,9 @@
    * @prop --product-card-image-bg-color: Set the background color of the product card image.
    * @prop --basket-button-bg-color-pressed: Set the background color of the pressed Basket Button.
    * @prop --font-family: Set the font family of the widget.
+   * @prop --vviinn-results-max-columns: Maximum number of columns (default: unlimited). Set to number like 4 to limit columns.
+   * @prop --vviinn-results-gap-horizontal: Horizontal gap between items (default: 16px).
+   * @prop --vviinn-results-gap-vertical: Vertical gap between items (default: 32px).
    */
 
   display: block;
@@ -33,25 +36,43 @@
   align-content: center;
   align-items: start;
   box-sizing: border-box;
-  display: grid;
-  grid-gap: 32px 16px;
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(
-      var(--product-card-width, var(--product-card-results-min-width)),
-      1fr
-    )
-  );
   justify-items: center;
   padding: 0 24px 24px 12px;
   position: absolute;
+
+  /* Calculate safe column width with overflow protection */
+  --results-min-width: var(
+    --product-card-width,
+    var(--product-card-results-min-width)
+  );
+  --results-max-cols: var(--vviinn-results-max-columns);
+  --results-gap-h: var(--vviinn-results-gap-horizontal);
+  --results-gap-v: var(--vviinn-results-gap-vertical);
+
+  --max-column-width: calc(
+    100% / var(--results-max-cols) - var(--results-gap-h)
+  );
+  --safe-column-width: max(
+    var(--max-column-width),
+    min(var(--results-min-width), 100%)
+  );
+
+  /* Apply the improved grid */
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(var(--safe-column-width), 1fr)
+  );
+  gap: var(--results-gap-v) var(--results-gap-h);
 }
 
 :host(.show-in-widget) .products {
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(var(--product-card-width, var(--product-card-widget-min-width)), 1fr)
+  /* Widget-specific overrides */
+  --results-min-width: var(
+    --product-card-width,
+    var(--product-card-widget-min-width)
   );
+  --results-gap-v: 24px; /* Smaller vertical gap for widgets */
 }
 
 :host(:not(.show-in-widget)) .products {
