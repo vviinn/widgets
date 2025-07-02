@@ -9,6 +9,8 @@
    * @prop --product-card-image-bg-color: Set the background color of the product card image.
    * @prop --basket-button-bg-color-pressed: Set the background color of the pressed Basket Button.
    * @prop --font-family: Set the font family of the widget.
+   * @prop --vviinn-results-gap-horizontal: Horizontal gap between items (default: 16px). Adaptive on mobile.
+   * @prop --vviinn-results-gap-vertical: Vertical gap between items (default: 32px). Adaptive on mobile and in widgets.
    */
 
   display: grid;
@@ -139,28 +141,44 @@
   width: 0;
 }
 
+/* Grid */
 .recommendations-results.recommendations-grid {
   width: 100%;
   align-content: center;
   align-items: start;
   box-sizing: border-box;
   display: grid;
-  grid-gap: 32px 16px;
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(
-      var(--product-card-width, var(--product-card-results-min-width)),
-      1fr
-    )
-  );
+  gap: var(--vviinn-results-gap-vertical) var(--vviinn-results-gap-horizontal);
   padding-bottom: var(--spacing-300);
 }
 
+/* Regular pages */
+:host(:not(.show-in-widget)) .recommendations-results.recommendations-grid {
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(
+      min(
+        var(--product-card-width, var(--product-card-results-min-width)),
+        100%
+      ),
+      1fr
+    )
+  );
+}
+
+/* Widget */
+:host(.show-in-widget) .recommendations-results.recommendations-grid {
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(var(--product-card-widget-min-width), 100%), 1fr)
+  );
+}
+
+/* Mobile */
 @media (max-width: 768px) {
   :host(.show-in-widget) .recommendations-results.recommendations-grid {
     width: unset;
-    grid-gap: 24px 16px;
+    --vviinn-results-gap-vertical: 24px;
     justify-content: center;
-    grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
   }
 }

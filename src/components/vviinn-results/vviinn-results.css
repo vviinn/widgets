@@ -9,9 +9,8 @@
    * @prop --product-card-image-bg-color: Set the background color of the product card image.
    * @prop --basket-button-bg-color-pressed: Set the background color of the pressed Basket Button.
    * @prop --font-family: Set the font family of the widget.
-   * @prop --vviinn-results-max-columns: Maximum number of columns (default: unlimited). Set to number like 4 to limit columns.
-   * @prop --vviinn-results-gap-horizontal: Horizontal gap between items (default: 16px).
-   * @prop --vviinn-results-gap-vertical: Vertical gap between items (default: 32px).
+   * @prop --vviinn-results-gap-horizontal: Horizontal gap between items (default: 16px). Adaptive on mobile.
+   * @prop --vviinn-results-gap-vertical: Vertical gap between items (default: 32px). Adaptive on mobile and in widgets.
    */
 
   display: block;
@@ -31,53 +30,41 @@
   height: 100%;
 }
 
+/* Base grid */
 .products {
   width: 100%;
   align-content: center;
   align-items: start;
   box-sizing: border-box;
   justify-items: center;
-  padding: 0 24px 24px 12px;
-  position: absolute;
-
-  /* Calculate safe column width with overflow protection */
-  --results-min-width: var(
-    --product-card-width,
-    var(--product-card-results-min-width)
-  );
-  --results-max-cols: var(--vviinn-results-max-columns);
-  --results-gap-h: var(--vviinn-results-gap-horizontal);
-  --results-gap-v: var(--vviinn-results-gap-vertical);
-
-  --max-column-width: calc(
-    100% / var(--results-max-cols) - var(--results-gap-h)
-  );
-  --safe-column-width: max(
-    var(--max-column-width),
-    min(var(--results-min-width), 100%)
-  );
-
-  /* Apply the improved grid */
   display: grid;
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(var(--safe-column-width), 1fr)
-  );
-  gap: var(--results-gap-v) var(--results-gap-h);
+  gap: var(--vviinn-results-gap-vertical) var(--vviinn-results-gap-horizontal);
 }
 
-:host(.show-in-widget) .products {
-  /* Widget-specific overrides */
-  --results-min-width: var(
-    --product-card-width,
-    var(--product-card-widget-min-width)
-  );
-  --results-gap-v: 24px; /* Smaller vertical gap for widgets */
-}
-
+/* Regular pages */
 :host(:not(.show-in-widget)) .products {
   position: static;
   padding: 0;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(
+      min(
+        var(--product-card-width, var(--product-card-results-min-width)),
+        100%
+      ),
+      1fr
+    )
+  );
+}
+
+/* Widget */
+:host(.show-in-widget) .products {
+  padding: 0 24px 24px 12px;
+  position: absolute;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(var(--product-card-widget-min-width), 100%), 1fr)
+  );
 }
 
 .hidden {
@@ -154,9 +141,12 @@ vviinn-recommendations-sidebar::part(sidebar-content) {
 
 :host(.matching-discovery) vviinn-recommendations-sidebar::part(items-group) {
   grid-template-columns: repeat(
-    auto-fill,
+    auto-fit,
     minmax(
-      var(--product-card-width, var(--product-card-results-min-width)),
+      min(
+        var(--product-card-width, var(--product-card-results-min-width)),
+        100%
+      ),
       1fr
     )
   );
@@ -166,11 +156,42 @@ vviinn-recommendations-sidebar::part(sidebar-content) {
   vviinn-recommendations-sidebar::part(recommendations-results),
 :host(.show-in-widget) vviinn-recommendations-sidebar::part(items-group) {
   grid-template-columns: repeat(
-    auto-fill,
-    minmax(var(--product-card-widget-min-width), 1fr)
+    auto-fit,
+    minmax(min(var(--product-card-widget-min-width), 100%), 1fr)
   );
 }
 
+/* Container queries */
+:host(:not(.show-in-widget)) {
+  container-type: inline-size;
+}
+
+@container (min-width: 1440px) {
+  :host(:not(.show-in-widget)) .products {
+    --product-card-width: 300px;
+  }
+}
+
+@container (max-width: 550px) {
+  :host(:not(.show-in-widget)) .products {
+    --product-card-width: 180px;
+  }
+}
+
+/* Media queries fallback */
+@media (min-width: 1440px) {
+  :host(:not(.show-in-widget)) .products {
+    --product-card-width: 300px;
+  }
+}
+
+@media (max-width: 550px) {
+  :host(:not(.show-in-widget)) .products {
+    --product-card-width: 180px;
+  }
+}
+
+/* Mobile */
 @media (max-width: 768px) {
   :host(.show-in-widget) {
     align-content: start;
@@ -181,11 +202,15 @@ vviinn-recommendations-sidebar::part(sidebar-content) {
     margin-top: 24px;
   }
 
-  .products {
+  :host(.show-in-widget) .products {
+    --vviinn-results-gap-vertical: 24px;
+  }
+
+  :host(:not(.show-in-widget)) .products {
     position: static;
     padding: 0;
     width: unset;
-    row-gap: 24px;
+    --vviinn-results-gap-vertical: 24px;
     justify-content: center;
   }
 
@@ -199,7 +224,7 @@ vviinn-recommendations-sidebar::part(sidebar-content) {
 }
 
 @media (max-width: 380px) {
-  .products {
-    column-gap: 10px;
+  :host(:not(.show-in-widget)) .products {
+    --vviinn-results-gap-horizontal: 10px;
   }
 }
