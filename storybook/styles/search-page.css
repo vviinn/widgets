@@ -60,7 +60,3 @@ vviinn-cropper.active {
     flex-wrap: wrap;
   }
 }
-
-.search-page-wrapper-result vviinn-results {
-  --product-card-width: 215px;
-}
