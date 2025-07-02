@@ -84,8 +84,7 @@ vviinn-vps-button::part(vviinn-button) {
   background-color: #f4f4f4;
   transition: background-color 0.2s;
   aspect-ratio: 1 / 1;
-  border-top-right-radius: 7px;
-  border-bottom-right-radius: 7px;
+  border-radius: 0 7px 7px 0;
 }
 
 .speech-button {
