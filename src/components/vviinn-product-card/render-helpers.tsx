@@ -385,7 +385,7 @@ export const ContentCardContent = (
         </div>
       )}
       {contentLink && (
-        <Linked deeplink={contentLink} part="content-link">
+        <Linked deeplink={contentLink} part="content-link" tabindex={0}>
           {getLastUrlPath(contentLink)}
         </Linked>
       )}
