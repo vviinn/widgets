@@ -64,9 +64,3 @@ vviinn-cropper.active {
 .search-page-wrapper-result vviinn-results {
   --product-card-width: 215px;
 }
-
-@media screen and (max-width: 768px) {
-  .search-page-wrapper-result vviinn-results {
-    --product-card-width: 155px;
-  }
-}
