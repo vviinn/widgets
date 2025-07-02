@@ -43,7 +43,7 @@ Using `Vviinn Widgets` as separate components allows for greater control over th
               <vviinn-selected-filters locale="en-US"></vviinn-selected-filters>
             </div>
 
-            <vviinn-results results-count="12" token={vviinnToken} locale="en-US" one-click-discovery-mode="append-grid"></vviinn-results>
+            <vviinn-results results-count="12" token={vviinnToken} locale="en-US" one-click-discovery-mode="append-grid" product-details-new-tab="true"></vviinn-results>
           </div>
         </div>
       </div>
@@ -122,7 +122,7 @@ vviinn-text-search {
       <vviinn-selected-filters locale="en-US"></vviinn-selected-filters>
     </div>
     
-    <vviinn-results results-count="12" token="TOKEN" locale="en-US" one-click-discovery-mode="append-grid"></vviinn-results>
+    <vviinn-results results-count="12" token="TOKEN" locale="en-US" one-click-discovery-mode="append-grid" product-details-new-tab="true"></vviinn-results>
   </div>
 </div>
 ```
@@ -183,7 +183,7 @@ To see the filter columns, enable Filters in the Interface Controls section insi
   search-query="RECEIVED_QUERY"
 ></vviinn-text-search>
 
-<vviinn-results token="YOUR_TOKEN" locale="en-US"></vviinn-results>
+<vviinn-results token="YOUR_TOKEN" locale="en-US" product-details-new-tab="true"></vviinn-results>
 
 <!-- Image Search example: -->
 <vviinn-cropper width="300"></vviinn-cropper>
@@ -194,7 +194,7 @@ To see the filter columns, enable Filters in the Interface Controls section insi
   locale="en-US"
 ></vviinn-text-search>
 
-<vviinn-results token="YOUR_TOKEN" search-id="RECEIVED_SEARCH_ID" locale="en-US"></vviinn-results>
+<vviinn-results token="YOUR_TOKEN" search-id="RECEIVED_SEARCH_ID" locale="en-US" product-details-new-tab="true"></vviinn-results>
 
 ```
 </div>

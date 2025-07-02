@@ -6,14 +6,11 @@ import {
   State,
   Listen,
   Element,
-  Event,
-  EventEmitter,
   Fragment,
   Watch,
 } from "@stencil/core";
 import { CrossIcon } from "../../vviinn-icons";
 import { CarouselMode } from "../../vviinn-carousel/vviinn-carousel";
-import { BasicEventData } from "../../../recommendation/events";
 import { CampaignName } from "../../../campaign/Campaign";
 import { Locale } from "../../../locale";
 import { UpdateButtonLocation } from "../../vviinn-vpr-widget/vviinn-vpr-widget";
@@ -24,6 +21,7 @@ import i18next from "i18next";
 import {
   DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH,
   PRODUCT_CARD_IMAGE_WIDTH,
+  LOADING_CLASS_DELAY,
 } from "../../../widget/constants";
 
 type SidebarState = "idle" | "open" | "closed";
@@ -109,8 +107,6 @@ export class RecommendationsSidebar {
   };
   private loadingClassTimeout: ReturnType<typeof setTimeout>;
 
-  @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
-
   @Listen("vviinnUpdatingAllCardsStarted")
   updatingAllCardsStarted() {
     const { height } = this.getSidebarRectangle();
@@ -163,7 +159,7 @@ export class RecommendationsSidebar {
     } else {
       this.loadingClassTimeout = setTimeout(() => {
         this.showLoadingClass = false;
-      }, 500);
+      }, LOADING_CLASS_DELAY);
     }
   }
 
@@ -176,12 +172,10 @@ export class RecommendationsSidebar {
         ) as HTMLElement;
         closeButton?.focus();
       }, 0);
-    } else if (
-      newState === "closed" &&
-      oldState === "open" &&
-      this.triggerElement
-    ) {
-      this.triggerElement?.focus();
+    } else if (newState === "closed" && oldState === "open") {
+      if (this.triggerElement) {
+        this.triggerElement.focus();
+      }
     }
   }
 
@@ -252,7 +246,9 @@ export class RecommendationsSidebar {
             )}
             <button
               class="close-sidebar"
-              onClick={() => (this.sidebarState = "closed")}
+              onClick={() => {
+                this.sidebarState = "closed";
+              }}
               onKeyDown={(event: KeyboardEvent) => {
                 if (event.key === "Enter" || event.key === " ") {
                   event.preventDefault();

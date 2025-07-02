@@ -56,7 +56,7 @@ Default.args = {
   excluded: "",
   mode: "grid",
   blockTitle: "Recommended products",
-  productDetailsNewTab: false,
+  productDetailsNewTab: true,
   productDetailsRedirect: true,
   imageWidth: 300,
   imageRatio: 1,
