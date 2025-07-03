@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.177.2](https://github.com/vviinn/widgets/compare/v2.177.1...v2.177.2) (2025-07-03)
+
+
+### Bug Fixes
+
+* Product link focus in Safari browser ([09cc43b](https://github.com/vviinn/widgets/commit/09cc43bdcb6b3f6ef6c37c58d7f6d75b5811c30b))
+
 ### [2.177.1](https://github.com/vviinn/widgets/compare/v2.177.0...v2.177.1) (2025-07-02)
 
 
