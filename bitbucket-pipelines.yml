@@ -56,7 +56,10 @@ pipelines:
           script:
             - git pull
             - npm run update_storybook_widget_version
-            - git add ./storybook/package.json
+            - cd storybook
+            - npm install
+            - cd ..
+            - git add ./storybook/package.json ./storybook/package-lock.json
             - git commit -m "[skip ci] update widget's version in storybook"
             - git push origin develop
     master:
