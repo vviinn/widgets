@@ -79,7 +79,10 @@ import {
   getSlotNames,
   addEventListenersWithSignal,
 } from "../../dom";
-import { OneClickDiscoveryMode } from "../../widget/types";
+import {
+  OneClickDiscoveryMode,
+  oneClickDiscoveryModes,
+} from "../../widget/types";
 import { RESULTS_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
 import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
 import { RESULTS_CALCULATED_COLUMNS_CSS_VAR } from "../vviinn-carousel/constants";
@@ -209,7 +212,7 @@ export class VviinnResults {
   @Prop() addPriceContainer?: boolean = false;
 
   /** One-click Discovery Mode */
-  @Prop() oneClickDiscoveryMode?: OneClickDiscoveryMode;
+  @Prop() oneClickDiscoveryMode?: OneClickDiscoveryMode = "append-grid";
   /** Comma-separated list of campaign IDs */
   @Prop() oneClickDiscoveryCampaigns: string = "";
 
@@ -738,8 +741,13 @@ export class VviinnResults {
       this.state.resultLoaded = true;
     }
 
+    const shouldShowOneClickDiscoveryButton =
+      oneClickDiscoveryModes.includes(this.oneClickDiscoveryMode) &&
+      this.oneClickDiscoveryMode !== "unset";
+
     const isOneClickDiscoveryAppendMode =
-      this.oneClickDiscoveryMode?.startsWith("append");
+      this.oneClickDiscoveryMode === "append-grid" ||
+      this.oneClickDiscoveryMode === "append-slider";
 
     const oneClickDiscoveryHandler = (index: number) => {
       if (!isOneClickDiscoveryAppendMode) return;
@@ -809,7 +817,7 @@ export class VviinnResults {
         style={{ order: i.toString() }}
         showFooterArrow={this.oneClickDiscoverySelectedIndex === i}
       >
-        {!!this.oneClickDiscoveryMode && (
+        {shouldShowOneClickDiscoveryButton && (
           <div
             slot="vviinn-product-card-actions"
             class="vviinn-results-product-card-actions"

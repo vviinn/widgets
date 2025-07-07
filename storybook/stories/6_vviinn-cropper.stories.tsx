@@ -36,6 +36,7 @@ const Template = (args) => `
       token="${args.token}"
       api-path="${args.apiPath}"
       one-click-discovery-mode="append-grid"
+      product-details-new-tab="true"
       locale="en-US"
     ></vviinn-results>
   </div>

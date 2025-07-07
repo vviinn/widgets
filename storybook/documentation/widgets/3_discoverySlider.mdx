@@ -21,19 +21,20 @@ import { vviinnToken, productIdSimilarProducts } from "../../helpers";
     </div>
     <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
-            <vviinn-vpr-widget token={vviinnToken} product-id={productIdSimilarProducts} mode="grid" block-title="" locale="en-US">
-            </vviinn-vpr-widget>
+            <vviinn-vpr-widget token={vviinnToken} product-id={productIdSimilarProducts} mode="grid" block-title="" locale="en-US" product-details-new-tab="true">
+</vviinn-vpr-widget>
         </div>
     </div>
     <div id="Code_1" className="tabcontent">
 ```html
-<vviinn-vpr-widget 
-    token="TOKEN" 
-    product-id="PRODUCT_ID"
-    mode="grid"
-    block-title=""
-    locale="en-US"
-></vviinn-vpr-widget>
+        <vviinn-vpr-widget
+            token="TOKEN"
+            product-id="PRODUCT_ID"
+            mode="grid"
+            block-title=""
+            locale="en-US"
+            product-details-new-tab="true"
+        ></vviinn-vpr-widget>
 ```
     </div>
 </div>
@@ -48,18 +49,19 @@ import { vviinnToken, productIdSimilarProducts } from "../../helpers";
     </div>
     <div id="Preview_3" className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
-            <vviinn-vpr-widget token={vviinnToken} product-id={productIdSimilarProducts} block-title="" locale="en-US">
-            </vviinn-vpr-widget>
+            <vviinn-vpr-widget token={vviinnToken} product-id={productIdSimilarProducts} block-title="" locale="en-US" product-details-new-tab="true">
+</vviinn-vpr-widget>
         </div>
     </div>
     <div id="Code_3" className="tabcontent">
 ```html
-<vviinn-vpr-widget 
-    token="TOKEN" 
-    product-id="PRODUCT_ID"
-    block-title=""
-    locale="en-US"
-></vviinn-vpr-widget>
+        <vviinn-vpr-widget
+            token="TOKEN"
+            product-id="PRODUCT_ID"
+            block-title=""
+            locale="en-US"
+            product-details-new-tab="true"
+        ></vviinn-vpr-widget>
 ```
     </div>
 </div>

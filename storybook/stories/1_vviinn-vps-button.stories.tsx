@@ -41,7 +41,6 @@ const Template = (args) => `
   add-to-basket-show="${args.addToBasketShow}"
   add-price-container="${args.addPriceContainer}"
   favorite-show="${args.favoriteShow}"
-  one-click-discovery-show="${args.oneClickDiscoveryShow}"
   one-click-discovery-mode="${args.oneClickDiscoveryMode}"
 ></vviinn-vps-button>`;
 
@@ -68,6 +67,5 @@ Default.args = {
   addToBasketShow: false,
   addPriceContainer: false,
   favoriteShow: false,
-  oneClickDiscoveryShow: true,
   oneClickDiscoveryMode: "append-grid",
 };

@@ -25,6 +25,7 @@ import { useSearchStore } from "../../store/search.store";
 import {
   DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH,
   PRODUCT_CARD_IMAGE_WIDTH,
+  SIDEBAR_ANIMATION_DURATION,
 } from "../../widget/constants";
 import { addEventListenersWithSignal } from "../../dom";
 /**
@@ -243,12 +244,25 @@ export class VviinnVprButton {
 
   private sidebar: HTMLVviinnRecommendationsSidebarElement | null = null;
 
-  private sidebarCloseListener = () => {
+  private removeSidebarFromDOM = () => {
     if (!this.sidebar) return;
 
     if (this.targetAppendSidebarTo?.contains(this.sidebar)) {
       this.targetAppendSidebarTo.removeChild(this.sidebar);
-      return;
+    } else if (document.body.contains(this.sidebar)) {
+      document.body.removeChild(this.sidebar);
+    }
+    this.sidebar = null;
+  };
+
+  private sidebarCloseListener = (isStorybookClose = false) => {
+    if (!this.sidebar) return;
+
+    if (isStorybookClose) {
+      this.removeSidebarFromDOM();
+    } else {
+      (this.sidebar as any).sidebarState = "closed";
+      setTimeout(() => this.removeSidebarFromDOM(), SIDEBAR_ANIMATION_DURATION);
     }
   };
 
@@ -360,7 +374,10 @@ export class VviinnVprButton {
     const { signal } = this.eventAbortController;
     addEventListenersWithSignal(
       document,
-      [["vviinnWidgetClose", this.sidebarCloseListener]],
+      [
+        ["vviinnWidgetClose", () => this.sidebarCloseListener(false)],
+        ["vviinnStorybookStoryChanged", () => this.sidebarCloseListener(true)],
+      ],
       signal,
     );
 

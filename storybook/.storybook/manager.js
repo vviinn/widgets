@@ -1,6 +1,7 @@
 import { addons } from "storybook/manager-api";
 import vviinnTheme from "./vviinn-theme";
 import { vviinnIndustry } from "../helpers";
+import "./addons/close-modals-addon";
 
 addons.setConfig({
   theme: vviinnTheme,

@@ -132,6 +132,7 @@ export const TextSearchResultsPage = (args) => {
 
         <vviinn-results 
           token="${vviinnToken}"  
+          product-details-new-tab="true"
           locale="en-US">
         </vviinn-results>
       </div>
@@ -170,6 +171,7 @@ export const ImageSearchResultsPage = (args) => {
         <vviinn-results 
           token="${vviinnToken}"  
           search-id="${searchId}"
+          product-details-new-tab="true"
           locale="en-US">
         </vviinn-results>
       </div>
