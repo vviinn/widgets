@@ -256,6 +256,14 @@ export class VviinnCarousel {
       };
       contentNode.addEventListener("scroll", this.scrollHandler);
     }
+
+    if (
+      this.recommendations?.length > 0 &&
+      !this.showContent &&
+      !this.loading
+    ) {
+      this.showContent = true;
+    }
   }
 
   @Watch("recommendations")
