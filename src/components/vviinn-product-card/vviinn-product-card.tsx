@@ -453,7 +453,7 @@ export class VviinnProductCard {
             </Fragment>
           ) : (
             <Fragment>
-              <Linked deeplink={this.deeplink} part="deeplink">
+              <Linked deeplink={this.deeplink} part="deeplink" tabindex={0}>
                 <span class="title" part="title">
                   {this.productTitle}
                 </span>
