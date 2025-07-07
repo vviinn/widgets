@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.177.3](https://github.com/vviinn/widgets/compare/v2.177.2...v2.177.3) (2025-07-07)
+
+
+### Bug Fixes
+
+* Prevent infinite loading state when opening the Discovery widget in a new tab. ([d36ce43](https://github.com/vviinn/widgets/commit/d36ce43ed4b1064edf8fc4480e635405e5632442))
+
 ### [2.177.2](https://github.com/vviinn/widgets/compare/v2.177.1...v2.177.2) (2025-07-03)
 
 
