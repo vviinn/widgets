@@ -34,101 +34,99 @@ export class VviinnPriceRange {
   ) => void;
   @Prop() selectedInterval?: components["schemas"]["interval"];
 
-  @State() minIndex: number = 0;
-  @State() maxIndex: number;
   @State() scalingFactor: number;
+  @State() minValue: number;
+  @State() maxValue: number;
+  @State() fromValue: number;
+  @State() toValue: number;
 
   fromSlider: HTMLInputElement;
   toSlider: HTMLInputElement;
 
   componentWillLoad() {
-    this.updatingSelectedInterval();
+    this.initializeValues();
   }
 
   @Watch("selectedInterval")
-  updatingSelectedInterval() {
+  @Watch("histogram")
+  initializeValues() {
     if (!this.histogram || this.histogram.length === 0) {
       return;
     }
 
+    this.minValue = this.histogram[0].value.interval.start;
+    this.maxValue =
+      this.histogram[this.histogram.length - 1].value.interval.end;
+
+    if (this.selectedInterval) {
+      this.fromValue = this.selectedInterval.start ?? this.minValue;
+      this.toValue = this.selectedInterval.end ?? this.maxValue;
+    } else {
+      this.fromValue = this.minValue;
+      this.toValue = this.maxValue;
+    }
+
     const maxValueofFrequency = Math.max(
-      ...this.histogram.map(({ value }) => {
-        return value.frequency;
-      }),
+      ...this.histogram.map(({ value }) => value.frequency),
     );
-
     this.scalingFactor = 100 / maxValueofFrequency;
-
-    if (this.selectedInterval?.start !== undefined) {
-      const foundMinIndex = this.histogram.findIndex(
-        ({ value }) => value.interval.start === this.selectedInterval.start,
-      );
-      this.minIndex = foundMinIndex !== -1 ? foundMinIndex : 0;
-    } else {
-      this.minIndex = 0;
-    }
-
-    if (this.selectedInterval?.end !== undefined) {
-      const foundMaxIndex = this.histogram.findIndex(
-        (item) => item.value.interval.end === this.selectedInterval.end,
-      );
-      this.maxIndex =
-        foundMaxIndex !== -1 ? foundMaxIndex : this.histogram.length - 1;
-    } else {
-      this.maxIndex = this.histogram.length - 1;
-    }
   }
 
   private controlFromSlider = (e: InputEvent) => {
-    const fromValue = parseInt((e.target as HTMLInputElement).value);
+    const newFromValue = parseInt((e.target as HTMLInputElement).value);
 
-    if (fromValue >= this.maxIndex) {
-      this.minIndex = this.maxIndex - 1; // Set it just below max index
+    if (newFromValue >= this.toValue) {
+      this.fromValue = this.toValue - 1;
+      (e.target as HTMLInputElement).value = String(this.fromValue);
     } else {
-      this.minIndex = fromValue;
+      this.fromValue = newFromValue;
     }
-
-    (e.target as HTMLInputElement).value = String(this.minIndex);
   };
 
   private controlToSlider = (e: InputEvent) => {
-    const toValue = parseInt((e.target as HTMLInputElement).value);
+    const newToValue = parseInt((e.target as HTMLInputElement).value);
 
-    if (toValue <= this.minIndex) {
-      this.maxIndex = this.minIndex + 1;
+    if (newToValue <= this.fromValue) {
+      this.toValue = this.fromValue + 1;
+      (e.target as HTMLInputElement).value = String(this.toValue);
     } else {
-      this.maxIndex = toValue;
+      this.toValue = newToValue;
     }
-
-    (e.target as HTMLInputElement).value = String(this.maxIndex);
   };
 
   private sendBackValue = () => {
     this.priceChangeHandler({
       interval: {
-        start: this.histogram[this.minIndex]?.value?.interval?.start,
-        end: this.histogram[this.maxIndex]?.value?.interval?.end,
+        start: this.fromValue,
+        end: this.toValue,
       },
     });
   };
+
   private calculateBarHeight(frequency: number) {
     return frequency * this.scalingFactor;
   }
 
+  private isBarActive(item: Histogram[number]): boolean {
+    if (!item.active) return false;
+
+    const { start, end } = item.value.interval;
+    return !(end < this.fromValue || start > this.toValue);
+  }
+
   render() {
-    const histogramSize = this.histogram.length - 1;
     return (
       <Host exportparts={priceRangeParts}>
         <div class="histogram" part="histogram">
-          {this.histogram.map((item, index) => {
+          {this.histogram.map((item) => {
             const barHeight = this.calculateBarHeight(item.value.frequency);
             const heightInPercent =
               barHeight && barHeight < MIN_BAR_HEIGHT
                 ? MIN_BAR_HEIGHT
                 : barHeight;
 
-            const isActive =
-              item.active && index >= this.minIndex && index <= this.maxIndex;
+            const isActive = this.isBarActive(item);
+            console.log(isActive, item);
             return (
               <div
                 class={`histogram-bar ${
@@ -148,11 +146,12 @@ export class VviinnPriceRange {
               ref={(el) => (this.fromSlider = el)}
               id="fromSlider"
               type="range"
-              min="0"
-              max={histogramSize}
-              value={this.minIndex}
+              min={this.minValue}
+              max={this.maxValue}
+              value={this.fromValue}
               onInput={this.controlFromSlider}
               onChange={this.sendBackValue}
+              step={1}
               part="histogram-from-slider"
               aria-label={i18next.t("a11y.priceRangeMin")}
             />
@@ -160,11 +159,12 @@ export class VviinnPriceRange {
               ref={(el) => (this.toSlider = el)}
               id="toSlider"
               type="range"
-              min="0"
-              max={histogramSize}
-              value={this.maxIndex}
+              min={this.minValue}
+              max={this.maxValue}
+              value={this.toValue}
               onInput={this.controlToSlider}
               onChange={this.sendBackValue}
+              step={1}
               part="histogram-to-slider"
               aria-label={i18next.t("a11y.priceRangeMax")}
             />
@@ -172,11 +172,11 @@ export class VviinnPriceRange {
         </div>
         <div class="label-wrapper" part="histogram-label-wrapper">
           <div class="label" part="histogram-label">
-            {this.histogram[this.minIndex]?.value?.interval?.start}
+            {this.fromValue}
             <span class="histogram-currency">{globalState.currencySign}</span>
           </div>
           <div class="label" part="histogram-label">
-            {this.histogram[this.maxIndex]?.value?.interval?.end}
+            {this.toValue}
             <span class="histogram-currency">{globalState.currencySign}</span>
           </div>
         </div>
