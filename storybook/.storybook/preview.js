@@ -30,6 +30,7 @@ export const parameters = {
   docs: {
     extractArgTypes,
     extractComponentDescription,
+    toc: { headingSelector: "h2, h3", disable: false },
   },
   options: {
     storySort: {
