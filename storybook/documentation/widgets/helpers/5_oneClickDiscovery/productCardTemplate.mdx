@@ -1,0 +1,20 @@
+import {productIdCrossSelling, productIdSimilarProducts, vviinnToken} from "../../../../helpers";
+
+<div className="product">
+    <a className="product__image" href="#"></a>
+    <div className="product__name">
+        <a href="#">Product Name</a>
+    </div>
+    <div className="product__price">
+        $10.00
+
+        <vviinn-vpr-button
+            token={vviinnToken}
+            product-id={props.cardMode!=='set'?productIdSimilarProducts:productIdCrossSelling}
+            mode={props.cardMode}
+            block-title=""
+            locale="en-US"
+            product-details-new-tab="true"
+        ></vviinn-vpr-button>
+    </div>
+</div>
