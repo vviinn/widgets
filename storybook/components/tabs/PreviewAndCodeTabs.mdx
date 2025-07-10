@@ -12,7 +12,7 @@ import {Source} from "@storybook/addon-docs/blocks";
         </div>
     </div>
 
-    <div className="tab-sub-title">{props.tabData.description}</div>
+    {props.tabData.description??props.tabData.description}
 
     <div id={`Preview_${props.tabData.groupID}`} className="tabcontent" style={{display:"block"}}>
         <div className="tabcontent-preview">
