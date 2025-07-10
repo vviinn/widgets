@@ -10,7 +10,7 @@ export const searchModalConstants = {
   image: {
     groupId: "imageModal",
     header: "Image Search (default)",
-    code: codeWithExtraProps(defaultWidget),
+    code: defaultWidget,
     descriptionText: "Search with Image and Camera",
   },
   full: {
