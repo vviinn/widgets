@@ -1,9 +1,9 @@
-import { Meta, Story } from '@storybook/addon-docs/blocks';
+import { Meta } from '@storybook/addon-docs/blocks';
 
-import "../../components/tabs/styles.css";
 import "./styles.css";
-import {clickHandlers} from "../../components"
-import { vviinnToken } from "../../helpers";
+import PreviewAndCodeTabs from "../../components/tabs/PreviewAndCodeTabs.mdx"
+import {searchModalConstants} from "./helpers/1_searchModal/searchModalConstants";
+import SearchModalTemplate from "./helpers/1_searchModal/searchModalTemplate.mdx"
 
 <Meta title="Widgets/Search Modal" />
 
@@ -17,115 +17,17 @@ The `Search Modal` is a full-screen overlay that allows:
 
 ## Examples
 
-<div id="image">
-    <div className="tab tab-reverse">
-        <h3>Image Search (default)</h3>
-        <div className="tablink-group">
-            <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'image')}}>Code</button>
-            <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'image')}}>Preview</button>
-        </div>
-    </div>
-    <div className='tab-sub-title'>Search with Image and Camera</div>
-    <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
-        <div className="tabcontent-preview">
-            <vviinn-vps-button token={vviinnToken} locale="en-US" add-style="true">
-            </vviinn-vps-button>
-        </div>
-    </div>
-    <div id="Code_2" className="tabcontent">
-```html
-<vviinn-vps-button 
-    token="TOKEN" 
-    locale="en-US"
-    add-style="true"
-></vviinn-vps-button>
-```
-    </div>
-</div>
+<PreviewAndCodeTabs tabData={{...searchModalConstants.image,
+    component:<SearchModalTemplate/>}}/>
 
-<div id="full">
-    <div className="tab tab-reverse">
-        <h3>Full Search</h3>
-        <div className="tablink-group">
-            <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'full')}}>Code</button>
-            <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'full')}}>Preview</button>
-        </div>
-    </div>
-    <div className='tab-sub-title'>Search with Image, Text, and Camera</div>
-    <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
-        <div className="tabcontent-preview">
-            <vviinn-vps-button token={vviinnToken} text-search-show="true" locale="en-US" add-style="true">
-            </vviinn-vps-button>
-        </div>
-    </div>
-    <div id="Code_1" className="tabcontent">
-```html
-<vviinn-vps-button 
-    token="TOKEN" 
-    text-search-show="true"
-    locale="en-US"
-    add-style="true"
-></vviinn-vps-button>
-```
-    </div>
-</div>
+<PreviewAndCodeTabs tabData={{...searchModalConstants.full,
+    component:<SearchModalTemplate textSearchShow="true"/>}}/>
 
-<div id="upload-mode">
-    <div className="tab tab-reverse">
-        <h3>Upload Mode</h3>
-        <div className="tablink-group">
-            <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_3', 'upload-mode')}}>Code</button>
-            <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_3', 'upload-mode')}}>Preview</button>
-        </div>
-    </div>
-       <div className='tab-sub-title'>Directly opens image upload for Image Search</div>
+<PreviewAndCodeTabs tabData={{...searchModalConstants.upload,
+    component:<SearchModalTemplate mode="upload"/>}}/>
 
-    <div id="Preview_3" className="tabcontent" style={{display:"block"}}>
-        <div className="tabcontent-preview">
-            <vviinn-vps-button token={vviinnToken} mode="upload" locale="en-US" add-style="true">
-            </vviinn-vps-button>
-        </div>
-    </div>
-    <div id="Code_3" className="tabcontent">
-```html
-<vviinn-vps-button 
-    token="TOKEN" 
-    mode="upload"
-    locale="en-US"
-    add-style="true"
-></vviinn-vps-button>
-```
-    </div>
-</div>
-
-<div id="camera-mode">
-    <div className="tab tab-reverse">
-        <h3>Camera Mode</h3>
-
-        <div className="tablink-group">
-            <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_4', 'camera-mode')}}>Code</button>
-            <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_4', 'camera-mode')}}>Preview</button>
-        </div>
-    </div>
-       <div className='tab-sub-title'>Search with Camera</div>
-
-    <div id="Preview_4" className="tabcontent" style={{display:"block"}}>
-        <div className="tabcontent-preview">
-            <vviinn-vps-button token={vviinnToken} mode="camera" locale="en-US" add-style="true">
-            </vviinn-vps-button>
-        </div>
-    </div>
-    <div id="Code_4" className="tabcontent">
-```html
-<vviinn-vps-button 
-    token="TOKEN" 
-    mode="camera"
-    locale="en-US"
-    add-style="true"
-></vviinn-vps-button>
-```
-    </div>
-</div>
+<PreviewAndCodeTabs tabData={{...searchModalConstants.camera,
+    component:<SearchModalTemplate mode="camera"/>}}/>
 
 
 
