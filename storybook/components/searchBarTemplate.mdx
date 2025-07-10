@@ -1,0 +1,9 @@
+import {vviinnToken} from "../helpers";
+
+<vviinn-text-search token={vviinnToken} locale="en-US" {...props.textSearch?.extended}>
+        {props.textSearch?.slotted&&<vviinn-vps-button
+            token={vviinnToken} locale="en-US"
+            slot="vviinn-text-search-actions">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 8C4 5.79 5.79 4 8 4H9V2H8C4.69 2 2 4.69 2 8V9H4V8Z" fill="#161616"/><path d="M4 16V15H2V16C2 19.31 4.69 22 8 22H9V20H8C5.79 20 4 18.21 4 16Z" fill="#161616"/><path d="M20 16C20 18.21 18.21 20 16 20H15V22H16C19.31 22 22 19.31 22 16V15H20V16Z" fill="#161616"/><path d="M16 2H15V4H16C18.21 4 20 5.79 20 8V9H22V8C22 4.69 19.31 2 16 2Z" fill="#161616"/><path d="M17 12C17 9.24 14.76 7 12 7C9.24 7 7 9.24 7 12C7 14.76 9.24 17 12 17C14.76 17 17 14.76 17 12ZM12 15C10.35 15 9 13.65 9 12C9 10.35 10.35 9 12 9C13.65 9 15 10.35 15 12C15 13.65 13.65 15 12 15Z" fill="#161616"/></svg>
+        </vviinn-vps-button>}
+</vviinn-text-search>
