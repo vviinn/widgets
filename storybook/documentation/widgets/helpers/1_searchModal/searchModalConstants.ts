@@ -32,10 +32,3 @@ export const searchModalConstants = {
     descriptionText: "Search with Camera",
   },
 };
-
-//  camera: {
-//     groupId: "cameraModal",
-//     header: "",
-//     code: ``,
-//     descriptionText:""
-//   },
