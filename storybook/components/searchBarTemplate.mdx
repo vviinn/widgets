@@ -1,6 +1,6 @@
 import {vviinnToken} from "../helpers";
 
-<vviinn-text-search token={vviinnToken} locale="en-US" {...props.textSearch?.extended}>
+<vviinn-text-search token={vviinnToken} locale="en-US" mode={props.textSearch?.mode}>
         {props.textSearch?.slotted&&<vviinn-vps-button
             token={vviinnToken} locale="en-US"
             slot="vviinn-text-search-actions">
