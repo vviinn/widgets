@@ -8,27 +8,40 @@ const defaultWidget = `<vviinn-vps-button
 
 export const searchModalConstants = {
   image: {
-    groupId: "imageModal",
-    header: "Image Search (default)",
-    code: defaultWidget,
-    descriptionText: "Search with Image and Camera",
+    tabData: {
+      groupId: "imageModal",
+      header: "Image Search (default)",
+      code: defaultWidget,
+      descriptionText: "Search with Image and Camera",
+    },
+    componentProps: {},
   },
+
   full: {
-    groupId: "fullModal",
-    header: "Full Search",
-    code: codeWithExtraProps(defaultWidget, '    text-search-show="true"'),
-    descriptionText: "Search with Image, Text, and Camera",
+    tabData: {
+      groupId: "fullModal",
+      header: "Full Search",
+      code: codeWithExtraProps(defaultWidget, '    text-search-show="true"'),
+      descriptionText: "Search with Image, Text, and Camera",
+    },
+    componentProps: { textSearchShow: true },
   },
   upload: {
-    groupId: "uploadModal",
-    header: "Upload Mode",
-    code: codeWithExtraProps(defaultWidget, '    mode="upload"'),
-    descriptionText: "Directly opens image upload for Image Search",
+    tabData: {
+      groupId: "uploadModal",
+      header: "Upload Mode",
+      code: codeWithExtraProps(defaultWidget, '    mode="upload"'),
+      descriptionText: "Directly opens image upload for Image Search",
+    },
+    componentProps: { mode: "upload" },
   },
   camera: {
-    groupId: "cameraModal",
-    header: "Camera Mode",
-    code: codeWithExtraProps(defaultWidget, '    mode="camera"'),
-    descriptionText: "Search with Camera",
+    tabData: {
+      groupId: "cameraModal",
+      header: "Camera Mode",
+      code: codeWithExtraProps(defaultWidget, '    mode="camera"'),
+      descriptionText: "Search with Camera",
+    },
+    componentProps: { mode: "camera" },
   },
 };

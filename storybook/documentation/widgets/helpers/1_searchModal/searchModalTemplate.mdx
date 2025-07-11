@@ -1,5 +1,5 @@
 import {vviinnToken} from "../../../../helpers";
+import PreviewAndCodeTabs from "../../../../components/tabs/PreviewAndCodeTabs.mdx"
 
-<vviinn-vps-button mode={props.mode} text-search-show={props.textSearchShow} token={vviinnToken} locale="en-US" add-style="true">
-
-</vviinn-vps-button>
+<PreviewAndCodeTabs tabData={{...props.tabData,
+    component: <vviinn-vps-button mode={props.componentProps.mode} text-search-show={props.componentProps.textSearchShow} token={vviinnToken}></vviinn-vps-button>}}/>

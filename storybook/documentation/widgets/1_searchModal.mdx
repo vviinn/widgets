@@ -1,7 +1,6 @@
 import { Meta } from '@storybook/addon-docs/blocks';
 
 import "./styles.css";
-import PreviewAndCodeTabs from "../../components/tabs/PreviewAndCodeTabs.mdx"
 import {searchModalConstants} from "./helpers/1_searchModal/searchModalConstants";
 import SearchModalTemplate from "./helpers/1_searchModal/searchModalTemplate.mdx"
 
@@ -17,17 +16,14 @@ The `Search Modal` is a full-screen overlay that allows:
 
 ## Examples
 
-<PreviewAndCodeTabs tabData={{...searchModalConstants.image,
-    component:<SearchModalTemplate/>}}/>
+<SearchModalTemplate {...searchModalConstants.image}/>
 
-<PreviewAndCodeTabs tabData={{...searchModalConstants.full,
-    component:<SearchModalTemplate textSearchShow="true"/>}}/>
+<SearchModalTemplate {...searchModalConstants.full}/>
 
-<PreviewAndCodeTabs tabData={{...searchModalConstants.upload,
-    component:<SearchModalTemplate mode="upload"/>}}/>
+<SearchModalTemplate {...searchModalConstants.upload}/>
 
-<PreviewAndCodeTabs tabData={{...searchModalConstants.camera,
-    component:<SearchModalTemplate mode="camera"/>}}/>
+<SearchModalTemplate {...searchModalConstants.camera}/>
+
 
 
 
