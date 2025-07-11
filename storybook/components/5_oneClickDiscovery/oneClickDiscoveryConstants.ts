@@ -1,4 +1,4 @@
-import { codeWithExtraProps } from "../../../../helpers/codeWithExtraProps";
+import { codeWithExtraProps } from "../../helpers/codeWithExtraProps";
 
 const resultsCode = `<vviinn-results 
     token="TOKEN" 
