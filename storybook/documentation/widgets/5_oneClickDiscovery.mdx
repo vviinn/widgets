@@ -4,7 +4,7 @@ import { textSearchQuery } from "../../helpers";
 import "./styles.css";
 import PreviewAndCodeTabs from "../../components/tabs/PreviewAndCodeTabs.mdx"
 import {oneClickDiscoveryConstants} from "../../components/5_oneClickDiscovery/oneClickDiscoveryConstants";
-import OneClickDiscoveryTemplate from "../../components/5_oneClickDiscovery/oneClickDicoveryTemplate.mdx"
+import VviinnResults from "../../components/vviinnResultsTemplate.mdx"
 import ProductCardTemplate from  "../../components/5_oneClickDiscovery/productCardTemplate.mdx"
 
 
@@ -16,17 +16,17 @@ One-click discovery allows you to display products with a single click inside th
 
 <PreviewAndCodeTabs tabData={{...oneClickDiscoveryConstants.modal,
 description:<div className="tab-sub-title">One-click Discovery's <code>modal</code> mode, showing in <code>vviinn-results</code> for the {textSearchQuery} query.</div>,
-component: <OneClickDiscoveryTemplate discoveryMode="modal"/>
+component: <VviinnResults discoveryMode="modal" textQuery={textSearchQuery}/>
 }}/>
 
 <PreviewAndCodeTabs tabData={{...oneClickDiscoveryConstants.appendGrid,
     description:<div className="tab-sub-title">One-click Discovery's  <code>append-grid</code> mode, showing in <code>vviinn-results</code> for the {textSearchQuery} query.</div>,
-    component: <OneClickDiscoveryTemplate discoveryMode="append-grid"/>
+    component: <VviinnResults discoveryMode="append-grid"  textQuery={textSearchQuery}/>
 }}/>
 
 <PreviewAndCodeTabs tabData={{...oneClickDiscoveryConstants.appendSlider,
     description:<div className="tab-sub-title">One-click Discovery's  <code>append-slider</code> mode, showing in <code>vviinn-results</code> for the {textSearchQuery} query.</div>,
-    component: <OneClickDiscoveryTemplate discoveryMode="append-slider"/>
+    component: <VviinnResults discoveryMode="append-slider" textQuery={textSearchQuery}/>
 }}/>
 
 <PreviewAndCodeTabs tabData={{...oneClickDiscoveryConstants.standalone,
