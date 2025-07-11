@@ -1,13 +1,5 @@
 import { codeWithExtraProps } from "../../helpers/codeWithExtraProps";
-
-const resultsCode = `<vviinn-results 
-    token="TOKEN" 
-    image-resolution-width="500" 
-    locale="en-US" 
-    results-count="6"
-    text-search-query="EXAMPLE_QUERY"
-    product-details-new-tab="true"
-></vviinn-results>`;
+import { vviinnResultsCode } from "../vviinnResultsCode";
 
 const vprButtonCode = `<vviinn-vpr-button 
                 token="TOKEN" 
@@ -33,7 +25,7 @@ export const oneClickDiscoveryConstants = {
     groupId: "modalDiscovery",
     header: "One-click Discovery Modal",
     code: codeWithExtraProps(
-      resultsCode,
+      vviinnResultsCode(),
       '    one-click-discovery-mode="modal"',
     ),
   },
@@ -41,7 +33,7 @@ export const oneClickDiscoveryConstants = {
     groupId: "appendGridDiscovery",
     header: "One-click Discovery Appended Grid",
     code: codeWithExtraProps(
-      resultsCode,
+      vviinnResultsCode(),
       '    one-click-discovery-mode="append-grid"',
     ),
   },
@@ -49,7 +41,7 @@ export const oneClickDiscoveryConstants = {
     groupId: "appendSliderDiscovery",
     header: "One-click Discovery Appended Slider",
     code: codeWithExtraProps(
-      resultsCode,
+      vviinnResultsCode(),
       '    one-click-discovery-mode="append-slider"',
     ),
   },
