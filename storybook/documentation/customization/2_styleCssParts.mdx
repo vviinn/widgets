@@ -9,6 +9,7 @@ import { vviinnToken, productIdSimilarProducts, productIdCrossSelling } from "..
 
 import "../../components/tabs/styles.css";
 import { clickHandlers } from "../../components"
+import PreviewAndCodeTabs from "../../components/tabs/PreviewAndCodeTabs.mdx"
 
 import "../widgets/styles.css";
 
@@ -25,114 +26,64 @@ For example, [check](?path=/story/playground-discovery--default) the list of ava
 
 ## Examples
 
-<div id="discovery-slider-example">
-    <div className="tab tab-reverse">
-        <h3>Discovery Slider: Styling Product Card's Title</h3>
-        <div className="tablink-group">
-            <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'discovery-slider-example')}}>Code</button>
-            <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'discovery-slider-example')}}>Preview</button>
-        </div>
-    </div>
-    <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
-        <div className="tabcontent-preview">
-            <vviinn-vpr-widget id="vviinn-discovery-slider" token={vviinnToken} product-id={productIdSimilarProducts} mode="grid" block-title="" add-to-basket-show="true" locale="en-US">
-            </vviinn-vpr-widget>
-        </div>
-    </div>
-    <div id="Code_1" className="tabcontent">
-```html
-<style>
-  vviinn-vpr-widget::part(title) {
+<PreviewAndCodeTabs tabData={{groupId:"productCardStyling", header:"Discovery Slider: Styling Product Card's Title",
+    component:  <vviinn-vpr-widget id="vviinn-discovery-slider" token={vviinnToken} product-id={productIdSimilarProducts} mode="grid" block-title="" add-to-basket-show="true" locale="en-US">
+    </vviinn-vpr-widget>,
+    code:`<style>
+vviinn-vpr-widget::part(title) {
     font-weight: bold;
     color: #ffffff;
     background: #000000;
   }
 </style>
 
-<vviinn-vpr-widget 
-    token="TOKEN" 
+<vviinn-vpr-widget
+    token="TOKEN"
     product-id="PRODUCT_ID"
     mode="grid"
     block-title=""
     add-to-basket-show="true"
     locale="en-US"
->
-</vviinn-vpr-widget>
-```
-    </div>
-</div>
+></vviinn-vpr-widget>`}}/>
 
-<div id="discovery-set-example">
-    <div className="tab tab-reverse">
-        <h3>Discovery Set: Styling Widget's Title and Discount Label</h3>
-        <div className="tablink-group">
-            <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'discovery-set-example')}}>Code</button>
-            <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'discovery-set-example')}}>Preview</button>
-        </div>
-    </div>
-    <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
-        <div className="tabcontent-preview">
-            <vviinn-vpr-widget id="vviinn-discovery-set" token={vviinnToken} product-id={productIdCrossSelling} mode="set" campaign-type="VCS" locale="en-US">
-            </vviinn-vpr-widget>
-        </div>
-    </div>
-    <div id="Code_2" className="tabcontent">
-```html
-<style>
-  vviinn-vpr-widget::part(recommendations-title) {
+<PreviewAndCodeTabs tabData={{groupId:"discoverySetStyling", header:"Discovery Set: Styling Widget's Title and Discount Label",
+    component: <vviinn-vpr-widget id="vviinn-discovery-set" token={vviinnToken} product-id={productIdCrossSelling} mode="set" campaign-type="VCS" locale="en-US">
+    </vviinn-vpr-widget>,
+    code:`<style>
+vviinn-vpr-widget::part(recommendations-title) {
     font-weight: bold;
     color: #ffffff;
     background: #000000;
-  }
+}
 
-  vviinn-vpr-widget::part(discount-label) {
+vviinn-vpr-widget::part(discount-label) {
     font-weight: bold;
     background: #000000;
   }
 </style>
 
-<vviinn-vpr-widget 
-    token="TOKEN" 
+<vviinn-vpr-widget
+    token="TOKEN"
     product-id="PRODUCT_ID"
     mode="set"
     campaign-type="VCS"
     locale="en-US"
-></vviinn-vpr-widget>
-```
-    </div>
-</div>
+></vviinn-vpr-widget>`}}/>
 
-<div id="search-modal-example">
-    <div className="tab tab-reverse">
-        <h3>Search Modal: Styling Upload Photo Button</h3>
-        <div className="tablink-group">
-            <button className="tablink tablink--sm tablink tablink--sm--sm" onClick={(e)=> {clickHandlers(e, 'Code_3', 'search-modal-example')}}>Code</button>
-            <button className="tablink tablink--sm tablink tablink--sm--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_3', 'search-modal-example')}}>Preview</button>
-        </div>
-
-    </div>
-    
-    <div id="Preview_3" className="tabcontent" style={{display:"block"}}>
-        <div className="tabcontent-preview">
-            <vviinn-vps-button id="vviinn-vps-button-customization" token={vviinnToken} text-search-show="true" locale="en-US" add-style="true"></vviinn-vps-button>
-        </div>
-    </div>
-    <div id="Code_3" className="tabcontent">
-```html
-<style>
-  vviinn-vps-button::part(upload-photo_button) {
+<PreviewAndCodeTabs tabData={{groupId:"searchModalStyling", header:"Search Modal: Styling Upload Photo Button",
+    component: <vviinn-vps-button id="vviinn-vps-button-customization" token={vviinnToken} text-search-show="true" locale="en-US" add-style="true"></vviinn-vps-button>,
+    code:`<style>
+vviinn-vps-button::part(upload-photo_button) {
     background: unset;
     border: 1px solid #000000;
     color: #000000;
-  }
+}
 </style>
-<vviinn-vps-button 
-    token="TOKEN" 
+<vviinn-vps-button
+    token="TOKEN"
     text-search-show="true"
     locale="en-US"
-></vviinn-vps-button>
-```
-    </div>
-</div>
+></vviinn-vps-button>`}}/>
 
-<Card cardData={cardCredentials("customizedLabelCard")} />
+<Card cardData={cardCredentials("customizedLabelCard")}
+      descriptionText="Custom labels are hidden by default, so we should rewrite the display property to show them. The code example also demonstrates how to change the order of the elements. In this case, we should set an 'order' property for each displayed part of the Product Card." />
