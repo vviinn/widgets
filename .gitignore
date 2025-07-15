@@ -22,6 +22,7 @@ storybook/storybook-static
 debug-storybook.log
 storybook/output.log
 
-# Cursor-specific files and folders
+# AI-tools specific files and folders
 .cursor/
 .cursorignore
+CLAUDE.md
