@@ -24,7 +24,7 @@ import {
   parseBasePrice,
   renderCustomLabels,
   ContentCardContent,
-  renderImage,
+  UniversalImage,
 } from "./render-helpers";
 import {
   CrossSellingClickEvent,
@@ -181,10 +181,13 @@ export class VviinnProductCard {
   @Prop() showFooterArrow: boolean = false;
   /** @internal */
   @Prop() imageResolutionWidth: number = 300;
+  /** @internal */
+  @Prop() loading: boolean = false;
 
   @State() isTransitioning: boolean = false;
   @State() basketButonPressed: boolean = false;
   @State() favoriteButonPressed: boolean = false;
+  @State() imageLoaded: boolean = false;
 
   /** Event emitted once when the recommendation is rendered on the page */
   @Event({ bubbles: true })
@@ -266,13 +269,8 @@ export class VviinnProductCard {
   crossSellingClickListener({ detail }: CrossSellingClickEvent) {
     const { animationInterval } = detail;
     this.isTransitioning = true;
-    this.basketButonPressed = false;
-    this.favoriteButonPressed = false;
-
-    const animationTimer = setTimeout(() => {
-      this.isTransitioning = false;
-      clearTimeout(animationTimer);
-    }, animationInterval);
+    this.resetButtonStates();
+    this.startAnimationTimer(animationInterval);
   }
 
   @Watch("updatingAllCards")
@@ -280,19 +278,22 @@ export class VviinnProductCard {
     if (!this.updatingAllCards) return;
     this.vviinnUpdatingAllCardsStarted.emit();
     this.isTransitioning = true;
-    this.basketButonPressed = false;
-
-    const animationTimer = setTimeout(() => {
+    this.resetButtonStates();
+    this.startAnimationTimer(this.defaultAnimationInterval, () => {
       this.vviinnUpdatingAllCardsFinished.emit();
-
-      this.isTransitioning = false;
-      clearTimeout(animationTimer);
-    }, this.defaultAnimationInterval);
+    });
   }
 
   @Watch("productId")
   productIdWatcher() {
     this.productData = this.getProductData();
+  }
+
+  @Watch("loading")
+  loadingWatcher(newVal: boolean) {
+    if (newVal) {
+      this.imageLoaded = false;
+    }
   }
 
   private parseEnergyCertificationsString() {
@@ -406,11 +407,45 @@ export class VviinnProductCard {
       src: this.image,
       imageResolutionWidth: this.imageResolutionWidth,
       title: this.productTitle,
-      ref: (el) => {
+      ref: (el: HTMLImageElement) => {
         this.imageElement = el as HTMLImageElement;
       },
       isSource: this.isSourceProduct,
+      onLoadEnd: () => {
+        this.imageLoaded = true;
+      },
     };
+  }
+
+  private resetButtonStates() {
+    this.basketButonPressed = false;
+    this.favoriteButonPressed = false;
+  }
+
+  private startAnimationTimer(interval: number, callback?: () => void) {
+    const timer = setTimeout(() => {
+      callback?.();
+      this.isTransitioning = false;
+      clearTimeout(timer);
+    }, interval);
+  }
+
+  private shouldShowSkeleton(): boolean {
+    return this.loading || this.isTransitioning;
+  }
+
+  private renderImageWithLoadedState(
+    imageProps: ImageProps,
+    isResponsive: boolean,
+    isFullHeight: boolean = false,
+  ) {
+    const additionalClasses = this.imageLoaded ? ["loaded"] : [];
+    return UniversalImage({
+      ...imageProps,
+      isResponsive,
+      isFullHeight,
+      additionalClasses,
+    });
   }
 
   render() {
@@ -429,7 +464,11 @@ export class VviinnProductCard {
               deeplink={this.contentLink}
               part="image-link content-image-link"
             >
-              {renderImage(this.imageProps, this.responsive, true)}
+              {this.renderImageWithLoadedState(
+                this.imageProps,
+                this.responsive,
+                true,
+              )}
             </Linked>
           </div>
           {ContentCardContent(this.contentText, this.contentLink)}
@@ -442,14 +481,16 @@ export class VviinnProductCard {
         part="product-card"
         class={{
           animated: this.isTransitioning,
+          loading: this.loading,
         }}
         exportparts={productCardParts}
       >
         <div class="content-container" part="content-container">
-          {this.isTransitioning ? (
+          {this.shouldShowSkeleton() ? (
             <Fragment>
               <vviinn-skeleton height={40} />
               <vviinn-skeleton height={20} halfWidth={true} />
+              <vviinn-skeleton height={40} />
             </Fragment>
           ) : (
             <Fragment>
@@ -495,26 +536,19 @@ export class VviinnProductCard {
               {renderCustomLabels(this.customLabels.split(","))}
             </Fragment>
           )}
-
-          <vviinn-skeleton
-            height={40}
-            class={{
-              hidden: !this.isTransitioning,
-            }}
-          />
         </div>
 
         <div
           class={{
             "basket-button-container": true,
-            hidden: !this.isShowBasketButton(),
+            hidden: !this.isShowBasketButton() || this.shouldShowSkeleton(),
           }}
           part="basket-button-container"
         >
           <button
             class={{
               "basket-button": true,
-              hidden: this.isTransitioning,
+              hidden: this.shouldShowSkeleton(),
               pressed: this.basketButonPressed,
             }}
             part="basket-button"
@@ -580,9 +614,24 @@ export class VviinnProductCard {
         </div>
 
         <div class="image-container" part="image-container">
-          <Linked deeplink={this.deeplink} part="image-link">
-            {renderImage(this.imageProps, this.responsive)}
-          </Linked>
+          {this.shouldShowSkeleton() ? (
+            <div
+              class="image-skeleton"
+              style={{
+                "aspect-ratio": this.imageRatio.toString(),
+                width: "100%",
+              }}
+            >
+              <vviinn-skeleton />
+            </div>
+          ) : (
+            <Linked deeplink={this.deeplink} part="image-link">
+              {this.renderImageWithLoadedState(
+                this.imageProps,
+                this.responsive,
+              )}
+            </Linked>
+          )}
           {this.setMode &&
             !this.appliedDiscountPercentage &&
             this.currentDiscountPercentage && (

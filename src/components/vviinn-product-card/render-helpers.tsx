@@ -354,18 +354,6 @@ export const UniversalImage = ({
   );
 };
 
-export const renderImage = (
-  imageProps: ImageProps,
-  isResponsive: boolean,
-  isFullHeight: boolean = false,
-) => {
-  return UniversalImage({
-    ...imageProps,
-    isResponsive,
-    isFullHeight,
-  });
-};
-
 export const ContentCardContent = (
   contentText: string,
   contentLink: string,
