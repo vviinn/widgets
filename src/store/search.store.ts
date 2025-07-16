@@ -195,11 +195,13 @@ const updateImageState = (store: SearchStoreName) => (file: File) =>
 const processVisualSearch = (
   store: SearchStoreName,
   body: VisualSearchRequest,
+  token?: string | null,
 ) => {
   const state = useStore(store);
+  const resolvedToken = token ?? globalState.token;
 
   return pipe(
-    getTokenWithBody<VisualSearchRequest>(globalState.token, body),
+    getTokenWithBody<VisualSearchRequest>(resolvedToken, body),
     setBodyAndHeaders,
     TE.fromEither,
     TE.chain((request) => visualSearchSessionClient(request)),
@@ -215,7 +217,7 @@ const processVisualSearch = (
 };
 
 const uploadImageFile =
-  (store: SearchStoreName, imageType: ImageType = "image", searchId?: string) =>
+  (store: SearchStoreName, imageType: ImageType = "image", searchId?: string, token?: string | null) =>
   (file: File) => {
     const state = useStore(store);
     return pipe(
@@ -246,14 +248,14 @@ const uploadImageFile =
               inner: error,
             }),
           ),
-          TE.chain((body) => processVisualSearch(store, body)),
+          TE.chain((body) => processVisualSearch(store, body, token)),
         ),
       ),
     );
   };
 
 export const makeUploadFileRequest =
-  (store: SearchStoreName) => async (file: File) => {
+  (store: SearchStoreName, token?: string | null) => async (file: File) => {
     const state = useStore(store);
 
     Object.assign(state, {
@@ -265,7 +267,7 @@ export const makeUploadFileRequest =
       visualSearchStarted: true,
     });
 
-    const session = await pipe(uploadImageFile(store, "image")(file))();
+    const session = await pipe(uploadImageFile(store, "image", undefined, token)(file))();
 
     if (!state.visualSearchId?.length) return session;
 
@@ -278,7 +280,7 @@ export const makeUploadFileRequest =
     if (!shouldProcessHiRes) return session;
 
     pipe(
-      uploadImageFile(store, "highResolutionImage", state.visualSearchId)(file),
+      uploadImageFile(store, "highResolutionImage", state.visualSearchId, token)(file),
       TE.getOrElseW((error) => {
         console.error("Failed to upload hi-res image:", error);
         return T.of(session);
@@ -291,6 +293,7 @@ export const makeUploadFileRequest =
 export const makeVisualSearchRequest = async (
   store: SearchStoreName,
   searchId?: string | null,
+  token?: string | null,
 ) => {
   const state = useStore(store);
   state.textSearchQuery = null;
@@ -337,7 +340,7 @@ export const makeVisualSearchRequest = async (
       include: fetchDetectedObjects,
     },
   };
-  return processVisualSearch(store, body)();
+  return processVisualSearch(store, body, token)();
 };
 
 export const setTextSearchQuery = (
