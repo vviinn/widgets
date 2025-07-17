@@ -1,8 +1,8 @@
-import { Meta, Story } from '@storybook/addon-docs/blocks';
+import { Meta } from '@storybook/addon-docs/blocks';
 
-import "../../components/tabs/styles.css";
-import {clickHandlers} from "../../components"
 import { vviinnToken, productIdCrossSelling } from "../../helpers";
+import PreviewAndCodeTabs from "../../components/tabs/PreviewAndCodeTabs.mdx"
+
 
 import "./styles.css";
 
@@ -10,33 +10,17 @@ import "./styles.css";
 
 # Discovery Set
 
-<div id="cross-selling">
-    <div className="tab tab-reverse">
-        <div className="tablink-group">
-            <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'cross-selling')}}>Code</button>
-            <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'cross-selling')}}>Preview</button>
-        </div>
-    </div>
-    <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
-        <div className="tabcontent-preview">
-            <vviinn-vpr-widget id="discovery-set-vviinn-vpr-widget" token={vviinnToken} product-id={productIdCrossSelling} mode="set" locale="en-US" set-items-amount="3" product-details-new-tab="true">
-</vviinn-vpr-widget>
-        </div>
-    </div>
-    <div id="Code_1" className="tabcontent">
-```html
-<vviinn-vpr-widget 
-    token="TOKEN" 
+<PreviewAndCodeTabs tabData={{groupId:'cross-selling',
+component:            <vviinn-vpr-widget id="discovery-set-vviinn-vpr-widget" token={vviinnToken} product-id={productIdCrossSelling} mode="set" locale="en-US" set-items-amount="3" product-details-new-tab="true">
+</vviinn-vpr-widget>,
+code:`<vviinn-vpr-widget
+    token="TOKEN"
     product-id="PRODUCT_ID"
     mode="set"
     set-items-amount="3"
     locale="en-US"
     product-details-new-tab="true"
-></vviinn-vpr-widget>
-```
-    </div>
-</div>
-
+></vviinn-vpr-widget>`}} />
 
 
 

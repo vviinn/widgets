@@ -4,7 +4,7 @@ import "../../components/tabs/styles.css";
 import "../../styles/filters-search-bar.css";
 import "../../styles/product-card.css";
 
-import Card from "../../components/productCard/card.mdx";
+import CardTemplate from "../../components/productCard/cardTemplate.mdx";
 import { cardCredentials } from "../../components/productCard/cardCredentials";
 
 <Meta title="Components/Product Card" />
@@ -13,10 +13,10 @@ import { cardCredentials } from "../../components/productCard/cardCredentials";
 
 ## Examples
 
-<Card cardData={cardCredentials("mainCard")} />
+<CardTemplate cardData={cardCredentials("mainCard")} />
 
-<Card cardData={cardCredentials("appendCard")} />
+<CardTemplate cardData={cardCredentials("appendCard")} />
 
-<Card cardData={cardCredentials("setCard")} />
+<CardTemplate cardData={cardCredentials("setCard")} />
 
-<Card cardData={cardCredentials("minimalisticCard")} />
+<CardTemplate cardData={cardCredentials("minimalisticCard")} />

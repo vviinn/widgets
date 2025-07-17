@@ -1,52 +1,40 @@
-import { Meta, Story } from '@storybook/addon-docs/blocks';
+import { Meta } from '@storybook/addon-docs/blocks';
 
-import "../../components/tabs/styles.css";
-import {clickHandlers} from "../../components"
 import "../../styles/filters-search-bar.css";
 import { vviinnToken, textSearchQuery } from "../../helpers";
 import "../../styles/search-page.css";
 import "./styles.css";
+import PreviewAndCodeTabs from "../../components/tabs/PreviewAndCodeTabs.mdx"
+
 
 <Meta title="Widgets/Product List Page" />
 
 # Product List Page
 
-<div id="text-search">
-    <div className="tab tab-reverse">
-        <div className="tablink-group">
-          <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_2', 'text-search')}}>Code</button>
-          <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_2', 'text-search')}}>Preview</button>
-        </div>
+<PreviewAndCodeTabs tabData={{groupId:'productListPage',
+component:<div className="search-page-wrapper">
+    <div className="search-page-wrapper-aside">
+        <vviinn-extended-filters locale="en-US" mode="preview"></vviinn-extended-filters>
     </div>
-    <div id="Preview_2" className="tabcontent" style={{display:"block"}}>
-        <div className="tabcontent-preview">
-            <div className="search-page-wrapper">
-                <div className="search-page-wrapper-aside">
-                    <vviinn-extended-filters locale="en-US" mode="preview"></vviinn-extended-filters>
-                </div>
-                <div className="search-page-wrapper-result">
-                    <div className="search-page-wrapper-result-filters">
-                        <vviinn-extended-filters locale="en-US"></vviinn-extended-filters>
+    <div className="search-page-wrapper-result">
+        <div className="search-page-wrapper-result-filters">
+            <vviinn-extended-filters locale="en-US"></vviinn-extended-filters>
 
-                        <vviinn-selected-filters locale="en-US"></vviinn-selected-filters>
-                    </div>
-
-                    <vviinn-results 
-                      token={vviinnToken}
-                      image-resolution-width="500" 
-                      locale="en-US" 
-                      results-count="9"
-                      text-search-query={textSearchQuery}
-                      one-click-discovery-mode="append-grid"
-                      product-details-new-tab="true"
-                    ></vviinn-results>
-                </div>
-            </div>
+            <vviinn-selected-filters locale="en-US"></vviinn-selected-filters>
         </div>
+
+        <vviinn-results
+            token={vviinnToken}
+            image-resolution-width="500"
+            locale="en-US"
+            results-count="9"
+            text-search-query={textSearchQuery}
+            one-click-discovery-mode="append-grid"
+            product-details-new-tab="true"
+        ></vviinn-results>
     </div>
-    <div id="Code_2" className="tabcontent">
-```html
-<style>
+</div>,
+code:`<style>
 vviinn-text-search {
   margin: 10px 0;
 }
@@ -105,17 +93,15 @@ vviinn-text-search {
             <vviinn-selected-filters locale="en-US"></vviinn-selected-filters>
         </div>
 
-        <vviinn-results 
+        <vviinn-results
           token="TOKEN"
-          image-resolution-width="500" 
-          locale="en-US" 
+          image-resolution-width="500"
+          locale="en-US"
           results-count="9"
           text-search-query="EXAMPLE_QUERY"
           one-click-discovery-mode="append-grid"
           product-details-new-tab="true"
         ></vviinn-results>
     </div>
-</div>
-```
-    </div>
-</div>
+</div>`}}
+/>

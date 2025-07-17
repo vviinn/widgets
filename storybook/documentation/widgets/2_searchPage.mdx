@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/addon-docs/blocks';
+import { Meta } from '@storybook/addon-docs/blocks';
 
 import "../../styles/filters-search-bar.css";
 import "../../components/tabs/styles.css";
@@ -6,6 +6,8 @@ import "./styles.css";
 import { clickHandlers } from "../../components";
 import { vviinnToken } from "../../helpers";
 import "../../styles/search-page.css";
+import PreviewAndCodeTabs from "../../components/tabs/PreviewAndCodeTabs.mdx"
+
 
 <Meta title="Widgets/Search Page" />
 
@@ -15,125 +17,100 @@ Using `Vviinn Widgets` as separate components allows for greater control over th
 
 ## Examples
 
-<div id="basic">
-  <div className="tab tab-reverse">
-      <h3>Basic Example</h3>
-
-      <div className="tablink-group">
-        <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Details_1', 'basic')}}>Technical Details</button>
-        <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'basic')}}>Code</button>
-        <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'basic')}}>Preview</button>
-      </div>
-  </div>
-
-  <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
-      <div className="tabcontent-preview">
-        <div className="search-page-wrapper">
-          <div className="search-page-wrapper-aside">
+<PreviewAndCodeTabs tabData={{groupId:"basic", header:"Basic Example",
+    component:<div className="search-page-wrapper">
+        <div className="search-page-wrapper-aside">
             <vviinn-cropper width="300"></vviinn-cropper>
             <vviinn-extended-filters locale="en-US" mode="preview"></vviinn-extended-filters>
-          </div>
-          <div className="search-page-wrapper-result">
+        </div>
+        <div className="search-page-wrapper-result">
             <vviinn-text-search token={vviinnToken} locale="en-US" search-query="chair" mode="extended">
             </vviinn-text-search>
-            
-            <div className="search-page-wrapper-result-filters">
-              <vviinn-extended-filters locale="en-US"></vviinn-extended-filters>
 
-              <vviinn-selected-filters locale="en-US"></vviinn-selected-filters>
+            <div className="search-page-wrapper-result-filters">
+                <vviinn-extended-filters locale="en-US"></vviinn-extended-filters>
+
+                <vviinn-selected-filters locale="en-US"></vviinn-selected-filters>
             </div>
 
             <vviinn-results results-count="12" token={vviinnToken} locale="en-US" one-click-discovery-mode="append-grid" product-details-new-tab="true"></vviinn-results>
-          </div>
         </div>
-      </div>
-  </div>
-
-  <div id="Code_1" className="tabcontent">
-```html
-<style>
+    </div>,
+    code:`<style>
 vviinn-text-search {
-  margin: 10px 0;
-}
+    margin: 10px 0;
+  }
+  .search-page-wrapper {
+      display: flex;
+      gap: 20px;
+  }
 
-.search-page-wrapper {
-  display: flex;
-  gap: 20px;
-}
-
-.search-page-wrapper-aside {
-  flex: none;
-  width: 250px;
-}
-@media screen and (max-width: 768px) {
   .search-page-wrapper-aside {
-    display: none;
+      flex: none;
+      width: 250px;
   }
-}
 
-.search-page-wrapper-result {
-  flex: 1;
-}
+  @media screen and (max-width: 768px) {
+      .search-page-wrapper-aside {
+        display: none;
+      }
+  }
 
-.search-page-wrapper-result-filters {
-  margin: 10px 0 !important;
-  overflow-x: auto;
-}
+  .search-page-wrapper-result {
+      flex: 1;
+  }
 
-.search-page-wrapper-result-filters vviinn-extended-filters {
-  display: none;
-}
+  .search-page-wrapper-result-filters {
+      margin: 10px 0 !important;
+      overflow-x: auto;
+  }
 
-@media screen and (max-width: 768px) {
   .search-page-wrapper-result-filters vviinn-extended-filters {
-    display: block;
+      display: none;
   }
-  .search-page-wrapper-result-filters vviinn-selected-filters {
-    margin-top: 10px;
-  }
-  .search-page-wrapper-result-filters
-    vviinn-selected-filters::part(selected-filters-list) {
-    flex-wrap: wrap;
-  }
-}
 
-</style>
+  @media screen and (max-width: 768px) {
+      .search-page-wrapper-result-filters vviinn-extended-filters {
+        display: block;
+      }
+      .search-page-wrapper-result-filters vviinn-selected-filters {
+        margin-top: 10px;
+      }
+      .search-page-wrapper-result-filters
+        vviinn-selected-filters::part(selected-filters-list) {
+        flex-wrap: wrap;
+      }
+  }
+
+ </style>
 <div class="search-page-wrapper">
-  <div class="search-page-wrapper-aside">
-    <vviinn-cropper width="300"></vviinn-cropper>
-    <vviinn-extended-filters locale="en-US" mode="preview"></vviinn-extended-filters>
-  </div>
-  <div class="search-page-wrapper-result">
-    <vviinn-text-search token="TOKEN" locale="en-US" search-query="chair" mode="extended">
-    </vviinn-text-search>
-    
-    <div class="search-page-wrapper-result-filters">
-      <vviinn-extended-filters locale="en-US"></vviinn-extended-filters>
+      <div class="search-page-wrapper-aside">
+            <vviinn-cropper width="300"></vviinn-cropper>
+            <vviinn-extended-filters locale="en-US" mode="preview"></vviinn-extended-filters>
+      </div>
+      <div class="search-page-wrapper-result">
+            <vviinn-text-search token="TOKEN" locale="en-US" search-query="chair" mode="extended"></vviinn-text-search>
+            <div class="search-page-wrapper-result-filters">
+                  <vviinn-extended-filters locale="en-US"></vviinn-extended-filters>
+                  <vviinn-selected-filters locale="en-US"></vviinn-selected-filters>
+            </div>
+            <vviinn-results results-count="12" token="TOKEN" locale="en-US" one-click-discovery-mode="append-grid" product-details-new-tab="true"></vviinn-results>
+      </div>
+</div>`,
+    techDetails:<><p>In this basic example, we use <code>vviinn-text-search</code>, <code>vviinn-results</code>, and two variations of the filter component. Let's take a closer look at the attributes we are using in this example:</p>
+        <ul>
+            <li> The <code>token</code> attribute is required for all components (except filters) and is used to authenticate your requests.</li>
+            <li> The <code>extended</code> mode enables image search functionality.</li>
+            <li> The <code>results-count</code> attribute defines the number of results that will be fetched. It cannot exceed the number set in the Campaign settings.</li>
+        </ul>
+        <p>Other attributes you can use are detailed on the components' pages.</p>
 
-      <vviinn-selected-filters locale="en-US"></vviinn-selected-filters>
-    </div>
-    
-    <vviinn-results results-count="12" token="TOKEN" locale="en-US" one-click-discovery-mode="append-grid" product-details-new-tab="true"></vviinn-results>
-  </div>
-</div>
-```
-</div>
-<div id="Details_1" className="tabcontent">
-In this basic example, we use `vviinn-text-search`, `vviinn-results`, and two variations of the filter component. Let's take a closer look at the attributes we are using in this example: 
+        <p>To see the filter columns, enable Filters in the Interface Controls section inside the Text Search campaign via the <a href="https://panel.vviinn.com">Panel</a>. The Primary flag is responsible for showing filters in the vviinn-filters component.</p></>}}/>
 
-- The `token` attribute is required for all components (except filters) and is used to authenticate your requests.
-- The `extended` mode enables image search functionality.
-- The `results-count` attribute defines the number of results that will be fetched. It cannot exceed the number set in the Campaign settings.
-
-Other attributes you can use are detailed on the components' pages.
-
-To see the filter columns, enable Filters in the Interface Controls section inside the Text Search campaign via the [Panel](https://panel.vviinn.com). The Primary flag is responsible for showing filters in the vviinn-filters component.
-</div>
-</div>
 
 <div id="different">
   <div className="tab tab-reverse">
-      <h3>Using Results on a Different Page Example</h3>
+      <h3 id="differentPageResults">Using Results on a Different Page Example</h3>
 
       <div className="tablink-group">
         <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Details_2', 'different')}}>Technical Details</button>
