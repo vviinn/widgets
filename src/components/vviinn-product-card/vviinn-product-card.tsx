@@ -408,7 +408,7 @@ export class VviinnProductCard {
       imageResolutionWidth: this.imageResolutionWidth,
       title: this.productTitle,
       ref: (el: HTMLImageElement) => {
-        this.imageElement = el as HTMLImageElement;
+        this.imageElement = el;
       },
       isSource: this.isSourceProduct,
       onLoadEnd: () => {

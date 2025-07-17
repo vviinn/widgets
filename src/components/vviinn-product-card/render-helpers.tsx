@@ -275,7 +275,7 @@ const ImageOrPlaceholder: FunctionalComponent<{
         width: widthPx,
         height: heightPx,
       }}
-      class="image-placeholder"
+      class={`image-placeholder ${props.className}`}
       part="image-placeholder"
       ref={props.ref}
     >
