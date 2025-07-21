@@ -66,9 +66,6 @@ export const cardCredentials = (cardType) => {
   const uniqueId = cardData.uniqueId;
   return {
     name: `product-card-${uniqueId}`,
-    codeId: `Code_${uniqueId}`,
-    previewId: `Preview_${uniqueId}`,
-    style: "",
     ...cardData,
     code: `${codeCardStyle}${cardCodeFromData(
       cardData.productData,

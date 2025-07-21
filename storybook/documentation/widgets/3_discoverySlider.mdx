@@ -1,9 +1,9 @@
-import { Meta, Story } from '@storybook/addon-docs/blocks';
+import { Meta } from '@storybook/addon-docs/blocks';
 
-import "../../components/tabs/styles.css";
 import "./styles.css";
-import {clickHandlers} from "../../components"
 import { vviinnToken, productIdSimilarProducts } from "../../helpers";
+import PreviewAndCodeTabs from "../../components/tabs/PreviewAndCodeTabs.mdx"
+import {discoverySliderExamples} from "./constants/3_discoverySlider";
 
 <Meta title="Widgets/Discovery Slider" />
 
@@ -11,60 +11,20 @@ import { vviinnToken, productIdSimilarProducts } from "../../helpers";
 
 ## Examples
 
-<div id="similar-products">
-    <div className="tab tab-reverse">
-        <h3>Discovery Slider Grid</h3>
-        <div className="tablink-group">
-            <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_1', 'similar-products')}}>Code</button>
-            <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_1', 'similar-products')}}>Preview</button>
-        </div>
-    </div>
-    <div id="Preview_1" className="tabcontent" style={{display:"block"}}>
-        <div className="tabcontent-preview">
-            <vviinn-vpr-widget token={vviinnToken} product-id={productIdSimilarProducts} mode="grid" block-title="" locale="en-US" product-details-new-tab="true">
-</vviinn-vpr-widget>
-        </div>
-    </div>
-    <div id="Code_1" className="tabcontent">
-```html
-        <vviinn-vpr-widget
-            token="TOKEN"
-            product-id="PRODUCT_ID"
-            mode="grid"
-            block-title=""
-            locale="en-US"
-            product-details-new-tab="true"
-        ></vviinn-vpr-widget>
-```
-    </div>
-</div>
+<PreviewAndCodeTabs tabData={{...discoverySliderExamples.grid,
+    component: <vviinn-vpr-widget token={vviinnToken}
+                                  product-id={productIdSimilarProducts}
+                                  block-title="" locale="en-US"
+                                  product-details-new-tab="true"
+                                  mode="grid" />
+    }}/>
 
-<div id="fluid">
-    <div className="tab tab-reverse">
-        <h3>Discovery Slider Fluid</h3>
-        <div className="tablink-group">
-            <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_3', 'fluid')}}>Code</button>
-            <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_3', 'fluid')}}>Preview</button>
-        </div>
-    </div>
-    <div id="Preview_3" className="tabcontent" style={{display:"block"}}>
-        <div className="tabcontent-preview">
-            <vviinn-vpr-widget token={vviinnToken} product-id={productIdSimilarProducts} block-title="" locale="en-US" product-details-new-tab="true">
-</vviinn-vpr-widget>
-        </div>
-    </div>
-    <div id="Code_3" className="tabcontent">
-```html
-        <vviinn-vpr-widget
-            token="TOKEN"
-            product-id="PRODUCT_ID"
-            block-title=""
-            locale="en-US"
-            product-details-new-tab="true"
-        ></vviinn-vpr-widget>
-```
-    </div>
-</div>
+<PreviewAndCodeTabs tabData={{...discoverySliderExamples.fluid,
+    component: <vviinn-vpr-widget token={vviinnToken}
+                                  product-id={productIdSimilarProducts}
+                                  block-title="" locale="en-US"
+                                  product-details-new-tab="true"/>
+}}/>
 
 
 

@@ -275,7 +275,7 @@ const ImageOrPlaceholder: FunctionalComponent<{
         width: widthPx,
         height: heightPx,
       }}
-      class="image-placeholder"
+      class={`image-placeholder ${props.className}`}
       part="image-placeholder"
       ref={props.ref}
     >
@@ -352,18 +352,6 @@ export const UniversalImage = ({
       {isSource && <PlusIcon />}
     </picture>
   );
-};
-
-export const renderImage = (
-  imageProps: ImageProps,
-  isResponsive: boolean,
-  isFullHeight: boolean = false,
-) => {
-  return UniversalImage({
-    ...imageProps,
-    isResponsive,
-    isFullHeight,
-  });
 };
 
 export const ContentCardContent = (

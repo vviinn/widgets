@@ -83,7 +83,10 @@ import {
   OneClickDiscoveryMode,
   oneClickDiscoveryModes,
 } from "../../widget/types";
-import { RESULTS_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
+import {
+  RESULTS_WIDGET_IMAGE_RESOLUTION_WIDTH,
+  SCROLL_TO_DISCOVERY_DELAY,
+} from "../../widget/constants";
 import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
 import { RESULTS_CALCULATED_COLUMNS_CSS_VAR } from "../vviinn-carousel/constants";
 
@@ -765,7 +768,7 @@ export class VviinnResults {
 
       this.oneClickDiscoverySelectedIndex = index;
 
-      requestAnimationFrame(() => {
+      const scrollToDiscovery = () => {
         const appendedContainer = this.el.shadowRoot.getElementById(
           "one-click-discovery-append",
         );
@@ -776,11 +779,15 @@ export class VviinnResults {
           ? scrollableElement
           : window;
 
+        const targetTop = appendedContainer.offsetTop;
+
         scrollableContainer.scrollTo({
-          top: appendedContainer.offsetTop,
+          top: targetTop,
           behavior: "smooth",
         });
-      });
+      };
+
+      setTimeout(scrollToDiscovery, SCROLL_TO_DISCOVERY_DELAY);
     };
 
     return this.getResults().map((p, i) => (
