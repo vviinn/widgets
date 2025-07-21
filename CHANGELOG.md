@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.178.0](https://github.com/vviinn/widgets/compare/v2.177.4...v2.178.0) (2025-07-18)
+
+
+### Features
+
+* Make the transition smoother for the Product Card after the loading state is complete. ([5e69129](https://github.com/vviinn/widgets/commit/5e69129ba62dc17f79e87d41a44a7ae601a0fcbb))
+
+### [2.177.4](https://github.com/vviinn/widgets/compare/v2.177.3...v2.177.4) (2025-07-17)
+
 ### [2.177.3](https://github.com/vviinn/widgets/compare/v2.177.2...v2.177.3) (2025-07-07)
 
 

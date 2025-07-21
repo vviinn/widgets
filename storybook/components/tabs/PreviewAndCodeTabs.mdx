@@ -1,0 +1,35 @@
+import "../tabs/styles.css";
+import { clickHandlers } from "../index";
+import {Source} from "@storybook/addon-docs/blocks";
+
+
+<div id={props.tabData.groupId}>
+    <div className="tab tab-reverse">
+        {props.tabData.header&&<h3 id={`Title_${props.tabData.groupId}`}>{props.tabData.header}</h3>}
+        <div className="tablink-group">
+            {props.tabData.techDetails&&<button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, `Details_${props.tabData.groupId}`, props.tabData.groupId)}}>Technical Details</button>}
+            <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, `Code_${props.tabData.groupId}`, props.tabData.groupId)}}>Code</button>
+            <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e,  `Preview_${props.tabData.groupId}`, props.tabData.groupId)}}>Preview</button>
+        </div>
+    </div>
+
+    {props.tabData.descriptionText&&<div className="tab-sub-title">{props.tabData.descriptionText}</div>}
+    {props.tabData.description}
+
+    <div id={`Preview_${props.tabData.groupId}`} className="tabcontent" style={{display:"block"}}>
+        <div className="tabcontent-preview">
+            {props.tabData.component}
+        </div>
+    </div>
+
+    <div id={`Code_${props.tabData.groupId}`} className="tabcontent">
+        <Source
+            language="html"
+            format={false}
+            code={`${props.tabData.code}
+    `}
+        />
+        <div />
+    </div>
+    {props.tabData.techDetails&&<div id={`Details_${props.tabData.groupId}`} className="tabcontent">{props.tabData.techDetails}</div>}
+</div>

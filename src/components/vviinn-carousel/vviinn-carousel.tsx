@@ -616,8 +616,11 @@ export class VviinnCarousel {
         }}
       >
         {Array.from({ length: this.columns }).map((_, index) => (
-          <vviinn-product-card-skeleton
+          <vviinn-product-card
+            loading={true}
             imageRatio={this.imageRatio}
+            productTitle=""
+            productId={`skeleton-${index}`}
             key={`skeleton-${index}`}
           />
         ))}
