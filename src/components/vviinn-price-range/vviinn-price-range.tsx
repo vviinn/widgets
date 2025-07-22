@@ -7,6 +7,7 @@ import { globalState } from "../../store/store";
 export type Histogram = components["schemas"]["interval-filter-values"][];
 
 const MIN_BAR_HEIGHT = 3;
+const MIN_SLIDER_MARGIN_PERCENT = 0.03; // 3% of total range
 
 /**
  * @part histogram - Wrapper itself.
@@ -73,10 +74,11 @@ export class VviinnPriceRange {
   }
 
   private controlFromSlider = (e: InputEvent) => {
-    const newFromValue = parseInt((e.target as HTMLInputElement).value);
+    const target = e.target as HTMLInputElement;
+    const newFromValue = parseInt(target.value);
 
-    if (newFromValue >= this.toValue) {
-      this.fromValue = this.toValue - 1;
+    if (newFromValue >= this.toValue - this.minMargin) {
+      this.fromValue = this.toValue - this.minMargin;
       (e.target as HTMLInputElement).value = String(this.fromValue);
     } else {
       this.fromValue = newFromValue;
@@ -84,10 +86,11 @@ export class VviinnPriceRange {
   };
 
   private controlToSlider = (e: InputEvent) => {
-    const newToValue = parseInt((e.target as HTMLInputElement).value);
+    const target = e.target as HTMLInputElement;
+    const newToValue = parseInt(target.value);
 
-    if (newToValue <= this.fromValue) {
-      this.toValue = this.fromValue + 1;
+    if (newToValue <= this.fromValue + this.minMargin) {
+      this.toValue = this.fromValue + this.minMargin;
       (e.target as HTMLInputElement).value = String(this.toValue);
     } else {
       this.toValue = newToValue;
@@ -102,6 +105,11 @@ export class VviinnPriceRange {
       },
     });
   };
+
+  private get minMargin(): number {
+    const totalRange = this.maxValue - this.minValue;
+    return Math.max(1, Math.round(totalRange * MIN_SLIDER_MARGIN_PERCENT));
+  }
 
   private calculateBarHeight(frequency: number) {
     return frequency * this.scalingFactor;
