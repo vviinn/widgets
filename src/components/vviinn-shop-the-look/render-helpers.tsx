@@ -3,6 +3,7 @@ import { Rectangle } from "../../interfaces/search";
 import { Recommendation } from "../../interfaces/recommendation";
 import { BasicEventData } from "../../recommendation/events";
 import { ModalPosition } from "./helpers";
+import { Pagination } from "swiper/modules";
 
 export interface DetectedObjectsProps {
   imageBounds: Rectangle | null;
@@ -87,22 +88,34 @@ export const renderSwiper = (props: SwiperProps) => {
     );
   }
 
+  const swiperRef = (el: any) => {
+    if (el && !el.swiper) {
+      // Configure swiper with modules
+      Object.assign(el, {
+        modules: [Pagination],
+        pagination: {
+          clickable: true,
+        },
+        navigation: false,
+        scrollbar: false,
+        keyboard: true,
+        mousewheel: false,
+        allowTouchMove: true,
+        initialSlide: currentImageIndex,
+      });
+    }
+  };
+
   return (
     <swiper-container
-      pagination={true}
-      pagination-clickable={true}
-      navigation={false}
-      scrollbar={false}
-      keyboard={true}
-      mousewheel={false}
-      allow-touch-move={true}
-      initial-slide={currentImageIndex}
+      ref={swiperRef}
       onSlideChange={onSlideChange}
       style={{
         '--swiper-pagination-color': '#8d8d8d',
         '--swiper-pagination-bullet-inactive-color': 'rgba(22, 22, 22, 0.25)',
         '--swiper-pagination-bullet-size': '8px',
-        '--swiper-pagination-bullet-horizontal-gap': '4px',
+        '--swiper-pagination-bullet-horizontal-gap': '8px',
+        '--swiper-pagination-bottom': '20px',
       }}
     >
       {imageUrls.map((url, index) => (
