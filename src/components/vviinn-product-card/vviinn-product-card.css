@@ -8,6 +8,7 @@
    * @prop --product-card-image-bg-color: Set the background color of the product card image.
    * @prop --basket-button-bg-color-pressed: Set the background color of the pressed Basket Button.
    * @prop --font-family: Set the font family of the product card.
+   * @prop --product-card-transition-duration: Duration of skeleton to content transitions.
    */
 
   --product-card-content-align-default: flex-start;
@@ -15,6 +16,7 @@
   --product-card-image-border-default: none;
   --product-card-image-bg-color-default: var(--surface-bg-color-01);
   --basket-button-bg-color-pressed-default: var(--button-bg-color-positive);
+  --product-card-transition-duration-default: 0.5s;
 
   position: relative;
   height: fit-content;
@@ -85,6 +87,31 @@
   background-color: var(--surface-bg-color-02);
 }
 
+.image-skeleton,
+.image-placeholder,
+.image {
+  transition: opacity
+    var(
+      --product-card-transition-duration,
+      var(--product-card-transition-duration-default)
+    )
+    ease-in-out;
+}
+
+.image-skeleton,
+.image-placeholder {
+  opacity: 1;
+}
+
+.image {
+  opacity: 0;
+}
+
+.image-skeleton.loaded,
+.image-placeholder.loaded {
+  opacity: 0;
+}
+
 .price-container {
   display: flex;
   flex-direction: column;
@@ -149,6 +176,10 @@
     --product-card-image-border,
     var(--product-card-image-border-default)
   );
+}
+
+.image.loaded {
+  opacity: 1;
 }
 
 .image.responsive {
@@ -314,6 +345,7 @@ picture::after {
   mix-blend-mode: multiply;
   content: "";
 }
+
 
 :host(.animated) picture::after {
   mix-blend-mode: normal;

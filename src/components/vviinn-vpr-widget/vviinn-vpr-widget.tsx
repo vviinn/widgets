@@ -702,8 +702,11 @@ export class VviinnVprWidget implements ComponentInterface {
         {isLoading
           ? Array.from({ length: calculatedColumnsAmount * 3 }).map(
               (_, index) => (
-                <vviinn-product-card-skeleton
+                <vviinn-product-card
+                  loading={true}
                   imageRatio={this.imageRatio}
+                  productTitle=""
+                  productId={`skeleton-${index}`}
                   key={`skeleton-${index}`}
                 />
               ),

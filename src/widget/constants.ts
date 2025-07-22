@@ -6,3 +6,6 @@ export const PRODUCT_CARD_IMAGE_WIDTH = 300;
 
 export const SIDEBAR_ANIMATION_DURATION = 500;
 export const LOADING_CLASS_DELAY = 500;
+
+// Scroll animation constants
+export const SCROLL_TO_DISCOVERY_DELAY = 250;
