@@ -1,45 +1,113 @@
 import { Rectangle, VisualSearchResponse } from "../../interfaces/search";
-import { fromImage } from "../../geometry/Rectangle";
 import * as E from "fp-ts/lib/Either";
 import { Recommendation } from "../../interfaces/recommendation";
+import { RESPONSIVE_BREAKPOINTS, INTERSECTION_THRESHOLDS } from "./constants";
 
 export interface ModalPosition {
   x: number;
   y: number;
 }
 
+export const isDesktop = (): boolean => {
+  if (typeof window === "undefined") return false;
+  return window.innerWidth >= RESPONSIVE_BREAKPOINTS.DESKTOP;
+};
+
+export const isSmallMobile = (): boolean => {
+  if (typeof window === "undefined") return false;
+  return window.innerWidth <= RESPONSIVE_BREAKPOINTS.SMALL_MOBILE;
+};
+
+export const getVisibilityThreshold = (isDesktop: boolean): number => {
+  return isDesktop
+    ? INTERSECTION_THRESHOLDS.DESKTOP_VISIBLE
+    : INTERSECTION_THRESHOLDS.MOBILE_VISIBLE;
+};
+
+export interface VisibilityUpdateParams {
+  index: number;
+  isVisible: boolean;
+  isDesktop: boolean;
+  visibleImageIndices: Set<number>;
+}
+
+export const shouldKeepImageVisible = (
+  params: VisibilityUpdateParams,
+): boolean => {
+  const { isVisible, isDesktop } = params;
+  // On desktop, keep partially visible images in the visible set to preserve objects
+  // On mobile, only keep fully visible images
+  if (isVisible) {
+    return true;
+  }
+  return isDesktop; // Desktop keeps images visible even when not intersecting
+};
+
+export const shouldRenderDetectedObjects = (
+  imageState: any,
+  visibleImageIndices: Set<number>,
+  imageIndex: number,
+): boolean => {
+  if (!imageState) return false;
+
+  const isDesktopView = isDesktop();
+  // On desktop, render objects even for partially visible (sliced) images
+  // On mobile, only render when image is fully visible
+  return isDesktopView
+    ? imageState.isVisible || visibleImageIndices.has(imageIndex)
+    : imageState.isVisible;
+};
+
 export const calculateModalPosition = (
-  detectedObject: Rectangle,
   imageElement: HTMLImageElement,
-  width: number,
-  height: number
+  containerElement?: HTMLElement,
 ): ModalPosition => {
   if (!imageElement) return { x: 0, y: 0 };
 
-  const imageRect = imageElement.getBoundingClientRect();
-  const objectCenterX = detectedObject.left + detectedObject.width / 2;
-  const objectCenterY = detectedObject.top + detectedObject.height / 2;
-  const pixelX = objectCenterX * width;
-  const pixelY = objectCenterY * height;
-  const modalDistance = detectedObject.width * width;
+  // Get the actual image bounds
+  const imageBounds = calculateImageBounds(imageElement);
+  if (!imageBounds) return { x: 0, y: 0 };
 
-  return {
-    x: imageRect.left + pixelX - modalDistance,
-    y: imageRect.top + pixelY,
-  };
+  const isDesktopView = isDesktop();
+
+  if (isDesktopView) {
+    // Desktop: Position relative to the image center within the component
+    // Get container bounds to calculate relative positioning
+    let containerBounds = { left: 0, top: 0 };
+    if (containerElement) {
+      const containerRect = containerElement.getBoundingClientRect();
+      containerBounds = { left: containerRect.left, top: containerRect.top };
+    }
+    
+    // Calculate position relative to container
+    const x = imageBounds.left - containerBounds.left + imageBounds.width / 2;
+    const y = imageBounds.top - containerBounds.top + imageBounds.height / 2;
+    return { x, y };
+  } else {
+    // Mobile: center within component bounds (50% of container)
+    return { x: 0, y: 0 }; // Will use CSS centering via 50%/50%
+  }
 };
 
-export const calculateImageBounds = (imageElement: HTMLImageElement): Rectangle | null => {
+export const calculateImageBounds = (
+  imageElement: HTMLImageElement,
+): Rectangle | null => {
   if (!imageElement) return null;
-  return fromImage(imageElement);
+  const rect = imageElement.getBoundingClientRect();
+  return {
+    left: rect.left,
+    top: rect.top,
+    width: rect.width,
+    height: rect.height,
+  };
 };
 
 export const hasImageBoundsChanged = (
   currentBounds: Rectangle | null,
-  newBounds: Rectangle
+  newBounds: Rectangle,
 ): boolean => {
   if (!currentBounds) return true;
-  
+
   return (
     currentBounds.left !== newBounds.left ||
     currentBounds.top !== newBounds.top ||
@@ -72,7 +140,7 @@ export interface IntersectionObserverConfig {
 
 export const setupIntersectionObserver = (
   element: HTMLElement,
-  config: IntersectionObserverConfig
+  config: IntersectionObserverConfig,
 ): IntersectionObserver | null => {
   if (typeof window === "undefined" || !("IntersectionObserver" in window)) {
     config.onIntersectionChange(true);
@@ -88,7 +156,7 @@ export const setupIntersectionObserver = (
     },
     {
       threshold: config.threshold,
-    }
+    },
   );
 
   observer.observe(element);
@@ -102,29 +170,35 @@ export interface VisualSearchParams {
 }
 
 export const performVisualSearch = async (
-  params: VisualSearchParams
-): Promise<E.Either<string, { detectedObjects: Rectangle[]; searchResults: Recommendation[] }>> => {
+  params: VisualSearchParams,
+): Promise<
+  E.Either<
+    string,
+    { detectedObjects: Rectangle[]; searchResults: Recommendation[] }
+  >
+> => {
   try {
     const imageFile = await createImageFile(params.imageUrl);
     const { makeUploadFileRequest } = await import("../../store/search.store");
 
     const result = await makeUploadFileRequest(
       "components",
-      params.componentToken || params.token
+      params.componentToken || params.token,
     )(imageFile);
 
     return E.fold(
       (error: any) => E.left(`Upload failed: ${error}`),
       (uploadResponse: VisualSearchResponse) => {
-        const detectedObjects = uploadResponse.interactions?.suggestedSearchAreas?.map(
-          (area) => area.rectangle
-        ) || [];
-        
+        const detectedObjects =
+          uploadResponse.interactions?.suggestedSearchAreas?.map(
+            (area) => area.rectangle,
+          ) || [];
+
         return E.right({
           detectedObjects,
-          searchResults: []
+          searchResults: [],
         });
-      }
+      },
     )(result);
   } catch (error) {
     return E.left(`Visual search initialization failed: ${error}`);
@@ -134,17 +208,23 @@ export const performVisualSearch = async (
 export interface DetectedObjectClickParams {
   detectedObject: Rectangle;
   imageElement: HTMLImageElement;
-  width: number;
-  height: number;
   token: string;
   componentToken?: string;
+  containerElement?: HTMLElement;
 }
 
 export const handleDetectedObjectClick = async (
-  params: DetectedObjectClickParams
-): Promise<E.Either<string, { searchResults: Recommendation[]; modalPosition: ModalPosition }>> => {
+  params: DetectedObjectClickParams,
+): Promise<
+  E.Either<
+    string,
+    { searchResults: Recommendation[]; modalPosition: ModalPosition }
+  >
+> => {
   try {
-    const { makeVisualSearchRequest, componentsState } = await import("../../store/search.store");
+    const { makeVisualSearchRequest, componentsState } = await import(
+      "../../store/search.store"
+    );
 
     componentsState.searchArea = params.detectedObject;
     componentsState.imageBounds = { left: 0, top: 0, width: 1, height: 1 };
@@ -152,7 +232,7 @@ export const handleDetectedObjectClick = async (
     const result = await makeVisualSearchRequest(
       "components",
       null,
-      params.componentToken || params.token
+      params.componentToken || params.token,
     );
 
     return E.fold(
@@ -160,17 +240,15 @@ export const handleDetectedObjectClick = async (
       (searchResponse: VisualSearchResponse) => {
         const searchResults = searchResponse.data?.products || [];
         const modalPosition = calculateModalPosition(
-          params.detectedObject,
           params.imageElement,
-          params.width,
-          params.height
+          params.containerElement,
         );
 
         return E.right({
           searchResults,
-          modalPosition
+          modalPosition,
         });
-      }
+      },
     )(result);
   } catch (error) {
     return E.left(`Visual search failed: ${error}`);
@@ -184,7 +262,7 @@ export interface SlideChangeEventDetail {
 
 export const extractSlideIndex = (event: any): number | null => {
   let newIndex = null;
-  
+
   if (event.detail && Array.isArray(event.detail) && event.detail[0]) {
     newIndex = event.detail[0].activeIndex || event.detail[0].realIndex;
   } else if (event.detail && event.detail.activeIndex !== undefined) {

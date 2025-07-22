@@ -2,7 +2,7 @@ import { h } from "@stencil/core";
 import { Rectangle } from "../../interfaces/search";
 import { Recommendation } from "../../interfaces/recommendation";
 import { BasicEventData } from "../../recommendation/events";
-import { ModalPosition } from "./helpers";
+import { ModalPosition, isDesktop, isSmallMobile } from "./helpers";
 import { Pagination } from "swiper/modules";
 
 export interface DetectedObjectsProps {
@@ -55,8 +55,28 @@ export interface SwiperProps {
   detectedObjects: Rectangle[];
   onSlideChange: (event: any) => void;
   onImageRef: (el: HTMLImageElement, index: number) => void;
-  renderDetectedObjects: () => any;
+  renderDetectedObjects: (imageIndex: number) => any;
+  onNavigatePrev?: () => void;
+  onNavigateNext?: () => void;
+  shouldShowArrows?: boolean;
 }
+
+
+// Helper function to get responsive image styles
+const getImageStyles = (width: number, height: number) => {
+  if (isSmallMobile()) {
+    return {
+      width: '100%',
+      height: 'auto',
+      maxHeight: '70vh',
+      objectFit: 'contain' as const,
+    };
+  }
+  return {
+    width: `${width}px`,
+    height: `${height}px`,
+  };
+};
 
 export const renderSwiper = (props: SwiperProps) => {
   const {
@@ -68,74 +88,126 @@ export const renderSwiper = (props: SwiperProps) => {
     onSlideChange,
     onImageRef,
     renderDetectedObjects,
+    onNavigatePrev,
+    onNavigateNext,
+    shouldShowArrows = true,
   } = props;
+  
 
-  if (totalImages <= 1) {
+  // Only show single image if we truly have 1 or fewer images
+  if (!imageUrls || imageUrls.length <= 1) {
     return (
       <div class="image-container">
         <img
-          ref={(el: HTMLImageElement) => onImageRef(el, currentImageIndex)}
-          src={imageUrls[currentImageIndex]}
+          ref={(el: HTMLImageElement) => onImageRef(el, 0)}
+          src={imageUrls?.[0] || ''}
           alt="Shop the look"
           class="main-image"
-          style={{
-            width: `${width}px`,
-            height: `${height}px`,
-          }}
+          style={getImageStyles(width, height)}
         />
-        {renderDetectedObjects()}
+        {renderDetectedObjects(0)}
       </div>
     );
   }
 
+  const desktop = isDesktop();
+  
   const swiperRef = (el: any) => {
     if (el && !el.swiper) {
-      // Configure swiper with modules
+      // Configure swiper with modules based on screen size
+      const modules = desktop ? [] : [Pagination];
+      
       Object.assign(el, {
-        modules: [Pagination],
-        pagination: {
-          clickable: true,
-        },
+        modules,
         navigation: false,
+        pagination: !desktop ? {
+          clickable: true,
+        } : false,
         scrollbar: false,
-        keyboard: true,
+        keyboard: { enabled: true },
         mousewheel: false,
         allowTouchMove: true,
         initialSlide: currentImageIndex,
+        loop: false,
+        slidesPerView: desktop ? 'auto' : 1,
+        spaceBetween: desktop ? 20 : 0,
+        centeredSlides: false,
       });
+      
+      // Initialize swiper after configuration
+      if (el.initialize) {
+        el.initialize();
+      }
     }
   };
 
+  // Manual navigation handlers
+  const handlePrevClick = () => {
+    if (onNavigatePrev) {
+      onNavigatePrev();
+    }
+  };
+
+  const handleNextClick = () => {
+    if (onNavigateNext) {
+      onNavigateNext();
+    }
+  };
+
+  const swiperStyles = desktop ? {
+    '--swiper-navigation-color': '#8d8d8d',
+    '--swiper-navigation-size': '24px',
+  } : {
+    '--swiper-pagination-color': '#8d8d8d',
+    '--swiper-pagination-bullet-inactive-color': 'rgba(22, 22, 22, 0.25)',
+    '--swiper-pagination-bullet-size': '8px',
+    '--swiper-pagination-bullet-horizontal-gap': '8px',
+    '--swiper-pagination-bottom': '20px',
+  };
+
   return (
-    <swiper-container
-      ref={swiperRef}
-      onSlideChange={onSlideChange}
-      style={{
-        '--swiper-pagination-color': '#8d8d8d',
-        '--swiper-pagination-bullet-inactive-color': 'rgba(22, 22, 22, 0.25)',
-        '--swiper-pagination-bullet-size': '8px',
-        '--swiper-pagination-bullet-horizontal-gap': '8px',
-        '--swiper-pagination-bottom': '20px',
-      }}
-    >
-      {imageUrls.map((url, index) => (
-        <swiper-slide key={index}>
-          <div class="image-container">
-            <img
-              ref={(el: HTMLImageElement) => onImageRef(el, index)}
-              src={url}
-              alt={`Shop the look ${index + 1}`}
-              class="main-image"
-              style={{
-                width: `${width}px`,
-                height: `${height}px`,
-              }}
-            />
-            {index === currentImageIndex && renderDetectedObjects()}
-          </div>
-        </swiper-slide>
-      ))}
-    </swiper-container>
+    <div class={`swiper-wrapper ${desktop ? 'desktop-carousel' : 'mobile-slider'}`}>
+      <swiper-container
+        ref={swiperRef}
+        onSlideChange={onSlideChange}
+        style={swiperStyles}
+        slides-per-view={desktop ? "auto" : "1"}
+        space-between={desktop ? "20" : "0"}
+        initial-slide={currentImageIndex.toString()}
+        keyboard="true"
+        allow-touch-move="true"
+        centered-slides="false"
+        pagination={!desktop ? "true" : undefined}
+        pagination-clickable={!desktop ? "true" : undefined}
+      >
+        {imageUrls.map((url, index) => (
+          <swiper-slide key={index}>
+            <div class="image-container">
+              <img
+                ref={(el: HTMLImageElement) => onImageRef(el, index)}
+                src={url}
+                alt={`Shop the look ${index + 1}`}
+                class="main-image"
+                style={getImageStyles(width, height)}
+              />
+              {renderDetectedObjects(index)}
+            </div>
+          </swiper-slide>
+        ))}
+      </swiper-container>
+      {desktop && shouldShowArrows && (
+        <div class="carousel-navigation">
+          <div 
+            class={`swiper-button-prev ${currentImageIndex === 0 ? 'disabled' : ''}`}
+            onClick={handlePrevClick}
+          />
+          <div 
+            class={`swiper-button-next ${currentImageIndex === totalImages - 1 ? 'disabled' : ''}`}
+            onClick={handleNextClick}
+          />
+        </div>
+      )}
+    </div>
   );
 };
 
@@ -193,17 +265,23 @@ export const renderModal = (props: ModalProps) => {
 
   if (!showModal || !selectedDetectedObject) return null;
 
-  const modalStyle = modalPosition
-    ? {
-        "--modal-x": `${modalPosition.x}px`,
-        "--modal-y": `${modalPosition.y}px`,
-      }
-    : {};
+  // Check if we're on mobile
+  const isMobile = !isDesktop();
+  
+  let modalStyle = {};
+  
+  // Only set custom positioning for desktop - mobile uses CSS centering
+  if (modalPosition && !isMobile) {
+    modalStyle = {
+      "--modal-x": `${modalPosition.x}px`,
+      "--modal-y": `${modalPosition.y}px`,
+    };
+  }
 
   return (
     <div class="modal-overlay" onClick={onModalClose}>
       <div
-        class="modal-content-wrapper"
+        class={`modal-content-wrapper ${isMobile ? 'mobile-modal' : 'desktop-modal'}`}
         style={modalStyle}
         onClick={(e) => e.stopPropagation()}
       >

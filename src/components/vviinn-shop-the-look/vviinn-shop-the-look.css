@@ -17,6 +17,8 @@
   position: relative;
   width: 100%;
   background: var(--shop-the-look-bg);
+  /* Create positioning context for modal overlay */
+  overflow: hidden;
 }
 
 .main-content {
@@ -35,6 +37,12 @@
 }
 
 /* Swiper Styles */
+.swiper-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
 swiper-container {
   width: 100%;
   height: 100%;
@@ -47,6 +55,9 @@ swiper-slide {
   justify-content: center;
   align-items: center;
   background: #f0f0f0;
+  width: 100%;
+  height: 100%;
+  flex-shrink: 0;
 }
 
 /* Enhanced custom pagination styling */
@@ -90,6 +101,100 @@ swiper-container::part(bullet-active) {
 swiper-container::part(bullet-active):hover {
   background: #6b6b6b;
   transform: scale(1.1);
+}
+
+/* Desktop carousel layout with bottom-right navigation */
+.desktop-carousel {
+  position: relative;
+  width: 100%;
+}
+
+.desktop-carousel swiper-container {
+  width: 100%;
+  height: 100%;
+}
+
+.desktop-carousel .carousel-navigation {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+/* Desktop carousel navigation styles - bottom right positioning */
+.desktop-carousel .swiper-button-prev,
+.desktop-carousel .swiper-button-next {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(4px);
+  margin: 0;
+}
+
+.desktop-carousel .swiper-button-prev:hover,
+.desktop-carousel .swiper-button-next:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.desktop-carousel .swiper-button-prev::after,
+.desktop-carousel .swiper-button-next::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border: 2px solid #8d8d8d;
+  border-top: none;
+  border-right: none;
+  transition: border-color 0.3s ease;
+}
+
+.desktop-carousel .swiper-button-prev::after {
+  transform: rotate(45deg);
+  margin-left: 1px;
+}
+
+.desktop-carousel .swiper-button-next::after {
+  transform: rotate(-135deg);
+  margin-right: 1px;
+}
+
+.desktop-carousel .swiper-button-prev:hover::after,
+.desktop-carousel .swiper-button-next:hover::after {
+  border-color: #6b6b6b;
+}
+
+/* Disabled state for navigation buttons */
+.desktop-carousel .swiper-button-prev.disabled,
+.desktop-carousel .swiper-button-next.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.desktop-carousel .swiper-button-prev.disabled::after,
+.desktop-carousel .swiper-button-next.disabled::after {
+  border-color: #ccc;
+}
+
+/* Hide pagination dots on desktop carousel */
+.desktop-carousel swiper-container::part(pagination) {
+  display: none;
+}
+
+/* Mobile slider keeps pagination dots */
+.mobile-slider swiper-container::part(pagination) {
+  display: flex;
 }
 
 .main-image {
@@ -146,8 +251,8 @@ swiper-container::part(bullet-active):hover {
   transform: scale(1.05);
 }
 
-.modal-overlay {
-  position: fixed;
+.shop-the-look-container .modal-overlay {
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
@@ -157,8 +262,8 @@ swiper-container::part(bullet-active):hover {
   pointer-events: auto;
 }
 
-.modal-content-wrapper {
-  position: fixed;
+.shop-the-look-container .modal-content-wrapper {
+  position: absolute;
   background: var(--shop-the-look-bg);
   border-radius: 12px;
   overflow: hidden;
@@ -167,6 +272,22 @@ swiper-container::part(bullet-active):hover {
   top: var(--modal-y, 50%);
   left: var(--modal-x, 50%);
   transform: translate(-50%, -50%);
+}
+
+/* Mobile modal specific styles - always centered */
+.shop-the-look-container .modal-content-wrapper.mobile-modal {
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 64px);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+}
+
+/* Desktop modal specific styles */
+.shop-the-look-container .modal-content-wrapper.desktop-modal {
+  position: absolute;
 }
 
 .modal-body {
@@ -243,22 +364,149 @@ swiper-container::part(bullet-active):hover {
 /* Make detected objects non-clickable when modal is open, but keep them visible */
 .shop-the-look-container.modal-open vviinn-detected-object {
   pointer-events: none;
-  z-index: 1 !important;
+  z-index: 1;
+}
+
+/* Desktop: Ensure detected objects remain visible even on partially sliced images */
+@media (min-width: 768px) {
+  .desktop-carousel vviinn-detected-object {
+    /* Ensure objects stay visible and positioned correctly relative to their image */
+    position: absolute;
+    z-index: 15;
+    /* Prevent objects from being clipped when image is partially visible */
+    overflow: visible;
+  }
+
+  /* Ensure image containers don't clip detected objects on desktop */
+  .desktop-carousel .image-container {
+    overflow: visible;
+  }
+
+  /* But keep the image itself clipped for proper carousel appearance */
+  .desktop-carousel .main-image {
+    overflow: hidden;
+    border-radius: var(--shop-the-look-border-radius);
+  }
+
+  /* TODO: */
+  /* swiper-container::part(wrapper) {
+    display: flex;
+    justify-content: center;
+  } */
 }
 
 /* Responsive adjustments */
-@media (max-width: 390px) {
-  .modal-content {
+@media (max-width: 767px) {
+  /* Mobile: Hide navigation arrows and navigation container */
+  .shop-the-look-container .swiper-button-prev,
+  .shop-the-look-container .swiper-button-next,
+  .shop-the-look-container .carousel-navigation {
+    display: none;
+  }
+
+  /* Mobile: Ensure swiper takes full width */
+  .mobile-slider {
     width: 100%;
-    border-radius: 16px 16px 0 0;
   }
 
-  .product-section {
-    gap: 20px;
+  /* Mobile: Ensure modal fits in viewport but don't override centering */
+  .modal-content-wrapper.desktop-modal {
+    max-width: calc(100vw - 24px);
+    max-height: calc(100vh - 48px);
   }
 
-  .product-image {
-    width: 140px;
-    height: 144px;
+  .search-results-grid {
+    width: min(160px, calc(100vw - 48px));
+    height: min(160px, calc(100vw - 48px));
+  }
+}
+
+@media (min-width: 768px) {
+  /* Desktop: Hide pagination dots */
+  .shop-the-look-container
+    .desktop-carousel
+    swiper-container::part(pagination) {
+    display: none;
+  }
+
+  /* Desktop: Show navigation arrows */
+  .desktop-carousel .swiper-button-prev,
+  .desktop-carousel .swiper-button-next {
+    display: flex;
+  }
+
+  /* Desktop: Show carousel navigation */
+  .desktop-carousel .carousel-navigation {
+    display: flex;
+  }
+
+  /* Desktop: Allow slides to have natural width for multi-slide view */
+  .shop-the-look-container .desktop-carousel swiper-slide {
+    width: auto;
+    flex-shrink: 0;
+  }
+
+  /* Desktop: Container should show slides from the left */
+  .desktop-carousel {
+    max-width: none;
+  }
+
+  .desktop-carousel swiper-container {
+    justify-content: flex-start;
+  }
+
+  /* Ensure swiper wrapper aligns slides to the left */
+  .desktop-carousel .swiper-wrapper {
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+}
+
+/* iPhone SE and smaller screens (375px and below) */
+@media (max-width: 375px) {
+  .shop-the-look-container {
+    width: 100%;
+  }
+
+  .shop-the-look-container .image-container,
+  .shop-the-look-container swiper-container,
+  .shop-the-look-container swiper-slide {
+    width: 100%;
+  }
+
+  .shop-the-look-container .main-image {
+    width: 100%;
+    height: auto;
+    max-height: 70vh;
+    object-fit: contain;
+  }
+
+  /* Only apply size constraints to desktop modals on small screens */
+  .modal-content-wrapper.desktop-modal {
+    max-width: calc(100vw - 16px);
+  }
+
+  .search-results-grid {
+    width: min(140px, calc(100vw - 32px));
+    height: min(140px, calc(100vw - 32px));
+    gap: 4px;
+  }
+}
+
+/* Very small screens (320px and below) */
+@media (max-width: 320px) {
+  .main-image {
+    max-height: 60vh;
+  }
+
+  .search-results-grid {
+    width: min(120px, calc(100vw - 24px));
+    height: min(120px, calc(100vw - 24px));
+    gap: 3px;
+  }
+
+  /* Only apply size constraints to desktop modals on very small screens */
+  .modal-content-wrapper.desktop-modal {
+    max-width: calc(100vw - 12px);
   }
 }
