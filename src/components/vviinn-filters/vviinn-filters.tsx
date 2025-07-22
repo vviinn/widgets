@@ -289,9 +289,7 @@ export class VviinnFilters {
           >
             {isIntervalFilter(column) ? (
               <vviinn-price-range
-                histogram={(filterOptions as Histogram).filter(
-                  (item) => item.value.frequency > 0,
-                )}
+                histogram={filterOptions as Histogram}
                 priceChangeHandler={this.priceChangeHandler}
                 selectedInterval={getSelectedPriceInterval(this.requestFilters)}
               />
