@@ -79,7 +79,7 @@ export class VviinnPriceRange {
 
     if (newFromValue >= this.toValue - this.minMargin) {
       this.fromValue = this.toValue - this.minMargin;
-      (e.target as HTMLInputElement).value = String(this.fromValue);
+      target.value = String(this.fromValue);
     } else {
       this.fromValue = newFromValue;
     }
@@ -91,7 +91,7 @@ export class VviinnPriceRange {
 
     if (newToValue <= this.fromValue + this.minMargin) {
       this.toValue = this.fromValue + this.minMargin;
-      (e.target as HTMLInputElement).value = String(this.toValue);
+      target.value = String(this.toValue);
     } else {
       this.toValue = newToValue;
     }
@@ -134,7 +134,6 @@ export class VviinnPriceRange {
                 : barHeight;
 
             const isActive = this.isBarActive(item);
-            console.log(isActive, item);
             return (
               <div
                 class={`histogram-bar ${
@@ -156,10 +155,10 @@ export class VviinnPriceRange {
               type="range"
               min={this.minValue}
               max={this.maxValue}
+              step={1}
               value={this.fromValue}
               onInput={this.controlFromSlider}
               onChange={this.sendBackValue}
-              step={1}
               part="histogram-from-slider"
               aria-label={i18next.t("a11y.priceRangeMin")}
             />
@@ -169,10 +168,10 @@ export class VviinnPriceRange {
               type="range"
               min={this.minValue}
               max={this.maxValue}
+              step={1}
               value={this.toValue}
               onInput={this.controlToSlider}
               onChange={this.sendBackValue}
-              step={1}
               part="histogram-to-slider"
               aria-label={i18next.t("a11y.priceRangeMax")}
             />
