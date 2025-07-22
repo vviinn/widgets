@@ -15,6 +15,7 @@ import { pipe } from "fp-ts/lib/function";
 import { getAnalyticsModule } from "../../analytics/GeneralAnalytics";
 import * as O from "fp-ts/lib/Option";
 import i18next from "i18next";
+import { setupIntersectionObserver, type IntersectionObserverConfig } from "../../dom";
 
 import { searchState } from "../../store/search.store";
 import {
@@ -256,13 +257,27 @@ export class VviinnProductCard {
   componentDidLoad() {
     this.vviinnProductLoad.emit(this.productData);
     this.addLinksEventListeners();
+    this.setupIntersectionObserver();
+  }
 
+  private setupIntersectionObserver() {
     if (!this.imageElement) return;
-    this.intersectionObserver = new IntersectionObserver(
-      this.intersectionCallback.bind(this.imageElement),
-      { threshold: 0.95 },
-    );
-    this.intersectionObserver.observe(this.imageElement);
+
+    const config: IntersectionObserverConfig = {
+      threshold: 0.95, // Сохраняем существующее значение для обратной совместимости
+      onIntersectionChange: (isIntersecting: boolean) => {
+        if (isIntersecting) {
+          pipe(
+            getAnalyticsModule,
+            O.map((analytics) => analytics.sendImpression(this.getProduct())),
+          );
+          this.vviinnProductView.emit(this.productData);
+          this.intersectionObserver?.disconnect();
+        }
+      }
+    };
+
+    this.intersectionObserver = setupIntersectionObserver(this.imageElement, config);
   }
 
   @Listen("vviinnCrossSellingClick")
@@ -324,17 +339,7 @@ export class VviinnProductCard {
     };
   }
 
-  private intersectionCallback = (data: IntersectionObserverEntry[]) => {
-    if (!data.length) return;
-    if (data.some((entry) => entry.isIntersecting)) {
-      pipe(
-        getAnalyticsModule,
-        O.map((analytics) => analytics.sendImpression(this.getProduct())),
-      );
-      this.vviinnProductView.emit(this.productData);
-      this.intersectionObserver.disconnect();
-    }
-  };
+  // Убрали intersectionCallback - логика теперь в setupIntersectionObserver
 
   private basketButtonClickHandler() {
     this.vviinnAddToBasket.emit({

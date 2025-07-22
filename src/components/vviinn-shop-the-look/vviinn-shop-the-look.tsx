@@ -117,7 +117,6 @@ export class VviinnShopTheLook {
   }
 
   componentDidLoad() {
-    // Defer image bounds update to avoid Stencil warning about state changes during componentDidLoad
     setTimeout(() => {
       this.updateImageBounds();
     }, 0);
@@ -135,12 +134,10 @@ export class VviinnShopTheLook {
     window.removeEventListener("resize", this.handleResize);
     this.intersectionObserver?.disconnect();
 
-    // Clean up individual image observers
     this.imageObservers.forEach(observer => observer.disconnect());
     this.imageObservers.clear();
     this.imageElements.clear();
 
-    // Clean up swiper event listeners
     const swiperContainer =
       this.el.shadowRoot?.querySelector("swiper-container");
     if (swiperContainer) {
@@ -157,7 +154,6 @@ export class VviinnShopTheLook {
 
   private handleResize = () => {
     this.updateImageBounds();
-    // Force re-render to update responsive styles
     this.forceRerender = Date.now();
   };
 
@@ -168,11 +164,9 @@ export class VviinnShopTheLook {
         this.imageBounds = newBounds;
       }
     }
-    // Note: Initial imageBounds is set in componentWillLoad, no need to set here again
   }
 
   private setupIntersectionObserver() {
-    // Desktop: 100% visible (threshold 1.0), Mobile: 33% visible (threshold 0.33)
     const isDesktopView = isDesktop();
     const threshold = isDesktopView ? INTERSECTION_THRESHOLDS.DESKTOP_FULL_VISIBLE : INTERSECTION_THRESHOLDS.MOBILE_VISIBLE;
     
@@ -192,7 +186,6 @@ export class VviinnShopTheLook {
   }
 
   private setupSwiperEventListener() {
-    // Use setTimeout to ensure swiper is fully initialized
     setTimeout(() => {
       const swiperContainer =
         this.el.shadowRoot?.querySelector("swiper-container");
@@ -201,7 +194,6 @@ export class VviinnShopTheLook {
           "swiperslidechange",
           this.handleSlideChange,
         );
-        // Also try the alternative event name
         swiperContainer.addEventListener("slidechange", this.handleSlideChange);
       }
     }, TIMING.SWIPER_INIT_DELAY);
@@ -252,7 +244,6 @@ export class VviinnShopTheLook {
     this.currentResultIndex = 0;
     this.showModal = false;
 
-    // Get the correct image element for this image index
     const imageElement = this.imageElements.get(imageIndex) || this.imageElement;
     
     const params: DetectedObjectClickParams = {
@@ -352,7 +343,6 @@ export class VviinnShopTheLook {
       return null;
     }
     
-    // Use cached image bounds instead of recalculating
     const imageBounds = imageState.imageBounds;
     
     const props: DetectedObjectsProps = {
@@ -373,7 +363,6 @@ export class VviinnShopTheLook {
     if (newIndex !== null && newIndex !== this.internalCurrentImageIndex) {
       this.internalCurrentImageIndex = newIndex;
 
-      // Reset UI state and clear previous image data immediately
       this.showModal = false;
       this.selectedDetectedObject = null;
       this.modalPosition = null;
@@ -394,7 +383,6 @@ export class VviinnShopTheLook {
       this.imageElement = el;
     }
     
-    // Store reference for individual tracking
     if (el) {
       this.imageElements.set(index, el);
       this.setupImageIntersectionObserver(el, index);
@@ -402,7 +390,6 @@ export class VviinnShopTheLook {
   };
 
   private setupImageIntersectionObserver = (element: HTMLImageElement, index: number) => {
-    // Clean up existing observer for this image
     const existingObserver = this.imageObservers.get(index);
     if (existingObserver) {
       existingObserver.disconnect();
@@ -438,37 +425,30 @@ export class VviinnShopTheLook {
     const wasVisible = currentState.isVisible;
     const stateChanged = wasVisible !== isVisible;
     
-    if (!stateChanged) return; // No change, avoid unnecessary updates
+    if (!stateChanged) return;
     
     currentState.isVisible = isVisible;
     currentState.imageElement = this.imageElements.get(index) || null;
     
-    // Calculate and cache image bounds when becoming visible
     if (isVisible && currentState.imageElement && !currentState.imageBounds) {
       currentState.imageBounds = calculateImageBounds(currentState.imageElement);
     }
     
     this.imageStates.set(index, currentState);
     
-    // Desktop rule: Keep images in visible indices even when partially sliced
-    // Mobile rule: Only track fully visible images
     const isDesktopView = isDesktop();
     
     if (isVisible) {
       this.visibleImageIndices.add(index);
-      // Only trigger search if not already completed and this is the first time becoming visible
       if (!currentState.searchCompleted) {
         this.performVisualSearchForImage(index);
       }
     } else {
-      // On desktop, keep partially visible images in the visible set to preserve objects
       if (!isDesktopView) {
         this.visibleImageIndices.delete(index);
       }
-      // On desktop, only remove from visible set if threshold is very low (completely hidden)
     }
     
-    // Update the visible indices state to trigger re-render only if there was a real change
     this.visibleImageIndices = new Set(this.visibleImageIndices);
   };
 
@@ -492,7 +472,6 @@ export class VviinnShopTheLook {
       (response: { detectedObjects: Rectangle[]; searchResults: Recommendation[] }) => {
         this.updateImageState(imageIndex, response.detectedObjects, true, response.searchResults);
         
-        // Auto-select first object only for the first image (index 0)
         if (imageIndex === 0 && response.detectedObjects.length > 0) {
           setTimeout(async () => {
             await this.handleDetectedObjectClick(response.detectedObjects[0], 0, imageIndex);
@@ -530,7 +509,6 @@ export class VviinnShopTheLook {
       const newIndex = this.internalCurrentImageIndex - 1;
       this.updateSlideIndex(newIndex);
       
-      // Get swiper and programmatically slide
       const swiperContainer = this.el.shadowRoot?.querySelector('swiper-container');
       if (swiperContainer && (swiperContainer as any).swiper) {
         (swiperContainer as any).swiper.slideTo(newIndex);
@@ -543,7 +521,6 @@ export class VviinnShopTheLook {
       const newIndex = this.internalCurrentImageIndex + 1;
       this.updateSlideIndex(newIndex);
       
-      // Get swiper and programmatically slide
       const swiperContainer = this.el.shadowRoot?.querySelector('swiper-container');
       if (swiperContainer && (swiperContainer as any).swiper) {
         (swiperContainer as any).swiper.slideTo(newIndex);
@@ -554,7 +531,6 @@ export class VviinnShopTheLook {
   private updateSlideIndex = (newIndex: number) => {
     this.internalCurrentImageIndex = newIndex;
 
-    // Reset UI state and clear previous image data immediately
     this.showModal = false;
     this.selectedDetectedObject = null;
     this.modalPosition = null;
@@ -570,14 +546,11 @@ export class VviinnShopTheLook {
   };
 
   private shouldShowArrows = (): boolean => {
-    // Simple heuristic: show arrows if we have more than 3 images on desktop
-    // or if the total width of images would exceed viewport width
     const isDesktopView = isDesktop();
     if (!isDesktopView) return false;
     
-    // Show arrows if we have more than what can reasonably fit
-    const estimatedImageWidth = this.width + 20; // image width + space between
-    const availableWidth = window.innerWidth - 100; // account for padding/margins
+    const estimatedImageWidth = this.width + 20;
+    const availableWidth = window.innerWidth - 100;
     const maxImagesVisible = Math.floor(availableWidth / estimatedImageWidth);
     
     return this.totalImages > maxImagesVisible;

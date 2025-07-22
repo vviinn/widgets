@@ -1,8 +1,3 @@
-export const RESPONSIVE_BREAKPOINTS = {
-  DESKTOP: 768,
-  SMALL_MOBILE: 375,
-} as const;
-
 export const INTERSECTION_THRESHOLDS = {
   DESKTOP_VISIBLE: 0.1, // 10% visible - preserves objects on sliced images
   MOBILE_VISIBLE: 0.33, // 33% visible - better UX on mobile

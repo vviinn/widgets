@@ -1,22 +1,19 @@
 import { Rectangle, VisualSearchResponse } from "../../interfaces/search";
 import * as E from "fp-ts/lib/Either";
 import { Recommendation } from "../../interfaces/recommendation";
-import { RESPONSIVE_BREAKPOINTS, INTERSECTION_THRESHOLDS } from "./constants";
+import { INTERSECTION_THRESHOLDS } from "./constants";
+import { isDesktop as sharedIsDesktop, isSmallMobile as sharedIsSmallMobile } from "../../helpers/device/checkDeviceType";
+import { calculateImageBounds } from "../../Image/bounds";
+import { createImageFile } from "../../Image/upload";
+import { extractSlideIndex as sharedExtractSlideIndex } from "../../utils/swiper/swiperUtils";
 
 export interface ModalPosition {
   x: number;
   y: number;
 }
 
-export const isDesktop = (): boolean => {
-  if (typeof window === "undefined") return false;
-  return window.innerWidth >= RESPONSIVE_BREAKPOINTS.DESKTOP;
-};
-
-export const isSmallMobile = (): boolean => {
-  if (typeof window === "undefined") return false;
-  return window.innerWidth <= RESPONSIVE_BREAKPOINTS.SMALL_MOBILE;
-};
+export const isDesktop = sharedIsDesktop;
+export const isSmallMobile = sharedIsSmallMobile;
 
 export const getVisibilityThreshold = (isDesktop: boolean): number => {
   return isDesktop
@@ -35,12 +32,10 @@ export const shouldKeepImageVisible = (
   params: VisibilityUpdateParams,
 ): boolean => {
   const { isVisible, isDesktop } = params;
-  // On desktop, keep partially visible images in the visible set to preserve objects
-  // On mobile, only keep fully visible images
   if (isVisible) {
     return true;
   }
-  return isDesktop; // Desktop keeps images visible even when not intersecting
+  return isDesktop;
 };
 
 export const shouldRenderDetectedObjects = (
@@ -51,8 +46,6 @@ export const shouldRenderDetectedObjects = (
   if (!imageState) return false;
 
   const isDesktopView = isDesktop();
-  // On desktop, render objects even for partially visible (sliced) images
-  // On mobile, only render when image is fully visible
   return isDesktopView
     ? imageState.isVisible || visibleImageIndices.has(imageIndex)
     : imageState.isVisible;
@@ -64,65 +57,28 @@ export const calculateModalPosition = (
 ): ModalPosition => {
   if (!imageElement) return { x: 0, y: 0 };
 
-  // Get the actual image bounds
   const imageBounds = calculateImageBounds(imageElement);
   if (!imageBounds) return { x: 0, y: 0 };
 
   const isDesktopView = isDesktop();
 
   if (isDesktopView) {
-    // Desktop: Position relative to the image center within the component
-    // Get container bounds to calculate relative positioning
     let containerBounds = { left: 0, top: 0 };
     if (containerElement) {
       const containerRect = containerElement.getBoundingClientRect();
       containerBounds = { left: containerRect.left, top: containerRect.top };
     }
-    
-    // Calculate position relative to container
     const x = imageBounds.left - containerBounds.left + imageBounds.width / 2;
     const y = imageBounds.top - containerBounds.top + imageBounds.height / 2;
     return { x, y };
   } else {
-    // Mobile: center within component bounds (50% of container)
-    return { x: 0, y: 0 }; // Will use CSS centering via 50%/50%
+    return { x: 0, y: 0 };
   }
 };
 
-export const calculateImageBounds = (
-  imageElement: HTMLImageElement,
-): Rectangle | null => {
-  if (!imageElement) return null;
-  const rect = imageElement.getBoundingClientRect();
-  return {
-    left: rect.left,
-    top: rect.top,
-    width: rect.width,
-    height: rect.height,
-  };
-};
-
-export const hasImageBoundsChanged = (
-  currentBounds: Rectangle | null,
-  newBounds: Rectangle,
-): boolean => {
-  if (!currentBounds) return true;
-
-  return (
-    currentBounds.left !== newBounds.left ||
-    currentBounds.top !== newBounds.top ||
-    currentBounds.width !== newBounds.width ||
-    currentBounds.height !== newBounds.height
-  );
-};
-
-export const createImageFile = async (imageUrl: string): Promise<File> => {
-  const imageResponse = await fetch(imageUrl);
-  const imageBlob = await imageResponse.blob();
-  return new File([imageBlob], "shop-the-look-image.jpg", {
-    type: "image/jpeg",
-  });
-};
+export { calculateImageBounds, hasImageBoundsChanged } from "../../Image/bounds";
+export { createImageFile } from "../../Image/upload";
+export { setupIntersectionObserver, type IntersectionObserverConfig } from "../../dom";
 
 export const resetSearchState = () => ({
   detectedObjects: [],
@@ -132,36 +88,6 @@ export const resetSearchState = () => ({
   modalPosition: null,
   initialSearchCompleted: false,
 });
-
-export interface IntersectionObserverConfig {
-  threshold: number;
-  onIntersectionChange: (isIntersecting: boolean) => void;
-}
-
-export const setupIntersectionObserver = (
-  element: HTMLElement,
-  config: IntersectionObserverConfig,
-): IntersectionObserver | null => {
-  if (typeof window === "undefined" || !("IntersectionObserver" in window)) {
-    config.onIntersectionChange(true);
-    return null;
-  }
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        const isIntersecting = entry.intersectionRatio >= config.threshold;
-        config.onIntersectionChange(isIntersecting);
-      });
-    },
-    {
-      threshold: config.threshold,
-    },
-  );
-
-  observer.observe(element);
-  return observer;
-};
 
 export interface VisualSearchParams {
   imageUrl: string;
@@ -255,21 +181,5 @@ export const handleDetectedObjectClick = async (
   }
 };
 
-export interface SlideChangeEventDetail {
-  activeIndex?: number;
-  realIndex?: number;
-}
-
-export const extractSlideIndex = (event: any): number | null => {
-  let newIndex = null;
-
-  if (event.detail && Array.isArray(event.detail) && event.detail[0]) {
-    newIndex = event.detail[0].activeIndex || event.detail[0].realIndex;
-  } else if (event.detail && event.detail.activeIndex !== undefined) {
-    newIndex = event.detail.activeIndex;
-  } else if (event.detail && event.detail.realIndex !== undefined) {
-    newIndex = event.detail.realIndex;
-  }
-
-  return newIndex;
-};
+export const extractSlideIndex = sharedExtractSlideIndex;
+export { type SwiperSlideChangeEventDetail as SlideChangeEventDetail } from "../../utils/swiper/swiperUtils";

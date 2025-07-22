@@ -2,8 +2,10 @@ import { h } from "@stencil/core";
 import { Rectangle } from "../../interfaces/search";
 import { Recommendation } from "../../interfaces/recommendation";
 import { BasicEventData } from "../../recommendation/events";
-import { ModalPosition, isDesktop, isSmallMobile } from "./helpers";
-import { Pagination } from "swiper/modules";
+import { ModalPosition } from "./helpers";
+import { isDesktop, isSmallMobile } from "../../helpers/device/checkDeviceType";
+import { getResponsiveImageStyles } from "../../Image/responsive";
+import { configureSwiperElement, getSwiperStyles } from "../../utils/swiper/swiperUtils";
 
 export interface DetectedObjectsProps {
   imageBounds: Rectangle | null;
@@ -62,20 +64,8 @@ export interface SwiperProps {
 }
 
 
-// Helper function to get responsive image styles
 const getImageStyles = (width: number, height: number) => {
-  if (isSmallMobile()) {
-    return {
-      width: '100%',
-      height: 'auto',
-      maxHeight: '70vh',
-      objectFit: 'contain' as const,
-    };
-  }
-  return {
-    width: `${width}px`,
-    height: `${height}px`,
-  };
+  return getResponsiveImageStyles(width, height, isSmallMobile());
 };
 
 export const renderSwiper = (props: SwiperProps) => {
@@ -94,7 +84,6 @@ export const renderSwiper = (props: SwiperProps) => {
   } = props;
   
 
-  // Only show single image if we truly have 1 or fewer images
   if (!imageUrls || imageUrls.length <= 1) {
     return (
       <div class="image-container">
@@ -114,34 +103,15 @@ export const renderSwiper = (props: SwiperProps) => {
   
   const swiperRef = (el: any) => {
     if (el && !el.swiper) {
-      // Configure swiper with modules based on screen size
-      const modules = desktop ? [] : [Pagination];
-      
-      Object.assign(el, {
-        modules,
-        navigation: false,
-        pagination: !desktop ? {
-          clickable: true,
-        } : false,
-        scrollbar: false,
-        keyboard: { enabled: true },
-        mousewheel: false,
-        allowTouchMove: true,
+      configureSwiperElement(el, {
+        isDesktop: desktop,
         initialSlide: currentImageIndex,
-        loop: false,
-        slidesPerView: desktop ? 'auto' : 1,
-        spaceBetween: desktop ? 20 : 0,
-        centeredSlides: false,
+        pagination: true,
+        keyboard: true,
       });
-      
-      // Initialize swiper after configuration
-      if (el.initialize) {
-        el.initialize();
-      }
     }
   };
 
-  // Manual navigation handlers
   const handlePrevClick = () => {
     if (onNavigatePrev) {
       onNavigatePrev();
@@ -154,16 +124,7 @@ export const renderSwiper = (props: SwiperProps) => {
     }
   };
 
-  const swiperStyles = desktop ? {
-    '--swiper-navigation-color': '#8d8d8d',
-    '--swiper-navigation-size': '24px',
-  } : {
-    '--swiper-pagination-color': '#8d8d8d',
-    '--swiper-pagination-bullet-inactive-color': 'rgba(22, 22, 22, 0.25)',
-    '--swiper-pagination-bullet-size': '8px',
-    '--swiper-pagination-bullet-horizontal-gap': '8px',
-    '--swiper-pagination-bottom': '20px',
-  };
+  const swiperStyles = getSwiperStyles(desktop);
 
   return (
     <div class={`swiper-wrapper ${desktop ? 'desktop-carousel' : 'mobile-slider'}`}>
@@ -265,12 +226,9 @@ export const renderModal = (props: ModalProps) => {
 
   if (!showModal || !selectedDetectedObject) return null;
 
-  // Check if we're on mobile
   const isMobile = !isDesktop();
   
   let modalStyle = {};
-  
-  // Only set custom positioning for desktop - mobile uses CSS centering
   if (modalPosition && !isMobile) {
     modalStyle = {
       "--modal-x": `${modalPosition.x}px`,
