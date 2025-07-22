@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.179.0](https://github.com/vviinn/widgets/compare/v2.178.0...v2.179.0) (2025-07-22)
+
+
+### Features
+
+* Use a continuous range for a price filter instead of being restricted by the price intervals shown on the histogram ([9c6125e](https://github.com/vviinn/widgets/commit/9c6125ead50371c9018c8e472c9bcaa73f1dec4b))
+
 ## [2.178.0](https://github.com/vviinn/widgets/compare/v2.177.4...v2.178.0) (2025-07-18)
 
 
