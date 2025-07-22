@@ -255,14 +255,14 @@ export class VviinnProductCard {
 
   componentDidLoad() {
     this.vviinnProductLoad.emit(this.productData);
+    this.addLinksEventListeners();
 
+    if (!this.imageElement) return;
     this.intersectionObserver = new IntersectionObserver(
       this.intersectionCallback.bind(this.imageElement),
       { threshold: 0.95 },
     );
     this.intersectionObserver.observe(this.imageElement);
-
-    this.addLinksEventListeners();
   }
 
   @Listen("vviinnCrossSellingClick")
