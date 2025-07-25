@@ -12,7 +12,7 @@ import * as E from "fp-ts/lib/Either";
 import { Recommendation } from "../../interfaces/recommendation";
 import { Rectangle } from "../../interfaces/search";
 import { BasicEventData } from "../../recommendation/events";
-import { TEST_IMAGE_URLS, TEST_BASIC_EVENT_DATA } from "./test-data";
+import { TEST_BASIC_EVENT_DATA } from "./test-data";
 import { register } from "swiper/element";
 import {
   calculateImageBounds,
@@ -56,15 +56,10 @@ export interface ShopTheLookEventData extends BasicEventData {
 export class VviinnShopTheLook {
   @Element() el: HTMLElement;
 
-  @Prop() imageUrls: string[] = TEST_IMAGE_URLS;
-  @Prop() currentImageIndex: number = 0;
-  @State() internalCurrentImageIndex: number = 0;
-  @State() totalImages: number = 1;
-  @Prop() basicEventData: BasicEventData = TEST_BASIC_EVENT_DATA;
+  @Prop() imageUrls: string = "";
   @Prop() width: number = 350;
   @Prop() height: number = 468;
-  @Prop() token: string;
-  @Prop() enableVisualSearch: boolean = true;
+  @Prop() token: string = "";
 
   @State() selectedDetectedObject: Rectangle | null = null;
   @State() showModal: boolean = false;
@@ -90,6 +85,9 @@ export class VviinnShopTheLook {
   > = new Map();
   @State() forceRerender: number = 0;
   @State() visibleImageIndices: Set<number> = new Set();
+  @State() currentImageIndex: number = 0;
+  @State() totalImages: number = 1;
+  @State() imageUrlsList: string[] = [];
 
   @Event()
   vviinnShopTheLookDetectedObjectClick: EventEmitter<ShopTheLookEventData>;
@@ -102,25 +100,30 @@ export class VviinnShopTheLook {
   private imageElements: Map<number, HTMLImageElement> = new Map();
 
   componentWillLoad() {
+    if (this.imageUrls && this.imageUrls.trim()) {
+      this.imageUrlsList = this.imageUrls
+        .split(",")
+        .map((url) => url.trim())
+        .filter((url) => url.length > 0);
+    }
+
     this.imageBounds = {
       left: 0,
       top: 0,
       width: this.width,
       height: this.height,
     };
-    this.totalImages = this.imageUrls.length;
-    this.internalCurrentImageIndex = this.currentImageIndex;
+    this.totalImages = this.imageUrlsList.length;
     if (this.token) {
       this.componentToken = this.token;
     }
-    
   }
 
   componentDidLoad() {
     setTimeout(() => {
       this.updateImageBounds();
     }, 0);
-    
+
     this.imageElement?.addEventListener("load", () => this.updateImageBounds());
     window.addEventListener("resize", this.handleResize);
     this.setupIntersectionObserver();
@@ -134,7 +137,7 @@ export class VviinnShopTheLook {
     window.removeEventListener("resize", this.handleResize);
     this.intersectionObserver?.disconnect();
 
-    this.imageObservers.forEach(observer => observer.disconnect());
+    this.imageObservers.forEach((observer) => observer.disconnect());
     this.imageObservers.clear();
     this.imageElements.clear();
 
@@ -168,18 +171,20 @@ export class VviinnShopTheLook {
 
   private setupIntersectionObserver() {
     const isDesktopView = isDesktop();
-    const threshold = isDesktopView ? INTERSECTION_THRESHOLDS.DESKTOP_FULL_VISIBLE : INTERSECTION_THRESHOLDS.MOBILE_VISIBLE;
-    
+    const threshold = isDesktopView
+      ? INTERSECTION_THRESHOLDS.DESKTOP_FULL_VISIBLE
+      : INTERSECTION_THRESHOLDS.MOBILE_VISIBLE;
+
     const config: IntersectionObserverConfig = {
       threshold,
       onIntersectionChange: (isIntersecting: boolean) => {
         const wasIntersecting = this.isIntersecting;
         this.isIntersecting = isIntersecting;
-        
+
         if (!wasIntersecting && this.isIntersecting) {
           this.performVisualSearchIfReady();
         }
-      }
+      },
     };
 
     this.intersectionObserver = setupIntersectionObserver(this.el, config);
@@ -200,8 +205,8 @@ export class VviinnShopTheLook {
   }
 
   private performVisualSearchIfReady() {
-    if (this.enableVisualSearch && this.token) {
-      const currentImageState = this.imageStates.get(this.internalCurrentImageIndex);
+    if (this.token) {
+      const currentImageState = this.imageStates.get(this.currentImageIndex);
       if (!currentImageState?.searchCompleted) {
         this.performVisualSearch();
       } else {
@@ -211,7 +216,7 @@ export class VviinnShopTheLook {
   }
 
   private loadImageState() {
-    const imageState = this.imageStates.get(this.internalCurrentImageIndex);
+    const imageState = this.imageStates.get(this.currentImageIndex);
     if (imageState) {
       this.detectedObjects = imageState.detectedObjects;
       this.initialSearchCompleted = imageState.searchCompleted;
@@ -220,8 +225,8 @@ export class VviinnShopTheLook {
   }
 
   private saveImageState() {
-    const currentState = this.imageStates.get(this.internalCurrentImageIndex);
-    this.imageStates.set(this.internalCurrentImageIndex, {
+    const currentState = this.imageStates.get(this.currentImageIndex);
+    this.imageStates.set(this.currentImageIndex, {
       detectedObjects: [...this.detectedObjects],
       searchCompleted: this.initialSearchCompleted,
       searchResults: [...this.searchResults],
@@ -234,9 +239,9 @@ export class VviinnShopTheLook {
   private handleDetectedObjectClick = async (
     detectedObject: Rectangle,
     objectIndex: number,
-    imageIndex: number = this.internalCurrentImageIndex,
+    imageIndex: number = this.currentImageIndex,
   ) => {
-    if (!this.enableVisualSearch || !this.token) return;
+    if (!this.token) return;
 
     this.selectedDetectedObject = detectedObject;
     this.isSearching = true;
@@ -244,8 +249,9 @@ export class VviinnShopTheLook {
     this.currentResultIndex = 0;
     this.showModal = false;
 
-    const imageElement = this.imageElements.get(imageIndex) || this.imageElement;
-    
+    const imageElement =
+      this.imageElements.get(imageIndex) || this.imageElement;
+
     const params: DetectedObjectClickParams = {
       detectedObject,
       imageElement,
@@ -261,7 +267,10 @@ export class VviinnShopTheLook {
         console.error("Visual search failed:", error);
         this.isSearching = false;
       },
-      (response: { searchResults: Recommendation[]; modalPosition: ModalPosition }) => {
+      (response: {
+        searchResults: Recommendation[];
+        modalPosition: ModalPosition;
+      }) => {
         this.searchResults = response.searchResults;
         this.modalPosition = response.modalPosition;
         this.currentResultIndex = 0;
@@ -272,7 +281,7 @@ export class VviinnShopTheLook {
         }
 
         this.vviinnShopTheLookDetectedObjectClick.emit({
-          ...this.basicEventData,
+          ...TEST_BASIC_EVENT_DATA,
           detectedObjectId: `detected-${imageIndex}-${objectIndex}`,
           product: this.searchResults[0] || null,
         });
@@ -281,8 +290,8 @@ export class VviinnShopTheLook {
   };
 
   private performVisualSearch = async () => {
-    const currentImageUrl = this.imageUrls[this.internalCurrentImageIndex];
-    if (!this.enableVisualSearch || !this.token || !currentImageUrl) return;
+    const currentImageUrl = this.imageUrlsList[this.currentImageIndex];
+    if (!this.token || !currentImageUrl) return;
 
     const params: VisualSearchParams = {
       imageUrl: currentImageUrl,
@@ -297,7 +306,10 @@ export class VviinnShopTheLook {
         console.error("Visual search failed:", error);
         this.initialSearchCompleted = true;
       },
-      (response: { detectedObjects: Rectangle[]; searchResults: Recommendation[] }) => {
+      (response: {
+        detectedObjects: Rectangle[];
+        searchResults: Recommendation[];
+      }) => {
         this.detectedObjects = response.detectedObjects;
 
         if (this.detectedObjects.length > 0) {
@@ -316,7 +328,7 @@ export class VviinnShopTheLook {
 
   private handleProductClick = (product: Recommendation) => {
     this.vviinnShopTheLookProductClick.emit({
-      ...this.basicEventData,
+      ...TEST_BASIC_EVENT_DATA,
       detectedObjectId: this.selectedDetectedObject
         ? `detected-${Date.now()}`
         : "",
@@ -333,25 +345,31 @@ export class VviinnShopTheLook {
     this.searchResults = [];
     this.currentResultIndex = 0;
     this.modalPosition = null;
-    this.vviinnShopTheLookModalClose.emit(this.basicEventData);
+    this.vviinnShopTheLookModalClose.emit(TEST_BASIC_EVENT_DATA);
   };
 
   private renderDetectedObjectsWrapper = (imageIndex: number) => {
     const imageState = this.imageStates.get(imageIndex);
-    
-    if (!shouldRenderDetectedObjects(imageState, this.visibleImageIndices, imageIndex)) {
+
+    if (
+      !shouldRenderDetectedObjects(
+        imageState,
+        this.visibleImageIndices,
+        imageIndex,
+      )
+    ) {
       return null;
     }
-    
+
     const imageBounds = imageState.imageBounds;
-    
+
     const props: DetectedObjectsProps = {
       imageBounds,
       detectedObjects: imageState.detectedObjects,
       initialSearchCompleted: imageState.searchCompleted,
       selectedDetectedObject: this.selectedDetectedObject,
-      basicEventData: this.basicEventData,
-      onSelectObject: (detectedObject: Rectangle, objectIndex: number) => 
+      basicEventData: TEST_BASIC_EVENT_DATA,
+      onSelectObject: (detectedObject: Rectangle, objectIndex: number) =>
         this.handleDetectedObjectClick(detectedObject, objectIndex, imageIndex),
     };
     return renderDetectedObjects(props);
@@ -360,8 +378,8 @@ export class VviinnShopTheLook {
   private handleSlideChange = (event: any) => {
     const newIndex = extractSlideIndex(event);
 
-    if (newIndex !== null && newIndex !== this.internalCurrentImageIndex) {
-      this.internalCurrentImageIndex = newIndex;
+    if (newIndex !== null && newIndex !== this.currentImageIndex) {
+      this.currentImageIndex = newIndex;
 
       this.showModal = false;
       this.selectedDetectedObject = null;
@@ -379,25 +397,28 @@ export class VviinnShopTheLook {
   };
 
   private handleImageRef = (el: HTMLImageElement, index: number) => {
-    if (index === this.internalCurrentImageIndex || this.totalImages <= 1) {
+    if (index === this.currentImageIndex || this.totalImages <= 1) {
       this.imageElement = el;
     }
-    
+
     if (el) {
       this.imageElements.set(index, el);
       this.setupImageIntersectionObserver(el, index);
     }
   };
 
-  private setupImageIntersectionObserver = (element: HTMLImageElement, index: number) => {
+  private setupImageIntersectionObserver = (
+    element: HTMLImageElement,
+    index: number,
+  ) => {
     const existingObserver = this.imageObservers.get(index);
     if (existingObserver) {
       existingObserver.disconnect();
     }
-    
+
     const isDesktopView = isDesktop();
     const threshold = getVisibilityThreshold(isDesktopView);
-    
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -405,9 +426,9 @@ export class VviinnShopTheLook {
           this.updateImageVisibility(index, isVisible);
         });
       },
-      { threshold }
+      { threshold },
     );
-    
+
     observer.observe(element);
     this.imageObservers.set(index, observer);
   };
@@ -421,23 +442,25 @@ export class VviinnShopTheLook {
       imageElement: this.imageElements.get(index) || null,
       imageBounds: null,
     };
-    
+
     const wasVisible = currentState.isVisible;
     const stateChanged = wasVisible !== isVisible;
-    
+
     if (!stateChanged) return;
-    
+
     currentState.isVisible = isVisible;
     currentState.imageElement = this.imageElements.get(index) || null;
-    
+
     if (isVisible && currentState.imageElement && !currentState.imageBounds) {
-      currentState.imageBounds = calculateImageBounds(currentState.imageElement);
+      currentState.imageBounds = calculateImageBounds(
+        currentState.imageElement,
+      );
     }
-    
+
     this.imageStates.set(index, currentState);
-    
+
     const isDesktopView = isDesktop();
-    
+
     if (isVisible) {
       this.visibleImageIndices.add(index);
       if (!currentState.searchCompleted) {
@@ -448,13 +471,13 @@ export class VviinnShopTheLook {
         this.visibleImageIndices.delete(index);
       }
     }
-    
+
     this.visibleImageIndices = new Set(this.visibleImageIndices);
   };
 
   private performVisualSearchForImage = async (imageIndex: number) => {
-    const imageUrl = this.imageUrls[imageIndex];
-    if (!this.enableVisualSearch || !this.token || !imageUrl) return;
+    const imageUrl = this.imageUrlsList[imageIndex];
+    if (!this.token || !imageUrl) return;
 
     const params: VisualSearchParams = {
       imageUrl,
@@ -469,23 +492,35 @@ export class VviinnShopTheLook {
         console.error(`Visual search failed for image ${imageIndex}:`, error);
         this.updateImageState(imageIndex, [], true, []);
       },
-      (response: { detectedObjects: Rectangle[]; searchResults: Recommendation[] }) => {
-        this.updateImageState(imageIndex, response.detectedObjects, true, response.searchResults);
-        
+      (response: {
+        detectedObjects: Rectangle[];
+        searchResults: Recommendation[];
+      }) => {
+        this.updateImageState(
+          imageIndex,
+          response.detectedObjects,
+          true,
+          response.searchResults,
+        );
+
         if (imageIndex === 0 && response.detectedObjects.length > 0) {
           setTimeout(async () => {
-            await this.handleDetectedObjectClick(response.detectedObjects[0], 0, imageIndex);
+            await this.handleDetectedObjectClick(
+              response.detectedObjects[0],
+              0,
+              imageIndex,
+            );
           }, TIMING.SEARCH_DELAY);
         }
-      }
+      },
     )(result);
   };
 
   private updateImageState = (
-    index: number, 
-    detectedObjects: Rectangle[], 
-    searchCompleted: boolean, 
-    searchResults: Recommendation[]
+    index: number,
+    detectedObjects: Rectangle[],
+    searchCompleted: boolean,
+    searchResults: Recommendation[],
   ) => {
     const currentState = this.imageStates.get(index) || {
       detectedObjects: [],
@@ -495,7 +530,7 @@ export class VviinnShopTheLook {
       imageElement: null,
       imageBounds: null,
     };
-    
+
     this.imageStates.set(index, {
       ...currentState,
       detectedObjects,
@@ -505,11 +540,12 @@ export class VviinnShopTheLook {
   };
 
   private handleNavigatePrev = () => {
-    if (this.internalCurrentImageIndex > 0) {
-      const newIndex = this.internalCurrentImageIndex - 1;
+    if (this.currentImageIndex > 0) {
+      const newIndex = this.currentImageIndex - 1;
       this.updateSlideIndex(newIndex);
-      
-      const swiperContainer = this.el.shadowRoot?.querySelector('swiper-container');
+
+      const swiperContainer =
+        this.el.shadowRoot?.querySelector("swiper-container");
       if (swiperContainer && (swiperContainer as any).swiper) {
         (swiperContainer as any).swiper.slideTo(newIndex);
       }
@@ -517,11 +553,12 @@ export class VviinnShopTheLook {
   };
 
   private handleNavigateNext = () => {
-    if (this.internalCurrentImageIndex < this.totalImages - 1) {
-      const newIndex = this.internalCurrentImageIndex + 1;
+    if (this.currentImageIndex < this.totalImages - 1) {
+      const newIndex = this.currentImageIndex + 1;
       this.updateSlideIndex(newIndex);
-      
-      const swiperContainer = this.el.shadowRoot?.querySelector('swiper-container');
+
+      const swiperContainer =
+        this.el.shadowRoot?.querySelector("swiper-container");
       if (swiperContainer && (swiperContainer as any).swiper) {
         (swiperContainer as any).swiper.slideTo(newIndex);
       }
@@ -529,7 +566,7 @@ export class VviinnShopTheLook {
   };
 
   private updateSlideIndex = (newIndex: number) => {
-    this.internalCurrentImageIndex = newIndex;
+    this.currentImageIndex = newIndex;
 
     this.showModal = false;
     this.selectedDetectedObject = null;
@@ -548,19 +585,19 @@ export class VviinnShopTheLook {
   private shouldShowArrows = (): boolean => {
     const isDesktopView = isDesktop();
     if (!isDesktopView) return false;
-    
+
     const estimatedImageWidth = this.width + 20;
     const availableWidth = window.innerWidth - 100;
     const maxImagesVisible = Math.floor(availableWidth / estimatedImageWidth);
-    
+
     return this.totalImages > maxImagesVisible;
   };
 
   private renderSwiperWrapper = () => {
     const props: SwiperProps = {
       totalImages: this.totalImages,
-      imageUrls: this.imageUrls,
-      currentImageIndex: this.internalCurrentImageIndex,
+      imageUrls: this.imageUrlsList,
+      currentImageIndex: this.currentImageIndex,
       width: this.width,
       height: this.height,
       imageElement: this.imageElement,
