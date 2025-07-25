@@ -88,6 +88,8 @@ export class VviinnShopTheLook {
   @State() currentImageIndex: number = 0;
   @State() totalImages: number = 1;
   @State() imageUrlsList: string[] = [];
+  @State() showSliderView: boolean = false;
+  @State() currentProductIndex: number = 0;
 
   @Event()
   vviinnShopTheLookDetectedObjectClick: EventEmitter<ShopTheLookEventData>;
@@ -345,7 +347,27 @@ export class VviinnShopTheLook {
     this.searchResults = [];
     this.currentResultIndex = 0;
     this.modalPosition = null;
+    this.showSliderView = false;
+    this.currentProductIndex = 0;
     this.vviinnShopTheLookModalClose.emit(TEST_BASIC_EVENT_DATA);
+  };
+
+  private handleProductDetailsClick = (_product: Recommendation, index: number) => {
+    this.currentProductIndex = index;
+    this.showSliderView = true;
+  };
+
+  private handleBackToGrid = () => {
+    this.showSliderView = false;
+    this.currentProductIndex = 0;
+  };
+
+  private handleNavigateProduct = (direction: 'prev' | 'next') => {
+    if (direction === 'prev' && this.currentProductIndex > 0) {
+      this.currentProductIndex--;
+    } else if (direction === 'next' && this.currentProductIndex < this.searchResults.length - 1) {
+      this.currentProductIndex++;
+    }
   };
 
   private renderDetectedObjectsWrapper = (imageIndex: number) => {
@@ -620,6 +642,11 @@ export class VviinnShopTheLook {
       searchResults: this.searchResults,
       onModalClose: this.handleModalClose,
       onProductClick: this.handleProductClick,
+      showSliderView: this.showSliderView,
+      currentProductIndex: this.currentProductIndex,
+      onProductDetailsClick: this.handleProductDetailsClick,
+      onBackToGrid: this.handleBackToGrid,
+      onNavigateProduct: this.handleNavigateProduct,
     };
     return renderModal(props);
   };

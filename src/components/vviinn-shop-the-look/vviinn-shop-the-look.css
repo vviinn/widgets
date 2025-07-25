@@ -510,3 +510,109 @@ swiper-container::part(bullet-active):hover {
     max-width: calc(100vw - 12px);
   }
 }
+
+/* Product Details Slider Styles */
+.modal-content-wrapper.slider-view {
+  max-width: 240px;
+  min-height: 300px;
+  width: 240px;
+  padding: 8px;
+}
+
+.modal-content-wrapper.slider-view.mobile-modal {
+  max-width: 280px;
+  width: 280px;
+  padding: 12px;
+}
+
+.product-details-slider {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.slider-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 4px;
+  margin-bottom: 8px;
+}
+
+.back-to-grid-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: var(--shop-the-look-text-muted);
+  transition: all 0.2s ease;
+}
+
+.back-to-grid-button:hover {
+  color: var(--shop-the-look-text);
+}
+
+.back-to-grid-button svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.slider-content {
+  flex: 1;
+  position: relative;
+}
+
+.product-details-card-wrapper {
+  height: 100%;
+  padding: 0;
+}
+
+.product-details-card {
+  height: 100%;
+  background: var(--shop-the-look-bg);
+  border: none;
+  box-shadow: none;
+}
+
+/* Swiper pagination customization for product details */
+.product-details-slider swiper-container::part(pagination) {
+  bottom: 8px;
+}
+
+.product-details-slider swiper-container::part(bullet) {
+  background: var(--shop-the-look-text-muted);
+  opacity: 0.4;
+  width: 6px;
+  height: 6px;
+}
+
+.product-details-slider swiper-container::part(bullet-active) {
+  background: var(--shop-the-look-text);
+  opacity: 1;
+}
+
+/* Mobile responsive styles for product details */
+@media (max-width: 768px) {
+  .modal-content-wrapper.slider-view.mobile-modal {
+    max-width: 260px;
+    width: 260px;
+  }
+
+  .product-details-card::part(title) {
+    font-size: 13px;
+  }
+
+  .product-details-card::part(brand) {
+    font-size: 11px;
+  }
+
+  .product-details-card::part(price-regular),
+  .product-details-card::part(price-sale) {
+    font-size: 13px;
+  }
+
+  .product-details-card::part(price-outdated) {
+    font-size: 11px;
+  }
+}
