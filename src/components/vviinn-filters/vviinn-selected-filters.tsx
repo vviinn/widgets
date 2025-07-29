@@ -31,14 +31,14 @@ import {
 import { triggerFilter } from "./helpers/triggerFilter";
 import { SearchStore, useSearchStore } from "../../store/search.store";
 import { globalState } from "../../store/store";
-import { ResponseDynamicFilterIntervalItem } from "../../interfaces/recommendation";
-import { isIntervalFilter } from "../../filters";
+import { isPriceFilter } from "../../filters";
 import { components } from "../../interfaces/generated";
 import i18next from "i18next";
 import { resources } from "../../locale";
 import { announceToScreenReader } from "../../a11y";
 import { getLocalStorageItems } from "../../localStorage";
 import { addEventListenersWithSignal } from "../../dom";
+import { ResponseIntervalFilterItem } from "../../interfaces/search";
 
 /**
  * @part selected-filters-list - List of selected filters.
@@ -121,8 +121,8 @@ export class VviinnSelectedFilters {
 
   private getPriceFilter = () =>
     this.state.dynamicFilters.find((filter) =>
-      isIntervalFilter(filter.column),
-    ) as ResponseDynamicFilterIntervalItem;
+      isPriceFilter(filter.column),
+    ) as ResponseIntervalFilterItem;
 
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
     this.showInWidget !== isTriggeredByVpsWidget;
@@ -148,7 +148,7 @@ export class VviinnSelectedFilters {
       this.textSearchCustomFilter = detail.kind;
     }
 
-    if (isIntervalFilter(detail.kind) && detail.action === "select") {
+    if (isPriceFilter(detail.kind) && detail.action === "select") {
       this.priceCustomFilter = getPriceLabel(
         this.getPriceFilter(),
         detail.value.interval as components["schemas"]["interval"],

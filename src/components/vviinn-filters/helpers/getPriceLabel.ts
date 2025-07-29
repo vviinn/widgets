@@ -1,13 +1,12 @@
-import { components } from "../../../interfaces/generated";
-import { ResponseDynamicFilterIntervalItem } from "../../../interfaces/recommendation";
+import { ResponseIntervalFilterItem } from "../../../interfaces/search";
 
 export const getPriceLabel = (
-  intervalFilter: ResponseDynamicFilterIntervalItem,
-  interval: components["schemas"]["interval"],
+  intervalFilter: ResponseIntervalFilterItem,
+  fullInterval: ResponseIntervalFilterItem["full"],
   currencySign: string,
 ): string | null => {
-  if (!interval) return null;
-  const { start, end } = interval;
+  if (!fullInterval) return null;
+  const { start, end } = fullInterval;
   const { start: rangeStart, end: rangeEnd } = intervalFilter.full;
 
   if (start !== rangeStart || end !== rangeEnd) {

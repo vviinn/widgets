@@ -31,7 +31,6 @@ import {
 } from "../../recommendation/events";
 import { triggerFilter } from "./helpers/triggerFilter";
 import { SearchStore, useSearchStore } from "../../store/search.store";
-import { isIntervalFilter } from "../../filters";
 import { addEventListenersWithSignal } from "../../dom";
 
 /**
@@ -234,7 +233,6 @@ export class VviinnFilters {
     const filters = this.getFilters().filter((filter) => filter.isPrimary);
 
     const { selectedFilter, handleSubFilterSelection } = this;
-    const { column } = selectedFilter ?? {};
     const filterOptions = getFilterOptions(selectedFilter);
 
     return (
@@ -287,7 +285,7 @@ export class VviinnFilters {
               label: selectedFilter.label,
             })}
           >
-            {isIntervalFilter(column) ? (
+            {selectedFilter.type === "interval" ? (
               <vviinn-price-range
                 histogram={filterOptions as Histogram}
                 priceChangeHandler={this.priceChangeHandler}

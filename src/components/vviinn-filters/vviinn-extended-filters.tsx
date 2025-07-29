@@ -41,10 +41,9 @@ import {
 import { ClickEvent, isClickedInRectBound } from "../../geometry/Rectangle";
 import { triggerFilter, triggerResetFilters } from "./helpers/triggerFilter";
 import { SearchStore, useSearchStore } from "../../store/search.store";
-import { isIntervalFilter } from "../../filters";
 import { globalState } from "../../store/store";
-import { ResponseDynamicFilterIntervalItem } from "../../interfaces/recommendation";
 import { addEventListenersWithSignal } from "../../dom";
+import { ResponseIntervalFilterItem } from "../../interfaces/search";
 
 /**
  * @slot vviinn-extended-filters-title - Text on widget's header.
@@ -340,10 +339,10 @@ export class VviinnExtendedFilters {
                   );
                   const addedOptions = [];
                   requestFilter?.values?.forEach((value) => {
-                    if (isIntervalFilter(mainColumn)) {
+                    if (mainFilter.type === "interval") {
                       const intervalFilter = filters.find(
                         (filter) => filter.column === mainColumn,
-                      ) as ResponseDynamicFilterIntervalItem;
+                      ) as ResponseIntervalFilterItem;
 
                       const priceLabel = getPriceLabel(
                         intervalFilter,
@@ -392,7 +391,7 @@ export class VviinnExtendedFilters {
                           <ChevronIconSmall />
                         </button>
 
-                        {isIntervalFilter(mainColumn) && isExpanded ? (
+                        {mainFilter.type === "interval" && isExpanded ? (
                           <vviinn-price-range
                             histogram={filterOptions as Histogram}
                             priceChangeHandler={this.priceChangeHandler}
@@ -600,8 +599,8 @@ export class VviinnExtendedFilters {
   }
 
   private priceChangeHandler = (filterValue: DynamicFilterValue) => {
-    const selectedFilter = this.getFilters().find((filter) =>
-      isIntervalFilter(filter.column),
+    const selectedFilter = this.getFilters().find(
+      (filter) => filter.type === "interval",
     );
 
     if (selectedFilter) {
