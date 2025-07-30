@@ -23,7 +23,7 @@ import { ChevronIconSmall, NewCloseIcon } from "../vviinn-icons";
 import {
   FilterOptions,
   getFilterOptions,
-  getPriceLabel,
+  getIntervalLabel,
   isSubFilterActive,
   RenderFilterButton,
   getSelectedPriceInterval,
@@ -344,13 +344,13 @@ export class VviinnExtendedFilters {
                         (filter) => filter.column === mainColumn,
                       ) as ResponseIntervalFilterItem;
 
-                      const priceLabel = getPriceLabel(
+                      const intervalLabel = getIntervalLabel(
                         intervalFilter,
                         value,
                         globalState.currencySign,
                       );
-                      priceLabel &&
-                        addedOptions.push(<span>{priceLabel}</span>);
+                      intervalLabel &&
+                        addedOptions.push(<span>{intervalLabel}</span>);
                     } else {
                       const index = filterOptions.findIndex(
                         (f) => (f.value.value ?? f.value) === value,

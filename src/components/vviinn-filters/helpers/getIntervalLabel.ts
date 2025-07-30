@@ -1,16 +1,22 @@
 import { ResponseIntervalFilterItem } from "../../../interfaces/search";
+import { isPriceFilter } from "../../../filters";
 
-export const getPriceLabel = (
+export const getIntervalLabel = (
   intervalFilter: ResponseIntervalFilterItem,
   fullInterval: ResponseIntervalFilterItem["full"],
-  currencySign: string,
+  currencySign?: string,
 ): string | null => {
   if (!fullInterval) return null;
   const { start, end } = fullInterval;
   const { start: rangeStart, end: rangeEnd } = intervalFilter.full;
 
   if (start !== rangeStart || end !== rangeEnd) {
-    return `${start} ${currencySign} – ${end} ${currencySign}`;
+    const isPrice = isPriceFilter(intervalFilter.column);
+    if (isPrice && currencySign) {
+      return `${start} ${currencySign} – ${end} ${currencySign}`;
+    } else {
+      return `${start} – ${end}`;
+    }
   } else {
     return null;
   }

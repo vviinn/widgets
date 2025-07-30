@@ -16,7 +16,7 @@ import {
 } from "../../campaign/VPRCampaignService";
 import {
   FilterOptions,
-  getPriceLabel,
+  getIntervalLabel,
   isSubFilterActive,
   RenderCustomButton,
   RenderFilterButton,
@@ -149,7 +149,7 @@ export class VviinnSelectedFilters {
     }
 
     if (isPriceFilter(detail.kind) && detail.action === "select") {
-      this.priceCustomFilter = getPriceLabel(
+      this.priceCustomFilter = getIntervalLabel(
         this.getPriceFilter(),
         detail.value.interval as components["schemas"]["interval"],
         globalState.currencySign,
