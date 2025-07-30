@@ -1,9 +1,12 @@
-import { ResponseIntervalFilterItem } from "../../../interfaces/search";
+import {
+  Interval,
+  ResponseIntervalFilterItem,
+} from "../../../interfaces/search";
 import { isPriceFilter } from "../../../filters";
 
 export const getIntervalLabel = (
   intervalFilter: ResponseIntervalFilterItem,
-  fullInterval: ResponseIntervalFilterItem["full"],
+  fullInterval: Interval,
   currencySign?: string,
 ): string | null => {
   if (!fullInterval) return null;

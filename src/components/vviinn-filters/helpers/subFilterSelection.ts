@@ -20,7 +20,7 @@ export const subFilterSelection = (
     valueIndex == -1 || index == -1 ? "select" : "deselect";
 
   const pushObject =
-    index === -1 || selectedFilter.type === "interval"
+    index === -1 || selectedFilter?.type === "interval"
       ? { column: selectedColumn, values: [] }
       : filters[index];
 
