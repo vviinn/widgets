@@ -11,6 +11,7 @@ import {
 } from "@stencil/core";
 import i18next from "i18next";
 import { announceToScreenReader } from "../../a11y";
+import { IntervalFilterValueItem } from "../../interfaces/search";
 import {
   ResponseDynamicFilterItem,
   DynamicFilterValue,
@@ -22,6 +23,7 @@ import {
   isSubFilterActive,
   getSelectedInterval,
 } from "./helpers";
+import { isPriceFilter } from "../../filters";
 import { Histogram } from "../vviinn-range-filter/vviinn-range-filter";
 import {
   ChangedFiltersEventData,
@@ -134,8 +136,8 @@ export class VviinnFilters {
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
     this.showInWidget !== isTriggeredByVpsWidget;
 
-  private priceChangeHandler = (filterValue: DynamicFilterValue) => {
-    this.handleSubFilterSelection(filterValue, this.selectedFilter);
+  private intervalChangeHandler = (filterValue: IntervalFilterValueItem) => {
+    this.handleSubFilterSelection(filterValue as DynamicFilterValue, this.selectedFilter);
   };
 
   private handleSubFilterSelection = (
@@ -288,11 +290,12 @@ export class VviinnFilters {
             {selectedFilter.type === "interval" ? (
               <vviinn-range-filter
                 histogram={filterOptions as Histogram}
-                priceChangeHandler={this.priceChangeHandler}
+                intervalChangeHandler={this.intervalChangeHandler}
                 selectedInterval={getSelectedInterval(
                   this.requestFilters,
                   selectedFilter.column,
                 )}
+                showCurrency={isPriceFilter(selectedFilter.column)}
               />
             ) : (
               <ul class="sub-filters-wrapper" part="filters-footer-list">

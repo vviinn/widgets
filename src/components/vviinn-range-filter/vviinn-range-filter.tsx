@@ -1,10 +1,14 @@
 import { Component, Host, h, Prop, Element, State, Watch } from "@stencil/core";
 import i18next from "i18next";
-import { components } from "../../interfaces/generated";
+import {
+  IntervalFilterValueItem,
+  IntervalFilterValue,
+  Interval,
+} from "../../interfaces/search";
 import { priceRangeParts } from "../../cssParts";
 import { globalState } from "../../store/store";
 
-export type Histogram = components["schemas"]["interval-filter-values"][];
+export type Histogram = IntervalFilterValue[];
 
 const MIN_BAR_HEIGHT = 3;
 const MIN_SLIDER_MARGIN_PERCENT = 0.03; // 3% of total range
@@ -30,10 +34,9 @@ export class VviinnPriceRange {
 
   @Prop() histogram: Histogram = [];
   @Prop() addStyle: boolean = true;
-  @Prop() priceChangeHandler: (
-    filterValue: components["schemas"]["interval-filter-value-item"],
-  ) => void;
-  @Prop() selectedInterval?: components["schemas"]["interval"];
+  @Prop() intervalChangeHandler: (filterValue: IntervalFilterValueItem) => void;
+  @Prop() selectedInterval?: Interval;
+  @Prop() showCurrency: boolean = true;
 
   @State() scalingFactor: number;
   @State() minValue: number;
@@ -98,7 +101,7 @@ export class VviinnPriceRange {
   };
 
   private sendBackValue = () => {
-    this.priceChangeHandler({
+    this.intervalChangeHandler({
       interval: {
         start: this.fromValue,
         end: this.toValue,
@@ -180,11 +183,15 @@ export class VviinnPriceRange {
         <div class="label-wrapper" part="histogram-label-wrapper">
           <div class="label" part="histogram-label">
             {this.fromValue}
-            <span class="histogram-currency">{globalState.currencySign}</span>
+            {this.showCurrency && (
+              <span class="histogram-currency">{globalState.currencySign}</span>
+            )}
           </div>
           <div class="label" part="histogram-label">
             {this.toValue}
-            <span class="histogram-currency">{globalState.currencySign}</span>
+            {this.showCurrency && (
+              <span class="histogram-currency">{globalState.currencySign}</span>
+            )}
           </div>
         </div>
       </Host>

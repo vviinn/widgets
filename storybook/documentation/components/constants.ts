@@ -1,5 +1,6 @@
 export const filtersList = [
   {
+    type: "categorical",
     column: "color_confirmed",
     label: "Color",
     isPrimary: true,
@@ -71,6 +72,7 @@ export const filtersList = [
     ],
   },
   {
+    type: "interval",
     column: "price",
     label: "Price",
     isPrimary: true,
@@ -261,6 +263,76 @@ export const filtersList = [
     ],
   },
   {
+    type: "interval",
+    column: "weight",
+    label: "Weight (g)",
+    isPrimary: true,
+    full: {
+      start: 50,
+      end: 2000,
+    },
+    selectedValues: [],
+    suggestions: [],
+    histogram: [
+      {
+        value: {
+          frequency: 0.15,
+          interval: {
+            start: 50,
+            end: 200,
+          },
+        },
+        label: "[50-200)",
+        active: true,
+      },
+      {
+        value: {
+          frequency: 0.25,
+          interval: {
+            start: 200,
+            end: 500,
+          },
+        },
+        label: "[200-500)",
+        active: true,
+      },
+      {
+        value: {
+          frequency: 0.35,
+          interval: {
+            start: 500,
+            end: 1000,
+          },
+        },
+        label: "[500-1000)",
+        active: true,
+      },
+      {
+        value: {
+          frequency: 0.2,
+          interval: {
+            start: 1000,
+            end: 1500,
+          },
+        },
+        label: "[1000-1500)",
+        active: true,
+      },
+      {
+        value: {
+          frequency: 0.05,
+          interval: {
+            start: 1500,
+            end: 2000,
+          },
+        },
+        label: "[1500-2000)",
+        active: true,
+      },
+    ],
+  },
+  {
+    type: "categorical",
     column: "product_type",
     label: "Category",
     isPrimary: true,
@@ -286,6 +358,7 @@ export const filters = JSON.stringify(filtersList);
 export const extendedFilters = JSON.stringify([
   ...filtersList,
   {
+    type: "categorical",
     column: "availability",
     label: "Availability",
     isPrimary: false,
@@ -305,6 +378,7 @@ export const extendedFilters = JSON.stringify([
     ],
   },
   {
+    type: "categorical",
     column: "brand",
     label: "Brand",
     isPrimary: true,
@@ -324,6 +398,7 @@ export const extendedFilters = JSON.stringify([
     ],
   },
   {
+    type: "categorical",
     column: "size",
     label: "Size",
     isPrimary: true,

@@ -13,6 +13,7 @@ import {
 } from "@stencil/core";
 import i18next from "i18next";
 import { announceToScreenReader } from "../../a11y";
+import { IntervalFilterValueItem } from "../../interfaces/search";
 
 import {
   ResponseDynamicFilterItem,
@@ -28,6 +29,7 @@ import {
   RenderFilterButton,
   getSelectedInterval,
 } from "./helpers";
+import { isPriceFilter } from "../../filters";
 import { resources } from "../../locale";
 
 import { SlotSkeleton, slotChangeListener } from "../customized-slots";
@@ -394,11 +396,17 @@ export class VviinnExtendedFilters {
                         {mainFilter.type === "interval" && isExpanded ? (
                           <vviinn-range-filter
                             histogram={filterOptions as Histogram}
-                            priceChangeHandler={this.priceChangeHandler}
+                            intervalChangeHandler={(filterValue) =>
+                              this.intervalFilterChangeHandler(
+                                filterValue,
+                                mainFilter.column,
+                              )
+                            }
                             selectedInterval={getSelectedInterval(
                               this.requestFilters,
                               mainFilter.column,
                             )}
+                            showCurrency={isPriceFilter(mainFilter.column)}
                           />
                         ) : (
                           <ul
@@ -599,13 +607,16 @@ export class VviinnExtendedFilters {
     this.eventAbortController?.abort();
   }
 
-  private priceChangeHandler = (filterValue: DynamicFilterValue) => {
+  private intervalFilterChangeHandler = (
+    filterValue: IntervalFilterValueItem,
+    filterColumn: string,
+  ) => {
     const selectedFilter = this.getFilters().find(
-      (filter) => filter.type === "interval",
+      (filter) => filter.column === filterColumn,
     );
 
     if (selectedFilter) {
-      this.handleSubFilterSelection(filterValue, selectedFilter);
+      this.handleSubFilterSelection(filterValue as DynamicFilterValue, selectedFilter);
     }
   };
 

@@ -31,13 +31,12 @@ import {
 import { triggerFilter } from "./helpers/triggerFilter";
 import { SearchStore, useSearchStore } from "../../store/search.store";
 import { globalState } from "../../store/store";
-import { components } from "../../interfaces/generated";
 import i18next from "i18next";
 import { resources } from "../../locale";
 import { announceToScreenReader } from "../../a11y";
 import { getLocalStorageItems } from "../../localStorage";
 import { addEventListenersWithSignal } from "../../dom";
-import { ResponseIntervalFilterItem } from "../../interfaces/search";
+import { Interval, ResponseIntervalFilterItem } from "../../interfaces/search";
 
 /**
  * @part selected-filters-list - List of selected filters.
@@ -145,7 +144,7 @@ export class VviinnSelectedFilters {
     if (detail.action === "select" && detail.filter?.type === "interval") {
       const intervalLabel = getIntervalLabel(
         detail.filter as ResponseIntervalFilterItem,
-        detail.value.interval as components["schemas"]["interval"],
+        detail.value.interval as Interval,
         globalState.currencySign,
       );
       if (intervalLabel) {
