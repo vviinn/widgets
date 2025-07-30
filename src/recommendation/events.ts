@@ -11,6 +11,7 @@ import { ErrorKind } from "../error";
 import {
   DynamicFilterValue,
   RequestDynamicFilterItem,
+  ResponseDynamicFilterItem,
 } from "../campaign/VPRCampaignService";
 import { Rectangle } from "../interfaces/search";
 
@@ -110,6 +111,7 @@ export type DynamicFilterTrackingData = {
 
 export type DynamicFilterInternalData = DynamicFilterTrackingData & {
   customTrigger?: Widget;
+  filter?: ResponseDynamicFilterItem;
 };
 
 export type SearchIdEvent = CustomEvent<SearchIdEventData>;

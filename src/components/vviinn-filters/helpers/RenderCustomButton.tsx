@@ -4,7 +4,7 @@ import { FilterIconClose } from "../../vviinn-icons";
 import { TextIcon } from "../../vviinn-icons/icons/TextIcon";
 
 type RenderCustomButtonProps = {
-  buttonType: "image" | "text" | "price" | "crop";
+  buttonType: "image" | "text" | "range" | "crop";
   onClick?: () => void;
   label?: string;
   imageSrc?: string;
@@ -58,7 +58,7 @@ export const RenderCustomButton = ({
           {buttonType === "crop" && (
             <slot name="vviinn-crop-filter-text">{label}</slot>
           )}
-          {(buttonType === "text" || buttonType === "price") && label}
+          {(buttonType === "text" || buttonType === "range") && label}
         </span>
         {isClickable && <FilterIconClose />}
       </button>

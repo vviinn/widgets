@@ -21,8 +21,8 @@ const MIN_SLIDER_MARGIN_PERCENT = 0.03; // 3% of total range
  */
 
 @Component({
-  tag: "vviinn-price-range",
-  styleUrl: "vviinn-price-range.css",
+  tag: "vviinn-range-filter",
+  styleUrl: "vviinn-range-filter.css",
   shadow: true,
 })
 export class VviinnPriceRange {

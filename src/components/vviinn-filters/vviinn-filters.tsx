@@ -20,9 +20,9 @@ import {
   getFilterOptions,
   RenderFilterButton,
   isSubFilterActive,
-  getSelectedPriceInterval,
+  getSelectedInterval,
 } from "./helpers";
-import { Histogram } from "../vviinn-price-range/vviinn-price-range";
+import { Histogram } from "../vviinn-range-filter/vviinn-range-filter";
 import {
   ChangedFiltersEventData,
   DynamicFilterInternalData,
@@ -286,10 +286,13 @@ export class VviinnFilters {
             })}
           >
             {selectedFilter.type === "interval" ? (
-              <vviinn-price-range
+              <vviinn-range-filter
                 histogram={filterOptions as Histogram}
                 priceChangeHandler={this.priceChangeHandler}
-                selectedInterval={getSelectedPriceInterval(this.requestFilters)}
+                selectedInterval={getSelectedInterval(
+                  this.requestFilters,
+                  selectedFilter.column,
+                )}
               />
             ) : (
               <ul class="sub-filters-wrapper" part="filters-footer-list">

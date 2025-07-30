@@ -26,12 +26,12 @@ import {
   getIntervalLabel,
   isSubFilterActive,
   RenderFilterButton,
-  getSelectedPriceInterval,
+  getSelectedInterval,
 } from "./helpers";
 import { resources } from "../../locale";
 
 import { SlotSkeleton, slotChangeListener } from "../customized-slots";
-import { Histogram } from "../vviinn-price-range/vviinn-price-range";
+import { Histogram } from "../vviinn-range-filter/vviinn-range-filter";
 import {
   ChangedFiltersEventData,
   DynamicFilterTrackingData,
@@ -392,11 +392,12 @@ export class VviinnExtendedFilters {
                         </button>
 
                         {mainFilter.type === "interval" && isExpanded ? (
-                          <vviinn-price-range
+                          <vviinn-range-filter
                             histogram={filterOptions as Histogram}
                             priceChangeHandler={this.priceChangeHandler}
-                            selectedInterval={getSelectedPriceInterval(
+                            selectedInterval={getSelectedInterval(
                               this.requestFilters,
+                              mainFilter.column,
                             )}
                           />
                         ) : (

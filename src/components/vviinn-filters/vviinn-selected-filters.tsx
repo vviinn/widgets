@@ -31,7 +31,6 @@ import {
 import { triggerFilter } from "./helpers/triggerFilter";
 import { SearchStore, useSearchStore } from "../../store/search.store";
 import { globalState } from "../../store/store";
-import { isPriceFilter } from "../../filters";
 import { components } from "../../interfaces/generated";
 import i18next from "i18next";
 import { resources } from "../../locale";
@@ -66,7 +65,7 @@ export class VviinnSelectedFilters {
   @State() selectedFilterButtons: JSX.Element[] = [];
   @State() textSearchCustomFilter: string | null = null;
   @State() imageSrc: string | null = null;
-  @State() priceCustomFilter: string | null = null;
+  @State() intervalCustomFilters: { [column: string]: string } = {};
 
   /** The filter's state changes */
   @Event({ bubbles: true })
@@ -119,11 +118,6 @@ export class VviinnSelectedFilters {
     });
   }
 
-  private getPriceFilter = () =>
-    this.state.dynamicFilters.find((filter) =>
-      isPriceFilter(filter.column),
-    ) as ResponseIntervalFilterItem;
-
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
     this.showInWidget !== isTriggeredByVpsWidget;
 
@@ -133,7 +127,7 @@ export class VviinnSelectedFilters {
   ) => {
     this.requestFilters = [];
     this.selectedFilterButtons = [];
-    this.priceCustomFilter = null;
+    this.intervalCustomFilters = {};
     resetTextSearchFilter && (this.textSearchCustomFilter = null);
     resetImageFilter && (this.imageSrc = null);
   };
@@ -148,12 +142,18 @@ export class VviinnSelectedFilters {
       this.textSearchCustomFilter = detail.kind;
     }
 
-    if (isPriceFilter(detail.kind) && detail.action === "select") {
-      this.priceCustomFilter = getIntervalLabel(
-        this.getPriceFilter(),
+    if (detail.action === "select" && detail.filter?.type === "interval") {
+      const intervalLabel = getIntervalLabel(
+        detail.filter as ResponseIntervalFilterItem,
         detail.value.interval as components["schemas"]["interval"],
         globalState.currencySign,
       );
+      if (intervalLabel) {
+        this.intervalCustomFilters = {
+          ...this.intervalCustomFilters,
+          [detail.filter.column]: intervalLabel,
+        };
+      }
     }
   };
 
@@ -198,13 +198,18 @@ export class VviinnSelectedFilters {
     this.imageSrc = imageSrc;
   };
 
-  private handlePriceButtonClick = () => {
-    this.priceCustomFilter = null;
+  private handleIntervalButtonClick = (column: string) => {
+    // Remove this specific interval filter from custom filters
+    const { [column]: removed, ...remaining } = this.intervalCustomFilters;
+    this.intervalCustomFilters = remaining;
 
-    const priceFilter = this.getPriceFilter();
+    const intervalFilter = this.state.dynamicFilters.find(
+      (filter) => filter.column === column,
+    ) as ResponseIntervalFilterItem;
+
     this.handleSubFilterSelection(
-      priceFilter.full as DynamicFilterValue,
-      priceFilter,
+      intervalFilter.full as DynamicFilterValue,
+      intervalFilter,
     );
   };
 
@@ -315,12 +320,18 @@ export class VviinnSelectedFilters {
               hidden: !this.state.searchArea,
             })}
 
-            {RenderCustomButton({
-              label: this.priceCustomFilter,
-              buttonType: "price",
-              onClick: this.handlePriceButtonClick,
-              hidden: !this.priceCustomFilter,
-            })}
+            {Object.entries(this.intervalCustomFilters).map(
+              ([column, label]) => (
+                <div key={column}>
+                  {RenderCustomButton({
+                    label,
+                    buttonType: "range",
+                    onClick: () => this.handleIntervalButtonClick(column),
+                    hidden: false,
+                  })}
+                </div>
+              ),
+            )}
 
             {this.selectedFilterButtons}
           </ul>
