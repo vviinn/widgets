@@ -1,10 +1,10 @@
-import { components } from "../../../interfaces/generated";
-
 import { ResponseDynamicFilterItem } from "../../../campaign/VPRCampaignService";
+import {
+  IntervalFilterValue,
+  LabelValueItem,
+} from "../../../interfaces/search";
 
-export type FilterOptions =
-  | components["schemas"]["label-value-item"][]
-  | components["schemas"]["interval-filter-values"][];
+export type FilterOptions = LabelValueItem[] | IntervalFilterValue[];
 
 export const getFilterOptions = (
   filter: ResponseDynamicFilterItem,
