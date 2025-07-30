@@ -7,13 +7,13 @@ import {
 import { EventEmitter } from "@stencil/core";
 import {
   ChangedFiltersEventData,
-  DynamicFilterTrackingData,
+  DynamicFilterInternalData,
 } from "../../../recommendation/events";
 
 type TriggerResetFiltersParams = {
   el: HTMLElement;
   isTriggeredByVpsWidget: boolean;
-  vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
+  vviinnFilterTriggered: EventEmitter<DynamicFilterInternalData>;
   vviinnFiltersChanged?: EventEmitter<ChangedFiltersEventData>;
 };
 
@@ -43,6 +43,7 @@ export const triggerFilter = ({
     action,
     isTriggeredByVpsWidget,
     value: filterValue,
+    filter: selectedFilter,
   });
 
   vviinnFiltersChanged.emit({

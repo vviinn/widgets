@@ -36,9 +36,6 @@ export type CrossSellingRequest = Interfaces["CrossSellingRequest"];
 export type RequestStaticFilters = Interfaces["RequestStaticFilters"];
 export type Recommendation = Interfaces["Recommendation"];
 
-export type ResponseDynamicFilterIntervalItem =
-  Interfaces["ResponseDynamicFilterIntervalItem"];
-
 export type EnergyEfficiencyClass = Interfaces["EnergyEfficiencyClass"];
 export type EnergyCertification = Interfaces["EnergyCertification"];
 export type EnergyClassIconDirection =

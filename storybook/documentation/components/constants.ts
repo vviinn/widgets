@@ -1,5 +1,6 @@
 export const filtersList = [
   {
+    type: "categorical",
     column: "color_confirmed",
     label: "Color",
     isPrimary: true,
@@ -71,196 +72,200 @@ export const filtersList = [
     ],
   },
   {
+    type: "interval",
     column: "price",
     label: "Price",
     isPrimary: true,
     full: {
-      start: 0,
-      end: 49,
+      start: 39,
+      end: 989,
     },
     selectedValues: [],
-    suggestions: [
-      {
-        value: {
-          frequency: 0.2083333283662796,
-          interval: {
-            start: 0,
-            end: 3,
-          },
-        },
-        label: "[0-3)",
-        active: true,
-      },
-      {
-        value: {
-          frequency: 0.1822916716337204,
-          interval: {
-            start: 3,
-            end: 5,
-          },
-        },
-        label: "[3-5)",
-        active: true,
-      },
-      {
-        value: {
-          frequency: 0.1927083283662796,
-          interval: {
-            start: 5,
-            end: 7,
-          },
-        },
-        label: "[5-7)",
-        active: true,
-      },
-      {
-        value: {
-          frequency: 0.4166666567325592,
-          interval: {
-            start: 7,
-            end: 49,
-          },
-        },
-        label: "[7-49)",
-        active: true,
-      },
-    ],
+    suggestions: [],
     histogram: [
       {
         value: {
-          frequency: 0.1347150206565857,
+          frequency: 0.019999999552965164,
           interval: {
-            start: 0,
-            end: 1,
+            start: 39,
+            end: 58,
           },
         },
-        label: "[0-1)",
-        active: true,
-      },
-      {
-        value: {
-          frequency: 0.07253886014223099,
-          interval: {
-            start: 1,
-            end: 2,
-          },
-        },
-        label: "[1-2)",
+        label: "[39-58)",
         active: true,
       },
       {
         value: {
           frequency: 0,
           interval: {
-            start: 2,
-            end: 3,
+            start: 58,
+            end: 77,
           },
         },
-        label: "[2-3)",
+        label: "[58-77)",
         active: true,
       },
       {
         value: {
-          frequency: 0.062176164239645004,
+          frequency: 0.03999999910593033,
           interval: {
-            start: 3,
-            end: 4,
+            start: 77,
+            end: 96,
           },
         },
-        label: "[3-4)",
+        label: "[77-96)",
         active: true,
       },
       {
         value: {
-          frequency: 0.11917098611593246,
+          frequency: 0.14000000059604645,
           interval: {
-            start: 4,
-            end: 5,
+            start: 96,
+            end: 115,
           },
         },
-        label: "[4-5)",
+        label: "[96-115)",
         active: true,
       },
       {
         value: {
-          frequency: 0.0984455943107605,
+          frequency: 0.20000000298023224,
           interval: {
-            start: 5,
-            end: 6,
+            start: 115,
+            end: 134,
           },
         },
-        label: "[5-6)",
+        label: "[115-134)",
         active: true,
       },
       {
         value: {
-          frequency: 0.09326425194740295,
+          frequency: 0.10000000149011612,
           interval: {
-            start: 6,
-            end: 7,
+            start: 134,
+            end: 153,
           },
         },
-        label: "[6-7)",
+        label: "[134-153)",
         active: true,
       },
       {
         value: {
-          frequency: 0.33678755164146423,
+          frequency: 0.1599999964237213,
           interval: {
-            start: 7,
-            end: 8,
+            start: 153,
+            end: 172,
           },
         },
-        label: "[7-8)",
+        label: "[153-172)",
         active: true,
       },
       {
         value: {
-          frequency: 0.02590673603117466,
+          frequency: 0.20000000298023224,
           interval: {
-            start: 8,
-            end: 9,
+            start: 172,
+            end: 191,
           },
         },
-        label: "[8-9)",
+        label: "[172-191)",
         active: true,
       },
       {
         value: {
-          frequency: 0.031088082119822502,
+          frequency: 0.36000001430511475,
           interval: {
-            start: 19,
-            end: 20,
+            start: 191,
+            end: 210,
           },
         },
-        label: "[19-20)",
-        active: true,
-      },
-      {
-        value: {
-          frequency: 0,
-          interval: {
-            start: 20,
-            end: 21,
-          },
-        },
-        label: "[20-21)",
-        active: true,
-      },
-      {
-        value: {
-          frequency: 0.020725388079881668,
-          interval: {
-            start: 48,
-            end: 49,
-          },
-        },
-        label: "[48-49)",
+        label: "[191-210)",
         active: true,
       },
     ],
   },
   {
+    type: "interval",
+    column: "weight",
+    label: "Weight (g)",
+    isPrimary: true,
+    full: {
+      start: 50,
+      end: 2000,
+    },
+    selectedValues: [],
+    suggestions: [],
+    histogram: [
+      {
+        value: {
+          frequency: 0.1,
+          interval: {
+            start: 50,
+            end: 200,
+          },
+        },
+        label: "[50-200)",
+        active: true,
+      },
+      {
+        value: {
+          frequency: 0.15,
+          interval: {
+            start: 200,
+            end: 500,
+          },
+        },
+        label: "[200-500)",
+        active: true,
+      },
+      {
+        value: {
+          frequency: 0.2,
+          interval: {
+            start: 500,
+            end: 1000,
+          },
+        },
+        label: "[500-1000)",
+        active: true,
+      },
+      {
+        value: {
+          frequency: 0.25,
+          interval: {
+            start: 1000,
+            end: 1500,
+          },
+        },
+        label: "[1000-1500)",
+        active: true,
+      },
+      {
+        value: {
+          frequency: 0.3,
+          interval: {
+            start: 1500,
+            end: 1750,
+          },
+        },
+        label: "[1500-1750)",
+        active: true,
+      },
+      {
+        value: {
+          frequency: 0.2,
+          interval: {
+            start: 1750,
+            end: 2000,
+          },
+        },
+        label: "[1750-2000)",
+        active: true,
+      },
+    ],
+  },
+  {
+    type: "categorical",
     column: "product_type",
     label: "Category",
     isPrimary: true,
@@ -286,6 +291,7 @@ export const filters = JSON.stringify(filtersList);
 export const extendedFilters = JSON.stringify([
   ...filtersList,
   {
+    type: "categorical",
     column: "availability",
     label: "Availability",
     isPrimary: false,
@@ -305,6 +311,7 @@ export const extendedFilters = JSON.stringify([
     ],
   },
   {
+    type: "categorical",
     column: "brand",
     label: "Brand",
     isPrimary: true,
@@ -324,6 +331,7 @@ export const extendedFilters = JSON.stringify([
     ],
   },
   {
+    type: "categorical",
     column: "size",
     label: "Size",
     isPrimary: true,
