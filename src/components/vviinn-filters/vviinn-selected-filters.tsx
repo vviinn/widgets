@@ -198,7 +198,6 @@ export class VviinnSelectedFilters {
   };
 
   private handleIntervalButtonClick = (column: string) => {
-    // Remove this specific interval filter from custom filters
     const { [column]: removed, ...remaining } = this.intervalCustomFilters;
     this.intervalCustomFilters = remaining;
 
