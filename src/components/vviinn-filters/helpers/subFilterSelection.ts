@@ -4,8 +4,24 @@ import {
   RequestDynamicFilterItem,
 } from "../../../campaign/VPRCampaignService";
 import { FilterAction } from "vviinn-tracking-client-ts";
+import {
+  Interval,
+  ResponseIntervalFilterItem,
+} from "../../../interfaces/search";
 
 type ValueRequest = string & { start?: number; end?: number };
+
+const isFullRangeInterval = (
+  selectedFilter: ResponseDynamicFilterItem,
+  interval: Interval,
+): boolean => {
+  if (selectedFilter.type !== "interval") return false;
+
+  const intervalFilter = selectedFilter as ResponseIntervalFilterItem;
+  const fullRange = intervalFilter.full;
+
+  return interval.start === fullRange.start && interval.end === fullRange.end;
+};
 
 export const subFilterSelection = (
   filters: RequestDynamicFilterItem[],
@@ -15,6 +31,22 @@ export const subFilterSelection = (
   const selectedColumn = selectedFilter.column;
   const value = filterValue.interval ?? filterValue.value ?? filterValue;
   const index = filters.findIndex(({ column }) => column === selectedColumn);
+
+  if (selectedFilter.type === "interval" && filterValue.interval) {
+    const interval = filterValue.interval as Interval;
+
+    if (isFullRangeInterval(selectedFilter, interval)) {
+      if (index > -1) {
+        filters = [
+          ...filters.filter((filter) => filter.column !== selectedColumn),
+        ];
+        return { filters, action: "deselect" as FilterAction };
+      } else {
+        return { filters: [...filters], action: "deselect" as FilterAction };
+      }
+    }
+  }
+
   const valueIndex = filters[index]?.values.findIndex((val) => val === value);
   const action: FilterAction =
     valueIndex == -1 || index == -1 ? "select" : "deselect";
