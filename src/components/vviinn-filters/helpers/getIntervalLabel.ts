@@ -18,7 +18,8 @@ export const getIntervalLabel = (
     if (isPrice && currencySign) {
       return `${start} ${currencySign} – ${end} ${currencySign}`;
     } else {
-      return `${start} – ${end}`;
+      const rangeValue = `${start} – ${end}`;
+      return isPrice ? rangeValue : `${intervalFilter.label}: ${rangeValue}`;
     }
   } else {
     return null;
