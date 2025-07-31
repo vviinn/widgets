@@ -73,3 +73,35 @@ export const triggerResetFilters = ({
       isTriggeredByVpsWidget,
     });
 };
+
+type TriggerRemoveIntervalFilterParams = {
+  column: string;
+  requestFilters: RequestDynamicFilterItem[];
+} & TriggerResetFiltersParams;
+
+export const triggerRemoveIntervalFilter = ({
+  column,
+  requestFilters,
+  el,
+  isTriggeredByVpsWidget,
+  vviinnFilterTriggered,
+  vviinnFiltersChanged,
+}: TriggerRemoveIntervalFilterParams) => {
+  const updatedFilters = requestFilters.filter(
+    (filter) => filter.column !== column,
+  );
+
+  vviinnFilterTriggered.emit({
+    kind: column,
+    action: "deselect",
+    isTriggeredByVpsWidget,
+  });
+
+  vviinnFiltersChanged.emit({
+    filters: updatedFilters,
+    el,
+    isTriggeredByVpsWidget,
+  });
+
+  return updatedFilters;
+};
