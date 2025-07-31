@@ -7,7 +7,7 @@ import { isPriceFilter } from "../../../filters";
 export const getIntervalLabel = (
   intervalFilter: ResponseIntervalFilterItem,
   fullInterval: Interval,
-  currencySign: string,
+  currencySign?: string,
   showColumnLabel: boolean = false,
 ): string | null => {
   if (!fullInterval) return null;
