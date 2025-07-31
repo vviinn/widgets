@@ -1,6 +1,6 @@
 export { getFilterOptions, FilterOptions } from "./getFilterOptions";
-export { getPriceLabel } from "./getPriceLabel";
-export { getSelectedPriceInterval } from "./getSelectedPriceInterval";
+export { getIntervalLabel } from "./getIntervalLabel";
+export { getSelectedInterval } from "./getSelectedInterval";
 export { isSubFilterActive } from "./isSubFilterActive";
 export { RenderCustomButton } from "./RenderCustomButton";
 export { RenderFilterButton } from "./RenderFilterButton";

@@ -29,7 +29,7 @@
   display: inline-flex;
 }
 
-vviinn-price-range {
+vviinn-range-filter {
   max-width: 500px;
   padding-bottom: var(--spacing-150);
 }
@@ -542,7 +542,7 @@ vviinn-price-range {
     padding-bottom: 120px;
   }
 
-  vviinn-price-range {
+  vviinn-range-filter {
     max-width: unset;
   }
 }
