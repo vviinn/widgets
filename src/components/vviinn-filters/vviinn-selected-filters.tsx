@@ -149,6 +149,7 @@ export class VviinnSelectedFilters {
         detail.filter as ResponseIntervalFilterItem,
         detail.value.interval as Interval,
         globalState.currencySign,
+        true,
       );
       if (intervalLabel) {
         this.intervalCustomFilters = {

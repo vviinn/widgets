@@ -7,7 +7,8 @@ import { isPriceFilter } from "../../../filters";
 export const getIntervalLabel = (
   intervalFilter: ResponseIntervalFilterItem,
   fullInterval: Interval,
-  currencySign?: string,
+  currencySign: string,
+  showColumnLabel: boolean = false,
 ): string | null => {
   if (!fullInterval) return null;
   const { start, end } = fullInterval;
@@ -19,7 +20,9 @@ export const getIntervalLabel = (
       return `${start} ${currencySign} – ${end} ${currencySign}`;
     } else {
       const rangeValue = `${start} – ${end}`;
-      return isPrice ? rangeValue : `${intervalFilter.label}: ${rangeValue}`;
+      return isPrice
+        ? rangeValue
+        : `${showColumnLabel ? `${intervalFilter.label}: ` : ""}${rangeValue}`;
     }
   } else {
     return null;
