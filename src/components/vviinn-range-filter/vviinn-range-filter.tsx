@@ -125,6 +125,13 @@ export class VviinnPriceRange {
     return !(end < this.fromValue || start > this.toValue);
   }
 
+  private calculateBarWidth(item: Histogram[number]): number {
+    const { start, end } = item.value.interval;
+    const intervalWidth = end - start;
+    const totalRange = this.maxValue - this.minValue;
+    return (intervalWidth / totalRange) * 100;
+  }
+
   render() {
     return (
       <Host exportparts={priceRangeParts}>
@@ -135,6 +142,7 @@ export class VviinnPriceRange {
               barHeight && barHeight < MIN_BAR_HEIGHT
                 ? MIN_BAR_HEIGHT
                 : barHeight;
+            const widthInPercent = this.calculateBarWidth(item);
 
             const isActive = this.isBarActive(item);
             return (
@@ -144,6 +152,7 @@ export class VviinnPriceRange {
                 }`}
                 style={{
                   height: `${heightInPercent}%`,
+                  width: `${widthInPercent}%`,
                 }}
                 part="histogram-bar"
               ></div>

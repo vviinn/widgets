@@ -137,7 +137,10 @@ export class VviinnFilters {
     this.showInWidget !== isTriggeredByVpsWidget;
 
   private intervalChangeHandler = (filterValue: IntervalFilterValueItem) => {
-    this.handleSubFilterSelection(filterValue as DynamicFilterValue, this.selectedFilter);
+    this.handleSubFilterSelection(
+      filterValue as DynamicFilterValue,
+      this.selectedFilter,
+    );
   };
 
   private handleSubFilterSelection = (
@@ -287,7 +290,7 @@ export class VviinnFilters {
               label: selectedFilter.label,
             })}
           >
-            {selectedFilter.type === "interval" ? (
+            {selectedFilter?.type === "interval" ? (
               <vviinn-range-filter
                 histogram={filterOptions as Histogram}
                 intervalChangeHandler={this.intervalChangeHandler}
