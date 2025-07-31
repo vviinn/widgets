@@ -1,5 +1,6 @@
 import { vviinnToken } from "../helpers";
 import "../documentation/widgets/styles.css";
+import { argsFromParams } from "../helpers/argsFromParams";
 
 export default {
   title: "Playground/Search Modal",
@@ -47,7 +48,7 @@ const Template = (args) => `
 export const Default = Template.bind({});
 Default.storyName = "Search Modal";
 
-Default.args = {
+const initArgs = {
   token: vviinnToken,
   apiPath: process.env.STORYBOOK_API_PATH,
   campaignIdTextSearch: "",
@@ -69,3 +70,5 @@ Default.args = {
   favoriteShow: false,
   oneClickDiscoveryMode: "append-grid",
 };
+
+Default.args = argsFromParams(initArgs);
