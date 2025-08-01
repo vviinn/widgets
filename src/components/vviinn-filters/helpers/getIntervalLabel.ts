@@ -8,6 +8,7 @@ export const getIntervalLabel = (
   intervalFilter: ResponseIntervalFilterItem,
   fullInterval: Interval,
   currencySign?: string,
+  showColumnLabel: boolean = false,
 ): string | null => {
   if (!fullInterval) return null;
   const { start, end } = fullInterval;
@@ -18,7 +19,10 @@ export const getIntervalLabel = (
     if (isPrice && currencySign) {
       return `${start} ${currencySign} – ${end} ${currencySign}`;
     } else {
-      return `${start} – ${end}`;
+      const rangeValue = `${start} – ${end}`;
+      return isPrice
+        ? rangeValue
+        : `${showColumnLabel ? `${intervalFilter.label}: ` : ""}${rangeValue}`;
     }
   } else {
     return null;

@@ -313,12 +313,7 @@ export const makeVisualSearchRequest = async (
       top: scaled.top,
     };
   } else {
-    searchRectangle = {
-      width: 1,
-      height: 1,
-      left: 0,
-      top: 0,
-    };
+    searchRectangle = null;
     fetchDetectedObjects = true;
   }
 

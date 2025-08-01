@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.180.2](https://github.com/vviinn/widgets/compare/v2.180.1...v2.180.2) (2025-07-31)
+
+
+### Bug Fixes
+
+* Don't show the filter column label in the extended filters. ([cb674f8](https://github.com/vviinn/widgets/commit/cb674f8b422ecf2bd5f6ef94f75926dc40fe45a2))
+
+### [2.180.1](https://github.com/vviinn/widgets/compare/v2.180.0...v2.180.1) (2025-07-31)
+
+
+### Bug Fixes
+
+* Fix the range filter behaviour and synchronization across the filter components ([061af5e](https://github.com/vviinn/widgets/commit/061af5e924acbad22841dd962fc8b7e33be3f5f3))
+
 ## [2.180.0](https://github.com/vviinn/widgets/compare/v2.179.0...v2.180.0) (2025-07-30)
 
 
