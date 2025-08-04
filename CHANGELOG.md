@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.180.3](https://github.com/vviinn/widgets/compare/v2.180.2...v2.180.3) (2025-08-04)
+
+
+### Bug Fixes
+
+* prevent triggering upload for vviinn-button in upload mode on any button click or enter pressed in widget ([e5d530b](https://github.com/vviinn/widgets/commit/e5d530bb925de92b136971263981fbd66a58d843))
+
+### [2.180.2](https://github.com/vviinn/widgets/compare/v2.180.1...v2.180.2) (2025-07-31)
+
+
+### Bug Fixes
+
+* Don't show the filter column label in the extended filters. ([cb674f8](https://github.com/vviinn/widgets/commit/cb674f8b422ecf2bd5f6ef94f75926dc40fe45a2))
+
+### [2.180.1](https://github.com/vviinn/widgets/compare/v2.180.0...v2.180.1) (2025-07-31)
+
+
+### Bug Fixes
+
+* Fix the range filter behaviour and synchronization across the filter components ([061af5e](https://github.com/vviinn/widgets/commit/061af5e924acbad22841dd962fc8b7e33be3f5f3))
+
+## [2.180.0](https://github.com/vviinn/widgets/compare/v2.179.0...v2.180.0) (2025-07-30)
+
+
+### Features
+
+* Add filter support for the interval type to display in the slider view. ([8eacf7f](https://github.com/vviinn/widgets/commit/8eacf7ffca951c9ce266146a64bbd1a93a5c9539))
+
+## [2.179.0](https://github.com/vviinn/widgets/compare/v2.178.0...v2.179.0) (2025-07-22)
+
+
+### Features
+
+* Use a continuous range for a price filter instead of being restricted by the price intervals shown on the histogram ([9c6125e](https://github.com/vviinn/widgets/commit/9c6125ead50371c9018c8e472c9bcaa73f1dec4b))
+
 ## [2.178.0](https://github.com/vviinn/widgets/compare/v2.177.4...v2.178.0) (2025-07-18)
 
 

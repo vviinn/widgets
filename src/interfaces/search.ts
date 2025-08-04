@@ -8,7 +8,14 @@ export interface SearchInterfaces {
   ProductListingPageRequest: components["schemas"]["product-listing-page-request"];
   ProductListingPageResponse: components["schemas"]["product-listing-page-response"];
   RequestDynamicFilterItem: components["schemas"]["request-dynamic-filter-item"];
-  ResponseFilterItem: components["schemas"]["response-categorical-filter-item"];
+
+  ResponseDynamicFilters: components["schemas"]["response-dynamic-filters"];
+  ResponseCategoricalFilterItem: components["schemas"]["response-categorical-filter-item"];
+  ResponseIntervalFilterItem: components["schemas"]["response-interval-filter-item"];
+  IntervalFilterValueItem: components["schemas"]["interval-filter-value-item"];
+  IntervalFilterValue: components["schemas"]["interval-filter-values"];
+  LabelValueItem: components["schemas"]["label-value-item"];
+  Interval: components["schemas"]["interval"];
   SearchIdResponse: components["schemas"]["ion-visual-product-search"];
 
   Rectangle: components["schemas"]["rectangle"];
@@ -30,6 +37,16 @@ export type SearchIdResponse = SearchInterfaces["SearchIdResponse"];
 
 export type RequestDynamicFilterItem =
   SearchInterfaces["RequestDynamicFilterItem"];
-export type ResponseFilterItem = SearchInterfaces["ResponseFilterItem"];
+
+export type ResponseDynamicFilters = SearchInterfaces["ResponseDynamicFilters"];
+export type ResponseCategoricalFilterItem =
+  SearchInterfaces["ResponseCategoricalFilterItem"];
+export type ResponseIntervalFilterItem =
+  SearchInterfaces["ResponseIntervalFilterItem"];
+export type IntervalFilterValueItem =
+  SearchInterfaces["IntervalFilterValueItem"];
+export type IntervalFilterValue = SearchInterfaces["IntervalFilterValue"];
+export type LabelValueItem = SearchInterfaces["LabelValueItem"];
+export type Interval = SearchInterfaces["Interval"];
 
 export type Rectangle = SearchInterfaces["Rectangle"];

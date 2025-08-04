@@ -13,6 +13,7 @@ import {
 } from "@stencil/core";
 import i18next from "i18next";
 import { announceToScreenReader } from "../../a11y";
+import { IntervalFilterValueItem } from "../../interfaces/search";
 
 import {
   ResponseDynamicFilterItem,
@@ -23,15 +24,16 @@ import { ChevronIconSmall, NewCloseIcon } from "../vviinn-icons";
 import {
   FilterOptions,
   getFilterOptions,
-  getPriceLabel,
+  getIntervalLabel,
   isSubFilterActive,
   RenderFilterButton,
-  getSelectedPriceInterval,
+  getSelectedInterval,
 } from "./helpers";
+import { isPriceFilter } from "../../filters";
 import { resources } from "../../locale";
 
 import { SlotSkeleton, slotChangeListener } from "../customized-slots";
-import { Histogram } from "../vviinn-price-range/vviinn-price-range";
+import { Histogram } from "../vviinn-range-filter/vviinn-range-filter";
 import {
   ChangedFiltersEventData,
   DynamicFilterTrackingData,
@@ -41,10 +43,9 @@ import {
 import { ClickEvent, isClickedInRectBound } from "../../geometry/Rectangle";
 import { triggerFilter, triggerResetFilters } from "./helpers/triggerFilter";
 import { SearchStore, useSearchStore } from "../../store/search.store";
-import { isIntervalFilter } from "../../filters";
 import { globalState } from "../../store/store";
-import { ResponseDynamicFilterIntervalItem } from "../../interfaces/recommendation";
 import { addEventListenersWithSignal } from "../../dom";
+import { ResponseIntervalFilterItem } from "../../interfaces/search";
 
 /**
  * @slot vviinn-extended-filters-title - Text on widget's header.
@@ -340,18 +341,18 @@ export class VviinnExtendedFilters {
                   );
                   const addedOptions = [];
                   requestFilter?.values?.forEach((value) => {
-                    if (isIntervalFilter(mainColumn)) {
+                    if (mainFilter.type === "interval") {
                       const intervalFilter = filters.find(
                         (filter) => filter.column === mainColumn,
-                      ) as ResponseDynamicFilterIntervalItem;
+                      ) as ResponseIntervalFilterItem;
 
-                      const priceLabel = getPriceLabel(
+                      const intervalLabel = getIntervalLabel(
                         intervalFilter,
                         value,
                         globalState.currencySign,
                       );
-                      priceLabel &&
-                        addedOptions.push(<span>{priceLabel}</span>);
+                      intervalLabel &&
+                        addedOptions.push(<span>{intervalLabel}</span>);
                     } else {
                       const index = filterOptions.findIndex(
                         (f) => (f.value.value ?? f.value) === value,
@@ -392,15 +393,20 @@ export class VviinnExtendedFilters {
                           <ChevronIconSmall />
                         </button>
 
-                        {isIntervalFilter(mainColumn) && isExpanded ? (
-                          <vviinn-price-range
-                            histogram={(filterOptions as Histogram).filter(
-                              (item) => item.value.frequency > 0,
-                            )}
-                            priceChangeHandler={this.priceChangeHandler}
-                            selectedInterval={getSelectedPriceInterval(
+                        {mainFilter.type === "interval" && isExpanded ? (
+                          <vviinn-range-filter
+                            histogram={filterOptions as Histogram}
+                            intervalChangeHandler={(filterValue) =>
+                              this.intervalFilterChangeHandler(
+                                filterValue,
+                                mainFilter.column,
+                              )
+                            }
+                            selectedInterval={getSelectedInterval(
                               this.requestFilters,
+                              mainFilter.column,
                             )}
+                            showCurrency={isPriceFilter(mainFilter.column)}
                           />
                         ) : (
                           <ul
@@ -601,13 +607,16 @@ export class VviinnExtendedFilters {
     this.eventAbortController?.abort();
   }
 
-  private priceChangeHandler = (filterValue: DynamicFilterValue) => {
-    const selectedFilter = this.getFilters().find((filter) =>
-      isIntervalFilter(filter.column),
+  private intervalFilterChangeHandler = (
+    filterValue: IntervalFilterValueItem,
+    filterColumn: string,
+  ) => {
+    const selectedFilter = this.getFilters().find(
+      (filter) => filter.column === filterColumn,
     );
 
     if (selectedFilter) {
-      this.handleSubFilterSelection(filterValue, selectedFilter);
+      this.handleSubFilterSelection(filterValue as DynamicFilterValue, selectedFilter);
     }
   };
 

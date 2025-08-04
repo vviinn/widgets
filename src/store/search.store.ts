@@ -20,7 +20,6 @@ import { imageFromFileTask } from "../Image/fromFile";
 import {
   ProductListingPageRequest,
   Rectangle,
-  ResponseFilterItem,
   TextSearchRequest,
   VisualSearchRequest,
   VisualSearchResponse,
@@ -311,12 +310,7 @@ export const makeVisualSearchRequest = async (
       top: scaled.top,
     };
   } else {
-    searchRectangle = {
-      width: 1,
-      height: 1,
-      left: 0,
-      top: 0,
-    };
+    searchRectangle = null;
     fetchDetectedObjects = true;
   }
 
@@ -379,8 +373,7 @@ export const makeTextSearchRequest = async (
       state.results = sessionResponse?.data?.products ?? [];
       state.textSearchId = sessionResponse.requestId;
       state.dynamicFilters =
-        (sessionResponse?.interactions
-          ?.dynamicFilters as ResponseFilterItem[]) ?? [];
+        sessionResponse?.interactions?.dynamicFilters ?? [];
       state.searchStatus = "success";
       return sessionResponse;
     }),
@@ -433,8 +426,7 @@ export const makeProductListingPageRequest = async (
       if (skipStateUpdate) return sessionResponse;
       state.results = sessionResponse?.data?.products ?? [];
       state.dynamicFilters =
-        (sessionResponse?.interactions
-          ?.dynamicFilters as ResponseFilterItem[]) ?? [];
+        sessionResponse?.interactions?.dynamicFilters ?? [];
       state.searchStatus = "success";
       return sessionResponse;
     }),

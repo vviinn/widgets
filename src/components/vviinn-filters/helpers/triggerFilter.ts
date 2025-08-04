@@ -7,13 +7,13 @@ import {
 import { EventEmitter } from "@stencil/core";
 import {
   ChangedFiltersEventData,
-  DynamicFilterTrackingData,
+  DynamicFilterInternalData,
 } from "../../../recommendation/events";
 
 type TriggerResetFiltersParams = {
   el: HTMLElement;
   isTriggeredByVpsWidget: boolean;
-  vviinnFilterTriggered: EventEmitter<DynamicFilterTrackingData>;
+  vviinnFilterTriggered: EventEmitter<DynamicFilterInternalData>;
   vviinnFiltersChanged?: EventEmitter<ChangedFiltersEventData>;
 };
 
@@ -43,6 +43,7 @@ export const triggerFilter = ({
     action,
     isTriggeredByVpsWidget,
     value: filterValue,
+    filter: selectedFilter,
   });
 
   vviinnFiltersChanged.emit({
@@ -71,4 +72,36 @@ export const triggerResetFilters = ({
       el,
       isTriggeredByVpsWidget,
     });
+};
+
+type TriggerRemoveIntervalFilterParams = {
+  column: string;
+  requestFilters: RequestDynamicFilterItem[];
+} & TriggerResetFiltersParams;
+
+export const triggerRemoveIntervalFilter = ({
+  column,
+  requestFilters,
+  el,
+  isTriggeredByVpsWidget,
+  vviinnFilterTriggered,
+  vviinnFiltersChanged,
+}: TriggerRemoveIntervalFilterParams) => {
+  const updatedFilters = requestFilters.filter(
+    (filter) => filter.column !== column,
+  );
+
+  vviinnFilterTriggered.emit({
+    kind: column,
+    action: "deselect",
+    isTriggeredByVpsWidget,
+  });
+
+  vviinnFiltersChanged.emit({
+    filters: updatedFilters,
+    el,
+    isTriggeredByVpsWidget,
+  });
+
+  return updatedFilters;
 };

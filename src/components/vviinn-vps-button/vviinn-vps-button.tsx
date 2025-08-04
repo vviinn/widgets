@@ -275,12 +275,15 @@ export class VviinnVpsButton {
     return (
       <Host
         role={this.buttonPressed ? undefined : "button"}
-        tabindex={this.buttonPressed ? undefined : "0"}
         aria-label={this.buttonPressed ? undefined : ariaLabel}
-        onClick={this.buttonPressed ? undefined : this.handleActivation}
-        onKeyDown={this.buttonPressed ? undefined : this.handleKeyDown}
       >
-        <vviinn-button addStyle={this.addStyle} part="vviinn-button">
+        <vviinn-button
+          addStyle={this.addStyle}
+          part="vviinn-button"
+          tabindex={this.buttonPressed ? undefined : "0"}
+          onClick={this.buttonPressed ? undefined : this.handleActivation}
+          onKeyDown={this.buttonPressed ? undefined : this.handleKeyDown}
+        >
           <slot>{buttonIcon}</slot>
         </vviinn-button>
 

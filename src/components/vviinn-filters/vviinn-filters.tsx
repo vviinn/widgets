@@ -11,6 +11,7 @@ import {
 } from "@stencil/core";
 import i18next from "i18next";
 import { announceToScreenReader } from "../../a11y";
+import { IntervalFilterValueItem } from "../../interfaces/search";
 import {
   ResponseDynamicFilterItem,
   DynamicFilterValue,
@@ -20,9 +21,10 @@ import {
   getFilterOptions,
   RenderFilterButton,
   isSubFilterActive,
-  getSelectedPriceInterval,
+  getSelectedInterval,
 } from "./helpers";
-import { Histogram } from "../vviinn-price-range/vviinn-price-range";
+import { isPriceFilter } from "../../filters";
+import { Histogram } from "../vviinn-range-filter/vviinn-range-filter";
 import {
   ChangedFiltersEventData,
   DynamicFilterInternalData,
@@ -31,7 +33,6 @@ import {
 } from "../../recommendation/events";
 import { triggerFilter } from "./helpers/triggerFilter";
 import { SearchStore, useSearchStore } from "../../store/search.store";
-import { isIntervalFilter } from "../../filters";
 import { addEventListenersWithSignal } from "../../dom";
 
 /**
@@ -135,8 +136,11 @@ export class VviinnFilters {
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
     this.showInWidget !== isTriggeredByVpsWidget;
 
-  private priceChangeHandler = (filterValue: DynamicFilterValue) => {
-    this.handleSubFilterSelection(filterValue, this.selectedFilter);
+  private intervalChangeHandler = (filterValue: IntervalFilterValueItem) => {
+    this.handleSubFilterSelection(
+      filterValue as DynamicFilterValue,
+      this.selectedFilter,
+    );
   };
 
   private handleSubFilterSelection = (
@@ -234,7 +238,6 @@ export class VviinnFilters {
     const filters = this.getFilters().filter((filter) => filter.isPrimary);
 
     const { selectedFilter, handleSubFilterSelection } = this;
-    const { column } = selectedFilter ?? {};
     const filterOptions = getFilterOptions(selectedFilter);
 
     return (
@@ -287,13 +290,15 @@ export class VviinnFilters {
               label: selectedFilter.label,
             })}
           >
-            {isIntervalFilter(column) ? (
-              <vviinn-price-range
-                histogram={(filterOptions as Histogram).filter(
-                  (item) => item.value.frequency > 0,
+            {selectedFilter?.type === "interval" ? (
+              <vviinn-range-filter
+                histogram={filterOptions as Histogram}
+                intervalChangeHandler={this.intervalChangeHandler}
+                selectedInterval={getSelectedInterval(
+                  this.requestFilters,
+                  selectedFilter.column,
                 )}
-                priceChangeHandler={this.priceChangeHandler}
-                selectedInterval={getSelectedPriceInterval(this.requestFilters)}
+                showCurrency={isPriceFilter(selectedFilter.column)}
               />
             ) : (
               <ul class="sub-filters-wrapper" part="filters-footer-list">
