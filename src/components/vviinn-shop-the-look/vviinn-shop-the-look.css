@@ -1,23 +1,15 @@
-:host {
-  --shop-the-look-bg: #ffffff;
-  --shop-the-look-text: #000000;
-  --shop-the-look-text-muted: #666666;
-  --shop-the-look-border: #e0e0e0;
-  --shop-the-look-modal-bg: #f4f4f4;
-  --shop-the-look-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
-  --shop-the-look-border-radius: 16px;
-  --shop-the-look-border-radius-sm: 8px;
-  display: block;
-  font-family: Inter, sans-serif;
-}
+@import "../../variables.css";
 
-/* Swiper base styles - included inline since @import doesn't work in web components */
+:host {
+  --shop-the-look-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+  display: block;
+  font-family: var(--font-family-base);
+}
 
 .shop-the-look-container {
   position: relative;
   width: 100%;
-  background: var(--shop-the-look-bg);
-  /* Create positioning context for modal overlay */
+  background: var(--color-bg-base);
   overflow: hidden;
 }
 
@@ -25,15 +17,15 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--spacing-200);
   align-items: center;
 }
 
 .image-container {
   position: relative;
-  border-radius: var(--shop-the-look-border-radius);
+  border-radius: var(--border-radius-200);
   overflow: hidden;
-  background: #f0f0f0;
+  background: var(--color-field-02);
 }
 
 /* Swiper Styles */
@@ -46,7 +38,7 @@
 swiper-container {
   width: 100%;
   height: 100%;
-  border-radius: var(--shop-the-look-border-radius);
+  border-radius: var(--border-radius-200);
   overflow: hidden;
 }
 
@@ -54,7 +46,7 @@ swiper-slide {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #f0f0f0;
+  background: var(--color-field-02);
   width: 100%;
   height: 100%;
   flex-shrink: 0;
@@ -62,18 +54,18 @@ swiper-slide {
 
 /* Enhanced custom pagination styling */
 swiper-container::part(pagination) {
-  bottom: 20px;
+  bottom: var(--spacing-250);
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 8px;
-  padding: 8px 0;
+  gap: var(--spacing-100);
+  padding: var(--spacing-100) 0;
 }
 
 swiper-container::part(bullet) {
   width: 8px;
   height: 8px;
-  border-radius: 50%;
+  border-radius: var(--border-radius-full);
   background: rgba(22, 22, 22, 0.25);
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   margin: 0;
@@ -92,14 +84,14 @@ swiper-container::part(bullet):hover {
 swiper-container::part(bullet-active) {
   width: 24px;
   height: 8px;
-  border-radius: 4px;
-  background: #8d8d8d;
+  border-radius: var(--spacing-50);
+  background: var(--color-icon-helper);
   transform: scale(1);
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 swiper-container::part(bullet-active):hover {
-  background: #6b6b6b;
+  background: var(--color-icon-secondary);
   transform: scale(1.1);
 }
 
@@ -116,10 +108,10 @@ swiper-container::part(bullet-active):hover {
 
 .desktop-carousel .carousel-navigation {
   position: absolute;
-  bottom: 20px;
-  right: 20px;
+  bottom: var(--spacing-250);
+  right: var(--spacing-250);
   display: flex;
-  gap: 8px;
+  gap: var(--spacing-100);
   z-index: 10;
 }
 
@@ -130,7 +122,7 @@ swiper-container::part(bullet-active):hover {
   width: 32px;
   height: 32px;
   background: rgba(255, 255, 255, 0.9);
-  border-radius: 50%;
+  border-radius: var(--border-radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -153,7 +145,7 @@ swiper-container::part(bullet-active):hover {
   content: "";
   width: 8px;
   height: 8px;
-  border: 2px solid #8d8d8d;
+  border: 2px solid var(--color-icon-helper);
   border-top: none;
   border-right: none;
   transition: border-color 0.3s ease;
@@ -171,7 +163,7 @@ swiper-container::part(bullet-active):hover {
 
 .desktop-carousel .swiper-button-prev:hover::after,
 .desktop-carousel .swiper-button-next:hover::after {
-  border-color: #6b6b6b;
+  border-color: var(--color-icon-secondary);
 }
 
 /* Disabled state for navigation buttons */
@@ -184,7 +176,7 @@ swiper-container::part(bullet-active):hover {
 
 .desktop-carousel .swiper-button-prev.disabled::after,
 .desktop-carousel .swiper-button-next.disabled::after {
-  border-color: #ccc;
+  border-color: var(--color-border-03);
 }
 
 /* Hide pagination dots on desktop carousel */
@@ -206,26 +198,26 @@ swiper-container::part(bullet-active):hover {
 
 .pagination-dots {
   display: flex;
-  gap: 8px;
+  gap: var(--spacing-100);
   align-items: center;
   justify-content: center;
-  padding: 8px 0;
+  padding: var(--spacing-100) 0;
 }
 
 /* Custom pagination dots (fallback/alternative implementation) */
 .pagination-dots {
   display: flex;
-  gap: 4px;
+  gap: var(--spacing-50);
   align-items: center;
   justify-content: center;
-  padding: 16px 0;
-  margin-top: 8px;
+  padding: var(--spacing-200) 0;
+  margin-top: var(--spacing-100);
 }
 
 .pagination-dot {
   width: 8px;
   height: 8px;
-  border-radius: 50%;
+  border-radius: var(--border-radius-full);
   background: rgba(22, 22, 22, 0.25);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
@@ -241,13 +233,13 @@ swiper-container::part(bullet-active):hover {
 .pagination-dot.active {
   width: 24px;
   height: 8px;
-  border-radius: 4px;
-  background: #8d8d8d;
+  border-radius: var(--spacing-50);
+  background: var(--color-icon-helper);
   transform: scale(1);
 }
 
 .pagination-dot.active:hover {
-  background: #6b6b6b;
+  background: var(--color-icon-secondary);
   transform: scale(1.05);
 }
 
@@ -264,8 +256,8 @@ swiper-container::part(bullet-active):hover {
 
 .shop-the-look-container .modal-content-wrapper {
   position: absolute;
-  background: var(--shop-the-look-bg);
-  border-radius: 12px;
+  background: var(--color-bg-base);
+  border-radius: var(--border-radius-150);
   overflow: hidden;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   z-index: 2000;
@@ -291,23 +283,23 @@ swiper-container::part(bullet-active):hover {
 }
 
 .modal-body {
-  padding: 12px;
+  padding: var(--spacing-100);
 }
 
 .search-results-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 6px;
-  width: 160px;
-  height: 160px;
+  gap: var(--spacing-75);
+  width: 140px;
+  height: 140px;
 }
 
 .result-item {
   cursor: pointer;
   transition: transform 0.2s ease;
-  border-radius: 6px;
+  border-radius: var(--spacing-75);
   overflow: hidden;
-  background: #f0f0f0;
+  background: var(--color-field-02);
   aspect-ratio: 1;
 }
 
@@ -329,12 +321,12 @@ swiper-container::part(bullet-active):hover {
 
 .search-loader {
   position: absolute;
-  top: 16px;
-  right: 16px;
+  top: var(--spacing-200);
+  right: var(--spacing-200);
   z-index: 100;
   background: rgba(255, 255, 255, 0.9);
-  border-radius: 50%;
-  padding: 8px;
+  border-radius: var(--border-radius-full);
+  padding: var(--spacing-100);
   backdrop-filter: blur(4px);
 }
 
@@ -385,7 +377,7 @@ swiper-container::part(bullet-active):hover {
   /* But keep the image itself clipped for proper carousel appearance */
   .desktop-carousel .main-image {
     overflow: hidden;
-    border-radius: var(--shop-the-look-border-radius);
+    border-radius: var(--border-radius-200);
   }
 
   /* TODO: */
@@ -397,7 +389,6 @@ swiper-container::part(bullet-active):hover {
 
 /* Responsive adjustments */
 @media (max-width: 767px) {
-  /* Mobile: Hide navigation arrows and navigation container */
   .shop-the-look-container .swiper-button-prev,
   .shop-the-look-container .swiper-button-next,
   .shop-the-look-container .carousel-navigation {
@@ -489,7 +480,7 @@ swiper-container::part(bullet-active):hover {
   .search-results-grid {
     width: min(140px, calc(100vw - 32px));
     height: min(140px, calc(100vw - 32px));
-    gap: 4px;
+    gap: var(--spacing-50);
   }
 }
 
@@ -516,13 +507,13 @@ swiper-container::part(bullet-active):hover {
   max-width: 240px;
   min-height: 300px;
   width: 240px;
-  padding: 8px;
+  padding: var(--spacing-100);
 }
 
 .modal-content-wrapper.slider-view.mobile-modal {
   max-width: 280px;
   width: 280px;
-  padding: 12px;
+  padding: var(--spacing-150);
 }
 
 .product-details-slider {
@@ -535,21 +526,21 @@ swiper-container::part(bullet-active):hover {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding: 4px;
-  margin-bottom: 8px;
+  padding: var(--spacing-50);
+  margin-bottom: var(--spacing-100);
 }
 
 .back-to-grid-button {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 4px;
-  color: var(--shop-the-look-text-muted);
+  padding: var(--spacing-50);
+  color: var(--color-text-secondary);
   transition: all 0.2s ease;
 }
 
 .back-to-grid-button:hover {
-  color: var(--shop-the-look-text);
+  color: var(--color-text-primary);
 }
 
 .back-to-grid-button svg {
@@ -570,25 +561,25 @@ swiper-container::part(bullet-active):hover {
 
 .product-details-card {
   height: 100%;
-  background: var(--shop-the-look-bg);
+  background: var(--color-bg-base);
   border: none;
   box-shadow: none;
 }
 
 /* Swiper pagination customization for product details */
 .product-details-slider swiper-container::part(pagination) {
-  bottom: 8px;
+  bottom: var(--spacing-100);
 }
 
 .product-details-slider swiper-container::part(bullet) {
-  background: var(--shop-the-look-text-muted);
+  background: var(--color-text-secondary);
   opacity: 0.4;
   width: 6px;
   height: 6px;
 }
 
 .product-details-slider swiper-container::part(bullet-active) {
-  background: var(--shop-the-look-text);
+  background: var(--color-text-primary);
   opacity: 1;
 }
 
