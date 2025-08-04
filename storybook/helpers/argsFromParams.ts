@@ -1,10 +1,19 @@
 const typecastValue = (initValue, paramsValue) => {
-  if (typeof initValue === "number") return parseInt(paramsValue);
-  else if (typeof initValue === "boolean") return paramsValue === "!true";
-  return paramsValue;
+  switch (typeof initValue) {
+    case "number":
+      return parseInt(paramsValue);
+    case "boolean":
+      return paramsValue === "!true";
+    default:
+      return paramsValue === "!undefined"
+        ? undefined
+        : paramsValue === "!null"
+          ? null
+          : paramsValue;
+  }
 };
 
-function updateRelevantChild(previousChild, keysArray: string[], newValue) {
+function updateInternalProperty(previousChild, keysArray: string[], newValue) {
   let currentChild = previousChild[keysArray[0]];
   let newChildValue;
   if (keysArray.length === 1)
@@ -12,7 +21,7 @@ function updateRelevantChild(previousChild, keysArray: string[], newValue) {
   else {
     if (currentChild === undefined) currentChild = {};
     const childKeys = keysArray.slice(1);
-    newChildValue = updateRelevantChild(currentChild, childKeys, newValue);
+    newChildValue = updateInternalProperty(currentChild, childKeys, newValue);
   }
   return { ...previousChild, [keysArray[0]]: newChildValue };
 }
@@ -22,7 +31,6 @@ const referrerArgs = (urlArgs: string) =>
 
 const hrefArgs = (urlArgs: string) => {
   const argsString = urlArgs.split("&id=")[0];
-  console.log(argsString);
   if (!argsString.length) return;
   const unorderedEntries = argsString
     .split("%")
@@ -42,12 +50,15 @@ export const argsFromParams = (args) => {
     if (argsStart >= 0) {
       const urlArgs = url.substring(argsStart + 6);
       const entries = isNewTab ? hrefArgs(urlArgs) : referrerArgs(urlArgs);
-      console.log(entries);
       if (entries) {
         for (const entry in entries) {
           if (entry.includes(".")) {
             const entryActualKeys = entry.split(".");
-            args = updateRelevantChild(args, entryActualKeys, entries[entry]);
+            args = updateInternalProperty(
+              args,
+              entryActualKeys,
+              entries[entry],
+            );
           } else args[entry] = typecastValue(args[entry], entries[entry]);
         }
       }
