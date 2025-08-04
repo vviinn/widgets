@@ -48,6 +48,10 @@
   font-size: 16px;
 }
 
+.tablink:focus {
+  outline: revert;
+}
+
 .tablink--sm {
   padding: 8px 10px;
   font-size: 14px;

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.180.3](https://github.com/vviinn/widgets/compare/v2.180.2...v2.180.3) (2025-08-04)
+
+
+### Bug Fixes
+
+* prevent triggering upload for vviinn-button in upload mode on any button click or enter pressed in widget ([e5d530b](https://github.com/vviinn/widgets/commit/e5d530bb925de92b136971263981fbd66a58d843))
+
 ### [2.180.2](https://github.com/vviinn/widgets/compare/v2.180.1...v2.180.2) (2025-07-31)
 
 
