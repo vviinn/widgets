@@ -3,7 +3,7 @@ const typecastValue = (initValue, paramsValue) => {
     case "number":
       return parseInt(paramsValue);
     case "boolean":
-      return paramsValue === "!true";
+      return paramsValue === "!true"; //storybook marks ! the supported special values, which are booleans, undefined and null
     default:
       return paramsValue === "!undefined"
         ? undefined
