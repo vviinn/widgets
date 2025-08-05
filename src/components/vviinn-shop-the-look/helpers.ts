@@ -2,10 +2,14 @@ import { Rectangle, VisualSearchResponse } from "../../interfaces/search";
 import * as E from "fp-ts/lib/Either";
 import { Recommendation } from "../../interfaces/recommendation";
 import { INTERSECTION_THRESHOLDS } from "./constants";
-import { isDesktop as sharedIsDesktop, isSmallMobile as sharedIsSmallMobile } from "../../helpers/device/checkDeviceType";
+import {
+  isDesktop as sharedIsDesktop,
+  isSmallMobile as sharedIsSmallMobile,
+} from "../../helpers/device/checkDeviceType";
 import { calculateImageBounds } from "../../Image/bounds";
 import { createImageFile } from "../../Image/upload";
 import { extractSlideIndex as sharedExtractSlideIndex } from "../../utils/swiper/swiperUtils";
+import { makeUploadFileRequest, makeVisualSearchRequest, shopTheLookState } from "../../store/search.store";
 
 export interface ModalPosition {
   x: number;
@@ -76,9 +80,15 @@ export const calculateModalPosition = (
   }
 };
 
-export { calculateImageBounds, hasImageBoundsChanged } from "../../Image/bounds";
+export {
+  calculateImageBounds,
+  hasImageBoundsChanged,
+} from "../../Image/bounds";
 export { createImageFile } from "../../Image/upload";
-export { setupIntersectionObserver, type IntersectionObserverConfig } from "../../dom";
+export {
+  setupIntersectionObserver,
+  type IntersectionObserverConfig,
+} from "../../dom";
 
 export const resetSearchState = () => ({
   detectedObjects: [],
@@ -100,15 +110,18 @@ export const performVisualSearch = async (
 ): Promise<
   E.Either<
     string,
-    { detectedObjects: Rectangle[]; searchResults: Recommendation[] }
+    {
+      detectedObjects: Rectangle[];
+      searchResults: Recommendation[];
+      visualSearchId: string | null;
+    }
   >
 > => {
   try {
     const imageFile = await createImageFile(params.imageUrl);
-    const { makeUploadFileRequest } = await import("../../store/search.store");
 
     const result = await makeUploadFileRequest(
-      "components",
+      "shopTheLook",
       params.componentToken || params.token,
     )(imageFile);
 
@@ -123,6 +136,7 @@ export const performVisualSearch = async (
         return E.right({
           detectedObjects,
           searchResults: [],
+          visualSearchId: uploadResponse.requestId || null,
         });
       },
     )(result);
@@ -137,7 +151,10 @@ export interface DetectedObjectClickParams {
   token: string;
   componentToken?: string;
   containerElement?: HTMLElement;
+  visualSearchId?: string | null;
 }
+
+let isSearchInProgress = false;
 
 export const handleDetectedObjectClick = async (
   params: DetectedObjectClickParams,
@@ -147,17 +164,22 @@ export const handleDetectedObjectClick = async (
     { searchResults: Recommendation[]; modalPosition: ModalPosition }
   >
 > => {
-  try {
-    const { makeVisualSearchRequest, componentsState } = await import(
-      "../../store/search.store"
-    );
+  if (isSearchInProgress) {
+    return E.left("Search already in progress");
+  }
 
-    componentsState.searchArea = params.detectedObject;
-    componentsState.imageBounds = { left: 0, top: 0, width: 1, height: 1 };
+  isSearchInProgress = true;
+
+  try {
+    if (!params.imageElement) {
+      return E.left("Image element is missing");
+    }
+
+    shopTheLookState.searchArea = params.detectedObject;
 
     const result = await makeVisualSearchRequest(
-      "components",
-      null,
+      "shopTheLook",
+      params.visualSearchId || null,
       params.componentToken || params.token,
     );
 
@@ -178,6 +200,8 @@ export const handleDetectedObjectClick = async (
     )(result);
   } catch (error) {
     return E.left(`Visual search failed: ${error}`);
+  } finally {
+    isSearchInProgress = false;
   }
 };
 

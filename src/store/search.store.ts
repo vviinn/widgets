@@ -40,7 +40,7 @@ import { fileToB64 } from "../file";
 import { ImageType, shouldResize } from "./image-processing";
 import { OnChangeHandler } from "@stencil/store/dist/types";
 
-export type SearchStoreName = "widget" | "components";
+export type SearchStoreName = "widget" | "components" | "shopTheLook";
 export type SearchStatus = "idle" | "loading" | "success" | "error";
 
 type AppStateGlobalDefaults = {
@@ -76,6 +76,12 @@ type ReceivedDataDefaults = {
 export type SearchStore = AppStateGlobalDefaults &
   AppStateDefaults &
   ReceivedDataDefaults;
+
+export interface ShopTheLookStore {
+  searchArea: Rectangle | null;
+  imageBounds: Rectangle | null;
+  visualSearchId: string | null;
+}
 
 const appStateGlobalDefaults: AppStateGlobalDefaults = {
   excluded: null,
@@ -118,8 +124,27 @@ const { state: searchState, onChange: onChangeWidgetState } =
 const { state: componentsState, onChange: onChangeComponentsState } =
   createStore<SearchStore>(storeDefaults);
 
-const useStore = (store: SearchStoreName) =>
-  store === "widget" ? searchState : componentsState;
+const shopTheLookDefaults: ShopTheLookStore = {
+  searchArea: null,
+  imageBounds: null,
+  visualSearchId: null,
+};
+
+const { state: shopTheLookState, onChange: onChangeShopTheLookState } =
+  createStore<ShopTheLookStore>(shopTheLookDefaults);
+
+const useStore = (store: SearchStoreName) => {
+  switch (store) {
+    case "widget":
+      return searchState;
+    case "components":
+      return componentsState;
+    case "shopTheLook":
+      return shopTheLookState as Partial<SearchStore>;
+    default:
+      return storeDefaults;
+  }
+};
 
 export type ResetMode =
   | "appStateOnly"
@@ -169,6 +194,11 @@ const updateVisualSearchState =
   (store: SearchStoreName) => async (response: VisualSearchResponse) => {
     const state = useStore(store);
 
+    if (store === "shopTheLook") {
+      state.visualSearchId = response.requestId;
+      return;
+    }
+
     const detectedObjects = response.interactions.suggestedSearchAreas.map(
       ({ rectangle }) => rectangle,
     );
@@ -216,7 +246,12 @@ const processVisualSearch = (
 };
 
 const uploadImageFile =
-  (store: SearchStoreName, imageType: ImageType = "image", searchId?: string, token?: string | null) =>
+  (
+    store: SearchStoreName,
+    imageType: ImageType = "image",
+    searchId?: string,
+    token?: string | null,
+  ) =>
   (file: File) => {
     const state = useStore(store);
     return pipe(
@@ -257,16 +292,20 @@ export const makeUploadFileRequest =
   (store: SearchStoreName, token?: string | null) => async (file: File) => {
     const state = useStore(store);
 
-    Object.assign(state, {
-      image: null,
-      detectedObjects: [],
-      textSearchQuery: null,
-      searchType: "image",
-      searchStatus: "loading",
-      visualSearchStarted: true,
-    });
+    if (store !== "shopTheLook") {
+      Object.assign(state, {
+        image: null,
+        detectedObjects: [],
+        textSearchQuery: null,
+        searchType: "image",
+        searchStatus: "loading",
+        visualSearchStarted: true,
+      });
+    }
 
-    const session = await pipe(uploadImageFile(store, "image", undefined, token)(file))();
+    const session = await pipe(
+      uploadImageFile(store, "image", undefined, token)(file),
+    )();
 
     if (!state.visualSearchId?.length) return session;
 
@@ -279,7 +318,12 @@ export const makeUploadFileRequest =
     if (!shouldProcessHiRes) return session;
 
     pipe(
-      uploadImageFile(store, "highResolutionImage", state.visualSearchId, token)(file),
+      uploadImageFile(
+        store,
+        "highResolutionImage",
+        state.visualSearchId,
+        token,
+      )(file),
       TE.getOrElseW((error) => {
         console.error("Failed to upload hi-res image:", error);
         return T.of(session);
@@ -303,22 +347,25 @@ export const makeVisualSearchRequest = async (
   let searchRectangle: Rectangle | null = null;
   let fetchDetectedObjects = false;
 
-  if (state.searchArea && state.imageBounds) {
-    const scaled = divideOnSized(state.imageBounds)(state.searchArea);
-
-    searchRectangle = {
-      width: scaled.width,
-      height: scaled.height,
-      left: scaled.left,
-      top: scaled.top,
-    };
+  if (state.searchArea) {
+    if (store === "shopTheLook") {
+      searchRectangle = state.searchArea;
+    } else if (state.searchArea && state.imageBounds) {
+      const scaled = divideOnSized(state.imageBounds)(state.searchArea);
+      searchRectangle = {
+        width: scaled.width,
+        height: scaled.height,
+        left: scaled.left,
+        top: scaled.top,
+      };
+    }
   } else {
     searchRectangle = null;
     fetchDetectedObjects = true;
   }
 
   const body: VisualSearchRequest = {
-    requestId: searchId ?? state.visualSearchId,
+    ...addIfDefined("requestId", searchId ?? state.visualSearchId),
     ...addIfNotEmpty(
       "campaign",
       state.campaignIdVisualSearch || state.campaignId,
@@ -462,6 +509,8 @@ export const useSearchStore = (
 export {
   onChangeComponentsState,
   onChangeWidgetState,
+  onChangeShopTheLookState,
   searchState,
   componentsState,
+  shopTheLookState,
 };

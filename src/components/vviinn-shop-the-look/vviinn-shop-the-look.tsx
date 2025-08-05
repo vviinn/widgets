@@ -81,6 +81,7 @@ export class VviinnShopTheLook {
       isVisible: boolean;
       imageElement: HTMLImageElement | null;
       imageBounds: Rectangle | null;
+      visualSearchId: string | null;
     }
   > = new Map();
   @State() forceRerender: number = 0;
@@ -235,6 +236,7 @@ export class VviinnShopTheLook {
       isVisible: currentState?.isVisible || false,
       imageElement: currentState?.imageElement || this.imageElement,
       imageBounds: currentState?.imageBounds || null,
+      visualSearchId: currentState?.visualSearchId || null,
     });
   }
 
@@ -253,6 +255,9 @@ export class VviinnShopTheLook {
 
     const imageElement =
       this.imageElements.get(imageIndex) || this.imageElement;
+    
+    const imageState = this.imageStates.get(imageIndex);
+    const visualSearchId = imageState?.visualSearchId || null;
 
     const params: DetectedObjectClickParams = {
       detectedObject,
@@ -260,12 +265,16 @@ export class VviinnShopTheLook {
       token: this.token,
       componentToken: this.componentToken,
       containerElement: this.el,
+      visualSearchId,
     };
 
     const result = await handleDetectedObjectClick(params);
 
     E.fold(
       (error: string) => {
+        if (error.includes('Search already in progress')) {
+          return;
+        }
         console.error("Visual search failed:", error);
         this.isSearching = false;
       },
@@ -311,8 +320,15 @@ export class VviinnShopTheLook {
       (response: {
         detectedObjects: Rectangle[];
         searchResults: Recommendation[];
+        visualSearchId?: string;
       }) => {
         this.detectedObjects = response.detectedObjects;
+
+        const currentState = this.imageStates.get(this.currentImageIndex);
+        if (currentState) {
+          currentState.visualSearchId = response.visualSearchId || null;
+          this.imageStates.set(this.currentImageIndex, currentState);
+        }
 
         if (this.detectedObjects.length > 0) {
           setTimeout(async () => {
@@ -463,6 +479,7 @@ export class VviinnShopTheLook {
       isVisible: false,
       imageElement: this.imageElements.get(index) || null,
       imageBounds: null,
+      visualSearchId: null,
     };
 
     const wasVisible = currentState.isVisible;
@@ -512,17 +529,19 @@ export class VviinnShopTheLook {
     E.fold(
       (error: string) => {
         console.error(`Visual search failed for image ${imageIndex}:`, error);
-        this.updateImageState(imageIndex, [], true, []);
+        this.updateImageState(imageIndex, [], true, [], null);
       },
       (response: {
         detectedObjects: Rectangle[];
         searchResults: Recommendation[];
+        visualSearchId?: string;
       }) => {
         this.updateImageState(
           imageIndex,
           response.detectedObjects,
           true,
           response.searchResults,
+          response.visualSearchId || null,
         );
 
         if (imageIndex === 0 && response.detectedObjects.length > 0) {
@@ -543,6 +562,7 @@ export class VviinnShopTheLook {
     detectedObjects: Rectangle[],
     searchCompleted: boolean,
     searchResults: Recommendation[],
+    visualSearchId?: string | null,
   ) => {
     const currentState = this.imageStates.get(index) || {
       detectedObjects: [],
@@ -551,6 +571,7 @@ export class VviinnShopTheLook {
       isVisible: false,
       imageElement: null,
       imageBounds: null,
+      visualSearchId: null,
     };
 
     this.imageStates.set(index, {
@@ -558,6 +579,7 @@ export class VviinnShopTheLook {
       detectedObjects,
       searchCompleted,
       searchResults,
+      ...(visualSearchId !== undefined && { visualSearchId }),
     });
   };
 
