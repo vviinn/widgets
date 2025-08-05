@@ -36,8 +36,22 @@ function updateInternalProperty(
 const referrerArgs = (urlArgs: string) =>
   Object.fromEntries(urlArgs.split(";").map((item) => item.split(":")));
 
+const meaningfulUrlPart = (urlArgs: string) => {
+  const idIndex = urlArgs.lastIndexOf("&id=");
+  const globalsIndex = urlArgs.lastIndexOf("&globals");
+  const splitAt =
+    idIndex >= 0
+      ? globalsIndex >= 0
+        ? Math.min(idIndex, globalsIndex)
+        : idIndex
+      : globalsIndex >= 0
+        ? globalsIndex
+        : urlArgs.length;
+  return splitAt < urlArgs.length ? urlArgs.substring(0, splitAt) : urlArgs;
+};
+
 const hrefArgs = (urlArgs: string) => {
-  const argsString = urlArgs.split("&id=")[0];
+  const argsString = meaningfulUrlPart(urlArgs);
   if (!argsString.length) return;
   const unorderedEntries = argsString
     .split("%")
@@ -57,6 +71,7 @@ export const argsFromParams = (args: any) => {
     if (argsStart >= 0) {
       const urlArgs = url.substring(argsStart + 5);
       const entries = isNewTab ? hrefArgs(urlArgs) : referrerArgs(urlArgs);
+      console.log(entries);
       if (entries) {
         for (const entry in entries) {
           if (entry.includes(".")) {
