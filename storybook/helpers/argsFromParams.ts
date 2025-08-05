@@ -3,8 +3,10 @@ const typecastValue = (
   paramsValue: string,
 ) => {
   switch (typeof initValue) {
-    case "number":
-      return parseInt(paramsValue);
+    case "number": {
+      const intValue = parseInt(paramsValue);
+      return isNaN(intValue) ? paramsValue : intValue;
+    }
     case "boolean":
       return paramsValue === "!true"; //storybook marks ! the supported special values, which are booleans, undefined and null
     default:
@@ -58,7 +60,8 @@ const hrefArgs = (urlArgs: string) => {
     .map((item, index) => (index !== 0 ? item.substring(2) : item));
   const orderedEntries: [string, string][] = [];
   for (let i = 0; i < unorderedEntries.length; i += 2) {
-    orderedEntries.push([unorderedEntries[i], unorderedEntries[i + 1]]);
+    if (unorderedEntries?.[i] && unorderedEntries?.[i + 1])
+      orderedEntries.push([unorderedEntries[i], unorderedEntries[i + 1]]);
   }
   return Object.fromEntries(orderedEntries);
 };
@@ -71,7 +74,6 @@ export const argsFromParams = (args: any) => {
     if (argsStart >= 0) {
       const urlArgs = url.substring(argsStart + 5);
       const entries = isNewTab ? hrefArgs(urlArgs) : referrerArgs(urlArgs);
-      console.log(entries);
       if (entries) {
         for (const entry in entries) {
           if (entry.includes(".")) {
