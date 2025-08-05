@@ -53,9 +53,9 @@ export const argsFromParams = (args: any) => {
   const isNewTab = !document.referrer.length;
   const url = isNewTab ? window.location.href : document.referrer;
   if (url) {
-    const argsStart = url.indexOf("&args=");
+    const argsStart = url.indexOf("args=");
     if (argsStart >= 0) {
-      const urlArgs = url.substring(argsStart + 6);
+      const urlArgs = url.substring(argsStart + 5);
       const entries = isNewTab ? hrefArgs(urlArgs) : referrerArgs(urlArgs);
       if (entries) {
         for (const entry in entries) {
