@@ -1,4 +1,7 @@
-const typecastValue = (initValue, paramsValue) => {
+const typecastValue = (
+  initValue: string | boolean | number | null | undefined,
+  paramsValue: string,
+) => {
   switch (typeof initValue) {
     case "number":
       return parseInt(paramsValue);
@@ -13,7 +16,11 @@ const typecastValue = (initValue, paramsValue) => {
   }
 };
 
-function updateInternalProperty(previousChild, keysArray: string[], newValue) {
+function updateInternalProperty(
+  previousChild: any,
+  keysArray: string[],
+  newValue: string,
+) {
   let currentChild = previousChild[keysArray[0]];
   let newChildValue;
   if (keysArray.length === 1)
@@ -42,7 +49,7 @@ const hrefArgs = (urlArgs: string) => {
   return Object.fromEntries(orderedEntries);
 };
 
-export const argsFromParams = (args) => {
+export const argsFromParams = (args: any) => {
   const isNewTab = !document.referrer.length;
   const url = isNewTab ? window.location.href : document.referrer;
   if (url) {
