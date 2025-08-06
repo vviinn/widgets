@@ -2,6 +2,7 @@ import { ResultsTemplate } from "../../src/components/vviinn-results/stories/Res
 import { filterValue, vviinnToken } from "../helpers";
 import "../styles/search-page.css";
 import "../documentation/widgets/styles.css";
+import { argsFromParams } from "../helpers/argsFromParams";
 
 export default {
   title: "Playground/Product List",
@@ -10,7 +11,8 @@ export default {
 
 export const Default = ResultsTemplate.bind({});
 Default.storyName = "Product List";
-Default.args = {
+
+const initArgs = {
   token: vviinnToken,
   campaignIdTextSearch: "",
   campaignIdVisualSearch: "",
@@ -32,3 +34,5 @@ Default.args = {
   addPriceContainer: false,
   favoriteShow: true,
 };
+
+Default.args = argsFromParams(initArgs);
