@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.180.4](https://github.com/vviinn/widgets/compare/v2.180.3...v2.180.4) (2025-08-06)
+
+
+### Bug Fixes
+
+* parse storybook supported args from url ([ba708bb](https://github.com/vviinn/widgets/commit/ba708bb5cb5e5be9d04fde9bde1a71d7bb699ec1))
+
 ### [2.180.3](https://github.com/vviinn/widgets/compare/v2.180.2...v2.180.3) (2025-08-04)
 
 
