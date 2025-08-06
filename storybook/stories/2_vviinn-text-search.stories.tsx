@@ -1,6 +1,7 @@
 import { vviinnToken } from "../helpers";
 import "../documentation/widgets/styles.css";
 import "../styles/search-page.css";
+import { argsFromParams } from "../helpers/argsFromParams";
 
 const textSearchDecorator = (story) => `
       ${story()}
@@ -49,7 +50,7 @@ export const Default = Template.bind({});
 
 Default.storyName = "Search Bar";
 
-Default.args = {
+const initArgs = {
   token: vviinnToken,
   apiPath: process.env.STORYBOOK_API_PATH,
   searchQuery: "",
@@ -64,3 +65,5 @@ Default.parameters = {
     url: "https://www.figma.com/design/4xUlo6X4l7FHKcHkJRW4C4/Visual-Search-Widget?node-id=1370-226&t=iiWX4CdPIRXmBKQ3-0",
   },
 };
+
+Default.args = argsFromParams(initArgs);

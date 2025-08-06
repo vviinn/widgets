@@ -1,6 +1,7 @@
 import "../documentation/widgets/styles.css";
 import "../styles/search-page.css";
 import { vviinnToken } from "../helpers";
+import { argsFromParams } from "../helpers/argsFromParams";
 
 export default {
   title: "Playground/Cropper",
@@ -45,9 +46,11 @@ const Template = (args) => `
 export const Default = Template.bind({});
 Default.storyName = "Cropper";
 
-Default.args = {
+const initArgs = {
   token: vviinnToken,
   apiPath: process.env.STORYBOOK_API_PATH,
   saveImageMode: "once",
   width: 288,
 };
+
+Default.args = argsFromParams(initArgs);

@@ -2,7 +2,7 @@ import { argTypes } from "../../src/components/vviinn-product-card/stories/args"
 import { productDecorator } from "../../src/components/vviinn-product-card/stories/decorators";
 import { energyCertificationsString } from "../documentation/components/constants";
 import "../documentation/widgets/styles.css";
-
+import { argsFromParams } from "../helpers/argsFromParams";
 export default {
   title: "Playground/Product Card",
   component: "vviinn-product-card",
@@ -53,7 +53,7 @@ export const Default = Template.bind({});
 
 Default.storyName = "Product Card";
 
-Default.args = {
+const initArgs = {
   productTitle: "Couchtisch Rolf Benz 8770 Ronald Schmitt",
   productType: "Couchtische",
   brand: "Ronald Schmitt",
@@ -84,3 +84,5 @@ Default.args = {
   contentText: "This is a content card text.",
   contentLink: "https://example.com/content-link",
 };
+
+Default.args = argsFromParams(initArgs);
