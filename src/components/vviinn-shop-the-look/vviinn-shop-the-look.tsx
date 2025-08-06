@@ -7,6 +7,7 @@ import {
   Event,
   EventEmitter,
   Element,
+  Watch,
 } from "@stencil/core";
 import * as E from "fp-ts/lib/Either";
 import { Recommendation } from "../../interfaces/recommendation";
@@ -84,13 +85,15 @@ export class VviinnShopTheLook {
       visualSearchId: string | null;
     }
   > = new Map();
-  @State() forceRerender: number = 0;
   @State() visibleImageIndices: Set<number> = new Set();
   @State() currentImageIndex: number = 0;
   @State() totalImages: number = 1;
   @State() imageUrlsList: string[] = [];
   @State() showSliderView: boolean = false;
   @State() currentProductIndex: number = 0;
+  @State() currentViewMode: "desktop" | "mobile" | null = null;
+  @State() swiperKey: string = "swiper-0";
+  @State() showArrows: boolean = false;
 
   @Event()
   vviinnShopTheLookDetectedObjectClick: EventEmitter<ShopTheLookEventData>;
@@ -120,6 +123,9 @@ export class VviinnShopTheLook {
     if (this.token) {
       this.componentToken = this.token;
     }
+
+    this.currentViewMode = isDesktop() ? "desktop" : "mobile";
+    this.updateArrowsVisibility();
   }
 
   componentDidLoad() {
@@ -131,6 +137,19 @@ export class VviinnShopTheLook {
     window.addEventListener("resize", this.handleResize);
     this.setupIntersectionObserver();
     this.setupSwiperEventListener();
+  }
+
+  @Watch("currentViewMode")
+  onViewModeChange(newViewMode: "desktop" | "mobile" | null) {
+    if (newViewMode && this.totalImages > 1) {
+      if (this.showModal) {
+        this.handleModalClose();
+      }
+
+      setTimeout(() => {
+        this.setupSwiperEventListener();
+      }, 100);
+    }
   }
 
   disconnectedCallback() {
@@ -160,7 +179,31 @@ export class VviinnShopTheLook {
 
   private handleResize = () => {
     this.updateImageBounds();
-    this.forceRerender = Date.now();
+    this.checkViewModeChange();
+    this.updateArrowsVisibility();
+  };
+
+  private checkViewModeChange = () => {
+    const newViewMode = isDesktop() ? "desktop" : "mobile";
+    if (newViewMode !== this.currentViewMode) {
+      this.currentViewMode = newViewMode;
+      // Recreate swiper by changing key
+      this.swiperKey = `swiper-${Date.now()}`;
+    }
+  };
+
+  private updateArrowsVisibility = () => {
+    const isDesktopView = isDesktop();
+    if (!isDesktopView) {
+      this.showArrows = false;
+      return;
+    }
+
+    const estimatedImageWidth = this.width + 20;
+    const availableWidth = window.innerWidth - 100;
+    const maxImagesVisible = Math.floor(availableWidth / estimatedImageWidth);
+
+    this.showArrows = this.totalImages > maxImagesVisible;
   };
 
   private updateImageBounds() {
@@ -255,7 +298,7 @@ export class VviinnShopTheLook {
 
     const imageElement =
       this.imageElements.get(imageIndex) || this.imageElement;
-    
+
     const imageState = this.imageStates.get(imageIndex);
     const visualSearchId = imageState?.visualSearchId || null;
 
@@ -272,7 +315,7 @@ export class VviinnShopTheLook {
 
     E.fold(
       (error: string) => {
-        if (error.includes('Search already in progress')) {
+        if (error.includes("Search already in progress")) {
           return;
         }
         console.error("Visual search failed:", error);
@@ -368,7 +411,10 @@ export class VviinnShopTheLook {
     this.vviinnShopTheLookModalClose.emit(TEST_BASIC_EVENT_DATA);
   };
 
-  private handleProductDetailsClick = (_product: Recommendation, index: number) => {
+  private handleProductDetailsClick = (
+    _product: Recommendation,
+    index: number,
+  ) => {
     this.currentProductIndex = index;
     this.showSliderView = true;
   };
@@ -378,10 +424,13 @@ export class VviinnShopTheLook {
     this.currentProductIndex = 0;
   };
 
-  private handleNavigateProduct = (direction: 'prev' | 'next') => {
-    if (direction === 'prev' && this.currentProductIndex > 0) {
+  private handleNavigateProduct = (direction: "prev" | "next") => {
+    if (direction === "prev" && this.currentProductIndex > 0) {
       this.currentProductIndex--;
-    } else if (direction === 'next' && this.currentProductIndex < this.searchResults.length - 1) {
+    } else if (
+      direction === "next" &&
+      this.currentProductIndex < this.searchResults.length - 1
+    ) {
       this.currentProductIndex++;
     }
   };
@@ -626,16 +675,6 @@ export class VviinnShopTheLook {
     }, TIMING.SLIDE_TRANSITION_DELAY);
   };
 
-  private shouldShowArrows = (): boolean => {
-    const isDesktopView = isDesktop();
-    if (!isDesktopView) return false;
-
-    const estimatedImageWidth = this.width + 20;
-    const availableWidth = window.innerWidth - 100;
-    const maxImagesVisible = Math.floor(availableWidth / estimatedImageWidth);
-
-    return this.totalImages > maxImagesVisible;
-  };
 
   private renderSwiperWrapper = () => {
     const props: SwiperProps = {
@@ -651,7 +690,8 @@ export class VviinnShopTheLook {
       renderDetectedObjects: this.renderDetectedObjectsWrapper,
       onNavigatePrev: this.handleNavigatePrev,
       onNavigateNext: this.handleNavigateNext,
-      shouldShowArrows: this.shouldShowArrows(),
+      shouldShowArrows: this.showArrows,
+      swiperKey: this.swiperKey,
     };
     return renderSwiper(props);
   };
@@ -687,7 +727,6 @@ export class VviinnShopTheLook {
               </div>
             )}
           </div>
-          {/* Modal positioned within component boundaries */}
           {this.renderModalWrapper()}
         </div>
       </Host>

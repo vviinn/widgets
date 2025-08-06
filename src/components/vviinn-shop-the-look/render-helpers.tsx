@@ -66,6 +66,8 @@ export interface SwiperProps {
   onNavigatePrev?: () => void;
   onNavigateNext?: () => void;
   shouldShowArrows?: boolean;
+  onSwiperRef?: (el: any) => void;
+  swiperKey?: string;
 }
 
 const getImageStyles = (width: number, height: number) => {
@@ -85,6 +87,8 @@ export const renderSwiper = (props: SwiperProps) => {
     onNavigatePrev,
     onNavigateNext,
     shouldShowArrows = true,
+    onSwiperRef,
+    swiperKey,
   } = props;
 
   if (!imageUrls || imageUrls.length <= 1) {
@@ -113,6 +117,9 @@ export const renderSwiper = (props: SwiperProps) => {
         keyboard: true,
       });
     }
+    if (onSwiperRef) {
+      onSwiperRef(el);
+    }
   };
 
   const handlePrevClick = () => {
@@ -134,6 +141,7 @@ export const renderSwiper = (props: SwiperProps) => {
       class={`swiper-wrapper ${desktop ? "desktop-carousel" : "mobile-slider"}`}
     >
       <swiper-container
+        key={swiperKey}
         ref={swiperRef}
         onSlideChange={onSlideChange}
         style={swiperStyles}

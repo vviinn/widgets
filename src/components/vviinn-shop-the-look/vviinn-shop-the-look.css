@@ -28,7 +28,6 @@
   background: var(--color-field-02);
 }
 
-/* Swiper Styles */
 .swiper-wrapper {
   position: relative;
   width: 100%;
@@ -52,7 +51,6 @@ swiper-slide {
   flex-shrink: 0;
 }
 
-/* Enhanced custom pagination styling */
 swiper-container::part(pagination) {
   bottom: var(--spacing-250);
   display: flex;
@@ -95,10 +93,17 @@ swiper-container::part(bullet-active):hover {
   transform: scale(1.1);
 }
 
-/* Desktop carousel layout with bottom-right navigation */
 .desktop-carousel {
   position: relative;
   width: 100%;
+}
+
+.shop-the-look-container .mobile-slider swiper-container::part(pagination) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-100);
+  padding: var(--spacing-100) 0;
 }
 
 .desktop-carousel swiper-container {
@@ -115,7 +120,6 @@ swiper-container::part(bullet-active):hover {
   z-index: 10;
 }
 
-/* Desktop carousel navigation styles - bottom right positioning */
 .desktop-carousel .swiper-button-prev,
 .desktop-carousel .swiper-button-next {
   position: relative;
@@ -166,7 +170,6 @@ swiper-container::part(bullet-active):hover {
   border-color: var(--color-icon-secondary);
 }
 
-/* Disabled state for navigation buttons */
 .desktop-carousel .swiper-button-prev.disabled,
 .desktop-carousel .swiper-button-next.disabled {
   opacity: 0.3;
@@ -179,12 +182,10 @@ swiper-container::part(bullet-active):hover {
   border-color: var(--color-border-03);
 }
 
-/* Hide pagination dots on desktop carousel */
-.desktop-carousel swiper-container::part(pagination) {
+.shop-the-look-container .desktop-carousel swiper-container::part(pagination) {
   display: none;
 }
 
-/* Mobile slider keeps pagination dots */
 .mobile-slider swiper-container::part(pagination) {
   display: flex;
 }
@@ -204,7 +205,6 @@ swiper-container::part(bullet-active):hover {
   padding: var(--spacing-100) 0;
 }
 
-/* Custom pagination dots (fallback/alternative implementation) */
 .pagination-dots {
   display: flex;
   gap: var(--spacing-50);
@@ -266,7 +266,6 @@ swiper-container::part(bullet-active):hover {
   transform: translate(-50%, -50%);
 }
 
-/* Mobile modal specific styles - always centered */
 .shop-the-look-container .modal-content-wrapper.mobile-modal {
   max-width: calc(100vw - 32px);
   max-height: calc(100vh - 64px);
@@ -277,7 +276,6 @@ swiper-container::part(bullet-active):hover {
   margin: 0;
 }
 
-/* Desktop modal specific styles */
 .shop-the-look-container .modal-content-wrapper.desktop-modal {
   position: absolute;
 }
@@ -353,41 +351,29 @@ swiper-container::part(bullet-active):hover {
   }
 }
 
-/* Make detected objects non-clickable when modal is open, but keep them visible */
 .shop-the-look-container.modal-open vviinn-detected-object {
   pointer-events: none;
   z-index: 1;
 }
 
-/* Desktop: Ensure detected objects remain visible even on partially sliced images */
+/* Keep detected objects visible when image is partially sliced */
 @media (min-width: 768px) {
   .desktop-carousel vviinn-detected-object {
-    /* Ensure objects stay visible and positioned correctly relative to their image */
     position: absolute;
     z-index: 15;
-    /* Prevent objects from being clipped when image is partially visible */
     overflow: visible;
   }
 
-  /* Ensure image containers don't clip detected objects on desktop */
   .desktop-carousel .image-container {
     overflow: visible;
   }
 
-  /* But keep the image itself clipped for proper carousel appearance */
   .desktop-carousel .main-image {
     overflow: hidden;
     border-radius: var(--border-radius-200);
   }
-
-  /* TODO: */
-  /* swiper-container::part(wrapper) {
-    display: flex;
-    justify-content: center;
-  } */
 }
 
-/* Responsive adjustments */
 @media (max-width: 767px) {
   .shop-the-look-container .swiper-button-prev,
   .shop-the-look-container .swiper-button-next,
@@ -395,9 +381,13 @@ swiper-container::part(bullet-active):hover {
     display: none;
   }
 
-  /* Mobile: Ensure swiper takes full width */
   .mobile-slider {
     width: 100%;
+  }
+
+  .shop-the-look-container .mobile-slider swiper-slide {
+    width: 100%;
+    flex-shrink: 0;
   }
 
   /* Mobile: Ensure modal fits in viewport but don't override centering */
@@ -413,20 +403,17 @@ swiper-container::part(bullet-active):hover {
 }
 
 @media (min-width: 768px) {
-  /* Desktop: Hide pagination dots */
   .shop-the-look-container
     .desktop-carousel
     swiper-container::part(pagination) {
     display: none;
   }
 
-  /* Desktop: Show navigation arrows */
   .desktop-carousel .swiper-button-prev,
   .desktop-carousel .swiper-button-next {
     display: flex;
   }
 
-  /* Desktop: Show carousel navigation */
   .desktop-carousel .carousel-navigation {
     display: flex;
   }
@@ -453,7 +440,6 @@ swiper-container::part(bullet-active):hover {
   }
 }
 
-/* iPhone SE and smaller screens (375px and below) */
 @media (max-width: 375px) {
   .shop-the-look-container {
     width: 100%;
@@ -472,7 +458,6 @@ swiper-container::part(bullet-active):hover {
     object-fit: contain;
   }
 
-  /* Only apply size constraints to desktop modals on small screens */
   .modal-content-wrapper.desktop-modal {
     max-width: calc(100vw - 16px);
   }
@@ -481,24 +466,6 @@ swiper-container::part(bullet-active):hover {
     width: min(140px, calc(100vw - 32px));
     height: min(140px, calc(100vw - 32px));
     gap: var(--spacing-50);
-  }
-}
-
-/* Very small screens (320px and below) */
-@media (max-width: 320px) {
-  .main-image {
-    max-height: 60vh;
-  }
-
-  .search-results-grid {
-    width: min(120px, calc(100vw - 24px));
-    height: min(120px, calc(100vw - 24px));
-    gap: 3px;
-  }
-
-  /* Only apply size constraints to desktop modals on very small screens */
-  .modal-content-wrapper.desktop-modal {
-    max-width: calc(100vw - 12px);
   }
 }
 
@@ -566,7 +533,6 @@ swiper-container::part(bullet-active):hover {
   box-shadow: none;
 }
 
-/* Swiper pagination customization for product details */
 .product-details-slider swiper-container::part(pagination) {
   bottom: var(--spacing-100);
 }
