@@ -61,6 +61,7 @@ export class VviinnShopTheLook {
   @Prop() width: number = 350;
   @Prop() height: number = 468;
   @Prop() token: string = "";
+  @Prop() currencySign: string = "€";
 
   @State() selectedDetectedObject: Rectangle | null = null;
   @State() showModal: boolean = false;
@@ -675,7 +676,6 @@ export class VviinnShopTheLook {
     }, TIMING.SLIDE_TRANSITION_DELAY);
   };
 
-
   private renderSwiperWrapper = () => {
     const props: SwiperProps = {
       totalImages: this.totalImages,
@@ -709,6 +709,7 @@ export class VviinnShopTheLook {
       onProductDetailsClick: this.handleProductDetailsClick,
       onBackToGrid: this.handleBackToGrid,
       onNavigateProduct: this.handleNavigateProduct,
+      currencySign: this.currencySign,
     };
     return renderModal(props);
   };

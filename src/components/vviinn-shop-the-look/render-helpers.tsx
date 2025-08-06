@@ -232,93 +232,56 @@ export const renderProductGrid = (props: ProductGridProps) => {
 export interface ProductDetailsSliderProps {
   searchResults: Recommendation[];
   currentProductIndex: number;
+  currencySign?: string;
   onProductClick: (product: Recommendation) => void;
   onBackToGrid: () => void;
   onNavigateProduct: (direction: "prev" | "next") => void;
 }
 
-export const renderProductDetailsSlider = (
-  props: ProductDetailsSliderProps,
-) => {
+export const renderProductDetails = (props: ProductDetailsSliderProps) => {
   const {
     searchResults,
     currentProductIndex,
     onProductClick,
     onBackToGrid,
-    onNavigateProduct,
+    currencySign,
   } = props;
 
   if (!searchResults.length) return null;
 
-  const isDesktopView = isDesktop();
-
-  const swiperRef = (el: any) => {
-    if (el && !el.swiper) {
-      configureSwiperElement(el, {
-        isDesktop: isDesktopView,
-        initialSlide: currentProductIndex,
-        pagination: true,
-        keyboard: true,
-      });
-    }
-  };
-
-  const handleSlideChange = (event: any) => {
-    const activeIndex =
-      event.detail?.[0]?.activeIndex ?? event.target?.swiper?.activeIndex;
-    if (activeIndex !== undefined && activeIndex !== currentProductIndex) {
-      onNavigateProduct(activeIndex > currentProductIndex ? "next" : "prev");
-    }
-  };
+  const selectedProduct = searchResults[currentProductIndex];
+  if (!selectedProduct) return null;
 
   return (
-    <div class="product-details-slider">
-      <div class="slider-header">
+    <div class="product-details">
+      <div class="product-header">
         <button class="back-to-grid-button" onClick={onBackToGrid}>
           <GridViewIcon />
         </button>
       </div>
 
-      <div class="slider-content">
-        <swiper-container
-          ref={swiperRef}
-          onSlideChange={handleSlideChange}
-          slides-per-view="1"
-          space-between="0"
-          initial-slide={currentProductIndex.toString()}
-          keyboard="true"
-          allow-touch-move="true"
-          pagination="true"
-          pagination-clickable="true"
-        >
-          {searchResults.map((product, index) => (
-            <swiper-slide key={`${product.productId}-${index}`}>
-              <div class="product-details-card-wrapper">
-                <vviinn-product-card
-                  class="product-details-card"
-                  productId={product.productId || ""}
-                  productTitle={product.title || ""}
-                  brand={product.brand}
-                  price={product.price.actual}
-                  salePrice={product.price.sale}
-                  currency="€"
-                  locale="en"
-                  image={
-                    product.image?.thumbnail || product.image?.original || ""
-                  }
-                  imageWidth={220}
-                  imageRatio={0.9}
-                  imageResolutionWidth={150}
-                  deeplink={product.deeplink}
-                  responsive={true}
-                  addToBasketShow={false}
-                  favoriteShow={false}
-                  onVviinnProductClick={() => onProductClick(product)}
-                />
-              </div>
-            </swiper-slide>
-          ))}
-        </swiper-container>
+      <div class="product-content">
+        <div class="product-details-card-wrapper">
+          <vviinn-product-card
+            class="product-details-card"
+            productId={selectedProduct.productId || ""}
+            productTitle={selectedProduct.title || ""}
+            brand={selectedProduct.brand}
+            price={selectedProduct.price.actual}
+            salePrice={selectedProduct.price.sale}
+            addPriceContainer={true}
+            image={
+              selectedProduct.image?.thumbnail ||
+              selectedProduct.image?.original ||
+              ""
+            }
+            responsive={true}
+            imageResolutionWidth={300}
+            currency={currencySign || ""}
+            deeplink={selectedProduct.deeplink}
+            onVviinnProductClick={() => onProductClick(selectedProduct)}
+          />
+        </div>
       </div>
     </div>
   );
@@ -333,6 +296,7 @@ export interface ModalProps {
   onProductClick: (product: Recommendation) => void;
   showSliderView?: boolean;
   currentProductIndex?: number;
+  currencySign?: string;
   onProductDetailsClick?: (product: Recommendation, index: number) => void;
   onBackToGrid?: () => void;
   onNavigateProduct?: (direction: "prev" | "next") => void;
@@ -351,6 +315,7 @@ export const renderModal = (props: ModalProps) => {
     onProductDetailsClick,
     onBackToGrid,
     onNavigateProduct,
+    currencySign,
   } = props;
 
   if (!showModal || !selectedDetectedObject) return null;
@@ -368,16 +333,17 @@ export const renderModal = (props: ModalProps) => {
   return (
     <div class="modal-overlay" onClick={onModalClose}>
       <div
-        class={`modal-content-wrapper ${isMobile ? "mobile-modal" : "desktop-modal"} ${showSliderView ? "slider-view" : ""}`}
+        class={`modal-content-wrapper ${isMobile ? "mobile-modal" : "desktop-modal"}`}
         style={modalStyle}
         onClick={(e) => e.stopPropagation()}
       >
         <div class="modal-body">
           {showSliderView
-            ? renderProductDetailsSlider({
+            ? renderProductDetails({
                 searchResults,
                 currentProductIndex,
                 onProductClick,
+                currencySign,
                 onBackToGrid: onBackToGrid || (() => {}),
                 onNavigateProduct: onNavigateProduct || (() => {}),
               })

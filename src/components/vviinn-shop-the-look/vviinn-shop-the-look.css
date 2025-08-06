@@ -45,7 +45,6 @@ swiper-slide {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: var(--color-field-02);
   width: 100%;
   height: 100%;
   flex-shrink: 0;
@@ -259,7 +258,7 @@ swiper-container::part(bullet-active):hover {
   background: var(--color-bg-base);
   border-radius: var(--border-radius-150);
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.25);
   z-index: 2000;
   top: var(--modal-y, 50%);
   left: var(--modal-x, 50%);
@@ -287,22 +286,17 @@ swiper-container::part(bullet-active):hover {
 .search-results-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-75);
+  gap: var(--spacing-50);
   width: 140px;
   height: 140px;
 }
 
 .result-item {
   cursor: pointer;
-  transition: transform 0.2s ease;
   border-radius: var(--spacing-75);
   overflow: hidden;
   background: var(--color-field-02);
   aspect-ratio: 1;
-}
-
-.result-item:hover {
-  transform: scale(1.05);
 }
 
 .result-image {
@@ -386,6 +380,7 @@ swiper-container::part(bullet-active):hover {
   }
 
   .shop-the-look-container .mobile-slider swiper-slide {
+    background: var(--color-field-02);
     width: 100%;
     flex-shrink: 0;
   }
@@ -469,54 +464,40 @@ swiper-container::part(bullet-active):hover {
   }
 }
 
-/* Product Details Slider Styles */
-.modal-content-wrapper.slider-view {
-  max-width: 240px;
-  min-height: 300px;
-  width: 240px;
-  padding: var(--spacing-100);
-}
-
-.modal-content-wrapper.slider-view.mobile-modal {
-  max-width: 280px;
-  width: 280px;
-  padding: var(--spacing-150);
-}
-
-.product-details-slider {
+.product-details {
   display: flex;
   flex-direction: column;
   height: 100%;
+  gap: var(--spacing-75);
+  width: fit-content;
 }
 
-.slider-header {
+.product-header {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding: var(--spacing-50);
-  margin-bottom: var(--spacing-100);
 }
 
 .back-to-grid-button {
+  display: contents;
   background: none;
   border: none;
   cursor: pointer;
-  padding: var(--spacing-50);
-  color: var(--color-text-secondary);
-  transition: all 0.2s ease;
-}
-
-.back-to-grid-button:hover {
-  color: var(--color-text-primary);
+  padding: 0;
 }
 
 .back-to-grid-button svg {
-  width: 16px;
-  height: 16px;
-  fill: currentColor;
+  width: 24px;
+  height: 24px;
+  color: var(--color-icon-helper);
+  transition: color 0.2s ease;
 }
 
-.slider-content {
+.back-to-grid-button:hover svg {
+  color: var(--color-icon-secondary);
+}
+
+.product-content {
   flex: 1;
   position: relative;
 }
@@ -524,52 +505,30 @@ swiper-container::part(bullet-active):hover {
 .product-details-card-wrapper {
   height: 100%;
   padding: 0;
+  width: 160px;
+  max-width: 160px;
 }
 
 .product-details-card {
   height: 100%;
   background: var(--color-bg-base);
   border: none;
-  box-shadow: none;
+  width: 100%;
+  max-width: 100%;
 }
 
-.product-details-slider swiper-container::part(pagination) {
-  bottom: var(--spacing-100);
+vviinn-product-card::part(price-container) {
+  flex-direction: row;
 }
 
-.product-details-slider swiper-container::part(bullet) {
-  background: var(--color-text-secondary);
-  opacity: 0.4;
-  width: 6px;
-  height: 6px;
+vviinn-product-card::part(image-picture)::after,
+vviinn-product-card::part(image) {
+  border-radius: var(--border-radius-200);
 }
 
-.product-details-slider swiper-container::part(bullet-active) {
-  background: var(--color-text-primary);
-  opacity: 1;
-}
-
-/* Mobile responsive styles for product details */
-@media (max-width: 768px) {
-  .modal-content-wrapper.slider-view.mobile-modal {
-    max-width: 260px;
-    width: 260px;
-  }
-
-  .product-details-card::part(title) {
-    font-size: 13px;
-  }
-
-  .product-details-card::part(brand) {
-    font-size: 11px;
-  }
-
-  .product-details-card::part(price-regular),
-  .product-details-card::part(price-sale) {
-    font-size: 13px;
-  }
-
-  .product-details-card::part(price-outdated) {
-    font-size: 11px;
-  }
+vviinn-product-card::part(title),
+vviinn-product-card::part(brand),
+vviinn-product-card::part(price-container) {
+  font-weight: var(--font-weight-400);
+  color: #525252;
 }
