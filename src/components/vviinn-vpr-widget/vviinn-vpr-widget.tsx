@@ -661,6 +661,7 @@ export class VviinnVprWidget implements ComponentInterface {
         productId={recommendation.productId}
         productTitle={recommendation.title}
         productType={recommendation.productType}
+        entityType={recommendation.entityType}
         deeplink={recommendation.deeplink}
         image={recommendation.image.thumbnail}
         imageResolutionWidth={this.imageResolutionWidth}

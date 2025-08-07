@@ -195,6 +195,7 @@
 .title,
 .product-type {
   display: -webkit-box;
+  /* TODO: Check why we use this rule and variable */
   max-width: var(--product-card-set-mode-max-width);
   text-align: var(
     --product-card-text-align,
@@ -346,7 +347,6 @@ picture::after {
   content: "";
 }
 
-
 :host(.animated) picture::after {
   mix-blend-mode: normal;
 }
@@ -469,7 +469,7 @@ vviinn-energy-label {
   height: 100%;
 }
 
-.content-text,
+.content-title,
 .content-link {
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -478,7 +478,7 @@ vviinn-energy-label {
   overflow: hidden;
 }
 
-.content-text {
+.content-title {
   -webkit-line-clamp: 3;
   font-size: var(--font-size-headline);
   font-weight: var(--font-weight-600);

@@ -555,6 +555,7 @@ export class VviinnCarousel {
         productId={recommendation.productId}
         productTitle={recommendation.title}
         productType={recommendation.productType}
+        entityType={recommendation.entityType}
         deeplink={recommendation.deeplink}
         image={recommendation.image.thumbnail || recommendation.image.original}
         brand={recommendation.brand}
@@ -699,6 +700,7 @@ export class VviinnCarousel {
                 this.sourceProduct.image.thumbnail ||
                 this.sourceProduct.image.original
               }
+              entityType={this.sourceProduct.entityType}
               price={this.sourceProduct.price.actual}
               salePrice={this.sourceProduct.price.sale}
               basePrice={this.sourceProduct.basePrice?.actual}

@@ -56,6 +56,6 @@ export const contentCardPartsList = [
   "content-card-image-picture",
   "content-card-image",
   "content-label",
-  "content-text",
+  "content-title",
   "content-link",
 ];

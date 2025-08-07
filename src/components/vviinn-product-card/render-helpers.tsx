@@ -355,9 +355,9 @@ export const UniversalImage = ({
 };
 
 export const ContentCardContent = (
-  contentText: string,
+  contentTitle: string,
   contentLink: string,
-  labelText: string = "Content",
+  labelText: string,
 ) => {
   return (
     <div
@@ -367,9 +367,9 @@ export const ContentCardContent = (
       <div class="content-label" part="content-label">
         {labelText}
       </div>
-      {contentText && (
-        <div class="content-text" part="content-text" title={contentText}>
-          {contentText}
+      {contentTitle && (
+        <div class="content-title" part="content-title" title={contentTitle}>
+          {contentTitle}
         </div>
       )}
       {contentLink && (
