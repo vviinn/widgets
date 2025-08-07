@@ -1,7 +1,7 @@
 import { pipe } from "fp-ts/lib/function";
 import * as E from "fp-ts/lib/Either";
 import { FunctionalComponent, h, Fragment, JSX } from "@stencil/core";
-import { BasePrice } from "../../interfaces/recommendation";
+import { BasePrice } from "../../interfaces";
 import { ImagePlaceholderIcon, PlusIcon } from "../vviinn-icons";
 import { getLastUrlPath } from "../../helpers/url/getLastUrlPath";
 import { joinTruthy } from "../../utils/string/joinTruthy";

@@ -39,7 +39,7 @@ import { resources } from "../../locale";
 import { announceToScreenReader } from "../../a11y";
 import { getLocalStorageItems } from "../../localStorage";
 import { addEventListenersWithSignal } from "../../dom";
-import { Interval, ResponseIntervalFilterItem } from "../../interfaces/search";
+import { Interval, ResponseIntervalFilterItem } from "../..//interfaces";
 
 /**
  * @part selected-filters-list - List of selected filters.

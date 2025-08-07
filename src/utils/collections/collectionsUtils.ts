@@ -1,6 +1,6 @@
 import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/function";
-import { RequestStaticFilters } from "../../interfaces/recommendation";
+import { RequestStaticFilters } from "../../interfaces";
 
 interface Sized {
   length: number;

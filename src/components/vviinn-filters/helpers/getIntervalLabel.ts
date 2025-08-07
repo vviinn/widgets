@@ -1,7 +1,4 @@
-import {
-  Interval,
-  ResponseIntervalFilterItem,
-} from "../../../interfaces/search";
+import { Interval, ResponseIntervalFilterItem } from "../../..//interfaces";
 import { isPriceFilter } from "../../../filters";
 
 export const getIntervalLabel = (

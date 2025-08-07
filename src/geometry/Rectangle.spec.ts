@@ -1,4 +1,4 @@
-import { Rectangle } from "../interfaces/search";
+import { Rectangle } from "..//interfaces";
 import { scaleSelection, getScaleRange, scaleWithSized } from "./Rectangle";
 
 import { Sized } from "./Sized";

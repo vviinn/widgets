@@ -11,7 +11,7 @@ import {
 } from "@stencil/core";
 import i18next from "i18next";
 import { announceToScreenReader } from "../../a11y";
-import { IntervalFilterValueItem } from "../../interfaces/search";
+import { IntervalFilterValueItem } from "../..//interfaces";
 import {
   ResponseDynamicFilterItem,
   DynamicFilterValue,

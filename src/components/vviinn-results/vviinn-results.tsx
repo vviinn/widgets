@@ -41,7 +41,7 @@ import {
 } from "../../components";
 import { ErrorType } from "../vviinn-error";
 import { campaignTypeNames } from "../../campaign/Campaign";
-import { TextSearchResponse } from "../../interfaces/search";
+import { TextSearchResponse } from "../..//interfaces";
 import {
   ChangedFiltersEvent,
   ChangedFiltersEventData,

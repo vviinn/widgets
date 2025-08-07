@@ -3,10 +3,7 @@ import * as TE from "fp-ts/TaskEither";
 import * as T from "fp-ts/Task";
 import { pipe } from "fp-ts/function";
 import { globalState } from "./store";
-import {
-  Recommendation,
-  RequestStaticFilters,
-} from "../interfaces/recommendation";
+import { Recommendation, RequestStaticFilters } from "../interfaces";
 import {
   visualSearchSessionClient,
   textSearchSessionClient,
@@ -23,7 +20,7 @@ import {
   TextSearchRequest,
   VisualSearchRequest,
   VisualSearchResponse,
-} from "../interfaces/search";
+} from "..//interfaces";
 import {
   ResponseDynamicFilterItem,
   RequestDynamicFilterItem,

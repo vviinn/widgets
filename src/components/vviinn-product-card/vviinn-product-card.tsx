@@ -48,7 +48,7 @@ import {
   BasePrice,
   EnergyCertification,
   Recommendation,
-} from "../../interfaces/recommendation";
+} from "../../interfaces";
 import { resources } from "../../locale";
 import { contentCardParts, productCardParts } from "../../cssParts";
 import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";

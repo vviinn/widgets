@@ -1,5 +1,5 @@
 import { ProductAnalytics } from "./ProductAnalytics";
-import { Recommendation } from "../interfaces/recommendation";
+import { Recommendation } from "../interfaces";
 
 export class GtagAnalytics implements ProductAnalytics {
   sendImpression(product: Recommendation) {

@@ -25,7 +25,7 @@ import { globalState, trackEvent, updateGlobalState } from "../../store/store";
 import { CampaignName, campaignTypeNames } from "../../campaign/Campaign";
 import { getRecommendationsService } from "../../campaign/CampaignService";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
-import { Recommendation } from "../../interfaces/recommendation";
+import { Recommendation } from "../../interfaces";
 import { SlotSkeleton, slotChangeListener } from "../customized-slots";
 
 import {

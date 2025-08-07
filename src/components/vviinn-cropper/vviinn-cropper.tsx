@@ -35,7 +35,7 @@ import {
   useSearchStore,
 } from "../../store/search.store";
 import { getImageSizes } from "../../Image/sizing";
-import { Rectangle } from "../../interfaces/search";
+import { Rectangle } from "../..//interfaces";
 import { isCropBoxDataSimilar } from "./helpers/isCropBoxDataSimilar";
 import { cleanLocalStorage, getLocalStorageItems } from "../../localStorage";
 import { addEventListenersWithSignal } from "../../dom";

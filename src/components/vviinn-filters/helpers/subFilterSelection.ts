@@ -4,10 +4,7 @@ import {
   RequestDynamicFilterItem,
 } from "../../../campaign/VPRCampaignService";
 import { FilterAction } from "vviinn-tracking-client-ts";
-import {
-  Interval,
-  ResponseIntervalFilterItem,
-} from "../../../interfaces/search";
+import { Interval, ResponseIntervalFilterItem } from "../../..//interfaces";
 
 type ValueRequest = string & { start?: number; end?: number };
 

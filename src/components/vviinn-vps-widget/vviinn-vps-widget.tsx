@@ -53,7 +53,7 @@ import { Locale } from "../../locale";
 import { CameraActionIcon, UploadActionIcon } from "../vviinn-icons";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 import { videoStreamSettings } from "../../video/settings";
-import { Recommendation } from "../../interfaces/recommendation";
+import { Recommendation } from "../../interfaces";
 import { checkDeviceType } from "../../helpers/device/checkDeviceType";
 import {
   OneClickDiscoveryAppendMode,

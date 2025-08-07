@@ -12,7 +12,7 @@ import {
   Rectangle,
   TextSearchResponse,
   VisualSearchResponse,
-} from "../interfaces/search";
+} from "..//interfaces";
 
 export type SearchType = "text" | "image";
 

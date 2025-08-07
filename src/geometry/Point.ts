@@ -1,7 +1,7 @@
 import { semigroupSum, semigroupProduct, struct } from "fp-ts/Semigroup";
 import { ClientEvent } from "../utils/event/Events";
 import { semigroupDiff } from "../utils/semigroup/semigroupDiff";
-import { Rectangle } from "../interfaces/search";
+import { Rectangle } from "..//interfaces";
 
 export type Point = {
   readonly left: number;
