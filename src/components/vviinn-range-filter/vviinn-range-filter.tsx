@@ -4,7 +4,7 @@ import {
   IntervalFilterValueItem,
   IntervalFilterValue,
   Interval,
-} from "../../interfaces/search";
+} from "../../interfaces";
 import { priceRangeParts } from "../../cssParts";
 import { globalState } from "../../store/store";
 

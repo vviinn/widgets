@@ -49,11 +49,14 @@ import {
   BasePrice,
   EnergyCertification,
   Recommendation,
-} from "../../interfaces/recommendation";
+} from "../../interfaces";
 import { resources } from "../../locale";
 import { contentCardParts, productCardParts } from "../../cssParts";
 import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
-import { PRODUCT_CARD_IMAGE_WIDTH } from "../../widget/constants";
+import {
+  PRODUCT_CARD_IMAGE_RESOLUTION_WIDTH,
+  PRODUCT_CARD_IMAGE_WIDTH,
+} from "../../widget/constants";
 import { addEventListenersWithSignal } from "../../dom";
 
 /**
@@ -131,6 +134,7 @@ export class VviinnProductCard {
   @Prop() basePrice?: BasePrice | string | null;
   @Prop() productTitle: string;
   @Prop() productType: string | undefined;
+  @Prop() entityType: Recommendation["entityType"] = "product";
   @Prop() setMode: boolean = false;
   @Prop() salePrice: number | undefined;
   @Prop() baseSalePrice: BasePrice | string | null;
@@ -141,12 +145,7 @@ export class VviinnProductCard {
   @Prop() customLabels: string = "";
   @Prop() addPriceContainer?: boolean = false;
   @Prop({ mutable: true }) energyCertifications?: EnergyCertification[];
-  /** If true, renders the card in 'Content' mode (special layout) */
-  @Prop() isContentCard: boolean = false;
-  /** Content text for Content card mode */
-  @Prop() contentText?: string;
-  /** Content link for Content card mode */
-  @Prop() contentLink?: string;
+  @Prop() deeplink: string | undefined;
 
   /** @internal */
   @Prop() productId: string;
@@ -158,8 +157,6 @@ export class VviinnProductCard {
   @Prop() buttonElementId?: string;
   /** @internal */
   @Prop() widgetVersion: string;
-  /** @internal */
-  @Prop() deeplink: string | undefined;
   /** @internal */
   @Prop() index: number = 0;
   /** @internal */
@@ -181,7 +178,8 @@ export class VviinnProductCard {
   /** @internal */
   @Prop() showFooterArrow: boolean = false;
   /** @internal */
-  @Prop() imageResolutionWidth: number = 300;
+  @Prop({ mutable: true }) imageResolutionWidth: number =
+    PRODUCT_CARD_IMAGE_RESOLUTION_WIDTH;
   /** @internal */
   @Prop() loading: boolean = false;
 
@@ -224,6 +222,7 @@ export class VviinnProductCard {
   private intersectionObserver: IntersectionObserver;
   private linkEventAbortController?: AbortController;
   private imageProps: ImageProps;
+  private isContentCard: boolean;
 
   private isShowUpdateButton = () =>
     this.setMode &&
@@ -236,6 +235,7 @@ export class VviinnProductCard {
 
   connectedCallback() {
     this.productData = this.getProductData();
+    this.isContentCard = this.entityType === "content";
     this.imageProps = this.getImageProps();
 
     this.isStandalone &&
@@ -410,7 +410,9 @@ export class VviinnProductCard {
       width: this.imageWidth,
       height: this.imageWidth * this.imageRatio,
       src: this.image,
-      imageResolutionWidth: this.imageResolutionWidth,
+      imageResolutionWidth: this.isContentCard
+        ? this.imageResolutionWidth * 2
+        : this.imageResolutionWidth,
       title: this.productTitle,
       ref: (el: HTMLImageElement) => {
         this.imageElement = el;
@@ -466,7 +468,7 @@ export class VviinnProductCard {
             part="image-container"
           >
             <Linked
-              deeplink={this.contentLink}
+              deeplink={this.deeplink}
               part="image-link content-image-link"
             >
               {this.renderImageWithLoadedState(
@@ -476,7 +478,11 @@ export class VviinnProductCard {
               )}
             </Linked>
           </div>
-          {ContentCardContent(this.contentText, this.contentLink)}
+          {ContentCardContent(
+            this.productTitle,
+            this.deeplink,
+            i18next.t("contentLabel"),
+          )}
         </Host>
       );
     }
@@ -485,8 +491,7 @@ export class VviinnProductCard {
       <Host
         part="product-card"
         class={{
-          animated: this.isTransitioning,
-          loading: this.loading,
+          animated: this.shouldShowSkeleton(),
         }}
         exportparts={productCardParts}
       >
@@ -622,9 +627,9 @@ export class VviinnProductCard {
           {this.shouldShowSkeleton() ? (
             <div
               class="image-skeleton"
+              part="image-skeleton"
               style={{
                 "aspect-ratio": this.imageRatio.toString(),
-                width: "100%",
               }}
             >
               <vviinn-skeleton />

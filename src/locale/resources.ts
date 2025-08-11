@@ -10,6 +10,7 @@ export const resources: Resource = {
       basketButtonText: "In den Warenkorb",
       basketButtonPressedText: "In den Warenkorb",
       discoveryWidgetTitle: "Ähnliche Produkte",
+      contentLabel: "Inhalt",
       setMode: {
         widgetTitle: "Kaufen Sie ein Set und erhalten Sie Rabatt",
         widgetSubtitle:
@@ -139,6 +140,7 @@ export const resources: Resource = {
       basketButtonText: "Add to Basket",
       basketButtonPressedText: "Add to Basket",
       discoveryWidgetTitle: "Recommended products",
+      contentLabel: "Content",
       setMode: {
         widgetTitle: "Buy a set to get discount",
         widgetSubtitle: "Save up to 15% for buying products from the list",
