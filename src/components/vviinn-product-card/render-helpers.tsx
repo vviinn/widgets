@@ -1,7 +1,7 @@
 import { pipe } from "fp-ts/lib/function";
 import * as E from "fp-ts/lib/Either";
 import { FunctionalComponent, h, Fragment, JSX } from "@stencil/core";
-import { BasePrice } from "../../interfaces/recommendation";
+import { BasePrice } from "../../interfaces";
 import { ImagePlaceholderIcon, PlusIcon } from "../vviinn-icons";
 import { getLastUrlPath } from "../../helpers/url/getLastUrlPath";
 import { joinTruthy } from "../../utils/string/joinTruthy";
@@ -355,9 +355,9 @@ export const UniversalImage = ({
 };
 
 export const ContentCardContent = (
-  contentText: string,
+  contentTitle: string,
   contentLink: string,
-  labelText: string = "Content",
+  labelText: string,
 ) => {
   return (
     <div
@@ -367,9 +367,9 @@ export const ContentCardContent = (
       <div class="content-label" part="content-label">
         {labelText}
       </div>
-      {contentText && (
-        <div class="content-text" part="content-text" title={contentText}>
-          {contentText}
+      {contentTitle && (
+        <div class="content-title" part="content-title" title={contentTitle}>
+          {contentTitle}
         </div>
       )}
       {contentLink && (

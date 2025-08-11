@@ -1,11 +1,15 @@
-import { Interfaces } from "../interfaces/recommendation";
+import { 
+  SimilarProductsRequest, 
+  SimilarProductsResponse 
+} from "../interfaces/discovery";
+import { 
+  ResponseDynamicFilterItem, 
+  DynamicFilterValue, 
+  RequestDynamicFilterItem 
+} from "../interfaces/filter";
 import { apiPost } from "../network/apiClient";
 
-type SimilarProductsRequest = Interfaces["SimilarProductsRequest"];
-export type SimilarProductsResponse = Interfaces["SimilarProductsResponse"];
-export type ResponseDynamicFilterItem = Interfaces["ResponseDynamicFilterItem"];
-export type DynamicFilterValue = Interfaces["DynamicFilterValue"];
-export type RequestDynamicFilterItem = Interfaces["RequestDynamicFilterItem"];
+export type { SimilarProductsResponse, ResponseDynamicFilterItem, DynamicFilterValue, RequestDynamicFilterItem };
 
 export const getVPRRecommendations =
   (body: SimilarProductsRequest) => (options: RequestInit) => {

@@ -98,6 +98,10 @@
     ease-in-out;
 }
 
+.image-skeleton {
+  width: 100%;
+}
+
 .image-skeleton,
 .image-placeholder {
   opacity: 1;
@@ -195,7 +199,6 @@
 .title,
 .product-type {
   display: -webkit-box;
-  max-width: var(--product-card-set-mode-max-width);
   text-align: var(
     --product-card-text-align,
     var(--product-card-text-align-default)
@@ -346,7 +349,6 @@ picture::after {
   content: "";
 }
 
-
 :host(.animated) picture::after {
   mix-blend-mode: normal;
 }
@@ -444,6 +446,10 @@ picture .plus-icon {
   letter-spacing: var(--letter-spacing-label);
 }
 
+:host(.animated) .discount-label {
+  display: none;
+}
+
 vviinn-energy-label {
   justify-content: var(
     --product-card-content-align,
@@ -469,7 +475,7 @@ vviinn-energy-label {
   height: 100%;
 }
 
-.content-text,
+.content-title,
 .content-link {
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -478,7 +484,7 @@ vviinn-energy-label {
   overflow: hidden;
 }
 
-.content-text {
+.content-title {
   -webkit-line-clamp: 3;
   font-size: var(--font-size-headline);
   font-weight: var(--font-weight-600);

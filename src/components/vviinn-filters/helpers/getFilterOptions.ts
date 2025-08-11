@@ -1,8 +1,5 @@
 import { ResponseDynamicFilterItem } from "../../../campaign/VPRCampaignService";
-import {
-  IntervalFilterValue,
-  LabelValueItem,
-} from "../../../interfaces/search";
+import { IntervalFilterValue, LabelValueItem } from "../../../interfaces";
 
 export type FilterOptions = LabelValueItem[] | IntervalFilterValue[];
 

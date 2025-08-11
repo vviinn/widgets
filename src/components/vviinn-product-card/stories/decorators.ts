@@ -9,6 +9,11 @@ html, body, #root, #root-inner {
   width: fit-content;
 }
 
+.product-wrapper:has(vviinn-product-card[entity-type="content"]) {
+  width: 300px;
+  max-width: 100%;
+}
+
 vviinn-product-card {
   --product-card-content-align: ${args.productCardContentAlign};
   --product-card-text-align: ${args.productCardTextAlign};
