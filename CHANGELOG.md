@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.181.0](https://github.com/vviinn/widgets/compare/v2.180.4...v2.181.0) (2025-08-11)
+
+
+### Features
+
+* Introduce the entity type in the widget. Apply custom styles for the content card. ([5b96ae5](https://github.com/vviinn/widgets/commit/5b96ae5f43ddaf5290c282d1fd7e2bb790b09dea))
+* New One-click Discovery icon ([46c443a](https://github.com/vviinn/widgets/commit/46c443a2709cd9c9289fe563dd0e78898c42a9d5))
+
+
+### Bug Fixes
+
+* Fix the Set Widget layout on updating. ([0828d18](https://github.com/vviinn/widgets/commit/0828d1863470656adbb912433c4ff3b1f9979848))
+
 ### [2.180.4](https://github.com/vviinn/widgets/compare/v2.180.3...v2.180.4) (2025-08-06)
 
 
