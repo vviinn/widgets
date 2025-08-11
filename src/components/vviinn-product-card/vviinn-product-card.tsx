@@ -486,8 +486,7 @@ export class VviinnProductCard {
       <Host
         part="product-card"
         class={{
-          animated: this.isTransitioning,
-          loading: this.loading,
+          animated: this.shouldShowSkeleton(),
         }}
         exportparts={productCardParts}
       >
@@ -623,9 +622,9 @@ export class VviinnProductCard {
           {this.shouldShowSkeleton() ? (
             <div
               class="image-skeleton"
+              part="image-skeleton"
               style={{
                 "aspect-ratio": this.imageRatio.toString(),
-                width: "100%",
               }}
             >
               <vviinn-skeleton />

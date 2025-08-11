@@ -98,6 +98,10 @@
     ease-in-out;
 }
 
+.image-skeleton {
+  width: 100%;
+}
+
 .image-skeleton,
 .image-placeholder {
   opacity: 1;
@@ -195,8 +199,6 @@
 .title,
 .product-type {
   display: -webkit-box;
-  /* TODO: Check why we use this rule and variable */
-  max-width: var(--product-card-set-mode-max-width);
   text-align: var(
     --product-card-text-align,
     var(--product-card-text-align-default)
@@ -442,6 +444,10 @@ picture .plus-icon {
   color: var(--color-text-on-color);
   background-color: var(--label-bg-color-accent);
   letter-spacing: var(--letter-spacing-label);
+}
+
+:host(.animated) .discount-label {
+  display: none;
 }
 
 vviinn-energy-label {

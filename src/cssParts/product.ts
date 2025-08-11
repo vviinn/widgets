@@ -7,6 +7,7 @@ export const productCardGeneralPartsList = [
   "deeplink",
   "image",
   "image-container",
+  "image-skeleton",
   "image-link",
   "image-picture",
   "image-placeholder",

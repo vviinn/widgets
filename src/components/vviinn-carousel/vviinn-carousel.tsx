@@ -107,7 +107,17 @@ export class VviinnCarousel {
   vviinnProductView: EventEmitter<ProductCardEventData>;
   private resizeObserver: ResizeObserver = new ResizeObserver(() => {
     this.handleResize();
-    this.setImageWidthSetMode("100%");
+
+    if (this.isSetMode && this.updatingAllCards) {
+      const currentWidth = this.el.style.getPropertyValue(
+        SET_MODE_IMAGE_WIDTH_CSS_VAR,
+      );
+      if (!currentWidth || currentWidth === "100%") {
+        this.setImageWidthSetMode("100%");
+      }
+    } else {
+      this.setImageWidthSetMode("100%");
+    }
   });
 
   private isSetMode: boolean;
@@ -188,14 +198,15 @@ export class VviinnCarousel {
         this.vviinnProductLoad.emit(productData);
       }
 
+      let element = this.el.querySelector(`[data-id="${productId}"]`);
+      const imageWidth = element.getBoundingClientRect().width;
+
+      this.setImageWidthSetMode(`${imageWidth}px`);
+
       this.crossSellingRecommendations = [...newCrossSellingRecommendations];
 
-      let element = this.el.querySelector(`[data-id="${productId}"]`);
       const button = element.shadowRoot.querySelector(".update-button");
       button?.classList.add("hidden");
-
-      const imageWidth = element.getBoundingClientRect().width;
-      this.setImageWidthSetMode(`${imageWidth}px`);
 
       const animationTimer = setTimeout(() => {
         if (recommendationIndex + step * 2 <= this.recommendations.length - 1) {
