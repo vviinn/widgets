@@ -26,4 +26,5 @@ storybook/output.log
 .cursor/
 .cursorignore
 .claude
+.mcp.json
 CLAUDE.md
