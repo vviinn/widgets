@@ -27,7 +27,7 @@ import {
 import i18next from "i18next";
 import { Locale, resources } from "../../locale";
 import { SearchBarMode } from "../../widget/types";
-import { TextSearchResponse } from "../..//interfaces";
+import { TextSearchResponse } from "../../interfaces";
 import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/lib/function";
 import { searchBarParts } from "../../cssParts";

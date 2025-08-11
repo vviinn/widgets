@@ -20,7 +20,7 @@ import {
   TextSearchRequest,
   VisualSearchRequest,
   VisualSearchResponse,
-} from "..//interfaces";
+} from "../interfaces";
 import {
   ResponseDynamicFilterItem,
   RequestDynamicFilterItem,

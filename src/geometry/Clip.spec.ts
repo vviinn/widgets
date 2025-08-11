@@ -1,4 +1,4 @@
-import { Rectangle } from "..//interfaces";
+import { Rectangle } from "../interfaces";
 import { getClipValue } from "./Clip";
 
 it("should return proper clip css string with Rectangular type", async () => {

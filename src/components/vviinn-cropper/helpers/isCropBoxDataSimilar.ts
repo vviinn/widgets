@@ -1,4 +1,4 @@
-import { Rectangle } from "../../..//interfaces";
+import { Rectangle } from "../../../interfaces";
 
 export const isCropBoxDataSimilar = (
   cropBoxData1: Rectangle,

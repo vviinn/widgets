@@ -1,4 +1,4 @@
-import { Rectangle } from "../..//interfaces";
+import { Rectangle } from "../../interfaces";
 
 export type CropBoxData = {
   left: number;

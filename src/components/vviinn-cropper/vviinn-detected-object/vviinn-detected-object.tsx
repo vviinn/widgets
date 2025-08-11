@@ -16,7 +16,7 @@ import {
   BasicEventData,
   SelectObjectEventData,
 } from "../../../recommendation/events";
-import { Rectangle } from "../../..//interfaces";
+import { Rectangle } from "../../../interfaces";
 
 @Component({
   tag: "vviinn-detected-object",

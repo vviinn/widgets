@@ -1,4 +1,4 @@
-import { Rectangle } from "..//interfaces";
+import { Rectangle } from "../interfaces";
 
 export const setLocalStorageItems = (
   imageSrc: string,

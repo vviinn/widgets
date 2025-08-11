@@ -1,5 +1,5 @@
 import { RequestDynamicFilterItem } from "../../../campaign/VPRCampaignService";
-import { Interval } from "../../..//interfaces";
+import { Interval } from "../../../interfaces";
 
 export const getSelectedInterval = (
   requestFilters: RequestDynamicFilterItem[],
