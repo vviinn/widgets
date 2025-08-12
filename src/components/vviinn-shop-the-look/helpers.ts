@@ -1,6 +1,6 @@
 import { Rectangle, VisualSearchResponse } from "../../interfaces/search";
 import * as E from "fp-ts/lib/Either";
-import { Recommendation } from "../../interfaces/recommendation";
+import { Recommendation } from "../../interfaces";
 import { INTERSECTION_THRESHOLDS } from "./constants";
 import {
   isDesktop as sharedIsDesktop,
@@ -9,7 +9,11 @@ import {
 import { calculateImageBounds } from "../../Image/bounds";
 import { createImageFile } from "../../Image/upload";
 import { extractSlideIndex as sharedExtractSlideIndex } from "../../utils/swiper/swiperUtils";
-import { makeUploadFileRequest, makeVisualSearchRequest, shopTheLookState } from "../../store/search.store";
+import {
+  makeUploadFileRequest,
+  makeVisualSearchRequest,
+  shopTheLookState,
+} from "../../store/search.store";
 
 export interface ModalPosition {
   x: number;

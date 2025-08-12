@@ -10,7 +10,7 @@ import {
   Watch,
 } from "@stencil/core";
 import * as E from "fp-ts/lib/Either";
-import { Recommendation } from "../../interfaces/recommendation";
+import { Recommendation } from "../../interfaces";
 import { Rectangle } from "../../interfaces/search";
 import { BasicEventData } from "../../recommendation/events";
 import { TEST_BASIC_EVENT_DATA } from "./test-data";

@@ -1,6 +1,6 @@
 import { h } from "@stencil/core";
 import { Rectangle } from "../../interfaces/search";
-import { Recommendation } from "../../interfaces/recommendation";
+import { Recommendation } from "../../interfaces";
 import { BasicEventData } from "../../recommendation/events";
 import { ModalPosition } from "./helpers";
 import { isDesktop, isSmallMobile } from "../../helpers/device/checkDeviceType";
