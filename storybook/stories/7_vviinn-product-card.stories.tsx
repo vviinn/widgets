@@ -9,6 +9,14 @@ export default {
   decorators: [productDecorator],
   parameters: {
     controls: { expanded: false },
+    argTypes: {
+      entityType: {
+        options: ["product", "content", "list"],
+        control: {
+          type: "select",
+        },
+      },
+    },
   },
   argTypes,
 };
