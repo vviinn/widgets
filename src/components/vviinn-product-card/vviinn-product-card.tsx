@@ -184,7 +184,7 @@ export class VviinnProductCard {
   @Prop({ mutable: true }) imageResolutionWidth: number =
     PRODUCT_CARD_IMAGE_RESOLUTION_WIDTH;
   /** @internal */
-  @Prop() loading: boolean = true;
+  @Prop() loading: boolean = false;
 
   @State() isTransitioning: boolean = false;
   @State() basketButonPressed: boolean = false;
