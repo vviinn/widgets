@@ -295,7 +295,6 @@ swiper-container::part(bullet-active):hover {
   cursor: pointer;
   border-radius: var(--spacing-75);
   overflow: hidden;
-  background: var(--color-field-02);
   aspect-ratio: 1;
 }
 

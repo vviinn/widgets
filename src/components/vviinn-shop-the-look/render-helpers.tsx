@@ -10,7 +10,6 @@ import {
   getSwiperStyles,
 } from "../../utils/swiper/swiperUtils";
 import { GridViewIcon } from "../vviinn-icons/icons/GridViewIcon";
-import { UniversalImage } from "../vviinn-product-card/render-helpers";
 
 export interface DetectedObjectsProps {
   imageBounds: Rectangle | null;
@@ -213,15 +212,15 @@ export const renderProductGrid = (props: ProductGridProps) => {
           }}
         >
           <div class="result-image">
-            {UniversalImage({
-              width: 120,
-              height: 120,
-              title: product.title || "",
-              src: product.image?.thumbnail || product.image?.original || "",
-              ref: () => {},
-              isResponsive: true,
-              imageResolutionWidth: 300,
-            })}
+            <vviinn-image
+              width={120}
+              height={120}
+              alt={product.title || ""}
+              imageTitle={product.title || ""}
+              src={product.image?.thumbnail || product.image?.original || ""}
+              responsive={true}
+              imageResolutionWidth={300}
+            />
           </div>
         </div>
       ))}

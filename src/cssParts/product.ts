@@ -1,3 +1,15 @@
+export const imagePartsList = [
+  "image",
+  "image-container",
+  "image-picture",
+  "image-placeholder",
+  "image-skeleton",
+  "image-link",
+  "content-card-image",
+  "content-card-image-container", 
+  "content-card-image-picture",
+];
+
 export const productCardGeneralPartsList = [
   "product-card",
   "content-container",
@@ -5,12 +17,6 @@ export const productCardGeneralPartsList = [
   "product-type",
   "currency",
   "deeplink",
-  "image",
-  "image-container",
-  "image-skeleton",
-  "image-link",
-  "image-picture",
-  "image-placeholder",
   "title",
   "basket-button",
   "basket-button-container",
@@ -52,10 +58,7 @@ export const pricePartsList = [
 
 export const contentCardPartsList = [
   "content-card",
-  "content-card-image-container",
   "content-card-content-container",
-  "content-card-image-picture",
-  "content-card-image",
   "content-label",
   "content-title",
   "content-link",

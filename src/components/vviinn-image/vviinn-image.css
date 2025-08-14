@@ -1,0 +1,93 @@
+:host {
+  /**
+   * @prop --image-border: Set the border of the image.
+   * @prop --image-bg-color: Set the background color of the image.
+   * @prop --image-transition-duration: Duration of skeleton to content transitions.
+   */
+
+  --image-border-default: none;
+  --image-bg-color-default: var(--surface-bg-color-01);
+  --image-transition-duration-default: 0.5s;
+
+  display: block;
+}
+
+.image {
+  box-sizing: border-box;
+  display: grid;
+  align-content: center;
+  object-position: 50% 50%;
+  aspect-ratio: 1;
+  object-fit: contain;
+  text-align: center;
+  border: var(--image-border, var(--image-border-default));
+  opacity: 0;
+  transition: opacity
+    var(--image-transition-duration, var(--image-transition-duration-default))
+    ease-in-out;
+}
+
+.image.loaded {
+  opacity: 1;
+}
+
+.image.responsive {
+  width: 100%;
+  height: auto;
+}
+
+.content-card-image.responsive {
+  min-width: 100%;
+  height: 100%;
+}
+
+.image-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f0f0;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  height: auto;
+  transition: opacity
+    var(--image-transition-duration, var(--image-transition-duration-default))
+    ease-in-out;
+  opacity: 1;
+}
+
+.image-placeholder.loaded {
+  opacity: 0;
+}
+
+picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+picture::before {
+  display: block;
+  box-sizing: border-box;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  content: "";
+  opacity: 0;
+}
+
+picture::after {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: var(--image-bg-color, var(--image-bg-color-default));
+  mix-blend-mode: multiply;
+  content: "";
+}
+

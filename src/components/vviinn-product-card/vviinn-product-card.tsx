@@ -15,7 +15,10 @@ import { pipe } from "fp-ts/lib/function";
 import { getAnalyticsModule } from "../../analytics/GeneralAnalytics";
 import * as O from "fp-ts/lib/Option";
 import i18next from "i18next";
-import { setupIntersectionObserver, type IntersectionObserverConfig } from "../../dom";
+import {
+  setupIntersectionObserver,
+  type IntersectionObserverConfig,
+} from "../../dom";
 
 import { searchState } from "../../store/search.store";
 import {
@@ -25,7 +28,6 @@ import {
   parseBasePrice,
   renderCustomLabels,
   ContentCardContent,
-  UniversalImage,
 } from "./render-helpers";
 import {
   CrossSellingClickEvent,
@@ -42,6 +44,7 @@ import {
   UpdateIcon,
   FavoriteIcon,
   FavoriteIconPressed,
+  PlusIcon,
 } from "../vviinn-icons";
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
 import { generateRandomNumber } from "../../utils/number";
@@ -181,7 +184,7 @@ export class VviinnProductCard {
   @Prop({ mutable: true }) imageResolutionWidth: number =
     PRODUCT_CARD_IMAGE_RESOLUTION_WIDTH;
   /** @internal */
-  @Prop() loading: boolean = false;
+  @Prop() loading: boolean = true;
 
   @State() isTransitioning: boolean = false;
   @State() basketButonPressed: boolean = false;
@@ -274,10 +277,13 @@ export class VviinnProductCard {
           this.vviinnProductView.emit(this.productData);
           this.intersectionObserver?.disconnect();
         }
-      }
+      },
     };
 
-    this.intersectionObserver = setupIntersectionObserver(this.imageElement, config);
+    this.intersectionObserver = setupIntersectionObserver(
+      this.imageElement,
+      config,
+    );
   }
 
   @Listen("vviinnCrossSellingClick")
@@ -446,13 +452,34 @@ export class VviinnProductCard {
     isResponsive: boolean,
     isFullHeight: boolean = false,
   ) {
-    const additionalClasses = this.imageLoaded ? ["loaded"] : [];
-    return UniversalImage({
-      ...imageProps,
-      isResponsive,
-      isFullHeight,
-      additionalClasses,
-    });
+    return (
+      <vviinn-image
+        src={imageProps.src}
+        width={imageProps.width}
+        height={imageProps.height}
+        alt={imageProps.title}
+        imageTitle={imageProps.title}
+        responsive={isResponsive}
+        fullHeight={isFullHeight}
+        imageResolutionWidth={imageProps.imageResolutionWidth}
+        customClass={this.imageLoaded ? "loaded" : ""}
+        imageRef={imageProps.ref}
+        loadEndCallback={imageProps.onLoadEnd}
+        onVviinnImageLoad={imageProps.onLoadEnd}
+        style={{
+          "--image-border": "var(--product-card-image-border, none)",
+          "--image-bg-color":
+            "var(--product-card-image-bg-color, var(--surface-bg-color-01))",
+          "--image-transition-duration":
+            "var(--product-card-transition-duration, 0.5s)",
+        }}
+      >
+        <slot
+          name="vviinn-image-placeholder-icon"
+          slot="placeholder-icon"
+        ></slot>
+      </vviinn-image>
+    );
   }
 
   render() {
@@ -492,6 +519,8 @@ export class VviinnProductCard {
         part="product-card"
         class={{
           animated: this.shouldShowSkeleton(),
+          "product-card--source": this.isSourceProduct,
+          "set-mode": this.setMode,
         }}
         exportparts={productCardParts}
       >
@@ -642,6 +671,7 @@ export class VviinnProductCard {
               )}
             </Linked>
           )}
+          {this.isSourceProduct && <PlusIcon class="plus-icon" />}
           {this.setMode &&
             !this.appliedDiscountPercentage &&
             this.currentDiscountPercentage && (
