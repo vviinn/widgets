@@ -8,8 +8,7 @@ import {
   Event,
   EventEmitter,
 } from "@stencil/core";
-import { ImagePlaceholderIcon } from "../vviinn-icons";
-import { imagePartsList } from "../../cssParts/product";
+import { imageParts } from "../../cssParts";
 
 /**
  * Encapsulated image component with customizable styling and built-in placeholder support.
@@ -59,6 +58,8 @@ export class VviinnImage {
     "contain";
   /** Whether to show loading state with skeleton animation */
   @Prop() loading: boolean = false;
+  /** Whether component is in set mode shows sparkle icon in loading state */
+  @Prop() showSkeletonIcon: boolean = false;
   /** Custom CSS classes to apply */
   @Prop() customClass: string = "";
   /** Border radius (can use CSS custom properties) */
@@ -172,24 +173,17 @@ export class VviinnImage {
       );
     }
 
-    return (
-      <div
-        class="image-placeholder"
-        part="image-placeholder"
-        style={this.getDimensionStyles()}
-      >
-        <slot name="placeholder-icon">
-          <ImagePlaceholderIcon />
-        </slot>
-      </div>
-    );
+    return null;
   }
 
   render() {
     const containerStyles = this.getDimensionStyles();
 
     return (
-      <Host exportparts={imagePartsList.join(", ")}>
+      <Host
+        exportparts={imageParts}
+        class={{ "has-skeleton-icon": this.showSkeletonIcon }}
+      >
         <div
           class={`image-container ${this.fullHeight ? "content-card-image-container" : ""}`}
           part={`image-container ${this.fullHeight ? "content-card-image-container" : ""}`}
@@ -201,7 +195,19 @@ export class VviinnImage {
             {this.renderImage()}
           </picture>
           {this.loading && !this.imageLoaded && (
-            <vviinn-skeleton class="skeleton-overlay"></vviinn-skeleton>
+            <div
+              class="image-skeleton"
+              part="image-skeleton"
+              style={{
+                "aspect-ratio": this.aspectRatio
+                  ? this.aspectRatio.toString()
+                  : this.width && this.height
+                    ? (this.width / this.height).toString()
+                    : "1",
+              }}
+            >
+              <vviinn-skeleton />
+            </div>
           )}
         </div>
       </Host>

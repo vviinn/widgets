@@ -41,6 +41,8 @@ export const energyLabelParts = makeExportPartsString(energyLabelPartsList);
 
 export const productCardsGridPart = "products";
 
+export const imageParts = makeExportPartsString(imagePartsList);
+
 export const productCardParts = makeExportPartsString(
   productCardGeneralPartsList,
   imagePartsList,

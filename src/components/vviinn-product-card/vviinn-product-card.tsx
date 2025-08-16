@@ -466,6 +466,8 @@ export class VviinnProductCard {
         imageRef={imageProps.ref}
         loadEndCallback={imageProps.onLoadEnd}
         onVviinnImageLoad={imageProps.onLoadEnd}
+        loading={this.shouldShowSkeleton()}
+        showSkeletonIcon={this.setMode}
         style={{
           "--image-border": "var(--product-card-image-border, none)",
           "--image-bg-color":
