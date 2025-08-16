@@ -73,6 +73,21 @@ export class VviinnImage {
   /** Callback for when image loading ends (load or error) */
   @Prop() loadEndCallback?: () => void;
 
+  private get isLoading(): boolean {
+    return this.loading && !this.imageLoaded && !this.imageError;
+  }
+
+  private get hasValidImage(): boolean {
+    return !!this.src && !this.imageError;
+  }
+
+  private get computedAspectRatio(): number | null {
+    if (this.aspectRatio) return this.aspectRatio;
+    if (this.width && this.height) return this.width / this.height;
+    return null;
+  }
+
+
   private getProcessedSrc(): string {
     if (!this.src) return "";
 
@@ -86,20 +101,25 @@ export class VviinnImage {
     return this.src;
   }
 
-  private getDimensionStyles() {
+  private getDimensionStyles(): Record<string, string> {
     const styles: Record<string, string> = {};
+    const aspectRatio = this.computedAspectRatio;
 
-    if (this.aspectRatio) {
-      styles.aspectRatio = this.aspectRatio.toString();
-    } else if (this.width && this.height) {
-      if (!this.responsive) {
-        styles.width = `${this.width}px`;
-        styles.height = `${this.height}px`;
+    if (aspectRatio) {
+      if (this.responsive) {
+        styles.aspectRatio = aspectRatio.toString();
       } else {
-        styles.aspectRatio = (this.width / this.height).toString();
+        styles.width = this.width ? `${this.width}px` : 'auto';
+        styles.height = this.height ? `${this.height}px` : 'auto';
       }
     }
 
+    return styles;
+  }
+
+  private getContainerStyles(): Record<string, string> {
+    const styles = this.getDimensionStyles();
+    
     if (this.borderRadius) styles.borderRadius = this.borderRadius;
     if (this.border) styles.border = this.border;
     if (this.backgroundColor) styles.backgroundColor = this.backgroundColor;
@@ -107,15 +127,30 @@ export class VviinnImage {
     return styles;
   }
 
-  private getImageClasses(): string {
-    let classes = "image";
-    if (this.responsive) classes += " responsive";
-    if (this.fullHeight) classes += " full-height content-card-image";
-    if (this.loading) classes += " loading";
-    if (this.imageLoaded) classes += " loaded";
-    if (this.imageError) classes += " error";
-    if (this.customClass) classes += " " + this.customClass;
-    return classes;
+  private getImageStyles(): Record<string, string> {
+    const styles: Record<string, string> = {
+      objectFit: this.objectFit,
+    };
+
+    if (!this.responsive) {
+      if (this.width) styles.width = `${this.width}px`;
+      if (this.height) styles.height = `${this.height}px`;
+    }
+
+    return styles;
+  }
+
+  private getImageClassMap() {
+    return {
+      image: true,
+      responsive: this.responsive,
+      'full-height': this.fullHeight,
+      'content-card-image': this.fullHeight,
+      loading: this.isLoading,
+      loaded: this.imageLoaded,
+      error: this.imageError,
+      [this.customClass]: !!this.customClass,
+    };
   }
 
   private handleImageLoad = (event: Event) => {
@@ -147,68 +182,57 @@ export class VviinnImage {
 
   private renderImage() {
     const processedSrc = this.getProcessedSrc();
-    const hasImage = !!processedSrc && !this.imageError;
-
-    if (hasImage) {
-      return (
-        <img
-          src={processedSrc}
-          alt={this.alt}
-          title={this.imageTitle}
-          class={this.getImageClasses()}
-          part={`image ${this.fullHeight ? "content-card-image" : ""}`}
-          style={{
-            objectFit: this.objectFit,
-            ...(!this.responsive && this.width
-              ? { width: `${this.width}px` }
-              : {}),
-            ...(!this.responsive && this.height
-              ? { height: `${this.height}px` }
-              : {}),
-          }}
-          onLoad={this.handleImageLoad}
-          onError={this.handleImageError}
-          loading="lazy"
-        />
-      );
+    
+    if (!this.hasValidImage || !processedSrc) {
+      return null;
     }
 
-    return null;
+    return (
+      <img
+        src={processedSrc}
+        alt={this.alt}
+        title={this.imageTitle}
+        class={this.getImageClassMap()}
+        part={`image ${this.fullHeight ? "content-card-image" : ""}`}
+        style={this.getImageStyles()}
+        onLoad={this.handleImageLoad}
+        onError={this.handleImageError}
+        loading="lazy"
+      />
+    );
+  }
+
+  private renderSkeleton() {
+    if (!this.isLoading) return null;
+
+    const aspectRatio = this.computedAspectRatio || 1;
+
+    return (
+      <div
+        class="image-skeleton"
+        part="image-skeleton"
+        style={{ "aspect-ratio": aspectRatio.toString() }}
+      >
+        <vviinn-skeleton />
+      </div>
+    );
   }
 
   render() {
-    const containerStyles = this.getDimensionStyles();
-
     return (
       <Host
         exportparts={imageParts}
         class={{ "has-skeleton-icon": this.showSkeletonIcon }}
       >
         <div
-          class={`image-container ${this.fullHeight ? "content-card-image-container" : ""}`}
-          part={`image-container ${this.fullHeight ? "content-card-image-container" : ""}`}
-          style={containerStyles}
+          class={`image-container${this.fullHeight ? ' content-card-image-container' : ''}`}
+          part={`image-container${this.fullHeight ? ' content-card-image-container' : ''}`}
+          style={this.getContainerStyles()}
         >
-          <picture
-            part={`image-picture ${this.fullHeight ? "content-card-image-picture" : ""}`}
-          >
+          <picture part={`image-picture${this.fullHeight ? ' content-card-image-picture' : ''}`}>
             {this.renderImage()}
           </picture>
-          {this.loading && !this.imageLoaded && (
-            <div
-              class="image-skeleton"
-              part="image-skeleton"
-              style={{
-                "aspect-ratio": this.aspectRatio
-                  ? this.aspectRatio.toString()
-                  : this.width && this.height
-                    ? (this.width / this.height).toString()
-                    : "1",
-              }}
-            >
-              <vviinn-skeleton />
-            </div>
-          )}
+          {this.renderSkeleton()}
         </div>
       </Host>
     );
