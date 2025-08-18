@@ -87,7 +87,6 @@ export class VviinnImage {
     return null;
   }
 
-
   private getProcessedSrc(): string {
     if (!this.src) return "";
 
@@ -109,8 +108,8 @@ export class VviinnImage {
       if (this.responsive) {
         styles.aspectRatio = aspectRatio.toString();
       } else {
-        styles.width = this.width ? `${this.width}px` : 'auto';
-        styles.height = this.height ? `${this.height}px` : 'auto';
+        styles.width = this.width ? `${this.width}px` : "auto";
+        styles.height = this.height ? `${this.height}px` : "auto";
       }
     }
 
@@ -119,7 +118,7 @@ export class VviinnImage {
 
   private getContainerStyles(): Record<string, string> {
     const styles = this.getDimensionStyles();
-    
+
     if (this.borderRadius) styles.borderRadius = this.borderRadius;
     if (this.border) styles.border = this.border;
     if (this.backgroundColor) styles.backgroundColor = this.backgroundColor;
@@ -144,8 +143,8 @@ export class VviinnImage {
     return {
       image: true,
       responsive: this.responsive,
-      'full-height': this.fullHeight,
-      'content-card-image': this.fullHeight,
+      "full-height": this.fullHeight,
+      "content-card-image": this.fullHeight,
       loading: this.isLoading,
       loaded: this.imageLoaded,
       error: this.imageError,
@@ -182,7 +181,7 @@ export class VviinnImage {
 
   private renderImage() {
     const processedSrc = this.getProcessedSrc();
-    
+
     if (!this.hasValidImage || !processedSrc) {
       return null;
     }
@@ -225,11 +224,13 @@ export class VviinnImage {
         class={{ "has-skeleton-icon": this.showSkeletonIcon }}
       >
         <div
-          class={`image-container${this.fullHeight ? ' content-card-image-container' : ''}`}
-          part={`image-container${this.fullHeight ? ' content-card-image-container' : ''}`}
+          class={`image-container${this.fullHeight ? " content-card-image-container" : ""}`}
+          part={`image-container${this.fullHeight ? " content-card-image-container" : ""}`}
           style={this.getContainerStyles()}
         >
-          <picture part={`image-picture${this.fullHeight ? ' content-card-image-picture' : ''}`}>
+          <picture
+            part={`image-picture${this.fullHeight ? " content-card-image-picture" : ""}`}
+          >
             {this.renderImage()}
           </picture>
           {this.renderSkeleton()}

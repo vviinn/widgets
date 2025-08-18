@@ -457,6 +457,7 @@ export class VviinnProductCard {
         src={imageProps.src}
         width={imageProps.width}
         height={imageProps.height}
+        aspectRatio={this.imageRatio}
         alt={imageProps.title}
         imageTitle={imageProps.title}
         responsive={isResponsive}
@@ -491,6 +492,7 @@ export class VviinnProductCard {
           part="product-card content-card"
           class="content-card"
           exportparts={contentCardParts}
+          data-id={this.productId}
         >
           <div
             class="image-container content-card-image-container"
@@ -525,6 +527,7 @@ export class VviinnProductCard {
           "set-mode": this.setMode,
         }}
         exportparts={productCardParts}
+        data-id={this.productId}
       >
         <div class="content-container" part="content-container">
           {this.shouldShowSkeleton() ? (

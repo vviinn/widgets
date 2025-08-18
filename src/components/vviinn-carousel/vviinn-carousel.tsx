@@ -577,7 +577,7 @@ export class VviinnCarousel {
         salePrice={salePrice}
         basePrice={recommendation.basePrice?.actual}
         baseSalePrice={recommendation.basePrice?.sale}
-        responsive={this.isGridMode}
+        responsive={this.isGridMode || this.isSetMode}
         campaignTypeId={this.campaignTypeId}
         widgetElementId={this.widgetElementId}
         widgetVersion={this.widgetVersion}
@@ -726,6 +726,7 @@ export class VviinnCarousel {
               setMode={this.isSetMode}
               locale={this.locale}
               favoriteShow={this.favoriteShow}
+              responsive={true}
             />
           )}
 

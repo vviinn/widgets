@@ -519,8 +519,8 @@ vviinn-product-card::part(price-container) {
   flex-direction: row;
 }
 
-vviinn-product-card::part(image-picture)::after,
-vviinn-product-card::part(image) {
+vviinn-image::part(image-picture)::after,
+vviinn-image::part(image) {
   border-radius: var(--border-radius-200);
 }
 
