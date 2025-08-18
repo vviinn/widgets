@@ -56,20 +56,6 @@
   width: 100%;
 }
 
-.image-skeleton {
-  position: relative;
-}
-
-:host(.set-mode) .image-skeleton::after {
-  content: url("../../assets/sparkle-icon.svg");
-  position: absolute;
-  width: 80px;
-  height: 80px;
-  left: calc(50% - 40px);
-  top: calc(50% - 40px);
-  z-index: 10;
-}
-
 :host(.set-mode) vviinn-image::part(image),
 :host(.set-mode.product-card--source) vviinn-image::part(image) {
   width: var(--vviinn-set-mode-image-width, 100%);

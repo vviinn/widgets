@@ -467,7 +467,7 @@ export class VviinnProductCard {
         imageRef={imageProps.ref}
         loadEndCallback={imageProps.onLoadEnd}
         onVviinnImageLoad={imageProps.onLoadEnd}
-        loading={this.shouldShowSkeleton()}
+        showSkeleton={this.shouldShowSkeleton()}
         showSkeletonIcon={this.setMode}
         style={{
           "--image-border": "var(--product-card-image-border, none)",
@@ -658,24 +658,10 @@ export class VviinnProductCard {
         </div>
 
         <div class="image-container" part="image-container">
-          {this.shouldShowSkeleton() ? (
-            <div
-              class="image-skeleton"
-              part="image-skeleton"
-              style={{
-                "aspect-ratio": this.imageRatio.toString(),
-              }}
-            >
-              <vviinn-skeleton />
-            </div>
-          ) : (
-            <Linked deeplink={this.deeplink} part="image-link">
-              {this.renderImageWithLoadedState(
-                this.imageProps,
-                this.responsive,
-              )}
-            </Linked>
-          )}
+          <Linked deeplink={this.deeplink} part="image-link">
+            {this.renderImageWithLoadedState(this.imageProps, this.responsive)}
+          </Linked>
+
           {this.isSourceProduct && <PlusIcon class="plus-icon" />}
           {this.setMode &&
             !this.appliedDiscountPercentage &&

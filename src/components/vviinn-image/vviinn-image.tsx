@@ -57,7 +57,7 @@ export class VviinnImage {
   @Prop() objectFit: "contain" | "cover" | "fill" | "none" | "scale-down" =
     "contain";
   /** Whether to show loading state with skeleton animation */
-  @Prop() loading: boolean = false;
+  @Prop() showSkeleton: boolean = false;
   /** Whether component is in set mode shows sparkle icon in loading state */
   @Prop() showSkeletonIcon: boolean = false;
   /** Custom CSS classes to apply */
@@ -74,7 +74,7 @@ export class VviinnImage {
   @Prop() loadEndCallback?: () => void;
 
   private get isLoading(): boolean {
-    return this.loading && !this.imageLoaded && !this.imageError;
+    return this.showSkeleton && !this.imageError;
   }
 
   private get hasValidImage(): boolean {
@@ -202,8 +202,6 @@ export class VviinnImage {
   }
 
   private renderSkeleton() {
-    if (!this.isLoading) return null;
-
     const aspectRatio = this.computedAspectRatio || 1;
 
     return (
@@ -228,12 +226,15 @@ export class VviinnImage {
           part={`image-container${this.fullHeight ? " content-card-image-container" : ""}`}
           style={this.getContainerStyles()}
         >
-          <picture
-            part={`image-picture${this.fullHeight ? " content-card-image-picture" : ""}`}
-          >
-            {this.renderImage()}
-          </picture>
-          {this.renderSkeleton()}
+          {this.isLoading ? (
+            this.renderSkeleton()
+          ) : (
+            <picture
+              part={`image-picture${this.fullHeight ? " content-card-image-picture" : ""}`}
+            >
+              {this.renderImage()}
+            </picture>
+          )}
         </div>
       </Host>
     );
