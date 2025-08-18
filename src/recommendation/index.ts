@@ -3,7 +3,7 @@ import {
   SimilarProductsRequest,
   RequestStaticFilters,
   Recommendation,
-} from "../interfaces/recommendation";
+} from "../interfaces";
 import { RequestDynamicFilterItem } from "../campaign/VPRCampaignService";
 import {
   addIfNotEmpty,

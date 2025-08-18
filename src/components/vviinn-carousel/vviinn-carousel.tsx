@@ -15,7 +15,7 @@ import { chunksOf } from "fp-ts/lib/Array";
 import { pipe } from "fp-ts/lib/function";
 import i18next from "i18next";
 
-import { Recommendation } from "../../interfaces/recommendation";
+import { Recommendation } from "../../interfaces";
 import { ChevronIcon } from "../vviinn-icons";
 import { CampaignTypeId, campaignTypeNames } from "../../campaign/Campaign";
 import {
@@ -107,7 +107,17 @@ export class VviinnCarousel {
   vviinnProductView: EventEmitter<ProductCardEventData>;
   private resizeObserver: ResizeObserver = new ResizeObserver(() => {
     this.handleResize();
-    this.setImageWidthSetMode("100%");
+
+    if (this.isSetMode && this.updatingAllCards) {
+      const currentWidth = this.el.style.getPropertyValue(
+        SET_MODE_IMAGE_WIDTH_CSS_VAR,
+      );
+      if (!currentWidth || currentWidth === "100%") {
+        this.setImageWidthSetMode("100%");
+      }
+    } else {
+      this.setImageWidthSetMode("100%");
+    }
   });
 
   private isSetMode: boolean;
@@ -188,14 +198,15 @@ export class VviinnCarousel {
         this.vviinnProductLoad.emit(productData);
       }
 
+      let element = this.el.querySelector(`[data-id="${productId}"]`);
+      const imageWidth = element.getBoundingClientRect().width;
+
+      this.setImageWidthSetMode(`${imageWidth}px`);
+
       this.crossSellingRecommendations = [...newCrossSellingRecommendations];
 
-      let element = this.el.querySelector(`[data-id="${productId}"]`);
       const button = element.shadowRoot.querySelector(".update-button");
       button?.classList.add("hidden");
-
-      const imageWidth = element.getBoundingClientRect().width;
-      this.setImageWidthSetMode(`${imageWidth}px`);
 
       const animationTimer = setTimeout(() => {
         if (recommendationIndex + step * 2 <= this.recommendations.length - 1) {
@@ -555,6 +566,7 @@ export class VviinnCarousel {
         productId={recommendation.productId}
         productTitle={recommendation.title}
         productType={recommendation.productType}
+        entityType={recommendation.entityType}
         deeplink={recommendation.deeplink}
         image={recommendation.image.thumbnail || recommendation.image.original}
         brand={recommendation.brand}
@@ -699,6 +711,7 @@ export class VviinnCarousel {
                 this.sourceProduct.image.thumbnail ||
                 this.sourceProduct.image.original
               }
+              entityType={this.sourceProduct.entityType}
               price={this.sourceProduct.price.actual}
               salePrice={this.sourceProduct.price.sale}
               basePrice={this.sourceProduct.basePrice?.actual}

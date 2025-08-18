@@ -7,6 +7,7 @@ export const productCardGeneralPartsList = [
   "deeplink",
   "image",
   "image-container",
+  "image-skeleton",
   "image-link",
   "image-picture",
   "image-placeholder",
@@ -56,6 +57,6 @@ export const contentCardPartsList = [
   "content-card-image-picture",
   "content-card-image",
   "content-label",
-  "content-text",
+  "content-title",
   "content-link",
 ];

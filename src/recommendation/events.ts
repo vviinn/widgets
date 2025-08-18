@@ -13,7 +13,7 @@ import {
   RequestDynamicFilterItem,
   ResponseDynamicFilterItem,
 } from "../campaign/VPRCampaignService";
-import { Rectangle } from "../interfaces/search";
+import { Rectangle } from "../interfaces";
 
 export type CommonEventData = {
   campaignTypeId: "VPR" | "VPS" | "VCS" | "TPS";

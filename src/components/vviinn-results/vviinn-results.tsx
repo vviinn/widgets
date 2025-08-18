@@ -41,7 +41,7 @@ import {
 } from "../../components";
 import { ErrorType } from "../vviinn-error";
 import { campaignTypeNames } from "../../campaign/Campaign";
-import { TextSearchResponse } from "../../interfaces/search";
+import { TextSearchResponse } from "../../interfaces";
 import {
   ChangedFiltersEvent,
   ChangedFiltersEventData,
@@ -800,6 +800,7 @@ export class VviinnResults {
         productTitle={p.title}
         productId={p.productId}
         productType={p.productType}
+        entityType={p.entityType}
         brand={p.brand}
         deeplink={p.deeplink}
         price={p.price.actual}

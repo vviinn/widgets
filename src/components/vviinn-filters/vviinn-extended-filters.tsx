@@ -13,7 +13,7 @@ import {
 } from "@stencil/core";
 import i18next from "i18next";
 import { announceToScreenReader } from "../../a11y";
-import { IntervalFilterValueItem } from "../../interfaces/search";
+import { IntervalFilterValueItem } from "../../interfaces";
 
 import {
   ResponseDynamicFilterItem,
@@ -45,7 +45,7 @@ import { triggerFilter, triggerResetFilters } from "./helpers/triggerFilter";
 import { SearchStore, useSearchStore } from "../../store/search.store";
 import { globalState } from "../../store/store";
 import { addEventListenersWithSignal } from "../../dom";
-import { ResponseIntervalFilterItem } from "../../interfaces/search";
+import { ResponseIntervalFilterItem } from "../../interfaces";
 
 /**
  * @slot vviinn-extended-filters-title - Text on widget's header.
@@ -616,7 +616,10 @@ export class VviinnExtendedFilters {
     );
 
     if (selectedFilter) {
-      this.handleSubFilterSelection(filterValue as DynamicFilterValue, selectedFilter);
+      this.handleSubFilterSelection(
+        filterValue as DynamicFilterValue,
+        selectedFilter,
+      );
     }
   };
 

@@ -5,7 +5,7 @@ import {
   pointProductSemigroup,
 } from "./Point";
 import { Sized, sizedDivSemigroup } from "./Sized";
-import { Rectangle } from "../interfaces/search";
+import { Rectangle } from "../interfaces";
 
 export type ClickEvent = Event & { clientX: number; clientY: number };
 

@@ -1,6 +1,7 @@
 import { argTypes } from "../../src/components/vviinn-vpr-widget/stories/args";
 import { vviinnToken, productIdSimilarProducts } from "../helpers";
 import "../documentation/widgets/styles.css";
+import { argsFromParams } from "../helpers/argsFromParams";
 
 export default {
   title: "Playground/Discovery",
@@ -47,7 +48,8 @@ const Template = (args) => `
 
 export const Default = Template.bind({});
 Default.storyName = "Discovery";
-Default.args = {
+
+const initArgs = {
   token: vviinnToken,
   apiPath: process.env.STORYBOOK_API_PATH,
   productId: productIdSimilarProducts,
@@ -78,3 +80,5 @@ Default.args = {
   addPriceContainer: false,
   favoriteShow: false,
 };
+
+Default.args = argsFromParams(initArgs);

@@ -25,7 +25,7 @@ import { globalState, trackEvent, updateGlobalState } from "../../store/store";
 import { CampaignName, campaignTypeNames } from "../../campaign/Campaign";
 import { getRecommendationsService } from "../../campaign/CampaignService";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
-import { Recommendation } from "../../interfaces/recommendation";
+import { Recommendation } from "../../interfaces";
 import { SlotSkeleton, slotChangeListener } from "../customized-slots";
 
 import {
@@ -661,6 +661,7 @@ export class VviinnVprWidget implements ComponentInterface {
         productId={recommendation.productId}
         productTitle={recommendation.title}
         productType={recommendation.productType}
+        entityType={recommendation.entityType}
         deeplink={recommendation.deeplink}
         image={recommendation.image.thumbnail}
         imageResolutionWidth={this.imageResolutionWidth}
