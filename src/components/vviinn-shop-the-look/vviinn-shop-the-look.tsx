@@ -13,8 +13,8 @@ import * as E from "fp-ts/lib/Either";
 import { Recommendation } from "../../interfaces";
 import { Rectangle } from "../../interfaces/search";
 import { BasicEventData } from "../../recommendation/events";
-import { TEST_BASIC_EVENT_DATA } from "./test-data";
 import { register } from "swiper/element";
+import { updateGlobalState } from "../../store/store";
 import {
   calculateImageBounds,
   hasImageBoundsChanged,
@@ -39,6 +39,8 @@ import {
   SwiperProps,
   ModalProps,
 } from "./render-helpers";
+import { Locale } from "../../locale";
+import { TEST_BASIC_EVENT_DATA } from "./test-data";
 
 if (typeof window !== "undefined") {
   register();
@@ -49,6 +51,13 @@ export interface ShopTheLookEventData extends BasicEventData {
   product: Recommendation;
 }
 
+/**
+ * Interactive "Shop the Look" widget that enables visual product search on fashion/interior images.
+ * Users can click on hotspots (detected objects) to discover similar products and see recommendations in a modal.
+ *
+ * Supports multiple images with swiper navigation, responsive design, and customizable styling.
+ */
+
 @Component({
   tag: "vviinn-shop-the-look",
   styleUrl: "vviinn-shop-the-look.css",
@@ -57,11 +66,22 @@ export interface ShopTheLookEventData extends BasicEventData {
 export class VviinnShopTheLook {
   @Element() el: HTMLElement;
 
+  /** Comma-separated list of image URLs to display in the widget */
   @Prop() imageUrls: string = "";
+  /** Width of the widget in pixels */
   @Prop() width: number = 350;
+  /** Height of the widget in pixels */
   @Prop() height: number = 468;
+  /** Vviinn customer's token (required) */
   @Prop() token: string = "";
+  /** The currency sign is displayed after the price */
   @Prop() currencySign: string = "€";
+  /** Campaign ID for visual search requests */
+  @Prop() campaignId: string = "";
+  /** The locale for currency formatting and text localization */
+  @Prop() locale: Locale;
+  /** @internal */
+  @Prop() apiPath?: string;
 
   @State() selectedDetectedObject: Rectangle | null = null;
   @State() showModal: boolean = false;
@@ -96,9 +116,12 @@ export class VviinnShopTheLook {
   @State() swiperKey: string = "swiper-0";
   @State() showArrows: boolean = false;
 
+  /** Emitted when a detected object/hotspot is clicked. Contains the object ID and first recommended product. */
   @Event()
   vviinnShopTheLookDetectedObjectClick: EventEmitter<ShopTheLookEventData>;
+  /** Emitted when a product in the recommendation modal is clicked. Contains the product details and detected object ID. */
   @Event() vviinnShopTheLookProductClick: EventEmitter<ShopTheLookEventData>;
+  /** Emitted when the recommendation modal is closed by the user. */
   @Event() vviinnShopTheLookModalClose: EventEmitter<BasicEventData>;
 
   private imageElement: HTMLImageElement;
@@ -107,6 +130,13 @@ export class VviinnShopTheLook {
   private imageElements: Map<number, HTMLImageElement> = new Map();
 
   componentWillLoad() {
+    updateGlobalState({
+      token: this.token,
+      apiPath: this.apiPath,
+      locale: this.locale,
+      currencySign: this.currencySign,
+    });
+
     if (this.imageUrls && this.imageUrls.trim()) {
       this.imageUrlsList = this.imageUrls
         .split(",")
@@ -310,6 +340,7 @@ export class VviinnShopTheLook {
       componentToken: this.componentToken,
       containerElement: this.el,
       visualSearchId,
+      campaignId: this.campaignId,
     };
 
     const result = await handleDetectedObjectClick(params);
@@ -352,6 +383,7 @@ export class VviinnShopTheLook {
       imageUrl: currentImageUrl,
       token: this.token,
       componentToken: this.componentToken,
+      campaignId: this.campaignId,
     };
 
     const result = await performVisualSearch(params);
@@ -572,6 +604,7 @@ export class VviinnShopTheLook {
       imageUrl,
       token: this.token,
       componentToken: this.componentToken,
+      campaignId: this.campaignId,
     };
 
     const result = await performVisualSearch(params);

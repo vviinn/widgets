@@ -248,6 +248,7 @@ const uploadImageFile =
     imageType: ImageType = "image",
     searchId?: string,
     token?: string | null,
+    campaignId?: string | null,
   ) =>
   (file: File) => {
     const state = useStore(store);
@@ -271,7 +272,7 @@ const uploadImageFile =
               ...addIfDefined("requestId", searchId),
               ...addIfNotEmpty(
                 "campaign",
-                state.campaignIdVisualSearch || state.campaignId,
+                campaignId || state.campaignIdVisualSearch || state.campaignId,
               ),
             }),
             (error) => ({
@@ -286,7 +287,8 @@ const uploadImageFile =
   };
 
 export const makeUploadFileRequest =
-  (store: SearchStoreName, token?: string | null) => async (file: File) => {
+  (store: SearchStoreName, token?: string | null, campaignId?: string | null) =>
+  async (file: File) => {
     const state = useStore(store);
 
     if (store !== "shopTheLook") {
@@ -301,7 +303,7 @@ export const makeUploadFileRequest =
     }
 
     const session = await pipe(
-      uploadImageFile(store, "image", undefined, token)(file),
+      uploadImageFile(store, "image", undefined, token, campaignId)(file),
     )();
 
     if (!state.visualSearchId?.length) return session;
@@ -320,6 +322,7 @@ export const makeUploadFileRequest =
         "highResolutionImage",
         state.visualSearchId,
         token,
+        campaignId,
       )(file),
       TE.getOrElseW((error) => {
         console.error("Failed to upload hi-res image:", error);
@@ -334,6 +337,7 @@ export const makeVisualSearchRequest = async (
   store: SearchStoreName,
   searchId?: string | null,
   token?: string | null,
+  campaignId?: string | null,
 ) => {
   const state = useStore(store);
   state.textSearchQuery = null;
@@ -365,7 +369,7 @@ export const makeVisualSearchRequest = async (
     ...addIfDefined("requestId", searchId ?? state.visualSearchId),
     ...addIfNotEmpty(
       "campaign",
-      state.campaignIdVisualSearch || state.campaignId,
+      campaignId || state.campaignIdVisualSearch || state.campaignId,
     ),
     ...addIfNotEmpty("dynamicFilters", state.requestFilters),
     query: {

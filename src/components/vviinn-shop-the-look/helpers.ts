@@ -107,6 +107,7 @@ export interface VisualSearchParams {
   imageUrl: string;
   token: string;
   componentToken?: string;
+  campaignId?: string;
 }
 
 export const performVisualSearch = async (
@@ -127,6 +128,7 @@ export const performVisualSearch = async (
     const result = await makeUploadFileRequest(
       "shopTheLook",
       params.componentToken || params.token,
+      params.campaignId,
     )(imageFile);
 
     return E.fold(
@@ -156,6 +158,7 @@ export interface DetectedObjectClickParams {
   componentToken?: string;
   containerElement?: HTMLElement;
   visualSearchId?: string | null;
+  campaignId?: string;
 }
 
 let isSearchInProgress = false;
@@ -185,6 +188,7 @@ export const handleDetectedObjectClick = async (
       "shopTheLook",
       params.visualSearchId || null,
       params.componentToken || params.token,
+      params.campaignId,
     );
 
     return E.fold(

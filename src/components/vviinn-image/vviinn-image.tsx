@@ -157,26 +157,16 @@ export class VviinnImage {
     this.imageLoaded = true;
     this.vviinnImageLoad.emit();
 
-    if (this.imageRef) {
-      this.imageRef(imgElement);
-    }
-
-    if (this.loadEndCallback) {
-      this.loadEndCallback();
-    }
+    this.imageRef && this.imageRef(imgElement);
+    this.loadEndCallback?.();
   };
 
   private handleImageError = () => {
     this.imageError = true;
     this.vviinnImageError.emit();
 
-    if (this.imageRef) {
-      this.imageRef(null);
-    }
-
-    if (this.loadEndCallback) {
-      this.loadEndCallback();
-    }
+    this.imageRef && this.imageRef(null);
+    this?.loadEndCallback();
   };
 
   private renderImage() {
