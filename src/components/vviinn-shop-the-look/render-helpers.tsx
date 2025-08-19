@@ -8,7 +8,7 @@ import {
   configureSwiperElement,
   getSwiperStyles,
 } from "../../utils/swiper/swiperUtils";
-import { ArrowIcon } from "../vviinn-icons/icons/ArrowIcon";
+import { SecondaryActionIcon } from "../vviinn-icons/icons/SecondaryActionIcon";
 
 export interface DetectedObjectsProps {
   imageBounds: Rectangle | null;
@@ -258,7 +258,7 @@ export const renderProductDetails = (props: ProductDetailsSliderProps) => {
     <div class="product-details">
       <div class="product-header">
         <button class="back-to-grid-button" onClick={onBackToGrid}>
-          <ArrowIcon />
+          <SecondaryActionIcon />
         </button>
       </div>
 

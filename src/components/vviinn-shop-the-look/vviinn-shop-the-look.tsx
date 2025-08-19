@@ -382,6 +382,8 @@ export class VviinnShopTheLook {
     const currentImageUrl = this.imageUrlsList[this.currentImageIndex];
     if (!this.token || !currentImageUrl) return;
 
+    this.isSearching = true;
+
     const params: VisualSearchParams = {
       imageUrl: currentImageUrl,
       token: this.token,
@@ -395,6 +397,7 @@ export class VviinnShopTheLook {
       (error: string) => {
         console.error("Visual search failed:", error);
         this.initialSearchCompleted = true;
+        this.isSearching = false;
       },
       (response: {
         detectedObjects: Rectangle[];
@@ -410,6 +413,7 @@ export class VviinnShopTheLook {
         }
 
         if (this.detectedObjects.length > 0) {
+          this.isSearching = false;
           setTimeout(async () => {
             await this.handleDetectedObjectClick(this.detectedObjects[0], 0);
             this.initialSearchCompleted = true;
@@ -417,6 +421,7 @@ export class VviinnShopTheLook {
           }, TIMING.SEARCH_DELAY);
         } else {
           this.initialSearchCompleted = true;
+          this.isSearching = false;
           this.saveImageState();
         }
       },
@@ -635,6 +640,12 @@ export class VviinnShopTheLook {
     const imageUrl = this.imageUrlsList[imageIndex];
     if (!this.token || !imageUrl) return;
 
+    const isCurrentImage = imageIndex === this.currentImageIndex;
+
+    if (isCurrentImage) {
+      this.isSearching = true;
+    }
+
     const params: VisualSearchParams = {
       imageUrl,
       token: this.token,
@@ -648,6 +659,9 @@ export class VviinnShopTheLook {
       (error: string) => {
         console.error(`Visual search failed for image ${imageIndex}:`, error);
         this.updateImageState(imageIndex, [], true, [], null);
+        if (isCurrentImage) {
+          this.isSearching = false;
+        }
       },
       (response: {
         detectedObjects: Rectangle[];
@@ -661,6 +675,10 @@ export class VviinnShopTheLook {
           response.searchResults,
           response.visualSearchId || null,
         );
+
+        if (isCurrentImage) {
+          this.isSearching = false;
+        }
 
         if (imageIndex === 0 && response.detectedObjects.length > 0) {
           setTimeout(async () => {

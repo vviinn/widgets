@@ -539,9 +539,11 @@ vviinn-product-card::part(price-container) {
   flex-direction: row;
 }
 
-vviinn-image::part(image-picture)::after,
-vviinn-image::part(image) {
-  border-radius: var(--border-radius-200);
+vviinn-image::part(image),
+.product-details-card-wrapper vviinn-product-card::part(image),
+.product-details-card-wrapper vviinn-product-card::part(image-picture) {
+  border-radius: var(--border-radius-100);
+  overflow: hidden;
 }
 
 vviinn-product-card::part(title),
