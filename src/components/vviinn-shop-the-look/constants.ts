@@ -1,7 +1,6 @@
 export const INTERSECTION_THRESHOLDS = {
-  DESKTOP_VISIBLE: 0.1, // 10% visible - preserves objects on sliced images
-  MOBILE_VISIBLE: 0.33, // 33% visible - better UX on mobile
-  DESKTOP_FULL_VISIBLE: 1.0, // 100% visible
+  DESKTOP_VISIBLE: 0.6,
+  MOBILE_VISIBLE: 0.33,
 } as const;
 
 export const TIMING = {

@@ -46,17 +46,10 @@ export const shouldKeepImageVisible = (
   return isDesktop;
 };
 
-export const shouldRenderDetectedObjects = (
-  imageState: any,
-  visibleImageIndices: Set<number>,
-  imageIndex: number,
-): boolean => {
+export const shouldRenderDetectedObjects = (imageState: any): boolean => {
   if (!imageState) return false;
 
-  const isDesktopView = isDesktop();
-  return isDesktopView
-    ? imageState.isVisible || visibleImageIndices.has(imageIndex)
-    : imageState.isVisible;
+  return imageState.isVisible;
 };
 
 export const calculateModalPosition = (
@@ -84,9 +77,7 @@ export const calculateModalPosition = (
   }
 };
 
-export {
-  calculateImageBounds,
-} from "../../Image/bounds";
+export { calculateImageBounds } from "../../Image/bounds";
 export { createImageFile } from "../../Image/upload";
 export {
   setupIntersectionObserver,

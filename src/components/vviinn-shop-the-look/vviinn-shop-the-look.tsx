@@ -26,10 +26,11 @@ import {
   DetectedObjectClickParams,
   extractSlideIndex,
   isDesktop,
-  getVisibilityThreshold,
   shouldRenderDetectedObjects,
+  getVisibilityThreshold,
 } from "./helpers";
-import { INTERSECTION_THRESHOLDS, TIMING } from "./constants";
+import { ShopTheLookImageStore, createDefaultImageState } from "./store";
+import { TIMING } from "./constants";
 import {
   renderDetectedObjects,
   renderSwiper,
@@ -82,28 +83,11 @@ export class VviinnShopTheLook {
 
   @State() selectedDetectedObject: Rectangle | null = null;
   @State() showModal: boolean = false;
-  @State() imageBounds: Rectangle | null = null;
-  @State() detectedObjects: Rectangle[] = [];
-  @State() searchResults: Recommendation[] = [];
   @State() currentResultIndex: number = 0;
   @State() modalPosition: ModalPosition | null = null;
   @State() isSearching: boolean = false;
   @State() componentToken: string | null = null;
-  @State() initialSearchCompleted: boolean = false;
   @State() isIntersecting: boolean = false;
-  @State() imageStates: Map<
-    number,
-    {
-      detectedObjects: Rectangle[];
-      searchCompleted: boolean;
-      searchResults: Recommendation[];
-      isVisible: boolean;
-      imageElement: HTMLImageElement | null;
-      imageBounds: Rectangle | null;
-      visualSearchId: string | null;
-    }
-  > = new Map();
-  @State() visibleImageIndices: Set<number> = new Set();
   @State() currentImageIndex: number = 0;
   @State() totalImages: number = 1;
   @State() imageUrlsList: string[] = [];
@@ -123,8 +107,7 @@ export class VviinnShopTheLook {
 
   private imageElement: HTMLImageElement;
   private intersectionObserver: IntersectionObserver;
-  private imageObservers: Map<number, IntersectionObserver> = new Map();
-  private imageElements: Map<number, HTMLImageElement> = new Map();
+  private imageStore: ShopTheLookImageStore;
 
   componentWillLoad() {
     updateGlobalState({
@@ -141,12 +124,6 @@ export class VviinnShopTheLook {
         .filter((url) => url.length > 0);
     }
 
-    this.imageBounds = {
-      left: 0,
-      top: 0,
-      width: 0, // Will be calculated from image aspect ratio
-      height: this.height,
-    };
     this.totalImages = this.imageUrlsList.length;
     if (this.token) {
       this.componentToken = this.token;
@@ -154,6 +131,19 @@ export class VviinnShopTheLook {
 
     this.currentViewMode = isDesktop() ? "desktop" : "mobile";
     this.updateArrowsVisibility();
+
+    // Initialize observer manager
+    const isDesktopView = isDesktop();
+    const threshold = getVisibilityThreshold(isDesktopView);
+
+    this.imageStore = new ShopTheLookImageStore({
+      threshold,
+      token: this.token,
+      isIntersecting: this.isIntersecting,
+      totalImages: this.totalImages,
+      onImageVisibilityChange: this.handleImageVisibilityChange.bind(this),
+      onVisualSearchTrigger: this.handleVisualSearchTrigger.bind(this),
+    });
   }
 
   componentDidLoad() {
@@ -162,7 +152,7 @@ export class VviinnShopTheLook {
       this.updateArrowsVisibility();
     });
     window.addEventListener("resize", this.handleResize);
-    this.setupIntersectionObserver();
+    this.initializeContainerVisibilityTracking();
     this.setupSwiperEventListener();
   }
 
@@ -179,16 +169,44 @@ export class VviinnShopTheLook {
     }
   }
 
+  /**
+   * Helper methods for common operations
+   */
+  @State() private rerenderTrigger: number = 0;
+
+  private triggerReRender() {
+    this.rerenderTrigger++;
+  }
+
+  private clearModalAndSlideState() {
+    this.showModal = false;
+    this.selectedDetectedObject = null;
+    this.modalPosition = null;
+    this.currentResultIndex = 0;
+  }
+
+  private updateSearchingState(isCurrentImage: boolean = false) {
+    this.isSearching = this.imageStore.hasActiveSearches();
+    if (isCurrentImage) {
+      this.isSearching = false;
+    }
+    this.triggerReRender();
+  }
+
+  /**
+   * Helper method to get current image state from store
+   */
+  private getCurrentImageState() {
+    return this.imageStore.getImageState(this.currentImageIndex);
+  }
+
   disconnectedCallback() {
     this.imageElement?.removeEventListener("load", () =>
       this.updateImageBounds(),
     );
     window.removeEventListener("resize", this.handleResize);
     this.intersectionObserver?.disconnect();
-
-    this.imageObservers.forEach((observer) => observer.disconnect());
-    this.imageObservers.clear();
-    this.imageElements.clear();
+    this.imageStore?.disconnectAll();
 
     const swiperContainer =
       this.el.shadowRoot?.querySelector("swiper-container");
@@ -208,6 +226,7 @@ export class VviinnShopTheLook {
     this.updateImageBounds();
     this.checkViewModeChange();
     this.updateArrowsVisibility();
+    this.triggerReRender();
   };
 
   private checkViewModeChange = () => {
@@ -244,22 +263,28 @@ export class VviinnShopTheLook {
     ) {
       const newBounds = calculateImageBounds(this.imageElement);
       if (newBounds) {
-        this.imageBounds = newBounds;
+        // Only update the store - single source of truth
+        this.imageStore.updateImageState(this.currentImageIndex, {
+          imageBounds: newBounds,
+        });
       }
     }
   }
 
-  private setupIntersectionObserver() {
+  private initializeContainerVisibilityTracking() {
     const isDesktopView = isDesktop();
-    const threshold = isDesktopView
-      ? INTERSECTION_THRESHOLDS.DESKTOP_FULL_VISIBLE
-      : INTERSECTION_THRESHOLDS.MOBILE_VISIBLE;
+    const threshold = getVisibilityThreshold(isDesktopView);
 
     const config: IntersectionObserverConfig = {
       threshold,
       onIntersectionChange: (isIntersecting: boolean) => {
         const wasIntersecting = this.isIntersecting;
         this.isIntersecting = isIntersecting;
+
+        // Update observer manager config immediately
+        this.imageStore?.updateConfig({
+          isIntersecting: this.isIntersecting,
+        });
 
         if (!wasIntersecting && this.isIntersecting) {
           this.performVisualSearchIfReady();
@@ -284,38 +309,102 @@ export class VviinnShopTheLook {
     }, TIMING.SWIPER_INIT_DELAY);
   }
 
+  private handleImageVisibilityChange = () => {
+    // Trigger re-render when image visibility changes
+    this.triggerReRender();
+  };
+
+  private handleVisualSearchTrigger = (index: number) => {
+    this.performVisualSearchForImage(index);
+    this.updateSearchingState();
+  };
+
+  private setupObserverAfterSwiper(element: HTMLImageElement, index: number) {
+    setTimeout(() => {
+      const swiperContainer =
+        this.el.shadowRoot?.querySelector("swiper-container");
+      if (swiperContainer) {
+        // Listen for Swiper initialization events
+        const setupObserver = () => {
+          this.imageStore.setupImageIntersectionObserver(element, index);
+        };
+
+        // Try multiple Swiper events in case one doesn't fire
+        swiperContainer.addEventListener("swiperinitialized", setupObserver, {
+          once: true,
+        });
+        swiperContainer.addEventListener("swiperinit", setupObserver, {
+          once: true,
+        });
+
+        // Fallback: if no events fire, set up after delay
+        setTimeout(() => {
+          const state = this.imageStore.getImageState(index);
+          if (!state?.observerSetup) {
+            this.imageStore.setupImageIntersectionObserver(element, index);
+          }
+        }, 1000);
+      }
+    }, TIMING.SWIPER_INIT_DELAY);
+  }
+
   private performVisualSearchIfReady() {
-    if (this.token) {
-      const currentImageState = this.imageStates.get(this.currentImageIndex);
-      if (!currentImageState?.searchCompleted) {
-        this.performVisualSearch();
-      } else {
+    const isDesktopView = isDesktop();
+
+    // Update observer manager config
+    this.imageStore.updateConfig({
+      isIntersecting: this.isIntersecting,
+      token: this.token,
+      totalImages: this.totalImages,
+    });
+
+    if (this.token && this.isIntersecting) {
+      const currentImageState = this.imageStore.getImageState(
+        this.currentImageIndex,
+      );
+
+      if (currentImageState?.searchCompleted) {
         this.loadImageState();
+      } else if (!currentImageState?.searchCompleted) {
+        // Single image OR mobile multi-image: trigger for current image
+        // Desktop multi-image: handled by individual image observers
+        if (this.totalImages === 1 || !isDesktopView) {
+          // Mark current image as visible for mobile/single image
+          if (!isDesktopView || this.totalImages === 1) {
+            this.markCurrentImageAsVisible();
+          }
+
+          // Only trigger if not already triggered
+          const state = this.imageStore.getImageState(this.currentImageIndex);
+          if (!state?.searchTriggered) {
+            this.imageStore.updateImageState(this.currentImageIndex, {
+              searchTriggered: true,
+            });
+            this.performVisualSearch();
+          }
+        }
       }
     }
   }
 
-  private loadImageState() {
-    const imageState = this.imageStates.get(this.currentImageIndex);
-    if (imageState) {
-      this.detectedObjects = imageState.detectedObjects;
-      this.initialSearchCompleted = imageState.searchCompleted;
-      this.searchResults = imageState.searchResults;
+  private markCurrentImageAsVisible() {
+    const currentState = this.imageStore.getImageState(this.currentImageIndex);
+    if (currentState) {
+      currentState.isVisible = true;
+      this.imageStore.setImageState(this.currentImageIndex, currentState);
+      // Also update the observer manager's state
+      this.imageStore.setImageState(this.currentImageIndex, currentState);
     }
   }
 
-  private saveImageState() {
-    const currentState = this.imageStates.get(this.currentImageIndex);
-    this.imageStates.set(this.currentImageIndex, {
-      detectedObjects: [...this.detectedObjects],
-      searchCompleted: this.initialSearchCompleted,
-      searchResults: [...this.searchResults],
-      isVisible: currentState?.isVisible || false,
-      imageElement: currentState?.imageElement || this.imageElement,
-      imageBounds: currentState?.imageBounds || null,
-      visualSearchId: currentState?.visualSearchId || null,
-    });
+  private loadImageState() {
+    // Ensure the current image is marked as visible for rendering
+    const isDesktopView = isDesktop();
+    if (!isDesktopView || this.totalImages === 1) {
+      this.markCurrentImageAsVisible();
+    }
   }
+
 
   private handleDetectedObjectClick = async (
     detectedObject: Rectangle,
@@ -326,14 +415,13 @@ export class VviinnShopTheLook {
 
     this.selectedDetectedObject = detectedObject;
     this.isSearching = true;
-    this.searchResults = [];
-    this.currentResultIndex = 0;
     this.showModal = false;
+    this.currentResultIndex = 0;
 
     const imageElement =
-      this.imageElements.get(imageIndex) || this.imageElement;
+      this.imageStore.getImageElement(imageIndex) || this.imageElement;
 
-    const imageState = this.imageStates.get(imageIndex);
+    const imageState = this.imageStore.getImageState(imageIndex);
     const visualSearchId = imageState?.visualSearchId || null;
 
     const params: DetectedObjectClickParams = {
@@ -360,19 +448,26 @@ export class VviinnShopTheLook {
         searchResults: Recommendation[];
         modalPosition: ModalPosition;
       }) => {
-        this.searchResults = response.searchResults;
+        // Save search results to store and show modal
+        if (response.searchResults && response.searchResults.length > 0) {
+          // Update store with the search results
+          this.imageStore.updateImageState(this.currentImageIndex, {
+            searchResults: response.searchResults,
+          });
+        }
+
         this.modalPosition = response.modalPosition;
         this.currentResultIndex = 0;
         this.isSearching = false;
 
-        if (this.searchResults.length > 0) {
+        if (response.searchResults && response.searchResults.length > 0) {
           this.showModal = true;
         }
 
         this.vviinnShopTheLookDetectedObjectClick.emit({
           ...TEST_BASIC_EVENT_DATA,
           detectedObjectId: `detected-${imageIndex}-${objectIndex}`,
-          product: this.searchResults[0] || null,
+          product: response.searchResults[0] || null,
         });
       },
     )(result);
@@ -396,7 +491,9 @@ export class VviinnShopTheLook {
     E.fold(
       (error: string) => {
         console.error("Visual search failed:", error);
-        this.initialSearchCompleted = true;
+        this.imageStore.updateImageState(this.currentImageIndex, {
+          searchCompleted: true,
+        });
         this.isSearching = false;
       },
       (response: {
@@ -404,25 +501,30 @@ export class VviinnShopTheLook {
         searchResults: Recommendation[];
         visualSearchId?: string;
       }) => {
-        this.detectedObjects = response.detectedObjects;
+        // Save detected objects and search results to store
+        this.imageStore.updateImageStateData(
+          this.currentImageIndex,
+          response.detectedObjects,
+          true,
+          response.searchResults,
+          response.visualSearchId || null,
+        );
 
-        const currentState = this.imageStates.get(this.currentImageIndex);
-        if (currentState) {
-          currentState.visualSearchId = response.visualSearchId || null;
-          this.imageStates.set(this.currentImageIndex, currentState);
-        }
-
-        if (this.detectedObjects.length > 0) {
+        const currentImageState = this.getCurrentImageState();
+        if (currentImageState.detectedObjects.length > 0) {
           this.isSearching = false;
           setTimeout(async () => {
-            await this.handleDetectedObjectClick(this.detectedObjects[0], 0);
-            this.initialSearchCompleted = true;
-            this.saveImageState();
+            await this.handleDetectedObjectClick(currentImageState.detectedObjects[0], 0);
+                this.imageStore.updateImageState(this.currentImageIndex, {
+              searchCompleted: true,
+            });
           }, TIMING.SEARCH_DELAY);
         } else {
-          this.initialSearchCompleted = true;
+          this.imageStore.updateImageState(this.currentImageIndex, {
+          searchCompleted: true,
+        });
           this.isSearching = false;
-          this.saveImageState();
+          // State is automatically saved in store
         }
       },
     )(result);
@@ -442,11 +544,7 @@ export class VviinnShopTheLook {
     if (this.isSearching) return;
     if (event && event.target !== event.currentTarget) return;
 
-    this.showModal = false;
-    this.selectedDetectedObject = null;
-    this.searchResults = [];
-    this.currentResultIndex = 0;
-    this.modalPosition = null;
+    this.clearModalAndSlideState();
     this.showSliderView = false;
     this.currentProductIndex = 0;
     this.vviinnShopTheLookModalClose.emit(TEST_BASIC_EVENT_DATA);
@@ -470,22 +568,16 @@ export class VviinnShopTheLook {
       this.currentProductIndex--;
     } else if (
       direction === "next" &&
-      this.currentProductIndex < this.searchResults.length - 1
+      this.currentProductIndex < this.getCurrentImageState().searchResults.length - 1
     ) {
       this.currentProductIndex++;
     }
   };
 
   private renderDetectedObjectsWrapper = (imageIndex: number) => {
-    const imageState = this.imageStates.get(imageIndex);
+    const imageState = this.imageStore.getImageState(imageIndex);
 
-    if (
-      !shouldRenderDetectedObjects(
-        imageState,
-        this.visibleImageIndices,
-        imageIndex,
-      )
-    ) {
+    if (!shouldRenderDetectedObjects(imageState)) {
       return null;
     }
 
@@ -508,30 +600,68 @@ export class VviinnShopTheLook {
 
     if (newIndex !== null && newIndex !== this.currentImageIndex) {
       this.currentImageIndex = newIndex;
-
-      this.showModal = false;
-      this.selectedDetectedObject = null;
-      this.modalPosition = null;
-      this.searchResults = [];
-      this.currentResultIndex = 0;
-      this.detectedObjects = [];
-      this.initialSearchCompleted = false;
+      this.clearModalAndSlideState();
 
       setTimeout(() => {
         this.updateImageBounds();
-        this.performVisualSearchIfReady();
+
+        // Mark current image as visible for mobile
+        const isDesktopView = isDesktop();
+        if (!isDesktopView) {
+          this.markCurrentImageAsVisible();
+          this.performVisualSearchIfReady();
+        } else {
+          // On desktop, just load existing state if available
+          const currentImageState = this.imageStore.getImageState(
+            this.currentImageIndex,
+          );
+          if (currentImageState?.searchCompleted) {
+            this.loadImageState();
+          }
+        }
       }, TIMING.SLIDE_TRANSITION_DELAY);
     }
   };
 
   private handleImageRef = (el: HTMLImageElement, index: number) => {
+    // Prevent processing the same ref multiple times
+    const state = this.imageStore.getImageState(index);
+    if (state?.refProcessed && this.imageStore.getImageElement(index) === el) {
+      return;
+    }
+
+    this.imageStore.updateImageState(index, { refProcessed: true });
+
     if (index === this.currentImageIndex || this.totalImages <= 1) {
       this.imageElement = el;
     }
 
     if (el) {
-      this.imageElements.set(index, el);
-      this.setupImageIntersectionObserver(el, index);
+      this.imageStore.setImageElement(index, el);
+
+      // Initialize image state only if it doesn't exist
+      if (!this.imageStore.hasImageState(index)) {
+        const currentState = createDefaultImageState(el);
+        this.imageStore.setImageState(index, currentState);
+        this.imageStore.setImageState(index, currentState);
+      } else {
+        // Just update the imageElement reference without triggering re-render
+        const existingState = this.imageStore.getImageState(index);
+        existingState.imageElement = el;
+        this.imageStore.setImageState(index, existingState);
+      }
+
+      const isDesktopView = isDesktop();
+
+      // Set up intersection observers based on device and image count
+      if (this.totalImages === 1) {
+        // Single image: no individual observers needed
+      } else if (isDesktopView) {
+        // Desktop multi-image: set up observers after Swiper initializes
+        this.setupObserverAfterSwiper(el, index);
+      } else {
+        // Mobile multi-image: no individual observers, rely on slide change events
+      }
 
       // Update bounds immediately if image is already loaded, otherwise wait for load
       if (el.complete && el.offsetWidth > 0) {
@@ -556,84 +686,17 @@ export class VviinnShopTheLook {
         this.updateArrowsVisibility();
       }
 
-      const imageState = this.imageStates.get(index);
+      const imageState = this.imageStore.getImageState(index);
       if (imageState) {
         const bounds = calculateImageBounds(el);
         if (bounds) {
           imageState.imageBounds = bounds;
-          this.imageStates.set(index, imageState);
+          this.imageStore.setImageState(index, imageState);
+          // Trigger re-render to update detected object positions
+          this.triggerReRender();
         }
       }
     });
-  };
-
-  private setupImageIntersectionObserver = (
-    element: HTMLImageElement,
-    index: number,
-  ) => {
-    const existingObserver = this.imageObservers.get(index);
-    if (existingObserver) {
-      existingObserver.disconnect();
-    }
-
-    const isDesktopView = isDesktop();
-    const threshold = getVisibilityThreshold(isDesktopView);
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const isVisible = entry.intersectionRatio >= threshold;
-          this.updateImageVisibility(index, isVisible);
-        });
-      },
-      { threshold },
-    );
-
-    observer.observe(element);
-    this.imageObservers.set(index, observer);
-  };
-
-  private updateImageVisibility = (index: number, isVisible: boolean) => {
-    const currentState = this.imageStates.get(index) || {
-      detectedObjects: [],
-      searchCompleted: false,
-      searchResults: [],
-      isVisible: false,
-      imageElement: this.imageElements.get(index) || null,
-      imageBounds: null,
-      visualSearchId: null,
-    };
-
-    const wasVisible = currentState.isVisible;
-    const stateChanged = wasVisible !== isVisible;
-
-    if (!stateChanged) return;
-
-    currentState.isVisible = isVisible;
-    currentState.imageElement = this.imageElements.get(index) || null;
-
-    if (isVisible && currentState.imageElement && !currentState.imageBounds) {
-      currentState.imageBounds = calculateImageBounds(
-        currentState.imageElement,
-      );
-    }
-
-    this.imageStates.set(index, currentState);
-
-    const isDesktopView = isDesktop();
-
-    if (isVisible) {
-      this.visibleImageIndices.add(index);
-      if (!currentState.searchCompleted) {
-        this.performVisualSearchForImage(index);
-      }
-    } else {
-      if (!isDesktopView) {
-        this.visibleImageIndices.delete(index);
-      }
-    }
-
-    this.visibleImageIndices = new Set(this.visibleImageIndices);
   };
 
   private performVisualSearchForImage = async (imageIndex: number) => {
@@ -658,27 +721,22 @@ export class VviinnShopTheLook {
     E.fold(
       (error: string) => {
         console.error(`Visual search failed for image ${imageIndex}:`, error);
-        this.updateImageState(imageIndex, [], true, [], null);
-        if (isCurrentImage) {
-          this.isSearching = false;
-        }
+        this.imageStore.updateImageStateData(imageIndex, [], true, [], null);
+        this.updateSearchingState(isCurrentImage);
       },
       (response: {
         detectedObjects: Rectangle[];
         searchResults: Recommendation[];
         visualSearchId?: string;
       }) => {
-        this.updateImageState(
+        this.imageStore.updateImageStateData(
           imageIndex,
           response.detectedObjects,
           true,
           response.searchResults,
           response.visualSearchId || null,
         );
-
-        if (isCurrentImage) {
-          this.isSearching = false;
-        }
+        this.updateSearchingState(isCurrentImage);
 
         if (imageIndex === 0 && response.detectedObjects.length > 0) {
           setTimeout(async () => {
@@ -691,32 +749,6 @@ export class VviinnShopTheLook {
         }
       },
     )(result);
-  };
-
-  private updateImageState = (
-    index: number,
-    detectedObjects: Rectangle[],
-    searchCompleted: boolean,
-    searchResults: Recommendation[],
-    visualSearchId?: string | null,
-  ) => {
-    const currentState = this.imageStates.get(index) || {
-      detectedObjects: [],
-      searchCompleted: false,
-      searchResults: [],
-      isVisible: false,
-      imageElement: null,
-      imageBounds: null,
-      visualSearchId: null,
-    };
-
-    this.imageStates.set(index, {
-      ...currentState,
-      detectedObjects,
-      searchCompleted,
-      searchResults,
-      ...(visualSearchId !== undefined && { visualSearchId }),
-    });
   };
 
   private handleNavigatePrev = () => {
@@ -747,14 +779,7 @@ export class VviinnShopTheLook {
 
   private updateSlideIndex = (newIndex: number) => {
     this.currentImageIndex = newIndex;
-
-    this.showModal = false;
-    this.selectedDetectedObject = null;
-    this.modalPosition = null;
-    this.searchResults = [];
-    this.currentResultIndex = 0;
-    this.detectedObjects = [];
-    this.initialSearchCompleted = false;
+    this.clearModalAndSlideState();
 
     setTimeout(() => {
       this.updateImageBounds();
@@ -769,7 +794,7 @@ export class VviinnShopTheLook {
       currentImageIndex: this.currentImageIndex,
       height: this.height,
       imageElement: this.imageElement,
-      detectedObjects: this.detectedObjects,
+      detectedObjects: this.getCurrentImageState().detectedObjects,
       onSlideChange: this.handleSlideChange,
       onImageRef: this.handleImageRef,
       renderDetectedObjects: this.renderDetectedObjectsWrapper,
@@ -786,7 +811,7 @@ export class VviinnShopTheLook {
       showModal: this.showModal,
       selectedDetectedObject: this.selectedDetectedObject,
       modalPosition: this.modalPosition,
-      searchResults: this.searchResults,
+      searchResults: this.getCurrentImageState().searchResults,
       onModalClose: this.handleModalClose,
       onProductClick: this.handleProductClick,
       showSliderView: this.showSliderView,
