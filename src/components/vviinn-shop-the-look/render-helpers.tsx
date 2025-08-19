@@ -3,8 +3,7 @@ import { Rectangle } from "../../interfaces/search";
 import { Recommendation } from "../../interfaces";
 import { BasicEventData } from "../../recommendation/events";
 import { ModalPosition } from "./helpers";
-import { isDesktop, isSmallMobile } from "../../helpers/device/checkDeviceType";
-import { getResponsiveImageStyles } from "../../Image/responsive";
+import { isDesktop } from "../../helpers/device/checkDeviceType";
 import {
   configureSwiperElement,
   getSwiperStyles,
@@ -55,7 +54,6 @@ export interface SwiperProps {
   totalImages: number;
   imageUrls: string[];
   currentImageIndex: number;
-  width: number;
   height: number;
   imageElement: HTMLImageElement;
   detectedObjects: Rectangle[];
@@ -69,8 +67,14 @@ export interface SwiperProps {
   swiperKey?: string;
 }
 
-const getImageStyles = (width: number, height: number) => {
-  return getResponsiveImageStyles(width, height, isSmallMobile());
+const getImageStyles = (height: number) => {
+  return {
+    maxWidth: "100%",
+    maxHeight: `${height}px`,
+    width: "auto",
+    height: isDesktop() ? `${height}px` : "auto",
+    objectFit: "contain" as const,
+  };
 };
 
 export const renderSwiper = (props: SwiperProps) => {
@@ -78,7 +82,6 @@ export const renderSwiper = (props: SwiperProps) => {
     totalImages,
     imageUrls,
     currentImageIndex,
-    width,
     height,
     onSlideChange,
     onImageRef,
@@ -98,7 +101,7 @@ export const renderSwiper = (props: SwiperProps) => {
           src={imageUrls?.[0] || ""}
           alt="Shop the look"
           class="main-image"
-          style={getImageStyles(width, height)}
+          style={getImageStyles(height)}
         />
         {renderDetectedObjects(0)}
       </div>
@@ -161,7 +164,7 @@ export const renderSwiper = (props: SwiperProps) => {
                 src={url}
                 alt={`Shop the look ${index + 1}`}
                 class="main-image"
-                style={getImageStyles(width, height)}
+                style={getImageStyles(height)}
               />
               {renderDetectedObjects(index)}
             </div>

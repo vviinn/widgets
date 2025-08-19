@@ -15,20 +15,3 @@ export const calculateImageBounds = (
     height: rect.height,
   };
 };
-
-/**
- * Check if image bounds have changed
- */
-export const hasImageBoundsChanged = (
-  currentBounds: Rectangle | null,
-  newBounds: Rectangle,
-): boolean => {
-  if (!currentBounds) return true;
-
-  return (
-    currentBounds.left !== newBounds.left ||
-    currentBounds.top !== newBounds.top ||
-    currentBounds.width !== newBounds.width ||
-    currentBounds.height !== newBounds.height
-  );
-};

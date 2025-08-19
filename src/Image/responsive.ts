@@ -8,10 +8,10 @@ export const getResponsiveImageStyles = (
 ) => {
   if (isSmallMobile) {
     return {
-      width: '100%',
-      height: 'auto',
-      maxHeight: '70vh',
-      objectFit: 'contain' as const,
+      width: "100%",
+      height: "auto",
+      maxHeight: "70vh",
+      objectFit: "contain" as const,
     };
   }
   return {

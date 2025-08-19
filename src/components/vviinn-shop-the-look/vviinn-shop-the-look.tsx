@@ -17,7 +17,6 @@ import { register } from "swiper/element";
 import { updateGlobalState } from "../../store/store";
 import {
   calculateImageBounds,
-  hasImageBoundsChanged,
   ModalPosition,
   setupIntersectionObserver,
   IntersectionObserverConfig,
@@ -68,10 +67,8 @@ export class VviinnShopTheLook {
 
   /** Comma-separated list of image URLs to display in the widget */
   @Prop() imageUrls: string = "";
-  /** Width of the widget in pixels */
-  @Prop() width: number = 350;
   /** Height of the widget in pixels */
-  @Prop() height: number = 468;
+  @Prop() height: number = 500;
   /** Vviinn customer's token (required) */
   @Prop() token: string = "";
   /** The currency sign is displayed after the price */
@@ -147,7 +144,7 @@ export class VviinnShopTheLook {
     this.imageBounds = {
       left: 0,
       top: 0,
-      width: this.width,
+      width: 0, // Will be calculated from image aspect ratio
       height: this.height,
     };
     this.totalImages = this.imageUrlsList.length;
@@ -160,11 +157,10 @@ export class VviinnShopTheLook {
   }
 
   componentDidLoad() {
-    setTimeout(() => {
+    this.imageElement?.addEventListener("load", () => {
       this.updateImageBounds();
-    }, 0);
-
-    this.imageElement?.addEventListener("load", () => this.updateImageBounds());
+      this.updateArrowsVisibility();
+    });
     window.addEventListener("resize", this.handleResize);
     this.setupIntersectionObserver();
     this.setupSwiperEventListener();
@@ -230,17 +226,24 @@ export class VviinnShopTheLook {
       return;
     }
 
-    const estimatedImageWidth = this.width + 20;
-    const availableWidth = window.innerWidth - 100;
-    const maxImagesVisible = Math.floor(availableWidth / estimatedImageWidth);
-
-    this.showArrows = this.totalImages > maxImagesVisible;
+    if (this.imageElement && this.imageElement.offsetWidth > 0) {
+      const actualImageWidth = this.imageElement.offsetWidth + 20; // Add spacing
+      const availableWidth = window.innerWidth - 100;
+      const maxImagesVisible = Math.floor(availableWidth / actualImageWidth);
+      this.showArrows = this.totalImages > maxImagesVisible;
+    } else {
+      this.showArrows = this.totalImages > 1;
+    }
   };
 
   private updateImageBounds() {
-    if (this.imageElement) {
+    if (
+      this.imageElement &&
+      this.imageElement.offsetWidth > 0 &&
+      this.imageElement.offsetHeight > 0
+    ) {
       const newBounds = calculateImageBounds(this.imageElement);
-      if (newBounds && hasImageBoundsChanged(this.imageBounds, newBounds)) {
+      if (newBounds) {
         this.imageBounds = newBounds;
       }
     }
@@ -524,7 +527,39 @@ export class VviinnShopTheLook {
     if (el) {
       this.imageElements.set(index, el);
       this.setupImageIntersectionObserver(el, index);
+
+      // Update bounds immediately if image is already loaded, otherwise wait for load
+      if (el.complete && el.offsetWidth > 0) {
+        this.updateImageBoundsForElement(el, index);
+      } else {
+        el.addEventListener(
+          "load",
+          () => this.updateImageBoundsForElement(el, index),
+          { once: true },
+        );
+      }
     }
+  };
+
+  private updateImageBoundsForElement = (
+    el: HTMLImageElement,
+    index: number,
+  ) => {
+    requestAnimationFrame(() => {
+      if (index === this.currentImageIndex || this.totalImages <= 1) {
+        this.updateImageBounds();
+        this.updateArrowsVisibility();
+      }
+
+      const imageState = this.imageStates.get(index);
+      if (imageState) {
+        const bounds = calculateImageBounds(el);
+        if (bounds) {
+          imageState.imageBounds = bounds;
+          this.imageStates.set(index, imageState);
+        }
+      }
+    });
   };
 
   private setupImageIntersectionObserver = (
@@ -714,7 +749,6 @@ export class VviinnShopTheLook {
       totalImages: this.totalImages,
       imageUrls: this.imageUrlsList,
       currentImageIndex: this.currentImageIndex,
-      width: this.width,
       height: this.height,
       imageElement: this.imageElement,
       detectedObjects: this.detectedObjects,

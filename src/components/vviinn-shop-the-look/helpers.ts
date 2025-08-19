@@ -86,7 +86,6 @@ export const calculateModalPosition = (
 
 export {
   calculateImageBounds,
-  hasImageBoundsChanged,
 } from "../../Image/bounds";
 export { createImageFile } from "../../Image/upload";
 export {
