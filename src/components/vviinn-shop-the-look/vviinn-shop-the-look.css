@@ -552,3 +552,8 @@ vviinn-product-card::part(price-container) {
   font-weight: var(--font-weight-400);
   color: #525252;
 }
+
+.product-grid-container.hidden,
+.product-details-container.hidden {
+  display: none;
+}

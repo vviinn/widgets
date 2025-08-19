@@ -340,20 +340,23 @@ export const renderModal = (props: ModalProps) => {
         onClick={(e) => e.stopPropagation()}
       >
         <div class="modal-body">
-          {showSliderView
-            ? renderProductDetails({
-                searchResults,
-                currentProductIndex,
-                onProductClick,
-                currencySign,
-                onBackToGrid: onBackToGrid || (() => {}),
-                onNavigateProduct: onNavigateProduct || (() => {}),
-              })
-            : renderProductGrid({
-                searchResults,
-                onProductClick,
-                onProductDetailsClick,
-              })}
+          <div class={`product-grid-container ${showSliderView ? 'hidden' : ''}`}>
+            {searchResults.length > 0 && renderProductGrid({
+              searchResults,
+              onProductClick,
+              onProductDetailsClick,
+            })}
+          </div>
+          <div class={`product-details-container ${!showSliderView ? 'hidden' : ''}`}>
+            {searchResults.length > 0 && renderProductDetails({
+              searchResults,
+              currentProductIndex,
+              onProductClick,
+              currencySign,
+              onBackToGrid,
+              onNavigateProduct,
+            })}
+          </div>
         </div>
       </div>
     </div>
