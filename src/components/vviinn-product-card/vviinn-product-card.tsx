@@ -260,14 +260,14 @@ export class VviinnProductCard {
   componentDidLoad() {
     this.vviinnProductLoad.emit(this.productData);
     this.addLinksEventListeners();
-    this.setupIntersectionObserver();
+    this.initializeVisibilityTracking();
   }
 
-  private setupIntersectionObserver() {
-    if (!this.imageElement) return;
+  private initializeVisibilityTracking() {
+    if (!this.imageElement || this.intersectionObserver) return;
 
     const config: IntersectionObserverConfig = {
-      threshold: 0.95, // Сохраняем существующее значение для обратной совместимости
+      threshold: 0.95,
       onIntersectionChange: (isIntersecting: boolean) => {
         if (isIntersecting) {
           pipe(
@@ -422,6 +422,7 @@ export class VviinnProductCard {
       title: this.productTitle,
       ref: (el: HTMLImageElement) => {
         this.imageElement = el;
+        if (el) this.initializeVisibilityTracking();
       },
       isSource: this.isSourceProduct,
       onLoadEnd: () => {
