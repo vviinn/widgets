@@ -1,3 +1,5 @@
+@import "../vviinn-skeleton/vviinn-skeleton.css";
+
 :host {
   /**
    * @prop --image-border: Set the border of the image.
@@ -29,6 +31,10 @@
 
 .image.loaded {
   opacity: 1;
+}
+
+.image-container.loaded .image-skeleton {
+  opacity: 0;
 }
 
 .image.responsive {
@@ -91,8 +97,36 @@ picture::after {
   content: "";
 }
 
-.image-skeleton {
+.image-container {
   position: relative;
+  display: block;
+}
+
+.image-skeleton {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+  transition: opacity
+    var(--image-transition-duration, var(--image-transition-duration-default))
+    ease-in-out;
+}
+
+:host(.set-mode-transition) .image-skeleton {
+  transition: none;
+  opacity: 1;
+}
+
+:host(.set-mode-transition) .image {
+  transition: none;
+  opacity: 0;
+}
+
+.image-skeleton vviinn-skeleton {
+  width: 100%;
+  height: 100%;
 }
 
 :host(.has-skeleton-icon) .image-skeleton::after {

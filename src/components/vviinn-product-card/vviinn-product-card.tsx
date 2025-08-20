@@ -138,7 +138,7 @@ export class VviinnProductCard {
   @Prop() productTitle: string;
   @Prop() productType: string | undefined;
   @Prop() entityType: Recommendation["entityType"] = "product";
-  @Prop() setMode: boolean = false;
+  @Prop() isSetMode: boolean = false;
   @Prop() salePrice: number | undefined;
   @Prop() baseSalePrice: BasePrice | string | null;
   @Prop() responsive: boolean = false;
@@ -184,7 +184,7 @@ export class VviinnProductCard {
   @Prop({ mutable: true }) imageResolutionWidth: number =
     PRODUCT_CARD_IMAGE_RESOLUTION_WIDTH;
   /** @internal */
-  @Prop() loading: boolean = false;
+  @Prop({ mutable: true }) loading: boolean = false;
 
   @State() isTransitioning: boolean = false;
   @State() basketButonPressed: boolean = false;
@@ -228,13 +228,16 @@ export class VviinnProductCard {
   private isContentCard: boolean;
 
   private isShowUpdateButton = () =>
-    this.setMode &&
+    this.isSetMode &&
     !this.isSourceProduct &&
     !this.basketButonPressed &&
     this.updateButtonLocation !== "onTop";
 
   private isShowBasketButton = () =>
-    !this.isSourceProduct && (this.addToBasketShow || this.setMode);
+    !this.isSourceProduct && (this.addToBasketShow || this.isSetMode);
+
+  private showSkeleton = () =>
+    this.isSetMode ? this.isTransitioning : this.loading;
 
   connectedCallback() {
     this.productData = this.getProductData();
@@ -258,13 +261,15 @@ export class VviinnProductCard {
   }
 
   componentDidLoad() {
+    if (this.showSkeleton()) return;
     this.vviinnProductLoad.emit(this.productData);
     this.addLinksEventListeners();
     this.initializeVisibilityTracking();
   }
 
   private initializeVisibilityTracking() {
-    if (!this.imageElement || this.intersectionObserver) return;
+    if (!this.imageElement || this.intersectionObserver || this.showSkeleton())
+      return;
 
     const config: IntersectionObserverConfig = {
       threshold: 0.95,
@@ -308,13 +313,7 @@ export class VviinnProductCard {
   @Watch("productId")
   productIdWatcher() {
     this.productData = this.getProductData();
-  }
-
-  @Watch("loading")
-  loadingWatcher(newVal: boolean) {
-    if (newVal) {
-      this.imageLoaded = false;
-    }
+    this.imageProps = this.getImageProps();
   }
 
   private parseEnergyCertificationsString() {
@@ -380,6 +379,8 @@ export class VviinnProductCard {
   }
 
   private addLinksEventListeners() {
+    if (this.showSkeleton()) return;
+
     this.linkEventAbortController = new AbortController();
     const { signal } = this.linkEventAbortController;
     const links = this.el.shadowRoot.querySelectorAll("a");
@@ -427,6 +428,7 @@ export class VviinnProductCard {
       isSource: this.isSourceProduct,
       onLoadEnd: () => {
         this.imageLoaded = true;
+        this.loading = false;
       },
     };
   }
@@ -442,10 +444,6 @@ export class VviinnProductCard {
       this.isTransitioning = false;
       clearTimeout(timer);
     }, interval);
-  }
-
-  private shouldShowSkeleton(): boolean {
-    return this.loading || this.isTransitioning;
   }
 
   private renderImageWithLoadedState(
@@ -468,8 +466,8 @@ export class VviinnProductCard {
         imageRef={imageProps.ref}
         loadEndCallback={imageProps.onLoadEnd}
         onVviinnImageLoad={imageProps.onLoadEnd}
-        showSkeleton={this.shouldShowSkeleton()}
-        showSkeletonIcon={this.setMode}
+        showSkeleton={this.showSkeleton()}
+        isSetMode={this.isSetMode}
         style={{
           "--image-border": "var(--product-card-image-border, none)",
           "--image-bg-color":
@@ -523,15 +521,15 @@ export class VviinnProductCard {
       <Host
         part="product-card"
         class={{
-          animated: this.shouldShowSkeleton(),
+          animated: this.isTransitioning,
           "product-card--source": this.isSourceProduct,
-          "set-mode": this.setMode,
+          "set-mode": this.isSetMode,
         }}
         exportparts={productCardParts}
         data-id={this.productId}
       >
         <div class="content-container" part="content-container">
-          {this.shouldShowSkeleton() ? (
+          {this.showSkeleton() ? (
             <Fragment>
               <vviinn-skeleton height={40} />
               <vviinn-skeleton height={20} halfWidth={true} />
@@ -586,14 +584,13 @@ export class VviinnProductCard {
         <div
           class={{
             "basket-button-container": true,
-            hidden: !this.isShowBasketButton() || this.shouldShowSkeleton(),
+            hidden: !this.isShowBasketButton() || this.showSkeleton(),
           }}
           part="basket-button-container"
         >
           <button
             class={{
               "basket-button": true,
-              hidden: this.shouldShowSkeleton(),
               pressed: this.basketButonPressed,
             }}
             part="basket-button"
@@ -612,7 +609,7 @@ export class VviinnProductCard {
                 </slot>
               </span>
               <span>
-                {this.setMode ? (
+                {this.isSetMode ? (
                   <slot name="vviinn-basket-button-text" key="button-text-set">
                     {i18next.t("setMode.basketButtonText")}
                   </slot>
@@ -643,13 +640,13 @@ export class VviinnProductCard {
                 <span
                   class="discount-percentage"
                   part="discount-percentage"
-                  hidden={!(this.setMode && this.appliedDiscountPercentage)}
+                  hidden={!(this.isSetMode && this.appliedDiscountPercentage)}
                 >
                   {this.appliedDiscountPercentage}%
                 </span>
 
                 <slot name="vviinn-basket-button-text-pressed">
-                  {this.setMode
+                  {this.isSetMode
                     ? i18next.t("setMode.basketButtonPressedText")
                     : i18next.t("basketButtonPressedText")}
                 </slot>
@@ -664,7 +661,7 @@ export class VviinnProductCard {
           </Linked>
 
           {this.isSourceProduct && <PlusIcon class="plus-icon" />}
-          {this.setMode &&
+          {this.isSetMode &&
             !this.appliedDiscountPercentage &&
             this.currentDiscountPercentage && (
               <div

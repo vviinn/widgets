@@ -59,7 +59,7 @@ export class VviinnImage {
   /** Whether to show loading state with skeleton animation */
   @Prop() showSkeleton: boolean = false;
   /** Whether component is in set mode shows sparkle icon in loading state */
-  @Prop() showSkeletonIcon: boolean = false;
+  @Prop() isSetMode: boolean = false;
   /** Custom CSS classes to apply */
   @Prop() customClass: string = "";
   /** Border radius (can use CSS custom properties) */
@@ -73,8 +73,8 @@ export class VviinnImage {
   /** Callback for when image loading ends (load or error) */
   @Prop() loadEndCallback?: () => void;
 
-  private get isLoading(): boolean {
-    return this.showSkeleton && !this.imageError;
+  private get shouldShowSkeleton(): boolean {
+    return this.isSetMode ? this.showSkeleton : (this.showSkeleton && (!this.imageLoaded && !this.imageError));
   }
 
   private get hasValidImage(): boolean {
@@ -145,7 +145,7 @@ export class VviinnImage {
       responsive: this.responsive,
       "full-height": this.fullHeight,
       "content-card-image": this.fullHeight,
-      loading: this.isLoading,
+      "set-mode-transition": this.isSetMode && this.shouldShowSkeleton,
       loaded: this.imageLoaded,
       error: this.imageError,
       [this.customClass]: !!this.customClass,
@@ -192,39 +192,39 @@ export class VviinnImage {
   }
 
   private renderSkeleton() {
-    const aspectRatio = this.computedAspectRatio || 1;
-
     return (
-      <div
-        class="image-skeleton"
-        part="image-skeleton"
-        style={{ "aspect-ratio": aspectRatio.toString() }}
-      >
+      <div class="image-skeleton" part="image-skeleton">
         <vviinn-skeleton />
       </div>
     );
   }
 
   render() {
+    console.log(this.shouldShowSkeleton);
     return (
       <Host
         exportparts={imageParts}
-        class={{ "has-skeleton-icon": this.showSkeletonIcon }}
+        class={{ 
+          "has-skeleton-icon": this.isSetMode,
+          "set-mode-transition": this.isSetMode && this.shouldShowSkeleton
+        }}
       >
         <div
-          class={`image-container${this.fullHeight ? " content-card-image-container" : ""}`}
+          class={{
+            "image-container": true,
+            "content-card-image-container": this.fullHeight,
+            loading: this.shouldShowSkeleton,
+            loaded: this.imageLoaded,
+          }}
           part={`image-container${this.fullHeight ? " content-card-image-container" : ""}`}
           style={this.getContainerStyles()}
         >
-          {this.isLoading ? (
-            this.renderSkeleton()
-          ) : (
-            <picture
-              part={`image-picture${this.fullHeight ? " content-card-image-picture" : ""}`}
-            >
-              {this.renderImage()}
-            </picture>
-          )}
+          <picture
+            part={`image-picture${this.fullHeight ? " content-card-image-picture" : ""}`}
+          >
+            {this.renderImage()}
+          </picture>
+          {this.shouldShowSkeleton && this.renderSkeleton()}
         </div>
       </Host>
     );

@@ -592,7 +592,7 @@ export class VviinnCarousel {
         currency={this.currencySign}
         pricePrefix={this.pricePrefix}
         locale={this.locale}
-        setMode={this.isSetMode}
+        isSetMode={this.isSetMode}
         customLabels={getCustomLabels(recommendation)}
         addPriceContainer={this.addPriceContainer}
         favoriteShow={this.favoriteShow}
@@ -631,6 +631,7 @@ export class VviinnCarousel {
           <vviinn-product-card
             loading={true}
             imageRatio={this.imageRatio}
+            responsive={true}
             productTitle=""
             productId={`skeleton-${index}`}
             key={`skeleton-${index}`}
@@ -723,7 +724,7 @@ export class VviinnCarousel {
               isSourceProduct={true}
               currency={this.currencySign}
               pricePrefix={this.pricePrefix}
-              setMode={this.isSetMode}
+              isSetMode={this.isSetMode}
               locale={this.locale}
               favoriteShow={this.favoriteShow}
               responsive={true}

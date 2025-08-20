@@ -200,6 +200,7 @@
   line-height: 0px;
   position: absolute;
   right: var(--spacing-75);
+  z-index: 3;
 }
 
 .product-card-actions-top {
