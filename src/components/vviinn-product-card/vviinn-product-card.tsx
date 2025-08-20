@@ -344,8 +344,6 @@ export class VviinnProductCard {
     };
   }
 
-  // Убрали intersectionCallback - логика теперь в setupIntersectionObserver
-
   private basketButtonClickHandler() {
     this.vviinnAddToBasket.emit({
       ...this.productData,

@@ -132,7 +132,6 @@ export class VviinnShopTheLook {
     this.currentViewMode = isDesktop() ? "desktop" : "mobile";
     this.updateArrowsVisibility();
 
-    // Initialize observer manager
     const isDesktopView = isDesktop();
     const threshold = getVisibilityThreshold(isDesktopView);
 
@@ -169,9 +168,6 @@ export class VviinnShopTheLook {
     }
   }
 
-  /**
-   * Helper methods for common operations
-   */
   @State() private rerenderTrigger: number = 0;
 
   private triggerReRender() {
@@ -193,9 +189,6 @@ export class VviinnShopTheLook {
     this.triggerReRender();
   }
 
-  /**
-   * Helper method to get current image state from store
-   */
   private getCurrentImageState() {
     return this.imageStore.getImageState(this.currentImageIndex);
   }
@@ -246,7 +239,7 @@ export class VviinnShopTheLook {
     }
 
     if (this.imageElement && this.imageElement.offsetWidth > 0) {
-      const actualImageWidth = this.imageElement.offsetWidth + 20; // Add spacing
+      const actualImageWidth = this.imageElement.offsetWidth + 20;
       const availableWidth = window.innerWidth - 100;
       const maxImagesVisible = Math.floor(availableWidth / actualImageWidth);
       this.showArrows = this.totalImages > maxImagesVisible;
@@ -263,7 +256,6 @@ export class VviinnShopTheLook {
     ) {
       const newBounds = calculateImageBounds(this.imageElement);
       if (newBounds) {
-        // Only update the store - single source of truth
         this.imageStore.updateImageState(this.currentImageIndex, {
           imageBounds: newBounds,
         });
@@ -281,7 +273,6 @@ export class VviinnShopTheLook {
         const wasIntersecting = this.isIntersecting;
         this.isIntersecting = isIntersecting;
 
-        // Update observer manager config immediately
         this.imageStore?.updateConfig({
           isIntersecting: this.isIntersecting,
         });
@@ -310,7 +301,6 @@ export class VviinnShopTheLook {
   }
 
   private handleImageVisibilityChange = () => {
-    // Trigger re-render when image visibility changes
     this.triggerReRender();
   };
 
@@ -323,27 +313,28 @@ export class VviinnShopTheLook {
     setTimeout(() => {
       const swiperContainer =
         this.el.shadowRoot?.querySelector("swiper-container");
+
       if (swiperContainer) {
-        // Listen for Swiper initialization events
         const setupObserver = () => {
           this.imageStore.setupImageIntersectionObserver(element, index);
         };
+        const swiperInstance = swiperContainer?.swiper;
 
-        // Try multiple Swiper events in case one doesn't fire
-        swiperContainer.addEventListener("swiperinitialized", setupObserver, {
-          once: true,
-        });
-        swiperContainer.addEventListener("swiperinit", setupObserver, {
-          once: true,
-        });
+        if (swiperInstance) {
+          setupObserver();
+        } else {
+          swiperContainer.addEventListener("swiperinit", setupObserver, {
+            once: true,
+          });
 
-        // Fallback: if no events fire, set up after delay
-        setTimeout(() => {
-          const state = this.imageStore.getImageState(index);
-          if (!state?.observerSetup) {
-            this.imageStore.setupImageIntersectionObserver(element, index);
-          }
-        }, 1000);
+          // Fallback: if event doesn't fire, set up after delay
+          setTimeout(() => {
+            const state = this.imageStore.getImageState(index);
+            if (!state?.observerSetup) {
+              this.imageStore.setupImageIntersectionObserver(element, index);
+            }
+          }, 1000);
+        }
       }
     }, TIMING.SWIPER_INIT_DELAY);
   }
@@ -351,7 +342,6 @@ export class VviinnShopTheLook {
   private performVisualSearchIfReady() {
     const isDesktopView = isDesktop();
 
-    // Update observer manager config
     this.imageStore.updateConfig({
       isIntersecting: this.isIntersecting,
       token: this.token,
@@ -365,23 +355,19 @@ export class VviinnShopTheLook {
 
       if (currentImageState?.searchCompleted) {
         this.loadImageState();
-      } else if (!currentImageState?.searchCompleted) {
-        // Single image OR mobile multi-image: trigger for current image
-        // Desktop multi-image: handled by individual image observers
-        if (this.totalImages === 1 || !isDesktopView) {
-          // Mark current image as visible for mobile/single image
-          if (!isDesktopView || this.totalImages === 1) {
-            this.markCurrentImageAsVisible();
-          }
+      } else if (this.totalImages === 1 || !isDesktopView) {
+        // Mark current image as visible for mobile/single image
+        if (!isDesktopView || this.totalImages === 1) {
+          this.markCurrentImageAsVisible();
+        }
 
-          // Only trigger if not already triggered
-          const state = this.imageStore.getImageState(this.currentImageIndex);
-          if (!state?.searchTriggered) {
-            this.imageStore.updateImageState(this.currentImageIndex, {
-              searchTriggered: true,
-            });
-            this.performVisualSearch();
-          }
+        // Only trigger if not already triggered
+        const state = this.imageStore.getImageState(this.currentImageIndex);
+        if (!state?.searchTriggered) {
+          this.imageStore.updateImageState(this.currentImageIndex, {
+            searchTriggered: true,
+          });
+          this.performVisualSearch();
         }
       }
     }
@@ -392,19 +378,15 @@ export class VviinnShopTheLook {
     if (currentState) {
       currentState.isVisible = true;
       this.imageStore.setImageState(this.currentImageIndex, currentState);
-      // Also update the observer manager's state
-      this.imageStore.setImageState(this.currentImageIndex, currentState);
     }
   }
 
   private loadImageState() {
-    // Ensure the current image is marked as visible for rendering
     const isDesktopView = isDesktop();
     if (!isDesktopView || this.totalImages === 1) {
       this.markCurrentImageAsVisible();
     }
   }
-
 
   private handleDetectedObjectClick = async (
     detectedObject: Rectangle,
@@ -448,9 +430,7 @@ export class VviinnShopTheLook {
         searchResults: Recommendation[];
         modalPosition: ModalPosition;
       }) => {
-        // Save search results to store and show modal
         if (response.searchResults && response.searchResults.length > 0) {
-          // Update store with the search results
           this.imageStore.updateImageState(this.currentImageIndex, {
             searchResults: response.searchResults,
           });
@@ -501,7 +481,6 @@ export class VviinnShopTheLook {
         searchResults: Recommendation[];
         visualSearchId?: string;
       }) => {
-        // Save detected objects and search results to store
         this.imageStore.updateImageStateData(
           this.currentImageIndex,
           response.detectedObjects,
@@ -514,17 +493,19 @@ export class VviinnShopTheLook {
         if (currentImageState.detectedObjects.length > 0) {
           this.isSearching = false;
           setTimeout(async () => {
-            await this.handleDetectedObjectClick(currentImageState.detectedObjects[0], 0);
-                this.imageStore.updateImageState(this.currentImageIndex, {
+            await this.handleDetectedObjectClick(
+              currentImageState.detectedObjects[0],
+              0,
+            );
+            this.imageStore.updateImageState(this.currentImageIndex, {
               searchCompleted: true,
             });
           }, TIMING.SEARCH_DELAY);
         } else {
           this.imageStore.updateImageState(this.currentImageIndex, {
-          searchCompleted: true,
-        });
+            searchCompleted: true,
+          });
           this.isSearching = false;
-          // State is automatically saved in store
         }
       },
     )(result);
@@ -568,7 +549,8 @@ export class VviinnShopTheLook {
       this.currentProductIndex--;
     } else if (
       direction === "next" &&
-      this.currentProductIndex < this.getCurrentImageState().searchResults.length - 1
+      this.currentProductIndex <
+        this.getCurrentImageState().searchResults.length - 1
     ) {
       this.currentProductIndex++;
     }
@@ -605,13 +587,11 @@ export class VviinnShopTheLook {
       setTimeout(() => {
         this.updateImageBounds();
 
-        // Mark current image as visible for mobile
         const isDesktopView = isDesktop();
         if (!isDesktopView) {
           this.markCurrentImageAsVisible();
           this.performVisualSearchIfReady();
         } else {
-          // On desktop, just load existing state if available
           const currentImageState = this.imageStore.getImageState(
             this.currentImageIndex,
           );
@@ -624,7 +604,6 @@ export class VviinnShopTheLook {
   };
 
   private handleImageRef = (el: HTMLImageElement, index: number) => {
-    // Prevent processing the same ref multiple times
     const state = this.imageStore.getImageState(index);
     if (state?.refProcessed && this.imageStore.getImageElement(index) === el) {
       return;
@@ -652,18 +631,10 @@ export class VviinnShopTheLook {
       }
 
       const isDesktopView = isDesktop();
-
-      // Set up intersection observers based on device and image count
-      if (this.totalImages === 1) {
-        // Single image: no individual observers needed
-      } else if (isDesktopView) {
-        // Desktop multi-image: set up observers after Swiper initializes
+      if (isDesktopView) {
         this.setupObserverAfterSwiper(el, index);
-      } else {
-        // Mobile multi-image: no individual observers, rely on slide change events
       }
 
-      // Update bounds immediately if image is already loaded, otherwise wait for load
       if (el.complete && el.offsetWidth > 0) {
         this.updateImageBoundsForElement(el, index);
       } else {
@@ -692,7 +663,6 @@ export class VviinnShopTheLook {
         if (bounds) {
           imageState.imageBounds = bounds;
           this.imageStore.setImageState(index, imageState);
-          // Trigger re-render to update detected object positions
           this.triggerReRender();
         }
       }

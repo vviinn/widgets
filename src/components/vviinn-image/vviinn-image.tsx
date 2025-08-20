@@ -74,7 +74,9 @@ export class VviinnImage {
   @Prop() loadEndCallback?: () => void;
 
   private get shouldShowSkeleton(): boolean {
-    return this.isSetMode ? this.showSkeleton : (this.showSkeleton && (!this.imageLoaded && !this.imageError));
+    return this.isSetMode
+      ? this.showSkeleton
+      : this.showSkeleton && !this.imageLoaded && !this.imageError;
   }
 
   private get hasValidImage(): boolean {
@@ -200,13 +202,12 @@ export class VviinnImage {
   }
 
   render() {
-    console.log(this.shouldShowSkeleton);
     return (
       <Host
         exportparts={imageParts}
-        class={{ 
+        class={{
           "has-skeleton-icon": this.isSetMode,
-          "set-mode-transition": this.isSetMode && this.shouldShowSkeleton
+          "set-mode-transition": this.isSetMode && this.shouldShowSkeleton,
         }}
       >
         <div

@@ -103,7 +103,6 @@ export class ShopTheLookImageStore {
 
     this.updateImageState(index, { isVisible });
 
-    // Notify parent component of visibility change
     this.config.onImageVisibilityChange();
 
     if (this.shouldTriggerSearch(index, isVisible, wasVisible, currentState)) {
@@ -118,7 +117,6 @@ export class ShopTheLookImageStore {
     wasVisible: boolean,
     currentState: ImageState,
   ): boolean {
-    // Check all conditions for triggering a visual search
     const isNewlyVisible = isVisible && wasVisible === false;
     const hasRequiredTokenAndState =
       this.config.isIntersecting && this.config.token;
@@ -149,9 +147,6 @@ export class ShopTheLookImageStore {
     return this.getImageState(index).imageElement;
   }
 
-  /**
-   * Replace entire image state (use sparingly)
-   */
   setImageState(index: number, state: ImageState) {
     this.imageStates.set(index, state);
   }
@@ -189,16 +184,10 @@ export class ShopTheLookImageStore {
     return new Map(this.imageStates);
   }
 
-  /**
-   * Check if an image state exists for the given index
-   */
   hasImageState(index: number): boolean {
     return this.imageStates.has(index);
   }
 
-  /**
-   * Check if any images are currently searching (triggered but not completed)
-   */
   hasActiveSearches(): boolean {
     return Array.from(this.imageStates.values()).some(state => 
       state.searchTriggered && !state.searchCompleted
