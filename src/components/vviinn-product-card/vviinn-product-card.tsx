@@ -222,6 +222,7 @@ export class VviinnProductCard {
 
   private productData: ProductCardEventData | null = null;
   private imageElement?: HTMLImageElement;
+  private visibilityTrackedElement?: HTMLImageElement | null;
   private intersectionObserver: IntersectionObserver;
   private linkEventAbortController?: AbortController;
   private imageProps: ImageProps;
@@ -289,6 +290,11 @@ export class VviinnProductCard {
       this.imageElement,
       config,
     );
+  }
+
+  private cleanupVisibilityTracking() {
+    this.intersectionObserver?.disconnect();
+    this.visibilityTrackedElement = null;
   }
 
   @Listen("vviinnCrossSellingClick")
@@ -403,7 +409,7 @@ export class VviinnProductCard {
 
   disconnectedCallback() {
     this.linkEventAbortController?.abort();
-    this.intersectionObserver?.disconnect();
+    this.cleanupVisibilityTracking();
   }
 
   private getProduct(): Recommendation {
@@ -421,7 +427,13 @@ export class VviinnProductCard {
       title: this.productTitle,
       ref: (el: HTMLImageElement) => {
         this.imageElement = el;
-        if (el) this.initializeVisibilityTracking();
+        if (el && this.visibilityTrackedElement !== el) {
+          this.cleanupVisibilityTracking();
+          this.visibilityTrackedElement = el;
+          this.initializeVisibilityTracking();
+        } else if (!el) {
+          this.cleanupVisibilityTracking();
+        }
       },
       isSource: this.isSourceProduct,
       onLoadEnd: () => {

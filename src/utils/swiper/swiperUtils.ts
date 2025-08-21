@@ -21,6 +21,11 @@ export const extractSlideIndex = (event: SwiperEvent): number | null => {
   return newIndex;
 };
 
+export interface ConfigurableSwiperElement {
+  [key: string]: any;
+  initialize?: () => void;
+}
+
 export interface SwiperConfig {
   isDesktop: boolean;
   slidesPerView?: number | "auto";
@@ -35,10 +40,10 @@ export interface SwiperConfig {
   centeredSlides?: boolean;
 }
 
-/**
- * Configure Swiper element with common settings
- */
-export const configureSwiperElement = (element: any, config: SwiperConfig) => {
+export const configureSwiperElement = (
+  element: ConfigurableSwiperElement,
+  config: SwiperConfig,
+) => {
   if (!element) return;
 
   const modules = config.isDesktop ? [] : config.pagination ? [Pagination] : [];

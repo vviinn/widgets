@@ -131,7 +131,7 @@ const useStore = (store: SearchStoreName): SearchStore => {
     case "shopTheLook":
       return shopTheLookState;
     default:
-      return storeDefaults;
+      throw new Error(`Unknown store name: ${store}`);
   }
 };
 
