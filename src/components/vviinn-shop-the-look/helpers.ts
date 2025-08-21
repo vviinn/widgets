@@ -149,9 +149,9 @@ export interface DetectedObjectClickParams {
   containerElement?: HTMLElement;
   visualSearchId?: string | null;
   campaignId?: string;
+  isSearchInProgress: boolean;
+  setSearchInProgress: (inProgress: boolean) => void;
 }
-
-let isSearchInProgress = false;
 
 export const handleDetectedObjectClick = async (
   params: DetectedObjectClickParams,
@@ -169,13 +169,15 @@ export const handleDetectedObjectClick = async (
     token,
     campaignId,
     containerElement,
+    isSearchInProgress,
+    setSearchInProgress,
   } = params;
 
   if (isSearchInProgress) {
     return E.left("Search already in progress");
   }
 
-  isSearchInProgress = true;
+  setSearchInProgress(true);
 
   try {
     if (!imageElement) {
@@ -209,7 +211,7 @@ export const handleDetectedObjectClick = async (
   } catch (error) {
     return E.left(`Visual search failed: ${error}`);
   } finally {
-    isSearchInProgress = false;
+    setSearchInProgress(false);
   }
 };
 

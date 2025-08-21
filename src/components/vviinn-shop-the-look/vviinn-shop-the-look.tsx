@@ -97,6 +97,7 @@ export class VviinnShopTheLook {
   @State() currentViewMode: "desktop" | "mobile" | null = null;
   @State() swiperKey: string = "swiper-0";
   @State() showArrows: boolean = false;
+  @State() isSearchInProgress: boolean = false;
 
   /** Emitted when a detected object/hotspot is clicked. Contains the object ID and first recommended product. */
   @Event()
@@ -147,10 +148,6 @@ export class VviinnShopTheLook {
   }
 
   componentDidLoad() {
-    this.imageElement?.addEventListener("load", () => {
-      this.updateImageBounds();
-      this.updateArrowsVisibility();
-    });
     window.addEventListener("resize", this.handleResize);
     this.initializeContainerVisibilityTracking();
     this.setupSwiperEventListener();
@@ -183,7 +180,7 @@ export class VviinnShopTheLook {
   }
 
   private updateSearchingState(isCurrentImage: boolean = false) {
-    this.isSearching = this.imageStore.hasActiveSearches();
+    this.isSearching = this.imageStore?.hasActiveSearches() ?? false;
     if (isCurrentImage) {
       this.isSearching = false;
     }
@@ -191,13 +188,10 @@ export class VviinnShopTheLook {
   }
 
   private getCurrentImageState() {
-    return this.imageStore.getImageState(this.currentImageIndex);
+    return this.imageStore?.getImageState(this.currentImageIndex);
   }
 
   disconnectedCallback() {
-    this.imageElement?.removeEventListener("load", () =>
-      this.updateImageBounds(),
-    );
     window.removeEventListener("resize", this.handleResize);
     this.intersectionObserver?.disconnect();
     this.imageStore?.disconnectAll();
@@ -252,7 +246,7 @@ export class VviinnShopTheLook {
       this.imageElement.offsetHeight > 0
     ) {
       const newBounds = calculateImageBounds(this.imageElement);
-      if (newBounds) {
+      if (newBounds && this.imageStore) {
         this.imageStore.updateImageState(this.currentImageIndex, {
           imageBounds: newBounds,
         });
@@ -412,6 +406,10 @@ export class VviinnShopTheLook {
       containerElement: this.el,
       visualSearchId,
       campaignId: this.campaignId,
+      isSearchInProgress: this.isSearchInProgress,
+      setSearchInProgress: (inProgress: boolean) => {
+        this.isSearchInProgress = inProgress;
+      },
     };
 
     const result = await handleDetectedObjectClick(params);

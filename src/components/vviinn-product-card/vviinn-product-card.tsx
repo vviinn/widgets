@@ -294,6 +294,7 @@ export class VviinnProductCard {
 
   private cleanupVisibilityTracking() {
     this.intersectionObserver?.disconnect();
+    this.intersectionObserver = null;
     this.visibilityTrackedElement = null;
   }
 
