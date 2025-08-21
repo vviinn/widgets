@@ -189,9 +189,8 @@ export class ShopTheLookImageStore {
   }
 
   hasActiveSearches(): boolean {
-    return Array.from(this.imageStates.values()).some(state => 
-      state.searchTriggered && !state.searchCompleted
+    return Array.from(this.imageStates.values()).some(
+      (state) => state.searchTriggered && !state.searchCompleted,
     );
   }
-
 }

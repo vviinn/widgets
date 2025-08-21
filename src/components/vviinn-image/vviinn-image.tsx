@@ -160,7 +160,7 @@ export class VviinnImage {
     this.vviinnImageLoad.emit();
 
     this.imageRef && this.imageRef(imgElement);
-    this.loadEndCallback?.();
+    this?.loadEndCallback();
   };
 
   private handleImageError = () => {
