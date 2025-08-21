@@ -31,6 +31,7 @@ import {
 } from "./helpers";
 import { ShopTheLookImageStore, createDefaultImageState } from "./store";
 import { TIMING } from "./constants";
+import { shopTheLookState } from "../../store/search.store";
 import {
   renderDetectedObjects,
   renderSwiper,
@@ -157,7 +158,7 @@ export class VviinnShopTheLook {
 
   @Watch("currentViewMode")
   onViewModeChange(newViewMode: "desktop" | "mobile" | null) {
-    if (newViewMode && this.totalImages > 1) {
+    if (newViewMode) {
       if (this.showModal) {
         this.handleModalClose();
       }
@@ -206,10 +207,6 @@ export class VviinnShopTheLook {
     if (swiperContainer) {
       swiperContainer.removeEventListener(
         "swiperslidechange",
-        this.handleSlideChange,
-      );
-      swiperContainer.removeEventListener(
-        "slidechange",
         this.handleSlideChange,
       );
     }
@@ -287,17 +284,17 @@ export class VviinnShopTheLook {
   }
 
   private setupSwiperEventListener() {
-    setTimeout(() => {
-      const swiperContainer =
-        this.el.shadowRoot?.querySelector("swiper-container");
-      if (swiperContainer) {
+    const swiperContainer =
+      this.el.shadowRoot?.querySelector("swiper-container");
+
+    if (swiperContainer) {
+      setTimeout(() => {
         swiperContainer.addEventListener(
           "swiperslidechange",
           this.handleSlideChange,
         );
-        swiperContainer.addEventListener("slidechange", this.handleSlideChange);
-      }
-    }, TIMING.SWIPER_INIT_DELAY);
+      }, TIMING.SWIPER_INIT_DELAY);
+    }
   }
 
   private handleImageVisibilityChange = () => {
@@ -404,7 +401,8 @@ export class VviinnShopTheLook {
       this.imageStore.getImageElement(imageIndex) || this.imageElement;
 
     const imageState = this.imageStore.getImageState(imageIndex);
-    const visualSearchId = imageState?.visualSearchId || null;
+    const visualSearchId =
+      imageState?.visualSearchId || shopTheLookState.visualSearchId || null;
 
     const params: DetectedObjectClickParams = {
       detectedObject,

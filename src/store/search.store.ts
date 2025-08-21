@@ -74,12 +74,6 @@ export type SearchStore = AppStateGlobalDefaults &
   AppStateDefaults &
   ReceivedDataDefaults;
 
-export interface ShopTheLookStore {
-  searchArea: Rectangle | null;
-  imageBounds: Rectangle | null;
-  visualSearchId: string | null;
-}
-
 const appStateGlobalDefaults: AppStateGlobalDefaults = {
   excluded: null,
   campaignId: "",
@@ -121,23 +115,21 @@ const { state: searchState, onChange: onChangeWidgetState } =
 const { state: componentsState, onChange: onChangeComponentsState } =
   createStore<SearchStore>(storeDefaults);
 
-const shopTheLookDefaults: ShopTheLookStore = {
-  searchArea: null,
-  imageBounds: null,
-  visualSearchId: null,
+const shopTheLookDefaults: SearchStore = {
+  ...storeDefaults,
 };
 
 const { state: shopTheLookState, onChange: onChangeShopTheLookState } =
-  createStore<ShopTheLookStore>(shopTheLookDefaults);
+  createStore<SearchStore>(shopTheLookDefaults);
 
-const useStore = (store: SearchStoreName) => {
+const useStore = (store: SearchStoreName): SearchStore => {
   switch (store) {
     case "widget":
       return searchState;
     case "components":
       return componentsState;
     case "shopTheLook":
-      return shopTheLookState as Partial<SearchStore>;
+      return shopTheLookState;
     default:
       return storeDefaults;
   }

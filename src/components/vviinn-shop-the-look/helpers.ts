@@ -161,6 +161,16 @@ export const handleDetectedObjectClick = async (
     { searchResults: Recommendation[]; modalPosition: ModalPosition }
   >
 > => {
+  const {
+    imageElement,
+    detectedObject,
+    visualSearchId,
+    componentToken,
+    token,
+    campaignId,
+    containerElement,
+  } = params;
+
   if (isSearchInProgress) {
     return E.left("Search already in progress");
   }
@@ -168,17 +178,17 @@ export const handleDetectedObjectClick = async (
   isSearchInProgress = true;
 
   try {
-    if (!params.imageElement) {
+    if (!imageElement) {
       return E.left("Image element is missing");
     }
 
-    shopTheLookState.searchArea = params.detectedObject;
+    shopTheLookState.searchArea = detectedObject;
 
     const result = await makeVisualSearchRequest(
       "shopTheLook",
-      params.visualSearchId || null,
-      params.componentToken || params.token,
-      params.campaignId,
+      visualSearchId || null,
+      componentToken || token,
+      campaignId,
     );
 
     return E.fold(
@@ -186,8 +196,8 @@ export const handleDetectedObjectClick = async (
       (searchResponse: VisualSearchResponse) => {
         const searchResults = searchResponse.data?.products || [];
         const modalPosition = calculateModalPosition(
-          params.imageElement,
-          params.containerElement,
+          imageElement,
+          containerElement,
         );
 
         return E.right({
