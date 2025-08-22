@@ -9,6 +9,14 @@ export default {
   decorators: [productDecorator],
   parameters: {
     controls: { expanded: false },
+    argTypes: {
+      entityType: {
+        options: ["product", "content", "list"],
+        control: {
+          type: "select",
+        },
+      },
+    },
   },
   argTypes,
 };
@@ -30,7 +38,7 @@ const Template = (args) => {
       image-ratio="${args.imageRatio}"
       update-button-location="${args.updateButtonLocation}"
       add-to-basket-show="${args.addToBasketShow}"
-      set-mode="${args.setMode}"
+      is-set-mode="${args.isSetMode}"
       locale="${args.locale}"
       currency="${args.currency}"
       deeplink="${args.deeplink}"
@@ -72,7 +80,7 @@ const initArgs = {
   pricePrefix: "",
   customLabels: "UVP",
   addToBasketShow: true,
-  setMode: false,
+  isSetMode: false,
   updateButtonLocation: "onItem",
   productCardContentAlign: "flex-start",
   productCardTextAlign: "left",

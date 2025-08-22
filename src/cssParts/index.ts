@@ -7,6 +7,7 @@ import {
 } from "./filters";
 
 import {
+  imagePartsList,
   productCardGeneralPartsList,
   energyLabelPartsList,
   customLabelPartsList,
@@ -40,14 +41,20 @@ export const energyLabelParts = makeExportPartsString(energyLabelPartsList);
 
 export const productCardsGridPart = "products";
 
+export const imageParts = makeExportPartsString(imagePartsList);
+
 export const productCardParts = makeExportPartsString(
   productCardGeneralPartsList,
+  imagePartsList,
   pricePartsList,
   customLabelPartsList,
   energyLabelPartsList,
 );
 
-export const contentCardParts = makeExportPartsString(contentCardPartsList);
+export const contentCardParts = makeExportPartsString(
+  contentCardPartsList,
+  imagePartsList,
+);
 
 export const searchWidgetFilterParts = makeExportPartsString(
   extendedFiltersPartsList,
