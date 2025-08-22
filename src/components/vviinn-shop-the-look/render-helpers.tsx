@@ -278,8 +278,8 @@ export const renderProductDetails = (props: ProductDetailsSliderProps) => {
               selectedProduct.image?.original ||
               ""
             }
-            responsive={true}
             imageResolutionWidth={300}
+            imageWidth={160}
             currency={currencySign || ""}
             deeplink={selectedProduct.deeplink}
             onVviinnProductClick={() => onProductClick(selectedProduct)}
