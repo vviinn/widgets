@@ -24,7 +24,6 @@ import {
   VisualSearchParams,
   handleDetectedObjectClick,
   DetectedObjectClickParams,
-  extractSlideIndex,
   isDesktop,
   shouldRenderDetectedObjects,
   getVisibilityThreshold,
@@ -42,6 +41,7 @@ import {
 } from "./render-helpers";
 import { Locale } from "../../locale";
 import { TEST_BASIC_EVENT_DATA } from "./test-data";
+import { extractSlideIndex } from "../../utils/swiper/swiperUtils";
 
 if (typeof window !== "undefined") {
   register();
@@ -576,7 +576,7 @@ export class VviinnShopTheLook {
   private handleSlideChange = (event: any) => {
     const newIndex = extractSlideIndex(event);
 
-    if (newIndex !== null && newIndex !== this.currentImageIndex) {
+    if (newIndex !== undefined && newIndex !== this.currentImageIndex) {
       this.currentImageIndex = newIndex;
       this.clearModalAndSlideState();
 

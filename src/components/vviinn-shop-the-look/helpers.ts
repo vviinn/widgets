@@ -8,7 +8,6 @@ import {
 } from "../../helpers/device/checkDeviceType";
 import { calculateImageBounds } from "../../Image/bounds";
 import { createImageFile } from "../../Image/upload";
-import { extractSlideIndex as sharedExtractSlideIndex } from "../../utils/swiper/swiperUtils";
 import {
   makeUploadFileRequest,
   makeVisualSearchRequest,
@@ -56,8 +55,6 @@ export const calculateModalPosition = (
   imageElement: HTMLImageElement,
   containerElement?: HTMLElement,
 ): ModalPosition => {
-  if (!imageElement) return { x: 0, y: 0 };
-
   const imageBounds = calculateImageBounds(imageElement);
   if (!imageBounds) return { x: 0, y: 0 };
 
@@ -214,6 +211,3 @@ export const handleDetectedObjectClick = async (
     setSearchInProgress(false);
   }
 };
-
-export const extractSlideIndex = sharedExtractSlideIndex;
-export { type SwiperSlideChangeEventDetail as SlideChangeEventDetail } from "../../utils/swiper/swiperUtils";

@@ -1,16 +1,16 @@
 import { Pagination } from "swiper/modules";
 
-export interface SwiperSlideChangeEventDetail {
+type SwiperSlideChangeEventDetail = {
   activeIndex?: number;
   realIndex?: number;
-}
+};
 
-export interface SwiperEvent {
+type SwiperEvent = {
   detail: SwiperSlideChangeEventDetail | SwiperSlideChangeEventDetail[];
-}
+};
 
-export const extractSlideIndex = (event: SwiperEvent): number | null => {
-  let newIndex = null;
+export const extractSlideIndex = (event: SwiperEvent): number | undefined => {
+  let newIndex = undefined;
 
   if (event.detail && Array.isArray(event.detail) && event.detail[0]) {
     newIndex = event.detail[0].activeIndex || event.detail[0].realIndex;

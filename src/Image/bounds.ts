@@ -4,7 +4,7 @@ import { Rectangle } from "../interfaces/search";
  * Calculate the bounds of an image element in the viewport
  */
 export const calculateImageBounds = (
-  imageElement: HTMLImageElement,
+  imageElement: HTMLImageElement | null | undefined,
 ): Rectangle | null => {
   if (!imageElement) return null;
   const rect = imageElement.getBoundingClientRect();
