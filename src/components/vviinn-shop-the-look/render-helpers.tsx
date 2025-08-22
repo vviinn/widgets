@@ -265,6 +265,7 @@ export const renderProductDetails = (props: ProductDetailsSliderProps) => {
       <div class="product-content">
         <div class="product-details-card-wrapper">
           <vviinn-product-card
+            key={selectedProduct.productId}
             class="product-details-card"
             productId={selectedProduct.productId || ""}
             productTitle={selectedProduct.title || ""}
@@ -277,8 +278,8 @@ export const renderProductDetails = (props: ProductDetailsSliderProps) => {
               selectedProduct.image?.original ||
               ""
             }
-            responsive={true}
             imageResolutionWidth={300}
+            imageWidth={160}
             currency={currencySign || ""}
             deeplink={selectedProduct.deeplink}
             onVviinnProductClick={() => onProductClick(selectedProduct)}

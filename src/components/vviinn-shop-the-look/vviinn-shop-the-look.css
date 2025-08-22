@@ -546,6 +546,10 @@ vviinn-image::part(image),
   overflow: hidden;
 }
 
+.product-details-card-wrapper vviinn-product-card::part(image-container) {
+  height: 160px;
+}
+
 vviinn-product-card::part(title),
 vviinn-product-card::part(brand),
 vviinn-product-card::part(price-container) {
