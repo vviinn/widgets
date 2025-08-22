@@ -177,6 +177,8 @@ export class VviinnShopTheLook {
     this.selectedDetectedObject = null;
     this.modalPosition = null;
     this.currentResultIndex = 0;
+    this.currentProductIndex = 0;
+    this.showSliderView = false;
   }
 
   private updateSearchingState(isCurrentImage: boolean = false) {
