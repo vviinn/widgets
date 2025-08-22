@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.182.1](https://github.com/vviinn/widgets/compare/v2.182.0...v2.182.1) (2025-08-22)
+
+
+### Bug Fixes
+
+* Shop-the-look mismatch of the clicked product and the details view. ([00bfffc](https://github.com/vviinn/widgets/commit/00bfffced210d26637b3bd0692766c35267bf043))
+
 ## [2.182.0](https://github.com/vviinn/widgets/compare/v2.181.0...v2.182.0) (2025-08-22)
 
 
