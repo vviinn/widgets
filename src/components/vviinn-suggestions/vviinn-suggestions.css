@@ -1,0 +1,125 @@
+@import "../../variables.css";
+
+:host {
+  display: contents;
+  min-height: max-content;
+}
+
+.container {
+  display: grid;
+  margin-top: var(--spacing-300);
+  padding: var(--spacing-200);
+  grid-gap: var(--spacing-150);
+  font-family: var(--font-family, var(--font-family-base));
+  border-radius: var(--border-radius-150);
+  border: 1px solid var(--color-border-01);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-100);
+}
+
+.icon {
+  font-size: 20px;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--font-size-headline);
+  line-height: var(--line-height-headline);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.description {
+  margin: 0;
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  color: var(--color-text-secondary);
+}
+
+.suggestions-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--spacing-100);
+  height: fit-content;
+}
+
+.suggestion-item {
+  margin: 0;
+  width: fit-content;
+  padding: var(--spacing-150);
+  background: var(--surface-bg-color-01);
+  border-radius: var(--border-radius-100);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  color: var(--color-text-primary);
+}
+
+.suggestion-link {
+  background: none;
+  border: none;
+  color: var(--color-primary-500);
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: inherit;
+  line-height: inherit;
+  padding: 0;
+  margin: 0;
+}
+
+.suggestion-link:hover {
+  color: var(--color-primary-600);
+}
+
+.suggestion-link:focus {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Simple toggle button for filter suggestions */
+.suggestion-filter-button {
+  background: var(--surface-bg-color-01);
+  border: 1px solid var(--color-border-01);
+  border-radius: var(--border-radius-100);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-75);
+  width: 100%;
+  
+  font-family: var(--font-family, var(--font-family-base));
+  font-size: var(--font-size-body);
+  color: var(--color-text-primary);
+  
+  transition: all 0.2s ease;
+}
+
+.suggestion-filter-button:hover {
+  background: var(--surface-bg-color-01-hover);
+  border-color: var(--color-primary-500);
+}
+
+.suggestion-filter-button.active {
+  background: var(--color-primary-500);
+  border-color: var(--color-primary-500);
+  color: var(--color-text-inverse);
+}
+
+.suggestion-filter-icon {
+  margin-left: var(--spacing-50);
+  font-size: 14px;
+  min-width: 14px;
+}
+
+@media (max-width: 768px) {
+  :host {
+    padding: var(--spacing-200);
+  }
+}

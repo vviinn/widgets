@@ -808,15 +808,23 @@ export class VviinnVpsWidget {
               {this.isResultSlide() && (
                 <div class="source-wrapper">
                   {this.isTextSearch() ? (
-                    <vviinn-text-search
-                      token={this.token}
-                      showInWidget={true}
-                      apiPath={this.apiPath}
-                      locale={this.locale}
-                      uiSessionId={this.uiSessionId}
-                      basicEventData={this.getBasicEventData(true)}
-                      save-image-mode="never"
-                    />
+                    <Fragment>
+                      <vviinn-text-search
+                        token={this.token}
+                        showInWidget={true}
+                        apiPath={this.apiPath}
+                        locale={this.locale}
+                        uiSessionId={this.uiSessionId}
+                        basicEventData={this.getBasicEventData(true)}
+                        save-image-mode="never"
+                      />
+                      <vviinn-suggestions
+                        showInWidget={true}
+                        token={this.token}
+                        apiPath={this.apiPath}
+                        locale={this.locale}
+                      />
+                    </Fragment>
                   ) : (
                     <vviinn-cropper
                       basicEventData={this.getBasicEventData()}

@@ -241,8 +241,13 @@ vviinn-preloader {
     visibility: visible;
   }
 
-  .results-page vviinn-text-search {
+  .source-wrapper vviinn-text-search {
     width: calc(100% - 48px);
+    transform: translateX(24px);
+  }
+
+  .source-wrapper vviinn-suggestions::part(container) {
+    width: calc(100% - 82px);
     transform: translateX(24px);
   }
 

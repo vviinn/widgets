@@ -29,6 +29,10 @@ export const resources: Resource = {
       teaserText: "Finde Dein Produkt",
       imageSearchModalTitle: "AI Search",
       textSearchPlaceholder: "mit Text suchen",
+      suggestions: {
+        title: "AI-Empfehlungen",
+        description: "Hier sind einige Vorschläge, die Ihnen helfen, das perfekte zu finden.",
+      },
       speechRecognition: {
         placeholder: "Aufnahme...",
         tooltip: {
@@ -157,6 +161,10 @@ export const resources: Resource = {
       teaserText: "Find Your Product",
       imageSearchModalTitle: "AI Search",
       textSearchPlaceholder: "Search by text",
+      suggestions: {
+        title: "AI Suggestions",
+        description: "Here are some suggestions to help you find the perfect one.",
+      },
       speechRecognition: {
         placeholder: "Listening...",
         tooltip: {
