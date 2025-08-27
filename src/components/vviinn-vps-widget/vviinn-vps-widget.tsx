@@ -857,7 +857,12 @@ export class VviinnVpsWidget {
                       />
 
                       <vviinn-extended-filters-button
-                        class="extended-filters-button"
+                        class={{
+                          "extended-filters-button": true,
+                          "has-primary-filters":
+                            this.state.dynamicFilters.filter((f) => f.isPrimary)
+                              .length > 0,
+                        }}
                         exportparts="extended-filters-button"
                         showInWidget={true}
                       />

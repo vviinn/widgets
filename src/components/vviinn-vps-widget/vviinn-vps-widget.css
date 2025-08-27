@@ -138,20 +138,20 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
 }
 
 .source-wrapper {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   position: relative;
   width: 100%;
   max-width: 100%;
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-gutter: stable;
-  grid-template-rows: min-content 1fr;
-  padding: 0 12px 12px 24px;
+  gap: var(--spacing-300);
+  padding: 0 16px 12px 24px;
   scrollbar-width: thin;
 }
 
 .filters-wrapper {
-  margin-top: 12px;
   transform: translateX(-24px);
   min-width: calc(100% + 24px);
 }
@@ -173,6 +173,10 @@ vviinn-extended-filters.modal-extended-filters {
 vviinn-extended-filters.preview-extended-filters {
   display: block;
   width: 100%;
+}
+
+vviinn-extended-filters.preview-extended-filters::part(extended-filters-row) {
+  padding-right: 0;
 }
 
 .extended-filters-button {
@@ -246,11 +250,6 @@ vviinn-preloader {
     transform: translateX(24px);
   }
 
-  .source-wrapper vviinn-suggestions::part(container) {
-    width: calc(100% - 82px);
-    transform: translateX(24px);
-  }
-
   .start-page.active {
     height: calc(100vh - 64px);
     height: calc(100svh - 64px);
@@ -281,7 +280,6 @@ vviinn-preloader {
   .filters-wrapper {
     min-width: 100%;
     min-height: 40px;
-    margin-top: 24px;
     padding-left: 24px;
   }
 
@@ -299,11 +297,38 @@ vviinn-preloader {
     display: none;
   }
 
+  vviinn-suggestions::part(container) {
+    padding: 0 var(--spacing-300);
+  }
+
+  vviinn-suggestions::part(suggestions-wrapper) {
+    width: calc(100% + 48px);
+    transform: translateX(-24px);
+  }
+
+  vviinn-suggestions::part(suggestions-list) {
+    padding: 0 var(--spacing-300);
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  vviinn-suggestions::part(suggestions-list)::-webkit-scrollbar {
+    display: none;
+  }
+
   .extended-filters-button {
     display: block;
     position: absolute;
-    right: 24px;
+    left: 48px;
     top: 0;
+  }
+
+  .extended-filters-button.has-primary-filters {
+    left: unset;
+    right: 24px;
   }
 
   .results-page {

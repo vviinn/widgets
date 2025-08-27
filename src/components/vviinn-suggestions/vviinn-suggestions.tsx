@@ -478,12 +478,14 @@ export class VviinnSuggestions {
               </slot>
             </h3>
           </div>
-          <p class="description" part="description">
+          <div class="description" part="description">
             <slot name="vviinn-suggestions-description">
               {i18next.t("suggestions.description")}
             </slot>
-          </p>
-          {this.renderStreamItems()}
+          </div>
+          <div class="suggestions-wrapper" part="suggestions-wrapper">
+            {this.renderStreamItems()}
+          </div>
         </div>
       </Host>
     );
