@@ -148,8 +148,61 @@ export function cleanLineText(line: string): string {
   return line.replace(/^\*\s*/, ""); // Remove bullet point
 }
 
+/**
+ * Renders a toggle button for filter suggestions
+ */
+export function renderToggleButton(
+  text: string,
+  isSelected: boolean,
+  onClick: () => void,
+  key: string,
+) {
+  return (
+    <li class="suggestion-item" part="suggestion-item" key={key}>
+      <button
+        class={`suggestion-filter-button ${isSelected ? "active" : ""}`}
+        part="suggestion-filter-button"
+        onClick={onClick}
+        type="button"
+      >
+        {text}
+      </button>
+    </li>
+  );
+}
+
 export function splitAnnotationText(annotationText: string): string[] {
   return annotationText.split("\n").filter((line) => line.trim());
+}
+
+/**
+ * Checks if annotation has categorical dynamic filters
+ */
+export function hasCategoricalFilters(annotation: any): {
+  hasFilters: boolean;
+  selectedFilter?: any;
+} {
+  const hasFilters = hasDynamicFilters(annotation);
+  
+  if (hasFilters && annotation.interactions?.dynamicFilters?.[0]) {
+    const selectedFilter = annotation.interactions.dynamicFilters[0];
+    if (selectedFilter.type === "categorical") {
+      return { hasFilters: true, selectedFilter };
+    }
+  }
+  
+  return { hasFilters: false };
+}
+
+/**
+ * Renders fallback list item when no filters are present
+ */
+export function renderFallbackListItem(
+  text: string,
+  itemKey: string,
+  onClick: () => void,
+) {
+  return renderListItem(text, itemKey, true, onClick);
 }
 
 export function hasDynamicFilters(

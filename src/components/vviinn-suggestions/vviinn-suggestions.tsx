@@ -16,7 +16,9 @@ import { updateGlobalState, globalState } from "../../store/store";
 import {
   ChangedFiltersEventData,
   DynamicFilterInternalData,
+  TextSearchEventData,
 } from "../../recommendation/events";
+import { RequestDynamicFilterItem } from "../../campaign/VPRCampaignService";
 import { addEventListenersWithSignal } from "../../dom";
 import { Locale } from "../../locale/types";
 import { resources } from "../../locale";
@@ -31,7 +33,14 @@ import {
   splitAnnotationText,
   hasDynamicFilters,
   FilterHandlers,
+  renderToggleButton,
+  hasCategoricalFilters,
+  renderFallbackListItem,
 } from "./render-helpers";
+import {
+  toggleFilterInSet,
+  syncSuggestionFilters,
+} from "./helpers";
 
 /**
  * @slot vviinn-suggestions-title - Custom title text to replace default "AI Suggestions".
@@ -129,7 +138,10 @@ export class VviinnSuggestions {
 
     addEventListenersWithSignal(
       document,
-      [["vviinnFiltersChanged", this.handleFiltersChanged]],
+      [
+        ["vviinnFiltersChanged", this.handleFiltersChanged],
+        ["vviinnTextSearchStarted", this.handleTextSearchStarted],
+      ],
       signal,
     );
   }
@@ -152,8 +164,20 @@ export class VviinnSuggestions {
       return;
     }
 
+    // Check if any suggestion filters should be deactivated
+    this.syncSuggestionFiltersWithActiveFilters(filters);
+
     // Update the store state with the new filters (this ensures consistency)
     this.state.requestFilters = filters;
+  };
+
+  private handleTextSearchStarted = ({
+    detail,
+  }: CustomEvent<TextSearchEventData>) => {
+    // Clear all applied suggestion filters when text search starts
+    if (this.showInWidget === detail.isTriggeredByVpsWidget) {
+      this.appliedSuggestionFilters = new Set();
+    }
   };
 
   private handleProductClick = (
@@ -183,13 +207,17 @@ export class VviinnSuggestions {
   };
 
   private toggleSuggestionFilter(suggestionText: string) {
-    const newAppliedFilters = new Set(this.appliedSuggestionFilters);
-    if (newAppliedFilters.has(suggestionText)) {
-      newAppliedFilters.delete(suggestionText);
-    } else {
-      newAppliedFilters.add(suggestionText);
-    }
-    this.appliedSuggestionFilters = newAppliedFilters;
+    this.appliedSuggestionFilters = toggleFilterInSet(
+      this.appliedSuggestionFilters,
+      suggestionText
+    );
+  }
+
+  private syncSuggestionFiltersWithActiveFilters(activeFilters: RequestDynamicFilterItem[]) {
+    this.appliedSuggestionFilters = syncSuggestionFilters(
+      activeFilters,
+      this.stream
+    );
   }
 
   private applyProductFilters(dataItems: any[], interactions: any) {
@@ -281,39 +309,36 @@ export class VviinnSuggestions {
     itemKey: string,
     listItems: JSX.Element[],
   ) {
-    const hasFilters = hasDynamicFilters(annotation);
+    const { hasFilters, selectedFilter } = hasCategoricalFilters(annotation);
 
-    if (hasFilters && annotation.interactions?.dynamicFilters?.[0]) {
-      const selectedFilter = annotation.interactions.dynamicFilters[0];
-      if (selectedFilter.type === "categorical" && "values" in selectedFilter) {
-        const matchingFilterOption = selectedFilter.values.find((option) => {
-          return (
-            option.label === cleanLine ||
-            option.label === product.title ||
-            option.label === product.productId
-          );
-        });
+    if (hasFilters && selectedFilter && "values" in selectedFilter) {
+      const matchingFilterOption = selectedFilter.values.find((option) => {
+        return (
+          option.label === cleanLine ||
+          option.label === product.title ||
+          option.label === product.productId
+        );
+      });
 
-        if (matchingFilterOption) {
-          const isSelected = this.appliedSuggestionFilters.has(cleanLine);
-          listItems.push(
-            this.renderToggleButton(
-              cleanLine,
-              isSelected,
-              () =>
-                this.handleProductClick(
-                  product,
-                  annotation.interactions,
-                  cleanLine,
-                ),
-              `${itemKey}-filter`,
-            ),
-          );
-        }
+      if (matchingFilterOption) {
+        const isSelected = this.appliedSuggestionFilters.has(cleanLine);
+        listItems.push(
+          renderToggleButton(
+            cleanLine,
+            isSelected,
+            () =>
+              this.handleProductClick(
+                product,
+                annotation.interactions,
+                cleanLine,
+              ),
+            `${itemKey}-filter`,
+          ),
+        );
       }
     } else {
       listItems.push(
-        renderListItem(cleanLine, itemKey, true, () =>
+        renderFallbackListItem(cleanLine, itemKey, () =>
           this.handleSuggestionClick(annotation),
         ),
       );
@@ -326,48 +351,25 @@ export class VviinnSuggestions {
     itemKey: string,
     listItems: JSX.Element[],
   ) {
-    const hasFilters = hasDynamicFilters(annotation);
+    const { hasFilters, selectedFilter } = hasCategoricalFilters(annotation);
 
-    if (hasFilters && annotation.interactions?.dynamicFilters?.[0]) {
-      const selectedFilter = annotation.interactions.dynamicFilters[0];
-      if (selectedFilter.type === "categorical") {
-        const isSelected = this.appliedSuggestionFilters.has(annotationText);
-        listItems.push(
-          this.renderToggleButton(
-            annotationText,
-            isSelected,
-            () => this.handleSuggestionClick(annotation, annotationText),
-            itemKey,
-          ),
-        );
-      }
+    if (hasFilters && selectedFilter) {
+      const isSelected = this.appliedSuggestionFilters.has(annotationText);
+      listItems.push(
+        renderToggleButton(
+          annotationText,
+          isSelected,
+          () => this.handleSuggestionClick(annotation, annotationText),
+          itemKey,
+        ),
+      );
     } else {
       listItems.push(
-        renderListItem(annotationText, itemKey, true, () =>
+        renderFallbackListItem(annotationText, itemKey, () =>
           this.handleSuggestionClick(annotation),
         ),
       );
     }
-  }
-
-  private renderToggleButton(
-    text: string,
-    isSelected: boolean,
-    onClick: () => void,
-    key: string,
-  ) {
-    return (
-      <li class="suggestion-item" part="suggestion-item" key={key}>
-        <button
-          class={`suggestion-filter-button ${isSelected ? "active" : ""}`}
-          part="suggestion-filter-button"
-          onClick={onClick}
-          type="button"
-        >
-          {text}
-        </button>
-      </li>
-    );
   }
 
   private renderSuggestionItem(
