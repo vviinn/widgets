@@ -138,9 +138,11 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
 }
 
 .source-wrapper {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   position: relative;
+  grid-auto-rows: min-content;
+  padding: 0 12px 12px 24px;
+  gap: var(--spacing-300);
   width: 100%;
   max-width: 100%;
   overflow-y: auto;

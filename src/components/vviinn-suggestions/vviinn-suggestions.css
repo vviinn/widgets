@@ -1,7 +1,7 @@
 @import "../../variables.css";
 
 :host {
-  display: block;
+  display: contents;
 }
 
 .container {
@@ -40,7 +40,6 @@
   overflow-y: hidden;
   overflow-x: visible;
   width: 100%;
-  contain: layout;
 }
 
 .suggestions-list {
