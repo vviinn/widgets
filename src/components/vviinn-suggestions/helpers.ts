@@ -1,10 +1,6 @@
 import { RequestDynamicFilterItem } from "../../campaign/VPRCampaignService";
 import { components } from "../../interfaces/generated";
-import { splitAnnotationText, cleanLineText } from "./render-helpers";
 
-/**
- * Toggles a suggestion filter in the applied filters set
- */
 export const toggleFilterInSet = (
   appliedFilters: Set<string>,
   suggestionText: string,
@@ -18,9 +14,6 @@ export const toggleFilterInSet = (
   return newAppliedFilters;
 };
 
-/**
- * Extracts active filter values from request filters
- */
 export const extractActiveFilterValues = (
   activeFilters: RequestDynamicFilterItem[],
 ): Set<string> => {
@@ -33,10 +26,6 @@ export const extractActiveFilterValues = (
   return activeValues;
 };
 
-/**
- * Syncs applied suggestion filters with active store filters
- * Now works in both directions - activation and deactivation
- */
 export const syncSuggestionFilters = (
   activeFilters: RequestDynamicFilterItem[],
   stream: components["schemas"]["stream"] | null,
@@ -46,7 +35,6 @@ export const syncSuggestionFilters = (
 
   if (!stream?.items) return updatedAppliedFilters;
 
-  // Go through all suggestions in stream and check if they should be active
   for (const item of stream.items) {
     if (item.role !== "assistant" || !item.parts) continue;
 
@@ -59,21 +47,21 @@ export const syncSuggestionFilters = (
         const filter = annotation.interactions.dynamicFilters[0];
         if (filter.type !== "categorical" || !("values" in filter)) continue;
 
-        const annotationText = part.text.content?.substring(
-          annotation.locator.start,
-          annotation.locator.start + annotation.locator.length,
-        );
+        const dataItems = [];
+        if ((annotation.data as any)?.products?.length > 0) {
+          dataItems.push(...(annotation.data as any).products);
+        } else if (annotation.data?.items?.length > 0) {
+          dataItems.push(...annotation.data.items);
+        }
 
-        const lines = splitAnnotationText(annotationText || "");
-        const cleanLines = lines.map((line) => cleanLineText(line));
-
-        // Check each suggestion text against its corresponding filter value
-        cleanLines.forEach((suggestionText, lineIndex) => {
-          if (lineIndex < filter.values.length) {
-            const correspondingFilterValue = String(filter.values[lineIndex].value);
-            if (activeValues.has(correspondingFilterValue)) {
-              updatedAppliedFilters.add(suggestionText);
-            }
+        dataItems.forEach((product) => {
+          const productLabel = product.title || product.productId;
+          const matchingFilterValue = filter.values.find((value) => 
+            value.label === productLabel || value.label === product.productId
+          );
+          
+          if (matchingFilterValue && activeValues.has(String(matchingFilterValue.value))) {
+            updatedAppliedFilters.add(productLabel);
           }
         });
       }

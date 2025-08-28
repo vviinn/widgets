@@ -30,18 +30,13 @@ import {
   applyFiltersForItems,
   handleDeeplinks,
   renderListItem,
-  cleanLineText,
-  splitAnnotationText,
   hasDynamicFilters,
   FilterHandlers,
   renderToggleButton,
   hasCategoricalFilters,
   renderFallbackListItem,
 } from "./render-helpers";
-import {
-  toggleFilterInSet,
-  syncSuggestionFilters,
-} from "./helpers";
+import { toggleFilterInSet, syncSuggestionFilters } from "./helpers";
 
 /**
  * @slot vviinn-suggestions-title - Custom title text to replace default "AI Suggestions".
@@ -90,6 +85,9 @@ export class VviinnSuggestions {
   private eventAbortController?: AbortController;
   private disposeStoreListener?: () => void;
 
+  private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
+    this.showInWidget !== isTriggeredByVpsWidget;
+
   private replaceSlotsContent() {
     const slots = this.el.querySelectorAll("[slot]");
     this.globalSlotsChanged.emit({
@@ -117,17 +115,12 @@ export class VviinnSuggestions {
     const { state, onChange } = useSearchStore(this.showInWidget);
     this.state = state;
 
-    // Listen to stream changes
     const disposeStreamListener = onChange("stream", () => {
       this.stream = this.state.stream;
     });
 
-    // Listen to filter changes for consistency
-    const disposeFilterListener = onChange("requestFilters", () => {
-      // Store state is automatically updated, no need for local copy
-    });
+    const disposeFilterListener = onChange("requestFilters", () => {});
 
-    // Combine disposers
     this.disposeStoreListener = () => {
       disposeStreamListener();
       disposeFilterListener();
@@ -158,28 +151,21 @@ export class VviinnSuggestions {
   }: CustomEvent<ChangedFiltersEventData>) => {
     const { filters, el: senderElement, isTriggeredByVpsWidget } = detail;
 
-    // Skip if this event came from this component or different widget mode
     if (
       senderElement === this.el ||
-      this.showInWidget !== isTriggeredByVpsWidget
-    ) {
+      this.skipStateChanges(isTriggeredByVpsWidget)
+    )
       return;
-    }
 
-    // Check if any suggestion filters should be deactivated
     this.syncSuggestionFiltersWithActiveFilters(filters);
-
-    // Update the store state with the new filters (this ensures consistency)
     this.state.requestFilters = filters;
   };
 
   private handleTextSearchStarted = ({
     detail,
   }: CustomEvent<TextSearchEventData>) => {
-    // Clear all applied suggestion filters when text search starts
-    if (this.showInWidget === detail.isTriggeredByVpsWidget) {
-      this.appliedSuggestionFilters = new Set();
-    }
+    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
+    this.appliedSuggestionFilters = new Set();
   };
 
   private handleProductClick = (
@@ -211,14 +197,16 @@ export class VviinnSuggestions {
   private toggleSuggestionFilter(suggestionText: string) {
     this.appliedSuggestionFilters = toggleFilterInSet(
       this.appliedSuggestionFilters,
-      suggestionText
+      suggestionText,
     );
   }
 
-  private syncSuggestionFiltersWithActiveFilters(activeFilters: RequestDynamicFilterItem[]) {
+  private syncSuggestionFiltersWithActiveFilters(
+    activeFilters: RequestDynamicFilterItem[],
+  ) {
     this.appliedSuggestionFilters = syncSuggestionFilters(
       activeFilters,
-      this.stream
+      this.stream,
     );
   }
 
@@ -242,71 +230,33 @@ export class VviinnSuggestions {
     };
   }
 
-  private renderDataItemsAnnotation(
+  private renderProductItems(
     dataItems: any[],
-    annotationText: string,
     annotation: components["schemas"]["context-annotation"],
     key: string,
-    idx: number,
     listItems: JSX.Element[],
   ) {
-    const lines = splitAnnotationText(annotationText);
-
-    if (lines.length === dataItems.length) {
-      // Create separate list items for each product
-      lines.forEach((line, productIdx) => {
-        const product = dataItems[productIdx];
-        const cleanLine = cleanLineText(line);
-
-        if ("deeplink" in product && product.deeplink) {
-          listItems.push(
-            renderListItem(
-              cleanLine,
-              `${key}-${idx}-${productIdx}`,
-              false,
-              undefined,
-              product.deeplink,
-            ),
-          );
-        } else {
-          this.renderProductListItem(
-            product,
-            cleanLine,
-            annotation,
-            `${key}-${idx}-${productIdx}`,
-            listItems,
-          );
-        }
-      });
-    } else {
-      // Fallback to full annotation if we can't match lines to products
-      this.renderAnnotationAsFilter(
-        annotationText,
-        annotation,
-        `${key}-${idx}-filter`,
-        listItems,
-      );
-    }
+    dataItems.forEach((product, productIdx) => {
+      const itemKey = `${key}-${productIdx}`;
+      
+      if ("deeplink" in product && product.deeplink) {
+        listItems.push(
+          renderListItem(
+            product.title || product.productId,
+            itemKey,
+            false,
+            undefined,
+            product.deeplink,
+          ),
+        );
+      } else {
+        this.renderProductAsFilter(product, annotation, itemKey, listItems);
+      }
+    });
   }
 
-  private renderPlainAnnotation(
-    annotationText: string,
-    annotation: components["schemas"]["context-annotation"],
-    key: string,
-    idx: number,
-    listItems: JSX.Element[],
-  ) {
-    this.renderAnnotationAsFilter(
-      annotationText,
-      annotation,
-      `${key}-${idx}-no-data-filter`,
-      listItems,
-    );
-  }
-
-  private renderProductListItem(
+  private renderProductAsFilter(
     product: any,
-    cleanLine: string,
     annotation: components["schemas"]["context-annotation"],
     itemKey: string,
     listItems: JSX.Element[],
@@ -314,60 +264,28 @@ export class VviinnSuggestions {
     const { hasFilters, selectedFilter } = hasCategoricalFilters(annotation);
 
     if (hasFilters && selectedFilter && "values" in selectedFilter) {
+      const productLabel = product.title || product.productId;
       const matchingFilterOption = selectedFilter.values.find((option) => {
         return (
-          option.label === cleanLine ||
-          option.label === product.title ||
+          option.label === productLabel ||
           option.label === product.productId
         );
       });
 
       if (matchingFilterOption) {
-        const isSelected = this.appliedSuggestionFilters.has(cleanLine);
+        const isSelected = this.appliedSuggestionFilters.has(productLabel);
         listItems.push(
           renderToggleButton(
-            cleanLine,
+            productLabel,
             isSelected,
-            () =>
-              this.handleProductClick(
-                product,
-                annotation.interactions,
-                cleanLine,
-              ),
-            `${itemKey}-filter`,
+            () => this.handleProductClick(product, annotation.interactions, productLabel),
+            itemKey,
           ),
         );
       }
     } else {
       listItems.push(
-        renderFallbackListItem(cleanLine, itemKey, () =>
-          this.handleSuggestionClick(annotation),
-        ),
-      );
-    }
-  }
-
-  private renderAnnotationAsFilter(
-    annotationText: string,
-    annotation: components["schemas"]["context-annotation"],
-    itemKey: string,
-    listItems: JSX.Element[],
-  ) {
-    const { hasFilters, selectedFilter } = hasCategoricalFilters(annotation);
-
-    if (hasFilters && selectedFilter) {
-      const isSelected = this.appliedSuggestionFilters.has(annotationText);
-      listItems.push(
-        renderToggleButton(
-          annotationText,
-          isSelected,
-          () => this.handleSuggestionClick(annotation, annotationText),
-          itemKey,
-        ),
-      );
-    } else {
-      listItems.push(
-        renderFallbackListItem(annotationText, itemKey, () =>
+        renderFallbackListItem(product.title || product.productId, itemKey, () =>
           this.handleSuggestionClick(annotation),
         ),
       );
@@ -375,66 +293,22 @@ export class VviinnSuggestions {
   }
 
   private renderSuggestionItem(
-    content: string,
     annotations: components["schemas"]["context-annotation"][],
     key: string,
   ) {
     if (!annotations || annotations.length === 0) {
-      return renderListItem(content, key);
+      return null;
     }
 
     const listItems: JSX.Element[] = [];
-    let currentIndex = 0;
 
-    // Process each annotation to create separate list items
     annotations.forEach((annotation, idx) => {
-      const { locator } = annotation;
-
-      // Add text before annotation as plain list item if not empty
-      if (currentIndex < locator.start) {
-        const plainText = content.substring(currentIndex, locator.start).trim();
-        if (plainText) {
-          listItems.push(renderListItem(plainText, `plain-${key}-${idx}`));
-        }
-      }
-
       const dataItems = extractDataItems(annotation);
-
-      const annotationText = content.substring(
-        locator.start,
-        locator.start + locator.length,
-      );
-
-      // Render individual products or fallback to full annotation
+      
       if (dataItems.length > 0) {
-        this.renderDataItemsAnnotation(
-          dataItems,
-          annotationText,
-          annotation,
-          key,
-          idx,
-          listItems,
-        );
-      } else {
-        this.renderPlainAnnotation(
-          annotationText,
-          annotation,
-          key,
-          idx,
-          listItems,
-        );
+        this.renderProductItems(dataItems, annotation, `${key}-${idx}`, listItems);
       }
-
-      currentIndex = locator.start + locator.length;
     });
-
-    // Add remaining text as plain list item if not empty
-    if (currentIndex < content.length) {
-      const remainingText = content.substring(currentIndex).trim();
-      if (remainingText) {
-        listItems.push(renderListItem(remainingText, `remaining-${key}`));
-      }
-    }
 
     return listItems;
   }
@@ -446,11 +320,10 @@ export class VviinnSuggestions {
           if (item.role !== "assistant" || !item.parts) return null;
 
           return item.parts.map((part, partIndex) => {
-            if (part.text?.content) {
+            if (part.text?.annotations) {
               return this.renderSuggestionItem(
-                part.text.content,
-                part.text.annotations || [],
-                index + "-" + partIndex,
+                part.text.annotations,
+                `${index}-${partIndex}`,
               );
             }
             return null;

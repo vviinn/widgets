@@ -144,13 +144,7 @@ export function renderListItem(
   );
 }
 
-export function cleanLineText(line: string): string {
-  return line.replace(/^\*\s*/, ""); // Remove bullet point
-}
 
-/**
- * Renders a toggle button for filter suggestions
- */
 export function renderToggleButton(
   text: string,
   isSelected: boolean,
@@ -171,13 +165,7 @@ export function renderToggleButton(
   );
 }
 
-export function splitAnnotationText(annotationText: string): string[] {
-  return annotationText.split("\n").filter((line) => line.trim());
-}
 
-/**
- * Checks if annotation has categorical dynamic filters
- */
 export function hasCategoricalFilters(annotation: any): {
   hasFilters: boolean;
   selectedFilter?: any;
@@ -194,9 +182,6 @@ export function hasCategoricalFilters(annotation: any): {
   return { hasFilters: false };
 }
 
-/**
- * Renders fallback list item when no filters are present
- */
 export function renderFallbackListItem(
   text: string,
   itemKey: string,
