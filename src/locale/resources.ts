@@ -165,7 +165,7 @@ export const resources: Resource = {
       suggestions: {
         title: "AI Suggestions",
         description:
-          "Here are some suggestions to help you find the perfect one.",
+          "Here are some suggestions to help you find the perfect match.",
       },
       speechRecognition: {
         placeholder: "Listening...",
