@@ -11,6 +11,11 @@ import {
 } from "@stencil/core";
 import i18next from "i18next";
 import { components } from "../../interfaces/generated";
+import {
+  Recommendation,
+  ContextAnnotation,
+  Interactions,
+} from "../../interfaces/product";
 import { useSearchStore, SearchStore } from "../../store/search.store";
 import { updateGlobalState, globalState } from "../../store/store";
 import {
@@ -34,7 +39,6 @@ import {
   FilterHandlers,
   renderToggleButton,
   hasCategoricalFilters,
-  renderFallbackListItem,
 } from "./render-helpers";
 import { toggleFilterInSet, syncSuggestionFilters } from "./helpers";
 
@@ -169,8 +173,8 @@ export class VviinnSuggestions {
   };
 
   private handleProductClick = (
-    product: any,
-    interactions: any,
+    product: Recommendation,
+    interactions: Interactions,
     suggestionText: string,
   ) => {
     this.toggleSuggestionFilter(suggestionText);
@@ -178,7 +182,7 @@ export class VviinnSuggestions {
   };
 
   private handleSuggestionClick = (
-    annotation: components["schemas"]["context-annotation"],
+    annotation: ContextAnnotation,
     suggestionText?: string,
   ) => {
     const dataItems = extractDataItems(annotation);
@@ -210,7 +214,7 @@ export class VviinnSuggestions {
     );
   }
 
-  private applyProductFilters(dataItems: any[], interactions: any) {
+  private applyProductFilters(dataItems: Recommendation[], interactions: Interactions) {
     const handlers = this.getFilterHandlers();
     const updatedFilters = applyFiltersForItems(
       dataItems,
@@ -231,8 +235,8 @@ export class VviinnSuggestions {
   }
 
   private renderProductItems(
-    dataItems: any[],
-    annotation: components["schemas"]["context-annotation"],
+    dataItems: Recommendation[],
+    annotation: ContextAnnotation,
     key: string,
     listItems: JSX.Element[],
   ) {
@@ -256,8 +260,8 @@ export class VviinnSuggestions {
   }
 
   private renderProductAsFilter(
-    product: any,
-    annotation: components["schemas"]["context-annotation"],
+    product: Recommendation,
+    annotation: ContextAnnotation,
     itemKey: string,
     listItems: JSX.Element[],
   ) {
@@ -285,7 +289,7 @@ export class VviinnSuggestions {
       }
     } else {
       listItems.push(
-        renderFallbackListItem(product.title || product.productId, itemKey, () =>
+        renderListItem(product.title || product.productId, itemKey, true, () =>
           this.handleSuggestionClick(annotation),
         ),
       );
@@ -293,7 +297,7 @@ export class VviinnSuggestions {
   }
 
   private renderSuggestionItem(
-    annotations: components["schemas"]["context-annotation"][],
+    annotations: ContextAnnotation[],
     key: string,
   ) {
     if (!annotations || annotations.length === 0) {

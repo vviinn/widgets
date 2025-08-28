@@ -47,12 +47,7 @@ export const syncSuggestionFilters = (
         const filter = annotation.interactions.dynamicFilters[0];
         if (filter.type !== "categorical" || !("values" in filter)) continue;
 
-        const dataItems = [];
-        if ((annotation.data as any)?.products?.length > 0) {
-          dataItems.push(...(annotation.data as any).products);
-        } else if (annotation.data?.items?.length > 0) {
-          dataItems.push(...annotation.data.items);
-        }
+        const dataItems = annotation.data?.items || [];
 
         dataItems.forEach((product) => {
           const productLabel = product.title || product.productId;

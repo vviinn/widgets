@@ -4,6 +4,11 @@ import {
   ResponseDynamicFilterItem,
   RequestDynamicFilterItem,
 } from "../../campaign/VPRCampaignService";
+import {
+  Recommendation,
+  ContextAnnotation,
+  Interactions,
+} from "../../interfaces/product";
 import { triggerFilter } from "../vviinn-filters/helpers/triggerFilter";
 import {
   DynamicFilterInternalData,
@@ -17,22 +22,13 @@ export interface FilterHandlers {
   isTriggeredByVpsWidget: boolean;
 }
 
-export function extractDataItems(
-  annotation: components["schemas"]["context-annotation"],
-) {
-  let dataItems = [];
-  if ((annotation.data as any)?.products?.length > 0) {
-    dataItems = (annotation.data as any).products;
-  } else if (annotation.data?.items?.length > 0) {
-    dataItems = annotation.data.items;
-  }
-  return dataItems;
-}
+export const extractDataItems = (annotation: ContextAnnotation) =>
+  annotation.data?.items || [];
 
-export function findMatchingFilterValue(
-  item: any,
+export const findMatchingFilterValue = (
+  item: Recommendation,
   filter: ResponseDynamicFilterItem,
-) {
+) => {
   if (
     filter.type !== "categorical" ||
     !("values" in filter) ||
@@ -49,14 +45,14 @@ export function findMatchingFilterValue(
   } else {
     return null;
   }
-}
+};
 
-export function applyFiltersForItems(
-  dataItems: any[],
-  interactions: any,
+export const applyFiltersForItems = (
+  dataItems: Recommendation[],
+  interactions: Interactions,
   currentRequestFilters: RequestDynamicFilterItem[],
   handlers: FilterHandlers,
-): RequestDynamicFilterItem[] {
+): RequestDynamicFilterItem[] => {
   if (!interactions?.dynamicFilters || dataItems.length === 0) {
     return currentRequestFilters;
   }
@@ -88,9 +84,9 @@ export function applyFiltersForItems(
   }
 
   return updatedFilters;
-}
+};
 
-export function handleDeeplinks(dataItems: any[]): boolean {
+export const handleDeeplinks = (dataItems: Recommendation[]): boolean => {
   for (const item of dataItems) {
     if ("deeplink" in item && item.deeplink) {
       window.open(item.deeplink as string, "_blank");
@@ -98,15 +94,15 @@ export function handleDeeplinks(dataItems: any[]): boolean {
     }
   }
   return false;
-}
+};
 
-export function renderListItem(
-  content: string | any,
+export const renderListItem = (
+  content: string,
   key: string,
   isClickable: boolean = false,
   clickHandler?: () => void,
   href?: string,
-) {
+) => {
   if (href) {
     return (
       <li class="suggestion-item" part="suggestion-item" key={key}>
@@ -142,15 +138,14 @@ export function renderListItem(
       {content}
     </li>
   );
-}
+};
 
-
-export function renderToggleButton(
+export const renderToggleButton = (
   text: string,
   isSelected: boolean,
   onClick: () => void,
   key: string,
-) {
+) => {
   return (
     <li class="suggestion-item" part="suggestion-item" key={key}>
       <button
@@ -163,38 +158,27 @@ export function renderToggleButton(
       </button>
     </li>
   );
-}
+};
 
-
-export function hasCategoricalFilters(annotation: any): {
+export const hasCategoricalFilters = (annotation: ContextAnnotation): {
   hasFilters: boolean;
-  selectedFilter?: any;
-} {
+  selectedFilter?: ResponseDynamicFilterItem;
+} => {
   const hasFilters = hasDynamicFilters(annotation);
-  
+
   if (hasFilters && annotation.interactions?.dynamicFilters?.[0]) {
     const selectedFilter = annotation.interactions.dynamicFilters[0];
     if (selectedFilter.type === "categorical") {
       return { hasFilters: true, selectedFilter };
     }
   }
-  
+
   return { hasFilters: false };
-}
+};
 
-export function renderFallbackListItem(
-  text: string,
-  itemKey: string,
-  onClick: () => void,
-) {
-  return renderListItem(text, itemKey, true, onClick);
-}
 
-export function hasDynamicFilters(
-  annotation: components["schemas"]["context-annotation"],
-): boolean {
-  return !!(
+export const hasDynamicFilters = (annotation: ContextAnnotation): boolean =>
+  !!(
     annotation.interactions?.dynamicFilters &&
     annotation.interactions.dynamicFilters.length > 0
   );
-}
