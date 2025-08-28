@@ -24,6 +24,7 @@ import { Locale } from "../../locale/types";
 import { resources } from "../../locale";
 import { slotChangeListener } from "../customized-slots";
 import { SparkIcon } from "../vviinn-icons/icons/SparkIcon";
+import { suggestionsParts } from "../../cssParts";
 import {
   extractDataItems,
   applyFiltersForItems,
@@ -47,11 +48,12 @@ import {
  * @slot vviinn-suggestions-description - Custom description text to replace default description.
  * @slot vviinn-suggestions-icon - Custom icon to replace default sparkle emoji.
  *
- * @part container - The main container element.
- * @part header - The header section containing icon and title.
- * @part icon - The sparkle icon wrapper.
- * @part title - The title text element.
- * @part description - The description text element.
+ * @part suggestions-container - The main suggestions container element.
+ * @part suggestions-header - The header section containing icon and title.
+ * @part suggestions-icon - The sparkle icon wrapper.
+ * @part suggestions-title - The title text element.
+ * @part suggestions-description - The description text element.
+ * @part suggestions-wrapper - The wrapper around the suggestions list.
  * @part suggestions-list - The list container for all suggestions.
  * @part suggestion-item - Individual suggestion item.
  * @part suggestion-link - Clickable suggestion text/link.
@@ -468,19 +470,20 @@ export class VviinnSuggestions {
         class={{
           "show-in-widget": this.showInWidget,
         }}
+        exportparts={suggestionsParts}
       >
-        <div class="container" part="container">
-          <div class="header" part="header">
-            <div class="icon" part="icon">
+        <div class="container" part="suggestions-container">
+          <div class="header" part="suggestions-header">
+            <div class="icon" part="suggestions-icon">
               <slot name="vviinn-suggestions-icon">{<SparkIcon />}</slot>
             </div>
-            <h3 class="title" part="title">
+            <h3 class="title" part="suggestions-title">
               <slot name="vviinn-suggestions-title">
                 {i18next.t("suggestions.title")}
               </slot>
             </h3>
           </div>
-          <div class="description" part="description">
+          <div class="description" part="suggestions-description">
             <slot name="vviinn-suggestions-description">
               {i18next.t("suggestions.description")}
             </slot>

@@ -69,6 +69,7 @@ import {
   searchBarParts,
   searchWidgetButtonParts,
   searchWidgetFilterParts,
+  suggestionsParts,
 } from "../../cssParts";
 import { findSlotElements, addEventListenersWithSignal } from "../../dom";
 import { SEARCH_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
@@ -706,7 +707,7 @@ export class VviinnVpsWidget {
   render() {
     return (
       <Host
-        exportparts={`${modalParts}, ${productCardParts}, ${searchBarParts}, ${searchWidgetFilterParts}, ${searchWidgetButtonParts}, ${productCardsGridPart}`}
+        exportparts={`${modalParts}, ${productCardParts}, ${searchBarParts}, ${searchWidgetFilterParts}, ${searchWidgetButtonParts}, ${productCardsGridPart}, ${suggestionsParts}`}
       >
         {!this.showingInButton && SlotSkeleton("search")}
 

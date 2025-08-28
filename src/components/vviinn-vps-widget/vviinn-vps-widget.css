@@ -299,7 +299,7 @@ vviinn-preloader {
     display: none;
   }
 
-  vviinn-suggestions::part(container) {
+  vviinn-suggestions::part(suggestions-container) {
     padding: 0 var(--spacing-300);
   }
 
