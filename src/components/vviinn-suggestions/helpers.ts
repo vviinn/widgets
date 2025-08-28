@@ -51,11 +51,15 @@ export const syncSuggestionFilters = (
 
         dataItems.forEach((product) => {
           const productLabel = product.title || product.productId;
-          const matchingFilterValue = filter.values.find((value) => 
-            value.label === productLabel || value.label === product.productId
+          const matchingFilterValue = filter.values.find(
+            (value) =>
+              value.label === productLabel || value.label === product.productId,
           );
-          
-          if (matchingFilterValue && activeValues.has(String(matchingFilterValue.value))) {
+
+          if (
+            matchingFilterValue &&
+            activeValues.has(String(matchingFilterValue.value))
+          ) {
             updatedAppliedFilters.add(productLabel);
           }
         });
