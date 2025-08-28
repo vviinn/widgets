@@ -1,5 +1,4 @@
 import { h, EventEmitter } from "@stencil/core";
-import { components } from "../../interfaces/generated";
 import {
   ResponseDynamicFilterItem,
   RequestDynamicFilterItem,
@@ -160,7 +159,9 @@ export const renderToggleButton = (
   );
 };
 
-export const hasCategoricalFilters = (annotation: ContextAnnotation): {
+export const hasCategoricalFilters = (
+  annotation: ContextAnnotation,
+): {
   hasFilters: boolean;
   selectedFilter?: ResponseDynamicFilterItem;
 } => {
@@ -175,7 +176,6 @@ export const hasCategoricalFilters = (annotation: ContextAnnotation): {
 
   return { hasFilters: false };
 };
-
 
 export const hasDynamicFilters = (annotation: ContextAnnotation): boolean =>
   !!(
