@@ -178,7 +178,4 @@ export const hasCategoricalFilters = (
 };
 
 export const hasDynamicFilters = (annotation: ContextAnnotation): boolean =>
-  !!(
-    annotation.interactions?.dynamicFilters &&
-    annotation.interactions.dynamicFilters.length > 0
-  );
+  !!annotation.interactions?.dynamicFilters?.length;

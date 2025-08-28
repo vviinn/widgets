@@ -121,16 +121,15 @@ export class VviinnSuggestions {
 
     const disposeStreamListener = onChange("stream", () => {
       this.stream = this.state.stream;
+      this.syncFiltersIfReady();
     });
-
-    const disposeFilterListener = onChange("requestFilters", () => {});
 
     this.disposeStoreListener = () => {
       disposeStreamListener();
-      disposeFilterListener();
     };
 
     this.stream = this.state.stream;
+    this.syncFiltersIfReady();
 
     this.eventAbortController = new AbortController();
     const { signal } = this.eventAbortController;
@@ -205,6 +204,12 @@ export class VviinnSuggestions {
     );
   }
 
+  private syncFiltersIfReady() {
+    if (this.stream && this.state.requestFilters?.length > 0) {
+      this.syncSuggestionFiltersWithActiveFilters(this.state.requestFilters);
+    }
+  }
+
   private syncSuggestionFiltersWithActiveFilters(
     activeFilters: RequestDynamicFilterItem[],
   ) {
@@ -214,7 +219,10 @@ export class VviinnSuggestions {
     );
   }
 
-  private applyProductFilters(dataItems: Recommendation[], interactions: Interactions) {
+  private applyProductFilters(
+    dataItems: Recommendation[],
+    interactions: Interactions,
+  ) {
     const handlers = this.getFilterHandlers();
     const updatedFilters = applyFiltersForItems(
       dataItems,
@@ -242,7 +250,7 @@ export class VviinnSuggestions {
   ) {
     dataItems.forEach((product, productIdx) => {
       const itemKey = `${key}-${productIdx}`;
-      
+
       if ("deeplink" in product && product.deeplink) {
         listItems.push(
           renderListItem(
@@ -271,8 +279,7 @@ export class VviinnSuggestions {
       const productLabel = product.title || product.productId;
       const matchingFilterOption = selectedFilter.values.find((option) => {
         return (
-          option.label === productLabel ||
-          option.label === product.productId
+          option.label === productLabel || option.label === product.productId
         );
       });
 
@@ -282,7 +289,12 @@ export class VviinnSuggestions {
           renderToggleButton(
             productLabel,
             isSelected,
-            () => this.handleProductClick(product, annotation.interactions, productLabel),
+            () =>
+              this.handleProductClick(
+                product,
+                annotation.interactions,
+                productLabel,
+              ),
             itemKey,
           ),
         );
@@ -296,10 +308,7 @@ export class VviinnSuggestions {
     }
   }
 
-  private renderSuggestionItem(
-    annotations: ContextAnnotation[],
-    key: string,
-  ) {
+  private renderSuggestionItem(annotations: ContextAnnotation[], key: string) {
     if (!annotations || annotations.length === 0) {
       return null;
     }
@@ -308,9 +317,14 @@ export class VviinnSuggestions {
 
     annotations.forEach((annotation, idx) => {
       const dataItems = extractDataItems(annotation);
-      
+
       if (dataItems.length > 0) {
-        this.renderProductItems(dataItems, annotation, `${key}-${idx}`, listItems);
+        this.renderProductItems(
+          dataItems,
+          annotation,
+          `${key}-${idx}`,
+          listItems,
+        );
       }
     });
 
