@@ -37,8 +37,11 @@ export const setupIntersectionObserver = (
  * Create an intersection observer for multiple elements with individual callbacks
  */
 export const setupMultipleIntersectionObserver = (
-  elements: Array<{ element: HTMLElement; callback: (isIntersecting: boolean) => void }>,
-  config: Omit<IntersectionObserverConfig, 'onIntersectionChange'>,
+  elements: Array<{
+    element: HTMLElement;
+    callback: (isIntersecting: boolean) => void;
+  }>,
+  config: Omit<IntersectionObserverConfig, "onIntersectionChange">,
 ): IntersectionObserver | null => {
   if (typeof window === "undefined" || !("IntersectionObserver" in window)) {
     // SSR safety - no callbacks on server, only browser-side intersection tracking
@@ -49,7 +52,9 @@ export const setupMultipleIntersectionObserver = (
     (entries) => {
       entries.forEach((entry) => {
         const isIntersecting = entry.intersectionRatio >= config.threshold;
-        const elementConfig = elements.find(({ element }) => element === entry.target);
+        const elementConfig = elements.find(
+          ({ element }) => element === entry.target,
+        );
         if (elementConfig) {
           elementConfig.callback(isIntersecting);
         }

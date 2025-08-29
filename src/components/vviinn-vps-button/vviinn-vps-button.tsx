@@ -52,6 +52,9 @@ import { globalState, updateGlobalState } from "../../store/store";
  * @slot vviinn-custom-label-2 - Custom label with index 2.
  * @slot vviinn-custom-label-3 - Custom label with index 3.
  * @slot vviinn-custom-label-4 - Custom label with index 4.
+ * @slot vviinn-suggestions-title - Custom title text to replace default "AI Suggestions".
+ * @slot vviinn-suggestions-description - Custom description text to replace default description.
+ * @slot vviinn-suggestions-icon - Custom icon to replace default sparkle emoji.
  *
  * @part close-button - Close Button in the modal's header.
  * @part secondary-action - Back Button in the modal's header.
@@ -90,6 +93,16 @@ import { globalState, updateGlobalState } from "../../store/store";
  * @part energy-label-icon - Icon with an energy class.
  * @part energy-label-product-type - Product type.
  * @part energy-label-data-sheet-link - Data sheet link.
+ * @part suggestions-container - The main suggestions container element.
+ * @part suggestions-header - The header section containing icon and title.
+ * @part suggestions-icon - The sparkle icon wrapper.
+ * @part suggestions-title - The title text element.
+ * @part suggestions-description - The description text element.
+ * @part suggestions-wrapper - The wrapper around the suggestions list.
+ * @part suggestions-list - The list container for all suggestions.
+ * @part suggestion-item - Individual suggestion item.
+ * @part suggestion-link - Clickable suggestion text/link.
+ * @part suggestion-filter-button - Toggle button for filter suggestions.
  */
 @Component({
   tag: "vviinn-vps-button",

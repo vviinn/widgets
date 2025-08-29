@@ -3,6 +3,7 @@ type s = import("./generated").components["schemas"];
 // Request Filters
 export type RequestStaticFilters = s["request-static-filters"];
 export type RequestDynamicFilterItem = s["request-dynamic-filter-item"];
+export type RequestCategoricalFilterValue = s["category"];
 
 // Response Filters
 export type ResponseDynamicFilters = s["response-dynamic-filters"];
