@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.183.0](https://github.com/vviinn/widgets/compare/v2.182.1...v2.183.0) (2025-08-29)
+
+
+### Features
+
+* Add vviinn-suggestions component, which implements the stream concept ([f800b98](https://github.com/vviinn/widgets/commit/f800b986272f7ee6bf49d517d6d7d9559be45e51))
+
 ### [2.182.1](https://github.com/vviinn/widgets/compare/v2.182.0...v2.182.1) (2025-08-22)
 
 
