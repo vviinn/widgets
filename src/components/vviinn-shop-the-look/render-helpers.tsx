@@ -303,6 +303,7 @@ export interface ModalProps {
   onProductDetailsClick?: (product: Recommendation, index: number) => void;
   onBackToGrid?: () => void;
   onNavigateProduct?: (direction: "prev" | "next") => void;
+  modalContentRef?: (el: HTMLElement) => void;
 }
 
 export const renderModal = (props: ModalProps) => {
@@ -311,7 +312,6 @@ export const renderModal = (props: ModalProps) => {
     selectedDetectedObject,
     modalPosition,
     searchResults,
-    onModalClose,
     onProductClick,
     showSliderView = false,
     currentProductIndex = 0,
@@ -319,6 +319,7 @@ export const renderModal = (props: ModalProps) => {
     onBackToGrid,
     onNavigateProduct,
     currencySign,
+    modalContentRef,
   } = props;
 
   if (!showModal || !selectedDetectedObject) return null;
@@ -334,36 +335,33 @@ export const renderModal = (props: ModalProps) => {
   }
 
   return (
-    <div class="modal-overlay" onClick={onModalClose}>
-      <div
-        class={`modal-content-wrapper ${isMobile ? "mobile-modal" : "desktop-modal"}`}
-        style={modalStyle}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div class="modal-body">
-          <div
-            class={`product-grid-container ${showSliderView ? "hidden" : ""}`}
-          >
-            {searchResults.length > 0 &&
-              renderProductGrid({
-                searchResults,
-                onProductClick,
-                onProductDetailsClick,
-              })}
-          </div>
-          <div
-            class={`product-details-container ${!showSliderView ? "hidden" : ""}`}
-          >
-            {searchResults.length > 0 &&
-              renderProductDetails({
-                searchResults,
-                currentProductIndex,
-                onProductClick,
-                currencySign,
-                onBackToGrid,
-                onNavigateProduct,
-              })}
-          </div>
+    <div
+      ref={modalContentRef}
+      class={`modal-content-wrapper ${isMobile ? "mobile-modal" : "desktop-modal"}`}
+      style={modalStyle}
+      onClick={(e) => e.stopPropagation()}
+    >
+      <div class="modal-body">
+        <div class={`product-grid-container ${showSliderView ? "hidden" : ""}`}>
+          {searchResults.length > 0 &&
+            renderProductGrid({
+              searchResults,
+              onProductClick,
+              onProductDetailsClick,
+            })}
+        </div>
+        <div
+          class={`product-details-container ${!showSliderView ? "hidden" : ""}`}
+        >
+          {searchResults.length > 0 &&
+            renderProductDetails({
+              searchResults,
+              currentProductIndex,
+              onProductClick,
+              currencySign,
+              onBackToGrid,
+              onNavigateProduct,
+            })}
         </div>
       </div>
     </div>

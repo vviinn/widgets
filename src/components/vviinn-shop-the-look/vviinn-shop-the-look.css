@@ -350,8 +350,7 @@ swiper-container::part(bullet-active):hover {
 }
 
 .shop-the-look-container.modal-open vviinn-detected-object {
-  pointer-events: none;
-  z-index: 1;
+  z-index: 2001;
 }
 
 /* Keep detected objects visible when image is partially sliced */
