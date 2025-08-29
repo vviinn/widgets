@@ -79,6 +79,8 @@ export class VviinnShopTheLook {
   @Prop() campaignId: string = "";
   /** The locale for currency formatting and text localization */
   @Prop() locale: Locale;
+  /** Style variant for corner styling - 'rounded' for rounded corners, 'cornered' for sharp corners */
+  @Prop() widgetStyle: "rounded" | "cornered" = "rounded";
   /** @internal */
   @Prop() apiPath?: string;
 
@@ -110,6 +112,7 @@ export class VviinnShopTheLook {
   private imageElement: HTMLImageElement;
   private intersectionObserver: IntersectionObserver;
   private imageStore: ShopTheLookImageStore;
+  private modalContentRef: HTMLElement;
 
   componentWillLoad() {
     updateGlobalState({
@@ -149,6 +152,7 @@ export class VviinnShopTheLook {
 
   componentDidLoad() {
     window.addEventListener("resize", this.handleResize);
+    document.addEventListener("click", this.handleDocumentClick);
     this.initializeContainerVisibilityTracking();
     this.setupSwiperEventListener();
   }
@@ -195,6 +199,7 @@ export class VviinnShopTheLook {
 
   disconnectedCallback() {
     window.removeEventListener("resize", this.handleResize);
+    document.removeEventListener("click", this.handleDocumentClick);
     this.intersectionObserver?.disconnect();
     this.imageStore?.disconnectAll();
 
@@ -213,6 +218,17 @@ export class VviinnShopTheLook {
     this.checkViewModeChange();
     this.updateArrowsVisibility();
     this.triggerReRender();
+  };
+
+  private handleDocumentClick = (event: Event) => {
+    if (!this.showModal || this.isSearching) return;
+
+    const target = event.target as Element | null;
+    if (!target) return;
+    if (this.modalContentRef && this.modalContentRef.contains(target)) return;
+    if (target.closest("vviinn-detected-object")) return;
+
+    this.handleModalClose();
   };
 
   private checkViewModeChange = () => {
@@ -780,7 +796,6 @@ export class VviinnShopTheLook {
       selectedDetectedObject: this.selectedDetectedObject,
       modalPosition: this.modalPosition,
       searchResults: this.getCurrentImageState().searchResults,
-      onModalClose: this.handleModalClose,
       onProductClick: this.handleProductClick,
       showSliderView: this.showSliderView,
       currentProductIndex: this.currentProductIndex,
@@ -788,6 +803,9 @@ export class VviinnShopTheLook {
       onBackToGrid: this.handleBackToGrid,
       onNavigateProduct: this.handleNavigateProduct,
       currencySign: this.currencySign,
+      modalContentRef: (el: HTMLElement) => {
+        this.modalContentRef = el;
+      },
     };
     return renderModal(props);
   };
@@ -796,7 +814,7 @@ export class VviinnShopTheLook {
     return (
       <Host>
         <div
-          class={`shop-the-look-container ${this.showModal ? "modal-open" : ""}`}
+          class={`shop-the-look-container ${this.showModal ? "modal-open" : ""} widget-style-${this.widgetStyle}`}
         >
           <div class="main-content">
             {this.renderSwiperWrapper()}

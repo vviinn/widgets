@@ -1,0 +1,69 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+import "./styles.css";
+import { vviinnToken } from "../../helpers";
+import PreviewAndCodeTabs from "../../components/tabs/PreviewAndCodeTabs.mdx"
+import { singleImageUrl, multipleImageUrls } from "./constants/7_shopTheLook";
+
+<Meta title="Widgets/Shop The Look" />
+
+# Shop The Look
+
+The `Shop The Look` widget enables interactive visual product discovery directly on images. Users can explore hotspots on fashion, furniture, DIY, and lifestyle images to discover and purchase featured products, creating an engaging shopping experience that bridges inspiration and commerce.
+
+## Key Features
+
+- **Interactive Hotspots**: Clickable areas on images reveal product information
+- **Visual Search**: Powered by AI to identify products within images  
+- **Multiple Images**: Support for single or multiple images across various categories
+- **Responsive Design**: Adapts to different screen sizes and orientations
+- **Widget Styles**: Choose between rounded and cornered visual styles
+
+## Examples
+
+<PreviewAndCodeTabs tabData={{
+    groupId: "shop-the-look-single-rounded",
+    header: "Single Image with Rounded Style",
+    component: <vviinn-shop-the-look
+        token="TOKEN"
+        image-urls={singleImageUrl}
+        height="500"
+        currency-sign="€"
+        locale="en-US"
+        widget-style="rounded"
+    />,
+    code: `<vviinn-shop-the-look
+    token="your-token"
+    image-urls="${singleImageUrl}"
+    height="500"
+    currency-sign="€"
+    locale="en-US"
+    widget-style="rounded">
+</vviinn-shop-the-look>`
+}}/>
+
+<PreviewAndCodeTabs tabData={{
+    groupId: "shop-the-look-multiple-cornered",
+    header: "Multiple Images with Cornered Style",
+    component: <vviinn-shop-the-look
+        token={vviinnToken}
+        image-urls={multipleImageUrls}
+        height="500"
+        currency-sign="€"
+        locale="en-US"
+        widget-style="cornered"
+    />,
+    code: `<vviinn-shop-the-look
+    token="TOKEN"
+    image-urls="${multipleImageUrls}"
+    height="500"
+    currency-sign="€"
+    locale="en-US"
+    widget-style="cornered">
+</vviinn-shop-the-look>`
+}}/>
+
+## Widget Style Options
+
+- **rounded**: Soft, rounded corners for a modern, friendly appearance
+- **cornered**: Sharp, angular corners for a more geometric, professional look

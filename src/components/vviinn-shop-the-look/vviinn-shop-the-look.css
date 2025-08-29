@@ -350,8 +350,7 @@ swiper-container::part(bullet-active):hover {
 }
 
 .shop-the-look-container.modal-open vviinn-detected-object {
-  pointer-events: none;
-  z-index: 1;
+  z-index: 2001;
 }
 
 /* Keep detected objects visible when image is partially sliced */
@@ -550,14 +549,25 @@ vviinn-image::part(image),
   height: 160px;
 }
 
-vviinn-product-card::part(title),
-vviinn-product-card::part(brand),
-vviinn-product-card::part(price-container) {
-  font-weight: var(--font-weight-400);
-  color: #525252;
-}
-
 .product-grid-container.hidden,
 .product-details-container.hidden {
   display: none;
+}
+
+/* Widget Style: Cornered variant overrides all rounded elements */
+.widget-style-cornered .image-container,
+.widget-style-cornered swiper-container,
+.widget-style-cornered .desktop-carousel .main-image,
+.widget-style-cornered .modal-content-wrapper,
+.widget-style-cornered .result-item,
+.widget-style-cornered .desktop-carousel .swiper-button-prev,
+.widget-style-cornered .desktop-carousel .swiper-button-next,
+.widget-style-cornered vviinn-image::part(image),
+.widget-style-cornered
+  .product-details-card-wrapper
+  vviinn-product-card::part(image),
+.widget-style-cornered
+  .product-details-card-wrapper
+  vviinn-product-card::part(image-picture) {
+  border-radius: 0;
 }
