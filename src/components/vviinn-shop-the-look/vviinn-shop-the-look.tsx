@@ -796,7 +796,6 @@ export class VviinnShopTheLook {
       selectedDetectedObject: this.selectedDetectedObject,
       modalPosition: this.modalPosition,
       searchResults: this.getCurrentImageState().searchResults,
-      onModalClose: this.handleModalClose,
       onProductClick: this.handleProductClick,
       showSliderView: this.showSliderView,
       currentProductIndex: this.currentProductIndex,

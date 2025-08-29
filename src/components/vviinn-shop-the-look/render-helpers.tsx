@@ -295,7 +295,6 @@ export interface ModalProps {
   selectedDetectedObject: Rectangle | null;
   modalPosition: ModalPosition | null;
   searchResults: Recommendation[];
-  onModalClose: (event?: Event) => void;
   onProductClick: (product: Recommendation) => void;
   showSliderView?: boolean;
   currentProductIndex?: number;
