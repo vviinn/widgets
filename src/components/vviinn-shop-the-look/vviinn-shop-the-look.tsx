@@ -79,6 +79,8 @@ export class VviinnShopTheLook {
   @Prop() campaignId: string = "";
   /** The locale for currency formatting and text localization */
   @Prop() locale: Locale;
+  /** Style variant for corner styling - 'rounded' for rounded corners, 'cornered' for sharp corners */
+  @Prop() widgetStyle: 'rounded' | 'cornered' = 'rounded';
   /** @internal */
   @Prop() apiPath?: string;
 
@@ -796,7 +798,7 @@ export class VviinnShopTheLook {
     return (
       <Host>
         <div
-          class={`shop-the-look-container ${this.showModal ? "modal-open" : ""}`}
+          class={`shop-the-look-container ${this.showModal ? "modal-open" : ""} widget-style-${this.widgetStyle}`}
         >
           <div class="main-content">
             {this.renderSwiperWrapper()}

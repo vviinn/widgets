@@ -25,6 +25,7 @@ const Template = (args) => `
       campaign-id="${args.campaignId}"
       api-path="${args.apiPath}"
       locale="${args.locale}"
+      widget-style="${args.widgetStyle}"
     ></vviinn-shop-the-look>
   </div>
 `;
@@ -41,6 +42,7 @@ const initArgs = {
   campaignId: "",
   apiPath: process.env.STORYBOOK_API_PATH,
   locale: "en-US",
+  widgetStyle: "rounded",
 };
 
 Default.args = argsFromParams(initArgs);

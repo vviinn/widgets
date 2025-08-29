@@ -561,3 +561,21 @@ vviinn-product-card::part(price-container) {
 .product-details-container.hidden {
   display: none;
 }
+
+/* Widget Style: Cornered variant overrides all rounded elements */
+.widget-style-cornered .image-container,
+.widget-style-cornered swiper-container,
+.widget-style-cornered .desktop-carousel .main-image,
+.widget-style-cornered .modal-content-wrapper,
+.widget-style-cornered .result-item,
+.widget-style-cornered .desktop-carousel .swiper-button-prev,
+.widget-style-cornered .desktop-carousel .swiper-button-next,
+.widget-style-cornered vviinn-image::part(image),
+.widget-style-cornered
+  .product-details-card-wrapper
+  vviinn-product-card::part(image),
+.widget-style-cornered
+  .product-details-card-wrapper
+  vviinn-product-card::part(image-picture) {
+  border-radius: 0;
+}
