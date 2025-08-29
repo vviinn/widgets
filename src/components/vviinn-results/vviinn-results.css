@@ -43,7 +43,7 @@
     )
   );
   justify-items: center;
-  padding: 0 24px 24px 12px;
+  padding: 0 24px 24px 16px;
   position: absolute;
 }
 
@@ -157,7 +157,7 @@ vviinn-recommendations-sidebar::part(sidebar-content) {
     overflow-y: unset;
     width: 100%;
     padding-top: 0;
-    margin-top: 24px;
+    margin-top: 12px;
   }
 
   .products {

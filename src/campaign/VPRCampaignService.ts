@@ -1,15 +1,20 @@
-import { 
-  SimilarProductsRequest, 
-  SimilarProductsResponse 
+import {
+  SimilarProductsRequest,
+  SimilarProductsResponse,
 } from "../interfaces/discovery";
-import { 
-  ResponseDynamicFilterItem, 
-  DynamicFilterValue, 
-  RequestDynamicFilterItem 
+import {
+  ResponseDynamicFilterItem,
+  DynamicFilterValue,
+  RequestDynamicFilterItem,
 } from "../interfaces/filter";
 import { apiPost } from "../network/apiClient";
 
-export type { SimilarProductsResponse, ResponseDynamicFilterItem, DynamicFilterValue, RequestDynamicFilterItem };
+export type {
+  SimilarProductsResponse,
+  ResponseDynamicFilterItem,
+  DynamicFilterValue,
+  RequestDynamicFilterItem,
+};
 
 export const getVPRRecommendations =
   (body: SimilarProductsRequest) => (options: RequestInit) => {

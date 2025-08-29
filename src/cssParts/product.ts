@@ -6,7 +6,7 @@ export const imagePartsList = [
   "image-skeleton",
   "image-link",
   "content-card-image",
-  "content-card-image-container", 
+  "content-card-image-container",
   "content-card-image-picture",
 ];
 

@@ -4,6 +4,7 @@ import * as T from "fp-ts/Task";
 import { pipe } from "fp-ts/function";
 import { globalState } from "./store";
 import { Recommendation, RequestStaticFilters } from "../interfaces";
+import { components } from "../interfaces/generated";
 import {
   visualSearchSessionClient,
   textSearchSessionClient,
@@ -68,6 +69,7 @@ type ReceivedDataDefaults = {
   sourceProduct: Recommendation | null;
   dynamicFilters: ResponseDynamicFilterItem[];
   detectedObjects: Rectangle[];
+  stream: components["schemas"]["stream"] | null;
 };
 
 export type SearchStore = AppStateGlobalDefaults &
@@ -102,6 +104,7 @@ const receivedDataDefaults: ReceivedDataDefaults = {
   sourceProduct: null,
   dynamicFilters: [],
   detectedObjects: [],
+  stream: null,
 };
 
 const storeDefaults: SearchStore = {
@@ -417,6 +420,7 @@ export const makeTextSearchRequest = async (
       state.textSearchId = sessionResponse.requestId;
       state.dynamicFilters =
         sessionResponse?.interactions?.dynamicFilters ?? [];
+      state.stream = sessionResponse?.stream ?? null;
       state.searchStatus = "success";
       return sessionResponse;
     }),
