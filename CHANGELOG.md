@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.184.0](https://github.com/vviinn/widgets/compare/v2.183.0...v2.184.0) (2025-08-29)
+
+
+### Features
+
+* Close the products modal and open another one when clicking a detected object. ([d60d3a9](https://github.com/vviinn/widgets/commit/d60d3a996df2c6f5944f977e35bc4bd942b66fd1))
+* Shop-the-look page in the Widgets section of the Storybook ([2af938f](https://github.com/vviinn/widgets/commit/2af938f5a01b78a9e53fd5b91d2176bb534306c7))
+* widget-style attribute, which applies cornered or rounded styles ([f232754](https://github.com/vviinn/widgets/commit/f2327541b520c819fbdbffd29e763f58827b0f2e))
+
 ## [2.183.0](https://github.com/vviinn/widgets/compare/v2.182.1...v2.183.0) (2025-08-29)
 
 
