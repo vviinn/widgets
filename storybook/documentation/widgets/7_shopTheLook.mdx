@@ -1,0 +1,68 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+import "./styles.css";
+import { vviinnToken } from "../../helpers";
+import PreviewAndCodeTabs from "../../components/tabs/PreviewAndCodeTabs.mdx"
+
+<Meta title="Widgets/Shop The Look" />
+
+# Shop The Look
+
+The `Shop The Look` widget enables interactive visual product discovery directly on images. Users can explore hotspots on fashion, furniture, DIY, and lifestyle images to discover and purchase featured products, creating an engaging shopping experience that bridges inspiration and commerce.
+
+## Key Features
+
+- **Interactive Hotspots**: Clickable areas on images reveal product information
+- **Visual Search**: Powered by AI to identify products within images  
+- **Multiple Images**: Support for single or multiple images across various categories
+- **Responsive Design**: Adapts to different screen sizes and orientations
+- **Widget Styles**: Choose between rounded and cornered visual styles
+
+## Examples
+
+<PreviewAndCodeTabs tabData={{
+    groupId: "shop-the-look-single-rounded",
+    header: "Single Image with Rounded Style",
+    component: <vviinn-shop-the-look
+        token="TOKEN"
+        image-urls="https://images.unsplash.com/photo-1717076521696-ea6d8ed0963a?q=80&w=1064&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        height="500"
+        currency-sign="€"
+        locale="en-US"
+        widget-style="rounded"
+    />,
+    code: `<vviinn-shop-the-look
+    token="your-token"
+    image-urls="https://images.unsplash.com/photo-1717076521696-ea6d8ed0963a?q=80&w=1064&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    height="500"
+    currency-sign="€"
+    locale="en-US"
+    widget-style="rounded">
+</vviinn-shop-the-look>`
+}}/>
+
+<PreviewAndCodeTabs tabData={{
+    groupId: "shop-the-look-multiple-cornered",
+    header: "Multiple Images with Cornered Style",
+    component: <vviinn-shop-the-look
+        token={vviinnToken}
+        image-urls="https://images.unsplash.com/photo-1717076521696-ea6d8ed0963a?q=80&w=1064&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D, https://images.unsplash.com/photo-1729086046027-09979ade13fd?q=80&w=1124&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D, https://images.unsplash.com/photo-1613807871118-9e983601b759?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8dmVydGljYWwlMjBpbWFnZSUyMGludGVyaW9yJTIwcm9vbSUyMGNoYWlyfGVufDB8fDB8fHwy, https://images.unsplash.com/photo-1676786318418-4740318c2246?q=80&w=822&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        height="500"
+        currency-sign="€"
+        locale="en-US"
+        widget-style="cornered"
+    />,
+    code: `<vviinn-shop-the-look
+    token="TOKEN"
+    image-urls="https://images.unsplash.com/photo-1717076521696-ea6d8ed0963a?q=80&w=1064&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D, https://images.unsplash.com/photo-1729086046027-09979ade13fd?q=80&w=1124&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D, https://images.unsplash.com/photo-1613807871118-9e983601b759?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8dmVydGljYWwlMjBpbWFnZSUyMGludGVyaW9yJTIwcm9vbSUyMGNoYWlyfGVufDB8fDB8fHwy, https://images.unsplash.com/photo-1676786318418-4740318c2246?q=80&w=822&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    height="500"
+    currency-sign="€"
+    locale="en-US"
+    widget-style="cornered">
+</vviinn-shop-the-look>`
+}}/>
+
+## Widget Style Options
+
+- **rounded**: Soft, rounded corners for a modern, friendly appearance
+- **cornered**: Sharp, angular corners for a more geometric, professional look
