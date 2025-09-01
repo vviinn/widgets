@@ -330,6 +330,7 @@ export const renderModal = (props: ModalProps) => {
     modalStyle = {
       "--modal-x": `${modalPosition.x}px`,
       "--modal-y": `${modalPosition.y}px`,
+      ...(modalPosition.anchor && { "--modal-anchor": modalPosition.anchor }),
     };
   }
 

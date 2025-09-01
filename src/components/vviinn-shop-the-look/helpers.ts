@@ -17,6 +17,7 @@ import {
 export interface ModalPosition {
   x: number;
   y: number;
+  anchor?: "top-left" | "top-right" | "bottom-left" | "bottom-right";
 }
 
 export const isDesktop = sharedIsDesktop;
@@ -64,18 +65,56 @@ export const calculateModalPosition = (
   const objectCenterY =
     (detectedObject.top + detectedObject.height / 2) * imageBounds.height;
 
-  const screenX = imageBounds.left + objectCenterX;
-  const screenY = imageBounds.top + objectCenterY;
+  const midX = imageBounds.width / 2;
+  const midY = imageBounds.height / 2;
 
-  // Convert to container-relative coordinates if container provided
+  let anchor: "top-left" | "top-right" | "bottom-left" | "bottom-right";
+
+  if (objectCenterX <= midX && objectCenterY <= midY) {
+    anchor = "top-left";
+  } else if (objectCenterX > midX && objectCenterY <= midY) {
+    anchor = "top-right";
+  } else if (objectCenterX <= midX && objectCenterY > midY) {
+    anchor = "bottom-left";
+  } else {
+    anchor = "bottom-right";
+  }
+
+  const offset = isDesktop() ? 24 : 16;
+
+  let offsetX = 0,
+    offsetY = 0;
+
+  switch (anchor) {
+    case "top-left":
+      offsetX = offset;
+      offsetY = offset;
+      break;
+    case "top-right":
+      offsetX = -offset;
+      offsetY = offset;
+      break;
+    case "bottom-left":
+      offsetX = offset;
+      offsetY = -offset;
+      break;
+    case "bottom-right":
+      offsetX = -offset;
+      offsetY = -offset;
+      break;
+  }
+
+  const screenX = imageBounds.left + objectCenterX + offsetX;
+  const screenY = imageBounds.top + objectCenterY + offsetY;
+
   if (containerElement) {
     const containerRect = containerElement.getBoundingClientRect();
     const x = screenX - containerRect.left;
     const y = screenY - containerRect.top;
-    return { x, y };
+    return { x, y, anchor };
   }
 
-  return { x: screenX, y: screenY };
+  return { x: screenX, y: screenY, anchor };
 };
 
 export { calculateImageBounds } from "../../Image/bounds";

@@ -267,6 +267,29 @@ swiper-container::part(bullet-active):hover {
   z-index: 2000;
   top: var(--modal-y, 50%);
   left: var(--modal-x, 50%);
+}
+
+.shop-the-look-container
+  .modal-content-wrapper[style*="--modal-anchor: top-left"] {
+  transform: translate(0, 0);
+}
+
+.shop-the-look-container
+  .modal-content-wrapper[style*="--modal-anchor: top-right"] {
+  transform: translate(-100%, 0);
+}
+
+.shop-the-look-container
+  .modal-content-wrapper[style*="--modal-anchor: bottom-left"] {
+  transform: translate(0, -100%);
+}
+
+.shop-the-look-container
+  .modal-content-wrapper[style*="--modal-anchor: bottom-right"] {
+  transform: translate(-100%, -100%);
+}
+
+.shop-the-look-container .modal-content-wrapper:not([style*="--modal-anchor"]) {
   transform: translate(-50%, -50%);
 }
 
@@ -274,9 +297,6 @@ swiper-container::part(bullet-active):hover {
   max-width: calc(100vw - 32px);
   max-height: calc(100vh - 64px);
   position: absolute;
-  top: var(--modal-y, 50%);
-  left: var(--modal-x, 50%);
-  transform: translate(-50%, -50%);
   margin: 0;
 }
 
