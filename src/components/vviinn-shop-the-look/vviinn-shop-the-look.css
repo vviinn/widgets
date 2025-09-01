@@ -274,8 +274,8 @@ swiper-container::part(bullet-active):hover {
   max-width: calc(100vw - 32px);
   max-height: calc(100vh - 64px);
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: var(--modal-y, 50%);
+  left: var(--modal-x, 50%);
   transform: translate(-50%, -50%);
   margin: 0;
 }

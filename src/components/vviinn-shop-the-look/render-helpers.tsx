@@ -326,7 +326,7 @@ export const renderModal = (props: ModalProps) => {
   const isMobile = !isDesktop();
 
   let modalStyle = {};
-  if (modalPosition && !isMobile) {
+  if (modalPosition) {
     modalStyle = {
       "--modal-x": `${modalPosition.x}px`,
       "--modal-y": `${modalPosition.y}px`,

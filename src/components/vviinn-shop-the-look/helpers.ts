@@ -53,25 +53,29 @@ export const shouldRenderDetectedObjects = (imageState: any): boolean => {
 
 export const calculateModalPosition = (
   imageElement: HTMLImageElement,
+  detectedObject: Rectangle,
   containerElement?: HTMLElement,
 ): ModalPosition => {
   const imageBounds = calculateImageBounds(imageElement);
   if (!imageBounds) return { x: 0, y: 0 };
 
-  const isDesktopView = isDesktop();
+  const objectCenterX =
+    (detectedObject.left + detectedObject.width / 2) * imageBounds.width;
+  const objectCenterY =
+    (detectedObject.top + detectedObject.height / 2) * imageBounds.height;
 
-  if (isDesktopView) {
-    let containerBounds = { left: 0, top: 0 };
-    if (containerElement) {
-      const containerRect = containerElement.getBoundingClientRect();
-      containerBounds = { left: containerRect.left, top: containerRect.top };
-    }
-    const x = imageBounds.left - containerBounds.left + imageBounds.width / 2;
-    const y = imageBounds.top - containerBounds.top + imageBounds.height / 2;
+  const screenX = imageBounds.left + objectCenterX;
+  const screenY = imageBounds.top + objectCenterY;
+
+  // Convert to container-relative coordinates if container provided
+  if (containerElement) {
+    const containerRect = containerElement.getBoundingClientRect();
+    const x = screenX - containerRect.left;
+    const y = screenY - containerRect.top;
     return { x, y };
-  } else {
-    return { x: 0, y: 0 };
   }
+
+  return { x: screenX, y: screenY };
 };
 
 export { calculateImageBounds } from "../../Image/bounds";
@@ -196,6 +200,7 @@ export const handleDetectedObjectClick = async (
         const searchResults = searchResponse.data?.products || [];
         const modalPosition = calculateModalPosition(
           imageElement,
+          detectedObject,
           containerElement,
         );
 
