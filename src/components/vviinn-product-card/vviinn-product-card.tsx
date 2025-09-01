@@ -15,6 +15,10 @@ import { pipe } from "fp-ts/lib/function";
 import { getAnalyticsModule } from "../../analytics/GeneralAnalytics";
 import * as O from "fp-ts/lib/Option";
 import i18next from "i18next";
+import {
+  setupIntersectionObserver,
+  type IntersectionObserverConfig,
+} from "../../dom";
 
 import { searchState } from "../../store/search.store";
 import {
@@ -24,7 +28,6 @@ import {
   parseBasePrice,
   renderCustomLabels,
   ContentCardContent,
-  UniversalImage,
 } from "./render-helpers";
 import {
   CrossSellingClickEvent,
@@ -41,6 +44,7 @@ import {
   UpdateIcon,
   FavoriteIcon,
   FavoriteIconPressed,
+  PlusIcon,
 } from "../vviinn-icons";
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
 import { generateRandomNumber } from "../../utils/number";
@@ -134,7 +138,7 @@ export class VviinnProductCard {
   @Prop() productTitle: string;
   @Prop() productType: string | undefined;
   @Prop() entityType: Recommendation["entityType"] = "product";
-  @Prop() setMode: boolean = false;
+  @Prop() isSetMode: boolean = false;
   @Prop() salePrice: number | undefined;
   @Prop() baseSalePrice: BasePrice | string | null;
   @Prop() responsive: boolean = false;
@@ -180,7 +184,7 @@ export class VviinnProductCard {
   @Prop({ mutable: true }) imageResolutionWidth: number =
     PRODUCT_CARD_IMAGE_RESOLUTION_WIDTH;
   /** @internal */
-  @Prop() loading: boolean = false;
+  @Prop({ mutable: true }) loading: boolean = false;
 
   @State() isTransitioning: boolean = false;
   @State() basketButonPressed: boolean = false;
@@ -218,19 +222,23 @@ export class VviinnProductCard {
 
   private productData: ProductCardEventData | null = null;
   private imageElement?: HTMLImageElement;
+  private visibilityTrackedElement?: HTMLImageElement | null;
   private intersectionObserver: IntersectionObserver;
   private linkEventAbortController?: AbortController;
   private imageProps: ImageProps;
   private isContentCard: boolean;
 
   private isShowUpdateButton = () =>
-    this.setMode &&
+    this.isSetMode &&
     !this.isSourceProduct &&
     !this.basketButonPressed &&
     this.updateButtonLocation !== "onTop";
 
   private isShowBasketButton = () =>
-    !this.isSourceProduct && (this.addToBasketShow || this.setMode);
+    !this.isSourceProduct && (this.addToBasketShow || this.isSetMode);
+
+  private showSkeleton = () =>
+    this.isSetMode ? this.isTransitioning : this.loading;
 
   connectedCallback() {
     this.productData = this.getProductData();
@@ -254,15 +262,40 @@ export class VviinnProductCard {
   }
 
   componentDidLoad() {
+    if (this.showSkeleton()) return;
     this.vviinnProductLoad.emit(this.productData);
     this.addLinksEventListeners();
+    this.initializeVisibilityTracking();
+  }
 
-    if (!this.imageElement) return;
-    this.intersectionObserver = new IntersectionObserver(
-      this.intersectionCallback.bind(this.imageElement),
-      { threshold: 0.95 },
+  private initializeVisibilityTracking() {
+    if (!this.imageElement || this.intersectionObserver || this.showSkeleton())
+      return;
+
+    const config: IntersectionObserverConfig = {
+      threshold: 0.95,
+      onIntersectionChange: (isIntersecting: boolean) => {
+        if (isIntersecting) {
+          pipe(
+            getAnalyticsModule,
+            O.map((analytics) => analytics.sendImpression(this.getProduct())),
+          );
+          this.vviinnProductView.emit(this.productData);
+          this.intersectionObserver?.disconnect();
+        }
+      },
+    };
+
+    this.intersectionObserver = setupIntersectionObserver(
+      this.imageElement,
+      config,
     );
-    this.intersectionObserver.observe(this.imageElement);
+  }
+
+  private cleanupVisibilityTracking() {
+    this.intersectionObserver?.disconnect();
+    this.intersectionObserver = null;
+    this.visibilityTrackedElement = null;
   }
 
   @Listen("vviinnCrossSellingClick")
@@ -287,13 +320,7 @@ export class VviinnProductCard {
   @Watch("productId")
   productIdWatcher() {
     this.productData = this.getProductData();
-  }
-
-  @Watch("loading")
-  loadingWatcher(newVal: boolean) {
-    if (newVal) {
-      this.imageLoaded = false;
-    }
+    this.imageProps = this.getImageProps();
   }
 
   private parseEnergyCertificationsString() {
@@ -323,18 +350,6 @@ export class VviinnProductCard {
       ),
     };
   }
-
-  private intersectionCallback = (data: IntersectionObserverEntry[]) => {
-    if (!data.length) return;
-    if (data.some((entry) => entry.isIntersecting)) {
-      pipe(
-        getAnalyticsModule,
-        O.map((analytics) => analytics.sendImpression(this.getProduct())),
-      );
-      this.vviinnProductView.emit(this.productData);
-      this.intersectionObserver.disconnect();
-    }
-  };
 
   private basketButtonClickHandler() {
     this.vviinnAddToBasket.emit({
@@ -369,6 +384,8 @@ export class VviinnProductCard {
   }
 
   private addLinksEventListeners() {
+    if (this.showSkeleton()) return;
+
     this.linkEventAbortController = new AbortController();
     const { signal } = this.linkEventAbortController;
     const links = this.el.shadowRoot.querySelectorAll("a");
@@ -393,7 +410,7 @@ export class VviinnProductCard {
 
   disconnectedCallback() {
     this.linkEventAbortController?.abort();
-    this.intersectionObserver?.disconnect();
+    this.cleanupVisibilityTracking();
   }
 
   private getProduct(): Recommendation {
@@ -411,10 +428,18 @@ export class VviinnProductCard {
       title: this.productTitle,
       ref: (el: HTMLImageElement) => {
         this.imageElement = el;
+        if (el && this.visibilityTrackedElement !== el) {
+          this.cleanupVisibilityTracking();
+          this.visibilityTrackedElement = el;
+          this.initializeVisibilityTracking();
+        } else if (!el) {
+          this.cleanupVisibilityTracking();
+        }
       },
       isSource: this.isSourceProduct,
       onLoadEnd: () => {
         this.imageLoaded = true;
+        this.loading = false;
       },
     };
   }
@@ -432,22 +457,42 @@ export class VviinnProductCard {
     }, interval);
   }
 
-  private shouldShowSkeleton(): boolean {
-    return this.loading || this.isTransitioning;
-  }
-
   private renderImageWithLoadedState(
     imageProps: ImageProps,
     isResponsive: boolean,
     isFullHeight: boolean = false,
   ) {
-    const additionalClasses = this.imageLoaded ? ["loaded"] : [];
-    return UniversalImage({
-      ...imageProps,
-      isResponsive,
-      isFullHeight,
-      additionalClasses,
-    });
+    return (
+      <vviinn-image
+        src={imageProps.src}
+        width={imageProps.width}
+        height={imageProps.height}
+        aspectRatio={this.imageRatio}
+        alt={imageProps.title}
+        imageTitle={imageProps.title}
+        responsive={isResponsive}
+        fullHeight={isFullHeight}
+        imageResolutionWidth={imageProps.imageResolutionWidth}
+        customClass={this.imageLoaded ? "loaded" : ""}
+        imageRef={imageProps.ref}
+        loadEndCallback={imageProps.onLoadEnd}
+        onVviinnImageLoad={imageProps.onLoadEnd}
+        showSkeleton={this.showSkeleton()}
+        isSetMode={this.isSetMode}
+        style={{
+          "--image-border": "var(--product-card-image-border, none)",
+          "--image-bg-color":
+            "var(--product-card-image-bg-color, var(--surface-bg-color-01))",
+          "--image-transition-duration":
+            "var(--product-card-transition-duration, 0.5s)",
+        }}
+      >
+        <slot
+          name="vviinn-image-placeholder-icon"
+          slot="placeholder-icon"
+        ></slot>
+      </vviinn-image>
+    );
   }
 
   render() {
@@ -457,6 +502,7 @@ export class VviinnProductCard {
           part="product-card content-card"
           class="content-card"
           exportparts={contentCardParts}
+          data-id={this.productId}
         >
           <div
             class="image-container content-card-image-container"
@@ -486,12 +532,15 @@ export class VviinnProductCard {
       <Host
         part="product-card"
         class={{
-          animated: this.shouldShowSkeleton(),
+          animated: this.isTransitioning,
+          "product-card--source": this.isSourceProduct,
+          "set-mode": this.isSetMode,
         }}
         exportparts={productCardParts}
+        data-id={this.productId}
       >
         <div class="content-container" part="content-container">
-          {this.shouldShowSkeleton() ? (
+          {this.showSkeleton() ? (
             <Fragment>
               <vviinn-skeleton height={40} />
               <vviinn-skeleton height={20} halfWidth={true} />
@@ -546,14 +595,13 @@ export class VviinnProductCard {
         <div
           class={{
             "basket-button-container": true,
-            hidden: !this.isShowBasketButton() || this.shouldShowSkeleton(),
+            hidden: !this.isShowBasketButton() || this.showSkeleton(),
           }}
           part="basket-button-container"
         >
           <button
             class={{
               "basket-button": true,
-              hidden: this.shouldShowSkeleton(),
               pressed: this.basketButonPressed,
             }}
             part="basket-button"
@@ -572,7 +620,7 @@ export class VviinnProductCard {
                 </slot>
               </span>
               <span>
-                {this.setMode ? (
+                {this.isSetMode ? (
                   <slot name="vviinn-basket-button-text" key="button-text-set">
                     {i18next.t("setMode.basketButtonText")}
                   </slot>
@@ -603,13 +651,13 @@ export class VviinnProductCard {
                 <span
                   class="discount-percentage"
                   part="discount-percentage"
-                  hidden={!(this.setMode && this.appliedDiscountPercentage)}
+                  hidden={!(this.isSetMode && this.appliedDiscountPercentage)}
                 >
                   {this.appliedDiscountPercentage}%
                 </span>
 
                 <slot name="vviinn-basket-button-text-pressed">
-                  {this.setMode
+                  {this.isSetMode
                     ? i18next.t("setMode.basketButtonPressedText")
                     : i18next.t("basketButtonPressedText")}
                 </slot>
@@ -619,25 +667,12 @@ export class VviinnProductCard {
         </div>
 
         <div class="image-container" part="image-container">
-          {this.shouldShowSkeleton() ? (
-            <div
-              class="image-skeleton"
-              part="image-skeleton"
-              style={{
-                "aspect-ratio": this.imageRatio.toString(),
-              }}
-            >
-              <vviinn-skeleton />
-            </div>
-          ) : (
-            <Linked deeplink={this.deeplink} part="image-link">
-              {this.renderImageWithLoadedState(
-                this.imageProps,
-                this.responsive,
-              )}
-            </Linked>
-          )}
-          {this.setMode &&
+          <Linked deeplink={this.deeplink} part="image-link">
+            {this.renderImageWithLoadedState(this.imageProps, this.responsive)}
+          </Linked>
+
+          {this.isSourceProduct && <PlusIcon class="plus-icon" />}
+          {this.isSetMode &&
             !this.appliedDiscountPercentage &&
             this.currentDiscountPercentage && (
               <div

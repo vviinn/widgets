@@ -11,3 +11,10 @@ export type EnergyClassIconDirection =
 
 // Pricing
 export type BasePrice = s["basePrice"];
+
+// Stream
+export type ContextAnnotation = s["context-annotation"];
+export type ContextAnnotationDataProducts =
+  s["context-annotation-data-products"];
+export type Interactions = s["interactions"];
+export type StreamItem = s["stream-item"];

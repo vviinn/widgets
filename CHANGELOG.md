@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.184.0](https://github.com/vviinn/widgets/compare/v2.183.0...v2.184.0) (2025-08-29)
+
+
+### Features
+
+* Close the products modal and open another one when clicking a detected object. ([d60d3a9](https://github.com/vviinn/widgets/commit/d60d3a996df2c6f5944f977e35bc4bd942b66fd1))
+* Shop-the-look page in the Widgets section of the Storybook ([2af938f](https://github.com/vviinn/widgets/commit/2af938f5a01b78a9e53fd5b91d2176bb534306c7))
+* widget-style attribute, which applies cornered or rounded styles ([f232754](https://github.com/vviinn/widgets/commit/f2327541b520c819fbdbffd29e763f58827b0f2e))
+
+## [2.183.0](https://github.com/vviinn/widgets/compare/v2.182.1...v2.183.0) (2025-08-29)
+
+
+### Features
+
+* Add vviinn-suggestions component, which implements the stream concept ([f800b98](https://github.com/vviinn/widgets/commit/f800b986272f7ee6bf49d517d6d7d9559be45e51))
+
+### [2.182.1](https://github.com/vviinn/widgets/compare/v2.182.0...v2.182.1) (2025-08-22)
+
+
+### Bug Fixes
+
+* Shop-the-look mismatch of the clicked product and the details view. ([00bfffc](https://github.com/vviinn/widgets/commit/00bfffced210d26637b3bd0692766c35267bf043))
+
+## [2.182.0](https://github.com/vviinn/widgets/compare/v2.181.0...v2.182.0) (2025-08-22)
+
+
+### Features
+
+* Add vviinn-image component. ([b1b307a](https://github.com/vviinn/widgets/commit/b1b307a9fdcc4d54e48243306eee6f903c20c5de))
+
 ## [2.181.0](https://github.com/vviinn/widgets/compare/v2.180.4...v2.181.0) (2025-08-11)
 
 

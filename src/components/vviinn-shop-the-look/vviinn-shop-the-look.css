@@ -1,0 +1,573 @@
+@import "../../variables.css";
+
+:host {
+  --shop-the-look-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+  display: block;
+  font-family: var(--font-family-base);
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.shop-the-look-container {
+  position: relative;
+  width: 100%;
+  background: var(--color-bg-base);
+  overflow: hidden;
+}
+
+.main-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-200);
+  align-items: center;
+}
+
+.image-container {
+  position: relative;
+  border-radius: var(--border-radius-200);
+  overflow: hidden;
+  background: var(--color-field-02);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.swiper-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+swiper-container {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--border-radius-200);
+  overflow: hidden;
+}
+
+swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  flex-shrink: 0;
+}
+
+swiper-container::part(pagination) {
+  bottom: var(--spacing-250);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-100);
+  padding: var(--spacing-100) 0;
+}
+
+swiper-container::part(bullet) {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--border-radius-full);
+  background: rgba(22, 22, 22, 0.25);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  margin: 0;
+  opacity: 1;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transform: scale(1);
+}
+
+swiper-container::part(bullet):hover {
+  background: rgba(22, 22, 22, 0.5);
+  transform: scale(1.2);
+}
+
+swiper-container::part(bullet-active) {
+  width: 24px;
+  height: 8px;
+  border-radius: var(--spacing-50);
+  background: var(--color-icon-helper);
+  transform: scale(1);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+swiper-container::part(bullet-active):hover {
+  background: var(--color-icon-secondary);
+  transform: scale(1.1);
+}
+
+.desktop-carousel {
+  position: relative;
+  width: 100%;
+}
+
+.shop-the-look-container .mobile-slider swiper-container::part(pagination) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-100);
+  padding: var(--spacing-100) 0;
+}
+
+.desktop-carousel swiper-container {
+  width: 100%;
+  height: 100%;
+}
+
+.desktop-carousel .carousel-navigation {
+  position: absolute;
+  bottom: var(--spacing-250);
+  right: var(--spacing-250);
+  display: flex;
+  gap: var(--spacing-100);
+  z-index: 10;
+}
+
+.desktop-carousel .swiper-button-prev,
+.desktop-carousel .swiper-button-next {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: var(--border-radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(4px);
+  margin: 0;
+}
+
+.desktop-carousel .swiper-button-prev:hover,
+.desktop-carousel .swiper-button-next:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.desktop-carousel .swiper-button-prev::after,
+.desktop-carousel .swiper-button-next::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border: 2px solid var(--color-icon-helper);
+  border-top: none;
+  border-right: none;
+  transition: border-color 0.3s ease;
+}
+
+.desktop-carousel .swiper-button-prev::after {
+  transform: rotate(45deg);
+  margin-left: 1px;
+}
+
+.desktop-carousel .swiper-button-next::after {
+  transform: rotate(-135deg);
+  margin-right: 1px;
+}
+
+.desktop-carousel .swiper-button-prev:hover::after,
+.desktop-carousel .swiper-button-next:hover::after {
+  border-color: var(--color-icon-secondary);
+}
+
+.desktop-carousel .swiper-button-prev.disabled,
+.desktop-carousel .swiper-button-next.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.desktop-carousel .swiper-button-prev.disabled::after,
+.desktop-carousel .swiper-button-next.disabled::after {
+  border-color: var(--color-border-03);
+}
+
+.shop-the-look-container .desktop-carousel swiper-container::part(pagination) {
+  display: none;
+}
+
+.mobile-slider swiper-container::part(pagination) {
+  display: flex;
+}
+
+.main-image {
+  display: block;
+  object-fit: contain;
+}
+
+.pagination-dots {
+  display: flex;
+  gap: var(--spacing-100);
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-100) 0;
+}
+
+.pagination-dots {
+  display: flex;
+  gap: var(--spacing-50);
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-200) 0;
+  margin-top: var(--spacing-100);
+}
+
+.pagination-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--border-radius-full);
+  background: rgba(22, 22, 22, 0.25);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+.pagination-dot:hover {
+  background: rgba(22, 22, 22, 0.5);
+  transform: scale(1.1);
+}
+
+.pagination-dot.active {
+  width: 24px;
+  height: 8px;
+  border-radius: var(--spacing-50);
+  background: var(--color-icon-helper);
+  transform: scale(1);
+}
+
+.pagination-dot.active:hover {
+  background: var(--color-icon-secondary);
+  transform: scale(1.05);
+}
+
+.shop-the-look-container .modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: transparent;
+  z-index: 1000;
+  pointer-events: auto;
+}
+
+.shop-the-look-container .modal-content-wrapper {
+  position: absolute;
+  background: var(--color-bg-base);
+  border-radius: var(--border-radius-150);
+  overflow: hidden;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.25);
+  z-index: 2000;
+  top: var(--modal-y, 50%);
+  left: var(--modal-x, 50%);
+  transform: translate(-50%, -50%);
+}
+
+.shop-the-look-container .modal-content-wrapper.mobile-modal {
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 64px);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+}
+
+.shop-the-look-container .modal-content-wrapper.desktop-modal {
+  position: absolute;
+}
+
+.modal-body {
+  padding: var(--spacing-100);
+}
+
+.search-results-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-50);
+  width: 140px;
+  height: 140px;
+}
+
+.result-item {
+  cursor: pointer;
+  border-radius: var(--spacing-75);
+  overflow: hidden;
+  aspect-ratio: 1;
+}
+
+.result-image {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.result-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.search-loader {
+  position: absolute;
+  top: var(--spacing-200);
+  right: var(--spacing-200);
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: var(--border-radius-full);
+  padding: var(--spacing-100);
+  backdrop-filter: blur(4px);
+}
+
+.search-loader vviinn-preloader {
+  width: 24px;
+  height: 24px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.shop-the-look-container.modal-open vviinn-detected-object {
+  z-index: 2001;
+}
+
+/* Keep detected objects visible when image is partially sliced */
+@media (min-width: 768px) {
+  .desktop-carousel vviinn-detected-object {
+    position: absolute;
+    z-index: 15;
+    overflow: visible;
+  }
+
+  .desktop-carousel .image-container {
+    overflow: visible;
+  }
+
+  .desktop-carousel .main-image {
+    overflow: hidden;
+    border-radius: var(--border-radius-200);
+  }
+}
+
+@media (max-width: 767px) {
+  .shop-the-look-container .swiper-button-prev,
+  .shop-the-look-container .swiper-button-next,
+  .shop-the-look-container .carousel-navigation {
+    display: none;
+  }
+
+  .mobile-slider {
+    width: 100%;
+  }
+
+  .shop-the-look-container .mobile-slider swiper-slide {
+    width: 100%;
+    flex-shrink: 0;
+  }
+
+  /* Mobile: Ensure modal fits in viewport but don't override centering */
+  .modal-content-wrapper.desktop-modal {
+    max-width: calc(100vw - 24px);
+    max-height: calc(100vh - 48px);
+  }
+
+  .search-results-grid {
+    width: min(160px, calc(100vw - 48px));
+    height: min(160px, calc(100vw - 48px));
+  }
+}
+
+@media (min-width: 768px) {
+  .shop-the-look-container
+    .desktop-carousel
+    swiper-container::part(pagination) {
+    display: none;
+  }
+
+  .desktop-carousel .swiper-button-prev,
+  .desktop-carousel .swiper-button-next {
+    display: flex;
+  }
+
+  .desktop-carousel .carousel-navigation {
+    display: flex;
+  }
+
+  /* Desktop: Allow slides to have natural width for multi-slide view */
+  .shop-the-look-container .desktop-carousel swiper-slide {
+    width: auto;
+    flex-shrink: 0;
+  }
+
+  /* Desktop: Container should show slides from the left */
+  .desktop-carousel {
+    max-width: none;
+  }
+
+  .desktop-carousel swiper-container {
+    justify-content: flex-start;
+  }
+
+  /* Ensure swiper wrapper aligns slides to the left */
+  .desktop-carousel .swiper-wrapper {
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+}
+
+@media (min-width: 768px) {
+  .desktop-carousel swiper-slide {
+    width: auto !important;
+    flex-shrink: 0;
+  }
+
+  .mobile-slider swiper-slide {
+    width: auto;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 767px) {
+  .shop-the-look-container {
+    width: 100%;
+    max-width: 100vw;
+    overflow: hidden;
+  }
+
+  .shop-the-look-container .image-container,
+  .shop-the-look-container swiper-container,
+  .shop-the-look-container swiper-slide {
+    width: fit-content;
+    max-width: 100%;
+  }
+
+  .shop-the-look-container .main-image {
+    max-width: 100%;
+    height: auto;
+    width: auto;
+    object-fit: contain;
+  }
+
+  .modal-content-wrapper.desktop-modal {
+    max-width: calc(100vw - 16px);
+  }
+
+  .search-results-grid {
+    width: min(140px, calc(100vw - 32px));
+    height: min(140px, calc(100vw - 32px));
+    gap: var(--spacing-50);
+  }
+}
+
+.product-details {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: var(--spacing-75);
+  width: fit-content;
+}
+
+.product-header {
+  display: flex;
+  align-items: center;
+}
+
+.back-to-grid-button {
+  display: contents;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.back-to-grid-button svg {
+  width: 24px;
+  height: 24px;
+  color: var(--color-icon-helper);
+  transition: color 0.2s ease;
+}
+
+.back-to-grid-button:hover svg {
+  color: var(--color-icon-secondary);
+}
+
+.product-content {
+  flex: 1;
+  position: relative;
+}
+
+.product-details-card-wrapper {
+  height: 100%;
+  padding: 0;
+  width: 160px;
+  max-width: 160px;
+}
+
+.product-details-card {
+  height: 100%;
+  background: var(--color-bg-base);
+  border: none;
+  width: 100%;
+  max-width: 100%;
+}
+
+vviinn-product-card::part(price-container) {
+  flex-direction: row;
+}
+
+vviinn-image::part(image),
+.product-details-card-wrapper vviinn-product-card::part(image),
+.product-details-card-wrapper vviinn-product-card::part(image-picture) {
+  border-radius: var(--border-radius-100);
+  overflow: hidden;
+}
+
+.product-details-card-wrapper vviinn-product-card::part(image-container) {
+  height: 160px;
+}
+
+.product-grid-container.hidden,
+.product-details-container.hidden {
+  display: none;
+}
+
+/* Widget Style: Cornered variant overrides all rounded elements */
+.widget-style-cornered .image-container,
+.widget-style-cornered swiper-container,
+.widget-style-cornered .desktop-carousel .main-image,
+.widget-style-cornered .modal-content-wrapper,
+.widget-style-cornered .result-item,
+.widget-style-cornered .desktop-carousel .swiper-button-prev,
+.widget-style-cornered .desktop-carousel .swiper-button-next,
+.widget-style-cornered vviinn-image::part(image),
+.widget-style-cornered
+  .product-details-card-wrapper
+  vviinn-product-card::part(image),
+.widget-style-cornered
+  .product-details-card-wrapper
+  vviinn-product-card::part(image-picture) {
+  border-radius: 0;
+}

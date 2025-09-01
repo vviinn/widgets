@@ -1,0 +1,23 @@
+export const INTERSECTION_THRESHOLDS = {
+  DESKTOP_VISIBLE: 0.6,
+  MOBILE_VISIBLE: 0.33,
+} as const;
+
+export const TIMING = {
+  SWIPER_INIT_DELAY: 200,
+  SEARCH_DELAY: 500,
+  SLIDE_TRANSITION_DELAY: 100,
+} as const;
+
+export const MODAL_DIMENSIONS = {
+  WIDTH: 184, // 160px + 24px padding
+  HEIGHT: 184, // 160px + 24px padding
+} as const;
+
+export const Z_INDEX = {
+  DETECTED_OBJECT: 10,
+  DETECTED_OBJECT_DESKTOP: 15,
+  SEARCH_LOADER: 100,
+  MODAL_OVERLAY: 1000,
+  MODAL_CONTENT: 2000,
+} as const;

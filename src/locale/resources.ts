@@ -27,8 +27,13 @@ export const resources: Resource = {
       cameraButtonTextStop: "Kamera stoppen",
       privacyBadgeText: `Durch das Hochladen eines Bildes willigst Du in die Verarbeitung durch unseren Partner ${VVIINN_LINK} ein. Das Bild wird nach einer Stunde Inaktivität gelöscht.`,
       teaserText: "Finde Dein Produkt",
-      imageSearchModalTitle: "AI Search",
+      imageSearchModalTitle: "KI-Suche",
       textSearchPlaceholder: "mit Text suchen",
+      suggestions: {
+        title: "KI-Vorschläge",
+        description:
+          "Hier sind einige Vorschläge, die Ihnen helfen, das perfekte zu finden.",
+      },
       speechRecognition: {
         placeholder: "Aufnahme...",
         tooltip: {
@@ -157,6 +162,11 @@ export const resources: Resource = {
       teaserText: "Find Your Product",
       imageSearchModalTitle: "AI Search",
       textSearchPlaceholder: "Search by text",
+      suggestions: {
+        title: "AI Suggestions",
+        description:
+          "Here are some suggestions to help you find the perfect match.",
+      },
       speechRecognition: {
         placeholder: "Listening...",
         tooltip: {

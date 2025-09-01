@@ -1,3 +1,4 @@
+// DOM manipulation utilities
 export const findTarget = (ev: any) => {
   return ev.target;
 };
@@ -7,6 +8,9 @@ export const findSlotElements = (el: HTMLElement): HTMLSlotElement[] =>
 
 export const getSlotNames = (slotElements: HTMLSlotElement[]): string[] =>
   slotElements.map((el) => el.getAttribute("slot"));
+
+// Intersection Observer utilities
+export * from "./intersectionObserver";
 
 export type EventListenerTuple = [string, EventListenerOrEventListenerObject];
 

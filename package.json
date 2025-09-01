@@ -1,6 +1,6 @@
 {
   "name": "vviinn-widgets",
-  "version": "2.181.0",
+  "version": "2.184.0",
   "description": "vviinn web components",
   "main": "./dist/index.cjs.js",
   "module": "./dist/index.js",
@@ -29,6 +29,7 @@
     "release": "commit-and-tag-version",
     "release.ci": "commit-and-tag-version --releaseCommitMessageFormat '[skip ci] chore(release): {{currentTag}}'",
     "artifactregistry-login": "npx google-artifactregistry-auth",
+    "format": "prettier --write 'src/**/*.{ts,tsx,js,jsx,css,scss,json}'",
     "update_storybook_changelog": "node ./scripts/update-changelog.js",
     "update_storybook_widget_version": "node ./scripts/update-widget-version.js"
   },
@@ -41,6 +42,7 @@
     "fp-ts": "^2.12.3",
     "i18next": "^23.2.11",
     "rxjs": "^7.5.5",
+    "swiper": "^11.2.10",
     "tslib": "^1.14.1",
     "uuid": "^8.3.2",
     "vviinn-tracking-client-ts": "^1.7.6",

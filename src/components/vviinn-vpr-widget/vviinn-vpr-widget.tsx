@@ -680,7 +680,7 @@ export class VviinnVprWidget implements ComponentInterface {
         index={index}
         widgetElementId={this.id}
         widgetVersion={version}
-        setMode={this.isSetMode}
+        isSetMode={this.isSetMode}
         customLabels={getCustomLabels(recommendation)}
         favoriteShow={this.favoriteShow}
       />
@@ -693,6 +693,7 @@ export class VviinnVprWidget implements ComponentInterface {
       styleSheet.getPropertyValue(RESULTS_CALCULATED_COLUMNS_CSS_VAR),
     );
     const isLoading = this.recommendationsLoading;
+
     return (
       <div
         class={`recommendations-results recommendations-${this.mode}`}
@@ -706,6 +707,7 @@ export class VviinnVprWidget implements ComponentInterface {
                 <vviinn-product-card
                   loading={true}
                   imageRatio={this.imageRatio}
+                  responsive={true}
                   productTitle=""
                   productId={`skeleton-${index}`}
                   key={`skeleton-${index}`}
