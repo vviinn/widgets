@@ -184,9 +184,9 @@ export const performVisualSearch = async (
 export interface DetectedObjectClickParams {
   detectedObject: Rectangle;
   imageElement: HTMLImageElement;
+  containerElement?: HTMLElement;
   token: string;
   componentToken?: string;
-  containerElement?: HTMLElement;
   visualSearchId?: string | null;
   campaignId?: string;
   isSearchInProgress: boolean;
@@ -204,11 +204,11 @@ export const handleDetectedObjectClick = async (
   const {
     imageElement,
     detectedObject,
+    containerElement,
     visualSearchId,
     componentToken,
     token,
     campaignId,
-    containerElement,
     isSearchInProgress,
     setSearchInProgress,
   } = params;

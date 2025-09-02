@@ -12,7 +12,7 @@
   position: relative;
   width: 100%;
   background: var(--color-bg-base);
-  overflow: hidden;
+  overflow: visible;
 }
 
 .main-content {
@@ -21,6 +21,7 @@
   flex-direction: column;
   gap: var(--spacing-200);
   align-items: center;
+  overflow: hidden;
 }
 
 .image-container {
@@ -247,61 +248,41 @@ swiper-container::part(bullet-active):hover {
   transform: scale(1.05);
 }
 
-.shop-the-look-container .modal-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: transparent;
-  z-index: 1000;
-  pointer-events: auto;
-}
-
-.shop-the-look-container .modal-content-wrapper {
+.modal-content-wrapper {
   position: absolute;
   background: var(--color-bg-base);
   border-radius: var(--border-radius-150);
   overflow: hidden;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.25);
-  z-index: 2000;
+  z-index: 10000;
   top: var(--modal-y, 50%);
   left: var(--modal-x, 50%);
 }
 
-.shop-the-look-container
-  .modal-content-wrapper[style*="--modal-anchor: top-left"] {
+.modal-content-wrapper[style*="--modal-anchor: top-left"] {
   transform: translate(0, 0);
 }
 
-.shop-the-look-container
-  .modal-content-wrapper[style*="--modal-anchor: top-right"] {
+.modal-content-wrapper[style*="--modal-anchor: top-right"] {
   transform: translate(-100%, 0);
 }
 
-.shop-the-look-container
-  .modal-content-wrapper[style*="--modal-anchor: bottom-left"] {
+.modal-content-wrapper[style*="--modal-anchor: bottom-left"] {
   transform: translate(0, -100%);
 }
 
-.shop-the-look-container
-  .modal-content-wrapper[style*="--modal-anchor: bottom-right"] {
+.modal-content-wrapper[style*="--modal-anchor: bottom-right"] {
   transform: translate(-100%, -100%);
 }
 
-.shop-the-look-container .modal-content-wrapper:not([style*="--modal-anchor"]) {
+.modal-content-wrapper:not([style*="--modal-anchor"]) {
   transform: translate(-50%, -50%);
 }
 
-.shop-the-look-container .modal-content-wrapper.mobile-modal {
+.modal-content-wrapper.mobile-modal {
   max-width: calc(100vw - 32px);
   max-height: calc(100vh - 64px);
-  position: absolute;
   margin: 0;
-}
-
-.shop-the-look-container .modal-content-wrapper.desktop-modal {
-  position: absolute;
 }
 
 .modal-body {
@@ -370,7 +351,7 @@ swiper-container::part(bullet-active):hover {
 }
 
 .shop-the-look-container.modal-open vviinn-detected-object {
-  z-index: 2001;
+  z-index: 10001;
 }
 
 /* Keep detected objects visible when image is partially sliced */

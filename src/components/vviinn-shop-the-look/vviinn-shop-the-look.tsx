@@ -402,9 +402,9 @@ export class VviinnShopTheLook {
     const params: DetectedObjectClickParams = {
       detectedObject,
       imageElement,
+      containerElement: this.el,
       token: this.token,
       componentToken: this.componentToken,
-      containerElement: this.el,
       visualSearchId,
       campaignId: this.campaignId,
       isSearchInProgress: this.isSearchInProgress,
