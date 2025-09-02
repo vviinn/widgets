@@ -16,7 +16,6 @@ import { BasicEventData } from "../../recommendation/events";
 import { register } from "swiper/element";
 import { updateGlobalState } from "../../store/store";
 import {
-  calculateImageBounds,
   ModalPosition,
   setupIntersectionObserver,
   IntersectionObserverConfig,
@@ -214,7 +213,6 @@ export class VviinnShopTheLook {
   }
 
   private handleResize = () => {
-    this.updateImageBounds();
     this.checkViewModeChange();
     this.updateArrowsVisibility();
     this.triggerReRender();
@@ -256,21 +254,6 @@ export class VviinnShopTheLook {
       this.showArrows = this.totalImages > 1;
     }
   };
-
-  private updateImageBounds() {
-    if (
-      this.imageElement &&
-      this.imageElement.offsetWidth > 0 &&
-      this.imageElement.offsetHeight > 0
-    ) {
-      const newBounds = calculateImageBounds(this.imageElement);
-      if (newBounds && this.imageStore) {
-        this.imageStore.updateImageState(this.currentImageIndex, {
-          imageBounds: newBounds,
-        });
-      }
-    }
-  }
 
   private initializeContainerVisibilityTracking() {
     const isDesktopView = isDesktop();
@@ -577,7 +560,14 @@ export class VviinnShopTheLook {
       return null;
     }
 
-    const imageBounds = imageState.imageBounds;
+    const imageBounds = imageState.imageElement
+      ? {
+          left: 0,
+          top: 0,
+          width: imageState.imageElement.offsetWidth,
+          height: imageState.imageElement.offsetHeight,
+        }
+      : null;
 
     const props: DetectedObjectsProps = {
       imageBounds,
@@ -599,8 +589,6 @@ export class VviinnShopTheLook {
       this.clearModalAndSlideState();
 
       setTimeout(() => {
-        this.updateImageBounds();
-
         const isDesktopView = isDesktop();
         if (!isDesktopView) {
           this.markCurrentImageAsVisible();
@@ -662,23 +650,12 @@ export class VviinnShopTheLook {
   };
 
   private updateImageBoundsForElement = (
-    el: HTMLImageElement,
+    _el: HTMLImageElement,
     index: number,
   ) => {
     requestAnimationFrame(() => {
       if (index === this.currentImageIndex || this.totalImages <= 1) {
-        this.updateImageBounds();
         this.updateArrowsVisibility();
-      }
-
-      const imageState = this.imageStore.getImageState(index);
-      if (imageState) {
-        const bounds = calculateImageBounds(el);
-        if (bounds) {
-          imageState.imageBounds = bounds;
-          this.imageStore.setImageState(index, imageState);
-          this.triggerReRender();
-        }
       }
     });
   };
@@ -766,7 +743,6 @@ export class VviinnShopTheLook {
     this.clearModalAndSlideState();
 
     setTimeout(() => {
-      this.updateImageBounds();
       this.performVisualSearchIfReady();
     }, TIMING.SLIDE_TRANSITION_DELAY);
   };
