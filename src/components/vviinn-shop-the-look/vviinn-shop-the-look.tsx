@@ -154,6 +154,7 @@ export class VviinnShopTheLook {
     document.addEventListener("click", this.handleDocumentClick);
     this.initializeContainerVisibilityTracking();
     this.setupSwiperEventListener();
+    this.setupSwiperDragEventListeners();
   }
 
   @Watch("currentViewMode")
@@ -165,6 +166,7 @@ export class VviinnShopTheLook {
 
       setTimeout(() => {
         this.setupSwiperEventListener();
+        this.setupSwiperDragEventListeners();
       }, 100);
     }
   }
@@ -208,6 +210,10 @@ export class VviinnShopTheLook {
       swiperContainer.removeEventListener(
         "swiperslidechange",
         this.handleSlideChange,
+      );
+      swiperContainer.removeEventListener(
+        "swipersliderfirstmove",
+        this.handleSwiperScroll,
       );
     }
   }
@@ -291,6 +297,27 @@ export class VviinnShopTheLook {
       }, TIMING.SWIPER_INIT_DELAY);
     }
   }
+
+  private setupSwiperDragEventListeners() {
+    const swiperContainer =
+      this.el.shadowRoot?.querySelector("swiper-container");
+
+    if (swiperContainer) {
+      setTimeout(() => {
+        swiperContainer.addEventListener(
+          "swipersliderfirstmove",
+          this.handleSwiperScroll,
+          { passive: true },
+        );
+      }, TIMING.SWIPER_INIT_DELAY);
+    }
+  }
+
+  private handleSwiperScroll = () => {
+    if (this.showModal) {
+      this.handleModalClose();
+    }
+  };
 
   private handleImageVisibilityChange = () => {
     this.triggerReRender();
