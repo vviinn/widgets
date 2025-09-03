@@ -14,10 +14,12 @@ import {
   shopTheLookState,
 } from "../../store/search.store";
 
+export type AnchorPosition = "top-left" | "top-right" | "bottom-left" | "bottom-right";
+
 export interface ModalPosition {
   x: number;
   y: number;
-  anchor?: "top-left" | "top-right" | "bottom-left" | "bottom-right";
+  anchor?: AnchorPosition;
 }
 
 export const isDesktop = sharedIsDesktop;
@@ -68,24 +70,17 @@ export const calculateModalPosition = (
   const midX = imageBounds.width / 2;
   const midY = imageBounds.height / 2;
 
-  let anchor: "top-left" | "top-right" | "bottom-left" | "bottom-right";
-
-  if (objectCenterX <= midX && objectCenterY <= midY) {
-    anchor = "top-left";
-  } else if (objectCenterX > midX && objectCenterY <= midY) {
-    anchor = "top-right";
-  } else if (objectCenterX <= midX && objectCenterY > midY) {
-    anchor = "bottom-left";
-  } else {
-    anchor = "bottom-right";
-  }
+  const anchor = [
+    objectCenterY > midY ? 'bottom' : 'top',
+    objectCenterX > midX ? 'right' : 'left'
+  ].join('-') as AnchorPosition;
 
   const offset = isDesktop() ? 24 : 16;
   const isMobile = !isDesktop();
   const mobileXShift = 32;
   const mobileYOffset = 6;
-  let offsetX = 0,
-    offsetY = 0;
+
+  let offsetX = 0, offsetY = 0;
 
   switch (anchor) {
     case "top-left":
