@@ -463,6 +463,10 @@ swiper-container::part(bullet-active):hover {
     max-width: 100%;
   }
 
+  swiper-container::part(wrapper) {
+    align-items: center;
+  }
+
   .shop-the-look-container .main-image {
     max-width: 100%;
     height: auto;
