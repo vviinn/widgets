@@ -81,26 +81,28 @@ export const calculateModalPosition = (
   }
 
   const offset = isDesktop() ? 24 : 16;
-
+  const isMobile = !isDesktop();
+  const mobileXShift = 32;
+  const mobileYOffset = 6;
   let offsetX = 0,
     offsetY = 0;
 
   switch (anchor) {
     case "top-left":
-      offsetX = offset;
-      offsetY = offset;
+      offsetX = isMobile ? offset - mobileXShift : offset;
+      offsetY = isMobile ? offset + mobileYOffset : offset;
       break;
     case "top-right":
-      offsetX = -offset;
-      offsetY = offset;
+      offsetX = isMobile ? -offset + mobileXShift : -offset;
+      offsetY = isMobile ? offset + mobileYOffset : offset;
       break;
     case "bottom-left":
-      offsetX = offset;
-      offsetY = -offset;
+      offsetX = isMobile ? offset - mobileXShift : offset;
+      offsetY = isMobile ? -offset - mobileYOffset : -offset;
       break;
     case "bottom-right":
-      offsetX = -offset;
-      offsetY = -offset;
+      offsetX = isMobile ? -offset + mobileXShift : -offset;
+      offsetY = isMobile ? -offset - mobileYOffset : -offset;
       break;
   }
 
