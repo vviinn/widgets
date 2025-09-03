@@ -46,26 +46,35 @@ export const configureSwiperElement = (
 ) => {
   if (!element) return;
 
-  const modules = config.isDesktop ? [] : config.pagination ? [Pagination] : [];
+  const {
+    isDesktop,
+    navigation = false,
+    pagination = false,
+    keyboard = true,
+    mousewheel = false,
+    allowTouchMove = true,
+    initialSlide = 0,
+    loop = false,
+    slidesPerView = isDesktop ? "auto" : 1,
+    spaceBetween = isDesktop ? 20 : 8,
+    centeredSlides = false,
+  } = config;
+
+  const modules = isDesktop ? [] : pagination ? [Pagination] : [];
 
   Object.assign(element, {
     modules,
-    navigation: config.navigation ?? false,
-    pagination:
-      config.pagination && !config.isDesktop
-        ? {
-            clickable: true,
-          }
-        : false,
+    navigation,
+    pagination: pagination && !isDesktop ? { clickable: true } : false,
     scrollbar: false,
-    keyboard: { enabled: config.keyboard ?? true },
-    mousewheel: config.mousewheel ?? false,
-    allowTouchMove: config.allowTouchMove ?? true,
-    initialSlide: config.initialSlide ?? 0,
-    loop: config.loop ?? false,
-    slidesPerView: config.slidesPerView ?? (config.isDesktop ? "auto" : 1),
-    spaceBetween: config.spaceBetween ?? (config.isDesktop ? 20 : 0),
-    centeredSlides: config.centeredSlides ?? false,
+    keyboard: { enabled: keyboard },
+    mousewheel,
+    allowTouchMove,
+    initialSlide,
+    loop,
+    slidesPerView,
+    spaceBetween,
+    centeredSlides,
   });
 
   // Initialize swiper after configuration

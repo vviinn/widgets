@@ -117,6 +117,7 @@ export const renderSwiper = (props: SwiperProps) => {
         initialSlide: currentImageIndex,
         pagination: true,
         keyboard: true,
+        spaceBetween: desktop ? 20 : 8,
       });
     }
     if (onSwiperRef) {
@@ -147,12 +148,6 @@ export const renderSwiper = (props: SwiperProps) => {
         ref={swiperRef}
         onSlideChange={onSlideChange}
         style={swiperStyles}
-        slides-per-view={desktop ? "auto" : "1"}
-        space-between={desktop ? "20" : "0"}
-        initial-slide={currentImageIndex.toString()}
-        keyboard="true"
-        allow-touch-move="true"
-        centered-slides="false"
         pagination={!desktop ? "true" : undefined}
         pagination-clickable={!desktop ? "true" : undefined}
       >
