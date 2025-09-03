@@ -117,7 +117,6 @@ export const renderSwiper = (props: SwiperProps) => {
         initialSlide: swiperActiveIndex,
         pagination: true,
         keyboard: true,
-        spaceBetween: desktop ? 20 : 8,
       });
     }
     if (onSwiperRef) {

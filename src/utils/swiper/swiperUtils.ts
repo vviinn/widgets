@@ -1,5 +1,10 @@
 import { Pagination } from "swiper/modules";
 
+export const SWIPER_SPACE_BETWEEN = {
+  DESKTOP: 20,
+  MOBILE: 8,
+} as const;
+
 type SwiperSlideChangeEventDetail = {
   activeIndex?: number;
   realIndex?: number;
@@ -56,7 +61,9 @@ export const configureSwiperElement = (
     initialSlide = 0,
     loop = false,
     slidesPerView = isDesktop ? "auto" : 1,
-    spaceBetween = isDesktop ? 20 : 8,
+    spaceBetween = isDesktop
+      ? SWIPER_SPACE_BETWEEN.DESKTOP
+      : SWIPER_SPACE_BETWEEN.MOBILE,
     centeredSlides = false,
   } = config;
 

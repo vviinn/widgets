@@ -13,6 +13,7 @@ import * as E from "fp-ts/lib/Either";
 import { Recommendation } from "../../interfaces";
 import { Rectangle } from "../../interfaces/search";
 import { BasicEventData } from "../../recommendation/events";
+import { fromRenderedImage } from "../../geometry/Rectangle";
 import { register } from "swiper/element";
 import { updateGlobalState } from "../../store/store";
 import {
@@ -599,14 +600,7 @@ export class VviinnShopTheLook {
       return null;
     }
 
-    const imageBounds = imageState.imageElement
-      ? {
-          left: 0,
-          top: 0,
-          width: imageState.imageElement.offsetWidth,
-          height: imageState.imageElement.offsetHeight,
-        }
-      : null;
+    const imageBounds = fromRenderedImage(imageState.imageElement);
 
     const props: DetectedObjectsProps = {
       imageBounds,
