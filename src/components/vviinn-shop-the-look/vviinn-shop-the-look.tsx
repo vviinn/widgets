@@ -386,7 +386,7 @@ export class VviinnShopTheLook {
           this.imageStore.updateImageState(this.currentImageIndex, {
             searchTriggered: true,
           });
-          this.performVisualSearch();
+          this.performVisualSearch(this.currentImageIndex);
         }
       }
     }
@@ -455,7 +455,7 @@ export class VviinnShopTheLook {
         modalPosition: ModalPosition;
       }) => {
         if (response.searchResults && response.searchResults.length > 0) {
-          this.imageStore.updateImageState(this.currentImageIndex, {
+          this.imageStore.updateImageState(imageIndex, {
             searchResults: response.searchResults,
           });
         }
@@ -477,14 +477,17 @@ export class VviinnShopTheLook {
     )(result);
   };
 
-  private performVisualSearch = async () => {
-    const currentImageUrl = this.imageUrlsList[this.currentImageIndex];
-    if (!this.token || !currentImageUrl) return;
+  private performVisualSearch = async (
+    targetImageIndex: number = this.currentImageIndex,
+  ) => {
+    const targetImageUrl = this.imageUrlsList[targetImageIndex];
+    if (!this.token || !targetImageUrl) return;
 
-    this.isSearching = true;
+    const isCurrentImage = targetImageIndex === this.currentImageIndex;
+    if (isCurrentImage) this.isSearching = true;
 
     const params: VisualSearchParams = {
-      imageUrl: currentImageUrl,
+      imageUrl: targetImageUrl,
       token: this.token,
       componentToken: this.componentToken,
       campaignId: this.campaignId,
@@ -494,11 +497,16 @@ export class VviinnShopTheLook {
 
     E.fold(
       (error: string) => {
-        console.error("Visual search failed:", error);
-        this.imageStore.updateImageState(this.currentImageIndex, {
+        console.error(
+          `Visual search failed for image ${targetImageIndex}:`,
+          error,
+        );
+        this.imageStore.updateImageState(targetImageIndex, {
           searchCompleted: true,
         });
-        this.isSearching = false;
+        if (isCurrentImage) {
+          this.isSearching = false;
+        }
       },
       (response: {
         detectedObjects: Rectangle[];
@@ -506,30 +514,38 @@ export class VviinnShopTheLook {
         visualSearchId?: string;
       }) => {
         this.imageStore.updateImageStateData(
-          this.currentImageIndex,
+          targetImageIndex,
           response.detectedObjects,
           true,
           response.searchResults,
           response.visualSearchId || null,
         );
 
-        const currentImageState = this.getCurrentImageState();
-        if (currentImageState.detectedObjects.length > 0) {
+        const targetImageState =
+          this.imageStore.getImageState(targetImageIndex);
+
+        if (isCurrentImage) {
           this.isSearching = false;
+        }
+
+        const shouldAutoClick =
+          targetImageState.detectedObjects.length > 0 && isCurrentImage;
+
+        if (shouldAutoClick) {
           setTimeout(async () => {
             await this.handleDetectedObjectClick(
-              currentImageState.detectedObjects[0],
+              targetImageState.detectedObjects[0],
               0,
+              targetImageIndex,
             );
-            this.imageStore.updateImageState(this.currentImageIndex, {
+            this.imageStore.updateImageState(targetImageIndex, {
               searchCompleted: true,
             });
           }, TIMING.SEARCH_DELAY);
         } else {
-          this.imageStore.updateImageState(this.currentImageIndex, {
+          this.imageStore.updateImageState(targetImageIndex, {
             searchCompleted: true,
           });
-          this.isSearching = false;
         }
       },
     )(result);
@@ -726,7 +742,10 @@ export class VviinnShopTheLook {
         );
         this.updateSearchingState(isCurrentImage);
 
-        if (imageIndex === 0 && response.detectedObjects.length > 0) {
+        const shouldAutoClick =
+          response.detectedObjects.length > 0 && isCurrentImage;
+
+        if (shouldAutoClick) {
           setTimeout(async () => {
             await this.handleDetectedObjectClick(
               response.detectedObjects[0],
