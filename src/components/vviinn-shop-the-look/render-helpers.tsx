@@ -53,7 +53,7 @@ export const renderDetectedObjects = (props: DetectedObjectsProps) => {
 export interface SwiperProps {
   totalImages: number;
   imageUrls: string[];
-  currentImageIndex: number;
+  swiperActiveIndex: number;
   height: number;
   imageElement: HTMLImageElement;
   detectedObjects: Rectangle[];
@@ -81,7 +81,7 @@ export const renderSwiper = (props: SwiperProps) => {
   const {
     totalImages,
     imageUrls,
-    currentImageIndex,
+    swiperActiveIndex,
     height,
     onSlideChange,
     onImageRef,
@@ -114,7 +114,7 @@ export const renderSwiper = (props: SwiperProps) => {
     if (el && !el.swiper) {
       configureSwiperElement(el, {
         isDesktop: desktop,
-        initialSlide: currentImageIndex,
+        initialSlide: swiperActiveIndex,
         pagination: true,
         keyboard: true,
         spaceBetween: desktop ? 20 : 8,
@@ -169,11 +169,11 @@ export const renderSwiper = (props: SwiperProps) => {
       {desktop && shouldShowArrows && (
         <div class="carousel-navigation">
           <div
-            class={`swiper-button-prev ${currentImageIndex === 0 ? "disabled" : ""}`}
+            class={`swiper-button-prev ${swiperActiveIndex === 0 ? "disabled" : ""}`}
             onClick={handlePrevClick}
           />
           <div
-            class={`swiper-button-next ${currentImageIndex === totalImages - 1 ? "disabled" : ""}`}
+            class={`swiper-button-next ${swiperActiveIndex === totalImages - 1 ? "disabled" : ""}`}
             onClick={handleNextClick}
           />
         </div>
@@ -228,7 +228,7 @@ export const renderProductGrid = (props: ProductGridProps) => {
 
 export interface ProductDetailsSliderProps {
   searchResults: Recommendation[];
-  currentProductIndex: number;
+  selectedProductIndex: number;
   currencySign?: string;
   onProductClick: (product: Recommendation) => void;
   onBackToGrid: () => void;
@@ -238,7 +238,7 @@ export interface ProductDetailsSliderProps {
 export const renderProductDetails = (props: ProductDetailsSliderProps) => {
   const {
     searchResults,
-    currentProductIndex,
+    selectedProductIndex,
     onProductClick,
     onBackToGrid,
     currencySign,
@@ -246,7 +246,7 @@ export const renderProductDetails = (props: ProductDetailsSliderProps) => {
 
   if (!searchResults.length) return null;
 
-  const selectedProduct = searchResults[currentProductIndex];
+  const selectedProduct = searchResults[selectedProductIndex];
   if (!selectedProduct) return null;
 
   return (
@@ -292,7 +292,7 @@ export interface ModalProps {
   searchResults: Recommendation[];
   onProductClick: (product: Recommendation) => void;
   showSliderView?: boolean;
-  currentProductIndex?: number;
+  selectedProductIndex?: number;
   currencySign?: string;
   onProductDetailsClick?: (product: Recommendation, index: number) => void;
   onBackToGrid?: () => void;
@@ -308,7 +308,7 @@ export const renderModal = (props: ModalProps) => {
     searchResults,
     onProductClick,
     showSliderView = false,
-    currentProductIndex = 0,
+    selectedProductIndex = 0,
     onProductDetailsClick,
     onBackToGrid,
     onNavigateProduct,
@@ -351,7 +351,7 @@ export const renderModal = (props: ModalProps) => {
           {searchResults.length > 0 &&
             renderProductDetails({
               searchResults,
-              currentProductIndex,
+              selectedProductIndex,
               onProductClick,
               currencySign,
               onBackToGrid,

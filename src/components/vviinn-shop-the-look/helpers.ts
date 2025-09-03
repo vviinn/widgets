@@ -136,7 +136,6 @@ export const resetSearchState = () => ({
 export interface VisualSearchParams {
   imageUrl: string;
   token: string;
-  componentToken?: string;
   campaignId?: string;
 }
 
@@ -157,7 +156,7 @@ export const performVisualSearch = async (
 
     const result = await makeUploadFileRequest(
       "shopTheLook",
-      params.componentToken || params.token,
+      params.token,
       params.campaignId,
     )(imageFile);
 
@@ -186,7 +185,6 @@ export interface DetectedObjectClickParams {
   imageElement: HTMLImageElement;
   containerElement?: HTMLElement;
   token: string;
-  componentToken?: string;
   visualSearchId?: string | null;
   campaignId?: string;
   isSearchInProgress: boolean;
@@ -206,7 +204,6 @@ export const handleDetectedObjectClick = async (
     detectedObject,
     containerElement,
     visualSearchId,
-    componentToken,
     token,
     campaignId,
     isSearchInProgress,
@@ -229,7 +226,7 @@ export const handleDetectedObjectClick = async (
     const result = await makeVisualSearchRequest(
       "shopTheLook",
       visualSearchId || null,
-      componentToken || token,
+      token,
       campaignId,
     );
 

@@ -85,20 +85,22 @@ export class VviinnShopTheLook {
 
   @State() selectedDetectedObject: Rectangle | null = null;
   @State() showModal: boolean = false;
-  @State() currentResultIndex: number = 0;
   @State() modalPosition: ModalPosition | null = null;
-  @State() isSearching: boolean = false;
-  @State() componentToken: string | null = null;
-  @State() isIntersecting: boolean = false;
-  @State() currentImageIndex: number = 0;
+  @State() showSliderView: boolean = false;
+  @State() selectedProductIndex: number = 0;
+  @State() modalImageIndex: number = 0;
+
+  @State() swiperActiveIndex: number = 0;
   @State() totalImages: number = 1;
   @State() imageUrlsList: string[] = [];
-  @State() showSliderView: boolean = false;
-  @State() currentProductIndex: number = 0;
-  @State() currentViewMode: "desktop" | "mobile" | null = null;
   @State() swiperKey: string = "swiper-0";
   @State() showArrows: boolean = false;
+
+  @State() showLoadingSpinner: boolean = false;
   @State() isSearchInProgress: boolean = false;
+
+  @State() currentViewMode: "desktop" | "mobile" | null = null;
+  @State() isWidgetVisible: boolean = false;
 
   /** Emitted when a detected object/hotspot is clicked. Contains the object ID and first recommended product. */
   @Event()
@@ -129,9 +131,6 @@ export class VviinnShopTheLook {
     }
 
     this.totalImages = this.imageUrlsList.length;
-    if (this.token) {
-      this.componentToken = this.token;
-    }
 
     this.currentViewMode = isDesktop() ? "desktop" : "mobile";
     this.updateArrowsVisibility();
@@ -142,7 +141,7 @@ export class VviinnShopTheLook {
     this.imageStore = new ShopTheLookImageStore({
       threshold,
       token: this.token,
-      isIntersecting: this.isIntersecting,
+      isWidgetVisible: this.isWidgetVisible,
       totalImages: this.totalImages,
       onImageVisibilityChange: this.handleImageVisibilityChange.bind(this),
       onVisualSearchTrigger: this.handleVisualSearchTrigger.bind(this),
@@ -181,21 +180,21 @@ export class VviinnShopTheLook {
     this.showModal = false;
     this.selectedDetectedObject = null;
     this.modalPosition = null;
-    this.currentResultIndex = 0;
-    this.currentProductIndex = 0;
+    this.selectedProductIndex = 0;
     this.showSliderView = false;
+    this.modalImageIndex = 0;
   }
 
   private updateSearchingState(isCurrentImage: boolean = false) {
-    this.isSearching = this.imageStore?.hasActiveSearches() ?? false;
+    this.showLoadingSpinner = this.imageStore?.hasActiveSearches() ?? false;
     if (isCurrentImage) {
-      this.isSearching = false;
+      this.showLoadingSpinner = false;
     }
     this.triggerReRender();
   }
 
   private getCurrentImageState() {
-    return this.imageStore?.getImageState(this.currentImageIndex);
+    return this.imageStore?.getImageState(this.swiperActiveIndex);
   }
 
   disconnectedCallback() {
@@ -225,7 +224,7 @@ export class VviinnShopTheLook {
   };
 
   private handleDocumentClick = (event: Event) => {
-    if (!this.showModal || this.isSearching) return;
+    if (!this.showModal || this.showLoadingSpinner) return;
 
     const target = event.target as Element | null;
     if (!target) return;
@@ -267,15 +266,15 @@ export class VviinnShopTheLook {
 
     const config: IntersectionObserverConfig = {
       threshold,
-      onIntersectionChange: (isIntersecting: boolean) => {
-        const wasIntersecting = this.isIntersecting;
-        this.isIntersecting = isIntersecting;
+      onIntersectionChange: (isWidgetVisible: boolean) => {
+        const wasWidgetVisible = this.isWidgetVisible;
+        this.isWidgetVisible = isWidgetVisible;
 
         this.imageStore?.updateConfig({
-          isIntersecting: this.isIntersecting,
+          isWidgetVisible: this.isWidgetVisible,
         });
 
-        if (!wasIntersecting && this.isIntersecting) {
+        if (!wasWidgetVisible && this.isWidgetVisible) {
           this.performVisualSearchIfReady();
         }
       },
@@ -362,14 +361,14 @@ export class VviinnShopTheLook {
     const isDesktopView = isDesktop();
 
     this.imageStore.updateConfig({
-      isIntersecting: this.isIntersecting,
+      isWidgetVisible: this.isWidgetVisible,
       token: this.token,
       totalImages: this.totalImages,
     });
 
-    if (this.token && this.isIntersecting) {
+    if (this.token && this.isWidgetVisible) {
       const currentImageState = this.imageStore.getImageState(
-        this.currentImageIndex,
+        this.swiperActiveIndex,
       );
 
       if (currentImageState?.searchCompleted) {
@@ -381,22 +380,22 @@ export class VviinnShopTheLook {
         }
 
         // Only trigger if not already triggered
-        const state = this.imageStore.getImageState(this.currentImageIndex);
+        const state = this.imageStore.getImageState(this.swiperActiveIndex);
         if (!state?.searchTriggered) {
-          this.imageStore.updateImageState(this.currentImageIndex, {
+          this.imageStore.updateImageState(this.swiperActiveIndex, {
             searchTriggered: true,
           });
-          this.performVisualSearch(this.currentImageIndex);
+          this.performVisualSearch(this.swiperActiveIndex);
         }
       }
     }
   }
 
   private markCurrentImageAsVisible() {
-    const currentState = this.imageStore.getImageState(this.currentImageIndex);
+    const currentState = this.imageStore.getImageState(this.swiperActiveIndex);
     if (currentState) {
       currentState.isVisible = true;
-      this.imageStore.setImageState(this.currentImageIndex, currentState);
+      this.imageStore.setImageState(this.swiperActiveIndex, currentState);
     }
   }
 
@@ -410,14 +409,14 @@ export class VviinnShopTheLook {
   private handleDetectedObjectClick = async (
     detectedObject: Rectangle,
     objectIndex: number,
-    imageIndex: number = this.currentImageIndex,
+    imageIndex: number = this.swiperActiveIndex,
   ) => {
     if (!this.token) return;
 
     this.selectedDetectedObject = detectedObject;
-    this.isSearching = true;
+    this.showLoadingSpinner = true;
     this.showModal = false;
-    this.currentResultIndex = 0;
+    this.modalImageIndex = imageIndex;
 
     const imageElement =
       this.imageStore.getImageElement(imageIndex) || this.imageElement;
@@ -431,7 +430,6 @@ export class VviinnShopTheLook {
       imageElement,
       containerElement: this.el,
       token: this.token,
-      componentToken: this.componentToken,
       visualSearchId,
       campaignId: this.campaignId,
       isSearchInProgress: this.isSearchInProgress,
@@ -448,7 +446,7 @@ export class VviinnShopTheLook {
           return;
         }
         console.error("Visual search failed:", error);
-        this.isSearching = false;
+        this.showLoadingSpinner = false;
       },
       (response: {
         searchResults: Recommendation[];
@@ -461,8 +459,7 @@ export class VviinnShopTheLook {
         }
 
         this.modalPosition = response.modalPosition;
-        this.currentResultIndex = 0;
-        this.isSearching = false;
+        this.showLoadingSpinner = false;
 
         if (response.searchResults && response.searchResults.length > 0) {
           this.showModal = true;
@@ -478,18 +475,17 @@ export class VviinnShopTheLook {
   };
 
   private performVisualSearch = async (
-    targetImageIndex: number = this.currentImageIndex,
+    targetImageIndex: number = this.swiperActiveIndex,
   ) => {
     const targetImageUrl = this.imageUrlsList[targetImageIndex];
     if (!this.token || !targetImageUrl) return;
 
-    const isCurrentImage = targetImageIndex === this.currentImageIndex;
-    if (isCurrentImage) this.isSearching = true;
+    const isCurrentImage = targetImageIndex === this.swiperActiveIndex;
+    if (isCurrentImage) this.showLoadingSpinner = true;
 
     const params: VisualSearchParams = {
       imageUrl: targetImageUrl,
       token: this.token,
-      componentToken: this.componentToken,
       campaignId: this.campaignId,
     };
 
@@ -505,7 +501,7 @@ export class VviinnShopTheLook {
           searchCompleted: true,
         });
         if (isCurrentImage) {
-          this.isSearching = false;
+          this.showLoadingSpinner = false;
         }
       },
       (response: {
@@ -525,7 +521,7 @@ export class VviinnShopTheLook {
           this.imageStore.getImageState(targetImageIndex);
 
         if (isCurrentImage) {
-          this.isSearching = false;
+          this.showLoadingSpinner = false;
         }
 
         const shouldAutoClick =
@@ -562,12 +558,12 @@ export class VviinnShopTheLook {
   };
 
   private handleModalClose = (event?: Event) => {
-    if (this.isSearching) return;
+    if (this.showLoadingSpinner) return;
     if (event && event.target !== event.currentTarget) return;
 
     this.clearModalAndSlideState();
     this.showSliderView = false;
-    this.currentProductIndex = 0;
+    this.selectedProductIndex = 0;
     this.vviinnShopTheLookModalClose.emit(TEST_BASIC_EVENT_DATA);
   };
 
@@ -575,24 +571,24 @@ export class VviinnShopTheLook {
     _product: Recommendation,
     index: number,
   ) => {
-    this.currentProductIndex = index;
+    this.selectedProductIndex = index;
     this.showSliderView = true;
   };
 
   private handleBackToGrid = () => {
     this.showSliderView = false;
-    this.currentProductIndex = 0;
+    this.selectedProductIndex = 0;
   };
 
   private handleNavigateProduct = (direction: "prev" | "next") => {
-    if (direction === "prev" && this.currentProductIndex > 0) {
-      this.currentProductIndex--;
+    const modalImageState = this.imageStore.getImageState(this.modalImageIndex);
+    if (direction === "prev" && this.selectedProductIndex > 0) {
+      this.selectedProductIndex--;
     } else if (
       direction === "next" &&
-      this.currentProductIndex <
-        this.getCurrentImageState().searchResults.length - 1
+      this.selectedProductIndex < modalImageState.searchResults.length - 1
     ) {
-      this.currentProductIndex++;
+      this.selectedProductIndex++;
     }
   };
 
@@ -627,8 +623,8 @@ export class VviinnShopTheLook {
   private handleSlideChange = (event: any) => {
     const newIndex = extractSlideIndex(event);
 
-    if (newIndex !== undefined && newIndex !== this.currentImageIndex) {
-      this.currentImageIndex = newIndex;
+    if (newIndex !== undefined && newIndex !== this.swiperActiveIndex) {
+      this.swiperActiveIndex = newIndex;
       this.clearModalAndSlideState();
 
       setTimeout(() => {
@@ -638,7 +634,7 @@ export class VviinnShopTheLook {
           this.performVisualSearchIfReady();
         } else {
           const currentImageState = this.imageStore.getImageState(
-            this.currentImageIndex,
+            this.swiperActiveIndex,
           );
           if (currentImageState?.searchCompleted) {
             this.loadImageState();
@@ -656,7 +652,7 @@ export class VviinnShopTheLook {
 
     this.imageStore.updateImageState(index, { refProcessed: true });
 
-    if (index === this.currentImageIndex || this.totalImages <= 1) {
+    if (index === this.swiperActiveIndex || this.totalImages <= 1) {
       this.imageElement = el;
     }
 
@@ -697,7 +693,7 @@ export class VviinnShopTheLook {
     index: number,
   ) => {
     requestAnimationFrame(() => {
-      if (index === this.currentImageIndex || this.totalImages <= 1) {
+      if (index === this.swiperActiveIndex || this.totalImages <= 1) {
         this.updateArrowsVisibility();
       }
     });
@@ -707,16 +703,15 @@ export class VviinnShopTheLook {
     const imageUrl = this.imageUrlsList[imageIndex];
     if (!this.token || !imageUrl) return;
 
-    const isCurrentImage = imageIndex === this.currentImageIndex;
+    const isCurrentImage = imageIndex === this.swiperActiveIndex;
 
     if (isCurrentImage) {
-      this.isSearching = true;
+      this.showLoadingSpinner = true;
     }
 
     const params: VisualSearchParams = {
       imageUrl,
       token: this.token,
-      componentToken: this.componentToken,
       campaignId: this.campaignId,
     };
 
@@ -759,8 +754,8 @@ export class VviinnShopTheLook {
   };
 
   private handleNavigatePrev = () => {
-    if (this.currentImageIndex > 0) {
-      const newIndex = this.currentImageIndex - 1;
+    if (this.swiperActiveIndex > 0) {
+      const newIndex = this.swiperActiveIndex - 1;
       this.updateSlideIndex(newIndex);
 
       const swiperContainer =
@@ -772,8 +767,8 @@ export class VviinnShopTheLook {
   };
 
   private handleNavigateNext = () => {
-    if (this.currentImageIndex < this.totalImages - 1) {
-      const newIndex = this.currentImageIndex + 1;
+    if (this.swiperActiveIndex < this.totalImages - 1) {
+      const newIndex = this.swiperActiveIndex + 1;
       this.updateSlideIndex(newIndex);
 
       const swiperContainer =
@@ -785,7 +780,7 @@ export class VviinnShopTheLook {
   };
 
   private updateSlideIndex = (newIndex: number) => {
-    this.currentImageIndex = newIndex;
+    this.swiperActiveIndex = newIndex;
     this.clearModalAndSlideState();
 
     setTimeout(() => {
@@ -797,7 +792,7 @@ export class VviinnShopTheLook {
     const props: SwiperProps = {
       totalImages: this.totalImages,
       imageUrls: this.imageUrlsList,
-      currentImageIndex: this.currentImageIndex,
+      swiperActiveIndex: this.swiperActiveIndex,
       height: this.height,
       imageElement: this.imageElement,
       detectedObjects: this.getCurrentImageState().detectedObjects,
@@ -817,10 +812,11 @@ export class VviinnShopTheLook {
       showModal: this.showModal,
       selectedDetectedObject: this.selectedDetectedObject,
       modalPosition: this.modalPosition,
-      searchResults: this.getCurrentImageState().searchResults,
+      searchResults: this.imageStore.getImageState(this.modalImageIndex)
+        .searchResults,
       onProductClick: this.handleProductClick,
       showSliderView: this.showSliderView,
-      currentProductIndex: this.currentProductIndex,
+      selectedProductIndex: this.selectedProductIndex,
       onProductDetailsClick: this.handleProductDetailsClick,
       onBackToGrid: this.handleBackToGrid,
       onNavigateProduct: this.handleNavigateProduct,
@@ -840,7 +836,7 @@ export class VviinnShopTheLook {
         >
           <div class="main-content">
             {this.renderSwiperWrapper()}
-            {this.isSearching && (
+            {this.showLoadingSpinner && (
               <div class="search-loader">
                 <vviinn-preloader />
               </div>
