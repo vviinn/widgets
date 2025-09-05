@@ -87,7 +87,7 @@ export class VviinnShopTheLook {
   @State() selectedDetectedObject: Rectangle | null = null;
   @State() showModal: boolean = false;
   @State() modalPosition: ModalPosition | null = null;
-  @State() showSliderView: boolean = false;
+  @State() showDetailedView: boolean = false;
   @State() selectedProductIndex: number = 0;
   @State() modalImageIndex: number = 0;
 
@@ -177,12 +177,16 @@ export class VviinnShopTheLook {
     this.rerenderTrigger++;
   }
 
+  private resetDetailedView() {
+    this.showDetailedView = false;
+    this.selectedProductIndex = 0;
+  }
+
   private clearModalAndSlideState() {
     this.showModal = false;
     this.selectedDetectedObject = null;
     this.modalPosition = null;
-    this.selectedProductIndex = 0;
-    this.showSliderView = false;
+    this.resetDetailedView();
     this.modalImageIndex = 0;
   }
 
@@ -417,6 +421,7 @@ export class VviinnShopTheLook {
     this.selectedDetectedObject = detectedObject;
     this.showLoadingSpinner = true;
     this.showModal = false;
+    this.resetDetailedView();
     this.modalImageIndex = imageIndex;
 
     const imageElement =
@@ -563,8 +568,6 @@ export class VviinnShopTheLook {
     if (event && event.target !== event.currentTarget) return;
 
     this.clearModalAndSlideState();
-    this.showSliderView = false;
-    this.selectedProductIndex = 0;
     this.vviinnShopTheLookModalClose.emit(TEST_BASIC_EVENT_DATA);
   };
 
@@ -573,12 +576,7 @@ export class VviinnShopTheLook {
     index: number,
   ) => {
     this.selectedProductIndex = index;
-    this.showSliderView = true;
-  };
-
-  private handleBackToGrid = () => {
-    this.showSliderView = false;
-    this.selectedProductIndex = 0;
+    this.showDetailedView = true;
   };
 
   private handleNavigateProduct = (direction: "prev" | "next") => {
@@ -809,10 +807,10 @@ export class VviinnShopTheLook {
       searchResults: this.imageStore.getImageState(this.modalImageIndex)
         .searchResults,
       onProductClick: this.handleProductClick,
-      showSliderView: this.showSliderView,
+      showDetailedView: this.showDetailedView,
       selectedProductIndex: this.selectedProductIndex,
       onProductDetailsClick: this.handleProductDetailsClick,
-      onBackToGrid: this.handleBackToGrid,
+      onBackToGrid: this.resetDetailedView,
       onNavigateProduct: this.handleNavigateProduct,
       currencySign: this.currencySign,
       modalContentRef: (el: HTMLElement) => {

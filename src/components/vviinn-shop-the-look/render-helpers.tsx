@@ -290,7 +290,7 @@ export interface ModalProps {
   modalPosition: ModalPosition | null;
   searchResults: Recommendation[];
   onProductClick: (product: Recommendation) => void;
-  showSliderView?: boolean;
+  showDetailedView?: boolean;
   selectedProductIndex?: number;
   currencySign?: string;
   onProductDetailsClick?: (product: Recommendation, index: number) => void;
@@ -306,7 +306,7 @@ export const renderModal = (props: ModalProps) => {
     modalPosition,
     searchResults,
     onProductClick,
-    showSliderView = false,
+    showDetailedView = false,
     selectedProductIndex = 0,
     onProductDetailsClick,
     onBackToGrid,
@@ -336,7 +336,9 @@ export const renderModal = (props: ModalProps) => {
       onClick={(e) => e.stopPropagation()}
     >
       <div class="modal-body">
-        <div class={`product-grid-container ${showSliderView ? "hidden" : ""}`}>
+        <div
+          class={`product-grid-container ${showDetailedView ? "hidden" : ""}`}
+        >
           {searchResults.length > 0 &&
             renderProductGrid({
               searchResults,
@@ -345,7 +347,7 @@ export const renderModal = (props: ModalProps) => {
             })}
         </div>
         <div
-          class={`product-details-container ${!showSliderView ? "hidden" : ""}`}
+          class={`product-details-container ${!showDetailedView ? "hidden" : ""}`}
         >
           {searchResults.length > 0 &&
             renderProductDetails({
