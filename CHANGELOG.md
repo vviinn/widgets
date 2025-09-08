@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.185.0](https://github.com/vviinn/widgets/compare/v2.184.0...v2.185.0) (2025-09-08)
+
+
+### Features
+
+* Dynamic modal positioning based on the center of the detected object ([b8285a0](https://github.com/vviinn/widgets/commit/b8285a0bd9d3e29286023c9050833376d2121332))
+
+
+### Bug Fixes
+
+* Detected objects positioning ([8ca6430](https://github.com/vviinn/widgets/commit/8ca6430f4b820c7a9aafb4be0cf2c12d44e86f2c))
+* Shop-the-Look: close the modal on the slider's first move. ([7d92dba](https://github.com/vviinn/widgets/commit/7d92dbaaae4187d5156fb220cf122540113d18a9))
+* Shop-the-Look: solve race conditions for the requests when scrolling through the images ([6330e25](https://github.com/vviinn/widgets/commit/6330e258d817f2531bc806b57d7d3cae38ae5ae6))
+
 ## [2.184.0](https://github.com/vviinn/widgets/compare/v2.183.0...v2.184.0) (2025-08-29)
 
 
