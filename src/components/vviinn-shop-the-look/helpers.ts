@@ -14,9 +14,16 @@ import {
   shopTheLookState,
 } from "../../store/search.store";
 
+export type AnchorPosition =
+  | "top-left"
+  | "top-right"
+  | "bottom-left"
+  | "bottom-right";
+
 export interface ModalPosition {
   x: number;
   y: number;
+  anchor?: AnchorPosition;
 }
 
 export const isDesktop = sharedIsDesktop;
@@ -53,25 +60,63 @@ export const shouldRenderDetectedObjects = (imageState: any): boolean => {
 
 export const calculateModalPosition = (
   imageElement: HTMLImageElement,
+  detectedObject: Rectangle,
   containerElement?: HTMLElement,
 ): ModalPosition => {
   const imageBounds = calculateImageBounds(imageElement);
   if (!imageBounds) return { x: 0, y: 0 };
 
-  const isDesktopView = isDesktop();
+  const objectCenterX =
+    (detectedObject.left + detectedObject.width / 2) * imageBounds.width;
+  const objectCenterY =
+    (detectedObject.top + detectedObject.height / 2) * imageBounds.height;
 
-  if (isDesktopView) {
-    let containerBounds = { left: 0, top: 0 };
-    if (containerElement) {
-      const containerRect = containerElement.getBoundingClientRect();
-      containerBounds = { left: containerRect.left, top: containerRect.top };
-    }
-    const x = imageBounds.left - containerBounds.left + imageBounds.width / 2;
-    const y = imageBounds.top - containerBounds.top + imageBounds.height / 2;
-    return { x, y };
-  } else {
-    return { x: 0, y: 0 };
+  const midX = imageBounds.width / 2;
+  const midY = imageBounds.height / 2;
+
+  const anchor = [
+    objectCenterY > midY ? "bottom" : "top",
+    objectCenterX > midX ? "right" : "left",
+  ].join("-") as AnchorPosition;
+
+  const offset = isDesktop() ? 24 : 16;
+  const isMobile = !isDesktop();
+  const mobileXShift = 32;
+  const mobileYOffset = 6;
+
+  let offsetX = 0,
+    offsetY = 0;
+
+  switch (anchor) {
+    case "top-left":
+      offsetX = isMobile ? offset - mobileXShift : offset;
+      offsetY = isMobile ? offset + mobileYOffset : offset;
+      break;
+    case "top-right":
+      offsetX = isMobile ? -offset + mobileXShift : -offset;
+      offsetY = isMobile ? offset + mobileYOffset : offset;
+      break;
+    case "bottom-left":
+      offsetX = isMobile ? offset - mobileXShift : offset;
+      offsetY = isMobile ? -offset - mobileYOffset : -offset;
+      break;
+    case "bottom-right":
+      offsetX = isMobile ? -offset + mobileXShift : -offset;
+      offsetY = isMobile ? -offset - mobileYOffset : -offset;
+      break;
   }
+
+  const screenX = imageBounds.left + objectCenterX + offsetX;
+  const screenY = imageBounds.top + objectCenterY + offsetY;
+
+  if (containerElement) {
+    const containerRect = containerElement.getBoundingClientRect();
+    const x = screenX - containerRect.left;
+    const y = screenY - containerRect.top;
+    return { x, y, anchor };
+  }
+
+  return { x: screenX, y: screenY, anchor };
 };
 
 export { calculateImageBounds } from "../../Image/bounds";
@@ -93,7 +138,6 @@ export const resetSearchState = () => ({
 export interface VisualSearchParams {
   imageUrl: string;
   token: string;
-  componentToken?: string;
   campaignId?: string;
 }
 
@@ -114,7 +158,7 @@ export const performVisualSearch = async (
 
     const result = await makeUploadFileRequest(
       "shopTheLook",
-      params.componentToken || params.token,
+      params.token,
       params.campaignId,
     )(imageFile);
 
@@ -141,9 +185,8 @@ export const performVisualSearch = async (
 export interface DetectedObjectClickParams {
   detectedObject: Rectangle;
   imageElement: HTMLImageElement;
-  token: string;
-  componentToken?: string;
   containerElement?: HTMLElement;
+  token: string;
   visualSearchId?: string | null;
   campaignId?: string;
   isSearchInProgress: boolean;
@@ -161,11 +204,10 @@ export const handleDetectedObjectClick = async (
   const {
     imageElement,
     detectedObject,
+    containerElement,
     visualSearchId,
-    componentToken,
     token,
     campaignId,
-    containerElement,
     isSearchInProgress,
     setSearchInProgress,
   } = params;
@@ -186,7 +228,7 @@ export const handleDetectedObjectClick = async (
     const result = await makeVisualSearchRequest(
       "shopTheLook",
       visualSearchId || null,
-      componentToken || token,
+      token,
       campaignId,
     );
 
@@ -196,6 +238,7 @@ export const handleDetectedObjectClick = async (
         const searchResults = searchResponse.data?.products || [];
         const modalPosition = calculateModalPosition(
           imageElement,
+          detectedObject,
           containerElement,
         );
 
