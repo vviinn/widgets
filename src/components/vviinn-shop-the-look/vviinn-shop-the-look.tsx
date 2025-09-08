@@ -177,10 +177,10 @@ export class VviinnShopTheLook {
     this.rerenderTrigger++;
   }
 
-  private resetDetailedView() {
+  private resetDetailedView = () => {
     this.showDetailedView = false;
     this.selectedProductIndex = 0;
-  }
+  };
 
   private clearModalAndSlideState() {
     this.showModal = false;
