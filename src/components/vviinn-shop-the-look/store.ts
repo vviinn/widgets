@@ -18,7 +18,7 @@ export interface ImageState {
 export interface ObserverConfig {
   threshold: number;
   token: string;
-  isIntersecting: boolean;
+  isWidgetVisible: boolean;
   totalImages: number;
   onImageVisibilityChange: () => void;
   onVisualSearchTrigger: (index: number) => void;
@@ -119,7 +119,7 @@ export class ShopTheLookImageStore {
   ): boolean {
     const isNewlyVisible = isVisible && wasVisible === false;
     const hasRequiredTokenAndState =
-      this.config.isIntersecting && this.config.token;
+      this.config.isWidgetVisible && this.config.token;
     const isSearchEligible =
       !currentState.searchCompleted && !currentState.searchTriggered;
     const hasCapacityForMoreSearches =

@@ -53,7 +53,7 @@ export const renderDetectedObjects = (props: DetectedObjectsProps) => {
 export interface SwiperProps {
   totalImages: number;
   imageUrls: string[];
-  currentImageIndex: number;
+  swiperActiveIndex: number;
   height: number;
   imageElement: HTMLImageElement;
   detectedObjects: Rectangle[];
@@ -81,7 +81,7 @@ export const renderSwiper = (props: SwiperProps) => {
   const {
     totalImages,
     imageUrls,
-    currentImageIndex,
+    swiperActiveIndex,
     height,
     onSlideChange,
     onImageRef,
@@ -114,7 +114,7 @@ export const renderSwiper = (props: SwiperProps) => {
     if (el && !el.swiper) {
       configureSwiperElement(el, {
         isDesktop: desktop,
-        initialSlide: currentImageIndex,
+        initialSlide: swiperActiveIndex,
         pagination: true,
         keyboard: true,
       });
@@ -147,12 +147,6 @@ export const renderSwiper = (props: SwiperProps) => {
         ref={swiperRef}
         onSlideChange={onSlideChange}
         style={swiperStyles}
-        slides-per-view={desktop ? "auto" : "1"}
-        space-between={desktop ? "20" : "0"}
-        initial-slide={currentImageIndex.toString()}
-        keyboard="true"
-        allow-touch-move="true"
-        centered-slides="false"
         pagination={!desktop ? "true" : undefined}
         pagination-clickable={!desktop ? "true" : undefined}
       >
@@ -174,11 +168,11 @@ export const renderSwiper = (props: SwiperProps) => {
       {desktop && shouldShowArrows && (
         <div class="carousel-navigation">
           <div
-            class={`swiper-button-prev ${currentImageIndex === 0 ? "disabled" : ""}`}
+            class={`swiper-button-prev ${swiperActiveIndex === 0 ? "disabled" : ""}`}
             onClick={handlePrevClick}
           />
           <div
-            class={`swiper-button-next ${currentImageIndex === totalImages - 1 ? "disabled" : ""}`}
+            class={`swiper-button-next ${swiperActiveIndex === totalImages - 1 ? "disabled" : ""}`}
             onClick={handleNextClick}
           />
         </div>
@@ -233,7 +227,7 @@ export const renderProductGrid = (props: ProductGridProps) => {
 
 export interface ProductDetailsSliderProps {
   searchResults: Recommendation[];
-  currentProductIndex: number;
+  selectedProductIndex: number;
   currencySign?: string;
   onProductClick: (product: Recommendation) => void;
   onBackToGrid: () => void;
@@ -243,7 +237,7 @@ export interface ProductDetailsSliderProps {
 export const renderProductDetails = (props: ProductDetailsSliderProps) => {
   const {
     searchResults,
-    currentProductIndex,
+    selectedProductIndex,
     onProductClick,
     onBackToGrid,
     currencySign,
@@ -251,7 +245,7 @@ export const renderProductDetails = (props: ProductDetailsSliderProps) => {
 
   if (!searchResults.length) return null;
 
-  const selectedProduct = searchResults[currentProductIndex];
+  const selectedProduct = searchResults[selectedProductIndex];
   if (!selectedProduct) return null;
 
   return (
@@ -279,7 +273,7 @@ export const renderProductDetails = (props: ProductDetailsSliderProps) => {
               ""
             }
             imageResolutionWidth={300}
-            imageWidth={160}
+            imageWidth={isDesktop() ? 160 : 120}
             currency={currencySign || ""}
             deeplink={selectedProduct.deeplink}
             onVviinnProductClick={() => onProductClick(selectedProduct)}
@@ -296,8 +290,8 @@ export interface ModalProps {
   modalPosition: ModalPosition | null;
   searchResults: Recommendation[];
   onProductClick: (product: Recommendation) => void;
-  showSliderView?: boolean;
-  currentProductIndex?: number;
+  showDetailedView?: boolean;
+  selectedProductIndex?: number;
   currencySign?: string;
   onProductDetailsClick?: (product: Recommendation, index: number) => void;
   onBackToGrid?: () => void;
@@ -312,8 +306,8 @@ export const renderModal = (props: ModalProps) => {
     modalPosition,
     searchResults,
     onProductClick,
-    showSliderView = false,
-    currentProductIndex = 0,
+    showDetailedView = false,
+    selectedProductIndex = 0,
     onProductDetailsClick,
     onBackToGrid,
     onNavigateProduct,
@@ -326,10 +320,11 @@ export const renderModal = (props: ModalProps) => {
   const isMobile = !isDesktop();
 
   let modalStyle = {};
-  if (modalPosition && !isMobile) {
+  if (modalPosition) {
     modalStyle = {
       "--modal-x": `${modalPosition.x}px`,
       "--modal-y": `${modalPosition.y}px`,
+      ...(modalPosition.anchor && { "--modal-anchor": modalPosition.anchor }),
     };
   }
 
@@ -341,7 +336,9 @@ export const renderModal = (props: ModalProps) => {
       onClick={(e) => e.stopPropagation()}
     >
       <div class="modal-body">
-        <div class={`product-grid-container ${showSliderView ? "hidden" : ""}`}>
+        <div
+          class={`product-grid-container ${showDetailedView ? "hidden" : ""}`}
+        >
           {searchResults.length > 0 &&
             renderProductGrid({
               searchResults,
@@ -350,12 +347,12 @@ export const renderModal = (props: ModalProps) => {
             })}
         </div>
         <div
-          class={`product-details-container ${!showSliderView ? "hidden" : ""}`}
+          class={`product-details-container ${!showDetailedView ? "hidden" : ""}`}
         >
           {searchResults.length > 0 &&
             renderProductDetails({
               searchResults,
-              currentProductIndex,
+              selectedProductIndex,
               onProductClick,
               currencySign,
               onBackToGrid,
