@@ -135,6 +135,7 @@ export class VviinnExtendedFilters {
   private state?: SearchStore;
   private eventAbortController?: AbortController;
   private filterAnnouncementRef?: HTMLElement;
+  private isPreviewInlineMode: boolean;
 
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
     this.showInWidget !== isTriggeredByVpsWidget;
@@ -376,16 +377,19 @@ export class VviinnExtendedFilters {
                         part="extended-filters-row-wrapper"
                       >
                         <button
-                          onClick={() =>
-                            this.handleMoreOptionsMainClick(mainFilter.column)
-                          }
+                          onClick={(event) => {
+                            if (this.isPreviewInlineMode) {
+                              event.stopPropagation();
+                            }
+                            this.handleMoreOptionsMainClick(mainFilter.column);
+                          }}
                           class="filters-modal-main-button"
                           part="extended-filters-main-button"
                           aria-expanded={isExpanded ? "true" : "false"}
                           type="button"
                         >
                           <span>{mainFilter.label}</span>
-                          {this.mode !== "preview-inline" &&
+                          {!this.isPreviewInlineMode &&
                             addedOptions.length > 0 && (
                               <div
                                 class="filters-modal-main-button-added-options"
@@ -539,9 +543,10 @@ export class VviinnExtendedFilters {
     const optionsVisible = this.selectedMoreOptions.includes(column);
 
     if (optionsVisible) {
-      this.selectedMoreOptions = this.selectedMoreOptions.filter(
-        (option) => option !== column,
-      );
+      this.selectedMoreOptions = [
+        ...this.selectedMoreOptions.filter((option) => option !== column),
+      ];
+      this.displayedOptionsCount = new Map(this.displayedOptionsCount);
       this.displayedOptionsCount.delete(column);
     } else {
       this.vviinnFilterTriggered.emit({
@@ -549,7 +554,10 @@ export class VviinnExtendedFilters {
         kind: column,
         isTriggeredByVpsWidget: this.showInWidget,
       });
-      this.selectedMoreOptions = [...this.selectedMoreOptions, column];
+
+      this.selectedMoreOptions = this.isPreviewInlineMode
+        ? [column]
+        : [...this.selectedMoreOptions, column];
     }
   }
 
@@ -583,6 +591,7 @@ export class VviinnExtendedFilters {
   connectedCallback() {
     const { state } = useSearchStore(this.showInWidget);
     this.state = state;
+    this.isPreviewInlineMode = this.mode === "preview-inline";
     this.eventAbortController = new AbortController();
     const { signal } = this.eventAbortController;
 
@@ -640,14 +649,18 @@ export class VviinnExtendedFilters {
 
   @Listen("click", { target: "body" })
   bodyClickListener(event: ClickEvent) {
-    if (
-      this.mode === "preview" ||
-      this.mode === "preview-inline" ||
-      !this.showMore ||
-      this.isKeyboardClick(event)
-    ) {
+    if (this.mode === "preview" || this.isKeyboardClick(event)) return;
+
+    if (this.isPreviewInlineMode && this.selectedMoreOptions.length > 0) {
+      const target = event.target as HTMLElement;
+      if (target === this.el || this.el.contains(target)) return;
+
+      this.selectedMoreOptions = [];
       return;
     }
+
+    if (!this.showMore) return;
+
     const sidebarRect = this.getSidebarRectangle();
     if (
       !sidebarRect ||
