@@ -4,11 +4,7 @@ import {
   getColorOptionAriaLabel,
 } from "../../../a11y";
 
-import {
-  FilterIconCheck,
-  FilterIconClose,
-  FilterIconSquare,
-} from "../../vviinn-icons";
+import { FilterIconCheck, FilterIconClose } from "../../vviinn-icons";
 import {
   DynamicFilterValue,
   ResponseDynamicFilterItem,
@@ -67,23 +63,18 @@ export const RenderFilterButton = ({
             aria-hidden="true"
           ></div>
         )}
-
         {!hasHexCodeLength && <span part="filters-option-text">{label}</span>}
-
-        <div
-          part="filters-option-icon-wrapper"
-          class="filters-option-icon-wrapper"
-          aria-hidden="true"
-        >
-          {!showClose ? (
-            isSelected ? (
-              <FilterIconCheck />
-            ) : (
-              <FilterIconSquare />
-            )
-          ) : null}
-        </div>
-        {isRemovable && <FilterIconClose />}
+        {isRemovable ? (
+          <FilterIconClose />
+        ) : (
+          <div
+            part="filters-option-icon-wrapper"
+            class="filters-option-icon-wrapper"
+            aria-hidden="true"
+          >
+            {!showClose && isSelected ? <FilterIconCheck /> : null}
+          </div>
+        )}
       </button>
     </li>
   );

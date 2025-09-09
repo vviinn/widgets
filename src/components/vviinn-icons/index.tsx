@@ -20,7 +20,6 @@ export { FiltersIcon } from "./icons/FiltersIcon";
 export { NewCloseIcon } from "./icons/NewCloseIcon";
 export { FilterIconCheck } from "./icons/FilterIconCheck";
 export { FilterIconClose } from "./icons/FilterIconClose";
-export { FilterIconSquare } from "./icons/FilterIconSquare";
 export { SimilarProductsIcon } from "./icons/SimilarProductsIcon";
 export { CrossSellingIcon } from "./icons/CrossSellingIcon";
 export { SearchModalCameraIcon } from "./icons/SearchModalCameraIcon";
