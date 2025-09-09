@@ -97,7 +97,7 @@ const FILTER_OPTIONS_STEP_COUNT = 5;
 export class VviinnExtendedFilters {
   @Element() el: HTMLElement;
 
-  @Prop() mode: "button" | "preview" | "modal" = "button";
+  @Prop() mode: "button" | "preview" | "preview-inline" | "modal" = "button";
   @Prop() showHeader?: boolean = true;
 
   /** @internal */
@@ -367,7 +367,10 @@ export class VviinnExtendedFilters {
                   });
 
                   return (
-                    <li part="extended-filters-row">
+                    <li
+                      class="extended-filters-row"
+                      part="extended-filters-row"
+                    >
                       <div
                         class={`filters-modal-main-button-wrapper ${isExpanded ? "open" : ""}`}
                         part="extended-filters-row-wrapper"
@@ -382,14 +385,15 @@ export class VviinnExtendedFilters {
                           type="button"
                         >
                           <span>{mainFilter.label}</span>
-                          {addedOptions.length > 0 && (
-                            <div
-                              class="filters-modal-main-button-added-options"
-                              part="extended-filters-selected-wrapper"
-                            >
-                              {addedOptions}
-                            </div>
-                          )}
+                          {this.mode !== "preview-inline" &&
+                            addedOptions.length > 0 && (
+                              <div
+                                class="filters-modal-main-button-added-options"
+                                part="extended-filters-selected-wrapper"
+                              >
+                                {addedOptions}
+                              </div>
+                            )}
                           <ChevronIconSmall />
                         </button>
 
@@ -579,7 +583,6 @@ export class VviinnExtendedFilters {
   connectedCallback() {
     const { state } = useSearchStore(this.showInWidget);
     this.state = state;
-
     this.eventAbortController = new AbortController();
     const { signal } = this.eventAbortController;
 
@@ -639,6 +642,7 @@ export class VviinnExtendedFilters {
   bodyClickListener(event: ClickEvent) {
     if (
       this.mode === "preview" ||
+      this.mode === "preview-inline" ||
       !this.showMore ||
       this.isKeyboardClick(event)
     ) {
