@@ -611,6 +611,15 @@ vviinn-range-filter {
   color: var(--color-icon-inverse);
 }
 
+.filters-modal.preview-inline .filters-modal-sub-list:has(vviinn-range-filter) {
+  padding: 0 var(--spacing-75);
+  width: 200px;
+}
+
+.filters-modal.preview-inline vviinn-range-filter {
+  width: 100%;
+}
+
 @media (max-width: 768px) {
   .sub-filters-wrapper,
   .selected-filters-wrapper {

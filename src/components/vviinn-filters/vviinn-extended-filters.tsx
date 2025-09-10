@@ -401,32 +401,32 @@ export class VviinnExtendedFilters {
                           <ChevronIconSmall />
                         </button>
 
-                        {mainFilter.type === "interval" && isExpanded ? (
-                          <vviinn-range-filter
-                            histogram={filterOptions as Histogram}
-                            intervalChangeHandler={(filterValue) =>
-                              this.intervalFilterChangeHandler(
-                                filterValue,
+                        <ul
+                          class="filters-modal-sub-list"
+                          part="extended-filters-sub-list"
+                        >
+                          {mainFilter.type === "interval" && isExpanded ? (
+                            <vviinn-range-filter
+                              histogram={filterOptions as Histogram}
+                              intervalChangeHandler={(filterValue) =>
+                                this.intervalFilterChangeHandler(
+                                  filterValue,
+                                  mainFilter.column,
+                                )
+                              }
+                              selectedInterval={getSelectedInterval(
+                                this.requestFilters,
                                 mainFilter.column,
-                              )
-                            }
-                            selectedInterval={getSelectedInterval(
-                              this.requestFilters,
-                              mainFilter.column,
-                            )}
-                            showCurrency={isPriceFilter(mainFilter.column)}
-                          />
-                        ) : (
-                          <ul
-                            class="filters-modal-sub-list"
-                            part="extended-filters-sub-list"
-                          >
-                            {this.renderFilterOptions(
+                              )}
+                              showCurrency={isPriceFilter(mainFilter.column)}
+                            />
+                          ) : (
+                            this.renderFilterOptions(
                               mainFilter,
                               filterOptions,
-                            )}
-                          </ul>
-                        )}
+                            )
+                          )}
+                        </ul>
                       </div>
                     </li>
                   );
