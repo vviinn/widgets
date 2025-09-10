@@ -281,6 +281,7 @@ vviinn-range-filter {
 
 .filters-modal-main-button-wrapper.open .filters-modal-main-button > svg {
   transform: rotate(-90deg);
+  color: var(--color-icon-primary);
 }
 
 .filters-modal-sub-list {

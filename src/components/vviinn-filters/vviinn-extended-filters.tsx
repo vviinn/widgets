@@ -421,10 +421,7 @@ export class VviinnExtendedFilters {
                               showCurrency={isPriceFilter(mainFilter.column)}
                             />
                           ) : (
-                            this.renderFilterOptions(
-                              mainFilter,
-                              filterOptions,
-                            )
+                            this.renderFilterOptions(mainFilter, filterOptions)
                           )}
                         </ul>
                       </div>
@@ -476,33 +473,39 @@ export class VviinnExtendedFilters {
     filterOptions: FilterOptions,
   ) {
     const { column: filterColumn } = filter;
-    this.initializeDisplayedOptions(filterColumn);
 
-    const displayedCount =
-      this.displayedOptionsCount.get(filterColumn) ||
-      FILTER_OPTIONS_INITIAL_COUNT;
+    let displayedCount: number;
+    if (this.isPreviewInlineMode) {
+      displayedCount = filterOptions.length;
+    } else {
+      this.initializeDisplayedOptions(filterColumn);
+      displayedCount =
+        this.displayedOptionsCount.get(filterColumn) ||
+        FILTER_OPTIONS_INITIAL_COUNT;
+    }
+
+    const optionsToShow = filterOptions.slice(0, displayedCount);
+    const hasMoreOptions = displayedCount < filterOptions.length;
 
     return (
       <Fragment>
-        {filterOptions
-          .slice(0, displayedCount)
-          .map(({ value, label, active }) => {
-            const isSelected = isSubFilterActive(
-              this.requestFilters,
-              value,
-              filter,
-            );
+        {optionsToShow.map(({ value, label, active }) => {
+          const isSelected = isSubFilterActive(
+            this.requestFilters,
+            value,
+            filter,
+          );
 
-            return RenderFilterButton({
-              handleSubFilterSelection: this.handleSubFilterSelection,
-              selectedFilter: filter,
-              value,
-              label,
-              active,
-              isSelected,
-            });
-          })}
-        {displayedCount < filterOptions.length && (
+          return RenderFilterButton({
+            handleSubFilterSelection: this.handleSubFilterSelection,
+            selectedFilter: filter,
+            value,
+            label,
+            active,
+            isSelected,
+          });
+        })}
+        {hasMoreOptions && (
           <li role="listitem">
             <button
               onClick={() =>
