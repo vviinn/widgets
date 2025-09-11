@@ -171,6 +171,7 @@ export class VviinnSelectedFilters {
 
   private handleImageUploadFinished = ({ detail }: SearchIdEvent) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
+    this.textSearchCustomFilter = null;
     this.getUploadedImageSrc();
   };
 
