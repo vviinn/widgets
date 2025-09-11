@@ -9,17 +9,27 @@ import PreviewAndCodeTabs from "../../components/tabs/PreviewAndCodeTabs.mdx"
 
 # Filters
 
+The filters components allow users to refine product search results. There are two main components: `vviinn-filters` displays selected primary filters in compact mode, while `vviinn-extended-filters` shows all activated filters with multiple display modes.
+
 <p>In order to see the results, you need to use this component in combination with other components like Product List.</p>
 
 <PreviewAndCodeTabs tabData={{groupId:'primary', header:"Primary View",
+    descriptionText:"Shows filters marked as primary in Panel, displayed in compact mode.",
     component:  <vviinn-filters filters-string={filters} locale="en-US"></vviinn-filters>,
     code:'<vviinn-filters locale="en-US"></vviinn-filters>'}}/>
 
 <PreviewAndCodeTabs tabData={{groupId:'extended', header:"Modal View",
+    descriptionText:"Shows all activated filters in a modal overlay (vviinn-extended-filters default mode).",
     component:   <vviinn-extended-filters filters-string={extendedFilters} locale="en-US"></vviinn-extended-filters>,
     code:'<vviinn-extended-filters locale="en-US"></vviinn-extended-filters>'}}/>
 
-<PreviewAndCodeTabs tabData={{groupId:'extendedPreview', header:"Extended View",
+<PreviewAndCodeTabs tabData={{groupId:'previewInline', header:"Inline Preview",
+    descriptionText:"Shows all activated filters with categories displayed in a single row and values shown in a modal with search functionality.",
+    component:   <vviinn-extended-filters filters-string={extendedFilters} mode="preview-inline" locale="en-US"></vviinn-extended-filters>,
+    code:'<vviinn-extended-filters mode="preview-inline" locale="en-US"></vviinn-extended-filters>'}}/>
+
+<PreviewAndCodeTabs tabData={{groupId:'extendedPreview', header:"Preview",
+    descriptionText:"Shows all activated filters displayed directly in the interface without modal overlay.",
     component:   <vviinn-extended-filters filters-string={extendedFilters} mode="preview" locale="en-US"></vviinn-extended-filters>,
     code:'<vviinn-extended-filters mode="preview" locale="en-US"></vviinn-extended-filters>'}}/>
 
