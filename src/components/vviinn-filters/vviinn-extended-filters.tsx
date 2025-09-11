@@ -28,7 +28,9 @@ import {
   isSubFilterActive,
   RenderFilterButton,
   getSelectedInterval,
+  RenderSearchInput,
 } from "./helpers";
+import { filterOptionsBySearch } from "./helpers/searchHelper";
 import { isPriceFilter } from "../../filters";
 import { resources } from "../../locale";
 
@@ -52,6 +54,7 @@ import { ResponseIntervalFilterItem } from "../../interfaces";
  * @slot vviinn-extended-filters-apply - Title of Apply Button.
  * @slot vviinn-extended-filters-reset - Title of Reset Button.
  * @slot vviinn-extended-filters-no-filters - Message shown when no filters are available.
+ * @slot vviinn-filters-search-icon - Custom icon for the search input.
  *
  * @part extended-filters-modal - Modal itself.
  * @part extended-filters-modal-wrapper - Wrapper for the modal.
@@ -69,6 +72,10 @@ import { ResponseIntervalFilterItem } from "../../interfaces";
  * @part extended-filters-actions - Wrapper for the actions.
  * @part extended-filters-apply - Apply button.
  * @part extended-filters-reset - Reset button.
+ *
+ * @part filters-search-input-container - Container for the search input with icon.
+ * @part filters-search-icon - Icon wrapper for the search input.
+ * @part filters-search-input - Search input field.
  *
  * @part filters-sub-row - Row of the sub filters.
  * @part filters-option-button - Button of the sub filter.
@@ -114,6 +121,7 @@ export class VviinnExtendedFilters {
   @State() showMore: boolean = false;
   @State() selectedMoreOptions: string[] = [];
   @State() displayedOptionsCount: Map<string, number> = new Map();
+  @State() searchTerm: string = "";
 
   /** The filter's state changes */
   @Event({ bubbles: true })
@@ -146,7 +154,12 @@ export class VviinnExtendedFilters {
   private resetOptionsInteractions() {
     this.displayedOptionsCount = new Map();
     this.selectedMoreOptions = [];
+    this.searchTerm = "";
   }
+
+  private handleSearchInput = (searchTerm: string) => {
+    this.searchTerm = searchTerm;
+  };
 
   private announceFilterChange(message: string) {
     announceToScreenReader(message, this.filterAnnouncementRef);
@@ -420,9 +433,22 @@ export class VviinnExtendedFilters {
                               )}
                               showCurrency={isPriceFilter(mainFilter.column)}
                             />
-                          ) : (
-                            this.renderFilterOptions(mainFilter, filterOptions)
-                          )}
+                          ) : isExpanded ? (
+                            <Fragment>
+                              {this.isPreviewInlineMode &&
+                                RenderSearchInput({
+                                  searchTerm: this.searchTerm,
+                                  onSearchInput: this.handleSearchInput,
+                                  placeholder: i18next.t(
+                                    "filters.search.placeholder",
+                                  ),
+                                })}
+                              {this.renderFilterOptions(
+                                mainFilter,
+                                filterOptions,
+                              )}
+                            </Fragment>
+                          ) : null}
                         </ul>
                       </div>
                     </li>
@@ -474,9 +500,14 @@ export class VviinnExtendedFilters {
   ) {
     const { column: filterColumn } = filter;
 
+    const isCategoricalFilter = filter.type === "categorical";
+    const filteredOptions = isCategoricalFilter
+      ? filterOptionsBySearch(filterOptions as any, this.searchTerm)
+      : filterOptions;
+
     let displayedCount: number;
     if (this.isPreviewInlineMode) {
-      displayedCount = filterOptions.length;
+      displayedCount = filteredOptions.length;
     } else {
       this.initializeDisplayedOptions(filterColumn);
       displayedCount =
@@ -484,8 +515,8 @@ export class VviinnExtendedFilters {
         FILTER_OPTIONS_INITIAL_COUNT;
     }
 
-    const optionsToShow = filterOptions.slice(0, displayedCount);
-    const hasMoreOptions = displayedCount < filterOptions.length;
+    const optionsToShow = filteredOptions.slice(0, displayedCount);
+    const hasMoreOptions = displayedCount < filteredOptions.length;
 
     return (
       <Fragment>
@@ -509,13 +540,13 @@ export class VviinnExtendedFilters {
           <li role="listitem">
             <button
               onClick={() =>
-                this.showMoreOptions(filterColumn, filterOptions.length)
+                this.showMoreOptions(filterColumn, filteredOptions.length)
               }
               class="filters-more-modal-button"
               part="filters-option-button"
               type="button"
               aria-label={i18next.t("a11y.showMoreOptions", {
-                count: filterOptions.length - displayedCount,
+                count: filteredOptions.length - displayedCount,
                 label: filter.label,
               })}
             >
@@ -562,6 +593,9 @@ export class VviinnExtendedFilters {
         ? [column]
         : [...this.selectedMoreOptions, column];
     }
+
+    // Reset search when switching filters
+    this.searchTerm = "";
   }
 
   private handleFiltersChanged = ({

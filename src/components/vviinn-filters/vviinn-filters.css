@@ -34,6 +34,54 @@ vviinn-range-filter {
   padding-bottom: var(--spacing-150);
 }
 
+.filters-search-input-container {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-50) var(--spacing-50) var(--spacing-50) 0;
+}
+
+.filters-search-icon {
+  position: absolute;
+  left: var(--spacing-100);
+  color: var(--color-icon-helper);
+  z-index: 1;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filters-search-input {
+  width: 100%;
+  padding: var(--spacing-100) var(--spacing-100) var(--spacing-100)
+    var(--spacing-500);
+  border: 1px solid var(--color-border-01);
+  border-radius: var(--border-radius-100);
+  background: var(--color-bg-base);
+  font-family: var(--font-family, var(--font-family-base));
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-400);
+  line-height: var(--line-height-body);
+  color: var(--color-text-primary);
+  box-sizing: border-box;
+  outline: none;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.filters-search-input::placeholder {
+  color: var(--color-text-placeholder);
+}
+
+.filters-search-input:focus {
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 2px var(--color-border-focus-shadow);
+}
+
 .filters-modal-main-button,
 .filters-sub-button,
 .filters-main-button,
@@ -567,7 +615,7 @@ vviinn-range-filter {
 }
 
 .filters-modal.preview-inline .filters-modal-sub-list {
-  max-height: 200px;
+  max-height: 210px;
   width: max-content;
   min-width: 140px;
   height: fit-content;

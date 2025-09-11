@@ -11,6 +11,7 @@ export { PlusIcon } from "./icons/PlusIcon";
 export { RoundCameraIcon } from "./icons/RoundCameraIcon";
 export { SecondaryActionIcon } from "./icons/SecondaryActionIcon";
 export { TextSearchIcon } from "./icons/TextSearchIcon";
+export { SearchIcon } from "./icons/SearchIcon";
 export { UpdateIcon } from "./icons/UpdateIcon";
 export { UploadActionIcon } from "./icons/UploadActionIcon";
 export { VisualSearchIcon } from "./icons/VisualSearchIcon";
