@@ -637,6 +637,11 @@ vviinn-range-filter {
   scrollbar-width: thin;
 }
 
+.filters-modal.preview-inline .align-right .filters-modal-sub-list {
+  left: auto;
+  right: 0;
+}
+
 .filters-modal.preview-inline .filters-more-modal-button {
   width: 100%;
   justify-content: space-between;

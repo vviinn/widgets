@@ -29,6 +29,7 @@ import {
   RenderFilterButton,
   getSelectedInterval,
   RenderSearchInput,
+  applyRightAlignmentToModal,
 } from "./helpers";
 import { filterOptionsBySearch } from "./helpers/searchHelper";
 import { isPriceFilter } from "../../filters";
@@ -394,7 +395,10 @@ export class VviinnExtendedFilters {
                             if (this.isPreviewInlineMode) {
                               event.stopPropagation();
                             }
-                            this.handleMoreOptionsMainClick(mainFilter.column);
+                            this.handleMoreOptionsMainClick(
+                              mainFilter.column,
+                              event,
+                            );
                           }}
                           class="filters-modal-main-button"
                           part="extended-filters-main-button"
@@ -573,7 +577,7 @@ export class VviinnExtendedFilters {
     });
   };
 
-  private handleMoreOptionsMainClick(column: string) {
+  private handleMoreOptionsMainClick(column: string, event?: Event) {
     const optionsVisible = this.selectedMoreOptions.includes(column);
 
     if (optionsVisible) {
@@ -592,9 +596,12 @@ export class VviinnExtendedFilters {
       this.selectedMoreOptions = this.isPreviewInlineMode
         ? [column]
         : [...this.selectedMoreOptions, column];
+
+      if (this.isPreviewInlineMode && event) {
+        this.applyModalPositioning(event);
+      }
     }
 
-    // Reset search when switching filters
     this.searchTerm = "";
   }
 
@@ -672,6 +679,18 @@ export class VviinnExtendedFilters {
     }
   };
 
+  private applyModalPositioning(event: Event): void {
+    const button = event.target as HTMLElement;
+    const categoryElement = button.closest(
+      ".extended-filters-row",
+    ) as HTMLElement;
+    if (categoryElement) {
+      requestAnimationFrame(() => {
+        applyRightAlignmentToModal(categoryElement);
+      });
+    }
+  }
+
   private getAsideElement(): HTMLElement {
     return this.el.shadowRoot.querySelector("aside");
   }
@@ -690,7 +709,13 @@ export class VviinnExtendedFilters {
 
     if (this.isPreviewInlineMode && this.selectedMoreOptions.length > 0) {
       const target = event.target as HTMLElement;
-      if (target === this.el || this.el.contains(target)) return;
+      const actualTarget = (event.composedPath && event.composedPath()[0]) || target;
+
+      const isClickInModal = (actualTarget as HTMLElement).closest?.('.filters-modal-sub-list');
+      if (isClickInModal) return;
+
+      const isClickOnCategoryButton = (actualTarget as HTMLElement).closest?.('.filters-modal-main-button');
+      if (isClickOnCategoryButton) return;
 
       this.selectedMoreOptions = [];
       return;
