@@ -5,7 +5,7 @@ export { isSubFilterActive } from "./isSubFilterActive";
 export { RenderCustomButton } from "./RenderCustomButton";
 export { RenderFilterButton } from "./RenderFilterButton";
 export { RenderSearchInput } from "./RenderSearchInput";
-export { 
-  isCategoryOnRightSide, 
-  applyRightAlignmentToModal
+export {
+  isCategoryOnRightSide,
+  applyRightAlignmentToModal,
 } from "./modalPositioning";

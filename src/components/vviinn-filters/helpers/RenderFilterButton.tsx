@@ -40,7 +40,7 @@ export const RenderFilterButton = ({
     if (isRemovable) {
       return <FilterIconClose />;
     }
-    
+
     return (
       <div
         part="filters-option-icon-wrapper"
