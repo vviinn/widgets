@@ -107,6 +107,8 @@ export class VviinnExtendedFilters {
 
   @Prop() mode: "button" | "preview" | "preview-inline" | "modal" = "button";
   @Prop() showHeader?: boolean = true;
+  /** Minimum number of filter options required to show search bar in preview-inline mode. Set to 0 to always show, or a high number to never show. */
+  @Prop() searchThreshold?: number = 0;
 
   /** @internal */
   @Prop() filtersString: string = "";
@@ -440,6 +442,7 @@ export class VviinnExtendedFilters {
                           ) : isExpanded ? (
                             <Fragment>
                               {this.isPreviewInlineMode &&
+                                filterOptions.length >= this.searchThreshold &&
                                 RenderSearchInput({
                                   searchTerm: this.searchTerm,
                                   onSearchInput: this.handleSearchInput,
