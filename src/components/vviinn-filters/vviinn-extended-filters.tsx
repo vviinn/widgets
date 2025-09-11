@@ -635,8 +635,8 @@ export class VviinnExtendedFilters {
   private isKeyboardClick = (event: ClickEvent): boolean =>
     event.clientX === 0 && event.clientY === 0;
 
-  @Listen("click", { target: "body" })
-  bodyClickListener(event: ClickEvent) {
+  @Listen("mousedown", { target: "body" })
+  bodyMouseDownListener(event: MouseEvent) {
     if (
       this.mode === "preview" ||
       !this.showMore ||
