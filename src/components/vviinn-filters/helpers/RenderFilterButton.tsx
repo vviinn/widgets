@@ -36,6 +36,22 @@ export const RenderFilterButton = ({
   const hasHexCodeLength = hexCode?.length > 0;
   const isRemovable = isSelected && showClose;
 
+  const renderIcon = (): JSX.Element => {
+    if (isRemovable) {
+      return <FilterIconClose />;
+    }
+    
+    return (
+      <div
+        part="filters-option-icon-wrapper"
+        class="filters-option-icon-wrapper"
+        aria-hidden="true"
+      >
+        {isSelected ? <FilterIconCheck /> : null}
+      </div>
+    );
+  };
+
   const ariaLabel = isRemovable
     ? getRemoveFilterAriaLabel(label)
     : hasHexCodeLength
@@ -64,17 +80,7 @@ export const RenderFilterButton = ({
           ></div>
         )}
         {!hasHexCodeLength && <span part="filters-option-text">{label}</span>}
-        {isRemovable ? (
-          <FilterIconClose />
-        ) : (
-          <div
-            part="filters-option-icon-wrapper"
-            class="filters-option-icon-wrapper"
-            aria-hidden="true"
-          >
-            {!showClose && isSelected ? <FilterIconCheck /> : null}
-          </div>
-        )}
+        {renderIcon()}
       </button>
     </li>
   );

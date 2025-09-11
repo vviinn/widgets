@@ -711,10 +711,10 @@ export class VviinnExtendedFilters {
       const target = event.target as HTMLElement;
       const actualTarget = (event.composedPath && event.composedPath()[0]) || target;
 
-      const isClickInModal = (actualTarget as HTMLElement).closest?.('.filters-modal-sub-list');
+      const isClickInModal = (actualTarget as HTMLElement).closest('.filters-modal-sub-list');
       if (isClickInModal) return;
 
-      const isClickOnCategoryButton = (actualTarget as HTMLElement).closest?.('.filters-modal-main-button');
+      const isClickOnCategoryButton = (actualTarget as HTMLElement).closest('.filters-modal-main-button');
       if (isClickOnCategoryButton) return;
 
       this.selectedMoreOptions = [];
