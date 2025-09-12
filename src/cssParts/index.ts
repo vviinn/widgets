@@ -4,6 +4,7 @@ import {
   histogramPartsList,
   generalFiltersPartsList,
   selectedFiltersPartsList,
+  searchPartsList,
 } from "./filters";
 
 import {
@@ -22,6 +23,7 @@ export const extendedFiltersParts = makeExportPartsString(
   extendedFiltersPartsList,
   histogramPartsList,
   generalFiltersPartsList,
+  searchPartsList,
 );
 
 export const filtersParts = makeExportPartsString(
@@ -60,6 +62,7 @@ export const searchWidgetFilterParts = makeExportPartsString(
   extendedFiltersPartsList,
   filtersPartsList,
   histogramPartsList,
+  searchPartsList,
   generalFiltersPartsList,
 );
 

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.186.0](https://github.com/vviinn/widgets/compare/v2.185.0...v2.186.0) (2025-09-12)
+
+
+### Features
+
+* Preview-inline mode for vviinn-extended-filters, allowing categories to appear in a single row and displaying values in the modal with search functionality. ([3b2fe94](https://github.com/vviinn/widgets/commit/3b2fe94677187055df9d4fb1ae6d00d6a6013066))
+
 ## [2.185.0](https://github.com/vviinn/widgets/compare/v2.184.0...v2.185.0) (2025-09-08)
 
 
