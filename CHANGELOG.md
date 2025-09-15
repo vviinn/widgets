@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.187.0](https://github.com/vviinn/widgets/compare/v2.186.0...v2.187.0) (2025-09-15)
+
+
+### Features
+
+*  Add documentation for customizing search button content ([7b18b76](https://github.com/vviinn/widgets/commit/7b18b76a2e169274189bceabbb3375d4aa19040a))
+
+
+### Bug Fixes
+
+* Prevent extended filters modal close on slider drag release outside bounds. ([4414357](https://github.com/vviinn/widgets/commit/4414357f03fb7c2a38639d8fa076595177c86f1a))
+* Reset the text query selected filter after uploading a photo. ([538c63b](https://github.com/vviinn/widgets/commit/538c63b65e3198b64c00e2737b6c2e1cfa5df969))
+
 ## [2.186.0](https://github.com/vviinn/widgets/compare/v2.185.0...v2.186.0) (2025-09-12)
 
 
