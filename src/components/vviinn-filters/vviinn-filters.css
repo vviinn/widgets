@@ -637,9 +637,12 @@ vviinn-range-filter {
 
 .filters-modal.preview-inline .filters-more-modal-button {
   width: 100%;
-  justify-content: space-between;
   gap: var(--spacing-150);
   background-color: var(--color-bg-base);
+}
+
+.filters-modal.preview-inline .filters-option-icon-wrapper {
+  margin-left: auto;
 }
 
 .filters-modal.preview-inline .filters-more-modal-button:hover {

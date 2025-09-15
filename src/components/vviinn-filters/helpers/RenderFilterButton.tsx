@@ -21,6 +21,7 @@ type RenderButtonProps = {
   selectedFilter: ResponseDynamicFilterItem;
   isSelected?: boolean;
   showClose?: boolean;
+  showColorLabel?: boolean;
 };
 
 export const RenderFilterButton = ({
@@ -31,6 +32,7 @@ export const RenderFilterButton = ({
   selectedFilter,
   isSelected = false,
   showClose = false,
+  showColorLabel,
 }: RenderButtonProps): JSX.Element => {
   const hexCode = value?.hexCode;
   const hasHexCodeLength = hexCode?.length > 0;
@@ -79,7 +81,9 @@ export const RenderFilterButton = ({
             aria-hidden="true"
           ></div>
         )}
-        {!hasHexCodeLength && <span part="filters-option-text">{label}</span>}
+        {(showColorLabel || !hasHexCodeLength) && (
+          <span part="filters-option-text">{label}</span>
+        )}
         {renderIcon()}
       </button>
     </li>

@@ -530,6 +530,7 @@ export class VviinnExtendedFilters {
           return RenderFilterButton({
             handleSubFilterSelection: this.handleSubFilterSelection,
             selectedFilter: filter,
+            showColorLabel: this.isPreviewInlineMode,
             value,
             label,
             active,
