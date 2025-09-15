@@ -30,6 +30,7 @@
 }
 
 vviinn-range-filter {
+  width: 100%;
   max-width: 500px;
   padding-bottom: var(--spacing-150);
 }

@@ -43,11 +43,11 @@ import {
   TriggerSourceEvent,
   TriggerSourceEventData,
 } from "../../recommendation/events";
-import { ClickEvent, isClickedInRectBound } from "../../geometry/Rectangle";
+import { ClickEvent } from "../../geometry/Rectangle";
 import { triggerFilter, triggerResetFilters } from "./helpers/triggerFilter";
 import { SearchStore, useSearchStore } from "../../store/search.store";
 import { globalState } from "../../store/store";
-import { addEventListenersWithSignal } from "../../dom";
+import { addEventListenersWithSignal, isElementInSelector } from "../../dom";
 import { ResponseIntervalFilterItem } from "../../interfaces";
 
 /**
@@ -199,15 +199,8 @@ export class VviinnExtendedFilters {
   }
 
   private resetModal = () => {
-    triggerResetFilters({
-      vviinnFilterTriggered: this.vviinnFilterTriggered,
-      vviinnFiltersChanged: this.vviinnFiltersChanged,
-      el: this.el,
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
-    this.vviinnSelectedFiltersReset.emit({
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
+    triggerResetFilters(this.getFilterEventData());
+    this.vviinnSelectedFiltersReset.emit(this.getEventTriggerData());
 
     this.handleCloseModal();
   };
@@ -227,7 +220,7 @@ export class VviinnExtendedFilters {
   showMoreWatcher(modalOpen) {
     this.vviinnFilterTriggered.emit({
       action: modalOpen ? "open" : "close",
-      isTriggeredByVpsWidget: this.showInWidget,
+      ...this.getEventTriggerData(),
     });
 
     if (modalOpen) {
@@ -573,10 +566,7 @@ export class VviinnExtendedFilters {
       filterValue,
       selectedFilter,
       requestFilters: this.requestFilters,
-      vviinnFilterTriggered: this.vviinnFilterTriggered,
-      vviinnFiltersChanged: this.vviinnFiltersChanged,
-      el: this.el,
-      isTriggeredByVpsWidget: this.showInWidget,
+      ...this.getFilterEventData(),
     });
   };
 
@@ -593,7 +583,7 @@ export class VviinnExtendedFilters {
       this.vviinnFilterTriggered.emit({
         action: "show",
         kind: column,
-        isTriggeredByVpsWidget: this.showInWidget,
+        ...this.getEventTriggerData(),
       });
 
       this.selectedMoreOptions = this.isPreviewInlineMode
@@ -694,54 +684,35 @@ export class VviinnExtendedFilters {
     }
   }
 
-  private getAsideElement(): HTMLElement {
-    return this.el.shadowRoot.querySelector("aside");
-  }
-
-  private getSidebarRectangle(): DOMRect {
-    const asideElement = this.getAsideElement();
-    return asideElement.getBoundingClientRect();
-  }
-
   private isKeyboardClick = (event: ClickEvent): boolean =>
     event.clientX === 0 && event.clientY === 0;
+
+  private getEventTriggerData = () => ({
+    isTriggeredByVpsWidget: this.showInWidget,
+  });
+
+  private getFilterEventData = () => ({
+    vviinnFilterTriggered: this.vviinnFilterTriggered,
+    vviinnFiltersChanged: this.vviinnFiltersChanged,
+    el: this.el,
+    ...this.getEventTriggerData(),
+  });
 
   @Listen("mousedown", { target: "body" })
   bodyMouseDownListener(event: MouseEvent) {
     if (this.mode === "preview" || this.isKeyboardClick(event)) return;
+    if (isElementInSelector(event, ".filters-modal-list")) return;
 
-    if (this.isPreviewInlineMode && this.selectedMoreOptions.length > 0) {
-      const target = event.target as HTMLElement;
-      const actualTarget =
-        (event.composedPath && event.composedPath()[0]) || target;
+    const hasOpenModal =
+      this.showMore ||
+      (this.isPreviewInlineMode && this.selectedMoreOptions.length > 0);
+    if (!hasOpenModal) return;
 
-      const isClickInModal = (actualTarget as HTMLElement).closest(
-        ".filters-modal-sub-list",
-      );
-      if (isClickInModal) return;
-
-      const isClickOnCategoryButton = (actualTarget as HTMLElement).closest(
-        ".filters-modal-main-button",
-      );
-      if (isClickOnCategoryButton) return;
-
+    if (this.isPreviewInlineMode) {
       this.selectedMoreOptions = [];
-      return;
+    } else {
+      this.handleCloseModal();
     }
-
-    if (!this.showMore) return;
-
-    const sidebarRect = this.getSidebarRectangle();
-    if (
-      !sidebarRect ||
-      sidebarRect.width === 0 ||
-      sidebarRect.height === 0 ||
-      isClickedInRectBound(event, sidebarRect)
-    ) {
-      return;
-    }
-
-    this.handleCloseModal();
   }
 
   render() {
