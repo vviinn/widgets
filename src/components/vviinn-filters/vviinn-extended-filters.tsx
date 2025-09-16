@@ -234,6 +234,18 @@ export class VviinnExtendedFilters {
     }
   }
 
+  @Watch("selectedMoreOptions")
+  selectedMoreOptionsWatcher(newOptions: string[]) {
+    if (this.isPreviewInlineMode && newOptions.length > 0) {
+      setTimeout(() => {
+        const searchInput = this.el.shadowRoot.querySelector(
+          ".filters-search-input",
+        ) as HTMLElement;
+        searchInput?.focus();
+      }, 0);
+    }
+  }
+
   componentDidRender() {
     this.replaceSlotsContent();
   }
