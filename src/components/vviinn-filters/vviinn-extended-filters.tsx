@@ -388,6 +388,11 @@ export class VviinnExtendedFilters {
                     }
                   });
 
+                  const shouldShowSearch =
+                    this.isPreviewInlineMode &&
+                    mainFilter.type !== "interval" &&
+                    filterOptions.length >= this.searchThreshold;
+
                   return (
                     <li
                       class="extended-filters-row"
@@ -425,43 +430,45 @@ export class VviinnExtendedFilters {
                           <ChevronIconSmall />
                         </button>
 
-                        <ul
-                          class="filters-modal-sub-list"
-                          part="extended-filters-sub-list"
-                        >
-                          {mainFilter.type === "interval" && isExpanded ? (
-                            <vviinn-range-filter
-                              histogram={filterOptions as Histogram}
-                              intervalChangeHandler={(filterValue) =>
-                                this.intervalFilterChangeHandler(
-                                  filterValue,
-                                  mainFilter.column,
+                        {isExpanded ? (
+                          <div class="filters-search-container">
+                            {shouldShowSearch &&
+                              RenderSearchInput({
+                                searchTerm: this.searchTerm,
+                                onSearchInput: this.handleSearchInput,
+                                placeholder: i18next.t(
+                                  "filters.search.placeholder",
+                                ),
+                              })}
+
+                            <ul
+                              class="filters-modal-sub-list"
+                              part="extended-filters-sub-list"
+                            >
+                              {mainFilter.type === "interval" ? (
+                                <vviinn-range-filter
+                                  histogram={filterOptions as Histogram}
+                                  intervalChangeHandler={(filterValue) =>
+                                    this.intervalFilterChangeHandler(
+                                      filterValue,
+                                      mainFilter.column,
+                                    )
+                                  }
+                                  selectedInterval={getSelectedInterval(
+                                    this.requestFilters,
+                                    mainFilter.column,
+                                  )}
+                                  showCurrency={isPriceFilter(mainFilter.column)}
+                                />
+                              ) : (
+                                this.renderFilterOptions(
+                                  mainFilter,
+                                  filterOptions,
                                 )
-                              }
-                              selectedInterval={getSelectedInterval(
-                                this.requestFilters,
-                                mainFilter.column,
                               )}
-                              showCurrency={isPriceFilter(mainFilter.column)}
-                            />
-                          ) : isExpanded ? (
-                            <Fragment>
-                              {this.isPreviewInlineMode &&
-                                filterOptions.length >= this.searchThreshold &&
-                                RenderSearchInput({
-                                  searchTerm: this.searchTerm,
-                                  onSearchInput: this.handleSearchInput,
-                                  placeholder: i18next.t(
-                                    "filters.search.placeholder",
-                                  ),
-                                })}
-                              {this.renderFilterOptions(
-                                mainFilter,
-                                filterOptions,
-                              )}
-                            </Fragment>
-                          ) : null}
-                        </ul>
+                            </ul>
+                          </div>
+                        ) : null}
                       </div>
                     </li>
                   );
