@@ -74,6 +74,7 @@ import { ResponseIntervalFilterItem } from "../../interfaces";
  * @part extended-filters-apply - Apply button.
  * @part extended-filters-reset - Reset button.
  *
+ * @part filters-search-container - Container wrapping search input and filter list.
  * @part filters-search-input-container - Container for the search input with icon.
  * @part filters-search-icon - Icon wrapper for the search input.
  * @part filters-search-input - Search input field.
@@ -431,7 +432,7 @@ export class VviinnExtendedFilters {
                         </button>
 
                         {isExpanded ? (
-                          <div class="filters-search-container">
+                          <div class="filters-search-container" part="filters-search-container">
                             {shouldShowSearch &&
                               RenderSearchInput({
                                 searchTerm: this.searchTerm,
