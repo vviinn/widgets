@@ -231,7 +231,7 @@ export class VviinnExtendedFilters {
           ".filters-modal-close",
         ) as HTMLElement;
         closeButton?.focus();
-      }, 0);
+      }, 10);
     }
   }
 
@@ -243,7 +243,7 @@ export class VviinnExtendedFilters {
           ".filters-search-input",
         ) as HTMLElement;
         searchInput?.focus();
-      }, 0);
+      }, 10);
     }
   }
 

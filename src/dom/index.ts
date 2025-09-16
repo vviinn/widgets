@@ -92,6 +92,6 @@ export function isElementInSelector(
   const composedPath = event.composedPath?.() || [];
   return (
     !!target?.closest?.(selector) ||
-    composedPath.some((el: any) => el.classList?.contains?.(selector.slice(1)))
+    composedPath.some((el: any) => el.matches?.(selector))
   );
 }
