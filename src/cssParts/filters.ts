@@ -39,6 +39,7 @@ export const filtersPartsList = [
 export const selectedFiltersPartsList = ["selected-filters-list"];
 
 export const searchPartsList = [
+  "filters-search-container",
   "filters-search-input-container",
   "filters-search-icon",
   "filters-search-input",

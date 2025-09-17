@@ -82,3 +82,16 @@ export function setElementInteractivity(
     });
   }
 }
+
+//  Check if an event target matches a selector, including through shadow DOM boundaries
+export function isElementInSelector(
+  event: MouseEvent,
+  selector: string,
+): boolean {
+  const target = event.target as HTMLElement;
+  const composedPath = event.composedPath?.() || [];
+  return (
+    !!target?.closest?.(selector) ||
+    composedPath.some((el: any) => el.matches?.(selector))
+  );
+}
