@@ -33,7 +33,7 @@ import {
 } from "./helpers";
 import { filterOptionsBySearch } from "./helpers/searchHelper";
 import { isPriceFilter } from "../../filters";
-import { resources } from "../../locale";
+import { Locale, resources } from "../../locale";
 
 import { SlotSkeleton, slotChangeListener } from "../customized-slots";
 import { Histogram } from "../vviinn-range-filter/vviinn-range-filter";
@@ -43,11 +43,11 @@ import {
   TriggerSourceEvent,
   TriggerSourceEventData,
 } from "../../recommendation/events";
-import { ClickEvent, isClickedInRectBound } from "../../geometry/Rectangle";
+import { ClickEvent } from "../../geometry/Rectangle";
 import { triggerFilter, triggerResetFilters } from "./helpers/triggerFilter";
 import { SearchStore, useSearchStore } from "../../store/search.store";
 import { globalState } from "../../store/store";
-import { addEventListenersWithSignal } from "../../dom";
+import { addEventListenersWithSignal, isElementInSelector } from "../../dom";
 import { ResponseIntervalFilterItem } from "../../interfaces";
 import { extendedFiltersParts } from "../../cssParts";
 
@@ -75,6 +75,7 @@ import { extendedFiltersParts } from "../../cssParts";
  * @part extended-filters-apply - Apply button.
  * @part extended-filters-reset - Reset button.
  *
+ * @part filters-search-container - Container wrapping search input and filter list.
  * @part filters-search-input-container - Container for the search input with icon.
  * @part filters-search-icon - Icon wrapper for the search input.
  * @part filters-search-input - Search input field.
@@ -114,6 +115,8 @@ export class VviinnExtendedFilters {
   @Prop() showHeader?: boolean = true;
   /** Minimum number of filter options required to show search bar in preview-inline mode. Set to 0 to always show, or a high number to never show. */
   @Prop() searchThreshold?: number = 0;
+  /** The locale for currency formatting and text localization */
+  @Prop() locale?: Locale;
 
   /** @internal */
   @Prop() filtersString: string = "";
@@ -204,15 +207,8 @@ export class VviinnExtendedFilters {
   }
 
   private resetModal = () => {
-    triggerResetFilters({
-      vviinnFilterTriggered: this.vviinnFilterTriggered,
-      vviinnFiltersChanged: this.vviinnFiltersChanged,
-      el: this.el,
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
-    this.vviinnSelectedFiltersReset.emit({
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
+    triggerResetFilters(this.getFilterEventData());
+    this.vviinnSelectedFiltersReset.emit(this.getEventTriggerData());
 
     this.handleCloseModal();
   };
@@ -232,7 +228,7 @@ export class VviinnExtendedFilters {
   showMoreWatcher(modalOpen) {
     this.vviinnFilterTriggered.emit({
       action: modalOpen ? "open" : "close",
-      isTriggeredByVpsWidget: this.showInWidget,
+      ...this.getEventTriggerData(),
     });
 
     if (modalOpen) {
@@ -242,7 +238,19 @@ export class VviinnExtendedFilters {
           ".filters-modal-close",
         ) as HTMLElement;
         closeButton?.focus();
-      }, 0);
+      }, 10);
+    }
+  }
+
+  @Watch("selectedMoreOptions")
+  selectedMoreOptionsWatcher(newOptions: string[]) {
+    if (this.isPreviewInlineMode && newOptions.length > 0) {
+      setTimeout(() => {
+        const searchInput = this.el.shadowRoot.querySelector(
+          ".filters-search-input",
+        ) as HTMLElement;
+        searchInput?.focus();
+      }, 10);
     }
   }
 
@@ -273,7 +281,7 @@ export class VviinnExtendedFilters {
 
   async componentWillLoad() {
     await i18next.init({
-      lng: globalState.locale,
+      lng: this.locale ?? globalState.locale,
       fallbackLng: "en",
       resources,
     });
@@ -388,6 +396,11 @@ export class VviinnExtendedFilters {
                     }
                   });
 
+                  const shouldShowSearch =
+                    this.isPreviewInlineMode &&
+                    mainFilter.type !== "interval" &&
+                    filterOptions.length >= this.searchThreshold;
+
                   return (
                     <li
                       class="extended-filters-row"
@@ -425,43 +438,50 @@ export class VviinnExtendedFilters {
                           <ChevronIconSmall />
                         </button>
 
-                        <ul
-                          class="filters-modal-sub-list"
-                          part="extended-filters-sub-list"
-                        >
-                          {mainFilter.type === "interval" && isExpanded ? (
-                            <vviinn-range-filter
-                              histogram={filterOptions as Histogram}
-                              intervalChangeHandler={(filterValue) =>
-                                this.intervalFilterChangeHandler(
-                                  filterValue,
-                                  mainFilter.column,
+                        {isExpanded ? (
+                          <div
+                            class="filters-search-container"
+                            part="filters-search-container"
+                          >
+                            {shouldShowSearch &&
+                              RenderSearchInput({
+                                searchTerm: this.searchTerm,
+                                onSearchInput: this.handleSearchInput,
+                                placeholder: i18next.t(
+                                  "filters.search.placeholder",
+                                ),
+                              })}
+
+                            <ul
+                              class="filters-modal-sub-list"
+                              part="extended-filters-sub-list"
+                            >
+                              {mainFilter.type === "interval" ? (
+                                <vviinn-range-filter
+                                  histogram={filterOptions as Histogram}
+                                  intervalChangeHandler={(filterValue) =>
+                                    this.intervalFilterChangeHandler(
+                                      filterValue,
+                                      mainFilter.column,
+                                    )
+                                  }
+                                  selectedInterval={getSelectedInterval(
+                                    this.requestFilters,
+                                    mainFilter.column,
+                                  )}
+                                  showCurrency={isPriceFilter(
+                                    mainFilter.column,
+                                  )}
+                                />
+                              ) : (
+                                this.renderFilterOptions(
+                                  mainFilter,
+                                  filterOptions,
                                 )
-                              }
-                              selectedInterval={getSelectedInterval(
-                                this.requestFilters,
-                                mainFilter.column,
                               )}
-                              showCurrency={isPriceFilter(mainFilter.column)}
-                            />
-                          ) : isExpanded ? (
-                            <Fragment>
-                              {this.isPreviewInlineMode &&
-                                filterOptions.length >= this.searchThreshold &&
-                                RenderSearchInput({
-                                  searchTerm: this.searchTerm,
-                                  onSearchInput: this.handleSearchInput,
-                                  placeholder: i18next.t(
-                                    "filters.search.placeholder",
-                                  ),
-                                })}
-                              {this.renderFilterOptions(
-                                mainFilter,
-                                filterOptions,
-                              )}
-                            </Fragment>
-                          ) : null}
-                        </ul>
+                            </ul>
+                          </div>
+                        ) : null}
                       </div>
                     </li>
                   );
@@ -542,6 +562,7 @@ export class VviinnExtendedFilters {
           return RenderFilterButton({
             handleSubFilterSelection: this.handleSubFilterSelection,
             selectedFilter: filter,
+            showColorLabel: this.isPreviewInlineMode,
             value,
             label,
             active,
@@ -578,10 +599,7 @@ export class VviinnExtendedFilters {
       filterValue,
       selectedFilter,
       requestFilters: this.requestFilters,
-      vviinnFilterTriggered: this.vviinnFilterTriggered,
-      vviinnFiltersChanged: this.vviinnFiltersChanged,
-      el: this.el,
-      isTriggeredByVpsWidget: this.showInWidget,
+      ...this.getFilterEventData(),
     });
   };
 
@@ -598,7 +616,7 @@ export class VviinnExtendedFilters {
       this.vviinnFilterTriggered.emit({
         action: "show",
         kind: column,
-        isTriggeredByVpsWidget: this.showInWidget,
+        ...this.getEventTriggerData(),
       });
 
       this.selectedMoreOptions = this.isPreviewInlineMode
@@ -699,54 +717,35 @@ export class VviinnExtendedFilters {
     }
   }
 
-  private getAsideElement(): HTMLElement {
-    return this.el.shadowRoot.querySelector("aside");
-  }
-
-  private getSidebarRectangle(): DOMRect {
-    const asideElement = this.getAsideElement();
-    return asideElement.getBoundingClientRect();
-  }
-
   private isKeyboardClick = (event: ClickEvent): boolean =>
     event.clientX === 0 && event.clientY === 0;
+
+  private getEventTriggerData = () => ({
+    isTriggeredByVpsWidget: this.showInWidget,
+  });
+
+  private getFilterEventData = () => ({
+    vviinnFilterTriggered: this.vviinnFilterTriggered,
+    vviinnFiltersChanged: this.vviinnFiltersChanged,
+    el: this.el,
+    ...this.getEventTriggerData(),
+  });
 
   @Listen("mousedown", { target: "body" })
   bodyMouseDownListener(event: MouseEvent) {
     if (this.mode === "preview" || this.isKeyboardClick(event)) return;
+    if (isElementInSelector(event, ".filters-modal-list")) return;
 
-    if (this.isPreviewInlineMode && this.selectedMoreOptions.length > 0) {
-      const target = event.target as HTMLElement;
-      const actualTarget =
-        (event.composedPath && event.composedPath()[0]) || target;
+    const hasOpenModal =
+      this.showMore ||
+      (this.isPreviewInlineMode && this.selectedMoreOptions.length > 0);
+    if (!hasOpenModal) return;
 
-      const isClickInModal = (actualTarget as HTMLElement).closest(
-        ".filters-modal-sub-list",
-      );
-      if (isClickInModal) return;
-
-      const isClickOnCategoryButton = (actualTarget as HTMLElement).closest(
-        ".filters-modal-main-button",
-      );
-      if (isClickOnCategoryButton) return;
-
+    if (this.isPreviewInlineMode) {
       this.selectedMoreOptions = [];
-      return;
+    } else {
+      this.handleCloseModal();
     }
-
-    if (!this.showMore) return;
-
-    const sidebarRect = this.getSidebarRectangle();
-    if (
-      !sidebarRect ||
-      sidebarRect.width === 0 ||
-      sidebarRect.height === 0 ||
-      isClickedInRectBound(event, sidebarRect)
-    ) {
-      return;
-    }
-
-    this.handleCloseModal();
   }
 
   render() {
