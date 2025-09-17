@@ -33,7 +33,7 @@ import {
 } from "./helpers";
 import { filterOptionsBySearch } from "./helpers/searchHelper";
 import { isPriceFilter } from "../../filters";
-import { resources } from "../../locale";
+import { Locale, resources } from "../../locale";
 
 import { SlotSkeleton, slotChangeListener } from "../customized-slots";
 import { Histogram } from "../vviinn-range-filter/vviinn-range-filter";
@@ -110,6 +110,8 @@ export class VviinnExtendedFilters {
   @Prop() showHeader?: boolean = true;
   /** Minimum number of filter options required to show search bar in preview-inline mode. Set to 0 to always show, or a high number to never show. */
   @Prop() searchThreshold?: number = 0;
+  /** The locale for currency formatting and text localization */
+  @Prop() locale?: Locale;
 
   /** @internal */
   @Prop() filtersString: string = "";
@@ -274,7 +276,7 @@ export class VviinnExtendedFilters {
 
   async componentWillLoad() {
     await i18next.init({
-      lng: globalState.locale,
+      lng: this.locale ?? globalState.locale,
       fallbackLng: "en",
       resources,
     });
@@ -432,7 +434,10 @@ export class VviinnExtendedFilters {
                         </button>
 
                         {isExpanded ? (
-                          <div class="filters-search-container" part="filters-search-container">
+                          <div
+                            class="filters-search-container"
+                            part="filters-search-container"
+                          >
                             {shouldShowSearch &&
                               RenderSearchInput({
                                 searchTerm: this.searchTerm,
@@ -459,7 +464,9 @@ export class VviinnExtendedFilters {
                                     this.requestFilters,
                                     mainFilter.column,
                                   )}
-                                  showCurrency={isPriceFilter(mainFilter.column)}
+                                  showCurrency={isPriceFilter(
+                                    mainFilter.column,
+                                  )}
                                 />
                               ) : (
                                 this.renderFilterOptions(
