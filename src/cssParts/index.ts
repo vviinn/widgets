@@ -15,6 +15,7 @@ import {
   pricePartsList,
   contentCardPartsList,
 } from "./product";
+import { suggestionsPartsList } from "./suggestions";
 
 const makeExportPartsString = (...args: string[][]): string =>
   args.flat().join(", ");
@@ -64,6 +65,7 @@ export const searchWidgetFilterParts = makeExportPartsString(
   histogramPartsList,
   searchPartsList,
   generalFiltersPartsList,
+  selectedFiltersPartsList,
 );
 
 export const searchWidgetButtonParts = makeExportPartsString([
@@ -90,18 +92,5 @@ export const modalParts = makeExportPartsString([
   "close-button",
   "secondary-action",
 ]);
-
-export const suggestionsPartsList = [
-  "suggestions-container",
-  "suggestions-header",
-  "suggestions-icon",
-  "suggestions-title",
-  "suggestions-description",
-  "suggestions-wrapper",
-  "suggestions-list",
-  "suggestion-item",
-  "suggestion-link",
-  "suggestion-filter-button",
-];
 
 export const suggestionsParts = makeExportPartsString(suggestionsPartsList);

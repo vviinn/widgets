@@ -49,6 +49,7 @@ import { SearchStore, useSearchStore } from "../../store/search.store";
 import { globalState } from "../../store/store";
 import { addEventListenersWithSignal } from "../../dom";
 import { ResponseIntervalFilterItem } from "../../interfaces";
+import { extendedFiltersParts } from "../../cssParts";
 
 /**
  * @slot vviinn-extended-filters-title - Text on widget's header.
@@ -105,7 +106,11 @@ const FILTER_OPTIONS_STEP_COUNT = 5;
 export class VviinnExtendedFilters {
   @Element() el: HTMLElement;
 
-  @Prop() mode: "button" | "preview" | "preview-inline" | "modal" = "button";
+  @Prop({ reflect: true }) mode:
+    | "button"
+    | "preview"
+    | "preview-inline"
+    | "modal" = "button";
   @Prop() showHeader?: boolean = true;
   /** Minimum number of filter options required to show search bar in preview-inline mode. Set to 0 to always show, or a high number to never show. */
   @Prop() searchThreshold?: number = 0;
@@ -752,6 +757,7 @@ export class VviinnExtendedFilters {
         class={{
           "show-in-widget": this.showInWidget,
         }}
+        exportParts={extendedFiltersParts}
       >
         <div
           ref={(el) => (this.filterAnnouncementRef = el)}

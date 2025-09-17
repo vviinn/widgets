@@ -34,6 +34,7 @@ import {
 import { triggerFilter } from "./helpers/triggerFilter";
 import { SearchStore, useSearchStore } from "../../store/search.store";
 import { addEventListenersWithSignal } from "../../dom";
+import { filtersParts } from "../../cssParts";
 
 /**
  * @part filters-wrapper - Wrapper for the main filters.
@@ -246,6 +247,7 @@ export class VviinnFilters {
           "show-in-widget": this.showInWidget,
         }}
         onKeyDown={this.handleKeyDown}
+        exportparts={filtersParts}
       >
         <div
           ref={(el) => (this.filterAnnouncementRef = el)}

@@ -40,6 +40,7 @@ import { announceToScreenReader } from "../../a11y";
 import { getLocalStorageItems } from "../../localStorage";
 import { addEventListenersWithSignal } from "../../dom";
 import { Interval, ResponseIntervalFilterItem } from "../../interfaces";
+import { selectedFiltersParts } from "../../cssParts";
 
 /**
  * @part selected-filters-list - List of selected filters.
@@ -312,6 +313,7 @@ export class VviinnSelectedFilters {
         class={{
           "show-in-widget": this.showInWidget,
         }}
+        exportParts={selectedFiltersParts}
       >
         <div
           ref={(el) => (this.filterAnnouncementRef = el)}

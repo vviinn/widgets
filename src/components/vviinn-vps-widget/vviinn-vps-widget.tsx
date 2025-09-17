@@ -61,8 +61,6 @@ import {
   VisualSearchMode,
 } from "../../widget/types";
 import {
-  extendedFiltersParts,
-  filtersParts,
   modalParts,
   productCardParts,
   productCardsGridPart,
@@ -725,7 +723,6 @@ export class VviinnVpsWidget {
             (this.mode === "upload" && this.showingInButton) ||
             (!this.isCameraEnabled && this.isOnboardingSlide())
           }
-          exportparts={modalParts}
         >
           <vviinn-slider position={this.slidePosition}>
             <vviinn-slide
@@ -843,17 +840,15 @@ export class VviinnVpsWidget {
                         hidden: this.showAspectRatioError,
                       }}
                     >
-                      <vviinn-filters
-                        class="preview-filters"
+                      <vviinn-filters showInWidget={true} />
+
+                      <vviinn-selected-filters
                         showInWidget={true}
-                        exportparts={filtersParts}
-                      />
+                      ></vviinn-selected-filters>
 
                       <vviinn-extended-filters
-                        class="preview-extended-filters"
                         mode="preview"
                         showHeader={false}
-                        exportparts={extendedFiltersParts}
                         showInWidget={true}
                       />
 
@@ -864,7 +859,6 @@ export class VviinnVpsWidget {
                             this.state.dynamicFilters.filter((f) => f.isPrimary)
                               .length > 0,
                         }}
-                        exportparts="extended-filters-button"
                         showInWidget={true}
                       />
                     </div>
@@ -906,12 +900,7 @@ export class VviinnVpsWidget {
             </vviinn-slide>
           </vviinn-slider>
 
-          <vviinn-extended-filters
-            class="modal-extended-filters"
-            mode="modal"
-            exportparts={extendedFiltersParts}
-            showInWidget={true}
-          />
+          <vviinn-extended-filters mode="modal" showInWidget={true} />
         </vviinn-overlayed-modal>
       </Host>
     );
