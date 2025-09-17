@@ -224,6 +224,7 @@ Slots that could be used for [Search Modal](?path=/docs/widgets-search-modal--do
 
 ### Search Modal Slots:
 
+* default slot (unnamed) – *Replaces the default search button icon. Can contain any HTML content including text, SVG icons, or other elements*
 * vviinn-teaser-text – *Text on the widget's main screen*
 * vviinn-image-upload-button-text – *Title of Upload Button*
 * vviinn-image-upload-icon - *Icon of Upload Button*
@@ -269,6 +270,18 @@ Slots that could be used for [Search Modal](?path=/docs/widgets-search-modal--do
     </svg>
     <span slot="vviinn-teaser-text">Custom Text</span>
     <span slot="vviinn-image-upload-button-text">Custom Button Text</span>
+</vviinn-vps-button>`}}/>
+
+<PreviewAndCodeTabs tabData={{groupId:"SearchModalTextButton", header:"Text Button Example",
+    descriptionText:"Example showing how to use text content in the default (unnamed) slot to create a text button instead of an icon button.",
+    component:<vviinn-vps-button token={vviinnToken} add-style="false">
+        <span style={{backgroundColor: "lightgreen", padding: "8px 16px"}}>Search Now</span>
+    </vviinn-vps-button>,
+    code:`<vviinn-vps-button
+    token="TOKEN"
+    add-style="false"
+>
+    <span style="background-color: lightgreen; padding: 8px 16px;">Search Now</span>
 </vviinn-vps-button>`}}/>
 
 ## Filters

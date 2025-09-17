@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.187.1](https://github.com/vviinn/widgets/compare/v2.187.0...v2.187.1) (2025-09-17)
+
+
+### Bug Fixes
+
+* Display color labels along with color dots for filters in preview-inline mode. ([accfc28](https://github.com/vviinn/widgets/commit/accfc285a21733a8685dcf1aac69c5be7f0f579d))
+* Interval filters for preview-inline mode. ([2d95e6b](https://github.com/vviinn/widgets/commit/2d95e6b24023b86cf410657e6ee3bb8f94c4ca44))
+
+## [2.187.0](https://github.com/vviinn/widgets/compare/v2.186.0...v2.187.0) (2025-09-15)
+
+
+### Features
+
+*  Add documentation for customizing search button content ([7b18b76](https://github.com/vviinn/widgets/commit/7b18b76a2e169274189bceabbb3375d4aa19040a))
+
+
+### Bug Fixes
+
+* Prevent extended filters modal close on slider drag release outside bounds. ([4414357](https://github.com/vviinn/widgets/commit/4414357f03fb7c2a38639d8fa076595177c86f1a))
+* Reset the text query selected filter after uploading a photo. ([538c63b](https://github.com/vviinn/widgets/commit/538c63b65e3198b64c00e2737b6c2e1cfa5df969))
+
+## [2.186.0](https://github.com/vviinn/widgets/compare/v2.185.0...v2.186.0) (2025-09-12)
+
+
+### Features
+
+* Preview-inline mode for vviinn-extended-filters, allowing categories to appear in a single row and displaying values in the modal with search functionality. ([3b2fe94](https://github.com/vviinn/widgets/commit/3b2fe94677187055df9d4fb1ae6d00d6a6013066))
+
 ## [2.185.0](https://github.com/vviinn/widgets/compare/v2.184.0...v2.185.0) (2025-09-08)
 
 

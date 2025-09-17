@@ -70,6 +70,9 @@ export const resources: Resource = {
           noFiltersMessage:
             "Für die akuelle Suche sind keine Filter verfügbar.",
         },
+        search: {
+          placeholder: "Suche...",
+        },
         imageFilterText: "Bild",
         cropFilterText: "Bildausschnitt",
       },
@@ -201,6 +204,9 @@ export const resources: Resource = {
           apply: "Apply",
           resetFilters: "Reset Filters",
           noFiltersMessage: "No filters available for the current search.",
+        },
+        search: {
+          placeholder: "Search...",
         },
         imageFilterText: "Image",
         cropFilterText: "Crop",
