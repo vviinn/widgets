@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.187.1](https://github.com/vviinn/widgets/compare/v2.187.0...v2.187.1) (2025-09-17)
+
+
+### Bug Fixes
+
+* Display color labels along with color dots for filters in preview-inline mode. ([accfc28](https://github.com/vviinn/widgets/commit/accfc285a21733a8685dcf1aac69c5be7f0f579d))
+* Interval filters for preview-inline mode. ([2d95e6b](https://github.com/vviinn/widgets/commit/2d95e6b24023b86cf410657e6ee3bb8f94c4ca44))
+
 ## [2.187.0](https://github.com/vviinn/widgets/compare/v2.186.0...v2.187.0) (2025-09-15)
 
 
