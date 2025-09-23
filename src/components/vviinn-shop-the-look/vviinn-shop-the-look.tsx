@@ -10,6 +10,7 @@ import {
   Watch,
 } from "@stencil/core";
 import * as E from "fp-ts/lib/Either";
+import { CropperManager } from "./cropper-manager";
 import { Recommendation } from "../../interfaces";
 import { Rectangle } from "../../interfaces/search";
 import { BasicEventData } from "../../recommendation/events";
@@ -27,6 +28,9 @@ import {
   isDesktop,
   shouldRenderDetectedObjects,
   getVisibilityThreshold,
+  calculateImageBounds,
+  isValidImageBounds,
+  findVisibleImageBounds,
 } from "./helpers";
 import { ShopTheLookImageStore, createDefaultImageState } from "./store";
 import { TIMING } from "./constants";
@@ -81,6 +85,8 @@ export class VviinnShopTheLook {
   @Prop() locale: Locale;
   /** Style variant for corner styling - 'rounded' for rounded corners, 'cornered' for sharp corners */
   @Prop() widgetStyle: "rounded" | "cornered" = "rounded";
+  /** Enable cropper mode for manual area selection */
+  @Prop() showCropper: boolean = false;
   /** @internal */
   @Prop() apiPath?: string;
 
@@ -115,6 +121,7 @@ export class VviinnShopTheLook {
   private intersectionObserver: IntersectionObserver;
   private imageStore: ShopTheLookImageStore;
   private modalContentRef: HTMLElement;
+  private cropperManager: CropperManager;
 
   componentWillLoad() {
     updateGlobalState({
@@ -147,6 +154,14 @@ export class VviinnShopTheLook {
       onImageVisibilityChange: this.handleImageVisibilityChange.bind(this),
       onVisualSearchTrigger: this.handleVisualSearchTrigger.bind(this),
     });
+
+    if (this.showCropper) {
+      this.cropperManager = new CropperManager({
+        onCropEnd: (cropArea: Rectangle, imageIndex: number) => {
+          this.handleDetectedObjectClick(cropArea, 0, imageIndex);
+        },
+      });
+    }
   }
 
   componentDidLoad() {
@@ -207,6 +222,7 @@ export class VviinnShopTheLook {
     document.removeEventListener("click", this.handleDocumentClick);
     this.intersectionObserver?.disconnect();
     this.imageStore?.disconnectAll();
+    this.cropperManager?.destroyAll();
 
     const swiperContainer =
       this.el.shadowRoot?.querySelector("swiper-container");
@@ -430,6 +446,7 @@ export class VviinnShopTheLook {
     const imageState = this.imageStore.getImageState(imageIndex);
     const visualSearchId =
       imageState?.visualSearchId || shopTheLookState.visualSearchId || null;
+    const imageBounds = this.getCurrentImageBounds(imageIndex);
 
     const params: DetectedObjectClickParams = {
       detectedObject,
@@ -438,6 +455,7 @@ export class VviinnShopTheLook {
       token: this.token,
       visualSearchId,
       campaignId: this.campaignId,
+      imageBounds,
       isSearchInProgress: this.isSearchInProgress,
       setSearchInProgress: (inProgress: boolean) => {
         this.isSearchInProgress = inProgress;
@@ -563,6 +581,12 @@ export class VviinnShopTheLook {
     });
   };
 
+  private activateCropperForSlide = (activeIndex: number) => {
+    this.cropperManager?.activateCropperForSlide(activeIndex, (index) =>
+      this.imageStore.getImageElement(index),
+    );
+  };
+
   private handleModalClose = (event?: Event) => {
     if (this.showLoadingSpinner) return;
     if (event && event.target !== event.currentTarget) return;
@@ -593,12 +617,14 @@ export class VviinnShopTheLook {
 
   private renderDetectedObjectsWrapper = (imageIndex: number) => {
     const imageState = this.imageStore.getImageState(imageIndex);
+    const isActiveSlide = imageIndex === this.swiperActiveIndex;
 
-    if (!shouldRenderDetectedObjects(imageState)) {
+    if (!shouldRenderDetectedObjects(imageState, isActiveSlide)) {
       return null;
     }
 
-    const imageBounds = fromRenderedImage(imageState.imageElement);
+    const imageBounds =
+      imageState.imageBounds || fromRenderedImage(imageState.imageElement);
 
     const props: DetectedObjectsProps = {
       imageBounds,
@@ -632,6 +658,8 @@ export class VviinnShopTheLook {
             this.loadImageState();
           }
         }
+
+        this.activateCropperForSlide(this.swiperActiveIndex);
       }, TIMING.SLIDE_TRANSITION_DELAY);
     }
   };
@@ -669,11 +697,13 @@ export class VviinnShopTheLook {
       }
 
       if (el.complete && el.offsetWidth > 0) {
-        this.updateImageBoundsForElement(el, index);
+        this.initializeImageForCropper(el, index);
       } else {
         el.addEventListener(
           "load",
-          () => this.updateImageBoundsForElement(el, index),
+          () => {
+            this.initializeImageForCropper(el, index);
+          },
           { once: true },
         );
       }
@@ -690,6 +720,41 @@ export class VviinnShopTheLook {
       }
     });
   };
+
+  private storeOriginalImageBounds = (el: HTMLImageElement, index: number) => {
+    const originalImageBounds = fromRenderedImage(el);
+    const currentState = this.imageStore.getImageState(index);
+    if (currentState) {
+      currentState.imageBounds = originalImageBounds;
+      this.imageStore.setImageState(index, currentState);
+    }
+  };
+
+  private initializeImageForCropper = (el: HTMLImageElement, index: number) => {
+    this.updateImageBoundsForElement(el, index);
+    this.storeOriginalImageBounds(el, index);
+    this.cropperManager?.initializeCropper(el, index, this.swiperActiveIndex);
+  };
+
+  private getCurrentImageBounds(imageIndex: number): Rectangle | null {
+    const imageState = this.imageStore.getImageState(imageIndex);
+
+    // 1. Try direct image element bounds
+    const imageElement = this.imageStore.getImageElement(imageIndex);
+    const directBounds = imageElement
+      ? calculateImageBounds(imageElement)
+      : null;
+    if (isValidImageBounds(directBounds)) {
+      return directBounds;
+    }
+
+    // 2. Find any visible image as fallback
+    return (
+      findVisibleImageBounds(this.el.shadowRoot) ||
+      imageState?.imageBounds ||
+      null
+    );
+  }
 
   private performVisualSearchForImage = async (imageIndex: number) => {
     const imageUrl = this.imageUrlsList[imageIndex];

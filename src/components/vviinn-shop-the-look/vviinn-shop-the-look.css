@@ -1,6 +1,5 @@
 @import "../../variables.css";
-
-/* Base Component Styles */
+@import "../../styles/cropper-shared.css";
 
 :host {
   --shop-the-look-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
@@ -200,10 +199,6 @@ swiper-container::part(bullet-active):hover {
 .desktop-carousel .swiper-button-prev.disabled::after,
 .desktop-carousel .swiper-button-next.disabled::after {
   border-color: var(--color-border-03);
-}
-
-.desktop-carousel .image-container {
-  overflow: visible;
 }
 
 .desktop-carousel .main-image {
@@ -438,10 +433,6 @@ vviinn-image::part(image),
   overflow: visible;
 }
 
-.desktop-carousel .image-container {
-  overflow: visible;
-}
-
 .desktop-carousel .main-image {
   overflow: hidden;
   border-radius: var(--border-radius-200);
@@ -542,6 +533,11 @@ vviinn-image::part(image),
 
 /* Widget Style Variants. Cornered variant overrides all rounded elements */
 
+.cropper-wrap-box {
+  border-radius: var(--border-radius-200);
+  overflow: hidden;
+}
+
 .widget-style-cornered .image-container,
 .widget-style-cornered swiper-container,
 .widget-style-cornered .desktop-carousel .main-image,
@@ -549,6 +545,7 @@ vviinn-image::part(image),
 .widget-style-cornered .result-item,
 .widget-style-cornered .desktop-carousel .swiper-button-prev,
 .widget-style-cornered .desktop-carousel .swiper-button-next,
+.widget-style-cornered .cropper-wrap-box,
 .widget-style-cornered vviinn-image::part(image),
 .widget-style-cornered
   .product-details-card-wrapper
