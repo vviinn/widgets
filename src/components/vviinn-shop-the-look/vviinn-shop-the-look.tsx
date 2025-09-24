@@ -896,6 +896,7 @@ export class VviinnShopTheLook {
       onNavigateNext: this.handleNavigateNext,
       shouldShowArrows: this.showArrows,
       swiperKey: this.swiperKey,
+      allowTouchMove: !this.showCropper,
     };
     return renderSwiper(props);
   };

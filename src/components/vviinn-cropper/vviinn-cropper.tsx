@@ -36,7 +36,8 @@ import {
 } from "../../store/search.store";
 import { getImageSizes } from "../../Image/sizing";
 import { Rectangle } from "../../interfaces";
-import { isCropBoxDataSimilar } from "./helpers/isCropBoxDataSimilar";
+import { isCropBoxChangeMinimal } from "./helpers/isCropBoxDataSimilar";
+import { getCropBoxData } from "./helpers/cropperUtils";
 import { cleanLocalStorage, getLocalStorageItems } from "../../localStorage";
 import { addEventListenersWithSignal } from "../../dom";
 
@@ -220,15 +221,6 @@ export class VviinnCropper {
     });
   }
 
-  private getCropboxData(): Rectangle {
-    const { left, top, width, height } = this.cropper.getCropBoxData();
-    return {
-      left,
-      top,
-      width,
-      height,
-    };
-  }
 
   private loadImage = () => {
     const renderedImageElement = this.el.shadowRoot.querySelector("img");
@@ -271,12 +263,12 @@ export class VviinnCropper {
   };
 
   private cropStart = () => {
-    this.startEndCropBoxData = this.getCropboxData();
+    this.startEndCropBoxData = getCropBoxData(this.cropper);
   };
 
   private cropEnd = () => {
-    const cropboxData = this.getCropboxData();
-    if (isCropBoxDataSimilar(this.startEndCropBoxData, cropboxData)) return;
+    const cropboxData = getCropBoxData(this.cropper);
+    if (isCropBoxChangeMinimal(this.startEndCropBoxData, cropboxData)) return;
 
     this.vviinnCropperCropEnd.emit(cropboxData);
     this.state.searchArea = cropboxData;

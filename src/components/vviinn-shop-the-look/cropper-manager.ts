@@ -2,6 +2,8 @@ import Cropper from "cropperjs";
 import { cropperOptions } from "../vviinn-cropper/constants";
 import { Rectangle } from "../../interfaces/search";
 import { divideOnSized } from "../../geometry/Rectangle";
+import { isCropBoxChangeMinimal } from "../vviinn-cropper/helpers/isCropBoxDataSimilar";
+import { getCropBoxData } from "../vviinn-cropper/helpers/cropperUtils";
 
 export interface CropperManagerConfig {
   onCropEnd: (cropArea: Rectangle, imageIndex: number) => void;
@@ -9,6 +11,7 @@ export interface CropperManagerConfig {
 
 export class CropperManager {
   private cropperInstances: Map<number, Cropper> = new Map();
+  private startCropBoxData: Map<number, Rectangle> = new Map();
   private config: CropperManagerConfig;
 
   constructor(config: CropperManagerConfig) {
@@ -30,6 +33,7 @@ export class CropperManager {
 
     const cropper = new Cropper(imageElement, {
       ...cropperOptions,
+      cropstart: () => this.handleCropStart(cropper, index),
       cropend: () => this.handleCropEnd(cropper, index),
       ready: () => {},
     });
@@ -37,15 +41,28 @@ export class CropperManager {
     this.cropperInstances.set(index, cropper);
   }
 
+  private handleCropStart(cropper: Cropper, imageIndex: number) {
+    this.startCropBoxData.set(imageIndex, getCropBoxData(cropper));
+  }
+
   private handleCropEnd(cropper: Cropper, imageIndex: number) {
-    const cropBoxData = cropper.getCropBoxData();
+    const currentCropBoxData = getCropBoxData(cropper);
+    const startCropBoxData = this.startCropBoxData.get(imageIndex);
+
+    if (
+      startCropBoxData &&
+      isCropBoxChangeMinimal(startCropBoxData, currentCropBoxData)
+    ) {
+      return;
+    }
+
     const imageData = cropper.getImageData();
 
     const adjustedCropBox: Rectangle = {
-      left: cropBoxData.left - imageData.left,
-      top: cropBoxData.top - imageData.top,
-      width: cropBoxData.width,
-      height: cropBoxData.height,
+      left: currentCropBoxData.left - imageData.left,
+      top: currentCropBoxData.top - imageData.top,
+      width: currentCropBoxData.width,
+      height: currentCropBoxData.height,
     };
 
     const normalizedCropArea = divideOnSized({

@@ -65,6 +65,7 @@ export interface SwiperProps {
   shouldShowArrows?: boolean;
   onSwiperRef?: (el: any) => void;
   swiperKey?: string;
+  allowTouchMove?: boolean;
 }
 
 const getImageStyles = (height: number) => {
@@ -91,6 +92,7 @@ export const renderSwiper = (props: SwiperProps) => {
     shouldShowArrows = true,
     onSwiperRef,
     swiperKey,
+    allowTouchMove = true,
   } = props;
 
   if (!imageUrls || imageUrls.length <= 1) {
@@ -117,6 +119,7 @@ export const renderSwiper = (props: SwiperProps) => {
         initialSlide: swiperActiveIndex,
         pagination: true,
         keyboard: true,
+        allowTouchMove,
       });
     }
     if (onSwiperRef) {
