@@ -131,35 +131,6 @@ export {
   type IntersectionObserverConfig,
 } from "../../dom";
 
-export const isValidImageBounds = (bounds: Rectangle | null): boolean => {
-  if (!bounds || bounds.width <= 0 || bounds.height <= 0) {
-    return false;
-  }
-
-  // For mobile, ensure image is actually visible on screen
-  if (!isDesktop()) {
-    return bounds.left >= 0 && bounds.left < window.innerWidth;
-  }
-
-  return true;
-};
-
-export const findVisibleImageBounds = (
-  shadowRoot: ShadowRoot | null,
-): Rectangle | null => {
-  const allImages = shadowRoot?.querySelectorAll("img");
-  if (!allImages) return null;
-
-  for (const img of Array.from(allImages)) {
-    const bounds = calculateImageBounds(img);
-    if (isValidImageBounds(bounds)) {
-      return bounds;
-    }
-  }
-
-  return null;
-};
-
 export const resetSearchState = () => ({
   detectedObjects: [],
   searchResults: [],
@@ -289,5 +260,18 @@ export const handleDetectedObjectClick = async (
     return E.left(`Visual search failed: ${error}`);
   } finally {
     setSearchInProgress(false);
+  }
+};
+
+export const autoSelectFirstObject = (
+  imageIndex: number,
+  detectedObjects: Rectangle[],
+  onSelectObject: (detectedObject: Rectangle, objectIndex: number, imageIndex: number) => Promise<void>,
+  delay: number,
+) => {
+  if (detectedObjects.length > 0) {
+    setTimeout(async () => {
+      await onSelectObject(detectedObjects[0], 0, imageIndex);
+    }, delay);
   }
 };

@@ -29,18 +29,6 @@ export const fromImage = (image: HTMLImageElement): Rectangle => {
   };
 };
 
-export const fromRenderedImage = (
-  image: HTMLImageElement | null | undefined,
-): Rectangle | null => {
-  if (!image) return null;
-  return {
-    left: 0,
-    top: 0,
-    width: image.offsetWidth,
-    height: image.offsetHeight,
-  };
-};
-
 export const fromNaturalImage = (image: HTMLImageElement): Rectangle => {
   return {
     left: 0,
