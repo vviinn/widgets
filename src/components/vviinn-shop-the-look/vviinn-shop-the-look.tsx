@@ -99,7 +99,7 @@ export class VviinnShopTheLook {
   @State() totalImages: number = 1;
   @State() imageUrlsList: string[] = [];
   @State() swiperKey: string = "swiper-0";
-  @State() showArrows: boolean = false;
+  @State() showNavigation: boolean = false;
 
   @State() showLoadingSpinner: boolean = false;
   @State() isSearchInProgress: boolean = false;
@@ -263,19 +263,13 @@ export class VviinnShopTheLook {
   };
 
   private updateArrowsVisibility = () => {
-    const isDesktopView = isDesktop();
-    if (!isDesktopView) {
-      this.showArrows = false;
-      return;
-    }
-
     if (this.imageElement && this.imageElement.offsetWidth > 0) {
       const actualImageWidth = this.imageElement.offsetWidth + 20;
       const availableWidth = window.innerWidth - 100;
       const maxImagesVisible = Math.floor(availableWidth / actualImageWidth);
-      this.showArrows = this.totalImages > maxImagesVisible;
+      this.showNavigation = this.totalImages > maxImagesVisible;
     } else {
-      this.showArrows = this.totalImages > 1;
+      this.showNavigation = this.totalImages > 1;
     }
   };
 
@@ -894,7 +888,7 @@ export class VviinnShopTheLook {
       renderDetectedObjects: this.renderDetectedObjectsWrapper,
       onNavigatePrev: this.handleNavigatePrev,
       onNavigateNext: this.handleNavigateNext,
-      shouldShowArrows: this.showArrows,
+      showNavigation: this.showNavigation,
       swiperKey: this.swiperKey,
       allowTouchMove: !this.showCropper,
     };
@@ -926,7 +920,7 @@ export class VviinnShopTheLook {
     return (
       <Host>
         <div
-          class={`shop-the-look-container ${this.showModal ? "modal-open" : ""} widget-style-${this.widgetStyle}`}
+          class={`shop-the-look-container ${this.showModal ? "modal-open" : ""} ${this.showCropper ? "with-cropper" : ""} widget-style-${this.widgetStyle}`}
         >
           <div class="main-content">
             {this.renderSwiperWrapper()}

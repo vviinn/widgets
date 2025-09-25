@@ -21,7 +21,6 @@
   flex-direction: column;
   gap: var(--spacing-200);
   align-items: center;
-  overflow: hidden;
 }
 
 /* Image Container & Main Image */
@@ -111,6 +110,79 @@ swiper-container::part(bullet-active):hover {
   transform: scale(1.1);
 }
 
+/* Swiper Navigation */
+
+.carousel-navigation {
+  display: flex;
+  position: absolute;
+  bottom: var(--spacing-150);
+  right: var(--spacing-150);
+  gap: var(--spacing-100);
+  z-index: 10;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: var(--border-radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(4px);
+  margin: 0;
+}
+
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border: 2px solid var(--color-icon-helper);
+  border-top: none;
+  border-right: none;
+  transition: border-color 0.3s ease;
+}
+
+.swiper-button-prev::after {
+  transform: rotate(45deg);
+  margin-left: 1px;
+}
+
+.swiper-button-next::after {
+  transform: rotate(-135deg);
+  margin-right: 1px;
+}
+
+.swiper-button-prev:hover::after,
+.swiper-button-next:hover::after {
+  border-color: var(--color-icon-secondary);
+}
+
+.swiper-button-prev.disabled,
+.swiper-button-next.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.swiper-button-prev.disabled::after,
+.swiper-button-next.disabled::after {
+  border-color: var(--color-border-03);
+}
+
 /* Desktop Carousel */
 
 .desktop-carousel {
@@ -128,77 +200,6 @@ swiper-container::part(bullet-active):hover {
 .desktop-carousel .swiper-wrapper {
   justify-content: flex-start;
   align-items: flex-start;
-}
-
-.desktop-carousel .carousel-navigation {
-  position: absolute;
-  bottom: var(--spacing-250);
-  right: var(--spacing-250);
-  display: flex;
-  gap: var(--spacing-100);
-  z-index: 10;
-}
-
-.desktop-carousel .swiper-button-prev,
-.desktop-carousel .swiper-button-next {
-  position: relative;
-  width: 32px;
-  height: 32px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: var(--border-radius-full);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  backdrop-filter: blur(4px);
-  margin: 0;
-}
-
-.desktop-carousel .swiper-button-prev:hover,
-.desktop-carousel .swiper-button-next:hover {
-  background: rgba(255, 255, 255, 1);
-  transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.desktop-carousel .swiper-button-prev::after,
-.desktop-carousel .swiper-button-next::after {
-  content: "";
-  width: 8px;
-  height: 8px;
-  border: 2px solid var(--color-icon-helper);
-  border-top: none;
-  border-right: none;
-  transition: border-color 0.3s ease;
-}
-
-.desktop-carousel .swiper-button-prev::after {
-  transform: rotate(45deg);
-  margin-left: 1px;
-}
-
-.desktop-carousel .swiper-button-next::after {
-  transform: rotate(-135deg);
-  margin-right: 1px;
-}
-
-.desktop-carousel .swiper-button-prev:hover::after,
-.desktop-carousel .swiper-button-next:hover::after {
-  border-color: var(--color-icon-secondary);
-}
-
-.desktop-carousel .swiper-button-prev.disabled,
-.desktop-carousel .swiper-button-next.disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-.desktop-carousel .swiper-button-prev.disabled::after,
-.desktop-carousel .swiper-button-next.disabled::after {
-  border-color: var(--color-border-03);
 }
 
 .desktop-carousel .main-image {
@@ -447,10 +448,6 @@ vviinn-image::part(image),
   display: flex;
 }
 
-.desktop-carousel .carousel-navigation {
-  display: flex;
-}
-
 .desktop-carousel {
   max-width: none;
 }
@@ -472,9 +469,7 @@ vviinn-image::part(image),
 }
 
 @media (max-width: 768px) {
-  .shop-the-look-container .swiper-button-prev,
-  .shop-the-look-container .swiper-button-next,
-  .shop-the-look-container .carousel-navigation {
+  .shop-the-look-container:not(.with-cropper) .carousel-navigation {
     display: none;
   }
 
@@ -519,6 +514,11 @@ vviinn-image::part(image),
     width: min(140px, calc(100vw - 32px));
     height: min(140px, calc(100vw - 32px));
     gap: var(--spacing-50);
+  }
+
+  .carousel-navigation {
+    bottom: var(--spacing-50);
+    right: var(--spacing-50);
   }
 
   .product-details-card-wrapper {

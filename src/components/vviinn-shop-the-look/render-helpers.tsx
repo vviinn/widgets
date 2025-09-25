@@ -1,4 +1,4 @@
-import { h } from "@stencil/core";
+import { Fragment, h } from "@stencil/core";
 import { Rectangle } from "../../interfaces/search";
 import { Recommendation } from "../../interfaces";
 import { BasicEventData } from "../../recommendation/events";
@@ -62,7 +62,7 @@ export interface SwiperProps {
   renderDetectedObjects: (imageIndex: number) => any;
   onNavigatePrev?: () => void;
   onNavigateNext?: () => void;
-  shouldShowArrows?: boolean;
+  showNavigation?: boolean;
   onSwiperRef?: (el: any) => void;
   swiperKey?: string;
   allowTouchMove?: boolean;
@@ -89,7 +89,7 @@ export const renderSwiper = (props: SwiperProps) => {
     renderDetectedObjects,
     onNavigatePrev,
     onNavigateNext,
-    shouldShowArrows = true,
+    showNavigation = true,
     onSwiperRef,
     swiperKey,
     allowTouchMove = true,
@@ -142,33 +142,35 @@ export const renderSwiper = (props: SwiperProps) => {
   const swiperStyles = getSwiperStyles(desktop);
 
   return (
-    <div
-      class={`swiper-wrapper ${desktop ? "desktop-carousel" : "mobile-slider"}`}
-    >
-      <swiper-container
-        key={swiperKey}
-        ref={swiperRef}
-        onSlideChange={onSlideChange}
-        style={swiperStyles}
-        pagination={!desktop ? "true" : undefined}
-        pagination-clickable={!desktop ? "true" : undefined}
+    <Fragment>
+      <div
+        class={`swiper-wrapper ${desktop ? "desktop-carousel" : "mobile-slider"}`}
       >
-        {imageUrls.map((url, index) => (
-          <swiper-slide key={index}>
-            <div class="image-container">
-              <img
-                ref={(el: HTMLImageElement) => onImageRef(el, index)}
-                src={url}
-                alt={`Shop the look ${index + 1}`}
-                class="main-image"
-                style={getImageStyles(height)}
-              />
-              {renderDetectedObjects(index)}
-            </div>
-          </swiper-slide>
-        ))}
-      </swiper-container>
-      {desktop && shouldShowArrows && (
+        <swiper-container
+          key={swiperKey}
+          ref={swiperRef}
+          onSlideChange={onSlideChange}
+          style={swiperStyles}
+          pagination={!desktop ? "true" : undefined}
+          pagination-clickable={!desktop ? "true" : undefined}
+        >
+          {imageUrls.map((url, index) => (
+            <swiper-slide key={index}>
+              <div class="image-container">
+                <img
+                  ref={(el: HTMLImageElement) => onImageRef(el, index)}
+                  src={url}
+                  alt={`Shop the look ${index + 1}`}
+                  class="main-image"
+                  style={getImageStyles(height)}
+                />
+                {renderDetectedObjects(index)}
+              </div>
+            </swiper-slide>
+          ))}
+        </swiper-container>
+      </div>
+      {showNavigation && (
         <div class="carousel-navigation">
           <div
             class={`swiper-button-prev ${swiperActiveIndex === 0 ? "disabled" : ""}`}
@@ -180,7 +182,7 @@ export const renderSwiper = (props: SwiperProps) => {
           />
         </div>
       )}
-    </div>
+    </Fragment>
   );
 };
 
