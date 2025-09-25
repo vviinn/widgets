@@ -1,4 +1,4 @@
-import { Fragment, h } from "@stencil/core";
+import { h } from "@stencil/core";
 import { Rectangle } from "../../interfaces/search";
 import { Recommendation } from "../../interfaces";
 import { BasicEventData } from "../../recommendation/events";
@@ -78,6 +78,29 @@ const getImageStyles = (height: number) => {
   };
 };
 
+export const renderNavigation = (
+  swiperActiveIndex: number,
+  totalImages: number,
+  onNavigatePrev: () => void,
+  onNavigateNext: () => void,
+) => {
+  const handlePrevClick = () => onNavigatePrev();
+  const handleNextClick = () => onNavigateNext();
+
+  return (
+    <div class="carousel-navigation">
+      <div
+        class={`swiper-button-prev ${swiperActiveIndex === 0 ? "disabled" : ""}`}
+        onClick={handlePrevClick}
+      />
+      <div
+        class={`swiper-button-next ${swiperActiveIndex === totalImages - 1 ? "disabled" : ""}`}
+        onClick={handleNextClick}
+      />
+    </div>
+  );
+};
+
 export const renderSwiper = (props: SwiperProps) => {
   const {
     totalImages,
@@ -89,7 +112,7 @@ export const renderSwiper = (props: SwiperProps) => {
     renderDetectedObjects,
     onNavigatePrev,
     onNavigateNext,
-    showNavigation = true,
+    showNavigation,
     onSwiperRef,
     swiperKey,
     allowTouchMove = true,
@@ -127,22 +150,10 @@ export const renderSwiper = (props: SwiperProps) => {
     }
   };
 
-  const handlePrevClick = () => {
-    if (onNavigatePrev) {
-      onNavigatePrev();
-    }
-  };
-
-  const handleNextClick = () => {
-    if (onNavigateNext) {
-      onNavigateNext();
-    }
-  };
-
   const swiperStyles = getSwiperStyles(desktop);
 
   return (
-    <Fragment>
+    <div class="swiper-container-wrapper">
       <div
         class={`swiper-wrapper ${desktop ? "desktop-carousel" : "mobile-slider"}`}
       >
@@ -170,19 +181,14 @@ export const renderSwiper = (props: SwiperProps) => {
           ))}
         </swiper-container>
       </div>
-      {showNavigation && (
-        <div class="carousel-navigation">
-          <div
-            class={`swiper-button-prev ${swiperActiveIndex === 0 ? "disabled" : ""}`}
-            onClick={handlePrevClick}
-          />
-          <div
-            class={`swiper-button-next ${swiperActiveIndex === totalImages - 1 ? "disabled" : ""}`}
-            onClick={handleNextClick}
-          />
-        </div>
-      )}
-    </Fragment>
+      {showNavigation &&
+        renderNavigation(
+          swiperActiveIndex,
+          totalImages,
+          onNavigatePrev,
+          onNavigateNext,
+        )}
+    </div>
   );
 };
 

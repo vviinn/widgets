@@ -99,7 +99,7 @@ export class VviinnShopTheLook {
   @State() totalImages: number = 1;
   @State() imageUrlsList: string[] = [];
   @State() swiperKey: string = "swiper-0";
-  @State() showNavigation: boolean = false;
+  @State() needNavigation: boolean = false;
 
   @State() showLoadingSpinner: boolean = false;
   @State() isSearchInProgress: boolean = false;
@@ -267,9 +267,9 @@ export class VviinnShopTheLook {
       const actualImageWidth = this.imageElement.offsetWidth + 20;
       const availableWidth = window.innerWidth - 100;
       const maxImagesVisible = Math.floor(availableWidth / actualImageWidth);
-      this.showNavigation = this.totalImages > maxImagesVisible;
+      this.needNavigation = this.totalImages > maxImagesVisible;
     } else {
-      this.showNavigation = this.totalImages > 1;
+      this.needNavigation = this.totalImages > 1;
     }
   };
 
@@ -888,9 +888,9 @@ export class VviinnShopTheLook {
       renderDetectedObjects: this.renderDetectedObjectsWrapper,
       onNavigatePrev: this.handleNavigatePrev,
       onNavigateNext: this.handleNavigateNext,
-      showNavigation: this.showNavigation,
       swiperKey: this.swiperKey,
       allowTouchMove: !this.showCropper,
+      showNavigation: (this.needNavigation && isDesktop()) || !this.showCropper,
     };
     return renderSwiper(props);
   };

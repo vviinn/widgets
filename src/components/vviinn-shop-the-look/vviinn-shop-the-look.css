@@ -44,6 +44,11 @@
 
 /* Swiper Base Styles */
 
+.swiper-container-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
 .swiper-wrapper {
   position: relative;
   width: 100%;
