@@ -139,7 +139,7 @@ export class VviinnShopTheLook {
     this.totalImages = this.imageUrlsList.length;
 
     this.currentViewMode = isDesktop() ? "desktop" : "mobile";
-    this.updateArrowsVisibility();
+    this.updateNavigationVisibility();
 
     const isDesktopView = isDesktop();
     const threshold = getVisibilityThreshold(isDesktopView);
@@ -238,7 +238,7 @@ export class VviinnShopTheLook {
 
   private handleResize = () => {
     this.checkViewModeChange();
-    this.updateArrowsVisibility();
+    this.updateNavigationVisibility();
     this.triggerReRender();
   };
 
@@ -262,7 +262,7 @@ export class VviinnShopTheLook {
     }
   };
 
-  private updateArrowsVisibility = () => {
+  private updateNavigationVisibility = () => {
     if (this.imageElement && this.imageElement.offsetWidth > 0) {
       const actualImageWidth = this.imageElement.offsetWidth + 20;
       const availableWidth = window.innerWidth - 100;
@@ -773,7 +773,7 @@ export class VviinnShopTheLook {
   ) => {
     requestAnimationFrame(() => {
       if (index === this.swiperActiveIndex || this.totalImages <= 1) {
-        this.updateArrowsVisibility();
+        this.updateNavigationVisibility();
       }
     });
   };

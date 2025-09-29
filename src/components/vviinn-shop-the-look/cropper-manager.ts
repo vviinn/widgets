@@ -35,7 +35,6 @@ export class CropperManager {
       ...cropperOptions,
       cropstart: () => this.handleCropStart(cropper, index),
       cropend: () => this.handleCropEnd(cropper, index),
-      ready: () => {},
     });
 
     this.cropperInstances.set(index, cropper);
