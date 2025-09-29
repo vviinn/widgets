@@ -16,7 +16,6 @@ export default {
 };
 
 const Template = (args) => `
-  <div style="max-width: 100%; padding: 20px;">
     <vviinn-shop-the-look
       image-urls="${args.imageUrls}"
       token="${args.token}"
@@ -28,7 +27,6 @@ const Template = (args) => `
       widget-style="${args.widgetStyle}"
       show-cropper="${args.showCropper}"
     ></vviinn-shop-the-look>
-  </div>
 `;
 
 export const Default = Template.bind({});

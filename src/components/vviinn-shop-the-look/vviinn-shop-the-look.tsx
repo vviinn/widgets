@@ -890,7 +890,7 @@ export class VviinnShopTheLook {
       onNavigateNext: this.handleNavigateNext,
       swiperKey: this.swiperKey,
       allowTouchMove: !this.showCropper,
-      showNavigation: (this.needNavigation && isDesktop()) || !this.showCropper,
+      showNavigation: (this.needNavigation && isDesktop()) || this.showCropper,
     };
     return renderSwiper(props);
   };
