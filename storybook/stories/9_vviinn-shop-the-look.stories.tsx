@@ -26,6 +26,7 @@ const Template = (args) => `
       api-path="${args.apiPath}"
       locale="${args.locale}"
       widget-style="${args.widgetStyle}"
+      show-cropper="${args.showCropper}"
     ></vviinn-shop-the-look>
   </div>
 `;
@@ -43,6 +44,7 @@ const initArgs = {
   apiPath: process.env.STORYBOOK_API_PATH,
   locale: "en-US",
   widgetStyle: "rounded",
+  showCropper: false,
 };
 
 Default.args = argsFromParams(initArgs);
