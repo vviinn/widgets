@@ -58,7 +58,9 @@ export const shouldRenderDetectedObjects = (
 ): boolean => {
   if (!imageState) return false;
 
-  return isActiveSlide || imageState.isVisible;
+  return isDesktop()
+    ? imageState.searchCompleted && imageState.detectedObjects?.length > 0
+    : isActiveSlide;
 };
 
 export const calculateModalPosition = (
@@ -266,7 +268,11 @@ export const handleDetectedObjectClick = async (
 export const autoSelectFirstObject = (
   imageIndex: number,
   detectedObjects: Rectangle[],
-  onSelectObject: (detectedObject: Rectangle, objectIndex: number, imageIndex: number) => Promise<void>,
+  onSelectObject: (
+    detectedObject: Rectangle,
+    objectIndex: number,
+    imageIndex: number,
+  ) => Promise<void>,
   delay: number,
 ) => {
   if (detectedObjects.length > 0) {

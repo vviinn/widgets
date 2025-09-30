@@ -18,6 +18,15 @@ export class CropperManager {
     this.config = config;
   }
 
+  private destroyCropper(index: number) {
+    const cropper = this.cropperInstances.get(index);
+    if (cropper) {
+      cropper.destroy();
+      this.cropperInstances.delete(index);
+      this.startCropBoxData.delete(index);
+    }
+  }
+
   initializeCropper(
     imageElement: HTMLImageElement,
     index: number,
@@ -28,7 +37,7 @@ export class CropperManager {
     }
 
     if (this.cropperInstances.has(index)) {
-      this.cropperInstances.get(index)?.destroy();
+      this.destroyCropper(index);
     }
 
     const cropper = new Cropper(imageElement, {
@@ -76,11 +85,8 @@ export class CropperManager {
     activeIndex: number,
     getImageElement: (index: number) => HTMLImageElement | null,
   ) {
-    this.cropperInstances.forEach((cropper, index) => {
-      if (index !== activeIndex) {
-        cropper.destroy();
-        this.cropperInstances.delete(index);
-      }
+    this.cropperInstances.forEach((_cropper, index) => {
+      if (index !== activeIndex) this.destroyCropper(index);
     });
 
     if (!this.cropperInstances.has(activeIndex)) {
@@ -98,6 +104,7 @@ export class CropperManager {
   destroyAll() {
     this.cropperInstances.forEach((cropper) => cropper.destroy());
     this.cropperInstances.clear();
+    this.startCropBoxData.clear();
   }
 
   hasCropper(index: number): boolean {
@@ -108,10 +115,8 @@ export class CropperManager {
     index: number,
     getImageElement: (index: number) => HTMLImageElement | null,
   ) {
-    const cropper = this.cropperInstances.get(index);
-    if (cropper) {
-      cropper.destroy();
-      this.cropperInstances.delete(index);
+    if (this.cropperInstances.has(index)) {
+      this.destroyCropper(index);
 
       const imageElement = getImageElement(index);
       if (

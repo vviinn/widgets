@@ -20,7 +20,6 @@ export interface ObserverConfig {
   token: string;
   isWidgetVisible: boolean;
   totalImages: number;
-  onImageVisibilityChange: () => void;
   onVisualSearchTrigger: (index: number) => void;
 }
 
@@ -102,8 +101,6 @@ export class ShopTheLookImageStore {
     }
 
     this.updateImageState(index, { isVisible });
-
-    this.config.onImageVisibilityChange();
 
     if (this.shouldTriggerSearch(index, isVisible, wasVisible, currentState)) {
       this.updateImageState(index, { searchTriggered: true });

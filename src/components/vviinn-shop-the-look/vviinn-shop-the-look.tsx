@@ -149,7 +149,6 @@ export class VviinnShopTheLook {
       token: this.token,
       isWidgetVisible: this.isWidgetVisible,
       totalImages: this.totalImages,
-      onImageVisibilityChange: this.handleImageVisibilityChange.bind(this),
       onVisualSearchTrigger: this.handleVisualSearchTrigger.bind(this),
     });
 
@@ -173,21 +172,11 @@ export class VviinnShopTheLook {
   @Watch("currentViewMode")
   onViewModeChange(newViewMode: "desktop" | "mobile" | null) {
     if (newViewMode) {
-      if (this.showModal) {
-        this.handleModalClose();
-      }
-
-      setTimeout(() => {
+      requestAnimationFrame(() => {
         this.setupSwiperEventListener();
         this.setupSwiperDragEventListeners();
-      }, 100);
+      });
     }
-  }
-
-  @State() private rerenderTrigger: number = 0;
-
-  private triggerReRender() {
-    this.rerenderTrigger++;
   }
 
   private resetDetailedView = () => {
@@ -208,7 +197,6 @@ export class VviinnShopTheLook {
     if (isCurrentImage) {
       this.showLoadingSpinner = false;
     }
-    this.triggerReRender();
   }
 
   private getCurrentImageState() {
@@ -248,8 +236,6 @@ export class VviinnShopTheLook {
         );
       });
     }
-
-    this.triggerReRender();
   };
 
   private handleDocumentClick = (event: Event) => {
@@ -267,7 +253,9 @@ export class VviinnShopTheLook {
     const newViewMode = isDesktop() ? "desktop" : "mobile";
     if (newViewMode !== this.currentViewMode) {
       this.currentViewMode = newViewMode;
-      // Recreate swiper by changing key
+
+      if (this.showModal) this.handleModalClose();
+      // Recreate swiper by changing key to apply new configuration
       this.swiperKey = `swiper-${Date.now()}`;
     }
   };
@@ -339,10 +327,6 @@ export class VviinnShopTheLook {
     if (this.showModal) {
       this.handleModalClose();
     }
-  };
-
-  private handleImageVisibilityChange = () => {
-    this.triggerReRender();
   };
 
   private handleVisualSearchTrigger = (index: number) => {
