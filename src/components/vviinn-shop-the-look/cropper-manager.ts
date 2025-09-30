@@ -103,4 +103,24 @@ export class CropperManager {
   hasCropper(index: number): boolean {
     return this.cropperInstances.has(index);
   }
+
+  updateCropperDimensions(
+    index: number,
+    getImageElement: (index: number) => HTMLImageElement | null,
+  ) {
+    const cropper = this.cropperInstances.get(index);
+    if (cropper) {
+      cropper.destroy();
+      this.cropperInstances.delete(index);
+
+      const imageElement = getImageElement(index);
+      if (
+        imageElement &&
+        imageElement.complete &&
+        imageElement.offsetWidth > 0
+      ) {
+        this.initializeCropper(imageElement, index, index);
+      }
+    }
+  }
 }

@@ -239,6 +239,16 @@ export class VviinnShopTheLook {
   private handleResize = () => {
     this.checkViewModeChange();
     this.updateNavigationVisibility();
+
+    if (this.showCropper && this.cropperManager) {
+      requestAnimationFrame(() => {
+        this.cropperManager.updateCropperDimensions(
+          this.swiperActiveIndex,
+          (index) => this.imageStore.getImageElement(index),
+        );
+      });
+    }
+
     this.triggerReRender();
   };
 
