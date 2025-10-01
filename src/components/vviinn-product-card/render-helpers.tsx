@@ -1,34 +1,11 @@
-import { pipe } from "fp-ts/lib/function";
-import * as E from "fp-ts/lib/Either";
 import { FunctionalComponent, h, Fragment, JSX } from "@stencil/core";
-import { BasePrice } from "../../interfaces/recommendation";
-import { ImagePlaceholderIcon, PlusIcon } from "../vviinn-icons";
+import { BasePrice } from "../../interfaces";
 import { getLastUrlPath } from "../../helpers/url/getLastUrlPath";
-import { joinTruthy } from "../../utils/string/joinTruthy";
-
-const FIT_EXPR = /fit\/\d+\//;
 
 type LinkedProps = {
   deeplink: string;
   tabindex?: number;
   part?: string;
-};
-
-const containsFit = (url: string): E.Either<string, string> => {
-  return pipe(
-    url.match(FIT_EXPR),
-    E.fromNullable(url),
-    E.map(() => url),
-  );
-};
-
-const processWidth = (url: string, size: number): string => {
-  if (!url?.length) return "";
-  return pipe(
-    containsFit(url),
-    E.map((url) => url.replace(FIT_EXPR, `fit/${size}/`)),
-    E.getOrElse(() => url),
-  );
 };
 
 export const Linked = (props: LinkedProps, child: JSX.Element) =>
@@ -226,71 +203,7 @@ export type ImageProps = {
   ref: (el: HTMLImageElement) => void;
   isSource?: boolean;
   imageResolutionWidth?: number;
-};
-
-function getDimensionValues(value?: number | string) {
-  return {
-    num: typeof value === "number" ? value : undefined,
-    px:
-      value !== undefined
-        ? typeof value === "number"
-          ? `${value}px`
-          : value
-        : undefined,
-  };
-}
-
-const ImageOrPlaceholder: FunctionalComponent<{
-  src: string;
-  width?: number | string;
-  height?: number | string;
-  alt?: string;
-  title?: string;
-  className?: string;
-  part?: string;
-  ref?: (el: Element) => void;
-  onLoad?: () => void;
-}> = (props) => {
-  const hasImage = !!props.src;
-
-  const { num: widthNum, px: widthPx } = getDimensionValues(props.width);
-  const { num: heightNum, px: heightPx } = getDimensionValues(props.height);
-
-  return hasImage ? (
-    <img
-      src={props.src}
-      width={widthNum}
-      height={heightNum}
-      alt={props.alt}
-      title={props.title}
-      class={props.className}
-      ref={props.ref}
-      onLoad={props.onLoad}
-      loading="lazy"
-      part={props.part}
-    />
-  ) : (
-    <div
-      style={{
-        width: widthPx,
-        height: heightPx,
-      }}
-      class={`image-placeholder ${props.className}`}
-      part="image-placeholder"
-      ref={props.ref}
-    >
-      <slot name="vviinn-image-placeholder-icon">
-        <ImagePlaceholderIcon />
-      </slot>
-    </div>
-  );
-};
-
-const getProcessedSrc = (
-  src: string,
-  imageResolutionWidth?: number,
-): string => {
-  return imageResolutionWidth ? processWidth(src, imageResolutionWidth) : src;
+  onLoadEnd?: () => void;
 };
 
 export interface UniversalImageProps extends ImageProps {
@@ -300,64 +213,10 @@ export interface UniversalImageProps extends ImageProps {
   additionalParts?: string[];
   onLoadEnd?: () => void;
 }
-
-export const UniversalImage = ({
-  width,
-  height,
-  title,
-  src,
-  ref,
-  isSource,
-  imageResolutionWidth,
-  isResponsive = false,
-  isFullHeight = false,
-  additionalClasses = [],
-  additionalParts = [],
-  onLoadEnd = () => undefined,
-}: UniversalImageProps): HTMLPictureElement => {
-  const processedSrc = getProcessedSrc(src, imageResolutionWidth);
-
-  const classes = joinTruthy([
-    "image",
-    isResponsive && "responsive",
-    isFullHeight && "content-card-image",
-    ...additionalClasses,
-  ]);
-
-  const computeParts = (base: string) =>
-    joinTruthy([
-      base,
-      isFullHeight &&
-        (base === "image-picture"
-          ? "content-card-image-picture"
-          : "content-card-image"),
-      ...additionalParts,
-    ]);
-  const parts = computeParts("image-picture");
-  const imageParts = computeParts("image");
-
-  return (
-    <picture part={parts}>
-      <ImageOrPlaceholder
-        src={processedSrc}
-        width={!isResponsive ? width : undefined}
-        height={!isResponsive ? height : undefined}
-        alt={title}
-        title={title}
-        part={imageParts}
-        className={classes}
-        ref={ref}
-        onLoad={onLoadEnd}
-      />
-      {isSource && <PlusIcon />}
-    </picture>
-  );
-};
-
 export const ContentCardContent = (
-  contentText: string,
+  contentTitle: string,
   contentLink: string,
-  labelText: string = "Content",
+  labelText: string,
 ) => {
   return (
     <div
@@ -367,9 +226,9 @@ export const ContentCardContent = (
       <div class="content-label" part="content-label">
         {labelText}
       </div>
-      {contentText && (
-        <div class="content-text" part="content-text" title={contentText}>
-          {contentText}
+      {contentTitle && (
+        <div class="content-title" part="content-title" title={contentTitle}>
+          {contentTitle}
         </div>
       )}
       {contentLink && (

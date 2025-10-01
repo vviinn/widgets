@@ -24,8 +24,15 @@ const filtersSlotNames: string[] = [
   "vviinn-extended-filters-apply",
   "vviinn-extended-filters-reset",
   "vviinn-extended-filters-no-filters",
+  "vviinn-filters-search-icon",
   "vviinn-image-filter-text",
   "vviinn-crop-filter-text",
+];
+
+const suggestionsSlotNames: string[] = [
+  "vviinn-suggestions-title",
+  "vviinn-suggestions-description",
+  "vviinn-suggestions-icon",
 ];
 
 export const productCardSlotNames: string[] = [
@@ -54,7 +61,12 @@ type RenderType = "search" | "discovery" | "filters" | "card";
 const getSlotNamesList = (renderType: RenderType) => {
   switch (renderType) {
     case "search": {
-      return [...vpsSlotNames, ...filtersSlotNames, ...productCardSlotNames];
+      return [
+        ...vpsSlotNames,
+        ...filtersSlotNames,
+        ...productCardSlotNames,
+        ...suggestionsSlotNames,
+      ];
     }
     case "discovery": {
       return [...vprSlotNames, ...filtersSlotNames, ...productCardSlotNames];
@@ -142,6 +154,7 @@ export const slotChangeListener = (component: any, element: HTMLElement) => {
           "VVIINN-TEXT-SEARCH",
           "VVIINN-EXTENDED-FILTERS",
           "VVIINN-SELECTED-FILTERS",
+          "VVIINN-SUGGESTIONS",
         ].includes(elementTagName);
 
         const productCardChildrenTags = ["VVIINN-ENERGY-LABEL"];

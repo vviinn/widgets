@@ -1,3 +1,4 @@
+// DOM manipulation utilities
 export const findTarget = (ev: any) => {
   return ev.target;
 };
@@ -7,6 +8,9 @@ export const findSlotElements = (el: HTMLElement): HTMLSlotElement[] =>
 
 export const getSlotNames = (slotElements: HTMLSlotElement[]): string[] =>
   slotElements.map((el) => el.getAttribute("slot"));
+
+// Intersection Observer utilities
+export * from "./intersectionObserver";
 
 export type EventListenerTuple = [string, EventListenerOrEventListenerObject];
 
@@ -77,4 +81,17 @@ export function setElementInteractivity(
       disableTabbing(element);
     });
   }
+}
+
+//  Check if an event target matches a selector, including through shadow DOM boundaries
+export function isElementInSelector(
+  event: MouseEvent,
+  selector: string,
+): boolean {
+  const target = event.target as HTMLElement;
+  const composedPath = event.composedPath?.() || [];
+  return (
+    !!target?.closest?.(selector) ||
+    composedPath.some((el: any) => el.matches?.(selector))
+  );
 }

@@ -328,6 +328,12 @@ export const extendedFilters = JSON.stringify([
         active: true,
         selected: false,
       },
+      {
+        value: "Puma",
+        label: "Puma",
+        active: true,
+        selected: false,
+      },
     ],
   },
   {

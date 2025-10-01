@@ -1,8 +1,10 @@
 import { apiPost } from "../network/apiClient";
-import { Interfaces } from "../interfaces/recommendation";
+import {
+  CrossSellingRequest,
+  CrossSellingResponse,
+} from "../interfaces/discovery";
 
-type CrossSellingRequest = Interfaces["CrossSellingRequest"];
-export type CrossSellingResponse = Interfaces["CrossSellingResponse"];
+export type { CrossSellingResponse };
 
 export const getVCSRecommendations =
   (body: CrossSellingRequest) => (options: RequestInit) => {

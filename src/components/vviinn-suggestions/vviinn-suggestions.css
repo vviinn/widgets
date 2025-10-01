@@ -1,0 +1,104 @@
+@import "../../variables.css";
+
+:host {
+  display: contents;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  grid-gap: var(--spacing-150);
+  font-family: var(--font-family, var(--font-family-base));
+  padding-right: var(--spacing-100);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-100);
+}
+
+.icon {
+  font-size: 20px;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--font-size-headline);
+  line-height: var(--line-height-headline);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.description {
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  color: var(--color-text-secondary);
+}
+
+.suggestions-wrapper {
+  overflow-y: hidden;
+  overflow-x: visible;
+  width: 100%;
+}
+
+.suggestions-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  padding-right: var(--spacing-100);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-100);
+  flex-wrap: wrap;
+}
+
+.suggestion-item {
+  display: contents;
+}
+
+.suggestion-link {
+  background: none;
+  border: none;
+  color: var(--color-primary-500);
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: inherit;
+  line-height: inherit;
+  padding: 0;
+  margin: 0;
+}
+
+.suggestion-link:hover {
+  color: var(--color-primary-600);
+}
+
+.suggestion-link:focus {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.suggestion-filter-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  height: 36px;
+  white-space: nowrap;
+  padding: 0 var(--spacing-100);
+  border-radius: var(--border-radius-100);
+  background-color: var(--surface-bg-color-01);
+  transition: background-color 0.1s;
+  font-family: var(--font-family, var(--font-family-base));
+  font-size: var(--font-size-label);
+  color: var(--color-text-primary);
+}
+
+.suggestion-filter-button:hover {
+  background-color: var(--surface-bg-color-01-hover);
+}
+
+.suggestion-filter-button.active {
+  background: var(--surface-bg-color-inverse);
+  color: var(--color-text-inverse);
+}

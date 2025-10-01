@@ -17,7 +17,6 @@
 
 .histogram-bar {
   background: var(--surface-inverse-bg-color, #262626);
-  flex: 1;
   border-radius: 2px 2px 0px 0px;
 }
 .histogram-bar.histogram-bar-inactive {

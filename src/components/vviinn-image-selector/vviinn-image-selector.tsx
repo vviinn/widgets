@@ -21,7 +21,7 @@ import {
   SearchIdEventData,
 } from "../../recommendation/events";
 import { BasicError } from "../../error";
-import { VisualSearchResponse } from "../../interfaces/search";
+import { VisualSearchResponse } from "../../interfaces";
 import { setLocalStorageItems } from "../../localStorage";
 
 /**

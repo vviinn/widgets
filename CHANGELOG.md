@@ -2,6 +2,119 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.187.1](https://github.com/vviinn/widgets/compare/v2.187.0...v2.187.1) (2025-09-17)
+
+
+### Bug Fixes
+
+* Display color labels along with color dots for filters in preview-inline mode. ([accfc28](https://github.com/vviinn/widgets/commit/accfc285a21733a8685dcf1aac69c5be7f0f579d))
+* Interval filters for preview-inline mode. ([2d95e6b](https://github.com/vviinn/widgets/commit/2d95e6b24023b86cf410657e6ee3bb8f94c4ca44))
+
+## [2.187.0](https://github.com/vviinn/widgets/compare/v2.186.0...v2.187.0) (2025-09-15)
+
+
+### Features
+
+*  Add documentation for customizing search button content ([7b18b76](https://github.com/vviinn/widgets/commit/7b18b76a2e169274189bceabbb3375d4aa19040a))
+
+
+### Bug Fixes
+
+* Prevent extended filters modal close on slider drag release outside bounds. ([4414357](https://github.com/vviinn/widgets/commit/4414357f03fb7c2a38639d8fa076595177c86f1a))
+* Reset the text query selected filter after uploading a photo. ([538c63b](https://github.com/vviinn/widgets/commit/538c63b65e3198b64c00e2737b6c2e1cfa5df969))
+
+## [2.186.0](https://github.com/vviinn/widgets/compare/v2.185.0...v2.186.0) (2025-09-12)
+
+
+### Features
+
+* Preview-inline mode for vviinn-extended-filters, allowing categories to appear in a single row and displaying values in the modal with search functionality. ([3b2fe94](https://github.com/vviinn/widgets/commit/3b2fe94677187055df9d4fb1ae6d00d6a6013066))
+
+## [2.185.0](https://github.com/vviinn/widgets/compare/v2.184.0...v2.185.0) (2025-09-08)
+
+
+### Features
+
+* Dynamic modal positioning based on the center of the detected object ([b8285a0](https://github.com/vviinn/widgets/commit/b8285a0bd9d3e29286023c9050833376d2121332))
+
+
+### Bug Fixes
+
+* Detected objects positioning ([8ca6430](https://github.com/vviinn/widgets/commit/8ca6430f4b820c7a9aafb4be0cf2c12d44e86f2c))
+* Shop-the-Look: close the modal on the slider's first move. ([7d92dba](https://github.com/vviinn/widgets/commit/7d92dbaaae4187d5156fb220cf122540113d18a9))
+* Shop-the-Look: solve race conditions for the requests when scrolling through the images ([6330e25](https://github.com/vviinn/widgets/commit/6330e258d817f2531bc806b57d7d3cae38ae5ae6))
+
+## [2.184.0](https://github.com/vviinn/widgets/compare/v2.183.0...v2.184.0) (2025-08-29)
+
+
+### Features
+
+* Close the products modal and open another one when clicking a detected object. ([d60d3a9](https://github.com/vviinn/widgets/commit/d60d3a996df2c6f5944f977e35bc4bd942b66fd1))
+* Shop-the-look page in the Widgets section of the Storybook ([2af938f](https://github.com/vviinn/widgets/commit/2af938f5a01b78a9e53fd5b91d2176bb534306c7))
+* widget-style attribute, which applies cornered or rounded styles ([f232754](https://github.com/vviinn/widgets/commit/f2327541b520c819fbdbffd29e763f58827b0f2e))
+
+## [2.183.0](https://github.com/vviinn/widgets/compare/v2.182.1...v2.183.0) (2025-08-29)
+
+
+### Features
+
+* Add vviinn-suggestions component, which implements the stream concept ([f800b98](https://github.com/vviinn/widgets/commit/f800b986272f7ee6bf49d517d6d7d9559be45e51))
+
+### [2.182.1](https://github.com/vviinn/widgets/compare/v2.182.0...v2.182.1) (2025-08-22)
+
+
+### Bug Fixes
+
+* Shop-the-look mismatch of the clicked product and the details view. ([00bfffc](https://github.com/vviinn/widgets/commit/00bfffced210d26637b3bd0692766c35267bf043))
+
+## [2.182.0](https://github.com/vviinn/widgets/compare/v2.181.0...v2.182.0) (2025-08-22)
+
+
+### Features
+
+* Add vviinn-image component. ([b1b307a](https://github.com/vviinn/widgets/commit/b1b307a9fdcc4d54e48243306eee6f903c20c5de))
+
+## [2.181.0](https://github.com/vviinn/widgets/compare/v2.180.4...v2.181.0) (2025-08-11)
+
+
+### Features
+
+* Introduce the entity type in the widget. Apply custom styles for the content card. ([5b96ae5](https://github.com/vviinn/widgets/commit/5b96ae5f43ddaf5290c282d1fd7e2bb790b09dea))
+* New One-click Discovery icon ([46c443a](https://github.com/vviinn/widgets/commit/46c443a2709cd9c9289fe563dd0e78898c42a9d5))
+
+
+### Bug Fixes
+
+* Fix the Set Widget layout on updating. ([0828d18](https://github.com/vviinn/widgets/commit/0828d1863470656adbb912433c4ff3b1f9979848))
+
+### [2.180.4](https://github.com/vviinn/widgets/compare/v2.180.3...v2.180.4) (2025-08-06)
+
+
+### Bug Fixes
+
+* parse storybook supported args from url ([ba708bb](https://github.com/vviinn/widgets/commit/ba708bb5cb5e5be9d04fde9bde1a71d7bb699ec1))
+
+### [2.180.3](https://github.com/vviinn/widgets/compare/v2.180.2...v2.180.3) (2025-08-04)
+
+
+### Bug Fixes
+
+* prevent triggering upload for vviinn-button in upload mode on any button click or enter pressed in widget ([e5d530b](https://github.com/vviinn/widgets/commit/e5d530bb925de92b136971263981fbd66a58d843))
+
+### [2.180.2](https://github.com/vviinn/widgets/compare/v2.180.1...v2.180.2) (2025-07-31)
+
+
+### Bug Fixes
+
+* Don't show the filter column label in the extended filters. ([cb674f8](https://github.com/vviinn/widgets/commit/cb674f8b422ecf2bd5f6ef94f75926dc40fe45a2))
+
+### [2.180.1](https://github.com/vviinn/widgets/compare/v2.180.0...v2.180.1) (2025-07-31)
+
+
+### Bug Fixes
+
+* Fix the range filter behaviour and synchronization across the filter components ([061af5e](https://github.com/vviinn/widgets/commit/061af5e924acbad22841dd962fc8b7e33be3f5f3))
+
 ## [2.180.0](https://github.com/vviinn/widgets/compare/v2.179.0...v2.180.0) (2025-07-30)
 
 

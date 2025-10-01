@@ -53,7 +53,7 @@ import { Locale } from "../../locale";
 import { CameraActionIcon, UploadActionIcon } from "../vviinn-icons";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 import { videoStreamSettings } from "../../video/settings";
-import { Recommendation } from "../../interfaces/recommendation";
+import { Recommendation } from "../../interfaces";
 import { checkDeviceType } from "../../helpers/device/checkDeviceType";
 import {
   OneClickDiscoveryAppendMode,
@@ -69,6 +69,7 @@ import {
   searchBarParts,
   searchWidgetButtonParts,
   searchWidgetFilterParts,
+  suggestionsParts,
 } from "../../cssParts";
 import { findSlotElements, addEventListenersWithSignal } from "../../dom";
 import { SEARCH_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
@@ -706,7 +707,7 @@ export class VviinnVpsWidget {
   render() {
     return (
       <Host
-        exportparts={`${modalParts}, ${productCardParts}, ${searchBarParts}, ${searchWidgetFilterParts}, ${searchWidgetButtonParts}, ${productCardsGridPart}`}
+        exportparts={`${modalParts}, ${productCardParts}, ${searchBarParts}, ${searchWidgetFilterParts}, ${searchWidgetButtonParts}, ${productCardsGridPart}, ${suggestionsParts}`}
       >
         {!this.showingInButton && SlotSkeleton("search")}
 
@@ -808,15 +809,23 @@ export class VviinnVpsWidget {
               {this.isResultSlide() && (
                 <div class="source-wrapper">
                   {this.isTextSearch() ? (
-                    <vviinn-text-search
-                      token={this.token}
-                      showInWidget={true}
-                      apiPath={this.apiPath}
-                      locale={this.locale}
-                      uiSessionId={this.uiSessionId}
-                      basicEventData={this.getBasicEventData(true)}
-                      save-image-mode="never"
-                    />
+                    <Fragment>
+                      <vviinn-text-search
+                        token={this.token}
+                        showInWidget={true}
+                        apiPath={this.apiPath}
+                        locale={this.locale}
+                        uiSessionId={this.uiSessionId}
+                        basicEventData={this.getBasicEventData(true)}
+                        save-image-mode="never"
+                      />
+                      <vviinn-suggestions
+                        showInWidget={true}
+                        token={this.token}
+                        apiPath={this.apiPath}
+                        locale={this.locale}
+                      />
+                    </Fragment>
                   ) : (
                     <vviinn-cropper
                       basicEventData={this.getBasicEventData()}
@@ -849,7 +858,12 @@ export class VviinnVpsWidget {
                       />
 
                       <vviinn-extended-filters-button
-                        class="extended-filters-button"
+                        class={{
+                          "extended-filters-button": true,
+                          "has-primary-filters":
+                            this.state.dynamicFilters.filter((f) => f.isPrimary)
+                              .length > 0,
+                        }}
                         exportparts="extended-filters-button"
                         showInWidget={true}
                       />

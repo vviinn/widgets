@@ -10,6 +10,7 @@ export const resources: Resource = {
       basketButtonText: "In den Warenkorb",
       basketButtonPressedText: "In den Warenkorb",
       discoveryWidgetTitle: "Ähnliche Produkte",
+      contentLabel: "Inhalt",
       setMode: {
         widgetTitle: "Kaufen Sie ein Set und erhalten Sie Rabatt",
         widgetSubtitle:
@@ -26,8 +27,13 @@ export const resources: Resource = {
       cameraButtonTextStop: "Kamera stoppen",
       privacyBadgeText: `Durch das Hochladen eines Bildes willigst Du in die Verarbeitung durch unseren Partner ${VVIINN_LINK} ein. Das Bild wird nach einer Stunde Inaktivität gelöscht.`,
       teaserText: "Finde Dein Produkt",
-      imageSearchModalTitle: "AI Search",
+      imageSearchModalTitle: "KI-Suche",
       textSearchPlaceholder: "mit Text suchen",
+      suggestions: {
+        title: "KI-Vorschläge",
+        description:
+          "Hier sind einige Vorschläge, die Ihnen helfen, das perfekte zu finden.",
+      },
       speechRecognition: {
         placeholder: "Aufnahme...",
         tooltip: {
@@ -63,6 +69,9 @@ export const resources: Resource = {
           resetFilters: "Filter zurücksetzen",
           noFiltersMessage:
             "Für die akuelle Suche sind keine Filter verfügbar.",
+        },
+        search: {
+          placeholder: "Suche...",
         },
         imageFilterText: "Bild",
         cropFilterText: "Bildausschnitt",
@@ -139,6 +148,7 @@ export const resources: Resource = {
       basketButtonText: "Add to Basket",
       basketButtonPressedText: "Add to Basket",
       discoveryWidgetTitle: "Recommended products",
+      contentLabel: "Content",
       setMode: {
         widgetTitle: "Buy a set to get discount",
         widgetSubtitle: "Save up to 15% for buying products from the list",
@@ -155,6 +165,11 @@ export const resources: Resource = {
       teaserText: "Find Your Product",
       imageSearchModalTitle: "AI Search",
       textSearchPlaceholder: "Search by text",
+      suggestions: {
+        title: "AI Suggestions",
+        description:
+          "Here are some suggestions to help you find the perfect match.",
+      },
       speechRecognition: {
         placeholder: "Listening...",
         tooltip: {
@@ -189,6 +204,9 @@ export const resources: Resource = {
           apply: "Apply",
           resetFilters: "Reset Filters",
           noFiltersMessage: "No filters available for the current search.",
+        },
+        search: {
+          placeholder: "Search...",
         },
         imageFilterText: "Image",
         cropFilterText: "Crop",

@@ -28,7 +28,10 @@ import {
   TriggerSourceEvent,
   TriggerSourceEventData,
 } from "../../recommendation/events";
-import { triggerFilter } from "./helpers/triggerFilter";
+import {
+  triggerFilter,
+  triggerRemoveIntervalFilter,
+} from "./helpers/triggerFilter";
 import { SearchStore, useSearchStore } from "../../store/search.store";
 import { globalState } from "../../store/store";
 import i18next from "i18next";
@@ -36,7 +39,7 @@ import { resources } from "../../locale";
 import { announceToScreenReader } from "../../a11y";
 import { getLocalStorageItems } from "../../localStorage";
 import { addEventListenersWithSignal } from "../../dom";
-import { Interval, ResponseIntervalFilterItem } from "../../interfaces/search";
+import { Interval, ResponseIntervalFilterItem } from "../../interfaces";
 
 /**
  * @part selected-filters-list - List of selected filters.
@@ -146,12 +149,17 @@ export class VviinnSelectedFilters {
         detail.filter as ResponseIntervalFilterItem,
         detail.value.interval as Interval,
         globalState.currencySign,
+        true,
       );
       if (intervalLabel) {
         this.intervalCustomFilters = {
           ...this.intervalCustomFilters,
           [detail.filter.column]: intervalLabel,
         };
+      } else {
+        const { [detail.filter.column]: removed, ...remaining } =
+          this.intervalCustomFilters;
+        this.intervalCustomFilters = remaining;
       }
     }
   };
@@ -163,6 +171,7 @@ export class VviinnSelectedFilters {
 
   private handleImageUploadFinished = ({ detail }: SearchIdEvent) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
+    this.textSearchCustomFilter = null;
     this.getUploadedImageSrc();
   };
 
@@ -178,6 +187,24 @@ export class VviinnSelectedFilters {
       return;
 
     this.requestFilters = filters;
+
+    const activeIntervalColumns = new Set(
+      filters
+        .filter((f) => f.values && f.values.length > 0)
+        .map((f) => f.column),
+    );
+
+    const updatedIntervalFilters = Object.fromEntries(
+      Object.entries(this.intervalCustomFilters).filter(([column]) =>
+        activeIntervalColumns.has(column),
+      ),
+    );
+
+    if (
+      Object.keys(updatedIntervalFilters).length !==
+      Object.keys(this.intervalCustomFilters).length
+    )
+      this.intervalCustomFilters = updatedIntervalFilters;
   };
 
   private handleSelectedFiltersReset = ({ detail }: TriggerSourceEvent) => {
@@ -201,14 +228,14 @@ export class VviinnSelectedFilters {
     const { [column]: removed, ...remaining } = this.intervalCustomFilters;
     this.intervalCustomFilters = remaining;
 
-    const intervalFilter = this.state.dynamicFilters.find(
-      (filter) => filter.column === column,
-    ) as ResponseIntervalFilterItem;
-
-    this.handleSubFilterSelection(
-      intervalFilter.full as DynamicFilterValue,
-      intervalFilter,
-    );
+    this.requestFilters = triggerRemoveIntervalFilter({
+      column,
+      requestFilters: this.requestFilters,
+      el: this.el,
+      isTriggeredByVpsWidget: this.showInWidget,
+      vviinnFilterTriggered: this.vviinnFilterTriggered,
+      vviinnFiltersChanged: this.vviinnFiltersChanged,
+    });
   };
 
   private handleCropButtonClick = () => {
@@ -318,8 +345,9 @@ export class VviinnSelectedFilters {
               hidden: !this.state.searchArea,
             })}
 
-            {Object.entries(this.intervalCustomFilters).map(
-              ([column, label]) => (
+            {Object.entries(this.intervalCustomFilters)
+              .filter(([, label]) => label && label.trim().length > 0)
+              .map(([column, label]) => (
                 <div key={column}>
                   {RenderCustomButton({
                     label,
@@ -328,8 +356,7 @@ export class VviinnSelectedFilters {
                     hidden: false,
                   })}
                 </div>
-              ),
-            )}
+              ))}
 
             {this.selectedFilterButtons}
           </ul>

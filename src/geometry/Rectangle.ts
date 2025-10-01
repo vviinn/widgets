@@ -5,7 +5,7 @@ import {
   pointProductSemigroup,
 } from "./Point";
 import { Sized, sizedDivSemigroup } from "./Sized";
-import { Rectangle } from "../interfaces/search";
+import { Rectangle } from "../interfaces";
 
 export type ClickEvent = Event & { clientX: number; clientY: number };
 
@@ -26,6 +26,18 @@ export const fromImage = (image: HTMLImageElement): Rectangle => {
     top: 0,
     width: image.width,
     height: image.height,
+  };
+};
+
+export const fromRenderedImage = (
+  image: HTMLImageElement | null | undefined,
+): Rectangle | null => {
+  if (!image) return null;
+  return {
+    left: 0,
+    top: 0,
+    width: image.offsetWidth,
+    height: image.offsetHeight,
   };
 };
 

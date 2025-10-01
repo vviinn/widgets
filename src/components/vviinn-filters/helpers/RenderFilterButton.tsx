@@ -4,11 +4,7 @@ import {
   getColorOptionAriaLabel,
 } from "../../../a11y";
 
-import {
-  FilterIconCheck,
-  FilterIconClose,
-  FilterIconSquare,
-} from "../../vviinn-icons";
+import { FilterIconCheck, FilterIconClose } from "../../vviinn-icons";
 import {
   DynamicFilterValue,
   ResponseDynamicFilterItem,
@@ -25,6 +21,7 @@ type RenderButtonProps = {
   selectedFilter: ResponseDynamicFilterItem;
   isSelected?: boolean;
   showClose?: boolean;
+  showColorLabel?: boolean;
 };
 
 export const RenderFilterButton = ({
@@ -35,10 +32,27 @@ export const RenderFilterButton = ({
   selectedFilter,
   isSelected = false,
   showClose = false,
+  showColorLabel,
 }: RenderButtonProps): JSX.Element => {
   const hexCode = value?.hexCode;
   const hasHexCodeLength = hexCode?.length > 0;
   const isRemovable = isSelected && showClose;
+
+  const renderIcon = (): JSX.Element => {
+    if (isRemovable) {
+      return <FilterIconClose />;
+    }
+
+    return (
+      <div
+        part="filters-option-icon-wrapper"
+        class="filters-option-icon-wrapper"
+        aria-hidden="true"
+      >
+        {isSelected ? <FilterIconCheck /> : null}
+      </div>
+    );
+  };
 
   const ariaLabel = isRemovable
     ? getRemoveFilterAriaLabel(label)
@@ -67,23 +81,10 @@ export const RenderFilterButton = ({
             aria-hidden="true"
           ></div>
         )}
-
-        {!hasHexCodeLength && <span part="filters-option-text">{label}</span>}
-
-        <div
-          part="filters-option-icon-wrapper"
-          class="filters-option-icon-wrapper"
-          aria-hidden="true"
-        >
-          {!showClose ? (
-            isSelected ? (
-              <FilterIconCheck />
-            ) : (
-              <FilterIconSquare />
-            )
-          ) : null}
-        </div>
-        {isRemovable && <FilterIconClose />}
+        {(showColorLabel || !hasHexCodeLength) && (
+          <span part="filters-option-text">{label}</span>
+        )}
+        {renderIcon()}
       </button>
     </li>
   );

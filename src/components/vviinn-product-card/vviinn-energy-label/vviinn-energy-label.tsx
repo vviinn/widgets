@@ -3,7 +3,7 @@ import i18next from "i18next";
 import {
   EnergyCertification,
   EnergyClassIconDirection,
-} from "../../../interfaces/recommendation";
+} from "../../../interfaces";
 import { slotChangeListener } from "../../customized-slots";
 import { energyLabelParts } from "../../../cssParts";
 
