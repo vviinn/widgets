@@ -961,7 +961,7 @@ export class VviinnShopTheLook {
       onNavigatePrev: this.handleNavigatePrev,
       onNavigateNext: this.handleNavigateNext,
       swiperKey: this.swiperKey,
-      allowTouchMove: !this.showCropper,
+      allowTouchMove: !this.showCropper || isDesktop(),
       showNavigation: (this.needNavigation && isDesktop()) || this.showCropper,
     };
     return renderSwiper(props);
