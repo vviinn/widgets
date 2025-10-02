@@ -121,6 +121,7 @@ export class VviinnShopTheLook {
   private modalContentRef: HTMLElement;
   private cropperManager: CropperManager;
   private autoSelectTimeout?: number;
+  private cropDebounceTimeout?: number;
 
   componentWillLoad() {
     updateGlobalState({
@@ -157,7 +158,7 @@ export class VviinnShopTheLook {
     if (this.showCropper) {
       this.cropperManager = new CropperManager({
         onCropEnd: (cropArea: Rectangle, imageIndex: number) => {
-          this.handleDetectedObjectClick(cropArea, 0, imageIndex);
+          this.debouncedCropSearch(cropArea, imageIndex);
         },
       });
     }
@@ -222,6 +223,7 @@ export class VviinnShopTheLook {
     this.imageStore?.disconnectAll();
     this.cropperManager?.destroyAll();
     if (this.autoSelectTimeout) clearTimeout(this.autoSelectTimeout);
+    if (this.cropDebounceTimeout) clearTimeout(this.cropDebounceTimeout);
 
     const swiperContainer =
       this.el.shadowRoot?.querySelector("swiper-container");
@@ -692,6 +694,17 @@ export class VviinnShopTheLook {
     this.cropperManager?.activateCropperForSlide(activeIndex, (index) =>
       this.imageStore.getImageElement(index),
     );
+  };
+
+  private debouncedCropSearch = (cropArea: Rectangle, imageIndex: number) => {
+    if (this.cropDebounceTimeout) {
+      clearTimeout(this.cropDebounceTimeout);
+    }
+
+    this.cropDebounceTimeout = window.setTimeout(() => {
+      this.cropDebounceTimeout = undefined;
+      this.handleDetectedObjectClick(cropArea, 0, imageIndex);
+    }, TIMING.CROP_DEBOUNCE_DELAY);
   };
 
   private handleModalClose = (event?: Event) => {
