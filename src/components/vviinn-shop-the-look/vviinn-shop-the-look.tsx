@@ -28,6 +28,7 @@ import {
   shouldRenderDetectedObjects,
   getVisibilityThreshold,
   calculateImageBounds,
+  calculateModalPosition,
   autoSelectFirstObject,
 } from "./helpers";
 import { ShopTheLookImageStore, createDefaultImageState } from "./store";
@@ -149,6 +150,7 @@ export class VviinnShopTheLook {
       token: this.token,
       isWidgetVisible: this.isWidgetVisible,
       totalImages: this.totalImages,
+      isModalOpen: this.showModal,
       onVisualSearchTrigger: this.handleVisualSearchTrigger.bind(this),
     });
 
@@ -177,6 +179,11 @@ export class VviinnShopTheLook {
         this.setupSwiperDragEventListeners();
       });
     }
+  }
+
+  @Watch("showModal")
+  onShowModalChange(newValue: boolean) {
+    this.imageStore?.updateConfig({ isModalOpen: newValue });
   }
 
   private resetDetailedView = () => {
@@ -283,6 +290,7 @@ export class VviinnShopTheLook {
 
         this.imageStore?.updateConfig({
           isWidgetVisible: this.isWidgetVisible,
+          isModalOpen: this.showModal,
         });
 
         if (!wasWidgetVisible && this.isWidgetVisible) {
@@ -330,6 +338,8 @@ export class VviinnShopTheLook {
   };
 
   private handleVisualSearchTrigger = (index: number) => {
+    if (this.showModal) return;
+
     this.performVisualSearchForImage(index);
     this.updateSearchingState();
   };
@@ -371,6 +381,7 @@ export class VviinnShopTheLook {
       isWidgetVisible: this.isWidgetVisible,
       token: this.token,
       totalImages: this.totalImages,
+      isModalOpen: this.showModal,
     });
 
     if (this.token && this.isWidgetVisible) {
@@ -410,7 +421,7 @@ export class VviinnShopTheLook {
     this.markCurrentImageAsVisible();
 
     const imageState = this.imageStore.getImageState(this.swiperActiveIndex);
-    if (imageState?.detectedObjects) {
+    if (imageState?.detectedObjects && !this.showModal) {
       autoSelectFirstObject(
         this.swiperActiveIndex,
         imageState.detectedObjects,
@@ -447,6 +458,15 @@ export class VviinnShopTheLook {
     const imageBounds = this.getImageBounds(imageIndex);
     const imageElement =
       this.imageStore.getImageElement(imageIndex) || this.imageElement;
+
+    if (imageBounds && imageElement) {
+      this.modalPosition = calculateModalPosition(
+        imageElement,
+        detectedObject,
+        this.el,
+        imageBounds,
+      );
+    }
 
     const imageState = this.imageStore.getImageState(imageIndex);
     const visualSearchId =
@@ -486,7 +506,6 @@ export class VviinnShopTheLook {
           });
         }
 
-        this.modalPosition = response.modalPosition;
         this.showLoadingSpinner = false;
 
         if (response.searchResults && response.searchResults.length > 0) {
@@ -553,7 +572,9 @@ export class VviinnShopTheLook {
         }
 
         const shouldAutoClick =
-          targetImageState.detectedObjects.length > 0 && isCurrentImage;
+          targetImageState.detectedObjects.length > 0 &&
+          isCurrentImage &&
+          !this.showModal;
 
         if (shouldAutoClick) {
           autoSelectFirstObject(
@@ -779,6 +800,7 @@ export class VviinnShopTheLook {
 
   private performVisualSearchForImage = async (imageIndex: number) => {
     const imageUrl = this.imageUrlsList[imageIndex];
+
     if (!this.token || !imageUrl) return;
 
     const isCurrentImage = imageIndex === this.swiperActiveIndex;
@@ -816,7 +838,9 @@ export class VviinnShopTheLook {
         this.updateSearchingState(isCurrentImage);
 
         const shouldAutoClick =
-          response.detectedObjects.length > 0 && isCurrentImage;
+          response.detectedObjects.length > 0 &&
+          isCurrentImage &&
+          !this.showModal;
 
         if (shouldAutoClick) {
           autoSelectFirstObject(

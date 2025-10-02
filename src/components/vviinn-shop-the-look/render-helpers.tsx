@@ -2,13 +2,13 @@ import { h } from "@stencil/core";
 import { Rectangle } from "../../interfaces/search";
 import { Recommendation } from "../../interfaces";
 import { BasicEventData } from "../../recommendation/events";
-import { ModalPosition } from "./helpers";
 import { isDesktop } from "../../helpers/device/checkDeviceType";
 import {
   configureSwiperElement,
   getSwiperStyles,
 } from "../../utils/swiper/swiperUtils";
 import { SecondaryActionIcon } from "../vviinn-icons/icons/SecondaryActionIcon";
+import { ModalPosition } from "./helpers";
 
 export interface DetectedObjectsProps {
   imageBounds: Rectangle | null;
@@ -330,14 +330,13 @@ export const renderModal = (props: ModalProps) => {
 
   const isMobile = !isDesktop();
 
-  let modalStyle = {};
-  if (modalPosition) {
-    modalStyle = {
-      "--modal-x": `${modalPosition.x}px`,
-      "--modal-y": `${modalPosition.y}px`,
-      ...(modalPosition.anchor && { "--modal-anchor": modalPosition.anchor }),
-    };
-  }
+  const modalStyle = modalPosition
+    ? {
+        "--modal-x": `${modalPosition.x}px`,
+        "--modal-y": `${modalPosition.y}px`,
+        "--modal-anchor": modalPosition.anchor,
+      }
+    : {};
 
   return (
     <div
