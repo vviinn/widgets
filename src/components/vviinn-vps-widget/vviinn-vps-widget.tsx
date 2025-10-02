@@ -204,7 +204,7 @@ export class VviinnVpsWidget {
   @Prop() showInWidget?: boolean = true;
 
   @State() slidePosition: number = 0;
-  @State() uploadSource: UploadSource;
+  @State() uploadSource: UploadSource | null = null;
   @State() stream: MediaStream | null = null;
   @State() products: Recommendation[] = [];
   @State() modalBody?: HTMLElement;
@@ -670,14 +670,15 @@ export class VviinnVpsWidget {
     this.isCameraInitializing = false;
     this.setShowAspectRatioError(false);
     this.slidePosition = 0;
+    this.uploadSource = null;
     this.resetScroll("start-page_block");
   };
 
   private resetState = () => {
     this.resetInnerState();
-    if (this.showInWidget) {
-      resetStore(this.storeName, "appStateAndReceivedData");
-    }
+    this.showInWidget
+      ? resetStore(this.storeName, "appStateAndReceivedData")
+      : resetStore(this.storeName, "appStateOnly");
   };
 
   private haveErrors(): boolean {
