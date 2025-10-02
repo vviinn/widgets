@@ -105,7 +105,15 @@ export class ShopTheLookImageStore {
 
     const isModalCurrentlyOpen = this.config.isModalOpen ?? false;
 
-    if (this.shouldTriggerSearch(index, isVisible, wasVisible, currentState, isModalCurrentlyOpen)) {
+    if (
+      this.shouldTriggerSearch(
+        index,
+        isVisible,
+        wasVisible,
+        currentState,
+        isModalCurrentlyOpen,
+      )
+    ) {
       this.updateImageState(index, { searchTriggered: true });
       this.config.onVisualSearchTrigger(index);
     }

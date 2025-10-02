@@ -221,7 +221,6 @@ export class VviinnCropper {
     });
   }
 
-
   private loadImage = () => {
     const renderedImageElement = this.el.shadowRoot.querySelector("img");
     if (this.state.image) {
