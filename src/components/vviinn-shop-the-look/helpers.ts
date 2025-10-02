@@ -59,7 +59,7 @@ export const shouldRenderDetectedObjects = (
   if (!imageState) return false;
 
   return isDesktop()
-    ? imageState.searchCompleted && imageState.detectedObjects?.length > 0
+    ? imageState.searchCompleted && !!imageState.detectedObjects?.length
     : isActiveSlide;
 };
 
