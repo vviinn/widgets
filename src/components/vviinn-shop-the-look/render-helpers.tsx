@@ -326,10 +326,10 @@ export const renderModal = (props: ModalProps) => {
     modalContentRef,
   } = props;
 
-  if (!showModal || !selectedDetectedObject) return null;
+  if (!showModal || !selectedDetectedObject || !searchResults?.length)
+    return null;
 
   const isMobile = !isDesktop();
-
   const modalStyle = modalPosition
     ? {
         "--modal-x": `${modalPosition.x}px`,

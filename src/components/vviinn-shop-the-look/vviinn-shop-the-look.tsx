@@ -417,11 +417,44 @@ export class VviinnShopTheLook {
     }
   }
 
+  private navigateToSlide(slideIndex: number) {
+    const swiperContainer = this.el.shadowRoot?.querySelector("swiper-container");
+    if (swiperContainer && (swiperContainer as any).swiper) {
+      (swiperContainer as any).swiper.slideTo(slideIndex);
+    }
+  }
+
+  private forceSearchForSlide(slideIndex: number) {
+    const imageState = this.imageStore.getImageState(slideIndex);
+    if (imageState) {
+      imageState.isVisible = true;
+      this.imageStore.setImageState(slideIndex, imageState);
+    }
+    this.imageStore.updateImageState(slideIndex, { searchTriggered: true });
+    this.performVisualSearch(slideIndex);
+  }
+
+  private ensureSlideSearchTriggered(slideIndex: number) {
+    const imageState = this.imageStore.getImageState(slideIndex);
+
+    if (!imageState.searchCompleted && !imageState.searchTriggered) {
+      this.forceSearchForSlide(slideIndex);
+    } else if (imageState.searchCompleted) {
+      this.activateCurrentSlide();
+    } else {
+      this.performVisualSearchIfReady();
+    }
+  }
+
   private activateCurrentSlide() {
     this.markCurrentImageAsVisible();
 
     const imageState = this.imageStore.getImageState(this.swiperActiveIndex);
-    if (imageState?.detectedObjects && !this.showModal) {
+    if (
+      imageState?.detectedObjects?.length > 0 &&
+      !this.showModal &&
+      !this.showLoadingSpinner
+    ) {
       autoSelectFirstObject(
         this.swiperActiveIndex,
         imageState.detectedObjects,
@@ -438,11 +471,12 @@ export class VviinnShopTheLook {
   ) => {
     if (!this.token) return;
 
-    if (this.showCropper) {
-      if (isDesktop() && imageIndex !== this.swiperActiveIndex) {
-        this.swiperActiveIndex = imageIndex;
-      }
+    if (isDesktop() && imageIndex !== this.swiperActiveIndex) {
+      this.swiperActiveIndex = imageIndex;
+      this.navigateToSlide(imageIndex);
+    }
 
+    if (this.showCropper) {
       const hasCropperForSlide = this.cropperManager?.hasCropper?.(imageIndex);
       if (!hasCropperForSlide) {
         this.activateCropperForSlide(imageIndex);
@@ -508,7 +542,11 @@ export class VviinnShopTheLook {
 
         this.showLoadingSpinner = false;
 
-        if (response.searchResults && response.searchResults.length > 0) {
+        if (
+          response.searchResults &&
+          response.searchResults.length > 0 &&
+          imageIndex === this.swiperActiveIndex
+        ) {
           this.showModal = true;
         }
 
@@ -574,6 +612,7 @@ export class VviinnShopTheLook {
         const shouldAutoClick =
           targetImageState.detectedObjects.length > 0 &&
           isCurrentImage &&
+          targetImageIndex === this.swiperActiveIndex &&
           !this.showModal;
 
         if (shouldAutoClick) {
@@ -717,21 +756,7 @@ export class VviinnShopTheLook {
       this.clearModalAndSlideState();
 
       setTimeout(() => {
-        const isDesktopView = isDesktop();
-        if (!isDesktopView) {
-          this.markCurrentImageAsVisible();
-          this.performVisualSearchIfReady();
-        } else {
-          const currentImageState = this.imageStore.getImageState(
-            this.swiperActiveIndex,
-          );
-          if (currentImageState?.searchCompleted) {
-            this.activateCurrentSlide();
-          } else {
-            this.markCurrentImageAsVisible();
-            this.performVisualSearchIfReady();
-          }
-        }
+        this.ensureSlideSearchTriggered(this.swiperActiveIndex);
       }, TIMING.SLIDE_TRANSITION_DELAY);
     }
   };
@@ -840,6 +865,7 @@ export class VviinnShopTheLook {
         const shouldAutoClick =
           response.detectedObjects.length > 0 &&
           isCurrentImage &&
+          imageIndex === this.swiperActiveIndex &&
           !this.showModal;
 
         if (shouldAutoClick) {
@@ -858,12 +884,7 @@ export class VviinnShopTheLook {
     if (this.swiperActiveIndex > 0) {
       const newIndex = this.swiperActiveIndex - 1;
       this.updateSlideIndex(newIndex);
-
-      const swiperContainer =
-        this.el.shadowRoot?.querySelector("swiper-container");
-      if (swiperContainer && (swiperContainer as any).swiper) {
-        (swiperContainer as any).swiper.slideTo(newIndex);
-      }
+      this.navigateToSlide(newIndex);
     }
   };
 
@@ -871,12 +892,7 @@ export class VviinnShopTheLook {
     if (this.swiperActiveIndex < this.totalImages - 1) {
       const newIndex = this.swiperActiveIndex + 1;
       this.updateSlideIndex(newIndex);
-
-      const swiperContainer =
-        this.el.shadowRoot?.querySelector("swiper-container");
-      if (swiperContainer && (swiperContainer as any).swiper) {
-        (swiperContainer as any).swiper.slideTo(newIndex);
-      }
+      this.navigateToSlide(newIndex);
     }
   };
 
@@ -885,7 +901,13 @@ export class VviinnShopTheLook {
     this.clearModalAndSlideState();
 
     setTimeout(() => {
-      this.performVisualSearchIfReady();
+      const imageState = this.imageStore.getImageState(newIndex);
+
+      if (!imageState.searchCompleted && !imageState.searchTriggered) {
+        this.forceSearchForSlide(newIndex);
+      } else {
+        this.performVisualSearchIfReady();
+      }
 
       if (this.showCropper) {
         this.activateCropperForSlide(newIndex);
