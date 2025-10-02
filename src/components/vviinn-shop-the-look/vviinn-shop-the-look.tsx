@@ -122,6 +122,7 @@ export class VviinnShopTheLook {
   private cropperManager: CropperManager;
   private autoSelectTimeout?: number;
   private cropDebounceTimeout?: number;
+  private isManualObjectSelection: boolean = false;
 
   componentWillLoad() {
     updateGlobalState({
@@ -214,6 +215,10 @@ export class VviinnShopTheLook {
 
   private getCurrentImageState() {
     return this.imageStore?.getImageState(this.swiperActiveIndex);
+  }
+
+  private isCurrentSlide(imageIndex: number): boolean {
+    return imageIndex === this.swiperActiveIndex;
   }
 
   disconnectedCallback() {
@@ -474,9 +479,17 @@ export class VviinnShopTheLook {
   ) => {
     if (!this.token) return;
 
-    if (isDesktop() && imageIndex !== this.swiperActiveIndex) {
+    const needsSlideTransition =
+      isDesktop() && !this.isCurrentSlide(imageIndex);
+
+    if (needsSlideTransition) {
+      this.isManualObjectSelection = true;
+      this.selectedDetectedObject = null;
       this.swiperActiveIndex = imageIndex;
       this.navigateToSlide(imageIndex);
+      await new Promise((resolve) =>
+        setTimeout(() => requestAnimationFrame(() => requestAnimationFrame(resolve)), 200)
+      );
     }
 
     if (this.showCropper) {
@@ -487,6 +500,7 @@ export class VviinnShopTheLook {
     }
 
     this.selectedDetectedObject = detectedObject;
+    this.isManualObjectSelection = false;
     this.showLoadingSpinner = true;
     this.showModal = false;
     this.resetDetailedView();
@@ -548,7 +562,7 @@ export class VviinnShopTheLook {
         if (
           response.searchResults &&
           response.searchResults.length > 0 &&
-          imageIndex === this.swiperActiveIndex
+          this.isCurrentSlide(imageIndex)
         ) {
           this.showModal = true;
         }
@@ -737,7 +751,7 @@ export class VviinnShopTheLook {
 
   private renderDetectedObjectsWrapper = (imageIndex: number) => {
     const imageState = this.imageStore.getImageState(imageIndex);
-    const isActiveSlide = imageIndex === this.swiperActiveIndex;
+    const isActiveSlide = this.isCurrentSlide(imageIndex);
 
     if (!shouldRenderDetectedObjects(imageState, isActiveSlide)) {
       return null;
@@ -840,7 +854,7 @@ export class VviinnShopTheLook {
 
     if (!this.token || !imageUrl) return;
 
-    const isCurrentImage = imageIndex === this.swiperActiveIndex;
+    const isCurrentImage = this.isCurrentSlide(imageIndex);
 
     if (isCurrentImage) {
       this.showLoadingSpinner = true;
@@ -874,11 +888,11 @@ export class VviinnShopTheLook {
         );
         this.updateSearchingState(isCurrentImage);
 
-        const isStillCurrentImage = imageIndex === this.swiperActiveIndex;
         const shouldAutoClick =
           response.detectedObjects.length > 0 &&
-          isStillCurrentImage &&
-          !this.showModal;
+          this.isCurrentSlide(imageIndex) &&
+          !this.showModal &&
+          !this.isManualObjectSelection;
 
         if (shouldAutoClick) {
           this.scheduleAutoSelectFirstObject(
@@ -896,15 +910,16 @@ export class VviinnShopTheLook {
   ) {
     if (
       !detectedObjects?.length ||
-      imageIndex !== this.swiperActiveIndex ||
-      this.autoSelectTimeout
+      !this.isCurrentSlide(imageIndex) ||
+      this.autoSelectTimeout ||
+      this.isManualObjectSelection
     ) {
       return;
     }
 
     this.autoSelectTimeout = window.setTimeout(() => {
       this.autoSelectTimeout = undefined;
-      if (this.swiperActiveIndex !== imageIndex || this.showModal) return;
+      if (!this.isCurrentSlide(imageIndex) || this.showModal) return;
 
       const first = detectedObjects[0];
       if (first) {
