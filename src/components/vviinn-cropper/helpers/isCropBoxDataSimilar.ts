@@ -1,6 +1,6 @@
 import { Rectangle } from "../../../interfaces";
 
-export const isCropBoxDataSimilar = (
+export const isCropBoxChangeMinimal = (
   cropBoxData1: Rectangle,
   cropBoxData2: Rectangle,
   positionPxThreshold = 0.5,

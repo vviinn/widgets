@@ -99,7 +99,10 @@ export class VviinnDetectedObject {
           class="detected-object-button"
           aria-label={i18next.t("a11y.detectedObject")}
           aria-pressed={isActive}
-          onClick={() => this.selectDetectedObject()}
+          onClick={(e) => {
+            e.stopPropagation();
+            this.selectDetectedObject();
+          }}
           onKeyDown={this.handleKeyDown}
         ></button>
       </Host>

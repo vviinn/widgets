@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.188.0](https://github.com/vviinn/widgets/compare/v2.187.1...v2.188.0) (2025-10-06)
+
+
+### Features
+
+* Show Cropper feature for the shop-the-look widget. ([df08879](https://github.com/vviinn/widgets/commit/df08879671eb4cba11f00fcc9d2b1ac2813ca449))
+
 ### [2.187.1](https://github.com/vviinn/widgets/compare/v2.187.0...v2.187.1) (2025-09-17)
 
 
