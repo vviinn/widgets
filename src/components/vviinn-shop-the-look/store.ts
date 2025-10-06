@@ -20,7 +20,7 @@ export interface ObserverConfig {
   token: string;
   isWidgetVisible: boolean;
   totalImages: number;
-  onImageVisibilityChange: () => void;
+  isModalOpen?: boolean;
   onVisualSearchTrigger: (index: number) => void;
 }
 
@@ -103,9 +103,17 @@ export class ShopTheLookImageStore {
 
     this.updateImageState(index, { isVisible });
 
-    this.config.onImageVisibilityChange();
+    const isModalCurrentlyOpen = this.config.isModalOpen ?? false;
 
-    if (this.shouldTriggerSearch(index, isVisible, wasVisible, currentState)) {
+    if (
+      this.shouldTriggerSearch(
+        index,
+        isVisible,
+        wasVisible,
+        currentState,
+        isModalCurrentlyOpen,
+      )
+    ) {
       this.updateImageState(index, { searchTriggered: true });
       this.config.onVisualSearchTrigger(index);
     }
@@ -116,7 +124,10 @@ export class ShopTheLookImageStore {
     isVisible: boolean,
     wasVisible: boolean,
     currentState: ImageState,
+    isModalOpen: boolean = false,
   ): boolean {
+    if (isModalOpen) return false;
+
     const isNewlyVisible = isVisible && wasVisible === false;
     const hasRequiredTokenAndState =
       this.config.isWidgetVisible && this.config.token;

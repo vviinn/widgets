@@ -52,18 +52,25 @@ export const shouldKeepImageVisible = (
   return isDesktop;
 };
 
-export const shouldRenderDetectedObjects = (imageState: any): boolean => {
+export const shouldRenderDetectedObjects = (
+  imageState: any,
+  isActiveSlide: boolean,
+): boolean => {
   if (!imageState) return false;
 
-  return imageState.isVisible;
+  return isDesktop()
+    ? imageState.searchCompleted && !!imageState.detectedObjects?.length
+    : isActiveSlide;
 };
 
 export const calculateModalPosition = (
   imageElement: HTMLImageElement,
   detectedObject: Rectangle,
   containerElement?: HTMLElement,
+  preCalculatedImageBounds?: Rectangle | null,
 ): ModalPosition => {
-  const imageBounds = calculateImageBounds(imageElement);
+  const imageBounds =
+    preCalculatedImageBounds || calculateImageBounds(imageElement);
   if (!imageBounds) return { x: 0, y: 0 };
 
   const objectCenterX =
@@ -191,6 +198,7 @@ export interface DetectedObjectClickParams {
   campaignId?: string;
   isSearchInProgress: boolean;
   setSearchInProgress: (inProgress: boolean) => void;
+  imageBounds?: Rectangle | null;
 }
 
 export const handleDetectedObjectClick = async (
@@ -207,6 +215,7 @@ export const handleDetectedObjectClick = async (
     containerElement,
     visualSearchId,
     token,
+    imageBounds,
     campaignId,
     isSearchInProgress,
     setSearchInProgress,
@@ -240,6 +249,7 @@ export const handleDetectedObjectClick = async (
           imageElement,
           detectedObject,
           containerElement,
+          imageBounds,
         );
 
         return E.right({
@@ -252,5 +262,22 @@ export const handleDetectedObjectClick = async (
     return E.left(`Visual search failed: ${error}`);
   } finally {
     setSearchInProgress(false);
+  }
+};
+
+export const autoSelectFirstObject = (
+  imageIndex: number,
+  detectedObjects: Rectangle[],
+  onSelectObject: (
+    detectedObject: Rectangle,
+    objectIndex: number,
+    imageIndex: number,
+  ) => Promise<void>,
+  delay: number,
+) => {
+  if (detectedObjects.length > 0) {
+    setTimeout(async () => {
+      await onSelectObject(detectedObjects[0], 0, imageIndex);
+    }, delay);
   }
 };

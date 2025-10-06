@@ -2,13 +2,13 @@ import { h } from "@stencil/core";
 import { Rectangle } from "../../interfaces/search";
 import { Recommendation } from "../../interfaces";
 import { BasicEventData } from "../../recommendation/events";
-import { ModalPosition } from "./helpers";
 import { isDesktop } from "../../helpers/device/checkDeviceType";
 import {
   configureSwiperElement,
   getSwiperStyles,
 } from "../../utils/swiper/swiperUtils";
 import { SecondaryActionIcon } from "../vviinn-icons/icons/SecondaryActionIcon";
+import { ModalPosition } from "./helpers";
 
 export interface DetectedObjectsProps {
   imageBounds: Rectangle | null;
@@ -62,9 +62,10 @@ export interface SwiperProps {
   renderDetectedObjects: (imageIndex: number) => any;
   onNavigatePrev?: () => void;
   onNavigateNext?: () => void;
-  shouldShowArrows?: boolean;
+  showNavigation?: boolean;
   onSwiperRef?: (el: any) => void;
   swiperKey?: string;
+  allowTouchMove?: boolean;
 }
 
 const getImageStyles = (height: number) => {
@@ -75,6 +76,29 @@ const getImageStyles = (height: number) => {
     height: isDesktop() ? `${height}px` : "auto",
     objectFit: "contain" as const,
   };
+};
+
+export const renderNavigation = (
+  swiperActiveIndex: number,
+  totalImages: number,
+  onNavigatePrev: () => void,
+  onNavigateNext: () => void,
+) => {
+  const handlePrevClick = () => onNavigatePrev();
+  const handleNextClick = () => onNavigateNext();
+
+  return (
+    <div class="carousel-navigation">
+      <div
+        class={`swiper-button-prev ${swiperActiveIndex === 0 ? "disabled" : ""}`}
+        onClick={handlePrevClick}
+      />
+      <div
+        class={`swiper-button-next ${swiperActiveIndex === totalImages - 1 ? "disabled" : ""}`}
+        onClick={handleNextClick}
+      />
+    </div>
+  );
 };
 
 export const renderSwiper = (props: SwiperProps) => {
@@ -88,9 +112,10 @@ export const renderSwiper = (props: SwiperProps) => {
     renderDetectedObjects,
     onNavigatePrev,
     onNavigateNext,
-    shouldShowArrows = true,
+    showNavigation,
     onSwiperRef,
     swiperKey,
+    allowTouchMove = true,
   } = props;
 
   if (!imageUrls || imageUrls.length <= 1) {
@@ -117,6 +142,7 @@ export const renderSwiper = (props: SwiperProps) => {
         initialSlide: swiperActiveIndex,
         pagination: true,
         keyboard: true,
+        allowTouchMove,
       });
     }
     if (onSwiperRef) {
@@ -124,59 +150,44 @@ export const renderSwiper = (props: SwiperProps) => {
     }
   };
 
-  const handlePrevClick = () => {
-    if (onNavigatePrev) {
-      onNavigatePrev();
-    }
-  };
-
-  const handleNextClick = () => {
-    if (onNavigateNext) {
-      onNavigateNext();
-    }
-  };
-
   const swiperStyles = getSwiperStyles(desktop);
 
   return (
-    <div
-      class={`swiper-wrapper ${desktop ? "desktop-carousel" : "mobile-slider"}`}
-    >
-      <swiper-container
-        key={swiperKey}
-        ref={swiperRef}
-        onSlideChange={onSlideChange}
-        style={swiperStyles}
-        pagination={!desktop ? "true" : undefined}
-        pagination-clickable={!desktop ? "true" : undefined}
+    <div class="swiper-container-wrapper">
+      <div
+        class={`swiper-wrapper ${desktop ? "desktop-carousel" : "mobile-slider"}`}
       >
-        {imageUrls.map((url, index) => (
-          <swiper-slide key={index}>
-            <div class="image-container">
-              <img
-                ref={(el: HTMLImageElement) => onImageRef(el, index)}
-                src={url}
-                alt={`Shop the look ${index + 1}`}
-                class="main-image"
-                style={getImageStyles(height)}
-              />
-              {renderDetectedObjects(index)}
-            </div>
-          </swiper-slide>
-        ))}
-      </swiper-container>
-      {desktop && shouldShowArrows && (
-        <div class="carousel-navigation">
-          <div
-            class={`swiper-button-prev ${swiperActiveIndex === 0 ? "disabled" : ""}`}
-            onClick={handlePrevClick}
-          />
-          <div
-            class={`swiper-button-next ${swiperActiveIndex === totalImages - 1 ? "disabled" : ""}`}
-            onClick={handleNextClick}
-          />
-        </div>
-      )}
+        <swiper-container
+          key={swiperKey}
+          ref={swiperRef}
+          onSlideChange={onSlideChange}
+          style={swiperStyles}
+          pagination={!desktop ? "true" : undefined}
+          pagination-clickable={!desktop ? "true" : undefined}
+        >
+          {imageUrls.map((url, index) => (
+            <swiper-slide key={index}>
+              <div class="image-container">
+                <img
+                  ref={(el: HTMLImageElement) => onImageRef(el, index)}
+                  src={url}
+                  alt={`Shop the look ${index + 1}`}
+                  class="main-image"
+                  style={getImageStyles(height)}
+                />
+                {renderDetectedObjects(index)}
+              </div>
+            </swiper-slide>
+          ))}
+        </swiper-container>
+      </div>
+      {showNavigation &&
+        renderNavigation(
+          swiperActiveIndex,
+          totalImages,
+          onNavigatePrev,
+          onNavigateNext,
+        )}
     </div>
   );
 };
@@ -315,18 +326,17 @@ export const renderModal = (props: ModalProps) => {
     modalContentRef,
   } = props;
 
-  if (!showModal || !selectedDetectedObject) return null;
+  if (!showModal || !selectedDetectedObject || !searchResults?.length)
+    return null;
 
   const isMobile = !isDesktop();
-
-  let modalStyle = {};
-  if (modalPosition) {
-    modalStyle = {
-      "--modal-x": `${modalPosition.x}px`,
-      "--modal-y": `${modalPosition.y}px`,
-      ...(modalPosition.anchor && { "--modal-anchor": modalPosition.anchor }),
-    };
-  }
+  const modalStyle = modalPosition
+    ? {
+        "--modal-x": `${modalPosition.x}px`,
+        "--modal-y": `${modalPosition.y}px`,
+        "--modal-anchor": modalPosition.anchor,
+      }
+    : {};
 
   return (
     <div
