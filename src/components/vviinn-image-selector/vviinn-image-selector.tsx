@@ -23,6 +23,7 @@ import {
 import { BasicError } from "../../error";
 import { VisualSearchResponse } from "../../interfaces";
 import { setLocalStorageItems } from "../../localStorage";
+import { checkImageType } from "../../Image/error";
 
 /**
  * @part button -  button look and feel
@@ -34,7 +35,7 @@ import { setLocalStorageItems } from "../../localStorage";
 })
 export class VviinnImageSelector {
   @Event() vviinnImageUploadStarted: EventEmitter<ImageUploadEventData>;
-  /** Wrong image format, that isn't .jpg, .jpeg, png */
+  /** Wrong image format, that isn't .jpg, .jpeg, .png, .webp, or .avif */
   @Event() vviinnNoResult: EventEmitter<NoResultEventData>;
   @Event() vviinnImageUploadFinished: EventEmitter<SearchIdEventData>;
 
@@ -52,16 +53,29 @@ export class VviinnImageSelector {
   private fileInput: HTMLInputElement;
 
   private async handleInputChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files[0];
+
+    const validationResult = checkImageType(file);
+
+    if (E.isLeft(validationResult)) {
+      this.vviinnNoResult.emit({
+        ...this.basicEventData,
+        reason: validationResult.left.kind,
+      });
+      input.value = null;
+      return;
+    }
+
     this.vviinnImageUploadStarted.emit({
       ...this.basicEventData,
       isTriggeredByVpsWidget: this.storeName === "widget",
     });
-    const input = event.target as HTMLInputElement;
 
     const processingResult: E.Either<
       BasicError<string | Response>,
       VisualSearchResponse
-    > = await makeUploadFileRequest(this.storeName)(input.files[0]);
+    > = await makeUploadFileRequest(this.storeName)(file);
 
     pipe(
       processingResult,

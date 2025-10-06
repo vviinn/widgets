@@ -4,7 +4,7 @@ import { findFirstMap } from "fp-ts/Array";
 import { pipe } from "fp-ts/lib/function";
 import { none, some } from "fp-ts/lib/Option";
 
-const SUPPORTED_FILE_TYPES = ["jpg", "jpeg", "png", "webp"];
+const SUPPORTED_FILE_TYPES = ["jpg", "jpeg", "png", "webp", "avif"];
 
 const unsupportedFileTypeError: BasicError<string> = {
   kind: "client",

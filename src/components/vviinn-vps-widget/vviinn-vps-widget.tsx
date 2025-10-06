@@ -243,7 +243,7 @@ export class VviinnVpsWidget {
   /** The image upload has started */
   @Event() vviinnImageUploadStarted: EventEmitter<ImageUploadEventData>;
 
-  /** Wrong image format, that isn't .jpg, .jpeg, png, or the request failed */
+  /** Wrong image format, that isn't .jpg, .jpeg, .png, .webp, or .avif, or the request failed */
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
   private overflow: string;
@@ -420,7 +420,7 @@ export class VviinnVpsWidget {
       this.trackWidgetEvent("open");
     } else {
       document.body.style.overflow = this.overflow;
-      this.initResultEvents();
+      this.showInWidget && this.initResultEvents();
     }
   }
 
@@ -663,7 +663,7 @@ export class VviinnVpsWidget {
     this.wrongImageFormat = false;
     this.resetScroll("results-block");
     this.stopStreamTracks();
-    this.initResultEvents();
+    this.showInWidget && this.initResultEvents();
     this.stream = null;
     this.isCameraEnabled = false;
     this.isCameraButtonClicked = false;
