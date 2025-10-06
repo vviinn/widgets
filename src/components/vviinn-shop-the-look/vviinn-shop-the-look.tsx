@@ -488,7 +488,10 @@ export class VviinnShopTheLook {
       this.swiperActiveIndex = imageIndex;
       this.navigateToSlide(imageIndex);
       await new Promise((resolve) =>
-        setTimeout(() => requestAnimationFrame(() => requestAnimationFrame(resolve)), 200)
+        setTimeout(
+          () => requestAnimationFrame(() => requestAnimationFrame(resolve)),
+          200,
+        ),
       );
     }
 
@@ -976,7 +979,7 @@ export class VviinnShopTheLook {
       onNavigatePrev: this.handleNavigatePrev,
       onNavigateNext: this.handleNavigateNext,
       swiperKey: this.swiperKey,
-      allowTouchMove: !this.showCropper || isDesktop(),
+      allowTouchMove: !this.showCropper,
       showNavigation: (this.needNavigation && isDesktop()) || this.showCropper,
     };
     return renderSwiper(props);
