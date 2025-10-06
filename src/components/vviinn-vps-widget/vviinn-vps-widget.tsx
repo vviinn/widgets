@@ -676,9 +676,7 @@ export class VviinnVpsWidget {
 
   private resetState = () => {
     this.resetInnerState();
-    this.showInWidget
-      ? resetStore(this.storeName, "appStateAndReceivedData")
-      : resetStore(this.storeName, "appStateOnly");
+    this.showInWidget && resetStore(this.storeName, "appStateAndReceivedData");
   };
 
   private haveErrors(): boolean {
