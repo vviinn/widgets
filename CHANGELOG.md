@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.189.0](https://github.com/vviinn/widgets/compare/v2.188.0...v2.189.0) (2025-10-07)
+
+
+### Features
+
+* Support AVIF format for images. ([b62f2f7](https://github.com/vviinn/widgets/commit/b62f2f7d73d401be27a38efc5f6e17ac0b13b732))
+
+
+### Bug Fixes
+
+* Infinite loading after uploading the unsupported image format for vviinn-components ([6cb2ea5](https://github.com/vviinn/widgets/commit/6cb2ea5f923bcfe56feeeb67fc0ea12caff4a620))
+
 ## [2.188.0](https://github.com/vviinn/widgets/compare/v2.187.1...v2.188.0) (2025-10-06)
 
 
