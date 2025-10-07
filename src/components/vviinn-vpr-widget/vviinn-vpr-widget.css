@@ -1,4 +1,5 @@
 @import "../../variables.css";
+@import "../../styles/utilities.css";
 
 :host {
   /**
@@ -120,15 +121,6 @@
   font-family: var(--font-family, var(--font-family-base));
   font-size: var(--font-size-headline);
   padding-bottom: 48px;
-}
-
-.visually-hidden {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: -1;
-  height: 0;
-  width: 0;
 }
 
 .recommendations-results.recommendations-grid {
