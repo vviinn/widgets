@@ -1008,6 +1008,8 @@ export class VviinnShopTheLook {
       },
       (uploadData: ProcessFileUploadResult) => {
         this.clearModalAndSlideState();
+        if (this.showCropper) this.cropperManager?.destroyAll();
+
         this.imageStore.shiftIndicesForward(0);
 
         this.pendingUploadData = {
