@@ -132,6 +132,7 @@ export class VviinnShopTheLook {
   private autoSelectTimeout?: number;
   private cropDebounceTimeout?: number;
   private isManualObjectSelection: boolean = false;
+  private isNavigatingToSlide: boolean = false;
   private fileInput: HTMLInputElement;
 
   componentWillLoad() {
@@ -491,15 +492,23 @@ export class VviinnShopTheLook {
 
     if (needsSlideTransition) {
       this.isManualObjectSelection = true;
-      this.selectedDetectedObject = null;
+      this.isNavigatingToSlide = true;
       this.swiperActiveIndex = imageIndex;
+
       this.navigateToSlide(imageIndex);
+      this.selectedDetectedObject = detectedObject;
+      this.modalImageIndex = imageIndex;
+
+      // Wait for slide transition before API call to ensure correct modal positioning
       await new Promise((resolve) =>
-        setTimeout(
-          () => requestAnimationFrame(() => requestAnimationFrame(resolve)),
-          200,
-        ),
+        setTimeout(() => {
+          this.isNavigatingToSlide = false;
+          requestAnimationFrame(() => requestAnimationFrame(resolve));
+        }, 300),
       );
+    } else {
+      this.selectedDetectedObject = detectedObject;
+      this.modalImageIndex = imageIndex;
     }
 
     if (this.showCropper) {
@@ -509,12 +518,10 @@ export class VviinnShopTheLook {
       }
     }
 
-    this.selectedDetectedObject = detectedObject;
     this.isManualObjectSelection = false;
     this.showLoadingSpinner = true;
     this.showModal = false;
     this.resetDetailedView();
-    this.modalImageIndex = imageIndex;
 
     const imageBounds = this.getImageBounds(imageIndex);
     const imageElement =
@@ -792,6 +799,7 @@ export class VviinnShopTheLook {
       this.clearModalAndSlideState();
 
       setTimeout(() => {
+        this.isNavigatingToSlide = false;
         this.ensureSlideSearchTriggered(this.swiperActiveIndex);
       }, TIMING.SLIDE_TRANSITION_DELAY);
     }
@@ -935,18 +943,28 @@ export class VviinnShopTheLook {
     imageIndex: number,
     detectedObjects: Rectangle[],
   ) {
+    const hasNoDetectedObjects = !detectedObjects?.length;
+    const isNotCurrentSlide = !this.isCurrentSlide(imageIndex);
+    const hasActiveTimeout = !!this.autoSelectTimeout;
+    const isUserDriven =
+      this.isManualObjectSelection || this.isNavigatingToSlide;
+
     if (
-      !detectedObjects?.length ||
-      !this.isCurrentSlide(imageIndex) ||
-      this.autoSelectTimeout ||
-      this.isManualObjectSelection
+      hasNoDetectedObjects ||
+      isNotCurrentSlide ||
+      hasActiveTimeout ||
+      isUserDriven
     ) {
       return;
     }
 
     this.autoSelectTimeout = window.setTimeout(() => {
       this.autoSelectTimeout = undefined;
-      if (!this.isCurrentSlide(imageIndex) || this.showModal) return;
+
+      const isNotCurrentSlide = !this.isCurrentSlide(imageIndex);
+      if (isNotCurrentSlide || this.showModal || this.isNavigatingToSlide) {
+        return;
+      }
 
       const first = detectedObjects[0];
       if (first) {
@@ -1027,11 +1045,13 @@ export class VviinnShopTheLook {
   };
 
   private updateSlideIndex = (newIndex: number) => {
+    this.isNavigatingToSlide = true;
     this.swiperActiveIndex = newIndex;
     this.navigateToSlide(newIndex);
     this.clearModalAndSlideState();
 
     setTimeout(() => {
+      this.isNavigatingToSlide = false;
       const imageState = this.imageStore.getImageState(newIndex);
 
       if (!imageState.searchCompleted && !imageState.searchTriggered) {

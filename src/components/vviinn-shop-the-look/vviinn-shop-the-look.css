@@ -586,6 +586,6 @@ vviinn-image::part(image),
   .product-details-card-wrapper
   vviinn-product-card::part(image-picture),
 .widget-style-cornered .upload-button,
-.carousel-navigation button {
+.widget-style-cornered .carousel-navigation button {
   border-radius: 0;
 }
