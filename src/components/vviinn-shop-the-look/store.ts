@@ -129,8 +129,7 @@ export class ShopTheLookImageStore {
     if (isModalOpen) return false;
 
     const isNewlyVisible = isVisible && wasVisible === false;
-    const hasRequiredTokenAndState =
-      this.config.isWidgetVisible && this.config.token;
+    const hasToken = !!this.config.token;
     const isSearchEligible =
       !currentState.searchCompleted && !currentState.searchTriggered;
     const hasCapacityForMoreSearches =
@@ -138,7 +137,7 @@ export class ShopTheLookImageStore {
 
     return (
       isNewlyVisible &&
-      hasRequiredTokenAndState &&
+      hasToken &&
       isSearchEligible &&
       hasCapacityForMoreSearches
     );

@@ -412,9 +412,9 @@ export class VviinnShopTheLook {
 
       if (currentImageState?.searchCompleted) {
         this.activateCurrentSlide();
-      } else if (this.totalImages === 1 || !isDesktopView) {
-        // Mark current image as visible for mobile/single image
-        if (!isDesktopView || this.totalImages === 1) {
+      } else if (this.totalImages === 1 || !isDesktopView || this.showCropper) {
+        // Mark current image as visible for mobile/single image/cropper mode
+        if (!isDesktopView || this.totalImages === 1 || this.showCropper) {
           this.markCurrentImageAsVisible();
         }
 
@@ -425,6 +425,10 @@ export class VviinnShopTheLook {
             searchTriggered: true,
           });
           this.performVisualSearch(this.swiperActiveIndex);
+        }
+
+        if (this.showCropper) {
+          this.activateCropperForSlide(this.swiperActiveIndex);
         }
       }
     }
@@ -599,7 +603,7 @@ export class VviinnShopTheLook {
     const targetImageUrl = this.imageUrlsList[targetImageIndex];
     if (!this.token || !targetImageUrl) return;
 
-    const isCurrentImage = targetImageIndex === this.swiperActiveIndex;
+    const isCurrentImage = this.isCurrentSlide(targetImageIndex);
     if (isCurrentImage) this.showLoadingSpinner = true;
 
     const params: VisualSearchParams = {
@@ -646,7 +650,7 @@ export class VviinnShopTheLook {
         const shouldAutoClick =
           targetImageState.detectedObjects.length > 0 &&
           isCurrentImage &&
-          targetImageIndex === this.swiperActiveIndex &&
+          this.isCurrentSlide(targetImageIndex) &&
           !this.showModal;
 
         if (shouldAutoClick) {
@@ -813,7 +817,7 @@ export class VviinnShopTheLook {
 
     this.imageStore.updateImageState(index, { refProcessed: true });
 
-    if (index === this.swiperActiveIndex || this.totalImages <= 1) {
+    if (this.isCurrentSlide(index) || this.totalImages <= 1) {
       this.imageElement = el;
     }
 
@@ -873,7 +877,7 @@ export class VviinnShopTheLook {
     index: number,
   ) => {
     requestAnimationFrame(() => {
-      if (index === this.swiperActiveIndex || this.totalImages <= 1) {
+      if (this.isCurrentSlide(index) || this.totalImages <= 1) {
         this.updateNavigationVisibility();
       }
     });
@@ -881,7 +885,10 @@ export class VviinnShopTheLook {
 
   private initializeImageForCropper = (el: HTMLImageElement, index: number) => {
     this.updateImageBoundsForElement(el, index);
-    this.cropperManager?.initializeCropper(el, index, this.swiperActiveIndex);
+
+    if (this.isCurrentSlide(index)) {
+      this.cropperManager?.initializeCropper(el, index, this.swiperActiveIndex);
+    }
   };
 
   private performVisualSearchForImage = async (imageIndex: number) => {
