@@ -24,13 +24,16 @@
   align-items: center;
 }
 
-/* Upload Button */
-
-.upload-button-container {
+.actions-container {
   width: 100%;
   display: flex;
-  padding: var(--spacing-200) 0;
+  align-items: center;
+  gap: var(--spacing-300);
+  margin-top: var(--spacing-250);
+  justify-content: flex-end;
 }
+
+/* Upload Button */
 
 .upload-button {
   display: inline-flex;
@@ -151,35 +154,28 @@ swiper-container::part(bullet-active):hover {
 
 .carousel-navigation {
   display: flex;
-  position: absolute;
-  bottom: var(--spacing-150);
-  right: var(--spacing-150);
   gap: var(--spacing-100);
-  z-index: 10;
 }
 
 .swiper-button-prev,
 .swiper-button-next {
   position: relative;
-  width: 32px;
-  height: 32px;
-  background: rgba(255, 255, 255, 0.9);
+  width: 48px;
+  height: 48px;
+  background: var(--button-bg-color-secondary);
+  border: none;
   border-radius: var(--border-radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  backdrop-filter: blur(4px);
+  transition: background 0.3s ease;
   margin: 0;
 }
 
 .swiper-button-prev:hover,
 .swiper-button-next:hover {
-  background: rgba(255, 255, 255, 1);
-  transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  background: var(--button-bg-color-secondary-hover);
 }
 
 .swiper-button-prev::after,
@@ -190,7 +186,6 @@ swiper-container::part(bullet-active):hover {
   border: 2px solid var(--color-icon-helper);
   border-top: none;
   border-right: none;
-  transition: border-color 0.3s ease;
 }
 
 .swiper-button-prev::after {
@@ -210,7 +205,7 @@ swiper-container::part(bullet-active):hover {
 
 .swiper-button-prev.disabled,
 .swiper-button-next.disabled {
-  opacity: 0.3;
+  opacity: 0.5;
   cursor: not-allowed;
   pointer-events: none;
 }
@@ -589,6 +584,8 @@ vviinn-image::part(image),
   vviinn-product-card::part(image),
 .widget-style-cornered
   .product-details-card-wrapper
-  vviinn-product-card::part(image-picture) {
+  vviinn-product-card::part(image-picture),
+.widget-style-cornered .upload-button,
+.carousel-navigation button {
   border-radius: 0;
 }

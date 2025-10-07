@@ -44,6 +44,7 @@ import {
   DetectedObjectsProps,
   SwiperProps,
   ModalProps,
+  renderNavigation,
 } from "./render-helpers";
 import { Locale } from "../../locale";
 import { TEST_BASIC_EVENT_DATA } from "./test-data";
@@ -1045,9 +1046,11 @@ export class VviinnShopTheLook {
     }, TIMING.SLIDE_TRANSITION_DELAY);
   };
 
+  private showNavigation = () =>
+    (this.needNavigation && isDesktop()) || this.showCropper;
+
   private renderSwiperWrapper = () => {
     const props: SwiperProps = {
-      totalImages: this.totalImages,
       imageUrls: this.imageUrlsList,
       swiperActiveIndex: this.swiperActiveIndex,
       height: this.height,
@@ -1056,11 +1059,8 @@ export class VviinnShopTheLook {
       onSlideChange: this.handleSlideChange,
       onImageRef: this.handleImageRef,
       renderDetectedObjects: this.renderDetectedObjectsWrapper,
-      onNavigatePrev: this.handleNavigatePrev,
-      onNavigateNext: this.handleNavigateNext,
       swiperKey: this.swiperKey,
       allowTouchMove: !this.showCropper,
-      showNavigation: (this.needNavigation && isDesktop()) || this.showCropper,
     };
     return renderSwiper(props);
   };
@@ -1101,27 +1101,37 @@ export class VviinnShopTheLook {
             )}
           </div>
           {this.renderModalWrapper()}
-          {this.uploadMode && (
-            <div class="upload-button-container">
-              <button
-                class="upload-button"
-                onClick={() => this.fileInput?.click()}
-                disabled={this.showLoadingSpinner}
-              >
-                <slot name="vviinn-image-upload-icon">
-                  <UploadActionIconVariant />
-                </slot>
-                <slot name="upload-button-text"></slot>
-              </button>
-              <input
-                type="file"
-                class="visually-hidden"
-                accept="image/*"
-                onChange={this.handleFileUpload}
-                ref={(el) => (this.fileInput = el as HTMLInputElement)}
-              />
-            </div>
-          )}
+          <div class="actions-container">
+            {this.uploadMode && (
+              <div class="upload-button-container">
+                <button
+                  class="upload-button"
+                  onClick={() => this.fileInput?.click()}
+                  disabled={this.showLoadingSpinner}
+                >
+                  <slot name="vviinn-image-upload-icon">
+                    <UploadActionIconVariant />
+                  </slot>
+                  <slot name="upload-button-text"></slot>
+                </button>
+                <input
+                  type="file"
+                  class="visually-hidden"
+                  accept="image/*"
+                  onChange={this.handleFileUpload}
+                  ref={(el) => (this.fileInput = el as HTMLInputElement)}
+                />
+              </div>
+            )}
+
+            {this.showNavigation() &&
+              renderNavigation(
+                this.swiperActiveIndex,
+                this.totalImages,
+                this.handleNavigatePrev,
+                this.handleNavigateNext,
+              )}
+          </div>
         </div>
       </Host>
     );

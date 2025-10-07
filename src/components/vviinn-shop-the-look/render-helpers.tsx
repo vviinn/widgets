@@ -51,7 +51,6 @@ export const renderDetectedObjects = (props: DetectedObjectsProps) => {
 };
 
 export interface SwiperProps {
-  totalImages: number;
   imageUrls: string[];
   swiperActiveIndex: number;
   height: number;
@@ -60,9 +59,6 @@ export interface SwiperProps {
   onSlideChange: (event: any) => void;
   onImageRef: (el: HTMLImageElement, index: number) => void;
   renderDetectedObjects: (imageIndex: number) => any;
-  onNavigatePrev?: () => void;
-  onNavigateNext?: () => void;
-  showNavigation?: boolean;
   onSwiperRef?: (el: any) => void;
   swiperKey?: string;
   allowTouchMove?: boolean;
@@ -89,11 +85,11 @@ export const renderNavigation = (
 
   return (
     <div class="carousel-navigation">
-      <div
+      <button
         class={`swiper-button-prev ${swiperActiveIndex === 0 ? "disabled" : ""}`}
         onClick={handlePrevClick}
       />
-      <div
+      <button
         class={`swiper-button-next ${swiperActiveIndex === totalImages - 1 ? "disabled" : ""}`}
         onClick={handleNextClick}
       />
@@ -103,16 +99,12 @@ export const renderNavigation = (
 
 export const renderSwiper = (props: SwiperProps) => {
   const {
-    totalImages,
     imageUrls,
     swiperActiveIndex,
     height,
     onSlideChange,
     onImageRef,
     renderDetectedObjects,
-    onNavigatePrev,
-    onNavigateNext,
-    showNavigation,
     onSwiperRef,
     swiperKey,
     allowTouchMove = true,
@@ -181,13 +173,6 @@ export const renderSwiper = (props: SwiperProps) => {
           ))}
         </swiper-container>
       </div>
-      {showNavigation &&
-        renderNavigation(
-          swiperActiveIndex,
-          totalImages,
-          onNavigatePrev,
-          onNavigateNext,
-        )}
     </div>
   );
 };
