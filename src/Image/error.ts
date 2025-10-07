@@ -5,6 +5,9 @@ import { pipe } from "fp-ts/lib/function";
 import { none, some } from "fp-ts/lib/Option";
 
 const SUPPORTED_FILE_TYPES = ["jpg", "jpeg", "png", "webp", "avif"];
+export const acceptableFileFormats: string = SUPPORTED_FILE_TYPES.map(
+  (type) => `.${type}`,
+).join(", ");
 
 const unsupportedFileTypeError: BasicError<string> = {
   kind: "client",

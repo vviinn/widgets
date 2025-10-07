@@ -23,7 +23,7 @@ import {
 import { BasicError } from "../../error";
 import { VisualSearchResponse } from "../../interfaces";
 import { setLocalStorageItems } from "../../localStorage";
-import { checkImageType } from "../../Image/error";
+import { acceptableFileFormats, checkImageType } from "../../Image/error";
 
 /**
  * @part button -  button look and feel
@@ -42,7 +42,7 @@ export class VviinnImageSelector {
   @Prop() basicEventData: BasicEventData;
   @Prop() startUpload: boolean;
   @Prop() loading: boolean = false;
-  @Prop() accept: "image" | "application-octet-stream" = "image";
+  @Prop() accept: string;
   @Prop() resetVpsButton: () => void;
   @Prop() token?: string;
   @Prop() apiPath?: string;
@@ -63,7 +63,7 @@ export class VviinnImageSelector {
         ...this.basicEventData,
         reason: validationResult.left.kind,
       });
-      input.value = '';
+      input.value = "";
       return;
     }
 
@@ -101,7 +101,7 @@ export class VviinnImageSelector {
       ),
     );
 
-    input.value = '';
+    input.value = "";
   }
 
   @Watch("startUpload")
@@ -137,9 +137,7 @@ export class VviinnImageSelector {
           class="visually-hidden"
           type="file"
           tabindex="-1"
-          accept={
-            this.accept === "image" ? "image/*" : "application/octet-stream"
-          }
+          accept={acceptableFileFormats}
           onChange={(event: Event) => this.handleInputChange(event)}
           ref={(el) => (this.fileInput = el as HTMLInputElement)}
         />
