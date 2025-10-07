@@ -13,6 +13,7 @@ import {
   makeVisualSearchRequest,
   shopTheLookState,
 } from "../../store/search.store";
+import { imageFromFileTask } from "../../Image/fromFile";
 
 export type AnchorPosition =
   | "top-left"
@@ -279,5 +280,67 @@ export const autoSelectFirstObject = (
     setTimeout(async () => {
       await onSelectObject(detectedObjects[0], 0, imageIndex);
     }, delay);
+  }
+};
+
+export const buildImageUrlsList = (
+  uploadedImageUrls: string[],
+  imageUrlsProp: string,
+): string[] => {
+  const propImageUrls =
+    imageUrlsProp && imageUrlsProp.trim()
+      ? imageUrlsProp
+          .split(",")
+          .map((url) => url.trim())
+          .filter((url) => url.length > 0)
+      : [];
+
+  return [...uploadedImageUrls, ...propImageUrls];
+};
+
+export interface ProcessFileUploadParams {
+  file: File;
+  token: string;
+  campaignId?: string;
+}
+
+export interface ProcessFileUploadResult {
+  imageUrl: string;
+  detectedObjects: Rectangle[];
+  visualSearchId: string | null;
+}
+
+export const processFileUpload = async (
+  params: ProcessFileUploadParams,
+): Promise<E.Either<string, ProcessFileUploadResult>> => {
+  const { file, token, campaignId } = params;
+
+  try {
+    const imageElement = await imageFromFileTask(file)();
+    const imageUrl = imageElement.src;
+
+    const uploadResult = await makeUploadFileRequest(
+      "shopTheLook",
+      token,
+      campaignId,
+    )(file);
+
+    return E.fold(
+      (error: any) => E.left(`Upload failed: ${error}`),
+      (response: VisualSearchResponse) => {
+        const detectedObjects =
+          response.interactions?.suggestedSearchAreas?.map(
+            (area: any) => area.rectangle,
+          ) || [];
+
+        return E.right({
+          imageUrl,
+          detectedObjects,
+          visualSearchId: response.requestId || null,
+        });
+      },
+    )(uploadResult);
+  } catch (error) {
+    return E.left(`Failed to process image: ${error}`);
   }
 };

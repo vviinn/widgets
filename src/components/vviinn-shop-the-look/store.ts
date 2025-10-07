@@ -204,4 +204,15 @@ export class ShopTheLookImageStore {
       (state) => state.searchTriggered && !state.searchCompleted,
     );
   }
+
+  shiftIndicesForward(startIndex: number = 0) {
+    const statesToShift = Array.from(this.imageStates.entries())
+      .filter(([index]) => index >= startIndex)
+      .sort(([a], [b]) => b - a);
+
+    statesToShift.forEach(([oldIndex, state]) => {
+      this.imageStates.delete(oldIndex);
+      this.imageStates.set(oldIndex + 1, state);
+    });
+  }
 }

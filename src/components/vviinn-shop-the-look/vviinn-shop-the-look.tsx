@@ -29,6 +29,10 @@ import {
   getVisibilityThreshold,
   calculateImageBounds,
   calculateModalPosition,
+  buildImageUrlsList,
+  processFileUpload,
+  ProcessFileUploadParams,
+  ProcessFileUploadResult,
 } from "./helpers";
 import { ShopTheLookImageStore, createDefaultImageState } from "./store";
 import { TIMING } from "./constants";
@@ -44,6 +48,7 @@ import {
 import { Locale } from "../../locale";
 import { TEST_BASIC_EVENT_DATA } from "./test-data";
 import { extractSlideIndex } from "../../utils/swiper/swiperUtils";
+import { UploadActionIconVariant } from "../vviinn-icons";
 
 if (typeof window !== "undefined") {
   register();
@@ -85,6 +90,8 @@ export class VviinnShopTheLook {
   @Prop() widgetStyle: "rounded" | "cornered" = "rounded";
   /** Enable cropper mode for manual area selection */
   @Prop() showCropper: boolean = false;
+  /** Enable upload mode to allow users to upload their own images */
+  @Prop() uploadMode: boolean = false;
   /** @internal */
   @Prop() apiPath?: string;
 
@@ -106,6 +113,7 @@ export class VviinnShopTheLook {
 
   @State() currentViewMode: "desktop" | "mobile" | null = null;
   @State() isWidgetVisible: boolean = false;
+  @State() uploadedImageUrls: string[] = [];
 
   /** Emitted when a detected object/hotspot is clicked. Contains the object ID and first recommended product. */
   @Event()
@@ -123,6 +131,7 @@ export class VviinnShopTheLook {
   private autoSelectTimeout?: number;
   private cropDebounceTimeout?: number;
   private isManualObjectSelection: boolean = false;
+  private fileInput: HTMLInputElement;
 
   componentWillLoad() {
     updateGlobalState({
@@ -132,13 +141,10 @@ export class VviinnShopTheLook {
       currencySign: this.currencySign,
     });
 
-    if (this.imageUrls && this.imageUrls.trim()) {
-      this.imageUrlsList = this.imageUrls
-        .split(",")
-        .map((url) => url.trim())
-        .filter((url) => url.length > 0);
-    }
-
+    this.imageUrlsList = buildImageUrlsList(
+      this.uploadedImageUrls,
+      this.imageUrls,
+    );
     this.totalImages = this.imageUrlsList.length;
 
     this.currentViewMode = isDesktop() ? "desktop" : "mobile";
@@ -822,16 +828,33 @@ export class VviinnShopTheLook {
         this.setupObserverAfterSwiper(el, index);
       }
 
-      if (el.complete && el.offsetWidth > 0) {
+      const initializeImage = () => {
         this.initializeImageForCropper(el, index);
+
+        if (this.pendingUploadData && index === 0) {
+          this.imageStore.updateImageStateData(
+            0,
+            this.pendingUploadData.detectedObjects,
+            true,
+            [],
+            this.pendingUploadData.visualSearchId,
+          );
+
+          if (this.pendingUploadData.detectedObjects.length > 0) {
+            this.scheduleAutoSelectFirstObject(
+              0,
+              this.pendingUploadData.detectedObjects,
+            );
+          }
+
+          this.pendingUploadData = null;
+        }
+      };
+
+      if (el.complete && el.offsetWidth > 0) {
+        initializeImage();
       } else {
-        el.addEventListener(
-          "load",
-          () => {
-            this.initializeImageForCropper(el, index);
-          },
-          { once: true },
-        );
+        el.addEventListener("load", initializeImage, { once: true });
       }
     }
   };
@@ -931,6 +954,63 @@ export class VviinnShopTheLook {
     }, TIMING.SEARCH_DEBOUNCE_DELAY);
   }
 
+  private pendingUploadData: {
+    detectedObjects: Rectangle[];
+    visualSearchId: string | null;
+  } | null = null;
+
+  private handleFileUpload = async (event: Event) => {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if (!file) return;
+
+    this.showLoadingSpinner = true;
+
+    const params: ProcessFileUploadParams = {
+      file,
+      token: this.token,
+      campaignId: this.campaignId,
+    };
+
+    const result = await processFileUpload(params);
+
+    E.fold(
+      (error: string) => {
+        console.error(error);
+        this.showLoadingSpinner = false;
+      },
+      (uploadData: ProcessFileUploadResult) => {
+        this.clearModalAndSlideState();
+        this.imageStore.shiftIndicesForward(0);
+
+        this.pendingUploadData = {
+          detectedObjects: uploadData.detectedObjects,
+          visualSearchId: uploadData.visualSearchId,
+        };
+
+        this.uploadedImageUrls = [
+          uploadData.imageUrl,
+          ...this.uploadedImageUrls,
+        ];
+        this.imageUrlsList = buildImageUrlsList(
+          this.uploadedImageUrls,
+          this.imageUrls,
+        );
+        this.totalImages = this.imageUrlsList.length;
+
+        this.swiperActiveIndex = 0;
+        this.showLoadingSpinner = false;
+
+        requestAnimationFrame(() => {
+          this.navigateToSlide(0);
+        });
+      },
+    )(result);
+
+    input.value = "";
+  };
+
   private handleNavigatePrev = () => {
     if (this.swiperActiveIndex > 0) {
       const newIndex = this.swiperActiveIndex - 1;
@@ -1021,6 +1101,27 @@ export class VviinnShopTheLook {
             )}
           </div>
           {this.renderModalWrapper()}
+          {this.uploadMode && (
+            <div class="upload-button-container">
+              <button
+                class="upload-button"
+                onClick={() => this.fileInput?.click()}
+                disabled={this.showLoadingSpinner}
+              >
+                <slot name="vviinn-image-upload-icon">
+                  <UploadActionIconVariant />
+                </slot>
+                <slot name="upload-button-text"></slot>
+              </button>
+              <input
+                type="file"
+                class="visually-hidden"
+                accept="image/*"
+                onChange={this.handleFileUpload}
+                ref={(el) => (this.fileInput = el as HTMLInputElement)}
+              />
+            </div>
+          )}
         </div>
       </Host>
     );

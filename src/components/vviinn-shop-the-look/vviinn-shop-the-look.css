@@ -23,6 +23,45 @@
   align-items: center;
 }
 
+/* Upload Button */
+
+.upload-button-container {
+  width: 100%;
+  display: flex;
+  padding: var(--spacing-200) 0;
+}
+
+.upload-button {
+  display: inline-flex;
+  padding: var(--spacing-150);
+  justify-content: center;
+  align-items: center;
+  background: var(--button-bg-color-primary);
+  border: none;
+  border-radius: var(--border-radius-100);
+  color: var(--color-text-inverse);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.upload-button:hover {
+  background: var(--button-bg-color-primary-hover);
+}
+
+.upload-button:disabled {
+  cursor: not-allowed;
+}
+
+.visually-hidden {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
 /* Image Container & Main Image */
 
 .image-container {
