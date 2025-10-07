@@ -63,7 +63,7 @@ export class VviinnImageSelector {
         ...this.basicEventData,
         reason: validationResult.left.kind,
       });
-      input.value = null;
+      input.value = '';
       return;
     }
 
@@ -101,7 +101,7 @@ export class VviinnImageSelector {
       ),
     );
 
-    input.value = null;
+    input.value = '';
   }
 
   @Watch("startUpload")
