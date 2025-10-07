@@ -54,7 +54,8 @@ export class VviinnImageSelector {
 
   private async handleInputChange(event: Event) {
     const input = event.target as HTMLInputElement;
-    const file = input.files[0];
+    const file = input.files?.[0];
+    if (!file) return;
 
     const validationResult = checkImageType(file);
 
