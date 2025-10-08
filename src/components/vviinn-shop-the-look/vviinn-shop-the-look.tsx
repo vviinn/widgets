@@ -10,10 +10,10 @@ import {
   Watch,
 } from "@stencil/core";
 import * as E from "fp-ts/lib/Either";
+import { CropperManager } from "./cropper-manager";
 import { Recommendation } from "../../interfaces";
 import { Rectangle } from "../../interfaces/search";
 import { BasicEventData } from "../../recommendation/events";
-import { fromRenderedImage } from "../../geometry/Rectangle";
 import { register } from "swiper/element";
 import { updateGlobalState } from "../../store/store";
 import {
@@ -27,6 +27,12 @@ import {
   isDesktop,
   shouldRenderDetectedObjects,
   getVisibilityThreshold,
+  calculateImageBounds,
+  calculateModalPosition,
+  buildImageUrlsList,
+  processFileUpload,
+  ProcessFileUploadParams,
+  ProcessFileUploadResult,
 } from "./helpers";
 import { ShopTheLookImageStore, createDefaultImageState } from "./store";
 import { TIMING } from "./constants";
@@ -38,10 +44,17 @@ import {
   DetectedObjectsProps,
   SwiperProps,
   ModalProps,
+  renderNavigation,
 } from "./render-helpers";
 import { Locale } from "../../locale";
 import { TEST_BASIC_EVENT_DATA } from "./test-data";
-import { extractSlideIndex } from "../../utils/swiper/swiperUtils";
+import {
+  extractSlideIndex,
+  SwiperEvent,
+  SwiperContainerElement,
+} from "../../utils/swiper/swiperUtils";
+import { UploadActionIconVariant } from "../vviinn-icons";
+import { acceptableFileFormats } from "../../Image/error";
 
 if (typeof window !== "undefined") {
   register();
@@ -81,6 +94,10 @@ export class VviinnShopTheLook {
   @Prop() locale: Locale;
   /** Style variant for corner styling - 'rounded' for rounded corners, 'cornered' for sharp corners */
   @Prop() widgetStyle: "rounded" | "cornered" = "rounded";
+  /** Enable cropper mode for manual area selection */
+  @Prop() showCropper: boolean = false;
+  /** Enable upload mode to allow users to upload their own images */
+  @Prop() uploadMode: boolean = false;
   /** @internal */
   @Prop() apiPath?: string;
 
@@ -95,13 +112,14 @@ export class VviinnShopTheLook {
   @State() totalImages: number = 1;
   @State() imageUrlsList: string[] = [];
   @State() swiperKey: string = "swiper-0";
-  @State() showArrows: boolean = false;
+  @State() needNavigation: boolean = false;
 
   @State() showLoadingSpinner: boolean = false;
   @State() isSearchInProgress: boolean = false;
 
   @State() currentViewMode: "desktop" | "mobile" | null = null;
   @State() isWidgetVisible: boolean = false;
+  @State() uploadedImageUrls: string[] = [];
 
   /** Emitted when a detected object/hotspot is clicked. Contains the object ID and first recommended product. */
   @Event()
@@ -115,6 +133,12 @@ export class VviinnShopTheLook {
   private intersectionObserver: IntersectionObserver;
   private imageStore: ShopTheLookImageStore;
   private modalContentRef: HTMLElement;
+  private cropperManager: CropperManager;
+  private autoSelectTimeout?: number;
+  private cropDebounceTimeout?: number;
+  private isManualObjectSelection: boolean = false;
+  private isNavigatingToSlide: boolean = false;
+  private fileInput: HTMLInputElement;
 
   componentWillLoad() {
     updateGlobalState({
@@ -124,17 +148,14 @@ export class VviinnShopTheLook {
       currencySign: this.currencySign,
     });
 
-    if (this.imageUrls && this.imageUrls.trim()) {
-      this.imageUrlsList = this.imageUrls
-        .split(",")
-        .map((url) => url.trim())
-        .filter((url) => url.length > 0);
-    }
-
+    this.imageUrlsList = buildImageUrlsList(
+      this.uploadedImageUrls,
+      this.imageUrls,
+    );
     this.totalImages = this.imageUrlsList.length;
 
     this.currentViewMode = isDesktop() ? "desktop" : "mobile";
-    this.updateArrowsVisibility();
+    this.updateNavigationVisibility();
 
     const isDesktopView = isDesktop();
     const threshold = getVisibilityThreshold(isDesktopView);
@@ -144,9 +165,17 @@ export class VviinnShopTheLook {
       token: this.token,
       isWidgetVisible: this.isWidgetVisible,
       totalImages: this.totalImages,
-      onImageVisibilityChange: this.handleImageVisibilityChange.bind(this),
+      isModalOpen: this.showModal,
       onVisualSearchTrigger: this.handleVisualSearchTrigger.bind(this),
     });
+
+    if (this.showCropper) {
+      this.cropperManager = new CropperManager({
+        onCropEnd: (cropArea: Rectangle, imageIndex: number) => {
+          this.debouncedCropSearch(cropArea, imageIndex);
+        },
+      });
+    }
   }
 
   componentDidLoad() {
@@ -160,21 +189,16 @@ export class VviinnShopTheLook {
   @Watch("currentViewMode")
   onViewModeChange(newViewMode: "desktop" | "mobile" | null) {
     if (newViewMode) {
-      if (this.showModal) {
-        this.handleModalClose();
-      }
-
-      setTimeout(() => {
+      requestAnimationFrame(() => {
         this.setupSwiperEventListener();
         this.setupSwiperDragEventListeners();
-      }, 100);
+      });
     }
   }
 
-  @State() private rerenderTrigger: number = 0;
-
-  private triggerReRender() {
-    this.rerenderTrigger++;
+  @Watch("showModal")
+  onShowModalChange(newValue: boolean) {
+    this.imageStore?.updateConfig({ isModalOpen: newValue });
   }
 
   private resetDetailedView = () => {
@@ -188,6 +212,11 @@ export class VviinnShopTheLook {
     this.modalPosition = null;
     this.resetDetailedView();
     this.modalImageIndex = 0;
+
+    if (this.autoSelectTimeout) {
+      clearTimeout(this.autoSelectTimeout);
+      this.autoSelectTimeout = undefined;
+    }
   }
 
   private updateSearchingState(isCurrentImage: boolean = false) {
@@ -195,11 +224,14 @@ export class VviinnShopTheLook {
     if (isCurrentImage) {
       this.showLoadingSpinner = false;
     }
-    this.triggerReRender();
   }
 
   private getCurrentImageState() {
     return this.imageStore?.getImageState(this.swiperActiveIndex);
+  }
+
+  private isCurrentSlide(imageIndex: number): boolean {
+    return imageIndex === this.swiperActiveIndex;
   }
 
   disconnectedCallback() {
@@ -207,6 +239,9 @@ export class VviinnShopTheLook {
     document.removeEventListener("click", this.handleDocumentClick);
     this.intersectionObserver?.disconnect();
     this.imageStore?.disconnectAll();
+    this.cropperManager?.destroyAll();
+    if (this.autoSelectTimeout) clearTimeout(this.autoSelectTimeout);
+    if (this.cropDebounceTimeout) clearTimeout(this.cropDebounceTimeout);
 
     const swiperContainer =
       this.el.shadowRoot?.querySelector("swiper-container");
@@ -224,8 +259,16 @@ export class VviinnShopTheLook {
 
   private handleResize = () => {
     this.checkViewModeChange();
-    this.updateArrowsVisibility();
-    this.triggerReRender();
+    this.updateNavigationVisibility();
+
+    if (this.showCropper && this.cropperManager) {
+      requestAnimationFrame(() => {
+        this.cropperManager.updateCropperDimensions(
+          this.swiperActiveIndex,
+          (index) => this.imageStore.getImageElement(index),
+        );
+      });
+    }
   };
 
   private handleDocumentClick = (event: Event) => {
@@ -243,25 +286,21 @@ export class VviinnShopTheLook {
     const newViewMode = isDesktop() ? "desktop" : "mobile";
     if (newViewMode !== this.currentViewMode) {
       this.currentViewMode = newViewMode;
-      // Recreate swiper by changing key
+
+      if (this.showModal) this.handleModalClose();
+      // Recreate swiper by changing key to apply new configuration
       this.swiperKey = `swiper-${Date.now()}`;
     }
   };
 
-  private updateArrowsVisibility = () => {
-    const isDesktopView = isDesktop();
-    if (!isDesktopView) {
-      this.showArrows = false;
-      return;
-    }
-
+  private updateNavigationVisibility = () => {
     if (this.imageElement && this.imageElement.offsetWidth > 0) {
       const actualImageWidth = this.imageElement.offsetWidth + 20;
       const availableWidth = window.innerWidth - 100;
       const maxImagesVisible = Math.floor(availableWidth / actualImageWidth);
-      this.showArrows = this.totalImages > maxImagesVisible;
+      this.needNavigation = this.totalImages > maxImagesVisible;
     } else {
-      this.showArrows = this.totalImages > 1;
+      this.needNavigation = this.totalImages > 1;
     }
   };
 
@@ -277,6 +316,7 @@ export class VviinnShopTheLook {
 
         this.imageStore?.updateConfig({
           isWidgetVisible: this.isWidgetVisible,
+          isModalOpen: this.showModal,
         });
 
         if (!wasWidgetVisible && this.isWidgetVisible) {
@@ -323,11 +363,9 @@ export class VviinnShopTheLook {
     }
   };
 
-  private handleImageVisibilityChange = () => {
-    this.triggerReRender();
-  };
-
   private handleVisualSearchTrigger = (index: number) => {
+    if (this.showModal) return;
+
     this.performVisualSearchForImage(index);
     this.updateSearchingState();
   };
@@ -369,6 +407,7 @@ export class VviinnShopTheLook {
       isWidgetVisible: this.isWidgetVisible,
       token: this.token,
       totalImages: this.totalImages,
+      isModalOpen: this.showModal,
     });
 
     if (this.token && this.isWidgetVisible) {
@@ -377,10 +416,10 @@ export class VviinnShopTheLook {
       );
 
       if (currentImageState?.searchCompleted) {
-        this.loadImageState();
-      } else if (this.totalImages === 1 || !isDesktopView) {
-        // Mark current image as visible for mobile/single image
-        if (!isDesktopView || this.totalImages === 1) {
+        this.activateCurrentSlide();
+      } else if (this.totalImages === 1 || !isDesktopView || this.showCropper) {
+        // Mark current image as visible for mobile/single image/cropper mode
+        if (!isDesktopView || this.totalImages === 1 || this.showCropper) {
           this.markCurrentImageAsVisible();
         }
 
@@ -391,6 +430,10 @@ export class VviinnShopTheLook {
             searchTriggered: true,
           });
           this.performVisualSearch(this.swiperActiveIndex);
+        }
+
+        if (this.showCropper) {
+          this.activateCropperForSlide(this.swiperActiveIndex);
         }
       }
     }
@@ -404,10 +447,46 @@ export class VviinnShopTheLook {
     }
   }
 
-  private loadImageState() {
-    const isDesktopView = isDesktop();
-    if (!isDesktopView || this.totalImages === 1) {
-      this.markCurrentImageAsVisible();
+  private navigateToSlide(slideIndex: number) {
+    const swiperContainer = this.el.shadowRoot?.querySelector(
+      "swiper-container",
+    ) as SwiperContainerElement | null;
+    if (swiperContainer?.swiper) {
+      swiperContainer.swiper.slideTo(slideIndex);
+    }
+  }
+
+  private forceSearchForSlide(slideIndex: number) {
+    const imageState = this.imageStore.getImageState(slideIndex);
+    if (imageState) {
+      imageState.isVisible = true;
+      this.imageStore.setImageState(slideIndex, imageState);
+    }
+    this.imageStore.updateImageState(slideIndex, { searchTriggered: true });
+    this.performVisualSearch(slideIndex);
+  }
+
+  private ensureSlideSearchTriggered(slideIndex: number) {
+    const imageState = this.imageStore.getImageState(slideIndex);
+
+    if (!imageState.searchCompleted && !imageState.searchTriggered) {
+      this.forceSearchForSlide(slideIndex);
+    } else if (imageState.searchCompleted) {
+      this.activateCurrentSlide();
+    } else {
+      this.performVisualSearchIfReady();
+    }
+  }
+
+  private activateCurrentSlide() {
+    this.markCurrentImageAsVisible();
+
+    const imageState = this.imageStore.getImageState(this.swiperActiveIndex);
+    if (imageState?.detectedObjects?.length > 0 && !this.showModal) {
+      this.scheduleAutoSelectFirstObject(
+        this.swiperActiveIndex,
+        imageState.detectedObjects,
+      );
     }
   }
 
@@ -418,14 +497,54 @@ export class VviinnShopTheLook {
   ) => {
     if (!this.token) return;
 
-    this.selectedDetectedObject = detectedObject;
+    const needsSlideTransition =
+      isDesktop() && !this.isCurrentSlide(imageIndex);
+
+    if (needsSlideTransition) {
+      this.isManualObjectSelection = true;
+      this.isNavigatingToSlide = true;
+      this.swiperActiveIndex = imageIndex;
+
+      this.navigateToSlide(imageIndex);
+      this.selectedDetectedObject = detectedObject;
+      this.modalImageIndex = imageIndex;
+
+      // Wait for slide transition before API call to ensure correct modal positioning
+      await new Promise((resolve) =>
+        setTimeout(() => {
+          this.isNavigatingToSlide = false;
+          requestAnimationFrame(() => requestAnimationFrame(resolve));
+        }, 300),
+      );
+    } else {
+      this.selectedDetectedObject = detectedObject;
+      this.modalImageIndex = imageIndex;
+    }
+
+    if (this.showCropper) {
+      const hasCropperForSlide = this.cropperManager?.hasCropper?.(imageIndex);
+      if (!hasCropperForSlide) {
+        this.activateCropperForSlide(imageIndex);
+      }
+    }
+
+    this.isManualObjectSelection = false;
     this.showLoadingSpinner = true;
     this.showModal = false;
     this.resetDetailedView();
-    this.modalImageIndex = imageIndex;
 
+    const imageBounds = this.getImageBounds(imageIndex);
     const imageElement =
       this.imageStore.getImageElement(imageIndex) || this.imageElement;
+
+    if (imageBounds && imageElement) {
+      this.modalPosition = calculateModalPosition(
+        imageElement,
+        detectedObject,
+        this.el,
+        imageBounds,
+      );
+    }
 
     const imageState = this.imageStore.getImageState(imageIndex);
     const visualSearchId =
@@ -438,6 +557,7 @@ export class VviinnShopTheLook {
       token: this.token,
       visualSearchId,
       campaignId: this.campaignId,
+      imageBounds,
       isSearchInProgress: this.isSearchInProgress,
       setSearchInProgress: (inProgress: boolean) => {
         this.isSearchInProgress = inProgress;
@@ -464,10 +584,13 @@ export class VviinnShopTheLook {
           });
         }
 
-        this.modalPosition = response.modalPosition;
         this.showLoadingSpinner = false;
 
-        if (response.searchResults && response.searchResults.length > 0) {
+        if (
+          response.searchResults &&
+          response.searchResults.length > 0 &&
+          this.isCurrentSlide(imageIndex)
+        ) {
           this.showModal = true;
         }
 
@@ -486,7 +609,7 @@ export class VviinnShopTheLook {
     const targetImageUrl = this.imageUrlsList[targetImageIndex];
     if (!this.token || !targetImageUrl) return;
 
-    const isCurrentImage = targetImageIndex === this.swiperActiveIndex;
+    const isCurrentImage = this.isCurrentSlide(targetImageIndex);
     if (isCurrentImage) this.showLoadingSpinner = true;
 
     const params: VisualSearchParams = {
@@ -531,24 +654,21 @@ export class VviinnShopTheLook {
         }
 
         const shouldAutoClick =
-          targetImageState.detectedObjects.length > 0 && isCurrentImage;
+          targetImageState.detectedObjects.length > 0 &&
+          isCurrentImage &&
+          this.isCurrentSlide(targetImageIndex) &&
+          !this.showModal;
 
         if (shouldAutoClick) {
-          setTimeout(async () => {
-            await this.handleDetectedObjectClick(
-              targetImageState.detectedObjects[0],
-              0,
-              targetImageIndex,
-            );
-            this.imageStore.updateImageState(targetImageIndex, {
-              searchCompleted: true,
-            });
-          }, TIMING.SEARCH_DELAY);
-        } else {
-          this.imageStore.updateImageState(targetImageIndex, {
-            searchCompleted: true,
-          });
+          this.scheduleAutoSelectFirstObject(
+            targetImageIndex,
+            targetImageState.detectedObjects,
+          );
         }
+
+        this.imageStore.updateImageState(targetImageIndex, {
+          searchCompleted: true,
+        });
       },
     )(result);
   };
@@ -561,6 +681,71 @@ export class VviinnShopTheLook {
         : "",
       product,
     });
+  };
+
+  private getCropperBounds(imageIndex: number): Rectangle | null {
+    if (
+      this.showCropper &&
+      this.cropperManager?.hasCropper &&
+      this.cropperManager.hasCropper(imageIndex)
+    ) {
+      const cropperImage = this.el.shadowRoot?.querySelector(
+        ".cropper-container .cropper-canvas img",
+      ) as HTMLImageElement;
+      if (cropperImage && cropperImage.offsetWidth > 0) {
+        return calculateImageBounds(cropperImage);
+      }
+    }
+    return null;
+  }
+
+  private getStoreBounds(imageIndex: number): Rectangle | null {
+    const imageElement = this.imageStore.getImageElement(imageIndex);
+    if (imageElement && imageElement.offsetWidth > 0) {
+      return calculateImageBounds(imageElement);
+    }
+    return null;
+  }
+
+  private getVisibleSlideBounds(imageIndex: number): Rectangle | null {
+    // Filter out cropper images and hidden elements
+    const slideImages = Array.from(
+      this.el.shadowRoot?.querySelectorAll("swiper-slide img") || [],
+    ).filter(
+      (img) =>
+        !img.closest(".cropper-container") &&
+        (img as HTMLImageElement).offsetWidth > 0,
+    );
+
+    if (slideImages && slideImages[imageIndex]) {
+      return calculateImageBounds(slideImages[imageIndex] as HTMLImageElement);
+    }
+    return null;
+  }
+
+  private getImageBounds(imageIndex: number): Rectangle | null {
+    return (
+      this.getCropperBounds(imageIndex) ||
+      this.getStoreBounds(imageIndex) ||
+      this.getVisibleSlideBounds(imageIndex)
+    );
+  }
+
+  private activateCropperForSlide = (activeIndex: number) => {
+    this.cropperManager?.activateCropperForSlide(activeIndex, (index) =>
+      this.imageStore.getImageElement(index),
+    );
+  };
+
+  private debouncedCropSearch = (cropArea: Rectangle, imageIndex: number) => {
+    if (this.cropDebounceTimeout) {
+      clearTimeout(this.cropDebounceTimeout);
+    }
+
+    this.cropDebounceTimeout = window.setTimeout(() => {
+      this.cropDebounceTimeout = undefined;
+      this.handleDetectedObjectClick(cropArea, 0, imageIndex);
+    }, TIMING.CROP_DEBOUNCE_DELAY);
   };
 
   private handleModalClose = (event?: Event) => {
@@ -593,12 +778,13 @@ export class VviinnShopTheLook {
 
   private renderDetectedObjectsWrapper = (imageIndex: number) => {
     const imageState = this.imageStore.getImageState(imageIndex);
+    const isActiveSlide = this.isCurrentSlide(imageIndex);
 
-    if (!shouldRenderDetectedObjects(imageState)) {
+    if (!shouldRenderDetectedObjects(imageState, isActiveSlide)) {
       return null;
     }
 
-    const imageBounds = fromRenderedImage(imageState.imageElement);
+    const imageBounds = this.getImageBounds(imageIndex);
 
     const props: DetectedObjectsProps = {
       imageBounds,
@@ -612,26 +798,19 @@ export class VviinnShopTheLook {
     return renderDetectedObjects(props);
   };
 
-  private handleSlideChange = (event: any) => {
+  private handleSlideChange = (event: SwiperEvent) => {
     const newIndex = extractSlideIndex(event);
 
-    if (newIndex !== undefined && newIndex !== this.swiperActiveIndex) {
-      this.swiperActiveIndex = newIndex;
+    if (newIndex !== undefined) {
+      if (newIndex !== this.swiperActiveIndex) {
+        this.swiperActiveIndex = newIndex;
+      }
+
       this.clearModalAndSlideState();
 
       setTimeout(() => {
-        const isDesktopView = isDesktop();
-        if (!isDesktopView) {
-          this.markCurrentImageAsVisible();
-          this.performVisualSearchIfReady();
-        } else {
-          const currentImageState = this.imageStore.getImageState(
-            this.swiperActiveIndex,
-          );
-          if (currentImageState?.searchCompleted) {
-            this.loadImageState();
-          }
-        }
+        this.isNavigatingToSlide = false;
+        this.ensureSlideSearchTriggered(this.swiperActiveIndex);
       }, TIMING.SLIDE_TRANSITION_DELAY);
     }
   };
@@ -644,7 +823,7 @@ export class VviinnShopTheLook {
 
     this.imageStore.updateImageState(index, { refProcessed: true });
 
-    if (index === this.swiperActiveIndex || this.totalImages <= 1) {
+    if (this.isCurrentSlide(index) || this.totalImages <= 1) {
       this.imageElement = el;
     }
 
@@ -668,14 +847,33 @@ export class VviinnShopTheLook {
         this.setupObserverAfterSwiper(el, index);
       }
 
+      const initializeImage = () => {
+        this.initializeImageForCropper(el, index);
+
+        if (this.pendingUploadData && index === 0) {
+          this.imageStore.updateImageStateData(
+            0,
+            this.pendingUploadData.detectedObjects,
+            true,
+            [],
+            this.pendingUploadData.visualSearchId,
+          );
+
+          if (this.pendingUploadData.detectedObjects.length > 0) {
+            this.scheduleAutoSelectFirstObject(
+              0,
+              this.pendingUploadData.detectedObjects,
+            );
+          }
+
+          this.pendingUploadData = null;
+        }
+      };
+
       if (el.complete && el.offsetWidth > 0) {
-        this.updateImageBoundsForElement(el, index);
+        initializeImage();
       } else {
-        el.addEventListener(
-          "load",
-          () => this.updateImageBoundsForElement(el, index),
-          { once: true },
-        );
+        el.addEventListener("load", initializeImage, { once: true });
       }
     }
   };
@@ -685,17 +883,26 @@ export class VviinnShopTheLook {
     index: number,
   ) => {
     requestAnimationFrame(() => {
-      if (index === this.swiperActiveIndex || this.totalImages <= 1) {
-        this.updateArrowsVisibility();
+      if (this.isCurrentSlide(index) || this.totalImages <= 1) {
+        this.updateNavigationVisibility();
       }
     });
   };
 
+  private initializeImageForCropper = (el: HTMLImageElement, index: number) => {
+    this.updateImageBoundsForElement(el, index);
+
+    if (this.isCurrentSlide(index)) {
+      this.cropperManager?.initializeCropper(el, index, this.swiperActiveIndex);
+    }
+  };
+
   private performVisualSearchForImage = async (imageIndex: number) => {
     const imageUrl = this.imageUrlsList[imageIndex];
+
     if (!this.token || !imageUrl) return;
 
-    const isCurrentImage = imageIndex === this.swiperActiveIndex;
+    const isCurrentImage = this.isCurrentSlide(imageIndex);
 
     if (isCurrentImage) {
       this.showLoadingSpinner = true;
@@ -730,31 +937,118 @@ export class VviinnShopTheLook {
         this.updateSearchingState(isCurrentImage);
 
         const shouldAutoClick =
-          response.detectedObjects.length > 0 && isCurrentImage;
+          response.detectedObjects.length > 0 &&
+          this.isCurrentSlide(imageIndex) &&
+          !this.showModal &&
+          !this.isManualObjectSelection;
 
         if (shouldAutoClick) {
-          setTimeout(async () => {
-            await this.handleDetectedObjectClick(
-              response.detectedObjects[0],
-              0,
-              imageIndex,
-            );
-          }, TIMING.SEARCH_DELAY);
+          this.scheduleAutoSelectFirstObject(
+            imageIndex,
+            response.detectedObjects,
+          );
         }
       },
     )(result);
+  };
+
+  private scheduleAutoSelectFirstObject(
+    imageIndex: number,
+    detectedObjects: Rectangle[],
+  ) {
+    const hasNoDetectedObjects = !detectedObjects?.length;
+    const isNotCurrentSlide = !this.isCurrentSlide(imageIndex);
+    const hasActiveTimeout = !!this.autoSelectTimeout;
+    const isUserDriven =
+      this.isManualObjectSelection || this.isNavigatingToSlide;
+
+    if (
+      hasNoDetectedObjects ||
+      isNotCurrentSlide ||
+      hasActiveTimeout ||
+      isUserDriven
+    ) {
+      return;
+    }
+
+    this.autoSelectTimeout = window.setTimeout(() => {
+      this.autoSelectTimeout = undefined;
+
+      const isNotCurrentSlide = !this.isCurrentSlide(imageIndex);
+      if (isNotCurrentSlide || this.showModal || this.isNavigatingToSlide) {
+        return;
+      }
+
+      const first = detectedObjects[0];
+      if (first) {
+        this.handleDetectedObjectClick(first, 0, imageIndex);
+      }
+    }, TIMING.SEARCH_DEBOUNCE_DELAY);
+  }
+
+  private pendingUploadData: {
+    detectedObjects: Rectangle[];
+    visualSearchId: string | null;
+  } | null = null;
+
+  private handleFileUpload = async (event: Event) => {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if (!file) return;
+
+    this.showLoadingSpinner = true;
+
+    const params: ProcessFileUploadParams = {
+      file,
+      token: this.token,
+      campaignId: this.campaignId,
+    };
+
+    const result = await processFileUpload(params);
+
+    E.fold(
+      (error: string) => {
+        console.error(error);
+        this.showLoadingSpinner = false;
+      },
+      (uploadData: ProcessFileUploadResult) => {
+        this.clearModalAndSlideState();
+        if (this.showCropper) this.cropperManager?.destroyAll();
+
+        this.imageStore.shiftIndicesForward(0);
+
+        this.pendingUploadData = {
+          detectedObjects: uploadData.detectedObjects,
+          visualSearchId: uploadData.visualSearchId,
+        };
+
+        this.uploadedImageUrls = [
+          uploadData.imageUrl,
+          ...this.uploadedImageUrls,
+        ];
+        this.imageUrlsList = buildImageUrlsList(
+          this.uploadedImageUrls,
+          this.imageUrls,
+        );
+        this.totalImages = this.imageUrlsList.length;
+
+        this.swiperActiveIndex = 0;
+        this.showLoadingSpinner = false;
+
+        requestAnimationFrame(() => {
+          this.navigateToSlide(0);
+        });
+      },
+    )(result);
+
+    input.value = "";
   };
 
   private handleNavigatePrev = () => {
     if (this.swiperActiveIndex > 0) {
       const newIndex = this.swiperActiveIndex - 1;
       this.updateSlideIndex(newIndex);
-
-      const swiperContainer =
-        this.el.shadowRoot?.querySelector("swiper-container");
-      if (swiperContainer && (swiperContainer as any).swiper) {
-        (swiperContainer as any).swiper.slideTo(newIndex);
-      }
     }
   };
 
@@ -762,27 +1056,36 @@ export class VviinnShopTheLook {
     if (this.swiperActiveIndex < this.totalImages - 1) {
       const newIndex = this.swiperActiveIndex + 1;
       this.updateSlideIndex(newIndex);
-
-      const swiperContainer =
-        this.el.shadowRoot?.querySelector("swiper-container");
-      if (swiperContainer && (swiperContainer as any).swiper) {
-        (swiperContainer as any).swiper.slideTo(newIndex);
-      }
     }
   };
 
   private updateSlideIndex = (newIndex: number) => {
+    this.isNavigatingToSlide = true;
     this.swiperActiveIndex = newIndex;
+    this.navigateToSlide(newIndex);
     this.clearModalAndSlideState();
 
     setTimeout(() => {
-      this.performVisualSearchIfReady();
+      this.isNavigatingToSlide = false;
+      const imageState = this.imageStore.getImageState(newIndex);
+
+      if (!imageState.searchCompleted && !imageState.searchTriggered) {
+        this.forceSearchForSlide(newIndex);
+      } else {
+        this.performVisualSearchIfReady();
+      }
+
+      if (this.showCropper) {
+        this.activateCropperForSlide(newIndex);
+      }
     }, TIMING.SLIDE_TRANSITION_DELAY);
   };
 
+  private showNavigation = () =>
+    (this.needNavigation && isDesktop()) || this.showCropper;
+
   private renderSwiperWrapper = () => {
     const props: SwiperProps = {
-      totalImages: this.totalImages,
       imageUrls: this.imageUrlsList,
       swiperActiveIndex: this.swiperActiveIndex,
       height: this.height,
@@ -791,10 +1094,8 @@ export class VviinnShopTheLook {
       onSlideChange: this.handleSlideChange,
       onImageRef: this.handleImageRef,
       renderDetectedObjects: this.renderDetectedObjectsWrapper,
-      onNavigatePrev: this.handleNavigatePrev,
-      onNavigateNext: this.handleNavigateNext,
-      shouldShowArrows: this.showArrows,
       swiperKey: this.swiperKey,
+      allowTouchMove: !this.showCropper,
     };
     return renderSwiper(props);
   };
@@ -824,7 +1125,7 @@ export class VviinnShopTheLook {
     return (
       <Host>
         <div
-          class={`shop-the-look-container ${this.showModal ? "modal-open" : ""} widget-style-${this.widgetStyle}`}
+          class={`shop-the-look-container ${this.showModal ? "modal-open" : ""} ${this.showCropper ? "with-cropper" : ""} widget-style-${this.widgetStyle}`}
         >
           <div class="main-content">
             {this.renderSwiperWrapper()}
@@ -835,6 +1136,37 @@ export class VviinnShopTheLook {
             )}
           </div>
           {this.renderModalWrapper()}
+          <div class="actions-container">
+            {this.uploadMode && (
+              <div class="upload-button-container">
+                <button
+                  class="upload-button"
+                  onClick={() => this.fileInput?.click()}
+                  disabled={this.showLoadingSpinner}
+                >
+                  <slot name="vviinn-image-upload-icon">
+                    <UploadActionIconVariant />
+                  </slot>
+                  <slot name="upload-button-text"></slot>
+                </button>
+                <input
+                  type="file"
+                  class="visually-hidden"
+                  accept={acceptableFileFormats}
+                  onChange={this.handleFileUpload}
+                  ref={(el) => (this.fileInput = el as HTMLInputElement)}
+                />
+              </div>
+            )}
+
+            {this.showNavigation() &&
+              renderNavigation(
+                this.swiperActiveIndex,
+                this.totalImages,
+                this.handleNavigatePrev,
+                this.handleNavigateNext,
+              )}
+          </div>
         </div>
       </Host>
     );

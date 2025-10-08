@@ -1,14 +1,16 @@
-import { h } from "@stencil/core";
+import { h, VNode } from "@stencil/core";
 import { Rectangle } from "../../interfaces/search";
 import { Recommendation } from "../../interfaces";
 import { BasicEventData } from "../../recommendation/events";
-import { ModalPosition } from "./helpers";
 import { isDesktop } from "../../helpers/device/checkDeviceType";
 import {
   configureSwiperElement,
   getSwiperStyles,
+  SwiperEvent,
+  ConfigurableSwiperElement,
 } from "../../utils/swiper/swiperUtils";
 import { SecondaryActionIcon } from "../vviinn-icons/icons/SecondaryActionIcon";
+import { ModalPosition } from "./helpers";
 
 export interface DetectedObjectsProps {
   imageBounds: Rectangle | null;
@@ -51,20 +53,17 @@ export const renderDetectedObjects = (props: DetectedObjectsProps) => {
 };
 
 export interface SwiperProps {
-  totalImages: number;
   imageUrls: string[];
   swiperActiveIndex: number;
   height: number;
   imageElement: HTMLImageElement;
   detectedObjects: Rectangle[];
-  onSlideChange: (event: any) => void;
+  onSlideChange: (event: SwiperEvent) => void;
   onImageRef: (el: HTMLImageElement, index: number) => void;
-  renderDetectedObjects: (imageIndex: number) => any;
-  onNavigatePrev?: () => void;
-  onNavigateNext?: () => void;
-  shouldShowArrows?: boolean;
-  onSwiperRef?: (el: any) => void;
+  renderDetectedObjects: (imageIndex: number) => VNode | VNode[] | null;
+  onSwiperRef?: (el: ConfigurableSwiperElement) => void;
   swiperKey?: string;
+  allowTouchMove?: boolean;
 }
 
 const getImageStyles = (height: number) => {
@@ -77,20 +76,44 @@ const getImageStyles = (height: number) => {
   };
 };
 
+export const renderNavigation = (
+  swiperActiveIndex: number,
+  totalImages: number,
+  onNavigatePrev: () => void,
+  onNavigateNext: () => void,
+) => {
+  const handlePrevClick = () => onNavigatePrev();
+  const handleNextClick = () => onNavigateNext();
+
+  return (
+    <div class="carousel-navigation">
+      <button
+        class={`swiper-button-prev ${swiperActiveIndex === 0 ? "disabled" : ""}`}
+        onClick={handlePrevClick}
+      >
+        <SecondaryActionIcon />
+      </button>
+      <button
+        class={`swiper-button-next ${swiperActiveIndex === totalImages - 1 ? "disabled" : ""}`}
+        onClick={handleNextClick}
+      >
+        <SecondaryActionIcon />
+      </button>
+    </div>
+  );
+};
+
 export const renderSwiper = (props: SwiperProps) => {
   const {
-    totalImages,
     imageUrls,
     swiperActiveIndex,
     height,
     onSlideChange,
     onImageRef,
     renderDetectedObjects,
-    onNavigatePrev,
-    onNavigateNext,
-    shouldShowArrows = true,
     onSwiperRef,
     swiperKey,
+    allowTouchMove = true,
   } = props;
 
   if (!imageUrls || imageUrls.length <= 1) {
@@ -110,13 +133,14 @@ export const renderSwiper = (props: SwiperProps) => {
 
   const desktop = isDesktop();
 
-  const swiperRef = (el: any) => {
+  const swiperRef = (el: ConfigurableSwiperElement | null) => {
     if (el && !el.swiper) {
       configureSwiperElement(el, {
         isDesktop: desktop,
         initialSlide: swiperActiveIndex,
         pagination: true,
         keyboard: true,
+        allowTouchMove,
       });
     }
     if (onSwiperRef) {
@@ -124,59 +148,37 @@ export const renderSwiper = (props: SwiperProps) => {
     }
   };
 
-  const handlePrevClick = () => {
-    if (onNavigatePrev) {
-      onNavigatePrev();
-    }
-  };
-
-  const handleNextClick = () => {
-    if (onNavigateNext) {
-      onNavigateNext();
-    }
-  };
-
   const swiperStyles = getSwiperStyles(desktop);
 
   return (
-    <div
-      class={`swiper-wrapper ${desktop ? "desktop-carousel" : "mobile-slider"}`}
-    >
-      <swiper-container
-        key={swiperKey}
-        ref={swiperRef}
-        onSlideChange={onSlideChange}
-        style={swiperStyles}
-        pagination={!desktop ? "true" : undefined}
-        pagination-clickable={!desktop ? "true" : undefined}
+    <div class="swiper-container-wrapper">
+      <div
+        class={`swiper-wrapper ${desktop ? "desktop-carousel" : "mobile-slider"}`}
       >
-        {imageUrls.map((url, index) => (
-          <swiper-slide key={index}>
-            <div class="image-container">
-              <img
-                ref={(el: HTMLImageElement) => onImageRef(el, index)}
-                src={url}
-                alt={`Shop the look ${index + 1}`}
-                class="main-image"
-                style={getImageStyles(height)}
-              />
-              {renderDetectedObjects(index)}
-            </div>
-          </swiper-slide>
-        ))}
-      </swiper-container>
-      {desktop && shouldShowArrows && (
-        <div class="carousel-navigation">
-          <div
-            class={`swiper-button-prev ${swiperActiveIndex === 0 ? "disabled" : ""}`}
-            onClick={handlePrevClick}
-          />
-          <div
-            class={`swiper-button-next ${swiperActiveIndex === totalImages - 1 ? "disabled" : ""}`}
-            onClick={handleNextClick}
-          />
-        </div>
-      )}
+        <swiper-container
+          key={swiperKey}
+          ref={swiperRef}
+          onSlideChange={onSlideChange}
+          style={swiperStyles}
+          pagination={!desktop ? "true" : undefined}
+          pagination-clickable={!desktop ? "true" : undefined}
+        >
+          {imageUrls.map((url, index) => (
+            <swiper-slide key={index}>
+              <div class="image-container">
+                <img
+                  ref={(el: HTMLImageElement) => onImageRef(el, index)}
+                  src={url}
+                  alt={`Shop the look ${index + 1}`}
+                  class="main-image"
+                  style={getImageStyles(height)}
+                />
+                {renderDetectedObjects(index)}
+              </div>
+            </swiper-slide>
+          ))}
+        </swiper-container>
+      </div>
     </div>
   );
 };
@@ -315,18 +317,17 @@ export const renderModal = (props: ModalProps) => {
     modalContentRef,
   } = props;
 
-  if (!showModal || !selectedDetectedObject) return null;
+  if (!showModal || !selectedDetectedObject || !searchResults?.length)
+    return null;
 
   const isMobile = !isDesktop();
-
-  let modalStyle = {};
-  if (modalPosition) {
-    modalStyle = {
-      "--modal-x": `${modalPosition.x}px`,
-      "--modal-y": `${modalPosition.y}px`,
-      ...(modalPosition.anchor && { "--modal-anchor": modalPosition.anchor }),
-    };
-  }
+  const modalStyle = modalPosition
+    ? {
+        "--modal-x": `${modalPosition.x}px`,
+        "--modal-y": `${modalPosition.y}px`,
+        "--modal-anchor": modalPosition.anchor,
+      }
+    : {};
 
   return (
     <div

@@ -16,7 +16,6 @@ export default {
 };
 
 const Template = (args) => `
-  <div style="max-width: 100%; padding: 20px;">
     <vviinn-shop-the-look
       image-urls="${args.imageUrls}"
       token="${args.token}"
@@ -26,8 +25,9 @@ const Template = (args) => `
       api-path="${args.apiPath}"
       locale="${args.locale}"
       widget-style="${args.widgetStyle}"
+      show-cropper="${args.showCropper}"
+      upload-mode="${args.uploadMode}"
     ></vviinn-shop-the-look>
-  </div>
 `;
 
 export const Default = Template.bind({});
@@ -43,6 +43,8 @@ const initArgs = {
   apiPath: process.env.STORYBOOK_API_PATH,
   locale: "en-US",
   widgetStyle: "rounded",
+  showCropper: false,
+  uploadMode: false,
 };
 
 Default.args = argsFromParams(initArgs);
