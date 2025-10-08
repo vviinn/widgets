@@ -1,6 +1,6 @@
 @import "../../variables.css";
-
-/* Base Component Styles */
+@import "../../styles/cropper-shared.css";
+@import "../../styles/utilities.css";
 
 :host {
   --shop-the-look-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
@@ -22,7 +22,38 @@
   flex-direction: column;
   gap: var(--spacing-200);
   align-items: center;
-  overflow: hidden;
+}
+
+.actions-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-300);
+  margin-top: var(--spacing-250);
+  justify-content: flex-end;
+}
+
+/* Upload Button */
+
+.upload-button {
+  display: inline-flex;
+  padding: var(--spacing-150);
+  justify-content: center;
+  align-items: center;
+  background: var(--button-bg-color-primary);
+  border: none;
+  border-radius: var(--border-radius-100);
+  color: var(--color-text-inverse);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.upload-button:hover {
+  background: var(--button-bg-color-primary-hover);
+}
+
+.upload-button:disabled {
+  cursor: not-allowed;
 }
 
 /* Image Container & Main Image */
@@ -45,6 +76,13 @@
 }
 
 /* Swiper Base Styles */
+
+.swiper-container-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
 
 .swiper-wrapper {
   position: relative;
@@ -112,6 +150,52 @@ swiper-container::part(bullet-active):hover {
   transform: scale(1.1);
 }
 
+/* Swiper Navigation */
+
+.carousel-navigation {
+  display: flex;
+  gap: var(--spacing-100);
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  background: var(--button-bg-color-secondary);
+  border: none;
+  border-radius: var(--border-radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background 0.3s ease,
+    opacity 0.3s ease;
+  margin: 0;
+}
+
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  background: var(--button-bg-color-secondary-hover);
+}
+
+.swiper-button-next svg {
+  transform: rotate(180deg);
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  color: var(--color-text-secondary);
+}
+
+.swiper-button-prev.disabled,
+.swiper-button-next.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 /* Desktop Carousel */
 
 .desktop-carousel {
@@ -129,81 +213,6 @@ swiper-container::part(bullet-active):hover {
 .desktop-carousel .swiper-wrapper {
   justify-content: flex-start;
   align-items: flex-start;
-}
-
-.desktop-carousel .carousel-navigation {
-  position: absolute;
-  bottom: var(--spacing-250);
-  right: var(--spacing-250);
-  display: flex;
-  gap: var(--spacing-100);
-  z-index: 10;
-}
-
-.desktop-carousel .swiper-button-prev,
-.desktop-carousel .swiper-button-next {
-  position: relative;
-  width: 32px;
-  height: 32px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: var(--border-radius-full);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  backdrop-filter: blur(4px);
-  margin: 0;
-}
-
-.desktop-carousel .swiper-button-prev:hover,
-.desktop-carousel .swiper-button-next:hover {
-  background: rgba(255, 255, 255, 1);
-  transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.desktop-carousel .swiper-button-prev::after,
-.desktop-carousel .swiper-button-next::after {
-  content: "";
-  width: 8px;
-  height: 8px;
-  border: 2px solid var(--color-icon-helper);
-  border-top: none;
-  border-right: none;
-  transition: border-color 0.3s ease;
-}
-
-.desktop-carousel .swiper-button-prev::after {
-  transform: rotate(45deg);
-  margin-left: 1px;
-}
-
-.desktop-carousel .swiper-button-next::after {
-  transform: rotate(-135deg);
-  margin-right: 1px;
-}
-
-.desktop-carousel .swiper-button-prev:hover::after,
-.desktop-carousel .swiper-button-next:hover::after {
-  border-color: var(--color-icon-secondary);
-}
-
-.desktop-carousel .swiper-button-prev.disabled,
-.desktop-carousel .swiper-button-next.disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-.desktop-carousel .swiper-button-prev.disabled::after,
-.desktop-carousel .swiper-button-next.disabled::after {
-  border-color: var(--color-border-03);
-}
-
-.desktop-carousel .image-container {
-  overflow: visible;
 }
 
 .desktop-carousel .main-image {
@@ -438,10 +447,6 @@ vviinn-image::part(image),
   overflow: visible;
 }
 
-.desktop-carousel .image-container {
-  overflow: visible;
-}
-
 .desktop-carousel .main-image {
   overflow: hidden;
   border-radius: var(--border-radius-200);
@@ -453,10 +458,6 @@ vviinn-image::part(image),
 
 .desktop-carousel .swiper-button-prev,
 .desktop-carousel .swiper-button-next {
-  display: flex;
-}
-
-.desktop-carousel .carousel-navigation {
   display: flex;
 }
 
@@ -481,9 +482,7 @@ vviinn-image::part(image),
 }
 
 @media (max-width: 768px) {
-  .shop-the-look-container .swiper-button-prev,
-  .shop-the-look-container .swiper-button-next,
-  .shop-the-look-container .carousel-navigation {
+  .shop-the-look-container:not(.with-cropper) .carousel-navigation {
     display: none;
   }
 
@@ -530,6 +529,11 @@ vviinn-image::part(image),
     gap: var(--spacing-50);
   }
 
+  .carousel-navigation {
+    bottom: var(--spacing-50);
+    right: var(--spacing-50);
+  }
+
   .product-details-card-wrapper {
     width: 120px;
     max-width: 120px;
@@ -542,6 +546,11 @@ vviinn-image::part(image),
 
 /* Widget Style Variants. Cornered variant overrides all rounded elements */
 
+.cropper-wrap-box {
+  border-radius: var(--border-radius-200);
+  overflow: hidden;
+}
+
 .widget-style-cornered .image-container,
 .widget-style-cornered swiper-container,
 .widget-style-cornered .desktop-carousel .main-image,
@@ -549,12 +558,15 @@ vviinn-image::part(image),
 .widget-style-cornered .result-item,
 .widget-style-cornered .desktop-carousel .swiper-button-prev,
 .widget-style-cornered .desktop-carousel .swiper-button-next,
+.widget-style-cornered .cropper-wrap-box,
 .widget-style-cornered vviinn-image::part(image),
 .widget-style-cornered
   .product-details-card-wrapper
   vviinn-product-card::part(image),
 .widget-style-cornered
   .product-details-card-wrapper
-  vviinn-product-card::part(image-picture) {
+  vviinn-product-card::part(image-picture),
+.widget-style-cornered .upload-button,
+.widget-style-cornered .carousel-navigation button {
   border-radius: 0;
 }

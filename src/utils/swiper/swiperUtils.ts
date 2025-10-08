@@ -10,9 +10,9 @@ type SwiperSlideChangeEventDetail = {
   realIndex?: number;
 };
 
-type SwiperEvent = {
+export interface SwiperEvent extends Event {
   detail: SwiperSlideChangeEventDetail | SwiperSlideChangeEventDetail[];
-};
+}
 
 export const extractSlideIndex = (event: SwiperEvent): number | undefined => {
   let newIndex = undefined;
@@ -25,6 +25,14 @@ export const extractSlideIndex = (event: SwiperEvent): number | undefined => {
 
   return newIndex;
 };
+
+export interface SwiperInstance {
+  slideTo: (index: number) => void;
+}
+
+export interface SwiperContainerElement extends HTMLElement {
+  swiper?: SwiperInstance;
+}
 
 export interface ConfigurableSwiperElement {
   [key: string]: any;

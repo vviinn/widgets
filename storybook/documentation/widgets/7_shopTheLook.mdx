@@ -14,10 +14,12 @@ The `Shop The Look` widget enables interactive visual product discovery directly
 ## Key Features
 
 - **Interactive Hotspots**: Clickable areas on images reveal product information
-- **Visual Search**: Powered by AI to identify products within images  
+- **Visual Search**: Powered by AI to identify products within images
 - **Multiple Images**: Support for single or multiple images across various categories
 - **Responsive Design**: Adapts to different screen sizes and orientations
 - **Widget Styles**: Choose between rounded and cornered visual styles
+- **Cropper Mode**: Enable manual area selection for precise product targeting
+- **Upload Mode**: Allow users to upload their own images for instant product discovery
 
 ## Examples
 
@@ -63,7 +65,27 @@ The `Shop The Look` widget enables interactive visual product discovery directly
 </vviinn-shop-the-look>`
 }}/>
 
-## Widget Style Options
-
-- **rounded**: Soft, rounded corners for a modern, friendly appearance
-- **cornered**: Sharp, angular corners for a more geometric, professional look
+<PreviewAndCodeTabs tabData={{
+    groupId: "shop-the-look-advanced-features",
+    header: "Advanced Features: Cropper & Upload Mode",
+    component: <vviinn-shop-the-look
+        token={vviinnToken}
+        image-urls={multipleImageUrls}
+        height="500"
+        currency-sign="€"
+        locale="en-US"
+        widget-style="rounded"
+        show-cropper="true"
+        upload-mode="true"
+    />,
+    code: `<vviinn-shop-the-look
+    token="TOKEN"
+    image-urls="${multipleImageUrls}"
+    height="500"
+    currency-sign="€"
+    locale="en-US"
+    widget-style="rounded"
+    show-cropper="true"
+    upload-mode="true">
+</vviinn-shop-the-look>`
+}}/>

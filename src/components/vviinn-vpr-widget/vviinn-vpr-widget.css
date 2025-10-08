@@ -1,4 +1,5 @@
 @import "../../variables.css";
+@import "../../styles/utilities.css";
 
 :host {
   /**
@@ -124,16 +125,6 @@
   padding-bottom: 48px;
 }
 
-.visually-hidden {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: -1;
-  height: 0;
-  width: 0;
-}
-
-/* Grid */
 .recommendations-results.recommendations-grid {
   width: 100%;
   align-content: center;
