@@ -54,6 +54,7 @@ import {
   SwiperContainerElement,
 } from "../../utils/swiper/swiperUtils";
 import { UploadActionIconVariant } from "../vviinn-icons";
+import { acceptableFileFormats } from "../../Image/error";
 
 if (typeof window !== "undefined") {
   register();
@@ -1151,7 +1152,7 @@ export class VviinnShopTheLook {
                 <input
                   type="file"
                   class="visually-hidden"
-                  accept="image/*"
+                  accept={acceptableFileFormats}
                   onChange={this.handleFileUpload}
                   ref={(el) => (this.fileInput = el as HTMLInputElement)}
                 />
