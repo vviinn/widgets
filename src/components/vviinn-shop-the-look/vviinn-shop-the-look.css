@@ -169,7 +169,9 @@ swiper-container::part(bullet-active):hover {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition:
+    background 0.3s ease,
+    opacity 0.3s ease;
   margin: 0;
 }
 
@@ -178,29 +180,13 @@ swiper-container::part(bullet-active):hover {
   background: var(--button-bg-color-secondary-hover);
 }
 
-.swiper-button-prev::after,
-.swiper-button-next::after {
-  content: "";
-  width: 8px;
-  height: 8px;
-  border: 2px solid var(--color-icon-helper);
-  border-top: none;
-  border-right: none;
+.swiper-button-next svg {
+  transform: rotate(180deg);
 }
 
-.swiper-button-prev::after {
-  transform: rotate(45deg);
-  margin-left: 1px;
-}
-
-.swiper-button-next::after {
-  transform: rotate(-135deg);
-  margin-right: 1px;
-}
-
-.swiper-button-prev:hover::after,
-.swiper-button-next:hover::after {
-  border-color: var(--color-icon-secondary);
+.swiper-button-prev,
+.swiper-button-next {
+  color: var(--color-text-secondary);
 }
 
 .swiper-button-prev.disabled,
@@ -208,11 +194,6 @@ swiper-container::part(bullet-active):hover {
   opacity: 0.5;
   cursor: not-allowed;
   pointer-events: none;
-}
-
-.swiper-button-prev.disabled::after,
-.swiper-button-next.disabled::after {
-  border-color: var(--color-border-03);
 }
 
 /* Desktop Carousel */

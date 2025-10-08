@@ -377,7 +377,7 @@ vviinn-energy-label {
 
 .content-link {
   -webkit-line-clamp: 1;
-  color: var(--color-content-accent);
+  color: var(--color-text-primary);
   text-decoration: none;
 }
 

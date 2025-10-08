@@ -88,11 +88,15 @@ export const renderNavigation = (
       <button
         class={`swiper-button-prev ${swiperActiveIndex === 0 ? "disabled" : ""}`}
         onClick={handlePrevClick}
-      />
+      >
+        <SecondaryActionIcon />
+      </button>
       <button
         class={`swiper-button-next ${swiperActiveIndex === totalImages - 1 ? "disabled" : ""}`}
         onClick={handleNextClick}
-      />
+      >
+        <SecondaryActionIcon />
+      </button>
     </div>
   );
 };
