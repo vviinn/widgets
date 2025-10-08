@@ -1,6 +1,11 @@
-import { Rectangle, VisualSearchResponse } from "../../interfaces/search";
+import {
+  Rectangle,
+  VisualSearchResponse,
+  SuggestedSearchArea,
+} from "../../interfaces/search";
 import * as E from "fp-ts/lib/Either";
 import { Recommendation } from "../../interfaces";
+import { BasicError } from "../../error";
 import { INTERSECTION_THRESHOLDS } from "./constants";
 import {
   isDesktop as sharedIsDesktop,
@@ -14,6 +19,7 @@ import {
   shopTheLookState,
 } from "../../store/search.store";
 import { imageFromFileTask } from "../../Image/fromFile";
+import { ImageState } from "./store";
 
 export type AnchorPosition =
   | "top-left"
@@ -54,7 +60,7 @@ export const shouldKeepImageVisible = (
 };
 
 export const shouldRenderDetectedObjects = (
-  imageState: any,
+  imageState: ImageState | null,
   isActiveSlide: boolean,
 ): boolean => {
   if (!imageState) return false;
@@ -171,7 +177,8 @@ export const performVisualSearch = async (
     )(imageFile);
 
     return E.fold(
-      (error: any) => E.left(`Upload failed: ${error}`),
+      (error: BasicError<string | Response>) =>
+        E.left(`Upload failed: ${error.inner}`),
       (uploadResponse: VisualSearchResponse) => {
         const detectedObjects =
           uploadResponse.interactions?.suggestedSearchAreas?.map(
@@ -243,7 +250,8 @@ export const handleDetectedObjectClick = async (
     );
 
     return E.fold(
-      (error: any) => E.left(`Visual search failed: ${error}`),
+      (error: BasicError<string | Response>) =>
+        E.left(`Visual search failed: ${error.inner}`),
       (searchResponse: VisualSearchResponse) => {
         const searchResults = searchResponse.data?.products || [];
         const modalPosition = calculateModalPosition(
@@ -326,11 +334,12 @@ export const processFileUpload = async (
     )(file);
 
     return E.fold(
-      (error: any) => E.left(`Upload failed: ${error}`),
+      (error: BasicError<string | Response>) =>
+        E.left(`Upload failed: ${error.inner}`),
       (response: VisualSearchResponse) => {
         const detectedObjects =
           response.interactions?.suggestedSearchAreas?.map(
-            (area: any) => area.rectangle,
+            (area: SuggestedSearchArea) => area.rectangle,
           ) || [];
 
         return E.right({

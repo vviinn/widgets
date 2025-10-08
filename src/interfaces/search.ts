@@ -15,3 +15,4 @@ export type ProductListingPageResponse = s["product-listing-page-response"];
 // Search Utilities
 export type SearchIdResponse = s["ion-visual-product-search"];
 export type Rectangle = s["rectangle"];
+export type SuggestedSearchArea = s["suggested-search-area"];

@@ -48,7 +48,11 @@ import {
 } from "./render-helpers";
 import { Locale } from "../../locale";
 import { TEST_BASIC_EVENT_DATA } from "./test-data";
-import { extractSlideIndex } from "../../utils/swiper/swiperUtils";
+import {
+  extractSlideIndex,
+  SwiperEvent,
+  SwiperContainerElement,
+} from "../../utils/swiper/swiperUtils";
 import { UploadActionIconVariant } from "../vviinn-icons";
 
 if (typeof window !== "undefined") {
@@ -443,10 +447,11 @@ export class VviinnShopTheLook {
   }
 
   private navigateToSlide(slideIndex: number) {
-    const swiperContainer =
-      this.el.shadowRoot?.querySelector("swiper-container");
-    if (swiperContainer && (swiperContainer as any).swiper) {
-      (swiperContainer as any).swiper.slideTo(slideIndex);
+    const swiperContainer = this.el.shadowRoot?.querySelector(
+      "swiper-container",
+    ) as SwiperContainerElement | null;
+    if (swiperContainer?.swiper) {
+      swiperContainer.swiper.slideTo(slideIndex);
     }
   }
 
@@ -792,7 +797,7 @@ export class VviinnShopTheLook {
     return renderDetectedObjects(props);
   };
 
-  private handleSlideChange = (event: any) => {
+  private handleSlideChange = (event: SwiperEvent) => {
     const newIndex = extractSlideIndex(event);
 
     if (newIndex !== undefined) {

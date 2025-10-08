@@ -1,4 +1,4 @@
-import { h } from "@stencil/core";
+import { h, VNode } from "@stencil/core";
 import { Rectangle } from "../../interfaces/search";
 import { Recommendation } from "../../interfaces";
 import { BasicEventData } from "../../recommendation/events";
@@ -6,6 +6,8 @@ import { isDesktop } from "../../helpers/device/checkDeviceType";
 import {
   configureSwiperElement,
   getSwiperStyles,
+  SwiperEvent,
+  ConfigurableSwiperElement,
 } from "../../utils/swiper/swiperUtils";
 import { SecondaryActionIcon } from "../vviinn-icons/icons/SecondaryActionIcon";
 import { ModalPosition } from "./helpers";
@@ -56,10 +58,10 @@ export interface SwiperProps {
   height: number;
   imageElement: HTMLImageElement;
   detectedObjects: Rectangle[];
-  onSlideChange: (event: any) => void;
+  onSlideChange: (event: SwiperEvent) => void;
   onImageRef: (el: HTMLImageElement, index: number) => void;
-  renderDetectedObjects: (imageIndex: number) => any;
-  onSwiperRef?: (el: any) => void;
+  renderDetectedObjects: (imageIndex: number) => VNode | VNode[] | null;
+  onSwiperRef?: (el: ConfigurableSwiperElement) => void;
   swiperKey?: string;
   allowTouchMove?: boolean;
 }
@@ -131,7 +133,7 @@ export const renderSwiper = (props: SwiperProps) => {
 
   const desktop = isDesktop();
 
-  const swiperRef = (el: any) => {
+  const swiperRef = (el: ConfigurableSwiperElement | null) => {
     if (el && !el.swiper) {
       configureSwiperElement(el, {
         isDesktop: desktop,
