@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.190.0](https://github.com/vviinn/widgets/compare/v2.189.0...v2.190.0) (2025-10-08)
+
+
+### Features
+
+* Uploading an image to the Shop-the-Look widget. ([33f8257](https://github.com/vviinn/widgets/commit/33f8257288309ef15c21653f922347f1024f88c1))
+
 ## [2.189.0](https://github.com/vviinn/widgets/compare/v2.188.0...v2.189.0) (2025-10-07)
 
 
