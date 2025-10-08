@@ -26,6 +26,7 @@ const Template = (args) => `
       locale="${args.locale}"
       widget-style="${args.widgetStyle}"
       show-cropper="${args.showCropper}"
+      upload-mode="${args.uploadMode}"
     ></vviinn-shop-the-look>
 `;
 
@@ -43,6 +44,7 @@ const initArgs = {
   locale: "en-US",
   widgetStyle: "rounded",
   showCropper: false,
+  uploadMode: false,
 };
 
 Default.args = argsFromParams(initArgs);

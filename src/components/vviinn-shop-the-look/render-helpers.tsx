@@ -1,4 +1,4 @@
-import { h } from "@stencil/core";
+import { h, VNode } from "@stencil/core";
 import { Rectangle } from "../../interfaces/search";
 import { Recommendation } from "../../interfaces";
 import { BasicEventData } from "../../recommendation/events";
@@ -6,6 +6,8 @@ import { isDesktop } from "../../helpers/device/checkDeviceType";
 import {
   configureSwiperElement,
   getSwiperStyles,
+  SwiperEvent,
+  ConfigurableSwiperElement,
 } from "../../utils/swiper/swiperUtils";
 import { SecondaryActionIcon } from "../vviinn-icons/icons/SecondaryActionIcon";
 import { ModalPosition } from "./helpers";
@@ -51,19 +53,15 @@ export const renderDetectedObjects = (props: DetectedObjectsProps) => {
 };
 
 export interface SwiperProps {
-  totalImages: number;
   imageUrls: string[];
   swiperActiveIndex: number;
   height: number;
   imageElement: HTMLImageElement;
   detectedObjects: Rectangle[];
-  onSlideChange: (event: any) => void;
+  onSlideChange: (event: SwiperEvent) => void;
   onImageRef: (el: HTMLImageElement, index: number) => void;
-  renderDetectedObjects: (imageIndex: number) => any;
-  onNavigatePrev?: () => void;
-  onNavigateNext?: () => void;
-  showNavigation?: boolean;
-  onSwiperRef?: (el: any) => void;
+  renderDetectedObjects: (imageIndex: number) => VNode | VNode[] | null;
+  onSwiperRef?: (el: ConfigurableSwiperElement) => void;
   swiperKey?: string;
   allowTouchMove?: boolean;
 }
@@ -89,30 +87,30 @@ export const renderNavigation = (
 
   return (
     <div class="carousel-navigation">
-      <div
+      <button
         class={`swiper-button-prev ${swiperActiveIndex === 0 ? "disabled" : ""}`}
         onClick={handlePrevClick}
-      />
-      <div
+      >
+        <SecondaryActionIcon />
+      </button>
+      <button
         class={`swiper-button-next ${swiperActiveIndex === totalImages - 1 ? "disabled" : ""}`}
         onClick={handleNextClick}
-      />
+      >
+        <SecondaryActionIcon />
+      </button>
     </div>
   );
 };
 
 export const renderSwiper = (props: SwiperProps) => {
   const {
-    totalImages,
     imageUrls,
     swiperActiveIndex,
     height,
     onSlideChange,
     onImageRef,
     renderDetectedObjects,
-    onNavigatePrev,
-    onNavigateNext,
-    showNavigation,
     onSwiperRef,
     swiperKey,
     allowTouchMove = true,
@@ -135,7 +133,7 @@ export const renderSwiper = (props: SwiperProps) => {
 
   const desktop = isDesktop();
 
-  const swiperRef = (el: any) => {
+  const swiperRef = (el: ConfigurableSwiperElement | null) => {
     if (el && !el.swiper) {
       configureSwiperElement(el, {
         isDesktop: desktop,
@@ -181,13 +179,6 @@ export const renderSwiper = (props: SwiperProps) => {
           ))}
         </swiper-container>
       </div>
-      {showNavigation &&
-        renderNavigation(
-          swiperActiveIndex,
-          totalImages,
-          onNavigatePrev,
-          onNavigateNext,
-        )}
     </div>
   );
 };
