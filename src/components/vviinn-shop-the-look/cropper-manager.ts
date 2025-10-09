@@ -1,6 +1,6 @@
 import Cropper from "cropperjs";
 import { cropperOptions } from "../vviinn-cropper/constants";
-import { Rectangle } from "../../interfaces/search";
+import { Rectangle } from "../../interfaces";
 import { divideOnSized } from "../../geometry/Rectangle";
 import { isCropBoxChangeMinimal } from "../vviinn-cropper/helpers/isCropBoxDataSimilar";
 import { getCropBoxData } from "../vviinn-cropper/helpers/cropperUtils";

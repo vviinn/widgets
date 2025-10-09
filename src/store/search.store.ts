@@ -3,8 +3,7 @@ import * as TE from "fp-ts/TaskEither";
 import * as T from "fp-ts/Task";
 import { pipe } from "fp-ts/function";
 import { globalState } from "./store";
-import { Recommendation, RequestStaticFilters } from "../interfaces";
-import { components } from "../interfaces/generated";
+import { Recommendation, RequestStaticFilters, Stream } from "../interfaces";
 import {
   visualSearchSessionClient,
   textSearchSessionClient,
@@ -69,7 +68,7 @@ type ReceivedDataDefaults = {
   sourceProduct: Recommendation | null;
   dynamicFilters: ResponseDynamicFilterItem[];
   detectedObjects: Rectangle[];
-  stream: components["schemas"]["stream"] | null;
+  stream: Stream | null;
 };
 
 export type SearchStore = AppStateGlobalDefaults &

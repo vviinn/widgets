@@ -1,5 +1,5 @@
 import { h, VNode } from "@stencil/core";
-import { Rectangle } from "../../interfaces/search";
+import { Rectangle } from "../../interfaces";
 import { Recommendation } from "../../interfaces";
 import { BasicEventData } from "../../recommendation/events";
 import { isDesktop } from "../../helpers/device/checkDeviceType";

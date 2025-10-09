@@ -1,8 +1,5 @@
 import { apiPost } from "../network/apiClient";
-import {
-  CrossSellingRequest,
-  CrossSellingResponse,
-} from "../interfaces/discovery";
+import { CrossSellingRequest, CrossSellingResponse } from "../interfaces";
 
 export type { CrossSellingResponse };
 
