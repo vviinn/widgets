@@ -50,6 +50,7 @@ import {
   ProductCardEventData,
   ProductEvent,
   ProductEventType,
+  RedirectEventData,
   ResultEventType,
   TextSearchEvent,
   TextSearchEventData,
@@ -163,6 +164,8 @@ export class VviinnResults {
   @Event() vviinnResultLoad: EventEmitter<BasicEventData>;
   /** The search result appears in the viewport */
   @Event() vviinnResultView: EventEmitter<BasicEventData>;
+  /** A redirect URL is received from the API */
+  @Event() vviinnRedirect: EventEmitter<RedirectEventData>;
 
   /** The 'query' is received for performing a Text Search */
   /** @internal */
@@ -735,6 +738,16 @@ export class VviinnResults {
     return null;
   }
 
+  private emitRedirectIfPresent() {
+    if (this.state.redirect) {
+      const redirectData: RedirectEventData = {
+        url: this.state.redirect.url,
+        ...this.getBasicEventData(),
+      };
+      this.vviinnRedirect.emit(redirectData);
+    }
+  }
+
   private renderResults() {
     const widgetData = this.getBasicEventData();
 
@@ -742,6 +755,7 @@ export class VviinnResults {
       this.vviinnResultLoad.emit(this.getBasicEventData());
       this.trackResultEvent("load");
       this.state.resultLoaded = true;
+      this.emitRedirectIfPresent();
     }
 
     const shouldShowOneClickDiscoveryButton =

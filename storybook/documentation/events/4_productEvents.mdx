@@ -75,9 +75,19 @@ Some events have additional props, summarized it table below.
     </tr>
 
     <tr>
-      <td>vviinnNoResult</td><td>Triggered when an error has occurred after the Product AI recommendation, search request or because of an image’s wrong format uploaded to the Product AI search.</td>
+      <td>vviinnNoResult</td><td>Triggered when an error has occurred after the Product AI recommendation, search request or because of an image's wrong format uploaded to the Product AI search.</td>
 
       <td>-</td>
+    </tr>
+
+    <tr>
+      <td>vviinnRedirect</td><td>Triggered when the API returns a redirect URL instead of regular product results. This typically happens when the search query matches a specific category or landing page.</td>
+
+      <td>
+        <ul>
+          <li>url</li>
+        </ul>
+      </td>
     </tr>
 
     <tr>
@@ -128,4 +138,19 @@ document.addEventListener("vviinnProductLoad", ({ detail }) => {
     "widgetVersion": "2.1.0"
 }
 // ... and other loaded products
+
+document.addEventListener("vviinnRedirect", ({ detail }) => {
+  console.log(detail);
+  // Optionally redirect the user
+  // window.location.href = detail.url;
+});
+
+// Output:
+{
+    "url": "https://www.trends.de/sansibar",
+    "campaignTypeId": "TPS",
+    "campaignTypeName": "Text Product Search",
+    "widgetId": "my-search-widget",
+    "widgetVersion": "2.190.0"
+}
 ```
