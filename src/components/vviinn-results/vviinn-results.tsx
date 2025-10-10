@@ -267,6 +267,7 @@ export class VviinnResults {
   private initResultEvents = () => {
     this.state.resultLoaded = false;
     this.state.resultViewed = false;
+    this.state.redirect = null;
   };
 
   private updateCampaignIds = () => {
@@ -740,9 +741,10 @@ export class VviinnResults {
 
   private emitRedirectIfPresent() {
     if (this.state.redirect) {
+      const { url } = this.state.redirect;
       const redirectData: RedirectEventData = {
-        url: this.state.redirect.url,
         ...this.getBasicEventData(),
+        url,
       };
       this.vviinnRedirect.emit(redirectData);
     }
