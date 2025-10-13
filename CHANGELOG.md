@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.191.0](https://github.com/vviinn/widgets/compare/v2.190.0...v2.191.0) (2025-10-13)
+
+
+### Features
+
+* New Redirect event. ([9965858](https://github.com/vviinn/widgets/commit/99658580fbdda8422145b73e790b29d1b697dfb5))
+
 ## [2.190.0](https://github.com/vviinn/widgets/compare/v2.189.0...v2.190.0) (2025-10-08)
 
 
