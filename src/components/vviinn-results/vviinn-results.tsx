@@ -542,9 +542,23 @@ export class VviinnResults {
     this.state = state;
     this.storeName = storeName;
 
-    this.disposeStoreListener = onChange("searchStatus", (searchStatus) => {
-      if (searchStatus === "loading") this.resetDiscoveryAppendIndexes();
+    const disposeSearchStatusListener = onChange(
+      "searchStatus",
+      (searchStatus) => {
+        if (searchStatus === "loading") this.resetDiscoveryAppendIndexes();
+      },
+    );
+
+    const disposeRedirectListener = onChange("redirect", (redirect) => {
+      if (redirect) this.emitRedirectIfPresent();
     });
+
+    this.disposeStoreListener = () => {
+      disposeSearchStatusListener();
+      disposeRedirectListener();
+    };
+
+    this.emitRedirectIfPresent();
 
     if (this.el.id) this.widgetElementId = this.el.id;
 
@@ -757,7 +771,6 @@ export class VviinnResults {
       this.vviinnResultLoad.emit(this.getBasicEventData());
       this.trackResultEvent("load");
       this.state.resultLoaded = true;
-      this.emitRedirectIfPresent();
     }
 
     const shouldShowOneClickDiscoveryButton =
