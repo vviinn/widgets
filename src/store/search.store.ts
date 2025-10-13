@@ -3,8 +3,12 @@ import * as TE from "fp-ts/TaskEither";
 import * as T from "fp-ts/Task";
 import { pipe } from "fp-ts/function";
 import { globalState } from "./store";
-import { Recommendation, RequestStaticFilters } from "../interfaces";
-import { components } from "../interfaces/generated";
+import {
+  Recommendation,
+  RequestStaticFilters,
+  Stream,
+  Redirect,
+} from "../interfaces";
 import {
   visualSearchSessionClient,
   textSearchSessionClient,
@@ -69,7 +73,8 @@ type ReceivedDataDefaults = {
   sourceProduct: Recommendation | null;
   dynamicFilters: ResponseDynamicFilterItem[];
   detectedObjects: Rectangle[];
-  stream: components["schemas"]["stream"] | null;
+  stream: Stream | null;
+  redirect: Redirect | null;
 };
 
 export type SearchStore = AppStateGlobalDefaults &
@@ -105,6 +110,7 @@ const receivedDataDefaults: ReceivedDataDefaults = {
   dynamicFilters: [],
   detectedObjects: [],
   stream: null,
+  redirect: null,
 };
 
 const storeDefaults: SearchStore = {
@@ -199,6 +205,7 @@ const updateVisualSearchState =
     state.visualSearchId = response.requestId;
     state.results = response.data.products;
     state.dynamicFilters = response.interactions.dynamicFilters;
+    state.redirect = response.interactions.redirect ?? null;
     state.searchStatus = "success";
   };
 
@@ -420,6 +427,7 @@ export const makeTextSearchRequest = async (
       state.textSearchId = sessionResponse.requestId;
       state.dynamicFilters =
         sessionResponse?.interactions?.dynamicFilters ?? [];
+      state.redirect = sessionResponse?.interactions?.redirect ?? null;
       state.stream = sessionResponse?.stream ?? null;
       state.searchStatus = "success";
       return sessionResponse;
@@ -474,6 +482,7 @@ export const makeProductListingPageRequest = async (
       state.results = sessionResponse?.data?.products ?? [];
       state.dynamicFilters =
         sessionResponse?.interactions?.dynamicFilters ?? [];
+      state.redirect = sessionResponse?.interactions?.redirect ?? null;
       state.searchStatus = "success";
       return sessionResponse;
     }),

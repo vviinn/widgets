@@ -1,4 +1,4 @@
-import { Rectangle } from "../interfaces/search";
+import { Rectangle } from "../interfaces";
 
 /**
  * Calculate the bounds of an image element in the viewport

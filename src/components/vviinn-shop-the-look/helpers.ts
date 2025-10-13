@@ -2,7 +2,7 @@ import {
   Rectangle,
   VisualSearchResponse,
   SuggestedSearchArea,
-} from "../../interfaces/search";
+} from "../../interfaces";
 import * as E from "fp-ts/lib/Either";
 import { Recommendation } from "../../interfaces";
 import { BasicError } from "../../error";
