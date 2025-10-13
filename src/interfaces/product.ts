@@ -17,4 +17,5 @@ export type ContextAnnotation = s["context-annotation"];
 export type ContextAnnotationDataProducts =
   s["context-annotation-data-products"];
 export type Interactions = s["interactions"];
+export type Stream = s["stream"];
 export type StreamItem = s["stream-item"];

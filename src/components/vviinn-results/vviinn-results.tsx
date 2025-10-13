@@ -50,6 +50,7 @@ import {
   ProductCardEventData,
   ProductEvent,
   ProductEventType,
+  RedirectEventData,
   ResultEventType,
   TextSearchEvent,
   TextSearchEventData,
@@ -163,6 +164,8 @@ export class VviinnResults {
   @Event() vviinnResultLoad: EventEmitter<BasicEventData>;
   /** The search result appears in the viewport */
   @Event() vviinnResultView: EventEmitter<BasicEventData>;
+  /** A redirect URL is received from the API */
+  @Event() vviinnRedirect: EventEmitter<RedirectEventData>;
 
   /** The 'query' is received for performing a Text Search */
   /** @internal */
@@ -264,6 +267,7 @@ export class VviinnResults {
   private initResultEvents = () => {
     this.state.resultLoaded = false;
     this.state.resultViewed = false;
+    this.state.redirect = null;
   };
 
   private updateCampaignIds = () => {
@@ -538,9 +542,23 @@ export class VviinnResults {
     this.state = state;
     this.storeName = storeName;
 
-    this.disposeStoreListener = onChange("searchStatus", (searchStatus) => {
-      if (searchStatus === "loading") this.resetDiscoveryAppendIndexes();
+    const disposeSearchStatusListener = onChange(
+      "searchStatus",
+      (searchStatus) => {
+        if (searchStatus === "loading") this.resetDiscoveryAppendIndexes();
+      },
+    );
+
+    const disposeRedirectListener = onChange("redirect", (redirect) => {
+      if (redirect) this.emitRedirectIfPresent();
     });
+
+    this.disposeStoreListener = () => {
+      disposeSearchStatusListener();
+      disposeRedirectListener();
+    };
+
+    this.emitRedirectIfPresent();
 
     if (this.el.id) this.widgetElementId = this.el.id;
 
@@ -733,6 +751,17 @@ export class VviinnResults {
       return "empty-results";
 
     return null;
+  }
+
+  private emitRedirectIfPresent() {
+    if (this.state.redirect) {
+      const { url } = this.state.redirect;
+      const redirectData: RedirectEventData = {
+        ...this.getBasicEventData(),
+        url,
+      };
+      this.vviinnRedirect.emit(redirectData);
+    }
   }
 
   private renderResults() {

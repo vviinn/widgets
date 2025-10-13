@@ -1,4 +1,4 @@
 export * from "./discovery";
-export * from "./filter";
+export * from "./interactions";
 export * from "./product";
 export * from "./search";

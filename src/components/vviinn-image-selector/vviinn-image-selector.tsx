@@ -23,6 +23,7 @@ import {
 import { BasicError } from "../../error";
 import { VisualSearchResponse } from "../../interfaces";
 import { setLocalStorageItems } from "../../localStorage";
+import { acceptableFileFormats, checkImageType } from "../../Image/error";
 
 /**
  * @part button -  button look and feel
@@ -34,14 +35,14 @@ import { setLocalStorageItems } from "../../localStorage";
 })
 export class VviinnImageSelector {
   @Event() vviinnImageUploadStarted: EventEmitter<ImageUploadEventData>;
-  /** Wrong image format, that isn't .jpg, .jpeg, png */
+  /** Wrong image format, that isn't .jpg, .jpeg, .png, .webp, or .avif */
   @Event() vviinnNoResult: EventEmitter<NoResultEventData>;
   @Event() vviinnImageUploadFinished: EventEmitter<SearchIdEventData>;
 
   @Prop() basicEventData: BasicEventData;
   @Prop() startUpload: boolean;
   @Prop() loading: boolean = false;
-  @Prop() accept: "image" | "application-octet-stream" = "image";
+  @Prop() accept: string;
   @Prop() resetVpsButton: () => void;
   @Prop() token?: string;
   @Prop() apiPath?: string;
@@ -52,16 +53,30 @@ export class VviinnImageSelector {
   private fileInput: HTMLInputElement;
 
   private async handleInputChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    const validationResult = checkImageType(file);
+
+    if (E.isLeft(validationResult)) {
+      this.vviinnNoResult.emit({
+        ...this.basicEventData,
+        reason: validationResult.left.kind,
+      });
+      input.value = "";
+      return;
+    }
+
     this.vviinnImageUploadStarted.emit({
       ...this.basicEventData,
       isTriggeredByVpsWidget: this.storeName === "widget",
     });
-    const input = event.target as HTMLInputElement;
 
     const processingResult: E.Either<
       BasicError<string | Response>,
       VisualSearchResponse
-    > = await makeUploadFileRequest(this.storeName)(input.files[0]);
+    > = await makeUploadFileRequest(this.storeName)(file);
 
     pipe(
       processingResult,
@@ -87,7 +102,7 @@ export class VviinnImageSelector {
       ),
     );
 
-    input.value = null;
+    input.value = "";
   }
 
   @Watch("startUpload")
@@ -123,9 +138,7 @@ export class VviinnImageSelector {
           class="visually-hidden"
           type="file"
           tabindex="-1"
-          accept={
-            this.accept === "image" ? "image/*" : "application/octet-stream"
-          }
+          accept={acceptableFileFormats}
           onChange={(event: Event) => this.handleInputChange(event)}
           ref={(el) => (this.fileInput = el as HTMLInputElement)}
         />

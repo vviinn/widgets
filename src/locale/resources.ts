@@ -55,7 +55,7 @@ export const resources: Resource = {
       },
       wrongFormatBlock: {
         title: "Dateityp wird nicht unterstützt",
-        text: "Bitte laden Sie eine .jpg, .png oder .webp Bilddatei hoch.",
+        text: "Bitte laden Sie eine .jpg, .png, .webp oder .avif Bilddatei hoch.",
         button: "Neues Bild hochladen",
       },
       wrongAspectRatioBlock: {
@@ -191,7 +191,7 @@ export const resources: Resource = {
       },
       wrongFormatBlock: {
         title: "Wrong file format",
-        text: "Please upload a .jpg, .png or .webp image file.",
+        text: "Please upload a .jpg, .png, .webp or .avif image file.",
         button: "Upload another file",
       },
       wrongAspectRatioBlock: {

@@ -1,6 +1,11 @@
-import { Rectangle, VisualSearchResponse } from "../../interfaces/search";
+import {
+  Rectangle,
+  VisualSearchResponse,
+  SuggestedSearchArea,
+} from "../../interfaces";
 import * as E from "fp-ts/lib/Either";
 import { Recommendation } from "../../interfaces";
+import { BasicError } from "../../error";
 import { INTERSECTION_THRESHOLDS } from "./constants";
 import {
   isDesktop as sharedIsDesktop,
@@ -13,6 +18,8 @@ import {
   makeVisualSearchRequest,
   shopTheLookState,
 } from "../../store/search.store";
+import { imageFromFileTask } from "../../Image/fromFile";
+import { ImageState } from "./store";
 
 export type AnchorPosition =
   | "top-left"
@@ -52,18 +59,25 @@ export const shouldKeepImageVisible = (
   return isDesktop;
 };
 
-export const shouldRenderDetectedObjects = (imageState: any): boolean => {
+export const shouldRenderDetectedObjects = (
+  imageState: ImageState | null,
+  isActiveSlide: boolean,
+): boolean => {
   if (!imageState) return false;
 
-  return imageState.isVisible;
+  return isDesktop()
+    ? imageState.searchCompleted && !!imageState.detectedObjects?.length
+    : isActiveSlide;
 };
 
 export const calculateModalPosition = (
   imageElement: HTMLImageElement,
   detectedObject: Rectangle,
   containerElement?: HTMLElement,
+  preCalculatedImageBounds?: Rectangle | null,
 ): ModalPosition => {
-  const imageBounds = calculateImageBounds(imageElement);
+  const imageBounds =
+    preCalculatedImageBounds || calculateImageBounds(imageElement);
   if (!imageBounds) return { x: 0, y: 0 };
 
   const objectCenterX =
@@ -163,7 +177,8 @@ export const performVisualSearch = async (
     )(imageFile);
 
     return E.fold(
-      (error: any) => E.left(`Upload failed: ${error}`),
+      (error: BasicError<string | Response>) =>
+        E.left(`Upload failed: ${error.inner}`),
       (uploadResponse: VisualSearchResponse) => {
         const detectedObjects =
           uploadResponse.interactions?.suggestedSearchAreas?.map(
@@ -191,6 +206,7 @@ export interface DetectedObjectClickParams {
   campaignId?: string;
   isSearchInProgress: boolean;
   setSearchInProgress: (inProgress: boolean) => void;
+  imageBounds?: Rectangle | null;
 }
 
 export const handleDetectedObjectClick = async (
@@ -207,6 +223,7 @@ export const handleDetectedObjectClick = async (
     containerElement,
     visualSearchId,
     token,
+    imageBounds,
     campaignId,
     isSearchInProgress,
     setSearchInProgress,
@@ -233,13 +250,15 @@ export const handleDetectedObjectClick = async (
     );
 
     return E.fold(
-      (error: any) => E.left(`Visual search failed: ${error}`),
+      (error: BasicError<string | Response>) =>
+        E.left(`Visual search failed: ${error.inner}`),
       (searchResponse: VisualSearchResponse) => {
         const searchResults = searchResponse.data?.products || [];
         const modalPosition = calculateModalPosition(
           imageElement,
           detectedObject,
           containerElement,
+          imageBounds,
         );
 
         return E.right({
@@ -252,5 +271,85 @@ export const handleDetectedObjectClick = async (
     return E.left(`Visual search failed: ${error}`);
   } finally {
     setSearchInProgress(false);
+  }
+};
+
+export const autoSelectFirstObject = (
+  imageIndex: number,
+  detectedObjects: Rectangle[],
+  onSelectObject: (
+    detectedObject: Rectangle,
+    objectIndex: number,
+    imageIndex: number,
+  ) => Promise<void>,
+  delay: number,
+) => {
+  if (detectedObjects.length > 0) {
+    setTimeout(async () => {
+      await onSelectObject(detectedObjects[0], 0, imageIndex);
+    }, delay);
+  }
+};
+
+export const buildImageUrlsList = (
+  uploadedImageUrls: string[],
+  imageUrlsProp: string,
+): string[] => {
+  const propImageUrls =
+    imageUrlsProp && imageUrlsProp.trim()
+      ? imageUrlsProp
+          .split(",")
+          .map((url) => url.trim())
+          .filter((url) => url.length > 0)
+      : [];
+
+  return [...uploadedImageUrls, ...propImageUrls];
+};
+
+export interface ProcessFileUploadParams {
+  file: File;
+  token: string;
+  campaignId?: string;
+}
+
+export interface ProcessFileUploadResult {
+  imageUrl: string;
+  detectedObjects: Rectangle[];
+  visualSearchId: string | null;
+}
+
+export const processFileUpload = async (
+  params: ProcessFileUploadParams,
+): Promise<E.Either<string, ProcessFileUploadResult>> => {
+  const { file, token, campaignId } = params;
+
+  try {
+    const imageElement = await imageFromFileTask(file)();
+    const imageUrl = imageElement.src;
+
+    const uploadResult = await makeUploadFileRequest(
+      "shopTheLook",
+      token,
+      campaignId,
+    )(file);
+
+    return E.fold(
+      (error: BasicError<string | Response>) =>
+        E.left(`Upload failed: ${error.inner}`),
+      (response: VisualSearchResponse) => {
+        const detectedObjects =
+          response.interactions?.suggestedSearchAreas?.map(
+            (area: SuggestedSearchArea) => area.rectangle,
+          ) || [];
+
+        return E.right({
+          imageUrl,
+          detectedObjects,
+          visualSearchId: response.requestId || null,
+        });
+      },
+    )(uploadResult);
+  } catch (error) {
+    return E.left(`Failed to process image: ${error}`);
   }
 };

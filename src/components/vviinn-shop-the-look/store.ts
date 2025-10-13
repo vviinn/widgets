@@ -20,7 +20,7 @@ export interface ObserverConfig {
   token: string;
   isWidgetVisible: boolean;
   totalImages: number;
-  onImageVisibilityChange: () => void;
+  isModalOpen?: boolean;
   onVisualSearchTrigger: (index: number) => void;
 }
 
@@ -103,9 +103,17 @@ export class ShopTheLookImageStore {
 
     this.updateImageState(index, { isVisible });
 
-    this.config.onImageVisibilityChange();
+    const isModalCurrentlyOpen = this.config.isModalOpen ?? false;
 
-    if (this.shouldTriggerSearch(index, isVisible, wasVisible, currentState)) {
+    if (
+      this.shouldTriggerSearch(
+        index,
+        isVisible,
+        wasVisible,
+        currentState,
+        isModalCurrentlyOpen,
+      )
+    ) {
       this.updateImageState(index, { searchTriggered: true });
       this.config.onVisualSearchTrigger(index);
     }
@@ -116,10 +124,12 @@ export class ShopTheLookImageStore {
     isVisible: boolean,
     wasVisible: boolean,
     currentState: ImageState,
+    isModalOpen: boolean = false,
   ): boolean {
+    if (isModalOpen) return false;
+
     const isNewlyVisible = isVisible && wasVisible === false;
-    const hasRequiredTokenAndState =
-      this.config.isWidgetVisible && this.config.token;
+    const hasToken = !!this.config.token;
     const isSearchEligible =
       !currentState.searchCompleted && !currentState.searchTriggered;
     const hasCapacityForMoreSearches =
@@ -127,7 +137,7 @@ export class ShopTheLookImageStore {
 
     return (
       isNewlyVisible &&
-      hasRequiredTokenAndState &&
+      hasToken &&
       isSearchEligible &&
       hasCapacityForMoreSearches
     );
@@ -192,5 +202,16 @@ export class ShopTheLookImageStore {
     return Array.from(this.imageStates.values()).some(
       (state) => state.searchTriggered && !state.searchCompleted,
     );
+  }
+
+  shiftIndicesForward(startIndex: number = 0) {
+    const statesToShift = Array.from(this.imageStates.entries())
+      .filter(([index]) => index >= startIndex)
+      .sort(([a], [b]) => b - a);
+
+    statesToShift.forEach(([oldIndex, state]) => {
+      this.imageStates.delete(oldIndex);
+      this.imageStates.set(oldIndex + 1, state);
+    });
   }
 }

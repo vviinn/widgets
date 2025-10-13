@@ -14,6 +14,7 @@ export { TextSearchIcon } from "./icons/TextSearchIcon";
 export { SearchIcon } from "./icons/SearchIcon";
 export { UpdateIcon } from "./icons/UpdateIcon";
 export { UploadActionIcon } from "./icons/UploadActionIcon";
+export { UploadActionIconVariant } from "./icons/UploadActionIconVariant";
 export { VisualSearchIcon } from "./icons/VisualSearchIcon";
 export { WarningIcon } from "./icons/WarningIcon";
 export { PhotoFrameCorner } from "./icons/PhotoFrameCorner";
