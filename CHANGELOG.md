@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.191.1](https://github.com/vviinn/widgets/compare/v2.191.0...v2.191.1) (2025-10-13)
+
+
+### Bug Fixes
+
+* vviinnRedirect event logic. ([86dd076](https://github.com/vviinn/widgets/commit/86dd076539f07f1fdd2a0fcbfb954ec56e0d6eba))
+
 ## [2.191.0](https://github.com/vviinn/widgets/compare/v2.190.0...v2.191.0) (2025-10-13)
 
 
