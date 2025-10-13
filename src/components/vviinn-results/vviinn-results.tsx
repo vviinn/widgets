@@ -263,13 +263,11 @@ export class VviinnResults {
     this.calculateColumns();
     this.calculateCardHeight();
   });
-  private redirectEmitted: boolean = false;
 
   private initResultEvents = () => {
     this.state.resultLoaded = false;
     this.state.resultViewed = false;
     this.state.redirect = null;
-    this.redirectEmitted = false;
   };
 
   private updateCampaignIds = () => {
@@ -551,8 +549,8 @@ export class VviinnResults {
       },
     );
 
-    const disposeRedirectListener = onChange("redirect", () => {
-      this.emitRedirectIfPresent();
+    const disposeRedirectListener = onChange("redirect", (redirect) => {
+      if (redirect) this.emitRedirectIfPresent();
     });
 
     this.disposeStoreListener = () => {
@@ -756,14 +754,13 @@ export class VviinnResults {
   }
 
   private emitRedirectIfPresent() {
-    if (this.state.redirect && !this.redirectEmitted) {
+    if (this.state.redirect) {
       const { url } = this.state.redirect;
       const redirectData: RedirectEventData = {
         ...this.getBasicEventData(),
         url,
       };
       this.vviinnRedirect.emit(redirectData);
-      this.redirectEmitted = true;
     }
   }
 
