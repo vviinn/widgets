@@ -263,11 +263,13 @@ export class VviinnResults {
     this.calculateColumns();
     this.calculateCardHeight();
   });
+  private redirectEmitted: boolean = false;
 
   private initResultEvents = () => {
     this.state.resultLoaded = false;
     this.state.resultViewed = false;
     this.state.redirect = null;
+    this.redirectEmitted = false;
   };
 
   private updateCampaignIds = () => {
@@ -542,9 +544,23 @@ export class VviinnResults {
     this.state = state;
     this.storeName = storeName;
 
-    this.disposeStoreListener = onChange("searchStatus", (searchStatus) => {
-      if (searchStatus === "loading") this.resetDiscoveryAppendIndexes();
+    const disposeSearchStatusListener = onChange(
+      "searchStatus",
+      (searchStatus) => {
+        if (searchStatus === "loading") this.resetDiscoveryAppendIndexes();
+      },
+    );
+
+    const disposeRedirectListener = onChange("redirect", () => {
+      this.emitRedirectIfPresent();
     });
+
+    this.disposeStoreListener = () => {
+      disposeSearchStatusListener();
+      disposeRedirectListener();
+    };
+
+    this.emitRedirectIfPresent();
 
     if (this.el.id) this.widgetElementId = this.el.id;
 
@@ -740,13 +756,14 @@ export class VviinnResults {
   }
 
   private emitRedirectIfPresent() {
-    if (this.state.redirect) {
+    if (this.state.redirect && !this.redirectEmitted) {
       const { url } = this.state.redirect;
       const redirectData: RedirectEventData = {
         ...this.getBasicEventData(),
         url,
       };
       this.vviinnRedirect.emit(redirectData);
+      this.redirectEmitted = true;
     }
   }
 
@@ -757,7 +774,6 @@ export class VviinnResults {
       this.vviinnResultLoad.emit(this.getBasicEventData());
       this.trackResultEvent("load");
       this.state.resultLoaded = true;
-      this.emitRedirectIfPresent();
     }
 
     const shouldShowOneClickDiscoveryButton =
