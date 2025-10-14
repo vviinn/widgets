@@ -28,6 +28,7 @@ import {
   parseBasePrice,
   renderCustomLabels,
   ContentCardContent,
+  ListCardContent,
 } from "./render-helpers";
 import {
   CrossSellingClickEvent,
@@ -51,10 +52,15 @@ import { generateRandomNumber } from "../../utils/number";
 import {
   BasePrice,
   EnergyCertification,
+  EntityType,
   Recommendation,
 } from "../../interfaces";
 import { resources } from "../../locale";
-import { contentCardParts, productCardParts } from "../../cssParts";
+import {
+  contentCardParts,
+  listCardParts,
+  productCardParts,
+} from "../../cssParts";
 import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
 import {
   PRODUCT_CARD_IMAGE_RESOLUTION_WIDTH,
@@ -100,6 +106,13 @@ import { addEventListenersWithSignal } from "../../dom";
  * @part custom-label-4 - Custom label with index 4.
  * @part product-card-actions - Style actions wrapper.
  * @part product-card-actions-top - Style top actions wrapper.
+ * @part list-card - List card container.
+ * @part list-card-content-container - List card's content container.
+ * @part list-label - List card's label (e.g., "Category").
+ * @part list-title - List card's title.
+ * @part list-link - Anchor element for list card link.
+ * @part list-card-image-container - List card's image container.
+ * @part list-card-image-link - Anchor element for list card image.
  *
  * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
@@ -137,7 +150,7 @@ export class VviinnProductCard {
   @Prop() basePrice?: BasePrice | string | null;
   @Prop() productTitle: string;
   @Prop() productType: string | undefined;
-  @Prop() entityType: Recommendation["entityType"] = "product";
+  @Prop() entityType: EntityType = "product";
   @Prop() isSetMode: boolean = false;
   @Prop() salePrice: number | undefined;
   @Prop() baseSalePrice: BasePrice | string | null;
@@ -226,7 +239,8 @@ export class VviinnProductCard {
   private intersectionObserver: IntersectionObserver;
   private linkEventAbortController?: AbortController;
   private imageProps: ImageProps;
-  private isContentCard: boolean;
+  private isContentCard: boolean = false;
+  private isListCard: boolean = false;
 
   private isShowUpdateButton = () =>
     this.isSetMode &&
@@ -243,6 +257,7 @@ export class VviinnProductCard {
   connectedCallback() {
     this.productData = this.getProductData();
     this.isContentCard = this.entityType === "content";
+    this.isListCard = this.entityType === "list";
     this.imageProps = this.getImageProps();
 
     this.isStandalone &&
@@ -496,21 +511,21 @@ export class VviinnProductCard {
   }
 
   render() {
-    if (this.isContentCard) {
+    if (this.isContentCard || this.isListCard) {
       return (
         <Host
-          part="product-card content-card"
-          class="content-card"
-          exportparts={contentCardParts}
+          part={`product-card ${this.entityType}-card`}
+          class={`${this.entityType}-card`}
+          exportparts={this.isContentCard ? contentCardParts : listCardParts}
           data-id={this.productId}
         >
           <div
-            class="image-container content-card-image-container"
+            class={`image-container ${this.entityType}-card-image-container`}
             part="image-container"
           >
             <Linked
               deeplink={this.deeplink}
-              part="image-link content-image-link"
+              part={`image-link ${this.entityType}-image-link`}
             >
               {this.renderImageWithLoadedState(
                 this.imageProps,
@@ -519,11 +534,17 @@ export class VviinnProductCard {
               )}
             </Linked>
           </div>
-          {ContentCardContent(
-            this.productTitle,
-            this.deeplink,
-            i18next.t("contentLabel"),
-          )}
+          {this.isContentCard
+            ? ContentCardContent(
+                this.productTitle,
+                this.deeplink,
+                i18next.t("contentLabel"),
+              )
+            : ListCardContent(
+                this.productTitle,
+                this.deeplink,
+                i18next.t("listLabel"),
+              )}
         </Host>
       );
     }

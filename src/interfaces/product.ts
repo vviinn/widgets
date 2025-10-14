@@ -2,6 +2,7 @@ type s = import("./generated").components["schemas"];
 
 // Product Items
 export type Recommendation = s["response-product-item"];
+export type EntityType = Recommendation["entityType"];
 
 // Energy Efficiency
 export type EnergyEfficiencyClass = s["energy-efficiency-class"];
