@@ -381,6 +381,49 @@ vviinn-energy-label {
   text-decoration: none;
 }
 
+:host(.list-card) {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--spacing-250);
+  gap: var(--spacing-200);
+  background-color: var(--surface-bg-color-01);
+}
+
+:host(.list-card) .content-container {
+  order: 1;
+  background-color: unset;
+}
+
+:host(.list-card) vviinn-image {
+  --image-bg-display: none;
+  --picture-blend-mode: multiply;
+}
+
+.list-card-image-container {
+  order: 2;
+  box-sizing: border-box;
+  padding: var(--spacing-125);
+}
+
+.list-label {
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-400);
+  line-height: var(--line-height-body);
+  letter-spacing: var(--letter-spacing-body);
+}
+
+.list-title {
+  text-align: center;
+  font-size: 40px;
+  font-weight: var(--font-weight-600);
+  line-height: 40px;
+  letter-spacing: var(--letter-spacing-title);
+}
+
 .footer-arrow {
   position: absolute;
   bottom: -35px;

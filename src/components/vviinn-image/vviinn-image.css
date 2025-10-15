@@ -70,23 +70,12 @@ picture {
   width: 100%;
   height: 100%;
   position: relative;
-}
-
-picture::before {
-  display: block;
-  box-sizing: border-box;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  content: "";
-  opacity: 0;
+  mix-blend-mode: var(--picture-blend-mode, normal);
 }
 
 picture::after {
   box-sizing: border-box;
-  display: block;
+  display: var(--image-bg-display, block);
   position: absolute;
   width: 100%;
   height: 100%;

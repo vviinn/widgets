@@ -240,11 +240,7 @@ export const ContentCardContent = (
   );
 };
 
-export const ListCardContent = (
-  listTitle: string,
-  listLink: string,
-  labelText: string,
-) => {
+export const ListCardContent = (listTitle: string, labelText: string) => {
   return (
     <div
       class="content-container"
@@ -257,11 +253,6 @@ export const ListCardContent = (
         <div class="list-title" part="list-title" title={listTitle}>
           {listTitle}
         </div>
-      )}
-      {listLink && (
-        <Linked deeplink={listLink} part="list-link" tabindex={0}>
-          {getLastUrlPath(listLink)}
-        </Linked>
       )}
     </div>
   );

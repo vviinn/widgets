@@ -110,7 +110,6 @@ import { addEventListenersWithSignal } from "../../dom";
  * @part list-card-content-container - List card's content container.
  * @part list-label - List card's label (e.g., "Category").
  * @part list-title - List card's title.
- * @part list-link - Anchor element for list card link.
  * @part list-card-image-container - List card's image container.
  * @part list-card-image-link - Anchor element for list card image.
  *
@@ -475,7 +474,7 @@ export class VviinnProductCard {
   private renderImageWithLoadedState(
     imageProps: ImageProps,
     isResponsive: boolean,
-    isFullHeight: boolean = false,
+    entityType: EntityType = "product",
   ) {
     return (
       <vviinn-image
@@ -486,7 +485,7 @@ export class VviinnProductCard {
         alt={imageProps.title}
         imageTitle={imageProps.title}
         responsive={isResponsive}
-        fullHeight={isFullHeight}
+        entityType={entityType}
         imageResolutionWidth={imageProps.imageResolutionWidth}
         customClass={this.imageLoaded ? "loaded" : ""}
         imageRef={imageProps.ref}
@@ -530,7 +529,7 @@ export class VviinnProductCard {
               {this.renderImageWithLoadedState(
                 this.imageProps,
                 this.responsive,
-                true,
+                this.entityType,
               )}
             </Linked>
           </div>
@@ -540,11 +539,7 @@ export class VviinnProductCard {
                 this.deeplink,
                 i18next.t("contentLabel"),
               )
-            : ListCardContent(
-                this.productTitle,
-                this.deeplink,
-                i18next.t("listLabel"),
-              )}
+            : ListCardContent(this.productTitle, i18next.t("listLabel"))}
         </Host>
       );
     }
@@ -689,7 +684,11 @@ export class VviinnProductCard {
 
         <div class="image-container" part="image-container">
           <Linked deeplink={this.deeplink} part="image-link">
-            {this.renderImageWithLoadedState(this.imageProps, this.responsive)}
+            {this.renderImageWithLoadedState(
+              this.imageProps,
+              this.responsive,
+              this.entityType,
+            )}
           </Linked>
 
           {this.isSourceProduct && <PlusIcon class="plus-icon" />}

@@ -9,6 +9,7 @@ import {
   EventEmitter,
 } from "@stencil/core";
 import { imageParts } from "../../cssParts";
+import { EntityType } from "../../interfaces";
 
 /**
  * Encapsulated image component with customizable styling and built-in placeholder support.
@@ -49,8 +50,8 @@ export class VviinnImage {
   @Prop() imageTitle: string = "";
   /** Whether to enable responsive behavior (width: 100%, height: auto) */
   @Prop() responsive: boolean = false;
-  /** Whether to fill the full height of the container */
-  @Prop() fullHeight: boolean = false;
+  /** Type of the entity */
+  @Prop() entityType: EntityType = "product";
   /** Image processing width for URL optimization */
   @Prop() imageResolutionWidth?: number;
   /** How the image should fit within its container */
@@ -73,6 +74,14 @@ export class VviinnImage {
   /** Callback for when image loading ends (load or error) */
   @Prop() loadEndCallback?: () => void;
 
+  private isContentType: boolean = false;
+  private isListType: boolean = false;
+
+  connectedCallback() {
+    this.isContentType = this.entityType === "content";
+    this.isListType = this.entityType === "list";
+  }
+
   private get shouldShowSkeleton(): boolean {
     return this.isSetMode
       ? this.showSkeleton
@@ -84,7 +93,7 @@ export class VviinnImage {
   }
 
   private get computedAspectRatio(): number | null {
-    if (this.aspectRatio) return this.aspectRatio;
+    if (this.aspectRatio && this.entityType !== "list") return this.aspectRatio;
     if (this.width && this.height) return this.width / this.height;
     return null;
   }
@@ -145,8 +154,9 @@ export class VviinnImage {
     return {
       image: true,
       responsive: this.responsive,
-      "full-height": this.fullHeight,
-      "content-card-image": this.fullHeight,
+      "full-height": this.isContentType,
+      "content-card-image": this.isContentType,
+      "list-card-image": this.isListType,
       "set-mode-transition": this.isSetMode && this.shouldShowSkeleton,
       loaded: this.imageLoaded,
       error: this.imageError,
@@ -184,7 +194,7 @@ export class VviinnImage {
         alt={this.alt}
         title={this.imageTitle}
         class={this.getImageClassMap()}
-        part={`image ${this.fullHeight ? "content-card-image" : ""}`}
+        part={`image ${this.entityType}-card-image`}
         style={this.getImageStyles()}
         onLoad={this.handleImageLoad}
         onError={this.handleImageError}
@@ -213,16 +223,15 @@ export class VviinnImage {
         <div
           class={{
             "image-container": true,
-            "content-card-image-container": this.fullHeight,
+            "content-card-image-container": this.isContentType,
+            "list-card-image-container": this.isListType,
             loading: this.shouldShowSkeleton,
             loaded: this.imageLoaded,
           }}
-          part={`image-container${this.fullHeight ? " content-card-image-container" : ""}`}
+          part={`image-container ${this.entityType}-card-image-container`}
           style={this.getContainerStyles()}
         >
-          <picture
-            part={`image-picture${this.fullHeight ? " content-card-image-picture" : ""}`}
-          >
+          <picture part={`image-picture ${this.entityType}-card-image-picture`}>
             {this.renderImage()}
           </picture>
           {this.shouldShowSkeleton && this.renderSkeleton()}

@@ -72,5 +72,4 @@ export const listCardPartsList = [
   "list-card-content-container",
   "list-label",
   "list-title",
-  "list-link",
 ];
