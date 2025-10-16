@@ -540,6 +540,13 @@ export class VviinnProductCard {
                 i18next.t("contentLabel"),
               )
             : ListCardContent(this.productTitle, i18next.t("listLabel"))}
+          {this.isListCard && this.deeplink && (
+            <a
+              href={this.deeplink}
+              class="list-card-overlay-link"
+              aria-label={this.productTitle}
+            ></a>
+          )}
         </Host>
       );
     }
