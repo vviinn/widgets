@@ -6,10 +6,6 @@ html, body, #root, #root-inner {
 }
 
 .product-wrapper {
-  width: fit-content;
-}
-
-.product-wrapper:has(vviinn-product-card[entity-type="content"]) {
   width: 300px;
   max-width: 100%;
 }

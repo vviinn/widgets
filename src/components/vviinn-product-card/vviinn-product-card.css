@@ -381,6 +381,31 @@ vviinn-energy-label {
   padding: var(--spacing-250);
   gap: var(--spacing-200);
   background-color: var(--surface-bg-color-01);
+  height: calc(100% - 20px) !important;
+  align-self: flex-start;
+}
+
+:host(.list-card)::before,
+:host(.list-card)::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: -1;
+}
+
+:host(.list-card)::before {
+  bottom: -12px;
+  width: calc(100% - 16px);
+  height: 12px;
+  background-color: #dddddd;
+}
+
+:host(.list-card)::after {
+  bottom: -20px;
+  width: calc(100% - 32px);
+  height: 8px;
+  background-color: #c6c6c6;
 }
 
 :host(.list-card) .content-container {
@@ -414,6 +439,11 @@ vviinn-energy-label {
   font-weight: var(--font-weight-600);
   line-height: 40px;
   letter-spacing: var(--letter-spacing-title);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .list-card-overlay-link {
