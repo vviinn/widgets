@@ -82,6 +82,10 @@ export class VviinnImage {
     this.isListType = this.entityType === "list";
   }
 
+  private get usesFlexibleLayout(): boolean {
+    return this.isContentType || this.isListType;
+  }
+
   private get shouldShowSkeleton(): boolean {
     return this.isSetMode
       ? this.showSkeleton
@@ -93,7 +97,8 @@ export class VviinnImage {
   }
 
   private get computedAspectRatio(): number | null {
-    if (this.aspectRatio && this.entityType !== "list") return this.aspectRatio;
+    if (this.usesFlexibleLayout) return null;
+    if (this.aspectRatio) return this.aspectRatio;
     if (this.width && this.height) return this.width / this.height;
     return null;
   }
@@ -138,9 +143,10 @@ export class VviinnImage {
   }
 
   private getImageStyles(): Record<string, string> {
-    const styles: Record<string, string> = {
-      objectFit: this.objectFit,
-    };
+    const styles: Record<string, string> = {};
+    if (this.usesFlexibleLayout) return styles;
+
+    styles.objectFit = this.objectFit;
 
     if (!this.responsive) {
       if (this.width) styles.width = `${this.width}px`;

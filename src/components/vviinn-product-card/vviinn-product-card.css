@@ -345,17 +345,8 @@ vviinn-energy-label {
   );
 }
 
-:host(.content-card) {
-  height: auto;
-}
-
 .content-card-image-container {
   height: 100%;
-}
-
-.content-card-image {
-  aspect-ratio: unset;
-  object-fit: cover;
 }
 
 .content-title,

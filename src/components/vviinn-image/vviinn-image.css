@@ -42,8 +42,11 @@
   height: auto;
 }
 
-.content-card-image.responsive {
-  min-width: 100%;
+.image.content-card-image,
+.image.list-card-image {
+  aspect-ratio: unset;
+  object-fit: cover;
+  width: 100%;
   height: 100%;
 }
 
@@ -89,6 +92,11 @@ picture::after {
 .image-container {
   position: relative;
   display: block;
+}
+
+.image-container.content-card-image-container,
+.image-container.content-card-image-container picture {
+  height: 100%;
 }
 
 .image-skeleton {
