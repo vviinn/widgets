@@ -5,6 +5,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
+  --font-size-display: 32px;
   --font-size-title: 24px;
   --font-size-headline: 18px;
   --font-size-label-large: 16px;
@@ -13,6 +14,7 @@
   --font-size-body: 14px;
   --font-size-caption: 12px;
 
+  --line-height-display: 40px;
   --line-height-title: 32px;
   --line-height-headline: 24px;
   --line-height-label-large: 24px;
@@ -136,6 +138,8 @@
   --surface-bg-color-inverse-hover: #303030;
   --surface-bg-color-inverse-active: #393939;
   --surface-bg-color-disabled: #e0e0e0;
+  --surface-bg-color-shadow-01: #dddddd;
+  --surface-bg-color-shadow-02: #c6c6c6;
 
   --chip-bg-color-primary: #161616;
   --chip-bg-color-primary-hover: #1e1e1e;

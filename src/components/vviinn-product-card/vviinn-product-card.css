@@ -73,7 +73,7 @@
   padding: 8px;
   background-color: white;
   color: #999;
-  border: 1px solid #ddd;
+  border: 1px solid #dddddd;
   border-radius: 50%;
   z-index: 1;
 }
@@ -381,7 +381,7 @@ vviinn-energy-label {
   padding: var(--spacing-250);
   gap: var(--spacing-200);
   background-color: var(--surface-bg-color-01);
-  height: calc(100% - 20px) !important;
+  height: calc(100% - 20px);
   align-self: flex-start;
 }
 
@@ -398,14 +398,14 @@ vviinn-energy-label {
   bottom: -12px;
   width: calc(100% - 16px);
   height: 12px;
-  background-color: #dddddd;
+  background-color: var(--surface-bg-color-shadow-01);
 }
 
 :host(.list-card)::after {
   bottom: -20px;
   width: calc(100% - 32px);
   height: 8px;
-  background-color: #c6c6c6;
+  background-color: var(--surface-bg-color-shadow-02);
 }
 
 :host(.list-card) .content-container {
@@ -435,9 +435,9 @@ vviinn-energy-label {
 
 .list-title {
   text-align: center;
-  font-size: 40px;
+  font-size: var(--font-size-display);
   font-weight: var(--font-weight-600);
-  line-height: 40px;
+  line-height: var(--line-height-display);
   letter-spacing: var(--letter-spacing-title);
   display: -webkit-box;
   -webkit-box-orient: vertical;
