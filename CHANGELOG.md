@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.192.0](https://github.com/vviinn/widgets/compare/v2.191.1...v2.192.0) (2025-10-20)
+
+
+### Features
+
+* Introduce the layout of the Product Card (list entity type). ([094d764](https://github.com/vviinn/widgets/commit/094d76403757efe7d8d8437fcc2bc396d09a63c8))
+
 ### [2.191.1](https://github.com/vviinn/widgets/compare/v2.191.0...v2.191.1) (2025-10-13)
 
 
