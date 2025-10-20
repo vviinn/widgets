@@ -30,6 +30,10 @@ export type BasicEventData = { widget?: Widget } & {
   [K in keyof CommonEventData]: CommonEventData[K];
 };
 
+export type RedirectEventData = { url: string; widget?: Widget } & {
+  [K in keyof CommonEventData]: CommonEventData[K];
+};
+
 export type ImageUploadEventData = { isTriggeredByVpsWidget?: boolean } & {
   [K in keyof BasicEventData]: BasicEventData[K];
 };

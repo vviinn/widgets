@@ -10,12 +10,12 @@ import {
   JSX,
 } from "@stencil/core";
 import i18next from "i18next";
-import { components } from "../../interfaces/generated";
 import {
   Recommendation,
   ContextAnnotation,
   Interactions,
-} from "../../interfaces/product";
+  Stream,
+} from "../../interfaces";
 import { useSearchStore, SearchStore } from "../../store/search.store";
 import { updateGlobalState, globalState } from "../../store/store";
 import {
@@ -75,7 +75,7 @@ export class VviinnSuggestions {
   @Prop() pricePrefix?: string;
   @Prop() token?: string;
 
-  @State() private stream: components["schemas"]["stream"] | null = null;
+  @State() private stream: Stream | null = null;
   @State() private appliedSuggestionFilters: Set<string> = new Set();
 
   @Event({ bubbles: true })

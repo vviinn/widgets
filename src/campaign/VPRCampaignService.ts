@@ -1,12 +1,10 @@
 import {
   SimilarProductsRequest,
   SimilarProductsResponse,
-} from "../interfaces/discovery";
-import {
   ResponseDynamicFilterItem,
   DynamicFilterValue,
   RequestDynamicFilterItem,
-} from "../interfaces/filter";
+} from "../interfaces";
 import { apiPost } from "../network/apiClient";
 
 export type {

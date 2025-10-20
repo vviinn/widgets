@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.192.0](https://github.com/vviinn/widgets/compare/v2.191.1...v2.192.0) (2025-10-20)
+
+
+### Features
+
+* Introduce the layout of the Product Card (list entity type). ([094d764](https://github.com/vviinn/widgets/commit/094d76403757efe7d8d8437fcc2bc396d09a63c8))
+
+### [2.191.1](https://github.com/vviinn/widgets/compare/v2.191.0...v2.191.1) (2025-10-13)
+
+
+### Bug Fixes
+
+* vviinnRedirect event logic. ([86dd076](https://github.com/vviinn/widgets/commit/86dd076539f07f1fdd2a0fcbfb954ec56e0d6eba))
+
+## [2.191.0](https://github.com/vviinn/widgets/compare/v2.190.0...v2.191.0) (2025-10-13)
+
+
+### Features
+
+* New Redirect event. ([9965858](https://github.com/vviinn/widgets/commit/99658580fbdda8422145b73e790b29d1b697dfb5))
+
 ## [2.190.0](https://github.com/vviinn/widgets/compare/v2.189.0...v2.190.0) (2025-10-08)
 
 

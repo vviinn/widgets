@@ -7,7 +7,7 @@ import {
   Recommendation,
   ContextAnnotation,
   Interactions,
-} from "../../interfaces/product";
+} from "../../interfaces";
 import { triggerFilter } from "../vviinn-filters/helpers/triggerFilter";
 import {
   DynamicFilterInternalData,

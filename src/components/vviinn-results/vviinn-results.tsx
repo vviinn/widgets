@@ -50,6 +50,7 @@ import {
   ProductCardEventData,
   ProductEvent,
   ProductEventType,
+  RedirectEventData,
   ResultEventType,
   TextSearchEvent,
   TextSearchEventData,
@@ -73,7 +74,7 @@ import {
   vprIconSlotName,
 } from "../customized-slots";
 import { getCustomLabels } from "../../recommendation";
-import { productCardParts, productCardsGridPart } from "../../cssParts";
+import { productCardParts, productCardsGridPart, listCardParts, contentCardParts } from "../../cssParts";
 import {
   findSlotElements,
   getSlotNames,
@@ -126,6 +127,23 @@ import { RESULTS_CALCULATED_COLUMNS_CSS_VAR } from "../vviinn-carousel/constants
  * @part custom-label-3 - Custom label with index 3.
  * @part custom-label-4 - Custom label with index 4.
  *
+ * @part list-card - List card container (for entity-type="list").
+ * @part list-card-content-container - List card's content container.
+ * @part list-label - List card's label (e.g., "Category").
+ * @part list-title - List card's title.
+ * @part list-card-image-container - List card's image container.
+ * @part list-card-image - List card's image element.
+ * @part list-card-image-picture - List card's image picture element.
+ *
+ * @part content-card - Content card container (for entity-type="content").
+ * @part content-card-content-container - Content card's content container.
+ * @part content-label - Content card's label.
+ * @part content-title - Content card's title.
+ * @part content-link - Content card's link.
+ * @part content-card-image - Content card's image element.
+ * @part content-card-image-container - Content card's image container.
+ * @part content-card-image-picture - Content card's image picture element.
+ *
  * @slot vviinn-results-vpr-icon - One-click Discovery icon.
  * @slot vviinn-favorite-icon - Icon of Favorite button.
  * @slot vviinn-favorite-icon-pressed - Icon of pressed Favorite button.
@@ -163,6 +181,8 @@ export class VviinnResults {
   @Event() vviinnResultLoad: EventEmitter<BasicEventData>;
   /** The search result appears in the viewport */
   @Event() vviinnResultView: EventEmitter<BasicEventData>;
+  /** A redirect URL is received from the API */
+  @Event() vviinnRedirect: EventEmitter<RedirectEventData>;
 
   /** The 'query' is received for performing a Text Search */
   /** @internal */
@@ -264,6 +284,7 @@ export class VviinnResults {
   private initResultEvents = () => {
     this.state.resultLoaded = false;
     this.state.resultViewed = false;
+    this.state.redirect = null;
   };
 
   private updateCampaignIds = () => {
@@ -538,9 +559,23 @@ export class VviinnResults {
     this.state = state;
     this.storeName = storeName;
 
-    this.disposeStoreListener = onChange("searchStatus", (searchStatus) => {
-      if (searchStatus === "loading") this.resetDiscoveryAppendIndexes();
+    const disposeSearchStatusListener = onChange(
+      "searchStatus",
+      (searchStatus) => {
+        if (searchStatus === "loading") this.resetDiscoveryAppendIndexes();
+      },
+    );
+
+    const disposeRedirectListener = onChange("redirect", (redirect) => {
+      if (redirect) this.emitRedirectIfPresent();
     });
+
+    this.disposeStoreListener = () => {
+      disposeSearchStatusListener();
+      disposeRedirectListener();
+    };
+
+    this.emitRedirectIfPresent();
 
     if (this.el.id) this.widgetElementId = this.el.id;
 
@@ -735,6 +770,17 @@ export class VviinnResults {
     return null;
   }
 
+  private emitRedirectIfPresent() {
+    if (this.state.redirect) {
+      const { url } = this.state.redirect;
+      const redirectData: RedirectEventData = {
+        ...this.getBasicEventData(),
+        url,
+      };
+      this.vviinnRedirect.emit(redirectData);
+    }
+  }
+
   private renderResults() {
     const widgetData = this.getBasicEventData();
 
@@ -873,7 +919,7 @@ export class VviinnResults {
           "show-in-widget": this.showInWidget,
           "matching-discovery": this.oneClickDiscoveryMode === "append-slider",
         }}
-        exportparts={`${productCardParts}, ${productCardsGridPart}`}
+        exportparts={`${productCardParts}, ${listCardParts}, ${contentCardParts}, ${productCardsGridPart}`}
       >
         <div class="nothing-found">
           {this.getCurrentErrorType() && (

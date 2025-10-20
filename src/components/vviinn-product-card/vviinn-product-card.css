@@ -73,7 +73,7 @@
   padding: 8px;
   background-color: white;
   color: #999;
-  border: 1px solid #ddd;
+  border: 1px solid #dddddd;
   border-radius: 50%;
   z-index: 1;
 }
@@ -345,17 +345,8 @@ vviinn-energy-label {
   );
 }
 
-:host(.content-card) {
-  height: auto;
-}
-
 .content-card-image-container {
   height: 100%;
-}
-
-.content-card-image {
-  aspect-ratio: unset;
-  object-fit: cover;
 }
 
 .content-title,
@@ -379,6 +370,90 @@ vviinn-energy-label {
   -webkit-line-clamp: 1;
   color: var(--color-text-primary);
   text-decoration: none;
+}
+
+:host(.list-card) {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--spacing-250);
+  gap: var(--spacing-200);
+  background-color: var(--surface-bg-color-01);
+  height: calc(100% - 20px);
+  align-self: flex-start;
+}
+
+:host(.list-card)::before,
+:host(.list-card)::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: -1;
+}
+
+:host(.list-card)::before {
+  bottom: -12px;
+  width: calc(100% - 16px);
+  height: 12px;
+  background-color: var(--surface-bg-color-shadow-01);
+}
+
+:host(.list-card)::after {
+  bottom: -20px;
+  width: calc(100% - 32px);
+  height: 8px;
+  background-color: var(--surface-bg-color-shadow-02);
+}
+
+:host(.list-card) .content-container {
+  order: 1;
+  background-color: unset;
+}
+
+:host(.list-card) vviinn-image {
+  --image-bg-display: none;
+  --picture-blend-mode: multiply;
+}
+
+.list-card-image-container {
+  order: 2;
+  box-sizing: border-box;
+  padding: var(--spacing-125);
+}
+
+.list-label {
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-400);
+  line-height: var(--line-height-body);
+  letter-spacing: var(--letter-spacing-body);
+}
+
+.list-title {
+  text-align: center;
+  font-size: var(--font-size-display);
+  font-weight: var(--font-weight-600);
+  line-height: var(--line-height-display);
+  letter-spacing: var(--letter-spacing-title);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.list-card-overlay-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  cursor: pointer;
 }
 
 .footer-arrow {

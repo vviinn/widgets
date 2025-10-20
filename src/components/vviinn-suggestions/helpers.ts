@@ -1,5 +1,5 @@
 import { RequestDynamicFilterItem } from "../../campaign/VPRCampaignService";
-import { components } from "../../interfaces/generated";
+import { Stream } from "../../interfaces";
 
 export const toggleFilterInSet = (
   appliedFilters: Set<string>,
@@ -28,7 +28,7 @@ export const extractActiveFilterValues = (
 
 export const syncSuggestionFilters = (
   activeFilters: RequestDynamicFilterItem[],
-  stream: components["schemas"]["stream"] | null,
+  stream: Stream | null,
 ): Set<string> => {
   const activeValues = extractActiveFilterValues(activeFilters);
   const updatedAppliedFilters = new Set<string>();

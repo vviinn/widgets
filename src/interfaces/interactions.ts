@@ -23,3 +23,6 @@ export type DynamicFilterValue = s["interval-filter-value-item"] &
   s["full-color-filter-response"];
 export type LabelValueItem = s["label-value-item"];
 export type Interval = s["interval"];
+
+// Redirect
+export type Redirect = s["redirect"];
