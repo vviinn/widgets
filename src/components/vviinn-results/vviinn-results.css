@@ -25,6 +25,9 @@
 
 :host::part(product-card) {
   width: 100%;
+}
+
+:host::part(content-card) {
   height: 100%;
 }
 
