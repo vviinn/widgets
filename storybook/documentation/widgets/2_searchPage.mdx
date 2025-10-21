@@ -4,7 +4,7 @@ import "../../styles/filters-search-bar.css";
 import "../../components/tabs/styles.css";
 import "./styles.css";
 import { clickHandlers } from "../../components";
-import { vviinnToken } from "../../helpers";
+import { vviinnToken, textSearchQuery } from "../../helpers";
 import "../../styles/search-page.css";
 import PreviewAndCodeTabs from "../../components/tabs/PreviewAndCodeTabs.mdx"
 
@@ -24,7 +24,7 @@ Using `Vviinn Widgets` as separate components allows for greater control over th
             <vviinn-extended-filters locale="en-US" mode="preview"></vviinn-extended-filters>
         </div>
         <div className="search-page-wrapper-result">
-            <vviinn-text-search token={vviinnToken} locale="en-US" search-query="chair" mode="extended">
+            <vviinn-text-search token={vviinnToken} locale="en-US" search-query={textSearchQuery} mode="extended">
             </vviinn-text-search>
 
             <div className="search-page-wrapper-result-filters">
@@ -98,7 +98,7 @@ vviinn-text-search {
             <vviinn-extended-filters locale="en-US" mode="preview"></vviinn-extended-filters>
       </div>
       <div class="search-page-wrapper-result">
-            <vviinn-text-search token="TOKEN" locale="en-US" search-query="chair" mode="extended"></vviinn-text-search>
+            <vviinn-text-search token="TOKEN" locale="en-US" search-query="EXAMPLE_QUERY" mode="extended"></vviinn-text-search>
             <div class="search-page-wrapper-result-filters">
                   <vviinn-extended-filters locale="en-US"></vviinn-extended-filters>
                   <vviinn-selected-filters locale="en-US"></vviinn-selected-filters>
