@@ -256,10 +256,12 @@ export class VviinnShopTheLook {
         "swipersliderfirstmove",
         this.handleSwiperScroll,
       );
-      swiperContainer.removeEventListener(
-        "pointerdown",
-        this.handleSwiperPointerDown,
-      );
+      if (this.showCropper && isDesktop()) {
+        swiperContainer.removeEventListener(
+          "pointerdown",
+          this.handleSwiperPointerDown,
+        );
+      }
     }
   }
 

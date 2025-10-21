@@ -12,6 +12,13 @@ export interface CropperManagerConfig {
 export class CropperManager {
   private cropperInstances: Map<number, Cropper> = new Map();
   private startCropBoxData: Map<number, Rectangle> = new Map();
+  private pendingImageLoads: Map<
+    number,
+    {
+      element: HTMLImageElement;
+      handlers: { load: () => void; error: () => void };
+    }
+  > = new Map();
   private config: CropperManagerConfig;
 
   constructor(config: CropperManagerConfig) {
@@ -24,6 +31,13 @@ export class CropperManager {
       cropper.destroy();
       this.cropperInstances.delete(index);
       this.startCropBoxData.delete(index);
+    }
+
+    const pending = this.pendingImageLoads.get(index);
+    if (pending) {
+      pending.element.removeEventListener("load", pending.handlers.load);
+      pending.element.removeEventListener("error", pending.handlers.error);
+      this.pendingImageLoads.delete(index);
     }
   }
 
@@ -94,18 +108,27 @@ export class CropperManager {
       if (!imageElement) return;
 
       const initCropper = () => {
+        this.pendingImageLoads.delete(activeIndex);
         if (imageElement.offsetWidth > 0) {
           this.initializeCropper(imageElement, activeIndex, activeIndex);
         }
       };
 
       const handleError = () => {
-        console.warn(`Failed to load image for cropper at index ${activeIndex}`);
+        this.pendingImageLoads.delete(activeIndex);
+        console.warn(
+          `Failed to load image for cropper at index ${activeIndex}`,
+        );
       };
 
       if (imageElement.complete && imageElement.offsetWidth > 0) {
         initCropper();
       } else {
+        const handlers = { load: initCropper, error: handleError };
+        this.pendingImageLoads.set(activeIndex, {
+          element: imageElement,
+          handlers,
+        });
         imageElement.addEventListener("load", initCropper, { once: true });
         imageElement.addEventListener("error", handleError, { once: true });
       }
@@ -113,9 +136,8 @@ export class CropperManager {
   }
 
   destroyAll() {
-    this.cropperInstances.forEach((cropper) => cropper.destroy());
-    this.cropperInstances.clear();
-    this.startCropBoxData.clear();
+    const indices = Array.from(this.cropperInstances.keys());
+    indices.forEach((index) => this.destroyCropper(index));
   }
 
   hasCropper(index: number): boolean {
