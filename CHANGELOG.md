@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.194.0](https://github.com/vviinn/widgets/compare/v2.193.0...v2.194.0) (2025-10-21)
+
+
+### Features
+
+* Add fashion images for Shop-the-Look in the Storybook. ([8768e15](https://github.com/vviinn/widgets/commit/8768e15ac51ca33c0ff4b3374235ebb7e4a8cc4f))
+
 ## [2.193.0](https://github.com/vviinn/widgets/compare/v2.192.0...v2.193.0) (2025-10-21)
 
 
