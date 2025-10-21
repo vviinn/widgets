@@ -99,10 +99,15 @@ export class CropperManager {
         }
       };
 
+      const handleError = () => {
+        console.warn(`Failed to load image for cropper at index ${activeIndex}`);
+      };
+
       if (imageElement.complete && imageElement.offsetWidth > 0) {
         initCropper();
       } else {
         imageElement.addEventListener("load", initCropper, { once: true });
+        imageElement.addEventListener("error", handleError, { once: true });
       }
     }
   }

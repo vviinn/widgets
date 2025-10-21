@@ -387,7 +387,7 @@ export class VviinnShopTheLook {
       "swiper-container",
     ) as SwiperContainerElement | null;
 
-    const swiper = swiperContainer?.swiper as any;
+    const swiper = swiperContainer?.swiper;
     if (swiper?.allowTouchMove !== undefined) {
       swiper.allowTouchMove = allow;
     }

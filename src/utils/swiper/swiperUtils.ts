@@ -28,6 +28,7 @@ export const extractSlideIndex = (event: SwiperEvent): number | undefined => {
 
 export interface SwiperInstance {
   slideTo: (index: number) => void;
+  allowTouchMove?: boolean;
 }
 
 export interface SwiperContainerElement extends HTMLElement {
