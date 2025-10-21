@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.193.0](https://github.com/vviinn/widgets/compare/v2.192.0...v2.193.0) (2025-10-21)
+
+
+### Features
+
+* Shop-the-look: enable dragging non-active slides on desktop with the cropper. ([c4c75ae](https://github.com/vviinn/widgets/commit/c4c75ae479d3bcbf7fa2f361e33c5cda7576ff48))
+
 ## [2.192.0](https://github.com/vviinn/widgets/compare/v2.191.1...v2.192.0) (2025-10-20)
 
 
