@@ -42,6 +42,26 @@ export const getVisibilityThreshold = (isDesktop: boolean): number => {
     : INTERSECTION_THRESHOLDS.MOBILE_VISIBLE;
 };
 
+export const findSlideByPointerEvent = (
+  event: PointerEvent,
+): HTMLElement | null => {
+  const target = event.target as HTMLElement;
+  return target.closest("swiper-slide") as HTMLElement | null;
+};
+
+export const getSlideIndex = (
+  slide: HTMLElement,
+  shadowRoot?: ShadowRoot | null,
+): number => {
+  if (!shadowRoot) return -1;
+
+  const allSlides = Array.from(
+    shadowRoot.querySelectorAll("swiper-slide") || [],
+  ) as HTMLElement[];
+
+  return allSlides.indexOf(slide);
+};
+
 export interface VisibilityUpdateParams {
   index: number;
   isVisible: boolean;
