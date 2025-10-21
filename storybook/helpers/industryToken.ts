@@ -10,6 +10,12 @@ const data = {
     textSearchQuery: "Chair",
     filterValue: "Möbel > Schränke & Regale",
     description: "company: 'vviinn', site: 'widgets.vviinn.com'",
+    shopTheLookImageUrls: [
+      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/home_01.jpg",
+      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/home_02.jpg",
+      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/home_03.jpg",
+      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/home_04.jpg",
+    ],
   },
   fashion: {
     token:
@@ -19,6 +25,12 @@ const data = {
     textSearchQuery: "taschen",
     filterValue: "Beauty > Düfte",
     description: "company: 'Vviinn Demo Company', site: 'Fashion Women 64K'",
+    shopTheLookImageUrls: [
+      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/fashion_01.jpg",
+      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/fashion_02.jpg",
+      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/fashion_03.jpg",
+      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/fashion_04.jpg",
+    ],
   },
   "manufacturer-spare-parts": {
     token:
@@ -29,6 +41,7 @@ const data = {
     filterValue:
       "Essentra-DE-AT > Befestigungen > Stangen und Schrauben > Schrauben",
   },
+  shopTheLookImageUrls: [],
 };
 
 const selectedIndustry = data[vviinnIndustry] || data["home-living"];
@@ -39,3 +52,4 @@ export const productIdSimilarProducts =
 export const productIdCrossSelling = selectedIndustry.productIdCrossSelling;
 export const textSearchQuery = selectedIndustry.textSearchQuery;
 export const filterValue = selectedIndustry.filterValue;
+export const shopTheLookImageUrls = selectedIndustry.shopTheLookImageUrls;
