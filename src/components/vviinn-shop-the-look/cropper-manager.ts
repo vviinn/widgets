@@ -131,8 +131,8 @@ export class CropperManager {
           element: imageElement,
           handlers,
         });
-        imageElement.addEventListener("load", initCropper, { once: true });
-        imageElement.addEventListener("error", handleError, { once: true });
+        imageElement.addEventListener("load", handlers.load, { once: true });
+        imageElement.addEventListener("error", handlers.error, { once: true });
       }
     }
   }
