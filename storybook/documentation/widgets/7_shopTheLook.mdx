@@ -35,7 +35,7 @@ The `Shop The Look` widget enables interactive visual product discovery directly
     />,
     code: `<vviinn-shop-the-look
     token="TOKEN"
-    image-urls="${shopTheLookImageUrls[0]}"
+    image-urls="IMAGE_URL"
     height="500"
     currency-sign="€"
     locale="en-US"
@@ -48,7 +48,7 @@ The `Shop The Look` widget enables interactive visual product discovery directly
     header: "Multiple Images with Cornered Style",
     component: <vviinn-shop-the-look
         token={vviinnToken}
-        image-urls={shopTheLookImageUrls}
+        image-urls={shopTheLookImageUrls.join(',')}
         height="500"
         currency-sign="€"
         locale="en-US"
@@ -56,7 +56,7 @@ The `Shop The Look` widget enables interactive visual product discovery directly
     />,
     code: `<vviinn-shop-the-look
     token="TOKEN"
-    image-urls="${shopTheLookImageUrls}"
+    image-urls="IMAGE_URLS_COMMA_SEPARATED"
     height="500"
     currency-sign="€"
     locale="en-US"
@@ -69,7 +69,7 @@ The `Shop The Look` widget enables interactive visual product discovery directly
     header: "Advanced Features: Cropper & Upload Mode",
     component: <vviinn-shop-the-look
         token={vviinnToken}
-        image-urls={shopTheLookImageUrls}
+        image-urls={shopTheLookImageUrls.join(',')}
         height="500"
         currency-sign="€"
         locale="en-US"
@@ -79,7 +79,7 @@ The `Shop The Look` widget enables interactive visual product discovery directly
     />,
     code: `<vviinn-shop-the-look
     token="TOKEN"
-    image-urls="${shopTheLookImageUrls}"
+    image-urls="IMAGE_URLS_COMMA_SEPARATED"
     height="500"
     currency-sign="€"
     locale="en-US"
