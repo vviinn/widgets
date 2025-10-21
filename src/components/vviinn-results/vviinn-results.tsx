@@ -74,7 +74,12 @@ import {
   vprIconSlotName,
 } from "../customized-slots";
 import { getCustomLabels } from "../../recommendation";
-import { productCardParts, productCardsGridPart, listCardParts, contentCardParts } from "../../cssParts";
+import {
+  productCardParts,
+  productCardsGridPart,
+  listCardParts,
+  contentCardParts,
+} from "../../cssParts";
 import {
   findSlotElements,
   getSlotNames,

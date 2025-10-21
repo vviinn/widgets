@@ -33,6 +33,8 @@ import {
   processFileUpload,
   ProcessFileUploadParams,
   ProcessFileUploadResult,
+  findSlideByPointerEvent,
+  getSlideIndex,
 } from "./helpers";
 import { ShopTheLookImageStore, createDefaultImageState } from "./store";
 import { TIMING } from "./constants";
@@ -254,6 +256,10 @@ export class VviinnShopTheLook {
         "swipersliderfirstmove",
         this.handleSwiperScroll,
       );
+      swiperContainer.removeEventListener(
+        "pointerdown",
+        this.handleSwiperPointerDown,
+      );
     }
   }
 
@@ -353,7 +359,37 @@ export class VviinnShopTheLook {
           this.handleSwiperScroll,
           { passive: true },
         );
+
+        if (this.showCropper && isDesktop()) {
+          swiperContainer.addEventListener(
+            "pointerdown",
+            this.handleSwiperPointerDown,
+            { capture: true },
+          );
+        }
       }, TIMING.SWIPER_INIT_DELAY);
+    }
+  }
+
+  private handleSwiperPointerDown = (event: PointerEvent) => {
+    const slide = findSlideByPointerEvent(event);
+    if (!slide) return;
+
+    const slideIndex = getSlideIndex(slide, this.el.shadowRoot);
+    if (slideIndex === -1) return;
+
+    const hasCropper = this.cropperManager?.hasCropper(slideIndex);
+    this.updateSwiperAllowTouchMove(!hasCropper);
+  };
+
+  private updateSwiperAllowTouchMove(allow: boolean) {
+    const swiperContainer = this.el.shadowRoot?.querySelector(
+      "swiper-container",
+    ) as SwiperContainerElement | null;
+
+    const swiper = swiperContainer?.swiper as any;
+    if (swiper?.allowTouchMove !== undefined) {
+      swiper.allowTouchMove = allow;
     }
   }
 
@@ -1085,6 +1121,9 @@ export class VviinnShopTheLook {
     (this.needNavigation && isDesktop()) || this.showCropper;
 
   private renderSwiperWrapper = () => {
+    // On desktop with cropper: allow touch move by default, but prevent via event handler
+    const allowTouchMove = this.showCropper ? isDesktop() : true;
+
     const props: SwiperProps = {
       imageUrls: this.imageUrlsList,
       swiperActiveIndex: this.swiperActiveIndex,
@@ -1095,7 +1134,7 @@ export class VviinnShopTheLook {
       onImageRef: this.handleImageRef,
       renderDetectedObjects: this.renderDetectedObjectsWrapper,
       swiperKey: this.swiperKey,
-      allowTouchMove: !this.showCropper,
+      allowTouchMove,
     };
     return renderSwiper(props);
   };

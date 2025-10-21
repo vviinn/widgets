@@ -91,12 +91,18 @@ export class CropperManager {
 
     if (!this.cropperInstances.has(activeIndex)) {
       const imageElement = getImageElement(activeIndex);
-      if (
-        imageElement &&
-        imageElement.complete &&
-        imageElement.offsetWidth > 0
-      ) {
-        this.initializeCropper(imageElement, activeIndex, activeIndex);
+      if (!imageElement) return;
+
+      const initCropper = () => {
+        if (imageElement.offsetWidth > 0) {
+          this.initializeCropper(imageElement, activeIndex, activeIndex);
+        }
+      };
+
+      if (imageElement.complete && imageElement.offsetWidth > 0) {
+        initCropper();
+      } else {
+        imageElement.addEventListener("load", initCropper, { once: true });
       }
     }
   }
