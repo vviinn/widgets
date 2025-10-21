@@ -33,6 +33,8 @@ export class CropperManager {
       this.startCropBoxData.delete(index);
     }
 
+    /* Clean up pending image load listeners if they haven't fired yet
+    (handlers remove themselves from Map when they fire) */
     const pending = this.pendingImageLoads.get(index);
     if (pending) {
       pending.element.removeEventListener("load", pending.handlers.load);

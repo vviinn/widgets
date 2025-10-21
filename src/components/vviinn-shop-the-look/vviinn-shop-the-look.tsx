@@ -236,6 +236,10 @@ export class VviinnShopTheLook {
     return imageIndex === this.swiperActiveIndex;
   }
 
+  private get shouldManageDragging(): boolean {
+    return this.showCropper && isDesktop();
+  }
+
   disconnectedCallback() {
     window.removeEventListener("resize", this.handleResize);
     document.removeEventListener("click", this.handleDocumentClick);
@@ -256,7 +260,7 @@ export class VviinnShopTheLook {
         "swipersliderfirstmove",
         this.handleSwiperScroll,
       );
-      if (this.showCropper && isDesktop()) {
+      if (this.shouldManageDragging) {
         swiperContainer.removeEventListener(
           "pointerdown",
           this.handleSwiperPointerDown,
@@ -362,7 +366,7 @@ export class VviinnShopTheLook {
           { passive: true },
         );
 
-        if (this.showCropper && isDesktop()) {
+        if (this.shouldManageDragging) {
           swiperContainer.addEventListener(
             "pointerdown",
             this.handleSwiperPointerDown,
@@ -845,6 +849,11 @@ export class VviinnShopTheLook {
       }
 
       this.clearModalAndSlideState();
+
+      if (this.shouldManageDragging) {
+        const hasCropper = this.cropperManager?.hasCropper(newIndex);
+        this.updateSwiperAllowTouchMove(!hasCropper);
+      }
 
       setTimeout(() => {
         this.isNavigatingToSlide = false;
