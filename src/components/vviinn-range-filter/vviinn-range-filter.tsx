@@ -310,7 +310,13 @@ export class VviinnPriceRange {
             />
           </div>
         </div>
-        <div class="label-wrapper" part="histogram-label-wrapper">
+        <div
+          class={{
+            "label-wrapper": true,
+            "with-inputs": this.showIntervalInputs,
+          }}
+          part="histogram-label-wrapper"
+        >
           {this.renderValueDisplay(
             this.fromValue,
             "from",

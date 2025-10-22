@@ -88,9 +88,14 @@
 
 .label-wrapper {
   display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+
+.label-wrapper.with-inputs {
   gap: var(--spacing-100);
   height: 48px;
-  margin-top: 6px;
+  justify-content: flex-start;
 }
 
 .label-wrapper .label {
