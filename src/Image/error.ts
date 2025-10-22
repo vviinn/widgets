@@ -3,7 +3,7 @@ import { BasicError } from "../error";
 import { findFirstMap } from "fp-ts/Array";
 import { pipe } from "fp-ts/lib/function";
 import { none, some } from "fp-ts/lib/Option";
-import { isWebKit } from "../helpers/device/checkDeviceType";
+import { isWebKitEngine } from "../helpers/device/checkDeviceType";
 
 // File types for MIME validation (file.type = "image/jpeg" -> "jpeg")
 // Note: heif included because browsers may report HEIC files as "image/heif"
@@ -34,7 +34,7 @@ export const checkImageType = (
 ): Either<BasicError<string>, File> => {
   const fileType = file.type.split("/")[1];
 
-  if ((fileType === "heic" || fileType === "heif") && !isWebKit()) {
+  if ((fileType === "heic" || fileType === "heif") && !isWebKitEngine()) {
     return left(heicNotSupportedError);
   }
 

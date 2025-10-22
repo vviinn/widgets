@@ -20,13 +20,15 @@ export const checkDeviceType = (): "desktop" | "tablet" | "mobile" => {
   return "desktop";
 };
 
-export const isWebKit = (): boolean => {
+export const isWebKitEngine = (): boolean => {
   if (typeof navigator === "undefined") return false;
   const ua = navigator.userAgent;
-  return (
-    (/WebKit/.test(ua) && !/Chrome|Edg|OPR/.test(ua)) ||
-    /iPhone|iPad|iPod/.test(ua)
-  );
+
+  // On iOS, all browsers use WebKit under the hood (Apple requirement)
+  if (/iPhone|iPad|iPod/.test(ua)) return true;
+
+  // On desktop, check for WebKit but exclude Chrome, Edge, and Opera
+  return /WebKit/.test(ua) && !/Chrome|Edg|OPR/.test(ua);
 };
 
 // Screen size based responsive detection
