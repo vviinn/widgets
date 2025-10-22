@@ -5,8 +5,7 @@ import { pipe } from "fp-ts/lib/function";
 import { none, some } from "fp-ts/lib/Option";
 import { isWebKitEngine } from "../helpers/device/checkDeviceType";
 
-// File types for MIME validation (file.type = "image/jpeg" -> "jpeg")
-// Note: heif included because browsers may report HEIC files as "image/heif"
+// Browsers may report the same file as either "image/heic" or "image/heif"
 const SUPPORTED_FILE_TYPES = [
   "jpg",
   "jpeg",
@@ -16,17 +15,20 @@ const SUPPORTED_FILE_TYPES = [
   "heic",
   "heif",
 ];
+
 // HTML accept attribute value for file input
 export const acceptableFileFormats = ".jpg, .jpeg, .png, .webp, .avif, .heic";
 
 const unsupportedFileTypeError: BasicError<string> = {
   kind: "client",
   inner: "File format not supported",
+  code: "unsupported-file-type",
 };
 
 const heicNotSupportedError: BasicError<string> = {
   kind: "client",
   inner: "HEIC format is only supported in Safari and iOS browsers",
+  code: "heic-not-supported",
 };
 
 export const checkImageType = (

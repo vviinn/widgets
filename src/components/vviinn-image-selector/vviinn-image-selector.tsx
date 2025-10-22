@@ -64,6 +64,7 @@ export class VviinnImageSelector {
         ...this.basicEventData,
         reason: validationResult.left.kind,
         errorMessage: validationResult.left.inner,
+        errorCode: validationResult.left.code,
       });
       input.value = "";
       return;

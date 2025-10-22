@@ -308,7 +308,7 @@ export class VviinnVpsWidget {
 
   private handleVviinnNoResult = (detail: NoResultEventData) => {
     if (detail.reason === "client") {
-      if (detail.errorMessage?.includes("HEIC")) {
+      if (detail.errorCode === "heic-not-supported") {
         this.wrongImageFormat = "heic-not-supported";
       } else {
         this.wrongImageFormat = "wrong-format";
