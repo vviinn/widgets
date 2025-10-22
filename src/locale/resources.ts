@@ -56,7 +56,12 @@ export const resources: Resource = {
       },
       wrongFormatBlock: {
         title: "Dateityp wird nicht unterstützt",
-        text: "Bitte laden Sie eine .jpg, .png, .webp oder .avif Bilddatei hoch.",
+        text: "Bitte laden Sie eine .jpg, .png, .webp, .avif, oder .heic Bilddatei hoch.",
+        button: "Neues Bild hochladen",
+      },
+      heicNotSupportedBlock: {
+        title: "HEIC wird nicht unterstützt",
+        text: "HEIC-Dateien werden nur in Safari und auf iOS-Geräten unterstützt. Bitte verwenden Sie ein anderes Format.",
         button: "Neues Bild hochladen",
       },
       wrongAspectRatioBlock: {
@@ -193,7 +198,12 @@ export const resources: Resource = {
       },
       wrongFormatBlock: {
         title: "Wrong file format",
-        text: "Please upload a .jpg, .png, .webp or .avif image file.",
+        text: "Please upload a .jpg, .png, .webp, .avif, or .heic image file.",
+        button: "Upload another file",
+      },
+      heicNotSupportedBlock: {
+        title: "HEIC not supported",
+        text: "HEIC files are only supported in Safari and iOS browsers. Please use a different format.",
         button: "Upload another file",
       },
       wrongAspectRatioBlock: {

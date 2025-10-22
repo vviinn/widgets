@@ -214,7 +214,8 @@ export class VviinnVpsWidget {
   @State() isCameraButtonClicked: boolean = false;
 
   @State() showAspectRatioError = false;
-  @State() wrongImageFormat: boolean = false;
+  @State() wrongImageFormat: "wrong-format" | "heic-not-supported" | false =
+    false;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -243,7 +244,7 @@ export class VviinnVpsWidget {
   /** The image upload has started */
   @Event() vviinnImageUploadStarted: EventEmitter<ImageUploadEventData>;
 
-  /** Wrong image format, that isn't .jpg, .jpeg, .png, .webp, or .avif, or the request failed */
+  /** Wrong image format, that isn't .jpg, .jpeg, .png, .webp, .avif, or .heic, or the request failed */
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
   private overflow: string;
@@ -307,7 +308,11 @@ export class VviinnVpsWidget {
 
   private handleVviinnNoResult = (detail: NoResultEventData) => {
     if (detail.reason === "client") {
-      this.wrongImageFormat = true;
+      if (detail.errorMessage?.includes("HEIC")) {
+        this.wrongImageFormat = "heic-not-supported";
+      } else {
+        this.wrongImageFormat = "wrong-format";
+      }
     }
   };
 
@@ -680,11 +685,11 @@ export class VviinnVpsWidget {
   };
 
   private haveErrors(): boolean {
-    return this.wrongImageFormat || this.state.searchStatus === "error";
+    return !!this.wrongImageFormat || this.state.searchStatus === "error";
   }
 
   private getCurrentErrorType(): ErrorType | null {
-    if (this.wrongImageFormat) return "wrong-format";
+    if (this.wrongImageFormat) return this.wrongImageFormat;
     if (this.state.searchStatus === "error") return "server-error";
     return null;
   }

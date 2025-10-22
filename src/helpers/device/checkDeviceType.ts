@@ -20,6 +20,15 @@ export const checkDeviceType = (): "desktop" | "tablet" | "mobile" => {
   return "desktop";
 };
 
+export const isWebKit = (): boolean => {
+  if (typeof navigator === "undefined") return false;
+  const ua = navigator.userAgent;
+  return (
+    (/WebKit/.test(ua) && !/Chrome|Edg|OPR/.test(ua)) ||
+    /iPhone|iPad|iPod/.test(ua)
+  );
+};
+
 // Screen size based responsive detection
 export const isDesktop = (
   breakpoint: number = DEFAULT_BREAKPOINTS.DESKTOP,

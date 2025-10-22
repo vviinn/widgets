@@ -35,7 +35,7 @@ import { acceptableFileFormats, checkImageType } from "../../Image/error";
 })
 export class VviinnImageSelector {
   @Event() vviinnImageUploadStarted: EventEmitter<ImageUploadEventData>;
-  /** Wrong image format, that isn't .jpg, .jpeg, .png, .webp, or .avif */
+  /** Wrong image format, that isn't .jpg, .jpeg, .png, .webp, .avif, or .heic */
   @Event() vviinnNoResult: EventEmitter<NoResultEventData>;
   @Event() vviinnImageUploadFinished: EventEmitter<SearchIdEventData>;
 
@@ -63,6 +63,7 @@ export class VviinnImageSelector {
       this.vviinnNoResult.emit({
         ...this.basicEventData,
         reason: validationResult.left.kind,
+        errorMessage: validationResult.left.inner,
       });
       input.value = "";
       return;

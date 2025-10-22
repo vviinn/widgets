@@ -45,6 +45,7 @@ export type TriggerSourceEventData = {
 
 export type NoResultEventData = {
   reason: ErrorKind;
+  errorMessage?: string;
 } & {
   [K in keyof CommonEventData]: CommonEventData[K];
 };
