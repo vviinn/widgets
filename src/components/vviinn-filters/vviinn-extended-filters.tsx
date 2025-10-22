@@ -92,8 +92,12 @@ import { ResponseIntervalFilterItem } from "../../interfaces";
  * @part histogram-sliders-control - Container for the range sliders control.
  * @part histogram-from-slider - Slider for the minimum value.
  * @part histogram-to-slider - Slider for the maximum value.
- * @part histogram-label-wrapper - Wrapper for the labels.
- * @part histogram-label - Label for the histogram.
+ * @part histogram-label-wrapper - Wrapper for the labels/inputs.
+ * @part histogram-label - Label for the histogram (when showIntervalInputs is false).
+ * @part histogram-input-container - Container for the input field (when showIntervalInputs is true).
+ * @part histogram-input-label - Label text for the input (From/Till).
+ * @part histogram-from-input - Input field for the minimum value.
+ * @part histogram-to-input - Input field for the maximum value.
  */
 
 const FILTER_OPTIONS_INITIAL_COUNT = 8;
@@ -121,6 +125,8 @@ export class VviinnExtendedFilters {
   @Prop() showingInButton: boolean = false;
   /** @internal */
   @Prop() widgetElement?: HTMLVviinnVpsWidgetElement;
+  /** Show editable input fields in interval filters instead of readonly labels */
+  @Prop() showIntervalInputs: boolean = false;
 
   @State() innerFilters: ResponseDynamicFilterItem[] = [];
   @State() requestFilters: RequestDynamicFilterItem[] = [];
@@ -467,6 +473,7 @@ export class VviinnExtendedFilters {
                                   showCurrency={isPriceFilter(
                                     mainFilter.column,
                                   )}
+                                  showIntervalInputs={this.showIntervalInputs}
                                 />
                               ) : (
                                 this.renderFilterOptions(
