@@ -56,6 +56,8 @@ import { ResponseIntervalFilterItem } from "../../interfaces";
  * @slot vviinn-extended-filters-reset - Title of Reset Button.
  * @slot vviinn-extended-filters-no-filters - Message shown when no filters are available.
  * @slot vviinn-filters-search-icon - Custom icon for the search input.
+ * @slot vviinn-range-filter-from-label - Label text for the "From" input field in range filters.
+ * @slot vviinn-range-filter-to-label - Label text for the "To" input field in range filters.
  *
  * @part extended-filters-modal - Modal itself.
  * @part extended-filters-modal-wrapper - Wrapper for the modal.

@@ -7,6 +7,7 @@ import {
 } from "../../interfaces";
 import { priceRangeParts } from "../../cssParts";
 import { globalState } from "../../store/store";
+import { slotChangeListener } from "../customized-slots";
 
 export type Histogram = IntervalFilterValue[];
 
@@ -15,6 +16,9 @@ const MIN_SLIDER_MARGIN_PERCENT = 0.03; // 3% of total range
 const DIGITS_ONLY_REGEX = /[^\d]/g;
 
 /**
+ * @slot vviinn-range-filter-from-label - Label text for the "From" input field.
+ * @slot vviinn-range-filter-to-label - Label text for the "To" input field.
+ *
  * @part histogram - Wrapper itself.
  * @part histogram-bar - Bar of the histogram.
  * @part histogram-range-container - Container for the range sliders.
@@ -55,6 +59,7 @@ export class VviinnPriceRange {
   toSlider: HTMLInputElement;
 
   componentWillLoad() {
+    slotChangeListener(this, this.el);
     this.initializeValues();
   }
 
@@ -192,6 +197,7 @@ export class VviinnPriceRange {
     type: "from" | "to",
     labelKey: string,
     ariaLabelKey: string,
+    slotName: string,
   ) => {
     if (this.showIntervalInputs) {
       return (
@@ -200,7 +206,9 @@ export class VviinnPriceRange {
           part="histogram-input-container"
           onClick={(e) => {
             const container = e.currentTarget as HTMLElement;
-            const input = container.querySelector('.value-input') as HTMLInputElement;
+            const input = container.querySelector(
+              ".value-input",
+            ) as HTMLInputElement;
             if (input && e.target !== input) {
               input.focus();
               this.setCursorToEnd(input);
@@ -208,7 +216,7 @@ export class VviinnPriceRange {
           }}
         >
           <span class="input-label" part="histogram-input-label">
-            {i18next.t(labelKey)}
+            <slot name={slotName}>{i18next.t(labelKey)}</slot>
           </span>
           <div class="input-value-wrapper">
             <input
@@ -308,12 +316,14 @@ export class VviinnPriceRange {
             "from",
             "filters.from",
             "a11y.priceRangeMin",
+            "vviinn-range-filter-from-label",
           )}
           {this.renderValueDisplay(
             this.toValue,
             "to",
             "filters.till",
             "a11y.priceRangeMax",
+            "vviinn-range-filter-to-label",
           )}
         </div>
       </Host>

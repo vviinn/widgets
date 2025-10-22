@@ -27,6 +27,8 @@ const filtersSlotNames: string[] = [
   "vviinn-filters-search-icon",
   "vviinn-image-filter-text",
   "vviinn-crop-filter-text",
+  "vviinn-range-filter-from-label",
+  "vviinn-range-filter-to-label",
 ];
 
 const suggestionsSlotNames: string[] = [
@@ -153,8 +155,10 @@ export const slotChangeListener = (component: any, element: HTMLElement) => {
           "VVIINN-MODAL",
           "VVIINN-TEXT-SEARCH",
           "VVIINN-EXTENDED-FILTERS",
+          "VVIINN-FILTERS",
           "VVIINN-SELECTED-FILTERS",
           "VVIINN-SUGGESTIONS",
+          "VVIINN-RANGE-FILTER",
         ].includes(elementTagName);
 
         const productCardChildrenTags = ["VVIINN-ENERGY-LABEL"];
