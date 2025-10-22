@@ -56,7 +56,7 @@ export const resources: Resource = {
       },
       wrongFormatBlock: {
         title: "Dateityp wird nicht unterstützt",
-        text: "Bitte laden Sie eine .jpg, .png, .webp, .avif, oder .heic Bilddatei hoch.",
+        text: "Bitte laden Sie eine .jpg, .png, .webp, .avif oder .heic Bilddatei hoch.",
         button: "Neues Bild hochladen",
       },
       heicNotSupportedBlock: {

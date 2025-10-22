@@ -17,7 +17,10 @@ const SUPPORTED_FILE_TYPES = [
 ];
 
 // HTML accept attribute value for file input
-export const acceptableFileFormats = ".jpg, .jpeg, .png, .webp, .avif, .heic";
+export const acceptableFileFormats = SUPPORTED_FILE_TYPES
+  .filter(type => type !== "heif")
+  .map(type => `.${type}`)
+  .join(", ");
 
 const unsupportedFileTypeError: BasicError<string> = {
   kind: "client",
