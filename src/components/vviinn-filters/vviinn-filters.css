@@ -353,7 +353,7 @@ vviinn-range-filter {
 
   display: flex;
   align-items: center;
-  height: 32px;
+  height: 36px;
   padding: var(--spacing-75);
   gap: var(--spacing-50);
 
