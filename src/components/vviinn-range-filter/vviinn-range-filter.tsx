@@ -42,7 +42,6 @@ export class VviinnPriceRange {
   @Element() el: HTMLElement;
 
   @Prop() histogram: Histogram = [];
-  @Prop() addStyle: boolean = true;
   @Prop() intervalChangeHandler: (filterValue: IntervalFilterValueItem) => void;
   @Prop() selectedInterval?: Interval;
   @Prop() showCurrency: boolean = true;
@@ -54,9 +53,6 @@ export class VviinnPriceRange {
   @State() maxValue: number;
   @State() fromValue: number;
   @State() toValue: number;
-
-  fromSlider: HTMLInputElement;
-  toSlider: HTMLInputElement;
 
   componentWillLoad() {
     slotChangeListener(this, this.el);
@@ -88,25 +84,33 @@ export class VviinnPriceRange {
     this.scalingFactor = 100 / maxValueofFrequency;
   }
 
+  private clampAndEnforceMargin = (
+    value: number,
+    type: "from" | "to",
+  ): number => {
+    let clampedValue = Math.max(this.minValue, Math.min(this.maxValue, value));
+
+    if (type === "from") {
+      clampedValue = Math.min(clampedValue, this.toValue - this.minMargin);
+    } else {
+      clampedValue = Math.max(clampedValue, this.fromValue + this.minMargin);
+    }
+
+    return clampedValue;
+  };
+
   private controlSlider = (e: InputEvent, type: "from" | "to") => {
     const target = e.target as HTMLInputElement;
     const newValue = parseInt(target.value);
+    const clampedValue = this.clampAndEnforceMargin(newValue, type);
 
     if (type === "from") {
-      if (newValue >= this.toValue - this.minMargin) {
-        this.fromValue = this.toValue - this.minMargin;
-        target.value = String(this.fromValue);
-      } else {
-        this.fromValue = newValue;
-      }
+      this.fromValue = clampedValue;
     } else {
-      if (newValue <= this.fromValue + this.minMargin) {
-        this.toValue = this.fromValue + this.minMargin;
-        target.value = String(this.toValue);
-      } else {
-        this.toValue = newValue;
-      }
+      this.toValue = clampedValue;
     }
+
+    target.value = String(clampedValue);
   };
 
   private sendBackValue = () => {
@@ -136,36 +140,21 @@ export class VviinnPriceRange {
   private handleInputBlur = (e: Event, type: "from" | "to") => {
     const target = e.target as HTMLInputElement;
     const numericValue = target.value.replace(DIGITS_ONLY_REGEX, "");
-    let value = parseInt(numericValue);
-
     const defaultValue = type === "from" ? this.minValue : this.maxValue;
 
-    if (isNaN(value) || numericValue === "") {
-      value = defaultValue;
-    }
+    let parsedValue = parseInt(numericValue);
+    if (isNaN(parsedValue) || numericValue === "") parsedValue = defaultValue;
 
-    // Clamp to bounds
-    if (value < this.minValue) {
-      value = this.minValue;
-    } else if (value > this.maxValue) {
-      value = this.maxValue;
-    }
+    const clampedValue = this.clampAndEnforceMargin(parsedValue, type);
 
-    // Enforce minimum margin between sliders
     if (type === "from") {
-      if (value >= this.toValue - this.minMargin) {
-        value = this.toValue - this.minMargin;
-      }
-      this.fromValue = value;
+      this.fromValue = clampedValue;
     } else {
-      if (value <= this.fromValue + this.minMargin) {
-        value = this.fromValue + this.minMargin;
-      }
-      this.toValue = value;
+      this.toValue = clampedValue;
     }
 
-    target.value = String(value);
-    target.size = this.calculateInputSize(value);
+    target.value = String(clampedValue);
+    target.size = this.calculateInputSize(clampedValue);
     this.sendBackValue();
   };
 
@@ -232,7 +221,6 @@ export class VviinnPriceRange {
                   (e.target as HTMLInputElement).blur();
                 }
               }}
-              onClick={(e) => this.setCursorToEnd(e.target as HTMLInputElement)}
               aria-label={i18next.t(ariaLabelKey)}
             />
             {this.showCurrency && (
@@ -268,9 +256,10 @@ export class VviinnPriceRange {
             const isActive = this.isBarActive(item);
             return (
               <div
-                class={`histogram-bar ${
-                  !isActive ? "histogram-bar-inactive" : ""
-                }`}
+                class={{
+                  "histogram-bar": true,
+                  "histogram-bar-inactive": !isActive,
+                }}
                 style={{
                   height: `${heightInPercent}%`,
                   width: `${widthInPercent}%`,
@@ -283,7 +272,6 @@ export class VviinnPriceRange {
         <div class="range_container" part="histogram-range-container">
           <div class="sliders_control" part="histogram-sliders-control">
             <input
-              ref={(el) => (this.fromSlider = el)}
               id="fromSlider"
               type="range"
               min={this.minValue}
@@ -296,7 +284,6 @@ export class VviinnPriceRange {
               aria-label={i18next.t("a11y.priceRangeMin")}
             />
             <input
-              ref={(el) => (this.toSlider = el)}
               id="toSlider"
               type="range"
               min={this.minValue}
