@@ -172,10 +172,6 @@ vviinn-extended-filters[mode="modal"] {
   display: none;
 }
 
-vviinn-selected-filters::part(selected-filters-list) {
-  padding: 0 var(--spacing-300);
-}
-
 vviinn-extended-filters[mode="preview"] {
   display: block;
   width: 100%;

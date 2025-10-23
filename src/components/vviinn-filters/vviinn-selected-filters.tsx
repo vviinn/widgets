@@ -308,6 +308,12 @@ export class VviinnSelectedFilters {
   }
 
   render() {
+    if (
+      this.showInWidget &&
+      !this.selectedFilterButtons.length &&
+      !this.state.croppedImageUrl
+    )
+      return null;
     return (
       <Host
         class={{
@@ -321,12 +327,15 @@ export class VviinnSelectedFilters {
           class="sr-only"
         ></div>
 
-        <section aria-label={i18next.t("a11y.selectedFilters")}>
+        <section
+          class="selected-filters-container"
+          aria-label={i18next.t("a11y.selectedFilters")}
+        >
           <ul class="selected-filters-wrapper" part="selected-filters-list">
             {RenderCustomButton({
               label: this.textSearchCustomFilter,
               buttonType: "text",
-              hidden: !this.textSearchCustomFilter?.length,
+              hidden: !this.textSearchCustomFilter?.length || this.showInWidget,
             })}
 
             {RenderCustomButton({
@@ -336,7 +345,8 @@ export class VviinnSelectedFilters {
               hidden:
                 !this.imageSrc?.length ||
                 !this.state.visualSearchStarted ||
-                !this.state.image,
+                !this.state.image ||
+                this.showInWidget,
             })}
 
             {RenderCustomButton({

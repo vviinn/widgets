@@ -138,19 +138,6 @@ vviinn-range-filter {
   flex-wrap: wrap;
 }
 
-:host(.show-in-widget.preview-filters) .selected-filters-wrapper {
-  flex-wrap: unset;
-  overflow-x: auto;
-}
-
-:host(.show-in-widget.preview-filters) .sub-filters-wrapper,
-:host(.show-in-widget.preview-filters) .selected-filters-wrapper {
-  transform: translateX(-24px);
-  padding-left: var(--spacing-300);
-  padding-right: var(--spacing-300);
-  width: 100%;
-}
-
 .filters-sub-button {
   color: var(--color-text-primary);
   background: var(--surface-bg-color-01);
@@ -362,8 +349,9 @@ vviinn-range-filter {
   cursor: pointer;
 
   display: flex;
-  padding: var(--spacing-75);
   align-items: center;
+  height: 32px;
+  padding: var(--spacing-75);
   gap: var(--spacing-50);
 
   border-radius: var(--border-radius-100);
@@ -694,12 +682,12 @@ vviinn-range-filter {
   .selected-filters-wrapper {
     flex-wrap: unset;
     overflow-x: auto;
+    scrollbar-width: none;
     padding-bottom: 0;
   }
 
   .sub-filters-wrapper,
   .selected-filters-wrapper {
-    margin-top: 16px;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -708,6 +696,15 @@ vviinn-range-filter {
   .sub-filters-wrapper::-webkit-scrollbar,
   .selected-filters-wrapper::-webkit-scrollbar {
     display: none;
+  }
+
+  :host(.show-in-widget) .selected-filters-container {
+    overflow-x: auto;
+    width: 100%;
+  }
+
+  :host(.show-in-widget) .selected-filters-wrapper {
+    padding: 0 var(--spacing-300);
   }
 
   .filters-modal.button .filters-modal-wrapper,
@@ -738,6 +735,11 @@ vviinn-range-filter {
 
   vviinn-range-filter {
     max-width: unset;
+  }
+
+  :host(.show-in-widget.preview-filters) vviinn-range-filter {
+    max-width: calc(100% - 48px);
+    transform: translateX(24px);
   }
 }
 
