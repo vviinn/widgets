@@ -20,7 +20,6 @@ import {
   type IntersectionObserverConfig,
 } from "../../dom";
 
-import { searchState } from "../../store/search.store";
 import {
   ImageProps,
   Linked,
@@ -165,6 +164,8 @@ export class VviinnProductCard {
   /** @internal */
   @Prop() productId: string;
   /** @internal */
+  @Prop() product?: Recommendation;
+  /** @internal */
   @Prop() campaignTypeId: CampaignTypeId;
   /** @internal */
   @Prop() widgetElementId?: string;
@@ -292,7 +293,7 @@ export class VviinnProductCard {
         if (isIntersecting) {
           pipe(
             getAnalyticsModule,
-            O.map((analytics) => analytics.sendImpression(this.getProduct())),
+            O.map((analytics) => analytics.sendImpression(this.product)),
           );
           this.vviinnProductView.emit(this.productData);
           this.intersectionObserver?.disconnect();
@@ -392,7 +393,7 @@ export class VviinnProductCard {
       getAnalyticsModule,
       O.match(
         () => null,
-        (analytics) => analytics.sendClick(this.getProduct()),
+        (analytics) => analytics.sendClick(this.product),
       ),
     );
   }
@@ -425,10 +426,6 @@ export class VviinnProductCard {
   disconnectedCallback() {
     this.linkEventAbortController?.abort();
     this.cleanupVisibilityTracking();
-  }
-
-  private getProduct(): Recommendation {
-    return searchState.results.find((r) => r.productId === this.productId);
   }
 
   private getImageProps() {

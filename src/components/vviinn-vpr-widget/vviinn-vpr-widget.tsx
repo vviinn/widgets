@@ -659,6 +659,7 @@ export class VviinnVprWidget implements ComponentInterface {
         pricePrefix={globalState.pricePrefix}
         locale={globalState.locale}
         productId={recommendation.productId}
+        product={recommendation}
         productTitle={recommendation.title}
         productType={recommendation.productType}
         entityType={recommendation.entityType}
