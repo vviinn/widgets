@@ -10,15 +10,27 @@ const data = {
     textSearchQuery: "Chair",
     filterValue: "Möbel > Schränke & Regale",
     description: "company: 'vviinn', site: 'widgets.vviinn.com'",
+    shopTheLookImageUrls: [
+      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/home_01.jpg",
+      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/home_02.jpg",
+      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/home_03.jpg",
+      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/home_04.jpg",
+    ],
   },
   fashion: {
     token:
       "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjIwNywianRpIjoiMmU0OTY3OTgtYzk3NC00ODQ3LTkyYWItOTBkMTEyZGY5MTY2Iiwic2NvcGVzIjpbInZwciIsInZwcyIsInZwYyJdfQ.bH8WQkR3jBuDZ92F3WObgcKplh14ODZeiBCf5JDOJfucU75u4XaZOQrmsOaw1ouZbO9cW40sKw9ZICaP4Soi00AHrWPBGjuzZ0Yx17vwGFUtHgK5Zi9DAhd3R3PcRnbo7UIvUtANTGcExd5TQnrA07DtV99KThoQEYB2I8R8HXv46j-Abo2kHovd6fGwYC6FYT1QpXEsVa8QNZtcrB0yU1rK6da8aR5Nh3zYECIUL0ysdhRmOQxR_3zBUVrXJYB15vvOH4TjAG6jSMcvaLwzmmTzH9_A9kVLsP27cFK5YYoAx7_w0eBMhQv3yEaHrVXuMXQe2gFjvCat441_DvZWyg",
-    productIdSimilarProducts: "2588009-1",
-    productIdCrossSelling: "4165669-1",
+    productIdSimilarProducts: "4078868-1",
+    productIdCrossSelling: "4017822-1",
     textSearchQuery: "taschen",
     filterValue: "Beauty > Düfte",
     description: "company: 'Vviinn Demo Company', site: 'Fashion Women 64K'",
+    shopTheLookImageUrls: [
+      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/fashion_01-1.jpg",
+      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/fashion_02.jpg",
+      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/fashion_03.jpg",
+      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/fashion_04.jpg",
+    ],
   },
   "manufacturer-spare-parts": {
     token:
@@ -29,6 +41,7 @@ const data = {
     filterValue:
       "Essentra-DE-AT > Befestigungen > Stangen und Schrauben > Schrauben",
   },
+  shopTheLookImageUrls: [],
 };
 
 const selectedIndustry = data[vviinnIndustry] || data["home-living"];
@@ -39,3 +52,4 @@ export const productIdSimilarProducts =
 export const productIdCrossSelling = selectedIndustry.productIdCrossSelling;
 export const textSearchQuery = selectedIndustry.textSearchQuery;
 export const filterValue = selectedIndustry.filterValue;
+export const shopTheLookImageUrls = selectedIndustry.shopTheLookImageUrls;
