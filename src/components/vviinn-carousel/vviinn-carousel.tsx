@@ -564,6 +564,7 @@ export class VviinnCarousel {
       <vviinn-product-card
         index={rank}
         productId={recommendation.productId}
+        product={recommendation}
         productTitle={recommendation.title}
         productType={recommendation.productType}
         entityType={recommendation.entityType}

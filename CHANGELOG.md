@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.195.0](https://github.com/vviinn/widgets/compare/v2.194.1...v2.195.0) (2025-10-23)
+
+
+### Features
+
+* The possibility of displaying inputs for interval filters ([5b9af6c](https://github.com/vviinn/widgets/commit/5b9af6c8c58128960b2e52ff60785108d2eb2bb1))
+
+### [2.194.1](https://github.com/vviinn/widgets/compare/v2.194.0...v2.194.1) (2025-10-23)
+
+
+### Bug Fixes
+
+* Error on product click, using widget components. ([5215f46](https://github.com/vviinn/widgets/commit/5215f46aef64317b1e1f7364a73098ed1170ecf5))
+
+## [2.194.0](https://github.com/vviinn/widgets/compare/v2.193.0...v2.194.0) (2025-10-21)
+
+
+### Features
+
+* Add fashion images for Shop-the-Look in the Storybook. ([8768e15](https://github.com/vviinn/widgets/commit/8768e15ac51ca33c0ff4b3374235ebb7e4a8cc4f))
+
+## [2.193.0](https://github.com/vviinn/widgets/compare/v2.192.0...v2.193.0) (2025-10-21)
+
+
+### Features
+
+* Shop-the-look: enable dragging non-active slides on desktop with the cropper. ([c4c75ae](https://github.com/vviinn/widgets/commit/c4c75ae479d3bcbf7fa2f361e33c5cda7576ff48))
+
+## [2.192.0](https://github.com/vviinn/widgets/compare/v2.191.1...v2.192.0) (2025-10-20)
+
+
+### Features
+
+* Introduce the layout of the Product Card (list entity type). ([094d764](https://github.com/vviinn/widgets/commit/094d76403757efe7d8d8437fcc2bc396d09a63c8))
+
 ### [2.191.1](https://github.com/vviinn/widgets/compare/v2.191.0...v2.191.1) (2025-10-13)
 
 

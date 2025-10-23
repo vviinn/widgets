@@ -239,3 +239,21 @@ export const ContentCardContent = (
     </div>
   );
 };
+
+export const ListCardContent = (listTitle: string, labelText: string) => {
+  return (
+    <div
+      class="content-container"
+      part="list-container list-card-content-container"
+    >
+      <div class="list-label" part="list-label">
+        {labelText}
+      </div>
+      {listTitle && (
+        <div class="list-title" part="list-title" title={listTitle}>
+          {listTitle}
+        </div>
+      )}
+    </div>
+  );
+};

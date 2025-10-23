@@ -20,12 +20,14 @@ export class GAnalytics implements ProductAnalytics {
   }
 
   sendImpression(product: Recommendation) {
-    ga("ec:addImpression", this.convertProduct(product));
+    if (!product) return;
 
-    return undefined;
+    ga("ec:addImpression", this.convertProduct(product));
   }
 
   sendClick(product: Recommendation) {
+    if (!product) return;
+
     ga("ec:addProduct", {
       id: product.productId,
       name: product.title,
@@ -37,7 +39,5 @@ export class GAnalytics implements ProductAnalytics {
     });
 
     ga("ec:setAction", "click", { list: "VI VPR View" });
-
-    return undefined;
   }
 }

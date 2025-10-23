@@ -14,6 +14,7 @@ import {
   customLabelPartsList,
   pricePartsList,
   contentCardPartsList,
+  listCardPartsList,
 } from "./product";
 
 const makeExportPartsString = (...args: string[][]): string =>
@@ -55,6 +56,11 @@ export const productCardParts = makeExportPartsString(
 
 export const contentCardParts = makeExportPartsString(
   contentCardPartsList,
+  imagePartsList,
+);
+
+export const listCardParts = makeExportPartsString(
+  listCardPartsList,
   imagePartsList,
 );
 

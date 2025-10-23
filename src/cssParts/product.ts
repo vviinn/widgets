@@ -8,6 +8,9 @@ export const imagePartsList = [
   "content-card-image",
   "content-card-image-container",
   "content-card-image-picture",
+  "list-card-image",
+  "list-card-image-container",
+  "list-card-image-picture",
 ];
 
 export const productCardGeneralPartsList = [
@@ -62,4 +65,11 @@ export const contentCardPartsList = [
   "content-label",
   "content-title",
   "content-link",
+];
+
+export const listCardPartsList = [
+  "list-card",
+  "list-card-content-container",
+  "list-label",
+  "list-title",
 ];

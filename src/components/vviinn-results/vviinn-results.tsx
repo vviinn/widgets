@@ -74,7 +74,12 @@ import {
   vprIconSlotName,
 } from "../customized-slots";
 import { getCustomLabels } from "../../recommendation";
-import { productCardParts, productCardsGridPart } from "../../cssParts";
+import {
+  productCardParts,
+  productCardsGridPart,
+  listCardParts,
+  contentCardParts,
+} from "../../cssParts";
 import {
   findSlotElements,
   getSlotNames,
@@ -126,6 +131,23 @@ import { RESULTS_CALCULATED_COLUMNS_CSS_VAR } from "../vviinn-carousel/constants
  * @part custom-label-2 - Custom label with index 2.
  * @part custom-label-3 - Custom label with index 3.
  * @part custom-label-4 - Custom label with index 4.
+ *
+ * @part list-card - List card container (for entity-type="list").
+ * @part list-card-content-container - List card's content container.
+ * @part list-label - List card's label (e.g., "Category").
+ * @part list-title - List card's title.
+ * @part list-card-image-container - List card's image container.
+ * @part list-card-image - List card's image element.
+ * @part list-card-image-picture - List card's image picture element.
+ *
+ * @part content-card - Content card container (for entity-type="content").
+ * @part content-card-content-container - Content card's content container.
+ * @part content-label - Content card's label.
+ * @part content-title - Content card's title.
+ * @part content-link - Content card's link.
+ * @part content-card-image - Content card's image element.
+ * @part content-card-image-container - Content card's image container.
+ * @part content-card-image-picture - Content card's image picture element.
  *
  * @slot vviinn-results-vpr-icon - One-click Discovery icon.
  * @slot vviinn-favorite-icon - Icon of Favorite button.
@@ -828,6 +850,7 @@ export class VviinnResults {
         index={i}
         productTitle={p.title}
         productId={p.productId}
+        product={p}
         productType={p.productType}
         entityType={p.entityType}
         brand={p.brand}
@@ -902,7 +925,7 @@ export class VviinnResults {
           "show-in-widget": this.showInWidget,
           "matching-discovery": this.oneClickDiscoveryMode === "append-slider",
         }}
-        exportparts={`${productCardParts}, ${productCardsGridPart}`}
+        exportparts={`${productCardParts}, ${listCardParts}, ${contentCardParts}, ${productCardsGridPart}`}
       >
         <div class="nothing-found">
           {this.getCurrentErrorType() && (

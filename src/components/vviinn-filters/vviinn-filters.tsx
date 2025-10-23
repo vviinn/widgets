@@ -34,14 +34,18 @@ import {
 import { triggerFilter } from "./helpers/triggerFilter";
 import { SearchStore, useSearchStore } from "../../store/search.store";
 import { addEventListenersWithSignal } from "../../dom";
+import { slotChangeListener, SlotSkeleton } from "../customized-slots";
 
 /**
+ * @slot vviinn-range-filter-from-label - Label text for the "From" input field in range filters.
+ * @slot vviinn-range-filter-to-label - Label text for the "To" input field in range filters.
+ *
  * @part filters-wrapper - Wrapper for the main filters.
  * @part filters-list - List of main filters.
  * @part filters-main-button - Main filter button.
  * @part filters-footer - Wrapper for the sub filters.
  * @part filters-footer-list - List of sub filters.
- 
+
  * @part filters-sub-row - Row of the sub filters.
  * @part filters-option-button - Button of the sub filter.
  * @part filters-option-image - Image of the sub filter.
@@ -55,8 +59,12 @@ import { addEventListenersWithSignal } from "../../dom";
  * @part histogram-sliders-control - Container for the range sliders control.
  * @part histogram-from-slider - Slider for the minimum value.
  * @part histogram-to-slider - Slider for the maximum value.
- * @part histogram-label-wrapper - Wrapper for the labels.
- * @part histogram-label - Label for the histogram.
+ * @part histogram-label-wrapper - Wrapper for the labels/inputs.
+ * @part histogram-label - Label for the histogram (when showIntervalInputs is false).
+ * @part histogram-input-container - Container for the input field (when showIntervalInputs is true).
+ * @part histogram-input-label - Label text for the input (From/Till).
+ * @part histogram-from-input - Input field for the minimum value.
+ * @part histogram-to-input - Input field for the maximum value.
  */
 
 @Component({
@@ -71,6 +79,8 @@ export class VviinnFilters {
   @Prop() filtersString: string = "";
   /** @internal */
   @Prop() showInWidget: boolean = false;
+  /** Show editable input fields in interval filters instead of readonly labels */
+  @Prop() showIntervalInputs: boolean = false;
 
   @State() innerFilters: ResponseDynamicFilterItem[] = [];
   @State() selectedFilterColumn?: string;
@@ -230,8 +240,24 @@ export class VviinnFilters {
     this.filtersStringWatcher();
   }
 
+  componentWillLoad() {
+    slotChangeListener(this, this.el);
+  }
+
+  componentDidRender() {
+    this.replaceSlotsContent();
+  }
+
   disconnectedCallback() {
     this.eventAbortController?.abort();
+  }
+
+  private replaceSlotsContent() {
+    const slots = this.el.querySelectorAll("[slot]");
+    this.globalSlotsChanged.emit({
+      slots: Array.from(slots),
+      element: this.el,
+    });
   }
 
   render() {
@@ -247,6 +273,7 @@ export class VviinnFilters {
         }}
         onKeyDown={this.handleKeyDown}
       >
+        {SlotSkeleton("filters")}
         <div
           ref={(el) => (this.filterAnnouncementRef = el)}
           aria-live="polite"
@@ -299,6 +326,7 @@ export class VviinnFilters {
                   selectedFilter.column,
                 )}
                 showCurrency={isPriceFilter(selectedFilter.column)}
+                showIntervalInputs={this.showIntervalInputs}
               />
             ) : (
               <ul class="sub-filters-wrapper" part="filters-footer-list">
