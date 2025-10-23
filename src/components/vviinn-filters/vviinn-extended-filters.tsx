@@ -30,6 +30,7 @@ import {
   getSelectedInterval,
   RenderSearchInput,
   applyRightAlignmentToModal,
+  syncRequestFilters,
 } from "./helpers";
 import { filterOptionsBySearch } from "./helpers/searchHelper";
 import { isPriceFilter } from "../../filters";
@@ -676,9 +677,16 @@ export class VviinnExtendedFilters {
   }
 
   connectedCallback() {
-    const { state } = useSearchStore(this.showInWidget);
+    const { state, onChange } = useSearchStore(this.showInWidget);
     this.state = state;
     this.isPreviewInlineMode = this.mode === "preview-inline";
+
+    syncRequestFilters(
+      state,
+      onChange,
+      (filters) => (this.requestFilters = filters),
+    );
+
     this.eventAbortController = new AbortController();
     const { signal } = this.eventAbortController;
 

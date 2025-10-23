@@ -22,6 +22,7 @@ import {
   RenderFilterButton,
   isSubFilterActive,
   getSelectedInterval,
+  syncRequestFilters,
 } from "./helpers";
 import { isPriceFilter } from "../../filters";
 import { Histogram } from "../vviinn-range-filter/vviinn-range-filter";
@@ -222,8 +223,14 @@ export class VviinnFilters {
   }
 
   connectedCallback() {
-    const { state } = useSearchStore(this.showInWidget);
+    const { state, onChange } = useSearchStore(this.showInWidget);
     this.state = state;
+
+    syncRequestFilters(
+      state,
+      onChange,
+      (filters) => (this.requestFilters = filters),
+    );
 
     this.eventAbortController = new AbortController();
     const { signal } = this.eventAbortController;

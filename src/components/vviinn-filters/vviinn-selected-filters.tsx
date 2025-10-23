@@ -20,6 +20,7 @@ import {
   isSubFilterActive,
   RenderCustomButton,
   RenderFilterButton,
+  syncRequestFilters,
 } from "./helpers";
 import {
   ChangedFiltersEventData,
@@ -246,8 +247,14 @@ export class VviinnSelectedFilters {
   };
 
   connectedCallback() {
-    const { state } = useSearchStore(this.showInWidget);
+    const { state, onChange } = useSearchStore(this.showInWidget);
     this.state = state;
+
+    syncRequestFilters(
+      state,
+      onChange,
+      (filters) => (this.requestFilters = filters),
+    );
 
     this.eventAbortController = new AbortController();
     const { signal } = this.eventAbortController;
