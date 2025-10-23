@@ -23,7 +23,7 @@ import {
 import { BasicError } from "../../error";
 import { VisualSearchResponse } from "../../interfaces";
 import { setLocalStorageItems } from "../../localStorage";
-import { acceptableFileFormats, checkImageType } from "../../Image/error";
+import { getAcceptableFileFormats, checkImageType } from "../../Image/error";
 
 /**
  * @part button -  button look and feel
@@ -140,7 +140,7 @@ export class VviinnImageSelector {
           class="visually-hidden"
           type="file"
           tabindex="-1"
-          accept={acceptableFileFormats}
+          accept={getAcceptableFileFormats()}
           onChange={(event: Event) => this.handleInputChange(event)}
           ref={(el) => (this.fileInput = el as HTMLInputElement)}
         />
