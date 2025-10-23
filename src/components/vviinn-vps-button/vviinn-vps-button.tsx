@@ -151,6 +151,8 @@ export class VviinnVpsButton {
   @Prop() oneClickDiscoveryCampaigns: string = "";
   /** Wrap the Product Card's price values in the container. */
   @Prop() addPriceContainer?: boolean = false;
+  /** Show editable input fields in interval filters instead of readonly labels */
+  @Prop() showIntervalInputs: boolean = false;
 
   /** @internal */
   @Prop() apiPath?: string;
@@ -328,6 +330,7 @@ export class VviinnVpsButton {
           textSearchShow={this.textSearchShow}
           addToBasketShow={this.addToBasketShow}
           addPriceContainer={this.addPriceContainer}
+          showIntervalInputs={this.showIntervalInputs}
           replaceSlotsContentInButton={this.replaceSlotsContent.bind(this)}
           oneClickDiscoveryMode={this.oneClickDiscoveryMode}
           oneClickDiscoveryCampaigns={this.oneClickDiscoveryCampaigns}

@@ -1,6 +1,6 @@
 import { Recommendation } from "../interfaces";
 
 export interface ProductAnalytics {
-  sendImpression: (product: Recommendation) => undefined;
-  sendClick: (product: Recommendation) => undefined;
+  sendImpression: (product: Recommendation) => void;
+  sendClick: (product: Recommendation) => void;
 }

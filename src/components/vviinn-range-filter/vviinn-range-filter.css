@@ -11,8 +11,8 @@
   height: 64px;
   display: flex;
   align-items: flex-end;
-  gap: 2px;
-  padding: 0 12px;
+  gap: var(--spacing-25);
+  padding: 0 var(--spacing-150);
 }
 
 .histogram-bar {
@@ -92,6 +92,12 @@
   margin-top: 6px;
 }
 
+.label-wrapper.with-inputs {
+  gap: var(--spacing-100);
+  height: 48px;
+  justify-content: flex-start;
+}
+
 .label-wrapper .label {
   display: flex;
   padding: var(--spacing-25) var(--spacing-100);
@@ -110,4 +116,66 @@
   letter-spacing: var(--letter-spacing-label);
 
   gap: 3px;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  align-items: stretch;
+  flex: 1 1 0;
+  height: 40px;
+  border: 1px solid var(--color-border-01);
+  border-radius: var(--border-radius-100);
+  background: var(--color-bg-base);
+  padding: var(--spacing-50) var(--spacing-100);
+  justify-content: center;
+  cursor: text;
+}
+
+.input-container:focus-within {
+  border-color: var(--color-border-03);
+}
+
+.input-label {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-400);
+  line-height: var(--line-height-body);
+  letter-spacing: var(--letter-spacing-body);
+  font-family: var(--font-family-base);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.input-value-wrapper {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--spacing-25);
+}
+
+.value-input {
+  border: none;
+  background: transparent;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-400);
+  line-height: var(--line-height-body);
+  letter-spacing: var(--letter-spacing-body);
+  font-family: var(--font-family-base);
+  padding: 0;
+  max-width: 100%;
+}
+
+.value-input:focus {
+  outline: none;
+}
+
+.input-currency {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-400);
+  line-height: var(--line-height-body);
+  flex-shrink: 0;
+  user-select: none;
 }

@@ -81,6 +81,8 @@ export const resources: Resource = {
         },
         imageFilterText: "Bild",
         cropFilterText: "Bildausschnitt",
+        from: "Von",
+        till: "Bis",
       },
       energyLabel: {
         dataSheetText: "Produktdatenblatt",
@@ -222,6 +224,8 @@ export const resources: Resource = {
         },
         imageFilterText: "Image",
         cropFilterText: "Crop",
+        from: "From",
+        till: "Till",
       },
       energyLabel: {
         dataSheetText: "Product Data Sheet",

@@ -850,6 +850,7 @@ export class VviinnResults {
         index={i}
         productTitle={p.title}
         productId={p.productId}
+        product={p}
         productType={p.productType}
         entityType={p.entityType}
         brand={p.brand}
