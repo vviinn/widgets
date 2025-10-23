@@ -23,8 +23,6 @@ export class GAnalytics implements ProductAnalytics {
     if (!product) return;
 
     ga("ec:addImpression", this.convertProduct(product));
-
-    return undefined;
   }
 
   sendClick(product: Recommendation) {
@@ -41,7 +39,5 @@ export class GAnalytics implements ProductAnalytics {
     });
 
     ga("ec:setAction", "click", { list: "VI VPR View" });
-
-    return undefined;
   }
 }

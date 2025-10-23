@@ -18,8 +18,6 @@ export class GtagAnalytics implements ProductAnalytics {
         },
       ],
     });
-
-    return undefined;
   }
 
   sendClick(product: Recommendation) {
@@ -40,7 +38,5 @@ export class GtagAnalytics implements ProductAnalytics {
         },
       ],
     });
-
-    return undefined;
   }
 }
