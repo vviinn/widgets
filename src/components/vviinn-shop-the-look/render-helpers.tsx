@@ -262,6 +262,7 @@ export const renderProductDetails = (props: ProductDetailsSliderProps) => {
         <div class="product-details-card-wrapper">
           <vviinn-product-card
             key={selectedProduct.productId}
+            product={selectedProduct}
             class="product-details-card"
             productId={selectedProduct.productId || ""}
             productTitle={selectedProduct.title || ""}

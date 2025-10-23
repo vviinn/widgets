@@ -20,12 +20,16 @@ export class GAnalytics implements ProductAnalytics {
   }
 
   sendImpression(product: Recommendation) {
+    if (!product) return;
+
     ga("ec:addImpression", this.convertProduct(product));
 
     return undefined;
   }
 
   sendClick(product: Recommendation) {
+    if (!product) return;
+
     ga("ec:addProduct", {
       id: product.productId,
       name: product.title,
