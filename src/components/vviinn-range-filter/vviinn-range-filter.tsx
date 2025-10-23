@@ -143,7 +143,7 @@ export class VviinnPriceRange {
     const defaultValue = type === "from" ? this.minValue : this.maxValue;
 
     let parsedValue = parseInt(numericValue);
-    if (isNaN(parsedValue) || numericValue === "") parsedValue = defaultValue;
+    if (isNaN(parsedValue)) parsedValue = defaultValue;
 
     const clampedValue = this.clampAndEnforceMargin(parsedValue, type);
 
