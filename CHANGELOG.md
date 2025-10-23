@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.195.0](https://github.com/vviinn/widgets/compare/v2.194.1...v2.195.0) (2025-10-23)
+
+
+### Features
+
+* The possibility of displaying inputs for interval filters ([5b9af6c](https://github.com/vviinn/widgets/commit/5b9af6c8c58128960b2e52ff60785108d2eb2bb1))
+
 ### [2.194.1](https://github.com/vviinn/widgets/compare/v2.194.0...v2.194.1) (2025-10-23)
 
 

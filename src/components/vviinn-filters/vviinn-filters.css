@@ -681,7 +681,8 @@ vviinn-range-filter {
 
 .filters-modal.preview-inline .filters-modal-sub-list:has(vviinn-range-filter) {
   padding: 0 var(--spacing-75);
-  width: 200px;
+  width: 220px;
+  max-height: unset;
 }
 
 .filters-modal.preview-inline vviinn-range-filter {

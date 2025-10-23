@@ -61,6 +61,8 @@ import {
   VisualSearchMode,
 } from "../../widget/types";
 import {
+  extendedFiltersParts,
+  filtersParts,
   modalParts,
   productCardParts,
   productCardsGridPart,
@@ -179,6 +181,8 @@ export class VviinnVpsWidget {
   @Prop() oneClickDiscoveryCampaigns: string = "";
   /** Wrap the Product Card's price values in the container. */
   @Prop() addPriceContainer?: boolean = false;
+  /** Show editable input fields in interval filters instead of readonly labels */
+  @Prop() showIntervalInputs: boolean = false;
 
   /** @internal */
   @Prop() apiPath?: string;
@@ -843,12 +847,14 @@ export class VviinnVpsWidget {
 
                       <vviinn-selected-filters
                         showInWidget={true}
-                      ></vviinn-selected-filters>
+                        exportparts={filtersParts}
+                      />
 
                       <vviinn-extended-filters
                         mode="preview"
                         showHeader={false}
                         showInWidget={true}
+                        showIntervalInputs={this.showIntervalInputs}
                       />
 
                       <vviinn-extended-filters-button
@@ -899,7 +905,13 @@ export class VviinnVpsWidget {
             </vviinn-slide>
           </vviinn-slider>
 
-          <vviinn-extended-filters mode="modal" showInWidget={true} />
+          <vviinn-extended-filters
+            class="modal-extended-filters"
+            mode="modal"
+            exportparts={extendedFiltersParts}
+            showInWidget={true}
+            showIntervalInputs={this.showIntervalInputs}
+          />
         </vviinn-overlayed-modal>
       </Host>
     );
