@@ -54,4 +54,8 @@ export const histogramPartsList = [
   "histogram-to-slider",
   "histogram-label-wrapper",
   "histogram-label",
+  "histogram-input-container",
+  "histogram-input-label",
+  "histogram-from-input",
+  "histogram-to-input",
 ];

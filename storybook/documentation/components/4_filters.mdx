@@ -23,15 +23,15 @@ The filters components allow users to refine product search results. There are t
     component:   <vviinn-extended-filters filters-string={extendedFilters} locale="en-US"></vviinn-extended-filters>,
     code:'<vviinn-extended-filters locale="en-US"></vviinn-extended-filters>'}}/>
 
-<PreviewAndCodeTabs tabData={{groupId:'previewInline', header:"Inline Preview",
+<PreviewAndCodeTabs tabData={{groupId:'previewInline', header:"Preview Inline mode",
     descriptionText:"Shows all activated filters with categories displayed in a single row and values shown in a modal with search functionality.",
     component:   <vviinn-extended-filters filters-string={extendedFilters} mode="preview-inline" search-threshold="3" locale="en-US"></vviinn-extended-filters>,
     code:'<vviinn-extended-filters mode="preview-inline" locale="en-US"></vviinn-extended-filters>'}}/>
 
-<PreviewAndCodeTabs tabData={{groupId:'extendedPreview', header:"Preview",
+<PreviewAndCodeTabs tabData={{groupId:'extendedPreview', header:"Preview mode with Interval Inputs",
     descriptionText:"Shows all activated filters displayed directly in the interface without modal overlay.",
-    component:   <vviinn-extended-filters filters-string={extendedFilters} mode="preview" locale="en-US"></vviinn-extended-filters>,
-    code:'<vviinn-extended-filters mode="preview" locale="en-US"></vviinn-extended-filters>'}}/>
+    component:   <vviinn-extended-filters filters-string={extendedFilters} mode="preview" show-interval-inputs="true" locale="en-US"></vviinn-extended-filters>,
+    code:'<vviinn-extended-filters mode="preview" show-interval-inputs="true" locale="en-US"></vviinn-extended-filters>'}}/>
 
 
 

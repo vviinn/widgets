@@ -41,6 +41,7 @@ const Template = (args) => `
   text-search-show="${args.textSearchShow}"
   add-to-basket-show="${args.addToBasketShow}"
   add-price-container="${args.addPriceContainer}"
+  show-interval-inputs="${args.showIntervalInputs}"
   favorite-show="${args.favoriteShow}"
   one-click-discovery-mode="${args.oneClickDiscoveryMode}"
 ></vviinn-vps-button>`;
@@ -67,6 +68,7 @@ const initArgs = {
   textSearchShow: true,
   addToBasketShow: false,
   addPriceContainer: false,
+  showIntervalInputs: false,
   favoriteShow: false,
   oneClickDiscoveryMode: "append-grid",
 };
