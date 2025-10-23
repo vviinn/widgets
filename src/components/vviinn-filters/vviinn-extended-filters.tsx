@@ -331,29 +331,37 @@ export class VviinnExtendedFilters {
           class="filters-modal-wrapper"
           part="extended-filters-modal-wrapper"
         >
-          {this.showHeader && (
-            <div class="filters-modal-header" part="extended-filters-header">
-              <h2
-                id="filters-modal-title"
-                class="filters-modal-title"
-                part="extended-filters-title"
-              >
-                <slot name="vviinn-extended-filters-title">
-                  {i18next.t("filters.modal.title")}
-                </slot>
-              </h2>
+          <div
+            class={{
+              "filters-modal-header": true,
+              "show-header-content": this.showHeader,
+            }}
+            part="extended-filters-header"
+          >
+            {this.showHeader && (
+              <Fragment>
+                <h2
+                  id="filters-modal-title"
+                  class="filters-modal-title"
+                  part="extended-filters-title"
+                >
+                  <slot name="vviinn-extended-filters-title">
+                    {i18next.t("filters.modal.title")}
+                  </slot>
+                </h2>
 
-              <button
-                class="filters-modal-close"
-                onClick={this.handleCloseModal}
-                part="extended-filters-modal-close"
-                aria-label={i18next.t("a11y.closeDialog")}
-                type="button"
-              >
-                <NewCloseIcon />
-              </button>
-            </div>
-          )}
+                <button
+                  class="filters-modal-close"
+                  onClick={this.handleCloseModal}
+                  part="extended-filters-modal-close"
+                  aria-label={i18next.t("a11y.closeDialog")}
+                  type="button"
+                >
+                  <NewCloseIcon />
+                </button>
+              </Fragment>
+            )}
+          </div>
 
           <div class="filters-modal-main" part="extended-filters-main">
             {filters.length === 0 && this.state.searchStatus !== "loading" ? (
