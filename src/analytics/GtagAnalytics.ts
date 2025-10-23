@@ -3,7 +3,7 @@ import { Recommendation } from "../interfaces";
 
 export class GtagAnalytics implements ProductAnalytics {
   sendImpression(product: Recommendation) {
-    if (!product) return undefined;
+    if (!product) return;
     gtag("event", "view_item_list", {
       items: [
         {
@@ -18,11 +18,11 @@ export class GtagAnalytics implements ProductAnalytics {
         },
       ],
     });
-
-    return undefined;
   }
 
   sendClick(product: Recommendation) {
+    if (!product) return;
+
     gtag("event", "select_content", {
       content_type: "product",
       items: [
@@ -38,7 +38,5 @@ export class GtagAnalytics implements ProductAnalytics {
         },
       ],
     });
-
-    return undefined;
   }
 }
