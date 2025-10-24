@@ -18,12 +18,38 @@ const SUPPORTED_FILE_TYPES = [
 
 const BASE_FILE_FORMATS = ["jpg", "jpeg", "png", "webp", "avif"];
 
+const getFormatToMime = (format: string): string => {
+  // jpg and jpeg both map to image/jpeg
+  return format === "jpg" ? "image/jpeg" : `image/${format}`;
+};
+
+const FORMAT_TO_MIME: Record<string, string> = Object.fromEntries(
+  SUPPORTED_FILE_TYPES.map((format) => [format, getFormatToMime(format)]),
+);
+
 export const getAcceptableFileFormats = (): string => {
   const formats = isWebKitEngine()
     ? [...BASE_FILE_FORMATS, "heic"]
     : BASE_FILE_FORMATS;
 
-  return formats.map((type) => `.${type}`).join(", ");
+  // Include both MIME types and file extensions for better browser compatibility
+  const mimeTypes = formats.map((type) => FORMAT_TO_MIME[type]);
+  const extensions = formats.map((type) => `.${type}`);
+
+  return [...mimeTypes, ...extensions].join(",");
+};
+
+export const getAcceptableFileFormatsForDisplay = (): string => {
+  const formats = isWebKitEngine()
+    ? [...BASE_FILE_FORMATS, "heic"]
+    : BASE_FILE_FORMATS;
+
+  const formattedTypes = formats
+    .filter((type) => type !== "jpeg")
+    .map((type) => `.${type}`);
+
+  const lastFormat = formattedTypes.pop();
+  return `${formattedTypes.join(", ")}, or ${lastFormat}`;
 };
 
 const unsupportedFileTypeError: BasicError<string> = {

@@ -6,7 +6,7 @@ import "../../styles/product-card.css";
 
 
 <PreviewAndCodeTabs tabData={{groupId: props.cardData.name, header:props.cardData.header, code:props.cardData.code, descriptionText:props.descriptionText,
-    component:<>
+    component:
         <div className="product-wrapper">
             <vviinn-product-card {...props.cardData.productData}>
             {props.cardData.buttonParams && (
@@ -34,5 +34,4 @@ import "../../styles/product-card.css";
                 <div id="product-card-append-container"></div>
             )}
         </div>
-    </>
     }}/>

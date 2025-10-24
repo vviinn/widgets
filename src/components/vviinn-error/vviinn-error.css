@@ -17,7 +17,7 @@
   grid-gap: var(--spacing-150);
   text-align: center;
   justify-items: center;
-  width: 356px;
+  max-width: 356px;
   padding: var(--spacing-200);
   max-width: calc(100vw - 2 * var(--spacing-300));
   border-radius: var(--border-radius-200);
