@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.196.0](https://github.com/vviinn/widgets/compare/v2.195.1...v2.196.0) (2025-10-24)
+
+
+### Features
+
+* Support for the HEIF image format on Safari Desktop and iOS devices. ([e65e6b6](https://github.com/vviinn/widgets/commit/e65e6b6716ccc0402564db5442e75b7dd30a9a5a))
+
 ### [2.195.1](https://github.com/vviinn/widgets/compare/v2.195.0...v2.195.1) (2025-10-24)
 
 
