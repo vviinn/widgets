@@ -94,7 +94,7 @@ const CAMERA_START_DELAY = 500;
  * @slot vviinn-custom-label-3 - Custom label with index 3.
  * @slot vviinn-custom-label-4 - Custom label with index 4.
  *
- * @slot vviinn-results-vpr-icon - One-click Discovery icon.
+ * @slot vviinn-results-vpr-icon - One-Click Discovery icon.
  * @part close-button - Close Button in the modal's header.
  * @part secondary-action - Back Button in the modal's header.
  * @part results-title - Title on the results page.
@@ -175,7 +175,7 @@ export class VviinnVpsWidget {
   @Prop() addToBasketShow: boolean = false;
   /** Show or hide Favorite button */
   @Prop() favoriteShow: boolean = false;
-  /** One click Discovery mode, restricted to append only (no modal supported for this component)*/
+  /** One-Click Discovery mode, restricted to append only (no modal supported for this component)*/
   @Prop() oneClickDiscoveryMode?: OneClickDiscoveryAppendMode = "append-grid";
   /** Comma-separated list of campaign IDs */
   @Prop() oneClickDiscoveryCampaigns: string = "";
@@ -216,7 +216,8 @@ export class VviinnVpsWidget {
   @State() isCameraButtonClicked: boolean = false;
 
   @State() showAspectRatioError = false;
-  @State() wrongImageFormat: boolean = false;
+  @State() wrongImageFormat: "wrong-format" | "heic-not-supported" | false =
+    false;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })
@@ -245,7 +246,7 @@ export class VviinnVpsWidget {
   /** The image upload has started */
   @Event() vviinnImageUploadStarted: EventEmitter<ImageUploadEventData>;
 
-  /** Wrong image format, that isn't .jpg, .jpeg, .png, .webp, or .avif, or the request failed */
+  /** Wrong image format (supported formats depend on the browser), or the request failed */
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
   private overflow: string;
@@ -309,7 +310,11 @@ export class VviinnVpsWidget {
 
   private handleVviinnNoResult = (detail: NoResultEventData) => {
     if (detail.reason === "client") {
-      this.wrongImageFormat = true;
+      if (detail.errorCode === "heic-not-supported") {
+        this.wrongImageFormat = "heic-not-supported";
+      } else {
+        this.wrongImageFormat = "wrong-format";
+      }
     }
   };
 
@@ -682,11 +687,11 @@ export class VviinnVpsWidget {
   };
 
   private haveErrors(): boolean {
-    return this.wrongImageFormat || this.state.searchStatus === "error";
+    return !!this.wrongImageFormat || this.state.searchStatus === "error";
   }
 
   private getCurrentErrorType(): ErrorType | null {
-    if (this.wrongImageFormat) return "wrong-format";
+    if (this.wrongImageFormat) return this.wrongImageFormat;
     if (this.state.searchStatus === "error") return "server-error";
     return null;
   }
@@ -764,7 +769,7 @@ export class VviinnVpsWidget {
                         <vviinn-error
                           errorType={this.getCurrentErrorType()}
                           handler={this.resetState}
-                          hasBackground={this.showInWidget}
+                          hasBackground={true}
                           searchType={this.state.searchType}
                         />
                       )}

@@ -141,7 +141,7 @@ export class VviinnVprButton {
   @Prop() showFilters: boolean = false;
   /** Wrap the Product Card's price values in the container. */
   @Prop() addPriceContainer?: boolean = false;
-  /** One click Discovery mode*/
+  /** One-Click Discovery mode*/
   @Prop() oneClickDiscoveryMode?: OneClickDiscoveryMode = "modal";
 
   /** List of discounts for Set mode. Example: "5, 10, 15, 20" (could be less than 4 numbers) */

@@ -1,4 +1,4 @@
-import { browserType } from "./browserType";
+import { browserType } from "../../../helpers/device/browserType";
 
 export const permitSpeechRecognition = () => {
   const uncastedWindow = window as any;

@@ -4,7 +4,7 @@ import "../documentation/widgets/styles.css";
 import { argsFromParams } from "../helpers/argsFromParams";
 
 export default {
-  title: "Playground/One-click Discovery",
+  title: "Playground/One-Click Discovery",
   component: "vviinn-vpr-button",
   argTypes: {
     ...argTypes,
@@ -48,7 +48,7 @@ const Template = (args) => `
 `;
 
 export const Default = Template.bind({});
-Default.storyName = "One-click Discovery";
+Default.storyName = "One-Click Discovery";
 
 const initArgs = {
   token: vviinnToken,

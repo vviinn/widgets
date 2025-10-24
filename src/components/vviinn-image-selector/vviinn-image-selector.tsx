@@ -23,7 +23,7 @@ import {
 import { BasicError } from "../../error";
 import { VisualSearchResponse } from "../../interfaces";
 import { setLocalStorageItems } from "../../localStorage";
-import { acceptableFileFormats, checkImageType } from "../../Image/error";
+import { getAcceptableFileFormats, checkImageType } from "../../Image/error";
 
 /**
  * @part button -  button look and feel
@@ -35,7 +35,7 @@ import { acceptableFileFormats, checkImageType } from "../../Image/error";
 })
 export class VviinnImageSelector {
   @Event() vviinnImageUploadStarted: EventEmitter<ImageUploadEventData>;
-  /** Wrong image format, that isn't .jpg, .jpeg, .png, .webp, or .avif */
+  /** Wrong image format (supported formats depend on the browser) */
   @Event() vviinnNoResult: EventEmitter<NoResultEventData>;
   @Event() vviinnImageUploadFinished: EventEmitter<SearchIdEventData>;
 
@@ -63,6 +63,8 @@ export class VviinnImageSelector {
       this.vviinnNoResult.emit({
         ...this.basicEventData,
         reason: validationResult.left.kind,
+        errorMessage: validationResult.left.inner,
+        errorCode: validationResult.left.code,
       });
       input.value = "";
       return;
@@ -138,7 +140,7 @@ export class VviinnImageSelector {
           class="visually-hidden"
           type="file"
           tabindex="-1"
-          accept={acceptableFileFormats}
+          accept={getAcceptableFileFormats()}
           onChange={(event: Event) => this.handleInputChange(event)}
           ref={(el) => (this.fileInput = el as HTMLInputElement)}
         />

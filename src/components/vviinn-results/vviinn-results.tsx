@@ -149,7 +149,7 @@ import { RESULTS_CALCULATED_COLUMNS_CSS_VAR } from "../vviinn-carousel/constants
  * @part content-card-image-container - Content card's image container.
  * @part content-card-image-picture - Content card's image picture element.
  *
- * @slot vviinn-results-vpr-icon - One-click Discovery icon.
+ * @slot vviinn-results-vpr-icon - One-Click Discovery icon.
  * @slot vviinn-favorite-icon - Icon of Favorite button.
  * @slot vviinn-favorite-icon-pressed - Icon of pressed Favorite button.
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
@@ -239,7 +239,7 @@ export class VviinnResults {
   /** Wrap the Product Card's price values in the container. */
   @Prop() addPriceContainer?: boolean = false;
 
-  /** One-click Discovery Mode */
+  /** One-Click Discovery Mode */
   @Prop() oneClickDiscoveryMode?: OneClickDiscoveryMode = "append-grid";
   /** Comma-separated list of campaign IDs */
   @Prop() oneClickDiscoveryCampaigns: string = "";

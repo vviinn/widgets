@@ -2,7 +2,8 @@ export type ErrorType =
   | "empty-results"
   | "server-error"
   | "wrong-aspect-ratio"
-  | "wrong-format";
+  | "wrong-format"
+  | "heic-not-supported";
 
 export interface ErrorTypeConfig {
   i18nKey: string;
@@ -32,6 +33,12 @@ export const errorTypeConfig: Record<ErrorType, ErrorTypeConfig> = {
   },
   "wrong-format": {
     i18nKey: "wrongFormatBlock",
+    hasTopMargin: false,
+    hasText: true,
+    hasButton: true,
+  },
+  "heic-not-supported": {
+    i18nKey: "heicNotSupportedBlock",
     hasTopMargin: false,
     hasText: true,
     hasButton: true,
