@@ -68,7 +68,7 @@ export interface ShopTheLookEventData extends BasicEventData {
 }
 
 /**
- * Interactive "Shop the Look" widget that enables visual product search on fashion/interior images.
+ * Interactive "Shop-the-Look" widget that enables visual product search on fashion/interior images.
  * Users can click on hotspots (detected objects) to discover similar products and see recommendations in a modal.
  *
  * Supports multiple images with swiper navigation, responsive design, and customizable styling.

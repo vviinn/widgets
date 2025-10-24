@@ -23,7 +23,7 @@ const productCardCode = (cardProps: string) => `    <div class="product">
 export const oneClickDiscoveryConstants = {
   modal: {
     groupId: "modalDiscovery",
-    header: "One-click Discovery Modal",
+    header: "One-Click Discovery Modal",
     code: codeWithExtraProps(
       vviinnResultsCode(),
       '    one-click-discovery-mode="modal"',
@@ -31,7 +31,7 @@ export const oneClickDiscoveryConstants = {
   },
   appendGrid: {
     groupId: "appendGridDiscovery",
-    header: "One-click Discovery Appended Grid",
+    header: "One-Click Discovery Appended Grid",
     code: codeWithExtraProps(
       vviinnResultsCode(),
       '    one-click-discovery-mode="append-grid"',
@@ -39,7 +39,7 @@ export const oneClickDiscoveryConstants = {
   },
   appendSlider: {
     groupId: "appendSliderDiscovery",
-    header: "One-click Discovery Appended Slider",
+    header: "One-Click Discovery Appended Slider",
     code: codeWithExtraProps(
       vviinnResultsCode(),
       '    one-click-discovery-mode="append-slider"',
@@ -47,7 +47,7 @@ export const oneClickDiscoveryConstants = {
   },
   standalone: {
     groupId: "standaloneDiscovery",
-    header: "One-click Discovery Itself",
+    header: "One-Click Discovery Itself",
     code: `<div class="collection">
 ${productCardCode('                mode="continuity"')}
 ${productCardCode('                mode="grid"')}

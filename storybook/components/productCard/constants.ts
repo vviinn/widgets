@@ -97,7 +97,7 @@ export const productDataByIndustryAndType = {
 export const cardDataByType = {
   mainCard: {
     uniqueId: "main",
-    header: "Full Content View with Modal One-click Discovery",
+    header: "Full Content View with Modal One-Click Discovery",
     productData: {
       "price-prefix": "",
       "custom-labels": "UVP",
@@ -115,7 +115,7 @@ export const cardDataByType = {
   },
   appendCard: {
     uniqueId: "append",
-    header: "Partial Content View with Appended One-click Discovery",
+    header: "Partial Content View with Appended One-Click Discovery",
     productData: {
       "add-to-basket-show": "true",
       "is-standalone": "true",
