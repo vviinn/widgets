@@ -246,7 +246,7 @@ export class VviinnVpsWidget {
   /** The image upload has started */
   @Event() vviinnImageUploadStarted: EventEmitter<ImageUploadEventData>;
 
-  /** Wrong image format, that isn't .jpg, .jpeg, .png, .webp, .avif, or .heic, or the request failed */
+  /** Wrong image format (supported formats depend on the browser), or the request failed */
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
   private overflow: string;
@@ -769,7 +769,7 @@ export class VviinnVpsWidget {
                         <vviinn-error
                           errorType={this.getCurrentErrorType()}
                           handler={this.resetState}
-                          hasBackground={this.showInWidget}
+                          hasBackground={true}
                           searchType={this.state.searchType}
                         />
                       )}

@@ -35,7 +35,7 @@ import { getAcceptableFileFormats, checkImageType } from "../../Image/error";
 })
 export class VviinnImageSelector {
   @Event() vviinnImageUploadStarted: EventEmitter<ImageUploadEventData>;
-  /** Wrong image format, that isn't .jpg, .jpeg, .png, .webp, .avif, or .heic */
+  /** Wrong image format (supported formats depend on the browser) */
   @Event() vviinnNoResult: EventEmitter<NoResultEventData>;
   @Event() vviinnImageUploadFinished: EventEmitter<SearchIdEventData>;
 

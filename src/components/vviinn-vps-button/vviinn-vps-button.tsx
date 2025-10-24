@@ -188,7 +188,7 @@ export class VviinnVpsButton {
   /** The search result appears in the viewport */
   @Event() vviinnResultView: EventEmitter<BasicEventData>;
 
-  /** Wrong image format, that isn't .jpg, .jpeg, .png, .webp, .avif, or .heic, or the request failed */
+  /** Wrong image format (supported formats depend on the browser), or the request failed */
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
   /** Crop area changes */

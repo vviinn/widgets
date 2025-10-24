@@ -19,7 +19,6 @@
   justify-items: center;
   max-width: 356px;
   padding: var(--spacing-200);
-  max-width: calc(100vw - 2 * var(--spacing-300));
   border-radius: var(--border-radius-200);
   box-sizing: border-box;
   margin: 0 auto;
