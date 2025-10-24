@@ -8,29 +8,29 @@ import VviinnResults from "../../components/vviinnResultsTemplate.mdx"
 import ProductCardTemplate from  "../../components/5_oneClickDiscovery/productCardTemplate.mdx"
 
 
-<Meta title="Widgets/One-click Discovery" />
+<Meta title="Widgets/One-Click Discovery" />
 
-# One-click Discovery
+# One-Click Discovery
 
-One-click discovery allows you to display products with a single click inside the modal or in appended mode. Here are examples using the `vviinn-results` component or separately.
+One-Click Discovery allows you to display products with a single click inside the modal or in appended mode. Here are examples using the `vviinn-results` component or separately.
 
 <PreviewAndCodeTabs tabData={{...oneClickDiscoveryConstants.modal,
-description:<div className="tab-sub-title">One-click Discovery's <code>modal</code> mode, showing in <code>vviinn-results</code> for the {textSearchQuery} query.</div>,
+description:<div className="tab-sub-title">One-Click Discovery's <code>modal</code> mode, showing in <code>vviinn-results</code> for the {textSearchQuery} query.</div>,
 component: <VviinnResults discoveryMode="modal" textQuery={textSearchQuery}/>
 }}/>
 
 <PreviewAndCodeTabs tabData={{...oneClickDiscoveryConstants.appendGrid,
-    description:<div className="tab-sub-title">One-click Discovery's  <code>append-grid</code> mode, showing in <code>vviinn-results</code> for the {textSearchQuery} query.</div>,
+    description:<div className="tab-sub-title">One-Click Discovery's  <code>append-grid</code> mode, showing in <code>vviinn-results</code> for the {textSearchQuery} query.</div>,
     component: <VviinnResults discoveryMode="append-grid"  textQuery={textSearchQuery}/>
 }}/>
 
 <PreviewAndCodeTabs tabData={{...oneClickDiscoveryConstants.appendSlider,
-    description:<div className="tab-sub-title">One-click Discovery's  <code>append-slider</code> mode, showing in <code>vviinn-results</code> for the {textSearchQuery} query.</div>,
+    description:<div className="tab-sub-title">One-Click Discovery's  <code>append-slider</code> mode, showing in <code>vviinn-results</code> for the {textSearchQuery} query.</div>,
     component: <VviinnResults discoveryMode="append-slider" textQuery={textSearchQuery}/>
 }}/>
 
 <PreviewAndCodeTabs tabData={{...oneClickDiscoveryConstants.standalone,
-    description:    <div className="tab-sub-title">Integrating the One-click Discovery modal into an example grid using <code>continuity</code> (default), <code>grid</code>, and <code>set</code> modes.</div>,
+    description:    <div className="tab-sub-title">Integrating the One-Click Discovery modal into an example grid using <code>continuity</code> (default), <code>grid</code>, and <code>set</code> modes.</div>,
     component: <div className="collection">
         <ProductCardTemplate cardMode="continuity"/>
         <ProductCardTemplate cardMode="grid"/>
