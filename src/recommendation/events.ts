@@ -7,7 +7,7 @@ import {
   ResultViewEvent,
   Widget,
 } from "vviinn-tracking-client-ts";
-import { ErrorKind } from "../error";
+import { ErrorCode, ErrorKind } from "../error";
 import {
   DynamicFilterValue,
   RequestDynamicFilterItem,
@@ -45,6 +45,8 @@ export type TriggerSourceEventData = {
 
 export type NoResultEventData = {
   reason: ErrorKind;
+  errorMessage?: string;
+  errorCode?: ErrorCode;
 } & {
   [K in keyof CommonEventData]: CommonEventData[K];
 };

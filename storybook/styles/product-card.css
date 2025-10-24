@@ -1,3 +1,8 @@
+.product-wrapper {
+  width: 300px;
+  max-width: 100%;
+}
+
 #product-card-main vviinn-product-card::part(custom-label-0) {
   display: block;
 }
