@@ -26,7 +26,7 @@ const data = {
     filterValue: "Beauty > Düfte",
     description: "company: 'Vviinn Demo Company', site: 'Fashion Women 64K'",
     shopTheLookImageUrls: [
-      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/fashion_01-1.jpg",
+      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/fashion_01.jpg",
       "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/fashion_02.jpg",
       "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/fashion_03.jpg",
       "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/fashion_04.jpg",

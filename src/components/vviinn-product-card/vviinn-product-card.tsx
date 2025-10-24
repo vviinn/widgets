@@ -118,7 +118,7 @@ import { addEventListenersWithSignal } from "../../dom";
  * @slot vviinn-basket-button-text-pressed - Text of pressed Add to Basket button (Set mode).
  * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button (Set mode).
  * @slot vviinn-energy-label-data-sheet-text - Data sheet link's text.
- * @slot vviinn-product-card-actions - Add action buttons like One-click discovery to this slot.
+ * @slot vviinn-product-card-actions - Add action buttons like One-Click Discovery to this slot.
  * @slot vviinn-favorite-icon - Icon of Favorite button.
  * @slot vviinn-favorite-icon-pressed - Icon of pressed Favorite button.
  * @slot vviinn-custom-label-0 - Custom label with index 0.

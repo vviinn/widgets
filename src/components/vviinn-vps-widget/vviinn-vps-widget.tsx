@@ -94,7 +94,7 @@ const CAMERA_START_DELAY = 500;
  * @slot vviinn-custom-label-3 - Custom label with index 3.
  * @slot vviinn-custom-label-4 - Custom label with index 4.
  *
- * @slot vviinn-results-vpr-icon - One-click Discovery icon.
+ * @slot vviinn-results-vpr-icon - One-Click Discovery icon.
  * @part close-button - Close Button in the modal's header.
  * @part secondary-action - Back Button in the modal's header.
  * @part results-title - Title on the results page.
@@ -175,7 +175,7 @@ export class VviinnVpsWidget {
   @Prop() addToBasketShow: boolean = false;
   /** Show or hide Favorite button */
   @Prop() favoriteShow: boolean = false;
-  /** One click Discovery mode, restricted to append only (no modal supported for this component)*/
+  /** One-Click Discovery mode, restricted to append only (no modal supported for this component)*/
   @Prop() oneClickDiscoveryMode?: OneClickDiscoveryAppendMode = "append-grid";
   /** Comma-separated list of campaign IDs */
   @Prop() oneClickDiscoveryCampaigns: string = "";
