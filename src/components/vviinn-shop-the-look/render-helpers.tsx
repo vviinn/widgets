@@ -122,7 +122,7 @@ export const renderSwiper = (props: SwiperProps) => {
         <img
           ref={(el: HTMLImageElement) => onImageRef(el, 0)}
           src={imageUrls?.[0] || ""}
-          alt="Shop the look"
+          alt="Shop-the-Look"
           class="main-image"
           style={getImageStyles(height)}
         />
@@ -169,7 +169,7 @@ export const renderSwiper = (props: SwiperProps) => {
                 <img
                   ref={(el: HTMLImageElement) => onImageRef(el, index)}
                   src={url}
-                  alt={`Shop the look ${index + 1}`}
+                  alt={`Shop-the-Look ${index + 1}`}
                   class="main-image"
                   style={getImageStyles(height)}
                 />

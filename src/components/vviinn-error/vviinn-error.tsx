@@ -2,6 +2,7 @@ import { Component, Host, Prop, h } from "@stencil/core";
 import i18next from "i18next";
 import { WarningIcon } from "../vviinn-icons";
 import { ErrorType, errorTypeConfig } from "./index";
+import { getAcceptableFileFormatsForDisplay } from "../../Image/error";
 
 @Component({
   tag: "vviinn-error",
@@ -20,9 +21,16 @@ export class VviinnError {
 
     const config = errorTypeConfig[this.errorType];
 
+    const translationOptions =
+      this.errorType === "wrong-format"
+        ? { formats: getAcceptableFileFormatsForDisplay() }
+        : undefined;
+
     return {
       title: i18next.t(`${config.i18nKey}.title`),
-      text: config.hasText ? i18next.t(`${config.i18nKey}.text`) : null,
+      text: config.hasText
+        ? i18next.t(`${config.i18nKey}.text`, translationOptions)
+        : null,
       buttonText: this.hasButton()
         ? i18next.t(`${config.i18nKey}.button`)
         : null,

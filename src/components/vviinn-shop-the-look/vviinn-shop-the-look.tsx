@@ -56,7 +56,7 @@ import {
   SwiperContainerElement,
 } from "../../utils/swiper/swiperUtils";
 import { UploadActionIconVariant } from "../vviinn-icons";
-import { acceptableFileFormats } from "../../Image/error";
+import { getAcceptableFileFormats } from "../../Image/error";
 
 if (typeof window !== "undefined") {
   register();
@@ -68,7 +68,7 @@ export interface ShopTheLookEventData extends BasicEventData {
 }
 
 /**
- * Interactive "Shop the Look" widget that enables visual product search on fashion/interior images.
+ * Interactive "Shop-the-Look" widget that enables visual product search on fashion/interior images.
  * Users can click on hotspots (detected objects) to discover similar products and see recommendations in a modal.
  *
  * Supports multiple images with swiper navigation, responsive design, and customizable styling.
@@ -1202,7 +1202,7 @@ export class VviinnShopTheLook {
                 <input
                   type="file"
                   class="visually-hidden"
-                  accept={acceptableFileFormats}
+                  accept={getAcceptableFileFormats()}
                   onChange={this.handleFileUpload}
                   ref={(el) => (this.fileInput = el as HTMLInputElement)}
                 />

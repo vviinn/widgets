@@ -48,7 +48,7 @@ export const resources: Resource = {
       },
       emptyResultsBlock: {
         title: "Leider nichts gefunden",
-        button: "Neues Bild hochladen",
+        button: "Erneut versuchen",
       },
       serverErrorBlock: {
         title: "Keine Verbindung",
@@ -56,12 +56,17 @@ export const resources: Resource = {
       },
       wrongFormatBlock: {
         title: "Dateityp wird nicht unterstützt",
-        text: "Bitte laden Sie eine .jpg, .png, .webp oder .avif Bilddatei hoch.",
-        button: "Neues Bild hochladen",
+        text: "Bitte laden Sie ein Bild im {{formats}} Format hoch.",
+        button: "Erneut versuchen",
+      },
+      heicNotSupportedBlock: {
+        title: "HEIC wird nicht unterstützt",
+        text: "HEIC-Dateien werden nur in Safari und iOS-Browsern unterstützt. Bitte verwenden Sie ein anderes Format.",
+        button: "Erneut versuchen",
       },
       wrongAspectRatioBlock: {
         title: "Das Bild ist zu schmal",
-        button: "Neues Bild hochladen",
+        button: "Erneut versuchen",
       },
       filters: {
         modal: {
@@ -187,7 +192,7 @@ export const resources: Resource = {
       },
       emptyResultsBlock: {
         title: "Sorry, nothing found",
-        button: "Upload another image",
+        button: "Try again",
       },
       serverErrorBlock: {
         title: "Something went wrong",
@@ -195,12 +200,17 @@ export const resources: Resource = {
       },
       wrongFormatBlock: {
         title: "Wrong file format",
-        text: "Please upload a .jpg, .png, .webp or .avif image file.",
-        button: "Upload another file",
+        text: "Please upload an image in {{formats}} format.",
+        button: "Try again",
+      },
+      heicNotSupportedBlock: {
+        title: "HEIC not supported",
+        text: "HEIC files are only supported in Safari and iOS browsers. Please use a different format.",
+        button: "Try again",
       },
       wrongAspectRatioBlock: {
         title: "The image is too narrow",
-        button: "Upload another image",
+        button: "Try again",
       },
       filters: {
         modal: {

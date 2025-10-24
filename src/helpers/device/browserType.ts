@@ -1,3 +1,5 @@
+// Detects specific browser brands for feature support (e.g., Speech Recognition API)
+// Returns browser identification for Chrome, Safari, and forbidden browsers
 export const browserType = () => {
   const uncastedWindow = window as any;
   const winNav = window.navigator as any;

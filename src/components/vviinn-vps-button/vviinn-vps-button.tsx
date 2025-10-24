@@ -46,7 +46,7 @@ import { globalState, updateGlobalState } from "../../store/store";
  * @slot vviinn-image-search-modal-title - Image search modal title.
  * @slot vviinn-text-search-icon - Icon of the text search block.
  * @slot vviinn-energy-label-data-sheet-text - Text of the data sheet link for the energy label.
- * @slot vviinn-results-vpr-icon - One-click Discovery icon
+ * @slot vviinn-results-vpr-icon - One-Click Discovery icon
  * @slot vviinn-custom-label-0 - Custom label with index 0.
  * @slot vviinn-custom-label-1 - Custom label with index 1.
  * @slot vviinn-custom-label-2 - Custom label with index 2.
@@ -145,7 +145,7 @@ export class VviinnVpsButton {
   @Prop() addToBasketShow: boolean = false;
   /** Show or hide Favorite button */
   @Prop() favoriteShow: boolean = false;
-  /** One click Discovery mode, restricted to append only (no modal supported for this component)*/
+  /** One-Click Discovery mode, restricted to append only (no modal supported for this component)*/
   @Prop() oneClickDiscoveryMode?: OneClickDiscoveryAppendMode = "append-grid";
   /** Comma-separated list of campaign IDs */
   @Prop() oneClickDiscoveryCampaigns: string = "";
@@ -188,7 +188,7 @@ export class VviinnVpsButton {
   /** The search result appears in the viewport */
   @Event() vviinnResultView: EventEmitter<BasicEventData>;
 
-  /** Wrong image format, that isn't .jpg, .jpeg, .png, .webp, or .avif, or the request failed */
+  /** Wrong image format (supported formats depend on the browser), or the request failed */
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
   /** Crop area changes */

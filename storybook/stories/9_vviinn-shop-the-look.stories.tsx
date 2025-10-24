@@ -4,7 +4,7 @@ import { argsFromParams } from "../helpers/argsFromParams";
 import "../documentation/widgets/styles.css";
 
 export default {
-  title: "Playground/Shop The Look",
+  title: "Playground/Shop-the-Look",
   component: "vviinn-shop-the-look",
   parameters: {
     badges: ["beta", "experimental"],
@@ -32,7 +32,7 @@ const Template = (args) => `
 `;
 
 export const Default = Template.bind({});
-Default.storyName = "Shop The Look";
+Default.storyName = "Shop-the-Look";
 
 const initArgs = {
   token: vviinnToken,
