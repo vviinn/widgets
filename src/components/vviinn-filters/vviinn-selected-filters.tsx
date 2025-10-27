@@ -318,7 +318,8 @@ export class VviinnSelectedFilters {
     if (
       this.showInWidget &&
       !this.selectedFilterButtons.length &&
-      !this.state.croppedImageUrl
+      !this.state.croppedImageUrl &&
+      !Object.keys(this.intervalCustomFilters).length
     )
       return null;
     return (

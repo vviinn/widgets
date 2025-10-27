@@ -835,11 +835,6 @@ export class VviinnVpsWidget {
                     />
                   )}
 
-                  <vviinn-selected-filters
-                    showInWidget={true}
-                    exportparts={filtersParts}
-                  />
-
                   {this.isTextSearch() && (
                     <vviinn-suggestions
                       showInWidget={true}
@@ -848,6 +843,11 @@ export class VviinnVpsWidget {
                       locale={this.locale}
                     />
                   )}
+
+                  <vviinn-selected-filters
+                    showInWidget={true}
+                    exportparts={filtersParts}
+                  />
 
                   {this.state.dynamicFilters?.length > 0 && (
                     <div
