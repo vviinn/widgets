@@ -3,7 +3,7 @@ import { SearchStore } from "../../../store/search.store";
 import { OnChangeHandler } from "@stencil/store/dist/types";
 
 /**
- * Syncs local component requestFilters state with the store's requestFilters in case there are response filters with * selected: true.
+ * Syncs local component requestFilters state with the store's requestFilters in case there are response filters with selected: true.
  */
 export const syncRequestFilters = (
   state: SearchStore,

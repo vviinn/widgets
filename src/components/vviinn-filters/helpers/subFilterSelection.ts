@@ -5,6 +5,7 @@ import {
 } from "../../../campaign/VPRCampaignService";
 import { FilterAction } from "vviinn-tracking-client-ts";
 import { Interval, ResponseIntervalFilterItem } from "../../../interfaces";
+import { extractFilterValue, valueToString } from "./filterValueUtils";
 
 type ValueRequest = string & { start?: number; end?: number };
 
@@ -26,7 +27,7 @@ export const subFilterSelection = (
   filterValue: DynamicFilterValue,
 ) => {
   const selectedColumn = selectedFilter.column;
-  const value = filterValue.interval ?? filterValue.value ?? filterValue;
+  const rawValue = extractFilterValue(filterValue);
   const index = filters.findIndex(({ column }) => column === selectedColumn);
 
   if (selectedFilter.type === "interval" && filterValue.interval) {
@@ -42,6 +43,13 @@ export const subFilterSelection = (
         return { filters: [...filters], action: "deselect" as FilterAction };
       }
     }
+  }
+
+  const value =
+    selectedFilter.type === "categorical" ? valueToString(rawValue) : rawValue;
+
+  if (value === null) {
+    return { filters: [...filters], action: "deselect" as FilterAction };
   }
 
   const valueIndex = filters[index]?.values.findIndex((val) => val === value);

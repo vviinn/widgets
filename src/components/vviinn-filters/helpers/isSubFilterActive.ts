@@ -3,6 +3,7 @@ import {
   DynamicFilterValue,
   RequestDynamicFilterItem,
 } from "../../../campaign/VPRCampaignService";
+import { isValueMatch } from "./filterValueUtils";
 
 export const isSubFilterActive = (
   requestFilters: RequestDynamicFilterItem[],
@@ -17,10 +18,5 @@ export const isSubFilterActive = (
 
   if (!mainFilter) return false;
 
-  return mainFilter.values.some(
-    (value) =>
-      value === filterValue ||
-      value === filterValue.interval ||
-      value === filterValue.value,
-  );
+  return mainFilter.values.some((value) => isValueMatch(value, filterValue));
 };

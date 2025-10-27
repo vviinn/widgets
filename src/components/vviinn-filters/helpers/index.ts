@@ -11,3 +11,8 @@ export {
   isCategoryOnRightSide,
   applyRightAlignmentToModal,
 } from "./modalPositioning";
+export {
+  extractFilterValue,
+  valueToString,
+  isValueMatch,
+} from "./filterValueUtils";

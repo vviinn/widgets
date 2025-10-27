@@ -2,22 +2,11 @@ import {
   ResponseDynamicFilterItem,
   RequestDynamicFilterItem,
 } from "../../../interfaces/interactions";
+import { valueToString } from "./filterValueUtils";
 
 /**
- * Converts filter value to string format expected by request API.
- * Handles simple values (string/number) and complex objects (color filters).
- */
-const valueToString = (val: unknown): string => {
-  if (typeof val === "string" || typeof val === "number") return String(val);
-  if (typeof val === "object" && val !== null && "value" in val) {
-    return String((val as { value: unknown }).value);
-  }
-  return String(val);
-};
-
-/**
- * Extracts selected filter values from backend response filters and converts them to the request filter format.
- * Used to initialize requestFilters when backend returns filters with selected: true
+  Extracts selected filter values from backend response filters and converts them to the request filter format.
+  Used to initialize requestFilters when backend returns filters with selected: true
  */
 export const extractSelectedFilters = (
   dynamicFilters: ResponseDynamicFilterItem[],
@@ -27,8 +16,9 @@ export const extractSelectedFilters = (
   return dynamicFilters.reduce((acc, filter) => {
     if (filter.type === "categorical" && "values" in filter) {
       const selectedValues = filter.values
-        .filter((item) => item.selected === true)
-        .map((item) => valueToString(item.value));
+        .filter((item) => item.selected === true && item.value != null)
+        .map((item) => valueToString(item.value))
+        .filter((val): val is string => val !== null);
 
       if (selectedValues.length > 0) {
         acc.push({ column: filter.column, values: selectedValues });
