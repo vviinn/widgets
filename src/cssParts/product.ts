@@ -43,6 +43,8 @@ export const customLabelPartsList = [
   "custom-label-2",
   "custom-label-3",
   "custom-label-4",
+  "custom-label-content",
+  "custom-label-image",
 ];
 
 export const pricePartsList = [

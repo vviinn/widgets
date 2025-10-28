@@ -116,10 +116,16 @@ type PriceProps = PriceElementProps & {
   showInContainer?: boolean;
 };
 
-export const renderCustomLabels = (labels: string[]) => {
+export const renderCustomLabels = (
+  labels: string[],
+  location: "content" | "image",
+) => {
   const renderLabel = (label: string, index: number) =>
     label ? (
-      <span part={`custom-label-${index}`} class="custom-label">
+      <span
+        part={`custom-label-${index} custom-label-${location}`}
+        class="custom-label"
+      >
         <slot name={`vviinn-custom-label-${index}`}>{label}</slot>
       </span>
     ) : null;

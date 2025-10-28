@@ -728,6 +728,7 @@ export class VviinnCarousel {
               isSetMode={this.isSetMode}
               locale={this.locale}
               favoriteShow={this.favoriteShow}
+              customLabels={getCustomLabels(this.sourceProduct)}
               responsive={true}
             />
           )}
