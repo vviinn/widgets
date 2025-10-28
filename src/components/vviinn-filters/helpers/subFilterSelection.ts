@@ -5,7 +5,11 @@ import {
 } from "../../../campaign/VPRCampaignService";
 import { FilterAction } from "vviinn-tracking-client-ts";
 import { Interval, ResponseIntervalFilterItem } from "../../../interfaces";
-import { extractFilterValue, valueToString, isIntervalMatch } from "./filterValueUtils";
+import {
+  extractFilterValue,
+  valueToString,
+  isIntervalMatch,
+} from "./filterValueUtils";
 
 const isFullRangeInterval = (
   selectedFilter: ResponseDynamicFilterItem,
