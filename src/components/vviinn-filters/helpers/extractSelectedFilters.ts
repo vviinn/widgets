@@ -1,8 +1,25 @@
 import {
   ResponseDynamicFilterItem,
   RequestDynamicFilterItem,
+  Interval,
 } from "../../../interfaces/interactions";
 import { valueToString } from "./filterValueUtils";
+
+const getSelectedValues = (
+  filter: ResponseDynamicFilterItem,
+): string[] | Interval[] => {
+  if (filter.type === "categorical" && "values" in filter) {
+    return filter.values
+      .filter((item) => !!item.selected && !!valueToString(item.value))
+      .map((item) => valueToString(item.value));
+  }
+
+  if (filter.type === "interval" && "selectedValues" in filter) {
+    return filter.selectedValues ?? [];
+  }
+
+  return [];
+};
 
 /**
   Extracts selected filter values from backend response filters and converts them to the request filter format.
@@ -14,22 +31,12 @@ export const extractSelectedFilters = (
   if (!dynamicFilters?.length) return [];
 
   return dynamicFilters.reduce((acc, filter) => {
-    if (filter.type === "categorical" && "values" in filter) {
-      const selectedValues = filter.values
-        .filter((item) => item.selected === true && item.value != null)
-        .map((item) => valueToString(item.value))
-        .filter((val): val is string => val !== null);
+    const selectedValues = getSelectedValues(filter);
 
-      if (selectedValues.length > 0) {
-        acc.push({ column: filter.column, values: selectedValues });
-      }
-    } else if (filter.type === "interval" && "selectedValues" in filter) {
-      const { selectedValues } = filter;
-      if (selectedValues?.length > 0) {
-        acc.push({ column: filter.column, values: selectedValues });
-      }
+    if (selectedValues?.length > 0) {
+      acc.push({ column: filter.column, values: selectedValues as any });
     }
 
     return acc;
-  }, [] as RequestDynamicFilterItem[]);
+  }, []);
 };

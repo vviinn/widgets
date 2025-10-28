@@ -7,8 +7,6 @@ import { FilterAction } from "vviinn-tracking-client-ts";
 import { Interval, ResponseIntervalFilterItem } from "../../../interfaces";
 import { extractFilterValue, valueToString } from "./filterValueUtils";
 
-type ValueRequest = string & { start?: number; end?: number };
-
 const isFullRangeInterval = (
   selectedFilter: ResponseDynamicFilterItem,
   interval: Interval,
@@ -45,14 +43,9 @@ export const subFilterSelection = (
     }
   }
 
-  const value =
-    selectedFilter.type === "categorical" ? valueToString(rawValue) : rawValue;
-
-  if (value === null) {
-    return { filters: [...filters], action: "deselect" as FilterAction };
-  }
-
-  const valueIndex = filters[index]?.values.findIndex((val) => val === value);
+  const valueIndex = filters[index]?.values.findIndex(
+    (val) => val === rawValue,
+  );
   const action: FilterAction =
     valueIndex == -1 || index == -1 ? "select" : "deselect";
 
@@ -61,8 +54,19 @@ export const subFilterSelection = (
       ? { column: selectedColumn, values: [] }
       : filters[index];
 
-  if (valueIndex > -1) pushObject.values.splice(valueIndex, 1);
-  else pushObject.values.push(value as ValueRequest);
+  if (valueIndex > -1) {
+    pushObject.values.splice(valueIndex, 1);
+  } else {
+    if (selectedFilter.type === "categorical") {
+      const stringValue = valueToString(rawValue);
+      if (stringValue === null) {
+        return { filters: [...filters], action: "deselect" as FilterAction };
+      }
+      (pushObject.values as string[]).push(stringValue);
+    } else {
+      (pushObject.values as Interval[]).push(rawValue as Interval);
+    }
+  }
 
   if (index === -1) {
     filters = [...filters, pushObject];

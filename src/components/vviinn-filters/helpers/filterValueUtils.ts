@@ -1,10 +1,8 @@
 import { DynamicFilterValue } from "../../../campaign/VPRCampaignService";
+import { Interval } from "../../../interfaces";
 
-export const extractFilterValue = (
-  filterValue: DynamicFilterValue,
-): unknown => {
-  return filterValue.interval ?? filterValue.value ?? filterValue;
-};
+export const extractFilterValue = (filterValue: DynamicFilterValue) =>
+  filterValue.interval ?? filterValue.value ?? filterValue;
 
 export const valueToString = (val: unknown): string | null => {
   if (val === null || val === undefined) return null;
@@ -15,24 +13,32 @@ export const valueToString = (val: unknown): string | null => {
   return String(val);
 };
 
+const isIntervalMatch = (a: unknown, b: unknown): boolean => {
+  if (
+    typeof a !== "object" ||
+    typeof b !== "object" ||
+    a === null ||
+    b === null
+  ) {
+    return false;
+  }
+
+  const intervalA = a as Interval;
+  const intervalB = b as Interval;
+
+  return intervalA.start === intervalB.start && intervalA.end === intervalB.end;
+};
+
 export const isValueMatch = (
   requestValue: unknown,
   filterValue: DynamicFilterValue,
 ): boolean => {
-  if (requestValue === filterValue) return true;
-
-  // Check interval match (for interval filters)
-  if (
+  const isDirectMatch = requestValue === filterValue;
+  const isIntervalFilterMatch =
     filterValue.interval !== undefined &&
-    requestValue === filterValue.interval
-  ) {
-    return true;
-  }
+    isIntervalMatch(requestValue, filterValue.interval);
+  const isComplexValueMatch =
+    filterValue.value !== undefined && requestValue === filterValue.value;
 
-  // Check value property match (for color filters and other complex objects)
-  if (filterValue.value !== undefined && requestValue === filterValue.value) {
-    return true;
-  }
-
-  return false;
+  return isDirectMatch || isIntervalFilterMatch || isComplexValueMatch;
 };
