@@ -740,7 +740,7 @@ vviinn-range-filter {
     max-width: unset;
   }
 
-  :host(.show-in-widget.preview-filters) vviinn-range-filter {
+  :host(.show-in-widget.primary-filters) vviinn-range-filter {
     max-width: calc(100% - 48px);
     transform: translateX(24px);
   }

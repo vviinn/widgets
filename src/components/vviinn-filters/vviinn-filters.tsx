@@ -278,7 +278,7 @@ export class VviinnFilters {
       <Host
         class={{
           "show-in-widget": this.showInWidget,
-          "preview-filters": true,
+          "primary-filters": true,
         }}
         onKeyDown={this.handleKeyDown}
         exportparts={filtersParts}

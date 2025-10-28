@@ -10,7 +10,7 @@ export const valueToString = (val: unknown): string | null => {
   if (val === null || val === undefined) return null;
   if (typeof val === "string" || typeof val === "number") return String(val);
   if (typeof val === "object" && val !== null && "value" in val) {
-    return String((val as { value: unknown }).value);
+    return valueToString((val as { value: unknown }).value);
   }
   return String(val);
 };

@@ -428,9 +428,15 @@ export const makeTextSearchRequest = async (
       state.textSearchId = sessionResponse.requestId;
       state.dynamicFilters =
         sessionResponse?.interactions?.dynamicFilters ?? [];
-      state.requestFilters = extractSelectedFilters(
+
+      const extractedFilters = extractSelectedFilters(
         sessionResponse?.interactions?.dynamicFilters ?? [],
       );
+
+      if (state.requestFilters.length === 0 && extractedFilters.length > 0) {
+        state.requestFilters = extractedFilters;
+      }
+
       state.redirect = sessionResponse?.interactions?.redirect ?? null;
       state.stream = sessionResponse?.stream ?? null;
       state.searchStatus = "success";
