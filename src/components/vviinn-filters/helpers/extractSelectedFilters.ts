@@ -9,9 +9,13 @@ const getSelectedValues = (
   filter: ResponseDynamicFilterItem,
 ): string[] | Interval[] => {
   if (filter.type === "categorical" && "values" in filter) {
-    return filter.values
-      .filter((item) => !!item.selected && !!valueToString(item.value))
-      .map((item) => valueToString(item.value));
+    return filter.values.reduce<string[]>((acc, item) => {
+      if (item.selected) {
+        const stringValue = valueToString(item.value);
+        if (stringValue) acc.push(stringValue);
+      }
+      return acc;
+    }, []);
   }
 
   if (filter.type === "interval" && "selectedValues" in filter) {
@@ -34,9 +38,9 @@ export const extractSelectedFilters = (
     const selectedValues = getSelectedValues(filter);
 
     if (selectedValues?.length > 0) {
-      acc.push({ column: filter.column, values: selectedValues as any });
+      acc.push({ column: filter.column, values: selectedValues });
     }
 
     return acc;
-  }, []);
+  }, [] as RequestDynamicFilterItem[]);
 };

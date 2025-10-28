@@ -5,7 +5,7 @@ import {
 } from "../../../campaign/VPRCampaignService";
 import { FilterAction } from "vviinn-tracking-client-ts";
 import { Interval, ResponseIntervalFilterItem } from "../../../interfaces";
-import { extractFilterValue, valueToString } from "./filterValueUtils";
+import { extractFilterValue, valueToString, isIntervalMatch } from "./filterValueUtils";
 
 const isFullRangeInterval = (
   selectedFilter: ResponseDynamicFilterItem,
@@ -43,8 +43,8 @@ export const subFilterSelection = (
     }
   }
 
-  const valueIndex = filters[index]?.values.findIndex(
-    (val) => val === rawValue,
+  const valueIndex = filters[index]?.values.findIndex((val) =>
+    typeof val === "string" ? val === rawValue : isIntervalMatch(val, rawValue),
   );
   const action: FilterAction =
     valueIndex == -1 || index == -1 ? "select" : "deselect";

@@ -15,4 +15,5 @@ export {
   extractFilterValue,
   valueToString,
   isValueMatch,
+  isIntervalMatch,
 } from "./filterValueUtils";

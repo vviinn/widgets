@@ -13,7 +13,7 @@ export const valueToString = (val: unknown): string | null => {
   return String(val);
 };
 
-const isIntervalMatch = (a: unknown, b: unknown): boolean => {
+export const isIntervalMatch = (a: unknown, b: unknown): boolean => {
   if (
     typeof a !== "object" ||
     typeof b !== "object" ||
