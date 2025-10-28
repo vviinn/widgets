@@ -731,7 +731,6 @@ export class VviinnVpsWidget {
             (this.mode === "upload" && this.showingInButton) ||
             (!this.isCameraEnabled && this.isOnboardingSlide())
           }
-          exportparts={modalParts}
         >
           <vviinn-slider position={this.slidePosition}>
             <vviinn-slide
@@ -814,25 +813,19 @@ export class VviinnVpsWidget {
             >
               {this.isResultSlide() && (
                 <div class="source-wrapper">
-                  {this.isTextSearch() ? (
-                    <Fragment>
-                      <vviinn-text-search
-                        token={this.token}
-                        showInWidget={true}
-                        apiPath={this.apiPath}
-                        locale={this.locale}
-                        uiSessionId={this.uiSessionId}
-                        basicEventData={this.getBasicEventData(true)}
-                        save-image-mode="never"
-                      />
-                      <vviinn-suggestions
-                        showInWidget={true}
-                        token={this.token}
-                        apiPath={this.apiPath}
-                        locale={this.locale}
-                      />
-                    </Fragment>
-                  ) : (
+                  {this.isTextSearch() && (
+                    <vviinn-text-search
+                      token={this.token}
+                      showInWidget={true}
+                      apiPath={this.apiPath}
+                      locale={this.locale}
+                      uiSessionId={this.uiSessionId}
+                      basicEventData={this.getBasicEventData(true)}
+                      save-image-mode="never"
+                    />
+                  )}
+
+                  {!this.isTextSearch() && (
                     <vviinn-cropper
                       basicEventData={this.getBasicEventData()}
                       showAspectRatioError={this.showAspectRatioError}
@@ -842,6 +835,20 @@ export class VviinnVpsWidget {
                     />
                   )}
 
+                  {this.isTextSearch() && (
+                    <vviinn-suggestions
+                      showInWidget={true}
+                      token={this.token}
+                      apiPath={this.apiPath}
+                      locale={this.locale}
+                    />
+                  )}
+
+                  <vviinn-selected-filters
+                    showInWidget={true}
+                    exportparts={filtersParts}
+                  />
+
                   {this.state.dynamicFilters?.length > 0 && (
                     <div
                       class={{
@@ -850,17 +857,13 @@ export class VviinnVpsWidget {
                       }}
                     >
                       <vviinn-filters
-                        class="preview-filters"
                         showInWidget={true}
                         showIntervalInputs={this.showIntervalInputs}
-                        exportparts={filtersParts}
                       />
 
                       <vviinn-extended-filters
-                        class="preview-extended-filters"
                         mode="preview"
                         showHeader={false}
-                        exportparts={extendedFiltersParts}
                         showInWidget={true}
                         showIntervalInputs={this.showIntervalInputs}
                       />
@@ -872,7 +875,6 @@ export class VviinnVpsWidget {
                             this.state.dynamicFilters.filter((f) => f.isPrimary)
                               .length > 0,
                         }}
-                        exportparts="extended-filters-button"
                         showInWidget={true}
                       />
                     </div>
@@ -881,35 +883,41 @@ export class VviinnVpsWidget {
               )}
 
               {this.isResultSlide() && (
-                <vviinn-results
-                  token={globalState.token}
-                  locale={globalState.locale}
-                  pricePrefix={globalState.pricePrefix}
-                  currency-sign={globalState.currencySign}
-                  apiPath={globalState.apiPath}
-                  campaignIdTextSearch={this.campaignIdTextSearch}
-                  campaignIdVisualSearch={this.campaignIdVisualSearch}
-                  uiSessionId={this.uiSessionId}
-                  widgetElementId={this.buttonElementId ?? this.widgetElementId}
-                  showInWidget={true}
-                  buttonElementId={this.buttonElementId}
-                  imageResolutionWidth={this.imageResolutionWidth}
-                  productDetailsNewTab={this.productDetailsNewTab}
-                  productDetailsRedirect={this.productDetailsRedirect}
-                  addToBasketShow={this.addToBasketShow}
-                  favoriteShow={this.favoriteShow}
-                  showAspectRatioError={this.showAspectRatioError}
-                  resetWidgetState={this.resetState}
-                  replaceSlotsContentInWidget={this.replaceSlotsContent.bind(
-                    this,
-                  )}
-                  replaceSlotsContentInButton={this.replaceSlotsContentInButton}
-                  addPriceContainer={this.addPriceContainer}
-                  oneClickDiscoveryMode={this.oneClickDiscoveryMode}
-                  oneClickDiscoveryCampaigns={this.oneClickDiscoveryCampaigns}
-                  parentSlots={[...this.parentSlots, ...this.slots]}
-                  scrollableModalBody={this.modalBody}
-                />
+                <Fragment>
+                  <vviinn-results
+                    token={globalState.token}
+                    locale={globalState.locale}
+                    pricePrefix={globalState.pricePrefix}
+                    currency-sign={globalState.currencySign}
+                    apiPath={globalState.apiPath}
+                    campaignIdTextSearch={this.campaignIdTextSearch}
+                    campaignIdVisualSearch={this.campaignIdVisualSearch}
+                    uiSessionId={this.uiSessionId}
+                    widgetElementId={
+                      this.buttonElementId ?? this.widgetElementId
+                    }
+                    showInWidget={true}
+                    buttonElementId={this.buttonElementId}
+                    imageResolutionWidth={this.imageResolutionWidth}
+                    productDetailsNewTab={this.productDetailsNewTab}
+                    productDetailsRedirect={this.productDetailsRedirect}
+                    addToBasketShow={this.addToBasketShow}
+                    favoriteShow={this.favoriteShow}
+                    showAspectRatioError={this.showAspectRatioError}
+                    resetWidgetState={this.resetState}
+                    replaceSlotsContentInWidget={this.replaceSlotsContent.bind(
+                      this,
+                    )}
+                    replaceSlotsContentInButton={
+                      this.replaceSlotsContentInButton
+                    }
+                    addPriceContainer={this.addPriceContainer}
+                    oneClickDiscoveryMode={this.oneClickDiscoveryMode}
+                    oneClickDiscoveryCampaigns={this.oneClickDiscoveryCampaigns}
+                    parentSlots={[...this.parentSlots, ...this.slots]}
+                    scrollableModalBody={this.modalBody}
+                  />
+                </Fragment>
               )}
             </vviinn-slide>
           </vviinn-slider>
