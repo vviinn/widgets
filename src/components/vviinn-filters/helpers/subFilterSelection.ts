@@ -5,8 +5,11 @@ import {
 } from "../../../campaign/VPRCampaignService";
 import { FilterAction } from "vviinn-tracking-client-ts";
 import { Interval, ResponseIntervalFilterItem } from "../../../interfaces";
-
-type ValueRequest = string & { start?: number; end?: number };
+import {
+  extractFilterValue,
+  valueToString,
+  isIntervalMatch,
+} from "./filterValueUtils";
 
 const isFullRangeInterval = (
   selectedFilter: ResponseDynamicFilterItem,
@@ -26,7 +29,7 @@ export const subFilterSelection = (
   filterValue: DynamicFilterValue,
 ) => {
   const selectedColumn = selectedFilter.column;
-  const value = filterValue.interval ?? filterValue.value ?? filterValue;
+  const rawValue = extractFilterValue(filterValue);
   const index = filters.findIndex(({ column }) => column === selectedColumn);
 
   if (selectedFilter.type === "interval" && filterValue.interval) {
@@ -44,7 +47,9 @@ export const subFilterSelection = (
     }
   }
 
-  const valueIndex = filters[index]?.values.findIndex((val) => val === value);
+  const valueIndex = filters[index]?.values.findIndex((val) =>
+    typeof val === "string" ? val === rawValue : isIntervalMatch(val, rawValue),
+  );
   const action: FilterAction =
     valueIndex == -1 || index == -1 ? "select" : "deselect";
 
@@ -53,8 +58,19 @@ export const subFilterSelection = (
       ? { column: selectedColumn, values: [] }
       : filters[index];
 
-  if (valueIndex > -1) pushObject.values.splice(valueIndex, 1);
-  else pushObject.values.push(value as ValueRequest);
+  if (valueIndex > -1) {
+    pushObject.values.splice(valueIndex, 1);
+  } else {
+    if (selectedFilter.type === "categorical") {
+      const stringValue = valueToString(rawValue);
+      if (stringValue === null) {
+        return { filters: [...filters], action: "deselect" as FilterAction };
+      }
+      (pushObject.values as string[]).push(stringValue);
+    } else {
+      (pushObject.values as Interval[]).push(rawValue as Interval);
+    }
+  }
 
   if (index === -1) {
     filters = [...filters, pushObject];

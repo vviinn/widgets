@@ -22,6 +22,7 @@ import {
   RenderFilterButton,
   isSubFilterActive,
   getSelectedInterval,
+  syncRequestFilters,
 } from "./helpers";
 import { isPriceFilter } from "../../filters";
 import { Histogram } from "../vviinn-range-filter/vviinn-range-filter";
@@ -34,6 +35,7 @@ import {
 import { triggerFilter } from "./helpers/triggerFilter";
 import { SearchStore, useSearchStore } from "../../store/search.store";
 import { addEventListenersWithSignal } from "../../dom";
+import { filtersParts } from "../../cssParts";
 import { slotChangeListener, SlotSkeleton } from "../customized-slots";
 
 /**
@@ -221,8 +223,14 @@ export class VviinnFilters {
   }
 
   connectedCallback() {
-    const { state } = useSearchStore(this.showInWidget);
+    const { state, onChange } = useSearchStore(this.showInWidget);
     this.state = state;
+
+    syncRequestFilters(
+      state,
+      onChange,
+      (filters) => (this.requestFilters = filters),
+    );
 
     this.eventAbortController = new AbortController();
     const { signal } = this.eventAbortController;
@@ -270,8 +278,10 @@ export class VviinnFilters {
       <Host
         class={{
           "show-in-widget": this.showInWidget,
+          "primary-filters": true,
         }}
         onKeyDown={this.handleKeyDown}
+        exportparts={filtersParts}
       >
         {SlotSkeleton("filters")}
         <div
