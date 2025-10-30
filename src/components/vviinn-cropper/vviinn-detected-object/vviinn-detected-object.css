@@ -36,6 +36,8 @@
   width: var(--size);
   left: calc(-1 * var(--size) / 2);
   top: calc(-1 * var(--size) / 2);
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 :host::before {
@@ -44,6 +46,7 @@
   z-index: 0;
   background: rgba(0, 0, 0, 0.16);
   backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   transition: transform 0.07s ease-in-out;
 }
 
