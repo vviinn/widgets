@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.198.0](https://github.com/vviinn/widgets/compare/v2.197.0...v2.198.0) (2025-10-30)
+
+
+### Features
+
+* New CSS parts: carousel-button-prev, carousel-button-next for styling carousel buttons individually. ([af85db0](https://github.com/vviinn/widgets/commit/af85db09b89bc399c316375226dd4ad415655fa3))
+* Render custom labels inside the card's image container and provide CSS parts to identify them: custom-label-image and custom-label-content. ([853590c](https://github.com/vviinn/widgets/commit/853590cd305229a43f813ecca4d7c0ff271c5ca3))
+
+
+### Bug Fixes
+
+* Blurred detected objects possibility in Safari browser. ([205327a](https://github.com/vviinn/widgets/commit/205327af2517ef4fa9494c52fa952dc963774863))
+
 ## [2.197.0](https://github.com/vviinn/widgets/compare/v2.196.0...v2.197.0) (2025-10-28)
 
 
