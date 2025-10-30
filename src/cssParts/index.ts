@@ -90,6 +90,8 @@ export const searchBarParts = makeExportPartsString([
 export const carouselParts = makeExportPartsString([
   "items-group",
   "carousel-button",
+  "carousel-button-prev",
+  "carousel-button-next",
   "recommendations-results",
 ]);
 

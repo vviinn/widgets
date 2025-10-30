@@ -46,7 +46,9 @@ type MoveDirection = "left" | "right";
 export type CarouselMode = "grid" | "continuity" | "set";
 
 /**
- * @part carousel-button
+ * @part carousel-button - Both carousel navigation buttons (generic part)
+ * @part carousel-button-prev - The previous/back navigation button
+ * @part carousel-button-next - The next/forward navigation button
  **/
 @Component({
   tag: "vviinn-carousel",
@@ -745,7 +747,7 @@ export class VviinnCarousel {
                       this.gridArrowsDynamic && this.isGridMode,
                   }}
                   onClick={() => this.handleCarouselButtonClick("left")}
-                  part="carousel-button"
+                  part="carousel-button carousel-button-prev"
                   disabled={this.isFirst()}
                   aria-label={i18next.t("buttons.previous")}
                 >
@@ -755,7 +757,7 @@ export class VviinnCarousel {
                 <button
                   class="next"
                   onClick={() => this.handleCarouselButtonClick("right")}
-                  part="carousel-button"
+                  part="carousel-button carousel-button-next"
                   disabled={this.isLast()}
                   aria-label={i18next.t("buttons.next")}
                 >

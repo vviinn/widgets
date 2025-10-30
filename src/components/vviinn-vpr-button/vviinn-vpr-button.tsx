@@ -50,7 +50,9 @@ import { addEventListenersWithSignal } from "../../dom";
  * @part price-regular - Block for a price if no sale price is presented.
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
  * @part price-prefix - Block rendered before each price element (for ex. "from").
- * @part carousel-button - Button for carousel navigation.
+ * @part carousel-button - Both carousel navigation buttons (generic part).
+ * @part carousel-button-prev - The previous/back carousel navigation button.
+ * @part carousel-button-next - The next/forward carousel navigation button.
  * @part recommendations-results - For internal usage only!
  * @part recommendations-title - Title of the recommendations grid.
  * @part recommendations-subtitle - Subtitle of the recommendations grid.
