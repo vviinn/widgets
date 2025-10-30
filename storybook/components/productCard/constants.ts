@@ -107,7 +107,7 @@ export const cardDataByType = {
     },
     style: `
 <style>
-    vviinn-product-card::part(custom-label-0) {
+    vviinn-product-card::part(custom-label-0 custom-label-content) {
         display: block;
     }
 </style>`,
@@ -169,9 +169,16 @@ export const cardDataByType = {
     order: 1;
   }
 
-   vviinn-product-card::part(custom-label-0) {
-    order: 2;
+   vviinn-product-card::part(custom-label-0 custom-label-content) {
     display: block;
+    order: 2;
+  }
+
+   vviinn-product-card::part(custom-label-1 custom-label-image) {
+    display: block;
+    position: absolute;
+    top: 10px;
+    left: 10px;
   }
 
    vviinn-product-card::part(price-outdated) {
