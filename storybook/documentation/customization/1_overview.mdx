@@ -1,0 +1,154 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import "../widgets/styles.css";
+import "./customization.css";
+
+<Meta title="Customization/Overview" />
+
+# Customization Overview
+
+Vviinn Widgets offer three powerful ways to customize appearance and content. This guide helps you choose the right approach for your needs.
+
+## Customization Methods
+
+### [CSS Variables](?path=/docs/customization-css-variables--docs)
+Apply theme-level styles using CSS custom properties. Best for global styling and brand colors.
+
+### [Target Styling](?path=/docs/customization-target-styling--docs)
+Style specific elements inside widgets with `::part()` selector. Best for precise styling control.
+
+### [Custom Content](?path=/docs/customization-custom-content--docs)
+Replace default text, icons, and content with your own HTML. Best for changing widget content.
+
+---
+
+## When to Use Each Method
+
+<table width="100%" className="comparison-table">
+  <thead>
+    <tr>
+      <th>What You Want to Do</th>
+      <th>CSS Variables</th>
+      <th>Target Styling</th>
+      <th>Custom Content</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Change brand colors (primary, hover)</td>
+      <td style={{fontSize: "1.5em"}}>✓</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Change font family globally</td>
+      <td style={{fontSize: "1.5em"}}>✓</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Style product card appearance (alignment, borders)</td>
+      <td style={{fontSize: "1.5em"}}>✓</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Style a specific button or element</td>
+      <td>—</td>
+      <td style={{fontSize: "1.5em"}}>✓</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Change element positioning or layout</td>
+      <td>—</td>
+      <td style={{fontSize: "1.5em"}}>✓</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Apply complex CSS (animations, transforms)</td>
+      <td>—</td>
+      <td style={{fontSize: "1.5em"}}>✓</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Replace button text or labels</td>
+      <td>—</td>
+      <td>—</td>
+      <td style={{fontSize: "1.5em"}}>✓</td>
+    </tr>
+    <tr>
+      <td>Add custom icons</td>
+      <td>—</td>
+      <td>—</td>
+      <td style={{fontSize: "1.5em"}}>✓</td>
+    </tr>
+    <tr>
+      <td>Inject custom HTML/markup</td>
+      <td>—</td>
+      <td>—</td>
+      <td style={{fontSize: "1.5em"}}>✓</td>
+    </tr>
+  </tbody>
+</table>
+
+---
+
+## Quick Start Examples
+
+### CSS Variables: Change Primary Color
+```css
+vviinn-vps-button {
+  --color-primary: #078688;
+  --color-primary-hover: #056b67;
+}
+```
+
+### Target Styling: Style Upload Button
+```css
+vviinn-vps-button::part(upload-photo_button) {
+  background: #000;
+  color: #fff;
+  border-radius: 8px;
+}
+```
+
+### Custom Content: Replace Button Text
+```html
+<vviinn-vpr-widget token="TOKEN">
+  <span slot="vviinn-basket-button-text">Add to Cart</span>
+</vviinn-vpr-widget>
+```
+
+---
+
+## Combining Methods
+
+You can use multiple customization methods together for maximum flexibility:
+
+```html
+<style>
+  /* CSS Variables for theme colors */
+  vviinn-vps-button {
+    --color-primary: #078688;
+  }
+
+  /* Target Styling for specific elements */
+  vviinn-vps-button::part(upload-photo_button) {
+    border-radius: 8px;
+  }
+</style>
+
+<!-- Custom Content for text -->
+<vviinn-vps-button token="TOKEN">
+  <span slot="vviinn-recommendations-title">You May Also Like</span>
+</vviinn-vps-button>
+```
+
+---
+
+## Next Steps
+
+1. **Start with CSS Variables** if you need basic theming
+2. **Use Target Styling** when you need precise control over specific elements
+3. **Use Custom Content** when you need to change text or add custom content
+
+For detailed examples and available options, visit the individual documentation pages linked above.
