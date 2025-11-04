@@ -30,6 +30,12 @@ import {
   ListCardContent,
 } from "./render-helpers";
 import {
+  HOVER_DELAY_MS,
+  shouldShowMultipleImages,
+  getCurrentImage,
+  createHoverTimerManager,
+} from "./helpers";
+import {
   CrossSellingClickEvent,
   CrossSellingClickEventData,
   ProductCardEventData,
@@ -207,7 +213,7 @@ export class VviinnProductCard {
   @State() basketButonPressed: boolean = false;
   @State() favoriteButonPressed: boolean = false;
   @State() imageLoaded: boolean = false;
-  @State() isHovering: boolean = false;
+  @State() showSecondImage: boolean = false;
 
   /** Event emitted once when the recommendation is rendered on the page */
   @Event({ bubbles: true })
@@ -243,6 +249,7 @@ export class VviinnProductCard {
   private visibilityTrackedElement?: HTMLImageElement | null;
   private intersectionObserver: IntersectionObserver;
   private linkEventAbortController?: AbortController;
+  private hoverTimerManager = createHoverTimerManager();
   private imageProps: ImageProps;
   private isContentCard: boolean = false;
   private isListCard: boolean = false;
@@ -258,21 +265,6 @@ export class VviinnProductCard {
 
   private showSkeleton = () =>
     this.isSetMode ? this.isTransitioning : this.loading;
-
-  private shouldShowMultipleImages = () =>
-    this.showMultipleImages && this.images.length >= 2;
-
-  private getCurrentImage = (): string | undefined => {
-    if (this.shouldShowMultipleImages() && this.isHovering) {
-      const firstImg = this.images[0];
-      const firstImgUrl = firstImg.thumbnail ?? firstImg.original;
-      // If first image in array matches main image, use second image for hover
-      const hoverIndex = firstImgUrl === this.image ? 1 : 0;
-      const img = this.images[hoverIndex];
-      return img.thumbnail ?? img.original;
-    }
-    return this.image;
-  };
 
   connectedCallback() {
     this.productData = this.getProductData();
@@ -359,8 +351,8 @@ export class VviinnProductCard {
     this.imageProps = this.getImageProps();
   }
 
-  @Watch("isHovering")
-  isHoveringWatcher() {
+  @Watch("showSecondImage")
+  showSecondImageWatcher() {
     this.imageProps = this.getImageProps();
   }
 
@@ -408,11 +400,17 @@ export class VviinnProductCard {
   }
 
   private handleImageMouseEnter = () => {
-    if (this.shouldShowMultipleImages()) this.isHovering = true;
+    shouldShowMultipleImages(this.showMultipleImages, this.images.length) &&
+      this.hoverTimerManager.set(() => {
+        this.showSecondImage = true;
+      }, HOVER_DELAY_MS);
   };
 
   private handleImageMouseLeave = () => {
-    if (this.shouldShowMultipleImages()) this.isHovering = false;
+    shouldShowMultipleImages(this.showMultipleImages, this.images.length) &&
+      this.hoverTimerManager.set(() => {
+        this.showSecondImage = false;
+      }, HOVER_DELAY_MS);
   };
 
   private productClickHandler(event: MouseEvent) {
@@ -460,13 +458,19 @@ export class VviinnProductCard {
   disconnectedCallback() {
     this.linkEventAbortController?.abort();
     this.cleanupVisibilityTracking();
+    this.hoverTimerManager.clear();
   }
 
   private getImageProps() {
     return {
       width: this.imageWidth,
       height: this.imageWidth * this.imageRatio,
-      src: this.getCurrentImage(),
+      src: getCurrentImage(
+        this.showSecondImage,
+        this.image,
+        this.images,
+        shouldShowMultipleImages(this.showMultipleImages, this.images.length),
+      ),
       imageResolutionWidth: this.isContentCard
         ? this.imageResolutionWidth * 2
         : this.imageResolutionWidth,
