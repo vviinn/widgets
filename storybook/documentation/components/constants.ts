@@ -201,65 +201,65 @@ export const filtersList = [
           frequency: 0.1,
           interval: {
             start: 50,
-            end: 200,
+            end: 375,
           },
         },
-        label: "[50-200)",
+        label: "[50-375)",
         active: true,
       },
       {
         value: {
           frequency: 0.15,
           interval: {
-            start: 200,
-            end: 500,
+            start: 375,
+            end: 700,
           },
         },
-        label: "[200-500)",
+        label: "[375-700)",
         active: true,
       },
       {
         value: {
           frequency: 0.2,
           interval: {
-            start: 500,
-            end: 1000,
+            start: 700,
+            end: 1025,
           },
         },
-        label: "[500-1000)",
+        label: "[700-1025)",
         active: true,
       },
       {
         value: {
           frequency: 0.25,
           interval: {
-            start: 1000,
-            end: 1500,
+            start: 1025,
+            end: 1350,
           },
         },
-        label: "[1000-1500)",
+        label: "[1025-1350)",
         active: true,
       },
       {
         value: {
           frequency: 0.3,
           interval: {
-            start: 1500,
-            end: 1750,
+            start: 1350,
+            end: 1675,
           },
         },
-        label: "[1500-1750)",
+        label: "[1350-1675)",
         active: true,
       },
       {
         value: {
           frequency: 0.2,
           interval: {
-            start: 1750,
+            start: 1675,
             end: 2000,
           },
         },
-        label: "[1750-2000)",
+        label: "[1675-2000)",
         active: true,
       },
     ],
