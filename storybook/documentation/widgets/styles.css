@@ -13,3 +13,17 @@ vviinn-vpr-widget#discovery-set-vviinn-vpr-widget::part(title) {
 .best-practices-list ol > li {
   margin-bottom: 1.5em; /* Adjust as needed */
 }
+
+/* Generic table styles for documentation */
+.docs-table tr td:nth-child(1) {
+  width: 25%;
+  font-weight: 600;
+}
+
+.docs-table tr td:nth-child(2) {
+  width: 45%;
+}
+
+.docs-table tr td:nth-child(3) {
+  width: 30%;
+}
