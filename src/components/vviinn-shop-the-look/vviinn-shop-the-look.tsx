@@ -100,6 +100,8 @@ export class VviinnShopTheLook {
   @Prop() showCropper: boolean = false;
   /** Enable upload mode to allow users to upload their own images */
   @Prop() uploadMode: boolean = false;
+  /** Show second image from images array in product cards */
+  @Prop() showMultipleImages: boolean = false;
   /** @internal */
   @Prop() apiPath?: string;
 
@@ -1164,6 +1166,7 @@ export class VviinnShopTheLook {
       onBackToGrid: this.resetDetailedView,
       onNavigateProduct: this.handleNavigateProduct,
       currencySign: this.currencySign,
+      showMultipleImages: this.showMultipleImages,
       modalContentRef: (el: HTMLElement) => {
         this.modalContentRef = el;
       },

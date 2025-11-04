@@ -220,6 +220,8 @@ export class VviinnResults {
   @Prop({ mutable: true }) uiSessionId?: string;
   /** Resolution width of an image in the product card */
   @Prop() imageResolutionWidth?: number = RESULTS_WIDGET_IMAGE_RESOLUTION_WIDTH;
+  /** Show second image from images array in product cards */
+  @Prop() showMultipleImages: boolean = false;
   /** Toggle for opening product link in new tab or not */
   @Prop() productDetailsNewTab?: boolean = false;
   /** Toggle for redirection to PDP on product's click */
@@ -862,7 +864,9 @@ export class VviinnResults {
         responsive={true}
         imageWidth={this.imageResolutionWidth}
         imageResolutionWidth={this.imageResolutionWidth}
-        image={p.image.thumbnail || p.image.original}
+        image={p.image?.thumbnail ?? p.image?.original}
+        images={p.images}
+        showMultipleImages={this.showMultipleImages}
         energyCertifications={p.energyCertifications}
         part="product-card"
         campaignTypeId={widgetData.campaignTypeId}

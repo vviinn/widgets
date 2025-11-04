@@ -4,6 +4,7 @@ export const ResultsTemplate = (args) => {
     apiPath,
     searchId,
     imageResolutionWidth,
+    showMultipleImages,
     currencySign,
     locale,
     productDetailsRedirect,
@@ -47,6 +48,7 @@ export const ResultsTemplate = (args) => {
     api-path="${apiPath}"
     search-id="${searchId}"
     image-resolution-width="${imageResolutionWidth}"
+    show-multiple-images="${showMultipleImages}"
     currency-sign="${currencySign}"
     locale="${locale}"
     price-prefix="${pricePrefix}"

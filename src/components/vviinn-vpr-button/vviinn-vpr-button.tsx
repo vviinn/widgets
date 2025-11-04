@@ -123,6 +123,8 @@ export class VviinnVprButton {
     DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH;
   /** The ratio of each recommended product image */
   @Prop() imageRatio: number = 1;
+  /** Show second image from images array in product cards */
+  @Prop() showMultipleImages: boolean = false;
   /** Items amount in set mode grid */
   @Prop() setItemsAmount?: number = 4;
   /** Optional for custom CSS. It will overwrite all other settings */
@@ -337,6 +339,7 @@ export class VviinnVprButton {
     sidebar.campaignType = this.campaignType;
     sidebar.color = this.color;
     sidebar.imageWidth = this.imageWidth;
+    sidebar.showMultipleImages = this.showMultipleImages;
     sidebar.buttonElementId = this.el.id;
     sidebar.noResultText = this.noResultText;
     sidebar.noResultShow = this.noResultShow;

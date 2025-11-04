@@ -167,6 +167,8 @@ export class VviinnVprWidget implements ComponentInterface {
     DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH;
   /** The ratio of each recommended product image */
   @Prop() imageRatio: number = 1;
+  /** Show second image from images array in product cards */
+  @Prop() showMultipleImages: boolean = false;
   /** Items amount in set mode grid */
   @Prop() setItemsAmount?: number = 4;
   /** Optional for custom CSS. It will overwrite all other settings */
@@ -666,7 +668,11 @@ export class VviinnVprWidget implements ComponentInterface {
         productType={recommendation.productType}
         entityType={recommendation.entityType}
         deeplink={recommendation.deeplink}
-        image={recommendation.image.thumbnail}
+        image={
+          recommendation.image?.thumbnail ?? recommendation.image?.original
+        }
+        images={recommendation.images}
+        showMultipleImages={this.showMultipleImages}
         imageResolutionWidth={this.imageResolutionWidth}
         brand={recommendation.brand}
         imageWidth={this.imageWidth}

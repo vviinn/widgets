@@ -52,6 +52,7 @@ import {
   BasePrice,
   EnergyCertification,
   EntityType,
+  ProductImage,
   Recommendation,
 } from "../../interfaces";
 import { resources } from "../../locale";
@@ -142,6 +143,9 @@ export class VviinnProductCard {
   @Prop() locale: string | undefined = undefined;
   @Prop() pricePrefix?: string;
   @Prop() image: string | undefined;
+  @Prop() images: ProductImage[] = [];
+  /** Show second image from images array */
+  @Prop() showMultipleImages: boolean = false;
   @Prop() imageRatio: number = 1;
   @Prop() imageWidth: number = PRODUCT_CARD_IMAGE_WIDTH;
   @Prop() price: number | undefined;
@@ -203,6 +207,7 @@ export class VviinnProductCard {
   @State() basketButonPressed: boolean = false;
   @State() favoriteButonPressed: boolean = false;
   @State() imageLoaded: boolean = false;
+  @State() isHovering: boolean = false;
 
   /** Event emitted once when the recommendation is rendered on the page */
   @Event({ bubbles: true })
@@ -254,10 +259,26 @@ export class VviinnProductCard {
   private showSkeleton = () =>
     this.isSetMode ? this.isTransitioning : this.loading;
 
+  private shouldShowMultipleImages = () =>
+    this.showMultipleImages && this.images.length >= 2;
+
+  private getCurrentImage = (): string | undefined => {
+    if (this.shouldShowMultipleImages() && this.isHovering) {
+      const firstImg = this.images[0];
+      const firstImgUrl = firstImg.thumbnail ?? firstImg.original;
+      // If first image in array matches main image, use second image for hover
+      const hoverIndex = firstImgUrl === this.image ? 1 : 0;
+      const img = this.images[hoverIndex];
+      return img.thumbnail ?? img.original;
+    }
+    return this.image;
+  };
+
   connectedCallback() {
     this.productData = this.getProductData();
     this.isContentCard = this.entityType === "content";
     this.isListCard = this.entityType === "list";
+
     this.imageProps = this.getImageProps();
 
     this.isStandalone &&
@@ -338,6 +359,11 @@ export class VviinnProductCard {
     this.imageProps = this.getImageProps();
   }
 
+  @Watch("isHovering")
+  isHoveringWatcher() {
+    this.imageProps = this.getImageProps();
+  }
+
   private parseEnergyCertificationsString() {
     if (this.energyCertificationsString === "") return;
 
@@ -380,6 +406,14 @@ export class VviinnProductCard {
     });
     this.favoriteButonPressed = !this.favoriteButonPressed;
   }
+
+  private handleImageMouseEnter = () => {
+    if (this.shouldShowMultipleImages()) this.isHovering = true;
+  };
+
+  private handleImageMouseLeave = () => {
+    if (this.shouldShowMultipleImages()) this.isHovering = false;
+  };
 
   private productClickHandler(event: MouseEvent) {
     event.preventDefault();
@@ -432,7 +466,7 @@ export class VviinnProductCard {
     return {
       width: this.imageWidth,
       height: this.imageWidth * this.imageRatio,
-      src: this.image,
+      src: this.getCurrentImage(),
       imageResolutionWidth: this.isContentCard
         ? this.imageResolutionWidth * 2
         : this.imageResolutionWidth,
@@ -686,7 +720,12 @@ export class VviinnProductCard {
           </button>
         </div>
 
-        <div class="image-container" part="image-container">
+        <div
+          class="image-container"
+          part="image-container"
+          onMouseEnter={this.handleImageMouseEnter}
+          onMouseLeave={this.handleImageMouseLeave}
+        >
           <Linked deeplink={this.deeplink} part="image-link">
             {this.renderImageWithLoadedState(
               this.imageProps,

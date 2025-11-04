@@ -60,4 +60,10 @@ export const argTypes = {
       type: "object",
     },
   },
+  images: {
+    description: "Array of image URLs (first 2 will be used for hover effect on desktop)",
+    control: {
+      type: "object",
+    },
+  },
 };

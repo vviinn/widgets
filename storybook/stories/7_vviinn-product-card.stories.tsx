@@ -22,6 +22,10 @@ export default {
 };
 
 const Template = (args) => {
+  const imagesAttr = args.images && args.images.length > 0
+    ? `images='${JSON.stringify(args.images)}'`
+    : '';
+
   return `
     <vviinn-product-card
       product-title="${args.productTitle}"
@@ -33,6 +37,8 @@ const Template = (args) => {
       base-sale-price='${JSON.stringify(args.baseSalePrice)}'
       price-prefix="${args.pricePrefix}"
       image="${args.image}"
+      ${imagesAttr}
+      show-multiple-images="${args.showMultipleImages}"
       image-width="${args.imageWidth}"
       responsive="${args.responsive}"
       image-ratio="${args.imageRatio}"
@@ -42,7 +48,6 @@ const Template = (args) => {
       locale="${args.locale}"
       currency="${args.currency}"
       deeplink="${args.deeplink}"
-      image-ratio="${args.imageRatio}"
       custom-labels="${args.customLabels}"
       product-card-content-align="${args.productCardContentAlign}"
       product-card-text-align="${args.productCardTextAlign}"
@@ -70,6 +75,11 @@ const initArgs = {
     "https://www.moebel-shop.de/rolf-benz-8770-couchtisch-ronald-schmitt",
   image:
     "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg",
+  images: [
+    "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg",
+    "https://www.moebel-shop.de/media/image/9d/cb/e7/0749295-002_600x600.jpg"
+  ],
+  showMultipleImages: false,
   responsive: false,
   imageWidth: 300,
   imageRatio: 1,

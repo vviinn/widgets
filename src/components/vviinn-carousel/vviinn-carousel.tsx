@@ -91,6 +91,7 @@ export class VviinnCarousel {
   @Prop() replaceSlotsContent: () => void;
   @Prop() setModeDiscountsArray: number[];
   @Prop() imageRatio: number = 1;
+  @Prop() showMultipleImages: boolean = false;
   @Prop() addPriceContainer?: boolean = false;
   @Prop() favoriteShow: boolean;
   @Prop() setItemsAmount?: number = 4;
@@ -571,7 +572,9 @@ export class VviinnCarousel {
         productType={recommendation.productType}
         entityType={recommendation.entityType}
         deeplink={recommendation.deeplink}
-        image={recommendation.image.thumbnail || recommendation.image.original}
+        image={recommendation.image?.thumbnail ?? recommendation.image?.original}
+        images={recommendation.images}
+        showMultipleImages={this.showMultipleImages}
         brand={recommendation.brand}
         imageWidth={this.imageWidth}
         imageRatio={this.imageRatio}
@@ -712,9 +715,11 @@ export class VviinnCarousel {
               class="set-mode product-card--source"
               productTitle={this.sourceProduct.title}
               image={
-                this.sourceProduct.image.thumbnail ||
-                this.sourceProduct.image.original
+                this.sourceProduct.image?.thumbnail ??
+                this.sourceProduct.image?.original
               }
+              images={this.sourceProduct.images}
+              showMultipleImages={this.showMultipleImages}
               entityType={this.sourceProduct.entityType}
               price={this.sourceProduct.price.actual}
               salePrice={this.sourceProduct.price.sale}

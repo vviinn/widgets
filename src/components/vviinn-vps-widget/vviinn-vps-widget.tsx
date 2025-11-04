@@ -167,6 +167,8 @@ export class VviinnVpsWidget {
   @Prop() productDetailsRedirect: boolean = true;
   /** Resolution width of an image in the product card */
   @Prop() imageResolutionWidth: number = SEARCH_WIDGET_IMAGE_RESOLUTION_WIDTH;
+  /** Show second image from images array in product cards */
+  @Prop() showMultipleImages: boolean = false;
   /** Example image source */
   @Prop() exampleImageSource: string = DEFAULT_EXAMPLE_IMAGE;
   /** Show the text search */
@@ -899,6 +901,7 @@ export class VviinnVpsWidget {
                     showInWidget={true}
                     buttonElementId={this.buttonElementId}
                     imageResolutionWidth={this.imageResolutionWidth}
+                    showMultipleImages={this.showMultipleImages}
                     productDetailsNewTab={this.productDetailsNewTab}
                     productDetailsRedirect={this.productDetailsRedirect}
                     addToBasketShow={this.addToBasketShow}

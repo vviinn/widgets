@@ -54,6 +54,11 @@
 .image-container {
   position: relative;
   width: 100%;
+  cursor: pointer;
+}
+
+.image-container vviinn-image {
+  transition: opacity var(--product-card-transition-duration, 0.3s) ease-in-out;
 }
 
 :host(.set-mode) vviinn-image::part(image),

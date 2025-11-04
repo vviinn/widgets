@@ -28,6 +28,7 @@ const Template = (args) => `
       widget-style="${args.widgetStyle}"
       show-cropper="${args.showCropper}"
       upload-mode="${args.uploadMode}"
+      show-multiple-images="${args.showMultipleImages}"
     ></vviinn-shop-the-look>
 `;
 
@@ -45,6 +46,7 @@ const initArgs = {
   widgetStyle: "rounded",
   showCropper: false,
   uploadMode: false,
+  showMultipleImages: false,
 };
 
 Default.args = argsFromParams(initArgs);
