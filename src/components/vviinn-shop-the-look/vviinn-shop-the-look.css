@@ -1,6 +1,7 @@
 @import "../../variables.css";
 @import "../../styles/cropper-shared.css";
 @import "../../styles/utilities.css";
+@import "../../styles/swiper-pagination.css";
 
 :host {
   --shop-the-look-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
@@ -115,32 +116,6 @@ swiper-container::part(pagination) {
   align-items: center;
   gap: var(--spacing-100);
   padding: var(--spacing-100) 0;
-}
-
-swiper-container::part(bullet) {
-  width: 8px;
-  height: 8px;
-  border-radius: var(--border-radius-full);
-  background: rgba(22, 22, 22, 0.25);
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  margin: 0;
-  opacity: 1;
-  cursor: pointer;
-  border: none;
-  outline: none;
-  transform: scale(1);
-}
-
-swiper-container::part(bullet):hover {
-  background: rgba(22, 22, 22, 0.5);
-  transform: scale(1.2);
-}
-
-swiper-container::part(bullet-active) {
-  width: 24px;
-  height: 8px;
-  border-radius: var(--spacing-50);
-  background: var(--color-icon-helper);
   transform: scale(1);
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }

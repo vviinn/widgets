@@ -307,43 +307,47 @@ export const ImageSwiper: FunctionalComponent<ImageSwiperProps> = (props) => {
   };
 
   return (
-    <swiper-container
-      ref={swiperRef}
-      class="product-card-swiper"
-      part="product-card-swiper"
-    >
-      {images.map((img, index) => {
-        const imgSrc = img.thumbnail ?? img.original;
-        return (
-          <swiper-slide key={imgSrc}>
-            <vviinn-image
-              src={imgSrc}
-              width={imageWidth}
-              height={imageWidth * imageRatio}
-              aspectRatio={imageRatio}
-              alt={productTitle}
-              imageTitle={productTitle}
-              responsive={responsive}
-              imageResolutionWidth={imageResolutionWidth}
-              onVviinnImageLoad={index === 0 ? onImageLoad : undefined}
-              showSkeleton={showSkeleton}
-              isSetMode={isSetMode}
-              style={{
-                "--image-border": "var(--product-card-image-border, none)",
-                "--image-bg-color":
-                  "var(--product-card-image-bg-color, var(--surface-bg-color-01))",
-                "--image-transition-duration":
-                  "var(--product-card-transition-duration, 0.5s)",
-              }}
-            >
-              <slot
-                name="vviinn-image-placeholder-icon"
-                slot="placeholder-icon"
-              ></slot>
-            </vviinn-image>
-          </swiper-slide>
-        );
-      })}
-    </swiper-container>
+    <div class="product-card-swiper-wrapper">
+      <swiper-container
+        ref={swiperRef}
+        class="product-card-swiper"
+        part="product-card-swiper"
+        pagination={images.length > 1 ? "true" : undefined}
+        pagination-clickable={images.length > 1 ? "true" : undefined}
+      >
+        {images.map((img, index) => {
+          const imgSrc = img.thumbnail ?? img.original;
+          return (
+            <swiper-slide key={imgSrc}>
+              <vviinn-image
+                src={imgSrc}
+                width={imageWidth}
+                height={imageWidth * imageRatio}
+                aspectRatio={imageRatio}
+                alt={productTitle}
+                imageTitle={productTitle}
+                responsive={responsive}
+                imageResolutionWidth={imageResolutionWidth}
+                onVviinnImageLoad={index === 0 ? onImageLoad : undefined}
+                showSkeleton={showSkeleton}
+                isSetMode={isSetMode}
+                style={{
+                  "--image-border": "var(--product-card-image-border, none)",
+                  "--image-bg-color":
+                    "var(--product-card-image-bg-color, var(--surface-bg-color-01))",
+                  "--image-transition-duration":
+                    "var(--product-card-transition-duration, 0.5s)",
+                }}
+              >
+                <slot
+                  name="vviinn-image-placeholder-icon"
+                  slot="placeholder-icon"
+                ></slot>
+              </vviinn-image>
+            </swiper-slide>
+          );
+        })}
+      </swiper-container>
+    </div>
   );
 };

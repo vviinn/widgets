@@ -1,4 +1,5 @@
 @import "../../variables.css";
+@import "../../styles/swiper-pagination.css";
 
 :host {
   /**
@@ -487,4 +488,13 @@ vviinn-energy-label {
 
 .hidden {
   display: none !important;
+}
+
+.product-card-swiper::part(pagination) {
+  position: static;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-100);
+  padding: var(--spacing-100) 0;
 }
