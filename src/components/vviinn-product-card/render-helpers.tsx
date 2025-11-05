@@ -311,9 +311,9 @@ export const ImageSwiper: FunctionalComponent<ImageSwiperProps> = (props) => {
       <swiper-container
         ref={swiperRef}
         class="product-card-swiper"
-        part="product-card-swiper"
         pagination={images.length > 1 ? "true" : undefined}
         pagination-clickable={images.length > 1 ? "true" : undefined}
+        exportparts="pagination:product-images-pagination, bullet:product-images-pagination-bullet, bullet-active:product-images-pagination-bullet-active"
       >
         {images.map((img, index) => {
           const imgSrc = img.thumbnail ?? img.original;

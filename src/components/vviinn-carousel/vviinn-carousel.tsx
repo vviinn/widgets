@@ -575,6 +575,7 @@ export class VviinnCarousel {
         image={recommendation.image?.thumbnail ?? recommendation.image?.original}
         images={recommendation.images}
         showMultipleImages={this.showMultipleImages}
+        disableMobileSwiper={true}
         brand={recommendation.brand}
         imageWidth={this.imageWidth}
         imageRatio={this.imageRatio}
@@ -720,6 +721,7 @@ export class VviinnCarousel {
               }
               images={this.sourceProduct.images}
               showMultipleImages={this.showMultipleImages}
+              disableMobileSwiper={true}
               entityType={this.sourceProduct.entityType}
               price={this.sourceProduct.price.actual}
               salePrice={this.sourceProduct.price.sale}

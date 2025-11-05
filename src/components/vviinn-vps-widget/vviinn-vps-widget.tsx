@@ -133,6 +133,9 @@ const CAMERA_START_DELAY = 500;
  * @part energy-label-icon - Icon with an energy class.
  * @part energy-label-product-type - Product type.
  * @part energy-label-data-sheet-link - Data sheet link.
+ * @part product-images-pagination - Container for product images pagination dots (mobile only).
+ * @part product-images-pagination-bullet - Individual pagination dot.
+ * @part product-images-pagination-bullet-active - Active pagination dot.
  */
 
 @Component({

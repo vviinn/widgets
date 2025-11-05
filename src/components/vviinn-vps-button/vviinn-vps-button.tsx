@@ -93,6 +93,9 @@ import { globalState, updateGlobalState } from "../../store/store";
  * @part energy-label-icon - Icon with an energy class.
  * @part energy-label-product-type - Product type.
  * @part energy-label-data-sheet-link - Data sheet link.
+ * @part product-images-pagination - Container for product images pagination dots (mobile only).
+ * @part product-images-pagination-bullet - Individual pagination dot.
+ * @part product-images-pagination-bullet-active - Active pagination dot.
  * @part suggestions-container - The main suggestions container element.
  * @part suggestions-header - The header section containing icon and title.
  * @part suggestions-icon - The sparkle icon wrapper.

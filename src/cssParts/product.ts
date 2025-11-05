@@ -28,6 +28,9 @@ export const productCardGeneralPartsList = [
   "product-card-actions-top",
   "discount-label",
   "discount-percentage",
+  "product-images-pagination",
+  "product-images-pagination-bullet",
+  "product-images-pagination-bullet-active",
 ];
 
 export const energyLabelPartsList = [

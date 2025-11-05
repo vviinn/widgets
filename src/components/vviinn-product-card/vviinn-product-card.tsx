@@ -104,6 +104,9 @@ import { addEventListenersWithSignal } from "../../dom";
  * @part update-button-item - Update button in Product Card (Set mode).
  * @part discount-label - Discount label in Product Card (Set mode).
  * @part discount-percentage - Discount percentage inside the Add to Basket button (Set mode).
+ * @part product-images-pagination - Container for product images pagination dots (mobile only).
+ * @part product-images-pagination-bullet - Individual pagination dot.
+ * @part product-images-pagination-bullet-active - Active pagination dot.
  * @part energy-label-container - Energy label container.
  * @part energy-label-icon - Icon with an energy class.
  * @part energy-label-product-type - Product type.
@@ -211,6 +214,8 @@ export class VviinnProductCard {
     PRODUCT_CARD_IMAGE_RESOLUTION_WIDTH;
   /** @internal */
   @Prop({ mutable: true }) loading: boolean = false;
+  /** @internal */
+  @Prop() disableMobileSwiper: boolean = false;
 
   @State() isTransitioning: boolean = false;
   @State() basketButonPressed: boolean = false;
@@ -735,7 +740,7 @@ export class VviinnProductCard {
         >
           <Linked deeplink={this.deeplink} part="image-link">
             {(() => {
-              if (this.showMultipleImages && isMobile()) {
+              if (this.showMultipleImages && !this.disableMobileSwiper && isMobile()) {
                 const swiperImages = getImagesForSwiper(
                   this.image,
                   this.images,
