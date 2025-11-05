@@ -100,7 +100,7 @@ export class VviinnShopTheLook {
   @Prop() showCropper: boolean = false;
   /** Enable upload mode to allow users to upload their own images */
   @Prop() uploadMode: boolean = false;
-  /** Show second image from images array in product cards */
+  /** Show multiple images: swiper on mobile, hover on desktop in product cards */
   @Prop() showMultipleImages: boolean = false;
   /** @internal */
   @Prop() apiPath?: string;

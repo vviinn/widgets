@@ -28,13 +28,16 @@ import {
   renderCustomLabels,
   ContentCardContent,
   ListCardContent,
+  ImageSwiper,
 } from "./render-helpers";
 import {
   HOVER_DELAY_MS,
   shouldShowMultipleImages,
   getCurrentImage,
   createHoverTimerManager,
+  getImagesForSwiper,
 } from "./helpers";
+import { isMobile } from "../../helpers/device/checkDeviceType";
 import {
   CrossSellingClickEvent,
   CrossSellingClickEventData,
@@ -150,7 +153,7 @@ export class VviinnProductCard {
   @Prop() pricePrefix?: string;
   @Prop() image: string | undefined;
   @Prop() images: ProductImage[] = [];
-  /** Show second image from images array */
+  /** Show multiple images: swiper on mobile, hover on desktop */
   @Prop() showMultipleImages: boolean = false;
   @Prop() imageRatio: number = 1;
   @Prop() imageWidth: number = PRODUCT_CARD_IMAGE_WIDTH;
@@ -731,11 +734,41 @@ export class VviinnProductCard {
           onMouseLeave={this.handleImageMouseLeave}
         >
           <Linked deeplink={this.deeplink} part="image-link">
-            {this.renderImageWithLoadedState(
-              this.imageProps,
-              this.responsive,
-              this.entityType,
-            )}
+            {(() => {
+              if (this.showMultipleImages && isMobile()) {
+                const swiperImages = getImagesForSwiper(
+                  this.image,
+                  this.images,
+                );
+                if (swiperImages.length > 1) {
+                  return (
+                    <ImageSwiper
+                      images={swiperImages}
+                      productTitle={this.productTitle}
+                      imageWidth={this.imageWidth}
+                      imageRatio={this.imageRatio}
+                      imageResolutionWidth={
+                        this.isContentCard
+                          ? this.imageResolutionWidth * 2
+                          : this.imageResolutionWidth
+                      }
+                      onImageLoad={() => {
+                        this.imageLoaded = true;
+                        this.loading = false;
+                      }}
+                      responsive={this.responsive}
+                      showSkeleton={this.showSkeleton()}
+                      isSetMode={this.isSetMode}
+                    />
+                  );
+                }
+              }
+              return this.renderImageWithLoadedState(
+                this.imageProps,
+                this.responsive,
+                this.entityType,
+              );
+            })()}
           </Linked>
 
           {this.isSourceProduct && <PlusIcon class="plus-icon" />}

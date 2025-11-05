@@ -220,7 +220,7 @@ export class VviinnResults {
   @Prop({ mutable: true }) uiSessionId?: string;
   /** Resolution width of an image in the product card */
   @Prop() imageResolutionWidth?: number = RESULTS_WIDGET_IMAGE_RESOLUTION_WIDTH;
-  /** Show second image from images array in product cards */
+  /** Show multiple images: swiper on mobile, hover on desktop in product cards */
   @Prop() showMultipleImages: boolean = false;
   /** Toggle for opening product link in new tab or not */
   @Prop() productDetailsNewTab?: boolean = false;
