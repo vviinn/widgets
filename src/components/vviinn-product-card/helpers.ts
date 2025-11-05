@@ -29,10 +29,11 @@ export const getCurrentImage = (
   shouldShow: boolean,
 ): string | undefined => {
   if (shouldShow && showSecondImage && images.length > 0) {
-    // If first image matches main image, use second image for hover
-    const hoverIndex = isFirstImageMatchingMain(mainImage, images) ? 1 : 0;
+    // If first image matches main image and there is a second image, use second image for hover
+    const useSecondImage = isFirstImageMatchingMain(mainImage, images) && images.length > 1;
+    const hoverIndex = useSecondImage ? 1 : 0;
     const img = images[hoverIndex];
-    return img.thumbnail ?? img.original;
+    return img?.thumbnail ?? img?.original;
   }
   return mainImage;
 };

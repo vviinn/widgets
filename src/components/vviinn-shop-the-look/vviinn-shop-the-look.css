@@ -116,8 +116,6 @@ swiper-container::part(pagination) {
   align-items: center;
   gap: var(--spacing-100);
   padding: var(--spacing-100) 0;
-  transform: scale(1);
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 swiper-container::part(bullet-active):hover {
