@@ -10,34 +10,34 @@ import { clickHandlers } from "../../components"
 
 # CSS Variables
 
-Apply CSS style generally to [CSS Custom Properties (CSS Variables)](https://developer.mozilla.org/en-US/docs/Web/CSS/--*) for all or specific Vviinn widgets.
+**Theme-level customization** using [CSS Custom Properties (CSS Variables)](https://developer.mozilla.org/en-US/docs/Web/CSS/--*) for all or specific Vviinn widgets.
 
-## CSS Custom Properties (CSS Variables)
+## Available CSS Variables
 
 ### General
 
-* \--font-family *used for customizing the font family*
+* **`--font-family`** *used for customizing the font family*
 
 ### Search Modal
 
-* \--color-primary *used on the main action button, slider bullets, selected detected object or filter, and some other parts*
-* \--color-primary-hover *used on the main action button when hovering*
-* \--color-icons *used in svg icons fill*
+* **`--color-primary`** *used on the main action button, slider bullets, selected detected object or filter, and some other parts*
+* **`--color-primary-hover`** *used on the main action button when hovering*
+* **`--color-icons`** *used in svg icons fill*
 
 ### Product Card
 
-* \--product-card-content-align *used on the product card content alignment*
-* \--product-card-text-align *used on the product card text alignment*
-* \--product-card-image-border *used on the product card image border*
-* \--product-card-image-bg-color *used on the product card background*
-* \--basket-button-bg-color-pressed *used on the pressed basket button background*
+* **`--product-card-content-align`** *used on the product card content alignment*
+* **`--product-card-text-align`** *used on the product card text alignment*
+* **`--product-card-image-border`** *used on the product card image border*
+* **`--product-card-image-bg-color`** *used on the product card background*
+* **`--basket-button-bg-color-pressed`** *used on the pressed basket button background*
 
-Note: all widgets that use product cards (like `vviinn-vps-button`, and `vviinn-results`), could be customized with these variables.
+**Note:** All widgets that use product cards (like `vviinn-vps-button`, and `vviinn-results`) can be customized with these variables.
 
 
 ## Applying CSS Variables to Widgets
 
-Apply the CSS variables to all `Vviinn Widgets` of the pages by using the `html` selector as shown in the following example:
+Apply the CSS variables to **all Vviinn Widgets** on the page by using the `html` selector:
 ```css
 html {
   ...
@@ -46,7 +46,7 @@ html {
 }
 ```
 
-If you want to apply the variables to a specific widget, you can use the widget name as a selector as shown in the following example:
+To apply variables to **a specific widget**, use the widget name as a selector:
 ```css
 vviinn-vps-button {
   ...

@@ -17,9 +17,9 @@ import "../widgets/styles.css";
 
 # Styling Specific Elements
 
-Need to style just the upload button? Or change how a title looks? CSS Parts give you precise control over individual widget elements.
+Need to style just the upload button? Or change how a title looks? **CSS Parts give you precise control** over individual widget elements.
 
-Use the `::part()` selector to target specific parts that regular CSS can't reach. Learn more about [Shadow Parts](https://developer.mozilla.org/en-US/docs/Web/CSS/::part). 
+Use the **`::part()` selector** to target specific parts that regular CSS can't reach. Learn more about [Shadow Parts](https://developer.mozilla.org/en-US/docs/Web/CSS/::part). 
 
 ## Finding Available Parts
 
@@ -28,7 +28,7 @@ Each widget exposes specific elements you can style. Find available parts in two
 1. **Playground section** - View the complete list at the bottom of the Controls tab (right sidebar). For example, [check Discovery Slider parts](?path=/story/playground-discovery--default).
 2. **Browser DevTools** - Inspect the widget element and look for `part` attributes in the shadow DOM.
 
-**Tip:** You can combine multiple parts in a selector to target specific elements more precisely:
+**Tip:** You can **combine multiple parts** in a selector to target specific elements more precisely:
 
 ```css
 /* Target an element that has both parts */
@@ -100,4 +100,4 @@ vviinn-vps-button::part(upload-photo_button) {
 ></vviinn-vps-button>`}}/>
 
 <Card cardData={cardCredentials("customizedLabelCard")}
-      descriptionText="Custom labels are hidden by default, so we should rewrite the display property to show them. The code example also demonstrates how to change the order of the elements. In this case, we should set an 'order' property for each displayed part of the Product Card." />
+      descriptionText="Custom labels are hidden by default, so it is needed to rewrite the display property to show them. The code example also demonstrates how to change the order of the elements. In this case, set an 'order' property for each displayed part of the Product Card." />
