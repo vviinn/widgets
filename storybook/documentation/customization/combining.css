@@ -1,0 +1,14 @@
+#vviinn-combining-methods {
+  --color-primary: #078688;
+  --color-primary-hover: #056b67;
+}
+
+#vviinn-combining-methods::part(upload-photo_button) {
+  min-height: 48px;
+  padding: 12px 24px;
+  font-size: 16px;
+}
+
+#vviinn-combining-methods::part(text-search-container) {
+  border: 2px solid #078688;
+}

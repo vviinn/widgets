@@ -20,7 +20,7 @@ const initArgs = {
   filterColumn: "product_type",
   filterValue,
   apiPath: process.env.STORYBOOK_API_PATH,
-  resultsCount: 12,
+  resultsCount: 9,
   imageResolutionWidth: 500,
   currencySign: "€",
   pricePrefix: "",

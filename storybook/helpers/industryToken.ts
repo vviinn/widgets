@@ -7,7 +7,7 @@ const data = {
       "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjgzLCJqdGkiOiI3ZTg2Y2I1YS00ZTFjLTRhYjctYjU2My1lN2FjMTYzZTYyZDIiLCJzY29wZXMiOlsidnByIiwidnBzIiwidnBjIl19.skAkdwLTQ0sfeqfMCHWRN3QmoNGjb6YEUr3Z5mt9wvXyl447EXTx7nYRIpCVSF6T65bo5BEbDsCyjCII5jpfNWVgmHzNWfm9ZZ1_4vPdl7QsdMfQ7RZ6zEdVwCGVkQr34OLmsrHrSwnVv22Lkf74X_0uEkh1AUZcyTC8lGzdV0rYaipBIg47yKx1MpK3QegaXwCNshuPPDbl9s_Y-tiGkBI2761fElDaEIXUkeWLvkwL3Y2pUO3CpfzDYdS6coS0blBq_yCfuw_u2bkJbakg2JOiGkFnUBA7bZcDaLhx7Yl7ofsVeObaRic77wJR9cIU4RVec26kPTXw2Wxi4sjfmg",
     productIdSimilarProducts: "590013-6",
     productIdCrossSelling: "598125",
-    textSearchQuery: "Chair",
+    textSearchQuery: "Grey office chair with armrests",
     filterValue: "Möbel > Schränke & Regale",
     description: "company: 'vviinn', site: 'widgets.vviinn.com'",
     shopTheLookImageUrls: [
@@ -22,7 +22,7 @@ const data = {
       "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOjIwNywianRpIjoiMmU0OTY3OTgtYzk3NC00ODQ3LTkyYWItOTBkMTEyZGY5MTY2Iiwic2NvcGVzIjpbInZwciIsInZwcyIsInZwYyJdfQ.bH8WQkR3jBuDZ92F3WObgcKplh14ODZeiBCf5JDOJfucU75u4XaZOQrmsOaw1ouZbO9cW40sKw9ZICaP4Soi00AHrWPBGjuzZ0Yx17vwGFUtHgK5Zi9DAhd3R3PcRnbo7UIvUtANTGcExd5TQnrA07DtV99KThoQEYB2I8R8HXv46j-Abo2kHovd6fGwYC6FYT1QpXEsVa8QNZtcrB0yU1rK6da8aR5Nh3zYECIUL0ysdhRmOQxR_3zBUVrXJYB15vvOH4TjAG6jSMcvaLwzmmTzH9_A9kVLsP27cFK5YYoAx7_w0eBMhQv3yEaHrVXuMXQe2gFjvCat441_DvZWyg",
     productIdSimilarProducts: "4078868-1",
     productIdCrossSelling: "4017822-1",
-    textSearchQuery: "taschen",
+    textSearchQuery: "Pink leather bag with gold hardware",
     filterValue: "Beauty > Düfte",
     description: "company: 'Vviinn Demo Company', site: 'Fashion Women 64K'",
     shopTheLookImageUrls: [
