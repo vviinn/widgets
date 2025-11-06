@@ -33,20 +33,3 @@
 .docs-table tr th:nth-child(3) {
   width: 30%;
 }
-
-/* Comparison table - for customization overview (4 columns with equal method columns) */
-.comparison-table tr td:nth-child(1),
-.comparison-table tr th:nth-child(1) {
-  width: 40%;
-  font-weight: 600;
-}
-
-.comparison-table tr td:nth-child(2),
-.comparison-table tr th:nth-child(2),
-.comparison-table tr td:nth-child(3),
-.comparison-table tr th:nth-child(3),
-.comparison-table tr td:nth-child(4),
-.comparison-table tr th:nth-child(4) {
-  width: 20%;
-  text-align: center;
-}
