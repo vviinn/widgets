@@ -40,6 +40,7 @@ import { isCropBoxChangeMinimal } from "./helpers/isCropBoxDataSimilar";
 import { getCropBoxData } from "./helpers/cropperUtils";
 import { cleanLocalStorage, getLocalStorageItems } from "../../localStorage";
 import { addEventListenersWithSignal } from "../../dom";
+import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
 
 @Component({
   tag: "vviinn-cropper",
@@ -52,6 +53,8 @@ export class VviinnCropper {
   /** Save to Local Storage mode for uploaded image */
   @Prop() saveImageMode?: "once" | "always" | "never" = "once";
   @Prop({ mutable: true }) width: number = 288;
+  /** Optional for custom CSS. It will overwrite all other settings */
+  @Prop() cssUrl: string | null = null;
 
   /** @internal */
   @Prop() apiPath?: string;
@@ -293,6 +296,8 @@ export class VviinnCropper {
           active: !!this.state.image,
         }}
       >
+        {renderExternalCSS(this.cssUrl)}
+
         <div class="container">
           {this.state.image && (
             <div

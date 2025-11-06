@@ -66,6 +66,7 @@ import {
   PRODUCT_CARD_IMAGE_WIDTH,
 } from "../../widget/constants";
 import { addEventListenersWithSignal } from "../../dom";
+import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
 
 /**
  * @part image-container - Product Card's image container.
@@ -160,6 +161,8 @@ export class VviinnProductCard {
   @Prop() addPriceContainer?: boolean = false;
   @Prop({ mutable: true }) energyCertifications?: EnergyCertification[];
   @Prop() deeplink: string | undefined;
+  /** Optional for custom CSS. It will overwrite all other settings */
+  @Prop() cssUrl: string | null = null;
 
   /** @internal */
   @Prop() productId: string;
@@ -515,6 +518,7 @@ export class VviinnProductCard {
           exportparts={this.isContentCard ? contentCardParts : listCardParts}
           data-id={this.productId}
         >
+          {renderExternalCSS(this.cssUrl)}
           <div
             class={`image-container ${this.entityType}-card-image-container`}
             part="image-container"
@@ -559,6 +563,8 @@ export class VviinnProductCard {
         exportparts={productCardParts}
         data-id={this.productId}
       >
+        {renderExternalCSS(this.cssUrl)}
+
         <div class="content-container" part="content-container">
           {this.showSkeleton() ? (
             <Fragment>

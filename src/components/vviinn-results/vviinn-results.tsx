@@ -95,6 +95,7 @@ import {
 } from "../../widget/constants";
 import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
 import { RESULTS_CALCULATED_COLUMNS_CSS_VAR } from "../vviinn-carousel/constants";
+import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
 
 /**
  * @part products - Products container.
@@ -243,6 +244,8 @@ export class VviinnResults {
   @Prop() oneClickDiscoveryMode?: OneClickDiscoveryMode = "append-grid";
   /** Comma-separated list of campaign IDs */
   @Prop() oneClickDiscoveryCampaigns: string = "";
+  /** Optional for custom CSS. It will overwrite all other settings */
+  @Prop() cssUrl: string | null = null;
 
   /** True when we use vviinn-results inside the widget */
   /** @internal */
@@ -927,6 +930,8 @@ export class VviinnResults {
         }}
         exportparts={`${productCardParts}, ${listCardParts}, ${contentCardParts}, ${productCardsGridPart}`}
       >
+        {renderExternalCSS(this.cssUrl)}
+
         <div class="nothing-found">
           {this.getCurrentErrorType() && (
             <vviinn-error

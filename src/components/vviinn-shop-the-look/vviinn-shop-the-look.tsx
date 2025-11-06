@@ -57,6 +57,7 @@ import {
 } from "../../utils/swiper/swiperUtils";
 import { UploadActionIconVariant } from "../vviinn-icons";
 import { getAcceptableFileFormats } from "../../Image/error";
+import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
 
 if (typeof window !== "undefined") {
   register();
@@ -100,6 +101,8 @@ export class VviinnShopTheLook {
   @Prop() showCropper: boolean = false;
   /** Enable upload mode to allow users to upload their own images */
   @Prop() uploadMode: boolean = false;
+  /** Optional for custom CSS. It will overwrite all other settings */
+  @Prop() cssUrl: string | null = null;
   /** @internal */
   @Prop() apiPath?: string;
 
@@ -1174,6 +1177,8 @@ export class VviinnShopTheLook {
   render() {
     return (
       <Host>
+        {renderExternalCSS(this.cssUrl)}
+
         <div
           class={`shop-the-look-container ${this.showModal ? "modal-open" : ""} ${this.showCropper ? "with-cropper" : ""} widget-style-${this.widgetStyle}`}
         >
