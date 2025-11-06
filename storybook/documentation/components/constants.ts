@@ -1,3 +1,5 @@
+import { generateHistogram } from "../../helpers";
+
 export const filtersList = [
   {
     type: "categorical",
@@ -82,107 +84,9 @@ export const filtersList = [
     },
     selectedValues: [],
     suggestions: [],
-    histogram: [
-      {
-        value: {
-          frequency: 0.019999999552965164,
-          interval: {
-            start: 39,
-            end: 58,
-          },
-        },
-        label: "[39-58)",
-        active: true,
-      },
-      {
-        value: {
-          frequency: 0,
-          interval: {
-            start: 58,
-            end: 77,
-          },
-        },
-        label: "[58-77)",
-        active: true,
-      },
-      {
-        value: {
-          frequency: 0.03999999910593033,
-          interval: {
-            start: 77,
-            end: 96,
-          },
-        },
-        label: "[77-96)",
-        active: true,
-      },
-      {
-        value: {
-          frequency: 0.14000000059604645,
-          interval: {
-            start: 96,
-            end: 115,
-          },
-        },
-        label: "[96-115)",
-        active: true,
-      },
-      {
-        value: {
-          frequency: 0.20000000298023224,
-          interval: {
-            start: 115,
-            end: 134,
-          },
-        },
-        label: "[115-134)",
-        active: true,
-      },
-      {
-        value: {
-          frequency: 0.10000000149011612,
-          interval: {
-            start: 134,
-            end: 153,
-          },
-        },
-        label: "[134-153)",
-        active: true,
-      },
-      {
-        value: {
-          frequency: 0.1599999964237213,
-          interval: {
-            start: 153,
-            end: 172,
-          },
-        },
-        label: "[153-172)",
-        active: true,
-      },
-      {
-        value: {
-          frequency: 0.20000000298023224,
-          interval: {
-            start: 172,
-            end: 191,
-          },
-        },
-        label: "[172-191)",
-        active: true,
-      },
-      {
-        value: {
-          frequency: 0.36000001430511475,
-          interval: {
-            start: 191,
-            end: 210,
-          },
-        },
-        label: "[191-210)",
-        active: true,
-      },
-    ],
+    histogram: generateHistogram(39, 989, [
+      0.02, 0.04, 0.07, 0.10, 0.13, 0.16, 0.19, 0.22, 0.15, 0.10, 0.06, 0.03, 0.02, 0.01
+    ]),
   },
   {
     type: "interval",
@@ -195,74 +99,7 @@ export const filtersList = [
     },
     selectedValues: [],
     suggestions: [],
-    histogram: [
-      {
-        value: {
-          frequency: 0.1,
-          interval: {
-            start: 50,
-            end: 375,
-          },
-        },
-        label: "[50-375)",
-        active: true,
-      },
-      {
-        value: {
-          frequency: 0.15,
-          interval: {
-            start: 375,
-            end: 700,
-          },
-        },
-        label: "[375-700)",
-        active: true,
-      },
-      {
-        value: {
-          frequency: 0.2,
-          interval: {
-            start: 700,
-            end: 1025,
-          },
-        },
-        label: "[700-1025)",
-        active: true,
-      },
-      {
-        value: {
-          frequency: 0.25,
-          interval: {
-            start: 1025,
-            end: 1350,
-          },
-        },
-        label: "[1025-1350)",
-        active: true,
-      },
-      {
-        value: {
-          frequency: 0.3,
-          interval: {
-            start: 1350,
-            end: 1675,
-          },
-        },
-        label: "[1350-1675)",
-        active: true,
-      },
-      {
-        value: {
-          frequency: 0.2,
-          interval: {
-            start: 1675,
-            end: 2000,
-          },
-        },
-        label: "[1675-2000)",
-        active: true,
-      },
-    ],
+    histogram: generateHistogram(50, 2000, [0.1, 0.15, 0.2, 0.25, 0.3, 0.2]),
   },
   {
     type: "categorical",
