@@ -101,7 +101,7 @@ export class VviinnShopTheLook {
   @Prop() showCropper: boolean = false;
   /** Enable upload mode to allow users to upload their own images */
   @Prop() uploadMode: boolean = false;
-  /** Optional for custom CSS. It will overwrite all other settings */
+  /** URL to external CSS file for custom styling */
   @Prop() cssUrl: string | null = null;
   /** @internal */
   @Prop() apiPath?: string;

@@ -184,7 +184,7 @@ export class VviinnVpsWidget {
   @Prop() addPriceContainer?: boolean = false;
   /** Show editable input fields in interval filters instead of readonly labels */
   @Prop() showIntervalInputs: boolean = false;
-  /** Optional for custom CSS. It will overwrite all other settings */
+  /** URL to external CSS file for custom styling */
   @Prop() cssUrl: string | null = null;
 
   /** @internal */

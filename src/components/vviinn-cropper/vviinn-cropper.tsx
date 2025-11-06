@@ -53,7 +53,7 @@ export class VviinnCropper {
   /** Save to Local Storage mode for uploaded image */
   @Prop() saveImageMode?: "once" | "always" | "never" = "once";
   @Prop({ mutable: true }) width: number = 288;
-  /** Optional for custom CSS. It will overwrite all other settings */
+  /** URL to external CSS file for custom styling */
   @Prop() cssUrl: string | null = null;
 
   /** @internal */

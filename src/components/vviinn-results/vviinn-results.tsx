@@ -244,7 +244,7 @@ export class VviinnResults {
   @Prop() oneClickDiscoveryMode?: OneClickDiscoveryMode = "append-grid";
   /** Comma-separated list of campaign IDs */
   @Prop() oneClickDiscoveryCampaigns: string = "";
-  /** Optional for custom CSS. It will overwrite all other settings */
+  /** URL to external CSS file for custom styling */
   @Prop() cssUrl: string | null = null;
 
   /** True when we use vviinn-results inside the widget */

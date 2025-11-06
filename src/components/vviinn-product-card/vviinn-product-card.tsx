@@ -161,7 +161,7 @@ export class VviinnProductCard {
   @Prop() addPriceContainer?: boolean = false;
   @Prop({ mutable: true }) energyCertifications?: EnergyCertification[];
   @Prop() deeplink: string | undefined;
-  /** Optional for custom CSS. It will overwrite all other settings */
+  /** URL to external CSS file for custom styling */
   @Prop() cssUrl: string | null = null;
 
   /** @internal */

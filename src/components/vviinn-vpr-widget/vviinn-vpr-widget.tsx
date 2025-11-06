@@ -170,7 +170,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() imageRatio: number = 1;
   /** Items amount in set mode grid */
   @Prop() setItemsAmount?: number = 4;
-  /** Optional for custom CSS. It will overwrite all other settings */
+  /** URL to external CSS file for custom styling */
   @Prop() cssUrl: string | null = null;
   /** The currency sign is displayed after the price */
   @Prop() currencySign?: string;
