@@ -1,0 +1,111 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import "../widgets/styles.css";
+import "./customization.css";
+import "./combining.css";
+
+import { vviinnToken } from "../../helpers";
+import "../../components/tabs/styles.css";
+import { clickHandlers } from "../../components"
+
+<Meta title="Customization/Overview" />
+
+# Customization Overview
+
+Vviinn Widgets offer **three powerful ways** to customize appearance and content. This guide helps you choose the right approach for your needs.
+
+## Customization Methods
+
+### [CSS Variables](?path=/docs/customization-css-variables--docs)
+**Theme-level styling:** colors, fonts, spacing. Use for:
+- Change brand colors (primary, hover)
+- Change font family globally
+- Style product card appearance (alignment, borders)
+
+### [Target Styling](?path=/docs/customization-target-styling--docs)
+**Precise element control** with `::part()` selector. Use for:
+- Style a specific button or element
+- Change element positioning or layout
+- Apply complex CSS (animations, transforms)
+
+### [Custom Content](?path=/docs/customization-custom-content--docs)
+**Replace default content** with your own HTML. Use for:
+- Replace button text or labels
+- Add custom icons
+- Inject custom HTML/markup
+
+---
+
+## Quick Start Examples
+
+### CSS Variables: Change Primary Color
+```css
+vviinn-vps-button {
+  --color-primary: #078688;
+  --color-primary-hover: #056b67;
+}
+```
+
+### Target Styling: Style Upload Button
+```css
+vviinn-vps-button::part(upload-photo_button) {
+  min-height: 48px;
+  padding: 12px 24px;
+  font-size: 16px;
+}
+```
+
+### Custom Content: Replace Button Text
+```html
+<vviinn-vps-button token="TOKEN">
+  <span slot="vviinn-image-upload-button-text">Upload Image</span>
+</vviinn-vps-button>
+```
+
+---
+
+## Combining Methods
+
+You can use **multiple customization methods together** for maximum flexibility:
+
+<div id="combining-methods-example">
+    <div className="tab tab-reverse">
+        <h3>Combining All Three Methods</h3>
+        <div className="tablink-group">
+            <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Code_combining', 'combining-methods-example')}}>Code</button>
+            <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Preview_combining', 'combining-methods-example')}}>Preview</button>
+        </div>
+    </div>
+    <div id="Preview_combining" className="tabcontent" style={{display:"block"}}>
+        <div className="tabcontent-preview">
+            <vviinn-vps-button id="vviinn-combining-methods" token={vviinnToken} text-search-show="true" locale="en-US" add-style="true">
+                <span slot="vviinn-teaser-text">Find your best match</span>
+                <span slot="vviinn-image-upload-button-text">Upload Image</span>
+            </vviinn-vps-button>
+        </div>
+    </div>
+    <div id="Code_combining" className="tabcontent">
+```html
+<style>
+  vviinn-vps-button {
+    --color-primary: #078688;
+    --color-primary-hover: #056b67;
+  }
+
+  vviinn-vps-button::part(upload-photo_button) {
+    min-height: 48px;
+    padding: 12px 24px;
+    font-size: 16px;
+  }
+
+  vviinn-vps-button::part(text-search-container) {
+    border: 2px solid #078688;
+  }
+</style>
+
+<vviinn-vps-button token="TOKEN" text-search-show="true">
+  <span slot="vviinn-teaser-text">Find your best match</span>
+  <span slot="vviinn-image-upload-button-text">Upload Image</span>
+</vviinn-vps-button>
+```
+    </div>
+</div>
