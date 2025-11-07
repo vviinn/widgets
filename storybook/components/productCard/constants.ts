@@ -151,8 +151,7 @@ export const cardDataByType = {
   },
   customizedLabelCard: {
     uniqueId: "customized-label",
-    header: "Product Card: Styling Custom Label and Changing Order",
-    info: "Custom labels are hidden by default, so we should rewrite the display property to show them. The code example also demonstrates how to change the order of the elements. In this case, we should set an 'order' property for each displayed part of the Product Card.",
+    header: "Product Card: Styling Custom Labels and Changing Order",
     productData: {
       "product-title": "Couchtisch Rolf Benz 8770 Ronald Schmitt",
       price: "3629",

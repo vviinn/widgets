@@ -1,0 +1,35 @@
+/* Shared table styles for Storybook documentation */
+
+/* Events table - for event documentation (3 columns: Name, Description, Props) */
+.events-table tr td:nth-child(1),
+.events-table tr th:nth-child(1) {
+  width: 15%;
+  font-weight: 600;
+}
+
+.events-table tr td:nth-child(2),
+.events-table tr th:nth-child(2) {
+  width: 35%;
+}
+
+.events-table tr td:nth-child(3),
+.events-table tr th:nth-child(3) {
+  width: 25%;
+}
+
+/* Documentation table - for implementation tips and guides (3 columns) */
+.docs-table tr td:nth-child(1),
+.docs-table tr th:nth-child(1) {
+  width: 25%;
+  font-weight: 600;
+}
+
+.docs-table tr td:nth-child(2),
+.docs-table tr th:nth-child(2) {
+  width: 45%;
+}
+
+.docs-table tr td:nth-child(3),
+.docs-table tr th:nth-child(3) {
+  width: 30%;
+}

@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.199.0](https://github.com/vviinn/widgets/compare/v2.198.0...v2.199.0) (2025-11-06)
+
+
+### Features
+
+* Improve Search Page documentation. Merge with the Best Practices page. ([1b915de](https://github.com/vviinn/widgets/commit/1b915de533aeb7da7208798b2382acc9eea128c0))
+* Improvements to Storybook's customization section. ([4c0e4f3](https://github.com/vviinn/widgets/commit/4c0e4f34117b4c769584e98225a085eddc1d762e))
+
+
+### Bug Fixes
+
+* Show fewer results for product lists in Storybook. Improve text search queries for industries. ([8875321](https://github.com/vviinn/widgets/commit/88753215349ca3fd72b762a0b8ea800178f879d3))
+* Show missing CSS parts and slots for the Discovery Widget playground in Storybook. ([076c9bb](https://github.com/vviinn/widgets/commit/076c9bb7c07ef31507c8d7f643c991118792c5e5))
+
 ## [2.198.0](https://github.com/vviinn/widgets/compare/v2.197.0...v2.198.0) (2025-10-30)
 
 
