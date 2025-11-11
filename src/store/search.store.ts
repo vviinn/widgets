@@ -41,6 +41,7 @@ import { divideOnSized } from "../geometry/Rectangle";
 import { fileToB64 } from "../file";
 import { ImageType, shouldResize } from "./image-processing";
 import { OnChangeHandler } from "@stencil/store/dist/types";
+import { extractSelectedFilters } from "../components/vviinn-filters/helpers/extractSelectedFilters";
 
 export type SearchStoreName = "widget" | "components" | "shopTheLook";
 export type SearchStatus = "idle" | "loading" | "success" | "error";
@@ -427,6 +428,15 @@ export const makeTextSearchRequest = async (
       state.textSearchId = sessionResponse.requestId;
       state.dynamicFilters =
         sessionResponse?.interactions?.dynamicFilters ?? [];
+
+      const extractedFilters = extractSelectedFilters(
+        sessionResponse?.interactions?.dynamicFilters ?? [],
+      );
+
+      if (state.requestFilters.length === 0 && extractedFilters.length > 0) {
+        state.requestFilters = extractedFilters;
+      }
+
       state.redirect = sessionResponse?.interactions?.redirect ?? null;
       state.stream = sessionResponse?.stream ?? null;
       state.searchStatus = "success";

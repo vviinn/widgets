@@ -107,7 +107,7 @@ export const cardDataByType = {
     },
     style: `
 <style>
-    vviinn-product-card::part(custom-label-0) {
+    vviinn-product-card::part(custom-label-0 custom-label-content) {
         display: block;
     }
 </style>`,
@@ -151,8 +151,7 @@ export const cardDataByType = {
   },
   customizedLabelCard: {
     uniqueId: "customized-label",
-    header: "Product Card: Styling Custom Label and Changing Order",
-    info: "Custom labels are hidden by default, so we should rewrite the display property to show them. The code example also demonstrates how to change the order of the elements. In this case, we should set an 'order' property for each displayed part of the Product Card.",
+    header: "Product Card: Styling Custom Labels and Changing Order",
     productData: {
       "product-title": "Couchtisch Rolf Benz 8770 Ronald Schmitt",
       price: "3629",
@@ -169,9 +168,16 @@ export const cardDataByType = {
     order: 1;
   }
 
-   vviinn-product-card::part(custom-label-0) {
-    order: 2;
+   vviinn-product-card::part(custom-label-0 custom-label-content) {
     display: block;
+    order: 2;
+  }
+
+   vviinn-product-card::part(custom-label-1 custom-label-image) {
+    display: block;
+    position: absolute;
+    top: 10px;
+    left: 10px;
   }
 
    vviinn-product-card::part(price-outdated) {

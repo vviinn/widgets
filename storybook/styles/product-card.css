@@ -3,7 +3,8 @@
   max-width: 100%;
 }
 
-#product-card-main vviinn-product-card::part(custom-label-0) {
+#product-card-main
+  vviinn-product-card::part(custom-label-0 custom-label-content) {
   display: block;
 }
 
@@ -45,9 +46,17 @@
 #product-card-customized-label vviinn-product-card::part(title) {
   order: 1;
 }
-#product-card-customized-label vviinn-product-card::part(custom-label-0) {
+#product-card-customized-label
+  vviinn-product-card::part(custom-label-0 custom-label-content) {
   order: 2;
   display: block;
+}
+#product-card-customized-label
+  vviinn-product-card::part(custom-label-1 custom-label-image) {
+  display: block;
+  position: absolute;
+  top: 10px;
+  left: 10px;
 }
 #product-card-customized-label vviinn-product-card::part(price-outdated) {
   order: 3;

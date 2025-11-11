@@ -133,9 +133,12 @@ type Detail = CustomEvent<{
 const castAsHtmlElement = (element: ChildNode) => element as HTMLElement;
 const getShadowRoots = (shadowRoot: ShadowRoot) => {
   const levelOne = shadowRoot;
-  const levelTwo = levelOne && castAsHtmlElement(levelOne.lastChild).shadowRoot;
-  const levelThree =
-    levelTwo && castAsHtmlElement(levelTwo.lastChild).shadowRoot;
+  const levelTwo = levelOne?.lastChild
+    ? castAsHtmlElement(levelOne.lastChild).shadowRoot
+    : null;
+  const levelThree = levelTwo?.lastChild
+    ? castAsHtmlElement(levelTwo.lastChild).shadowRoot
+    : null;
 
   return { levelOne, levelTwo, levelThree };
 };

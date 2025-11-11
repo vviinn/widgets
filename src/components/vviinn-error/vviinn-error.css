@@ -2,6 +2,7 @@
 
 :host {
   display: block;
+  width: 100%;
   font-family: var(--font-family, var(--font-family-base));
 }
 
@@ -17,6 +18,7 @@
   grid-gap: var(--spacing-150);
   text-align: center;
   justify-items: center;
+  width: 100%;
   max-width: 356px;
   padding: var(--spacing-200);
   border-radius: var(--border-radius-200);

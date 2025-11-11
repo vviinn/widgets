@@ -1,0 +1,2391 @@
+openapi: 3.0.2
+info:
+  title: AI as a Service API
+  version: "1.28.0"
+  x-logo:
+    url: https://docs.vviinn.com/logo.png
+    altText: vviinn
+    href: https://www.vviinn.com
+tags:
+  - name: services
+    x-displayName: Services
+  - name: product_management
+    x-displayName: Product Management
+  - name: category_path
+    x-displayName: Category Path
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/category-path" />
+x-tagGroups:
+  - name: Endpoints
+    tags:
+      - services
+      - product_management
+  - name: Concepts
+    tags:
+      - category_path
+servers:
+  - url: "https://api.vviinn.com"
+paths:
+  /product/{product-id}:
+    parameters:
+      - $ref: "#/components/parameters/product-id"
+    put:
+      security:
+        - site-credentials: [ ]
+      tags:
+        - product_management
+      summary: Set Product
+      operationId: SetProduct
+      description: Creates a new product or updates an existing one
+      requestBody:
+        $ref: "#/components/requestBodies/product-annotation"
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/product-annotation"
+        "400":
+          description: Could not save or publish the product
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/product-annotation-error"
+        "401":
+          $ref: "#/components/responses/authentication-error"
+        "403":
+          $ref: "#/components/responses/authorization-error"
+    delete:
+      security:
+        - site-credentials: [ ]
+      tags:
+        - product_management
+      summary: Delete Product
+      operationId: DeleteProduct
+      description: Deletes product and its images from a site on a given product id
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: success
+                  data:
+                    $ref: "#/components/schemas/delete-product-images-by-productId"
+        "400":
+          description: Could not delete the image
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Could not delete the image
+                  data:
+                    $ref: "#/components/schemas/delete-image-error"
+                  debug:
+                    type: string
+                    example: exception message
+        "401":
+          $ref: "#/components/responses/authentication-error"
+        "403":
+          $ref: "#/components/responses/authorization-error"
+        "404":
+          description: Unable to find any image of the product
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unable to find any image of the product.
+                  data:
+                    $ref: "#/components/schemas/delete-image-error"
+  /similar-products:
+    post:
+      security:
+        - read-only-token: [ ]
+        - site-credentials: [ ]
+      tags:
+        - services
+      summary: Similar Products
+      operationId: GetSimilarProducts
+      description: |
+        This endpoint allows to discover products similar to the source product, usually chosen by a user.
+        The response contains a list of similarities for each product.
+      requestBody:
+        $ref: "#/components/requestBodies/similar-products"
+      responses:
+        "200":
+          $ref: "#/components/responses/similar-products"
+        "400":
+          $ref: "#/components/responses/generic-error"
+        "401":
+          $ref: "#/components/responses/authentication-error"
+        "403":
+          $ref: "#/components/responses/authorization-error"
+        "404":
+          $ref: "#/components/responses/generic-error"
+        "422":
+          $ref: "#/components/responses/generic-error"
+  /cross-selling:
+    post:
+      security:
+        - read-only-token: [ ]
+        - site-credentials: [ ]
+      tags:
+        - services
+      summary: Cross-Selling
+      operationId: GetCrossSellingProducts
+      description: |
+        This endpoint suggests related products based on a source product, usually chosen by a user.
+        The response contains a list of suggestions for each product.
+      requestBody:
+        $ref: "#/components/requestBodies/cross-selling"
+      responses:
+        "200":
+          $ref: "#/components/responses/cross-selling"
+        "400":
+          $ref: "#/components/responses/generic-error"
+        "401":
+          $ref: "#/components/responses/authentication-error"
+        "403":
+          $ref: "#/components/responses/authorization-error"
+        "404":
+          $ref: "#/components/responses/generic-error"
+        "422":
+          $ref: "#/components/responses/generic-error"
+  /text-search:
+    post:
+      security:
+        - read-only-token: [ ]
+        - site-credentials: [ ]
+      tags:
+        - services
+      summary: Text-Search Products
+      description: |
+        This endpoint allows you to search with text query in textual attributes and visual features.
+        The response contains the search result for each product.
+      operationId: TextSearchProducts
+      requestBody:
+        $ref: "#/components/requestBodies/text-search"
+      responses:
+        "200":
+          $ref: "#/components/responses/text-search"
+        "401":
+          $ref: "#/components/responses/authentication-error"
+        "403":
+          $ref: "#/components/responses/authorization-error"
+  /auto-suggest:
+    post:
+      security:
+        - read-only-token: [ ]
+        - site-credentials: [ ]
+      tags:
+        - alpha
+      summary: Auto-Suggest
+      description: |
+        This endpoint provides auto-suggested search queries based on a partial text input.
+      operationId: AutoSuggest
+      requestBody:
+        $ref: "#/components/requestBodies/auto-suggest"
+      responses:
+        "200":
+          $ref: "#/components/responses/auto-suggest"
+        "401":
+          $ref: "#/components/responses/generic-error"
+        "403":
+          $ref: "#/components/responses/generic-error"
+
+  /visual-search:
+    post:
+      security:
+        - read-only-token: [ ]
+        - site-credentials: [ ]
+      summary: Visual-Search Products
+      tags:
+        - services
+      description: |
+        This endpoint allows you to search with an image in visual features and textual attributes. 
+        The response contains the search result for each product.
+      operationId: VisualSearchProducts
+      requestBody:
+        $ref: "#/components/requestBodies/visual-search"
+      responses:
+        "200":
+          $ref: "#/components/responses/visual-search"
+        "401":
+          $ref: "#/components/responses/authentication-error"
+        "403":
+          $ref: "#/components/responses/authorization-error"
+  /search/session:
+    post:
+      security:
+        - read-only-token: [ ]
+        - site-credentials: [ ]
+      tags:
+        - services
+      deprecated: true
+      summary: New Visual Search Session
+      operationId: CreateSearchSession
+      description: Starts a reusable search session for a one image.
+      parameters:
+        - $ref: "#/components/parameters/campaign-id"
+        - $ref: "#/components/parameters/excluded"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - image
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          $ref: "#/components/responses/ion-visual-product-search"
+        "400":
+          description: ProductSearch exception
+          content:
+            application/json:
+              example:
+                message: Could not start search session
+                data: ""
+                debug: Passed images count to this endpoint are invalid or not enough.
+        "401":
+          $ref: "#/components/responses/authentication-error"
+        "403":
+          $ref: "#/components/responses/authorization-error"
+  /search/session/{search-id}:
+    get:
+      security:
+        - read-only-token: [ ]
+        - site-credentials: [ ]
+      tags:
+        - services
+      deprecated: true
+      summary: Visual Search in Existing Session
+      operationId: SearchInExistingSession
+      description: Starts a search in existing session.
+      parameters:
+        - name: search-id
+          required: true
+          in: path
+          schema:
+            type: string
+            example: "602d20ad1ac7d8-15165248"
+        - $ref: "#/components/parameters/campaign-id"
+      responses:
+        "200":
+          $ref: "#/components/responses/ion-visual-product-search"
+        "400":
+          description: ProductSearch exception
+          content:
+            application/json:
+              example:
+                message: Could not start search session
+                data: ""
+                debug: Passed images count to this endpoint are invalid or not enough.
+        "401":
+          $ref: "#/components/responses/authentication-error"
+        "403":
+          $ref: "#/components/responses/authorization-error"
+  /search/session/{search-id}/detect-objects:
+    get:
+      security:
+        - read-only-token: [ ]
+        - site-credentials: [ ]
+      tags:
+        - services
+      deprecated: true
+      summary: Object Detection in Existing Visual Search Session
+      operationId: DetectObjectsOfImageInExistingSession
+      description: Get detected objects of image in existing session.
+      parameters:
+        - name: search-id
+          required: true
+          in: path
+          schema:
+            type: string
+            example: "602d20ad1ac7d8-15165248"
+        - $ref: "#/components/parameters/campaign-id"
+      responses:
+        "200":
+          $ref: "#/components/responses/ion-detected-objects"
+        "400":
+          description: ProductSearch exception
+          content:
+            application/json:
+              example:
+                message: Could not detect objects
+                data: ""
+        "401":
+          $ref: "#/components/responses/authentication-error"
+        "403":
+          $ref: "#/components/responses/authorization-error"
+  /search/session/{search-id}/upload-image:
+    put:
+      security:
+        - read-only-token: [ ]
+        - site-credentials: [ ]
+      tags:
+        - services
+      deprecated: true
+      summary: High Resolution Image for Existing Visual Search Session
+      operationId: UploadHighResolutionImageToExistingSession
+      description: Upload high resolution image to existing session.
+      parameters:
+        - name: search-id
+          required: true
+          in: path
+          schema:
+            type: string
+            example: "602d20ad1ac7d8-15165248"
+        - $ref: "#/components/parameters/campaign-id"
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: success
+        "400":
+          description: ProductSearch exception
+          content:
+            application/json:
+              example:
+                message: Upload image failed
+                data: ""
+        "401":
+          $ref: "#/components/responses/authentication-error"
+        "403":
+          $ref: "#/components/responses/authorization-error"
+  /product-listing-page:
+    post:
+      security:
+        - read-only-token: [ ]
+        - site-credentials: [ ]
+      tags:
+        - alpha
+      summary: Product listing page
+      description: |
+        This endpoint returns a list of filtered products.
+        The response contains the products.
+      operationId: ProductListingPage
+      requestBody:
+        $ref: "#/components/requestBodies/product-listing-page"
+      responses:
+        "200":
+          $ref: "#/components/responses/product-listing-page"
+        "401":
+          $ref: "#/components/responses/authentication-error"
+        "403":
+          $ref: "#/components/responses/authorization-error"
+  /product/{product-id}/predicted-attributes:
+    post:
+      security:
+        - site-credentials: [ ]
+      tags:
+        - services
+      summary: Predict Product Data
+      description: |
+        This endpoint predicts the fields of a single product, already existing in your product catalog.
+        In addition to the fields of the products, the response also contains information about the product's images.
+      operationId: predictProductAttributes
+      parameters:
+        - $ref: "#/components/parameters/product-id"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/predict-product"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/predicted-product"
+        "400":
+          $ref: "#/components/responses/generic-error"
+        "401":
+          $ref: "#/components/responses/authentication-error"
+        "403":
+          $ref: "#/components/responses/authorization-error"
+        "404":
+          $ref: "#/components/responses/generic-error"
+        "422":
+          $ref: "#/components/responses/generic-error"
+        "500":
+          $ref: "#/components/responses/generic-error"
+  /product/{product-id}/similar-products:
+    get:
+      security:
+        - read-only-token: [ ]
+        - site-credentials: [ ]
+      tags:
+        - services
+      deprecated: true
+      summary: Similar Products
+      operationId: GetSimilarProductsToInputImage
+      description: |
+        This endpoint allows to discover products similar to the source product, usually chosen by a user.
+        The response contains a list of similarities for each product.
+      parameters:
+        - $ref: "#/components/parameters/product-id"
+        - name: similar-products-count
+          in: query
+          schema:
+            $ref: "#/components/schemas/resultsCount"
+        - $ref: "#/components/parameters/campaigns"
+        - $ref: "#/components/parameters/image-code"
+        - $ref: "#/components/parameters/color"
+        - $ref: "#/components/parameters/excluded"
+        - $ref: "#/components/parameters/category"
+      responses:
+        "200":
+          $ref: "#/components/responses/visual-product-recommendation"
+        "400":
+          $ref: "#/components/responses/generic-error"
+        "401":
+          $ref: "#/components/responses/authentication-error"
+        "403":
+          $ref: "#/components/responses/authorization-error"
+  /product/{product-id}/cross-selling-products:
+    get:
+      security:
+        - read-only-token: [ ]
+        - site-credentials: [ ]
+      tags:
+        - services
+      deprecated: true
+      summary: Cross-Selling
+      operationId: GetCrossSellingProductsToInputImage
+      description: |
+        This endpoint suggests related products based on a source product, usually chosen by a user.
+        The response contains a list of suggestions for each product.
+      parameters:
+        - $ref: "#/components/parameters/product-id"
+        - name: cross-selling-products-count
+          in: query
+          schema:
+            $ref: "#/components/schemas/resultsCount"
+        - $ref: "#/components/parameters/campaigns"
+        - $ref: "#/components/parameters/image-code"
+        - $ref: "#/components/parameters/color"
+        - $ref: "#/components/parameters/excluded"
+      responses:
+        "200":
+          $ref: "#/components/responses/visual-product-recommendation"
+        "400":
+          $ref: "#/components/responses/generic-error"
+        "401":
+          $ref: "#/components/responses/authentication-error"
+        "403":
+          $ref: "#/components/responses/authorization-error"
+components:
+  securitySchemes:
+    read-only-token:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        This kind of token is used to authenticate read-only requests to the API.
+        Each token belongs to a specific site and is valid until explicitly revoked.
+        This token can be safely used in the browser, because it does not grant access to sensitive information.
+        
+        You can find your site's read-only token in the site settings.
+    site-credentials:
+      type: http
+      scheme: basic
+      description: |
+        This set of credentials makes it possible to read potentially sensitive information from the API;
+        it also allows to modify the site.
+        There it is important to keep these credentials secret, e.g., by using them only on the server side.
+        
+        You can find your site's credentials in the site settings.
+  parameters:
+    product-id:
+      name: product-id
+      required: true
+      in: path
+      schema:
+        $ref: "#/components/schemas/product-id"
+    campaign-id:
+      name: campaign-id
+      in: query
+      schema:
+        $ref: "#/components/schemas/campaign-id"
+    campaigns:
+      name: campaigns
+      in: query
+      schema:
+        description: comma-separated list of campaign ids
+        type: string
+        example: 127,185
+    image-code:
+      name: image-code
+      in: query
+      schema:
+        $ref: "#/components/schemas/image-code"
+    color:
+      deprecated: true
+      name: color
+      in: query
+      schema:
+        $ref: "#/components/schemas/color"
+    excluded:
+      name: excluded[]
+      in: query
+      schema:
+        type: array
+        description: each item describes a column and values from that column that should be excluded from the result set
+        items:
+          description: the name of the column and the comma-separated list of values are separated by a colon
+          type: string
+        example:
+          - "brand:Nike,Puma"
+          - "custom_label_0:summer"
+    category:
+      name: category[]
+      in: query
+      schema:
+        $ref: "#/components/schemas/category"
+  schemas:
+    request-id:
+      type: string
+      example: "6edf9d4d-60e8-49f3-b120-e89d728b8a89"
+    product-id:
+      type: string
+      example: 120857
+    campaign-id:
+      oneOf:
+        - type: integer
+          example: 28
+        - type: string
+          example: 2d45fd08-9ba4-4f57-81d9-fe75069f64dd
+    campaigns:
+      description: list of campaign ids
+      type: array
+      items:
+        $ref: "#/components/schemas/campaign-id"
+    resultsCount:
+      type: integer
+      description: returns less than or equal to the campaign's defined results
+      example: 8
+    image-code:
+      type: string
+      example: "2"
+    color:
+      deprecated: true
+      type: string
+      pattern: ^[0-9a-fA-F]{6}$
+      example: "12ff21"
+    excluded:
+      type: array
+      description: each item describes a column and values from that column that should be excluded from the result set
+      items:
+        $ref: "#/components/schemas/value-list"
+    included:
+      type: array
+      description: each item describes a column and values from that column that should be included in the result set
+      items:
+        $ref: "#/components/schemas/value-list"
+    category:
+      type: array
+      description: each item describes a category path that should be used instead of the product's actual category paths
+      items:
+        $ref: "#/components/schemas/category-path"
+      example:
+        - cm9vdA
+        - TcO2YmVsPlRpc2NoZQ
+    energy-class-range:
+      type: object
+      properties:
+        min:
+          $ref: "#/components/schemas/energy-efficiency-class"
+        max:
+          $ref: "#/components/schemas/energy-efficiency-class"
+    energy-certification-class-icon-urls:
+      type: object
+      required:
+        - left
+        - right
+      properties:
+        left:
+          type: string
+          format: uri
+        right:
+          type: string
+          format: uri
+    energy-certification:
+      type: object
+      properties:
+        certificationClass:
+          $ref: "#/components/schemas/energy-efficiency-class"
+        classIconUrls:
+          $ref: "#/components/schemas/energy-certification-class-icon-urls"
+        classRange:
+          $ref: "#/components/schemas/energy-class-range"
+        classLabelUrl:
+          type: string
+          format: uri
+        classDataSheetUrl:
+          type: string
+          format: uri
+        productType:
+          type: string
+    energy-efficiency-class:
+      type: string
+      nullable: true
+      enum:
+        - A+++
+        - A++
+        - A+
+        - A
+        - B
+        - C
+        - D
+        - E
+        - F
+        - G
+      example: A+
+      externalDocs:
+        url: https://support.google.com/merchants/answer/7562785?hl=en&ref_topic=6324338
+    ion-detected-object-rectangle:
+      type: object
+      properties:
+        left:
+          type: number
+          example: 0
+        top:
+          type: number
+          example: 0.3641
+        width:
+          type: number
+          example: 0.94
+        height:
+          type: number
+          example: 0.54175
+    ion-detected-object-value:
+      type: object
+      required:
+        - score
+        - rectangle
+      properties:
+        classId:
+          type: integer
+        class:
+          type: string
+        score:
+          type: integer
+        rectangle:
+          "$ref": "#/components/schemas/ion-detected-object-rectangle"
+    ion-detected-object:
+      type: object
+      properties:
+        value:
+          "$ref": "#/components/schemas/ion-detected-object-value"
+        links:
+          additionalProperties:
+            "$ref": "#/components/schemas/ion-link"
+    ion-detected-objects:
+      type: object
+      properties:
+        value:
+          type: array
+          items:
+            "$ref": "#/components/schemas/ion-detected-object"
+    delete-image-error:
+      type: object
+      properties:
+        site-id:
+          type: integer
+          example: 25
+        image-id:
+          type: string
+          example: "1"
+    product-data:
+      type: object
+      properties:
+        title:
+          type: string
+          nullable: true
+          example: product title
+          externalDocs:
+            url: https://support.google.com/merchants/answer/6324415?hl=en&ref_topic=6324338
+        description:
+          type: string
+          nullable: true
+          example: product description
+          externalDocs:
+            url: https://support.google.com/merchants/answer/6324468?hl=en&ref_topic=6324338
+        link:
+          type: string
+          nullable: true
+          example: https://www.example.com/writing/google-pens
+          externalDocs:
+            url: https://support.google.com/merchants/answer/6324416?hl=en&ref_topic=6324338
+        mobile_link:
+          type: string
+          nullable: true
+          example: https://www.m.example.com/writing/fiji-pens
+          externalDocs:
+            url: https://support.google.com/merchants/answer/6324459?hl=en&ref_topic=6324338
+        availability:
+          type: string
+          nullable: true
+          enum:
+            - in_stock
+            - out_of_stock
+            - preorder
+            - backorder
+          example: in_stock
+          externalDocs:
+            url: https://support.google.com/merchants/answer/6324448?hl=en&ref_topic=6324338
+        price:
+          type: number
+          nullable: true
+          example: 18.50
+          externalDocs:
+            url: https://support.google.com/merchants/answer/6324371?hl=en&ref_topic=6324338
+        sale_price:
+          type: number
+          nullable: true
+          example: 25.50
+          externalDocs:
+            url: https://support.google.com/merchants/answer/6324471?hl=en&ref_topic=6324338
+        google_product_category:
+          description: Only category paths are supported.
+          type: string
+          nullable: true
+          maxLength: 500
+          example: Apparel & Accessories > Clothing > Dresses
+          externalDocs:
+            url: https://support.google.com/merchants/answer/6324436?hl=en&ref_topic=6324338
+        product_type:
+          type: string
+          nullable: true
+          maxLength: 3758
+          example: Home > Women > Dresses > Maxi Dresses, Home > Women > Dresses > Party Dresses
+          externalDocs:
+            url: https://support.google.com/merchants/answer/6324406?hl=en&ref_topic=6324338
+        brand:
+          type: string
+          nullable: true
+          maxLength: 70
+          example: Google
+          externalDocs:
+            url: https://support.google.com/merchants/answer/6324351?hl=en&ref_topic=6324338
+        gtin:
+          type: string
+          nullable: true
+          maxLength: 158
+          example: 3234567890126, 123456788787, 98746543218
+          externalDocs:
+            url: https://support.google.com/merchants/answer/6324461?hl=en&ref_topic=6324338
+        mpn:
+          type: string
+          nullable: true
+          maxLength: 70
+          example: GO12345OOGLE
+          externalDocs:
+            url: https://support.google.com/merchants/answer/6324482?hl=en&ref_topic=6324338
+        condition:
+          type: string
+          nullable: true
+          enum:
+            - new
+            - refurbished
+            - used
+          example: new
+          externalDocs:
+            url: https://support.google.com/merchants/answer/6324469?hl=en&ref_topic=6324338
+        adult:
+          type: boolean
+          nullable: true
+          example: true
+          externalDocs:
+            url: https://support.google.com/merchants/answer/6324508?hl=en&ref_topic=6324338
+        multipack:
+          type: number
+          nullable: true
+          example: 6
+          externalDocs:
+            url: https://support.google.com/merchants/answer/6324488?hl=en&ref_topic=6324338
+        is_bundle:
+          type: boolean
+          nullable: true
+          example: false
+          externalDocs:
+            url: https://support.google.com/merchants/answer/6324449?hl=en&ref_topic=6324338
+        energy_efficiency_class:
+          $ref: "#/components/schemas/energy-efficiency-class"
+        min_energy_efficiency_class:
+          $ref: "#/components/schemas/energy-efficiency-class"
+        max_energy_efficiency_class:
+          $ref: "#/components/schemas/energy-efficiency-class"
+        age_group:
+          type: string
+          nullable: true
+          enum:
+            - newborn
+            - infant
+            - toddler
+            - kids
+            - adult
+          example: infant
+          externalDocs:
+            url: https://support.google.com/merchants/answer/6324463?hl=en&ref_topic=6324338
+        color:
+          type: string
+          nullable: true
+          maxLength: 100
+          example: Orange Mango Explosion
+          externalDocs:
+            url: https://support.google.com/merchants/answer/6324487?hl=en&ref_topic=6324338
+        gender:
+          type: string
+          nullable: true
+          enum:
+            - male
+            - female
+            - unisex
+          example: female
+          externalDocs:
+            url: https://support.google.com/merchants/answer/6324479?hl=en&ref_topic=6324338
+        material:
+          type: string
+          nullable: true
+          maxLength: 200
+          example: Leather
+          externalDocs:
+            url: https://support.google.com/merchants/answer/6324410?hl=en&ref_topic=6324338
+        pattern:
+          type: string
+          nullable: true
+          maxLength: 100
+          example: Striped
+          externalDocs:
+            url: https://support.google.com/merchants/answer/6324483?hl=en&ref_topic=6324338
+        size:
+          type: string
+          nullable: true
+          maxLength: 100
+          example: XL
+          externalDocs:
+            url: https://support.google.com/merchants/answer/6324492?hl=en&ref_topic=6324338
+        size_type:
+          type: string
+          nullable: true
+          enum:
+            - regular
+            - petite
+            - tall
+            - plus
+            - big
+            - maternity
+          example: petite
+          externalDocs:
+            url: https://support.google.com/merchants/answer/6324497?hl=en&ref_topic=6324338
+        size_system:
+          type: string
+          nullable: true
+          enum:
+            - AU
+            - BR
+            - CN
+            - DE
+            - EU
+            - FR
+            - IT
+            - JP
+            - MEX
+            - UK
+            - US
+          example: UK
+          externalDocs:
+            url: https://support.google.com/merchants/answer/6324502?hl=en&ref_topic=6324338
+        item_group_id:
+          type: string
+          nullable: true
+          maxLength: 50
+          example: AB12345
+          externalDocs:
+            url: https://support.google.com/merchants/answer/6324507?hl=en&ref_topic=6324338
+        custom_label_0:
+          type: string
+          nullable: true
+          example: summer
+          externalDocs:
+            url: https://support.google.com/merchants/answer/6324473?hl=en&ref_topic=6324338
+        custom_label_1:
+          type: string
+          nullable: true
+          example: summer
+          externalDocs:
+            url: https://support.google.com/merchants/answer/6324473?hl=en&ref_topic=6324338
+        custom_label_2:
+          type: string
+          nullable: true
+          example: summer
+          externalDocs:
+            url: https://support.google.com/merchants/answer/6324473?hl=en&ref_topic=6324338
+        custom_label_3:
+          type: string
+          nullable: true
+          example: summer
+          externalDocs:
+            url: https://support.google.com/merchants/answer/6324473?hl=en&ref_topic=6324338
+        custom_label_4:
+          type: string
+          nullable: true
+          example: summer
+          externalDocs:
+            url: https://support.google.com/merchants/answer/6324473?hl=en&ref_topic=6324338
+        promotion_id:
+          type: string
+          nullable: true
+          maxLength: 50
+          example: tbby123_us
+          externalDocs:
+            url: https://support.google.com/merchants/answer/7050148?hl=en&ref_topic=6324338
+        product_detail:
+          type: string
+          nullable: true
+          example: General:Product Type:Digital player,General:Digital Player Type:Flash based,Display:Resolution:432 x 240,Display:Diagonal Size:"2.5"
+          externalDocs:
+            url: https://support.google.com/merchants/answer/9218260?hl=en&ref_topic=6324338
+        product_highlight:
+          type: string
+          nullable: true
+          maxLength: 1518
+          example: '"Supports thousands of apps, including Netflix, YouTube, HBO Now, Spotify, Showtime, Pandora, Google Play Movies", "1080p maximum display resolution"'
+          externalDocs:
+            url: https://support.google.com/merchants/answer/9216100?hl=en&ref_topic=6324338
+        product_length:
+          type: string
+          nullable: true
+          example: 30 cm
+          externalDocs:
+            url: https://support.google.com/merchants/answer/11018531?hl=en&ref_topic=6324338
+        product_width:
+          type: string
+          nullable: true
+          example: 30 cm
+          externalDocs:
+            url: https://support.google.com/merchants/answer/11018531?hl=en&ref_topic=6324338
+        product_height:
+          type: string
+          nullable: true
+          example: 30 cm
+          externalDocs:
+            url: https://support.google.com/merchants/answer/11018531?hl=en&ref_topic=6324338
+        product_weight:
+          type: string
+          nullable: true
+          example: 10 kg
+          externalDocs:
+            url: https://support.google.com/merchants/answer/11018531?hl=en&ref_topic=6324338
+    product:
+      type: object
+      properties:
+        site-id:
+          type: integer
+          example: 11
+        product-id:
+          type: string
+          example: "100257"
+        data:
+          $ref: "#/components/schemas/product-data"
+    product-annotation:
+      items:
+        title: Product data object
+        type: object
+        required:
+          - data
+          - message
+        properties:
+          message:
+            type: string
+            example: success
+          data:
+            $ref: "#/components/schemas/product"
+    product-annotation-images:
+      title: Product images object
+      type: object
+      properties:
+        url:
+          type: string
+    product-annotation-error:
+      items:
+        title: Product data object
+        type: object
+        required:
+          - data
+          - message
+        properties:
+          message:
+            type: string
+            example: Could not save or publish the product
+          data:
+            $ref: "#/components/schemas/product"
+          debug:
+            type: string
+            example: exception message
+    response-product-item:
+      type: object
+      properties:
+        kind:
+          $ref: "#/components/schemas/item-kind"
+        entityType:
+          $ref: "#/components/schemas/entity-type"
+        groupId:
+          type: string
+          nullable: true
+          example: 55fc5f71d6362321cb93b82b387e2f32
+        productId:
+          type: string
+          example: 55fc5f71d6362321cb93b82b387e2f32
+        title:
+          type: string
+          example: Livingwalls Fototapete Walls by Patel iconic 3
+        deeplink:
+          type: string
+          nullable: true
+          description: link to the product detail page
+          example: http://mainUrl/site/5/product/55fc5f71d6362321cb93b82b387e2f32/details
+        brand:
+          type: string
+          nullable: true
+          example: Fender
+        productType:
+          type: string
+          nullable: true
+          example: guitar
+        image:
+          $ref: "#/components/schemas/image"
+        images:
+          type: array
+          items:
+            $ref: "#/components/schemas/image"
+        price:
+          type: object
+          properties:
+            actual:
+              $ref: "#/components/schemas/price"
+              nullable: true
+            sale:
+              $ref: "#/components/schemas/price"
+              nullable: true
+              example: 24.95
+        basePrice:
+          type: object
+          properties:
+            actual:
+              $ref: "#/components/schemas/basePrice"
+            sale:
+              $ref: "#/components/schemas/basePrice"
+        energyEfficiencyClass:
+          deprecated: true
+          $ref: "#/components/schemas/energy-efficiency-class"
+        minEnergyEfficiencyClass:
+          deprecated: true
+          $ref: "#/components/schemas/energy-efficiency-class"
+        maxEnergyEfficiencyClass:
+          deprecated: true
+          $ref: "#/components/schemas/energy-efficiency-class"
+        energyCertifications:
+          type: array
+          items:
+            $ref: "#/components/schemas/energy-certification"
+        custom_label_0:
+          type: string
+          nullable: true
+        custom_label_1:
+          type: string
+          nullable: true
+        custom_label_2:
+          type: string
+          nullable: true
+        custom_label_3:
+          type: string
+          nullable: true
+        custom_label_4:
+          type: string
+          nullable: true
+    item-kind:
+      deprecated: true
+      description: |
+        This field is superseded by the entity type and therefore deprecated.
+      type: string
+      enum:
+        - product
+        - content
+    entity-type:
+      description: |
+        The API usually returns products; it can also return entities representing something else.
+        To enable different handling of these entities, the API uses an `entity-type` to distinguish between them, namely:
+        * A `product` entity represents a product in the catalog.
+        * A `content` entity contains information relevant to a user, e.g., trends, opening hours.
+        * A `list` entity comprises a collection of distinguishable items, e.g., a category page.
+      type: string
+      enum:
+        - product
+        - content
+        - list
+    image:
+      type: object
+      properties:
+        original:
+          type: string
+          format: uri
+          example: http://mainUrl/image.jpg
+        thumbnail:
+          type: string
+          format: uri
+          nullable: true
+          example: http://mainUrl/thumbnail-image.jpg
+      required:
+        - original
+        - thumbnail
+    price:
+      type: number
+      nullable: true
+      example: 19.90
+    basePrice:
+      description: The base price per `measure` is derived by adjusting the product's total cost to a standardized unit of measurement, making it easier to compare products of varying volumes.
+      type: object
+      properties:
+        price:
+          $ref: "#/components/schemas/price"
+        quantity:
+          type: number
+          example: 100.0
+        measure:
+          type: string
+      example:
+        price: 15.92
+        quantity: 100.0
+        measure: "ml"
+    category-path:
+      type: string
+      description: |
+        In a category tree, a category path identifies a category of the tree.
+        The API expects and returns each category path only in encoded form.
+
+        A category path is a sequence category labels, separated by the `>` character.
+        Whitespace around the category labels is ignored.
+        If the `>` character is part of a category label, it must be escaped with `%3E`.
+        The root node has no label and is omitted in a category path.
+        To represent the root node, use `root` as the sole label instead.
+
+        Consider the following category tree:
+        ```
+        .
+        ├── Furniture
+        │   ├── Benches
+        │   └── Cabinets & Storage
+        └── Home & Garden
+            ├── Plants
+            ├── Wood Stoves
+            └── Fish Pond (<><)
+        ```
+
+        That contains the following category paths:
+        - `root`
+        - `Furniture`
+        - `Furniture > Benches`
+        - `Furniture > Cabinets & Storage`
+        - `Home & Garden`
+        - `Home & Garden > Plants`
+        - `Home & Garden > Wood Stoves`
+        - `Home & Garden > Fish Pond (<%3E<)`
+
+        Category paths are transmitted in encoded form.
+        To this end, we use the [Base64-URL](https://datatracker.ietf.org/doc/html/rfc4648#section-5) encoding without any padding.
+        The category paths above are encoded as follows:
+        - `cm9vdA`
+        - `RnVybml0dXJl`
+        - `RnVybml0dXJlID4gQmVuY2hlcw`
+        - `RnVybml0dXJlID4gQ2FiaW5ldHMgJiBTdG9yYWdl`
+        - `SG9tZSAmIEdhcmRlbg`
+        - `SG9tZSAmIEdhcmRlbiA-IFBsYW50cw`
+        - `SG9tZSAmIEdhcmRlbiA-IFdvb2QgU3RvdmVz`
+        - `SG9tZSAmIEdhcmRlbiA-IEZpc2ggUG9uZCAoPCUzRTwp`
+        
+        On Linux, the `basenc` command can be used to encode category paths:
+        ```bash
+        echo -n 'Furniture > Cabinets & Storage' | basenc -w0 --base64url
+        # returns: RnVybml0dXJlID4gQ2FiaW5ldHMgJiBTdG9yYWdl
+        echo -n 'RnVybml0dXJlID4gQ2FiaW5ldHMgJiBTdG9yYWdl' | basenc -d -w0 --base64url
+        # returns: Furniture > Cabinets & Storage
+        ```
+      example:
+        - RnVybml0dXJl
+        - SG9tZSAmIEdhcmRlbg
+    rectangle:
+      type: object
+      properties:
+        left:
+          type: number
+          example: 0.1728
+          description: the relative distance to the left edge of the image
+        top:
+          type: number
+          example: 0.3641
+          description: the relative distance to the top edge of the image
+        width:
+          type: number
+          example: 0.4575
+          description: the width relative to the image's width
+        height:
+          type: number
+          example: 0.2917
+          description: the height relative to the image's height
+      description: |
+        A rectangle is defined by the position of its top-left corner and its side lengths.
+        Each value is relative to an image's dimensions, i.e., they are in the range `[0, 1]`.
+        The top-left corner is defined to be at `(0, 0)`, the bottom-right corner at `(1, 1)`.
+    category-filter:
+      allOf:
+        - $ref: "#/components/schemas/ion-link"
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: Kinder
+    name-value-item:
+      type: object
+      required:
+        - name
+        - value
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+    ion-link:
+      type: object
+      required:
+        - method
+        - href
+      properties:
+        method:
+          type: string
+          example: POST
+        href:
+          type: string
+          format: uri
+    search-area:
+      allOf:
+        - $ref: "#/components/schemas/ion-link"
+      type: object
+      required:
+        - rel
+        - value
+      properties:
+        rel:
+          type: array
+          items:
+            type: string
+            example: "query-form"
+        value:
+          type: array
+          items:
+            $ref: "#/components/schemas/name-value-item"
+    upload-high-resolution-image:
+      allOf:
+        - $ref: "#/components/schemas/ion-link"
+      type: object
+      required:
+        - rel
+        - value
+      properties:
+        rel:
+          type: array
+          items:
+            type: string
+            example: "form"
+        value:
+          type: array
+          items:
+            $ref: "#/components/schemas/name-value-item"
+    response-products:
+      type: array
+      items:
+        $ref: "#/components/schemas/response-product-item"
+    visual-product-search:
+      type: array
+      items:
+        $ref: "#/components/schemas/response-product-item"
+    ion-visual-product-search:
+      type: object
+      properties:
+        value:
+          type: array
+          items:
+            $ref: "#/components/schemas/response-product-item"
+        type:
+          type: string
+          example: "array"
+        searchArea:
+          $ref: "#/components/schemas/search-area"
+        uploadHighResolutionImage:
+          $ref: "#/components/schemas/upload-high-resolution-image"
+        filters:
+          type: object
+          properties:
+            type:
+              type: string
+              example: "object"
+            value:
+              type: object
+              properties:
+                categories:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/category-filter"
+        links:
+          type: object
+          additionalProperties:
+            "$ref": "#/components/schemas/ion-link"
+          example:
+            "self":
+              method: POST
+              href: "/search/session/62cd4392853023-58137863"
+        detectedObjects:
+          type: array
+          items:
+            "$ref": "#/components/schemas/ion-detected-object"
+    similar-products-request:
+      type: object
+      properties:
+        requestId:
+          $ref: "#/components/schemas/request-id"
+        productId:
+          $ref: "#/components/schemas/product-id"
+        resultsCount:
+          $ref: "#/components/schemas/resultsCount"
+        campaigns:
+          $ref: "#/components/schemas/campaigns"
+        substitutions:
+          $ref: "#/components/schemas/request-substitutions"
+        staticFilters:
+          $ref: "#/components/schemas/request-static-filters"
+        dynamicFilters:
+          $ref: "#/components/schemas/request-dynamic-filters"
+      required:
+        - productId
+    similar-products-response:
+      type: object
+      required:
+        - data
+      properties:
+        requestId:
+          $ref: "#/components/schemas/request-id"
+        data:
+          type: object
+          required:
+            - sourceProduct
+            - products
+          properties:
+            sourceProduct:
+              $ref: "#/components/schemas/response-product-item"
+            products:
+              $ref: "#/components/schemas/response-products"
+        interactions:
+          $ref: "#/components/schemas/interactions"
+        substitutions:
+          $ref: "#/components/schemas/response-substitutions"
+    cross-selling-request:
+      type: object
+      properties:
+        requestId:
+          $ref: "#/components/schemas/request-id"
+        productId:
+          $ref: "#/components/schemas/product-id"
+        resultsCount:
+          $ref: "#/components/schemas/resultsCount"
+        campaigns:
+          $ref: "#/components/schemas/campaigns"
+        staticFilters:
+          $ref: "#/components/schemas/request-static-filters"
+        dynamicFilters:
+          $ref: "#/components/schemas/request-dynamic-filters"
+      required:
+        - productId
+    cross-selling-response:
+      type: object
+      required:
+        - data
+      properties:
+        requestId:
+          $ref: "#/components/schemas/request-id"
+        data:
+          type: object
+          required:
+            - sourceProduct
+            - products
+          properties:
+            sourceProduct:
+              $ref: "#/components/schemas/response-product-item"
+            products:
+              $ref: "#/components/schemas/response-products"
+        interactions:
+          $ref: "#/components/schemas/interactions"
+    text-search-request:
+      type: object
+      properties:
+        requestId:
+          $ref: "#/components/schemas/request-id"
+        query:
+          type: string
+          example: flowers
+        resultsCount:
+          $ref: "#/components/schemas/resultsCount"
+        campaign:
+          $ref: "#/components/schemas/campaign-id"
+        staticFilters:
+          $ref: "#/components/schemas/request-static-filters"
+        dynamicFilters:
+          $ref: "#/components/schemas/request-dynamic-filters"
+      required:
+        - query
+    visual-search-request:
+      type: object
+      properties:
+        requestId:
+          $ref: "#/components/schemas/request-id"
+        query:
+          type: object
+          properties:
+            image:
+              type: string
+              format: byte
+              example: iVBORw0KGgoAAAANSUhEUgAAAAMAAAADCAYAAABWKLW/AAAABHNCSVQICAgIfAhkiAAAACxJREFUCJkFwQENACAMBLEjwQMOZvMxg4H5QAgqjpZGfZHSeRmwxGyg9Bgb/YMgFBc0Hx5MAAAAAElFTkSuQmCC
+              description: |
+                This image is used for finding products.
+                
+                The image will be temporarily stored on the server-side, enabling subsequent requests to omit the image.
+                In that case, the `requestId` must be set in the request.
+                
+                When sending, it should be either the base64-encoded image or a data URL containing an image in base64 encoding.
+            highResolutionImage:
+              type: string
+              format: byte
+              example: iVBORw0KGgoAAAANSUhEUgAAAAMAAAADCAYAAABWKLW/AAAABHNCSVQICAgIfAhkiAAAACxJREFUCJkFwQENACAMBLEjwQMOZvMxg4H5QAgqjpZGfZHSeRmwxGyg9Bgb/YMgFBc0Hx5MAAAAAElFTkSuQmCC
+              description: |
+                In addition to the `image`, a high resolution image can be uploaded to ensure accurate results when using a search area.
+                Before sending a high resolution image, we recommend to send a small image initially to have results early.
+                
+                When sending, it should be either the base64-encoded image or a data URL containing an image in base64 encoding.
+            searchArea:
+              type: object
+              oneOf:
+                - $ref: "#/components/schemas/rectangle"
+              description: |
+                The search area defines a region within the image;
+                the results will be based on this region instead of the entire image.
+                
+                If a high resolution image has been uploaded, the search area will be based on the high resolution image.
+        resultsCount:
+          $ref: "#/components/schemas/resultsCount"
+        campaign:
+          $ref: "#/components/schemas/campaign-id"
+        staticFilters:
+          $ref: "#/components/schemas/request-static-filters"
+        dynamicFilters:
+          $ref: "#/components/schemas/request-dynamic-filters"
+        objectDetection:
+          $ref: "#/components/schemas/request-object-detection"
+      required:
+        - query
+    product-listing-page-request:
+      type: object
+      properties:
+        requestId:
+          $ref: "#/components/schemas/request-id"
+        resultsCount:
+          $ref: "#/components/schemas/resultsCount"
+        campaign:
+          $ref: "#/components/schemas/campaign-id"
+        staticFilters:
+          $ref: "#/components/schemas/request-static-filters"
+        dynamicFilters:
+          $ref: "#/components/schemas/request-dynamic-filters"
+    text-search-response:
+      type: object
+      properties:
+        requestId:
+          $ref: "#/components/schemas/request-id"
+        data:
+          type: object
+          properties:
+            products:
+              $ref: "#/components/schemas/response-products"
+            interactions:
+              deprecated: true
+              oneOf:
+                - $ref: "#/components/schemas/interactions"
+          required:
+            - products
+        interactions:
+          $ref: "#/components/schemas/interactions"
+        stream:
+          $ref: "#/components/schemas/stream"
+    auto-suggest-request:
+      type: object
+      properties:
+        query:
+          type: string
+          example: "sneak"
+      required:
+        - query
+    auto-suggest-response:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            query:
+              type: string
+              example: sneak
+            completions:
+              type: array
+              items:
+                $ref: "#/components/schemas/query-completion"
+          required:
+            - query
+            - completions
+      required:
+        - data
+    query-completion:
+      type: object
+      properties:
+        suggestion:
+          type: string
+          example: sneakers
+        url:
+          type: string
+          format: uri
+          example: https://www.example.com/sneakers
+          nullable: true
+      required:
+        - suggestion
+    visual-search-response:
+      type: object
+      properties:
+        requestId:
+          $ref: "#/components/schemas/request-id"
+        data:
+          type: object
+          properties:
+            products:
+              $ref: "#/components/schemas/response-products"
+          required:
+            - products
+        interactions:
+          $ref: "#/components/schemas/interactions"
+    product-listing-page-response:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            products:
+              $ref: "#/components/schemas/response-products"
+          required:
+            - products
+        interactions:
+          $ref: "#/components/schemas/interactions"
+    label-value-item:
+      type: object
+      required:
+        - value
+        - label
+      properties:
+        value:
+          oneOf:
+            - $ref: "#/components/schemas/category-path"
+            - $ref: "#/components/schemas/succinct-color-filter-response"
+            - $ref: "#/components/schemas/full-color-filter-response"
+            - type: string
+            - type: number
+        label:
+          type: string
+          example: Tische
+    filter-kind:
+      type: string
+      enum:
+        - categorical
+        - interval
+    categorical-filter-value-item:
+      allOf:
+        - $ref: "#/components/schemas/label-value-item"
+        - type: object
+          required:
+            - value
+            - label
+            - active
+            - selected
+          properties:
+            active:
+              type: boolean
+              example: true
+            selected:
+              type: boolean
+              example: false
+    interval-selected-values:
+      type: array
+      items:
+        $ref: "#/components/schemas/interval"
+    interval-filter-values:
+      type: object
+      required:
+        - value
+        - label
+        - active
+      properties:
+        value:
+          $ref: "#/components/schemas/interval-filter-value-item"
+        label:
+          type: string
+          example: Tische
+        active:
+          type: boolean
+          example: true
+    response-categorical-filter-item:
+      type: object
+      required:
+        - type
+        - column
+        - label
+        - isPrimary
+        - values
+      properties:
+        type:
+          $ref: "#/components/schemas/filter-kind"
+        column:
+          type: string
+          example: product_type
+        label:
+          type: string
+          example: "Product Type"
+        isPrimary:
+          type: boolean
+          example: true
+        values:
+          type: array
+          items:
+            $ref: "#/components/schemas/categorical-filter-value-item"
+    response-interval-filter-item:
+      type: object
+      required:
+        - type
+        - column
+        - label
+        - isPrimary
+        - full
+        - selectedValues
+        - suggestions
+        - histogram
+      properties:
+        type:
+          $ref: "#/components/schemas/filter-kind"
+        column:
+          type: string
+          example: price
+        label:
+          type: string
+          example: Price
+        isPrimary:
+          type: boolean
+          example: true
+        full:
+          $ref: "#/components/schemas/interval"
+        selectedValues:
+          $ref: "#/components/schemas/interval-selected-values"
+        suggestions:
+          type: array
+          items:
+            $ref: "#/components/schemas/interval-filter-values"
+        histogram:
+          type: array
+          items:
+            $ref: "#/components/schemas/interval-filter-values"
+    request-dynamic-filter-item:
+      type: object
+      required:
+        - column
+        - values
+      properties:
+        column:
+          type: string
+          example: product_type
+        values:
+          oneOf:
+            - $ref: "#/components/schemas/category"
+            - $ref: "#/components/schemas/string-list"
+            - $ref: "#/components/schemas/interval-list"
+            - $ref: "#/components/schemas/color-list-includes-rgb-code"
+            - $ref: "#/components/schemas/color-list"
+    response-dynamic-filters:
+      type: array
+      items:
+        oneOf:
+          - $ref: "#/components/schemas/response-categorical-filter-item"
+          - $ref: "#/components/schemas/response-interval-filter-item"
+    request-dynamic-filters:
+      type: array
+      description: |
+        The dynamic filters are parameters that refine the already narrowed down dataset from the `staticFilters` based on real-time request criteria.
+        These filters are flexible and can be adjusted dynamically to specific user queries or requirements, allowing for further granular filtering.
+        They provide a more precise result based on the user's immediate needs.
+      items:
+        $ref: "#/components/schemas/request-dynamic-filter-item"
+    request-object-detection:
+      type: object
+      properties:
+        include:
+          type: boolean
+          description: if true, objects in the image will be detected and returned as suggested search areas
+      required:
+        - include
+    request-static-filters:
+      type: object
+      description: |
+        The static filters are predefined parameters that set the initial scope for the data retrieval process.
+        These filters are configured to extract a broad, meaningful set of results based on your criteria.
+        Once applied, they help in reducing the dataset to a manageable and relevant subset before any further, more granular filtering occurs via `dynamicFilters`.
+      properties:
+        excluded:
+          $ref: "#/components/schemas/excluded"
+        included:
+          $ref: "#/components/schemas/included"
+    interactions:
+      type: object
+      required:
+        - dynamicFilters
+      properties:
+        dynamicFilters:
+          $ref: "#/components/schemas/response-dynamic-filters"
+        suggestedSearchAreas:
+          type: array
+          items:
+            $ref: "#/components/schemas/suggested-search-area"
+        redirect:
+          $ref: "#/components/schemas/redirect"
+    suggested-search-area:
+      type: object
+      properties:
+        rectangle:
+          $ref: "#/components/schemas/rectangle"
+      required:
+        - rectangle
+    redirect:
+      type: object
+      properties:
+        url:
+          description: The URL to which the user should be redirected.
+          type: string
+          format: uri
+          example: "https://www.example.com/some-category"
+      required:
+        - url
+    stream:
+      description: |
+        A stream guides a user to fulfilling an intent by providing precise and relevant insights.
+        
+        The engine behind a stream can be likened to an assistant that continuously observes the user's actions and tries to reconcile it with the product catalog.
+        As soon as the imagined assistant sees an opportunity to help, it provides stream items.
+        They can be presented to the user in a chat-like interface and be acted upon by the user.
+        Alternatively, they can be processed automatically, to act on unambiguous, high-confidence suggestions.
+        
+        An important distinction to interactions is a stream's requirement for precision and a higher threshold for relevance:
+        For the former, the interactions might contain multiple filters with many options, whereas a stream would suggest only a single filter with ideally only one option.
+        For the latter, an interaction might contain filter options that are unlikely to be relevant, whereas a stream would never suggest such options.
+        That is, the interactions give the user the full flexibility to explore, whereas a stream guides the user by focusing on an intent.
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/stream-item"
+      required:
+        - items
+    stream-item:
+      type: object
+      properties:
+        role:
+          $ref: "#/components/schemas/role"
+        parts:
+          type: array
+          items:
+            $ref: "#/components/schemas/stream-part"
+      required:
+        - role
+        - parts
+    role:
+      type: string
+      description: |
+        A stream involves multiple actors, each with a different purpose and capabilities.
+        They are distinguished by their `role` in the stream:
+        
+        * The `assistant` is the part of the system that drives the stream, usually by means of AI.
+        * Items produced by the `system` initiate the stream's context, usually, by defining the assistant's goals, means and limitations.
+        * The `user` is the person who interacts with the system, e.g., a customer.
+        * The `client` receives the stream and processes it for the user.
+          This can be as simple as rendering the stream in a chat interface;
+          or as complex as reacting automatically to stream items, e.g., by automatically applying a filter.
+        
+        The distinction between `user`, `client` and `assistant` is crucial:
+        It allows to produce effects on the frontend that are not initiated by the user, but requested by the assistant.
+        Likewise, information from the frontend can flow to the assistant, without involving the user.
+      enum:
+        - assistant
+        - system
+        - user
+        - client
+      example: assistant
+    stream-part:
+      type: object
+      properties:
+        text:
+          $ref: "#/components/schemas/context"
+        inlineData:
+          $ref: "#/components/schemas/blob"
+        functionCall:
+          $ref: "#/components/schemas/function-call"
+        functionResponse:
+          $ref: "#/components/schemas/function-response"
+        fileData:
+          $ref: "#/components/schemas/file-data"
+    context:
+      type: object
+      description: |
+        A context item summarizes the current situation and informs about next steps.
+        It is composed of text (`content`) and structured data (`annotations`), intended for the `user` and `client`, respectively.
+        With this separation, the content can be arranged in a human-readable way, without any need for further processing.
+        However, the client can use an annotation to replace its referenced part of the content with a more meaningful representation, e.g., product cards.
+      properties:
+        content:
+          type: string
+          format: markdown
+          description: The content is human-readable markdown text, intended for the user.
+          example: |
+            You are looking for a couch. We have two categories that might be of particular interest to you:
+            
+            * [Lounge](https://www.example.com/lounge)
+            * [Divan](https://www.example.com/divan)
+            
+            They represent different kinds of couches.
+        annotations:
+          type: array
+          items:
+            $ref: "#/components/schemas/context-annotation"
+      required:
+        - content
+        - annotations
+    context-annotation:
+      type: object
+      description: |
+        A context annotation provides structured information about a specific part of a context's content.
+        
+        The `locator` describes the part of the text that the annotation refers to.
+        The `data` contains the structured information related to the part referred to by the annotation, e.g., the part's contained products.
+        The `interactions` describe how the user can interact with the annotation or its parts, e.g., by setting a filter when clicking on a card.
+      properties:
+        locator:
+          type: object
+          description: This object describes the location of what the annotation refers to.
+          properties:
+            start:
+              type: integer
+              description: The position of the annotation's first character in the text
+              example: 98
+            length:
+              type: integer
+              description: The annotation's length in the text
+              example: 83
+          required:
+            - start
+            - length
+        data:
+          discriminator:
+            propertyName: type
+            mapping:
+              products: "#/components/schemas/context-annotation-data-products"
+          oneOf:
+            - $ref: "#/components/schemas/context-annotation-data-products"
+        interactions:
+          $ref: "#/components/schemas/interactions"
+      required:
+        - locator
+        - data
+        - interactions
+    context-annotation-data-products:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - products
+          example: products
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/response-product-item"
+      required:
+        - type
+        - items
+    blob:
+      type: object
+      description: A `blob` is used to transfer binary data within a stream, e.g., an image uploaded by the user.
+      properties:
+        mimeType:
+          type: string
+          example: "image/png"
+        data:
+          type: string
+          format: base64
+          example: iVBORw0KGgoAAAANSUhEUgAAAAMAAAADCAYAAABWKLW/AAAABHNCSVQICAgIfAhkiAAAACxJREFUCJkFwQENACAMBLEjwQMOZvMxg4H5QAgqjpZGfZHSeRmwxGyg9Bgb/YMgFBc0Hx5MAAAAAElFTkSuQmCC
+    function-call:
+      type: object
+      description: |
+        A `function-call` represents an invocation of a function.
+        
+        In most cases, a function is executed by the assistant, e.g., to predict a category based on the user's input.
+        However, a function can also be executed by the client, e.g., to automatically set a filter.
+        In that case, the assistant can only request the client to execute a function.
+        To do so, the assistant needs to be aware of the functions supported by the client.
+      properties:
+        id:
+          type: string
+          description: If set, the result of this function call is required to have the same id.
+        name:
+          type: string
+          description: The name of the function to be called.
+        args:
+          type: object
+      required:
+        - name
+    function-response:
+      type: object
+      description: |
+        A `function-response` contains the result of a function call.
+        
+        The client can show the structured data in the response in a more meaningful way, e.g., by using a dedicated UI component.
+      properties:
+        id:
+          type: string
+          description: If a function call has an id, the function response must use the same id.
+        name:
+          type: string
+          description: The name of the function that was called.
+        response:
+          type: object
+      required:
+        - name
+        - response
+    file-data:
+      type: object
+      description: "`file-data` references an uploaded file in a stream, thus avoiding to repeatedly sending the same file."
+      properties:
+        mimeType:
+          type: string
+          example: "image/png"
+        fileUri:
+          type: string
+          format: uri
+          example: "https://example.com/path/to/file.png"
+    request-substitutions:
+      type: object
+      properties:
+        category:
+          $ref: "#/components/schemas/category"
+        price:
+          $ref: "#/components/schemas/price"
+    response-substitutions:
+      type: array
+      items:
+        $ref: "#/components/schemas/response-substitution-item"
+    response-substitution-item:
+      type: object
+      required:
+        - column
+        - value
+      properties:
+        column:
+          type: string
+          enum:
+            - product_type
+            - google_product_category
+            - price
+        value:
+          oneOf:
+            - $ref: "#/components/schemas/label-value-item"
+            - type: array
+              items:
+                $ref: "#/components/schemas/label-value-item"
+    value-list:
+      type: object
+      properties:
+        column:
+          type: string
+          example: brand
+        values:
+          type: array
+          items:
+            type: string
+          example:
+            - "Nike"
+            - "Puma"
+    string-list:
+      type: array
+      items:
+        type: string
+      example:
+        - "Nike"
+        - "Puma"
+    succinct-color-filter-response:
+      type: object
+      required:
+        - value
+        - name
+      properties:
+        value:
+          type: string
+          example: "beige"
+        name:
+          type: string
+          example: "beige"
+    full-color-filter-response:
+      required:
+        - value
+        - name
+        - hexCode
+        - rgb
+        - family
+      allOf:
+        - $ref: "#/components/schemas/succinct-color-filter-response"
+        - type: object
+          properties:
+            hexCode:
+              type: string
+              example: "#C7B3A8"
+            rgb:
+              $ref: "#/components/schemas/rgb"
+            family:
+              type: string
+              example: "beige"
+    rgb:
+      type: object
+      properties:
+        red:
+          type: integer
+          example: 199
+        green:
+          type: integer
+          example: 179
+        blue:
+          type: integer
+          example: 168
+    color-list-includes-rgb-code:
+      type: array
+      items:
+        type: string
+      example:
+        - "black > #1A1A1A"
+        - "beige > #C7B3A8"
+    color-list:
+      type: array
+      items:
+        type: string
+      example:
+        - "black"
+        - "beige"
+    interval-filter-value-item:
+      type: object
+      properties:
+        frequency:
+          type: number
+        interval:
+          $ref: "#/components/schemas/interval"
+    interval-list:
+      type: array
+      items:
+        $ref: "#/components/schemas/interval"
+    interval:
+      description: The interval object that is defined by a [start, end).
+      type: object
+      properties:
+        start:
+          type: number
+        end:
+          type: number
+    visual-product-recommendations:
+      type: object
+      properties:
+        bestFits:
+          type: array
+          items:
+            type: string
+          example:
+            - "b56764137ca959da9541bb28c1987d6c"
+            - "b5685a5230f5050475f214b4bb0e239b"
+            - "b56c560872da93602ff88c7267eb4774"
+            - "d861ad687c60820255dbf8f88516f24d"
+        extended:
+          $ref: "#/components/schemas/response-products"
+    predict-product:
+      type: object
+      properties:
+        attributes:
+          type: array
+          items:
+            type: string
+    predicted-product:
+      type: object
+      properties:
+        id:
+          description: the id of the product to which the predictions belong
+          type: string
+          example: 0010020000VR
+        attributes:
+          description: each object represents a field of the product with its predicted value
+          type: array
+          items:
+            $ref: "#/components/schemas/predicted-attribute"
+        images:
+          description: each object represents an image of the product with its predicted fields
+          type: array
+          items:
+            $ref: "#/components/schemas/predicted-image"
+      required:
+        - id
+        - attributes
+        - images
+    predicted-image:
+      type: object
+      properties:
+        url:
+          description: the url that identifies the image
+          type: string
+          example: "https://www.example.org/image.jpg"
+        attributes:
+          description: each object represents an attribute of the image with its predicted value
+          type: array
+          items:
+            $ref: "#/components/schemas/predicted-attribute"
+      required:
+        - url
+        - attributes
+    predicted-attribute:
+      description: this object contains a prediction for an attribute
+      type: object
+      properties:
+        name:
+          description: the attribute's name
+          type: string
+          example: color
+        value:
+          description: the attribute's known value (according to the product catalog)
+          nullable: true
+          example: red
+        prediction:
+          description: the attribute's predicted value
+          nullable: true
+          example: orange
+        confirmed:
+          description: the value that was confirmed by a user
+          nullable: true
+          example: peach
+      required:
+        - name
+        - value
+        - prediction
+    delete-product-images-by-productId:
+      type: object
+      properties:
+        site-id:
+          type: integer
+          example: 25
+        product-id:
+          type: string
+          example: "100258"
+        image-ids:
+          type: array
+          items: { }
+          example:
+            - "1"
+            - "2"
+  requestBodies:
+    product-annotation:
+      description: Product data object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: "#/components/schemas/product-data"
+              images:
+                type: array
+                items:
+                  $ref: "#/components/schemas/product-annotation-images"
+    similar-products:
+      description: Similar Products request body
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/similar-products-request"
+    cross-selling:
+      description: Cross Selling request body
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/cross-selling-request"
+    text-search:
+      description: Text Search request body
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/text-search-request"
+    auto-suggest:
+      description: Auto Suggest request body
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/auto-suggest-request"
+    visual-search:
+      description: Visual Search request body
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/visual-search-request"
+    product-listing-page:
+      description: Product listing page request body
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/product-listing-page-request"
+  responses:
+    ion-detected-objects:
+      description: detected objects response
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ion-detected-objects"
+    visual-product-search:
+      description: success
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/response-products"
+    ion-visual-product-search:
+      description: success
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ion-visual-product-search"
+    visual-product-recommendation:
+      description: success
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/visual-product-recommendations"
+    similar-products:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/similar-products-response"
+    cross-selling:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/cross-selling-response"
+    text-search:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/text-search-response"
+    auto-suggest:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/auto-suggest-response"
+    visual-search:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/visual-search-response"
+    product-listing-page:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/product-listing-page-response"
+    authentication-error:
+      description: Authentication Error
+      content:
+        application/json:
+          example:
+            message: Authentication Error
+    authorization-error:
+      description: Authorization Error
+      content:
+        application/json:
+          example:
+            message: Authorization Error
+    generic-error:
+      description: Generic Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+          example:
+            message: Generic Error
+  examples:
+    rectangle:
+      value:
+        name: rectangle
+        type: object
+        value:
+          left:
+            type: integer
+            value: 100
+          top:
+            type: integer
+            value: 150
+          width:
+            type: integer
+            value: 500
+          height:
+            type: integer
+            value: 350

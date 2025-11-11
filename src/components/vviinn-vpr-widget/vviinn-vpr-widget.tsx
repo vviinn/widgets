@@ -69,8 +69,11 @@ import {
   DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH,
   PRODUCT_CARD_IMAGE_WIDTH,
 } from "../../widget/constants";
+import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
 
 export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
+
+export type Mode = "pure-grid" | CarouselMode;
 
 /**
  * @part product-card - Product Card itself.
@@ -82,6 +85,9 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @part image-link - Anchor element around product image. Rendered only if "deeplink" property is filled.
  * @part image-picture - Picture element for image.
  * @part image-placeholder - Placeholder shown when no image is available.
+ * @part image-container - Product Card's image container.
+ * @part content-container - Product Card's content container.
+ * @part basket-button-container - Product Card's basket button container.
  * @part deeplink - Anchor element around product title. Rendered only if "deeplink" property is filled.
  * @part price-amount-sale - Numeric part of the price.
  * @part price-amount-outdated - Numeric part of the price.
@@ -93,7 +99,11 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @part price-regular - Block for a price if no sale price is presented.
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
  * @part price-prefix - Block rendered before each price element (for ex. "from").
- * @part carousel-button - Button for carousel navigation.
+ * @part product-card-actions - Product Card actions wrapper.
+ * @part product-card-actions-top - Product Card top actions wrapper.
+ * @part carousel-button - Both carousel navigation buttons (generic part).
+ * @part carousel-button-prev - The previous/back carousel navigation button.
+ * @part carousel-button-next - The next/forward carousel navigation button.
  * @part recommendations-results - For internal usage only!
  * @part recommendations-title - Title of the recommendations grid.
  * @part recommendations-subtitle - Subtitle of the recommendations grid.
@@ -106,6 +116,12 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @part update-button-item - Update Button inside the Product Card (Set mode).
  * @part discount-label - Discount label in Product Card (Set mode).
  * @part discount-percentage - Discount percentage inside the Add to Basket button (Set mode).
+ * @part list-card - List card container.
+ * @part list-card-content-container - List card's content container.
+ * @part list-card-image-container - List card's image container.
+ * @part list-card-image-link - List card's image link.
+ * @part list-label - List card's label (e.g., "Category").
+ * @part list-title - List card's title.
  *
  * @part custom-label-0 - Custom label with index 0.
  * @part custom-label-1 - Custom label with index 1.
@@ -132,9 +148,6 @@ export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
  * @slot vviinn-custom-label-4 - Custom label with index 4.
  * @slot vviinn-image-placeholder-icon - Icon or content for the image placeholder.
  */
-
-export type Mode = "pure-grid" | CarouselMode;
-
 @Component({
   tag: "vviinn-vpr-widget",
   styleUrl: "vviinn-vpr-widget.css",
@@ -167,7 +180,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() imageRatio: number = 1;
   /** Items amount in set mode grid */
   @Prop() setItemsAmount?: number = 4;
-  /** Optional for custom CSS. It will overwrite all other settings */
+  /** URL to external CSS file for custom styling */
   @Prop() cssUrl: string | null = null;
   /** The currency sign is displayed after the price */
   @Prop() currencySign?: string;
@@ -637,17 +650,6 @@ export class VviinnVprWidget implements ComponentInterface {
     });
   }
 
-  private isExternalCSS(): boolean {
-    return this.cssUrl && this.cssUrl.length > 0;
-  }
-
-  private renderExternalCSS() {
-    return this.isExternalCSS() ? (
-      <link href={this.cssUrl} rel="stylesheet" />
-    ) : (
-      ""
-    );
-  }
 
   private renderRecommendation(
     recommendation: Recommendation,
@@ -774,7 +776,7 @@ export class VviinnVprWidget implements ComponentInterface {
         aria-live={isLoading ? "polite" : "off"}
       >
         <Fragment>
-          {this.renderExternalCSS()}
+          {renderExternalCSS(this.cssUrl)}
 
           {SlotSkeleton("discovery")}
 

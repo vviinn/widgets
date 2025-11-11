@@ -2,6 +2,47 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.200.0](https://github.com/vviinn/widgets/compare/v2.199.0...v2.200.0) (2025-11-11)
+
+
+### Features
+
+* CSS URL (css-url) support for widgets and components. ([d87e34f](https://github.com/vviinn/widgets/commit/d87e34f2cbbdec94d93cd93996a644a47bf6eb5a))
+
+## [2.199.0](https://github.com/vviinn/widgets/compare/v2.198.0...v2.199.0) (2025-11-06)
+
+
+### Features
+
+* Improve Search Page documentation. Merge with the Best Practices page. ([1b915de](https://github.com/vviinn/widgets/commit/1b915de533aeb7da7208798b2382acc9eea128c0))
+* Improvements to Storybook's customization section. ([4c0e4f3](https://github.com/vviinn/widgets/commit/4c0e4f34117b4c769584e98225a085eddc1d762e))
+
+
+### Bug Fixes
+
+* Show fewer results for product lists in Storybook. Improve text search queries for industries. ([8875321](https://github.com/vviinn/widgets/commit/88753215349ca3fd72b762a0b8ea800178f879d3))
+* Show missing CSS parts and slots for the Discovery Widget playground in Storybook. ([076c9bb](https://github.com/vviinn/widgets/commit/076c9bb7c07ef31507c8d7f643c991118792c5e5))
+
+## [2.198.0](https://github.com/vviinn/widgets/compare/v2.197.0...v2.198.0) (2025-10-30)
+
+
+### Features
+
+* New CSS parts: carousel-button-prev, carousel-button-next for styling carousel buttons individually. ([af85db0](https://github.com/vviinn/widgets/commit/af85db09b89bc399c316375226dd4ad415655fa3))
+* Render custom labels inside the card's image container and provide CSS parts to identify them: custom-label-image and custom-label-content. ([853590c](https://github.com/vviinn/widgets/commit/853590cd305229a43f813ecca4d7c0ff271c5ca3))
+
+
+### Bug Fixes
+
+* Blurred detected objects possibility in Safari browser. ([205327a](https://github.com/vviinn/widgets/commit/205327af2517ef4fa9494c52fa952dc963774863))
+
+## [2.197.0](https://github.com/vviinn/widgets/compare/v2.196.0...v2.197.0) (2025-10-28)
+
+
+### Features
+
+* Display selected filters in the Search Widget ([4445ef1](https://github.com/vviinn/widgets/commit/4445ef1c6ee20f5e780408f3c7e8d09887bdbb22))
+
 ## [2.196.0](https://github.com/vviinn/widgets/compare/v2.195.1...v2.196.0) (2025-10-24)
 
 

@@ -30,6 +30,7 @@ import {
   getSelectedInterval,
   RenderSearchInput,
   applyRightAlignmentToModal,
+  syncRequestFilters,
 } from "./helpers";
 import { filterOptionsBySearch } from "./helpers/searchHelper";
 import { isPriceFilter } from "../../filters";
@@ -49,6 +50,7 @@ import { SearchStore, useSearchStore } from "../../store/search.store";
 import { globalState } from "../../store/store";
 import { addEventListenersWithSignal, isElementInSelector } from "../../dom";
 import { ResponseIntervalFilterItem } from "../../interfaces";
+import { extendedFiltersParts } from "../../cssParts";
 
 /**
  * @slot vviinn-extended-filters-title - Text on widget's header.
@@ -112,7 +114,11 @@ const FILTER_OPTIONS_STEP_COUNT = 5;
 export class VviinnExtendedFilters {
   @Element() el: HTMLElement;
 
-  @Prop() mode: "button" | "preview" | "preview-inline" | "modal" = "button";
+  @Prop({ reflect: true }) mode:
+    | "button"
+    | "preview"
+    | "preview-inline"
+    | "modal" = "button";
   @Prop() showHeader?: boolean = true;
   /** Minimum number of filter options required to show search bar in preview-inline mode. Set to 0 to always show, or a high number to never show. */
   @Prop() searchThreshold?: number = 0;
@@ -326,29 +332,37 @@ export class VviinnExtendedFilters {
           class="filters-modal-wrapper"
           part="extended-filters-modal-wrapper"
         >
-          {this.showHeader && (
-            <div class="filters-modal-header" part="extended-filters-header">
-              <h2
-                id="filters-modal-title"
-                class="filters-modal-title"
-                part="extended-filters-title"
-              >
-                <slot name="vviinn-extended-filters-title">
-                  {i18next.t("filters.modal.title")}
-                </slot>
-              </h2>
+          <div
+            class={{
+              "filters-modal-header": true,
+              "show-header-content": this.showHeader,
+            }}
+            part="extended-filters-header"
+          >
+            {this.showHeader && (
+              <Fragment>
+                <h2
+                  id="filters-modal-title"
+                  class="filters-modal-title"
+                  part="extended-filters-title"
+                >
+                  <slot name="vviinn-extended-filters-title">
+                    {i18next.t("filters.modal.title")}
+                  </slot>
+                </h2>
 
-              <button
-                class="filters-modal-close"
-                onClick={this.handleCloseModal}
-                part="extended-filters-modal-close"
-                aria-label={i18next.t("a11y.closeDialog")}
-                type="button"
-              >
-                <NewCloseIcon />
-              </button>
-            </div>
-          )}
+                <button
+                  class="filters-modal-close"
+                  onClick={this.handleCloseModal}
+                  part="extended-filters-modal-close"
+                  aria-label={i18next.t("a11y.closeDialog")}
+                  type="button"
+                >
+                  <NewCloseIcon />
+                </button>
+              </Fragment>
+            )}
+          </div>
 
           <div class="filters-modal-main" part="extended-filters-main">
             {filters.length === 0 && this.state.searchStatus !== "loading" ? (
@@ -663,9 +677,16 @@ export class VviinnExtendedFilters {
   }
 
   connectedCallback() {
-    const { state } = useSearchStore(this.showInWidget);
+    const { state, onChange } = useSearchStore(this.showInWidget);
     this.state = state;
     this.isPreviewInlineMode = this.mode === "preview-inline";
+
+    syncRequestFilters(
+      state,
+      onChange,
+      (filters) => (this.requestFilters = filters),
+    );
+
     this.eventAbortController = new AbortController();
     const { signal } = this.eventAbortController;
 
@@ -760,6 +781,7 @@ export class VviinnExtendedFilters {
         class={{
           "show-in-widget": this.showInWidget,
         }}
+        exportParts={extendedFiltersParts}
       >
         <div
           ref={(el) => (this.filterAnnouncementRef = el)}
