@@ -1,3 +1,4 @@
+delete process.env.OPENAPI_URL;
 const dotenv = require("dotenv").config();
 const swaggerToTS = require("openapi-typescript").default;
 const fs = require("fs");
