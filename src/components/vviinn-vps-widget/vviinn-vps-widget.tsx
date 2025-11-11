@@ -73,6 +73,7 @@ import {
 } from "../../cssParts";
 import { findSlotElements, addEventListenersWithSignal } from "../../dom";
 import { SEARCH_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
+import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
 
 const CAMERA_START_DELAY = 500;
 
@@ -183,6 +184,8 @@ export class VviinnVpsWidget {
   @Prop() addPriceContainer?: boolean = false;
   /** Show editable input fields in interval filters instead of readonly labels */
   @Prop() showIntervalInputs: boolean = false;
+  /** URL to external CSS file for custom styling */
+  @Prop() cssUrl: string | null = null;
 
   /** @internal */
   @Prop() apiPath?: string;
@@ -715,6 +718,8 @@ export class VviinnVpsWidget {
       <Host
         exportparts={`${modalParts}, ${productCardParts}, ${searchBarParts}, ${searchWidgetFilterParts}, ${searchWidgetButtonParts}, ${productCardsGridPart}, ${suggestionsParts}`}
       >
+        {renderExternalCSS(this.cssUrl)}
+
         {!this.showingInButton && SlotSkeleton("search")}
 
         <vviinn-overlayed-modal
