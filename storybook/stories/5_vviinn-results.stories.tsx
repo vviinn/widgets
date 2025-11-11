@@ -34,6 +34,7 @@ const initArgs = {
   oneClickDiscoveryMode: "append-grid",
   addPriceContainer: false,
   favoriteShow: true,
+  cssUrl: "",
 };
 
 Default.args = argsFromParams(initArgs);

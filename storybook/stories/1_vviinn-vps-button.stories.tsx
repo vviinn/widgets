@@ -45,6 +45,7 @@ const Template = (args) => `
   show-interval-inputs="${args.showIntervalInputs}"
   favorite-show="${args.favoriteShow}"
   one-click-discovery-mode="${args.oneClickDiscoveryMode}"
+  css-url="${args.cssUrl}"
 ></vviinn-vps-button>`;
 
 export const Default = Template.bind({});
@@ -73,6 +74,7 @@ const initArgs = {
   showIntervalInputs: false,
   favoriteShow: false,
   oneClickDiscoveryMode: "append-grid",
+  cssUrl: "",
 };
 
 Default.args = argsFromParams(initArgs);

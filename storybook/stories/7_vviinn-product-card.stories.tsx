@@ -58,6 +58,7 @@ const Template = (args) => {
       favorite-show="${args.favoriteShow}"
       is-standalone="true"
       entity-type="${args.entityType}"
+      css-url="${args.cssUrl}"
     ></vviinn-product-card>`;
 };
 
@@ -100,6 +101,7 @@ const initArgs = {
   energyCertificationsString,
   favoriteShow: true,
   entityType: "product",
+  cssUrl: "",
 };
 
 Default.args = argsFromParams(initArgs);

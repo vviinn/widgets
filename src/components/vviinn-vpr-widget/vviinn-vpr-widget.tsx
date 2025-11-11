@@ -69,6 +69,7 @@ import {
   DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH,
   PRODUCT_CARD_IMAGE_WIDTH,
 } from "../../widget/constants";
+import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
 
 export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
 
@@ -184,7 +185,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() showMultipleImages: boolean = false;
   /** Items amount in set mode grid */
   @Prop() setItemsAmount?: number = 4;
-  /** Optional for custom CSS. It will overwrite all other settings */
+  /** URL to external CSS file for custom styling */
   @Prop() cssUrl: string | null = null;
   /** The currency sign is displayed after the price */
   @Prop() currencySign?: string;
@@ -654,17 +655,6 @@ export class VviinnVprWidget implements ComponentInterface {
     });
   }
 
-  private isExternalCSS(): boolean {
-    return this.cssUrl && this.cssUrl.length > 0;
-  }
-
-  private renderExternalCSS() {
-    return this.isExternalCSS() ? (
-      <link href={this.cssUrl} rel="stylesheet" />
-    ) : (
-      ""
-    );
-  }
 
   private renderRecommendation(
     recommendation: Recommendation,
@@ -797,7 +787,7 @@ export class VviinnVprWidget implements ComponentInterface {
         aria-live={isLoading ? "polite" : "off"}
       >
         <Fragment>
-          {this.renderExternalCSS()}
+          {renderExternalCSS(this.cssUrl)}
 
           {SlotSkeleton("discovery")}
 

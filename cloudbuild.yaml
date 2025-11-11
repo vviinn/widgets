@@ -14,6 +14,8 @@ steps:
     args:
       - '-c'
       - |
+        echo "OPENAPI_URL=./openapi/merchant-openapi.yaml" > .env
+        npm run build_interfaces
         npm run build
         cp -r . /widgets
     volumes:

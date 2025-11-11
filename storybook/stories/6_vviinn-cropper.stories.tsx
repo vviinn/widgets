@@ -14,7 +14,8 @@ const Template = (args) => `
     <vviinn-cropper
       width="${args.width}"
       api-path="${args.apiPath}"
-      save-image-mode="${args.saveImageMode}"></vviinn-cropper> 
+      save-image-mode="${args.saveImageMode}"
+      css-url="${args.cssUrl}"></vviinn-cropper> 
       
     <vviinn-extended-filters mode="preview" locale="en-US"></vviinn-extended-filters>
   </div>
@@ -51,6 +52,7 @@ const initArgs = {
   apiPath: process.env.STORYBOOK_API_PATH,
   saveImageMode: "once",
   width: 288,
+  cssUrl: "",
 };
 
 Default.args = argsFromParams(initArgs);

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.200.0](https://github.com/vviinn/widgets/compare/v2.199.0...v2.200.0) (2025-11-11)
+
+
+### Features
+
+* CSS URL (css-url) support for widgets and components. ([d87e34f](https://github.com/vviinn/widgets/commit/d87e34f2cbbdec94d93cd93996a644a47bf6eb5a))
+
 ## [2.199.0](https://github.com/vviinn/widgets/compare/v2.198.0...v2.199.0) (2025-11-06)
 
 

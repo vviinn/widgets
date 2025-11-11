@@ -6,6 +6,10 @@ on:
       - develop
       - main
 
+env:
+  NODE_VERSION: "18.20.4"
+  OPENAPI_URL: ./openapi/merchant-openapi.yaml
+
 jobs:
   generate-version-develop:
     runs-on: ubuntu-latest
@@ -22,12 +26,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18.20.4"
+          node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
       - name: Create .env file
         run: |
-          touch .env
-          echo "OPENAPI_URL=https://docs.stage.vviinn.com/openapi.yaml" >> .env
+          echo "OPENAPI_URL=${{ env.OPENAPI_URL }}" >> .env
           echo "RECOMMENDATIONS_URL=https://api.stage.vviinn.com/product/" >> .env
       - run: npm install
       - run: npm run test
@@ -50,13 +53,12 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18.20.4"
+          node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
       - run: git pull
       - name: Create .env file
         run: |
-          touch .env
-          echo "OPENAPI_URL=https://docs.vviinn.com/openapi.yaml" >> .env
+          echo "OPENAPI_URL=${{ env.OPENAPI_URL }}" >> .env
           echo "RECOMMENDATIONS_URL=https://api.vviinn.com/product/" >> .env
           echo "API_PATH=https://api.vviinn.com" >> .env
       - run: npm install
@@ -84,7 +86,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18.20.4"
+          node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
       - run: git pull
       - run: npm run update_storybook_widget_version
@@ -101,12 +103,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18.20.4"
+          node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
       - name: Create .env file
         run: |
-          touch .env
-          echo "OPENAPI_URL=https://docs.vviinn.com/openapi.yaml" >> .env
+          echo "OPENAPI_URL=${{ env.OPENAPI_URL }}" >> .env
           echo "RECOMMENDATIONS_URL=https://api.vviinn.com/product/" >> .env
       - run: npm install
       - run: npm run test

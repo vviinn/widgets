@@ -57,6 +57,7 @@ import {
 } from "../../utils/swiper/swiperUtils";
 import { UploadActionIconVariant } from "../vviinn-icons";
 import { getAcceptableFileFormats } from "../../Image/error";
+import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
 
 if (typeof window !== "undefined") {
   register();
@@ -102,6 +103,8 @@ export class VviinnShopTheLook {
   @Prop() uploadMode: boolean = false;
   /** Show multiple images: swiper on mobile, hover on desktop in product cards */
   @Prop() showMultipleImages: boolean = false;
+  /** URL to external CSS file for custom styling */
+  @Prop() cssUrl: string | null = null;
   /** @internal */
   @Prop() apiPath?: string;
 
@@ -1177,6 +1180,8 @@ export class VviinnShopTheLook {
   render() {
     return (
       <Host>
+        {renderExternalCSS(this.cssUrl)}
+
         <div
           class={`shop-the-look-container ${this.showModal ? "modal-open" : ""} ${this.showCropper ? "with-cropper" : ""} widget-style-${this.widgetStyle}`}
         >

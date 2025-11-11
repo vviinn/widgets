@@ -145,7 +145,7 @@ export class VviinnVprButton {
   @Prop() showMultipleImages: boolean = false;
   /** Items amount in set mode grid */
   @Prop() setItemsAmount?: number = 4;
-  /** Optional for custom CSS. It will overwrite all other settings */
+  /** URL to external CSS file for custom styling */
   @Prop() cssUrl: string | null = null;
   /** A custom message is displayed when no results */
   @Prop() noResultText: string = "";
