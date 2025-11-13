@@ -416,10 +416,10 @@ export class VviinnProductCard {
   };
 
   private handleImageMouseLeave = () => {
-    shouldShowMultipleImages(this.showMultipleImages, this.images.length) &&
-      this.hoverTimerManager.set(() => {
-        this.showSecondImage = false;
-      }, HOVER_DELAY_MS);
+    if (shouldShowMultipleImages(this.showMultipleImages, this.images.length)) {
+      this.hoverTimerManager.clear();
+      this.showSecondImage = false;
+    }
   };
 
   private productClickHandler(event: MouseEvent) {

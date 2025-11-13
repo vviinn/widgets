@@ -22,9 +22,10 @@ export default {
 };
 
 const Template = (args) => {
-  const imagesAttr = args.images && args.images.length > 0
-    ? `images='${JSON.stringify(args.images)}'`
-    : '';
+  const imagesAttr =
+    args.images && args.images.length > 0
+      ? `images='${JSON.stringify(args.images)}'`
+      : "";
 
   return `
     <vviinn-product-card
@@ -77,8 +78,14 @@ const initArgs = {
   image:
     "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg",
   images: [
-    "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg",
-    "https://www.moebel-shop.de/media/image/9d/cb/e7/0749295-002_600x600.jpg"
+    {
+      original:
+        "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg",
+    },
+    {
+      original:
+        "https://www.moebel-shop.de/media/image/9d/cb/e7/0749295-002_600x600.jpg",
+    },
   ],
   showMultipleImages: false,
   responsive: false,
