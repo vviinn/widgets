@@ -28,16 +28,14 @@ import {
   renderCustomLabels,
   ContentCardContent,
   ListCardContent,
-  ImageSwiper,
+  renderProductCardImage,
 } from "./render-helpers";
 import {
   HOVER_DELAY_MS,
   shouldShowMultipleImages,
   getCurrentImage,
   createHoverTimerManager,
-  getImagesForSwiper,
 } from "./helpers";
-import { isMobile } from "../../helpers/device/checkDeviceType";
 import {
   CrossSellingClickEvent,
   CrossSellingClickEventData,
@@ -517,44 +515,6 @@ export class VviinnProductCard {
     }, interval);
   }
 
-  private renderImageWithLoadedState(
-    imageProps: ImageProps,
-    isResponsive: boolean,
-    entityType: EntityType = "product",
-  ) {
-    return (
-      <vviinn-image
-        src={imageProps.src}
-        width={imageProps.width}
-        height={imageProps.height}
-        aspectRatio={this.imageRatio}
-        alt={imageProps.title}
-        imageTitle={imageProps.title}
-        responsive={isResponsive}
-        entityType={entityType}
-        imageResolutionWidth={imageProps.imageResolutionWidth}
-        customClass={this.imageLoaded ? "loaded" : ""}
-        imageRef={imageProps.ref}
-        loadEndCallback={imageProps.onLoadEnd}
-        onVviinnImageLoad={imageProps.onLoadEnd}
-        showSkeleton={this.showSkeleton()}
-        isSetMode={this.isSetMode}
-        style={{
-          "--image-border": "var(--product-card-image-border, none)",
-          "--image-bg-color":
-            "var(--product-card-image-bg-color, var(--surface-bg-color-01))",
-          "--image-transition-duration":
-            "var(--product-card-transition-duration, 0.5s)",
-        }}
-      >
-        <slot
-          name="vviinn-image-placeholder-icon"
-          slot="placeholder-icon"
-        ></slot>
-      </vviinn-image>
-    );
-  }
-
   render() {
     if (this.isContentCard || this.isListCard) {
       return (
@@ -573,11 +533,24 @@ export class VviinnProductCard {
               deeplink={this.deeplink}
               part={`image-link ${this.entityType}-image-link`}
             >
-              {this.renderImageWithLoadedState(
-                this.imageProps,
-                this.responsive,
-                this.entityType,
-              )}
+              {renderProductCardImage({
+                src: this.imageProps.src,
+                width: this.imageProps.width,
+                height: this.imageProps.height,
+                aspectRatio: this.imageRatio,
+                title: this.imageProps.title,
+                responsive: this.responsive,
+                entityType: this.entityType,
+                imageResolutionWidth: this.imageProps.imageResolutionWidth,
+                customClass: this.imageLoaded ? "loaded" : "",
+                imageRef: this.imageProps.ref,
+                onImageLoad: this.imageProps.onLoadEnd,
+                showSkeleton: this.showSkeleton(),
+                isSetMode: this.isSetMode,
+                images: this.images,
+                showMultipleImages: this.showMultipleImages,
+                disableMobileSwiper: this.disableMobileSwiper,
+              })}
             </Linked>
           </div>
           {this.isContentCard
@@ -745,41 +718,24 @@ export class VviinnProductCard {
           onMouseLeave={this.handleImageMouseLeave}
         >
           <Linked deeplink={this.deeplink} part="image-link">
-            {(() => {
-              if (this.showMultipleImages && !this.disableMobileSwiper && isMobile()) {
-                const swiperImages = getImagesForSwiper(
-                  this.image,
-                  this.images,
-                );
-                if (swiperImages.length > 1) {
-                  return (
-                    <ImageSwiper
-                      images={swiperImages}
-                      productTitle={this.productTitle}
-                      imageWidth={this.imageWidth}
-                      imageRatio={this.imageRatio}
-                      imageResolutionWidth={
-                        this.isContentCard
-                          ? this.imageResolutionWidth * 2
-                          : this.imageResolutionWidth
-                      }
-                      onImageLoad={() => {
-                        this.imageLoaded = true;
-                        this.loading = false;
-                      }}
-                      responsive={this.responsive}
-                      showSkeleton={this.showSkeleton()}
-                      isSetMode={this.isSetMode}
-                    />
-                  );
-                }
-              }
-              return this.renderImageWithLoadedState(
-                this.imageProps,
-                this.responsive,
-                this.entityType,
-              );
-            })()}
+            {renderProductCardImage({
+              src: this.imageProps.src,
+              width: this.imageProps.width,
+              height: this.imageProps.height,
+              aspectRatio: this.imageRatio,
+              title: this.imageProps.title,
+              responsive: this.responsive,
+              entityType: this.entityType,
+              imageResolutionWidth: this.imageProps.imageResolutionWidth,
+              customClass: this.imageLoaded ? "loaded" : "",
+              imageRef: this.imageProps.ref,
+              onImageLoad: this.imageProps.onLoadEnd,
+              showSkeleton: this.showSkeleton(),
+              isSetMode: this.isSetMode,
+              images: this.images,
+              showMultipleImages: this.showMultipleImages,
+              disableMobileSwiper: this.disableMobileSwiper,
+            })}
           </Linked>
 
           {this.isSourceProduct && <PlusIcon class="plus-icon" />}

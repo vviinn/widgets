@@ -1,8 +1,10 @@
 import { FunctionalComponent, h, Fragment, JSX } from "@stencil/core";
-import { BasePrice, ProductImage } from "../../interfaces";
+import { BasePrice, EntityType, ProductImage } from "../../interfaces";
 import { getLastUrlPath } from "../../helpers/url/getLastUrlPath";
 import { configureSwiperElement } from "../../utils/swiper/swiperUtils";
 import { register } from "swiper/element";
+import { isMobile } from "../../helpers/device/checkDeviceType";
+import { getImagesForSwiper } from "./helpers";
 
 if (typeof window !== "undefined") {
   register();
@@ -225,6 +227,104 @@ export interface UniversalImageProps extends ImageProps {
   additionalParts?: string[];
   onLoadEnd?: () => void;
 }
+
+export interface ProductCardImageProps {
+  src: string;
+  width: number;
+  height: number;
+  aspectRatio: number;
+  title: string;
+  responsive?: boolean;
+  imageResolutionWidth?: number;
+  showSkeleton?: boolean;
+  isSetMode?: boolean;
+  entityType?: EntityType;
+  customClass?: string;
+  imageRef?: (el: HTMLImageElement) => void;
+  onImageLoad?: () => void;
+  renderPlaceholderSlot?: boolean;
+  images?: ProductImage[];
+  showMultipleImages?: boolean;
+  disableMobileSwiper?: boolean;
+}
+
+export const renderProductCardImage = (props: ProductCardImageProps) => {
+  const {
+    src,
+    width,
+    height,
+    aspectRatio,
+    title,
+    responsive = false,
+    imageResolutionWidth,
+    showSkeleton = false,
+    isSetMode = false,
+    entityType = "product",
+    customClass = "",
+    imageRef,
+    onImageLoad,
+    renderPlaceholderSlot = true,
+    images = [],
+    showMultipleImages = false,
+    disableMobileSwiper = false,
+  } = props;
+
+  if (showMultipleImages && !disableMobileSwiper && isMobile()) {
+    const swiperImages = getImagesForSwiper(src, images);
+    if (swiperImages.length > 1) {
+      return (
+        <ImageSwiper
+          images={swiperImages}
+          productTitle={title}
+          imageWidth={width}
+          imageRatio={aspectRatio}
+          imageResolutionWidth={imageResolutionWidth}
+          onImageLoad={onImageLoad}
+          responsive={responsive}
+          showSkeleton={showSkeleton}
+          isSetMode={isSetMode}
+          entityType={entityType}
+          customClass={customClass}
+          imageRef={imageRef}
+        />
+      );
+    }
+  }
+
+  return (
+    <vviinn-image
+      src={src}
+      width={width}
+      height={height}
+      aspectRatio={aspectRatio}
+      alt={title}
+      imageTitle={title}
+      responsive={responsive}
+      entityType={entityType}
+      imageResolutionWidth={imageResolutionWidth}
+      customClass={customClass}
+      imageRef={imageRef}
+      onVviinnImageLoad={onImageLoad}
+      showSkeleton={showSkeleton}
+      isSetMode={isSetMode}
+      style={{
+        "--image-border": "var(--product-card-image-border, none)",
+        "--image-bg-color":
+          "var(--product-card-image-bg-color, var(--surface-bg-color-01))",
+        "--image-transition-duration":
+          "var(--product-card-transition-duration, 0.5s)",
+      }}
+    >
+      {renderPlaceholderSlot && (
+        <slot
+          name="vviinn-image-placeholder-icon"
+          slot="placeholder-icon"
+        ></slot>
+      )}
+    </vviinn-image>
+  );
+};
+
 export const ContentCardContent = (
   contentTitle: string,
   contentLink: string,
@@ -280,6 +380,9 @@ export type ImageSwiperProps = {
   responsive?: boolean;
   showSkeleton?: boolean;
   isSetMode?: boolean;
+  entityType?: import("../../interfaces").EntityType;
+  customClass?: string;
+  imageRef?: (el: HTMLImageElement) => void;
 };
 
 export const ImageSwiper: FunctionalComponent<ImageSwiperProps> = (props) => {
@@ -293,6 +396,9 @@ export const ImageSwiper: FunctionalComponent<ImageSwiperProps> = (props) => {
     responsive,
     showSkeleton,
     isSetMode,
+    entityType = "product",
+    customClass,
+    imageRef,
   } = props;
 
   const swiperRef = (el: any) => {
@@ -319,31 +425,21 @@ export const ImageSwiper: FunctionalComponent<ImageSwiperProps> = (props) => {
           const imgSrc = img.thumbnail ?? img.original;
           return (
             <swiper-slide key={imgSrc}>
-              <vviinn-image
-                src={imgSrc}
-                width={imageWidth}
-                height={imageWidth * imageRatio}
-                aspectRatio={imageRatio}
-                alt={productTitle}
-                imageTitle={productTitle}
-                responsive={responsive}
-                imageResolutionWidth={imageResolutionWidth}
-                onVviinnImageLoad={index === 0 ? onImageLoad : undefined}
-                showSkeleton={showSkeleton}
-                isSetMode={isSetMode}
-                style={{
-                  "--image-border": "var(--product-card-image-border, none)",
-                  "--image-bg-color":
-                    "var(--product-card-image-bg-color, var(--surface-bg-color-01))",
-                  "--image-transition-duration":
-                    "var(--product-card-transition-duration, 0.5s)",
-                }}
-              >
-                <slot
-                  name="vviinn-image-placeholder-icon"
-                  slot="placeholder-icon"
-                ></slot>
-              </vviinn-image>
+              {renderProductCardImage({
+                src: imgSrc,
+                width: imageWidth,
+                height: imageWidth * imageRatio,
+                aspectRatio: imageRatio,
+                title: productTitle,
+                responsive,
+                imageResolutionWidth,
+                entityType,
+                customClass,
+                imageRef: index === 0 ? imageRef : undefined,
+                onImageLoad: index === 0 ? onImageLoad : undefined,
+                showSkeleton,
+                isSetMode,
+              })}
             </swiper-slide>
           );
         })}
