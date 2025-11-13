@@ -15,6 +15,17 @@ swiper-container::part(bullet) {
   border: none;
   outline: none;
   transform: scale(1);
+  position: relative;
+}
+
+swiper-container::part(bullet)::after {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
+  cursor: pointer;
 }
 
 swiper-container::part(bullet):hover {

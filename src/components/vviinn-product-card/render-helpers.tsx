@@ -420,14 +420,6 @@ export const ImageSwiper: FunctionalComponent<ImageSwiperProps> = (props) => {
         slidesPerView: 1,
         spaceBetween: 0,
       });
-
-      // Force pagination update after initialization
-      if (el.swiper) {
-        el.swiper.on("slideChange", () => {
-          el.swiper.pagination?.render();
-          el.swiper.pagination?.update();
-        });
-      }
     }
   };
 
