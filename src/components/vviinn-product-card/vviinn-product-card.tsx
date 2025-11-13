@@ -28,7 +28,14 @@ import {
   renderCustomLabels,
   ContentCardContent,
   ListCardContent,
+  renderProductCardImage,
 } from "./render-helpers";
+import {
+  HOVER_DELAY_MS,
+  shouldShowMultipleImages,
+  getCurrentImage,
+  createHoverTimerManager,
+} from "./helpers";
 import {
   CrossSellingClickEvent,
   CrossSellingClickEventData,
@@ -52,6 +59,7 @@ import {
   BasePrice,
   EnergyCertification,
   EntityType,
+  ProductImage,
   Recommendation,
 } from "../../interfaces";
 import { resources } from "../../locale";
@@ -95,6 +103,9 @@ import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
  * @part update-button-item - Update button in Product Card (Set mode).
  * @part discount-label - Discount label in Product Card (Set mode).
  * @part discount-percentage - Discount percentage inside the Add to Basket button (Set mode).
+ * @part product-images-pagination - Container for product images pagination dots (mobile only).
+ * @part product-images-pagination-bullet - Individual pagination dot.
+ * @part product-images-pagination-bullet-active - Active pagination dot.
  * @part energy-label-container - Energy label container.
  * @part energy-label-icon - Icon with an energy class.
  * @part energy-label-product-type - Product type.
@@ -143,6 +154,9 @@ export class VviinnProductCard {
   @Prop() locale: string | undefined = undefined;
   @Prop() pricePrefix?: string;
   @Prop() image: string | undefined;
+  @Prop() images: ProductImage[] = [];
+  /** Show multiple images: swiper on mobile, hover on desktop */
+  @Prop() showMultipleImages: boolean = false;
   @Prop() imageRatio: number = 1;
   @Prop() imageWidth: number = PRODUCT_CARD_IMAGE_WIDTH;
   @Prop() price: number | undefined;
@@ -201,11 +215,14 @@ export class VviinnProductCard {
     PRODUCT_CARD_IMAGE_RESOLUTION_WIDTH;
   /** @internal */
   @Prop({ mutable: true }) loading: boolean = false;
+  /** @internal */
+  @Prop() disableMobileSwiper: boolean = false;
 
   @State() isTransitioning: boolean = false;
   @State() basketButonPressed: boolean = false;
   @State() favoriteButonPressed: boolean = false;
   @State() imageLoaded: boolean = false;
+  @State() showSecondImage: boolean = false;
 
   /** Event emitted once when the recommendation is rendered on the page */
   @Event({ bubbles: true })
@@ -241,6 +258,7 @@ export class VviinnProductCard {
   private visibilityTrackedElement?: HTMLImageElement | null;
   private intersectionObserver: IntersectionObserver;
   private linkEventAbortController?: AbortController;
+  private hoverTimerManager = createHoverTimerManager();
   private imageProps: ImageProps;
   private isContentCard: boolean = false;
   private isListCard: boolean = false;
@@ -261,6 +279,7 @@ export class VviinnProductCard {
     this.productData = this.getProductData();
     this.isContentCard = this.entityType === "content";
     this.isListCard = this.entityType === "list";
+
     this.imageProps = this.getImageProps();
 
     this.isStandalone &&
@@ -341,6 +360,11 @@ export class VviinnProductCard {
     this.imageProps = this.getImageProps();
   }
 
+  @Watch("showSecondImage")
+  showSecondImageWatcher() {
+    this.imageProps = this.getImageProps();
+  }
+
   private parseEnergyCertificationsString() {
     if (this.energyCertificationsString === "") return;
 
@@ -383,6 +407,20 @@ export class VviinnProductCard {
     });
     this.favoriteButonPressed = !this.favoriteButonPressed;
   }
+
+  private handleImageMouseEnter = () => {
+    shouldShowMultipleImages(this.showMultipleImages, this.images.length) &&
+      this.hoverTimerManager.set(() => {
+        this.showSecondImage = true;
+      }, HOVER_DELAY_MS);
+  };
+
+  private handleImageMouseLeave = () => {
+    if (shouldShowMultipleImages(this.showMultipleImages, this.images.length)) {
+      this.hoverTimerManager.clear();
+      this.showSecondImage = false;
+    }
+  };
 
   private productClickHandler(event: MouseEvent) {
     event.preventDefault();
@@ -429,13 +467,19 @@ export class VviinnProductCard {
   disconnectedCallback() {
     this.linkEventAbortController?.abort();
     this.cleanupVisibilityTracking();
+    this.hoverTimerManager.clear();
   }
 
   private getImageProps() {
     return {
       width: this.imageWidth,
       height: this.imageWidth * this.imageRatio,
-      src: this.image,
+      src: getCurrentImage(
+        this.showSecondImage,
+        this.image,
+        this.images,
+        shouldShowMultipleImages(this.showMultipleImages, this.images.length),
+      ),
       imageResolutionWidth: this.isContentCard
         ? this.imageResolutionWidth * 2
         : this.imageResolutionWidth,
@@ -471,44 +515,6 @@ export class VviinnProductCard {
     }, interval);
   }
 
-  private renderImageWithLoadedState(
-    imageProps: ImageProps,
-    isResponsive: boolean,
-    entityType: EntityType = "product",
-  ) {
-    return (
-      <vviinn-image
-        src={imageProps.src}
-        width={imageProps.width}
-        height={imageProps.height}
-        aspectRatio={this.imageRatio}
-        alt={imageProps.title}
-        imageTitle={imageProps.title}
-        responsive={isResponsive}
-        entityType={entityType}
-        imageResolutionWidth={imageProps.imageResolutionWidth}
-        customClass={this.imageLoaded ? "loaded" : ""}
-        imageRef={imageProps.ref}
-        loadEndCallback={imageProps.onLoadEnd}
-        onVviinnImageLoad={imageProps.onLoadEnd}
-        showSkeleton={this.showSkeleton()}
-        isSetMode={this.isSetMode}
-        style={{
-          "--image-border": "var(--product-card-image-border, none)",
-          "--image-bg-color":
-            "var(--product-card-image-bg-color, var(--surface-bg-color-01))",
-          "--image-transition-duration":
-            "var(--product-card-transition-duration, 0.5s)",
-        }}
-      >
-        <slot
-          name="vviinn-image-placeholder-icon"
-          slot="placeholder-icon"
-        ></slot>
-      </vviinn-image>
-    );
-  }
-
   render() {
     if (this.isContentCard || this.isListCard) {
       return (
@@ -523,16 +529,25 @@ export class VviinnProductCard {
             class={`image-container ${this.entityType}-card-image-container`}
             part="image-container"
           >
-            <Linked
-              deeplink={this.deeplink}
-              part={`image-link ${this.entityType}-image-link`}
-            >
-              {this.renderImageWithLoadedState(
-                this.imageProps,
-                this.responsive,
-                this.entityType,
-              )}
-            </Linked>
+            {renderProductCardImage({
+              src: this.imageProps.src,
+              width: this.imageProps.width,
+              height: this.imageProps.height,
+              aspectRatio: this.imageRatio,
+              title: this.imageProps.title,
+              responsive: this.responsive,
+              entityType: this.entityType,
+              imageResolutionWidth: this.imageProps.imageResolutionWidth,
+              customClass: this.imageLoaded ? "loaded" : "",
+              imageRef: this.imageProps.ref,
+              onImageLoad: this.imageProps.onLoadEnd,
+              showSkeleton: this.showSkeleton(),
+              isSetMode: this.isSetMode,
+              images: this.images,
+              showMultipleImages: this.showMultipleImages,
+              disableMobileSwiper: this.disableMobileSwiper,
+              deeplink: this.deeplink,
+            })}
           </div>
           {this.isContentCard
             ? ContentCardContent(
@@ -692,14 +707,31 @@ export class VviinnProductCard {
           </button>
         </div>
 
-        <div class="image-container" part="image-container">
-          <Linked deeplink={this.deeplink} part="image-link">
-            {this.renderImageWithLoadedState(
-              this.imageProps,
-              this.responsive,
-              this.entityType,
-            )}
-          </Linked>
+        <div
+          class="image-container"
+          part="image-container"
+          onMouseEnter={this.handleImageMouseEnter}
+          onMouseLeave={this.handleImageMouseLeave}
+        >
+          {renderProductCardImage({
+            src: this.imageProps.src,
+            width: this.imageProps.width,
+            height: this.imageProps.height,
+            aspectRatio: this.imageRatio,
+            title: this.imageProps.title,
+            responsive: this.responsive,
+            entityType: this.entityType,
+            imageResolutionWidth: this.imageProps.imageResolutionWidth,
+            customClass: this.imageLoaded ? "loaded" : "",
+            imageRef: this.imageProps.ref,
+            onImageLoad: this.imageProps.onLoadEnd,
+            showSkeleton: this.showSkeleton(),
+            isSetMode: this.isSetMode,
+            images: this.images,
+            showMultipleImages: this.showMultipleImages,
+            disableMobileSwiper: this.disableMobileSwiper,
+            deeplink: this.deeplink,
+          })}
 
           {this.isSourceProduct && <PlusIcon class="plus-icon" />}
           {this.isSetMode &&

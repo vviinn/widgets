@@ -101,6 +101,8 @@ export class VviinnShopTheLook {
   @Prop() showCropper: boolean = false;
   /** Enable upload mode to allow users to upload their own images */
   @Prop() uploadMode: boolean = false;
+  /** Show multiple images: swiper on mobile, hover on desktop in product cards */
+  @Prop() showMultipleImages: boolean = false;
   /** URL to external CSS file for custom styling */
   @Prop() cssUrl: string | null = null;
   /** @internal */
@@ -1167,6 +1169,7 @@ export class VviinnShopTheLook {
       onBackToGrid: this.resetDetailedView,
       onNavigateProduct: this.handleNavigateProduct,
       currencySign: this.currencySign,
+      showMultipleImages: this.showMultipleImages,
       modalContentRef: (el: HTMLElement) => {
         this.modalContentRef = el;
       },

@@ -93,6 +93,9 @@ import { globalState, updateGlobalState } from "../../store/store";
  * @part energy-label-icon - Icon with an energy class.
  * @part energy-label-product-type - Product type.
  * @part energy-label-data-sheet-link - Data sheet link.
+ * @part product-images-pagination - Container for product images pagination dots (mobile only).
+ * @part product-images-pagination-bullet - Individual pagination dot.
+ * @part product-images-pagination-bullet-active - Active pagination dot.
  * @part suggestions-container - The main suggestions container element.
  * @part suggestions-header - The header section containing icon and title.
  * @part suggestions-icon - The sparkle icon wrapper.
@@ -137,6 +140,8 @@ export class VviinnVpsButton {
   @Prop() productDetailsRedirect: boolean = true;
   /** Resolution width of an image in the product card */
   @Prop() imageResolutionWidth: number = SEARCH_WIDGET_IMAGE_RESOLUTION_WIDTH;
+  /** Show multiple images: swiper on mobile, hover on desktop in product cards */
+  @Prop() showMultipleImages: boolean = false;
   /** Example image source */
   @Prop() exampleImageSource: string = DEFAULT_EXAMPLE_IMAGE;
   /** Show the text search */
@@ -328,6 +333,7 @@ export class VviinnVpsButton {
           productDetailsNewTab={this.productDetailsNewTab}
           productDetailsRedirect={this.productDetailsRedirect}
           imageResolutionWidth={this.imageResolutionWidth}
+          showMultipleImages={this.showMultipleImages}
           exampleImageSource={this.exampleImageSource}
           textSearchShow={this.textSearchShow}
           addToBasketShow={this.addToBasketShow}

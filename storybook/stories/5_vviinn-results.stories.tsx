@@ -22,6 +22,7 @@ const initArgs = {
   apiPath: process.env.STORYBOOK_API_PATH,
   resultsCount: 9,
   imageResolutionWidth: 500,
+  showMultipleImages: false,
   currencySign: "€",
   pricePrefix: "",
   locale: "en-US",

@@ -67,6 +67,9 @@ import { addEventListenersWithSignal } from "../../dom";
  * @part energy-label-icon - Icon with an energy class.
  * @part energy-label-product-type - Product type.
  * @part energy-label-data-sheet-link - Data sheet link.
+ * @part product-images-pagination - Container for product images pagination dots (mobile only).
+ * @part product-images-pagination-bullet - Individual pagination dot.
+ * @part product-images-pagination-bullet-active - Active pagination dot.
  * @part update-button-top - Update Button on the top (Set mode).
  * @part update-button-item - Update Button inside the Product Card (Set mode).
  * @part discount-label - Discount label in Product Card (Set mode).
@@ -138,6 +141,8 @@ export class VviinnVprButton {
     DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH;
   /** The ratio of each recommended product image */
   @Prop() imageRatio: number = 1;
+  /** Show multiple images on hover (desktop only) */
+  @Prop() showMultipleImages: boolean = false;
   /** Items amount in set mode grid */
   @Prop() setItemsAmount?: number = 4;
   /** URL to external CSS file for custom styling */
@@ -352,6 +357,7 @@ export class VviinnVprButton {
     sidebar.campaignType = this.campaignType;
     sidebar.color = this.color;
     sidebar.imageWidth = this.imageWidth;
+    sidebar.showMultipleImages = this.showMultipleImages;
     sidebar.buttonElementId = this.el.id;
     sidebar.noResultText = this.noResultText;
     sidebar.noResultShow = this.noResultShow;

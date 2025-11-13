@@ -116,6 +116,9 @@ export type Mode = "pure-grid" | CarouselMode;
  * @part update-button-item - Update Button inside the Product Card (Set mode).
  * @part discount-label - Discount label in Product Card (Set mode).
  * @part discount-percentage - Discount percentage inside the Add to Basket button (Set mode).
+ * @part product-images-pagination - Container for product images pagination dots (mobile only).
+ * @part product-images-pagination-bullet - Individual pagination dot.
+ * @part product-images-pagination-bullet-active - Active pagination dot.
  * @part list-card - List card container.
  * @part list-card-content-container - List card's content container.
  * @part list-card-image-container - List card's image container.
@@ -178,6 +181,8 @@ export class VviinnVprWidget implements ComponentInterface {
     DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH;
   /** The ratio of each recommended product image */
   @Prop() imageRatio: number = 1;
+  /** Show multiple images on hover (desktop only) */
+  @Prop() showMultipleImages: boolean = false;
   /** Items amount in set mode grid */
   @Prop() setItemsAmount?: number = 4;
   /** URL to external CSS file for custom styling */
@@ -666,7 +671,12 @@ export class VviinnVprWidget implements ComponentInterface {
         productType={recommendation.productType}
         entityType={recommendation.entityType}
         deeplink={recommendation.deeplink}
-        image={recommendation.image.thumbnail}
+        image={
+          recommendation.image?.thumbnail ?? recommendation.image?.original
+        }
+        images={recommendation.images}
+        showMultipleImages={this.showMultipleImages}
+        disableMobileSwiper={true}
         imageResolutionWidth={this.imageResolutionWidth}
         brand={recommendation.brand}
         imageWidth={this.imageWidth}
@@ -745,6 +755,7 @@ export class VviinnVprWidget implements ComponentInterface {
         setModeDiscountsArray={this.setModeDiscountsArray}
         imageResolutionWidth={this.imageResolutionWidth}
         imageRatio={this.imageRatio}
+        showMultipleImages={this.showMultipleImages}
         favoriteShow={this.favoriteShow}
         setItemsAmount={this.setItemsAmount}
         loading={this.recommendationsLoading}

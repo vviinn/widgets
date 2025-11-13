@@ -4,6 +4,9 @@ type s = import("./generated").components["schemas"];
 export type Recommendation = s["response-product-item"];
 export type EntityType = Recommendation["entityType"];
 
+// Images
+export type ProductImage = s["image"];
+
 // Energy Efficiency
 export type EnergyEfficiencyClass = s["energy-efficiency-class"];
 export type EnergyCertification = s["energy-certification"];

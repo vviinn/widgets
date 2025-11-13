@@ -38,6 +38,7 @@ const Template = (args) => `
   product-details-redirect="${args.productDetailsRedirect}"
   api-path="${args.apiPath}"
   image-resolution-width="${args.imageResolutionWidth}"
+  show-multiple-images="${args.showMultipleImages}"
   text-search-show="${args.textSearchShow}"
   add-to-basket-show="${args.addToBasketShow}"
   add-price-container="${args.addPriceContainer}"
@@ -66,6 +67,7 @@ const initArgs = {
   pricePrefix: "",
   addStyle: true,
   imageResolutionWidth: 250,
+  showMultipleImages: false,
   textSearchShow: true,
   addToBasketShow: false,
   addPriceContainer: false,

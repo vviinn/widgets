@@ -134,6 +134,9 @@ const CAMERA_START_DELAY = 500;
  * @part energy-label-icon - Icon with an energy class.
  * @part energy-label-product-type - Product type.
  * @part energy-label-data-sheet-link - Data sheet link.
+ * @part product-images-pagination - Container for product images pagination dots (mobile only).
+ * @part product-images-pagination-bullet - Individual pagination dot.
+ * @part product-images-pagination-bullet-active - Active pagination dot.
  */
 
 @Component({
@@ -168,6 +171,8 @@ export class VviinnVpsWidget {
   @Prop() productDetailsRedirect: boolean = true;
   /** Resolution width of an image in the product card */
   @Prop() imageResolutionWidth: number = SEARCH_WIDGET_IMAGE_RESOLUTION_WIDTH;
+  /** Show multiple images: swiper on mobile, hover on desktop in product cards */
+  @Prop() showMultipleImages: boolean = false;
   /** Example image source */
   @Prop() exampleImageSource: string = DEFAULT_EXAMPLE_IMAGE;
   /** Show the text search */
@@ -904,6 +909,7 @@ export class VviinnVpsWidget {
                     showInWidget={true}
                     buttonElementId={this.buttonElementId}
                     imageResolutionWidth={this.imageResolutionWidth}
+                    showMultipleImages={this.showMultipleImages}
                     productDetailsNewTab={this.productDetailsNewTab}
                     productDetailsRedirect={this.productDetailsRedirect}
                     addToBasketShow={this.addToBasketShow}

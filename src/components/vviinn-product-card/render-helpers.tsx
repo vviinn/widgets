@@ -1,6 +1,14 @@
 import { FunctionalComponent, h, Fragment, JSX } from "@stencil/core";
-import { BasePrice } from "../../interfaces";
+import { BasePrice, EntityType, ProductImage } from "../../interfaces";
 import { getLastUrlPath } from "../../helpers/url/getLastUrlPath";
+import { configureSwiperElement } from "../../utils/swiper/swiperUtils";
+import { register } from "swiper/element";
+import { isMobile } from "../../helpers/device/checkDeviceType";
+import { getImagesForSwiper } from "./helpers";
+
+if (typeof window !== "undefined") {
+  register();
+}
 
 type LinkedProps = {
   deeplink: string;
@@ -219,6 +227,113 @@ export interface UniversalImageProps extends ImageProps {
   additionalParts?: string[];
   onLoadEnd?: () => void;
 }
+
+export interface ProductCardImageProps {
+  src: string;
+  width: number;
+  height: number;
+  aspectRatio: number;
+  title: string;
+  responsive?: boolean;
+  imageResolutionWidth?: number;
+  showSkeleton?: boolean;
+  isSetMode?: boolean;
+  entityType?: EntityType;
+  customClass?: string;
+  imageRef?: (el: HTMLImageElement) => void;
+  onImageLoad?: () => void;
+  renderPlaceholderSlot?: boolean;
+  images?: ProductImage[];
+  showMultipleImages?: boolean;
+  disableMobileSwiper?: boolean;
+  deeplink?: string;
+}
+
+export const renderProductCardImage = (props: ProductCardImageProps) => {
+  const {
+    src,
+    width,
+    height,
+    aspectRatio,
+    title,
+    responsive = false,
+    imageResolutionWidth,
+    showSkeleton = false,
+    isSetMode = false,
+    entityType = "product",
+    customClass = "",
+    imageRef,
+    onImageLoad,
+    renderPlaceholderSlot = true,
+    images = [],
+    showMultipleImages = false,
+    disableMobileSwiper = false,
+    deeplink,
+  } = props;
+
+  if (showMultipleImages && !disableMobileSwiper && isMobile()) {
+    const swiperImages = getImagesForSwiper(src, images);
+    if (swiperImages.length > 1) {
+      return (
+        <ImageSwiper
+          images={swiperImages}
+          productTitle={title}
+          imageWidth={width}
+          imageRatio={aspectRatio}
+          imageResolutionWidth={imageResolutionWidth}
+          onImageLoad={onImageLoad}
+          responsive={responsive}
+          showSkeleton={showSkeleton}
+          isSetMode={isSetMode}
+          entityType={entityType}
+          customClass={customClass}
+          imageRef={imageRef}
+          deeplink={deeplink}
+        />
+      );
+    }
+  }
+
+  const imageElement = (
+    <vviinn-image
+      src={src}
+      width={width}
+      height={height}
+      aspectRatio={aspectRatio}
+      alt={title}
+      imageTitle={title}
+      responsive={responsive}
+      entityType={entityType}
+      imageResolutionWidth={imageResolutionWidth}
+      customClass={customClass}
+      imageRef={imageRef}
+      onVviinnImageLoad={onImageLoad}
+      showSkeleton={showSkeleton}
+      isSetMode={isSetMode}
+      style={{
+        "--image-border": "var(--product-card-image-border, none)",
+        "--image-bg-color":
+          "var(--product-card-image-bg-color, var(--surface-bg-color-01))",
+        "--image-transition-duration":
+          "var(--product-card-transition-duration, 0.5s)",
+      }}
+    >
+      {renderPlaceholderSlot && (
+        <slot
+          name="vviinn-image-placeholder-icon"
+          slot="placeholder-icon"
+        ></slot>
+      )}
+    </vviinn-image>
+  );
+
+  return (
+    <Linked deeplink={deeplink} part="image-link">
+      {imageElement}
+    </Linked>
+  );
+};
+
 export const ContentCardContent = (
   contentTitle: string,
   contentLink: string,
@@ -260,6 +375,96 @@ export const ListCardContent = (listTitle: string, labelText: string) => {
           {listTitle}
         </div>
       )}
+    </div>
+  );
+};
+
+export type ImageSwiperProps = {
+  images: ProductImage[];
+  productTitle: string;
+  imageWidth: number;
+  imageRatio: number;
+  imageResolutionWidth: number;
+  onImageLoad?: () => void;
+  responsive?: boolean;
+  showSkeleton?: boolean;
+  isSetMode?: boolean;
+  entityType?: import("../../interfaces").EntityType;
+  customClass?: string;
+  imageRef?: (el: HTMLImageElement) => void;
+  deeplink?: string;
+};
+
+export const ImageSwiper: FunctionalComponent<ImageSwiperProps> = (props) => {
+  const {
+    images,
+    productTitle,
+    imageWidth,
+    imageRatio,
+    imageResolutionWidth,
+    onImageLoad,
+    responsive,
+    showSkeleton,
+    isSetMode,
+    entityType = "product",
+    customClass,
+    imageRef,
+    deeplink,
+  } = props;
+
+  const swiperRef = (el: any) => {
+    if (el) {
+      configureSwiperElement(el, {
+        isDesktop: false,
+        pagination: images.length > 1,
+        slidesPerView: 1,
+        spaceBetween: 0,
+      });
+    }
+  };
+
+  return (
+    <div class="product-card-swiper-wrapper">
+      <swiper-container
+        ref={swiperRef}
+        class="product-card-swiper"
+        pagination={images.length > 1 ? "true" : undefined}
+        pagination-clickable={images.length > 1 ? "true" : undefined}
+        exportparts="pagination:product-images-pagination, bullet:product-images-pagination-bullet, bullet-active:product-images-pagination-bullet-active"
+      >
+        {images.map((img, index) => {
+          const imgSrc = img.thumbnail ?? img.original;
+          return (
+            <swiper-slide key={imgSrc}>
+              <Linked deeplink={deeplink} part="image-link">
+                <vviinn-image
+                  src={imgSrc}
+                  width={imageWidth}
+                  height={imageWidth * imageRatio}
+                  aspectRatio={imageRatio}
+                  alt={productTitle}
+                  imageTitle={productTitle}
+                  responsive={responsive}
+                  entityType={entityType}
+                  imageResolutionWidth={imageResolutionWidth}
+                  customClass={customClass}
+                  imageRef={index === 0 ? imageRef : undefined}
+                  onVviinnImageLoad={index === 0 ? onImageLoad : undefined}
+                  showSkeleton={showSkeleton}
+                  isSetMode={isSetMode}
+                  style={{
+                    "--image-border": "var(--product-card-image-border, none)",
+                    "--image-bg-color":
+                      "var(--product-card-image-bg-color, var(--surface-bg-color-01))",
+                    "--image-transition-duration":
+                      "var(--product-card-transition-duration, 0.5s)",
+                  }}
+                />
+              </Linked>
+            </swiper-slide>
+          );
+        })}
+      </swiper-container>
     </div>
   );
 };

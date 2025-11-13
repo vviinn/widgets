@@ -126,6 +126,9 @@ import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
  * @part energy-label-icon - Icon with an energy class.
  * @part energy-label-product-type - Product type.
  * @part energy-label-data-sheet-link - Data sheet link.
+ * @part product-images-pagination - Container for product images pagination dots (mobile only).
+ * @part product-images-pagination-bullet - Individual pagination dot.
+ * @part product-images-pagination-bullet-active - Active pagination dot.
  *
  * @part custom-label-0 - Custom label with index 0.
  * @part custom-label-1 - Custom label with index 1.
@@ -221,6 +224,8 @@ export class VviinnResults {
   @Prop({ mutable: true }) uiSessionId?: string;
   /** Resolution width of an image in the product card */
   @Prop() imageResolutionWidth?: number = RESULTS_WIDGET_IMAGE_RESOLUTION_WIDTH;
+  /** Show multiple images: swiper on mobile, hover on desktop in product cards */
+  @Prop() showMultipleImages: boolean = false;
   /** Toggle for opening product link in new tab or not */
   @Prop() productDetailsNewTab?: boolean = false;
   /** Toggle for redirection to PDP on product's click */
@@ -865,7 +870,9 @@ export class VviinnResults {
         responsive={true}
         imageWidth={this.imageResolutionWidth}
         imageResolutionWidth={this.imageResolutionWidth}
-        image={p.image.thumbnail || p.image.original}
+        image={p.image?.thumbnail ?? p.image?.original}
+        images={p.images}
+        showMultipleImages={this.showMultipleImages}
         energyCertifications={p.energyCertifications}
         part="product-card"
         campaignTypeId={widgetData.campaignTypeId}
