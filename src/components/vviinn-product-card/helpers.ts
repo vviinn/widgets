@@ -30,7 +30,8 @@ export const getCurrentImage = (
 ): string | undefined => {
   if (shouldShow && showSecondImage && images.length > 0) {
     // If first image matches main image and there is a second image, use second image for hover
-    const useSecondImage = isFirstImageMatchingMain(mainImage, images) && images.length > 1;
+    const useSecondImage =
+      isFirstImageMatchingMain(mainImage, images) && images.length > 1;
     const hoverIndex = useSecondImage ? 1 : 0;
     const img = images[hoverIndex];
     return img?.thumbnail ?? img?.original;
@@ -42,8 +43,12 @@ export const getImagesForSwiper = (
   mainImage: string | undefined,
   images: ProductImage[],
 ): ProductImage[] => {
-  if (!mainImage || isFirstImageMatchingMain(mainImage, images)) return images;
-  return [{ original: mainImage, thumbnail: mainImage }, ...images];
+  const allImages =
+    !mainImage || isFirstImageMatchingMain(mainImage, images)
+      ? images
+      : [{ original: mainImage, thumbnail: mainImage }, ...images];
+
+  return allImages.slice(0, 2);
 };
 
 export const createHoverTimerManager = () => {
