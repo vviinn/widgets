@@ -233,7 +233,7 @@ export class VviinnVpsButton {
 
   async componentWillLoad() {
     await i18next.init({
-      lng: globalState.locale,
+      lng: this.locale ?? globalState.locale,
       fallbackLng: "en",
       resources,
     });

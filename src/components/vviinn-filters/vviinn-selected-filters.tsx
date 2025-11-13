@@ -42,6 +42,7 @@ import { getLocalStorageItems } from "../../localStorage";
 import { addEventListenersWithSignal } from "../../dom";
 import { Interval, ResponseIntervalFilterItem } from "../../interfaces";
 import { selectedFiltersParts } from "../../cssParts";
+import { Locale } from "../../locale";
 
 /**
  * @part selected-filters-list - List of selected filters.
@@ -61,6 +62,9 @@ import { selectedFiltersParts } from "../../cssParts";
 })
 export class VviinnSelectedFilters {
   @Element() el: HTMLElement;
+
+  /** The locale for currency formatting and text localization */
+  @Prop() locale?: Locale;
 
   /** @internal */
   @Prop() showInWidget: boolean = false;
@@ -276,7 +280,7 @@ export class VviinnSelectedFilters {
   async componentWillLoad() {
     this.getUploadedImageSrc();
     await i18next.init({
-      lng: globalState.locale,
+      lng: this.locale ?? globalState.locale,
       fallbackLng: "en",
       resources,
     });

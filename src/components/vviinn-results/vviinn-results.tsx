@@ -402,7 +402,7 @@ export class VviinnResults {
 
     if (!this.showInWidget) {
       await i18next.init({
-        lng: globalState.locale,
+        lng: this.locale ?? globalState.locale,
         fallbackLng: "en",
         resources,
       });
@@ -853,7 +853,7 @@ export class VviinnResults {
       <vviinn-product-card
         pricePrefix={globalState.pricePrefix}
         currency={globalState.currencySign}
-        locale={globalState.locale}
+        locale={this.locale}
         key={p.productId}
         index={i}
         productTitle={p.title}

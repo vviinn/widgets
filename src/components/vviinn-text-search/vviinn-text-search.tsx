@@ -161,7 +161,7 @@ export class VviinnTextSearch {
 
   async componentWillLoad() {
     await i18next.init({
-      lng: globalState.locale,
+      lng: this.locale ?? globalState.locale,
       fallbackLng: "en",
       resources,
     });
@@ -265,7 +265,7 @@ export class VviinnTextSearch {
           {this.mode === "extended" && (
             <vviinn-vps-button
               token={globalState.token}
-              locale={globalState.locale}
+              locale={this.locale}
               apiPath={globalState.apiPath}
               addStyle={false}
               showInWidget={false}

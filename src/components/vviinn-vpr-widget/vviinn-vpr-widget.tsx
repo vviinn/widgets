@@ -449,7 +449,7 @@ export class VviinnVprWidget implements ComponentInterface {
 
   async componentWillLoad() {
     await i18next.init({
-      lng: globalState.locale,
+      lng: this.locale ?? globalState.locale,
       fallbackLng: "en",
       resources,
     });
@@ -655,7 +655,6 @@ export class VviinnVprWidget implements ComponentInterface {
     });
   }
 
-
   private renderRecommendation(
     recommendation: Recommendation,
     index: number,
@@ -664,7 +663,7 @@ export class VviinnVprWidget implements ComponentInterface {
       <vviinn-product-card
         currency={globalState.currencySign}
         pricePrefix={globalState.pricePrefix}
-        locale={globalState.locale}
+        locale={this.locale}
         productId={recommendation.productId}
         product={recommendation}
         productTitle={recommendation.title}
@@ -737,7 +736,7 @@ export class VviinnVprWidget implements ComponentInterface {
       <vviinn-carousel
         currencySign={globalState.currencySign}
         pricePrefix={globalState.pricePrefix}
-        locale={globalState.locale}
+        locale={this.locale}
         mode={this.mode as CarouselMode}
         campaignTypeId={this.campaignType}
         imageWidth={this.imageWidth}

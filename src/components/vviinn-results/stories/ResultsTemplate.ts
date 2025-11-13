@@ -41,7 +41,7 @@ export const ResultsTemplate = (args) => {
   <div class="search-page-wrapper-result">
     <div class="search-page-wrapper-result-filters">
       <vviinn-extended-filters locale="${args.locale}"></vviinn-extended-filters>
-      <vviinn-selected-filters></vviinn-selected-filters>
+      <vviinn-selected-filters locale="${args.locale}"></vviinn-selected-filters>
     </div>
 
     <vviinn-results

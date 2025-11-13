@@ -396,7 +396,7 @@ export class VviinnVpsWidget {
 
   async componentWillLoad() {
     await i18next.init({
-      lng: globalState.locale,
+      lng: this.locale ?? globalState.locale,
       fallbackLng: "en",
       resources,
     });
@@ -795,7 +795,7 @@ export class VviinnVpsWidget {
                         <vviinn-text-search
                           token={globalState.token}
                           apiPath={globalState.apiPath}
-                          locale={globalState.locale}
+                          locale={this.locale}
                           showInWidget={true}
                           showOnFirstScreen={true}
                           uiSessionId={this.uiSessionId}
@@ -855,6 +855,7 @@ export class VviinnVpsWidget {
                   )}
 
                   <vviinn-selected-filters
+                    locale={this.locale}
                     showInWidget={true}
                     exportparts={filtersParts}
                   />
@@ -896,7 +897,7 @@ export class VviinnVpsWidget {
                 <Fragment>
                   <vviinn-results
                     token={globalState.token}
-                    locale={globalState.locale}
+                    locale={this.locale}
                     pricePrefix={globalState.pricePrefix}
                     currency-sign={globalState.currencySign}
                     apiPath={globalState.apiPath}
