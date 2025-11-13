@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.201.0](https://github.com/vviinn/widgets/compare/v2.200.0...v2.201.0) (2025-11-13)
+
+
+### Features
+
+* Possibility of showing the second image in the Product Card. ([9eb61e9](https://github.com/vviinn/widgets/commit/9eb61e9f17157f1f36012909e9f597d78a3d4e40))
+* Slider for showing the second image in the Product Card on mobile devices. ([a5d9598](https://github.com/vviinn/widgets/commit/a5d9598e7dec09468677e820c74153eba02298e4))
+
 ## [2.200.0](https://github.com/vviinn/widgets/compare/v2.199.0...v2.200.0) (2025-11-11)
 
 
