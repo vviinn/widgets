@@ -529,29 +529,25 @@ export class VviinnProductCard {
             class={`image-container ${this.entityType}-card-image-container`}
             part="image-container"
           >
-            <Linked
-              deeplink={this.deeplink}
-              part={`image-link ${this.entityType}-image-link`}
-            >
-              {renderProductCardImage({
-                src: this.imageProps.src,
-                width: this.imageProps.width,
-                height: this.imageProps.height,
-                aspectRatio: this.imageRatio,
-                title: this.imageProps.title,
-                responsive: this.responsive,
-                entityType: this.entityType,
-                imageResolutionWidth: this.imageProps.imageResolutionWidth,
-                customClass: this.imageLoaded ? "loaded" : "",
-                imageRef: this.imageProps.ref,
-                onImageLoad: this.imageProps.onLoadEnd,
-                showSkeleton: this.showSkeleton(),
-                isSetMode: this.isSetMode,
-                images: this.images,
-                showMultipleImages: this.showMultipleImages,
-                disableMobileSwiper: this.disableMobileSwiper,
-              })}
-            </Linked>
+            {renderProductCardImage({
+              src: this.imageProps.src,
+              width: this.imageProps.width,
+              height: this.imageProps.height,
+              aspectRatio: this.imageRatio,
+              title: this.imageProps.title,
+              responsive: this.responsive,
+              entityType: this.entityType,
+              imageResolutionWidth: this.imageProps.imageResolutionWidth,
+              customClass: this.imageLoaded ? "loaded" : "",
+              imageRef: this.imageProps.ref,
+              onImageLoad: this.imageProps.onLoadEnd,
+              showSkeleton: this.showSkeleton(),
+              isSetMode: this.isSetMode,
+              images: this.images,
+              showMultipleImages: this.showMultipleImages,
+              disableMobileSwiper: this.disableMobileSwiper,
+              deeplink: this.deeplink,
+            })}
           </div>
           {this.isContentCard
             ? ContentCardContent(
@@ -717,26 +713,25 @@ export class VviinnProductCard {
           onMouseEnter={this.handleImageMouseEnter}
           onMouseLeave={this.handleImageMouseLeave}
         >
-          <Linked deeplink={this.deeplink} part="image-link">
-            {renderProductCardImage({
-              src: this.imageProps.src,
-              width: this.imageProps.width,
-              height: this.imageProps.height,
-              aspectRatio: this.imageRatio,
-              title: this.imageProps.title,
-              responsive: this.responsive,
-              entityType: this.entityType,
-              imageResolutionWidth: this.imageProps.imageResolutionWidth,
-              customClass: this.imageLoaded ? "loaded" : "",
-              imageRef: this.imageProps.ref,
-              onImageLoad: this.imageProps.onLoadEnd,
-              showSkeleton: this.showSkeleton(),
-              isSetMode: this.isSetMode,
-              images: this.images,
-              showMultipleImages: this.showMultipleImages,
-              disableMobileSwiper: this.disableMobileSwiper,
-            })}
-          </Linked>
+          {renderProductCardImage({
+            src: this.imageProps.src,
+            width: this.imageProps.width,
+            height: this.imageProps.height,
+            aspectRatio: this.imageRatio,
+            title: this.imageProps.title,
+            responsive: this.responsive,
+            entityType: this.entityType,
+            imageResolutionWidth: this.imageProps.imageResolutionWidth,
+            customClass: this.imageLoaded ? "loaded" : "",
+            imageRef: this.imageProps.ref,
+            onImageLoad: this.imageProps.onLoadEnd,
+            showSkeleton: this.showSkeleton(),
+            isSetMode: this.isSetMode,
+            images: this.images,
+            showMultipleImages: this.showMultipleImages,
+            disableMobileSwiper: this.disableMobileSwiper,
+            deeplink: this.deeplink,
+          })}
 
           {this.isSourceProduct && <PlusIcon class="plus-icon" />}
           {this.isSetMode &&

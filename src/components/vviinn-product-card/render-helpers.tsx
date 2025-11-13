@@ -246,6 +246,7 @@ export interface ProductCardImageProps {
   images?: ProductImage[];
   showMultipleImages?: boolean;
   disableMobileSwiper?: boolean;
+  deeplink?: string;
 }
 
 export const renderProductCardImage = (props: ProductCardImageProps) => {
@@ -267,6 +268,7 @@ export const renderProductCardImage = (props: ProductCardImageProps) => {
     images = [],
     showMultipleImages = false,
     disableMobileSwiper = false,
+    deeplink,
   } = props;
 
   if (showMultipleImages && !disableMobileSwiper && isMobile()) {
@@ -286,12 +288,13 @@ export const renderProductCardImage = (props: ProductCardImageProps) => {
           entityType={entityType}
           customClass={customClass}
           imageRef={imageRef}
+          deeplink={deeplink}
         />
       );
     }
   }
 
-  return (
+  const imageElement = (
     <vviinn-image
       src={src}
       width={width}
@@ -322,6 +325,12 @@ export const renderProductCardImage = (props: ProductCardImageProps) => {
         ></slot>
       )}
     </vviinn-image>
+  );
+
+  return (
+    <Linked deeplink={deeplink} part="image-link">
+      {imageElement}
+    </Linked>
   );
 };
 
@@ -383,6 +392,7 @@ export type ImageSwiperProps = {
   entityType?: import("../../interfaces").EntityType;
   customClass?: string;
   imageRef?: (el: HTMLImageElement) => void;
+  deeplink?: string;
 };
 
 export const ImageSwiper: FunctionalComponent<ImageSwiperProps> = (props) => {
@@ -399,6 +409,7 @@ export const ImageSwiper: FunctionalComponent<ImageSwiperProps> = (props) => {
     entityType = "product",
     customClass,
     imageRef,
+    deeplink,
   } = props;
 
   const swiperRef = (el: any) => {
@@ -413,7 +424,7 @@ export const ImageSwiper: FunctionalComponent<ImageSwiperProps> = (props) => {
   };
 
   return (
-    <div class="product-card-swiper-wrapper">
+    <div class="product-card-swiper-wrapper has-swiper">
       <swiper-container
         ref={swiperRef}
         class="product-card-swiper"
@@ -425,21 +436,31 @@ export const ImageSwiper: FunctionalComponent<ImageSwiperProps> = (props) => {
           const imgSrc = img.thumbnail ?? img.original;
           return (
             <swiper-slide key={imgSrc}>
-              {renderProductCardImage({
-                src: imgSrc,
-                width: imageWidth,
-                height: imageWidth * imageRatio,
-                aspectRatio: imageRatio,
-                title: productTitle,
-                responsive,
-                imageResolutionWidth,
-                entityType,
-                customClass,
-                imageRef: index === 0 ? imageRef : undefined,
-                onImageLoad: index === 0 ? onImageLoad : undefined,
-                showSkeleton,
-                isSetMode,
-              })}
+              <Linked deeplink={deeplink} part="image-link">
+                <vviinn-image
+                  src={imgSrc}
+                  width={imageWidth}
+                  height={imageWidth * imageRatio}
+                  aspectRatio={imageRatio}
+                  alt={productTitle}
+                  imageTitle={productTitle}
+                  responsive={responsive}
+                  entityType={entityType}
+                  imageResolutionWidth={imageResolutionWidth}
+                  customClass={customClass}
+                  imageRef={index === 0 ? imageRef : undefined}
+                  onVviinnImageLoad={index === 0 ? onImageLoad : undefined}
+                  showSkeleton={showSkeleton}
+                  isSetMode={isSetMode}
+                  style={{
+                    "--image-border": "var(--product-card-image-border, none)",
+                    "--image-bg-color":
+                      "var(--product-card-image-bg-color, var(--surface-bg-color-01))",
+                    "--image-transition-duration":
+                      "var(--product-card-transition-duration, 0.5s)",
+                  }}
+                />
+              </Linked>
             </swiper-slide>
           );
         })}

@@ -491,6 +491,18 @@ vviinn-energy-label {
   display: none !important;
 }
 
+.image-container:has(.product-card-swiper-wrapper) {
+  --swiper-pagination-bullet-size: 8px;
+  --pagination-height: calc(
+    var(--spacing-200) + var(--swiper-pagination-bullet-size)
+  );
+  margin-bottom: var(--pagination-height);
+}
+
+.product-card-swiper-wrapper {
+  margin-bottom: calc(-1 * var(--pagination-height));
+}
+
 .product-card-swiper::part(pagination) {
   position: static;
   display: flex;
