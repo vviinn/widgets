@@ -910,6 +910,7 @@ export class VviinnResults {
               addStyle={false}
               isStandalone={false}
               sidebarTitle=""
+              locale={this.locale}
               appendSidebarToId={
                 isOneClickDiscoveryAppendMode
                   ? "one-click-discovery-append"

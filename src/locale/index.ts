@@ -14,6 +14,7 @@ export const initializeLocale = async (locale?: string): Promise<void> => {
   const targetLocale = locale ?? defaultConfig.locale;
 
   if (i18next.isInitialized) {
+    if (i18next.language === targetLocale) return;
     await i18next.changeLanguage(targetLocale);
   } else {
     await i18next.init({
