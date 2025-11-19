@@ -19,6 +19,7 @@ const Template = (args) => `
       show-scroll="${args.showScroll}"
       image-ratio="${args.imageRatio}"
       locale="${args.locale}"
+      number-locale="${args.numberLocale}"
       price-prefix="${args.pricePrefix}"
       product-id="${args.productId}"
       token="${args.token}"
@@ -68,6 +69,7 @@ const initArgs = {
   showMultipleImages: false,
   setItemsAmount: 4,
   locale: "en-US",
+  numberLocale: "",
   currencySign: "€",
   pricePrefix: "",
   cssUrl: "",

@@ -93,8 +93,10 @@ export class VviinnShopTheLook {
   @Prop() currencySign?: string;
   /** Campaign ID for visual search requests */
   @Prop() campaignId: string = "";
-  /** The locale for currency formatting and text localization */
+  /** Locale for text localization */
   @Prop() locale?: Locale;
+  /** Locale for number formatting. Falls back to locale */
+  @Prop() numberLocale?: string;
   /** Style variant for corner styling - 'rounded' for rounded corners, 'cornered' for sharp corners */
   @Prop() widgetStyle: "rounded" | "cornered" = "rounded";
   /** Enable cropper mode for manual area selection */
@@ -242,6 +244,10 @@ export class VviinnShopTheLook {
 
   private get effectiveCurrencySign(): string {
     return this.currencySign ?? defaultConfig.currencySign;
+  }
+
+  private get effectiveNumberLocale(): string {
+    return this.numberLocale || this.locale || defaultConfig.locale;
   }
 
   disconnectedCallback() {
@@ -1173,6 +1179,7 @@ export class VviinnShopTheLook {
       onNavigateProduct: this.handleNavigateProduct,
       currencySign: this.effectiveCurrencySign,
       locale: this.locale,
+      numberLocale: this.effectiveNumberLocale,
       showMultipleImages: this.showMultipleImages,
       modalContentRef: (el: HTMLElement) => {
         this.modalContentRef = el;

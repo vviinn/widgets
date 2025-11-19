@@ -26,6 +26,7 @@ const initArgs = {
   currencySign: "€",
   pricePrefix: "",
   locale: "en-US",
+  numberLocale: "",
   productDetailsNewTab: true,
   productDetailsRedirect: true,
   addToBasketShow: false,

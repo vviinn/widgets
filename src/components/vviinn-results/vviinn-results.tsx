@@ -210,8 +210,10 @@ export class VviinnResults {
   @Prop() token: string;
   /** The currency sign is displayed after the price */
   @Prop() currencySign?: string;
-  /** The locale for currency formatting and text localization */
+  /** Locale for text localization */
   @Prop() locale?: Locale;
+  /** Locale for number formatting. Falls back to locale */
+  @Prop() numberLocale?: string;
   /** Campaign ID used for Text Search */
   @Prop() campaignIdTextSearch: string = "";
   /** Campaign ID used for Visual Search */
@@ -867,6 +869,7 @@ export class VviinnResults {
         pricePrefix={this.pricePrefix}
         currencySign={this.currencySign}
         locale={this.locale}
+        numberLocale={this.numberLocale}
         key={p.productId}
         index={i}
         productTitle={p.title}
@@ -906,11 +909,15 @@ export class VviinnResults {
             class="vviinn-results-product-card-actions"
           >
             <vviinn-vpr-button
+              token={this.token}
+              locale={this.locale}
+              currencySign={this.currencySign}
+              numberLocale={this.numberLocale}
+              apiPath={this.apiPath}
               productId={p.productId}
               addStyle={false}
               isStandalone={false}
               sidebarTitle=""
-              locale={this.locale}
               appendSidebarToId={
                 isOneClickDiscoveryAppendMode
                   ? "one-click-discovery-append"

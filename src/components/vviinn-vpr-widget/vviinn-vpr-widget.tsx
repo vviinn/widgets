@@ -170,8 +170,10 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() excluded: string = "";
   /** Campaign type */
   @Prop() campaignType: CampaignName = this.mode === "set" ? "VCS" : "VPR";
-  /** The locale for currency formatting and text localization */
+  /** Locale for text localization */
   @Prop() locale?: Locale;
+  /** Locale for number formatting. Falls back to locale */
+  @Prop() numberLocale?: string;
   /** Accepts any hex color code */
   @Prop() color: string = "";
   /** Width of each recommended product image in Continuity mode */
@@ -661,6 +663,7 @@ export class VviinnVprWidget implements ComponentInterface {
         currencySign={this.currencySign}
         pricePrefix={this.pricePrefix}
         locale={this.locale}
+        numberLocale={this.numberLocale}
         productId={recommendation.productId}
         product={recommendation}
         productTitle={recommendation.title}
@@ -734,6 +737,7 @@ export class VviinnVprWidget implements ComponentInterface {
         currencySign={this.currencySign}
         pricePrefix={this.pricePrefix}
         locale={this.locale}
+        numberLocale={this.numberLocale}
         mode={this.mode as CarouselMode}
         campaignTypeId={this.campaignType}
         imageWidth={this.imageWidth}

@@ -117,8 +117,10 @@ export class VviinnVpsButton {
   @Prop() token: string;
   /**  The currency sign is displayed after the price */
   @Prop() currencySign?: string;
-  /** The locale for currency formatting and text localization */
+  /** Locale for text localization */
   @Prop() locale?: Locale;
+  /** Locale for number formatting. Falls back to locale */
+  @Prop() numberLocale?: string;
   /** Prefix is displayed before the price */
   @Prop() pricePrefix?: string;
   /** Campaign ID used for Visual Search (deprecated) */
@@ -307,6 +309,7 @@ export class VviinnVpsButton {
           currency-sign={this.currencySign}
           token={this.token}
           locale={this.locale}
+          numberLocale={this.numberLocale}
           apiPath={this.apiPath}
           pricePrefix={this.pricePrefix}
           campaignId={this.campaignId}

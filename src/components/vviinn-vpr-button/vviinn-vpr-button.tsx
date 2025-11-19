@@ -116,8 +116,10 @@ export class VviinnVprButton {
   @Element() el: HTMLElement;
   /** Vviinn customer's token (required) */
   @Prop() token: string;
-  /** The locale for currency formatting and text localization */
+  /** Locale for text localization */
   @Prop() locale?: Locale;
+  /** Locale for number formatting. Falls back to locale */
+  @Prop() numberLocale?: string;
   /**  The currency sign is displayed after the price */
   @Prop() currencySign?: string;
   /** Prefix is displayed before the price */
@@ -348,6 +350,7 @@ export class VviinnVprButton {
     const sidebar = document.createElement("vviinn-recommendations-sidebar");
     sidebar.token = this.token;
     sidebar.locale = this.locale;
+    sidebar.numberLocale = this.numberLocale;
     sidebar.currencySign = this.currencySign;
     sidebar.pricePrefix = this.pricePrefix;
     sidebar.apiPath = this.apiPath;

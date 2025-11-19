@@ -153,6 +153,8 @@ export class VviinnProductCard {
   @Prop() brand: string | undefined;
   @Prop() currencySign: string | undefined = undefined;
   @Prop() locale?: Locale;
+  /** Locale for number formatting. Falls back to locale */
+  @Prop() numberLocale?: string;
   @Prop() pricePrefix?: string;
   @Prop() image: string | undefined;
   @Prop() images: ProductImage[] = [];
@@ -282,6 +284,10 @@ export class VviinnProductCard {
 
   private get effectiveLocale() {
     return this.locale ?? defaultConfig.locale;
+  }
+
+  private get effectiveNumberLocale() {
+    return this.numberLocale || this.effectiveLocale;
   }
 
   connectedCallback() {
@@ -626,7 +632,7 @@ export class VviinnProductCard {
               <Price
                 prefix={this.pricePrefix}
                 currency={this.effectiveCurrencySign}
-                locale={this.effectiveLocale}
+                numberLocale={this.effectiveNumberLocale}
                 price={this.price}
                 basePrice={parseBasePrice(this.basePrice)}
                 salePrice={this.salePrice}

@@ -154,8 +154,10 @@ export class VviinnVpsWidget {
   @Prop() currencySign?: string;
   /** Prefix is displayed before the price */
   @Prop() pricePrefix?: string;
-  /** The locale for currency formatting and text localization */
+  /** Locale for text localization */
   @Prop() locale?: Locale;
+  /** Locale for number formatting. Falls back to locale */
+  @Prop() numberLocale?: string;
   /** Campaign ID used for Visual Search (deprecated) */
   @Prop() campaignId: string = "";
   /** Campaign ID used for Text Search */
@@ -901,6 +903,7 @@ export class VviinnVpsWidget {
                   <vviinn-results
                     token={this.token}
                     locale={this.locale}
+                    numberLocale={this.numberLocale}
                     pricePrefix={this.pricePrefix}
                     currency-sign={this.currencySign}
                     apiPath={this.apiPath}

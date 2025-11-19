@@ -30,9 +30,9 @@ export const Linked = (props: LinkedProps, child: JSX.Element) =>
     child
   );
 
-const getFormattedPrice = (price: number, locale: string) =>
+const getFormattedPrice = (price: number, numberLocale: string) =>
   price
-    ? new Intl.NumberFormat(locale, {
+    ? new Intl.NumberFormat(numberLocale, {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       }).format(price)
@@ -41,7 +41,7 @@ const getFormattedPrice = (price: number, locale: string) =>
 type PriceType = "sale" | "outdated" | "regular";
 
 type PriceElementProps = {
-  readonly locale: string;
+  readonly numberLocale: string;
   readonly price: number;
   readonly prefix: string;
   readonly currency: string;
@@ -49,7 +49,7 @@ type PriceElementProps = {
 };
 
 type BasePriceElementProps = {
-  readonly locale: string;
+  readonly numberLocale: string;
   readonly currency: string;
   readonly basePrice?: BasePrice | null;
   readonly priceType?: PriceType;
@@ -57,7 +57,7 @@ type BasePriceElementProps = {
 
 const FormattedPrice: FunctionalComponent<PriceElementProps> = (props) => {
   const priceType = props.priceType;
-  const formattedPrice = getFormattedPrice(props.price, props.locale);
+  const formattedPrice = getFormattedPrice(props.price, props.numberLocale);
 
   const prefixElement = props.prefix ? (
     <span part="price-prefix">{props.prefix + " "}</span>
@@ -85,10 +85,10 @@ const FormattedBasePrice: FunctionalComponent<BasePriceElementProps> = ({
   currency,
   basePrice,
   priceType,
-  locale,
+  numberLocale,
 }) => {
   if (!basePrice?.price) return null;
-  const formattedPrice = getFormattedPrice(basePrice.price, locale);
+  const formattedPrice = getFormattedPrice(basePrice.price, numberLocale);
 
   return (
     <span
@@ -117,7 +117,7 @@ export const parseBasePrice = (
   return basePrice;
 };
 
-type PriceProps = PriceElementProps & {
+type PriceProps = Omit<PriceElementProps, "priceType"> & {
   basePrice: BasePrice;
   salePrice: number;
   baseSalePrice: BasePrice;
@@ -154,13 +154,13 @@ export const Price: FunctionalComponent<PriceProps> = (props) => {
             prefix={props.prefix}
             currency={props.currency}
             price={props.price}
-            locale={props.locale}
+            numberLocale={props.numberLocale}
             priceType="outdated"
           />
           <FormattedBasePrice
             currency={props.currency}
             basePrice={props.basePrice}
-            locale={props.locale}
+            numberLocale={props.numberLocale}
             priceType="outdated"
           />
         </span>,
@@ -170,13 +170,13 @@ export const Price: FunctionalComponent<PriceProps> = (props) => {
             prefix={props.prefix}
             currency={props.currency}
             price={props.salePrice}
-            locale={props.locale}
+            numberLocale={props.numberLocale}
             priceType="sale"
           />
           <FormattedBasePrice
             currency={props.currency}
             basePrice={props.baseSalePrice}
-            locale={props.locale}
+            numberLocale={props.numberLocale}
             priceType="sale"
           />
         </span>,
@@ -187,14 +187,14 @@ export const Price: FunctionalComponent<PriceProps> = (props) => {
           prefix={props.prefix}
           currency={props.currency}
           price={props.price}
-          locale={props.locale}
+          numberLocale={props.numberLocale}
           priceType="regular"
         />
 
         <FormattedBasePrice
           currency={props.currency}
           basePrice={props.basePrice}
-          locale={props.locale}
+          numberLocale={props.numberLocale}
           priceType="regular"
         />
       </span>

@@ -122,7 +122,7 @@ export class VviinnExtendedFilters {
   @Prop() showHeader?: boolean = true;
   /** Minimum number of filter options required to show search bar in preview-inline mode. Set to 0 to always show, or a high number to never show. */
   @Prop() searchThreshold?: number = 0;
-  /** The locale for currency formatting and text localization */
+  /** Locale for text localization */
   @Prop() locale?: Locale;
   /** The currency sign displayed after price values */
   @Prop() currencySign?: string;

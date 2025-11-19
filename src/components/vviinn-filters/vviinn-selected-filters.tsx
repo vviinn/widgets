@@ -62,7 +62,7 @@ import { selectedFiltersParts } from "../../cssParts";
 export class VviinnSelectedFilters {
   @Element() el: HTMLElement;
 
-  /** The locale for currency formatting and text localization */
+  /** Locale for text localization */
   @Prop() locale?: Locale;
   /** The currency sign displayed after price values */
   @Prop() currencySign?: string;

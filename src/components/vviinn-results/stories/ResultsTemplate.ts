@@ -7,6 +7,7 @@ export const ResultsTemplate = (args) => {
     showMultipleImages,
     currencySign,
     locale,
+    numberLocale,
     productDetailsRedirect,
     productDetailsNewTab,
     uiSessionId,
@@ -52,6 +53,7 @@ export const ResultsTemplate = (args) => {
     show-multiple-images="${showMultipleImages}"
     currency-sign="${currencySign}"
     locale="${locale}"
+    number-locale="${numberLocale}"
     price-prefix="${pricePrefix}"
     product-details-redirect="${productDetailsRedirect}"
     product-details-new-tab="${productDetailsNewTab}"

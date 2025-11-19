@@ -47,6 +47,7 @@ const Template = (args) => {
       add-to-basket-show="${args.addToBasketShow}"
       is-set-mode="${args.isSetMode}"
       locale="${args.locale}"
+      number-locale="${args.numberLocale}"
       currency-sign="${args.currencySign}"
       deeplink="${args.deeplink}"
       custom-labels="${args.customLabels}"
@@ -72,6 +73,7 @@ const initArgs = {
   productType: "Couchtische",
   brand: "Ronald Schmitt",
   locale: "en-US",
+  numberLocale: "",
   currencySign: "€",
   deeplink:
     "https://www.moebel-shop.de/rolf-benz-8770-couchtisch-ronald-schmitt",

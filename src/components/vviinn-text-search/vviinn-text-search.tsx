@@ -73,7 +73,7 @@ export class VviinnTextSearch {
 
   /** Vviinn customer's token (required) */
   @Prop() token: string;
-  /** The locale for currency formatting and text localization */
+  /** Locale for text localization */
   @Prop() locale?: Locale;
   /** Basic or extended text search with search modal and speech recognition */
   @Prop() mode: SearchBarMode = "basic";

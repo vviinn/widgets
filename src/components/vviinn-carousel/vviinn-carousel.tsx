@@ -77,6 +77,7 @@ export class VviinnCarousel {
   @Prop() currencySign: string;
   @Prop() pricePrefix: string;
   @Prop() locale: Locale;
+  @Prop() numberLocale?: string;
   @Prop() imageWidth: number = PRODUCT_CARD_IMAGE_WIDTH;
   @Prop() showScroll: boolean = true;
   @Prop() campaignTypeId: CampaignTypeId;
@@ -601,6 +602,7 @@ export class VviinnCarousel {
         currencySign={this.currencySign}
         pricePrefix={this.pricePrefix}
         locale={this.locale}
+        numberLocale={this.numberLocale}
         isSetMode={this.isSetMode}
         customLabels={getCustomLabels(recommendation)}
         addPriceContainer={this.addPriceContainer}
@@ -738,6 +740,7 @@ export class VviinnCarousel {
               pricePrefix={this.pricePrefix}
               isSetMode={this.isSetMode}
               locale={this.locale}
+              numberLocale={this.numberLocale}
               favoriteShow={this.favoriteShow}
               customLabels={getCustomLabels(this.sourceProduct)}
               responsive={true}
