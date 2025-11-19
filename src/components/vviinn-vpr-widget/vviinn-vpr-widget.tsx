@@ -597,6 +597,7 @@ export class VviinnVprWidget implements ComponentInterface {
       TE.of(getRecommendationsService(campaignType)),
       TE.ap(TE.of(body)),
       TE.ap(TE.of(headers)),
+      TE.ap(TE.of(this.apiPath)),
       TE.flatten,
     );
 

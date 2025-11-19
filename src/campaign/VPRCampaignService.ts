@@ -15,11 +15,17 @@ export type {
 };
 
 export const getVPRRecommendations =
-  (body: SimilarProductsRequest) => (options: RequestInit) => {
+  (body: SimilarProductsRequest) =>
+  (options: RequestInit) =>
+  (apiPath?: string) => {
     const url = "similar-products";
 
-    return apiPost<SimilarProductsResponse>(url, {
-      ...options,
-      body: JSON.stringify(body),
-    });
+    return apiPost<SimilarProductsResponse>(
+      url,
+      {
+        ...options,
+        body: JSON.stringify(body),
+      },
+      apiPath,
+    );
   };
