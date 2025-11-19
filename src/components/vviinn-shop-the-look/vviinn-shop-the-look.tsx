@@ -47,7 +47,8 @@ import {
   ModalProps,
   renderNavigation,
 } from "./render-helpers";
-import { Locale } from "../../locale";
+import { Locale, initializeLocale } from "../../locale";
+import { globalState } from "../../store/store";
 import { TEST_BASIC_EVENT_DATA } from "./test-data";
 import {
   extractSlideIndex,
@@ -89,7 +90,7 @@ export class VviinnShopTheLook {
   /** Height of the widget in pixels */
   @Prop() height: number = 500;
   /** The currency sign is displayed after the price */
-  @Prop() currencySign: string = "€";
+  @Prop() currencySign?: string;
   /** Campaign ID for visual search requests */
   @Prop() campaignId: string = "";
   /** The locale for currency formatting and text localization */
@@ -146,7 +147,9 @@ export class VviinnShopTheLook {
   private isNavigatingToSlide: boolean = false;
   private fileInput: HTMLInputElement;
 
-  componentWillLoad() {
+  async componentWillLoad() {
+    await initializeLocale(this.locale);
+
     this.imageUrlsList = buildImageUrlsList(
       this.uploadedImageUrls,
       this.imageUrls,
@@ -235,6 +238,10 @@ export class VviinnShopTheLook {
 
   private get shouldManageDragging(): boolean {
     return this.showCropper && isDesktop();
+  }
+
+  private get effectiveCurrencySign(): string {
+    return this.currencySign ?? globalState.currencySign;
   }
 
   disconnectedCallback() {
@@ -1160,7 +1167,7 @@ export class VviinnShopTheLook {
       onProductDetailsClick: this.handleProductDetailsClick,
       onBackToGrid: this.resetDetailedView,
       onNavigateProduct: this.handleNavigateProduct,
-      currencySign: this.currencySign,
+      currencySign: this.effectiveCurrencySign,
       locale: this.locale,
       showMultipleImages: this.showMultipleImages,
       modalContentRef: (el: HTMLElement) => {

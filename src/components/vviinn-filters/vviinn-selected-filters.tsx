@@ -280,7 +280,7 @@ export class VviinnSelectedFilters {
 
   async componentWillLoad() {
     this.getUploadedImageSrc();
-    await initializeLocale(this.locale ?? globalState.locale);
+    await initializeLocale(this.locale);
   }
 
   componentDidRender() {

@@ -400,7 +400,7 @@ export class VviinnResults {
     this.passedSlotNames = getSlotNames([...this.parentSlots, ...this.slots]);
 
     if (!this.showInWidget) {
-      await initializeLocale(this.locale ?? globalState.locale);
+      await initializeLocale(this.locale);
     }
   }
 

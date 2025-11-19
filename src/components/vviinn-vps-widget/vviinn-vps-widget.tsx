@@ -22,7 +22,7 @@ import {
   SearchStoreName,
   useSearchStore,
 } from "../../store/search.store";
-import { trackEvent, globalState } from "../../store/store";
+import { trackEvent } from "../../store/store";
 import { slotChangeListener, SlotSkeleton } from "../customized-slots";
 import {
   SearchImageSource,
@@ -397,7 +397,7 @@ export class VviinnVpsWidget {
   };
 
   async componentWillLoad() {
-    await initializeLocale(this.locale ?? globalState.locale);
+    await initializeLocale(this.locale);
 
     this.slots = findSlotElements(this.el);
 

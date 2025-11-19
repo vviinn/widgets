@@ -18,7 +18,7 @@ import {
   BasicEventData,
   ProductCardEventData,
 } from "../../recommendation/events";
-import { Locale } from "../../locale";
+import { Locale, initializeLocale } from "../../locale";
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
 import { OneClickDiscoveryMode } from "../../widget/types";
 import { useSearchStore } from "../../store/search.store";
@@ -247,7 +247,9 @@ export class VviinnVprButton {
     });
   }
 
-  componentWillLoad() {
+  async componentWillLoad() {
+    await initializeLocale(this.locale);
+
     if (this.appendSidebarToElement) {
       this.targetAppendSidebarTo = this.appendSidebarToElement;
     } else if (this.appendSidebarToId) {

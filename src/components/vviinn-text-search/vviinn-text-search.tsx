@@ -147,7 +147,7 @@ export class VviinnTextSearch {
     });
 
   async componentWillLoad() {
-    await initializeLocale(this.locale ?? globalState.locale);
+    await initializeLocale(this.locale);
     slotChangeListener(this, this.el);
 
     this.recognition = initializeRecognition(

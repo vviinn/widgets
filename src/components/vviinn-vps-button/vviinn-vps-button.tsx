@@ -33,7 +33,6 @@ import { findSlotElements } from "../../dom";
 import { SEARCH_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
 import i18next from "i18next";
 import { initializeLocale } from "../../locale";
-import { globalState } from "../../store/store";
 
 /**
  * @slot vviinn-teaser-text - Text on the widget's main screen.
@@ -228,7 +227,7 @@ export class VviinnVpsButton {
   }
 
   async componentWillLoad() {
-    await initializeLocale(this.locale ?? globalState.locale);
+    await initializeLocale(this.locale);
     this.slots = findSlotElements(this.el);
   }
 

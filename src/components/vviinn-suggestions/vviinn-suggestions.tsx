@@ -17,7 +17,6 @@ import {
   Stream,
 } from "../../interfaces";
 import { useSearchStore, SearchStore } from "../../store/search.store";
-import { globalState } from "../../store/store";
 import {
   ChangedFiltersEventData,
   DynamicFilterInternalData,
@@ -100,7 +99,7 @@ export class VviinnSuggestions {
   }
 
   async componentWillLoad() {
-    await initializeLocale(this.locale ?? globalState.locale);
+    await initializeLocale(this.locale);
 
     slotChangeListener(this, this.el);
   }
