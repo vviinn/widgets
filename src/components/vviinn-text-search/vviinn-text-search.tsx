@@ -34,7 +34,7 @@ import { searchBarParts } from "../../cssParts";
 import { MicIcon } from "../vviinn-icons/icons/MicIcon";
 import { initializeRecognition, speechTooltip } from "./helpers";
 import Timeout = NodeJS.Timeout;
-import { globalState } from "../../store/store";
+import { defaultConfig } from "../../store/store";
 
 /**
  * @part text-search-container - Container for the text search block.
@@ -151,7 +151,7 @@ export class VviinnTextSearch {
     slotChangeListener(this, this.el);
 
     this.recognition = initializeRecognition(
-      this.locale ?? globalState.locale,
+      this.locale ?? defaultConfig.locale,
       () => {
         this.showRecording();
         this.setShowTooltip(false);
@@ -216,7 +216,12 @@ export class VviinnTextSearch {
 
     if (this.showInWidget && this.showOnFirstScreen) {
       const response = pipe(
-        await makeTextSearchRequest(this.storeName, queryToUse, this.token),
+        await makeTextSearchRequest(
+          this.storeName,
+          queryToUse,
+          this.token,
+          this.apiPath,
+        ),
         E.getOrElse(() => null),
         (response: TextSearchResponse) => response,
       );

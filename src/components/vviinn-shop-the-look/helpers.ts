@@ -173,6 +173,7 @@ export interface VisualSearchParams {
   imageUrl: string;
   token: string;
   campaignId?: string;
+  apiPath?: string;
 }
 
 export const performVisualSearch = async (
@@ -193,6 +194,7 @@ export const performVisualSearch = async (
     const result = await makeUploadFileRequest(
       "shopTheLook",
       params.token,
+      params.apiPath,
       params.campaignId,
     )(imageFile);
 
@@ -224,6 +226,7 @@ export interface DetectedObjectClickParams {
   token: string;
   visualSearchId?: string | null;
   campaignId?: string;
+  apiPath?: string;
   isSearchInProgress: boolean;
   setSearchInProgress: (inProgress: boolean) => void;
   imageBounds?: Rectangle | null;
@@ -245,6 +248,7 @@ export const handleDetectedObjectClick = async (
     token,
     imageBounds,
     campaignId,
+    apiPath,
     isSearchInProgress,
     setSearchInProgress,
   } = params;
@@ -266,6 +270,7 @@ export const handleDetectedObjectClick = async (
       "shopTheLook",
       visualSearchId || null,
       token,
+      apiPath,
       campaignId,
     );
 
@@ -330,6 +335,7 @@ export interface ProcessFileUploadParams {
   file: File;
   token: string;
   campaignId?: string;
+  apiPath?: string;
 }
 
 export interface ProcessFileUploadResult {
@@ -341,7 +347,7 @@ export interface ProcessFileUploadResult {
 export const processFileUpload = async (
   params: ProcessFileUploadParams,
 ): Promise<E.Either<string, ProcessFileUploadResult>> => {
-  const { file, token, campaignId } = params;
+  const { file, token, campaignId, apiPath } = params;
 
   try {
     const imageElement = await imageFromFileTask(file)();
@@ -350,6 +356,7 @@ export const processFileUpload = async (
     const uploadResult = await makeUploadFileRequest(
       "shopTheLook",
       token,
+      apiPath,
       campaignId,
     )(file);
 

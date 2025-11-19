@@ -32,7 +32,8 @@ import {
   resetStore,
   useSearchStore,
 } from "../../store/search.store";
-import { globalState, trackEvent } from "../../store/store";
+import { trackEvent } from "../../store/store";
+import { isTrackingEnabled } from "../../store/tracking";
 import {
   BasicEventData,
   ImageUploadEventData,
@@ -443,6 +444,7 @@ export class VviinnResults {
         this.storeName,
         queryToUse,
         this.token,
+        this.apiPath,
         requestId,
         this.resultsCount,
       ),
@@ -460,6 +462,7 @@ export class VviinnResults {
         this.filterColumn,
         this.filterValue,
         this.token,
+        this.apiPath,
         this.resultsCount,
         dynamicFilters,
         this.useInnerState,
@@ -508,6 +511,7 @@ export class VviinnResults {
         this.storeName,
         this.state.visualSearchId,
         this.token,
+        this.apiPath,
       );
     }
   };
@@ -616,7 +620,12 @@ export class VviinnResults {
     );
 
     if (!!this.searchId)
-      makeVisualSearchRequest(this.storeName, this.searchId, this.token);
+      makeVisualSearchRequest(
+        this.storeName,
+        this.searchId,
+        this.token,
+        this.apiPath,
+      );
 
     this.getResultsByCategory();
 
@@ -643,7 +652,8 @@ export class VviinnResults {
   @Watch("searchId")
   watchSearchId(newId: string) {
     if (this.showInWidget) return;
-    if (newId) makeVisualSearchRequest(this.storeName, newId, this.token);
+    if (newId)
+      makeVisualSearchRequest(this.storeName, newId, this.token, this.apiPath);
   }
 
   @Listen("vviinnProductLoad")
@@ -752,7 +762,7 @@ export class VviinnResults {
     detail: ProductCardEventData,
     eventType: ProductEventType,
   ): ProductEvent | null {
-    if (!globalState.trackingEnabled) return null;
+    if (!isTrackingEnabled()) return null;
 
     const eventBody = this.createTrackingEventBody(detail);
 

@@ -170,7 +170,12 @@ export class VviinnCropper {
     this.vviinnImageCrop.emit({
       isTriggeredByVpsWidget: this.showInWidget,
     });
-    makeVisualSearchRequest(this.storeName, null, this.token);
+    makeVisualSearchRequest(
+      this.storeName,
+      null,
+      this.token,
+      this.apiPath,
+    );
   };
 
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
@@ -207,7 +212,12 @@ export class VviinnCropper {
       });
     }
 
-    makeVisualSearchRequest(this.storeName, null, this.token);
+    makeVisualSearchRequest(
+      this.storeName,
+      null,
+      this.token,
+      this.apiPath,
+    );
   }
 
   @Listen("vviinnImageCrop")
@@ -278,7 +288,12 @@ export class VviinnCropper {
     this.vviinnImageCrop.emit({
       isTriggeredByVpsWidget: this.showInWidget,
     });
-    makeVisualSearchRequest(this.storeName, null, this.token);
+    makeVisualSearchRequest(
+      this.storeName,
+      null,
+      this.token,
+      this.apiPath,
+    );
   };
 
   private showPreloader = () =>

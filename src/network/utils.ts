@@ -4,7 +4,7 @@ import { IO } from "fp-ts/IO";
 import { pipe } from "fp-ts/function";
 import * as S from "fp-ts/Semigroup";
 import * as String from "fp-ts/string";
-import { globalState } from "../store/store";
+import { defaultConfig } from "../store/store";
 import { BasicError, emptyApiPathError } from "../error";
 
 const stringMonoid = O.getMonoid(String.Monoid);
@@ -12,11 +12,21 @@ const stringMonoid = O.getMonoid(String.Monoid);
 export const getApiPath: IO<E.Either<BasicError<string>, string>> = () =>
   pipe(
     O.getFirstMonoid<string>().concat(
-      O.fromNullable(globalState.apiPath),
+      O.fromNullable(defaultConfig.apiPath),
       O.fromNullable(`${process.env.API_PATH}`),
     ),
     E.fromOption(() => emptyApiPathError),
   );
+
+export const resolveApiPath = (
+  apiPath?: string,
+): E.Either<BasicError<string>, string> =>
+  apiPath
+    ? pipe(
+        O.fromNullable(apiPath),
+        E.fromOption(() => emptyApiPathError),
+      )
+    : getApiPath();
 
 const headersSemigroupSum: S.Semigroup<Headers> = {
   concat: (x: Headers, y: Headers) => {

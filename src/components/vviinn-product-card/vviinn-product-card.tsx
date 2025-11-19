@@ -68,7 +68,7 @@ import {
   listCardParts,
   productCardParts,
 } from "../../cssParts";
-import { globalState } from "../../store/store";
+import { defaultConfig } from "../../store/store";
 import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
 import {
   PRODUCT_CARD_IMAGE_RESOLUTION_WIDTH,
@@ -277,11 +277,11 @@ export class VviinnProductCard {
     this.isSetMode ? this.isTransitioning : this.loading;
 
   private get effectiveCurrencySign() {
-    return this.currencySign ?? globalState.currencySign;
+    return this.currencySign ?? defaultConfig.currencySign;
   }
 
   private get effectiveLocale() {
-    return this.locale ?? globalState.locale;
+    return this.locale ?? defaultConfig.locale;
   }
 
   connectedCallback() {

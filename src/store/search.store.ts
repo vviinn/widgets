@@ -224,6 +224,7 @@ const processVisualSearch = (
   store: SearchStoreName,
   body: VisualSearchRequest,
   token: string,
+  apiPath?: string,
 ) => {
   const state = useStore(store);
 
@@ -231,7 +232,7 @@ const processVisualSearch = (
     getTokenWithBody<VisualSearchRequest>(token, body),
     setBodyAndHeaders,
     TE.fromEither,
-    TE.chain((request) => visualSearchSessionClient(request)),
+    TE.chain((request) => visualSearchSessionClient(request, apiPath)),
     TE.map((sessionResponse) => {
       updateVisualSearchState(store)(sessionResponse);
       return sessionResponse;
@@ -249,6 +250,7 @@ const uploadImageFile =
     token: string,
     imageType: ImageType = "image",
     searchId?: string,
+    apiPath?: string,
     campaignId?: string | null,
   ) =>
   (file: File) => {
@@ -281,14 +283,19 @@ const uploadImageFile =
               inner: error,
             }),
           ),
-          TE.chain((body) => processVisualSearch(store, body, token)),
+          TE.chain((body) => processVisualSearch(store, body, token, apiPath)),
         ),
       ),
     );
   };
 
 export const makeUploadFileRequest =
-  (store: SearchStoreName, token: string, campaignId?: string | null) =>
+  (
+    store: SearchStoreName,
+    token: string,
+    apiPath?: string,
+    campaignId?: string | null,
+  ) =>
   async (file: File) => {
     const state = useStore(store);
 
@@ -304,7 +311,14 @@ export const makeUploadFileRequest =
     }
 
     const session = await pipe(
-      uploadImageFile(store, token, "image", undefined, campaignId)(file),
+      uploadImageFile(
+        store,
+        token,
+        "image",
+        undefined,
+        apiPath,
+        campaignId,
+      )(file),
     )();
 
     if (!state.visualSearchId?.length) return session;
@@ -323,6 +337,7 @@ export const makeUploadFileRequest =
         token,
         "highResolutionImage",
         state.visualSearchId,
+        apiPath,
         campaignId,
       )(file),
       TE.getOrElseW((error) => {
@@ -338,6 +353,7 @@ export const makeVisualSearchRequest = async (
   store: SearchStoreName,
   searchId: string | null,
   token: string,
+  apiPath?: string,
   campaignId?: string | null,
 ) => {
   const state = useStore(store);
@@ -383,7 +399,7 @@ export const makeVisualSearchRequest = async (
       include: fetchDetectedObjects,
     },
   };
-  return processVisualSearch(store, body, token)();
+  return processVisualSearch(store, body, token, apiPath)();
 };
 
 export const setTextSearchQuery = (
@@ -398,6 +414,7 @@ export const makeTextSearchRequest = async (
   store: SearchStoreName,
   query: string,
   token: string,
+  apiPath?: string,
   requestId?: string | null,
   resultsCount?: number,
 ) => {
@@ -421,7 +438,7 @@ export const makeTextSearchRequest = async (
     getTokenWithBody<TextSearchRequest>(token, body),
     setBodyAndHeaders,
     TE.fromEither,
-    TE.chain((request) => textSearchSessionClient(request)),
+    TE.chain((request) => textSearchSessionClient(request, apiPath)),
     TE.map((sessionResponse) => {
       state.results = sessionResponse?.data?.products ?? [];
       state.textSearchId = sessionResponse.requestId;
@@ -452,6 +469,7 @@ export const makeProductListingPageRequest = async (
   column: string,
   value: string,
   token: string,
+  apiPath?: string,
   resultsCount?: number,
   dynamicFilters?: RequestDynamicFilterItem[],
   skipStateUpdate?: boolean,
@@ -486,7 +504,7 @@ export const makeProductListingPageRequest = async (
     getTokenWithBody<ProductListingPageRequest>(token, body),
     setBodyAndHeaders,
     TE.fromEither,
-    TE.chainW(productListingPageSessionClient),
+    TE.chainW((request) => productListingPageSessionClient(request, apiPath)),
     TE.map((sessionResponse) => {
       if (skipStateUpdate) return sessionResponse;
       state.results = sessionResponse?.data?.products ?? [];

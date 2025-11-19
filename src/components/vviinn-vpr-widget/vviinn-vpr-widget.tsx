@@ -21,7 +21,8 @@ import * as E from "fp-ts/lib/Either";
 import { version } from "../../../package.json";
 
 import { createBearAuthedHeader } from "./token-helpers";
-import { globalState, trackEvent } from "../../store/store";
+import { trackEvent } from "../../store/store";
+import { isTrackingEnabled } from "../../store/tracking";
 import { CampaignName, campaignTypeNames } from "../../campaign/Campaign";
 import { getRecommendationsService } from "../../campaign/CampaignService";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
@@ -551,7 +552,7 @@ export class VviinnVprWidget implements ComponentInterface {
     detail: ProductCardEventData,
     eventType: ProductEventType | "basket" | "wishlist",
   ): ProductEvent | AddToBasketEvent | AddToWishlistEvent | null {
-    if (!globalState.trackingEnabled) return null;
+    if (!isTrackingEnabled()) return null;
 
     if (eventType === "basket") {
       delete detail.discount;

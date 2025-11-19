@@ -1,40 +1,33 @@
-import { createStore } from "@stencil/store";
 import { WidgetEvent } from "vviinn-tracking-client-ts";
 import { ProductEvent, ResultEvent } from "../recommendation/events";
 import { createTrackingApi } from "../openApi";
 import { Locale } from "../locale";
+import { isTrackingEnabled, disableTracking } from "./tracking";
 
-type GlobalStore = {
+type DefaultConfig = {
   locale: Locale;
   currencySign: string;
-  pricePrefix: string;
   apiPath: string;
-  trackingEnabled: boolean;
 };
 
-const globalStoreDefaults: GlobalStore = {
+export const defaultConfig: DefaultConfig = {
   locale: "de-DE",
   currencySign: "€",
-  pricePrefix: "",
   apiPath: "https://api.vviinn.com",
-  trackingEnabled: true,
 };
-
-const { state } = createStore(globalStoreDefaults);
-export const globalState = state;
 
 export const trackEvent = async (
   event: WidgetEvent | ProductEvent | ResultEvent,
   token: string,
-  apiPath: string = "https://api.vviinn.com",
+  apiPath: string = defaultConfig.apiPath,
 ): Promise<void> => {
-  if (!state.trackingEnabled || !event || !token) return;
+  if (!isTrackingEnabled() || !event || !token) return;
 
   try {
     const trackingApi = createTrackingApi(apiPath, token);
     const result = await trackingApi.trackEvent(event);
     if (result.status === "rejected") {
-      state.trackingEnabled = false;
+      disableTracking();
     }
   } catch (error) {
     console.error("Tracking event error:", error);

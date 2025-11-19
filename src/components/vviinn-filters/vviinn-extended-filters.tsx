@@ -47,7 +47,7 @@ import {
 import { ClickEvent } from "../../geometry/Rectangle";
 import { triggerFilter, triggerResetFilters } from "./helpers/triggerFilter";
 import { SearchStore, useSearchStore } from "../../store/search.store";
-import { globalState } from "../../store/store";
+import { defaultConfig } from "../../store/store";
 import { addEventListenersWithSignal, isElementInSelector } from "../../dom";
 import { ResponseIntervalFilterItem } from "../../interfaces";
 import { extendedFiltersParts } from "../../cssParts";
@@ -394,7 +394,7 @@ export class VviinnExtendedFilters {
                       const intervalLabel = getIntervalLabel(
                         intervalFilter,
                         value,
-                        this.currencySign ?? globalState.currencySign,
+                        this.currencySign ?? defaultConfig.currencySign,
                       );
                       intervalLabel &&
                         addedOptions.push(<span>{intervalLabel}</span>);

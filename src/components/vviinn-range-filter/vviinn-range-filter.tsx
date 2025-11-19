@@ -6,7 +6,7 @@ import {
   Interval,
 } from "../../interfaces";
 import { priceRangeParts } from "../../cssParts";
-import { globalState } from "../../store/store";
+import { defaultConfig } from "../../store/store";
 import { slotChangeListener } from "../customized-slots";
 
 export type Histogram = IntervalFilterValue[];
@@ -226,7 +226,9 @@ export class VviinnPriceRange {
               aria-label={i18next.t(ariaLabelKey)}
             />
             {this.showCurrency && (
-              <span class="input-currency">{this.currencySign ?? globalState.currencySign}</span>
+              <span class="input-currency">
+                {this.currencySign ?? defaultConfig.currencySign}
+              </span>
             )}
           </div>
         </div>
@@ -237,7 +239,9 @@ export class VviinnPriceRange {
       <div class="label" part="histogram-label">
         {value}
         {this.showCurrency && (
-          <span class="histogram-currency">{this.currencySign ?? globalState.currencySign}</span>
+          <span class="histogram-currency">
+            {this.currencySign ?? defaultConfig.currencySign}
+          </span>
         )}
       </div>
     );

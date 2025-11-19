@@ -48,7 +48,7 @@ import {
   renderNavigation,
 } from "./render-helpers";
 import { Locale, initializeLocale } from "../../locale";
-import { globalState } from "../../store/store";
+import { defaultConfig } from "../../store/store";
 import { TEST_BASIC_EVENT_DATA } from "./test-data";
 import {
   extractSlideIndex,
@@ -241,7 +241,7 @@ export class VviinnShopTheLook {
   }
 
   private get effectiveCurrencySign(): string {
-    return this.currencySign ?? globalState.currencySign;
+    return this.currencySign ?? defaultConfig.currencySign;
   }
 
   disconnectedCallback() {
@@ -603,6 +603,7 @@ export class VviinnShopTheLook {
       token: this.token,
       visualSearchId,
       campaignId: this.campaignId,
+      apiPath: this.apiPath,
       imageBounds,
       isSearchInProgress: this.isSearchInProgress,
       setSearchInProgress: (inProgress: boolean) => {
@@ -662,6 +663,7 @@ export class VviinnShopTheLook {
       imageUrl: targetImageUrl,
       token: this.token,
       campaignId: this.campaignId,
+      apiPath: this.apiPath,
     };
 
     const result = await performVisualSearch(params);
@@ -963,6 +965,7 @@ export class VviinnShopTheLook {
       imageUrl,
       token: this.token,
       campaignId: this.campaignId,
+      apiPath: this.apiPath,
     };
 
     const result = await performVisualSearch(params);
@@ -1054,6 +1057,7 @@ export class VviinnShopTheLook {
       file,
       token: this.token,
       campaignId: this.campaignId,
+      apiPath: this.apiPath,
     };
 
     const result = await processFileUpload(params);

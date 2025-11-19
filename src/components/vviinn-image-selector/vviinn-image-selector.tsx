@@ -78,7 +78,11 @@ export class VviinnImageSelector {
     const processingResult: E.Either<
       BasicError<string | Response>,
       VisualSearchResponse
-    > = await makeUploadFileRequest(this.storeName, this.token)(file);
+    > = await makeUploadFileRequest(
+      this.storeName,
+      this.token,
+      this.apiPath,
+    )(file);
 
     pipe(
       processingResult,

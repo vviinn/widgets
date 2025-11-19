@@ -34,7 +34,7 @@ import {
   triggerRemoveIntervalFilter,
 } from "./helpers/triggerFilter";
 import { SearchStore, useSearchStore } from "../../store/search.store";
-import { globalState } from "../../store/store";
+import { defaultConfig } from "../../store/store";
 import i18next from "i18next";
 import { Locale, initializeLocale } from "../../locale";
 import { announceToScreenReader } from "../../a11y";
@@ -155,7 +155,7 @@ export class VviinnSelectedFilters {
       const intervalLabel = getIntervalLabel(
         detail.filter as ResponseIntervalFilterItem,
         detail.value.interval as Interval,
-        this.currencySign ?? globalState.currencySign,
+        this.currencySign ?? defaultConfig.currencySign,
         true,
       );
       if (intervalLabel) {
