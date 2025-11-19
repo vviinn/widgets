@@ -53,8 +53,7 @@ import {
   createAddToBasketEvent,
   createAddToWishlistEvent,
 } from "../../tracking";
-import { resources } from "../../locale";
-import { Locale } from "../../locale";
+import { Locale, initializeLocale } from "../../locale";
 import { UpdateIcon } from "../vviinn-icons";
 import { getCustomLabels, getRecommendationsBody } from "../../recommendation";
 import {
@@ -171,7 +170,7 @@ export class VviinnVprWidget implements ComponentInterface {
   /** Campaign type */
   @Prop() campaignType: CampaignName = this.mode === "set" ? "VCS" : "VPR";
   /** The locale for currency formatting and text localization */
-  @Prop() locale: Locale;
+  @Prop() locale?: Locale;
   /** Accepts any hex color code */
   @Prop() color: string = "";
   /** Width of each recommended product image in Continuity mode */
@@ -447,11 +446,7 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   async componentWillLoad() {
-    await i18next.init({
-      lng: this.locale ?? globalState.locale,
-      fallbackLng: "en",
-      resources,
-    });
+    await initializeLocale(this.locale ?? globalState.locale);
 
     slotChangeListener(this, this.el);
   }
@@ -482,9 +477,11 @@ export class VviinnVprWidget implements ComponentInterface {
     await this.trackIfNotAppended(async () => {
       const productClickEvent = this.getProductTrackEvent(detail, "click");
 
-      await trackEvent(productClickEvent, this.token, this.apiPath).finally(() => {
-        this.handleOpenLink(product.deeplink, clickEvent);
-      });
+      await trackEvent(productClickEvent, this.token, this.apiPath).finally(
+        () => {
+          this.handleOpenLink(product.deeplink, clickEvent);
+        },
+      );
     });
 
     if (this.isAppended) {
@@ -660,7 +657,7 @@ export class VviinnVprWidget implements ComponentInterface {
   ): HTMLVviinnProductCardElement {
     return (
       <vviinn-product-card
-        currency={this.currencySign}
+        currencySign={this.currencySign}
         pricePrefix={this.pricePrefix}
         locale={this.locale}
         productId={recommendation.productId}
@@ -832,6 +829,8 @@ export class VviinnVprWidget implements ComponentInterface {
               {this.showExtendedFilters && (
                 <vviinn-extended-filters
                   showingInButton={this.showingInButton}
+                  locale={this.locale}
+                  currencySign={this.currencySign}
                 ></vviinn-extended-filters>
               )}
             </div>

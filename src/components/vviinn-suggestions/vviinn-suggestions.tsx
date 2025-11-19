@@ -25,8 +25,7 @@ import {
 } from "../../recommendation/events";
 import { RequestDynamicFilterItem } from "../../campaign/VPRCampaignService";
 import { addEventListenersWithSignal } from "../../dom";
-import { Locale } from "../../locale/types";
-import { resources } from "../../locale";
+import { Locale, initializeLocale } from "../../locale";
 import { slotChangeListener } from "../customized-slots";
 import { SparkIcon } from "../vviinn-icons/icons/SparkIcon";
 import { suggestionsParts } from "../../cssParts";
@@ -101,11 +100,7 @@ export class VviinnSuggestions {
   }
 
   async componentWillLoad() {
-    await i18next.init({
-      lng: this.locale ?? globalState.locale,
-      fallbackLng: "en",
-      resources,
-    });
+    await initializeLocale(this.locale ?? globalState.locale);
 
     slotChangeListener(this, this.el);
   }

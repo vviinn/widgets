@@ -11,6 +11,7 @@ import {
 } from "../../utils/swiper/swiperUtils";
 import { SecondaryActionIcon } from "../vviinn-icons/icons/SecondaryActionIcon";
 import { ModalPosition } from "./helpers";
+import { Locale } from "../../locale";
 
 export interface DetectedObjectsProps {
   imageBounds: Rectangle | null;
@@ -231,6 +232,7 @@ export interface ProductDetailsSliderProps {
   searchResults: Recommendation[];
   selectedProductIndex: number;
   currencySign?: string;
+  locale?: Locale;
   showMultipleImages?: boolean;
   onProductClick: (product: Recommendation) => void;
   onBackToGrid: () => void;
@@ -244,6 +246,7 @@ export const renderProductDetails = (props: ProductDetailsSliderProps) => {
     onProductClick,
     onBackToGrid,
     currencySign,
+    locale,
     showMultipleImages = false,
   } = props;
 
@@ -281,7 +284,8 @@ export const renderProductDetails = (props: ProductDetailsSliderProps) => {
             showMultipleImages={showMultipleImages}
             imageResolutionWidth={300}
             imageWidth={isDesktop() ? 160 : 120}
-            currency={currencySign || ""}
+            currencySign={currencySign || ""}
+            locale={locale}
             deeplink={selectedProduct.deeplink}
             onVviinnProductClick={() => onProductClick(selectedProduct)}
           />
@@ -300,6 +304,7 @@ export interface ModalProps {
   showDetailedView?: boolean;
   selectedProductIndex?: number;
   currencySign?: string;
+  locale?: Locale;
   showMultipleImages?: boolean;
   onProductDetailsClick?: (product: Recommendation, index: number) => void;
   onBackToGrid?: () => void;
@@ -320,6 +325,7 @@ export const renderModal = (props: ModalProps) => {
     onBackToGrid,
     onNavigateProduct,
     currencySign,
+    locale,
     showMultipleImages = false,
     modalContentRef,
   } = props;
@@ -363,6 +369,7 @@ export const renderModal = (props: ModalProps) => {
               selectedProductIndex,
               onProductClick,
               currencySign,
+              locale,
               showMultipleImages,
               onBackToGrid,
               onNavigateProduct,

@@ -32,7 +32,7 @@ import {
 import { findSlotElements } from "../../dom";
 import { SEARCH_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
 import i18next from "i18next";
-import { resources } from "../../locale";
+import { initializeLocale } from "../../locale";
 import { globalState } from "../../store/store";
 
 /**
@@ -119,7 +119,7 @@ export class VviinnVpsButton {
   /**  The currency sign is displayed after the price */
   @Prop() currencySign?: string;
   /** The locale for currency formatting and text localization */
-  @Prop() locale: Locale;
+  @Prop() locale?: Locale;
   /** Prefix is displayed before the price */
   @Prop() pricePrefix?: string;
   /** Campaign ID used for Visual Search (deprecated) */
@@ -228,11 +228,7 @@ export class VviinnVpsButton {
   }
 
   async componentWillLoad() {
-    await i18next.init({
-      lng: this.locale ?? globalState.locale,
-      fallbackLng: "en",
-      resources,
-    });
+    await initializeLocale(this.locale ?? globalState.locale);
     this.slots = findSlotElements(this.el);
   }
 

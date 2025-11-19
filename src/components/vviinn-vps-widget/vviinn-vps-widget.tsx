@@ -48,8 +48,7 @@ import {
   parseStringToExcluded,
 } from "../../utils/collections/collectionsUtils";
 import { ErrorType } from "../vviinn-error";
-import { resources } from "../../locale";
-import { Locale } from "../../locale";
+import { Locale, initializeLocale } from "../../locale";
 import { CameraActionIcon, UploadActionIcon } from "../vviinn-icons";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 import { videoStreamSettings } from "../../video/settings";
@@ -398,11 +397,7 @@ export class VviinnVpsWidget {
   };
 
   async componentWillLoad() {
-    await i18next.init({
-      lng: this.locale ?? globalState.locale,
-      fallbackLng: "en",
-      resources,
-    });
+    await initializeLocale(this.locale ?? globalState.locale);
 
     this.slots = findSlotElements(this.el);
 
@@ -882,6 +877,7 @@ export class VviinnVpsWidget {
                         mode="preview"
                         showHeader={false}
                         showInWidget={true}
+                        locale={this.locale}
                         currencySign={this.currencySign}
                         showIntervalInputs={this.showIntervalInputs}
                       />
@@ -946,6 +942,7 @@ export class VviinnVpsWidget {
             mode="modal"
             exportparts={extendedFiltersParts}
             showInWidget={true}
+            locale={this.locale}
             currencySign={this.currencySign}
             showIntervalInputs={this.showIntervalInputs}
           />

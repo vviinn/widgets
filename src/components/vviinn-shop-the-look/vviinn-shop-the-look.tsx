@@ -93,7 +93,7 @@ export class VviinnShopTheLook {
   /** Campaign ID for visual search requests */
   @Prop() campaignId: string = "";
   /** The locale for currency formatting and text localization */
-  @Prop() locale: Locale;
+  @Prop() locale?: Locale;
   /** Style variant for corner styling - 'rounded' for rounded corners, 'cornered' for sharp corners */
   @Prop() widgetStyle: "rounded" | "cornered" = "rounded";
   /** Enable cropper mode for manual area selection */
@@ -1161,6 +1161,7 @@ export class VviinnShopTheLook {
       onBackToGrid: this.resetDetailedView,
       onNavigateProduct: this.handleNavigateProduct,
       currencySign: this.currencySign,
+      locale: this.locale,
       showMultipleImages: this.showMultipleImages,
       modalContentRef: (el: HTMLElement) => {
         this.modalContentRef = el;

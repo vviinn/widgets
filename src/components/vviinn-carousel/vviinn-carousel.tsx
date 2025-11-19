@@ -572,7 +572,9 @@ export class VviinnCarousel {
         productType={recommendation.productType}
         entityType={recommendation.entityType}
         deeplink={recommendation.deeplink}
-        image={recommendation.image?.thumbnail ?? recommendation.image?.original}
+        image={
+          recommendation.image?.thumbnail ?? recommendation.image?.original
+        }
         images={recommendation.images}
         showMultipleImages={this.showMultipleImages}
         disableMobileSwiper={true}
@@ -596,7 +598,7 @@ export class VviinnCarousel {
         updateButtonLocation={this.updateButtonLocation}
         appliedDiscountPercentage={appliedDiscount}
         currentDiscountPercentage={this.setModeDiscount}
-        currency={this.currencySign}
+        currencySign={this.currencySign}
         pricePrefix={this.pricePrefix}
         locale={this.locale}
         isSetMode={this.isSetMode}
@@ -732,7 +734,7 @@ export class VviinnCarousel {
               imageWidth={300}
               imageResolutionWidth={this.imageResolutionWidth}
               isSourceProduct={true}
-              currency={this.currencySign}
+              currencySign={this.currencySign}
               pricePrefix={this.pricePrefix}
               isSetMode={this.isSetMode}
               locale={this.locale}

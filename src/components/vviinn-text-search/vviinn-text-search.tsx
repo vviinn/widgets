@@ -25,7 +25,7 @@ import {
   TriggerSourceEventData,
 } from "../../recommendation/events";
 import i18next from "i18next";
-import { Locale, resources } from "../../locale";
+import { Locale, initializeLocale } from "../../locale";
 import { SearchBarMode } from "../../widget/types";
 import { TextSearchResponse } from "../../interfaces";
 import * as E from "fp-ts/Either";
@@ -74,7 +74,7 @@ export class VviinnTextSearch {
   /** Vviinn customer's token (required) */
   @Prop() token: string;
   /** The locale for currency formatting and text localization */
-  @Prop() locale: Locale;
+  @Prop() locale?: Locale;
   /** Basic or extended text search with search modal and speech recognition */
   @Prop() mode: SearchBarMode = "basic";
   /** Query for the text search passed from widget */
@@ -147,11 +147,7 @@ export class VviinnTextSearch {
     });
 
   async componentWillLoad() {
-    await i18next.init({
-      lng: this.locale ?? globalState.locale,
-      fallbackLng: "en",
-      resources,
-    });
+    await initializeLocale(this.locale ?? globalState.locale);
     slotChangeListener(this, this.el);
 
     this.recognition = initializeRecognition(

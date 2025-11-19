@@ -66,8 +66,7 @@ import {
   createAddToWishlistEvent,
 } from "../../tracking";
 import { RequestDynamicFilterItem } from "../../campaign/VPRCampaignService";
-import i18next from "i18next";
-import { resources } from "../../locale";
+import { initializeLocale } from "../../locale";
 import {
   productCardSlotNames,
   slotChangeListener,
@@ -401,11 +400,7 @@ export class VviinnResults {
     this.passedSlotNames = getSlotNames([...this.parentSlots, ...this.slots]);
 
     if (!this.showInWidget) {
-      await i18next.init({
-        lng: this.locale ?? globalState.locale,
-        fallbackLng: "en",
-        resources,
-      });
+      await initializeLocale(this.locale ?? globalState.locale);
     }
   }
 
@@ -509,7 +504,11 @@ export class VviinnResults {
     if (this.isTextSearch()) {
       this.getTextSearchResults(this.state.textSearchId);
     } else {
-      makeVisualSearchRequest(this.storeName, this.state.visualSearchId, this.token);
+      makeVisualSearchRequest(
+        this.storeName,
+        this.state.visualSearchId,
+        this.token,
+      );
     }
   };
 
@@ -616,7 +615,8 @@ export class VviinnResults {
       signal,
     );
 
-    if (!!this.searchId) makeVisualSearchRequest(this.storeName, this.searchId, this.token);
+    if (!!this.searchId)
+      makeVisualSearchRequest(this.storeName, this.searchId, this.token);
 
     this.getResultsByCategory();
 
@@ -672,9 +672,11 @@ export class VviinnResults {
     const product = this.findProductById(productId);
     if (!product || !product.deeplink) return;
 
-    await trackEvent(productClickEvent, this.token, this.apiPath).finally(() => {
-      this.handleOpenLink(product.deeplink, clickEvent);
-    });
+    await trackEvent(productClickEvent, this.token, this.apiPath).finally(
+      () => {
+        this.handleOpenLink(product.deeplink, clickEvent);
+      },
+    );
   }
 
   @Listen("vviinnAuxClick")
@@ -853,7 +855,7 @@ export class VviinnResults {
     return this.getResults().map((p, i) => (
       <vviinn-product-card
         pricePrefix={this.pricePrefix}
-        currency={this.currencySign}
+        currencySign={this.currencySign}
         locale={this.locale}
         key={p.productId}
         index={i}

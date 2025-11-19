@@ -34,7 +34,7 @@ import {
 } from "./helpers";
 import { filterOptionsBySearch } from "./helpers/searchHelper";
 import { isPriceFilter } from "../../filters";
-import { Locale, resources } from "../../locale";
+import { Locale, initializeLocale } from "../../locale";
 
 import { SlotSkeleton, slotChangeListener } from "../customized-slots";
 import { Histogram } from "../vviinn-range-filter/vviinn-range-filter";
@@ -291,11 +291,7 @@ export class VviinnExtendedFilters {
   }
 
   async componentWillLoad() {
-    await i18next.init({
-      lng: this.locale ?? globalState.locale,
-      fallbackLng: "en",
-      resources,
-    });
+    await initializeLocale(this.locale ?? globalState.locale);
 
     slotChangeListener(this, this.el);
   }

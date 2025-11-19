@@ -117,7 +117,7 @@ export class VviinnVprButton {
   /** Vviinn customer's token (required) */
   @Prop() token: string;
   /** The locale for currency formatting and text localization */
-  @Prop() locale: Locale;
+  @Prop() locale?: Locale;
   /**  The currency sign is displayed after the price */
   @Prop() currencySign?: string;
   /** Prefix is displayed before the price */
