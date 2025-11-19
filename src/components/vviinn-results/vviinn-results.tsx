@@ -32,7 +32,7 @@ import {
   resetStore,
   useSearchStore,
 } from "../../store/search.store";
-import { globalState, trackEvent, updateGlobalState } from "../../store/store";
+import { globalState, trackEvent } from "../../store/store";
 import {
   BasicEventData,
   ImageUploadEventData,
@@ -447,6 +447,7 @@ export class VviinnResults {
       await makeTextSearchRequest(
         this.storeName,
         queryToUse,
+        this.token,
         requestId,
         this.resultsCount,
       ),
@@ -463,6 +464,7 @@ export class VviinnResults {
       await makeProductListingPageRequest(
         this.filterColumn,
         this.filterValue,
+        this.token,
         this.resultsCount,
         dynamicFilters,
         this.useInnerState,
@@ -489,7 +491,7 @@ export class VviinnResults {
       ...rest,
     });
 
-    trackEvent(textSearchStartedEvent);
+    trackEvent(textSearchStartedEvent, this.token, this.apiPath);
 
     this.getTextSearchResults();
   };
@@ -507,7 +509,7 @@ export class VviinnResults {
     if (this.isTextSearch()) {
       this.getTextSearchResults(this.state.textSearchId);
     } else {
-      makeVisualSearchRequest(this.storeName, this.state.visualSearchId);
+      makeVisualSearchRequest(this.storeName, this.state.visualSearchId, this.token);
     }
   };
 
@@ -535,7 +537,7 @@ export class VviinnResults {
       eventBody,
     );
 
-    trackEvent(filterEvent);
+    trackEvent(filterEvent, this.token, this.apiPath);
   };
 
   private imageUploadStartedHandler = ({
@@ -567,7 +569,6 @@ export class VviinnResults {
   };
 
   connectedCallback() {
-    updateGlobalState(this);
     const { state, storeName, onChange } = useSearchStore(this.showInWidget);
     this.state = state;
     this.storeName = storeName;
@@ -615,7 +616,7 @@ export class VviinnResults {
       signal,
     );
 
-    if (!!this.searchId) makeVisualSearchRequest(this.storeName, this.searchId);
+    if (!!this.searchId) makeVisualSearchRequest(this.storeName, this.searchId, this.token);
 
     this.getResultsByCategory();
 
@@ -642,13 +643,13 @@ export class VviinnResults {
   @Watch("searchId")
   watchSearchId(newId: string) {
     if (this.showInWidget) return;
-    if (newId) makeVisualSearchRequest(this.storeName, newId);
+    if (newId) makeVisualSearchRequest(this.storeName, newId, this.token);
   }
 
   @Listen("vviinnProductLoad")
   trackProductLoad({ detail }: ProductCardEvent) {
     const productLoadEvent = this.getProductTrackEvent(detail, "load");
-    trackEvent(productLoadEvent);
+    trackEvent(productLoadEvent, this.token, this.apiPath);
   }
 
   @Listen("vviinnProductView")
@@ -660,7 +661,7 @@ export class VviinnResults {
     }
 
     const productViewEvent = this.getProductTrackEvent(detail, "view");
-    trackEvent(productViewEvent);
+    trackEvent(productViewEvent, this.token, this.apiPath);
   }
 
   @Listen("vviinnProductClick")
@@ -671,7 +672,7 @@ export class VviinnResults {
     const product = this.findProductById(productId);
     if (!product || !product.deeplink) return;
 
-    await trackEvent(productClickEvent).finally(() => {
+    await trackEvent(productClickEvent, this.token, this.apiPath).finally(() => {
       this.handleOpenLink(product.deeplink, clickEvent);
     });
   }
@@ -684,7 +685,7 @@ export class VviinnResults {
     const product = this.findProductById(productId);
     if (!product || !product.deeplink) return;
 
-    await trackEvent(productClickEvent);
+    await trackEvent(productClickEvent, this.token, this.apiPath);
   }
 
   @Listen("vviinnAddToBasket")
@@ -696,7 +697,7 @@ export class VviinnResults {
       this.getCampaignType(),
     )(eventBody);
 
-    trackEvent(addToBasketEvent);
+    trackEvent(addToBasketEvent, this.token, this.apiPath);
   }
 
   @Listen("vviinnAddToFavorite")
@@ -706,7 +707,7 @@ export class VviinnResults {
       this.getCampaignType(),
     )(eventBody);
 
-    trackEvent(addToWishlistEvent);
+    trackEvent(addToWishlistEvent, this.token, this.apiPath);
   }
 
   private trackResultEvent(type: ResultEventType) {
@@ -721,7 +722,7 @@ export class VviinnResults {
         ...rest,
       });
 
-    trackEvent(resultEvent);
+    trackEvent(resultEvent, this.token, this.apiPath);
   }
 
   private findProductById(
@@ -851,8 +852,8 @@ export class VviinnResults {
 
     return this.getResults().map((p, i) => (
       <vviinn-product-card
-        pricePrefix={globalState.pricePrefix}
-        currency={globalState.currencySign}
+        pricePrefix={this.pricePrefix}
+        currency={this.currencySign}
         locale={this.locale}
         key={p.productId}
         index={i}

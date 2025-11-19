@@ -17,7 +17,7 @@ import {
   Stream,
 } from "../../interfaces";
 import { useSearchStore, SearchStore } from "../../store/search.store";
-import { updateGlobalState, globalState } from "../../store/store";
+import { globalState } from "../../store/store";
 import {
   ChangedFiltersEventData,
   DynamicFilterInternalData,
@@ -115,7 +115,6 @@ export class VviinnSuggestions {
   }
 
   connectedCallback() {
-    updateGlobalState(this);
     const { state, onChange } = useSearchStore(this.showInWidget);
     this.state = state;
 

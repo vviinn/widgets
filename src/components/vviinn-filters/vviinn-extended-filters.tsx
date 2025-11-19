@@ -124,6 +124,8 @@ export class VviinnExtendedFilters {
   @Prop() searchThreshold?: number = 0;
   /** The locale for currency formatting and text localization */
   @Prop() locale?: Locale;
+  /** The currency sign displayed after price values */
+  @Prop() currencySign?: string;
 
   /** @internal */
   @Prop() filtersString: string = "";
@@ -396,7 +398,7 @@ export class VviinnExtendedFilters {
                       const intervalLabel = getIntervalLabel(
                         intervalFilter,
                         value,
-                        globalState.currencySign,
+                        this.currencySign ?? globalState.currencySign,
                       );
                       intervalLabel &&
                         addedOptions.push(<span>{intervalLabel}</span>);
@@ -489,6 +491,7 @@ export class VviinnExtendedFilters {
                                   showCurrency={isPriceFilter(
                                     mainFilter.column,
                                   )}
+                                  currencySign={this.currencySign}
                                   showIntervalInputs={this.showIntervalInputs}
                                 />
                               ) : (

@@ -44,6 +44,7 @@ type ZoomCapabilities = {
 })
 export class VviinnExampleImage {
   @Element() el: HTMLElement;
+  @Prop() token: string;
   @Prop() exampleImageSource: string;
   @Prop() width: number = 0;
   @Prop() height: number = 0;
@@ -191,7 +192,7 @@ export class VviinnExampleImage {
     file = await toFile(dataURI);
 
     pipe(
-      await makeUploadFileRequest(this.storeName)(file),
+      await makeUploadFileRequest(this.storeName, this.token)(file),
       E.match(
         () => {
           this.vviinnNoResult.emit(this.basicEventData);

@@ -1,74 +1,38 @@
 import { createStore } from "@stencil/store";
-import { DefaultApi, WidgetEvent } from "vviinn-tracking-client-ts";
+import { WidgetEvent } from "vviinn-tracking-client-ts";
 import { ProductEvent, ResultEvent } from "../recommendation/events";
 import { createTrackingApi } from "../openApi";
 import { Locale } from "../locale";
 
 type GlobalStore = {
-  token: string | null;
-  apiPath: string | null;
   locale: Locale;
   currencySign: string;
   pricePrefix: string;
-
+  apiPath: string;
   trackingEnabled: boolean;
-  trackingApi: DefaultApi | null;
 };
 
 const globalStoreDefaults: GlobalStore = {
-  token: null,
-  apiPath: "https://api.vviinn.com",
   locale: "de-DE",
   currencySign: "€",
   pricePrefix: "",
-
+  apiPath: "https://api.vviinn.com",
   trackingEnabled: true,
-  trackingApi: null,
 };
 
 const { state } = createStore(globalStoreDefaults);
 export const globalState = state;
 
-const initTrackingApi = (): void => {
-  if (!state.trackingApi) {
-    state.trackingApi = createTrackingApi(state.apiPath, state.token);
-  }
-};
-
-interface ComponentWithGlobalConfig {
-  apiPath?: string;
-  locale?: Locale;
-  currencySign?: string;
-  pricePrefix?: string;
-  token?: string;
-}
-
-export const updateGlobalState = (
-  component: ComponentWithGlobalConfig,
-): void => {
-  const updates: Partial<GlobalStore> = {
-    apiPath: component?.apiPath,
-    locale: component?.locale,
-    currencySign: component?.currencySign,
-    pricePrefix: component?.pricePrefix,
-    token: component?.token,
-  };
-
-  Object.entries(updates).forEach(([key, value]) => {
-    if (value !== undefined) {
-      state[key] = value;
-    }
-  });
-};
-
 export const trackEvent = async (
   event: WidgetEvent | ProductEvent | ResultEvent,
+  token: string,
+  apiPath: string = "https://api.vviinn.com",
 ): Promise<void> => {
-  if (!state.trackingEnabled || !event) return;
-  initTrackingApi();
+  if (!state.trackingEnabled || !event || !token) return;
 
   try {
-    const result = await state.trackingApi.trackEvent(event);
+    const trackingApi = createTrackingApi(apiPath, token);
+    const result = await trackingApi.trackEvent(event);
     if (result.status === "rejected") {
       state.trackingEnabled = false;
     }

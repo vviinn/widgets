@@ -33,7 +33,7 @@ import { findSlotElements } from "../../dom";
 import { SEARCH_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
 import i18next from "i18next";
 import { resources } from "../../locale";
-import { globalState, updateGlobalState } from "../../store/store";
+import { globalState } from "../../store/store";
 
 /**
  * @slot vviinn-teaser-text - Text on the widget's main screen.
@@ -225,10 +225,6 @@ export class VviinnVpsButton {
         this.el.focus();
       });
     }
-  }
-
-  connectedCallback() {
-    updateGlobalState(this);
   }
 
   async componentWillLoad() {

@@ -34,7 +34,7 @@ import { searchBarParts } from "../../cssParts";
 import { MicIcon } from "../vviinn-icons/icons/MicIcon";
 import { initializeRecognition, speechTooltip } from "./helpers";
 import Timeout = NodeJS.Timeout;
-import { updateGlobalState, globalState } from "../../store/store";
+import { globalState } from "../../store/store";
 
 /**
  * @part text-search-container - Container for the text search block.
@@ -125,22 +125,9 @@ export class VviinnTextSearch {
         ? this.placeholder
         : i18next.t("textSearchPlaceholder");
 
-  private recognition = initializeRecognition(
-    globalState.locale,
-    () => {
-      this.showRecording();
-      this.setShowTooltip(false);
-      clearTimeout(this.triggerTooltipStart);
-    },
-    this.hideRecording,
-    (speechResult) => {
-      setTextSearchQuery(this.storeName, speechResult);
-      this.handleTextSearch();
-    },
-  );
+  private recognition: ReturnType<typeof initializeRecognition> | null = null;
 
   connectedCallback() {
-    updateGlobalState(this);
     const { state, storeName } = useSearchStore(this.showInWidget);
     this.state = state;
     this.storeName = storeName;
@@ -167,6 +154,20 @@ export class VviinnTextSearch {
     });
     slotChangeListener(this, this.el);
 
+    this.recognition = initializeRecognition(
+      this.locale ?? globalState.locale,
+      () => {
+        this.showRecording();
+        this.setShowTooltip(false);
+        clearTimeout(this.triggerTooltipStart);
+      },
+      this.hideRecording,
+      (speechResult) => {
+        setTextSearchQuery(this.storeName, speechResult);
+        this.handleTextSearch();
+      },
+    );
+
     if (this.searchQuery?.length > 0) {
       setTextSearchQuery(this.storeName, this.searchQuery);
     }
@@ -186,6 +187,8 @@ export class VviinnTextSearch {
   }
 
   private handleSpeech = async () => {
+    if (!this.recognition) return;
+
     if (this.isRecording) {
       this.recognition.stop();
       this.hideRecording();
@@ -217,7 +220,7 @@ export class VviinnTextSearch {
 
     if (this.showInWidget && this.showOnFirstScreen) {
       const response = pipe(
-        await makeTextSearchRequest(this.storeName, queryToUse),
+        await makeTextSearchRequest(this.storeName, queryToUse, this.token),
         E.getOrElse(() => null),
         (response: TextSearchResponse) => response,
       );
@@ -264,9 +267,9 @@ export class VviinnTextSearch {
 
           {this.mode === "extended" && (
             <vviinn-vps-button
-              token={globalState.token}
+              token={this.token}
               locale={this.locale}
-              apiPath={globalState.apiPath}
+              apiPath={this.apiPath}
               addStyle={false}
               showInWidget={false}
               exportparts="vviinn-button"

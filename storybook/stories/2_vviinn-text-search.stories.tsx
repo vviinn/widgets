@@ -16,7 +16,7 @@ export default {
 const Template = (args) => `
 <div class="search-page-wrapper">
   <div class="search-page-wrapper-aside">
-    <vviinn-cropper></vviinn-cropper> 
+    <vviinn-cropper token="${args.token}"></vviinn-cropper> 
     <vviinn-extended-filters locale="${args.locale}" mode="preview"></vviinn-extended-filters>
   </div>
   <div class="search-page-wrapper-result">

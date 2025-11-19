@@ -22,7 +22,7 @@ import {
   SearchStoreName,
   useSearchStore,
 } from "../../store/search.store";
-import { trackEvent, updateGlobalState, globalState } from "../../store/store";
+import { trackEvent, globalState } from "../../store/store";
 import { slotChangeListener, SlotSkeleton } from "../customized-slots";
 import {
   SearchImageSource,
@@ -320,7 +320,10 @@ export class VviinnVpsWidget {
     if (detail.reason === "client") {
       if (detail.errorCode === "heic-not-supported") {
         this.wrongImageFormat = "heic-not-supported";
-      } else {
+      } else if (
+        detail.errorCode === "unsupported-file-type" ||
+        !detail.errorCode
+      ) {
         this.wrongImageFormat = "wrong-format";
       }
     }
@@ -483,7 +486,7 @@ export class VviinnVpsWidget {
       search_area: "manual-selection",
       ...rest,
     });
-    trackEvent(searchEvent);
+    trackEvent(searchEvent, this.token, this.apiPath);
   }
 
   @Listen("vviinnSelectObject")
@@ -498,7 +501,7 @@ export class VviinnVpsWidget {
       search_area: "attention-point",
       ...rest,
     });
-    trackEvent(searchEvent);
+    trackEvent(searchEvent, this.token, this.apiPath);
   }
 
   @Listen("vviinnSelectFilter")
@@ -515,11 +518,10 @@ export class VviinnVpsWidget {
       action: detail.action,
       ...rest,
     });
-    trackEvent(searchEvent);
+    trackEvent(searchEvent, this.token, this.apiPath);
   }
 
   connectedCallback() {
-    updateGlobalState(this);
     this.isDesktop = checkDeviceType() === "desktop";
     const { state, storeName } = useSearchStore(this.showInWidget);
     this.storeName = storeName;
@@ -563,7 +565,7 @@ export class VviinnVpsWidget {
       ...rest,
     };
     const widgetEvent: WidgetEvent = createWidgetEvent("VPS")(eventBody);
-    trackEvent(widgetEvent);
+    trackEvent(widgetEvent, this.token, this.apiPath);
   }
 
   private trackInitialSearch() {
@@ -575,7 +577,7 @@ export class VviinnVpsWidget {
       source: "upload",
       ...rest,
     });
-    trackEvent(searchEvent);
+    trackEvent(searchEvent, this.token, this.apiPath);
   }
 
   private handleImageSelection() {
@@ -642,6 +644,7 @@ export class VviinnVpsWidget {
         onVviinnImageUploadStarted={() => {
           this.handleVviinnImageUpload("uploadPhoto");
         }}
+        token={this.token}
         storeName={this.storeName}
         state={this.state}
         onVviinnNoResult={({ detail }) => this.handleVviinnNoResult(detail)}
@@ -750,6 +753,7 @@ export class VviinnVpsWidget {
               }}
             >
               <vviinn-camera
+                token={this.token}
                 onVviinnImageUploadFinished={
                   this.handleVviinnImageUploadFinished
                 }
@@ -793,8 +797,8 @@ export class VviinnVpsWidget {
 
                       {this.textSearchShow && (
                         <vviinn-text-search
-                          token={globalState.token}
-                          apiPath={globalState.apiPath}
+                          token={this.token}
+                          apiPath={this.apiPath}
                           locale={this.locale}
                           showInWidget={true}
                           showOnFirstScreen={true}
@@ -837,6 +841,7 @@ export class VviinnVpsWidget {
 
                   {!this.isTextSearch() && (
                     <vviinn-cropper
+                      token={this.token}
                       basicEventData={this.getBasicEventData()}
                       showAspectRatioError={this.showAspectRatioError}
                       apiPath={this.apiPath}
@@ -856,6 +861,7 @@ export class VviinnVpsWidget {
 
                   <vviinn-selected-filters
                     locale={this.locale}
+                    currencySign={this.currencySign}
                     showInWidget={true}
                     exportparts={filtersParts}
                   />
@@ -876,6 +882,7 @@ export class VviinnVpsWidget {
                         mode="preview"
                         showHeader={false}
                         showInWidget={true}
+                        currencySign={this.currencySign}
                         showIntervalInputs={this.showIntervalInputs}
                       />
 
@@ -896,11 +903,11 @@ export class VviinnVpsWidget {
               {this.isResultSlide() && (
                 <Fragment>
                   <vviinn-results
-                    token={globalState.token}
+                    token={this.token}
                     locale={this.locale}
-                    pricePrefix={globalState.pricePrefix}
-                    currency-sign={globalState.currencySign}
-                    apiPath={globalState.apiPath}
+                    pricePrefix={this.pricePrefix}
+                    currency-sign={this.currencySign}
+                    apiPath={this.apiPath}
                     campaignIdTextSearch={this.campaignIdTextSearch}
                     campaignIdVisualSearch={this.campaignIdVisualSearch}
                     uiSessionId={this.uiSessionId}
@@ -939,6 +946,7 @@ export class VviinnVpsWidget {
             mode="modal"
             exportparts={extendedFiltersParts}
             showInWidget={true}
+            currencySign={this.currencySign}
             showIntervalInputs={this.showIntervalInputs}
           />
         </vviinn-overlayed-modal>

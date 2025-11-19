@@ -12,7 +12,6 @@ import {
 import i18next from "i18next";
 import Cropper from "cropperjs";
 import styles from "./vviinn-cropper.css";
-import { updateGlobalState } from "../../store/store";
 import { fromImage } from "../../geometry/Rectangle";
 import {
   BasicEventData,
@@ -50,6 +49,8 @@ import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
 export class VviinnCropper {
   @Element() el: HTMLElement;
 
+  /** Vviinn customer's token */
+  @Prop() token: string;
   /** Save to Local Storage mode for uploaded image */
   @Prop() saveImageMode?: "once" | "always" | "never" = "once";
   @Prop({ mutable: true }) width: number = 288;
@@ -89,8 +90,6 @@ export class VviinnCropper {
   private eventAbortController?: AbortController;
 
   connectedCallback() {
-    updateGlobalState(this);
-
     const { state, storeName } = useSearchStore(this.showInWidget);
     this.state = state;
     this.storeName = storeName;
@@ -171,7 +170,7 @@ export class VviinnCropper {
     this.vviinnImageCrop.emit({
       isTriggeredByVpsWidget: this.showInWidget,
     });
-    makeVisualSearchRequest(this.storeName, null);
+    makeVisualSearchRequest(this.storeName, null, this.token);
   };
 
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
@@ -208,7 +207,7 @@ export class VviinnCropper {
       });
     }
 
-    makeVisualSearchRequest(this.storeName, null);
+    makeVisualSearchRequest(this.storeName, null, this.token);
   }
 
   @Listen("vviinnImageCrop")
@@ -279,7 +278,7 @@ export class VviinnCropper {
     this.vviinnImageCrop.emit({
       isTriggeredByVpsWidget: this.showInWidget,
     });
-    makeVisualSearchRequest(this.storeName, null);
+    makeVisualSearchRequest(this.storeName, null, this.token);
   };
 
   private showPreloader = () =>

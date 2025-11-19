@@ -65,6 +65,8 @@ export class VviinnSelectedFilters {
 
   /** The locale for currency formatting and text localization */
   @Prop() locale?: Locale;
+  /** The currency sign displayed after price values */
+  @Prop() currencySign?: string;
 
   /** @internal */
   @Prop() showInWidget: boolean = false;
@@ -154,7 +156,7 @@ export class VviinnSelectedFilters {
       const intervalLabel = getIntervalLabel(
         detail.filter as ResponseIntervalFilterItem,
         detail.value.interval as Interval,
-        globalState.currencySign,
+        this.currencySign ?? globalState.currencySign,
         true,
       );
       if (intervalLabel) {

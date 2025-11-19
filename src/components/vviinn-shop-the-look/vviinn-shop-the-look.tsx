@@ -15,7 +15,6 @@ import { Recommendation } from "../../interfaces";
 import { Rectangle } from "../../interfaces";
 import { BasicEventData } from "../../recommendation/events";
 import { register } from "swiper/element";
-import { updateGlobalState } from "../../store/store";
 import {
   ModalPosition,
   setupIntersectionObserver,
@@ -83,12 +82,12 @@ export interface ShopTheLookEventData extends BasicEventData {
 export class VviinnShopTheLook {
   @Element() el: HTMLElement;
 
+  /** Vviinn customer's token (required) */
+  @Prop() token: string;
   /** Comma-separated list of image URLs to display in the widget */
   @Prop() imageUrls: string = "";
   /** Height of the widget in pixels */
   @Prop() height: number = 500;
-  /** Vviinn customer's token (required) */
-  @Prop() token: string = "";
   /** The currency sign is displayed after the price */
   @Prop() currencySign: string = "€";
   /** Campaign ID for visual search requests */
@@ -148,13 +147,6 @@ export class VviinnShopTheLook {
   private fileInput: HTMLInputElement;
 
   componentWillLoad() {
-    updateGlobalState({
-      token: this.token,
-      apiPath: this.apiPath,
-      locale: this.locale,
-      currencySign: this.currencySign,
-    });
-
     this.imageUrlsList = buildImageUrlsList(
       this.uploadedImageUrls,
       this.imageUrls,

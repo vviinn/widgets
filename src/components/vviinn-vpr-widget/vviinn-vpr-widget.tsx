@@ -21,7 +21,7 @@ import * as E from "fp-ts/lib/Either";
 import { version } from "../../../package.json";
 
 import { createBearAuthedHeader } from "./token-helpers";
-import { globalState, trackEvent, updateGlobalState } from "../../store/store";
+import { globalState, trackEvent } from "../../store/store";
 import { CampaignName, campaignTypeNames } from "../../campaign/Campaign";
 import { getRecommendationsService } from "../../campaign/CampaignService";
 import { CarouselMode } from "../vviinn-carousel/vviinn-carousel";
@@ -323,7 +323,7 @@ export class VviinnVprWidget implements ComponentInterface {
   ): void {
     this.trackIfNotAppended(() => {
       const productEvent = this.getProductTrackEvent(detail, eventType);
-      productEvent && trackEvent(productEvent);
+      productEvent && trackEvent(productEvent, this.token, this.apiPath);
     });
   }
 
@@ -427,7 +427,6 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   connectedCallback() {
-    updateGlobalState(this);
     this.id = this.buttonElementId ?? this.el.id;
     if (!this.uiSessionId) {
       this.uiSessionId = uuidv4();
@@ -483,7 +482,7 @@ export class VviinnVprWidget implements ComponentInterface {
     await this.trackIfNotAppended(async () => {
       const productClickEvent = this.getProductTrackEvent(detail, "click");
 
-      await trackEvent(productClickEvent).finally(() => {
+      await trackEvent(productClickEvent, this.token, this.apiPath).finally(() => {
         this.handleOpenLink(product.deeplink, clickEvent);
       });
     });
@@ -535,7 +534,7 @@ export class VviinnVprWidget implements ComponentInterface {
     const widgetEvent: WidgetEvent = createWidgetEvent(
       this.trackingCampaignType,
     )(eventBody);
-    trackEvent(widgetEvent);
+    trackEvent(widgetEvent, this.token, this.apiPath);
   }
 
   private trackResultEvent(type: ResultEventType) {
@@ -548,7 +547,7 @@ export class VviinnVprWidget implements ComponentInterface {
 
     const resultEvent: ResultViewEvent | ResultLoadEvent =
       createResultEventByType(type, this.trackingCampaignType)(eventBody);
-    trackEvent(resultEvent);
+    trackEvent(resultEvent, this.token, this.apiPath);
   }
 
   private getProductTrackEvent(
@@ -579,12 +578,12 @@ export class VviinnVprWidget implements ComponentInterface {
   }
 
   private async getRecommendations() {
-    if (this.productId === undefined || globalState.token === undefined) return;
+    if (this.productId === undefined || this.token === undefined) return;
     this.setLoading(true);
     const campaignType =
       this.campaignType.length > 0 ? this.campaignType : "VPR";
 
-    const headers = createBearAuthedHeader(globalState.token);
+    const headers = createBearAuthedHeader(this.token);
 
     const body = getRecommendationsBody({
       productId: this.productId,
@@ -661,8 +660,8 @@ export class VviinnVprWidget implements ComponentInterface {
   ): HTMLVviinnProductCardElement {
     return (
       <vviinn-product-card
-        currency={globalState.currencySign}
-        pricePrefix={globalState.pricePrefix}
+        currency={this.currencySign}
+        pricePrefix={this.pricePrefix}
         locale={this.locale}
         productId={recommendation.productId}
         product={recommendation}
@@ -734,8 +733,8 @@ export class VviinnVprWidget implements ComponentInterface {
   private renderCarousel(): HTMLVviinnCarouselElement {
     return (
       <vviinn-carousel
-        currencySign={globalState.currencySign}
-        pricePrefix={globalState.pricePrefix}
+        currencySign={this.currencySign}
+        pricePrefix={this.pricePrefix}
         locale={this.locale}
         mode={this.mode as CarouselMode}
         campaignTypeId={this.campaignType}
