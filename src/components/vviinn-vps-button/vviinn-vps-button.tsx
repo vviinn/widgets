@@ -46,6 +46,12 @@ import { initializeLocale } from "../../locale";
  * @slot vviinn-text-search-icon - Icon of the text search block.
  * @slot vviinn-energy-label-data-sheet-text - Text of the data sheet link for the energy label.
  * @slot vviinn-results-vpr-icon - One-Click Discovery icon
+ * @slot vviinn-favorite-icon - Icon of Favorite button.
+ * @slot vviinn-favorite-icon-pressed - Icon of pressed Favorite button.
+ * @slot vviinn-basket-button-text - Text of Add to Basket button.
+ * @slot vviinn-basket-button-icon - Icon of Add to Basket button.
+ * @slot vviinn-basket-button-text-pressed - Text of pressed Add to Basket button.
+ * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button.
  * @slot vviinn-custom-label-0 - Custom label with index 0.
  * @slot vviinn-custom-label-1 - Custom label with index 1.
  * @slot vviinn-custom-label-2 - Custom label with index 2.
@@ -80,6 +86,11 @@ import { initializeLocale } from "../../locale";
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
  * @part price-prefix - Block rendered before each price element (for ex. "from").
  * @part title - Title inside Product Card.
+ * @part basket-button - Add to Basket button.
+ * @part basket-button-container - Product Card's basket button container.
+ * @part favorite-button - Favorite button.
+ * @part product-card-actions - Product Card actions wrapper.
+ * @part product-card-actions-top - Product Card top actions wrapper.
  * @part text-search-input - Text search input.
  * @part button - Clickable button element.
  * @part vviinn-button - Button element container.

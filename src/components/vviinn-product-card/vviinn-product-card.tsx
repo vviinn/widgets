@@ -101,6 +101,7 @@ import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
  * @part price-prefix - Renders before price-amount. Can be set with "price-prefix" property or inherited from parent component.
  * @part title - Product title
  * @part basket-button - Add to Basket button.
+ * @part favorite-button - Favorite button.
  * @part update-button-item - Update button in Product Card (Set mode).
  * @part discount-label - Discount label in Product Card (Set mode).
  * @part discount-percentage - Discount percentage inside the Add to Basket button (Set mode).
