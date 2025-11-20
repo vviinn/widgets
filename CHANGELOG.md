@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.202.1](https://github.com/vviinn/widgets/compare/v2.202.0...v2.202.1) (2025-11-20)
+
+
+### Bug Fixes
+
+* One-click discovery layout fixes for the modal and appended modes. ([2b28db4](https://github.com/vviinn/widgets/commit/2b28db493936ac8a3e849e500c45da34ac49a365))
+* Storybook layout minor fixes. ([adb6c41](https://github.com/vviinn/widgets/commit/adb6c41592eb033a2e6e1d1f002e21adb9165be2))
+
 ## [2.202.0](https://github.com/vviinn/widgets/compare/v2.201.0...v2.202.0) (2025-11-20)
 
 
