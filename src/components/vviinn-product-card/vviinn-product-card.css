@@ -19,6 +19,7 @@
   --basket-button-bg-color-pressed-default: var(--button-bg-color-positive);
   --product-card-transition-duration-default: 0.5s;
 
+  box-sizing: border-box;
   position: relative;
   height: fit-content;
   display: flex;
