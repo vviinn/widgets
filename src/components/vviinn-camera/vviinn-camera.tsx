@@ -44,6 +44,7 @@ type ZoomCapabilities = {
 })
 export class VviinnExampleImage {
   @Element() el: HTMLElement;
+  @Prop() token: string;
   @Prop() exampleImageSource: string;
   @Prop() width: number = 0;
   @Prop() height: number = 0;
@@ -53,6 +54,7 @@ export class VviinnExampleImage {
   @Prop() showInWidget: boolean;
   @Prop() storeName: SearchStoreName;
   @Prop() state: SearchStore;
+  @Prop() apiPath?: string;
 
   @State() selected: boolean = false;
   @State() videoInitialized: boolean = false;
@@ -191,7 +193,11 @@ export class VviinnExampleImage {
     file = await toFile(dataURI);
 
     pipe(
-      await makeUploadFileRequest(this.storeName)(file),
+      await makeUploadFileRequest(
+        this.storeName,
+        this.token,
+        this.apiPath,
+      )(file),
       E.match(
         () => {
           this.vviinnNoResult.emit(this.basicEventData);

@@ -25,6 +25,7 @@ const Template = (args) => `
       campaign-id="${args.campaignId}"
       api-path="${args.apiPath}"
       locale="${args.locale}"
+      number-locale="${args.numberLocale}"
       widget-style="${args.widgetStyle}"
       show-cropper="${args.showCropper}"
       upload-mode="${args.uploadMode}"
@@ -44,6 +45,7 @@ const initArgs = {
   campaignId: "",
   apiPath: process.env.STORYBOOK_API_PATH,
   locale: "en-US",
+  numberLocale: "",
   widgetStyle: "rounded",
   showCropper: false,
   uploadMode: false,

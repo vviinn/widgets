@@ -12,6 +12,7 @@ const Template = (args) => `
 <div class="search-page-wrapper">
   <div class="search-page-wrapper-aside cropper-page">
     <vviinn-cropper
+      token="${args.token}"
       width="${args.width}"
       api-path="${args.apiPath}"
       save-image-mode="${args.saveImageMode}"

@@ -2,7 +2,6 @@ import { createStore } from "@stencil/store";
 import * as TE from "fp-ts/TaskEither";
 import * as T from "fp-ts/Task";
 import { pipe } from "fp-ts/function";
-import { globalState } from "./store";
 import {
   Recommendation,
   RequestStaticFilters,
@@ -224,16 +223,16 @@ const updateImageState = (store: SearchStoreName) => (file: File) =>
 const processVisualSearch = (
   store: SearchStoreName,
   body: VisualSearchRequest,
-  token?: string | null,
+  token: string,
+  apiPath?: string,
 ) => {
   const state = useStore(store);
-  const resolvedToken = token ?? globalState.token;
 
   return pipe(
-    getTokenWithBody<VisualSearchRequest>(resolvedToken, body),
+    getTokenWithBody<VisualSearchRequest>(token, body),
     setBodyAndHeaders,
     TE.fromEither,
-    TE.chain((request) => visualSearchSessionClient(request)),
+    TE.chain((request) => visualSearchSessionClient(request, apiPath)),
     TE.map((sessionResponse) => {
       updateVisualSearchState(store)(sessionResponse);
       return sessionResponse;
@@ -248,9 +247,10 @@ const processVisualSearch = (
 const uploadImageFile =
   (
     store: SearchStoreName,
+    token: string,
     imageType: ImageType = "image",
     searchId?: string,
-    token?: string | null,
+    apiPath?: string,
     campaignId?: string | null,
   ) =>
   (file: File) => {
@@ -283,14 +283,19 @@ const uploadImageFile =
               inner: error,
             }),
           ),
-          TE.chain((body) => processVisualSearch(store, body, token)),
+          TE.chain((body) => processVisualSearch(store, body, token, apiPath)),
         ),
       ),
     );
   };
 
 export const makeUploadFileRequest =
-  (store: SearchStoreName, token?: string | null, campaignId?: string | null) =>
+  (
+    store: SearchStoreName,
+    token: string,
+    apiPath?: string,
+    campaignId?: string | null,
+  ) =>
   async (file: File) => {
     const state = useStore(store);
 
@@ -306,7 +311,14 @@ export const makeUploadFileRequest =
     }
 
     const session = await pipe(
-      uploadImageFile(store, "image", undefined, token, campaignId)(file),
+      uploadImageFile(
+        store,
+        token,
+        "image",
+        undefined,
+        apiPath,
+        campaignId,
+      )(file),
     )();
 
     if (!state.visualSearchId?.length) return session;
@@ -322,9 +334,10 @@ export const makeUploadFileRequest =
     pipe(
       uploadImageFile(
         store,
+        token,
         "highResolutionImage",
         state.visualSearchId,
-        token,
+        apiPath,
         campaignId,
       )(file),
       TE.getOrElseW((error) => {
@@ -338,8 +351,9 @@ export const makeUploadFileRequest =
 
 export const makeVisualSearchRequest = async (
   store: SearchStoreName,
-  searchId?: string | null,
-  token?: string | null,
+  searchId: string | null,
+  token: string,
+  apiPath?: string,
   campaignId?: string | null,
 ) => {
   const state = useStore(store);
@@ -385,7 +399,7 @@ export const makeVisualSearchRequest = async (
       include: fetchDetectedObjects,
     },
   };
-  return processVisualSearch(store, body, token)();
+  return processVisualSearch(store, body, token, apiPath)();
 };
 
 export const setTextSearchQuery = (
@@ -399,6 +413,8 @@ export const setTextSearchQuery = (
 export const makeTextSearchRequest = async (
   store: SearchStoreName,
   query: string,
+  token: string,
+  apiPath?: string,
   requestId?: string | null,
   resultsCount?: number,
 ) => {
@@ -419,10 +435,10 @@ export const makeTextSearchRequest = async (
   };
 
   return pipe(
-    getTokenWithBody<TextSearchRequest>(globalState.token, body),
+    getTokenWithBody<TextSearchRequest>(token, body),
     setBodyAndHeaders,
     TE.fromEither,
-    TE.chain((request) => textSearchSessionClient(request)),
+    TE.chain((request) => textSearchSessionClient(request, apiPath)),
     TE.map((sessionResponse) => {
       state.results = sessionResponse?.data?.products ?? [];
       state.textSearchId = sessionResponse.requestId;
@@ -452,6 +468,8 @@ export const makeTextSearchRequest = async (
 export const makeProductListingPageRequest = async (
   column: string,
   value: string,
+  token: string,
+  apiPath?: string,
   resultsCount?: number,
   dynamicFilters?: RequestDynamicFilterItem[],
   skipStateUpdate?: boolean,
@@ -483,10 +501,10 @@ export const makeProductListingPageRequest = async (
   };
 
   return await pipe(
-    getTokenWithBody<ProductListingPageRequest>(globalState.token, body),
+    getTokenWithBody<ProductListingPageRequest>(token, body),
     setBodyAndHeaders,
     TE.fromEither,
-    TE.chainW(productListingPageSessionClient),
+    TE.chainW((request) => productListingPageSessionClient(request, apiPath)),
     TE.map((sessionResponse) => {
       if (skipStateUpdate) return sessionResponse;
       state.results = sessionResponse?.data?.products ?? [];
