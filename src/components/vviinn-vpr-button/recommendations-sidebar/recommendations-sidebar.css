@@ -4,7 +4,7 @@
   --vviinn-carousel-columns: 4;
   box-sizing: border-box;
   position: fixed;
-  z-index: 2;
+  z-index: 9999;
   display: block;
   display: flex;
   height: 100vh;
