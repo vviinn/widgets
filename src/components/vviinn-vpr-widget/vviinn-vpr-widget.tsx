@@ -108,6 +108,7 @@ export type Mode = "pure-grid" | CarouselMode;
  * @part recommendations-title - Title of the recommendations grid.
  * @part recommendations-subtitle - Subtitle of the recommendations grid.
  * @part basket-button - Add to Basket button.
+ * @part favorite-button - Favorite button.
  * @part energy-label-container - Energy label container.
  * @part energy-label-icon - Icon with an energy class.
  * @part energy-label-product-type - Product type.

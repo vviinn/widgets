@@ -122,6 +122,11 @@ import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
  * @part price-prefix - Block rendered before each price element (for ex. "from").
  * @part title - Title inside Product Card.
+ * @part basket-button - Add to Basket button.
+ * @part basket-button-container - Product Card's basket button container.
+ * @part favorite-button - Favorite button.
+ * @part product-card-actions - Product Card actions wrapper.
+ * @part product-card-actions-top - Product Card top actions wrapper.
  * @part energy-label-container - Energy label container.
  * @part energy-label-icon - Icon with an energy class.
  * @part energy-label-product-type - Product type.
