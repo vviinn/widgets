@@ -2,11 +2,10 @@
 
 :host {
   --vviinn-carousel-columns: 4;
+  display: block;
   box-sizing: border-box;
   position: fixed;
   z-index: 9999;
-  display: block;
-  display: flex;
   height: 100vh;
   left: 0;
   top: 0;
