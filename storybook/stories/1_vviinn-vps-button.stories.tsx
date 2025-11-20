@@ -33,6 +33,7 @@ const Template = (args) => `
   currency-sign="${args.currencySign}"
   price-prefix="${args.pricePrefix}"
   locale="${args.locale}"
+  number-locale="${args.numberLocale}"
   mode="${args.mode}"
   product-details-new-tab="${args.productDetailsNewTab}"
   product-details-redirect="${args.productDetailsRedirect}"
@@ -63,6 +64,7 @@ const initArgs = {
   productDetailsNewTab: true,
   productDetailsRedirect: true,
   locale: "en-US",
+  numberLocale: "",
   currencySign: "€",
   pricePrefix: "",
   addStyle: true,

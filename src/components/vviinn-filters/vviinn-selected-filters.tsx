@@ -34,9 +34,9 @@ import {
   triggerRemoveIntervalFilter,
 } from "./helpers/triggerFilter";
 import { SearchStore, useSearchStore } from "../../store/search.store";
-import { globalState } from "../../store/store";
+import { defaultConfig } from "../../store/store";
 import i18next from "i18next";
-import { resources } from "../../locale";
+import { Locale, initializeLocale } from "../../locale";
 import { announceToScreenReader } from "../../a11y";
 import { getLocalStorageItems } from "../../localStorage";
 import { addEventListenersWithSignal } from "../../dom";
@@ -61,6 +61,11 @@ import { selectedFiltersParts } from "../../cssParts";
 })
 export class VviinnSelectedFilters {
   @Element() el: HTMLElement;
+
+  /** Locale for text localization */
+  @Prop() locale?: Locale;
+  /** The currency sign displayed after price values */
+  @Prop() currencySign?: string;
 
   /** @internal */
   @Prop() showInWidget: boolean = false;
@@ -150,7 +155,7 @@ export class VviinnSelectedFilters {
       const intervalLabel = getIntervalLabel(
         detail.filter as ResponseIntervalFilterItem,
         detail.value.interval as Interval,
-        globalState.currencySign,
+        this.currencySign ?? defaultConfig.currencySign,
         true,
       );
       if (intervalLabel) {
@@ -275,11 +280,7 @@ export class VviinnSelectedFilters {
 
   async componentWillLoad() {
     this.getUploadedImageSrc();
-    await i18next.init({
-      lng: globalState.locale,
-      fallbackLng: "en",
-      resources,
-    });
+    await initializeLocale(this.locale);
   }
 
   componentDidRender() {

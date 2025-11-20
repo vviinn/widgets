@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.202.0](https://github.com/vviinn/widgets/compare/v2.201.0...v2.202.0) (2025-11-20)
+
+
+### Features
+
+* Add numberLocale prop for price/number formatting. ([8d7e8bf](https://github.com/vviinn/widgets/commit/8d7e8bf8840d7c2b7b0de13db972f0dec24341ec))
+
+
+### Bug Fixes
+
+* Don't render the currency sign when there are no prices for the product. ([3485cbb](https://github.com/vviinn/widgets/commit/3485cbb1ac7b61c1b1f3d8035b0981cc8bb9fe7b))
+* Fix locale and currency-sign inconsistencies. Improve language initialization logic. ([b9080ba](https://github.com/vviinn/widgets/commit/b9080ba012b87ec381269af923bc83f8fda73d3f))
+* Remove unnecessary state updates in the components to prevent synchronization bugs. vviinn-cropper now requires a token. ([381a931](https://github.com/vviinn/widgets/commit/381a93196daeda65cb79b814b5fafdb2fcbc949b))
+
 ## [2.201.0](https://github.com/vviinn/widgets/compare/v2.200.0...v2.201.0) (2025-11-13)
 
 

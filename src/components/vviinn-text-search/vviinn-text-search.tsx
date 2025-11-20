@@ -25,7 +25,7 @@ import {
   TriggerSourceEventData,
 } from "../../recommendation/events";
 import i18next from "i18next";
-import { Locale, resources } from "../../locale";
+import { Locale, initializeLocale } from "../../locale";
 import { SearchBarMode } from "../../widget/types";
 import { TextSearchResponse } from "../../interfaces";
 import * as E from "fp-ts/Either";
@@ -34,7 +34,7 @@ import { searchBarParts } from "../../cssParts";
 import { MicIcon } from "../vviinn-icons/icons/MicIcon";
 import { initializeRecognition, speechTooltip } from "./helpers";
 import Timeout = NodeJS.Timeout;
-import { updateGlobalState, globalState } from "../../store/store";
+import { defaultConfig } from "../../store/store";
 
 /**
  * @part text-search-container - Container for the text search block.
@@ -73,8 +73,8 @@ export class VviinnTextSearch {
 
   /** Vviinn customer's token (required) */
   @Prop() token: string;
-  /** The locale for currency formatting and text localization */
-  @Prop() locale: Locale;
+  /** Locale for text localization */
+  @Prop() locale?: Locale;
   /** Basic or extended text search with search modal and speech recognition */
   @Prop() mode: SearchBarMode = "basic";
   /** Query for the text search passed from widget */
@@ -125,22 +125,9 @@ export class VviinnTextSearch {
         ? this.placeholder
         : i18next.t("textSearchPlaceholder");
 
-  private recognition = initializeRecognition(
-    globalState.locale,
-    () => {
-      this.showRecording();
-      this.setShowTooltip(false);
-      clearTimeout(this.triggerTooltipStart);
-    },
-    this.hideRecording,
-    (speechResult) => {
-      setTextSearchQuery(this.storeName, speechResult);
-      this.handleTextSearch();
-    },
-  );
+  private recognition: ReturnType<typeof initializeRecognition> | null = null;
 
   connectedCallback() {
-    updateGlobalState(this);
     const { state, storeName } = useSearchStore(this.showInWidget);
     this.state = state;
     this.storeName = storeName;
@@ -160,12 +147,22 @@ export class VviinnTextSearch {
     });
 
   async componentWillLoad() {
-    await i18next.init({
-      lng: globalState.locale,
-      fallbackLng: "en",
-      resources,
-    });
+    await initializeLocale(this.locale);
     slotChangeListener(this, this.el);
+
+    this.recognition = initializeRecognition(
+      this.locale ?? defaultConfig.locale,
+      () => {
+        this.showRecording();
+        this.setShowTooltip(false);
+        clearTimeout(this.triggerTooltipStart);
+      },
+      this.hideRecording,
+      (speechResult) => {
+        setTextSearchQuery(this.storeName, speechResult);
+        this.handleTextSearch();
+      },
+    );
 
     if (this.searchQuery?.length > 0) {
       setTextSearchQuery(this.storeName, this.searchQuery);
@@ -186,6 +183,8 @@ export class VviinnTextSearch {
   }
 
   private handleSpeech = async () => {
+    if (!this.recognition) return;
+
     if (this.isRecording) {
       this.recognition.stop();
       this.hideRecording();
@@ -217,7 +216,12 @@ export class VviinnTextSearch {
 
     if (this.showInWidget && this.showOnFirstScreen) {
       const response = pipe(
-        await makeTextSearchRequest(this.storeName, queryToUse),
+        await makeTextSearchRequest(
+          this.storeName,
+          queryToUse,
+          this.token,
+          this.apiPath,
+        ),
         E.getOrElse(() => null),
         (response: TextSearchResponse) => response,
       );
@@ -264,9 +268,9 @@ export class VviinnTextSearch {
 
           {this.mode === "extended" && (
             <vviinn-vps-button
-              token={globalState.token}
-              locale={globalState.locale}
-              apiPath={globalState.apiPath}
+              token={this.token}
+              locale={this.locale}
+              apiPath={this.apiPath}
               addStyle={false}
               showInWidget={false}
               exportparts="vviinn-button"

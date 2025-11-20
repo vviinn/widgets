@@ -62,12 +62,13 @@ import {
   ProductImage,
   Recommendation,
 } from "../../interfaces";
-import { resources } from "../../locale";
+import { initializeLocale, Locale } from "../../locale";
 import {
   contentCardParts,
   listCardParts,
   productCardParts,
 } from "../../cssParts";
+import { defaultConfig } from "../../store/store";
 import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
 import {
   PRODUCT_CARD_IMAGE_RESOLUTION_WIDTH,
@@ -150,8 +151,10 @@ export class VviinnProductCard {
   @Element() el: HTMLElement;
 
   @Prop() brand: string | undefined;
-  @Prop() currency: string | undefined = undefined;
-  @Prop() locale: string | undefined = undefined;
+  @Prop() currencySign: string | undefined = undefined;
+  @Prop() locale?: Locale;
+  /** Locale for number formatting. Falls back to locale */
+  @Prop() numberLocale?: string;
   @Prop() pricePrefix?: string;
   @Prop() image: string | undefined;
   @Prop() images: ProductImage[] = [];
@@ -275,6 +278,18 @@ export class VviinnProductCard {
   private showSkeleton = () =>
     this.isSetMode ? this.isTransitioning : this.loading;
 
+  private get effectiveCurrencySign() {
+    return this.currencySign ?? defaultConfig.currencySign;
+  }
+
+  private get effectiveLocale() {
+    return this.locale ?? defaultConfig.locale;
+  }
+
+  private get effectiveNumberLocale() {
+    return this.numberLocale || this.effectiveLocale;
+  }
+
   connectedCallback() {
     this.productData = this.getProductData();
     this.isContentCard = this.entityType === "content";
@@ -282,12 +297,9 @@ export class VviinnProductCard {
 
     this.imageProps = this.getImageProps();
 
-    this.isStandalone &&
-      i18next.init({
-        lng: this.locale,
-        fallbackLng: "en",
-        resources,
-      });
+    if (this.isStandalone) {
+      initializeLocale(this.effectiveLocale);
+    }
 
     if (this.energyCertificationsString.length > 0) {
       this.parseEnergyCertificationsString();
@@ -619,8 +631,8 @@ export class VviinnProductCard {
 
               <Price
                 prefix={this.pricePrefix}
-                currency={this.currency}
-                locale={this.locale}
+                currency={this.effectiveCurrencySign}
+                numberLocale={this.effectiveNumberLocale}
                 price={this.price}
                 basePrice={parseBasePrice(this.basePrice)}
                 salePrice={this.salePrice}

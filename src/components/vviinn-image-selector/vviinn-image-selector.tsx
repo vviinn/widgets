@@ -44,7 +44,7 @@ export class VviinnImageSelector {
   @Prop() loading: boolean = false;
   @Prop() accept: string;
   @Prop() resetVpsButton: () => void;
-  @Prop() token?: string;
+  @Prop() token: string;
   @Prop() apiPath?: string;
   @Prop() showInWidget: boolean;
   @Prop() storeName: SearchStoreName;
@@ -78,15 +78,20 @@ export class VviinnImageSelector {
     const processingResult: E.Either<
       BasicError<string | Response>,
       VisualSearchResponse
-    > = await makeUploadFileRequest(this.storeName)(file);
+    > = await makeUploadFileRequest(
+      this.storeName,
+      this.token,
+      this.apiPath,
+    )(file);
 
     pipe(
       processingResult,
       E.match(
-        ({ kind }) => {
+        ({ kind, code }) => {
           this.vviinnNoResult.emit({
             ...this.basicEventData,
             reason: kind,
+            errorCode: code,
           });
         },
         (response) => {

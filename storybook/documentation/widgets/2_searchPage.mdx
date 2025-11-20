@@ -71,7 +71,7 @@ This is the most common use case where the search component is on one page (e.g.
 <vviinn-results token="YOUR_TOKEN" locale="en-US" product-details-new-tab="true"></vviinn-results>
 
 <!-- Image Search example: -->
-<vviinn-cropper width="300"></vviinn-cropper>
+<vviinn-cropper token="YOUR_TOKEN" width="300"></vviinn-cropper>
 
 <vviinn-text-search
   token="YOUR_TOKEN"
@@ -134,7 +134,7 @@ In this example, the `vviinn-text-search` component is on the first page, and th
 <PreviewAndCodeTabs tabData={{groupId:"basic", header:"Single Page Example",
     component:<div className="search-page-wrapper">
         <div className="search-page-wrapper-aside">
-            <vviinn-cropper width="300"></vviinn-cropper>
+            <vviinn-cropper token={vviinnToken} width="300"></vviinn-cropper>
             <vviinn-extended-filters locale="en-US" mode="preview"></vviinn-extended-filters>
         </div>
         <div className="search-page-wrapper-result">
@@ -211,7 +211,7 @@ vviinn-text-search {
  </style>
 <div class="search-page-wrapper">
       <div class="search-page-wrapper-aside">
-            <vviinn-cropper width="300"></vviinn-cropper>
+            <vviinn-cropper token="TOKEN" width="300"></vviinn-cropper>
             <vviinn-extended-filters locale="en-US" mode="preview"></vviinn-extended-filters>
       </div>
       <div class="search-page-wrapper-result">

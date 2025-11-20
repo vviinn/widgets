@@ -17,7 +17,6 @@ import {
   Stream,
 } from "../../interfaces";
 import { useSearchStore, SearchStore } from "../../store/search.store";
-import { updateGlobalState, globalState } from "../../store/store";
 import {
   ChangedFiltersEventData,
   DynamicFilterInternalData,
@@ -25,8 +24,7 @@ import {
 } from "../../recommendation/events";
 import { RequestDynamicFilterItem } from "../../campaign/VPRCampaignService";
 import { addEventListenersWithSignal } from "../../dom";
-import { Locale } from "../../locale/types";
-import { resources } from "../../locale";
+import { Locale, initializeLocale } from "../../locale";
 import { slotChangeListener } from "../customized-slots";
 import { SparkIcon } from "../vviinn-icons/icons/SparkIcon";
 import { suggestionsParts } from "../../cssParts";
@@ -101,11 +99,7 @@ export class VviinnSuggestions {
   }
 
   async componentWillLoad() {
-    await i18next.init({
-      lng: globalState.locale,
-      fallbackLng: "en",
-      resources,
-    });
+    await initializeLocale(this.locale);
 
     slotChangeListener(this, this.el);
   }
@@ -115,7 +109,6 @@ export class VviinnSuggestions {
   }
 
   connectedCallback() {
-    updateGlobalState(this);
     const { state, onChange } = useSearchStore(this.showInWidget);
     this.state = state;
 

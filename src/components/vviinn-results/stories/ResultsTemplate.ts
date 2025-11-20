@@ -7,6 +7,7 @@ export const ResultsTemplate = (args) => {
     showMultipleImages,
     currencySign,
     locale,
+    numberLocale,
     productDetailsRedirect,
     productDetailsNewTab,
     uiSessionId,
@@ -41,7 +42,7 @@ export const ResultsTemplate = (args) => {
   <div class="search-page-wrapper-result">
     <div class="search-page-wrapper-result-filters">
       <vviinn-extended-filters locale="${args.locale}"></vviinn-extended-filters>
-      <vviinn-selected-filters></vviinn-selected-filters>
+      <vviinn-selected-filters locale="${args.locale}"></vviinn-selected-filters>
     </div>
 
     <vviinn-results
@@ -52,6 +53,7 @@ export const ResultsTemplate = (args) => {
     show-multiple-images="${showMultipleImages}"
     currency-sign="${currencySign}"
     locale="${locale}"
+    number-locale="${numberLocale}"
     price-prefix="${pricePrefix}"
     product-details-redirect="${productDetailsRedirect}"
     product-details-new-tab="${productDetailsNewTab}"

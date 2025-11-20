@@ -34,7 +34,7 @@ import {
 } from "./helpers";
 import { filterOptionsBySearch } from "./helpers/searchHelper";
 import { isPriceFilter } from "../../filters";
-import { Locale, resources } from "../../locale";
+import { Locale, initializeLocale } from "../../locale";
 
 import { SlotSkeleton, slotChangeListener } from "../customized-slots";
 import { Histogram } from "../vviinn-range-filter/vviinn-range-filter";
@@ -47,7 +47,7 @@ import {
 import { ClickEvent } from "../../geometry/Rectangle";
 import { triggerFilter, triggerResetFilters } from "./helpers/triggerFilter";
 import { SearchStore, useSearchStore } from "../../store/search.store";
-import { globalState } from "../../store/store";
+import { defaultConfig } from "../../store/store";
 import { addEventListenersWithSignal, isElementInSelector } from "../../dom";
 import { ResponseIntervalFilterItem } from "../../interfaces";
 import { extendedFiltersParts } from "../../cssParts";
@@ -122,8 +122,10 @@ export class VviinnExtendedFilters {
   @Prop() showHeader?: boolean = true;
   /** Minimum number of filter options required to show search bar in preview-inline mode. Set to 0 to always show, or a high number to never show. */
   @Prop() searchThreshold?: number = 0;
-  /** The locale for currency formatting and text localization */
+  /** Locale for text localization */
   @Prop() locale?: Locale;
+  /** The currency sign displayed after price values */
+  @Prop() currencySign?: string;
 
   /** @internal */
   @Prop() filtersString: string = "";
@@ -289,11 +291,7 @@ export class VviinnExtendedFilters {
   }
 
   async componentWillLoad() {
-    await i18next.init({
-      lng: this.locale ?? globalState.locale,
-      fallbackLng: "en",
-      resources,
-    });
+    await initializeLocale(this.locale);
 
     slotChangeListener(this, this.el);
   }
@@ -396,7 +394,7 @@ export class VviinnExtendedFilters {
                       const intervalLabel = getIntervalLabel(
                         intervalFilter,
                         value,
-                        globalState.currencySign,
+                        this.currencySign ?? defaultConfig.currencySign,
                       );
                       intervalLabel &&
                         addedOptions.push(<span>{intervalLabel}</span>);
@@ -489,6 +487,7 @@ export class VviinnExtendedFilters {
                                   showCurrency={isPriceFilter(
                                     mainFilter.column,
                                   )}
+                                  currencySign={this.currencySign}
                                   showIntervalInputs={this.showIntervalInputs}
                                 />
                               ) : (

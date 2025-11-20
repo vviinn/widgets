@@ -11,6 +11,7 @@ import {
 } from "../../utils/swiper/swiperUtils";
 import { SecondaryActionIcon } from "../vviinn-icons/icons/SecondaryActionIcon";
 import { ModalPosition } from "./helpers";
+import { Locale } from "../../locale";
 
 export interface DetectedObjectsProps {
   imageBounds: Rectangle | null;
@@ -231,6 +232,8 @@ export interface ProductDetailsSliderProps {
   searchResults: Recommendation[];
   selectedProductIndex: number;
   currencySign?: string;
+  locale?: Locale;
+  numberLocale?: string;
   showMultipleImages?: boolean;
   onProductClick: (product: Recommendation) => void;
   onBackToGrid: () => void;
@@ -244,6 +247,8 @@ export const renderProductDetails = (props: ProductDetailsSliderProps) => {
     onProductClick,
     onBackToGrid,
     currencySign,
+    locale,
+    numberLocale,
     showMultipleImages = false,
   } = props;
 
@@ -281,7 +286,9 @@ export const renderProductDetails = (props: ProductDetailsSliderProps) => {
             showMultipleImages={showMultipleImages}
             imageResolutionWidth={300}
             imageWidth={isDesktop() ? 160 : 120}
-            currency={currencySign || ""}
+            currencySign={currencySign || ""}
+            locale={locale}
+            numberLocale={numberLocale}
             deeplink={selectedProduct.deeplink}
             onVviinnProductClick={() => onProductClick(selectedProduct)}
           />
@@ -300,6 +307,8 @@ export interface ModalProps {
   showDetailedView?: boolean;
   selectedProductIndex?: number;
   currencySign?: string;
+  locale?: Locale;
+  numberLocale?: string;
   showMultipleImages?: boolean;
   onProductDetailsClick?: (product: Recommendation, index: number) => void;
   onBackToGrid?: () => void;
@@ -320,6 +329,8 @@ export const renderModal = (props: ModalProps) => {
     onBackToGrid,
     onNavigateProduct,
     currencySign,
+    locale,
+    numberLocale,
     showMultipleImages = false,
     modalContentRef,
   } = props;
@@ -363,6 +374,8 @@ export const renderModal = (props: ModalProps) => {
               selectedProductIndex,
               onProductClick,
               currencySign,
+              locale,
+              numberLocale,
               showMultipleImages,
               onBackToGrid,
               onNavigateProduct,

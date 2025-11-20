@@ -32,8 +32,7 @@ import {
 import { findSlotElements } from "../../dom";
 import { SEARCH_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
 import i18next from "i18next";
-import { resources } from "../../locale";
-import { globalState, updateGlobalState } from "../../store/store";
+import { initializeLocale } from "../../locale";
 
 /**
  * @slot vviinn-teaser-text - Text on the widget's main screen.
@@ -118,8 +117,10 @@ export class VviinnVpsButton {
   @Prop() token: string;
   /**  The currency sign is displayed after the price */
   @Prop() currencySign?: string;
-  /** The locale for currency formatting and text localization */
-  @Prop() locale: Locale;
+  /** Locale for text localization */
+  @Prop() locale?: Locale;
+  /** Locale for number formatting. Falls back to locale */
+  @Prop() numberLocale?: string;
   /** Prefix is displayed before the price */
   @Prop() pricePrefix?: string;
   /** Campaign ID used for Visual Search (deprecated) */
@@ -227,16 +228,8 @@ export class VviinnVpsButton {
     }
   }
 
-  connectedCallback() {
-    updateGlobalState(this);
-  }
-
   async componentWillLoad() {
-    await i18next.init({
-      lng: globalState.locale,
-      fallbackLng: "en",
-      resources,
-    });
+    await initializeLocale(this.locale);
     this.slots = findSlotElements(this.el);
   }
 
@@ -316,6 +309,7 @@ export class VviinnVpsButton {
           currency-sign={this.currencySign}
           token={this.token}
           locale={this.locale}
+          numberLocale={this.numberLocale}
           apiPath={this.apiPath}
           pricePrefix={this.pricePrefix}
           campaignId={this.campaignId}
