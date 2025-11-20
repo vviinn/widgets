@@ -18,6 +18,12 @@ vviinn-cropper.active {
 
 .search-page-wrapper-aside.cropper-page {
   width: auto;
+  min-width: 288px;
+}
+
+.search-page-wrapper-aside.cropper-page
+  vviinn-extended-filters::part(extended-filters-modal) {
+  width: 288px;
 }
 
 @media screen and (max-width: 768px) {
@@ -40,6 +46,9 @@ vviinn-cropper.active {
 }
 
 .search-page-wrapper-result-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   margin: 10px 0 !important;
   overflow-x: auto;
 }
