@@ -151,65 +151,40 @@ export const Price: FunctionalComponent<PriceProps> = (props) => {
   const hasRegularPrice = props.price || props.basePrice?.price;
   const hasSalePrice = props.salePrice || props.baseSalePrice?.price;
 
+  const priceGroup = (
+    priceType: PriceType,
+    price: number,
+    basePrice: BasePrice,
+  ) => (
+    <span class={`price-${priceType}`} part={`price-${priceType}`}>
+      <FormattedPrice
+        prefix={props.prefix}
+        currency={props.currency}
+        price={price}
+        numberLocale={props.numberLocale}
+        priceType={priceType}
+      />
+      <FormattedBasePrice
+        currency={props.currency}
+        basePrice={basePrice}
+        numberLocale={props.numberLocale}
+        priceType={priceType}
+      />
+    </span>
+  );
+
   const renderPrice = () => {
     if (hasSalePrice) {
       return [
-        hasRegularPrice && (
-          <span class="price-outdated" part="price-outdated">
-            <FormattedPrice
-              prefix={props.prefix}
-              currency={props.currency}
-              price={props.price}
-              numberLocale={props.numberLocale}
-              priceType="outdated"
-            />
-            <FormattedBasePrice
-              currency={props.currency}
-              basePrice={props.basePrice}
-              numberLocale={props.numberLocale}
-              priceType="outdated"
-            />
-          </span>
-        ),
-
-        <span class="price-sale" part="price-sale">
-          <FormattedPrice
-            prefix={props.prefix}
-            currency={props.currency}
-            price={props.salePrice}
-            numberLocale={props.numberLocale}
-            priceType="sale"
-          />
-          <FormattedBasePrice
-            currency={props.currency}
-            basePrice={props.baseSalePrice}
-            numberLocale={props.numberLocale}
-            priceType="sale"
-          />
-        </span>,
+        hasRegularPrice &&
+          priceGroup("outdated", props.price, props.basePrice),
+        priceGroup("sale", props.salePrice, props.baseSalePrice),
       ];
     }
 
     if (!hasRegularPrice) return null;
 
-    return (
-      <span class="price-regular" part="price-regular">
-        <FormattedPrice
-          prefix={props.prefix}
-          currency={props.currency}
-          price={props.price}
-          numberLocale={props.numberLocale}
-          priceType="regular"
-        />
-
-        <FormattedBasePrice
-          currency={props.currency}
-          basePrice={props.basePrice}
-          numberLocale={props.numberLocale}
-          priceType="regular"
-        />
-      </span>
-    );
+    return priceGroup("regular", props.price, props.basePrice);
   };
 
   return props.showInContainer ? (

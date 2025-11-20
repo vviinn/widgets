@@ -170,6 +170,13 @@ export class VviinnCropper {
     this.vviinnImageCrop.emit({
       isTriggeredByVpsWidget: this.showInWidget,
     });
+    this.triggerVisualSearch();
+  };
+
+  private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
+    this.showInWidget !== isTriggeredByVpsWidget;
+
+  private triggerVisualSearch = () => {
     makeVisualSearchRequest(
       this.storeName,
       null,
@@ -177,9 +184,6 @@ export class VviinnCropper {
       this.apiPath,
     );
   };
-
-  private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
-    this.showInWidget !== isTriggeredByVpsWidget;
 
   private imageUploadFinishedHandler = ({ detail }: SearchIdEvent) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
@@ -212,12 +216,7 @@ export class VviinnCropper {
       });
     }
 
-    makeVisualSearchRequest(
-      this.storeName,
-      null,
-      this.token,
-      this.apiPath,
-    );
+    this.triggerVisualSearch();
   }
 
   @Listen("vviinnImageCrop")
@@ -288,12 +287,7 @@ export class VviinnCropper {
     this.vviinnImageCrop.emit({
       isTriggeredByVpsWidget: this.showInWidget,
     });
-    makeVisualSearchRequest(
-      this.storeName,
-      null,
-      this.token,
-      this.apiPath,
-    );
+    this.triggerVisualSearch();
   };
 
   private showPreloader = () =>
