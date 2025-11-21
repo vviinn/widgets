@@ -1,6 +1,14 @@
 import { FunctionalComponent, h, Fragment, JSX } from "@stencil/core";
-import { BasePrice } from "../../interfaces";
+import { BasePrice, EntityType, ProductImage } from "../../interfaces";
 import { getLastUrlPath } from "../../helpers/url/getLastUrlPath";
+import { configureSwiperElement } from "../../utils/swiper/swiperUtils";
+import { register } from "swiper/element";
+import { isMobile } from "../../helpers/device/checkDeviceType";
+import { getImagesForSwiper } from "./helpers";
+
+if (typeof window !== "undefined") {
+  register();
+}
 
 type LinkedProps = {
   deeplink: string;
@@ -22,9 +30,9 @@ export const Linked = (props: LinkedProps, child: JSX.Element) =>
     child
   );
 
-const getFormattedPrice = (price: number, locale: string) =>
+const getFormattedPrice = (price: number, numberLocale: string) =>
   price
-    ? new Intl.NumberFormat(locale, {
+    ? new Intl.NumberFormat(numberLocale, {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       }).format(price)
@@ -33,7 +41,7 @@ const getFormattedPrice = (price: number, locale: string) =>
 type PriceType = "sale" | "outdated" | "regular";
 
 type PriceElementProps = {
-  readonly locale: string;
+  readonly numberLocale: string;
   readonly price: number;
   readonly prefix: string;
   readonly currency: string;
@@ -41,7 +49,7 @@ type PriceElementProps = {
 };
 
 type BasePriceElementProps = {
-  readonly locale: string;
+  readonly numberLocale: string;
   readonly currency: string;
   readonly basePrice?: BasePrice | null;
   readonly priceType?: PriceType;
@@ -49,7 +57,7 @@ type BasePriceElementProps = {
 
 const FormattedPrice: FunctionalComponent<PriceElementProps> = (props) => {
   const priceType = props.priceType;
-  const formattedPrice = getFormattedPrice(props.price, props.locale);
+  const formattedPrice = getFormattedPrice(props.price, props.numberLocale);
 
   const prefixElement = props.prefix ? (
     <span part="price-prefix">{props.prefix + " "}</span>
@@ -60,6 +68,8 @@ const FormattedPrice: FunctionalComponent<PriceElementProps> = (props) => {
       {props.currency}
     </span>
   ) : null;
+
+  if (!formattedPrice) return null;
 
   return (
     <span
@@ -77,10 +87,10 @@ const FormattedBasePrice: FunctionalComponent<BasePriceElementProps> = ({
   currency,
   basePrice,
   priceType,
-  locale,
+  numberLocale,
 }) => {
   if (!basePrice?.price) return null;
-  const formattedPrice = getFormattedPrice(basePrice.price, locale);
+  const formattedPrice = getFormattedPrice(basePrice.price, numberLocale);
 
   return (
     <span
@@ -109,7 +119,7 @@ export const parseBasePrice = (
   return basePrice;
 };
 
-type PriceProps = PriceElementProps & {
+type PriceProps = Omit<PriceElementProps, "priceType"> & {
   basePrice: BasePrice;
   salePrice: number;
   baseSalePrice: BasePrice;
@@ -138,59 +148,44 @@ export const renderCustomLabels = (
 };
 
 export const Price: FunctionalComponent<PriceProps> = (props) => {
-  const renderPrice = () =>
-    props.salePrice ? (
-      [
-        <span class="price-outdated" part="price-outdated">
-          <FormattedPrice
-            prefix={props.prefix}
-            currency={props.currency}
-            price={props.price}
-            locale={props.locale}
-            priceType="outdated"
-          />
-          <FormattedBasePrice
-            currency={props.currency}
-            basePrice={props.basePrice}
-            locale={props.locale}
-            priceType="outdated"
-          />
-        </span>,
+  const hasRegularPrice = props.price || props.basePrice?.price;
+  const hasSalePrice = props.salePrice || props.baseSalePrice?.price;
 
-        <span class="price-sale" part="price-sale">
-          <FormattedPrice
-            prefix={props.prefix}
-            currency={props.currency}
-            price={props.salePrice}
-            locale={props.locale}
-            priceType="sale"
-          />
-          <FormattedBasePrice
-            currency={props.currency}
-            basePrice={props.baseSalePrice}
-            locale={props.locale}
-            priceType="sale"
-          />
-        </span>,
-      ]
-    ) : (
-      <span class="price-regular" part="price-regular">
-        <FormattedPrice
-          prefix={props.prefix}
-          currency={props.currency}
-          price={props.price}
-          locale={props.locale}
-          priceType="regular"
-        />
+  const priceGroup = (
+    priceType: PriceType,
+    price: number,
+    basePrice: BasePrice,
+  ) => (
+    <span class={`price-${priceType}`} part={`price-${priceType}`}>
+      <FormattedPrice
+        prefix={props.prefix}
+        currency={props.currency}
+        price={price}
+        numberLocale={props.numberLocale}
+        priceType={priceType}
+      />
+      <FormattedBasePrice
+        currency={props.currency}
+        basePrice={basePrice}
+        numberLocale={props.numberLocale}
+        priceType={priceType}
+      />
+    </span>
+  );
 
-        <FormattedBasePrice
-          currency={props.currency}
-          basePrice={props.basePrice}
-          locale={props.locale}
-          priceType="regular"
-        />
-      </span>
-    );
+  const renderPrice = () => {
+    if (hasSalePrice) {
+      return [
+        hasRegularPrice &&
+          priceGroup("outdated", props.price, props.basePrice),
+        priceGroup("sale", props.salePrice, props.baseSalePrice),
+      ];
+    }
+
+    if (!hasRegularPrice) return null;
+
+    return priceGroup("regular", props.price, props.basePrice);
+  };
 
   return props.showInContainer ? (
     <div class="price-container" part="price-container">
@@ -219,6 +214,113 @@ export interface UniversalImageProps extends ImageProps {
   additionalParts?: string[];
   onLoadEnd?: () => void;
 }
+
+export interface ProductCardImageProps {
+  src: string;
+  width: number;
+  height: number;
+  aspectRatio: number;
+  title: string;
+  responsive?: boolean;
+  imageResolutionWidth?: number;
+  showSkeleton?: boolean;
+  isSetMode?: boolean;
+  entityType?: EntityType;
+  customClass?: string;
+  imageRef?: (el: HTMLImageElement) => void;
+  onImageLoad?: () => void;
+  renderPlaceholderSlot?: boolean;
+  images?: ProductImage[];
+  showMultipleImages?: boolean;
+  disableMobileSwiper?: boolean;
+  deeplink?: string;
+}
+
+export const renderProductCardImage = (props: ProductCardImageProps) => {
+  const {
+    src,
+    width,
+    height,
+    aspectRatio,
+    title,
+    responsive = false,
+    imageResolutionWidth,
+    showSkeleton = false,
+    isSetMode = false,
+    entityType = "product",
+    customClass = "",
+    imageRef,
+    onImageLoad,
+    renderPlaceholderSlot = true,
+    images = [],
+    showMultipleImages = false,
+    disableMobileSwiper = false,
+    deeplink,
+  } = props;
+
+  if (showMultipleImages && !disableMobileSwiper && isMobile()) {
+    const swiperImages = getImagesForSwiper(src, images);
+    if (swiperImages.length > 1) {
+      return (
+        <ImageSwiper
+          images={swiperImages}
+          productTitle={title}
+          imageWidth={width}
+          imageRatio={aspectRatio}
+          imageResolutionWidth={imageResolutionWidth}
+          onImageLoad={onImageLoad}
+          responsive={responsive}
+          showSkeleton={showSkeleton}
+          isSetMode={isSetMode}
+          entityType={entityType}
+          customClass={customClass}
+          imageRef={imageRef}
+          deeplink={deeplink}
+        />
+      );
+    }
+  }
+
+  const imageElement = (
+    <vviinn-image
+      src={src}
+      width={width}
+      height={height}
+      aspectRatio={aspectRatio}
+      alt={title}
+      imageTitle={title}
+      responsive={responsive}
+      entityType={entityType}
+      imageResolutionWidth={imageResolutionWidth}
+      customClass={customClass}
+      imageRef={imageRef}
+      onVviinnImageLoad={onImageLoad}
+      showSkeleton={showSkeleton}
+      isSetMode={isSetMode}
+      style={{
+        "--image-border": "var(--product-card-image-border, none)",
+        "--image-bg-color":
+          "var(--product-card-image-bg-color, var(--surface-bg-color-01))",
+        "--image-transition-duration":
+          "var(--product-card-transition-duration, 0.5s)",
+      }}
+    >
+      {renderPlaceholderSlot && (
+        <slot
+          name="vviinn-image-placeholder-icon"
+          slot="placeholder-icon"
+        ></slot>
+      )}
+    </vviinn-image>
+  );
+
+  return (
+    <Linked deeplink={deeplink} part="image-link">
+      {imageElement}
+    </Linked>
+  );
+};
+
 export const ContentCardContent = (
   contentTitle: string,
   contentLink: string,
@@ -260,6 +362,96 @@ export const ListCardContent = (listTitle: string, labelText: string) => {
           {listTitle}
         </div>
       )}
+    </div>
+  );
+};
+
+export type ImageSwiperProps = {
+  images: ProductImage[];
+  productTitle: string;
+  imageWidth: number;
+  imageRatio: number;
+  imageResolutionWidth: number;
+  onImageLoad?: () => void;
+  responsive?: boolean;
+  showSkeleton?: boolean;
+  isSetMode?: boolean;
+  entityType?: import("../../interfaces").EntityType;
+  customClass?: string;
+  imageRef?: (el: HTMLImageElement) => void;
+  deeplink?: string;
+};
+
+export const ImageSwiper: FunctionalComponent<ImageSwiperProps> = (props) => {
+  const {
+    images,
+    productTitle,
+    imageWidth,
+    imageRatio,
+    imageResolutionWidth,
+    onImageLoad,
+    responsive,
+    showSkeleton,
+    isSetMode,
+    entityType = "product",
+    customClass,
+    imageRef,
+    deeplink,
+  } = props;
+
+  const swiperRef = (el: any) => {
+    if (el) {
+      configureSwiperElement(el, {
+        isDesktop: false,
+        pagination: images.length > 1,
+        slidesPerView: 1,
+        spaceBetween: 0,
+      });
+    }
+  };
+
+  return (
+    <div class="product-card-swiper-wrapper">
+      <swiper-container
+        ref={swiperRef}
+        class="product-card-swiper"
+        pagination={images.length > 1 ? "true" : undefined}
+        pagination-clickable={images.length > 1 ? "true" : undefined}
+        exportparts="pagination:product-images-pagination, bullet:product-images-pagination-bullet, bullet-active:product-images-pagination-bullet-active"
+      >
+        {images.map((img, index) => {
+          const imgSrc = img.thumbnail ?? img.original;
+          return (
+            <swiper-slide key={imgSrc}>
+              <Linked deeplink={deeplink} part="image-link">
+                <vviinn-image
+                  src={imgSrc}
+                  width={imageWidth}
+                  height={imageWidth * imageRatio}
+                  aspectRatio={imageRatio}
+                  alt={productTitle}
+                  imageTitle={productTitle}
+                  responsive={responsive}
+                  entityType={entityType}
+                  imageResolutionWidth={imageResolutionWidth}
+                  customClass={customClass}
+                  imageRef={index === 0 ? imageRef : undefined}
+                  onVviinnImageLoad={index === 0 ? onImageLoad : undefined}
+                  showSkeleton={showSkeleton}
+                  isSetMode={isSetMode}
+                  style={{
+                    "--image-border": "var(--product-card-image-border, none)",
+                    "--image-bg-color":
+                      "var(--product-card-image-bg-color, var(--surface-bg-color-01))",
+                    "--image-transition-duration":
+                      "var(--product-card-transition-duration, 0.5s)",
+                  }}
+                />
+              </Linked>
+            </swiper-slide>
+          );
+        })}
+      </swiper-container>
     </div>
   );
 };

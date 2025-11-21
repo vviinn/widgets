@@ -1,7 +1,7 @@
 const commonParams = {
   locale: "en-US",
   deeplink: "#",
-  currency: "€",
+  currencySign: "€",
   style: { width: "fit-content" },
   "image-width": "300",
 };

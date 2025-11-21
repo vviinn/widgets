@@ -1,4 +1,5 @@
 @import "../../variables.css";
+@import "../../styles/swiper-pagination.css";
 
 :host {
   /**
@@ -18,6 +19,7 @@
   --basket-button-bg-color-pressed-default: var(--button-bg-color-positive);
   --product-card-transition-duration-default: 0.5s;
 
+  box-sizing: border-box;
   position: relative;
   height: fit-content;
   display: flex;
@@ -54,6 +56,11 @@
 .image-container {
   position: relative;
   width: 100%;
+  cursor: pointer;
+}
+
+.image-container vviinn-image {
+  transition: opacity var(--product-card-transition-duration, 0.3s) ease-in-out;
 }
 
 :host(.set-mode) vviinn-image::part(image),
@@ -483,4 +490,25 @@ vviinn-energy-label {
 
 .hidden {
   display: none !important;
+}
+
+.image-container:has(.product-card-swiper-wrapper) {
+  --swiper-pagination-bullet-size: 8px;
+  --pagination-height: calc(
+    var(--spacing-200) + var(--swiper-pagination-bullet-size)
+  );
+  margin-bottom: var(--pagination-height);
+}
+
+.product-card-swiper-wrapper {
+  margin-bottom: calc(-1 * var(--pagination-height));
+}
+
+.product-card-swiper::part(pagination) {
+  position: static;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-100);
+  padding: var(--spacing-100) 0;
 }

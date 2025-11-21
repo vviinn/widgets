@@ -32,7 +32,8 @@ import {
   resetStore,
   useSearchStore,
 } from "../../store/search.store";
-import { globalState, trackEvent, updateGlobalState } from "../../store/store";
+import { trackEvent } from "../../store/store";
+import { isTrackingEnabled } from "../../store/tracking";
 import {
   BasicEventData,
   ImageUploadEventData,
@@ -66,8 +67,7 @@ import {
   createAddToWishlistEvent,
 } from "../../tracking";
 import { RequestDynamicFilterItem } from "../../campaign/VPRCampaignService";
-import i18next from "i18next";
-import { resources } from "../../locale";
+import { initializeLocale } from "../../locale";
 import {
   productCardSlotNames,
   slotChangeListener,
@@ -122,10 +122,18 @@ import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
  * @part price-prefix - Block rendered before each price element (for ex. "from").
  * @part title - Title inside Product Card.
+ * @part basket-button - Add to Basket button.
+ * @part basket-button-container - Product Card's basket button container.
+ * @part favorite-button - Favorite button.
+ * @part product-card-actions - Product Card actions wrapper.
+ * @part product-card-actions-top - Product Card top actions wrapper.
  * @part energy-label-container - Energy label container.
  * @part energy-label-icon - Icon with an energy class.
  * @part energy-label-product-type - Product type.
  * @part energy-label-data-sheet-link - Data sheet link.
+ * @part product-images-pagination - Container for product images pagination dots (mobile only).
+ * @part product-images-pagination-bullet - Individual pagination dot.
+ * @part product-images-pagination-bullet-active - Active pagination dot.
  *
  * @part custom-label-0 - Custom label with index 0.
  * @part custom-label-1 - Custom label with index 1.
@@ -207,8 +215,10 @@ export class VviinnResults {
   @Prop() token: string;
   /** The currency sign is displayed after the price */
   @Prop() currencySign?: string;
-  /** The locale for currency formatting and text localization */
+  /** Locale for text localization */
   @Prop() locale?: Locale;
+  /** Locale for number formatting. Falls back to locale */
+  @Prop() numberLocale?: string;
   /** Campaign ID used for Text Search */
   @Prop() campaignIdTextSearch: string = "";
   /** Campaign ID used for Visual Search */
@@ -221,6 +231,8 @@ export class VviinnResults {
   @Prop({ mutable: true }) uiSessionId?: string;
   /** Resolution width of an image in the product card */
   @Prop() imageResolutionWidth?: number = RESULTS_WIDGET_IMAGE_RESOLUTION_WIDTH;
+  /** Show multiple images: swiper on mobile, hover on desktop in product cards */
+  @Prop() showMultipleImages: boolean = false;
   /** Toggle for opening product link in new tab or not */
   @Prop() productDetailsNewTab?: boolean = false;
   /** Toggle for redirection to PDP on product's click */
@@ -396,11 +408,7 @@ export class VviinnResults {
     this.passedSlotNames = getSlotNames([...this.parentSlots, ...this.slots]);
 
     if (!this.showInWidget) {
-      await i18next.init({
-        lng: globalState.locale,
-        fallbackLng: "en",
-        resources,
-      });
+      await initializeLocale(this.locale);
     }
   }
 
@@ -442,6 +450,8 @@ export class VviinnResults {
       await makeTextSearchRequest(
         this.storeName,
         queryToUse,
+        this.token,
+        this.apiPath,
         requestId,
         this.resultsCount,
       ),
@@ -458,6 +468,8 @@ export class VviinnResults {
       await makeProductListingPageRequest(
         this.filterColumn,
         this.filterValue,
+        this.token,
+        this.apiPath,
         this.resultsCount,
         dynamicFilters,
         this.useInnerState,
@@ -484,7 +496,7 @@ export class VviinnResults {
       ...rest,
     });
 
-    trackEvent(textSearchStartedEvent);
+    trackEvent(textSearchStartedEvent, this.token, this.apiPath);
 
     this.getTextSearchResults();
   };
@@ -502,7 +514,12 @@ export class VviinnResults {
     if (this.isTextSearch()) {
       this.getTextSearchResults(this.state.textSearchId);
     } else {
-      makeVisualSearchRequest(this.storeName, this.state.visualSearchId);
+      makeVisualSearchRequest(
+        this.storeName,
+        this.state.visualSearchId,
+        this.token,
+        this.apiPath,
+      );
     }
   };
 
@@ -530,7 +547,7 @@ export class VviinnResults {
       eventBody,
     );
 
-    trackEvent(filterEvent);
+    trackEvent(filterEvent, this.token, this.apiPath);
   };
 
   private imageUploadStartedHandler = ({
@@ -562,7 +579,6 @@ export class VviinnResults {
   };
 
   connectedCallback() {
-    updateGlobalState(this);
     const { state, storeName, onChange } = useSearchStore(this.showInWidget);
     this.state = state;
     this.storeName = storeName;
@@ -610,7 +626,13 @@ export class VviinnResults {
       signal,
     );
 
-    if (!!this.searchId) makeVisualSearchRequest(this.storeName, this.searchId);
+    if (!!this.searchId)
+      makeVisualSearchRequest(
+        this.storeName,
+        this.searchId,
+        this.token,
+        this.apiPath,
+      );
 
     this.getResultsByCategory();
 
@@ -637,13 +659,14 @@ export class VviinnResults {
   @Watch("searchId")
   watchSearchId(newId: string) {
     if (this.showInWidget) return;
-    if (newId) makeVisualSearchRequest(this.storeName, newId);
+    if (newId)
+      makeVisualSearchRequest(this.storeName, newId, this.token, this.apiPath);
   }
 
   @Listen("vviinnProductLoad")
   trackProductLoad({ detail }: ProductCardEvent) {
     const productLoadEvent = this.getProductTrackEvent(detail, "load");
-    trackEvent(productLoadEvent);
+    trackEvent(productLoadEvent, this.token, this.apiPath);
   }
 
   @Listen("vviinnProductView")
@@ -655,7 +678,7 @@ export class VviinnResults {
     }
 
     const productViewEvent = this.getProductTrackEvent(detail, "view");
-    trackEvent(productViewEvent);
+    trackEvent(productViewEvent, this.token, this.apiPath);
   }
 
   @Listen("vviinnProductClick")
@@ -666,9 +689,11 @@ export class VviinnResults {
     const product = this.findProductById(productId);
     if (!product || !product.deeplink) return;
 
-    await trackEvent(productClickEvent).finally(() => {
-      this.handleOpenLink(product.deeplink, clickEvent);
-    });
+    await trackEvent(productClickEvent, this.token, this.apiPath).finally(
+      () => {
+        this.handleOpenLink(product.deeplink, clickEvent);
+      },
+    );
   }
 
   @Listen("vviinnAuxClick")
@@ -679,7 +704,7 @@ export class VviinnResults {
     const product = this.findProductById(productId);
     if (!product || !product.deeplink) return;
 
-    await trackEvent(productClickEvent);
+    await trackEvent(productClickEvent, this.token, this.apiPath);
   }
 
   @Listen("vviinnAddToBasket")
@@ -691,7 +716,7 @@ export class VviinnResults {
       this.getCampaignType(),
     )(eventBody);
 
-    trackEvent(addToBasketEvent);
+    trackEvent(addToBasketEvent, this.token, this.apiPath);
   }
 
   @Listen("vviinnAddToFavorite")
@@ -701,7 +726,7 @@ export class VviinnResults {
       this.getCampaignType(),
     )(eventBody);
 
-    trackEvent(addToWishlistEvent);
+    trackEvent(addToWishlistEvent, this.token, this.apiPath);
   }
 
   private trackResultEvent(type: ResultEventType) {
@@ -716,7 +741,7 @@ export class VviinnResults {
         ...rest,
       });
 
-    trackEvent(resultEvent);
+    trackEvent(resultEvent, this.token, this.apiPath);
   }
 
   private findProductById(
@@ -744,7 +769,7 @@ export class VviinnResults {
     detail: ProductCardEventData,
     eventType: ProductEventType,
   ): ProductEvent | null {
-    if (!globalState.trackingEnabled) return null;
+    if (!isTrackingEnabled()) return null;
 
     const eventBody = this.createTrackingEventBody(detail);
 
@@ -846,9 +871,10 @@ export class VviinnResults {
 
     return this.getResults().map((p, i) => (
       <vviinn-product-card
-        pricePrefix={globalState.pricePrefix}
-        currency={globalState.currencySign}
-        locale={globalState.locale}
+        pricePrefix={this.pricePrefix}
+        currencySign={this.currencySign}
+        locale={this.locale}
+        numberLocale={this.numberLocale}
         key={p.productId}
         index={i}
         productTitle={p.title}
@@ -865,7 +891,9 @@ export class VviinnResults {
         responsive={true}
         imageWidth={this.imageResolutionWidth}
         imageResolutionWidth={this.imageResolutionWidth}
-        image={p.image.thumbnail || p.image.original}
+        image={p.image?.thumbnail ?? p.image?.original}
+        images={p.images}
+        showMultipleImages={this.showMultipleImages}
         energyCertifications={p.energyCertifications}
         part="product-card"
         campaignTypeId={widgetData.campaignTypeId}
@@ -886,6 +914,11 @@ export class VviinnResults {
             class="vviinn-results-product-card-actions"
           >
             <vviinn-vpr-button
+              token={this.token}
+              locale={this.locale}
+              currencySign={this.currencySign}
+              numberLocale={this.numberLocale}
+              apiPath={this.apiPath}
               productId={p.productId}
               addStyle={false}
               isStandalone={false}

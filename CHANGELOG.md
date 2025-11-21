@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.202.1](https://github.com/vviinn/widgets/compare/v2.202.0...v2.202.1) (2025-11-20)
+
+
+### Bug Fixes
+
+* One-click discovery layout fixes for the modal and appended modes. ([2b28db4](https://github.com/vviinn/widgets/commit/2b28db493936ac8a3e849e500c45da34ac49a365))
+* Storybook layout minor fixes. ([adb6c41](https://github.com/vviinn/widgets/commit/adb6c41592eb033a2e6e1d1f002e21adb9165be2))
+
+## [2.202.0](https://github.com/vviinn/widgets/compare/v2.201.0...v2.202.0) (2025-11-20)
+
+
+### Features
+
+* Add numberLocale prop for price/number formatting. ([8d7e8bf](https://github.com/vviinn/widgets/commit/8d7e8bf8840d7c2b7b0de13db972f0dec24341ec))
+
+
+### Bug Fixes
+
+* Don't render the currency sign when there are no prices for the product. ([3485cbb](https://github.com/vviinn/widgets/commit/3485cbb1ac7b61c1b1f3d8035b0981cc8bb9fe7b))
+* Fix locale and currency-sign inconsistencies. Improve language initialization logic. ([b9080ba](https://github.com/vviinn/widgets/commit/b9080ba012b87ec381269af923bc83f8fda73d3f))
+* Remove unnecessary state updates in the components to prevent synchronization bugs. vviinn-cropper now requires a token. ([381a931](https://github.com/vviinn/widgets/commit/381a93196daeda65cb79b814b5fafdb2fcbc949b))
+
+## [2.201.0](https://github.com/vviinn/widgets/compare/v2.200.0...v2.201.0) (2025-11-13)
+
+
+### Features
+
+* Possibility of showing the second image in the Product Card. ([9eb61e9](https://github.com/vviinn/widgets/commit/9eb61e9f17157f1f36012909e9f597d78a3d4e40))
+* Slider for showing the second image in the Product Card on mobile devices. ([a5d9598](https://github.com/vviinn/widgets/commit/a5d9598e7dec09468677e820c74153eba02298e4))
+
 ## [2.200.0](https://github.com/vviinn/widgets/compare/v2.199.0...v2.200.0) (2025-11-11)
 
 

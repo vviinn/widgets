@@ -32,8 +32,7 @@ import {
 import { findSlotElements } from "../../dom";
 import { SEARCH_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
 import i18next from "i18next";
-import { resources } from "../../locale";
-import { globalState, updateGlobalState } from "../../store/store";
+import { initializeLocale } from "../../locale";
 
 /**
  * @slot vviinn-teaser-text - Text on the widget's main screen.
@@ -47,6 +46,12 @@ import { globalState, updateGlobalState } from "../../store/store";
  * @slot vviinn-text-search-icon - Icon of the text search block.
  * @slot vviinn-energy-label-data-sheet-text - Text of the data sheet link for the energy label.
  * @slot vviinn-results-vpr-icon - One-Click Discovery icon
+ * @slot vviinn-favorite-icon - Icon of Favorite button.
+ * @slot vviinn-favorite-icon-pressed - Icon of pressed Favorite button.
+ * @slot vviinn-basket-button-text - Text of Add to Basket button.
+ * @slot vviinn-basket-button-icon - Icon of Add to Basket button.
+ * @slot vviinn-basket-button-text-pressed - Text of pressed Add to Basket button.
+ * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button.
  * @slot vviinn-custom-label-0 - Custom label with index 0.
  * @slot vviinn-custom-label-1 - Custom label with index 1.
  * @slot vviinn-custom-label-2 - Custom label with index 2.
@@ -81,6 +86,11 @@ import { globalState, updateGlobalState } from "../../store/store";
  * @part price-sale - Block for sale price. Rendered only if the sale price is presented.
  * @part price-prefix - Block rendered before each price element (for ex. "from").
  * @part title - Title inside Product Card.
+ * @part basket-button - Add to Basket button.
+ * @part basket-button-container - Product Card's basket button container.
+ * @part favorite-button - Favorite button.
+ * @part product-card-actions - Product Card actions wrapper.
+ * @part product-card-actions-top - Product Card top actions wrapper.
  * @part text-search-input - Text search input.
  * @part button - Clickable button element.
  * @part vviinn-button - Button element container.
@@ -93,6 +103,9 @@ import { globalState, updateGlobalState } from "../../store/store";
  * @part energy-label-icon - Icon with an energy class.
  * @part energy-label-product-type - Product type.
  * @part energy-label-data-sheet-link - Data sheet link.
+ * @part product-images-pagination - Container for product images pagination dots (mobile only).
+ * @part product-images-pagination-bullet - Individual pagination dot.
+ * @part product-images-pagination-bullet-active - Active pagination dot.
  * @part suggestions-container - The main suggestions container element.
  * @part suggestions-header - The header section containing icon and title.
  * @part suggestions-icon - The sparkle icon wrapper.
@@ -115,8 +128,10 @@ export class VviinnVpsButton {
   @Prop() token: string;
   /**  The currency sign is displayed after the price */
   @Prop() currencySign?: string;
-  /** The locale for currency formatting and text localization */
-  @Prop() locale: Locale;
+  /** Locale for text localization */
+  @Prop() locale?: Locale;
+  /** Locale for number formatting. Falls back to locale */
+  @Prop() numberLocale?: string;
   /** Prefix is displayed before the price */
   @Prop() pricePrefix?: string;
   /** Campaign ID used for Visual Search (deprecated) */
@@ -137,6 +152,8 @@ export class VviinnVpsButton {
   @Prop() productDetailsRedirect: boolean = true;
   /** Resolution width of an image in the product card */
   @Prop() imageResolutionWidth: number = SEARCH_WIDGET_IMAGE_RESOLUTION_WIDTH;
+  /** Show multiple images: swiper on mobile, hover on desktop in product cards */
+  @Prop() showMultipleImages: boolean = false;
   /** Example image source */
   @Prop() exampleImageSource: string = DEFAULT_EXAMPLE_IMAGE;
   /** Show the text search */
@@ -222,16 +239,8 @@ export class VviinnVpsButton {
     }
   }
 
-  connectedCallback() {
-    updateGlobalState(this);
-  }
-
   async componentWillLoad() {
-    await i18next.init({
-      lng: globalState.locale,
-      fallbackLng: "en",
-      resources,
-    });
+    await initializeLocale(this.locale);
     this.slots = findSlotElements(this.el);
   }
 
@@ -311,6 +320,7 @@ export class VviinnVpsButton {
           currency-sign={this.currencySign}
           token={this.token}
           locale={this.locale}
+          numberLocale={this.numberLocale}
           apiPath={this.apiPath}
           pricePrefix={this.pricePrefix}
           campaignId={this.campaignId}
@@ -328,6 +338,7 @@ export class VviinnVpsButton {
           productDetailsNewTab={this.productDetailsNewTab}
           productDetailsRedirect={this.productDetailsRedirect}
           imageResolutionWidth={this.imageResolutionWidth}
+          showMultipleImages={this.showMultipleImages}
           exampleImageSource={this.exampleImageSource}
           textSearchShow={this.textSearchShow}
           addToBasketShow={this.addToBasketShow}

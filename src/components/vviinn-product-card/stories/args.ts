@@ -2,20 +2,6 @@ export const argTypes = {
   brand: {
     description: "Using the [title] attribute from product feed.",
   },
-  locale: {
-    options: ["de-DE", "en-US"],
-    control: {
-      type: "select",
-      default: 0,
-    },
-  },
-  currency: {
-    options: ["$", "€", "£", "¥", "₽"],
-    control: {
-      type: "select",
-      default: 0,
-    },
-  },
   productCardContentAlign: {
     options: ["flex-start", "center", "flex-end"],
     control: {
@@ -56,6 +42,13 @@ export const argTypes = {
     },
   },
   baseSalePrice: {
+    control: {
+      type: "object",
+    },
+  },
+  images: {
+    description:
+      "Array of image URLs (first 2 will be used for hover effect on desktop)",
     control: {
       type: "object",
     },

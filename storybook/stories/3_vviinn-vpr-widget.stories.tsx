@@ -19,12 +19,14 @@ const Template = (args) => `
       show-scroll="${args.showScroll}"
       image-ratio="${args.imageRatio}"
       locale="${args.locale}"
+      number-locale="${args.numberLocale}"
       price-prefix="${args.pricePrefix}"
       product-id="${args.productId}"
       token="${args.token}"
       mode="${args.mode}"
       image-width="${args.imageWidth}"
       image-resolution-width="${args.imageResolutionWidth}"
+      show-multiple-images="${args.showMultipleImages}"
       set-items-amount="${args.setItemsAmount}"
       campaign-type="${args.campaignType}"
       campaigns="${args.campaigns}"
@@ -64,8 +66,10 @@ const initArgs = {
   imageWidth: 300,
   imageResolutionWidth: 500,
   imageRatio: 1,
+  showMultipleImages: false,
   setItemsAmount: 4,
   locale: "en-US",
+  numberLocale: "",
   currencySign: "€",
   pricePrefix: "",
   cssUrl: "",

@@ -26,8 +26,12 @@ export const productCardGeneralPartsList = [
   "update-button-item",
   "product-card-actions",
   "product-card-actions-top",
+  "favorite-button",
   "discount-label",
   "discount-percentage",
+  "product-images-pagination",
+  "product-images-pagination-bullet",
+  "product-images-pagination-bullet-active",
 ];
 
 export const energyLabelPartsList = [

@@ -15,7 +15,6 @@ import { Recommendation } from "../../interfaces";
 import { Rectangle } from "../../interfaces";
 import { BasicEventData } from "../../recommendation/events";
 import { register } from "swiper/element";
-import { updateGlobalState } from "../../store/store";
 import {
   ModalPosition,
   setupIntersectionObserver,
@@ -48,7 +47,8 @@ import {
   ModalProps,
   renderNavigation,
 } from "./render-helpers";
-import { Locale } from "../../locale";
+import { Locale, initializeLocale } from "../../locale";
+import { defaultConfig } from "../../store/store";
 import { TEST_BASIC_EVENT_DATA } from "./test-data";
 import {
   extractSlideIndex,
@@ -83,24 +83,28 @@ export interface ShopTheLookEventData extends BasicEventData {
 export class VviinnShopTheLook {
   @Element() el: HTMLElement;
 
+  /** Vviinn customer's token (required) */
+  @Prop() token: string;
   /** Comma-separated list of image URLs to display in the widget */
   @Prop() imageUrls: string = "";
   /** Height of the widget in pixels */
   @Prop() height: number = 500;
-  /** Vviinn customer's token (required) */
-  @Prop() token: string = "";
   /** The currency sign is displayed after the price */
-  @Prop() currencySign: string = "€";
+  @Prop() currencySign?: string;
   /** Campaign ID for visual search requests */
   @Prop() campaignId: string = "";
-  /** The locale for currency formatting and text localization */
-  @Prop() locale: Locale;
+  /** Locale for text localization */
+  @Prop() locale?: Locale;
+  /** Locale for number formatting. Falls back to locale */
+  @Prop() numberLocale?: string;
   /** Style variant for corner styling - 'rounded' for rounded corners, 'cornered' for sharp corners */
   @Prop() widgetStyle: "rounded" | "cornered" = "rounded";
   /** Enable cropper mode for manual area selection */
   @Prop() showCropper: boolean = false;
   /** Enable upload mode to allow users to upload their own images */
   @Prop() uploadMode: boolean = false;
+  /** Show multiple images: swiper on mobile, hover on desktop in product cards */
+  @Prop() showMultipleImages: boolean = false;
   /** URL to external CSS file for custom styling */
   @Prop() cssUrl: string | null = null;
   /** @internal */
@@ -145,13 +149,8 @@ export class VviinnShopTheLook {
   private isNavigatingToSlide: boolean = false;
   private fileInput: HTMLInputElement;
 
-  componentWillLoad() {
-    updateGlobalState({
-      token: this.token,
-      apiPath: this.apiPath,
-      locale: this.locale,
-      currencySign: this.currencySign,
-    });
+  async componentWillLoad() {
+    await initializeLocale(this.locale);
 
     this.imageUrlsList = buildImageUrlsList(
       this.uploadedImageUrls,
@@ -241,6 +240,14 @@ export class VviinnShopTheLook {
 
   private get shouldManageDragging(): boolean {
     return this.showCropper && isDesktop();
+  }
+
+  private get effectiveCurrencySign(): string {
+    return this.currencySign ?? defaultConfig.currencySign;
+  }
+
+  private get effectiveNumberLocale(): string {
+    return this.numberLocale || this.locale || defaultConfig.locale;
   }
 
   disconnectedCallback() {
@@ -602,6 +609,7 @@ export class VviinnShopTheLook {
       token: this.token,
       visualSearchId,
       campaignId: this.campaignId,
+      apiPath: this.apiPath,
       imageBounds,
       isSearchInProgress: this.isSearchInProgress,
       setSearchInProgress: (inProgress: boolean) => {
@@ -661,6 +669,7 @@ export class VviinnShopTheLook {
       imageUrl: targetImageUrl,
       token: this.token,
       campaignId: this.campaignId,
+      apiPath: this.apiPath,
     };
 
     const result = await performVisualSearch(params);
@@ -962,6 +971,7 @@ export class VviinnShopTheLook {
       imageUrl,
       token: this.token,
       campaignId: this.campaignId,
+      apiPath: this.apiPath,
     };
 
     const result = await performVisualSearch(params);
@@ -1053,6 +1063,7 @@ export class VviinnShopTheLook {
       file,
       token: this.token,
       campaignId: this.campaignId,
+      apiPath: this.apiPath,
     };
 
     const result = await processFileUpload(params);
@@ -1166,7 +1177,10 @@ export class VviinnShopTheLook {
       onProductDetailsClick: this.handleProductDetailsClick,
       onBackToGrid: this.resetDetailedView,
       onNavigateProduct: this.handleNavigateProduct,
-      currencySign: this.currencySign,
+      currencySign: this.effectiveCurrencySign,
+      locale: this.locale,
+      numberLocale: this.effectiveNumberLocale,
+      showMultipleImages: this.showMultipleImages,
       modalContentRef: (el: HTMLElement) => {
         this.modalContentRef = el;
       },

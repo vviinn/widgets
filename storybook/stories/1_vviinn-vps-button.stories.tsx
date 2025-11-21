@@ -33,11 +33,13 @@ const Template = (args) => `
   currency-sign="${args.currencySign}"
   price-prefix="${args.pricePrefix}"
   locale="${args.locale}"
+  number-locale="${args.numberLocale}"
   mode="${args.mode}"
   product-details-new-tab="${args.productDetailsNewTab}"
   product-details-redirect="${args.productDetailsRedirect}"
   api-path="${args.apiPath}"
   image-resolution-width="${args.imageResolutionWidth}"
+  show-multiple-images="${args.showMultipleImages}"
   text-search-show="${args.textSearchShow}"
   add-to-basket-show="${args.addToBasketShow}"
   add-price-container="${args.addPriceContainer}"
@@ -62,10 +64,12 @@ const initArgs = {
   productDetailsNewTab: true,
   productDetailsRedirect: true,
   locale: "en-US",
+  numberLocale: "",
   currencySign: "€",
   pricePrefix: "",
   addStyle: true,
   imageResolutionWidth: 250,
+  showMultipleImages: false,
   textSearchShow: true,
   addToBasketShow: false,
   addPriceContainer: false,

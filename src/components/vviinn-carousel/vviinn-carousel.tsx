@@ -77,6 +77,7 @@ export class VviinnCarousel {
   @Prop() currencySign: string;
   @Prop() pricePrefix: string;
   @Prop() locale: Locale;
+  @Prop() numberLocale?: string;
   @Prop() imageWidth: number = PRODUCT_CARD_IMAGE_WIDTH;
   @Prop() showScroll: boolean = true;
   @Prop() campaignTypeId: CampaignTypeId;
@@ -91,6 +92,7 @@ export class VviinnCarousel {
   @Prop() replaceSlotsContent: () => void;
   @Prop() setModeDiscountsArray: number[];
   @Prop() imageRatio: number = 1;
+  @Prop() showMultipleImages: boolean = false;
   @Prop() addPriceContainer?: boolean = false;
   @Prop() favoriteShow: boolean;
   @Prop() setItemsAmount?: number = 4;
@@ -571,7 +573,12 @@ export class VviinnCarousel {
         productType={recommendation.productType}
         entityType={recommendation.entityType}
         deeplink={recommendation.deeplink}
-        image={recommendation.image.thumbnail || recommendation.image.original}
+        image={
+          recommendation.image?.thumbnail ?? recommendation.image?.original
+        }
+        images={recommendation.images}
+        showMultipleImages={this.showMultipleImages}
+        disableMobileSwiper={true}
         brand={recommendation.brand}
         imageWidth={this.imageWidth}
         imageRatio={this.imageRatio}
@@ -592,9 +599,10 @@ export class VviinnCarousel {
         updateButtonLocation={this.updateButtonLocation}
         appliedDiscountPercentage={appliedDiscount}
         currentDiscountPercentage={this.setModeDiscount}
-        currency={this.currencySign}
+        currencySign={this.currencySign}
         pricePrefix={this.pricePrefix}
         locale={this.locale}
+        numberLocale={this.numberLocale}
         isSetMode={this.isSetMode}
         customLabels={getCustomLabels(recommendation)}
         addPriceContainer={this.addPriceContainer}
@@ -712,9 +720,12 @@ export class VviinnCarousel {
               class="set-mode product-card--source"
               productTitle={this.sourceProduct.title}
               image={
-                this.sourceProduct.image.thumbnail ||
-                this.sourceProduct.image.original
+                this.sourceProduct.image?.thumbnail ??
+                this.sourceProduct.image?.original
               }
+              images={this.sourceProduct.images}
+              showMultipleImages={this.showMultipleImages}
+              disableMobileSwiper={true}
               entityType={this.sourceProduct.entityType}
               price={this.sourceProduct.price.actual}
               salePrice={this.sourceProduct.price.sale}
@@ -725,10 +736,11 @@ export class VviinnCarousel {
               imageWidth={300}
               imageResolutionWidth={this.imageResolutionWidth}
               isSourceProduct={true}
-              currency={this.currencySign}
+              currencySign={this.currencySign}
               pricePrefix={this.pricePrefix}
               isSetMode={this.isSetMode}
               locale={this.locale}
+              numberLocale={this.numberLocale}
               favoriteShow={this.favoriteShow}
               customLabels={getCustomLabels(this.sourceProduct)}
               responsive={true}

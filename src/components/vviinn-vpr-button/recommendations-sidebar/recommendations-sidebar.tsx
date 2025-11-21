@@ -37,6 +37,7 @@ export class RecommendationsSidebar {
   @Prop() sidebarTitle: string;
   @Prop() token: string;
   @Prop() locale: Locale;
+  @Prop() numberLocale?: string;
   @Prop() currencySign: string;
   @Prop() pricePrefix: string;
   @Prop() productId: string;
@@ -49,6 +50,7 @@ export class RecommendationsSidebar {
   @Prop() color: string;
   @Prop() imageWidth: number = PRODUCT_CARD_IMAGE_WIDTH;
   @Prop() imageRatio: number = 1;
+  @Prop() showMultipleImages: boolean = false;
   @Prop() cssUrl: string | null;
   @Prop() noResultText: string;
   @Prop() noResultShow: boolean;
@@ -269,10 +271,12 @@ export class RecommendationsSidebar {
               pricePrefix={this.pricePrefix}
               apiPath={this.apiPath}
               locale={this.locale}
+              numberLocale={this.numberLocale}
               productId={this.productId}
               exportparts={`${carouselParts}, ${productCardParts}`}
               imageWidth={this.imageWidth}
               imageRatio={this.imageRatio}
+              showMultipleImages={this.showMultipleImages}
               setItemsAmount={this.setItemsAmount}
               blockTitle=""
               mode={this.mode}

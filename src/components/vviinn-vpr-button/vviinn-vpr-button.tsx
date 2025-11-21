@@ -18,7 +18,7 @@ import {
   BasicEventData,
   ProductCardEventData,
 } from "../../recommendation/events";
-import { Locale } from "../../locale";
+import { Locale, initializeLocale } from "../../locale";
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
 import { OneClickDiscoveryMode } from "../../widget/types";
 import { useSearchStore } from "../../store/search.store";
@@ -63,10 +63,14 @@ import { addEventListenersWithSignal } from "../../dom";
  * @part recommendations-title - Title of the recommendations grid.
  * @part recommendations-subtitle - Subtitle of the recommendations grid.
  * @part basket-button - Add to Basket button.
+ * @part favorite-button - Favorite button.
  * @part energy-label-container - Energy label container.
  * @part energy-label-icon - Icon with an energy class.
  * @part energy-label-product-type - Product type.
  * @part energy-label-data-sheet-link - Data sheet link.
+ * @part product-images-pagination - Container for product images pagination dots (mobile only).
+ * @part product-images-pagination-bullet - Individual pagination dot.
+ * @part product-images-pagination-bullet-active - Active pagination dot.
  * @part update-button-top - Update Button on the top (Set mode).
  * @part update-button-item - Update Button inside the Product Card (Set mode).
  * @part discount-label - Discount label in Product Card (Set mode).
@@ -113,8 +117,10 @@ export class VviinnVprButton {
   @Element() el: HTMLElement;
   /** Vviinn customer's token (required) */
   @Prop() token: string;
-  /** The locale for currency formatting and text localization */
-  @Prop() locale: Locale;
+  /** Locale for text localization */
+  @Prop() locale?: Locale;
+  /** Locale for number formatting. Falls back to locale */
+  @Prop() numberLocale?: string;
   /**  The currency sign is displayed after the price */
   @Prop() currencySign?: string;
   /** Prefix is displayed before the price */
@@ -138,6 +144,8 @@ export class VviinnVprButton {
     DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH;
   /** The ratio of each recommended product image */
   @Prop() imageRatio: number = 1;
+  /** Show multiple images on hover (desktop only) */
+  @Prop() showMultipleImages: boolean = false;
   /** Items amount in set mode grid */
   @Prop() setItemsAmount?: number = 4;
   /** URL to external CSS file for custom styling */
@@ -242,7 +250,9 @@ export class VviinnVprButton {
     });
   }
 
-  componentWillLoad() {
+  async componentWillLoad() {
+    await initializeLocale(this.locale);
+
     if (this.appendSidebarToElement) {
       this.targetAppendSidebarTo = this.appendSidebarToElement;
     } else if (this.appendSidebarToId) {
@@ -341,6 +351,7 @@ export class VviinnVprButton {
     const sidebar = document.createElement("vviinn-recommendations-sidebar");
     sidebar.token = this.token;
     sidebar.locale = this.locale;
+    sidebar.numberLocale = this.numberLocale;
     sidebar.currencySign = this.currencySign;
     sidebar.pricePrefix = this.pricePrefix;
     sidebar.apiPath = this.apiPath;
@@ -352,6 +363,7 @@ export class VviinnVprButton {
     sidebar.campaignType = this.campaignType;
     sidebar.color = this.color;
     sidebar.imageWidth = this.imageWidth;
+    sidebar.showMultipleImages = this.showMultipleImages;
     sidebar.buttonElementId = this.el.id;
     sidebar.noResultText = this.noResultText;
     sidebar.noResultShow = this.noResultShow;
