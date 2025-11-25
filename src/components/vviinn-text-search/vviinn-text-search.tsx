@@ -8,6 +8,9 @@ import {
   EventEmitter,
   State,
 } from "@stencil/core";
+import * as E from "fp-ts/Either";
+import { pipe } from "fp-ts/lib/function";
+import { version } from "../../../package.json";
 import {
   makeTextSearchRequest,
   setTextSearchQuery,
@@ -28,14 +31,11 @@ import i18next from "i18next";
 import { Locale, initializeLocale } from "../../locale";
 import { SearchBarMode } from "../../widget/types";
 import { TextSearchResponse } from "../../interfaces";
-import * as E from "fp-ts/Either";
-import { pipe } from "fp-ts/lib/function";
 import { searchBarParts } from "../../cssParts";
 import { MicIcon } from "../vviinn-icons/icons/MicIcon";
 import { initializeRecognition, speechTooltip } from "./helpers";
 import Timeout = NodeJS.Timeout;
 import { defaultConfig } from "../../store/store";
-import { version } from "../../../package.json";
 import { campaignTypeNames } from "../../campaign/Campaign";
 import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
 

@@ -494,6 +494,24 @@ export class VviinnResults {
     );
   }
 
+  private async getVisualSearchResults(searchId?: string | null) {
+    return pipe(
+      await makeVisualSearchRequest(
+        this.storeName,
+        searchId ?? this.state.visualSearchId,
+        this.token,
+        this.apiPath,
+      ),
+      E.fold(
+        () => {
+          this.vviinnNoResult.emit(this.getBasicEventData("VPS"));
+          return null;
+        },
+        (response) => response,
+      ),
+    );
+  }
+
   private textSearchStartedHandler = async ({ detail }: TextSearchEvent) => {
     const { isTriggeredByVpsWidget } = detail;
     if (this.skipStateChanges(isTriggeredByVpsWidget)) return;
@@ -527,12 +545,7 @@ export class VviinnResults {
     if (this.isTextSearch()) {
       this.getTextSearchResults(this.state.textSearchId);
     } else {
-      makeVisualSearchRequest(
-        this.storeName,
-        this.state.visualSearchId,
-        this.token,
-        this.apiPath,
-      );
+      this.getVisualSearchResults();
     }
   };
 
@@ -639,13 +652,7 @@ export class VviinnResults {
       signal,
     );
 
-    if (!!this.searchId)
-      makeVisualSearchRequest(
-        this.storeName,
-        this.searchId,
-        this.token,
-        this.apiPath,
-      );
+    if (!!this.searchId) this.getVisualSearchResults(this.searchId);
 
     this.getResultsByCategory();
 
@@ -672,8 +679,7 @@ export class VviinnResults {
   @Watch("searchId")
   watchSearchId(newId: string) {
     if (this.showInWidget) return;
-    if (newId)
-      makeVisualSearchRequest(this.storeName, newId, this.token, this.apiPath);
+    if (newId) this.getVisualSearchResults(newId);
   }
 
   @Listen("vviinnProductLoad")
