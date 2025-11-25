@@ -211,6 +211,9 @@ export class VviinnResults {
   /** @internal */
   @Event() vviinnCropperResetState: EventEmitter<TriggerSourceEventData>;
 
+  /** Triggered when a text search request fails */
+  @Event() vviinnNoResult: EventEmitter<BasicEventData>;
+
   /** Vviinn customer's token (required) */
   @Prop() token: string;
   /** The currency sign is displayed after the price */
@@ -455,7 +458,13 @@ export class VviinnResults {
         requestId,
         this.resultsCount,
       ),
-      E.getOrElse(() => null),
+      E.fold(
+        () => {
+          this.vviinnNoResult.emit(this.getBasicEventData("TPS"));
+          return null;
+        },
+        (response) => response,
+      ),
     );
   }
 
@@ -474,10 +483,14 @@ export class VviinnResults {
         dynamicFilters,
         this.useInnerState,
       ),
-      E.getOrElse(() => null),
-      (response: TextSearchResponse) => {
-        if (this.useInnerState) this.innerResults = response.data.products;
-      },
+      E.fold(
+        () => {
+          this.vviinnNoResult.emit(this.getBasicEventData("TPS"));
+        },
+        (response: TextSearchResponse) => {
+          if (this.useInnerState) this.innerResults = response.data.products;
+        },
+      ),
     );
   }
 

@@ -35,6 +35,9 @@ import { MicIcon } from "../vviinn-icons/icons/MicIcon";
 import { initializeRecognition, speechTooltip } from "./helpers";
 import Timeout = NodeJS.Timeout;
 import { defaultConfig } from "../../store/store";
+import { version } from "../../../package.json";
+import { campaignTypeNames } from "../../campaign/Campaign";
+import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
 
 /**
  * @part text-search-container - Container for the text search block.
@@ -70,6 +73,9 @@ export class VviinnTextSearch {
   /** @internal */
   @Event({ bubbles: true })
   vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
+
+  /** Triggered when a text search request fails */
+  @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
   /** Vviinn customer's token (required) */
   @Prop() token: string;
@@ -146,6 +152,18 @@ export class VviinnTextSearch {
       isTriggeredByVpsWidget: this.showInWidget,
     });
 
+  private getBasicEventData = (): BasicEventData => {
+    if (this.showInWidget && this.basicEventData) {
+      return this.basicEventData;
+    }
+    return {
+      campaignTypeId: "TPS",
+      campaignTypeName: campaignTypeNames["TPS"],
+      widgetVersion: version,
+      ...addIfNotEmpty("widgetId", this.el.id),
+    };
+  };
+
   async componentWillLoad() {
     await initializeLocale(this.locale);
     slotChangeListener(this, this.el);
@@ -215,27 +233,29 @@ export class VviinnTextSearch {
     });
 
     if (this.showInWidget && this.showOnFirstScreen) {
-      const response = pipe(
+      pipe(
         await makeTextSearchRequest(
           this.storeName,
           queryToUse,
           this.token,
           this.apiPath,
         ),
-        E.getOrElse(() => null),
-        (response: TextSearchResponse) => response,
+        E.fold(
+          () => {
+            this.vviinnNoResult.emit(this.getBasicEventData());
+          },
+          (response: TextSearchResponse) => {
+            this.widgetTextSearchFinished.emit({
+              query: queryToUse,
+              requestId: response.requestId,
+            });
+
+            this.vviinnSelectedFiltersReset.emit({
+              isTriggeredByVpsWidget: this.showInWidget,
+            });
+          },
+        ),
       );
-
-      if (response) {
-        this.widgetTextSearchFinished.emit({
-          query: queryToUse,
-          requestId: response.requestId,
-        });
-
-        this.vviinnSelectedFiltersReset.emit({
-          isTriggeredByVpsWidget: this.showInWidget,
-        });
-      }
     }
   };
 
