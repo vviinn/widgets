@@ -2,7 +2,7 @@
 
 :host {
   --vviinn-carousel-columns: 4;
-  display: block;
+  display: flex;
   box-sizing: border-box;
   position: fixed;
   z-index: 9999;
@@ -15,7 +15,7 @@
 
 :host(.bottom) {
   flex-direction: column;
-  justify-content: end;
+  justify-content: flex-end;
 }
 
 :host(.no-fixed) {
