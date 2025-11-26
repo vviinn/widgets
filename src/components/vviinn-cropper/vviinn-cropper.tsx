@@ -125,7 +125,7 @@ export class VviinnCropper {
   }
 
   private initPreloadedImage = () => {
-    if (this.showInWidget) {
+    if (this.showInWidget && this.state.image) {
       const [width, height] = getImageSizes(
         this.state.image,
         DEFAULT_IMAGE_SIZE,
