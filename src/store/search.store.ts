@@ -225,12 +225,14 @@ const updateImageState = (store: SearchStoreName) => (file: File) =>
     TE.map(() => file),
   );
 
-const handleSearchError = (store: SearchStoreName) => <E>(error: E): E => {
-  resetStore(store, "receivedDataOnly");
-  const state = useStore(store);
-  state.searchStatus = "error";
-  return error;
-};
+const handleSearchError =
+  (store: SearchStoreName) =>
+  <E>(error: E): E => {
+    resetStore(store, "receivedDataOnly");
+    const state = useStore(store);
+    state.searchStatus = "error";
+    return error;
+  };
 
 const processVisualSearch = (
   store: SearchStoreName,

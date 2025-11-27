@@ -176,8 +176,7 @@ export const Price: FunctionalComponent<PriceProps> = (props) => {
   const renderPrice = () => {
     if (hasSalePrice) {
       return [
-        hasRegularPrice &&
-          priceGroup("outdated", props.price, props.basePrice),
+        hasRegularPrice && priceGroup("outdated", props.price, props.basePrice),
         priceGroup("sale", props.salePrice, props.baseSalePrice),
       ];
     }

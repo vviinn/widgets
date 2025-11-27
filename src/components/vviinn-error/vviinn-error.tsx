@@ -13,7 +13,6 @@ export class VviinnError {
   @Prop() hasBackground: boolean = true;
   @Prop() errorType?: ErrorType;
   @Prop() handler?: VoidFunction;
-  @Prop() hasTopMargin: boolean = false;
   @Prop() searchType?: string;
 
   private getErrorContent() {
