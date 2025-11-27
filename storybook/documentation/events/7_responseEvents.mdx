@@ -38,6 +38,29 @@ Some events have additional props, summarized in the table below.
         </ul>
       </td>
     </tr>
+
+    <tr>
+      <td>vviinnNoResult</td>
+      <td>Triggered when an error has occurred after:<br/>- Product AI recommendation request<br/>- Visual search request (image upload, crop, rotate, select object)<br/>- Text search request<br/>- Product listing page request<br/>- Image validation (wrong format)</td>
+      <td>
+        <ul>
+          <li>vviinn-vpr-widget (Recommendation Widget)</li>
+          <li>vviinn-vps-button (Search Button)</li>
+          <li>vviinn-vps-widget (Search Modal)</li>
+          <li>vviinn-text-search (Text Search)</li>
+          <li>vviinn-results (Product List)</li>
+          <li>vviinn-cropper (Cropper)</li>
+        </ul>
+      </td>
+      <td>
+        Additional props for image upload errors:
+        <ul>
+          <li>reason - error type (e.g., "invalid_file_type")</li>
+          <li>errorCode - error code</li>
+          <li>errorMessage - human-readable error message (only for validation errors)</li>
+        </ul>
+      </td>
+    </tr>
   </tbody>
 </table>
 
@@ -58,5 +81,18 @@ document.addEventListener("vviinnRedirect", ({ detail }) => {
     "campaignTypeName": "Text Product Search",
     "widgetId": "my-search-widget",
     "widgetVersion": "2.190.0"
+}
+
+document.addEventListener("vviinnNoResult", ({ detail }) => {
+  console.log(detail);
+  // Handle error - show notification, retry, etc.
+});
+
+// Output:
+{
+    "campaignTypeId": "TPS",
+    "campaignTypeName": "Text Product Search",
+    "widgetId": "my-search-widget",
+    "widgetVersion": "2.202.0"
 }
 ```

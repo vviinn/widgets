@@ -146,6 +146,7 @@ const useStore = (store: SearchStoreName): SearchStore => {
 
 export type ResetMode =
   | "appStateOnly"
+  | "receivedDataOnly"
   | "appStateAndReceivedData"
   | "all"
   | "manual";
@@ -162,6 +163,10 @@ export const resetStore = (
   switch (mode) {
     case "appStateOnly":
       resetPayload = { ...appStateDefaults };
+      break;
+
+    case "receivedDataOnly":
+      resetPayload = { ...receivedDataDefaults };
       break;
 
     case "appStateAndReceivedData":
@@ -220,14 +225,21 @@ const updateImageState = (store: SearchStoreName) => (file: File) =>
     TE.map(() => file),
   );
 
+const handleSearchError =
+  (store: SearchStoreName) =>
+  <E>(error: E): E => {
+    resetStore(store, "receivedDataOnly");
+    const state = useStore(store);
+    state.searchStatus = "error";
+    return error;
+  };
+
 const processVisualSearch = (
   store: SearchStoreName,
   body: VisualSearchRequest,
   token: string,
   apiPath?: string,
 ) => {
-  const state = useStore(store);
-
   return pipe(
     getTokenWithBody<VisualSearchRequest>(token, body),
     setBodyAndHeaders,
@@ -237,10 +249,7 @@ const processVisualSearch = (
       updateVisualSearchState(store)(sessionResponse);
       return sessionResponse;
     }),
-    TE.mapLeft((error) => {
-      state.searchStatus = "error";
-      return error;
-    }),
+    TE.mapLeft(handleSearchError(store)),
   );
 };
 
@@ -458,10 +467,7 @@ export const makeTextSearchRequest = async (
       state.searchStatus = "success";
       return sessionResponse;
     }),
-    TE.mapLeft((error) => {
-      state.searchStatus = "error";
-      return error;
-    }),
+    TE.mapLeft(handleSearchError(store)),
   )();
 };
 
@@ -514,10 +520,7 @@ export const makeProductListingPageRequest = async (
       state.searchStatus = "success";
       return sessionResponse;
     }),
-    TE.mapLeft((error) => {
-      state.searchStatus = "error";
-      return error;
-    }),
+    TE.mapLeft(handleSearchError("components")),
   )();
 };
 
