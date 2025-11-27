@@ -992,7 +992,6 @@ export class VviinnResults {
               handler={this.resetWidgetState}
               hasBackground={this.showInWidget}
               searchType={this.state.searchType}
-              showInWidget={this.showInWidget}
             />
           )}
         </div>

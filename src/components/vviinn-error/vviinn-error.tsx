@@ -15,7 +15,6 @@ export class VviinnError {
   @Prop() handler?: VoidFunction;
   @Prop() hasTopMargin: boolean = false;
   @Prop() searchType?: string;
-  @Prop() showInWidget: boolean = false;
 
   private getErrorContent() {
     if (!this.errorType) return null;
@@ -47,9 +46,7 @@ export class VviinnError {
 
     if (!i18next.exists(buttonKey)) return false;
 
-    if (this.showInWidget && this.handler) return true;
-
-    return this.errorType === "empty-results" && this.searchType === "image";
+    return !!this.handler;
   }
 
   render() {
