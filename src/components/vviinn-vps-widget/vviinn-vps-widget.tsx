@@ -653,6 +653,7 @@ export class VviinnVpsWidget {
           this.handleVviinnImageUpload("uploadPhoto");
         }}
         token={this.token}
+        apiPath={this.apiPath}
         storeName={this.storeName}
         state={this.state}
         onVviinnNoResult={({ detail }) => this.handleVviinnNoResult(detail)}
@@ -768,6 +769,7 @@ export class VviinnVpsWidget {
                 onVviinnImageUploadStarted={() => {
                   this.handleVviinnImageUpload("startCamera");
                 }}
+                apiPath={this.apiPath}
                 basicEventData={this.getBasicEventData()}
                 srcObject={this.stream}
                 cameraButtonClicked={this.isCameraButtonClicked}

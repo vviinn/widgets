@@ -211,6 +211,9 @@ export class VviinnResults {
   /** @internal */
   @Event() vviinnCropperResetState: EventEmitter<TriggerSourceEventData>;
 
+  /** Triggered when a text search request fails */
+  @Event() vviinnNoResult: EventEmitter<BasicEventData>;
+
   /** Vviinn customer's token (required) */
   @Prop() token: string;
   /** The currency sign is displayed after the price */
@@ -455,7 +458,13 @@ export class VviinnResults {
         requestId,
         this.resultsCount,
       ),
-      E.getOrElse(() => null),
+      E.fold(
+        () => {
+          this.vviinnNoResult.emit(this.getBasicEventData("TPS"));
+          return null;
+        },
+        (response) => response,
+      ),
     );
   }
 
@@ -474,10 +483,32 @@ export class VviinnResults {
         dynamicFilters,
         this.useInnerState,
       ),
-      E.getOrElse(() => null),
-      (response: TextSearchResponse) => {
-        if (this.useInnerState) this.innerResults = response.data.products;
-      },
+      E.fold(
+        () => {
+          this.vviinnNoResult.emit(this.getBasicEventData("TPS"));
+        },
+        (response: TextSearchResponse) => {
+          if (this.useInnerState) this.innerResults = response.data.products;
+        },
+      ),
+    );
+  }
+
+  private async getVisualSearchResults(searchId?: string | null) {
+    return pipe(
+      await makeVisualSearchRequest(
+        this.storeName,
+        searchId ?? this.state.visualSearchId,
+        this.token,
+        this.apiPath,
+      ),
+      E.fold(
+        () => {
+          this.vviinnNoResult.emit(this.getBasicEventData("VPS"));
+          return null;
+        },
+        (response) => response,
+      ),
     );
   }
 
@@ -514,12 +545,7 @@ export class VviinnResults {
     if (this.isTextSearch()) {
       this.getTextSearchResults(this.state.textSearchId);
     } else {
-      makeVisualSearchRequest(
-        this.storeName,
-        this.state.visualSearchId,
-        this.token,
-        this.apiPath,
-      );
+      this.getVisualSearchResults();
     }
   };
 
@@ -626,13 +652,7 @@ export class VviinnResults {
       signal,
     );
 
-    if (!!this.searchId)
-      makeVisualSearchRequest(
-        this.storeName,
-        this.searchId,
-        this.token,
-        this.apiPath,
-      );
+    if (!!this.searchId) this.getVisualSearchResults(this.searchId);
 
     this.getResultsByCategory();
 
@@ -659,8 +679,7 @@ export class VviinnResults {
   @Watch("searchId")
   watchSearchId(newId: string) {
     if (this.showInWidget) return;
-    if (newId)
-      makeVisualSearchRequest(this.storeName, newId, this.token, this.apiPath);
+    if (newId) this.getVisualSearchResults(newId);
   }
 
   @Listen("vviinnProductLoad")
@@ -797,6 +816,7 @@ export class VviinnResults {
     const resultsLength = this.getResults().length;
 
     if (this.showAspectRatioError) return "wrong-aspect-ratio";
+    if (this.state.searchStatus === "error") return "server-error";
     if (resultsLength === 0 && this.state.searchStatus === "success")
       return "empty-results";
 
@@ -969,7 +989,7 @@ export class VviinnResults {
           {this.getCurrentErrorType() && (
             <vviinn-error
               errorType={this.getCurrentErrorType()}
-              handler={() => this?.resetWidgetState()}
+              handler={this.resetWidgetState}
               hasBackground={this.showInWidget}
               searchType={this.state.searchType}
             />

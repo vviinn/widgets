@@ -11,6 +11,9 @@ import {
 } from "@stencil/core";
 import i18next from "i18next";
 import Cropper from "cropperjs";
+import * as E from "fp-ts/Either";
+import { pipe } from "fp-ts/lib/function";
+import { version } from "../../../package.json";
 import styles from "./vviinn-cropper.css";
 import { fromImage } from "../../geometry/Rectangle";
 import {
@@ -40,6 +43,8 @@ import { getCropBoxData } from "./helpers/cropperUtils";
 import { cleanLocalStorage, getLocalStorageItems } from "../../localStorage";
 import { addEventListenersWithSignal } from "../../dom";
 import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
+import { campaignTypeNames } from "../../campaign/Campaign";
+import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
 
 @Component({
   tag: "vviinn-cropper",
@@ -84,6 +89,9 @@ export class VviinnCropper {
   /** @internal */
   @Event() vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
 
+  /** Triggered when a visual search request fails */
+  @Event() vviinnNoResult: EventEmitter<BasicEventData>;
+
   private state?: SearchStore;
   private storeName?: SearchStoreName;
   private startEndCropBoxData?: Rectangle;
@@ -117,7 +125,7 @@ export class VviinnCropper {
   }
 
   private initPreloadedImage = () => {
-    if (this.showInWidget) {
+    if (this.showInWidget && this.state.image) {
       const [width, height] = getImageSizes(
         this.state.image,
         DEFAULT_IMAGE_SIZE,
@@ -176,12 +184,32 @@ export class VviinnCropper {
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
     this.showInWidget !== isTriggeredByVpsWidget;
 
-  private triggerVisualSearch = () => {
-    makeVisualSearchRequest(
-      this.storeName,
-      null,
-      this.token,
-      this.apiPath,
+  private getBasicEventData = (): BasicEventData => {
+    if (this.showInWidget && this.basicEventData) {
+      return this.basicEventData;
+    }
+    return {
+      campaignTypeId: "VPS",
+      campaignTypeName: campaignTypeNames["VPS"],
+      widgetVersion: version,
+      ...addIfNotEmpty("widgetId", this.el.id),
+    };
+  };
+
+  private triggerVisualSearch = async () => {
+    pipe(
+      await makeVisualSearchRequest(
+        this.storeName,
+        null,
+        this.token,
+        this.apiPath,
+      ),
+      E.fold(
+        () => {
+          this.vviinnNoResult.emit(this.getBasicEventData());
+        },
+        () => {},
+      ),
     );
   };
 

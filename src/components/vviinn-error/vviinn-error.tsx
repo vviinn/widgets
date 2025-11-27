@@ -13,7 +13,6 @@ export class VviinnError {
   @Prop() hasBackground: boolean = true;
   @Prop() errorType?: ErrorType;
   @Prop() handler?: VoidFunction;
-  @Prop() hasTopMargin: boolean = false;
   @Prop() searchType?: string;
 
   private getErrorContent() {
@@ -26,14 +25,15 @@ export class VviinnError {
         ? { formats: getAcceptableFileFormatsForDisplay() }
         : undefined;
 
+    const textKey = `${config.i18nKey}.text`;
+    const buttonKey = `${config.i18nKey}.button`;
+
     return {
       title: i18next.t(`${config.i18nKey}.title`),
-      text: config.hasText
-        ? i18next.t(`${config.i18nKey}.text`, translationOptions)
+      text: i18next.exists(textKey)
+        ? i18next.t(textKey, translationOptions)
         : null,
-      buttonText: this.hasButton()
-        ? i18next.t(`${config.i18nKey}.button`)
-        : null,
+      buttonText: this.hasButton() ? i18next.t(buttonKey) : null,
     };
   }
 
@@ -41,19 +41,16 @@ export class VviinnError {
     if (!this.errorType) return false;
 
     const config = errorTypeConfig[this.errorType];
+    const buttonKey = `${config.i18nKey}.button`;
 
-    if (config.hasButton) return true;
+    if (!i18next.exists(buttonKey)) return false;
 
-    return this.errorType === "empty-results" && this.searchType === "image";
+    return !!this.handler;
   }
 
   render() {
     const content = this.getErrorContent();
-    const needsTopMargin =
-      this.hasTopMargin ||
-      (this.errorType && errorTypeConfig[this.errorType]?.hasTopMargin);
 
-    const hostClasses = { "add-top-margin": needsTopMargin };
     const contentClasses = {
       "error-content": true,
       "add-background": this.hasBackground,
@@ -76,7 +73,7 @@ export class VviinnError {
         ];
 
     return (
-      <Host class={hostClasses}>
+      <Host>
         <div class={contentClasses}>{errorContent}</div>
       </Host>
     );

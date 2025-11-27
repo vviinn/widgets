@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.203.0](https://github.com/vviinn/widgets/compare/v2.202.1...v2.203.0) (2025-11-27)
+
+
+### Features
+
+* Emit vviinnNoResult event for text-search requests. ([be2af25](https://github.com/vviinn/widgets/commit/be2af25942f811fa87ba112548a25b7c508bc680))
+* Show server errors in the vviinn-results widget. ([98cc8ec](https://github.com/vviinn/widgets/commit/98cc8ecc76c21bf02b4b8cb6eb07ed50a85dd52b))
+
+
+### Bug Fixes
+
+* Add cache-control headers to prevent stale resource references. ([3186d7d](https://github.com/vviinn/widgets/commit/3186d7d5bc6d7202a1974b1248915b3c626e3952))
+* Emit missing vviinnNoResult events for visual-search requests ([05dff05](https://github.com/vviinn/widgets/commit/05dff05adc7c5ab7aab38dc6c38e3b334c5635ac))
+* Fix possible console errors. ([260a33b](https://github.com/vviinn/widgets/commit/260a33b1a4d36b3261d2036397d82516625d8338))
+
 ### [2.202.1](https://github.com/vviinn/widgets/compare/v2.202.0...v2.202.1) (2025-11-20)
 
 
