@@ -816,6 +816,7 @@ export class VviinnResults {
     const resultsLength = this.getResults().length;
 
     if (this.showAspectRatioError) return "wrong-aspect-ratio";
+    if (this.state.searchStatus === "error") return "server-error";
     if (resultsLength === 0 && this.state.searchStatus === "success")
       return "empty-results";
 
@@ -988,9 +989,10 @@ export class VviinnResults {
           {this.getCurrentErrorType() && (
             <vviinn-error
               errorType={this.getCurrentErrorType()}
-              handler={() => this?.resetWidgetState()}
+              handler={this.resetWidgetState}
               hasBackground={this.showInWidget}
               searchType={this.state.searchType}
+              showInWidget={this.showInWidget}
             />
           )}
         </div>

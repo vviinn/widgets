@@ -792,6 +792,7 @@ export class VviinnVpsWidget {
                           handler={this.resetState}
                           hasBackground={true}
                           searchType={this.state.searchType}
+                          showInWidget={true}
                         />
                       )}
                     </div>
