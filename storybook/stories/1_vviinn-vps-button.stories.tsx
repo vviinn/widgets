@@ -1,28 +1,11 @@
-import {
-  vviinnToken,
-  createCSSVarDecorator,
-  productCardImageAspectRatioMapping,
-  productCardImageAspectRatioArg,
-  productCardImageBgColorMapping,
-  productCardImageBgColorArg,
-} from "../helpers";
+import { vviinnToken } from "../helpers";
 import "../documentation/widgets/styles.css";
 import { argsFromParams } from "../helpers/argsFromParams";
-
-const cssVarDecorator = createCSSVarDecorator("vviinn-vps-button", [
-  productCardImageAspectRatioMapping,
-  productCardImageBgColorMapping,
-]);
 
 export default {
   title: "Playground/Search Modal",
   component: "vviinn-vps-button",
-  argTypes: {
-    productCardImageAspectRatio: productCardImageAspectRatioArg,
-    productCardImageBgColor: productCardImageBgColorArg,
-  },
   decorators: [
-    cssVarDecorator,
     (story) => `
     <div style="display: grid;
                 position: absolute;
@@ -86,8 +69,6 @@ const initArgs = {
   pricePrefix: "",
   addStyle: true,
   imageResolutionWidth: 250,
-  productCardImageAspectRatio: "1 / 1",
-  productCardImageBgColor: "#f4f4f4",
   showMultipleImages: false,
   textSearchShow: true,
   addToBasketShow: false,

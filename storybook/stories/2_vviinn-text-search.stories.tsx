@@ -1,28 +1,16 @@
-import {
-  vviinnToken,
-  createCSSVarDecorator,
-  productCardImageAspectRatioMapping,
-  productCardImageAspectRatioArg,
-  productCardImageBgColorMapping,
-  productCardImageBgColorArg,
-} from "../helpers";
+import { vviinnToken } from "../helpers";
 import "../documentation/widgets/styles.css";
 import "../styles/search-page.css";
 import { argsFromParams } from "../helpers/argsFromParams";
 
-const cssVarDecorator = createCSSVarDecorator("vviinn-results", [
-  productCardImageAspectRatioMapping,
-  productCardImageBgColorMapping,
-]);
+const textSearchDecorator = (story) => `
+      ${story()}
+  `;
 
 export default {
   title: "Playground/Search Bar",
   component: "vviinn-text-search",
-  decorators: [cssVarDecorator],
-  argTypes: {
-    productCardImageAspectRatio: productCardImageAspectRatioArg,
-    productCardImageBgColor: productCardImageBgColorArg,
-  },
+  decorators: [textSearchDecorator],
 };
 
 const Template = (args) => `
@@ -69,8 +57,6 @@ const initArgs = {
   placeholder: "",
   mode: "extended",
   locale: "en-US",
-  productCardImageAspectRatio: "1 / 1",
-  productCardImageBgColor: "#f4f4f4",
 };
 
 Default.parameters = {

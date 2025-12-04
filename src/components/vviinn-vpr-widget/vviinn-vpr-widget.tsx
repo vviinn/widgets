@@ -182,6 +182,8 @@ export class VviinnVprWidget implements ComponentInterface {
   /** Resolution width of an image in the product card */
   @Prop() imageResolutionWidth: number =
     DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH;
+  /** The ratio of each recommended product image */
+  @Prop() imageRatio: number = 1;
   /** Show multiple images on hover (desktop only) */
   @Prop() showMultipleImages: boolean = false;
   /** Items amount in set mode grid */
@@ -679,6 +681,7 @@ export class VviinnVprWidget implements ComponentInterface {
         imageResolutionWidth={this.imageResolutionWidth}
         brand={recommendation.brand}
         imageWidth={this.imageWidth}
+        imageRatio={this.imageRatio}
         price={recommendation.price.actual}
         salePrice={recommendation.price.sale}
         basePrice={recommendation.basePrice?.actual}
@@ -717,6 +720,7 @@ export class VviinnVprWidget implements ComponentInterface {
               (_, index) => (
                 <vviinn-product-card
                   loading={true}
+                  imageRatio={this.imageRatio}
                   responsive={true}
                   productTitle=""
                   productId={`skeleton-${index}`}
@@ -752,6 +756,7 @@ export class VviinnVprWidget implements ComponentInterface {
         replaceSlotsContent={this.replaceSlotsContent.bind(this)}
         setModeDiscountsArray={this.setModeDiscountsArray}
         imageResolutionWidth={this.imageResolutionWidth}
+        imageRatio={this.imageRatio}
         showMultipleImages={this.showMultipleImages}
         favoriteShow={this.favoriteShow}
         setItemsAmount={this.setItemsAmount}

@@ -1,28 +1,11 @@
 import "../documentation/widgets/styles.css";
 import "../styles/search-page.css";
-import {
-  vviinnToken,
-  createCSSVarDecorator,
-  productCardImageAspectRatioMapping,
-  productCardImageAspectRatioArg,
-  productCardImageBgColorMapping,
-  productCardImageBgColorArg,
-} from "../helpers";
+import { vviinnToken } from "../helpers";
 import { argsFromParams } from "../helpers/argsFromParams";
-
-const cssVarDecorator = createCSSVarDecorator("vviinn-results", [
-  productCardImageAspectRatioMapping,
-  productCardImageBgColorMapping,
-]);
 
 export default {
   title: "Playground/Cropper",
   component: "vviinn-cropper",
-  decorators: [cssVarDecorator],
-  argTypes: {
-    productCardImageAspectRatio: productCardImageAspectRatioArg,
-    productCardImageBgColor: productCardImageBgColorArg,
-  },
 };
 
 const Template = (args) => `
@@ -71,8 +54,6 @@ const initArgs = {
   saveImageMode: "once",
   width: 288,
   cssUrl: "",
-  productCardImageAspectRatio: "1 / 1",
-  productCardImageBgColor: "#f4f4f4",
 };
 
 Default.args = argsFromParams(initArgs);

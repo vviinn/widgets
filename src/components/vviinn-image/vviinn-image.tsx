@@ -38,8 +38,12 @@ export class VviinnImage {
 
   /** Image source URL */
   @Prop() src?: string;
-  /** Image width in pixels */
+  /** Image width in pixels (used for aspect ratio calculation) */
   @Prop() width?: number;
+  /** Image height in pixels (used for aspect ratio calculation) */
+  @Prop() height?: number;
+  /** Aspect ratio as a number (width/height). Overrides width/height if provided */
+  @Prop() aspectRatio?: number;
   /** Image alt text */
   @Prop() alt: string = "";
   /** Image title attribute */
@@ -92,6 +96,13 @@ export class VviinnImage {
     return !!this.src && !this.imageError;
   }
 
+  private get computedAspectRatio(): number | null {
+    if (this.usesFlexibleLayout) return null;
+    if (this.aspectRatio) return this.aspectRatio;
+    if (this.width && this.height) return this.width / this.height;
+    return null;
+  }
+
   private getProcessedSrc(): string {
     if (!this.src) return "";
 
@@ -105,12 +116,25 @@ export class VviinnImage {
     return this.src;
   }
 
-  private getContainerStyles(): Record<string, string> {
+  private getDimensionStyles(): Record<string, string> {
     const styles: Record<string, string> = {};
+    const aspectRatio = this.computedAspectRatio;
 
-    if (!this.responsive && this.width) {
-      styles.width = `${this.width}px`;
+    if (aspectRatio) {
+      if (this.responsive) {
+        styles.aspectRatio = aspectRatio.toString();
+      } else {
+        styles.width = this.width ? `${this.width}px` : "auto";
+        styles.height = this.height ? `${this.height}px` : "auto";
+      }
     }
+
+    return styles;
+  }
+
+  private getContainerStyles(): Record<string, string> {
+    const styles = this.getDimensionStyles();
+
     if (this.borderRadius) styles.borderRadius = this.borderRadius;
     if (this.border) styles.border = this.border;
     if (this.backgroundColor) styles.backgroundColor = this.backgroundColor;
@@ -124,8 +148,9 @@ export class VviinnImage {
 
     styles.objectFit = this.objectFit;
 
-    if (!this.responsive && this.width) {
-      styles.width = `${this.width}px`;
+    if (!this.responsive) {
+      if (this.width) styles.width = `${this.width}px`;
+      if (this.height) styles.height = `${this.height}px`;
     }
 
     return styles;

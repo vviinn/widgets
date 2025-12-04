@@ -1,10 +1,7 @@
-import { productCardImageAspectRatioArg } from "../../../../storybook/helpers";
-
 export const argTypes = {
   brand: {
     description: "Using the [title] attribute from product feed.",
   },
-  productCardImageAspectRatio: productCardImageAspectRatioArg,
   productCardContentAlign: {
     options: ["flex-start", "center", "flex-end"],
     control: {

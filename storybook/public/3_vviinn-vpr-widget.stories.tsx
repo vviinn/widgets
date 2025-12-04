@@ -1,22 +1,10 @@
 import { argTypes } from "../../src/components/vviinn-vpr-widget/stories/args";
-import {
-  vviinnToken,
-  productIdSimilarProducts,
-  createCSSVarDecorator,
-  productCardImageAspectRatioMapping,
-  productCardImageBgColorMapping,
-} from "../helpers";
+import { vviinnToken, productIdSimilarProducts } from "../helpers";
 import "../documentation/widgets/styles.css";
-
-const cssVarDecorator = createCSSVarDecorator("vviinn-vpr-widget", [
-  productCardImageAspectRatioMapping,
-  productCardImageBgColorMapping,
-]);
 
 export default {
   title: "Playground/Discovery",
   component: "vviinn-vpr-widget",
-  decorators: [cssVarDecorator],
   argTypes: {
     ...argTypes,
   },
@@ -28,6 +16,7 @@ const Template = (args) => `
       css-url="${args.cssUrl}"
       currency-sign="${args.currencySign}"
       show-scroll="${args.showScroll}"
+      image-ratio="${args.imageRatio}"
       locale="${args.locale}"
       price-prefix="${args.pricePrefix}"
       product-id="${args.productId}"
@@ -70,8 +59,7 @@ Default.args = {
   productDetailsNewTab: true,
   productDetailsRedirect: true,
   imageWidth: 300,
-  productCardImageAspectRatio: "1 / 1",
-  productCardImageBgColor: "#f4f4f4",
+  imageRatio: 1,
   setItemsAmount: 4,
   locale: "en-US",
   currencySign: "€",

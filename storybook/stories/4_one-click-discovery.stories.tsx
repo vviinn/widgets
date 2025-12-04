@@ -1,23 +1,11 @@
 import { argTypes } from "../../src/components/vviinn-vpr-button/stories/args";
-import {
-  vviinnToken,
-  productIdSimilarProducts,
-  createCSSVarDecorator,
-  productCardImageAspectRatioMapping,
-  productCardImageBgColorMapping,
-} from "../helpers";
+import { vviinnToken, productIdSimilarProducts } from "../helpers";
 import "../documentation/widgets/styles.css";
 import { argsFromParams } from "../helpers/argsFromParams";
-
-const cssVarDecorator = createCSSVarDecorator("vviinn-vpr-button", [
-  productCardImageAspectRatioMapping,
-  productCardImageBgColorMapping,
-]);
 
 export default {
   title: "Playground/One-Click Discovery",
   component: "vviinn-vpr-button",
-  decorators: [cssVarDecorator],
   argTypes: {
     ...argTypes,
   },
@@ -28,6 +16,7 @@ const Template = (args) => `
       sidebar-title="${args.sidebarTitle}"
       css-url="${args.cssUrl}"
       currency-sign="${args.currencySign}"
+      image-ratio="${args.imageRatio}"
       locale="${args.locale}"
       number-locale="${args.numberLocale}"
       price-prefix="${args.pricePrefix}"
@@ -78,8 +67,7 @@ const initArgs = {
   productDetailsRedirect: true,
   imageWidth: 300,
   imageResolutionWidth: 500,
-  productCardImageAspectRatio: "1 / 1",
-  productCardImageBgColor: "#f4f4f4",
+  imageRatio: 1,
   showMultipleImages: false,
   setItemsAmount: 4,
   locale: "en-US",

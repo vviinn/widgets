@@ -1,8 +1,3 @@
-import {
-  productCardImageAspectRatioArg,
-  productCardImageBgColorArg,
-} from "../../../../storybook/helpers";
-
 const token = {
   name: "token",
   control: {
@@ -83,8 +78,6 @@ export const argTypes = {
   campaigns,
   cssUrl,
   imageWidth,
-  productCardImageAspectRatio: productCardImageAspectRatioArg,
-  productCardImageBgColor: productCardImageBgColorArg,
   productId,
   token,
   color,
