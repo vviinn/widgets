@@ -1,1235 +1,2463 @@
 import { Meta, Story, Canvas } from "@storybook/addon-docs/blocks";
-<Meta title="Changelog/Changelog"></Meta>
-# Changelog
-All notable changes to this project will be documented in this file
-## v. 2.203.2 - 2025-12-04
-### Features
-- Add --product-card-image-aspect-ratio CSS variable for the image ratio control in all widgets.
-## v. 2.203.1 - 2025-12-04
-### Bug Fixes
-- Correct indexes for rendered custom labels.
-## v. 2.203.0 - 2025-11-27
-### Features
-- Emit vviinnNoResult event for text-search requests.
-- Show server errors in the vviinn-results widget.
-### Bug Fixes
-- Add cache-control headers to prevent stale resource references.
-- Emit missing vviinnNoResult events for visual-search requests
-- Fix possible console errors.
-## v. 2.202.1 - 2025-11-20
-### Bug Fixes
-- One-click discovery layout fixes for the modal and appended modes.
-- Storybook layout minor fixes.
-## v. 2.202.0 - 2025-11-20
-### Features
-- Add numberLocale prop for price/number formatting.
-### Bug Fixes
-- Don't render the currency sign when there are no prices for the product.
-- Fix locale and currency-sign inconsistencies. Improve language initialization logic.
-- Remove unnecessary state updates in the components to prevent synchronization bugs. vviinn-cropper now requires a token.
-## v. 2.201.0 - 2025-11-13
-### Features
-- Possibility of showing the second image in the Product Card.
-- Slider for showing the second image in the Product Card on mobile devices.
-## v. 2.200.0 - 2025-11-11
-### Features
-- CSS URL
-## v. 2.199.0 - 2025-11-06
-### Features
-- Improve Search Page documentation. Merge with the Best Practices page.
-- Improvements to Storybook's customization section.
-### Bug Fixes
-- Show fewer results for product lists in Storybook. Improve text search queries for industries.
-- Show missing CSS parts and slots for the Discovery Widget playground in Storybook.
-## v. 2.198.0 - 2025-10-30
-### Features
-- New CSS parts: carousel-button-prev, carousel-button-next for styling carousel buttons individually.
-- Render custom labels inside the card's image container and provide CSS parts to identify them: custom-label-image and custom-label-content.
-### Bug Fixes
-- Blurred detected objects possibility in Safari browser.
-## v. 2.197.0 - 2025-10-28
-### Features
-- Display selected filters in the Search Widget
-## v. 2.196.0 - 2025-10-24
-### Features
-- Support for the HEIF image format on Safari Desktop and iOS devices.
-## v. 2.195.1 - 2025-10-24
-### Bug Fixes
-- Storybook components names and images.
-## v. 2.195.0 - 2025-10-23
-### Features
-- The possibility of displaying inputs for interval filters
-## v. 2.194.1 - 2025-10-23
-### Bug Fixes
-- Error on product click, using widget components.
-## v. 2.194.0 - 2025-10-21
-### Features
-- Add fashion images for Shop-the-Look in the Storybook.
-## v. 2.193.0 - 2025-10-21
-### Features
-- Shop-the-look: enable dragging non-active slides on desktop with the cropper.
-## v. 2.192.0 - 2025-10-20
-### Features
-- Introduce the layout of the Product Card
-## v. 2.191.1 - 2025-10-13
-### Bug Fixes
-- vviinnRedirect event logic.
-## v. 2.191.0 - 2025-10-13
-### Features
-- New Redirect event.
-## v. 2.190.0 - 2025-10-08
-### Features
-- Uploading an image to the Shop-the-Look widget.
-## v. 2.189.0 - 2025-10-07
-### Features
-- Support AVIF format for images.
-### Bug Fixes
-- Infinite loading after uploading the unsupported image format for vviinn-components
-## v. 2.188.0 - 2025-10-06
-### Features
-- Show Cropper feature for the shop-the-look widget.
-## v. 2.187.1 - 2025-09-17
-### Bug Fixes
-- Display color labels along with color dots for filters in preview-inline mode.
-- Interval filters for preview-inline mode.
-## v. 2.187.0 - 2025-09-15
-### Features
--  Add documentation for customizing search button content
-### Bug Fixes
-- Prevent extended filters modal close on slider drag release outside bounds.
-- Reset the text query selected filter after uploading a photo.
-## v. 2.186.0 - 2025-09-12
-### Features
-- Preview-inline mode for vviinn-extended-filters, allowing categories to appear in a single row and displaying values in the modal with search functionality.
-## v. 2.185.0 - 2025-09-08
-### Features
-- Dynamic modal positioning based on the center of the detected object
-### Bug Fixes
-- Detected objects positioning
-- Shop-the-Look: close the modal on the slider's first move.
-- Shop-the-Look: solve race conditions for the requests when scrolling through the images
-## v. 2.184.0 - 2025-08-29
-### Features
-- Close the products modal and open another one when clicking a detected object.
-- Shop-the-look page in the Widgets section of the Storybook
-- widget-style attribute, which applies cornered or rounded styles
-## v. 2.183.0 - 2025-08-29
-### Features
-- Add vviinn-suggestions component, which implements the stream concept
-## v. 2.182.1 - 2025-08-22
-### Bug Fixes
-- Shop-the-look mismatch of the clicked product and the details view.
-## v. 2.182.0 - 2025-08-22
-### Features
-- Add vviinn-image component.
-## v. 2.181.0 - 2025-08-11
-### Features
-- Introduce the entity type in the widget. Apply custom styles for the content card.
-- New One-click Discovery icon
-### Bug Fixes
-- Fix the Set Widget layout on updating.
-## v. 2.180.4 - 2025-08-06
-### Bug Fixes
-- parse storybook supported args from url
-## v. 2.180.3 - 2025-08-04
-### Bug Fixes
-- prevent triggering upload for vviinn-button in upload mode on any button click or enter pressed in widget
-## v. 2.180.2 - 2025-07-31
-### Bug Fixes
-- Don't show the filter column label in the extended filters.
-## v. 2.180.1 - 2025-07-31
-### Bug Fixes
-- Fix the range filter behaviour and synchronization across the filter components
-## v. 2.180.0 - 2025-07-30
-### Features
-- Add filter support for the interval type to display in the slider view.
-## v. 2.179.0 - 2025-07-22
-### Features
-- Use a continuous range for a price filter instead of being restricted by the price intervals shown on the histogram
-## v. 2.178.0 - 2025-07-18
-### Features
-- Make the transition smoother for the Product Card after the loading state is complete.
-## v. 2.177.3 - 2025-07-07
-### Bug Fixes
-- Prevent infinite loading state when opening the Discovery widget in a new tab.
-## v. 2.177.2 - 2025-07-03
-### Bug Fixes
-- Product link focus in Safari browser
-## v. 2.177.1 - 2025-07-02
-### Bug Fixes
-- Close One-click discovery on switching Storybook pages
-## v. 2.177.0 - 2025-06-30
-### Features
-- Remove deprecated one-click-discovery-show prop for the Search Widget
-## v. 2.176.1 - 2025-06-27
-### Bug Fixes
-- Console warning
-## v. 2.176.0 - 2025-06-27
-### Features
-- Accessibility improvements
-## v. 2.175.2 - 2025-06-26
-### Bug Fixes
-- Fix Storybook build
-## v. 2.175.1 - 2025-06-26
-### Bug Fixes
-- env variables for the Storybook
-## v. 2.175.0 - 2025-06-26
-### Features
-- added storybook a11y addon
-- Upgrade the Storybook to v9
-## v. 2.174.0 - 2025-06-26
-### Features
-- One-click Discovery accessibility
-### Bug Fixes
-- One-click discovery asseccibility in the product grid
-## v. 2.173.0 - 2025-06-24
-### Features
-- Filters accessibility
-### Bug Fixes
-- Align the secondary text color with the design to enhance accessibility
-## v. 2.172.3 - 2025-06-24
-### Bug Fixes
-- added accessible labels to carousel buttons
-## v. 2.172.2 - 2025-06-13
-### Bug Fixes
-- Visual Search layout on iOS after making a crop on the uploaded image
-## v. 2.172.1 - 2025-06-12
-### Bug Fixes
-- Extra tracking requests in the one-click discovery widgets
-## v. 2.172.0 - 2025-06-11
-### Features
-- Text search state refactoring
-## v. 2.171.2 - 2025-06-10
-### Bug Fixes
-- Improve translations for the no-filters state
-## v. 2.171.1 - 2025-06-10
-### Bug Fixes
-- Indicate and disable carousel buttons on the first and last elements
-## v. 2.171.0 - 2025-06-10
-### Features
-- Refactor search store to show an empty results infobox in the results widget
-## v. 2.170.2 - 2025-06-05
-### Bug Fixes
-- Show inactive bars of the price filter after receiving an updated histogram
-## v. 2.170.1 - 2025-06-05
-### Bug Fixes
-- Hide the image selected filter when no results are shown
-## v. 2.170.0 - 2025-06-03
-### Features
-- Distinguish inactive price intervals
-### Bug Fixes
-- Stability of showing the range in the price filter
-## v. 2.169.0 - 2025-06-02
-### Features
-- Improve accessibility of Search Widget
-## v. 2.168.1 - 2025-05-28
-### Bug Fixes
-- Fix visual search filter request when passing an empty search-id parameter
-## v. 2.168.0 - 2025-05-22
-### Features
-- Refactor event listeners using AbortController
-## v. 2.167.0 - 2025-05-22
-### Features
-- Content Card layout
-## v. 2.166.0 - 2025-05-21
-### Features
-- Unify the style of the color filter item
-## v. 2.165.0 - 2025-05-21
-### Features
-- Update Stencil to 4.31.0 and related libraries to the latest version
-## v. 2.164.3 - 2025-05-20
-### Bug Fixes
-- Fix One-click discovery behavior when receiving no results
-## v. 2.164.2 - 2025-05-14
-### Bug Fixes
-- Improve Best Practices documentation
-## v. 2.164.1 - 2025-05-14
-### Bug Fixes
-- Bugfix on One-click discovery modal close
-## v. 2.164.0 - 2025-05-14
-### Features
-- Best Practices page in Storybook
-## v. 2.163.1 - 2025-05-13
-### Bug Fixes
-- remove query watching for Search Bar
-## v. 2.163.0 - 2025-05-13
-### Features
-- Watch and react to searchId and searchQuery changes in the components
-## v. 2.162.0 - 2025-05-12
-### Features
-- imageResolutionWidth for Discovery widgets
-- Show image placeholder for Product Card if no image source
-## v. 2.161.1 - 2025-05-05
-### Bug Fixes
-- Fix an extra scroll for extended filters in the Search Widget and hide if no filters are received
-## v. 2.161.0 - 2025-05-05
-### Features
-- Campaign id props for text and visual search
-## v. 2.160.4 - 2025-04-30
-### Bug Fixes
-- Add the products shadow part
-## v. 2.160.3 - 2025-04-30
-### Bug Fixes
-- Fix Storybook build 2
-## v. 2.160.2 - 2025-04-30
-### Bug Fixes
-- Fix Storybook build
-## v. 2.160.1 - 2025-04-30
-### Bug Fixes
-- Fix cropper when showing results on a new page
-## v. 2.160.0 - 2025-04-30
-### Features
-- Make custom Image and Text selected filters non-interactive
-## v. 2.159.0 - 2025-04-28
-### Features
-- Add a helper Story to test search results on a different page
-## v. 2.158.2 - 2025-04-24
-### Bug Fixes
-- Fix text search filter requests, refactoring
-## v. 2.158.1 - 2025-04-23
-### Bug Fixes
-- Fix state handling, while switching between text and visual search, minor fixes
-## v. 2.158.0 - 2025-04-17
-### Features
-- One-click discovery animation in appended modes
-## v. 2.157.0 - 2025-04-14
-### Features
-- Crop handling for Selected Filters
-- Selected filter for uploaded image
-## v. 2.156.4 - 2025-04-07
-### Bug Fixes
-- Pass campaign-id to Visual Search request body
-## v. 2.156.3 - 2025-03-27
-### Bug Fixes
-- Add exportparts for vviinn-button in Search Bar
-## v. 2.156.2 - 2025-03-27
-### Bug Fixes
-- Fix an error when there is no image link for a product
-## v. 2.156.1 - 2025-03-27
-### Bug Fixes
-- Fix one-click discovery grid behavior for two-rows view
-## v. 2.156.0 - 2025-03-25
-### Features
-- Use new visual-search endpoint with dynamic filters
-## v. 2.155.0 - 2025-03-20
-### Features
-- Add One-click Discovery Playground
-## v. 2.154.0 - 2025-03-07
-### Features
-- Price label for extended filters
-### Bug Fixes
-- Collapse filter options after closing the modal
-- Improve resetting filters
-- Reset text search filters after cropper interactions
-- Reset the displayed filter amount after collapsing the group or a new search
-## v. 2.153.0 - 2025-03-05
-### Features
-- Save image mode for Search Bar
-## v. 2.152.4 - 2025-02-28
-### Bug Fixes
-- Add titles translations for Discovery and One-click discovery widgets
-## v. 2.152.2 - 2025-02-27
-### Bug Fixes
-- Fix detected objects reset possibility in components. Wait for the response of the detected objects before the searchId request.
-## v. 2.152.1 - 2025-02-26
-### Bug Fixes
-- Update dependencies, fix packages vulnerabilities
-## v. 2.152.0 - 2025-02-24
-### Features
-- Use hi-res resized mage to show in Cropper component
-## v. 2.151.1 - 2025-02-24
-### Bug Fixes
-- Fix filter buttons alignment
-## v. 2.151.0 - 2025-02-20
-### Features
-- Add placeholder prop for Search Bar
-- Fix the layout of Cropper Playground and remove the default image
-- Update documentation and clarify the widgets installation process
-### Bug Fixes
-- Fix cropper width property for components, add default value 288
-## v. 2.150.1 - 2025-02-13
-### Bug Fixes
-- Show close button for One-click discovery Set
-## v. 2.150.0 - 2025-02-12
-### Features
-- Send new tracking events: Add to favorite, Text search started, and additional Filter events
-## v. 2.149.0 - 2025-02-07
-### Features
-- Add Storybook's playground for Cropper
-- Save Image modes for Cropper
-### Bug Fixes
-- Cropper issue after uploading the same image
-- use vviinnImageUploadFinished event instead of vviinnSearchIdReceived
-## v. 2.148.0 - 2025-02-04
-### Features
-- Make zoom feature more accurate
-## v. 2.147.1 - 2025-02-04
-### Bug Fixes
-- Fix console error on unprocessable text search request
-## v. 2.147.0 - 2025-02-04
-### Features
-- Make filters styles cleaner, remove default padding
-- Show selected price filter
-## v. 2.146.2 - 2025-02-03
-### Bug Fixes
-- Show Cropper on the Search Page and fix documentation
-## v. 2.146.1 - 2025-01-24
-### Bug Fixes
-- Fix reseting campaignId on new Image Search
-## v. 2.146.0 - 2025-01-23
-### Features
-- Image resizing logic changes and optimizations, using jpeg format.
-## v. 2.145.12 - 2025-01-21
-### Bug Fixes
-- pass api path from text search to search modal
-## v. 2.145.11 - 2025-01-14
-### Bug Fixes
-- Storybooks issues after fixing cloud build
-## v. 2.145.10 - 2025-01-14
-### Bug Fixes
-- if text search is active send tracking events as text search
-## v. 2.145.9 - 2025-01-14
-### Bug Fixes
-- determine if recommendations are shown inside search widget
-## v. 2.145.8 - 2025-01-13
-### Bug Fixes
-- Add a standalone mode for One-click discovery to show a large icon
-- Fix arrow styles in appended One-click discovery
-- One-click discovery modal behavior
-- Synchronize appended grid layout with vviinn-results
-## v. 2.145.7 - 2025-01-13
-### Bug Fixes
-- only reset components store on component callback
-## v. 2.145.6 - 2025-01-13
-### Bug Fixes
-- Fix Storybook's build in Google Cloud
-## v. 2.145.5 - 2025-01-13
-### Bug Fixes
-- Cloudbuild pipeline improvements
-## v. 2.145.4 - 2025-01-13
-### Bug Fixes
-- Clear node_modules for Storybook before installing it in Cloud and echoing commit hash in the console
-## v. 2.145.3 - 2025-01-13
-### Bug Fixes
-- Add fixed esbuild version 0.24.0 for dependencies
-## v. 2.145.2 - 2025-01-11
-### Bug Fixes
-- Storybook update to 8.4.7
-## v. 2.145.1 - 2025-01-11
-### Bug Fixes
-- Storybook audit fix and added @babel/preset-env plugin
-## v. 2.145.0 - 2025-01-10
-### Features
-- Camera uploading for Search Bar's extended mode
-- Change the teaser text of Search Modal
-- Components supports image uploading from Search Modal
-- Refactor Search Bar modes, delete 'upload' mode
-## v. 2.144.2 - 2025-01-10
-### Bug Fixes
-- don't close search widget if close event was emitted by recommendation
-## v. 2.144.1 - 2025-01-06
-### Bug Fixes
-- Styles refactoring of product card's actions buttons
-## v. 2.144.0 - 2025-01-03
-### Features
-- allow slider mode in recommendations
-## v. 2.143.0 - 2025-01-03
-### Features
-- Cropper integration with Search Bar and Results components
-## v. 2.142.4 - 2024-12-20
-### Bug Fixes
-- Selecting detected object issue
-## v. 2.142.3 - 2024-12-19
-### Bug Fixes
-- update slider step so that images don't look cropped
-## v. 2.142.2 - 2024-12-19
-### Bug Fixes
-- Cropper component's refactoring
-## v. 2.142.1 - 2024-12-18
-### Bug Fixes
-- Slots issues in vviinn-results
-## v. 2.142.0 - 2024-12-17
-### Features
-- Slots support for custom labels
-### Bug Fixes
-- Product Card slots in Search Widget
-## v. 2.141.0 - 2024-12-16
-### Features
-- updated speech to text according to new requirements
-## v. 2.140.0 - 2024-12-11
-### Features
-- styled oneclick discovery in the vviinn result and search modal
-## v. 2.139.0 - 2024-12-10
-### Features
-- added one-click-discovery-campaigns to search modal and product list page
-- made product-card icons smaller but we the same clickable area
-## v. 2.138.0 - 2024-12-10
-### Features
-- set-items-amount property for Discovery set widgets
-## v. 2.137.0 - 2024-12-09
-### Features
-- prototype speech recognition
-## v. 2.136.1 - 2024-12-06
-### Bug Fixes
-- Refactor CSS parts and improve consistency
-- Remove deprecated CSS part 'product-part'
-## v. 2.136.0 - 2024-12-05
-### Features
-- Show scrollbars on hover in Discovery widgets
-## v. 2.135.0 - 2024-12-05
-### Features
-- refactored results to support custom widget result event instead of vps only
-## v. 2.134.0 - 2024-12-04
-### Features
-- developed an independent component for Vviinn cropper
-## v. 2.133.0 - 2024-12-04
-### Features
-- Use requestId for optimized text search
-## v. 2.132.0 - 2024-12-04
-### Features
-- Show Extended Filters Button in the Search Widget
-## v. 2.131.0 - 2024-12-02
-### Features
-- Added grid view to append mode of one-click discovery
-## v. 2.130.0 - 2024-11-28
-### Features
-- Rework of One-click discovery Storybook's page
-## v. 2.129.0 - 2024-11-28
-### Features
-- Update storybook documentation
-## v. 2.128.0 - 2024-11-26
-### Features
-- Track reset filters event
-## v. 2.127.0 - 2024-11-26
-### Features
-- removed some repetitive type definitions
-## v. 2.126.0 - 2024-11-22
-### Features
-- Add a show-more button for an extended-filters options
-## v. 2.125.0 - 2024-11-22
-### Features
-- Change the modal button's styles with an add-style='true' prop
-### Bug Fixes
-- Storybook fixes and layout improvements
-## v. 2.124.1 - 2024-11-22
-### Bug Fixes
-- Use internal state for Discovery Widget
-## v. 2.124.0 - 2024-11-21
-### Features
-- Added slots support for Discovery components in the Product List component
-## v. 2.123.0 - 2024-11-18
-### Features
-- changed product card in storybook to show recommendations for relevant products
-## v. 2.122.0 - 2024-11-18
-### Features
-- Add --modal-border-radius variable for Search Widget
-### Bug Fixes
-- Filters CSS parts support
-## v. 2.121.1 - 2024-11-18
-### Bug Fixes
-- Adjust max range value for price filter
-## v. 2.121.0 - 2024-11-18
-### Features
-- added favourite button support
-## v. 2.120.0 - 2024-11-18
-### Features
-- Reset selected filters after the new text search
-### Bug Fixes
-- Fix the state conflict of the Search Widget with Results on one page.
-- Remove an extra vviinnFiltersChanged event triggering
-- Show errors for text search
-## v. 2.119.0 - 2024-11-14
-### Features
-- send text search tracking
-## v. 2.118.3 - 2024-11-14
-### Bug Fixes
-- Unify filter buttons across the components
-## v. 2.118.2 - 2024-11-14
-### Bug Fixes
-- Show Industry Select on mobile in the Storybook
-## v. 2.118.1 - 2024-11-11
-### Bug Fixes
-- Align extended and color filters styles
-## v. 2.118.0 - 2024-11-11
-### Features
-- Show in Storybook how to style custom labels
-## v. 2.117.0 - 2024-10-31
-### Features
-- Extended filters for Search Widget, desktop devices
-## v. 2.116.0 - 2024-10-30
-### Features
-- changed product card examples to cover relevant industries and reasonable item properties
-## v. 2.115.1 - 2024-10-29
-### Bug Fixes
-- Price range improvements: optimizing fetching, removing empty histogram columns
-- Price range improvements: slider UX
-## v. 2.115.0 - 2024-10-29
-### Features
-- new layout of storybook welcome page
-## v. 2.114.13 - 2024-10-29
-### Bug Fixes
-- New scheme for tracking dynamic filters select/deselect
-## v. 2.114.12 - 2024-10-29
-### Bug Fixes
-- Minor Set Widget's layout fix
-## v. 2.114.11 - 2024-10-28
-### Bug Fixes
-- Set widget layout fixes. Adding image-picture part for styling.
-## v. 2.114.10 - 2024-10-21
-### Bug Fixes
-- use 'main' branch in github-actions
-## v. 2.114.9 - 2024-10-21
-### Bug Fixes
-- Changelog generation
-## v. 2.114.0 - 2024-10-18
-### Features
-- Allow color customization of One-click discovery icon
-## v. 2.113.0 - 2024-10-17
-### Features
-- Added one-click-discovery-mode
-## v. 2.112.2 - 2024-10-17
-### Bug Fixes
-- Now add-price-container is configured via Storybook
-## v. 2.112.1 - 2024-10-17
-### Bug Fixes
-- vviinn-filters improvements
-## v. 2.112.0 - 2024-10-16
-### Features
-- Fixed some designing cases on storybook
-## v. 2.111.0 - 2024-10-16
-### Features
-- add-price-container property for Widgets
-## v. 2.110.0 - 2024-10-14
-### Features
-- Product Card's layout changes
-## v. 2.109.0 - 2024-10-11
-### Features
-- Accept filters for product-listing-page endpoint
-## v. 2.108.0 - 2024-10-10
-### Features
-- dynamic filter trigger events now as a helper function
-## v. 2.107.0 - 2024-10-09
-### Features
-- Added currency sign to price-range and showing the actual values
-## v. 2.106.0 - 2024-10-09
-### Features
-- closing extended modal in button mode when click outside
-## v. 2.105.0 - 2024-10-09
-### Features
-- add one-click discovery to vviinn-results
-## v. 2.104.0 - 2024-10-08
-### Features
-- Loading state for Search Bar
-## v. 2.103.0 - 2024-10-08
-### Features
-- Add Product Card examples to the Storybook
-## v. 2.102.0 - 2024-10-01
-### Features
-- adding actions slot to product card
-## v. 2.101.1 - 2024-09-30
-### Bug Fixes
-- One-click Discovery Set widget uses cross-selling request by default
-## v. 2.101.0 - 2024-09-30
-### Features
-- Default search query for Search Bar
-## v. 2.100.0 - 2024-09-30
-### Features
-- Unify Product Card styles
-## v. 2.99.0 - 2024-09-26
-### Features
-- Added an ability to vviinn-vpr-button to load the sidebar to custom container
-## v. 2.98.1 - 2024-09-25
-### Bug Fixes
-- Change default mode for Search Bar
-## v. 2.98.0 - 2024-09-24
-### Features
-- Add textAndModal mode for vviinn-text-search
-## v. 2.97.2 - 2024-09-23
-### Bug Fixes
-- changed product list layout in storybook
-- storybook improvement
-## v. 2.97.1 - 2024-09-23
-### Bug Fixes
-- Unblock scroll when switching between stories
-## v. 2.97.0 - 2024-09-23
-### Features
-- Add a variable for customizing font-family
-### Bug Fixes
-- Unify font-family for widgets
-## v. 2.96.0 - 2024-09-20
-### Features
-- Show Base Price in Product Card
-## v. 2.95.4 - 2024-09-18
-### Bug Fixes
-- removed additional log
-## v. 2.95.3 - 2024-09-18
-### Bug Fixes
-- Fix energy label parts for Search Widget
-## v. 2.95.2 - 2024-09-18
-### Bug Fixes
-- separated custom label and added new parts
-## v. 2.95.1 - 2024-09-17
-### Bug Fixes
-- Added price-label part to the visual search and results components
-## v. 2.95.0 - 2024-09-16
-### Features
-- added mode to discovery and locale to all stories examples
-## v. 2.94.1 - 2024-09-16
-### Bug Fixes
-- Hide source product when not enough recommendations for set mode
-## v. 2.94.0 - 2024-09-16
-### Features
-- Show energe label in Storybook's Product Card
-## v. 2.93.0 - 2024-09-11
-### Features
-- Added preview mode to vviinn-extended-filters
-## v. 2.92.0 - 2024-09-11
-### Features
-- changed icon of one-click dicovery set
-## v. 2.91.0 - 2024-09-11
-### Features
-- changed icon of one-click discovery on slider mode
-## v. 2.90.0 - 2024-09-10
-### Features
-- use related icons in search modal
-## v. 2.89.1 - 2024-09-10
-### Bug Fixes
-- Fix product details redirection for Search Widget
-## v. 2.89.0 - 2024-09-10
-### Features
-- Show source image in One-Click Discovery button
-## v. 2.88.0 - 2024-09-10
-### Features
-- documentation of events section
-- update customization section documentation
-## v. 2.87.1 - 2024-09-09
-### Bug Fixes
-- Added enableImportInjection
-## v. 2.87.0 - 2024-09-09
-### Features
-- Adding Nuxt documentation
-## v. 2.86.0 - 2024-09-09
-### Features
-- Product Card Redesign
-## v. 2.85.1 - 2024-09-09
-### Bug Fixes
-- Fix slots for energy labels and extra API calls for the text search
-## v. 2.85.0 - 2024-09-05
-### Features
-- Added industry selector to the storybook
-## v. 2.84.1 - 2024-09-05
-### Bug Fixes
-- Fixed pipeline issue
-## v. 2.84.0 - 2024-09-05
-### Features
-- Changed the vviinn-vpr-button icon based on campaign-type
-## v. 2.83.0 - 2024-09-04
-### Features
-- Storybook Restructuring
-## v. 2.82.0 - 2024-08-30
-### Features
-- Update energy labels structure
-## v. 2.81.0 - 2024-08-29
-### Features
-- developed price labels
-## v. 2.80.1 - 2024-08-29
-### Bug Fixes
-- Update storybook content and fixed dart code highlighting
-## v. 2.80.0 - 2024-08-28
-### Features
-- Use vviinn-filters in the Search Widget
-## v. 2.79.2 - 2024-08-27
-### Bug Fixes
-- Applied some design changes
-## v. 2.79.1 - 2024-08-26
-### Bug Fixes
-- Add additional padding for vviinn-text-search in textAndImage mode
-## v. 2.79.0 - 2024-08-22
-### Features
-- Refactor CSS variables and replace some defaults
-## v. 2.78.0 - 2024-08-21
-### Features
-- Fix layout issues for Text Search story
-## v. 2.77.0 - 2024-08-16
-### Features
-- Show filters with the Text Search component in the Storybook
-## v. 2.76.2 - 2024-08-15
-### Bug Fixes
-- Applied new designs to vviinn-filters component
-## v. 2.76.1 - 2024-08-14
-### Bug Fixes
-- Fix visual search filters
-## v. 2.76.0 - 2024-08-14
-### Features
-- Add instructions for a separated components
-## v. 2.75.0 - 2024-08-13
-### Features
-- Make stories for vviinn-results and vviinn-text-search
-## v. 2.74.2 - 2024-08-12
-### Bug Fixes
-- Updated documentation
-## v. 2.74.1 - 2024-08-12
-### Bug Fixes
-- Applied new styles for vviinn-price-range
-## v. 2.74.0 - 2024-08-12
-### Features
-- Add vviinn-energy-label component
-## v. 2.73.1 - 2024-08-08
-### Bug Fixes
-- defined new variables
-## v. 2.73.0 - 2024-08-07
-### Features
-- Product Listing Page support for vviinn-results component
-## v. 2.72.1 - 2024-08-01
-### Bug Fixes
-- Fixed color filter
-## v. 2.72.0 - 2024-07-30
-### Features
-- Connect vviinn-filters and vviinn-results components
-## v. 2.71.0 - 2024-07-30
-### Features
-- integrated with active and primary filters flags
-## v. 2.70.0 - 2024-07-29
-### Features
-- Add image upload button for vviinn-text-search
-## v. 2.69.0 - 2024-07-29
-### Features
-- Added color filters in the new style
-### Bug Fixes
-- fixed send color filters
-## v. 2.68.0 - 2024-07-25
-### Features
-- Separate vviinn-text-search component
-## v. 2.67.1 - 2024-07-24
-### Bug Fixes
-- Fix errors layout in Search Widget
-## v. 2.67.0 - 2024-07-24
-### Features
-- implemented vviin-price filters component and used in the vviinn-filters
-## v. 2.66.2 - 2024-07-19
-### Bug Fixes
-- install storybook generally
-## v. 2.66.1 - 2024-07-19
-### Bug Fixes
-- Storybook issue
-## v. 2.66.0 - 2024-07-19
-### Features
-- Add textSearchQuery prop for vviinn-results component
-## v. 2.65.0 - 2024-07-18
-### Features
-- Add vviinn-product-card-width CSS variable
-## v. 2.64.0 - 2024-07-18
-### Features
-- Add an event listener of searchId to vviinn-results widget
-## v. 2.63.0 - 2024-07-17
-### Features
-- Add results component
-## v. 2.62.0 - 2024-07-10
-### Features
-- Bring Set Mode to Recommendation Button
-## v. 2.61.0 - 2024-07-10
-### Features
-- Add product-details-redirection property
-### Bug Fixes
-- Rename new property to product-details-redirect. Rename product-detail-new-tab to product-details-new-tab
-## v. 2.60.0 - 2024-07-10
-### Features
-- Added multiple filter support
-## v. 2.59.0 - 2024-07-10
-### Features
-- Applied some changes on filters component
-## v. 2.58.0 - 2024-07-08
-### Features
-- Change default Storybook token
-## v. 2.57.0 - 2024-07-02
-### Features
-- developing filters component
-## v. 2.56.0 - 2024-07-01
-### Features
-- Recommendation's Set mode customization of discounts
-## v. 2.55.7 - 2024-07-01
-### Bug Fixes
-- fixed an issue in storybook
-## v. 2.55.4 - 2024-06-26
-### Bug Fixes
-- Recommendations and Search endpoints refactoring
-## v. 2.55.3 - 2024-06-25
-### Bug Fixes
-- Show no-result-text when receiving empty recommendations
-## v. 2.55.2 - 2024-06-20
-### Bug Fixes
-- Fix starting page layout of Search Widget
-## v. 2.55.1 - 2024-06-19
-### Bug Fixes
-- Fix product events for Set widget
-## v. 2.55.0 - 2024-06-19
-### Features
-- Add discount-label part for Set widget
-- Add slots for pressed Add to Basket button, Set mode
-## v. 2.54.1 - 2024-06-14
-### Bug Fixes
-- Fix scripts for building the project
-## v. 2.54.0 - 2024-06-13
-### Features
-- Migrate recommendations to the new endpoint
-- Use source product in the Set widget
-## v. 2.53.0 - 2024-06-13
-### Features
-- Filters functionality for text search
-## v. 2.52.4 - 2024-06-13
-### Bug Fixes
-- Change the style of the photo frame
-- Remove camera capture text and adjust camera layout
-## v. 2.52.3 - 2024-06-12
-### Bug Fixes
-- Fixed influence case of different widgets in the level of events, props, and slots.
-## v. 2.52.2 - 2024-06-12
-### Bug Fixes
-- Added vviinn-camera-button-text-start slot to the search widget button and storybook
-- Added vviinn-camera-button-text-stop slot to the search widget button and storybook
-- Added vviinn-camera-icon slot to the search widget button and storybook
-- Added vviinn-image-upload-icon slot to the search widget button and storybook
-- Added vviinn-text-search-icon slot to the search widget button and storybook
-- Removed vviinn-camera-button-text slot from the search widget
-- Removed vviinn-show-files-button-text slot from the search widget
-- synchronized the slots on recommendation widgets
-## v. 2.52.1 - 2024-06-11
-### Bug Fixes
-- Fix slots for Start Camera button
-## v. 2.52.0 - 2024-06-06
-### Features
-- Redesign camera screen
-## v. 2.51.5 - 2024-06-06
-### Bug Fixes
-- Fix basket-button slots behaviour after card updating for Set widget
-## v. 2.51.4 - 2024-06-06
-### Bug Fixes
-- Fixed conflict of Vviinn events and gtag
-## v. 2.51.2 - 2024-06-06
-### Bug Fixes
-- Fixed issue of Vviinn widgets clicks in storybook
-## v. 2.51.1 - 2024-06-04
-### Bug Fixes
-- Changed title
-## v. 2.51.0 - 2024-06-04
-### Features
-- Changed some titles and translations
-## v. 2.50.4 - 2024-06-04
-### Bug Fixes
-- Fixed issue of multi language when using 2 widget
-## v. 2.50.3 - 2024-05-30
-### Bug Fixes
-- Fixed issue of repeating slots
-## v. 2.50.2 - 2024-05-28
-### Bug Fixes
-- Fixed storybook issue
-## v. 2.50.0 - 2024-05-23
-### Features
-- Add slots for customizing Set widget, Recommendation
-## v. 2.49.3 - 2024-05-21
-### Bug Fixes
-- Adjust scrolling for grid mode in Recommendation widget
-## v. 2.49.2 - 2024-05-17
-### Bug Fixes
-- Get back additional fields for Controls tab
-## v. 2.49.0 - 2024-05-13
-### Features
-- Add camera mode for Search Widget
-## v. 2.48.7 - 2024-05-02
-### Bug Fixes
-- Prevent triggering extra vviinnProductLoad events for the Search Widget
-## v. 2.48.6 - 2024-04-24
-### Bug Fixes
-- Fix basket button overflow issue and set mode bug with displaying prices
-- Fix growing card issue for Recommendation widget
-- Fix scrolling behaviour for Recommendation widget, grid mode
-- remove extra margin for bullets block in Recommendation widget, grid mode
-## v. 2.48.5 - 2024-04-24
-### Bug Fixes
-- Add downscaling for uploaded Hi-Res image
-## v. 2.48.4 - 2024-04-17
-### Bug Fixes
-- Add possibility to pass campaign-id as string to Search Widget
-- Remove unused slots and make according changes in documentation
-## v. 2.48.3 - 2024-04-16
-### Bug Fixes
-- Add thin scrollbar for set widget
-## v. 2.48.2 - 2024-04-11
-### Bug Fixes
-- Fix Plus Icon positioning
-## v. 2.48.1 - 2024-04-11
-### Bug Fixes
-- Fix issue with resizing cards in Set Widget
-## v. 2.48.0 - 2024-04-10
-### Features
-- Add translations for Set Mode
-## v. 2.47.0 - 2024-04-10
-### Features
-- Add Buy as Set functionality to Recommendation Widget
-## v. 2.46.0 - 2024-04-09
-### Features
-- Add Text Search Feature
-## v. 2.45.0 - 2024-03-18
-### Features
-- Updated the documentation related to the Vue Framework.
-## v. 2.44.2 - 2024-03-13
-### Bug Fixes
-- Fix zoom bug on the iOS 17.4
-## v. 2.44.1 - 2024-03-13
-### Bug Fixes
-- Fix Cropper Behavior for Different Image Ratios
-## v. 2.44.0 - 2024-03-05
-### Features
-- Take Square Image by the Camera
-## v. 2.43.1 - 2024-03-04
-### Bug Fixes
-- Fix console error
-## v. 2.43.0 - 2024-02-29
-### Features
-- Add Zoom Controls for Camera
-- Improve Camera's quality
-## v. 2.42.1 - 2024-02-28
-### Bug Fixes
-- Remove Highlighting on Photo Button's Click
-## v. 2.42.0 - 2024-02-14
-### Features
-- update react documentation
-## v. 2.41.2 - 2024-02-14
-### Bug Fixes
-- Search Widget: Translations Improvements
-## v. 2.41.1 - 2024-02-13
-### Bug Fixes
-- Fix For Visual Search When Tracking is Deactivated
-## v. 2.41.0 - 2024-02-13
-### Features
-- Add Slots for Icons
-## v. 2.40.2 - 2024-02-12
-### Bug Fixes
-- Translation Functionality Improvements
-## v. 2.40.1 - 2024-02-08
-### Bug Fixes
-- Improve Cropper Controls
-## v. 2.40.0 - 2024-02-08
-### Features
-- Add Transitions For Detected Object's Points
-## v. 2.39.0 - 2024-02-08
-### Features
-- Open Camera in the Browser
-## v. 2.38.0 - 2024-02-02
-### Features
-- copper design
-## v. 2.37.0 - 2024-02-01
-### Features
-- Add Native Camera Experience for Search Widget
-## v. 2.36.0 - 2024-01-31
-### Features
-- Added show files feature
-## v. 2.35.0 - 2024-01-17
-### Features
-- New design of Search Widget: first screen
-## v. 2.34.0 - 2024-01-11
-### Features
-- Add Update All Cards Funtionality
-## v. 2.33.0 - 2023-12-11
-### Features
-- Add 'cross-selling' mode for Recommendation Widget
-## v. 2.32.0 - 2023-11-07
-### Features
-- Trigger vviinnProductView event when product image appears in the viewport.
-## v. 2.31.0 - 2023-10-25
-### Features
-- Track mouse wheel click as product click.
-## v. 2.30.2 - 2023-10-12
-### Bug Fixes
-- Fix result events behavior for Search Button
-## v. 2.29.3 - 2023-10-11
-### Features
-- Send resultView and resultLoad events to the tracking service
-## v. 2.30.2 - 2023-10-12
-### Bug Fixes
-- Fix result events behavior for Search Button
-## v. 2.30.0 - 2023-10-11
-### Features
-- Send resultView and resultLoad events to the tracking service
-## v. 2.29.0 - 2023-09-19
-### Features
-- If opening product details in new tab is blocked by the browser
-- Open product details in new tab on click + holding ctrl or command button.
-## v. 2.28.0 - 2023-09-14
-### Features
-- Add 'vviinnAddToBasket' event for Recommendation Widget with possibility to show or hide button
-- Add slot for Add to Basket text customization, add shadow part for button's styles customization
-- send addToBasket event to the tracking service
-## v. 2.27.0 - 2023-09-13
-### Features
-- Make crop after clicking detected objects
-## v. 2.26.0 - 2023-09-04
-### Features
-- Replace old custom cropper with cropper.js
-## v. 2.25.2 - 2023-08-29
-### Bug Fixes
-- Fix bug with emitting product load events for non-active search widget instances
-## v. 2.25.0 - 2023-08-29
-### Features
-- Add image-resolution-width prop for VPS components; Change default resolution width to 250px
-## v. 2.24.0 - 2023-08-28
-### Features
-- Track product_load_event, widet's load event, distinguishing clicked filter kind, layout fix on the desktop for VPS widget
-## v. 2.23.0 - 2023-08-28
-### Features
-- Use responsive images for VPS widget
-## v. 2.22.0 - 2023-08-23
-### Features
-- Distinguish Between VPC and VPR in Recommendations Widget
-## v. 2.21.0 - 2023-08-11
-### Features
-- Add vviinnResultLoad and vviinnResultView events
-## v. 2.20.0 - 2023-06-22
-### Features
-- show widgetVersion in the Events, fix order of load and open events for vpr button
-## v. 2.19.0 - 2023-06-21
-### Features
-- Add upload mode to vps button
-- Add upload mode to vps button and update packages
-- Add upload mode to vps button, update packages
-## v. 2.18.0 - 2023-04-27
-### Features
-- Added currency to VPR button and VPR widget
-## v. 2.17.0 - 2023-03-21
-### Features
-- add Color to the storybook
-## v. 2.16.0 - 2023-02-15
-### Features
-- added some parts for styling
-## v. 2.15.0 - 2023-02-02
-### Features
-- Added the ability to be able to change numeric part of price
-## v. 2.14.0 - 2023-02-02
-### Features
-- Disable tracking api when the server rejected
-## v. 2.13.0 - 2022-12-07
-### Features
-- add the ability to add style to buttons or not
-## v. 2.12.0 - 2022-12-06
-### Features
-- made styles of recommendation and search button persistent
-### Bug Fixes
-- Fixed issue of cursor pointer on search button
-## v. 2.11.10 - 2022-12-01
-### Bug Fixes
-- fixing safari crash issue
-## v. 2.11.8 - 2022-12-01
-### Bug Fixes
-- removed a change to fix the crach safari issue
-## v. 2.11.7 - 2022-12-01
-### Bug Fixes
-- removed a change to fix the crach safari issue
-## v. 2.11.0 - 2022-11-28
-### Features
-- hide recommendation widget if there are no results
-## v. 2.10.0 - 2022-11-28
-### Features
-- hide preloader on vps button after 5sec timeout
-## v. 2.9.0 - 2022-11-24
-### Features
-- added auxclick event to the product
-## v. 2.8.3 - 2022-11-23
-### Bug Fixes
-- inline styles for some components to reduce number of requests
-## v. 2.8.0 - 2022-10-10
-### Features
-- move image resizing in WebWorker
-- move tracking WebWorker thread
-- use cssnano for css minification
-### Bug Fixes
-- fix bug with wrong image sizes when convert File to Image
-## v. 2.7.3 - 2022-09-25
-### Bug Fixes
-- fix bug with broken redirect on product deeplink
-## v. 2.7.0 - 2022-09-23
-### Features
-- use campaign id in search sessions and example images
-## v. 2.6.0 - 2022-09-20
-### Features
-- add campaigns parameter to recommendations widget
-- add property with campaigns ids to search widget for targeting campaigns
-## v. 2.5.2 - 2022-09-15
-### Bug Fixes
-- remove unnessesary logs
-## v. 2.5.1 - 2022-09-15
-### Bug Fixes
-- redirect to product deeplink even if tracking request fall
-## v. 2.5.0 - 2022-09-14
-### Features
-- export example images block as shadow part
-## v. 2.4.4 - 2022-09-13
-### Bug Fixes
-- fix tracking product click event
-## v. 2.4.3 - 2022-09-08
-### Bug Fixes
-- fix tracking open event for Search widget
-## v. 2.4.2 - 2022-04-27
-### Bug Fixes
-- fix bug with wrong rank in telemetry for recommendations
-- increase example images sizes
-## v. 2.4.1 - 2022-04-22
-### Bug Fixes
-- fix telemetry events for search widget
-## v. 2.4.0 - 2022-04-22
-### Features
-- integrate telemetry
-## v. 2.3.0 - 2022-04-04
-### Features
-- export carousel buttons as shadow parts
-### Bug Fixes
-- remove sidebar when vviinn-vpr-button removed from dom
-## v. 2.2.1 - 2022-03-17
-### Bug Fixes
-- type typo fix
-## v. 2.2.0 - 2022-03-17
-### Features
-- add vviinn-vpr-button component
-## v. 2.1.1 - 2022-03-14
-### Bug Fixes
-- permanently hide scrollbars in grid mode for Recommendation
-## v. 2.1.0 - 2022-03-14
-### Features
-- Recommendations Widget - add property for loading external css
-### Bug Fixes
-- add default border for images in recommendation widget
-- fetch recommendation if campaignType changed
-- find carousel parent properly
-- fix broken deeplinks in recommendation widget
-- fix bug with scrollbars in recommendation widgets
-- fix buggy layout with on Grid Mode of Recommendations widget
-- fix scrollbars property on recommendations widget
-- fix scrolling if scrollbar is hidden
-- fix title allignement in recommendations component
-- minor style fixes
-- refactor exported shadow parts of product card component
-## v. 2.0.0 - 2022-02-24
-### ⚠ BREAKING CHANGES
-- new slider implementation for recommendation widget
-### Features
-- add new customizable slots
-- Change default style for product cards
-- improve slider on recommendation widget
-- new slider implementation for recommendation widget
-### Bug Fixes
-- fix bug with sending google analytics
-- fix default cards style on search widget
-- fix layout in recommendation widget
-- Fixed bug with getting item width in recommendation widget
-- recommendation widget improvements
-- unobserve ResizeObserver when VviinnCarousel removed
-## v. 1.1.1 - 2022-01-13
-### Bug Fixes
-- reset loader after server errors
-## v. 1.1.0 - 2022-01-06
-### Features
-- fetch recommendations when product-id changed
-- use Lanczos algorythm for image resizing on client
-### Bug Fixes
-- export shadow part for product type
-- fix bug with wrong selected image size on results view
-- image resizing now resize on larger side
+
+<Meta title="Changelog/Changelog"></Meta>
+
+# Changelog
+
+All notable changes to this project will be documented in this file
+
+## v. 2.203.1 - 2025-12-04
+
+### Bug Fixes
+
+- Correct indexes for rendered custom labels.
+
+## v. 2.203.0 - 2025-11-27
+
+### Features
+
+- Emit vviinnNoResult event for text-search requests.
+
+- Show server errors in the vviinn-results widget.
+
+### Bug Fixes
+
+- Add cache-control headers to prevent stale resource references.
+
+- Emit missing vviinnNoResult events for visual-search requests
+
+- Fix possible console errors.
+
+## v. 2.202.1 - 2025-11-20
+
+### Bug Fixes
+
+- One-click discovery layout fixes for the modal and appended modes.
+
+- Storybook layout minor fixes.
+
+## v. 2.202.0 - 2025-11-20
+
+### Features
+
+- Add numberLocale prop for price/number formatting.
+
+### Bug Fixes
+
+- Don't render the currency sign when there are no prices for the product.
+
+- Fix locale and currency-sign inconsistencies. Improve language initialization logic.
+
+- Remove unnecessary state updates in the components to prevent synchronization bugs. vviinn-cropper now requires a token.
+
+## v. 2.201.0 - 2025-11-13
+
+### Features
+
+- Possibility of showing the second image in the Product Card.
+
+- Slider for showing the second image in the Product Card on mobile devices.
+
+## v. 2.200.0 - 2025-11-11
+
+### Features
+
+- CSS URL
+
+## v. 2.199.0 - 2025-11-06
+
+### Features
+
+- Improve Search Page documentation. Merge with the Best Practices page.
+
+- Improvements to Storybook's customization section.
+
+### Bug Fixes
+
+- Show fewer results for product lists in Storybook. Improve text search queries for industries.
+
+- Show missing CSS parts and slots for the Discovery Widget playground in Storybook.
+
+## v. 2.198.0 - 2025-10-30
+
+### Features
+
+- New CSS parts: carousel-button-prev, carousel-button-next for styling carousel buttons individually.
+
+- Render custom labels inside the card's image container and provide CSS parts to identify them: custom-label-image and custom-label-content.
+
+### Bug Fixes
+
+- Blurred detected objects possibility in Safari browser.
+
+## v. 2.197.0 - 2025-10-28
+
+### Features
+
+- Display selected filters in the Search Widget
+
+## v. 2.196.0 - 2025-10-24
+
+### Features
+
+- Support for the HEIF image format on Safari Desktop and iOS devices.
+
+## v. 2.195.1 - 2025-10-24
+
+### Bug Fixes
+
+- Storybook components names and images.
+
+## v. 2.195.0 - 2025-10-23
+
+### Features
+
+- The possibility of displaying inputs for interval filters
+
+## v. 2.194.1 - 2025-10-23
+
+### Bug Fixes
+
+- Error on product click, using widget components.
+
+## v. 2.194.0 - 2025-10-21
+
+### Features
+
+- Add fashion images for Shop-the-Look in the Storybook.
+
+## v. 2.193.0 - 2025-10-21
+
+### Features
+
+- Shop-the-look: enable dragging non-active slides on desktop with the cropper.
+
+## v. 2.192.0 - 2025-10-20
+
+### Features
+
+- Introduce the layout of the Product Card
+
+## v. 2.191.1 - 2025-10-13
+
+### Bug Fixes
+
+- vviinnRedirect event logic.
+
+## v. 2.191.0 - 2025-10-13
+
+### Features
+
+- New Redirect event.
+
+## v. 2.190.0 - 2025-10-08
+
+### Features
+
+- Uploading an image to the Shop-the-Look widget.
+
+## v. 2.189.0 - 2025-10-07
+
+### Features
+
+- Support AVIF format for images.
+
+### Bug Fixes
+
+- Infinite loading after uploading the unsupported image format for vviinn-components
+
+## v. 2.188.0 - 2025-10-06
+
+### Features
+
+- Show Cropper feature for the shop-the-look widget.
+
+## v. 2.187.1 - 2025-09-17
+
+### Bug Fixes
+
+- Display color labels along with color dots for filters in preview-inline mode.
+
+- Interval filters for preview-inline mode.
+
+## v. 2.187.0 - 2025-09-15
+
+### Features
+
+-  Add documentation for customizing search button content
+
+### Bug Fixes
+
+- Prevent extended filters modal close on slider drag release outside bounds.
+
+- Reset the text query selected filter after uploading a photo.
+
+## v. 2.186.0 - 2025-09-12
+
+### Features
+
+- Preview-inline mode for vviinn-extended-filters, allowing categories to appear in a single row and displaying values in the modal with search functionality.
+
+## v. 2.185.0 - 2025-09-08
+
+### Features
+
+- Dynamic modal positioning based on the center of the detected object
+
+### Bug Fixes
+
+- Detected objects positioning
+
+- Shop-the-Look: close the modal on the slider's first move.
+
+- Shop-the-Look: solve race conditions for the requests when scrolling through the images
+
+## v. 2.184.0 - 2025-08-29
+
+### Features
+
+- Close the products modal and open another one when clicking a detected object.
+
+- Shop-the-look page in the Widgets section of the Storybook
+
+- widget-style attribute, which applies cornered or rounded styles
+
+## v. 2.183.0 - 2025-08-29
+
+### Features
+
+- Add vviinn-suggestions component, which implements the stream concept
+
+## v. 2.182.1 - 2025-08-22
+
+### Bug Fixes
+
+- Shop-the-look mismatch of the clicked product and the details view.
+
+## v. 2.182.0 - 2025-08-22
+
+### Features
+
+- Add vviinn-image component.
+
+## v. 2.181.0 - 2025-08-11
+
+### Features
+
+- Introduce the entity type in the widget. Apply custom styles for the content card.
+
+- New One-click Discovery icon
+
+### Bug Fixes
+
+- Fix the Set Widget layout on updating.
+
+## v. 2.180.4 - 2025-08-06
+
+### Bug Fixes
+
+- parse storybook supported args from url
+
+## v. 2.180.3 - 2025-08-04
+
+### Bug Fixes
+
+- prevent triggering upload for vviinn-button in upload mode on any button click or enter pressed in widget
+
+## v. 2.180.2 - 2025-07-31
+
+### Bug Fixes
+
+- Don't show the filter column label in the extended filters.
+
+## v. 2.180.1 - 2025-07-31
+
+### Bug Fixes
+
+- Fix the range filter behaviour and synchronization across the filter components
+
+## v. 2.180.0 - 2025-07-30
+
+### Features
+
+- Add filter support for the interval type to display in the slider view.
+
+## v. 2.179.0 - 2025-07-22
+
+### Features
+
+- Use a continuous range for a price filter instead of being restricted by the price intervals shown on the histogram
+
+## v. 2.178.0 - 2025-07-18
+
+### Features
+
+- Make the transition smoother for the Product Card after the loading state is complete.
+
+## v. 2.177.3 - 2025-07-07
+
+### Bug Fixes
+
+- Prevent infinite loading state when opening the Discovery widget in a new tab.
+
+## v. 2.177.2 - 2025-07-03
+
+### Bug Fixes
+
+- Product link focus in Safari browser
+
+## v. 2.177.1 - 2025-07-02
+
+### Bug Fixes
+
+- Close One-click discovery on switching Storybook pages
+
+## v. 2.177.0 - 2025-06-30
+
+### Features
+
+- Remove deprecated one-click-discovery-show prop for the Search Widget
+
+## v. 2.176.1 - 2025-06-27
+
+### Bug Fixes
+
+- Console warning
+
+## v. 2.176.0 - 2025-06-27
+
+### Features
+
+- Accessibility improvements
+
+## v. 2.175.2 - 2025-06-26
+
+### Bug Fixes
+
+- Fix Storybook build
+
+## v. 2.175.1 - 2025-06-26
+
+### Bug Fixes
+
+- env variables for the Storybook
+
+## v. 2.175.0 - 2025-06-26
+
+### Features
+
+- added storybook a11y addon
+
+- Upgrade the Storybook to v9
+
+## v. 2.174.0 - 2025-06-26
+
+### Features
+
+- One-click Discovery accessibility
+
+### Bug Fixes
+
+- One-click discovery asseccibility in the product grid
+
+## v. 2.173.0 - 2025-06-24
+
+### Features
+
+- Filters accessibility
+
+### Bug Fixes
+
+- Align the secondary text color with the design to enhance accessibility
+
+## v. 2.172.3 - 2025-06-24
+
+### Bug Fixes
+
+- added accessible labels to carousel buttons
+
+## v. 2.172.2 - 2025-06-13
+
+### Bug Fixes
+
+- Visual Search layout on iOS after making a crop on the uploaded image
+
+## v. 2.172.1 - 2025-06-12
+
+### Bug Fixes
+
+- Extra tracking requests in the one-click discovery widgets
+
+## v. 2.172.0 - 2025-06-11
+
+### Features
+
+- Text search state refactoring
+
+## v. 2.171.2 - 2025-06-10
+
+### Bug Fixes
+
+- Improve translations for the no-filters state
+
+## v. 2.171.1 - 2025-06-10
+
+### Bug Fixes
+
+- Indicate and disable carousel buttons on the first and last elements
+
+## v. 2.171.0 - 2025-06-10
+
+### Features
+
+- Refactor search store to show an empty results infobox in the results widget
+
+## v. 2.170.2 - 2025-06-05
+
+### Bug Fixes
+
+- Show inactive bars of the price filter after receiving an updated histogram
+
+## v. 2.170.1 - 2025-06-05
+
+### Bug Fixes
+
+- Hide the image selected filter when no results are shown
+
+## v. 2.170.0 - 2025-06-03
+
+### Features
+
+- Distinguish inactive price intervals
+
+### Bug Fixes
+
+- Stability of showing the range in the price filter
+
+## v. 2.169.0 - 2025-06-02
+
+### Features
+
+- Improve accessibility of Search Widget
+
+## v. 2.168.1 - 2025-05-28
+
+### Bug Fixes
+
+- Fix visual search filter request when passing an empty search-id parameter
+
+## v. 2.168.0 - 2025-05-22
+
+### Features
+
+- Refactor event listeners using AbortController
+
+## v. 2.167.0 - 2025-05-22
+
+### Features
+
+- Content Card layout
+
+## v. 2.166.0 - 2025-05-21
+
+### Features
+
+- Unify the style of the color filter item
+
+## v. 2.165.0 - 2025-05-21
+
+### Features
+
+- Update Stencil to 4.31.0 and related libraries to the latest version
+
+## v. 2.164.3 - 2025-05-20
+
+### Bug Fixes
+
+- Fix One-click discovery behavior when receiving no results
+
+## v. 2.164.2 - 2025-05-14
+
+### Bug Fixes
+
+- Improve Best Practices documentation
+
+## v. 2.164.1 - 2025-05-14
+
+### Bug Fixes
+
+- Bugfix on One-click discovery modal close
+
+## v. 2.164.0 - 2025-05-14
+
+### Features
+
+- Best Practices page in Storybook
+
+## v. 2.163.1 - 2025-05-13
+
+### Bug Fixes
+
+- remove query watching for Search Bar
+
+## v. 2.163.0 - 2025-05-13
+
+### Features
+
+- Watch and react to searchId and searchQuery changes in the components
+
+## v. 2.162.0 - 2025-05-12
+
+### Features
+
+- imageResolutionWidth for Discovery widgets
+
+- Show image placeholder for Product Card if no image source
+
+## v. 2.161.1 - 2025-05-05
+
+### Bug Fixes
+
+- Fix an extra scroll for extended filters in the Search Widget and hide if no filters are received
+
+## v. 2.161.0 - 2025-05-05
+
+### Features
+
+- Campaign id props for text and visual search
+
+## v. 2.160.4 - 2025-04-30
+
+### Bug Fixes
+
+- Add the products shadow part
+
+## v. 2.160.3 - 2025-04-30
+
+### Bug Fixes
+
+- Fix Storybook build 2
+
+## v. 2.160.2 - 2025-04-30
+
+### Bug Fixes
+
+- Fix Storybook build
+
+## v. 2.160.1 - 2025-04-30
+
+### Bug Fixes
+
+- Fix cropper when showing results on a new page
+
+## v. 2.160.0 - 2025-04-30
+
+### Features
+
+- Make custom Image and Text selected filters non-interactive
+
+## v. 2.159.0 - 2025-04-28
+
+### Features
+
+- Add a helper Story to test search results on a different page
+
+## v. 2.158.2 - 2025-04-24
+
+### Bug Fixes
+
+- Fix text search filter requests, refactoring
+
+## v. 2.158.1 - 2025-04-23
+
+### Bug Fixes
+
+- Fix state handling, while switching between text and visual search, minor fixes
+
+## v. 2.158.0 - 2025-04-17
+
+### Features
+
+- One-click discovery animation in appended modes
+
+## v. 2.157.0 - 2025-04-14
+
+### Features
+
+- Crop handling for Selected Filters
+
+- Selected filter for uploaded image
+
+## v. 2.156.4 - 2025-04-07
+
+### Bug Fixes
+
+- Pass campaign-id to Visual Search request body
+
+## v. 2.156.3 - 2025-03-27
+
+### Bug Fixes
+
+- Add exportparts for vviinn-button in Search Bar
+
+## v. 2.156.2 - 2025-03-27
+
+### Bug Fixes
+
+- Fix an error when there is no image link for a product
+
+## v. 2.156.1 - 2025-03-27
+
+### Bug Fixes
+
+- Fix one-click discovery grid behavior for two-rows view
+
+## v. 2.156.0 - 2025-03-25
+
+### Features
+
+- Use new visual-search endpoint with dynamic filters
+
+## v. 2.155.0 - 2025-03-20
+
+### Features
+
+- Add One-click Discovery Playground
+
+## v. 2.154.0 - 2025-03-07
+
+### Features
+
+- Price label for extended filters
+
+### Bug Fixes
+
+- Collapse filter options after closing the modal
+
+- Improve resetting filters
+
+- Reset text search filters after cropper interactions
+
+- Reset the displayed filter amount after collapsing the group or a new search
+
+## v. 2.153.0 - 2025-03-05
+
+### Features
+
+- Save image mode for Search Bar
+
+## v. 2.152.4 - 2025-02-28
+
+### Bug Fixes
+
+- Add titles translations for Discovery and One-click discovery widgets
+
+## v. 2.152.2 - 2025-02-27
+
+### Bug Fixes
+
+- Fix detected objects reset possibility in components. Wait for the response of the detected objects before the searchId request.
+
+## v. 2.152.1 - 2025-02-26
+
+### Bug Fixes
+
+- Update dependencies, fix packages vulnerabilities
+
+## v. 2.152.0 - 2025-02-24
+
+### Features
+
+- Use hi-res resized mage to show in Cropper component
+
+## v. 2.151.1 - 2025-02-24
+
+### Bug Fixes
+
+- Fix filter buttons alignment
+
+## v. 2.151.0 - 2025-02-20
+
+### Features
+
+- Add placeholder prop for Search Bar
+
+- Fix the layout of Cropper Playground and remove the default image
+
+- Update documentation and clarify the widgets installation process
+
+### Bug Fixes
+
+- Fix cropper width property for components, add default value 288
+
+## v. 2.150.1 - 2025-02-13
+
+### Bug Fixes
+
+- Show close button for One-click discovery Set
+
+## v. 2.150.0 - 2025-02-12
+
+### Features
+
+- Send new tracking events: Add to favorite, Text search started, and additional Filter events
+
+## v. 2.149.0 - 2025-02-07
+
+### Features
+
+- Add Storybook's playground for Cropper
+
+- Save Image modes for Cropper
+
+### Bug Fixes
+
+- Cropper issue after uploading the same image
+
+- use vviinnImageUploadFinished event instead of vviinnSearchIdReceived
+
+## v. 2.148.0 - 2025-02-04
+
+### Features
+
+- Make zoom feature more accurate
+
+## v. 2.147.1 - 2025-02-04
+
+### Bug Fixes
+
+- Fix console error on unprocessable text search request
+
+## v. 2.147.0 - 2025-02-04
+
+### Features
+
+- Make filters styles cleaner, remove default padding
+
+- Show selected price filter
+
+## v. 2.146.2 - 2025-02-03
+
+### Bug Fixes
+
+- Show Cropper on the Search Page and fix documentation
+
+## v. 2.146.1 - 2025-01-24
+
+### Bug Fixes
+
+- Fix reseting campaignId on new Image Search
+
+## v. 2.146.0 - 2025-01-23
+
+### Features
+
+- Image resizing logic changes and optimizations, using jpeg format.
+
+## v. 2.145.12 - 2025-01-21
+
+### Bug Fixes
+
+- pass api path from text search to search modal
+
+## v. 2.145.11 - 2025-01-14
+
+### Bug Fixes
+
+- Storybooks issues after fixing cloud build
+
+## v. 2.145.10 - 2025-01-14
+
+### Bug Fixes
+
+- if text search is active send tracking events as text search
+
+## v. 2.145.9 - 2025-01-14
+
+### Bug Fixes
+
+- determine if recommendations are shown inside search widget
+
+## v. 2.145.8 - 2025-01-13
+
+### Bug Fixes
+
+- Add a standalone mode for One-click discovery to show a large icon
+
+- Fix arrow styles in appended One-click discovery
+
+- One-click discovery modal behavior
+
+- Synchronize appended grid layout with vviinn-results
+
+## v. 2.145.7 - 2025-01-13
+
+### Bug Fixes
+
+- only reset components store on component callback
+
+## v. 2.145.6 - 2025-01-13
+
+### Bug Fixes
+
+- Fix Storybook's build in Google Cloud
+
+## v. 2.145.5 - 2025-01-13
+
+### Bug Fixes
+
+- Cloudbuild pipeline improvements
+
+## v. 2.145.4 - 2025-01-13
+
+### Bug Fixes
+
+- Clear node_modules for Storybook before installing it in Cloud and echoing commit hash in the console
+
+## v. 2.145.3 - 2025-01-13
+
+### Bug Fixes
+
+- Add fixed esbuild version 0.24.0 for dependencies
+
+## v. 2.145.2 - 2025-01-11
+
+### Bug Fixes
+
+- Storybook update to 8.4.7
+
+## v. 2.145.1 - 2025-01-11
+
+### Bug Fixes
+
+- Storybook audit fix and added @babel/preset-env plugin
+
+## v. 2.145.0 - 2025-01-10
+
+### Features
+
+- Camera uploading for Search Bar's extended mode
+
+- Change the teaser text of Search Modal
+
+- Components supports image uploading from Search Modal
+
+- Refactor Search Bar modes, delete 'upload' mode
+
+## v. 2.144.2 - 2025-01-10
+
+### Bug Fixes
+
+- don't close search widget if close event was emitted by recommendation
+
+## v. 2.144.1 - 2025-01-06
+
+### Bug Fixes
+
+- Styles refactoring of product card's actions buttons
+
+## v. 2.144.0 - 2025-01-03
+
+### Features
+
+- allow slider mode in recommendations
+
+## v. 2.143.0 - 2025-01-03
+
+### Features
+
+- Cropper integration with Search Bar and Results components
+
+## v. 2.142.4 - 2024-12-20
+
+### Bug Fixes
+
+- Selecting detected object issue
+
+## v. 2.142.3 - 2024-12-19
+
+### Bug Fixes
+
+- update slider step so that images don't look cropped
+
+## v. 2.142.2 - 2024-12-19
+
+### Bug Fixes
+
+- Cropper component's refactoring
+
+## v. 2.142.1 - 2024-12-18
+
+### Bug Fixes
+
+- Slots issues in vviinn-results
+
+## v. 2.142.0 - 2024-12-17
+
+### Features
+
+- Slots support for custom labels
+
+### Bug Fixes
+
+- Product Card slots in Search Widget
+
+## v. 2.141.0 - 2024-12-16
+
+### Features
+
+- updated speech to text according to new requirements
+
+## v. 2.140.0 - 2024-12-11
+
+### Features
+
+- styled oneclick discovery in the vviinn result and search modal
+
+## v. 2.139.0 - 2024-12-10
+
+### Features
+
+- added one-click-discovery-campaigns to search modal and product list page
+
+- made product-card icons smaller but we the same clickable area
+
+## v. 2.138.0 - 2024-12-10
+
+### Features
+
+- set-items-amount property for Discovery set widgets
+
+## v. 2.137.0 - 2024-12-09
+
+### Features
+
+- prototype speech recognition
+
+## v. 2.136.1 - 2024-12-06
+
+### Bug Fixes
+
+- Refactor CSS parts and improve consistency
+
+- Remove deprecated CSS part 'product-part'
+
+## v. 2.136.0 - 2024-12-05
+
+### Features
+
+- Show scrollbars on hover in Discovery widgets
+
+## v. 2.135.0 - 2024-12-05
+
+### Features
+
+- refactored results to support custom widget result event instead of vps only
+
+## v. 2.134.0 - 2024-12-04
+
+### Features
+
+- developed an independent component for Vviinn cropper
+
+## v. 2.133.0 - 2024-12-04
+
+### Features
+
+- Use requestId for optimized text search
+
+## v. 2.132.0 - 2024-12-04
+
+### Features
+
+- Show Extended Filters Button in the Search Widget
+
+## v. 2.131.0 - 2024-12-02
+
+### Features
+
+- Added grid view to append mode of one-click discovery
+
+## v. 2.130.0 - 2024-11-28
+
+### Features
+
+- Rework of One-click discovery Storybook's page
+
+## v. 2.129.0 - 2024-11-28
+
+### Features
+
+- Update storybook documentation
+
+## v. 2.128.0 - 2024-11-26
+
+### Features
+
+- Track reset filters event
+
+## v. 2.127.0 - 2024-11-26
+
+### Features
+
+- removed some repetitive type definitions
+
+## v. 2.126.0 - 2024-11-22
+
+### Features
+
+- Add a show-more button for an extended-filters options
+
+## v. 2.125.0 - 2024-11-22
+
+### Features
+
+- Change the modal button's styles with an add-style='true' prop
+
+### Bug Fixes
+
+- Storybook fixes and layout improvements
+
+## v. 2.124.1 - 2024-11-22
+
+### Bug Fixes
+
+- Use internal state for Discovery Widget
+
+## v. 2.124.0 - 2024-11-21
+
+### Features
+
+- Added slots support for Discovery components in the Product List component
+
+## v. 2.123.0 - 2024-11-18
+
+### Features
+
+- changed product card in storybook to show recommendations for relevant products
+
+## v. 2.122.0 - 2024-11-18
+
+### Features
+
+- Add --modal-border-radius variable for Search Widget
+
+### Bug Fixes
+
+- Filters CSS parts support
+
+## v. 2.121.1 - 2024-11-18
+
+### Bug Fixes
+
+- Adjust max range value for price filter
+
+## v. 2.121.0 - 2024-11-18
+
+### Features
+
+- added favourite button support
+
+## v. 2.120.0 - 2024-11-18
+
+### Features
+
+- Reset selected filters after the new text search
+
+### Bug Fixes
+
+- Fix the state conflict of the Search Widget with Results on one page.
+
+- Remove an extra vviinnFiltersChanged event triggering
+
+- Show errors for text search
+
+## v. 2.119.0 - 2024-11-14
+
+### Features
+
+- send text search tracking
+
+## v. 2.118.3 - 2024-11-14
+
+### Bug Fixes
+
+- Unify filter buttons across the components
+
+## v. 2.118.2 - 2024-11-14
+
+### Bug Fixes
+
+- Show Industry Select on mobile in the Storybook
+
+## v. 2.118.1 - 2024-11-11
+
+### Bug Fixes
+
+- Align extended and color filters styles
+
+## v. 2.118.0 - 2024-11-11
+
+### Features
+
+- Show in Storybook how to style custom labels
+
+## v. 2.117.0 - 2024-10-31
+
+### Features
+
+- Extended filters for Search Widget, desktop devices
+
+## v. 2.116.0 - 2024-10-30
+
+### Features
+
+- changed product card examples to cover relevant industries and reasonable item properties
+
+## v. 2.115.1 - 2024-10-29
+
+### Bug Fixes
+
+- Price range improvements: optimizing fetching, removing empty histogram columns
+
+- Price range improvements: slider UX
+
+## v. 2.115.0 - 2024-10-29
+
+### Features
+
+- new layout of storybook welcome page
+
+## v. 2.114.13 - 2024-10-29
+
+### Bug Fixes
+
+- New scheme for tracking dynamic filters select/deselect
+
+## v. 2.114.12 - 2024-10-29
+
+### Bug Fixes
+
+- Minor Set Widget's layout fix
+
+## v. 2.114.11 - 2024-10-28
+
+### Bug Fixes
+
+- Set widget layout fixes. Adding image-picture part for styling.
+
+## v. 2.114.10 - 2024-10-21
+
+### Bug Fixes
+
+- use 'main' branch in github-actions
+
+## v. 2.114.9 - 2024-10-21
+
+### Bug Fixes
+
+- Changelog generation
+
+## v. 2.114.0 - 2024-10-18
+
+### Features
+
+- Allow color customization of One-click discovery icon
+
+## v. 2.113.0 - 2024-10-17
+
+### Features
+
+- Added one-click-discovery-mode
+
+## v. 2.112.2 - 2024-10-17
+
+### Bug Fixes
+
+- Now add-price-container is configured via Storybook
+
+## v. 2.112.1 - 2024-10-17
+
+### Bug Fixes
+
+- vviinn-filters improvements
+
+## v. 2.112.0 - 2024-10-16
+
+### Features
+
+- Fixed some designing cases on storybook
+
+## v. 2.111.0 - 2024-10-16
+
+### Features
+
+- add-price-container property for Widgets
+
+## v. 2.110.0 - 2024-10-14
+
+### Features
+
+- Product Card's layout changes
+
+## v. 2.109.0 - 2024-10-11
+
+### Features
+
+- Accept filters for product-listing-page endpoint
+
+## v. 2.108.0 - 2024-10-10
+
+### Features
+
+- dynamic filter trigger events now as a helper function
+
+## v. 2.107.0 - 2024-10-09
+
+### Features
+
+- Added currency sign to price-range and showing the actual values
+
+## v. 2.106.0 - 2024-10-09
+
+### Features
+
+- closing extended modal in button mode when click outside
+
+## v. 2.105.0 - 2024-10-09
+
+### Features
+
+- add one-click discovery to vviinn-results
+
+## v. 2.104.0 - 2024-10-08
+
+### Features
+
+- Loading state for Search Bar
+
+## v. 2.103.0 - 2024-10-08
+
+### Features
+
+- Add Product Card examples to the Storybook
+
+## v. 2.102.0 - 2024-10-01
+
+### Features
+
+- adding actions slot to product card
+
+## v. 2.101.1 - 2024-09-30
+
+### Bug Fixes
+
+- One-click Discovery Set widget uses cross-selling request by default
+
+## v. 2.101.0 - 2024-09-30
+
+### Features
+
+- Default search query for Search Bar
+
+## v. 2.100.0 - 2024-09-30
+
+### Features
+
+- Unify Product Card styles
+
+## v. 2.99.0 - 2024-09-26
+
+### Features
+
+- Added an ability to vviinn-vpr-button to load the sidebar to custom container
+
+## v. 2.98.1 - 2024-09-25
+
+### Bug Fixes
+
+- Change default mode for Search Bar
+
+## v. 2.98.0 - 2024-09-24
+
+### Features
+
+- Add textAndModal mode for vviinn-text-search
+
+## v. 2.97.2 - 2024-09-23
+
+### Bug Fixes
+
+- changed product list layout in storybook
+
+- storybook improvement
+
+## v. 2.97.1 - 2024-09-23
+
+### Bug Fixes
+
+- Unblock scroll when switching between stories
+
+## v. 2.97.0 - 2024-09-23
+
+### Features
+
+- Add a variable for customizing font-family
+
+### Bug Fixes
+
+- Unify font-family for widgets
+
+## v. 2.96.0 - 2024-09-20
+
+### Features
+
+- Show Base Price in Product Card
+
+## v. 2.95.4 - 2024-09-18
+
+### Bug Fixes
+
+- removed additional log
+
+## v. 2.95.3 - 2024-09-18
+
+### Bug Fixes
+
+- Fix energy label parts for Search Widget
+
+## v. 2.95.2 - 2024-09-18
+
+### Bug Fixes
+
+- separated custom label and added new parts
+
+## v. 2.95.1 - 2024-09-17
+
+### Bug Fixes
+
+- Added price-label part to the visual search and results components
+
+## v. 2.95.0 - 2024-09-16
+
+### Features
+
+- added mode to discovery and locale to all stories examples
+
+## v. 2.94.1 - 2024-09-16
+
+### Bug Fixes
+
+- Hide source product when not enough recommendations for set mode
+
+## v. 2.94.0 - 2024-09-16
+
+### Features
+
+- Show energe label in Storybook's Product Card
+
+## v. 2.93.0 - 2024-09-11
+
+### Features
+
+- Added preview mode to vviinn-extended-filters
+
+## v. 2.92.0 - 2024-09-11
+
+### Features
+
+- changed icon of one-click dicovery set
+
+## v. 2.91.0 - 2024-09-11
+
+### Features
+
+- changed icon of one-click discovery on slider mode
+
+## v. 2.90.0 - 2024-09-10
+
+### Features
+
+- use related icons in search modal
+
+## v. 2.89.1 - 2024-09-10
+
+### Bug Fixes
+
+- Fix product details redirection for Search Widget
+
+## v. 2.89.0 - 2024-09-10
+
+### Features
+
+- Show source image in One-Click Discovery button
+
+## v. 2.88.0 - 2024-09-10
+
+### Features
+
+- documentation of events section
+
+- update customization section documentation
+
+## v. 2.87.1 - 2024-09-09
+
+### Bug Fixes
+
+- Added enableImportInjection
+
+## v. 2.87.0 - 2024-09-09
+
+### Features
+
+- Adding Nuxt documentation
+
+## v. 2.86.0 - 2024-09-09
+
+### Features
+
+- Product Card Redesign
+
+## v. 2.85.1 - 2024-09-09
+
+### Bug Fixes
+
+- Fix slots for energy labels and extra API calls for the text search
+
+## v. 2.85.0 - 2024-09-05
+
+### Features
+
+- Added industry selector to the storybook
+
+## v. 2.84.1 - 2024-09-05
+
+### Bug Fixes
+
+- Fixed pipeline issue
+
+## v. 2.84.0 - 2024-09-05
+
+### Features
+
+- Changed the vviinn-vpr-button icon based on campaign-type
+
+## v. 2.83.0 - 2024-09-04
+
+### Features
+
+- Storybook Restructuring
+
+## v. 2.82.0 - 2024-08-30
+
+### Features
+
+- Update energy labels structure
+
+## v. 2.81.0 - 2024-08-29
+
+### Features
+
+- developed price labels
+
+## v. 2.80.1 - 2024-08-29
+
+### Bug Fixes
+
+- Update storybook content and fixed dart code highlighting
+
+## v. 2.80.0 - 2024-08-28
+
+### Features
+
+- Use vviinn-filters in the Search Widget
+
+## v. 2.79.2 - 2024-08-27
+
+### Bug Fixes
+
+- Applied some design changes
+
+## v. 2.79.1 - 2024-08-26
+
+### Bug Fixes
+
+- Add additional padding for vviinn-text-search in textAndImage mode
+
+## v. 2.79.0 - 2024-08-22
+
+### Features
+
+- Refactor CSS variables and replace some defaults
+
+## v. 2.78.0 - 2024-08-21
+
+### Features
+
+- Fix layout issues for Text Search story
+
+## v. 2.77.0 - 2024-08-16
+
+### Features
+
+- Show filters with the Text Search component in the Storybook
+
+## v. 2.76.2 - 2024-08-15
+
+### Bug Fixes
+
+- Applied new designs to vviinn-filters component
+
+## v. 2.76.1 - 2024-08-14
+
+### Bug Fixes
+
+- Fix visual search filters
+
+## v. 2.76.0 - 2024-08-14
+
+### Features
+
+- Add instructions for a separated components
+
+## v. 2.75.0 - 2024-08-13
+
+### Features
+
+- Make stories for vviinn-results and vviinn-text-search
+
+## v. 2.74.2 - 2024-08-12
+
+### Bug Fixes
+
+- Updated documentation
+
+## v. 2.74.1 - 2024-08-12
+
+### Bug Fixes
+
+- Applied new styles for vviinn-price-range
+
+## v. 2.74.0 - 2024-08-12
+
+### Features
+
+- Add vviinn-energy-label component
+
+## v. 2.73.1 - 2024-08-08
+
+### Bug Fixes
+
+- defined new variables
+
+## v. 2.73.0 - 2024-08-07
+
+### Features
+
+- Product Listing Page support for vviinn-results component
+
+## v. 2.72.1 - 2024-08-01
+
+### Bug Fixes
+
+- Fixed color filter
+
+## v. 2.72.0 - 2024-07-30
+
+### Features
+
+- Connect vviinn-filters and vviinn-results components
+
+## v. 2.71.0 - 2024-07-30
+
+### Features
+
+- integrated with active and primary filters flags
+
+## v. 2.70.0 - 2024-07-29
+
+### Features
+
+- Add image upload button for vviinn-text-search
+
+## v. 2.69.0 - 2024-07-29
+
+### Features
+
+- Added color filters in the new style
+
+### Bug Fixes
+
+- fixed send color filters
+
+## v. 2.68.0 - 2024-07-25
+
+### Features
+
+- Separate vviinn-text-search component
+
+## v. 2.67.1 - 2024-07-24
+
+### Bug Fixes
+
+- Fix errors layout in Search Widget
+
+## v. 2.67.0 - 2024-07-24
+
+### Features
+
+- implemented vviin-price filters component and used in the vviinn-filters
+
+## v. 2.66.2 - 2024-07-19
+
+### Bug Fixes
+
+- install storybook generally
+
+## v. 2.66.1 - 2024-07-19
+
+### Bug Fixes
+
+- Storybook issue
+
+## v. 2.66.0 - 2024-07-19
+
+### Features
+
+- Add textSearchQuery prop for vviinn-results component
+
+## v. 2.65.0 - 2024-07-18
+
+### Features
+
+- Add vviinn-product-card-width CSS variable
+
+## v. 2.64.0 - 2024-07-18
+
+### Features
+
+- Add an event listener of searchId to vviinn-results widget
+
+## v. 2.63.0 - 2024-07-17
+
+### Features
+
+- Add results component
+
+## v. 2.62.0 - 2024-07-10
+
+### Features
+
+- Bring Set Mode to Recommendation Button
+
+## v. 2.61.0 - 2024-07-10
+
+### Features
+
+- Add product-details-redirection property
+
+### Bug Fixes
+
+- Rename new property to product-details-redirect. Rename product-detail-new-tab to product-details-new-tab
+
+## v. 2.60.0 - 2024-07-10
+
+### Features
+
+- Added multiple filter support
+
+## v. 2.59.0 - 2024-07-10
+
+### Features
+
+- Applied some changes on filters component
+
+## v. 2.58.0 - 2024-07-08
+
+### Features
+
+- Change default Storybook token
+
+## v. 2.57.0 - 2024-07-02
+
+### Features
+
+- developing filters component
+
+## v. 2.56.0 - 2024-07-01
+
+### Features
+
+- Recommendation's Set mode customization of discounts
+
+## v. 2.55.7 - 2024-07-01
+
+### Bug Fixes
+
+- fixed an issue in storybook
+
+## v. 2.55.4 - 2024-06-26
+
+### Bug Fixes
+
+- Recommendations and Search endpoints refactoring
+
+## v. 2.55.3 - 2024-06-25
+
+### Bug Fixes
+
+- Show no-result-text when receiving empty recommendations
+
+## v. 2.55.2 - 2024-06-20
+
+### Bug Fixes
+
+- Fix starting page layout of Search Widget
+
+## v. 2.55.1 - 2024-06-19
+
+### Bug Fixes
+
+- Fix product events for Set widget
+
+## v. 2.55.0 - 2024-06-19
+
+### Features
+
+- Add discount-label part for Set widget
+
+- Add slots for pressed Add to Basket button, Set mode
+
+## v. 2.54.1 - 2024-06-14
+
+### Bug Fixes
+
+- Fix scripts for building the project
+
+## v. 2.54.0 - 2024-06-13
+
+### Features
+
+- Migrate recommendations to the new endpoint
+
+- Use source product in the Set widget
+
+## v. 2.53.0 - 2024-06-13
+
+### Features
+
+- Filters functionality for text search
+
+## v. 2.52.4 - 2024-06-13
+
+### Bug Fixes
+
+- Change the style of the photo frame
+
+- Remove camera capture text and adjust camera layout
+
+## v. 2.52.3 - 2024-06-12
+
+### Bug Fixes
+
+- Fixed influence case of different widgets in the level of events, props, and slots.
+
+## v. 2.52.2 - 2024-06-12
+
+### Bug Fixes
+
+- Added vviinn-camera-button-text-start slot to the search widget button and storybook
+
+- Added vviinn-camera-button-text-stop slot to the search widget button and storybook
+
+- Added vviinn-camera-icon slot to the search widget button and storybook
+
+- Added vviinn-image-upload-icon slot to the search widget button and storybook
+
+- Added vviinn-text-search-icon slot to the search widget button and storybook
+
+- Removed vviinn-camera-button-text slot from the search widget
+
+- Removed vviinn-show-files-button-text slot from the search widget
+
+- synchronized the slots on recommendation widgets
+
+## v. 2.52.1 - 2024-06-11
+
+### Bug Fixes
+
+- Fix slots for Start Camera button
+
+## v. 2.52.0 - 2024-06-06
+
+### Features
+
+- Redesign camera screen
+
+## v. 2.51.5 - 2024-06-06
+
+### Bug Fixes
+
+- Fix basket-button slots behaviour after card updating for Set widget
+
+## v. 2.51.4 - 2024-06-06
+
+### Bug Fixes
+
+- Fixed conflict of Vviinn events and gtag
+
+## v. 2.51.2 - 2024-06-06
+
+### Bug Fixes
+
+- Fixed issue of Vviinn widgets clicks in storybook
+
+## v. 2.51.1 - 2024-06-04
+
+### Bug Fixes
+
+- Changed title
+
+## v. 2.51.0 - 2024-06-04
+
+### Features
+
+- Changed some titles and translations
+
+## v. 2.50.4 - 2024-06-04
+
+### Bug Fixes
+
+- Fixed issue of multi language when using 2 widget
+
+## v. 2.50.3 - 2024-05-30
+
+### Bug Fixes
+
+- Fixed issue of repeating slots
+
+## v. 2.50.2 - 2024-05-28
+
+### Bug Fixes
+
+- Fixed storybook issue
+
+## v. 2.50.0 - 2024-05-23
+
+### Features
+
+- Add slots for customizing Set widget, Recommendation
+
+## v. 2.49.3 - 2024-05-21
+
+### Bug Fixes
+
+- Adjust scrolling for grid mode in Recommendation widget
+
+## v. 2.49.2 - 2024-05-17
+
+### Bug Fixes
+
+- Get back additional fields for Controls tab
+
+## v. 2.49.0 - 2024-05-13
+
+### Features
+
+- Add camera mode for Search Widget
+
+## v. 2.48.7 - 2024-05-02
+
+### Bug Fixes
+
+- Prevent triggering extra vviinnProductLoad events for the Search Widget
+
+## v. 2.48.6 - 2024-04-24
+
+### Bug Fixes
+
+- Fix basket button overflow issue and set mode bug with displaying prices
+
+- Fix growing card issue for Recommendation widget
+
+- Fix scrolling behaviour for Recommendation widget, grid mode
+
+- remove extra margin for bullets block in Recommendation widget, grid mode
+
+## v. 2.48.5 - 2024-04-24
+
+### Bug Fixes
+
+- Add downscaling for uploaded Hi-Res image
+
+## v. 2.48.4 - 2024-04-17
+
+### Bug Fixes
+
+- Add possibility to pass campaign-id as string to Search Widget
+
+- Remove unused slots and make according changes in documentation
+
+## v. 2.48.3 - 2024-04-16
+
+### Bug Fixes
+
+- Add thin scrollbar for set widget
+
+## v. 2.48.2 - 2024-04-11
+
+### Bug Fixes
+
+- Fix Plus Icon positioning
+
+## v. 2.48.1 - 2024-04-11
+
+### Bug Fixes
+
+- Fix issue with resizing cards in Set Widget
+
+## v. 2.48.0 - 2024-04-10
+
+### Features
+
+- Add translations for Set Mode
+
+## v. 2.47.0 - 2024-04-10
+
+### Features
+
+- Add Buy as Set functionality to Recommendation Widget
+
+## v. 2.46.0 - 2024-04-09
+
+### Features
+
+- Add Text Search Feature
+
+## v. 2.45.0 - 2024-03-18
+
+### Features
+
+- Updated the documentation related to the Vue Framework.
+
+## v. 2.44.2 - 2024-03-13
+
+### Bug Fixes
+
+- Fix zoom bug on the iOS 17.4
+
+## v. 2.44.1 - 2024-03-13
+
+### Bug Fixes
+
+- Fix Cropper Behavior for Different Image Ratios
+
+## v. 2.44.0 - 2024-03-05
+
+### Features
+
+- Take Square Image by the Camera
+
+## v. 2.43.1 - 2024-03-04
+
+### Bug Fixes
+
+- Fix console error
+
+## v. 2.43.0 - 2024-02-29
+
+### Features
+
+- Add Zoom Controls for Camera
+
+- Improve Camera's quality
+
+## v. 2.42.1 - 2024-02-28
+
+### Bug Fixes
+
+- Remove Highlighting on Photo Button's Click
+
+## v. 2.42.0 - 2024-02-14
+
+### Features
+
+- update react documentation
+
+## v. 2.41.2 - 2024-02-14
+
+### Bug Fixes
+
+- Search Widget: Translations Improvements
+
+## v. 2.41.1 - 2024-02-13
+
+### Bug Fixes
+
+- Fix For Visual Search When Tracking is Deactivated
+
+## v. 2.41.0 - 2024-02-13
+
+### Features
+
+- Add Slots for Icons
+
+## v. 2.40.2 - 2024-02-12
+
+### Bug Fixes
+
+- Translation Functionality Improvements
+
+## v. 2.40.1 - 2024-02-08
+
+### Bug Fixes
+
+- Improve Cropper Controls
+
+## v. 2.40.0 - 2024-02-08
+
+### Features
+
+- Add Transitions For Detected Object's Points
+
+## v. 2.39.0 - 2024-02-08
+
+### Features
+
+- Open Camera in the Browser
+
+## v. 2.38.0 - 2024-02-02
+
+### Features
+
+- copper design
+
+## v. 2.37.0 - 2024-02-01
+
+### Features
+
+- Add Native Camera Experience for Search Widget
+
+## v. 2.36.0 - 2024-01-31
+
+### Features
+
+- Added show files feature
+
+## v. 2.35.0 - 2024-01-17
+
+### Features
+
+- New design of Search Widget: first screen
+
+## v. 2.34.0 - 2024-01-11
+
+### Features
+
+- Add Update All Cards Funtionality
+
+## v. 2.33.0 - 2023-12-11
+
+### Features
+
+- Add 'cross-selling' mode for Recommendation Widget
+
+## v. 2.32.0 - 2023-11-07
+
+### Features
+
+- Trigger vviinnProductView event when product image appears in the viewport.
+
+## v. 2.31.0 - 2023-10-25
+
+### Features
+
+- Track mouse wheel click as product click.
+
+## v. 2.30.2 - 2023-10-12
+
+### Bug Fixes
+
+- Fix result events behavior for Search Button
+
+## v. 2.29.3 - 2023-10-11
+
+### Features
+
+- Send resultView and resultLoad events to the tracking service
+
+## v. 2.30.2 - 2023-10-12
+
+### Bug Fixes
+
+- Fix result events behavior for Search Button
+
+## v. 2.30.0 - 2023-10-11
+
+### Features
+
+- Send resultView and resultLoad events to the tracking service
+
+## v. 2.29.0 - 2023-09-19
+
+### Features
+
+- If opening product details in new tab is blocked by the browser
+
+- Open product details in new tab on click + holding ctrl or command button.
+
+## v. 2.28.0 - 2023-09-14
+
+### Features
+
+- Add 'vviinnAddToBasket' event for Recommendation Widget with possibility to show or hide button
+
+- Add slot for Add to Basket text customization, add shadow part for button's styles customization
+
+- send addToBasket event to the tracking service
+
+## v. 2.27.0 - 2023-09-13
+
+### Features
+
+- Make crop after clicking detected objects
+
+## v. 2.26.0 - 2023-09-04
+
+### Features
+
+- Replace old custom cropper with cropper.js
+
+## v. 2.25.2 - 2023-08-29
+
+### Bug Fixes
+
+- Fix bug with emitting product load events for non-active search widget instances
+
+## v. 2.25.0 - 2023-08-29
+
+### Features
+
+- Add image-resolution-width prop for VPS components; Change default resolution width to 250px
+
+## v. 2.24.0 - 2023-08-28
+
+### Features
+
+- Track product_load_event, widet's load event, distinguishing clicked filter kind, layout fix on the desktop for VPS widget
+
+## v. 2.23.0 - 2023-08-28
+
+### Features
+
+- Use responsive images for VPS widget
+
+## v. 2.22.0 - 2023-08-23
+
+### Features
+
+- Distinguish Between VPC and VPR in Recommendations Widget
+
+## v. 2.21.0 - 2023-08-11
+
+### Features
+
+- Add vviinnResultLoad and vviinnResultView events
+
+## v. 2.20.0 - 2023-06-22
+
+### Features
+
+- show widgetVersion in the Events, fix order of load and open events for vpr button
+
+## v. 2.19.0 - 2023-06-21
+
+### Features
+
+- Add upload mode to vps button
+
+- Add upload mode to vps button and update packages
+
+- Add upload mode to vps button, update packages
+
+## v. 2.18.0 - 2023-04-27
+
+### Features
+
+- Added currency to VPR button and VPR widget
+
+## v. 2.17.0 - 2023-03-21
+
+### Features
+
+- add Color to the storybook
+
+## v. 2.16.0 - 2023-02-15
+
+### Features
+
+- added some parts for styling
+
+## v. 2.15.0 - 2023-02-02
+
+### Features
+
+- Added the ability to be able to change numeric part of price
+
+## v. 2.14.0 - 2023-02-02
+
+### Features
+
+- Disable tracking api when the server rejected
+
+## v. 2.13.0 - 2022-12-07
+
+### Features
+
+- add the ability to add style to buttons or not
+
+## v. 2.12.0 - 2022-12-06
+
+### Features
+
+- made styles of recommendation and search button persistent
+
+### Bug Fixes
+
+- Fixed issue of cursor pointer on search button
+
+## v. 2.11.10 - 2022-12-01
+
+### Bug Fixes
+
+- fixing safari crash issue
+
+## v. 2.11.8 - 2022-12-01
+
+### Bug Fixes
+
+- removed a change to fix the crach safari issue
+
+## v. 2.11.7 - 2022-12-01
+
+### Bug Fixes
+
+- removed a change to fix the crach safari issue
+
+## v. 2.11.0 - 2022-11-28
+
+### Features
+
+- hide recommendation widget if there are no results
+
+## v. 2.10.0 - 2022-11-28
+
+### Features
+
+- hide preloader on vps button after 5sec timeout
+
+## v. 2.9.0 - 2022-11-24
+
+### Features
+
+- added auxclick event to the product
+
+## v. 2.8.3 - 2022-11-23
+
+### Bug Fixes
+
+- inline styles for some components to reduce number of requests
+
+## v. 2.8.0 - 2022-10-10
+
+### Features
+
+- move image resizing in WebWorker
+
+- move tracking WebWorker thread
+
+- use cssnano for css minification
+
+### Bug Fixes
+
+- fix bug with wrong image sizes when convert File to Image
+
+## v. 2.7.3 - 2022-09-25
+
+### Bug Fixes
+
+- fix bug with broken redirect on product deeplink
+
+## v. 2.7.0 - 2022-09-23
+
+### Features
+
+- use campaign id in search sessions and example images
+
+## v. 2.6.0 - 2022-09-20
+
+### Features
+
+- add campaigns parameter to recommendations widget
+
+- add property with campaigns ids to search widget for targeting campaigns
+
+## v. 2.5.2 - 2022-09-15
+
+### Bug Fixes
+
+- remove unnessesary logs
+
+## v. 2.5.1 - 2022-09-15
+
+### Bug Fixes
+
+- redirect to product deeplink even if tracking request fall
+
+## v. 2.5.0 - 2022-09-14
+
+### Features
+
+- export example images block as shadow part
+
+## v. 2.4.4 - 2022-09-13
+
+### Bug Fixes
+
+- fix tracking product click event
+
+## v. 2.4.3 - 2022-09-08
+
+### Bug Fixes
+
+- fix tracking open event for Search widget
+
+## v. 2.4.2 - 2022-04-27
+
+### Bug Fixes
+
+- fix bug with wrong rank in telemetry for recommendations
+
+- increase example images sizes
+
+## v. 2.4.1 - 2022-04-22
+
+### Bug Fixes
+
+- fix telemetry events for search widget
+
+## v. 2.4.0 - 2022-04-22
+
+### Features
+
+- integrate telemetry
+
+## v. 2.3.0 - 2022-04-04
+
+### Features
+
+- export carousel buttons as shadow parts
+
+### Bug Fixes
+
+- remove sidebar when vviinn-vpr-button removed from dom
+
+## v. 2.2.1 - 2022-03-17
+
+### Bug Fixes
+
+- type typo fix
+
+## v. 2.2.0 - 2022-03-17
+
+### Features
+
+- add vviinn-vpr-button component
+
+## v. 2.1.1 - 2022-03-14
+
+### Bug Fixes
+
+- permanently hide scrollbars in grid mode for Recommendation
+
+## v. 2.1.0 - 2022-03-14
+
+### Features
+
+- Recommendations Widget - add property for loading external css
+
+### Bug Fixes
+
+- add default border for images in recommendation widget
+
+- fetch recommendation if campaignType changed
+
+- find carousel parent properly
+
+- fix broken deeplinks in recommendation widget
+
+- fix bug with scrollbars in recommendation widgets
+
+- fix buggy layout with on Grid Mode of Recommendations widget
+
+- fix scrollbars property on recommendations widget
+
+- fix scrolling if scrollbar is hidden
+
+- fix title allignement in recommendations component
+
+- minor style fixes
+
+- refactor exported shadow parts of product card component
+
+## v. 2.0.0 - 2022-02-24
+
+### ⚠ BREAKING CHANGES
+
+- new slider implementation for recommendation widget
+
+### Features
+
+- add new customizable slots
+
+- Change default style for product cards
+
+- improve slider on recommendation widget
+
+- new slider implementation for recommendation widget
+
+### Bug Fixes
+
+- fix bug with sending google analytics
+
+- fix default cards style on search widget
+
+- fix layout in recommendation widget
+
+- Fixed bug with getting item width in recommendation widget
+
+- recommendation widget improvements
+
+- unobserve ResizeObserver when VviinnCarousel removed
+
+## v. 1.1.1 - 2022-01-13
+
+### Bug Fixes
+
+- reset loader after server errors
+
+## v. 1.1.0 - 2022-01-06
+
+### Features
+
+- fetch recommendations when product-id changed
+
+- use Lanczos algorythm for image resizing on client
+
+### Bug Fixes
+
+- export shadow part for product type
+
+- fix bug with wrong selected image size on results view
+
+- image resizing now resize on larger side
