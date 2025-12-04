@@ -214,7 +214,6 @@ export const renderProductGrid = (props: ProductGridProps) => {
           <div class="result-image">
             <vviinn-image
               width={120}
-              height={120}
               alt={product.title || ""}
               imageTitle={product.title || ""}
               src={product.image?.thumbnail || product.image?.original || ""}

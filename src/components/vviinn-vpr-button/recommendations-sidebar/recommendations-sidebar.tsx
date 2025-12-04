@@ -49,7 +49,6 @@ export class RecommendationsSidebar {
   @Prop() campaignType: CampaignName;
   @Prop() color: string;
   @Prop() imageWidth: number = PRODUCT_CARD_IMAGE_WIDTH;
-  @Prop() imageRatio: number = 1;
   @Prop() showMultipleImages: boolean = false;
   @Prop() cssUrl: string | null;
   @Prop() noResultText: string;
@@ -275,7 +274,6 @@ export class RecommendationsSidebar {
               productId={this.productId}
               exportparts={`${carouselParts}, ${productCardParts}`}
               imageWidth={this.imageWidth}
-              imageRatio={this.imageRatio}
               showMultipleImages={this.showMultipleImages}
               setItemsAmount={this.setItemsAmount}
               blockTitle=""

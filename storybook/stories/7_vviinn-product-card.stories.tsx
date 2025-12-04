@@ -42,7 +42,6 @@ const Template = (args) => {
       show-multiple-images="${args.showMultipleImages}"
       image-width="${args.imageWidth}"
       responsive="${args.responsive}"
-      image-ratio="${args.imageRatio}"
       update-button-location="${args.updateButtonLocation}"
       add-to-basket-show="${args.addToBasketShow}"
       is-set-mode="${args.isSetMode}"
@@ -92,7 +91,7 @@ const initArgs = {
   showMultipleImages: false,
   responsive: false,
   imageWidth: 300,
-  imageRatio: 1,
+  productCardImageAspectRatio: "1 / 1",
   price: 3629,
   basePrice: { price: 10, quantity: 1, measure: "cm²" },
   salePrice: 1653,

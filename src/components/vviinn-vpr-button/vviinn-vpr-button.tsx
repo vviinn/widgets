@@ -142,8 +142,6 @@ export class VviinnVprButton {
   /** Resolution width of an image in the product card */
   @Prop() imageResolutionWidth: number =
     DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH;
-  /** The ratio of each recommended product image */
-  @Prop() imageRatio: number = 1;
   /** Show multiple images on hover (desktop only) */
   @Prop() showMultipleImages: boolean = false;
   /** Items amount in set mode grid */
@@ -377,7 +375,6 @@ export class VviinnVprButton {
     sidebar.buttonChildren = this.el.children;
     sidebar.showFilters = this.showFilters;
     sidebar.cssUrl = this.cssUrl;
-    sidebar.imageRatio = this.imageRatio;
     sidebar.setItemsAmount = this.setItemsAmount;
     sidebar.setModeDiscounts = this.setModeDiscounts;
     sidebar.updateButtonLocation = this.updateButtonLocation;
