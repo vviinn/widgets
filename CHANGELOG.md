@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.203.1](https://github.com/vviinn/widgets/compare/v2.203.0...v2.203.1) (2025-12-04)
+
+
+### Bug Fixes
+
+* Correct indexes for rendered custom labels. ([2b8f5b3](https://github.com/vviinn/widgets/commit/2b8f5b3b834cb75da03165e04daa0685838872e6))
+
 ## [2.203.0](https://github.com/vviinn/widgets/compare/v2.202.1...v2.203.0) (2025-11-27)
 
 
