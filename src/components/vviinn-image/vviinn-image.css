@@ -10,8 +10,8 @@
 
   --image-border-default: none;
   --image-bg-color-default: var(--surface-bg-color-01);
-  --image-transition-duration-default: 0.5s;
   --product-card-image-aspect-ratio-default: 1;
+  --image-transition-duration-default: 0.5s;
 
   display: block;
 }
@@ -21,7 +21,10 @@
   display: grid;
   align-content: center;
   object-position: 50% 50%;
-  aspect-ratio: var(--product-card-image-aspect-ratio, var(--product-card-image-aspect-ratio-default));
+  aspect-ratio: var(
+    --product-card-image-aspect-ratio,
+    var(--product-card-image-aspect-ratio-default)
+  );
   object-fit: contain;
   text-align: center;
   border: var(--image-border, var(--image-border-default));
@@ -57,7 +60,10 @@
   align-items: center;
   justify-content: center;
   background: #f0f0f0;
-  aspect-ratio: var(--product-card-image-aspect-ratio, var(--product-card-image-aspect-ratio-default));
+  aspect-ratio: var(
+    --product-card-image-aspect-ratio,
+    var(--product-card-image-aspect-ratio-default)
+  );
   width: 100%;
   height: auto;
   transition: opacity
@@ -94,7 +100,10 @@ picture::after {
 .image-container {
   position: relative;
   display: block;
-  aspect-ratio: var(--product-card-image-aspect-ratio, var(--product-card-image-aspect-ratio-default));
+  aspect-ratio: var(
+    --product-card-image-aspect-ratio,
+    var(--product-card-image-aspect-ratio-default)
+  );
 }
 
 .image-container.content-card-image-container,

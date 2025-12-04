@@ -18,6 +18,7 @@
   --product-card-image-border-default: none;
   --product-card-image-bg-color-default: var(--surface-bg-color-01);
   --basket-button-bg-color-pressed-default: var(--button-bg-color-positive);
+  --product-card-image-aspect-ratio-default: 1;
   --product-card-transition-duration-default: 0.5s;
 
   box-sizing: border-box;
@@ -91,7 +92,10 @@
   align-items: center;
   justify-content: center;
   background: #f0f0f0;
-  aspect-ratio: var(--product-card-image-aspect-ratio, 1);
+  aspect-ratio: var(
+    --product-card-image-aspect-ratio,
+    var(--product-card-image-aspect-ratio-default)
+  );
   width: 100%;
   height: auto;
 }
