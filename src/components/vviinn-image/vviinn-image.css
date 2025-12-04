@@ -5,11 +5,13 @@
    * @prop --image-border: Set the border of the image.
    * @prop --image-bg-color: Set the background color of the image.
    * @prop --image-transition-duration: Duration of skeleton to content transitions.
+   * @prop --product-card-image-aspect-ratio: Set the aspect ratio (e.g., "3 / 4", "1 / 1", "16 / 9").
    */
 
   --image-border-default: none;
   --image-bg-color-default: var(--surface-bg-color-01);
   --image-transition-duration-default: 0.5s;
+  --product-card-image-aspect-ratio-default: 1;
 
   display: block;
 }
@@ -19,7 +21,7 @@
   display: grid;
   align-content: center;
   object-position: 50% 50%;
-  aspect-ratio: 1;
+  aspect-ratio: var(--product-card-image-aspect-ratio, var(--product-card-image-aspect-ratio-default));
   object-fit: contain;
   text-align: center;
   border: var(--image-border, var(--image-border-default));
@@ -55,7 +57,7 @@
   align-items: center;
   justify-content: center;
   background: #f0f0f0;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: var(--product-card-image-aspect-ratio, var(--product-card-image-aspect-ratio-default));
   width: 100%;
   height: auto;
   transition: opacity
@@ -92,6 +94,7 @@ picture::after {
 .image-container {
   position: relative;
   display: block;
+  aspect-ratio: var(--product-card-image-aspect-ratio, var(--product-card-image-aspect-ratio-default));
 }
 
 .image-container.content-card-image-container,

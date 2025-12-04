@@ -197,7 +197,6 @@ export const Price: FunctionalComponent<PriceProps> = (props) => {
 
 export type ImageProps = {
   width: number;
-  height: number;
   title: string;
   src: string;
   ref: (el: HTMLImageElement) => void;
@@ -217,8 +216,6 @@ export interface UniversalImageProps extends ImageProps {
 export interface ProductCardImageProps {
   src: string;
   width: number;
-  height: number;
-  aspectRatio: number;
   title: string;
   responsive?: boolean;
   imageResolutionWidth?: number;
@@ -239,8 +236,6 @@ export const renderProductCardImage = (props: ProductCardImageProps) => {
   const {
     src,
     width,
-    height,
-    aspectRatio,
     title,
     responsive = false,
     imageResolutionWidth,
@@ -265,7 +260,6 @@ export const renderProductCardImage = (props: ProductCardImageProps) => {
           images={swiperImages}
           productTitle={title}
           imageWidth={width}
-          imageRatio={aspectRatio}
           imageResolutionWidth={imageResolutionWidth}
           onImageLoad={onImageLoad}
           responsive={responsive}
@@ -284,8 +278,6 @@ export const renderProductCardImage = (props: ProductCardImageProps) => {
     <vviinn-image
       src={src}
       width={width}
-      height={height}
-      aspectRatio={aspectRatio}
       alt={title}
       imageTitle={title}
       responsive={responsive}
@@ -369,7 +361,6 @@ export type ImageSwiperProps = {
   images: ProductImage[];
   productTitle: string;
   imageWidth: number;
-  imageRatio: number;
   imageResolutionWidth: number;
   onImageLoad?: () => void;
   responsive?: boolean;
@@ -386,7 +377,6 @@ export const ImageSwiper: FunctionalComponent<ImageSwiperProps> = (props) => {
     images,
     productTitle,
     imageWidth,
-    imageRatio,
     imageResolutionWidth,
     onImageLoad,
     responsive,
@@ -426,8 +416,6 @@ export const ImageSwiper: FunctionalComponent<ImageSwiperProps> = (props) => {
                 <vviinn-image
                   src={imgSrc}
                   width={imageWidth}
-                  height={imageWidth * imageRatio}
-                  aspectRatio={imageRatio}
                   alt={productTitle}
                   imageTitle={productTitle}
                   responsive={responsive}

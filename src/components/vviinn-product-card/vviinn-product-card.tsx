@@ -161,7 +161,6 @@ export class VviinnProductCard {
   @Prop() images: ProductImage[] = [];
   /** Show multiple images: swiper on mobile, hover on desktop */
   @Prop() showMultipleImages: boolean = false;
-  @Prop() imageRatio: number = 1;
   @Prop() imageWidth: number = PRODUCT_CARD_IMAGE_WIDTH;
   @Prop() price: number | undefined;
   @Prop() basePrice?: BasePrice | string | null;
@@ -486,7 +485,6 @@ export class VviinnProductCard {
   private getImageProps() {
     return {
       width: this.imageWidth,
-      height: this.imageWidth * this.imageRatio,
       src: getCurrentImage(
         this.showSecondImage,
         this.image,
@@ -545,8 +543,6 @@ export class VviinnProductCard {
             {renderProductCardImage({
               src: this.imageProps.src,
               width: this.imageProps.width,
-              height: this.imageProps.height,
-              aspectRatio: this.imageRatio,
               title: this.imageProps.title,
               responsive: this.responsive,
               entityType: this.entityType,
@@ -729,8 +725,6 @@ export class VviinnProductCard {
           {renderProductCardImage({
             src: this.imageProps.src,
             width: this.imageProps.width,
-            height: this.imageProps.height,
-            aspectRatio: this.imageRatio,
             title: this.imageProps.title,
             responsive: this.responsive,
             entityType: this.entityType,
