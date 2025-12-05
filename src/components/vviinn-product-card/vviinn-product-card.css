@@ -362,6 +362,12 @@ vviinn-energy-label {
   height: 100%;
 }
 
+.content-card-image-container .image-placeholder,
+.list-card-image-container .image-placeholder {
+  aspect-ratio: unset;
+  height: 100%;
+}
+
 .content-title,
 .content-link {
   display: -webkit-box;
@@ -392,9 +398,8 @@ vviinn-energy-label {
   flex-direction: column;
   align-items: center;
   padding: var(--spacing-250);
-  gap: var(--spacing-200);
+  gap: 0;
   background-color: var(--surface-bg-color-01);
-  height: calc(100% - 20px);
   align-self: flex-start;
 }
 
@@ -435,6 +440,17 @@ vviinn-energy-label {
   order: 2;
   box-sizing: border-box;
   padding: var(--spacing-125);
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.list-card-image-container vviinn-image {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
 }
 
 .list-label {

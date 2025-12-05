@@ -33,6 +33,10 @@
   height: 100%;
 }
 
+:host::part(list-card) {
+  height: calc(100% - 20px);
+}
+
 .products {
   width: 100%;
   align-content: center;
