@@ -73,9 +73,8 @@ export class RecommendationsSidebar {
   @Prop() showInWidget: boolean = false;
   @Prop() imageResolutionWidth: number =
     DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH;
-
-  /** @internal */
   @Prop() apiPath: string;
+
   /** @internal */
   @Prop() showInCustomContainer: boolean = false;
   /** @internal */

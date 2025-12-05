@@ -76,8 +76,6 @@ const initArgs = {
   productDetailsRedirect: true,
   imageWidth: 300,
   imageResolutionWidth: 500,
-  productCardImageAspectRatio: "1 / 1",
-  productCardImageBgColor: "#f4f4f4",
   showMultipleImages: false,
   setItemsAmount: 4,
   locale: "en-US",
@@ -95,6 +93,8 @@ const initArgs = {
   showExtendedFilters: false,
   addPriceContainer: false,
   favoriteShow: false,
+  productCardImageAspectRatio: "1 / 1",
+  productCardImageBgColor: "#f4f4f4",
 };
 
 Default.args = argsFromParams(initArgs);

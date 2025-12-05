@@ -117,6 +117,8 @@ export class VviinnVprButton {
   @Element() el: HTMLElement;
   /** Vviinn customer's token (required) */
   @Prop() token: string;
+  /** API endpoint URL (optional, defaults to production) */
+  @Prop() apiPath?: string;
   /** Locale for text localization */
   @Prop() locale?: Locale;
   /** Locale for number formatting. Falls back to locale */
@@ -180,7 +182,6 @@ export class VviinnVprButton {
   @Prop() position: "bottom" | "right" = "bottom";
   /** Add default styles to the button */
   @Prop() addStyle: boolean = true;
-
   /** Show or hide Favorite button */
   @Prop() favoriteShow: boolean = false;
 
@@ -191,9 +192,6 @@ export class VviinnVprButton {
   @Prop() appendSidebarToId: string;
   /** @internal */
   @Prop() isStandalone: boolean = true;
-
-  /** @internal */
-  @Prop() apiPath?: string;
 
   /** @internal */
   @Prop() showInWidget: boolean = false;

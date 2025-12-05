@@ -161,6 +161,8 @@ export class VviinnVprWidget implements ComponentInterface {
   @Element() el: HTMLElement;
   /** Vviinn customer's token (required) */
   @Prop() token: string;
+  /** API endpoint URL (optional, defaults to production) */
+  @Prop() apiPath?: string;
   /** ID of product you need recommendations for (required) */
   @Prop() productId: string;
   /** Switch between carousel modes */
@@ -222,8 +224,6 @@ export class VviinnVprWidget implements ComponentInterface {
   /** Show or hide the widget's scrollbar */
   @Prop() showScroll = true;
 
-  /** @internal */
-  @Prop() apiPath?: string;
   /** @internal */
   @Prop() useCarousel: boolean = true;
   /** @internal */

@@ -86,8 +86,6 @@ const initArgs = {
   pricePrefix: "",
   addStyle: true,
   imageResolutionWidth: 250,
-  productCardImageAspectRatio: "1 / 1",
-  productCardImageBgColor: "#f4f4f4",
   showMultipleImages: false,
   textSearchShow: true,
   addToBasketShow: false,
@@ -96,6 +94,8 @@ const initArgs = {
   favoriteShow: false,
   oneClickDiscoveryMode: "append-grid",
   cssUrl: "",
+  productCardImageAspectRatio: "1 / 1",
+  productCardImageBgColor: "#f4f4f4",
 };
 
 Default.args = argsFromParams(initArgs);

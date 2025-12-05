@@ -32,16 +32,14 @@ Default.storyName = "Product List";
 
 const initArgs = {
   token: vviinnToken,
+  apiPath: process.env.STORYBOOK_API_PATH,
   campaignIdTextSearch: "",
   campaignIdVisualSearch: "",
   oneClickDiscoveryCampaigns: "",
   filterColumn: "product_type",
   filterValue,
-  apiPath: process.env.STORYBOOK_API_PATH,
   resultsCount: 9,
   imageResolutionWidth: 500,
-  productCardImageAspectRatio: "1 / 1",
-  productCardImageBgColor: "#f4f4f4",
   showMultipleImages: false,
   currencySign: "€",
   pricePrefix: "",
@@ -56,6 +54,8 @@ const initArgs = {
   addPriceContainer: false,
   favoriteShow: true,
   cssUrl: "",
+  productCardImageAspectRatio: "1 / 1",
+  productCardImageBgColor: "#f4f4f4",
 };
 
 Default.args = argsFromParams(initArgs);

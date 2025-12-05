@@ -39,11 +39,11 @@ Default.storyName = "Shop-the-Look";
 
 const initArgs = {
   token: vviinnToken,
+  apiPath: process.env.STORYBOOK_API_PATH,
   imageUrls: shopTheLookImageUrls.join(","),
   height: 500,
   currencySign: "€",
   campaignId: "",
-  apiPath: process.env.STORYBOOK_API_PATH,
   locale: "en-US",
   numberLocale: "",
   widgetStyle: "rounded",
