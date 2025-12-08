@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.204.0](https://github.com/vviinn/widgets/compare/v2.203.2...v2.204.0) (2025-12-08)
+
+
+### Features
+
+* Add --product-card-image-aspect-ratio CSS variable for the image ratio control in all widgets. ([d71b3c6](https://github.com/vviinn/widgets/commit/d71b3c66a3b5ad7c8b570c757eb4d008bb7b4d6c))
+
 ### [2.203.2](https://github.com/vviinn/widgets/compare/v2.203.1...v2.203.2) (2025-12-04)
 
 
