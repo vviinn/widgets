@@ -50,10 +50,6 @@ const Template = (args) => {
       currency-sign="${args.currencySign}"
       deeplink="${args.deeplink}"
       custom-labels="${args.customLabels}"
-      product-card-content-align="${args.productCardContentAlign}"
-      product-card-text-align="${args.productCardTextAlign}"
-      product-card-image-border="${args.productCardImageBorder}"
-      product-card-image-bg-color="${args.productCardImageBgColor}"
       energy-certifications-string='${args.energyCertificationsString}'
       add-price-container='${args.addPriceContainer}'
       favorite-show="${args.favoriteShow}"

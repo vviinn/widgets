@@ -35,3 +35,18 @@ export const productCardImageBgColorMapping: CSSVarMapping = {
   argName: "productCardImageBgColor",
   cssVar: "--product-card-image-bg-color",
 };
+
+export const productCardContentAlignMapping: CSSVarMapping = {
+  argName: "productCardContentAlign",
+  cssVar: "--product-card-content-align",
+};
+
+export const productCardTextAlignMapping: CSSVarMapping = {
+  argName: "productCardTextAlign",
+  cssVar: "--product-card-text-align",
+};
+
+export const productCardImageBorderMapping: CSSVarMapping = {
+  argName: "productCardImageBorder",
+  cssVar: "--product-card-image-border",
+};
