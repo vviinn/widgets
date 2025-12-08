@@ -1,31 +1,20 @@
+import {
+  productCardImageAspectRatioArg,
+  productCardContentAlignArg,
+  productCardTextAlignArg,
+  productCardImageBorderArg,
+  productCardImageBgColorArg,
+} from "../../../../storybook/helpers";
+
 export const argTypes = {
   brand: {
     description: "Using the [title] attribute from product feed.",
   },
-  productCardContentAlign: {
-    options: ["flex-start", "center", "flex-end"],
-    control: {
-      type: "select",
-    },
-  },
-  productCardTextAlign: {
-    options: ["left", "center", "right"],
-    control: {
-      type: "select",
-    },
-  },
-  productCardImageBorder: {
-    options: ["none", "1px solid #e0e0e0"],
-    control: {
-      type: "select",
-    },
-  },
-  productCardImageBgColor: {
-    options: ["transparent", "#f4f4f4"],
-    control: {
-      type: "select",
-    },
-  },
+  productCardImageAspectRatio: productCardImageAspectRatioArg,
+  productCardContentAlign: productCardContentAlignArg,
+  productCardTextAlign: productCardTextAlignArg,
+  productCardImageBorder: productCardImageBorderArg,
+  productCardImageBgColor: productCardImageBgColorArg,
   energyCertifications: {
     table: {
       disable: true,

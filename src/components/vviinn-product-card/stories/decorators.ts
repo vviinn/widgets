@@ -15,6 +15,7 @@ vviinn-product-card {
   --product-card-text-align: ${args.productCardTextAlign};
   --product-card-image-border: ${args.productCardImageBorder};
   --product-card-image-bg-color: ${args.productCardImageBgColor};
+  --product-card-image-aspect-ratio: ${args.productCardImageAspectRatio};
 }
 
 vviinn-product-card::part(custom-label-0), vviinn-product-card::part(custom-label-1), vviinn-product-card::part(custom-label-2), vviinn-product-card::part(custom-label-3), vviinn-product-card::part(custom-label-4) {

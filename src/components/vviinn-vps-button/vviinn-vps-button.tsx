@@ -172,9 +172,9 @@ export class VviinnVpsButton {
   @Prop() showIntervalInputs: boolean = false;
   /** URL to external CSS file for custom styling */
   @Prop() cssUrl: string | null = null;
-
-  /** @internal */
+  /** API endpoint URL (optional, defaults to production) */
   @Prop() apiPath?: string;
+
   /** @internal */
   @Prop() showInWidget?: boolean = true;
 

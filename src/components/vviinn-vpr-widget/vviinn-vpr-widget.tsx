@@ -161,6 +161,8 @@ export class VviinnVprWidget implements ComponentInterface {
   @Element() el: HTMLElement;
   /** Vviinn customer's token (required) */
   @Prop() token: string;
+  /** API endpoint URL (optional, defaults to production) */
+  @Prop() apiPath?: string;
   /** ID of product you need recommendations for (required) */
   @Prop() productId: string;
   /** Switch between carousel modes */
@@ -182,8 +184,6 @@ export class VviinnVprWidget implements ComponentInterface {
   /** Resolution width of an image in the product card */
   @Prop() imageResolutionWidth: number =
     DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH;
-  /** The ratio of each recommended product image */
-  @Prop() imageRatio: number = 1;
   /** Show multiple images on hover (desktop only) */
   @Prop() showMultipleImages: boolean = false;
   /** Items amount in set mode grid */
@@ -224,8 +224,6 @@ export class VviinnVprWidget implements ComponentInterface {
   /** Show or hide the widget's scrollbar */
   @Prop() showScroll = true;
 
-  /** @internal */
-  @Prop() apiPath?: string;
   /** @internal */
   @Prop() useCarousel: boolean = true;
   /** @internal */
@@ -681,7 +679,6 @@ export class VviinnVprWidget implements ComponentInterface {
         imageResolutionWidth={this.imageResolutionWidth}
         brand={recommendation.brand}
         imageWidth={this.imageWidth}
-        imageRatio={this.imageRatio}
         price={recommendation.price.actual}
         salePrice={recommendation.price.sale}
         basePrice={recommendation.basePrice?.actual}
@@ -720,7 +717,6 @@ export class VviinnVprWidget implements ComponentInterface {
               (_, index) => (
                 <vviinn-product-card
                   loading={true}
-                  imageRatio={this.imageRatio}
                   responsive={true}
                   productTitle=""
                   productId={`skeleton-${index}`}
@@ -756,7 +752,6 @@ export class VviinnVprWidget implements ComponentInterface {
         replaceSlotsContent={this.replaceSlotsContent.bind(this)}
         setModeDiscountsArray={this.setModeDiscountsArray}
         imageResolutionWidth={this.imageResolutionWidth}
-        imageRatio={this.imageRatio}
         showMultipleImages={this.showMultipleImages}
         favoriteShow={this.favoriteShow}
         setItemsAmount={this.setItemsAmount}

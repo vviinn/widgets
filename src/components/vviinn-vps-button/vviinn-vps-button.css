@@ -9,6 +9,7 @@
     * @prop --product-card-text-align: Set the alignment of the text inside the product card.
     * @prop --product-card-image-border: Set the border of the product card image.
     * @prop --product-card-image-bg-color: Set the background color of the product card image.
+    * @prop --product-card-image-aspect-ratio: Set the aspect ratio of the product card image (e.g., "1 / 1", "3 / 4").
     * @prop --basket-button-bg-color-pressed: Set the background color of the pressed Basket Button.
     * @prop --font-family: Set the font family of the widget.
   */

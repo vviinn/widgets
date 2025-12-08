@@ -42,7 +42,6 @@ const Template = (args) => {
       show-multiple-images="${args.showMultipleImages}"
       image-width="${args.imageWidth}"
       responsive="${args.responsive}"
-      image-ratio="${args.imageRatio}"
       update-button-location="${args.updateButtonLocation}"
       add-to-basket-show="${args.addToBasketShow}"
       is-set-mode="${args.isSetMode}"
@@ -51,10 +50,6 @@ const Template = (args) => {
       currency-sign="${args.currencySign}"
       deeplink="${args.deeplink}"
       custom-labels="${args.customLabels}"
-      product-card-content-align="${args.productCardContentAlign}"
-      product-card-text-align="${args.productCardTextAlign}"
-      product-card-image-border="${args.productCardImageBorder}"
-      product-card-image-bg-color="${args.productCardImageBgColor}"
       energy-certifications-string='${args.energyCertificationsString}'
       add-price-container='${args.addPriceContainer}'
       favorite-show="${args.favoriteShow}"
@@ -92,7 +87,6 @@ const initArgs = {
   showMultipleImages: false,
   responsive: false,
   imageWidth: 300,
-  imageRatio: 1,
   price: 3629,
   basePrice: { price: 10, quantity: 1, measure: "cm²" },
   salePrice: 1653,
@@ -101,16 +95,17 @@ const initArgs = {
   customLabels: "UVP",
   addToBasketShow: true,
   isSetMode: false,
-  updateButtonLocation: "onItem",
-  productCardContentAlign: "flex-start",
-  productCardTextAlign: "left",
-  productCardImageBorder: "none",
-  productCardImageBgColor: "#f4f4f4",
   addPriceContainer: false,
   energyCertificationsString,
   favoriteShow: true,
   entityType: "product",
   cssUrl: "",
+  updateButtonLocation: "onItem",
+  productCardContentAlign: "flex-start",
+  productCardTextAlign: "left",
+  productCardImageBorder: "none",
+  productCardImageBgColor: "#f4f4f4",
+  productCardImageAspectRatio: "1 / 1",
 };
 
 Default.args = argsFromParams(initArgs);
