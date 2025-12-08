@@ -49,7 +49,6 @@ export class RecommendationsSidebar {
   @Prop() campaignType: CampaignName;
   @Prop() color: string;
   @Prop() imageWidth: number = PRODUCT_CARD_IMAGE_WIDTH;
-  @Prop() imageRatio: number = 1;
   @Prop() showMultipleImages: boolean = false;
   @Prop() cssUrl: string | null;
   @Prop() noResultText: string;
@@ -74,9 +73,8 @@ export class RecommendationsSidebar {
   @Prop() showInWidget: boolean = false;
   @Prop() imageResolutionWidth: number =
     DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH;
-
-  /** @internal */
   @Prop() apiPath: string;
+
   /** @internal */
   @Prop() showInCustomContainer: boolean = false;
   /** @internal */
@@ -275,7 +273,6 @@ export class RecommendationsSidebar {
               productId={this.productId}
               exportparts={`${carouselParts}, ${productCardParts}`}
               imageWidth={this.imageWidth}
-              imageRatio={this.imageRatio}
               showMultipleImages={this.showMultipleImages}
               setItemsAmount={this.setItemsAmount}
               blockTitle=""

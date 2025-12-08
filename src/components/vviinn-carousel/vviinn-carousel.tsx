@@ -91,7 +91,6 @@ export class VviinnCarousel {
   @Prop() updateButtonLocation: UpdateButtonLocation;
   @Prop() replaceSlotsContent: () => void;
   @Prop() setModeDiscountsArray: number[];
-  @Prop() imageRatio: number = 1;
   @Prop() showMultipleImages: boolean = false;
   @Prop() addPriceContainer?: boolean = false;
   @Prop() favoriteShow: boolean;
@@ -581,7 +580,6 @@ export class VviinnCarousel {
         disableMobileSwiper={true}
         brand={recommendation.brand}
         imageWidth={this.imageWidth}
-        imageRatio={this.imageRatio}
         imageResolutionWidth={this.imageResolutionWidth}
         price={recommendation.price.actual}
         salePrice={salePrice}
@@ -641,7 +639,6 @@ export class VviinnCarousel {
         {Array.from({ length: this.columns }).map((_, index) => (
           <vviinn-product-card
             loading={true}
-            imageRatio={this.imageRatio}
             responsive={true}
             productTitle=""
             productId={`skeleton-${index}`}
@@ -732,7 +729,6 @@ export class VviinnCarousel {
               basePrice={this.sourceProduct.basePrice?.actual}
               baseSalePrice={this.sourceProduct.basePrice?.sale}
               addPriceContainer={this.addPriceContainer}
-              imageRatio={1}
               imageWidth={300}
               imageResolutionWidth={this.imageResolutionWidth}
               isSourceProduct={true}

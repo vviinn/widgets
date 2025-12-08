@@ -56,14 +56,14 @@ export class VviinnCropper {
 
   /** Vviinn customer's token */
   @Prop() token: string;
+  /** API endpoint URL (optional, defaults to production) */
+  @Prop() apiPath?: string;
   /** Save to Local Storage mode for uploaded image */
   @Prop() saveImageMode?: "once" | "always" | "never" = "once";
   @Prop({ mutable: true }) width: number = 288;
   /** URL to external CSS file for custom styling */
   @Prop() cssUrl: string | null = null;
 
-  /** @internal */
-  @Prop() apiPath?: string;
   /** @internal */
   @Prop({ mutable: true }) height?: number;
   /** @internal */

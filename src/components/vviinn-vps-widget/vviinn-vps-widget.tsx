@@ -159,6 +159,8 @@ export class VviinnVpsWidget {
 
   /** Vviinn customer's token (required) */
   @Prop() token: string;
+  /** API endpoint URL (optional, defaults to production) */
+  @Prop() apiPath?: string;
   /** Toggle the widget's modal showing */
   @Prop({ mutable: true }) active: boolean = true;
   /**  The currency sign is displayed after the price */
@@ -204,8 +206,6 @@ export class VviinnVpsWidget {
   /** URL to external CSS file for custom styling */
   @Prop() cssUrl: string | null = null;
 
-  /** @internal */
-  @Prop() apiPath?: string;
   /** Set true when showing the widget in button */
   /** @internal */
   @Prop() showingInButton?: boolean = false;

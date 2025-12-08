@@ -85,6 +85,8 @@ export class VviinnShopTheLook {
 
   /** Vviinn customer's token (required) */
   @Prop() token: string;
+  /** API endpoint URL (optional, defaults to production) */
+  @Prop() apiPath?: string;
   /** Comma-separated list of image URLs to display in the widget */
   @Prop() imageUrls: string = "";
   /** Height of the widget in pixels */
@@ -107,8 +109,6 @@ export class VviinnShopTheLook {
   @Prop() showMultipleImages: boolean = false;
   /** URL to external CSS file for custom styling */
   @Prop() cssUrl: string | null = null;
-  /** @internal */
-  @Prop() apiPath?: string;
 
   @State() selectedDetectedObject: Rectangle | null = null;
   @State() showModal: boolean = false;

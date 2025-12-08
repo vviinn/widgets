@@ -79,6 +79,8 @@ export class VviinnTextSearch {
 
   /** Vviinn customer's token (required) */
   @Prop() token: string;
+  /** API endpoint URL (optional, defaults to production) */
+  @Prop() apiPath?: string;
   /** Locale for text localization */
   @Prop() locale?: Locale;
   /** Basic or extended text search with search modal and speech recognition */
@@ -94,8 +96,6 @@ export class VviinnTextSearch {
   /** Search Bar is showing on first widget's screen */
   /** @internal */
   @Prop() showOnFirstScreen: boolean = false;
-  /** @internal */
-  @Prop() apiPath?: string;
   /** uiSessionId from vps-widget */
   /** @internal */
   @Prop() uiSessionId?: string;

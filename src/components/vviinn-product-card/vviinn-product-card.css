@@ -7,6 +7,7 @@
    * @prop --product-card-text-align: Set the alignment of the text inside the product card.
    * @prop --product-card-image-border: Set the border of the product card image.
    * @prop --product-card-image-bg-color: Set the background color of the product card image.
+   * @prop --product-card-image-aspect-ratio: Set the aspect ratio of the product card image (e.g., "1 / 1", "3 / 4").
    * @prop --basket-button-bg-color-pressed: Set the background color of the pressed Basket Button.
    * @prop --font-family: Set the font family of the product card.
    * @prop --product-card-transition-duration: Duration of skeleton to content transitions.
@@ -17,6 +18,7 @@
   --product-card-image-border-default: none;
   --product-card-image-bg-color-default: var(--surface-bg-color-01);
   --basket-button-bg-color-pressed-default: var(--button-bg-color-positive);
+  --product-card-image-aspect-ratio-default: 1;
   --product-card-transition-duration-default: 0.5s;
 
   box-sizing: border-box;
@@ -90,7 +92,10 @@
   align-items: center;
   justify-content: center;
   background: #f0f0f0;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: var(
+    --product-card-image-aspect-ratio,
+    var(--product-card-image-aspect-ratio-default)
+  );
   width: 100%;
   height: auto;
 }
@@ -357,6 +362,12 @@ vviinn-energy-label {
   height: 100%;
 }
 
+.content-card-image-container .image-placeholder,
+.list-card-image-container .image-placeholder {
+  aspect-ratio: unset;
+  height: 100%;
+}
+
 .content-title,
 .content-link {
   display: -webkit-box;
@@ -387,9 +398,8 @@ vviinn-energy-label {
   flex-direction: column;
   align-items: center;
   padding: var(--spacing-250);
-  gap: var(--spacing-200);
+  gap: 0;
   background-color: var(--surface-bg-color-01);
-  height: calc(100% - 20px);
   align-self: flex-start;
 }
 
@@ -430,6 +440,17 @@ vviinn-energy-label {
   order: 2;
   box-sizing: border-box;
   padding: var(--spacing-125);
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.list-card-image-container vviinn-image {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
 }
 
 .list-label {

@@ -261,12 +261,12 @@ export class VviinnResults {
   @Prop() oneClickDiscoveryCampaigns: string = "";
   /** URL to external CSS file for custom styling */
   @Prop() cssUrl: string | null = null;
+  /** API endpoint URL (optional, defaults to production) */
+  @Prop() apiPath?: string;
 
   /** True when we use vviinn-results inside the widget */
   /** @internal */
   @Prop() showInWidget?: boolean = false;
-  /** @internal */
-  @Prop() apiPath?: string;
   /** Element Id, passed from vps-button */
   /** @internal */
   @Prop() buttonElementId?: string;
