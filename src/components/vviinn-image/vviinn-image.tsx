@@ -108,7 +108,12 @@ export class VviinnImage {
   private getContainerStyles(): Record<string, string> {
     const styles: Record<string, string> = {};
 
-    if (!this.responsive && this.width && !this.isContentType && !this.isListType) {
+    if (
+      !this.responsive &&
+      this.width &&
+      !this.isContentType &&
+      !this.isListType
+    ) {
       styles.width = `${this.width}px`;
     }
     if (this.borderRadius) styles.borderRadius = this.borderRadius;

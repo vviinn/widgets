@@ -26,6 +26,7 @@ import {
   DynamicFilterInternalData,
   BasicEventData,
   TriggerSourceEventData,
+  RedirectEventData,
 } from "../../recommendation/events";
 import i18next from "i18next";
 import { Locale, initializeLocale } from "../../locale";
@@ -76,6 +77,13 @@ export class VviinnTextSearch {
 
   /** Triggered when a text search request fails */
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
+
+  /** A redirect URL is received from the API (can be intercepted by client) */
+  @Event({
+    cancelable: true,
+    bubbles: true,
+  })
+  vviinnRedirect: EventEmitter<RedirectEventData>;
 
   /** Vviinn customer's token (required) */
   @Prop() token: string;
@@ -132,16 +140,28 @@ export class VviinnTextSearch {
         : i18next.t("textSearchPlaceholder");
 
   private recognition: ReturnType<typeof initializeRecognition> | null = null;
+  private disposeStoreListener?: () => void;
 
   connectedCallback() {
-    const { state, storeName } = useSearchStore(this.showInWidget);
+    const { state, storeName, onChange } = useSearchStore(this.showInWidget);
     this.state = state;
     this.storeName = storeName;
+
+    const disposeRedirectListener = onChange("redirect", (redirect) => {
+      if (redirect?.url && this.state.textSearchQuery) {
+        this.handleTextSearchRedirect(redirect.url, this.state.textSearchQuery);
+      }
+    });
+
+    this.disposeStoreListener = () => {
+      disposeRedirectListener();
+    };
   }
 
   disconnectedCallback() {
     clearTimeout(this.triggerTooltipStart);
     clearTimeout(this.triggerTooltipEnd);
+    this.disposeStoreListener?.();
   }
 
   private trackTextSearch = () =>
@@ -271,6 +291,21 @@ export class VviinnTextSearch {
       action();
     }
   };
+
+  private handleTextSearchRedirect(url: string, query: string) {
+    const redirectData: RedirectEventData = {
+      ...this.getBasicEventData(),
+      url,
+      query,
+    };
+    const event = this.vviinnRedirect.emit(redirectData);
+
+    if (event.defaultPrevented) {
+      return;
+    } else {
+      window.location.href = url;
+    }
+  }
 
   render() {
     return (

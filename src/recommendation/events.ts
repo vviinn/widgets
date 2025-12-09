@@ -30,7 +30,11 @@ export type BasicEventData = { widget?: Widget } & {
   [K in keyof CommonEventData]: CommonEventData[K];
 };
 
-export type RedirectEventData = { url: string; widget?: Widget } & {
+export type RedirectEventData = {
+  url: string;
+  query: string;
+  widget?: Widget;
+} & {
   [K in keyof CommonEventData]: CommonEventData[K];
 };
 
