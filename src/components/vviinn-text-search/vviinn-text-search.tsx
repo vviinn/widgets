@@ -12,6 +12,7 @@ import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/lib/function";
 import { version } from "../../../package.json";
 import {
+  makeAutoSuggestRequest,
   makeTextSearchRequest,
   setTextSearchQuery,
   SearchStoreName,
@@ -245,6 +246,8 @@ export class VviinnTextSearch {
     const queryToUse = this.state.textSearchQuery;
     if (!queryToUse) return;
 
+    await this.checkAutoSuggest(queryToUse);
+
     this.trackTextSearch();
 
     this.vviinnTextSearchStarted.emit({
@@ -277,6 +280,10 @@ export class VviinnTextSearch {
         ),
       );
     }
+  };
+
+  private checkAutoSuggest = async (query: string) => {
+    await makeAutoSuggestRequest(this.storeName, query, this.token, this.apiPath);
   };
 
   private handleKeyPress(event: KeyboardEvent) {

@@ -12,6 +12,11 @@ export type TextSearchResponse = s["text-search-response"];
 export type ProductListingPageRequest = s["product-listing-page-request"];
 export type ProductListingPageResponse = s["product-listing-page-response"];
 
+// Auto-Suggest
+export type AutoSuggestRequest = s["auto-suggest-request"];
+export type AutoSuggestResponse = s["auto-suggest-response"];
+export type QueryCompletion = s["query-completion"];
+
 // Search Utilities
 export type SearchIdResponse = s["ion-visual-product-search"];
 export type Rectangle = s["rectangle"];

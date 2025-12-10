@@ -304,7 +304,6 @@ export class VviinnResults {
   private initResultEvents = () => {
     this.state.resultLoaded = false;
     this.state.resultViewed = false;
-    this.state.redirect = null;
   };
 
   private updateCampaignIds = () => {
