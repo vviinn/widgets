@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.205.0](https://github.com/vviinn/widgets/compare/v2.204.0...v2.205.0) (2025-12-11)
+
+
+### Features
+
+*  The vviinnRedirect event now automatically redirects to the suggested URL unless intercepted via event.preventDefault(). The event is emitted from vviinn-text-search when API returns a redirect. ([b89a42f](https://github.com/vviinn/widgets/commit/b89a42fec3574d37c9eb8bddd54d702711eeec67))
+* Integration of auto-suggest which now runs before text search for faster redirect detection. ([b84b60d](https://github.com/vviinn/widgets/commit/b84b60df34b2666cb6292f999fc5acab21a158a8))
+
 ## [2.204.0](https://github.com/vviinn/widgets/compare/v2.203.2...v2.204.0) (2025-12-08)
 
 
