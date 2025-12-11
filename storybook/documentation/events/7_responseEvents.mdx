@@ -24,17 +24,16 @@ Some events have additional props, summarized in the table below.
   <tbody>
     <tr>
       <td>vviinnRedirect</td>
-      <td>Triggered when the API returns a suggested redirect URL in the response.</td>
+      <td>Triggered when the API returns a suggested redirect URL in the response. Automatically redirects unless intercepted by calling <code>event.preventDefault()</code> (e.g., for SPA routing).</td>
       <td>
         <ul>
-          <li>vviinn-vps-button (Search Button)</li>
-          <li>vviinn-vps-widget (Search Modal)</li>
-          <li>vviinn-results (Product List)</li>
+          <li>vviinn-text-search (Text Search Bar)</li>
         </ul>
       </td>
       <td>
         <ul>
-          <li>url</li>
+          <li>url - redirect URL</li>
+          <li>query - search query that triggered the redirect</li>
         </ul>
       </td>
     </tr>
@@ -67,22 +66,43 @@ Some events have additional props, summarized in the table below.
 
 ## Listen to Events. Examples
 
+### Basic Usage of Redirect Event
+
 ```javascript
 document.addEventListener("vviinnRedirect", ({ detail }) => {
   console.log(detail);
-  // Optionally redirect the user
-  // window.location.href = detail.url;
+  // Widget will automatically redirect unless intercepted
 });
 
 // Output:
 {
     "url": "https://www.my-site.de/sansibar",
+    "query": "sansibar",
     "campaignTypeId": "TPS",
     "campaignTypeName": "Text Product Search",
     "widgetId": "my-search-widget",
-    "widgetVersion": "2.190.0"
+    "widgetVersion": "2.205.0"
 }
+```
 
+### Intercept Redirect
+
+You can intercept the redirect by calling `event.preventDefault()` to handle navigation yourself.
+
+```javascript
+document.addEventListener("vviinnRedirect", (event) => {
+  event.preventDefault();
+
+  const { url, query } = event.detail;
+
+  // Your custom logic: SPA routing, analytics, confirmation dialogs, etc.
+  myRouter.push(url);
+});
+```
+
+### Basic Usage of No Result Event
+
+```javascript
 document.addEventListener("vviinnNoResult", ({ detail }) => {
   console.log(detail);
   // Handle error - show notification, retry, etc.
