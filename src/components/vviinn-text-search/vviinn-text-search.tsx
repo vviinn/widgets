@@ -149,8 +149,8 @@ export class VviinnTextSearch {
     this.storeName = storeName;
 
     const disposeRedirectListener = onChange("redirect", (redirect) => {
-      if (redirect?.url && this.state.textSearchQuery) {
-        this.handleTextSearchRedirect(redirect.url, this.state.textSearchQuery);
+      if (redirect?.url && redirect?.query === this.state.textSearchQuery) {
+        this.handleTextSearchRedirect(redirect.url, redirect.query);
       }
     });
 
@@ -283,7 +283,19 @@ export class VviinnTextSearch {
   };
 
   private checkAutoSuggest = async (query: string) => {
-    await makeAutoSuggestRequest(this.storeName, query, this.token, this.apiPath);
+    pipe(
+      await makeAutoSuggestRequest(
+        this.storeName,
+        query,
+        this.token,
+        this.apiPath,
+      ),
+      E.fold(
+        // Intentionally ignore errors for auto-suggest
+        () => {},
+        () => {},
+      ),
+    );
   };
 
   private handleKeyPress(event: KeyboardEvent) {
@@ -308,6 +320,7 @@ export class VviinnTextSearch {
     const event = this.vviinnRedirect.emit(redirectData);
 
     if (event.defaultPrevented) {
+      this.state.redirect = null;
       return;
     } else {
       window.location.href = url;

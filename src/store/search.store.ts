@@ -76,7 +76,7 @@ type ReceivedDataDefaults = {
   dynamicFilters: ResponseDynamicFilterItem[];
   detectedObjects: Rectangle[];
   stream: Stream | null;
-  redirect: Redirect | null;
+  redirect: (Redirect & { query?: string }) | null;
 };
 
 export type SearchStore = AppStateGlobalDefaults &
@@ -212,7 +212,6 @@ const updateVisualSearchState =
     state.visualSearchId = response.requestId;
     state.results = response.data.products;
     state.dynamicFilters = response.interactions.dynamicFilters;
-    state.redirect = response.interactions.redirect ?? null;
     state.searchStatus = "success";
   };
 
@@ -464,9 +463,6 @@ export const makeTextSearchRequest = async (
         state.requestFilters = extractedFilters;
       }
 
-      if (!state.redirect) {
-        state.redirect = sessionResponse?.interactions?.redirect ?? null;
-      }
       state.stream = sessionResponse?.stream ?? null;
       state.searchStatus = "success";
       return sessionResponse;
@@ -520,7 +516,6 @@ export const makeProductListingPageRequest = async (
       state.results = sessionResponse?.data?.products ?? [];
       state.dynamicFilters =
         sessionResponse?.interactions?.dynamicFilters ?? [];
-      state.redirect = sessionResponse?.interactions?.redirect ?? null;
       state.searchStatus = "success";
       return sessionResponse;
     }),
@@ -571,13 +566,14 @@ export const makeAutoSuggestRequest = async (
       );
 
       if (matchingCompletion?.url) {
-        state.redirect = { url: matchingCompletion.url };
+        state.redirect = { url: matchingCompletion.url, query };
       } else {
         state.redirect = null;
       }
 
       return response;
     }),
+    TE.mapLeft((error) => error),
   )();
 };
 
