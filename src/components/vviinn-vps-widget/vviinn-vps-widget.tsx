@@ -805,7 +805,7 @@ export class VviinnVpsWidget {
 
                       <div class="buttons-group">{this.renderButtons()}</div>
 
-                      {this.textSearchShow && (
+                      {this.textSearchShow && !this.isResultSlide() && (
                         <vviinn-text-search
                           token={this.token}
                           apiPath={this.apiPath}
