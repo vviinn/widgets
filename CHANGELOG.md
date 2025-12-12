@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.205.3](https://github.com/vviinn/widgets/compare/v2.205.2...v2.205.3) (2025-12-12)
+
+
+### Bug Fixes
+
+* Github actions fixes. ([848fe6f](https://github.com/vviinn/widgets/commit/848fe6f7ac925a89bcb294f21ee0f66e24980dd6))
+
+### [2.205.2](https://github.com/vviinn/widgets/compare/v2.205.1...v2.205.2) (2025-12-12)
+
+
+### Bug Fixes
+
+* Upgrade to Node.js 22.x and npm 11 for OIDC trusted publishing. ([73e6c36](https://github.com/vviinn/widgets/commit/73e6c361b7c3a8c118479ab40d7d58bf5ad12515))
+
+### [2.205.1](https://github.com/vviinn/widgets/compare/v2.205.0...v2.205.1) (2025-12-12)
+
+
+### Bug Fixes
+
+* Publishing process of the package. ([332a5ad](https://github.com/vviinn/widgets/commit/332a5ad61a397408c9e2e7db9d6f688238e3d155))
+
+## [2.205.0](https://github.com/vviinn/widgets/compare/v2.204.0...v2.205.0) (2025-12-11)
+
+
+### Features
+
+*  The vviinnRedirect event now automatically redirects to the suggested URL unless intercepted via event.preventDefault(). The event is emitted from vviinn-text-search when API returns a redirect. ([b89a42f](https://github.com/vviinn/widgets/commit/b89a42fec3574d37c9eb8bddd54d702711eeec67))
+* Integration of auto-suggest which now runs before text search for faster redirect detection. ([b84b60d](https://github.com/vviinn/widgets/commit/b84b60df34b2666cb6292f999fc5acab21a158a8))
+
 ## [2.204.0](https://github.com/vviinn/widgets/compare/v2.203.2...v2.204.0) (2025-12-08)
 
 

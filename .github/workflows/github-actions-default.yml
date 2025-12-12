@@ -7,7 +7,7 @@ on:
       - main
 
 env:
-  NODE_VERSION: "18.20.4"
+  NODE_VERSION: "22.x"
   OPENAPI_URL: ./openapi/merchant-openapi.yaml
 
 jobs:
@@ -46,6 +46,9 @@ jobs:
 
   release-beta:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     if: github.ref == 'refs/heads/develop'
     needs: generate-version-develop
     steps:
@@ -55,6 +58,9 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
+          registry-url: "https://registry.npmjs.org"
+      - name: Upgrade npm for OIDC support
+        run: npm install -g npm@11
       - run: git pull
       - name: Create .env file
         run: |
@@ -65,10 +71,8 @@ jobs:
       - run: npm run test
       - run: npm run build_interfaces
       - run: npm run build
-      - name: Publish to NPM registry with beta tag
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-          npm publish --tag beta
+      - name: Publish to NPM registry with beta tag using OIDC
+        run: npm publish --tag beta --access public
 
   update-widget-version-storybook:
     runs-on: ubuntu-latest

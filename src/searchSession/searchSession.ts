@@ -6,6 +6,7 @@ import { Eq } from "fp-ts/lib/Eq";
 import { BasicError } from "../error";
 import { sequenceToEither } from "../utils/either";
 import {
+  AutoSuggestResponse,
   ProductListingPageResponse,
   Rectangle,
   TextSearchResponse,
@@ -60,5 +61,18 @@ export const productListingPageSessionClient = (
     sequenceToEither(resolveApiPath(apiPath), createInitPostRequest),
     TE.fromEither,
     TE.chainW(makeRequest<ProductListingPageResponse>(requestUrl, initialData)),
+  );
+};
+
+export const autoSuggestClient = (
+  initialData: RequestInit,
+  apiPath?: string,
+): TE.TaskEither<BasicError<Response | string>, AutoSuggestResponse> => {
+  const requestUrl = "auto-suggest";
+
+  return pipe(
+    sequenceToEither(resolveApiPath(apiPath), createInitPostRequest),
+    TE.fromEither,
+    TE.chainW(makeRequest<AutoSuggestResponse>(requestUrl, initialData)),
   );
 };
