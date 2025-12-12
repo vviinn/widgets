@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.205.2](https://github.com/vviinn/widgets/compare/v2.205.1...v2.205.2) (2025-12-12)
+
+
+### Bug Fixes
+
+* Upgrade to Node.js 22.x and npm 11 for OIDC trusted publishing. ([73e6c36](https://github.com/vviinn/widgets/commit/73e6c361b7c3a8c118479ab40d7d58bf5ad12515))
+
 ### [2.205.1](https://github.com/vviinn/widgets/compare/v2.205.0...v2.205.1) (2025-12-12)
 
 
