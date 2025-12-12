@@ -72,7 +72,7 @@ jobs:
       - run: npm run build_interfaces
       - run: npm run build
       - name: Publish to NPM registry with beta tag using OIDC
-        run: npm publish --tag beta --provenance --access public
+        run: npm publish --tag beta --access public
 
   update-widget-version-storybook:
     runs-on: ubuntu-latest
