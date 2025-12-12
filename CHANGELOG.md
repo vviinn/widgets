@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.205.3](https://github.com/vviinn/widgets/compare/v2.205.2...v2.205.3) (2025-12-12)
+
+
+### Bug Fixes
+
+* Github actions fixes. ([848fe6f](https://github.com/vviinn/widgets/commit/848fe6f7ac925a89bcb294f21ee0f66e24980dd6))
+
 ### [2.205.2](https://github.com/vviinn/widgets/compare/v2.205.1...v2.205.2) (2025-12-12)
 
 
