@@ -255,7 +255,7 @@ export class VviinnTextSearch {
       isTriggeredByVpsWidget: this.showInWidget,
     });
 
-    if (this.showOnFirstScreen) {
+    if (this.showInWidget && this.showOnFirstScreen) {
       pipe(
         await makeTextSearchRequest(
           this.storeName,

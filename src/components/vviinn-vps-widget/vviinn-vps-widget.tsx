@@ -476,6 +476,13 @@ export class VviinnVpsWidget {
     }
   }
 
+  @Listen("vviinnTextSearchStarted")
+  textSearchStartedHandler({ detail }: TextSearchEvent) {
+    if (!this.showInWidget && !detail.isTriggeredByVpsWidget) {
+      this.closeModalAndResetState();
+    }
+  }
+
   @Listen("vviinnResultLoad") resultLoadHandler() {
     this.state.resultLoaded = true;
   }
@@ -699,7 +706,7 @@ export class VviinnVpsWidget {
   }
 
   private resetInnerState = () => {
-    setTextSearchQuery(this.storeName, null);
+    this.showInWidget && setTextSearchQuery(this.storeName, null);
     this.wrongImageFormat = false;
     this.resetScroll("results-block");
     this.stopStreamTracks();
