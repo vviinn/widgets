@@ -205,6 +205,12 @@ export class VviinnVpsWidget {
   @Prop() showIntervalInputs: boolean = false;
   /** URL to external CSS file for custom styling */
   @Prop() cssUrl: string | null = null;
+  /** Show search results in modal or on page */
+  @Prop() showResultsInModal?: boolean = true;
+
+  private get showInWidget() {
+    return this.showResultsInModal;
+  }
 
   /** Set true when showing the widget in button */
   /** @internal */
@@ -222,8 +228,6 @@ export class VviinnVpsWidget {
   @Prop() replaceSlotsContentInButton?: () => void;
   /** @internal */
   @Prop() parentSlots?: HTMLSlotElement[] = [];
-  /** @internal */
-  @Prop() showInWidget?: boolean = true;
 
   @State() slidePosition: number = 0;
   @State() uploadSource: UploadSource | null = null;
@@ -465,7 +469,11 @@ export class VviinnVpsWidget {
   @Listen("widgetTextSearchFinished")
   textSearchFinishedHandler({ detail }: TextSearchEvent) {
     setTextSearchQuery(this.storeName, detail.query);
-    this.slidePosition = 1;
+    if (this.showInWidget) {
+      this.slidePosition = 1;
+    } else {
+      this.closeModalAndResetState();
+    }
   }
 
   @Listen("vviinnResultLoad") resultLoadHandler() {
@@ -588,12 +596,17 @@ export class VviinnVpsWidget {
     trackEvent(searchEvent, this.token, this.apiPath);
   }
 
+  private closeModalAndResetState() {
+    this.resetVpsButton?.();
+    this.resetState();
+    this.active = false;
+  }
+
   private handleImageSelection() {
     if (this.showInWidget) {
       this.slidePosition = 1;
     } else {
-      this.resetVpsButton && this.resetVpsButton();
-      this.resetState();
+      this.closeModalAndResetState();
     }
   }
 
@@ -810,7 +823,7 @@ export class VviinnVpsWidget {
                           token={this.token}
                           apiPath={this.apiPath}
                           locale={this.locale}
-                          showInWidget={true}
+                          showInWidget={this.showInWidget}
                           showOnFirstScreen={true}
                           uiSessionId={this.uiSessionId}
                           basicEventData={this.getBasicEventData(true)}
@@ -840,7 +853,7 @@ export class VviinnVpsWidget {
                   {this.isTextSearch() && (
                     <vviinn-text-search
                       token={this.token}
-                      showInWidget={true}
+                      showInWidget={this.showInWidget}
                       apiPath={this.apiPath}
                       locale={this.locale}
                       uiSessionId={this.uiSessionId}
@@ -855,14 +868,14 @@ export class VviinnVpsWidget {
                       basicEventData={this.getBasicEventData()}
                       showAspectRatioError={this.showAspectRatioError}
                       apiPath={this.apiPath}
-                      showInWidget={true}
+                      showInWidget={this.showInWidget}
                       save-image-mode="never"
                     />
                   )}
 
                   {this.isTextSearch() && (
                     <vviinn-suggestions
-                      showInWidget={true}
+                      showInWidget={this.showInWidget}
                       token={this.token}
                       apiPath={this.apiPath}
                       locale={this.locale}
@@ -872,7 +885,7 @@ export class VviinnVpsWidget {
                   <vviinn-selected-filters
                     locale={this.locale}
                     currencySign={this.currencySign}
-                    showInWidget={true}
+                    showInWidget={this.showInWidget}
                     exportparts={filtersParts}
                   />
 
@@ -884,14 +897,14 @@ export class VviinnVpsWidget {
                       }}
                     >
                       <vviinn-filters
-                        showInWidget={true}
+                        showInWidget={this.showInWidget}
                         showIntervalInputs={this.showIntervalInputs}
                       />
 
                       <vviinn-extended-filters
                         mode="preview"
                         showHeader={false}
-                        showInWidget={true}
+                        showInWidget={this.showInWidget}
                         locale={this.locale}
                         currencySign={this.currencySign}
                         showIntervalInputs={this.showIntervalInputs}
@@ -904,7 +917,7 @@ export class VviinnVpsWidget {
                             this.state.dynamicFilters.filter((f) => f.isPrimary)
                               .length > 0,
                         }}
-                        showInWidget={true}
+                        showInWidget={this.showInWidget}
                       />
                     </div>
                   )}
@@ -926,7 +939,7 @@ export class VviinnVpsWidget {
                     widgetElementId={
                       this.buttonElementId ?? this.widgetElementId
                     }
-                    showInWidget={true}
+                    showInWidget={this.showInWidget}
                     buttonElementId={this.buttonElementId}
                     imageResolutionWidth={this.imageResolutionWidth}
                     showMultipleImages={this.showMultipleImages}
@@ -957,7 +970,7 @@ export class VviinnVpsWidget {
             class="modal-extended-filters"
             mode="modal"
             exportparts={extendedFiltersParts}
-            showInWidget={true}
+            showInWidget={this.showInWidget}
             locale={this.locale}
             currencySign={this.currencySign}
             showIntervalInputs={this.showIntervalInputs}

@@ -255,7 +255,7 @@ export class VviinnTextSearch {
       isTriggeredByVpsWidget: this.showInWidget,
     });
 
-    if (this.showInWidget && this.showOnFirstScreen) {
+    if (this.showOnFirstScreen) {
       pipe(
         await makeTextSearchRequest(
           this.storeName,
@@ -347,7 +347,7 @@ export class VviinnTextSearch {
               locale={this.locale}
               apiPath={this.apiPath}
               addStyle={false}
-              showInWidget={false}
+              showResultsInModal={false}
               exportparts="vviinn-button"
             />
           )}
