@@ -174,9 +174,8 @@ export class VviinnVpsButton {
   @Prop() cssUrl: string | null = null;
   /** API endpoint URL (optional, defaults to production) */
   @Prop() apiPath?: string;
-
-  /** @internal */
-  @Prop() showInWidget?: boolean = true;
+  /** Show search results in modal or on page */
+  @Prop() showResultsInModal?: boolean = true;
 
   @State() buttonPressed: boolean = false;
 
@@ -348,7 +347,7 @@ export class VviinnVpsButton {
           oneClickDiscoveryMode={this.oneClickDiscoveryMode}
           oneClickDiscoveryCampaigns={this.oneClickDiscoveryCampaigns}
           favoriteShow={this.favoriteShow}
-          showInWidget={this.showInWidget}
+          showResultsInModal={this.showResultsInModal}
           parentSlots={this.slots}
           cssUrl={this.cssUrl}
         />

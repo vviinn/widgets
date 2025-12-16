@@ -52,6 +52,7 @@ const Template = (args) => `
   locale="${args.locale}"
   number-locale="${args.numberLocale}"
   mode="${args.mode}"
+  show-results-in-modal="${args.showResultsInModal}"
   product-details-new-tab="${args.productDetailsNewTab}"
   product-details-redirect="${args.productDetailsRedirect}"
   api-path="${args.apiPath}"
@@ -78,6 +79,7 @@ const initArgs = {
   campaignId: "",
   excluded: "",
   mode: "modal",
+  showResultsInModal: true,
   productDetailsNewTab: true,
   productDetailsRedirect: true,
   locale: "en-US",
