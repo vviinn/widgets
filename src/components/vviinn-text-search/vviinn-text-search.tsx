@@ -347,7 +347,7 @@ export class VviinnTextSearch {
               locale={this.locale}
               apiPath={this.apiPath}
               addStyle={false}
-              showInWidget={false}
+              showResultsInModal={false}
               exportparts="vviinn-button"
             />
           )}

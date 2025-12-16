@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.206.0](https://github.com/vviinn/widgets/compare/v2.205.3...v2.206.0) (2025-12-16)
+
+
+### Features
+
+* Add show-results-in-modal prop to display results on page. Allows using modal for search input while showing results on page through separate vviinn-results component. ([0b7239b](https://github.com/vviinn/widgets/commit/0b7239b5b6ee354eca9cdaba4c86d93400514605))
+
 ### [2.205.3](https://github.com/vviinn/widgets/compare/v2.205.2...v2.205.3) (2025-12-12)
 
 
