@@ -2,10 +2,10 @@
 
 :host {
   /**
-   * @prop --image-border: Set the border of the image.
-   * @prop --image-bg-color: Set the background color of the image.
+   * @prop --image-border: The border of the image.
+   * @prop --image-bg-color: The background color of the image.
    * @prop --image-transition-duration: Duration of skeleton to content transitions.
-   * @prop --product-card-image-aspect-ratio: Set the aspect ratio (e.g., "3 / 4", "1 / 1", "16 / 9").
+   * @prop --product-card-image-aspect-ratio: The aspect ratio (e.g., "3:4", "1:1").
    */
 
   --image-border-default: none;
