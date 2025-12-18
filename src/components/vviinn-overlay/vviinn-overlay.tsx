@@ -1,4 +1,4 @@
-import { Component, h, Element, Prop, Watch } from "@stencil/core";
+import { Component, h, Prop, Watch } from "@stencil/core";
 
 @Component({
   tag: "vviinn-overlay",
@@ -6,21 +6,33 @@ import { Component, h, Element, Prop, Watch } from "@stencil/core";
   shadow: true,
 })
 export class VviinnOverlay {
-  @Element() el: HTMLElement;
-  @Prop() active: boolean = false;
+  @Prop({ reflect: true }) active: boolean = false;
 
   private dialogRef?: HTMLDialogElement;
+  private isClosing: boolean = false;
 
   @Watch("active")
   handleActiveChange(isActive: boolean) {
-    if (!this.dialogRef) return;
+    requestAnimationFrame(() => {
+      if (!this.dialogRef) return;
 
-    if (isActive && !this.dialogRef.open) {
-      this.dialogRef.showModal();
-    } else if (!isActive && this.dialogRef.open) {
-      this.dialogRef.close();
-    }
+      if (isActive && !this.dialogRef.open) {
+        this.isClosing = false;
+        this.dialogRef.classList.remove("closing");
+        this.dialogRef.showModal();
+      } else if (!isActive && this.dialogRef.open && !this.isClosing) {
+        this.isClosing = true;
+        this.dialogRef.classList.add("closing");
+      }
+    });
   }
+
+  private handleAnimationEnd = (event: AnimationEvent) => {
+    if (event.animationName === "fade-out" && this.isClosing) {
+      this.isClosing = false;
+      this.dialogRef?.close();
+    }
+  };
 
   componentDidLoad() {
     if (this.active && this.dialogRef) {
@@ -30,7 +42,10 @@ export class VviinnOverlay {
 
   render() {
     return (
-      <dialog ref={(el) => (this.dialogRef = el)}>
+      <dialog
+        ref={(el) => (this.dialogRef = el)}
+        onAnimationEnd={this.handleAnimationEnd}
+      >
         <slot></slot>
       </dialog>
     );

@@ -27,7 +27,7 @@ dialog[open] {
     ease-in-out;
 }
 
-dialog::backdrop {
+dialog[open]::backdrop {
   background: rgba(0, 0, 0, 0.5);
   animation: fade-in
     var(
@@ -52,4 +52,32 @@ dialog::backdrop {
   to {
     opacity: 1;
   }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0.1;
+  }
+}
+
+dialog.closing {
+  animation: fade-out
+    var(
+      --search-modal-animation-duration,
+      var(--search-modal-animation-duration-default)
+    )
+    ease-in-out;
+}
+
+dialog.closing::backdrop {
+  animation: fade-out
+    var(
+      --search-modal-animation-duration,
+      var(--search-modal-animation-duration-default)
+    )
+    ease-in-out;
 }

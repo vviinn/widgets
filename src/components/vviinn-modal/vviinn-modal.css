@@ -147,6 +147,6 @@ button:hover {
   }
 
   to {
-    transform: translateY(calc(100% - 64px));
+    transform: translateY(100%);
   }
 }
