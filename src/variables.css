@@ -153,7 +153,9 @@
   --label-bg-color-accent: #ff3944;
 
   /* Animation durations */
-  --sidebar-animation-duration: 0.5s;
+  --sidebar-animation-duration-default: 0.5s;
+  --search-modal-animation-duration-default: 0.25s;
+  --search-modal-animation-duration-mobile-default: 0.35s;
 
   /* DARK MODE SUPPORT
   @media (prefers-color-scheme: dark) {

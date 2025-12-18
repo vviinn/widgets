@@ -22,8 +22,8 @@ export class VviinnOverlayedModal {
 
   render() {
     return (
-      <Host class={{ active: this.active }}>
-        <vviinn-overlay>
+      <Host>
+        <vviinn-overlay active={this.active}>
           <vviinn-modal
             resetState={this.resetState}
             active={this.active}
