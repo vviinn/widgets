@@ -97,17 +97,17 @@ export class VviinnModal {
     );
   }
 
-  private handleAnimationEnd(ev: AnimationEvent) {
+  private handleAnimationEnd = (ev: AnimationEvent) => {
     if (ev.animationName !== "fade-in") return;
     this.slider = true;
-  }
+  };
 
   render() {
     return (
       <Host
         exportparts={modalParts}
         class={{ closed: !this.active, "first-screen": this.isFirstScreen }}
-        onAnimationEnd={(ev: AnimationEvent) => this.handleAnimationEnd(ev)}
+        onAnimationEnd={this.handleAnimationEnd}
         role="dialog"
         aria-modal={this.active ? "true" : "false"}
         aria-label={i18next.t("imageSearchModalTitle")}

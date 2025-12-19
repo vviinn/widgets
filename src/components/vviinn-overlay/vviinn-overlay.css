@@ -1,14 +1,47 @@
-:host {
-  animation: fade-in 0.5s ease-in-out;
-  background: rgba(0, 0, 0, 0.5);
-  display: block;
-  height: 100vh;
-  left: 0;
-  overflow: hidden;
-  position: fixed;
-  top: 0;
+dialog {
+  border: none;
+  padding: 0;
+  margin: 0;
+  max-width: 100vw;
+  max-height: 100vh;
   width: 100vw;
-  z-index: 9999;
+  height: 100vh;
+  background: transparent;
+  overflow: hidden;
+  cursor: default;
+}
+
+dialog:not([open]) {
+  display: none;
+}
+
+dialog[open] {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  animation: fade-in
+    var(
+      --search-modal-animation-duration,
+      var(--search-modal-animation-duration-default)
+    )
+    ease-in-out;
+}
+
+dialog[open]::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  animation: fade-in
+    var(
+      --search-modal-animation-duration,
+      var(--search-modal-animation-duration-default)
+    )
+    ease-in-out;
+}
+
+@media (max-width: 768px) {
+  dialog[open] {
+    align-items: end;
+    padding-top: 64px;
+  }
 }
 
 @keyframes fade-in {
@@ -19,4 +52,32 @@
   to {
     opacity: 1;
   }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0.1;
+  }
+}
+
+dialog.closing {
+  animation: fade-out
+    var(
+      --search-modal-animation-duration,
+      var(--search-modal-animation-duration-default)
+    )
+    ease-in-out;
+}
+
+dialog.closing::backdrop {
+  animation: fade-out
+    var(
+      --search-modal-animation-duration,
+      var(--search-modal-animation-duration-default)
+    )
+    ease-in-out;
 }
