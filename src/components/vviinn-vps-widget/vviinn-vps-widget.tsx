@@ -442,7 +442,11 @@ export class VviinnVpsWidget {
   @Watch("active")
   activeWatcher(active: boolean) {
     if (active) {
-      this.mode !== "upload" && this.resetState();
+      if (this.mode === "upload") {
+        this.slidePosition !== 1 && this.resetInnerState();
+      } else {
+        this.resetState();
+      }
       this.overflow = document.body.style.overflow;
       document.body.style.overflow = "hidden";
       this.vviinnWidgetOpen.emit(this.getBasicEventData());
