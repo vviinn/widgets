@@ -443,6 +443,7 @@ export class VviinnVpsWidget {
   @Watch("active")
   activeWatcher(active: boolean) {
     if (active) {
+      this.resetState();
       this.overflow = document.body.style.overflow;
       document.body.style.overflow = "hidden";
       this.vviinnWidgetOpen.emit(this.getBasicEventData());
@@ -743,7 +744,6 @@ export class VviinnVpsWidget {
 
   private handleModalClose() {
     this.active = false;
-    this.resetState();
 
     const elementsToReset = ["start-page_block", "results-block"];
     elementsToReset.forEach((name) => this.resetScroll(name));
