@@ -234,6 +234,7 @@ export class VviinnVpsWidget {
   @State() stream: MediaStream | null = null;
   @State() products: Recommendation[] = [];
   @State() modalBody?: HTMLElement;
+  @State() uploadDialogOpened: boolean = false;
 
   @State() isCameraInitializing: boolean = false;
   @State() isCameraEnabled: boolean = false;
@@ -327,9 +328,7 @@ export class VviinnVpsWidget {
 
   private handleVviinnImageUploadFinished = () => {
     this.handleImageSelection();
-    if (this.mode === "upload" && this.showingInButton) {
-      this.active = true;
-    }
+    if (this.mode === "upload" && this.showInWidget) this.active = true;
   };
 
   private handleVviinnNoResult = (detail: NoResultEventData) => {
@@ -443,13 +442,14 @@ export class VviinnVpsWidget {
   @Watch("active")
   activeWatcher(active: boolean) {
     if (active) {
-      this.resetState();
+      this.mode !== "upload" && this.resetState();
       this.overflow = document.body.style.overflow;
       document.body.style.overflow = "hidden";
       this.vviinnWidgetOpen.emit(this.getBasicEventData());
       if (this.mode === "camera") this.handleStartCameraClick();
       this.trackWidgetEvent("open");
     } else {
+      this.mode === "upload" && setTimeout(() => this.resetState(), 500);
       document.body.style.overflow = this.overflow;
       this.showInWidget && this.initResultEvents();
     }
@@ -663,14 +663,17 @@ export class VviinnVpsWidget {
       ),
       <vviinn-image-selector
         class="action-button"
-        onClick={() => (this.uploadSource = "uploadPhoto")}
+        onClick={() => {
+          if (this.mode !== "upload") this.uploadSource = "uploadPhoto";
+        }}
         onKeyDown={(e) =>
           this.handleButtonKeyDown(e, () => {
-            this.uploadSource = "uploadPhoto";
+            if (this.mode !== "upload") this.uploadSource = "uploadPhoto";
           })
         }
         onVviinnImageUploadFinished={this.handleVviinnImageUploadFinished}
         onVviinnImageUploadStarted={() => {
+          this.uploadDialogOpened = true;
           this.handleVviinnImageUpload("uploadPhoto");
         }}
         token={this.token}
@@ -682,7 +685,9 @@ export class VviinnVpsWidget {
         basicEventData={this.getBasicEventData()}
         part="upload-photo_button"
         startUpload={
-          this.buttonPressed && this.showingInButton && this.mode === "upload"
+          this.buttonPressed &&
+          this.mode === "upload" &&
+          !this.uploadDialogOpened
         }
         showInWidget={this.showInWidget}
         loading={
@@ -719,6 +724,7 @@ export class VviinnVpsWidget {
     this.setShowAspectRatioError(false);
     this.slidePosition = 0;
     this.uploadSource = null;
+    this.uploadDialogOpened = false;
     this.resetScroll("start-page_block");
   };
 
@@ -770,7 +776,7 @@ export class VviinnVpsWidget {
           buttonElementId={this.buttonElementId ?? this.widgetElementId}
           widgetVersion={version}
           hideBackButton={
-            (this.mode === "upload" && this.showingInButton) ||
+            this.mode === "upload" ||
             (!this.isCameraEnabled && this.isOnboardingSlide())
           }
         >
