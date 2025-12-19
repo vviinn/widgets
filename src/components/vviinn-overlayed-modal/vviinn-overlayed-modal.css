@@ -1,36 +1,3 @@
 :host {
-  display: none;
-}
-
-:host(.active) {
   display: block;
-}
-
-vviinn-overlay {
-  align-items: center;
-  display: grid;
-  justify-items: center;
-  cursor: default;
-}
-
-vviinn-modal {
-  margin-left: 24px;
-  margin-right: 24px;
-}
-
-@media (max-width: 768px) {
-  vviinn-modal {
-    height: 100vh;
-    margin-top: 64px;
-    transform: translateY(100%);
-    width: 100vw;
-    margin-left: 0;
-    margin-right: 0;
-  }
-
-  vviinn-overlay {
-    align-items: end;
-    display: grid;
-    justify-items: center;
-  }
 }
