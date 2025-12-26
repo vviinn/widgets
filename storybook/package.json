@@ -7,6 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "storybook": "STORYBOOK_ENV=local storybook dev -p 6006",
     "build-storybook": "storybook build",
+    "prepare-llm-extraction": "playwright install chromium",
+    "build-llm-docs": "storybook-llms-extractor --config llms.config.js && node scripts/enrich-llm-docs.js",
     "chromatic": "npx chromatic --project-token 124f815087df"
   },
   "author": "",
@@ -16,6 +18,7 @@
     "@babel/plugin-proposal-decorators": "^7.21.0",
     "@babel/plugin-transform-typescript": "^7.21.3",
     "@babel/preset-env": "^7.26.0",
+    "@fluentui/storybook-llms-extractor": "^0.0.3",
     "@kurbar/storybook-addon-docs-stencil": "^8.0.0",
     "@storybook/addon-a11y": "^9.0.15",
     "@storybook/addon-docs": "^9.0.17",

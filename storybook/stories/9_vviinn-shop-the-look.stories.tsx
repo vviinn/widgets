@@ -6,14 +6,6 @@ import "../documentation/widgets/styles.css";
 export default {
   title: "Playground/Shop-the-Look",
   component: "vviinn-shop-the-look",
-  parameters: {
-    badges: ["beta", "experimental"],
-    docs: {
-      description: {
-        component: "experimental",
-      },
-    },
-  },
 };
 
 const Template = (args) => `
