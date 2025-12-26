@@ -20,7 +20,14 @@ const COMPONENT_MAPPING = {
 
 console.log("📝 Enriching LLM docs with Stencil docs.json...\n");
 
+// Read and validate docs.json, return components indexed by tag name
 function readDocsJson() {
+  if (!fs.existsSync(DOCS_JSON)) {
+    console.error(`❌ docs.json not found at ${DOCS_JSON}`);
+    console.error("   Run 'npm run build' first to generate docs.json");
+    process.exit(1);
+  }
+
   try {
     const content = fs.readFileSync(DOCS_JSON, "utf-8");
     const data = JSON.parse(content);
@@ -30,18 +37,25 @@ function readDocsJson() {
       componentsByTag[comp.tag] = comp;
     });
 
+    if (Object.keys(componentsByTag).length === 0) {
+      console.error(`❌ docs.json contains no components`);
+      process.exit(1);
+    }
+
     return componentsByTag;
   } catch (error) {
     console.error(`❌ Could not read ${DOCS_JSON}:`, error.message);
-    return {};
+    process.exit(1);
   }
 }
 
-// Convert component metadata to Markdown
+const ENRICHMENT_MARKER = "<!-- STENCIL_DOCS_ENRICHED -->";
+
+// Convert component metadata (props, slots, CSS vars, parts) to Markdown
 function componentToMarkdown(component) {
   if (!component) return "";
 
-  let md = "";
+  let md = ENRICHMENT_MARKER + "\n\n";
 
   // Properties section
   if (component.props && component.props.length > 0) {
@@ -113,8 +127,20 @@ function componentToMarkdown(component) {
   return md;
 }
 
+// Enrich playground-*.txt files with matching component metadata
 function enrichLlmsFiles(componentsByTag) {
+  if (!fs.existsSync(LLMS_DIR)) {
+    console.error(`❌ LLMS directory not found at ${LLMS_DIR}`);
+    console.error("   Make sure storybook-llms-extractor ran successfully");
+    process.exit(1);
+  }
+
   const llmsFiles = fs.readdirSync(LLMS_DIR).filter((f) => f.endsWith(".txt"));
+
+  if (llmsFiles.length === 0) {
+    console.warn(`⚠️  No .txt files found in ${LLMS_DIR}`);
+  }
+
   let enrichedCount = 0;
 
   llmsFiles.forEach((fileName) => {
@@ -123,7 +149,7 @@ function enrichLlmsFiles(componentsByTag) {
     const filePath = path.join(LLMS_DIR, fileName);
     let content = fs.readFileSync(filePath, "utf-8");
 
-    if (content.includes("## Properties")) {
+    if (content.includes(ENRICHMENT_MARKER)) {
       console.log(`  ⊘ Skipped ${fileName} (already enriched)`);
       return;
     }
@@ -143,8 +169,6 @@ function enrichLlmsFiles(componentsByTag) {
 
     // Add metadata sections at the top (after title)
     const markdown = componentToMarkdown(component);
-    if (!markdown) return;
-
     const lines = content.split("\n");
 
     // Insert after title (line 0 = "# Title", insert at line 1)
@@ -172,7 +196,9 @@ function enrichLlmsFiles(componentsByTag) {
   return enrichedCount;
 }
 
-// Enrich components-filters.txt with multiple components
+// Enrich components-filters.txt with vviinn-filters + vviinn-extended-filters
+// @param {Record<string, any>} componentsByTag - Components indexed by tag
+// @returns {number} 1 if enriched, 0 if skipped
 function enrichFiltersFile(componentsByTag) {
   const fileName = "components-filters.txt";
   const filePath = path.join(LLMS_DIR, fileName);
@@ -184,7 +210,7 @@ function enrichFiltersFile(componentsByTag) {
   let content = fs.readFileSync(filePath, "utf-8");
 
   // Check if already enriched
-  if (content.includes("## vviinn-filters Properties")) {
+  if (content.includes(ENRICHMENT_MARKER)) {
     console.log(`  ⊘ Skipped ${fileName} (already enriched)`);
     return 0;
   }
@@ -198,14 +224,8 @@ function enrichFiltersFile(componentsByTag) {
   }
 
   let markdown = "";
-  if (filters) {
-    markdown += componentToMarkdown(filters);
-  }
-  if (extendedFilters) {
-    markdown += componentToMarkdown(extendedFilters);
-  }
-
-  if (!markdown) return 0;
+  if (filters) markdown += componentToMarkdown(filters);
+  if (extendedFilters) markdown += componentToMarkdown(extendedFilters);
 
   // Find insertion point - before "## Examples" or "### " section
   const lines = content.split("\n");

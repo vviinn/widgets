@@ -42,9 +42,13 @@ steps:
         if [ "$_ENVIRONMENT" = "production" ]
         then
           echo "Installing Playwright for LLM docs extraction..."
-          npm run prepare-llm-extraction
-          echo "Generating LLM documentation..."
-          npm run build-llm-docs
+          if npm run prepare-llm-extraction; then
+            echo "Generating LLM documentation..."
+            npm run build-llm-docs
+          else
+            echo "❌ prepare-llm-extraction failed; skipping LLM docs generation" >&2
+            exit 1
+          fi
         else
           echo "Skipping LLM docs generation (stage environment)"
         fi
