@@ -41,12 +41,18 @@ steps:
         npm run build-storybook
         if [ "$_ENVIRONMENT" = "production" ]
         then
-          echo "Installing Playwright for LLM docs extraction..."
-          if npm run prepare-llm-extraction; then
-            echo "Generating LLM documentation..."
-            npm run build-llm-docs
+          echo "Installing Playwright system dependencies..."
+          if npx playwright install-deps chromium; then
+            echo "Installing Playwright browsers..."
+            if npm run prepare-llm-extraction; then
+              echo "Generating LLM documentation..."
+              npm run build-llm-docs
+            else
+              echo "❌ prepare-llm-extraction failed; skipping LLM docs generation" >&2
+              exit 1
+            fi
           else
-            echo "❌ prepare-llm-extraction failed; skipping LLM docs generation" >&2
+            echo "❌ Failed to install Playwright system dependencies" >&2
             exit 1
           fi
         else
