@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.207.1](https://github.com/vviinn/widgets/compare/v2.207.0...v2.207.1) (2025-12-26)
+
+
+### Bug Fixes
+
+* Build of LLM-optimized documentation. ([c7badde](https://github.com/vviinn/widgets/commit/c7badded9e7f3ea0520e232b33f985a66a1dda30))
+
 ## [2.207.0](https://github.com/vviinn/widgets/compare/v2.206.1...v2.207.0) (2025-12-26)
 
 
