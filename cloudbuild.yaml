@@ -39,6 +39,19 @@ steps:
         echo "Commit Hash: $(git rev-parse HEAD)"
         npm install --production=false
         npm run build-storybook
+        if [ "$_ENVIRONMENT" = "production" ]
+        then
+          echo "Installing Playwright for LLM docs extraction..."
+          if npm run prepare-llm-extraction; then
+            echo "Generating LLM documentation..."
+            npm run build-llm-docs
+          else
+            echo "❌ prepare-llm-extraction failed; skipping LLM docs generation" >&2
+            exit 1
+          fi
+        else
+          echo "Skipping LLM docs generation (stage environment)"
+        fi
     volumes:
       - name: 'widgets_local_build'
         path: '/widgets'

@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.207.0](https://github.com/vviinn/widgets/compare/v2.206.1...v2.207.0) (2025-12-26)
+
+
+### Features
+
+* Generate LLM-optimized documentation from Storybook for AI code assistants. ([b0eb14c](https://github.com/vviinn/widgets/commit/b0eb14c9f7c491878c7ba660fa56c0141e820c05))
+* Generate LLM-optimized documentation from Storybook for AI code assistants. ([6ee8d41](https://github.com/vviinn/widgets/commit/6ee8d417206f3725667b767a6c2c4c18d1ef2509))
+
 ### [2.206.1](https://github.com/vviinn/widgets/compare/v2.206.0...v2.206.1) (2025-12-19)
 
 
