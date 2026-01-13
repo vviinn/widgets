@@ -20,18 +20,20 @@ Cropper events are essential to connect `vviinn-results` component.
 
       <td>
         <ul>
-          <li>imageBounds</li>
-          <li>searchArea</li>
+          <li>imageBounds - Image dimensions in pixels</li>
         </ul>
       </td>
     </tr>
 
     <tr>
-      <td>vviinnCropperCropEnd</td><td>Triggered when the cropper ends and you can send `Rectangular Search Request` again.</td>
+      <td>vviinnCropperCropEnd</td><td>Triggered when crop ends with enriched data including normalized coordinates for visual-search API.</td>
 
       <td>
         <ul>
-          <li>searchArea</li>
+          <li>searchArea - Search area in absolute pixels</li>
+          <li>normalizedSearchArea - Normalized search area (0-1 range) ready for visual-search API</li>
+          <li>imageBounds - Image dimensions in pixels</li>
+          <li>requestId - Optional search/request ID for API continuity</li>
         </ul>
       </td>
     </tr>
@@ -41,14 +43,21 @@ Cropper events are essential to connect `vviinn-results` component.
 
 ## Listen to Events. Examples
 
+By default, the cropper automatically triggers visual search after crop ends. Set `autoSearch={false}` on the `vviinn-cropper` component to disable automatic search and handle the API call manually. The `vviinnCropperCropEnd` event will still fire with normalized data ready for API use.
+
 ```javascript
-document.addEventListener("vviinnCropperLoadImage", ({ detail }) => {
+document.addEventListener("vviinnCropperCropEnd", ({ detail }) => {
   console.log(detail);
+
+  // Use normalizedSearchArea directly in visual-search API:
+  // query: { searchArea: detail.normalizedSearchArea }
 });
 
 // Output:
 {
-  "imageBounds": {...}
-  "searchArea": {...}
+  "searchArea": { "left": 100, "top": 50, "width": 200, "height": 150 },
+  "normalizedSearchArea": { "left": 0.125, "top": 0.083, "width": 0.25, "height": 0.25 },
+  "imageBounds": { "left": 0, "top": 0, "width": 800, "height": 600 },
+  "requestId": "abc-123-def"
 }
 ```
