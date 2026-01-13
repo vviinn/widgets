@@ -320,7 +320,9 @@ export class VviinnCropper {
       searchArea: cropboxData,
       normalizedSearchArea,
       imageBounds: this.state.imageBounds,
-      requestId: this.state.visualSearchId,
+      ...(this.state.visualSearchId && {
+        requestId: this.state.visualSearchId,
+      }),
     });
 
     this.state.searchArea = cropboxData;
