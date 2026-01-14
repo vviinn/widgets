@@ -7,6 +7,12 @@ import './events.css'
 
 Cropper events are used internally to connect the `vviinn-cropper` and `vviinn-results` components. They can also be used externally to handle crop operations manually (e.g., with `autoSearch={false}` for custom API integration).
 
+All these events are available on the `vviinn-cropper` component, and the following props are available for each event:
+
+- imageBounds - Image dimensions in pixels
+
+Some events have additional props, summarized in the table below.
+
 <table width="100%" className="events-table">
   <thead>
     <tr><th>Name</th><th>Description</th><th>Props</th></tr>
@@ -17,9 +23,6 @@ Cropper events are used internally to connect the `vviinn-cropper` and `vviinn-r
       <td>vviinnCropperLoadImage</td><td>Triggered when the image load in cropper.</td>
 
       <td>
-        <ul>
-          <li>imageBounds - Image dimensions in pixels</li>
-        </ul>
       </td>
     </tr>
 
@@ -30,7 +33,6 @@ Cropper events are used internally to connect the `vviinn-cropper` and `vviinn-r
         <ul>
           <li>searchArea - Search area in absolute pixels</li>
           <li>normalizedSearchArea - Normalized search area (0-1 range) ready for visual-search API</li>
-          <li>imageBounds - Image dimensions in pixels</li>
           <li>requestId - Optional search/request ID for API continuity</li>
         </ul>
       </td>
