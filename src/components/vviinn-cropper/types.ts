@@ -9,5 +9,11 @@ export type CropBoxData = {
 
 export type LoadImageEventData = {
   imageBounds: Rectangle;
-  searchArea?: Rectangle;
+};
+
+export type CropEndEventData = {
+  searchArea: Rectangle;
+  normalizedSearchArea: Rectangle;
+  imageBounds: Rectangle;
+  requestId?: string;
 };
