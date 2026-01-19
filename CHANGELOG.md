@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.209.0](https://github.com/vviinn/widgets/compare/v2.208.1...v2.209.0) (2026-01-19)
+
+
+### Features
+
+* Emit vviinnSearchSuccess events with results, filters, and metadata for visual-search, text-search, and product-listing-page requests. ([7420185](https://github.com/vviinn/widgets/commit/7420185b4d79baef0d7eea09f2d0c5db75d321ce))
+
 ### [2.208.1](https://github.com/vviinn/widgets/compare/v2.208.0...v2.208.1) (2026-01-19)
 
 
