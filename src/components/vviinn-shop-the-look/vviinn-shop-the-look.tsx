@@ -8,6 +8,7 @@ import {
   EventEmitter,
   Element,
   Watch,
+  Listen,
 } from "@stencil/core";
 import * as E from "fp-ts/lib/Either";
 import { CropperManager } from "./cropper-manager";
@@ -58,6 +59,7 @@ import {
 import { UploadActionIconVariant } from "../vviinn-icons";
 import { getAcceptableFileFormats } from "../../Image/error";
 import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
+import { openProductLink } from "../../helpers/navigation/openProductLink";
 
 if (typeof window !== "undefined") {
   register();
@@ -109,6 +111,10 @@ export class VviinnShopTheLook {
   @Prop() showMultipleImages: boolean = false;
   /** URL to external CSS file for custom styling */
   @Prop() cssUrl: string | null = null;
+  /** Open product links in new tab */
+  @Prop() productDetailsNewTab: boolean = false;
+  /** Enable product detail redirects on click */
+  @Prop() productDetailsRedirect: boolean = true;
 
   @State() selectedDetectedObject: Rectangle | null = null;
   @State() showModal: boolean = false;
@@ -137,6 +143,27 @@ export class VviinnShopTheLook {
   @Event() vviinnShopTheLookProductClick: EventEmitter<ShopTheLookEventData>;
   /** Emitted when the recommendation modal is closed by the user. */
   @Event() vviinnShopTheLookModalClose: EventEmitter<BasicEventData>;
+
+  @Listen("vviinnProductClick")
+  handleProductCardClick(event: CustomEvent) {
+    const { productId, clickEvent } = event.detail;
+
+    const modalImageState = this.imageStore?.getImageState(
+      this.modalImageIndex,
+    );
+    const product = modalImageState?.searchResults?.find(
+      (p) => p.productId === productId,
+    );
+
+    if (product?.deeplink) {
+      openProductLink(
+        product.deeplink,
+        clickEvent,
+        this.productDetailsRedirect,
+        this.productDetailsNewTab,
+      );
+    }
+  }
 
   private imageElement: HTMLImageElement;
   private intersectionObserver: IntersectionObserver;
