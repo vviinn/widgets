@@ -95,6 +95,7 @@ import {
 import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
 import { RESULTS_CALCULATED_COLUMNS_CSS_VAR } from "../vviinn-carousel/constants";
 import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
+import { openProductLink } from "../../helpers/navigation/openProductLink";
 
 /**
  * @part products - Products container.
@@ -699,7 +700,12 @@ export class VviinnResults {
 
     await trackEvent(productClickEvent, this.token, this.apiPath).finally(
       () => {
-        this.handleOpenLink(product.deeplink, clickEvent);
+        openProductLink(
+          product.deeplink,
+          clickEvent,
+          this.productDetailsRedirect,
+          this.productDetailsNewTab,
+        );
       },
     );
   }
@@ -756,21 +762,6 @@ export class VviinnResults {
     id: Recommendation["productId"],
   ): Recommendation | undefined {
     return this.getResults().find((r) => r.productId === id);
-  }
-
-  private handleOpenLink(deeplink: string, event: MouseEvent) {
-    if (!this.productDetailsRedirect) return;
-
-    if (this.productDetailsNewTab || event.ctrlKey || event.metaKey) {
-      let newTab = window.open();
-      if (newTab) {
-        newTab.location.href = deeplink;
-      } else {
-        window.location.href = deeplink;
-      }
-    } else {
-      window.location.href = deeplink;
-    }
   }
 
   private getProductTrackEvent(

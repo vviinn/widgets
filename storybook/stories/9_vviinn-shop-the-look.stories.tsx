@@ -22,6 +22,8 @@ const Template = (args) => `
       show-cropper="${args.showCropper}"
       upload-mode="${args.uploadMode}"
       show-multiple-images="${args.showMultipleImages}"
+      product-details-new-tab="${args.productDetailsNewTab}"
+      product-details-redirect="${args.productDetailsRedirect}"
       css-url="${args.cssUrl}"
     ></vviinn-shop-the-look>
 `;
@@ -42,6 +44,8 @@ const initArgs = {
   showCropper: false,
   uploadMode: false,
   showMultipleImages: false,
+  productDetailsNewTab: false,
+  productDetailsRedirect: true,
   cssUrl: "",
 };
 

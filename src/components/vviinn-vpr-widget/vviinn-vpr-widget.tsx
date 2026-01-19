@@ -70,6 +70,7 @@ import {
   PRODUCT_CARD_IMAGE_WIDTH,
 } from "../../widget/constants";
 import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
+import { openProductLink } from "../../helpers/navigation/openProductLink";
 
 export type UpdateButtonLocation = "onTop" | "onItem" | "topAndItem";
 
@@ -347,20 +348,6 @@ export class VviinnVprWidget implements ComponentInterface {
     };
   }
 
-  private handleOpenLink(deeplink: string, event: MouseEvent) {
-    if (!this.productDetailsRedirect) return;
-    if (this.productDetailsNewTab || event.ctrlKey || event.metaKey) {
-      let newTab = window.open();
-      if (newTab) {
-        newTab.location.href = deeplink;
-      } else {
-        window.location.href = deeplink;
-      }
-    } else {
-      window.location.href = deeplink;
-    }
-  }
-
   private findProductById(
     id: Recommendation["productId"],
   ): Recommendation | undefined {
@@ -481,13 +468,23 @@ export class VviinnVprWidget implements ComponentInterface {
 
       await trackEvent(productClickEvent, this.token, this.apiPath).finally(
         () => {
-          this.handleOpenLink(product.deeplink, clickEvent);
+          openProductLink(
+            product.deeplink,
+            clickEvent,
+            this.productDetailsRedirect,
+            this.productDetailsNewTab,
+          );
         },
       );
     });
 
     if (this.isAppended) {
-      this.handleOpenLink(product.deeplink, clickEvent);
+      openProductLink(
+        product.deeplink,
+        clickEvent,
+        this.productDetailsRedirect,
+        this.productDetailsNewTab,
+      );
     }
   }
 
