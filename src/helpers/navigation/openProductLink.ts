@@ -10,10 +10,7 @@ export const openProductLink = (
     productDetailsNewTab || event.ctrlKey || event.metaKey;
 
   if (shouldOpenInNewTab) {
-    const newTab = window.open(deeplink, "_blank", "noopener,noreferrer");
-    if (!newTab) {
-      window.location.href = deeplink;
-    }
+    window.open(deeplink, "_blank", "noopener,noreferrer");
   } else {
     window.location.href = deeplink;
   }
