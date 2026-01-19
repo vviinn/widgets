@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.208.1](https://github.com/vviinn/widgets/compare/v2.208.0...v2.208.1) (2026-01-19)
+
+
+### Bug Fixes
+
+* Shop-the-Look aspect ratio support. ([cd905dd](https://github.com/vviinn/widgets/commit/cd905dd83412317084bf77bbcec1919008556407))
+* Shop-the-Look product link redirection. ([65b0bbd](https://github.com/vviinn/widgets/commit/65b0bbd8bc1c723597afb1b9ae42386cf44b7d5e))
+
+## [2.208.0](https://github.com/vviinn/widgets/compare/v2.207.1...v2.208.0) (2026-01-14)
+
+
+### Features
+
+* Enrich vviinnCropperCropEnd event with normalized coordinates (0-1 range) ready for visual-search API. Add autoSearch prop to disable automatic search and handle API calls manually. ([a534452](https://github.com/vviinn/widgets/commit/a5344520a190cef356331372bd10ab6febeeee3b))
+
 ### [2.207.1](https://github.com/vviinn/widgets/compare/v2.207.0...v2.207.1) (2025-12-26)
 
 

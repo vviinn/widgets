@@ -15,14 +15,14 @@ import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/lib/function";
 import { version } from "../../../package.json";
 import styles from "./vviinn-cropper.css";
-import { fromImage } from "../../geometry/Rectangle";
+import { fromImage, divideOnSized } from "../../geometry/Rectangle";
 import {
   BasicEventData,
   SearchIdEvent,
   SelectObjectEventData,
   TriggerSourceEventData,
 } from "../../recommendation/events";
-import { LoadImageEventData } from "./types";
+import { LoadImageEventData, CropEndEventData } from "./types";
 import { ValidateCropBoxData } from "./helpers/validateCropBoxData";
 import {
   cropperOptions,
@@ -60,6 +60,8 @@ export class VviinnCropper {
   @Prop() apiPath?: string;
   /** Save to Local Storage mode for uploaded image */
   @Prop() saveImageMode?: "once" | "always" | "never" = "once";
+  /** Automatically trigger visual search after crop. Set to false to handle search manually via vviinnCropperCropEnd event */
+  @Prop() autoSearch?: boolean = true;
   @Prop({ mutable: true }) width: number = 288;
   /** URL to external CSS file for custom styling */
   @Prop() cssUrl: string | null = null;
@@ -78,7 +80,10 @@ export class VviinnCropper {
 
   @Event() vviinnImageCrop: EventEmitter<TriggerSourceEventData>;
   @Event() vviinnCropperLoadImage: EventEmitter<LoadImageEventData>;
-  @Event() vviinnCropperCropEnd: EventEmitter<Rectangle>;
+  /** Triggered when crop ends with enriched data including normalized coordinates for visual-search API */
+  @Event() vviinnCropperCropEnd: EventEmitter<CropEndEventData>;
+  /** Triggered when a visual search request fails */
+  @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
   /** @internal */
   @Event() vviinnCropperAspectRatioError: EventEmitter<boolean>;
@@ -88,9 +93,6 @@ export class VviinnCropper {
   @Event() vviinnResetCropArea: EventEmitter<TriggerSourceEventData>;
   /** @internal */
   @Event() vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
-
-  /** Triggered when a visual search request fails */
-  @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
   private state?: SearchStore;
   private storeName?: SearchStoreName;
@@ -308,14 +310,29 @@ export class VviinnCropper {
     const cropboxData = getCropBoxData(this.cropper);
     if (isCropBoxChangeMinimal(this.startEndCropBoxData, cropboxData)) return;
 
-    this.vviinnCropperCropEnd.emit(cropboxData);
+    if (!this.state.imageBounds) return;
+
+    const normalizedSearchArea = divideOnSized(this.state.imageBounds)(
+      cropboxData,
+    );
+
+    this.vviinnCropperCropEnd.emit({
+      searchArea: cropboxData,
+      normalizedSearchArea,
+      imageBounds: this.state.imageBounds,
+      ...(this.state.visualSearchId && {
+        requestId: this.state.visualSearchId,
+      }),
+    });
+
     this.state.searchArea = cropboxData;
     this.selectedDetectedObject = null;
 
     this.vviinnImageCrop.emit({
       isTriggeredByVpsWidget: this.showInWidget,
     });
-    this.triggerVisualSearch();
+
+    this.autoSearch && this.triggerVisualSearch();
   };
 
   private showPreloader = () =>
