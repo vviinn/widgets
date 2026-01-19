@@ -276,14 +276,13 @@ swiper-container::part(bullet-active):hover {
   grid-template-columns: 1fr 1fr;
   gap: var(--spacing-50);
   width: 140px;
-  height: 140px;
 }
 
 .result-item {
   cursor: pointer;
   border-radius: var(--spacing-75);
   overflow: hidden;
-  aspect-ratio: 1;
+  aspect-ratio: var(--product-card-image-aspect-ratio, 1);
 }
 
 .result-image {
@@ -366,9 +365,6 @@ vviinn-image::part(image),
   overflow: hidden;
 }
 
-.product-details-card-wrapper vviinn-product-card::part(image-container) {
-  height: 160px;
-}
 
 /* Search Loader */
 
@@ -498,7 +494,6 @@ vviinn-image::part(image),
 
   .search-results-grid {
     width: min(140px, calc(100vw - 32px));
-    height: min(140px, calc(100vw - 32px));
     gap: var(--spacing-50);
   }
 
@@ -510,10 +505,6 @@ vviinn-image::part(image),
   .product-details-card-wrapper {
     width: 120px;
     max-width: 120px;
-  }
-
-  .product-details-card-wrapper vviinn-product-card::part(image-container) {
-    height: 120px;
   }
 }
 
