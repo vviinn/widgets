@@ -43,6 +43,9 @@ import { fileToB64 } from "../file";
 import { ImageType, shouldResize } from "./image-processing";
 import { OnChangeHandler } from "@stencil/store/dist/types";
 import { extractSelectedFilters } from "../components/vviinn-filters/helpers/extractSelectedFilters";
+import { SearchSuccessEventData } from "../recommendation/events";
+import { campaignTypeNames } from "../campaign/Campaign";
+import { version } from "../../package.json";
 
 export type SearchStoreName = "widget" | "components" | "shopTheLook";
 export type SearchStatus = "idle" | "loading" | "success" | "error";
@@ -195,8 +198,40 @@ export const resetStore = (
   Object.assign(state, resetPayload);
 };
 
+const emitSearchSuccess = (
+  storeName: SearchStoreName,
+  state: SearchStore,
+  campaignTypeId: "VPS" | "TPS",
+) => {
+  const requestId =
+    campaignTypeId === "VPS"
+      ? state.visualSearchId || ""
+      : state.textSearchId || "";
+
+  const eventData: SearchSuccessEventData = {
+    results: state.results,
+    dynamicFilters: state.dynamicFilters,
+    detectedObjects: state.detectedObjects,
+    requestId,
+    ...addIfDefined("query", state.textSearchQuery),
+    storeName,
+    campaignTypeId,
+    campaignTypeName: campaignTypeNames[campaignTypeId],
+    widgetVersion: version,
+  };
+
+  document.dispatchEvent(
+    new CustomEvent("vviinnSearchSuccess", {
+      detail: eventData,
+      bubbles: true,
+      composed: true,
+    }),
+  );
+};
+
 const updateVisualSearchState =
-  (store: SearchStoreName) => async (response: VisualSearchResponse) => {
+  (store: SearchStoreName, isHiResUpdate: boolean = false) =>
+  async (response: VisualSearchResponse) => {
     const state = useStore(store);
 
     if (store === "shopTheLook") {
@@ -213,6 +248,8 @@ const updateVisualSearchState =
     state.results = response.data.products;
     state.dynamicFilters = response.interactions.dynamicFilters;
     state.searchStatus = "success";
+
+    if (!isHiResUpdate) emitSearchSuccess(store, state, "VPS");
   };
 
 const updateImageState = (store: SearchStoreName) => (file: File) =>
@@ -240,6 +277,7 @@ const processVisualSearch = (
   body: VisualSearchRequest,
   token: string,
   apiPath?: string,
+  isHiResUpdate: boolean = false,
 ) => {
   return pipe(
     getTokenWithBody<VisualSearchRequest>(token, body),
@@ -247,7 +285,7 @@ const processVisualSearch = (
     TE.fromEither,
     TE.chain((request) => visualSearchSessionClient(request, apiPath)),
     TE.map((sessionResponse) => {
-      updateVisualSearchState(store)(sessionResponse);
+      updateVisualSearchState(store, isHiResUpdate)(sessionResponse);
       return sessionResponse;
     }),
     TE.mapLeft(handleSearchError(store)),
@@ -262,6 +300,7 @@ const uploadImageFile =
     searchId?: string,
     apiPath?: string,
     campaignId?: string | null,
+    isHiResUpdate: boolean = false,
   ) =>
   (file: File) => {
     const state = useStore(store);
@@ -293,7 +332,9 @@ const uploadImageFile =
               inner: error,
             }),
           ),
-          TE.chain((body) => processVisualSearch(store, body, token, apiPath)),
+          TE.chain((body) =>
+            processVisualSearch(store, body, token, apiPath, isHiResUpdate),
+          ),
         ),
       ),
     );
@@ -349,6 +390,7 @@ export const makeUploadFileRequest =
         state.visualSearchId,
         apiPath,
         campaignId,
+        true, // isHiResUpdate = true
       )(file),
       TE.getOrElseW((error) => {
         console.error("Failed to upload hi-res image:", error);
@@ -465,6 +507,7 @@ export const makeTextSearchRequest = async (
 
       state.stream = sessionResponse?.stream ?? null;
       state.searchStatus = "success";
+      emitSearchSuccess(store, state, "TPS");
       return sessionResponse;
     }),
     TE.mapLeft(handleSearchError(store)),
@@ -517,6 +560,7 @@ export const makeProductListingPageRequest = async (
       state.dynamicFilters =
         sessionResponse?.interactions?.dynamicFilters ?? [];
       state.searchStatus = "success";
+      emitSearchSuccess("components", state, "TPS");
       return sessionResponse;
     }),
     TE.mapLeft(handleSearchError("components")),

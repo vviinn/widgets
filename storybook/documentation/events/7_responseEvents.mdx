@@ -23,11 +23,34 @@ Some events have additional props, summarized in the table below.
 
   <tbody>
     <tr>
+      <td>vviinnSearchSuccess</td>
+      <td>Triggered when the API successfully returns search results. Emitted for visual search (VPS), text search (TPS), and product listing page requests. Provides access to results data for custom UI implementations.</td>
+      <td>
+        <ul>
+          <li>vviinn-vps-button (Search Button)</li>
+          <li>vviinn-text-search (Search Bar)</li>
+          <li>vviinn-results (Product List)</li>
+          <li>vviinn-cropper (Cropper)</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>results - array of results</li>
+          <li>dynamicFilters - available filters</li>
+          <li>detectedObjects - detected search areas (visual search only)</li>
+          <li>requestId - unique request identifier</li>
+          <li>query - search query text (text search only)</li>
+          <li>storeName - emitted for "widget" or "components"</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
       <td>vviinnRedirect</td>
       <td>Triggered when the API returns a suggested redirect URL in the response. Automatically redirects unless intercepted by calling <code>event.preventDefault()</code> (e.g., for SPA routing).</td>
       <td>
         <ul>
-          <li>vviinn-text-search (Text Search Bar)</li>
+          <li>vviinn-text-search (Search Bar)</li>
         </ul>
       </td>
       <td>
@@ -45,8 +68,7 @@ Some events have additional props, summarized in the table below.
         <ul>
           <li>vviinn-vpr-widget (Recommendation Widget)</li>
           <li>vviinn-vps-button (Search Button)</li>
-          <li>vviinn-vps-widget (Search Modal)</li>
-          <li>vviinn-text-search (Text Search)</li>
+          <li>vviinn-text-search (Search Bar)</li>
           <li>vviinn-results (Product List)</li>
           <li>vviinn-cropper (Cropper)</li>
         </ul>
@@ -62,7 +84,6 @@ Some events have additional props, summarized in the table below.
     </tr>
   </tbody>
 </table>
-
 
 ## Listen to Events. Examples
 
@@ -100,6 +121,46 @@ document.addEventListener("vviinnRedirect", (event) => {
 });
 ```
 
+### Basic Usage of Search Success Event
+
+```javascript
+document.addEventListener("vviinnSearchSuccess", ({ detail }) => {
+  console.log(detail);
+  // Use results data for custom UI implementation
+});
+
+// Output example (Visual Search):
+{
+    "results": [
+        {
+            "productId": "12345",
+            "title": "Product Name",
+            "price": { "actual": { "amount": 29.99 } },
+            "image": { "url": "https://..." }
+            // ... more product fields
+        }
+        // ... more products
+    ],
+    "dynamicFilters": [
+        {
+            "kind": "color",
+            "values": [
+                { "value": "red", "count": 15 },
+                { "value": "blue", "count": 8 }
+            ]
+        }
+    ],
+    "detectedObjects": [
+        { "left": 0.1, "top": 0.2, "width": 0.3, "height": 0.4 }
+    ],
+    "requestId": "abc123-def456",
+    "storeName": "widget",
+    "campaignTypeId": "VPS",
+    "campaignTypeName": "Visual Search",
+    "widgetVersion": "2.208.0"
+}
+```
+
 ### Basic Usage of No Result Event
 
 ```javascript
@@ -113,6 +174,6 @@ document.addEventListener("vviinnNoResult", ({ detail }) => {
     "campaignTypeId": "TPS",
     "campaignTypeName": "Text Product Search",
     "widgetId": "my-search-widget",
-    "widgetVersion": "2.202.0"
+    "widgetVersion": "2.208.0"
 }
 ```

@@ -14,6 +14,8 @@ import {
   ResponseDynamicFilterItem,
 } from "../campaign/VPRCampaignService";
 import { Rectangle } from "../interfaces";
+import { Recommendation } from "../interfaces/product";
+import { SearchStoreName } from "../store/search.store";
 
 export type CommonEventData = {
   campaignTypeId: "VPR" | "VPS" | "VCS" | "TPS";
@@ -124,6 +126,17 @@ export type DynamicFilterInternalData = DynamicFilterTrackingData & {
   filter?: ResponseDynamicFilterItem;
 };
 
+export type SearchSuccessEventData = {
+  results: Recommendation[];
+  dynamicFilters: ResponseDynamicFilterItem[];
+  detectedObjects?: Rectangle[];
+  requestId: string;
+  query?: string;
+  storeName: SearchStoreName;
+} & {
+  [K in keyof CommonEventData]: CommonEventData[K];
+};
+
 export type SearchIdEvent = CustomEvent<SearchIdEventData>;
 export type TextSearchEvent = CustomEvent<TextSearchEventData>;
 export type ChangedFiltersEvent = CustomEvent<ChangedFiltersEventData>;
@@ -131,3 +144,4 @@ export type ResetSelectedFiltersEvent = TriggerSourceEvent;
 export type ProductCardEvent = CustomEvent<ProductCardEventData>;
 export type CrossSellingClickEvent = CustomEvent<CrossSellingClickEventData>;
 export type TriggerSourceEvent = CustomEvent<TriggerSourceEventData>;
+export type SearchSuccessEvent = CustomEvent<SearchSuccessEventData>;

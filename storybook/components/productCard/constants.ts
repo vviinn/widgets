@@ -4,6 +4,7 @@ const commonParams = {
   currencySign: "€",
   style: { width: "fit-content" },
   "image-width": "300",
+  "image-resolution-width": "500",
 };
 
 export const productDataByIndustryAndType = {
@@ -18,41 +19,41 @@ export const productDataByIndustryAndType = {
       "sale-price": "149.99",
       "base-sale-price": '{"price":1499.00,"quantity":1,"measure":"l"}',
       image:
-        "https://www.fashionhype.com/uploads/tx_amproductfeeds/produktbilder/4130004.jpg",
+        "https://cdn.vviinn.com/image/0/fit/400/0/ce/0/Z3M6Ly92dmlpbm4tY2F0YWxvZy1pbWFnZXMtcHJvZHVjdGlvbi93d3cuZmFzaGlvbmh5cGUuY29tL0VsczVNLURHNVFzLUwzVndiRzloWkhNdmRIaGZZVzF3Y205a2RXTjBabVZsWkhNdmNISnZaSFZyZEdKcGJHUmxjaTgwTVRNd01EQTBMbXB3WncuanBn",
     },
     appendCard: {
-      id: "4012501-1",
-      "product-title": "Mtb 03 In-ear-kopfhörer Grün",
-      brand: "Montblanc",
-      price: "390.0",
-      "sale-price": "389.99",
+      id: "4139204-1",
+      "product-title": "CREOLE FÜR ANHÄNGER ROSÉGOLD orange Damen",
+      brand: "DoDo",
+      price: "70.0",
+      "sale-price": "59.99",
       image:
-        "https://www.fashionhype.com/uploads/tx_amproductfeeds/produktbilder/4012501.jpg",
+        "https://cdn.vviinn.com/image/0/fit/400/0/ce/0/Z3M6Ly92dmlpbm4tY2F0YWxvZy1pbWFnZXMtcHJvZHVjdGlvbi93d3cuZmFzaGlvbmh5cGUuY29tL1E2aXBNTXVrQjVnLUwzVndiRzloWkhNdmRIaGZZVzF3Y205a2RXTjBabVZsWkhNdmNISnZaSFZyZEdKcGJHUmxjaTgwTVRNNU1qQTBMbXB3WncuanBn",
       "energy-certifications-string":
         '[{"certificationClass":"A++","classIconUrls":{"left":"https://cdn.vviinn.com/assets/certification/energy/A+++toD/left/A++.svg","right":"https://cdn.vviinn.com/assets/certification/energy/A+++toD/right/A++.svg"},"classRange":{"min":"A++","max":"D"},"classLabelUrl":"https://energy-efficient-products.ec.europa.eu/sites/default/files/styles/embed_medium_2x/public/2024-04/sample-energy-label-with-numbers-new.png?itok=x7puJdbG","classDataSheetUrl":"https://www.roller.de/medias/sys_master/datasheets/datasheets/h7a/hc5/11687118700574/1328023300-P01.pdf","productType":"Tischleuchte"}]',
     },
     setCard: {
-      id: "3918542-1",
-      "product-title": "Cargojeans blau beige",
-      brand: "Mrs & HUGS",
+      id: "4340498-1",
+      "product-title": "Cargo-Pants Beige Damen",
+      brand: "Roberto Collina",
       price: "129.99",
       image:
-        "https://www.fashionhype.com/uploads/tx_amproductfeeds/produktbilder/3918542.jpg",
+        "https://cdn.vviinn.com/image/0/fit/400/0/ce/0/Z3M6Ly92dmlpbm4tY2F0YWxvZy1pbWFnZXMtcHJvZHVjdGlvbi93d3cuZmFzaGlvbmh5cGUuY29tL2pSMFFDa2ZWWjVBLUwzVndiRzloWkhNdmRIaGZZVzF3Y205a2RXTjBabVZsWkhNdmNISnZaSFZyZEdKcGJHUmxjaTgwTXpRd05EazRMbXB3WncuanBn",
     },
     minimalisticCard: {
-      id: "4120256-1",
-      "product-title": "4er-Pack Socken weiss beige",
-      brand: "Calvin Klein",
+      id: "4335120-1",
+      "product-title": "Zweier-Pack kurze Socken aus Baumwoll-Mix Damen",
+      brand: "HUGO BOSS",
       "product-type": "Socken",
       price: "29.9",
       "sale-price": "25",
       image:
-        "https://www.fashionhype.com/uploads/tx_amproductfeeds/produktbilder/4120256.jpg",
+        "https://cdn.vviinn.com/image/0/fit/400/0/ce/0/Z3M6Ly92dmlpbm4tY2F0YWxvZy1pbWFnZXMtcHJvZHVjdGlvbi93d3cuZmFzaGlvbmh5cGUuY29tL1dUdkNvWnRsdXcwLUwzVndiRzloWkhNdmRIaGZZVzF3Y205a2RXTjBabVZsWkhNdmNISnZaSFZyZEdKcGJHUmxjaTgwTXpNMU1USXdMbXB3WncuanBn",
     },
   },
   "home-living": {
     mainCard: {
-      id: "301403586523",
+      id: "632083",
       "product-title": "Windlicht-Set",
       brand: "MARILU",
       "product-type": "Accessoires > Gedeckter Tisch > Kerzen & Leuchter",
@@ -61,35 +62,37 @@ export const productDataByIndustryAndType = {
       "sale-price": "8",
       "base-sale-price": '{"price":2,"quantity":1,"measure":"Stk"}',
       image:
-        "https://cdn.vviinn.com/image/0/fit/400/0/ce/0/Z3M6Ly92dmlpbm4tY2F0YWxvZy1pbWFnZXMtcHJvZHVjdGlvbi9tZWRpYS50cmVuZHMuZGUvMmFqbF94UkszalEtTDJKcGJHUXlMekEwTnpNNE16Z3VhbkJuLmpwZw==",
+        "https://cdn.vviinn.com/image/0/fit/400/0/ce/0/Z3M6Ly92dmlpbm4tY2F0YWxvZy1pbWFnZXMtcHJvZHVjdGlvbi9tZWRpYS50cmVuZHMuZGUvWkFCdDVQd2RkcUEtTDJKcGJHUXhMekEyTXpJd09ETXVhbkJuLmpwZw==",
     },
     appendCard: {
-      id: "296104578150",
-      "product-title": "Stehleuchte LEITUNG",
-      brand: "FISCHER & HONSEL",
-      price: "199.0",
-      "sale-price": "165.3",
+      id: "955098",
+      "product-title": "Hängeleuchte GAETANO 1 (DH 38x150 cm)",
+      brand: "EGLO",
+      price: "99.0",
+      "sale-price": "89.99",
       "add-to-basket-show": "true",
       image:
-        "https://cdn.vviinn.com/image/0/fit/400/0/ce/0/Z3M6Ly92dmlpbm4tY2F0YWxvZy1pbWFnZXMtcHJvZHVjdGlvbi9tZWRpYS5vc3Rlcm1hbm4uZGUveDAtTk5feE1wcG8tTDJKcGJHUXhMekExTnpFMU1UTXVhbkJuLmpwZw==",
+        "https://cdn.vviinn.com/image/0/fit/400/0/ce/0/Z3M6Ly92dmlpbm4tY2F0YWxvZy1pbWFnZXMtcHJvZHVjdGlvbi9tZWRpYS5vc3Rlcm1hbm4uZGUvcGhob3huVER5ZnMtTDJKcGJHUXhMekE1TlRVd09UZ3VhbkJuLmpwZw==",
       "energy-certifications-string":
         '[{"certificationClass":"A","classIconUrls":{"left":"https://cdn.vviinn.com/assets/certification/energy/AtoG/left/A.svg","right":"https://cdn.vviinn.com/assets/certification/energy/AtoG/right/A.svg"},"classRange":{"min":"A","max":"G"},"classLabelUrl":"https://energy-efficient-products.ec.europa.eu/sites/default/files/styles/embed_medium_2x/public/2024-04/sample-energy-label-with-numbers-new.png?itok=x7puJdbG","classDataSheetUrl":"https://www.roller.de/medias/sys_master/datasheets/datasheets/h7a/hc5/11687118700574/1328023300-P01.pdf","productType":"Tischleuchte"}]',
     },
     setCard: {
-      idL: "266152528616",
-      "product-title": "Sessel",
-      brand: "VERO",
+      id: "309717",
+      "product-title": "Sessel Buddy",
+      brand: "VITO",
       price: "149.0",
-      image: "https://media.trends.de/bild1/0440803-00004.jpg",
+      image:
+        "https://cdn.vviinn.com/image/0/fit/400/0/ce/0/Z3M6Ly92dmlpbm4tY2F0YWxvZy1pbWFnZXMtcHJvZHVjdGlvbi9tZWRpYS5vc3Rlcm1hbm4uZGUvVnRNRmtqWktFWFEtTDJKcGJHUXhMekF6TURrM01UY3VhbkJuLmpwZw==",
     },
     minimalisticCard: {
-      id: "286429561802",
+      id: "585101",
       "product-title": "Sideboard",
       brand: "ELTON",
       "product-type": "Möbel > Schränke & Regale > Sideboards",
       price: "599.0",
       "sale-price": "550.0",
-      image: "https://media.ostermann.de/bild1/0476790.jpg",
+      image:
+        "https://cdn.vviinn.com/image/0/fit/400/0/ce/0/Z3M6Ly92dmlpbm4tY2F0YWxvZy1pbWFnZXMtcHJvZHVjdGlvbi9tZWRpYS5vc3Rlcm1hbm4uZGUvU1A4YmlseTRGeW8tTDJKcGJHUXhMekExT0RVeE1ERXVhbkJuLmpwZw==",
     },
   },
 };
@@ -153,11 +156,12 @@ export const cardDataByType = {
     uniqueId: "customized-label",
     header: "Product Card: Styling Custom Labels and Changing Order",
     productData: {
-      "product-title": "Couchtisch Rolf Benz 8770 Ronald Schmitt",
-      price: "3629",
-      "sale-price": "1653",
+      id: "100001",
+      "product-title": "Polsterstuhl bert plantagie DUO",
+      price: "539",
+      "sale-price": "440",
       image:
-        "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg",
+        "https://cdn.vviinn.com/image/0/fit/400/0/ce/0/Z3M6Ly92dmlpbm4tY2F0YWxvZy1pbWFnZXMtcHJvZHVjdGlvbi9tZWRpYS5vc3Rlcm1hbm4uZGUvZEdoU2hDc0tOWWMtTDJKcGJHUXhMekF4TURBd01ERXVhbkJuLmpwZw==",
       "is-standalone": "true",
       "custom-labels": "UVP, SALE",
       ...commonParams,
