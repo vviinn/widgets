@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.209.1](https://github.com/vviinn/widgets/compare/v2.209.0...v2.209.1) (2026-01-21)
+
+
+### Bug Fixes
+
+* Update product card examples in Storybook and replace missing images. ([38f99f2](https://github.com/vviinn/widgets/commit/38f99f247ef44dd71a5480dbe51df19efb823307))
+
 ## [2.209.0](https://github.com/vviinn/widgets/compare/v2.208.1...v2.209.0) (2026-01-19)
 
 
