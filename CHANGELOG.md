@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.209.2](https://github.com/vviinn/widgets/compare/v2.209.1...v2.209.2) (2026-01-27)
+
+
+### Bug Fixes
+
+* Сlear stale detected objects when saving new image to localStorage. ([8b8b493](https://github.com/vviinn/widgets/commit/8b8b493d44ad97b339da7e300d33f18b7d611df2))
+
 ### [2.209.1](https://github.com/vviinn/widgets/compare/v2.209.0...v2.209.1) (2026-01-21)
 
 
