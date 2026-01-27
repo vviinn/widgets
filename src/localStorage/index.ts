@@ -4,12 +4,13 @@ export const setLocalStorageItems = (
   imageSrc: string,
   detectedObjects: Rectangle[],
 ) => {
-  if (imageSrc?.length) localStorage.setItem("vviinnCropperImageSrc", imageSrc);
-  if (detectedObjects?.length)
-    localStorage.setItem(
-      "vviinnDetectedObjects",
-      JSON.stringify(detectedObjects),
-    );
+  if (!imageSrc?.length) return;
+
+  localStorage.setItem("vviinnCropperImageSrc", imageSrc);
+  localStorage.setItem(
+    "vviinnDetectedObjects",
+    JSON.stringify(detectedObjects || []),
+  );
 };
 
 export const getLocalStorageItems = () => {
