@@ -1,7 +1,7 @@
 import { Rectangle } from "../interfaces";
 
 export const setLocalStorageItems = (
-  imageSrc: string,
+  imageSrc: string | undefined,
   detectedObjects: Rectangle[],
 ) => {
   if (!imageSrc?.length) return;
@@ -9,7 +9,7 @@ export const setLocalStorageItems = (
   localStorage.setItem("vviinnCropperImageSrc", imageSrc);
   localStorage.setItem(
     "vviinnDetectedObjects",
-    JSON.stringify(detectedObjects || []),
+    JSON.stringify(detectedObjects),
   );
 };
 
