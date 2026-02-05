@@ -1,6 +1,6 @@
 export const INTERSECTION_THRESHOLDS = {
-  DESKTOP_VISIBLE: 0.6,
-  MOBILE_VISIBLE: 0.33,
+  DESKTOP_VISIBLE: 0.01,
+  MOBILE_VISIBLE: 0.01,
 } as const;
 
 export const TIMING = {
