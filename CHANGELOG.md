@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.210.0](https://github.com/vviinn/widgets/compare/v2.209.2...v2.210.0) (2026-02-05)
+
+
+### Features
+
+* Shop-the-Look: start requests earlier, when widget barely appears in the viewport. ([a8399e9](https://github.com/vviinn/widgets/commit/a8399e9ea867309a20b98095e92e8529cf3edde7))
+
 ### [2.209.2](https://github.com/vviinn/widgets/compare/v2.209.1...v2.209.2) (2026-01-27)
 
 
