@@ -40,6 +40,10 @@ import Timeout = NodeJS.Timeout;
 import { defaultConfig } from "../../store/store";
 import { campaignTypeNames } from "../../campaign/Campaign";
 import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
+import {
+  isOnResultsPage,
+  buildResultsPageRedirectUrl,
+} from "../../helpers/url/resultsPageUrl";
 
 /**
  * @part text-search-container - Container for the text search block.
@@ -98,6 +102,8 @@ export class VviinnTextSearch {
   @Prop({ mutable: true }) searchQuery?: string;
   /** Custom placeholder for the text search input */
   @Prop() placeholder?: string = "";
+  /** URL of the results page for automatic text search redirect. */
+  @Prop() resultsPageUrl?: string;
 
   /** True, when used inside the widget */
   /** @internal */
@@ -250,6 +256,20 @@ export class VviinnTextSearch {
 
     this.trackTextSearch();
 
+    const shouldRedirectToResultsPage =
+      this.resultsPageUrl &&
+      !this.showInWidget &&
+      !isOnResultsPage(this.resultsPageUrl);
+
+    if (shouldRedirectToResultsPage) {
+      const redirectUrl = buildResultsPageRedirectUrl(
+        this.resultsPageUrl,
+        queryToUse,
+      );
+      this.handleTextSearchRedirect(redirectUrl, queryToUse);
+      return;
+    }
+
     this.vviinnTextSearchStarted.emit({
       query: queryToUse,
       isTriggeredByVpsWidget: this.showInWidget,
@@ -318,6 +338,7 @@ export class VviinnTextSearch {
       query,
     };
     const event = this.vviinnRedirect.emit(redirectData);
+    alert("Redirecting to: " + url);
 
     if (event.defaultPrevented) {
       this.state.redirect = null;

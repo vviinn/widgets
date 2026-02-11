@@ -207,6 +207,8 @@ export class VviinnVpsWidget {
   @Prop() cssUrl: string | null = null;
   /** Show search results in modal or on page */
   @Prop() showResultsInModal?: boolean = true;
+  /** URL of the results page for automatic text search redirect. */
+  @Prop() resultsPageUrl?: string;
 
   private get showInWidget() {
     return this.showResultsInModal;
@@ -844,6 +846,7 @@ export class VviinnVpsWidget {
                           showOnFirstScreen={true}
                           uiSessionId={this.uiSessionId}
                           basicEventData={this.getBasicEventData(true)}
+                          resultsPageUrl={this.resultsPageUrl}
                           save-image-mode="never"
                         />
                       )}
@@ -875,6 +878,7 @@ export class VviinnVpsWidget {
                       locale={this.locale}
                       uiSessionId={this.uiSessionId}
                       basicEventData={this.getBasicEventData(true)}
+                      resultsPageUrl={this.resultsPageUrl}
                       save-image-mode="never"
                     />
                   )}

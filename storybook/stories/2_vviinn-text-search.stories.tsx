@@ -39,6 +39,7 @@ const Template = (args) => `
       mode="${args.mode}"
       locale="${args.locale}"
       placeholder="${args.placeholder}"
+      results-page-url="${args.resultsPageUrl}"
     >
     </vviinn-text-search>
 
@@ -67,6 +68,7 @@ const initArgs = {
   apiPath: process.env.STORYBOOK_API_PATH,
   searchQuery: "",
   placeholder: "",
+  resultsPageUrl: "",
   mode: "extended",
   locale: "en-US",
   productCardImageAspectRatio: "1 / 1",

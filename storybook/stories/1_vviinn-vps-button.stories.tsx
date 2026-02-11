@@ -65,6 +65,7 @@ const Template = (args) => `
   favorite-show="${args.favoriteShow}"
   one-click-discovery-mode="${args.oneClickDiscoveryMode}"
   css-url="${args.cssUrl}"
+  results-page-url="${args.resultsPageUrl}"
 ></vviinn-vps-button>`;
 
 export const Default = Template.bind({});
@@ -96,6 +97,7 @@ const initArgs = {
   favoriteShow: false,
   oneClickDiscoveryMode: "append-grid",
   cssUrl: "",
+  resultsPageUrl: "",
   productCardImageAspectRatio: "1 / 1",
   productCardImageBgColor: "#f4f4f4",
 };
