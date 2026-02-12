@@ -28,6 +28,7 @@ import {
   BasicEventData,
   TriggerSourceEventData,
   RedirectEventData,
+  RedirectSource,
 } from "../../recommendation/events";
 import i18next from "i18next";
 import { Locale, initializeLocale } from "../../locale";
@@ -42,7 +43,7 @@ import { campaignTypeNames } from "../../campaign/Campaign";
 import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
 import {
   isOnResultsPage,
-  buildResultsPageRedirectUrl,
+  buildTextSearchRedirectUrl,
 } from "../../helpers/url/resultsPageUrl";
 
 /**
@@ -156,7 +157,11 @@ export class VviinnTextSearch {
 
     const disposeRedirectListener = onChange("redirect", (redirect) => {
       if (redirect?.url && redirect?.query === this.state.textSearchQuery) {
-        this.handleTextSearchRedirect(redirect.url, redirect.query);
+        this.handleTextSearchRedirect(
+          redirect.url,
+          "auto-suggest",
+          redirect.query,
+        );
       }
     });
 
@@ -256,17 +261,31 @@ export class VviinnTextSearch {
 
     this.trackTextSearch();
 
+    const autoSuggestRedirect = this.state.redirect;
+    const hasAutoSuggestRedirect =
+      autoSuggestRedirect?.url &&
+      autoSuggestRedirect.query === queryToUse;
+
+    if (hasAutoSuggestRedirect) {
+      this.handleTextSearchRedirect(
+        autoSuggestRedirect.url,
+        "auto-suggest",
+        queryToUse,
+      );
+      return;
+    }
+
     const shouldRedirectToResultsPage =
       this.resultsPageUrl &&
       !this.showInWidget &&
       !isOnResultsPage(this.resultsPageUrl);
 
     if (shouldRedirectToResultsPage) {
-      const redirectUrl = buildResultsPageRedirectUrl(
+      const redirectUrl = buildTextSearchRedirectUrl(
         this.resultsPageUrl,
         queryToUse,
       );
-      this.handleTextSearchRedirect(redirectUrl, queryToUse);
+      this.handleTextSearchRedirect(redirectUrl, "text-search", queryToUse);
       return;
     }
 
@@ -331,14 +350,18 @@ export class VviinnTextSearch {
     }
   };
 
-  private handleTextSearchRedirect(url: string, query: string) {
+  private handleTextSearchRedirect(
+    url: string,
+    source: RedirectSource,
+    query: string,
+  ) {
     const redirectData: RedirectEventData = {
       ...this.getBasicEventData(),
       url,
+      source,
       query,
     };
     const event = this.vviinnRedirect.emit(redirectData);
-    alert("Redirecting to: " + url);
 
     if (event.defaultPrevented) {
       this.state.redirect = null;
@@ -369,6 +392,7 @@ export class VviinnTextSearch {
               apiPath={this.apiPath}
               addStyle={false}
               showResultsInModal={false}
+              resultsPageUrl={this.resultsPageUrl}
               exportparts="vviinn-button"
             />
           )}

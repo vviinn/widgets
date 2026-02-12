@@ -8,11 +8,20 @@ export const isOnResultsPage = (resultsPageUrl: string): boolean =>
   normalizePathname(window.location.pathname) ===
   normalizePathname(resolveResultsPageUrl(resultsPageUrl).pathname);
 
-export const buildResultsPageRedirectUrl = (
+export const buildTextSearchRedirectUrl = (
   resultsPageUrl: string,
   query: string,
 ): string => {
   const url = resolveResultsPageUrl(resultsPageUrl);
-  url.searchParams.set("q", query);
+  url.searchParams.set("query", query);
+  return url.toString();
+};
+
+export const buildImageSearchRedirectUrl = (
+  resultsPageUrl: string,
+  searchId: string,
+): string => {
+  const url = resolveResultsPageUrl(resultsPageUrl);
+  url.searchParams.set("searchId", searchId);
   return url.toString();
 };

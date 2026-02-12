@@ -1,7 +1,8 @@
 import {
   resolveResultsPageUrl,
   isOnResultsPage,
-  buildResultsPageRedirectUrl,
+  buildTextSearchRedirectUrl,
+  buildImageSearchRedirectUrl,
 } from "./resultsPageUrl";
 
 describe("resolveResultsPageUrl", () => {
@@ -74,34 +75,60 @@ describe("isOnResultsPage", () => {
   });
 });
 
-describe("buildResultsPageRedirectUrl", () => {
+describe("buildTextSearchRedirectUrl", () => {
   it("appends query parameter to a pathname-based URL", () => {
-    const result = buildResultsPageRedirectUrl("/search", "blue shoes");
+    const result = buildTextSearchRedirectUrl("/search", "blue shoes");
     const url = new URL(result);
     expect(url.pathname).toBe("/search");
-    expect(url.searchParams.get("q")).toBe("blue shoes");
+    expect(url.searchParams.get("query")).toBe("blue shoes");
   });
 
   it("appends query parameter to a full URL", () => {
-    const result = buildResultsPageRedirectUrl(
+    const result = buildTextSearchRedirectUrl(
       "https://shop.com/search",
       "red dress",
     );
     const url = new URL(result);
     expect(url.origin).toBe("https://shop.com");
     expect(url.pathname).toBe("/search");
-    expect(url.searchParams.get("q")).toBe("red dress");
+    expect(url.searchParams.get("query")).toBe("red dress");
   });
 
   it("preserves existing query params in resultsPageUrl", () => {
-    const result = buildResultsPageRedirectUrl("/search?lang=en", "jacket");
+    const result = buildTextSearchRedirectUrl("/search?lang=en", "jacket");
     const url = new URL(result);
     expect(url.searchParams.get("lang")).toBe("en");
-    expect(url.searchParams.get("q")).toBe("jacket");
+    expect(url.searchParams.get("query")).toBe("jacket");
   });
 
   it("encodes special characters in the query", () => {
-    const result = buildResultsPageRedirectUrl("/search", "hello world&more");
-    expect(result).toContain("q=hello+world%26more");
+    const result = buildTextSearchRedirectUrl("/search", "hello world&more");
+    expect(result).toContain("query=hello+world%26more");
+  });
+});
+
+describe("buildImageSearchRedirectUrl", () => {
+  it("appends searchId parameter to a pathname-based URL", () => {
+    const result = buildImageSearchRedirectUrl("/search", "abc-123");
+    const url = new URL(result);
+    expect(url.pathname).toBe("/search");
+    expect(url.searchParams.get("searchId")).toBe("abc-123");
+  });
+
+  it("appends searchId parameter to a full URL", () => {
+    const result = buildImageSearchRedirectUrl(
+      "https://shop.com/search",
+      "xyz-456",
+    );
+    const url = new URL(result);
+    expect(url.origin).toBe("https://shop.com");
+    expect(url.searchParams.get("searchId")).toBe("xyz-456");
+  });
+
+  it("preserves existing query params in resultsPageUrl", () => {
+    const result = buildImageSearchRedirectUrl("/search?lang=en", "abc-123");
+    const url = new URL(result);
+    expect(url.searchParams.get("lang")).toBe("en");
+    expect(url.searchParams.get("searchId")).toBe("abc-123");
   });
 });
