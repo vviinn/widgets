@@ -103,7 +103,7 @@ export class VviinnTextSearch {
   @Prop({ mutable: true }) searchQuery?: string;
   /** Custom placeholder for the text search input */
   @Prop() placeholder?: string = "";
-  /** URL of the results page for automatic text search redirect. */
+  /** URL of the results page for automatic search redirect. */
   @Prop() resultsPageUrl?: string;
 
   /** True, when used inside the widget */

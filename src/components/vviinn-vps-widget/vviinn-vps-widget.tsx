@@ -213,7 +213,7 @@ export class VviinnVpsWidget {
   @Prop() cssUrl: string | null = null;
   /** Show search results in modal or on page */
   @Prop() showResultsInModal?: boolean = true;
-  /** URL of the results page for automatic text search redirect. */
+  /** URL of the results page for automatic search redirect. */
   @Prop() resultsPageUrl?: string;
 
   private get showInWidget() {
