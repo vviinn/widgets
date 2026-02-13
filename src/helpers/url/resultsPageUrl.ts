@@ -25,3 +25,15 @@ export const buildImageSearchRedirectUrl = (
   url.searchParams.set("searchId", searchId);
   return url.toString();
 };
+
+export const parseResultsPageParams = (
+  search: string = window.location.search,
+): { query?: string; searchId?: string } => {
+  const params = new URLSearchParams(search);
+  const query = params.get("query");
+  const searchId = params.get("searchId");
+  return {
+    ...(query && { query }),
+    ...(searchId && { searchId }),
+  };
+};

@@ -73,6 +73,7 @@ import {
   vprIconSlotName,
 } from "../customized-slots";
 import { getCustomLabels } from "../../recommendation";
+import { parseResultsPageParams } from "../../helpers/url/resultsPageUrl";
 import {
   productCardParts,
   productCardsGridPart,
@@ -642,12 +643,16 @@ export class VviinnResults {
       signal,
     );
 
-    if (!!this.searchId) this.getVisualSearchResults(this.searchId);
+    const urlParams = parseResultsPageParams();
+    const effectiveSearchId = this.searchId || urlParams.searchId;
+    const effectiveTextSearchQuery = this.textSearchQuery || urlParams.query;
+
+    if (effectiveSearchId) this.getVisualSearchResults(effectiveSearchId);
 
     this.getResultsByCategory();
 
-    if (this.textSearchQuery && !this.state.textSearchQuery) {
-      setTextSearchQuery(this.storeName, this.textSearchQuery);
+    if (effectiveTextSearchQuery && !this.state.textSearchQuery) {
+      setTextSearchQuery(this.storeName, effectiveTextSearchQuery);
     }
     !this.showInWidget && this.getTextSearchResults();
   }

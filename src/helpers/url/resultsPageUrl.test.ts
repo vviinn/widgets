@@ -3,6 +3,7 @@ import {
   isOnResultsPage,
   buildTextSearchRedirectUrl,
   buildImageSearchRedirectUrl,
+  parseResultsPageParams,
 } from "./resultsPageUrl";
 
 describe("resolveResultsPageUrl", () => {
@@ -130,5 +131,37 @@ describe("buildImageSearchRedirectUrl", () => {
     const url = new URL(result);
     expect(url.searchParams.get("lang")).toBe("en");
     expect(url.searchParams.get("searchId")).toBe("abc-123");
+  });
+});
+
+describe("parseResultsPageParams", () => {
+  it("parses query parameter", () => {
+    const result = parseResultsPageParams("?query=blue+shoes");
+    expect(result).toEqual({ query: "blue shoes" });
+  });
+
+  it("parses searchId parameter", () => {
+    const result = parseResultsPageParams("?searchId=abc-123");
+    expect(result).toEqual({ searchId: "abc-123" });
+  });
+
+  it("parses both query and searchId", () => {
+    const result = parseResultsPageParams("?query=shoes&searchId=abc-123");
+    expect(result).toEqual({ query: "shoes", searchId: "abc-123" });
+  });
+
+  it("returns empty object when no relevant params exist", () => {
+    const result = parseResultsPageParams("?lang=en&page=2");
+    expect(result).toEqual({});
+  });
+
+  it("returns empty object for empty search string", () => {
+    const result = parseResultsPageParams("");
+    expect(result).toEqual({});
+  });
+
+  it("decodes encoded characters in query", () => {
+    const result = parseResultsPageParams("?query=hello+world%26more");
+    expect(result).toEqual({ query: "hello world&more" });
   });
 });

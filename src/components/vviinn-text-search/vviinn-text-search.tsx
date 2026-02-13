@@ -148,32 +148,16 @@ export class VviinnTextSearch {
         : i18next.t("textSearchPlaceholder");
 
   private recognition: ReturnType<typeof initializeRecognition> | null = null;
-  private disposeStoreListener?: () => void;
 
   connectedCallback() {
-    const { state, storeName, onChange } = useSearchStore(this.showInWidget);
+    const { state, storeName } = useSearchStore(this.showInWidget);
     this.state = state;
     this.storeName = storeName;
-
-    const disposeRedirectListener = onChange("redirect", (redirect) => {
-      if (redirect?.url && redirect?.query === this.state.textSearchQuery) {
-        this.handleTextSearchRedirect(
-          redirect.url,
-          "auto-suggest",
-          redirect.query,
-        );
-      }
-    });
-
-    this.disposeStoreListener = () => {
-      disposeRedirectListener();
-    };
   }
 
   disconnectedCallback() {
     clearTimeout(this.triggerTooltipStart);
     clearTimeout(this.triggerTooltipEnd);
-    this.disposeStoreListener?.();
   }
 
   private trackTextSearch = () =>
