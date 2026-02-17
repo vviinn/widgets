@@ -712,7 +712,9 @@ export class VviinnVpsWidget {
             if (this.mode !== "upload") this.uploadSource = "uploadPhoto";
           })
         }
-        onVviinnImageUploadFinished={({ detail }) => this.handleVviinnImageUploadFinished(detail)}
+        onVviinnImageUploadFinished={({ detail }) =>
+          this.handleVviinnImageUploadFinished(detail)
+        }
         onVviinnImageUploadStarted={() => {
           this.uploadDialogOpened = true;
           this.handleVviinnImageUpload("uploadPhoto");

@@ -247,8 +247,7 @@ export class VviinnTextSearch {
 
     const autoSuggestRedirect = this.state.redirect;
     const hasAutoSuggestRedirect =
-      autoSuggestRedirect?.url &&
-      autoSuggestRedirect.query === queryToUse;
+      autoSuggestRedirect?.url && autoSuggestRedirect.query === queryToUse;
 
     if (hasAutoSuggestRedirect) {
       this.handleTextSearchRedirect(
