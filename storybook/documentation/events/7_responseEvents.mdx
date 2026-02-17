@@ -47,16 +47,19 @@ Some events have additional props, summarized in the table below.
 
     <tr>
       <td>vviinnRedirect</td>
-      <td>Triggered when the API returns a suggested redirect URL in the response. Automatically redirects unless intercepted by calling <code>event.preventDefault()</code> (e.g., for SPA routing).</td>
+      <td>Triggered before an automatic redirect. This happens when the API returns a suggested redirect URL (auto-suggest), or when <code>results-page-url</code> is set and the user initiates a text or image search from a different page. Automatically redirects unless intercepted by calling <code>event.preventDefault()</code> (e.g., for SPA routing).</td>
       <td>
         <ul>
           <li>vviinn-text-search (Search Bar)</li>
+          <li>vviinn-vps-button (Search Button)</li>
         </ul>
       </td>
       <td>
         <ul>
           <li>url - redirect URL</li>
-          <li>query - search query that triggered the redirect</li>
+          <li>source - "text-search", "image-search", or "auto-suggest"</li>
+          <li>query - search query (text search and auto-suggest)</li>
+          <li>searchId - search ID (image search)</li>
         </ul>
       </td>
     </tr>
@@ -95,13 +98,34 @@ document.addEventListener("vviinnRedirect", ({ detail }) => {
   // Widget will automatically redirect unless intercepted
 });
 
-// Output:
+// Output (auto-suggest):
 {
     "url": "https://www.my-site.de/sansibar",
+    "source": "auto-suggest",
     "query": "sansibar",
     "campaignTypeId": "TPS",
     "campaignTypeName": "Text Product Search",
     "widgetId": "my-search-widget",
+    "widgetVersion": "2.205.0"
+}
+
+// Output (text search with results-page-url):
+{
+    "url": "https://www.my-site.de/results?query=shoes",
+    "source": "text-search",
+    "query": "shoes",
+    "campaignTypeId": "TPS",
+    "campaignTypeName": "Text Product Search",
+    "widgetVersion": "2.205.0"
+}
+
+// Output (image search with results-page-url):
+{
+    "url": "https://www.my-site.de/results?searchId=abc-123",
+    "source": "image-search",
+    "searchId": "abc-123",
+    "campaignTypeId": "VPS",
+    "campaignTypeName": "Visual Search",
     "widgetVersion": "2.205.0"
 }
 ```
