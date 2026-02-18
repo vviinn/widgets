@@ -358,7 +358,7 @@ export class VviinnVpsWidget {
     const redirectData: RedirectEventData = {
       ...this.getBasicEventData(),
       url,
-      source: "image-search",
+      source: "visual-search",
       searchId,
     };
     const event = this.vviinnRedirect.emit(redirectData);

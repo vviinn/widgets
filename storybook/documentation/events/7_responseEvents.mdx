@@ -57,7 +57,7 @@ Some events have additional props, summarized in the table below.
       <td>
         <ul>
           <li>url - redirect URL</li>
-          <li>source - "text-search", "image-search", or "auto-suggest"</li>
+          <li>source - "text-search", "visual-search", or "auto-suggest"</li>
           <li>query - search query (text search and auto-suggest)</li>
           <li>searchId - search ID (image search)</li>
         </ul>
@@ -122,7 +122,7 @@ document.addEventListener("vviinnRedirect", ({ detail }) => {
 // Output (image search with results-page-url):
 {
     "url": "https://www.my-site.de/results?searchId=abc-123",
-    "source": "image-search",
+    "source": "visual-search",
     "searchId": "abc-123",
     "campaignTypeId": "VPS",
     "campaignTypeName": "Visual Search",

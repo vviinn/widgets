@@ -32,7 +32,7 @@ export type BasicEventData = { widget?: Widget } & {
   [K in keyof CommonEventData]: CommonEventData[K];
 };
 
-export type RedirectSource = "text-search" | "image-search" | "auto-suggest";
+export type RedirectSource = "text-search" | "visual-search" | "auto-suggest";
 
 export type RedirectEventData = {
   url: string;
