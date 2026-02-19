@@ -176,6 +176,8 @@ export class VviinnVpsButton {
   @Prop() apiPath?: string;
   /** Show search results in modal or on page */
   @Prop() showResultsInModal?: boolean = true;
+  /** URL of the results page for automatic search redirect. */
+  @Prop() resultsPageUrl?: string;
 
   @State() buttonPressed: boolean = false;
 
@@ -348,6 +350,7 @@ export class VviinnVpsButton {
           oneClickDiscoveryCampaigns={this.oneClickDiscoveryCampaigns}
           favoriteShow={this.favoriteShow}
           showResultsInModal={this.showResultsInModal}
+          resultsPageUrl={this.resultsPageUrl}
           parentSlots={this.slots}
           cssUrl={this.cssUrl}
         />

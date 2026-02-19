@@ -27,24 +27,82 @@ Using `Vviinn Widgets` as separate components allows for greater control over th
 
 This is the most common use case where the search component is on one page (e.g., homepage) and results are displayed on a separate search results page.
 
-<div id="different">
+#### Automatic Redirect (Recommended)
+
+Set the `results-page-url` prop on the search component. The widget handles redirection and URL parameter passing automatically.
+
+<div id="automatic">
   <div className="tab tab-reverse">
       <div className="tablink-group">
-        <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Details_2', 'different')}}>Technical Details</button>
-        <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Code_2', 'different')}}>Code</button>
+        <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Details_auto', 'automatic')}}>Technical Details</button>
+        <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Code_auto', 'automatic')}}>Code</button>
       </div>
   </div>
 
-  <div id="Code_2" className="tabcontent" style={{display:"block"}}>
+  <div id="Code_auto" className="tabcontent" style={{display:"block"}}>
 ```html
-<!-- Page 1 -->
+<!-- Homepage -->
+<vviinn-text-search
+  token="YOUR_TOKEN"
+  mode="extended"
+  locale="en-US"
+  results-page-url="/search"
+></vviinn-text-search>
+
+<!-- Results page (/search) -->
+<vviinn-text-search
+  token="YOUR_TOKEN"
+  mode="extended"
+  locale="en-US"
+  results-page-url="/search"
+></vviinn-text-search>
+
+<vviinn-filters locale="en-US"></vviinn-filters>
+<vviinn-extended-filters locale="en-US"></vviinn-extended-filters>
+
+<vviinn-results
+  token="YOUR_TOKEN"
+  locale="en-US"
+  product-details-new-tab="true"
+  results-page-url="/search"
+></vviinn-results>
+```
+</div>
+<div id="Details_auto" className="tabcontent">
+How it works:
+
+1. When the user searches on the homepage, the widget redirects to the results page with URL parameters (e.g., `/search?query=shoes` or `/search?searchId=abc-123`).
+2. On the results page, `vviinn-results` with `results-page-url` set automatically parses URL parameters and triggers the corresponding search.
+3. The `vviinn-text-search` input is automatically populated with the query from the URL.
+4. On the results page, `results-page-url` ensures that the widget does not redirect again — subsequent searches update results in-place.
+5. You can intercept the redirect by listening to the `vviinnRedirect` event and calling `event.preventDefault()` (e.g., for SPA routing).
+</div>
+</div>
+
+---
+
+#### Manual Redirect
+
+For full control over the redirect logic, omit `results-page-url` and handle navigation yourself using events.
+
+<div id="manual">
+  <div className="tab tab-reverse">
+      <div className="tablink-group">
+        <button className="tablink tablink--sm" onClick={(e)=> {clickHandlers(e, 'Details_manual', 'manual')}}>Technical Details</button>
+        <button className="tablink tablink--sm active" onClick={(e)=> {clickHandlers(e, 'Code_manual', 'manual')}}>Code</button>
+      </div>
+  </div>
+
+  <div id="Code_manual" className="tabcontent" style={{display:"block"}}>
+```html
+<!-- Homepage -->
 <script>
   document.addEventListener("vviinnTextSearchStarted", ({ detail }) => {
-     // Redirection logic, using detail.query (text search)
+     // Redirect using detail.query (text search)
   });
 
   document.addEventListener("vviinnImageUploadFinished", ({ detail }) => {
-    // Redirection logic, using detail.searchId (image search)
+    // Redirect using detail.searchId (image search)
   });
 </script>
 <vviinn-text-search
@@ -53,7 +111,7 @@ This is the most common use case where the search component is on one page (e.g.
   locale="en-US"
 ></vviinn-text-search>
 
-<!-- Page 2 -->
+<!-- Results page -->
 <script>
   // Get query or searchId from URL
 </script>
@@ -83,7 +141,7 @@ This is the most common use case where the search component is on one page (e.g.
 
 ```
 </div>
-<div id="Details_2" className="tabcontent">
+<div id="Details_manual" className="tabcontent">
 In this example, the `vviinn-text-search` component is on the first page, and the rest of the components are on the second page.
 
 1. First, you should add event listeners to capture the `query` for a text search or `searchId` for a Visual Search.
@@ -107,18 +165,23 @@ In this example, the `vviinn-text-search` component is on the first page, and th
   </thead>
   <tbody>
     <tr>
-      <td>Showing initial results after redirect</td>
-      <td>Pass the <code>query</code> from URL to display initial text search results</td>
-      <td><code>&lt;vviinn-text-search search-query="QUERY"&gt;</code></td>
+      <td>Automatic redirect to results page</td>
+      <td>Set the results page URL — the widget handles redirect and URL parameters automatically</td>
+      <td><code>&lt;vviinn-text-search results-page-url="/search"&gt;</code> or <code>results-page-url="https://shop.com/search"</code></td>
+    </tr>
+    <tr>
+      <td>Intercepting the redirect (SPA)</td>
+      <td>Listen to the <code>vviinnRedirect</code> event and call <code>preventDefault()</code> to handle navigation yourself</td>
+      <td><code>document.addEventListener("vviinnRedirect", ...)</code></td>
     </tr>
     <tr>
       <td>Performing new searches on results page</td>
-      <td>Don't pass parameters again - components handle new queries automatically</td>
+      <td>Don't pass parameters again — components handle new queries automatically</td>
       <td>No attributes needed</td>
     </tr>
     <tr>
-      <td>Supporting page reloads</td>
-      <td>Update URL after each search without page refresh using browser History API</td>
+      <td>Supporting page reloads (manual redirect)</td>
+      <td>When handling redirect manually, update URL after each search using browser History API so the page can be reloaded</td>
       <td>Use <code>pushState()</code> or <code>replaceState()</code></td>
     </tr>
     <tr>

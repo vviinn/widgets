@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.211.0](https://github.com/vviinn/widgets/compare/v2.210.0...v2.211.0) (2026-02-19)
+
+
+### Features
+
+* Results Page Redirect: add image search redirect and fix auto-suggest race condition. ([fba72ca](https://github.com/vviinn/widgets/commit/fba72ca4b77128da84b9885c130364076419b0ad))
+* Results Page Redirect: parse URL params and trigger search on results page load. ([462ad2c](https://github.com/vviinn/widgets/commit/462ad2c166ea15552846af9947248ca548c1df09))
+* Text Search: automatically redirect to results page when url is provided on Search Bar or Search Modal. ([d65f2b6](https://github.com/vviinn/widgets/commit/d65f2b664a802231cb042d2944cf91f0026c7be6))
+
+## [2.210.0](https://github.com/vviinn/widgets/compare/v2.209.2...v2.210.0) (2026-02-05)
+
+
+### Features
+
+* Shop-the-Look: start requests earlier, when widget barely appears in the viewport. ([a8399e9](https://github.com/vviinn/widgets/commit/a8399e9ea867309a20b98095e92e8529cf3edde7))
+
 ### [2.209.2](https://github.com/vviinn/widgets/compare/v2.209.1...v2.209.2) (2026-01-27)
 
 

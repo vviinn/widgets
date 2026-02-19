@@ -41,6 +41,8 @@ import {
   NoResultEventData,
   TextSearchEvent,
   ImageUploadEventData,
+  RedirectEventData,
+  SearchIdEventData,
 } from "../../recommendation/events";
 import { campaignTypeNames } from "../../campaign/Campaign";
 import {
@@ -73,6 +75,10 @@ import {
 import { findSlotElements, addEventListenersWithSignal } from "../../dom";
 import { SEARCH_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
 import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
+import {
+  isOnResultsPage,
+  buildImageSearchRedirectUrl,
+} from "../../helpers/url/resultsPageUrl";
 
 const CAMERA_START_DELAY = 500;
 
@@ -207,6 +213,8 @@ export class VviinnVpsWidget {
   @Prop() cssUrl: string | null = null;
   /** Show search results in modal or on page */
   @Prop() showResultsInModal?: boolean = true;
+  /** URL of the results page for automatic search redirect. */
+  @Prop() resultsPageUrl?: string;
 
   private get showInWidget() {
     return this.showResultsInModal;
@@ -274,6 +282,10 @@ export class VviinnVpsWidget {
   /** Wrong image format (supported formats depend on the browser), or the request failed */
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
+  /** Redirect to results page (can be intercepted by client via preventDefault) */
+  @Event({ cancelable: true, bubbles: true })
+  vviinnRedirect: EventEmitter<RedirectEventData>;
+
   private overflow: string;
   private uiSessionId: string;
   private imageSource: SearchImageSource = "upload";
@@ -326,10 +338,35 @@ export class VviinnVpsWidget {
     this.uploadSource = uploadSource;
   };
 
-  private handleVviinnImageUploadFinished = () => {
+  private handleVviinnImageUploadFinished = (detail: SearchIdEventData) => {
+    const shouldRedirectToResultsPage =
+      this.resultsPageUrl &&
+      !this.showInWidget &&
+      !isOnResultsPage(this.resultsPageUrl);
+
+    if (shouldRedirectToResultsPage) {
+      this.handleImageSearchRedirect(detail.searchId);
+      return;
+    }
+
     this.handleImageSelection();
     if (this.mode === "upload" && this.showInWidget) this.active = true;
   };
+
+  private handleImageSearchRedirect(searchId: string) {
+    const url = buildImageSearchRedirectUrl(this.resultsPageUrl, searchId);
+    const redirectData: RedirectEventData = {
+      ...this.getBasicEventData(),
+      url,
+      source: "visual-search",
+      searchId,
+    };
+    const event = this.vviinnRedirect.emit(redirectData);
+
+    if (!event.defaultPrevented) {
+      window.location.href = url;
+    }
+  }
 
   private handleVviinnNoResult = (detail: NoResultEventData) => {
     if (detail.reason === "client") {
@@ -675,7 +712,9 @@ export class VviinnVpsWidget {
             if (this.mode !== "upload") this.uploadSource = "uploadPhoto";
           })
         }
-        onVviinnImageUploadFinished={this.handleVviinnImageUploadFinished}
+        onVviinnImageUploadFinished={({ detail }) =>
+          this.handleVviinnImageUploadFinished(detail)
+        }
         onVviinnImageUploadStarted={() => {
           this.uploadDialogOpened = true;
           this.handleVviinnImageUpload("uploadPhoto");
@@ -793,8 +832,8 @@ export class VviinnVpsWidget {
             >
               <vviinn-camera
                 token={this.token}
-                onVviinnImageUploadFinished={
-                  this.handleVviinnImageUploadFinished
+                onVviinnImageUploadFinished={({ detail }) =>
+                  this.handleVviinnImageUploadFinished(detail)
                 }
                 onVviinnImageUploadStarted={() => {
                   this.handleVviinnImageUpload("startCamera");
@@ -844,6 +883,7 @@ export class VviinnVpsWidget {
                           showOnFirstScreen={true}
                           uiSessionId={this.uiSessionId}
                           basicEventData={this.getBasicEventData(true)}
+                          resultsPageUrl={this.resultsPageUrl}
                           save-image-mode="never"
                         />
                       )}
@@ -875,6 +915,7 @@ export class VviinnVpsWidget {
                       locale={this.locale}
                       uiSessionId={this.uiSessionId}
                       basicEventData={this.getBasicEventData(true)}
+                      resultsPageUrl={this.resultsPageUrl}
                       save-image-mode="never"
                     />
                   )}
