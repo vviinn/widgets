@@ -64,6 +64,7 @@ Set the `results-page-url` prop on the search component. The widget handles redi
   token="YOUR_TOKEN"
   locale="en-US"
   product-details-new-tab="true"
+  results-page-url="/search"
 ></vviinn-results>
 ```
 </div>
@@ -71,7 +72,7 @@ Set the `results-page-url` prop on the search component. The widget handles redi
 How it works:
 
 1. When the user searches on the homepage, the widget redirects to the results page with URL parameters (e.g., `/search?query=shoes` or `/search?searchId=abc-123`).
-2. On the results page, `vviinn-results` automatically parses URL parameters and triggers the corresponding search.
+2. On the results page, `vviinn-results` with `results-page-url` set automatically parses URL parameters and triggers the corresponding search.
 3. The `vviinn-text-search` input is automatically populated with the query from the URL.
 4. On the results page, `results-page-url` ensures that the widget does not redirect again — subsequent searches update results in-place.
 5. You can intercept the redirect by listening to the `vviinnRedirect` event and calling `event.preventDefault()` (e.g., for SPA routing).

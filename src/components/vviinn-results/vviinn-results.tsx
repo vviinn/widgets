@@ -73,7 +73,10 @@ import {
   vprIconSlotName,
 } from "../customized-slots";
 import { getCustomLabels } from "../../recommendation";
-import { parseResultsPageParams } from "../../helpers/url/resultsPageUrl";
+import {
+  parseResultsPageParams,
+  isOnResultsPage,
+} from "../../helpers/url/resultsPageUrl";
 import {
   productCardParts,
   productCardsGridPart,
@@ -229,6 +232,8 @@ export class VviinnResults {
   @Prop() pricePrefix?: string;
   /** Search ID for results request */
   @Prop() searchId?: string;
+  /** URL of the results page. When set, the component parses URL parameters (query, searchId) on load. */
+  @Prop() resultsPageUrl?: string;
   /** uiSessionId from vps-widget */
   @Prop({ mutable: true }) uiSessionId?: string;
   /** Resolution width of an image in the product card */
@@ -643,7 +648,10 @@ export class VviinnResults {
       signal,
     );
 
-    const urlParams = parseResultsPageParams();
+    const urlParams =
+      this.resultsPageUrl && isOnResultsPage(this.resultsPageUrl)
+        ? parseResultsPageParams()
+        : {};
     const effectiveSearchId = this.searchId || urlParams.searchId;
     const effectiveTextSearchQuery = this.textSearchQuery || urlParams.query;
 
