@@ -18,7 +18,7 @@ All these events are available on Text Search.
 
   <tbody>
     <tr>
-      <td>vviinnTextSearchStarted</td><td>Triggered when a text search was initiated.</td>
+      <td>vviinnTextSearchStarted</td><td>Triggered when a text search was initiated.<br/><br/>Not emitted when:<br/>- <code>results-page-url</code> is set and the user is not on the results page<br/>- Query mapping returns an auto-suggest redirect<br/><br/>In both cases, <code>vviinnRedirect</code> is emitted instead.</td>
 
       <td>
         <ul>

@@ -28,7 +28,7 @@ export default {
 const Template = (args) => `
 <div class="search-page-wrapper">
   <div class="search-page-wrapper-aside">
-    <vviinn-cropper token="${args.token}"></vviinn-cropper> 
+    <vviinn-cropper token="${args.token}" api-path="${args.apiPath}"></vviinn-cropper> 
     <vviinn-extended-filters locale="${args.locale}" mode="preview"></vviinn-extended-filters>
   </div>
   <div class="search-page-wrapper-result">
@@ -39,6 +39,7 @@ const Template = (args) => `
       mode="${args.mode}"
       locale="${args.locale}"
       placeholder="${args.placeholder}"
+      results-page-url="${args.resultsPageUrl}"
     >
     </vviinn-text-search>
 
@@ -67,6 +68,7 @@ const initArgs = {
   apiPath: process.env.STORYBOOK_API_PATH,
   searchQuery: "",
   placeholder: "",
+  resultsPageUrl: "",
   mode: "extended",
   locale: "en-US",
   productCardImageAspectRatio: "1 / 1",

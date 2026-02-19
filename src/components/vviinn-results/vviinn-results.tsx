@@ -74,6 +74,10 @@ import {
 } from "../customized-slots";
 import { getCustomLabels } from "../../recommendation";
 import {
+  parseResultsPageParams,
+  isOnResultsPage,
+} from "../../helpers/url/resultsPageUrl";
+import {
   productCardParts,
   productCardsGridPart,
   listCardParts,
@@ -228,6 +232,8 @@ export class VviinnResults {
   @Prop() pricePrefix?: string;
   /** Search ID for results request */
   @Prop() searchId?: string;
+  /** URL of the results page. When set, the component parses URL parameters (query, searchId) on load. */
+  @Prop() resultsPageUrl?: string;
   /** uiSessionId from vps-widget */
   @Prop({ mutable: true }) uiSessionId?: string;
   /** Resolution width of an image in the product card */
@@ -642,12 +648,19 @@ export class VviinnResults {
       signal,
     );
 
-    if (!!this.searchId) this.getVisualSearchResults(this.searchId);
+    const urlParams =
+      this.resultsPageUrl && isOnResultsPage(this.resultsPageUrl)
+        ? parseResultsPageParams()
+        : {};
+    const effectiveSearchId = this.searchId || urlParams.searchId;
+    const effectiveTextSearchQuery = this.textSearchQuery || urlParams.query;
+
+    if (effectiveSearchId) this.getVisualSearchResults(effectiveSearchId);
 
     this.getResultsByCategory();
 
-    if (this.textSearchQuery && !this.state.textSearchQuery) {
-      setTextSearchQuery(this.storeName, this.textSearchQuery);
+    if (effectiveTextSearchQuery && !this.state.textSearchQuery) {
+      setTextSearchQuery(this.storeName, effectiveTextSearchQuery);
     }
     !this.showInWidget && this.getTextSearchResults();
   }
