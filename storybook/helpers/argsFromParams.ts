@@ -35,8 +35,20 @@ function updateInternalProperty(
   return { ...previousChild, [keysArray[0]]: newChildValue };
 }
 
-const referrerArgs = (urlArgs: string) =>
-  Object.fromEntries(urlArgs.split(";").map((item) => item.split(":")));
+const decodeParam = (s: string) =>
+  decodeURIComponent(s.replace(/\+/g, " "));
+
+const splitEntry = (item: string): [string, string] => {
+  const colonIndex = item.indexOf(":");
+  if (colonIndex === -1) return [decodeParam(item), ""];
+  return [
+    decodeParam(item.substring(0, colonIndex)),
+    decodeParam(item.substring(colonIndex + 1)),
+  ];
+};
+
+const parseArgs = (urlArgs: string) =>
+  Object.fromEntries(urlArgs.split(";").map(splitEntry));
 
 const meaningfulUrlPart = (urlArgs: string) => {
   const idIndex = urlArgs.lastIndexOf("&id=");
@@ -55,15 +67,7 @@ const meaningfulUrlPart = (urlArgs: string) => {
 const hrefArgs = (urlArgs: string) => {
   const argsString = meaningfulUrlPart(urlArgs);
   if (!argsString.length) return;
-  const unorderedEntries = argsString
-    .split("%")
-    .map((item, index) => (index !== 0 ? item.substring(2) : item));
-  const orderedEntries: [string, string][] = [];
-  for (let i = 0; i < unorderedEntries.length; i += 2) {
-    if (unorderedEntries?.[i] && unorderedEntries?.[i + 1])
-      orderedEntries.push([unorderedEntries[i], unorderedEntries[i + 1]]);
-  }
-  return Object.fromEntries(orderedEntries);
+  return parseArgs(argsString);
 };
 
 export const argsFromParams = (args: any) => {
@@ -73,7 +77,7 @@ export const argsFromParams = (args: any) => {
     const argsStart = url.indexOf("args=");
     if (argsStart >= 0) {
       const urlArgs = url.substring(argsStart + 5);
-      const entries = isNewTab ? hrefArgs(urlArgs) : referrerArgs(urlArgs);
+      const entries = isNewTab ? hrefArgs(urlArgs) : parseArgs(urlArgs);
       if (entries) {
         for (const entry in entries) {
           if (entry.includes(".")) {
