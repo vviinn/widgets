@@ -97,7 +97,7 @@ import { addEventListenersWithSignal } from "../../dom";
  * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button.
  * @slot vviinn-energy-label-data-sheet-text - Text of the data sheet link for the energy label.
  *
- * @slot vviinn-recommendations-subtitle - Recommendations subtitle text (Set mode).
+ * @slot vviinn-recommendations-subtitle - Recommendations subtitle text.
  * @slot vviinn-update-button-text - Text of Update Button on the top (Set mode).
  * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
  * @slot vviinn-custom-label-0 - Custom label with index 0.
@@ -176,6 +176,8 @@ export class VviinnVprButton {
 
   /** Sidebar title */
   @Prop() sidebarTitle: string;
+  /** Widget's subtitle */
+  @Prop() sidebarSubtitle: string;
   /** Show or hide the scrollbar */
   @Prop() modalScrollbar: boolean = false;
   /** Position of the modal */
@@ -352,6 +354,7 @@ export class VviinnVprButton {
     sidebar.pricePrefix = this.pricePrefix;
     sidebar.apiPath = this.apiPath;
     sidebar.sidebarTitle = this.sidebarTitle;
+    sidebar.blockSubtitle = this.sidebarSubtitle;
     sidebar.productId = this.productId;
     sidebar.position = this.position;
     sidebar.widgetScrollbar = this.modalScrollbar;

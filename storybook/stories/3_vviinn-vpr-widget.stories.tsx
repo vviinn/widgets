@@ -26,6 +26,7 @@ export default {
 const Template = (args) => `
     <vviinn-vpr-widget
       block-title="${args.blockTitle}"
+      block-subtitle="${args.blockSubtitle}"
       css-url="${args.cssUrl}"
       currency-sign="${args.currencySign}"
       show-scroll="${args.showScroll}"
@@ -72,6 +73,7 @@ const initArgs = {
   excluded: "",
   mode: "grid",
   blockTitle: "Recommended products",
+  blockSubtitle: "",
   productDetailsNewTab: true,
   productDetailsRedirect: true,
   imageWidth: 300,
