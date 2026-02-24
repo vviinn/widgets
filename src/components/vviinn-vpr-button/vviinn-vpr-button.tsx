@@ -354,7 +354,7 @@ export class VviinnVprButton {
     sidebar.pricePrefix = this.pricePrefix;
     sidebar.apiPath = this.apiPath;
     sidebar.sidebarTitle = this.sidebarTitle;
-    sidebar.blockSubtitle = this.sidebarSubtitle;
+    sidebar.sidebarSubtitle = this.sidebarSubtitle;
     sidebar.productId = this.productId;
     sidebar.position = this.position;
     sidebar.widgetScrollbar = this.modalScrollbar;

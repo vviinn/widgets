@@ -35,8 +35,13 @@ function updateInternalProperty(
   return { ...previousChild, [keysArray[0]]: newChildValue };
 }
 
-const decodeParam = (s: string) =>
-  decodeURIComponent(s.replace(/\+/g, " "));
+const decodeParam = (s: string) => {
+  try {
+    return decodeURIComponent(s.replace(/\+/g, " "));
+  } catch {
+    return s;
+  }
+};
 
 const splitEntry = (item: string): [string, string] => {
   const colonIndex = item.indexOf(":");

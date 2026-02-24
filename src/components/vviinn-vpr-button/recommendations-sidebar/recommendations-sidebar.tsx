@@ -35,7 +35,7 @@ export class RecommendationsSidebar {
   @Element() el: HTMLElement;
 
   @Prop() sidebarTitle: string;
-  @Prop() blockSubtitle: string;
+  @Prop() sidebarSubtitle: string;
   @Prop() token: string;
   @Prop() locale: Locale;
   @Prop() numberLocale?: string;
@@ -243,9 +243,9 @@ export class RecommendationsSidebar {
                     {this.sidebarTitle || i18next.t("discoveryWidgetTitle")}
                   </span>
                 )}
-                {!!this.blockSubtitle && (
+                {!!this.sidebarSubtitle && (
                   <span class="subtitle" part="recommendations-subtitle">
-                    {this.blockSubtitle}
+                    {this.sidebarSubtitle}
                   </span>
                 )}
               </Fragment>
@@ -283,7 +283,7 @@ export class RecommendationsSidebar {
               showMultipleImages={this.showMultipleImages}
               setItemsAmount={this.setItemsAmount}
               blockTitle={this.mode !== "set" ? "" : this.sidebarTitle}
-              blockSubtitle={this.mode === "set" ? this.blockSubtitle : undefined}
+              blockSubtitle={this.mode === "set" ? this.sidebarSubtitle : undefined}
               mode={this.mode}
               campaign-type={this.campaignType}
               useCarousel={this.useCarousel}
