@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.212.0](https://github.com/vviinn/widgets/compare/v2.211.0...v2.212.0) (2026-02-25)
+
+
+### Features
+
+* (block/sidebar)-title and (block/sidebar)-subtitle props avaliable for Discovery widgets. ([76b9d58](https://github.com/vviinn/widgets/commit/76b9d58a40481f846e400ba766cce8b7be933bce))
+
 ## [2.211.0](https://github.com/vviinn/widgets/compare/v2.210.0...v2.211.0) (2026-02-19)
 
 
