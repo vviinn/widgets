@@ -160,6 +160,12 @@ img.source-image {
   color: #000000;
 }
 
+.subtitle {
+  font-size: var(--font-size-body);
+  font-family: var(--font-family, var(--font-family-base));
+  text-align: center;
+}
+
 .close-sidebar {
   position: absolute;
   background: transparent;

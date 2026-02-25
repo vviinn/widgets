@@ -16,7 +16,7 @@ import { Locale } from "../../../locale";
 import { UpdateButtonLocation } from "../../vviinn-vpr-widget/vviinn-vpr-widget";
 import { ClickEvent, isClickedInRectBound } from "../../../geometry/Rectangle";
 import { Recommendation } from "../../../components";
-import { carouselParts, productCardParts } from "../../../cssParts";
+import { carouselParts, productCardParts, recommendationsParts } from "../../../cssParts";
 import i18next from "i18next";
 import {
   DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH,
@@ -35,6 +35,7 @@ export class RecommendationsSidebar {
   @Element() el: HTMLElement;
 
   @Prop() sidebarTitle: string;
+  @Prop() sidebarSubtitle: string;
   @Prop() token: string;
   @Prop() locale: Locale;
   @Prop() numberLocale?: string;
@@ -217,7 +218,7 @@ export class RecommendationsSidebar {
       <Host
         class={this.getClassMap()}
         style={{ display: this.hidden ? "none" : undefined }}
-        exportparts={`body, close-sidebar, ${carouselParts}, ${productCardParts}`}
+        exportparts={`body, close-sidebar, ${carouselParts}, ${productCardParts}, ${recommendationsParts}`}
       >
         <div
           class="sidebar"
@@ -242,8 +243,14 @@ export class RecommendationsSidebar {
                     {this.sidebarTitle || i18next.t("discoveryWidgetTitle")}
                   </span>
                 )}
+                {!!this.sidebarSubtitle && (
+                  <span class="subtitle" part="recommendations-subtitle">
+                    {this.sidebarSubtitle}
+                  </span>
+                )}
               </Fragment>
             )}
+
             <button
               class="close-sidebar"
               onClick={() => {
@@ -271,11 +278,12 @@ export class RecommendationsSidebar {
               locale={this.locale}
               numberLocale={this.numberLocale}
               productId={this.productId}
-              exportparts={`${carouselParts}, ${productCardParts}`}
+              exportparts={`${carouselParts}, ${productCardParts}, ${recommendationsParts}`}
               imageWidth={this.imageWidth}
               showMultipleImages={this.showMultipleImages}
               setItemsAmount={this.setItemsAmount}
-              blockTitle=""
+              blockTitle={this.mode !== "set" ? "" : this.sidebarTitle}
+              blockSubtitle={this.mode === "set" ? this.sidebarSubtitle : undefined}
               mode={this.mode}
               campaign-type={this.campaignType}
               useCarousel={this.useCarousel}

@@ -87,6 +87,11 @@ export const searchBarParts = makeExportPartsString([
   "text-search-container",
 ]);
 
+export const recommendationsParts = makeExportPartsString([
+  "recommendations-title",
+  "recommendations-subtitle",
+]);
+
 export const carouselParts = makeExportPartsString([
   "items-group",
   "carousel-button",
