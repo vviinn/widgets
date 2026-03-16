@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.212.1](https://github.com/vviinn/widgets/compare/v2.212.0...v2.212.1) (2026-03-16)
+
+
+### Bug Fixes
+
+* Shop the look upload button customization ([1b76fdd](https://github.com/vviinn/widgets/commit/1b76fdd949955e056121e045af3fd84279e4304d))
+
 ## [2.212.0](https://github.com/vviinn/widgets/compare/v2.211.0...v2.212.0) (2026-02-25)
 
 
