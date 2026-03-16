@@ -107,3 +107,11 @@ export const modalParts = makeExportPartsString([
 ]);
 
 export const suggestionsParts = makeExportPartsString(suggestionsPartsList);
+
+export const shopTheLookPartsList = [
+  "shop-the-look-upload-button",
+  "shop-the-look-upload-button-icon",
+  "shop-the-look-upload-button-text",
+];
+
+export const shopTheLookParts = makeExportPartsString(shopTheLookPartsList);
