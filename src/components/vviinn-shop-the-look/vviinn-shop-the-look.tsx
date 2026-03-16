@@ -78,8 +78,8 @@ export interface ShopTheLookEventData extends BasicEventData {
  * Supports multiple images with swiper navigation, responsive design, and customizable styling.
  *
  * @part shop-the-look-upload-button - The upload button element
- * @part shop-the-look-upload-button-icon - The upload button icon slot
- * @part shop-the-look-upload-button-text - The upload button text slot
+ * @part shop-the-look-upload-button-icon - The upload button icon wrapper
+ * @part shop-the-look-upload-button-text - The upload button text wrapper
  */
 
 @Component({
