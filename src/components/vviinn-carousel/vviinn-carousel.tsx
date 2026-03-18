@@ -251,6 +251,18 @@ export class VviinnCarousel {
   componentWillLoad() {
     this.isRTL = document.dir === "rtl";
     this.updateColumnsNumber();
+
+    if (this.isSetMode && this.recommendations?.length > 0) {
+      this.recommendationsWatcher();
+    }
+
+    if (
+      this.recommendations?.length > 0 &&
+      !this.showContent &&
+      !this.loading
+    ) {
+      this.showContent = true;
+    }
   }
 
   componentDidLoad() {
@@ -271,17 +283,6 @@ export class VviinnCarousel {
       contentNode.addEventListener("scroll", this.scrollHandler);
     }
 
-    if (
-      this.recommendations?.length > 0 &&
-      !this.showContent &&
-      !this.loading
-    ) {
-      this.showContent = true;
-    }
-
-    if (this.isSetMode && this.recommendations?.length > 0) {
-      this.recommendationsWatcher();
-    }
   }
 
   @Watch("recommendations")
