@@ -338,7 +338,6 @@ export class VviinnVprWidget implements ComponentInterface {
   private showNoResultText = () =>
     !this.recommendationsLoading &&
     (this.recommendations.length === 0 ||
-      (this.recommendations.length < this.setItemsAmount && this.isSetMode) ||
       this.hasErrorOnLoad);
 
   private getBasicEventData(): BasicEventData {
@@ -808,7 +807,7 @@ export class VviinnVprWidget implements ComponentInterface {
                 )}
               </div>
 
-              {this.isSetMode && this.updateButtonLocation !== "onItem" ? (
+              {this.isSetMode && this.updateButtonLocation !== "onItem" && this.recommendations.length > 0 ? (
                 <button
                   class="update-button"
                   part="update-button-top"

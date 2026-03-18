@@ -278,6 +278,10 @@ export class VviinnCarousel {
     ) {
       this.showContent = true;
     }
+
+    if (this.isSetMode && this.recommendations?.length > 0) {
+      this.recommendationsWatcher();
+    }
   }
 
   @Watch("recommendations")
@@ -292,6 +296,8 @@ export class VviinnCarousel {
           0,
           this.columns,
         );
+      } else if (this.recommendations.length > 0) {
+        this.crossSellingRecommendations = [...this.recommendations];
       }
     }
   }
