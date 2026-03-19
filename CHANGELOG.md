@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.212.2](https://github.com/vviinn/widgets/compare/v2.212.1...v2.212.2) (2026-03-19)
+
+
+### Bug Fixes
+
+* Discovery Widget: Set mode shows products when fewer results than set-items-amount ([85bc46f](https://github.com/vviinn/widgets/commit/85bc46f8e47fbf88a7dadba5fd8c3dee6ca7026d))
+
 ### [2.212.1](https://github.com/vviinn/widgets/compare/v2.212.0...v2.212.1) (2026-03-16)
 
 
