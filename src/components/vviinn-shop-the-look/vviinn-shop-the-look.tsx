@@ -59,6 +59,7 @@ import {
 import { UploadActionIconVariant } from "../vviinn-icons";
 import { getAcceptableFileFormats } from "../../Image/error";
 import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
+import { shopTheLookParts } from "../../cssParts";
 import { openProductLink } from "../../helpers/navigation/openProductLink";
 
 if (typeof window !== "undefined") {
@@ -75,6 +76,10 @@ export interface ShopTheLookEventData extends BasicEventData {
  * Users can click on hotspots (detected objects) to discover similar products and see recommendations in a modal.
  *
  * Supports multiple images with swiper navigation, responsive design, and customizable styling.
+ *
+ * @part shop-the-look-upload-button - The upload button element
+ * @part shop-the-look-upload-button-icon - The upload button icon wrapper
+ * @part shop-the-look-upload-button-text - The upload button text wrapper
  */
 
 @Component({
@@ -1217,7 +1222,7 @@ export class VviinnShopTheLook {
 
   render() {
     return (
-      <Host>
+      <Host exportparts={shopTheLookParts}>
         {renderExternalCSS(this.cssUrl)}
 
         <div
@@ -1237,13 +1242,18 @@ export class VviinnShopTheLook {
               <div class="upload-button-container">
                 <button
                   class="upload-button"
+                  part="shop-the-look-upload-button"
                   onClick={() => this.fileInput?.click()}
                   disabled={this.showLoadingSpinner}
                 >
-                  <slot name="vviinn-image-upload-icon">
-                    <UploadActionIconVariant />
-                  </slot>
-                  <slot name="upload-button-text"></slot>
+                  <span class="upload-button-icon" part="shop-the-look-upload-button-icon">
+                    <slot name="vviinn-image-upload-icon">
+                      <UploadActionIconVariant />
+                    </slot>
+                  </span>
+                  <span class="upload-button-text" part="shop-the-look-upload-button-text">
+                    <slot name="upload-button-text"></slot>
+                  </span>
                 </button>
                 <input
                   type="file"

@@ -143,7 +143,7 @@ export type Mode = "pure-grid" | CarouselMode;
  * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button.
  * @slot vviinn-energy-label-data-sheet-text - Text of the data sheet link for the energy label.
  *
- * @slot vviinn-recommendations-subtitle - Recommendations subtitle text (Set mode).
+ * @slot vviinn-recommendations-subtitle - Recommendations subtitle text.
  * @slot vviinn-update-button-text - Text of Update Button on the top (Set mode).
  * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
  * @slot vviinn-custom-label-0 - Custom label with index 0.
@@ -222,6 +222,8 @@ export class VviinnVprWidget implements ComponentInterface {
 
   /** Widget's title */
   @Prop() blockTitle: string;
+  /** Widget's subtitle */
+  @Prop() blockSubtitle: string;
   /** Show or hide the widget's scrollbar */
   @Prop() showScroll = true;
 
@@ -336,7 +338,6 @@ export class VviinnVprWidget implements ComponentInterface {
   private showNoResultText = () =>
     !this.recommendationsLoading &&
     (this.recommendations.length === 0 ||
-      (this.recommendations.length < this.setItemsAmount && this.isSetMode) ||
       this.hasErrorOnLoad);
 
   private getBasicEventData(): BasicEventData {
@@ -785,26 +786,28 @@ export class VviinnVprWidget implements ComponentInterface {
 
           {SlotSkeleton("discovery")}
 
-          {(this.isSetMode || this.blockTitle?.length !== 0) && (
+          {(this.isSetMode || this.blockTitle !== "" || !!this.blockSubtitle) && (
             <div class="widget-header">
               <div>
-                <h2 part="recommendations-title">
-                  <slot name="vviinn-recommendations-title">
-                    {this.isSetMode
-                      ? i18next.t("setMode.widgetTitle")
-                      : this.blockTitle || i18next.t("discoveryWidgetTitle")}
-                  </slot>
-                </h2>
-                {this.isSetMode && (
+                {this.blockTitle !== "" && (
+                  <h2 part="recommendations-title">
+                    <slot name="vviinn-recommendations-title">
+                      {this.blockTitle ?? (this.isSetMode
+                        ? i18next.t("setMode.widgetTitle")
+                        : i18next.t("discoveryWidgetTitle"))}
+                    </slot>
+                  </h2>
+                )}
+                {(this.isSetMode || !!this.blockSubtitle) && (
                   <h3 part="recommendations-subtitle">
                     <slot name="vviinn-recommendations-subtitle">
-                      {i18next.t("setMode.widgetSubtitle")}
+                      {this.blockSubtitle || (this.isSetMode ? i18next.t("setMode.widgetSubtitle") : "")}
                     </slot>
                   </h3>
                 )}
               </div>
 
-              {this.isSetMode && this.updateButtonLocation !== "onItem" ? (
+              {this.isSetMode && this.updateButtonLocation !== "onItem" && this.recommendations.length > 0 ? (
                 <button
                   class="update-button"
                   part="update-button-top"

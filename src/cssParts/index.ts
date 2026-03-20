@@ -87,6 +87,11 @@ export const searchBarParts = makeExportPartsString([
   "text-search-container",
 ]);
 
+export const recommendationsParts = makeExportPartsString([
+  "recommendations-title",
+  "recommendations-subtitle",
+]);
+
 export const carouselParts = makeExportPartsString([
   "items-group",
   "carousel-button",
@@ -102,3 +107,11 @@ export const modalParts = makeExportPartsString([
 ]);
 
 export const suggestionsParts = makeExportPartsString(suggestionsPartsList);
+
+export const shopTheLookPartsList = [
+  "shop-the-look-upload-button",
+  "shop-the-look-upload-button-icon",
+  "shop-the-look-upload-button-text",
+];
+
+export const shopTheLookParts = makeExportPartsString(shopTheLookPartsList);

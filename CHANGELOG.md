@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.212.2](https://github.com/vviinn/widgets/compare/v2.212.1...v2.212.2) (2026-03-19)
+
+
+### Bug Fixes
+
+* Discovery Widget: Set mode shows products when fewer results than set-items-amount ([85bc46f](https://github.com/vviinn/widgets/commit/85bc46f8e47fbf88a7dadba5fd8c3dee6ca7026d))
+
+### [2.212.1](https://github.com/vviinn/widgets/compare/v2.212.0...v2.212.1) (2026-03-16)
+
+
+### Bug Fixes
+
+* Shop the look upload button customization ([1b76fdd](https://github.com/vviinn/widgets/commit/1b76fdd949955e056121e045af3fd84279e4304d))
+
+## [2.212.0](https://github.com/vviinn/widgets/compare/v2.211.0...v2.212.0) (2026-02-25)
+
+
+### Features
+
+* (block/sidebar)-title and (block/sidebar)-subtitle props avaliable for Discovery widgets. ([76b9d58](https://github.com/vviinn/widgets/commit/76b9d58a40481f846e400ba766cce8b7be933bce))
+
 ## [2.211.0](https://github.com/vviinn/widgets/compare/v2.210.0...v2.211.0) (2026-02-19)
 
 

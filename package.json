@@ -1,6 +1,6 @@
 {
   "name": "vviinn-widgets",
-  "version": "2.211.0",
+  "version": "2.212.2",
   "description": "vviinn web components",
   "main": "./dist/index.cjs.js",
   "module": "./dist/index.js",
@@ -43,7 +43,7 @@
     "fp-ts": "^2.12.3",
     "i18next": "^23.2.11",
     "rxjs": "^7.5.5",
-    "swiper": "^11.2.10",
+    "swiper": "^12.1.2",
     "tslib": "^1.14.1",
     "uuid": "^8.3.2",
     "vviinn-tracking-client-ts": "^1.7.6",

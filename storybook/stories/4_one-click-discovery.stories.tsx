@@ -25,7 +25,8 @@ export default {
 
 const Template = (args) => `
     <vviinn-vpr-button
-      sidebar-title="${args.sidebarTitle}"
+      ${args.sidebarTitle ? `sidebar-title="${args.sidebarTitle}"` : ""}
+      ${args.sidebarSubtitle ? `sidebar-subtitle="${args.sidebarSubtitle}"` : ""}
       css-url="${args.cssUrl}"
       currency-sign="${args.currencySign}"
       locale="${args.locale}"
@@ -72,7 +73,8 @@ const initArgs = {
   color: "",
   excluded: "",
   mode: "grid",
-  sidebarTitle: "Recommended products",
+  sidebarTitle: "",
+  sidebarSubtitle: "",
   addStyle: true,
   productDetailsNewTab: true,
   productDetailsRedirect: true,
