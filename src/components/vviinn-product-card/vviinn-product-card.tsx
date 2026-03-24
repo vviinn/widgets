@@ -41,6 +41,7 @@ import {
   CrossSellingClickEventData,
   ProductCardEventData,
 } from "../../recommendation/events";
+import { CUSTOM_LABELS_DELIMITER } from "../../recommendation";
 
 import styles from "./vviinn-product-card.css";
 import { CampaignTypeId, campaignTypeNames } from "../../campaign/Campaign";
@@ -637,7 +638,7 @@ export class VviinnProductCard {
                 showInContainer={this.addPriceContainer}
               />
 
-              {renderCustomLabels(this.customLabels.split("|"), "content")}
+              {renderCustomLabels(this.customLabels.split(CUSTOM_LABELS_DELIMITER), "content")}
             </Fragment>
           )}
         </div>
@@ -809,7 +810,7 @@ export class VviinnProductCard {
             <slot name="vviinn-product-card-actions"></slot>
           </div>
 
-          {renderCustomLabels(this.customLabels.split("|"), "image")}
+          {renderCustomLabels(this.customLabels.split(CUSTOM_LABELS_DELIMITER), "image")}
         </div>
 
         {this.showFooterArrow && <div class="footer-arrow"></div>}
