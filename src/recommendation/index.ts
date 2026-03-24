@@ -66,5 +66,5 @@ export const getCustomLabels = (recommendation: Recommendation) => {
     custom_label_4,
   ]
     .map((label) => label ?? "")
-    .join(",");
+    .join("|");
 };
