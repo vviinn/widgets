@@ -611,7 +611,9 @@ export const makeAutoSuggestRequest = async (
       state.autoSuggestCompletions = response.data.completions ?? [];
 
       const matchingCompletion = response.data.completions.find(
-        (completion) => completion.suggestion === query && completion?.url,
+        (completion) =>
+          completion.suggestion.toLowerCase() === query.toLowerCase() &&
+          completion?.url,
       );
 
       if (matchingCompletion?.url) {
