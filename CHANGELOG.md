@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.212.3](https://github.com/vviinn/widgets/compare/v2.212.2...v2.212.3) (2026-03-24)
+
+
+### Bug Fixes
+
+* Product Card: use pipe delimiter for custom labels to support commas in values. ([3b4eca8](https://github.com/vviinn/widgets/commit/3b4eca8b80fee57497356a21cf2867279a6875e5))
+
 ### [2.212.2](https://github.com/vviinn/widgets/compare/v2.212.1...v2.212.2) (2026-03-19)
 
 

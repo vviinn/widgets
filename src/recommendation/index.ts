@@ -49,6 +49,8 @@ export const getRecommendationsBody = ({
   };
 };
 
+export const CUSTOM_LABELS_DELIMITER = "|";
+
 export const getCustomLabels = (recommendation: Recommendation) => {
   const {
     custom_label_0,
@@ -66,5 +68,5 @@ export const getCustomLabels = (recommendation: Recommendation) => {
     custom_label_4,
   ]
     .map((label) => label ?? "")
-    .join(",");
+    .join(CUSTOM_LABELS_DELIMITER);
 };
