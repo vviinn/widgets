@@ -28,9 +28,10 @@ export const renderSuggestions = (
   if (!completions.length || !query) return null;
 
   return (
-    <ul class="suggestions-container" part="suggestions-container" role="listbox">
+    <ul class="suggestions-container" part="suggestions-container" role="listbox" id="suggestions-listbox">
       {completions.map((completion, index) => (
         <li
+          id={`suggestion-${index}`}
           class={{ "suggestion-item": true, "suggestion-item--active": index === activeIndex }}
           part="suggestion-item"
           role="option"

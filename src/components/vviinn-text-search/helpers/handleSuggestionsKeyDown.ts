@@ -46,9 +46,9 @@ export const handleSuggestionsKeyDown = (
       }
       break;
     case "ArrowUp":
-      if (hasSuggestions) {
+      if (hasSuggestions && activeSuggestionIndex > -1) {
         event.preventDefault();
-        const prevIndex = Math.max(activeSuggestionIndex - 1, -1);
+        const prevIndex = activeSuggestionIndex - 1;
         onActiveIndexChange(prevIndex);
         const newQuery = prevIndex === -1 ? originalQuery : completions[prevIndex].suggestion;
         setTextSearchQuery(storeName, newQuery);

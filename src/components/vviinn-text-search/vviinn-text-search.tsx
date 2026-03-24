@@ -61,6 +61,8 @@ import {
  * @part text-search-button - Text search input's search button.
  * @slot vviinn-text-search-icon - Icon of the text search block.
  * @part speech-button - Speech recognition button.
+ * @part suggestions-container - Auto-suggest dropdown container.
+ * @part suggestion-item - Individual auto-suggest item.
  * @slot vviinn-text-search-actions - Additional actions for the text search block, e.g., a button to open the Search Modal.
  */
 @Component({
@@ -293,7 +295,10 @@ export class VviinnTextSearch {
     if (!queryToUse) return;
 
     this.hideSuggestions();
-    if (!skipAutoSuggest) await this.checkAutoSuggest(queryToUse);
+    if (!skipAutoSuggest) {
+      await this.checkAutoSuggest(queryToUse);
+      this.hideSuggestions();
+    }
 
     this.trackTextSearch();
 
@@ -433,6 +438,13 @@ export class VviinnTextSearch {
             onInput={(event) => this.handleInputChange(event)}
             onKeyDown={this.handleKeyDown}
             onBlur={this.autoSuggestShow ? this.hideSuggestions : undefined}
+            {...(this.autoSuggestShow && {
+              role: "combobox",
+              "aria-autocomplete": "list",
+              "aria-expanded": this.autoSuggestCompletions.length > 0 && !!this.state.textSearchQuery ? "true" : "false",
+              "aria-controls": "suggestions-listbox",
+              "aria-activedescendant": this.activeSuggestionIndex >= 0 ? `suggestion-${this.activeSuggestionIndex}` : undefined,
+            })}
           />
 
           {this.mode === "extended" && (
