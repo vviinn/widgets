@@ -12,6 +12,7 @@ import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/lib/function";
 import { version } from "../../../package.json";
 import {
+  clearAutoSuggestCompletions,
   makeAutoSuggestRequest,
   makeTextSearchRequest,
   setTextSearchQuery,
@@ -35,8 +36,15 @@ import { Locale, initializeLocale } from "../../locale";
 import { SearchBarMode } from "../../widget/types";
 import { TextSearchResponse } from "../../interfaces";
 import { searchBarParts } from "../../cssParts";
+import { QueryCompletion } from "../../interfaces";
 import { MicIcon } from "../vviinn-icons/icons/MicIcon";
-import { initializeRecognition, speechTooltip } from "./helpers";
+import {
+  createAutoSuggestHandler,
+  handleSuggestionsKeyDown,
+  initializeRecognition,
+  renderSuggestions,
+  speechTooltip,
+} from "./helpers";
 import Timeout = NodeJS.Timeout;
 import { defaultConfig } from "../../store/store";
 import { campaignTypeNames } from "../../campaign/Campaign";
@@ -105,6 +113,8 @@ export class VviinnTextSearch {
   @Prop() placeholder?: string = "";
   /** URL of the results page for automatic search redirect. */
   @Prop() resultsPageUrl?: string;
+  /** Show auto-suggest dropdown with search completions */
+  @Prop() autoSuggestShow: boolean = false;
 
   /** True, when used inside the widget */
   /** @internal */
@@ -121,6 +131,9 @@ export class VviinnTextSearch {
 
   @State() isRecording = false;
   @State() showTooltip = false;
+  @State() autoSuggestCompletions: QueryCompletion[] = [];
+  @State() activeSuggestionIndex = -1;
+  private originalQuery = "";
 
   private isShowPreloader = () =>
     this.state.searchStatus === "loading" && this.state.searchType === "text";
@@ -148,16 +161,25 @@ export class VviinnTextSearch {
         : i18next.t("textSearchPlaceholder");
 
   private recognition: ReturnType<typeof initializeRecognition> | null = null;
+  private autoSuggestHandler: ReturnType<typeof createAutoSuggestHandler>;
 
   connectedCallback() {
-    const { state, storeName } = useSearchStore(this.showInWidget);
+    const { state, storeName, onChange } = useSearchStore(this.showInWidget);
     this.state = state;
     this.storeName = storeName;
+
+    if (this.autoSuggestShow) {
+      onChange("autoSuggestCompletions", (completions) => {
+        this.autoSuggestCompletions = completions;
+        this.activeSuggestionIndex = -1;
+      });
+    }
   }
 
   disconnectedCallback() {
     clearTimeout(this.triggerTooltipStart);
     clearTimeout(this.triggerTooltipEnd);
+    this.autoSuggestHandler?.cleanup();
   }
 
   private trackTextSearch = () =>
@@ -183,6 +205,14 @@ export class VviinnTextSearch {
   async componentWillLoad() {
     await initializeLocale(this.locale);
     slotChangeListener(this, this.el);
+
+    if (this.autoSuggestShow) {
+      this.autoSuggestHandler = createAutoSuggestHandler(
+        this.storeName,
+        this.token,
+        this.apiPath,
+      );
+    }
 
     this.recognition = initializeRecognition(
       this.locale ?? defaultConfig.locale,
@@ -213,7 +243,11 @@ export class VviinnTextSearch {
 
   handleInputChange(event: Event) {
     const value = (event.target as HTMLInputElement).value;
-    setTextSearchQuery(this.storeName, value);
+    if (this.autoSuggestShow) {
+      this.autoSuggestHandler.handleInputChange(value);
+    } else {
+      setTextSearchQuery(this.storeName, value);
+    }
   }
 
   private handleSpeech = async () => {
@@ -237,11 +271,29 @@ export class VviinnTextSearch {
     }
   };
 
-  private handleTextSearch = async () => {
+  private hideSuggestions = () => {
+    clearAutoSuggestCompletions(this.storeName);
+  };
+
+  private selectSuggestion = (completion: QueryCompletion) => {
+    setTextSearchQuery(this.storeName, completion.suggestion);
+    this.hideSuggestions();
+
+    if (completion.url) {
+      this.trackTextSearch();
+      this.handleTextSearchRedirect(completion.url, "auto-suggest", completion.suggestion);
+      return;
+    }
+
+    this.handleTextSearch(true);
+  };
+
+  private handleTextSearch = async (skipAutoSuggest = false) => {
     const queryToUse = this.state.textSearchQuery;
     if (!queryToUse) return;
 
-    await this.checkAutoSuggest(queryToUse);
+    this.hideSuggestions();
+    if (!skipAutoSuggest) await this.checkAutoSuggest(queryToUse);
 
     this.trackTextSearch();
 
@@ -320,11 +372,25 @@ export class VviinnTextSearch {
     );
   };
 
-  private handleKeyPress(event: KeyboardEvent) {
-    if (event.key === "Enter") {
-      this.handleTextSearch();
+  private handleKeyDown = (event: KeyboardEvent) => {
+    if (!this.autoSuggestShow) {
+      if (event.key === "Enter") this.handleTextSearch();
+      return;
     }
-  }
+
+    handleSuggestionsKeyDown(event, {
+      completions: this.autoSuggestCompletions,
+      activeSuggestionIndex: this.activeSuggestionIndex,
+      originalQuery: this.originalQuery,
+      storeName: this.storeName,
+      textSearchQuery: this.state.textSearchQuery,
+      onActiveIndexChange: (index) => (this.activeSuggestionIndex = index),
+      onOriginalQueryChange: (query) => (this.originalQuery = query),
+      onSelectSuggestion: this.selectSuggestion,
+      onHideSuggestions: this.hideSuggestions,
+      onSearch: this.handleTextSearch,
+    });
+  };
 
   private handleButtonKeyDown = (event: KeyboardEvent, action: () => void) => {
     if (event.key === "Enter" || event.key === " ") {
@@ -365,7 +431,8 @@ export class VviinnTextSearch {
             placeholder={this.getPlaceholderText()}
             value={this.state.textSearchQuery || ""}
             onInput={(event) => this.handleInputChange(event)}
-            onKeyUp={(event) => this.handleKeyPress(event as KeyboardEvent)}
+            onKeyDown={this.handleKeyDown}
+            onBlur={this.autoSuggestShow ? this.hideSuggestions : undefined}
           />
 
           {this.mode === "extended" && (
@@ -404,7 +471,7 @@ export class VviinnTextSearch {
           <button
             class="text-search-button"
             part="text-search-button"
-            onClick={this.handleTextSearch}
+            onClick={() => this.handleTextSearch()}
             onKeyDown={(event) =>
               this.handleButtonKeyDown(event, this.handleTextSearch)
             }
@@ -420,6 +487,13 @@ export class VviinnTextSearch {
             )}
           </button>
         </div>
+        {this.autoSuggestShow &&
+          renderSuggestions(
+            this.autoSuggestCompletions,
+            this.state.textSearchQuery,
+            this.activeSuggestionIndex,
+            this.selectSuggestion,
+          )}
         {this.showTooltip && (
           <p class="text-search-tooltip" part="text-search-tooltip">
             {i18next.t(this.tooltipText)}

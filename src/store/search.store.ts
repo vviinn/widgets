@@ -4,6 +4,7 @@ import * as T from "fp-ts/Task";
 import { pipe } from "fp-ts/function";
 import {
   AutoSuggestRequest,
+  QueryCompletion,
   Recommendation,
   RequestStaticFilters,
   Stream,
@@ -80,6 +81,7 @@ type ReceivedDataDefaults = {
   detectedObjects: Rectangle[];
   stream: Stream | null;
   redirect: (Redirect & { query?: string }) | null;
+  autoSuggestCompletions: QueryCompletion[];
 };
 
 export type SearchStore = AppStateGlobalDefaults &
@@ -116,6 +118,7 @@ const receivedDataDefaults: ReceivedDataDefaults = {
   detectedObjects: [],
   stream: null,
   redirect: null,
+  autoSuggestCompletions: [],
 };
 
 const storeDefaults: SearchStore = {
@@ -605,6 +608,8 @@ export const makeAutoSuggestRequest = async (
     TE.map((response) => {
       if (response.data.query !== state.textSearchQuery) return response;
 
+      state.autoSuggestCompletions = response.data.completions ?? [];
+
       const matchingCompletion = response.data.completions.find(
         (completion) => completion.suggestion === query && completion?.url,
       );
@@ -619,6 +624,11 @@ export const makeAutoSuggestRequest = async (
     }),
     TE.mapLeft((error) => error),
   )();
+};
+
+export const clearAutoSuggestCompletions = (store: SearchStoreName) => {
+  const state = useStore(store);
+  state.autoSuggestCompletions = [];
 };
 
 export {
