@@ -164,6 +164,7 @@ export class VviinnTextSearch {
 
   private recognition: ReturnType<typeof initializeRecognition> | null = null;
   private autoSuggestHandler: ReturnType<typeof createAutoSuggestHandler>;
+  private disposeOnChange: (() => void) | undefined;
 
   connectedCallback() {
     const { state, storeName, onChange } = useSearchStore(this.showInWidget);
@@ -171,7 +172,7 @@ export class VviinnTextSearch {
     this.storeName = storeName;
 
     if (this.autoSuggestShow) {
-      onChange("autoSuggestCompletions", (completions) => {
+      this.disposeOnChange = onChange("autoSuggestCompletions", (completions) => {
         this.autoSuggestCompletions = completions;
         this.activeSuggestionIndex = -1;
       });
@@ -182,6 +183,7 @@ export class VviinnTextSearch {
     clearTimeout(this.triggerTooltipStart);
     clearTimeout(this.triggerTooltipEnd);
     this.autoSuggestHandler?.cleanup();
+    this.disposeOnChange?.();
   }
 
   private trackTextSearch = () =>
