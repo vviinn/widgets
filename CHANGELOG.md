@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.212.4](https://github.com/vviinn/widgets/compare/v2.212.3...v2.212.4) (2026-03-25)
+
+
+### Bug Fixes
+
+* Disabled carousel button in continuity mode. ([785ee3e](https://github.com/vviinn/widgets/commit/785ee3e8fecca154ced6b422a9c23913201fdfa8))
+
 ### [2.212.3](https://github.com/vviinn/widgets/compare/v2.212.2...v2.212.3) (2026-03-24)
 
 

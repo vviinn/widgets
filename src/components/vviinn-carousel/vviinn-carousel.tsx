@@ -10,6 +10,7 @@ import {
   Event,
   EventEmitter,
   Fragment,
+  forceUpdate,
 } from "@stencil/core";
 import { chunksOf } from "fp-ts/lib/Array";
 import { pipe } from "fp-ts/lib/function";
@@ -282,7 +283,8 @@ export class VviinnCarousel {
       };
       contentNode.addEventListener("scroll", this.scrollHandler);
     }
-
+    // Re-render to recalculate button states with actual DOM dimensions
+    forceUpdate(this);
   }
 
   @Watch("recommendations")
