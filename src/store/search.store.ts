@@ -606,14 +606,14 @@ export const makeAutoSuggestRequest = async (
     TE.fromEither,
     TE.chain((request) => autoSuggestClient(request, apiPath)),
     TE.map((response) => {
-      if (response.data.query.toLowerCase() !== state.textSearchQuery?.toLowerCase()) return response;
+      if (response.data.query.trim().toLowerCase() !== state.textSearchQuery?.trim().toLowerCase()) return response;
 
       const completions = response.data.completions ?? [];
       state.autoSuggestCompletions = completions;
 
       const matchingCompletion = completions.find(
         (completion) =>
-          completion.suggestion.toLowerCase() === query.toLowerCase() &&
+          completion.suggestion.trim().toLowerCase() === query.trim().toLowerCase() &&
           completion?.url,
       );
 
