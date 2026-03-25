@@ -247,6 +247,7 @@ const updateVisualSearchState =
     state.visualSearchId = response.requestId;
     state.results = response.data.products;
     state.dynamicFilters = response.interactions.dynamicFilters;
+    state.stream = response?.stream ?? null;
     state.searchStatus = "success";
 
     if (!isHiResUpdate) emitSearchSuccess(store, state, "VPS");

@@ -1,7 +1,7 @@
 openapi: 3.0.2
 info:
   title: AI as a Service API
-  version: "1.28.0"
+  version: "1.29.0"
   x-logo:
     url: https://docs.vviinn.com/logo.png
     altText: vviinn
@@ -1488,6 +1488,15 @@ components:
                 In that case, the `requestId` must be set in the request.
                 
                 When sending, it should be either the base64-encoded image or a data URL containing an image in base64 encoding.
+            url:
+              type: string
+              format: uri
+              example: "https://example.com/product-image.jpg"
+              description: |
+                URL of the image to use for finding products.
+                Either `image` or `url` must be provided. If both are given, `image` takes precedence.
+                When using a URL, `highResolutionImage` is not needed and will be ignored,
+                as the image is fetched server-side at full resolution.
             highResolutionImage:
               type: string
               format: byte
@@ -1495,8 +1504,10 @@ components:
               description: |
                 In addition to the `image`, a high resolution image can be uploaded to ensure accurate results when using a search area.
                 Before sending a high resolution image, we recommend to send a small image initially to have results early.
-                
+
                 When sending, it should be either the base64-encoded image or a data URL containing an image in base64 encoding.
+
+                Ignored when `url` is used.
             searchArea:
               type: object
               oneOf:
@@ -1604,6 +1615,8 @@ components:
             - products
         interactions:
           $ref: "#/components/schemas/interactions"
+        stream:
+          $ref: "#/components/schemas/stream"
     product-listing-page-response:
       type: object
       properties:
