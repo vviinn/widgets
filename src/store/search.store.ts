@@ -4,6 +4,7 @@ import * as T from "fp-ts/Task";
 import { pipe } from "fp-ts/function";
 import {
   AutoSuggestRequest,
+  QueryCompletion,
   Recommendation,
   RequestStaticFilters,
   Stream,
@@ -80,6 +81,7 @@ type ReceivedDataDefaults = {
   detectedObjects: Rectangle[];
   stream: Stream | null;
   redirect: (Redirect & { query?: string }) | null;
+  autoSuggestCompletions: QueryCompletion[];
 };
 
 export type SearchStore = AppStateGlobalDefaults &
@@ -116,6 +118,7 @@ const receivedDataDefaults: ReceivedDataDefaults = {
   detectedObjects: [],
   stream: null,
   redirect: null,
+  autoSuggestCompletions: [],
 };
 
 const storeDefaults: SearchStore = {
@@ -603,10 +606,15 @@ export const makeAutoSuggestRequest = async (
     TE.fromEither,
     TE.chain((request) => autoSuggestClient(request, apiPath)),
     TE.map((response) => {
-      if (response.data.query !== state.textSearchQuery) return response;
+      if (response.data.query.trim().toLowerCase() !== state.textSearchQuery?.trim().toLowerCase()) return response;
 
-      const matchingCompletion = response.data.completions.find(
-        (completion) => completion.suggestion === query && completion?.url,
+      const completions = response.data.completions ?? [];
+      state.autoSuggestCompletions = completions;
+
+      const matchingCompletion = completions.find(
+        (completion) =>
+          completion.suggestion.trim().toLowerCase() === query.trim().toLowerCase() &&
+          completion?.url,
       );
 
       if (matchingCompletion?.url) {
@@ -619,6 +627,11 @@ export const makeAutoSuggestRequest = async (
     }),
     TE.mapLeft((error) => error),
   )();
+};
+
+export const clearAutoSuggestCompletions = (store: SearchStoreName) => {
+  const state = useStore(store);
+  state.autoSuggestCompletions = [];
 };
 
 export {

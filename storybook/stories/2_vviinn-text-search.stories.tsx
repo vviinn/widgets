@@ -40,6 +40,7 @@ const Template = (args) => `
       locale="${args.locale}"
       placeholder="${args.placeholder}"
       results-page-url="${args.resultsPageUrl}"
+      auto-suggest-show="${args.autoSuggestShow}"
     >
     </vviinn-text-search>
 
@@ -69,6 +70,7 @@ const initArgs = {
   searchQuery: "",
   placeholder: "",
   resultsPageUrl: "",
+  autoSuggestShow: false,
   mode: "extended",
   locale: "en-US",
   productCardImageAspectRatio: "1 / 1",
