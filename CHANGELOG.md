@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.213.0](https://github.com/vviinn/widgets/compare/v2.212.4...v2.213.0) (2026-03-26)
+
+
+### Features
+
+* Auto-suggest dropdown for text search. ([7cb3ea1](https://github.com/vviinn/widgets/commit/7cb3ea12929f1b3614a9165e1e364c08102a48bf))
+
+
+### Bug Fixes
+
+* Case-insensitive query mapping redirect. ([87590d8](https://github.com/vviinn/widgets/commit/87590d8c2e54cbde046417862427d4901eec7a00))
+
 ### [2.212.4](https://github.com/vviinn/widgets/compare/v2.212.3...v2.212.4) (2026-03-25)
 
 
