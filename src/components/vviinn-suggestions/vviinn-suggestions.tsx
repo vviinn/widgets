@@ -37,24 +37,26 @@ import {
   FilterHandlers,
   renderToggleButton,
   hasCategoricalFilters,
+  renderInfoText,
+  hasProperLocators,
+  renderAnnotatedContent,
 } from "./render-helpers";
 import { toggleFilterInSet, syncSuggestionFilters } from "./helpers";
 
 /**
  * @slot vviinn-suggestions-title - Custom title text to replace default "AI Suggestions".
- * @slot vviinn-suggestions-description - Custom description text to replace default description.
  * @slot vviinn-suggestions-icon - Custom icon to replace default sparkle emoji.
  *
  * @part suggestions-container - The main suggestions container element.
  * @part suggestions-header - The header section containing icon and title.
  * @part suggestions-icon - The sparkle icon wrapper.
  * @part suggestions-title - The title text element.
- * @part suggestions-description - The description text element.
  * @part suggestions-wrapper - The wrapper around the suggestions list.
  * @part suggestions-list - The list container for all suggestions.
  * @part suggestion-item - Individual suggestion item.
  * @part suggestion-link - Clickable suggestion text/link.
  * @part suggestion-filter-button - Toggle button for filter suggestions.
+ * @part suggestion-info-text - Informational markdown text block (e.g. barcode scan result, search explanation).
  */
 
 @Component({
@@ -301,9 +303,25 @@ export class VviinnSuggestions {
     }
   }
 
-  private renderSuggestionItem(annotations: ContextAnnotation[], key: string) {
-    if (!annotations || annotations.length === 0) {
+  private renderSuggestionItem(
+    content: string,
+    annotations: ContextAnnotation[],
+    key: string,
+  ) {
+    if (annotations.length === 0) {
       return null;
+    }
+
+    if (hasProperLocators(annotations)) {
+      return [
+        renderAnnotatedContent(
+          content,
+          annotations,
+          (annotation, text) => this.handleSuggestionClick(annotation, text),
+          this.appliedSuggestionFilters,
+          key,
+        ),
+      ];
     }
 
     const listItems: JSX.Element[] = [];
@@ -325,23 +343,31 @@ export class VviinnSuggestions {
   }
 
   private renderStreamItems() {
-    return (
-      <ul class="suggestions-list" part="suggestions-list">
-        {this.stream.items.map((item, index) => {
-          if (item.role !== "assistant" || !item.parts) return null;
+    const parts: JSX.Element[] = [];
 
-          return item.parts.map((part, partIndex) => {
-            if (part.text?.annotations) {
-              return this.renderSuggestionItem(
-                part.text.annotations,
-                `${index}-${partIndex}`,
-              );
-            }
-            return null;
-          });
-        })}
-      </ul>
-    );
+    this.stream.items.forEach((item, index) => {
+      if (item.role !== "assistant" || !item.parts) return;
+
+      item.parts.forEach((part, partIndex) => {
+        const key = `${index}-${partIndex}`;
+        if (!part.text) return;
+
+        if (part.text.annotations?.length > 0) {
+          const rendered = this.renderSuggestionItem(part.text.content, part.text.annotations, key);
+          if (rendered?.length) {
+            parts.push(
+              <ul class="suggestions-list" part="suggestions-list" key={key}>
+                {rendered}
+              </ul>,
+            );
+          }
+        } else if (part.text.content) {
+          parts.push(renderInfoText(part.text.content, key));
+        }
+      });
+    });
+
+    return parts;
   }
 
   render() {
@@ -366,11 +392,6 @@ export class VviinnSuggestions {
                 {i18next.t("suggestions.title")}
               </slot>
             </h3>
-          </div>
-          <div class="description" part="suggestions-description">
-            <slot name="vviinn-suggestions-description">
-              {i18next.t("suggestions.description")}
-            </slot>
           </div>
           <div class="suggestions-wrapper" part="suggestions-wrapper">
             {this.renderStreamItems()}

@@ -1,4 +1,5 @@
 import { h, EventEmitter } from "@stencil/core";
+import { marked } from "marked";
 import {
   ResponseDynamicFilterItem,
   RequestDynamicFilterItem,
@@ -22,7 +23,7 @@ export interface FilterHandlers {
 }
 
 export const extractDataItems = (annotation: ContextAnnotation) =>
-  annotation.data?.items || [];
+  annotation.data.items;
 
 export const findMatchingFilterValue = (
   item: Recommendation,
@@ -179,3 +180,79 @@ export const hasCategoricalFilters = (
 
 export const hasDynamicFilters = (annotation: ContextAnnotation): boolean =>
   !!annotation.interactions?.dynamicFilters?.length;
+
+export const hasProperLocators = (annotations: ContextAnnotation[]): boolean =>
+  annotations.every((a) => (a.data?.items?.length ?? 0) === 1);
+
+type Segment =
+  | { type: "text"; content: string }
+  | { type: "annotated"; content: string; annotation: ContextAnnotation };
+
+export const splitContentByLocators = (
+  content: string,
+  annotations: ContextAnnotation[],
+): Segment[] => {
+  const sorted = [...annotations].sort((a, b) => a.locator.start - b.locator.start);
+  const segments: Segment[] = [];
+  let cursor = 0;
+
+  for (const annotation of sorted) {
+    const { start, length } = annotation.locator;
+    if (start > cursor) {
+      segments.push({ type: "text", content: content.slice(cursor, start) });
+    }
+    segments.push({
+      type: "annotated",
+      content: content.slice(start, start + length),
+      annotation,
+    });
+    cursor = start + length;
+  }
+
+  if (cursor < content.length) {
+    segments.push({ type: "text", content: content.slice(cursor) });
+  }
+
+  return segments;
+};
+
+export const renderAnnotatedContent = (
+  content: string,
+  annotations: ContextAnnotation[],
+  onAnnotationClick: (annotation: ContextAnnotation, text: string) => void,
+  appliedFilters: Set<string>,
+  key: string,
+) => {
+  const segments = splitContentByLocators(content, annotations);
+
+  return (
+    <li class="suggestion-item" part="suggestion-item" key={key}>
+      {segments.map((segment, i) => {
+        if (segment.type === "text") {
+          return <span key={`${key}-t-${i}`}>{segment.content}</span>;
+        }
+        const isSelected = appliedFilters.has(segment.content);
+        return (
+          <button
+            key={`${key}-a-${i}`}
+            class={`suggestion-filter-button ${isSelected ? "active" : ""}`}
+            part="suggestion-filter-button"
+            onClick={() => onAnnotationClick(segment.annotation, segment.content)}
+            type="button"
+          >
+            {segment.content}
+          </button>
+        );
+      })}
+    </li>
+  );
+};
+
+export const renderInfoText = (content: string, key: string) => (
+  <div
+    class="suggestion-info-text"
+    part="suggestion-info-text"
+    key={key}
+    innerHTML={marked.parse(content) as string}
+  />
+);
