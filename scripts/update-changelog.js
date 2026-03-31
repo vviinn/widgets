@@ -32,7 +32,7 @@ fs.readFile("./CHANGELOG.md", "utf8", (err, data) => {
         return;
       }
     } else {
-      return `${release.replace("*", "-").split("(")[0].trimEnd()}`;
+      return `${release.replace("*", "-").split("([")[0].trimEnd()}`;
     }
   });
 

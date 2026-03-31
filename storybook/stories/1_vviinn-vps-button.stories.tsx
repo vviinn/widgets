@@ -59,6 +59,7 @@ const Template = (args) => `
   image-resolution-width="${args.imageResolutionWidth}"
   show-multiple-images="${args.showMultipleImages}"
   text-search-show="${args.textSearchShow}"
+  auto-suggest-show="${args.autoSuggestShow}"
   add-to-basket-show="${args.addToBasketShow}"
   add-price-container="${args.addPriceContainer}"
   show-interval-inputs="${args.showIntervalInputs}"
@@ -91,6 +92,7 @@ const initArgs = {
   imageResolutionWidth: 250,
   showMultipleImages: false,
   textSearchShow: true,
+  autoSuggestShow: false,
   addToBasketShow: false,
   addPriceContainer: false,
   showIntervalInputs: false,
