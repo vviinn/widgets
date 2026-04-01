@@ -31,15 +31,12 @@ import { suggestionsParts } from "../../cssParts";
 import {
   extractDataItems,
   applyFiltersForItems,
-  handleDeeplinks,
-  renderListItem,
   hasDynamicFilters,
   FilterHandlers,
-  renderToggleButton,
-  hasCategoricalFilters,
   renderInfoText,
   hasProperLocators,
   renderAnnotatedContent,
+  getAnnotationFilterKeys,
 } from "./render-helpers";
 import { toggleFilterInSet, syncSuggestionFilters } from "./helpers";
 
@@ -166,27 +163,13 @@ export class VviinnSuggestions {
     this.appliedSuggestionFilters = new Set();
   };
 
-  private handleProductClick = (
-    product: Recommendation,
-    interactions: Interactions,
-    suggestionText: string,
-  ) => {
-    this.toggleSuggestionFilter(suggestionText);
-    this.applyProductFilters([product], interactions);
-  };
-
-  private handleSuggestionClick = (
-    annotation: ContextAnnotation,
-    suggestionText?: string,
-  ) => {
+  private handleSuggestionClick = (annotation: ContextAnnotation) => {
     const dataItems = extractDataItems(annotation);
 
-    if (handleDeeplinks(dataItems)) {
-      return;
-    }
-
-    if (suggestionText && hasDynamicFilters(annotation)) {
-      this.toggleSuggestionFilter(suggestionText);
+    if (hasDynamicFilters(annotation)) {
+      getAnnotationFilterKeys(annotation).forEach((key) =>
+        this.toggleSuggestionFilter(key),
+      );
     }
 
     this.applyProductFilters(dataItems, annotation.interactions);
@@ -237,109 +220,24 @@ export class VviinnSuggestions {
     };
   }
 
-  private renderProductItems(
-    dataItems: Recommendation[],
-    annotation: ContextAnnotation,
-    key: string,
-    listItems: JSX.Element[],
-  ) {
-    dataItems.forEach((product, productIdx) => {
-      const itemKey = `${key}-${productIdx}`;
-
-      if ("deeplink" in product && product.deeplink) {
-        listItems.push(
-          renderListItem(
-            product.title || product.productId,
-            itemKey,
-            false,
-            undefined,
-            product.deeplink,
-          ),
-        );
-      } else {
-        this.renderProductAsFilter(product, annotation, itemKey, listItems);
-      }
-    });
-  }
-
-  private renderProductAsFilter(
-    product: Recommendation,
-    annotation: ContextAnnotation,
-    itemKey: string,
-    listItems: JSX.Element[],
-  ) {
-    const { hasFilters, selectedFilter } = hasCategoricalFilters(annotation);
-
-    if (hasFilters && selectedFilter && "values" in selectedFilter) {
-      const productLabel = product.title || product.productId;
-      const matchingFilterOption = selectedFilter.values.find((option) => {
-        return (
-          option.label === productLabel || option.label === product.productId
-        );
-      });
-
-      if (matchingFilterOption) {
-        const isSelected = this.appliedSuggestionFilters.has(productLabel);
-        listItems.push(
-          renderToggleButton(
-            productLabel,
-            isSelected,
-            () =>
-              this.handleProductClick(
-                product,
-                annotation.interactions,
-                productLabel,
-              ),
-            itemKey,
-          ),
-        );
-      }
-    } else {
-      listItems.push(
-        renderListItem(product.title || product.productId, itemKey, true, () =>
-          this.handleSuggestionClick(annotation),
-        ),
-      );
-    }
-  }
-
   private renderSuggestionItem(
     content: string,
     annotations: ContextAnnotation[],
     key: string,
   ) {
-    if (annotations.length === 0) {
+    if (annotations.length === 0 || !hasProperLocators(annotations)) {
       return null;
     }
 
-    if (hasProperLocators(annotations)) {
-      return [
-        renderAnnotatedContent(
-          content,
-          annotations,
-          (annotation, text) => this.handleSuggestionClick(annotation, text),
-          this.appliedSuggestionFilters,
-          key,
-        ),
-      ];
-    }
-
-    const listItems: JSX.Element[] = [];
-
-    annotations.forEach((annotation, idx) => {
-      const dataItems = extractDataItems(annotation);
-
-      if (dataItems.length > 0) {
-        this.renderProductItems(
-          dataItems,
-          annotation,
-          `${key}-${idx}`,
-          listItems,
-        );
-      }
-    });
-
-    return listItems;
+    return [
+      renderAnnotatedContent(
+        content,
+        annotations,
+        (annotation) => this.handleSuggestionClick(annotation),
+        this.appliedSuggestionFilters,
+        key,
+      ),
+    ];
   }
 
   private renderStreamItems() {

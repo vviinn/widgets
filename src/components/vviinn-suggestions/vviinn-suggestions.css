@@ -48,6 +48,7 @@
   align-items: center;
   gap: var(--spacing-100);
   flex-wrap: wrap;
+  font-size: var(--font-size-label);
 }
 
 .suggestion-item {
@@ -106,11 +107,12 @@
 }
 
 .suggestion-info-text {
-  font-size: var(--font-size-body);
-  line-height: var(--line-height-body);
-  color: var(--color-text-secondary);
+  font-size: var(--font-size-label);
+  color: var(--color-text-primary);
 }
 
-.suggestion-info-text p {
+.suggestion-info-text * {
+  font-size: var(--font-size-label);
   margin: 0;
+  font-weight: inherit;
 }
