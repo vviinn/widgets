@@ -136,6 +136,7 @@ export class VviinnTextSearch {
   @State() autoSuggestCompletions: QueryCompletion[] = [];
   @State() activeSuggestionIndex = -1;
   private originalQuery = "";
+  private searchSubmitted = false;
 
   private isShowPreloader = () =>
     this.state.searchStatus === "loading" && this.state.searchType === "text";
@@ -173,6 +174,7 @@ export class VviinnTextSearch {
 
     if (this.autoSuggestShow) {
       this.disposeOnChange = onChange("autoSuggestCompletions", (completions) => {
+        if (this.searchSubmitted && completions.length > 0) return;
         this.autoSuggestCompletions = completions;
         this.activeSuggestionIndex = -1;
       });
@@ -246,6 +248,7 @@ export class VviinnTextSearch {
   }
 
   handleInputChange(event: Event) {
+    this.searchSubmitted = false;
     const value = (event.target as HTMLInputElement).value;
     if (this.autoSuggestShow) {
       this.autoSuggestHandler.handleInputChange(value);
@@ -296,6 +299,8 @@ export class VviinnTextSearch {
     const queryToUse = this.state.textSearchQuery;
     if (!queryToUse) return;
 
+    this.searchSubmitted = true;
+    this.autoSuggestHandler?.cancelPending();
     this.hideSuggestions();
     if (!skipAutoSuggest) {
       await this.checkAutoSuggest(queryToUse);
