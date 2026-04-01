@@ -174,6 +174,7 @@ export const renderAnnotatedContent = (
               key={`${key}-a-${i}`}
               href={deeplink}
               target="_blank"
+              rel="noopener noreferrer"
               class="suggestion-link"
               part="suggestion-link"
             >

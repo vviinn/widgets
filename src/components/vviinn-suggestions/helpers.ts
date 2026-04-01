@@ -20,7 +20,7 @@ export const extractActiveFilterValues = (
   const activeValues = new Set<string>();
   activeFilters.forEach((filter) => {
     if (Array.isArray(filter.values)) {
-      filter.values.forEach((v) => activeValues.add(String(v)));
+      filter.values.forEach((v) => activeValues.add(`${filter.column}:${String(v)}`));
     }
   });
   return activeValues;
@@ -48,7 +48,7 @@ export const syncSuggestionFilters = (
           if (filter.type !== "categorical" || !("values" in filter)) continue;
 
           filter.values.forEach((value) => {
-            if (activeValues.has(String(value.value))) {
+            if (activeValues.has(`${filter.column}:${String(value.value)}`)) {
               updatedAppliedFilters.add(`${filter.column}:${value.value}`);
             }
           });
