@@ -85,6 +85,8 @@ export const searchBarParts = makeExportPartsString([
   "speech-button",
   "text-search-tooltip",
   "text-search-container",
+  "suggestions-container",
+  "suggestion-item",
 ]);
 
 export const recommendationsParts = makeExportPartsString([
