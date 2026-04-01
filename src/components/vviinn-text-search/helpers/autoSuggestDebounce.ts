@@ -31,7 +31,5 @@ export const createAutoSuggestHandler = (
 
   const cancelPending = () => clearTimeout(debounceTimer);
 
-  const cleanup = () => clearTimeout(debounceTimer);
-
-  return { handleInputChange, cancelPending, cleanup };
+  return { handleInputChange, cancelPending, cleanup: cancelPending };
 };

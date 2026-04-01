@@ -296,10 +296,6 @@ vviinn-preloader {
     padding: 0 var(--spacing-300);
   }
 
-  vviinn-suggestions::part(suggestions-list)::-webkit-scrollbar {
-    display: none;
-  }
-
   .extended-filters-button {
     display: block;
     position: absolute;
