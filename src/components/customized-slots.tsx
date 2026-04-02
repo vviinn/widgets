@@ -33,7 +33,7 @@ const filtersSlotNames: string[] = [
 
 const suggestionsSlotNames: string[] = [
   "vviinn-suggestions-title",
-  "vviinn-suggestions-description",
+
   "vviinn-suggestions-icon",
 ];
 

@@ -31,30 +31,29 @@ import { suggestionsParts } from "../../cssParts";
 import {
   extractDataItems,
   applyFiltersForItems,
-  handleDeeplinks,
-  renderListItem,
   hasDynamicFilters,
   FilterHandlers,
-  renderToggleButton,
-  hasCategoricalFilters,
+  renderInfoText,
+  hasProperLocators,
+  renderAnnotatedContent,
+  getAnnotationFilterKeys,
 } from "./render-helpers";
 import { toggleFilterInSet, syncSuggestionFilters } from "./helpers";
 
 /**
  * @slot vviinn-suggestions-title - Custom title text to replace default "AI Suggestions".
- * @slot vviinn-suggestions-description - Custom description text to replace default description.
  * @slot vviinn-suggestions-icon - Custom icon to replace default sparkle emoji.
  *
  * @part suggestions-container - The main suggestions container element.
  * @part suggestions-header - The header section containing icon and title.
  * @part suggestions-icon - The sparkle icon wrapper.
  * @part suggestions-title - The title text element.
- * @part suggestions-description - The description text element.
  * @part suggestions-wrapper - The wrapper around the suggestions list.
  * @part suggestions-list - The list container for all suggestions.
  * @part suggestion-item - Individual suggestion item.
  * @part suggestion-link - Clickable suggestion text/link.
  * @part suggestion-filter-button - Toggle button for filter suggestions.
+ * @part suggestion-info-text - Informational markdown text block (e.g. barcode scan result, search explanation).
  */
 
 @Component({
@@ -164,27 +163,13 @@ export class VviinnSuggestions {
     this.appliedSuggestionFilters = new Set();
   };
 
-  private handleProductClick = (
-    product: Recommendation,
-    interactions: Interactions,
-    suggestionText: string,
-  ) => {
-    this.toggleSuggestionFilter(suggestionText);
-    this.applyProductFilters([product], interactions);
-  };
-
-  private handleSuggestionClick = (
-    annotation: ContextAnnotation,
-    suggestionText?: string,
-  ) => {
+  private handleSuggestionClick = (annotation: ContextAnnotation) => {
     const dataItems = extractDataItems(annotation);
 
-    if (handleDeeplinks(dataItems)) {
-      return;
-    }
-
-    if (suggestionText && hasDynamicFilters(annotation)) {
-      this.toggleSuggestionFilter(suggestionText);
+    if (hasDynamicFilters(annotation)) {
+      getAnnotationFilterKeys(annotation).forEach((key) =>
+        this.toggleSuggestionFilter(key),
+      );
     }
 
     this.applyProductFilters(dataItems, annotation.interactions);
@@ -235,113 +220,52 @@ export class VviinnSuggestions {
     };
   }
 
-  private renderProductItems(
-    dataItems: Recommendation[],
-    annotation: ContextAnnotation,
+  private renderSuggestionItem(
+    content: string,
+    annotations: ContextAnnotation[],
     key: string,
-    listItems: JSX.Element[],
   ) {
-    dataItems.forEach((product, productIdx) => {
-      const itemKey = `${key}-${productIdx}`;
-
-      if ("deeplink" in product && product.deeplink) {
-        listItems.push(
-          renderListItem(
-            product.title || product.productId,
-            itemKey,
-            false,
-            undefined,
-            product.deeplink,
-          ),
-        );
-      } else {
-        this.renderProductAsFilter(product, annotation, itemKey, listItems);
-      }
-    });
-  }
-
-  private renderProductAsFilter(
-    product: Recommendation,
-    annotation: ContextAnnotation,
-    itemKey: string,
-    listItems: JSX.Element[],
-  ) {
-    const { hasFilters, selectedFilter } = hasCategoricalFilters(annotation);
-
-    if (hasFilters && selectedFilter && "values" in selectedFilter) {
-      const productLabel = product.title || product.productId;
-      const matchingFilterOption = selectedFilter.values.find((option) => {
-        return (
-          option.label === productLabel || option.label === product.productId
-        );
-      });
-
-      if (matchingFilterOption) {
-        const isSelected = this.appliedSuggestionFilters.has(productLabel);
-        listItems.push(
-          renderToggleButton(
-            productLabel,
-            isSelected,
-            () =>
-              this.handleProductClick(
-                product,
-                annotation.interactions,
-                productLabel,
-              ),
-            itemKey,
-          ),
-        );
-      }
-    } else {
-      listItems.push(
-        renderListItem(product.title || product.productId, itemKey, true, () =>
-          this.handleSuggestionClick(annotation),
-        ),
-      );
-    }
-  }
-
-  private renderSuggestionItem(annotations: ContextAnnotation[], key: string) {
-    if (!annotations || annotations.length === 0) {
+    if (annotations.length === 0 || !hasProperLocators(annotations)) {
       return null;
     }
 
-    const listItems: JSX.Element[] = [];
-
-    annotations.forEach((annotation, idx) => {
-      const dataItems = extractDataItems(annotation);
-
-      if (dataItems.length > 0) {
-        this.renderProductItems(
-          dataItems,
-          annotation,
-          `${key}-${idx}`,
-          listItems,
-        );
-      }
-    });
-
-    return listItems;
+    return [
+      renderAnnotatedContent(
+        content,
+        annotations,
+        (annotation) => this.handleSuggestionClick(annotation),
+        this.appliedSuggestionFilters,
+        key,
+      ),
+    ];
   }
 
   private renderStreamItems() {
-    return (
-      <ul class="suggestions-list" part="suggestions-list">
-        {this.stream.items.map((item, index) => {
-          if (item.role !== "assistant" || !item.parts) return null;
+    const parts: JSX.Element[] = [];
 
-          return item.parts.map((part, partIndex) => {
-            if (part.text?.annotations) {
-              return this.renderSuggestionItem(
-                part.text.annotations,
-                `${index}-${partIndex}`,
-              );
-            }
-            return null;
-          });
-        })}
-      </ul>
-    );
+    this.stream.items.forEach((item, index) => {
+      if (item.role !== "assistant" || !item.parts) return;
+
+      item.parts.forEach((part, partIndex) => {
+        const key = `${index}-${partIndex}`;
+        if (!part.text) return;
+
+        if (part.text.annotations?.length > 0) {
+          const rendered = this.renderSuggestionItem(part.text.content, part.text.annotations, key);
+          if (rendered?.length) {
+            parts.push(
+              <ul class="suggestions-list" part="suggestions-list" key={key}>
+                {rendered}
+              </ul>,
+            );
+          }
+        } else if (part.text.content) {
+          parts.push(renderInfoText(part.text.content, key));
+        }
+      });
+    });
+
+    return parts;
   }
 
   render() {
@@ -366,11 +290,6 @@ export class VviinnSuggestions {
                 {i18next.t("suggestions.title")}
               </slot>
             </h3>
-          </div>
-          <div class="description" part="suggestions-description">
-            <slot name="vviinn-suggestions-description">
-              {i18next.t("suggestions.description")}
-            </slot>
           </div>
           <div class="suggestions-wrapper" part="suggestions-wrapper">
             {this.renderStreamItems()}

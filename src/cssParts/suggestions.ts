@@ -3,10 +3,10 @@ export const suggestionsPartsList = [
   "suggestions-header",
   "suggestions-icon",
   "suggestions-title",
-  "suggestions-description",
   "suggestions-wrapper",
   "suggestions-list",
   "suggestion-item",
   "suggestion-link",
   "suggestion-filter-button",
+  "suggestion-info-text",
 ];

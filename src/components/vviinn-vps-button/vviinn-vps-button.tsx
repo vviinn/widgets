@@ -58,7 +58,7 @@ import { initializeLocale } from "../../locale";
  * @slot vviinn-custom-label-3 - Custom label with index 3.
  * @slot vviinn-custom-label-4 - Custom label with index 4.
  * @slot vviinn-suggestions-title - Custom title text to replace default "AI Suggestions".
- * @slot vviinn-suggestions-description - Custom description text to replace default description.
+
  * @slot vviinn-suggestions-icon - Custom icon to replace default sparkle emoji.
  *
  * @part close-button - Close Button in the modal's header.

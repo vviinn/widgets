@@ -20,7 +20,7 @@ export const extractActiveFilterValues = (
   const activeValues = new Set<string>();
   activeFilters.forEach((filter) => {
     if (Array.isArray(filter.values)) {
-      filter.values.forEach((v) => activeValues.add(String(v)));
+      filter.values.forEach((v) => activeValues.add(`${filter.column}:${String(v)}`));
     }
   });
   return activeValues;
@@ -42,27 +42,17 @@ export const syncSuggestionFilters = (
       if (!part.text?.annotations) continue;
 
       for (const annotation of part.text.annotations) {
-        if (!annotation.interactions?.dynamicFilters?.[0]) continue;
+        if (!annotation.interactions?.dynamicFilters?.length) continue;
 
-        const filter = annotation.interactions.dynamicFilters[0];
-        if (filter.type !== "categorical" || !("values" in filter)) continue;
+        for (const filter of annotation.interactions.dynamicFilters) {
+          if (filter.type !== "categorical" || !("values" in filter)) continue;
 
-        const dataItems = annotation.data?.items || [];
-
-        dataItems.forEach((product) => {
-          const productLabel = product.title || product.productId;
-          const matchingFilterValue = filter.values.find(
-            (value) =>
-              value.label === productLabel || value.label === product.productId,
-          );
-
-          if (
-            matchingFilterValue &&
-            activeValues.has(String(matchingFilterValue.value))
-          ) {
-            updatedAppliedFilters.add(productLabel);
-          }
-        });
+          filter.values.forEach((value) => {
+            if (activeValues.has(`${filter.column}:${String(value.value)}`)) {
+              updatedAppliedFilters.add(`${filter.column}:${value.value}`);
+            }
+          });
+        }
       }
     }
   }

@@ -7,9 +7,10 @@
 .container {
   display: flex;
   flex-direction: column;
-  grid-gap: var(--spacing-150);
+  gap: var(--spacing-150);
   font-family: var(--font-family, var(--font-family-base));
   padding-right: var(--spacing-100);
+  line-height: normal;
 }
 
 .header {
@@ -30,15 +31,10 @@
   color: var(--color-text-primary);
 }
 
-.description {
-  font-size: var(--font-size-body);
-  line-height: var(--line-height-body);
-  color: var(--color-text-secondary);
-}
-
 .suggestions-wrapper {
-  overflow-y: hidden;
-  overflow-x: visible;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-100);
   width: 100%;
 }
 
@@ -51,6 +47,7 @@
   align-items: center;
   gap: var(--spacing-100);
   flex-wrap: wrap;
+  font-size: var(--font-size-label);
 }
 
 .suggestion-item {
@@ -106,4 +103,15 @@
 .suggestion-filter-button.active {
   background: var(--surface-bg-color-inverse);
   color: var(--color-text-inverse);
+}
+
+.suggestion-info-text {
+  font-size: var(--font-size-label);
+  color: var(--color-text-primary);
+}
+
+.suggestion-info-text * {
+  font-size: var(--font-size-label);
+  margin: 0;
+  font-weight: inherit;
 }

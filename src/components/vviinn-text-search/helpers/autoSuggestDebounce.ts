@@ -29,7 +29,7 @@ export const createAutoSuggestHandler = (
     }, AUTO_SUGGEST_DEBOUNCE_MS);
   };
 
-  const cleanup = () => clearTimeout(debounceTimer);
+  const cancelPending = () => clearTimeout(debounceTimer);
 
-  return { handleInputChange, cleanup };
+  return { handleInputChange, cancelPending, cleanup: cancelPending };
 };
