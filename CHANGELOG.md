@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.214.0](https://github.com/vviinn/widgets/compare/v2.213.0...v2.214.0) (2026-04-02)
+
+
+### Features
+
+* Render markdown text from stream parts in vviinn-suggestions, prepare for inline annotated locators. ([74d58a2](https://github.com/vviinn/widgets/commit/74d58a2477a119b4a6bfa5135043486d0593fc87))
+* Show vviinn-suggestions for Visual Search. ([69efebb](https://github.com/vviinn/widgets/commit/69efebb7c5c9a99fb7c0b69e519826dddeab3e56))
+
 ## [2.213.0](https://github.com/vviinn/widgets/compare/v2.212.4...v2.213.0) (2026-03-26)
 
 
