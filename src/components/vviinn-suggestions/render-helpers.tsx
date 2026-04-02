@@ -164,14 +164,15 @@ export const renderAnnotatedContent = (
   return (
     <li class="suggestion-item" part="suggestion-item" key={key}>
       {segments.map((segment, i) => {
+        const segmentKey = `${key}-${i}`;
         if (segment.type === "text") {
-          return <span key={`${key}-t-${i}`} innerHTML={marked.parseInline(segment.content) as string}></span>;
+          return <span key={segmentKey} innerHTML={marked.parseInline(segment.content) as string}></span>;
         }
         const deeplink = getAnnotationDeeplink(segment.annotation);
         if (deeplink) {
           return (
             <a
-              key={`${key}-a-${i}`}
+              key={segmentKey}
               href={deeplink}
               target="_blank"
               rel="noopener noreferrer"
@@ -187,7 +188,7 @@ export const renderAnnotatedContent = (
         );
         return (
           <button
-            key={`${key}-a-${i}`}
+            key={segmentKey}
             class={`suggestion-filter-button ${isSelected ? "active" : ""}`}
             part="suggestion-filter-button"
             onClick={() => onAnnotationClick(segment.annotation)}
