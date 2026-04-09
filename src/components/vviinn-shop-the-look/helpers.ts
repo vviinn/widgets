@@ -12,9 +12,9 @@ import {
   isSmallMobile as sharedIsSmallMobile,
 } from "../../helpers/device/checkDeviceType";
 import { calculateImageBounds } from "../../Image/bounds";
-import { createImageFile } from "../../Image/upload";
 import {
   makeUploadFileRequest,
+  makeVisualSearchByUrlRequest,
   makeVisualSearchRequest,
   shopTheLookState,
 } from "../../store/search.store";
@@ -154,7 +154,6 @@ export const calculateModalPosition = (
 };
 
 export { calculateImageBounds } from "../../Image/bounds";
-export { createImageFile } from "../../Image/upload";
 export {
   setupIntersectionObserver,
   type IntersectionObserverConfig,
@@ -189,28 +188,27 @@ export const performVisualSearch = async (
   >
 > => {
   try {
-    const imageFile = await createImageFile(params.imageUrl);
-
-    const result = await makeUploadFileRequest(
+    const result = await makeVisualSearchByUrlRequest(
       "shopTheLook",
+      params.imageUrl,
       params.token,
       params.apiPath,
       params.campaignId,
-    )(imageFile);
+    );
 
     return E.fold(
       (error: BasicError<string | Response>) =>
-        E.left(`Upload failed: ${error.inner}`),
-      (uploadResponse: VisualSearchResponse) => {
+        E.left(`Visual search failed: ${error.inner}`),
+      (response: VisualSearchResponse) => {
         const detectedObjects =
-          uploadResponse.interactions?.suggestedSearchAreas?.map(
+          response.interactions?.suggestedSearchAreas?.map(
             (area) => area.rectangle,
           ) || [];
 
         return E.right({
           detectedObjects,
           searchResults: [],
-          visualSearchId: uploadResponse.requestId || null,
+          visualSearchId: response.requestId || null,
         });
       },
     )(result);
