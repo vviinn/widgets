@@ -310,7 +310,7 @@ export class VviinnVpsButton {
       <Host
         role={this.buttonPressed ? undefined : "button"}
         aria-label={this.buttonPressed ? undefined : ariaLabel}
-        exportparts={searchModalFirstScreenParts}
+        exportparts={`vviinn-button, ${searchModalFirstScreenParts}`}
       >
         <vviinn-button
           addStyle={this.addStyle}

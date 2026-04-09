@@ -67,6 +67,7 @@ import {
  * @part secondary-action - Back Button in the search modal's header.
  * @part upload-photo_button - Upload Photo Button in the search modal.
  * @part start-camera_button - Start Camera Button in the search modal.
+ * @part vviinn-button - Visual search button element in the search bar (extended mode).
  * @slot vviinn-text-search-icon - Icon of the text search block.
  * @slot vviinn-text-search-actions - Additional actions for the text search block, e.g., a button to open the Search Modal.
  * @slot vviinn-teaser-text - Text on the search modal's main screen.
@@ -487,7 +488,6 @@ export class VviinnTextSearch {
               {...(this.cssUrl != null && { cssUrl: this.cssUrl })}
               {...(this.visualSearchMode && { mode: this.visualSearchMode })}
               parentSlots={this.slots}
-              exportparts={`vviinn-button, ${searchModalFirstScreenParts}`}
             />
           )}
 
