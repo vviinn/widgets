@@ -33,9 +33,10 @@ import {
 } from "../../recommendation/events";
 import i18next from "i18next";
 import { Locale, initializeLocale } from "../../locale";
-import { SearchBarMode } from "../../widget/types";
+import { SearchBarMode, VisualSearchMode } from "../../widget/types";
 import { TextSearchResponse } from "../../interfaces";
-import { searchBarParts } from "../../cssParts";
+import { searchBarParts, searchModalFirstScreenParts } from "../../cssParts";
+import { findSlotElements } from "../../dom";
 import { QueryCompletion } from "../../interfaces";
 import { MicIcon } from "../vviinn-icons/icons/MicIcon";
 import {
@@ -59,11 +60,24 @@ import {
  * @part text-search-input - Text search input.
  * @part text-search-tooltip - Text search tooltip.
  * @part text-search-button - Text search input's search button.
- * @slot vviinn-text-search-icon - Icon of the text search block.
  * @part speech-button - Speech recognition button.
  * @part suggestions-container - Auto-suggest dropdown container.
  * @part suggestion-item - Individual auto-suggest item.
+ * @part close-button - Close Button in the search modal's header.
+ * @part secondary-action - Back Button in the search modal's header.
+ * @part upload-photo_button - Upload Photo Button in the search modal.
+ * @part start-camera_button - Start Camera Button in the search modal.
+ * @part vviinn-button - Visual search button element in the search bar (extended mode).
+ * @slot vviinn-text-search-icon - Icon of the text search block.
  * @slot vviinn-text-search-actions - Additional actions for the text search block, e.g., a button to open the Search Modal.
+ * @slot vviinn-teaser-text - Text on the search modal's main screen.
+ * @slot vviinn-image-upload-button-text - Title of Upload Button in the search modal.
+ * @slot vviinn-image-upload-icon - Icon of Upload Button in the search modal.
+ * @slot vviinn-camera-button-text-start - Title of Start Camera button in the search modal.
+ * @slot vviinn-camera-button-text-stop - Title of Stop Camera button in the search modal.
+ * @slot vviinn-camera-icon - Icon of Camera Button in the search modal.
+ * @slot vviinn-privacy-badge-text - Text content of privacy notification in the search modal.
+ * @slot vviinn-image-search-modal-title - Search modal title.
  */
 @Component({
   tag: "vviinn-text-search",
@@ -117,6 +131,12 @@ export class VviinnTextSearch {
   @Prop() resultsPageUrl?: string;
   /** Show auto-suggest dropdown with search completions */
   @Prop() autoSuggestShow: boolean = false;
+  /** Example image shown in the visual search modal */
+  @Prop() exampleImageSource?: string;
+  /** URL to external CSS file for custom styling of the visual search modal */
+  @Prop() cssUrl?: string | null;
+  /** Visual search modal mode (modal/camera/upload) */
+  @Prop() visualSearchMode?: VisualSearchMode;
 
   /** True, when used inside the widget */
   /** @internal */
@@ -137,6 +157,7 @@ export class VviinnTextSearch {
   @State() activeSuggestionIndex = -1;
   private originalQuery = "";
   private searchSubmitted = false;
+  private slots: HTMLSlotElement[] = [];
 
   private isShowPreloader = () =>
     this.state.searchStatus === "loading" && this.state.searchType === "text";
@@ -211,6 +232,7 @@ export class VviinnTextSearch {
   async componentWillLoad() {
     await initializeLocale(this.locale);
     slotChangeListener(this, this.el);
+    this.slots = findSlotElements(this.el);
 
     if (this.autoSuggestShow) {
       this.autoSuggestHandler = createAutoSuggestHandler(
@@ -434,7 +456,7 @@ export class VviinnTextSearch {
 
   render() {
     return (
-      <Host exportparts={searchBarParts}>
+      <Host exportparts={`${searchBarParts}, ${searchModalFirstScreenParts}`}>
         <div class="text-search-container" part="text-search-container">
           <input
             class="text-search-input"
@@ -462,7 +484,10 @@ export class VviinnTextSearch {
               addStyle={false}
               showResultsInModal={false}
               resultsPageUrl={this.resultsPageUrl}
-              exportparts="vviinn-button"
+              {...(this.exampleImageSource && { exampleImageSource: this.exampleImageSource })}
+              {...(this.cssUrl != null && { cssUrl: this.cssUrl })}
+              {...(this.visualSearchMode && { mode: this.visualSearchMode })}
+              parentSlots={this.slots}
             />
           )}
 
