@@ -11,7 +11,7 @@ on:
       - main
 
 env:
-  NODE_VERSION: "22.x"
+  NODE_VERSION: "22.21.0"
   OPENAPI_URL: ./openapi/merchant-openapi.yaml
 
 jobs:
@@ -78,7 +78,7 @@ jobs:
           cache: "npm"
           registry-url: "https://registry.npmjs.org"
       - name: Upgrade npm for OIDC support
-        run: npm install -g npm@11.1.0
+        run: npm install -g npm@11
       - run: git pull
       - name: Create .env file
         run: |
