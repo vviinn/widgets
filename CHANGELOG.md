@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.215.2](https://github.com/vviinn/widgets/compare/v2.215.1...v2.215.2) (2026-04-09)
+
+
+### Bug Fixes
+
+* Improve release pipeline stability ([f46d61d](https://github.com/vviinn/widgets/commit/f46d61d486bae38bdaf7f55b156c1aaa0339329c))
+
 ### [2.215.1](https://github.com/vviinn/widgets/compare/v2.215.0...v2.215.1) (2026-04-09)
 
 ## [2.215.0](https://github.com/vviinn/widgets/compare/v2.214.0...v2.215.0) (2026-04-09)
