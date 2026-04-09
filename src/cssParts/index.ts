@@ -79,6 +79,13 @@ export const searchWidgetButtonParts = makeExportPartsString([
   "start-camera_button",
 ]);
 
+export const searchModalFirstScreenParts = makeExportPartsString([
+  "close-button",
+  "secondary-action",
+  "upload-photo_button",
+  "start-camera_button",
+]);
+
 export const searchBarParts = makeExportPartsString([
   "text-search-input",
   "text-search-button",

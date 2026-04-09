@@ -31,6 +31,7 @@ import {
 } from "../../widget/types";
 import { findSlotElements } from "../../dom";
 import { SEARCH_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
+import { searchModalFirstScreenParts } from "../../cssParts";
 import i18next from "i18next";
 import { initializeLocale } from "../../locale";
 
@@ -180,6 +181,8 @@ export class VviinnVpsButton {
   @Prop() showResultsInModal?: boolean = true;
   /** URL of the results page for automatic search redirect. */
   @Prop() resultsPageUrl?: string;
+  /** @internal */
+  @Prop() parentSlots?: HTMLSlotElement[] = [];
 
   @State() buttonPressed: boolean = false;
 
@@ -251,15 +254,17 @@ export class VviinnVpsButton {
     this.replaceSlotsContent();
   }
 
+  private allSlots = () => [...this.parentSlots, ...this.slots];
+
   private replaceSlotsContent(childrenElement?: HTMLElement) {
     this.globalSlotsChanged.emit({
-      slots: Array.from(this.slots),
+      slots: this.allSlots(),
       element: this.el,
     });
 
     if (childrenElement) {
       this.globalSlotsChanged.emit({
-        slots: Array.from(this.slots),
+        slots: this.allSlots(),
         element: childrenElement,
       });
     }
@@ -305,6 +310,7 @@ export class VviinnVpsButton {
       <Host
         role={this.buttonPressed ? undefined : "button"}
         aria-label={this.buttonPressed ? undefined : ariaLabel}
+        exportparts={searchModalFirstScreenParts}
       >
         <vviinn-button
           addStyle={this.addStyle}
@@ -354,7 +360,7 @@ export class VviinnVpsButton {
           favoriteShow={this.favoriteShow}
           showResultsInModal={this.showResultsInModal}
           resultsPageUrl={this.resultsPageUrl}
-          parentSlots={this.slots}
+          parentSlots={[...this.parentSlots, ...this.slots]}
           cssUrl={this.cssUrl}
         />
       </Host>
