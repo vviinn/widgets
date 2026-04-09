@@ -33,7 +33,7 @@ import {
 } from "../../recommendation/events";
 import i18next from "i18next";
 import { Locale, initializeLocale } from "../../locale";
-import { SearchBarMode } from "../../widget/types";
+import { SearchBarMode, VisualSearchMode } from "../../widget/types";
 import { TextSearchResponse } from "../../interfaces";
 import { searchBarParts } from "../../cssParts";
 import { QueryCompletion } from "../../interfaces";
@@ -117,6 +117,12 @@ export class VviinnTextSearch {
   @Prop() resultsPageUrl?: string;
   /** Show auto-suggest dropdown with search completions */
   @Prop() autoSuggestShow: boolean = false;
+  /** Example image shown in the visual search modal */
+  @Prop() exampleImageSource?: string;
+  /** URL to external CSS file for custom styling of the visual search modal */
+  @Prop() cssUrl?: string | null;
+  /** Visual search modal mode (modal/camera/upload) */
+  @Prop() visualSearchMode?: VisualSearchMode;
 
   /** True, when used inside the widget */
   /** @internal */
@@ -462,6 +468,9 @@ export class VviinnTextSearch {
               addStyle={false}
               showResultsInModal={false}
               resultsPageUrl={this.resultsPageUrl}
+              {...(this.exampleImageSource && { exampleImageSource: this.exampleImageSource })}
+              {...(this.cssUrl != null && { cssUrl: this.cssUrl })}
+              {...(this.visualSearchMode && { mode: this.visualSearchMode })}
               exportparts="vviinn-button"
             />
           )}
