@@ -5,12 +5,31 @@ on:
     branches:
       - develop
       - main
+  pull_request:
+    branches:
+      - develop
+      - main
 
 env:
   NODE_VERSION: "22.x"
   OPENAPI_URL: ./openapi/merchant-openapi.yaml
 
 jobs:
+  security-audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+      - run: npm install
+      - name: Check for high/critical vulnerabilities
+        run: npm audit --audit-level=high
+
   generate-version-develop:
     runs-on: ubuntu-latest
     permissions:
