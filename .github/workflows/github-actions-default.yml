@@ -60,8 +60,7 @@ jobs:
       - run: npm run update_storybook_changelog
       - run: |
           git add ./storybook/documentation/change-log/1_changelog.mdx
-          git commit -m '[skip ci] update storybook changelog'
-          git push origin develop
+          git diff --cached --quiet || (git commit -m '[skip ci] update storybook changelog' && git push origin develop)
 
   release-beta:
     runs-on: ubuntu-latest
