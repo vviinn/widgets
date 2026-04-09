@@ -2,30 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
-### [2.215.3](https://github.com/vviinn/widgets/compare/v2.215.2...v2.215.3) (2026-04-09)
-
-
-### Bug Fixes
-
-* Improve release pipeline stability ([4f8eca5](https://github.com/vviinn/widgets/commit/4f8eca5cbb29c38b0a13bfa1b38ef3286e6390a6))
-* Restore npm OIDC support for publishing ([450187d](https://github.com/vviinn/widgets/commit/450187de70ca4e560a72397e87c53fead76b14a7))
-
-### [2.215.2](https://github.com/vviinn/widgets/compare/v2.215.1...v2.215.2) (2026-04-09)
-
-
-### Bug Fixes
-
-* Improve release pipeline stability ([f46d61d](https://github.com/vviinn/widgets/commit/f46d61d486bae38bdaf7f55b156c1aaa0339329c))
-
-### [2.215.1](https://github.com/vviinn/widgets/compare/v2.215.0...v2.215.1) (2026-04-09)
-
-## [2.215.0](https://github.com/vviinn/widgets/compare/v2.214.0...v2.215.0) (2026-04-09)
+## [2.215.3](https://github.com/vviinn/widgets/compare/v2.214.0...v2.215.3) (2026-04-09)
 
 
 ### Features
 
 * Add missing Search Bar props, used by Search Modal in extended mode: example-image-source, visual-search-mode, css-url ([c7cd2db](https://github.com/vviinn/widgets/commit/c7cd2db96b8d94abe92fafa28d6ab9128d76ac80))
 * Add missing Search Bar slots and parts, used by Search Modal ([3bc3e8b](https://github.com/vviinn/widgets/commit/3bc3e8b4091cefbbf6f9009918d969ee2ac2af95))
+
+
+### Bug Fixes
+
+* Improve release pipeline stability ([4f8eca5](https://github.com/vviinn/widgets/commit/4f8eca5cbb29c38b0a13bfa1b38ef3286e6390a6))
 
 ## [2.214.0](https://github.com/vviinn/widgets/compare/v2.213.0...v2.214.0) (2026-04-02)
 
