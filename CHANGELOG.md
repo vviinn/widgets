@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.216.0](https://github.com/vviinn/widgets/compare/v2.215.3...v2.216.0) (2026-04-10)
+
+
+### Features
+
+* Send image URLs for Shop-the-Look visual search requests ([d899057](https://github.com/vviinn/widgets/commit/d899057eedb7702733ce88cdb9cef038970c3fde))
+
 ## [2.215.3](https://github.com/vviinn/widgets/compare/v2.214.0...v2.215.3) (2026-04-09)
 
 
