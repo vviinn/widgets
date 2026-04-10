@@ -288,17 +288,12 @@ vviinn-preloader {
     padding: 0 var(--spacing-300);
   }
 
-  vviinn-suggestions::part(suggestions-list) {
+  vviinn-suggestions::part(suggestion-info-text) {
     padding: 0 var(--spacing-300);
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scrollbar-width: thin;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
   }
 
-  vviinn-suggestions::part(suggestions-list)::-webkit-scrollbar {
-    display: none;
+  vviinn-suggestions::part(suggestions-list) {
+    padding: 0 var(--spacing-300);
   }
 
   .extended-filters-button {

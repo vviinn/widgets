@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.216.0](https://github.com/vviinn/widgets/compare/v2.215.3...v2.216.0) (2026-04-10)
+
+
+### Features
+
+* Send image URLs for Shop-the-Look visual search requests ([d899057](https://github.com/vviinn/widgets/commit/d899057eedb7702733ce88cdb9cef038970c3fde))
+
+## [2.215.3](https://github.com/vviinn/widgets/compare/v2.214.0...v2.215.3) (2026-04-09)
+
+
+### Features
+
+* Add missing Search Bar props, used by Search Modal in extended mode: example-image-source, visual-search-mode, css-url ([c7cd2db](https://github.com/vviinn/widgets/commit/c7cd2db96b8d94abe92fafa28d6ab9128d76ac80))
+* Add missing Search Bar slots and parts, used by Search Modal ([3bc3e8b](https://github.com/vviinn/widgets/commit/3bc3e8b4091cefbbf6f9009918d969ee2ac2af95))
+
+
+### Bug Fixes
+
+* Improve release pipeline stability ([4f8eca5](https://github.com/vviinn/widgets/commit/4f8eca5cbb29c38b0a13bfa1b38ef3286e6390a6))
+
+## [2.214.0](https://github.com/vviinn/widgets/compare/v2.213.0...v2.214.0) (2026-04-02)
+
+
+### Features
+
+* Render markdown text from stream parts in vviinn-suggestions, prepare for inline annotated locators. ([74d58a2](https://github.com/vviinn/widgets/commit/74d58a2477a119b4a6bfa5135043486d0593fc87))
+* Show vviinn-suggestions for Visual Search. ([69efebb](https://github.com/vviinn/widgets/commit/69efebb7c5c9a99fb7c0b69e519826dddeab3e56))
+
 ## [2.213.0](https://github.com/vviinn/widgets/compare/v2.212.4...v2.213.0) (2026-03-26)
 
 

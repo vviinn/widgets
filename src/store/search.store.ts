@@ -250,6 +250,7 @@ const updateVisualSearchState =
     state.visualSearchId = response.requestId;
     state.results = response.data.products;
     state.dynamicFilters = response.interactions.dynamicFilters;
+    state.stream = response?.stream ?? null;
     state.searchStatus = "success";
 
     if (!isHiResUpdate) emitSearchSuccess(store, state, "VPS");
@@ -342,6 +343,34 @@ const uploadImageFile =
       ),
     );
   };
+
+export const makeVisualSearchByUrlRequest = async (
+  store: SearchStoreName,
+  imageUrl: string,
+  token: string,
+  apiPath?: string,
+  campaignId?: string | null,
+) => {
+  const state = useStore(store);
+
+  const body: VisualSearchRequest = {
+    query: {
+      url: imageUrl,
+    },
+    objectDetection: {
+      include: true,
+    },
+    ...addNestedIfNotEmpty("staticFilters", {
+      ...addIfNotEmpty("excluded", state.excluded),
+    }),
+    ...addIfNotEmpty(
+      "campaign",
+      campaignId || state.campaignIdVisualSearch || state.campaignId,
+    ),
+  };
+
+  return processVisualSearch(store, body, token, apiPath)();
+};
 
 export const makeUploadFileRequest =
   (

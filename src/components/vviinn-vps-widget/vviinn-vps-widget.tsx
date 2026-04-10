@@ -935,14 +935,12 @@ export class VviinnVpsWidget {
                     />
                   )}
 
-                  {this.isTextSearch() && (
-                    <vviinn-suggestions
-                      showInWidget={this.showInWidget}
-                      token={this.token}
-                      apiPath={this.apiPath}
-                      locale={this.locale}
-                    />
-                  )}
+                  <vviinn-suggestions
+                    showInWidget={this.showInWidget}
+                    token={this.token}
+                    apiPath={this.apiPath}
+                    locale={this.locale}
+                  />
 
                   <vviinn-selected-filters
                     locale={this.locale}

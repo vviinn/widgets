@@ -9,7 +9,7 @@ const data = {
     productIdCrossSelling: "598125",
     textSearchQuery: "Grey office chair with armrests",
     filterValue: "Möbel > Schränke & Regale",
-    description: "company: 'vviinn', site: 'widgets.vviinn.com'",
+    description: "company: 'vviinn', site: 'widgets.vviinn.home&living'",
     shopTheLookImageUrls: [
       "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/home_01.jpg",
       "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/home_02.jpg",
@@ -24,7 +24,8 @@ const data = {
     productIdCrossSelling: "4017822-1",
     textSearchQuery: "Pink leather bag with gold hardware",
     filterValue: "Beauty > Düfte",
-    description: "company: 'Vviinn Demo Company', site: 'Fashion Women 64K'",
+    description:
+      "company: 'Vviinn Demo Company', site: 'widgets.vviinn.fashion'",
     shopTheLookImageUrls: [
       "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/fashion_01.jpg",
       "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/fashion_02.jpg",

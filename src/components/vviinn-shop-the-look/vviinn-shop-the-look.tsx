@@ -77,6 +77,7 @@ export interface ShopTheLookEventData extends BasicEventData {
  *
  * Supports multiple images with swiper navigation, responsive design, and customizable styling.
  *
+ * @part shop-the-look-actions-container - The actions container wrapping the upload button.
  * @part shop-the-look-upload-button - The upload button element
  * @part shop-the-look-upload-button-icon - The upload button icon wrapper
  * @part shop-the-look-upload-button-text - The upload button text wrapper
@@ -1237,7 +1238,7 @@ export class VviinnShopTheLook {
             )}
           </div>
           {this.renderModalWrapper()}
-          <div class="actions-container">
+          <div class="actions-container" part="shop-the-look-actions-container">
             {this.uploadMode && (
               <div class="upload-button-container">
                 <button

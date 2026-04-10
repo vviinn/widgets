@@ -32,7 +32,7 @@ const Template = (args) => `
     <vviinn-extended-filters locale="${args.locale}" mode="preview"></vviinn-extended-filters>
   </div>
   <div class="search-page-wrapper-result">
-    <vviinn-text-search 
+    <vviinn-text-search
       token="${args.token}"
       api-path="${args.apiPath}"
       search-query="${args.searchQuery}"
@@ -41,6 +41,9 @@ const Template = (args) => `
       placeholder="${args.placeholder}"
       results-page-url="${args.resultsPageUrl}"
       auto-suggest-show="${args.autoSuggestShow}"
+      example-image-source="${args.exampleImageSource}"
+      css-url="${args.cssUrl}"
+      visual-search-mode="${args.visualSearchMode}"
     >
     </vviinn-text-search>
 
@@ -71,6 +74,9 @@ const initArgs = {
   placeholder: "",
   resultsPageUrl: "",
   autoSuggestShow: false,
+  exampleImageSource: "",
+  cssUrl: "",
+  visualSearchMode: "modal",
   mode: "extended",
   locale: "en-US",
   productCardImageAspectRatio: "1 / 1",
