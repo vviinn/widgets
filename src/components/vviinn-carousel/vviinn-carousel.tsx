@@ -481,7 +481,13 @@ export class VviinnCarousel {
       styleSheet.getPropertyValue(RESULTS_CALCULATED_COLUMNS_CSS_VAR),
     );
     if (!calculatedColumnsAmount || isNaN(calculatedColumnsAmount)) {
-      this.columns = DEFAULT_COLUMNS_NUMBER;
+      const cssColumnsAmount = parseInt(
+        styleSheet.getPropertyValue("--vviinn-carousel-columns"),
+      );
+      this.columns =
+        cssColumnsAmount && !isNaN(cssColumnsAmount)
+          ? cssColumnsAmount
+          : DEFAULT_COLUMNS_NUMBER;
     } else {
       this.columns = calculatedColumnsAmount;
     }
