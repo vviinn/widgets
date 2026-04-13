@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.216.1](https://github.com/vviinn/widgets/compare/v2.216.0...v2.216.1) (2026-04-13)
+
+
+### Bug Fixes
+
+* Discovery widget: --vviinn-carousel-columns not applying in grid mode ([3c04a43](https://github.com/vviinn/widgets/commit/3c04a43b7779013f37a0a287483648da9f4b76e9))
+
 ## [2.216.0](https://github.com/vviinn/widgets/compare/v2.215.3...v2.216.0) (2026-04-10)
 
 
