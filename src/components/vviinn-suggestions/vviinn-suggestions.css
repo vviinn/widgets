@@ -113,5 +113,4 @@
 .suggestion-info-text * {
   font-size: var(--font-size-label);
   margin: 0;
-  font-weight: inherit;
 }

@@ -247,9 +247,18 @@ const updateVisualSearchState =
     );
     if (detectedObjects.length > 0) state.detectedObjects = detectedObjects;
 
+    const dynamicFilters = response.interactions.dynamicFilters ?? [];
+
     state.visualSearchId = response.requestId;
     state.results = response.data.products;
-    state.dynamicFilters = response.interactions.dynamicFilters;
+    state.dynamicFilters = dynamicFilters;
+
+    const extractedFilters = extractSelectedFilters(dynamicFilters);
+
+    if (state.requestFilters.length === 0 && extractedFilters.length > 0) {
+      state.requestFilters = extractedFilters;
+    }
+
     state.stream = response?.stream ?? null;
     state.searchStatus = "success";
 
