@@ -26,6 +26,7 @@ import {
 } from "../../recommendation/events";
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
 import {
+  CAROUSEL_COLUMNS_CSS_VAR,
   CAROUSEL_IMAGE_WIDTH_CSS_VAR,
   CAROUSEL_CONTENT_WIDTH_CSS_VAR,
   CONTENT_GROUP_CSS_CLASS,
@@ -481,7 +482,13 @@ export class VviinnCarousel {
       styleSheet.getPropertyValue(RESULTS_CALCULATED_COLUMNS_CSS_VAR),
     );
     if (!calculatedColumnsAmount || isNaN(calculatedColumnsAmount)) {
-      this.columns = DEFAULT_COLUMNS_NUMBER;
+      const cssColumnsAmount = parseInt(
+        styleSheet.getPropertyValue(CAROUSEL_COLUMNS_CSS_VAR),
+      );
+      this.columns =
+        cssColumnsAmount >= 1
+          ? cssColumnsAmount
+          : DEFAULT_COLUMNS_NUMBER;
     } else {
       this.columns = calculatedColumnsAmount;
     }

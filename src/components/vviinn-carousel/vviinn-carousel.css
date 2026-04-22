@@ -1,8 +1,8 @@
 :host {
   /**
-      * @prop --product-card-calculated-height: Calculated height of Product Card.
+   * @prop --vviinn-carousel-columns: A number of items in grid mode.
+   * @prop --product-card-calculated-height: Calculated height of Product Card.
    */
-  --vviinn-carousel-columns-internal: var(--vviinn-carousel-columns, 4);
 }
 
 .body {
@@ -140,7 +140,7 @@ content. .content:not(.show-scrollbar)::-webkit-scrollbar,
 .items-group {
   display: grid;
   grid-gap: 16px;
-  grid-template-columns: repeat(var(--vviinn-carousel-columns-internal), 1fr);
+  grid-template-columns: repeat(var(--vviinn-carousel-columns, 4), 1fr);
   min-width: 100%;
 }
 
