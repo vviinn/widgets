@@ -250,6 +250,15 @@ const updateVisualSearchState =
     state.visualSearchId = response.requestId;
     state.results = response.data.products;
     state.dynamicFilters = response.interactions.dynamicFilters;
+
+    const extractedFilters = extractSelectedFilters(
+      response.interactions.dynamicFilters ?? [],
+    );
+
+    if (state.requestFilters.length === 0 && extractedFilters.length > 0) {
+      state.requestFilters = extractedFilters;
+    }
+
     state.stream = response?.stream ?? null;
     state.searchStatus = "success";
 

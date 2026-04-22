@@ -152,22 +152,10 @@ export class VviinnSelectedFilters {
     }
 
     if (detail.action === "select" && detail.filter?.type === "interval") {
-      const intervalLabel = getIntervalLabel(
+      this.setIntervalFilterLabel(
         detail.filter as ResponseIntervalFilterItem,
         detail.value.interval as Interval,
-        this.currencySign ?? defaultConfig.currencySign,
-        true,
       );
-      if (intervalLabel) {
-        this.intervalCustomFilters = {
-          ...this.intervalCustomFilters,
-          [detail.filter.column]: intervalLabel,
-        };
-      } else {
-        const { [detail.filter.column]: removed, ...remaining } =
-          this.intervalCustomFilters;
-        this.intervalCustomFilters = remaining;
-      }
     }
   };
 
@@ -296,6 +284,10 @@ export class VviinnSelectedFilters {
     const filters = this.state?.dynamicFilters || [];
 
     filters.forEach((filter) => {
+      if (filter.type === "interval") {
+        this.syncPreselectedIntervalFilter(filter as ResponseIntervalFilterItem);
+        return;
+      }
       if (!("values" in filter)) return;
       (filter.values as FilterOptions).forEach(({ value, label, active }) => {
         if (isSubFilterActive(this.requestFilters, value, filter)) {
@@ -313,6 +305,41 @@ export class VviinnSelectedFilters {
         }
       });
     });
+  }
+
+  private setIntervalFilterLabel(
+    filter: ResponseIntervalFilterItem,
+    interval: Interval,
+  ) {
+    const label = getIntervalLabel(
+      filter,
+      interval,
+      this.currencySign ?? defaultConfig.currencySign,
+      true,
+    );
+    if (label) {
+      this.intervalCustomFilters = {
+        ...this.intervalCustomFilters,
+        [filter.column]: label,
+      };
+    } else {
+      const { [filter.column]: removed, ...remaining } =
+        this.intervalCustomFilters;
+      this.intervalCustomFilters = remaining;
+    }
+  }
+
+  private syncPreselectedIntervalFilter(
+    filter: ResponseIntervalFilterItem,
+  ) {
+    if (this.intervalCustomFilters[filter.column]) return;
+
+    const matchingRequest = this.requestFilters.find(
+      (rf) => rf.column === filter.column,
+    );
+    if (!matchingRequest?.values?.length) return;
+
+    this.setIntervalFilterLabel(filter, matchingRequest.values[0] as Interval);
   }
 
   render() {
