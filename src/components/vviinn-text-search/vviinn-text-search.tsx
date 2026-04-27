@@ -53,6 +53,7 @@ import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
 import {
   isOnResultsPage,
   buildTextSearchRedirectUrl,
+  parseResultsPageParamNames,
 } from "../../helpers/url/resultsPageUrl";
 
 /**
@@ -129,6 +130,8 @@ export class VviinnTextSearch {
   @Prop() placeholder?: string = "";
   /** URL of the results page for automatic search redirect. */
   @Prop() resultsPageUrl?: string;
+  /** Custom URL param names for results page redirect. Default: "query=query&searchId=searchId". */
+  @Prop() resultsPageParams?: string;
   /** Show auto-suggest dropdown with search completions */
   @Prop() autoSuggestShow: boolean = false;
   /** Example image shown in the visual search modal */
@@ -353,6 +356,7 @@ export class VviinnTextSearch {
       const redirectUrl = buildTextSearchRedirectUrl(
         this.resultsPageUrl,
         queryToUse,
+        parseResultsPageParamNames(this.resultsPageParams).query,
       );
       this.handleTextSearchRedirect(redirectUrl, "text-search", queryToUse);
       return;
@@ -484,6 +488,7 @@ export class VviinnTextSearch {
               addStyle={false}
               showResultsInModal={false}
               resultsPageUrl={this.resultsPageUrl}
+              resultsPageParams={this.resultsPageParams}
               {...(this.exampleImageSource && { exampleImageSource: this.exampleImageSource })}
               {...(this.cssUrl != null && { cssUrl: this.cssUrl })}
               {...(this.visualSearchMode && { mode: this.visualSearchMode })}

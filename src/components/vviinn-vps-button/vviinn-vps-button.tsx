@@ -181,6 +181,8 @@ export class VviinnVpsButton {
   @Prop() showResultsInModal?: boolean = true;
   /** URL of the results page for automatic search redirect. */
   @Prop() resultsPageUrl?: string;
+  /** Custom URL param names for results page redirect. Default: "query=query&searchId=searchId". */
+  @Prop() resultsPageParams?: string;
   /** @internal */
   @Prop() parentSlots?: HTMLSlotElement[] = [];
 
@@ -360,6 +362,7 @@ export class VviinnVpsButton {
           favoriteShow={this.favoriteShow}
           showResultsInModal={this.showResultsInModal}
           resultsPageUrl={this.resultsPageUrl}
+          resultsPageParams={this.resultsPageParams}
           parentSlots={[...this.parentSlots, ...this.slots]}
           cssUrl={this.cssUrl}
         />
