@@ -1,6 +1,8 @@
 import { RequestDynamicFilterItem } from "../../../campaign/VPRCampaignService";
 import { SearchStore } from "../../../store/search.store";
-import { OnChangeHandler } from "@stencil/store/dist/types";
+import type { ObservableMap } from "@stencil/store";
+
+type OnChangeHandler<T> = ObservableMap<T>["onChange"];
 
 /**
  * Syncs local component requestFilters state with the store's requestFilters in case there are response filters with selected: true.
