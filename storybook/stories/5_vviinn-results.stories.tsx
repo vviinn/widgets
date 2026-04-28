@@ -54,6 +54,8 @@ const initArgs = {
   addPriceContainer: false,
   favoriteShow: true,
   cssUrl: "",
+  resultsPageUrl: "",
+  resultsPageParams: "",
   productCardImageAspectRatio: "1 / 1",
   productCardImageBgColor: "#f4f4f4",
 };

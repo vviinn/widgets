@@ -40,6 +40,7 @@ const Template = (args) => `
       locale="${args.locale}"
       placeholder="${args.placeholder}"
       results-page-url="${args.resultsPageUrl}"
+      results-page-params="${args.resultsPageParams}"
       auto-suggest-show="${args.autoSuggestShow}"
       example-image-source="${args.exampleImageSource}"
       css-url="${args.cssUrl}"
@@ -73,6 +74,7 @@ const initArgs = {
   searchQuery: "",
   placeholder: "",
   resultsPageUrl: "",
+  resultsPageParams: "",
   autoSuggestShow: false,
   exampleImageSource: "",
   cssUrl: "",
