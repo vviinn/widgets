@@ -71,11 +71,12 @@ Set the `results-page-url` prop on the search component. The widget handles redi
 <div id="Details_auto" className="tabcontent">
 How it works:
 
-1. When the user searches on the homepage, the widget redirects to the results page with URL parameters (e.g., `/search?query=shoes` or `/search?searchId=abc-123`).
+1. When the user searches on the homepage, the widget redirects to the results page with URL parameters (e.g., `/search?query=shoes` or `/search?searchId=abc-123`). URL param names can be customized via `results-page-params` (e.g., `results-page-params="query=q&searchId=sid"` → `/search?q=shoes&sid=abc-123`). Set this prop on both the search component and `vviinn-results` so they agree on the param names.
 2. On the results page, `vviinn-results` with `results-page-url` set automatically parses URL parameters and triggers the corresponding search.
 3. The `vviinn-text-search` input is automatically populated with the query from the URL.
 4. On the results page, `results-page-url` ensures that the widget does not redirect again — subsequent searches update results in-place.
 5. You can intercept the redirect by listening to the `vviinnRedirect` event and calling `event.preventDefault()` (e.g., for SPA routing).
+6. Visual search (`vviinn-vps-button`, `vviinn-vps-widget`) supports the same flow: set `results-page-url` and `show-results-in-modal="false"` to redirect to the results page after image upload instead of rendering results inside the modal.
 </div>
 </div>
 
