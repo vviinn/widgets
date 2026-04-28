@@ -23,6 +23,8 @@ export const ResultsTemplate = (args) => {
     campaignIdVisualSearch,
     oneClickDiscoveryCampaigns,
     cssUrl,
+    resultsPageUrl,
+    resultsPageParams,
   } = args;
 
   const filterAttributes =
@@ -69,6 +71,8 @@ export const ResultsTemplate = (args) => {
     campaign-id-text-search="${campaignIdTextSearch}"
     campaign-id-visual-search="${campaignIdVisualSearch}"
     css-url="${cssUrl}"
+    results-page-url="${resultsPageUrl}"
+    results-page-params="${resultsPageParams}"
   ></vviinn-results>
   </div>
 </div>`;
