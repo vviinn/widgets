@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.217.0](https://github.com/vviinn/widgets/compare/v2.216.2...v2.217.0) (2026-04-28)
+
+
+### Features
+
+* Add resultsPageParams Prop — overrides default URL param names for redirect and parsing, accepts URLSearchParams-style string ([d24c4d0](https://github.com/vviinn/widgets/commit/d24c4d08e1d42031e76790f594dbd9052559e701))
+
 ### [2.216.2](https://github.com/vviinn/widgets/compare/v2.216.1...v2.216.2) (2026-04-22)
 
 
