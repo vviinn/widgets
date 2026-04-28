@@ -251,7 +251,11 @@ export class VviinnSuggestions {
         if (!part.text) return;
 
         if (part.text.annotations?.length > 0) {
-          const rendered = this.renderSuggestionItem(part.text.content, part.text.annotations, key);
+          const rendered = this.renderSuggestionItem(
+            part.text.content,
+            part.text.annotations,
+            key,
+          );
           if (rendered?.length) {
             parts.push(
               <ul class="suggestions-list" part="suggestions-list" key={key}>

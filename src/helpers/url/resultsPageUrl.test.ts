@@ -4,6 +4,7 @@ import {
   buildTextSearchRedirectUrl,
   buildImageSearchRedirectUrl,
   parseResultsPageParams,
+  parseResultsPageParamNames,
 } from "./resultsPageUrl";
 
 describe("resolveResultsPageUrl", () => {
@@ -163,5 +164,76 @@ describe("parseResultsPageParams", () => {
   it("decodes encoded characters in query", () => {
     const result = parseResultsPageParams("?query=hello+world%26more");
     expect(result).toEqual({ query: "hello world&more" });
+  });
+
+  it("uses custom param names when provided", () => {
+    const result = parseResultsPageParams("?q=shoes&sid=abc-123", {
+      query: "q",
+      searchId: "sid",
+    });
+    expect(result).toEqual({ query: "shoes", searchId: "abc-123" });
+  });
+
+  it("ignores default names when custom names provided", () => {
+    const result = parseResultsPageParams("?query=shoes&searchId=abc", {
+      query: "q",
+      searchId: "sid",
+    });
+    expect(result).toEqual({});
+  });
+});
+
+describe("parseResultsPageParamNames", () => {
+  it("returns defaults when input is empty", () => {
+    expect(parseResultsPageParamNames()).toEqual({
+      query: "query",
+      searchId: "searchId",
+    });
+  });
+
+  it("returns defaults when input is undefined", () => {
+    expect(parseResultsPageParamNames(undefined)).toEqual({
+      query: "query",
+      searchId: "searchId",
+    });
+  });
+
+  it("parses both custom names from URLSearchParams string", () => {
+    expect(parseResultsPageParamNames("query=q&searchId=sid")).toEqual({
+      query: "q",
+      searchId: "sid",
+    });
+  });
+
+  it("overrides only provided keys, keeps defaults for missing", () => {
+    expect(parseResultsPageParamNames("query=q")).toEqual({
+      query: "q",
+      searchId: "searchId",
+    });
+  });
+
+  it("ignores unknown keys", () => {
+    expect(parseResultsPageParamNames("foo=bar&query=q")).toEqual({
+      query: "q",
+      searchId: "searchId",
+    });
+  });
+});
+
+describe("buildTextSearchRedirectUrl with custom param name", () => {
+  it("uses custom queryParamName", () => {
+    const result = buildTextSearchRedirectUrl("/search", "shoes", "q");
+    const url = new URL(result);
+    expect(url.searchParams.get("q")).toBe("shoes");
+    expect(url.searchParams.get("query")).toBeNull();
+  });
+});
+
+describe("buildImageSearchRedirectUrl with custom param name", () => {
+  it("uses custom searchIdParamName", () => {
+    const result = buildImageSearchRedirectUrl("/search", "abc-123", "sid");
+    const url = new URL(result);
+    expect(url.searchParams.get("sid")).toBe("abc-123");
+    expect(url.searchParams.get("searchId")).toBeNull();
   });
 });

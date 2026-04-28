@@ -16,7 +16,11 @@ import { Locale } from "../../../locale";
 import { UpdateButtonLocation } from "../../vviinn-vpr-widget/vviinn-vpr-widget";
 import { ClickEvent, isClickedInRectBound } from "../../../geometry/Rectangle";
 import { Recommendation } from "../../../components";
-import { carouselParts, productCardParts, recommendationsParts } from "../../../cssParts";
+import {
+  carouselParts,
+  productCardParts,
+  recommendationsParts,
+} from "../../../cssParts";
 import i18next from "i18next";
 import {
   DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH,
@@ -283,7 +287,9 @@ export class RecommendationsSidebar {
               showMultipleImages={this.showMultipleImages}
               setItemsAmount={this.setItemsAmount}
               blockTitle={this.mode !== "set" ? "" : this.sidebarTitle}
-              blockSubtitle={this.mode === "set" ? this.sidebarSubtitle : undefined}
+              blockSubtitle={
+                this.mode === "set" ? this.sidebarSubtitle : undefined
+              }
               mode={this.mode}
               campaign-type={this.campaignType}
               useCarousel={this.useCarousel}

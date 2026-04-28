@@ -25,6 +25,4 @@ storybook/output.log
 # AI-tools specific files and folders
 .cursor/
 .cursorignore
-.claude
 .mcp.json
-CLAUDE.md

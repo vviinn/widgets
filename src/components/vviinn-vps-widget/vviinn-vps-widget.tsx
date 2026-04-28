@@ -78,6 +78,7 @@ import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
 import {
   isOnResultsPage,
   buildImageSearchRedirectUrl,
+  parseResultsPageParamNames,
 } from "../../helpers/url/resultsPageUrl";
 
 const CAMERA_START_DELAY = 500;
@@ -213,10 +214,12 @@ export class VviinnVpsWidget {
   @Prop() showIntervalInputs: boolean = false;
   /** URL to external CSS file for custom styling */
   @Prop() cssUrl: string | null = null;
-  /** Show search results in modal or on page */
+  /** Render results in modal. Set false to redirect or show results on the page. */
   @Prop() showResultsInModal?: boolean = true;
   /** URL of the results page for automatic search redirect. */
   @Prop() resultsPageUrl?: string;
+  /** Custom URL param names for results page redirect. Default: "query=query&searchId=searchId". */
+  @Prop() resultsPageParams?: string;
 
   private get showInWidget() {
     return this.showResultsInModal;
@@ -356,7 +359,11 @@ export class VviinnVpsWidget {
   };
 
   private handleImageSearchRedirect(searchId: string) {
-    const url = buildImageSearchRedirectUrl(this.resultsPageUrl, searchId);
+    const url = buildImageSearchRedirectUrl(
+      this.resultsPageUrl,
+      searchId,
+      parseResultsPageParamNames(this.resultsPageParams).searchId,
+    );
     const redirectData: RedirectEventData = {
       ...this.getBasicEventData(),
       url,
