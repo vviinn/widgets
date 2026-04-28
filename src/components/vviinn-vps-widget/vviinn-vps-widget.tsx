@@ -214,7 +214,7 @@ export class VviinnVpsWidget {
   @Prop() showIntervalInputs: boolean = false;
   /** URL to external CSS file for custom styling */
   @Prop() cssUrl: string | null = null;
-  /** Show search results in modal or on page */
+  /** Render results in modal. Set false to redirect or show results on the page. */
   @Prop() showResultsInModal?: boolean = true;
   /** URL of the results page for automatic search redirect. */
   @Prop() resultsPageUrl?: string;

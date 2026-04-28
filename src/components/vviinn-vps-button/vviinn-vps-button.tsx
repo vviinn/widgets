@@ -177,7 +177,7 @@ export class VviinnVpsButton {
   @Prop() cssUrl: string | null = null;
   /** API endpoint URL (optional, defaults to production) */
   @Prop() apiPath?: string;
-  /** Show search results in modal or on page */
+  /** Render results in modal. Set false to redirect or show results on the page. */
   @Prop() showResultsInModal?: boolean = true;
   /** URL of the results page for automatic search redirect. */
   @Prop() resultsPageUrl?: string;
