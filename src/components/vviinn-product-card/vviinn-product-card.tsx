@@ -638,7 +638,10 @@ export class VviinnProductCard {
                 showInContainer={this.addPriceContainer}
               />
 
-              {renderCustomLabels(this.customLabels.split(CUSTOM_LABELS_DELIMITER), "content")}
+              {renderCustomLabels(
+                this.customLabels.split(CUSTOM_LABELS_DELIMITER),
+                "content",
+              )}
             </Fragment>
           )}
         </div>
@@ -810,7 +813,10 @@ export class VviinnProductCard {
             <slot name="vviinn-product-card-actions"></slot>
           </div>
 
-          {renderCustomLabels(this.customLabels.split(CUSTOM_LABELS_DELIMITER), "image")}
+          {renderCustomLabels(
+            this.customLabels.split(CUSTOM_LABELS_DELIMITER),
+            "image",
+          )}
         </div>
 
         {this.showFooterArrow && <div class="footer-arrow"></div>}

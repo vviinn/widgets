@@ -197,11 +197,14 @@ export class VviinnTextSearch {
     this.storeName = storeName;
 
     if (this.autoSuggestShow) {
-      this.disposeOnChange = onChange("autoSuggestCompletions", (completions) => {
-        if (this.searchSubmitted && completions.length > 0) return;
-        this.autoSuggestCompletions = completions;
-        this.activeSuggestionIndex = -1;
-      });
+      this.disposeOnChange = onChange(
+        "autoSuggestCompletions",
+        (completions) => {
+          if (this.searchSubmitted && completions.length > 0) return;
+          this.autoSuggestCompletions = completions;
+          this.activeSuggestionIndex = -1;
+        },
+      );
     }
   }
 
@@ -313,7 +316,11 @@ export class VviinnTextSearch {
 
     if (completion.url) {
       this.trackTextSearch();
-      this.handleTextSearchRedirect(completion.url, "auto-suggest", completion.suggestion);
+      this.handleTextSearchRedirect(
+        completion.url,
+        "auto-suggest",
+        completion.suggestion,
+      );
       return;
     }
 
@@ -474,9 +481,16 @@ export class VviinnTextSearch {
             {...(this.autoSuggestShow && {
               role: "combobox",
               "aria-autocomplete": "list",
-              "aria-expanded": this.autoSuggestCompletions.length > 0 && !!this.state.textSearchQuery ? "true" : "false",
+              "aria-expanded":
+                this.autoSuggestCompletions.length > 0 &&
+                !!this.state.textSearchQuery
+                  ? "true"
+                  : "false",
               "aria-controls": "suggestions-listbox",
-              "aria-activedescendant": this.activeSuggestionIndex >= 0 ? `suggestion-${this.activeSuggestionIndex}` : undefined,
+              "aria-activedescendant":
+                this.activeSuggestionIndex >= 0
+                  ? `suggestion-${this.activeSuggestionIndex}`
+                  : undefined,
             })}
           />
 
@@ -489,7 +503,9 @@ export class VviinnTextSearch {
               showResultsInModal={false}
               resultsPageUrl={this.resultsPageUrl}
               resultsPageParams={this.resultsPageParams}
-              {...(this.exampleImageSource && { exampleImageSource: this.exampleImageSource })}
+              {...(this.exampleImageSource && {
+                exampleImageSource: this.exampleImageSource,
+              })}
               {...(this.cssUrl != null && { cssUrl: this.cssUrl })}
               {...(this.visualSearchMode && { mode: this.visualSearchMode })}
               parentSlots={this.slots}

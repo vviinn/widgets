@@ -104,7 +104,9 @@ export const hasDynamicFilters = (annotation: ContextAnnotation): boolean =>
   !!annotation.interactions?.dynamicFilters?.length;
 
 export const hasProperLocators = (annotations: ContextAnnotation[]): boolean =>
-  annotations.every((a) => a.locator?.start !== undefined && a.locator?.length !== undefined);
+  annotations.every(
+    (a) => a.locator?.start !== undefined && a.locator?.length !== undefined,
+  );
 
 type Segment =
   | { type: "text"; content: string }
@@ -114,7 +116,9 @@ export const splitContentByLocators = (
   content: string,
   annotations: ContextAnnotation[],
 ): Segment[] => {
-  const sorted = [...annotations].sort((a, b) => a.locator.start - b.locator.start);
+  const sorted = [...annotations].sort(
+    (a, b) => a.locator.start - b.locator.start,
+  );
   const segments: Segment[] = [];
   let cursor = 0;
 
@@ -138,12 +142,18 @@ export const splitContentByLocators = (
   return segments;
 };
 
-export const getAnnotationFilterKeys = (annotation: ContextAnnotation): string[] =>
+export const getAnnotationFilterKeys = (
+  annotation: ContextAnnotation,
+): string[] =>
   annotation.interactions?.dynamicFilters?.flatMap((filter) =>
-    "values" in filter ? filter.values.map((v) => `${filter.column}:${v.value}`) : [],
+    "values" in filter
+      ? filter.values.map((v) => `${filter.column}:${v.value}`)
+      : [],
   ) ?? [];
 
-const getAnnotationDeeplink = (annotation: ContextAnnotation): string | null => {
+const getAnnotationDeeplink = (
+  annotation: ContextAnnotation,
+): string | null => {
   for (const item of annotation.data.items) {
     if ("deeplink" in item && item.deeplink) {
       return item.deeplink;
@@ -166,7 +176,12 @@ export const renderAnnotatedContent = (
       {segments.map((segment, i) => {
         const segmentKey = `${key}-${i}`;
         if (segment.type === "text") {
-          return <span key={segmentKey} innerHTML={marked.parseInline(segment.content) as string}></span>;
+          return (
+            <span
+              key={segmentKey}
+              innerHTML={marked.parseInline(segment.content) as string}
+            ></span>
+          );
         }
         const deeplink = getAnnotationDeeplink(segment.annotation);
         if (deeplink) {
@@ -183,8 +198,8 @@ export const renderAnnotatedContent = (
             </a>
           );
         }
-        const isSelected = getAnnotationFilterKeys(segment.annotation).some((k) =>
-          appliedFilters.has(k),
+        const isSelected = getAnnotationFilterKeys(segment.annotation).some(
+          (k) => appliedFilters.has(k),
         );
         return (
           <button

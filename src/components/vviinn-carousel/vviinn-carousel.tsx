@@ -486,9 +486,7 @@ export class VviinnCarousel {
         styleSheet.getPropertyValue(CAROUSEL_COLUMNS_CSS_VAR),
       );
       this.columns =
-        cssColumnsAmount >= 1
-          ? cssColumnsAmount
-          : DEFAULT_COLUMNS_NUMBER;
+        cssColumnsAmount >= 1 ? cssColumnsAmount : DEFAULT_COLUMNS_NUMBER;
     } else {
       this.columns = calculatedColumnsAmount;
     }

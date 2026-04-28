@@ -285,7 +285,9 @@ export class VviinnSelectedFilters {
 
     filters.forEach((filter) => {
       if (filter.type === "interval") {
-        this.syncPreselectedIntervalFilter(filter as ResponseIntervalFilterItem);
+        this.syncPreselectedIntervalFilter(
+          filter as ResponseIntervalFilterItem,
+        );
         return;
       }
       if (!("values" in filter)) return;
@@ -329,9 +331,7 @@ export class VviinnSelectedFilters {
     }
   }
 
-  private syncPreselectedIntervalFilter(
-    filter: ResponseIntervalFilterItem,
-  ) {
+  private syncPreselectedIntervalFilter(filter: ResponseIntervalFilterItem) {
     if (this.intervalCustomFilters[filter.column]) return;
 
     const matchingRequest = this.requestFilters.find(

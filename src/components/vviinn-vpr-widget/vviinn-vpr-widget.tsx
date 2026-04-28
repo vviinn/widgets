@@ -337,8 +337,7 @@ export class VviinnVprWidget implements ComponentInterface {
 
   private showNoResultText = () =>
     !this.recommendationsLoading &&
-    (this.recommendations.length === 0 ||
-      this.hasErrorOnLoad);
+    (this.recommendations.length === 0 || this.hasErrorOnLoad);
 
   private getBasicEventData(): BasicEventData {
     return {
@@ -786,28 +785,36 @@ export class VviinnVprWidget implements ComponentInterface {
 
           {SlotSkeleton("discovery")}
 
-          {(this.isSetMode || this.blockTitle !== "" || !!this.blockSubtitle) && (
+          {(this.isSetMode ||
+            this.blockTitle !== "" ||
+            !!this.blockSubtitle) && (
             <div class="widget-header">
               <div>
                 {this.blockTitle !== "" && (
                   <h2 part="recommendations-title">
                     <slot name="vviinn-recommendations-title">
-                      {this.blockTitle ?? (this.isSetMode
-                        ? i18next.t("setMode.widgetTitle")
-                        : i18next.t("discoveryWidgetTitle"))}
+                      {this.blockTitle ??
+                        (this.isSetMode
+                          ? i18next.t("setMode.widgetTitle")
+                          : i18next.t("discoveryWidgetTitle"))}
                     </slot>
                   </h2>
                 )}
                 {(this.isSetMode || !!this.blockSubtitle) && (
                   <h3 part="recommendations-subtitle">
                     <slot name="vviinn-recommendations-subtitle">
-                      {this.blockSubtitle || (this.isSetMode ? i18next.t("setMode.widgetSubtitle") : "")}
+                      {this.blockSubtitle ||
+                        (this.isSetMode
+                          ? i18next.t("setMode.widgetSubtitle")
+                          : "")}
                     </slot>
                   </h3>
                 )}
               </div>
 
-              {this.isSetMode && this.updateButtonLocation !== "onItem" && this.recommendations.length > 0 ? (
+              {this.isSetMode &&
+              this.updateButtonLocation !== "onItem" &&
+              this.recommendations.length > 0 ? (
                 <button
                   class="update-button"
                   part="update-button-top"
