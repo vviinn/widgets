@@ -20,7 +20,9 @@ export const extractActiveFilterValues = (
   const activeValues = new Set<string>();
   activeFilters.forEach((filter) => {
     if (Array.isArray(filter.values)) {
-      filter.values.forEach((v) => activeValues.add(`${filter.column}:${String(v)}`));
+      filter.values.forEach((v) =>
+        activeValues.add(`${filter.column}:${String(v)}`),
+      );
     }
   });
   return activeValues;

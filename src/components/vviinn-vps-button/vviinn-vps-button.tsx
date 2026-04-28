@@ -177,10 +177,12 @@ export class VviinnVpsButton {
   @Prop() cssUrl: string | null = null;
   /** API endpoint URL (optional, defaults to production) */
   @Prop() apiPath?: string;
-  /** Show search results in modal or on page */
+  /** Render results in modal. Set false to redirect or show results on the page. */
   @Prop() showResultsInModal?: boolean = true;
   /** URL of the results page for automatic search redirect. */
   @Prop() resultsPageUrl?: string;
+  /** Custom URL param names for results page redirect. Default: "query=query&searchId=searchId". */
+  @Prop() resultsPageParams?: string;
   /** @internal */
   @Prop() parentSlots?: HTMLSlotElement[] = [];
 
@@ -360,6 +362,7 @@ export class VviinnVpsButton {
           favoriteShow={this.favoriteShow}
           showResultsInModal={this.showResultsInModal}
           resultsPageUrl={this.resultsPageUrl}
+          resultsPageParams={this.resultsPageParams}
           parentSlots={[...this.parentSlots, ...this.slots]}
           cssUrl={this.cssUrl}
         />

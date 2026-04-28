@@ -1,5 +1,8 @@
 import { QueryCompletion } from "../../../interfaces";
-import { setTextSearchQuery, SearchStoreName } from "../../../store/search.store";
+import {
+  setTextSearchQuery,
+  SearchStoreName,
+} from "../../../store/search.store";
 
 type SuggestionsKeyDownParams = {
   completions: QueryCompletion[];
@@ -40,7 +43,10 @@ export const handleSuggestionsKeyDown = (
         if (activeSuggestionIndex === -1) {
           onOriginalQueryChange(textSearchQuery);
         }
-        const nextIndex = Math.min(activeSuggestionIndex + 1, completions.length - 1);
+        const nextIndex = Math.min(
+          activeSuggestionIndex + 1,
+          completions.length - 1,
+        );
         onActiveIndexChange(nextIndex);
         setTextSearchQuery(storeName, completions[nextIndex].suggestion);
       }
@@ -50,7 +56,8 @@ export const handleSuggestionsKeyDown = (
         event.preventDefault();
         const prevIndex = activeSuggestionIndex - 1;
         onActiveIndexChange(prevIndex);
-        const newQuery = prevIndex === -1 ? originalQuery : completions[prevIndex].suggestion;
+        const newQuery =
+          prevIndex === -1 ? originalQuery : completions[prevIndex].suggestion;
         setTextSearchQuery(storeName, newQuery);
       }
       break;

@@ -42,7 +42,9 @@ import {
 import { divideOnSized } from "../geometry/Rectangle";
 import { fileToB64 } from "../file";
 import { ImageType, shouldResize } from "./image-processing";
-import { OnChangeHandler } from "@stencil/store/dist/types";
+import type { ObservableMap } from "@stencil/store";
+
+type OnChangeHandler<T> = ObservableMap<T>["onChange"];
 import { extractSelectedFilters } from "../components/vviinn-filters/helpers/extractSelectedFilters";
 import { SearchSuccessEventData } from "../recommendation/events";
 import { campaignTypeNames } from "../campaign/Campaign";
@@ -127,17 +129,23 @@ const storeDefaults: SearchStore = {
   ...receivedDataDefaults,
 };
 
-const { state: searchState, onChange: onChangeWidgetState } =
-  createStore<SearchStore>(storeDefaults);
-const { state: componentsState, onChange: onChangeComponentsState } =
-  createStore<SearchStore>(storeDefaults);
+const widgetStore = createStore<SearchStore>(storeDefaults);
+const searchState = widgetStore.state;
+const onChangeWidgetState: OnChangeHandler<SearchStore> = widgetStore.onChange;
+
+const componentsStore = createStore<SearchStore>(storeDefaults);
+const componentsState = componentsStore.state;
+const onChangeComponentsState: OnChangeHandler<SearchStore> =
+  componentsStore.onChange;
 
 const shopTheLookDefaults: SearchStore = {
   ...storeDefaults,
 };
 
-const { state: shopTheLookState, onChange: onChangeShopTheLookState } =
-  createStore<SearchStore>(shopTheLookDefaults);
+const shopTheLookStore = createStore<SearchStore>(shopTheLookDefaults);
+const shopTheLookState = shopTheLookStore.state;
+const onChangeShopTheLookState: OnChangeHandler<SearchStore> =
+  shopTheLookStore.onChange;
 
 const useStore = (store: SearchStoreName): SearchStore => {
   switch (store) {
@@ -644,15 +652,19 @@ export const makeAutoSuggestRequest = async (
     TE.fromEither,
     TE.chain((request) => autoSuggestClient(request, apiPath)),
     TE.map((response) => {
-      if (response.data.query.trim().toLowerCase() !== state.textSearchQuery?.trim().toLowerCase()) return response;
+      if (
+        response.data.query.trim().toLowerCase() !==
+        state.textSearchQuery?.trim().toLowerCase()
+      )
+        return response;
 
       const completions = response.data.completions ?? [];
       state.autoSuggestCompletions = completions;
 
       const matchingCompletion = completions.find(
         (completion) =>
-          completion.suggestion.trim().toLowerCase() === query.trim().toLowerCase() &&
-          completion?.url,
+          completion.suggestion.trim().toLowerCase() ===
+            query.trim().toLowerCase() && completion?.url,
       );
 
       if (matchingCompletion?.url) {

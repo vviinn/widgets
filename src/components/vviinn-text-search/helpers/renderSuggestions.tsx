@@ -12,11 +12,7 @@ const highlightMatch = (suggestion: string, query: string) => {
   const match = suggestion.slice(matchIndex, matchIndex + query.length);
   const after = suggestion.slice(matchIndex + query.length);
 
-  return [
-    before,
-    <span class="suggestion-highlight">{match}</span>,
-    after,
-  ];
+  return [before, <span class="suggestion-highlight">{match}</span>, after];
 };
 
 export const renderSuggestions = (
@@ -28,11 +24,19 @@ export const renderSuggestions = (
   if (!completions.length || !query) return null;
 
   return (
-    <ul class="suggestions-container" part="suggestions-container" role="listbox" id="suggestions-listbox">
+    <ul
+      class="suggestions-container"
+      part="suggestions-container"
+      role="listbox"
+      id="suggestions-listbox"
+    >
       {completions.map((completion, index) => (
         <li
           id={`suggestion-${index}`}
-          class={{ "suggestion-item": true, "suggestion-item--active": index === activeIndex }}
+          class={{
+            "suggestion-item": true,
+            "suggestion-item--active": index === activeIndex,
+          }}
           part="suggestion-item"
           role="option"
           aria-selected={index === activeIndex ? "true" : "false"}

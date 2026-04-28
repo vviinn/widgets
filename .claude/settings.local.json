@@ -1,0 +1,37 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__figma-dev-mode__get_code",
+      "mcp__figma-dev-mode__get_screenshot",
+      "Bash(sed:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(pwd:*)",
+      "WebSearch",
+      "WebFetch(domain:stenciljs.com)",
+      "WebFetch(domain:developer.mozilla.org)",
+      "WebFetch(domain:typescript.org)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:storybook.js.org)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(wc:*)"
+    ]
+  },
+  "enabledMcpjsonServers": ["browser", "browser-tools"],
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_response.filePath // .tool_input.file_path' | { read -r f; npx prettier --write \"$f\"; } 2>/dev/null || true"
+          }
+        ]
+      }
+    ]
+  }
+}

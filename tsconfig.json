@@ -6,7 +6,7 @@
     "sourceMap": true,
     "experimentalDecorators": true,
     "lib": ["dom", "es2017", "es2019"],
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "module": "esnext",
     "target": "es2017",
     "noUnusedLocals": true,
@@ -14,7 +14,14 @@
     "jsx": "react",
     "jsxFactory": "h",
     "resolveJsonModule": true,
-    "strict": false
+    "strict": false,
+    "types": [
+      "jest",
+      "node",
+      "google.analytics",
+      "gtag.js",
+      "dom-speech-recognition"
+    ]
   },
   "include": ["src", "types/jsx.d.ts"],
   "exclude": ["node_modules"]

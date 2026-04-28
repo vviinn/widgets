@@ -1247,12 +1247,18 @@ export class VviinnShopTheLook {
                   onClick={() => this.fileInput?.click()}
                   disabled={this.showLoadingSpinner}
                 >
-                  <span class="upload-button-icon" part="shop-the-look-upload-button-icon">
+                  <span
+                    class="upload-button-icon"
+                    part="shop-the-look-upload-button-icon"
+                  >
                     <slot name="vviinn-image-upload-icon">
                       <UploadActionIconVariant />
                     </slot>
                   </span>
-                  <span class="upload-button-text" part="shop-the-look-upload-button-text">
+                  <span
+                    class="upload-button-text"
+                    part="shop-the-look-upload-button-text"
+                  >
                     <slot name="upload-button-text"></slot>
                   </span>
                 </button>
