@@ -346,7 +346,7 @@ export class VviinnVpsWidget {
   private handleVviinnImageUploadFinished = (detail: SearchIdEventData) => {
     const visualSearchRedirect = this.state.redirect;
     const hasVisualSearchRedirect =
-      visualSearchRedirect?.url &&
+      !!visualSearchRedirect?.url &&
       visualSearchRedirect.searchId === detail.searchId;
 
     if (hasVisualSearchRedirect) {
