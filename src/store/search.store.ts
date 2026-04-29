@@ -82,7 +82,7 @@ type ReceivedDataDefaults = {
   dynamicFilters: ResponseDynamicFilterItem[];
   detectedObjects: Rectangle[];
   stream: Stream | null;
-  redirect: (Redirect & { query?: string }) | null;
+  redirect: (Redirect & { query?: string; searchId?: string }) | null;
   autoSuggestCompletions: QueryCompletion[];
 };
 
@@ -260,6 +260,9 @@ const updateVisualSearchState =
     state.visualSearchId = response.requestId;
     state.results = response.data.products;
     state.dynamicFilters = dynamicFilters;
+    state.redirect = response.interactions.redirect
+      ? { ...response.interactions.redirect, searchId: response.requestId }
+      : null;
 
     const extractedFilters = extractSelectedFilters(dynamicFilters);
 

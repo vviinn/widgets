@@ -113,6 +113,7 @@ export class VviinnTextSearch {
   @Event({
     cancelable: true,
     bubbles: true,
+    composed: true,
   })
   vviinnRedirect: EventEmitter<RedirectEventData>;
 

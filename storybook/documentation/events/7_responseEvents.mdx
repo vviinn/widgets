@@ -47,7 +47,7 @@ Some events have additional props, summarized in the table below.
 
     <tr>
       <td>vviinnRedirect</td>
-      <td>Triggered before an automatic redirect. This happens when the API returns a suggested redirect URL (auto-suggest), or when <code>results-page-url</code> is set and the user initiates a text or image search from a different page. Automatically redirects unless intercepted by calling <code>event.preventDefault()</code> (e.g., for SPA routing).</td>
+      <td>Triggered before an automatic redirect. This happens when the API returns a suggested redirect URL (auto-suggest for text search, or after an image upload for visual search), or when <code>results-page-url</code> is set and the user initiates a text or image search from a different page. Automatically redirects unless intercepted by calling <code>event.preventDefault()</code> (e.g., for SPA routing).</td>
       <td>
         <ul>
           <li>vviinn-text-search (Search Bar)</li>

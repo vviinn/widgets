@@ -288,7 +288,7 @@ export class VviinnVpsWidget {
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
   /** Redirect to results page (can be intercepted by client via preventDefault) */
-  @Event({ cancelable: true, bubbles: true })
+  @Event({ cancelable: true, bubbles: true, composed: true })
   vviinnRedirect: EventEmitter<RedirectEventData>;
 
   private overflow: string;
@@ -344,13 +344,28 @@ export class VviinnVpsWidget {
   };
 
   private handleVviinnImageUploadFinished = (detail: SearchIdEventData) => {
+    const visualSearchRedirect = this.state.redirect;
+    const hasVisualSearchRedirect =
+      visualSearchRedirect?.url &&
+      visualSearchRedirect.searchId === detail.searchId;
+
+    if (hasVisualSearchRedirect) {
+      this.handleImageSearchRedirect(visualSearchRedirect.url, detail.searchId);
+      return;
+    }
+
     const shouldRedirectToResultsPage =
       this.resultsPageUrl &&
       !this.showInWidget &&
       !isOnResultsPage(this.resultsPageUrl);
 
     if (shouldRedirectToResultsPage) {
-      this.handleImageSearchRedirect(detail.searchId);
+      const url = buildImageSearchRedirectUrl(
+        this.resultsPageUrl,
+        detail.searchId,
+        parseResultsPageParamNames(this.resultsPageParams).searchId,
+      );
+      this.handleImageSearchRedirect(url, detail.searchId);
       return;
     }
 
@@ -358,12 +373,7 @@ export class VviinnVpsWidget {
     if (this.mode === "upload" && this.showInWidget) this.active = true;
   };
 
-  private handleImageSearchRedirect(searchId: string) {
-    const url = buildImageSearchRedirectUrl(
-      this.resultsPageUrl,
-      searchId,
-      parseResultsPageParamNames(this.resultsPageParams).searchId,
-    );
+  private handleImageSearchRedirect(url: string, searchId: string) {
     const redirectData: RedirectEventData = {
       ...this.getBasicEventData(),
       url,

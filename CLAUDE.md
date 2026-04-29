@@ -28,7 +28,7 @@ npm run release.ci        # CI release
 - `vviinn-vps-widget`: Visual Product Search (modal-based image search)
 - `vviinn-vpr-widget`: Visual Product Recommendations
 - `vviinn-shop-the-look`: Interactive image hotspots with product recommendations
-- `vviinn-vps-button` / `vviinn-vpr-button`: Trigger buttons
+- `vviinn-vps-button` / `vviinn-vpr-button`: Trigger buttons. `vviinn-text-search` in `mode="extended"` renders `vviinn-vps-button` internally to handle image upload.
 - `vviinn-cropper`: Image cropping interface with geometry validation
 - `vviinn-product-card`: Product display with intersection tracking
 
