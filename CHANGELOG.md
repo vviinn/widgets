@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.218.0](https://github.com/vviinn/widgets/compare/v2.217.1...v2.218.0) (2026-04-29)
+
+
+### Features
+
+* Visual Search: Follow API-Suggested Redirect URL on Image Upload ([145f954](https://github.com/vviinn/widgets/commit/145f954a92477e9948edb5f572ed523a03b5c0cd))
+
 ### [2.217.1](https://github.com/vviinn/widgets/compare/v2.217.0...v2.217.1) (2026-04-28)
 
 ## [2.217.0](https://github.com/vviinn/widgets/compare/v2.216.2...v2.217.0) (2026-04-28)
