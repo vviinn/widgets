@@ -101,3 +101,43 @@ vviinn-vps-button::part(upload-photo_button) {
 
 <Card cardData={cardCredentials("customizedLabelCard")}
       descriptionText="Custom labels are hidden by default, so it is needed to rewrite the display property to show them. The code example also demonstrates how to change the order of the elements. In this case, set an 'order' property for each displayed part of the Product Card." />
+
+## Styling Slotted Content
+
+Custom content placed in a widget's **default slot** (e.g. an SVG icon inside `vviinn-vps-button` or `vviinn-vpr-button` – same approach for both) can be styled two ways depending on where the stylesheet lives.
+
+<PreviewAndCodeTabs tabData={{groupId:"slottedPageCss", header:"From a page stylesheet (light DOM)",
+    description: <p>Slotted elements live in the <strong>light DOM</strong>, so plain descendant selectors reach them from any stylesheet on the page. The same selectors work for <code>vviinn-vpr-button</code>.</p>,
+    component: <div style={{minHeight:"60px"}}>
+      <vviinn-vps-button id="vviinn-slotted-page-css" token={vviinnToken} locale="en-US" add-style="false">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+      </vviinn-vps-button>
+    </div>,
+    code:`<style>
+vviinn-vps-button { background: #e5e7eb; }
+
+vviinn-vps-button svg {
+  width: 32px;
+  height: 32px;
+}
+</style>
+
+<vviinn-vps-button token="TOKEN" add-style="false">
+  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+</vviinn-vps-button>`}}/>
+
+### From `css-url` (shadow DOM)
+
+When the stylesheet is loaded via the widget's `css-url` prop, it lives **inside the widget's shadow root**. Use `::slotted()` to reach the same elements from that scope:
+
+```css
+/* loaded via <vviinn-vps-button css-url="..."> */
+:host ::slotted(svg) {
+  width: 32px;
+  height: 32px;
+}
+```
+
+Pick whichever scope matches where your stylesheet is hosted.
+
+**Note:** Applies only to the **default slot** (no `slot=` attribute). Content in **named slots** (e.g. `slot="vviinn-image-upload-icon"`) is forwarded into nested components – style it via CSS Parts or CSS Variables instead.

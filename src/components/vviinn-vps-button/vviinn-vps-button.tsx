@@ -32,6 +32,7 @@ import {
 import { findSlotElements } from "../../dom";
 import { SEARCH_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
 import { searchModalFirstScreenParts } from "../../cssParts";
+import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
 import i18next from "i18next";
 import { initializeLocale } from "../../locale";
 
@@ -314,6 +315,7 @@ export class VviinnVpsButton {
         aria-label={this.buttonPressed ? undefined : ariaLabel}
         exportparts={`vviinn-button, ${searchModalFirstScreenParts}`}
       >
+        {renderExternalCSS(this.cssUrl)}
         <vviinn-button
           addStyle={this.addStyle}
           part="vviinn-button"
