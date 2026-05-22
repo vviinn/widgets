@@ -30,6 +30,24 @@ jobs:
       - name: Check for high/critical vulnerabilities
         run: npm audit --audit-level=high
 
+  security-audit-storybook:
+    name: Security Audit (Storybook)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+          cache-dependency-path: storybook/package-lock.json
+      - run: npm install
+        working-directory: storybook
+      - name: Check for high/critical vulnerabilities
+        run: npm audit --audit-level=high
+        working-directory: storybook
+
   generate-version-develop:
     runs-on: ubuntu-latest
     permissions:
