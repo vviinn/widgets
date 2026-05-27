@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.219.0](https://github.com/vviinn/widgets/compare/v2.218.0...v2.219.0) (2026-05-27)
+
+
+### Features
+
+* Search Modal & One-click Discovery: Document slot icon styling and enable css-url ([e7fe7ea](https://github.com/vviinn/widgets/commit/e7fe7ea67d000b42e42f937db7eee1b54cd3585e))
+
 ## [2.218.0](https://github.com/vviinn/widgets/compare/v2.217.1...v2.218.0) (2026-04-29)
 
 
