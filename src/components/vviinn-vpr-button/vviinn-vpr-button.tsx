@@ -28,6 +28,7 @@ import {
   SIDEBAR_ANIMATION_DURATION,
 } from "../../widget/constants";
 import { addEventListenersWithSignal } from "../../dom";
+import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
 /**
  * @part button - Clickable button element.
  * @part vviinn-button - Button element container.
@@ -319,6 +320,7 @@ export class VviinnVprButton {
         onClick={this.handleButtonClick}
         onKeyDown={this.handleKeyDown}
       >
+        {renderExternalCSS(this.cssUrl)}
         <vviinn-button addStyle={this.addStyle} part="vviinn-button">
           <slot>
             {this.campaignType === "VCS" ? (

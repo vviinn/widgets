@@ -19,3 +19,12 @@ vviinn-vpr-widget#vviinn-discovery-set::part(discount-label) {
 vviinn-vpr-widget#vviinn-discovery-set::part(title) {
   min-height: 40px;
 }
+
+vviinn-vps-button#vviinn-slotted-page-css {
+  background: #e5e7eb;
+}
+
+vviinn-vps-button#vviinn-slotted-page-css svg {
+  width: 32px;
+  height: 32px;
+}
