@@ -134,7 +134,7 @@ export class VviinnTextSearch {
   /** Custom URL param names for results page redirect. Default: "query=query&searchId=searchId". */
   @Prop() resultsPageParams?: string;
   /** Show auto-suggest dropdown with search completions */
-  @Prop() autoSuggestShow: boolean = false;
+  @Prop() autoSuggestShow: boolean = true;
   /** Example image shown in the visual search modal */
   @Prop() exampleImageSource?: string;
   /** URL to external CSS file for custom styling of the visual search modal */

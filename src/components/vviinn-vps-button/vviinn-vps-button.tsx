@@ -161,7 +161,7 @@ export class VviinnVpsButton {
   /** Show the text search */
   @Prop() textSearchShow: boolean = false;
   /** Show auto-suggest dropdown with search completions */
-  @Prop() autoSuggestShow: boolean = false;
+  @Prop() autoSuggestShow: boolean = true;
   /** Show or hide Add to Basket buttons */
   @Prop() addToBasketShow: boolean = false;
   /** Show or hide Favorite button */
