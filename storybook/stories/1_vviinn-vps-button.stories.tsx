@@ -93,7 +93,7 @@ const initArgs = {
   imageResolutionWidth: 250,
   showMultipleImages: false,
   textSearchShow: true,
-  autoSuggestShow: false,
+  autoSuggestShow: true,
   addToBasketShow: false,
   addPriceContainer: false,
   showIntervalInputs: false,

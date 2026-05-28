@@ -12,7 +12,6 @@ import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/lib/function";
 import { version } from "../../../package.json";
 import {
-  clearAutoSuggestCompletions,
   makeAutoSuggestRequest,
   makeTextSearchRequest,
   setTextSearchQuery,
@@ -34,10 +33,9 @@ import {
 import i18next from "i18next";
 import { Locale, initializeLocale } from "../../locale";
 import { SearchBarMode, VisualSearchMode } from "../../widget/types";
-import { TextSearchResponse } from "../../interfaces";
+import { TextSearchResponse, QueryCompletion } from "../../interfaces";
 import { searchBarParts, searchModalFirstScreenParts } from "../../cssParts";
 import { findSlotElements } from "../../dom";
-import { QueryCompletion } from "../../interfaces";
 import { MicIcon } from "../vviinn-icons/icons/MicIcon";
 import {
   createAutoSuggestHandler,
@@ -134,7 +132,7 @@ export class VviinnTextSearch {
   /** Custom URL param names for results page redirect. Default: "query=query&searchId=searchId". */
   @Prop() resultsPageParams?: string;
   /** Show auto-suggest dropdown with search completions */
-  @Prop() autoSuggestShow: boolean = false;
+  @Prop() autoSuggestShow: boolean = true;
   /** Example image shown in the visual search modal */
   @Prop() exampleImageSource?: string;
   /** URL to external CSS file for custom styling of the visual search modal */
@@ -161,6 +159,7 @@ export class VviinnTextSearch {
   @State() activeSuggestionIndex = -1;
   private originalQuery = "";
   private searchSubmitted = false;
+  private isDisconnected = false;
   private slots: HTMLSlotElement[] = [];
 
   private isShowPreloader = () =>
@@ -190,31 +189,27 @@ export class VviinnTextSearch {
 
   private recognition: ReturnType<typeof initializeRecognition> | null = null;
   private autoSuggestHandler: ReturnType<typeof createAutoSuggestHandler>;
-  private disposeOnChange: (() => void) | undefined;
 
   connectedCallback() {
-    const { state, storeName, onChange } = useSearchStore(this.showInWidget);
+    const { state, storeName } = useSearchStore(this.showInWidget);
     this.state = state;
     this.storeName = storeName;
-
-    if (this.autoSuggestShow) {
-      this.disposeOnChange = onChange(
-        "autoSuggestCompletions",
-        (completions) => {
-          if (this.searchSubmitted && completions.length > 0) return;
-          this.autoSuggestCompletions = completions;
-          this.activeSuggestionIndex = -1;
-        },
-      );
-    }
+    this.isDisconnected = false;
   }
 
   disconnectedCallback() {
+    this.isDisconnected = true;
     clearTimeout(this.triggerTooltipStart);
     clearTimeout(this.triggerTooltipEnd);
     this.autoSuggestHandler?.cleanup();
-    this.disposeOnChange?.();
   }
+
+  private setAutoSuggestCompletions = (completions: QueryCompletion[]) => {
+    if (this.isDisconnected) return;
+    if (this.searchSubmitted && completions.length > 0) return;
+    this.autoSuggestCompletions = completions;
+    this.activeSuggestionIndex = -1;
+  };
 
   private trackTextSearch = () =>
     this.vviinnFilterTriggered.emit({
@@ -246,6 +241,7 @@ export class VviinnTextSearch {
         this.storeName,
         this.token,
         this.apiPath,
+        this.setAutoSuggestCompletions,
       );
     }
 
@@ -308,7 +304,8 @@ export class VviinnTextSearch {
   };
 
   private hideSuggestions = () => {
-    clearAutoSuggestCompletions(this.storeName);
+    this.autoSuggestCompletions = [];
+    this.activeSuggestionIndex = -1;
   };
 
   private selectSuggestion = (completion: QueryCompletion) => {
@@ -409,6 +406,7 @@ export class VviinnTextSearch {
         query,
         this.token,
         this.apiPath,
+        this.setAutoSuggestCompletions,
       ),
       E.fold(
         // Intentionally ignore errors for auto-suggest

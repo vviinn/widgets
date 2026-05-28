@@ -1,34 +1,37 @@
 steps:
-  - id: 'install_widgets'
+  - id: "install_widgets"
     name: node
     entrypoint: bash
     args:
-      - '-c'
+      - "-c"
       - |
+        set -euo pipefail
         rm -rf node_modules/
         npm install
-    dir: '/workspace'
-  - id: 'build_widgets'
+    dir: "/workspace"
+  - id: "build_widgets"
     name: node
     entrypoint: bash
     args:
-      - '-c'
+      - "-c"
       - |
+        set -euo pipefail
         echo "OPENAPI_URL=./openapi/merchant-openapi.yaml" > .env
         npm run build_interfaces
         npm run build
         cp -r . /widgets
     volumes:
-      - name: 'widgets_local_build'
-        path: '/widgets'
-    dir: '/workspace'
-    waitFor: ['install_widgets']
-  - id: 'build_storybook'
+      - name: "widgets_local_build"
+        path: "/widgets"
+    dir: "/workspace"
+    waitFor: ["install_widgets"]
+  - id: "build_storybook"
     name: node
     entrypoint: bash
     args:
-      - '-c'
+      - "-c"
       - |
+        set -euo pipefail
         echo "Cleaning node_modules..."
         rm -rf node_modules
         if [ "$_ENVIRONMENT" = "stage" ]
@@ -59,18 +62,29 @@ steps:
           echo "Skipping LLM docs generation (stage environment)"
         fi
     volumes:
-      - name: 'widgets_local_build'
-        path: '/widgets'
-    dir: '/workspace/storybook'
-    waitFor: ['build_widgets']
+      - name: "widgets_local_build"
+        path: "/widgets"
+    dir: "/workspace/storybook"
+    waitFor: ["build_widgets"]
     env:
-      - 'NODE_ENV=$_NODE_ENV'
-      - 'NODE_OPTIONS=--openssl-legacy-provider'
-  - name: 'gcr.io/cloud-builders/docker'
-    args: [ 'build', '-t', 'eu.gcr.io/$PROJECT_ID/storybook:$_DOCKER_TAG', '.' ]
-    dir: '/workspace/storybook'
-  - name: 'gcr.io/cloud-builders/docker'
-    args: [ 'push', 'eu.gcr.io/$PROJECT_ID/storybook:$_DOCKER_TAG' ]
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+      - "NODE_ENV=$_NODE_ENV"
+      - "NODE_OPTIONS=--openssl-legacy-provider"
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["build", "-t", "eu.gcr.io/$PROJECT_ID/storybook:$_DOCKER_TAG", "."]
+    dir: "/workspace/storybook"
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "eu.gcr.io/$PROJECT_ID/storybook:$_DOCKER_TAG"]
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: gcloud
-    args: [ 'run', 'deploy', 'storybook-$_ENVIRONMENT', '--image', 'eu.gcr.io/$PROJECT_ID/storybook:$_DOCKER_TAG', '--region', 'europe-west1',  '--platform', 'managed' ]
+    args:
+      [
+        "run",
+        "deploy",
+        "storybook-$_ENVIRONMENT",
+        "--image",
+        "eu.gcr.io/$PROJECT_ID/storybook:$_DOCKER_TAG",
+        "--region",
+        "europe-west1",
+        "--platform",
+        "managed",
+      ]
