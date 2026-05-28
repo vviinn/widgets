@@ -84,9 +84,14 @@ export const filtersList = [
     },
     selectedValues: [],
     suggestions: [],
-    histogram: generateHistogram(39, 989, [
-      0.02, 0.04, 0.07, 0.10, 0.13, 0.16, 0.19, 0.22, 0.15, 0.10, 0.06, 0.03, 0.02, 0.01
-    ]),
+    histogram: generateHistogram(
+      39,
+      989,
+      [
+        0.02, 0.04, 0.07, 0.1, 0.13, 0.16, 0.19, 0.22, 0.15, 0.1, 0.06, 0.03,
+        0.02, 0.01,
+      ],
+    ),
   },
   {
     type: "interval",
@@ -212,6 +217,3 @@ export const energyCertificationsString = JSON.stringify([
     productType: "Product Type",
   },
 ]);
-
-export const imageURLExample =
-  "https://cdn.vviinn.com/assets/merchant/default/cropper-chair-example.jpg";

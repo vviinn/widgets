@@ -75,7 +75,7 @@ const initArgs = {
   placeholder: "",
   resultsPageUrl: "",
   resultsPageParams: "",
-  autoSuggestShow: false,
+  autoSuggestShow: true,
   exampleImageSource: "",
   cssUrl: "",
   visualSearchMode: "modal",

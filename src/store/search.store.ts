@@ -83,7 +83,6 @@ type ReceivedDataDefaults = {
   detectedObjects: Rectangle[];
   stream: Stream | null;
   redirect: (Redirect & { query?: string; searchId?: string }) | null;
-  autoSuggestCompletions: QueryCompletion[];
 };
 
 export type SearchStore = AppStateGlobalDefaults &
@@ -120,7 +119,6 @@ const receivedDataDefaults: ReceivedDataDefaults = {
   detectedObjects: [],
   stream: null,
   redirect: null,
-  autoSuggestCompletions: [],
 };
 
 const storeDefaults: SearchStore = {
@@ -643,6 +641,7 @@ export const makeAutoSuggestRequest = async (
   query: string,
   token: string,
   apiPath?: string,
+  onCompletions?: (completions: QueryCompletion[]) => void,
 ) => {
   const state = useStore(store);
   const body: AutoSuggestRequest = {
@@ -662,7 +661,7 @@ export const makeAutoSuggestRequest = async (
         return response;
 
       const completions = response.data.completions ?? [];
-      state.autoSuggestCompletions = completions;
+      onCompletions?.(completions);
 
       const matchingCompletion = completions.find(
         (completion) =>
@@ -680,11 +679,6 @@ export const makeAutoSuggestRequest = async (
     }),
     TE.mapLeft((error) => error),
   )();
-};
-
-export const clearAutoSuggestCompletions = (store: SearchStoreName) => {
-  const state = useStore(store);
-  state.autoSuggestCompletions = [];
 };
 
 export {
