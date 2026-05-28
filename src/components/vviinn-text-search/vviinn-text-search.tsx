@@ -159,6 +159,7 @@ export class VviinnTextSearch {
   @State() activeSuggestionIndex = -1;
   private originalQuery = "";
   private searchSubmitted = false;
+  private isDisconnected = false;
   private slots: HTMLSlotElement[] = [];
 
   private isShowPreloader = () =>
@@ -193,15 +194,18 @@ export class VviinnTextSearch {
     const { state, storeName } = useSearchStore(this.showInWidget);
     this.state = state;
     this.storeName = storeName;
+    this.isDisconnected = false;
   }
 
   disconnectedCallback() {
+    this.isDisconnected = true;
     clearTimeout(this.triggerTooltipStart);
     clearTimeout(this.triggerTooltipEnd);
     this.autoSuggestHandler?.cleanup();
   }
 
   private setAutoSuggestCompletions = (completions: QueryCompletion[]) => {
+    if (this.isDisconnected) return;
     if (this.searchSubmitted && completions.length > 0) return;
     this.autoSuggestCompletions = completions;
     this.activeSuggestionIndex = -1;
