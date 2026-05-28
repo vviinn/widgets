@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.220.0](https://github.com/vviinn/widgets/compare/v2.219.0...v2.220.0) (2026-05-28)
+
+
+### Features
+
+* Show auto-suggest by default in Search Bar and Search Modal ([42e470e](https://github.com/vviinn/widgets/commit/42e470e3d3995eb35af77df642ae8bfed36ba525))
+
 ## [2.219.0](https://github.com/vviinn/widgets/compare/v2.218.0...v2.219.0) (2026-05-27)
 
 
