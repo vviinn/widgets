@@ -1,6 +1,6 @@
 steps:
   - id: "install_widgets"
-    name: node
+    name: node:22
     entrypoint: bash
     args:
       - "-c"
@@ -10,7 +10,7 @@ steps:
         npm install
     dir: "/workspace"
   - id: "build_widgets"
-    name: node
+    name: node:22
     entrypoint: bash
     args:
       - "-c"
@@ -26,7 +26,7 @@ steps:
     dir: "/workspace"
     waitFor: ["install_widgets"]
   - id: "build_storybook"
-    name: node
+    name: node:22
     entrypoint: bash
     args:
       - "-c"
@@ -46,17 +46,17 @@ steps:
         then
           echo "Installing Playwright system dependencies..."
           if npx playwright install-deps chromium; then
-            echo "Installing Playwright browsers..."
-            if npm run prepare-llm-extraction; then
+            echo "Installing Playwright browsers (max 10 min)..."
+            if timeout 600 npm run prepare-llm-extraction; then
               echo "Generating LLM documentation..."
-              npm run build-llm-docs
+              if ! npm run build-llm-docs; then
+                echo "⚠️  build-llm-docs failed; deploying storybook with stale LLM docs" >&2
+              fi
             else
-              echo "❌ prepare-llm-extraction failed; skipping LLM docs generation" >&2
-              exit 1
+              echo "⚠️  playwright install timed out or failed; deploying storybook with stale LLM docs" >&2
             fi
           else
-            echo "❌ Failed to install Playwright system dependencies" >&2
-            exit 1
+            echo "⚠️  playwright install-deps failed; deploying storybook with stale LLM docs" >&2
           fi
         else
           echo "Skipping LLM docs generation (stage environment)"
