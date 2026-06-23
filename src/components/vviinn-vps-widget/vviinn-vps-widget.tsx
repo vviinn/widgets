@@ -51,7 +51,11 @@ import {
 } from "../../utils/collections/collectionsUtils";
 import { ErrorType } from "../vviinn-error";
 import { Locale, initializeLocale } from "../../locale";
-import { CameraActionIcon, UploadActionIcon } from "../vviinn-icons";
+import {
+  CameraActionIcon,
+  UploadActionIcon,
+  ImagePlaceholderIcon,
+} from "../vviinn-icons";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 import { videoStreamSettings } from "../../video/settings";
 import { Recommendation } from "../../interfaces";
@@ -694,6 +698,8 @@ export class VviinnVpsWidget {
         this.uploadSource === "startCamera") ||
       this.isCameraInitializing;
 
+    const isDropZone = this.useDragAndDrop && this.isDesktop;
+
     const buttons = [
       this.cameraAvailable && (
         <button
@@ -724,7 +730,7 @@ export class VviinnVpsWidget {
         </button>
       ),
       <vviinn-image-selector
-        class="action-button"
+        class={isDropZone ? "upload-drop-zone" : "action-button"}
         onClick={() => {
           if (this.mode !== "upload") this.uploadSource = "uploadPhoto";
         }}
@@ -742,7 +748,7 @@ export class VviinnVpsWidget {
         }}
         token={this.token}
         apiPath={this.apiPath}
-        useDragAndDrop={this.useDragAndDrop}
+        useDragAndDrop={isDropZone}
         storeName={this.storeName}
         state={this.state}
         onVviinnNoResult={({ detail }) => this.handleVviinnNoResult(detail)}
@@ -761,6 +767,11 @@ export class VviinnVpsWidget {
           this.uploadSource === "uploadPhoto"
         }
       >
+        <span slot="drop-zone-icon">
+          <ImagePlaceholderIcon />
+        </span>
+        <span slot="drop-zone-text">{i18next.t("dragDropHintText")}</span>
+
         <span slot="upload-button-text" class="action-button-content">
           <slot name="vviinn-image-upload-icon">
             <UploadActionIcon />

@@ -57,6 +57,10 @@ export class VviinnImageSelector {
 
   @State() isDragOver: boolean = false;
 
+  // dragleave fires when the pointer moves over inner elements; debounce it so
+  // the drag-over state doesn't flicker (dragover keeps cancelling the timer).
+  private dragLeaveTimer: ReturnType<typeof setTimeout>;
+
   private async processFile(file: File) {
     const validationResult = checkImageType(file);
 
@@ -122,23 +126,30 @@ export class VviinnImageSelector {
     if (!this.useDragAndDrop) return;
     event.preventDefault();
     event.dataTransfer.dropEffect = "copy";
+    clearTimeout(this.dragLeaveTimer);
     if (!this.isDragOver) this.isDragOver = true;
   }
 
   @Listen("dragleave")
   onDragLeave() {
     if (!this.useDragAndDrop) return;
-    this.isDragOver = false;
+    clearTimeout(this.dragLeaveTimer);
+    this.dragLeaveTimer = setTimeout(() => (this.isDragOver = false), 50);
   }
 
   @Listen("drop", { passive: false })
   async onDrop(event: DragEvent) {
     if (!this.useDragAndDrop) return;
     event.preventDefault();
+    clearTimeout(this.dragLeaveTimer);
     this.isDragOver = false;
 
     const file = parseDroppedFile(event.dataTransfer);
     if (file) await this.processFile(file);
+  }
+
+  disconnectedCallback() {
+    clearTimeout(this.dragLeaveTimer);
   }
 
   @Watch("startUpload")
@@ -152,27 +163,33 @@ export class VviinnImageSelector {
   render() {
     return (
       <Host exportparts="button" class={{ "drag-over": this.isDragOver }}>
-        {this.loading ? (
-          <vviinn-preloader />
-        ) : (
-          <label
-            htmlFor="fileInput"
-            part="button"
-            tabindex="0"
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                this.fileInput?.click();
-              }
-            }}
-          >
-            {this.isDragOver ? (
-              <span class="drop-hint">Drop image here</span>
-            ) : (
-              <slot name="upload-button-text">Upload image</slot>
-            )}
-          </label>
+        {this.useDragAndDrop && (
+          <div class="drop-zone__hint" aria-hidden="true">
+            <span class="drop-zone__icon">
+              <slot name="drop-zone-icon" />
+            </span>
+            <span class="drop-zone__text">
+              <slot name="drop-zone-text" />
+            </span>
+          </div>
         )}
+        <label
+          htmlFor="fileInput"
+          part="button"
+          tabindex="0"
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              this.fileInput?.click();
+            }
+          }}
+        >
+          {this.loading ? (
+            <vviinn-preloader />
+          ) : (
+            <slot name="upload-button-text">Upload image</slot>
+          )}
+        </label>
         <input
           id="fileInput"
           class="visually-hidden"

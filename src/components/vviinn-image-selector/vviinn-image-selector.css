@@ -3,24 +3,32 @@
 label {
   cursor: pointer;
   display: grid;
+  place-items: center;
   width: 100%;
   height: 100%;
   transition: background 0.1s ease-in-out;
 }
 
-/* prototype-only drop-zone feedback; final look comes via CSS Part later */
-:host(.drag-over) label {
-  outline: 2px dashed var(--color-bg-base);
-  outline-offset: -4px;
-  background: var(--color-bg-inverse);
-  color: var(--color-bg-base);
-  place-items: center;
+/* Host is styled as the dashed container by the parent's .upload-drop-zone rule
+   (outer-tree styles win over :host); here we only style this shadow's content. */
+:host(.upload-drop-zone) label {
+  height: 48px;
+  border-radius: var(--border-radius-100);
+  background: var(--color-primary, var(--button-bg-color-primary));
+  color: var(--color-text-on-color);
 }
 
-:host(.drag-over) label * {
-  pointer-events: none;
+.drop-zone__hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-100);
+  width: 100%;
 }
 
-.drop-hint {
-  font-weight: 600;
+.drop-zone__text {
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  color: var(--color-text-secondary);
 }
