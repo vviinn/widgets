@@ -194,6 +194,8 @@ export class VviinnVpsWidget {
   @Prop() imageResolutionWidth: number = SEARCH_WIDGET_IMAGE_RESOLUTION_WIDTH;
   /** Show multiple images: swiper on mobile, hover on desktop in product cards */
   @Prop() showMultipleImages: boolean = false;
+  /** Accept images dropped onto the upload button (file from OS or image URL from a page) */
+  @Prop() useDragAndDrop: boolean = false;
   /** Example image source */
   @Prop() exampleImageSource: string = DEFAULT_EXAMPLE_IMAGE;
   /** Show the text search */
@@ -740,6 +742,7 @@ export class VviinnVpsWidget {
         }}
         token={this.token}
         apiPath={this.apiPath}
+        useDragAndDrop={this.useDragAndDrop}
         storeName={this.storeName}
         state={this.state}
         onVviinnNoResult={({ detail }) => this.handleVviinnNoResult(detail)}

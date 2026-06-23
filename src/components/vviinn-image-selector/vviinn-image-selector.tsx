@@ -6,6 +6,8 @@ import {
   EventEmitter,
   Prop,
   Watch,
+  State,
+  Listen,
 } from "@stencil/core";
 import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/lib/function";
@@ -20,10 +22,9 @@ import {
   NoResultEventData,
   SearchIdEventData,
 } from "../../recommendation/events";
-import { BasicError } from "../../error";
-import { VisualSearchResponse } from "../../interfaces";
 import { setLocalStorageItems } from "../../localStorage";
 import { getAcceptableFileFormats, checkImageType } from "../../Image/error";
+import { parseDroppedFile } from "../../helpers/dragAndDrop/parseDroppedFile";
 
 /**
  * @part button -  button look and feel
@@ -49,14 +50,14 @@ export class VviinnImageSelector {
   @Prop() showInWidget: boolean;
   @Prop() storeName: SearchStoreName;
   @Prop() state: SearchStore;
+  /** Accept images dropped onto the selector (file from OS or image URL from a page) */
+  @Prop() useDragAndDrop: boolean = false;
 
   private fileInput: HTMLInputElement;
 
-  private async handleInputChange(event: Event) {
-    const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
-    if (!file) return;
+  @State() isDragOver: boolean = false;
 
+  private async processFile(file: File) {
     const validationResult = checkImageType(file);
 
     if (E.isLeft(validationResult)) {
@@ -66,7 +67,6 @@ export class VviinnImageSelector {
         errorMessage: validationResult.left.inner,
         errorCode: validationResult.left.code,
       });
-      input.value = "";
       return;
     }
 
@@ -75,10 +75,7 @@ export class VviinnImageSelector {
       isTriggeredByVpsWidget: this.storeName === "widget",
     });
 
-    const processingResult: E.Either<
-      BasicError<string | Response>,
-      VisualSearchResponse
-    > = await makeUploadFileRequest(
+    const processingResult = await makeUploadFileRequest(
       this.storeName,
       this.token,
       this.apiPath,
@@ -108,8 +105,40 @@ export class VviinnImageSelector {
         },
       ),
     );
+  }
+
+  private async handleInputChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    await this.processFile(file);
 
     input.value = "";
+  }
+
+  @Listen("dragover", { passive: false })
+  onDragOver(event: DragEvent) {
+    if (!this.useDragAndDrop) return;
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "copy";
+    if (!this.isDragOver) this.isDragOver = true;
+  }
+
+  @Listen("dragleave")
+  onDragLeave() {
+    if (!this.useDragAndDrop) return;
+    this.isDragOver = false;
+  }
+
+  @Listen("drop", { passive: false })
+  async onDrop(event: DragEvent) {
+    if (!this.useDragAndDrop) return;
+    event.preventDefault();
+    this.isDragOver = false;
+
+    const file = parseDroppedFile(event.dataTransfer);
+    if (file) await this.processFile(file);
   }
 
   @Watch("startUpload")
@@ -122,7 +151,7 @@ export class VviinnImageSelector {
 
   render() {
     return (
-      <Host exportparts="button">
+      <Host exportparts="button" class={{ "drag-over": this.isDragOver }}>
         {this.loading ? (
           <vviinn-preloader />
         ) : (
@@ -137,7 +166,11 @@ export class VviinnImageSelector {
               }
             }}
           >
-            <slot name="upload-button-text">Upload image</slot>
+            {this.isDragOver ? (
+              <span class="drop-hint">Drop image here</span>
+            ) : (
+              <slot name="upload-button-text">Upload image</slot>
+            )}
           </label>
         )}
         <input

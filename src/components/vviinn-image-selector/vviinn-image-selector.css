@@ -7,3 +7,20 @@ label {
   height: 100%;
   transition: background 0.1s ease-in-out;
 }
+
+/* prototype-only drop-zone feedback; final look comes via CSS Part later */
+:host(.drag-over) label {
+  outline: 2px dashed var(--color-bg-base);
+  outline-offset: -4px;
+  background: var(--color-bg-inverse);
+  color: var(--color-bg-base);
+  place-items: center;
+}
+
+:host(.drag-over) label * {
+  pointer-events: none;
+}
+
+.drop-hint {
+  font-weight: 600;
+}
