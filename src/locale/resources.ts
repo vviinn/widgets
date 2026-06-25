@@ -24,7 +24,7 @@ export const resources: Resource = {
       exampleImagesTitle:
         "Mit den Beispielbildern die Suche direkt ausprobieren",
       imageUploadButtonText: "Bild hochladen",
-      dragDropHintText: "Bild per Drag & Drop hierhin ziehen oder",
+      dragDropHintText: "Bild per Drag & Drop hierhin ziehen",
       cameraButtonTextStart: "Kamera starten",
       cameraButtonTextStop: "Kamera stoppen",
       privacyBadgeText: `Durch das Hochladen eines Bildes willigst Du in die Verarbeitung durch unseren Partner ${VVIINN_LINK} ein. Das Bild wird nach einer Stunde Inaktivität gelöscht.`,
@@ -169,7 +169,7 @@ export const resources: Resource = {
 
       exampleImagesTitle: "Try out the search with the example images",
       imageUploadButtonText: "Upload Photo",
-      dragDropHintText: "Drag and drop your image here or",
+      dragDropHintText: "Drag and drop your image here",
       cameraButtonTextStart: "Start Camera",
       cameraButtonTextStop: "Stop Camera",
       privacyBadgeText: `By uploading a picture you agree to the processing by our partner ${VVIINN_LINK}. The image will be deleted after one hour of inactivity.`,

@@ -9,6 +9,12 @@ label {
   transition: background 0.15s ease-in-out;
 }
 
+/* While uploading, the button shows a spinner but must not re-open the picker. */
+label.loading {
+  pointer-events: none;
+  cursor: default;
+}
+
 /* Host is styled as the dashed container by the parent's .upload-drop-zone rule
    (outer-tree styles win over :host); here we only style this shadow's content. */
 :host(.upload-drop-zone) label {

@@ -202,9 +202,10 @@ export class VviinnImageSelector {
         <label
           htmlFor="fileInput"
           part="button"
-          tabindex="0"
+          class={{ loading: this.loading }}
+          tabindex={this.loading ? -1 : 0}
           onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
+            if (!this.loading && (e.key === "Enter" || e.key === " ")) {
               e.preventDefault();
               this.fileInput?.click();
             }
