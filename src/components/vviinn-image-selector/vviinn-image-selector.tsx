@@ -127,7 +127,7 @@ export class VviinnImageSelector {
     event.preventDefault();
     event.dataTransfer.dropEffect = "copy";
     clearTimeout(this.dragLeaveTimer);
-    if (!this.isDragOver) this.isDragOver = true;
+    this.isDragOver = true;
   }
 
   @Listen("dragleave")
@@ -162,7 +162,12 @@ export class VviinnImageSelector {
 
   render() {
     return (
-      <Host exportparts="button" class={{ "drag-over": this.isDragOver }}>
+      <Host
+        exportparts={
+          this.useDragAndDrop ? "button:upload-photo_button" : "button"
+        }
+        class={{ "drag-over": this.isDragOver }}
+      >
         {this.useDragAndDrop && (
           <div class="drop-zone__hint" aria-hidden="true">
             <span class="drop-zone__icon">

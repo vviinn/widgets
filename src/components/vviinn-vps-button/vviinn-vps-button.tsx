@@ -29,7 +29,7 @@ import {
   OneClickDiscoveryAppendMode,
   VisualSearchMode,
 } from "../../widget/types";
-import { findSlotElements } from "../../dom";
+import { findSlotElements, hasDefaultSlotContent } from "../../dom";
 import { SEARCH_WIDGET_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
 import { searchModalFirstScreenParts } from "../../cssParts";
 import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
@@ -40,6 +40,8 @@ import { initializeLocale } from "../../locale";
  * @slot vviinn-teaser-text - Text on the widget's main screen.
  * @slot vviinn-image-upload-button-text - Title of Upload Button.
  * @slot vviinn-image-upload-icon - Icon of Upload Button.
+ * @slot vviinn-drag-drop-icon - Icon of the drag & drop zone.
+ * @slot vviinn-drag-drop-text - Hint text of the drag & drop zone.
  * @slot vviinn-camera-button-text-start - Title of Start Camera button.
  * @slot vviinn-camera-button-text-stop - Title of Stop Camera button (for Desktop).
  * @slot vviinn-camera-icon - Icon of Camera Button.
@@ -67,6 +69,7 @@ import { initializeLocale } from "../../locale";
  * @part secondary-action - Back Button in the modal's header.
  * @part results-title - Title on the results page.
  * @part upload-photo_button - Upload Photo Button.
+ * @part drop-zone - Drag & drop container (when useDragAndDrop is enabled).
  * @part start-camera_button - Start Camera Button.
  * @part products - Products container.
  * @part product-card - Product Card itself.
@@ -234,6 +237,11 @@ export class VviinnVpsButton {
 
   private slots?: HTMLSlotElement[] = [];
 
+  // True when the consumer projects real content into the default slot (custom
+  // trigger). Whitespace-only text and named-slot children don't count, so
+  // formatting newlines around named slots can't suppress the fallback icon.
+  private hasCustomTrigger = false;
+
   @Listen("vviinnWidgetClose")
   handleModalClosed({ detail }: CustomEvent<BasicEventData>) {
     if (detail.campaignTypeId === "VPS") {
@@ -253,6 +261,7 @@ export class VviinnVpsButton {
   async componentWillLoad() {
     await initializeLocale(this.locale);
     this.slots = findSlotElements(this.el);
+    this.hasCustomTrigger = hasDefaultSlotContent(this.el);
   }
 
   componentDidLoad() {
@@ -325,7 +334,7 @@ export class VviinnVpsButton {
           onClick={this.buttonPressed ? undefined : this.handleActivation}
           onKeyDown={this.buttonPressed ? undefined : this.handleKeyDown}
         >
-          <slot>{buttonIcon}</slot>
+          {this.hasCustomTrigger ? <slot /> : buttonIcon}
         </vviinn-button>
 
         {SlotSkeleton("search")}

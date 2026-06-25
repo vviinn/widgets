@@ -9,6 +9,17 @@ export const findSlotElements = (el: HTMLElement): HTMLSlotElement[] =>
 export const getSlotNames = (slotElements: HTMLSlotElement[]): string[] =>
   slotElements.map((el) => el.getAttribute("slot"));
 
+// True when the element has real default-slot content: an element child with no
+// `slot` attribute, or a non-whitespace text node. Whitespace and named-slot
+// children don't count, so formatting newlines can't suppress a slot fallback.
+export const hasDefaultSlotContent = (el: HTMLElement): boolean =>
+  Array.from(el.childNodes).some((node) =>
+    node.nodeType === Node.TEXT_NODE
+      ? node.textContent.trim() !== ""
+      : node.nodeType === Node.ELEMENT_NODE &&
+        !(node as Element).getAttribute("slot"),
+  );
+
 // Intersection Observer utilities
 export * from "./intersectionObserver";
 

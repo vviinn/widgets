@@ -54,7 +54,7 @@ import { Locale, initializeLocale } from "../../locale";
 import {
   CameraActionIcon,
   UploadActionIcon,
-  ImagePlaceholderIcon,
+  DragDropImageIcon,
 } from "../vviinn-icons";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 import { videoStreamSettings } from "../../video/settings";
@@ -754,7 +754,7 @@ export class VviinnVpsWidget {
         onVviinnNoResult={({ detail }) => this.handleVviinnNoResult(detail)}
         resetVpsButton={this.resetVpsButton}
         basicEventData={this.getBasicEventData()}
-        part="upload-photo_button"
+        part={isDropZone ? "drop-zone" : "upload-photo_button"}
         startUpload={
           this.buttonPressed &&
           this.mode === "upload" &&
@@ -768,14 +768,22 @@ export class VviinnVpsWidget {
         }
       >
         <span slot="drop-zone-icon">
-          <ImagePlaceholderIcon />
+          <slot name="vviinn-drag-drop-icon">
+            <DragDropImageIcon />
+          </slot>
         </span>
-        <span slot="drop-zone-text">{i18next.t("dragDropHintText")}</span>
+        <span slot="drop-zone-text">
+          <slot name="vviinn-drag-drop-text">
+            {i18next.t("dragDropHintText")}
+          </slot>
+        </span>
 
         <span slot="upload-button-text" class="action-button-content">
-          <slot name="vviinn-image-upload-icon">
-            <UploadActionIcon />
-          </slot>
+          {!isDropZone && (
+            <slot name="vviinn-image-upload-icon">
+              <UploadActionIcon />
+            </slot>
+          )}
 
           <slot name="vviinn-image-upload-button-text">
             <span>{i18next.t("imageUploadButtonText")}</span>

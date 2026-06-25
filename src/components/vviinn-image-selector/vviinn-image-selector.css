@@ -6,7 +6,7 @@ label {
   place-items: center;
   width: 100%;
   height: 100%;
-  transition: background 0.1s ease-in-out;
+  transition: background 0.15s ease-in-out;
 }
 
 /* Host is styled as the dashed container by the parent's .upload-drop-zone rule
@@ -18,11 +18,15 @@ label {
   color: var(--color-text-on-color);
 }
 
+:host(.upload-drop-zone) label:hover {
+  background: var(--color-primary-hover, var(--button-bg-color-primary-hover));
+}
+
 .drop-zone__hint {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--spacing-100);
+  gap: var(--spacing-50);
   width: 100%;
 }
 
