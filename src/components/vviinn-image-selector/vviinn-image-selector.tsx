@@ -50,7 +50,7 @@ export class VviinnImageSelector {
   @Prop() showInWidget: boolean;
   @Prop() storeName: SearchStoreName;
   @Prop() state: SearchStore;
-  /** Accept images dropped onto the selector (file from OS or image URL from a page) */
+  /** Accept image files dropped from the OS onto the selector */
   @Prop() useDragAndDrop: boolean = false;
 
   private fileInput: HTMLInputElement;
@@ -61,7 +61,13 @@ export class VviinnImageSelector {
   // the drag-over state doesn't flicker (dragover keeps cancelling the timer).
   private dragLeaveTimer: ReturnType<typeof setTimeout>;
 
+  // Guards against a second drop / file-input change starting a concurrent
+  // upload while the first request is still in flight (racing two searches).
+  private isProcessing = false;
+
   private async processFile(file: File) {
+    if (this.isProcessing) return;
+
     const validationResult = checkImageType(file);
 
     if (E.isLeft(validationResult)) {
@@ -79,36 +85,41 @@ export class VviinnImageSelector {
       isTriggeredByVpsWidget: this.storeName === "widget",
     });
 
-    const processingResult = await makeUploadFileRequest(
-      this.storeName,
-      this.token,
-      this.apiPath,
-    )(file);
+    this.isProcessing = true;
+    try {
+      const processingResult = await makeUploadFileRequest(
+        this.storeName,
+        this.token,
+        this.apiPath,
+      )(file);
 
-    pipe(
-      processingResult,
-      E.match(
-        ({ kind, code }) => {
-          this.vviinnNoResult.emit({
-            ...this.basicEventData,
-            reason: kind,
-            errorCode: code,
-          });
-        },
-        (response) => {
-          if (!this.showInWidget)
-            setLocalStorageItems(
-              this.state.image?.src,
-              this.state.detectedObjects,
-            );
+      pipe(
+        processingResult,
+        E.match(
+          ({ kind, code }) => {
+            this.vviinnNoResult.emit({
+              ...this.basicEventData,
+              reason: kind,
+              errorCode: code,
+            });
+          },
+          (response) => {
+            if (!this.showInWidget)
+              setLocalStorageItems(
+                this.state.image?.src,
+                this.state.detectedObjects,
+              );
 
-          this.vviinnImageUploadFinished.emit({
-            searchId: response.requestId,
-            isTriggeredByVpsWidget: this.storeName === "widget",
-          });
-        },
-      ),
-    );
+            this.vviinnImageUploadFinished.emit({
+              searchId: response.requestId,
+              isTriggeredByVpsWidget: this.storeName === "widget",
+            });
+          },
+        ),
+      );
+    } finally {
+      this.isProcessing = false;
+    }
   }
 
   private async handleInputChange(event: Event) {
@@ -125,7 +136,7 @@ export class VviinnImageSelector {
   onDragOver(event: DragEvent) {
     if (!this.useDragAndDrop) return;
     event.preventDefault();
-    event.dataTransfer.dropEffect = "copy";
+    if (event.dataTransfer) event.dataTransfer.dropEffect = "copy";
     clearTimeout(this.dragLeaveTimer);
     this.isDragOver = true;
   }
@@ -146,6 +157,16 @@ export class VviinnImageSelector {
 
     const file = parseDroppedFile(event.dataTransfer);
     if (file) await this.processFile(file);
+  }
+
+  // Safety net for a drag that ends without a dragleave reaching this host
+  // (dropped outside the element, or cancelled): clears a stuck highlight.
+  @Listen("drop", { target: "document" })
+  @Listen("dragend", { target: "document" })
+  onGlobalDragEnd() {
+    if (!this.useDragAndDrop || !this.isDragOver) return;
+    clearTimeout(this.dragLeaveTimer);
+    this.isDragOver = false;
   }
 
   disconnectedCallback() {

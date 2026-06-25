@@ -159,7 +159,7 @@ export class VviinnVpsButton {
   @Prop() imageResolutionWidth: number = SEARCH_WIDGET_IMAGE_RESOLUTION_WIDTH;
   /** Show multiple images: swiper on mobile, hover on desktop in product cards */
   @Prop() showMultipleImages: boolean = false;
-  /** Accept images dropped onto the upload button (file from OS or image URL from a page) */
+  /** Accept image files dropped from the OS onto the upload button (desktop only) */
   @Prop() useDragAndDrop: boolean = false;
   /** Example image source */
   @Prop() exampleImageSource: string = DEFAULT_EXAMPLE_IMAGE;
@@ -240,7 +240,9 @@ export class VviinnVpsButton {
   // True when the consumer projects real content into the default slot (custom
   // trigger). Whitespace-only text and named-slot children don't count, so
   // formatting newlines around named slots can't suppress the fallback icon.
-  private hasCustomTrigger = false;
+  // @State + the default slot's slotchange keep this reactive to light-DOM that
+  // is projected/removed after load (e.g. deferred hydration, async injection).
+  @State() hasCustomTrigger = false;
 
   @Listen("vviinnWidgetClose")
   handleModalClosed({ detail }: CustomEvent<BasicEventData>) {
@@ -334,7 +336,16 @@ export class VviinnVpsButton {
           onClick={this.buttonPressed ? undefined : this.handleActivation}
           onKeyDown={this.buttonPressed ? undefined : this.handleKeyDown}
         >
-          {this.hasCustomTrigger ? <slot /> : buttonIcon}
+          <span
+            style={{ display: this.hasCustomTrigger ? "contents" : "none" }}
+          >
+            <slot
+              onSlotchange={() =>
+                (this.hasCustomTrigger = hasDefaultSlotContent(this.el))
+              }
+            />
+          </span>
+          {!this.hasCustomTrigger && buttonIcon}
         </vviinn-button>
 
         {SlotSkeleton("search")}

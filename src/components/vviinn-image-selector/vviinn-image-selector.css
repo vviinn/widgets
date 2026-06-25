@@ -31,8 +31,8 @@ label {
 }
 
 .drop-zone__text {
-  font-size: 14px;
-  line-height: 20px;
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
   text-align: center;
   color: var(--color-text-secondary);
 }

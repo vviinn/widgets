@@ -198,7 +198,7 @@ export class VviinnVpsWidget {
   @Prop() imageResolutionWidth: number = SEARCH_WIDGET_IMAGE_RESOLUTION_WIDTH;
   /** Show multiple images: swiper on mobile, hover on desktop in product cards */
   @Prop() showMultipleImages: boolean = false;
-  /** Accept images dropped onto the upload button (file from OS or image URL from a page) */
+  /** Accept image files dropped from the OS onto the upload button (desktop only) */
   @Prop() useDragAndDrop: boolean = false;
   /** Example image source */
   @Prop() exampleImageSource: string = DEFAULT_EXAMPLE_IMAGE;
