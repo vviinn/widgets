@@ -11,6 +11,8 @@ const vpsSlotNames: string[] = [
   "vviinn-teaser-text",
   "vviinn-image-upload-button-text",
   "vviinn-image-upload-icon",
+  "vviinn-drag-drop-icon",
+  "vviinn-drag-drop-text",
   "vviinn-camera-button-text-start",
   "vviinn-camera-button-text-stop",
   "vviinn-camera-icon",

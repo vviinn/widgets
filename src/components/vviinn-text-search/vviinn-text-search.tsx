@@ -139,6 +139,8 @@ export class VviinnTextSearch {
   @Prop() cssUrl?: string | null;
   /** Visual search modal mode (modal/camera/upload) */
   @Prop() visualSearchMode?: VisualSearchMode;
+  /** Accept image files dropped from the OS onto the upload button (desktop only) */
+  @Prop() useDragAndDrop: boolean = false;
 
   /** True, when used inside the widget */
   /** @internal */
@@ -507,6 +509,7 @@ export class VviinnTextSearch {
               })}
               {...(this.cssUrl != null && { cssUrl: this.cssUrl })}
               {...(this.visualSearchMode && { mode: this.visualSearchMode })}
+              useDragAndDrop={this.useDragAndDrop}
               parentSlots={this.slots}
             />
           )}

@@ -77,6 +77,7 @@ export const searchWidgetFilterParts = makeExportPartsString(
 export const searchWidgetButtonParts = makeExportPartsString([
   "upload-photo_button",
   "start-camera_button",
+  "drop-zone",
 ]);
 
 export const searchModalFirstScreenParts = makeExportPartsString([
@@ -84,6 +85,7 @@ export const searchModalFirstScreenParts = makeExportPartsString([
   "secondary-action",
   "upload-photo_button",
   "start-camera_button",
+  "drop-zone",
 ]);
 
 export const searchBarParts = makeExportPartsString([

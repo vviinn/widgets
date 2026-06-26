@@ -67,7 +67,11 @@ const heicNotSupportedError: BasicError<string> = {
 export const checkImageType = (
   file: File,
 ): Either<BasicError<string>, File> => {
-  const fileType = file.type.split("/")[1];
+  // OS drag-and-drop can yield an empty file.type; fall back to the file
+  // extension (which is what the browser derives the type from anyway).
+  const fileType = file.type
+    ? file.type.split("/")[1]
+    : file.name.split(".").pop()?.toLowerCase();
 
   if ((fileType === "heic" || fileType === "heif") && !isWebKitEngine()) {
     return left(heicNotSupportedError);
