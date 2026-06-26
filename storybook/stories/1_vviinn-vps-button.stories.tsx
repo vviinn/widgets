@@ -58,6 +58,7 @@ const Template = (args) => `
   api-path="${args.apiPath}"
   image-resolution-width="${args.imageResolutionWidth}"
   show-multiple-images="${args.showMultipleImages}"
+  use-drag-and-drop="${args.useDragAndDrop}"
   text-search-show="${args.textSearchShow}"
   auto-suggest-show="${args.autoSuggestShow}"
   add-to-basket-show="${args.addToBasketShow}"
@@ -92,6 +93,7 @@ const initArgs = {
   addStyle: true,
   imageResolutionWidth: 250,
   showMultipleImages: false,
+  useDragAndDrop: false,
   textSearchShow: true,
   autoSuggestShow: true,
   addToBasketShow: false,

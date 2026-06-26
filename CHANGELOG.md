@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.221.0](https://github.com/vviinn/widgets/compare/v2.220.0...v2.221.0) (2026-06-26)
+
+
+### Features
+
+* Search Modal: Drag and Drop upload, configured by use-drag-and-drop prop ([bdb9ead](https://github.com/vviinn/widgets/commit/bdb9eadcd0d94236ded3452b7326f22c31c70b07))
+
 ## [2.220.0](https://github.com/vviinn/widgets/compare/v2.219.0...v2.220.0) (2026-05-28)
 
 

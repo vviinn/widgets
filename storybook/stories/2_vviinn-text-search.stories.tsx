@@ -45,6 +45,7 @@ const Template = (args) => `
       example-image-source="${args.exampleImageSource}"
       css-url="${args.cssUrl}"
       visual-search-mode="${args.visualSearchMode}"
+      use-drag-and-drop="${args.useDragAndDrop}"
     >
     </vviinn-text-search>
 
@@ -79,6 +80,7 @@ const initArgs = {
   exampleImageSource: "",
   cssUrl: "",
   visualSearchMode: "modal",
+  useDragAndDrop: false,
   mode: "extended",
   locale: "en-US",
   productCardImageAspectRatio: "1 / 1",

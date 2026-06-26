@@ -51,7 +51,11 @@ import {
 } from "../../utils/collections/collectionsUtils";
 import { ErrorType } from "../vviinn-error";
 import { Locale, initializeLocale } from "../../locale";
-import { CameraActionIcon, UploadActionIcon } from "../vviinn-icons";
+import {
+  CameraActionIcon,
+  UploadActionIcon,
+  DragDropImageIcon,
+} from "../vviinn-icons";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 import { videoStreamSettings } from "../../video/settings";
 import { Recommendation } from "../../interfaces";
@@ -194,6 +198,8 @@ export class VviinnVpsWidget {
   @Prop() imageResolutionWidth: number = SEARCH_WIDGET_IMAGE_RESOLUTION_WIDTH;
   /** Show multiple images: swiper on mobile, hover on desktop in product cards */
   @Prop() showMultipleImages: boolean = false;
+  /** Accept image files dropped from the OS onto the upload button (desktop only) */
+  @Prop() useDragAndDrop: boolean = false;
   /** Example image source */
   @Prop() exampleImageSource: string = DEFAULT_EXAMPLE_IMAGE;
   /** Show the text search */
@@ -692,6 +698,8 @@ export class VviinnVpsWidget {
         this.uploadSource === "startCamera") ||
       this.isCameraInitializing;
 
+    const isDropZone = this.useDragAndDrop && this.isDesktop;
+
     const buttons = [
       this.cameraAvailable && (
         <button
@@ -722,7 +730,7 @@ export class VviinnVpsWidget {
         </button>
       ),
       <vviinn-image-selector
-        class="action-button"
+        class={isDropZone ? "upload-drop-zone" : "action-button"}
         onClick={() => {
           if (this.mode !== "upload") this.uploadSource = "uploadPhoto";
         }}
@@ -740,12 +748,13 @@ export class VviinnVpsWidget {
         }}
         token={this.token}
         apiPath={this.apiPath}
+        useDragAndDrop={isDropZone}
         storeName={this.storeName}
         state={this.state}
         onVviinnNoResult={({ detail }) => this.handleVviinnNoResult(detail)}
         resetVpsButton={this.resetVpsButton}
         basicEventData={this.getBasicEventData()}
-        part="upload-photo_button"
+        part={isDropZone ? "drop-zone" : "upload-photo_button"}
         startUpload={
           this.buttonPressed &&
           this.mode === "upload" &&
@@ -758,10 +767,23 @@ export class VviinnVpsWidget {
           this.uploadSource === "uploadPhoto"
         }
       >
-        <span slot="upload-button-text" class="action-button-content">
-          <slot name="vviinn-image-upload-icon">
-            <UploadActionIcon />
+        <span slot="drop-zone-icon">
+          <slot name="vviinn-drag-drop-icon">
+            <DragDropImageIcon />
           </slot>
+        </span>
+        <span slot="drop-zone-text">
+          <slot name="vviinn-drag-drop-text">
+            {i18next.t("dragDropHintText")}
+          </slot>
+        </span>
+
+        <span slot="upload-button-text" class="action-button-content">
+          {!isDropZone && (
+            <slot name="vviinn-image-upload-icon">
+              <UploadActionIcon />
+            </slot>
+          )}
 
           <slot name="vviinn-image-upload-button-text">
             <span>{i18next.t("imageUploadButtonText")}</span>

@@ -88,7 +88,7 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
   height: 48px;
   justify-items: center;
   font-family: var(--font-family, var(--font-family-base));
-  transition: background 0.1s ease-in-out;
+  transition: background 0.15s ease-in-out;
   color: var(--color-text-primary);
   background-color: #f4f4f4;
 }
@@ -127,6 +127,40 @@ vviinn-overlayed-modal.first-screen::part(secondary-action) {
 
 .action-button .hidden {
   display: none;
+}
+
+.upload-drop-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-150);
+  padding: var(--spacing-200);
+  box-sizing: border-box;
+  cursor: pointer;
+  background: var(--button-bg-color-secondary);
+  border: 1px dashed var(--color-border-02);
+  border-radius: var(--border-radius-50);
+  font-family: var(--font-family, var(--font-family-base));
+  transition:
+    border-color 0.1s ease-in-out,
+    background 0.1s ease-in-out;
+}
+
+.upload-drop-zone.drag-over {
+  border-color: var(--color-primary, var(--button-bg-color-primary));
+  background: color-mix(
+    in srgb,
+    var(--color-primary, var(--button-bg-color-primary)) 8%,
+    transparent
+  );
+}
+
+/* Slotted icon lives in this tree, so it must be sized here (not in the child). */
+.upload-drop-zone [slot="drop-zone-icon"] svg {
+  display: block;
+  width: 32px;
+  height: 32px;
+  color: var(--color-text-secondary);
 }
 
 .results-page {
