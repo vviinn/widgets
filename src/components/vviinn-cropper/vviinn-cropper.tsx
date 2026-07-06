@@ -136,7 +136,7 @@ export class VviinnCropper {
   private isOcrResult = () => hasSelectedOcrFilter(this.state.dynamicFilters);
 
   private syncCroppingState = () => {
-    if (!this.state.image) return;
+    if (!this.state.image || !this.state.imageBounds) return;
 
     if (this.isOcrResult()) {
       this.cropper?.destroy();
@@ -310,6 +310,7 @@ export class VviinnCropper {
   };
 
   private initCropper = (imageElement: HTMLImageElement, data = {}) => {
+    if (!this.state.imageBounds) return;
     const { width, height } = this.state.imageBounds;
 
     if (
@@ -330,7 +331,7 @@ export class VviinnCropper {
       ...cropperOptions,
       cropstart: this.cropStart,
       cropend: this.cropEnd,
-      ready: () => this.cropper.reset(),
+      ready: () => this.cropper?.reset(),
       data,
     });
   };
