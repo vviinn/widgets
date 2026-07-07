@@ -129,18 +129,34 @@ export class VviinnCropper {
   disconnectedCallback() {
     this.eventAbortController?.abort();
     this.disposeStoreListener?.();
-    this.cropper?.destroy?.();
-    this.state.image = null;
+    this.resetCropperState();
   }
 
   private isOcrResult = () => hasSelectedOcrFilter(this.state.dynamicFilters);
+
+  private destroyCropper = () => {
+    this.cropper?.destroy?.();
+    this.cropper = null;
+  };
+
+  private clearCropState = () => {
+    this.state.searchArea = null;
+    this.state.croppedImageUrl = null;
+    this.selectedDetectedObject = null;
+  };
+
+  private resetCropperState = () => {
+    this.destroyCropper();
+    this.state.image = null;
+    this.clearCropState();
+  };
 
   private syncCroppingState = () => {
     if (!this.state.image || !this.state.imageBounds) return;
 
     if (this.isOcrResult()) {
-      this.cropper?.destroy();
-      this.cropper = null;
+      this.destroyCropper();
+      this.clearCropState();
       return;
     }
 
@@ -186,11 +202,9 @@ export class VviinnCropper {
   }: CustomEvent<TriggerSourceEventData>) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
 
-    this.selectedDetectedObject = null;
     this.state.image?.setAttribute("src", "");
     this.state.detectedObjects = [];
-    this.state.image = null;
-    this.cropper?.destroy();
+    this.resetCropperState();
     cleanLocalStorage();
   };
 
@@ -293,8 +307,7 @@ export class VviinnCropper {
       let data = {};
       if (this.cropper) {
         data = this.cropper.getData(true);
-        this.cropper.destroy();
-        this.cropper = null;
+        this.destroyCropper();
       }
       const imageBounds = fromImage(renderedImageElement);
 
@@ -303,7 +316,10 @@ export class VviinnCropper {
       });
       this.state.imageBounds = imageBounds;
 
-      if (this.isOcrResult()) return;
+      if (this.isOcrResult()) {
+        this.clearCropState();
+        return;
+      }
 
       this.initCropper(renderedImageElement, data);
     }
