@@ -315,6 +315,7 @@ export class VviinnCropper {
 
     const renderedImageElement =
       this.el.shadowRoot.querySelector<HTMLImageElement>("img");
+    if (!renderedImageElement) return;
     this.imageElement = renderedImageElement;
 
     let data = {};
@@ -374,6 +375,7 @@ export class VviinnCropper {
   };
 
   private initCropper = (imageElement: HTMLImageElement, data = {}) => {
+    if (!imageElement) return;
     if (!this.checkAspectRatio() || !this.hasSupportedSize()) return;
 
     this.cropper = new Cropper(imageElement, {
