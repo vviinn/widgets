@@ -101,7 +101,7 @@ export class VviinnCropper {
   private eventAbortController?: AbortController;
   private disposeStoreListener?: () => void;
   private lastGatedImage: HTMLImageElement | null = null;
-  private validationFailed = false;
+  private imageElement: HTMLImageElement | null = null;
 
   connectedCallback() {
     const { state, storeName, onChange } = useSearchStore(this.showInWidget);
@@ -137,7 +137,7 @@ export class VviinnCropper {
   private isOcrResult = () => hasSelectedOcrFilter(this.state.dynamicFilters);
 
   private destroyCropper = () => {
-    this.cropper?.destroy?.();
+    this.cropper?.destroy();
     this.cropper = null;
   };
 
@@ -153,21 +153,28 @@ export class VviinnCropper {
     this.clearCropState();
   };
 
+  private gateOcrResult = () => {
+    this.destroyCropper();
+    this.clearCropState();
+  };
+
   private syncCroppingState = () => {
     if (!this.state.image || !this.state.imageBounds) return;
 
     if (this.isOcrResult()) {
-      this.destroyCropper();
-      this.clearCropState();
+      this.gateOcrResult();
       return;
     }
 
-    if (this.cropper || this.validationFailed) return;
+    if (
+      this.cropper ||
+      !this.hasSupportedAspectRatio() ||
+      !this.hasSupportedSize()
+    )
+      return;
 
-    const renderedImageElement =
-      this.el.shadowRoot.querySelector<HTMLImageElement>("img");
-    if (renderedImageElement) {
-      this.initCropper(renderedImageElement);
+    if (this.imageElement) {
+      this.initCropper(this.imageElement);
     }
   };
 
@@ -216,7 +223,7 @@ export class VviinnCropper {
     detail,
   }: CustomEvent<TriggerSourceEventData>) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
-    this.cropper?.reset?.();
+    this.cropper?.reset();
     this.clearCropState();
     this.vviinnImageCrop.emit({
       isTriggeredByVpsWidget: this.showInWidget,
@@ -304,73 +311,76 @@ export class VviinnCropper {
   }
 
   private loadImage = () => {
-    const renderedImageElement = this.el.shadowRoot.querySelector("img");
-    if (this.state.image) {
-      let data = {};
-      if (this.cropper) {
-        data = this.cropper.getData(true);
-        this.destroyCropper();
-      }
-      const imageBounds = fromImage(renderedImageElement);
+    if (!this.state.image) return;
 
-      this.vviinnCropperLoadImage.emit({
-        imageBounds,
-      });
-      this.state.imageBounds = imageBounds;
-      this.validationFailed = false;
+    const renderedImageElement =
+      this.el.shadowRoot.querySelector<HTMLImageElement>("img");
+    this.imageElement = renderedImageElement;
 
-      // dynamicFilters can still hold the PREVIOUS search's value here - the
-      // response for this new image hasn't landed yet. Only trust it as OCR
-      // the first time this component instance sees an image; re-uploads
-      // default to showing the cropper and let syncCroppingState correct it
-      // once fresh filters for this image arrive.
-      const isReupload =
-        this.lastGatedImage !== null &&
-        this.lastGatedImage !== this.state.image;
-      this.lastGatedImage = this.state.image;
-
-      if (!isReupload && this.isOcrResult()) {
-        this.clearCropState();
-        this.validateImageBounds();
-        return;
-      }
-
-      this.initCropper(renderedImageElement, data);
+    let data = {};
+    if (this.cropper) {
+      data = this.cropper.getData(true);
+      this.destroyCropper();
     }
+    const imageBounds = fromImage(renderedImageElement);
+
+    this.vviinnCropperLoadImage.emit({
+      imageBounds,
+    });
+    this.state.imageBounds = imageBounds;
+
+    // dynamicFilters can still hold the PREVIOUS search's value here - the
+    // response for this new image hasn't landed yet. Only trust it as OCR
+    // the first time this component instance sees an image; re-uploads
+    // default to showing the cropper and let syncCroppingState correct it
+    // once fresh filters for this image arrive.
+    const isReupload =
+      this.lastGatedImage !== null && this.lastGatedImage !== this.state.image;
+    this.lastGatedImage = this.state.image;
+
+    if (!isReupload && this.isOcrResult()) {
+      this.clearCropState();
+      this.checkAspectRatio();
+      return;
+    }
+
+    this.initCropper(renderedImageElement, data);
   };
 
-  private validateImageBounds = (): boolean => {
+  private hasSupportedAspectRatio = (): boolean => {
     if (!this.state.imageBounds) return false;
     const { width, height } = this.state.imageBounds;
 
-    if (
-      width / height < SUPPORTED_ASPECT_RATIO ||
-      height / width < SUPPORTED_ASPECT_RATIO
-    ) {
-      this.validationFailed = true;
-      this.vviinnCropperAspectRatioError.emit(true);
-      return false;
-    }
+    return (
+      width / height >= SUPPORTED_ASPECT_RATIO &&
+      height / width >= SUPPORTED_ASPECT_RATIO
+    );
+  };
 
-    if (
-      width < MIN_IMAGE_SIDE_FOR_CROPPER ||
-      height < MIN_IMAGE_SIDE_FOR_CROPPER
-    ) {
-      this.validationFailed = true;
-      return false;
-    }
+  private hasSupportedSize = (): boolean => {
+    if (!this.state.imageBounds) return false;
+    const { width, height } = this.state.imageBounds;
 
-    return true;
+    return (
+      width >= MIN_IMAGE_SIDE_FOR_CROPPER &&
+      height >= MIN_IMAGE_SIDE_FOR_CROPPER
+    );
+  };
+
+  private checkAspectRatio = (): boolean => {
+    if (this.hasSupportedAspectRatio()) return true;
+    this.vviinnCropperAspectRatioError.emit(true);
+    return false;
   };
 
   private initCropper = (imageElement: HTMLImageElement, data = {}) => {
-    if (!this.validateImageBounds()) return;
+    if (!this.checkAspectRatio() || !this.hasSupportedSize()) return;
 
     this.cropper = new Cropper(imageElement, {
       ...cropperOptions,
       cropstart: this.cropStart,
       cropend: this.cropEnd,
-      ready: () => this.cropper?.reset?.(),
+      ready: () => this.cropper?.reset(),
       data,
     });
   };
