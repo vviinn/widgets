@@ -212,7 +212,7 @@ export class VviinnCropper {
     detail,
   }: CustomEvent<TriggerSourceEventData>) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
-    this.cropper?.reset();
+    this.cropper?.reset?.();
     this.state.searchArea = null;
     this.state.croppedImageUrl = null;
     this.selectedDetectedObject = null;
@@ -347,7 +347,7 @@ export class VviinnCropper {
       ...cropperOptions,
       cropstart: this.cropStart,
       cropend: this.cropEnd,
-      ready: () => this.cropper?.reset(),
+      ready: () => this.cropper?.reset?.(),
       data,
     });
   };
