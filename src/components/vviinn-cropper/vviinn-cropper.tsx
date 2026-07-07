@@ -100,6 +100,8 @@ export class VviinnCropper {
   private startEndCropBoxData?: Rectangle;
   private eventAbortController?: AbortController;
   private disposeStoreListener?: () => void;
+  private lastGatedImage: HTMLImageElement | null = null;
+  private validationFailed = false;
 
   connectedCallback() {
     const { state, storeName, onChange } = useSearchStore(this.showInWidget);
@@ -160,9 +162,11 @@ export class VviinnCropper {
       return;
     }
 
+    if (this.cropper || this.validationFailed) return;
+
     const renderedImageElement =
       this.el.shadowRoot.querySelector<HTMLImageElement>("img");
-    if (renderedImageElement && !this.cropper) {
+    if (renderedImageElement) {
       this.initCropper(renderedImageElement);
     }
   };
@@ -213,9 +217,7 @@ export class VviinnCropper {
   }: CustomEvent<TriggerSourceEventData>) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.cropper?.reset?.();
-    this.state.searchArea = null;
-    this.state.croppedImageUrl = null;
-    this.selectedDetectedObject = null;
+    this.clearCropState();
     this.vviinnImageCrop.emit({
       isTriggeredByVpsWidget: this.showInWidget,
     });
@@ -315,9 +317,21 @@ export class VviinnCropper {
         imageBounds,
       });
       this.state.imageBounds = imageBounds;
+      this.validationFailed = false;
 
-      if (this.isOcrResult()) {
+      // dynamicFilters can still hold the PREVIOUS search's value here - the
+      // response for this new image hasn't landed yet. Only trust it as OCR
+      // the first time this component instance sees an image; re-uploads
+      // default to showing the cropper and let syncCroppingState correct it
+      // once fresh filters for this image arrive.
+      const isReupload =
+        this.lastGatedImage !== null &&
+        this.lastGatedImage !== this.state.image;
+      this.lastGatedImage = this.state.image;
+
+      if (!isReupload && this.isOcrResult()) {
         this.clearCropState();
+        this.validateImageBounds();
         return;
       }
 
@@ -325,24 +339,33 @@ export class VviinnCropper {
     }
   };
 
-  private initCropper = (imageElement: HTMLImageElement, data = {}) => {
-    if (!this.state.imageBounds) return;
+  private validateImageBounds = (): boolean => {
+    if (!this.state.imageBounds) return false;
     const { width, height } = this.state.imageBounds;
 
     if (
       width / height < SUPPORTED_ASPECT_RATIO ||
       height / width < SUPPORTED_ASPECT_RATIO
     ) {
+      this.validationFailed = true;
       this.vviinnCropperAspectRatioError.emit(true);
-      return;
+      return false;
     }
 
     if (
       width < MIN_IMAGE_SIDE_FOR_CROPPER ||
       height < MIN_IMAGE_SIDE_FOR_CROPPER
     ) {
-      return;
+      this.validationFailed = true;
+      return false;
     }
+
+    return true;
+  };
+
+  private initCropper = (imageElement: HTMLImageElement, data = {}) => {
+    if (!this.validateImageBounds()) return;
+
     this.cropper = new Cropper(imageElement, {
       ...cropperOptions,
       cropstart: this.cropStart,
