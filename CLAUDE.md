@@ -68,6 +68,12 @@ Global CSS variables in `src/variables.css`.
 - **Punctuation in comments & docs**: use an em dash (—), not a hyphen (-) or en dash (–).
 - **Component JSDoc**: the `@part` / `@slot` / `@cssprop` JSDoc block must sit **immediately above `@Component`** with no declaration in between — otherwise Stencil attaches it to that declaration and the docs (Storybook Controls table via `docs.json`) lose the parts/slots.
 
+## Git Commit Conventions
+
+- **User-facing changes** — `feat:` for features, `fix:` for fixes. These land in the user-facing changelog, so write them for end users. Semi-free form: add a `Component Name:` segment when the change targets one component (`feat: Vviinn Cropper: toggle cropper visibility by OCR filter`), otherwise a plain summary for cross-cutting changes (`fix: Restore missing CSS parts & slots in component docs`).
+- **Routine work** (intermediate fixes, chores, review changes, refactors) — `#<ticket> Description`, where `<ticket>` is the number from the branch name (e.g. `#39690 Ignore local Claude settings file`). No `feat:`/`fix:`/`chore:` prefix.
+- **Automation** (releases, CI, changelog bumps) — prefix with `[skip ci]`.
+
 ## Key Patterns
 
 **Slot System**: Centralized in `src/components/customized-slots.tsx`. See `/add-slot` command for adding slots to components.
