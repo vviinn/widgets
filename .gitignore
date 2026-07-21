@@ -26,3 +26,5 @@ storybook/output.log
 .cursor/
 .cursorignore
 .mcp.json
+# Claude Code local settings (personal, not shared)
+.claude/settings.local.json
