@@ -64,6 +64,7 @@ Global CSS variables in `src/variables.css`.
 - **CSS-First**: Prioritize CSS over JS for positioning and layout
 - **Class Maps**: `{ 'base': true, active: this.isActive, [this.variant]: !!this.variant }`
 - **Adding @Prop()**: See `/add-prop` command. ALWAYS update Storybook story when adding props.
+- **Punctuation in comments & docs**: use an em dash (—), not a hyphen (-) or en dash (–).
 
 ## Key Patterns
 
