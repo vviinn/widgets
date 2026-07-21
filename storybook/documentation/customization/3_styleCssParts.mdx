@@ -37,6 +37,8 @@ vviinn-vpr-widget::part(custom-label-0) {
 }
 ```
 
+Part names stay the same whichever widget you embed: a nested component re-exports its own parts (Product Card does this), and rendering directly inside the widget's shadow tree lets `::part()` reach them across that single boundary — you re-export nothing yourself. It only breaks when a part sits more than one shadow boundary away from the tag you select — e.g. a widget rendered inside another widget's shadow — which is why `vviinn-vpr-button` forwards its sidebar's parts explicitly.
+
 **Tip:** You can **combine multiple parts** in a selector to target an element that carries both — the same works from any host widget\*:
 
 ```css
