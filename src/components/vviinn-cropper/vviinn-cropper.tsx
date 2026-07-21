@@ -133,6 +133,8 @@ export class VviinnCropper {
     this.eventAbortController?.abort();
     this.disposeStoreListener?.();
     this.destroyCropper();
+    // "never" keeps no image across mounts, so clear it from the shared store.
+    if (this.saveImageMode === "never") this.state.image = null;
   }
 
   private destroyCropper = () => {
@@ -161,6 +163,9 @@ export class VviinnCropper {
   private reconcileCropper = () => {
     if (!this.state.image || !this.imageElement || !this.state.imageBounds)
       return;
+
+    // Fires on a dynamicFilters change — a fresh response for the current image.
+    this.gate.onFreshFilters();
 
     if (this.gate.isGated(this.state.dynamicFilters)) {
       this.hideCropper();

@@ -37,13 +37,17 @@ describe("CropperOcrGate", () => {
     expect(gate.isGated(ocrFilters(true))).toBe(false);
   });
 
-  it("re-arms gating when a different image is loaded", () => {
+  it("does not gate a re-upload on stale filters until fresh ones arrive", () => {
     const gate = new CropperOcrGate();
     gate.onImage(imageA);
     gate.onUserAdjust();
     expect(gate.isGated(ocrFilters(true))).toBe(false);
 
+    // Re-upload: stale filters, cropper stays until fresh ones arrive.
     gate.onImage(imageB);
+    expect(gate.isGated(ocrFilters(true))).toBe(false);
+
+    gate.onFreshFilters();
     expect(gate.isGated(ocrFilters(true))).toBe(true);
   });
 
