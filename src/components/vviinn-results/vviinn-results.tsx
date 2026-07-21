@@ -102,6 +102,10 @@ import { RESULTS_CALCULATED_COLUMNS_CSS_VAR } from "../vviinn-carousel/constants
 import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
 import { openProductLink } from "../../helpers/navigation/openProductLink";
 
+export type ReplaceSlotsContentInParent = (
+  childrenElement?: HTMLElement,
+) => void;
+
 /**
  * @part products - Products container.
  * @part product-card - Product Card itself.
@@ -177,11 +181,6 @@ import { openProductLink } from "../../helpers/navigation/openProductLink";
  * @slot vviinn-custom-label-4 - Custom label with index 4.
  * @slot vviinn-image-placeholder-icon - Icon or content for the image placeholder.
  */
-
-export type ReplaceSlotsContentInParent = (
-  childrenElement?: HTMLElement,
-) => void;
-
 @Component({
   tag: "vviinn-results",
   styleUrl: "vviinn-results.css",

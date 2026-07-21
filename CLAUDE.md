@@ -65,6 +65,7 @@ Global CSS variables in `src/variables.css`.
 - **Class Maps**: `{ 'base': true, active: this.isActive, [this.variant]: !!this.variant }`
 - **Adding @Prop()**: See `/add-prop` command. ALWAYS update Storybook story when adding props.
 - **Punctuation in comments & docs**: use an em dash (—), not a hyphen (-) or en dash (–).
+- **Component JSDoc**: the `@part` / `@slot` / `@cssprop` JSDoc block must sit **immediately above `@Component`** with no declaration in between — otherwise Stencil attaches it to that declaration and the docs (Storybook Controls table via `docs.json`) lose the parts/slots.
 
 ## Key Patterns
 
