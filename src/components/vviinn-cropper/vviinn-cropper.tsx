@@ -161,11 +161,12 @@ export class VviinnCropper {
 
   /** Show or hide the cropper to match the current OCR gate decision. */
   private reconcileCropper = () => {
+    // Before the guard: trust the fresh filters even if the image DOM isn't
+    // ready yet, so loadImage gates correctly once it runs.
+    this.gate.onFreshFilters();
+
     if (!this.state.image || !this.imageElement || !this.state.imageBounds)
       return;
-
-    // Fires on a dynamicFilters change — a fresh response for the current image.
-    this.gate.onFreshFilters();
 
     if (this.gate.isGated(this.state.dynamicFilters)) {
       this.hideCropper();
