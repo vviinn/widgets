@@ -40,7 +40,7 @@ import { getImageSizes } from "../../Image/sizing";
 import { Rectangle } from "../../interfaces";
 import { isCropBoxChangeMinimal } from "./helpers/isCropBoxDataSimilar";
 import { getCropBoxData } from "./helpers/cropperUtils";
-import { hasSelectedOcrFilter } from "./helpers/hasSelectedOcrFilter";
+import { CropperOcrGate } from "./helpers/cropperOcrGate";
 import { cleanLocalStorage, getLocalStorageItems } from "../../localStorage";
 import { addEventListenersWithSignal } from "../../dom";
 import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
@@ -100,17 +100,18 @@ export class VviinnCropper {
   private startEndCropBoxData?: Rectangle;
   private eventAbortController?: AbortController;
   private disposeStoreListener?: () => void;
-  private lastGatedImage: HTMLImageElement | null = null;
   private imageElement: HTMLImageElement | null = null;
+  private gate = new CropperOcrGate();
 
   connectedCallback() {
     const { state, storeName, onChange } = useSearchStore(this.showInWidget);
     this.state = state;
     this.storeName = storeName;
 
-    this.disposeStoreListener = onChange("dynamicFilters", () => {
-      this.syncCroppingState();
-    });
+    this.disposeStoreListener = onChange(
+      "dynamicFilters",
+      this.reconcileCropper,
+    );
 
     this.initPreloadedImage();
 
@@ -131,10 +132,8 @@ export class VviinnCropper {
   disconnectedCallback() {
     this.eventAbortController?.abort();
     this.disposeStoreListener?.();
-    this.resetCropperState();
+    this.destroyCropper();
   }
-
-  private isOcrResult = () => hasSelectedOcrFilter(this.state.dynamicFilters);
 
   private destroyCropper = () => {
     this.cropper?.destroy();
@@ -147,35 +146,28 @@ export class VviinnCropper {
     this.selectedDetectedObject = null;
   };
 
+  /** Tear down the cropper and drop any applied crop. */
+  private hideCropper = () => {
+    this.destroyCropper();
+    this.clearCropState();
+  };
+
   private resetCropperState = () => {
-    this.destroyCropper();
+    this.hideCropper();
     this.state.image = null;
-    this.clearCropState();
   };
 
-  private gateOcrResult = () => {
-    this.destroyCropper();
-    this.clearCropState();
-  };
+  /** Show or hide the cropper to match the current OCR gate decision. */
+  private reconcileCropper = () => {
+    if (!this.state.image || !this.imageElement || !this.state.imageBounds)
+      return;
 
-  private syncCroppingState = () => {
-    if (!this.state.image || !this.state.imageBounds) return;
-
-    if (this.isOcrResult()) {
-      this.gateOcrResult();
+    if (this.gate.isGated(this.state.dynamicFilters)) {
+      this.hideCropper();
       return;
     }
 
-    if (
-      this.cropper ||
-      !this.hasSupportedAspectRatio() ||
-      !this.hasSupportedSize()
-    )
-      return;
-
-    if (this.imageElement) {
-      this.initCropper(this.imageElement);
-    }
+    if (!this.cropper) this.initCropper(this.imageElement);
   };
 
   private initPreloadedImage = () => {
@@ -314,9 +306,10 @@ export class VviinnCropper {
     if (!this.state.image) return;
 
     const renderedImageElement =
-      this.el.shadowRoot.querySelector<HTMLImageElement>("img");
+      this.el.shadowRoot?.querySelector<HTMLImageElement>("img");
     if (!renderedImageElement) return;
     this.imageElement = renderedImageElement;
+    this.gate.onImage(this.state.image);
 
     let data = {};
     if (this.cropper) {
@@ -330,17 +323,10 @@ export class VviinnCropper {
     });
     this.state.imageBounds = imageBounds;
 
-    // dynamicFilters can still hold the PREVIOUS search's value here - the
-    // response for this new image hasn't landed yet. Only trust it as OCR
-    // the first time this component instance sees an image; re-uploads
-    // default to showing the cropper and let syncCroppingState correct it
-    // once fresh filters for this image arrive.
-    const isReupload =
-      this.lastGatedImage !== null && this.lastGatedImage !== this.state.image;
-    this.lastGatedImage = this.state.image;
-
-    if (!isReupload && this.isOcrResult()) {
-      this.clearCropState();
+    if (this.gate.isGated(this.state.dynamicFilters)) {
+      this.hideCropper();
+      // Surface an aspect-ratio error even while OCR-gated so the widget can
+      // still react to unsupported geometry on the freshly loaded image.
       this.checkAspectRatio();
       return;
     }
@@ -388,6 +374,7 @@ export class VviinnCropper {
   };
 
   private cropStart = () => {
+    this.gate.onUserAdjust();
     this.startEndCropBoxData = getCropBoxData(this.cropper);
   };
 
