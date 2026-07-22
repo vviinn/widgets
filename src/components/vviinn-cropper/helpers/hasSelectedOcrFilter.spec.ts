@@ -1,5 +1,11 @@
-import { hasSelectedOcrFilter } from "./hasSelectedOcrFilter";
-import { ResponseDynamicFilterItem } from "../../../interfaces";
+import {
+  hasSelectedOcrFilter,
+  requestHasOcrFilter,
+} from "./hasSelectedOcrFilter";
+import {
+  RequestDynamicFilterItem,
+  ResponseDynamicFilterItem,
+} from "../../../interfaces";
 
 const categoricalFilter = (
   column: string,
@@ -77,5 +83,34 @@ describe("hasSelectedOcrFilter", () => {
       categoricalFilter("brand", [{ value: "OCR", selected: true }]),
     ];
     expect(hasSelectedOcrFilter(dynamicFilters)).toBe(false);
+  });
+});
+
+describe("requestHasOcrFilter", () => {
+  const requestFilter = (
+    column: string,
+    values: string[],
+  ): RequestDynamicFilterItem =>
+    ({ column, values }) as RequestDynamicFilterItem;
+
+  it("returns false for undefined or empty requestFilters", () => {
+    expect(requestHasOcrFilter(undefined)).toBe(false);
+    expect(requestHasOcrFilter([])).toBe(false);
+  });
+
+  it("returns true when the modality filter carries OCR", () => {
+    expect(requestHasOcrFilter([requestFilter("modality", ["OCR"])])).toBe(
+      true,
+    );
+  });
+
+  it("returns false when OCR sits on an unrelated column", () => {
+    expect(requestHasOcrFilter([requestFilter("brand", ["OCR"])])).toBe(false);
+  });
+
+  it("returns false when modality carries other values only", () => {
+    expect(requestHasOcrFilter([requestFilter("modality", ["Visual"])])).toBe(
+      false,
+    );
   });
 });

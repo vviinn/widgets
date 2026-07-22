@@ -41,6 +41,10 @@ import { Rectangle } from "../../interfaces";
 import { isCropBoxChangeMinimal } from "./helpers/isCropBoxDataSimilar";
 import { getCropBoxData } from "./helpers/cropperUtils";
 import { CropperOcrGate } from "./helpers/cropperOcrGate";
+import {
+  hasSelectedOcrFilter,
+  requestHasOcrFilter,
+} from "./helpers/hasSelectedOcrFilter";
 import { cleanLocalStorage, getLocalStorageItems } from "../../localStorage";
 import { addEventListenersWithSignal } from "../../dom";
 import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
@@ -159,6 +163,14 @@ export class VviinnCropper {
     this.state.image = null;
   };
 
+  /**
+   * OCR is active if the user's requestFilters carry it (stable across
+   * region-restricted searches) or the latest response echoed it as selected.
+   */
+  private isOcrSelected = (): boolean =>
+    requestHasOcrFilter(this.state.requestFilters) ||
+    hasSelectedOcrFilter(this.state.dynamicFilters);
+
   /** Show or hide the cropper to match the current OCR gate decision. */
   private reconcileCropper = () => {
     // Before the guard: trust the fresh filters even if the image DOM isn't
@@ -168,8 +180,10 @@ export class VviinnCropper {
     if (!this.state.image || !this.imageElement || !this.state.imageBounds)
       return;
 
-    if (this.gate.isGated(this.state.dynamicFilters)) {
-      this.hideCropper();
+    if (this.gate.isGated(this.isOcrSelected())) {
+      // Same image, only the filter changed — drop the crop frame but keep the
+      // selected region/object, since OCR can still search within it.
+      this.destroyCropper();
       return;
     }
 
@@ -329,9 +343,11 @@ export class VviinnCropper {
     });
     this.state.imageBounds = imageBounds;
 
-    if (this.gate.isGated(this.state.dynamicFilters)) {
+    const isSearchLoading = this.state.searchStatus === "loading";
+
+    if (this.gate.isGated(this.isOcrSelected(), isSearchLoading)) {
       this.hideCropper();
-      // Surface an aspect-ratio error even while OCR-gated so the widget can
+      // Surface an aspect-ratio error even while hidden so the widget can
       // still react to unsupported geometry on the freshly loaded image.
       this.checkAspectRatio();
       return;
