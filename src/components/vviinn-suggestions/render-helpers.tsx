@@ -10,6 +10,7 @@ import {
   Interactions,
 } from "../../interfaces";
 import { triggerFilter } from "../vviinn-filters/helpers/triggerFilter";
+import { formatIntervalKey } from "./helpers";
 import {
   DynamicFilterInternalData,
   ChangedFiltersEventData,
@@ -173,8 +174,8 @@ export const getAnnotationFilterKeys = (
       return filter.values.map((v) => `${filter.column}:${v.value}`);
     }
     if (filter.type === "interval" && "selectedValues" in filter) {
-      return filter.selectedValues.map(
-        (interval) => `${filter.column}:${interval.start}-${interval.end}`,
+      return filter.selectedValues.map((interval) =>
+        formatIntervalKey(filter.column, interval.start, interval.end),
       );
     }
     return [];

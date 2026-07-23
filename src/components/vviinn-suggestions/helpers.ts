@@ -14,6 +14,12 @@ export const toggleFilterInSet = (
   return newAppliedFilters;
 };
 
+export const formatIntervalKey = (
+  column: string,
+  start: unknown,
+  end: unknown,
+): string => `${column}:${start}-${end}`;
+
 export const extractActiveFilterValues = (
   activeFilters: RequestDynamicFilterItem[],
 ): Set<string> => {
@@ -23,7 +29,7 @@ export const extractActiveFilterValues = (
     filter.values.forEach((v) => {
       // Interval values are `{start, end}` objects; categorical values are strings.
       if (v !== null && typeof v === "object" && "start" in v) {
-        activeValues.add(`${filter.column}:${v.start}-${v.end}`);
+        activeValues.add(formatIntervalKey(filter.column, v.start, v.end));
       } else {
         activeValues.add(`${filter.column}:${String(v)}`);
       }
@@ -59,7 +65,11 @@ export const syncSuggestionFilters = (
             });
           } else if (filter.type === "interval" && "selectedValues" in filter) {
             filter.selectedValues.forEach((interval) => {
-              const key = `${filter.column}:${interval.start}-${interval.end}`;
+              const key = formatIntervalKey(
+                filter.column,
+                interval.start,
+                interval.end,
+              );
               if (activeValues.has(key)) {
                 updatedAppliedFilters.add(key);
               }
