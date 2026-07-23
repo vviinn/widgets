@@ -64,6 +64,17 @@ Global CSS variables in `src/variables.css`.
 - **CSS-First**: Prioritize CSS over JS for positioning and layout
 - **Class Maps**: `{ 'base': true, active: this.isActive, [this.variant]: !!this.variant }`
 - **Adding @Prop()**: See `/add-prop` command. ALWAYS update Storybook story when adding props.
+- **Comments**: comment the _why_, not the _what_ — explain intent, non-obvious decisions, edge cases, and constraints the code can't express itself. Skip comments that restate the code; prefer self-documenting names over a comment. Keep them short and to the point; delete stale ones with the code they described.
+  - **Size**: default to a single line. Two lines is the ceiling for inline comments — if the _why_ needs more, extract a named helper/variable or move the rationale into the function's JSDoc instead. One focused sentence beats a paragraph.
+- **Punctuation in comments & docs**: use an em dash (—), not a hyphen (-) or en dash (–).
+- **Component JSDoc**: the `@part` / `@slot` / `@cssprop` JSDoc block must sit **immediately above `@Component`** with no declaration in between — otherwise Stencil attaches it to that declaration and the docs (Storybook Controls table via `docs.json`) lose the parts/slots.
+
+## Git Commit Conventions
+
+- **User-facing changes** — `feat:` for features, `fix:` for fixes. These land in the user-facing changelog, so write them for end users. Semi-free form: add a `Component Name:` segment when the change targets one component (`feat: Vviinn Cropper: toggle cropper visibility by OCR filter`), otherwise a plain summary for cross-cutting changes (`fix: Restore missing CSS parts & slots in component docs`).
+- **Routine work** (intermediate fixes, chores, review changes, refactors) — `#<ticket> Description`, where `<ticket>` is the number from the branch name (e.g. `#39690 Ignore local Claude settings file`). No `feat:`/`fix:`/`chore:` prefix.
+- **Automation** (releases, CI, changelog bumps) — prefix with `[skip ci]`.
+- **No `Co-Authored-By` trailers** — do not append `Co-Authored-By` (or other AI-attribution) lines to commit messages.
 
 ## Key Patterns
 
