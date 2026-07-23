@@ -173,7 +173,14 @@ export class VviinnCropper {
       return;
     }
 
-    if (!this.cropper) this.initCropper(this.imageElement);
+    // Guard geometry here so initCropper doesn't re-emit the aspect-ratio error on every filter change.
+    if (
+      !this.cropper &&
+      this.hasSupportedAspectRatio() &&
+      this.hasSupportedSize()
+    ) {
+      this.initCropper(this.imageElement);
+    }
   };
 
   private initPreloadedImage = () => {
