@@ -10,6 +10,7 @@ import {
   Interactions,
 } from "../../interfaces";
 import { triggerFilter } from "../vviinn-filters/helpers/triggerFilter";
+import { formatIntervalKey } from "./helpers";
 import {
   DynamicFilterInternalData,
   ChangedFiltersEventData,
@@ -58,17 +59,40 @@ export const applyFiltersForItems = (
 
   if (dataItems.length === 0) {
     for (const filter of filters) {
-      if (filter.type !== "categorical" || !("values" in filter)) continue;
-      for (const filterValue of filter.values) {
-        updatedFilters = triggerFilter({
-          filterValue: filterValue as any,
-          selectedFilter: filter as ResponseDynamicFilterItem,
-          requestFilters: updatedFilters,
-          vviinnFilterTriggered: handlers.vviinnFilterTriggered,
-          vviinnFiltersChanged: handlers.vviinnFiltersChanged,
-          el: handlers.el,
-          isTriggeredByVpsWidget: handlers.isTriggeredByVpsWidget,
-        });
+      if (filter.type === "categorical" && "values" in filter) {
+        for (const filterValue of filter.values) {
+          updatedFilters = triggerFilter({
+            filterValue: filterValue as any,
+            selectedFilter: filter as ResponseDynamicFilterItem,
+            requestFilters: updatedFilters,
+            vviinnFilterTriggered: handlers.vviinnFilterTriggered,
+            vviinnFiltersChanged: handlers.vviinnFiltersChanged,
+            el: handlers.el,
+            isTriggeredByVpsWidget: handlers.isTriggeredByVpsWidget,
+          });
+        }
+      } else if (filter.type === "interval" && "selectedValues" in filter) {
+        // A suggestion chip represents one specific range to toggle, not a slider.
+        // The backend emits `full === selectedValues[0]`, which would make
+        // `isFullRangeInterval` read every click as "cleared to the full range"
+        // (deselect-only). Neutralize `full` so the shared toggle logic selects /
+        // deselects this exact interval by value match. Only the object passed to
+        // `triggerFilter` is affected; `value` still carries the real interval.
+        const chipFilter = {
+          ...filter,
+          full: { start: undefined, end: undefined },
+        } as ResponseDynamicFilterItem;
+        for (const interval of filter.selectedValues) {
+          updatedFilters = triggerFilter({
+            filterValue: { interval } as any,
+            selectedFilter: chipFilter,
+            requestFilters: updatedFilters,
+            vviinnFilterTriggered: handlers.vviinnFilterTriggered,
+            vviinnFiltersChanged: handlers.vviinnFiltersChanged,
+            el: handlers.el,
+            isTriggeredByVpsWidget: handlers.isTriggeredByVpsWidget,
+          });
+        }
       }
     }
     return updatedFilters;
@@ -145,11 +169,17 @@ export const splitContentByLocators = (
 export const getAnnotationFilterKeys = (
   annotation: ContextAnnotation,
 ): string[] =>
-  annotation.interactions?.dynamicFilters?.flatMap((filter) =>
-    "values" in filter
-      ? filter.values.map((v) => `${filter.column}:${v.value}`)
-      : [],
-  ) ?? [];
+  annotation.interactions?.dynamicFilters?.flatMap((filter) => {
+    if (filter.type === "categorical" && "values" in filter) {
+      return filter.values.map((v) => `${filter.column}:${v.value}`);
+    }
+    if (filter.type === "interval" && "selectedValues" in filter) {
+      return filter.selectedValues.map((interval) =>
+        formatIntervalKey(filter.column, interval.start, interval.end),
+      );
+    }
+    return [];
+  }) ?? [];
 
 const getAnnotationDeeplink = (
   annotation: ContextAnnotation,

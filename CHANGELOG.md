@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.223.0](https://github.com/vviinn/widgets/compare/v2.222.0...v2.223.0) (2026-07-23)
+
+
+### Features
+
+* Storybook: clarify styling via CSS Parts using the host widget ([398965c](https://github.com/vviinn/widgets/commit/398965c963f0d45b1baa14adcfc44918ab3540d6))
+* Vviinn Cropper: toggle cropper visibility by OCR filter ([1fc4ca8](https://github.com/vviinn/widgets/commit/1fc4ca8ca337938c1ccd2aa01f7e2031cbd281f2))
+
+
+### Bug Fixes
+
+* restore missing CSS parts & slots in component docs ([4ca22cd](https://github.com/vviinn/widgets/commit/4ca22cd5a73484d50f26f32e849b11a85ac8aead))
+
+## [2.222.0](https://github.com/vviinn/widgets/compare/v2.221.0...v2.222.0) (2026-07-23)
+
+
+### Features
+
+* Suggestions: Render interval filters as interactive stream chips ([08fcba1](https://github.com/vviinn/widgets/commit/08fcba10c8de973dff660fc1194aa6925d93398a))
+
 ## [2.221.0](https://github.com/vviinn/widgets/compare/v2.220.0...v2.221.0) (2026-06-26)
 
 

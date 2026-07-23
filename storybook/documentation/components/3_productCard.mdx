@@ -7,9 +7,11 @@ import "../../styles/product-card.css";
 import CardTemplate from "../../components/productCard/cardTemplate.mdx";
 import { cardCredentials } from "../../components/productCard/cardCredentials";
 
-<Meta title="Components/Product Card" />
+<Meta title="Components/Product Card" /> 
 
 # Product Card
+
+> **Note:** Product Card is rendered **inside a widget** (`vviinn-vpr-widget`, `vviinn-vps-widget`, …), not on its own — the `vviinn-product-card` tag below is for reference. When styling via [CSS Parts](?path=/docs/customization-target-styling--docs), use your widget's tag as the host: `vviinn-vpr-widget::part(title)` targets the same element.
 
 ## Examples
 

@@ -40,6 +40,7 @@ import { getImageSizes } from "../../Image/sizing";
 import { Rectangle } from "../../interfaces";
 import { isCropBoxChangeMinimal } from "./helpers/isCropBoxDataSimilar";
 import { getCropBoxData } from "./helpers/cropperUtils";
+import { CropperOcrGate } from "./helpers/cropperOcrGate";
 import { cleanLocalStorage, getLocalStorageItems } from "../../localStorage";
 import { addEventListenersWithSignal } from "../../dom";
 import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
@@ -98,11 +99,19 @@ export class VviinnCropper {
   private storeName?: SearchStoreName;
   private startEndCropBoxData?: Rectangle;
   private eventAbortController?: AbortController;
+  private disposeStoreListener?: () => void;
+  private imageElement: HTMLImageElement | null = null;
+  private gate = new CropperOcrGate();
 
   connectedCallback() {
-    const { state, storeName } = useSearchStore(this.showInWidget);
+    const { state, storeName, onChange } = useSearchStore(this.showInWidget);
     this.state = state;
     this.storeName = storeName;
+
+    this.disposeStoreListener = onChange(
+      "dynamicFilters",
+      this.reconcileCropper,
+    );
 
     this.initPreloadedImage();
 
@@ -122,9 +131,57 @@ export class VviinnCropper {
 
   disconnectedCallback() {
     this.eventAbortController?.abort();
-    this.cropper?.destroy?.();
-    this.state.image = null;
+    this.disposeStoreListener?.();
+    this.destroyCropper();
+    // "never" keeps no image across mounts, so clear it from the shared store.
+    if (this.saveImageMode === "never") this.state.image = null;
   }
+
+  private destroyCropper = () => {
+    this.cropper?.destroy();
+    this.cropper = null;
+  };
+
+  private clearCropSelection = () => {
+    this.state.searchArea = null;
+    this.state.croppedImageUrl = null;
+    this.selectedDetectedObject = null;
+  };
+
+  /** Tear down the cropper and drop any applied crop. */
+  private discardCrop = () => {
+    this.destroyCropper();
+    this.clearCropSelection();
+  };
+
+  private resetCropperState = () => {
+    this.discardCrop();
+    this.state.image = null;
+  };
+
+  /** Show or hide the cropper to match the current OCR gate decision. */
+  private reconcileCropper = () => {
+    // Trust the fresh filters even before the image DOM is ready.
+    this.gate.onFreshFilters();
+
+    if (!this.state.image || !this.imageElement || !this.state.imageBounds)
+      return;
+
+    if (this.gate.isGated(this.state.dynamicFilters)) {
+      // Drop only the frame, keep the region/object so OCR searches within it.
+      this.destroyCropper();
+      return;
+    }
+
+    // Guard geometry here so initCropper doesn't re-emit the aspect-ratio error on every filter change.
+    if (
+      !this.cropper &&
+      this.hasSupportedAspectRatio() &&
+      this.hasSupportedSize()
+    ) {
+      this.initCropper(this.imageElement);
+    }
+  };
 
   private initPreloadedImage = () => {
     if (this.showInWidget && this.state.image) {
@@ -161,11 +218,9 @@ export class VviinnCropper {
   }: CustomEvent<TriggerSourceEventData>) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
 
-    this.selectedDetectedObject = null;
     this.state.image?.setAttribute("src", "");
     this.state.detectedObjects = [];
-    this.state.image = null;
-    this.cropper?.destroy();
+    this.resetCropperState();
     cleanLocalStorage();
   };
 
@@ -174,9 +229,7 @@ export class VviinnCropper {
   }: CustomEvent<TriggerSourceEventData>) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.cropper?.reset();
-    this.state.searchArea = null;
-    this.state.croppedImageUrl = null;
-    this.selectedDetectedObject = null;
+    this.clearCropSelection();
     this.vviinnImageCrop.emit({
       isTriggeredByVpsWidget: this.showInWidget,
     });
@@ -263,46 +316,79 @@ export class VviinnCropper {
   }
 
   private loadImage = () => {
-    const renderedImageElement = this.el.shadowRoot.querySelector("img");
-    if (this.state.image) {
-      let data = {};
-      if (this.cropper) {
-        data = this.cropper.getData(true);
-        this.cropper.destroy();
-      }
-      const imageBounds = fromImage(renderedImageElement);
-      const { width, height } = imageBounds;
+    if (!this.state.image) return;
 
-      this.vviinnCropperLoadImage.emit({
-        imageBounds,
-      });
-      this.state.imageBounds = imageBounds;
+    const renderedImageElement =
+      this.el.shadowRoot?.querySelector<HTMLImageElement>("img");
+    if (!renderedImageElement) return;
+    this.imageElement = renderedImageElement;
+    this.gate.onImage(this.state.image);
 
-      if (
-        width / height < SUPPORTED_ASPECT_RATIO ||
-        height / width < SUPPORTED_ASPECT_RATIO
-      ) {
-        this.vviinnCropperAspectRatioError.emit(true);
-        return;
-      }
-
-      if (
-        width < MIN_IMAGE_SIDE_FOR_CROPPER ||
-        height < MIN_IMAGE_SIDE_FOR_CROPPER
-      ) {
-        return;
-      }
-      this.cropper = new Cropper(renderedImageElement, {
-        ...cropperOptions,
-        cropstart: this.cropStart,
-        cropend: this.cropEnd,
-        ready: () => this.cropper.reset(),
-        data,
-      });
+    let data = {};
+    if (this.cropper) {
+      data = this.cropper.getData(true);
+      this.destroyCropper();
     }
+    const imageBounds = fromImage(renderedImageElement);
+
+    this.vviinnCropperLoadImage.emit({
+      imageBounds,
+    });
+    this.state.imageBounds = imageBounds;
+
+    const isSearchLoading = this.state.searchStatus === "loading";
+
+    if (this.gate.isGated(this.state.dynamicFilters, isSearchLoading)) {
+      this.discardCrop();
+      // Still surface aspect-ratio errors while hidden — geometry matters regardless.
+      this.checkAspectRatio();
+      return;
+    }
+
+    this.initCropper(renderedImageElement, data);
+  };
+
+  private hasSupportedAspectRatio = (): boolean => {
+    if (!this.state.imageBounds) return false;
+    const { width, height } = this.state.imageBounds;
+
+    return (
+      width / height >= SUPPORTED_ASPECT_RATIO &&
+      height / width >= SUPPORTED_ASPECT_RATIO
+    );
+  };
+
+  private hasSupportedSize = (): boolean => {
+    if (!this.state.imageBounds) return false;
+    const { width, height } = this.state.imageBounds;
+
+    return (
+      width >= MIN_IMAGE_SIDE_FOR_CROPPER &&
+      height >= MIN_IMAGE_SIDE_FOR_CROPPER
+    );
+  };
+
+  private checkAspectRatio = (): boolean => {
+    if (this.hasSupportedAspectRatio()) return true;
+    this.vviinnCropperAspectRatioError.emit(true);
+    return false;
+  };
+
+  private initCropper = (imageElement: HTMLImageElement, data = {}) => {
+    if (!imageElement) return;
+    if (!this.checkAspectRatio() || !this.hasSupportedSize()) return;
+
+    this.cropper = new Cropper(imageElement, {
+      ...cropperOptions,
+      cropstart: this.cropStart,
+      cropend: this.cropEnd,
+      ready: () => this.cropper?.reset(),
+      data,
+    });
   };
 
   private cropStart = () => {
+    this.gate.onUserAdjust();
     this.startEndCropBoxData = getCropBoxData(this.cropper);
   };
 
