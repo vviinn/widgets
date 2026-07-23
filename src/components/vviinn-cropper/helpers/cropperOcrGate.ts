@@ -9,20 +9,19 @@ import { hasSelectedOcrFilter } from "./hasSelectedOcrFilter";
 export class CropperOcrGate {
   private engaged = false;
   private lastImage: HTMLImageElement | null = null;
-  private trustFilters = true;
+  private awaitingFilters = false;
 
   /** Re-arm OCR gating for a freshly loaded image. */
   onImage(image: HTMLImageElement | null): void {
     if (image === this.lastImage) return;
-    // Re-uploads carry the previous search's filters until fresh ones arrive.
-    this.trustFilters = this.lastImage === null;
     this.lastImage = image;
     this.engaged = false;
+    this.awaitingFilters = true;
   }
 
   /** Fresh dynamicFilters for the current image have arrived. */
   onFreshFilters(): void {
-    this.trustFilters = true;
+    this.awaitingFilters = false;
   }
 
   /** Mark that the user started working with the cropper. */
@@ -31,8 +30,12 @@ export class CropperOcrGate {
   }
 
   /** True when the cropper should be hidden. */
-  isGated(dynamicFilters: ResponseDynamicFilterItem[] | undefined): boolean {
-    if (!this.trustFilters) return false;
+  isGated(
+    dynamicFilters: ResponseDynamicFilterItem[] | undefined,
+    isSearchLoading = false,
+  ): boolean {
+    // Defer while the image's search is still resolving, to avoid a flash.
+    if (this.awaitingFilters && isSearchLoading) return true;
     return !this.engaged && hasSelectedOcrFilter(dynamicFilters);
   }
 }

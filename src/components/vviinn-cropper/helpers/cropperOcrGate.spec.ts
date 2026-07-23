@@ -37,17 +37,13 @@ describe("CropperOcrGate", () => {
     expect(gate.isGated(ocrFilters(true))).toBe(false);
   });
 
-  it("does not gate a re-upload on stale filters until fresh ones arrive", () => {
+  it("re-arms gating when a different image is loaded", () => {
     const gate = new CropperOcrGate();
     gate.onImage(imageA);
     gate.onUserAdjust();
     expect(gate.isGated(ocrFilters(true))).toBe(false);
 
-    // Re-upload: stale filters, cropper stays until fresh ones arrive.
     gate.onImage(imageB);
-    expect(gate.isGated(ocrFilters(true))).toBe(false);
-
-    gate.onFreshFilters();
     expect(gate.isGated(ocrFilters(true))).toBe(true);
   });
 
@@ -57,5 +53,19 @@ describe("CropperOcrGate", () => {
     gate.onUserAdjust();
     gate.onImage(imageA);
     expect(gate.isGated(ocrFilters(true))).toBe(false);
+  });
+
+  it("defers (hides) on a new image while its search is still loading", () => {
+    const gate = new CropperOcrGate();
+    gate.onImage(imageA);
+
+    // Search in flight: hide regardless of the current filters, to avoid a flash.
+    expect(gate.isGated(ocrFilters(false), true)).toBe(true);
+    expect(gate.isGated(ocrFilters(true), true)).toBe(true);
+
+    // Fresh filters arrived: decide by OCR again.
+    gate.onFreshFilters();
+    expect(gate.isGated(ocrFilters(false), true)).toBe(false);
+    expect(gate.isGated(ocrFilters(true), true)).toBe(true);
   });
 });

@@ -142,34 +142,34 @@ export class VviinnCropper {
     this.cropper = null;
   };
 
-  private clearCropState = () => {
+  private clearCropSelection = () => {
     this.state.searchArea = null;
     this.state.croppedImageUrl = null;
     this.selectedDetectedObject = null;
   };
 
   /** Tear down the cropper and drop any applied crop. */
-  private hideCropper = () => {
+  private discardCrop = () => {
     this.destroyCropper();
-    this.clearCropState();
+    this.clearCropSelection();
   };
 
   private resetCropperState = () => {
-    this.hideCropper();
+    this.discardCrop();
     this.state.image = null;
   };
 
   /** Show or hide the cropper to match the current OCR gate decision. */
   private reconcileCropper = () => {
-    // Before the guard: trust the fresh filters even if the image DOM isn't
-    // ready yet, so loadImage gates correctly once it runs.
+    // Trust the fresh filters even before the image DOM is ready.
     this.gate.onFreshFilters();
 
     if (!this.state.image || !this.imageElement || !this.state.imageBounds)
       return;
 
     if (this.gate.isGated(this.state.dynamicFilters)) {
-      this.hideCropper();
+      // Drop only the frame, keep the region/object so OCR searches within it.
+      this.destroyCropper();
       return;
     }
 
@@ -222,7 +222,7 @@ export class VviinnCropper {
   }: CustomEvent<TriggerSourceEventData>) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.cropper?.reset();
-    this.clearCropState();
+    this.clearCropSelection();
     this.vviinnImageCrop.emit({
       isTriggeredByVpsWidget: this.showInWidget,
     });
@@ -329,10 +329,11 @@ export class VviinnCropper {
     });
     this.state.imageBounds = imageBounds;
 
-    if (this.gate.isGated(this.state.dynamicFilters)) {
-      this.hideCropper();
-      // Surface an aspect-ratio error even while OCR-gated so the widget can
-      // still react to unsupported geometry on the freshly loaded image.
+    const isSearchLoading = this.state.searchStatus === "loading";
+
+    if (this.gate.isGated(this.state.dynamicFilters, isSearchLoading)) {
+      this.discardCrop();
+      // Still surface aspect-ratio errors while hidden — geometry matters regardless.
       this.checkAspectRatio();
       return;
     }
