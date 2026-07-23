@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.222.0](https://github.com/vviinn/widgets/compare/v2.221.0...v2.222.0) (2026-07-23)
+
+
+### Features
+
+* Suggestions: Render interval filters as interactive stream chips ([08fcba1](https://github.com/vviinn/widgets/commit/08fcba10c8de973dff660fc1194aa6925d93398a))
+
 ## [2.221.0](https://github.com/vviinn/widgets/compare/v2.220.0...v2.221.0) (2026-06-26)
 
 
