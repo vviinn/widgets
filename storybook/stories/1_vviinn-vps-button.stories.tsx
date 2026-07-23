@@ -61,6 +61,7 @@ const Template = (args) => `
   use-drag-and-drop="${args.useDragAndDrop}"
   text-search-show="${args.textSearchShow}"
   auto-suggest-show="${args.autoSuggestShow}"
+  ai-suggestions-show="${args.aiSuggestionsShow}"
   add-to-basket-show="${args.addToBasketShow}"
   add-price-container="${args.addPriceContainer}"
   show-interval-inputs="${args.showIntervalInputs}"
@@ -96,6 +97,7 @@ const initArgs = {
   useDragAndDrop: false,
   textSearchShow: true,
   autoSuggestShow: true,
+  aiSuggestionsShow: true,
   addToBasketShow: false,
   addPriceContainer: false,
   showIntervalInputs: false,

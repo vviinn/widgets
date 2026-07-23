@@ -167,6 +167,8 @@ export class VviinnVpsButton {
   @Prop() textSearchShow: boolean = false;
   /** Show auto-suggest dropdown with search completions */
   @Prop() autoSuggestShow: boolean = true;
+  /** Show the AI Suggestions block in search results */
+  @Prop() aiSuggestionsShow: boolean = false;
   /** Show or hide Add to Basket buttons */
   @Prop() addToBasketShow: boolean = false;
   /** Show or hide Favorite button */
@@ -378,6 +380,7 @@ export class VviinnVpsButton {
           exampleImageSource={this.exampleImageSource}
           textSearchShow={this.textSearchShow}
           autoSuggestShow={this.autoSuggestShow}
+          aiSuggestionsShow={this.aiSuggestionsShow}
           addToBasketShow={this.addToBasketShow}
           addPriceContainer={this.addPriceContainer}
           showIntervalInputs={this.showIntervalInputs}
