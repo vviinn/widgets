@@ -14,16 +14,26 @@ export const toggleFilterInSet = (
   return newAppliedFilters;
 };
 
+export const formatIntervalKey = (
+  column: string,
+  start: unknown,
+  end: unknown,
+): string => `${column}:${start}-${end}`;
+
 export const extractActiveFilterValues = (
   activeFilters: RequestDynamicFilterItem[],
 ): Set<string> => {
   const activeValues = new Set<string>();
   activeFilters.forEach((filter) => {
-    if (Array.isArray(filter.values)) {
-      filter.values.forEach((v) =>
-        activeValues.add(`${filter.column}:${String(v)}`),
-      );
-    }
+    if (!Array.isArray(filter.values)) return;
+    filter.values.forEach((v) => {
+      // Interval values are `{start, end}` objects; categorical values are strings.
+      if (v !== null && typeof v === "object" && "start" in v) {
+        activeValues.add(formatIntervalKey(filter.column, v.start, v.end));
+      } else {
+        activeValues.add(`${filter.column}:${String(v)}`);
+      }
+    });
   });
   return activeValues;
 };
@@ -47,13 +57,24 @@ export const syncSuggestionFilters = (
         if (!annotation.interactions?.dynamicFilters?.length) continue;
 
         for (const filter of annotation.interactions.dynamicFilters) {
-          if (filter.type !== "categorical" || !("values" in filter)) continue;
-
-          filter.values.forEach((value) => {
-            if (activeValues.has(`${filter.column}:${String(value.value)}`)) {
-              updatedAppliedFilters.add(`${filter.column}:${value.value}`);
-            }
-          });
+          if (filter.type === "categorical" && "values" in filter) {
+            filter.values.forEach((value) => {
+              if (activeValues.has(`${filter.column}:${String(value.value)}`)) {
+                updatedAppliedFilters.add(`${filter.column}:${value.value}`);
+              }
+            });
+          } else if (filter.type === "interval" && "selectedValues" in filter) {
+            filter.selectedValues.forEach((interval) => {
+              const key = formatIntervalKey(
+                filter.column,
+                interval.start,
+                interval.end,
+              );
+              if (activeValues.has(key)) {
+                updatedAppliedFilters.add(key);
+              }
+            });
+          }
         }
       }
     }
