@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.224.0](https://github.com/vviinn/widgets/compare/v2.223.0...v2.224.0) (2026-07-24)
+
+
+### Features
+
+* Search Modal: add ai-suggestions-show prop to toggle AI Suggestions block ([752864e](https://github.com/vviinn/widgets/commit/752864e5e5ea5714bd57a3e4085605147b95c573))
+
 ## [2.223.0](https://github.com/vviinn/widgets/compare/v2.222.0...v2.223.0) (2026-07-23)
 
 
