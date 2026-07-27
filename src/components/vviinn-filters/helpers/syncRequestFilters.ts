@@ -5,20 +5,20 @@ import type { ObservableMap } from "@stencil/store";
 type OnChangeHandler<T> = ObservableMap<T>["onChange"];
 
 /**
- * Syncs local component requestFilters state with the store's requestFilters in case there are response filters with selected: true.
+ * Mirrors the store's requestFilters into local component state, empty updates included —
+ * a cleared store means nothing is selected, and the mirror has to say so too.
+ * Returns the store's dispose function; call it from disconnectedCallback.
  */
 export const syncRequestFilters = (
   state: SearchStore,
   onChange: OnChangeHandler<SearchStore>,
   setRequestFilters: (filters: RequestDynamicFilterItem[]) => void,
 ) => {
-  if (state.requestFilters?.length > 0) {
-    setRequestFilters([...state.requestFilters]);
-  }
+  // Copy the array — subFilterSelection edits the mirror in place and must not reach the store.
+  const mirror = (filters: RequestDynamicFilterItem[]) =>
+    setRequestFilters([...filters]);
 
-  onChange("requestFilters", (newValue) => {
-    if (newValue?.length > 0) {
-      setRequestFilters([...newValue]);
-    }
-  });
+  mirror(state.requestFilters);
+
+  return onChange("requestFilters", mirror);
 };

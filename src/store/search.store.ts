@@ -45,7 +45,7 @@ import { ImageType, shouldResize } from "./image-processing";
 import type { ObservableMap } from "@stencil/store";
 
 type OnChangeHandler<T> = ObservableMap<T>["onChange"];
-import { extractSelectedFilters } from "../components/vviinn-filters/helpers/extractSelectedFilters";
+import { reconcileRequestFilters } from "../components/vviinn-filters/helpers/reconcileRequestFilters";
 import { SearchSuccessEventData } from "../recommendation/events";
 import { campaignTypeNames } from "../campaign/Campaign";
 import { version } from "../../package.json";
@@ -238,6 +238,23 @@ const emitSearchSuccess = (
   );
 };
 
+/**
+ * Single entry point for the facets a response reports: the offered facets and the filters
+ * they leave applied must move together, or a filter outlives the facet that could undo it.
+ */
+const applyResponseFilters = (
+  state: SearchStore,
+  responseFilters: ResponseDynamicFilterItem[] | undefined,
+) => {
+  const dynamicFilters = responseFilters ?? [];
+
+  state.dynamicFilters = dynamicFilters;
+  state.requestFilters = reconcileRequestFilters(
+    state.requestFilters,
+    dynamicFilters,
+  );
+};
+
 const updateVisualSearchState =
   (store: SearchStoreName, isHiResUpdate: boolean = false) =>
   async (response: VisualSearchResponse) => {
@@ -253,20 +270,12 @@ const updateVisualSearchState =
     );
     if (detectedObjects.length > 0) state.detectedObjects = detectedObjects;
 
-    const dynamicFilters = response.interactions.dynamicFilters ?? [];
-
     state.visualSearchId = response.requestId;
     state.results = response.data.products;
-    state.dynamicFilters = dynamicFilters;
+    applyResponseFilters(state, response.interactions.dynamicFilters);
     state.redirect = response.interactions.redirect
       ? { ...response.interactions.redirect, searchId: response.requestId }
       : null;
-
-    const extractedFilters = extractSelectedFilters(dynamicFilters);
-
-    if (state.requestFilters.length === 0 && extractedFilters.length > 0) {
-      state.requestFilters = extractedFilters;
-    }
 
     state.stream = response?.stream ?? null;
     state.searchStatus = "success";
@@ -544,16 +553,10 @@ export const makeTextSearchRequest = async (
     TE.map((sessionResponse) => {
       state.results = sessionResponse?.data?.products ?? [];
       state.textSearchId = sessionResponse.requestId;
-      state.dynamicFilters =
-        sessionResponse?.interactions?.dynamicFilters ?? [];
-
-      const extractedFilters = extractSelectedFilters(
-        sessionResponse?.interactions?.dynamicFilters ?? [],
+      applyResponseFilters(
+        state,
+        sessionResponse?.interactions?.dynamicFilters,
       );
-
-      if (state.requestFilters.length === 0 && extractedFilters.length > 0) {
-        state.requestFilters = extractedFilters;
-      }
 
       state.stream = sessionResponse?.stream ?? null;
       state.searchStatus = "success";

@@ -294,10 +294,13 @@ export class VviinnCropper {
       };
 
       this.cropper.setCropBoxData(ValidateCropBoxData(cropBoxData));
-      this.vviinnImageCrop.emit({
-        isTriggeredByVpsWidget: this.showInWidget,
-      });
     }
+
+    // The search area changed — announce it even when the OCR gate left the cropper
+    // uninitialised, otherwise the filter reset riding on this event never runs.
+    this.vviinnImageCrop.emit({
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
 
     this.triggerVisualSearch();
   }

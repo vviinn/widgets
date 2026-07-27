@@ -104,6 +104,7 @@ export class VviinnFilters {
 
   private state?: SearchStore;
   private eventAbortController?: AbortController;
+  private disposeStoreListener?: () => void;
   private filterAnnouncementRef?: HTMLElement;
 
   private getFilters = () =>
@@ -226,7 +227,7 @@ export class VviinnFilters {
     const { state, onChange } = useSearchStore(this.showInWidget);
     this.state = state;
 
-    syncRequestFilters(
+    this.disposeStoreListener = syncRequestFilters(
       state,
       onChange,
       (filters) => (this.requestFilters = filters),
@@ -258,6 +259,7 @@ export class VviinnFilters {
 
   disconnectedCallback() {
     this.eventAbortController?.abort();
+    this.disposeStoreListener?.();
   }
 
   private replaceSlotsContent() {
