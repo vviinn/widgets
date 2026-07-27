@@ -10,12 +10,12 @@ npm start                 # Dev server with HTTPS + hot reload
 npm run build             # Production build
 npm run build.watch       # Dev build with watching
 npm test                  # Unit tests
-npm run test.e2e          # E2E tests
 npm run test.watch        # Watch unit tests
-npm run test.watchE2E     # Watch E2E with devtools
 npm run release           # Local release with version bump
 npm run release.ci        # CI release
 ```
+
+**E2E is not maintained** — `npm run test.e2e` / `npm run test.watchE2E` do not currently run. Don't use them to validate changes; rely on unit tests plus a manual check in the dev server.
 
 **OpenAPI sync**: Local spec at `openapi/merchant-openapi.yaml` must be kept in sync with upstream. Run `npm run update.openapi` to fetch latest (requires `gh` CLI auth). CI uses the committed local file.
 
