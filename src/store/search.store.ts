@@ -47,7 +47,7 @@ import type { ObservableMap } from "@stencil/store";
 type OnChangeHandler<T> = ObservableMap<T>["onChange"];
 // Not via the helpers barrel: it also re-exports the JSX render helpers, pulling icons and
 // a11y into the module graph of a store every widget imports.
-import { reconcileRequestFilters } from "../components/vviinn-filters/helpers/reconcileRequestFilters";
+import { extractSelectedFilters } from "../components/vviinn-filters/helpers/extractSelectedFilters";
 import { SearchSuccessEventData } from "../recommendation/events";
 import { campaignTypeNames } from "../campaign/Campaign";
 import { version } from "../../package.json";
@@ -243,18 +243,18 @@ const emitSearchSuccess = (
 /**
  * Single entry point for the facets a response reports: the offered facets and the filters
  * they leave applied must move together, or a filter outlives the facet that could undo it.
+ * The response is the source of truth — a facet it stops offering stops being applied.
+ *
+ * A response with no facets says nothing about the selection, so the pair stays as it is.
  */
 const applyResponseFilters = (
   state: SearchStore,
   responseFilters: ResponseDynamicFilterItem[] | undefined,
 ) => {
-  const dynamicFilters = responseFilters ?? [];
+  if (!responseFilters?.length) return;
 
-  state.dynamicFilters = dynamicFilters;
-  state.requestFilters = reconcileRequestFilters(
-    state.requestFilters,
-    dynamicFilters,
-  );
+  state.dynamicFilters = responseFilters;
+  state.requestFilters = extractSelectedFilters(responseFilters);
 };
 
 const updateVisualSearchState =

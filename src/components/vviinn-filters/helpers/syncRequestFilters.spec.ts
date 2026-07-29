@@ -1,6 +1,6 @@
 import { syncRequestFilters } from "./syncRequestFilters";
-import { SearchStore } from "../../../store/search.store";
-import { RequestDynamicFilterItem } from "../../../campaign/VPRCampaignService";
+import type { SearchStore } from "../../../store/search.store";
+import type { RequestDynamicFilterItem } from "../../../campaign/VPRCampaignService";
 
 type Listener = (value: RequestDynamicFilterItem[]) => void;
 
