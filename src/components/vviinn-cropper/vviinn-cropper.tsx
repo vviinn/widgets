@@ -249,7 +249,6 @@ export class VviinnCropper {
     };
   };
 
-  // Every path here follows a search-area change.
   private triggerVisualSearch = async () => {
     pipe(
       await makeVisualSearchRequest(this.storeName, null, this.token, {
@@ -411,7 +410,10 @@ export class VviinnCropper {
       isTriggeredByVpsWidget: this.showInWidget,
     });
 
-    this.autoSearch && this.triggerVisualSearch();
+    // Without autoSearch the host searches on its own, and dropAppliedFilters only shapes
+    // requests we make — so the previous area's filters have to leave the store here.
+    if (this.autoSearch) this.triggerVisualSearch();
+    else if (this.state.requestFilters.length) this.state.requestFilters = [];
   };
 
   private showPreloader = () =>

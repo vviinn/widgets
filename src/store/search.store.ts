@@ -45,6 +45,8 @@ import { ImageType, shouldResize } from "./image-processing";
 import type { ObservableMap } from "@stencil/store";
 
 type OnChangeHandler<T> = ObservableMap<T>["onChange"];
+// Not via the helpers barrel: it also re-exports the JSX render helpers, pulling icons and
+// a11y into the module graph of a store every widget imports.
 import { reconcileRequestFilters } from "../components/vviinn-filters/helpers/reconcileRequestFilters";
 import { SearchSuccessEventData } from "../recommendation/events";
 import { campaignTypeNames } from "../campaign/Campaign";
@@ -295,8 +297,11 @@ const updateImageState = (store: SearchStoreName) => (file: File) =>
   );
 
 const handleSearchError =
-  (store: SearchStoreName) =>
+  (store: SearchStoreName, isStale: () => boolean = () => false) =>
   <E>(error: E): E => {
+    // A stale failure would wipe the newer request's results and show an error over them.
+    if (isStale()) return error;
+
     // Keep dynamicFilters: they pair with requestFilters, which this reset leaves in place.
     // Dropping only the facets would leave a filter applied with no chip to undo it.
     resetStore(store, "receivedDataOnly", ["dynamicFilters"]);
@@ -305,6 +310,21 @@ const handleSearchError =
     return error;
   };
 
+/**
+ * Requests are never cancelled, so a slow response can land after a newer one and undo the
+ * selection the user already sees. One counter per store, shared by both search kinds —
+ * either kind supersedes whatever was pending, since they write the same fields.
+ */
+const latestSearch = new Map<SearchStoreName, number>();
+
+/** Claims the store's newest slot and returns the predicate for its own response. */
+const startSearch = (store: SearchStoreName): (() => boolean) => {
+  const sequence = (latestSearch.get(store) ?? 0) + 1;
+  latestSearch.set(store, sequence);
+
+  return () => latestSearch.get(store) !== sequence;
+};
+
 const processVisualSearch = (
   store: SearchStoreName,
   body: VisualSearchRequest,
@@ -312,16 +332,20 @@ const processVisualSearch = (
   apiPath?: string,
   isHiResUpdate: boolean = false,
 ) => {
+  const isStale = startSearch(store);
+
   return pipe(
     getTokenWithBody<VisualSearchRequest>(token, body),
     setBodyAndHeaders,
     TE.fromEither,
     TE.chain((request) => visualSearchSessionClient(request, apiPath)),
     TE.map((sessionResponse) => {
+      if (isStale()) return sessionResponse;
+
       updateVisualSearchState(store, isHiResUpdate)(sessionResponse);
       return sessionResponse;
     }),
-    TE.mapLeft(handleSearchError(store)),
+    TE.mapLeft(handleSearchError(store, isStale)),
   );
 };
 
@@ -466,9 +490,9 @@ export type VisualSearchOptions = {
   apiPath?: string;
   campaignId?: string | null;
   /**
-   * Search a new area — the previously applied filters belong to the old result set and are
-   * left out of the request. They stay in the store until the response reconciles them, so
-   * the UI keeps showing the last confirmed selection instead of blanking mid-flight.
+   * Searching a new area: the applied filters belong to the previous result set, so they are
+   * left out of this request. They stay in the store until the response reconciles them, so
+   * the UI keeps showing the last selection the server confirmed.
    */
   dropAppliedFilters?: boolean;
 };
@@ -560,12 +584,16 @@ export const makeTextSearchRequest = async (
     }),
   };
 
+  const isStale = startSearch(store);
+
   return pipe(
     getTokenWithBody<TextSearchRequest>(token, body),
     setBodyAndHeaders,
     TE.fromEither,
     TE.chain((request) => textSearchSessionClient(request, apiPath)),
     TE.map((sessionResponse) => {
+      if (isStale()) return sessionResponse;
+
       state.results = sessionResponse?.data?.products ?? [];
       state.textSearchId = sessionResponse.requestId;
       applyResponseFilters(
@@ -578,7 +606,7 @@ export const makeTextSearchRequest = async (
       emitSearchSuccess(store, state, "TPS");
       return sessionResponse;
     }),
-    TE.mapLeft(handleSearchError(store)),
+    TE.mapLeft(handleSearchError(store, isStale)),
   )();
 };
 

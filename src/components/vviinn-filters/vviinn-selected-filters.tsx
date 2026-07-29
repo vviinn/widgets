@@ -75,8 +75,8 @@ export class VviinnSelectedFilters {
   @State() textSearchCustomFilter: string | null = null;
   @State() imageSrc: string | null = null;
 
-  // Both are rebuilt from requestFilters ∩ dynamicFilters in componentWillRender, so they are
-  // plain fields: nothing outside that pass observes them, and @State would buy no re-render.
+  // Rebuilt from requestFilters ∩ dynamicFilters in componentWillRender and consumed by the
+  // render that follows it — nothing outside that pass observes them, so plain fields.
   private selectedFilterButtons: JSX.Element[] = [];
   private intervalFilterButtons: JSX.Element[] = [];
 
@@ -284,7 +284,7 @@ export class VviinnSelectedFilters {
     });
   }
 
-  /** A chip exists only while its interval is applied — a reconciled-away one leaves none. */
+  /** A chip exists only while the column has an applied interval to show. */
   private collectIntervalButton(filter: ResponseIntervalFilterItem) {
     const applied = getSelectedInterval(this.requestFilters, filter.column);
     if (!applied) return;

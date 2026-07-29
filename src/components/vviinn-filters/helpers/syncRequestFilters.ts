@@ -14,7 +14,8 @@ export const syncRequestFilters = (
   onChange: OnChangeHandler<SearchStore>,
   setMirror: (filters: RequestDynamicFilterItem[]) => void,
 ) => {
-  // Copy the array — subFilterSelection edits the mirror in place and must not reach the store.
+  // Copy the array so subFilterSelection can swap entries without touching the store's own.
+  // The entries stay shared, so its in-place `values` edits do reach the store.
   const copyToMirror = (filters: RequestDynamicFilterItem[]) =>
     setMirror([...filters]);
 

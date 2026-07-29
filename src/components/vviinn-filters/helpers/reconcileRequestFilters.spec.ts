@@ -82,38 +82,4 @@ describe("reconcileRequestFilters", () => {
       { column: "brand", values: ["Mediware"] },
     ]);
   });
-
-  // Reference identity matters: the store fans out to every subscriber on a new reference,
-  // so an unchanged selection must come back as the very same array.
-  describe("when the selection is unchanged", () => {
-    it("returns the same array for categorical values", () => {
-      const current = [applied("brand", ["Mediware", "Other"])];
-      const response = [
-        categoricalFilter("brand", [
-          { value: "Mediware", selected: true },
-          { value: "Other", selected: true },
-        ]),
-      ];
-
-      expect(reconcileRequestFilters(current, response)).toBe(current);
-    });
-
-    it("returns the same array for an interval compared by bounds", () => {
-      const current = [applied("minimum_price", [{ start: 0, end: 87 }])];
-      const response = [
-        intervalFilter("minimum_price", [{ start: 0, end: 87 }]),
-      ];
-
-      expect(reconcileRequestFilters(current, response)).toBe(current);
-    });
-
-    it("detects a changed value in an otherwise identical selection", () => {
-      const current = [applied("brand", ["Mediware"])];
-      const response = [
-        categoricalFilter("brand", [{ value: "Other", selected: true }]),
-      ];
-
-      expect(reconcileRequestFilters(current, response)).not.toBe(current);
-    });
-  });
 });

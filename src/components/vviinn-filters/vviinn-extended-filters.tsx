@@ -515,7 +515,7 @@ export class VviinnExtendedFilters {
                 {this.mode === "button" && (
                   <button
                     class="filters-modal-apply"
-                    onClick={() => (this.showMore = false)}
+                    onClick={this.handleCloseModal}
                     disabled={this.requestFilters.length === 0}
                     part="extended-filters-apply"
                     type="button"
