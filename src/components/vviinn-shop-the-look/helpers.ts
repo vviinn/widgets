@@ -268,8 +268,7 @@ export const handleDetectedObjectClick = async (
       "shopTheLook",
       visualSearchId || null,
       token,
-      apiPath,
-      campaignId,
+      { apiPath, campaignId },
     );
 
     return E.fold(

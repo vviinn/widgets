@@ -505,7 +505,7 @@ export class VviinnResults {
         this.storeName,
         searchId ?? this.state.visualSearchId,
         this.token,
-        this.apiPath,
+        { apiPath: this.apiPath },
       ),
       E.fold(
         () => {
@@ -593,15 +593,6 @@ export class VviinnResults {
     this.updateCampaignIds();
   };
 
-  private imageCropHandler = ({ detail }: TriggerSourceEvent) => {
-    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
-
-    this.vviinnSelectedFiltersReset.emit({
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
-    this.state.requestFilters = [];
-  };
-
   private oneClickDiscoveryAppendClosedHandler = ({
     detail,
   }: TriggerSourceEvent) => {
@@ -641,7 +632,6 @@ export class VviinnResults {
         ["vviinnTextSearchStarted", this.textSearchStartedHandler],
         ["vviinnFiltersChanged", this.filtersChangedHandler],
         ["vviinnFilterTriggered", this.filterTriggeredHandler],
-        ["vviinnImageCrop", this.imageCropHandler],
         [
           "vviinnOneClickDiscoveryAppendClosed",
           this.oneClickDiscoveryAppendClosedHandler,

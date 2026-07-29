@@ -297,7 +297,9 @@ const updateImageState = (store: SearchStoreName) => (file: File) =>
 const handleSearchError =
   (store: SearchStoreName) =>
   <E>(error: E): E => {
-    resetStore(store, "receivedDataOnly");
+    // Keep dynamicFilters: they pair with requestFilters, which this reset leaves in place.
+    // Dropping only the facets would leave a filter applied with no chip to undo it.
+    resetStore(store, "receivedDataOnly", ["dynamicFilters"]);
     const state = useStore(store);
     state.searchStatus = "error";
     return error;
@@ -460,12 +462,22 @@ export const makeUploadFileRequest =
     return session;
   };
 
+export type VisualSearchOptions = {
+  apiPath?: string;
+  campaignId?: string | null;
+  /**
+   * Search a new area — the previously applied filters belong to the old result set and are
+   * left out of the request. They stay in the store until the response reconciles them, so
+   * the UI keeps showing the last confirmed selection instead of blanking mid-flight.
+   */
+  dropAppliedFilters?: boolean;
+};
+
 export const makeVisualSearchRequest = async (
   store: SearchStoreName,
   searchId: string | null,
   token: string,
-  apiPath?: string,
-  campaignId?: string | null,
+  { apiPath, campaignId, dropAppliedFilters }: VisualSearchOptions = {},
 ) => {
   const state = useStore(store);
   state.textSearchQuery = null;
@@ -499,7 +511,10 @@ export const makeVisualSearchRequest = async (
       "campaign",
       campaignId || state.campaignIdVisualSearch || state.campaignId,
     ),
-    ...addIfNotEmpty("dynamicFilters", state.requestFilters),
+    ...addIfNotEmpty(
+      "dynamicFilters",
+      dropAppliedFilters ? [] : state.requestFilters,
+    ),
     query: {
       ...addIfDefined("searchArea", searchRectangle),
     },

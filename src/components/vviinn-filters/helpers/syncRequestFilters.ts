@@ -12,13 +12,13 @@ type OnChangeHandler<T> = ObservableMap<T>["onChange"];
 export const syncRequestFilters = (
   state: SearchStore,
   onChange: OnChangeHandler<SearchStore>,
-  setRequestFilters: (filters: RequestDynamicFilterItem[]) => void,
+  setMirror: (filters: RequestDynamicFilterItem[]) => void,
 ) => {
   // Copy the array — subFilterSelection edits the mirror in place and must not reach the store.
-  const mirror = (filters: RequestDynamicFilterItem[]) =>
-    setRequestFilters([...filters]);
+  const copyToMirror = (filters: RequestDynamicFilterItem[]) =>
+    setMirror([...filters]);
 
-  mirror(state.requestFilters);
+  copyToMirror(state.requestFilters);
 
-  return onChange("requestFilters", mirror);
+  return onChange("requestFilters", copyToMirror);
 };

@@ -92,8 +92,6 @@ export class VviinnCropper {
   @Event() vviinnCropperResetState: EventEmitter<TriggerSourceEventData>;
   /** @internal */
   @Event() vviinnResetCropArea: EventEmitter<TriggerSourceEventData>;
-  /** @internal */
-  @Event() vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
 
   private state?: SearchStore;
   private storeName?: SearchStoreName;
@@ -251,14 +249,13 @@ export class VviinnCropper {
     };
   };
 
+  // Every path here follows a search-area change.
   private triggerVisualSearch = async () => {
     pipe(
-      await makeVisualSearchRequest(
-        this.storeName,
-        null,
-        this.token,
-        this.apiPath,
-      ),
+      await makeVisualSearchRequest(this.storeName, null, this.token, {
+        apiPath: this.apiPath,
+        dropAppliedFilters: true,
+      }),
       E.fold(
         () => {
           this.vviinnNoResult.emit(this.getBasicEventData());
@@ -294,13 +291,10 @@ export class VviinnCropper {
       };
 
       this.cropper.setCropBoxData(ValidateCropBoxData(cropBoxData));
+      this.vviinnImageCrop.emit({
+        isTriggeredByVpsWidget: this.showInWidget,
+      });
     }
-
-    // The search area changed — announce it even when the OCR gate left the cropper
-    // uninitialised, otherwise the filter reset riding on this event never runs.
-    this.vviinnImageCrop.emit({
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
 
     this.triggerVisualSearch();
   }
@@ -312,10 +306,6 @@ export class VviinnCropper {
       this.state.croppedImageUrl = this.cropper
         .getCroppedCanvas?.()
         .toDataURL?.();
-
-    this.vviinnSelectedFiltersReset.emit({
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
   }
 
   private loadImage = () => {

@@ -17,6 +17,7 @@ import {
 import {
   FilterOptions,
   getIntervalLabel,
+  getSelectedInterval,
   isSubFilterActive,
   RenderCustomButton,
   RenderFilterButton,
@@ -40,7 +41,7 @@ import { Locale, initializeLocale } from "../../locale";
 import { announceToScreenReader } from "../../a11y";
 import { getLocalStorageItems } from "../../localStorage";
 import { addEventListenersWithSignal } from "../../dom";
-import { Interval, ResponseIntervalFilterItem } from "../../interfaces";
+import { ResponseIntervalFilterItem } from "../../interfaces";
 import { selectedFiltersParts } from "../../cssParts";
 
 /**
@@ -71,10 +72,13 @@ export class VviinnSelectedFilters {
   @Prop() showInWidget: boolean = false;
 
   @State() requestFilters: RequestDynamicFilterItem[] = [];
-  @State() selectedFilterButtons: JSX.Element[] = [];
   @State() textSearchCustomFilter: string | null = null;
   @State() imageSrc: string | null = null;
-  @State() intervalCustomFilters: { [column: string]: string } = {};
+
+  // Both are rebuilt from requestFilters ∩ dynamicFilters in componentWillRender, so they are
+  // plain fields: nothing outside that pass observes them, and @State would buy no re-render.
+  private selectedFilterButtons: JSX.Element[] = [];
+  private intervalFilterButtons: JSX.Element[] = [];
 
   /** The filter's state changes */
   @Event({ bubbles: true })
@@ -136,8 +140,6 @@ export class VviinnSelectedFilters {
     resetImageFilter: boolean = false,
   ) => {
     this.requestFilters = [];
-    this.selectedFilterButtons = [];
-    this.intervalCustomFilters = {};
     resetTextSearchFilter && (this.textSearchCustomFilter = null);
     resetImageFilter && (this.imageSrc = null);
   };
@@ -150,13 +152,6 @@ export class VviinnSelectedFilters {
     if (detail.customTrigger === "TPS") {
       this.resetInnerState(true, true);
       this.textSearchCustomFilter = detail.kind;
-    }
-
-    if (detail.action === "select" && detail.filter?.type === "interval") {
-      this.setIntervalFilterLabel(
-        detail.filter as ResponseIntervalFilterItem,
-        detail.value.interval as Interval,
-      );
     }
   };
 
@@ -183,24 +178,6 @@ export class VviinnSelectedFilters {
       return;
 
     this.requestFilters = filters;
-
-    const activeIntervalColumns = new Set(
-      filters
-        .filter((f) => f.values && f.values.length > 0)
-        .map((f) => f.column),
-    );
-
-    const updatedIntervalFilters = Object.fromEntries(
-      Object.entries(this.intervalCustomFilters).filter(([column]) =>
-        activeIntervalColumns.has(column),
-      ),
-    );
-
-    if (
-      Object.keys(updatedIntervalFilters).length !==
-      Object.keys(this.intervalCustomFilters).length
-    )
-      this.intervalCustomFilters = updatedIntervalFilters;
   };
 
   private handleSelectedFiltersReset = ({ detail }: TriggerSourceEvent) => {
@@ -221,9 +198,6 @@ export class VviinnSelectedFilters {
   };
 
   private handleIntervalButtonClick = (column: string) => {
-    const { [column]: removed, ...remaining } = this.intervalCustomFilters;
-    this.intervalCustomFilters = remaining;
-
     this.requestFilters = triggerRemoveIntervalFilter({
       column,
       requestFilters: this.requestFilters,
@@ -283,13 +257,12 @@ export class VviinnSelectedFilters {
 
   componentWillRender() {
     this.selectedFilterButtons = [];
+    this.intervalFilterButtons = [];
     const filters = this.state?.dynamicFilters || [];
 
     filters.forEach((filter) => {
       if (filter.type === "interval") {
-        this.syncPreselectedIntervalFilter(
-          filter as ResponseIntervalFilterItem,
-        );
+        this.collectIntervalButton(filter as ResponseIntervalFilterItem);
         return;
       }
       if (!("values" in filter)) return;
@@ -311,37 +284,30 @@ export class VviinnSelectedFilters {
     });
   }
 
-  private setIntervalFilterLabel(
-    filter: ResponseIntervalFilterItem,
-    interval: Interval,
-  ) {
+  /** A chip exists only while its interval is applied — a reconciled-away one leaves none. */
+  private collectIntervalButton(filter: ResponseIntervalFilterItem) {
+    const applied = getSelectedInterval(this.requestFilters, filter.column);
+    if (!applied) return;
+
     const label = getIntervalLabel(
       filter,
-      interval,
+      applied,
       this.currencySign ?? defaultConfig.currencySign,
       true,
     );
-    if (label) {
-      this.intervalCustomFilters = {
-        ...this.intervalCustomFilters,
-        [filter.column]: label,
-      };
-    } else {
-      const { [filter.column]: removed, ...remaining } =
-        this.intervalCustomFilters;
-      this.intervalCustomFilters = remaining;
-    }
-  }
+    if (!label) return;
 
-  private syncPreselectedIntervalFilter(filter: ResponseIntervalFilterItem) {
-    if (this.intervalCustomFilters[filter.column]) return;
+    const { column } = filter;
 
-    const matchingRequest = this.requestFilters.find(
-      (rf) => rf.column === filter.column,
+    this.intervalFilterButtons.push(
+      <div key={column}>
+        {RenderCustomButton({
+          label,
+          buttonType: "range",
+          onClick: () => this.handleIntervalButtonClick(column),
+        })}
+      </div>,
     );
-    if (!matchingRequest?.values?.length) return;
-
-    this.setIntervalFilterLabel(filter, matchingRequest.values[0] as Interval);
   }
 
   render() {
@@ -349,7 +315,7 @@ export class VviinnSelectedFilters {
       this.showInWidget &&
       !this.selectedFilterButtons.length &&
       !this.state.croppedImageUrl &&
-      !Object.keys(this.intervalCustomFilters).length
+      !this.intervalFilterButtons.length
     )
       return null;
     return (
@@ -395,18 +361,7 @@ export class VviinnSelectedFilters {
               hidden: !this.state.searchArea,
             })}
 
-            {Object.entries(this.intervalCustomFilters)
-              .filter(([, label]) => label && label.trim().length > 0)
-              .map(([column, label]) => (
-                <div key={column}>
-                  {RenderCustomButton({
-                    label,
-                    buttonType: "range",
-                    onClick: () => this.handleIntervalButtonClick(column),
-                    hidden: false,
-                  })}
-                </div>
-              ))}
+            {this.intervalFilterButtons}
 
             {this.selectedFilterButtons}
           </ul>
