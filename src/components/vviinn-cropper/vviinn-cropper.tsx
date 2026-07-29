@@ -394,6 +394,11 @@ export class VviinnCropper {
       cropboxData,
     );
 
+    // Before the events: a host listening on vviinnCropperCropEnd searches synchronously, and
+    // dropAppliedFilters only shapes requests we make ourselves.
+    if (!this.autoSearch && this.state.requestFilters.length)
+      this.state.requestFilters = [];
+
     this.vviinnCropperCropEnd.emit({
       searchArea: cropboxData,
       normalizedSearchArea,
@@ -410,10 +415,7 @@ export class VviinnCropper {
       isTriggeredByVpsWidget: this.showInWidget,
     });
 
-    // Without autoSearch the host searches on its own, and dropAppliedFilters only shapes
-    // requests we make — so the previous area's filters have to leave the store here.
     if (this.autoSearch) this.triggerVisualSearch();
-    else if (this.state.requestFilters.length) this.state.requestFilters = [];
   };
 
   private showPreloader = () =>

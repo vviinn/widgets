@@ -5,9 +5,8 @@ import dotenvPlugin from "rollup-plugin-dotenv";
 import { readFileSync } from "fs";
 import path from "path";
 
-// Replaces @stencil-community/postcss, unmaintained since 2023 and pinned to a
-// vulnerable postcss. Stencil's built-in autoprefixCss is not an option — it
-// emits a different prefix set than autoprefixer at any browserslist query.
+// Stencil's built-in autoprefixCss is not an option here: it emits a different prefix set
+// than autoprefixer at any browserslist query.
 const autoprefixPlugin = (): Plugin => ({
   name: "autoprefix-css",
   pluginType: "css",

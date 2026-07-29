@@ -36,7 +36,6 @@ describe("syncRequestFilters", () => {
     expect(setMirror).toHaveBeenCalledWith([applied("brand", ["Mediware"])]);
   });
 
-  // Regression: empty updates used to be dropped, so a cleared store left stale chips behind.
   it("mirrors an empty update", () => {
     const store = storeStub([applied("brand", ["Mediware"])]);
     const setMirror = jest.fn();
@@ -58,8 +57,6 @@ describe("syncRequestFilters", () => {
     expect(store.dispose).toHaveBeenCalledTimes(1);
   });
 
-  // subFilterSelection replaces entries of the array it is handed, so the mirror must not be
-  // the store's own array.
   it("hands over a copy, not the store's array", () => {
     const storeFilters = [applied("brand", ["Mediware"])];
     const store = storeStub(storeFilters);

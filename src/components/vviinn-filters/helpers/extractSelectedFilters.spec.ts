@@ -36,8 +36,6 @@ describe("extractSelectedFilters", () => {
     expect(extractSelectedFilters([])).toEqual([]);
   });
 
-  // This is what makes the response the source of truth: a facet it stops offering, or stops
-  // marking as selected, leaves no applied filter behind.
   it("omits a facet with nothing selected", () => {
     const response = [
       categoricalFilter("brand", [{ value: "A", selected: false }]),

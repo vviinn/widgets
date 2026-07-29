@@ -75,8 +75,8 @@ export class VviinnSelectedFilters {
   @State() textSearchCustomFilter: string | null = null;
   @State() imageSrc: string | null = null;
 
-  // Rebuilt from requestFilters ∩ dynamicFilters in componentWillRender and consumed by the
-  // render that follows it — nothing outside that pass observes them, so plain fields.
+  // Rebuilt in componentWillRender and consumed by the render after it, so plain fields.
+  // The requestFilters mirror drives that rebuild — reads there register no subscription.
   private selectedFilterButtons: JSX.Element[] = [];
   private intervalFilterButtons: JSX.Element[] = [];
 

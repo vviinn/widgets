@@ -45,9 +45,8 @@ import { ImageType, shouldResize } from "./image-processing";
 import type { ObservableMap } from "@stencil/store";
 
 type OnChangeHandler<T> = ObservableMap<T>["onChange"];
-// Not via the helpers barrel: it also re-exports the JSX render helpers, pulling icons and
-// a11y into the module graph of a store every widget imports.
-import { extractSelectedFilters } from "../components/vviinn-filters/helpers/extractSelectedFilters";
+import { applyResponseFilters } from "./helpers/applyResponseFilters";
+import { startSearch } from "./helpers/searchSequence";
 import { SearchSuccessEventData } from "../recommendation/events";
 import { campaignTypeNames } from "../campaign/Campaign";
 import { version } from "../../package.json";
@@ -240,23 +239,6 @@ const emitSearchSuccess = (
   );
 };
 
-/**
- * Single entry point for the facets a response reports: the offered facets and the filters
- * they leave applied must move together, or a filter outlives the facet that could undo it.
- * The response is the source of truth — a facet it stops offering stops being applied.
- *
- * A response with no facets says nothing about the selection, so the pair stays as it is.
- */
-const applyResponseFilters = (
-  state: SearchStore,
-  responseFilters: ResponseDynamicFilterItem[] | undefined,
-) => {
-  if (!responseFilters?.length) return;
-
-  state.dynamicFilters = responseFilters;
-  state.requestFilters = extractSelectedFilters(responseFilters);
-};
-
 const updateVisualSearchState =
   (store: SearchStoreName, isHiResUpdate: boolean = false) =>
   async (response: VisualSearchResponse) => {
@@ -309,21 +291,6 @@ const handleSearchError =
     state.searchStatus = "error";
     return error;
   };
-
-/**
- * Requests are never cancelled, so a slow response can land after a newer one and undo the
- * selection the user already sees. One counter per store, shared by both search kinds —
- * either kind supersedes whatever was pending, since they write the same fields.
- */
-const latestSearch = new Map<SearchStoreName, number>();
-
-/** Claims the store's newest slot and returns the predicate for its own response. */
-const startSearch = (store: SearchStoreName): (() => boolean) => {
-  const sequence = (latestSearch.get(store) ?? 0) + 1;
-  latestSearch.set(store, sequence);
-
-  return () => latestSearch.get(store) !== sequence;
-};
 
 const processVisualSearch = (
   store: SearchStoreName,
