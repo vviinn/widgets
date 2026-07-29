@@ -1,9 +1,28 @@
-import { Config } from "@stencil/core";
-import { postcss } from "@stencil-community/postcss";
+import { Config, Plugin } from "@stencil/core";
+import postCss from "postcss";
 import autoprefixer from "autoprefixer";
 import dotenvPlugin from "rollup-plugin-dotenv";
 import { readFileSync } from "fs";
 import path from "path";
+
+// Replaces @stencil-community/postcss, unmaintained since 2023 and pinned to a
+// vulnerable postcss. Stencil's built-in autoprefixCss is not an option — it
+// emits a different prefix set than autoprefixer at any browserslist query.
+const autoprefixPlugin = (): Plugin => ({
+  name: "autoprefix-css",
+  pluginType: "css",
+  async transform(sourceText: string, fileName: string) {
+    if (!/\.css$/i.test(fileName) || sourceText.trim() === "") {
+      return null;
+    }
+
+    const result = await postCss([autoprefixer()]).process(sourceText, {
+      from: fileName,
+    });
+
+    return { id: fileName, code: result.css };
+  },
+});
 
 export const config: Config = {
   extras: { enableImportInjection: true },
@@ -30,12 +49,7 @@ export const config: Config = {
   },
   globalScript: "src/global",
   globalStyle: "src/variables.css",
-  plugins: [
-    dotenvPlugin(),
-    postcss({
-      plugins: [autoprefixer()],
-    }),
-  ],
+  plugins: [dotenvPlugin(), autoprefixPlugin()],
   testing: {
     browserArgs: ["--no-sandbox", "--disable-setuid-sandbox"],
     browserHeadless: "shell",
