@@ -33,8 +33,14 @@ npm run release.ci        # CI release
 - `vviinn-vps-button` / `vviinn-vpr-button`: Trigger buttons. `vviinn-text-search` in `mode="extended"` renders `vviinn-vps-button` internally to handle image upload.
 - `vviinn-cropper`: Image cropping interface with geometry validation
 - `vviinn-product-card`: Product display with intersection tracking
+- `vviinn-filters` / `vviinn-extended-filters` / `vviinn-selected-filters`: filter row, modal and chips. Public, usable standalone alongside `vviinn-results`.
+- `vviinn-suggestions`: AI suggestions. Rendered only inside `vviinn-vps-widget`, so it is absent from standalone-component integrations.
 
 Global CSS variables in `src/variables.css`.
+
+**Two integration shapes**: the widget (`vviinn-vps-button` → `vviinn-vps-widget`), or standalone components wired together by events. Anything living only inside the widget is absent from the standalone shape — check which one you are reasoning about before concluding a feature is broken.
+
+**Event reach**: `@Listen` without a target binds to the host, so it only sees events from its own subtree. Cross-component wiring uses `addEventListenersWithSignal(document, …)`, which sees them wherever they originate.
 
 ## Code Style Guidelines
 
@@ -62,12 +68,13 @@ Global CSS variables in `src/variables.css`.
 **Code Quality**:
 
 - **DRY**: Check for existing types, constants, and functions before creating new ones. Search component folder first (`types.ts`, `helpers.ts`, `constants.ts`), then project-level (`/src/interfaces/`, `/src/geometry/`, `/src/constants/`)
-- **Component Organization**: Main file focused on state/lifecycle. Extract rendering to `render-helpers.ts`, utilities to `helpers.ts`
+- **Component Organization**: Main file focused on state/lifecycle. Extract rendering to `render-helpers.tsx`, utilities to `helpers.ts`
 - **CSS-First**: Prioritize CSS over JS for positioning and layout
 - **Class Maps**: `{ 'base': true, active: this.isActive, [this.variant]: !!this.variant }`
 - **Adding @Prop()**: See `/add-prop` command. ALWAYS update Storybook story when adding props.
 - **Comments**: comment the _why_, not the _what_ — explain intent, non-obvious decisions, edge cases, and constraints the code can't express itself. Skip comments that restate the code; prefer self-documenting names over a comment. Keep them short and to the point; delete stale ones with the code they described.
   - **Size**: default to a single line. Two lines is the ceiling for inline comments — if the _why_ needs more, extract a named helper/variable or move the rationale into the function's JSDoc instead. One focused sentence beats a paragraph.
+  - **No change history**: describe the code as it stands, never how it got there. No "now", "no longer", "instead of the previous", no naming a rejected alternative. The reader has only the current code — the old behaviour is invisible to them, and within a single PR it never existed on the branch they are reading. Diffs, commits and the PR description are where change belongs.
 - **Punctuation in comments & docs**: use an em dash (—), not a hyphen (-) or en dash (–).
 - **Component JSDoc**: the `@part` / `@slot` / `@cssprop` JSDoc block must sit **immediately above `@Component`** with no declaration in between — otherwise Stencil attaches it to that declaration and the docs (Storybook Controls table via `docs.json`) lose the parts/slots.
 
