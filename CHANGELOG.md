@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.224.1](https://github.com/vviinn/widgets/compare/v2.224.0...v2.224.1) (2026-07-30)
+
+
+### Bug Fixes
+
+* Clear all npm audit vulnerabilities in build dependencies ([9d40bc1](https://github.com/vviinn/widgets/commit/9d40bc1c5b5fe009b4f105b448f4b382ff2672be))
+* Clear high-severity postcss advisory in Storybook dependencies ([b1d4c00](https://github.com/vviinn/widgets/commit/b1d4c00dd600b3eb2af2fc85cad33c8ed0e5aba9))
+* Selected filter chips no longer show a stale selection ([b9b0cab](https://github.com/vviinn/widgets/commit/b9b0cabfcf470d4e6f390d442a29333a63e8d6f0))
+
 ## [2.224.0](https://github.com/vviinn/widgets/compare/v2.223.0...v2.224.0) (2026-07-24)
 
 
