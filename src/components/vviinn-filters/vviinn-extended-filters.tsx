@@ -164,6 +164,7 @@ export class VviinnExtendedFilters {
   private triggerElement?: HTMLElement;
   private state?: SearchStore;
   private eventAbortController?: AbortController;
+  private disposeStoreListener?: () => void;
   private filterAnnouncementRef?: HTMLElement;
   private isPreviewInlineMode: boolean;
 
@@ -514,7 +515,7 @@ export class VviinnExtendedFilters {
                 {this.mode === "button" && (
                   <button
                     class="filters-modal-apply"
-                    onClick={() => (this.showMore = false)}
+                    onClick={this.handleCloseModal}
                     disabled={this.requestFilters.length === 0}
                     part="extended-filters-apply"
                     type="button"
@@ -680,7 +681,7 @@ export class VviinnExtendedFilters {
     this.state = state;
     this.isPreviewInlineMode = this.mode === "preview-inline";
 
-    syncRequestFilters(
+    this.disposeStoreListener = syncRequestFilters(
       state,
       onChange,
       (filters) => (this.requestFilters = filters),
@@ -711,6 +712,7 @@ export class VviinnExtendedFilters {
 
   disconnectedCallback() {
     this.eventAbortController?.abort();
+    this.disposeStoreListener?.();
   }
 
   private intervalFilterChangeHandler = (

@@ -45,7 +45,8 @@ import { ImageType, shouldResize } from "./image-processing";
 import type { ObservableMap } from "@stencil/store";
 
 type OnChangeHandler<T> = ObservableMap<T>["onChange"];
-import { extractSelectedFilters } from "../components/vviinn-filters/helpers/extractSelectedFilters";
+import { applyResponseFilters } from "./helpers/applyResponseFilters";
+import { startSearch } from "./helpers/searchSequence";
 import { SearchSuccessEventData } from "../recommendation/events";
 import { campaignTypeNames } from "../campaign/Campaign";
 import { version } from "../../package.json";
@@ -253,20 +254,12 @@ const updateVisualSearchState =
     );
     if (detectedObjects.length > 0) state.detectedObjects = detectedObjects;
 
-    const dynamicFilters = response.interactions.dynamicFilters ?? [];
-
     state.visualSearchId = response.requestId;
     state.results = response.data.products;
-    state.dynamicFilters = dynamicFilters;
+    applyResponseFilters(state, response.interactions.dynamicFilters);
     state.redirect = response.interactions.redirect
       ? { ...response.interactions.redirect, searchId: response.requestId }
       : null;
-
-    const extractedFilters = extractSelectedFilters(dynamicFilters);
-
-    if (state.requestFilters.length === 0 && extractedFilters.length > 0) {
-      state.requestFilters = extractedFilters;
-    }
 
     state.stream = response?.stream ?? null;
     state.searchStatus = "success";
@@ -286,9 +279,14 @@ const updateImageState = (store: SearchStoreName) => (file: File) =>
   );
 
 const handleSearchError =
-  (store: SearchStoreName) =>
+  (store: SearchStoreName, isStale: () => boolean = () => false) =>
   <E>(error: E): E => {
-    resetStore(store, "receivedDataOnly");
+    // A stale failure would wipe the newer request's results and show an error over them.
+    if (isStale()) return error;
+
+    // Keep dynamicFilters: they pair with requestFilters, which this reset leaves in place.
+    // Dropping only the facets would leave a filter applied with no chip to undo it.
+    resetStore(store, "receivedDataOnly", ["dynamicFilters"]);
     const state = useStore(store);
     state.searchStatus = "error";
     return error;
@@ -301,16 +299,20 @@ const processVisualSearch = (
   apiPath?: string,
   isHiResUpdate: boolean = false,
 ) => {
+  const isStale = startSearch(store);
+
   return pipe(
     getTokenWithBody<VisualSearchRequest>(token, body),
     setBodyAndHeaders,
     TE.fromEither,
     TE.chain((request) => visualSearchSessionClient(request, apiPath)),
     TE.map((sessionResponse) => {
+      if (isStale()) return sessionResponse;
+
       updateVisualSearchState(store, isHiResUpdate)(sessionResponse);
       return sessionResponse;
     }),
-    TE.mapLeft(handleSearchError(store)),
+    TE.mapLeft(handleSearchError(store, isStale)),
   );
 };
 
@@ -451,12 +453,22 @@ export const makeUploadFileRequest =
     return session;
   };
 
+export type VisualSearchOptions = {
+  apiPath?: string;
+  campaignId?: string | null;
+  /**
+   * Searching a new area: the applied filters belong to the previous result set, so they are
+   * left out of this request. They stay in the store until the response reconciles them, so
+   * the UI keeps showing the last selection the server confirmed.
+   */
+  dropAppliedFilters?: boolean;
+};
+
 export const makeVisualSearchRequest = async (
   store: SearchStoreName,
   searchId: string | null,
   token: string,
-  apiPath?: string,
-  campaignId?: string | null,
+  { apiPath, campaignId, dropAppliedFilters }: VisualSearchOptions = {},
 ) => {
   const state = useStore(store);
   state.textSearchQuery = null;
@@ -490,7 +502,10 @@ export const makeVisualSearchRequest = async (
       "campaign",
       campaignId || state.campaignIdVisualSearch || state.campaignId,
     ),
-    ...addIfNotEmpty("dynamicFilters", state.requestFilters),
+    ...addIfNotEmpty(
+      "dynamicFilters",
+      dropAppliedFilters ? [] : state.requestFilters,
+    ),
     query: {
       ...addIfDefined("searchArea", searchRectangle),
     },
@@ -536,31 +551,29 @@ export const makeTextSearchRequest = async (
     }),
   };
 
+  const isStale = startSearch(store);
+
   return pipe(
     getTokenWithBody<TextSearchRequest>(token, body),
     setBodyAndHeaders,
     TE.fromEither,
     TE.chain((request) => textSearchSessionClient(request, apiPath)),
     TE.map((sessionResponse) => {
+      if (isStale()) return sessionResponse;
+
       state.results = sessionResponse?.data?.products ?? [];
       state.textSearchId = sessionResponse.requestId;
-      state.dynamicFilters =
-        sessionResponse?.interactions?.dynamicFilters ?? [];
-
-      const extractedFilters = extractSelectedFilters(
-        sessionResponse?.interactions?.dynamicFilters ?? [],
+      applyResponseFilters(
+        state,
+        sessionResponse?.interactions?.dynamicFilters,
       );
-
-      if (state.requestFilters.length === 0 && extractedFilters.length > 0) {
-        state.requestFilters = extractedFilters;
-      }
 
       state.stream = sessionResponse?.stream ?? null;
       state.searchStatus = "success";
       emitSearchSuccess(store, state, "TPS");
       return sessionResponse;
     }),
-    TE.mapLeft(handleSearchError(store)),
+    TE.mapLeft(handleSearchError(store, isStale)),
   )();
 };
 

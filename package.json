@@ -46,33 +46,37 @@
     "rxjs": "^7.5.5",
     "swiper": "^12.1.2",
     "tslib": "^1.14.1",
-    "uuid": "^8.3.2",
+    "uuid": "^11.1.1",
     "vviinn-tracking-client-ts": "^1.7.6",
     "whatwg-fetch": "^3.6.2"
   },
   "devDependencies": {
     "@babel/core": "^7.16.12",
-    "@stencil-community/postcss": "^2.1.0",
     "@stencil/core": "^4.31.0",
     "@stencil/store": "^2.0.8",
     "@types/dom-speech-recognition": "^0.0.4",
     "@types/google.analytics": "0.0.41",
     "@types/gtag.js": "0.0.4",
-    "@types/jest": "^27.0.3",
+    "@types/jest": "^29.5.14",
     "@types/node": "^22.15.21",
-    "@types/uuid": "^8.3.4",
     "autoprefixer": "^10.4.20",
     "babel-loader": "^9.1.2",
     "commit-and-tag-version": "^9.5.0",
     "dotenv": "^8.2.0",
     "enhanced-ecommerce-types": "0.0.3",
-    "jest": "^27.0.3",
-    "jest-cli": "^27.4.5",
-    "jest-config": "^27.0.3",
+    "jest": "^29.7.0",
+    "jest-cli": "^29.7.0",
+    "jest-config": "^29.7.0",
     "openapi-typescript": "^4.4.0",
+    "postcss": "^8.5.24",
     "prettier": "3.4.2",
     "rollup-plugin-dotenv": "^0.5.0",
     "storybook-addon-designs": "^6.2.1",
     "typescript": "^5.8.3"
+  },
+  "overrides": {
+    "minimatch": {
+      "brace-expansion": "^5.0.8"
+    }
   }
 }

@@ -5,20 +5,21 @@ import type { ObservableMap } from "@stencil/store";
 type OnChangeHandler<T> = ObservableMap<T>["onChange"];
 
 /**
- * Syncs local component requestFilters state with the store's requestFilters in case there are response filters with selected: true.
+ * Copies the store's requestFilters into local component state, empty updates included —
+ * a cleared store means nothing is selected, and the local copy has to say so too.
+ * Returns the store's dispose function; call it from disconnectedCallback.
  */
 export const syncRequestFilters = (
   state: SearchStore,
   onChange: OnChangeHandler<SearchStore>,
   setRequestFilters: (filters: RequestDynamicFilterItem[]) => void,
 ) => {
-  if (state.requestFilters?.length > 0) {
-    setRequestFilters([...state.requestFilters]);
-  }
+  // Copy the array so subFilterSelection can swap entries without touching the store's own.
+  // The entries stay shared, so its in-place `values` edits do reach the store.
+  const applyCopy = (filters: RequestDynamicFilterItem[]) =>
+    setRequestFilters([...filters]);
 
-  onChange("requestFilters", (newValue) => {
-    if (newValue?.length > 0) {
-      setRequestFilters([...newValue]);
-    }
-  });
+  applyCopy(state.requestFilters);
+
+  return onChange("requestFilters", applyCopy);
 };

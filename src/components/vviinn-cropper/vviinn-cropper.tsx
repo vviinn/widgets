@@ -92,8 +92,6 @@ export class VviinnCropper {
   @Event() vviinnCropperResetState: EventEmitter<TriggerSourceEventData>;
   /** @internal */
   @Event() vviinnResetCropArea: EventEmitter<TriggerSourceEventData>;
-  /** @internal */
-  @Event() vviinnSelectedFiltersReset: EventEmitter<TriggerSourceEventData>;
 
   private state?: SearchStore;
   private storeName?: SearchStoreName;
@@ -253,12 +251,10 @@ export class VviinnCropper {
 
   private triggerVisualSearch = async () => {
     pipe(
-      await makeVisualSearchRequest(
-        this.storeName,
-        null,
-        this.token,
-        this.apiPath,
-      ),
+      await makeVisualSearchRequest(this.storeName, null, this.token, {
+        apiPath: this.apiPath,
+        dropAppliedFilters: true,
+      }),
       E.fold(
         () => {
           this.vviinnNoResult.emit(this.getBasicEventData());
@@ -309,10 +305,6 @@ export class VviinnCropper {
       this.state.croppedImageUrl = this.cropper
         .getCroppedCanvas?.()
         .toDataURL?.();
-
-    this.vviinnSelectedFiltersReset.emit({
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
   }
 
   private loadImage = () => {
@@ -402,6 +394,11 @@ export class VviinnCropper {
       cropboxData,
     );
 
+    // Before the events: a host listening on vviinnCropperCropEnd searches synchronously, and
+    // dropAppliedFilters only shapes requests we make ourselves.
+    if (!this.autoSearch && this.state.requestFilters.length)
+      this.state.requestFilters = [];
+
     this.vviinnCropperCropEnd.emit({
       searchArea: cropboxData,
       normalizedSearchArea,
@@ -418,7 +415,7 @@ export class VviinnCropper {
       isTriggeredByVpsWidget: this.showInWidget,
     });
 
-    this.autoSearch && this.triggerVisualSearch();
+    if (this.autoSearch) this.triggerVisualSearch();
   };
 
   private showPreloader = () =>
