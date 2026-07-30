@@ -168,6 +168,13 @@ export const cardDataByType = {
     },
     style: `
 <style>
+  /*
+    This example targets the standalone <vviinn-product-card> tag.
+    In production the card is rendered inside a widget, so use the tag
+    of the widget you embed as the host instead — e.g.
+    vviinn-vps-widget::part(title), vviinn-vpr-widget::part(custom-label-0), etc.
+    The part names are the same.
+  */
   vviinn-product-card::part(title) {
     order: 1;
   }

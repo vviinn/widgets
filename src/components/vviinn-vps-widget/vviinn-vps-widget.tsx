@@ -206,6 +206,8 @@ export class VviinnVpsWidget {
   @Prop() textSearchShow: boolean = false;
   /** Show auto-suggest dropdown with search completions */
   @Prop() autoSuggestShow: boolean = true;
+  /** Show the AI Suggestions block in search results */
+  @Prop() aiSuggestionsShow: boolean = false;
   /** Show or hide Add to Basket buttons */
   @Prop() addToBasketShow: boolean = false;
   /** Show or hide Favorite button */
@@ -974,12 +976,14 @@ export class VviinnVpsWidget {
                     />
                   )}
 
-                  <vviinn-suggestions
-                    showInWidget={this.showInWidget}
-                    token={this.token}
-                    apiPath={this.apiPath}
-                    locale={this.locale}
-                  />
+                  {this.aiSuggestionsShow && (
+                    <vviinn-suggestions
+                      showInWidget={this.showInWidget}
+                      token={this.token}
+                      apiPath={this.apiPath}
+                      locale={this.locale}
+                    />
+                  )}
 
                   <vviinn-selected-filters
                     locale={this.locale}

@@ -2,6 +2,42 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.224.1](https://github.com/vviinn/widgets/compare/v2.224.0...v2.224.1) (2026-07-30)
+
+
+### Bug Fixes
+
+* Clear all npm audit vulnerabilities in build dependencies ([9d40bc1](https://github.com/vviinn/widgets/commit/9d40bc1c5b5fe009b4f105b448f4b382ff2672be))
+* Clear high-severity postcss advisory in Storybook dependencies ([b1d4c00](https://github.com/vviinn/widgets/commit/b1d4c00dd600b3eb2af2fc85cad33c8ed0e5aba9))
+* Selected filter chips no longer show a stale selection ([b9b0cab](https://github.com/vviinn/widgets/commit/b9b0cabfcf470d4e6f390d442a29333a63e8d6f0))
+
+## [2.224.0](https://github.com/vviinn/widgets/compare/v2.223.0...v2.224.0) (2026-07-24)
+
+
+### Features
+
+* Search Modal: add ai-suggestions-show prop to toggle AI Suggestions block ([752864e](https://github.com/vviinn/widgets/commit/752864e5e5ea5714bd57a3e4085605147b95c573))
+
+## [2.223.0](https://github.com/vviinn/widgets/compare/v2.222.0...v2.223.0) (2026-07-23)
+
+
+### Features
+
+* Storybook: clarify styling via CSS Parts using the host widget ([398965c](https://github.com/vviinn/widgets/commit/398965c963f0d45b1baa14adcfc44918ab3540d6))
+* Vviinn Cropper: toggle cropper visibility by OCR filter ([1fc4ca8](https://github.com/vviinn/widgets/commit/1fc4ca8ca337938c1ccd2aa01f7e2031cbd281f2))
+
+
+### Bug Fixes
+
+* restore missing CSS parts & slots in component docs ([4ca22cd](https://github.com/vviinn/widgets/commit/4ca22cd5a73484d50f26f32e849b11a85ac8aead))
+
+## [2.222.0](https://github.com/vviinn/widgets/compare/v2.221.0...v2.222.0) (2026-07-23)
+
+
+### Features
+
+* Suggestions: Render interval filters as interactive stream chips ([08fcba1](https://github.com/vviinn/widgets/commit/08fcba10c8de973dff660fc1194aa6925d93398a))
+
 ## [2.221.0](https://github.com/vviinn/widgets/compare/v2.220.0...v2.221.0) (2026-06-26)
 
 

@@ -52,6 +52,9 @@ import { addEventListenersWithSignal, isElementInSelector } from "../../dom";
 import { ResponseIntervalFilterItem } from "../../interfaces";
 import { extendedFiltersParts } from "../../cssParts";
 
+const FILTER_OPTIONS_INITIAL_COUNT = 8;
+const FILTER_OPTIONS_STEP_COUNT = 5;
+
 /**
  * @slot vviinn-extended-filters-title - Text on widget's header.
  * @slot vviinn-extended-filters-apply - Title of Apply Button.
@@ -103,9 +106,6 @@ import { extendedFiltersParts } from "../../cssParts";
  * @part histogram-from-input - Input field for the minimum value.
  * @part histogram-to-input - Input field for the maximum value.
  */
-
-const FILTER_OPTIONS_INITIAL_COUNT = 8;
-const FILTER_OPTIONS_STEP_COUNT = 5;
 @Component({
   tag: "vviinn-extended-filters",
   styleUrl: "vviinn-filters.css",
@@ -164,6 +164,7 @@ export class VviinnExtendedFilters {
   private triggerElement?: HTMLElement;
   private state?: SearchStore;
   private eventAbortController?: AbortController;
+  private disposeStoreListener?: () => void;
   private filterAnnouncementRef?: HTMLElement;
   private isPreviewInlineMode: boolean;
 
@@ -514,7 +515,7 @@ export class VviinnExtendedFilters {
                 {this.mode === "button" && (
                   <button
                     class="filters-modal-apply"
-                    onClick={() => (this.showMore = false)}
+                    onClick={this.handleCloseModal}
                     disabled={this.requestFilters.length === 0}
                     part="extended-filters-apply"
                     type="button"
@@ -680,7 +681,7 @@ export class VviinnExtendedFilters {
     this.state = state;
     this.isPreviewInlineMode = this.mode === "preview-inline";
 
-    syncRequestFilters(
+    this.disposeStoreListener = syncRequestFilters(
       state,
       onChange,
       (filters) => (this.requestFilters = filters),
@@ -711,6 +712,7 @@ export class VviinnExtendedFilters {
 
   disconnectedCallback() {
     this.eventAbortController?.abort();
+    this.disposeStoreListener?.();
   }
 
   private intervalFilterChangeHandler = (

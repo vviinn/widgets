@@ -11,10 +11,9 @@ const data = {
     filterValue: "Möbel > Schränke & Regale",
     description: "company: 'vviinn', site: 'widgets.vviinn.home&living'",
     shopTheLookImageUrls: [
-      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/home_01.jpg",
-      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/home_02.jpg",
-      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/home_03.jpg",
-      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/home_04.jpg",
+      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look-v2/home_01v2.jpg",
+      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look-v2/home_02v2.jpg",
+      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look-v2/home_03v2.jpg",
     ],
   },
   fashion: {
@@ -27,10 +26,9 @@ const data = {
     description:
       "company: 'Vviinn Demo Company', site: 'widgets.vviinn.fashion'",
     shopTheLookImageUrls: [
-      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/fashion_01.jpg",
-      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/fashion_02.jpg",
-      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/fashion_03.jpg",
-      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look/fashion_04.jpg",
+      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look-v2/fashion_01v2.jpg",
+      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look-v2/fashion_02v2.jpg",
+      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look-v2/fashion_03v2.jpg",
     ],
   },
   "manufacturer-spare-parts": {

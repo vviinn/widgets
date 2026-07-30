@@ -28,15 +28,28 @@ Each widget exposes specific elements you can style. Find available parts in two
 1. **Playground section** - View the complete list at the bottom of the Controls tab (right sidebar). For example, [check Discovery Slider parts](?path=/story/playground-discovery--default).
 2. **Browser DevTools** - Inspect the widget element and look for `part` attributes in the shadow DOM.
 
-**Tip:** You can **combine multiple parts** in a selector to target specific elements more precisely:
+Use the tag of the widget you actually embed as the host — e.g. `vviinn-vpr-widget` or `vviinn-vps-widget`. Product Card parts are forwarded up to that widget, so the part names stay the same:
+
+```css
+/* Single part on the widget you embed */
+vviinn-vpr-widget::part(custom-label-0) {
+  display: block;
+}
+```
+
+Part names stay the same whichever widget you embed: a nested component re-exports its own parts (Product Card does this), and rendering directly inside the widget's shadow tree lets `::part()` reach them across that single boundary — you re-export nothing yourself. It only breaks when a part sits more than one shadow boundary away from the tag you select — e.g. a widget rendered inside another widget's shadow — which is why `vviinn-vpr-button` forwards its sidebar's parts explicitly.
+
+**Tip:** You can **combine multiple parts** in a selector to target an element that carries both — the same works from any host widget\*:
 
 ```css
 /* Target an element that has both parts */
-vviinn-product-card::part(custom-label-1 custom-label-image) {
+vviinn-vps-widget::part(custom-label-1 custom-label-image) {
   border-radius: 8px;
   padding: 4px;
 }
 ```
+
+\* **Except `vviinn-vpr-button`** — it only opens a separate `vviinn-recommendations-sidebar`, so `vviinn-vpr-button::part(...)` reaches nothing. Target the sidebar: `vviinn-recommendations-sidebar::part(title)`.
 
 ## Examples
 
@@ -104,7 +117,7 @@ vviinn-vps-button::part(upload-photo_button) {
 
 ## Styling Slotted Content
 
-Custom content placed in a widget's **default slot** (e.g. an SVG icon inside `vviinn-vps-button` or `vviinn-vpr-button` – same approach for both) can be styled two ways depending on where the stylesheet lives.
+Custom content placed in a widget's **default slot** (e.g. an SVG icon inside `vviinn-vps-button` or `vviinn-vpr-button` — same approach for both) can be styled two ways depending on where the stylesheet lives.
 
 <PreviewAndCodeTabs tabData={{groupId:"slottedPageCss", header:"From a page stylesheet (light DOM)",
     description: <p>Slotted elements live in the <strong>light DOM</strong>, so plain descendant selectors reach them from any stylesheet on the page. The same selectors work for <code>vviinn-vpr-button</code>.</p>,
@@ -140,4 +153,4 @@ When the stylesheet is loaded via the widget's `css-url` prop, it lives **inside
 
 Pick whichever scope matches where your stylesheet is hosted.
 
-**Note:** Applies only to the **default slot** (no `slot=` attribute). Content in **named slots** (e.g. `slot="vviinn-image-upload-icon"`) is forwarded into nested components – style it via CSS Parts or CSS Variables instead.
+**Note:** Applies only to the **default slot** (no `slot=` attribute). Content in **named slots** (e.g. `slot="vviinn-image-upload-icon"`) is forwarded into nested components — style it via CSS Parts or CSS Variables instead.
