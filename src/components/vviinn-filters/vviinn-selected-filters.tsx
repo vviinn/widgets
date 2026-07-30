@@ -76,7 +76,7 @@ export class VviinnSelectedFilters {
   @State() imageSrc: string | null = null;
 
   // Rebuilt in componentWillRender and consumed by the render after it, so plain fields.
-  // The requestFilters mirror drives that rebuild — reads there register no subscription.
+  // The local requestFilters drive that rebuild — reads there register no subscription.
   private selectedFilterButtons: JSX.Element[] = [];
   private intervalFilterButtons: JSX.Element[] = [];
 

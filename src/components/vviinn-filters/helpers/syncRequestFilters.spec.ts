@@ -27,25 +27,27 @@ const storeStub = (requestFilters: RequestDynamicFilterItem[]) => {
 };
 
 describe("syncRequestFilters", () => {
-  it("seeds the mirror from the store", () => {
+  it("seeds the local copy from the store", () => {
     const store = storeStub([applied("brand", ["Mediware"])]);
-    const setMirror = jest.fn();
+    const setRequestFilters = jest.fn();
 
-    syncRequestFilters(store.state, store.onChange, setMirror);
+    syncRequestFilters(store.state, store.onChange, setRequestFilters);
 
-    expect(setMirror).toHaveBeenCalledWith([applied("brand", ["Mediware"])]);
+    expect(setRequestFilters).toHaveBeenCalledWith([
+      applied("brand", ["Mediware"]),
+    ]);
   });
 
-  it("mirrors an empty update", () => {
+  it("applies an empty update", () => {
     const store = storeStub([applied("brand", ["Mediware"])]);
-    const setMirror = jest.fn();
+    const setRequestFilters = jest.fn();
 
-    syncRequestFilters(store.state, store.onChange, setMirror);
-    setMirror.mockClear();
+    syncRequestFilters(store.state, store.onChange, setRequestFilters);
+    setRequestFilters.mockClear();
 
     store.emit([]);
 
-    expect(setMirror).toHaveBeenCalledWith([]);
+    expect(setRequestFilters).toHaveBeenCalledWith([]);
   });
 
   it("returns the store's dispose function", () => {
@@ -60,11 +62,11 @@ describe("syncRequestFilters", () => {
   it("hands over a copy, not the store's array", () => {
     const storeFilters = [applied("brand", ["Mediware"])];
     const store = storeStub(storeFilters);
-    const setMirror = jest.fn();
+    const setRequestFilters = jest.fn();
 
-    syncRequestFilters(store.state, store.onChange, setMirror);
+    syncRequestFilters(store.state, store.onChange, setRequestFilters);
 
-    expect(setMirror.mock.calls[0][0]).not.toBe(storeFilters);
-    expect(setMirror.mock.calls[0][0]).toEqual(storeFilters);
+    expect(setRequestFilters.mock.calls[0][0]).not.toBe(storeFilters);
+    expect(setRequestFilters.mock.calls[0][0]).toEqual(storeFilters);
   });
 });
