@@ -49,7 +49,7 @@ vviinn-text-search → vviinn-vps-button → vviinn-vps-widget → vviinn-result
 vviinn-results → vviinn-vpr-button → vviinn-recommendations-sidebar → vviinn-vpr-widget
 ```
 
-Two hops are easy to overlook. `vviinn-results` starts the second chain from inside a `.map()` over results, in a `vviinn-product-card` slot, behind an One-Click Discovery condition that is off under default props. `vviinn-vpr-button` then builds the sidebar imperatively via `document.createElement`, assigning each prop on its own line.
+Two hops are easy to overlook. `vviinn-results` starts the second chain from inside a `.map()` over results, in a `vviinn-product-card` slot, behind a One-Click Discovery condition that is on under default props (`oneClickDiscoveryMode` defaults to `"append-grid"`; only `"unset"` turns it off). `vviinn-vpr-button` then builds the sidebar imperatively via `document.createElement`, assigning each prop on its own line.
 
 ## Code Style Guidelines
 
