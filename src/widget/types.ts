@@ -11,6 +11,8 @@ export type OneClickDiscoveryAppendMode =
   | "unset";
 export type OneClickDiscoveryMode = OneClickDiscoveryAppendMode | "modal";
 
+export type DisableTrackingEvents = "none" | "all";
+
 export const oneClickDiscoveryModes = [
   "append-grid",
   "append-slider",

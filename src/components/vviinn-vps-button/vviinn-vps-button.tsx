@@ -26,6 +26,7 @@ import {
 import { Locale } from "../../locale";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
 import {
+  DisableTrackingEvents,
   OneClickDiscoveryAppendMode,
   VisualSearchMode,
 } from "../../widget/types";
@@ -191,6 +192,8 @@ export class VviinnVpsButton {
   @Prop() resultsPageUrl?: string;
   /** Custom URL param names for results page redirect. Default: "query=query&searchId=searchId". */
   @Prop() resultsPageParams?: string;
+  /** Stop sending tracking events to the Vviinn API. Custom events are still emitted. */
+  @Prop() disableTrackingEvents: DisableTrackingEvents = "none";
   /** @internal */
   @Prop() parentSlots?: HTMLSlotElement[] = [];
 
@@ -393,6 +396,7 @@ export class VviinnVpsButton {
           resultsPageParams={this.resultsPageParams}
           parentSlots={[...this.parentSlots, ...this.slots]}
           cssUrl={this.cssUrl}
+          disableTrackingEvents={this.disableTrackingEvents}
         />
       </Host>
     );

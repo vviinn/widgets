@@ -56,6 +56,7 @@ const initArgs = {
   cssUrl: "",
   resultsPageUrl: "",
   resultsPageParams: "",
+  disableTrackingEvents: "none",
   productCardImageAspectRatio: "1 / 1",
   productCardImageBgColor: "#f4f4f4",
 };

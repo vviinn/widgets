@@ -47,3 +47,5 @@ const initArgs = {
 ### 3. If prop is forwarded to a child component
 
 Make sure the prop is also passed in the render method where the child is rendered.
+
+See **Prop forwarding chains** in `CLAUDE.md` for the hops a prop has to travel.

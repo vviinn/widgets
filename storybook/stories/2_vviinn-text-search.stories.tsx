@@ -46,6 +46,7 @@ const Template = (args) => `
       css-url="${args.cssUrl}"
       visual-search-mode="${args.visualSearchMode}"
       use-drag-and-drop="${args.useDragAndDrop}"
+      disable-tracking-events="${args.disableTrackingEvents}"
     >
     </vviinn-text-search>
 
@@ -60,6 +61,7 @@ const Template = (args) => `
       locale="${args.locale}"
       one-click-discovery-mode="append-grid"
       product-details-new-tab="true"
+      disable-tracking-events="${args.disableTrackingEvents}"
     ></vviinn-results>
   </div>
 </div>  
@@ -81,6 +83,7 @@ const initArgs = {
   cssUrl: "",
   visualSearchMode: "modal",
   useDragAndDrop: false,
+  disableTrackingEvents: "none",
   mode: "extended",
   locale: "en-US",
   productCardImageAspectRatio: "1 / 1",

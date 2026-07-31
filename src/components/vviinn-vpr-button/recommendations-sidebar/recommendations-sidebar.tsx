@@ -27,6 +27,7 @@ import {
   PRODUCT_CARD_IMAGE_WIDTH,
   LOADING_CLASS_DELAY,
 } from "../../../widget/constants";
+import { DisableTrackingEvents } from "../../../widget/types";
 
 type SidebarState = "idle" | "open" | "closed";
 
@@ -96,6 +97,8 @@ export class RecommendationsSidebar {
   @Prop() isAppended: boolean = false;
   /** @internal */
   @Prop() uiSessionId?: string;
+  /** @internal */
+  @Prop() disableTrackingEvents: DisableTrackingEvents = "none";
 
   /** @internal - Element that triggered the sidebar opening (for focus management) */
   @Prop() triggerElement?: HTMLElement;
@@ -323,6 +326,7 @@ export class RecommendationsSidebar {
               setRecommendationsLoading={this.setRecommendationsLoading}
               imageResolutionWidth={this.imageResolutionWidth}
               uiSessionId={this.uiSessionId}
+              disableTrackingEvents={this.disableTrackingEvents}
             />
           </div>
         </div>

@@ -1,4 +1,5 @@
-import { Widget } from "vviinn-tracking-client-ts";
+import { Widget, WidgetEvent } from "vviinn-tracking-client-ts";
+import { ProductEvent, ResultEvent } from "../recommendation/events";
 
 const PRODUCT_LOAD_EVENT_TYPE = "product_load_event";
 const PRODUCT_VIEW_EVENT_TYPE = "product_view_event";
@@ -40,3 +41,5 @@ export type WidgetEventType = {
   widget: Widget;
   typ: WidgetEvents;
 };
+
+export type TrackedEvent = WidgetEvent | ProductEvent | ResultEvent;

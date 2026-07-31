@@ -32,7 +32,11 @@ import {
 } from "../../recommendation/events";
 import i18next from "i18next";
 import { Locale, initializeLocale } from "../../locale";
-import { SearchBarMode, VisualSearchMode } from "../../widget/types";
+import {
+  DisableTrackingEvents,
+  SearchBarMode,
+  VisualSearchMode,
+} from "../../widget/types";
 import { TextSearchResponse, QueryCompletion } from "../../interfaces";
 import { searchBarParts, searchModalFirstScreenParts } from "../../cssParts";
 import { findSlotElements } from "../../dom";
@@ -141,6 +145,8 @@ export class VviinnTextSearch {
   @Prop() visualSearchMode?: VisualSearchMode;
   /** Accept image files dropped from the OS onto the upload button (desktop only) */
   @Prop() useDragAndDrop: boolean = false;
+  /** Stop sending tracking events to the Vviinn API from the image search rendered in "extended" mode. Custom events are still emitted. */
+  @Prop() disableTrackingEvents: DisableTrackingEvents = "none";
 
   /** True, when used inside the widget */
   /** @internal */
@@ -511,6 +517,7 @@ export class VviinnTextSearch {
               {...(this.visualSearchMode && { mode: this.visualSearchMode })}
               useDragAndDrop={this.useDragAndDrop}
               parentSlots={this.slots}
+              disableTrackingEvents={this.disableTrackingEvents}
             />
           )}
 

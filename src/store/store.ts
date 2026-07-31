@@ -1,7 +1,7 @@
-import { WidgetEvent } from "vviinn-tracking-client-ts";
-import { ProductEvent, ResultEvent } from "../recommendation/events";
+import { TrackedEvent } from "../tracking/models";
 import { createTrackingApi } from "../openApi";
 import { Locale } from "../locale";
+import { DisableTrackingEvents } from "../widget/types";
 import { isTrackingEnabled, disableTracking } from "./tracking";
 
 type DefaultConfig = {
@@ -16,12 +16,22 @@ export const defaultConfig: DefaultConfig = {
   apiPath: "https://api.vviinn.com",
 };
 
+type TrackEventOptions = {
+  apiPath?: string;
+  disableTrackingEvents?: DisableTrackingEvents;
+};
+
 export const trackEvent = async (
-  event: WidgetEvent | ProductEvent | ResultEvent,
+  event: TrackedEvent,
   token: string,
-  apiPath: string = defaultConfig.apiPath,
+  {
+    apiPath = defaultConfig.apiPath,
+    disableTrackingEvents = "none",
+  }: TrackEventOptions = {},
 ): Promise<void> => {
-  if (!isTrackingEnabled() || !event || !token) return;
+  const disabled = disableTrackingEvents === "all" || !isTrackingEnabled();
+
+  if (disabled || !event || !token) return;
 
   try {
     const trackingApi = createTrackingApi(apiPath, token);

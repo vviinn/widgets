@@ -64,6 +64,7 @@ import {
   createAddToBasketEvent,
   createWidgetEvent,
   createAddToWishlistEvent,
+  TrackedEvent,
 } from "../../tracking";
 import { RequestDynamicFilterItem } from "../../campaign/VPRCampaignService";
 import { initializeLocale } from "../../locale";
@@ -90,6 +91,7 @@ import {
   addEventListenersWithSignal,
 } from "../../dom";
 import {
+  DisableTrackingEvents,
   OneClickDiscoveryMode,
   oneClickDiscoveryModes,
 } from "../../widget/types";
@@ -269,6 +271,8 @@ export class VviinnResults {
   @Prop() cssUrl: string | null = null;
   /** API endpoint URL (optional, defaults to production) */
   @Prop() apiPath?: string;
+  /** Stop sending tracking events to the Vviinn API. Custom events are still emitted. */
+  @Prop() disableTrackingEvents: DisableTrackingEvents = "none";
 
   /** True when we use vviinn-results inside the widget */
   /** @internal */
@@ -532,7 +536,7 @@ export class VviinnResults {
       ...rest,
     });
 
-    trackEvent(textSearchStartedEvent, this.token, this.apiPath);
+    this.track(textSearchStartedEvent);
 
     this.getTextSearchResults();
   };
@@ -578,7 +582,7 @@ export class VviinnResults {
       eventBody,
     );
 
-    trackEvent(filterEvent, this.token, this.apiPath);
+    this.track(filterEvent);
   };
 
   private imageUploadStartedHandler = ({
@@ -680,10 +684,17 @@ export class VviinnResults {
     if (newId) this.getVisualSearchResults(newId);
   }
 
+  private track(event: TrackedEvent): Promise<void> {
+    return trackEvent(event, this.token, {
+      apiPath: this.apiPath,
+      disableTrackingEvents: this.disableTrackingEvents,
+    });
+  }
+
   @Listen("vviinnProductLoad")
   trackProductLoad({ detail }: ProductCardEvent) {
     const productLoadEvent = this.getProductTrackEvent(detail, "load");
-    trackEvent(productLoadEvent, this.token, this.apiPath);
+    this.track(productLoadEvent);
   }
 
   @Listen("vviinnProductView")
@@ -695,7 +706,7 @@ export class VviinnResults {
     }
 
     const productViewEvent = this.getProductTrackEvent(detail, "view");
-    trackEvent(productViewEvent, this.token, this.apiPath);
+    this.track(productViewEvent);
   }
 
   @Listen("vviinnProductClick")
@@ -706,16 +717,14 @@ export class VviinnResults {
     const product = this.findProductById(productId);
     if (!product || !product.deeplink) return;
 
-    await trackEvent(productClickEvent, this.token, this.apiPath).finally(
-      () => {
-        openProductLink(
-          product.deeplink,
-          clickEvent,
-          this.productDetailsRedirect,
-          this.productDetailsNewTab,
-        );
-      },
-    );
+    await this.track(productClickEvent).finally(() => {
+      openProductLink(
+        product.deeplink,
+        clickEvent,
+        this.productDetailsRedirect,
+        this.productDetailsNewTab,
+      );
+    });
   }
 
   @Listen("vviinnAuxClick")
@@ -726,7 +735,7 @@ export class VviinnResults {
     const product = this.findProductById(productId);
     if (!product || !product.deeplink) return;
 
-    await trackEvent(productClickEvent, this.token, this.apiPath);
+    await this.track(productClickEvent);
   }
 
   @Listen("vviinnAddToBasket")
@@ -738,7 +747,7 @@ export class VviinnResults {
       this.getCampaignType(),
     )(eventBody);
 
-    trackEvent(addToBasketEvent, this.token, this.apiPath);
+    this.track(addToBasketEvent);
   }
 
   @Listen("vviinnAddToFavorite")
@@ -748,7 +757,7 @@ export class VviinnResults {
       this.getCampaignType(),
     )(eventBody);
 
-    trackEvent(addToWishlistEvent, this.token, this.apiPath);
+    this.track(addToWishlistEvent);
   }
 
   private trackResultEvent(type: ResultEventType) {
@@ -763,7 +772,7 @@ export class VviinnResults {
         ...rest,
       });
 
-    trackEvent(resultEvent, this.token, this.apiPath);
+    this.track(resultEvent);
   }
 
   private findProductById(
@@ -938,6 +947,7 @@ export class VviinnResults {
               campaigns={this.oneClickDiscoveryCampaigns}
               showInWidget={this.showInWidget}
               uiSessionId={this.uiSessionId}
+              disableTrackingEvents={this.disableTrackingEvents}
               onVviinnVprButtonActivated={() => oneClickDiscoveryHandler(i)}
             >
               {this.renderProductCardSlots()}

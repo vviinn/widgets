@@ -53,8 +53,10 @@ import {
   createProductEventByType,
   createAddToBasketEvent,
   createAddToWishlistEvent,
+  TrackedEvent,
 } from "../../tracking";
 import { Locale, initializeLocale } from "../../locale";
+import { DisableTrackingEvents } from "../../widget/types";
 import { UpdateIcon } from "../vviinn-icons";
 import { getCustomLabels, getRecommendationsBody } from "../../recommendation";
 import {
@@ -219,6 +221,8 @@ export class VviinnVprWidget implements ComponentInterface {
   @Prop() addPriceContainer?: boolean = false;
   /** Show or hide Favorite button */
   @Prop() favoriteShow: boolean = false;
+  /** Stop sending tracking events to the Vviinn API. Custom events are still emitted. */
+  @Prop() disableTrackingEvents: DisableTrackingEvents = "none";
 
   /** Widget's title */
   @Prop() blockTitle: string;
@@ -314,6 +318,13 @@ export class VviinnVprWidget implements ComponentInterface {
     this.setRecommendationsLoading?.(loading);
   };
 
+  private track(event: TrackedEvent): Promise<void> {
+    return trackEvent(event, this.token, {
+      apiPath: this.apiPath,
+      disableTrackingEvents: this.disableTrackingEvents,
+    });
+  }
+
   private trackIfNotAppended(
     trackingFn: () => void | Promise<void>,
   ): void | Promise<void> {
@@ -327,7 +338,7 @@ export class VviinnVprWidget implements ComponentInterface {
   ): void {
     this.trackIfNotAppended(() => {
       const productEvent = this.getProductTrackEvent(detail, eventType);
-      productEvent && trackEvent(productEvent, this.token, this.apiPath);
+      productEvent && this.track(productEvent);
     });
   }
 
@@ -466,16 +477,14 @@ export class VviinnVprWidget implements ComponentInterface {
     await this.trackIfNotAppended(async () => {
       const productClickEvent = this.getProductTrackEvent(detail, "click");
 
-      await trackEvent(productClickEvent, this.token, this.apiPath).finally(
-        () => {
-          openProductLink(
-            product.deeplink,
-            clickEvent,
-            this.productDetailsRedirect,
-            this.productDetailsNewTab,
-          );
-        },
-      );
+      await this.track(productClickEvent).finally(() => {
+        openProductLink(
+          product.deeplink,
+          clickEvent,
+          this.productDetailsRedirect,
+          this.productDetailsNewTab,
+        );
+      });
     });
 
     if (this.isAppended) {
@@ -530,7 +539,7 @@ export class VviinnVprWidget implements ComponentInterface {
     const widgetEvent: WidgetEvent = createWidgetEvent(
       this.trackingCampaignType,
     )(eventBody);
-    trackEvent(widgetEvent, this.token, this.apiPath);
+    this.track(widgetEvent);
   }
 
   private trackResultEvent(type: ResultEventType) {
@@ -543,7 +552,7 @@ export class VviinnVprWidget implements ComponentInterface {
 
     const resultEvent: ResultViewEvent | ResultLoadEvent =
       createResultEventByType(type, this.trackingCampaignType)(eventBody);
-    trackEvent(resultEvent, this.token, this.apiPath);
+    this.track(resultEvent);
   }
 
   private getProductTrackEvent(

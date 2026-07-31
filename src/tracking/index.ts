@@ -14,6 +14,8 @@ import {
   WIDGET_EVENT_TYPE,
 } from "./models";
 
+export type { TrackedEvent } from "./models";
+
 export const createResultEventByType = (
   type: ResultEventType,
   widget: Widget,

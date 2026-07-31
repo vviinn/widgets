@@ -57,6 +57,7 @@ const Template = (args) => `
       set-mode-discounts="${args.setModeDiscounts}"
       add-price-container="${args.addPriceContainer}"
       favorite-show="${args.favoriteShow}"
+      disable-tracking-events="${args.disableTrackingEvents}"
     ></vviinn-vpr-widget>
 `;
 
@@ -95,6 +96,7 @@ const initArgs = {
   showExtendedFilters: false,
   addPriceContainer: false,
   favoriteShow: false,
+  disableTrackingEvents: "none",
   productCardImageAspectRatio: "1 / 1",
   productCardImageBgColor: "#f4f4f4",
 };

@@ -70,6 +70,7 @@ const Template = (args) => `
   css-url="${args.cssUrl}"
   results-page-url="${args.resultsPageUrl}"
   results-page-params="${args.resultsPageParams}"
+  disable-tracking-events="${args.disableTrackingEvents}"
 ></vviinn-vps-button>`;
 
 export const Default = Template.bind({});
@@ -106,6 +107,7 @@ const initArgs = {
   cssUrl: "",
   resultsPageUrl: "",
   resultsPageParams: "",
+  disableTrackingEvents: "none",
   productCardImageAspectRatio: "1 / 1",
   productCardImageBgColor: "#f4f4f4",
 };

@@ -42,6 +42,15 @@ Global CSS variables in `src/variables.css`.
 
 **Event reach**: `@Listen` without a target binds to the host, so it only sees events from its own subtree. Cross-component wiring uses `addEventListenersWithSignal(document, …)`, which sees them wherever they originate.
 
+**Prop forwarding chains**: a prop that must reach every component has to be copied by hand at each of these hops. All are optional props with defaults, so a missed hop is not a compile error — it silently falls back to the default.
+
+```
+vviinn-text-search → vviinn-vps-button → vviinn-vps-widget → vviinn-results
+vviinn-results → vviinn-vpr-button → vviinn-recommendations-sidebar → vviinn-vpr-widget
+```
+
+Two hops are easy to overlook. `vviinn-results` starts the second chain from inside a `.map()` over results, in a `vviinn-product-card` slot, behind an One-Click Discovery condition that is off under default props. `vviinn-vpr-button` then builds the sidebar imperatively via `document.createElement`, assigning each prop on its own line.
+
 ## Code Style Guidelines
 
 **Stencil Components**:

@@ -33,6 +33,7 @@ import {
   createWidgetEvent,
   createFilterEvent,
   createImageSearchEvent,
+  TrackedEvent,
 } from "../../tracking";
 import {
   BasicEventData,
@@ -61,6 +62,7 @@ import { videoStreamSettings } from "../../video/settings";
 import { Recommendation } from "../../interfaces";
 import { checkDeviceType } from "../../helpers/device/checkDeviceType";
 import {
+  DisableTrackingEvents,
   OneClickDiscoveryAppendMode,
   UploadSource,
   VisualSearchMode,
@@ -228,6 +230,8 @@ export class VviinnVpsWidget {
   @Prop() resultsPageUrl?: string;
   /** Custom URL param names for results page redirect. Default: "query=query&searchId=searchId". */
   @Prop() resultsPageParams?: string;
+  /** Stop sending tracking events to the Vviinn API. Custom events are still emitted. */
+  @Prop() disableTrackingEvents: DisableTrackingEvents = "none";
 
   private get showInWidget() {
     return this.showResultsInModal;
@@ -578,7 +582,7 @@ export class VviinnVpsWidget {
       search_area: "manual-selection",
       ...rest,
     });
-    trackEvent(searchEvent, this.token, this.apiPath);
+    this.track(searchEvent);
   }
 
   @Listen("vviinnSelectObject")
@@ -593,7 +597,7 @@ export class VviinnVpsWidget {
       search_area: "attention-point",
       ...rest,
     });
-    trackEvent(searchEvent, this.token, this.apiPath);
+    this.track(searchEvent);
   }
 
   @Listen("vviinnSelectFilter")
@@ -610,7 +614,7 @@ export class VviinnVpsWidget {
       action: detail.action,
       ...rest,
     });
-    trackEvent(searchEvent, this.token, this.apiPath);
+    this.track(searchEvent);
   }
 
   connectedCallback() {
@@ -643,6 +647,13 @@ export class VviinnVpsWidget {
     this.eventAbortController?.abort();
   }
 
+  private track(event: TrackedEvent): Promise<void> {
+    return trackEvent(event, this.token, {
+      apiPath: this.apiPath,
+      disableTrackingEvents: this.disableTrackingEvents,
+    });
+  }
+
   private handleAspectRatioError = ({ detail }: CustomEvent<boolean>) => {
     this.setShowAspectRatioError(detail);
     this.el.classList.add("bordered");
@@ -657,7 +668,7 @@ export class VviinnVpsWidget {
       ...rest,
     };
     const widgetEvent: WidgetEvent = createWidgetEvent("VPS")(eventBody);
-    trackEvent(widgetEvent, this.token, this.apiPath);
+    this.track(widgetEvent);
   }
 
   private trackInitialSearch() {
@@ -669,7 +680,7 @@ export class VviinnVpsWidget {
       source: "upload",
       ...rest,
     });
-    trackEvent(searchEvent, this.token, this.apiPath);
+    this.track(searchEvent);
   }
 
   private closeModalAndResetState() {
@@ -1063,6 +1074,7 @@ export class VviinnVpsWidget {
                     oneClickDiscoveryCampaigns={this.oneClickDiscoveryCampaigns}
                     parentSlots={[...this.parentSlots, ...this.slots]}
                     scrollableModalBody={this.modalBody}
+                    disableTrackingEvents={this.disableTrackingEvents}
                   />
                 </Fragment>
               )}

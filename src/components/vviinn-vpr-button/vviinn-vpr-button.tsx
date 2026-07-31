@@ -20,7 +20,10 @@ import {
 } from "../../recommendation/events";
 import { Locale, initializeLocale } from "../../locale";
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
-import { OneClickDiscoveryMode } from "../../widget/types";
+import {
+  DisableTrackingEvents,
+  OneClickDiscoveryMode,
+} from "../../widget/types";
 import { useSearchStore } from "../../store/search.store";
 import {
   DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH,
@@ -187,6 +190,8 @@ export class VviinnVprButton {
   @Prop() addStyle: boolean = true;
   /** Show or hide Favorite button */
   @Prop() favoriteShow: boolean = false;
+  /** Stop sending tracking events to the Vviinn API. Custom events are still emitted. */
+  @Prop() disableTrackingEvents: DisableTrackingEvents = "none";
 
   /** @internal */
   @Prop() appendSidebarToElement: HTMLElement;
@@ -388,6 +393,7 @@ export class VviinnVprButton {
       !!this.targetAppendSidebarTo || !!this.appendSidebarToElement;
     sidebar.showInWidget = this.showInWidget;
     sidebar.uiSessionId = this.uiSessionId;
+    sidebar.disableTrackingEvents = this.disableTrackingEvents;
     sidebar.triggerElement = this.el;
 
     if (this.targetAppendSidebarTo) {

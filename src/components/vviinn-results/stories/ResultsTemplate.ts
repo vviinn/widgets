@@ -25,6 +25,7 @@ export const ResultsTemplate = (args) => {
     cssUrl,
     resultsPageUrl,
     resultsPageParams,
+    disableTrackingEvents,
   } = args;
 
   const filterAttributes =
@@ -73,6 +74,7 @@ export const ResultsTemplate = (args) => {
     css-url="${cssUrl}"
     results-page-url="${resultsPageUrl}"
     results-page-params="${resultsPageParams}"
+    disable-tracking-events="${disableTrackingEvents}"
   ></vviinn-results>
   </div>
 </div>`;
