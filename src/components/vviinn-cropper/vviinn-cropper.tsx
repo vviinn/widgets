@@ -11,6 +11,7 @@ import {
 } from "@stencil/core";
 import i18next from "i18next";
 import Cropper from "cropperjs";
+import { SearchArea } from "vviinn-tracking-client-ts";
 import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/lib/function";
 import { version } from "../../../package.json";
@@ -48,6 +49,7 @@ import { addEventListenersWithSignal } from "../../dom";
 import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
 import { campaignTypeNames } from "../../campaign/Campaign";
 import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
+import { trackImageSearch } from "../../tracking/searchTracking";
 
 @Component({
   tag: "vviinn-cropper",
@@ -229,10 +231,9 @@ export class VviinnCropper {
   }: CustomEvent<TriggerSourceEventData>) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.cropper?.reset();
+    // clearCropSelection drops the thumbnail; without a crop box the search covers the whole image.
     this.clearCropSelection();
-    this.vviinnImageCrop.emit({
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
+    this.reportCropChange("full");
     this.triggerVisualSearch();
   };
 
@@ -249,6 +250,20 @@ export class VviinnCropper {
       widgetVersion: version,
       ...addIfNotEmpty("widgetId", this.el.id),
     };
+  };
+
+  /** Announce a new crop area and report the search it starts. */
+  private reportCropChange = (searchArea: SearchArea) => {
+    this.vviinnImageCrop.emit({
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
+    trackImageSearch({
+      searchArea,
+      storeName: this.storeName,
+      token: this.token,
+      apiPath: this.apiPath,
+      basicEventData: this.getBasicEventData(),
+    });
   };
 
   /** Keep the crop thumbnail in step with the crop box — there is none while the cropper is hidden. */
@@ -307,9 +322,7 @@ export class VviinnCropper {
     }
 
     this.updateCroppedImage();
-    this.vviinnImageCrop.emit({
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
+    this.reportCropChange("attention-point");
     this.triggerVisualSearch();
   }
 
@@ -418,9 +431,7 @@ export class VviinnCropper {
     this.selectedDetectedObject = null;
 
     this.updateCroppedImage();
-    this.vviinnImageCrop.emit({
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
+    this.reportCropChange("manual-selection");
 
     if (this.autoSearch) this.triggerVisualSearch();
   };

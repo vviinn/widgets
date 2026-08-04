@@ -12,7 +12,6 @@ import {
 } from "@stencil/core";
 import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/lib/function";
-import { v4 as uuidv4 } from "uuid";
 import {
   AddToBasketEvent,
   FilterEvent,
@@ -66,6 +65,7 @@ import {
   createWidgetEvent,
   createAddToWishlistEvent,
 } from "../../tracking";
+import { getUiSessionId } from "../../tracking/session";
 import { RequestDynamicFilterItem } from "../../campaign/VPRCampaignService";
 import { initializeLocale } from "../../locale";
 import {
@@ -615,7 +615,7 @@ export class VviinnResults {
     if (this.el.id) this.widgetElementId = this.el.id;
 
     if (!this.uiSessionId) {
-      this.uiSessionId = uuidv4();
+      this.uiSessionId = getUiSessionId(storeName);
     }
 
     this.eventAbortController = new AbortController();
