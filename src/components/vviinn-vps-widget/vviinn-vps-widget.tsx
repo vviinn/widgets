@@ -30,14 +30,9 @@ import {
   WidgetAction,
   WidgetEvent,
 } from "vviinn-tracking-client-ts";
-import {
-  createWidgetEvent,
-  createFilterEvent,
-  createImageSearchEvent,
-} from "../../tracking";
+import { createWidgetEvent, createImageSearchEvent } from "../../tracking";
 import {
   BasicEventData,
-  SelectFilterEventData,
   SelectObjectEventData,
   NoResultEventData,
   TextSearchEvent,
@@ -287,9 +282,6 @@ export class VviinnVpsWidget {
 
   /** User selects the detected object */
   @Event() vviinnSelectObject: EventEmitter<SelectObjectEventData>;
-
-  /** User selects one of the filters */
-  @Event() vviinnSelectFilter: EventEmitter<SelectFilterEventData>;
 
   /** The image upload has started */
   @Event() vviinnImageUploadStarted: EventEmitter<ImageUploadEventData>;
@@ -588,23 +580,6 @@ export class VviinnVpsWidget {
       session_id: this.uiSessionId,
       source: this.imageSource,
       search_area: "attention-point",
-      ...rest,
-    });
-    trackEvent(searchEvent, this.token, this.apiPath);
-  }
-
-  @Listen("vviinnSelectFilter")
-  trackImageSearchFilterSelected({
-    detail,
-  }: CustomEvent<SelectFilterEventData>) {
-    resetResultEvents(this.storeName);
-    const { campaignTypeId, ...rest } = this.getBasicEventData();
-
-    const searchEvent: WidgetEvent = createFilterEvent("VPS")({
-      session_id: this.uiSessionId,
-      source: this.imageSource,
-      kind: detail.kind,
-      action: detail.action,
       ...rest,
     });
     trackEvent(searchEvent, this.token, this.apiPath);

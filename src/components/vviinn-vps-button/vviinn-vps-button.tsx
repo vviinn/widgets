@@ -20,7 +20,6 @@ import {
   BasicEventData,
   ImageUploadEventData,
   ProductCardEventData,
-  SelectFilterEventData,
   SelectObjectEventData,
   TriggerSourceEventData,
 } from "../../recommendation/events";
@@ -231,8 +230,6 @@ export class VviinnVpsButton {
   @Event() vviinnImageCrop: EventEmitter<TriggerSourceEventData>;
   /** User selects the detected object */
   @Event() vviinnSelectObject: EventEmitter<SelectObjectEventData>;
-  /** User selects one of the filters */
-  @Event() vviinnSelectFilter: EventEmitter<SelectFilterEventData>;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })

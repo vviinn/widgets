@@ -68,13 +68,6 @@ export type SelectObjectEventData = {
   [K in keyof CommonEventData]: CommonEventData[K];
 };
 
-export type SelectFilterEventData = {
-  action: FilterAction;
-  kind: string;
-} & {
-  [K in keyof CommonEventData]: CommonEventData[K];
-};
-
 export type ProductCardEventData = {
   productId: string;
   productRank: number;
