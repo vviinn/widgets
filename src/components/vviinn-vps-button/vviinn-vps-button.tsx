@@ -22,6 +22,7 @@ import {
   ProductCardEventData,
   SelectFilterEventData,
   SelectObjectEventData,
+  TriggerSourceEventData,
 } from "../../recommendation/events";
 import { Locale } from "../../locale";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
@@ -227,7 +228,7 @@ export class VviinnVpsButton {
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
   /** Crop area changes */
-  @Event() vviinnImageCrop: EventEmitter<BasicEventData>;
+  @Event() vviinnImageCrop: EventEmitter<TriggerSourceEventData>;
   /** User selects the detected object */
   @Event() vviinnSelectObject: EventEmitter<SelectObjectEventData>;
   /** User selects one of the filters */

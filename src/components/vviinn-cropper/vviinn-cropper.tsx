@@ -29,6 +29,8 @@ import {
   SUPPORTED_ASPECT_RATIO,
   MIN_IMAGE_SIDE_FOR_CROPPER,
   DEFAULT_IMAGE_SIZE,
+  CROP_THUMBNAIL_SIZE,
+  CROP_THUMBNAIL_QUALITY,
 } from "./constants";
 import {
   makeVisualSearchRequest,
@@ -249,6 +251,18 @@ export class VviinnCropper {
     };
   };
 
+  /** Keep the crop thumbnail in step with the crop box — there is none while the cropper is hidden. */
+  private updateCroppedImage = () => {
+    this.state.croppedImageUrl = this.cropper
+      ? this.cropper
+          .getCroppedCanvas({
+            maxWidth: CROP_THUMBNAIL_SIZE,
+            maxHeight: CROP_THUMBNAIL_SIZE,
+          })
+          .toDataURL("image/jpeg", CROP_THUMBNAIL_QUALITY)
+      : null;
+  };
+
   private triggerVisualSearch = async () => {
     pipe(
       await makeVisualSearchRequest(this.storeName, null, this.token, {
@@ -277,9 +291,9 @@ export class VviinnCropper {
   selectDetectedObject({ detail }: CustomEvent<SelectObjectEventData>) {
     this.selectedDetectedObject = detail.detectedObject;
     this.state.searchArea = detail.searchArea;
-    const { top, left, width, height } = detail.detectedObject;
 
     if (this.cropper) {
+      const { top, left, width, height } = detail.detectedObject;
       const { width: cropBoxWidth, height: cropBoxHeight } =
         this.cropper.getImageData();
       const cropBoxData = {
@@ -290,21 +304,13 @@ export class VviinnCropper {
       };
 
       this.cropper.setCropBoxData(ValidateCropBoxData(cropBoxData));
-      this.vviinnImageCrop.emit({
-        isTriggeredByVpsWidget: this.showInWidget,
-      });
     }
 
+    this.updateCroppedImage();
+    this.vviinnImageCrop.emit({
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
     this.triggerVisualSearch();
-  }
-
-  @Listen("vviinnImageCrop")
-  imageCropHandler({ detail }: CustomEvent<TriggerSourceEventData>) {
-    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
-    if (this.cropper)
-      this.state.croppedImageUrl = this.cropper
-        .getCroppedCanvas?.()
-        .toDataURL?.();
   }
 
   private loadImage = () => {
@@ -411,6 +417,7 @@ export class VviinnCropper {
     this.state.searchArea = cropboxData;
     this.selectedDetectedObject = null;
 
+    this.updateCroppedImage();
     this.vviinnImageCrop.emit({
       isTriggeredByVpsWidget: this.showInWidget,
     });
