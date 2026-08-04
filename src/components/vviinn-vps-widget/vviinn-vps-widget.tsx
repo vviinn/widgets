@@ -16,6 +16,7 @@ import i18next from "i18next";
 
 import { version } from "../../../package.json";
 import {
+  resetResultEvents,
   resetStore,
   setTextSearchQuery,
   SearchStore,
@@ -313,11 +314,6 @@ export class VviinnVpsWidget {
 
   private isTextSearch = () => this.state.searchType === "text";
 
-  private initResultEvents() {
-    this.state.resultLoaded = false;
-    this.state.resultViewed = false;
-  }
-
   private replaceSlotsContent(childrenElement?: HTMLElement) {
     this.globalSlotsChanged.emit({
       slots: this.slots,
@@ -519,7 +515,7 @@ export class VviinnVpsWidget {
     } else {
       this.mode === "upload" && setTimeout(() => this.resetState(), 500);
       document.body.style.overflow = this.overflow;
-      this.showInWidget && this.initResultEvents();
+      this.showInWidget && resetResultEvents(this.storeName);
     }
   }
 
@@ -568,7 +564,7 @@ export class VviinnVpsWidget {
 
   @Listen("vviinnImageCrop")
   cropAreaChanges() {
-    this.initResultEvents();
+    resetResultEvents(this.storeName);
 
     const { campaignTypeId, ...rest } = this.getBasicEventData();
 
@@ -583,7 +579,7 @@ export class VviinnVpsWidget {
 
   @Listen("vviinnSelectObject")
   trackDetectedObject() {
-    this.initResultEvents();
+    resetResultEvents(this.storeName);
 
     const { campaignTypeId, ...rest } = this.getBasicEventData();
 
@@ -600,7 +596,7 @@ export class VviinnVpsWidget {
   trackImageSearchFilterSelected({
     detail,
   }: CustomEvent<SelectFilterEventData>) {
-    this.initResultEvents();
+    resetResultEvents(this.storeName);
     const { campaignTypeId, ...rest } = this.getBasicEventData();
 
     const searchEvent: WidgetEvent = createFilterEvent("VPS")({
@@ -802,7 +798,7 @@ export class VviinnVpsWidget {
     this.wrongImageFormat = false;
     this.resetScroll("results-block");
     this.stopStreamTracks();
-    this.showInWidget && this.initResultEvents();
+    this.showInWidget && resetResultEvents(this.storeName);
     this.stream = null;
     this.isCameraEnabled = false;
     this.isCameraButtonClicked = false;

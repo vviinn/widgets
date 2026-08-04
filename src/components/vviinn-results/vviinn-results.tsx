@@ -29,6 +29,7 @@ import {
   setTextSearchQuery,
   SearchStore,
   SearchStoreName,
+  resetResultEvents,
   resetStore,
   useSearchStore,
 } from "../../store/search.store";
@@ -310,11 +311,6 @@ export class VviinnResults {
     this.calculateCardHeight();
   });
 
-  private initResultEvents = () => {
-    this.state.resultLoaded = false;
-    this.state.resultViewed = false;
-  };
-
   private updateCampaignIds = () => {
     this.state.campaignIdTextSearch = this.campaignIdTextSearch;
     this.state.campaignIdVisualSearch = this.campaignIdVisualSearch;
@@ -562,7 +558,7 @@ export class VviinnResults {
     const { campaignTypeId, ...rest } = this.getBasicEventData(customTrigger);
 
     if (action === "select" || action === "deselect" || action === "reset")
-      this.initResultEvents();
+      resetResultEvents(this.storeName);
 
     if (customTrigger === "TPS") return;
 
