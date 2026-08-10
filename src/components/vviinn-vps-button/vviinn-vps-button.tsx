@@ -18,10 +18,10 @@ import {
 import { SlotSkeleton } from "../customized-slots";
 import {
   BasicEventData,
+  ImageCropEventData,
   ImageUploadEventData,
   ProductCardEventData,
   SelectObjectEventData,
-  TriggerSourceEventData,
 } from "../../recommendation/events";
 import { Locale } from "../../locale";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
@@ -227,7 +227,7 @@ export class VviinnVpsButton {
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
   /** Crop area changes */
-  @Event() vviinnImageCrop: EventEmitter<TriggerSourceEventData>;
+  @Event() vviinnImageCrop: EventEmitter<ImageCropEventData>;
   /** User selects the detected object */
   @Event() vviinnSelectObject: EventEmitter<SelectObjectEventData>;
 

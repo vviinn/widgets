@@ -25,7 +25,7 @@ const IMAGE_SOURCE: SearchImageSource = "upload";
  * Report a visual search. Call it where the search is triggered — the same call serves the
  * widget and the standalone components, which have no widget to report on their behalf.
  *
- * @returns the reported event.
+ * Also rearms the result load and view events: a new search means a new result to report.
  */
 export const trackImageSearch = ({
   searchArea,
@@ -33,7 +33,7 @@ export const trackImageSearch = ({
   token,
   apiPath,
   basicEventData,
-}: ImageSearchTracking): WidgetEvent => {
+}: ImageSearchTracking): void => {
   resetResultEvents(storeName);
 
   const { campaignTypeId, ...rest } = basicEventData;
@@ -46,6 +46,4 @@ export const trackImageSearch = ({
   });
 
   trackEvent(searchEvent, token, apiPath);
-
-  return searchEvent;
 };

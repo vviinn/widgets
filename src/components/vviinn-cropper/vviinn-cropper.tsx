@@ -19,6 +19,7 @@ import styles from "./vviinn-cropper.css";
 import { fromImage, divideOnSized } from "../../geometry/Rectangle";
 import {
   BasicEventData,
+  ImageCropEventData,
   SearchIdEvent,
   SelectObjectEventData,
   TriggerSourceEventData,
@@ -84,7 +85,7 @@ export class VviinnCropper {
   @State() cropper: Cropper = null;
   @State() selectedDetectedObject?: Rectangle | null = null;
 
-  @Event() vviinnImageCrop: EventEmitter<TriggerSourceEventData>;
+  @Event() vviinnImageCrop: EventEmitter<ImageCropEventData>;
   @Event() vviinnCropperLoadImage: EventEmitter<LoadImageEventData>;
   /** Triggered when crop ends with enriched data including normalized coordinates for visual-search API */
   @Event() vviinnCropperCropEnd: EventEmitter<CropEndEventData>;
@@ -255,7 +256,10 @@ export class VviinnCropper {
 
   /** Announce a new crop area and report the search it starts. */
   private reportCropChange = (searchArea: SearchArea) => {
+    const basicEventData = this.getBasicEventData();
+
     this.vviinnImageCrop.emit({
+      ...basicEventData,
       isTriggeredByVpsWidget: this.showInWidget,
     });
     trackImageSearch({
@@ -263,7 +267,7 @@ export class VviinnCropper {
       storeName: this.storeName,
       token: this.token,
       apiPath: this.apiPath,
-      basicEventData: this.getBasicEventData(),
+      basicEventData,
     });
   };
 
@@ -328,9 +332,9 @@ export class VviinnCropper {
       this.cropper.setCropBoxData(ValidateCropBoxData(cropBoxData));
     }
 
-    this.updateCroppedImage();
     this.reportCropChange("attention-point");
     this.triggerVisualSearch();
+    this.updateCroppedImage();
   }
 
   private loadImage = () => {
@@ -437,10 +441,11 @@ export class VviinnCropper {
     this.state.searchArea = cropboxData;
     this.selectedDetectedObject = null;
 
-    this.updateCroppedImage();
     this.reportCropChange("manual-selection");
-
     if (this.autoSearch) this.triggerVisualSearch();
+
+    // The thumbnail is decoration, its canvas encoding must not delay the search request.
+    this.updateCroppedImage();
   };
 
   private showPreloader = () =>

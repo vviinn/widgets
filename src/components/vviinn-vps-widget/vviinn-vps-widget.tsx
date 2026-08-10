@@ -33,10 +33,10 @@ import {
   SelectObjectEventData,
   NoResultEventData,
   TextSearchEvent,
+  ImageCropEventData,
   ImageUploadEventData,
   RedirectEventData,
   SearchIdEventData,
-  TriggerSourceEventData,
 } from "../../recommendation/events";
 import { campaignTypeNames } from "../../campaign/Campaign";
 import {
@@ -275,7 +275,7 @@ export class VviinnVpsWidget {
   @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
 
   /** Crop area changes */
-  @Event() vviinnImageCrop: EventEmitter<TriggerSourceEventData>;
+  @Event() vviinnImageCrop: EventEmitter<ImageCropEventData>;
 
   /** User selects the detected object */
   @Event() vviinnSelectObject: EventEmitter<SelectObjectEventData>;

@@ -68,6 +68,12 @@ export type SelectObjectEventData = {
   [K in keyof CommonEventData]: CommonEventData[K];
 };
 
+export type ImageCropEventData = {
+  isTriggeredByVpsWidget: boolean;
+} & {
+  [K in keyof BasicEventData]: BasicEventData[K];
+};
+
 export type ProductCardEventData = {
   productId: string;
   productRank: number;
