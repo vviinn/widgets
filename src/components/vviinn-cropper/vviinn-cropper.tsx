@@ -32,6 +32,7 @@ import {
   DEFAULT_IMAGE_SIZE,
   CROP_THUMBNAIL_SIZE,
   CROP_THUMBNAIL_QUALITY,
+  CROP_THUMBNAIL_FILL_COLOR,
 } from "./constants";
 import {
   makeVisualSearchRequest,
@@ -268,14 +269,20 @@ export class VviinnCropper {
 
   /** Keep the crop thumbnail in step with the crop box — there is none while the cropper is hidden. */
   private updateCroppedImage = () => {
-    this.state.croppedImageUrl = this.cropper
-      ? this.cropper
-          .getCroppedCanvas({
-            maxWidth: CROP_THUMBNAIL_SIZE,
-            maxHeight: CROP_THUMBNAIL_SIZE,
-          })
-          .toDataURL("image/jpeg", CROP_THUMBNAIL_QUALITY)
-      : null;
+    // No canvas until the cropper is ready, and JPEG turns a transparent crop black without a fill.
+    const canvas = this.cropper?.getCroppedCanvas({
+      maxWidth: CROP_THUMBNAIL_SIZE,
+      maxHeight: CROP_THUMBNAIL_SIZE,
+      fillColor: CROP_THUMBNAIL_FILL_COLOR,
+    });
+
+    try {
+      this.state.croppedImageUrl =
+        canvas?.toDataURL("image/jpeg", CROP_THUMBNAIL_QUALITY) ?? null;
+    } catch {
+      // The thumbnail is decoration — never let it break the search the crop starts.
+      this.state.croppedImageUrl = null;
+    }
   };
 
   private triggerVisualSearch = async () => {

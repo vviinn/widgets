@@ -10,6 +10,7 @@ export const DEFAULT_IMAGE_SIZE = 288;
  */
 export const CROP_THUMBNAIL_SIZE = 256;
 export const CROP_THUMBNAIL_QUALITY = 0.8;
+export const CROP_THUMBNAIL_FILL_COLOR = "#fff";
 
 export const cropperOptions: Cropper.Options = {
   autoCropArea: INITIAL_CROP_AREA,
