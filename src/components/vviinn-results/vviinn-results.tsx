@@ -238,6 +238,7 @@ export class VviinnResults {
   /** Custom URL param names parsed from results page URL. Default: "query=query&searchId=searchId". */
   @Prop() resultsPageParams?: string;
   /** uiSessionId from vps-widget */
+  /** @internal */
   @Prop({ mutable: true }) uiSessionId?: string;
   /** Resolution width of an image in the product card */
   @Prop() imageResolutionWidth?: number = RESULTS_WIDGET_IMAGE_RESOLUTION_WIDTH;
