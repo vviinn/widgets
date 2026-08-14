@@ -159,6 +159,13 @@ const useStore = (store: SearchStoreName): SearchStore => {
   }
 };
 
+/** A new result is on its way, so its load and view events are due again. */
+export const resetResultEvents = (store: SearchStoreName) => {
+  const state = useStore(store);
+  state.resultLoaded = false;
+  state.resultViewed = false;
+};
+
 export type ResetMode =
   | "appStateOnly"
   | "receivedDataOnly"

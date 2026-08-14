@@ -48,7 +48,6 @@ const initArgs = {
   productDetailsNewTab: true,
   productDetailsRedirect: true,
   addToBasketShow: false,
-  uiSessionId: "",
   searchId: "",
   oneClickDiscoveryMode: "append-grid",
   addPriceContainer: false,

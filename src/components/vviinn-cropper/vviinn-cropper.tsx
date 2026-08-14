@@ -11,6 +11,7 @@ import {
 } from "@stencil/core";
 import i18next from "i18next";
 import Cropper from "cropperjs";
+import { SearchArea } from "vviinn-tracking-client-ts";
 import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/lib/function";
 import { version } from "../../../package.json";
@@ -18,6 +19,7 @@ import styles from "./vviinn-cropper.css";
 import { fromImage, divideOnSized } from "../../geometry/Rectangle";
 import {
   BasicEventData,
+  ImageCropEventData,
   SearchIdEvent,
   SelectObjectEventData,
   TriggerSourceEventData,
@@ -29,6 +31,9 @@ import {
   SUPPORTED_ASPECT_RATIO,
   MIN_IMAGE_SIDE_FOR_CROPPER,
   DEFAULT_IMAGE_SIZE,
+  CROP_THUMBNAIL_SIZE,
+  CROP_THUMBNAIL_QUALITY,
+  CROP_THUMBNAIL_FILL_COLOR,
 } from "./constants";
 import {
   makeVisualSearchRequest,
@@ -46,6 +51,7 @@ import { addEventListenersWithSignal } from "../../dom";
 import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
 import { campaignTypeNames } from "../../campaign/Campaign";
 import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
+import { trackImageSearch } from "../../tracking/searchTracking";
 
 @Component({
   tag: "vviinn-cropper",
@@ -79,7 +85,7 @@ export class VviinnCropper {
   @State() cropper: Cropper = null;
   @State() selectedDetectedObject?: Rectangle | null = null;
 
-  @Event() vviinnImageCrop: EventEmitter<TriggerSourceEventData>;
+  @Event() vviinnImageCrop: EventEmitter<ImageCropEventData>;
   @Event() vviinnCropperLoadImage: EventEmitter<LoadImageEventData>;
   /** Triggered when crop ends with enriched data including normalized coordinates for visual-search API */
   @Event() vviinnCropperCropEnd: EventEmitter<CropEndEventData>;
@@ -227,10 +233,9 @@ export class VviinnCropper {
   }: CustomEvent<TriggerSourceEventData>) => {
     if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
     this.cropper?.reset();
+    // clearCropSelection drops the thumbnail; without a crop box the search covers the whole image.
     this.clearCropSelection();
-    this.vviinnImageCrop.emit({
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
+    this.reportCropChange("full");
     this.triggerVisualSearch();
   };
 
@@ -247,6 +252,41 @@ export class VviinnCropper {
       widgetVersion: version,
       ...addIfNotEmpty("widgetId", this.el.id),
     };
+  };
+
+  /** Announce a new crop area and report the search it starts. */
+  private reportCropChange = (searchArea: SearchArea) => {
+    const basicEventData = this.getBasicEventData();
+
+    this.vviinnImageCrop.emit({
+      ...basicEventData,
+      isTriggeredByVpsWidget: this.showInWidget,
+    });
+    trackImageSearch({
+      searchArea,
+      storeName: this.storeName,
+      token: this.token,
+      apiPath: this.apiPath,
+      basicEventData,
+    });
+  };
+
+  /** Keep the crop thumbnail in step with the crop box — there is none while the cropper is hidden. */
+  private updateCroppedImage = () => {
+    // No canvas until the cropper is ready, and JPEG turns a transparent crop black without a fill.
+    const canvas = this.cropper?.getCroppedCanvas({
+      maxWidth: CROP_THUMBNAIL_SIZE,
+      maxHeight: CROP_THUMBNAIL_SIZE,
+      fillColor: CROP_THUMBNAIL_FILL_COLOR,
+    });
+
+    try {
+      this.state.croppedImageUrl =
+        canvas?.toDataURL("image/jpeg", CROP_THUMBNAIL_QUALITY) ?? null;
+    } catch {
+      // The thumbnail is decoration — never let it break the search the crop starts.
+      this.state.croppedImageUrl = null;
+    }
   };
 
   private triggerVisualSearch = async () => {
@@ -277,9 +317,9 @@ export class VviinnCropper {
   selectDetectedObject({ detail }: CustomEvent<SelectObjectEventData>) {
     this.selectedDetectedObject = detail.detectedObject;
     this.state.searchArea = detail.searchArea;
-    const { top, left, width, height } = detail.detectedObject;
 
     if (this.cropper) {
+      const { top, left, width, height } = detail.detectedObject;
       const { width: cropBoxWidth, height: cropBoxHeight } =
         this.cropper.getImageData();
       const cropBoxData = {
@@ -290,21 +330,11 @@ export class VviinnCropper {
       };
 
       this.cropper.setCropBoxData(ValidateCropBoxData(cropBoxData));
-      this.vviinnImageCrop.emit({
-        isTriggeredByVpsWidget: this.showInWidget,
-      });
     }
 
+    this.reportCropChange("attention-point");
     this.triggerVisualSearch();
-  }
-
-  @Listen("vviinnImageCrop")
-  imageCropHandler({ detail }: CustomEvent<TriggerSourceEventData>) {
-    if (this.skipStateChanges(detail.isTriggeredByVpsWidget)) return;
-    if (this.cropper)
-      this.state.croppedImageUrl = this.cropper
-        .getCroppedCanvas?.()
-        .toDataURL?.();
+    this.updateCroppedImage();
   }
 
   private loadImage = () => {
@@ -411,11 +441,11 @@ export class VviinnCropper {
     this.state.searchArea = cropboxData;
     this.selectedDetectedObject = null;
 
-    this.vviinnImageCrop.emit({
-      isTriggeredByVpsWidget: this.showInWidget,
-    });
-
+    this.reportCropChange("manual-selection");
     if (this.autoSearch) this.triggerVisualSearch();
+
+    // The thumbnail is decoration, its canvas encoding must not delay the search request.
+    this.updateCroppedImage();
   };
 
   private showPreloader = () =>

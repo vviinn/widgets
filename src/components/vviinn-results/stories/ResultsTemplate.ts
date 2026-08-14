@@ -10,7 +10,6 @@ export const ResultsTemplate = (args) => {
     numberLocale,
     productDetailsRedirect,
     productDetailsNewTab,
-    uiSessionId,
     resultsCount,
     filterColumn,
     filterValue,
@@ -61,7 +60,6 @@ export const ResultsTemplate = (args) => {
     product-details-new-tab="${productDetailsNewTab}"
     ${searchQueryAttribute}
     ${filterAttributes}
-    ui-session-id="${uiSessionId}"
     results-count="${resultsCount}"
     add-to-basket-show="${addToBasketShow}"
     one-click-discovery-mode="${oneClickDiscoveryMode}"

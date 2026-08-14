@@ -18,9 +18,9 @@ import {
 import { SlotSkeleton } from "../customized-slots";
 import {
   BasicEventData,
+  ImageCropEventData,
   ImageUploadEventData,
   ProductCardEventData,
-  SelectFilterEventData,
   SelectObjectEventData,
 } from "../../recommendation/events";
 import { Locale } from "../../locale";
@@ -227,11 +227,9 @@ export class VviinnVpsButton {
   @Event() vviinnNoResult: EventEmitter<BasicEventData>;
 
   /** Crop area changes */
-  @Event() vviinnImageCrop: EventEmitter<BasicEventData>;
+  @Event() vviinnImageCrop: EventEmitter<ImageCropEventData>;
   /** User selects the detected object */
   @Event() vviinnSelectObject: EventEmitter<SelectObjectEventData>;
-  /** User selects one of the filters */
-  @Event() vviinnSelectFilter: EventEmitter<SelectFilterEventData>;
 
   /** @internal */
   @Event({ bubbles: true, composed: true })

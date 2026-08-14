@@ -11,11 +11,11 @@ import {
   EventEmitter,
   Fragment,
 } from "@stencil/core";
-import { v4 as uuidv4 } from "uuid";
 import i18next from "i18next";
 
 import { version } from "../../../package.json";
 import {
+  resetResultEvents,
   resetStore,
   setTextSearchQuery,
   SearchStore,
@@ -24,22 +24,16 @@ import {
 } from "../../store/search.store";
 import { trackEvent } from "../../store/store";
 import { slotChangeListener, SlotSkeleton } from "../customized-slots";
-import {
-  SearchImageSource,
-  WidgetAction,
-  WidgetEvent,
-} from "vviinn-tracking-client-ts";
-import {
-  createWidgetEvent,
-  createFilterEvent,
-  createImageSearchEvent,
-} from "../../tracking";
+import { WidgetAction, WidgetEvent } from "vviinn-tracking-client-ts";
+import { createWidgetEvent } from "../../tracking";
+import { trackImageSearch } from "../../tracking/searchTracking";
+import { getUiSessionId } from "../../tracking/session";
 import {
   BasicEventData,
-  SelectFilterEventData,
   SelectObjectEventData,
   NoResultEventData,
   TextSearchEvent,
+  ImageCropEventData,
   ImageUploadEventData,
   RedirectEventData,
   SearchIdEventData,
@@ -281,13 +275,10 @@ export class VviinnVpsWidget {
   @Event() vviinnWidgetClose: EventEmitter<BasicEventData>;
 
   /** Crop area changes */
-  @Event() vviinnImageCrop: EventEmitter<BasicEventData>;
+  @Event() vviinnImageCrop: EventEmitter<ImageCropEventData>;
 
   /** User selects the detected object */
   @Event() vviinnSelectObject: EventEmitter<SelectObjectEventData>;
-
-  /** User selects one of the filters */
-  @Event() vviinnSelectFilter: EventEmitter<SelectFilterEventData>;
 
   /** The image upload has started */
   @Event() vviinnImageUploadStarted: EventEmitter<ImageUploadEventData>;
@@ -301,7 +292,6 @@ export class VviinnVpsWidget {
 
   private overflow: string;
   private uiSessionId: string;
-  private imageSource: SearchImageSource = "upload";
   private cameraAvailable: boolean = false;
   private isDesktop: boolean = false;
   private videoTrack: MediaStreamTrack | null = null;
@@ -312,11 +302,6 @@ export class VviinnVpsWidget {
   private eventAbortController?: AbortController;
 
   private isTextSearch = () => this.state.searchType === "text";
-
-  private initResultEvents() {
-    this.state.resultLoaded = false;
-    this.state.resultViewed = false;
-  }
 
   private replaceSlotsContent(childrenElement?: HTMLElement) {
     this.globalSlotsChanged.emit({
@@ -519,7 +504,7 @@ export class VviinnVpsWidget {
     } else {
       this.mode === "upload" && setTimeout(() => this.resetState(), 500);
       document.body.style.overflow = this.overflow;
-      this.showInWidget && this.initResultEvents();
+      this.showInWidget && resetResultEvents(this.storeName);
     }
   }
 
@@ -566,53 +551,6 @@ export class VviinnVpsWidget {
     this.isCameraInitializing = false;
   }
 
-  @Listen("vviinnImageCrop")
-  cropAreaChanges() {
-    this.initResultEvents();
-
-    const { campaignTypeId, ...rest } = this.getBasicEventData();
-
-    const searchEvent: WidgetEvent = createImageSearchEvent({
-      session_id: this.uiSessionId,
-      source: this.imageSource,
-      search_area: "manual-selection",
-      ...rest,
-    });
-    trackEvent(searchEvent, this.token, this.apiPath);
-  }
-
-  @Listen("vviinnSelectObject")
-  trackDetectedObject() {
-    this.initResultEvents();
-
-    const { campaignTypeId, ...rest } = this.getBasicEventData();
-
-    const searchEvent: WidgetEvent = createImageSearchEvent({
-      session_id: this.uiSessionId,
-      source: this.imageSource,
-      search_area: "attention-point",
-      ...rest,
-    });
-    trackEvent(searchEvent, this.token, this.apiPath);
-  }
-
-  @Listen("vviinnSelectFilter")
-  trackImageSearchFilterSelected({
-    detail,
-  }: CustomEvent<SelectFilterEventData>) {
-    this.initResultEvents();
-    const { campaignTypeId, ...rest } = this.getBasicEventData();
-
-    const searchEvent: WidgetEvent = createFilterEvent("VPS")({
-      session_id: this.uiSessionId,
-      source: this.imageSource,
-      kind: detail.kind,
-      action: detail.action,
-      ...rest,
-    });
-    trackEvent(searchEvent, this.token, this.apiPath);
-  }
-
   connectedCallback() {
     this.isDesktop = checkDeviceType() === "desktop";
     const { state, storeName } = useSearchStore(this.showInWidget);
@@ -626,7 +564,7 @@ export class VviinnVpsWidget {
     this.state.campaignIdVisualSearch = this.campaignIdVisualSearch;
     this.state.excluded = parseStringToExcluded(this.excluded);
 
-    this.uiSessionId = uuidv4();
+    this.uiSessionId = getUiSessionId(storeName);
     this.widgetElementId = this.el.id;
 
     this.eventAbortController = new AbortController();
@@ -661,15 +599,13 @@ export class VviinnVpsWidget {
   }
 
   private trackInitialSearch() {
-    const { campaignTypeId, ...rest } = this.getBasicEventData();
-
-    const searchEvent: WidgetEvent = createImageSearchEvent({
-      session_id: this.uiSessionId,
-      search_area: "full",
-      source: "upload",
-      ...rest,
+    trackImageSearch({
+      searchArea: "full",
+      storeName: this.storeName,
+      token: this.token,
+      apiPath: this.apiPath,
+      basicEventData: this.getBasicEventData(),
     });
-    trackEvent(searchEvent, this.token, this.apiPath);
   }
 
   private closeModalAndResetState() {
@@ -802,7 +738,7 @@ export class VviinnVpsWidget {
     this.wrongImageFormat = false;
     this.resetScroll("results-block");
     this.stopStreamTracks();
-    this.showInWidget && this.initResultEvents();
+    this.showInWidget && resetResultEvents(this.storeName);
     this.stream = null;
     this.isCameraEnabled = false;
     this.isCameraButtonClicked = false;
