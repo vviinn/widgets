@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.224.2](https://github.com/vviinn/widgets/compare/v2.224.1...v2.224.2) (2026-08-14)
+
+
+### Bug Fixes
+
+* Send search events for crop and detected-object searches without the widget ([b6aa27f](https://github.com/vviinn/widgets/commit/b6aa27fa4095b6e62b5db5a058eaea8734550db3))
+
 ### [2.224.1](https://github.com/vviinn/widgets/compare/v2.224.0...v2.224.1) (2026-07-30)
 
 
