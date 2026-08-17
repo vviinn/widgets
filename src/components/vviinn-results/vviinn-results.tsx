@@ -12,7 +12,6 @@ import {
 } from "@stencil/core";
 import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/lib/function";
-import { v4 as uuidv4 } from "uuid";
 import {
   AddToBasketEvent,
   FilterEvent,
@@ -29,6 +28,7 @@ import {
   setTextSearchQuery,
   SearchStore,
   SearchStoreName,
+  resetResultEvents,
   resetStore,
   useSearchStore,
 } from "../../store/search.store";
@@ -65,6 +65,7 @@ import {
   createWidgetEvent,
   createAddToWishlistEvent,
 } from "../../tracking";
+import { getUiSessionId } from "../../tracking/session";
 import { RequestDynamicFilterItem } from "../../campaign/VPRCampaignService";
 import { initializeLocale } from "../../locale";
 import {
@@ -237,6 +238,7 @@ export class VviinnResults {
   /** Custom URL param names parsed from results page URL. Default: "query=query&searchId=searchId". */
   @Prop() resultsPageParams?: string;
   /** uiSessionId from vps-widget */
+  /** @internal */
   @Prop({ mutable: true }) uiSessionId?: string;
   /** Resolution width of an image in the product card */
   @Prop() imageResolutionWidth?: number = RESULTS_WIDGET_IMAGE_RESOLUTION_WIDTH;
@@ -309,11 +311,6 @@ export class VviinnResults {
     this.calculateColumns();
     this.calculateCardHeight();
   });
-
-  private initResultEvents = () => {
-    this.state.resultLoaded = false;
-    this.state.resultViewed = false;
-  };
 
   private updateCampaignIds = () => {
     this.state.campaignIdTextSearch = this.campaignIdTextSearch;
@@ -562,7 +559,7 @@ export class VviinnResults {
     const { campaignTypeId, ...rest } = this.getBasicEventData(customTrigger);
 
     if (action === "select" || action === "deselect" || action === "reset")
-      this.initResultEvents();
+      resetResultEvents(this.storeName);
 
     if (customTrigger === "TPS") return;
 
@@ -619,7 +616,7 @@ export class VviinnResults {
     if (this.el.id) this.widgetElementId = this.el.id;
 
     if (!this.uiSessionId) {
-      this.uiSessionId = uuidv4();
+      this.uiSessionId = getUiSessionId(storeName);
     }
 
     this.eventAbortController = new AbortController();

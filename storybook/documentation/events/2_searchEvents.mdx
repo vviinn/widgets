@@ -33,9 +33,12 @@ Some events have additional props, summarized it table below.
     </tr>
 
     <tr>
-      <td>vviinnImageCrop</td><td>Triggered after an image is cropped.</td>
+      <td>vviinnImageCrop</td><td>Triggered after the crop area changes — by cropping, by selecting a detected object or by removing the crop.</td>
 
       <td>
+        <ul>
+          <li>isTriggeredByVpsWidget</li>
+        </ul>
       </td>
     </tr>
 
@@ -44,16 +47,7 @@ Some events have additional props, summarized it table below.
       <td>
         <ul>
           <li>detectedObject</li>
-        </ul>
-      </td>
-    </tr>
-
-    <tr>
-      <td>vviinnSelectFilter</td><td>Triggered after a filter is selected.</td>
-      <td>
-        <ul>
-          <li>action</li>
-          <li>category</li>
+          <li>searchArea</li>
         </ul>
       </td>
     </tr>

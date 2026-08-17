@@ -68,11 +68,10 @@ export type SelectObjectEventData = {
   [K in keyof CommonEventData]: CommonEventData[K];
 };
 
-export type SelectFilterEventData = {
-  action: FilterAction;
-  kind: string;
+export type ImageCropEventData = {
+  isTriggeredByVpsWidget: boolean;
 } & {
-  [K in keyof CommonEventData]: CommonEventData[K];
+  [K in keyof BasicEventData]: BasicEventData[K];
 };
 
 export type ProductCardEventData = {
