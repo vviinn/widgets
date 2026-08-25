@@ -190,7 +190,7 @@ export class VviinnExampleImage {
     );
 
     const dataURI = canvas.toDataURL("image/jpeg");
-    file = await toFile(dataURI);
+    file = toFile(dataURI);
 
     pipe(
       await makeUploadFileRequest(
