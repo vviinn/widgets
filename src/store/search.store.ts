@@ -170,9 +170,9 @@ export type ResetMode =
   | "appStateOnly"
   | "receivedDataOnly"
   | "appStateAndReceivedData"
-  | "all"
-  | "manual";
+  | "all";
 
+/** `excludedFields` names the fields the reset leaves alone. */
 export const resetStore = (
   store: SearchStoreName,
   mode: ResetMode = "appStateAndReceivedData",
@@ -201,12 +201,6 @@ export const resetStore = (
     case "all":
       resetPayload = { ...storeDefaults };
       break;
-
-    case "manual":
-      for (const key of excludedFields) {
-        delete (state as any)[key];
-      }
-      return;
   }
 
   for (const key of excludedFields) {
