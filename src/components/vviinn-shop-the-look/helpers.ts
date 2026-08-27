@@ -16,6 +16,7 @@ import {
   makeUploadFileRequest,
   makeVisualSearchByUrlRequest,
   makeVisualSearchRequest,
+  SearchRequestOptions,
   shopTheLookState,
 } from "../../store/search.store";
 import { imageFromFileTask } from "../../Image/fromFile";
@@ -168,11 +169,9 @@ export const resetSearchState = () => ({
   initialSearchCompleted: false,
 });
 
-export interface VisualSearchParams {
+export interface VisualSearchParams extends SearchRequestOptions {
   imageUrl: string;
   token: string;
-  campaignId?: string;
-  apiPath?: string;
 }
 
 export const performVisualSearch = async (
@@ -192,8 +191,7 @@ export const performVisualSearch = async (
       "shopTheLook",
       params.imageUrl,
       params.token,
-      params.apiPath,
-      params.campaignId,
+      { apiPath: params.apiPath, campaignId: params.campaignId },
     );
 
     return E.fold(
@@ -217,14 +215,12 @@ export const performVisualSearch = async (
   }
 };
 
-export interface DetectedObjectClickParams {
+export interface DetectedObjectClickParams extends SearchRequestOptions {
   detectedObject: Rectangle;
   imageElement: HTMLImageElement;
   containerElement?: HTMLElement;
   token: string;
   visualSearchId?: string | null;
-  campaignId?: string;
-  apiPath?: string;
   isSearchInProgress: boolean;
   setSearchInProgress: (inProgress: boolean) => void;
   imageBounds?: Rectangle | null;
@@ -328,11 +324,9 @@ export const buildImageUrlsList = (
   return [...uploadedImageUrls, ...propImageUrls];
 };
 
-export interface ProcessFileUploadParams {
+export interface ProcessFileUploadParams extends SearchRequestOptions {
   file: File;
   token: string;
-  campaignId?: string;
-  apiPath?: string;
 }
 
 export interface ProcessFileUploadResult {
@@ -350,12 +344,10 @@ export const processFileUpload = async (
     const imageElement = await imageFromFileTask(file)();
     const imageUrl = imageElement.src;
 
-    const uploadResult = await makeUploadFileRequest(
-      "shopTheLook",
-      token,
+    const uploadResult = await makeUploadFileRequest("shopTheLook", token, {
       apiPath,
       campaignId,
-    )(file);
+    })(file);
 
     return E.fold(
       (error: BasicError<string | Response>) =>

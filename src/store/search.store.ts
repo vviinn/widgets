@@ -293,6 +293,12 @@ const handleSearchError =
     return error;
   };
 
+/** Where a search request goes and which campaign it is attributed to. */
+export type SearchRequestOptions = {
+  apiPath?: string;
+  campaignId?: string | null;
+};
+
 const processVisualSearch = (
   store: SearchStoreName,
   body: VisualSearchRequest,
@@ -323,8 +329,7 @@ const uploadImageFile =
     token: string,
     imageType: ImageType = "image",
     searchId?: string,
-    apiPath?: string,
-    campaignId?: string | null,
+    { apiPath, campaignId }: SearchRequestOptions = {},
     isHiResUpdate: boolean = false,
   ) =>
   (file: File) => {
@@ -369,8 +374,7 @@ export const makeVisualSearchByUrlRequest = async (
   store: SearchStoreName,
   imageUrl: string,
   token: string,
-  apiPath?: string,
-  campaignId?: string | null,
+  { apiPath, campaignId }: SearchRequestOptions = {},
 ) => {
   const state = useStore(store);
 
@@ -394,12 +398,7 @@ export const makeVisualSearchByUrlRequest = async (
 };
 
 export const makeUploadFileRequest =
-  (
-    store: SearchStoreName,
-    token: string,
-    apiPath?: string,
-    campaignId?: string | null,
-  ) =>
+  (store: SearchStoreName, token: string, options: SearchRequestOptions = {}) =>
   async (file: File) => {
     const state = useStore(store);
 
@@ -415,14 +414,7 @@ export const makeUploadFileRequest =
     }
 
     const session = await pipe(
-      uploadImageFile(
-        store,
-        token,
-        "image",
-        undefined,
-        apiPath,
-        campaignId,
-      )(file),
+      uploadImageFile(store, token, "image", undefined, options)(file),
     )();
 
     if (!state.visualSearchId?.length) return session;
@@ -441,8 +433,7 @@ export const makeUploadFileRequest =
         token,
         "highResolutionImage",
         state.visualSearchId,
-        apiPath,
-        campaignId,
+        options,
         true, // isHiResUpdate = true
       )(file),
       TE.getOrElseW((error) => {
@@ -454,9 +445,7 @@ export const makeUploadFileRequest =
     return session;
   };
 
-export type VisualSearchOptions = {
-  apiPath?: string;
-  campaignId?: string | null;
+export type VisualSearchOptions = SearchRequestOptions & {
   /**
    * Searching a new area: the applied filters belong to the previous result set, so they are
    * left out of this request. They stay in the store until the response reconciles them, so
