@@ -1,22 +1,8 @@
 import { hasSelectedOcrFilter } from "./hasSelectedOcrFilter";
-import { ResponseDynamicFilterItem } from "../../../interfaces";
-
-const categoricalFilter = (
-  column: string,
-  values: { value: string; selected: boolean; active?: boolean }[],
-): ResponseDynamicFilterItem =>
-  ({
-    type: "categorical",
-    column,
-    label: column,
-    isPrimary: false,
-    values: values.map(({ value, selected, active = true }) => ({
-      value,
-      label: value,
-      active,
-      selected,
-    })),
-  }) as ResponseDynamicFilterItem;
+import {
+  categoricalFilter,
+  intervalFilter,
+} from "../../../filters/testFixtures";
 
 describe("hasSelectedOcrFilter", () => {
   it("returns false for undefined dynamicFilters", () => {
@@ -58,16 +44,7 @@ describe("hasSelectedOcrFilter", () => {
 
   it("returns false for an interval filter on the modality column", () => {
     const dynamicFilters = [
-      {
-        type: "interval",
-        column: "modality",
-        label: "modality",
-        isPrimary: false,
-        full: { start: 0, end: 1 },
-        selectedValues: [],
-        suggestions: [],
-        histogram: [],
-      } as unknown as ResponseDynamicFilterItem,
+      intervalFilter("modality", [], { start: 0, end: 1 }),
     ];
     expect(hasSelectedOcrFilter(dynamicFilters)).toBe(false);
   });
