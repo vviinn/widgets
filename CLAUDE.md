@@ -72,10 +72,7 @@ Global CSS variables in `src/variables.css`.
 - **CSS-First**: Prioritize CSS over JS for positioning and layout
 - **Class Maps**: `{ 'base': true, active: this.isActive, [this.variant]: !!this.variant }`
 - **Adding @Prop()**: See `/add-prop` command. ALWAYS update Storybook story when adding props.
-- **Comments**: comment the _why_, not the _what_ — explain intent, non-obvious decisions, edge cases, and constraints the code can't express itself. Skip comments that restate the code; prefer self-documenting names over a comment. Keep them short and to the point; delete stale ones with the code they described.
-  - **Size**: default to a single line. Two lines is the ceiling for inline comments — if the _why_ needs more, extract a named helper/variable or move the rationale into the function's JSDoc instead. One focused sentence beats a paragraph.
-  - **In tests the name is the documentation**: a comment above `it(...)` is only worth it when it carries something the name should not — a non-obvious precondition, an assertion's hidden dependency, a pointer to outside context. Restating the test name, or the JSDoc of the function under test, is noise.
-  - **No change history**: describe the code as it stands, never how it got there. No "now", "no longer", "instead of the previous", no naming a rejected alternative. The reader has only the current code — the old behaviour is invisible to them, and within a single PR it never existed on the branch they are reading. Diffs, commits and the PR description are where change belongs.
+- **Comments**: comment the _why_, not the _what_ — intent, non-obvious decisions, edge cases, constraints the code can't express itself. Skip comments that restate the code; prefer self-documenting names. Delete stale ones with the code they described. Default one line, two-line ceiling — past that, extract a named helper/variable or move the rationale into the function's JSDoc. In tests, only comment what the name itself can't carry (a hidden precondition, a hidden dependency of an assertion) — restating the test name or the tested function's JSDoc is noise. No change history: describe the code as it stands, never how it got there (no "now"/"no longer"/"instead of", no naming a rejected alternative) — that belongs in commits and the PR description.
 - **Punctuation in comments & docs**: use an em dash (—), not a hyphen (-) or en dash (–).
 - **Component JSDoc**: the `@part` / `@slot` / `@cssprop` JSDoc block must sit **immediately above `@Component`** with no declaration in between — otherwise Stencil attaches it to that declaration and the docs (Storybook Controls table via `docs.json`) lose the parts/slots.
 
@@ -84,24 +81,21 @@ Global CSS variables in `src/variables.css`.
 - **User-facing changes** — `feat:` for features, `fix:` for fixes. These land in the user-facing changelog, so write them for end users. Semi-free form: add a `Component Name:` segment when the change targets one component (`feat: Vviinn Cropper: toggle cropper visibility by OCR filter`), otherwise a plain summary for cross-cutting changes (`fix: Restore missing CSS parts & slots in component docs`).
 - **Routine work** (intermediate fixes, chores, review changes, refactors) — `#<ticket> Description`, where `<ticket>` is the number from the branch name (e.g. `#39690 Ignore local Claude settings file`). No `feat:`/`fix:`/`chore:` prefix.
 - **Automation** (releases, CI, changelog bumps) — prefix with `[skip ci]`.
+- **Avoiding a version bump**: `commit-and-tag-version` bumps at least the patch version on any commit, regardless of prefix (`chore:` included) — `[skip ci]` is the only reliable way to land a commit without triggering a release.
 - **Subject line only** — no body, no bullet lists, no rationale paragraph, even when the change spans several files and fixes several things. "Semi-free form" above refers to the subject's wording, not permission to add a body. Explain the mechanism in the PR description, not in the commit.
 - **No `Co-Authored-By` trailers** — do not append `Co-Authored-By` (or other AI-attribution) lines to commit messages.
 
 ## Key Patterns
 
-**Slot System**: Centralized in `src/components/customized-slots.tsx`. See `/add-slot` command for adding slots to components.
-
-**CSS Parts System**: Centralized in `src/cssParts/`. See `/add-css-part` command for adding parts.
-
-**Interface Types**: Domain-specific aliases in `/src/interfaces/` (product.ts, search.ts, discovery.ts, interactions.ts). See `/add-interface-type` command. Never import directly from `generated.ts` — use domain aliases.
-
-**Intersection Observer**: Consolidated utility at `/src/dom/intersectionObserver.ts`.
-
-**Responsive Detection**: `/src/helpers/device/checkDeviceType.ts` — supports both user-agent and viewport-based detection.
-
-**Swiper**: Custom elements (`<swiper-container>`, `<swiper-slide>`). Register via `import { register } from 'swiper/element'`. Utils at `/src/utils/swiper/swiperUtils.ts`.
-
-**Storybook**: Stories live in `storybook/stories/`. Glob for `**/*component-name*.stories.*` to find them.
+| Pattern | Path | Note |
+|---|---|---|
+| Slot System | `src/components/customized-slots.tsx` | `/add-slot` to add slots to components |
+| CSS Parts System | `src/cssParts/` | `/add-css-part` to add parts |
+| Interface Types | `/src/interfaces/` (`product.ts`, `search.ts`, `discovery.ts`, `interactions.ts`) | `/add-interface-type`; never import `generated.ts` directly — use the domain alias |
+| Intersection Observer | `/src/dom/intersectionObserver.ts` | consolidated utility |
+| Responsive Detection | `/src/helpers/device/checkDeviceType.ts` | user-agent + viewport based |
+| Swiper | custom elements `<swiper-container>`/`<swiper-slide>`, registered via `import { register } from 'swiper/element'`; utils at `/src/utils/swiper/swiperUtils.ts` | |
+| Storybook | `storybook/stories/` | glob `**/*component-name*.stories.*` to find a component's stories |
 
 ## Browser Testing
 
@@ -116,3 +110,5 @@ See `/browser-test` command. Shadow DOM requires JS access via `element.shadowRo
 ## MCP Integration
 
 Project MCP config: `.mcp.json` (root).
+
+@CLAUDE.local.md
