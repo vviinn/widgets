@@ -75,11 +75,6 @@ export class VviinnSelectedFilters {
   @State() textSearchCustomFilter: string | null = null;
   @State() imageSrc: string | null = null;
 
-  // Rebuilt in componentWillRender and consumed by the render after it, so plain fields.
-  // The local requestFilters drive that rebuild — reads there register no subscription.
-  private selectedFilterButtons: JSX.Element[] = [];
-  private intervalFilterButtons: JSX.Element[] = [];
-
   /** The filter's state changes */
   @Event({ bubbles: true })
   vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
@@ -255,39 +250,43 @@ export class VviinnSelectedFilters {
     this.disposeStoreListener?.();
   }
 
-  componentWillRender() {
-    this.selectedFilterButtons = [];
-    this.intervalFilterButtons = [];
-    const filters = this.state?.dynamicFilters || [];
+  /** Built here so the dynamicFilters read happens under render() and registers a subscription. */
+  private buildChips() {
+    const intervalChips: JSX.Element[] = [];
+    const selectedChips: JSX.Element[] = [];
 
-    filters.forEach((filter) => {
+    (this.state?.dynamicFilters ?? []).forEach((filter) => {
       if (filter.type === "interval") {
-        this.collectIntervalButton(filter as ResponseIntervalFilterItem);
+        const chip = this.renderIntervalChip(
+          filter as ResponseIntervalFilterItem,
+        );
+        if (chip) intervalChips.push(chip);
         return;
       }
       if (!("values" in filter)) return;
       (filter.values as FilterOptions).forEach(({ value, label, active }) => {
-        if (isSubFilterActive(this.requestFilters, value, filter)) {
-          this.selectedFilterButtons.push(
-            RenderFilterButton({
-              handleSubFilterSelection: this.handleSubFilterSelection,
-              selectedFilter: filter,
-              value,
-              label,
-              active,
-              isSelected: true,
-              showClose: true,
-            }),
-          );
-        }
+        if (!isSubFilterActive(this.requestFilters, value, filter)) return;
+        selectedChips.push(
+          RenderFilterButton({
+            handleSubFilterSelection: this.handleSubFilterSelection,
+            selectedFilter: filter,
+            value,
+            label,
+            active,
+            isSelected: true,
+            showClose: true,
+          }),
+        );
       });
     });
+
+    return { intervalChips, selectedChips };
   }
 
   /** A chip exists only while the column has an applied interval to show. */
-  private collectIntervalButton(filter: ResponseIntervalFilterItem) {
+  private renderIntervalChip(filter: ResponseIntervalFilterItem) {
     const applied = getSelectedInterval(this.requestFilters, filter.column);
-    if (!applied) return;
+    if (!applied) return null;
 
     const label = getIntervalLabel(
       filter,
@@ -295,27 +294,29 @@ export class VviinnSelectedFilters {
       this.currencySign ?? defaultConfig.currencySign,
       true,
     );
-    if (!label) return;
+    if (!label) return null;
 
     const { column } = filter;
 
-    this.intervalFilterButtons.push(
+    return (
       <div key={column}>
         {RenderCustomButton({
           label,
           buttonType: "range",
           onClick: () => this.handleIntervalButtonClick(column),
         })}
-      </div>,
+      </div>
     );
   }
 
   render() {
+    const { intervalChips, selectedChips } = this.buildChips();
+
     if (
       this.showInWidget &&
-      !this.selectedFilterButtons.length &&
+      !selectedChips.length &&
       !this.state.croppedImageUrl &&
-      !this.intervalFilterButtons.length
+      !intervalChips.length
     )
       return null;
     return (
@@ -361,9 +362,9 @@ export class VviinnSelectedFilters {
               hidden: !this.state.searchArea,
             })}
 
-            {this.intervalFilterButtons}
+            {intervalChips}
 
-            {this.selectedFilterButtons}
+            {selectedChips}
           </ul>
         </section>
       </Host>
