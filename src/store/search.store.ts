@@ -323,14 +323,23 @@ const processVisualSearch = (
   );
 };
 
+type UploadImageOptions = SearchRequestOptions & {
+  imageType?: ImageType;
+  searchId?: string;
+  isHiResUpdate?: boolean;
+};
+
 const uploadImageFile =
   (
     store: SearchStoreName,
     token: string,
-    imageType: ImageType = "image",
-    searchId?: string,
-    { apiPath, campaignId }: SearchRequestOptions = {},
-    isHiResUpdate: boolean = false,
+    {
+      apiPath,
+      campaignId,
+      imageType = "image",
+      searchId,
+      isHiResUpdate = false,
+    }: UploadImageOptions = {},
   ) =>
   (file: File) => {
     const state = useStore(store);
@@ -413,9 +422,7 @@ export const makeUploadFileRequest =
       });
     }
 
-    const session = await pipe(
-      uploadImageFile(store, token, "image", undefined, options)(file),
-    )();
+    const session = await uploadImageFile(store, token, options)(file)();
 
     if (!state.visualSearchId?.length) return session;
 
@@ -428,14 +435,12 @@ export const makeUploadFileRequest =
     if (!shouldProcessHiRes) return session;
 
     pipe(
-      uploadImageFile(
-        store,
-        token,
-        "highResolutionImage",
-        state.visualSearchId,
-        options,
-        true, // isHiResUpdate = true
-      )(file),
+      uploadImageFile(store, token, {
+        ...options,
+        imageType: "highResolutionImage",
+        searchId: state.visualSearchId,
+        isHiResUpdate: true,
+      })(file),
       TE.getOrElseW((error) => {
         console.error("Failed to upload hi-res image:", error);
         return T.of(session);
