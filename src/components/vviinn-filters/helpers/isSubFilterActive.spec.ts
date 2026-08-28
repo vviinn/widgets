@@ -1,34 +1,34 @@
 import { isSubFilterActive } from "./isSubFilterActive";
 import {
+  appliedFilter,
   categoricalFilter,
   intervalFilter,
 } from "../../../filters/testFixtures";
-import type { RequestDynamicFilterItem } from "../../../campaign/VPRCampaignService";
+import type { DynamicFilterValue } from "../../../campaign/VPRCampaignService";
 
-const applied = (column: string, values: unknown[]): RequestDynamicFilterItem =>
-  ({ column, values }) as RequestDynamicFilterItem;
+const option = (raw: unknown) => raw as DynamicFilterValue;
 
 const brand = categoricalFilter("brand", [
   { value: "Mediware", selected: false },
   { value: "Other", selected: false },
 ]);
 
+const price = intervalFilter("price", [], { start: 0, end: 1000 });
+
 describe("isSubFilterActive", () => {
   it("returns false when nothing is applied", () => {
-    expect(isSubFilterActive([], "Mediware" as never, brand)).toBe(false);
+    expect(isSubFilterActive([], option("Mediware"), brand)).toBe(false);
   });
 
   it("returns false when the applied filters are missing", () => {
-    expect(isSubFilterActive(undefined, "Mediware" as never, brand)).toBe(
-      false,
-    );
+    expect(isSubFilterActive(undefined, option("Mediware"), brand)).toBe(false);
   });
 
   it("returns false when the facet is missing", () => {
     expect(
       isSubFilterActive(
-        [applied("brand", ["Mediware"])],
-        "Mediware" as never,
+        [appliedFilter("brand", ["Mediware"])],
+        option("Mediware"),
         undefined,
       ),
     ).toBe(false);
@@ -37,8 +37,8 @@ describe("isSubFilterActive", () => {
   it("matches a plain string value applied on the same column", () => {
     expect(
       isSubFilterActive(
-        [applied("brand", ["Mediware"])],
-        "Mediware" as never,
+        [appliedFilter("brand", ["Mediware"])],
+        option("Mediware"),
         brand,
       ),
     ).toBe(true);
@@ -47,53 +47,48 @@ describe("isSubFilterActive", () => {
   it("ignores a value applied on another column", () => {
     expect(
       isSubFilterActive(
-        [applied("modality", ["Mediware"])],
-        "Mediware" as never,
+        [appliedFilter("modality", ["Mediware"])],
+        option("Mediware"),
         brand,
       ),
     ).toBe(false);
   });
 
-  it("ignores a value the column does not carry", () => {
+  it("returns false when the applied value differs", () => {
     expect(
       isSubFilterActive(
-        [applied("brand", ["Other"])],
-        "Mediware" as never,
+        [appliedFilter("brand", ["Other"])],
+        option("Mediware"),
         brand,
       ),
     ).toBe(false);
   });
 
-  // Categorical options reach the helper as { value, label, ... }, not as bare strings.
   it("matches an option object against the applied raw value", () => {
     expect(
       isSubFilterActive(
-        [applied("brand", ["Mediware"])],
-        { value: "Mediware", label: "Mediware" } as never,
+        [appliedFilter("brand", ["Mediware"])],
+        option({ value: "Mediware", label: "Mediware" }),
         brand,
       ),
     ).toBe(true);
   });
 
   it("matches an interval by its bounds rather than by reference", () => {
-    const price = intervalFilter("price", [], { start: 0, end: 1000 });
-
     expect(
       isSubFilterActive(
-        [applied("price", [{ start: 100, end: 200 }])],
-        { interval: { start: 100, end: 200 } } as never,
+        [appliedFilter("price", [{ start: 100, end: 200 }])],
+        option({ interval: { start: 100, end: 200 } }),
         price,
       ),
     ).toBe(true);
   });
 
   it("rejects an interval whose bounds differ", () => {
-    const price = intervalFilter("price", [], { start: 0, end: 1000 });
-
     expect(
       isSubFilterActive(
-        [applied("price", [{ start: 100, end: 200 }])],
-        { interval: { start: 100, end: 300 } } as never,
+        [appliedFilter("price", [{ start: 100, end: 200 }])],
+        option({ interval: { start: 100, end: 300 } }),
         price,
       ),
     ).toBe(false);
@@ -103,10 +98,10 @@ describe("isSubFilterActive", () => {
     expect(
       isSubFilterActive(
         [
-          applied("modality", ["OCR"]),
-          applied("brand", ["A", "Mediware", "B"]),
+          appliedFilter("modality", ["OCR"]),
+          appliedFilter("brand", ["A", "Mediware", "B"]),
         ],
-        "Mediware" as never,
+        option("Mediware"),
         brand,
       ),
     ).toBe(true);

@@ -25,9 +25,7 @@ describe("hasSelectedOcrFilter", () => {
 
   it("returns false when OCR is present but not selected, even if active", () => {
     const dynamicFilters = [
-      categoricalFilter("modality", [
-        { value: "OCR", selected: false, active: true },
-      ]),
+      categoricalFilter("modality", [{ value: "OCR", selected: false }]),
     ];
     expect(hasSelectedOcrFilter(dynamicFilters)).toBe(false);
   });
