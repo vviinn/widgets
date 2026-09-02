@@ -32,3 +32,6 @@ storybook/build-storybook.log
 .mcp.json
 # Claude Code local settings (personal, not shared)
 .claude/settings.local.json
+
+# SBOM produced by `npm sbom` in CI
+sbom.cyclonedx.json

@@ -108,7 +108,15 @@ jobs:
       - run: npm run build_interfaces
       - run: npm run build
       - name: Publish to NPM registry with beta tag using OIDC
-        run: npm publish --tag beta --access public
+        run: npm publish --tag beta --access public --provenance
+      - name: Generate SBOM
+        run: npm sbom --sbom-format cyclonedx --omit dev > sbom.cyclonedx.json
+      - name: Upload SBOM
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-${{ github.sha }}
+          path: sbom.cyclonedx.json
+          retention-days: 90
 
   update-widget-version-storybook:
     runs-on: ubuntu-latest
