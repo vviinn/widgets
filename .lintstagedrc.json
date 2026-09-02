@@ -1,0 +1,4 @@
+{
+  "*.{ts,tsx,js,jsx,css,json}": "prettier --write",
+  "*.{ts,tsx}": "eslint --no-warn-ignored"
+}
