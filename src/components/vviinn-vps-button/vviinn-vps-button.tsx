@@ -312,6 +312,7 @@ export class VviinnVpsButton {
             buttonIcon: <SearchModalFullSearchIcon />,
           };
         }
+      // falls through — a modal without text search uses the upload labels
       default:
         return {
           ariaLabel: i18next.t("a11y.uploadModeSearchButton"),

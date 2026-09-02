@@ -124,7 +124,7 @@ export class VviinnTextSearch {
   /** Basic or extended text search with search modal and speech recognition */
   @Prop() mode: SearchBarMode = "basic";
   /** Query for the text search passed from widget */
-  @Prop({ mutable: true }) searchQuery?: string;
+  @Prop() searchQuery?: string;
   /** Custom placeholder for the text search input */
   @Prop() placeholder?: string = "";
   /** URL of the results page for automatic search redirect. */
@@ -274,7 +274,7 @@ export class VviinnTextSearch {
     }
   }
 
-  handleInputChange(event: Event) {
+  private handleInputChange(event: Event) {
     this.searchSubmitted = false;
     const value = (event.target as HTMLInputElement).value;
     if (this.autoSuggestShow) {

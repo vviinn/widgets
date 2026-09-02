@@ -418,7 +418,7 @@ export class VviinnResults {
   }
 
   componentDidRender() {
-    !!this.replaceSlotsContentInButton
+    this.replaceSlotsContentInButton
       ? this.replaceSlotsContentInButton(this.el)
       : this.showInWidget
         ? this.replaceSlotsContentInWidget(this.el)
@@ -751,7 +751,7 @@ export class VviinnResults {
   private trackResultEvent(type: ResultEventType) {
     const { campaignTypeId, ...rest } = this.getBasicEventData();
 
-    let resultEvent: ResultViewEvent | ResultLoadEvent =
+    const resultEvent: ResultViewEvent | ResultLoadEvent =
       createResultEventByType(
         type,
         campaignTypeId as Widget,

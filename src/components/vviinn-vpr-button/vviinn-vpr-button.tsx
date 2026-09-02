@@ -347,7 +347,7 @@ export class VviinnVprButton {
     }
   };
 
-  handleClick(): void {
+  private handleClick(): void {
     const sidebar = document.createElement("vviinn-recommendations-sidebar");
     sidebar.token = this.token;
     sidebar.locale = this.locale;

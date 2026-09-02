@@ -6,14 +6,14 @@ const intervalFilter = (full: { start?: number; end?: number }) =>
 it("selects an interval when the clicked range differs from the full range", () => {
   const filter = intervalFilter({ start: 0, end: 1000 });
 
-  const { filters, action } = subFilterSelection(
-    [],
-    filter,
-    { interval: { start: 100, end: 200 } } as any,
-  );
+  const { filters, action } = subFilterSelection([], filter, {
+    interval: { start: 100, end: 200 },
+  } as any);
 
   expect(action).toBe("select");
-  expect(filters).toEqual([{ column: "price", values: [{ start: 100, end: 200 }] }]);
+  expect(filters).toEqual([
+    { column: "price", values: [{ start: 100, end: 200 }] },
+  ]);
 });
 
 it("deselects when the clicked range equals the full range (the guard suggestion chips must avoid)", () => {
