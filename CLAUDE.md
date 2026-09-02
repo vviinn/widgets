@@ -4,6 +4,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Where new rules go**: this file, not auto-memory. When the user corrects how you work or states a convention, write it here so it is versioned and visible to the whole team — never into the private memory directory.
 
+## Working Agreement
+
+- **One branch per ticket.** The branch name carries the ticket number, and commits on it use that number. Work spanning several tickets in one branch needs a stated reason.
+- **Land each finished piece before starting the next**, so the working tree holds one ticket at a time.
+- **Show the diff and name the ticket before moving on.** Group the change by intent — tooling, autofix, hand-fixed findings — and say which files fall in each group. A long unbroken run of edits across many files is unreviewable, however sound each edit is.
+
 ## Common Development Commands
 
 ```bash
