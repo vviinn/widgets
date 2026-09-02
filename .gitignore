@@ -1,5 +1,7 @@
 .log
 .env
+.env.local
+.env.*.local
 CLAUDE.local.md
 dist/
 www/

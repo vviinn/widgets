@@ -22,9 +22,18 @@ const config = {
 
     config.envPrefix = ["VITE_", "STORYBOOK_"];
 
+    // Expose every STORYBOOK_* var, so adding one needs no build-config edit. Secrets
+    // arrive from .env.local locally and from Cloud Build secretEnv on deploy.
+    const storybookEnvDefines = Object.fromEntries(
+      Object.entries(env).map(([key, value]) => [
+        `process.env.${key}`,
+        JSON.stringify(value),
+      ]),
+    );
+
     config.define = {
       ...config.define,
-      "process.env.STORYBOOK_API_PATH": JSON.stringify(env.STORYBOOK_API_PATH),
+      ...storybookEnvDefines,
       "import.meta.env.STORYBOOK_ENV": JSON.stringify(
         env.STORYBOOK_ENV || process.env.STORYBOOK_ENV || "local",
       ),

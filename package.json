@@ -16,7 +16,6 @@
   ],
   "scripts": {
     "build": "ENV=production stencil build --docs",
-    "postbuild": "cp .npmrc ./dist",
     "build.watch": "stencil build --watch --docs",
     "build.docs": "stencil build --docs",
     "build_interfaces": "node ./scripts/generate-interfaces.js ./src/interfaces/generated.ts",
