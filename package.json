@@ -30,7 +30,7 @@
     "release": "commit-and-tag-version",
     "release.ci": "commit-and-tag-version --releaseCommitMessageFormat '[skip ci] chore(release): {{currentTag}}'",
     "artifactregistry-login": "npx google-artifactregistry-auth",
-    "lint": "eslint .",
+    "lint": "eslint . --max-warnings 70",
     "lint.fix": "eslint . --fix",
     "format": "prettier --write 'src/**/*.{ts,tsx,js,jsx,css,scss,json}'",
     "update_storybook_changelog": "node ./scripts/update-changelog.js",
