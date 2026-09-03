@@ -1,6 +1,20 @@
 const fs = require("fs");
 const path = require("path");
-const sharp = require("sharp");
+
+const SHARP_VERSION = "0.35.4";
+
+// sharp carries ~27 MB of native binaries for a conversion that runs once every
+// few years, so it is installed on demand rather than declared as a dependency.
+let sharp;
+try {
+  sharp = require("sharp");
+} catch (error) {
+  if (error.code !== "MODULE_NOT_FOUND") throw error;
+  console.error(
+    `sharp is not installed — run \`npm i --no-save sharp@${SHARP_VERSION}\` and rerun this script.`,
+  );
+  process.exit(1);
+}
 
 const sourcePath = path.resolve(__dirname, "../src/favicon.svg");
 const icoPath = path.resolve(__dirname, "../src/favicon.ico");
