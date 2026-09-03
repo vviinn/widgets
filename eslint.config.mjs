@@ -10,6 +10,7 @@ export default tseslint.config(
       "dist/",
       "www/",
       "loader/",
+      "coverage/",
       "node_modules/",
       // Storybook is a separate npm project with its own toolchain.
       "storybook/",
