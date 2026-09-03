@@ -20,6 +20,7 @@
     "build.watch": "stencil build --watch --docs",
     "build.docs": "stencil build --docs",
     "build_interfaces": "node ./scripts/generate-interfaces.js ./src/interfaces/generated.ts",
+    "build.favicons": "node ./scripts/generate-favicons.js",
     "generate": "stencil generate",
     "start": "npm run build_interfaces && ENV=local stencil build --dev --watch --serve --docs",
     "test": "stencil test --spec",
