@@ -35,8 +35,7 @@ export default tseslint.config(
       // Inline arrow handlers are the idiom throughout the components.
       "react/jsx-no-bind": "off",
       // Prettier preserves whichever line break the author wrote after a
-      // decorator, so both styles are stable here and neither can be enforced
-      // without rewriting every component.
+      // decorator, so neither style is enforceable without a repo-wide rewrite.
       "@stencil-community/decorators-style": "off",
     },
   },
@@ -58,8 +57,8 @@ export default tseslint.config(
         "error",
         { allowShortCircuit: true, allowTernary: true },
       ],
-      // Kept visible as a warning rather than an error: the remaining `any`s
-      // predate the rule and are worked off gradually.
+      // A warning, not an error: the `any`s left in the tree are visible debt,
+      // held at their current count by `--max-warnings`.
       "@typescript-eslint/no-explicit-any": "warn",
       // Translations carry non-breaking spaces on purpose.
       "no-irregular-whitespace": [
