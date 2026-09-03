@@ -1,16 +1,9 @@
 import { CropperOcrGate } from "./cropperOcrGate";
-import { ResponseDynamicFilterItem } from "../../../interfaces";
+import { categoricalFilter } from "../../../filters/testFixtures";
 
-const ocrFilters = (selected: boolean): ResponseDynamicFilterItem[] =>
-  [
-    {
-      type: "categorical",
-      column: "modality",
-      label: "modality",
-      isPrimary: false,
-      values: [{ value: "OCR", label: "OCR", active: true, selected }],
-    },
-  ] as ResponseDynamicFilterItem[];
+const ocrFilters = (selected: boolean) => [
+  categoricalFilter("modality", [{ value: "OCR", selected }]),
+];
 
 const imageA = { id: "a" } as unknown as HTMLImageElement;
 const imageB = { id: "b" } as unknown as HTMLImageElement;

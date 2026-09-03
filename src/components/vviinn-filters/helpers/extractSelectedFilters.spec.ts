@@ -1,35 +1,9 @@
 import { extractSelectedFilters } from "./extractSelectedFilters";
-import type { Interval, ResponseDynamicFilterItem } from "../../../interfaces";
-
-const categoricalFilter = (
-  column: string,
-  values: { value: string; selected: boolean }[],
-): ResponseDynamicFilterItem => ({
-  type: "categorical" as const,
-  column,
-  label: column,
-  isPrimary: false,
-  values: values.map(({ value, selected }) => ({
-    value,
-    label: value,
-    active: true,
-    selected,
-  })),
-});
-
-const intervalFilter = (
-  column: string,
-  selectedValues: Interval[],
-): ResponseDynamicFilterItem => ({
-  type: "interval" as const,
-  column,
-  label: column,
-  isPrimary: false,
-  full: { start: 0, end: 100 },
-  selectedValues,
-  suggestions: [],
-  histogram: [],
-});
+import type { Interval } from "../../../interfaces";
+import {
+  categoricalFilter,
+  intervalFilter,
+} from "../../../filters/testFixtures";
 
 describe("extractSelectedFilters", () => {
   it("returns nothing for an empty response", () => {
