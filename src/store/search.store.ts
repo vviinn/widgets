@@ -170,9 +170,9 @@ export type ResetMode =
   | "appStateOnly"
   | "receivedDataOnly"
   | "appStateAndReceivedData"
-  | "all"
-  | "manual";
+  | "all";
 
+/** `excludedFields` names the fields the reset leaves alone. */
 export const resetStore = (
   store: SearchStoreName,
   mode: ResetMode = "appStateAndReceivedData",
@@ -201,12 +201,6 @@ export const resetStore = (
     case "all":
       resetPayload = { ...storeDefaults };
       break;
-
-    case "manual":
-      for (const key of excludedFields) {
-        delete (state as any)[key];
-      }
-      return;
   }
 
   for (const key of excludedFields) {
@@ -299,6 +293,12 @@ const handleSearchError =
     return error;
   };
 
+/** Where a search request goes and which campaign it is attributed to. */
+export type SearchRequestOptions = {
+  apiPath?: string;
+  campaignId?: string | null;
+};
+
 const processVisualSearch = (
   store: SearchStoreName,
   body: VisualSearchRequest,
@@ -323,15 +323,23 @@ const processVisualSearch = (
   );
 };
 
+type UploadImageOptions = SearchRequestOptions & {
+  imageType?: ImageType;
+  searchId?: string;
+  isHiResUpdate?: boolean;
+};
+
 const uploadImageFile =
   (
     store: SearchStoreName,
     token: string,
-    imageType: ImageType = "image",
-    searchId?: string,
-    apiPath?: string,
-    campaignId?: string | null,
-    isHiResUpdate: boolean = false,
+    {
+      apiPath,
+      campaignId,
+      imageType = "image",
+      searchId,
+      isHiResUpdate = false,
+    }: UploadImageOptions = {},
   ) =>
   (file: File) => {
     const state = useStore(store);
@@ -375,8 +383,7 @@ export const makeVisualSearchByUrlRequest = async (
   store: SearchStoreName,
   imageUrl: string,
   token: string,
-  apiPath?: string,
-  campaignId?: string | null,
+  { apiPath, campaignId }: SearchRequestOptions = {},
 ) => {
   const state = useStore(store);
 
@@ -400,12 +407,7 @@ export const makeVisualSearchByUrlRequest = async (
 };
 
 export const makeUploadFileRequest =
-  (
-    store: SearchStoreName,
-    token: string,
-    apiPath?: string,
-    campaignId?: string | null,
-  ) =>
+  (store: SearchStoreName, token: string, options: SearchRequestOptions = {}) =>
   async (file: File) => {
     const state = useStore(store);
 
@@ -420,16 +422,7 @@ export const makeUploadFileRequest =
       });
     }
 
-    const session = await pipe(
-      uploadImageFile(
-        store,
-        token,
-        "image",
-        undefined,
-        apiPath,
-        campaignId,
-      )(file),
-    )();
+    const session = await uploadImageFile(store, token, options)(file)();
 
     if (!state.visualSearchId?.length) return session;
 
@@ -442,15 +435,12 @@ export const makeUploadFileRequest =
     if (!shouldProcessHiRes) return session;
 
     pipe(
-      uploadImageFile(
-        store,
-        token,
-        "highResolutionImage",
-        state.visualSearchId,
-        apiPath,
-        campaignId,
-        true, // isHiResUpdate = true
-      )(file),
+      uploadImageFile(store, token, {
+        ...options,
+        imageType: "highResolutionImage",
+        searchId: state.visualSearchId,
+        isHiResUpdate: true,
+      })(file),
       TE.getOrElseW((error) => {
         console.error("Failed to upload hi-res image:", error);
         return T.of(session);
@@ -460,9 +450,7 @@ export const makeUploadFileRequest =
     return session;
   };
 
-export type VisualSearchOptions = {
-  apiPath?: string;
-  campaignId?: string | null;
+export type VisualSearchOptions = SearchRequestOptions & {
   /**
    * Searching a new area: the applied filters belong to the previous result set, so they are
    * left out of this request. They stay in the store until the response reconciles them, so

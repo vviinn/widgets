@@ -1,13 +1,9 @@
 import { syncRequestFilters } from "./syncRequestFilters";
 import type { SearchStore } from "../../../store/search.store";
 import type { RequestDynamicFilterItem } from "../../../campaign/VPRCampaignService";
+import { appliedFilter } from "../../../filters/testFixtures";
 
 type Listener = (value: RequestDynamicFilterItem[]) => void;
-
-const applied = (
-  column: string,
-  values: string[],
-): RequestDynamicFilterItem => ({ column, values });
 
 /** Minimal stand-in for @stencil/store: records the listener and hands back a dispose spy. */
 const storeStub = (requestFilters: RequestDynamicFilterItem[]) => {
@@ -28,18 +24,18 @@ const storeStub = (requestFilters: RequestDynamicFilterItem[]) => {
 
 describe("syncRequestFilters", () => {
   it("seeds the local copy from the store", () => {
-    const store = storeStub([applied("brand", ["Mediware"])]);
+    const store = storeStub([appliedFilter("brand", ["Mediware"])]);
     const setRequestFilters = jest.fn();
 
     syncRequestFilters(store.state, store.onChange, setRequestFilters);
 
     expect(setRequestFilters).toHaveBeenCalledWith([
-      applied("brand", ["Mediware"]),
+      appliedFilter("brand", ["Mediware"]),
     ]);
   });
 
   it("applies an empty update", () => {
-    const store = storeStub([applied("brand", ["Mediware"])]);
+    const store = storeStub([appliedFilter("brand", ["Mediware"])]);
     const setRequestFilters = jest.fn();
 
     syncRequestFilters(store.state, store.onChange, setRequestFilters);
@@ -60,7 +56,7 @@ describe("syncRequestFilters", () => {
   });
 
   it("hands over a copy, not the store's array", () => {
-    const storeFilters = [applied("brand", ["Mediware"])];
+    const storeFilters = [appliedFilter("brand", ["Mediware"])];
     const store = storeStub(storeFilters);
     const setRequestFilters = jest.fn();
 

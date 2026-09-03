@@ -1,21 +1,6 @@
 import { applyResponseFilters, FilterState } from "./applyResponseFilters";
 import type { ResponseDynamicFilterItem } from "../../interfaces";
-
-const categoricalFilter = (
-  column: string,
-  values: { value: string; selected: boolean }[],
-): ResponseDynamicFilterItem => ({
-  type: "categorical" as const,
-  column,
-  label: column,
-  isPrimary: false,
-  values: values.map(({ value, selected }) => ({
-    value,
-    label: value,
-    active: true,
-    selected,
-  })),
-});
+import { categoricalFilter } from "../../filters/testFixtures";
 
 const stateWith = (
   dynamicFilters: ResponseDynamicFilterItem[],
