@@ -38,7 +38,12 @@ export const config: Config = {
     {
       type: "www",
       serviceWorker: null, // disable service workers,
-      copy: [{ src: "assets" }, { src: "favicon.ico" }],
+      copy: [
+        { src: "assets" },
+        { src: "favicon.ico" },
+        { src: "favicon.svg" },
+        { src: "apple-touch-icon.png" },
+      ],
     },
   ],
   env: {

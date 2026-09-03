@@ -5,5 +5,5 @@ export default create({
   fontBase: '"Lato Light", sans-serif',
   brandTitle: "Vviinn",
   brandUrl: "https://www.vviinn.com/",
-  brandImage: "/assets/logo.svg",
+  brandImage: "/logo.svg",
 });

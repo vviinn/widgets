@@ -192,11 +192,9 @@ export class VviinnExampleImage {
     const file = toFile(dataURI);
 
     pipe(
-      await makeUploadFileRequest(
-        this.storeName,
-        this.token,
-        this.apiPath,
-      )(file),
+      await makeUploadFileRequest(this.storeName, this.token, {
+        apiPath: this.apiPath,
+      })(file),
       E.match(
         () => {
           this.vviinnNoResult.emit(this.basicEventData);

@@ -90,7 +90,7 @@ export class VviinnImageSelector {
       const processingResult = await makeUploadFileRequest(
         this.storeName,
         this.token,
-        this.apiPath,
+        { apiPath: this.apiPath },
       )(file);
 
       pipe(
