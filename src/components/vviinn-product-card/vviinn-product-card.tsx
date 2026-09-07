@@ -215,8 +215,7 @@ export class VviinnProductCard {
   /** @internal */
   @Prop() showFooterArrow: boolean = false;
   /** @internal */
-  @Prop({ mutable: true }) imageResolutionWidth: number =
-    PRODUCT_CARD_IMAGE_RESOLUTION_WIDTH;
+  @Prop() imageResolutionWidth: number = PRODUCT_CARD_IMAGE_RESOLUTION_WIDTH;
   /** @internal */
   @Prop({ mutable: true }) loading: boolean = false;
   /** @internal */

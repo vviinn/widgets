@@ -475,7 +475,7 @@ export class VviinnVpsWidget {
     this.replaceSlotsContent();
   }
 
-  getBasicEventData = (isTextSearch?: boolean): BasicEventData => {
+  private getBasicEventData = (isTextSearch?: boolean): BasicEventData => {
     const activeCampaign = this.isTextSearch() || isTextSearch ? "TPS" : "VPS";
     return {
       campaignTypeId: activeCampaign,

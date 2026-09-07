@@ -11,10 +11,28 @@ on:
       - main
 
 env:
-  NODE_VERSION: "22.21.0"
+  NODE_VERSION: "22.23.2"
   OPENAPI_URL: ./openapi/merchant-openapi.yaml
 
 jobs:
+  lint-and-test:
+    name: Lint and Unit Tests
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+      - name: Create .env file
+        run: echo "OPENAPI_URL=${{ env.OPENAPI_URL }}" >> .env
+      - run: npm install
+      - run: npm run build_interfaces
+      - run: npm run lint
+      - run: npm run test
+
   security-audit:
     name: Security Audit
     runs-on: ubuntu-latest

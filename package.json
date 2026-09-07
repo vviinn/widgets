@@ -1,6 +1,6 @@
 {
   "name": "vviinn-widgets",
-  "version": "2.224.6",
+  "version": "2.224.7",
   "description": "vviinn web components",
   "repository": {
     "type": "git",
@@ -27,17 +27,25 @@
     "generate": "stencil generate",
     "start": "npm run build_interfaces && ENV=local stencil build --dev --watch --serve --docs",
     "test": "stencil test --spec",
+    "test.coverage": "stencil test --spec -- --coverage",
     "test.e2e": "stencil test --e2e",
     "test.watch": "stencil test --spec --e2e --watchAll",
     "test.watchE2E": "stencil test --e2e --watchAll --devtools",
     "release": "commit-and-tag-version",
     "release.ci": "commit-and-tag-version --releaseCommitMessageFormat '[skip ci] chore(release): {{currentTag}}'",
+    "artifactregistry-login": "npx google-artifactregistry-auth",
+    "lint": "eslint . --max-warnings 70",
+    "lint.fix": "eslint . --fix",
     "format": "prettier --write 'src/**/*.{ts,tsx,js,jsx,css,scss,json}'",
     "update_storybook_changelog": "node ./scripts/update-changelog.js",
     "update_storybook_widget_version": "node ./scripts/update-widget-version.js",
-    "update.openapi": "gh api repos/vviinn/platform-api/contents/docs/merchant-openapi.yaml?ref=develop --jq '.content' | base64 -d > openapi/merchant-openapi.yaml && echo 'Synced: openapi/merchant-openapi.yaml'"
+    "update.openapi": "gh api repos/vviinn/platform-api/contents/docs/merchant-openapi.yaml?ref=develop --jq '.content' | base64 -d > openapi/merchant-openapi.yaml && echo 'Synced: openapi/merchant-openapi.yaml'",
+    "prepare": "husky"
   },
   "license": "MIT",
+  "engines": {
+    "node": ">=22.22.1 <23.0.0"
+  },
   "dependencies": {
     "@rgba-image/lanczos": "^0.1.1",
     "@sentry/browser": "^9.1.0",
@@ -55,6 +63,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.16.12",
+    "@stencil-community/eslint-plugin": "^0.10.0",
     "@stencil/core": "^4.31.0",
     "@stencil/store": "^2.0.8",
     "@types/dom-speech-recognition": "^0.0.4",
@@ -67,19 +76,26 @@
     "commit-and-tag-version": "^9.5.0",
     "dotenv": "^8.2.0",
     "enhanced-ecommerce-types": "0.0.3",
+    "eslint": "^9.39.5",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^17.12.0",
+    "husky": "^9.1.7",
     "jest": "^29.7.0",
     "jest-cli": "^29.7.0",
     "jest-config": "^29.7.0",
+    "lint-staged": "^17.4.1",
     "openapi-typescript": "^4.4.0",
     "postcss": "^8.5.24",
     "prettier": "3.4.2",
     "rollup-plugin-dotenv": "^0.5.0",
     "storybook-addon-designs": "^6.2.1",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.69.0"
   },
   "overrides": {
-    "minimatch": {
-      "brace-expansion": "^5.0.8"
+    "minimatch@3": {
+      "brace-expansion": "^1.1.12"
     }
   }
 }
