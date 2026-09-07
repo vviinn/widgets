@@ -5,7 +5,7 @@ import Timeout = NodeJS.Timeout;
 export const initializeRecognition = (
   locale: Locale,
   onStart: () => void,
-  onEnd: () => {},
+  onEnd: () => void,
   onRecognized: (speechResult: string) => void,
 ) => {
   const speechRecognition = permitSpeechRecognition();

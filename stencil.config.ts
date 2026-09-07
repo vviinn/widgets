@@ -57,6 +57,9 @@ export const config: Config = {
   testing: {
     browserArgs: ["--no-sandbox", "--disable-setuid-sandbox"],
     browserHeadless: "shell",
+    // Count every source file, not only the ones a test touches: otherwise the
+    // first test written for an untested file drags the global figure down.
+    collectCoverageFrom: ["src/**/*.{ts,tsx}", "!src/**/*.{spec,test,e2e}.*"],
   },
   sourceMap: false,
   devServer:

@@ -1,8 +1,11 @@
 .log
 .env
+.env.local
+.env.*.local
 CLAUDE.local.md
 dist/
 www/
+coverage/
 loader/
 .stencil
 src/interfaces/generated.ts
