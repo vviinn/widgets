@@ -43,7 +43,9 @@ const config = {
   viteFinal: async (config, { configType }) => {
     const env = loadEnv(configType, process.cwd(), ["STORYBOOK_"]);
 
-    config.envPrefix = ["VITE_", "STORYBOOK_"];
+    // Vite serialises every prefixed variable into import.meta.env in the output, which
+    // would bypass the allowlist above. STORYBOOK_ENV reaches the client through define.
+    config.envPrefix = ["VITE_"];
 
     // STORYBOOK_ENV is set only by the local dev script, so it cannot tell a
     // deployed build apart; configType can.
@@ -59,10 +61,17 @@ const config = {
     }
 
     // Secrets arrive from .env.local locally and from Cloud Build secretEnv on deploy.
-    const storybookEnvDefines = Object.fromEntries(
+    const exposedEnv = Object.fromEntries(
       EXPOSED_ENV_KEYS.filter((key) => key in env).map((key) => [
+        key,
+        env[key],
+      ]),
+    );
+
+    const storybookEnvDefines = Object.fromEntries(
+      Object.entries(exposedEnv).map(([key, value]) => [
         `process.env.${key}`,
-        JSON.stringify(env[key]),
+        JSON.stringify(value),
       ]),
     );
 
@@ -86,9 +95,10 @@ const config = {
           const path = require("path");
 
           if (fs.existsSync(id)) {
-            // Use our custom loader for .mdx files
+            // Use our custom loader for .mdx files. It substitutes only what is passed
+            // in, so the allowlist above governs the documentation output too.
             const loader = require(resolve("./stories.loader.ts"));
-            return loader.default(fs.readFileSync(id, "utf-8"));
+            return loader.default(fs.readFileSync(id, "utf-8"), exposedEnv);
           }
         }
       },
