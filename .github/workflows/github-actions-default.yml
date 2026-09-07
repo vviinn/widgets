@@ -107,10 +107,8 @@ jobs:
       - run: npm run test
       - run: npm run build_interfaces
       - run: npm run build
-      # npm cannot attest a private source repository, so --provenance joins the
-      # command only once the repository is public.
-      - name: Publish to NPM registry with beta tag using OIDC
-        run: npm publish --tag beta --access public ${{ github.event.repository.visibility == 'public' && '--provenance' || '' }}
+      # The SBOM comes from the lockfile, so it runs before the publish: a failure
+      # here must not leave a package in the registry with the dependent jobs skipped.
       - name: Generate SBOM
         run: npm sbom --sbom-format cyclonedx --omit dev > sbom.cyclonedx.json
       - name: Upload SBOM
@@ -119,6 +117,10 @@ jobs:
           name: sbom-${{ github.sha }}
           path: sbom.cyclonedx.json
           retention-days: 90
+      # npm cannot attest a private source repository, so --provenance joins the
+      # command only once the repository is public.
+      - name: Publish to NPM registry with beta tag using OIDC
+        run: npm publish --tag beta --access public ${{ github.event.repository.visibility == 'public' && '--provenance' || '' }}
 
   update-widget-version-storybook:
     runs-on: ubuntu-latest
