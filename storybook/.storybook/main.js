@@ -1,6 +1,21 @@
 import { resolve } from "path";
 import { loadEnv } from "vite";
 
+// Each key here is inlined into the publicly served bundle, so a variable reaches
+// the browser only by being listed — a build-side credential named STORYBOOK_*
+// stays out of it.
+const EXPOSED_ENV_KEYS = [
+  "STORYBOOK_API_PATH",
+  "STORYBOOK_CDN_PATH",
+  "STORYBOOK_ENV",
+  "STORYBOOK_NPM_PACKAGE_NAME",
+  "STORYBOOK_TOKEN_FASHION",
+  "STORYBOOK_TOKEN_HOME_LIVING",
+  "STORYBOOK_TOKEN_MANUFACTURER_SPARE_PARTS",
+  "STORYBOOK_VPR_WIDGET_TAG",
+  "STORYBOOK_VPS_WIDGET_TAG",
+];
+
 /** @type { import('@storybook/web-components-vite').StorybookConfig } */
 const config = {
   stories: [
@@ -22,12 +37,11 @@ const config = {
 
     config.envPrefix = ["VITE_", "STORYBOOK_"];
 
-    // Expose every STORYBOOK_* var, so adding one needs no build-config edit. Secrets
-    // arrive from .env.local locally and from Cloud Build secretEnv on deploy.
+    // Secrets arrive from .env.local locally and from Cloud Build secretEnv on deploy.
     const storybookEnvDefines = Object.fromEntries(
-      Object.entries(env).map(([key, value]) => [
+      EXPOSED_ENV_KEYS.filter((key) => key in env).map((key) => [
         `process.env.${key}`,
-        JSON.stringify(value),
+        JSON.stringify(env[key]),
       ]),
     );
 
