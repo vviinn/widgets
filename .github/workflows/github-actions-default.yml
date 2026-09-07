@@ -107,8 +107,10 @@ jobs:
       - run: npm run test
       - run: npm run build_interfaces
       - run: npm run build
+      # npm cannot attest a private source repository, so --provenance joins the
+      # command only once the repository is public.
       - name: Publish to NPM registry with beta tag using OIDC
-        run: npm publish --tag beta --access public --provenance
+        run: npm publish --tag beta --access public ${{ github.event.repository.visibility == 'public' && '--provenance' || '' }}
       - name: Generate SBOM
         run: npm sbom --sbom-format cyclonedx --omit dev > sbom.cyclonedx.json
       - name: Upload SBOM
