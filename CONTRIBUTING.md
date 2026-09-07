@@ -164,3 +164,8 @@ Subject line only, no body: the mechanism belongs in the pull request descriptio
 
 Conventions for components, TypeScript, CSS and the slot and CSS-part systems are documented
 in [CLAUDE.md](CLAUDE.md), which is the reference the team works from.
+
+## Code of conduct
+
+Everyone taking part in this project — issues, discussions and reviews included — is
+expected to follow our [Code of Conduct](CODE_OF_CONDUCT.md).
