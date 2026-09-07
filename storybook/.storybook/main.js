@@ -16,6 +16,14 @@ const EXPOSED_ENV_KEYS = [
   "STORYBOOK_VPS_WIDGET_TAG",
 ];
 
+// Without these the widgets render with an empty token, which shows up only as a
+// 401 in a visitor's browser — long after the build went green and deployed.
+const REQUIRED_ENV_KEYS = [
+  "STORYBOOK_TOKEN_FASHION",
+  "STORYBOOK_TOKEN_HOME_LIVING",
+  "STORYBOOK_TOKEN_MANUFACTURER_SPARE_PARTS",
+];
+
 /** @type { import('@storybook/web-components-vite').StorybookConfig } */
 const config = {
   stories: [
@@ -36,6 +44,19 @@ const config = {
     const env = loadEnv(configType, process.cwd(), ["STORYBOOK_"]);
 
     config.envPrefix = ["VITE_", "STORYBOOK_"];
+
+    // STORYBOOK_ENV is set only by the local dev script, so it cannot tell a
+    // deployed build apart; configType can.
+    if (configType === "PRODUCTION") {
+      const missing = REQUIRED_ENV_KEYS.filter((key) => !env[key]);
+
+      if (missing.length) {
+        throw new Error(
+          `Missing Storybook demo tokens: ${missing.join(", ")}. ` +
+            "Locally they come from storybook/.env.local, on deploy from Cloud Build secretEnv.",
+        );
+      }
+    }
 
     // Secrets arrive from .env.local locally and from Cloud Build secretEnv on deploy.
     const storybookEnvDefines = Object.fromEntries(
