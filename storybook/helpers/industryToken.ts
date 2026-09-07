@@ -36,8 +36,8 @@ const data = {
     textSearchQuery: "Schlitz",
     filterValue:
       "Essentra-DE-AT > Befestigungen > Stangen und Schrauben > Schrauben",
+    shopTheLookImageUrls: [],
   },
-  shopTheLookImageUrls: [],
 };
 
 const selectedIndustry = data[vviinnIndustry] || data["home-living"];
