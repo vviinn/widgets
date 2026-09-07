@@ -5,11 +5,12 @@ on:
     branches:
       - develop
       - main
-  # Analysis of the default branch establishes the baseline that pull request
-  # alerts are diffed against.
+  # Analysis of a branch establishes the baseline that its pull request alerts are
+  # diffed against, so every branch accepting pull requests needs one.
   push:
     branches:
       - develop
+      - main
 
 jobs:
   analyze:
