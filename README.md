@@ -100,7 +100,7 @@ document.body.append(widget);
 
 ## Public components
 
-The bundle registers 33 custom elements, but only the 12 below are the supported public API —
+The bundle registers 33 custom elements, but only the 13 below are the supported public API —
 the ones you place in your own markup. Everything else is an internal building block used by
 the widgets (modals, sliders, skeletons, the camera) and may change in any release without
 notice.
@@ -113,6 +113,7 @@ notice.
 | `vviinn-vpr-button` | Trigger button for the recommendations widget |
 | `vviinn-shop-the-look` | Interactive image hotspots with recommendations |
 | `vviinn-text-search` | Text search input; `mode="extended"` adds image upload |
+| `vviinn-suggestions` | AI suggestions for the current query |
 | `vviinn-results` | Product result grid |
 | `vviinn-product-card` | Single product tile |
 | `vviinn-filters` | Filter row |
@@ -124,10 +125,10 @@ notice.
 
 - **Widget** — `vviinn-vps-button` opens `vviinn-vps-widget`, which brings the whole search
   experience (results, filters, suggestions) with it. This is the fastest integration.
-- **Standalone components** — compose `vviinn-text-search`, `vviinn-results`,
-  `vviinn-filters` and the rest yourself and wire them together through their events. This
-  gives you full control over layout. Note that anything living only inside the widget —
-  suggestions, for example — is not part of this shape.
+- **Standalone components** — compose `vviinn-text-search`, `vviinn-suggestions`,
+  `vviinn-results`, `vviinn-filters` and the rest yourself and wire them together through
+  their events. This gives you full control over layout, at the cost of doing the wiring the
+  widget would otherwise do for you. Every component in the table above works in this shape.
 
 ## Documentation
 

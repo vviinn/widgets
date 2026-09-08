@@ -36,6 +36,7 @@ body:
         - vviinn-vpr-button
         - vviinn-shop-the-look
         - vviinn-text-search
+        - vviinn-suggestions
         - vviinn-results
         - vviinn-product-card
         - vviinn-filters
