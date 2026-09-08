@@ -50,7 +50,7 @@ import {
   UploadActionIcon,
   DragDropImageIcon,
 } from "../vviinn-icons";
-import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
+import { DEFAULT_EXAMPLE_IMAGE } from "../../constants/exampleImage";
 import { videoStreamSettings } from "../../video/settings";
 import { Recommendation } from "../../interfaces";
 import { checkDeviceType } from "../../helpers/device/checkDeviceType";
