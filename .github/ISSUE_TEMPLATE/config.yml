@@ -1,4 +1,7 @@
-blank_issues_enabled: false
+# A blank issue stays available: anything that is neither a bug nor a feature request
+# — a documentation error, an accessibility problem, a question about behaviour — would
+# otherwise have no path into the tracker at all.
+blank_issues_enabled: true
 contact_links:
   - name: Report a security vulnerability
     url: https://github.com/vviinn/widgets/security/advisories/new
