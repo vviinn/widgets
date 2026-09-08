@@ -162,8 +162,52 @@ Subject line only, no body: the mechanism belongs in the pull request descriptio
 
 ## Code style
 
-Conventions for components, TypeScript, CSS and the slot and CSS-part systems are documented
-in [CLAUDE.md](CLAUDE.md), which is the reference the team works from.
+Prettier and ESLint cover formatting and the mechanical rules. The conventions below are the
+ones a tool cannot check.
+
+### Components
+
+- Class-based components with Shadow DOM. `@Prop` is the public API, `@State` is internal,
+  `@Event` emits.
+- Keep the main component file about state and lifecycle. Rendering goes to
+  `render-helpers.tsx`, everything else to `helpers.ts`, alongside the component.
+- Document a `@Prop` with an inline comment above it when it appears in the Storybook
+  playground or when its behaviour is not obvious from the name.
+- The JSDoc block carrying `@part`, `@slot` and `@cssprop` must sit **immediately** above
+  `@Component`, with no declaration in between — otherwise Stencil attaches it to that
+  declaration and the parts and slots disappear from the generated docs.
+- Build class names as a map: `{ base: true, active: this.isActive }`.
+
+### TypeScript
+
+- Type props, state and events explicitly. Prefer `unknown` over `any`.
+- Arrow functions in utility and helper files, regular functions for class methods.
+- Never compare objects with `===`. Compare the fields that matter, or use a deep
+  comparison.
+- Import domain types from `src/interfaces/` — `product.ts`, `search.ts`, `discovery.ts`,
+  `interactions.ts`. Never import `generated.ts` directly; it is regenerated from the
+  OpenAPI spec and its names are not stable.
+
+### CSS
+
+- Take colours, spacing, radii and typography from the variables in `src/variables.css`.
+- The `--spacing-*` variables are for margin, padding and gap — not for width or height.
+- Prefer CSS over JavaScript for positioning and layout.
+- Avoid `!important`; reach for correct specificity instead.
+
+### Before adding anything
+
+Look for an existing type, constant or helper first: the component's own folder
+(`types.ts`, `helpers.ts`, `constants.ts`), then `src/interfaces/`, `src/geometry/`,
+`src/constants/`. The intersection-observer and device-detection utilities in particular
+already exist and are shared.
+
+### Comments
+
+Comment the intent, the constraint, the edge case — not what the line already says. Delete a
+comment together with the code it described, and describe the code as it stands rather than
+how it got there; that history belongs in the commit. One line is the default, two the
+ceiling: past that, extract a named helper or move the reasoning into the function's JSDoc.
 
 ## Code of conduct
 
