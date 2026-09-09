@@ -1,4 +1,4 @@
-import { Config, Plugin } from "@stencil/core";
+import { Config } from "@stencil/core";
 import postCss from "postcss";
 import autoprefixer from "autoprefixer";
 import dotenvPlugin from "rollup-plugin-dotenv";
@@ -7,7 +7,7 @@ import path from "path";
 
 // Stencil's built-in autoprefixCss is not an option here: it emits a different prefix set
 // than autoprefixer at any browserslist query.
-const autoprefixPlugin = (): Plugin => ({
+const autoprefixPlugin = () => ({
   name: "autoprefix-css",
   pluginType: "css",
   async transform(sourceText: string, fileName: string) {
