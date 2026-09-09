@@ -20,6 +20,7 @@
   ],
   "scripts": {
     "build": "ENV=production stencil build --docs",
+    "postbuild": "node scripts/verify-no-dev-leak.js",
     "build.watch": "stencil build --watch --docs",
     "build.docs": "stencil build --docs",
     "build_interfaces": "node ./scripts/generate-interfaces.js ./src/interfaces/generated.ts",
