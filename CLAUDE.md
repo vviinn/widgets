@@ -4,6 +4,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Where new rules go**: this file, not auto-memory. When the user corrects how you work or states a convention, write it here so it is versioned and visible to the whole team — never into the private memory directory.
 
+## Working Agreement
+
+- **One branch per ticket.** The branch name carries the ticket number, and commits on it use that number. Work spanning several tickets in one branch needs a stated reason.
+- **Land each finished piece before starting the next**, so the working tree holds one ticket at a time.
+- **Show the diff and name the ticket before moving on.** Group the change by intent — tooling, autofix, hand-fixed findings — and say which files fall in each group. A long unbroken run of edits across many files is unreviewable, however sound each edit is.
+
 ## Common Development Commands
 
 ```bash
@@ -18,6 +24,8 @@ npm run release.ci        # CI release
 ```
 
 **E2E is not maintained** — `npm run test.e2e` / `npm run test.watchE2E` do not currently run. Don't use them to validate changes; rely on unit tests plus a manual check in the dev server.
+
+**Clearing `dist/`**: remove `.stencil` alongside it. `rm -rf dist` on its own leaves the build cache, the next build emits a partial `dist/`, and the Storybook build then fails on it with `Could not resolve "../../dist/loader"` — which reads like a code fault rather than a stale cache.
 
 **OpenAPI sync**: Local spec at `openapi/merchant-openapi.yaml` must be kept in sync with upstream. Run `npm run update.openapi` to fetch latest (requires `gh` CLI auth). CI uses the committed local file.
 
@@ -107,6 +115,11 @@ See `/browser-test` command. Shadow DOM requires JS access via `element.shadowRo
 - `OPENAPI_URL` in `.env` — points to local OpenAPI spec for interface generation
 - `ENV=local` — HTTPS dev server
 - `ENV=production` — optimized builds
+
+**Local secrets** — supplied per developer, never in tracked files:
+
+- `storybook/.env.local` — Storybook demo tokens (`STORYBOOK_TOKEN_*`). Copy `storybook/.env.local.example` and fill it in. Cloud Build injects the same names from Secret Manager.
+- `dev/dev-config.js` — token and product id for the `npm start` dev harness (`dev/dev-harness.js`). Copy `dev/dev-config.example.js`. Both live outside `src/` so Stencil's collection build never copies them into `dist/` — the trade-off is that watch mode does not see them, so editing the config needs a dev-server restart.
 
 ## MCP Integration
 

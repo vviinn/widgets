@@ -21,6 +21,13 @@ export default tseslint.config(
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
+    // Plain browser scripts, not ES modules — the npm start dev harness.
+    files: ["dev/*.js"],
+    languageOptions: {
+      globals: globals.browser,
+    },
+  },
+  {
     files: ["src/**/*.{ts,tsx}"],
     extends: [stencil.configs.flat.recommended],
     languageOptions: {

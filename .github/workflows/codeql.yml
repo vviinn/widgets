@@ -1,0 +1,40 @@
+name: CodeQL
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+  # Analysis of a branch establishes the baseline that its pull request alerts are
+  # diffed against, so every branch accepting pull requests needs one.
+  push:
+    branches:
+      - develop
+      - main
+
+jobs:
+  analyze:
+    name: Analyze JavaScript/TypeScript
+    runs-on: ubuntu-latest
+    # FIXME: remove this guard, and add a weekly schedule, once the repository
+    # is public. Code scanning on a private repository needs GitHub Advanced
+    # Security; without it the job ends in "Resource not accessible by
+    # integration". Skipping by condition reports success, so a required check
+    # keeps passing until the day the repository flips over.
+    if: github.event.repository.visibility == 'public'
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+          queries: security-and-quality
+
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:javascript-typescript"

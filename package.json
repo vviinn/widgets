@@ -2,6 +2,10 @@
   "name": "vviinn-widgets",
   "version": "2.224.7",
   "description": "vviinn web components",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vviinn/widgets.git"
+  },
   "main": "./dist/index.cjs.js",
   "module": "./dist/index.js",
   "es2015": "dist/esm/index.mjs",
@@ -12,11 +16,11 @@
   "unpkg": "dist/vviinn-widgets/vviinn-vpr.js",
   "files": [
     "dist/",
-    "www/"
+    "www/build/"
   ],
   "scripts": {
     "build": "ENV=production stencil build --docs",
-    "postbuild": "cp .npmrc ./dist",
+    "postbuild": "node scripts/verify-no-dev-leak.js",
     "build.watch": "stencil build --watch --docs",
     "build.docs": "stencil build --docs",
     "build_interfaces": "node ./scripts/generate-interfaces.js ./src/interfaces/generated.ts",

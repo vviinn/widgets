@@ -1,6 +1,29 @@
 import { resolve } from "path";
 import { loadEnv } from "vite";
 
+// Each key here is inlined into the publicly served bundle, so a variable reaches
+// the browser only by being listed — a build-side credential named STORYBOOK_*
+// stays out of it.
+const EXPOSED_ENV_KEYS = [
+  "STORYBOOK_API_PATH",
+  "STORYBOOK_CDN_PATH",
+  "STORYBOOK_ENV",
+  "STORYBOOK_NPM_PACKAGE_NAME",
+  "STORYBOOK_TOKEN_FASHION",
+  "STORYBOOK_TOKEN_HOME_LIVING",
+  "STORYBOOK_TOKEN_MANUFACTURER_SPARE_PARTS",
+  "STORYBOOK_VPR_WIDGET_TAG",
+  "STORYBOOK_VPS_WIDGET_TAG",
+];
+
+// Without these the widgets render with an empty token, which shows up only as a
+// 401 in a visitor's browser — long after the build went green and deployed.
+const REQUIRED_ENV_KEYS = [
+  "STORYBOOK_TOKEN_FASHION",
+  "STORYBOOK_TOKEN_HOME_LIVING",
+  "STORYBOOK_TOKEN_MANUFACTURER_SPARE_PARTS",
+];
+
 /** @type { import('@storybook/web-components-vite').StorybookConfig } */
 const config = {
   stories: [
@@ -20,11 +43,41 @@ const config = {
   viteFinal: async (config, { configType }) => {
     const env = loadEnv(configType, process.cwd(), ["STORYBOOK_"]);
 
-    config.envPrefix = ["VITE_", "STORYBOOK_"];
+    // Vite serialises every prefixed variable into import.meta.env in the output, which
+    // would bypass the allowlist above. STORYBOOK_ENV reaches the client through define.
+    config.envPrefix = ["VITE_"];
+
+    // STORYBOOK_ENV is set only by the local dev script, so it cannot tell a
+    // deployed build apart; configType can.
+    if (configType === "PRODUCTION") {
+      const missing = REQUIRED_ENV_KEYS.filter((key) => !env[key]);
+
+      if (missing.length) {
+        throw new Error(
+          `Missing Storybook demo tokens: ${missing.join(", ")}. ` +
+            "Locally they come from storybook/.env.local, on deploy from Cloud Build secretEnv.",
+        );
+      }
+    }
+
+    // Secrets arrive from .env.local locally and from Cloud Build secretEnv on deploy.
+    const exposedEnv = Object.fromEntries(
+      EXPOSED_ENV_KEYS.filter((key) => key in env).map((key) => [
+        key,
+        env[key],
+      ]),
+    );
+
+    const storybookEnvDefines = Object.fromEntries(
+      Object.entries(exposedEnv).map(([key, value]) => [
+        `process.env.${key}`,
+        JSON.stringify(value),
+      ]),
+    );
 
     config.define = {
       ...config.define,
-      "process.env.STORYBOOK_API_PATH": JSON.stringify(env.STORYBOOK_API_PATH),
+      ...storybookEnvDefines,
       "import.meta.env.STORYBOOK_ENV": JSON.stringify(
         env.STORYBOOK_ENV || process.env.STORYBOOK_ENV || "local",
       ),
@@ -42,9 +95,10 @@ const config = {
           const path = require("path");
 
           if (fs.existsSync(id)) {
-            // Use our custom loader for .mdx files
+            // Use our custom loader for .mdx files. It substitutes only what is passed
+            // in, so the allowlist above governs the documentation output too.
             const loader = require(resolve("./stories.loader.ts"));
-            return loader.default(fs.readFileSync(id, "utf-8"));
+            return loader.default(fs.readFileSync(id, "utf-8"), exposedEnv);
           }
         }
       },

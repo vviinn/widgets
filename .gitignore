@@ -3,6 +3,7 @@
 .env.local
 .env.*.local
 CLAUDE.local.md
+dev/dev-config.js
 dist/
 www/
 coverage/
@@ -25,6 +26,7 @@ storybook/storybook-static
 !storybook/.env
 debug-storybook.log
 storybook/output.log
+storybook/build-storybook.log
 
 # AI-tools specific files and folders
 .cursor/
@@ -32,3 +34,6 @@ storybook/output.log
 .mcp.json
 # Claude Code local settings (personal, not shared)
 .claude/settings.local.json
+
+# SBOM produced by `npm sbom` in CI
+sbom.cyclonedx.json
