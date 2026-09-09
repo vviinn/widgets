@@ -24,7 +24,7 @@ import {
   SelectObjectEventData,
 } from "../../recommendation/events";
 import { Locale } from "../../locale";
-import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
+import { DEFAULT_EXAMPLE_IMAGE } from "../../constants/exampleImage";
 import {
   OneClickDiscoveryAppendMode,
   VisualSearchMode,
