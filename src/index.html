@@ -52,32 +52,8 @@
     }
   </style>
   <body>
-    <vviinn-vpr-widget product-id="590013-6"></vviinn-vpr-widget>
-    <script>
-      // Dev token lives in localStorage — set it once in the browser console:
-      // localStorage.setItem("vviinn-dev-token", "YOUR_TOKEN")
-      const TOKEN_WIDGETS = [
-        "vviinn-cropper",
-        "vviinn-results",
-        "vviinn-shop-the-look",
-        "vviinn-suggestions",
-        "vviinn-text-search",
-        "vviinn-vpr-button",
-        "vviinn-vpr-widget",
-        "vviinn-vps-button",
-        "vviinn-vps-widget",
-      ];
-
-      const devToken = localStorage.getItem("vviinn-dev-token");
-      const widgets = document.querySelectorAll(TOKEN_WIDGETS.join(","));
-
-      if (devToken) {
-        widgets.forEach((widget) => widget.setAttribute("token", devToken));
-      } else if (widgets.length) {
-        console.warn(
-          'No dev token set. Run localStorage.setItem("vviinn-dev-token", "YOUR_TOKEN") and reload.',
-        );
-      }
-    </script>
+    <vviinn-vpr-widget></vviinn-vpr-widget>
+    <script src="/dev-config.js"></script>
+    <script src="/dev-harness.js"></script>
   </body>
 </html>

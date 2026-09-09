@@ -39,6 +39,9 @@ export const config: Config = {
       type: "www",
       serviceWorker: null, // disable service workers,
       copy: [
+        // Dev harness lives outside srcDir so it never reaches dist/collection.
+        { src: "../dev/dev-config.js", dest: "dev-config.js", warn: false },
+        { src: "../dev/dev-harness.js", dest: "dev-harness.js" },
         { src: "favicon.ico" },
         { src: "favicon.svg" },
         { src: "apple-touch-icon.png" },

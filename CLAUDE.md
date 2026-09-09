@@ -119,7 +119,7 @@ See `/browser-test` command. Shadow DOM requires JS access via `element.shadowRo
 **Local secrets** — supplied per developer, never in tracked files:
 
 - `storybook/.env.local` — Storybook demo tokens (`STORYBOOK_TOKEN_*`). Copy `storybook/.env.local.example` and fill it in. Cloud Build injects the same names from Secret Manager.
-- `vviinn-dev-token` in `localStorage` — token for the `npm start` dev harness (`src/index.html`).
+- `dev/dev-config.js` — token and product id for the `npm start` dev harness (`dev/dev-harness.js`). Copy `dev/dev-config.example.js`. Both live outside `src/` so Stencil's collection build never copies them into `dist/` — the trade-off is that watch mode does not see them, so editing the config needs a dev-server restart.
 
 ## MCP Integration
 
