@@ -1,17 +1,23 @@
 version: 2
 
 updates:
-  # Runtime dependencies are inlined into www/build, so a CVE in one ships inside
-  # our artifact and only our release can fix it — consumers cannot patch it
-  # themselves. That makes advisories worth a pull request and routine version
-  # bumps not: every merge to develop cuts a beta release.
-  #
-  # open-pull-requests-limit: 0 is the documented way to keep the second without
-  # the first — security updates ignore this limit and still open pull requests.
-  # `ignore` is deliberately absent: it applies to security updates too, so
-  # ignoring majors there would swallow a major-version security fix.
+  # Limit 0 drops routine version bumps; security updates ignore the limit and
+  # still open pull requests. No `ignore` here — it suppresses those too.
   - package-ecosystem: npm
     directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 0
+    groups:
+      security-updates:
+        applies-to: security-updates
+        patterns:
+          - "*"
+
+  # Listed only to make security updates explicit — the docs leave it unstated
+  # whether an existing config narrows them to the directories it names.
+  - package-ecosystem: npm
+    directory: /storybook
     schedule:
       interval: monthly
     open-pull-requests-limit: 0
