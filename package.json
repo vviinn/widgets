@@ -2,6 +2,7 @@
   "name": "vviinn-widgets",
   "version": "2.224.8",
   "description": "vviinn web components",
+  "author": "Mediaopt",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vviinn/widgets.git"
