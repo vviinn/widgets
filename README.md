@@ -24,6 +24,7 @@ Vue and Nuxt, and inside a mobile `WebView`.
 - [Security](#security)
 - [Support](#support)
 - [License](#license)
+- [Trademark](#trademark)
 
 ## Prerequisites
 
@@ -156,3 +157,12 @@ For questions about your account, product feed or integration, contact
 ## License
 
 [MIT](LICENSE)
+
+## Trademark
+
+The license covers the source code. It does not grant any right to use the "vviinn" name or
+the vviinn logo.
+
+You may state that your project uses these widgets. You may not use the name or the logo as
+the name of your own project, as its logo, or in any way that suggests your project is
+published or endorsed by us. A fork has to carry a different name.
