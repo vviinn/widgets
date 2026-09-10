@@ -97,8 +97,18 @@ npm start        # dev server with HTTPS and hot reload
 npm run build    # production build
 ```
 
-The dev harness at `src/index.html` reads a token from `localStorage` under the key
-`vviinn-dev-token`; set it in the browser console.
+The dev harness takes its token and product id from `dev/dev-config.js`, which is gitignored.
+Copy the example and fill both in:
+
+```bash
+cp dev/dev-config.example.js dev/dev-config.js
+```
+
+`token` is needed by every embeddable widget; `productId` is needed on top of it by
+`vviinn-vpr-button` and `vviinn-vpr-widget`. The harness sets each attribute only where the
+markup does not already carry one, so hardcoding a value in `src/index.html` is how you test
+a second tenant. The file is copied at build start rather than watched, so editing it needs a
+dev-server restart.
 
 ## Storybook
 
