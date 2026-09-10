@@ -15,3 +15,4 @@
 - [ ] `npm test` passes
 - [ ] `npm run lint` passes
 - [ ] Commit messages follow the conventions in CONTRIBUTING.md
+- [ ] Commits are signed off — `git commit -s`
