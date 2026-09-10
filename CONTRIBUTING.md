@@ -2,16 +2,26 @@
 
 Thank you for looking at the source. Please read this before opening anything.
 
-## Pull requests are not accepted
+## Pull requests
 
-**We do not accept pull requests from outside the team.** The widgets are the client-side
-surface of a hosted service: changes have to be validated against the Vviinn API, real
-merchant product feeds and the internal QA setup, none of which are available outside the
-company. We cannot review or merge code we are unable to verify, so an outside pull request
-would sit open indefinitely — which is worse than not opening it.
+Pull requests from outside the team are welcome. For anything larger than a small fix, open
+an issue first and let us agree on the approach — that is cheaper for you than writing code
+we then ask you to change.
 
-The repository is published so that integrators can read the source, understand the
-behaviour they are embedding, and file precise reports. That part we very much want.
+Everything you need is in the repository. `npm test`, `npm run lint`,
+`npm run build_interfaces` and `npm run build` all run without credentials: the OpenAPI spec
+is committed and `.env.dev` is a working environment. Only live API responses need a token,
+and that token is your own — [register an
+account](https://widgets.vviinn.com/?path=/docs/getting-started-register--docs) and point the
+dev harness at your own catalogue. See [Development setup](#development-setup) below.
+
+Two things stay on our side. A reviewer listed in CODEOWNERS checks every change against real
+merchant data before it merges, because a widget that passes its unit tests can still break
+on a catalogue you have no way to see. And Storybook runs on our demo merchant tokens, which
+are not committed: without `storybook/.env.local` every story that calls the API renders
+empty, and the product ids and facet values inside the stories are pinned to those demo
+catalogues in any case. Verify your change with the unit tests and the dev server on your own
+catalogue, and say in the pull request what you could not check — the reviewer runs Storybook.
 
 ## Reporting a bug
 
@@ -33,8 +43,6 @@ Integration or account questions — product feed, panel configuration, billing 
 Do not open a public issue. See [SECURITY.md](SECURITY.md).
 
 ## Development setup
-
-This section is for maintainers; it is here so the setup is documented in one place.
 
 ### Requirements
 

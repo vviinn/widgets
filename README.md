@@ -140,10 +140,10 @@ notice.
 
 ## Contributing
 
-Bug reports and feature requests are welcome — please
-[open an issue](https://github.com/vviinn/widgets/issues). **External pull requests are not
-accepted**; see [CONTRIBUTING.md](CONTRIBUTING.md) for the reasoning and for the development
-setup used by the maintainers.
+Bug reports, feature requests and pull requests are all welcome — start by
+[opening an issue](https://github.com/vviinn/widgets/issues). See
+[CONTRIBUTING.md](CONTRIBUTING.md) for the development setup and what we look for in a pull
+request.
 
 ## Security
 

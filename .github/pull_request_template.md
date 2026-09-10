@@ -1,8 +1,3 @@
-<!--
-Pull requests from outside the team are not accepted — see CONTRIBUTING.md.
-Please open an issue instead; we read all of them.
--->
-
 ## Issue
 
 <!-- Issue number this branch belongs to. One branch per issue. -->

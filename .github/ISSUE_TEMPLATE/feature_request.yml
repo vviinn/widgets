@@ -5,9 +5,9 @@ body:
   - type: markdown
     attributes:
       value: |
-        We read every request. Note that we do not accept pull requests from outside the
-        team — see CONTRIBUTING.md for why — so please describe the need rather than
-        implementing it.
+        We read every request. Describe the need first — and if you would like to
+        implement it yourself, say so here so we can agree on the approach before you
+        write any code.
 
   - type: textarea
     id: problem
