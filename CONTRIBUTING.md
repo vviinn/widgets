@@ -40,6 +40,9 @@ This section is for maintainers; it is here so the setup is documented in one pl
 
 - Node.js `>=22.22.1 <23.0.0` — enforced by `engines` in `package.json`
 - npm
+- A POSIX-compatible shell. `build` and `start` prefix an inline `ENV=` assignment and
+  `update.openapi` pipes through `base64 -d`, none of which `cmd.exe` can run. On Windows,
+  work under WSL or Git Bash.
 
 ### Install
 
