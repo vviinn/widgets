@@ -30,7 +30,7 @@ export const productDataByIndustryAndType = {
       image:
         "https://cdn.vviinn.com/image/0/fit/400/0/ce/0/Z3M6Ly92dmlpbm4tY2F0YWxvZy1pbWFnZXMtcHJvZHVjdGlvbi93d3cuZmFzaGlvbmh5cGUuY29tL1E2aXBNTXVrQjVnLUwzVndiRzloWkhNdmRIaGZZVzF3Y205a2RXTjBabVZsWkhNdmNISnZaSFZyZEdKcGJHUmxjaTgwTVRNNU1qQTBMbXB3WncuanBn",
       "energy-certifications-string":
-        '[{"certificationClass":"A++","classIconUrls":{"left":"https://cdn.vviinn.com/assets/certification/energy/A+++toD/left/A++.svg","right":"https://cdn.vviinn.com/assets/certification/energy/A+++toD/right/A++.svg"},"classRange":{"min":"A++","max":"D"},"classLabelUrl":"https://energy-efficient-products.ec.europa.eu/sites/default/files/styles/embed_medium_2x/public/2024-04/sample-energy-label-with-numbers-new.png?itok=x7puJdbG","classDataSheetUrl":"https://www.roller.de/medias/sys_master/datasheets/datasheets/h7a/hc5/11687118700574/1328023300-P01.pdf","productType":"Tischleuchte"}]',
+        '[{"certificationClass":"A++","classIconUrls":{"left":"https://cdn.vviinn.com/assets/certification/energy/A+++toD/left/A++.svg","right":"https://cdn.vviinn.com/assets/certification/energy/A+++toD/right/A++.svg"},"classRange":{"min":"A++","max":"D"},"classLabelUrl":"https://energy-efficient-products.ec.europa.eu/sites/default/files/styles/embed_medium_2x/public/2024-04/sample-energy-label-with-numbers-new.png?itok=x7puJdbG","classDataSheetUrl":"https://example.com/datasheet.pdf","productType":"Tischleuchte"}]',
     },
     setCard: {
       id: "4340498-1",
@@ -74,7 +74,7 @@ export const productDataByIndustryAndType = {
       image:
         "https://cdn.vviinn.com/image/0/fit/400/0/ce/0/Z3M6Ly92dmlpbm4tY2F0YWxvZy1pbWFnZXMtcHJvZHVjdGlvbi9tZWRpYS5vc3Rlcm1hbm4uZGUvcGhob3huVER5ZnMtTDJKcGJHUXhMekE1TlRVd09UZ3VhbkJuLmpwZw==",
       "energy-certifications-string":
-        '[{"certificationClass":"A","classIconUrls":{"left":"https://cdn.vviinn.com/assets/certification/energy/AtoG/left/A.svg","right":"https://cdn.vviinn.com/assets/certification/energy/AtoG/right/A.svg"},"classRange":{"min":"A","max":"G"},"classLabelUrl":"https://energy-efficient-products.ec.europa.eu/sites/default/files/styles/embed_medium_2x/public/2024-04/sample-energy-label-with-numbers-new.png?itok=x7puJdbG","classDataSheetUrl":"https://www.roller.de/medias/sys_master/datasheets/datasheets/h7a/hc5/11687118700574/1328023300-P01.pdf","productType":"Tischleuchte"}]',
+        '[{"certificationClass":"A","classIconUrls":{"left":"https://cdn.vviinn.com/assets/certification/energy/AtoG/left/A.svg","right":"https://cdn.vviinn.com/assets/certification/energy/AtoG/right/A.svg"},"classRange":{"min":"A","max":"G"},"classLabelUrl":"https://energy-efficient-products.ec.europa.eu/sites/default/files/styles/embed_medium_2x/public/2024-04/sample-energy-label-with-numbers-new.png?itok=x7puJdbG","classDataSheetUrl":"https://example.com/datasheet.pdf","productType":"Tischleuchte"}]',
     },
     setCard: {
       id: "309717",
