@@ -64,14 +64,13 @@ export const Default = Template.bind({});
 Default.storyName = "Product Card";
 
 const initArgs = {
-  productTitle: "Couchtisch Rolf Benz 8770 Ronald Schmitt",
+  productTitle: "Couchtisch Loft (BH 120x45 cm)",
   productType: "Couchtische",
-  brand: "Ronald Schmitt",
+  brand: "Living",
   locale: "en-US",
   numberLocale: "",
   currencySign: "€",
-  deeplink:
-    "https://www.moebel-shop.de/rolf-benz-8770-couchtisch-ronald-schmitt",
+  deeplink: "https://example.com/couchtisch-loft",
   image:
     "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg",
   images: [
