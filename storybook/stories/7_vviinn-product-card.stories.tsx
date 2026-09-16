@@ -64,23 +64,23 @@ export const Default = Template.bind({});
 Default.storyName = "Product Card";
 
 const initArgs = {
-  productTitle: "Couchtisch Loft (BH 120x45 cm)",
-  productType: "Couchtische",
+  productTitle: "Sessel Loft (BH 80x95 cm)",
+  productType: "Sessel",
   brand: "Living",
   locale: "en-US",
   numberLocale: "",
   currencySign: "€",
-  deeplink: "https://example.com/couchtisch-loft",
+  deeplink: "https://example.com/sessel-loft",
   image:
-    "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg",
+    "https://cdn.vviinn.com/assets/merchant/default/product-card/home-03-armchair.jpg",
   images: [
     {
       original:
-        "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg",
+        "https://cdn.vviinn.com/assets/merchant/default/product-card/home-03-armchair.jpg",
     },
     {
       original:
-        "https://www.moebel-shop.de/media/image/9d/cb/e7/0749295-002_600x600.jpg",
+        "https://cdn.vviinn.com/assets/merchant/default/product-card/home-05-dining-chair.jpg",
     },
   ],
   showMultipleImages: false,
