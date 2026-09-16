@@ -22,10 +22,12 @@ const commonParams = {
   "image-resolution-width": "500",
 };
 
+// The main and append cards carry a discovery button, which requests recommendations for their
+// id — those two have to exist in the merchant catalogue, the other ids are display only.
 export const productDataByIndustryAndType = {
   fashion: {
     mainCard: {
-      id: "1001",
+      id: "4130004-1",
       "product-title": "Magic Energy 100 ml Damen",
       brand: "Charlotte Tilbury ",
       "product-type": "Eau de Parfum",
@@ -36,7 +38,7 @@ export const productDataByIndustryAndType = {
       image: productImages.fashionPerfume,
     },
     appendCard: {
-      id: "1002",
+      id: "4139204-1",
       "product-title": "CREOLE FÜR ANHÄNGER ROSÉGOLD orange Damen",
       brand: "DoDo",
       price: "70.0",
@@ -64,7 +66,7 @@ export const productDataByIndustryAndType = {
   },
   "home-living": {
     mainCard: {
-      id: "2001",
+      id: "632083",
       "product-title": "Windlicht-Set",
       brand: "MARILU",
       "product-type": "Accessoires > Gedeckter Tisch > Kerzen & Leuchter",
@@ -75,7 +77,7 @@ export const productDataByIndustryAndType = {
       image: productImages.homeLanternSet,
     },
     appendCard: {
-      id: "2002",
+      id: "955098",
       "product-title": "Hängeleuchte GAETANO 1 (DH 38x150 cm)",
       brand: "EGLO",
       price: "99.0",
