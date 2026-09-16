@@ -4,15 +4,19 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "lib": ["dom", "es2017", "es2019"],
+    "jsx": "react-jsx",
+    "allowJs": true,
     "allowSyntheticDefaultImports": true,
+    "allowUnreachableCode": false,
     "esModuleInterop": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "resolveJsonModule": true,
-    "skipLibCheck": true,
     "strict": false,
     "noEmit": true,
     "types": ["node"]
   },
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx", "**/*.jsx"],
   "exclude": ["node_modules", "storybook-static"],
   "ts-node": {
     "compilerOptions": {
