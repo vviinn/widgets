@@ -1,3 +1,18 @@
+const productImageBase =
+  "https://cdn.vviinn.com/assets/merchant/default/product-card/";
+
+export const productImages = {
+  perfume: `${productImageBase}fashion-01-perfume.jpg`,
+  earring: `${productImageBase}fashion-02-earring.jpg`,
+  cargoPants: `${productImageBase}fashion-03-cargo-pants.jpg`,
+  socks: `${productImageBase}fashion-04-socks.jpg`,
+  lanternSet: `${productImageBase}home-01-lantern-set.jpg`,
+  pendantLamp: `${productImageBase}home-02-pendant-lamp.jpg`,
+  armchair: `${productImageBase}home-03-armchair.jpg`,
+  sideboard: `${productImageBase}home-04-sideboard.jpg`,
+  diningChair: `${productImageBase}home-05-dining-chair.jpg`,
+};
+
 const commonParams = {
   locale: "en-US",
   deeplink: "#",
@@ -18,8 +33,7 @@ export const productDataByIndustryAndType = {
       "base-price": '{"price":1500.00,"quantity":1,"measure":"l"}',
       "sale-price": "149.99",
       "base-sale-price": '{"price":1499.00,"quantity":1,"measure":"l"}',
-      image:
-        "https://cdn.vviinn.com/assets/merchant/default/product-card/fashion-01-perfume.jpg",
+      image: productImages.perfume,
     },
     appendCard: {
       id: "4139204-1",
@@ -27,8 +41,7 @@ export const productDataByIndustryAndType = {
       brand: "DoDo",
       price: "70.0",
       "sale-price": "59.99",
-      image:
-        "https://cdn.vviinn.com/assets/merchant/default/product-card/fashion-02-earring.jpg",
+      image: productImages.earring,
       "energy-certifications-string":
         '[{"certificationClass":"A++","classIconUrls":{"left":"https://cdn.vviinn.com/assets/certification/energy/A+++toD/left/A++.svg","right":"https://cdn.vviinn.com/assets/certification/energy/A+++toD/right/A++.svg"},"classRange":{"min":"A++","max":"D"},"classLabelUrl":"https://energy-efficient-products.ec.europa.eu/sites/default/files/styles/embed_medium_2x/public/2024-04/sample-energy-label-with-numbers-new.png?itok=x7puJdbG","classDataSheetUrl":"https://example.com/datasheet.pdf","productType":"Tischleuchte"}]',
     },
@@ -37,8 +50,7 @@ export const productDataByIndustryAndType = {
       "product-title": "Cargo-Pants Beige Damen",
       brand: "Roberto Collina",
       price: "129.99",
-      image:
-        "https://cdn.vviinn.com/assets/merchant/default/product-card/fashion-03-cargo-pants.jpg",
+      image: productImages.cargoPants,
     },
     minimalisticCard: {
       id: "4335120-1",
@@ -47,8 +59,7 @@ export const productDataByIndustryAndType = {
       "product-type": "Socken",
       price: "29.9",
       "sale-price": "25",
-      image:
-        "https://cdn.vviinn.com/assets/merchant/default/product-card/fashion-04-socks.jpg",
+      image: productImages.socks,
     },
   },
   "home-living": {
@@ -61,8 +72,7 @@ export const productDataByIndustryAndType = {
       "base-price": '{"price":2.23,"quantity":1,"measure":"Stk"}',
       "sale-price": "8",
       "base-sale-price": '{"price":2,"quantity":1,"measure":"Stk"}',
-      image:
-        "https://cdn.vviinn.com/assets/merchant/default/product-card/home-01-lantern-set.jpg",
+      image: productImages.lanternSet,
     },
     appendCard: {
       id: "955098",
@@ -71,8 +81,7 @@ export const productDataByIndustryAndType = {
       price: "99.0",
       "sale-price": "89.99",
       "add-to-basket-show": "true",
-      image:
-        "https://cdn.vviinn.com/assets/merchant/default/product-card/home-02-pendant-lamp.jpg",
+      image: productImages.pendantLamp,
       "energy-certifications-string":
         '[{"certificationClass":"A","classIconUrls":{"left":"https://cdn.vviinn.com/assets/certification/energy/AtoG/left/A.svg","right":"https://cdn.vviinn.com/assets/certification/energy/AtoG/right/A.svg"},"classRange":{"min":"A","max":"G"},"classLabelUrl":"https://energy-efficient-products.ec.europa.eu/sites/default/files/styles/embed_medium_2x/public/2024-04/sample-energy-label-with-numbers-new.png?itok=x7puJdbG","classDataSheetUrl":"https://example.com/datasheet.pdf","productType":"Tischleuchte"}]',
     },
@@ -81,8 +90,7 @@ export const productDataByIndustryAndType = {
       "product-title": "Sessel Buddy",
       brand: "VITO",
       price: "149.0",
-      image:
-        "https://cdn.vviinn.com/assets/merchant/default/product-card/home-03-armchair.jpg",
+      image: productImages.armchair,
     },
     minimalisticCard: {
       id: "585101",
@@ -91,8 +99,7 @@ export const productDataByIndustryAndType = {
       "product-type": "Möbel > Schränke & Regale > Sideboards",
       price: "599.0",
       "sale-price": "550.0",
-      image:
-        "https://cdn.vviinn.com/assets/merchant/default/product-card/home-04-sideboard.jpg",
+      image: productImages.sideboard,
     },
   },
 };
@@ -160,8 +167,7 @@ export const cardDataByType = {
       "product-title": "Polsterstuhl bert plantagie DUO",
       price: "539",
       "sale-price": "440",
-      image:
-        "https://cdn.vviinn.com/assets/merchant/default/product-card/home-05-dining-chair.jpg",
+      image: productImages.diningChair,
       "is-standalone": "true",
       "custom-labels": "UVP, SALE",
       ...commonParams,

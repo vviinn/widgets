@@ -1,5 +1,6 @@
 import { argTypes } from "../../src/components/vviinn-product-card/stories/args";
 import { productDecorator } from "../../src/components/vviinn-product-card/stories/decorators";
+import { productImages } from "../components/productCard/constants";
 import { energyCertificationsString } from "../documentation/components/constants";
 import "../documentation/widgets/styles.css";
 import { argsFromParams } from "../helpers/argsFromParams";
@@ -71,16 +72,13 @@ const initArgs = {
   numberLocale: "",
   currencySign: "€",
   deeplink: "https://example.com/sessel-loft",
-  image:
-    "https://cdn.vviinn.com/assets/merchant/default/product-card/home-03-armchair.jpg",
+  image: productImages.armchair,
   images: [
     {
-      original:
-        "https://cdn.vviinn.com/assets/merchant/default/product-card/home-03-armchair.jpg",
+      original: productImages.armchair,
     },
     {
-      original:
-        "https://cdn.vviinn.com/assets/merchant/default/product-card/home-05-dining-chair.jpg",
+      original: productImages.diningChair,
     },
   ],
   showMultipleImages: false,
