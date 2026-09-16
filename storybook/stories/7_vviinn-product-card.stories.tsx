@@ -72,13 +72,13 @@ const initArgs = {
   numberLocale: "",
   currencySign: "€",
   deeplink: "https://example.com/sessel-loft",
-  image: productImages.armchair,
+  image: productImages.homeArmchair,
   images: [
     {
-      original: productImages.armchair,
+      original: productImages.homeArmchair,
     },
     {
-      original: productImages.diningChair,
+      original: productImages.homeDiningChair,
     },
   ],
   showMultipleImages: false,
