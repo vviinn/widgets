@@ -25,7 +25,7 @@ const commonParams = {
 export const productDataByIndustryAndType = {
   fashion: {
     mainCard: {
-      id: "4130004-1",
+      id: "1001",
       "product-title": "Magic Energy 100 ml Damen",
       brand: "Charlotte Tilbury ",
       "product-type": "Eau de Parfum",
@@ -36,7 +36,7 @@ export const productDataByIndustryAndType = {
       image: productImages.perfume,
     },
     appendCard: {
-      id: "4139204-1",
+      id: "1002",
       "product-title": "CREOLE FÜR ANHÄNGER ROSÉGOLD orange Damen",
       brand: "DoDo",
       price: "70.0",
@@ -46,14 +46,14 @@ export const productDataByIndustryAndType = {
         '[{"certificationClass":"A++","classIconUrls":{"left":"https://cdn.vviinn.com/assets/certification/energy/A+++toD/left/A++.svg","right":"https://cdn.vviinn.com/assets/certification/energy/A+++toD/right/A++.svg"},"classRange":{"min":"A++","max":"D"},"classLabelUrl":"https://energy-efficient-products.ec.europa.eu/sites/default/files/styles/embed_medium_2x/public/2024-04/sample-energy-label-with-numbers-new.png?itok=x7puJdbG","classDataSheetUrl":"https://example.com/datasheet.pdf","productType":"Tischleuchte"}]',
     },
     setCard: {
-      id: "4340498-1",
+      id: "1003",
       "product-title": "Cargo-Pants Beige Damen",
       brand: "Roberto Collina",
       price: "129.99",
       image: productImages.cargoPants,
     },
     minimalisticCard: {
-      id: "4335120-1",
+      id: "1004",
       "product-title": "Zweier-Pack kurze Socken aus Baumwoll-Mix Damen",
       brand: "HUGO BOSS",
       "product-type": "Socken",
@@ -64,7 +64,7 @@ export const productDataByIndustryAndType = {
   },
   "home-living": {
     mainCard: {
-      id: "632083",
+      id: "2001",
       "product-title": "Windlicht-Set",
       brand: "MARILU",
       "product-type": "Accessoires > Gedeckter Tisch > Kerzen & Leuchter",
@@ -75,7 +75,7 @@ export const productDataByIndustryAndType = {
       image: productImages.lanternSet,
     },
     appendCard: {
-      id: "955098",
+      id: "2002",
       "product-title": "Hängeleuchte GAETANO 1 (DH 38x150 cm)",
       brand: "EGLO",
       price: "99.0",
@@ -86,14 +86,14 @@ export const productDataByIndustryAndType = {
         '[{"certificationClass":"A","classIconUrls":{"left":"https://cdn.vviinn.com/assets/certification/energy/AtoG/left/A.svg","right":"https://cdn.vviinn.com/assets/certification/energy/AtoG/right/A.svg"},"classRange":{"min":"A","max":"G"},"classLabelUrl":"https://energy-efficient-products.ec.europa.eu/sites/default/files/styles/embed_medium_2x/public/2024-04/sample-energy-label-with-numbers-new.png?itok=x7puJdbG","classDataSheetUrl":"https://example.com/datasheet.pdf","productType":"Tischleuchte"}]',
     },
     setCard: {
-      id: "309717",
+      id: "2003",
       "product-title": "Sessel Buddy",
       brand: "VITO",
       price: "149.0",
       image: productImages.armchair,
     },
     minimalisticCard: {
-      id: "585101",
+      id: "2004",
       "product-title": "Sideboard",
       brand: "ELTON",
       "product-type": "Möbel > Schränke & Regale > Sideboards",
@@ -163,7 +163,7 @@ export const cardDataByType = {
     uniqueId: "customized-label",
     header: "Product Card: Styling Custom Labels and Changing Order",
     productData: {
-      id: "100001",
+      id: "3001",
       "product-title": "Polsterstuhl bert plantagie DUO",
       price: "539",
       "sale-price": "440",
