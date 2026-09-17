@@ -1,4 +1,4 @@
-# Vviinn Widgets
+# vviinn Widgets
 
 [![npm](https://img.shields.io/npm/v/vviinn-widgets)](https://www.npmjs.com/package/vviinn-widgets)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE)
@@ -6,7 +6,7 @@
 > AI-powered search and product discovery widgets for e-commerce storefronts.
 
 Drop a custom element onto a page and it renders a shoppable UI backed by the
-[Vviinn](https://vviinn.com) Visual Relevance Machine: search by photo, AI text search with
+[vviinn](https://vviinn.com) Visual Relevance Machine: search by photo, AI text search with
 suggestions, "shop the look" hotspots, smart filters, and product recommendations. The
 widgets are [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components)
 built with [Stencil](https://stenciljs.com/), so they work in plain HTML, in React, Angular,
@@ -28,10 +28,10 @@ Vue and Nuxt, and inside a mobile `WebView`.
 
 ## Prerequisites
 
-A Vviinn **read-only site token** and an imported product feed:
+A vviinn **read-only site token** and an imported product feed:
 
 1. [Register](https://panel.vviinn.com/auth/register) or
-   [sign in](https://panel.vviinn.com/auth/signin) to the Vviinn Panel and complete the
+   [sign in](https://panel.vviinn.com/auth/signin) to the vviinn Panel and complete the
    self-onboarding, which sets up your company, site, campaigns and product feed.
 2. Open **Sites**, select the active site, and copy the `Read Only` token.
 

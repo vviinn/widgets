@@ -12,7 +12,7 @@ Everything you need is in the repository. `npm test`, `npm run lint`,
 `npm run build_interfaces` and `npm run build` all run without credentials: the OpenAPI spec
 is committed and `.env.dev` is a working environment. Only live API responses need a token,
 and that token is your own — [register an
-account](https://panel.vviinn.com/auth/register) in the Vviinn Panel, as
+account](https://panel.vviinn.com/auth/register) in the vviinn Panel, as
 [Prerequisites](README.md#prerequisites) walks through, and point the dev harness at your own
 catalogue. See [Development setup](#development-setup) below.
 
