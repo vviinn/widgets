@@ -124,6 +124,20 @@ markup does not already carry one, so hardcoding a value in `src/index.html` is 
 a second tenant. The file is copied at build start rather than watched, so editing it needs a
 dev-server restart.
 
+### Favicons
+
+The icons in `src/` are generated from `src/favicon.svg` and committed, so this only needs
+rerunning when the source SVG changes. `sharp` is not a declared dependency — install it for
+the run and it is gone again after the next `npm ci`:
+
+```bash
+npm i --no-save sharp@0.35.4
+npm run build.favicons
+```
+
+The script writes `src/favicon.ico` and `src/apple-touch-icon.png`, then mirrors all three
+files into `storybook/public/`.
+
 ## Storybook
 
 `storybook/` is a separate project with its own `package.json`, published at
