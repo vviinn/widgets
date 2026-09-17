@@ -17,7 +17,8 @@
   "unpkg": "dist/vviinn-widgets/vviinn-vpr.js",
   "files": [
     "dist/",
-    "www/build/"
+    "www/build/",
+    "NOTICE"
   ],
   "scripts": {
     "build": "ENV=production stencil build --docs",
