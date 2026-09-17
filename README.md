@@ -160,7 +160,7 @@ For questions about your account, product feed or integration, contact
 
 ## Trademark
 
-The license covers the source code. It does not grant any right to use the "vviinn" name or
+The license covers the software. It does not grant any right to use the "vviinn" name or
 the vviinn logo.
 
 You may state that your project uses these widgets. You may not use the name or the logo as
