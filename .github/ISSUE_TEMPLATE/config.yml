@@ -10,5 +10,5 @@ contact_links:
     url: https://widgets.vviinn.com
     about: Props, events, CSS parts and slots for every public component.
   - name: Integration or account support
-    url: mailto:support@vviinn.com
-    about: Product feed, panel configuration and tokens — anything about your own account.
+    url: https://panel.vviinn.com
+    about: Product feed, panel configuration and tokens. Or write to support@vviinn.com.
