@@ -1,7 +1,7 @@
 # Vviinn Widgets
 
 [![npm](https://img.shields.io/npm/v/vviinn-widgets)](https://www.npmjs.com/package/vviinn-widgets)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE)
 
 > AI-powered search and product discovery widgets for e-commerce storefronts.
 
@@ -156,7 +156,7 @@ For questions about your account, product feed or integration, contact
 
 ## License
 
-[MIT](LICENSE)
+[Apache License 2.0](LICENSE)
 
 ## Trademark
 

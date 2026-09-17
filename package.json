@@ -44,7 +44,7 @@
     "update.openapi": "gh api repos/vviinn/platform-api/contents/docs/merchant-openapi.yaml?ref=develop --jq '.content' | base64 -d > openapi/merchant-openapi.yaml && echo 'Synced: openapi/merchant-openapi.yaml'",
     "prepare": "husky"
   },
-  "license": "MIT",
+  "license": "Apache-2.0",
   "engines": {
     "node": ">=22.22.1 <23.0.0"
   },
