@@ -195,8 +195,10 @@ before it is committed.
   published changelog, so write them for the people integrating the widgets. Add a component
   segment when the change targets one component:
   `feat: Vviinn Cropper: toggle cropper visibility by OCR filter`.
-- **Routine work** — intermediate fixes, chores, review changes, refactors — use
-  `#<issue> Description`, referencing the internal issue tracker.
+- **Routine work** — intermediate fixes, chores, review changes, refactors — a plain
+  descriptive subject, with no prefix. Maintainers put the internal issue number in front of
+  it; contributors from outside have no access to those numbers, and a bare `#123` here would
+  render as a link to an unrelated GitHub issue.
 - **Automation** — releases, CI, changelog bumps — prefix with `[skip ci]`.
 
 Subject line only, no body: the mechanism belongs in the pull request description.
