@@ -24,7 +24,7 @@ Vue and Nuxt, and inside a mobile `WebView`.
 - [Security](#security)
 - [Support](#support)
 - [License](#license)
-- [Trademark](#trademark)
+- [Name and logo](#name-and-logo)
 
 ## Prerequisites
 
@@ -158,7 +158,7 @@ For questions about your account, product feed or integration, contact
 
 [Apache License 2.0](LICENSE)
 
-## Trademark
+## Name and logo
 
 The license covers the software. It does not grant any right to use the "vviinn" name or
 the vviinn logo.
