@@ -135,7 +135,7 @@ The bundle registers others, but they are internal building blocks used by the w
 - **Widget docs and live playground:** https://widgets.vviinn.com — props, events, CSS
   variables, CSS parts and slots for every public component.
 - **API documentation:** https://docs.vviinn.com
-- **Release notes:** [CHANGELOG.md](CHANGELOG.md)
+- **Release notes:** [CHANGELOG.md](https://github.com/vviinn/widgets/blob/develop/CHANGELOG.md)
 
 ## Contributing
 
