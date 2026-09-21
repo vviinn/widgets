@@ -128,11 +128,11 @@ dev-server restart.
 ### Favicons
 
 The icons in `src/` are generated from `src/favicon.svg` and committed, so this only needs
-rerunning when the source SVG changes. `sharp` is not a declared dependency — install it for
-the run and it is gone again after the next `npm ci`:
+rerunning when the source SVG changes. `sharp` is not a declared dependency: the script names
+the exact `npm i --no-save` command when it is missing, and the package is gone again after
+the next `npm ci`.
 
 ```bash
-npm i --no-save sharp@0.35.4
 npm run build.favicons
 ```
 

@@ -101,10 +101,9 @@ document.body.append(widget);
 
 ## Public components
 
-The bundle registers 33 custom elements, but only the 13 below are the supported public API —
-the ones you place in your own markup. Everything else is an internal building block used by
-the widgets (modals, sliders, skeletons, the camera) and may change in any release without
-notice.
+The components below are the supported public API — the ones you place in your own markup.
+The bundle registers others, but they are internal building blocks used by the widgets
+(modals, sliders, skeletons, the camera) and may change in any release without notice.
 
 | Component | Purpose |
 | --- | --- |
