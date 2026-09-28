@@ -30,12 +30,12 @@ const data = {
     ],
   },
   "manufacturer-spare-parts": {
+    // this site is not selectable, so the data is incomplete
     token: process.env.STORYBOOK_TOKEN_MANUFACTURER_SPARE_PARTS,
-    productIdSimilarProducts: "0010030000vr",
-    productIdCrossSelling: "0010120001vr",
+    productIdSimilarProducts: "",
+    productIdCrossSelling: "",
     textSearchQuery: "Schlitz",
-    filterValue:
-      "Essentra-DE-AT > Befestigungen > Stangen und Schrauben > Schrauben",
+    filterValue: "",
     shopTheLookImageUrls: [],
   },
 };

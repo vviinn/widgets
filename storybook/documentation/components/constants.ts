@@ -212,8 +212,7 @@ export const energyCertificationsString = JSON.stringify([
       min: "A",
       max: "G",
     },
-    classDataSheetUrl:
-      "https://www.roller.de/medias/sys_master/datasheets/datasheets/h7a/hc5/11687118700574/1328023300-P01.pdf",
+    classDataSheetUrl: "https://example.com/datasheet.pdf",
     productType: "Product Type",
   },
 ]);
