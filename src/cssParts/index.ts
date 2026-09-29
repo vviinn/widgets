@@ -124,6 +124,9 @@ export const shopTheLookPartsList = [
   "shop-the-look-upload-button",
   "shop-the-look-upload-button-icon",
   "shop-the-look-upload-button-text",
+  "shop-the-look-results-grid",
+  "shop-the-look-result-item",
+  "shop-the-look-result-image",
 ];
 
 export const shopTheLookParts = makeExportPartsString(shopTheLookPartsList);

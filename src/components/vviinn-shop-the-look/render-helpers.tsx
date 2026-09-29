@@ -198,11 +198,12 @@ export const renderProductGrid = (props: ProductGridProps) => {
   const currentProducts = searchResults.slice(0, 4);
 
   return (
-    <div class="search-results-grid">
+    <div class="search-results-grid" part="shop-the-look-results-grid">
       {currentProducts.map((product, index) => (
         <div
           key={`${product.productId}-${index}`}
           class="result-item"
+          part="shop-the-look-result-item"
           onClick={() => {
             if (onProductDetailsClick) {
               onProductDetailsClick(product, index);
@@ -211,7 +212,7 @@ export const renderProductGrid = (props: ProductGridProps) => {
             }
           }}
         >
-          <div class="result-image">
+          <div class="result-image" part="shop-the-look-result-image">
             <vviinn-image
               width={120}
               alt={product.title || ""}
@@ -284,7 +285,7 @@ export const renderProductDetails = (props: ProductDetailsSliderProps) => {
             images={selectedProduct.images}
             showMultipleImages={showMultipleImages}
             imageResolutionWidth={300}
-            imageWidth={isDesktop() ? 160 : 120}
+            responsive={true}
             currencySign={currencySign || ""}
             locale={locale}
             numberLocale={numberLocale}
