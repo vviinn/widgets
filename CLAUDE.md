@@ -42,7 +42,7 @@ npm run release.ci        # CI release
 - `vviinn-cropper`: Image cropping interface with geometry validation
 - `vviinn-product-card`: Product display with intersection tracking
 - `vviinn-filters` / `vviinn-extended-filters` / `vviinn-selected-filters`: filter row, modal and chips. Public, usable standalone alongside `vviinn-results`.
-- `vviinn-suggestions`: AI suggestions. Rendered only inside `vviinn-vps-widget`, so it is absent from standalone-component integrations.
+- `vviinn-suggestions`: AI suggestions for the current query. Public, usable standalone alongside `vviinn-text-search` and `vviinn-results` as well as inside `vviinn-vps-widget`.
 
 Global CSS variables in `src/variables.css`.
 
