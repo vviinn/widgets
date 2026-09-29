@@ -1,5 +1,6 @@
 import { argTypes } from "../../src/components/vviinn-product-card/stories/args";
 import { productDecorator } from "../../src/components/vviinn-product-card/stories/decorators";
+import { productImages } from "../components/productCard/constants";
 import { energyCertificationsString } from "../documentation/components/constants";
 import "../documentation/widgets/styles.css";
 import { argsFromParams } from "../helpers/argsFromParams";
@@ -64,24 +65,20 @@ export const Default = Template.bind({});
 Default.storyName = "Product Card";
 
 const initArgs = {
-  productTitle: "Couchtisch Rolf Benz 8770 Ronald Schmitt",
-  productType: "Couchtische",
-  brand: "Ronald Schmitt",
+  productTitle: "Sessel Loft (BH 80x95 cm)",
+  productType: "Sessel",
+  brand: "Living",
   locale: "en-US",
   numberLocale: "",
   currencySign: "€",
-  deeplink:
-    "https://www.moebel-shop.de/rolf-benz-8770-couchtisch-ronald-schmitt",
-  image:
-    "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg",
+  deeplink: "https://example.com/sessel-loft",
+  image: productImages.homeArmchair,
   images: [
     {
-      original:
-        "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg",
+      original: productImages.homeArmchair,
     },
     {
-      original:
-        "https://www.moebel-shop.de/media/image/9d/cb/e7/0749295-002_600x600.jpg",
+      original: productImages.homeDiningChair,
     },
   ],
   showMultipleImages: false,

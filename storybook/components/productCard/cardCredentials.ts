@@ -34,7 +34,7 @@ const discoveryButtonCode = (append = false) => {
 
 const cardParamsToCode = (productData) => {
   return Object.entries(productData)
-    .filter(([key, value]) => typeof value !== "object")
+    .filter(([, value]) => typeof value !== "object")
     .map(([key, value]) => {
       if (value === "") return "";
       const stringifiedValue =

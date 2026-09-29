@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.224.9](https://github.com/vviinn/widgets/compare/v2.224.8...v2.224.9) (2026-09-28)
+
 ### [2.224.8](https://github.com/vviinn/widgets/compare/v2.224.7...v2.224.8) (2026-09-09)
 
 ### [2.224.7](https://github.com/vviinn/widgets/compare/v2.224.6...v2.224.7) (2026-09-07)
