@@ -1,6 +1,6 @@
 ## Issue
 
-<!-- Issue number this branch belongs to. One branch per issue. -->
+<!-- Issue number this branch belongs to. One branch per issue. No issue yet? See "Pull requests" in CONTRIBUTING.md. -->
 
 ## What changed
 

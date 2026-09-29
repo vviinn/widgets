@@ -53,7 +53,7 @@ Do not open a public issue. See [SECURITY.md](SECURITY.md).
 
 ### Requirements
 
-- Node.js `>=22.22.1 <23.0.0` — enforced by `engines` in `package.json`
+- Node.js — the version range set by `engines` in [`package.json`](package.json)
 - npm
 - A POSIX-compatible shell. `build` and `start` prefix an inline `ENV=` assignment and
   `update.openapi` pipes through `base64 -d`, none of which `cmd.exe` can run. On Windows,

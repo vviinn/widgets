@@ -18,7 +18,7 @@ Vue and Nuxt, and inside a mobile `WebView`.
 - [Install](#install)
 - [Usage](#usage)
 - [Public components](#public-components)
-- [Two ways to integrate](#two-ways-to-integrate)
+- [Ways to integrate](#ways-to-integrate)
 - [Documentation](#documentation)
 - [Contributing](#contributing)
 - [Security](#security)
@@ -82,7 +82,7 @@ Render a search button — it brings the search modal with it:
 <vviinn-vps-button token="YOUR_TOKEN"></vviinn-vps-button>
 ```
 
-Or recommendations for a given product:
+or recommendations for a given product:
 
 ```html
 <vviinn-vpr-widget token="YOUR_TOKEN" product-id="YOUR_PRODUCT_ID"></vviinn-vpr-widget>
@@ -102,8 +102,6 @@ document.body.append(widget);
 ## Public components
 
 The components below are the supported public API — the ones you place in your own markup.
-The bundle registers others, but they are internal building blocks used by the widgets
-(modals, sliders, skeletons, the camera) and may change in any release without notice.
 
 | Component | Purpose |
 | --- | --- |
@@ -121,7 +119,11 @@ The bundle registers others, but they are internal building blocks used by the w
 | `vviinn-selected-filters` | Active filter chips |
 | `vviinn-cropper` | Image cropping interface |
 
-## Two ways to integrate
+Other components registered in the bundle are internal building blocks used by the widgets —
+for example modals, sliders, skeletons and the camera — and may change in any release without
+notice.
+
+## Ways to integrate
 
 - **Widget** — `vviinn-vps-button` opens `vviinn-vps-widget`, which brings the whole search
   experience (results, filters, suggestions) with it. This is the fastest integration.

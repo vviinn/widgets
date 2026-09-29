@@ -82,10 +82,11 @@ body:
     id: device
     attributes:
       label: Where does it happen?
+      multiple: true
       options:
-        - Mobile only
-        - Desktop only
-        - Both
+        - Mobile
+        - Tablet
+        - Desktop
     validations:
       required: true
 

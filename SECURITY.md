@@ -2,14 +2,9 @@
 
 ## Supported versions
 
-Only the latest version published to npm receives security fixes. Releases are frequent and
+**Only the latest version published to npm receives security fixes.** Releases are frequent and
 follow [semantic versioning](https://docs.npmjs.com/about-semantic-versioning); if you are
 pinned to an older version, please upgrade before reporting.
-
-| Version | Supported |
-| --- | --- |
-| latest | yes |
-| older releases | no |
 
 ## Reporting a vulnerability
 
