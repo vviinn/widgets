@@ -1,6 +1,8 @@
 ## Issue
 
-<!-- Issue number this branch belongs to. One branch per issue. No issue yet? See "Pull requests" in CONTRIBUTING.md. -->
+<!-- Maintainers: the internal ticket number (5 digits), as in the branch name. Contributors:
+link the GitHub issue this change was agreed in, e.g. "Closes #12". No issue number yet? See
+"Pull requests" in CONTRIBUTING.md. One branch per issue. -->
 
 ## What changed
 
