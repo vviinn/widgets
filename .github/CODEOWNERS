@@ -1,0 +1,4 @@
+# Default owners for everything in this repository.
+# Review is requested from these accounts on every pull request.
+# GitHub skips the pull request author, so listing both keeps a reviewer assigned.
+* @egor-mediaopt @LiudmylaMasliuk

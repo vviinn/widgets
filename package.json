@@ -1,7 +1,8 @@
 {
   "name": "vviinn-widgets",
-  "version": "2.224.9",
+  "version": "2.225.0",
   "description": "vviinn web components",
+  "author": "Mediaopt",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vviinn/widgets.git"
@@ -16,7 +17,8 @@
   "unpkg": "dist/vviinn-widgets/vviinn-vpr.js",
   "files": [
     "dist/",
-    "www/build/"
+    "www/build/",
+    "NOTICE"
   ],
   "scripts": {
     "build": "ENV=production stencil build --docs",
@@ -30,7 +32,7 @@
     "test": "stencil test --spec",
     "test.coverage": "stencil test --spec -- --coverage",
     "test.e2e": "stencil test --e2e",
-    "test.watch": "stencil test --spec --e2e --watchAll",
+    "test.watch": "stencil test --spec --watchAll",
     "test.watchE2E": "stencil test --e2e --watchAll --devtools",
     "release": "commit-and-tag-version",
     "release.ci": "commit-and-tag-version --releaseCommitMessageFormat '[skip ci] chore(release): {{currentTag}}'",
@@ -43,7 +45,7 @@
     "update.openapi": "gh api repos/vviinn/platform-api/contents/docs/merchant-openapi.yaml?ref=develop --jq '.content' | base64 -d > openapi/merchant-openapi.yaml && echo 'Synced: openapi/merchant-openapi.yaml'",
     "prepare": "husky"
   },
-  "license": "MIT",
+  "license": "Apache-2.0",
   "engines": {
     "node": ">=22.22.1 <23.0.0"
   },

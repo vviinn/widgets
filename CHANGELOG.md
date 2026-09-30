@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.225.0](https://github.com/vviinn/widgets/compare/v2.224.9...v2.225.0) (2026-09-29)
+
+
+### Features
+
+* Relicense under the Apache License 2.0 ([9b957a0](https://github.com/vviinn/widgets/commit/9b957a02e6b0a93c778449c9949a26c7dea182fb))
+
 ### [2.224.9](https://github.com/vviinn/widgets/compare/v2.224.8...v2.224.9) (2026-09-28)
 
 ### [2.224.8](https://github.com/vviinn/widgets/compare/v2.224.7...v2.224.8) (2026-09-09)
