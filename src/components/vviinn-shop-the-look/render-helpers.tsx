@@ -212,9 +212,8 @@ export const renderProductGrid = (props: ProductGridProps) => {
             }
           }}
         >
-          <div class="result-image" part="shop-the-look-result-image">
+          <div class="result-image" part="shop-the-look-result-image-container">
             <vviinn-image
-              width={120}
               alt={product.title || ""}
               imageTitle={product.title || ""}
               src={product.image?.thumbnail || product.image?.original || ""}

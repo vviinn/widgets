@@ -83,7 +83,7 @@ export interface ShopTheLookEventData extends BasicEventData {
  * @part shop-the-look-upload-button-text - The upload button text wrapper
  * @part shop-the-look-results-grid - The grid of recommendation tiles in the modal
  * @part shop-the-look-result-item - A single recommendation tile
- * @part shop-the-look-result-image - The image wrapper inside a recommendation tile
+ * @part shop-the-look-result-image-container - The container wrapping the image inside a recommendation tile
  */
 
 @Component({
