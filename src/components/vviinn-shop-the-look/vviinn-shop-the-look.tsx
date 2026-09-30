@@ -61,6 +61,7 @@ import { getAcceptableFileFormats } from "../../Image/error";
 import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
 import { shopTheLookParts } from "../../cssParts";
 import { openProductLink } from "../../helpers/navigation/openProductLink";
+import { PRODUCT_CARD_IMAGE_RESOLUTION_WIDTH } from "../../widget/constants";
 
 if (typeof window !== "undefined") {
   register();
@@ -118,6 +119,8 @@ export class VviinnShopTheLook {
   @Prop() uploadMode: boolean = false;
   /** Show multiple images: swiper on mobile, hover on desktop in product cards */
   @Prop() showMultipleImages: boolean = false;
+  /** Resolution width of the recommendation tile and product card images */
+  @Prop() imageResolutionWidth: number = PRODUCT_CARD_IMAGE_RESOLUTION_WIDTH;
   /** URL to external CSS file for custom styling */
   @Prop() cssUrl: string | null = null;
   /** Open product links in new tab */
@@ -1217,6 +1220,7 @@ export class VviinnShopTheLook {
       locale: this.locale,
       numberLocale: this.effectiveNumberLocale,
       showMultipleImages: this.showMultipleImages,
+      imageResolutionWidth: this.imageResolutionWidth,
       modalContentRef: (el: HTMLElement) => {
         this.modalContentRef = el;
       },

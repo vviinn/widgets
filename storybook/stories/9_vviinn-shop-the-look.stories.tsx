@@ -22,6 +22,7 @@ const Template = (args) => `
       show-cropper="${args.showCropper}"
       upload-mode="${args.uploadMode}"
       show-multiple-images="${args.showMultipleImages}"
+      image-resolution-width="${args.imageResolutionWidth}"
       product-details-new-tab="${args.productDetailsNewTab}"
       product-details-redirect="${args.productDetailsRedirect}"
       css-url="${args.cssUrl}"
@@ -44,6 +45,7 @@ const initArgs = {
   showCropper: false,
   uploadMode: false,
   showMultipleImages: false,
+  imageResolutionWidth: 300,
   productDetailsNewTab: false,
   productDetailsRedirect: true,
   cssUrl: "",
