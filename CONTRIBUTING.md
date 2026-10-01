@@ -173,9 +173,7 @@ npm run test.watch    # watch mode
 npm run test.coverage # with coverage
 ```
 
-The end-to-end suite is **not maintained** and does not currently run — do not use
-`npm run test.e2e` to validate a change. Rely on unit tests plus a manual check in the dev
-server.
+Validate a change with unit tests plus a manual check in the dev server.
 
 ## Linting and formatting
 

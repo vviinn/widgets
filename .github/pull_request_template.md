@@ -10,7 +10,7 @@ link the GitHub issue this change was agreed in, e.g. "Closes #12". No issue num
 
 ## How it was verified
 
-<!-- Unit tests, and the manual check in the dev server or Storybook. The e2e suite is not maintained. -->
+<!-- Unit tests, and the manual check in the dev server or Storybook. -->
 
 ## Checklist
 
