@@ -7,7 +7,6 @@ import { loadEnv } from "vite";
 const EXPOSED_ENV_KEYS = [
   "STORYBOOK_API_PATH",
   "STORYBOOK_CDN_PATH",
-  "STORYBOOK_ENV",
   "STORYBOOK_NPM_PACKAGE_NAME",
   "STORYBOOK_TOKEN_FASHION",
   "STORYBOOK_TOKEN_HOME_LIVING",
@@ -44,11 +43,10 @@ const config = {
     const env = loadEnv(configType, process.cwd(), ["STORYBOOK_"]);
 
     // Vite serialises every prefixed variable into import.meta.env in the output, which
-    // would bypass the allowlist above. STORYBOOK_ENV reaches the client through define.
+    // would bypass the allowlist above.
     config.envPrefix = ["VITE_"];
 
-    // STORYBOOK_ENV is set only by the local dev script, so it cannot tell a
-    // deployed build apart; configType can.
+    // A deployed build is always a static one, so configType tells it apart from `storybook dev`.
     if (configType === "PRODUCTION") {
       const missing = REQUIRED_ENV_KEYS.filter((key) => !env[key]);
 
@@ -78,9 +76,6 @@ const config = {
     config.define = {
       ...config.define,
       ...storybookEnvDefines,
-      "import.meta.env.STORYBOOK_ENV": JSON.stringify(
-        env.STORYBOOK_ENV || process.env.STORYBOOK_ENV || "local",
-      ),
       global: "globalThis",
     };
 
