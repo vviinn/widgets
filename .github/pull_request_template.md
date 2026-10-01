@@ -17,4 +17,3 @@ link the GitHub issue this change was agreed in, e.g. "Closes #12". No issue num
 - [ ] `npm test` passes
 - [ ] `npm run lint` passes
 - [ ] Commit messages follow the conventions in CONTRIBUTING.md
-- [ ] Commits are signed off — `git commit -s`
