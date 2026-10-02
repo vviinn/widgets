@@ -186,23 +186,30 @@ export const renderSwiper = (props: SwiperProps) => {
 
 export interface ProductGridProps {
   searchResults: Recommendation[];
+  imageResolutionWidth: number;
   onProductClick: (product: Recommendation) => void;
   onProductDetailsClick?: (product: Recommendation, index: number) => void;
 }
 
 export const renderProductGrid = (props: ProductGridProps) => {
-  const { searchResults, onProductClick, onProductDetailsClick } = props;
+  const {
+    searchResults,
+    imageResolutionWidth,
+    onProductClick,
+    onProductDetailsClick,
+  } = props;
 
   if (!searchResults.length) return null;
 
   const currentProducts = searchResults.slice(0, 4);
 
   return (
-    <div class="search-results-grid">
+    <div class="search-results-grid" part="shop-the-look-results-grid">
       {currentProducts.map((product, index) => (
         <div
           key={`${product.productId}-${index}`}
           class="result-item"
+          part="shop-the-look-result-item"
           onClick={() => {
             if (onProductDetailsClick) {
               onProductDetailsClick(product, index);
@@ -211,14 +218,13 @@ export const renderProductGrid = (props: ProductGridProps) => {
             }
           }}
         >
-          <div class="result-image">
+          <div class="result-image" part="shop-the-look-result-image-container">
             <vviinn-image
-              width={120}
               alt={product.title || ""}
               imageTitle={product.title || ""}
               src={product.image?.thumbnail || product.image?.original || ""}
               responsive={true}
-              imageResolutionWidth={300}
+              imageResolutionWidth={imageResolutionWidth}
             />
           </div>
         </div>
@@ -234,6 +240,7 @@ export interface ProductDetailsSliderProps {
   locale?: Locale;
   numberLocale?: string;
   showMultipleImages?: boolean;
+  imageResolutionWidth: number;
   onProductClick: (product: Recommendation) => void;
   onBackToGrid: () => void;
   onNavigateProduct: (direction: "prev" | "next") => void;
@@ -249,6 +256,7 @@ export const renderProductDetails = (props: ProductDetailsSliderProps) => {
     locale,
     numberLocale,
     showMultipleImages = false,
+    imageResolutionWidth,
   } = props;
 
   if (!searchResults.length) return null;
@@ -283,8 +291,8 @@ export const renderProductDetails = (props: ProductDetailsSliderProps) => {
             }
             images={selectedProduct.images}
             showMultipleImages={showMultipleImages}
-            imageResolutionWidth={300}
-            imageWidth={isDesktop() ? 160 : 120}
+            imageResolutionWidth={imageResolutionWidth}
+            responsive={true}
             currencySign={currencySign || ""}
             locale={locale}
             numberLocale={numberLocale}
@@ -309,6 +317,7 @@ export interface ModalProps {
   locale?: Locale;
   numberLocale?: string;
   showMultipleImages?: boolean;
+  imageResolutionWidth: number;
   onProductDetailsClick?: (product: Recommendation, index: number) => void;
   onBackToGrid?: () => void;
   onNavigateProduct?: (direction: "prev" | "next") => void;
@@ -331,6 +340,7 @@ export const renderModal = (props: ModalProps) => {
     locale,
     numberLocale,
     showMultipleImages = false,
+    imageResolutionWidth,
     modalContentRef,
   } = props;
 
@@ -360,6 +370,7 @@ export const renderModal = (props: ModalProps) => {
           {searchResults.length > 0 &&
             renderProductGrid({
               searchResults,
+              imageResolutionWidth,
               onProductClick,
               onProductDetailsClick,
             })}
@@ -376,6 +387,7 @@ export const renderModal = (props: ModalProps) => {
               locale,
               numberLocale,
               showMultipleImages,
+              imageResolutionWidth,
               onBackToGrid,
               onNavigateProduct,
             })}
