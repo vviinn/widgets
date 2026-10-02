@@ -23,9 +23,32 @@ const autoprefixPlugin = () => ({
   },
 });
 
+// Apache-2.0 §4(a) wants the license to travel with every distribution, CDN bundles included.
+// Version-pinned jsdelivr links keep pointing at the terms that version shipped under.
+const buildLicensePreamble = () => {
+  const { name, version, license } = JSON.parse(
+    readFileSync(path.join(__dirname, "package.json"), "utf8"),
+  );
+  const notice = readFileSync(path.join(__dirname, "NOTICE"), "utf8");
+  const copyright = notice
+    .split("\n")
+    .find((line) => line.startsWith("Copyright"));
+  if (!copyright) throw new Error("NOTICE carries no Copyright line.");
+
+  const base = `https://cdn.jsdelivr.net/npm/${name}@${version}`;
+  return [
+    `${name} v${version}`,
+    copyright.trim(),
+    `SPDX-License-Identifier: ${license}`,
+    `License: ${base}/LICENSE`,
+    `Notice: ${base}/NOTICE`,
+  ].join("\n");
+};
+
 export const config: Config = {
   extras: { enableImportInjection: true },
   namespace: "vviinn-widgets",
+  preamble: buildLicensePreamble(),
   taskQueue: "async",
   outputTargets: [
     {
@@ -57,11 +80,9 @@ export const config: Config = {
   globalStyle: "src/variables.css",
   plugins: [dotenvPlugin(), autoprefixPlugin()],
   testing: {
-    browserArgs: ["--no-sandbox", "--disable-setuid-sandbox"],
-    browserHeadless: "shell",
     // Count every source file, not only the ones a test touches: otherwise the
     // first test written for an untested file drags the global figure down.
-    collectCoverageFrom: ["src/**/*.{ts,tsx}", "!src/**/*.{spec,test,e2e}.*"],
+    collectCoverageFrom: ["src/**/*.{ts,tsx}", "!src/**/*.{spec,test}.*"],
   },
   sourceMap: false,
   devServer:

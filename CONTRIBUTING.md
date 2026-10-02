@@ -16,12 +16,6 @@ account](https://panel.vviinn.com/auth/register) in the vviinn Panel, as
 [Prerequisites](README.md#prerequisites) walks through, and point the dev harness at your own
 catalogue. See [Development setup](#development-setup) below.
 
-Sign your commits off. `git commit -s` appends a `Signed-off-by` line, which states that you
-wrote the change or otherwise have the right to contribute it under this project's license —
-the [Developer Certificate of Origin](https://developercertificate.org). It hands us no
-rights beyond that license; it is a record of where the code came from, and we need it on
-every commit in the pull request.
-
 Two things stay on our side. A reviewer listed in CODEOWNERS checks every change against real
 merchant data before it merges, because a widget that passes its unit tests can still break
 on a catalogue you have no way to see. And Storybook runs on our demo merchant tokens, which
@@ -173,9 +167,7 @@ npm run test.watch    # watch mode
 npm run test.coverage # with coverage
 ```
 
-The end-to-end suite is **not maintained** and does not currently run — do not use
-`npm run test.e2e` to validate a change. Rely on unit tests plus a manual check in the dev
-server.
+Validate a change with unit tests plus a manual check in the dev server.
 
 ## Linting and formatting
 
