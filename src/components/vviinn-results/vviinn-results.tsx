@@ -45,7 +45,6 @@ import { campaignTypeNames } from "../../campaign/Campaign";
 import { TextSearchResponse } from "../../interfaces";
 import {
   ChangedFiltersEvent,
-  ChangedFiltersEventData,
   DynamicFilterInternalData,
   ProductCardEvent,
   ProductCardEventData,
@@ -53,7 +52,6 @@ import {
   ProductEventType,
   ResultEventType,
   TextSearchEvent,
-  TextSearchEventData,
   TriggerSourceEvent,
   TriggerSourceEventData,
 } from "../../recommendation/events";
@@ -200,15 +198,6 @@ export class VviinnResults {
   @Event() vviinnResultLoad: EventEmitter<BasicEventData>;
   /** The search result appears in the viewport */
   @Event() vviinnResultView: EventEmitter<BasicEventData>;
-
-  /** The 'query' is received for performing a Text Search */
-  /** @internal */
-  @Event() vviinnTextSearchStarted: EventEmitter<TextSearchEventData>;
-
-  /** The filter's state changes */
-  /** @internal */
-  @Event({ bubbles: true })
-  vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
 
   /** Cropper state should be resetted */
   /** @internal */
