@@ -23,8 +23,6 @@ npm run release           # Local release with version bump
 npm run release.ci        # CI release
 ```
 
-**E2E is not maintained** — `npm run test.e2e` / `npm run test.watchE2E` do not currently run. Don't use them to validate changes; rely on unit tests plus a manual check in the dev server.
-
 **Clearing `dist/`**: remove `.stencil` alongside it. `rm -rf dist` on its own leaves the build cache, the next build emits a partial `dist/`, and the Storybook build then fails on it with `Could not resolve "../../dist/loader"` — which reads like a code fault rather than a stale cache.
 
 **OpenAPI sync**: Local spec at `openapi/merchant-openapi.yaml` must be kept in sync with upstream. Run `npm run update.openapi` to fetch latest (requires `gh` CLI auth). CI uses the committed local file.

@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.226.1](https://github.com/vviinn/widgets/compare/v2.226.0...v2.226.1) (2026-10-02)
+
+## [2.226.0](https://github.com/vviinn/widgets/compare/v2.225.0...v2.226.0) (2026-10-02)
+
+
+### Features
+
+* Vviinn Shop The Look: configurable image resolution width ([eb213e5](https://github.com/vviinn/widgets/commit/eb213e59d9edd19c08e2fc16eedafd39840e6c8c))
+* Vviinn Shop The Look: customizable results grid and product card sizing via CSS parts and custom properties ([b2d5674](https://github.com/vviinn/widgets/commit/b2d5674223f9dcfa300f1a61c13c4cf250164535))
+
 ## [2.225.0](https://github.com/vviinn/widgets/compare/v2.224.9...v2.225.0) (2026-09-29)
 
 

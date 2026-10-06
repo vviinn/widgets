@@ -1,6 +1,6 @@
 {
   "name": "vviinn-widgets",
-  "version": "2.225.0",
+  "version": "2.226.1",
   "description": "vviinn web components",
   "author": "Mediaopt",
   "repository": {
@@ -31,9 +31,7 @@
     "start": "npm run build_interfaces && ENV=local stencil build --dev --watch --serve --docs",
     "test": "stencil test --spec",
     "test.coverage": "stencil test --spec -- --coverage",
-    "test.e2e": "stencil test --e2e",
     "test.watch": "stencil test --spec --watchAll",
-    "test.watchE2E": "stencil test --e2e --watchAll --devtools",
     "release": "commit-and-tag-version",
     "release.ci": "commit-and-tag-version --releaseCommitMessageFormat '[skip ci] chore(release): {{currentTag}}'",
     "artifactregistry-login": "npx google-artifactregistry-auth",
@@ -96,6 +94,9 @@
   "overrides": {
     "minimatch@3": {
       "brace-expansion": "^1.1.12"
+    },
+    "minimatch@10": {
+      "brace-expansion": "^5.0.12"
     }
   }
 }
