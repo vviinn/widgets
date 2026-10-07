@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "storybook": "STORYBOOK_ENV=local storybook dev -p 6006",
+    "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "prepare-llm-extraction": "playwright install chromium",
     "build-llm-docs": "storybook-llms-extractor --config llms.config.js && node scripts/enrich-llm-docs.js"
@@ -34,6 +34,6 @@
   "dependencies": {
     "lit-html": "^2.7.2",
     "path": "^0.12.7",
-    "vviinn-widgets": "^2.226.1"
+    "vviinn-widgets": "^2.226.2"
   }
 }

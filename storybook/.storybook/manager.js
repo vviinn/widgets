@@ -1,6 +1,7 @@
 import { addons } from "storybook/manager-api";
 import vviinnTheme from "./vviinn-theme";
-import { vviinnIndustry } from "../helpers";
+import demoSites from "../helpers/demoSites.json";
+import { SITE_STORAGE_KEY, vviinnSite } from "../helpers/siteSelection";
 import "./addons/close-modals-addon";
 
 addons.setConfig({
@@ -11,29 +12,23 @@ addons.setConfig({
   },
 });
 
-const appendIndustrySelect = () => {
+const appendSiteSelect = () => {
   const explorerMenu = document.getElementById("storybook-explorer-menu");
 
   const createSelect = () => {
-    const array = [
-      { value: "home-living", text: "Home & Living" },
-      { value: "fashion", text: "Fashion & Accessories" },
-      /*{ value: "manufacturer-spare-parts", text: "Manufacturer & Spare Parts" },*/
-    ];
-
     const selectList = document.createElement("select");
     selectList.onchange = (e) => {
       const target = e.target;
-      localStorage.setItem("vviinn-industries", target.value);
+      localStorage.setItem(SITE_STORAGE_KEY, target.value);
       location.reload();
     };
-    selectList.id = "vviinn-industries";
+    selectList.id = "vviinn-site-select";
 
-    array.forEach(({ value, text }) => {
+    Object.entries(demoSites).forEach(([value, { label }]) => {
       const option = document.createElement("option");
       option.value = value;
-      option.text = text;
-      if (vviinnIndustry === value) {
+      option.text = label;
+      if (vviinnSite === value) {
         option.selected = true;
       }
       selectList.appendChild(option);
@@ -43,7 +38,7 @@ const appendIndustrySelect = () => {
   };
 
   const appendToMenu = (menu) => {
-    if (menu && !menu.querySelector("#vviinn-industries")) {
+    if (menu && !menu.querySelector("#vviinn-site-select")) {
       const selectList = createSelect();
       menu.prepend(selectList);
     }
@@ -54,7 +49,7 @@ const appendIndustrySelect = () => {
 
 const observeMenuChanges = () => {
   const observer = new MutationObserver(() => {
-    appendIndustrySelect();
+    appendSiteSelect();
   });
 
   observer.observe(document.body, {
@@ -64,6 +59,6 @@ const observeMenuChanges = () => {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  appendIndustrySelect();
+  appendSiteSelect();
   observeMenuChanges();
 });
