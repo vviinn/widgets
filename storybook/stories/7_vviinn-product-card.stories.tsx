@@ -66,6 +66,9 @@ Default.storyName = "Product Card";
 
 const { mainCard, setCard } = siteProductCards;
 
+// Base prices are optional on a card, so a site may leave them out.
+const toBasePrice = (value?: string) => (value ? JSON.parse(value) : null);
+
 const initArgs = {
   productTitle: mainCard["product-title"],
   productType: mainCard["product-type"],
@@ -80,9 +83,9 @@ const initArgs = {
   responsive: false,
   imageWidth: 300,
   price: mainCard.price,
-  basePrice: JSON.parse(mainCard["base-price"]),
+  basePrice: toBasePrice(mainCard["base-price"]),
   salePrice: mainCard["sale-price"],
-  baseSalePrice: JSON.parse(mainCard["base-sale-price"]),
+  baseSalePrice: toBasePrice(mainCard["base-sale-price"]),
   pricePrefix: "",
   customLabels: "UVP",
   addToBasketShow: true,
