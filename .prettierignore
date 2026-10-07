@@ -1,3 +1,4 @@
 *.mdx
 *.yaml
 *.md
+package-lock.json
