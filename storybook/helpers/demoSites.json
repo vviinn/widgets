@@ -1,0 +1,105 @@
+{
+  "home-living": {
+    "label": "Home & Living",
+    "tokenEnvKey": "STORYBOOK_TOKEN_HOME_LIVING",
+    "productIdSimilarProducts": "590013-6",
+    "productIdCrossSelling": "598125",
+    "textSearchQuery": "Grey office chair with armrests",
+    "filterValue": "Möbel > Schränke & Regale",
+    "shopTheLookImageUrls": [
+      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look-v2/home_01v2.jpg",
+      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look-v2/home_02v2.jpg",
+      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look-v2/home_03v2.jpg"
+    ],
+    "productCards": {
+      "mainCard": {
+        "id": "632083",
+        "product-title": "Windlicht-Set",
+        "brand": "MARILU",
+        "product-type": "Kerzen & Leuchter",
+        "price": "8.9",
+        "base-price": "{\"price\":2.23,\"quantity\":1,\"measure\":\"Stk\"}",
+        "sale-price": "8",
+        "base-sale-price": "{\"price\":2,\"quantity\":1,\"measure\":\"Stk\"}",
+        "image": "https://cdn.vviinn.com/assets/merchant/default/product-card/home-01-lantern-set.jpg"
+      },
+      "appendCard": {
+        "id": "955098",
+        "product-title": "Hängeleuchte GAETANO 1 (DH 38x150 cm)",
+        "brand": "EGLO",
+        "price": "99.0",
+        "sale-price": "89.99",
+        "add-to-basket-show": "true",
+        "image": "https://cdn.vviinn.com/assets/merchant/default/product-card/home-02-pendant-lamp.jpg",
+        "energy-certifications-string": "[{\"certificationClass\":\"A\",\"classIconUrls\":{\"left\":\"https://cdn.vviinn.com/assets/certification/energy/AtoG/left/A.svg\",\"right\":\"https://cdn.vviinn.com/assets/certification/energy/AtoG/right/A.svg\"},\"classRange\":{\"min\":\"A\",\"max\":\"G\"},\"classLabelUrl\":\"https://energy-efficient-products.ec.europa.eu/sites/default/files/styles/embed_medium_2x/public/2024-04/sample-energy-label-with-numbers-new.png?itok=x7puJdbG\",\"classDataSheetUrl\":\"https://example.com/datasheet.pdf\",\"productType\":\"Tischleuchte\"}]"
+      },
+      "setCard": {
+        "id": "2003",
+        "product-title": "Sessel Buddy",
+        "brand": "VITO",
+        "price": "149.0",
+        "image": "https://cdn.vviinn.com/assets/merchant/default/product-card/home-03-armchair.jpg"
+      },
+      "minimalisticCard": {
+        "id": "2004",
+        "product-title": "Sideboard",
+        "brand": "ELTON",
+        "product-type": "Sideboards",
+        "price": "599.0",
+        "sale-price": "550.0",
+        "image": "https://cdn.vviinn.com/assets/merchant/default/product-card/home-04-sideboard.jpg"
+      }
+    }
+  },
+  "fashion": {
+    "label": "Fashion & Accessories",
+    "tokenEnvKey": "STORYBOOK_TOKEN_FASHION",
+    "productIdSimilarProducts": "4078868-1",
+    "productIdCrossSelling": "4017822-1",
+    "textSearchQuery": "Pink leather bag with gold hardware",
+    "filterValue": "Beauty > Düfte",
+    "shopTheLookImageUrls": [
+      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look-v2/fashion_01v2.jpg",
+      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look-v2/fashion_02v2.jpg",
+      "https://cdn.vviinn.com/assets/merchant/default/shop-the-look-v2/fashion_03v2.jpg"
+    ],
+    "productCards": {
+      "mainCard": {
+        "id": "4130004-1",
+        "product-title": "Magic Energy 100 ml Damen",
+        "brand": "Charlotte Tilbury ",
+        "product-type": "Eau de Parfum",
+        "price": "150.00",
+        "base-price": "{\"price\":1500.00,\"quantity\":1,\"measure\":\"l\"}",
+        "sale-price": "149.99",
+        "base-sale-price": "{\"price\":1499.00,\"quantity\":1,\"measure\":\"l\"}",
+        "image": "https://cdn.vviinn.com/assets/merchant/default/product-card/fashion-01-perfume.jpg"
+      },
+      "appendCard": {
+        "id": "4139204-1",
+        "product-title": "CREOLE FÜR ANHÄNGER ROSÉGOLD orange Damen",
+        "brand": "DoDo",
+        "price": "70.0",
+        "sale-price": "59.99",
+        "image": "https://cdn.vviinn.com/assets/merchant/default/product-card/fashion-02-earring.jpg",
+        "energy-certifications-string": "[{\"certificationClass\":\"A++\",\"classIconUrls\":{\"left\":\"https://cdn.vviinn.com/assets/certification/energy/A+++toD/left/A++.svg\",\"right\":\"https://cdn.vviinn.com/assets/certification/energy/A+++toD/right/A++.svg\"},\"classRange\":{\"min\":\"A++\",\"max\":\"D\"},\"classLabelUrl\":\"https://energy-efficient-products.ec.europa.eu/sites/default/files/styles/embed_medium_2x/public/2024-04/sample-energy-label-with-numbers-new.png?itok=x7puJdbG\",\"classDataSheetUrl\":\"https://example.com/datasheet.pdf\",\"productType\":\"Tischleuchte\"}]"
+      },
+      "setCard": {
+        "id": "1003",
+        "product-title": "Cargo-Pants Beige Damen",
+        "brand": "Roberto Collina",
+        "price": "129.99",
+        "image": "https://cdn.vviinn.com/assets/merchant/default/product-card/fashion-03-cargo-pants.jpg"
+      },
+      "minimalisticCard": {
+        "id": "1004",
+        "product-title": "Zweier-Pack kurze Socken aus Baumwoll-Mix Damen",
+        "brand": "HUGO BOSS",
+        "product-type": "Socken",
+        "price": "29.9",
+        "sale-price": "25",
+        "image": "https://cdn.vviinn.com/assets/merchant/default/product-card/fashion-04-socks.jpg"
+      }
+    }
+  }
+}
