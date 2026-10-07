@@ -1,5 +1,5 @@
-import { cardDataByType, productDataByIndustryAndType } from "./constants";
-import { vviinnIndustry } from "../../helpers";
+import { cardDataByType } from "./constants";
+import { siteProductCards } from "../../helpers";
 
 const cardDataSeparator = "\n    ";
 const cardAppendContainer = `
@@ -60,7 +60,7 @@ export const cardCredentials = (cardType) => {
   const cardData = cardDataByType[cardType];
   cardData.productData = {
     ...cardData.productData,
-    ...productDataByIndustryAndType[vviinnIndustry][cardType],
+    ...siteProductCards[cardType],
   };
   const codeCardStyle = cardData.style ? `${cardData.style}\n` : "";
   const uniqueId = cardData.uniqueId;

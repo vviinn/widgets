@@ -4,7 +4,7 @@ import {
   productCardTextAlignArg,
   productCardImageBorderArg,
   productCardImageBgColorArg,
-} from "../../../../storybook/helpers";
+} from "../../../../storybook/helpers/sharedArgTypes";
 
 export const argTypes = {
   brand: {

@@ -72,7 +72,6 @@ steps:
     secretEnv:
       - "STORYBOOK_TOKEN_HOME_LIVING"
       - "STORYBOOK_TOKEN_FASHION"
-      - "STORYBOOK_TOKEN_MANUFACTURER_SPARE_PARTS"
   - name: "gcr.io/cloud-builders/docker"
     args: ["build", "-t", "eu.gcr.io/$PROJECT_ID/storybook:$_DOCKER_TAG", "."]
     dir: "/workspace/storybook"
@@ -98,5 +97,3 @@ availableSecrets:
       env: "STORYBOOK_TOKEN_HOME_LIVING"
     - versionName: projects/$PROJECT_ID/secrets/storybook-token-fashion/versions/latest
       env: "STORYBOOK_TOKEN_FASHION"
-    - versionName: projects/$PROJECT_ID/secrets/storybook-token-manufacturer-spare-parts/versions/latest
-      env: "STORYBOOK_TOKEN_MANUFACTURER_SPARE_PARTS"

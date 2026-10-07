@@ -1,8 +1,8 @@
 import { argTypes } from "../../src/components/vviinn-product-card/stories/args";
 import { productDecorator } from "../../src/components/vviinn-product-card/stories/decorators";
-import { productImages } from "../components/productCard/constants";
 import { energyCertificationsString } from "../documentation/components/constants";
 import "../documentation/widgets/styles.css";
+import { siteProductCards } from "../helpers";
 import { argsFromParams } from "../helpers/argsFromParams";
 export default {
   title: "Playground/Product Card",
@@ -64,30 +64,25 @@ export const Default = Template.bind({});
 
 Default.storyName = "Product Card";
 
+const { mainCard, setCard } = siteProductCards;
+
 const initArgs = {
-  productTitle: "Sessel Loft (BH 80x95 cm)",
-  productType: "Sessel",
-  brand: "Living",
+  productTitle: mainCard["product-title"],
+  productType: mainCard["product-type"],
+  brand: mainCard.brand,
   locale: "en-US",
   numberLocale: "",
   currencySign: "€",
-  deeplink: "https://example.com/sessel-loft",
-  image: productImages.homeArmchair,
-  images: [
-    {
-      original: productImages.homeArmchair,
-    },
-    {
-      original: productImages.homeDiningChair,
-    },
-  ],
+  deeplink: "https://example.com/",
+  image: mainCard.image,
+  images: [{ original: mainCard.image }, { original: setCard.image }],
   showMultipleImages: false,
   responsive: false,
   imageWidth: 300,
-  price: 3629,
-  basePrice: { price: 10, quantity: 1, measure: "cm²" },
-  salePrice: 1653,
-  baseSalePrice: { price: 5, quantity: 1, measure: "cm²" },
+  price: mainCard.price,
+  basePrice: JSON.parse(mainCard["base-price"]),
+  salePrice: mainCard["sale-price"],
+  baseSalePrice: JSON.parse(mainCard["base-sale-price"]),
   pricePrefix: "",
   customLabels: "UVP",
   addToBasketShow: true,

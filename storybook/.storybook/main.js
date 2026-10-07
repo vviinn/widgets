@@ -1,5 +1,6 @@
 import { resolve } from "path";
 import { loadEnv } from "vite";
+import demoSites from "../helpers/demoSites.json";
 
 // Each key here is inlined into the publicly served bundle, so a variable reaches
 // the browser only by being listed — a build-side credential named STORYBOOK_*
@@ -8,20 +9,28 @@ const EXPOSED_ENV_KEYS = [
   "STORYBOOK_API_PATH",
   "STORYBOOK_CDN_PATH",
   "STORYBOOK_NPM_PACKAGE_NAME",
-  "STORYBOOK_TOKEN_FASHION",
-  "STORYBOOK_TOKEN_HOME_LIVING",
-  "STORYBOOK_TOKEN_MANUFACTURER_SPARE_PARTS",
   "STORYBOOK_VPR_WIDGET_TAG",
   "STORYBOOK_VPS_WIDGET_TAG",
 ];
 
-// Without these the widgets render with an empty token, which shows up only as a
-// 401 in a visitor's browser — long after the build went green and deployed.
-const REQUIRED_ENV_KEYS = [
-  "STORYBOOK_TOKEN_FASHION",
-  "STORYBOOK_TOKEN_HOME_LIVING",
-  "STORYBOOK_TOKEN_MANUFACTURER_SPARE_PARTS",
-];
+// Product-card examples and the playground read every card type for the selected site,
+// so each site has to carry the same set as the first one.
+const cardSets = Object.entries(demoSites).map(([siteId, { productCards }]) => [
+  siteId,
+  Object.keys(productCards ?? {})
+    .sort()
+    .join(", "),
+]);
+const [[, referenceCards]] = cardSets;
+const sitesWithOtherCards = cardSets
+  .filter(([, cards]) => cards !== referenceCards)
+  .map(([siteId]) => siteId);
+
+if (sitesWithOtherCards.length) {
+  throw new Error(
+    `productCards of ${sitesWithOtherCards.join(", ")} differ from the first site's (${referenceCards}) in storybook/helpers/demoSites.json.`,
+  );
+}
 
 /** @type { import('@storybook/web-components-vite').StorybookConfig } */
 const config = {
@@ -46,9 +55,20 @@ const config = {
     // would bypass the allowlist above.
     config.envPrefix = ["VITE_"];
 
-    // A deployed build is always a static one, so configType tells it apart from `storybook dev`.
+    const demoTokens = Object.fromEntries(
+      Object.entries(demoSites).map(([siteId, { tokenEnvKey }]) => [
+        siteId,
+        env[tokenEnvKey],
+      ]),
+    );
+
+    // Without a token the widgets render empty, which shows up only as a 401 in a visitor's
+    // browser — long after the build went green and deployed. A deployed build is always a
+    // static one, so configType tells it apart from `storybook dev`.
     if (configType === "PRODUCTION") {
-      const missing = REQUIRED_ENV_KEYS.filter((key) => !env[key]);
+      const missing = Object.entries(demoSites)
+        .filter(([siteId]) => !demoTokens[siteId])
+        .map(([, { tokenEnvKey }]) => tokenEnvKey);
 
       if (missing.length) {
         throw new Error(
@@ -76,6 +96,7 @@ const config = {
     config.define = {
       ...config.define,
       ...storybookEnvDefines,
+      __STORYBOOK_DEMO_TOKENS__: JSON.stringify(demoTokens),
       global: "globalThis",
     };
 
