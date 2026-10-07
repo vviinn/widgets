@@ -28,7 +28,7 @@ jobs:
           cache: "npm"
       - name: Create .env file
         run: echo "OPENAPI_URL=${{ env.OPENAPI_URL }}" >> .env
-      - run: npm install
+      - run: npm ci
       - run: npm run build_interfaces
       - run: npm run lint
       - run: npm run test
@@ -44,7 +44,7 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
-      - run: npm install
+      - run: npm ci
       - name: Check for high/critical vulnerabilities
         run: npm audit --audit-level=high
 
@@ -60,7 +60,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
           cache-dependency-path: storybook/package-lock.json
-      - run: npm install
+      - run: npm ci
         working-directory: storybook
       - name: Check for high/critical vulnerabilities
         run: npm audit --audit-level=high
@@ -87,7 +87,7 @@ jobs:
         run: |
           echo "OPENAPI_URL=${{ env.OPENAPI_URL }}" >> .env
           echo "RECOMMENDATIONS_URL=https://api.stage.vviinn.com/product/" >> .env
-      - run: npm install
+      - run: npm ci
       - run: npm run test
       - run: npm run build_interfaces
       - run: npm run build
@@ -121,7 +121,7 @@ jobs:
           echo "OPENAPI_URL=${{ env.OPENAPI_URL }}" >> .env
           echo "RECOMMENDATIONS_URL=https://api.vviinn.com/product/" >> .env
           echo "API_PATH=https://api.vviinn.com" >> .env
-      - run: npm install
+      - run: npm ci
       - run: npm run test
       - run: npm run build_interfaces
       - run: npm run build
@@ -160,8 +160,17 @@ jobs:
           cache: "npm"
       - run: git pull
       - run: npm run update_storybook_widget_version
+      # Without the lockfile, the next pull request fails `npm ci` in the Storybook audit.
+      # Retried because the registry may not serve the version published moments ago yet.
       - run: |
-          git add ./storybook/package.json
+          for attempt in 1 2 3 4 5 6; do
+            npm install --package-lock-only --ignore-scripts && exit 0
+            sleep 20
+          done
+          exit 1
+        working-directory: storybook
+      - run: |
+          git add ./storybook/package.json ./storybook/package-lock.json
           git commit -m "[skip ci] update widget's version in storybook"
           git push origin develop
 
@@ -179,7 +188,7 @@ jobs:
         run: |
           echo "OPENAPI_URL=${{ env.OPENAPI_URL }}" >> .env
           echo "RECOMMENDATIONS_URL=https://api.vviinn.com/product/" >> .env
-      - run: npm install
+      - run: npm ci
       - run: npm run test
       - run: npm run build_interfaces
       - run: npm run build

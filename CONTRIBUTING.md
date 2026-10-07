@@ -59,6 +59,20 @@ Do not open a public issue. See [SECURITY.md](SECURITY.md).
 npm ci
 ```
 
+### Changing dependencies
+
+Add, remove or upgrade a dependency with `npm install`, and commit `package-lock.json`
+together with `package.json` — the same applies inside `storybook/`, which has its own pair.
+CI installs with `npm ci`, which refuses a lockfile that disagrees with its manifest, so a
+missing lockfile update fails the pull request with:
+
+```
+npm error `npm ci` can only install packages when your package.json and package-lock.json or npm-shrinkwrap.json are in sync.
+```
+
+Run `npm install` in that directory — the repository root, or `storybook/` when the failing
+job is `Security Audit (Storybook)` — and commit the updated lockfile.
+
 ### Environment
 
 Create a `.env` file in the repository root. `.env.dev` is committed as a working starting
