@@ -35,12 +35,12 @@ steps:
         echo "Cleaning node_modules..."
         rm -rf node_modules
         echo "Commit Hash: $(git rev-parse HEAD)"
-        # Stage swaps in the local widgets build, so its manifest no longer matches the lockfile.
+        # Stage swaps in the local widgets build, so its manifest disagrees with the lockfile.
         if [ "$_ENVIRONMENT" = "stage" ]
         then
           cp -r /widgets .
           npm pkg set dependencies.vviinn-widgets="./widgets"
-          npm install --production=false
+          npm install --include=dev
         else
           npm ci --include=dev
         fi

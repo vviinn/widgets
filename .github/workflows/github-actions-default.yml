@@ -161,14 +161,17 @@ jobs:
       - run: git pull
       - run: npm run update_storybook_widget_version
       # Without the lockfile, the next pull request fails `npm ci` in the Storybook audit.
-      # Retried because the registry may not serve the version published moments ago yet.
-      - run: |
-          for attempt in 1 2 3 4 5 6; do
-            npm install --package-lock-only --ignore-scripts && exit 0
+      # Retries for ~2 minutes, and only while the registry does not serve the new version yet.
+      - name: Sync Storybook lockfile
+        working-directory: storybook
+        run: |
+          for _ in 1 2 3 4 5 6; do
+            npm install --package-lock-only --ignore-scripts --prefer-online 2>npm-error.log && exit 0
+            grep -qE 'ETARGET|E404' npm-error.log || { cat npm-error.log; exit 1; }
             sleep 20
           done
+          cat npm-error.log
           exit 1
-        working-directory: storybook
       - run: |
           git add ./storybook/package.json ./storybook/package-lock.json
           git commit -m "[skip ci] update widget's version in storybook"
