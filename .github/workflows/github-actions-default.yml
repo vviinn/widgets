@@ -45,8 +45,9 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
       - run: npm install
-      - name: Check for high/critical vulnerabilities
-        run: npm audit --audit-level=high
+      # Dev tooling stays out: braces (via Jest 29, the newest Stencil supports) has no fixed release.
+      - name: Check for high/critical vulnerabilities in the shipped dependencies
+        run: npm audit --omit=dev --audit-level=high
 
   security-audit-storybook:
     name: Security Audit (Storybook)
