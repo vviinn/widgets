@@ -2,9 +2,9 @@
 node_modules/
 
 # Build output and caches
-/dist/
-/www/
-/coverage/
+dist/
+www/
+coverage/
 .stencil/
 /storybook/storybook-static/
 
