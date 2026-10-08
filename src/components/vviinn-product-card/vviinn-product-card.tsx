@@ -35,6 +35,7 @@ import {
   shouldShowMultipleImages,
   getCurrentImage,
   createHoverTimerManager,
+  getProductDataAttributes,
 } from "./helpers";
 import {
   CrossSellingClickEvent,
@@ -576,6 +577,8 @@ export class VviinnProductCard {
       );
     }
 
+    const customLabels = this.customLabels.split(CUSTOM_LABELS_DELIMITER);
+
     return (
       <Host
         part="product-card"
@@ -586,6 +589,7 @@ export class VviinnProductCard {
         }}
         exportparts={productCardParts}
         data-id={this.productId}
+        {...getProductDataAttributes(this.brand, customLabels)}
       >
         {renderExternalCSS(this.cssUrl)}
 
@@ -637,10 +641,7 @@ export class VviinnProductCard {
                 showInContainer={this.addPriceContainer}
               />
 
-              {renderCustomLabels(
-                this.customLabels.split(CUSTOM_LABELS_DELIMITER),
-                "content",
-              )}
+              {renderCustomLabels(customLabels, "content")}
             </Fragment>
           )}
         </div>
@@ -812,10 +813,7 @@ export class VviinnProductCard {
             <slot name="vviinn-product-card-actions"></slot>
           </div>
 
-          {renderCustomLabels(
-            this.customLabels.split(CUSTOM_LABELS_DELIMITER),
-            "image",
-          )}
+          {renderCustomLabels(customLabels, "image")}
         </div>
 
         {this.showFooterArrow && <div class="footer-arrow"></div>}

@@ -1,6 +1,23 @@
 import { ProductImage } from "../../interfaces";
+import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
 
 export const HOVER_DELAY_MS = 65;
+
+/**
+ * Brand and non-empty custom labels as host attributes, so a stylesheet loaded
+ * through css-url can select cards by product data, e.g. [data-custom-label-1="Bestseller"]
+ */
+export const getProductDataAttributes = (
+  brand: string | undefined,
+  customLabels: string[],
+): Record<string, string> => ({
+  ...addIfNotEmpty("data-brand", brand),
+  ...Object.fromEntries(
+    customLabels
+      .map((label, index) => [`data-custom-label-${index}`, label])
+      .filter(([, label]) => label),
+  ),
+});
 
 export const shouldShowMultipleImages = (
   showMultipleImages: boolean,
