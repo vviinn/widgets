@@ -15,32 +15,28 @@ Vviinn Widgets offer **three powerful ways** to customize appearance and content
 
 ## Customization Methods
 
-### [CSS Variables](?path=/docs/customization-css-variables--docs)
-**Theme-level styling:** colors, fonts, spacing. Use for:
-- Change brand colors (primary, hover)
-- Change font family globally
-- Style product card appearance (alignment, borders)
-
-### [Target Styling](?path=/docs/customization-target-styling--docs)
-**Precise element control** with `::part()` selector. Use for:
-- Style a specific button or element
-- Change element positioning or layout
-- Apply complex CSS (animations, transforms)
-
-### [Custom Content](?path=/docs/customization-custom-content--docs)
-**Replace default content** with your own HTML. Use for:
-- Replace button text or labels
-- Add custom icons
-- Inject custom HTML/markup
-
-## Where Your CSS Lives
-
-Styles reach a widget from one of two places:
-
-- **Page stylesheet** — a `<style>` or `<link>` on your page. It reaches elements through the widget you embed: `vviinn-vpr-widget::part(title)`.
-- **`css-url` stylesheet** — a file the widget loads through its `css-url` prop, inside its shadow root. It selects elements directly (`vviinn-product-card::part(title)`, `:host`, `::slotted()`), and only it can style a card by its [product data](?path=/docs/components-product-card--docs) or the elements inside a card by the card's state, e.g. `vviinn-product-card:hover::part(image)`.
-
-Examples in these docs are written for a page stylesheet. Those meant for `css-url` start with a `/* loaded via … css-url="..." */` comment.
+<table width="100%" className="docs-table">
+  <thead>
+    <tr><th>Method</th><th>Use for</th><th>How</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="?path=/docs/customization-css-variables--docs">CSS Variables</a></td>
+      <td>Theme-level styling: brand colors, font family, product card alignment and borders</td>
+      <td><code>--color-primary</code> on the widget</td>
+    </tr>
+    <tr>
+      <td><a href="?path=/docs/customization-target-styling--docs">Target Styling</a></td>
+      <td>A specific element: its look, position, layout, animations and transforms</td>
+      <td><code>::part()</code> selector</td>
+    </tr>
+    <tr>
+      <td><a href="?path=/docs/customization-custom-content--docs">Custom Content</a></td>
+      <td>Your own HTML in place of default content: button text, labels, icons</td>
+      <td>Child element with <code>slot="…"</code></td>
+    </tr>
+  </tbody>
+</table>
 
 ---
 
@@ -118,3 +114,31 @@ You can use **multiple customization methods together** for maximum flexibility:
 ```
     </div>
 </div>
+
+---
+
+## Where Your CSS Lives
+
+### Page Stylesheet (Default)
+
+A `<style>` or `<link>` on your page. It reaches widget elements through the widget you embed, e.g. `vviinn-vpr-widget::part(title)`. Enough for most styling.
+
+### `css-url` Stylesheet
+
+A file the widget loads into its own shadow root:
+
+```html
+<vviinn-results css-url="https://your-shop.example/vviinn.css"></vviinn-results>
+```
+
+Inside it, select elements directly: `vviinn-product-card::part(title)`, `:host`, `::slotted()`. Use it for what a page stylesheet can't do:
+
+- style cards by [product data](?path=/docs/components-product-card--docs) – brand, custom labels;
+- style elements inside a card by the card's state, e.g. `vviinn-product-card:hover::part(image)`.
+
+Limits of `css-url`:
+
+- In the search modal the cards sit inside a nested `vviinn-results`, out of reach of the `vviinn-vps-widget` stylesheet.
+- On `vviinn-results` the file is also loaded into the One-Click Discovery buttons and the slider they open, so bare `:host` rules apply there too – scope layout rules with `:host(vviinn-results)`.
+
+Across these docs, `css-url` examples begin with a `/* loaded via … css-url="..." */` comment; all other examples go into a page stylesheet.

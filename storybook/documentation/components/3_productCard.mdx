@@ -11,11 +11,21 @@ import { cardCredentials } from "../../components/productCard/cardCredentials";
 
 # Product Card
 
-> **Note:** Product Card is rendered **inside a widget** (`vviinn-vpr-widget`, `vviinn-vps-widget`, …), not on its own — the `vviinn-product-card` tag below is for reference. When styling via [CSS Parts](?path=/docs/customization-target-styling--docs), use your widget's tag as the host: `vviinn-vpr-widget::part(title)` targets the same element.
+> **Note:** Product Card is rendered **inside a widget** (`vviinn-vpr-widget`, `vviinn-vps-widget`, …), not on its own – the `vviinn-product-card` tag below is for reference. When styling via [CSS Parts](?path=/docs/customization-target-styling--docs), use your widget's tag as the host: `vviinn-vpr-widget::part(title)` targets the same element (except `vviinn-vpr-button` – see CSS Parts).
+
+## Examples
+
+<CardTemplate cardData={cardCredentials("mainCard")} />
+
+<CardTemplate cardData={cardCredentials("appendCard")} />
+
+<CardTemplate cardData={cardCredentials("setCard")} />
+
+<CardTemplate cardData={cardCredentials("minimalisticCard")} />
 
 ## Selecting cards by product data
 
-Each card carries the product's brand and its non-empty custom labels as attributes — `data-brand` and `data-custom-label-0` … `data-custom-label-4`, numbered like the feed fields `custom_label_0` … `custom_label_4`. A stylesheet loaded through the widget's `css-url` prop lives in the same shadow root as the cards, so it can style cards by these values:
+Each card carries the product's brand and its non-empty custom labels as attributes – `data-brand` and `data-custom-label-0` … `data-custom-label-4`, numbered like the feed fields `custom_label_0` … `custom_label_4`. A stylesheet loaded through the widget's `css-url` prop lives in the same shadow root as the cards, so it can style cards by these values:
 
 ```css
 /* loaded via <vviinn-results css-url="..."> */
@@ -32,13 +42,3 @@ vviinn-product-card[data-brand="Acme"]::part(brand) {
 ```
 
 These attributes are not reachable from the page's own stylesheet, since `::part()` cannot be combined with an attribute selector. The same applies to the search modal: its cards sit inside a nested `vviinn-results`, out of reach of the `vviinn-vps-widget` stylesheet.
-
-## Examples
-
-<CardTemplate cardData={cardCredentials("mainCard")} />
-
-<CardTemplate cardData={cardCredentials("appendCard")} />
-
-<CardTemplate cardData={cardCredentials("setCard")} />
-
-<CardTemplate cardData={cardCredentials("minimalisticCard")} />
