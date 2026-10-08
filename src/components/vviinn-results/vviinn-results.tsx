@@ -922,6 +922,9 @@ export class VviinnResults {
               addToBasketShow={this.addToBasketShow}
               favoriteShow={this.favoriteShow}
               campaigns={this.oneClickDiscoveryCampaigns}
+              cssUrl={this.cssUrl}
+              imageResolutionWidth={this.imageResolutionWidth}
+              showMultipleImages={this.showMultipleImages}
               showInWidget={this.showInWidget}
               uiSessionId={this.uiSessionId}
               onVviinnVprButtonActivated={() => oneClickDiscoveryHandler(i)}
