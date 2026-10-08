@@ -51,6 +51,17 @@ vviinn-vps-widget::part(custom-label-1 custom-label-image) {
 
 \* **Except `vviinn-vpr-button`** — it only opens a separate `vviinn-recommendations-sidebar`, so `vviinn-vpr-button::part(...)` reaches nothing. Target the sidebar: `vviinn-recommendations-sidebar::part(title)`.
 
+**Styling inside a card by the card's state needs `css-url`.** A page stylesheet can style the card itself on hover (`vviinn-vpr-widget::part(product-card):hover`), but not the elements inside it — a `::part()` cannot be followed by another `::part()`. A stylesheet loaded through the widget's `css-url` prop sits next to the cards, so it can select the card first and then reach into it:
+
+```css
+/* loaded via <vviinn-vpr-widget css-url="..."> */
+vviinn-product-card:hover::part(image) {
+  opacity: 0.85;
+}
+```
+
+The card also carries product data as attributes to select by — see [Product Card](?path=/docs/components-product-card--docs).
+
 ## Examples
 
 <PreviewAndCodeTabs tabData={{groupId:"productCardStyling", header:"Discovery Slider: Styling Product Card's Title",

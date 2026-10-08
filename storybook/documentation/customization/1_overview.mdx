@@ -33,6 +33,15 @@ Vviinn Widgets offer **three powerful ways** to customize appearance and content
 - Add custom icons
 - Inject custom HTML/markup
 
+## Where Your CSS Lives
+
+Styles reach a widget from one of two places:
+
+- **Page stylesheet** — a `<style>` or `<link>` on your page. It reaches elements through the widget you embed: `vviinn-vpr-widget::part(title)`.
+- **`css-url` stylesheet** — a file the widget loads through its `css-url` prop, inside its shadow root. It selects elements directly (`vviinn-product-card::part(title)`, `:host`, `::slotted()`), and only it can style a card by its [product data](?path=/docs/components-product-card--docs) or the elements inside a card by the card's state, e.g. `vviinn-product-card:hover::part(image)`.
+
+Examples in these docs are written for a page stylesheet. Those meant for `css-url` start with a `/* loaded via … css-url="..." */` comment.
+
 ---
 
 ## Quick Start Examples
