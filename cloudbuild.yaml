@@ -6,8 +6,7 @@ steps:
       - "-c"
       - |
         set -euo pipefail
-        rm -rf node_modules/
-        npm install
+        npm ci
     dir: "/workspace"
   - id: "build_widgets"
     name: node:22
@@ -32,15 +31,17 @@ steps:
       - "-c"
       - |
         set -euo pipefail
-        echo "Cleaning node_modules..."
-        rm -rf node_modules
+        echo "Commit Hash: $(git rev-parse HEAD)"
+        # Stage swaps in the local widgets build, so its manifest disagrees with the lockfile.
         if [ "$_ENVIRONMENT" = "stage" ]
         then
           cp -r /widgets .
           npm pkg set dependencies.vviinn-widgets="./widgets"
+          npm install --include=dev
+        else
+          # Builds the widget version pinned in the lockfile, which the bot bumps on develop.
+          npm ci --include=dev
         fi
-        echo "Commit Hash: $(git rev-parse HEAD)"
-        npm install --production=false
         npm run build-storybook
         if [ "$_ENVIRONMENT" = "production" ]
         then
