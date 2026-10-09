@@ -528,6 +528,12 @@ export class VviinnProductCard {
   }
 
   render() {
+    const customLabels = this.customLabels.split(CUSTOM_LABELS_DELIMITER);
+    const productDataAttributes = getProductDataAttributes(
+      this.brand,
+      customLabels,
+    );
+
     if (this.isContentCard || this.isListCard) {
       return (
         <Host
@@ -535,6 +541,7 @@ export class VviinnProductCard {
           class={`${this.entityType}-card`}
           exportparts={this.isContentCard ? contentCardParts : listCardParts}
           data-id={this.productId}
+          {...productDataAttributes}
         >
           {renderExternalCSS(this.cssUrl)}
           <div
@@ -577,8 +584,6 @@ export class VviinnProductCard {
       );
     }
 
-    const customLabels = this.customLabels.split(CUSTOM_LABELS_DELIMITER);
-
     return (
       <Host
         part="product-card"
@@ -589,7 +594,7 @@ export class VviinnProductCard {
         }}
         exportparts={productCardParts}
         data-id={this.productId}
-        {...getProductDataAttributes(this.brand, customLabels)}
+        {...productDataAttributes}
       >
         {renderExternalCSS(this.cssUrl)}
 
