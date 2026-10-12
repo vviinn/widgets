@@ -34,21 +34,14 @@
     body {
       padding: 20px;
     }
-    vviinn-vps-button [slot] {
-      visibility: hidden;
-      position: absolute;
-    }
-    vviinn-vps-widget [slot] {
-      visibility: hidden;
-      position: absolute;
-    }
-    vviinn-vpr-widget [slot] {
-      visibility: hidden;
-      position: absolute;
-    }
+    vviinn-vps-button [slot],
+    vviinn-vps-widget [slot],
+    vviinn-vpr-widget [slot],
     vviinn-vpr-button [slot] {
       visibility: hidden;
       position: absolute;
+      width: 0;
+      height: 0;
     }
   </style>
   <body>

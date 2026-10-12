@@ -18,6 +18,8 @@ Want to change "Add to Basket" to "Add to Cart"? Use your own icons? **Slots let
 
 Add your content with the **`slot` attribute** to place it inside the widget. Learn more about [Slots](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_templates_and_slots#adding_flexibility_with_slots).
 
+The `width: 0; height: 0` in the examples keeps percent-sized slot content, such as an icon with `width="100%"`, from adding a horizontal scrollbar.
+
 ## Available in These Widgets
 
 - [Discovery Slider](#discovery-slider-example)
@@ -47,6 +49,8 @@ Here are slots that could be used for [Discovery Slider](?path=/docs/widgets-dis
   vviinn-vpr-widget [slot] {
     visibility: hidden;
     position: absolute;
+    width: 0;
+    height: 0;
   }
 </style>
 
@@ -87,6 +91,8 @@ Here are slots that could be used for [Discovery Slider](?path=/docs/widgets-dis
   vviinn-vpr-button [slot] {
     visibility: hidden;
     position: absolute;
+    width: 0;
+    height: 0;
   }
 </style>
 
@@ -149,6 +155,8 @@ Here are slots that could be used for [Discovery Slider](?path=/docs/widgets-dis
   vviinn-vpr-widget [slot] {
     visibility: hidden;
     position: absolute;
+    width: 0;
+    height: 0;
   }
 
   vviinn-vpr-widget::part(update-button-item) {
@@ -200,6 +208,8 @@ Here are slots that could be used for [Discovery Slider](?path=/docs/widgets-dis
   vviinn-vpr-button [slot] {
     visibility: hidden;
     position: absolute;
+    width: 0;
+    height: 0;
   }
 </style>
 
@@ -257,6 +267,8 @@ Slots that could be used for [Search Modal](?path=/docs/widgets-search-modal--do
   vviinn-vps-button [slot] {
     visibility: hidden;
     position: absolute;
+    width: 0;
+    height: 0;
   }
 </style>
 <vviinn-vps-button
@@ -308,10 +320,11 @@ Slots that could be used for [Extended Filters](?path=/docs/components-filters--
   vviinn-extended-filters [slot] {
     visibility: hidden;
     position: absolute;
-    locale="en-US"
+    width: 0;
+    height: 0;
   }
 </style>
-<vviinn-extended-filters>
+<vviinn-extended-filters locale="en-US">
     <span slot="vviinn-extended-filters-title">Custom Title</span>
     <span slot="vviinn-extended-filters-apply">Custom Apply</span>
     <span slot="vviinn-extended-filters-reset">Custom Reset</span>
