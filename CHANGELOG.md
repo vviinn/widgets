@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.227.0](https://github.com/vviinn/widgets/compare/v2.226.3...v2.227.0) (2026-10-12)
+
+
+### Features
+
+* Vviinn Product Card: Expose brand and custom labels as data attributes for css-url styling ([81cdf34](https://github.com/vviinn/widgets/commit/81cdf342ac6b6a7e220674b1153204e297078f35))
+* Vviinn Results: Set the row gap with --vviinn-results-row-gap, keeping the one-click discovery arrow attached ([212be0c](https://github.com/vviinn/widgets/commit/212be0c06262b6c180593e19c4e61e1290a902b1))
+
+
+### Bug Fixes
+
+* Vviinn Results: Apply the CSS URL and image settings to the one-click discovery slider ([15deae7](https://github.com/vviinn/widgets/commit/15deae7486fc25ace01160ab4a7d51fcf0d26d2b))
+
 ### [2.226.3](https://github.com/vviinn/widgets/compare/v2.226.2...v2.226.3) (2026-10-08)
 
 ### [2.226.2](https://github.com/vviinn/widgets/compare/v2.226.1...v2.226.2) (2026-10-07)
