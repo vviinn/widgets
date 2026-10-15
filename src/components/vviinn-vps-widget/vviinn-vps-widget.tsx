@@ -50,7 +50,7 @@ import {
   UploadActionIcon,
   DragDropImageIcon,
 } from "../vviinn-icons";
-import { DEFAULT_EXAMPLE_IMAGE } from "../../assets/constants";
+import { DEFAULT_EXAMPLE_IMAGE } from "../../constants/exampleImage";
 import { videoStreamSettings } from "../../video/settings";
 import { Recommendation } from "../../interfaces";
 import { checkDeviceType } from "../../helpers/device/checkDeviceType";
@@ -475,7 +475,7 @@ export class VviinnVpsWidget {
     this.replaceSlotsContent();
   }
 
-  getBasicEventData = (isTextSearch?: boolean): BasicEventData => {
+  private getBasicEventData = (isTextSearch?: boolean): BasicEventData => {
     const activeCampaign = this.isTextSearch() || isTextSearch ? "TPS" : "VPS";
     return {
       campaignTypeId: activeCampaign,

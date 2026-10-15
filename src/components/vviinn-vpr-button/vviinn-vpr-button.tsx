@@ -347,7 +347,7 @@ export class VviinnVprButton {
     }
   };
 
-  handleClick(): void {
+  private handleClick(): void {
     const sidebar = document.createElement("vviinn-recommendations-sidebar");
     sidebar.token = this.token;
     sidebar.locale = this.locale;
@@ -365,6 +365,7 @@ export class VviinnVprButton {
     sidebar.color = this.color;
     sidebar.imageWidth = this.imageWidth;
     sidebar.showMultipleImages = this.showMultipleImages;
+    sidebar.imageResolutionWidth = this.imageResolutionWidth;
     sidebar.buttonElementId = this.el.id;
     sidebar.noResultText = this.noResultText;
     sidebar.noResultShow = this.noResultShow;

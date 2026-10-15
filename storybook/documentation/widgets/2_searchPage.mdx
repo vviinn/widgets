@@ -181,6 +181,11 @@ In this example, the `vviinn-text-search` component is on the first page, and th
       <td>No attributes needed</td>
     </tr>
     <tr>
+      <td>Passing the query to the results page</td>
+      <td>Give the query to exactly one component — the search bar via <code>search-query</code>, or <code>vviinn-results</code> via <code>text-search-query</code> or the URL param it reads with <code>results-page-url</code>. Both at once describes the same search twice.</td>
+      <td><code>&lt;vviinn-text-search search-query="…"&gt;</code> <em>or</em> <code>&lt;vviinn-results text-search-query="…"&gt;</code></td>
+    </tr>
+    <tr>
       <td>Supporting page reloads (manual redirect)</td>
       <td>When handling redirect manually, update URL after each search using browser History API so the page can be reloaded</td>
       <td>Use <code>pushState()</code> or <code>replaceState()</code></td>

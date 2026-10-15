@@ -1,2 +1,11 @@
+# Prettier also reads .gitignore; this lists tracked files it must leave alone.
+
+# Written by npm
+package-lock.json
+
+# Synced verbatim from upstream by `npm run update.openapi`
+/openapi/merchant-openapi.yaml
+
+# Prose — line breaks are the author's
+*.md
 *.mdx
-*.yaml

@@ -7,10 +7,11 @@ import {
 
 let loader;
 let vviinnWidgets;
-let isLocalEnv = import.meta.env.STORYBOOK_ENV === "local";
 
+// `storybook dev` renders the working tree. A static build renders the installed package,
+// which Cloud Build points at the branch build on stage and leaves on the npm release in production.
 (async () => {
-  if (isLocalEnv) {
+  if (import.meta.env.DEV) {
     loader = await import("../../dist/loader");
     loader.defineCustomElements();
     vviinnWidgets = await import("../../dist");

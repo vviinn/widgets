@@ -47,7 +47,7 @@ export class VviinnEnergyLabel {
       });
     }
 
-    if (!!this.certificationClass) {
+    if (this.certificationClass) {
       return i18next.t("energyLabel.iconAltWithClassOnly", {
         energyClass: this.certificationClass,
       });

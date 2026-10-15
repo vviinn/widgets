@@ -1,5 +1,5 @@
-import { cardDataByType, productDataByIndustryAndType } from "./constants";
-import { vviinnIndustry } from "../../helpers";
+import { cardDataByType } from "./constants";
+import { siteProductCards } from "../../helpers";
 
 const cardDataSeparator = "\n    ";
 const cardAppendContainer = `
@@ -34,7 +34,7 @@ const discoveryButtonCode = (append = false) => {
 
 const cardParamsToCode = (productData) => {
   return Object.entries(productData)
-    .filter(([key, value]) => typeof value !== "object")
+    .filter(([, value]) => typeof value !== "object")
     .map(([key, value]) => {
       if (value === "") return "";
       const stringifiedValue =
@@ -60,7 +60,7 @@ export const cardCredentials = (cardType) => {
   const cardData = cardDataByType[cardType];
   cardData.productData = {
     ...cardData.productData,
-    ...productDataByIndustryAndType[vviinnIndustry][cardType],
+    ...siteProductCards[cardType],
   };
   const codeCardStyle = cardData.style ? `${cardData.style}\n` : "";
   const uniqueId = cardData.uniqueId;

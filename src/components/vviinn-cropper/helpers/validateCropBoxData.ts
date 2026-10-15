@@ -4,7 +4,7 @@ import { MIN_SEARCH_AREA_SIZE } from "../constants";
 export const ValidateCropBoxData = (cropBoxData: CropBoxData) => {
   const { width, height, left, top } = cropBoxData;
   const minSize = MIN_SEARCH_AREA_SIZE;
-  let result = {
+  const result = {
     width,
     height,
     left,

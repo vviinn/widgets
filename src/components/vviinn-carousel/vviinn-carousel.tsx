@@ -85,7 +85,7 @@ export class VviinnCarousel {
   @Prop() campaignTypeId: CampaignTypeId;
   @Prop() widgetElementId?: string;
   @Prop() gridArrowsDynamic: boolean;
-  @Prop({ mutable: true }) recommendations: Recommendation[] = [];
+  @Prop() recommendations: Recommendation[] = [];
   @Prop() sourceProduct: Recommendation;
   @Prop() widgetVersion: string;
   @Prop() addToBasketShow: boolean;
@@ -182,7 +182,7 @@ export class VviinnCarousel {
     step: number,
     animationInterval: number,
   ) => {
-    let clickedProduct = this.crossSellingRecommendations.find(
+    const clickedProduct = this.crossSellingRecommendations.find(
       (item) => item.productId === productId,
     );
     const crossSellingIndex =
@@ -203,7 +203,7 @@ export class VviinnCarousel {
         this.vviinnProductLoad.emit(productData);
       }
 
-      let element = this.el.querySelector(`[data-id="${productId}"]`);
+      const element = this.el.querySelector(`[data-id="${productId}"]`);
       const imageWidth = element.getBoundingClientRect().width;
 
       this.setImageWidthSetMode(`${imageWidth}px`);
@@ -349,7 +349,13 @@ export class VviinnCarousel {
     if (!this.isSetMode) return;
 
     const { productId } = detail;
-    if (this.setModeAppliedDiscounts.hasOwnProperty(productId)) return;
+    if (
+      Object.prototype.hasOwnProperty.call(
+        this.setModeAppliedDiscounts,
+        productId,
+      )
+    )
+      return;
 
     this.setModeAppliedDiscounts = {
       ...this.setModeAppliedDiscounts,
@@ -441,12 +447,6 @@ export class VviinnCarousel {
         parseInt(parentStyles["padding-left"]));
 
     this.el.style.setProperty(CAROUSEL_CONTENT_WIDTH_CSS_VAR, `${width}px`);
-  }
-
-  getParent(): HTMLElement {
-    const parentNode: any = this.el.parentNode;
-    const host = parentNode.host;
-    return host.parentElement as HTMLElement;
   }
 
   private cloneSlottedContent() {

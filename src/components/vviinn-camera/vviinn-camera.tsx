@@ -139,7 +139,6 @@ export class VviinnExampleImage {
   private async selectImage() {
     if (!this.srcObject) return;
     this.vviinnImageUploadStarted.emit(this.basicEventData);
-    let file: File;
 
     const photoFrame = this.el.shadowRoot.getElementById("photo-frame");
     const video = this.videoElement;
@@ -190,14 +189,12 @@ export class VviinnExampleImage {
     );
 
     const dataURI = canvas.toDataURL("image/jpeg");
-    file = toFile(dataURI);
+    const file = toFile(dataURI);
 
     pipe(
-      await makeUploadFileRequest(
-        this.storeName,
-        this.token,
-        this.apiPath,
-      )(file),
+      await makeUploadFileRequest(this.storeName, this.token, {
+        apiPath: this.apiPath,
+      })(file),
       E.match(
         () => {
           this.vviinnNoResult.emit(this.basicEventData);

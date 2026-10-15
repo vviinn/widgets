@@ -11,10 +11,28 @@ on:
       - main
 
 env:
-  NODE_VERSION: "22.21.0"
+  NODE_VERSION: "22.23.2"
   OPENAPI_URL: ./openapi/merchant-openapi.yaml
 
 jobs:
+  lint-and-test:
+    name: Lint and Unit Tests
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+      - name: Create .env file
+        run: echo "OPENAPI_URL=${{ env.OPENAPI_URL }}" >> .env
+      - run: npm ci
+      - run: npm run build_interfaces
+      - run: npm run lint
+      - run: npm run test
+
   security-audit:
     name: Security Audit
     runs-on: ubuntu-latest
@@ -26,9 +44,10 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
-      - run: npm install
-      - name: Check for high/critical vulnerabilities
-        run: npm audit --audit-level=high
+      # npm audit reads only the lockfile; the Lint job already installs the root.
+      # Dev tooling stays out: braces (via Jest 29, the newest Stencil supports) has no fixed release.
+      - name: Check for high/critical vulnerabilities in the shipped dependencies
+        run: npm audit --omit=dev --audit-level=high
 
   security-audit-storybook:
     name: Security Audit (Storybook)
@@ -42,7 +61,8 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
           cache-dependency-path: storybook/package-lock.json
-      - run: npm install
+      # Not needed for npm audit, but the only PR check that the Storybook lockfile matches package.json.
+      - run: npm ci --ignore-scripts
         working-directory: storybook
       - name: Check for high/critical vulnerabilities
         run: npm audit --audit-level=high
@@ -69,7 +89,7 @@ jobs:
         run: |
           echo "OPENAPI_URL=${{ env.OPENAPI_URL }}" >> .env
           echo "RECOMMENDATIONS_URL=https://api.stage.vviinn.com/product/" >> .env
-      - run: npm install
+      - run: npm ci
       - run: npm run test
       - run: npm run build_interfaces
       - run: npm run build
@@ -103,12 +123,24 @@ jobs:
           echo "OPENAPI_URL=${{ env.OPENAPI_URL }}" >> .env
           echo "RECOMMENDATIONS_URL=https://api.vviinn.com/product/" >> .env
           echo "API_PATH=https://api.vviinn.com" >> .env
-      - run: npm install
+      - run: npm ci
       - run: npm run test
       - run: npm run build_interfaces
       - run: npm run build
+      # The SBOM comes from the lockfile, so it runs before the publish: a failure
+      # here must not leave a package in the registry with the dependent jobs skipped.
+      - name: Generate SBOM
+        run: npm sbom --sbom-format cyclonedx --omit dev > sbom.cyclonedx.json
+      - name: Upload SBOM
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-${{ github.sha }}
+          path: sbom.cyclonedx.json
+          retention-days: 90
+      # npm cannot attest a private source repository, so --provenance joins the
+      # command only once the repository is public.
       - name: Publish to NPM registry with beta tag using OIDC
-        run: npm publish --tag beta --access public
+        run: npm publish --tag beta --access public ${{ github.event.repository.visibility == 'public' && '--provenance' || '' }}
 
   update-widget-version-storybook:
     runs-on: ubuntu-latest
@@ -130,8 +162,22 @@ jobs:
           cache: "npm"
       - run: git pull
       - run: npm run update_storybook_widget_version
+      # Without the lockfile, the next pull request fails `npm ci` in the Storybook audit.
+      # The registry can take minutes to serve a fresh version (2.226.2: ~5), so retry for up to 15.
+      - name: Sync Storybook lockfile
+        working-directory: storybook
+        run: |
+          for _ in $(seq 30); do
+            npm install --package-lock-only --ignore-scripts --prefer-online 2>npm-error.log && exit 0
+            grep -qE 'ETARGET|E404' npm-error.log || { cat npm-error.log; exit 1; }
+            sleep 30
+          done
+          cat npm-error.log
+          exit 1
       - run: |
-          git add ./storybook/package.json
+          git add ./storybook/package.json ./storybook/package-lock.json
+          # A re-run finds the version already committed.
+          git diff --cached --quiet && exit 0
           git commit -m "[skip ci] update widget's version in storybook"
           git push origin develop
 
@@ -149,7 +195,7 @@ jobs:
         run: |
           echo "OPENAPI_URL=${{ env.OPENAPI_URL }}" >> .env
           echo "RECOMMENDATIONS_URL=https://api.vviinn.com/product/" >> .env
-      - run: npm install
+      - run: npm ci
       - run: npm run test
       - run: npm run build_interfaces
       - run: npm run build

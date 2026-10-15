@@ -1,7 +1,7 @@
 import {
   productCardImageAspectRatioArg,
   productCardImageBgColorArg,
-} from "../../../../storybook/helpers";
+} from "../../../../storybook/helpers/sharedArgTypes";
 
 const token = {
   name: "token",

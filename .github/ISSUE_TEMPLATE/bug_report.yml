@@ -1,0 +1,106 @@
+name: Bug report
+description: Something in a widget behaves incorrectly
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report this. Please do not include your token or any
+        other credential — a report never needs one.
+
+        For account, product feed or panel questions, write to support@vviinn.com instead.
+        For a security issue, use the private advisory form linked in SECURITY.md.
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: The package version, or the CDN URL you load.
+      placeholder: "2.224.7, or https://cdn.jsdelivr.net/npm/vviinn-widgets@latest/..."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: install
+    attributes:
+      label: How are the widgets loaded?
+      options:
+        - CDN script tags
+        - npm package
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      options:
+        - vviinn-vps-widget
+        - vviinn-vps-button
+        - vviinn-vpr-widget
+        - vviinn-vpr-button
+        - vviinn-shop-the-look
+        - vviinn-text-search
+        - vviinn-suggestions
+        - vviinn-results
+        - vviinn-product-card
+        - vviinn-filters
+        - vviinn-extended-filters
+        - vviinn-selected-filters
+        - vviinn-cropper
+        - Several / not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: How to reproduce
+      description: A minimal HTML snippet with the props you set, plus the steps you take.
+      render: html
+    validations:
+      required: true
+
+  - type: textarea
+    id: behaviour
+    attributes:
+      label: Expected and actual behaviour
+      description: What you expected to happen, and what happened instead.
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Browser and OS
+      placeholder: "Chrome 141 on Windows 11, Safari 18 on iOS 18"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: device
+    attributes:
+      label: Where does it happen?
+      multiple: true
+      options:
+        - Mobile
+        - Tablet
+        - Desktop
+    validations:
+      required: true
+
+  - type: textarea
+    id: console
+    attributes:
+      label: Console errors
+      description: Any errors or warnings from the browser console.
+      render: shell
+
+  - type: checkboxes
+    id: hygiene
+    attributes:
+      label: Before submitting
+      options:
+        - label: This report contains no tokens, credentials or other secrets.
+          required: true

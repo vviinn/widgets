@@ -45,7 +45,6 @@ import { campaignTypeNames } from "../../campaign/Campaign";
 import { TextSearchResponse } from "../../interfaces";
 import {
   ChangedFiltersEvent,
-  ChangedFiltersEventData,
   DynamicFilterInternalData,
   ProductCardEvent,
   ProductCardEventData,
@@ -53,7 +52,6 @@ import {
   ProductEventType,
   ResultEventType,
   TextSearchEvent,
-  TextSearchEventData,
   TriggerSourceEvent,
   TriggerSourceEventData,
 } from "../../recommendation/events";
@@ -200,15 +198,6 @@ export class VviinnResults {
   @Event() vviinnResultLoad: EventEmitter<BasicEventData>;
   /** The search result appears in the viewport */
   @Event() vviinnResultView: EventEmitter<BasicEventData>;
-
-  /** The 'query' is received for performing a Text Search */
-  /** @internal */
-  @Event() vviinnTextSearchStarted: EventEmitter<TextSearchEventData>;
-
-  /** The filter's state changes */
-  /** @internal */
-  @Event({ bubbles: true })
-  vviinnFiltersChanged: EventEmitter<ChangedFiltersEventData>;
 
   /** Cropper state should be resetted */
   /** @internal */
@@ -418,7 +407,7 @@ export class VviinnResults {
   }
 
   componentDidRender() {
-    !!this.replaceSlotsContentInButton
+    this.replaceSlotsContentInButton
       ? this.replaceSlotsContentInButton(this.el)
       : this.showInWidget
         ? this.replaceSlotsContentInWidget(this.el)
@@ -751,7 +740,7 @@ export class VviinnResults {
   private trackResultEvent(type: ResultEventType) {
     const { campaignTypeId, ...rest } = this.getBasicEventData();
 
-    let resultEvent: ResultViewEvent | ResultLoadEvent =
+    const resultEvent: ResultViewEvent | ResultLoadEvent =
       createResultEventByType(
         type,
         campaignTypeId as Widget,
@@ -933,6 +922,9 @@ export class VviinnResults {
               addToBasketShow={this.addToBasketShow}
               favoriteShow={this.favoriteShow}
               campaigns={this.oneClickDiscoveryCampaigns}
+              cssUrl={this.cssUrl}
+              imageResolutionWidth={this.imageResolutionWidth}
+              showMultipleImages={this.showMultipleImages}
               showInWidget={this.showInWidget}
               uiSessionId={this.uiSessionId}
               onVviinnVprButtonActivated={() => oneClickDiscoveryHandler(i)}

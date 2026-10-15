@@ -1,0 +1,55 @@
+name: Feature request
+description: Suggest a capability or a change to an existing one
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        We read every request. Describe the need first — and if you would like to
+        implement it yourself, say so here so we can agree on the approach before you
+        write any code.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: The problem in terms of your storefront and your shoppers, not the code.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would help
+      description: The behaviour, prop, event or slot you have in mind.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Which component does this concern?
+      options:
+        - vviinn-vps-widget
+        - vviinn-vps-button
+        - vviinn-vpr-widget
+        - vviinn-vpr-button
+        - vviinn-shop-the-look
+        - vviinn-text-search
+        - vviinn-suggestions
+        - vviinn-results
+        - vviinn-product-card
+        - vviinn-filters
+        - vviinn-extended-filters
+        - vviinn-selected-filters
+        - vviinn-cropper
+        - New component
+        - Not component-specific
+    validations:
+      required: true
+
+  - type: textarea
+    id: workaround
+    attributes:
+      label: Current workaround
+      description: What you do today, if anything, and why it falls short.

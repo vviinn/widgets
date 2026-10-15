@@ -1,11 +1,9 @@
-export default function storyLoader(source) {
+// Substitutions are supplied by .storybook/main.js rather than read from the environment
+// here, so a single allowlist decides what can reach the documentation output.
+export default function storyLoader(source, substitutions = {}) {
   let processed = source;
 
-  const envVars = Object.fromEntries(
-    Object.entries(process.env).filter(([key]) => key.startsWith('STORYBOOK_'))
-  );
-
-  Object.entries(envVars).forEach(([key, value]) => {
+  Object.entries(substitutions).forEach(([key, value]) => {
     if (value) {
       processed = processed.replaceAll(key, value);
     }

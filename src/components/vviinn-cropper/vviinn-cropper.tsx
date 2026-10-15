@@ -76,7 +76,7 @@ export class VviinnCropper {
   /** @internal */
   @Prop({ mutable: true }) height?: number;
   /** @internal */
-  @Prop({ mutable: true }) basicEventData: BasicEventData;
+  @Prop() basicEventData: BasicEventData;
   /** @internal */
   @Prop() showAspectRatioError: boolean;
   /** @internal */

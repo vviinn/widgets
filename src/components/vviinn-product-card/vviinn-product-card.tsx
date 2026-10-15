@@ -35,6 +35,7 @@ import {
   shouldShowMultipleImages,
   getCurrentImage,
   createHoverTimerManager,
+  getProductDataAttributes,
 } from "./helpers";
 import {
   CrossSellingClickEvent,
@@ -215,8 +216,7 @@ export class VviinnProductCard {
   /** @internal */
   @Prop() showFooterArrow: boolean = false;
   /** @internal */
-  @Prop({ mutable: true }) imageResolutionWidth: number =
-    PRODUCT_CARD_IMAGE_RESOLUTION_WIDTH;
+  @Prop() imageResolutionWidth: number = PRODUCT_CARD_IMAGE_RESOLUTION_WIDTH;
   /** @internal */
   @Prop({ mutable: true }) loading: boolean = false;
   /** @internal */
@@ -528,6 +528,12 @@ export class VviinnProductCard {
   }
 
   render() {
+    const customLabels = this.customLabels.split(CUSTOM_LABELS_DELIMITER);
+    const productDataAttributes = getProductDataAttributes(
+      this.brand,
+      customLabels,
+    );
+
     if (this.isContentCard || this.isListCard) {
       return (
         <Host
@@ -535,6 +541,7 @@ export class VviinnProductCard {
           class={`${this.entityType}-card`}
           exportparts={this.isContentCard ? contentCardParts : listCardParts}
           data-id={this.productId}
+          {...productDataAttributes}
         >
           {renderExternalCSS(this.cssUrl)}
           <div
@@ -587,6 +594,7 @@ export class VviinnProductCard {
         }}
         exportparts={productCardParts}
         data-id={this.productId}
+        {...productDataAttributes}
       >
         {renderExternalCSS(this.cssUrl)}
 
@@ -638,10 +646,7 @@ export class VviinnProductCard {
                 showInContainer={this.addPriceContainer}
               />
 
-              {renderCustomLabels(
-                this.customLabels.split(CUSTOM_LABELS_DELIMITER),
-                "content",
-              )}
+              {renderCustomLabels(customLabels, "content")}
             </Fragment>
           )}
         </div>
@@ -813,10 +818,7 @@ export class VviinnProductCard {
             <slot name="vviinn-product-card-actions"></slot>
           </div>
 
-          {renderCustomLabels(
-            this.customLabels.split(CUSTOM_LABELS_DELIMITER),
-            "image",
-          )}
+          {renderCustomLabels(customLabels, "image")}
         </div>
 
         {this.showFooterArrow && <div class="footer-arrow"></div>}

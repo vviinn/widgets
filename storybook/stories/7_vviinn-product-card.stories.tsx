@@ -2,6 +2,7 @@ import { argTypes } from "../../src/components/vviinn-product-card/stories/args"
 import { productDecorator } from "../../src/components/vviinn-product-card/stories/decorators";
 import { energyCertificationsString } from "../documentation/components/constants";
 import "../documentation/widgets/styles.css";
+import { siteProductCards } from "../helpers";
 import { argsFromParams } from "../helpers/argsFromParams";
 export default {
   title: "Playground/Product Card",
@@ -63,34 +64,28 @@ export const Default = Template.bind({});
 
 Default.storyName = "Product Card";
 
+const { mainCard, setCard } = siteProductCards;
+
+// Base prices are optional on a card, so a site may leave them out.
+const toBasePrice = (value?: string) => (value ? JSON.parse(value) : null);
+
 const initArgs = {
-  productTitle: "Couchtisch Rolf Benz 8770 Ronald Schmitt",
-  productType: "Couchtische",
-  brand: "Ronald Schmitt",
+  productTitle: mainCard["product-title"],
+  productType: mainCard["product-type"],
+  brand: mainCard.brand,
   locale: "en-US",
   numberLocale: "",
   currencySign: "€",
-  deeplink:
-    "https://www.moebel-shop.de/rolf-benz-8770-couchtisch-ronald-schmitt",
-  image:
-    "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg",
-  images: [
-    {
-      original:
-        "https://www.moebel-shop.de/media/image/e3/e9/28/0749295-001_600x600.jpg",
-    },
-    {
-      original:
-        "https://www.moebel-shop.de/media/image/9d/cb/e7/0749295-002_600x600.jpg",
-    },
-  ],
+  deeplink: "https://example.com/",
+  image: mainCard.image,
+  images: [{ original: mainCard.image }, { original: setCard.image }],
   showMultipleImages: false,
   responsive: false,
   imageWidth: 300,
-  price: 3629,
-  basePrice: { price: 10, quantity: 1, measure: "cm²" },
-  salePrice: 1653,
-  baseSalePrice: { price: 5, quantity: 1, measure: "cm²" },
+  price: mainCard.price,
+  basePrice: toBasePrice(mainCard["base-price"]),
+  salePrice: mainCard["sale-price"],
+  baseSalePrice: toBasePrice(mainCard["base-sale-price"]),
   pricePrefix: "",
   customLabels: "UVP",
   addToBasketShow: true,
