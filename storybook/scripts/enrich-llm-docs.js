@@ -3,8 +3,17 @@
 const fs = require("fs");
 const path = require("path");
 
+const { distPath, summaryBaseUrl } = require("../llms.config");
+
 const DOCS_JSON = path.join(__dirname, "../../docs.json");
-const LLMS_DIR = path.join(__dirname, "../storybook-static/llms");
+const LLMS_TXT = path.join(__dirname, "..", distPath, "llms.txt");
+const LLMS_DIR = path.join(__dirname, "..", distPath, "llms");
+
+// The chatbot selects the Filters API reference by this exact llms.txt title.
+const FILTERS_TITLE = "Components/Filters";
+const FILTERS_FILE = "components-filters.txt";
+const FILTERS_DOCS_URL = "https://docs.vviinn.com/widgets/components/filters/";
+const FILTER_TAGS = ["vviinn-filters", "vviinn-extended-filters"];
 
 // Component name mapping: playground file prefix -> component tag
 const COMPONENT_MAPPING = {
@@ -53,9 +62,7 @@ const ENRICHMENT_MARKER = "<!-- STENCIL_DOCS_ENRICHED -->";
 
 // Convert component metadata (props, slots, CSS vars, parts) to Markdown
 function componentToMarkdown(component) {
-  if (!component) return "";
-
-  let md = ENRICHMENT_MARKER + "\n\n";
+  let md = "";
 
   // Properties section
   if (component.props && component.props.length > 0) {
@@ -168,7 +175,7 @@ function enrichLlmsFiles(componentsByTag) {
     }
 
     // Add metadata sections at the top (after title)
-    const markdown = componentToMarkdown(component);
+    const markdown = `${ENRICHMENT_MARKER}\n\n${componentToMarkdown(component)}`;
     const lines = content.split("\n");
 
     // Insert after title (line 0 = "# Title", insert at line 1)
@@ -196,65 +203,37 @@ function enrichLlmsFiles(componentsByTag) {
   return enrichedCount;
 }
 
-// Enrich components-filters.txt with vviinn-filters + vviinn-extended-filters
+// Filters have no Playground story to carry their API reference, so it gets a
+// text-only page of its own, listed in llms.txt
 // @param {Record<string, any>} componentsByTag - Components indexed by tag
-// @returns {number} 1 if enriched, 0 if skipped
-function enrichFiltersFile(componentsByTag) {
-  const fileName = "components-filters.txt";
-  const filePath = path.join(LLMS_DIR, fileName);
-
-  if (!fs.existsSync(filePath)) {
-    return 0;
+function writeFiltersFile(componentsByTag) {
+  const missingTags = FILTER_TAGS.filter((tag) => !componentsByTag[tag]);
+  if (missingTags.length > 0) {
+    console.error(
+      `❌ docs.json lacks ${missingTags.join(", ")} for ${FILTERS_FILE}`,
+    );
+    process.exit(1);
   }
 
-  let content = fs.readFileSync(filePath, "utf-8");
+  const content = [
+    "# Filters",
+    "",
+    `API reference of \`<vviinn-filters>\` and \`<vviinn-extended-filters>\`. Usage and examples: ${FILTERS_DOCS_URL}`,
+    "",
+    FILTER_TAGS.map((tag) => componentToMarkdown(componentsByTag[tag]))
+      .join("")
+      .trim(),
+    "",
+  ].join("\n");
+  fs.writeFileSync(path.join(LLMS_DIR, FILTERS_FILE), content, "utf-8");
 
-  // Check if already enriched
-  if (content.includes(ENRICHMENT_MARKER)) {
-    console.log(`  ⊘ Skipped ${fileName} (already enriched)`);
-    return 0;
+  const entry = `- [${FILTERS_TITLE}](${summaryBaseUrl}/llms/${FILTERS_FILE})`;
+  const llmsTxt = fs.readFileSync(LLMS_TXT, "utf-8");
+  if (!llmsTxt.includes(entry)) {
+    fs.writeFileSync(LLMS_TXT, `${llmsTxt.trimEnd()}\n${entry}\n`, "utf-8");
   }
 
-  // Get both filter components
-  const filters = componentsByTag["vviinn-filters"];
-  const extendedFilters = componentsByTag["vviinn-extended-filters"];
-
-  if (!filters && !extendedFilters) {
-    return 0;
-  }
-
-  let markdown = "";
-  if (filters) markdown += componentToMarkdown(filters);
-  if (extendedFilters) markdown += componentToMarkdown(extendedFilters);
-
-  // Find insertion point - before "## Examples" or "### " section
-  const lines = content.split("\n");
-  let insertIndex = -1;
-
-  for (let i = 0; i < lines.length; i++) {
-    if (lines[i].startsWith("## Examples") || lines[i].startsWith("### ")) {
-      insertIndex = i;
-      break;
-    }
-  }
-
-  // If no Examples/### found, append at the end
-  if (insertIndex === -1) {
-    insertIndex = lines.length;
-  }
-
-  // Insert the metadata
-  lines.splice(insertIndex, 0, "", markdown.trim(), "");
-  content = lines.join("\n");
-
-  fs.writeFileSync(filePath, content, "utf-8");
-
-  const sections = [];
-  if (filters) sections.push("vviinn-filters");
-  if (extendedFilters) sections.push("vviinn-extended-filters");
-
-  console.log(`  ✓ ${fileName} with ${sections.join(", ")}`);
-  return 1;
+  console.log(`  ✓ ${FILTERS_FILE} with ${FILTER_TAGS.join(", ")}`);
 }
 
 // Main
@@ -264,9 +243,9 @@ try {
   console.log(`📦 Loaded ${componentCount} components from docs.json\n`);
 
   const enrichedCount = enrichLlmsFiles(componentsByTag);
-  const filtersEnriched = enrichFiltersFile(componentsByTag);
+  writeFiltersFile(componentsByTag);
 
-  const totalEnriched = enrichedCount + filtersEnriched;
+  const totalEnriched = enrichedCount + 1;
 
   console.log(
     `\n✅ Done! Enriched ${totalEnriched} files with complete metadata\n`,
