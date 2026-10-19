@@ -6,8 +6,9 @@ const path = require("path");
 const { distPath, summaryBaseUrl } = require("../llms.config");
 
 const DOCS_JSON = path.join(__dirname, "../../docs.json");
-const LLMS_TXT = path.join(__dirname, "..", distPath, "llms.txt");
-const LLMS_DIR = path.join(__dirname, "..", distPath, "llms");
+const DIST_DIR = path.join(__dirname, "..", distPath);
+const LLMS_TXT = path.join(DIST_DIR, "llms.txt");
+const LLMS_DIR = path.join(DIST_DIR, "llms");
 
 // The chatbot selects the Filters API reference by this exact llms.txt title.
 const FILTERS_TITLE = "Components/Filters";
@@ -233,7 +234,7 @@ function writeFiltersFile(componentsByTag) {
     fs.writeFileSync(LLMS_TXT, `${llmsTxt.trimEnd()}\n${entry}\n`, "utf-8");
   }
 
-  console.log(`  ✓ ${FILTERS_FILE} with ${FILTER_TAGS.join(", ")}`);
+  console.log(`  ✓ Wrote ${FILTERS_FILE} with ${FILTER_TAGS.join(", ")}`);
 }
 
 // Main
@@ -245,10 +246,8 @@ try {
   const enrichedCount = enrichLlmsFiles(componentsByTag);
   writeFiltersFile(componentsByTag);
 
-  const totalEnriched = enrichedCount + 1;
-
   console.log(
-    `\n✅ Done! Enriched ${totalEnriched} files with complete metadata\n`,
+    `\n✅ Done! Enriched ${enrichedCount} files and wrote ${FILTERS_FILE}\n`,
   );
 } catch (error) {
   console.error("❌ Error:", error.message);

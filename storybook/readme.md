@@ -16,19 +16,20 @@ The widgets in the stories talk to the live API with a demo merchant token. The 
 
 Each site is one entry in [`helpers/demoSites.json`](helpers/demoSites.json):
 
-| Field                                                | Used for                                              |
-| ---------------------------------------------------- | ----------------------------------------------------- |
-| `label`                                              | Name in the sidebar selector                          |
-| `tokenEnvKey`                                        | Environment variable holding the site's token         |
-| `productIdSimilarProducts` / `productIdCrossSelling` | Product ids the recommendation widgets request        |
-| `textSearchQuery`                                    | Query the text search stories start with              |
-| `filterValue`                                        | Category passed as `filter-value`                     |
-| `shopTheLookImageUrls`                               | Images for the Shop the Look stories                  |
-| `productCards`                                       | Fixtures for the product-card examples and playground |
+| Field                      | Used for                                                                                                                    |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `label`                    | Name in the sidebar selector                                                                                                |
+| `tokenEnvKey`              | Environment variable holding the site's token                                                                               |
+| `productIdSimilarProducts` | Product id the recommendation widgets request                                                                               |
+| `productIdCrossSelling`    | Kept for the docs, see below                                                                                                |
+| `textSearchQuery`          | Kept for the docs, see below                                                                                                |
+| `filterValue`              | Category passed as `filter-value`                                                                                           |
+| `shopTheLookImageUrls`     | Images for the Shop the Look stories                                                                                        |
+| `productCards`             | Fixtures for the product-card playground (`mainCard`, `setCard`); `appendCard` and `minimalisticCard` are kept for the docs |
 
-Storybook does not read `productIdCrossSelling`, `textSearchQuery`, or the `appendCard` and `minimalisticCard` fixtures; they are kept for the demo site selector planned for the widget previews on docs.vviinn.com.
+The fields kept for the docs are not read by Storybook; they are there for the demo site selector planned for the widget previews on docs.vviinn.com.
 
-Product ids and `filterValue` must exist in the site's catalogue. So must the `id` of `mainCard` and `appendCard`: they carry a discovery button that requests recommendations for it. The other card ids are display only.
+Product ids and `filterValue` must exist in the site's catalogue. Storybook shows the card fixtures for display only.
 
 The file holds data only, so it can be copied as is into another project that renders the same demo. The first entry is the default site.
 
