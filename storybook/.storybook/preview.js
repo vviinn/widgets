@@ -34,17 +34,7 @@ export const parameters = {
   },
   options: {
     storySort: {
-      order: [
-        "Welcome to vviinn widgets",
-        "Getting Started",
-        "Widgets",
-        "Components",
-        "Installation",
-        "Customization",
-        "Events",
-        "Playground",
-        "Changelog",
-      ],
+      order: ["Playground", "Changelog"],
     },
   },
 };
