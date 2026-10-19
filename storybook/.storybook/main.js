@@ -39,7 +39,6 @@ const config = {
     "../documentation/change-log/*.mdx",
   ],
   addons: [
-    "@storybook/addon-links",
     "../addons/docs-rendered/register.ts",
     "@storybook/addon-a11y",
     "@storybook/addon-docs",
