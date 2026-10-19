@@ -199,20 +199,3 @@ export const extendedFilters = JSON.stringify([
     ],
   },
 ]);
-
-export const energyCertificationsString = JSON.stringify([
-  {
-    certificationClass: "B",
-    classIconUrls: {
-      left: "https://cdn.vviinn.com/assets/certification/energy/AtoG/left/B.svg",
-      right:
-        "https://cdn.vviinn.com/assets/certification/energy/AtoG/right/B.svg",
-    },
-    classRange: {
-      min: "A",
-      max: "G",
-    },
-    classDataSheetUrl: "https://example.com/datasheet.pdf",
-    productType: "Product Type",
-  },
-]);
