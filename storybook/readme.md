@@ -26,6 +26,8 @@ Each site is one entry in [`helpers/demoSites.json`](helpers/demoSites.json):
 | `shopTheLookImageUrls`                               | Images for the Shop the Look stories                  |
 | `productCards`                                       | Fixtures for the product-card examples and playground |
 
+Storybook does not read `productIdCrossSelling`, `textSearchQuery`, or the `appendCard` and `minimalisticCard` fixtures; they are kept for the demo site selector planned for the widget previews on docs.vviinn.com.
+
 Product ids and `filterValue` must exist in the site's catalogue. So must the `id` of `mainCard` and `appendCard`: they carry a discovery button that requests recommendations for it. The other card ids are display only.
 
 The file holds data only, so it can be copied as is into another project that renders the same demo. The first entry is the default site.
