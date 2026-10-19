@@ -8,10 +8,4 @@ export default defineConfig({
   optimizeDeps: {
     include: ["vviinn-widgets"],
   },
-  build: {
-    lib: {
-      entry: "./src/index.ts",
-      formats: ["es"],
-    },
-  },
 });

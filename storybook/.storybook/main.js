@@ -1,19 +1,12 @@
-import { resolve } from "path";
 import { loadEnv } from "vite";
 import demoSites from "../helpers/demoSites.json";
 
 // Each key here is inlined into the publicly served bundle, so a variable reaches
 // the browser only by being listed — a build-side credential named STORYBOOK_*
 // stays out of it.
-const EXPOSED_ENV_KEYS = [
-  "STORYBOOK_API_PATH",
-  "STORYBOOK_CDN_PATH",
-  "STORYBOOK_NPM_PACKAGE_NAME",
-  "STORYBOOK_VPR_WIDGET_TAG",
-  "STORYBOOK_VPS_WIDGET_TAG",
-];
+const EXPOSED_ENV_KEYS = ["STORYBOOK_API_PATH"];
 
-// Product-card examples and the playground read every card type for the selected site,
+// The product-card playground reads its cards by name from the selected site,
 // so each site has to carry the same set as the first one.
 const cardSets = Object.entries(demoSites).map(([siteId, { productCards }]) => [
   siteId,
@@ -98,26 +91,6 @@ const config = {
       __STORYBOOK_DEMO_TOKENS__: JSON.stringify(demoTokens),
       global: "globalThis",
     };
-
-    // Custom MDX loader handling for Vite
-    if (!config.plugins) config.plugins = [];
-
-    config.plugins.push({
-      name: "custom-mdx-loader",
-      load(id) {
-        if (id.endsWith(".mdx")) {
-          const fs = require("fs");
-          const path = require("path");
-
-          if (fs.existsSync(id)) {
-            // Use our custom loader for .mdx files. It substitutes only what is passed
-            // in, so the allowlist above governs the documentation output too.
-            const loader = require(resolve("./stories.loader.ts"));
-            return loader.default(fs.readFileSync(id, "utf-8"), exposedEnv);
-          }
-        }
-      },
-    });
 
     return config;
   },

@@ -52,6 +52,17 @@ function readDocsJson() {
       process.exit(1);
     }
 
+    // Checked before any file is written, so a renamed tag leaves no half-enriched output
+    const missingFilterTags = FILTER_TAGS.filter(
+      (tag) => !componentsByTag[tag],
+    );
+    if (missingFilterTags.length > 0) {
+      console.error(
+        `❌ docs.json lacks ${missingFilterTags.join(", ")} for ${FILTERS_FILE}`,
+      );
+      process.exit(1);
+    }
+
     return componentsByTag;
   } catch (error) {
     console.error(`❌ Could not read ${DOCS_JSON}:`, error.message);
@@ -208,14 +219,6 @@ function enrichLlmsFiles(componentsByTag) {
 // text-only page of its own, listed in llms.txt
 // @param {Record<string, any>} componentsByTag - Components indexed by tag
 function writeFiltersFile(componentsByTag) {
-  const missingTags = FILTER_TAGS.filter((tag) => !componentsByTag[tag]);
-  if (missingTags.length > 0) {
-    console.error(
-      `❌ docs.json lacks ${missingTags.join(", ")} for ${FILTERS_FILE}`,
-    );
-    process.exit(1);
-  }
-
   const content = [
     "# Filters",
     "",
