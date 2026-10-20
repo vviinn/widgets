@@ -29,6 +29,7 @@ if (sitesWithOtherCards.length) {
 const config = {
   stories: [
     "../stories/*.stories.@(js|jsx|ts|tsx)",
+    "../documentation/welcome.mdx",
     "../documentation/change-log/*.mdx",
   ],
   addons: [

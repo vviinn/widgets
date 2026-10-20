@@ -1,0 +1,82 @@
+/* Fills the whole preview, over the docs page padding */
+.welcome {
+  position: fixed;
+  inset: 0;
+  overflow: auto;
+  padding: 48px;
+  color: #161616;
+  /* Blueprint dot grid over the brand cyan glow from vviinn.com, from the bottom right corner */
+  background:
+    radial-gradient(circle, rgba(22, 22, 22, 0.08) 0.7px, transparent 1.2px) 0
+      0 / 10px 10px,
+    radial-gradient(
+      ellipse 120% 130% at 100% 100%,
+      rgba(100, 220, 233, 1) 0%,
+      rgba(139, 243, 255, 0) 100%
+    ),
+    #f8f8f6;
+}
+
+.welcome__title,
+.welcome__version {
+  margin: 0;
+  font-size: 40px;
+  line-height: 1.2;
+}
+
+.welcome__title {
+  font-weight: 400;
+}
+
+.welcome__version {
+  font-weight: 600;
+}
+
+.welcome__intro {
+  max-width: 640px;
+  margin: 32px 0 0;
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+.welcome__intro + .welcome__intro {
+  margin-top: 16px;
+}
+
+.welcome__links {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 32px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.welcome__links a {
+  font-size: 16px;
+  color: #029cfd;
+  text-decoration: none;
+}
+
+.welcome__links a::after {
+  content: " →";
+}
+
+.welcome__links a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .welcome {
+    padding: 24px;
+  }
+
+  .welcome__title,
+  .welcome__version {
+    font-size: 30px;
+  }
+
+  .welcome__intro {
+    font-size: 18px;
+  }
+}

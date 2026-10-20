@@ -1,0 +1,20 @@
+import { Meta, Unstyled } from "@storybook/addon-docs/blocks";
+import widgetsPackage from "../node_modules/vviinn-widgets/package.json";
+import "../styles/welcome.css";
+
+<Meta title="Welcome" />
+
+<Unstyled>
+  <div className="welcome">
+    <h1 className="welcome__title">vviinn-widgets</h1>
+    <p className="welcome__version">v{widgetsPackage.version}</p>
+    <p className="welcome__intro">AI-powered search and product discovery web components for e&#8209;commerce merchants.</p>
+    <p className="welcome__intro">Each playground runs a widget on a demo shop. Its Controls panel has interactive props and documents the events, slots, CSS custom properties and CSS parts.</p>
+    <ul className="welcome__links">
+      <li><a href="https://docs.vviinn.com/widgets/" target="_blank" rel="noopener">Documentation</a></li>
+      <li><a href="/?path=/docs/changelog-changelog--docs" target="_top">Changelog</a></li>
+      <li><a href="https://www.npmjs.com/package/vviinn-widgets" target="_blank" rel="noopener">npm</a></li>
+      <li><a href="https://vviinn.com" target="_blank" rel="noopener">Website</a></li>
+    </ul>
+  </div>
+</Unstyled>

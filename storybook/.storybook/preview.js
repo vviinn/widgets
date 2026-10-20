@@ -34,7 +34,7 @@ export const parameters = {
   },
   options: {
     storySort: {
-      order: ["Playground", "Changelog"],
+      order: ["Welcome", "Playground", "Changelog"],
     },
   },
 };
