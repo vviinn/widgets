@@ -78,7 +78,7 @@ export interface ShopTheLookEventData extends BasicEventData {
  *
  * Supports multiple images with swiper navigation, responsive design, and customizable styling.
  *
- * @part shop-the-look-actions-container - The actions container wrapping the upload button.
+ * @part shop-the-look-actions-container - The actions container wrapping the upload button
  * @part shop-the-look-upload-button - The upload button element
  * @part shop-the-look-upload-button-icon - The upload button icon wrapper
  * @part shop-the-look-upload-button-text - The upload button text wrapper
@@ -111,7 +111,7 @@ export class VviinnShopTheLook {
   @Prop() locale?: Locale;
   /** Locale for number formatting. Falls back to locale */
   @Prop() numberLocale?: string;
-  /** Style variant for corner styling - 'rounded' for rounded corners, 'cornered' for sharp corners */
+  /** Style variant for corner styling — 'rounded' for rounded corners, 'cornered' for sharp corners */
   @Prop() widgetStyle: "rounded" | "cornered" = "rounded";
   /** Enable cropper mode for manual area selection */
   @Prop() showCropper: boolean = false;
