@@ -53,3 +53,5 @@ componentWillLoad() {
 ```
 
 ### 5. Document child slots in parent widget's Storybook story
+
+### 6. Check public docs — see **Public Docs** in `CLAUDE.md`
