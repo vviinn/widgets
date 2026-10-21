@@ -1,7 +1,7 @@
 import { vviinnToken, shopTheLookImageUrls } from "../helpers";
 
 import { argsFromParams } from "../helpers/argsFromParams";
-import "../documentation/widgets/styles.css";
+import "../styles/playground.css";
 
 export default {
   title: "Playground/Shop-the-Look",

@@ -72,7 +72,7 @@ defineCustomElements();
 ```
 
 Angular needs `CUSTOM_ELEMENTS_SCHEMA`, and Vue needs the `isCustomElement` compiler option;
-both are covered in the [installation guide](https://widgets.vviinn.com/?path=/docs/getting-started-installation--docs).
+both are covered in the [installation guide](https://docs.vviinn.com/widgets/getting-started/installation/).
 
 ## Usage
 
@@ -134,9 +134,11 @@ notice.
 
 ## Documentation
 
-- **Widget docs and live playground:** https://widgets.vviinn.com — props, events, CSS
-  variables, CSS parts and slots for every public component.
-- **API documentation:** https://docs.vviinn.com
+- **Widget documentation:** https://docs.vviinn.com/widgets/ — integration guides, events
+  and customization for every widget.
+- **Live playground:** https://widgets.vviinn.com — try the widgets with their props, CSS
+  variables, CSS parts and slots, and read the widget changelog.
+- **API documentation:** https://docs.vviinn.com/api/
 - **Release notes:** [CHANGELOG.md](https://github.com/vviinn/widgets/blob/develop/CHANGELOG.md)
 
 ## Contributing

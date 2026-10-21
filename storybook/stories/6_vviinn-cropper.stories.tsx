@@ -1,4 +1,4 @@
-import "../documentation/widgets/styles.css";
+import "../styles/playground.css";
 import "../styles/search-page.css";
 import {
   vviinnToken,

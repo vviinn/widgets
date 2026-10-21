@@ -9,7 +9,7 @@ import {
   productCardImageBgColorArg,
 } from "../helpers";
 import "../styles/search-page.css";
-import "../documentation/widgets/styles.css";
+import "../styles/playground.css";
 import { argsFromParams } from "../helpers/argsFromParams";
 
 const cssVarDecorator = createCSSVarDecorator("vviinn-results", [

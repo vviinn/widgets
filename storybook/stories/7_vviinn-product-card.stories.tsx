@@ -1,9 +1,26 @@
 import { argTypes } from "../../src/components/vviinn-product-card/stories/args";
 import { productDecorator } from "../../src/components/vviinn-product-card/stories/decorators";
-import { energyCertificationsString } from "../documentation/components/constants";
-import "../documentation/widgets/styles.css";
+import "../styles/playground.css";
 import { siteProductCards } from "../helpers";
 import { argsFromParams } from "../helpers/argsFromParams";
+
+const energyCertificationsString = JSON.stringify([
+  {
+    certificationClass: "B",
+    classIconUrls: {
+      left: "https://cdn.vviinn.com/assets/certification/energy/AtoG/left/B.svg",
+      right:
+        "https://cdn.vviinn.com/assets/certification/energy/AtoG/right/B.svg",
+    },
+    classRange: {
+      min: "A",
+      max: "G",
+    },
+    classDataSheetUrl: "https://example.com/datasheet.pdf",
+    productType: "Product Type",
+  },
+]);
+
 export default {
   title: "Playground/Product Card",
   component: "vviinn-product-card",

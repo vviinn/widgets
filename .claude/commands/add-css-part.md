@@ -49,3 +49,5 @@ import { myComponentParts } from "../../cssParts";
 Import child parts in parent's cssParts config and include in parent's `makeExportPartsString`.
 
 ### 5. Document with JSDoc `@part` annotations on component class
+
+### 6. Check public docs — see **Public Docs** in `CLAUDE.md`

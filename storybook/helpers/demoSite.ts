@@ -13,8 +13,6 @@ if (!token) {
 export const vviinnToken = token ?? "";
 export const {
   productIdSimilarProducts,
-  productIdCrossSelling,
-  textSearchQuery,
   filterValue,
   shopTheLookImageUrls,
   productCards: siteProductCards,

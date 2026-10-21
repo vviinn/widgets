@@ -17,10 +17,5 @@
     "types": ["node"]
   },
   "include": ["**/*.ts", "**/*.tsx", "**/*.jsx"],
-  "exclude": ["node_modules", "storybook-static"],
-  "ts-node": {
-    "compilerOptions": {
-      "module": "commonjs"
-    }
-  }
+  "exclude": ["node_modules", "storybook-static"]
 }

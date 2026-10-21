@@ -80,7 +80,7 @@ Global CSS variables in `src/variables.css`.
 - **Adding @Prop()**: See `/add-prop` command. ALWAYS update Storybook story when adding props.
 - **Comments**: comment the _why_, not the _what_ — intent, non-obvious decisions, edge cases, constraints the code can't express itself. Skip comments that restate the code; prefer self-documenting names. Delete stale ones with the code they described. Default one line, two-line ceiling — past that, extract a named helper/variable or move the rationale into the function's JSDoc. In tests, only comment what the name itself can't carry (a hidden precondition, a hidden dependency of an assertion) — restating the test name or the tested function's JSDoc is noise. No change history: describe the code as it stands, never how it got there (no "now"/"no longer"/"instead of", no naming a rejected alternative) — that belongs in commits and the PR description.
 - **Punctuation in comments & docs**: use an em dash (—), not a hyphen (-) or en dash (–).
-- **Component JSDoc**: the `@part` / `@slot` / `@cssprop` JSDoc block must sit **immediately above `@Component`** with no declaration in between — otherwise Stencil attaches it to that declaration and the docs (Storybook Controls table via `docs.json`) lose the parts/slots.
+- **Component JSDoc**: the `@part` / `@slot` JSDoc block must sit **immediately above `@Component`** with no declaration in between — otherwise Stencil attaches it to that declaration and the docs (Storybook Controls table via `docs.json`) lose the parts/slots. CSS custom properties are documented with `@prop` in the comment inside `:host` of the component's CSS.
 
 ## Git Commit Conventions
 
@@ -104,9 +104,24 @@ Global CSS variables in `src/variables.css`.
 | Swiper | custom elements `<swiper-container>`/`<swiper-slide>`, registered via `import { register } from 'swiper/element'`; utils at `/src/utils/swiper/swiperUtils.ts` | |
 | Storybook | `storybook/stories/` | glob `**/*component-name*.stories.*` to find a component's stories |
 
+## Public Docs
+
+docs.vviinn.com is built from the repo `vviinn/public-docs`; ask for the path of its local checkout when none is known. The full API reference is Storybook Controls; under `src/content/docs/widgets/`, public-docs keeps by hand:
+
+- CSS custom properties — `customization/css-variables.mdx`, one section per widget
+- Slots — `customization/custom-content.mdx`, one list per widget
+- Widget pages — examples and guides, e.g. the Styling section of `shop-the-look.mdx`
+
+Every change to a public component's prop, slot, part or CSS custom property gets a public-docs check:
+
+- **New** — into the matching hand-kept list; an example or guide on the widget page only when the feature needs explaining. Say which in the summary.
+- **Changed, renamed or removed** — grep public-docs `src/content` for the name and update every hit.
+
+The docs change is its own PR in public-docs, merged once npm `latest` carries the change: doc previews (`WidgetPreview`) load `vviinn-widgets@latest`. Internal components (`vviinn-image`, `vviinn-carousel`, …) stay out.
+
 ## Browser Testing
 
-See `/browser-test` command. Shadow DOM requires JS access via `element.shadowRoot.querySelector()`.
+See `/browser-test` command. Playwright locators pierce open shadow roots; for state the snapshot doesn't show, use `element.shadowRoot.querySelector()` inside `browser_evaluate`.
 
 ## Environment Configuration
 
@@ -118,9 +133,5 @@ See `/browser-test` command. Shadow DOM requires JS access via `element.shadowRo
 
 - `storybook/.env.local` — Storybook demo tokens (`STORYBOOK_TOKEN_*`). Copy `storybook/.env.local.example` and fill it in. Cloud Build injects the same names from Secret Manager.
 - `dev/dev-config.js` — token and product id for the `npm start` dev harness (`dev/dev-harness.js`). Copy `dev/dev-config.example.js`. Both live outside `src/` so Stencil's collection build never copies them into `dist/` — the trade-off is that watch mode does not see them, so editing the config needs a dev-server restart.
-
-## MCP Integration
-
-Project MCP config: `.mcp.json` (root).
 
 @CLAUDE.local.md
