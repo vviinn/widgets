@@ -6,7 +6,7 @@ import {
   productCardImageBgColorMapping,
   productCardImageBgColorArg,
 } from "../helpers";
-import "../documentation/widgets/styles.css";
+import "../styles/playground.css";
 import { argsFromParams } from "../helpers/argsFromParams";
 
 const cssVarDecorator = createCSSVarDecorator("vviinn-vps-button", [

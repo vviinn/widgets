@@ -6,9 +6,12 @@ contact_links:
   - name: Report a security vulnerability
     url: https://github.com/vviinn/widgets/security/advisories/new
     about: Private advisory. Never report a vulnerability in a public issue.
-  - name: Documentation and live playground
+  - name: Widget documentation
+    url: https://docs.vviinn.com/widgets/
+    about: Integration guides, events and customization for every widget.
+  - name: Live playground
     url: https://widgets.vviinn.com
-    about: Props, events, CSS parts and slots for every public component.
+    about: Try the widgets with their props, CSS parts and slots.
   - name: Integration or account support
     url: https://panel.vviinn.com
     about: Product feed, panel configuration and tokens. Or write to support@vviinn.com.

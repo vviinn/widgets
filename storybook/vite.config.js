@@ -6,15 +6,6 @@ export default defineConfig({
     global: "globalThis",
   },
   optimizeDeps: {
-    include: ["lit-html", "vviinn-widgets"],
-  },
-  build: {
-    lib: {
-      entry: "./src/index.ts",
-      formats: ["es"],
-    },
-    rollupOptions: {
-      external: ["lit-html"],
-    },
+    include: ["vviinn-widgets"],
   },
 });
