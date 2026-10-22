@@ -4,23 +4,6 @@ import "../styles/playground.css";
 import { siteProductCards } from "../helpers";
 import { argsFromParams } from "../helpers/argsFromParams";
 
-const energyCertificationsString = JSON.stringify([
-  {
-    certificationClass: "B",
-    classIconUrls: {
-      left: "https://cdn.vviinn.com/assets/certification/energy/AtoG/left/B.svg",
-      right:
-        "https://cdn.vviinn.com/assets/certification/energy/AtoG/right/B.svg",
-    },
-    classRange: {
-      min: "A",
-      max: "G",
-    },
-    classDataSheetUrl: "https://example.com/datasheet.pdf",
-    productType: "Product Type",
-  },
-]);
-
 export default {
   title: "Playground/Product Card",
   component: "vviinn-product-card",
@@ -47,6 +30,7 @@ const Template = (args) => {
 
   return `
     <vviinn-product-card
+      product-id="${args.productId}"
       product-title="${args.productTitle}"
       brand="${args.brand}"
       product-type="${args.productType}"
@@ -86,7 +70,12 @@ const { mainCard, setCard } = siteProductCards;
 // Base prices are optional on a card, so a site may leave them out.
 const toBasePrice = (value?: string) => (value ? JSON.parse(value) : null);
 
+// Only products that need an energy label carry one.
+const energyCertificationsString =
+  mainCard["energy-certifications-string"] ?? "";
+
 const initArgs = {
+  productId: mainCard.id,
   productTitle: mainCard["product-title"],
   productType: mainCard["product-type"],
   brand: mainCard.brand,

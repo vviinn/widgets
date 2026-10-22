@@ -11,15 +11,14 @@
     ],
     "productCards": {
       "mainCard": {
-        "id": "632083",
-        "product-title": "Windlicht-Set",
+        "id": "955098",
+        "product-title": "Hängeleuchte Orbit",
         "brand": "vviinn Home",
-        "product-type": "Kerzen & Leuchter",
-        "price": "8.9",
-        "base-price": "{\"price\":2.23,\"quantity\":1,\"measure\":\"Stk\"}",
-        "sale-price": "8",
-        "base-sale-price": "{\"price\":2,\"quantity\":1,\"measure\":\"Stk\"}",
-        "image": "https://cdn.vviinn.com/assets/merchant/default/product-card/home-01-lantern-set.jpg"
+        "product-type": "Pendelleuchten",
+        "price": "99.0",
+        "sale-price": "89.99",
+        "image": "https://cdn.vviinn.com/assets/merchant/default/product-card/home-02-pendant-lamp.jpg",
+        "energy-certifications-string": "[{\"certificationClass\":\"A\",\"classIconUrls\":{\"left\":\"https://cdn.vviinn.com/assets/certification/energy/AtoG/left/A.svg\",\"right\":\"https://cdn.vviinn.com/assets/certification/energy/AtoG/right/A.svg\"},\"classRange\":{\"min\":\"A\",\"max\":\"G\"},\"classLabelUrl\":\"https://energy-efficient-products.ec.europa.eu/sites/default/files/styles/embed_medium_2x/public/2024-04/sample-energy-label-with-numbers-new.png?itok=x7puJdbG\",\"classDataSheetUrl\":\"https://example.com/datasheet.pdf\",\"productType\":\"Pendelleuchte\"}]"
       },
       "setCard": {
         "id": "2003",
