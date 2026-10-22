@@ -16,22 +16,20 @@ The widgets in the stories talk to the live API with a demo merchant token. The 
 
 Each site is one entry in [`helpers/demoSites.json`](helpers/demoSites.json):
 
-| Field                      | Used for                                                                                                                    |
-| -------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `label`                    | Name in the sidebar selector                                                                                                |
-| `tokenEnvKey`              | Environment variable holding the site's token                                                                               |
-| `productIdSimilarProducts` | Product id the recommendation widgets request                                                                               |
-| `productIdCrossSelling`    | Kept for the docs, see below                                                                                                |
-| `textSearchQuery`          | Kept for the docs, see below                                                                                                |
-| `filterValue`              | Category passed as `filter-value`                                                                                           |
-| `shopTheLookImageUrls`     | Images for the Shop the Look stories                                                                                        |
-| `productCards`             | Fixtures for the product-card playground (`mainCard`, `setCard`); `appendCard` and `minimalisticCard` are kept for the docs |
-
-The fields kept for the docs are not read by Storybook; they are there for the demo site selector planned for the widget previews on docs.vviinn.com.
+| Field                      | Used for                                                         |
+| -------------------------- | ---------------------------------------------------------------- |
+| `label`                    | Name in the sidebar selector                                     |
+| `tokenEnvKey`              | Environment variable holding the site's token                    |
+| `productIdSimilarProducts` | Product id the recommendation widgets request                    |
+| `filterValue`              | Category passed as `filter-value`                                |
+| `shopTheLookImageUrls`     | Images for the Shop the Look stories                             |
+| `productCards`             | Fixtures for the product-card playground (`mainCard`, `setCard`) |
 
 Product ids and `filterValue` must exist in the site's catalogue. Storybook shows the card fixtures for display only.
 
-The file holds data only, so it can be copied as is into another project that renders the same demo. The first entry is the default site.
+The docs on docs.vviinn.com keep their own copy of `productIdSimilarProducts`, `filterValue` and `shopTheLookImageUrls` (in `vviinn/public-docs`: `src/components/WidgetPreview.astro`, `src/components/demoSites.ts` and the `filter-value` in `src/content/docs/widgets/components/product-list.mdx`) — change both. The product cards in the docs are their own.
+
+The first entry is the default site.
 
 ### Tokens
 
