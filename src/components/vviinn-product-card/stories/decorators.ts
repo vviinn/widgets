@@ -18,7 +18,7 @@ vviinn-product-card {
   --product-card-image-aspect-ratio: ${args.productCardImageAspectRatio};
 }
 
-vviinn-product-card::part(custom-label-0), vviinn-product-card::part(custom-label-1), vviinn-product-card::part(custom-label-2), vviinn-product-card::part(custom-label-3), vviinn-product-card::part(custom-label-4) {
+vviinn-product-card::part(custom-label-content) {
   display: block;
 }
 

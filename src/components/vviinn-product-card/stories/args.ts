@@ -8,7 +8,12 @@ import {
 
 export const argTypes = {
   brand: {
-    description: "Using the [title] attribute from product feed.",
+    description:
+      "Product brand. The card also sets it as `data-brand`, so CSS can target cards by brand.",
+  },
+  customLabels: {
+    description:
+      "Labels from the product feed, up to five, separated by `|` — e.g. `UVP`. The card hides them by default; this playground shows them for illustration.",
   },
   productCardImageAspectRatio: productCardImageAspectRatioArg,
   productCardContentAlign: productCardContentAlignArg,

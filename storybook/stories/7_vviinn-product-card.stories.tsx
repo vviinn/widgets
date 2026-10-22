@@ -9,7 +9,6 @@ export default {
   component: "vviinn-product-card",
   decorators: [productDecorator],
   parameters: {
-    controls: { expanded: false },
     argTypes: {
       entityType: {
         options: ["product", "content", "list"],
@@ -93,7 +92,7 @@ const initArgs = {
   salePrice: mainCard["sale-price"],
   baseSalePrice: toBasePrice(mainCard["base-sale-price"]),
   pricePrefix: "",
-  customLabels: "UVP",
+  customLabels: "",
   addToBasketShow: true,
   isSetMode: false,
   addPriceContainer: false,
