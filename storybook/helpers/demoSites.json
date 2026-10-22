@@ -48,7 +48,7 @@
         "price": "150.00",
         "base-price": "{\"price\":1500.00,\"quantity\":1,\"measure\":\"l\"}",
         "sale-price": "149.99",
-        "base-sale-price": "{\"price\":1499.00,\"quantity\":1,\"measure\":\"l\"}",
+        "base-sale-price": "{\"price\":1499.90,\"quantity\":1,\"measure\":\"l\"}",
         "image": "https://cdn.vviinn.com/assets/merchant/default/product-card/fashion-01-perfume.jpg"
       },
       "setCard": {
