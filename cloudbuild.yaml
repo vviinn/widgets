@@ -39,8 +39,15 @@ steps:
           npm pkg set dependencies.vviinn-widgets="./widgets"
           npm install --include=dev
         else
-          # Builds the widget version pinned in the lockfile, which the bot bumps on develop.
+          # Production renders the release this commit carries, the version in the root package.json.
+          # The registry can take minutes to serve a fresh version (2.226.2: ~5), so retry for up to 15.
           npm ci --include=dev
+          version=$$(node -p "require('../package.json').version")
+          for _ in $$(seq 30); do
+            npm view "vviinn-widgets@$$version" version --prefer-online >/dev/null 2>&1 && break
+            sleep 30
+          done
+          npm install --no-save --ignore-scripts --prefer-online "vviinn-widgets@$$version"
         fi
         npm run build-storybook
         if [ "$_ENVIRONMENT" = "production" ]

@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "prestorybook": "node ../scripts/update-changelog.js",
     "storybook": "storybook dev -p 6006",
+    "prebuild-storybook": "node ../scripts/update-changelog.js",
     "build-storybook": "storybook build",
     "prepare-llm-extraction": "playwright install chromium",
     "build-llm-docs": "storybook-llms-extractor --config llms.config.js && node scripts/enrich-llm-docs.js"

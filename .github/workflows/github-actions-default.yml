@@ -9,6 +9,7 @@ on:
     branches:
       - develop
       - main
+  workflow_dispatch:
 
 env:
   NODE_VERSION: "22.23.2"
@@ -68,45 +69,39 @@ jobs:
         run: npm audit --audit-level=high
         working-directory: storybook
 
-  generate-version-develop:
+  # Keeps one release pull request open on develop from feat:, fix:, perf: and breaking
+  # commits. Merging it tags the commit and reports release_created to the jobs below.
+  # A pull request opened with GITHUB_TOKEN starts no workflow runs, so the release
+  # pull request needs a token of its own to get its checks.
+  release-please:
+    name: Release Please
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    if: github.ref == 'refs/heads/develop'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+    concurrency: release-please
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
     steps:
-      - uses: actions/checkout@v4
+      - id: release
+        uses: googleapis/release-please-action@v4
         with:
-          fetch-depth: 0
-      - run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "npm"
-      - name: Create .env file
-        run: |
-          echo "OPENAPI_URL=${{ env.OPENAPI_URL }}" >> .env
-          echo "RECOMMENDATIONS_URL=https://api.stage.vviinn.com/product/" >> .env
-      - run: npm ci
-      - run: npm run test
-      - run: npm run build_interfaces
-      - run: npm run build
-      - run: npm run release.ci
-      - run: git push --follow-tags origin develop
-      - run: npm run update_storybook_changelog
-      - run: |
-          git add ./storybook/documentation/change-log/1_changelog.mdx
-          git diff --cached --quiet || (git commit -m '[skip ci] update storybook changelog' && git push origin develop)
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+          target-branch: develop
 
-  release-beta:
+  # npm trusts this workflow file for OIDC publishing, so publishing stays in it.
+  # A release publishes latest; a run by hand (Actions → Run workflow on develop) publishes
+  # a beta to try develop as a real package. release-please is skipped on such a run,
+  # hence !cancelled().
+  publish:
+    name: Publish to npm
     runs-on: ubuntu-latest
+    needs: release-please
+    if: >-
+      !cancelled() && (needs.release-please.outputs.release_created == 'true' ||
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/develop'))
     permissions:
       contents: read
       id-token: write
-    if: github.ref == 'refs/heads/develop'
-    needs: generate-version-develop
     steps:
       - uses: actions/checkout@v4
       - name: Setup Node.js
@@ -117,7 +112,6 @@ jobs:
           registry-url: "https://registry.npmjs.org"
       - name: Upgrade npm for OIDC support
         run: npm install -g npm@11
-      - run: git pull
       - name: Create .env file
         run: |
           echo "OPENAPI_URL=${{ env.OPENAPI_URL }}" >> .env
@@ -125,6 +119,13 @@ jobs:
           echo "API_PATH=https://api.vviinn.com" >> .env
       - run: npm ci
       - run: npm run test
+      # The beta takes the next patch number, so it sorts after the current release, and the
+      # run number keeps each one unique.
+      - name: Set the beta version
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          next_patch=$(node -p "const [major, minor, patch] = require('./package.json').version.split('.'); [major, minor, +patch + 1].join('.')")
+          npm version "$next_patch-beta.${{ github.run_number }}" --no-git-tag-version
       - run: npm run build_interfaces
       - run: npm run build
       # The SBOM comes from the lockfile, so it runs before the publish: a failure
@@ -139,47 +140,29 @@ jobs:
           retention-days: 90
       # npm cannot attest a private source repository, so --provenance joins the
       # command only once the repository is public.
-      - name: Publish to NPM registry with beta tag using OIDC
-        run: npm publish --tag beta --access public ${{ github.event.repository.visibility == 'public' && '--provenance' || '' }}
+      - name: Publish to NPM registry using OIDC
+        run: npm publish --tag ${{ github.event_name == 'workflow_dispatch' && 'beta' || 'latest' }} --access public ${{ github.event.repository.visibility == 'public' && '--provenance' || '' }}
 
-  update-widget-version-storybook:
+  # main carries the production Storybook, which installs the version just published.
+  # main has no required checks, so the pull request merges at once; develop passed
+  # its checks in the release pull request.
+  merge-release-into-main:
+    name: Merge the release into main
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    if: github.ref == 'refs/heads/develop'
-    needs: release-beta
+    needs: [release-please, publish]
+    if: needs.release-please.outputs.release_created == 'true'
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "npm"
-      - run: git pull
-      - run: npm run update_storybook_widget_version
-      # Without the lockfile, the next pull request fails `npm ci` in the Storybook audit.
-      # The registry can take minutes to serve a fresh version (2.226.2: ~5), so retry for up to 15.
-      - name: Sync Storybook lockfile
-        working-directory: storybook
+      - name: Merge develop into main
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+          TAG: ${{ needs.release-please.outputs.tag_name }}
         run: |
-          for _ in $(seq 30); do
-            npm install --package-lock-only --ignore-scripts --prefer-online 2>npm-error.log && exit 0
-            grep -qE 'ETARGET|E404' npm-error.log || { cat npm-error.log; exit 1; }
-            sleep 30
-          done
-          cat npm-error.log
-          exit 1
-      - run: |
-          git add ./storybook/package.json ./storybook/package-lock.json
-          # A re-run finds the version already committed.
-          git diff --cached --quiet && exit 0
-          git commit -m "[skip ci] update widget's version in storybook"
-          git push origin develop
+          pr=$(gh pr list --repo "$GITHUB_REPOSITORY" --base main --head develop --state open --json url --jq '.[0].url')
+          if [ -z "$pr" ]; then
+            pr=$(gh pr create --repo "$GITHUB_REPOSITORY" --base main --head develop \
+              --title "Release $TAG" --body "Ships $TAG to main, which deploys the production Storybook.")
+          fi
+          gh pr merge "$pr" --repo "$GITHUB_REPOSITORY" --merge
 
   build-app-main:
     runs-on: ubuntu-latest

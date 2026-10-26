@@ -1,56 +1,42 @@
 const fs = require("fs");
+const path = require("path");
 
-fs.readFile("./CHANGELOG.md", "utf8", (err, data) => {
-  if (err) {
-    console.error(err);
+const changelogPath = path.resolve(__dirname, "../CHANGELOG.md");
+const storybookChangelogPath = path.resolve(
+  __dirname,
+  "../storybook/documentation/change-log/1_changelog.mdx",
+);
+// "## [2.227.0](https://…) (2026-10-12)"; patch releases use "###", early ones have no link.
+const versionHeading = /^#{2,3} \[?([\d.]+)\]?(?:\([^)]*\))? \(([\d-]+)\)$/;
+
+const isSectionHeading = (line) =>
+  line?.startsWith("### ") && !versionHeading.test(line);
+
+const releases = fs
+  .readFileSync(changelogPath, "utf8")
+  .split("\n")
+  .filter((result) => result !== "");
+
+const releasesFilter = releases.map((release, index) => {
+  const heading = release.match(versionHeading);
+
+  if (heading) {
+    const [, version, date] = heading;
+    // A release with no user-facing sections is left out.
+    if (isSectionHeading(releases[index + 1])) {
+      return `## v. ${version} - ${date}`;
+    }
     return;
   }
-
-  const releases = data.split("\n").filter((result) => result !== "");
-
-  let releasesFilter = releases.map((release, index) => {
-    const titleSplit = release.split(" ");
-
-    if (index === 1) {
-      release = release.replace(
-        / See \[[^\]]*\]\([^)]*\) for commit guidelines\./,
-        "",
-      );
-    }
-
-    if (
-      titleSplit.length === 3 &&
-      (titleSplit[0] === "##" || titleSplit[0] === "###") &&
-      titleSplit[1] !== "Bug"
-    ) {
-      const date = titleSplit[2].replace("(", "").replace(")", "");
-      const version = titleSplit[1].split("]")[0].replace("[", "");
-      if (
-        releases[index + 1] === "### Bug Fixes" ||
-        releases[index + 1] === "### Features" ||
-        releases[index + 1] === "### ⚠ BREAKING CHANGES"
-      ) {
-        return `## v. ${version} - ${date}`;
-      } else {
-        return;
-      }
-    } else {
-      return `${release.replace("*", "-").split("([")[0].trimEnd()}`;
-    }
-  });
-
-  releasesFilter.unshift('<Meta title="Changelog/Changelog"></Meta>');
-  releasesFilter.unshift(
-    'import { Meta, Story, Canvas } from "@storybook/addon-docs/blocks";',
-  );
-
-  fs.writeFile(
-    "./storybook/documentation/change-log/1_changelog.mdx",
-    releasesFilter.filter((release) => release).join("\n\r"),
-    (err) => {
-      if (err) {
-        console.error(err);
-      }
-    },
-  );
+  return `${release.replace("*", "-").split("([")[0].trimEnd()}`;
 });
+
+releasesFilter.unshift('<Meta title="Changelog/Changelog"></Meta>');
+releasesFilter.unshift(
+  'import { Meta, Story, Canvas } from "@storybook/addon-docs/blocks";',
+);
+
+fs.writeFileSync(
+  storybookChangelogPath,
+  releasesFilter.filter((release) => release).join("\n\r"),
+);
