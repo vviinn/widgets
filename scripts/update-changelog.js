@@ -36,6 +36,8 @@ releasesFilter.unshift(
   'import { Meta, Story, Canvas } from "@storybook/addon-docs/blocks";',
 );
 
+// The directory holds only this generated file, so a fresh checkout lacks it.
+fs.mkdirSync(path.dirname(storybookChangelogPath), { recursive: true });
 fs.writeFileSync(
   storybookChangelogPath,
   releasesFilter.filter((release) => release).join("\n\r"),

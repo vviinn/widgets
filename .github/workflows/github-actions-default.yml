@@ -69,10 +69,8 @@ jobs:
         run: npm audit --audit-level=high
         working-directory: storybook
 
-  # Keeps one release pull request open on develop from feat:, fix:, perf: and breaking
-  # commits. Merging it tags the commit and reports release_created to the jobs below.
-  # Its pull request is opened with a vviinn-widgets-connector-app token, as one from GITHUB_TOKEN
-  # starts no workflow runs; workflows: write lets the branch take in workflow file changes.
+  # Keeps a release pull request open on develop from the user-facing commits.
+  # It uses a vviinn-widgets-connector-app token: a pull request from GITHUB_TOKEN gets no checks.
   release-please:
     name: Release Please
     runs-on: ubuntu-latest
@@ -90,17 +88,15 @@ jobs:
           private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
           permission-contents: write
           permission-pull-requests: write
-          permission-workflows: write
+          permission-workflows: write # the branch takes in workflow changes from develop
       - id: release
         uses: googleapis/release-please-action@v4
         with:
           token: ${{ steps.app-token.outputs.token }}
           target-branch: develop
 
-  # npm trusts this workflow file for OIDC publishing, so publishing stays in it.
-  # A release publishes latest; a run by hand (Actions → Run workflow on develop) publishes
-  # a beta to try develop as a real package. release-please is skipped on such a run,
-  # hence !cancelled().
+  # A release publishes latest, a run by hand on develop a beta. npm trusts this file for OIDC
+  # publishing; !cancelled() lets the job run when a run by hand skips release-please.
   publish:
     name: Publish to npm
     runs-on: ubuntu-latest
@@ -112,7 +108,10 @@ jobs:
       contents: read
       id-token: write
     steps:
+      # Build exactly the tagged release, as develop may have moved on; empty on a run by hand.
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.release-please.outputs.tag_name }}
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -152,10 +151,8 @@ jobs:
       - name: Publish to NPM registry using OIDC
         run: npm publish --tag ${{ github.event_name == 'workflow_dispatch' && 'beta' || 'latest' }} --access public ${{ github.event.repository.visibility == 'public' && '--provenance' || '' }}
 
-  # main carries the production Storybook, which installs the version just published.
-  # main has no required checks, so the pull request merges at once; develop passed
-  # its checks in the release pull request. GITHUB_TOKEN may not open pull requests in
-  # this repository, so this job mints a token from the same App.
+  # Merges develop into main, which deploys the production Storybook. main takes changes only
+  # through pull requests, and GITHUB_TOKEN may not open one here, hence the App token.
   merge-release-into-main:
     name: Merge the release into main
     runs-on: ubuntu-latest
@@ -170,7 +167,7 @@ jobs:
           private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
           permission-contents: write
           permission-pull-requests: write
-          permission-workflows: write
+          permission-workflows: write # main takes in workflow changes from develop
       - name: Merge develop into main
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}

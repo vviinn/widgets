@@ -37,11 +37,11 @@ steps:
         then
           cp -r /widgets .
           npm pkg set dependencies.vviinn-widgets="./widgets"
-          npm install --include=dev
+          npm install
         else
           # Production renders the release this commit carries, the version in the root package.json.
           # The registry can take minutes to serve a fresh version (2.226.2: ~5), so retry for up to 15.
-          npm ci --include=dev
+          npm ci
           version=$$(node -p "require('../package.json').version")
           for _ in $$(seq 30); do
             npm view "vviinn-widgets@$$version" version --prefer-online >/dev/null 2>&1 && break
@@ -76,6 +76,8 @@ steps:
     waitFor: ["build_widgets"]
     env:
       - "NODE_ENV=$_NODE_ENV"
+      # NODE_ENV=production makes npm skip devDependencies, and the Storybook build needs them.
+      - "npm_config_include=dev"
       - "NODE_OPTIONS=--openssl-legacy-provider"
     secretEnv:
       - "STORYBOOK_TOKEN_HOME_LIVING"

@@ -199,9 +199,10 @@ before it is committed.
 ## Commit messages
 
 - **User-facing changes** — `feat:` for features, `fix:` for fixes, `perf:` for performance
-  improvements. These land in the published changelog and set the next version (`feat` minor,
-  `fix` and `perf` patch, `!` after the type major), so write them for the people integrating
-  the widgets. Add a component segment when the change targets one component:
+  improvements, `revert:` to undo one of them. These land in the published changelog and set
+  the next version (`feat` minor, `fix`, `perf` and `revert` patch, `!` after the type major),
+  so write them for the people integrating the widgets. Add a component segment when the
+  change targets one component:
   `feat: Vviinn Cropper: toggle cropper visibility by OCR filter`.
 - **Routine work** — intermediate fixes, chores, review changes, refactors — a plain
   descriptive subject, with no prefix. Maintainers put the internal issue number in front of
