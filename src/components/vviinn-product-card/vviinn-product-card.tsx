@@ -80,7 +80,11 @@ import { addEventListenersWithSignal } from "../../dom";
 import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
 
 /**
+ * Card for one search result or recommendation. Renders a product, a content entry or a list entry, depending on `entity-type`.
+ *
+ * @part product-card - Card container.
  * @part image-container - Product Card's image container.
+ * @part image-skeleton - Placeholder shown while the image loads.
  * @part content-container - Product Card's content container.
  * @part basket-button-container - Product Card's basket button container.
  * @part brand - Product brand.
@@ -91,12 +95,13 @@ import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
  * @part image-link - Anchor element for image. Rendered only if "deeplink" property filled.
  * @part image-picture - Picture element for image.
  * @part image-placeholder - Placeholder shown when no image is available.
- * @part price-amount-regular - Numeric part of the price.
- * @part price-amount-sale - Numeric part of the price.
- * @part price-amount-outdated - Numeric part of the price.
- * @part price-amount-base-sale - Numeric part of the base price.
- * @part price-amount-base-outdated - Numeric part of the base price.
- * @part price-amount-base-regular - Numeric part of the base price.
+ * @part price-container - Wrapper around the price values. Rendered only if "add-price-container" property is set.
+ * @part price-amount-regular - Numeric part of the regular price.
+ * @part price-amount-sale - Numeric part of the sale price.
+ * @part price-amount-outdated - Numeric part of the regular price shown as outdated.
+ * @part price-amount-base-sale - Numeric part of the sale price per unit.
+ * @part price-amount-base-outdated - Numeric part of the regular price per unit shown as outdated.
+ * @part price-amount-base-regular - Numeric part of the regular price per unit.
  * @part price-outdated - Renders when "sale-price" property filled. Contains regular price.
  * @part price-regular - Renders when "sale-price" property is empty.
  * @part price-sale - Renders when "sale-price" property filled. Contains sale price.
@@ -119,14 +124,26 @@ import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
  * @part custom-label-2 - Custom label with index 2.
  * @part custom-label-3 - Custom label with index 3.
  * @part custom-label-4 - Custom label with index 4.
+ * @part custom-label-content - Custom labels in the content area. Combine with custom-label-N to pick one place.
+ * @part custom-label-image - Custom labels on the image. Combine with custom-label-N to pick one place.
  * @part product-card-actions - Style actions wrapper.
  * @part product-card-actions-top - Style top actions wrapper.
+ * @part content-card - Content card container.
+ * @part content-card-content-container - Content card's content container.
+ * @part content-label - Content card's label.
+ * @part content-title - Content card's title.
+ * @part content-link - Content card's link.
+ * @part content-card-image - Content card's image.
+ * @part content-card-image-container - Content card's image container.
+ * @part content-card-image-picture - Picture element for content card's image.
  * @part list-card - List card container.
+ * @part list-container - Same element as list-card-content-container. Not exported to the widgets.
  * @part list-card-content-container - List card's content container.
  * @part list-label - List card's label (e.g., "Category").
  * @part list-title - List card's title.
+ * @part list-card-image - List card's image.
  * @part list-card-image-container - List card's image container.
- * @part list-card-image-link - Anchor element for list card image.
+ * @part list-card-image-picture - Picture element for list card's image.
  *
  * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
@@ -153,32 +170,55 @@ import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
 export class VviinnProductCard {
   @Element() el: HTMLElement;
 
+  /** Product brand. Also set as `data-brand` on the card, so CSS can target cards by brand */
   @Prop() brand: string | undefined;
+  /** The currency sign is displayed after the price */
   @Prop() currencySign: string | undefined = undefined;
+  /** Locale for text localization */
   @Prop() locale?: Locale;
   /** Locale for number formatting. Falls back to locale */
   @Prop() numberLocale?: string;
+  /** Prefix is displayed before the price */
   @Prop() pricePrefix?: string;
+  /** URL of the main product image */
   @Prop() image: string | undefined;
+  /** Product images, set as a JS property. Used by `show-multiple-images` when there are at least two */
   @Prop() images: ProductImage[] = [];
   /** Show multiple images: swiper on mobile, hover on desktop */
   @Prop() showMultipleImages: boolean = false;
+  /** Image width in pixels. Ignored when `responsive` is set */
   @Prop() imageWidth: number = PRODUCT_CARD_IMAGE_WIDTH;
+  /** Regular price */
   @Prop() price: number | undefined;
+  /** Price per unit, as an object or a JSON string: `{"price": 9.99, "quantity": 100, "measure": "ml"}` */
   @Prop() basePrice?: BasePrice | string | null;
+  /** Product title */
   @Prop() productTitle: string;
+  /** Product type */
   @Prop() productType: string | undefined;
+  /** What the card shows: a `product`, a `content` entry or a `list` entry */
   @Prop() entityType: EntityType = "product";
+  /** Render the card for Set mode: Update button, discount label, and Add to Basket regardless of `add-to-basket-show` */
   @Prop() isSetMode: boolean = false;
+  /** Sale price. When set, the regular price is shown as outdated next to it */
   @Prop() salePrice: number | undefined;
+  /** Price per unit for the sale price, in the same shape as `base-price` */
   @Prop() baseSalePrice: BasePrice | string | null;
+  /** Let the image fill the card width instead of `image-width` */
   @Prop() responsive: boolean = false;
+  /** Show or hide the Add to Basket button */
   @Prop() addToBasketShow: boolean;
+  /** Show or hide Favorite button */
   @Prop() favoriteShow: boolean;
+  /** Location of Update button for Set mode */
   @Prop() updateButtonLocation: UpdateButtonLocation;
+  /** Labels from the product feed, up to five, separated by `|`. Hidden by default — show them with the `custom-label-N` parts. Also set as `data-custom-label-N` */
   @Prop() customLabels: string = "";
+  /** Wrap the Product Card's price values in the container. */
   @Prop() addPriceContainer?: boolean = false;
+  /** Energy labels, set as a JS property */
   @Prop({ mutable: true }) energyCertifications?: EnergyCertification[];
+  /** Product page URL. The title and the image link to it */
   @Prop() deeplink: string | undefined;
   /** URL to external CSS file for custom styling */
   @Prop() cssUrl: string | null = null;
@@ -228,13 +268,13 @@ export class VviinnProductCard {
   @State() imageLoaded: boolean = false;
   @State() showSecondImage: boolean = false;
 
-  /** Event emitted once when the recommendation is rendered on the page */
+  /** Emitted once when the card has rendered */
   @Event({ bubbles: true })
   vviinnProductLoad: EventEmitter<ProductCardEventData>;
-  /** Event emitted once when the recommendation appears in the viewport */
+  /** Emitted once when the card's image is fully in the viewport */
   @Event({ bubbles: true })
   vviinnProductView: EventEmitter<ProductCardEventData>;
-  /** Event emitted ones when user click on deeplink */
+  /** Emitted on every click on a link in the card */
   @Event({ bubbles: true })
   vviinnProductClick: EventEmitter<ProductCardEventData>;
   /** User clicks on Add to Basket button */
