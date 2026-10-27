@@ -71,21 +71,30 @@ jobs:
 
   # Keeps one release pull request open on develop from feat:, fix:, perf: and breaking
   # commits. Merging it tags the commit and reports release_created to the jobs below.
-  # A pull request opened with GITHUB_TOKEN starts no workflow runs, so the release
-  # pull request needs a token of its own to get its checks.
+  # Its pull request is opened with a vviinn-widgets-connector-app token, as one from GITHUB_TOKEN
+  # starts no workflow runs; workflows: write lets the branch take in workflow file changes.
   release-please:
     name: Release Please
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
     concurrency: release-please
+    permissions: {}
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
       tag_name: ${{ steps.release.outputs.tag_name }}
     steps:
+      - id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.RELEASE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+          permission-workflows: write
       - id: release
         uses: googleapis/release-please-action@v4
         with:
-          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+          token: ${{ steps.app-token.outputs.token }}
           target-branch: develop
 
   # npm trusts this workflow file for OIDC publishing, so publishing stays in it.
@@ -145,16 +154,26 @@ jobs:
 
   # main carries the production Storybook, which installs the version just published.
   # main has no required checks, so the pull request merges at once; develop passed
-  # its checks in the release pull request.
+  # its checks in the release pull request. GITHUB_TOKEN may not open pull requests in
+  # this repository, so this job mints a token from the same App.
   merge-release-into-main:
     name: Merge the release into main
     runs-on: ubuntu-latest
     needs: [release-please, publish]
     if: needs.release-please.outputs.release_created == 'true'
+    permissions: {}
     steps:
+      - id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.RELEASE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+          permission-workflows: write
       - name: Merge develop into main
         env:
-          GH_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           TAG: ${{ needs.release-please.outputs.tag_name }}
         run: |
           pr=$(gh pr list --repo "$GITHUB_REPOSITORY" --base main --head develop --state open --json url --jq '.[0].url')
