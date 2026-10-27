@@ -7,9 +7,9 @@ import {
 } from "../../../../storybook/helpers/sharedArgTypes";
 
 export const argTypes = {
-  brand: {
+  productId: {
     description:
-      "Product brand. The card also sets it as `data-brand`, so CSS can target cards by brand.",
+      "Product ID the card passes into its events. Internal; the widgets set it.",
   },
   customLabels: {
     description:
@@ -41,8 +41,6 @@ export const argTypes = {
     },
   },
   images: {
-    description:
-      "Array of image URLs (first 2 will be used for hover effect on desktop)",
     control: {
       type: "object",
     },

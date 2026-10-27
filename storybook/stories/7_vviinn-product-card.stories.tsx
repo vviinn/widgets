@@ -8,16 +8,6 @@ export default {
   title: "Playground/Product Card",
   component: "vviinn-product-card",
   decorators: [productDecorator],
-  parameters: {
-    argTypes: {
-      entityType: {
-        options: ["product", "content", "list"],
-        control: {
-          type: "select",
-        },
-      },
-    },
-  },
   argTypes,
 };
 
