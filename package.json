@@ -18,6 +18,7 @@
   "files": [
     "dist/",
     "www/build/",
+    "docs.json",
     "NOTICE"
   ],
   "scripts": {
