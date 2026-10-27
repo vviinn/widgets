@@ -82,10 +82,10 @@ import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
 /**
  * Card for one search result or recommendation. Renders a product, a content entry or a list entry, depending on `entity-type`.
  *
- * @part product-card - Card container.
+ * @part product-card - Card container. Styled through an embedding widget, e.g. `vviinn-results::part(product-card)`.
  * @part image-container - Product Card's image container.
  * @part image-skeleton - Placeholder shown while the image loads.
- * @part content-container - Product Card's content container.
+ * @part content-container - Product Card's content container. On content cards, not exported to the widgets.
  * @part basket-button-container - Product Card's basket button container.
  * @part brand - Product brand.
  * @part product-type - Product type.
@@ -128,7 +128,7 @@ import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
  * @part custom-label-image - Custom labels on the image. Combine with custom-label-N to pick one place.
  * @part product-card-actions - Style actions wrapper.
  * @part product-card-actions-top - Style top actions wrapper.
- * @part content-card - Content card container.
+ * @part content-card - Content card container. Styled through an embedding widget, e.g. `vviinn-results::part(content-card)`.
  * @part content-card-content-container - Content card's content container.
  * @part content-label - Content card's label.
  * @part content-title - Content card's title.
@@ -136,7 +136,7 @@ import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
  * @part content-card-image - Content card's image.
  * @part content-card-image-container - Content card's image container.
  * @part content-card-image-picture - Picture element for content card's image.
- * @part list-card - List card container.
+ * @part list-card - List card container. Styled through an embedding widget, e.g. `vviinn-results::part(list-card)`.
  * @part list-container - Same element as list-card-content-container. Not exported to the widgets.
  * @part list-card-content-container - List card's content container.
  * @part list-label - List card's label (e.g., "Category").
@@ -212,13 +212,13 @@ export class VviinnProductCard {
   @Prop() favoriteShow: boolean;
   /** Location of Update button for Set mode */
   @Prop() updateButtonLocation: UpdateButtonLocation;
-  /** Labels from the product feed, up to five, separated by `|`. Hidden by default — show them with the `custom-label-N` parts. Also set as `data-custom-label-N` */
+  /** Labels from the product feed, separated by `|`. Hidden by default — show them with the `custom-label-N` parts, which exist for the first five. Also set as `data-custom-label-N` */
   @Prop() customLabels: string = "";
   /** Wrap the Product Card's price values in the container. */
   @Prop() addPriceContainer?: boolean = false;
   /** Energy labels, set as a JS property */
   @Prop({ mutable: true }) energyCertifications?: EnergyCertification[];
-  /** Product page URL. The title and the image link to it */
+  /** Product page URL for the title and image links. Standalone, the card doesn't navigate — handle `vviinnProductClick` */
   @Prop() deeplink: string | undefined;
   /** URL to external CSS file for custom styling */
   @Prop() cssUrl: string | null = null;
@@ -271,10 +271,10 @@ export class VviinnProductCard {
   /** Emitted once when the card has rendered */
   @Event({ bubbles: true })
   vviinnProductLoad: EventEmitter<ProductCardEventData>;
-  /** Emitted once when the card's image is fully in the viewport */
+  /** Emitted when at least 95% of the card's image is visible */
   @Event({ bubbles: true })
   vviinnProductView: EventEmitter<ProductCardEventData>;
-  /** Emitted on every click on a link in the card */
+  /** Emitted on a click on a link in the card, instead of following the link */
   @Event({ bubbles: true })
   vviinnProductClick: EventEmitter<ProductCardEventData>;
   /** User clicks on Add to Basket button */
