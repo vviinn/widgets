@@ -8,8 +8,9 @@ import {
 
 export const argTypes = {
   productId: {
-    description:
-      "Product ID the card passes into its events. Internal; the widgets set it.",
+    table: {
+      disable: true,
+    },
   },
   customLabels: {
     description:
