@@ -1,4 +1,4 @@
-name: Node.js CI Pipeline
+name: CI and Release
 
 on:
   push:
