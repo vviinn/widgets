@@ -1,4 +1,4 @@
-name: Node.js CI Pipeline
+name: CI and Release
 
 on:
   push:
@@ -9,6 +9,7 @@ on:
     branches:
       - develop
       - main
+  workflow_dispatch:
 
 env:
   NODE_VERSION: "22.23.2"
@@ -32,6 +33,7 @@ jobs:
       - run: npm run build_interfaces
       - run: npm run lint
       - run: npm run test
+      - run: npm run build
 
   security-audit:
     name: Security Audit
@@ -68,47 +70,49 @@ jobs:
         run: npm audit --audit-level=high
         working-directory: storybook
 
-  generate-version-develop:
+  # Keeps a release pull request open on develop from the user-facing commits.
+  # It uses a vviinn-widgets-connector-app token: a pull request from GITHUB_TOKEN gets no checks.
+  release-please:
+    name: Release Please
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    if: github.ref == 'refs/heads/develop'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+    concurrency: release-please
+    permissions: {}
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
     steps:
-      - uses: actions/checkout@v4
+      - id: app-token
+        uses: actions/create-github-app-token@v3
         with:
-          fetch-depth: 0
-      - run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+          client-id: ${{ vars.RELEASE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+          permission-workflows: write # the branch takes in workflow changes from develop
+      - id: release
+        uses: googleapis/release-please-action@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "npm"
-      - name: Create .env file
-        run: |
-          echo "OPENAPI_URL=${{ env.OPENAPI_URL }}" >> .env
-          echo "RECOMMENDATIONS_URL=https://api.stage.vviinn.com/product/" >> .env
-      - run: npm ci
-      - run: npm run test
-      - run: npm run build_interfaces
-      - run: npm run build
-      - run: npm run release.ci
-      - run: git push --follow-tags origin develop
-      - run: npm run update_storybook_changelog
-      - run: |
-          git add ./storybook/documentation/change-log/1_changelog.mdx
-          git diff --cached --quiet || (git commit -m '[skip ci] update storybook changelog' && git push origin develop)
+          token: ${{ steps.app-token.outputs.token }}
+          target-branch: develop
 
-  release-beta:
+  # A release publishes latest, a run by hand on develop a beta. npm trusts this file for OIDC
+  # publishing; !cancelled() lets the job run when a run by hand skips release-please.
+  publish:
+    name: Publish to npm
     runs-on: ubuntu-latest
+    needs: release-please
+    if: >-
+      !cancelled() && (needs.release-please.outputs.release_created == 'true' ||
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/develop'))
     permissions:
       contents: read
       id-token: write
-    if: github.ref == 'refs/heads/develop'
-    needs: generate-version-develop
     steps:
+      # Build exactly the tagged release, as develop may have moved on; empty on a run by hand.
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.release-please.outputs.tag_name }}
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -117,7 +121,6 @@ jobs:
           registry-url: "https://registry.npmjs.org"
       - name: Upgrade npm for OIDC support
         run: npm install -g npm@11
-      - run: git pull
       - name: Create .env file
         run: |
           echo "OPENAPI_URL=${{ env.OPENAPI_URL }}" >> .env
@@ -125,6 +128,13 @@ jobs:
           echo "API_PATH=https://api.vviinn.com" >> .env
       - run: npm ci
       - run: npm run test
+      # The beta takes the next patch number, so it sorts after the current release, and the
+      # run number keeps each one unique.
+      - name: Set the beta version
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          next_patch=$(node -p "const [major, minor, patch] = require('./package.json').version.split('.'); [major, minor, +patch + 1].join('.')")
+          npm version "$next_patch-beta.${{ github.run_number }}" --no-git-tag-version
       - run: npm run build_interfaces
       - run: npm run build
       # The SBOM comes from the lockfile, so it runs before the publish: a failure
@@ -139,47 +149,37 @@ jobs:
           retention-days: 90
       # npm cannot attest a private source repository, so --provenance joins the
       # command only once the repository is public.
-      - name: Publish to NPM registry with beta tag using OIDC
-        run: npm publish --tag beta --access public ${{ github.event.repository.visibility == 'public' && '--provenance' || '' }}
+      - name: Publish to NPM registry using OIDC
+        run: npm publish --tag ${{ github.event_name == 'workflow_dispatch' && 'beta' || 'latest' }} --access public ${{ github.event.repository.visibility == 'public' && '--provenance' || '' }}
 
-  update-widget-version-storybook:
+  # Merges develop into main, which deploys the production Storybook. main takes changes only
+  # through pull requests, and GITHUB_TOKEN may not open one here, hence the App token.
+  merge-release-into-main:
+    name: Merge the release into main
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    if: github.ref == 'refs/heads/develop'
-    needs: release-beta
+    needs: [release-please, publish]
+    if: needs.release-please.outputs.release_created == 'true'
+    permissions: {}
     steps:
-      - uses: actions/checkout@v4
+      - id: app-token
+        uses: actions/create-github-app-token@v3
         with:
-          fetch-depth: 0
-      - run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "npm"
-      - run: git pull
-      - run: npm run update_storybook_widget_version
-      # Without the lockfile, the next pull request fails `npm ci` in the Storybook audit.
-      # The registry can take minutes to serve a fresh version (2.226.2: ~5), so retry for up to 15.
-      - name: Sync Storybook lockfile
-        working-directory: storybook
+          client-id: ${{ vars.RELEASE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+          permission-workflows: write # main takes in workflow changes from develop
+      - name: Merge develop into main
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          TAG: ${{ needs.release-please.outputs.tag_name }}
         run: |
-          for _ in $(seq 30); do
-            npm install --package-lock-only --ignore-scripts --prefer-online 2>npm-error.log && exit 0
-            grep -qE 'ETARGET|E404' npm-error.log || { cat npm-error.log; exit 1; }
-            sleep 30
-          done
-          cat npm-error.log
-          exit 1
-      - run: |
-          git add ./storybook/package.json ./storybook/package-lock.json
-          # A re-run finds the version already committed.
-          git diff --cached --quiet && exit 0
-          git commit -m "[skip ci] update widget's version in storybook"
-          git push origin develop
+          pr=$(gh pr list --repo "$GITHUB_REPOSITORY" --base main --head develop --state open --json url --jq '.[0].url')
+          if [ -z "$pr" ]; then
+            pr=$(gh pr create --repo "$GITHUB_REPOSITORY" --base main --head develop \
+              --title "Release $TAG" --body "Ships $TAG to main, which deploys the production Storybook.")
+          fi
+          gh pr merge "$pr" --repo "$GITHUB_REPOSITORY" --merge
 
   build-app-main:
     runs-on: ubuntu-latest

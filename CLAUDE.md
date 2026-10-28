@@ -19,9 +19,9 @@ npm run build             # Production build
 npm run build.watch       # Dev build with watching
 npm test                  # Unit tests
 npm run test.watch        # Watch unit tests
-npm run release           # Local release with version bump
-npm run release.ci        # CI release
 ```
+
+**Releases**: release-please keeps a release PR open against `develop`, collecting the user-facing commits since the last release. Merging it tags the release, publishes npm `latest` and merges `develop` into `main`. A `beta` is published only on demand: run the default workflow on `develop` by hand (`workflow_dispatch`). A Storybook- or docs-only change reaches the production Storybook by merging `develop` into `main` by hand, but only with no release PR open — otherwise `develop`'s unreleased stories reach production ahead of the npm package. Configuration: `release-please-config.json`, `.release-please-manifest.json`.
 
 **Clearing `dist/`**: remove `.stencil` alongside it. `rm -rf dist` on its own leaves the build cache, the next build emits a partial `dist/`, and the Storybook build then fails on it with `Could not resolve "../../dist/loader"` — which reads like a code fault rather than a stale cache.
 
@@ -85,10 +85,9 @@ Global CSS variables in `src/variables.css`.
 ## Git Commit Conventions
 
 - **Commit only when asked.** Finishing a task means leaving the changes in the working tree and reporting them — the commit is a separate request. An approved plan, an approved branch, and green tests are not permission to commit; neither are the conventions below, which say how to word a commit message, not when to make one. Same for `push` and opening a PR. A confirmation prompt on `git commit`/`git push` is expected, not a malfunction.
-- **User-facing changes** — `feat:` for features, `fix:` for fixes. These land in the user-facing changelog, so write them for end users. Semi-free form: add a `Component Name:` segment when the change targets one component (`feat: Vviinn Cropper: toggle cropper visibility by OCR filter`), otherwise a plain summary for cross-cutting changes (`fix: Restore missing CSS parts & slots in component docs`).
+- **User-facing changes** — `feat:` for features, `fix:` for fixes, `perf:` for performance improvements, `revert:` to undo one of them. These land in the user-facing changelog and decide the next version (`feat` → minor, `fix`/`perf`/`revert` → patch, `!` after the type → major), so write them for end users. Semi-free form: add a `Component Name:` segment when the change targets one component (`feat: Vviinn Cropper: toggle cropper visibility by OCR filter`), otherwise a plain summary for cross-cutting changes (`fix: Restore missing CSS parts & slots in component docs`).
 - **Routine work** (intermediate fixes, chores, review changes, refactors) — `#<ticket> Description`, where `<ticket>` is the number from the branch name (e.g. `#39690 Ignore local Claude settings file`). No `feat:`/`fix:`/`chore:` prefix.
-- **Automation** (releases, CI, changelog bumps) — prefix with `[skip ci]`.
-- **Avoiding a version bump**: `commit-and-tag-version` bumps at least the patch version on any commit, regardless of prefix (`chore:` included) — `[skip ci]` is the only reliable way to land a commit without triggering a release.
+- **No release without a user-facing commit**: `#<ticket>` commits and hidden types (`chore:`, `docs:`, `refactor:`, `test:`, `build:`, `ci:`, `style:`) never open or bump a release PR. `[skip ci]` only skips the workflow run — never put it on the merge of the release PR, or nothing is published.
 - **Subject line only** — no body, no bullet lists, no rationale paragraph, even when the change spans several files and fixes several things. "Semi-free form" above refers to the subject's wording, not permission to add a body. Explain the mechanism in the PR description, not in the commit.
 - **No `Co-Authored-By` trailers** — do not append `Co-Authored-By` (or other AI-attribution) lines to commit messages.
 
