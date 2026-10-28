@@ -7,8 +7,14 @@ import {
 } from "../../../../storybook/helpers/sharedArgTypes";
 
 export const argTypes = {
-  brand: {
-    description: "Using the [title] attribute from product feed.",
+  productId: {
+    table: {
+      disable: true,
+    },
+  },
+  customLabels: {
+    description:
+      "Labels from the product feed, up to five, separated by `|` — e.g. `UVP`. The card hides them by default; this playground shows them for illustration.",
   },
   productCardImageAspectRatio: productCardImageAspectRatioArg,
   productCardContentAlign: productCardContentAlignArg,
@@ -36,8 +42,6 @@ export const argTypes = {
     },
   },
   images: {
-    description:
-      "Array of image URLs (first 2 will be used for hover effect on desktop)",
     control: {
       type: "object",
     },

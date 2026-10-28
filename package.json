@@ -1,6 +1,6 @@
 {
   "name": "vviinn-widgets",
-  "version": "2.227.1",
+  "version": "2.228.0",
   "description": "vviinn web components",
   "author": "Mediaopt",
   "repository": {
@@ -18,6 +18,7 @@
   "files": [
     "dist/",
     "www/build/",
+    "docs.json",
     "NOTICE"
   ],
   "scripts": {
@@ -32,14 +33,10 @@
     "test": "stencil test --spec",
     "test.coverage": "stencil test --spec -- --coverage",
     "test.watch": "stencil test --spec --watchAll",
-    "release": "commit-and-tag-version",
-    "release.ci": "commit-and-tag-version --releaseCommitMessageFormat '[skip ci] chore(release): {{currentTag}}'",
     "artifactregistry-login": "npx google-artifactregistry-auth",
     "lint": "eslint . --max-warnings 70",
     "lint.fix": "eslint . --fix",
     "format": "prettier --write 'src/**/*.{ts,tsx,js,jsx,css,scss,json}'",
-    "update_storybook_changelog": "node ./scripts/update-changelog.js",
-    "update_storybook_widget_version": "node ./scripts/update-widget-version.js",
     "update.openapi": "gh api repos/vviinn/platform-api/contents/docs/merchant-openapi.yaml?ref=develop --jq '.content' | base64 -d > openapi/merchant-openapi.yaml && echo 'Synced: openapi/merchant-openapi.yaml'",
     "prepare": "husky"
   },
@@ -71,7 +68,6 @@
     "@types/node": "^22.15.21",
     "autoprefixer": "^10.4.20",
     "babel-loader": "^9.1.2",
-    "commit-and-tag-version": "^9.5.0",
     "dotenv": "^8.2.0",
     "enhanced-ecommerce-types": "0.0.3",
     "eslint": "^9.39.5",
@@ -89,7 +85,8 @@
     "rollup-plugin-dotenv": "^0.5.0",
     "storybook-addon-designs": "^6.2.1",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.69.0"
+    "typescript-eslint": "^8.69.0",
+    "yargs": "^17.7.3"
   },
   "overrides": {
     "minimatch@3": {

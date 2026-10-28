@@ -1,4 +1,7 @@
-export const productDecorator = (story, { args }) => `
+export const productDecorator = (story, { args }) => {
+  const wrapper = document.createElement("div");
+  wrapper.className = "product-wrapper";
+  wrapper.innerHTML = `
 <style>
 html, body, #root, #root-inner {
   width: 100%;
@@ -18,12 +21,12 @@ vviinn-product-card {
   --product-card-image-aspect-ratio: ${args.productCardImageAspectRatio};
 }
 
-vviinn-product-card::part(custom-label-0), vviinn-product-card::part(custom-label-1), vviinn-product-card::part(custom-label-2), vviinn-product-card::part(custom-label-3), vviinn-product-card::part(custom-label-4) {
+vviinn-product-card::part(custom-label-content) {
   display: block;
 }
 
 </style>
-<div class="product-wrapper">
-  ${story()}
-</div>
 `;
+  wrapper.append(story());
+  return wrapper;
+};

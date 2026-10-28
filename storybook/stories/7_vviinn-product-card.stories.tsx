@@ -4,49 +4,18 @@ import "../styles/playground.css";
 import { siteProductCards } from "../helpers";
 import { argsFromParams } from "../helpers/argsFromParams";
 
-const energyCertificationsString = JSON.stringify([
-  {
-    certificationClass: "B",
-    classIconUrls: {
-      left: "https://cdn.vviinn.com/assets/certification/energy/AtoG/left/B.svg",
-      right:
-        "https://cdn.vviinn.com/assets/certification/energy/AtoG/right/B.svg",
-    },
-    classRange: {
-      min: "A",
-      max: "G",
-    },
-    classDataSheetUrl: "https://example.com/datasheet.pdf",
-    productType: "Product Type",
-  },
-]);
-
 export default {
   title: "Playground/Product Card",
   component: "vviinn-product-card",
   decorators: [productDecorator],
-  parameters: {
-    controls: { expanded: false },
-    argTypes: {
-      entityType: {
-        options: ["product", "content", "list"],
-        control: {
-          type: "select",
-        },
-      },
-    },
-  },
   argTypes,
 };
 
 const Template = (args) => {
-  const imagesAttr =
-    args.images && args.images.length > 0
-      ? `images='${JSON.stringify(args.images)}'`
-      : "";
-
-  return `
+  const container = document.createElement("div");
+  container.innerHTML = `
     <vviinn-product-card
+      product-id="${args.productId}"
       product-title="${args.productTitle}"
       brand="${args.brand}"
       product-type="${args.productType}"
@@ -56,7 +25,6 @@ const Template = (args) => {
       base-sale-price='${JSON.stringify(args.baseSalePrice)}'
       price-prefix="${args.pricePrefix}"
       image="${args.image}"
-      ${imagesAttr}
       show-multiple-images="${args.showMultipleImages}"
       image-width="${args.imageWidth}"
       responsive="${args.responsive}"
@@ -75,6 +43,11 @@ const Template = (args) => {
       entity-type="${args.entityType}"
       css-url="${args.cssUrl}"
     ></vviinn-product-card>`;
+
+  // Stencil leaves an array attribute as a string, so images goes in as a property.
+  const card = container.firstElementChild;
+  Object.assign(card, { images: args.images ?? [] });
+  return card;
 };
 
 export const Default = Template.bind({});
@@ -86,7 +59,12 @@ const { mainCard, setCard } = siteProductCards;
 // Base prices are optional on a card, so a site may leave them out.
 const toBasePrice = (value?: string) => (value ? JSON.parse(value) : null);
 
+// Only products that need an energy label carry one.
+const energyCertificationsString =
+  mainCard["energy-certifications-string"] ?? "";
+
 const initArgs = {
+  productId: mainCard.id,
   productTitle: mainCard["product-title"],
   productType: mainCard["product-type"],
   brand: mainCard.brand,
@@ -104,7 +82,7 @@ const initArgs = {
   salePrice: mainCard["sale-price"],
   baseSalePrice: toBasePrice(mainCard["base-sale-price"]),
   pricePrefix: "",
-  customLabels: "UVP",
+  customLabels: "",
   addToBasketShow: true,
   isSetMode: false,
   addPriceContainer: false,
