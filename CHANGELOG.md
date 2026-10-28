@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.228.0](https://github.com/vviinn/widgets/compare/v2.227.2...v2.228.0) (2026-10-28)
+
+
+### Features
+
+* Ship the component API reference (docs.json) with the npm package ([ffa5be4](https://github.com/vviinn/widgets/commit/ffa5be44d856bd81e314177b0dbbe090c33902c5))
+
 ### [2.227.2](https://github.com/vviinn/widgets/compare/v2.227.1...v2.227.2) (2026-10-26)
 
 ### [2.227.1](https://github.com/vviinn/widgets/compare/v2.227.0...v2.227.1) (2026-10-21)
