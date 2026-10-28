@@ -124,7 +124,6 @@ export type Mode = "pure-grid" | CarouselMode;
  * @part list-card - List card container.
  * @part list-card-content-container - List card's content container.
  * @part list-card-image-container - List card's image container.
- * @part list-card-image-link - List card's image link.
  * @part list-label - List card's label (e.g., "Category").
  * @part list-title - List card's title.
  *

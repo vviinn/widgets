@@ -1,4 +1,7 @@
-export const productDecorator = (story, { args }) => `
+export const productDecorator = (story, { args }) => {
+  const wrapper = document.createElement("div");
+  wrapper.className = "product-wrapper";
+  wrapper.innerHTML = `
 <style>
 html, body, #root, #root-inner {
   width: 100%;
@@ -23,7 +26,7 @@ vviinn-product-card::part(custom-label-content) {
 }
 
 </style>
-<div class="product-wrapper">
-  ${story()}
-</div>
 `;
+  wrapper.append(story());
+  return wrapper;
+};

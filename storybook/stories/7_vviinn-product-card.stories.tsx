@@ -8,26 +8,12 @@ export default {
   title: "Playground/Product Card",
   component: "vviinn-product-card",
   decorators: [productDecorator],
-  parameters: {
-    argTypes: {
-      entityType: {
-        options: ["product", "content", "list"],
-        control: {
-          type: "select",
-        },
-      },
-    },
-  },
   argTypes,
 };
 
 const Template = (args) => {
-  const imagesAttr =
-    args.images && args.images.length > 0
-      ? `images='${JSON.stringify(args.images)}'`
-      : "";
-
-  return `
+  const container = document.createElement("div");
+  container.innerHTML = `
     <vviinn-product-card
       product-id="${args.productId}"
       product-title="${args.productTitle}"
@@ -39,7 +25,6 @@ const Template = (args) => {
       base-sale-price='${JSON.stringify(args.baseSalePrice)}'
       price-prefix="${args.pricePrefix}"
       image="${args.image}"
-      ${imagesAttr}
       show-multiple-images="${args.showMultipleImages}"
       image-width="${args.imageWidth}"
       responsive="${args.responsive}"
@@ -58,6 +43,11 @@ const Template = (args) => {
       entity-type="${args.entityType}"
       css-url="${args.cssUrl}"
     ></vviinn-product-card>`;
+
+  // Stencil leaves an array attribute as a string, so images goes in as a property.
+  const card = container.firstElementChild;
+  Object.assign(card, { images: args.images ?? [] });
+  return card;
 };
 
 export const Default = Template.bind({});
