@@ -4,10 +4,8 @@
   "description": "AI-powered search and product discovery widgets for e-commerce storefronts, built as Web Components with Stencil.",
   "keywords": [
     "web-components",
-    "custom-elements",
     "stenciljs",
     "ecommerce",
-    "image-search",
     "visual-search",
     "product-search",
     "product-recommendations",
