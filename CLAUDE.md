@@ -54,6 +54,7 @@ Global CSS variables in `src/variables.css`.
 
 - Class-based components for main components with state/lifecycle
 - Document every prop, event, slot, part and CSS custom property of a public component (see **Public Docs**)
+- A description names only the public API: before naming a prop, attribute or event, check it exists on that component and isn't `@internal` — docs.json leaves internal ones out, so readers can't use them. Before declaring a CSS custom property on a wrapper, check the element it styles renders inside the wrapper's shadow tree: one mounted in `document.body` or an append target doesn't inherit it.
 - Shadow DOM for encapsulation
 - `@Prop` for public API, `@State` for internal state, `@Event` for custom events
 
