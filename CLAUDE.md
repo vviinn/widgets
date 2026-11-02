@@ -53,7 +53,7 @@ Global CSS variables in `src/variables.css`.
 **Stencil Components**:
 
 - Class-based components for main components with state/lifecycle
-- Document props with inline comments above @Prop when used in Storybook Playground or behavior is non-obvious
+- Document every prop, event, slot, part and CSS custom property of a public component (see **Public Docs**)
 - Shadow DOM for encapsulation
 - `@Prop` for public API, `@State` for internal state, `@Event` for custom events
 
@@ -80,7 +80,7 @@ Global CSS variables in `src/variables.css`.
 - **Adding @Prop()**: See `/add-prop` command. ALWAYS update Storybook story when adding props.
 - **Comments**: comment the _why_, not the _what_ — intent, non-obvious decisions, edge cases, constraints the code can't express itself. Skip comments that restate the code; prefer self-documenting names. Delete stale ones with the code they described. Default one line, two-line ceiling — past that, extract a named helper/variable or move the rationale into the function's JSDoc. In tests, only comment what the name itself can't carry (a hidden precondition, a hidden dependency of an assertion) — restating the test name or the tested function's JSDoc is noise. No change history: describe the code as it stands, never how it got there (no "now"/"no longer"/"instead of", no naming a rejected alternative) — that belongs in commits and the PR description.
 - **Punctuation in comments & docs**: use an em dash (—), not a hyphen (-) or en dash (–).
-- **Component JSDoc**: the `@part` / `@slot` JSDoc block must sit **immediately above `@Component`** with no declaration in between — otherwise Stencil attaches it to that declaration and the docs (Storybook Controls table via `docs.json`) lose the parts/slots. CSS custom properties are documented with `@prop` in the comment inside `:host` of the component's CSS.
+- **Component JSDoc**: the `@part` / `@slot` JSDoc block must sit **immediately above `@Component`** with no declaration in between — otherwise Stencil attaches it to that declaration and `docs.json` loses the parts/slots. CSS custom properties are documented with `@prop` in the comment inside `:host` of the component's CSS.
 
 ## Git Commit Conventions
 
@@ -105,18 +105,15 @@ Global CSS variables in `src/variables.css`.
 
 ## Public Docs
 
-docs.vviinn.com is built from the repo `vviinn/public-docs`; ask for the path of its local checkout when none is known. The full API reference is Storybook Controls; under `src/content/docs/widgets/`, public-docs keeps by hand:
+docs.vviinn.com is built from the repo `vviinn/public-docs`; ask for the path of its local checkout when none is known. Its Component Reference and the slot and CSS variable lists are generated from the `docs.json` of npm `latest`, so for props, events, slots, parts and CSS custom properties the JSDoc here is the docs text.
 
-- CSS custom properties — `customization/css-variables.mdx`, one section per widget
-- Slots — `customization/custom-content.mdx`, one list per widget
-- Widget pages — examples and guides, e.g. the Styling section of `shop-the-look.mdx`
+Every change to a public component's prop, event, slot, part or CSS custom property gets a public-docs check:
 
-Every change to a public component's prop, slot, part or CSS custom property gets a public-docs check:
+- **New** — reaches the reference and the lists by itself. A new prop or event gets `@since <version>`: the next minor of `.release-please-manifest.json`, since a `feat` bumps the minor; if the release PR ends up with another number, update the tag on `develop` before merging it. An example or guide on the widget page only when the feature needs explaining; say which in the summary.
+- **Changed, renamed or removed** — grep public-docs `src/content` for the name and update every hit. A slot or CSS custom property is described again on each widget that passes it on: grep `src/components` too and keep the wording the same.
+- **New public component** — add it to `PUBLIC_COMPONENT_TAGS` in `stencil.config.ts`, and its name, plus its Playground story if any, to `COMPONENTS` in public-docs `src/schemas/widgets-docs.mjs`.
 
-- **New** — into the matching hand-kept list; an example or guide on the widget page only when the feature needs explaining. Say which in the summary.
-- **Changed, renamed or removed** — grep public-docs `src/content` for the name and update every hit.
-
-The docs change is its own PR in public-docs, merged once npm `latest` carries the change: doc previews (`WidgetPreview`) load `vviinn-widgets@latest`. Internal components (`vviinn-image`, `vviinn-carousel`, …) stay out.
+The docs change is its own PR in public-docs, merged once npm `latest` carries the change: doc previews (`WidgetPreview`) load `vviinn-widgets@latest`. Internal components (`vviinn-image`, `vviinn-carousel`, …) are filtered out by the `docs-custom` output in `stencil.config.ts`.
 
 ## Browser Testing
 
