@@ -111,7 +111,7 @@ Every change to a public component's prop, event, slot, part or CSS custom prope
 
 - **New** — reaches the reference and the lists by itself. A new prop or event gets `@since <version>`: the next minor of `.release-please-manifest.json`, since a `feat` bumps the minor; if the release PR ends up with another number, update the tag on `develop` before merging it. An example or guide on the widget page only when the feature needs explaining; say which in the summary.
 - **Changed, renamed or removed** — grep public-docs `src/content` for the name and update every hit. A slot or CSS custom property is described again on each widget that passes it on: grep `src/components` too and keep the wording the same.
-- **New public component** — add it to `PUBLIC_COMPONENT_TAGS` in `stencil.config.ts`, and its name, plus its Playground story if any, to `COMPONENTS` in public-docs `src/schemas/widgets-docs.mjs`.
+- **New public component** — add a row to the component table in `README.md` and the tag to `PUBLIC_COMPONENT_TAGS` in `stencil.config.ts`, and its name, plus its Playground story if any, to `COMPONENTS` in public-docs `src/schemas/widgets-docs.mjs`.
 
 The docs change is its own PR in public-docs, merged once npm `latest` carries the change: doc previews (`WidgetPreview`) load `vviinn-widgets@latest`. Internal components (`vviinn-image`, `vviinn-carousel`, …) are filtered out by the `docs-custom` output in `stencil.config.ts`.
 

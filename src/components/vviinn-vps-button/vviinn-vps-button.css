@@ -1,6 +1,6 @@
 :host {
   /**
-    * @prop --color-primary: Accent color of buttons, Onboarding bullets and the selected object in an image.
+    * @prop --color-primary: Accent color of the action and upload buttons, the drag-over drop zone and the Onboarding bullets.
     * @prop --color-primary-hover: `--color-primary` on mouse hover.
     * @prop --modal-border-radius: The border radius of the modal.
     * @prop --search-modal-animation-duration: The animation duration of the modal on desktop devices.
