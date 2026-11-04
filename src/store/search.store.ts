@@ -79,6 +79,8 @@ type AppStateDefaults = {
 
 type ReceivedDataDefaults = {
   results: Recommendation[];
+  /** The text query that returned `results`; null for an image search or a category listing. */
+  resultsQuery: string | null;
   sourceProduct: Recommendation | null;
   dynamicFilters: ResponseDynamicFilterItem[];
   detectedObjects: Rectangle[];
@@ -115,6 +117,7 @@ const appStateDefaults: AppStateDefaults = {
 
 const receivedDataDefaults: ReceivedDataDefaults = {
   results: [],
+  resultsQuery: null,
   sourceProduct: null,
   dynamicFilters: [],
   detectedObjects: [],
@@ -257,6 +260,7 @@ const updateVisualSearchState =
 
     state.visualSearchId = response.requestId;
     state.results = response.data.products;
+    state.resultsQuery = null;
     applyResponseFilters(state, response.interactions.dynamicFilters);
     state.redirect = response.interactions.redirect
       ? { ...response.interactions.redirect, searchId: response.requestId }
@@ -557,6 +561,7 @@ export const makeTextSearchRequest = async (
       if (isStale()) return sessionResponse;
 
       state.results = sessionResponse?.data?.products ?? [];
+      state.resultsQuery = query;
       state.textSearchId = sessionResponse.requestId;
       applyResponseFilters(
         state,
@@ -615,6 +620,7 @@ export const makeProductListingPageRequest = async (
     TE.map((sessionResponse) => {
       if (skipStateUpdate) return sessionResponse;
       state.results = sessionResponse?.data?.products ?? [];
+      state.resultsQuery = null;
       state.dynamicFilters =
         sessionResponse?.interactions?.dynamicFilters ?? [];
       state.searchStatus = "success";

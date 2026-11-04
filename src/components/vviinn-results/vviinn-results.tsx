@@ -386,11 +386,17 @@ export class VviinnResults {
 
   private isTextSearch = () => this.state.searchType === "text";
 
-  // A new query reaches the store before its search starts, while image results may still be shown.
   private getQueryContext = () =>
-    createQueryContext({
-      query: this.isTextSearch() ? this.state.textSearchQuery : undefined,
-    });
+    createQueryContext({ query: this.state.resultsQuery });
+
+  // Cards of the recommendations opened inside the grid report through this component.
+  private getCardQueryContext = ({ campaignTypeId }: ProductCardEventData) =>
+    campaignTypeId === "VPR" || campaignTypeId === "VCS"
+      ? createQueryContext({
+          sourceProductId:
+            this.getResults()[this.oneClickDiscoverySelectedIndex]?.productId,
+        })
+      : this.getQueryContext();
 
   private createTrackingEventBody(detail: ProductCardEventData) {
     const { productRank, productId, campaignTypeId, clickEvent, ...rest } =
@@ -400,7 +406,7 @@ export class VviinnResults {
       rank: productRank,
       product: productId,
       ...rest,
-      ...this.getQueryContext(),
+      ...this.getCardQueryContext(detail),
     };
   }
 
