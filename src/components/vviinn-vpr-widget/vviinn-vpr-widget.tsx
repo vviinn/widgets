@@ -54,6 +54,7 @@ import {
   createAddToBasketEvent,
   createAddToWishlistEvent,
 } from "../../tracking";
+import { createQueryContext } from "../../tracking/queryContext";
 import { Locale, initializeLocale } from "../../locale";
 import { UpdateIcon } from "../vviinn-icons";
 import { getCustomLabels, getRecommendationsBody } from "../../recommendation";
@@ -372,8 +373,12 @@ export class VviinnVprWidget implements ComponentInterface {
       rank: productRank,
       product: productId,
       ...rest,
+      ...this.getQueryContext(),
     };
   };
+
+  private getQueryContext = () =>
+    createQueryContext({ sourceProductId: this.productId });
 
   @Watch("productId")
   handleProductIdChange() {
@@ -538,6 +543,7 @@ export class VviinnVprWidget implements ComponentInterface {
     const eventBody = {
       session_id: this.uiSessionId,
       ...rest,
+      ...this.getQueryContext(),
     };
 
     const resultEvent: ResultViewEvent | ResultLoadEvent =
