@@ -54,7 +54,7 @@
     "rxjs": "^7.5.5",
     "swiper": "^12.1.2",
     "uuid": "^11.1.1",
-    "vviinn-tracking-client-ts": "^1.7.6"
+    "vviinn-tracking-client-ts": "^1.9.0"
   },
   "devDependencies": {
     "@babel/core": "^7.16.12",

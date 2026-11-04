@@ -63,6 +63,7 @@ import {
   createWidgetEvent,
   createAddToWishlistEvent,
 } from "../../tracking";
+import { createQueryContext } from "../../tracking/queryContext";
 import { getUiSessionId } from "../../tracking/session";
 import { RequestDynamicFilterItem } from "../../campaign/VPRCampaignService";
 import { initializeLocale } from "../../locale";
@@ -385,6 +386,18 @@ export class VviinnResults {
 
   private isTextSearch = () => this.state.searchType === "text";
 
+  private getQueryContext = () =>
+    createQueryContext({ query: this.state.resultsQuery });
+
+  // Cards of the recommendations opened inside the grid report through this component.
+  private getCardQueryContext = ({ campaignTypeId }: ProductCardEventData) =>
+    campaignTypeId === "VPR" || campaignTypeId === "VCS"
+      ? createQueryContext({
+          sourceProductId:
+            this.getResults()[this.oneClickDiscoverySelectedIndex]?.productId,
+        })
+      : this.getQueryContext();
+
   private createTrackingEventBody(detail: ProductCardEventData) {
     const { productRank, productId, campaignTypeId, clickEvent, ...rest } =
       detail;
@@ -393,6 +406,7 @@ export class VviinnResults {
       rank: productRank,
       product: productId,
       ...rest,
+      ...this.getCardQueryContext(detail),
     };
   }
 
@@ -747,6 +761,7 @@ export class VviinnResults {
       )({
         session_id: this.uiSessionId,
         ...rest,
+        ...this.getQueryContext(),
       });
 
     trackEvent(resultEvent, this.token, this.apiPath);

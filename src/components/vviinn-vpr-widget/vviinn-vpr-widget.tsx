@@ -54,6 +54,7 @@ import {
   createAddToBasketEvent,
   createAddToWishlistEvent,
 } from "../../tracking";
+import { createQueryContext } from "../../tracking/queryContext";
 import { Locale, initializeLocale } from "../../locale";
 import { UpdateIcon } from "../vviinn-icons";
 import { getCustomLabels, getRecommendationsBody } from "../../recommendation";
@@ -304,6 +305,8 @@ export class VviinnVprWidget implements ComponentInterface {
   private productImageLoadedSubject = new Subject();
   private id?: string;
   private resultViewed: boolean = false;
+  /** The product the shown recommendations were requested for; `productId` may already be the next one. */
+  private recommendationsProductId?: string;
   private isSetMode: boolean;
   private isGridMode: boolean;
   private requestDynamicFilters: RequestDynamicFilterItem[] = [];
@@ -372,8 +375,12 @@ export class VviinnVprWidget implements ComponentInterface {
       rank: productRank,
       product: productId,
       ...rest,
+      ...this.getQueryContext(),
     };
   };
+
+  private getQueryContext = () =>
+    createQueryContext({ sourceProductId: this.recommendationsProductId });
 
   @Watch("productId")
   handleProductIdChange() {
@@ -538,6 +545,7 @@ export class VviinnVprWidget implements ComponentInterface {
     const eventBody = {
       session_id: this.uiSessionId,
       ...rest,
+      ...this.getQueryContext(),
     };
 
     const resultEvent: ResultViewEvent | ResultLoadEvent =
@@ -574,6 +582,7 @@ export class VviinnVprWidget implements ComponentInterface {
 
   private async getRecommendations() {
     if (this.productId === undefined || this.token === undefined) return;
+    const { productId } = this;
     this.setLoading(true);
     const campaignType =
       this.campaignType.length > 0 ? this.campaignType : "VPR";
@@ -581,7 +590,7 @@ export class VviinnVprWidget implements ComponentInterface {
     const headers = createBearAuthedHeader(this.token);
 
     const body = getRecommendationsBody({
-      productId: this.productId,
+      productId,
       color: this.color,
       excluded: this.excluded,
       campaigns: this.campaigns,
@@ -606,7 +615,7 @@ export class VviinnVprWidget implements ComponentInterface {
           this.setLoading(false);
         },
         (data) => {
-          this.handleRecommendationsSuccess(data);
+          this.handleRecommendationsSuccess(data, productId);
           this.vviinnRecommendationsLoaded.emit();
           this.setLoading(false);
         },
@@ -618,10 +627,13 @@ export class VviinnVprWidget implements ComponentInterface {
     this.hasErrorOnLoad = true;
   }
 
-  private handleRecommendationsSuccess({
-    data,
-    interactions,
-  }: SimilarProductsResponse | CrossSellingResponse) {
+  private handleRecommendationsSuccess(
+    { data, interactions }: SimilarProductsResponse | CrossSellingResponse,
+    productId: string,
+  ) {
+    this.recommendationsProductId = productId;
+    // A new set of recommendations gets its own view event.
+    this.resultViewed = false;
     this.vviinnResultLoad.emit(this.getBasicEventData());
     this.trackResultEvent("load");
     this.dynamicFilters =
