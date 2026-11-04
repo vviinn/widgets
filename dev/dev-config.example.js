@@ -3,4 +3,7 @@
 window.VVIINN_DEV = {
   token: "",
   productId: "",
+  // Optional, production when empty. The token must belong to the same environment,
+  // e.g. "https://api.stage.vviinn.com" with a stage token.
+  apiPath: "",
 };
