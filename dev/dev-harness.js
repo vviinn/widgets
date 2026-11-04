@@ -32,6 +32,11 @@ const inject = (tags, attribute, value) => {
   });
 };
 
+// The environment follows the token: a widget with its own token in the markup keeps its API.
+inject(
+  TOKEN_WIDGETS.map((tag) => `${tag}:not([token])`),
+  "api-path",
+  devConfig.apiPath,
+);
 inject(TOKEN_WIDGETS, "token", devConfig.token);
-inject(TOKEN_WIDGETS, "api-path", devConfig.apiPath);
 inject(PRODUCT_ID_WIDGETS, "product-id", devConfig.productId);
