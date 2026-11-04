@@ -1,5 +1,5 @@
 // Top-level embeddable widgets only — the internal children they render inherit
-// both values from their parent.
+// these values from their parent.
 const TOKEN_WIDGETS = [
   "vviinn-cropper",
   "vviinn-results",
@@ -33,4 +33,5 @@ const inject = (tags, attribute, value) => {
 };
 
 inject(TOKEN_WIDGETS, "token", devConfig.token);
+inject(TOKEN_WIDGETS, "api-path", devConfig.apiPath);
 inject(PRODUCT_ID_WIDGETS, "product-id", devConfig.productId);

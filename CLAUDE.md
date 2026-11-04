@@ -131,6 +131,6 @@ See `/browser-test` command. Playwright locators pierce open shadow roots; for s
 **Local secrets** — supplied per developer, never in tracked files:
 
 - `storybook/.env.local` — Storybook demo tokens (`STORYBOOK_TOKEN_*`). Copy `storybook/.env.local.example` and fill it in. Cloud Build injects the same names from Secret Manager.
-- `dev/dev-config.js` — token and product id for the `npm start` dev harness (`dev/dev-harness.js`). Copy `dev/dev-config.example.js`. Both live outside `src/` so Stencil's collection build never copies them into `dist/` — the trade-off is that watch mode does not see them, so editing the config needs a dev-server restart.
+- `dev/dev-config.js` — token, product id and, optionally, the API environment for the `npm start` dev harness (`dev/dev-harness.js`). Copy `dev/dev-config.example.js`. Both live outside `src/` so Stencil's collection build never copies them into `dist/` — the trade-off is that watch mode does not see them, so editing the config needs a dev-server restart.
 
 @CLAUDE.local.md
