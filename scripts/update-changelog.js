@@ -28,7 +28,7 @@ const releasesFilter = releases.map((release, index) => {
     }
     return;
   }
-  return `${release.replace("*", "-").split("([")[0].trimEnd()}`;
+  return `${release.replace(/^\* /, "- ").split("([")[0].trimEnd()}`;
 });
 
 releasesFilter.unshift('<Meta title="Changelog/Changelog"></Meta>');
