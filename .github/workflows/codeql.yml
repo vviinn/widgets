@@ -11,17 +11,15 @@ on:
     branches:
       - develop
       - main
+  # New CodeQL queries find issues in code that has not changed, so analysis also
+  # runs weekly on the default branch.
+  schedule:
+    - cron: "0 5 * * 1"
 
 jobs:
   analyze:
     name: Analyze JavaScript/TypeScript
     runs-on: ubuntu-latest
-    # FIXME: remove this guard, and add a weekly schedule, once the repository
-    # is public. Code scanning on a private repository needs GitHub Advanced
-    # Security; without it the job ends in "Resource not accessible by
-    # integration". Skipping by condition reports success, so a required check
-    # keeps passing until the day the repository flips over.
-    if: github.event.repository.visibility == 'public'
     permissions:
       contents: read
       security-events: write
