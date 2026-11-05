@@ -449,14 +449,11 @@ export class VviinnResults {
     }
 
     return pipe(
-      await makeTextSearchRequest(
-        this.storeName,
-        queryToUse,
-        this.token,
-        this.apiPath,
+      await makeTextSearchRequest(this.storeName, queryToUse, this.token, {
+        apiPath: this.apiPath,
         requestId,
-        this.resultsCount,
-      ),
+        resultsCount: this.resultsCount,
+      }),
       E.fold(
         () => {
           this.vviinnNoResult.emit(this.getBasicEventData("TPS"));
@@ -477,10 +474,12 @@ export class VviinnResults {
         this.filterColumn,
         this.filterValue,
         this.token,
-        this.apiPath,
-        this.resultsCount,
-        dynamicFilters,
-        this.useInnerState,
+        {
+          apiPath: this.apiPath,
+          resultsCount: this.resultsCount,
+          dynamicFilters,
+          skipStateUpdate: this.useInnerState,
+        },
       ),
       E.fold(
         () => {
@@ -504,21 +503,25 @@ export class VviinnResults {
         this.filterColumn,
         this.filterValue,
         this.token,
-        this.apiPath,
-        this.resultsCount,
-        extractSelectedFilters(this.state.dynamicFilters),
-        false,
-        offset,
+        {
+          apiPath: this.apiPath,
+          requestId: this.state.productListingPageId,
+          resultsCount: this.resultsCount,
+          dynamicFilters: extractSelectedFilters(this.state.dynamicFilters),
+          offset,
+        },
       );
     } else if (this.isTextSearch()) {
       makeTextSearchRequest(
         this.storeName,
         this.state.textSearchQuery,
         this.token,
-        this.apiPath,
-        this.state.textSearchId,
-        this.resultsCount,
-        offset,
+        {
+          apiPath: this.apiPath,
+          requestId: this.state.textSearchId,
+          resultsCount: this.resultsCount,
+          offset,
+        },
       );
     } else {
       makeVisualSearchRequest(this.storeName, null, this.token, {

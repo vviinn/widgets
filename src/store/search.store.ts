@@ -252,11 +252,7 @@ const emitSearchSuccess = (
 };
 
 const updateVisualSearchState =
-  (
-    store: SearchStoreName,
-    isHiResUpdate: boolean = false,
-    offset: number = 0,
-  ) =>
+  (store: SearchStoreName, isHiResUpdate: boolean, offset: number) =>
   async (response: VisualSearchResponse) => {
     const state = useStore(store);
 
@@ -297,7 +293,7 @@ const updateImageState = (store: SearchStoreName) => (file: File) =>
   );
 
 const handleSearchError =
-  (store: SearchStoreName, isStale: () => boolean = () => false) =>
+  (store: SearchStoreName, isStale: () => boolean) =>
   <E>(error: E): E => {
     // A stale failure would wipe the newer request's results and show an error over them.
     if (isStale()) return error;
@@ -485,20 +481,24 @@ export const makeUploadFileRequest =
     return session;
   };
 
-export type VisualSearchOptions = SearchRequestOptions & {
-  /**
-   * Searching a new area: the applied filters belong to the previous result set, so they are
-   * left out of this request. They stay in the store until the response reconciles them, so
-   * the UI keeps showing the last selection the server confirmed.
-   */
-  dropAppliedFilters?: boolean;
+type PageOptions = {
   /** Number of results already received; set to load the page after them. */
   offset?: number;
 };
 
+export type VisualSearchOptions = SearchRequestOptions &
+  PageOptions & {
+    /**
+     * Searching a new area: the applied filters belong to the previous result set, so they are
+     * left out of this request. They stay in the store until the response reconciles them, so
+     * the UI keeps showing the last selection the server confirmed.
+     */
+    dropAppliedFilters?: boolean;
+  };
+
 /** A next page keeps the list on screen while it loads, so it never enters the loading status. */
-const startLoading = (state: SearchStore, offset?: number) => {
-  if (offset) state.loadingMoreResults = true;
+const startLoading = (state: SearchStore, offset: number) => {
+  if (offset > 0) state.loadingMoreResults = true;
   else state.searchStatus = "loading";
 };
 
@@ -506,7 +506,12 @@ export const makeVisualSearchRequest = async (
   store: SearchStoreName,
   searchId: string | null,
   token: string,
-  { apiPath, campaignId, dropAppliedFilters, offset }: VisualSearchOptions = {},
+  {
+    apiPath,
+    campaignId,
+    dropAppliedFilters,
+    offset = 0,
+  }: VisualSearchOptions = {},
 ) => {
   const state = useStore(store);
   state.textSearchQuery = null;
@@ -544,7 +549,7 @@ export const makeVisualSearchRequest = async (
       "dynamicFilters",
       dropAppliedFilters ? [] : state.requestFilters,
     ),
-    ...(offset ? { offset } : {}),
+    ...(offset > 0 ? { offset } : {}),
     query: {
       ...addIfDefined("searchArea", searchRectangle),
     },
@@ -552,7 +557,7 @@ export const makeVisualSearchRequest = async (
       ...addIfNotEmpty("excluded", state.excluded),
     }),
     objectDetection: {
-      include: fetchDetectedObjects && !offset,
+      include: fetchDetectedObjects && offset === 0,
     },
   };
   return processVisualSearch(store, body, token, apiPath)();
@@ -566,14 +571,23 @@ export const setTextSearchQuery = (
   state.textSearchQuery = query || null;
 };
 
+/** Where a text or listing search goes and which page of which result set to load. */
+export type PagedSearchOptions = PageOptions & {
+  apiPath?: string;
+  requestId?: string | null;
+  resultsCount?: number;
+};
+
+export type ProductListingPageOptions = PagedSearchOptions & {
+  dynamicFilters?: RequestDynamicFilterItem[];
+  skipStateUpdate?: boolean;
+};
+
 export const makeTextSearchRequest = async (
   store: SearchStoreName,
   query: string,
   token: string,
-  apiPath?: string,
-  requestId?: string | null,
-  resultsCount?: number,
-  offset: number = 0,
+  { apiPath, requestId, resultsCount, offset = 0 }: PagedSearchOptions = {},
 ) => {
   const state = useStore(store);
   state.textSearchQuery = query;
@@ -584,7 +598,7 @@ export const makeTextSearchRequest = async (
     query,
     ...addIfDefined("requestId", requestId),
     ...addIfDefined("resultsCount", resultsCount),
-    ...(offset ? { offset } : {}),
+    ...(offset > 0 ? { offset } : {}),
     ...addIfNotEmpty("dynamicFilters", state.requestFilters),
     ...addIfNotEmpty("campaign", state.campaignIdTextSearch),
     ...addNestedIfNotEmpty("staticFilters", {
@@ -624,11 +638,14 @@ export const makeProductListingPageRequest = async (
   column: string,
   value: string,
   token: string,
-  apiPath?: string,
-  resultsCount?: number,
-  dynamicFilters?: RequestDynamicFilterItem[],
-  skipStateUpdate?: boolean,
-  offset: number = 0,
+  {
+    apiPath,
+    requestId,
+    resultsCount,
+    dynamicFilters,
+    skipStateUpdate,
+    offset = 0,
+  }: ProductListingPageOptions = {},
 ) => {
   const state = useStore("components");
   startLoading(state, offset);
@@ -654,9 +671,8 @@ export const makeProductListingPageRequest = async (
     },
     ...addIfDefined("resultsCount", resultsCount),
     ...addIfDefined("dynamicFilters", dynamicFilters),
-    ...(offset
-      ? { offset, ...addIfDefined("requestId", state.productListingPageId) }
-      : {}),
+    ...addIfDefined("requestId", requestId),
+    ...(offset > 0 ? { offset } : {}),
   };
 
   const isStale = skipStateUpdate ? () => false : startSearch("components");
