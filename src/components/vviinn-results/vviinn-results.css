@@ -191,6 +191,35 @@ vviinn-recommendations-sidebar::part(sidebar-content) {
   }
 }
 
+.show-more {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+}
+
+.show-more button {
+  appearance: none;
+  border: none;
+  cursor: pointer;
+  background: var(--color-primary, var(--button-bg-color-primary));
+  border-radius: var(--border-radius-100);
+  padding: var(--spacing-100) var(--spacing-300);
+  font-family: var(--font-family, var(--font-family-base));
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-500);
+  color: var(--color-text-inverse);
+}
+
+.show-more button:hover {
+  background: var(--color-primary-hover, var(--button-bg-color-primary-hover));
+}
+
+.show-more button:disabled {
+  cursor: default;
+  background: var(--button-bg-color-disabled);
+  color: var(--color-text-disabled);
+}
+
 @media (max-width: 380px) {
   .products {
     column-gap: 10px;

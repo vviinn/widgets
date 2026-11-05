@@ -55,6 +55,7 @@ import { videoStreamSettings } from "../../video/settings";
 import { Recommendation } from "../../interfaces";
 import { checkDeviceType } from "../../helpers/device/checkDeviceType";
 import {
+  LoadMoreMode,
   OneClickDiscoveryAppendMode,
   UploadSource,
   VisualSearchMode,
@@ -65,6 +66,7 @@ import {
   modalParts,
   productCardParts,
   productCardsGridPart,
+  showMoreButtonPart,
   searchBarParts,
   searchWidgetButtonParts,
   searchWidgetFilterParts,
@@ -112,6 +114,7 @@ const CAMERA_START_DELAY = 500;
  * @part upload-photo_button - Upload Photo Button.
  * @part start-camera_button - Start Camera Button.
  * @part products - Products container.
+ * @part show-more-button - Button that loads the next results. Rendered only if "load-more" property is "button".
  * @part product-card - Product Card itself.
  * @part image-container - Product Card's image container.
  * @part content-container - Product Card's content container.
@@ -212,6 +215,8 @@ export class VviinnVpsWidget {
   @Prop() oneClickDiscoveryCampaigns: string = "";
   /** Wrap the Product Card's price values in the container. */
   @Prop() addPriceContainer?: boolean = false;
+  /** Load the next results: "button" shows a button below the results */
+  @Prop() loadMore: LoadMoreMode = "none";
   /** Show editable input fields in interval filters instead of readonly labels */
   @Prop() showIntervalInputs: boolean = false;
   /** URL to external CSS file for custom styling */
@@ -781,7 +786,7 @@ export class VviinnVpsWidget {
   render() {
     return (
       <Host
-        exportparts={`${modalParts}, ${productCardParts}, ${searchBarParts}, ${searchWidgetFilterParts}, ${searchWidgetButtonParts}, ${productCardsGridPart}, ${suggestionsParts}`}
+        exportparts={`${modalParts}, ${productCardParts}, ${searchBarParts}, ${searchWidgetFilterParts}, ${searchWidgetButtonParts}, ${productCardsGridPart}, ${showMoreButtonPart}, ${suggestionsParts}`}
       >
         {renderExternalCSS(this.cssUrl)}
 
@@ -995,6 +1000,7 @@ export class VviinnVpsWidget {
                       this.replaceSlotsContentInButton
                     }
                     addPriceContainer={this.addPriceContainer}
+                    loadMore={this.loadMore}
                     oneClickDiscoveryMode={this.oneClickDiscoveryMode}
                     oneClickDiscoveryCampaigns={this.oneClickDiscoveryCampaigns}
                     parentSlots={[...this.parentSlots, ...this.slots]}

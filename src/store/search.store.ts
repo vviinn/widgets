@@ -47,6 +47,7 @@ import type { ObservableMap } from "@stencil/store";
 type OnChangeHandler<T> = ObservableMap<T>["onChange"];
 import { applyResponseFilters } from "./helpers/applyResponseFilters";
 import { startSearch } from "./helpers/searchSequence";
+import { applyResultsPage } from "./helpers/applyResultsPage";
 import { SearchSuccessEventData } from "../recommendation/events";
 import { campaignTypeNames } from "../campaign/Campaign";
 import { version } from "../../package.json";
@@ -75,6 +76,8 @@ type AppStateDefaults = {
   croppedImageUrl: string | null;
   visualSearchStarted: boolean;
   requestFilters: RequestDynamicFilterItem[];
+  productListingPageId: string | null;
+  pageSize: number;
 };
 
 type ReceivedDataDefaults = {
@@ -84,6 +87,9 @@ type ReceivedDataDefaults = {
   detectedObjects: Rectangle[];
   stream: Stream | null;
   redirect: (Redirect & { query?: string; searchId?: string }) | null;
+  resultsOffset: number;
+  hasMoreResults: boolean;
+  loadingMoreResults: boolean;
 };
 
 export type SearchStore = AppStateGlobalDefaults &
@@ -111,6 +117,8 @@ const appStateDefaults: AppStateDefaults = {
   croppedImageUrl: null,
   visualSearchStarted: false,
   requestFilters: [],
+  productListingPageId: null,
+  pageSize: 0,
 };
 
 const receivedDataDefaults: ReceivedDataDefaults = {
@@ -120,6 +128,9 @@ const receivedDataDefaults: ReceivedDataDefaults = {
   detectedObjects: [],
   stream: null,
   redirect: null,
+  resultsOffset: 0,
+  hasMoreResults: false,
+  loadingMoreResults: false,
 };
 
 const storeDefaults: SearchStore = {
@@ -241,7 +252,11 @@ const emitSearchSuccess = (
 };
 
 const updateVisualSearchState =
-  (store: SearchStoreName, isHiResUpdate: boolean = false) =>
+  (
+    store: SearchStoreName,
+    isHiResUpdate: boolean = false,
+    offset: number = 0,
+  ) =>
   async (response: VisualSearchResponse) => {
     const state = useStore(store);
 
@@ -250,13 +265,15 @@ const updateVisualSearchState =
       return;
     }
 
+    applyResultsPage(state, response.data.products, offset);
+    if (offset > 0) return;
+
     const detectedObjects = response.interactions.suggestedSearchAreas.map(
       ({ rectangle }) => rectangle,
     );
     if (detectedObjects.length > 0) state.detectedObjects = detectedObjects;
 
     state.visualSearchId = response.requestId;
-    state.results = response.data.products;
     applyResponseFilters(state, response.interactions.dynamicFilters);
     state.redirect = response.interactions.redirect
       ? { ...response.interactions.redirect, searchId: response.requestId }
@@ -293,6 +310,23 @@ const handleSearchError =
     return error;
   };
 
+/** A failed next page leaves the list as it is, so the shopper can try again. */
+const handleNextPageError =
+  (store: SearchStoreName, isStale: () => boolean) =>
+  <E>(error: E): E => {
+    if (!isStale()) useStore(store).loadingMoreResults = false;
+    return error;
+  };
+
+const handleRequestError = (
+  store: SearchStoreName,
+  offset: number,
+  isStale: () => boolean,
+) =>
+  offset > 0
+    ? handleNextPageError(store, isStale)
+    : handleSearchError(store, isStale);
+
 /** Where a search request goes and which campaign it is attributed to. */
 export type SearchRequestOptions = {
   apiPath?: string;
@@ -307,6 +341,7 @@ const processVisualSearch = (
   isHiResUpdate: boolean = false,
 ) => {
   const isStale = startSearch(store);
+  const offset = body.offset ?? 0;
 
   return pipe(
     getTokenWithBody<VisualSearchRequest>(token, body),
@@ -316,10 +351,10 @@ const processVisualSearch = (
     TE.map((sessionResponse) => {
       if (isStale()) return sessionResponse;
 
-      updateVisualSearchState(store, isHiResUpdate)(sessionResponse);
+      updateVisualSearchState(store, isHiResUpdate, offset)(sessionResponse);
       return sessionResponse;
     }),
-    TE.mapLeft(handleSearchError(store, isStale)),
+    TE.mapLeft(handleRequestError(store, offset, isStale)),
   );
 };
 
@@ -457,18 +492,26 @@ export type VisualSearchOptions = SearchRequestOptions & {
    * the UI keeps showing the last selection the server confirmed.
    */
   dropAppliedFilters?: boolean;
+  /** Number of results already received; set to load the page after them. */
+  offset?: number;
+};
+
+/** A next page keeps the list on screen while it loads, so it never enters the loading status. */
+const startLoading = (state: SearchStore, offset?: number) => {
+  if (offset) state.loadingMoreResults = true;
+  else state.searchStatus = "loading";
 };
 
 export const makeVisualSearchRequest = async (
   store: SearchStoreName,
   searchId: string | null,
   token: string,
-  { apiPath, campaignId, dropAppliedFilters }: VisualSearchOptions = {},
+  { apiPath, campaignId, dropAppliedFilters, offset }: VisualSearchOptions = {},
 ) => {
   const state = useStore(store);
   state.textSearchQuery = null;
   state.searchType = "image";
-  state.searchStatus = "loading";
+  startLoading(state, offset);
   state.visualSearchStarted = true;
 
   let searchRectangle: Rectangle | null = null;
@@ -501,6 +544,7 @@ export const makeVisualSearchRequest = async (
       "dynamicFilters",
       dropAppliedFilters ? [] : state.requestFilters,
     ),
+    ...(offset ? { offset } : {}),
     query: {
       ...addIfDefined("searchArea", searchRectangle),
     },
@@ -508,7 +552,7 @@ export const makeVisualSearchRequest = async (
       ...addIfNotEmpty("excluded", state.excluded),
     }),
     objectDetection: {
-      include: fetchDetectedObjects,
+      include: fetchDetectedObjects && !offset,
     },
   };
   return processVisualSearch(store, body, token, apiPath)();
@@ -529,16 +573,18 @@ export const makeTextSearchRequest = async (
   apiPath?: string,
   requestId?: string | null,
   resultsCount?: number,
+  offset: number = 0,
 ) => {
   const state = useStore(store);
   state.textSearchQuery = query;
   state.searchType = "text";
-  state.searchStatus = "loading";
+  startLoading(state, offset);
 
   const body: TextSearchRequest = {
     query,
     ...addIfDefined("requestId", requestId),
     ...addIfDefined("resultsCount", resultsCount),
+    ...(offset ? { offset } : {}),
     ...addIfNotEmpty("dynamicFilters", state.requestFilters),
     ...addIfNotEmpty("campaign", state.campaignIdTextSearch),
     ...addNestedIfNotEmpty("staticFilters", {
@@ -556,7 +602,9 @@ export const makeTextSearchRequest = async (
     TE.map((sessionResponse) => {
       if (isStale()) return sessionResponse;
 
-      state.results = sessionResponse?.data?.products ?? [];
+      applyResultsPage(state, sessionResponse?.data?.products ?? [], offset);
+      if (offset > 0) return sessionResponse;
+
       state.textSearchId = sessionResponse.requestId;
       applyResponseFilters(
         state,
@@ -568,7 +616,7 @@ export const makeTextSearchRequest = async (
       emitSearchSuccess(store, state, "TPS");
       return sessionResponse;
     }),
-    TE.mapLeft(handleSearchError(store, isStale)),
+    TE.mapLeft(handleRequestError(store, offset, isStale)),
   )();
 };
 
@@ -580,9 +628,10 @@ export const makeProductListingPageRequest = async (
   resultsCount?: number,
   dynamicFilters?: RequestDynamicFilterItem[],
   skipStateUpdate?: boolean,
+  offset: number = 0,
 ) => {
   const state = useStore("components");
-  state.searchStatus = "loading";
+  startLoading(state, offset);
 
   const requestValue =
     column === "product_type" || column === "google_product_category"
@@ -605,7 +654,12 @@ export const makeProductListingPageRequest = async (
     },
     ...addIfDefined("resultsCount", resultsCount),
     ...addIfDefined("dynamicFilters", dynamicFilters),
+    ...(offset
+      ? { offset, ...addIfDefined("requestId", state.productListingPageId) }
+      : {}),
   };
+
+  const isStale = skipStateUpdate ? () => false : startSearch("components");
 
   return await pipe(
     getTokenWithBody<ProductListingPageRequest>(token, body),
@@ -613,15 +667,19 @@ export const makeProductListingPageRequest = async (
     TE.fromEither,
     TE.chainW((request) => productListingPageSessionClient(request, apiPath)),
     TE.map((sessionResponse) => {
-      if (skipStateUpdate) return sessionResponse;
-      state.results = sessionResponse?.data?.products ?? [];
+      if (skipStateUpdate || isStale()) return sessionResponse;
+
+      applyResultsPage(state, sessionResponse?.data?.products ?? [], offset);
+      if (offset > 0) return sessionResponse;
+
+      state.productListingPageId = sessionResponse?.requestId ?? null;
       state.dynamicFilters =
         sessionResponse?.interactions?.dynamicFilters ?? [];
       state.searchStatus = "success";
       emitSearchSuccess("components", state, "TPS");
       return sessionResponse;
     }),
-    TE.mapLeft(handleSearchError("components")),
+    TE.mapLeft(handleRequestError("components", offset, isStale)),
   )();
 };
 

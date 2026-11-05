@@ -11,6 +11,7 @@ import {
   Watch,
 } from "@stencil/core";
 import * as E from "fp-ts/Either";
+import i18next from "i18next";
 import { pipe } from "fp-ts/lib/function";
 import {
   AddToBasketEvent,
@@ -80,6 +81,7 @@ import {
 import {
   productCardParts,
   productCardsGridPart,
+  showMoreButtonPart,
   listCardParts,
   contentCardParts,
 } from "../../cssParts";
@@ -89,6 +91,7 @@ import {
   addEventListenersWithSignal,
 } from "../../dom";
 import {
+  LoadMoreMode,
   OneClickDiscoveryMode,
   oneClickDiscoveryModes,
 } from "../../widget/types";
@@ -100,6 +103,7 @@ import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
 import { RESULTS_CALCULATED_COLUMNS_CSS_VAR } from "../vviinn-carousel/constants";
 import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
 import { openProductLink } from "../../helpers/navigation/openProductLink";
+import { extractSelectedFilters } from "../vviinn-filters/helpers/extractSelectedFilters";
 
 export type ReplaceSlotsContentInParent = (
   childrenElement?: HTMLElement,
@@ -165,6 +169,8 @@ export type ReplaceSlotsContentInParent = (
  * @part content-card-image - Content card's image element.
  * @part content-card-image-container - Content card's image container.
  * @part content-card-image-picture - Content card's image picture element.
+ *
+ * @part show-more-button - Button that loads the next results. Rendered only if "load-more" property is "button".
  *
  * @slot vviinn-results-vpr-icon - One-Click Discovery icon.
  * @slot vviinn-favorite-icon - Icon of Favorite button.
@@ -251,6 +257,8 @@ export class VviinnResults {
   @Prop() resultsCount?: number;
   /** Wrap the Product Card's price values in the container. */
   @Prop() addPriceContainer?: boolean = false;
+  /** Load the next results: "button" shows a button below the results */
+  @Prop() loadMore: LoadMoreMode = "none";
 
   /** One-Click Discovery Mode */
   @Prop() oneClickDiscoveryMode?: OneClickDiscoveryMode = "append-grid";
@@ -462,7 +470,7 @@ export class VviinnResults {
   private async getResultsByCategory(
     dynamicFilters?: RequestDynamicFilterItem[],
   ) {
-    if (!this.filterColumn || !this.filterValue || this.showInWidget) return;
+    if (!this.isProductListingPage()) return;
 
     pipe(
       await makeProductListingPageRequest(
@@ -484,6 +492,41 @@ export class VviinnResults {
       ),
     );
   }
+
+  private isProductListingPage = () =>
+    !!this.filterColumn && !!this.filterValue && !this.showInWidget;
+
+  private loadMoreResults = () => {
+    const offset = this.state.resultsOffset;
+
+    if (this.isProductListingPage()) {
+      makeProductListingPageRequest(
+        this.filterColumn,
+        this.filterValue,
+        this.token,
+        this.apiPath,
+        this.resultsCount,
+        extractSelectedFilters(this.state.dynamicFilters),
+        false,
+        offset,
+      );
+    } else if (this.isTextSearch()) {
+      makeTextSearchRequest(
+        this.storeName,
+        this.state.textSearchQuery,
+        this.token,
+        this.apiPath,
+        this.state.textSearchId,
+        this.resultsCount,
+        offset,
+      );
+    } else {
+      makeVisualSearchRequest(this.storeName, null, this.token, {
+        apiPath: this.apiPath,
+        offset,
+      });
+    }
+  };
 
   private async getVisualSearchResults(searchId?: string | null) {
     return pipe(
@@ -938,6 +981,31 @@ export class VviinnResults {
     ));
   }
 
+  private renderShowMoreButton(resultsLength: number) {
+    const shouldShowButton =
+      this.loadMore === "button" &&
+      !this.useInnerState &&
+      !this.showAspectRatioError &&
+      this.state.searchStatus === "success" &&
+      this.state.hasMoreResults;
+
+    if (!shouldShowButton) return null;
+
+    return (
+      <div class="show-more" style={{ order: (resultsLength + 1).toString() }}>
+        <button
+          type="button"
+          part={showMoreButtonPart}
+          disabled={this.state.loadingMoreResults}
+          aria-busy={this.state.loadingMoreResults ? "true" : "false"}
+          onClick={this.loadMoreResults}
+        >
+          {i18next.t("buttons.showMore")}
+        </button>
+      </div>
+    );
+  }
+
   render() {
     const resultsLength = this.getResults().length;
     return (
@@ -947,7 +1015,7 @@ export class VviinnResults {
           "show-in-widget": this.showInWidget,
           "matching-discovery": this.oneClickDiscoveryMode === "append-slider",
         }}
-        exportparts={`${productCardParts}, ${listCardParts}, ${contentCardParts}, ${productCardsGridPart}`}
+        exportparts={`${productCardParts}, ${listCardParts}, ${contentCardParts}, ${productCardsGridPart}, ${showMoreButtonPart}`}
       >
         {renderExternalCSS(this.cssUrl)}
 
@@ -979,6 +1047,7 @@ export class VviinnResults {
               ).toString(),
             }}
           ></div>
+          {this.renderShowMoreButton(resultsLength)}
         </div>
       </Host>
     );
