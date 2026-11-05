@@ -1,11 +1,12 @@
 :host {
   /**
-    * @prop --color-primary: The color of Search Button and bullets in Onboarding Block.
-    * @prop --color-primary-hover: The color of Search Button and bullets in Onboarding Block on mouse hover.
+    * @prop --color-primary: Accent color of the action and upload buttons, the drag-over drop zone and the Onboarding bullets.
+    * @prop --color-primary-hover: `--color-primary` on mouse hover.
     * @prop --modal-border-radius: The border radius of the modal.
     * @prop --search-modal-animation-duration: The animation duration of the modal on desktop devices.
     * @prop --search-modal-animation-duration-mobile: The animation duration of the modal on mobile devices.
     * @prop --product-card-width: Minimum width of product card inside the grid.
+    * @prop --vviinn-results-row-gap: Vertical gap between rows of product cards.
     * @prop --product-card-content-align: The alignment of the content inside the product card's flex container.
     * @prop --product-card-text-align: The alignment of the text inside the product card.
     * @prop --product-card-image-border: The border of the product card image.
