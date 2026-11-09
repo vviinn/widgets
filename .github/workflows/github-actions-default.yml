@@ -138,14 +138,13 @@ jobs:
       - run: npm run build_interfaces
       - run: npm run build
       # Before the publish: a failure here must not leave a package in the registry with
-      # attach-sbom skipped.
+      # attach-sbom skipped. A beta runs it too, so the hand-off is tested before a release.
       - name: Hand the SBOM on to the release
-        if: needs.release-please.outputs.release_created == 'true'
         uses: actions/upload-artifact@v7
         with:
           name: sbom
           path: dist/sbom.cdx.json
-          retention-days: 1
+          retention-days: 7
       # npm cannot attest a private source repository, so --provenance joins the
       # command only once the repository is public.
       - name: Publish to NPM registry using OIDC
@@ -171,7 +170,7 @@ jobs:
         run: |
           file="vviinn-widgets-${TAG#v}.cdx.json"
           mv sbom.cdx.json "$file"
-          gh release upload "$TAG" "$file" --repo "$GITHUB_REPOSITORY"
+          gh release upload "$TAG" "$file" --clobber --repo "$GITHUB_REPOSITORY"
 
   # Merges develop into main, which deploys the production Storybook. main takes changes only
   # through pull requests, and GITHUB_TOKEN may not open one here, hence the App token.
