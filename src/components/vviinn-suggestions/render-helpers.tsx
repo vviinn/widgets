@@ -209,8 +209,8 @@ const MARKDOWN_HTML = {
   ALLOWED_ATTR: ["href", "title", "start"],
 };
 
-const sanitizeHtml = (html: string | Promise<string>): string =>
-  DOMPurify.sanitize(html as string, MARKDOWN_HTML);
+const sanitizeHtml = (html: string): string =>
+  DOMPurify.sanitize(html, MARKDOWN_HTML);
 
 const getAnnotationDeeplink = (
   annotation: ContextAnnotation,
@@ -240,15 +240,14 @@ export const renderAnnotatedContent = (
           return (
             <span
               key={segmentKey}
-              innerHTML={sanitizeHtml(marked.parseInline(segment.content))}
+              innerHTML={sanitizeHtml(
+                marked.parseInline(segment.content, { async: false }),
+              )}
             ></span>
           );
         }
         const deeplink = getAnnotationDeeplink(segment.annotation);
-        if (deeplink && !isSafeLink(deeplink)) {
-          return <span key={segmentKey}>{segment.content}</span>;
-        }
-        if (deeplink) {
+        if (isSafeLink(deeplink)) {
           return (
             <a
               key={segmentKey}
@@ -261,6 +260,9 @@ export const renderAnnotatedContent = (
               {segment.content}
             </a>
           );
+        }
+        if (deeplink) {
+          return <span key={segmentKey}>{segment.content}</span>;
         }
         const isSelected = getAnnotationFilterKeys(segment.annotation).some(
           (k) => appliedFilters.has(k),
@@ -286,6 +288,6 @@ export const renderInfoText = (content: string, key: string) => (
     class="suggestion-info-text"
     part="suggestion-info-text"
     key={key}
-    innerHTML={sanitizeHtml(marked.parse(content))}
+    innerHTML={sanitizeHtml(marked.parse(content, { async: false }))}
   />
 );
