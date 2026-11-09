@@ -673,17 +673,13 @@ export const makeAutoSuggestRequest = async (
       const completions = response.data.completions ?? [];
       onCompletions?.(completions);
 
-      const matchingCompletion = completions.find(
+      const redirectUrl = completions.find(
         (completion) =>
           completion.suggestion.trim().toLowerCase() ===
-            query.trim().toLowerCase() && completion?.url,
-      );
+            query.trim().toLowerCase() && isSafeLink(completion.url),
+      )?.url;
 
-      if (isSafeLink(matchingCompletion?.url)) {
-        state.redirect = { url: matchingCompletion.url, query };
-      } else {
-        state.redirect = null;
-      }
+      state.redirect = redirectUrl ? { url: redirectUrl, query } : null;
 
       return response;
     }),
