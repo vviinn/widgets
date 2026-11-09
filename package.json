@@ -60,7 +60,6 @@
   },
   "dependencies": {
     "@rgba-image/lanczos": "^0.1.1",
-    "@stencil/store": "^2.0.8",
     "cropperjs": "^1.5.13",
     "fp-ts": "^2.12.3",
     "i18next": "^23.2.11",
@@ -74,6 +73,7 @@
     "@babel/core": "^7.16.12",
     "@stencil-community/eslint-plugin": "^0.10.0",
     "@stencil/core": "^4.31.0",
+    "@stencil/store": "^2.0.8",
     "@types/dom-speech-recognition": "^0.0.4",
     "@types/google.analytics": "0.0.41",
     "@types/gtag.js": "0.0.4",
