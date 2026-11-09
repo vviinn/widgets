@@ -216,7 +216,7 @@ const getAnnotationDeeplink = (
   annotation: ContextAnnotation,
 ): string | null => {
   for (const item of annotation.data.items) {
-    if ("deeplink" in item && isSafeLink(item.deeplink)) {
+    if ("deeplink" in item && item.deeplink) {
       return item.deeplink;
     }
   }
@@ -245,6 +245,9 @@ export const renderAnnotatedContent = (
           );
         }
         const deeplink = getAnnotationDeeplink(segment.annotation);
+        if (deeplink && !isSafeLink(deeplink)) {
+          return <span key={segmentKey}>{segment.content}</span>;
+        }
         if (deeplink) {
           return (
             <a
