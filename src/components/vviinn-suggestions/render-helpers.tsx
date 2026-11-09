@@ -183,9 +183,34 @@ export const getAnnotationFilterKeys = (
     return [];
   }) ?? [];
 
-// The text comes from the API, and marked passes raw HTML and javascript: links through.
+// The text comes from the API, and marked passes raw HTML through: keep what Markdown renders.
+const MARKDOWN_HTML = {
+  ALLOWED_TAGS: [
+    "p",
+    "br",
+    "strong",
+    "em",
+    "del",
+    "code",
+    "pre",
+    "blockquote",
+    "ul",
+    "ol",
+    "li",
+    "a",
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h5",
+    "h6",
+    "hr",
+  ],
+  ALLOWED_ATTR: ["href", "title", "start"],
+};
+
 const sanitizeHtml = (html: string | Promise<string>): string =>
-  DOMPurify.sanitize(html as string);
+  DOMPurify.sanitize(html as string, MARKDOWN_HTML);
 
 const getAnnotationDeeplink = (
   annotation: ContextAnnotation,
