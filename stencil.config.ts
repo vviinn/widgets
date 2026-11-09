@@ -140,7 +140,6 @@ export const config: Config = {
   // Stencil watches root files and ignores only its own docs-json output: without this,
   // every docs.json write would trigger the next rebuild.
   watchIgnoredRegex: [/[\\/]docs\.json$/],
-  globalScript: "src/global",
   globalStyle: "src/variables.css",
   plugins: [dotenvPlugin(), autoprefixPlugin()],
   testing: {

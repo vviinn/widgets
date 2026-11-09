@@ -60,7 +60,6 @@
   },
   "dependencies": {
     "@rgba-image/lanczos": "^0.1.1",
-    "@sentry/browser": "^9.1.0",
     "cropperjs": "^1.5.13",
     "fp-ts": "^2.12.3",
     "i18next": "^23.2.11",
