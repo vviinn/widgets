@@ -137,20 +137,41 @@ jobs:
           npm version "$next_patch-beta.${{ github.run_number }}" --no-git-tag-version
       - run: npm run build_interfaces
       - run: npm run build
-      # The SBOM comes from the lockfile, so it runs before the publish: a failure
-      # here must not leave a package in the registry with the dependent jobs skipped.
-      - name: Generate SBOM
-        run: npm sbom --sbom-format cyclonedx --omit dev > sbom.cyclonedx.json
-      - name: Upload SBOM
+      # Before the publish: a failure here must not leave a package in the registry with
+      # attach-sbom skipped.
+      - name: Hand the SBOM on to the release
+        if: needs.release-please.outputs.release_created == 'true'
         uses: actions/upload-artifact@v7
         with:
-          name: sbom-${{ github.sha }}
-          path: sbom.cyclonedx.json
-          retention-days: 90
+          name: sbom
+          path: dist/sbom.cdx.json
+          retention-days: 1
       # npm cannot attest a private source repository, so --provenance joins the
       # command only once the repository is public.
       - name: Publish to NPM registry using OIDC
         run: npm publish --tag ${{ github.event_name == 'workflow_dispatch' && 'beta' || 'latest' }} --access public ${{ github.event.repository.visibility == 'public' && '--provenance' || '' }}
+
+  # Attaches the SBOM to the GitHub release. A job of its own, so the publish job, which npm
+  # trusts through OIDC, keeps contents: read.
+  attach-sbom:
+    name: Attach the SBOM to the release
+    runs-on: ubuntu-latest
+    needs: [release-please, publish]
+    if: needs.release-please.outputs.release_created == 'true'
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: sbom
+      - name: Upload the SBOM to the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.release-please.outputs.tag_name }}
+        run: |
+          file="vviinn-widgets-${TAG#v}.cdx.json"
+          mv sbom.cdx.json "$file"
+          gh release upload "$TAG" "$file" --repo "$GITHUB_REPOSITORY"
 
   # Merges develop into main, which deploys the production Storybook. main takes changes only
   # through pull requests, and GITHUB_TOKEN may not open one here, hence the App token.
