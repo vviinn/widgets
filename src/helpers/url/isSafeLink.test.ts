@@ -8,6 +8,8 @@ describe("isSafeLink", () => {
     "p/1",
     "mailto:info@shop.com",
     "tel:+493012345",
+    "sms:+493012345",
+    "myshop://product/1",
   ])("accepts %s", (url) => {
     expect(isSafeLink(url)).toBe(true);
   });
