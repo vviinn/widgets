@@ -8,10 +8,10 @@ pinned to an older version, please upgrade before reporting.
 
 ## Software bill of materials
 
-Releases carry a [CycloneDX](https://cyclonedx.org/) SBOM of the packages the bundle
-contains. It ships in the npm package as `dist/sbom.cdx.json`, so a pinned version has its
-own, e.g. `https://cdn.jsdelivr.net/npm/vviinn-widgets@<version>/dist/sbom.cdx.json`, and
-each [GitHub release](https://github.com/vviinn/widgets/releases) attaches the same file.
+Releases from 2.229.0 on carry a [CycloneDX](https://cyclonedx.org/) SBOM of the packages
+the bundle contains. It ships in the npm package as `dist/sbom.cdx.json`, so a pinned version
+has its own, e.g. `https://cdn.jsdelivr.net/npm/vviinn-widgets@<version>/dist/sbom.cdx.json`,
+and each [GitHub release](https://github.com/vviinn/widgets/releases) attaches the same file.
 
 ## Reporting a vulnerability
 

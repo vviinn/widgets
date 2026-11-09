@@ -152,8 +152,8 @@ request.
 
 Please do not report security issues in public issues. See [SECURITY.md](SECURITY.md).
 
-Every release ships a [CycloneDX](https://cyclonedx.org/) SBOM of the bundle: in the package
-as `dist/sbom.cdx.json`, e.g.
+Every release from 2.229.0 on ships a [CycloneDX](https://cyclonedx.org/) SBOM of the bundle:
+in the package as `dist/sbom.cdx.json`, e.g.
 [the latest one](https://cdn.jsdelivr.net/npm/vviinn-widgets@latest/dist/sbom.cdx.json),
 and on each [GitHub release](https://github.com/vviinn/widgets/releases).
 
