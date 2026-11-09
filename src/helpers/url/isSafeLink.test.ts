@@ -1,12 +1,16 @@
 import { isSafeLink } from "./isSafeLink";
 
 describe("isSafeLink", () => {
-  it.each(["https://shop.com/p/1", "http://shop.com/p/1", "/p/1", "p/1"])(
-    "accepts %s",
-    (url) => {
-      expect(isSafeLink(url)).toBe(true);
-    },
-  );
+  it.each([
+    "https://shop.com/p/1",
+    "http://shop.com/p/1",
+    "/p/1",
+    "p/1",
+    "mailto:info@shop.com",
+    "tel:+493012345",
+  ])("accepts %s", (url) => {
+    expect(isSafeLink(url)).toBe(true);
+  });
 
   it.each([
     "javascript:alert(1)",
