@@ -88,16 +88,17 @@ import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
  * @part custom-label-3 - Custom label with index 3.
  * @part custom-label-4 - Custom label with index 4.
  *
+ * @slot - Replaces the One-Click Discovery button icon, e.g. with text.
  * @slot vviinn-recommendations-title - Recommendations title text.
  * @slot vviinn-favorite-icon - Icon of Favorite button.
  * @slot vviinn-favorite-icon-pressed - Icon of pressed Favorite button.
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
- * @slot vviinn-basket-button-icon - Text of Add to Basket icon.
+ * @slot vviinn-basket-button-icon - Icon of Add to Basket button.
  * @slot vviinn-basket-button-text-pressed - Text of pressed Add to Basket button.
  * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button.
  * @slot vviinn-energy-label-data-sheet-text - Text of the data sheet link for the energy label.
  *
- * @slot vviinn-recommendations-subtitle - Recommendations subtitle text.
+ * @slot vviinn-recommendations-subtitle - Recommendations subtitle text, shown in Set mode.
  * @slot vviinn-update-button-text - Text of Update Button on the top (Set mode).
  * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
  * @slot vviinn-custom-label-0 - Custom label with index 0.

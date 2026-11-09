@@ -4,7 +4,7 @@
 
 1. `src/components/customized-slots.tsx` — slot names array, `isElementChildTag`, `getSlotNamesList`
 2. Component's `.tsx` — call `slotChangeListener` in `componentWillLoad`
-3. Parent widget's Storybook story — document child slots for Playground visibility
+3. JSDoc `@slot` — on the component and on each parent widget that passes it on
 
 ## Step-by-step
 
@@ -52,6 +52,6 @@ componentWillLoad() {
 }
 ```
 
-### 5. Document child slots in parent widget's Storybook story
+### 5. Document with JSDoc `@slot` on the component and on each parent widget that passes it on
 
 ### 6. Check public docs — see **Public Docs** in `CLAUDE.md`
