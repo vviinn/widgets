@@ -54,6 +54,7 @@ import {
   parseResultsPageParamNames,
 } from "../../helpers/url/resultsPageUrl";
 import { navigateTo } from "../../helpers/navigation/navigateTo";
+import { isSafeLink } from "../../helpers/url/isSafeLink";
 
 /**
  * @part text-search-container - Container for the text search block.
@@ -315,7 +316,7 @@ export class VviinnTextSearch {
     setTextSearchQuery(this.storeName, completion.suggestion);
     this.hideSuggestions();
 
-    if (completion.url) {
+    if (isSafeLink(completion.url)) {
       this.trackTextSearch();
       this.handleTextSearchRedirect(
         completion.url,
