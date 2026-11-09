@@ -78,6 +78,7 @@ import {
 } from "../../widget/constants";
 import { addEventListenersWithSignal } from "../../dom";
 import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
+import { isSafeLink } from "../../helpers/url/isSafeLink";
 
 /**
  * Card for one search result or recommendation. Renders a product, a content entry or a list entry, depending on `entity-type`.
@@ -613,7 +614,7 @@ export class VviinnProductCard {
                 i18next.t("contentLabel"),
               )
             : ListCardContent(this.productTitle, i18next.t("listLabel"))}
-          {this.isListCard && this.deeplink && (
+          {this.isListCard && isSafeLink(this.deeplink) && (
             <a
               href={this.deeplink}
               class="list-card-overlay-link"

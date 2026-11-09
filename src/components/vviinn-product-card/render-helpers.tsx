@@ -1,6 +1,7 @@
 import { FunctionalComponent, h, Fragment, JSX } from "@stencil/core";
 import { BasePrice, EntityType, ProductImage } from "../../interfaces";
 import { getLastUrlPath } from "../../helpers/url/getLastUrlPath";
+import { isSafeLink } from "../../helpers/url/isSafeLink";
 import { configureSwiperElement } from "../../utils/swiper/swiperUtils";
 import { register } from "swiper/element";
 import { isMobile } from "../../helpers/device/checkDeviceType";
@@ -17,7 +18,7 @@ type LinkedProps = {
 };
 
 export const Linked = (props: LinkedProps, child: JSX.Element) =>
-  props.deeplink ? (
+  isSafeLink(props.deeplink) ? (
     <a
       class={props.part}
       part={props.part}

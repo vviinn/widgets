@@ -1,3 +1,5 @@
+import { navigateTo } from "./navigateTo";
+
 export const openProductLink = (
   deeplink: string,
   event: MouseEvent,
@@ -6,12 +8,5 @@ export const openProductLink = (
 ): void => {
   if (!productDetailsRedirect) return;
 
-  const shouldOpenInNewTab =
-    productDetailsNewTab || event.ctrlKey || event.metaKey;
-
-  if (shouldOpenInNewTab) {
-    window.open(deeplink, "_blank", "noopener,noreferrer");
-  } else {
-    window.location.href = deeplink;
-  }
+  navigateTo(deeplink, productDetailsNewTab || event.ctrlKey || event.metaKey);
 };

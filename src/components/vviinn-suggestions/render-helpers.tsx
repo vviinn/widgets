@@ -1,4 +1,5 @@
 import { h, EventEmitter } from "@stencil/core";
+import DOMPurify from "dompurify";
 import { marked } from "marked";
 import {
   ResponseDynamicFilterItem,
@@ -11,6 +12,7 @@ import {
 } from "../../interfaces";
 import { triggerFilter } from "../vviinn-filters/helpers/triggerFilter";
 import { formatIntervalKey } from "./helpers";
+import { isSafeLink } from "../../helpers/url/isSafeLink";
 import {
   DynamicFilterInternalData,
   ChangedFiltersEventData,
@@ -181,11 +183,15 @@ export const getAnnotationFilterKeys = (
     return [];
   }) ?? [];
 
+// The text comes from the API, and marked passes raw HTML and javascript: links through.
+const sanitizeHtml = (html: string | Promise<string>): string =>
+  DOMPurify.sanitize(html as string);
+
 const getAnnotationDeeplink = (
   annotation: ContextAnnotation,
 ): string | null => {
   for (const item of annotation.data.items) {
-    if ("deeplink" in item && item.deeplink) {
+    if ("deeplink" in item && isSafeLink(item.deeplink)) {
       return item.deeplink;
     }
   }
@@ -209,7 +215,7 @@ export const renderAnnotatedContent = (
           return (
             <span
               key={segmentKey}
-              innerHTML={marked.parseInline(segment.content) as string}
+              innerHTML={sanitizeHtml(marked.parseInline(segment.content))}
             ></span>
           );
         }
@@ -252,6 +258,6 @@ export const renderInfoText = (content: string, key: string) => (
     class="suggestion-info-text"
     part="suggestion-info-text"
     key={key}
-    innerHTML={marked.parse(content) as string}
+    innerHTML={sanitizeHtml(marked.parse(content))}
   />
 );
