@@ -51,6 +51,7 @@ import { SearchSuccessEventData } from "../recommendation/events";
 import { campaignTypeNames } from "../campaign/Campaign";
 import { version } from "../../package.json";
 import { isSafeLink } from "../helpers/url/isSafeLink";
+import { withSafeLinks } from "./helpers/completions";
 
 export type SearchStoreName = "widget" | "components" | "shopTheLook";
 export type SearchStatus = "idle" | "loading" | "success" | "error";
@@ -670,16 +671,20 @@ export const makeAutoSuggestRequest = async (
       )
         return response;
 
-      const completions = response.data.completions ?? [];
+      const completions = withSafeLinks(response.data.completions ?? []);
       onCompletions?.(completions);
 
-      const redirectUrl = completions.find(
+      const matchingCompletion = completions.find(
         (completion) =>
           completion.suggestion.trim().toLowerCase() ===
-            query.trim().toLowerCase() && isSafeLink(completion.url),
-      )?.url;
+            query.trim().toLowerCase() && completion?.url,
+      );
 
-      state.redirect = redirectUrl ? { url: redirectUrl, query } : null;
+      if (matchingCompletion?.url) {
+        state.redirect = { url: matchingCompletion.url, query };
+      } else {
+        state.redirect = null;
+      }
 
       return response;
     }),
