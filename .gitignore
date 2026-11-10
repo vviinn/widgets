@@ -25,9 +25,8 @@ coverage/
 /localhost.pem
 /localhost-key.pem
 
-# Logs and CI artifacts
+# Logs
 *.log
-/sbom.cyclonedx.json
 
 # Local working notes
 /docs/
