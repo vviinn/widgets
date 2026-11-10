@@ -90,6 +90,7 @@ Global CSS variables in `src/variables.css`.
 - **Routine work** (intermediate fixes, chores, review changes, refactors) — `#<ticket> Description`, where `<ticket>` is the number from the branch name (e.g. `#39690 Ignore local Claude settings file`). No `feat:`/`fix:`/`chore:` prefix.
 - **No release without a user-facing commit**: `#<ticket>` commits and hidden types (`chore:`, `docs:`, `refactor:`, `test:`, `build:`, `ci:`, `style:`) never open or bump a release PR. `[skip ci]` only skips the workflow run — never put it on the merge of the release PR, or nothing is published.
 - **Subject line only** — no body, no bullet lists, no rationale paragraph, even when the change spans several files and fixes several things. "Semi-free form" above refers to the subject's wording, not permission to add a body. Explain the mechanism in the PR description, not in the commit.
+- **Pull request titles** — `#<ticket> <summary>`, never a user-facing type (`feat:`, `fix:`, `perf:`, `revert:`); drop the type from an outside PR's title before merging. A merge commit carries the PR title, and release-please reads a typed title as a second change, so the changelog lists it twice. The user-facing line lives in the commit.
 - **No `Co-Authored-By` trailers** — do not append `Co-Authored-By` (or other AI-attribution) lines to commit messages.
 
 ## Key Patterns
