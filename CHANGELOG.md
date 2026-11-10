@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.229.0](https://github.com/vviinn/widgets/compare/v2.228.0...v2.229.0) (2026-11-10)
+
+
+### Features
+
+* Ship a CycloneDX SBOM of the bundle with every release ([c42af39](https://github.com/vviinn/widgets/commit/c42af39fcc641ca8a31e94f8fc52ba1eaf2e8c61))
+* Ship a CycloneDX SBOM of the bundle with every release ([8057053](https://github.com/vviinn/widgets/commit/805705318b2e95902f1e33258ac80d934d7d70b2))
+
 ## [2.228.0](https://github.com/vviinn/widgets/compare/v2.227.2...v2.228.0) (2026-10-28)
 
 
