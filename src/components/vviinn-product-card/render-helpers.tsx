@@ -331,7 +331,7 @@ export const ContentCardContent = (
           {contentTitle}
         </div>
       )}
-      {contentLink && (
+      {isSafeLink(contentLink) && (
         <Linked deeplink={contentLink} part="content-link" tabindex={0}>
           {getLastUrlPath(contentLink)}
         </Linked>
