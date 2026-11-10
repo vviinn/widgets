@@ -1,5 +1,4 @@
 import { h, EventEmitter } from "@stencil/core";
-import DOMPurify from "dompurify";
 import { marked } from "marked";
 import {
   ResponseDynamicFilterItem,
@@ -11,7 +10,7 @@ import {
   Interactions,
 } from "../../interfaces";
 import { triggerFilter } from "../vviinn-filters/helpers/triggerFilter";
-import { formatIntervalKey } from "./helpers";
+import { formatIntervalKey, sanitizeSuggestionHtml } from "./helpers";
 import { isSafeLink } from "../../helpers/url/isSafeLink";
 import {
   DynamicFilterInternalData,
@@ -183,24 +182,6 @@ export const getAnnotationFilterKeys = (
     return [];
   }) ?? [];
 
-// The text comes from the API, and marked passes raw HTML through. DOMPurify's defaults drop
-// scripts and handlers; forms and styles go too, so a suggestion cannot phish or cover the page.
-const SUGGESTION_HTML = {
-  FORBID_TAGS: [
-    "form",
-    "input",
-    "button",
-    "textarea",
-    "select",
-    "option",
-    "style",
-  ],
-  FORBID_ATTR: ["style"],
-};
-
-const sanitizeHtml = (html: string): string =>
-  DOMPurify.sanitize(html, SUGGESTION_HTML);
-
 const getAnnotationDeeplink = (
   annotation: ContextAnnotation,
 ): string | null => {
@@ -229,7 +210,7 @@ export const renderAnnotatedContent = (
           return (
             <span
               key={segmentKey}
-              innerHTML={sanitizeHtml(
+              innerHTML={sanitizeSuggestionHtml(
                 marked.parseInline(segment.content, { async: false }),
               )}
             ></span>
@@ -277,6 +258,6 @@ export const renderInfoText = (content: string, key: string) => (
     class="suggestion-info-text"
     part="suggestion-info-text"
     key={key}
-    innerHTML={sanitizeHtml(marked.parse(content, { async: false }))}
+    innerHTML={sanitizeSuggestionHtml(marked.parse(content, { async: false }))}
   />
 );
