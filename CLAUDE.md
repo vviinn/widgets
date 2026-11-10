@@ -6,8 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Working Agreement
 
-- **One branch per ticket.** The branch name carries the ticket number, and commits on it use that number. Work spanning several tickets in one branch needs a stated reason.
-- **Land each finished piece before starting the next**, so the working tree holds one ticket at a time.
+- **One branch per ticket.** The branch name carries the ticket number, and commits on it use that number. Tickets may share a branch when they only make sense together, touch the same code, stay small combined, and are ready to ship at the same time; a ticket with an open question or an outside blocker gets its own branch. A shared branch carries every number (`feature/40422-40374-component-docs`), each commit its own `#<ticket>`, and the PR says why they ship together.
+- **Land each finished piece before starting the next**, so the working tree holds one ticket, or one shared branch, at a time.
 - **Show the diff and name the ticket before moving on.** Group the change by intent — tooling, autofix, hand-fixed findings — and say which files fall in each group. A long unbroken run of edits across many files is unreviewable, however sound each edit is.
 
 ## Common Development Commands
@@ -21,7 +21,7 @@ npm test                  # Unit tests
 npm run test.watch        # Watch unit tests
 ```
 
-**Releases**: release-please keeps a release PR open against `develop`, collecting the user-facing commits since the last release. Merging it tags the release, publishes npm `latest` and merges `develop` into `main`. A `beta` is published only on demand: run the default workflow on `develop` by hand (`workflow_dispatch`). A Storybook- or docs-only change reaches the production Storybook by merging `develop` into `main` by hand, but only with no release PR open — otherwise `develop`'s unreleased stories reach production ahead of the npm package. Configuration: `release-please-config.json`, `.release-please-manifest.json`.
+**Releases**: release-please keeps a release PR open against `develop`, collecting the user-facing commits since the last release. Merging it tags the release, publishes npm `latest` and merges `develop` into `main`. A `beta` is published only on demand: run the default workflow on `develop` by hand (`workflow_dispatch`). After merging an update of the actions the publish job uses (checkout, setup-node, upload-artifact), run a beta: the pull request checks never run publish, so the next release would be its first test. A Storybook- or docs-only change reaches the production Storybook by merging `develop` into `main` by hand, but only with no release PR open — otherwise `develop`'s unreleased stories reach production ahead of the npm package. Configuration: `release-please-config.json`, `.release-please-manifest.json`.
 
 **Clearing `dist/`**: remove `.stencil` alongside it. `rm -rf dist` on its own leaves the build cache, the next build emits a partial `dist/`, and the Storybook build then fails on it with `Could not resolve "../../dist/loader"` — which reads like a code fault rather than a stale cache.
 
@@ -53,7 +53,8 @@ Global CSS variables in `src/variables.css`.
 **Stencil Components**:
 
 - Class-based components for main components with state/lifecycle
-- Document props with inline comments above @Prop when used in Storybook Playground or behavior is non-obvious
+- Document every prop, event, slot, part and CSS custom property of a public component (see **Public Docs**)
+- A description names only the public API: before naming a prop, attribute or event, check it exists on that component and isn't `@internal` — docs.json leaves internal ones out, so readers can't use them. Before declaring a CSS custom property on a wrapper, check the element it styles renders inside the wrapper's shadow tree: one mounted in `document.body` or an append target doesn't inherit it.
 - Shadow DOM for encapsulation
 - `@Prop` for public API, `@State` for internal state, `@Event` for custom events
 
@@ -80,15 +81,16 @@ Global CSS variables in `src/variables.css`.
 - **Adding @Prop()**: See `/add-prop` command. ALWAYS update Storybook story when adding props.
 - **Comments**: comment the _why_, not the _what_ — intent, non-obvious decisions, edge cases, constraints the code can't express itself. Skip comments that restate the code; prefer self-documenting names. Delete stale ones with the code they described. Default one line, two-line ceiling — past that, extract a named helper/variable or move the rationale into the function's JSDoc. In tests, only comment what the name itself can't carry (a hidden precondition, a hidden dependency of an assertion) — restating the test name or the tested function's JSDoc is noise. No change history: describe the code as it stands, never how it got there (no "now"/"no longer"/"instead of", no naming a rejected alternative) — that belongs in commits and the PR description.
 - **Punctuation in comments & docs**: use an em dash (—), not a hyphen (-) or en dash (–).
-- **Component JSDoc**: the `@part` / `@slot` JSDoc block must sit **immediately above `@Component`** with no declaration in between — otherwise Stencil attaches it to that declaration and the docs (Storybook Controls table via `docs.json`) lose the parts/slots. CSS custom properties are documented with `@prop` in the comment inside `:host` of the component's CSS.
+- **Component JSDoc**: the `@part` / `@slot` JSDoc block must sit **immediately above `@Component`** with no declaration in between — otherwise Stencil attaches it to that declaration and `docs.json` loses the parts/slots. CSS custom properties are documented with `@prop` in the comment inside `:host` of the component's CSS.
 
 ## Git Commit Conventions
 
 - **Commit only when asked.** Finishing a task means leaving the changes in the working tree and reporting them — the commit is a separate request. An approved plan, an approved branch, and green tests are not permission to commit; neither are the conventions below, which say how to word a commit message, not when to make one. Same for `push` and opening a PR. A confirmation prompt on `git commit`/`git push` is expected, not a malfunction.
 - **User-facing changes** — `feat:` for features, `fix:` for fixes, `perf:` for performance improvements, `revert:` to undo one of them. These land in the user-facing changelog and decide the next version (`feat` → minor, `fix`/`perf`/`revert` → patch, `!` after the type → major), so write them for end users. Semi-free form: add a `Component Name:` segment when the change targets one component (`feat: Vviinn Cropper: toggle cropper visibility by OCR filter`), otherwise a plain summary for cross-cutting changes (`fix: Restore missing CSS parts & slots in component docs`).
-- **Routine work** (intermediate fixes, chores, review changes, refactors) — `#<ticket> Description`, where `<ticket>` is the number from the branch name (e.g. `#39690 Ignore local Claude settings file`). No `feat:`/`fix:`/`chore:` prefix.
+- **Routine work** (intermediate fixes, chores, review changes, refactors) — `#<ticket> Description`, where `<ticket>` is a number from the branch name (e.g. `#39690 Ignore local Claude settings file`). No `feat:`/`fix:`/`chore:` prefix.
 - **No release without a user-facing commit**: `#<ticket>` commits and hidden types (`chore:`, `docs:`, `refactor:`, `test:`, `build:`, `ci:`, `style:`) never open or bump a release PR. `[skip ci]` only skips the workflow run — never put it on the merge of the release PR, or nothing is published.
 - **Subject line only** — no body, no bullet lists, no rationale paragraph, even when the change spans several files and fixes several things. "Semi-free form" above refers to the subject's wording, not permission to add a body. Explain the mechanism in the PR description, not in the commit.
+- **Pull request titles** — `#<ticket> <summary>`, never a user-facing type (`feat:`, `fix:`, `perf:`, `revert:`); drop the type from an outside PR's title before merging. A merge commit carries the PR title, and release-please reads a typed title as a second change, so the changelog lists it twice. The user-facing line lives in the commit.
 - **No `Co-Authored-By` trailers** — do not append `Co-Authored-By` (or other AI-attribution) lines to commit messages.
 
 ## Key Patterns
@@ -105,18 +107,15 @@ Global CSS variables in `src/variables.css`.
 
 ## Public Docs
 
-docs.vviinn.com is built from the repo `vviinn/public-docs`; ask for the path of its local checkout when none is known. The full API reference is Storybook Controls; under `src/content/docs/widgets/`, public-docs keeps by hand:
+docs.vviinn.com is built from the repo `vviinn/public-docs`; ask for the path of its local checkout when none is known. Its Component Reference and the slot and CSS variable lists are generated from the `docs.json` of npm `latest`, so for props, events, slots, parts and CSS custom properties the JSDoc here is the docs text.
 
-- CSS custom properties — `customization/css-variables.mdx`, one section per widget
-- Slots — `customization/custom-content.mdx`, one list per widget
-- Widget pages — examples and guides, e.g. the Styling section of `shop-the-look.mdx`
+Every change to a public component's prop, event, slot, part or CSS custom property gets a public-docs check:
 
-Every change to a public component's prop, slot, part or CSS custom property gets a public-docs check:
+- **New** — reaches the reference and the lists by itself. A new prop or event gets `@since <version>`: the next minor of `.release-please-manifest.json`, since a `feat` bumps the minor; if the release PR ends up with another number, update the tag on `develop` before merging it. An example or guide on the widget page only when the feature needs explaining; say which in the summary.
+- **Changed, renamed or removed** — grep public-docs `src/content` for the name and update every hit. A slot or CSS custom property is described again on each widget that passes it on: grep `src/components` too and keep the wording the same.
+- **New public component** — add a row to the component table in `README.md` and the tag to `PUBLIC_COMPONENT_TAGS` in `stencil.config.ts`, and its name, plus its Playground story if any, to `COMPONENTS` in public-docs `src/schemas/widgets-docs.mjs`.
 
-- **New** — into the matching hand-kept list; an example or guide on the widget page only when the feature needs explaining. Say which in the summary.
-- **Changed, renamed or removed** — grep public-docs `src/content` for the name and update every hit.
-
-The docs change is its own PR in public-docs, merged once npm `latest` carries the change: doc previews (`WidgetPreview`) load `vviinn-widgets@latest`. Internal components (`vviinn-image`, `vviinn-carousel`, …) stay out.
+The docs change is its own PR in public-docs, merged once npm `latest` carries the change: doc previews (`WidgetPreview`) load `vviinn-widgets@latest`. Internal components (`vviinn-image`, `vviinn-carousel`, …) are filtered out by the `docs-custom` output in `stencil.config.ts`.
 
 ## Browser Testing
 

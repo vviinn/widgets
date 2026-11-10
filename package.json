@@ -1,11 +1,25 @@
 {
   "name": "vviinn-widgets",
-  "version": "2.228.0",
-  "description": "vviinn web components",
+  "version": "2.229.0",
+  "description": "AI-powered search and product discovery widgets for e-commerce storefronts, built as Web Components with Stencil.",
+  "keywords": [
+    "web-components",
+    "stenciljs",
+    "ecommerce",
+    "visual-search",
+    "product-search",
+    "product-discovery",
+    "shop-the-look",
+    "vviinn"
+  ],
   "author": "Mediaopt",
+  "homepage": "https://docs.vviinn.com/widgets/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vviinn/widgets.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vviinn/widgets/issues"
   },
   "main": "./dist/index.cjs.js",
   "module": "./dist/index.js",
@@ -23,7 +37,7 @@
   ],
   "scripts": {
     "build": "ENV=production stencil build --docs",
-    "postbuild": "node scripts/verify-no-dev-leak.js",
+    "postbuild": "node scripts/verify-no-dev-leak.js && node scripts/collect-sbom.js",
     "build.watch": "stencil build --watch --docs",
     "build.docs": "stencil build --docs",
     "build_interfaces": "node ./scripts/generate-interfaces.js ./src/interfaces/generated.ts",
@@ -46,7 +60,6 @@
   },
   "dependencies": {
     "@rgba-image/lanczos": "^0.1.1",
-    "@sentry/browser": "^9.1.0",
     "cropperjs": "^1.5.13",
     "fp-ts": "^2.12.3",
     "i18next": "^23.2.11",
@@ -83,6 +96,7 @@
     "postcss": "^8.5.24",
     "prettier": "3.4.2",
     "rollup-plugin-dotenv": "^0.5.0",
+    "rollup-plugin-sbom": "^4.0.1",
     "storybook-addon-designs": "^6.2.1",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.69.0",

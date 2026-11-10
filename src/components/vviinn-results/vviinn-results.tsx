@@ -166,11 +166,11 @@ export type ReplaceSlotsContentInParent = (
  * @part content-card-image-container - Content card's image container.
  * @part content-card-image-picture - Content card's image picture element.
  *
- * @slot vviinn-results-vpr-icon - One-Click Discovery icon.
+ * @slot vviinn-results-vpr-icon - One-Click Discovery icon, hidden when `one-click-discovery-mode` is `unset`.
  * @slot vviinn-favorite-icon - Icon of Favorite button.
  * @slot vviinn-favorite-icon-pressed - Icon of pressed Favorite button.
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
- * @slot vviinn-basket-button-icon - Text of Add to Basket icon.
+ * @slot vviinn-basket-button-icon - Icon of Add to Basket button.
  * @slot vviinn-basket-button-text-pressed - Text of pressed Add to Basket button.
  * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button.
  * @slot vviinn-custom-label-0 - Custom label with index 0.

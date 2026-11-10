@@ -10,12 +10,15 @@
 ### 1. Add `@Prop()` to component
 
 ```typescript
-/** Short description of the prop */
+/**
+ * Short description of the prop
+ * @since <version>
+ */
 @Prop() myProp?: string;
 ```
 
 - Type explicitly, avoid `any`
-- Add JSDoc comment above — required if used in Storybook Playground or behavior is non-obvious
+- Add JSDoc comment above — required on a public component, with `@since` on a new prop (see **Public Docs** in `CLAUDE.md`)
 - Use `?` for optional props, set defaults where appropriate
 
 ### 2. Update Storybook story (MANDATORY)

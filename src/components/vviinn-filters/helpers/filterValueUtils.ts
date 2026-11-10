@@ -7,7 +7,7 @@ export const extractFilterValue = (filterValue: DynamicFilterValue) =>
 export const valueToString = (val: unknown): string | null => {
   if (val === null || val === undefined) return null;
   if (typeof val === "string" || typeof val === "number") return String(val);
-  if (typeof val === "object" && val !== null && "value" in val) {
+  if (typeof val === "object" && "value" in val) {
     return valueToString((val as { value: unknown }).value);
   }
   return String(val);
