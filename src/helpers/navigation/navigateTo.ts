@@ -1,6 +1,6 @@
 import { isSafeLink } from "../url/isSafeLink";
 
-/** Navigates to a URL from the API or a prop; a javascript: or data: URL goes nowhere. */
+/** Navigates to a URL from the API or a prop; a link `isSafeLink` rejects goes nowhere. */
 export const navigateTo = (url: string, newTab: boolean = false): void => {
   if (!isSafeLink(url)) return;
 
