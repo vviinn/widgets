@@ -172,11 +172,11 @@ export type ReplaceSlotsContentInParent = (
  *
  * @part show-more-button - Button that loads the next results. Rendered only if "load-more" property is "button".
  *
- * @slot vviinn-results-vpr-icon - One-Click Discovery icon.
+ * @slot vviinn-results-vpr-icon - One-Click Discovery icon, hidden when `one-click-discovery-mode` is `unset`.
  * @slot vviinn-favorite-icon - Icon of Favorite button.
  * @slot vviinn-favorite-icon-pressed - Icon of pressed Favorite button.
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
- * @slot vviinn-basket-button-icon - Text of Add to Basket icon.
+ * @slot vviinn-basket-button-icon - Icon of Add to Basket button.
  * @slot vviinn-basket-button-text-pressed - Text of pressed Add to Basket button.
  * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button.
  * @slot vviinn-custom-label-0 - Custom label with index 0.

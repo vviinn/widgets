@@ -137,12 +137,12 @@ export type Mode = "pure-grid" | CarouselMode;
  * @slot vviinn-favorite-icon - Icon of Favorite button.
  * @slot vviinn-favorite-icon-pressed - Icon of pressed Favorite button.
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
- * @slot vviinn-basket-button-icon - Text of Add to Basket icon.
+ * @slot vviinn-basket-button-icon - Icon of Add to Basket button.
  * @slot vviinn-basket-button-text-pressed - Text of pressed Add to Basket button.
  * @slot vviinn-basket-button-icon-pressed - Icon of pressed Add to Basket button.
  * @slot vviinn-energy-label-data-sheet-text - Text of the data sheet link for the energy label.
  *
- * @slot vviinn-recommendations-subtitle - Recommendations subtitle text.
+ * @slot vviinn-recommendations-subtitle - Recommendations subtitle text, shown in Set mode or when `block-subtitle` is set.
  * @slot vviinn-update-button-text - Text of Update Button on the top (Set mode).
  * @slot vviinn-update-button-icon - Icon of Update Button (Set mode).
  * @slot vviinn-custom-label-0 - Custom label with index 0.

@@ -38,6 +38,7 @@ import i18next from "i18next";
 import { initializeLocale } from "../../locale";
 
 /**
+ * @slot - Replaces the search button icon, e.g. with text.
  * @slot vviinn-teaser-text - Text on the widget's main screen.
  * @slot vviinn-image-upload-button-text - Title of Upload Button.
  * @slot vviinn-image-upload-icon - Icon of Upload Button.
@@ -50,7 +51,7 @@ import { initializeLocale } from "../../locale";
  * @slot vviinn-image-search-modal-title - Image search modal title.
  * @slot vviinn-text-search-icon - Icon of the text search block.
  * @slot vviinn-energy-label-data-sheet-text - Text of the data sheet link for the energy label.
- * @slot vviinn-results-vpr-icon - One-Click Discovery icon
+ * @slot vviinn-results-vpr-icon - One-Click Discovery icon, hidden when `one-click-discovery-mode` is `unset`.
  * @slot vviinn-favorite-icon - Icon of Favorite button.
  * @slot vviinn-favorite-icon-pressed - Icon of pressed Favorite button.
  * @slot vviinn-basket-button-text - Text of Add to Basket button.

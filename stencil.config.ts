@@ -3,6 +3,7 @@ import type { OutputTargetDocsCustom } from "@stencil/core/internal";
 import postCss from "postcss";
 import autoprefixer from "autoprefixer";
 import dotenvPlugin from "rollup-plugin-dotenv";
+import sbom from "rollup-plugin-sbom";
 import { readFileSync, writeFileSync } from "fs";
 import path from "path";
 
@@ -140,9 +141,23 @@ export const config: Config = {
   // Stencil watches root files and ignores only its own docs-json output: without this,
   // every docs.json write would trigger the next rebuild.
   watchIgnoredRegex: [/[\\/]docs\.json$/],
-  globalScript: "src/global",
   globalStyle: "src/variables.css",
   plugins: [dotenvPlugin(), autoprefixPlugin()],
+  // A Rollup plugin, so the SBOM lists the packages the bundle holds.
+  // scripts/collect-sbom.js keeps one copy, dist/sbom.cdx.json.
+  rollupPlugins: {
+    after:
+      process.env.ENV === "production"
+        ? [
+            sbom({
+              specVersion: "1.6",
+              rootComponentType: "library",
+              generateSerial: true,
+              includeWellKnown: false,
+            }),
+          ]
+        : [],
+  },
   testing: {
     // Count every source file, not only the ones a test touches: otherwise the
     // first test written for an untested file drags the global figure down.
