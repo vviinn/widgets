@@ -114,7 +114,7 @@ const CAMERA_START_DELAY = 500;
  * @part upload-photo_button - Upload Photo Button.
  * @part start-camera_button - Start Camera Button.
  * @part products - Products container.
- * @part show-more-button - Button that loads the next results. Rendered only if "load-more" property is "button".
+ * @part show-more-button - Button that loads the next results. Rendered only if `load-more` is `button`.
  * @part product-card - Product Card itself.
  * @part image-container - Product Card's image container.
  * @part content-container - Product Card's content container.
@@ -215,7 +215,10 @@ export class VviinnVpsWidget {
   @Prop() oneClickDiscoveryCampaigns: string = "";
   /** Wrap the Product Card's price values in the container. */
   @Prop() addPriceContainer?: boolean = false;
-  /** Load the next results: "button" shows a button below the results */
+  /**
+   * Load the next results: `button` shows a button below the results.
+   * @since 2.230.0
+   */
   @Prop() loadMore: LoadMoreMode = "none";
   /** Show editable input fields in interval filters instead of readonly labels */
   @Prop() showIntervalInputs: boolean = false;

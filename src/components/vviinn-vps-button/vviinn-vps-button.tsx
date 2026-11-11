@@ -74,7 +74,7 @@ import { initializeLocale } from "../../locale";
  * @part drop-zone - Drag & drop container (when useDragAndDrop is enabled).
  * @part start-camera_button - Start Camera Button.
  * @part products - Products container.
- * @part show-more-button - Button that loads the next results. Rendered only if "load-more" property is "button".
+ * @part show-more-button - Button that loads the next results. Rendered only if `load-more` is `button`.
  * @part product-card - Product Card itself.
  * @part brand - Brand inside Product Card.
  * @part product-type - Product Type inside Product Card.
@@ -182,7 +182,10 @@ export class VviinnVpsButton {
   @Prop() oneClickDiscoveryCampaigns: string = "";
   /** Wrap the Product Card's price values in the container. */
   @Prop() addPriceContainer?: boolean = false;
-  /** Load the next results: "button" shows a button below the results */
+  /**
+   * Load the next results: `button` shows a button below the results.
+   * @since 2.230.0
+   */
   @Prop() loadMore: LoadMoreMode = "none";
   /** Show editable input fields in interval filters instead of readonly labels */
   @Prop() showIntervalInputs: boolean = false;

@@ -170,7 +170,7 @@ export type ReplaceSlotsContentInParent = (
  * @part content-card-image-container - Content card's image container.
  * @part content-card-image-picture - Content card's image picture element.
  *
- * @part show-more-button - Button that loads the next results. Rendered only if "load-more" property is "button".
+ * @part show-more-button - Button that loads the next results. Rendered only if `load-more` is `button`.
  *
  * @slot vviinn-results-vpr-icon - One-Click Discovery icon, hidden when `one-click-discovery-mode` is `unset`.
  * @slot vviinn-favorite-icon - Icon of Favorite button.
@@ -257,7 +257,10 @@ export class VviinnResults {
   @Prop() resultsCount?: number;
   /** Wrap the Product Card's price values in the container. */
   @Prop() addPriceContainer?: boolean = false;
-  /** Load the next results: "button" shows a button below the results */
+  /**
+   * Load the next results: `button` shows a button below the results.
+   * @since 2.230.0
+   */
   @Prop() loadMore: LoadMoreMode = "none";
 
   /** One-Click Discovery Mode */
