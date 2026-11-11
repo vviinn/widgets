@@ -6,8 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Working Agreement
 
-- **One branch per ticket.** The branch name carries the ticket number, and commits on it use that number. Work spanning several tickets in one branch needs a stated reason.
-- **Land each finished piece before starting the next**, so the working tree holds one ticket at a time.
+- **One branch per ticket.** The branch name carries the ticket number, and commits on it use that number. Tickets may share a branch when they only make sense together, touch the same code, stay small combined, and are ready to ship at the same time; a ticket with an open question or an outside blocker gets its own branch. A shared branch carries every number (`feature/40422-40374-component-docs`), each commit its own `#<ticket>`, and the PR says why they ship together.
+- **Land each finished piece before starting the next**, so the working tree holds one ticket, or one shared branch, at a time.
 - **Show the diff and name the ticket before moving on.** Group the change by intent — tooling, autofix, hand-fixed findings — and say which files fall in each group. A long unbroken run of edits across many files is unreviewable, however sound each edit is.
 
 ## Common Development Commands
@@ -21,7 +21,7 @@ npm test                  # Unit tests
 npm run test.watch        # Watch unit tests
 ```
 
-**Releases**: release-please keeps a release PR open against `develop`, collecting the user-facing commits since the last release. Merging it tags the release, publishes npm `latest` and merges `develop` into `main`. A `beta` is published only on demand: run the default workflow on `develop` by hand (`workflow_dispatch`). A Storybook- or docs-only change reaches the production Storybook by merging `develop` into `main` by hand, but only with no release PR open — otherwise `develop`'s unreleased stories reach production ahead of the npm package. Configuration: `release-please-config.json`, `.release-please-manifest.json`.
+**Releases**: release-please keeps a release PR open against `develop`, collecting the user-facing commits since the last release. Merging it tags the release, publishes npm `latest` and merges `develop` into `main`. A `beta` is published only on demand: run the default workflow on `develop` by hand (`workflow_dispatch`). After merging an update of the actions the publish job uses (checkout, setup-node, upload-artifact), run a beta: the pull request checks never run publish, so the next release would be its first test. A Storybook- or docs-only change reaches the production Storybook by merging `develop` into `main` by hand, but only with no release PR open — otherwise `develop`'s unreleased stories reach production ahead of the npm package. Configuration: `release-please-config.json`, `.release-please-manifest.json`.
 
 **Clearing `dist/`**: remove `.stencil` alongside it. `rm -rf dist` on its own leaves the build cache, the next build emits a partial `dist/`, and the Storybook build then fails on it with `Could not resolve "../../dist/loader"` — which reads like a code fault rather than a stale cache.
 
@@ -87,9 +87,10 @@ Global CSS variables in `src/variables.css`.
 
 - **Commit only when asked.** Finishing a task means leaving the changes in the working tree and reporting them — the commit is a separate request. An approved plan, an approved branch, and green tests are not permission to commit; neither are the conventions below, which say how to word a commit message, not when to make one. Same for `push` and opening a PR. A confirmation prompt on `git commit`/`git push` is expected, not a malfunction.
 - **User-facing changes** — `feat:` for features, `fix:` for fixes, `perf:` for performance improvements, `revert:` to undo one of them. These land in the user-facing changelog and decide the next version (`feat` → minor, `fix`/`perf`/`revert` → patch, `!` after the type → major), so write them for end users. Semi-free form: add a `Component Name:` segment when the change targets one component (`feat: Vviinn Cropper: toggle cropper visibility by OCR filter`), otherwise a plain summary for cross-cutting changes (`fix: Restore missing CSS parts & slots in component docs`).
-- **Routine work** (intermediate fixes, chores, review changes, refactors) — `#<ticket> Description`, where `<ticket>` is the number from the branch name (e.g. `#39690 Ignore local Claude settings file`). No `feat:`/`fix:`/`chore:` prefix.
+- **Routine work** (intermediate fixes, chores, review changes, refactors) — `#<ticket> Description`, where `<ticket>` is a number from the branch name (e.g. `#39690 Ignore local Claude settings file`). No `feat:`/`fix:`/`chore:` prefix.
 - **No release without a user-facing commit**: `#<ticket>` commits and hidden types (`chore:`, `docs:`, `refactor:`, `test:`, `build:`, `ci:`, `style:`) never open or bump a release PR. `[skip ci]` only skips the workflow run — never put it on the merge of the release PR, or nothing is published.
 - **Subject line only** — no body, no bullet lists, no rationale paragraph, even when the change spans several files and fixes several things. "Semi-free form" above refers to the subject's wording, not permission to add a body. Explain the mechanism in the PR description, not in the commit.
+- **Pull request titles** — `#<ticket> <summary>`, never a user-facing type (`feat:`, `fix:`, `perf:`, `revert:`); drop the type from an outside PR's title before merging. A merge commit carries the PR title, and release-please reads a typed title as a second change, so the changelog lists it twice. The user-facing line lives in the commit.
 - **No `Co-Authored-By` trailers** — do not append `Co-Authored-By` (or other AI-attribution) lines to commit messages.
 
 ## Key Patterns

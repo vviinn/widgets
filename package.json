@@ -1,6 +1,6 @@
 {
   "name": "vviinn-widgets",
-  "version": "2.228.0",
+  "version": "2.229.0",
   "description": "AI-powered search and product discovery widgets for e-commerce storefronts, built as Web Components with Stencil.",
   "keywords": [
     "web-components",
