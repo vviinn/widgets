@@ -52,11 +52,13 @@ describe("sanitizeSuggestionHtml", () => {
       '<style>*{display:none}</style><b style="position:fixed">ok</b>',
     ],
     ["a class", '<span class="suggestion-link">ok</span>'],
+    ["an aria attribute", '<p aria-hidden="true">ok</p>'],
+    ["a data attribute", '<p data-track="x">ok</p>'],
   ])("drops %s", (_, html) => {
     const result = sanitizeSuggestionHtml(html);
 
     expect(result).not.toMatch(
-      /<(script|dialog|img|svg|form|input|style)|on\w+=|style=|class=/,
+      /<(script|dialog|img|svg|form|input|style)|on\w+=|style=|class=|aria-|data-/,
     );
     expect(result).toContain("ok");
   });

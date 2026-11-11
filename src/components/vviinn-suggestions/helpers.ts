@@ -3,7 +3,7 @@ import { RequestDynamicFilterItem } from "../../campaign/VPRCampaignService";
 import { Stream } from "../../interfaces";
 
 // The text comes from the API, and marked passes raw HTML through. Only the tags Markdown produces
-// are kept: no images, SVG, dialogs, forms, styles or classes, so a suggestion cannot cover or imitate the page.
+// are kept: no images, SVG, dialogs, forms, styles, classes or ARIA, so a suggestion cannot cover or imitate the page.
 const SUGGESTION_HTML = {
   ALLOWED_TAGS: [
     "p",
@@ -33,6 +33,8 @@ const SUGGESTION_HTML = {
     "td",
   ],
   ALLOWED_ATTR: ["href", "title", "align", "start"],
+  ALLOW_ARIA_ATTR: false,
+  ALLOW_DATA_ATTR: false,
 };
 
 const escapeHtml = (text: string): string =>
