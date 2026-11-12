@@ -1,7 +1,7 @@
 import type { QueryCompletion } from "../../interfaces";
 import { isSafeLink } from "../../helpers/url/isSafeLink";
 
-/** The completions with every link `isSafeLink` rejects removed, so whoever reads them needn't check. */
+/** The completions with every link `isSafeLink` rejects removed. */
 export const withSafeLinks = (
   completions: QueryCompletion[],
 ): QueryCompletion[] =>
