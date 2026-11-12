@@ -600,7 +600,25 @@ export class VviinnResults {
     this.focusNewCardAfterLoad =
       !!this.el.shadowRoot.activeElement?.closest(".show-more");
 
-    if (this.isProductListingPage()) {
+    // The page continues the search on screen, which need not be the one this instance's props set up
+    if (this.isTextSearch()) {
+      makeTextSearchRequest(
+        this.storeName,
+        this.state.textSearchQuery,
+        this.token,
+        {
+          apiPath: this.apiPath,
+          requestId: this.state.textSearchId,
+          resultsCount: this.resultsCount,
+          offset,
+        },
+      );
+    } else if (this.state.searchType === "image") {
+      makeVisualSearchRequest(this.storeName, null, this.token, {
+        apiPath: this.apiPath,
+        offset,
+      });
+    } else if (this.isProductListingPage()) {
       makeProductListingPageRequest(
         this.filterColumn,
         this.filterValue,
@@ -613,23 +631,6 @@ export class VviinnResults {
           offset,
         },
       );
-    } else if (this.isTextSearch()) {
-      makeTextSearchRequest(
-        this.storeName,
-        this.state.textSearchQuery,
-        this.token,
-        {
-          apiPath: this.apiPath,
-          requestId: this.state.textSearchId,
-          resultsCount: this.resultsCount,
-          offset,
-        },
-      );
-    } else {
-      makeVisualSearchRequest(this.storeName, null, this.token, {
-        apiPath: this.apiPath,
-        offset,
-      });
     }
   };
 

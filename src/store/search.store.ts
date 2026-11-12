@@ -661,7 +661,10 @@ export const makeProductListingPageRequest = async (
 ) => {
   const state = useStore("components");
   // An inner-state listing keeps its results to itself, so it leaves the shared search alone
-  if (!skipStateUpdate) startLoading(state, offset);
+  if (!skipStateUpdate) {
+    startLoading(state, offset);
+    state.searchType = null;
+  }
 
   const requestValue =
     column === "product_type" || column === "google_product_category"
