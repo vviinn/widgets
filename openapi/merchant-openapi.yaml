@@ -1,9 +1,9 @@
 openapi: 3.0.2
 info:
-  title: AI as a Service API
-  version: "1.29.0"
+  title: API Reference
+  version: "1.32.0"
   x-logo:
-    url: https://docs.vviinn.com/logo.png
+    url: https://docs-api-production-fdiv762nra-ew.a.run.app/logo.png
     altText: vviinn
     href: https://www.vviinn.com
 tags:
@@ -11,6 +11,8 @@ tags:
     x-displayName: Services
   - name: product_management
     x-displayName: Product Management
+  - name: mcp
+    x-displayName: Model Context Protocol (MCP)
   - name: category_path
     x-displayName: Category Path
     description: |
@@ -20,6 +22,7 @@ x-tagGroups:
     tags:
       - services
       - product_management
+      - mcp
   - name: Concepts
     tags:
       - category_path
@@ -189,10 +192,12 @@ paths:
         - read-only-token: [ ]
         - site-credentials: [ ]
       tags:
-        - alpha
+        - services
       summary: Auto-Suggest
       description: |
-        This endpoint provides auto-suggested search queries based on a partial text input.
+        This endpoint returns auto-complete suggestions for a partial search query.
+        Each suggestion completes the entered text and may carry a direct link (`url`) —
+        for example to a product or a landing page when a campaign maps the query to a specific target.
       operationId: AutoSuggest
       requestBody:
         $ref: "#/components/requestBodies/auto-suggest"
@@ -498,6 +503,93 @@ paths:
           $ref: "#/components/responses/authentication-error"
         "403":
           $ref: "#/components/responses/authorization-error"
+  /mcp:
+    post:
+      security:
+        - read-only-token: [ ]
+        - site-credentials: [ ]
+      tags:
+        - mcp
+      summary: MCP Endpoint
+      operationId: McpEndpoint
+      description: |
+        Single JSON-RPC 2.0 endpoint that follows the [Model Context Protocol](https://modelcontextprotocol.io/specification/2025-11-25),
+        served over the MCP *Streamable HTTP* transport.
+        Use it to expose vviinn's services to agentic clients through one MCP connection
+        instead of integrating each REST endpoint individually.
+
+        The server is listed in the [MCP Registry](https://registry.modelcontextprotocol.io/?search=com.vviinn/commerce-context-layer) as `com.vviinn/commerce-context-layer`.
+
+        Shops can also publish their own registry entry under their domain (e.g. `com.acme/shop`) that points at this endpoint with their site's read-only JWT pre-filled and a description tailored to their catalog. Setup uses the same [MCP publisher tooling](https://modelcontextprotocol.io/registry/quickstart) and DNS verification on the shop's domain.
+
+        The shape of the JSON-RPC requests and responses is defined by the MCP specification and is intentionally not described here.
+        Connect with any MCP-capable client and call `tools/list` to discover the tools available for your site, including their input and output schemas.
+
+        ## Authorization
+
+        Authenticate with the same credentials you already use for the REST API by setting one of:
+
+        - `Authorization: Bearer <jwt>` — read-only JWT.
+        - `Authorization: Basic <…>` — site credentials.
+
+        The site is determined entirely from the credentials; there is no per-site URL and no path or query parameter.
+
+        Some tools require elevated privileges, which are granted by the site's Basic credentials.
+        They are documented in their respective section. 
+
+        ## Tools
+
+        The tools below are grouped by what they do.
+        Each tool's input and output schemas are exposed at runtime via `tools/list`.
+
+        ### Search and Discovery
+
+        Each tool wraps an existing REST endpoint; use the REST documentation to understand the underlying behavior.
+
+        | Tool | REST equivalent |
+        | --- | --- |
+        | `text_search` | [`POST /text-search`](#tag/services/operation/TextSearchProducts) |
+        | `similar_products` | [`POST /similar-products`](#tag/services/operation/GetSimilarProducts) |
+        | `cross_selling` | [`POST /cross-selling`](#tag/services/operation/GetCrossSellingProducts) |
+        | `visual_search` | [`POST /visual-search`](#tag/services/operation/VisualSearchProducts) |
+
+        ### Catalog
+
+        Discovery tools that reveal the structure and contents of the catalog an agent is working with.
+
+        | Tool | What it reveals |
+        | --- | --- |
+        | `list_relevant_columns` | The product columns worth working with in this catalog, each with its `type` and human-readable `label` — the actionable vocabulary an agent can filter on, build facets from, or use to describe the catalog. |
+        | `describe_column` | The catalog-wide values of a single column — its distinct values, the category tree, a numeric range, or a true/false split — the full value space an agent can present, filter on, or validate input against. |
+        | `get_item_group` | All variants belonging to an item group, looked up by its `item_group_id` — the complete set, not the possibly incomplete one a search result carries. |
+        | `get_item` | The full record for a single product, looked up by its `id`. |
+        | `get_items` | The full records for a batch of products, looked up by a list of `id`s — the plural sibling of `get_item`. |
+
+        ### Memory
+
+        Service-side, append-only conversation memory for agentic clients: append everything that happens during a conversation to a durable per-conversation log and recall it completely and in order.
+
+        All memory tools require the site's Basic credentials; the read-only JWT does not authorize them.
+
+        | Tool | Purpose |
+        | --- | --- |
+        | `append_memory` | Append a batch of items to a conversation's log. |
+        | `recall_memory` | Return the last *count* items of a conversation, in order. |
+        | `replay_memory` | Return *limit* items from a given offset — the positional read used to fully restore a conversation. |
+        | `list_conversations` | List the conversation ids of the authenticated site with their created and last-appended timestamps. |
+        | `summarize_conversation` | A condensed, up-to-date summary of a conversation so far — the gist instead of the full log. |
+      responses:
+        "200":
+          description: |
+            JSON-RPC 2.0 response. The body shape follows the MCP specification and is not described here.
+        "401":
+          description: |
+            Missing or invalid credentials. The `WWW-Authenticate` header advertises the accepted schemes (`Bearer`, `Basic`).
+        "403":
+          description: Forbidden.
+        "429":
+          description: |
+            Rate limit exceeded. The `Retry-After` header indicates when to retry.
 components:
   securitySchemes:
     read-only-token:
@@ -587,6 +679,21 @@ components:
     resultsCount:
       type: integer
       description: returns less than or equal to the campaign's defined results
+      example: 8
+    offset:
+      type: integer
+      minimum: 0
+      default: 0
+      description: |
+        The position in the result list at which the returned page starts.
+        Omit it, or send `0`, for the first page.
+
+        To load the next page, send the number of results received so far, together with the `requestId`
+        and the `dynamicFilters` the previous response reported. Keep `resultsCount` the same for every page of a list:
+        changing it may repeat or skip results.
+
+        A page with fewer results than `resultsCount` is the last one; an offset beyond the end returns an empty result.
+        After changing the filters, start again at `0`.
       example: 8
     image-code:
       type: string
@@ -1068,7 +1175,9 @@ components:
         deeplink:
           type: string
           nullable: true
-          description: link to the product detail page
+          description: |
+            link to the product detail page; on a grouped product, the link to the page of the group
+            where there is one
           example: http://mainUrl/site/5/product/55fc5f71d6362321cb93b82b387e2f32/details
         brand:
           type: string
@@ -1129,6 +1238,159 @@ components:
         custom_label_4:
           type: string
           nullable: true
+        attributes:
+          type: object
+          description: |
+            The product's values for the attributes named in `siblings.options`, keyed by the
+            attribute's name; `null` where the product has no value. In addition, the attributes that
+            every variant carries independently of the options; each of them is absent where the product
+            has no value.
+          additionalProperties:
+            $ref: "#/components/schemas/attribute-value"
+          example:
+            color:
+              - value: "beige > #c7b3a8"
+                name: "beige"
+                hexCode: "#c7b3a8"
+                rgb:
+                  red: 199
+                  green: 179
+                  blue: 168
+                family: "beige"
+            size: "M"
+            link: "https://www.example.com/shirt?color=beige&size=M"
+        siblings:
+          type: object
+          nullable: true
+          description: |
+            The other variants the site groups with this product (for example the other colors and sizes
+            of one shirt) and the attributes that vary across the product and these variants together.
+            All of them share the product's `groupId`.
+
+            It is `null` if the product was not grouped with other variants. Variants are grouped only
+            if the site groups variants, and only among the results of a search or a recommendation.
+          required:
+            - options
+            - items
+          properties:
+            options:
+              description: |
+                The attributes that vary across the group, each with the distinct values it takes.
+                The values are those of this product and its siblings together, so a value that only
+                this product has is listed as well. The list is empty if no attribute varies.
+              type: array
+              items:
+                $ref: "#/components/schemas/sibling-option"
+            items:
+              description: |
+                The other variants grouped with this product that are relevant to the request.
+              type: array
+              items:
+                $ref: "#/components/schemas/sibling-item"
+    sibling-option:
+      type: object
+      required:
+        - name
+        - values
+      properties:
+        name:
+          description: |
+            The attribute's name. The product's `attributes` and the `attributes` of every sibling
+            have an entry under this name.
+          type: string
+          example: size
+        values:
+          description: |
+            The distinct values of the attribute. They do not say which combinations of values exist;
+            the `attributes` of the product and of each sibling do.
+          type: array
+          items:
+            $ref: "#/components/schemas/attribute-value"
+          example:
+            - "M"
+            - "L"
+    sibling-item:
+      description: A variant grouped with the product.
+      type: object
+      required:
+        - productId
+        - images
+        - attributes
+      properties:
+        productId:
+          type: string
+          example: 7b0a1c7f5d2e4a6f9c3b8d1e2f4a6c8e
+        images:
+          description: All images of the variant, in the order of the catalog. The list can be empty.
+          type: array
+          items:
+            $ref: "#/components/schemas/image"
+        attributes:
+          description: |
+            The variant's values for the attributes named in `siblings.options`, keyed by the
+            attribute's name; `null` where the variant has no value. In addition, the attributes that
+            every variant carries independently of the options; each of them is absent where the variant
+            has no value.
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/attribute-value"
+          example:
+            color:
+              - value: "blau"
+                name: "blau"
+            size: "L"
+            link: "https://www.example.com/shirt?color=blau&size=L"
+    attribute-value:
+      description: |
+        The value of one attribute of one product. Its form depends on the attribute's type:
+        * a string, a number or a boolean for an attribute of that type,
+        * a list of colors for a color attribute: all colors of the product form one value, so a
+          two-colored product differs from a one-colored one, and
+        * a list of paths for an attribute whose values are paths in a tree, such as a category.
+
+        In an `attributes` object it is `null` where the product has no value for an attribute named in
+        `siblings.options`.
+      anyOf:
+        - type: string
+          nullable: true
+        - type: number
+        - type: boolean
+        - type: array
+          items:
+            $ref: "#/components/schemas/color-value"
+        - type: array
+          items:
+            $ref: "#/components/schemas/path-value"
+    path-value:
+      description: A path in a tree, given as the list of its labels from the top level down.
+      type: array
+      items:
+        type: string
+      example:
+        - "Furniture"
+        - "Benches"
+    color-value:
+      description: |
+        A color. `hexCode`, `rgb` and `family` are present only if they are known for the color.
+      type: object
+      required:
+        - value
+        - name
+      properties:
+        value:
+          type: string
+          example: "beige > #c7b3a8"
+        name:
+          type: string
+          example: "beige"
+        hexCode:
+          type: string
+          example: "#c7b3a8"
+        rgb:
+          $ref: "#/components/schemas/rgb"
+        family:
+          type: string
+          example: "beige"
     item-kind:
       deprecated: true
       description: |
@@ -1461,6 +1723,8 @@ components:
           example: flowers
         resultsCount:
           $ref: "#/components/schemas/resultsCount"
+        offset:
+          $ref: "#/components/schemas/offset"
         campaign:
           $ref: "#/components/schemas/campaign-id"
         staticFilters:
@@ -1519,6 +1783,8 @@ components:
                 If a high resolution image has been uploaded, the search area will be based on the high resolution image.
         resultsCount:
           $ref: "#/components/schemas/resultsCount"
+        offset:
+          $ref: "#/components/schemas/offset"
         campaign:
           $ref: "#/components/schemas/campaign-id"
         staticFilters:
@@ -1536,6 +1802,8 @@ components:
           $ref: "#/components/schemas/request-id"
         resultsCount:
           $ref: "#/components/schemas/resultsCount"
+        offset:
+          $ref: "#/components/schemas/offset"
         campaign:
           $ref: "#/components/schemas/campaign-id"
         staticFilters:
@@ -1620,6 +1888,8 @@ components:
     product-listing-page-response:
       type: object
       properties:
+        requestId:
+          $ref: "#/components/schemas/request-id"
         data:
           type: object
           properties:
@@ -2139,6 +2409,10 @@ components:
       type: object
       properties:
         frequency:
+          description: |
+            Share (0 to 1) of the hits with a value in this column that fall into this range. A grouped hit
+            falls into every range one of its variants falls into, so the same hit can count in several
+            ranges and the shares can sum to more than 1.
           type: number
         interval:
           $ref: "#/components/schemas/interval"

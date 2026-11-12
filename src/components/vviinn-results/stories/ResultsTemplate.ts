@@ -17,6 +17,7 @@ export const ResultsTemplate = (args) => {
     addToBasketShow,
     oneClickDiscoveryMode,
     addPriceContainer,
+    loadMore,
     pricePrefix,
     campaignIdTextSearch,
     campaignIdVisualSearch,
@@ -64,6 +65,7 @@ export const ResultsTemplate = (args) => {
     add-to-basket-show="${addToBasketShow}"
     one-click-discovery-mode="${oneClickDiscoveryMode}"
     add-price-container="${addPriceContainer}"
+    load-more="${loadMore}"
     favorite-show="${args.favoriteShow}"
     one-click-discovery-campaigns="${oneClickDiscoveryCampaigns}"
     campaign-id-text-search="${campaignIdTextSearch}"

@@ -21,7 +21,7 @@ npm test                  # Unit tests
 npm run test.watch        # Watch unit tests
 ```
 
-**Releases**: release-please keeps a release PR open against `develop`, collecting the user-facing commits since the last release. Merging it tags the release, publishes npm `latest` and merges `develop` into `main`. A `beta` is published only on demand: run the default workflow on `develop` by hand (`workflow_dispatch`). After merging an update of the actions the publish job uses (checkout, setup-node, upload-artifact), run a beta: the pull request checks never run publish, so the next release would be its first test. A Storybook- or docs-only change reaches the production Storybook by merging `develop` into `main` by hand, but only with no release PR open — otherwise `develop`'s unreleased stories reach production ahead of the npm package. Configuration: `release-please-config.json`, `.release-please-manifest.json`.
+**Releases**: release-please keeps a release PR open against `develop`, collecting the user-facing commits since the last release. Merging it tags the release, publishes npm `latest` and merges `develop` into `main`. Before merging it, check the new `@since` tags against its version (see **Public Docs**). A `beta` is published only on demand: run the default workflow on `develop` by hand (`workflow_dispatch`). After merging an update of the actions the publish job uses (checkout, setup-node, upload-artifact), run a beta: the pull request checks never run publish, so the next release would be its first test. A Storybook- or docs-only change reaches the production Storybook by merging `develop` into `main` by hand, but only with no release PR open — otherwise `develop`'s unreleased stories reach production ahead of the npm package. Configuration: `release-please-config.json`, `.release-please-manifest.json`.
 
 **Clearing `dist/`**: remove `.stencil` alongside it. `rm -rf dist` on its own leaves the build cache, the next build emits a partial `dist/`, and the Storybook build then fails on it with `Could not resolve "../../dist/loader"` — which reads like a code fault rather than a stale cache.
 
@@ -111,7 +111,7 @@ docs.vviinn.com is built from the repo `vviinn/public-docs`; ask for the path of
 
 Every change to a public component's prop, event, slot, part or CSS custom property gets a public-docs check:
 
-- **New** — reaches the reference and the lists by itself. A new prop or event gets `@since <version>`: the next minor of `.release-please-manifest.json`, since a `feat` bumps the minor; if the release PR ends up with another number, update the tag on `develop` before merging it. An example or guide on the widget page only when the feature needs explaining; say which in the summary.
+- **New** — reaches the reference and the lists by itself. A new prop or event gets `@since <version>`: the next minor of `.release-please-manifest.json`, since a `feat` bumps the minor. Before merging a release PR, list the tags added since the last release — `git diff v<last release> origin/develop -- src | grep '^+.*@since'` — and set any that name another version than the release PR's to its number, on `develop`. An example or guide on the widget page only when the feature needs explaining; say which in the summary.
 - **Changed, renamed or removed** — grep public-docs `src/content` for the name and update every hit. A slot or CSS custom property is described again on each widget that passes it on: grep `src/components` too and keep the wording the same.
 - **New public component** — add a row to the component table in `README.md` and the tag to `PUBLIC_COMPONENT_TAGS` in `stencil.config.ts`, and its name, plus its Playground story if any, to `COMPONENTS` in public-docs `src/schemas/widgets-docs.mjs`.
 
@@ -130,6 +130,6 @@ See `/browser-test` command. Playwright locators pierce open shadow roots; for s
 **Local secrets** — supplied per developer, never in tracked files:
 
 - `storybook/.env.local` — Storybook demo tokens (`STORYBOOK_TOKEN_*`). Copy `storybook/.env.local.example` and fill it in. Cloud Build injects the same names from Secret Manager.
-- `dev/dev-config.js` — token and product id for the `npm start` dev harness (`dev/dev-harness.js`). Copy `dev/dev-config.example.js`. Both live outside `src/` so Stencil's collection build never copies them into `dist/` — the trade-off is that watch mode does not see them, so editing the config needs a dev-server restart.
+- `dev/dev-config.js` — token, product id and, optionally, the API environment for the `npm start` dev harness (`dev/dev-harness.js`). Copy `dev/dev-config.example.js`. Both live outside `src/` so Stencil's collection build never copies them into `dist/` — the trade-off is that watch mode does not see them, so editing the config needs a dev-server restart.
 
 @CLAUDE.local.md

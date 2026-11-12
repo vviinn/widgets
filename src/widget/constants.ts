@@ -10,3 +10,6 @@ export const LOADING_CLASS_DELAY = 500;
 
 // Scroll animation constants
 export const SCROLL_TO_DISCOVERY_DELAY = 250;
+
+// Longest wait for loaded cards to get ready behind their skeletons
+export const NEXT_PAGE_SWAP_TIMEOUT = 1000;

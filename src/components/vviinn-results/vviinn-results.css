@@ -114,6 +114,11 @@ products.hidden {
   grid-column: 1 / -1;
 }
 
+/* An empty row would add a second row gap above the Show more button or the next page skeletons */
+#one-click-discovery-append:empty:has(+ .show-more, + vviinn-product-card) {
+  display: none;
+}
+
 /* Top border sits 22px below the cards, 1px inside .footer-arrow so the arrow's white fill cuts it */
 vviinn-recommendations-sidebar::part(body) {
   border: 1px solid var(--color-border-02);
@@ -189,6 +194,54 @@ vviinn-recommendations-sidebar::part(sidebar-content) {
     align-content: start;
     width: unset;
   }
+}
+
+vviinn-product-card.next-page-pending {
+  visibility: hidden;
+}
+
+/* The text of a loaded page fades in over its skeleton bars; the image fades in on its own */
+@media (prefers-reduced-motion: no-preference) {
+  vviinn-product-card.next-page:not(.next-page-pending)::part(
+      content-container
+    ) {
+    animation: fade-in 200ms ease-out;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.show-more {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+}
+
+.show-more button {
+  appearance: none;
+  border: none;
+  cursor: pointer;
+  background: var(--button-bg-color-secondary);
+  border-radius: var(--border-radius-100);
+  padding: var(--spacing-150) var(--spacing-200);
+  font-family: var(--font-family, var(--font-family-base));
+  font-size: var(--font-size-label-large);
+  font-weight: var(--font-weight-500);
+  line-height: var(--line-height-label-large);
+  letter-spacing: var(--letter-spacing-label-large);
+  color: var(--color-text-primary);
+}
+
+.show-more button:hover {
+  background: var(--button-bg-color-secondary-hover);
+}
+
+.show-more button:active {
+  background: var(--button-bg-color-secondary-active);
 }
 
 @media (max-width: 380px) {

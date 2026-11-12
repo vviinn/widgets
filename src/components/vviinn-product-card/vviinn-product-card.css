@@ -65,6 +65,11 @@
   transition: opacity var(--product-card-transition-duration, 0.3s) ease-in-out;
 }
 
+/* Stencil hides unhydrated components only outside shadow roots; until its image hydrates the card would show text alone */
+:host(:not(.hydrated)) {
+  visibility: hidden;
+}
+
 :host(.set-mode) vviinn-image::part(image),
 :host(.set-mode.product-card--source) vviinn-image::part(image) {
   width: var(--vviinn-set-mode-image-width, 100%);

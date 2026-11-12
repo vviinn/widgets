@@ -47,6 +47,7 @@ import type { ObservableMap } from "@stencil/store";
 type OnChangeHandler<T> = ObservableMap<T>["onChange"];
 import { applyResponseFilters } from "./helpers/applyResponseFilters";
 import { startSearch } from "./helpers/searchSequence";
+import { applyResultsPage } from "./helpers/applyResultsPage";
 import { SearchSuccessEventData } from "../recommendation/events";
 import { campaignTypeNames } from "../campaign/Campaign";
 import { version } from "../../package.json";
@@ -77,6 +78,8 @@ type AppStateDefaults = {
   croppedImageUrl: string | null;
   visualSearchStarted: boolean;
   requestFilters: RequestDynamicFilterItem[];
+  productListingPageId: string | null;
+  pageSize: number;
 };
 
 type ReceivedDataDefaults = {
@@ -86,6 +89,11 @@ type ReceivedDataDefaults = {
   detectedObjects: Rectangle[];
   stream: Stream | null;
   redirect: (Redirect & { query?: string; searchId?: string }) | null;
+  resultsOffset: number;
+  hasMoreResults: boolean;
+  loadingMoreResults: boolean;
+  /** Set from an upload until its hi-res search is sent: a next page asked for earlier would be overtaken by it. */
+  hiResPending: boolean;
 };
 
 export type SearchStore = AppStateGlobalDefaults &
@@ -113,6 +121,8 @@ const appStateDefaults: AppStateDefaults = {
   croppedImageUrl: null,
   visualSearchStarted: false,
   requestFilters: [],
+  productListingPageId: null,
+  pageSize: 0,
 };
 
 const receivedDataDefaults: ReceivedDataDefaults = {
@@ -122,6 +132,10 @@ const receivedDataDefaults: ReceivedDataDefaults = {
   detectedObjects: [],
   stream: null,
   redirect: null,
+  resultsOffset: 0,
+  hasMoreResults: false,
+  loadingMoreResults: false,
+  hiResPending: false,
 };
 
 const storeDefaults: SearchStore = {
@@ -243,7 +257,7 @@ const emitSearchSuccess = (
 };
 
 const updateVisualSearchState =
-  (store: SearchStoreName, isHiResUpdate: boolean = false) =>
+  (store: SearchStoreName, isHiResUpdate: boolean, offset: number) =>
   async (response: VisualSearchResponse) => {
     const state = useStore(store);
 
@@ -252,13 +266,15 @@ const updateVisualSearchState =
       return;
     }
 
+    applyResultsPage(state, response.data.products, offset);
+    if (offset > 0) return;
+
     const detectedObjects = response.interactions.suggestedSearchAreas.map(
       ({ rectangle }) => rectangle,
     );
     if (detectedObjects.length > 0) state.detectedObjects = detectedObjects;
 
     state.visualSearchId = response.requestId;
-    state.results = response.data.products;
     applyResponseFilters(state, response.interactions.dynamicFilters);
     const { redirect } = response.interactions;
     state.redirect = isSafeLink(redirect?.url)
@@ -283,7 +299,7 @@ const updateImageState = (store: SearchStoreName) => (file: File) =>
   );
 
 const handleSearchError =
-  (store: SearchStoreName, isStale: () => boolean = () => false) =>
+  (store: SearchStoreName, isStale: () => boolean) =>
   <E>(error: E): E => {
     // A stale failure would wipe the newer request's results and show an error over them.
     if (isStale()) return error;
@@ -295,6 +311,23 @@ const handleSearchError =
     state.searchStatus = "error";
     return error;
   };
+
+/** A failed next page leaves the list as it is, so the shopper can try again. */
+const handleNextPageError =
+  (store: SearchStoreName, isStale: () => boolean) =>
+  <E>(error: E): E => {
+    if (!isStale()) useStore(store).loadingMoreResults = false;
+    return error;
+  };
+
+const handleRequestError = (
+  store: SearchStoreName,
+  offset: number,
+  isStale: () => boolean,
+) =>
+  offset > 0
+    ? handleNextPageError(store, isStale)
+    : handleSearchError(store, isStale);
 
 /** Where a search request goes and which campaign it is attributed to. */
 export type SearchRequestOptions = {
@@ -310,6 +343,8 @@ const processVisualSearch = (
   isHiResUpdate: boolean = false,
 ) => {
   const isStale = startSearch(store);
+  const offset = body.offset ?? 0;
+  if (isHiResUpdate) useStore(store).hiResPending = false;
 
   return pipe(
     getTokenWithBody<VisualSearchRequest>(token, body),
@@ -319,10 +354,10 @@ const processVisualSearch = (
     TE.map((sessionResponse) => {
       if (isStale()) return sessionResponse;
 
-      updateVisualSearchState(store, isHiResUpdate)(sessionResponse);
+      updateVisualSearchState(store, isHiResUpdate, offset)(sessionResponse);
       return sessionResponse;
     }),
-    TE.mapLeft(handleSearchError(store, isStale)),
+    TE.mapLeft(handleRequestError(store, offset, isStale)),
   );
 };
 
@@ -422,20 +457,24 @@ export const makeUploadFileRequest =
         searchType: "image",
         searchStatus: "loading",
         visualSearchStarted: true,
+        hiResPending: true,
       });
     }
 
     const session = await uploadImageFile(store, token, options)(file)();
 
-    if (!state.visualSearchId?.length) return session;
+    const shouldProcessHiRes =
+      !!state.visualSearchId?.length &&
+      (await pipe(
+        TE.fromTask(imageFromFileTask(file)),
+        TE.map((img) => shouldResize(img, "highResolutionImage")),
+        TE.getOrElse(() => T.of(false)),
+      )());
 
-    const shouldProcessHiRes = await pipe(
-      TE.fromTask(imageFromFileTask(file)),
-      TE.map((img) => shouldResize(img, "highResolutionImage")),
-      TE.getOrElse(() => T.of(false)),
-    )();
-
-    if (!shouldProcessHiRes) return session;
+    if (!shouldProcessHiRes) {
+      state.hiResPending = false;
+      return session;
+    }
 
     pipe(
       uploadImageFile(store, token, {
@@ -446,6 +485,7 @@ export const makeUploadFileRequest =
       })(file),
       TE.getOrElseW((error) => {
         console.error("Failed to upload hi-res image:", error);
+        state.hiResPending = false;
         return T.of(session);
       }),
     )();
@@ -453,25 +493,42 @@ export const makeUploadFileRequest =
     return session;
   };
 
-export type VisualSearchOptions = SearchRequestOptions & {
-  /**
-   * Searching a new area: the applied filters belong to the previous result set, so they are
-   * left out of this request. They stay in the store until the response reconciles them, so
-   * the UI keeps showing the last selection the server confirmed.
-   */
-  dropAppliedFilters?: boolean;
+type PageOptions = {
+  /** Number of results already received; set to load the page after them. */
+  offset?: number;
+};
+
+export type VisualSearchOptions = SearchRequestOptions &
+  PageOptions & {
+    /**
+     * Searching a new area: the applied filters belong to the previous result set, so they are
+     * left out of this request. They stay in the store until the response reconciles them, so
+     * the UI keeps showing the last selection the server confirmed.
+     */
+    dropAppliedFilters?: boolean;
+  };
+
+/** A next page keeps the list on screen while it loads, so it never enters the loading status. */
+const startLoading = (state: SearchStore, offset: number) => {
+  if (offset > 0) state.loadingMoreResults = true;
+  else state.searchStatus = "loading";
 };
 
 export const makeVisualSearchRequest = async (
   store: SearchStoreName,
   searchId: string | null,
   token: string,
-  { apiPath, campaignId, dropAppliedFilters }: VisualSearchOptions = {},
+  {
+    apiPath,
+    campaignId,
+    dropAppliedFilters,
+    offset = 0,
+  }: VisualSearchOptions = {},
 ) => {
   const state = useStore(store);
   state.textSearchQuery = null;
   state.searchType = "image";
-  state.searchStatus = "loading";
+  startLoading(state, offset);
   state.visualSearchStarted = true;
 
   let searchRectangle: Rectangle | null = null;
@@ -504,6 +561,7 @@ export const makeVisualSearchRequest = async (
       "dynamicFilters",
       dropAppliedFilters ? [] : state.requestFilters,
     ),
+    ...(offset > 0 ? { offset } : {}),
     query: {
       ...addIfDefined("searchArea", searchRectangle),
     },
@@ -511,7 +569,7 @@ export const makeVisualSearchRequest = async (
       ...addIfNotEmpty("excluded", state.excluded),
     }),
     objectDetection: {
-      include: fetchDetectedObjects,
+      include: fetchDetectedObjects && offset === 0,
     },
   };
   return processVisualSearch(store, body, token, apiPath)();
@@ -525,23 +583,34 @@ export const setTextSearchQuery = (
   state.textSearchQuery = query || null;
 };
 
+/** Where a text or listing search goes and which page of which result set to load. */
+export type PagedSearchOptions = PageOptions & {
+  apiPath?: string;
+  requestId?: string | null;
+  resultsCount?: number;
+};
+
+export type ProductListingPageOptions = PagedSearchOptions & {
+  dynamicFilters?: RequestDynamicFilterItem[];
+  skipStateUpdate?: boolean;
+};
+
 export const makeTextSearchRequest = async (
   store: SearchStoreName,
   query: string,
   token: string,
-  apiPath?: string,
-  requestId?: string | null,
-  resultsCount?: number,
+  { apiPath, requestId, resultsCount, offset = 0 }: PagedSearchOptions = {},
 ) => {
   const state = useStore(store);
   state.textSearchQuery = query;
   state.searchType = "text";
-  state.searchStatus = "loading";
+  startLoading(state, offset);
 
   const body: TextSearchRequest = {
     query,
     ...addIfDefined("requestId", requestId),
     ...addIfDefined("resultsCount", resultsCount),
+    ...(offset > 0 ? { offset } : {}),
     ...addIfNotEmpty("dynamicFilters", state.requestFilters),
     ...addIfNotEmpty("campaign", state.campaignIdTextSearch),
     ...addNestedIfNotEmpty("staticFilters", {
@@ -559,7 +628,9 @@ export const makeTextSearchRequest = async (
     TE.map((sessionResponse) => {
       if (isStale()) return sessionResponse;
 
-      state.results = sessionResponse?.data?.products ?? [];
+      applyResultsPage(state, sessionResponse?.data?.products ?? [], offset);
+      if (offset > 0) return sessionResponse;
+
       state.textSearchId = sessionResponse.requestId;
       applyResponseFilters(
         state,
@@ -571,7 +642,7 @@ export const makeTextSearchRequest = async (
       emitSearchSuccess(store, state, "TPS");
       return sessionResponse;
     }),
-    TE.mapLeft(handleSearchError(store, isStale)),
+    TE.mapLeft(handleRequestError(store, offset, isStale)),
   )();
 };
 
@@ -579,13 +650,21 @@ export const makeProductListingPageRequest = async (
   column: string,
   value: string,
   token: string,
-  apiPath?: string,
-  resultsCount?: number,
-  dynamicFilters?: RequestDynamicFilterItem[],
-  skipStateUpdate?: boolean,
+  {
+    apiPath,
+    requestId,
+    resultsCount,
+    dynamicFilters,
+    skipStateUpdate,
+    offset = 0,
+  }: ProductListingPageOptions = {},
 ) => {
   const state = useStore("components");
-  state.searchStatus = "loading";
+  // An inner-state listing keeps its results to itself, so it leaves the shared search alone
+  if (!skipStateUpdate) {
+    startLoading(state, offset);
+    state.searchType = null;
+  }
 
   const requestValue =
     column === "product_type" || column === "google_product_category"
@@ -608,7 +687,11 @@ export const makeProductListingPageRequest = async (
     },
     ...addIfDefined("resultsCount", resultsCount),
     ...addIfDefined("dynamicFilters", dynamicFilters),
+    ...addIfDefined("requestId", requestId),
+    ...(offset > 0 ? { offset } : {}),
   };
+
+  const isStale = skipStateUpdate ? () => false : startSearch("components");
 
   return await pipe(
     getTokenWithBody<ProductListingPageRequest>(token, body),
@@ -616,15 +699,19 @@ export const makeProductListingPageRequest = async (
     TE.fromEither,
     TE.chainW((request) => productListingPageSessionClient(request, apiPath)),
     TE.map((sessionResponse) => {
-      if (skipStateUpdate) return sessionResponse;
-      state.results = sessionResponse?.data?.products ?? [];
+      if (skipStateUpdate || isStale()) return sessionResponse;
+
+      applyResultsPage(state, sessionResponse?.data?.products ?? [], offset);
+      if (offset > 0) return sessionResponse;
+
+      state.productListingPageId = sessionResponse?.requestId ?? null;
       state.dynamicFilters =
         sessionResponse?.interactions?.dynamicFilters ?? [];
       state.searchStatus = "success";
       emitSearchSuccess("components", state, "TPS");
       return sessionResponse;
     }),
-    TE.mapLeft(handleSearchError("components")),
+    TE.mapLeft(handleRequestError("components", offset, isStale)),
   )();
 };
 

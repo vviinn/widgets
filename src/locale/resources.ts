@@ -46,6 +46,7 @@ export const resources: Resource = {
       buttons: {
         next: "weitere Produkte anzeigen",
         previous: "vorherige Produkte anzeigen",
+        showMore: "Mehr anzeigen",
       },
       emptyResultsBlock: {
         title: "Leider nichts gefunden",
@@ -191,6 +192,7 @@ export const resources: Resource = {
       buttons: {
         next: "show next products",
         previous: "show previous products",
+        showMore: "Show more",
       },
       emptyResultsBlock: {
         title: "Sorry, nothing found",
