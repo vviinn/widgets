@@ -67,6 +67,16 @@ describe("applyResultsPage", () => {
     expect(state.resultsOffset).toBe(4);
   });
 
+  it("ends on a later page that only repeats products already shown", () => {
+    const state = emptyState();
+    applyResultsPage(state, products("a", "b"), 0);
+
+    applyResultsPage(state, products("a", "b"), 2);
+
+    expect(ids(state)).toEqual(["a", "b"]);
+    expect(state.hasMoreResults).toBe(false);
+  });
+
   it("keeps the page size of the search when a filtered first page comes back short", () => {
     const state = emptyState();
     applyResultsPage(state, products("a", "b", "c"), 0);
