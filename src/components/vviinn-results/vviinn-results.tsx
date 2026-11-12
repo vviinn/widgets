@@ -1125,6 +1125,7 @@ export class VviinnResults {
       !this.showAspectRatioError &&
       this.state.searchStatus === "success" &&
       this.state.hasMoreResults &&
+      !this.state.hiResPending &&
       !this.showNextPageSkeletons;
 
     if (!shouldShowButton) return null;

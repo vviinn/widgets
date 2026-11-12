@@ -92,6 +92,8 @@ type ReceivedDataDefaults = {
   resultsOffset: number;
   hasMoreResults: boolean;
   loadingMoreResults: boolean;
+  /** Set from an upload until its hi-res search is sent: a next page asked for earlier would be overtaken by it. */
+  hiResPending: boolean;
 };
 
 export type SearchStore = AppStateGlobalDefaults &
@@ -133,6 +135,7 @@ const receivedDataDefaults: ReceivedDataDefaults = {
   resultsOffset: 0,
   hasMoreResults: false,
   loadingMoreResults: false,
+  hiResPending: false,
 };
 
 const storeDefaults: SearchStore = {
@@ -341,6 +344,7 @@ const processVisualSearch = (
 ) => {
   const isStale = startSearch(store);
   const offset = body.offset ?? 0;
+  if (isHiResUpdate) useStore(store).hiResPending = false;
 
   return pipe(
     getTokenWithBody<VisualSearchRequest>(token, body),
@@ -453,20 +457,24 @@ export const makeUploadFileRequest =
         searchType: "image",
         searchStatus: "loading",
         visualSearchStarted: true,
+        hiResPending: true,
       });
     }
 
     const session = await uploadImageFile(store, token, options)(file)();
 
-    if (!state.visualSearchId?.length) return session;
+    const shouldProcessHiRes =
+      !!state.visualSearchId?.length &&
+      (await pipe(
+        TE.fromTask(imageFromFileTask(file)),
+        TE.map((img) => shouldResize(img, "highResolutionImage")),
+        TE.getOrElse(() => T.of(false)),
+      )());
 
-    const shouldProcessHiRes = await pipe(
-      TE.fromTask(imageFromFileTask(file)),
-      TE.map((img) => shouldResize(img, "highResolutionImage")),
-      TE.getOrElse(() => T.of(false)),
-    )();
-
-    if (!shouldProcessHiRes) return session;
+    if (!shouldProcessHiRes) {
+      state.hiResPending = false;
+      return session;
+    }
 
     pipe(
       uploadImageFile(store, token, {
@@ -477,6 +485,7 @@ export const makeUploadFileRequest =
       })(file),
       TE.getOrElseW((error) => {
         console.error("Failed to upload hi-res image:", error);
+        state.hiResPending = false;
         return T.of(session);
       }),
     )();
