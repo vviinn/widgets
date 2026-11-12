@@ -520,8 +520,9 @@ export class VviinnResults {
     );
   }
 
-  private isProductListingPage = () =>
-    !!this.filterColumn && !!this.filterValue && !this.showInWidget;
+  private isProductListingPage() {
+    return !!this.filterColumn && !!this.filterValue && !this.showInWidget;
+  }
 
   private getProductCards() {
     return this.el.shadowRoot.querySelectorAll<HTMLVviinnProductCardElement>(
@@ -529,7 +530,7 @@ export class VviinnResults {
     );
   }
 
-  /** A new card takes a few frames to hydrate, so its skeleton stays until then instead of leaving a blank. */
+  /** New cards take a few frames to hydrate; their skeletons hold the place until then. */
   private swapInNextPage() {
     if (!this.nextPageArrived) return;
     this.nextPageArrived = false;
