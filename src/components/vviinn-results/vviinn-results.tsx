@@ -91,6 +91,7 @@ import {
   findSlotElements,
   getSlotNames,
   addEventListenersWithSignal,
+  focusFirstInShadow,
 } from "../../dom";
 import {
   LoadMoreMode,
@@ -571,27 +572,23 @@ export class VviinnResults {
     });
   }
 
-  /** The Show more button disappears while the page loads, so its focus moves to the first new card, or back to the button if nothing came. */
+  /** The Show more button disappears while the page loads, so its focus moves to the first new card; with none, back to the button or, at the end of the list, to the last card. */
   private restoreFocusAfterLoad() {
     if (!this.focusNewCardAfterLoad || this.showNextPageSkeletons) return;
     this.focusNewCardAfterLoad = false;
 
-    const card = this.getProductCards()[this.nextPageIndex];
+    const cards = this.getProductCards();
+    const newCard = cards[this.nextPageIndex];
+    const button =
+      this.el.shadowRoot.querySelector<HTMLElement>(".show-more button");
 
-    if (!card) {
-      this.el.shadowRoot
-        .querySelector<HTMLElement>(".show-more button")
-        ?.focus();
+    if (!newCard && button) {
+      button.focus();
       return;
     }
 
-    card
-      .componentOnReady()
-      .then(() =>
-        card.shadowRoot
-          ?.querySelector<HTMLElement>("a[href]")
-          ?.focus({ preventScroll: true }),
-      );
+    const card = newCard ?? cards[cards.length - 1];
+    card?.componentOnReady().then(() => focusFirstInShadow(card));
   }
 
   private loadMoreResults = () => {
