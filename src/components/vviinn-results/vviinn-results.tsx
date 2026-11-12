@@ -69,6 +69,7 @@ import { RequestDynamicFilterItem } from "../../campaign/VPRCampaignService";
 import { initializeLocale } from "../../locale";
 import {
   productCardSlotNames,
+  showMoreButtonTextSlotName,
   slotChangeListener,
   vprIconSlotName,
 } from "../customized-slots";
@@ -173,6 +174,7 @@ export type ReplaceSlotsContentInParent = (
  * @part show-more-button - Button that loads the next results. Rendered only if `load-more` is `button`.
  *
  * @slot vviinn-results-vpr-icon - One-Click Discovery icon, hidden when `one-click-discovery-mode` is `unset`.
+ * @slot vviinn-show-more-button-text - Text of the button that loads the next results. Rendered only if `load-more` is `button`.
  * @slot vviinn-favorite-icon - Icon of Favorite button.
  * @slot vviinn-favorite-icon-pressed - Icon of pressed Favorite button.
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
@@ -1006,7 +1008,9 @@ export class VviinnResults {
           aria-busy={this.state.loadingMoreResults ? "true" : "false"}
           onClick={this.loadMoreResults}
         >
-          {i18next.t("buttons.showMore")}
+          <slot name={showMoreButtonTextSlotName}>
+            {i18next.t("buttons.showMore")}
+          </slot>
         </button>
       </div>
     );

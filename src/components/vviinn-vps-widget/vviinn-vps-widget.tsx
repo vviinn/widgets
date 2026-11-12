@@ -109,6 +109,7 @@ const CAMERA_START_DELAY = 500;
  * @slot vviinn-custom-label-4 - Custom label with index 4.
  *
  * @slot vviinn-results-vpr-icon - One-Click Discovery icon, hidden when `one-click-discovery-mode` is `unset`.
+ * @slot vviinn-show-more-button-text - Text of the button that loads the next results. Rendered only if `load-more` is `button`.
  * @part close-button - Close Button in the modal's header.
  * @part secondary-action - Back Button in the modal's header.
  * @part results-title - Title on the results page.
