@@ -6,6 +6,7 @@ import {
   Element,
   Event,
   EventEmitter,
+  forceUpdate,
   Listen,
   State,
   Watch,
@@ -97,6 +98,7 @@ import {
   oneClickDiscoveryModes,
 } from "../../widget/types";
 import {
+  NEXT_PAGE_SWAP_TIMEOUT,
   RESULTS_WIDGET_IMAGE_RESOLUTION_WIDTH,
   SCROLL_TO_DISCOVERY_DELAY,
 } from "../../widget/constants";
@@ -301,6 +303,10 @@ export class VviinnResults {
 
   @State() slotsReplaced: boolean;
   @State() oneClickDiscoveryAppendIndex: number;
+
+  /** Skeletons stay from the start of a page load until its cards are ready to take their place. */
+  @State() showNextPageSkeletons = false;
+
   @State() oneClickDiscoverySelectedIndex: number;
   @State() innerResults: Recommendation[] = [];
 
@@ -393,6 +399,18 @@ export class VviinnResults {
 
   private eventAbortController?: AbortController;
 
+  /** Set when the Show more button had focus, so focus moves to the first new card. */
+  private focusNewCardAfterLoad = false;
+
+  /** Set by a Show more click until the page scrolls to the skeletons. */
+  private revealPending = false;
+
+  /** Index where the page loaded by Show more starts. */
+  private nextPageIndex?: number;
+
+  /** Set when the page has arrived and its cards still have to get ready behind the skeletons. */
+  private nextPageArrived = false;
+
   private getCampaignType = () =>
     this.state.searchType === "text" ? "TPS" : "VPS";
 
@@ -420,6 +438,10 @@ export class VviinnResults {
   }
 
   componentDidRender() {
+    this.swapInNextPage();
+    this.revealNextPage();
+    this.restoreFocusAfterLoad();
+
     this.replaceSlotsContentInButton
       ? this.replaceSlotsContentInButton(this.el)
       : this.showInWidget
@@ -500,8 +522,83 @@ export class VviinnResults {
   private isProductListingPage = () =>
     !!this.filterColumn && !!this.filterValue && !this.showInWidget;
 
+  private getProductCards() {
+    return this.el.shadowRoot.querySelectorAll<HTMLVviinnProductCardElement>(
+      "#vviinn-results-products > vviinn-product-card:not(.next-page-skeleton)",
+    );
+  }
+
+  /** A new card takes a few frames to hydrate, so its skeleton stays until then instead of leaving a blank. */
+  private swapInNextPage() {
+    if (!this.nextPageArrived) return;
+    this.nextPageArrived = false;
+
+    const newCards = Array.from(this.getProductCards()).slice(
+      this.nextPageIndex,
+    );
+    const cardsReady = Promise.all(
+      newCards.map((card) => card.componentOnReady()),
+    );
+    const timeout = new Promise((resolve) =>
+      setTimeout(resolve, NEXT_PAGE_SWAP_TIMEOUT),
+    );
+
+    Promise.race([cardsReady, timeout]).then(() => {
+      this.showNextPageSkeletons = false;
+    });
+  }
+
+  /** Scrolls just enough to show the first row of the page being loaded. */
+  private revealNextPage() {
+    if (!this.revealPending || !this.showNextPageSkeletons) return;
+    this.revealPending = false;
+
+    const skeleton =
+      this.el.shadowRoot.querySelector<HTMLVviinnProductCardElement>(
+        ".next-page-skeleton",
+      );
+    skeleton?.componentOnReady().then(() => {
+      const target = skeleton.isConnected
+        ? skeleton
+        : this.getProductCards()[this.nextPageIndex];
+      const reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      target?.scrollIntoView({
+        block: "nearest",
+        behavior: reduceMotion ? "auto" : "smooth",
+      });
+    });
+  }
+
+  /** The Show more button disappears while the page loads, so its focus moves to the first new card, or back to the button if nothing came. */
+  private restoreFocusAfterLoad() {
+    if (!this.focusNewCardAfterLoad || this.showNextPageSkeletons) return;
+    this.focusNewCardAfterLoad = false;
+
+    const card = this.getProductCards()[this.nextPageIndex];
+
+    if (!card) {
+      this.el.shadowRoot
+        .querySelector<HTMLElement>(".show-more button")
+        ?.focus();
+      return;
+    }
+
+    card
+      .componentOnReady()
+      .then(() =>
+        card.shadowRoot
+          ?.querySelector<HTMLElement>("a[href]")
+          ?.focus({ preventScroll: true }),
+      );
+  }
+
   private loadMoreResults = () => {
     const offset = this.state.resultsOffset;
+    this.revealPending = true;
+    this.focusNewCardAfterLoad =
+      !!this.el.shadowRoot.activeElement?.closest(".show-more");
 
     if (this.isProductListingPage()) {
       makeProductListingPageRequest(
@@ -645,12 +742,32 @@ export class VviinnResults {
     const disposeSearchStatusListener = onChange(
       "searchStatus",
       (searchStatus) => {
-        if (searchStatus === "loading") this.resetDiscoveryAppendIndexes();
+        if (searchStatus !== "loading") return;
+        this.resetDiscoveryAppendIndexes();
+        this.focusNewCardAfterLoad = false;
+        this.revealPending = false;
+        this.nextPageIndex = undefined;
+        this.nextPageArrived = false;
+        this.showNextPageSkeletons = false;
+      },
+    );
+
+    const disposeLoadingMoreListener = onChange(
+      "loadingMoreResults",
+      (loadingMoreResults) => {
+        if (loadingMoreResults) {
+          this.nextPageIndex = this.getResults().length;
+          this.showNextPageSkeletons = true;
+          return;
+        }
+        this.nextPageArrived = true;
+        forceUpdate(this);
       },
     );
 
     this.disposeStoreListener = () => {
       disposeSearchStatusListener();
+      disposeLoadingMoreListener();
     };
 
     if (this.el.id) this.widgetElementId = this.el.id;
@@ -903,6 +1020,12 @@ export class VviinnResults {
       setTimeout(scrollToDiscovery, SCROLL_TO_DISCOVERY_DELAY);
     };
 
+    const isNextPage = (index: number) =>
+      index >= (this.nextPageIndex ?? Infinity);
+    // A loaded page waits hidden after its skeletons, which hold its place until it is ready
+    const isPending = (index: number) =>
+      isNextPage(index) && this.showNextPageSkeletons;
+
     return this.getResults().map((p, i) => (
       <vviinn-product-card
         pricePrefix={this.pricePrefix}
@@ -939,7 +1062,13 @@ export class VviinnResults {
         favoriteShow={this.favoriteShow}
         addPriceContainer={this.addPriceContainer}
         isResultsWidget={true}
-        style={{ order: i.toString() }}
+        class={{
+          "next-page": isNextPage(i),
+          "next-page-pending": isPending(i),
+        }}
+        style={{
+          order: (isPending(i) ? i + this.state.pageSize + 1 : i).toString(),
+        }}
         showFooterArrow={this.oneClickDiscoverySelectedIndex === i}
       >
         {shouldShowOneClickDiscoveryButton && (
@@ -995,7 +1124,8 @@ export class VviinnResults {
       !this.useInnerState &&
       !this.showAspectRatioError &&
       this.state.searchStatus === "success" &&
-      this.state.hasMoreResults;
+      this.state.hasMoreResults &&
+      !this.showNextPageSkeletons;
 
     if (!shouldShowButton) return null;
 
@@ -1004,8 +1134,6 @@ export class VviinnResults {
         <button
           type="button"
           part={showMoreButtonPart}
-          disabled={this.state.loadingMoreResults}
-          aria-busy={this.state.loadingMoreResults ? "true" : "false"}
           onClick={this.loadMoreResults}
         >
           <slot name={showMoreButtonTextSlotName}>
@@ -1014,6 +1142,23 @@ export class VviinnResults {
         </button>
       </div>
     );
+  }
+
+  private renderNextPageSkeletons() {
+    if (this.useInnerState || !this.showNextPageSkeletons) return null;
+
+    return Array.from({ length: this.state.pageSize }, (_, i) => (
+      <vviinn-product-card
+        class="next-page-skeleton"
+        loading={true}
+        responsive={true}
+        productTitle=""
+        productId={`skeleton-${i}`}
+        key={`skeleton-${i}`}
+        part="product-card"
+        style={{ order: (this.nextPageIndex + 1 + i).toString() }}
+      />
+    ));
   }
 
   render() {
@@ -1047,6 +1192,7 @@ export class VviinnResults {
           }}
           part={productCardsGridPart}
           id="vviinn-results-products"
+          aria-busy={this.showNextPageSkeletons ? "true" : undefined}
         >
           {resultsLength > 0 && this.renderResults()}
           <div
@@ -1057,6 +1203,7 @@ export class VviinnResults {
               ).toString(),
             }}
           ></div>
+          {this.renderNextPageSkeletons()}
           {this.renderShowMoreButton(resultsLength)}
         </div>
       </Host>

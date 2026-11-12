@@ -114,8 +114,8 @@ products.hidden {
   grid-column: 1 / -1;
 }
 
-/* An empty row would add a second row gap above the Show more button */
-#one-click-discovery-append:empty:has(+ .show-more) {
+/* An empty row would add a second row gap above the Show more button or the next page skeletons */
+#one-click-discovery-append:empty:has(+ .show-more, + vviinn-product-card) {
   display: none;
 }
 
@@ -196,6 +196,25 @@ vviinn-recommendations-sidebar::part(sidebar-content) {
   }
 }
 
+vviinn-product-card.next-page-pending {
+  visibility: hidden;
+}
+
+/* The text of a loaded page fades in over its skeleton bars; the image fades in on its own */
+@media (prefers-reduced-motion: no-preference) {
+  vviinn-product-card.next-page:not(.next-page-pending)::part(
+      content-container
+    ) {
+    animation: fade-in 200ms ease-out;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
 .show-more {
   grid-column: 1 / -1;
   display: flex;
@@ -223,12 +242,6 @@ vviinn-recommendations-sidebar::part(sidebar-content) {
 
 .show-more button:active {
   background: var(--button-bg-color-secondary-active);
-}
-
-.show-more button:disabled {
-  cursor: default;
-  background: var(--button-bg-color-disabled);
-  color: var(--color-text-disabled);
 }
 
 @media (max-width: 380px) {
