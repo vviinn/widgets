@@ -53,6 +53,7 @@ import {
   buildTextSearchRedirectUrl,
   parseResultsPageParamNames,
 } from "../../helpers/url/resultsPageUrl";
+import { navigateTo } from "../../helpers/navigation/navigateTo";
 
 /**
  * @part text-search-container - Container for the text search block.
@@ -459,7 +460,7 @@ export class VviinnTextSearch {
       this.state.redirect = null;
       return;
     } else {
-      window.location.href = url;
+      navigateTo(url);
     }
   }
 

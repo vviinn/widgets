@@ -80,6 +80,7 @@ import {
   buildImageSearchRedirectUrl,
   parseResultsPageParamNames,
 } from "../../helpers/url/resultsPageUrl";
+import { navigateTo } from "../../helpers/navigation/navigateTo";
 
 const CAMERA_START_DELAY = 500;
 
@@ -384,7 +385,7 @@ export class VviinnVpsWidget {
     const event = this.vviinnRedirect.emit(redirectData);
 
     if (!event.defaultPrevented) {
-      window.location.href = url;
+      navigateTo(url);
     }
   }
 

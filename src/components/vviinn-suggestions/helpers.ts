@@ -1,5 +1,51 @@
+import DOMPurify from "dompurify";
 import { RequestDynamicFilterItem } from "../../campaign/VPRCampaignService";
 import { Stream } from "../../interfaces";
+
+// The text comes from the API, and marked passes raw HTML through. Only the tags Markdown produces
+// are kept: no images, SVG, dialogs, forms, styles, classes or ARIA, so a suggestion cannot cover or imitate the page.
+const SUGGESTION_HTML = {
+  ALLOWED_TAGS: [
+    "p",
+    "br",
+    "hr",
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h5",
+    "h6",
+    "strong",
+    "em",
+    "del",
+    "code",
+    "pre",
+    "blockquote",
+    "ul",
+    "ol",
+    "li",
+    "a",
+    "table",
+    "thead",
+    "tbody",
+    "tr",
+    "th",
+    "td",
+  ],
+  ALLOWED_ATTR: ["href", "title", "align", "start"],
+  ALLOW_ARIA_ATTR: false,
+  ALLOW_DATA_ATTR: false,
+};
+
+const escapeHtml = (text: string): string =>
+  text.replace(/[&<>"']/g, (char) => `&#${char.charCodeAt(0)};`);
+
+/** HTML that marked rendered from a suggestion, reduced to what is safe for `innerHTML`. */
+export const sanitizeSuggestionHtml = (html: string): string =>
+  // Without a usable DOM, DOMPurify hands its input back unchanged.
+  DOMPurify.isSupported
+    ? DOMPurify.sanitize(html, SUGGESTION_HTML)
+    : escapeHtml(html);
 
 export const toggleFilterInSet = (
   appliedFilters: Set<string>,

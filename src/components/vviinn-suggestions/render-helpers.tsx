@@ -10,7 +10,8 @@ import {
   Interactions,
 } from "../../interfaces";
 import { triggerFilter } from "../vviinn-filters/helpers/triggerFilter";
-import { formatIntervalKey } from "./helpers";
+import { formatIntervalKey, sanitizeSuggestionHtml } from "./helpers";
+import { isSafeLink } from "../../helpers/url/isSafeLink";
 import {
   DynamicFilterInternalData,
   ChangedFiltersEventData,
@@ -209,12 +210,14 @@ export const renderAnnotatedContent = (
           return (
             <span
               key={segmentKey}
-              innerHTML={marked.parseInline(segment.content) as string}
+              innerHTML={sanitizeSuggestionHtml(
+                marked.parseInline(segment.content, { async: false }),
+              )}
             ></span>
           );
         }
         const deeplink = getAnnotationDeeplink(segment.annotation);
-        if (deeplink) {
+        if (isSafeLink(deeplink)) {
           return (
             <a
               key={segmentKey}
@@ -227,6 +230,9 @@ export const renderAnnotatedContent = (
               {segment.content}
             </a>
           );
+        }
+        if (deeplink) {
+          return <span key={segmentKey}>{segment.content}</span>;
         }
         const isSelected = getAnnotationFilterKeys(segment.annotation).some(
           (k) => appliedFilters.has(k),
@@ -252,6 +258,6 @@ export const renderInfoText = (content: string, key: string) => (
     class="suggestion-info-text"
     part="suggestion-info-text"
     key={key}
-    innerHTML={marked.parse(content) as string}
+    innerHTML={sanitizeSuggestionHtml(marked.parse(content, { async: false }))}
   />
 );

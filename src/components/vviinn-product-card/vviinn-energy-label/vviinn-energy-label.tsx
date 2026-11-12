@@ -6,6 +6,7 @@ import {
 } from "../../../interfaces";
 import { slotChangeListener } from "../../customized-slots";
 import { energyLabelParts } from "../../../cssParts";
+import { isSafeLink } from "../../../helpers/url/isSafeLink";
 
 /**
  * @part energy-label-container - Energy label container.
@@ -57,11 +58,14 @@ export class VviinnEnergyLabel {
   }
 
   render() {
+    const dataSheetUrl = isSafeLink(this.classDataSheetUrl)
+      ? this.classDataSheetUrl
+      : undefined;
+
     return (
       <Host
         class={{
-          hidden:
-            !this.classIconUrls && !this.productType && !this.classDataSheetUrl,
+          hidden: !this.classIconUrls && !this.productType && !dataSheetUrl,
         }}
         exportparts={energyLabelParts}
       >
@@ -75,18 +79,18 @@ export class VviinnEnergyLabel {
             />
           )}
 
-          {(this.productType || this.classDataSheetUrl) && (
+          {(this.productType || dataSheetUrl) && (
             <div class="info-container">
               {this.productType && (
                 <span class="product-type" part="energy-label-product-type">
                   {this.productType}
                 </span>
               )}
-              {this.classDataSheetUrl && (
+              {dataSheetUrl && (
                 <a
                   class="data-sheet-link"
                   part="energy-label-data-sheet-link"
-                  href={this.classDataSheetUrl}
+                  href={dataSheetUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                 >

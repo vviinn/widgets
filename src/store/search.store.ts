@@ -51,6 +51,8 @@ import { applyResultsPage } from "./helpers/applyResultsPage";
 import { SearchSuccessEventData } from "../recommendation/events";
 import { campaignTypeNames } from "../campaign/Campaign";
 import { version } from "../../package.json";
+import { isSafeLink } from "../helpers/url/isSafeLink";
+import { withSafeLinks } from "./helpers/completions";
 
 export type SearchStoreName = "widget" | "components" | "shopTheLook";
 export type SearchStatus = "idle" | "loading" | "success" | "error";
@@ -271,8 +273,9 @@ const updateVisualSearchState =
 
     state.visualSearchId = response.requestId;
     applyResponseFilters(state, response.interactions.dynamicFilters);
-    state.redirect = response.interactions.redirect
-      ? { ...response.interactions.redirect, searchId: response.requestId }
+    const { redirect } = response.interactions;
+    state.redirect = isSafeLink(redirect?.url)
+      ? { ...redirect, searchId: response.requestId }
       : null;
 
     state.stream = response?.stream ?? null;
@@ -742,7 +745,7 @@ export const makeAutoSuggestRequest = async (
       )
         return response;
 
-      const completions = response.data.completions ?? [];
+      const completions = withSafeLinks(response.data.completions ?? []);
       onCompletions?.(completions);
 
       const matchingCompletion = completions.find(

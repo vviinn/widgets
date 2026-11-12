@@ -61,6 +61,7 @@
   "dependencies": {
     "@rgba-image/lanczos": "^0.1.1",
     "cropperjs": "^1.5.13",
+    "dompurify": "^3.4.17",
     "fp-ts": "^2.12.3",
     "i18next": "^23.2.11",
     "marked": "^17.0.5",
@@ -91,6 +92,7 @@
     "jest": "^29.7.0",
     "jest-cli": "^29.7.0",
     "jest-config": "^29.7.0",
+    "jsdom": "^25.0.1",
     "lint-staged": "^17.4.1",
     "openapi-typescript": "^4.4.0",
     "postcss": "^8.5.24",
