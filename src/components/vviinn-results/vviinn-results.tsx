@@ -103,7 +103,10 @@ import {
   RESULTS_WIDGET_IMAGE_RESOLUTION_WIDTH,
   SCROLL_TO_DISCOVERY_DELAY,
 } from "../../widget/constants";
-import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
+import {
+  addIfNotEmpty,
+  mostFrequent,
+} from "../../utils/collections/collectionsUtils";
 import { RESULTS_CALCULATED_COLUMNS_CSS_VAR } from "../vviinn-carousel/constants";
 import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
 import { openProductLink } from "../../helpers/navigation/openProductLink";
@@ -408,6 +411,9 @@ export class VviinnResults {
 
   /** Index where the page loaded by Show more starts. */
   private nextPageIndex?: number;
+
+  /** The most common card height on screen: a card stretches to its row, and the next page of the same search tends to fill its rows alike. */
+  private nextPageSkeletonHeight?: number;
 
   /** Set when the page has arrived and its cards still have to get ready behind the skeletons. */
   private nextPageArrived = false;
@@ -755,6 +761,11 @@ export class VviinnResults {
       "loadingMoreResults",
       (loadingMoreResults) => {
         if (loadingMoreResults) {
+          this.nextPageSkeletonHeight = mostFrequent(
+            Array.from(this.getProductCards(), (card) =>
+              Math.round(card.getBoundingClientRect().height),
+            ),
+          );
           this.nextPageIndex = this.getResults().length;
           this.showNextPageSkeletons = true;
           return;
@@ -1156,7 +1167,12 @@ export class VviinnResults {
         productId={`skeleton-${i}`}
         key={`skeleton-${i}`}
         part="product-card"
-        style={{ order: (this.nextPageIndex + 1 + i).toString() }}
+        style={{
+          order: (this.nextPageIndex + 1 + i).toString(),
+          ...(this.nextPageSkeletonHeight && {
+            height: `${this.nextPageSkeletonHeight}px`,
+          }),
+        }}
       />
     ));
   }

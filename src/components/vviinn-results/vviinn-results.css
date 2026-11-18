@@ -200,6 +200,11 @@ vviinn-product-card.next-page-pending {
   visibility: hidden;
 }
 
+/* A skeleton sized below its own bars cuts the last one short */
+vviinn-product-card.next-page-skeleton {
+  overflow: hidden;
+}
+
 /* The text of a loaded page fades in over its skeleton bars; the image fades in on its own */
 @media (prefers-reduced-motion: no-preference) {
   vviinn-product-card.next-page:not(.next-page-pending)::part(
