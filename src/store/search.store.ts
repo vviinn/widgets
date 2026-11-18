@@ -67,7 +67,10 @@ type AppStateGlobalDefaults = {
 type AppStateDefaults = {
   visualSearchId: string | null;
   textSearchId: string | null;
+  /** Follows the search field as the shopper types, sent or not. */
   textSearchQuery: string | null;
+  /** The query of the text search on screen: its next page and its filters go with it. */
+  searchedTextQuery: string | null;
   searchType: SearchType | null;
   searchStatus: SearchStatus;
   resultLoaded: boolean;
@@ -92,7 +95,7 @@ type ReceivedDataDefaults = {
   resultsOffset: number;
   hasMoreResults: boolean;
   loadingMoreResults: boolean;
-  /** Set from an upload until its hi-res search is sent: a next page asked for earlier would be overtaken by it. */
+  /** Set from an upload until its hi-res search answers: a next page asked for earlier would make that answer stale. */
   hiResPending: boolean;
 };
 
@@ -111,6 +114,7 @@ const appStateDefaults: AppStateDefaults = {
   visualSearchId: null,
   textSearchId: null,
   textSearchQuery: null,
+  searchedTextQuery: null,
   searchType: null,
   searchStatus: "idle",
   resultLoaded: false,
@@ -240,7 +244,12 @@ const emitSearchSuccess = (
     dynamicFilters: state.dynamicFilters,
     detectedObjects: state.detectedObjects,
     requestId,
-    ...addIfDefined("query", state.textSearchQuery),
+    ...addIfDefined(
+      "query",
+      state.searchType === "text"
+        ? state.searchedTextQuery
+        : state.textSearchQuery,
+    ),
     storeName,
     campaignTypeId,
     campaignTypeName: campaignTypeNames[campaignTypeId],
@@ -344,7 +353,6 @@ const processVisualSearch = (
 ) => {
   const isStale = startSearch(store);
   const offset = body.offset ?? 0;
-  if (isHiResUpdate) useStore(store).hiResPending = false;
 
   return pipe(
     getTokenWithBody<VisualSearchRequest>(token, body),
@@ -450,11 +458,11 @@ export const makeUploadFileRequest =
     const state = useStore(store);
 
     if (store !== "shopTheLook") {
+      setSearchType(state, "image");
       Object.assign(state, {
         image: null,
         detectedObjects: [],
         textSearchQuery: null,
-        searchType: "image",
         searchStatus: "loading",
         visualSearchStarted: true,
         hiResPending: true,
@@ -485,10 +493,11 @@ export const makeUploadFileRequest =
       })(file),
       TE.getOrElseW((error) => {
         console.error("Failed to upload hi-res image:", error);
-        state.hiResPending = false;
         return T.of(session);
       }),
-    )();
+    )().finally(() => {
+      state.hiResPending = false;
+    });
 
     return session;
   };
@@ -508,10 +517,24 @@ export type VisualSearchOptions = SearchRequestOptions &
     dropAppliedFilters?: boolean;
   };
 
+/** Each search kind runs its own campaign, so its page size is learnt anew. */
+const setSearchType = (state: SearchStore, searchType: SearchType | null) => {
+  if (state.searchType !== searchType) state.pageSize = 0;
+  state.searchType = searchType;
+};
+
 /** A next page keeps the list on screen while it loads, so it never enters the loading status. */
-const startLoading = (state: SearchStore, offset: number) => {
-  if (offset > 0) state.loadingMoreResults = true;
-  else state.searchStatus = "loading";
+const startLoading = (
+  state: SearchStore,
+  offset: number,
+  searchType: SearchType | null,
+) => {
+  if (offset > 0) {
+    state.loadingMoreResults = true;
+    return;
+  }
+  setSearchType(state, searchType);
+  state.searchStatus = "loading";
 };
 
 export const makeVisualSearchRequest = async (
@@ -526,9 +549,8 @@ export const makeVisualSearchRequest = async (
   }: VisualSearchOptions = {},
 ) => {
   const state = useStore(store);
-  state.textSearchQuery = null;
-  state.searchType = "image";
-  startLoading(state, offset);
+  if (offset === 0) state.textSearchQuery = null;
+  startLoading(state, offset, "image");
   state.visualSearchStarted = true;
 
   let searchRectangle: Rectangle | null = null;
@@ -592,7 +614,6 @@ export type PagedSearchOptions = PageOptions & {
 
 export type ProductListingPageOptions = PagedSearchOptions & {
   dynamicFilters?: RequestDynamicFilterItem[];
-  skipStateUpdate?: boolean;
 };
 
 export const makeTextSearchRequest = async (
@@ -602,9 +623,12 @@ export const makeTextSearchRequest = async (
   { apiPath, requestId, resultsCount, offset = 0 }: PagedSearchOptions = {},
 ) => {
   const state = useStore(store);
-  state.textSearchQuery = query;
-  state.searchType = "text";
-  startLoading(state, offset);
+  if (offset === 0) {
+    // A refresh of the search on screen leaves a draft in the field alone
+    if (!requestId) state.textSearchQuery = query;
+    state.searchedTextQuery = query;
+  }
+  startLoading(state, offset, "text");
 
   const body: TextSearchRequest = {
     query,
@@ -646,7 +670,8 @@ export const makeTextSearchRequest = async (
   )();
 };
 
-export const makeProductListingPageRequest = async (
+/** The listing request alone, for a caller that keeps the results to itself. */
+export const fetchProductListingPage = (
   column: string,
   value: string,
   token: string,
@@ -655,17 +680,9 @@ export const makeProductListingPageRequest = async (
     requestId,
     resultsCount,
     dynamicFilters,
-    skipStateUpdate,
     offset = 0,
   }: ProductListingPageOptions = {},
 ) => {
-  const state = useStore("components");
-  // An inner-state listing keeps its results to itself, so it leaves the shared search alone
-  if (!skipStateUpdate) {
-    startLoading(state, offset);
-    state.searchType = null;
-  }
-
   const requestValue =
     column === "product_type" || column === "google_product_category"
       ? pipe(
@@ -691,22 +708,38 @@ export const makeProductListingPageRequest = async (
     ...(offset > 0 ? { offset } : {}),
   };
 
-  const isStale = skipStateUpdate ? () => false : startSearch("components");
-
-  return await pipe(
+  return pipe(
     getTokenWithBody<ProductListingPageRequest>(token, body),
     setBodyAndHeaders,
     TE.fromEither,
     TE.chainW((request) => productListingPageSessionClient(request, apiPath)),
+  );
+};
+
+export const makeProductListingPageRequest = async (
+  column: string,
+  value: string,
+  token: string,
+  options: ProductListingPageOptions = {},
+) => {
+  const offset = options.offset ?? 0;
+  const state = useStore("components");
+  startLoading(state, offset, null);
+  const isStale = startSearch("components");
+
+  return await pipe(
+    fetchProductListingPage(column, value, token, options),
     TE.map((sessionResponse) => {
-      if (skipStateUpdate || isStale()) return sessionResponse;
+      if (isStale()) return sessionResponse;
 
       applyResultsPage(state, sessionResponse?.data?.products ?? [], offset);
       if (offset > 0) return sessionResponse;
 
       state.productListingPageId = sessionResponse?.requestId ?? null;
-      state.dynamicFilters =
-        sessionResponse?.interactions?.dynamicFilters ?? [];
+      applyResponseFilters(
+        state,
+        sessionResponse?.interactions?.dynamicFilters,
+      );
       state.searchStatus = "success";
       emitSearchSuccess("components", state, "TPS");
       return sessionResponse;
