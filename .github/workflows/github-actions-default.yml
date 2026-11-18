@@ -66,8 +66,9 @@ jobs:
       # Not needed for npm audit, but the only PR check that the Storybook lockfile matches package.json.
       - run: npm ci --ignore-scripts
         working-directory: storybook
-      - name: Check for high/critical vulnerabilities
-        run: npm audit --audit-level=high
+      # Dev tooling is left to Dependabot: an advisory without a fixed release would block every pull request.
+      - name: Check for high/critical vulnerabilities in the shipped dependencies
+        run: npm audit --omit=dev --audit-level=high
         working-directory: storybook
 
   # Keeps a release pull request open on develop from the user-facing commits.
