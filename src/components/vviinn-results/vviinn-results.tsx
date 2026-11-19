@@ -478,7 +478,7 @@ export class VviinnResults {
   } = {}) {
     if (!queryToUse) return;
 
-    if (!requestId?.length) {
+    if (offset === 0 && !requestId?.length) {
       resetStore(this.storeName, "appStateOnly");
       this.updateCampaignIds();
 
@@ -574,11 +574,13 @@ export class VviinnResults {
     const cardsReady = Promise.all(
       newCards.map((card) => card.componentOnReady()),
     );
-    const timeout = new Promise((resolve) =>
-      setTimeout(resolve, NEXT_PAGE_SWAP_TIMEOUT),
-    );
+    let timer: ReturnType<typeof setTimeout>;
+    const timeout = new Promise((resolve) => {
+      timer = setTimeout(resolve, NEXT_PAGE_SWAP_TIMEOUT);
+    });
 
     Promise.race([cardsReady, timeout]).then(() => {
+      clearTimeout(timer);
       if (load === this.nextPageLoad) this.showNextPageSkeletons = false;
     });
   }
@@ -701,7 +703,7 @@ export class VviinnResults {
     const { filters, isTriggeredByVpsWidget } = detail;
     if (this.skipStateChanges(isTriggeredByVpsWidget)) return;
 
-    if (this.useInnerState) {
+    if (this.useInnerState && this.isProductListingPage()) {
       this.getResultsByCategory({ dynamicFilters: filters });
       return;
     }
@@ -1051,7 +1053,7 @@ export class VviinnResults {
 
     const isNextPage = (index: number) =>
       index >= (this.nextPageIndex ?? Infinity);
-    // A loaded page waits hidden after its skeletons, which hold its place until it is ready
+    // A loaded page hydrates out of the layout while its skeletons hold its place
     const isPending = (index: number) =>
       isNextPage(index) && this.showNextPageSkeletons;
 
@@ -1096,7 +1098,7 @@ export class VviinnResults {
           "next-page-pending": isPending(i),
         }}
         style={{
-          order: (isPending(i) ? i + this.state.pageSize + 1 : i).toString(),
+          order: i.toString(),
         }}
         showFooterArrow={this.oneClickDiscoverySelectedIndex === i}
       >

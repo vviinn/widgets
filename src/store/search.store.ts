@@ -46,7 +46,7 @@ import type { ObservableMap } from "@stencil/store";
 
 type OnChangeHandler<T> = ObservableMap<T>["onChange"];
 import { applyResponseFilters } from "./helpers/applyResponseFilters";
-import { startSearch } from "./helpers/searchSequence";
+import { startSearch, startUpload } from "./helpers/searchSequence";
 import { applyResultsPage } from "./helpers/applyResultsPage";
 import { SearchSuccessEventData } from "../recommendation/events";
 import { campaignTypeNames } from "../campaign/Campaign";
@@ -456,20 +456,25 @@ export const makeUploadFileRequest =
   (store: SearchStoreName, token: string, options: SearchRequestOptions = {}) =>
   async (file: File) => {
     const state = useStore(store);
+    const isStaleUpload = startUpload(store);
+    const settleHiRes = () => {
+      if (!isStaleUpload()) state.hiResPending = false;
+    };
 
     if (store !== "shopTheLook") {
-      setSearchType(state, "image");
+      startLoading(state, 0, "image");
       Object.assign(state, {
         image: null,
         detectedObjects: [],
         textSearchQuery: null,
-        searchStatus: "loading",
         visualSearchStarted: true,
         hiResPending: true,
       });
     }
 
     const session = await uploadImageFile(store, token, options)(file)();
+    // A newer upload took over: its search ID is not this photo's
+    if (isStaleUpload()) return session;
 
     const shouldProcessHiRes =
       !!state.visualSearchId?.length &&
@@ -480,7 +485,7 @@ export const makeUploadFileRequest =
       )());
 
     if (!shouldProcessHiRes) {
-      state.hiResPending = false;
+      settleHiRes();
       return session;
     }
 
@@ -495,9 +500,7 @@ export const makeUploadFileRequest =
         console.error("Failed to upload hi-res image:", error);
         return T.of(session);
       }),
-    )().finally(() => {
-      state.hiResPending = false;
-    });
+    )().finally(settleHiRes);
 
     return session;
   };
@@ -533,6 +536,8 @@ const startLoading = (
     state.loadingMoreResults = true;
     return;
   }
+  // A next page still loading belongs to the results this search replaces
+  state.loadingMoreResults = false;
   setSearchType(state, searchType);
   state.searchStatus = "loading";
 };

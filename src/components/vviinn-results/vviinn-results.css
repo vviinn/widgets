@@ -115,7 +115,7 @@ products.hidden {
 }
 
 /* An empty row would add a second row gap above the Show more button or the next page skeletons */
-#one-click-discovery-append:empty:has(+ .show-more, + vviinn-product-card) {
+#one-click-discovery-append:empty:not(:last-child) {
   display: none;
 }
 
@@ -196,8 +196,9 @@ vviinn-recommendations-sidebar::part(sidebar-content) {
   }
 }
 
+/* Out of the layout, not just invisible: a card in the viewport would count as viewed */
 vviinn-product-card.next-page-pending {
-  visibility: hidden;
+  display: none;
 }
 
 /* A skeleton sized below its own bars cuts the last one short */
@@ -207,9 +208,7 @@ vviinn-product-card.next-page-skeleton {
 
 /* The text of a loaded page fades in over its skeleton bars; the image fades in on its own */
 @media (prefers-reduced-motion: no-preference) {
-  vviinn-product-card.next-page:not(.next-page-pending)::part(
-      content-container
-    ) {
+  vviinn-product-card.next-page::part(content-container) {
     animation: fade-in 200ms ease-out;
   }
 }
