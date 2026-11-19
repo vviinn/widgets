@@ -1171,6 +1171,9 @@ export class VviinnResults {
 
   render() {
     const resultsLength = this.getResults().length;
+    // An open discovery panel can sit past the last card, at the end of its row
+    const showMoreOrder =
+      Math.max(resultsLength, this.oneClickDiscoveryAppendIndex ?? 0) + 1;
     return (
       <Host
         id="results-block"
@@ -1220,7 +1223,7 @@ export class VviinnResults {
           )}
           {this.shouldShowMoreButton() && (
             <ShowMoreButton
-              order={resultsLength + 1}
+              order={showMoreOrder}
               onClick={this.loadMoreResults}
             />
           )}

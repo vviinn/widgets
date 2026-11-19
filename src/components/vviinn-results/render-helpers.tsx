@@ -42,6 +42,7 @@ export const NextPageSkeletons: FunctionalComponent<NextPageSkeletonsProps> = ({
       productTitle=""
       productId={`skeleton-${i}`}
       key={`skeleton-${i}`}
+      // Merchant card styles size the skeleton like the card it stands for
       part="product-card"
       style={{
         order: (firstOrder + i).toString(),
