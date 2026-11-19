@@ -35,10 +35,31 @@ export function addEventListenersWithSignal(
   });
 }
 
-export function disableTabbing(element: Element): void {
-  const focusableElements = element.querySelectorAll(
-    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+const FOCUSABLE_SELECTOR =
+  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
+/** Focuses the first element of a component's shadow root that takes focus, else the host itself. */
+export function focusFirstInShadow(host: HTMLElement): void {
+  const shadowRoot = host.shadowRoot;
+  const candidates = Array.from(
+    shadowRoot?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR) ?? [],
   );
+  const focused = candidates.some((candidate) => {
+    candidate.focus({ preventScroll: true });
+    return shadowRoot.activeElement === candidate;
+  });
+  if (focused) return;
+
+  // Focusable only for this focus, so the host never joins the tab order
+  host.tabIndex = -1;
+  host.addEventListener("blur", () => host.removeAttribute("tabindex"), {
+    once: true,
+  });
+  host.focus({ preventScroll: true });
+}
+
+export function disableTabbing(element: Element): void {
+  const focusableElements = element.querySelectorAll(FOCUSABLE_SELECTOR);
 
   focusableElements.forEach((el) => {
     const htmlEl = el as HTMLElement;

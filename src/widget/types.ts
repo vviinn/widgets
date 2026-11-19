@@ -17,3 +17,6 @@ export const oneClickDiscoveryModes = [
   "modal",
   "unset",
 ];
+
+/** How the shopper reaches the results after the first page. */
+export type LoadMoreMode = "none" | "button";

@@ -1,5 +1,5 @@
 // Top-level embeddable widgets only — the internal children they render inherit
-// both values from their parent.
+// these values from their parent.
 const TOKEN_WIDGETS = [
   "vviinn-cropper",
   "vviinn-results",
@@ -32,5 +32,11 @@ const inject = (tags, attribute, value) => {
   });
 };
 
+// The environment follows the token: a widget with its own token in the markup keeps its API.
+inject(
+  TOKEN_WIDGETS.map((tag) => `${tag}:not([token])`),
+  "api-path",
+  devConfig.apiPath,
+);
 inject(TOKEN_WIDGETS, "token", devConfig.token);
 inject(PRODUCT_ID_WIDGETS, "product-id", devConfig.productId);

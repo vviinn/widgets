@@ -1,6 +1,7 @@
 import {
   addIfDefined,
   addIfNotEmpty,
+  mostFrequent,
   parseStringToExcluded,
 } from "./collectionsUtils";
 
@@ -67,5 +68,16 @@ describe("parseStringToExcluded", () => {
     ],
   ])("should parse %s correctly", (_, input, expected) => {
     expect(parseStringToExcluded(input)).toEqual(expected);
+  });
+});
+
+describe("mostFrequent", () => {
+  test.each([
+    ["an empty list", [], undefined],
+    ["a single value", [378], 378],
+    ["a clear majority", [402, 378, 378, 402, 378], 378],
+    ["a tie", [402, 378, 378, 402], 378],
+  ])("should pick the value for %s", (_, values, expected) => {
+    expect(mostFrequent(values)).toBe(expected);
   });
 });

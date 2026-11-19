@@ -6,6 +6,7 @@ import {
   Element,
   Event,
   EventEmitter,
+  forceUpdate,
   Listen,
   State,
   Watch,
@@ -22,15 +23,19 @@ import {
 } from "vviinn-tracking-client-ts";
 import { version } from "../../../package.json";
 import {
+  fetchProductListingPage,
   makeProductListingPageRequest,
   makeVisualSearchRequest,
   makeTextSearchRequest,
+  PagedSearchOptions,
+  ProductListingPageOptions,
   setTextSearchQuery,
   SearchStore,
   SearchStoreName,
   resetResultEvents,
   resetStore,
   useSearchStore,
+  VisualSearchOptions,
 } from "../../store/search.store";
 import { trackEvent } from "../../store/store";
 import { isTrackingEnabled } from "../../store/tracking";
@@ -64,7 +69,6 @@ import {
   createAddToWishlistEvent,
 } from "../../tracking";
 import { getUiSessionId } from "../../tracking/session";
-import { RequestDynamicFilterItem } from "../../campaign/VPRCampaignService";
 import { initializeLocale } from "../../locale";
 import {
   productCardSlotNames,
@@ -80,6 +84,7 @@ import {
 import {
   productCardParts,
   productCardsGridPart,
+  showMoreButtonPart,
   listCardParts,
   contentCardParts,
 } from "../../cssParts";
@@ -87,19 +92,26 @@ import {
   findSlotElements,
   getSlotNames,
   addEventListenersWithSignal,
+  focusFirstInShadow,
 } from "../../dom";
 import {
+  LoadMoreMode,
   OneClickDiscoveryMode,
   oneClickDiscoveryModes,
 } from "../../widget/types";
 import {
+  NEXT_PAGE_SWAP_TIMEOUT,
   RESULTS_WIDGET_IMAGE_RESOLUTION_WIDTH,
   SCROLL_TO_DISCOVERY_DELAY,
 } from "../../widget/constants";
-import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
+import {
+  addIfNotEmpty,
+  mostFrequent,
+} from "../../utils/collections/collectionsUtils";
 import { RESULTS_CALCULATED_COLUMNS_CSS_VAR } from "../vviinn-carousel/constants";
 import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
 import { openProductLink } from "../../helpers/navigation/openProductLink";
+import { NextPageSkeletons, ShowMoreButton } from "./render-helpers";
 
 export type ReplaceSlotsContentInParent = (
   childrenElement?: HTMLElement,
@@ -166,7 +178,10 @@ export type ReplaceSlotsContentInParent = (
  * @part content-card-image-container - Content card's image container.
  * @part content-card-image-picture - Content card's image picture element.
  *
+ * @part show-more-button - Button that loads the next results. Rendered only if `load-more` is `button`.
+ *
  * @slot vviinn-results-vpr-icon - One-Click Discovery icon, hidden when `one-click-discovery-mode` is `unset`.
+ * @slot vviinn-show-more-button-text - Text of the button that loads the next results. Rendered only if `load-more` is `button`.
  * @slot vviinn-favorite-icon - Icon of Favorite button.
  * @slot vviinn-favorite-icon-pressed - Icon of pressed Favorite button.
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
@@ -251,6 +266,11 @@ export class VviinnResults {
   @Prop() resultsCount?: number;
   /** Wrap the Product Card's price values in the container. */
   @Prop() addPriceContainer?: boolean = false;
+  /**
+   * Load the next results: `button` shows a button below the results.
+   * @since 2.230.0
+   */
+  @Prop() loadMore: LoadMoreMode = "none";
 
   /** One-Click Discovery Mode */
   @Prop() oneClickDiscoveryMode?: OneClickDiscoveryMode = "append-grid";
@@ -288,6 +308,10 @@ export class VviinnResults {
 
   @State() slotsReplaced: boolean;
   @State() oneClickDiscoveryAppendIndex: number;
+
+  /** Skeletons stay from the start of a page load until its cards are ready to take their place. */
+  @State() showNextPageSkeletons: boolean = false;
+
   @State() oneClickDiscoverySelectedIndex: number;
   @State() innerResults: Recommendation[] = [];
 
@@ -380,6 +404,27 @@ export class VviinnResults {
 
   private eventAbortController?: AbortController;
 
+  /** Set when the Show more button had focus, so focus moves to the first new card. */
+  private focusNewCardAfterLoad = false;
+
+  /** Set by a Show more click until the page scrolls to the skeletons. */
+  private revealPending = false;
+
+  /** Index where the page loaded by Show more starts. */
+  private nextPageIndex?: number;
+
+  /** The most common card height on screen: a card stretches to its row, and the next page of the same search tends to fill its rows alike; the last row alone can be short and skew it. */
+  private nextPageSkeletonHeight?: number;
+
+  /** Set when the page has arrived and its cards still have to get ready behind the skeletons. */
+  private nextPageArrived = false;
+
+  /** Counts next page loads, so a swap that ends late leaves a newer load's skeletons alone. */
+  private nextPageLoad = 0;
+
+  /** Counts inner-state listing loads, so a late answer leaves newer filters' results alone. */
+  private innerListingLoad = 0;
+
   private getCampaignType = () =>
     this.state.searchType === "text" ? "TPS" : "VPS";
 
@@ -407,6 +452,10 @@ export class VviinnResults {
   }
 
   componentDidRender() {
+    this.swapInNextPage();
+    this.revealNextPage();
+    this.restoreFocusAfterLoad();
+
     this.replaceSlotsContentInButton
       ? this.replaceSlotsContentInButton(this.el)
       : this.showInWidget
@@ -423,12 +472,16 @@ export class VviinnResults {
   private skipStateChanges = (isTriggeredByVpsWidget: boolean) =>
     this.showInWidget !== isTriggeredByVpsWidget;
 
-  private async getTextSearchResults(requestId?: string) {
-    if (!this.state.textSearchQuery) return;
+  private async getTextSearchResults({
+    query: queryToUse = this.state.textSearchQuery,
+    requestId,
+    offset = 0,
+  }: Pick<PagedSearchOptions, "requestId" | "offset"> & {
+    query?: string;
+  } = {}) {
+    if (!queryToUse) return;
 
-    const queryToUse = this.state.textSearchQuery;
-
-    if (!requestId?.length) {
+    if (offset === 0 && !requestId?.length) {
       resetStore(this.storeName, "appStateOnly");
       this.updateCampaignIds();
 
@@ -441,17 +494,15 @@ export class VviinnResults {
     }
 
     return pipe(
-      await makeTextSearchRequest(
-        this.storeName,
-        queryToUse,
-        this.token,
-        this.apiPath,
+      await makeTextSearchRequest(this.storeName, queryToUse, this.token, {
+        apiPath: this.apiPath,
         requestId,
-        this.resultsCount,
-      ),
+        resultsCount: this.resultsCount,
+        offset,
+      }),
       E.fold(
         () => {
-          this.vviinnNoResult.emit(this.getBasicEventData("TPS"));
+          this.emitNoResult("TPS", offset);
           return null;
         },
         (response) => response,
@@ -459,43 +510,176 @@ export class VviinnResults {
     );
   }
 
-  private async getResultsByCategory(
-    dynamicFilters?: RequestDynamicFilterItem[],
-  ) {
-    if (!this.filterColumn || !this.filterValue || this.showInWidget) return;
+  /** An empty or failed next page is not a search without results. */
+  private emitNoResult(customTrigger: "TPS" | "VPS", offset: number) {
+    if (offset === 0)
+      this.vviinnNoResult.emit(this.getBasicEventData(customTrigger));
+  }
+
+  private async getResultsByCategory({
+    dynamicFilters,
+    offset = 0,
+  }: Pick<ProductListingPageOptions, "dynamicFilters" | "offset"> = {}) {
+    if (!this.isProductListingPage()) return;
+
+    const options: ProductListingPageOptions = {
+      apiPath: this.apiPath,
+      requestId: offset > 0 ? this.state.productListingPageId : undefined,
+      resultsCount: this.resultsCount,
+      dynamicFilters,
+      offset,
+    };
+    const load = ++this.innerListingLoad;
+    // An inner-state listing keeps its results to itself, out of the shared store
+    const request = this.useInnerState
+      ? fetchProductListingPage(
+          this.filterColumn,
+          this.filterValue,
+          this.token,
+          options,
+        )()
+      : makeProductListingPageRequest(
+          this.filterColumn,
+          this.filterValue,
+          this.token,
+          options,
+        );
 
     pipe(
-      await makeProductListingPageRequest(
-        this.filterColumn,
-        this.filterValue,
-        this.token,
-        this.apiPath,
-        this.resultsCount,
-        dynamicFilters,
-        this.useInnerState,
-      ),
+      await request,
       E.fold(
-        () => {
-          this.vviinnNoResult.emit(this.getBasicEventData("TPS"));
-        },
+        () => this.emitNoResult("TPS", offset),
         (response: TextSearchResponse) => {
-          if (this.useInnerState) this.innerResults = response.data.products;
+          if (this.useInnerState && load === this.innerListingLoad)
+            this.innerResults = response.data.products;
         },
       ),
     );
   }
 
-  private async getVisualSearchResults(searchId?: string | null) {
+  private isProductListingPage() {
+    return !!this.filterColumn && !!this.filterValue && !this.showInWidget;
+  }
+
+  private getProductCards() {
+    return this.el.shadowRoot.querySelectorAll<HTMLVviinnProductCardElement>(
+      "#vviinn-results-products > vviinn-product-card:not(.next-page-skeleton)",
+    );
+  }
+
+  /** New cards take a few frames to hydrate; their skeletons hold the place until then. */
+  private swapInNextPage() {
+    if (!this.nextPageArrived) return;
+    this.nextPageArrived = false;
+    const load = this.nextPageLoad;
+
+    const newCards = Array.from(this.getProductCards()).slice(
+      this.nextPageIndex,
+    );
+    const cardsReady = Promise.all(
+      newCards.map((card) => card.componentOnReady()),
+    );
+    let timer: ReturnType<typeof setTimeout>;
+    const timeout = new Promise((resolve) => {
+      timer = setTimeout(resolve, NEXT_PAGE_SWAP_TIMEOUT);
+    });
+
+    Promise.race([cardsReady, timeout]).then(() => {
+      clearTimeout(timer);
+      if (load === this.nextPageLoad) this.showNextPageSkeletons = false;
+    });
+  }
+
+  /** Scrolls just enough to show the first row of the page being loaded. */
+  private revealNextPage() {
+    if (!this.revealPending || !this.showNextPageSkeletons) return;
+    this.revealPending = false;
+
+    const skeleton =
+      this.el.shadowRoot.querySelector<HTMLVviinnProductCardElement>(
+        ".next-page-skeleton",
+      );
+    skeleton?.componentOnReady().then(() => {
+      const target = skeleton.isConnected
+        ? skeleton
+        : this.getProductCards()[this.nextPageIndex];
+      const reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      target?.scrollIntoView({
+        block: "nearest",
+        behavior: reduceMotion ? "auto" : "smooth",
+      });
+    });
+  }
+
+  /** The Show more button disappears while the page loads, so its focus moves to the first new card; with none, back to the button or, at the end of the list, to the last card. */
+  private restoreFocusAfterLoad() {
+    if (!this.focusNewCardAfterLoad || this.showNextPageSkeletons) return;
+    this.focusNewCardAfterLoad = false;
+    // Focus left with the button; anywhere else, the shopper put it there
+    if (document.activeElement && document.activeElement !== document.body)
+      return;
+
+    const cards = this.getProductCards();
+    const newCard = cards[this.nextPageIndex];
+    const button =
+      this.el.shadowRoot.querySelector<HTMLElement>(".show-more button");
+
+    if (!newCard && button) {
+      button.focus();
+      return;
+    }
+
+    const card = newCard ?? cards[cards.length - 1];
+    card?.componentOnReady().then(() => focusFirstInShadow(card));
+  }
+
+  private loadMoreResults = () => {
+    if (this.state.loadingMoreResults) return;
+    this.revealPending = true;
+    this.focusNewCardAfterLoad =
+      !!this.el.shadowRoot.activeElement?.closest(".show-more");
+
+    this.loadCurrentSearchPage(this.state.resultsOffset);
+  };
+
+  /** Loads a page of the search on screen — the next one for Show more, the first one for new filters; the search need not be the one this instance's props set up. */
+  private loadCurrentSearchPage(offset: number) {
+    if (this.isTextSearch()) {
+      this.getTextSearchResults({
+        // The field may hold a query never sent
+        query: this.state.searchedTextQuery,
+        requestId: this.state.textSearchId,
+        offset,
+      });
+    } else if (
+      this.state.searchType === "image" ||
+      !this.isProductListingPage()
+    ) {
+      this.getVisualSearchResults({ offset });
+    } else {
+      this.getResultsByCategory({
+        dynamicFilters: this.state.requestFilters,
+        offset,
+      });
+    }
+  }
+
+  private async getVisualSearchResults({
+    searchId,
+    offset = 0,
+  }: Pick<VisualSearchOptions, "offset"> & { searchId?: string } = {}) {
     return pipe(
       await makeVisualSearchRequest(
         this.storeName,
         searchId ?? this.state.visualSearchId,
         this.token,
-        { apiPath: this.apiPath },
+        { apiPath: this.apiPath, offset },
       ),
       E.fold(
         () => {
-          this.vviinnNoResult.emit(this.getBasicEventData("VPS"));
+          this.emitNoResult("VPS", offset);
           return null;
         },
         (response) => response,
@@ -527,17 +711,12 @@ export class VviinnResults {
     const { filters, isTriggeredByVpsWidget } = detail;
     if (this.skipStateChanges(isTriggeredByVpsWidget)) return;
 
-    if (this.filterColumn && this.filterValue) {
-      this.getResultsByCategory(filters);
+    if (this.useInnerState && this.isProductListingPage()) {
+      this.getResultsByCategory({ dynamicFilters: filters });
       return;
     }
     this.state.requestFilters = filters;
-
-    if (this.isTextSearch()) {
-      this.getTextSearchResults(this.state.textSearchId);
-    } else {
-      this.getVisualSearchResults();
-    }
+    this.loadCurrentSearchPage(0);
   };
 
   private filterTriggeredHandler = ({
@@ -594,12 +773,39 @@ export class VviinnResults {
     const disposeSearchStatusListener = onChange(
       "searchStatus",
       (searchStatus) => {
-        if (searchStatus === "loading") this.resetDiscoveryAppendIndexes();
+        if (searchStatus !== "loading") return;
+        this.resetDiscoveryAppendIndexes();
+        this.focusNewCardAfterLoad = false;
+        this.revealPending = false;
+        this.nextPageIndex = undefined;
+        this.nextPageArrived = false;
+        this.showNextPageSkeletons = false;
+      },
+    );
+
+    const disposeLoadingMoreListener = onChange(
+      "loadingMoreResults",
+      (loadingMoreResults) => {
+        if (this.useInnerState) return;
+        if (loadingMoreResults) {
+          this.nextPageSkeletonHeight = mostFrequent(
+            Array.from(this.getProductCards(), (card) =>
+              Math.round(card.getBoundingClientRect().height),
+            ),
+          );
+          this.nextPageIndex = this.getResults().length;
+          this.nextPageLoad++;
+          this.showNextPageSkeletons = true;
+          return;
+        }
+        this.nextPageArrived = true;
+        forceUpdate(this);
       },
     );
 
     this.disposeStoreListener = () => {
       disposeSearchStatusListener();
+      disposeLoadingMoreListener();
     };
 
     if (this.el.id) this.widgetElementId = this.el.id;
@@ -636,7 +842,8 @@ export class VviinnResults {
     const effectiveSearchId = this.searchId || urlParams.searchId;
     const effectiveTextSearchQuery = this.textSearchQuery || urlParams.query;
 
-    if (effectiveSearchId) this.getVisualSearchResults(effectiveSearchId);
+    if (effectiveSearchId)
+      this.getVisualSearchResults({ searchId: effectiveSearchId });
 
     this.getResultsByCategory();
 
@@ -663,7 +870,7 @@ export class VviinnResults {
   @Watch("searchId")
   watchSearchId(newId: string) {
     if (this.showInWidget) return;
-    if (newId) this.getVisualSearchResults(newId);
+    if (newId) this.getVisualSearchResults({ searchId: newId });
   }
 
   @Listen("vviinnProductLoad")
@@ -852,6 +1059,12 @@ export class VviinnResults {
       setTimeout(scrollToDiscovery, SCROLL_TO_DISCOVERY_DELAY);
     };
 
+    const isNextPage = (index: number) =>
+      index >= (this.nextPageIndex ?? Infinity);
+    // A loaded page hydrates out of the layout while its skeletons hold its place
+    const isPending = (index: number) =>
+      isNextPage(index) && this.showNextPageSkeletons;
+
     return this.getResults().map((p, i) => (
       <vviinn-product-card
         pricePrefix={this.pricePrefix}
@@ -888,7 +1101,13 @@ export class VviinnResults {
         favoriteShow={this.favoriteShow}
         addPriceContainer={this.addPriceContainer}
         isResultsWidget={true}
-        style={{ order: i.toString() }}
+        class={{
+          "next-page": isNextPage(i),
+          "next-page-pending": isPending(i),
+        }}
+        style={{
+          order: i.toString(),
+        }}
         showFooterArrow={this.oneClickDiscoverySelectedIndex === i}
       >
         {shouldShowOneClickDiscoveryButton && (
@@ -938,8 +1157,23 @@ export class VviinnResults {
     ));
   }
 
+  private shouldShowMoreButton() {
+    return (
+      this.loadMore === "button" &&
+      !this.useInnerState &&
+      !this.showAspectRatioError &&
+      this.state.searchStatus === "success" &&
+      this.state.hasMoreResults &&
+      !this.state.hiResPending &&
+      !this.showNextPageSkeletons
+    );
+  }
+
   render() {
     const resultsLength = this.getResults().length;
+    // An open discovery panel can sit past the last card, at the end of its row
+    const showMoreOrder =
+      Math.max(resultsLength, this.oneClickDiscoveryAppendIndex ?? 0) + 1;
     return (
       <Host
         id="results-block"
@@ -947,7 +1181,7 @@ export class VviinnResults {
           "show-in-widget": this.showInWidget,
           "matching-discovery": this.oneClickDiscoveryMode === "append-slider",
         }}
-        exportparts={`${productCardParts}, ${listCardParts}, ${contentCardParts}, ${productCardsGridPart}`}
+        exportparts={`${productCardParts}, ${listCardParts}, ${contentCardParts}, ${productCardsGridPart}, ${showMoreButtonPart}`}
       >
         {renderExternalCSS(this.cssUrl)}
 
@@ -969,6 +1203,7 @@ export class VviinnResults {
           }}
           part={productCardsGridPart}
           id="vviinn-results-products"
+          aria-busy={this.showNextPageSkeletons ? "true" : undefined}
         >
           {resultsLength > 0 && this.renderResults()}
           <div
@@ -979,6 +1214,19 @@ export class VviinnResults {
               ).toString(),
             }}
           ></div>
+          {this.showNextPageSkeletons && (
+            <NextPageSkeletons
+              count={this.state.pageSize}
+              firstOrder={this.nextPageIndex}
+              height={this.nextPageSkeletonHeight}
+            />
+          )}
+          {this.shouldShowMoreButton() && (
+            <ShowMoreButton
+              order={showMoreOrder}
+              onClick={this.loadMoreResults}
+            />
+          )}
         </div>
       </Host>
     );
