@@ -413,7 +413,7 @@ export class VviinnResults {
   /** Index where the page loaded by Show more starts. */
   private nextPageIndex?: number;
 
-  /** The most common card height on screen: a card stretches to its row, and the next page of the same search tends to fill its rows alike. */
+  /** The most common card height on screen: a card stretches to its row, and the next page of the same search tends to fill its rows alike; the last row alone can be short and skew it. */
   private nextPageSkeletonHeight?: number;
 
   /** Set when the page has arrived and its cards still have to get ready behind the skeletons. */

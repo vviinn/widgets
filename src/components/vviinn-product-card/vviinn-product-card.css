@@ -65,7 +65,8 @@
   transition: opacity var(--product-card-transition-duration, 0.3s) ease-in-out;
 }
 
-/* Stencil hides unhydrated components only outside shadow roots; until its image hydrates the card would show text alone */
+/* Stencil hides unhydrated components only outside shadow roots; until its image hydrates the card would show text alone.
+   A card that never hydrates means the bundle failed to load, and then nothing shows anyway */
 :host(:not(.hydrated)) {
   visibility: hidden;
 }

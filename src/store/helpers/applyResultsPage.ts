@@ -10,10 +10,9 @@ export type ResultsPageState = {
 };
 
 /**
- * The page at offset 0 replaces the list, a later page extends it. The search fills every page
- * but the last, so the largest page seen is the page size and a shorter or empty one is the end.
- * A later page with nothing new ends it too: an API without paging repeats the first page.
- *
+ * The page at offset 0 replaces the list, a later page extends it. The response carries no page
+ * size, so the largest page seen is taken as one: a shorter, empty or all-duplicate page ends the
+ * list (an API without paging repeats the first page), and a short first page shows Show more once.
  * `resultsOffset` counts what the server sent, duplicates included: the next page starts there.
  */
 export const applyResultsPage = (
