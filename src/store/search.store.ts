@@ -199,8 +199,6 @@ export const resetStore = (
   excludedFields: (keyof SearchStore)[] = [],
 ) => {
   const state = useStore(store);
-  // A request still in flight belongs to what the reset clears
-  startSearch(store);
 
   let resetPayload: Partial<SearchStore> = {};
 

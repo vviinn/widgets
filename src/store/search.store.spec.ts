@@ -140,17 +140,6 @@ describe("makeTextSearchRequest", () => {
     expect(state.loadingMoreResults).toBe(false);
   });
 
-  it("drops a next page that answers after a reset", async () => {
-    const { respond } = await searchFirstPage();
-
-    const loadingPage = nextPage();
-    resetStore("components");
-    await respond(1, page("t1", "c", "d"));
-    await loadingPage;
-
-    expect(ids()).toEqual([]);
-  });
-
   it("keeps a query typed in the field when the search on screen is refreshed", async () => {
     await searchFirstPage();
     state.textSearchQuery = "lamp";

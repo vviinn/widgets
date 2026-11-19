@@ -63,7 +63,7 @@ Global CSS variables in `src/variables.css`.
 - Always type props, state, and events explicitly
 - Avoid `any`, use `unknown` or specific types
 - **Prefer arrow functions** for utility/helper files, **regular functions** for class methods
-- **Object Comparison**: NEVER use `===` for comparing objects. Compare individual properties or use deep comparison
+- **Object Comparison**: NEVER use `===` for comparing objects. Compare individual properties or use deep comparison. The identity of a DOM node or another reference is the exception: `===` is the right check
 
 **CSS & Styling**:
 

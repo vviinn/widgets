@@ -310,7 +310,7 @@ export class VviinnResults {
   @State() oneClickDiscoveryAppendIndex: number;
 
   /** Skeletons stay from the start of a page load until its cards are ready to take their place. */
-  @State() showNextPageSkeletons = false;
+  @State() showNextPageSkeletons: boolean = false;
 
   @State() oneClickDiscoverySelectedIndex: number;
   @State() innerResults: Recommendation[] = [];
@@ -1214,7 +1214,7 @@ export class VviinnResults {
           {this.showNextPageSkeletons && (
             <NextPageSkeletons
               count={this.state.pageSize}
-              firstOrder={this.nextPageIndex + 1}
+              firstOrder={this.nextPageIndex}
               height={this.nextPageSkeletonHeight}
             />
           )}
