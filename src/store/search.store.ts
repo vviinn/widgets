@@ -199,6 +199,8 @@ export const resetStore = (
   excludedFields: (keyof SearchStore)[] = [],
 ) => {
   const state = useStore(store);
+  // A request still in flight belongs to what the reset clears
+  startSearch(store);
 
   let resetPayload: Partial<SearchStore> = {};
 
@@ -536,8 +538,9 @@ const startLoading = (
     state.loadingMoreResults = true;
     return;
   }
-  // A next page still loading belongs to the results this search replaces
+  // A next page or hi-res search still loading belongs to the results this search replaces
   state.loadingMoreResults = false;
+  state.hiResPending = false;
   setSearchType(state, searchType);
   state.searchStatus = "loading";
 };

@@ -140,6 +140,17 @@ describe("makeTextSearchRequest", () => {
     expect(state.loadingMoreResults).toBe(false);
   });
 
+  it("drops a next page that answers after a reset", async () => {
+    const { respond } = await searchFirstPage();
+
+    const loadingPage = nextPage();
+    resetStore("components");
+    await respond(1, page("t1", "c", "d"));
+    await loadingPage;
+
+    expect(ids()).toEqual([]);
+  });
+
   it("keeps a query typed in the field when the search on screen is refreshed", async () => {
     await searchFirstPage();
     state.textSearchQuery = "lamp";
@@ -224,6 +235,18 @@ describe("hiResPending", () => {
     await uploading;
     await respond(1, failure);
     await flush();
+
+    expect(state.hiResPending).toBe(false);
+  });
+
+  it("clears when a search of another kind replaces the upload's results", async () => {
+    const { respond } = setup(true);
+    mockClient(textSearchSessionClient);
+
+    const uploading = upload();
+    await respond(0, page("v1", "a", "b"));
+    await uploading;
+    makeTextSearchRequest("components", "sofa", "token");
 
     expect(state.hiResPending).toBe(false);
   });

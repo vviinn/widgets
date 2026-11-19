@@ -422,6 +422,9 @@ export class VviinnResults {
   /** Counts next page loads, so a swap that ends late leaves a newer load's skeletons alone. */
   private nextPageLoad = 0;
 
+  /** Counts inner-state listing loads, so a late answer leaves newer filters' results alone. */
+  private innerListingLoad = 0;
+
   private getCampaignType = () =>
     this.state.searchType === "text" ? "TPS" : "VPS";
 
@@ -526,6 +529,7 @@ export class VviinnResults {
       dynamicFilters,
       offset,
     };
+    const load = ++this.innerListingLoad;
     // An inner-state listing keeps its results to itself, out of the shared store
     const request = this.useInnerState
       ? fetchProductListingPage(
@@ -546,7 +550,8 @@ export class VviinnResults {
       E.fold(
         () => this.emitNoResult("TPS", offset),
         (response: TextSearchResponse) => {
-          if (this.useInnerState) this.innerResults = response.data.products;
+          if (this.useInnerState && load === this.innerListingLoad)
+            this.innerResults = response.data.products;
         },
       ),
     );
@@ -612,6 +617,9 @@ export class VviinnResults {
   private restoreFocusAfterLoad() {
     if (!this.focusNewCardAfterLoad || this.showNextPageSkeletons) return;
     this.focusNewCardAfterLoad = false;
+    // Focus left with the button; anywhere else, the shopper put it there
+    if (document.activeElement && document.activeElement !== document.body)
+      return;
 
     const cards = this.getProductCards();
     const newCard = cards[this.nextPageIndex];
