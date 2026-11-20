@@ -156,3 +156,27 @@ it("sends the current rank once the card moves to another position", async () =>
 
   expect(ranks).toEqual([0]);
 });
+
+it("tracks a click on the title of a product swapped into a set", async () => {
+  const page = await renderCard(
+    `<vviinn-product-card is-set-mode product-id="a" product-title="A" deeplink="https://shop.test/a"></vviinn-product-card>`,
+  );
+  const clicks: string[] = [];
+  page.root.addEventListener("vviinnProductClick", (e: CustomEvent) =>
+    clicks.push(e.detail.productId),
+  );
+
+  page.root.dispatchEvent(
+    new CustomEvent("vviinnCrossSellingClick", {
+      detail: { animationInterval: 10 },
+    }),
+  );
+  page.root.productId = "b";
+  page.root.deeplink = "https://shop.test/b";
+  await page.waitForChanges();
+  await new Promise((resolve) => setTimeout(resolve, 20));
+  await page.waitForChanges();
+  page.root.shadowRoot.querySelector<HTMLElement>("a.deeplink").click();
+
+  expect(clicks).toEqual(["b"]);
+});

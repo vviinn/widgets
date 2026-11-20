@@ -358,9 +358,9 @@ export class VviinnProductCard {
   }
 
   componentDidLoad() {
+    this.addLinksEventListeners();
     if (this.showSkeleton()) return;
     this.reportProductLoad();
-    this.addLinksEventListeners();
     this.initializeVisibilityTracking();
   }
 
@@ -523,29 +523,37 @@ export class VviinnProductCard {
     );
   }
 
+  // Listening on the shadow root covers links the skeleton re-creates.
   private addLinksEventListeners() {
-    if (this.showSkeleton()) return;
-
     this.linkEventAbortController = new AbortController();
-    const { signal } = this.linkEventAbortController;
-    const links = this.el.shadowRoot.querySelectorAll("a");
-
-    links.forEach((link) => {
-      const clickHandler = this.productClickHandler.bind(this);
-      const auxClickHandler = () => {
-        this.vviinnAuxClick.emit({
-          ...this.productData,
-        });
-      };
-      addEventListenersWithSignal(
-        link,
+    addEventListenersWithSignal(
+      this.el.shadowRoot,
+      [
         [
-          ["click", clickHandler],
-          ["auxclick", auxClickHandler],
+          "click",
+          (event: MouseEvent) =>
+            this.isOwnLinkClick(event) && this.productClickHandler(event),
         ],
-        signal,
+        [
+          "auxclick",
+          (event: MouseEvent) =>
+            this.isOwnLinkClick(event) &&
+            this.vviinnAuxClick.emit({ ...this.productData }),
+        ],
+      ],
+      this.linkEventAbortController.signal,
+    );
+  }
+
+  // The path also passes slotted content inside a card link; a merchant's own slotted link stays theirs.
+  private isOwnLinkClick(event: Event) {
+    return event
+      .composedPath()
+      .some(
+        (node) =>
+          (node as Element).tagName === "A" &&
+          (node as Element).getRootNode() === this.el.shadowRoot,
       );
-    });
   }
 
   disconnectedCallback() {
