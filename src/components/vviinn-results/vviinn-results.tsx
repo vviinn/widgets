@@ -386,6 +386,7 @@ export class VviinnResults {
   private isTextSearch = () => this.state.searchType === "text";
 
   // Cards of an appended one-click discovery bubble up here too; their vviinn-vpr-widget tracks them.
+  // Their events keep bubbling, since merchants may listen for them on the document.
   private isOwnCard = ({ campaignTypeId }: ProductCardEventData) =>
     campaignTypeId === "VPS" || campaignTypeId === "TPS";
 

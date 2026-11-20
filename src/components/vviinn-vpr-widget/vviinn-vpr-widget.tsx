@@ -460,6 +460,7 @@ export class VviinnVprWidget implements ComponentInterface {
     const product = this.findProductById(productId);
     if (!product || !product.deeplink) return;
 
+    // The tracking request isn't sent with keepalive, so it has to finish before the page navigates away.
     await this.trackProductEvent(detail, "click").finally(() => {
       openProductLink(
         product.deeplink,

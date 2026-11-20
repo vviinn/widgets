@@ -605,6 +605,7 @@ export class VviinnCarousel {
     const recommendations = this.isSetMode
       ? this.crossSellingRecommendations
       : this.recommendations;
+    // Rank is where the product is shown, so a product swapped into a set takes its slot as the rank.
     return recommendations.map((r, i) => this.renderRecommendation(r, i));
   }
 
