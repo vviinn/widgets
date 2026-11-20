@@ -3,7 +3,17 @@
 jest.mock("swiper/modules", () => ({ Pagination: {} }));
 jest.mock("swiper/element", () => ({ register: jest.fn() }));
 
-import { newSpecPage } from "@stencil/core/testing";
+const observers = new Set<(isIntersecting: boolean) => void>();
+const scrollIntoView = () => observers.forEach((notify) => notify(true));
+jest.mock("../../dom/intersectionObserver", () => ({
+  ...jest.requireActual("../../dom/intersectionObserver"),
+  setupIntersectionObserver: (_: Element, { onIntersectionChange }) => {
+    observers.add(onIntersectionChange);
+    return { disconnect: () => observers.delete(onIntersectionChange) };
+  },
+}));
+
+import { newSpecPage, SpecPage } from "@stencil/core/testing";
 import { VviinnProductCard } from "./vviinn-product-card";
 
 const renderCard = (html: string) =>
@@ -34,4 +44,83 @@ it("drops the attributes when the brand and labels are cleared", async () => {
 
   expect(page.root.hasAttribute("data-brand")).toBe(false);
   expect(page.root.hasAttribute("data-custom-label-0")).toBe(false);
+});
+
+describe("a card reused for another product", () => {
+  beforeEach(() => observers.clear());
+
+  const renderTrackedCard = async (
+    markup = `<vviinn-product-card product-id="a" product-title="A"></vviinn-product-card>`,
+  ) => {
+    const page = await renderCard(markup);
+    const loads: string[] = [];
+    const views: string[] = [];
+    page.root.addEventListener("vviinnProductLoad", (e: CustomEvent) =>
+      loads.push(`${e.detail.productId}:${e.detail.productName}`),
+    );
+    page.root.addEventListener("vviinnProductView", (e: CustomEvent) =>
+      views.push(e.detail.productId),
+    );
+    return { page, loads, views };
+  };
+
+  // vviinn-image isn't registered here, so its image load is played by hand.
+  const loadImage = (page: SpecPage) =>
+    page.root.shadowRoot
+      .querySelector("vviinn-image")
+      .imageRef(page.doc.createElement("img"));
+
+  it("reports the load of the new product with its new data", async () => {
+    const { page, loads } = await renderTrackedCard();
+
+    page.root.productId = "b";
+    page.root.productTitle = "B";
+    await page.waitForChanges();
+
+    expect(loads).toEqual(["b:B"]);
+  });
+
+  it("reports nothing when only other props change", async () => {
+    const { page, loads } = await renderTrackedCard();
+
+    page.root.productTitle = "A2";
+    await page.waitForChanges();
+
+    expect(loads).toEqual([]);
+  });
+
+  it("watches the new product's visibility", async () => {
+    const { page, views } = await renderTrackedCard();
+    loadImage(page);
+    scrollIntoView();
+
+    page.root.productId = "b";
+    await page.waitForChanges();
+    scrollIntoView();
+
+    expect(views).toEqual(["a", "b"]);
+  });
+
+  it("watches a product swapped into a set once the transition ends", async () => {
+    const { page, views } = await renderTrackedCard(
+      `<vviinn-product-card is-set-mode product-id="a"></vviinn-product-card>`,
+    );
+    loadImage(page);
+    scrollIntoView();
+
+    page.root.dispatchEvent(
+      new CustomEvent("vviinnCrossSellingClick", {
+        detail: { animationInterval: 10 },
+      }),
+    );
+    page.root.productId = "b";
+    await page.waitForChanges();
+    scrollIntoView();
+    expect(views).toEqual(["a"]);
+
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    await page.waitForChanges();
+    scrollIntoView();
+    expect(views).toEqual(["a", "b"]);
+  });
 });

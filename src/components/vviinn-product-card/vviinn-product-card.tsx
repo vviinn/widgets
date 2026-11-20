@@ -299,6 +299,7 @@ export class VviinnProductCard {
   vviinnUpdatingAllCardsFinished: EventEmitter;
 
   private productData: ProductCardEventData | null = null;
+  private reportedProductId?: string;
   private imageElement?: HTMLImageElement;
   private visibilityTrackedElement?: HTMLImageElement | null;
   private intersectionObserver: IntersectionObserver;
@@ -354,9 +355,25 @@ export class VviinnProductCard {
 
   componentDidLoad() {
     if (this.showSkeleton()) return;
-    this.vviinnProductLoad.emit(this.productData);
+    this.reportProductLoad();
     this.addLinksEventListeners();
     this.initializeVisibilityTracking();
+  }
+
+  componentDidUpdate() {
+    // Props settle only after the render, so a card the host reused for another product reports it here.
+    if (this.reportedProductId && this.reportedProductId !== this.productId) {
+      this.productData = this.getProductData();
+      this.reportProductLoad();
+      this.resetVisibilityTracking();
+    }
+    // A set-mode swap shows a skeleton first, so the view is armed once the transition ends.
+    this.initializeVisibilityTracking();
+  }
+
+  private reportProductLoad() {
+    this.reportedProductId = this.productId;
+    this.vviinnProductLoad.emit(this.productData);
   }
 
   private initializeVisibilityTracking() {
@@ -387,6 +404,12 @@ export class VviinnProductCard {
     this.intersectionObserver?.disconnect();
     this.intersectionObserver = null;
     this.visibilityTrackedElement = null;
+  }
+
+  // Keeps the image ref from arming a second observer when the new product's image loads.
+  private resetVisibilityTracking() {
+    this.cleanupVisibilityTracking();
+    this.visibilityTrackedElement = this.imageElement;
   }
 
   @Listen("vviinnCrossSellingClick")
