@@ -385,6 +385,10 @@ export class VviinnResults {
 
   private isTextSearch = () => this.state.searchType === "text";
 
+  // Cards of an appended one-click discovery bubble up here too; their vviinn-vpr-widget tracks them.
+  private isOwnCard = ({ campaignTypeId }: ProductCardEventData) =>
+    campaignTypeId === "VPS" || campaignTypeId === "TPS";
+
   private createTrackingEventBody(detail: ProductCardEventData) {
     const { productRank, productId, campaignTypeId, clickEvent, ...rest } =
       detail;
@@ -668,12 +672,15 @@ export class VviinnResults {
 
   @Listen("vviinnProductLoad")
   trackProductLoad({ detail }: ProductCardEvent) {
+    if (!this.isOwnCard(detail)) return;
     const productLoadEvent = this.getProductTrackEvent(detail, "load");
     trackEvent(productLoadEvent, this.token, this.apiPath);
   }
 
   @Listen("vviinnProductView")
   trackProductView({ detail }: ProductCardEvent) {
+    if (!this.isOwnCard(detail)) return;
+
     if (!this.state.resultViewed) {
       this.vviinnResultView.emit(this.getBasicEventData());
       this.trackResultEvent("view");
@@ -686,6 +693,8 @@ export class VviinnResults {
 
   @Listen("vviinnProductClick")
   async trackProductClick({ detail }: ProductCardEvent) {
+    if (!this.isOwnCard(detail)) return;
+
     const { productId, clickEvent } = detail;
     const productClickEvent = this.getProductTrackEvent(detail, "click");
 
@@ -706,6 +715,8 @@ export class VviinnResults {
 
   @Listen("vviinnAuxClick")
   async trackAuxClick({ detail }: ProductCardEvent) {
+    if (!this.isOwnCard(detail)) return;
+
     const { productId } = detail;
     const productClickEvent = this.getProductTrackEvent(detail, "click");
 
@@ -717,6 +728,8 @@ export class VviinnResults {
 
   @Listen("vviinnAddToBasket")
   trackAddToBasket({ detail }: ProductCardEvent) {
+    if (!this.isOwnCard(detail)) return;
+
     delete detail.discount;
 
     const eventBody = this.createTrackingEventBody(detail);
@@ -729,6 +742,8 @@ export class VviinnResults {
 
   @Listen("vviinnAddToFavorite")
   trackAddToFavorite({ detail }: ProductCardEvent) {
+    if (!this.isOwnCard(detail)) return;
+
     const eventBody = this.createTrackingEventBody(detail);
     const addToWishlistEvent: ProductEvent = createAddToWishlistEvent(
       this.getCampaignType(),

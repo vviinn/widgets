@@ -313,21 +313,12 @@ export class VviinnVprWidget implements ComponentInterface {
     this.setRecommendationsLoading?.(loading);
   };
 
-  private trackIfNotAppended(
-    trackingFn: () => void | Promise<void>,
-  ): void | Promise<void> {
-    if (this.isAppended) return;
-    return trackingFn();
-  }
-
-  private trackProductEventIfNotAppended(
+  private trackProductEvent(
     detail: ProductCardEventData,
     eventType: ProductEventType | "basket" | "wishlist",
-  ): void {
-    this.trackIfNotAppended(() => {
-      const productEvent = this.getProductTrackEvent(detail, eventType);
-      productEvent && trackEvent(productEvent, this.token, this.apiPath);
-    });
+  ): Promise<void> {
+    const productEvent = this.getProductTrackEvent(detail, eventType);
+    return trackEvent(productEvent, this.token, this.apiPath);
   }
 
   private getTrackingCampaignType(): "VPR" | "VPC" {
@@ -364,8 +355,14 @@ export class VviinnVprWidget implements ComponentInterface {
   private productCardEventDataToEventBody = (
     eventData: ProductCardEventData,
   ) => {
-    const { productRank, productId, campaignTypeId, discount, ...rest } =
-      eventData;
+    const {
+      productRank,
+      productId,
+      campaignTypeId,
+      discount,
+      clickEvent,
+      ...rest
+    } = eventData;
 
     return {
       session_id: this.uiSessionId,
@@ -442,7 +439,7 @@ export class VviinnVprWidget implements ComponentInterface {
   @Listen("vviinnProductLoad")
   trackProductLoad({ detail }: ProductCardEvent) {
     this.productImageLoadedSubject.next(detail.productId);
-    this.trackProductEventIfNotAppended(detail, "load");
+    this.trackProductEvent(detail, "load");
   }
 
   @Listen("vviinnProductView")
@@ -452,7 +449,7 @@ export class VviinnVprWidget implements ComponentInterface {
       this.vviinnResultView.emit(this.getBasicEventData());
       this.trackResultEvent("view");
     }
-    this.trackProductEventIfNotAppended(detail, "view");
+    this.trackProductEvent(detail, "view");
   }
 
   @Listen("vviinnProductClick")
@@ -462,29 +459,14 @@ export class VviinnVprWidget implements ComponentInterface {
     const product = this.findProductById(productId);
     if (!product || !product.deeplink) return;
 
-    await this.trackIfNotAppended(async () => {
-      const productClickEvent = this.getProductTrackEvent(detail, "click");
-
-      await trackEvent(productClickEvent, this.token, this.apiPath).finally(
-        () => {
-          openProductLink(
-            product.deeplink,
-            clickEvent,
-            this.productDetailsRedirect,
-            this.productDetailsNewTab,
-          );
-        },
-      );
-    });
-
-    if (this.isAppended) {
+    await this.trackProductEvent(detail, "click").finally(() => {
       openProductLink(
         product.deeplink,
         clickEvent,
         this.productDetailsRedirect,
         this.productDetailsNewTab,
       );
-    }
+    });
   }
 
   @Listen("vviinnAuxClick")
@@ -492,17 +474,17 @@ export class VviinnVprWidget implements ComponentInterface {
     const { productId } = detail;
     const product = this.findProductById(productId);
     if (!product || !product.deeplink) return;
-    this.trackProductEventIfNotAppended(detail, "click");
+    this.trackProductEvent(detail, "click");
   }
 
   @Listen("vviinnAddToBasket")
   async trackAddToBasket({ detail }: ProductCardEvent) {
-    this.trackProductEventIfNotAppended(detail, "basket");
+    this.trackProductEvent(detail, "basket");
   }
 
   @Listen("vviinnAddToFavorite")
   async trackAddToWishlist({ detail }: ProductCardEvent) {
-    this.trackProductEventIfNotAppended(detail, "wishlist");
+    this.trackProductEvent(detail, "wishlist");
   }
 
   @Listen("vviinnUpdatingAllCardsFinished")
@@ -624,6 +606,7 @@ export class VviinnVprWidget implements ComponentInterface {
   }: SimilarProductsResponse | CrossSellingResponse) {
     this.vviinnResultLoad.emit(this.getBasicEventData());
     this.trackResultEvent("load");
+    this.resultViewed = false;
     this.dynamicFilters =
       interactions.dynamicFilters as ResponseDynamicFilterItem[];
     const { products, sourceProduct } = data;
