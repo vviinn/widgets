@@ -7,7 +7,10 @@ const observers = new Set<(isIntersecting: boolean) => void>();
 const scrollIntoView = () => observers.forEach((notify) => notify(true));
 jest.mock("../../dom/intersectionObserver", () => ({
   ...jest.requireActual("../../dom/intersectionObserver"),
-  setupIntersectionObserver: (_: Element, { onIntersectionChange }) => {
+  setupIntersectionObserver: (
+    _: Element,
+    { onIntersectionChange }: IntersectionObserverConfig,
+  ) => {
     observers.add(onIntersectionChange);
     return { disconnect: () => observers.delete(onIntersectionChange) };
   },
@@ -15,6 +18,7 @@ jest.mock("../../dom/intersectionObserver", () => ({
 
 import { newSpecPage, SpecPage } from "@stencil/core/testing";
 import { VviinnProductCard } from "./vviinn-product-card";
+import type { IntersectionObserverConfig } from "../../dom/intersectionObserver";
 
 const renderCard = (html: string) =>
   newSpecPage({ components: [VviinnProductCard], html });
@@ -80,6 +84,18 @@ describe("a card reused for another product", () => {
     expect(loads).toEqual(["b:B"]);
   });
 
+  it("reports the first real product of a card rendered without one", async () => {
+    const { page, loads } = await renderTrackedCard(
+      `<vviinn-product-card product-id="" product-title=""></vviinn-product-card>`,
+    );
+
+    page.root.productId = "b";
+    page.root.productTitle = "B";
+    await page.waitForChanges();
+
+    expect(loads).toEqual(["b:B"]);
+  });
+
   it("reports nothing when only other props change", async () => {
     const { page, loads } = await renderTrackedCard();
 
@@ -123,4 +139,20 @@ describe("a card reused for another product", () => {
     scrollIntoView();
     expect(views).toEqual(["a", "b"]);
   });
+});
+
+it("sends the current rank once the card moves to another position", async () => {
+  const page = await renderCard(
+    `<vviinn-product-card add-to-basket-show product-id="a" index="3"></vviinn-product-card>`,
+  );
+  const ranks: number[] = [];
+  page.root.addEventListener("vviinnAddToBasket", (e: CustomEvent) =>
+    ranks.push(e.detail.productRank),
+  );
+
+  page.root.index = 0;
+  await page.waitForChanges();
+  page.root.shadowRoot.querySelector<HTMLElement>(".basket-button").click();
+
+  expect(ranks).toEqual([0]);
 });

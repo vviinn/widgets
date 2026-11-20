@@ -334,7 +334,6 @@ export class VviinnProductCard {
   }
 
   connectedCallback() {
-    this.productData = this.getProductData();
     this.isContentCard = this.entityType === "content";
     this.isListCard = this.entityType === "list";
 
@@ -353,6 +352,11 @@ export class VviinnProductCard {
     slotChangeListener(this, this.el);
   }
 
+  // A reused card can change its rank or campaign while keeping its product.
+  componentWillRender() {
+    this.productData = this.getProductData();
+  }
+
   componentDidLoad() {
     if (this.showSkeleton()) return;
     this.reportProductLoad();
@@ -362,8 +366,10 @@ export class VviinnProductCard {
 
   componentDidUpdate() {
     // Props settle only after the render, so a card the host reused for another product reports it here.
-    if (this.reportedProductId && this.reportedProductId !== this.productId) {
-      this.productData = this.getProductData();
+    if (
+      this.reportedProductId !== undefined &&
+      this.reportedProductId !== this.productId
+    ) {
       this.reportProductLoad();
       this.resetVisibilityTracking();
     }
@@ -371,8 +377,10 @@ export class VviinnProductCard {
     this.initializeVisibilityTracking();
   }
 
+  // The host can swap the product mid-update, so the load data is built at emit time.
   private reportProductLoad() {
     this.reportedProductId = this.productId;
+    this.productData = this.getProductData();
     this.vviinnProductLoad.emit(this.productData);
   }
 
@@ -433,7 +441,6 @@ export class VviinnProductCard {
 
   @Watch("productId")
   productIdWatcher() {
-    this.productData = this.getProductData();
     this.imageProps = this.getImageProps();
   }
 
