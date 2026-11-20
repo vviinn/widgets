@@ -14,7 +14,7 @@ import {
 } from "@stencil/core";
 import i18next from "i18next";
 import { pipe } from "fp-ts/lib/function";
-import { Subject } from "rxjs";
+import { Subject, Subscription } from "rxjs";
 import { v4 as uuidv4 } from "uuid";
 import * as TE from "fp-ts/lib/TaskEither";
 import * as E from "fp-ts/lib/Either";
@@ -302,6 +302,7 @@ export class VviinnVprWidget implements ComponentInterface {
 
   private productIds: string[];
   private productImageLoadedSubject = new Subject();
+  private productImageLoadedSubscription?: Subscription;
   private id?: string;
   private resultViewed: boolean = false;
   private isSetMode: boolean;
@@ -617,20 +618,22 @@ export class VviinnVprWidget implements ComponentInterface {
 
     this.productIds = this.recommendations.map((r) => r.productId);
 
-    this.productImageLoadedSubject.subscribe((id) => {
-      this.productIds = this.productIds.filter((x) => x !== id);
+    this.productImageLoadedSubscription?.unsubscribe();
+    this.productImageLoadedSubscription =
+      this.productImageLoadedSubject.subscribe((id) => {
+        this.productIds = this.productIds.filter((x) => x !== id);
 
-      if (!this.isSetMode && this.productIds.length === 0)
-        this.vviinnRecommendationsLoaded.emit();
+        if (!this.isSetMode && this.productIds.length === 0)
+          this.vviinnRecommendationsLoaded.emit();
 
-      if (this.isSetMode) {
-        const setModeProductsLoaded =
-          this.productIds.length ===
-          this.recommendations.length - this.setItemsAmount;
+        if (this.isSetMode) {
+          const setModeProductsLoaded =
+            this.productIds.length ===
+            this.recommendations.length - this.setItemsAmount;
 
-        if (setModeProductsLoaded) this.vviinnRecommendationsLoaded.emit();
-      }
-    });
+          if (setModeProductsLoaded) this.vviinnRecommendationsLoaded.emit();
+        }
+      });
   }
 
   private renderRecommendation(
