@@ -7,8 +7,6 @@ import {
   Prop,
   Listen,
   Watch,
-  Event,
-  EventEmitter,
   Fragment,
   forceUpdate,
 } from "@stencil/core";
@@ -18,11 +16,10 @@ import i18next from "i18next";
 
 import { Recommendation } from "../../interfaces";
 import { ChevronIcon } from "../vviinn-icons";
-import { CampaignTypeId, campaignTypeNames } from "../../campaign/Campaign";
+import { CampaignTypeId } from "../../campaign/Campaign";
 import {
   CrossSellingClickEvent,
   ProductCardEvent,
-  ProductCardEventData,
 } from "../../recommendation/events";
 import { UpdateButtonLocation } from "../vviinn-vpr-widget/vviinn-vpr-widget";
 import {
@@ -38,7 +35,6 @@ import {
 import { calculateDiscount } from "../../utils/number";
 import { Locale } from "../../locale";
 import { getCustomLabels } from "../../recommendation";
-import { addIfNotEmpty } from "../../utils/collections/collectionsUtils";
 import {
   DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH,
   PRODUCT_CARD_IMAGE_WIDTH,
@@ -104,12 +100,6 @@ export class VviinnCarousel {
   @Prop() imageResolutionWidth: number =
     DISCOVERY_WIDGET_IMAGE_RESOLUTION_WIDTH;
 
-  /** Event emitted once when the recommendation is rendered on the page */
-  @Event({ bubbles: true })
-  vviinnProductLoad: EventEmitter<ProductCardEventData>;
-  /** Event emitted once when the recommendation appears in the viewport */
-  @Event({ bubbles: true })
-  vviinnProductView: EventEmitter<ProductCardEventData>;
   private resizeObserver: ResizeObserver = new ResizeObserver(() => {
     this.handleResize();
 
@@ -134,19 +124,6 @@ export class VviinnCarousel {
 
   private scrollHandler: EventListener | null = null;
   private scrollEndHandler: EventListener | null = null;
-
-  private getProductData(recommendation, productRank): ProductCardEventData {
-    return {
-      productId: recommendation.productId,
-      productRank,
-      productName: recommendation.productTitle,
-      productType: recommendation.productType,
-      campaignTypeId: this.campaignTypeId,
-      campaignTypeName: campaignTypeNames[this.campaignTypeId],
-      widgetVersion: this.widgetVersion,
-      ...addIfNotEmpty("widgetId", this.widgetElementId),
-    };
-  }
 
   private mutationObserver = new MutationObserver(() =>
     this.cloneSlottedContent(),
@@ -195,14 +172,6 @@ export class VviinnCarousel {
         this.recommendations[recommendationIndex + step];
       newCrossSellingRecommendations[crossSellingIndex] = newRecommendation;
 
-      const productData = this.getProductData(
-        newRecommendation,
-        recommendationIndex + step,
-      );
-      if (this.isSetMode) {
-        this.vviinnProductLoad.emit(productData);
-      }
-
       const element = this.el.querySelector(`[data-id="${productId}"]`);
       const imageWidth = element.getBoundingClientRect().width;
 
@@ -216,9 +185,6 @@ export class VviinnCarousel {
       const animationTimer = setTimeout(() => {
         if (recommendationIndex + step * 2 <= this.recommendations.length - 1) {
           button?.classList.remove("hidden");
-        }
-        if (this.isSetMode) {
-          this.vviinnProductView.emit(productData);
         }
         clearTimeout(animationTimer);
       }, animationInterval);
@@ -639,6 +605,7 @@ export class VviinnCarousel {
     const recommendations = this.isSetMode
       ? this.crossSellingRecommendations
       : this.recommendations;
+    // Rank is where the product is shown, so a product swapped into a set takes its slot as the rank.
     return recommendations.map((r, i) => this.renderRecommendation(r, i));
   }
 
