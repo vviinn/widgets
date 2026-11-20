@@ -76,7 +76,6 @@ import {
   PRODUCT_CARD_IMAGE_RESOLUTION_WIDTH,
   PRODUCT_CARD_IMAGE_WIDTH,
 } from "../../widget/constants";
-import { addEventListenersWithSignal } from "../../dom";
 import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
 import { isSafeLink } from "../../helpers/url/isSafeLink";
 
@@ -269,7 +268,7 @@ export class VviinnProductCard {
   @State() imageLoaded: boolean = false;
   @State() showSecondImage: boolean = false;
 
-  /** Emitted once when the card has rendered */
+  /** Emitted when the card has rendered its product, and again each time `product-id` changes */
   @Event({ bubbles: true })
   vviinnProductLoad: EventEmitter<ProductCardEventData>;
   /** Emitted when at least 95% of the card's image is visible */
@@ -303,7 +302,6 @@ export class VviinnProductCard {
   private imageElement?: HTMLImageElement;
   private visibilityTrackedElement?: HTMLImageElement | null;
   private intersectionObserver: IntersectionObserver;
-  private linkEventAbortController?: AbortController;
   private hoverTimerManager = createHoverTimerManager();
   private imageProps: ImageProps;
   private isContentCard: boolean = false;
@@ -523,26 +521,15 @@ export class VviinnProductCard {
     );
   }
 
-  // Listening on the shadow root covers links the skeleton re-creates.
+  // The shadow root outlives links the skeleton re-creates and goes away with the card, so no cleanup is needed.
   private addLinksEventListeners() {
-    this.linkEventAbortController = new AbortController();
-    addEventListenersWithSignal(
-      this.el.shadowRoot,
-      [
-        [
-          "click",
-          (event: MouseEvent) =>
-            this.isOwnLinkClick(event) && this.productClickHandler(event),
-        ],
-        [
-          "auxclick",
-          (event: MouseEvent) =>
-            this.isOwnLinkClick(event) &&
-            this.vviinnAuxClick.emit({ ...this.productData }),
-        ],
-      ],
-      this.linkEventAbortController.signal,
-    );
+    this.el.shadowRoot.addEventListener("click", (event: MouseEvent) => {
+      if (this.isOwnLinkClick(event)) this.productClickHandler(event);
+    });
+    this.el.shadowRoot.addEventListener("auxclick", (event: MouseEvent) => {
+      if (this.isOwnLinkClick(event))
+        this.vviinnAuxClick.emit({ ...this.productData });
+    });
   }
 
   // The path also passes slotted content inside a card link; a merchant's own slotted link stays theirs.
@@ -557,7 +544,6 @@ export class VviinnProductCard {
   }
 
   disconnectedCallback() {
-    this.linkEventAbortController?.abort();
     this.cleanupVisibilityTracking();
     this.hoverTimerManager.clear();
   }
