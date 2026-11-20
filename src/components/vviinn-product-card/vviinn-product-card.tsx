@@ -297,7 +297,6 @@ export class VviinnProductCard {
   @Event({ bubbles: true })
   vviinnUpdatingAllCardsFinished: EventEmitter;
 
-  private productData: ProductCardEventData | null = null;
   private reportedProductId?: string;
   private imageElement?: HTMLImageElement;
   private visibilityTrackedElement?: HTMLImageElement | null;
@@ -350,11 +349,6 @@ export class VviinnProductCard {
     slotChangeListener(this, this.el);
   }
 
-  // A reused card can change its rank or campaign while keeping its product.
-  componentWillRender() {
-    this.productData = this.getProductData();
-  }
-
   componentDidLoad() {
     this.addLinksEventListeners();
     if (this.showSkeleton()) return;
@@ -375,10 +369,8 @@ export class VviinnProductCard {
     this.initializeVisibilityTracking();
   }
 
-  // The host can swap the product mid-update, so the load data is built at emit time.
   private reportProductLoad() {
     this.reportedProductId = this.productId;
-    this.productData = this.getProductData();
     this.vviinnProductLoad.emit(this.productData);
   }
 
@@ -459,7 +451,8 @@ export class VviinnProductCard {
     }
   }
 
-  private getProductData(): ProductCardEventData {
+  // Built on each read, so an event carries the props as they are when it fires.
+  private get productData(): ProductCardEventData {
     return {
       productId: this.productId,
       productRank: this.index,
