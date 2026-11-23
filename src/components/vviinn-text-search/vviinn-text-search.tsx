@@ -377,12 +377,9 @@ export class VviinnTextSearch {
 
     if (this.showInWidget && this.showOnFirstScreen) {
       pipe(
-        await makeTextSearchRequest(
-          this.storeName,
-          queryToUse,
-          this.token,
-          this.apiPath,
-        ),
+        await makeTextSearchRequest(this.storeName, queryToUse, this.token, {
+          apiPath: this.apiPath,
+        }),
         E.fold(
           () => {
             this.vviinnNoResult.emit(this.getBasicEventData());

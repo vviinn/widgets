@@ -51,6 +51,7 @@ const initArgs = {
   searchId: "",
   oneClickDiscoveryMode: "append-grid",
   addPriceContainer: false,
+  loadMore: "button",
   favoriteShow: true,
   cssUrl: "",
   resultsPageUrl: "",

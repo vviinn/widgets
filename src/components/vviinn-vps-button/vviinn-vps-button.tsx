@@ -26,6 +26,7 @@ import {
 import { Locale } from "../../locale";
 import { DEFAULT_EXAMPLE_IMAGE } from "../../constants/exampleImage";
 import {
+  LoadMoreMode,
   OneClickDiscoveryAppendMode,
   VisualSearchMode,
 } from "../../widget/types";
@@ -51,6 +52,7 @@ import { initializeLocale } from "../../locale";
  * @slot vviinn-text-search-icon - Icon of the text search block.
  * @slot vviinn-energy-label-data-sheet-text - Text of the data sheet link for the energy label.
  * @slot vviinn-results-vpr-icon - One-Click Discovery icon, hidden when `one-click-discovery-mode` is `unset`.
+ * @slot vviinn-show-more-button-text - Text of the button that loads the next results. Rendered only if `load-more` is `button`.
  * @slot vviinn-favorite-icon - Icon of Favorite button.
  * @slot vviinn-favorite-icon-pressed - Icon of pressed Favorite button.
  * @slot vviinn-basket-button-text - Text of Add to Basket button.
@@ -73,6 +75,7 @@ import { initializeLocale } from "../../locale";
  * @part drop-zone - Drag & drop container (when useDragAndDrop is enabled).
  * @part start-camera_button - Start Camera Button.
  * @part products - Products container.
+ * @part show-more-button - Button that loads the next results. Rendered only if `load-more` is `button`.
  * @part product-card - Product Card itself.
  * @part brand - Brand inside Product Card.
  * @part product-type - Product Type inside Product Card.
@@ -180,6 +183,11 @@ export class VviinnVpsButton {
   @Prop() oneClickDiscoveryCampaigns: string = "";
   /** Wrap the Product Card's price values in the container. */
   @Prop() addPriceContainer?: boolean = false;
+  /**
+   * Load the next results: `button` shows a button below the results.
+   * @since 2.230.0
+   */
+  @Prop() loadMore: LoadMoreMode = "none";
   /** Show editable input fields in interval filters instead of readonly labels */
   @Prop() showIntervalInputs: boolean = false;
   /** URL to external CSS file for custom styling */
@@ -383,6 +391,7 @@ export class VviinnVpsButton {
           aiSuggestionsShow={this.aiSuggestionsShow}
           addToBasketShow={this.addToBasketShow}
           addPriceContainer={this.addPriceContainer}
+          loadMore={this.loadMore}
           showIntervalInputs={this.showIntervalInputs}
           replaceSlotsContentInButton={this.replaceSlotsContent.bind(this)}
           oneClickDiscoveryMode={this.oneClickDiscoveryMode}
