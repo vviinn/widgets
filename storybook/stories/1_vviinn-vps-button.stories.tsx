@@ -64,6 +64,7 @@ const Template = (args) => `
   ai-suggestions-show="${args.aiSuggestionsShow}"
   add-to-basket-show="${args.addToBasketShow}"
   add-price-container="${args.addPriceContainer}"
+  load-more="${args.loadMore}"
   show-interval-inputs="${args.showIntervalInputs}"
   favorite-show="${args.favoriteShow}"
   one-click-discovery-mode="${args.oneClickDiscoveryMode}"
@@ -100,6 +101,7 @@ const initArgs = {
   aiSuggestionsShow: true,
   addToBasketShow: false,
   addPriceContainer: false,
+  loadMore: "none",
   showIntervalInputs: false,
   favoriteShow: false,
   oneClickDiscoveryMode: "append-grid",

@@ -50,3 +50,19 @@ export const addNestedIfNotEmpty = <T>(
   nested: Partial<Record<string, T>> | undefined,
 ): Partial<Record<string, Partial<Record<string, T>>>> =>
   nested && Object.keys(nested).length > 0 ? { [key]: nested } : {};
+
+/** On a tie, the value that reaches the top count first wins. */
+export const mostFrequent = <T>(values: T[]): T | undefined => {
+  const counts = new Map<T, number>();
+  let result: T | undefined;
+  let resultCount = 0;
+  values.forEach((value) => {
+    const count = (counts.get(value) ?? 0) + 1;
+    counts.set(value, count);
+    if (count > resultCount) {
+      result = value;
+      resultCount = count;
+    }
+  });
+  return result;
+};
