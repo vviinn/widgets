@@ -602,11 +602,18 @@ export class VviinnCarousel {
   }
 
   private renderRecommendationsElements(): HTMLVviinnProductCardElement[] {
-    const recommendations = this.isSetMode
-      ? this.crossSellingRecommendations
-      : this.recommendations;
-    // Rank is where the product is shown, so a product swapped into a set takes its slot as the rank.
-    return recommendations.map((r, i) => this.renderRecommendation(r, i));
+    if (!this.isSetMode)
+      return this.recommendations.map((r, i) =>
+        this.renderRecommendation(r, i),
+      );
+
+    // A set shows a window of the response, so rank is the product's index in it, not its slot.
+    return this.crossSellingRecommendations.map((r) =>
+      this.renderRecommendation(
+        r,
+        this.recommendations.findIndex((p) => p.productId === r.productId),
+      ),
+    );
   }
 
   private renderSkeletonContainer() {
