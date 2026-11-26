@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.229.1](https://github.com/vviinn/widgets/compare/v2.229.0...v2.229.1) (2026-11-26)
+
+
+### Bug Fixes
+
+* Product Card: keep the card hidden until its image is ready ([8222b72](https://github.com/vviinn/widgets/commit/8222b72bcc5d2187535636eddb8dc077b63ff20a))
+* Skeleton: soften the pulse ([13c5917](https://github.com/vviinn/widgets/commit/13c591784a88000ff50da3bef314efd19235fd07))
+* Track clicks on one-click discovery recommendations ([2302f03](https://github.com/vviinn/widgets/commit/2302f0350c2be8c66040f913a0a7f7a72d4cfdd6))
+* Track load and view of new recommendations after a product-id change ([0c6b583](https://github.com/vviinn/widgets/commit/0c6b583d75f4458dcf8ce4b9162fb04eb8561539))
+* Track title clicks on a product swapped in set mode ([562ed09](https://github.com/vviinn/widgets/commit/562ed09483806958f6854034807a411bfe6f98ee))
+
 ## [2.229.0](https://github.com/vviinn/widgets/compare/v2.228.0...v2.229.0) (2026-11-10)
 
 
