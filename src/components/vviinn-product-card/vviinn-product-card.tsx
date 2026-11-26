@@ -76,7 +76,6 @@ import {
   PRODUCT_CARD_IMAGE_RESOLUTION_WIDTH,
   PRODUCT_CARD_IMAGE_WIDTH,
 } from "../../widget/constants";
-import { addEventListenersWithSignal } from "../../dom";
 import { renderExternalCSS } from "../../utils/cssUrl/cssUrlHelper";
 import { isSafeLink } from "../../helpers/url/isSafeLink";
 
@@ -269,7 +268,7 @@ export class VviinnProductCard {
   @State() imageLoaded: boolean = false;
   @State() showSecondImage: boolean = false;
 
-  /** Emitted once when the card has rendered */
+  /** Emitted when the card has rendered its product, and again each time `product-id` changes */
   @Event({ bubbles: true })
   vviinnProductLoad: EventEmitter<ProductCardEventData>;
   /** Emitted when at least 95% of the card's image is visible */
@@ -298,11 +297,10 @@ export class VviinnProductCard {
   @Event({ bubbles: true })
   vviinnUpdatingAllCardsFinished: EventEmitter;
 
-  private productData: ProductCardEventData | null = null;
+  private reportedProductId?: string;
   private imageElement?: HTMLImageElement;
   private visibilityTrackedElement?: HTMLImageElement | null;
   private intersectionObserver: IntersectionObserver;
-  private linkEventAbortController?: AbortController;
   private hoverTimerManager = createHoverTimerManager();
   private imageProps: ImageProps;
   private isContentCard: boolean = false;
@@ -333,7 +331,6 @@ export class VviinnProductCard {
   }
 
   connectedCallback() {
-    this.productData = this.getProductData();
     this.isContentCard = this.entityType === "content";
     this.isListCard = this.entityType === "list";
 
@@ -353,10 +350,28 @@ export class VviinnProductCard {
   }
 
   componentDidLoad() {
-    if (this.showSkeleton()) return;
-    this.vviinnProductLoad.emit(this.productData);
     this.addLinksEventListeners();
+    if (this.showSkeleton()) return;
+    this.reportProductLoad();
     this.initializeVisibilityTracking();
+  }
+
+  componentDidUpdate() {
+    // Props settle only after the render, so a card the host reused for another product reports it here.
+    if (
+      this.reportedProductId !== undefined &&
+      this.reportedProductId !== this.productId
+    ) {
+      this.reportProductLoad();
+      this.resetVisibilityTracking();
+    }
+    // A set-mode swap shows a skeleton first, so the view is armed once the transition ends.
+    this.initializeVisibilityTracking();
+  }
+
+  private reportProductLoad() {
+    this.reportedProductId = this.productId;
+    this.vviinnProductLoad.emit(this.productData);
   }
 
   private initializeVisibilityTracking() {
@@ -389,6 +404,12 @@ export class VviinnProductCard {
     this.visibilityTrackedElement = null;
   }
 
+  // Keeps the image ref from arming a second observer when the new product's image loads.
+  private resetVisibilityTracking() {
+    this.cleanupVisibilityTracking();
+    this.visibilityTrackedElement = this.imageElement;
+  }
+
   @Listen("vviinnCrossSellingClick")
   crossSellingClickListener({ detail }: CrossSellingClickEvent) {
     const { animationInterval } = detail;
@@ -410,7 +431,6 @@ export class VviinnProductCard {
 
   @Watch("productId")
   productIdWatcher() {
-    this.productData = this.getProductData();
     this.imageProps = this.getImageProps();
   }
 
@@ -431,7 +451,8 @@ export class VviinnProductCard {
     }
   }
 
-  private getProductData(): ProductCardEventData {
+  // Built on each read, so an event carries the props as they are when it fires.
+  private get productData(): ProductCardEventData {
     return {
       productId: this.productId,
       productRank: this.index,
@@ -493,33 +514,29 @@ export class VviinnProductCard {
     );
   }
 
+  // The shadow root outlives links the skeleton re-creates and goes away with the card, so no cleanup is needed.
   private addLinksEventListeners() {
-    if (this.showSkeleton()) return;
-
-    this.linkEventAbortController = new AbortController();
-    const { signal } = this.linkEventAbortController;
-    const links = this.el.shadowRoot.querySelectorAll("a");
-
-    links.forEach((link) => {
-      const clickHandler = this.productClickHandler.bind(this);
-      const auxClickHandler = () => {
-        this.vviinnAuxClick.emit({
-          ...this.productData,
-        });
-      };
-      addEventListenersWithSignal(
-        link,
-        [
-          ["click", clickHandler],
-          ["auxclick", auxClickHandler],
-        ],
-        signal,
-      );
+    this.el.shadowRoot.addEventListener("click", (event: MouseEvent) => {
+      if (this.isOwnLinkClick(event)) this.productClickHandler(event);
+    });
+    this.el.shadowRoot.addEventListener("auxclick", (event: MouseEvent) => {
+      if (this.isOwnLinkClick(event))
+        this.vviinnAuxClick.emit({ ...this.productData });
     });
   }
 
+  // The path also passes slotted content inside a card link; a merchant's own slotted link stays theirs.
+  private isOwnLinkClick(event: Event) {
+    return event
+      .composedPath()
+      .some(
+        (node) =>
+          (node as Element).tagName === "A" &&
+          (node as Element).getRootNode() === this.el.shadowRoot,
+      );
+  }
+
   disconnectedCallback() {
-    this.linkEventAbortController?.abort();
     this.cleanupVisibilityTracking();
     this.hoverTimerManager.clear();
   }
